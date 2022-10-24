@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1917360A4D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C61460A89D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbiJXMQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S235200AbiJXNIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiJXMOs (ORCPT
+        with ESMTP id S235498AbiJXNIV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:14:48 -0400
+        Mon, 24 Oct 2022 09:08:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732147739A;
-        Mon, 24 Oct 2022 04:55:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC099DFAF;
+        Mon, 24 Oct 2022 05:21:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 918116126B;
-        Mon, 24 Oct 2022 11:55:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3571C433C1;
-        Mon, 24 Oct 2022 11:55:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DAA1611B0;
+        Mon, 24 Oct 2022 12:21:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E40DC433D6;
+        Mon, 24 Oct 2022 12:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612513;
-        bh=7a+WTDLovQeSm3K4+3q8ZCqpy2ODJ1EzuBZHDte6j3s=;
+        s=korg; t=1666614079;
+        bh=GVYsaKKXtS7tkqz2R3xxZid3DEplSAk80n6tHg3gJLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MURE368QAnM1DEWIYCfn/kr14lRU6c5Ee+u/90UutcbrBDbL/EOU24NMQI1Fl/stu
-         SfvKYzho2VkFuYIKfQJ1xd+6Yuc92BeiT3nwg6TkGRDQuDVIq1qVuh3hQs8O5n3J9/
-         nCiwYNZGzxpRBB94quEeF3YPA7EzbIcvL6xXFGHk=
+        b=SE0/xL9po31m3Umx+VZ11KzqfkhE8tPC9vSAJJRxoneHnn2SgLvPNGzUORH1nm9cl
+         ZJF6POsix5iuxtFBH++0l7DEDC/1R6/xFUAdPgq3Gbwum/OULNCDRJdnnYNJjQ9C2m
+         CknbOPex2oUGrs+FfOKqyuoZSlJLtTu+q/S6rxy8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH 4.19 002/229] docs: update mediator information in CoC docs
-Date:   Mon, 24 Oct 2022 13:28:41 +0200
-Message-Id: <20221024112959.182109794@linuxfoundation.org>
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 125/390] spi/omap100k:Fix PM disable depth imbalance in omap1_spi100k_probe
+Date:   Mon, 24 Oct 2022 13:28:42 +0200
+Message-Id: <20221024113027.989164463@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,31 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-commit 8bfdfa0d6b929ede7b6189e0e546ceb6a124d05d upstream.
+[ Upstream commit 29f65f2171c85a9633daa380df14009a365f42f2 ]
 
-Update mediator information in the CoC interpretation document.
+The pm_runtime_enable will increase power disable depth. Thus
+a pairing decrement is needed on the error handling path to
+keep it balanced according to context.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20220901212319.56644-1-skhan@linuxfoundation.org
-Cc: stable@vger.kernel.org
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes:db91841b58f9a ("spi/omap100k: Convert to runtime PM")
+
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Link: https://lore.kernel.org/r/20220924121310.78331-4-zhangqilong3@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/process/code-of-conduct-interpretation.rst |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-omap-100k.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/Documentation/process/code-of-conduct-interpretation.rst
-+++ b/Documentation/process/code-of-conduct-interpretation.rst
-@@ -51,7 +51,7 @@ the Technical Advisory Board (TAB) or ot
- uncertain how to handle situations that come up.  It will not be
- considered a violation report unless you want it to be.  If you are
- uncertain about approaching the TAB or any other maintainers, please
--reach out to our conflict mediator, Mishi Choudhary <mishi@linux.com>.
-+reach out to our conflict mediator, Joanna Lee <joanna.lee@gesmer.com>.
+diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
+index 0d0cd061d356..7c992d1f4abd 100644
+--- a/drivers/spi/spi-omap-100k.c
++++ b/drivers/spi/spi-omap-100k.c
+@@ -414,6 +414,7 @@ static int omap1_spi100k_probe(struct platform_device *pdev)
+ 	return status;
  
- In the end, "be kind to each other" is really what the end goal is for
- everybody.  We know everyone is human and we all fail at times, but the
+ err_fck:
++	pm_runtime_disable(&pdev->dev);
+ 	clk_disable_unprepare(spi100k->fck);
+ err_ick:
+ 	clk_disable_unprepare(spi100k->ick);
+-- 
+2.35.1
+
 
 
