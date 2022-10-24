@@ -2,155 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C6C609822
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 04:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14D95609826
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 04:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiJXCQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 22:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S229982AbiJXCRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 22:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJXCQQ (ORCPT
+        with ESMTP id S229939AbiJXCRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 22:16:16 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2041.outbound.protection.outlook.com [40.107.255.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC36470E53
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 19:16:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FZy5sCZO8KSgFMsNVQG+GSTytYTTyCAV+70CBg9qLfKq0vI2CGH5b5GNuExmZfeFlJmOQz5Q4FbcVD7rWMxoiYi7O+JDbPdTYLWi/Ji/fZrJdtd5u4Gg2xB2kIb//NhTPI2OTvoaCYOZKgYKPFTUNcsXtEw8Qtf0A4IhCqO7F3q5EREPrMVP6Raz8SfW14mb6WbYE8D6MRI5Hgycc/LuHm4DBkbXmU/Lq0nCiKDygWeWbmFpqmVbBoW7FNRxp9k2XeMPpYMR5NkPRzpZ5nSeJhOUG9K1Qay8aBNw+x96eV53mUCiE2G0FXvY+xWFDrdwrTv7gsmZH/DlpAbLpF01eg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MFsKJPMHmkTRAbtCEujGDittUzzTkzSVZmUIIXSAXJ4=;
- b=l+Pu1Ql1EeJ3h9PVrbANnSCq4ptjRbI2srZ6hMrqtUmRW3jc1FlZNhIGW0ax0n1Qm5JXpOIW0T1I5FHJmIX/gKfNW1+BvDskeXQL5BcBolWnsQ5CiXUnEfAWPTJGgFex/B32AJBxLvPx/Xv6dty2MmU2/Uo4yiWK6my8Qu8uXRu7vSwtVctB0NCQXHjVtRaXmrplXUBoJjTh9rwB6TaZSdrbcr0iOuxzm7FiICFMdGHHxLyeMs8bnpz0OcNGJslNMK5FxltGA7qkRrZOTDO7Oq1hTu3QVPrbKnk383f8cpZsWGe2xmSgFNzNGbtFoJRfgFKu9g40GGZjJP4uGo0qJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
- header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MFsKJPMHmkTRAbtCEujGDittUzzTkzSVZmUIIXSAXJ4=;
- b=Uq+RATcNB38lKvF/8xTvQPB9WQPgtmNgClkgL+zNu3x7YXu2WcHoIFiwjfIE62nEggVlq5tylFNJT16zAjyqvYkO/JN/zLvhT9Yc/LPyTA0rt0+KnzffXNQtwC1DemezmHqJp3HWFrgvvu4RY/QuQgQwf/YikcRtAcZ02rUqvEDH6v0rG/8N9nNyWu61R5yafoRlA2LYAkBgyUGJCCbDYrRblleMG0VE3Gwq8AIbyHtnIYa1E0K0yeV3SGgEEslR/SK2eVyPi18DKMevFk8Y8xuRAD/9qWE3bOGPUnkhg98vRIMX0gF+JG7qDLFy24eGfSZtrZzLSNkueWJr2LGucQ==
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com (2603:1096:404:104::19)
- by KL1PR0601MB4130.apcprd06.prod.outlook.com (2603:1096:820:2b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
- 2022 02:16:10 +0000
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::5d1a:4f09:b125:9670]) by TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::5d1a:4f09:b125:9670%7]) with mapi id 15.20.5746.023; Mon, 24 Oct 2022
- 02:16:10 +0000
-From:   Angus Chen <angus.chen@jaguarmicro.com>
-To:     Jason Wang <jasowang@redhat.com>
-CC:     "mst@redhat.com" <mst@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lingshan.zhu@intel.com" <lingshan.zhu@intel.com>
-Subject: RE: [PATCH v2] vDPA: rename get_vq_num_max to get_vq_size_max
-Thread-Topic: [PATCH v2] vDPA: rename get_vq_num_max to get_vq_size_max
-Thread-Index: AQHY50vG98uWpiwLxUepDlRUWf/jUa4cymsAgAACbaA=
-Date:   Mon, 24 Oct 2022 02:16:10 +0000
-Message-ID: <TY2PR06MB342493C73F9119E847765796852E9@TY2PR06MB3424.apcprd06.prod.outlook.com>
-References: <20221024015510.1917-1-angus.chen@jaguarmicro.com>
- <CACGkMEsag0xGcGxPnaou3wiO8iJBL4Pxecj6Vd-KEN7otQX5aQ@mail.gmail.com>
-In-Reply-To: <CACGkMEsag0xGcGxPnaou3wiO8iJBL4Pxecj6Vd-KEN7otQX5aQ@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR06MB3424:EE_|KL1PR0601MB4130:EE_
-x-ms-office365-filtering-correlation-id: b97dc2d5-bd5f-4fb6-0067-08dab565b7be
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zGa4SW2NJEC1eua7Pg7gGf/8Pas6pzi0fl0MIO/EPdyxnpo/N4YAbs00bXvkJsG7ykIrfP1jvi3BmKiUCjYT0C37T9Bw876DkSqVKsv/JvuLnDckv6KQI9gT9X8ay8BIKjdYOH3gpxo3XVHtQYZTSvnG1o/WBoeKz1PQJ6BhZe89Od39Z1JTD4PmOwkRFVzl3uSZu7Do1rDXcXQWBkLf86Fn8CAZuu88BW62sZotN23OlKxkOyS2Q+EkOd6ABI5vN8K3kj+bQ3swIKpeYTC0c5aG7dWrX64rquzP+XszKGtnf+LMWCyEIkyIlcPbVnby1jnhpbiBKPEcUJusaCC2GDTzheyr0usJkw2H1/leJW+sXJTtEJ1Mjz/a3woxA+y6MFydvVqAr5TsZdlvYvXY1tTtKXDA1dmxTO30JdgDoEjXvpmSRm1TNCrwHYOOSQVM+zdNlFwd5cLypkKpE2laVxPI5+66EC+Io2IkhDvgyjbvm0GKYU9u/EtTrS45vjoFc/ntcQRpLRYc8ZzKN246Rwp7TxtCGh08FqRDM7YhtgDtjO5FvPwfmwWASTVU5jwJQ0/jKJo9G69i+WMFdzzyFEUmLXN6gYI0qf2TwftY6pfM7jy5Mwv1owG14pMV+GJk/GPoLs/bRCpfu9BsB31sKPTD2fSRfjyk/t2LdUVGLnmkYGOJQMmMBxllDiJEMX+AlHQ42XCP6OgnpFJxxzr8Ch3lKGqzH7Ms3HjWOkB+5zN+Y4H0/1vSLM0PftG8WicStD6XLsMuavJvlql5iquAdQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3424.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39830400003)(366004)(346002)(396003)(136003)(376002)(451199015)(66446008)(44832011)(53546011)(38070700005)(64756008)(86362001)(4326008)(5660300002)(8676002)(186003)(122000001)(83380400001)(9686003)(478600001)(26005)(71200400001)(38100700002)(7696005)(55016003)(2906002)(52536014)(8936002)(316002)(33656002)(76116006)(41300700001)(66556008)(66476007)(6506007)(66946007)(54906003)(6916009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Ykh2dEE1UEoyeHc4di83QitnRFh0WGdacEZBR25ZSTFGN09lYWgxbnRQZ2Y4?=
- =?utf-8?B?TDV0MWsyd2RhMlUrUWRoN21HR1AwbnBkTWpBL29sdXY0ZHExOTZySzlMWWRZ?=
- =?utf-8?B?eWE1RlZablZFbHFVajdpRVYxTzhBYkhiUzMwbDFsTGptcjNMVHR1RnYrNVZO?=
- =?utf-8?B?N1JSVmRKa2pLZWVDVVpOY1I0cThnSkhhWjAydDN6T2dxa1AwVEExL0E0V3Ni?=
- =?utf-8?B?VzlIWURmVHVSWjByK09rYXV2OUlZbTh3YWhRVlh1clRDbUpPZEdWYXQ3Y0lW?=
- =?utf-8?B?bVd3aXpvM0V2L0hGbDlKRjJmd2xOcTgwZnZqeGNwKzduSFFKNEg0MDhzbUky?=
- =?utf-8?B?UWN2RytVYUxmWmVYMjJCRS8vdUpXeVQ5bUpVMTRvUXlIVDlsRi90WnoxQ0pE?=
- =?utf-8?B?WEwwZndiQTJjWnlEbS9tNTdueGl3dUppZ2lxOEVtSVZzYUN6WDAzL1BuYlNW?=
- =?utf-8?B?b1V6UHQrTlo0QWxZNktVbHdtTmw3WDZpNUJYS2tBdmVvcFUvVlYwTnZPRXZ2?=
- =?utf-8?B?ZjhtQjc1WW1HRWhQODJ6Z254NnBVdyt4Yk5iVkJRNlpCV2dMQVZrZ2VKVnhw?=
- =?utf-8?B?K0p2NkVTZk5pVjBNZmt4eEt2WkFRdVYwTnN2TWd0Q2p2V2s4ckdQbmIzQWRk?=
- =?utf-8?B?U3hwdUFNcG9YS1FYRk9Pbmw1K0QzZlBWenlsbzVobVNWMmZTakc4UzZwVXFM?=
- =?utf-8?B?d0dLcWdXR0l4TkxPekdMSHQrdXAwVnQyNFBsWWVZdnlQZVl2ZXkyMGlNbFpt?=
- =?utf-8?B?ZmJZS2Z4cDVDL0RjTSt5WFY5SWVEMFBVS2N5NWpiUTYrRTZoK3FoY09HR1V3?=
- =?utf-8?B?UUNRNzIzaFN3L21ZRHk2U3NXSC9UMlRXbmhXMUVzVHJGaTFRdm56MkhCdWRP?=
- =?utf-8?B?b0NSTm1LVkhZa1ppZFZqQ2pNSmVDdE9rd0FNZU5Ea1pJQ1ROVmJKVFZKM0RO?=
- =?utf-8?B?aXV2ek4yUGRjMHkyaXdUWnVod1FObUdYRnZKMTdja3JSaUF4NjQ5Sm1Ib2dZ?=
- =?utf-8?B?ZjBsWTU3UE02WFFYdFhrdE50MFFRY2NrUDNqcmZRLzhjejhwcEYxdmlwNUlh?=
- =?utf-8?B?cGN4WnVsM1NnTEVhTlNoMWVwTUVVdnFHMnNGTXZlQXVYelJzRWlUWDYyNEda?=
- =?utf-8?B?eDA3Z1M3WWtaNTNJZERGYlNCYk90eGRkVFlGQ05kL1doaDVVaHl3SldQRU1a?=
- =?utf-8?B?S1YwQjlXdzY4NFFNVXNneHJtd0svRUZKUVlUNEsxRmNUVGlIOVBWTGN3a1dG?=
- =?utf-8?B?ZnkwVHB3ODFEeFhRemNkc0QxRXJZVXJ2SmpWRWJ4YmZvQWM4TkIvNit4cWZB?=
- =?utf-8?B?aXR6WWx0UXg3OVFjS3FyODBtaFV6aFRlOG9vaWg1QnA2QXAxY1EvcGM3R3l6?=
- =?utf-8?B?T2tRSi9MVktkTkdZaVdSSkVnSVUvcVpnR2I4QzRENCtYVlpnckJzOVlESTFQ?=
- =?utf-8?B?ZDVWSkJxaW5NOWovKzB0L2tIN3lpbVFzRnI5eHpwK2d5OTRrQzR3bi9rYllm?=
- =?utf-8?B?Wk1NczhhbmxnQTZwRUNyOHVTYTkyVDN3c2Zxd0ZsQi94d29VVWJzY3QvMGts?=
- =?utf-8?B?OHlWV0EyN3F2T0Z2c0taellldUF1Rkpqdk1Pc05hZHpuQ0k1VkdmaWsyNjVE?=
- =?utf-8?B?Z25hZFlrZFVuMEpHc2c0YmxJajUyaW1DUGQwbXNBUXRYeW9UZitGb21wZmo2?=
- =?utf-8?B?NXZKMzdTZ3Q2cXhBM3JvSy84SmhhNGpWWUxhRVUvVjJyd1FFRC8xTE9IV3d3?=
- =?utf-8?B?MmpBb2pQam8wQjFMODluWjd0SzhRczd4N2ErdHBIbmlWbTNsa3RlTGJpcGc3?=
- =?utf-8?B?Y3dHdDFYT3hYMkFVbGd6UFJUbTBRNFpTWUYvMUVRM3B3YWlyVzRwSFFKNUhR?=
- =?utf-8?B?WXIvbjF2b3B2aHIzd1huUHRIMVZUbXRoM2Q2MlZ0ODFWTHcvY25ZRmI4MHlZ?=
- =?utf-8?B?QTFCN3ZkMTB3VEFRamVFSzE2ZkRLNHhQUjdlU0hSa2tFMk4yQWNDdG02Um5p?=
- =?utf-8?B?aEQvNXBQQTJwQkVuSVFNL1EyZ1dmdHkxZzdZUzFRSHpYMDNYdmlHcjdGSmpV?=
- =?utf-8?B?Z0RWVi9TS09zdlFzMUl6ZnBtNFUvNmJGWllkVzFFRHo2WExNSGo1Y0NNQ2ww?=
- =?utf-8?B?R0NzeHRmdjVveTMyRHRqM2tBUG1KdnVoTjdCd3ZhUk5jckFWazEzRGkxSjBB?=
- =?utf-8?B?b0E9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 23 Oct 2022 22:17:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51CE970E6F
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 19:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666577835;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9v3FWZ1u0qD8ZLDJpp9h3sV4g6hnZHOOtI7FbrsDezQ=;
+        b=bDmAAopUELXzva19YS0IXSVXiPFQZD1E8L2Pf9pBW1FgFUFh789NjDJ7XMyGlbTjhHFR9s
+        9ocoesqN4PDAlYmXUvEzuQR/kin+u8+3sRq4awsJfRs0DoyFiy0uEVB/Rk7AlnEhGgJWS/
+        XcBkkQkoJUlMMzQMnsb+lk0XHwu3fM8=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-269-TTfpKGNlMKe6eKESIqSdSw-1; Sun, 23 Oct 2022 22:17:14 -0400
+X-MC-Unique: TTfpKGNlMKe6eKESIqSdSw-1
+Received: by mail-pl1-f199.google.com with SMTP id d18-20020a170902ced200b00180680b8ed1so5522887plg.1
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 19:17:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9v3FWZ1u0qD8ZLDJpp9h3sV4g6hnZHOOtI7FbrsDezQ=;
+        b=c08ULyK4k/M5DgHRMyCw4xA/bIhG4TRoI9HTVYX6kRQjXa51C9ZUOUH6QZnf3NjGt4
+         kh9huotFhJgboNDAjLjAHjnz5pFC+YZsfFjS6+gyisB4XzMMbPE3Qgkhss46Dv8crCL5
+         kHdNHZD5qeDQGB6EVEq/Q5QKX41iSeC7XYUPJnmMaghJTlu0LHG8QaH612TjzxHIJb3l
+         N5GkoZiU0c+I2zbVIb+e4+lyrQJKWgSVnZTBqZ/aupXsURWX516MeM/KUw15Mb8pL8uL
+         lmF8XXLzghahRJi0jzHqbEC4fDH8h4ygRhhIMonOCayKinaqR4RZ1v1pjTI5tCZCDOnc
+         y+Qg==
+X-Gm-Message-State: ACrzQf06euODoyMfcgVxyzcHJnkhUAegZMVlM6MuVnXwwv2WKJ2WTWAs
+        CX5EO2KS1ySQ0cC8pP91etOydXHiMEdseoi64CJOBd6iNIvvwx4QqfBzMHOvTm7db1lsI1WnH3H
+        7lI2MIBbWdI5b4oNi2Rfb4frb
+X-Received: by 2002:a17:90a:5781:b0:20a:9962:bb4a with SMTP id g1-20020a17090a578100b0020a9962bb4amr69741692pji.185.1666577831726;
+        Sun, 23 Oct 2022 19:17:11 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4SfgJRkSkZHrTPYkX1LXMqdPEQ0jk6B3EgsYSpWxN8mmQY+v6NcttGHTuEqpwrNhHeNuXKMA==
+X-Received: by 2002:a17:90a:5781:b0:20a:9962:bb4a with SMTP id g1-20020a17090a578100b0020a9962bb4amr69741666pji.185.1666577831355;
+        Sun, 23 Oct 2022 19:17:11 -0700 (PDT)
+Received: from [10.72.12.79] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id p1-20020a62d001000000b0056bc742d21esm1199139pfg.176.2022.10.23.19.17.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 23 Oct 2022 19:17:11 -0700 (PDT)
+Subject: Re: [PATCH -next 3/5] ceph: fix possible null-ptr-deref when parsing
+ param
+To:     Hawkins Jiawei <yin31149@gmail.com>
+Cc:     idryomov@gmail.com, jlayton@kernel.org, 18801353760@163.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        ceph-devel@vger.kernel.org
+References: <aa3f35c1-1550-a322-956f-1837cb2389a9@redhat.com>
+ <20221024020430.15795-1-yin31149@gmail.com>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <91999bb6-3e59-60cc-32ff-504920735a0e@redhat.com>
+Date:   Mon, 24 Oct 2022 10:17:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-X-OriginatorOrg: jaguarmicro.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3424.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b97dc2d5-bd5f-4fb6-0067-08dab565b7be
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2022 02:16:10.4884
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4jUQLEmGEZOIXKZkWYGEdQTQAVzGRTdmmcKJTH1HigRafaUP7Q+/qEZNLPzZLYdxrnNxAJuDX0a3YgEFdD+ss5H0JXhFwJt5L6MICnGqdFE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4130
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221024020430.15795-1-yin31149@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSmFzb24NCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKYXNvbiBX
-YW5nIDxqYXNvd2FuZ0ByZWRoYXQuY29tPg0KPiBTZW50OiBNb25kYXksIE9jdG9iZXIgMjQsIDIw
-MjIgMTA6MDEgQU0NCj4gVG86IEFuZ3VzIENoZW4gPGFuZ3VzLmNoZW5AamFndWFybWljcm8uY29t
-Pg0KPiBDYzogbXN0QHJlZGhhdC5jb207IHZpcnR1YWxpemF0aW9uQGxpc3RzLmxpbnV4LWZvdW5k
-YXRpb24ub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW5nc2hhbi56aHVA
-aW50ZWwuY29tDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjJdIHZEUEE6IHJlbmFtZSBnZXRfdnFf
-bnVtX21heCB0byBnZXRfdnFfc2l6ZV9tYXgNCj4gDQo+IE9uIE1vbiwgT2N0IDI0LCAyMDIyIGF0
-IDk6NTYgQU0gQW5ndXMgQ2hlbiA8YW5ndXMuY2hlbkBqYWd1YXJtaWNyby5jb20+DQo+IHdyb3Rl
-Og0KPiA+DQo+ID4gVGhlIGdldF92cV9udW1fbWF4IG9mIHZkcGFfY29uZmlnX29wcyBpcyBtZWFu
-IGdldCB0aGUgbWF4IHNpemUgb2YgdnEsbm90DQo+ID4gdGhlIG1heCBudW1iZXIgb2YgdnEsaXQg
-aXMga2luZCBvZiBjb25mdXNlZCxyZW5hbWUgaXQuDQo+ID4gQW5kIGdldF92cV9udW1fbWluIHJl
-bmFtZSB0byBnZXRfdnFfc2l6ZV9taW4sDQo+ID4gc2V0X3ZxX251bSByZW5hbWUgdG8gc2V0X3Zx
-X3NpemUsDQo+ID4gcmVuYW1lIGltcGxlbWVudCBvZiB0aGlzIG9wcyBhbHNvLg0KPiA+DQo+ID4g
-U2lnbmVkLW9mZi1ieTogQW5ndXMgQ2hlbiA8YW5ndXMuY2hlbkBqYWd1YXJtaWNyby5jb20+DQo+
-ID4gLS0tDQo+IA0KPiBOb3QgYSBuYXRpdmUgc3Bhcmtlci4gQnV0IG51bV9tYXggY2FtZSBmcm9t
-IHZpcnRxdWV1ZSBzdHJ1Y3R1cmU6DQo+IA0KPiAvKg0KPiAgLi4uDQo+ICAqIEBudW1fbWF4OiB0
-aGUgbWF4aW11bSBudW1iZXIgb2YgZWxlbWVudHMgc3VwcG9ydGVkIGJ5IHRoZSBkZXZpY2UuDQo+
-ICAuLi4NCj4gICovDQo+IA0KPiBzdHJ1Y3QgdmlydHF1ZXVlIHsNCj4gICAgICAgICAuLi4NCj4g
-ICAgICAgICB1bnNpZ25lZCBpbnQgbnVtX21heDsNCkkgbm90aWNlZCB0aGlzIGFsc2/vvIxhbmQg
-SSBhbHdheXMgY29uZnVzZWQgYnkgdGhlIGRlZmluaXRpb24uIFRha2UgdmlydGlvX3BjaV9jb21t
-b25fY2ZnIGZvciBleGFtcGxlOg0KDQovKiBGaWVsZHMgaW4gVklSVElPX1BDSV9DQVBfQ09NTU9O
-X0NGRzogKi8NCnN0cnVjdCB2aXJ0aW9fcGNpX2NvbW1vbl9jZmcgew0KCS4uLg0KICAgIF9fbGUx
-NiBudW1fcXVldWVzOyAgICAgIC8qIHJlYWQtb25seSAqLw0KDQpJdCBqdXN0IGEgc3VnZ2VzdGlv
-bi4NClRoYW5rIHlvdS4NCj4gICAgICAgICAuLi4NCj4gfTsNCj4gDQo+IFRoYW5rcw0KDQo=
+
+On 24/10/2022 10:04, Hawkins Jiawei wrote:
+> Hi Xiubo,
+> On Mon, 24 Oct 2022 at 08:55, Xiubo Li <xiubli@redhat.com> wrote:
+>>
+>> On 24/10/2022 00:39, Hawkins Jiawei wrote:
+>>> According to commit "vfs: parse: deal with zero length string value",
+>>> kernel will set the param->string to null pointer in vfs_parse_fs_string()
+>>> if fs string has zero length.
+>>>
+>>> Yet the problem is that, ceph_parse_mount_param() will dereferences the
+>>> param->string, without checking whether it is a null pointer, which may
+>>> trigger a null-ptr-deref bug.
+>>>
+>>> This patch solves it by adding sanity check on param->string
+>>> in ceph_parse_mount_param().
+>>>
+>>> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+>>> ---
+>>>    fs/ceph/super.c | 3 +++
+>>>    1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/fs/ceph/super.c b/fs/ceph/super.c
+>>> index 3fc48b43cab0..341e23fe29eb 100644
+>>> --- a/fs/ceph/super.c
+>>> +++ b/fs/ceph/super.c
+>>> @@ -417,6 +417,9 @@ static int ceph_parse_mount_param(struct fs_context *fc,
+>>>                param->string = NULL;
+>>>                break;
+>>>        case Opt_mds_namespace:
+>>> +             if (!param->string)
+>>> +                     return invalfc(fc, "Bad value '%s' for mount option '%s'\n",
+>>> +                                    param->string, param->key);
+>>>                if (!namespace_equals(fsopt, param->string, strlen(param->string)))
+>>>                        return invalfc(fc, "Mismatching mds_namespace");
+>>>                kfree(fsopt->mds_namespace);
+>> BTW, did you hit any crash issue when testing this ?
+>>
+>> $ ./bin/mount.ceph :/ /mnt/kcephfs -o mds_namespace=
+>>
+>> <5>[  375.535442] ceph: module verification failed: signature and/or
+>> required key missing - tainting kernel
+>> <6>[  375.698145] ceph: loaded (mds proto 32)
+>> <3>[  375.801621] ceph: Bad value for 'mds_namespace'
+>>
+>>   From my test, the 'fsparam_string()' has already make sure it won't
+>> trigger the null-ptr-deref bug.
+> Did you test on linux-next tree?
+
+No, I am using the ceph-client repo for ceph code developing.
+
+>
+> I just write a reproducer based on syzkaller's template(So please
+> forgive me if it is too ugly to read)
+>
+> ===========================================================
+> // https://syzkaller.appspot.com/bug?id=76bbdfd28722f0160325e4350b57e33aa95b0bbe
+> // autogenerated by syzkaller (https://github.com/google/syzkaller)
+>
+> #define _GNU_SOURCE
+>
+> #include <dirent.h>
+> #include <endian.h>
+> #include <errno.h>
+> #include <fcntl.h>
+> #include <signal.h>
+> #include <stdarg.h>
+> #include <stdbool.h>
+> #include <stdint.h>
+> #include <stdio.h>
+> #include <stdlib.h>
+> #include <string.h>
+> #include <sys/prctl.h>
+> #include <sys/stat.h>
+> #include <sys/syscall.h>
+> #include <sys/types.h>
+> #include <sys/wait.h>
+> #include <time.h>
+> #include <unistd.h>
+>
+> unsigned long long procid;
+>
+> static void sleep_ms(uint64_t ms)
+> {
+>    usleep(ms * 1000);
+> }
+>
+> static uint64_t current_time_ms(void)
+> {
+>    struct timespec ts;
+>    if (clock_gettime(CLOCK_MONOTONIC, &ts))
+>      exit(1);
+>    return (uint64_t)ts.tv_sec * 1000 + (uint64_t)ts.tv_nsec / 1000000;
+> }
+>
+> static bool write_file(const char* file, const char* what, ...)
+> {
+>    char buf[1024];
+>    va_list args;
+>    va_start(args, what);
+>    vsnprintf(buf, sizeof(buf), what, args);
+>    va_end(args);
+>    buf[sizeof(buf) - 1] = 0;
+>    int len = strlen(buf);
+>    int fd = open(file, O_WRONLY | O_CLOEXEC);
+>    if (fd == -1)
+>      return false;
+>    if (write(fd, buf, len) != len) {
+>      int err = errno;
+>      close(fd);
+>      errno = err;
+>      return false;
+>    }
+>    close(fd);
+>    return true;
+> }
+>
+> static void kill_and_wait(int pid, int* status)
+> {
+>    kill(-pid, SIGKILL);
+>    kill(pid, SIGKILL);
+>    int i;
+>    for (i = 0; i < 100; i++) {
+>      if (waitpid(-1, status, WNOHANG | __WALL) == pid)
+>        return;
+>      usleep(1000);
+>    }
+>    DIR* dir = opendir("/sys/fs/fuse/connections");
+>    if (dir) {
+>      for (;;) {
+>        struct dirent* ent = readdir(dir);
+>        if (!ent)
+>          break;
+>        if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0)
+>          continue;
+>        char abort[300];
+>        snprintf(abort, sizeof(abort), "/sys/fs/fuse/connections/%s/abort",
+>                 ent->d_name);
+>        int fd = open(abort, O_WRONLY);
+>        if (fd == -1) {
+>          continue;
+>        }
+>        if (write(fd, abort, 1) < 0) {
+>        }
+>        close(fd);
+>      }
+>      closedir(dir);
+>    } else {
+>    }
+>    while (waitpid(-1, status, __WALL) != pid) {
+>    }
+> }
+>
+> static void setup_test()
+> {
+>    prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0);
+>    setpgrp();
+>    write_file("/proc/self/oom_score_adj", "1000");
+> }
+>
+> static void execute_one(void);
+>
+> #define WAIT_FLAGS __WALL
+>
+> static void loop(void)
+> {
+>    int iter;
+>    for (iter = 0;; iter++) {
+>      int pid = fork();
+>      if (pid < 0)
+>        exit(1);
+>      if (pid == 0) {
+>        setup_test();
+>        execute_one();
+>        exit(0);
+>      }
+>      int status = 0;
+>      uint64_t start = current_time_ms();
+>      for (;;) {
+>        if (waitpid(-1, &status, WNOHANG | WAIT_FLAGS) == pid)
+>          break;
+>        sleep_ms(1);
+>        if (current_time_ms() - start < 5 * 1000)
+>          continue;
+>        kill_and_wait(pid, &status);
+>        break;
+>      }
+>    }
+> }
+>
+> void execute_one(void)
+> {
+>    char opt[] = "mds_namespace=,\x00";
+>    memcpy((void*)0x20000080, "./file0\000", 8);
+>    syscall(__NR_mknod, 0x20000080ul, 0ul, 0x700ul + procid * 2);
+>    memcpy((void*)0x20000040, "[d::]:/8:", 9);
+>    memcpy((void*)0x200000c0, "./file0\000", 8);
+>    memcpy((void*)0x20000140, "ceph\000", 5);
+>    memcpy((void*)0x20000150, opt, sizeof(opt));
+>    syscall(__NR_mount, 0x20000040ul, 0x200000c0ul, 0x20000140ul, 0ul, 0x20000150);
+> }
+> int main(void)
+> {
+>    syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 3ul, 0x32ul, -1, 0);
+>    for (procid = 0; procid < 6; procid++) {
+>      if (fork() == 0) {
+>        loop();
+>      }
+>    }
+>    sleep(1000000);
+>    return 0;
+> }
+> ===========================================================
+>
+> And it triggers the null-ptr-deref bug described above,
+> its log is shown as below:
+> ===========================================================
+> [   90.779695][ T6513] KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+> [   90.782502][ T6513] RIP: 0010:strlen+0x1a/0x90
+> [ ... ]
+> [   90.782502][ T6513] Call Trace:
+> [   90.782502][ T6513]  <TASK>
+> [   90.782502][ T6513]  ceph_parse_mount_param+0x89a/0x21e0
+> [   90.782502][ T6513]  ? __kasan_unpoison_range-0xf/0x10
+> [   90.782502][ T6513]  ? kasan_addr_to_slab-0xf/0x90
+> [   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
+> [   90.782502][ T6513]  ? ceph_parse_mount_param+0x0/0x21e0
+> [   90.782502][ T6513]  ? audit_kill_trees+0x2b0/0x300
+> [   90.782502][ T6513]  ? lock_release+0x0/0x760
+> [   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
+> [   90.782502][ T6513]  ? security_fs_context_parse_param+0x99/0xd0
+> [   90.782502][ T6513]  ? ceph_parse_mount_param+0x0/0x21e0
+> [   90.782502][ T6513]  vfs_parse_fs_param+0x20f/0x3d0
+> [   90.782502][ T6513]  vfs_parse_fs_string+0xe4/0x180
+> [   90.782502][ T6513]  ? vfs_parse_fs_string+0x0/0x180
+> [   90.782502][ T6513]  ? rcu_read_lock_sched_held+0x0/0xd0
+> [   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
+> [   90.782502][ T6513]  ? kfree+0x129/0x1a0
+> [   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
+> [   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
+> [   90.782502][ T6513]  generic_parse_monolithic+0x16f/0x1f0
+> [   90.782502][ T6513]  ? generic_parse_monolithic+0x0/0x1f0
+> [   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
+> [   90.782502][ T6513]  ? alloc_fs_context+0x5cb/0xa00
+> [   90.782502][ T6513]  path_mount+0x11d3/0x1cb0
+> [   90.782502][ T6513]  ? path_mount+0x0/0x1cb0
+> [   90.782502][ T6513]  ? putname+0xfe/0x140
+> [   90.782502][ T6513]  do_mount+0xf3/0x110
+> [   90.782502][ T6513]  ? do_mount+0x0/0x110
+> [   90.782502][ T6513]  ? _copy_from_user+0xf7/0x170
+> [   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
+> [   90.782502][ T6513]  __x64_sys_mount+0x18f/0x230
+> [   90.782502][ T6513]  do_syscall_64+0x35/0xb0
+> [   90.782502][ T6513]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [ ... ]
+> [   90.782502][ T6513]  </TASK>
+> ===========================================================
+>
+> By the way, commit "vfs: parse: deal with zero length string value"
+> is still in discussion as below, so maybe this patchset is not
+> needed.
+> https://lore.kernel.org/all/17a1fdc-14a0-cf3c-784f-baa939895aef@google.com/
+
+Okay, It's said that breaking commit will be reverted. Let's wait for a 
+while to see what will it be.
+
+Thanks!
+
+- Xiubo
+
+>> But it will always make sense to fix it in ceph code with your patch.
+>>
+>> - Xiubo
+>>
+>>
+>>
+
