@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9147160ABBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297BC60AB22
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236778AbiJXN4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
+        id S236377AbiJXNoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236759AbiJXNyC (ORCPT
+        with ESMTP id S236896AbiJXNld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:54:02 -0400
+        Mon, 24 Oct 2022 09:41:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E56E8D0FF;
-        Mon, 24 Oct 2022 05:43:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071EDB48BC;
+        Mon, 24 Oct 2022 05:39:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64A7C612DB;
-        Mon, 24 Oct 2022 12:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 774D0C433D6;
-        Mon, 24 Oct 2022 12:43:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB2FF61252;
+        Mon, 24 Oct 2022 12:22:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A674C433C1;
+        Mon, 24 Oct 2022 12:22:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615397;
-        bh=fdoR0xvzYT9V9vLf+cdHsA/B+SRWhC/HM+ZFo35VXrE=;
+        s=korg; t=1666614124;
+        bh=2KuOyOV61eUspe7lepKwhElGOBYuoUrGDz3e1x9QyYA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ChU5BYqR7Pk+95lesD1TzvfWbF0AUdTskL6Ww5xLnW7Rlxe4/7Xjc8T61ll2eNaI3
-         9tAMYOl7xsrVMQ7SQ6xjqMGCwNyNxEBaFBOwxfCt+/0ES52foGyitHWojJsqOXql3F
-         EzuOaOY7rPWZCQKSWNRWpQw++PxlAPZ6mjLI8Awo=
+        b=QKCDr4DXXs9ssfYxwbCRgPMqwtfUYXJA57lLOuEJj8GE3NFKBErjuoM37XnWsxKPY
+         27lyGR5EBMFQRx19aBe8hE64Ijs51zrpX2M9INyibFkFnO4rf9uhVsKM9NuaA86ghG
+         oBDGpt/BHmvVtLv7NzypgRZjRO5xKPGmKVkuOuFU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-        Jes Sorensen <jes@trained-monkey.org>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 194/530] wifi: rtl8xxxu: Fix AIFS written to REG_EDCA_*_PARAM
+        stable@vger.kernel.org,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Robert Foss <robert.foss@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 141/390] drm: bridge: adv7511: fix CEC power down control register offset
 Date:   Mon, 24 Oct 2022 13:28:58 +0200
-Message-Id: <20221024113053.824788491@linuxfoundation.org>
+Message-Id: <20221024113028.672236319@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,96 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-[ Upstream commit 5574d3290449916397f3092dcd2bac92415498e1 ]
+[ Upstream commit 1d22b6033ea113a4c3850dfa2c0770885c81aec8 ]
 
-ieee80211_tx_queue_params.aifs is not supposed to be written directly
-to the REG_EDCA_*_PARAM registers. Instead process it like the vendor
-drivers do. It's kinda hacky but it works.
+The ADV7511_REG_CEC_CTRL = 0xE2 register is part of the main register
+map - not the CEC register map. As such, we shouldn't apply an offset to
+the register address. Doing so will cause us to address a bogus register
+for chips with a CEC register map offset (e.g. ADV7533).
 
-This change boosts the download speed and makes it more stable.
-
-Tested with RTL8188FU but all the other supported chips should also
-benefit.
-
-Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
-Signed-off-by: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-Acked-by: Jes Sorensen <jes@trained-monkey.org>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/038cc03f-3567-77ba-a7bd-c4930e3b2fad@gmail.com
+Fixes: 3b1b975003e4 ("drm: adv7511/33: add HDMI CEC support")
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Signed-off-by: Robert Foss <robert.foss@linaro.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220612144854.2223873-2-alvin@pqrs.dk
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ drivers/gpu/drm/bridge/adv7511/adv7511.h     | 5 +----
+ drivers/gpu/drm/bridge/adv7511/adv7511_cec.c | 4 ++--
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index fb2a5fc1a4e6..e74c885a04e5 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -4507,6 +4507,53 @@ rtl8xxxu_wireless_mode(struct ieee80211_hw *hw, struct ieee80211_sta *sta)
- 	return network_type;
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
+index a0f6ee15c248..711061bf3eb7 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
+@@ -386,10 +386,7 @@ void adv7511_cec_irq_process(struct adv7511 *adv7511, unsigned int irq1);
+ #else
+ static inline int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
+ {
+-	unsigned int offset = adv7511->type == ADV7533 ?
+-						ADV7533_REG_CEC_OFFSET : 0;
+-
+-	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset,
++	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL,
+ 		     ADV7511_CEC_CTRL_POWER_DOWN);
+ 	return 0;
  }
- 
-+static void rtl8xxxu_set_aifs(struct rtl8xxxu_priv *priv, u8 slot_time)
-+{
-+	u32 reg_edca_param[IEEE80211_NUM_ACS] = {
-+		[IEEE80211_AC_VO] = REG_EDCA_VO_PARAM,
-+		[IEEE80211_AC_VI] = REG_EDCA_VI_PARAM,
-+		[IEEE80211_AC_BE] = REG_EDCA_BE_PARAM,
-+		[IEEE80211_AC_BK] = REG_EDCA_BK_PARAM,
-+	};
-+	u32 val32;
-+	u16 wireless_mode = 0;
-+	u8 aifs, aifsn, sifs;
-+	int i;
-+
-+	if (priv->vif) {
-+		struct ieee80211_sta *sta;
-+
-+		rcu_read_lock();
-+		sta = ieee80211_find_sta(priv->vif, priv->vif->bss_conf.bssid);
-+		if (sta)
-+			wireless_mode = rtl8xxxu_wireless_mode(priv->hw, sta);
-+		rcu_read_unlock();
-+	}
-+
-+	if (priv->hw->conf.chandef.chan->band == NL80211_BAND_5GHZ ||
-+	    (wireless_mode & WIRELESS_MODE_N_24G))
-+		sifs = 16;
-+	else
-+		sifs = 10;
-+
-+	for (i = 0; i < IEEE80211_NUM_ACS; i++) {
-+		val32 = rtl8xxxu_read32(priv, reg_edca_param[i]);
-+
-+		/* It was set in conf_tx. */
-+		aifsn = val32 & 0xff;
-+
-+		/* aifsn not set yet or already fixed */
-+		if (aifsn < 2 || aifsn > 15)
-+			continue;
-+
-+		aifs = aifsn * slot_time + sifs;
-+
-+		val32 &= ~0xff;
-+		val32 |= aifs;
-+		rtl8xxxu_write32(priv, reg_edca_param[i], val32);
-+	}
-+}
-+
- static void
- rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
- 			  struct ieee80211_bss_conf *bss_conf, u32 changed)
-@@ -4592,6 +4639,8 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
- 		else
- 			val8 = 20;
- 		rtl8xxxu_write8(priv, REG_SLOT, val8);
-+
-+		rtl8xxxu_set_aifs(priv, val8);
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
+index a20a45c0b353..ddd1305b82b2 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
+@@ -316,7 +316,7 @@ int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
+ 		goto err_cec_alloc;
  	}
  
- 	if (changed & BSS_CHANGED_BSSID) {
+-	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset, 0);
++	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL, 0);
+ 	/* cec soft reset */
+ 	regmap_write(adv7511->regmap_cec,
+ 		     ADV7511_REG_CEC_SOFT_RESET + offset, 0x01);
+@@ -343,7 +343,7 @@ int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
+ 	dev_info(dev, "Initializing CEC failed with error %d, disabling CEC\n",
+ 		 ret);
+ err_cec_parse_dt:
+-	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset,
++	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL,
+ 		     ADV7511_CEC_CTRL_POWER_DOWN);
+ 	return ret == -EPROBE_DEFER ? ret : 0;
+ }
 -- 
 2.35.1
 
