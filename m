@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A38BA60A29A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3EA060A3A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbiJXLpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S232395AbiJXL6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbiJXLn7 (ORCPT
+        with ESMTP id S232156AbiJXL4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:43:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE5F72EE6;
-        Mon, 24 Oct 2022 04:41:10 -0700 (PDT)
+        Mon, 24 Oct 2022 07:56:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F10A7B29E;
+        Mon, 24 Oct 2022 04:47:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63AA861269;
-        Mon, 24 Oct 2022 11:38:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783E7C433C1;
-        Mon, 24 Oct 2022 11:38:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9F12B8119F;
+        Mon, 24 Oct 2022 11:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C6E1C433C1;
+        Mon, 24 Oct 2022 11:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611534;
-        bh=0AuyllYZlLRotjtidRW8mqdtseZlGF9ZjfVRkz43LCk=;
+        s=korg; t=1666612022;
+        bh=HcpGPCOEX3wCd/MN7AXOwedC+Kl55GIaCX/bTzIOc+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZQchmsv8kep718eXb3ifsyoTImF0CQq2iGinM/ratv5SFTjP/I9YWwBCzF7sx3cM+
-         XklZmbO6z+yA5P4UDlg9zFSxymPAflcvRMRikrgYGNEP6onB0hkeBK7UWP2rapge1+
-         ympP0Mslcq+/5LNd0LX4/8u+2q7I/jRoH2xYxwfQ=
+        b=mbct1K4VR9qd1EaMv8x71mfEl9J1qHvUahqEikOWK1pJqTCn5Gu0VMvDWPp8Skeeq
+         DD+PMyUE3d+8TMefQ/Felj5paAOJWkFMWM4hIxRL9TMqzb7ppP+9B1xEOUyKq6r1ZU
+         6OtlJcAABUwI/+kVjSluGlMVlFAPNyq6704ZANbI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        stable <stable@kernel.org>,
-        Hongling Zeng <zenghongling@kylinos.cn>
-Subject: [PATCH 4.9 003/159] uas: ignore UAS for Thinkplus chips
-Date:   Mon, 24 Oct 2022 13:29:17 +0200
-Message-Id: <20221024112949.481436244@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 4.14 041/210] ALSA: hda: Fix position reporting on Poulsbo
+Date:   Mon, 24 Oct 2022 13:29:18 +0200
+Message-Id: <20221024112958.323821272@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,60 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hongling Zeng <zenghongling@kylinos.cn>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 0fb9703a3eade0bb84c635705d9c795345e55053 upstream.
+commit 56e696c0f0c71b77fff921fc94b58a02f0445b2c upstream.
 
-The UAS mode of Thinkplus(0x17ef, 0x3899) is reported to influence
-performance and trigger kernel panic on several platforms with the
-following error message:
+Hans reported that his Sony VAIO VPX11S1E showed the broken sound
+behavior at the start of the stream for a couple of seconds, and it
+turned out that the position_fix=1 option fixes the issue.  It implies
+that the position reporting is inaccurate, and very likely hitting on
+all Poulsbo devices.
 
-[   39.702439] xhci_hcd 0000:0c:00.3: ERROR Transfer event for disabled
-               endpoint or incorrect stream ring
-[   39.702442] xhci_hcd 0000:0c:00.3: @000000026c61f810 00000000 00000000
-               1b000000 05038000
+The patch applies the workaround for Poulsbo generically to switch to
+LPIB mode instead of the default position buffer.
 
-[  720.545894][13] Workqueue: usb_hub_wq hub_event
-[  720.550971][13]  ffff88026c143c38 0000000000016300 ffff8802755bb900 ffff880
-                    26cb80000
-[  720.559673][13]  ffff88026c144000 ffff88026ca88100 0000000000000000 ffff880
-                    26cb80000
-[  720.568374][13]  ffff88026cb80000 ffff88026c143c50 ffffffff8186ae25 ffff880
-                    26ca880f8
-[  720.577076][13] Call Trace:
-[  720.580201][13]  [<ffffffff8186ae25>] schedule+0x35/0x80
-[  720.586137][13]  [<ffffffff8186b0ce>] schedule_preempt_disabled+0xe/0x10
-[  720.593623][13]  [<ffffffff8186cb94>] __mutex_lock_slowpath+0x164/0x1e0
-[  720.601012][13]  [<ffffffff8186cc3f>] mutex_lock+0x2f/0x40
-[  720.607141][13]  [<ffffffff8162b8e9>] usb_disconnect+0x59/0x290
-
-Falling back to USB mass storage can solve this problem, so ignore UAS
-function of this chip.
-
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
-Link: https://lore.kernel.org/r/1663902249837086.19.seg@mailgw
+Reported-and-tested-by: Hans de Goede <hdegoede@redhat.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/3e8697e1-87c6-7a7b-d2e8-b21f1d2f181b@redhat.com
+Link: https://lore.kernel.org/r/20221001142124.7241-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/storage/unusual_uas.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ sound/pci/hda/hda_intel.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -198,6 +198,13 @@ UNUSUAL_DEV(0x154b, 0xf00d, 0x0000, 0x99
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_ATA_1X),
- 
-+/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
-+UNUSUAL_DEV(0x17ef, 0x3899, 0x0000, 0x9999,
-+		"Thinkplus",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
-+
- /* Reported-by: Hans de Goede <hdegoede@redhat.com> */
- UNUSUAL_DEV(0x2109, 0x0711, 0x0000, 0x9999,
- 		"VIA",
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -2571,7 +2571,8 @@ static const struct pci_device_id azx_id
+ 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
+ 	/* Poulsbo */
+ 	{ PCI_DEVICE(0x8086, 0x811b),
+-	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
++	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE |
++	  AZX_DCAPS_POSFIX_LPIB },
+ 	/* Oaktrail */
+ 	{ PCI_DEVICE(0x8086, 0x080a),
+ 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
 
 
