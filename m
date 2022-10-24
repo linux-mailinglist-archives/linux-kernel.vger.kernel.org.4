@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA7860A6C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A101160ABE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiJXMig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S236916AbiJXN6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233888AbiJXM2e (ORCPT
+        with ESMTP id S232603AbiJXN6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:28:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E93386FBB;
-        Mon, 24 Oct 2022 05:02:18 -0700 (PDT)
+        Mon, 24 Oct 2022 09:58:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A114DF23;
+        Mon, 24 Oct 2022 05:45:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64C12B81150;
-        Mon, 24 Oct 2022 11:58:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF06C433D6;
-        Mon, 24 Oct 2022 11:58:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E07BD612C9;
+        Mon, 24 Oct 2022 12:44:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC4DC433D6;
+        Mon, 24 Oct 2022 12:44:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612709;
-        bh=KXBQ6MdwJlojy74YROK74a4S4l8XmysUHJstxMTskFQ=;
+        s=korg; t=1666615460;
+        bh=ZxHISU1o26LB6Sne1xESDXRiBzy9SbM+/TdvPkaq9rA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sOMUvPi7gmYmooroz3cYA+glwU2WBlIVqGb5BM2bdUbdIyEWTkw5T8hJXOebmrHPr
-         4a5kWokoGWJKP9zChRZNuou0aMjigxDgWTRUVHe+Ev5fyBn/3dtZmrvTTD0Jl7b368
-         QI2zItdFX31ytmr7rgF1gN6rbjAkdTLbwSCwXTsI=
+        b=nyVJ/FZh9Xq1qgSLt2XwZsRyXd32Pr5NnYclxaWj6G9/ZZxofO+EfGhxLdlIhhJXr
+         4idwFUZmWmtWn4t7FriMJ3QCzAUCf5B3b/e2Q+VKMPYFGe2XfXPF9/AF0nEA6xtXXs
+         rWuzaP/YO0c7qmNOY5OLOR4duZQopsw25nVnX2do=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 082/229] bpf: Ensure correct locking around vulnerable function find_vpid()
-Date:   Mon, 24 Oct 2022 13:30:01 +0200
-Message-Id: <20221024113001.724483738@linuxfoundation.org>
+        stable@vger.kernel.org, Matt Ranostay <mranostay@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Vaishnav Achath <vaishnav.a@ti.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 258/530] arm64: dts: ti: k3-j7200: fix main pinmux range
+Date:   Mon, 24 Oct 2022 13:30:02 +0200
+Message-Id: <20221024113056.747007679@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lee Jones <lee@kernel.org>
+From: Matt Ranostay <mranostay@ti.com>
 
-[ Upstream commit 83c10cc362d91c0d8d25e60779ee52fdbbf3894d ]
+[ Upstream commit 0d0a0b4413460383331088b2203ba09a6971bc3a ]
 
-The documentation for find_vpid() clearly states:
+Range size of 0x2b4 was incorrect since there isn't 173 configurable
+pins for muxing. Additionally there is a non-addressable region in the
+mapping which requires splitting into two ranges.
 
-  "Must be called with the tasklist_lock or rcu_read_lock() held."
+main_pmx0 -> 67 pins
+main_pmx1 -> 3 pins
 
-Presently we do neither for find_vpid() instance in bpf_task_fd_query().
-Add proper rcu_read_lock/unlock() to fix the issue.
-
-Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
-Signed-off-by: Lee Jones <lee@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220912133855.1218900-1-lee@kernel.org
+Fixes: d361ed88455f ("arm64: dts: ti: Add support for J7200 SoC")
+Signed-off-by: Matt Ranostay <mranostay@ti.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+Tested-by: Vaishnav Achath <vaishnav.a@ti.com>
+Link: https://lore.kernel.org/r/20220919205723.8342-1-mranostay@ti.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/syscall.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts | 10 ++++++----
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi             | 11 ++++++++++-
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index e940c1f65938..02e5bdb82a9a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2325,7 +2325,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 	if (attr->task_fd_query.flags != 0)
- 		return -EINVAL;
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+index d14f3c18b65f..c3406e7f10a9 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+@@ -131,15 +131,17 @@
+ 		>;
+ 	};
  
-+	rcu_read_lock();
- 	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
-+	rcu_read_unlock();
- 	if (!task)
- 		return -ENOENT;
+-	main_usbss0_pins_default: main-usbss0-pins-default {
++	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
+ 		pinctrl-single,pins = <
+-			J721E_IOPAD(0x120, PIN_OUTPUT, 0) /* (T4) USB0_DRVVBUS */
++			J721E_IOPAD(0xd0, PIN_OUTPUT, 7) /* (T5) SPI0_D1.GPIO0_55 */
+ 		>;
+ 	};
++};
  
+-	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
++&main_pmx1 {
++	main_usbss0_pins_default: main-usbss0-pins-default {
+ 		pinctrl-single,pins = <
+-			J721E_IOPAD(0xd0, PIN_OUTPUT, 7) /* (T5) SPI0_D1.GPIO0_55 */
++			J721E_IOPAD(0x04, PIN_OUTPUT, 0) /* (T4) USB0_DRVVBUS */
+ 		>;
+ 	};
+ };
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+index 000b5732ea0c..b1df17525dea 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+@@ -295,7 +295,16 @@
+ 	main_pmx0: pinctrl@11c000 {
+ 		compatible = "pinctrl-single";
+ 		/* Proxy 0 addressing */
+-		reg = <0x00 0x11c000 0x00 0x2b4>;
++		reg = <0x00 0x11c000 0x00 0x10c>;
++		#pinctrl-cells = <1>;
++		pinctrl-single,register-width = <32>;
++		pinctrl-single,function-mask = <0xffffffff>;
++	};
++
++	main_pmx1: pinctrl@11c11c {
++		compatible = "pinctrl-single";
++		/* Proxy 0 addressing */
++		reg = <0x00 0x11c11c 0x00 0xc>;
+ 		#pinctrl-cells = <1>;
+ 		pinctrl-single,register-width = <32>;
+ 		pinctrl-single,function-mask = <0xffffffff>;
 -- 
 2.35.1
 
