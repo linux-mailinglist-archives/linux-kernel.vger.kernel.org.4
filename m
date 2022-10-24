@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E0760B00A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324F360ACAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232260AbiJXQAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S230190AbiJXOLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiJXP6r (ORCPT
+        with ESMTP id S233996AbiJXOHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:58:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8873321E04;
-        Mon, 24 Oct 2022 07:53:50 -0700 (PDT)
+        Mon, 24 Oct 2022 10:07:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D553DBD2;
+        Mon, 24 Oct 2022 05:50:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 113D8B816B8;
-        Mon, 24 Oct 2022 12:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6191FC433D6;
-        Mon, 24 Oct 2022 12:30:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B5B9612C9;
+        Mon, 24 Oct 2022 12:50:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8655DC433D6;
+        Mon, 24 Oct 2022 12:50:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614633;
-        bh=VyRbyK2ww2404bbaV+nZGsh7aEeNQVyazO8tGuaL5hY=;
+        s=korg; t=1666615804;
+        bh=G2L0nwBjn5VtTyRobVNartiz1/0xuFjNYrEZ5NJlSKU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qFVei7WxuFonIozhkfSMOVrVYYY/Z57amCxoepZwXID44Fo2bfe1TulED/kVKHOyt
-         OJ+dtJBlnEs1vDAbFOyQKVDGIxvowRswEUXD/rdt/4sTVdcQwPol4JErxc89DqREmZ
-         XI6trKrYgFU+WGBFCN2BhawuXcP5pEK+3A6xRcMI=
+        b=AfqR38GZVrSvARtWr/dChJ4pHrNH6hDEhO8aGa2hBuFIIpVw+xJ0xsQgsPVSJnx3F
+         DcPYtFUaiYOv/AqCJbsbaCMhGuO8WccZ0rDfmuDCvV5z9Frjt1A4NeMlyO5tJl3018
+         uii5+/H8e0RlyjNAwT8PqX++sLnEv84hX2/R+0EY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, linux-riscv@lists.infradead.org,
+        mingo@redhat.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, zanussi@kernel.org, liaochang1@huawei.com,
+        chris.zjh@huawei.com, Yipeng Zou <zouyipeng@huawei.com>,
+        "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 335/390] platform/x86: msi-laptop: Change DMI match / alias strings to fix module autoloading
+Subject: [PATCH 5.15 388/530] tracing: kprobe: Fix kprobe event gen test module on exit
 Date:   Mon, 24 Oct 2022 13:32:12 +0200
-Message-Id: <20221024113037.270449887@linuxfoundation.org>
+Message-Id: <20221024113102.627762726@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,55 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Yipeng Zou <zouyipeng@huawei.com>
 
-[ Upstream commit 2a2565272a3628e45d61625e36ef17af7af4e3de ]
+[ Upstream commit ac48e189527fae87253ef2bf58892e782fb36874 ]
 
-On a MSI S270 with Fedora 37 x86_64 / systemd-251.4 the module does not
-properly autoload.
+Correct gen_kretprobe_test clr event para on module exit.
+This will make it can't to delete.
 
-This is likely caused by issues with how systemd-udevd handles the single
-quote char (') which is part of the sys_vendor / chassis_vendor strings
-on this laptop. As a workaround remove the single quote char + everything
-behind it from the sys_vendor + chassis_vendor matches. This fixes
-the module not autoloading.
+Link: https://lkml.kernel.org/r/20220919125629.238242-2-zouyipeng@huawei.com
 
-Link: https://github.com/systemd/systemd/issues/24715
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220917210407.647432-1-hdegoede@redhat.com
+Cc: <linux-riscv@lists.infradead.org>
+Cc: <mingo@redhat.com>
+Cc: <paul.walmsley@sifive.com>
+Cc: <palmer@dabbelt.com>
+Cc: <aou@eecs.berkeley.edu>
+Cc: <zanussi@kernel.org>
+Cc: <liaochang1@huawei.com>
+Cc: <chris.zjh@huawei.com>
+Fixes: 64836248dda2 ("tracing: Add kprobe event command generation test module")
+Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/msi-laptop.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ kernel/trace/kprobe_event_gen_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/msi-laptop.c b/drivers/platform/x86/msi-laptop.c
-index 3e935303b143..0e804b6c2d24 100644
---- a/drivers/platform/x86/msi-laptop.c
-+++ b/drivers/platform/x86/msi-laptop.c
-@@ -596,11 +596,10 @@ static const struct dmi_system_id msi_dmi_table[] __initconst = {
- 	{
- 		.ident = "MSI S270",
- 		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "MICRO-STAR INT'L CO.,LTD"),
-+			DMI_MATCH(DMI_SYS_VENDOR, "MICRO-STAR INT"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "MS-1013"),
- 			DMI_MATCH(DMI_PRODUCT_VERSION, "0131"),
--			DMI_MATCH(DMI_CHASSIS_VENDOR,
--				  "MICRO-STAR INT'L CO.,LTD")
-+			DMI_MATCH(DMI_CHASSIS_VENDOR, "MICRO-STAR INT")
- 		},
- 		.driver_data = &quirk_old_ec_model,
- 		.callback = dmi_check_cb
-@@ -633,8 +632,7 @@ static const struct dmi_system_id msi_dmi_table[] __initconst = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "NOTEBOOK"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "SAM2000"),
- 			DMI_MATCH(DMI_PRODUCT_VERSION, "0131"),
--			DMI_MATCH(DMI_CHASSIS_VENDOR,
--				  "MICRO-STAR INT'L CO.,LTD")
-+			DMI_MATCH(DMI_CHASSIS_VENDOR, "MICRO-STAR INT")
- 		},
- 		.driver_data = &quirk_old_ec_model,
- 		.callback = dmi_check_cb
+diff --git a/kernel/trace/kprobe_event_gen_test.c b/kernel/trace/kprobe_event_gen_test.c
+index 18b0f1cbb947..e023154be0f8 100644
+--- a/kernel/trace/kprobe_event_gen_test.c
++++ b/kernel/trace/kprobe_event_gen_test.c
+@@ -206,7 +206,7 @@ static void __exit kprobe_event_gen_test_exit(void)
+ 	WARN_ON(kprobe_event_delete("gen_kprobe_test"));
+ 
+ 	/* Disable the event or you can't remove it */
+-	WARN_ON(trace_array_set_clr_event(gen_kprobe_test->tr,
++	WARN_ON(trace_array_set_clr_event(gen_kretprobe_test->tr,
+ 					  "kprobes",
+ 					  "gen_kretprobe_test", false));
+ 
 -- 
 2.35.1
 
