@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6032760AB47
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D7060A888
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236492AbiJXNsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S235460AbiJXNG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236387AbiJXNq2 (ORCPT
+        with ESMTP id S234765AbiJXNE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:46:28 -0400
+        Mon, 24 Oct 2022 09:04:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DC93640C;
-        Mon, 24 Oct 2022 05:40:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B289882612;
+        Mon, 24 Oct 2022 05:20:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADAF0612E7;
-        Mon, 24 Oct 2022 12:39:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0BABC433D6;
-        Mon, 24 Oct 2022 12:39:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15045612CD;
+        Mon, 24 Oct 2022 12:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27C82C43144;
+        Mon, 24 Oct 2022 12:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615180;
-        bh=yPRuM1u1faHElFFGE373PtSuyxKcSUMFtcQMtPH069k=;
+        s=korg; t=1666614016;
+        bh=rNQYDcUVXn/gvEku+qTsHCMt6tZHLfUPTBw54RFZlAc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ch3AYJUUxOOsniqJSsXOZahA5bY1zMxXtE/CMp719LUfIT97GY6vgdqjbr1NstEjb
-         zIEdrH4JeCVd1TJj4AJb8pjU8traWwNIH95euAiDL2QPF9OqlICEvL+WlhecDpEA3d
-         IK7QehDSSOvkT84p6BsfO2/paAlrRepi0LPWF3xg=
+        b=x1tHH8LksS1dJFuzDnMD9fDXey7kQGXnwAXc03eradnLGVs6Z2bkCIldbRQFo1kNu
+         wHf2Ze+NXfqeQpg3bCN6HRO8e4Ih2NKKCGpFFye9IdrQfHURFLBiXeb4Egs/17mmsv
+         XX1ZdB2UYei0j8Vr7923UCr5RrhnX3yuy4MXcIrI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Wen Gong <quic_wgong@quicinc.com>,
         Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 152/530] wifi: ath10k: add peer map clean up for peer delete in ath10k_sta_state()
-Date:   Mon, 24 Oct 2022 13:28:16 +0200
-Message-Id: <20221024113051.934323843@linuxfoundation.org>
+Subject: [PATCH 5.10 100/390] wifi: ath10k: add peer map clean up for peer delete in ath10k_sta_state()
+Date:   Mon, 24 Oct 2022 13:28:17 +0200
+Message-Id: <20221024113026.923199530@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -170,10 +170,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 29 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
-index 8a80919b627f..8208434d7d2b 100644
+index b61cd275fbda..15f02bf23e9b 100644
 --- a/drivers/net/wireless/ath/ath10k/mac.c
 +++ b/drivers/net/wireless/ath/ath10k/mac.c
-@@ -864,11 +864,36 @@ static int ath10k_peer_delete(struct ath10k *ar, u32 vdev_id, const u8 *addr)
+@@ -853,11 +853,36 @@ static int ath10k_peer_delete(struct ath10k *ar, u32 vdev_id, const u8 *addr)
  	return 0;
  }
  
@@ -212,7 +212,7 @@ index 8a80919b627f..8208434d7d2b 100644
  
  	lockdep_assert_held(&ar->conf_mutex);
  
-@@ -880,25 +905,7 @@ static void ath10k_peer_cleanup(struct ath10k *ar, u32 vdev_id)
+@@ -869,25 +894,7 @@ static void ath10k_peer_cleanup(struct ath10k *ar, u32 vdev_id)
  		ath10k_warn(ar, "removing stale peer %pM from vdev_id %d\n",
  			    peer->addr, vdev_id);
  
@@ -239,7 +239,7 @@ index 8a80919b627f..8208434d7d2b 100644
  	}
  	spin_unlock_bh(&ar->data_lock);
  }
-@@ -7580,10 +7587,7 @@ static int ath10k_sta_state(struct ieee80211_hw *hw,
+@@ -7470,10 +7477,7 @@ static int ath10k_sta_state(struct ieee80211_hw *hw,
  				/* Clean up the peer object as well since we
  				 * must have failed to do this above.
  				 */
