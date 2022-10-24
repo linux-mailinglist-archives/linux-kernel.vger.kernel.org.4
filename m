@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4A060A7A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D048560A67F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbiJXMy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S234143AbiJXMeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbiJXMwg (ORCPT
+        with ESMTP id S234173AbiJXM3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:52:36 -0400
+        Mon, 24 Oct 2022 08:29:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D45101E1;
-        Mon, 24 Oct 2022 05:14:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D001987FBD;
+        Mon, 24 Oct 2022 05:03:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8170B6128E;
-        Mon, 24 Oct 2022 12:12:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98031C433C1;
-        Mon, 24 Oct 2022 12:12:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29C10612D7;
+        Mon, 24 Oct 2022 11:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B570C433C1;
+        Mon, 24 Oct 2022 11:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613545;
-        bh=P930n1nSM3z63KMYHL4L/pCD1C+IPjaalcWZsoat+3Q=;
+        s=korg; t=1666612441;
+        bh=1uEidU8QdesxzO/5otIAs5DQ7Dws8bVQHAz3M3ORzmU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N3dV3cMRgtThcS3ympUH0KXVUxDn/8eDZmbrvl4yovmx0vfAgRBs9Km0Cb6XWNeXh
-         chUhkJVygkj3k8vj5InIqAy/rbIPIesMZyTVybyC2j53xnCxkKSgAb10eaJZXHscs2
-         j59DSxp9HjyzxvZHqqXnt2DjniSMHbY0/KEseZ9Q=
+        b=evQIM6SSs1whdlifhKMhQsS+SI4ObXY3BiVGy212LJjS+m3YA0aV2ULMISxy9zcx+
+         QwHclamxWF/YuqhlECZM9b6jFjsIpqYEn7jRjYz7P8IAH+bu3VJLcjnZ5T5mdpwHgJ
+         r7ak5SYKc13j1dI6yIf4ipJryx/zsg3/wgp2qn7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 177/255] cgroup/cpuset: Enable update_tasks_cpumask() on top_cpuset
+        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 170/210] tcp: annotate data-race around tcp_md5sig_pool_populated
 Date:   Mon, 24 Oct 2022 13:31:27 +0200
-Message-Id: <20221024113008.721313707@linuxfoundation.org>
+Message-Id: <20221024113002.473610446@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,69 +55,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Waiman Long <longman@redhat.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit ec5fbdfb99d18482619ac42605cb80fbb56068ee ]
+[ Upstream commit aacd467c0a576e5e44d2de4205855dc0fe43f6fb ]
 
-Previously, update_tasks_cpumask() is not supposed to be called with
-top cpuset. With cpuset partition that takes CPUs away from the top
-cpuset, adjusting the cpus_mask of the tasks in the top cpuset is
-necessary. Percpu kthreads, however, are ignored.
+tcp_md5sig_pool_populated can be read while another thread
+changes its value.
 
-Fixes: ee8dde0cd2ce ("cpuset: Add new v2 cpuset.sched.partition flag")
-Signed-off-by: Waiman Long <longman@redhat.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
+The race has no consequence because allocations
+are protected with tcp_md5sig_mutex.
+
+This patch adds READ_ONCE() and WRITE_ONCE() to document
+the race and silence KCSAN.
+
+Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cgroup/cpuset.c | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
+ net/ipv4/tcp.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 9ba94a9a67aa..c7f4526ca64e 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -33,6 +33,7 @@
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
- #include <linux/kmod.h>
-+#include <linux/kthread.h>
- #include <linux/list.h>
- #include <linux/mempolicy.h>
- #include <linux/mm.h>
-@@ -1057,10 +1058,18 @@ static void update_tasks_cpumask(struct cpuset *cs)
- {
- 	struct css_task_iter it;
- 	struct task_struct *task;
-+	bool top_cs = cs == &top_cpuset;
- 
- 	css_task_iter_start(&cs->css, 0, &it);
--	while ((task = css_task_iter_next(&it)))
-+	while ((task = css_task_iter_next(&it))) {
-+		/*
-+		 * Percpu kthreads in top_cpuset are ignored
-+		 */
-+		if (top_cs && (task->flags & PF_KTHREAD) &&
-+		    kthread_is_per_cpu(task))
-+			continue;
- 		set_cpus_allowed_ptr(task, cs->effective_cpus);
-+	}
- 	css_task_iter_end(&it);
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 783d0cd4fcbd..3a5f5bcedb3b 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3318,12 +3318,16 @@ static void __tcp_alloc_md5sig_pool(void)
+ 	 * to memory. See smp_rmb() in tcp_get_md5sig_pool()
+ 	 */
+ 	smp_wmb();
+-	tcp_md5sig_pool_populated = true;
++	/* Paired with READ_ONCE() from tcp_alloc_md5sig_pool()
++	 * and tcp_get_md5sig_pool().
++	*/
++	WRITE_ONCE(tcp_md5sig_pool_populated, true);
  }
  
-@@ -2014,12 +2023,7 @@ static int update_prstate(struct cpuset *cs, int val)
- 		update_flag(CS_CPU_EXCLUSIVE, cs, 0);
+ bool tcp_alloc_md5sig_pool(void)
+ {
+-	if (unlikely(!tcp_md5sig_pool_populated)) {
++	/* Paired with WRITE_ONCE() from __tcp_alloc_md5sig_pool() */
++	if (unlikely(!READ_ONCE(tcp_md5sig_pool_populated))) {
+ 		mutex_lock(&tcp_md5sig_mutex);
+ 
+ 		if (!tcp_md5sig_pool_populated)
+@@ -3331,7 +3335,8 @@ bool tcp_alloc_md5sig_pool(void)
+ 
+ 		mutex_unlock(&tcp_md5sig_mutex);
  	}
+-	return tcp_md5sig_pool_populated;
++	/* Paired with WRITE_ONCE() from __tcp_alloc_md5sig_pool() */
++	return READ_ONCE(tcp_md5sig_pool_populated);
+ }
+ EXPORT_SYMBOL(tcp_alloc_md5sig_pool);
  
--	/*
--	 * Update cpumask of parent's tasks except when it is the top
--	 * cpuset as some system daemons cannot be mapped to other CPUs.
--	 */
--	if (parent != &top_cpuset)
--		update_tasks_cpumask(parent);
-+	update_tasks_cpumask(parent);
+@@ -3347,7 +3352,8 @@ struct tcp_md5sig_pool *tcp_get_md5sig_pool(void)
+ {
+ 	local_bh_disable();
  
- 	if (parent->child_ecpus_count)
- 		update_sibling_cpumasks(parent, cs, &tmp);
+-	if (tcp_md5sig_pool_populated) {
++	/* Paired with WRITE_ONCE() from __tcp_alloc_md5sig_pool() */
++	if (READ_ONCE(tcp_md5sig_pool_populated)) {
+ 		/* coupled with smp_wmb() in __tcp_alloc_md5sig_pool() */
+ 		smp_rmb();
+ 		return this_cpu_ptr(&tcp_md5sig_pool);
 -- 
 2.35.1
 
