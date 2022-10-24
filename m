@@ -2,62 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D7660A265
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E0360A36F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiJXLma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
+        id S232172AbiJXLzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbiJXLlw (ORCPT
+        with ESMTP id S232273AbiJXLyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:41:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F6F1146D;
-        Mon, 24 Oct 2022 04:39:36 -0700 (PDT)
+        Mon, 24 Oct 2022 07:54:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8319753B0;
+        Mon, 24 Oct 2022 04:45:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5971B81134;
-        Mon, 24 Oct 2022 11:37:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E10C3C43145;
-        Mon, 24 Oct 2022 11:37:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666611455;
-        bh=UDRWxHpUXDQtdc7IHgSsaUbIHdAv+fVPeKI+Z5q2R7s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A1/RhpNpP5X66qZOSkZ/SwPbAZJJql5Op19GBWa2Cv5z9rMTTBl710vhuUWLPlDQq
-         f7MNtNVWjAIHjSyCQ74f8WBsovclqRuUmKZCaCIN0TI1KU9fE1xNIE1UmiLnLZNWwQ
-         wZ2dUnbwUOdYmEsAti8y11OcTuko/8IxUgPh2Dgjt+aN8PJmoodGd/OKfZXCr8sznf
-         Ov/iwdbfelClyfgY9pmFp8mIa9ordG2agLrZMxIyNfYrEiYmuwyT/SpgKRtCPnJD+W
-         42fgGIoJvzayes1fBd7U2jnUBWgIjfew33P+7tCo+cHJqQctu3k3cK+lwXHYIYOK+z
-         cU5oe+b+47SlA==
-Date:   Mon, 24 Oct 2022 12:37:29 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        linux-samsung-soc@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH 04/21] ARM: s3c: remove adc.c
-Message-ID: <Y1Z4+Vx1/eBEJidP@sirena.org.uk>
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-4-arnd@kernel.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38147B8113A;
+        Mon, 24 Oct 2022 11:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 869C1C43143;
+        Mon, 24 Oct 2022 11:38:38 +0000 (UTC)
+Message-ID: <d75c0597-2323-27f2-a7e2-b319667bdcf6@xs4all.nl>
+Date:   Mon, 24 Oct 2022 13:38:36 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TjBesAEwJjzbs13b"
-Content-Disposition: inline
-In-Reply-To: <20221021203329.4143397-4-arnd@kernel.org>
-X-Cookie: You will forget that you ever knew me.
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1] media: cedrus: Propagate error code from
+ cedrus_h265_skip_bits()
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20220914150105.209484-1-dmitry.osipenko@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220914150105.209484-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,33 +55,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dmitry,
 
---TjBesAEwJjzbs13b
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch has a conflict with this patch from Jernej:
 
-On Fri, Oct 21, 2022 at 10:27:37PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> This driver could not be enabled on s3c64xx for a long time
-> because of the ARCH_MULTIPLATFORM dependency, so remove it.
+https://patchwork.linuxtv.org/project/linux-media/patch/20221017194413.1198301-1-jernej.skrabec@gmail.com/
 
-Acked-by: Mark Brown <broonie@kernel.org>
+I decided to take Jernej's patch first. Can you make a v2 that sits on top of
+that patch?
 
---TjBesAEwJjzbs13b
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks!
 
------BEGIN PGP SIGNATURE-----
+	Hans
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNWePgACgkQJNaLcl1U
-h9Cf+Af/VN6wHC7CvPwnkEZPiQwmDfKJ0zUj9sK6e4yTi+q9JBbCWo70NXs7QDV+
-qJ1IdJUjYtDMLuJugV+1A9yk/M73HakD9OTK4drZk3Tq6skDI+2h30RWtbezGSEO
-j9pIF9eGWAPJrLr2wEk2fdHc4p96G5ecRED9DXIgxtJiXIzlUMvft+Y4AYr8gNdc
-RDssoGSqZwJOMa2w+WalYCffJcxJUh2B2vzog0VzxdkgoQX+V6eCTJeG4/px/ZTP
-PCXR/8DwYgbpXADG2bAycARKy4s2WaKHAsU4znv0xoVIDn8EGxAoUqQ/xdNQij/K
-ciNCJA7tstlKnbjcuYMUvmFOetwO1g==
-=QtEb
------END PGP SIGNATURE-----
-
---TjBesAEwJjzbs13b--
+On 9/14/22 17:01, Dmitry Osipenko wrote:
+> The cedrus_h265_skip_bits() may get into infinite loop if decoding
+> parameters are incorrect. In this case we detect the loop and print
+> a error message, continuing the decoding that is fated to fail.
+> 
+> Will be cleaner to abort the decoding early. Propagate the error code
+> to cedrus_device_run() and reset hardware on the cedrus_h265_skip_bits()
+> failure.
+> 
+> Suggested-by: Jernej Škrabec <jernej.skrabec@gmail.com>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  drivers/staging/media/sunxi/cedrus/cedrus_dec.c  |  2 ++
+>  drivers/staging/media/sunxi/cedrus/cedrus_h265.c | 15 ++++++++++++---
+>  drivers/staging/media/sunxi/cedrus/cedrus_hw.c   |  7 ++++++-
+>  drivers/staging/media/sunxi/cedrus/cedrus_hw.h   |  2 ++
+>  4 files changed, 22 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> index e7f7602a5ab4..ae5df3dc01c0 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_dec.c
+> @@ -112,6 +112,8 @@ void cedrus_device_run(void *priv)
+>  
+>  		dev->dec_ops[ctx->current_codec]->trigger(ctx);
+>  	} else {
+> +		cedrus_hw_reset(dev);
+> +
+>  		v4l2_m2m_buf_done_and_job_finish(ctx->dev->m2m_dev,
+>  						 ctx->fh.m2m_ctx,
+>  						 VB2_BUF_STATE_ERROR);
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> index 4952fc17f3e6..f409f59452d8 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> @@ -224,9 +224,10 @@ static void cedrus_h265_pred_weight_write(struct cedrus_dev *dev,
+>  	}
+>  }
+>  
+> -static void cedrus_h265_skip_bits(struct cedrus_dev *dev, int num)
+> +static int cedrus_h265_skip_bits(struct cedrus_dev *dev, int num)
+>  {
+>  	int count = 0;
+> +	int err;
+>  
+>  	while (count < num) {
+>  		int tmp = min(num - count, 32);
+> @@ -235,11 +236,16 @@ static void cedrus_h265_skip_bits(struct cedrus_dev *dev, int num)
+>  			     VE_DEC_H265_TRIGGER_FLUSH_BITS |
+>  			     VE_DEC_H265_TRIGGER_TYPE_N_BITS(tmp));
+>  
+> -		if (cedrus_wait_for(dev, VE_DEC_H265_STATUS, VE_DEC_H265_STATUS_VLD_BUSY))
+> +		err = cedrus_wait_for(dev, VE_DEC_H265_STATUS, VE_DEC_H265_STATUS_VLD_BUSY);
+> +		if (err) {
+>  			dev_err_ratelimited(dev->dev, "timed out waiting to skip bits\n");
+> +			return err;
+> +		}
+>  
+>  		count += tmp;
+>  	}
+> +
+> +	return 0;
+>  }
+>  
+>  static void cedrus_h265_write_scaling_list(struct cedrus_ctx *ctx,
+> @@ -408,6 +414,7 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+>  	u32 pic_order_cnt[2];
+>  	u8 *padding;
+>  	int count;
+> +	int err;
+>  	u32 reg;
+>  
+>  	sps = run->h265.sps;
+> @@ -534,7 +541,9 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
+>  	/* Include the one bit. */
+>  	count++;
+>  
+> -	cedrus_h265_skip_bits(dev, slice_params->data_byte_offset * 8 - count);
+> +	err = cedrus_h265_skip_bits(dev, slice_params->data_byte_offset * 8 - count);
+> +	if (err)
+> +		return err;
+>  
+>  	/* Bitstream parameters. */
+>  
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+> index a6470a89851e..e9ceca332062 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.c
+> @@ -168,11 +168,16 @@ void cedrus_watchdog(struct work_struct *work)
+>  					 VB2_BUF_STATE_ERROR);
+>  }
+>  
+> +void cedrus_hw_reset(struct cedrus_dev *dev)
+> +{
+> +	reset_control_reset(dev->rstc);
+> +}
+> +
+>  int cedrus_hw_suspend(struct device *device)
+>  {
+>  	struct cedrus_dev *dev = dev_get_drvdata(device);
+>  
+> -	reset_control_assert(dev->rstc);
+> +	cedrus_hw_reset(dev);
+>  
+>  	clk_disable_unprepare(dev->ram_clk);
+>  	clk_disable_unprepare(dev->mod_clk);
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+> index 7c92f00e36da..919c4475f0d7 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_hw.h
+> @@ -30,4 +30,6 @@ void cedrus_hw_remove(struct cedrus_dev *dev);
+>  
+>  void cedrus_watchdog(struct work_struct *work);
+>  
+> +void cedrus_hw_reset(struct cedrus_dev *dev);
+> +
+>  #endif
