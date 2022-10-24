@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D3760A775
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF3460A781
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234273AbiJXMuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S234569AbiJXMvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbiJXMpW (ORCPT
+        with ESMTP id S234741AbiJXMpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7768E31DEA;
-        Mon, 24 Oct 2022 05:09:57 -0700 (PDT)
+        Mon, 24 Oct 2022 08:45:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E89318B31;
+        Mon, 24 Oct 2022 05:10:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37E4361218;
-        Mon, 24 Oct 2022 12:09:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A721C433D6;
-        Mon, 24 Oct 2022 12:09:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 455496129E;
+        Mon, 24 Oct 2022 12:09:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 515B7C433C1;
+        Mon, 24 Oct 2022 12:09:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613358;
-        bh=ne2UJ6vabJsh3Q1TxGPkJc9EVVF+3J1pryip5BHrUoI=;
+        s=korg; t=1666613387;
+        bh=/46bcVhFzcjZWnoY6JgoprBlN42KkvWIVoF7PtLK2+U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qs3fhHrdrGU0Dxe57ORM65fSntl19kX264q3ijLzYiTyufiq8YWlTEQeRzciK2Omi
-         ZA6zhgjyW+wfXFT/DOr+tmL/PwePINz+UzYNH6/DL3scB4oq24a06v61gsI0h+ANCE
-         xNuxCOkcoDmLLeCwCPm8Gn4xlRKRtZYul4aftNk8=
+        b=k6Wreb9Ix+w620h6b9/mN7qw6XsblKYvE4bYRy4JYpo1uHJ/SmjAXilvy+zehpPfb
+         crQFY43NYIIl1m6elasbMjsiYb76hoVFYu5B6SZeLqZiEtkMmF4D8m375+GpEN5jAB
+         KqC4KxqOrgbKAPNSEuo8FiUdHuIuV3Kv4QzgBMn8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org,
+        Rustam Subkhankulov <subkhankulov@ispras.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 089/255] drm/mipi-dsi: Detach devices when removing the host
-Date:   Mon, 24 Oct 2022 13:29:59 +0200
-Message-Id: <20221024113005.468986382@linuxfoundation.org>
+Subject: [PATCH 5.4 090/255] platform/chrome: fix double-free in chromeos_laptop_prepare()
+Date:   Mon, 24 Oct 2022 13:30:00 +0200
+Message-Id: <20221024113005.498169773@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
 References: <20221024113002.471093005@linuxfoundation.org>
@@ -54,39 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Rustam Subkhankulov <subkhankulov@ispras.ru>
 
-[ Upstream commit 668a8f17b5290d04ef7343636a5588a0692731a1 ]
+[ Upstream commit 6ad4194d6a1e1d11b285989cd648ef695b4a93c0 ]
 
-Whenever the MIPI-DSI host is unregistered, the code of
-mipi_dsi_host_unregister() loops over every device currently found on that
-bus and will unregister it.
+If chromeos_laptop_prepare_i2c_peripherals() fails after allocating memory
+for 'cros_laptop->i2c_peripherals', this memory is freed at 'err_out' label
+and nonzero value is returned. Then chromeos_laptop_destroy() is called,
+resulting in double-free error.
 
-However, it doesn't detach it from the bus first, which leads to all kind
-of resource leaks if the host wants to perform some clean up whenever a
-device is detached.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Fixes: 068a00233969 ("drm: Add MIPI DSI bus support")
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220711173939.1132294-2-maxime@cerno.tech
+Signed-off-by: Rustam Subkhankulov <subkhankulov@ispras.ru>
+Fixes: 5020cd29d8bf ("platform/chrome: chromeos_laptop - supply properties for ACPI devices")
+Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Link: https://lore.kernel.org/r/20220813220843.2373004-1-subkhankulov@ispras.ru
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_mipi_dsi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/platform/chrome/chromeos_laptop.c | 24 ++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
-index b99f96dcc6f1..bb7f72ade628 100644
---- a/drivers/gpu/drm/drm_mipi_dsi.c
-+++ b/drivers/gpu/drm/drm_mipi_dsi.c
-@@ -300,6 +300,7 @@ static int mipi_dsi_remove_device_fn(struct device *dev, void *priv)
+diff --git a/drivers/platform/chrome/chromeos_laptop.c b/drivers/platform/chrome/chromeos_laptop.c
+index 8723bcf10c93..954953133d56 100644
+--- a/drivers/platform/chrome/chromeos_laptop.c
++++ b/drivers/platform/chrome/chromeos_laptop.c
+@@ -716,6 +716,7 @@ static int __init
+ chromeos_laptop_prepare_i2c_peripherals(struct chromeos_laptop *cros_laptop,
+ 					const struct chromeos_laptop *src)
  {
- 	struct mipi_dsi_device *dsi = to_mipi_dsi_device(dev);
++	struct i2c_peripheral *i2c_peripherals;
+ 	struct i2c_peripheral *i2c_dev;
+ 	struct i2c_board_info *info;
+ 	int i;
+@@ -724,17 +725,15 @@ chromeos_laptop_prepare_i2c_peripherals(struct chromeos_laptop *cros_laptop,
+ 	if (!src->num_i2c_peripherals)
+ 		return 0;
  
-+	mipi_dsi_detach(dsi);
- 	mipi_dsi_device_unregister(dsi);
+-	cros_laptop->i2c_peripherals = kmemdup(src->i2c_peripherals,
+-					       src->num_i2c_peripherals *
+-						sizeof(*src->i2c_peripherals),
+-					       GFP_KERNEL);
+-	if (!cros_laptop->i2c_peripherals)
++	i2c_peripherals = kmemdup(src->i2c_peripherals,
++					      src->num_i2c_peripherals *
++					  sizeof(*src->i2c_peripherals),
++					  GFP_KERNEL);
++	if (!i2c_peripherals)
+ 		return -ENOMEM;
  
+-	cros_laptop->num_i2c_peripherals = src->num_i2c_peripherals;
+-
+-	for (i = 0; i < cros_laptop->num_i2c_peripherals; i++) {
+-		i2c_dev = &cros_laptop->i2c_peripherals[i];
++	for (i = 0; i < src->num_i2c_peripherals; i++) {
++		i2c_dev = &i2c_peripherals[i];
+ 		info = &i2c_dev->board_info;
+ 
+ 		error = chromeos_laptop_setup_irq(i2c_dev);
+@@ -752,16 +751,19 @@ chromeos_laptop_prepare_i2c_peripherals(struct chromeos_laptop *cros_laptop,
+ 		}
+ 	}
+ 
++	cros_laptop->i2c_peripherals = i2c_peripherals;
++	cros_laptop->num_i2c_peripherals = src->num_i2c_peripherals;
++
  	return 0;
+ 
+ err_out:
+ 	while (--i >= 0) {
+-		i2c_dev = &cros_laptop->i2c_peripherals[i];
++		i2c_dev = &i2c_peripherals[i];
+ 		info = &i2c_dev->board_info;
+ 		if (info->properties)
+ 			property_entries_free(info->properties);
+ 	}
+-	kfree(cros_laptop->i2c_peripherals);
++	kfree(i2c_peripherals);
+ 	return error;
+ }
+ 
 -- 
 2.35.1
 
