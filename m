@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7359960BEB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83C460BEB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiJXXgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41414 "EHLO
+        id S230373AbiJXXh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiJXXgP (ORCPT
+        with ESMTP id S230008AbiJXXhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:36:15 -0400
-Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF9B57E19
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:56:48 -0700 (PDT)
-Received: from gproxy3-pub.mail.unifiedlayer.com (unknown [69.89.30.42])
-        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id 93518802A2E2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 21:56:42 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id AB0CA1004A25E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 21:55:56 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id n5QJoMK7OEmXjn5QKoxF7F; Mon, 24 Oct 2022 21:55:56 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=EaQN/NqC c=1 sm=1 tr=0 ts=635709ec
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=Qawa6l4ZSaYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=hUbz0l04USDYyQbrkQpMq25kadJyy+Zkq6qwhLrlVn4=; b=cznHBFWKvJYloEyLk7DDpTsSzo
-        Qsc/KWecZBgjjDkarTrbz0uBQhUViXncmNNogZ1DICTdi3EPNsKwBRCetDtXvRiSqfNNQyiYx2NKU
-        BKj3hEEZ6/KKdLebBqM1RpkcsVOWXX3qBa20cJzGTpIfEiFGxgP0Id+j95RRYc3XEJwo36SnZfpQy
-        nbzhJ01K6l/pYMOusab1kBt0yuSQflo1Xzo7cFUhwD4d5J0Gac+WnhCn0bpTuSq1CzTfuh6kc3PRY
-        8mFPbi+bhZuD5x/6bNX5CeqijgqWSFdkBgfrhj7f3B1jjmXIKJuxD8jeNLyvqFn99dGEYuIKhIjCA
-        XScJuh4A==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:55122 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1on5QH-00362p-1s;
-        Mon, 24 Oct 2022 15:55:53 -0600
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221024112934.415391158@linuxfoundation.org>
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <1e2ae521-3106-1ee0-db51-7dbfc77d6045@w6rz.net>
-Date:   Mon, 24 Oct 2022 14:55:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 24 Oct 2022 19:37:31 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E946B15A302
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:57:40 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id 3so9179950vsh.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mie0dwILOoL5NP5Cg3Tf9BLyHE4I1j5avRUFdQRyJZQ=;
+        b=gNXcO91AfhdJU+tqEckzPK3JYjWSz1Js/FUQZO3PvIsUgwYmnA80qUARF9QI7nqyrK
+         7aDzrWPVkNNS9jt3kjz3H/2gbEyMAFDMxioj5GYU9tN+InKZaAywQuBlsdxCD8up/ZC1
+         cARm+ZNoI+B5/t+4cl+QXzAJHzscPydD8zxqc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mie0dwILOoL5NP5Cg3Tf9BLyHE4I1j5avRUFdQRyJZQ=;
+        b=QVJ85/kuzJcG7dWOEuMfnAtCpqFRuCapCiHPe8nwdPBM4JIS45mMhWacM/qjjh59AM
+         jp7eXpJ5ebae5qlLWGQH6q1FZct9G1XrZvSb1ybCc1ymlqu75N1Jcb1pzbywRQ1Yadv4
+         0WlNgkn/EGbT7KfbGekahdaZKzm6G7sLALanMMpi1I2GH+S8ksd84MOLIZPFf2pf/mCE
+         bFLmBuUGr64gBdvaEHB7i2CS4k94/5jiSrsHdQ3rFGyIzqj4pdMyAZL6a8I71XsahgG1
+         LSaJZ1TtchVRno/WhGGLLptpz/nWb6ZQ+DzSxmOCSpCYwWiKyvltagFSq7+teu/I/kCo
+         kBMg==
+X-Gm-Message-State: ACrzQf3SXiFNe9At3Bm7PGt3k2Q3ZeYIpa3zwLxLJb+UHZvgXBuyesAJ
+        A+4oG/EuBD1Zsu3Yvud5ZteKD4Ww/Wh2//jOI0BmCg==
+X-Google-Smtp-Source: AMsMyM6PPYTAcOUSy3ZKM+pzj2N+X3xlMfiu8aQLbFXu3p60GkgOWzwhnMJsay3y56pkP1gHlZx4uqvmP7yqCYRajpU=
+X-Received: by 2002:a67:fa14:0:b0:3aa:1ba5:4ab0 with SMTP id
+ i20-20020a67fa14000000b003aa1ba54ab0mr3994142vsq.77.1666648640519; Mon, 24
+ Oct 2022 14:57:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1on5QH-00362p-1s
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:55122
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221024102307.33722-1-angelogioacchino.delregno@collabora.com> <20221024102307.33722-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221024102307.33722-2-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Mon, 24 Oct 2022 14:57:09 -0700
+Message-ID: <CAGXv+5HnJgmoX=8596OJZki_0qDaipP+cbbTWpkVxuOkErSBdA@mail.gmail.com>
+Subject: Re: [PATCH 01/10] clk: mediatek: clk-mtk: Allow specifying flags on
+ mtk_fixed_factor clocks
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
+        miles.chen@mediatek.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, chun-jie.chen@mediatek.com,
+        jose.exposito89@gmail.com, yangyingliang@huawei.com,
+        msp@baylibre.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 4:31 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.4 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Oct 24, 2022 at 3:23 AM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
-> Anything received after that time might be too late.
+> Before this change, every mtk_fixed_factor clock forced clock flags to
+> CLK_SET_RATE_PARENT: while this is harmless in some cases, it may not
+> be desired in some others, especially when performing clock muxing on
+> a clock having multiple parents of which one is a dedicated PLL and the
+> others are not.
 >
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
+> This is especially seen on the GPU clocks on some SoCs, where we are
+> muxing between multiple parents: a fixed clock (crystal), a programmable
+> GPU PLL and one or more dividers for the MAINPLL, used for a number of
+> devices; it happens that when a rate change is called for the GPU, the
+> clock framework will try to satisfy the rate request by using one of the
+> MAINPLL dividers, which have CLK_SET_RATE_PARENT and will set the rate
+> on MAINPLL itself - overclocking or underclocking many devices in the
+> system - and making it to lock up.
 >
-> thanks,
+> Logically, it should be harmless (and would only reduce possible bugs)
+> to change all of the univpll and mainpll related fixed factor clocks
+> to not declare the CLK_SET_RATE_PARENT by default but, on some SoCs,
+> this is also used for dividers of other PLLs for which a rate change
+> based on the divider may be desired, hence introduce a new FACTOR_FLAGS()
+> macro to use custom flags (or none) on selected fixed factor clocks.
 >
-> greg k-h
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
-
-Tested-by: Ron Economos <re@w6rz.net>
-
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
