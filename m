@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC59A60B01A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B2360AD23
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiJXQB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
+        id S235073AbiJXOS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232795AbiJXP7W (ORCPT
+        with ESMTP id S234357AbiJXON6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:59:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D2436BD9;
-        Mon, 24 Oct 2022 07:54:42 -0700 (PDT)
+        Mon, 24 Oct 2022 10:13:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621E0CBFC9;
+        Mon, 24 Oct 2022 05:53:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BE18B819F4;
-        Mon, 24 Oct 2022 12:50:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B062C433C1;
-        Mon, 24 Oct 2022 12:49:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29CA9612D5;
+        Mon, 24 Oct 2022 12:15:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B31EC433D6;
+        Mon, 24 Oct 2022 12:15:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615798;
-        bh=SNjKG8v+CT/LaOPc8T6i3wQHsHHlKBHNV1KQqMQmtW8=;
+        s=korg; t=1666613734;
+        bh=sROAur3aGXlT8ifTU8ZjjjERgRM0DiGP+pQC/jW0V5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zOCXyG0XlvUKZNNLlgSZBCwCH6QS1eLwNU+4Uq+x0WbCxA+hZiIzOolUu/gqUcUAg
-         d2qDy58WOPLql9nbky8mKexNP8xO9AMPYWguK9DopwundHN+2OZ/4UrTF+uGf1nJh+
-         mIf5k40yvk/d4pKVIxThML35S9wU26A3EUggEw6Y=
+        b=ZEzb9+u918+gVV+OmArRoCnxl95U4h1ivKtekWoN61dKTQk2zbRFzLfLdalvzC960
+         z6KrOqkP/WmMs6qx9xEMJMGD+7vCvKnjE5yEt+rPZ7eSLmwjx9PKAyX9phWLnywi+T
+         dFlA9IB+23VyRPB8gwLw+YBVgmf8Q6LN0t/YyjkA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thierry Reding <thierry.reding@gmail.com>,
-        John Garry <john.garry@huawei.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 387/530] iommu/iova: Fix module config properly
-Date:   Mon, 24 Oct 2022 13:32:11 +0200
-Message-Id: <20221024113102.585338636@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 222/255] ARM: dts: imx6qp: add missing properties for sram
+Date:   Mon, 24 Oct 2022 13:32:12 +0200
+Message-Id: <20221024113010.472250384@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robin Murphy <robin.murphy@arm.com>
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-[ Upstream commit 4f58330fcc8482aa90674e1f40f601e82f18ed4a ]
+[ Upstream commit 088fe5237435ee2f7ed4450519b2ef58b94c832f ]
 
-IOMMU_IOVA is intended to be an optional library for users to select as
-and when they desire. Since it can be a module now, this means that
-built-in code which has chosen not to select it should not fail to link
-if it happens to have selected as a module by someone else. Replace
-IS_ENABLED() with IS_REACHABLE() to do the right thing.
+All 3 properties are required by sram.yaml. Fixes the dtbs_check warning:
+sram@940000: '#address-cells' is a required property
+sram@940000: '#size-cells' is a required property
+sram@940000: 'ranges' is a required property
 
-CC: Thierry Reding <thierry.reding@gmail.com>
-Reported-by: John Garry <john.garry@huawei.com>
-Fixes: 15bbdec3931e ("iommu: Make the iova library a module")
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
-Reviewed-by: Thierry Reding <treding@nvidia.com>
-Link: https://lore.kernel.org/r/548c2f683ca379aface59639a8f0cccc3a1ac050.1663069227.git.robin.murphy@arm.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/iova.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6qp.dtsi | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/include/linux/iova.h b/include/linux/iova.h
-index 71d8a2de6635..6b6cc104e300 100644
---- a/include/linux/iova.h
-+++ b/include/linux/iova.h
-@@ -133,7 +133,7 @@ static inline unsigned long iova_pfn(struct iova_domain *iovad, dma_addr_t iova)
- 	return iova >> iova_shift(iovad);
- }
+diff --git a/arch/arm/boot/dts/imx6qp.dtsi b/arch/arm/boot/dts/imx6qp.dtsi
+index d91f92f944c5..3633383db706 100644
+--- a/arch/arm/boot/dts/imx6qp.dtsi
++++ b/arch/arm/boot/dts/imx6qp.dtsi
+@@ -9,12 +9,18 @@
+ 		ocram2: sram@940000 {
+ 			compatible = "mmio-sram";
+ 			reg = <0x00940000 0x20000>;
++			ranges = <0 0x00940000 0x20000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
+ 			clocks = <&clks IMX6QDL_CLK_OCRAM>;
+ 		};
  
--#if IS_ENABLED(CONFIG_IOMMU_IOVA)
-+#if IS_REACHABLE(CONFIG_IOMMU_IOVA)
- int iova_cache_get(void);
- void iova_cache_put(void);
+ 		ocram3: sram@960000 {
+ 			compatible = "mmio-sram";
+ 			reg = <0x00960000 0x20000>;
++			ranges = <0 0x00960000 0x20000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
+ 			clocks = <&clks IMX6QDL_CLK_OCRAM>;
+ 		};
  
 -- 
 2.35.1
