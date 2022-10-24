@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2497260AC0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B94460A628
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236863AbiJXOCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
+        id S233816AbiJXMb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236891AbiJXOAR (ORCPT
+        with ESMTP id S233780AbiJXM25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:00:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90308E73A;
-        Mon, 24 Oct 2022 05:47:17 -0700 (PDT)
+        Mon, 24 Oct 2022 08:28:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D8A870A8;
+        Mon, 24 Oct 2022 05:02:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94FED612A4;
-        Mon, 24 Oct 2022 12:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6FD6C433D6;
-        Mon, 24 Oct 2022 12:45:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B405EB811F5;
+        Mon, 24 Oct 2022 11:59:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1544EC433D6;
+        Mon, 24 Oct 2022 11:59:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615531;
-        bh=lU1rMge4AvOB32EqEc1cYUnGuxCTzQQf26R06XK4qiY=;
+        s=korg; t=1666612772;
+        bh=BBEZSL/kEaLKT0nn3CDJDaoaCe8MaFX+1kU7JZ+z9Ck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DdJ2SXyiXRMcHbC3S+ee3oVgfPWInrXJpQWd+SFys6Ovji/bkwtGcC4v0GXQTv9Q6
-         G0ppDy3dHaL1jgYq+cyNEg4loxaTyWoA+Rq+3vV/tvd7H2qKGnOnHtHzDF4DWDa7NH
-         fkemlRGF7QELQ0PWIQ3XRDBDA/rA1+ZNRNK8sYVQ=
+        b=Cha0JQR8eSlxHXQjsOYNiD2ONaTNod9hkwDoi9EIAAXp4MhTtVF4nFZHMUOwWyMNP
+         139bthBplrAjA5Xy9L8pn5Fl8eaOag9LlvZtPScqrC36TR0ncHVau3eSsw+v1RicZP
+         4H4Ga0eqq3hB3OI4/gl+e/Toin8YoMx+Wj+tnr3w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Qiang <xuqiang36@huawei.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 286/530] media: meson: vdec: add missing clk_disable_unprepare on error in vdec_hevc_start()
-Date:   Mon, 24 Oct 2022 13:30:30 +0200
-Message-Id: <20221024113057.997955984@linuxfoundation.org>
+Subject: [PATCH 4.19 112/229] ARM: dts: kirkwood: lsxl: fix serial line
+Date:   Mon, 24 Oct 2022 13:30:31 +0200
+Message-Id: <20221024113002.628237795@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Qiang <xuqiang36@huawei.com>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit 4029372233e13e281f8c387f279f9f064ced3810 ]
+[ Upstream commit 04eabc6ac10fda9424606d9a7ab6ab9a5d95350a ]
 
-Add the missing clk_disable_unprepare() before return
-from vdec_hevc_start() in the error handling case.
+Commit 327e15428977 ("ARM: dts: kirkwood: consolidate common pinctrl
+settings") unknowingly broke the serial output on this board. Before
+this commit, the pinmux was still configured by the bootloader and the
+kernel didn't reconfigured it again. This was an oversight by the
+initial board support where the pinmux for the serial line was never
+configured by the kernel. But with this commit, the serial line will be
+reconfigured to the wrong pins. This is especially confusing, because
+the output still works, but the input doesn't. Presumingly, the input is
+reconfigured to MPP10, but the output is connected to both MPP11 and
+MPP5.
 
-Fixes: 823a7300340e (“media: meson: vdec: add common HEVC decoder support”)
-Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Override the pinmux in the board device tree.
+
+Fixes: 327e15428977 ("ARM: dts: kirkwood: consolidate common pinctrl settings")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/meson/vdec/vdec_hevc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/kirkwood-lsxl.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/staging/media/meson/vdec/vdec_hevc.c b/drivers/staging/media/meson/vdec/vdec_hevc.c
-index 9530e580e57a..afced435c907 100644
---- a/drivers/staging/media/meson/vdec/vdec_hevc.c
-+++ b/drivers/staging/media/meson/vdec/vdec_hevc.c
-@@ -167,8 +167,12 @@ static int vdec_hevc_start(struct amvdec_session *sess)
+diff --git a/arch/arm/boot/dts/kirkwood-lsxl.dtsi b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
+index 7b151acb9984..321a40a98ed2 100644
+--- a/arch/arm/boot/dts/kirkwood-lsxl.dtsi
++++ b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
+@@ -10,6 +10,11 @@
  
- 	clk_set_rate(core->vdec_hevc_clk, 666666666);
- 	ret = clk_prepare_enable(core->vdec_hevc_clk);
--	if (ret)
-+	if (ret) {
-+		if (core->platform->revision == VDEC_REVISION_G12A ||
-+		    core->platform->revision == VDEC_REVISION_SM1)
-+			clk_disable_unprepare(core->vdec_hevcf_clk);
- 		return ret;
-+	}
- 
- 	if (core->platform->revision == VDEC_REVISION_SM1)
- 		regmap_update_bits(core->regmap_ao, AO_RTI_GEN_PWR_SLEEP0,
+ 	ocp@f1000000 {
+ 		pinctrl: pin-controller@10000 {
++			/* Non-default UART pins */
++			pmx_uart0: pmx-uart0 {
++				marvell,pins = "mpp4", "mpp5";
++			};
++
+ 			pmx_power_hdd: pmx-power-hdd {
+ 				marvell,pins = "mpp10";
+ 				marvell,function = "gpo";
 -- 
 2.35.1
 
