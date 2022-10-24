@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C329960A774
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0EA60A555
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234395AbiJXMut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
+        id S233577AbiJXMXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234644AbiJXMpY (ORCPT
+        with ESMTP id S233410AbiJXMVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:24 -0400
+        Mon, 24 Oct 2022 08:21:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFDA28E06;
-        Mon, 24 Oct 2022 05:09:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A62D7C1EA;
+        Mon, 24 Oct 2022 04:59:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1E49612DF;
-        Mon, 24 Oct 2022 12:09:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A42C433D7;
-        Mon, 24 Oct 2022 12:08:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDD8F612A4;
+        Mon, 24 Oct 2022 11:58:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A428C433C1;
+        Mon, 24 Oct 2022 11:58:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613340;
-        bh=RhZY3f/cNX48ieii4f+tk/Br9qS6MllaouL23ztsNwk=;
+        s=korg; t=1666612714;
+        bh=/11Bn+/w1g2+97iqpB5rxj+jzSQ00chxTdkDUSp8RO0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QhHwUlGi+8zAk30SeKcfPSIeISYF01r+Ewl8sKtPayrlmvvjmEmt0HYkzzA0aapNz
-         0A7BteM0wqM2QaVrLW755W9kOrzY65jyZgRr/DCm4NSeefysQWpILmg+qS/wAYqCaG
-         MWIl5SDdMZIZNiVoPpFEulrrgPZwZ7rRi/Yq21B4=
+        b=jBB9Ov2sq6oBnmzRTiHBf99SlXGClNsrtwm1O9jjfQDxnPc7B/99lMtZVhdziRy5N
+         w3jC7UJXAoutGM3g1xzFcCdvBdti0FueP4c4wl9B7MzSCiu5NGne6yDrA+yHnmvhPh
+         sTPsGaiXKwgyjNGvvTlrsbDQNqkjELn29+a8VIS8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Kelin Wang <wangkelin2023@163.com>
-Subject: [PATCH 5.4 100/255] ASoC: eureka-tlv320: Hold reference returned from of_find_xxx API
-Date:   Mon, 24 Oct 2022 13:30:10 +0200
-Message-Id: <20221024113005.806514427@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 092/229] once: add DO_ONCE_SLOW() for sleepable contexts
+Date:   Mon, 24 Oct 2022 13:30:11 +0200
+Message-Id: <20221024113002.025977656@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +56,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit bfb735a3ceff0bab6473bac275da96f9b2a06dec ]
+[ Upstream commit 62c07983bef9d3e78e71189441e1a470f0d1e653 ]
 
-In eukrea_tlv320_probe(), we need to hold the reference returned
-from of_find_compatible_node() which has increased the refcount
-and then call of_node_put() with it when done.
+Christophe Leroy reported a ~80ms latency spike
+happening at first TCP connect() time.
 
-Fixes: 66f232908de2 ("ASoC: eukrea-tlv320: Add DT support.")
-Co-authored-by: Kelin Wang <wangkelin2023@163.com>
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220914134354.3995587-1-windhl@126.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+This is because __inet_hash_connect() uses get_random_once()
+to populate a perturbation table which became quite big
+after commit 4c2c8f03a5ab ("tcp: increase source port perturb table to 2^16")
+
+get_random_once() uses DO_ONCE(), which block hard irqs for the duration
+of the operation.
+
+This patch adds DO_ONCE_SLOW() which uses a mutex instead of a spinlock
+for operations where we prefer to stay in process context.
+
+Then __inet_hash_connect() can use get_random_slow_once()
+to populate its perturbation table.
+
+Fixes: 4c2c8f03a5ab ("tcp: increase source port perturb table to 2^16")
+Fixes: 190cc82489f4 ("tcp: change source port randomizarion at connect() time")
+Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Link: https://lore.kernel.org/netdev/CANn89iLAEYBaoYajy0Y9UmGFff5GPxDUoG-ErVB2jDdRNQ5Tug@mail.gmail.com/T/#t
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Willy Tarreau <w@1wt.eu>
+Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/fsl/eukrea-tlv320.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ include/linux/once.h       | 28 ++++++++++++++++++++++++++++
+ lib/once.c                 | 30 ++++++++++++++++++++++++++++++
+ net/ipv4/inet_hashtables.c |  4 ++--
+ 3 files changed, 60 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/fsl/eukrea-tlv320.c b/sound/soc/fsl/eukrea-tlv320.c
-index 6f3b768489f6..bf3d3f0aa858 100644
---- a/sound/soc/fsl/eukrea-tlv320.c
-+++ b/sound/soc/fsl/eukrea-tlv320.c
-@@ -86,7 +86,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
- 	int ret;
- 	int int_port = 0, ext_port;
- 	struct device_node *np = pdev->dev.of_node;
--	struct device_node *ssi_np = NULL, *codec_np = NULL;
-+	struct device_node *ssi_np = NULL, *codec_np = NULL, *tmp_np = NULL;
+diff --git a/include/linux/once.h b/include/linux/once.h
+index ae6f4eb41cbe..bb58e1c3aa03 100644
+--- a/include/linux/once.h
++++ b/include/linux/once.h
+@@ -5,10 +5,18 @@
+ #include <linux/types.h>
+ #include <linux/jump_label.h>
  
- 	eukrea_tlv320.dev = &pdev->dev;
- 	if (np) {
-@@ -143,7 +143,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
- 	}
++/* Helpers used from arbitrary contexts.
++ * Hard irqs are blocked, be cautious.
++ */
+ bool __do_once_start(bool *done, unsigned long *flags);
+ void __do_once_done(bool *done, struct static_key_true *once_key,
+ 		    unsigned long *flags, struct module *mod);
  
- 	if (machine_is_eukrea_cpuimx27() ||
--	    of_find_compatible_node(NULL, NULL, "fsl,imx21-audmux")) {
-+	    (tmp_np = of_find_compatible_node(NULL, NULL, "fsl,imx21-audmux"))) {
- 		imx_audmux_v1_configure_port(MX27_AUDMUX_HPCR1_SSI0,
- 			IMX_AUDMUX_V1_PCR_SYN |
- 			IMX_AUDMUX_V1_PCR_TFSDIR |
-@@ -158,10 +158,11 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
- 			IMX_AUDMUX_V1_PCR_SYN |
- 			IMX_AUDMUX_V1_PCR_RXDSEL(MX27_AUDMUX_HPCR1_SSI0)
- 		);
-+		of_node_put(tmp_np);
- 	} else if (machine_is_eukrea_cpuimx25sd() ||
- 		   machine_is_eukrea_cpuimx35sd() ||
- 		   machine_is_eukrea_cpuimx51sd() ||
--		   of_find_compatible_node(NULL, NULL, "fsl,imx31-audmux")) {
-+		   (tmp_np = of_find_compatible_node(NULL, NULL, "fsl,imx31-audmux"))) {
- 		if (!np)
- 			ext_port = machine_is_eukrea_cpuimx25sd() ?
- 				4 : 3;
-@@ -178,6 +179,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
- 			IMX_AUDMUX_V2_PTCR_SYN,
- 			IMX_AUDMUX_V2_PDCR_RXDSEL(int_port)
- 		);
-+		of_node_put(tmp_np);
- 	} else {
- 		if (np) {
- 			/* The eukrea,asoc-tlv320 driver was explicitly
++/* Variant for process contexts only. */
++bool __do_once_slow_start(bool *done);
++void __do_once_slow_done(bool *done, struct static_key_true *once_key,
++			 struct module *mod);
++
+ /* Call a function exactly once. The idea of DO_ONCE() is to perform
+  * a function call such as initialization of random seeds, etc, only
+  * once, where DO_ONCE() can live in the fast-path. After @func has
+@@ -52,9 +60,29 @@ void __do_once_done(bool *done, struct static_key_true *once_key,
+ 		___ret;							     \
+ 	})
+ 
++/* Variant of DO_ONCE() for process/sleepable contexts. */
++#define DO_ONCE_SLOW(func, ...)						     \
++	({								     \
++		bool ___ret = false;					     \
++		static bool __section(".data.once") ___done = false;	     \
++		static DEFINE_STATIC_KEY_TRUE(___once_key);		     \
++		if (static_branch_unlikely(&___once_key)) {		     \
++			___ret = __do_once_slow_start(&___done);	     \
++			if (unlikely(___ret)) {				     \
++				func(__VA_ARGS__);			     \
++				__do_once_slow_done(&___done, &___once_key,  \
++						    THIS_MODULE);	     \
++			}						     \
++		}							     \
++		___ret;							     \
++	})
++
+ #define get_random_once(buf, nbytes)					     \
+ 	DO_ONCE(get_random_bytes, (buf), (nbytes))
+ #define get_random_once_wait(buf, nbytes)                                    \
+ 	DO_ONCE(get_random_bytes_wait, (buf), (nbytes))                      \
+ 
++#define get_random_slow_once(buf, nbytes)				     \
++	DO_ONCE_SLOW(get_random_bytes, (buf), (nbytes))
++
+ #endif /* _LINUX_ONCE_H */
+diff --git a/lib/once.c b/lib/once.c
+index 59149bf3bfb4..351f66aad310 100644
+--- a/lib/once.c
++++ b/lib/once.c
+@@ -66,3 +66,33 @@ void __do_once_done(bool *done, struct static_key_true *once_key,
+ 	once_disable_jump(once_key, mod);
+ }
+ EXPORT_SYMBOL(__do_once_done);
++
++static DEFINE_MUTEX(once_mutex);
++
++bool __do_once_slow_start(bool *done)
++	__acquires(once_mutex)
++{
++	mutex_lock(&once_mutex);
++	if (*done) {
++		mutex_unlock(&once_mutex);
++		/* Keep sparse happy by restoring an even lock count on
++		 * this mutex. In case we return here, we don't call into
++		 * __do_once_done but return early in the DO_ONCE_SLOW() macro.
++		 */
++		__acquire(once_mutex);
++		return false;
++	}
++
++	return true;
++}
++EXPORT_SYMBOL(__do_once_slow_start);
++
++void __do_once_slow_done(bool *done, struct static_key_true *once_key,
++			 struct module *mod)
++	__releases(once_mutex)
++{
++	*done = true;
++	mutex_unlock(&once_mutex);
++	once_disable_jump(once_key, mod);
++}
++EXPORT_SYMBOL(__do_once_slow_done);
+diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
+index 5295a579ec82..70070f1003a0 100644
+--- a/net/ipv4/inet_hashtables.c
++++ b/net/ipv4/inet_hashtables.c
+@@ -765,8 +765,8 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
+ 	if (likely(remaining > 1))
+ 		remaining &= ~1U;
+ 
+-	net_get_random_once(table_perturb,
+-			    INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
++	get_random_slow_once(table_perturb,
++			     INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
+ 	index = port_offset & (INET_TABLE_PERTURB_SIZE - 1);
+ 
+ 	offset = READ_ONCE(table_perturb[index]) + (port_offset >> 32);
 -- 
 2.35.1
 
