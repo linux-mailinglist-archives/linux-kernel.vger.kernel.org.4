@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDA860B451
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C7860B0C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbiJXRhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
+        id S233551AbiJXQJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbiJXRg7 (ORCPT
+        with ESMTP id S233614AbiJXQEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:36:59 -0400
+        Mon, 24 Oct 2022 12:04:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3DA239221;
-        Mon, 24 Oct 2022 09:11:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2A311878C;
+        Mon, 24 Oct 2022 07:57:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C843B815B3;
-        Mon, 24 Oct 2022 12:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94929C433D7;
-        Mon, 24 Oct 2022 12:22:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B16EB81668;
+        Mon, 24 Oct 2022 12:22:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1618C433C1;
+        Mon, 24 Oct 2022 12:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614147;
-        bh=9hOHvcfAshufIN+WX2pbK6ZReYAb5opHs46B1aHl8Gc=;
+        s=korg; t=1666614153;
+        bh=1hCw6cxNbX3YN2yD9VtMsbWe/TAy/Ij432ySJrqy94M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PD7lIgemDhF58nMNAENCpybOizSWMd0vYIOImf3Yr5zjyZSCM9o6U8OthQFZOSidR
-         pUGDx+ixORbh5NvYKAuuWsCGqEjFzT297SQiXPmscc+n6wDZhZyfubXDLrwbwIy+Qf
-         YiDFxjJcGYpV4JoiUMfhKCaWu81VJKMbYwj5EFfw=
+        b=Ia73eklo2J+eqZNCED9xxoEEWC6kvd6jIRYZpWLp8miraenbr2vie7+Xnc0T0UwwA
+         meV8gzrI0i40Vvw/XBsZcnx4hV3UWih//I4PygnazYacFwi2khOnBUDxcxs5cmkwsl
+         eOM9wI3ZUY479gAIV7yUhXXcpfLOsEh2ZgpVE3N0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot <syzbot+576dfca25381fb6fbc5f@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 120/390] Bluetooth: hci_{ldisc,serdev}: check percpu_init_rwsem() failure
-Date:   Mon, 24 Oct 2022 13:28:37 +0200
-Message-Id: <20221024113027.777519807@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Micay <danielmicay@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 122/390] x86/microcode/AMD: Track patch allocation size explicitly
+Date:   Mon, 24 Oct 2022 13:28:39 +0200
+Message-Id: <20221024113027.862630256@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -56,91 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 3124d320c22f3f4388d9ac5c8f37eaad0cefd6b1 ]
+[ Upstream commit 712f210a457d9c32414df246a72781550bc23ef6 ]
 
-syzbot is reporting NULL pointer dereference at hci_uart_tty_close() [1],
-for rcu_sync_enter() is called without rcu_sync_init() due to
-hci_uart_tty_open() ignoring percpu_init_rwsem() failure.
+In preparation for reducing the use of ksize(), record the actual
+allocation size for later memcpy(). This avoids copying extra
+(uninitialized!) bytes into the patch buffer when the requested
+allocation size isn't exactly the size of a kmalloc bucket.
+Additionally, fix potential future issues where runtime bounds checking
+will notice that the buffer was allocated to a smaller value than
+returned by ksize().
 
-While we are at it, fix that hci_uart_register_device() ignores
-percpu_init_rwsem() failure and hci_uart_unregister_device() does not
-call percpu_free_rwsem().
-
-Link: https://syzkaller.appspot.com/bug?extid=576dfca25381fb6fbc5f [1]
-Reported-by: syzbot <syzbot+576dfca25381fb6fbc5f@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Fixes: 67d2f8781b9f00d1 ("Bluetooth: hci_ldisc: Allow sleeping while proto locks are held.")
-Fixes: d73e172816652772 ("Bluetooth: hci_serdev: Init hci_uart proto_lock to avoid oops")
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Fixes: 757885e94a22 ("x86, microcode, amd: Early microcode patch loading support for AMD")
+Suggested-by: Daniel Micay <danielmicay@gmail.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/lkml/CA+DvKQ+bp7Y7gmaVhacjv9uF6Ar-o4tet872h4Q8RPYPJjcJQA@mail.gmail.com/
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bluetooth/hci_ldisc.c  |  7 +++++--
- drivers/bluetooth/hci_serdev.c | 10 +++++++---
- 2 files changed, 12 insertions(+), 5 deletions(-)
+ arch/x86/include/asm/microcode.h    | 1 +
+ arch/x86/kernel/cpu/microcode/amd.c | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/bluetooth/hci_ldisc.c b/drivers/bluetooth/hci_ldisc.c
-index 637c5b8c2aa1..726d5c83c550 100644
---- a/drivers/bluetooth/hci_ldisc.c
-+++ b/drivers/bluetooth/hci_ldisc.c
-@@ -490,6 +490,11 @@ static int hci_uart_tty_open(struct tty_struct *tty)
- 		BT_ERR("Can't allocate control structure");
- 		return -ENFILE;
+diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
+index 91a06cef50c1..f73327397b89 100644
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -9,6 +9,7 @@
+ struct ucode_patch {
+ 	struct list_head plist;
+ 	void *data;		/* Intel uses only this one */
++	unsigned int size;
+ 	u32 patch_id;
+ 	u16 equiv_cpu;
+ };
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+index 3f6b137ef4e6..c87936441339 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -783,6 +783,7 @@ static int verify_and_add_patch(u8 family, u8 *fw, unsigned int leftover,
+ 		kfree(patch);
+ 		return -EINVAL;
  	}
-+	if (percpu_init_rwsem(&hu->proto_lock)) {
-+		BT_ERR("Can't allocate semaphore structure");
-+		kfree(hu);
-+		return -ENOMEM;
-+	}
++	patch->size = *patch_size;
  
- 	tty->disc_data = hu;
- 	hu->tty = tty;
-@@ -502,8 +507,6 @@ static int hci_uart_tty_open(struct tty_struct *tty)
- 	INIT_WORK(&hu->init_ready, hci_uart_init_work);
- 	INIT_WORK(&hu->write_work, hci_uart_write_work);
+ 	mc_hdr      = (struct microcode_header_amd *)(fw + SECTION_HDR_SIZE);
+ 	proc_id     = mc_hdr->processor_rev_id;
+@@ -864,7 +865,7 @@ load_microcode_amd(bool save, u8 family, const u8 *data, size_t size)
+ 		return ret;
  
--	percpu_init_rwsem(&hu->proto_lock);
--
- 	/* Flush any pending characters in the driver */
- 	tty_driver_flush_buffer(tty);
+ 	memset(amd_ucode_patch, 0, PATCH_MAX_SIZE);
+-	memcpy(amd_ucode_patch, p->data, min_t(u32, ksize(p->data), PATCH_MAX_SIZE));
++	memcpy(amd_ucode_patch, p->data, min_t(u32, p->size, PATCH_MAX_SIZE));
  
-diff --git a/drivers/bluetooth/hci_serdev.c b/drivers/bluetooth/hci_serdev.c
-index e9a44ab3812d..f2e2e553d4de 100644
---- a/drivers/bluetooth/hci_serdev.c
-+++ b/drivers/bluetooth/hci_serdev.c
-@@ -301,11 +301,12 @@ int hci_uart_register_device(struct hci_uart *hu,
- 
- 	serdev_device_set_client_ops(hu->serdev, &hci_serdev_client_ops);
- 
-+	if (percpu_init_rwsem(&hu->proto_lock))
-+		return -ENOMEM;
-+
- 	err = serdev_device_open(hu->serdev);
- 	if (err)
--		return err;
--
--	percpu_init_rwsem(&hu->proto_lock);
-+		goto err_rwsem;
- 
- 	err = p->open(hu);
- 	if (err)
-@@ -375,6 +376,8 @@ int hci_uart_register_device(struct hci_uart *hu,
- 	p->close(hu);
- err_open:
- 	serdev_device_close(hu->serdev);
-+err_rwsem:
-+	percpu_free_rwsem(&hu->proto_lock);
- 	return err;
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(hci_uart_register_device);
-@@ -396,5 +399,6 @@ void hci_uart_unregister_device(struct hci_uart *hu)
- 		clear_bit(HCI_UART_PROTO_READY, &hu->flags);
- 		serdev_device_close(hu->serdev);
- 	}
-+	percpu_free_rwsem(&hu->proto_lock);
- }
- EXPORT_SYMBOL_GPL(hci_uart_unregister_device);
 -- 
 2.35.1
 
