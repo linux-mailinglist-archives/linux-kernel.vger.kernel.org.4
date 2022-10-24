@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5E160993F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 06:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FB9609942
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 06:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiJXEkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 00:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S230022AbiJXEkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 00:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiJXEjy (ORCPT
+        with ESMTP id S229943AbiJXEkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 00:39:54 -0400
+        Mon, 24 Oct 2022 00:40:10 -0400
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00E827B10;
-        Sun, 23 Oct 2022 21:39:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4722BB13;
+        Sun, 23 Oct 2022 21:39:56 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 77582424B9;
-        Mon, 24 Oct 2022 04:39:45 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 6E02E42508;
+        Mon, 24 Oct 2022 04:39:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1666586389; bh=PVbU0np+97Je803BzzDJxHjiUfk3jhfRkIFZVZYuHUk=;
+        t=1666586394; bh=yMbEwflzqPvq1z+7biOy/IUVCweTSxh7aHPaxBSZMtg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=LYVmh+bSESpCH7QKiV6mv4Oel4WaxJcbFyjwesld4g+umRsZfe3jzeACIQA9EgbL7
-         e6OGgdiAPDOSHb8/nv5mm22hYgipk5ewwnU7QaD1AVWv5E/qaBNNWuVQ+Sw0kgSiJd
-         z2SC/9VTTruuzFJvFIjAftSYNWMl9xowXkOMOW0Dgpc39xJ3xZ9c6eb/OiH8SytExD
-         Yo0YvQNegGkH9Wk3jOjZv9wiUNd8TiBzbWxMUO7vFeKemw0Kfk+VmbcYcZ+kq/iW9N
-         Tqn36RYv+D7IwdzRQZPJGzYjRt/ZSIJKUFIF52a+fkODGhOhqz8kXAH/uSr9/KMTBa
-         4YWpOYw+wbarA==
+        b=yEf0FUNHoy/2ES74xJsxu/jKCPVa4yBrgjz9IPfCXBYFCKNRSovPXszbYdIumxaka
+         eCS9xnqqCjB1QgtNkmaQ5yYshTfmfIrfG4qVhpFKj4+DAVrZ6WzpCT9nrHgnH4/EsD
+         2ZQK652mihrJTpQ5luntG2RFPextkHcCVuWRTSFbetEXRHEKeF8b2vYOrJVHth6HD3
+         I1cZBDD/xzVaBzVpNJHy/uOLzAYNDM3qmIiD9Hq3cFsKFtQtQPxfZXozRDG9Hxd1IV
+         AJzBJw8nDyHsNplVP5xosYQSmaxDgDFHU+z9Xxv2sF0/RzGO/dq1++Zd8GqO159rrl
+         EVIfkpLK/XTng==
 From:   Hector Martin <marcan@marcan.st>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -45,160 +45,151 @@ Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/5] dt-bindings: cpufreq: apple,soc-cpufreq: Add binding for Apple SoC cpufreq
-Date:   Mon, 24 Oct 2022 13:39:22 +0900
-Message-Id: <20221024043925.25379-3-marcan@marcan.st>
+Subject: [PATCH v3 3/5] cpufreq: Generalize of_perf_domain_get_sharing_cpumask phandle format
+Date:   Mon, 24 Oct 2022 13:39:23 +0900
+Message-Id: <20221024043925.25379-4-marcan@marcan.st>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221024043925.25379-1-marcan@marcan.st>
 References: <20221024043925.25379-1-marcan@marcan.st>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
-The hardware has an independent controller per CPU cluster, and we
-represent them as unique nodes in order to accurately describe the
-hardware. The driver is responsible for binding them as a single cpufreq
-device (in the Linux cpufreq model).
+of_perf_domain_get_sharing_cpumask currently assumes a 1-argument
+phandle format, and directly returns the argument. Generalize this to
+return the full of_phandle_args, so it can be used by drivers which use
+other phandle styles (e.g. separate nodes). This also requires changing
+the CPU sharing match to compare the full args structure.
+
+Also, make sure to of_node_put(args.np) (the original code was leaking a
+reference).
 
 Signed-off-by: Hector Martin <marcan@marcan.st>
 ---
- .../cpufreq/apple,cluster-cpufreq.yaml        | 119 ++++++++++++++++++
- 1 file changed, 119 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+ drivers/cpufreq/mediatek-cpufreq-hw.c | 14 +++++++++-----
+ include/linux/cpufreq.h               | 28 +++++++++++++++------------
+ 2 files changed, 25 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-new file mode 100644
-index 000000000000..b11452f91468
---- /dev/null
-+++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-@@ -0,0 +1,119 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/cpufreq/apple,cluster-cpufreq.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
+index f0e0a35c7f21..f80339779084 100644
+--- a/drivers/cpufreq/mediatek-cpufreq-hw.c
++++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+@@ -160,6 +160,7 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
+ 	struct mtk_cpufreq_data *data;
+ 	struct device *dev = &pdev->dev;
+ 	struct resource *res;
++	struct of_phandle_args args;
+ 	void __iomem *base;
+ 	int ret, i;
+ 	int index;
+@@ -168,11 +169,14 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
+ 	if (!data)
+ 		return -ENOMEM;
+ 
+-	index = of_perf_domain_get_sharing_cpumask(policy->cpu, "performance-domains",
+-						   "#performance-domain-cells",
+-						   policy->cpus);
+-	if (index < 0)
+-		return index;
++	ret = of_perf_domain_get_sharing_cpumask(policy->cpu, "performance-domains",
++						 "#performance-domain-cells",
++						 policy->cpus, &args);
++	if (ret < 0)
++		return ret;
 +
-+title: Apple SoC cluster cpufreq device
++	index = args.args[0];
++	of_node_put(args.np);
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
+ 	if (!res) {
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index d5595d57f4e5..6a94a6eaad27 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -1110,10 +1110,10 @@ cpufreq_table_set_inefficient(struct cpufreq_policy *policy,
+ }
+ 
+ static inline int parse_perf_domain(int cpu, const char *list_name,
+-				    const char *cell_name)
++				    const char *cell_name,
++				    struct of_phandle_args *args)
+ {
+ 	struct device_node *cpu_np;
+-	struct of_phandle_args args;
+ 	int ret;
+ 
+ 	cpu_np = of_cpu_device_node_get(cpu);
+@@ -1121,41 +1121,44 @@ static inline int parse_perf_domain(int cpu, const char *list_name,
+ 		return -ENODEV;
+ 
+ 	ret = of_parse_phandle_with_args(cpu_np, list_name, cell_name, 0,
+-					 &args);
++					 args);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	of_node_put(cpu_np);
+ 
+-	return args.args[0];
++	return 0;
+ }
+ 
+ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_name,
+-						     const char *cell_name, struct cpumask *cpumask)
++						     const char *cell_name, struct cpumask *cpumask,
++						     struct of_phandle_args *pargs)
+ {
+-	int target_idx;
+ 	int cpu, ret;
++	struct of_phandle_args args;
+ 
+-	ret = parse_perf_domain(pcpu, list_name, cell_name);
++	ret = parse_perf_domain(pcpu, list_name, cell_name, pargs);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	target_idx = ret;
+ 	cpumask_set_cpu(pcpu, cpumask);
+ 
+ 	for_each_possible_cpu(cpu) {
+ 		if (cpu == pcpu)
+ 			continue;
+ 
+-		ret = parse_perf_domain(cpu, list_name, cell_name);
++		ret = parse_perf_domain(cpu, list_name, cell_name, &args);
+ 		if (ret < 0)
+ 			continue;
+ 
+-		if (target_idx == ret)
++		if (pargs->np == args.np && pargs->args_count == args.args_count &&
++		    !memcmp(pargs->args, args.args, sizeof(args.args[0]) * args.args_count))
+ 			cpumask_set_cpu(cpu, cpumask);
 +
-+maintainers:
-+  - Hector Martin <marcan@marcan.st>
-+
-+description: |
-+  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
-+  the cluster management register block. This binding uses the standard
-+  operating-points-v2 table to define the CPU performance states, with the
-+  opp-level property specifying the hardware p-state index for that level.
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - const: apple,t8103-cluster-cpufreq
-+          - const: apple,cluster-cpufreq
-+      - items:
-+          - const: apple,t6000-cluster-cpufreq
-+          - const: apple,t8103-cluster-cpufreq
-+          - const: apple,cluster-cpufreq
-+      - items:
-+          - const: apple,t8112-cluster-cpufreq
-+          - const: apple,cluster-cpufreq
-+
-+  reg:
-+    maxItems: 1
-+    description: The register region for this CPU cluster DVFS controller
-+
-+  '#performance-domain-cells':
-+    const: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - '#performance-domain-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    // This example shows a single CPU per domain and 2 domains,
-+    // with two p-states per domain.
-+    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
-+    cpus {
-+      #address-cells = <2>;
-+      #size-cells = <0>;
-+
-+      cpu@0 {
-+        compatible = "apple,icestorm";
-+        device_type = "cpu";
-+        reg = <0x0 0x0>;
-+        operating-points-v2 = <&ecluster_opp>;
-+        performance-domains = <&cpufreq_e>;
-+      };
-+
-+      cpu@10100 {
-+        compatible = "apple,firestorm";
-+        device_type = "cpu";
-+        reg = <0x0 0x10100>;
-+        operating-points-v2 = <&pcluster_opp>;
-+        performance-domains = <&cpufreq_p>;
-+      };
-+    };
-+
-+    ecluster_opp: opp-table-0 {
-+      compatible = "operating-points-v2";
-+      opp-shared;
-+
-+      opp01 {
-+        opp-hz = /bits/ 64 <600000000>;
-+        opp-level = <1>;
-+        clock-latency-ns = <7500>;
-+      };
-+      opp02 {
-+        opp-hz = /bits/ 64 <972000000>;
-+        opp-level = <2>;
-+        clock-latency-ns = <22000>;
-+      };
-+    };
-+
-+    pcluster_opp: opp-table-1 {
-+      compatible = "operating-points-v2";
-+      opp-shared;
-+
-+      opp01 {
-+        opp-hz = /bits/ 64 <600000000>;
-+        opp-level = <1>;
-+        clock-latency-ns = <8000>;
-+      };
-+      opp02 {
-+        opp-hz = /bits/ 64 <828000000>;
-+        opp-level = <2>;
-+        clock-latency-ns = <19000>;
-+      };
-+    };
-+
-+    soc {
-+      #address-cells = <2>;
-+      #size-cells = <2>;
-+
-+      cpufreq_e: cpufreq@210e20000 {
-+        compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+        reg = <0x2 0x10e20000 0 0x1000>;
-+        #performance-domain-cells = <0>;
-+      };
-+
-+      cpufreq_p: cpufreq@211e20000 {
-+        compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+        reg = <0x2 0x11e20000 0 0x1000>;
-+        #performance-domain-cells = <0>;
-+      };
-+    };
++		of_node_put(args.np);
+ 	}
+ 
+-	return target_idx;
++	return 0;
+ }
+ #else
+ static inline int cpufreq_boost_trigger_state(int state)
+@@ -1185,7 +1188,8 @@ cpufreq_table_set_inefficient(struct cpufreq_policy *policy,
+ }
+ 
+ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_name,
+-						     const char *cell_name, struct cpumask *cpumask)
++						     const char *cell_name, struct cpumask *cpumask,
++						     struct of_phandle_args *pargs)
+ {
+ 	return -EOPNOTSUPP;
+ }
 -- 
 2.35.1
 
