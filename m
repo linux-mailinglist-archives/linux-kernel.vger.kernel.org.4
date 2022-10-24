@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4990060A6A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6630260A8D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiJXMgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
+        id S235634AbiJXNLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234344AbiJXMaF (ORCPT
+        with ESMTP id S235640AbiJXNJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:30:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CB631EF6;
-        Mon, 24 Oct 2022 05:03:57 -0700 (PDT)
+        Mon, 24 Oct 2022 09:09:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746539F749;
+        Mon, 24 Oct 2022 05:22:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CDB6B81147;
-        Mon, 24 Oct 2022 11:46:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA6F3C433C1;
-        Mon, 24 Oct 2022 11:46:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07850612E7;
+        Mon, 24 Oct 2022 12:22:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AD4EC433D6;
+        Mon, 24 Oct 2022 12:22:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611983;
-        bh=MLYHlpHej6WatiXz/o2H6bBtG1Sl1y9g5508EWQT3AE=;
+        s=korg; t=1666614137;
+        bh=NDhl75XBw/Cv2H9f1biVIkMHuvFLt/dll9cekvRZ4cs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tSJ3IOrtDzEZvQBbwx9rJcNxfYfjGlV9H95S64Ja0Qv2MJEZtYon4y/qAV7NTTVAC
-         PueHDq44VSt57bhukZiy2QgzqBO9bhRSzhNI/QG/kLjjVR8aXcDUwUW+f6UlkHVVZv
-         jnimvtUmhwY9ukAgETvfbaEruOK4JtLS/MoCsmQw=
+        b=rNNbYes0EXswXmS5zp6xT7jKI8/VrBc73LHtlQh0xbSd+Xqng3L1Hlhfr/L2l0ma4
+         npkSbUsNyTZTaSk4z2vVEk36Chgr+D8g0S9ewkVdq/6rmW5VWdZRFqQ3MrruOursci
+         i1URHsWo3P1X0ADZmDItOVxE4RVtgdqmgQde2zpk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Swati Agarwal <swati.agarwal@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 025/210] dmaengine: xilinx_dma: Report error in case of dma_set_mask_and_coherent API failure
+        stable@vger.kernel.org, Simon Ser <contact@emersion.fr>,
+        Lyude Paul <lyude@redhat.com>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 145/390] drm/dp_mst: fix drm_dp_dpcd_read return value checks
 Date:   Mon, 24 Oct 2022 13:29:02 +0200
-Message-Id: <20221024112957.780094879@linuxfoundation.org>
+Message-Id: <20221024113028.858350468@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Swati Agarwal <swati.agarwal@xilinx.com>
+From: Simon Ser <contact@emersion.fr>
 
-[ Upstream commit 8f2b6bc79c32f0fa60df000ae387a790ec80eae9 ]
+[ Upstream commit 2ac6cdd581f48c8f68747156fde5868486a44985 ]
 
-The driver does not handle the failure case while calling
-dma_set_mask_and_coherent API.
+drm_dp_dpcd_read returns the number of bytes read. The previous code
+would print garbage on DPCD error, and would exit with on error on
+success.
 
-In case of failure, capture the return value of API and then report an
-error.
-
-Addresses-coverity: Unchecked return value (CHECKED_RETURN)
-
-Signed-off-by: Swati Agarwal <swati.agarwal@xilinx.com>
-Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Link: https://lore.kernel.org/r/20220817061125.4720-4-swati.agarwal@xilinx.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Simon Ser <contact@emersion.fr>
+Fixes: cb897542c6d2 ("drm/dp_mst: Fix W=1 warnings")
+Cc: Lyude Paul <lyude@redhat.com>
+Cc: Benjamin Gaignard <benjamin.gaignard@st.com>
+Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+Link: https://patchwork.freedesktop.org/patch/473500/
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/xilinx/xilinx_dma.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/drm_dp_mst_topology.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
-index 9319349e69d2..b4d00bc461db 100644
---- a/drivers/dma/xilinx/xilinx_dma.c
-+++ b/drivers/dma/xilinx/xilinx_dma.c
-@@ -2585,7 +2585,11 @@ static int xilinx_dma_probe(struct platform_device *pdev)
- 		xdev->ext_addr = false;
+diff --git a/drivers/gpu/drm/drm_dp_mst_topology.c b/drivers/gpu/drm/drm_dp_mst_topology.c
+index ab423b0413ee..4272cd3622f8 100644
+--- a/drivers/gpu/drm/drm_dp_mst_topology.c
++++ b/drivers/gpu/drm/drm_dp_mst_topology.c
+@@ -4856,14 +4856,14 @@ void drm_dp_mst_dump_topology(struct seq_file *m,
+ 		seq_printf(m, "dpcd: %*ph\n", DP_RECEIVER_CAP_SIZE, buf);
  
- 	/* Set the dma mask bits */
--	dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
-+	err = dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
-+	if (err < 0) {
-+		dev_err(xdev->dev, "DMA mask error %d\n", err);
-+		goto disable_clks;
-+	}
+ 		ret = drm_dp_dpcd_read(mgr->aux, DP_FAUX_CAP, buf, 2);
+-		if (ret) {
++		if (ret != 2) {
+ 			seq_printf(m, "faux/mst read failed\n");
+ 			goto out;
+ 		}
+ 		seq_printf(m, "faux/mst: %*ph\n", 2, buf);
  
- 	/* Initialize the DMA engine */
- 	xdev->common.dev = &pdev->dev;
+ 		ret = drm_dp_dpcd_read(mgr->aux, DP_MSTM_CTRL, buf, 1);
+-		if (ret) {
++		if (ret != 1) {
+ 			seq_printf(m, "mst ctrl read failed\n");
+ 			goto out;
+ 		}
+@@ -4871,7 +4871,7 @@ void drm_dp_mst_dump_topology(struct seq_file *m,
+ 
+ 		/* dump the standard OUI branch header */
+ 		ret = drm_dp_dpcd_read(mgr->aux, DP_BRANCH_OUI, buf, DP_BRANCH_OUI_HEADER_SIZE);
+-		if (ret) {
++		if (ret != DP_BRANCH_OUI_HEADER_SIZE) {
+ 			seq_printf(m, "branch oui read failed\n");
+ 			goto out;
+ 		}
 -- 
 2.35.1
 
