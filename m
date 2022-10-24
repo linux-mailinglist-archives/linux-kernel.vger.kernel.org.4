@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038BB60AB77
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E6960A54C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236198AbiJXNwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S233341AbiJXMW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233085AbiJXNvz (ORCPT
+        with ESMTP id S233339AbiJXMUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:51:55 -0400
+        Mon, 24 Oct 2022 08:20:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD05BB06C;
-        Mon, 24 Oct 2022 05:42:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2250C7B5AF;
+        Mon, 24 Oct 2022 04:59:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9AE261299;
-        Mon, 24 Oct 2022 12:42:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE641C433C1;
-        Mon, 24 Oct 2022 12:42:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44567612F4;
+        Mon, 24 Oct 2022 11:56:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57A0DC433C1;
+        Mon, 24 Oct 2022 11:56:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615340;
-        bh=tiyhuEZPjajtP+igwZqaXeDfD751I7gCLOYpcZMLJFw=;
+        s=korg; t=1666612611;
+        bh=Sf4p/I5+I0rasfxMUpNRv3gda7JlSUROFiBRNveWqCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bphs1z4X3RiT8KMTG03JJ4czz3JPZticoDc80fCJw2KIIrjEJXKdLJK8kZznuu7nj
-         +Iz6UYYXfQN21fVAWBKTi+4lKQ5yZO3ExGlIwrGNaump6qu/PYZzEanHlf7MreaXiA
-         hmeBedB289fRAP7a1HZJAkkhpVo8z03bNCOUU/58=
+        b=lL7JG+AadCkavVvKX5AoANZP4mRPuBxUOaE/3UUoV46dwNGfVkZQeZLfgQaipgxhQ
+         owgQPHBx5qLocySI/ug5q/nPBqhJrpg+9bhpCCPJZv6dL+P00zCvlLLBwhC3opuV1t
+         nze3fg1tjoXm5QgwNvcjxUa4iX9IoEwf8tMeeCkI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niels Dossche <dossche.niels@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Zbynek Michl <zbynek.michl@gmail.com>
-Subject: [PATCH 5.15 196/530] eth: alx: take rtnl_lock on resume
-Date:   Mon, 24 Oct 2022 13:29:00 +0200
-Message-Id: <20221024113053.918097596@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.19 022/229] random: clamp credited irq bits to maximum mixed
+Date:   Mon, 24 Oct 2022 13:29:01 +0200
+Message-Id: <20221024112959.856505864@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +52,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit 6ad1c94e1e7e374d88f0cfd77936dddb8339aaba ]
+commit e78a802a7b4febf53f2a92842f494b01062d85a8 upstream.
 
-Zbynek reports that alx trips an rtnl assertion on resume:
+Since the most that's mixed into the pool is sizeof(long)*2, don't
+credit more than that many bytes of entropy.
 
- RTNL: assertion failed at net/core/dev.c (2891)
- RIP: 0010:netif_set_real_num_tx_queues+0x1ac/0x1c0
- Call Trace:
-  <TASK>
-  __alx_open+0x230/0x570 [alx]
-  alx_resume+0x54/0x80 [alx]
-  ? pci_legacy_resume+0x80/0x80
-  dpm_run_callback+0x4a/0x150
-  device_resume+0x8b/0x190
-  async_resume+0x19/0x30
-  async_run_entry_fn+0x30/0x130
-  process_one_work+0x1e5/0x3b0
-
-indeed the driver does not hold rtnl_lock during its internal close
-and re-open functions during suspend/resume. Note that this is not
-a huge bug as the driver implements its own locking, and does not
-implement changing the number of queues, but we need to silence
-the splat.
-
-Fixes: 4a5fe57e7751 ("alx: use fine-grained locking instead of RTNL")
-Reported-and-tested-by: Zbynek Michl <zbynek.michl@gmail.com>
-Reviewed-by: Niels Dossche <dossche.niels@gmail.com>
-Link: https://lore.kernel.org/r/20220928181236.1053043-1-kuba@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e3e33fc2ea7f ("random: do not use input pool from hard IRQs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/atheros/alx/main.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/atheros/alx/main.c b/drivers/net/ethernet/atheros/alx/main.c
-index 98a8698a3201..2ac5253ff89a 100644
---- a/drivers/net/ethernet/atheros/alx/main.c
-+++ b/drivers/net/ethernet/atheros/alx/main.c
-@@ -1912,11 +1912,14 @@ static int alx_suspend(struct device *dev)
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -976,7 +976,7 @@ static void mix_interrupt_randomness(str
+ 	local_irq_enable();
  
- 	if (!netif_running(alx->dev))
- 		return 0;
-+
-+	rtnl_lock();
- 	netif_device_detach(alx->dev);
+ 	mix_pool_bytes(pool, sizeof(pool));
+-	credit_init_bits(max(1u, (count & U16_MAX) / 64));
++	credit_init_bits(clamp_t(unsigned int, (count & U16_MAX) / 64, 1, sizeof(pool) * 8));
  
- 	mutex_lock(&alx->mtx);
- 	__alx_stop(alx);
- 	mutex_unlock(&alx->mtx);
-+	rtnl_unlock();
- 
- 	return 0;
+ 	memzero_explicit(pool, sizeof(pool));
  }
-@@ -1927,6 +1930,7 @@ static int alx_resume(struct device *dev)
- 	struct alx_hw *hw = &alx->hw;
- 	int err;
- 
-+	rtnl_lock();
- 	mutex_lock(&alx->mtx);
- 	alx_reset_phy(hw);
- 
-@@ -1943,6 +1947,7 @@ static int alx_resume(struct device *dev)
- 
- unlock:
- 	mutex_unlock(&alx->mtx);
-+	rtnl_unlock();
- 	return err;
- }
- 
--- 
-2.35.1
-
 
 
