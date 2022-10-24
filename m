@@ -2,147 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81F960B575
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDC160B577
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:28:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiJXS2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S231538AbiJXS2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbiJXS1d (ORCPT
+        with ESMTP id S231442AbiJXS1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:27:33 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2059.outbound.protection.outlook.com [40.107.95.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD210A47D;
-        Mon, 24 Oct 2022 10:09:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nk5YcLl1dpUm1rECDJNn/SG00gXFavjs1EZa2RRy+vp2BfklX/zO2K4aAWUqEcHq1o/qqvOMZe8UNx/EWOweEFbxAUTzC6ZTs6D4VT78SuNp73jvjlWVWx0RDW8nSWZrb9lihdyr70obDZubhw76Yu+Xx46HRJUcf3i9X1M2xwH9PIPPbj9qnoCF9DWdPGNc13Wdtj7E/OxDuYsdTUfZNdQ3yOu8wHhUPoWpOIblEh64ATGk8UuP2QHXIaesqB+TbtQ89FuMFQJcAqRMI6d6N6meerCElJapMFUhq5SGYthh6g8R89b4WFDLJl1j5Ov4cghDFBSV3oNntp+7y1gwkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rMfOtIoNYFx3chhM75KrjYl729PIJ3xogRyhROocmxg=;
- b=GRG2e5DZV1v+QNeW5kuD6DR05mogmJcc5dWwvvNMnPKyK/wDElfMQWpx1Q1s3uHR33FjMXAeF9U8iD2rf6FxexzR8EIp2iY/8c3PYs7Pr/l94Z4bC3/rOwUEM2ob08dbr46FzLp5w8ERgUGxD0oK9PI63Yj9be+a/oSrjX/LUFxKZRvO2kCH0cecadg2Mycgz3vH++D7ju41sfzlELT9F+NsYXkXXa49dSdMI2lTZsSM+ul8DWeCxrEJYf5oy14g0mrgHmaL9FyKUBUTSIhWcySY8bhF9gTArnZmWlnpytrL0cR6ev/vUI7abY+GqTLh1e1g2i84zdYa2clIsFOKIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rMfOtIoNYFx3chhM75KrjYl729PIJ3xogRyhROocmxg=;
- b=rhKSTdRp6UkpqaeoYm5QGylnUEVa3IGcBPL303jNkTGyeTS9+jD2635ket3auraVTiSCxozjWpP7OqQ0TiopxRLnxbE1+ixARaT3rvstJhCfho2+W+0WSTlG4J4h9HB5uJxN2xR9k9oHonRkQky4i5RfYcJ+QKEDmFnGyLDz9sM8r6CDq+4DGzVaCovvKKxOozcXzBLfxUVkaxWSu6wITWYcIUsnG2jU++1u/X+/oj5JLAqyqCEVX7X2QI3mLRim10C57BmXTtwdRQtLHjlvrVXthfts0VL2jiZMTgI+8EJRk2Wv0GaoblxGft8+rXkcAu0cQBSK7EPJ/KYWu2TuoQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MN2PR12MB4336.namprd12.prod.outlook.com (2603:10b6:208:1df::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Mon, 24 Oct
- 2022 17:06:35 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Mon, 24 Oct 2022
- 17:06:35 +0000
-Date:   Mon, 24 Oct 2022 14:06:34 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Li Zhijian <lizhijian@fujitsu.com>
-Cc:     zyjzyj2000@gmail.com, leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bob Pearson <rpearsonhpe@gmail.com>
-Subject: Re: [PATCH for-next] RDMA/rxe: Fix mr leak in RESPST_ERR_RNR
-Message-ID: <Y1bGGurUBxm4YOJS@nvidia.com>
-References: <20221013040333.21097-1-lizhijian@fujitsu.com>
+        Mon, 24 Oct 2022 14:27:42 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B5E40BDF;
+        Mon, 24 Oct 2022 10:09:33 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id bs14so13626755ljb.9;
+        Mon, 24 Oct 2022 10:09:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VBYWVM9ODmS0VnK1FS7UvQkzqr14IDbygTiD2Kt2jNo=;
+        b=L14XkVSAc4WBdwRecryASp/ueVsdmBwQPQePAhWolmvZit0WXl4nywyQUrhmeXyiMW
+         Ejogwb/JSjeU75NrAsWcnaDz3y28PW6FU5dITtAyrugywzrlqFQ2kPohorsnco/KeRUa
+         s0qnjq5u9WSIhXhqXFXSuODcXtKBsGirVirH/kA+zNJsAn/PgflmnsqBesIIhAPzoRWN
+         XbzPzcYciTkzq7u/UsbMFirHOd0IMjR1QyKQK6hbbrJd3EOHobfINiUP9e91hbHs2KOU
+         kxOFude4E2fTeaowvaRviu0oBcUYBfjDZo97tAysKKTFsIwMVFqVuUS+2ubrZqyqU8+r
+         nvDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VBYWVM9ODmS0VnK1FS7UvQkzqr14IDbygTiD2Kt2jNo=;
+        b=ObSfbIcP/kMe2U5bPa5CFTJw1f1AgRcnRQ4wsumdK2Xew57mC4dlaw+R+kvMPhrWuY
+         fmnCJBR5OJAEzi09J+ttT+Qt9usCcmqRsX32i40c391x0WQ71sy28ZzFV0rAJUB9toQK
+         qzSzFK4KvL5gzI4Bm6TJ3DEctvCIa5FJgEWqcrFcoBtE1vaUIvj/2lUBrGVoSi+hCQjl
+         t0Mht9HloyV6YSjh7pNlrhe6BgMqHKScQSXZEQ3LViYMekoVvOTQu8AMHUsqPN30uXlo
+         SOHHKFyrW5kf02N/FBm+k7/6w46AvrAZ+kHKwKyH81qgqqxl4tuamguO+9mXbAieYUVs
+         wzPw==
+X-Gm-Message-State: ACrzQf3DP6lyYtEZZE8tObC3rq592ZPECLzPoUoZZIf8XR0ncne78wPb
+        0uAMIMd2pC7vv6vkJQTc6MM=
+X-Google-Smtp-Source: AMsMyM7ODeeFAmpnQDDH3HERObjY1vW7Iec4Qdx4UQVAzbcfokntL0Jbc9mXmee9bgtSmBhxtOvzIA==
+X-Received: by 2002:a05:651c:1104:b0:26f:e0ad:fd2e with SMTP id e4-20020a05651c110400b0026fe0adfd2emr11727240ljo.67.1666631284320;
+        Mon, 24 Oct 2022 10:08:04 -0700 (PDT)
+Received: from pc636 (host-217-213-69-138.mobileonline.telia.com. [217.213.69.138])
+        by smtp.gmail.com with ESMTPSA id d11-20020ac2544b000000b004979ec19380sm643994lfn.285.2022.10.24.10.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 10:08:03 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Mon, 24 Oct 2022 19:08:01 +0200
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org
+Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use
+ call_rcu_flush()
+Message-ID: <Y1bGcQ7RPleYp3ge@pc636>
+References: <20221019225144.2500095-13-paulmck@kernel.org>
+ <CAEXW_YQgSwMYisZVctXkjFu6_5YhFCpL_E5o5H4oJooS5Syp+g@mail.gmail.com>
+ <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
+ <Y1ZtyjxKCcV0Hfjn@pc636>
+ <Y1aDy3maaO39ClSU@pc636>
+ <Y1ahs83258Lok9+O@google.com>
+ <20221024153958.GY5600@paulmck-ThinkPad-P17-Gen-1>
+ <Y1a8ei1h7SzyYZx9@pc636>
+ <20221024164819.GA5600@paulmck-ThinkPad-P17-Gen-1>
+ <Y1bDdP3iHoa4xqZL@pc636>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221013040333.21097-1-lizhijian@fujitsu.com>
-X-ClientProxiedBy: BL1PR13CA0330.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::35) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN2PR12MB4336:EE_
-X-MS-Office365-Filtering-Correlation-Id: 798ff933-23ab-43f0-0a4f-08dab5e21b5c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: apBrEdKeqhYWabRJxMoWGvl4x7fmiKxsGfvuOTCtwvg4wujPiIsySdy8hKkSTPAYrWzBenK7M+jD4SB8m7tvTN0VPvA5JQeGSuTPpASNe02RVogNBJvwJbm75T38jqbXuqjuPnJ2Elj6V6ZVXBzsWTI3sbDuo4/tmTWGuMfB+8uepy4EyOjku9wSv5yICLKhJRszVwVyEwnO0Md1XPsjaxeJErazlCqyskf21TU22EXBd5A1r+8hXLFwTFjqKxwE1JEmGROmhC6nzKZgAd5c8Jr/OTX3jkipk1Inrl6U80nruHIY6spglctFBUYAA+nYkGIeYQLeqVsGNp6bdCZqSm2nOqvcAASshs0QZ+eqyqM/jzWNO2iJ/er42CKpq+vmTyzY9lMd7k0avWX/b3+E6ZWpf+dnNZl/eLjnyah6EXqLM+3hbO2OPKklDFLiyJXFgRff8E/zZly952AKIvAmYaNAZdwvDYERulkgSVpjdUHTPmMf3Z7nSLkjGFotEDZil25qudkG4wn0mwzwQWooVJFfuYDZJ8AeqxTS0wl58IExmpmvyQcLFbb392u9z7JKVSJbQrlLSVepxDJAWJNk4SO3EWlAXsV74il9qc1owyEg2L45IPUP9Dfp5lZhdc+CxJpBZ8jRSjlxgah7kf8T7bmjd03uNzevDFOW1HL07xbjwIbW5FNrFFq7qsP0hMB83LlHG09b7nLb2R9eWWa6qg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(346002)(396003)(376002)(366004)(451199015)(6916009)(36756003)(2906002)(5660300002)(8936002)(66946007)(66476007)(8676002)(4326008)(41300700001)(86362001)(66556008)(316002)(6506007)(6512007)(26005)(83380400001)(186003)(2616005)(38100700002)(6486002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ivpW3ReQvJUJ4wVjpCD1ahyJOtB9uW8VVtL4y7HbOMGCjR3S8m0hLo1Y+cAs?=
- =?us-ascii?Q?UeSmh8PoeSC5fTJtimGOBaiW35pIPHlOKMCpxh7+U/FaElBsinNAY6k4xvyI?=
- =?us-ascii?Q?dPp/qMALt00wBoYd1YoYQCYx73ytS8ZNsDthfpbVWMIsRROy8L1V5+6K5ikw?=
- =?us-ascii?Q?STgyrB7vA49x/veC+3kl5mqfGFyxZd6kWkNzT5rtWi2RfTmlTPNBH1HCUMpk?=
- =?us-ascii?Q?jwXQ52RRmdntn+YUCD1lbL0YtWaSJ5FVM9M+3yvH/T30NBUqtlUR8HVbAt6H?=
- =?us-ascii?Q?0xWsLMxWOEi+fI+d3AmxcF1tEQ4xaNf4Y9VH6t5oDqbhnVcsfaWLwHtML24y?=
- =?us-ascii?Q?Uax88C7EM4ju4sXI/V/4r/NjYz+Zrj9yQ9jX88/eAfwKesCTvmfRi0Kfacj2?=
- =?us-ascii?Q?iGVgCd4SW3GY/UZ9dAVxAzgjKQ3FFTWy2ESWqrcbCaojiQpnZu9xwwffHJnF?=
- =?us-ascii?Q?ScEqP5Mrmqk7CjoDOvFGqjvzQSCaSyhVk0o6qeSFkwEi31ndSAPjnyaED5Xd?=
- =?us-ascii?Q?jptYBI44GYI90BggGhdFIfnr3TpF+Haawc3jBzXvxipyPbCy92B8vN6T4ULo?=
- =?us-ascii?Q?diGkKb5F9Px+NX4R93UYiPJpnCYj0DolSfXurOJUqLyYz584zwtHJtQPN/aA?=
- =?us-ascii?Q?2ZysdOSLepPRX+85LGtCCDtkof47qVlxJz10iZa9fr7MUvmUuu71kWyd7Wjw?=
- =?us-ascii?Q?kOaQmlQrHjzGKetLTUWMa9bk5Bnms/NvXTOZRHjJ19i8CPJpRiye6pxO5xN7?=
- =?us-ascii?Q?wRa3KoPnjsz7sDKqxF9xMB+N3JS2/zqM5M6FJ/V7xAw7erarSWQ7YAG6qiVV?=
- =?us-ascii?Q?BPVSdYofhpMNd82dr5pdaK1lEIqreGdt5SExgh/bWlRxqXjTU1FTMnewOF3m?=
- =?us-ascii?Q?QnAIqB2D37l99JupaoEzTKXgfzy2OMfyDgdaEsz3SXvaXd9fdM87/wE5QPhV?=
- =?us-ascii?Q?HwdsOW/9fOl+2qf//bibq4WGizMD7PmmcfXPTNgBRb2rSrEMmvrKOCbScP9p?=
- =?us-ascii?Q?56M5aNQakbUNf8WwvTVk70B3wrVgE5o6NSAKeDrwWUMSbMZ/YuOaIqF00cQK?=
- =?us-ascii?Q?DbB1I6FH5GwqkWwt6FCLKUmRdc/nv4vAtH0NBHoZGKAKh6aA3KHU21chxFA0?=
- =?us-ascii?Q?8v9ySHNoV+bnEJddyD8ubPvigUNlwuNISPP44o6dXIH7WIdhFlzzZPiwTlQJ?=
- =?us-ascii?Q?IdGLDPDEhDcb9z/uaV5lDCVcwB9aMQPXrnZUpZMCI3/660xVIeUCuIoNSNlr?=
- =?us-ascii?Q?hbvBHBEx0+l/KRvwm/KIKogtMzu6KLR1ca0HjXTPHTTWSqtyeM4U1uNCr5vH?=
- =?us-ascii?Q?flLZFE7n6wigsjXSvpC58v7pmwYC7W4FxPLcoHjidi9foUWPvkO9fIf3YwxS?=
- =?us-ascii?Q?RuMYZvSv709mOUhTu8Tt/zMD01fls6MSXkI9jGKuuPJYcqwPY/lZybBuhWwe?=
- =?us-ascii?Q?c7wgHqgDghOBc5qI2Y08jWxQLjl581XvRBMlCywlnkkXOgKmXzMg7zE4Lhta?=
- =?us-ascii?Q?gtRHU+xcBUCugIQ+eztxraUB5zyAYhX0vsLKbA5A+Bk+uikyoJfDZc6yLpYG?=
- =?us-ascii?Q?ytShJ2lHonuVz5UjYs8=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 798ff933-23ab-43f0-0a4f-08dab5e21b5c
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 17:06:35.5411
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: S45o96ro2k1SWShIYy6ttC1XyHfhyRAPiJRrkkrUVHq84K/ot4bpaj4PaxtvkS1E
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4336
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <Y1bDdP3iHoa4xqZL@pc636>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 12:03:33PM +0800, Li Zhijian wrote:
-> rxe_recheck_mr() will increase mr's ref_cnt, so we should call rxe_put(mr)
-> to drop mr's ref_cnt in RESPST_ERR_RNR to avoid below warning:
-> [  633.447883] WARNING: CPU: 0 PID: 4156 at drivers/infiniband/sw/rxe/rxe_pool.c:259 __rxe_cleanup+0x1df/0x240 [rdma_rxe]
-> ...
-> [  633.509482] Call Trace:
-> [  633.510246]  <TASK>
-> [  633.510962]  rxe_dereg_mr+0x4c/0x60 [rdma_rxe]
-> [  633.512123]  ib_dereg_mr_user+0xa8/0x200 [ib_core]
-> [  633.513444]  ib_mr_pool_destroy+0x77/0xb0 [ib_core]
-> [  633.514763]  nvme_rdma_destroy_queue_ib+0x89/0x240 [nvme_rdma]
-> [  633.516230]  nvme_rdma_free_queue+0x40/0x50 [nvme_rdma]
-> [  633.517577]  nvme_rdma_teardown_io_queues.part.0+0xc3/0x120 [nvme_rdma]
-> [  633.519204]  nvme_rdma_error_recovery_work+0x4d/0xf0 [nvme_rdma]
-> [  633.520695]  process_one_work+0x582/0xa40
-> [  633.522987]  ? pwq_dec_nr_in_flight+0x100/0x100
-> [  633.524227]  ? rwlock_bug.part.0+0x60/0x60
-> [  633.525372]  worker_thread+0x2a9/0x700
-> [  633.526437]  ? process_one_work+0xa40/0xa40
-> [  633.527589]  kthread+0x168/0x1a0
-> [  633.528518]  ? kthread_complete_and_exit+0x20/0x20
-> [  633.529792]  ret_from_fork+0x22/0x30
+On Mon, Oct 24, 2022 at 06:55:16PM +0200, Uladzislau Rezki wrote:
+> On Mon, Oct 24, 2022 at 09:48:19AM -0700, Paul E. McKenney wrote:
+> > On Mon, Oct 24, 2022 at 06:25:30PM +0200, Uladzislau Rezki wrote:
+> > > >
+> > > > You guys might need to agree on the definition of "good" here.  Or maybe
+> > > > understand the differences in your respective platforms' definitions of
+> > > > "good".  ;-)
+> > > >
+> > > Indeed. Bad is when once per-millisecond infinitely :) At least in such use
+> > > workload a can detect a power delta and power gain. Anyway, below is a new
+> > > trace where i do not use "flush" variant for the kvfree_rcu():
+> > > 
+> > > <snip>
+> > > 1. Home screen swipe:
+> > >          rcuop/0-15      [003] d..1  1792.767750: rcu_batch_start: rcu_preempt CBs=1003 bl=10
+> > >          rcuop/2-33      [002] d..1  1792.771717: rcu_batch_start: rcu_preempt CBs=934 bl=10
+> > >          rcuop/3-40      [001] d..1  1794.811816: rcu_batch_start: rcu_preempt CBs=1508 bl=11
+> > >          rcuop/1-26      [003] d..1  1797.116382: rcu_batch_start: rcu_preempt CBs=2127 bl=16
+> > >          rcuop/4-48      [001] d..1  1797.124422: rcu_batch_start: rcu_preempt CBs=95 bl=10
+> > >          rcuop/5-55      [002] d..1  1797.124731: rcu_batch_start: rcu_preempt CBs=143 bl=10
+> > >          rcuop/6-62      [005] d..1  1798.911719: rcu_batch_start: rcu_preempt CBs=132 bl=10
+> > >          rcuop/2-33      [002] d..1  1803.003966: rcu_batch_start: rcu_preempt CBs=3797 bl=29
+> > >          rcuop/0-15      [003] d..1  1803.004707: rcu_batch_start: rcu_preempt CBs=2969 bl=23
+> > > 2. App launches:
+> > >          rcuop/4-48      [005] d..1  1831.087612: rcu_batch_start: rcu_preempt CBs=6141 bl=47
+> > >          rcuop/7-69      [007] d..1  1831.095578: rcu_batch_start: rcu_preempt CBs=5464 bl=42
+> > >          rcuop/5-55      [004] d..1  1832.703571: rcu_batch_start: rcu_preempt CBs=8461 bl=66
+> > >          rcuop/0-15      [004] d..1  1833.731603: rcu_batch_start: rcu_preempt CBs=2548 bl=19
+> > >          rcuop/1-26      [006] d..1  1833.743691: rcu_batch_start: rcu_preempt CBs=2567 bl=20
+> > >          rcuop/2-33      [006] d..1  1833.744005: rcu_batch_start: rcu_preempt CBs=2359 bl=18
+> > >          rcuop/3-40      [006] d..1  1833.744286: rcu_batch_start: rcu_preempt CBs=3681 bl=28
+> > >          rcuop/4-48      [002] d..1  1838.079777: rcu_batch_start: rcu_preempt CBs=10444 bl=81
+> > >          rcuop/7-69      [001] d..1  1838.080375: rcu_batch_start: rcu_preempt CBs=12572 bl=98
+> > >            <...>-62      [002] d..1  1838.080646: rcu_batch_start: rcu_preempt CBs=14135 bl=110
+> > >          rcuop/6-62      [000] d..1  1838.087722: rcu_batch_start: rcu_preempt CBs=10839 bl=84
+> > >            <...>-62      [003] d..1  1839.227022: rcu_batch_start: rcu_preempt CBs=1834 bl=14
+> > >            <...>-26      [001] d..1  1839.963315: rcu_batch_start: rcu_preempt CBs=5769 bl=45
+> > >          rcuop/2-33      [001] d..1  1839.966485: rcu_batch_start: rcu_preempt CBs=3789 bl=29
+> > >            <...>-40      [001] d..1  1839.966596: rcu_batch_start: rcu_preempt CBs=6425 bl=50
+> > >          rcuop/2-33      [005] d..1  1840.541272: rcu_batch_start: rcu_preempt CBs=825 bl=10
+> > >          rcuop/2-33      [005] d..1  1840.547724: rcu_batch_start: rcu_preempt CBs=44 bl=10
+> > >          rcuop/2-33      [005] d..1  1841.075759: rcu_batch_start: rcu_preempt CBs=516 bl=10
+> > >          rcuop/0-15      [002] d..1  1841.695716: rcu_batch_start: rcu_preempt CBs=6312 bl=49
+> > >          rcuop/0-15      [003] d..1  1841.709714: rcu_batch_start: rcu_preempt CBs=39 bl=10
+> > >          rcuop/5-55      [004] d..1  1843.112442: rcu_batch_start: rcu_preempt CBs=16007 bl=125
+> > >          rcuop/5-55      [004] d..1  1843.115444: rcu_batch_start: rcu_preempt CBs=7901 bl=61
+> > >          rcuop/6-62      [001] dn.1  1843.123983: rcu_batch_start: rcu_preempt CBs=8427 bl=65
+> > >          rcuop/6-62      [006] d..1  1843.412383: rcu_batch_start: rcu_preempt CBs=981 bl=10
+> > >          rcuop/0-15      [003] d..1  1844.659812: rcu_batch_start: rcu_preempt CBs=1851 bl=14
+> > >          rcuop/0-15      [003] d..1  1844.667790: rcu_batch_start: rcu_preempt CBs=135 bl=10
+> > > <snip>
+> > > 
+> > > it is much more better. But. As i wrote earlier there is a patch that i have submitted
+> > > some time ago improving kvfree_rcu() batching:
+> > > 
+> > > <snip>
+> > > commit 51824b780b719c53113dc39e027fbf670dc66028
+> > > Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > Date:   Thu Jun 30 18:33:35 2022 +0200
+> > > 
+> > >     rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
+> > > 
+> > >     Currently the monitor work is scheduled with a fixed interval of HZ/20,
+> > >     which is roughly 50 milliseconds. The drawback of this approach is
+> > >     low utilization of the 512 page slots in scenarios with infrequence
+> > >     kvfree_rcu() calls.  For example on an Android system:
+> > > <snip>
+> > > 
+> > > The trace that i posted was taken without it.
+> > 
+> > And if I am not getting too confused, that patch is now in mainline.
+> > So it does make sense to rely on it, then.  ;-)
+> > 
+> Right.
 > 
-> CC: Bob Pearson <rpearsonhpe@gmail.com>
-> Fixes: 8a1a0be894da ("RDMA/rxe: Replace mr by rkey in responder resources")
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->  drivers/infiniband/sw/rxe/rxe_resp.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> urezki@pc638:~/data/raid0/coding/linux.git$ git tag --contains
+> 51824b780b719c53113dc39e027fbf670dc66028
+> v6.1-rc1
+> v6.1-rc2
+> urezki@pc638:~/data/raid0/coding/linux.git$
+> 
+Just in case: 5.10 + "rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval":
 
-Applied to for-rc, thanks
+<snip>
+1. Home screen swipe:
+         rcuop/3-40      [003] d..1    94.202849: rcu_batch_start: rcu_preempt CBs=664 bl=10
+         rcuop/4-48      [001] d..1    95.999352: rcu_batch_start: rcu_preempt CBs=252 bl=10
+         rcuop/6-62      [002] d..1    97.534875: rcu_batch_start: rcu_preempt CBs=152 bl=10
+         rcuop/5-55      [003] d..1    98.042912: rcu_batch_start: rcu_preempt CBs=189 bl=10
+         rcuop/0-15      [002] d..1    98.306769: rcu_batch_start: rcu_preempt CBs=1457 bl=11
+         rcuop/1-26      [000] d..1    99.582931: rcu_batch_start: rcu_preempt CBs=2115 bl=16
+         rcuop/2-33      [003] d..1    99.582935: rcu_batch_start: rcu_preempt CBs=2019 bl=15
+         rcuop/3-40      [001] d..1    99.838885: rcu_batch_start: rcu_preempt CBs=1168 bl=10
+         rcuop/1-26      [000] d..1   100.603496: rcu_batch_start: rcu_preempt CBs=168 bl=10
+2. Apps launches:
+         rcuop/4-48      [007] d..1   102.910580: rcu_batch_start: rcu_preempt CBs=1150 bl=10
+         rcuop/6-62      [007] d..1   102.910682: rcu_batch_start: rcu_preempt CBs=1001 bl=10
+         rcuop/5-55      [007] d..1   103.166607: rcu_batch_start: rcu_preempt CBs=939 bl=10
+         rcuop/0-15      [007] d..1   104.450598: rcu_batch_start: rcu_preempt CBs=1694 bl=13
+         rcuop/5-55      [006] d..1   104.478640: rcu_batch_start: rcu_preempt CBs=3125 bl=24
+         rcuop/3-40      [007] d..1   104.958565: rcu_batch_start: rcu_preempt CBs=1108 bl=10
+         rcuop/7-69      [007] d..1   106.238634: rcu_batch_start: rcu_preempt CBs=10275 bl=80
+         rcuop/4-48      [007] d..1   107.258586: rcu_batch_start: rcu_preempt CBs=8142 bl=63
+         rcuop/7-69      [007] d..1   107.260769: rcu_batch_start: rcu_preempt CBs=1880 bl=14
+         rcuop/2-33      [007] d..1   107.526638: rcu_batch_start: rcu_preempt CBs=1968 bl=15
+         rcuop/1-26      [007] d..1   107.542612: rcu_batch_start: rcu_preempt CBs=1796 bl=14
+         rcuop/5-55      [007] d..1   108.286588: rcu_batch_start: rcu_preempt CBs=3547 bl=27
+         rcuop/6-62      [007] d..1   108.287639: rcu_batch_start: rcu_preempt CBs=5820 bl=45
+         rcuop/7-69      [007] d..1   108.290548: rcu_batch_start: rcu_preempt CBs=2430 bl=18
+         rcuop/0-15      [000] d..1   109.826843: rcu_batch_start: rcu_preempt CBs=2282 bl=17
+         rcuop/3-40      [002] d..1   110.595455: rcu_batch_start: rcu_preempt CBs=1960 bl=15
+           <...>-48      [005] d..1   112.390702: rcu_batch_start: rcu_preempt CBs=5143 bl=40
+         rcuop/7-69      [004] d..1   112.402607: rcu_batch_start: rcu_preempt CBs=3379 bl=26
+         rcuop/2-33      [005] d..1   112.638614: rcu_batch_start: rcu_preempt CBs=3223 bl=25
+         rcuop/1-26      [004] d..1   112.638617: rcu_batch_start: rcu_preempt CBs=3026 bl=23
+         rcuop/5-55      [007] d..1   113.402581: rcu_batch_start: rcu_preempt CBs=7251 bl=56
+         rcuop/6-62      [007] d..1   113.658582: rcu_batch_start: rcu_preempt CBs=7035 bl=54
+<snip>
 
-Jason
+--
+Uladzislau Rezki
