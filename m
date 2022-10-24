@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF0760B087
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0783E60B0A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiJXQGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+        id S233232AbiJXQHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbiJXQD1 (ORCPT
+        with ESMTP id S233008AbiJXQEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:03:27 -0400
+        Mon, 24 Oct 2022 12:04:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4E31E393E;
-        Mon, 24 Oct 2022 07:56:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C50937B2;
+        Mon, 24 Oct 2022 07:56:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C25E5B8166D;
-        Mon, 24 Oct 2022 12:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26764C433C1;
-        Mon, 24 Oct 2022 12:25:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63441B81673;
+        Mon, 24 Oct 2022 12:25:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B877AC433D6;
+        Mon, 24 Oct 2022 12:25:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614334;
-        bh=uoeFd3MyW7Ujm+9BgZ79uuyLasaqd+zLWJbzadSXaxI=;
+        s=korg; t=1666614337;
+        bh=bALNRABvlhgzd60APy0WYdB6i+5E0MSGrsOz6JFb/UU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T7QlpgP7uDZhmG2a2xRnbtAxGc/MRd4lFW/FhqpsSFxhNo1KVe0bn4pAkMNTuRpFF
-         gmpmhoAQhgVO6NclLOEH5OSv9rG55tVSPEhQK02p1k/N0RB+gQVtUHW9bUCpIFo04q
-         CqD064w5j+UrT9/HnHq1g60aXaZk5kHaYb3Cl+BA=
+        b=ySjTDaAsQznVhqrOllCw3P46ArGZ8KYk3jsquQKyMVLjy1jYL9dpbB0061jG/Xbo3
+         3OTB1BUUs+l0ZjE1F0nYdLZnAxeixvHrliykX6WuvSfWpYRDr/W1kdpHJj9ADL+utc
+         w0oIg3uRTSDjyzwCX6igmXeJbqN6CrUaazc+zDuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 189/390] iio: inkern: only release the device node when done with it
-Date:   Mon, 24 Oct 2022 13:29:46 +0200
-Message-Id: <20221024113030.806122436@linuxfoundation.org>
+Subject: [PATCH 5.10 190/390] iio: ABI: Fix wrong format of differential capacitance channel ABI.
+Date:   Mon, 24 Oct 2022 13:29:47 +0200
+Message-Id: <20221024113030.852781144@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -55,55 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nuno Sá <nuno.sa@analog.com>
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-[ Upstream commit 79c3e84874c7d14f04ad58313b64955a0d2e9437 ]
+[ Upstream commit 1efc41035f1841acf0af2bab153158e27ce94f10 ]
 
-'of_node_put()' can potentially release the memory pointed to by
-'iiospec.np' which would leave us with an invalid pointer (and we would
-still pass it in 'of_xlate()'). Note that it is not guaranteed for the
-of_node lifespan to be attached to the device (to which is attached)
-lifespan so that there is (even though very unlikely) the possibility
-for the node to be freed while the device is still around. Thus, as there
-are indeed some of_xlate users which do access the node, a race is indeed
-possible.
+in_ only occurs once in these attributes.
 
-As such, we can only release the node after we are done with it.
-
-Fixes: 17d82b47a215d ("iio: Add OF support")
-Signed-off-by: Nuno Sá <nuno.sa@analog.com>
-Link: https://lore.kernel.org/r/20220715122903.332535-2-nuno.sa@analog.com
+Fixes: 0baf29d658c7 ("staging:iio:documentation Add abi docs for capacitance adcs.")
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220626122938.582107-3-jic23@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/inkern.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ Documentation/ABI/testing/sysfs-bus-iio | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-index 8c3faa797284..c32b2577dd99 100644
---- a/drivers/iio/inkern.c
-+++ b/drivers/iio/inkern.c
-@@ -136,9 +136,10 @@ static int __of_iio_channel_get(struct iio_channel *channel,
+diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
+index df42bed09f25..53f07fc41b96 100644
+--- a/Documentation/ABI/testing/sysfs-bus-iio
++++ b/Documentation/ABI/testing/sysfs-bus-iio
+@@ -142,7 +142,7 @@ Description:
+ 		Raw capacitance measurement from channel Y. Units after
+ 		application of scale and offset are nanofarads.
  
- 	idev = bus_find_device(&iio_bus_type, NULL, iiospec.np,
- 			       iio_dev_node_match);
--	of_node_put(iiospec.np);
--	if (idev == NULL)
-+	if (idev == NULL) {
-+		of_node_put(iiospec.np);
- 		return -EPROBE_DEFER;
-+	}
- 
- 	indio_dev = dev_to_iio_dev(idev);
- 	channel->indio_dev = indio_dev;
-@@ -146,6 +147,7 @@ static int __of_iio_channel_get(struct iio_channel *channel,
- 		index = indio_dev->info->of_xlate(indio_dev, &iiospec);
- 	else
- 		index = __of_iio_simple_xlate(indio_dev, &iiospec);
-+	of_node_put(iiospec.np);
- 	if (index < 0)
- 		goto err_put;
- 	channel->channel = &indio_dev->channels[index];
+-What:		/sys/.../iio:deviceX/in_capacitanceY-in_capacitanceZ_raw
++What:		/sys/.../iio:deviceX/in_capacitanceY-capacitanceZ_raw
+ KernelVersion:	3.2
+ Contact:	linux-iio@vger.kernel.org
+ Description:
 -- 
 2.35.1
 
