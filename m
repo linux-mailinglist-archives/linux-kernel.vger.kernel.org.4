@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B10BD609959
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 06:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72ABD609958
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 06:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiJXEly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 00:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S230037AbiJXElt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 00:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbiJXElf (ORCPT
+        with ESMTP id S229967AbiJXElh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 00:41:35 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F087D422EF;
-        Sun, 23 Oct 2022 21:41:34 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id g12so1479669wrs.10;
-        Sun, 23 Oct 2022 21:41:34 -0700 (PDT)
+        Mon, 24 Oct 2022 00:41:37 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DD8796B7;
+        Sun, 23 Oct 2022 21:41:36 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id bh7-20020a05600c3d0700b003c6fb3b2052so5879155wmb.2;
+        Sun, 23 Oct 2022 21:41:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eorg+/Ww/9XjaDGiE3G7GADATyRcOGLQTY6DHSskd48=;
-        b=QuvnFqc0iKixA40xm8USZ9WYyJCxtBTdwfF5Uk1etsEgWFoFwEb5ALUqvaWl6F02bX
-         GQ63h0UcjaVgrMb4mAYw3s7473Daf6BlPxo0BV2kxzSUpsBrkhUDwaIh9GMwTkL28ryM
-         Sz85SdeapZIPkGwNxbbSaZ3IeLyUK7vYmq9oLF4i/t9MKr4T15lasYe4wIvr5yU/Y6QF
-         phz+aUF3V7zIodHYobwWPF8vLT+2LQOX+y/k4Qn5cNl9t8FSBDmW0iB+wJUoBT8XmBdF
-         vkzQsxvOXeEmAdPpoHWfhdrgXT95bL2eYP1TrQ8Vj1oxxox/15pTo/9KuOCc7CA4JFVD
-         vnJA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KDghWiI+VfS+QbKsUYVkwYkySZv+irXHu5fI56T3Y+4=;
+        b=jlyQHSJVM1ckmfkQqatiCEvt56zwVDqmhlesOcj2hUCDfSNEATcIMva4XyKHKmRVCM
+         E8+8vvmQzrlbtezGSedgSuPUNA1sp9CXCCYkZU4IX+y+TJyYmW2pYEp2PEL6Ym1QaaVT
+         Bo0DRy7zzqCxbRUqyC/7zkRkQNM8fLk/6EptXnoc1Drw8kDCwHbqHaIbA8Jz5I9MZkzF
+         lsUgJ/3ru2Op4WJ1/GneBMKx122g7kX0HvoKNd2X6PYXfT2QB20QY4CA2JpgjvZGlpe7
+         nFHcw9QV50nm1N4L7R6mbGrwSYNo8YfFcvDVAI8iQHv2qViayLAQQoeYraSKv+N3HkTP
+         K5vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eorg+/Ww/9XjaDGiE3G7GADATyRcOGLQTY6DHSskd48=;
-        b=oVHRpdPbRiCuaOb0REEvyl8KcPW7E5r5htzeYbp/m8QZdO6TfZYXzWinztXLYrZ0YI
-         NeODfBMSU6ltfJdYba1SDGvmWKNN1V2ZgO0OAIB5uyYmDXuj+ICq2ZkOmdyhLP92quZg
-         RhEaHAYceDUAiOrU5wsQ4DB0x1wS+VkFsGJd9/1fYYuTjx1zTTKt5O7+UH+chWydBai4
-         kZ6i2pFKMo8j4GTHp1eoutvtqV99vDy/RKbsBZpXmXmH3511aIMgdF7/FjT07mzeHpY3
-         A4f2jE1Ph51lTuHZRPFHMlKUNKvw+scZiLBXLxEUqst8JZnH/BIJxVqtIcFTnHmaiHsa
-         RbnQ==
-X-Gm-Message-State: ACrzQf3nPuQvoamDRyvUVSiJobvrp4WtHbkIHvKKUhPtlnUK0O4BXu7M
-        WTIB2aWQEwWUJDxWlhTOj3w=
-X-Google-Smtp-Source: AMsMyM7L/JtlELi3aklbJQzRKOj6rIqKgn40eJOjtT5hGGN2bw7+G8bdr/AXSEcIuy4A6a8ZXurZ1g==
-X-Received: by 2002:a05:6000:180b:b0:236:5985:9c4e with SMTP id m11-20020a056000180b00b0023659859c4emr8194068wrh.584.1666586493463;
-        Sun, 23 Oct 2022 21:41:33 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KDghWiI+VfS+QbKsUYVkwYkySZv+irXHu5fI56T3Y+4=;
+        b=Ww4gx8V5UJBii1D7NA9Gx19/4dsEVDtAMZuGQOny/LvUEPFbzfmAbzgdaxRItsBzHD
+         zX7HPZuR/zJweSIWXQOo+J4wW2bNJohhZkuhEsyWba80OKFuKZH1g8/jWAkIigGoGdB0
+         qjrLSKhnxMy0tuQl3ztM1ib976T0p53HETTEcJz/FPG5j+AXd5mwlLCwF2LCzz3edtvV
+         DIiIV2eRQKcboQJ1/hh7IAhHF4AyB5/ukdnyFeQRWeSesJTfgw98xy8aO2Oisxi81etS
+         tfGMn5PyMR4BFlUN286le9l4Z46dZ814joQeAwElJnbXeQGP5UeRphhU/j/2nxd+Fchq
+         mm9Q==
+X-Gm-Message-State: ACrzQf0XI4f38hErPBHk2O7arhTCUpHLbWOPAg6oLvP43qJ7NSu1CBX1
+        im32z0BXOqAULMZp2Lg2qUWxSfw/dV1Y7w==
+X-Google-Smtp-Source: AMsMyM7/GqaYaC1AJQ2QYC3SMzZalu0BZTNZmtwLmb1125xUtGbYwsx/QriCaCetJVEQsVIKnrrnew==
+X-Received: by 2002:a05:600c:1549:b0:3ce:794f:d801 with SMTP id f9-20020a05600c154900b003ce794fd801mr2623380wmg.63.1666586495423;
+        Sun, 23 Oct 2022 21:41:35 -0700 (PDT)
 Received: from hp-power-15.localdomain (mm-197-18-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.18.197])
-        by smtp.gmail.com with ESMTPSA id l39-20020a05600c1d2700b003c6deb5c1edsm9856925wms.45.2022.10.23.21.41.31
+        by smtp.gmail.com with ESMTPSA id l39-20020a05600c1d2700b003c6deb5c1edsm9856925wms.45.2022.10.23.21.41.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 21:41:32 -0700 (PDT)
+        Sun, 23 Oct 2022 21:41:35 -0700 (PDT)
 From:   Siarhei Volkau <lis8215@gmail.com>
 Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -58,10 +59,12 @@ Cc:     Siarhei Volkau <lis8215@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: [PATCH v5 0/3] Add Ingenic JZ4755 CGU driver
-Date:   Mon, 24 Oct 2022 07:40:53 +0300
-Message-Id: <20221024044057.4151633-1-lis8215@gmail.com>
+Subject: [PATCH v5 1/3] dt-bindings: ingenic: Add support for the JZ4755 CGU
+Date:   Mon, 24 Oct 2022 07:40:54 +0300
+Message-Id: <20221024044057.4151633-2-lis8215@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20221024044057.4151633-1-lis8215@gmail.com>
+References: <20221024044057.4151633-1-lis8215@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,41 +78,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds a Clock Generation Unit (CGU)
-driver for the JZ4755 SoC.
+Add documentation for the clock generation unit (CGU)
+of the JZ4755 SoC.
 
-v5:
- - reword commit msg for documentation
- - reword cover letter
-v4:
- - absent commit msg fixed
- - +/- ack
-v3:
- - MACH_JZ4755 creation removed
- - AIC clock parent fixed
- - EXT/512 clock clarified (tested)
- - dt header license refined
-v2:
- - CGU patches moved into its own patchset
- - dual license for dt-bindings header
- - Krzysztof's ack picked up
-v1:
- - adds support for the whole JZ4755
+Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+---
+ Documentation/devicetree/bindings/clock/ingenic,cgu.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Siarhei Volkau (3):
-  dt-bindings: ingenic: Add support for the JZ4755 CGU
-  dt-bindings: clock: Add Ingenic JZ4755 CGU header
-  clk: Add Ingenic JZ4755 CGU driver
-
- .../bindings/clock/ingenic,cgu.yaml           |   2 +
- drivers/clk/ingenic/Kconfig                   |  10 +
- drivers/clk/ingenic/Makefile                  |   1 +
- drivers/clk/ingenic/jz4755-cgu.c              | 346 ++++++++++++++++++
- .../dt-bindings/clock/ingenic,jz4755-cgu.h    |  49 +++
- 5 files changed, 408 insertions(+)
- create mode 100644 drivers/clk/ingenic/jz4755-cgu.c
- create mode 100644 include/dt-bindings/clock/ingenic,jz4755-cgu.h
-
+diff --git a/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml b/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
+index aa1df03ef..df256ebcd 100644
+--- a/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
++++ b/Documentation/devicetree/bindings/clock/ingenic,cgu.yaml
+@@ -22,6 +22,7 @@ select:
+         enum:
+           - ingenic,jz4740-cgu
+           - ingenic,jz4725b-cgu
++          - ingenic,jz4755-cgu
+           - ingenic,jz4760-cgu
+           - ingenic,jz4760b-cgu
+           - ingenic,jz4770-cgu
+@@ -51,6 +52,7 @@ properties:
+       - enum:
+           - ingenic,jz4740-cgu
+           - ingenic,jz4725b-cgu
++          - ingenic,jz4755-cgu
+           - ingenic,jz4760-cgu
+           - ingenic,jz4760b-cgu
+           - ingenic,jz4770-cgu
 -- 
 2.36.1
 
