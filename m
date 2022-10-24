@@ -2,208 +2,484 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0F0609548
-	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 19:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA156094EA
+	for <lists+linux-kernel@lfdr.de>; Sun, 23 Oct 2022 18:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiJWRzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 13:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42252 "EHLO
+        id S230472AbiJWQ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 12:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiJWRzL (ORCPT
+        with ESMTP id S229882AbiJWQ5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 13:55:11 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35E2B31EDD
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 10:55:07 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 1094C92009C; Sun, 23 Oct 2022 19:55:04 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 0010B92009B;
-        Sun, 23 Oct 2022 18:55:04 +0100 (BST)
-Date:   Sun, 23 Oct 2022 18:55:04 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Matthew Wilcox <willy@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
-In-Reply-To: <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2210211911390.50489@angie.orcam.me.uk>
-References: <20220815071332.627393-1-yuzhao@google.com> <20220815071332.627393-9-yuzhao@google.com> <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net> <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com> <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
- <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net> <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com> <Y1GZjPO+szk7X0wP@hirez.programming.kicks-ass.net> <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
- <Y1IUMDJFScAMrCS5@casper.infradead.org> <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sun, 23 Oct 2022 12:57:00 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC7164D2;
+        Sun, 23 Oct 2022 09:56:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666544219; x=1698080219;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7Rg3KhR6QudN53F09OpL0KlKQzVurculcfJodkdmGO4=;
+  b=i9+1uoGnNSwLqQq0pUa9ueCuh+T4puOYlo1fU/H8zr69lMyxz4GZGzlu
+   U63/mBtogBknB6xNrmpaNqVfI9D6cMYCLg+7VL+jS5898N3vjRwUJAiZR
+   wei5bBTbXKZJ5+eMd9lX79mGzCsAJGC6UQRWbM4DWljHnSUwtodlq+W6c
+   emuOgZFj7AGN2RojTfWT1EwRu2GiHl0nUC71iJM7QI4aX1JaRMNs6BNLz
+   t5nIljcUA1wqKlS9w2jFzGoPbwn4x8F3GK0fl3ysN/0FCq3RJJeUX8VfM
+   DqWILQ5DmLJ1oYJvjr4waCTBWBfHeCayE9JRfLeCRL3O5/7zoWHqCKSAx
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="333865331"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="333865331"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 09:56:58 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="736152021"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="736152021"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 09:56:55 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net, linux-hwmon@vger.kernel.org,
+        rajat.khandelwal@intel.com,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH v5] iio: temperature: Add driver support for Maxim MAX30208
+Date:   Mon, 24 Oct 2022 22:26:58 +0530
+Message-Id: <20221024165658.181340-1-rajat.khandelwal@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022, Linus Torvalds wrote:
+Maxim MAX30208 is a digital temperature sensor with 0.1°C accuracy.
 
-> > > We got rid of i386 support back in 2012. Maybe it's time to get rid of
-> > > i486 support in 2022?
-> >
-> > Arnd suggested removing i486 last year and got a bit of pushback.
-> > The most convincing to my mind was Maciej:
-> 
-> Hmm. Maciej added to the cc.
+Add support for max30208 driver in iio subsystem.
+Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX30208.pdf
 
- Thanks!
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+---
 
-> So I *really* don't think i486 class hardware is relevant any more.
-> Yes, I'm sure it exists (Maciej being an example), but from a kernel
-> development standpoint I don't think they are really relevant.
-> 
-> At some point, people have them as museum pieces. They might as well
-> run museum kernels.
-> 
-> Moving up to requiring cmpxchg8b doesn't sound unreasonable to me.
+v5:
+1. Fixed comment position in max30208_request
+2. Use of local u8 variable to build register values
+3. Using u8 instead of s8 in data_count
+4. Removed global MAX30208_RES_MILLICELCIUS
+5. Removed 'comma' on NULL terminators
 
- But is it really a problem?  I mean unlike MIPS R2000/R3000 class gear 
-that has no atomics at all at the CPU level (SMP R3000 machines did exist 
-and necessarily had atomics, actually via gating storage implemented by 
-board hardware in systems we have never had support for even for UP) we 
-have had atomics in x86 since forever.  Just not 64-bit ones.
+v4: Version comments go below line separator of signed-off-by
 
- Given the presence of generic atomics we can emulate CMPXCHG8B easily 
-LL/SC-style using a spinlock with XCHG even on SMP let alone UP.  So all 
-the kernel code can just assume the presence of CMPXCHG8B, but any 
-invocations of CMPXCHG8B would be diverted to the emulation, perhaps even 
-at the assembly level via a GAS macro called `cmpxchg8b' (why not?).  All 
-the maintenance burden is then shifted to that macro and said emulation 
-code.
+v3: Release the mutex lock after error gets returned
 
- Proof of concept wrapper:
+v2:
+1. Removed TODO
+2. Removed unnecessary blank spaces
+3. Corrected MC->MILLICELCIUS
+4. Comments added wherever required
+5. dev_err on i2c fails
+6. Rearranged some flows
+7. Removed PROCESSED
+8. int error return on gpio setup
+9. device_register at the end of probe
+10. Return on unsuccessful reset
+11. acpi_match_table and of_match_table added
+12. Minor quirks
 
-#define LOCK_PREFIX ""
+ MAINTAINERS                        |   6 +
+ drivers/iio/temperature/Kconfig    |  10 +
+ drivers/iio/temperature/Makefile   |   1 +
+ drivers/iio/temperature/max30208.c | 323 +++++++++++++++++++++++++++++
+ 4 files changed, 340 insertions(+)
+ create mode 100644 drivers/iio/temperature/max30208.c
 
-#define CC_SET(c) "\n\t/* output condition code " #c "*/\n"
-#define CC_OUT(c) "=@cc" #c
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f1390b8270b2..7f1fd2e31b94 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12373,6 +12373,12 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/regulator/maxim,max20086.yaml
+ F:	drivers/regulator/max20086-regulator.c
+ 
++MAXIM MAX30208 TEMPERATURE SENSOR DRIVER
++M:	Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
++L:	linux-iio@vger.kernel.org
++S:	Maintained
++F:	drivers/iio/temperature/max30208.c
++
+ MAXIM MAX77650 PMIC MFD DRIVER
+ M:	Bartosz Golaszewski <brgl@bgdev.pl>
+ L:	linux-kernel@vger.kernel.org
+diff --git a/drivers/iio/temperature/Kconfig b/drivers/iio/temperature/Kconfig
+index e8ed849e3b76..ed384f33e0c7 100644
+--- a/drivers/iio/temperature/Kconfig
++++ b/drivers/iio/temperature/Kconfig
+@@ -128,6 +128,16 @@ config TSYS02D
+ 	  This driver can also be built as a module. If so, the module will
+ 	  be called tsys02d.
+ 
++config MAX30208
++	tristate "Maxim MAX30208 digital temperature sensor"
++	depends on I2C
++	help
++	  If you say yes here you get support for Maxim MAX30208
++	  digital temperature sensor connected via I2C.
++
++	  This driver can also be built as a module. If so, the module
++	  will be called max30208.
++
+ config MAX31856
+ 	tristate "MAX31856 thermocouple sensor"
+ 	depends on SPI
+diff --git a/drivers/iio/temperature/Makefile b/drivers/iio/temperature/Makefile
+index dd08e562ffe0..dfec8c6d3019 100644
+--- a/drivers/iio/temperature/Makefile
++++ b/drivers/iio/temperature/Makefile
+@@ -7,6 +7,7 @@ obj-$(CONFIG_IQS620AT_TEMP) += iqs620at-temp.o
+ obj-$(CONFIG_LTC2983) += ltc2983.o
+ obj-$(CONFIG_HID_SENSOR_TEMP) += hid-sensor-temperature.o
+ obj-$(CONFIG_MAXIM_THERMOCOUPLE) += maxim_thermocouple.o
++obj-$(CONFIG_MAX30208) += max30208.o
+ obj-$(CONFIG_MAX31856) += max31856.o
+ obj-$(CONFIG_MAX31865) += max31865.o
+ obj-$(CONFIG_MLX90614) += mlx90614.o
+diff --git a/drivers/iio/temperature/max30208.c b/drivers/iio/temperature/max30208.c
+new file mode 100644
+index 000000000000..4f78337c78fe
+--- /dev/null
++++ b/drivers/iio/temperature/max30208.c
+@@ -0,0 +1,323 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++/*
++ * Copyright (c) Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
++ *
++ * Maxim MAX30208 digital temperature sensor with 0.1°C accuracy
++ * (7-bit I2C slave address (0x50 - 0x53))
++ *
++ * Note: This driver sets GPIO1 to behave as input for temperature
++ * conversion and GPIO0 to act as interrupt for temperature conversion.
++ */
++
++#include <linux/bitops.h>
++#include <linux/delay.h>
++#include <linux/iio/iio.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/types.h>
++
++#define MAX30208_DRV_NAME		"max30208"
++
++#define MAX30208_STATUS			0x00
++#define MAX30208_STATUS_TEMP_RDY	BIT(0)
++#define MAX30208_INT_ENABLE		0x01
++#define MAX30208_INT_ENABLE_TEMP_RDY	BIT(0)
++
++#define MAX30208_FIFO_OVF_CNTR		0x06
++#define MAX30208_FIFO_DATA_CNTR		0x07
++#define MAX30208_FIFO_DATA		0x08
++
++#define MAX30208_SYSTEM_CTRL		0x0c
++#define MAX30208_SYSTEM_CTRL_RESET	0x01
++
++#define MAX30208_TEMP_SENSOR_SETUP	0x14
++#define MAX30208_TEMP_SENSOR_SETUP_CONV	BIT(0)
++
++#define MAX30208_GPIO_SETUP		0x20
++#define MAX30208_GPIO1_SETUP		GENMASK(7, 6)
++#define MAX30208_GPIO0_SETUP		GENMASK(1, 0)
++#define MAX30208_GPIO_CTRL		0x21
++#define MAX30208_GPIO1_CTRL		BIT(3)
++#define MAX30208_GPIO0_CTRL		BIT(0)
++
++struct max30208_data {
++	struct i2c_client *client;
++	struct iio_dev *indio_dev;
++	struct mutex lock; /* Lock to prevent concurrent reads */
++};
++
++static const struct iio_chan_spec max30208_channels[] = {
++	{
++		.type = IIO_TEMP,
++		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
++	},
++};
++
++/**
++ * max30208_request() - Request a reading
++ * @data: Struct comprising member elements of the device
++ *
++ * Requests a reading from the device and waits until the conversion is ready.
++ */
++static int max30208_request(struct max30208_data *data)
++{
++	/*
++	 * Sensor can take up to 500 ms to respond so execute a total of
++	 * 10 retries to give the device sufficient time.
++	 */
++	int retries = 10;
++	u8 regval;
++	int ret;
++
++	ret = i2c_smbus_read_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP);
++	if (ret < 0) {
++		dev_err(&data->client->dev, "Error reading reg temperature setup\n");
++		return ret;
++	}
++
++	regval = ret | MAX30208_TEMP_SENSOR_SETUP_CONV;
++
++	ret = i2c_smbus_write_byte_data(data->client, MAX30208_TEMP_SENSOR_SETUP, regval);
++	if (ret < 0) {
++		dev_err(&data->client->dev, "Error writing reg temperature setup\n");
++		return ret;
++	}
++
++	while (retries--) {
++		ret = i2c_smbus_read_byte_data(data->client, MAX30208_STATUS);
++		if (ret < 0) {
++			dev_err(&data->client->dev, "Error reading reg status\n");
++			goto sleep;
++		}
++
++		if (ret & MAX30208_STATUS_TEMP_RDY)
++			return 0;
++
++		msleep(50);
++	}
++	dev_warn(&data->client->dev, "Temperature conversion failed\n");
++
++	return 0;
++
++sleep:
++	usleep_range(50000, 60000);
++	return 0;
++}
++
++static int max30208_update_temp(struct max30208_data *data)
++{
++	u8 data_count;
++	int ret;
++
++	mutex_lock(&data->lock);
++
++	ret = max30208_request(data);
++	if (ret < 0)
++		goto unlock;
++
++	ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
++	if (ret < 0) {
++		dev_err(&data->client->dev, "Error reading reg FIFO overflow counter\n");
++		goto unlock;
++	} else if (!ret) {
++		ret = i2c_smbus_read_byte_data(data->client,
++					       MAX30208_FIFO_DATA_CNTR);
++		if (ret < 0) {
++			dev_err(&data->client->dev, "Error reading reg FIFO data counter\n");
++			goto unlock;
++		}
++	}
++
++	data_count = ret;
++
++	/*
++	 * Ideally, counter should decrease by 1 each time a word is read from FIFO.
++	 * However, practically, the device behaves erroneously and counter sometimes
++	 * decreases by more than 1. Hence, do not loop the counter until it becomes 0
++	 * rather, use the exact counter value after each FIFO word is read.
++	 * Return the last reading from FIFO as the most recently triggered one.
++	 */
++	while (data_count) {
++		ret = i2c_smbus_read_word_swapped(data->client,
++						  MAX30208_FIFO_DATA);
++		if (ret < 0) {
++			dev_err(&data->client->dev, "Error reading reg FIFO data\n");
++			goto unlock;
++		}
++
++		data_count = i2c_smbus_read_byte_data(data->client,
++						      MAX30208_FIFO_DATA_CNTR);
++		if (data_count < 0) {
++			dev_err(&data->client->dev, "Error reading reg FIFO data counter\n");
++			ret = data_count;
++			goto unlock;
++		}
++	}
++
++unlock:
++	mutex_unlock(&data->lock);
++	return ret;
++}
++
++static int max30208_read(struct iio_dev *indio_dev,
++			 struct iio_chan_spec const *chan,
++			 int *val, int *val2, long mask)
++{
++	struct max30208_data *data = iio_priv(indio_dev);
++	int ret;
++
++	switch (mask) {
++	case IIO_CHAN_INFO_RAW:
++		ret = max30208_update_temp(data);
++		if (ret < 0)
++			return ret;
++
++		*val = sign_extend32(ret, 15);
++		return IIO_VAL_INT;
++
++	case IIO_CHAN_INFO_SCALE:
++		*val = 5;
++		return IIO_VAL_INT;
++
++	default:
++		return -EINVAL;
++	}
++}
++
++static int max30208_gpio_setup(struct max30208_data *data)
++{
++	u8 regval;
++	int ret;
++
++	ret = i2c_smbus_read_byte_data(data->client,
++				       MAX30208_GPIO_SETUP);
++	if (ret < 0) {
++		dev_err(&data->client->dev, "Error reading reg GPIO setup\n");
++		return ret;
++	}
++
++	/*
++	 * Setting GPIO1 to trigger temperature conversion
++	 * when driven low.
++	 * Setting GPIO0 to trigger interrupt when temperature
++	 * conversion gets completed.
++	 */
++	regval = ret | MAX30208_GPIO1_SETUP | MAX30208_GPIO0_SETUP;
++	ret = i2c_smbus_write_byte_data(data->client,
++					MAX30208_GPIO_SETUP, regval);
++	if (ret < 0) {
++		dev_err(&data->client->dev, "Error writing reg GPIO setup\n");
++		return ret;
++	}
++
++	ret = i2c_smbus_read_byte_data(data->client,
++				       MAX30208_INT_ENABLE);
++	if (ret < 0) {
++		dev_err(&data->client->dev, "Error reading reg interrupt enable\n");
++		return ret;
++	}
++
++	/* Enabling GPIO0 interrupt */
++	regval = ret | MAX30208_INT_ENABLE_TEMP_RDY;
++	ret = i2c_smbus_write_byte_data(data->client,
++					MAX30208_INT_ENABLE, regval);
++	if (ret < 0) {
++		dev_err(&data->client->dev, "Error writing reg interrupt enable\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct iio_info max30208_info = {
++	.read_raw = max30208_read,
++};
++
++static int max30208_probe(struct i2c_client *i2c)
++{
++	struct device *dev = &i2c->dev;
++	struct max30208_data *data;
++	struct iio_dev *indio_dev;
++	int ret;
++
++	indio_dev = devm_iio_device_alloc(dev, sizeof(*data));
++	if (!indio_dev)
++		return -ENOMEM;
++
++	data = iio_priv(indio_dev);
++	data->client = i2c;
++	mutex_init(&data->lock);
++
++	indio_dev->name = MAX30208_DRV_NAME;
++	indio_dev->channels = max30208_channels;
++	indio_dev->num_channels = ARRAY_SIZE(max30208_channels);
++	indio_dev->info = &max30208_info;
++	indio_dev->modes = INDIO_DIRECT_MODE;
++
++	/* Reset the device initially */
++	ret = i2c_smbus_write_byte_data(data->client, MAX30208_SYSTEM_CTRL,
++					MAX30208_SYSTEM_CTRL_RESET);
++	if (ret) {
++		dev_err(dev, "Failure in performing reset\n");
++		return ret;
++	}
++
++	usleep_range(50000, 60000);
++
++	ret = max30208_gpio_setup(data);
++	if (ret < 0)
++		return ret;
++
++	ret = devm_iio_device_register(dev, indio_dev);
++	if (ret) {
++		dev_err(dev, "Failed to register IIO device\n");
++		return ret;
++	}
++
++	return 0;
++}
++
++static const struct i2c_device_id max30208_id_table[] = {
++	{ "max30208" },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, max30208_id_table);
++
++static const struct acpi_device_id max30208_acpi_match[] = {
++	{ "MAX30208" },
++	{ }
++};
++MODULE_DEVICE_TABLE(acpi, max30208_acpi_match);
++
++static const struct of_device_id max30208_of_match[] = {
++	{ .compatible = "maxim,max30208" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max30208_of_match);
++
++static struct i2c_driver max30208_driver = {
++	.driver = {
++		.name = MAX30208_DRV_NAME,
++		.of_match_table = max30208_of_match,
++		.acpi_match_table = ACPI_PTR(max30208_acpi_match),
++	},
++	.probe_new = max30208_probe,
++	.id_table = max30208_id_table,
++};
++
++static int __init max30208_init(void)
++{
++	return i2c_add_driver(&max30208_driver);
++}
++module_init(max30208_init);
++
++static void __exit max30208_exit(void)
++{
++	i2c_del_driver(&max30208_driver);
++}
++module_exit(max30208_exit);
++
++MODULE_AUTHOR("Rajat Khandelwal <rajat.khandelwal@linux.intel.com>");
++MODULE_DESCRIPTION("Maxim MAX30208 digital temperature sensor");
++MODULE_LICENSE("GPL");
+-- 
+2.34.1
 
-#define unlikely(x) __builtin_expect(!!(x), 0)
-
-__extension__ typedef unsigned long long __u64;
-typedef unsigned int __u32;
-typedef __u64 u64;
-typedef __u32 u32;
-
-typedef _Bool bool;
-
-__asm__(
-	".macro		cmpxchg8b arg\n\t"
-	"pushl		%eax\n\t"
-	"leal		\\arg, %eax\n\t"
-	"xchgl		%eax, (%esp)\n\t"
-	"call		cmpxchg8b_emu\n\t"
-	".endm\n\t");
-
-bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
-{
-	bool success;
-	u64 old = *pold;
-	asm volatile(LOCK_PREFIX "cmpxchg8b %[ptr]"
-		     CC_SET(z)
-		     : CC_OUT(z) (success),
-		       [ptr] "+m" (*ptr),
-		       "+A" (old)
-		     : "b" ((u32)new),
-		       "c" ((u32)(new >> 32))
-		     : "memory");
-
-	if (unlikely(!success))
-		*pold = old;
-	return success;
-}
-
-This assembles to:
-
-cmpxchg8b.o:     file format elf32-i386
-
-Disassembly of section .text:
-
-00000000 <__try_cmpxchg64>:
-   0:	55                   	push   %ebp
-   1:	89 e5                	mov    %esp,%ebp
-   3:	57                   	push   %edi
-   4:	56                   	push   %esi
-   5:	89 d7                	mov    %edx,%edi
-   7:	53                   	push   %ebx
-   8:	89 c6                	mov    %eax,%esi
-   a:	8b 4d 0c             	mov    0xc(%ebp),%ecx
-   d:	8b 02                	mov    (%edx),%eax
-   f:	8b 5d 08             	mov    0x8(%ebp),%ebx
-  12:	8b 52 04             	mov    0x4(%edx),%edx
-  15:	50                   	push   %eax
-  16:	8d 06                	lea    (%esi),%eax
-  18:	87 04 24             	xchg   %eax,(%esp)
-  1b:	e8 fc ff ff ff       	call   1c <__try_cmpxchg64+0x1c>
-			1c: R_386_PC32	cmpxchg8b_emu
-  20:	0f 94 c1             	sete   %cl
-  23:	75 0b                	jne    30 <__try_cmpxchg64+0x30>
-  25:	5b                   	pop    %ebx
-  26:	88 c8                	mov    %cl,%al
-  28:	5e                   	pop    %esi
-  29:	5f                   	pop    %edi
-  2a:	5d                   	pop    %ebp
-  2b:	c3                   	ret    
-  2c:	8d 74 26 00          	lea    0x0(%esi,%eiz,1),%esi
-  30:	5b                   	pop    %ebx
-  31:	89 07                	mov    %eax,(%edi)
-  33:	5e                   	pop    %esi
-  34:	89 57 04             	mov    %edx,0x4(%edi)
-  37:	5f                   	pop    %edi
-  38:	88 c8                	mov    %cl,%al
-  3a:	5d                   	pop    %ebp
-  3b:	c3                   	ret    
-
-Of course there's a minor ABI nit for `cmpxchg8b_emu' to return a result 
-in ZF and the wrapper relies on CONFIG_FRAME_POINTER for correct `arg' 
-evaluation in all cases.  But that shouldn't be a big deal, should it?
-
- Then long-term maintenance would be minimal to nil and all the code 
-except for the wrapper and the emulation handler need not be concerned 
-about the 486 obscurity.  I can volunteer to maintain said wrapper and 
-emulation (and for that matter generic 486 support) if that helped to keep 
-the 486 alive.
-
- Eventually we may choose to drop 486 support after all, but CMPXCHG8B 
-alone seems too small a reason to me for that to happen right now.
-
- NB MIPS R2000 dates back to 1985, solid 4 years before the 486, and we 
-continue supporting it with minimal effort.  We do have atomic emulation 
-for userland of course.
-
-  Maciej
