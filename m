@@ -2,197 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E4860A6F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D49A060A576
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234232AbiJXMm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
+        id S233669AbiJXMYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234343AbiJXMjg (ORCPT
+        with ESMTP id S233540AbiJXMWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:39:36 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D97F7D7A0;
-        Mon, 24 Oct 2022 05:07:18 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id j188so10574680oih.4;
-        Mon, 24 Oct 2022 05:07:17 -0700 (PDT)
+        Mon, 24 Oct 2022 08:22:53 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBD21157
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:59:22 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id e15so7486166iof.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:59:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=CbU95M10rqKY9XTXjrLAHGbidlvO8mcbEqMNhmT7zvE=;
-        b=lZ72Dng6YwE1VM+uB0t4UEk3Y1M9gpQwvU+esV+jNeqLh/Af6sPMswmzLSAnudaLSn
-         Vq6KW2BBQOJy6bgnGyAofVWyQQGJDoL78TW/swcYuOV/8v43h5Lf2cqGaZWcoPHBCC0B
-         +O5tahgUM9fWvEE7V2Ws8lynfYb+GyC9uAPsw769WBn+OtlHX+Gz/+TIZlfNDMeWYEah
-         pFZYUW+YmWwzCcq2C2FoziwEGUSx998jU1v7ZmgBq45oTvhCIEFoj/Y8efDUkCwPQBoC
-         eH/6/KtDuqtmOnmFZ82Jt1wg5VFyN0SRyjVDngcTQK7tmH9vHCgLbXpJ9zlUiPJnSbfv
-         ldHg==
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmDXjWDbzeRAAinxIUP48fheIu9ywPgXIW0o1gwdOzo=;
+        b=XevXOugMqRF1oIpGbTIWwAaffV0qJS+9xjgf8qkbi4//DM9GGNtIcE/LtU6LK/Ac/a
+         Sqd2k/eM+v3wTCG9c8r8FgdpLx7ZccbOrE0u605lMJegkkLAheMzLSqTep/yq6KyzbhW
+         9AIXYR57KwIZGUp74mrEZ2GzAQYDAJPFMbSFk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CbU95M10rqKY9XTXjrLAHGbidlvO8mcbEqMNhmT7zvE=;
-        b=rIJcIO2Hv+sOijdSnNs0kO08GgdInm2wVTcyVZ8948IYk9swncFL0BciEkGnFmEaIU
-         31X21fmKzdcuMxsY3tGEImuz7HB5x6VfqcgcUbMtrzENOMM1Ou6ymS9m4Bx9w1dAJ6nF
-         VboMroPNC0ep9DfS0hiMFi5slNODxU3WCu+ftSD32ft5oeGyrLRdEJCBf5TsMh/F+ile
-         M89cWqagkmZ00BhDh5Zxr7befvzDDMueNBiwliRRSugsLpB7cLykbBZjDR+C3y59gKOF
-         +twnff2IvwMpRZ5+bsNW2x5VlzH6xrq2KfdIy8VloM6u4ULvPoGuS4kuupV36EE/cvm/
-         bk6Q==
-X-Gm-Message-State: ACrzQf16hVvz4qrtFLfoXG0xMkPNx87ewe3N9YNmJFS3RB2C8Yciuluj
-        2DdAf0O1eq3DpzRkkbKeexDHXgYlZeM=
-X-Google-Smtp-Source: AMsMyM7eUvJ+DnIELw80appBQ9f9gpDH65K7vBNEnv7NXO4DBYMxT/SuDsF5dZgN1MxDw4UuOtzYog==
-X-Received: by 2002:a05:6870:538a:b0:132:756f:2c98 with SMTP id h10-20020a056870538a00b00132756f2c98mr35892818oan.134.1666612607711;
-        Mon, 24 Oct 2022 04:56:47 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q9-20020a05683033c900b006622d085a7fsm3493018ott.50.2022.10.24.04.56.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 04:56:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
-Date:   Mon, 24 Oct 2022 04:56:43 -0700
+        bh=lmDXjWDbzeRAAinxIUP48fheIu9ywPgXIW0o1gwdOzo=;
+        b=GPj770hnZ7y+eHQ9q8vwSsWlRF380SKZOQTesnN+M/QoTying4y/Lu8qGSADB2zsgk
+         cZ/xWRc3RrXgKsopbuolHcPZel1upCWQb4iY3iOkWP+5y//1Q22WN2qVZ0NOUepPmLy4
+         LDK1QniAeRa3zVcnQRhSGVNt4Byg9dPcXgkSGKaWSWbdlGcNcbeoMKt1BEM8OIz3I9Zn
+         BW8lBIBD95xLorbFhHMdVDHnLLZaTAYkixl+BR5T4X1AP70aHdqnqeovwjm9kw2C6Lai
+         fXrWx3zVk9ycUdrlfAv7SJqKqcut4NR+BTTbdWzr08nfxHjv2NeQfYiB4l4+CTKW0eyX
+         gmuA==
+X-Gm-Message-State: ACrzQf0L+njLta8d/0fwVuvnCONIHaJNwrYflZUl1Ql8iY9uQJxtmA8l
+        thKNm6/nTJlzvdFMeZdoiLzBPQmuf4nV+l/2CfRq1w==
+X-Google-Smtp-Source: AMsMyM679MO3yAC93JYcpIzYICFZTxmBQ36woWKdu4O0Q6zf7hvaFvC+P16x3sbIZl751nVIrjtULTkWp4W2oXpZTG8=
+X-Received: by 2002:a05:6638:272c:b0:363:e601:cb62 with SMTP id
+ m44-20020a056638272c00b00363e601cb62mr21164710jav.284.1666612616150; Mon, 24
+ Oct 2022 04:56:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: (bug report) HWMON & Thermal interactions
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        daniel.lezcano@linaro.org
-Cc:     sudeep.holla@arm.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <Y1WHnJ6h1RSOipV4@e120937-lin>
- <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
-In-Reply-To: <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <Y1JkuKTjVYrOWbvm@eldamar.lan> <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
+In-Reply-To: <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Mon, 24 Oct 2022 17:26:44 +0530
+Message-ID: <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
+Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
+ update to 5.10.149 in 5.10.y.
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Salvatore Bonaccorso <carnil@debian.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        adi@kriegisch.at
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000fb5e5b05ebc67ce1"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/23/22 14:23, Guenter Roeck wrote:
-> On 10/23/22 11:27, Cristian Marussi wrote:
->> Hi,
->>
->> Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
->> to the fact that no trip points were (ever !) defined in the DT; bisecting it
->> looks like that after:
->>
->> https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
->>
->> the presence of the mandatory trips node within thermal zones is now
->> enforced.
->>
->> So, this is NOT what this bug report is about (I'll post soon patches for
->> the JUNO DT missing trips) BUT once this problem was solved in the DT,
->> another issue appeared:
->>
->> [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
->>
->> that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
->> embedding that sensors, only the first one is found as belonging to one ThermZ.
->> (this happens ALSO with v6.0 once I added the trips...)
->>
->> Digging deep into this, it turned out that inside the call chain
->>
->> devm_hwmon_device_register_with_info
->>    hwmon_device_register_with_info
->>      __hwmon_device_register
->>     hwmon_thermal_register_sensors(dev)
->>         --> hwmon_thermal_add_sensor(dev, j)
->>             --> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
->>
->> the HWMON channel index j is passed to the Thermal framework in order to
->> search and bind sensors with defined thermal zone, but this lead to the
->> assumption that sequential HWMON channel indexes corresponds one-to-one to the
->> underlying real sensor IDs that the ThermalFramework uses for matching
->> within the DT.
->>
->> On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
->> thermal zones like:
->>
->> thernal_zones {
->>     pmic {
->>         ...
->>         thermal-sensors = <&scmi_sensors0 0>;
->>         ...
->>         trips {
->>             ...
->>         }
->>     soc {
->>         ...
->>         thermal-sensors = <&scmi_sensors0 3>;
->>         ...
->>         trips {
->>             ...
->>         }
->>     }
->> }
->>
->> This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
->> the soc where J=1 BUT the real sensor ID is 3.
->>
->> Note that there can be a number of sensors, not all of them of a type handled
->> by HWMON, and enumerated by SCMI in different ways depending on the
->> platform.
->>
->> I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
->> context, where sensors are purely defined in the DT, the solution can be
->> more easily attained (i.e. renumber the sensors).
->>
->> At first I tried to solve this inside scmi-hwmon.c BUT I could not find
->> a way to present to the HWMON subsystem the list of sensors preserving
->> the above index/sensor_id matching (not even with a hack like passing
->> down dummy sensors to the HWMON subsystem to fill the 'holes' in the
->> numbering)
->>
->> My tentative solution, which works fine for me in my context, was to add
->> an optional HWMON hwops, so that the core hwmon can retrieve if needed the
->> real sensor ID if different from the channel index (using an optional hwops
->> instead of some static hwinfo var let me avoid to have to patch all the
->> existent hwmon drivers that happens to just work fine as of today...but
->> maybe it is not necessarily the proper final solution...)
->>
->> i.e.
->>
->> ----8<----
->>
->> Author: Cristian Marussi <cristian.marussi@arm.com>
->> Date:   Fri Oct 21 17:24:04 2022 +0100
->>
->>      hwmon: Add new .get_sensor_id hwops
->>      Add a new optional helper which can be defined to allow an hwmon chip to
->>      provide the logic to map hwmon indexes to the real underlying sensor IDs.
-> 
-> Maybe I am missing something, but ...
-> 
-> The driver isn't supposed to know anything about thermal devices and
-> thermal zones. If that no longer works, and drivers have to know about
-> thermal zones and thermal zone device index values anyway, we might
-> as well pull thermal device support from the hwmon core and implement
-> it in drivers.
-> 
+--000000000000fb5e5b05ebc67ce1
+Content-Type: text/plain; charset="UTF-8"
 
-No, wait: The question is really: Why does the scmi driver present the sensor
-with index 3 to the hwmon subsystem as sensor with index 1 ?
+On Sun, Oct 23, 2022 at 6:57 AM Bart Van Assche <bvanassche@acm.org> wrote:
+>
+> On 10/21/22 02:22, Salvatore Bonaccorso wrote:
+> > We got the following report in Debian after an update from 5.10.140 to
+> > the current 5.10.149. Full quoting below (from
+> > https://bugs.debian.org/1022126). Does this ring some bell about known
+> > regressions?
+>
+> Only three mpt3sas changes are new in v5.10.149 compared to v5.10.140:
+> $ git log --format=oneline v5.10.140..v5.10.149
+> 2b9aba0c5d58e141e32bb1bb4c7cd91d19f075b8 scsi: mpt3sas: Fix return value check of dma_get_required_mask()
+> e7fafef9830c4a01e60f76e3860a9bef0262378d scsi: mpt3sas: Force PCIe scatterlist allocations to be within same 4 GB region
+> ea10a652ad2ae2cf3eced6f632a5c98f26727057 scsi: mpt3sas: Fix use-after-free warning
+>
+> Sreekanth and Suganath, can you help with bisecting this issue? For the
+> full report, see also https://lore.kernel.org/linux-scsi/Y1JkuKTjVYrOWbvm@eldamar.lan/.
 
-If the sensor has index 3, and is presented to other entities as sensor
-with index 3, it should be presented to the hwmon subsystem as sensor with
-index 3, not with index 1. If sensors with index 1..2 do not exist,
-the is_visible function should return 0 for those sensors.
+This issue is getting observed after having the below patch changes,
+2b9aba0c5d58e141e32bb1bb4c7cd91d19f075b8 scsi: mpt3sas: Fix return
+value check of dma_get_required_mask()
 
-Guenter
+What is happening is that on Xen hypervisor, this
+dma_get_required_mask() API always returns a 32 bit DMA mask. I.e. It
+says that the minimum DMA mask required to access the host memory is
+32 bit and hence mpt3sas driver is setting the DMA mask to 32bit. So,
+on a 64 bit machine, if the driver set's the DMA mask to 32 bit then
+SWIOTLB's bounce buffer comes into picture during IOs. Since these
+bounce buffers are limited in size and hence we observe the IO hang if
+the large IOs are issued.
 
-> Guenter
-> 
+I am not sure whether this API's return value is correct or not in the
+Xen environment. If it is correct then I have to modify the driver to
+not use this API and directly set the DMA mask to 64 bit if the system
+is a 64bit machine.
 
+Thanks,
+Sreekanth
+
+
+
+>
+> Thanks,
+>
+> Bart.
+
+--000000000000fb5e5b05ebc67ce1
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+vZXeqKYupAd0/kWANIYKfeXvBSrhLTL/JLyu02jrKwUQmNeV/csW4n51mmbQyz5VRjLIaM9r93rl
+EKIoHplnybLWh6glNdzUbh+wpglCjssypREDVGZjlDD7NS2Q6FUCAwEAAaOCAd0wggHZMA4GA1Ud
+DwEB/wQEAwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUu
+Z2xvYmFsc2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggr
+BgEFBQcwAYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
+YTIwMjAwTQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3
+Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4
+aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmww
+JwYDVR0RBCAwHoEcc3JlZWthbnRoLnJlZGR5QGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU90fCF++yKdqz
+eSa+l3ox+Xh3bUUwDQYJKoZIhvcNAQELBQADggEBAEdSkxxx3jOPvsTAmqeChWssN7WYUZOhNQu/
++6bxE3/kn9StH6miItK87eIRsO0FFVLDJBnhWz0EGzWEliC68mV8ecDApK5douyO1VfXN8awZZ33
+i/RQS2sGbz1vIfPu54rtnwXGoUiXRaSOz0pLy/JRCFyHOj+8GKauKkyrUWiD0j1xPTJ1p8/KOyKd
+hPIHLRxnZxqpa2GjCtl3IYjKK8WbWx0NXkszaVTVRIn8e++VyiiH/yFXVyOEQxkZRQZWzTjPE9o/
+R31F09e8yABfehc+e00bSP23FKNuA8dwS29RHLpjmd+m5EtbFGD4EUANHzCSTA89S/iWNoaWteab
+v6IxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwftyuc
+ixn6z19iSQwwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFq7l/PC0jHugfQtWux6
+CdKsCZRPiFaYvxZKZNy5e5noMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMTAyNDExNTY1NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBIcoRPJF8VgzJC3X0oTVSDPRp1frOubd3wuffU
+6EFgkT0cfeucQY8bLVnhEI3v18Lrz/72J+bede6toF4HeXxkuyZFKv6QK2A72RmYtOIwOcjvkutP
+UFMJ5ZUXgJi889aHsKmqUuPi+tdd632Ag9ryvdsjcmR7x8GRydXG4xbEUYptSLp2mIEOBZ/Dp+Dj
+9p3MrPUungIhuIfCa4VO5jz447ec2ni9xMyEyg6swpad+FuAx9y1v/osKybhBnYUuRZ2hyOAMAtl
+W73n34yZ24Q5DBusIfdu6S1hYobYupsKuO53WzoWbGhTkbgjGB8r75iMyrwgyfw3a9UBXfkRmb/f
+--000000000000fb5e5b05ebc67ce1--
