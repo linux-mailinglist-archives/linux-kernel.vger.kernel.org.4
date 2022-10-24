@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E9B60B046
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFB260B4A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbiJXQDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S230410AbiJXR5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbiJXQCd (ORCPT
+        with ESMTP id S231953AbiJXR52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:02:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F1C491F4;
-        Mon, 24 Oct 2022 07:55:43 -0700 (PDT)
+        Mon, 24 Oct 2022 13:57:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408576F553;
+        Mon, 24 Oct 2022 09:37:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD4EBB819EE;
-        Mon, 24 Oct 2022 12:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D3F9C433D6;
-        Mon, 24 Oct 2022 12:48:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A9F8DCE16D5;
+        Mon, 24 Oct 2022 12:47:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959D5C433C1;
+        Mon, 24 Oct 2022 12:47:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615737;
-        bh=dirqGtiqwRgMxq1A/NUdYxtS7zQOiVtCO+7bR8qfAAI=;
+        s=korg; t=1666615670;
+        bh=1QUJDNqcFFRSgqgvnf6wISDMsBWhPp8lS7GZcNtc4uo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ya7IHMhiOv/3b8OL1UShF7zg7ThR8F4MHHTmp32cXXdwuxJf/F+npugGTRlN5mrrC
-         ZOyeYE87bbjRSFpfSi2ZhusgRZ/BjeH40NYoxlIl2TvPKa486o1TYoOcsAARaZOw7n
-         pFepyxzPCh0fN/l567KP6bYTZ9EvZzN/3d4tAA18=
+        b=uonYJPtE0iWAqTbVgJ0ZFuoa4mSCRgXiXVh9eogmShSz8EXbR40su9pehwpGPO4au
+         snhchSONXKnN/sHjWtNrX22rCEJVM4FB4eqhO4ryppGyPosGjTZ4GDa23u3pbUWXQH
+         oHKBVR29PgibWLAf/IHxw4x8uQS0jLXb6kI5i2Pw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 334/530] scsi: iscsi: Add recv workqueue helpers
-Date:   Mon, 24 Oct 2022 13:31:18 +0200
-Message-Id: <20221024113100.129624348@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Eddie James <eajames@linux.ibm.com>,
+        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 340/530] fsi: core: Check error number after calling ida_simple_get
+Date:   Mon, 24 Oct 2022 13:31:24 +0200
+Message-Id: <20221024113100.391210510@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
 References: <20221024113044.976326639@linuxfoundation.org>
@@ -55,109 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 8af809966c0b34cfacd8da9a412689b8e9910354 ]
+[ Upstream commit 35af9fb49bc5c6d61ef70b501c3a56fe161cce3e ]
 
-Add helpers to allow the drivers to run their recv paths from libiscsi's
-workqueue.
+If allocation fails, the ida_simple_get() will return error number.
+So master->idx could be error number and be used in dev_set_name().
+Therefore, it should be better to check it and return error if fails,
+like the ida_simple_get() in __fsi_get_new_minor().
 
-Link: https://lore.kernel.org/r/20220616224557.115234-3-michael.christie@oracle.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Stable-dep-of: 57569c37f0ad ("scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling getpeername()")
+Fixes: 09aecfab93b8 ("drivers/fsi: Add fsi master definition")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Reviewed-by: Eddie James <eajames@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220111073411.614138-1-jiasheng@iscas.ac.cn
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/libiscsi.c | 29 +++++++++++++++++++++++++++--
- include/scsi/libiscsi.h |  4 ++++
- 2 files changed, 31 insertions(+), 2 deletions(-)
+ drivers/fsi/fsi-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
-index 1cb18b80d182..73d235540b98 100644
---- a/drivers/scsi/libiscsi.c
-+++ b/drivers/scsi/libiscsi.c
-@@ -93,6 +93,16 @@ inline void iscsi_conn_queue_xmit(struct iscsi_conn *conn)
- }
- EXPORT_SYMBOL_GPL(iscsi_conn_queue_xmit);
+diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+index 59ddc9fd5bca..92e6eebd1851 100644
+--- a/drivers/fsi/fsi-core.c
++++ b/drivers/fsi/fsi-core.c
+@@ -1309,6 +1309,9 @@ int fsi_master_register(struct fsi_master *master)
  
-+inline void iscsi_conn_queue_recv(struct iscsi_conn *conn)
-+{
-+	struct Scsi_Host *shost = conn->session->host;
-+	struct iscsi_host *ihost = shost_priv(shost);
+ 	mutex_init(&master->scan_lock);
+ 	master->idx = ida_simple_get(&master_ida, 0, INT_MAX, GFP_KERNEL);
++	if (master->idx < 0)
++		return master->idx;
 +
-+	if (ihost->workq && !test_bit(ISCSI_CONN_FLAG_SUSPEND_RX, &conn->flags))
-+		queue_work(ihost->workq, &conn->recvwork);
-+}
-+EXPORT_SYMBOL_GPL(iscsi_conn_queue_recv);
-+
- static void __iscsi_update_cmdsn(struct iscsi_session *session,
- 				 uint32_t exp_cmdsn, uint32_t max_cmdsn)
- {
-@@ -1943,7 +1953,7 @@ EXPORT_SYMBOL_GPL(iscsi_suspend_queue);
+ 	dev_set_name(&master->dev, "fsi%d", master->idx);
+ 	master->dev.class = &fsi_master_class;
  
- /**
-  * iscsi_suspend_tx - suspend iscsi_data_xmit
-- * @conn: iscsi conn tp stop processing IO on.
-+ * @conn: iscsi conn to stop processing IO on.
-  *
-  * This function sets the suspend bit to prevent iscsi_data_xmit
-  * from sending new IO, and if work is queued on the xmit thread
-@@ -1956,7 +1966,7 @@ void iscsi_suspend_tx(struct iscsi_conn *conn)
- 
- 	set_bit(ISCSI_CONN_FLAG_SUSPEND_TX, &conn->flags);
- 	if (ihost->workq)
--		flush_workqueue(ihost->workq);
-+		flush_work(&conn->xmitwork);
- }
- EXPORT_SYMBOL_GPL(iscsi_suspend_tx);
- 
-@@ -1966,6 +1976,21 @@ static void iscsi_start_tx(struct iscsi_conn *conn)
- 	iscsi_conn_queue_xmit(conn);
- }
- 
-+/**
-+ * iscsi_suspend_rx - Prevent recvwork from running again.
-+ * @conn: iscsi conn to stop.
-+ */
-+void iscsi_suspend_rx(struct iscsi_conn *conn)
-+{
-+	struct Scsi_Host *shost = conn->session->host;
-+	struct iscsi_host *ihost = shost_priv(shost);
-+
-+	set_bit(ISCSI_CONN_FLAG_SUSPEND_RX, &conn->flags);
-+	if (ihost->workq)
-+		flush_work(&conn->recvwork);
-+}
-+EXPORT_SYMBOL_GPL(iscsi_suspend_rx);
-+
- /*
-  * We want to make sure a ping is in flight. It has timed out.
-  * And we are not busy processing a pdu that is making
-diff --git a/include/scsi/libiscsi.h b/include/scsi/libiscsi.h
-index ffffce144fdb..5cf84228b51d 100644
---- a/include/scsi/libiscsi.h
-+++ b/include/scsi/libiscsi.h
-@@ -201,6 +201,8 @@ struct iscsi_conn {
- 	struct list_head	cmdqueue;	/* data-path cmd queue */
- 	struct list_head	requeue;	/* tasks needing another run */
- 	struct work_struct	xmitwork;	/* per-conn. xmit workqueue */
-+	/* recv */
-+	struct work_struct	recvwork;
- 	unsigned long		flags;		/* ISCSI_CONN_FLAGs */
- 
- 	/* negotiated params */
-@@ -441,8 +443,10 @@ extern int iscsi_conn_get_param(struct iscsi_cls_conn *cls_conn,
- extern int iscsi_conn_get_addr_param(struct sockaddr_storage *addr,
- 				     enum iscsi_param param, char *buf);
- extern void iscsi_suspend_tx(struct iscsi_conn *conn);
-+extern void iscsi_suspend_rx(struct iscsi_conn *conn);
- extern void iscsi_suspend_queue(struct iscsi_conn *conn);
- extern void iscsi_conn_queue_xmit(struct iscsi_conn *conn);
-+extern void iscsi_conn_queue_recv(struct iscsi_conn *conn);
- 
- #define iscsi_conn_printk(prefix, _c, fmt, a...) \
- 	iscsi_cls_conn_printk(prefix, ((struct iscsi_conn *)_c)->cls_conn, \
 -- 
 2.35.1
 
