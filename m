@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2905460A1AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D131360A324
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiJXLcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S231485AbiJXLvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiJXLcA (ORCPT
+        with ESMTP id S231836AbiJXLtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:32:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F45756B85;
-        Mon, 24 Oct 2022 04:31:54 -0700 (PDT)
+        Mon, 24 Oct 2022 07:49:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA25E4C61E;
+        Mon, 24 Oct 2022 04:43:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B84B61259;
-        Mon, 24 Oct 2022 11:31:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 374A7C433D6;
-        Mon, 24 Oct 2022 11:31:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 94B2961297;
+        Mon, 24 Oct 2022 11:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A48C433C1;
+        Mon, 24 Oct 2022 11:43:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611113;
-        bh=BTxUk6zOdn4AF72fGjbFRugsG+1T5LCy1r/WeFDOWhM=;
+        s=korg; t=1666611818;
+        bh=nMsxlgLRGEX0FtD0r/V/YW2d/mRCby5PdiPhCodz1Z4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q0fs3t7ufewgnLj0weFPFfygZl7GHa46I+NpSmi56yHdNa7mMJH4x7J46Tpum5l4x
-         yS6P4i5DvnB5JnNTepo+ZQMmXXnu4PJETrmLcLMtUwUKO7Eqaz2d9iyjmtzRaX++Gt
-         qVRfwXJTjIF26ElDeWc5T/G1U3IVXS1EWQHhH6lU=
+        b=mLIQHt9KZRLyIUsGg4b4oe2jQlWz4kAZ3rkpSEYACBNTAv29xZ7iNSldI5cuLqa+H
+         DecT4MbdH14zZaWFx2Ilixo66AS7lyqQ7N+oxVzlJKRQXD9g9x+O+gLxr8zSLSfDnz
+         RqxY37z8pM2+3F8ejrDlj2MvGbkgb1R4laTS9WPY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikos Tsironis <ntsironis@arrikto.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 6.0 14/20] dm clone: Fix typo in block_device format specifier
-Date:   Mon, 24 Oct 2022 13:31:16 +0200
-Message-Id: <20221024112934.999774239@linuxfoundation.org>
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Arvid Norlander <lkml@vorpal.se>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 123/159] ACPI: video: Add Toshiba Satellite/Portege Z830 quirk
+Date:   Mon, 24 Oct 2022 13:31:17 +0200
+Message-Id: <20221024112953.990430064@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-References: <20221024112934.415391158@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,36 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikos Tsironis <ntsironis@arrikto.com>
+From: Arvid Norlander <lkml@vorpal.se>
 
-commit 5434ee8d28575b2e784bd5b4dbfc912e5da90759 upstream.
+[ Upstream commit 574160b8548deff8b80b174f03201e94ab8431e2 ]
 
-Use %pg for printing the block device name, instead of %pd.
+Toshiba Satellite Z830 needs the quirk video_disable_backlight_sysfs_if
+for proper backlight control after suspend/resume cycles.
 
-Fixes: 385411ffba0c ("dm: stop using bdevname")
-Cc: stable@vger.kernel.org # v5.18+
-Signed-off-by: Nikos Tsironis <ntsironis@arrikto.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Toshiba Portege Z830 is simply the same laptop rebranded for certain
+markets (I looked through the manual to other language sections to confirm
+this) and thus also needs this quirk.
+
+Thanks to Hans de Goede for suggesting this fix.
+
+Link: https://www.spinics.net/lists/platform-driver-x86/msg34394.html
+Suggested-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Arvid Norlander <lkml@vorpal.se>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Tested-by: Arvid Norlander <lkml@vorpal.se>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-clone-target.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/acpi_video.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/md/dm-clone-target.c b/drivers/md/dm-clone-target.c
-index 811b0a5379d0..2f1cc66d2641 100644
---- a/drivers/md/dm-clone-target.c
-+++ b/drivers/md/dm-clone-target.c
-@@ -2035,7 +2035,7 @@ static void disable_passdown_if_not_supported(struct clone *clone)
- 		reason = "max discard sectors smaller than a region";
- 
- 	if (reason) {
--		DMWARN("Destination device (%pd) %s: Disabling discard passdown.",
-+		DMWARN("Destination device (%pg) %s: Disabling discard passdown.",
- 		       dest_dev, reason);
- 		clear_bit(DM_CLONE_DISCARD_PASSDOWN, &clone->flags);
- 	}
+diff --git a/drivers/acpi/acpi_video.c b/drivers/acpi/acpi_video.c
+index ea0573176894..209903c2ee85 100644
+--- a/drivers/acpi/acpi_video.c
++++ b/drivers/acpi/acpi_video.c
+@@ -485,6 +485,22 @@ static struct dmi_system_id video_dmi_table[] = {
+ 		DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE R830"),
+ 		},
+ 	},
++	{
++	 .callback = video_disable_backlight_sysfs_if,
++	 .ident = "Toshiba Satellite Z830",
++	 .matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
++		DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE Z830"),
++		},
++	},
++	{
++	 .callback = video_disable_backlight_sysfs_if,
++	 .ident = "Toshiba Portege Z830",
++	 .matches = {
++		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
++		DMI_MATCH(DMI_PRODUCT_NAME, "PORTEGE Z830"),
++		},
++	},
+ 	/*
+ 	 * Some machine's _DOD IDs don't have bit 31(Device ID Scheme) set
+ 	 * but the IDs actually follow the Device ID Scheme.
 -- 
-2.38.1
+2.35.1
 
 
 
