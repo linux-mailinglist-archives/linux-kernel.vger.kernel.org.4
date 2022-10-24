@@ -2,293 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D780E609ADC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C27A609AE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJXHAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S230138AbiJXHDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiJXHAa (ORCPT
+        with ESMTP id S229455AbiJXHDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:00:30 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C742BB35;
-        Mon, 24 Oct 2022 00:00:20 -0700 (PDT)
-X-UUID: 8bbf94c61458406ebc1e2683938f1fb0-20221024
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=j7rpdpDxukLQykFxVx9uWvBd2Oi6MhJtBN5ZZYflQgs=;
-        b=hc1ZECvLUVMblUKT58qysNGQ97Gai1XfYCTn8ybgjwk/lQEF8jgPT9aUYluqTbOzDwT4wIW51wX3FTELq+u8ylgaNSyYR/X/K2V8wL7/TNf4pqDfOQdOJIuS38qLwXGFbfIpaEy3mBc3RH13KktuR5yzezTstKDglGcocf/VXjo=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:efdb091b-3789-4238-b420-43d90d38ba83,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:100
-X-CID-INFO: VERSION:1.1.12,REQID:efdb091b-3789-4238-b420-43d90d38ba83,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:100
-X-CID-META: VersionHash:62cd327,CLOUDID:447f79c8-03ab-4171-989e-341ab5339257,B
-        ulkID:221024150017OMBNL3KB,BulkQuantity:0,Recheck:0,SF:38|28|16|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 8bbf94c61458406ebc1e2683938f1fb0-20221024
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <mingjia.zhang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1964739988; Mon, 24 Oct 2022 15:00:14 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Mon, 24 Oct 2022 15:00:12 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Mon, 24 Oct 2022 15:00:11 +0800
-From:   Mingjia Zhang <mingjia.zhang@mediatek.com>
-To:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4] media: mediatek: vcodec: Add to support VP9 inner racing mode
-Date:   Mon, 24 Oct 2022 15:00:09 +0800
-Message-ID: <20221024070009.4488-1-mingjia.zhang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 24 Oct 2022 03:03:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465F656011;
+        Mon, 24 Oct 2022 00:03:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8BC7B80ED4;
+        Mon, 24 Oct 2022 07:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73E6FC433C1;
+        Mon, 24 Oct 2022 07:02:55 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: [PATCH V13 0/4] mm/sparse-vmemmap: Generalise helpers and enable for LoongArch
+Date:   Mon, 24 Oct 2022 15:01:01 +0800
+Message-Id: <20221024070105.306280-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to reduce decoder latency, enable VP9 inner racing mode.
-Send lat trans buffer information to core when trigger lat to work,
-need not to wait until lat decode done.
+This series is in order to enable sparse-vmemmap for LoongArch. But
+LoongArch cannot use generic helpers directly because MIPS&LoongArch
+need to call pgd_init()/pud_init()/pmd_init() when populating page
+tables. So we adjust the prototypes of p?d_init() to make generic
+helpers can call them, then enable sparse-vmemmap with generic helpers,
+and to be further, generalise vmemmap_populate_hugepages() for ARM64,
+X86 and LoongArch.
 
-Signed-off-by: Mingjia Zhang <mingjia.zhang@mediatek.com>
+V1 -> V2:
+Split ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP to a separate patch.
+
+V2 -> V3:
+1, Change the Signed-off-by order of author and committer;
+2, Update commit message about the build error on LoongArch.
+
+V3 -> V4:
+Change pmd to pmdp for ARM64 for consistency.
+
+V4 -> V5:
+Add a detailed comment for no-fallback in the altmap case.
+
+V5 -> V6:
+1, Fix build error for NIOS2;
+2, Fix build error for allnoconfig;
+3, Update comment for no-fallback in the altmap case.
+
+V6 -> V7:
+Fix build warnings of "no previous prototype".
+
+V7 -> V8:
+Fix build error for MIPS pud_init().
+
+V8 -> V9:
+Remove redundant #include to avoid build error with latest upstream
+kernel.
+
+V9 -> V10:
+Fix build error due to VMEMMAP changes in 6.0-rc1.
+
+V10 -> V11:
+Adjust context due to ARM64 changes in 6.1-rc1.
+
+V11 -> V12:
+1, Fix build error for !SPARSEMEM;
+2, Simplify pagetable_init() for MIPS32.
+
+V12 -> V13:
+1, Add Acked-by and Reviewed-by tags;
+2, Update commit message for the 4th patch.
+
+Huacai Chen and Feiyang Chen(4):
+ MIPS&LoongArch&NIOS2: Adjust prototypes of p?d_init().
+ LoongArch: Add sparse memory vmemmap support.
+ mm/sparse-vmemmap: Generalise vmemmap_populate_hugepages().
+ LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP.
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn> 
 ---
-Changes from v3:
-
-- CTS/GTS test pass
-- Fluster result: Ran 275/303 tests successfully
-
-Changes from v2:
-
-- CTS/GTS test pass
-- Fluster result: Ran 240/303 tests successfully
-
-Changes from v1:
-
-- CTS/GTS test pass
----
- .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 87 ++++++++++---------
- 1 file changed, 48 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-index 81de876d51267..baf7ecd54eda3 100644
---- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-+++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-@@ -436,6 +436,7 @@ struct vdec_vp9_slice_ref {
-  * @frame_ctx:		4 frame context according to VP9 Spec
-  * @frame_ctx_helper:	4 frame context according to newest kernel spec
-  * @dirty:		state of each frame context
-+ * @local_vsi:		local instance vsi information
-  * @init_vsi:		vsi used for initialized VP9 instance
-  * @vsi:		vsi used for decoding/flush ...
-  * @core_vsi:		vsi used for Core stage
-@@ -482,6 +483,8 @@ struct vdec_vp9_slice_instance {
- 	struct v4l2_vp9_frame_context frame_ctx_helper;
- 	unsigned char dirty[4];
- 
-+	struct vdec_vp9_slice_vsi local_vsi;
-+
- 	/* MicroP vsi */
- 	union {
- 		struct vdec_vp9_slice_init_vsi *init_vsi;
-@@ -1616,16 +1619,10 @@ static int vdec_vp9_slice_update_single(struct vdec_vp9_slice_instance *instance
- }
- 
- static int vdec_vp9_slice_update_lat(struct vdec_vp9_slice_instance *instance,
--				     struct vdec_lat_buf *lat_buf,
--				     struct vdec_vp9_slice_pfc *pfc)
-+				     struct vdec_vp9_slice_vsi *vsi)
- {
--	struct vdec_vp9_slice_vsi *vsi;
--
--	vsi = &pfc->vsi;
--	memcpy(&pfc->state[0], &vsi->state, sizeof(vsi->state));
--
- 	mtk_vcodec_debug(instance, "Frame %u LAT CRC 0x%08x %lx %lx\n",
--			 pfc->seq, vsi->state.crc[0],
-+			 (instance->seq - 1), vsi->state.crc[0],
- 			 (unsigned long)vsi->trans.dma_addr,
- 			 (unsigned long)vsi->trans.dma_addr_end);
- 
-@@ -2090,6 +2087,13 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 		return ret;
- 	}
- 
-+	if (IS_VDEC_INNER_RACING(ctx->dev->dec_capability)) {
-+		vdec_vp9_slice_vsi_from_remote(vsi, instance->vsi, 0);
-+		memcpy(&instance->local_vsi, vsi, sizeof(*vsi));
-+		vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
-+		vsi = &instance->local_vsi;
-+	}
-+
- 	if (instance->irq) {
- 		ret = mtk_vcodec_wait_for_done_ctx(ctx,	MTK_INST_IRQ_RECEIVED,
- 						   WAIT_INTR_TIMEOUT_MS, MTK_VDEC_LAT0);
-@@ -2102,22 +2106,25 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- 	}
- 
- 	vdec_vp9_slice_vsi_from_remote(vsi, instance->vsi, 0);
--	ret = vdec_vp9_slice_update_lat(instance, lat_buf, pfc);
-+	ret = vdec_vp9_slice_update_lat(instance, vsi);
- 
--	/* LAT trans full, no more UBE or decode timeout */
--	if (ret) {
--		mtk_vcodec_err(instance, "VP9 decode error: %d\n", ret);
--		return ret;
--	}
-+	if (!IS_VDEC_INNER_RACING(ctx->dev->dec_capability))
-+		/* LAT trans full, no more UBE or decode timeout */
-+		if (ret) {
-+			mtk_vcodec_err(instance, "frame[%d] decode error: %d\n",
-+				       ret, (instance->seq - 1));
-+			return ret;
-+		}
- 
--	mtk_vcodec_debug(instance, "lat dma addr: 0x%lx 0x%lx\n",
--			 (unsigned long)pfc->vsi.trans.dma_addr,
--			 (unsigned long)pfc->vsi.trans.dma_addr_end);
- 
--	vdec_msg_queue_update_ube_wptr(&ctx->msg_queue,
--				       vsi->trans.dma_addr_end +
--				       ctx->msg_queue.wdma_addr.dma_addr);
--	vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
-+	vsi->trans.dma_addr_end += ctx->msg_queue.wdma_addr.dma_addr;
-+	vdec_msg_queue_update_ube_wptr(&ctx->msg_queue, vsi->trans.dma_addr_end);
-+	if (!IS_VDEC_INNER_RACING(ctx->dev->dec_capability))
-+		vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
-+
-+	mtk_vcodec_debug(instance, "lat trans end addr(0x%lx), ube start addr(0x%lx)\n",
-+			 (unsigned long)vsi->trans.dma_addr_end,
-+			 (unsigned long)ctx->msg_queue.wdma_addr.dma_addr);
- 
- 	return 0;
- }
-@@ -2139,40 +2146,40 @@ static int vdec_vp9_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
- static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
- {
- 	struct vdec_vp9_slice_instance *instance;
--	struct vdec_vp9_slice_pfc *pfc;
-+	struct vdec_vp9_slice_pfc *pfc = NULL;
- 	struct mtk_vcodec_ctx *ctx = NULL;
- 	struct vdec_fb *fb = NULL;
- 	int ret = -EINVAL;
- 
- 	if (!lat_buf)
--		goto err;
-+		return -EINVAL;
- 
- 	pfc = lat_buf->private_data;
- 	ctx = lat_buf->ctx;
- 	if (!pfc || !ctx)
--		goto err;
-+		return -EINVAL;
- 
- 	instance = ctx->drv_handle;
- 	if (!instance)
--		goto err;
-+		return -EINVAL;
- 
- 	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
- 	if (!fb) {
- 		ret = -EBUSY;
--		goto err;
-+		goto vdec_dec_end;
- 	}
- 
- 	ret = vdec_vp9_slice_setup_core(instance, fb, lat_buf, pfc);
- 	if (ret) {
- 		mtk_vcodec_err(instance, "vdec_vp9_slice_setup_core\n");
--		goto err;
-+		goto vdec_dec_end;
- 	}
- 	vdec_vp9_slice_vsi_to_remote(&pfc->vsi, instance->core_vsi);
- 
- 	ret = vpu_dec_core(&instance->vpu);
- 	if (ret) {
- 		mtk_vcodec_err(instance, "vpu_dec_core\n");
--		goto err;
-+		goto vdec_dec_end;
- 	}
- 
- 	if (instance->irq) {
-@@ -2190,25 +2197,27 @@ static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
- 	ret = vdec_vp9_slice_update_core(instance, lat_buf, pfc);
- 	if (ret) {
- 		mtk_vcodec_err(instance, "vdec_vp9_slice_update_core\n");
--		goto err;
-+		goto vdec_dec_end;
- 	}
- 
--	pfc->vsi.trans.dma_addr_end += ctx->msg_queue.wdma_addr.dma_addr;
- 	mtk_vcodec_debug(instance, "core dma_addr_end 0x%lx\n",
- 			 (unsigned long)pfc->vsi.trans.dma_addr_end);
--	vdec_msg_queue_update_ube_rptr(&ctx->msg_queue, pfc->vsi.trans.dma_addr_end);
--	ctx->dev->vdec_pdata->cap_to_disp(ctx, 0, lat_buf->src_buf_req);
--
--	return 0;
- 
--err:
--	if (ctx && pfc) {
--		/* always update read pointer */
--		vdec_msg_queue_update_ube_rptr(&ctx->msg_queue, pfc->vsi.trans.dma_addr_end);
-+vdec_dec_end:
-+	/* always update read pointer */
-+	if (IS_VDEC_INNER_RACING(ctx->dev->dec_capability))
-+		vdec_msg_queue_update_ube_rptr(&ctx->msg_queue,
-+					       pfc->vsi.trans.dma_addr);
-+	else
-+		vdec_msg_queue_update_ube_rptr(&ctx->msg_queue,
-+					       pfc->vsi.trans.dma_addr_end);
- 
-+	if (ret)
- 		if (fb)
- 			ctx->dev->vdec_pdata->cap_to_disp(ctx, 1, lat_buf->src_buf_req);
--	}
-+	else
-+		ctx->dev->vdec_pdata->cap_to_disp(ctx, 0, lat_buf->src_buf_req);
-+
- 	return ret;
- }
- 
--- 
-2.18.0
+ arch/arm64/mm/mmu.c                    | 53 ++++++--------------
+ arch/loongarch/Kconfig                 |  2 +
+ arch/loongarch/include/asm/pgalloc.h   | 13 +----
+ arch/loongarch/include/asm/pgtable.h   | 13 +++--
+ arch/loongarch/include/asm/sparsemem.h |  8 +++
+ arch/loongarch/kernel/numa.c           |  4 +-
+ arch/loongarch/mm/init.c               | 44 +++++++++++++++-
+ arch/loongarch/mm/pgtable.c            | 23 +++++----
+ arch/mips/include/asm/pgalloc.h        |  8 +--
+ arch/mips/include/asm/pgtable-64.h     |  8 +--
+ arch/mips/kvm/mmu.c                    |  3 +-
+ arch/mips/mm/pgtable-32.c              | 10 ++--
+ arch/mips/mm/pgtable-64.c              | 18 ++++---
+ arch/mips/mm/pgtable.c                 |  2 +-
+ arch/x86/mm/init_64.c                  | 92 ++++++++++++----------------------
+ include/linux/mm.h                     |  8 +++
+ include/linux/page-flags.h             |  1 +
+ mm/sparse-vmemmap.c                    | 64 +++++++++++++++++++++++
+ 18 files changed, 222 insertions(+), 152 deletions(-)
+--
+2.27.0
 
