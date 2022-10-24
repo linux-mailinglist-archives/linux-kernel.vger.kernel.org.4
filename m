@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE95260AB44
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A8A60A881
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236485AbiJXNrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S235426AbiJXNG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236325AbiJXNqC (ORCPT
+        with ESMTP id S235383AbiJXNEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:46:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F6452808;
-        Mon, 24 Oct 2022 05:40:35 -0700 (PDT)
+        Mon, 24 Oct 2022 09:04:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBA45282F;
+        Mon, 24 Oct 2022 05:20:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A651612B9;
-        Mon, 24 Oct 2022 12:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BED9C433D6;
-        Mon, 24 Oct 2022 12:39:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C925461017;
+        Mon, 24 Oct 2022 12:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBDB3C433D6;
+        Mon, 24 Oct 2022 12:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615177;
-        bh=A7BlILwg72M1EmbA1f/X+SRvG6p9eP2j0ab0qNOaeAs=;
+        s=korg; t=1666614011;
+        bh=kaSLeQO+QPkHMeHmXJ59FjLAZu2CjkLZn8B3+ZzYINA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wmWysIoGES3QlQ8HAaQe/hLOOY3DZTsBhRhTXc3BLG2Z2v29vbZP8mlm5UOpc8TCI
-         DHazDQZ47mIHU99FPWHjHLggNzeWrGEXj2h7pYGlt95ijXhSSsC8MvuEtXmcCVg4Qb
-         MQcCzJ1OFUxkwmRBdLCp6Pbe4vehqZMn7Gn9x4NA=
+        b=J87SWjvDQETYh6LHZnA/smt1L3UPptjDC/4brVnHGEPn+f1WOWMW8ymp/9076ZG8K
+         kUVSbNIHQw6+/FZb7Y7fOpNq4fMkZGkZdJ/iGG8tVM7N8/ObUu28DUxT4c0wEkKXTG
+         YtQAWnxW4bPQ69EMhr2UGnwsgpXMw75gy/cFfDPA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 151/530] wifi: rtlwifi: 8192de: correct checking of IQK reload
-Date:   Mon, 24 Oct 2022 13:28:15 +0200
-Message-Id: <20221024113051.900839576@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 099/390] nfsd: Fix a memory leak in an error handling path
+Date:   Mon, 24 Oct 2022 13:28:16 +0200
+Message-Id: <20221024113026.874772555@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,50 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ping-Ke Shih <pkshih@realtek.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 93fbc1ebd978cf408ef5765e9c1630fce9a8621b ]
+[ Upstream commit fd1ef88049de09bc70d60b549992524cfc0e66ff ]
 
-Since IQK could spend time, we make a cache of IQK result matrix that looks
-like iqk_matrix[channel_idx].val[x][y], and we can reload the matrix if we
-have made a cache. To determine a cache is made, we check
-iqk_matrix[channel_idx].val[0][0].
+If this memdup_user() call fails, the memory allocated in a previous call
+a few lines above should be freed. Otherwise it leaks.
 
-The initial commit 7274a8c22980 ("rtlwifi: rtl8192de: Merge phy routines")
-make a mistake that checks incorrect iqk_matrix[channel_idx].val[0] that
-is always true, and this mistake is found by commit ee3db469dd31
-("wifi: rtlwifi: remove always-true condition pointed out by GCC 12"), so
-I recall the vendor driver to find fix and apply the correctness.
-
-Fixes: 7274a8c22980 ("rtlwifi: rtl8192de: Merge phy routines")
-Signed-off-by: Ping-Ke Shih <pkshih@realtek.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220801113345.42016-1-pkshih@realtek.com
+Fixes: 6ee95d1c8991 ("nfsd: add support for upcall version 2")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ fs/nfsd/nfs4recover.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c b/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c
-index 743e38a1aa51..4d153bd62c53 100644
---- a/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c
-+++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.c
-@@ -2386,11 +2386,10 @@ void rtl92d_phy_reload_iqk_setting(struct ieee80211_hw *hw, u8 channel)
- 			rtl_dbg(rtlpriv, COMP_SCAN, DBG_LOUD,
- 				"Just Read IQK Matrix reg for channel:%d....\n",
- 				channel);
--			_rtl92d_phy_patha_fill_iqk_matrix(hw, true,
--					rtlphy->iqk_matrix[
--					indexforchannel].value,	0,
--					(rtlphy->iqk_matrix[
--					indexforchannel].value[0][2] == 0));
-+			if (rtlphy->iqk_matrix[indexforchannel].value[0][0] != 0)
-+				_rtl92d_phy_patha_fill_iqk_matrix(hw, true,
-+					rtlphy->iqk_matrix[indexforchannel].value, 0,
-+					rtlphy->iqk_matrix[indexforchannel].value[0][2] == 0);
- 			if (IS_92D_SINGLEPHY(rtlhal->version)) {
- 				if ((rtlphy->iqk_matrix[
- 					indexforchannel].value[0][4] != 0)
+diff --git a/fs/nfsd/nfs4recover.c b/fs/nfsd/nfs4recover.c
+index f9b730c43192..83c4e6883953 100644
+--- a/fs/nfsd/nfs4recover.c
++++ b/fs/nfsd/nfs4recover.c
+@@ -815,8 +815,10 @@ __cld_pipe_inprogress_downcall(const struct cld_msg_v2 __user *cmsg,
+ 				princhash.data = memdup_user(
+ 						&ci->cc_princhash.cp_data,
+ 						princhashlen);
+-				if (IS_ERR_OR_NULL(princhash.data))
++				if (IS_ERR_OR_NULL(princhash.data)) {
++					kfree(name.data);
+ 					return -EFAULT;
++				}
+ 				princhash.len = princhashlen;
+ 			} else
+ 				princhash.len = 0;
 -- 
 2.35.1
 
