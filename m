@@ -2,101 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9B160BFBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F2E60BFDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiJYAkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S231301AbiJYAmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiJYAjm (ORCPT
+        with ESMTP id S229832AbiJYAmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:39:42 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7190B1FCC9;
-        Mon, 24 Oct 2022 16:07:06 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (unknown [194.36.25.51])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D27D6602319;
-        Tue, 25 Oct 2022 00:07:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666652824;
-        bh=syu6x+tQMYyXRnROEzYyOqlWI3pV6D/rMZw1lLuGM5g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bMUwQ7iyuh1NncKE+xbrlV4imgXvN327I0B1FFYOlO9RvlB4/vL5xDB5HkHfSrltg
-         jqoPN/y0eDEWf0R0TqfMACGkLH/iC88vUEJEyjIy2hzRo2TL51zDjk84uo8rEZ2O2u
-         fJ3Q9lCEFsbQAMMS+eT8uN+bdrbkWyQXLKaw+AN7nnZBTdJ1GopP7mGKT72fbCCtJA
-         QkLmUSxiIDx2kftHEj3WQeYtpXNQpLRoBXZK4KrZRyce8QGIaCa5Kw/+2RRTT/6RPo
-         wSsVI2XKgM9bJnwXyzcxPRU/XPrCf+rLUiVsmj0VlLDEDvu5t7q4vIC9N4KP15I8HQ
-         S+iDU7uVQPNDA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shane Chien <shane.chien@mediatek.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] ASoC: dt-bindings: mt8192-mt6359: Set maxItems, not type, for sound-dai
-Date:   Mon, 24 Oct 2022 19:06:57 -0400
-Message-Id: <20221024230658.1772907-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.38.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 20:42:22 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763D927CEE
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:14:12 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id lw1-20020a17090b180100b0021316472a8fso2419974pjb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zUr9nCpZGwPmjaMYLimECUICch35FeuRhnm3VL93618=;
+        b=lGxLBaCkjGJQ5m7n6pn99E7OtikpIKcRVqc+S3npSzqN/BVCnNlv0B/ccVxzryt5rY
+         Swq/kKFdgOZcInH3Gva6ymQSMwzkDmO6Js6CE+071v6qrE0s6U0xMVup7ALCOEuaGeAx
+         XNDmqWyzepz0QuZ5WUA+iPBFB1uK+IklgHtLOkthABx2gvTqwPQA+wDDyiaKkkmteRhq
+         lnUxoJYxt3RJEX5lL49GQejqBgo5NzsftGHnc28NWhLW9VZpWYOQ7lVjVOb0lhhk3KLk
+         SR9YVlH31zbLMwxACzt1zzcmaRTcUsY7+sqUXgIgXgod2N9L0kpG1gE/BFybABUxYiGk
+         TLvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zUr9nCpZGwPmjaMYLimECUICch35FeuRhnm3VL93618=;
+        b=o7uBGPYxRZQhSmu7Ww/iRqJQE/GMk+DK0xxt2BDUBYzXPZ4h+HnuEDpiRsM1ayvUWH
+         qeYHhSD2iebqC38HL2oTS+FhzujoTlAEaoer4gyZVt3aNJGgkNC5grDh6FBx29OQQDqM
+         78rhOTCiSA2yqDYT5o47BgKjB69QI8cxpZzIgFNu/NcA9pvNP9NYlru7wdP90JFBvQ96
+         k56HHqdUyJ/egQQaHwMRGrQGeM81FIqCX4W04XdXE/4UMrmnwBzdDNEgiryojb0NUc8S
+         OeTCqcD393TeddHtbBsm5Zjkz66LWD3Msuq0gvl0xC8ITGg62A5Crx2BC4OYUTTsIQYm
+         dQSQ==
+X-Gm-Message-State: ACrzQf3Ibc5lT0l6JEvWjPRzv0hiqq3/uX2EuUu8EGVuJg6bnOPRR5+e
+        CR6qfDC2HvIp+9dgoGOjsUQAPqqW0Gd8iA==
+X-Google-Smtp-Source: AMsMyM4A+0ArO1kTkLwRNYEITVTq3K7I/kdihJ6u1j0iy9n0LOAi68ufPrrVmhXaIZTyj+hBejplMVWycOMgxg==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a05:6a00:1406:b0:565:dc13:bb36 with SMTP
+ id l6-20020a056a00140600b00565dc13bb36mr36276391pfu.46.1666653251624; Mon, 24
+ Oct 2022 16:14:11 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 23:14:08 +0000
+In-Reply-To: <20221024153022.1b81a182eac44797b40bfda1@linux-foundation.org>
+Mime-Version: 1.0
+References: <20221024052841.3291983-1-shakeelb@google.com> <20221024153022.1b81a182eac44797b40bfda1@linux-foundation.org>
+Message-ID: <20221024231408.j3moql6q5qhct3jx@google.com>
+Subject: Re: [PATCH] mm: convert mm's rss stats into percpu_counter
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sound-dai is a standard property whose type is already set to
-phandle-array by sound-dai.yaml, so there's no need to set it (and
-wrongly so for headset-codec) in this binding. What should be set
-however is the maximum number of items, which for headset-codec should
-be 1.
+On Mon, Oct 24, 2022 at 03:30:22PM -0700, Andrew Morton wrote:
+> On Mon, 24 Oct 2022 05:28:41 +0000 Shakeel Butt <shakeelb@google.com> wrote:
+> 
+> > Currently mm_struct maintains rss_stats which are updated on page fault
+> > and the unmapping codepaths. For page fault codepath the updates are
+> > cached per thread with the batch of TASK_RSS_EVENTS_THRESH which is 64.
+> > The reason for caching is performance for multithreaded applications
+> > otherwise the rss_stats updates may become hotspot for such
+> > applications.
+> > 
+> > However this optimization comes with the cost of error margin in the rss
+> > stats. The rss_stats for applications with large number of threads can
+> > be very skewed. At worst the error margin is (nr_threads * 64) and we
+> > have a lot of applications with 100s of threads, so the error margin can
+> > be very high. Internally we had to reduce TASK_RSS_EVENTS_THRESH to 32.
+> > 
+> > Recently we started seeing the unbounded errors for rss_stats for
+> > specific applications which use TCP rx0cp. It seems like
+> > vm_insert_pages() codepath does not sync rss_stats at all.
+> > 
+> > This patch converts the rss_stats into percpu_counter to convert the
+> > error margin from (nr_threads * 64) to approximately (nr_cpus ^ 2).
+> 
+> Confused.  The max error should be O(nr_cpus)?
+> 
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+So, percpu_counter code sets the percpu batch in the following way:
 
----
+static int compute_batch_value(unsigned int cpu)
+{
+        int nr = num_online_cpus();
 
- .../devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+        percpu_counter_batch = max(32, nr*2);
+        return 0;
+}
 
-diff --git a/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml b/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
-index 478be7e3fa29..c6e614c1c30b 100644
---- a/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
-+++ b/Documentation/devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml
-@@ -34,7 +34,7 @@ properties:
- 
-     properties:
-       sound-dai:
--        $ref: /schemas/types.yaml#/definitions/phandle
-+        maxItems: 1
-     required:
-       - sound-dai
- 
-@@ -48,7 +48,6 @@ properties:
-         maxItems: 2
-         items:
-           maxItems: 1
--        $ref: /schemas/types.yaml#/definitions/phandle-array
-     required:
-       - sound-dai
- 
--- 
-2.38.1
+This means each cpu can cache (nr_cpus*2) updates. Practically the
+number of cpus do not change and are usually much less than the number
+of threads of large applications, so error margin is lower.
 
+> > However this conversion enable us to get the accurate stats for
+> > situations where accuracy is more important than the cpu cost. Though
+> > this patch does not make such tradeoffs.
+> 
+> Curiousity.  Can you expand on the final sentence here?
+> 
+
+Basically we can just use percpu_counter_add_local() for the updates and
+percpu_counter_sum() (or percpu_counter_sync() + percpu_counter_read)
+for the readers. At the moment the readers are either procfs interface,
+oom_killer and memory reclaim which I think are not performance critical
+and should be ok with slow read. However I think we can make that change
+in a separate patch.
+
+thanks,
+Shakeel
