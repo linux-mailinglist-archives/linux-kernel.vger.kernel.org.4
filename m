@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D4060AC83
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5643160AFCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiJXOH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S231877AbiJXP6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbiJXOEM (ORCPT
+        with ESMTP id S231642AbiJXP5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:04:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20FE90811;
-        Mon, 24 Oct 2022 05:49:07 -0700 (PDT)
+        Mon, 24 Oct 2022 11:57:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3C1E26;
+        Mon, 24 Oct 2022 07:52:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1CB06134C;
-        Mon, 24 Oct 2022 12:47:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0459C433D6;
-        Mon, 24 Oct 2022 12:47:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 980EAB811A0;
+        Mon, 24 Oct 2022 11:45:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E15F0C433C1;
+        Mon, 24 Oct 2022 11:44:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615631;
-        bh=0yp0MeoCQn55dZ0Ly+Cfe8r8xQVfv9yqt30m368kJ1M=;
+        s=korg; t=1666611899;
+        bh=+IJfdwQZHLdBxmVW+3yGX0T13fs3Qxpi0bql/8osMgE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bdr/nQp8157SAdL6QS1S4VICElTgzPOm6zNAo7hHdIIS/cglF2xmeQxeppug63MHR
-         Hc3q5BO0nacCfwTEzDOKY6mOt+RhKC+nRLyB08TCtZWdELq2tb33HulneIv5IL5cyr
-         g9JrN5vxaiO9S1ctIjLf5hmIRernKMBRTzbmgQNE=
+        b=jHIstq0cNdlnyTgeP6U2vXmE7B1vitDwKZwqa5S9HgGRG5ZHimQOgqrYnUQO9JLBM
+         quQFz80skLh30mzSEvakGPZ4bvby6h28NHdz28hx81rTjGhaggIZJbgTfaTjJNLx24
+         UkUZmEOMSUPxacOsZLRX+/tOL0IF0/QpsG24qxyU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Albert Briscoe <albertsbriscoe@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 323/530] usb: gadget: function: fix dangling pnp_string in f_printer.c
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 113/159] mfd: lp8788: Fix an error handling path in lp8788_irq_init() and lp8788_irq_init()
 Date:   Mon, 24 Oct 2022 13:31:07 +0200
-Message-Id: <20221024113059.654682359@linuxfoundation.org>
+Message-Id: <20221024112953.596139680@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,74 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Albert Briscoe <albertsbriscoe@gmail.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 24b7ba2f88e04800b54d462f376512e8c41b8a3c ]
+[ Upstream commit 557244f6284f30613f2d61f14b579303165876c3 ]
 
-When opts->pnp_string is changed with configfs, new memory is allocated for
-the string. It does not, however, update dev->pnp_string, even though the
-memory is freed. When rquesting the string, the host then gets old or
-corrupted data rather than the new string. The ieee 1284 id string should
-be allowed to change while the device is connected.
+In lp8788_irq_init(), if an error occurs after a successful
+irq_domain_add_linear() call, it must be undone by a corresponding
+irq_domain_remove() call.
 
-The bug was introduced in commit fdc01cc286be ("usb: gadget: printer:
-Remove pnp_string static buffer"), which changed opts->pnp_string from a
-char[] to a char*.
-This patch changes dev->pnp_string from a char* to a char** pointing to
-opts->pnp_string.
+irq_domain_remove() should also be called in lp8788_irq_exit() for the same
+reason.
 
-Fixes: fdc01cc286be ("usb: gadget: printer: Remove pnp_string static buffer")
-Signed-off-by: Albert Briscoe <albertsbriscoe@gmail.com>
-Link: https://lore.kernel.org/r/20220911223753.20417-1-albertsbriscoe@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: eea6b7cc53aa ("mfd: Add lp8788 mfd driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Lee Jones <lee@kernel.org>
+Link: https://lore.kernel.org/r/bcd5a72c9c1c383dd6324680116426e32737655a.1659261275.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_printer.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/mfd/lp8788-irq.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index abec5c58f525..a881c69b1f2b 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -89,7 +89,7 @@ struct printer_dev {
- 	u8			printer_cdev_open;
- 	wait_queue_head_t	wait;
- 	unsigned		q_len;
--	char			*pnp_string;	/* We don't own memory! */
-+	char			**pnp_string;	/* We don't own memory! */
- 	struct usb_function	function;
- };
- 
-@@ -1000,16 +1000,16 @@ static int printer_func_setup(struct usb_function *f,
- 			if ((wIndex>>8) != dev->interface)
- 				break;
- 
--			if (!dev->pnp_string) {
-+			if (!*dev->pnp_string) {
- 				value = 0;
- 				break;
- 			}
--			value = strlen(dev->pnp_string);
-+			value = strlen(*dev->pnp_string);
- 			buf[0] = (value >> 8) & 0xFF;
- 			buf[1] = value & 0xFF;
--			memcpy(buf + 2, dev->pnp_string, value);
-+			memcpy(buf + 2, *dev->pnp_string, value);
- 			DBG(dev, "1284 PNP String: %x %s\n", value,
--			    dev->pnp_string);
-+			    *dev->pnp_string);
- 			break;
- 
- 		case GET_PORT_STATUS: /* Get Port Status */
-@@ -1475,7 +1475,7 @@ static struct usb_function *gprinter_alloc(struct usb_function_instance *fi)
- 	kref_init(&dev->kref);
- 	++opts->refcnt;
- 	dev->minor = opts->minor;
--	dev->pnp_string = opts->pnp_string;
-+	dev->pnp_string = &opts->pnp_string;
- 	dev->q_len = opts->q_len;
- 	mutex_unlock(&opts->lock);
- 
+diff --git a/drivers/mfd/lp8788-irq.c b/drivers/mfd/lp8788-irq.c
+index 792d51bae20f..ae65928f35f0 100644
+--- a/drivers/mfd/lp8788-irq.c
++++ b/drivers/mfd/lp8788-irq.c
+@@ -179,6 +179,7 @@ int lp8788_irq_init(struct lp8788 *lp, int irq)
+ 				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+ 				"lp8788-irq", irqd);
+ 	if (ret) {
++		irq_domain_remove(lp->irqdm);
+ 		dev_err(lp->dev, "failed to create a thread for IRQ_N\n");
+ 		return ret;
+ 	}
+@@ -192,4 +193,6 @@ void lp8788_irq_exit(struct lp8788 *lp)
+ {
+ 	if (lp->irq)
+ 		free_irq(lp->irq, lp->irqdm);
++	if (lp->irqdm)
++		irq_domain_remove(lp->irqdm);
+ }
 -- 
 2.35.1
 
