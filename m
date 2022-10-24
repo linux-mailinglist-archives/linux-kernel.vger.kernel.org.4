@@ -2,99 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E6760ADB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B268160AE33
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237081AbiJXOav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
+        id S232408AbiJXOwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237341AbiJXO3u (ORCPT
+        with ESMTP id S234423AbiJXOwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:29:50 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFA3D994F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:03:34 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id z17so3321067qkj.8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ygEQgsnk9+cnssDub4433kT8dBZoeCOzc672ndoDWg=;
-        b=SlDLfdUy7FfM/j7QiG7iu7R5ehXsgixPiskiqiZz8ANCZNMKNvKMN4SQ8xHCCFTfh0
-         IL9CWmBAGeMmmEhW1d9oE6p6DFgtMh0RXGsgVR3d6OLaAjQofCUGiB+XtXIU2f46Hl2/
-         LuG9p0eGO6BbiKnZeiD2PYnKGGMclmWBEo6u105MtfIoEGadCFMzniCqoEV3Oy70ODxa
-         Xq5jzlXxHvetS3Bp4+eXdsAzg9rowI9ErRzPnmfM9Ydv+iFtqk4FJrClAKNnwQt5rsAj
-         ZmcAHumpppe5TWyd9EA8LNrAYdlMYKcWdsQVbktKJHLK1zoZOpP9s3sjseMO+YsfMkc3
-         7ZIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ygEQgsnk9+cnssDub4433kT8dBZoeCOzc672ndoDWg=;
-        b=I033q6y5ymaBAg5KnC56eorI3CcaWT6zx2z6j55O4jW7e+urxFGsaKyNXEI8ZoHPei
-         JKiorQ2sen0Vyxb3t7PpXdBbkuDqmlaDaWZgkbddqRsPLhv4RXOzIAiYH1s9mjNru+/D
-         JeCzI3KdX8CUolZfzn+JP6JZmFhk7QyFlkMi7yTOjpZSvV68fNbKPRr2HZ2tECDrqAFl
-         OKDTV7M1ILX02BbV3Dzimum2yotQvdGNSkNXlWuNB5kCZkBAuUzU3Ic3bqaLD/dn9d6+
-         OuLvyuJtR44kenzTodRNKYzCBvANbzFbFmbxZmnXojIoV8uHajlGUfnkhrFx5CzCiyu9
-         xHTA==
-X-Gm-Message-State: ACrzQf0ZOQJBeecMgtp7fSI7ntsZZLcQ3l2+rXJhbT9gcvrt4QbhQoQn
-        MtNGsJz22zKuB/kveyOdSstsuPFD14EzIw==
-X-Google-Smtp-Source: AMsMyM4VcQFVy//DqykW/4nb9YZadw+5ViBgauM82Dcnz44iWfoB2+pR/piEsUdOm+S967/Rk7Hf/g==
-X-Received: by 2002:ae9:e8ce:0:b0:6ed:22ee:305e with SMTP id a197-20020ae9e8ce000000b006ed22ee305emr22141460qkg.255.1666615864646;
-        Mon, 24 Oct 2022 05:51:04 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id x18-20020a05620a259200b006eeb3165565sm14833626qko.80.2022.10.24.05.51.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 05:51:04 -0700 (PDT)
-Message-ID: <ed79cf58-17bd-5542-db9d-e6a9ea3a1bc2@linaro.org>
-Date:   Mon, 24 Oct 2022 08:51:02 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 18/21] pinctrl: remove s3c24xx driver
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-18-arnd@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221021203329.4143397-18-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+        Mon, 24 Oct 2022 10:52:05 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3045C4E612;
+        Mon, 24 Oct 2022 06:30:11 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OCERSb023714;
+        Mon, 24 Oct 2022 12:51:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=oXDo6OOAGRuOx2/tHyuwWdEtQtQZtp/beyJbpXTtQo4=;
+ b=koxkd2YZZzRZMplg4caN1FtHR1Q0XA5I+p8f2rdYg9ihhsA14PzT4ltccH92+cxpqlsx
+ 5SqzFOEtiN+XMmSJK7MLubY02QztDq2WVmEzGKfrdyLcWtV1Wj3xC0Vl3p1l9a/VBKk9
+ 5tZ25nCzmJjk5ZOBC7Sq1Ji5f5VaQn68hxk0T4uJGj3PFUIkk1uL1zkJ1pmgpxmUTvaL
+ rvOt7RAsrsT0fWolYucTyXwMEZe9qLbStdP6jYNiA66qHNiZutRAiXdgq42/jgEFunz8
+ BOvxZODTyLVyT47aizWlW+J1fQxz5bSZZEXvN7agYONaoiaoYrD7V2/OqhBXUeiSGjwp aA== 
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kdthg12fh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 12:51:30 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29OCZbsn008186;
+        Mon, 24 Oct 2022 12:51:30 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma04dal.us.ibm.com with ESMTP id 3kc859pu97-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 12:51:29 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29OCpUoi8651402
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Oct 2022 12:51:30 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 434BA7805E;
+        Mon, 24 Oct 2022 13:34:16 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72A6E7805C;
+        Mon, 24 Oct 2022 13:34:14 +0000 (GMT)
+Received: from [IPv6:2601:5c4:4300:c551:a71:90ff:fec2:f05b] (unknown [9.163.14.162])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Oct 2022 13:34:14 +0000 (GMT)
+Message-ID: <2fd505a07bd26d76f1166761fa50905414edb7ef.camel@linux.ibm.com>
+Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
+ update to 5.10.149 in 5.10.y.
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Bart Van Assche <bvanassche@acm.org>
+Cc:     Salvatore Bonaccorso <carnil@debian.org>,
+        sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        adi@kriegisch.at
+Date:   Mon, 24 Oct 2022 08:51:25 -0400
+In-Reply-To: <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
+References: <Y1JkuKTjVYrOWbvm@eldamar.lan>
+         <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
+         <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: rf1s4aY2JsG8kj3ndnjkEqcdP00oZW8p
+X-Proofpoint-ORIG-GUID: rf1s4aY2JsG8kj3ndnjkEqcdP00oZW8p
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_03,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 bulkscore=0 clxscore=1011 spamscore=0 suspectscore=0
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210240077
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 16:27, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Mon, 2022-10-24 at 17:26 +0530, Sreekanth Reddy wrote:
+> On Sun, Oct 23, 2022 at 6:57 AM Bart Van Assche <bvanassche@acm.org>
+> wrote:
+> > On 10/21/22 02:22, Salvatore Bonaccorso wrote:
+> > > We got the following report in Debian after an update from
+> > > 5.10.140 to
+> > > the current 5.10.149. Full quoting below (from
+> > > https://bugs.debian.org/1022126). Does this ring some bell about
+> > > known
+> > > regressions?
+> > 
+> > Only three mpt3sas changes are new in v5.10.149 compared to
+> > v5.10.140:
+> > $ git log --format=oneline v5.10.140..v5.10.149
+> > 2b9aba0c5d58e141e32bb1bb4c7cd91d19f075b8 scsi: mpt3sas: Fix return
+> > value check of dma_get_required_mask()
+> > e7fafef9830c4a01e60f76e3860a9bef0262378d scsi: mpt3sas: Force PCIe
+> > scatterlist allocations to be within same 4 GB region
+> > ea10a652ad2ae2cf3eced6f632a5c98f26727057 scsi: mpt3sas: Fix use-
+> > after-free warning
+> > 
+> > Sreekanth and Suganath, can you help with bisecting this issue? For
+> > the
+> > full report, see also 
+> > https://lore.kernel.org/linux-scsi/Y1JkuKTjVYrOWbvm@eldamar.lan/.
 > 
-> The s3c24xx platform was removed, so this driver has no
-> remaining users.
+> This issue is getting observed after having the below patch changes,
+> 2b9aba0c5d58e141e32bb1bb4c7cd91d19f075b8 scsi: mpt3sas: Fix return
+> value check of dma_get_required_mask()
 > 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> What is happening is that on Xen hypervisor, this
+> dma_get_required_mask() API always returns a 32 bit DMA mask. I.e. It
+> says that the minimum DMA mask required to access the host memory is
+> 32 bit and hence mpt3sas driver is setting the DMA mask to 32bit.
 
+This sounds entirely correct because the VM is booted with (from the
+original debian bug report):
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+dom0_mem=4096M,max:4096M dom0_max_vcpus=4 dom0_vcpus_pin
+  ucode=scan xpti=dom0=false,domu=true gnttab_max_frames=128
 
-Best regards,
-Krzysztof
+So it has no memory above 4GB and thus 32 bit addressing is the minimum
+required.  If you boot a machine with >4GB and Xen still returns a 32
+bit mask here, then we have a Xen problem.
+
+>  So, on a 64 bit machine, if the driver set's the DMA mask to 32 bit
+> then SWIOTLB's bounce buffer comes into picture during IOs. Since
+> these bounce buffers are limited in size and hence we observe the IO
+> hang if the large IOs are issued.
+
+Why is the SWIOTLB active if all the physical memory in the VM is
+within the range of the DMA mask?  If this is really happening, it
+sounds like a SWIOTLB bug.
+
+> I am not sure whether this API's return value is correct or not in
+> the Xen environment. If it is correct then I have to modify the
+> driver to not use this API and directly set the DMA mask to 64 bit if
+> the system is a 64bit machine.
+
+The original design of the API is to describe exactly the minimum
+direct DMA requirements.  There are a large number of cards with
+multiple DMA register formats, the most common being to use either a
+compact 32 bit or an expanded 64 bit register to describe a page
+location.  The former gives 39 bits of addressing and the latter 64. 
+If the DMA mask is 39 bits or below as described by this API, then the
+card can use the compact address form.
+
+James
+
 
