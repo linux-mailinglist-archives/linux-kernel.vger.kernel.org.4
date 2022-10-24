@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D048560A67F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B97F60AA08
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234143AbiJXMeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S233054AbiJXN1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbiJXM3c (ORCPT
+        with ESMTP id S236311AbiJXNZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:32 -0400
+        Mon, 24 Oct 2022 09:25:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D001987FBD;
-        Mon, 24 Oct 2022 05:03:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FCEEA8CCA;
+        Mon, 24 Oct 2022 05:30:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29C10612D7;
-        Mon, 24 Oct 2022 11:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B570C433C1;
-        Mon, 24 Oct 2022 11:54:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2314361333;
+        Mon, 24 Oct 2022 12:29:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378ECC433C1;
+        Mon, 24 Oct 2022 12:29:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612441;
-        bh=1uEidU8QdesxzO/5otIAs5DQ7Dws8bVQHAz3M3ORzmU=;
+        s=korg; t=1666614594;
+        bh=VwMcaMFBPeYFXLMeNt06awjTRxjiHCwvRjs5lqUYO/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=evQIM6SSs1whdlifhKMhQsS+SI4ObXY3BiVGy212LJjS+m3YA0aV2ULMISxy9zcx+
-         QwHclamxWF/YuqhlECZM9b6jFjsIpqYEn7jRjYz7P8IAH+bu3VJLcjnZ5T5mdpwHgJ
-         r7ak5SYKc13j1dI6yIf4ipJryx/zsg3/wgp2qn7I=
+        b=QGur3clOEnokqvXyVlNaFPpoYcYv62tH74PSfEveZMEih3s4G0FVO779+fHJIWNJN
+         Lld+wTVqeeRHTYaDCBzrYxzgwRQhJ40TCx+91VMWrrbNa/qSVr21qGlXX50Uf8nuxH
+         71Ge76Da9zBKj7e3Zt/qeIpuhjj2rchGyuRAuqvI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Abhishek Shah <abhishek.shah@columbia.edu>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 170/210] tcp: annotate data-race around tcp_md5sig_pool_populated
-Date:   Mon, 24 Oct 2022 13:31:27 +0200
-Message-Id: <20221024113002.473610446@linuxfoundation.org>
+Subject: [PATCH 5.10 291/390] f2fs: fix race condition on setting FI_NO_EXTENT flag
+Date:   Mon, 24 Oct 2022 13:31:28 +0200
+Message-Id: <20221024113035.374091493@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit aacd467c0a576e5e44d2de4205855dc0fe43f6fb ]
+[ Upstream commit 07725adc55c0a414c10acb5c8c86cea34b95ddef ]
 
-tcp_md5sig_pool_populated can be read while another thread
-changes its value.
+The following scenarios exist.
+process A:               process B:
+->f2fs_drop_extent_tree  ->f2fs_update_extent_cache_range
+                          ->f2fs_update_extent_tree_range
+                           ->write_lock
+ ->set_inode_flag
+                           ->is_inode_flag_set
+                           ->__free_extent_tree // Shouldn't
+                                                // have been
+                                                // cleaned up
+                                                // here
+  ->write_lock
 
-The race has no consequence because allocations
-are protected with tcp_md5sig_mutex.
+In this case, the "FI_NO_EXTENT" flag is set between
+f2fs_update_extent_tree_range and is_inode_flag_set
+by other process. it leads to clearing the whole exten
+tree which should not have happened. And we fix it by
+move the setting it to the range of write_lock.
 
-This patch adds READ_ONCE() and WRITE_ONCE() to document
-the race and silence KCSAN.
-
-Reported-by: Abhishek Shah <abhishek.shah@columbia.edu>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes:5f281fab9b9a3 ("f2fs: disable extent_cache for fcollapse/finsert inodes")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ fs/f2fs/extent_cache.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 783d0cd4fcbd..3a5f5bcedb3b 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3318,12 +3318,16 @@ static void __tcp_alloc_md5sig_pool(void)
- 	 * to memory. See smp_rmb() in tcp_get_md5sig_pool()
- 	 */
- 	smp_wmb();
--	tcp_md5sig_pool_populated = true;
-+	/* Paired with READ_ONCE() from tcp_alloc_md5sig_pool()
-+	 * and tcp_get_md5sig_pool().
-+	*/
-+	WRITE_ONCE(tcp_md5sig_pool_populated, true);
- }
+diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+index 3ebf976a682d..bd16c78b5bf2 100644
+--- a/fs/f2fs/extent_cache.c
++++ b/fs/f2fs/extent_cache.c
+@@ -762,9 +762,8 @@ void f2fs_drop_extent_tree(struct inode *inode)
+ 	if (!f2fs_may_extent_tree(inode))
+ 		return;
  
- bool tcp_alloc_md5sig_pool(void)
- {
--	if (unlikely(!tcp_md5sig_pool_populated)) {
-+	/* Paired with WRITE_ONCE() from __tcp_alloc_md5sig_pool() */
-+	if (unlikely(!READ_ONCE(tcp_md5sig_pool_populated))) {
- 		mutex_lock(&tcp_md5sig_mutex);
- 
- 		if (!tcp_md5sig_pool_populated)
-@@ -3331,7 +3335,8 @@ bool tcp_alloc_md5sig_pool(void)
- 
- 		mutex_unlock(&tcp_md5sig_mutex);
- 	}
--	return tcp_md5sig_pool_populated;
-+	/* Paired with WRITE_ONCE() from __tcp_alloc_md5sig_pool() */
-+	return READ_ONCE(tcp_md5sig_pool_populated);
- }
- EXPORT_SYMBOL(tcp_alloc_md5sig_pool);
- 
-@@ -3347,7 +3352,8 @@ struct tcp_md5sig_pool *tcp_get_md5sig_pool(void)
- {
- 	local_bh_disable();
- 
--	if (tcp_md5sig_pool_populated) {
-+	/* Paired with WRITE_ONCE() from __tcp_alloc_md5sig_pool() */
-+	if (READ_ONCE(tcp_md5sig_pool_populated)) {
- 		/* coupled with smp_wmb() in __tcp_alloc_md5sig_pool() */
- 		smp_rmb();
- 		return this_cpu_ptr(&tcp_md5sig_pool);
+-	set_inode_flag(inode, FI_NO_EXTENT);
+-
+ 	write_lock(&et->lock);
++	set_inode_flag(inode, FI_NO_EXTENT);
+ 	__free_extent_tree(sbi, et);
+ 	if (et->largest.len) {
+ 		et->largest.len = 0;
 -- 
 2.35.1
 
