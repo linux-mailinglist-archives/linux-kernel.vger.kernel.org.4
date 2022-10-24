@@ -2,67 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9223609D83
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425D6609D86
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiJXJJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S230453AbiJXJKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiJXJIz (ORCPT
+        with ESMTP id S229689AbiJXJKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:08:55 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D220D116F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666602521; x=1698138521;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=5L/fG/Ui8cXJbVyL/PjPunCHI8UYMxhH3x5fxgw4GKs=;
-  b=jI731lTMKM2fEZrLpYr+Y+fj/pzJ4MTFHQVF85iWThPikQlmPOwWHunR
-   rpj5aBYcR0yfEHEPRP3COYe1GJNWmou5Kos0jMuNd+yS0+rgrFHKSato1
-   xc3irySHzIkXFSYBM+PB8fk3ZqBurQ3g/+hpMkOpyhQK3Zxl2/cez6FPW
-   rtAnDgVtlaAxxPi7QZ37Z/EzdJ0Esx3ZsxH0UBpF+OcpjKFeovXqWi1TF
-   sotND0sLX8baH3UMRs03FoWqj8hPMHuUi5oRTffVM2GFqb9N241p6gEpY
-   fJSb21x+FkQeVtAr3JO7CoWyL6NKq2gTr81yp1vklpelTlOqxPyKd/lvA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="371591238"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="371591238"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 02:08:40 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="720424117"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="720424117"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.212.138]) ([10.254.212.138])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 02:08:39 -0700
-Subject: Re: [driver-core:driver-core-testing] BUILD SUCCESS
- 59789f3418dd3c0a187490d49e900a59a5c8d732
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>
-References: <635484ed.ADi+2sBza+UlAhjj%lkp@intel.com>
- <Y1U0pINWo5yjUdc2@kroah.com> <Y1WZSysScBH0/6kd@smile.fi.intel.com>
- <Y1WbY903LjRATVwh@smile.fi.intel.com>
- <a762dca8-2458-c40b-7a35-80971c46ac84@intel.com>
- <Y1ZTXa0VZrl9jvUU@smile.fi.intel.com>
-From:   "Chen, Rong A" <rong.a.chen@intel.com>
-Message-ID: <86cafe81-004b-8a0f-b50b-2bad38f84635@intel.com>
-Date:   Mon, 24 Oct 2022 17:08:37 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
-MIME-Version: 1.0
-In-Reply-To: <Y1ZTXa0VZrl9jvUU@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Mon, 24 Oct 2022 05:10:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F330419014;
+        Mon, 24 Oct 2022 02:10:00 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29O8vpjJ018829;
+        Mon, 24 Oct 2022 09:09:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=IjkjfLi1XU14Xlz7ukGA2xp5khABYjaF7J/TnLMZGQc=;
+ b=DL1CzEcTE6MqbEDiLVYF6sYwJSgd7BQtk0N07w7Lerk0lGb0g1W5Q51tmBe1cITmWR7t
+ uyGKQxWeuTHU+dqfUTNRT3b2ROIgkMQPMh+4UtdS2VpFcfMxUB3kvk3R79hWj7M9f5in
+ Q/xDpPxqq+vMqyZ+k3IrgVJL97E/PVYwLar3Q7enxx4sS2rKeXFbQcpdCcZLSLDMEyN1
+ F75fnhvIMelJPGxZ+OOD43weNiVB+j7gw5KMoF/TlnwhXoz8k8HzJRJHt584Yv36vq5/
+ QTqMbvAGVM30e/9Dl6ojngX2/4UYnXSA6Fmjs4aHxiAGWxwXg6ZSmkDH+SHHPtLSdr3F 9w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kdqnb8dh3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 09:09:29 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29O8xrQg029669;
+        Mon, 24 Oct 2022 09:09:29 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kdqnb8df6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 09:09:28 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29O965sL021292;
+        Mon, 24 Oct 2022 09:09:25 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3kc7sj28qr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 09:09:25 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29O99N8N58851746
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Oct 2022 09:09:23 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0EED1A405C;
+        Mon, 24 Oct 2022 09:09:23 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 53BBAA405B;
+        Mon, 24 Oct 2022 09:09:22 +0000 (GMT)
+Received: from [9.171.39.85] (unknown [9.171.39.85])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Oct 2022 09:09:22 +0000 (GMT)
+Message-ID: <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
+Date:   Mon, 24 Oct 2022 11:09:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 0/4] KVM: API to block and resume all running vcpus in a
+ vm
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221022154819.1823133-1-eesposit@redhat.com>
+ <a2e16531-5522-a334-40a1-2b0e17663800@linux.ibm.com>
+ <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ifE-bU5jBEt83JkRu0uesAMslef9b9oi
+X-Proofpoint-ORIG-GUID: 8qje8qsHJmLZ8XtgxrR_ejCtINonS09l
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_02,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ priorityscore=1501 clxscore=1015 bulkscore=0 malwarescore=0 spamscore=0
+ adultscore=0 impostorscore=0 mlxlogscore=850 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210240057
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,275 +108,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 10/24/2022 4:57 PM, Andy Shevchenko wrote:
-> On Mon, Oct 24, 2022 at 09:10:53AM +0800, Chen, Rong A wrote:
->> On 10/24/2022 3:52 AM, Andy Shevchenko wrote:
->>> On Sun, Oct 23, 2022 at 10:43:07PM +0300, Andy Shevchenko wrote:
->>>> On Sun, Oct 23, 2022 at 02:33:40PM +0200, Greg Kroah-Hartman wrote:
->>>>> On Sun, Oct 23, 2022 at 08:03:57AM +0800, kernel test robot wrote:
->>>>>> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-testing
->>>>>> branch HEAD: 59789f3418dd3c0a187490d49e900a59a5c8d732  device property: Constify parameter in device_dma_supported() and device_get_dma_attr()
->>>>>>
->>>>>> Unverified Warning (likely false positive, please contact us if interested):
->>>>>>
->>>>>> drivers/hwmon/iio_hwmon.c:155 iio_hwmon_probe() warn: could not determine type of argument 4
->>>>>
->>>>> Andy, this is due to your changes, here's the offending code:
->>>>>
->>>>> 	sname = devm_kasprintf(dev, GFP_KERNEL, "%pfwP", dev_fwnode(dev));
->>>>>
->>>>> Now that dev_fwnode() is an inline function, the compiler is confused as
->>>>> to what function to select?  Maybe, I don't know, it seems odd, can you
->>>>> look into it?
->>>>
->>>> Hmm... I can't reproduce on my side.
->>>> Any (additional) information about compiler, architecture, etc?
+Am 24.10.22 um 10:33 schrieb Emanuele Giuseppe Esposito:
+> 
+> 
+> Am 24/10/2022 um 09:56 schrieb Christian Borntraeger:
+>> Am 22.10.22 um 17:48 schrieb Emanuele Giuseppe Esposito:
+>>> This new API allows the userspace to stop all running
+>>> vcpus using KVM_KICK_ALL_RUNNING_VCPUS ioctl, and resume them with
+>>> KVM_RESUME_ALL_KICKED_VCPUS.
+>>> A "running" vcpu is a vcpu that is executing the KVM_RUN ioctl.
 >>>
->>> I found the original report, but I don't see how to extract the defconfig /
->>> config it used. Can you send that file to me?
+>>> This serie is especially helpful to userspace hypervisors like
+>>> QEMU when they need to perform operations on memslots without the
+>>> risk of having a vcpu reading them in the meanwhile.
+>>> With "memslots operations" we mean grow, shrink, merge and split
+>>> memslots, which are not "atomic" because there is a time window
+>>> between the DELETE memslot operation and the CREATE one.
+>>> Currently, each memslot operation is performed with one or more
+>>> ioctls.
+>>> For example, merging two memslots into one would imply:
+>>> DELETE(m1)
+>>> DELETE(m2)
+>>> CREATE(m1+m2)
 >>>
+>>> And a vcpu could attempt to read m2 right after it is deleted, but
+>>> before the new one is created.
+>>>
+>>> Therefore the simplest solution is to pause all vcpus in the kvm
+>>> side, so that:
+>>> - userspace just needs to call the new API before making memslots
+>>> changes, keeping modifications to the minimum
+>>> - dirty page updates are also performed when vcpus are blocked, so
+>>> there is no time window between the dirty page ioctl and memslots
+>>> modifications, since vcpus are all stopped.
+>>> - no need to modify the existing memslots API
+>> Isnt QEMU able to achieve the same goal today by forcing all vCPUs
+>> into userspace with a signal? Can you provide some rationale why this
+>> is better in the cover letter or patch description?
 >>
->> Hi Andy,
->>
->> The original report can be found at https://lists.01.org/hyperkitty/list/kbuild@lists.01.org/thread/VE7CMY7FVIPYWHL4XMOCFWCNYTGZSTKP/
->>
->> and config file can be downloaded from https://lists.01.org/hyperkitty/list/kbuild@lists.01.org/message/VE7CMY7FVIPYWHL4XMOCFWCNYTGZSTKP/attachment/2/config.ksh
+> David Hildenbrand tried to propose something similar here:
+> https://github.com/davidhildenbrand/qemu/commit/86b1bf546a8d00908e33f7362b0b61e2be8dbb7a
 > 
-> Thanks!
+> While it is not optimized, I think it's more complex that the current
+> serie, since qemu should also make sure all running ioctls finish and
+> prevent the new ones from getting executed.
 > 
-> Can't reproduce on my Debian (x86_64):
+> Also we can't use pause_all_vcpus()/resume_all_vcpus() because they drop
+> the BQL.
 > 
-> gcc (Debian 12.2.0-3) 12.2.0
-> Copyright (C) 2022 Free Software Foundation, Inc.
-> This is free software; see the source for copying conditions.  There is NO
-> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> 
-> Is it GCC issue?
-> 
-> Any pointers where I can download the compiler you are using?
-> 
+> Would that be ok as rationale?
 
-Hi Andy,
-
-It's a smatch warning, it may be a false positive since Dan didn't 
-forward the report. +Dan
-
-smatch warnings:
-drivers/hwmon/iio_hwmon.c:155 iio_hwmon_probe() warn: could not 
-determine type of argument 4
-
-vim +155 drivers/hwmon/iio_hwmon.c
-
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   65
-4ae1c61ff2ba4f drivers/staging/iio/iio_hwmon.c Bill Pemberton 
-2012-11-19   66  static int iio_hwmon_probe(struct platform_device *pdev)
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   67  {
-c4ac7b98bdeb04 drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31   68  	struct device *dev = &pdev->dev;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   69  	struct iio_hwmon_state *st;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   70  	struct sensor_device_attribute *a;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   71  	int ret, i;
-bc34301b10672d drivers/hwmon/iio_hwmon.c       Michal Simek 
-2019-08-22   72  	int in_i = 1, temp_i = 1, curr_i = 1, humidity_i = 1, 
-power_i = 1;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   73  	enum iio_chan_type type;
-ca7d98dbd7db6a drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31   74  	struct iio_channel *channels;
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22   75  	struct device *hwmon_dev;
-b92fe9e3379c8d drivers/hwmon/iio_hwmon.c       Sanchayan Maity 
-2016-02-16   76  	char *sname;
-4b49cca36ee9bb drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2013-12-01   77
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22   78  	channels = devm_iio_channel_get_all(dev);
-9417fefe6f6ec2 drivers/hwmon/iio_hwmon.c       Quentin Schulz 
-2016-09-08   79  	if (IS_ERR(channels)) {
-9417fefe6f6ec2 drivers/hwmon/iio_hwmon.c       Quentin Schulz 
-2016-09-08   80  		if (PTR_ERR(channels) == -ENODEV)
-9417fefe6f6ec2 drivers/hwmon/iio_hwmon.c       Quentin Schulz 
-2016-09-08   81  			return -EPROBE_DEFER;
-ca7d98dbd7db6a drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31   82  		return PTR_ERR(channels);
-9417fefe6f6ec2 drivers/hwmon/iio_hwmon.c       Quentin Schulz 
-2016-09-08   83  	}
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   84
-c4ac7b98bdeb04 drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31   85  	st = devm_kzalloc(dev, sizeof(*st), GFP_KERNEL);
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22   86  	if (st == NULL)
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22   87  		return -ENOMEM;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   88
-ca7d98dbd7db6a drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31   89  	st->channels = channels;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   90
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   91  	/* count how many attributes we have */
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   92  	while (st->channels[st->num_channels].indio_dev)
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   93  		st->num_channels++;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   94
-a86854d0c599b3 drivers/hwmon/iio_hwmon.c       Kees Cook 
-2018-06-12   95  	st->attrs = devm_kcalloc(dev,
-a86854d0c599b3 drivers/hwmon/iio_hwmon.c       Kees Cook 
-2018-06-12   96  				 st->num_channels + 1, sizeof(*st->attrs),
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15   97  				 GFP_KERNEL);
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22   98  	if (st->attrs == NULL)
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22   99  		return -ENOMEM;
-c4ac7b98bdeb04 drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31  100
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  101  	for (i = 0; i < st->num_channels; i++) {
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  102  		const char *prefix;
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  103  		int n;
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  104
-c4ac7b98bdeb04 drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31  105  		a = devm_kzalloc(dev, sizeof(*a), GFP_KERNEL);
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  106  		if (a == NULL)
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  107  			return -ENOMEM;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  108
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  109  		sysfs_attr_init(&a->dev_attr.attr);
-314be14bb89369 drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-05-01  110  		ret = iio_get_channel_type(&st->channels[i], &type);
-c4ac7b98bdeb04 drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31  111  		if (ret < 0)
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  112  			return ret;
-c4ac7b98bdeb04 drivers/staging/iio/iio_hwmon.c Guenter Roeck 
-2013-01-31  113
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  114  		switch (type) {
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  115  		case IIO_VOLTAGE:
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  116  			n = in_i++;
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  117  			prefix = "in";
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  118  			break;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  119  		case IIO_TEMP:
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  120  			n = temp_i++;
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  121  			prefix = "temp";
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  122  			break;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  123  		case IIO_CURRENT:
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  124  			n = curr_i++;
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  125  			prefix = "curr";
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  126  			break;
-bc34301b10672d drivers/hwmon/iio_hwmon.c       Michal Simek 
-2019-08-22  127  		case IIO_POWER:
-bc34301b10672d drivers/hwmon/iio_hwmon.c       Michal Simek 
-2019-08-22  128  			n = power_i++;
-bc34301b10672d drivers/hwmon/iio_hwmon.c       Michal Simek 
-2019-08-22  129  			prefix = "power";
-bc34301b10672d drivers/hwmon/iio_hwmon.c       Michal Simek 
-2019-08-22  130  			break;
-61bb53bcbdd86e drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2014-09-27  131  		case IIO_HUMIDITYRELATIVE:
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  132  			n = humidity_i++;
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  133  			prefix = "humidity";
-61bb53bcbdd86e drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2014-09-27  134  			break;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  135  		default:
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  136  			return -EINVAL;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  137  		}
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  138
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  139  		a->dev_attr.attr.name = devm_kasprintf(dev, GFP_KERNEL,
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  140  						       "%s%d_input",
-cb202bb8b3238f drivers/hwmon/iio_hwmon.c       Andrey Smirnov 
-2019-04-02  141  						       prefix, n);
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  142  		if (a->dev_attr.attr.name == NULL)
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  143  			return -ENOMEM;
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  144
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  145  		a->dev_attr.show = iio_hwmon_read_val;
-389bc38eeb4aa8 drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2018-12-10  146  		a->dev_attr.attr.mode = 0444;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  147  		a->index = i;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  148  		st->attrs[i] = &a->dev_attr.attr;
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  149  	}
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  150
-4b49cca36ee9bb drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2013-12-01  151  	st->attr_group.attrs = st->attrs;
-4b49cca36ee9bb drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2013-12-01  152  	st->groups[0] = &st->attr_group;
-b92fe9e3379c8d drivers/hwmon/iio_hwmon.c       Sanchayan Maity 
-2016-02-16  153
-b7b568c2525b3a drivers/hwmon/iio_hwmon.c       Andy Shevchenko 
-2022-08-26  154  	if (dev_fwnode(dev)) {
-b7b568c2525b3a drivers/hwmon/iio_hwmon.c       Andy Shevchenko 
-2022-08-26 @155  		sname = devm_kasprintf(dev, GFP_KERNEL, "%pfwP", 
-dev_fwnode(dev));
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  156  		if (!sname)
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  157  			return -ENOMEM;
-b92fe9e3379c8d drivers/hwmon/iio_hwmon.c       Sanchayan Maity 
-2016-02-16  158  		strreplace(sname, '-', '_');
-86103cffe8834f drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2018-08-28  159  	} else {
-86103cffe8834f drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2018-08-28  160  		sname = "iio_hwmon";
-86103cffe8834f drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2018-08-28  161  	}
-86103cffe8834f drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2018-08-28  162
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  163  	hwmon_dev = 
-devm_hwmon_device_register_with_groups(dev, sname, st,
-4b49cca36ee9bb drivers/hwmon/iio_hwmon.c       Guenter Roeck 
-2013-12-01  164  							   st->groups);
-12005ec33f3a7e drivers/hwmon/iio_hwmon.c       Maxime Roussin-Bélanger 
-2018-07-22  165  	return PTR_ERR_OR_ZERO(hwmon_dev);
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  166  }
-e0f8a24e0edfde drivers/staging/iio/iio_hwmon.c Jonathan Cameron 
-2012-02-15  167
-
-Best Regards,
-Rong Chen
-
+Yes that helps and should be part of the cover letter for the next iterations.
