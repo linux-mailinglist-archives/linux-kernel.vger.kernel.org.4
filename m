@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210B560A542
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423BE60ABC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233299AbiJXMWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S236788AbiJXN4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233608AbiJXMT4 (ORCPT
+        with ESMTP id S236767AbiJXNyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2B583234;
-        Mon, 24 Oct 2022 04:58:50 -0700 (PDT)
+        Mon, 24 Oct 2022 09:54:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADEEBC603;
+        Mon, 24 Oct 2022 05:43:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE1746128E;
-        Mon, 24 Oct 2022 11:49:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2775C433C1;
-        Mon, 24 Oct 2022 11:49:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8509F612FF;
+        Mon, 24 Oct 2022 12:43:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6ECC433C1;
+        Mon, 24 Oct 2022 12:43:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612197;
-        bh=62cxHPxacIeJObyCUvpGDXSutCGffzA9SR9xi6Ab0Pw=;
+        s=korg; t=1666615403;
+        bh=0FgWjyKLI2um8JGHlqz65laz4O0Ndws/2JkNnZQ5x/Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AvNa7M+45r94/B8gJ/AJk2db0EjEySjTY59BaWfkC4mp2RQRguRq62IMwPNK4vp9y
-         jJogRK6fM4+myxMEPMv+ilR7+AmFAz5tPbgwJ6OhLKeNAtNgzRm3NpfCD7smdef85D
-         wBawKM+P6fCocKAACk24ieBXWG2u7b8o9SGs54lw=
+        b=e26Mpln/PiNpVZ6IShUH/vn39lR74MJBpsdULGdBokqh0znIJ5wsWWIIEsmIMSxbQ
+         ZViyaAPrlXpQKqbcPei3BlHILv0ivo49Ee0I/9y/oogfhMbl+lbZfQFm7bheN0BEyP
+         s8W97SXjDFo2GKm72RV0cAqzJhn8zwKnfVEFspIg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        syzbot+b8c672b0e22615c80fe0@syzkaller.appspotmail.com,
-        Khalid Masum <khalid.masum.92@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.14 065/210] nilfs2: fix use-after-free bug of struct nilfs_root
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 238/530] ASoC: da7219: Fix an error handling path in da7219_register_dai_clks()
 Date:   Mon, 24 Oct 2022 13:29:42 +0200
-Message-Id: <20221024112959.153644357@linuxfoundation.org>
+Message-Id: <20221024113055.874671211@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit d325dc6eb763c10f591c239550b8c7e5466a5d09 upstream.
+[ Upstream commit abb4e4349afe7eecdb0499582f1c777031e3a7c8 ]
 
-If the beginning of the inode bitmap area is corrupted on disk, an inode
-with the same inode number as the root inode can be allocated and fail
-soon after.  In this case, the subsequent call to nilfs_clear_inode() on
-that bogus root inode will wrongly decrement the reference counter of
-struct nilfs_root, and this will erroneously free struct nilfs_root,
-causing kernel oopses.
+If clk_hw_register() fails, the corresponding clk should not be
+unregistered.
 
-This fixes the problem by changing nilfs_new_inode() to skip reserved
-inode numbers while repairing the inode bitmap.
+To handle errors from loops, clean up partial iterations before doing the
+goto.  So add a clk_hw_unregister().
+Then use a while (--i >= 0) loop in the unwind section.
 
-Link: https://lkml.kernel.org/r/20221003150519.39789-1-konishi.ryusuke@gmail.com
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Reported-by: syzbot+b8c672b0e22615c80fe0@syzkaller.appspotmail.com
-Reported-by: Khalid Masum <khalid.masum.92@gmail.com>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 78013a1cf297 ("ASoC: da7219: Fix clock handling around codec level probe")
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/e4acceab57a0d9e477a8d5890a45c5309e553e7c.1663875789.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nilfs2/inode.c |   18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+ sound/soc/codecs/da7219.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/fs/nilfs2/inode.c
-+++ b/fs/nilfs2/inode.c
-@@ -344,6 +344,7 @@ struct inode *nilfs_new_inode(struct ino
- 	struct inode *inode;
- 	struct nilfs_inode_info *ii;
- 	struct nilfs_root *root;
-+	struct buffer_head *bh;
- 	int err = -ENOMEM;
- 	ino_t ino;
+diff --git a/sound/soc/codecs/da7219.c b/sound/soc/codecs/da7219.c
+index c7493549a9a5..da4c24b8dae5 100644
+--- a/sound/soc/codecs/da7219.c
++++ b/sound/soc/codecs/da7219.c
+@@ -2196,6 +2196,7 @@ static int da7219_register_dai_clks(struct snd_soc_component *component)
+ 			dai_clk_lookup = clkdev_hw_create(dai_clk_hw, init.name,
+ 							  "%s", dev_name(dev));
+ 			if (!dai_clk_lookup) {
++				clk_hw_unregister(dai_clk_hw);
+ 				ret = -ENOMEM;
+ 				goto err;
+ 			} else {
+@@ -2217,12 +2218,12 @@ static int da7219_register_dai_clks(struct snd_soc_component *component)
+ 	return 0;
  
-@@ -359,11 +360,26 @@ struct inode *nilfs_new_inode(struct ino
- 	ii->i_state = BIT(NILFS_I_NEW);
- 	ii->i_root = root;
+ err:
+-	do {
++	while (--i >= 0) {
+ 		if (da7219->dai_clks_lookup[i])
+ 			clkdev_drop(da7219->dai_clks_lookup[i]);
  
--	err = nilfs_ifile_create_inode(root->ifile, &ino, &ii->i_bh);
-+	err = nilfs_ifile_create_inode(root->ifile, &ino, &bh);
- 	if (unlikely(err))
- 		goto failed_ifile_create_inode;
- 	/* reference count of i_bh inherits from nilfs_mdt_read_block() */
- 
-+	if (unlikely(ino < NILFS_USER_INO)) {
-+		nilfs_msg(sb, KERN_WARNING,
-+			  "inode bitmap is inconsistent for reserved inodes");
-+		do {
-+			brelse(bh);
-+			err = nilfs_ifile_create_inode(root->ifile, &ino, &bh);
-+			if (unlikely(err))
-+				goto failed_ifile_create_inode;
-+		} while (ino < NILFS_USER_INO);
-+
-+		nilfs_msg(sb, KERN_INFO,
-+			  "repaired inode bitmap for reserved inodes");
+ 		clk_hw_unregister(&da7219->dai_clks_hw[i]);
+-	} while (i-- > 0);
 +	}
-+	ii->i_bh = bh;
-+
- 	atomic64_inc(&root->inodes_count);
- 	inode_init_owner(inode, dir, mode);
- 	inode->i_ino = ino;
+ 
+ 	if (np)
+ 		kfree(da7219->clk_hw_data);
+-- 
+2.35.1
+
 
 
