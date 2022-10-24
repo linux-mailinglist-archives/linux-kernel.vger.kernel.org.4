@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE56260A4DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBA360A490
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbiJXMRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
+        id S232502AbiJXMM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233013AbiJXMPj (ORCPT
+        with ESMTP id S232896AbiJXMLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:15:39 -0400
+        Mon, 24 Oct 2022 08:11:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964B880E9E;
-        Mon, 24 Oct 2022 04:56:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688977FFB9;
+        Mon, 24 Oct 2022 04:53:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF3DF61257;
-        Mon, 24 Oct 2022 11:53:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11090C433C1;
-        Mon, 24 Oct 2022 11:53:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0BFA61291;
+        Mon, 24 Oct 2022 11:53:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3448C433C1;
+        Mon, 24 Oct 2022 11:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612381;
-        bh=UUPFGVE5yNPwnJWYQ5KMH0OyH9TrpTMtg+zVr4sFNE0=;
+        s=korg; t=1666612384;
+        bh=vjYXcM4d6U4y24O7mT2Q36DVyLJAZZU64TsfuVOvQ4A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xmboJOkbbcMv8taM6TJmEfbXg+Qcp1tEH/Gigrt6yasD9ZhloqCobmBDkfvH5OLyT
-         mTns0FOM/Kz/nmxElHssRjJTHaTwedC+WAu2JAPUfNum+QzFf07rkQRMn9z7KIizfI
-         d4mRnWGflI2JppACKRPyWMTDVIYgaQVrTz5xnZ5o=
+        b=yj63hf8MHq9DE+6r+4IpPgrgXJ6bYbeAtI97DfFmwxZ8MxBaDFTwsfQeFpSF2HKUl
+         vDydXNvMnACWMj5BKKiiJQoWfTGgFUZKNClnNsLmSsTlpIQwPLkdkuRATeYliXiZ49
+         bEyIsbo249k+FzPFJh25Q4Hwn4sKDsGKvlW9bcLM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Serge Vasilugin <vasilugin@yandex.ru>,
         Daniel Golle <daniel@makrotopia.org>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
         Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 177/210] wifi: rt2x00: dont run Rt5592 IQ calibration on MT7620
-Date:   Mon, 24 Oct 2022 13:31:34 +0200
-Message-Id: <20221024113002.695313072@linuxfoundation.org>
+Subject: [PATCH 4.14 178/210] wifi: rt2x00: set correct TX_SW_CFG1 MAC register for MT7620
+Date:   Mon, 24 Oct 2022 13:31:35 +0200
+Message-Id: <20221024113002.738576707@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
 References: <20221024112956.797777597@linuxfoundation.org>
@@ -56,34 +57,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daniel Golle <daniel@makrotopia.org>
 
-[ Upstream commit d3aad83d05aec0cfd7670cf0028f2ad4b81de92e ]
+[ Upstream commit eeb50acf15762b61921f9df18663f839f387c054 ]
 
-The function rt2800_iq_calibrate is intended for Rt5592 only.
-Don't call it for MT7620 which has it's own calibration functions.
+Set correct TX_SW_CFG1 MAC register as it is done also in v3 of the
+vendor driver[1].
 
+[1]: https://gitlab.com/dm38/padavan-ng/-/blob/master/trunk/proprietary/rt_wifi/rtpci/3.0.X.X/mt76x2/chips/rt6352.c#L531
 Reported-by: Serge Vasilugin <vasilugin@yandex.ru>
 Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
 Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/31a1c34ddbd296b82f38c18c9ae7339059215fdc.1663445157.git.daniel@makrotopia.org
+Link: https://lore.kernel.org/r/4be38975ce600a34249e12d09a3cb758c6e71071.1663445157.git.daniel@makrotopia.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ralink/rt2x00/rt2800lib.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ralink/rt2x00/rt2800lib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
-index d2c289446c00..1309c136f7f3 100644
+index 1309c136f7f3..0c90bf0540b9 100644
 --- a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
 +++ b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
-@@ -3835,7 +3835,8 @@ static void rt2800_config_channel(struct rt2x00_dev *rt2x00dev,
- 		reg += 2 * rt2x00dev->lna_gain;
- 		rt2800_bbp_write_with_rx_chain(rt2x00dev, 66, reg);
- 
--		rt2800_iq_calibrate(rt2x00dev, rf->channel);
-+		if (rt2x00_rt(rt2x00dev, RT5592))
-+			rt2800_iq_calibrate(rt2x00dev, rf->channel);
- 	}
- 
- 	bbp = rt2800_bbp_read(rt2x00dev, 4);
+@@ -5315,7 +5315,7 @@ static int rt2800_init_registers(struct rt2x00_dev *rt2x00dev)
+ 		rt2800_register_write(rt2x00dev, TX_SW_CFG0, 0x00000404);
+ 	} else if (rt2x00_rt(rt2x00dev, RT6352)) {
+ 		rt2800_register_write(rt2x00dev, TX_SW_CFG0, 0x00000401);
+-		rt2800_register_write(rt2x00dev, TX_SW_CFG1, 0x000C0000);
++		rt2800_register_write(rt2x00dev, TX_SW_CFG1, 0x000C0001);
+ 		rt2800_register_write(rt2x00dev, TX_SW_CFG2, 0x00000000);
+ 		rt2800_register_write(rt2x00dev, MIMO_PS_CFG, 0x00000002);
+ 		rt2800_register_write(rt2x00dev, TX_PIN_CFG, 0x00150F0F);
 -- 
 2.35.1
 
