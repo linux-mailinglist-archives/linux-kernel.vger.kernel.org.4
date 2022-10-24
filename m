@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDAE60ABF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D6260A770
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235988AbiJXN76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53524 "EHLO
+        id S234314AbiJXMuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236834AbiJXN6Q (ORCPT
+        with ESMTP id S234585AbiJXMpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:58:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EB81151;
-        Mon, 24 Oct 2022 05:45:28 -0700 (PDT)
+        Mon, 24 Oct 2022 08:45:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F54622531;
+        Mon, 24 Oct 2022 05:09:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44E0A61311;
-        Mon, 24 Oct 2022 12:45:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BAB4C433D6;
-        Mon, 24 Oct 2022 12:45:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA702612B1;
+        Mon, 24 Oct 2022 12:08:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEB14C433D6;
+        Mon, 24 Oct 2022 12:08:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615512;
-        bh=g2gaW+ZGEQ4+WN4a3eyZHoD7cba+I8C6SyCyQBRVycU=;
+        s=korg; t=1666613332;
+        bh=GvrN2gzQkrI3b84T+M2mKLypIgpyFxYr4imErMtP4aM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oWyr/4Q9pE21cdKJkDFGTD6xvizOaeBXZqW+qjrQMgMjjc1OIf+0vY/6ZWHlwVojU
-         KepIpLyvZy/nkCa/Oqc16sUkxVIzlAq6eQhAg8oV921VMT67jLE+H/+NiYz2IRoIR1
-         he5r65WxqnJhbR6J+WsLFHIxN/kEEVnJ2ijp569Q=
+        b=c1tWbXIasAhvtDVvBlfEIXPkNVm9xPpAbLDUsUYF6MbeyVgwNE8uPCwY0gB1AMtWM
+         NHhjZvKHCxrmSzoj4drd/9VRlDUp5Jkzz5nTTQbAw5exQw8sBYwg/MvADZnRkmaor3
+         jP+1lUEwvb7Itq+XgXx/EAju7kJIFL20CQhLuPhk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 262/530] arm64: ftrace: fix module PLTs with mcount
-Date:   Mon, 24 Oct 2022 13:30:06 +0200
-Message-Id: <20221024113056.916331689@linuxfoundation.org>
+Subject: [PATCH 5.4 097/255] ALSA: hda: beep: Simplify keep-power-at-enable behavior
+Date:   Mon, 24 Oct 2022 13:30:07 +0200
+Message-Id: <20221024113005.715321102@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,125 +53,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland <mark.rutland@arm.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 8cfb08575c6d4585f1ce0deeb189e5c824776b04 ]
+[ Upstream commit 4c8d695cb9bc5f6fd298a586602947b2fc099a64 ]
 
-Li Huafei reports that mcount-based ftrace with module PLTs was broken
-by commit:
+The recent fix for IDT codecs to keep the power up while the beep is
+enabled can be better integrated into the beep helper code.
+This patch cleans up the code with refactoring.
 
-  a6253579977e4c6f ("arm64: ftrace: consistently handle PLTs.")
-
-When a module PLTs are used and a module is loaded sufficiently far away
-from the kernel, we'll create PLTs for any branches which are
-out-of-range. These are separate from the special ftrace trampoline
-PLTs, which the module PLT code doesn't directly manipulate.
-
-When mcount is in use this is a problem, as each mcount callsite in a
-module will be initialized to point to a module PLT, but since commit
-a6253579977e4c6f ftrace_make_nop() will assume that the callsite has
-been initialized to point to the special ftrace trampoline PLT, and
-ftrace_find_callable_addr() rejects other cases.
-
-This means that when ftrace tries to initialize a callsite via
-ftrace_make_nop(), the call to ftrace_find_callable_addr() will find
-that the `_mcount` stub is out-of-range and is not handled by the ftrace
-PLT, resulting in a splat:
-
-| ftrace_test: loading out-of-tree module taints kernel.
-| ftrace: no module PLT for _mcount
-| ------------[ ftrace bug ]------------
-| ftrace failed to modify
-| [<ffff800029180014>] 0xffff800029180014
-|  actual:   44:00:00:94
-| Initializing ftrace call sites
-| ftrace record flags: 2000000
-|  (0)
-|  expected tramp: ffff80000802eb3c
-| ------------[ cut here ]------------
-| WARNING: CPU: 3 PID: 157 at kernel/trace/ftrace.c:2120 ftrace_bug+0x94/0x270
-| Modules linked in:
-| CPU: 3 PID: 157 Comm: insmod Tainted: G           O       6.0.0-rc6-00151-gcd722513a189-dirty #22
-| Hardware name: linux,dummy-virt (DT)
-| pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-| pc : ftrace_bug+0x94/0x270
-| lr : ftrace_bug+0x21c/0x270
-| sp : ffff80000b2bbaf0
-| x29: ffff80000b2bbaf0 x28: 0000000000000000 x27: ffff0000c4d38000
-| x26: 0000000000000001 x25: ffff800009d7e000 x24: ffff0000c4d86e00
-| x23: 0000000002000000 x22: ffff80000a62b000 x21: ffff8000098ebea8
-| x20: ffff0000c4d38000 x19: ffff80000aa24158 x18: ffffffffffffffff
-| x17: 0000000000000000 x16: 0a0d2d2d2d2d2d2d x15: ffff800009aa9118
-| x14: 0000000000000000 x13: 6333626532303830 x12: 3030303866666666
-| x11: 203a706d61727420 x10: 6465746365707865 x9 : 3362653230383030
-| x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : 000000000000bff4
-| x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000001
-| x2 : ad2cb14bb5438900 x1 : 0000000000000000 x0 : 0000000000000022
-| Call trace:
-|  ftrace_bug+0x94/0x270
-|  ftrace_process_locs+0x308/0x430
-|  ftrace_module_init+0x44/0x60
-|  load_module+0x15b4/0x1ce8
-|  __do_sys_init_module+0x1ec/0x238
-|  __arm64_sys_init_module+0x24/0x30
-|  invoke_syscall+0x54/0x118
-|  el0_svc_common.constprop.4+0x84/0x100
-|  do_el0_svc+0x3c/0xd0
-|  el0_svc+0x1c/0x50
-|  el0t_64_sync_handler+0x90/0xb8
-|  el0t_64_sync+0x15c/0x160
-| ---[ end trace 0000000000000000 ]---
-| ---------test_init-----------
-
-Fix this by reverting to the old behaviour of ignoring the old
-instruction when initialising an mcount callsite in a module, which was
-the behaviour prior to commit a6253579977e4c6f.
-
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Fixes: a6253579977e ("arm64: ftrace: consistently handle PLTs.")
-Reported-by: Li Huafei <lihuafei1@huawei.com>
-Link: https://lore.kernel.org/linux-arm-kernel/20220929094134.99512-1-lihuafei1@huawei.com
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/r/20220929134525.798593-1-mark.rutland@arm.com
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+Fixes: 414d38ba8710 ("ALSA: hda/sigmatel: Keep power up while beep is enabled")
+Link: https://lore.kernel.org/r/20220906092306.26183-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/kernel/ftrace.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ sound/pci/hda/hda_beep.c       | 15 +++++++++++++--
+ sound/pci/hda/hda_beep.h       |  1 +
+ sound/pci/hda/patch_sigmatel.c | 25 ++-----------------------
+ 3 files changed, 16 insertions(+), 25 deletions(-)
 
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index ae0248154981..dba774f3b8d7 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -217,11 +217,26 @@ int ftrace_make_nop(struct module *mod, struct dyn_ftrace *rec,
- 	unsigned long pc = rec->ip;
- 	u32 old = 0, new;
- 
-+	new = aarch64_insn_gen_nop();
-+
-+	/*
-+	 * When using mcount, callsites in modules may have been initalized to
-+	 * call an arbitrary module PLT (which redirects to the _mcount stub)
-+	 * rather than the ftrace PLT we'll use at runtime (which redirects to
-+	 * the ftrace trampoline). We can ignore the old PLT when initializing
-+	 * the callsite.
-+	 *
-+	 * Note: 'mod' is only set at module load time.
-+	 */
-+	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) &&
-+	    IS_ENABLED(CONFIG_ARM64_MODULE_PLTS) && mod) {
-+		return aarch64_insn_patch_text_nosync((void *)pc, new);
-+	}
-+
- 	if (!ftrace_find_callable_addr(rec, mod, &addr))
- 		return -EINVAL;
- 
- 	old = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
--	new = aarch64_insn_gen_nop();
- 
- 	return ftrace_modify_code(pc, old, new, true);
+diff --git a/sound/pci/hda/hda_beep.c b/sound/pci/hda/hda_beep.c
+index c6e1e03a5e4d..5a50b6c1d604 100644
+--- a/sound/pci/hda/hda_beep.c
++++ b/sound/pci/hda/hda_beep.c
+@@ -118,6 +118,12 @@ static int snd_hda_beep_event(struct input_dev *dev, unsigned int type,
+ 	return 0;
  }
+ 
++static void turn_on_beep(struct hda_beep *beep)
++{
++	if (beep->keep_power_at_enable)
++		snd_hda_power_up_pm(beep->codec);
++}
++
+ static void turn_off_beep(struct hda_beep *beep)
+ {
+ 	cancel_work_sync(&beep->beep_work);
+@@ -125,6 +131,8 @@ static void turn_off_beep(struct hda_beep *beep)
+ 		/* turn off beep */
+ 		generate_tone(beep, 0);
+ 	}
++	if (beep->keep_power_at_enable)
++		snd_hda_power_down_pm(beep->codec);
+ }
+ 
+ /**
+@@ -140,7 +148,9 @@ int snd_hda_enable_beep_device(struct hda_codec *codec, int enable)
+ 	enable = !!enable;
+ 	if (beep->enabled != enable) {
+ 		beep->enabled = enable;
+-		if (!enable)
++		if (enable)
++			turn_on_beep(beep);
++		else
+ 			turn_off_beep(beep);
+ 		return 1;
+ 	}
+@@ -167,7 +177,8 @@ static int beep_dev_disconnect(struct snd_device *device)
+ 		input_unregister_device(beep->dev);
+ 	else
+ 		input_free_device(beep->dev);
+-	turn_off_beep(beep);
++	if (beep->enabled)
++		turn_off_beep(beep);
+ 	return 0;
+ }
+ 
+diff --git a/sound/pci/hda/hda_beep.h b/sound/pci/hda/hda_beep.h
+index a25358a4807a..db76e3ddba65 100644
+--- a/sound/pci/hda/hda_beep.h
++++ b/sound/pci/hda/hda_beep.h
+@@ -25,6 +25,7 @@ struct hda_beep {
+ 	unsigned int enabled:1;
+ 	unsigned int linear_tone:1;	/* linear tone for IDT/STAC codec */
+ 	unsigned int playing:1;
++	unsigned int keep_power_at_enable:1;	/* set by driver */
+ 	struct work_struct beep_work; /* scheduled task for beep event */
+ 	struct mutex mutex;
+ 	void (*power_hook)(struct hda_beep *beep, bool on);
+diff --git a/sound/pci/hda/patch_sigmatel.c b/sound/pci/hda/patch_sigmatel.c
+index 04a89171327d..e42a6c5c1ba3 100644
+--- a/sound/pci/hda/patch_sigmatel.c
++++ b/sound/pci/hda/patch_sigmatel.c
+@@ -4302,6 +4302,8 @@ static int stac_parse_auto_config(struct hda_codec *codec)
+ 		if (codec->beep) {
+ 			/* IDT/STAC codecs have linear beep tone parameter */
+ 			codec->beep->linear_tone = spec->linear_tone_beep;
++			/* keep power up while beep is enabled */
++			codec->beep->keep_power_at_enable = 1;
+ 			/* if no beep switch is available, make its own one */
+ 			caps = query_amp_caps(codec, nid, HDA_OUTPUT);
+ 			if (!(caps & AC_AMPCAP_MUTE)) {
+@@ -4442,28 +4444,6 @@ static int stac_suspend(struct hda_codec *codec)
+ 	stac_shutup(codec);
+ 	return 0;
+ }
+-
+-static int stac_check_power_status(struct hda_codec *codec, hda_nid_t nid)
+-{
+-#ifdef CONFIG_SND_HDA_INPUT_BEEP
+-	struct sigmatel_spec *spec = codec->spec;
+-#endif
+-	int ret = snd_hda_gen_check_power_status(codec, nid);
+-
+-#ifdef CONFIG_SND_HDA_INPUT_BEEP
+-	if (nid == spec->gen.beep_nid && codec->beep) {
+-		if (codec->beep->enabled != spec->beep_power_on) {
+-			spec->beep_power_on = codec->beep->enabled;
+-			if (spec->beep_power_on)
+-				snd_hda_power_up_pm(codec);
+-			else
+-				snd_hda_power_down_pm(codec);
+-		}
+-		ret |= spec->beep_power_on;
+-	}
+-#endif
+-	return ret;
+-}
+ #else
+ #define stac_suspend		NULL
+ #endif /* CONFIG_PM */
+@@ -4476,7 +4456,6 @@ static const struct hda_codec_ops stac_patch_ops = {
+ 	.unsol_event = snd_hda_jack_unsol_event,
+ #ifdef CONFIG_PM
+ 	.suspend = stac_suspend,
+-	.check_power_status = stac_check_power_status,
+ #endif
+ 	.reboot_notify = stac_shutup,
+ };
 -- 
 2.35.1
 
