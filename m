@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69538609C18
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1B0609C1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbiJXIKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S230153AbiJXIKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJXIKL (ORCPT
+        with ESMTP id S230181AbiJXIKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:10:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DF320370
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:10:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UwtyZS/lYmNxfO8IfzbqIzyAUJEvEF9ONCF2NviYd8Y=; b=Fcvm9olpUulVNJSzwt/lYCJUHg
-        vZyRSpuk/rl/rVPUPnWQgh9oyUq/fO4f1EGBwkbgr+zXM6ZI1d0h2vhSopYTmlby14THJGywG61c2
-        YRnyf7Zh4mc5vkO4/YmkkOa7uxTetB7pVBoZX/TlpBqdkU7BgR4ZYEaFoWpLwSN05y6TVI0pGVoM7
-        kdy+WNZCIv6yVa6qm/1jrMAhrRoZBl/NJWfU2l2HXfFVuna428CejJjhilF+bWQaSq/NAFK8JpkDi
-        hAmD+p0KBIuBcO5ZzQ/KFTBl6CWnv9sQ4weuDAe+V1tk9OLc+XcAXjQC4xwyaly9GKscjRWV7NztT
-        oZw0j77g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1omsX2-00FGt5-Am; Mon, 24 Oct 2022 08:10:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3F37C300242;
-        Mon, 24 Oct 2022 10:09:55 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 203AD2C2328BB; Mon, 24 Oct 2022 10:09:55 +0200 (CEST)
-Date:   Mon, 24 Oct 2022 10:09:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86@kernel.org, willy@infradead.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        aarcange@redhat.com, kirill.shutemov@linux.intel.com,
-        jroedel@suse.de, ubizjak@gmail.com
-Subject: Re: [PATCH 04/13] mm: Fix pmd_read_atomic()
-Message-ID: <Y1ZIU8eL3ieeXmDS@hirez.programming.kicks-ass.net>
-References: <20221022111403.531902164@infradead.org>
- <20221022114424.711181252@infradead.org>
- <CAHk-=whKxHeW3tx8Q2_0sf=NW9RGUQYC1S2Km3eLC9jJ=whSRw@mail.gmail.com>
+        Mon, 24 Oct 2022 04:10:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A94356E5;
+        Mon, 24 Oct 2022 01:10:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666599037; x=1698135037;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uw170i99a3xYagUOLTRB+BH+zYQ/zEo4hLwD3cRpGnE=;
+  b=kNhGC987e3EHKOv2CVLFbcr3XYpsM+fAjNcdSc+n182yM04lDdPSGt9l
+   ToRs8UClmVZsT1YcsIs0qBs/Gi0P2Lv5N18MEGFvxpdo2ZJiqWw7sM+z9
+   rrhAazPfMYe3VMRIuiIJcw6zpqEJsZ3VsTOPua4udAc53aGu5+OrOpJF8
+   5HGft3nwhMlwicq04743MZU8BMysQwj46G/Q35FBDM1QND05CNhOxfk2Q
+   pykFfS6UKmgHLqTh45vS4bHxQOp4woV2RBGKTnmU4O0vy04+tiQwmb4jc
+   GgbvvPGbVQMatfdJVzmJvg2ubV1sXlA+7Y9dYO4HLa+8+hJHqzGTsYxMD
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="294763395"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="294763395"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 01:10:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="756496680"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="756496680"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 24 Oct 2022 01:10:30 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1omsXT-001LDj-1z;
+        Mon, 24 Oct 2022 11:10:27 +0300
+Date:   Mon, 24 Oct 2022 11:10:27 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Stefan =?iso-8859-1?Q?M=E4tje?= <stefan.maetje@esd.eu>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sebastian =?iso-8859-1?Q?W=FCrl?= <sebastian.wuerl@ororatech.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] can: mcp251x: fix error handling code in
+ mcp251x_can_probe
+Message-ID: <Y1ZIc51hxE4iV70a@smile.fi.intel.com>
+References: <20221024053711.696124-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whKxHeW3tx8Q2_0sf=NW9RGUQYC1S2Km3eLC9jJ=whSRw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221024053711.696124-1-dzm91@hust.edu.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 10:30:51AM -0700, Linus Torvalds wrote:
-> On Sat, Oct 22, 2022 at 4:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > --- a/include/linux/pgtable.h
-> > +++ b/include/linux/pgtable.h
-> > @@ -258,6 +258,13 @@ static inline pte_t ptep_get(pte_t *ptep
-> >  }
-> >  #endif
-> >
-> > +#ifndef __HAVE_ARCH_PMDP_GET
-> > +static inline pmd_t pmdp_get(pmd_t *pmdp)
-> > +{
-> > +       return READ_ONCE(*pmdp);
-> > +}
-> > +#endif
+On Mon, Oct 24, 2022 at 01:37:07PM +0800, Dongliang Mu wrote:
+> In mcp251x_can_probe, if mcp251x_gpio_setup fails, it forgets to
+> unregister the can device.
 > 
-> What, what, what?
-> 
-> Where did that __HAVE_ARCH_PMDP_GET come from?
+> Fix this by unregistering can device in mcp251x_can_probe.
 
-Copy/paste like from ptep_get(), that has __HAVE_ARCH_PTEP_GET (which
-does appear to get used, once).
+Fixes tag?
 
-Do I break the pattern and simply leave this off, or do I stay
-consistent even though we hate it a little? ;-)
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
