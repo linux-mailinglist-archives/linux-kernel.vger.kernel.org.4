@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C40360A510
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43F760A516
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiJXMUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S233290AbiJXMUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233273AbiJXMTF (ORCPT
+        with ESMTP id S233308AbiJXMTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A02982842;
-        Mon, 24 Oct 2022 04:57:33 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F288285D;
+        Mon, 24 Oct 2022 04:57:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5016612DB;
-        Mon, 24 Oct 2022 11:55:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5B79C433C1;
-        Mon, 24 Oct 2022 11:55:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F593612B2;
+        Mon, 24 Oct 2022 11:55:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8209CC433D7;
+        Mon, 24 Oct 2022 11:55:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612526;
-        bh=fSVz+OkgMcoaGQ/swcxjK7pSryFkqY9VNBJa73jPodY=;
+        s=korg; t=1666612528;
+        bh=baATQorB7E7tji15g54jQol3I3flzO4pwiVl9pgM6Bk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=INOL/VcpuRPIlhpUFoO9DlAcdvD3sTWUWtWzDMqJUlP1znwD2/CMbC2ps9C9/J9iE
-         x7GF7rVemaCxYTgcn/KMMQXNVMHkrd5Fc80/BaCLkrQKxLd1kPU5iO3njBa1p7oEsw
-         4RFyEkeJ31+2LqvbYtRWQaRCUmOyckVfTABiSOng=
+        b=aOFMJQDH7NE589CQuVTvNkQNSIq4zPzviMr7VY1KNV+LYCISOiDEIGKN3KSHNr44u
+         kxJvaYwvLJl2h/qX8P3oRXMGk2C5seycSloMuroz08VVvjJlNI2UVfXiMEsUWxpqmY
+         EhBbxa3JtKokM81FLjhS8cZ8RAEJBd/4eUpOlzB4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Swati Agarwal <swati.agarwal@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 007/229] dmaengine: xilinx_dma: Report error in case of dma_set_mask_and_coherent API failure
-Date:   Mon, 24 Oct 2022 13:28:46 +0200
-Message-Id: <20221024112959.355783611@linuxfoundation.org>
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Sergei Antonov <saproj@gmail.com>,
+        Jonas Jensen <jonas.jensen@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 008/229] ARM: dts: fix Moxa SDIO compatible, remove sdhci misnomer
+Date:   Mon, 24 Oct 2022 13:28:47 +0200
+Message-Id: <20221024112959.385972274@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
 References: <20221024112959.085534368@linuxfoundation.org>
@@ -54,44 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Swati Agarwal <swati.agarwal@xilinx.com>
+From: Sergei Antonov <saproj@gmail.com>
 
-[ Upstream commit 8f2b6bc79c32f0fa60df000ae387a790ec80eae9 ]
+[ Upstream commit 02181e68275d28cab3c3f755852770367f1bc229 ]
 
-The driver does not handle the failure case while calling
-dma_set_mask_and_coherent API.
+Driver moxart-mmc.c has .compatible = "moxa,moxart-mmc".
 
-In case of failure, capture the return value of API and then report an
-error.
+But moxart .dts/.dtsi and the documentation file moxa,moxart-dma.txt
+contain compatible = "moxa,moxart-sdhci".
 
-Addresses-coverity: Unchecked return value (CHECKED_RETURN)
+Change moxart .dts/.dtsi files and moxa,moxart-dma.txt to match the driver.
 
-Signed-off-by: Swati Agarwal <swati.agarwal@xilinx.com>
-Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-Link: https://lore.kernel.org/r/20220817061125.4720-4-swati.agarwal@xilinx.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Replace 'sdhci' with 'mmc' in names too, since SDHCI is a different
+controller from FTSDC010.
+
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Sergei Antonov <saproj@gmail.com>
+Cc: Jonas Jensen <jonas.jensen@gmail.com>
+Link: https://lore.kernel.org/r/20220907175341.1477383-1-saproj@gmail.com'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/xilinx/xilinx_dma.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt | 4 ++--
+ arch/arm/boot/dts/moxart-uc7112lx.dts                     | 2 +-
+ arch/arm/boot/dts/moxart.dtsi                             | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
-index f72803587b8f..0ba70be4ea85 100644
---- a/drivers/dma/xilinx/xilinx_dma.c
-+++ b/drivers/dma/xilinx/xilinx_dma.c
-@@ -2674,7 +2674,11 @@ static int xilinx_dma_probe(struct platform_device *pdev)
- 		xdev->ext_addr = false;
+diff --git a/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt b/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
+index 8a9f3559335b..7e14e26676ec 100644
+--- a/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
++++ b/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
+@@ -34,8 +34,8 @@ Example:
+ Use specific request line passing from dma
+ For example, MMC request line is 5
  
- 	/* Set the dma mask bits */
--	dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
-+	err = dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
-+	if (err < 0) {
-+		dev_err(xdev->dev, "DMA mask error %d\n", err);
-+		goto disable_clks;
-+	}
+-	sdhci: sdhci@98e00000 {
+-		compatible = "moxa,moxart-sdhci";
++	mmc: mmc@98e00000 {
++		compatible = "moxa,moxart-mmc";
+ 		reg = <0x98e00000 0x5C>;
+ 		interrupts = <5 0>;
+ 		clocks = <&clk_apb>;
+diff --git a/arch/arm/boot/dts/moxart-uc7112lx.dts b/arch/arm/boot/dts/moxart-uc7112lx.dts
+index 4a962a26482d..59d8775a3a93 100644
+--- a/arch/arm/boot/dts/moxart-uc7112lx.dts
++++ b/arch/arm/boot/dts/moxart-uc7112lx.dts
+@@ -80,7 +80,7 @@ &clk_pll {
+ 	clocks = <&ref12>;
+ };
  
- 	/* Initialize the DMA engine */
- 	xdev->common.dev = &pdev->dev;
+-&sdhci {
++&mmc {
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm/boot/dts/moxart.dtsi b/arch/arm/boot/dts/moxart.dtsi
+index da7b3237bfe9..804a2bc6ec82 100644
+--- a/arch/arm/boot/dts/moxart.dtsi
++++ b/arch/arm/boot/dts/moxart.dtsi
+@@ -93,8 +93,8 @@ watchdog: watchdog@98500000 {
+ 			clock-names = "PCLK";
+ 		};
+ 
+-		sdhci: sdhci@98e00000 {
+-			compatible = "moxa,moxart-sdhci";
++		mmc: mmc@98e00000 {
++			compatible = "moxa,moxart-mmc";
+ 			reg = <0x98e00000 0x5C>;
+ 			interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&clk_apb>;
 -- 
 2.35.1
 
