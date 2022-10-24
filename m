@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17B960B907
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C7160B8F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiJXUAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
+        id S233905AbiJXUAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232665AbiJXT6j (ORCPT
+        with ESMTP id S233971AbiJXT6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:58:39 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB8A27E079
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:21:07 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-3691846091fso97002017b3.9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:21:07 -0700 (PDT)
+        Mon, 24 Oct 2022 15:58:44 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220AB280EF8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:21:16 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id n1-20020a170902f60100b00179c0a5c51fso6773979plg.7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N6W+CXwQP9ZcH6ztCYE0MpcmSu0rfOg+3GfDaO039jk=;
-        b=MyyCJTcbNDcWyLPc/QWROdPmUsiRtgLtA0uZwhDYIaxhjKZzDxzsl0LiHcpqoHsJtK
-         1uA9haRF3y8/UUCcPDlSPw8+dqL3V6VLOOb6vGOCckQozVmUJ12d87C6a10LYnyDMeGe
-         IOjzMYM+Qk/DMWgi1nw/qHPpKQ7Sjio4Z2pee+crAwV8uPUxdioh1H32O9lF+3yXMrsu
-         p+uwpa6xXEwn9uUvYsT2zOZBhvGXMdYYIM+P+3FTnb4A/4gA6e0Ms4EsPIQgfnvBOp8I
-         dX2qW7UCwOEVF89oEkT0K59f5ns6ha35MwcUu7PlLh6ia4fRViZXBJqniEWLj+wtEmsH
-         1YHg==
+        bh=IO66rWb82Ym5SFWEwsbpBF8A8iB7JwCydGL2I5mbLFY=;
+        b=hds5L9pq39xD5mOs2wSydg/fTH9JKNsJ7Rbx4+Zwar0mwCiXd1hUG54QUFgvXIy46C
+         0Nuybfzj2CtB9cQ87gNkJHD4MHJc113lhZZBc1ReSEFoxUjqpdWMir9O2DRmqD7ls/MW
+         /M7P7UwALSMn681ZAGb7ZMYNuscUeK/5z2yD2R3faeyxN9tYpOCOSvAqSfBITEHXq4aM
+         ZDekWbhsSEyGVKC9MlqoG8fW1+//MdAC2v70eHWLCMBgzcrePSjc7sMpNZJTy3eIjYJP
+         auJ5eWSlKWzOox1BEvLJHFG/Y3irC2WZBoMDi9LvpgiZ1ZpS38/wuu4xWHW7ZGO8vbV7
+         Bo+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N6W+CXwQP9ZcH6ztCYE0MpcmSu0rfOg+3GfDaO039jk=;
-        b=nvd58Vf1la2NtCnI5/m6+s0ybEPdTzBqa/p2kq3sh6HSLG1fdMF7vCj8zzC+6RJM5V
-         00zQLRWYayy+rTpEyk1MgGtpf6iezfGYJiV7pxw9DI2OcYxIRdzYAdMXdDdaQSuIWyhk
-         1zyfsM7PDQCkst71SbPfo3pMxMW7qv6Nk4V2cNTWzjf26t9XaDt56XixDQmFApCA0tgd
-         6s7IiM/mVuMMCX6iof4xVmwohM+O/oZrg11VXLYmgVd6M4T0r1rmNYaSvySWglWCEvWt
-         tQ4rRPtYgiMZ02ulxsYy9cr6xMYn/64Tdi9bcSRd024oF+9+Fg5MR4oCqBpZBw0L/0jL
-         trWw==
-X-Gm-Message-State: ACrzQf09u40jWT90EZ+rJuuBdsIpwv/+R82F/rxFAj2K66lJFjtsAc+7
-        Kl3/IJ7ffSc+16J2VL7LNdsMT8xZ/O1M
-X-Google-Smtp-Source: AMsMyM452qYtauCW4EO7scWSZkNj9sZ2nSnvYtqYPGuBG/6+zXZy0eh9dOLzUYkV9HTbdEPxf+TKeyEWlaGY
+        bh=IO66rWb82Ym5SFWEwsbpBF8A8iB7JwCydGL2I5mbLFY=;
+        b=AdPCszGK82yHO3jDmhpLy4IS+JWtW6c3nX734VvYrh/BDpbn4FfowkUL5PX75Dxei6
+         dS02nNYIc1fVHSTscWDQeUvgG2d3T/4YCYZt8LbjUn1+qxMQJaefdie9TLRvtAzJ6y1d
+         0+Ft/n63PWs7/hg4NrE6TuXF0EGTP+eKr8xF9fj2VlPQuZNupbeB33WaqEHgJBHtE1r+
+         izUdgftq60sv6af/10+E94HxJoBEeGdHkKAxpTz9PQqeY00h5U1NNQNq0iSw3jfLpLSy
+         edbLTWavCYjH0RjyleUblncHrgwzr7HT+ovG5wOXPqXhOjhrArC8aYa2Jv1q5tV64iGL
+         BbrA==
+X-Gm-Message-State: ACrzQf2T/lDVAv4/bvEUf7aP6EDEI4qr7hmBYpbUZ1cpoCcUu8wwsuXc
+        FXDQSD6e3SfiIsx8NvKsXqaq6aznNqOK
+X-Google-Smtp-Source: AMsMyM7mr42p3I5oH5NEpSHkDYBQ44el74P+LK4ELUYR9780/JS2/SSKzlney3clKu0vyZWDA8Pxbn80JtQY
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b8bc:a57d:a2a2:efdc])
- (user=irogers job=sendgmr) by 2002:a0d:d954:0:b0:368:d5ea:fc6a with SMTP id
- b81-20020a0dd954000000b00368d5eafc6amr20555995ywe.50.1666635616419; Mon, 24
- Oct 2022 11:20:16 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 11:19:10 -0700
+ (user=irogers job=sendgmr) by 2002:a17:90a:7a85:b0:20d:2891:15f with SMTP id
+ q5-20020a17090a7a8500b0020d2891015fmr40660039pjf.107.1666635626193; Mon, 24
+ Oct 2022 11:20:26 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 11:19:11 -0700
 In-Reply-To: <20221024181913.630986-1-irogers@google.com>
-Message-Id: <20221024181913.630986-6-irogers@google.com>
+Message-Id: <20221024181913.630986-7-irogers@google.com>
 Mime-Version: 1.0
 References: <20221024181913.630986-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Subject: [PATCH v2 5/8] perf session: Change type to avoid UB
+Subject: [PATCH v2 6/8] perf stat: Use sig_atomic_t to avoid UB
 From:   Ian Rogers <irogers@google.com>
 To:     Leo Yan <leo.yan@linaro.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -71,7 +71,7 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,34 +79,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-session_done is written to inside the signal handler of perf report
-and script. Switch its type to avoid undefined behavior.
+Use sig_atomic_t for variables written/accessed in signal
+handlers. This is undefined behavior as per:
+https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+objects+in+signal+handlers
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/session.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/perf/builtin-stat.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-index 1a4f10de29ff..0e1a3d6bacb9 100644
---- a/tools/perf/util/session.c
-+++ b/tools/perf/util/session.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <errno.h>
-+#include <signal.h>
- #include <inttypes.h>
- #include <linux/err.h>
- #include <linux/kernel.h>
-@@ -2022,7 +2023,7 @@ static int perf_session__flush_thread_stacks(struct perf_session *session)
- 					 NULL);
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 265b05157972..e1a5605adb97 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -173,7 +173,7 @@ static struct target target = {
+ 
+ #define METRIC_ONLY_LEN 20
+ 
+-static volatile pid_t		child_pid			= -1;
++static volatile sig_atomic_t	child_pid			= -1;
+ static int			detailed_run			=  0;
+ static bool			transaction_run;
+ static bool			topdown_run			= false;
+@@ -208,7 +208,7 @@ struct perf_stat {
+ static struct perf_stat		perf_stat;
+ #define STAT_RECORD		perf_stat.record
+ 
+-static volatile int done = 0;
++static volatile sig_atomic_t done = 0;
+ 
+ static struct perf_stat_config stat_config = {
+ 	.aggr_mode		= AGGR_GLOBAL,
+@@ -569,7 +569,7 @@ static void disable_counters(void)
+ 	}
  }
  
--volatile int session_done;
-+volatile sig_atomic_t session_done;
+-static volatile int workload_exec_errno;
++static volatile sig_atomic_t workload_exec_errno;
  
- static int __perf_session__process_decomp_events(struct perf_session *session);
+ /*
+  * evlist__prepare_workload will send a SIGUSR1
+@@ -1029,7 +1029,7 @@ static void print_counters(struct timespec *ts, int argc, const char **argv)
+ 	evlist__print_counters(evsel_list, &stat_config, &target, ts, argc, argv);
+ }
  
+-static volatile int signr = -1;
++static volatile sig_atomic_t signr = -1;
+ 
+ static void skip_signal(int signo)
+ {
 -- 
 2.38.0.135.g90850a2211-goog
 
