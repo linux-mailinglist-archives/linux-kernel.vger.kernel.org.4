@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEF360A73C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E10760A50B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234318AbiJXMsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38272 "EHLO
+        id S233005AbiJXMUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbiJXMoJ (ORCPT
+        with ESMTP id S233277AbiJXMTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:44:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1627F08A;
-        Mon, 24 Oct 2022 05:09:05 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF80816B8;
+        Mon, 24 Oct 2022 04:57:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF4A161218;
-        Mon, 24 Oct 2022 12:07:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBF4C433D7;
-        Mon, 24 Oct 2022 12:07:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 219B0612D2;
+        Mon, 24 Oct 2022 11:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34518C433D6;
+        Mon, 24 Oct 2022 11:57:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613253;
-        bh=uIdIsyZkWCtELS/sAPgIrAEP1Cyh+NKa0k0yNsrSR3Q=;
+        s=korg; t=1666612627;
+        bh=anviEcYHuKsLQZfCwdgo3hZTRU8BjjWQ5XXrx9ZPAn8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V7Qd57YjhQ3v1K0CK+SaX8TYibZ2vZ1LMzJvEpa/Wl47mkap8s3Fnj87j+tUUs24+
-         plBSGaguouIT87B3bSsHnfPlwuxAmR42sliHmNleUF09McbF/4OQRbOe55i7cTR5WN
-         M4KD4BDnIA5W5bYqlDuCwPWcFN64mimTgIlWt4Vg=
+        b=YMQHgf8C/Qupb4xXVdiRdV2QDx6GXF2OQyBEJmpXgfqjfQPHtVU+hkvDwkD92o1t4
+         gjw3T3EoTEWUmrV6bUQaLJU03+q3/+hyMRXmumZqoTxH8bp1ghvYrD3NYB/DFZTTu0
+         X643Sahl119KA6QQGEQXO8seO/2hsYkZ/WchCFBo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Jes Sorensen <Jes.Sorensen@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 067/255] wifi: rtl8xxxu: tighten bounds checking in rtl8xxxu_read_efuse()
-Date:   Mon, 24 Oct 2022 13:29:37 +0200
-Message-Id: <20221024113004.757211325@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Baokun Li <libaokun1@huawei.com>, Jan Kara <jack@suse.cz>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 4.19 059/229] ext4: fix null-ptr-deref in ext4_write_info
+Date:   Mon, 24 Oct 2022 13:29:38 +0200
+Message-Id: <20221024113000.998337697@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-[ Upstream commit 620d5eaeb9059636864bda83ca1c68c20ede34a5 ]
+commit f9c1f248607d5546075d3f731e7607d5571f2b60 upstream.
 
-There some bounds checking to ensure that "map_addr" is not out of
-bounds before the start of the loop.  But the checking needs to be
-done as we iterate through the loop because "map_addr" gets larger as
-we iterate.
+I caught a null-ptr-deref bug as follows:
+==================================================================
+KASAN: null-ptr-deref in range [0x0000000000000068-0x000000000000006f]
+CPU: 1 PID: 1589 Comm: umount Not tainted 5.10.0-02219-dirty #339
+RIP: 0010:ext4_write_info+0x53/0x1b0
+[...]
+Call Trace:
+ dquot_writeback_dquots+0x341/0x9a0
+ ext4_sync_fs+0x19e/0x800
+ __sync_filesystem+0x83/0x100
+ sync_filesystem+0x89/0xf0
+ generic_shutdown_super+0x79/0x3e0
+ kill_block_super+0xa1/0x110
+ deactivate_locked_super+0xac/0x130
+ deactivate_super+0xb6/0xd0
+ cleanup_mnt+0x289/0x400
+ __cleanup_mnt+0x16/0x20
+ task_work_run+0x11c/0x1c0
+ exit_to_user_mode_prepare+0x203/0x210
+ syscall_exit_to_user_mode+0x5b/0x3a0
+ do_syscall_64+0x59/0x70
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+ ==================================================================
 
-Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Jes Sorensen <Jes.Sorensen@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/Yv8eGLdBslLAk3Ct@kili
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Above issue may happen as follows:
+-------------------------------------
+exit_to_user_mode_prepare
+ task_work_run
+  __cleanup_mnt
+   cleanup_mnt
+    deactivate_super
+     deactivate_locked_super
+      kill_block_super
+       generic_shutdown_super
+        shrink_dcache_for_umount
+         dentry = sb->s_root
+         sb->s_root = NULL              <--- Here set NULL
+        sync_filesystem
+         __sync_filesystem
+          sb->s_op->sync_fs > ext4_sync_fs
+           dquot_writeback_dquots
+            sb->dq_op->write_info > ext4_write_info
+             ext4_journal_start(d_inode(sb->s_root), EXT4_HT_QUOTA, 2)
+              d_inode(sb->s_root)
+               s_root->d_inode          <--- Null pointer dereference
+
+To solve this problem, we use ext4_journal_start_sb directly
+to avoid s_root being used.
+
+Cc: stable@kernel.org
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220805123947.565152-1-libaokun1@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c  | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ fs/ext4/super.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index 048984ca81fd..3062103e216a 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -1875,13 +1875,6 @@ static int rtl8xxxu_read_efuse(struct rtl8xxxu_priv *priv)
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -5721,7 +5721,7 @@ static int ext4_write_info(struct super_
+ 	handle_t *handle;
  
- 		/* We have 8 bits to indicate validity */
- 		map_addr = offset * 8;
--		if (map_addr >= EFUSE_MAP_LEN) {
--			dev_warn(dev, "%s: Illegal map_addr (%04x), "
--				 "efuse corrupt!\n",
--				 __func__, map_addr);
--			ret = -EINVAL;
--			goto exit;
--		}
- 		for (i = 0; i < EFUSE_MAX_WORD_UNIT; i++) {
- 			/* Check word enable condition in the section */
- 			if (word_mask & BIT(i)) {
-@@ -1892,6 +1885,13 @@ static int rtl8xxxu_read_efuse(struct rtl8xxxu_priv *priv)
- 			ret = rtl8xxxu_read_efuse8(priv, efuse_addr++, &val8);
- 			if (ret)
- 				goto exit;
-+			if (map_addr >= EFUSE_MAP_LEN - 1) {
-+				dev_warn(dev, "%s: Illegal map_addr (%04x), "
-+					 "efuse corrupt!\n",
-+					 __func__, map_addr);
-+				ret = -EINVAL;
-+				goto exit;
-+			}
- 			priv->efuse_wifi.raw[map_addr++] = val8;
- 
- 			ret = rtl8xxxu_read_efuse8(priv, efuse_addr++, &val8);
--- 
-2.35.1
-
+ 	/* Data block + inode block */
+-	handle = ext4_journal_start(d_inode(sb->s_root), EXT4_HT_QUOTA, 2);
++	handle = ext4_journal_start_sb(sb, EXT4_HT_QUOTA, 2);
+ 	if (IS_ERR(handle))
+ 		return PTR_ERR(handle);
+ 	ret = dquot_commit_info(sb, type);
 
 
