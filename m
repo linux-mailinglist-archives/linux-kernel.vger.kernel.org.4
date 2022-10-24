@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1456609EFC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C2F609EFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbiJXKXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
+        id S231259AbiJXKYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJXKXd (ORCPT
+        with ESMTP id S230097AbiJXKXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:23:33 -0400
+        Mon, 24 Oct 2022 06:23:34 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045E258DE0;
-        Mon, 24 Oct 2022 03:23:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D4E258DF9;
+        Mon, 24 Oct 2022 03:23:33 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F06D16602824;
-        Mon, 24 Oct 2022 11:23:29 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0A4A76602826;
+        Mon, 24 Oct 2022 11:23:30 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666607010;
-        bh=Dh97L7JvjfiBu8V6B+2CA5mLksRChUmKRFgxrGoQYBQ=;
+        s=mail; t=1666607011;
+        bh=YBBjods/SCiT991mfWMY/FD6Sm61W+Mx7LF3CER+vIg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TvbvH7xeK4iqIydRWHhJqnRO+zIQjaQhBMCL/scRSAUk66+J5M/mEl28MBNqbEEfc
-         xyLH9KMiCfacPshXsncBxdE5JSuoZ2Y/ZRL35LyGEdpms8htxvbf1YfXG+E6Q73HRa
-         hhPmB4Whi0JaBBwapXiq6Ykav3ahCOvkMZwpXH0PafoYAx6pPVPAFudrevDCJr0ovB
-         V4GNN+q8G8SnCULI3PFoFRAsat5ccJQhSsq0P6oQAI2HJS4NJI4taSaKyr8Pd8SpJN
-         Nik0B44QPlnQpRlTppu+py3djaWi0LfbLXKKPt8OuHb8eubNkMOmTjEIbCGTre63BD
-         bKEUgKQLNppeA==
+        b=Dxmbkh1Qo3WvmUtf1Kto1l36FN7zCiOOtS02GKPs52OzXX43t1EswWl7FlTZZHJR5
+         zKxRw2EPTEk79T2wKeW4IOAf8/Aw56sJoyV3sLMeNkKTO8jnrrpxBcfIGjy7uq6sRy
+         RiyJhP/+ktnDsXmI10n5WfJi1X48YkFVQDl5Kbr8OBNX4ye2pcPVR4sR8znIaz9BdT
+         omuA0uTxpsGRmgBA4/9LIpD/+/KGcZ1VevpQI4UJoh2wapJEwtaB1kSte0Y8Ed3yAh
+         zyZ7dHCMOyMjmfIvVyyPKQdNZXcgP0gk0DF0FXGD77kdX0+aSEgjdeWQxGVc2busv1
+         hD/xCGysk/1lQ==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     sboyd@kernel.org
@@ -43,9 +43,9 @@ Cc:     mturquette@baylibre.com, matthias.bgg@gmail.com,
         msp@baylibre.com, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 05/10] clk: mediatek: mt8173: Drop flags for main/sys/univpll fixed factors
-Date:   Mon, 24 Oct 2022 12:23:02 +0200
-Message-Id: <20221024102307.33722-6-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 06/10] clk: mediatek: mt6795-topckgen: Drop flags for main/sys/univpll fixed factors
+Date:   Mon, 24 Oct 2022 12:23:03 +0200
+Message-Id: <20221024102307.33722-7-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20221024102307.33722-1-angelogioacchino.delregno@collabora.com>
 References: <20221024102307.33722-1-angelogioacchino.delregno@collabora.com>
@@ -74,16 +74,16 @@ clocks.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/clk/mediatek/clk-mt8173.c | 76 +++++++++++++++----------------
+ drivers/clk/mediatek/clk-mt6795-topckgen.c | 76 +++++++++++-----------
  1 file changed, 38 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8173.c b/drivers/clk/mediatek/clk-mt8173.c
-index b8529ee7199d..b57e33cda7a5 100644
---- a/drivers/clk/mediatek/clk-mt8173.c
-+++ b/drivers/clk/mediatek/clk-mt8173.c
-@@ -37,19 +37,19 @@ static const struct mtk_fixed_factor top_divs[] __initconst = {
- 	FACTOR(CLK_TOP_ARMCA7PLL_754M, "armca7pll_754m", "armca7pll", 1, 2),
- 	FACTOR(CLK_TOP_ARMCA7PLL_502M, "armca7pll_502m", "armca7pll", 1, 3),
+diff --git a/drivers/clk/mediatek/clk-mt6795-topckgen.c b/drivers/clk/mediatek/clk-mt6795-topckgen.c
+index 2948dd1aee8f..8b8307635a35 100644
+--- a/drivers/clk/mediatek/clk-mt6795-topckgen.c
++++ b/drivers/clk/mediatek/clk-mt6795-topckgen.c
+@@ -359,19 +359,19 @@ static const struct mtk_fixed_factor top_divs[] = {
+ 	FACTOR(CLK_TOP_ARMCA53PLL_754M, "armca53pll_754m", "clk26m", 1, 2),
+ 	FACTOR(CLK_TOP_ARMCA53PLL_502M, "armca53pll_502m", "clk26m", 1, 3),
  
 -	FACTOR(CLK_TOP_MAIN_H546M, "main_h546m", "mainpll", 1, 2),
 -	FACTOR(CLK_TOP_MAIN_H364M, "main_h364m", "mainpll", 1, 3),
@@ -110,7 +110,7 @@ index b8529ee7199d..b57e33cda7a5 100644
  
  	FACTOR(CLK_TOP_CLKRTC_EXT, "clkrtc_ext", "clk32k", 1, 1),
  	FACTOR(CLK_TOP_CLKRTC_INT, "clkrtc_int", "clk26m", 1, 793),
-@@ -84,20 +84,20 @@ static const struct mtk_fixed_factor top_divs[] __initconst = {
+@@ -402,20 +402,20 @@ static const struct mtk_fixed_factor top_divs[] = {
  	FACTOR(CLK_TOP_MSDCPLL2_D2, "msdcpll2_d2", "msdcpll2", 1, 2),
  	FACTOR(CLK_TOP_MSDCPLL2_D4, "msdcpll2_d4", "msdcpll2", 1, 4),
  
@@ -145,7 +145,7 @@ index b8529ee7199d..b57e33cda7a5 100644
  
  	FACTOR(CLK_TOP_TVDPLL, "tvdpll_ck", "tvdpll_594m", 1, 1),
  	FACTOR(CLK_TOP_TVDPLL_D2, "tvdpll_d2", "tvdpll_594m", 1, 2),
-@@ -105,21 +105,21 @@ static const struct mtk_fixed_factor top_divs[] __initconst = {
+@@ -423,21 +423,21 @@ static const struct mtk_fixed_factor top_divs[] = {
  	FACTOR(CLK_TOP_TVDPLL_D8, "tvdpll_d8", "tvdpll_594m", 1, 8),
  	FACTOR(CLK_TOP_TVDPLL_D16, "tvdpll_d16", "tvdpll_594m", 1, 16),
  
