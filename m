@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920F060A44C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DF960AB28
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbiJXMHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39232 "EHLO
+        id S236331AbiJXNnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbiJXMFE (ORCPT
+        with ESMTP id S236812AbiJXNlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:05:04 -0400
+        Mon, 24 Oct 2022 09:41:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A00B7CE24;
-        Mon, 24 Oct 2022 04:51:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DD78993B;
+        Mon, 24 Oct 2022 05:38:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AC68612D6;
-        Mon, 24 Oct 2022 11:51:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 279C3C4347C;
-        Mon, 24 Oct 2022 11:51:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B03A611B0;
+        Mon, 24 Oct 2022 12:27:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A5DC433D6;
+        Mon, 24 Oct 2022 12:27:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612276;
-        bh=8qIvuZtQBIn+XzpoaTxZT9Xx9bczzWsukg2GyFCA1/U=;
+        s=korg; t=1666614423;
+        bh=MAndz8nMfGWumzgeumXtIyvQC0YhR+/u+DyUw+CVihY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zAg7tOYVjaEZqY8LOD1/8ne7NWQI9+q2mSO7PjlAvGisTEMsYiPAo9iAkRqMBkxBB
-         mXworgjbbsuriasqwgmfRabXAh2YYAEYthaWKOso3YB2qpT+T48sEecfc66rmHC23p
-         SY+EAKbYKtTMCorJmDgKAoEAH002Y1Nz/sqhj2/E=
+        b=e/oCg/2kcUpRUG4+TwFTAsel+PG1ON5mrSxp82dqNh7p4g1vVkTbS0vgrxgRVKOmL
+         IqHnqtD1dyIyASM4muJQaFGKuFS6dI0VWtZIb7KPLbskEBCIZedAph4giWCv3RpYNz
+         SyvM6/fg8we/EhRea0fj36YyOj1mDZ0EbsSxgyog=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 105/210] mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
+Subject: [PATCH 5.10 225/390] ata: fix ata_id_has_devslp()
 Date:   Mon, 24 Oct 2022 13:30:22 +0200
-Message-Id: <20221024113000.422320989@linuxfoundation.org>
+Message-Id: <20221024113032.360887382@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-[ Upstream commit cb58188ad90a61784a56a64f5107faaf2ad323e7 ]
+[ Upstream commit 9c6e09a434e1317e09b78b3b69cd384022ec9a03 ]
 
-A dma_free_coherent() call is missing in the error handling path of the
-probe, as already done in the remove function.
+ACS-5 section
+7.13.6.36 Word 78: Serial ATA features supported
+states that:
 
-Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/53fc6ffa5d1c428fefeae7d313cf4a669c3a1e98.1663873255.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+If word 76 is not 0000h or FFFFh, word 78 reports the features supported
+by the device. If this word is not supported, the word shall be cleared
+to zero.
+
+(This text also exists in really old ACS standards, e.g. ACS-3.)
+
+Additionally, move the macro to the other ATA_ID_FEATURE_SUPP macros
+(which already have this check), thus making it more likely that the
+next ATA_ID_FEATURE_SUPP macro that is added will include this check.
+
+Fixes: 65fe1f0f66a5 ("ahci: implement aggressive SATA device sleep support")
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/wmt-sdmmc.c | 5 ++++-
+ include/linux/ata.h | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
-index fd30ac7da5e5..85cad20b2ae8 100644
---- a/drivers/mmc/host/wmt-sdmmc.c
-+++ b/drivers/mmc/host/wmt-sdmmc.c
-@@ -853,7 +853,7 @@ static int wmt_mci_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->clk_sdmmc)) {
- 		dev_err(&pdev->dev, "Error getting clock\n");
- 		ret = PTR_ERR(priv->clk_sdmmc);
--		goto fail5;
-+		goto fail5_and_a_half;
- 	}
+diff --git a/include/linux/ata.h b/include/linux/ata.h
+index 734cc646ce35..8b884cd3a232 100644
+--- a/include/linux/ata.h
++++ b/include/linux/ata.h
+@@ -565,6 +565,10 @@ struct ata_bmdma_prd {
+ 	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
+ 	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
+ 	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 2)))
++#define ata_id_has_devslp(id)	\
++	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
++	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
++	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 8)))
+ #define ata_id_iordy_disable(id) ((id)[ATA_ID_CAPABILITY] & (1 << 10))
+ #define ata_id_has_iordy(id) ((id)[ATA_ID_CAPABILITY] & (1 << 11))
+ #define ata_id_u32(id,n)	\
+@@ -577,7 +581,6 @@ struct ata_bmdma_prd {
  
- 	ret = clk_prepare_enable(priv->clk_sdmmc);
-@@ -870,6 +870,9 @@ static int wmt_mci_probe(struct platform_device *pdev)
- 	return 0;
- fail6:
- 	clk_put(priv->clk_sdmmc);
-+fail5_and_a_half:
-+	dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
-+			  priv->dma_desc_buffer, priv->dma_desc_device_addr);
- fail5:
- 	free_irq(dma_irq, priv);
- fail4:
+ #define ata_id_cdb_intr(id)	(((id)[ATA_ID_CONFIG] & 0x60) == 0x20)
+ #define ata_id_has_da(id)	((id)[ATA_ID_SATA_CAPABILITY_2] & (1 << 4))
+-#define ata_id_has_devslp(id)	((id)[ATA_ID_FEATURE_SUPP] & (1 << 8))
+ #define ata_id_has_ncq_autosense(id) \
+ 				((id)[ATA_ID_FEATURE_SUPP] & (1 << 7))
+ 
 -- 
 2.35.1
 
