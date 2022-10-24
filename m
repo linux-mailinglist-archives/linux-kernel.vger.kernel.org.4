@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA8460BA3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7041560B96C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbiJXUaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
+        id S233178AbiJXULF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234348AbiJXU26 (ORCPT
+        with ESMTP id S234324AbiJXUJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:28:58 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D46E222A6;
-        Mon, 24 Oct 2022 11:41:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 12718CE172C;
-        Mon, 24 Oct 2022 12:55:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37D8C433C1;
-        Mon, 24 Oct 2022 12:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666616151;
-        bh=SfovaiwKGLjcp/SsOJAxEXvxF9kuiamt4gaWeahnRxA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0KY5fyutQ6/YqFbdppJ1ZV4dg1JFbNxRsyrQPyjV6mwF1Mu0S1d9PwDZDSiORuTM2
-         7hZjW9aqcV9gDjkFyjUDU3OFzCOsGG4+leGNI71QoGFT6+aF9Ar66aEEuxydkUH7zK
-         WqdC0uyK5jCRiWTQRDME+ePMwUwmCwUTlH/AzBfE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Ravi Gunasekaran <r-gunasekaran@ti.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 520/530] net: ethernet: ti: davinci_mdio: fix build for mdio bitbang uses
-Date:   Mon, 24 Oct 2022 13:34:24 +0200
-Message-Id: <20221024113108.542283075@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 24 Oct 2022 16:09:43 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2A1B28;
+        Mon, 24 Oct 2022 11:29:29 -0700 (PDT)
+Received: from relay10.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::230])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id CF241CF059;
+        Mon, 24 Oct 2022 11:57:32 +0000 (UTC)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 62719240007;
+        Mon, 24 Oct 2022 11:56:50 +0000 (UTC)
+Message-ID: <ded477ea-08fa-b96d-c192-9640977b42e6@ovn.org>
+Date:   Mon, 24 Oct 2022 13:56:49 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Cc:     i.maximets@ovn.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Content-Language: en-US
+To:     nicolas.dichtel@6wind.com, Jakub Kicinski <kuba@kernel.org>
+References: <20221021114921.3705550-1-i.maximets@ovn.org>
+ <20221021090756.0ffa65ee@kernel.org>
+ <eb6903b7-c0d9-cc70-246e-8dbde0412433@6wind.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [RFE net-next] net: tun: 1000x speed up
+In-Reply-To: <eb6903b7-c0d9-cc70-246e-8dbde0412433@6wind.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On 10/24/22 11:44, Nicolas Dichtel wrote:
+> Le 21/10/2022 à 18:07, Jakub Kicinski a écrit :
+>> On Fri, 21 Oct 2022 13:49:21 +0200 Ilya Maximets wrote:
+>>> Bump the advertised speed to at least match the veth.  10Gbps also
+>>> seems like a more or less fair assumption these days, even though
+>>> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
+>>> and let the application/user decide on a right value for them.
+>>
+>> UNKOWN would seem more appropriate but at this point someone may depend
+>> on the speed being populated so it could cause regressions, I fear :S
+> If it is put in a bonding, it may cause some trouble. Maybe worth than
+> advertising 10M.
 
-commit 35bbe652c421037822aba29423f5f1f7d0d69f3f upstream.
+My thoughts were that changing the number should have a minimal impact
+while changing it to not report any number may cause some issues in
+applications that doesn't expect that for some reason (not having a
+fallback in case reported speed is unknown isn't great, and the argument
+can be made that applications should check that, but it's hard to tell
+for every application if they actually do that today).
 
-davinci_mdio.c uses mdio bitbang APIs, so it should select
-MDIO_BITBANG to prevent build errors.
-
-arm-linux-gnueabi-ld: drivers/net/ethernet/ti/davinci_mdio.o: in function `davinci_mdio_remove':
-drivers/net/ethernet/ti/davinci_mdio.c:649: undefined reference to `free_mdio_bitbang'
-arm-linux-gnueabi-ld: drivers/net/ethernet/ti/davinci_mdio.o: in function `davinci_mdio_probe':
-drivers/net/ethernet/ti/davinci_mdio.c:545: undefined reference to `alloc_mdio_bitbang'
-arm-linux-gnueabi-ld: drivers/net/ethernet/ti/davinci_mdio.o: in function `davinci_mdiobb_read':
-drivers/net/ethernet/ti/davinci_mdio.c:236: undefined reference to `mdiobb_read'
-arm-linux-gnueabi-ld: drivers/net/ethernet/ti/davinci_mdio.o: in function `davinci_mdiobb_write':
-drivers/net/ethernet/ti/davinci_mdio.c:253: undefined reference to `mdiobb_write'
-
-Fixes: d04807b80691 ("net: ethernet: ti: davinci_mdio: Add workaround for errata i2329")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-Cc: Ravi Gunasekaran <r-gunasekaran@ti.com>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Sudip Mukherjee (Codethink) <sudipm.mukherjee@gmail.com>
-Link: https://lore.kernel.org/r/20220824024216.4939-1-rdunlap@infradead.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/ethernet/ti/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
-
---- a/drivers/net/ethernet/ti/Kconfig
-+++ b/drivers/net/ethernet/ti/Kconfig
-@@ -33,6 +33,7 @@ config TI_DAVINCI_MDIO
- 	tristate "TI DaVinci MDIO Support"
- 	depends on ARCH_DAVINCI || ARCH_OMAP2PLUS || ARCH_KEYSTONE || ARCH_K3 || COMPILE_TEST
- 	select PHYLIB
-+	select MDIO_BITBANG
- 	help
- 	  This driver supports TI's DaVinci MDIO module.
- 
+Bonding is also a good point indeed, since it's even in-kernel user.
 
 
+The speed bump doesn't solve the problem per se.  It kind of postpones
+the decision, since we will run into the same issue eventually again.
+That's why I wanted to discuss that first.
+
+Though I think that at least unification across virtual devices (tun and
+veth) should be a step in a right direction.
+
+> 
+> Note that this value could be configured with ethtool:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e24f2dd516ed
+
+This is interesting, but it's a bit hard to manage, because in order
+to make a decision to bump the speed, application should already know
+that this is a tun/tap device.  So, there has to be a special case
+implemented in the code that detects the driver and changes the speed
+(this is about application that is using the interface, but didn't
+create it), but if we already know the driver, then it doesn't make
+sense to actually change the speed in many cases as application can
+already act accordingly.
+
+Also, the application may not have permissions to do that (I didn't
+check the requirements, but my guess would be at least CAP_NET_ADMIN?).
+
+For the human user it's still one extra configuration step that they
+need to remember to perform.
+
+Very useful for testing purposes though.  Thanks for pointing out!
+
+> 
+>>
+>>> Sorry for the clickbait subject line.
+>>
+>> Nicely done, worked on me :)
+> Works for me also :D
+
+Sorry again.  :):
+
+Best regards, Ilya Maximets.
