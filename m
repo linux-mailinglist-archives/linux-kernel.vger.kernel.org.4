@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0F660BAAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24E2460BB9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234657AbiJXUj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S232959AbiJXVHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234670AbiJXUi4 (ORCPT
+        with ESMTP id S232746AbiJXVGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:38:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9012CE07;
-        Mon, 24 Oct 2022 11:49:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C82D6B81217;
-        Mon, 24 Oct 2022 15:44:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32611C433B5;
-        Mon, 24 Oct 2022 15:44:17 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lyQUYKNL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666626254;
+        Mon, 24 Oct 2022 17:06:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947D92CA7E5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666638729;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=fWvLZVRYvZmjhg91idBo+8bsezBsd/7oKi65yYsjjjI=;
-        b=lyQUYKNLZmfHXqbLgJhp2zs5CgYl/THxLkwKN8y76FZMui/YKgF3Fu9tmZ9SD2R0nxC2LG
-        cJVcvEkJGelF/HxUtoAlXbtkWLJ5LCHlYmpvFjE9qMsrBoxze15kcO0xo+aaHDWHsvXIVh
-        4Xp5IcJoSad4gf1xt8ZHW55faDVCWKw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 659a5d2e (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 24 Oct 2022 15:44:14 +0000 (UTC)
-Date:   Mon, 24 Oct 2022 17:44:09 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        masahiroy@kernel.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct
- p4_event_bind::cntr signed array
-Message-ID: <Y1ayyS/7b5qnySi3@zx2c4.com>
-References: <20221020000356.177CDC433C1@smtp.kernel.org>
- <Y1EZuQcO8UoN91cX@localhost.localdomain>
- <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
- <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
- <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
+        bh=92rC7vra5jhLWtogZY2kc9h+cj7t9VuLWZS8/0qi9VI=;
+        b=YHso0iYclsdKJGcM0z18udr30n6DSj9Kx6PmViq/74d7TI4aTMd9Q1RXyYwJso3jDmWOeu
+        350QXlykfarfeNTmdLOylCXUf9R0v4oy4c4qukKRIKitxv0LAqDoJQyoTbIzKT7lXl5Z5G
+        pYoX+U/Yw7ZeDh43isL4AmOIOYpt1Sk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-106-7b7FQSphNy-BQfdUC9UndQ-1; Mon, 24 Oct 2022 11:44:19 -0400
+X-MC-Unique: 7b7FQSphNy-BQfdUC9UndQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E40BA858F17;
+        Mon, 24 Oct 2022 15:44:18 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 627801415114;
+        Mon, 24 Oct 2022 15:44:18 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 11:44:16 -0400
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Suwan Kim <suwan.kim027@gmail.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_blk: Fix signedness bug in virtblk_prep_rq()
+Message-ID: <Y1ay0NMQ7p03hgxu@fedora>
+References: <20221021204126.927603-1-rafaelmendsr@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="H+myidrQ2SNzoh0X"
 Content-Disposition: inline
-In-Reply-To: <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221021204126.927603-1-rafaelmendsr@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,33 +67,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 11:33:39AM -0600, Jason A. Donenfeld wrote:
-> Hi Linus,
-> 
-> On Thu, Oct 20, 2022 at 11:15 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> > Can we please try to collect these all in one place?
-> >
-> > I see that Andrew picked up the original one for -mm, but I think it
-> > would be better if we had one specific place for all of this (one
-> > branch) to collect it all.
-> 
-> Sure. Andrew can drop it from -mm, and I'll collect everything in:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git/log/?h=unsigned-char&r
-> 
-> And I'll ask Stephen to add that branch to -next.
 
-So, as discussed, I'm doing this, and it's in -next now. And as a
-result, we're getting warnings and such that I am fixing one by one.
-Progress, good.
+--H+myidrQ2SNzoh0X
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But it occurs to me that most of these bugs are not in
-architecture-specific code like the x86 p4_event_bind one from last
-week. That means I'll be submitting these as *fixes* during 6.1, since
-they're broken on some architecture already, rather than waiting to
-submit them to you via my unsigned-char tree in 6.2.
+On Fri, Oct 21, 2022 at 05:41:26PM -0300, Rafael Mendonca wrote:
+> The virtblk_map_data() function returns negative error codes, however, the
+> 'nents' field of vbr->sg_table is an unsigned int, which causes the error
+> handling not to work correctly.
+>=20
+> Fixes: 0e9911fa768f ("virtio-blk: support mq_ops->queue_rqs()")
+> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+> ---
+>  drivers/block/virtio_blk.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Just FYI.
+Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
 
-Jason
+--H+myidrQ2SNzoh0X
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmNWstAACgkQnKSrs4Gr
+c8jYegf9FWI4IHxGcvMocCCgVz2xC4vCDXutBT1DcO/mwG8nFliPMNR10l8zwwTO
+VgkOzVoed8mckPmnWXNyePLJB68ZeOmRvWRuExPwqZNMNHx8Nq/xtTG2NmYWR1qm
+gfMJeRmaXxEdSy4Ah7NFx4y7LMRk2SodlFzQMzb4vcQOww0p+GCTyl5gDWYeGPCV
+wbKCqdaKCnu85W9Z8cgjVPX6ACqdnIsy2X6Kik3mKUjQr389my9HODEI+7hOrWuR
+8Yode18jCQX8uR0gi1IriIso3vh7lNYyfGrCK2fpkwX1tlG1fFfDjhdftGwD5frR
+VkZXHYhphTdDZp+CcFRo7j2dO1mGLA==
+=nNPq
+-----END PGP SIGNATURE-----
+
+--H+myidrQ2SNzoh0X--
+
