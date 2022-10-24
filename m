@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46EA60A980
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B04460A97E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbiJXNVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S233963AbiJXNVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236377AbiJXNUR (ORCPT
+        with ESMTP id S236272AbiJXNTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:20:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB72384E65;
+        Mon, 24 Oct 2022 09:19:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5E484E6E;
         Mon, 24 Oct 2022 05:28:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0B40B815AC;
-        Mon, 24 Oct 2022 12:10:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D41C433C1;
-        Mon, 24 Oct 2022 12:10:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8798612E7;
+        Mon, 24 Oct 2022 12:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18C4C433C1;
+        Mon, 24 Oct 2022 12:24:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613403;
-        bh=LMiQSmINL+WpJ+Efxa9vMNxwvWoH4bT4QVIx9zBBdls=;
+        s=korg; t=1666614295;
+        bh=xnezvrP/hKkBp2MwA9j44y/EoiumJaeOfO3sR5XKtVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2WdqA9ppt+2yCOZfja4F/sCCZ/fu3lcDyj6qC4WrcoYbk0+4KXRfQaXlS3AHHdTC5
-         HSOS6vYkWES/A8WtLMH0t9K9sgitwxYj4v6x/qADmhnY9F37xYuPxempTKYS5fmWfw
-         sNNRWjYJd4lpyICEC5UHesZJijUkBXH6LZY0IOko=
+        b=XclhKWIjRKZHnMWNr9aBKqgtaRtmqiwD1ygh7gUYZj/hnjoasGg5XH9JFwWaEkhyO
+         H7v7HPP/ZTjqEO80D/EIb+/MCyaE+IYmUI29IoIy9duasbNaF04Vdhxr0vwH0tUPYQ
+         Zcs+cpv9dx5LQ02AjIONKoVI5arK2eav87cvS8Dk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 093/255] platform/x86: msi-laptop: Fix resource cleanup
+Subject: [PATCH 5.10 206/390] media: exynos4-is: fimc-is: Add of_node_put() when breaking out of loop
 Date:   Mon, 24 Oct 2022 13:30:03 +0200
-Message-Id: <20221024113005.585622506@linuxfoundation.org>
+Message-Id: <20221024113031.541577286@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,43 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 5523632aa10f906dfe2eb714ee748590dc7fc6b1 ]
+[ Upstream commit 211f8304fa21aaedc2c247f0c9d6c7f1aaa61ad7 ]
 
-Fix the input-device not getting free-ed on probe-errors and
-fix the msi_touchpad_dwork not getting cancelled on neither
-probe-errors nor on remove.
+In fimc_is_register_subdevs(), we need to call of_node_put() for
+the reference 'i2c_bus' when breaking out of the
+for_each_compatible_node() which has increased the refcount.
 
-Fixes: 143a4c0284dc ("msi-laptop: send out touchpad on/off key")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220825141336.208597-3-hdegoede@redhat.com
+Fixes: 9a761e436843 ("[media] exynos4-is: Add Exynos4x12 FIMC-IS driver")
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/msi-laptop.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/media/platform/exynos4-is/fimc-is.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/platform/x86/msi-laptop.c b/drivers/platform/x86/msi-laptop.c
-index 0960205ee49f..3e935303b143 100644
---- a/drivers/platform/x86/msi-laptop.c
-+++ b/drivers/platform/x86/msi-laptop.c
-@@ -1116,6 +1116,8 @@ static int __init msi_init(void)
- fail_create_group:
- 	if (quirks->load_scm_model) {
- 		i8042_remove_filter(msi_laptop_i8042_filter);
-+		cancel_delayed_work_sync(&msi_touchpad_dwork);
-+		input_unregister_device(msi_laptop_input_dev);
- 		cancel_delayed_work_sync(&msi_rfkill_dwork);
- 		cancel_work_sync(&msi_rfkill_work);
- 		rfkill_cleanup();
-@@ -1136,6 +1138,7 @@ static void __exit msi_cleanup(void)
- {
- 	if (quirks->load_scm_model) {
- 		i8042_remove_filter(msi_laptop_i8042_filter);
-+		cancel_delayed_work_sync(&msi_touchpad_dwork);
- 		input_unregister_device(msi_laptop_input_dev);
- 		cancel_delayed_work_sync(&msi_rfkill_dwork);
- 		cancel_work_sync(&msi_rfkill_work);
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+index dc2a144cd29b..b52d2203eac5 100644
+--- a/drivers/media/platform/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/exynos4-is/fimc-is.c
+@@ -213,6 +213,7 @@ static int fimc_is_register_subdevs(struct fimc_is *is)
+ 
+ 			if (ret < 0 || index >= FIMC_IS_SENSORS_NUM) {
+ 				of_node_put(child);
++				of_node_put(i2c_bus);
+ 				return ret;
+ 			}
+ 			index++;
 -- 
 2.35.1
 
