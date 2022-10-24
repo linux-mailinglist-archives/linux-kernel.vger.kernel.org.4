@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEB060A67D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3756A60A832
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234332AbiJXMev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S235009AbiJXNCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234208AbiJXM3j (ORCPT
+        with ESMTP id S235189AbiJXM7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:39 -0400
+        Mon, 24 Oct 2022 08:59:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE7E895F1;
-        Mon, 24 Oct 2022 05:03:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDDC8168B;
+        Mon, 24 Oct 2022 05:19:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 292156128E;
-        Mon, 24 Oct 2022 12:02:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C5ECC433C1;
-        Mon, 24 Oct 2022 12:02:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DF22612E1;
+        Mon, 24 Oct 2022 11:53:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 422BFC433C1;
+        Mon, 24 Oct 2022 11:53:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612977;
-        bh=/BleCwNH4q+MxKT7DR0P99zio7f8ZwEn9aOrqdQJuJE=;
+        s=korg; t=1666612407;
+        bh=vE5rL+QOIEbIK8xVnEOaxCra1ZgilolzKDEk5wzU78s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WTfOdAAaGCLlIr9/cNzTuzQ8Bu5P/PDG9zXMUQ9wgFBPyN44EkkQWFW2Yz5JJ7gt5
-         19gtG9ILGeQgO/VW162ETjoqrtwHXhnyvPvQSB7BAwgw+Hc2zIxdZSjP34KocCFlqI
-         LA4kll60HcF5cytvOscFqUQuS3sL2nMOyDWy5KIU=
+        b=b/lbCdeVB3B/FEWDkCwVUoUGMo++i0oegFHRSq2s4JIaPLYauxYtqRg79+wPrjQgw
+         LjiIWgFnxJPJ+pBVYjq/6zlpcvyTCt4LIUWlnmrmguy7UFRBrUPlHF1hMJm7R03JZ7
+         voxlmIdbxmkT47vefwCOS0MjqtPE9E9gsBMhKiuk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Hawkins Jiawei <yin31149@gmail.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 184/229] Bluetooth: hci_sysfs: Fix attempting to call device_add multiple times
+Subject: [PATCH 4.14 186/210] drm/vc4: vec: Fix timings for VEC modes
 Date:   Mon, 24 Oct 2022 13:31:43 +0200
-Message-Id: <20221024113005.052777577@linuxfoundation.org>
+Message-Id: <20221024113002.996469012@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
 
-[ Upstream commit 448a496f760664d3e2e79466aa1787e6abc922b5 ]
+[ Upstream commit 30d7565be96b3946c18a1ce3fd538f7946839092 ]
 
-device_add shall not be called multiple times as stated in its
-documentation:
+This commit fixes vertical timings of the VEC (composite output) modes
+to accurately represent the 525-line ("NTSC") and 625-line ("PAL") ITU-R
+standards.
 
- 'Do not call this routine or device_register() more than once for
- any device structure'
+Previous timings were actually defined as 502 and 601 lines, resulting
+in non-standard 62.69 Hz and 52 Hz signals being generated,
+respectively.
 
-Syzkaller reports a bug as follows [1]:
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:33!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-[...]
-Call Trace:
- <TASK>
- __list_add include/linux/list.h:69 [inline]
- list_add_tail include/linux/list.h:102 [inline]
- kobj_kset_join lib/kobject.c:164 [inline]
- kobject_add_internal+0x18f/0x8f0 lib/kobject.c:214
- kobject_add_varg lib/kobject.c:358 [inline]
- kobject_add+0x150/0x1c0 lib/kobject.c:410
- device_add+0x368/0x1e90 drivers/base/core.c:3452
- hci_conn_add_sysfs+0x9b/0x1b0 net/bluetooth/hci_sysfs.c:53
- hci_le_cis_estabilished_evt+0x57c/0xae0 net/bluetooth/hci_event.c:6799
- hci_le_meta_evt+0x2b8/0x510 net/bluetooth/hci_event.c:7110
- hci_event_func net/bluetooth/hci_event.c:7440 [inline]
- hci_event_packet+0x63d/0xfd0 net/bluetooth/hci_event.c:7495
- hci_rx_work+0xae7/0x1230 net/bluetooth/hci_core.c:4007
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-Link: https://syzkaller.appspot.com/bug?id=da3246e2d33afdb92d66bc166a0934c5b146404a
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Tested-by: Hawkins Jiawei <yin31149@gmail.com>
+Signed-off-by: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Acked-by: Noralf Trønnes <noralf@tronnes.org>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220728-rpi-analog-tv-properties-v2-28-459522d653a7@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_sysfs.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/vc4/vc4_vec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/bluetooth/hci_sysfs.c b/net/bluetooth/hci_sysfs.c
-index b69d88b88d2e..ccd2c377bf83 100644
---- a/net/bluetooth/hci_sysfs.c
-+++ b/net/bluetooth/hci_sysfs.c
-@@ -48,6 +48,9 @@ void hci_conn_add_sysfs(struct hci_conn *conn)
+diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
+index 3a9a302247a2..bcf7880f84a8 100644
+--- a/drivers/gpu/drm/vc4/vc4_vec.c
++++ b/drivers/gpu/drm/vc4/vc4_vec.c
+@@ -291,7 +291,7 @@ static void vc4_vec_ntsc_j_mode_set(struct vc4_vec *vec)
+ static const struct drm_display_mode ntsc_mode = {
+ 	DRM_MODE("720x480", DRM_MODE_TYPE_DRIVER, 13500,
+ 		 720, 720 + 14, 720 + 14 + 64, 720 + 14 + 64 + 60, 0,
+-		 480, 480 + 3, 480 + 3 + 3, 480 + 3 + 3 + 16, 0,
++		 480, 480 + 7, 480 + 7 + 6, 525, 0,
+ 		 DRM_MODE_FLAG_INTERLACE)
+ };
  
- 	BT_DBG("conn %p", conn);
+@@ -313,7 +313,7 @@ static void vc4_vec_pal_m_mode_set(struct vc4_vec *vec)
+ static const struct drm_display_mode pal_mode = {
+ 	DRM_MODE("720x576", DRM_MODE_TYPE_DRIVER, 13500,
+ 		 720, 720 + 20, 720 + 20 + 64, 720 + 20 + 64 + 60, 0,
+-		 576, 576 + 2, 576 + 2 + 3, 576 + 2 + 3 + 20, 0,
++		 576, 576 + 4, 576 + 4 + 6, 625, 0,
+ 		 DRM_MODE_FLAG_INTERLACE)
+ };
  
-+	if (device_is_registered(&conn->dev))
-+		return;
-+
- 	dev_set_name(&conn->dev, "%s:%d", hdev->name, conn->handle);
- 
- 	if (device_add(&conn->dev) < 0) {
 -- 
 2.35.1
 
