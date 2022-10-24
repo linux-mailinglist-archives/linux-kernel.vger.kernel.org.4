@@ -2,118 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B333B609B3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEEEA609B42
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbiJXHYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S230505AbiJXHYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiJXHYJ (ORCPT
+        with ESMTP id S231124AbiJXHYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:24:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151205C9F2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:24:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A65226103C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:24:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FC6C43148
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:24:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666596247;
-        bh=oMp4bDmweM0zCRQHLAKdcIPSEe7hySM9WY0ly2HUhW0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FOHUHrXU0bSCZUrz8P+wq7MieRM/XVj6uCuOGtnmvw5euG2A9m8AA9JP4rrWpj/AS
-         12fxLTdDMivX8I+OBOd2z8uTADBdgC/mmeQ1r5JRVKN7MCpKkWi9PFiN7rhLBRwZ3a
-         hi06VhZqexpO1GhBGV/97oVBQPHxqmF/QdvfIUYuS0ybjO893vSdD6e5tBoel2aXF3
-         NnTpaJsIzMoTVY4oQZRRgC0AVl5CI9FYc+5a8kCcDkxbLuLJwvkyRdJZMvguZRrJWW
-         gKLZUiJOuDb4OGcEiZC9wt0iuhHWW3KxUyRPcXqea94NoVgH+kbMImrmvT3G0pG1mD
-         n79UOcBDz4W0w==
-Received: by mail-ed1-f54.google.com with SMTP id a67so27796801edf.12
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:24:07 -0700 (PDT)
-X-Gm-Message-State: ACrzQf20FjBGu59tB/1iy8YlWNejXuv1ZaLO+VweeOI2d0LzJiIAhvuO
-        KI/kkLvBRY6lxQjXCSDFNz/I0kTzHjt4vNfbTfo=
-X-Google-Smtp-Source: AMsMyM4Z6rymPGvgTHgOsQf1d/yZ32NZ2glSwlHMcPQ3AwukVQi7Uhv315OjZE4oP6NxbcX3CqeJbJvUb9p4ikVehG0=
-X-Received: by 2002:a05:6402:42c6:b0:45c:fc58:bd0f with SMTP id
- i6-20020a05640242c600b0045cfc58bd0fmr29969691edc.19.1666596245318; Mon, 24
- Oct 2022 00:24:05 -0700 (PDT)
+        Mon, 24 Oct 2022 03:24:37 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DD4BE1F;
+        Mon, 24 Oct 2022 00:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666596270; x=1698132270;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=x2hdzbJFZkGSOjRme22bRLCPN3Dwe5K//vVXwOM7pNE=;
+  b=b02sZEcbkA/LjNmkxPIXgQgc4/sO52p3MyjY0XWEDb18BM4PTWatOj4D
+   U4H30qJUKkdaeMwtmQ0MF/TuQU+FlUy7vG37ZBX9/nL7UstU5u8QnQxhP
+   Ylz0bvXTbqkdL2xTCoy6FG9fx9yc1i4FpoGDSxL1iGPoZ7TeYHt/epIoo
+   AMPQusi44bXuoM7U1+fauTv31EjPT+RlRsS5FXxiAsR8C/tn+lkcxnAXZ
+   2NsMyssiB7fmkaFzxlUasWCCIK+J5Dc+R9fmyUD9Km0jsdABccbUqE2Et
+   QjORoEAHLq980EgIjpeV+9Qk4lGUOZAwIWdfFSKkf2W0lRkRM6ZkfZWWi
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="183588946"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Oct 2022 00:24:27 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 24 Oct 2022 00:24:26 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Mon, 24 Oct 2022 00:24:22 -0700
+Date:   Mon, 24 Oct 2022 12:54:21 +0530
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lxu@maxlinear.com>,
+        <hkallweit1@gmail.com>, <pabeni@redhat.com>, <edumazet@google.com>,
+        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
+        <Ian.Saturley@microchip.com>
+Subject: Re: [PATCH net-next] net: phy: mxl-gpy: Add PHY Auto/MDI/MDI-X set
+ driver for GPY211 chips
+Message-ID: <20221024072421.GB653394@raju-project-pc>
+References: <20221021100305.6576-1-Raju.Lakkaraju@microchip.com>
+ <Y1KmL7vTunvbw1/U@lunn.ch>
 MIME-Version: 1.0
-References: <20221022214622.18042-1-ogabbay@kernel.org> <20221022214622.18042-4-ogabbay@kernel.org>
- <Y1U2iBedfSzqTjer@kroah.com>
-In-Reply-To: <Y1U2iBedfSzqTjer@kroah.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon, 24 Oct 2022 10:23:38 +0300
-X-Gmail-Original-Message-ID: <CAFCwf126L5GZ52R7nayg8c-Avxpbv-rxAq+_q1OLw41jA5ow7A@mail.gmail.com>
-Message-ID: <CAFCwf126L5GZ52R7nayg8c-Avxpbv-rxAq+_q1OLw41jA5ow7A@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/3] drm: add dedicated minor for accelerator devices
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <Y1KmL7vTunvbw1/U@lunn.ch>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 3:41 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Sun, Oct 23, 2022 at 12:46:22AM +0300, Oded Gabbay wrote:
-> > +/**
-> > + * accel_open - open method for ACCEL file
-> > + * @inode: device inode
-> > + * @filp: file pointer.
-> > + *
-> > + * This function must be used by drivers as their &file_operations.open method.
-> > + * It looks up the correct ACCEL device and instantiates all the per-file
-> > + * resources for it. It also calls the &drm_driver.open driver callback.
-> > + *
-> > + * RETURNS:
-> > + *
-> > + * 0 on success or negative errno value on failure.
-> > + */
-> > +int accel_open(struct inode *inode, struct file *filp)
+Hi Andrew,
+
+Thank you for review comments.
+
+The 10/21/2022 16:01, Andrew Lunn wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> > +static void gpy_update_mdix(struct phy_device *phydev)
 > > +{
-> > +     struct drm_minor *minor;
+> > +     int ret;
 > > +
-> > +     minor = drm_minor_acquire(iminor(inode), true);
-> > +     if (IS_ERR(minor))
-> > +             return PTR_ERR(minor);
+> > +     ret = phy_read(phydev, PHY_CTL1);
+> > +     if (ret < 0) {
+> > +             phydev_err(phydev, "Error: MDIO register access failed: %d\n",
+> > +                        ret);
+> > +             return;
+> > +     }
+> 
+> > @@ -413,6 +490,8 @@ static void gpy_update_interface(struct phy_device *phydev)
+> >
+> >       if (phydev->speed == SPEED_2500 || phydev->speed == SPEED_1000)
+> >               genphy_read_master_slave(phydev);
 > > +
-> > +     return __drm_open(inode, filp, minor);
-> > +}
-> > +EXPORT_SYMBOL(accel_open);
->
-> EXPORT_SYMBOL_GPL() please.
->
-> And again, this should probably to into drivers/accel/ not here.
-Got it, will do.
+> > +     gpy_update_mdix(phydev);
+> 
+> Do you know why gpy_update_interface() is a void function? It is
+> called from gpy_read_status() which does return error codes. And it
+> seems like gpy_read_status() would benefit from returning -EINVAL, etc.
+
+Do you want me to change gpy_update_interface() return type ?
+Can I do those changes as part of this commit or need to fix on "net"
+branch ?
+
+> 
+>       Andrew
+
+-- 
+--------
 Thanks,
-Oded
->
-> thanks,
->
-> greg k-h
+Raju
