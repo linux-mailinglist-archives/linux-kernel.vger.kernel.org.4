@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCBC60A6B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD6A60A481
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiJXMhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S232904AbiJXMLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233883AbiJXMbc (ORCPT
+        with ESMTP id S232502AbiJXMKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:31:32 -0400
+        Mon, 24 Oct 2022 08:10:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE22B1EC5C;
-        Mon, 24 Oct 2022 05:04:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79D27FE75;
+        Mon, 24 Oct 2022 04:53:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9FB66B811C4;
-        Mon, 24 Oct 2022 12:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0016AC433C1;
-        Mon, 24 Oct 2022 12:01:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B066B81134;
+        Mon, 24 Oct 2022 11:52:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE69CC433D7;
+        Mon, 24 Oct 2022 11:52:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612917;
-        bh=7Mf8pAymLKtC4kysmJdpY7SrgzbFoAL52CT2NFcnYPE=;
+        s=korg; t=1666612321;
+        bh=sRESwLM37kyav1ZqzHsIQQZE1DF/iVdBz1Bgkyw1Cks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WH8d2+TDwLJ5/N564TTn04sLP256U5QxUJCNysYeKiNwFO4VEGLOV7pm5POXvMN6T
-         xcmBgnsS79hij97pem0Xh+J6pJj9liBWWLKOkoNCcYwihaxgP8sph2WqckVAE+RhxB
-         ojeBgEnPl2WXP+VSOGHmLSvsNHXgWo9QUebPwIEk=
+        b=oWAQ50bNlRCfMJ4Amc9d0nytI0dYYrIyAWfQYrBytPdf1MZth4773Wo8lg5Ucn+qa
+         FtoBRYyzUxvXp/GVdbWqoFWgMrPh9E5lOaXgFmAQ4btBg9DHa+aSOyGMRPBTZcdW4u
+         Oqcksvs1O32qx8yFKohxr57GL4zp9Kl50r6F2IwM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 151/229] mfd: lp8788: Fix an error handling path in lp8788_probe()
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>,
+        Miaoqian Lin <linmq006@gmail.com>
+Subject: [PATCH 4.14 153/210] powerpc/sysdev/fsl_msi: Add missing of_node_put()
 Date:   Mon, 24 Oct 2022 13:31:10 +0200
-Message-Id: <20221024113003.892784504@linuxfoundation.org>
+Message-Id: <20221024113001.943630984@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit becfdcd75126b20b8ec10066c5e85b34f8994ad5 ]
+[ Upstream commit def435c04ee984a5f9ed2711b2bfe946936c6a21 ]
 
-Should an error occurs in mfd_add_devices(), some resources need to be
-released, as already done in the .remove() function.
+In fsl_setup_msi_irqs(), use of_node_put() to drop the reference
+returned by of_parse_phandle().
 
-Add an error handling path and a lp8788_irq_exit() call to undo a previous
-lp8788_irq_init().
-
-Fixes: eea6b7cc53aa ("mfd: Add lp8788 mfd driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/18398722da9df9490722d853e4797350189ae79b.1659261275.git.christophe.jaillet@wanadoo.fr
+Fixes: 895d603f945ba ("powerpc/fsl_msi: add support for the fsl, msi property in PCI nodes")
+Co-authored-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220704145233.278539-1-windhl@126.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/lp8788.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ arch/powerpc/sysdev/fsl_msi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/mfd/lp8788.c b/drivers/mfd/lp8788.c
-index acf616559512..e47150cdf747 100644
---- a/drivers/mfd/lp8788.c
-+++ b/drivers/mfd/lp8788.c
-@@ -199,8 +199,16 @@ static int lp8788_probe(struct i2c_client *cl, const struct i2c_device_id *id)
- 	if (ret)
- 		return ret;
+diff --git a/arch/powerpc/sysdev/fsl_msi.c b/arch/powerpc/sysdev/fsl_msi.c
+index 44cbf4c12ea1..d43d3d1b27ed 100644
+--- a/arch/powerpc/sysdev/fsl_msi.c
++++ b/arch/powerpc/sysdev/fsl_msi.c
+@@ -216,8 +216,10 @@ static int fsl_setup_msi_irqs(struct pci_dev *pdev, int nvec, int type)
+ 			dev_err(&pdev->dev,
+ 				"node %pOF has an invalid fsl,msi phandle %u\n",
+ 				hose->dn, np->phandle);
++			of_node_put(np);
+ 			return -EINVAL;
+ 		}
++		of_node_put(np);
+ 	}
  
--	return mfd_add_devices(lp->dev, -1, lp8788_devs,
--			       ARRAY_SIZE(lp8788_devs), NULL, 0, NULL);
-+	ret = mfd_add_devices(lp->dev, -1, lp8788_devs,
-+			      ARRAY_SIZE(lp8788_devs), NULL, 0, NULL);
-+	if (ret)
-+		goto err_exit_irq;
-+
-+	return 0;
-+
-+err_exit_irq:
-+	lp8788_irq_exit(lp);
-+	return ret;
- }
- 
- static int lp8788_remove(struct i2c_client *cl)
+ 	for_each_pci_msi_entry(entry, pdev) {
 -- 
 2.35.1
 
