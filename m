@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C8960A8F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC3860A673
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235780AbiJXNND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45902 "EHLO
+        id S234246AbiJXMeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235995AbiJXNKW (ORCPT
+        with ESMTP id S234194AbiJXM3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:10:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB39237ED;
-        Mon, 24 Oct 2022 05:24:11 -0700 (PDT)
+        Mon, 24 Oct 2022 08:29:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E81876A6;
+        Mon, 24 Oct 2022 05:03:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27EB66126B;
-        Mon, 24 Oct 2022 12:22:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3490CC433C1;
-        Mon, 24 Oct 2022 12:22:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A22F16126B;
+        Mon, 24 Oct 2022 11:56:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B67AFC433C1;
+        Mon, 24 Oct 2022 11:56:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614171;
-        bh=MP1yxVGBMzqN7/KGr058ycVVbIuCkd0O/DCmCEKeALM=;
+        s=korg; t=1666612577;
+        bh=yQyto2Ce9b73hWIW5ToDONrZ7wExoMDHWAq3LWLzMCw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LQLd8fVlNVxtEpwQBGP8dDJu4lurxDhvvehZdTol0AvnTAFasb7m6PnadaZmEQZ0Q
-         YxvqrZGp6TpxQpkqkMAm1i4ZB+5Iy3Dpyop097rwlYRDJfT+DWUMr/4f0SRTbLuYsR
-         VMusNC1NIWXUMjOzvWZcvhcQbldIINWsc+yw3tOo=
+        b=kvyo8utknicJeSyczKAhvruuSe+qyfhaaWnjyFOq9dpPeG5lY5xRbFKEIfcic9X24
+         UEa8u+4aw4GtRETNxSn6Ytp8x8n30Plj3XXq8VEuKRaajx9fsTTD3LWBIte8+4v4Ra
+         RIwbg8ZpbXe2mDbkaNd+zTZXYi3oHLWDN0gERDZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Kelin Wang <wangkelin2023@163.com>
-Subject: [PATCH 5.10 160/390] ASoC: eureka-tlv320: Hold reference returned from of_find_xxx API
-Date:   Mon, 24 Oct 2022 13:29:17 +0200
-Message-Id: <20221024113029.513716431@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
+        stable <stable@kernel.org>
+Subject: [PATCH 4.19 039/229] usb: add quirks for Lenovo OneLink+ Dock
+Date:   Mon, 24 Oct 2022 13:29:18 +0200
+Message-Id: <20221024113000.364453553@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,69 +54,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
 
-[ Upstream commit bfb735a3ceff0bab6473bac275da96f9b2a06dec ]
+commit 37d49519b41405b08748392c6a7f193d9f77ecd2 upstream.
 
-In eukrea_tlv320_probe(), we need to hold the reference returned
-from of_find_compatible_node() which has increased the refcount
-and then call of_node_put() with it when done.
+The Lenovo OneLink+ Dock contains two VL812 USB3.0 controllers:
+17ef:1018 upstream
+17ef:1019 downstream
 
-Fixes: 66f232908de2 ("ASoC: eukrea-tlv320: Add DT support.")
-Co-authored-by: Kelin Wang <wangkelin2023@163.com>
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220914134354.3995587-1-windhl@126.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+These hubs suffer from two separate problems:
+
+1) After the host system was suspended and woken up, the hubs appear to
+   be in a random state. Some downstream ports (both internal to the
+   built-in audio and network controllers, and external to USB sockets)
+   may no longer be functional. The exact list of disabled ports (if
+   any) changes from wakeup to wakeup. Ports remain in that state until
+   the dock is power-cycled, or until the laptop is rebooted.
+
+   Wakeup sources connected to the hubs (keyboard, WoL on the integrated
+   gigabit controller) will wake the system up from suspend, but they
+   may no longer work after wakeup (and in that case will no longer work
+   as wakeup source in a subsequent suspend-wakeup cycle).
+
+   This issue appears in the logs with messages such as:
+
+     usb 1-6.1-port4: cannot disable (err = -71)
+     usb 1-6-port2: cannot disable (err = -71)
+     usb 1-6.1: clear tt 1 (80c0) error -71
+     usb 1-6-port4: cannot disable (err = -71)
+     usb 1-6.4: PM: dpm_run_callback(): usb_dev_resume+0x0/0x10 [usbcore] returns -71
+     usb 1-6.4: PM: failed to resume async: error -71
+     usb 1-7: reset full-speed USB device number 5 using xhci_hcd
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: Cannot enable. Maybe the USB cable is bad?
+     usb 1-6.1-port1: cannot disable (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: cannot reset (err = -71)
+     usb 1-6.1-port1: Cannot enable. Maybe the USB cable is bad?
+     usb 1-6.1-port1: cannot disable (err = -71)
+
+2) Some USB devices cannot be enumerated properly. So far I have only
+   seen the issue with USB 3.0 devices. The same devices work without
+   problem directly connected to the host system, to other systems or to
+   other hubs (even when those hubs are connected to the OneLink+ dock).
+
+   One very reliable reproducer is this USB 3.0 HDD enclosure:
+   152d:9561 JMicron Technology Corp. / JMicron USA Technology Corp. Mobius
+
+   I have seen it happen sporadically with other USB 3.0 enclosures,
+   with controllers from different manufacturers, all self-powered.
+
+   Typical messages in the logs:
+
+     xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+     xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+     usb 2-1.4: device not accepting address 6, error -62
+     xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+     xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+     usb 2-1.4: device not accepting address 7, error -62
+     usb 2-1-port4: attempt power cycle
+     xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+     xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+     usb 2-1.4: device not accepting address 8, error -62
+     xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+     xhci_hcd 0000:00:14.0: Timeout while waiting for setup device command
+     usb 2-1.4: device not accepting address 9, error -62
+     usb 2-1-port4: unable to enumerate USB device
+
+Through trial and error, I found that the USB_QUIRK_RESET_RESUME solved
+the second issue. Further testing then uncovered the first issue. Test
+results are summarized in this table:
+
+=======================================================================================
+Settings                        USB2 hotplug    USB3 hotplug    State after waking up
+---------------------------------------------------------------------------------------
+
+power/control=auto              works           fails           broken
+
+usbcore.autosuspend=-1          works           works           broken
+OR power/control=on
+
+power/control=auto              works (1)       works (1)       works
+and USB_QUIRK_RESET_RESUME
+
+power/control=on                works           works           works
+and USB_QUIRK_RESET_RESUME
+
+HUB_QUIRK_DISABLE_AUTOSUSPEND   works           works           works
+and USB_QUIRK_RESET_RESUME
+
+=======================================================================================
+
+In those results, the power/control settings are applied to both hubs,
+both on the USB2 and USB3 side, before each test.
+
+>From those results, USB_QUIRK_RESET_RESUME is required to reset the hubs
+properly after a suspend-wakeup cycle, and the hubs must not autosuspend
+to work around the USB3 issue.
+
+A secondary effect of USB_QUIRK_RESET_RESUME is to prevent the hubs'
+upstream links from suspending (the downstream ports can still suspend).
+This secondary effect is used in results (1). It is enough to solve the
+USB3 problem.
+
+Setting USB_QUIRK_RESET_RESUME on those hubs is the smallest patch that
+solves both issues.
+
+Prior to creating this patch, I have used the USB_QUIRK_RESET_RESUME via
+the kernel command line for over a year without noticing any side
+effect.
+
+Thanks to Oliver Neukum @Suse for explanations of the operations of
+USB_QUIRK_RESET_RESUME, and requesting more testing.
+
+Signed-off-by: Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+Cc: stable <stable@kernel.org>
+Link: https://lore.kernel.org/r/20220927073407.5672-1-jflf_kernel@gmx.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/fsl/eukrea-tlv320.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/usb/core/quirks.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/sound/soc/fsl/eukrea-tlv320.c b/sound/soc/fsl/eukrea-tlv320.c
-index e13271ea84de..29cf9234984d 100644
---- a/sound/soc/fsl/eukrea-tlv320.c
-+++ b/sound/soc/fsl/eukrea-tlv320.c
-@@ -86,7 +86,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
- 	int ret;
- 	int int_port = 0, ext_port;
- 	struct device_node *np = pdev->dev.of_node;
--	struct device_node *ssi_np = NULL, *codec_np = NULL;
-+	struct device_node *ssi_np = NULL, *codec_np = NULL, *tmp_np = NULL;
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -438,6 +438,10 @@ static const struct usb_device_id usb_qu
+ 	{ USB_DEVICE(0x1532, 0x0116), .driver_info =
+ 			USB_QUIRK_LINEAR_UFRAME_INTR_BINTERVAL },
  
- 	eukrea_tlv320.dev = &pdev->dev;
- 	if (np) {
-@@ -143,7 +143,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
- 	}
++	/* Lenovo ThinkPad OneLink+ Dock twin hub controllers (VIA Labs VL812) */
++	{ USB_DEVICE(0x17ef, 0x1018), .driver_info = USB_QUIRK_RESET_RESUME },
++	{ USB_DEVICE(0x17ef, 0x1019), .driver_info = USB_QUIRK_RESET_RESUME },
++
+ 	/* Lenovo USB-C to Ethernet Adapter RTL8153-04 */
+ 	{ USB_DEVICE(0x17ef, 0x720c), .driver_info = USB_QUIRK_NO_LPM },
  
- 	if (machine_is_eukrea_cpuimx27() ||
--	    of_find_compatible_node(NULL, NULL, "fsl,imx21-audmux")) {
-+	    (tmp_np = of_find_compatible_node(NULL, NULL, "fsl,imx21-audmux"))) {
- 		imx_audmux_v1_configure_port(MX27_AUDMUX_HPCR1_SSI0,
- 			IMX_AUDMUX_V1_PCR_SYN |
- 			IMX_AUDMUX_V1_PCR_TFSDIR |
-@@ -158,10 +158,11 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
- 			IMX_AUDMUX_V1_PCR_SYN |
- 			IMX_AUDMUX_V1_PCR_RXDSEL(MX27_AUDMUX_HPCR1_SSI0)
- 		);
-+		of_node_put(tmp_np);
- 	} else if (machine_is_eukrea_cpuimx25sd() ||
- 		   machine_is_eukrea_cpuimx35sd() ||
- 		   machine_is_eukrea_cpuimx51sd() ||
--		   of_find_compatible_node(NULL, NULL, "fsl,imx31-audmux")) {
-+		   (tmp_np = of_find_compatible_node(NULL, NULL, "fsl,imx31-audmux"))) {
- 		if (!np)
- 			ext_port = machine_is_eukrea_cpuimx25sd() ?
- 				4 : 3;
-@@ -178,6 +179,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
- 			IMX_AUDMUX_V2_PTCR_SYN,
- 			IMX_AUDMUX_V2_PDCR_RXDSEL(int_port)
- 		);
-+		of_node_put(tmp_np);
- 	} else {
- 		if (np) {
- 			/* The eukrea,asoc-tlv320 driver was explicitly
--- 
-2.35.1
-
 
 
