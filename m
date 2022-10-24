@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F5F60B187
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAD660B26E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbiJXQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        id S233254AbiJXQqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233980AbiJXQ0a (ORCPT
+        with ESMTP id S234916AbiJXQpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:26:30 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726041146A;
-        Mon, 24 Oct 2022 08:13:05 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id q9-20020a17090a178900b00212fe7c6bbeso3318031pja.4;
-        Mon, 24 Oct 2022 08:13:04 -0700 (PDT)
+        Mon, 24 Oct 2022 12:45:35 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715EC1960A1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:31:05 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id 13so5899064ejn.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KcmwET9ycGmnRj9dlzSF/IaZ72SsXSbPQdLAIqBeDMc=;
+        b=TkypTwkRyC+IEQfLJkO+AxzeecYSVuVzd/ZFrRP1xRW9uJVu0btsXMNfEeMzHNkxfh
+         C3FwJivHL9WupWbeclBsjHhoNC8xUJosd8kt4bC+V7VKkcCUfyVrhCX79auUCag9VbK6
+         Xz75zLELtpW5109YZu6x4ahA6HUB9OFrV4jUPJvVHR4Hscyf0AjekuDrimBKPhcfIoqT
+         OmNJcBX9i+Qjy7r0IZDwpqvLc3AvSUOeeEKByNbaqNgbQxnrphRAsux+uMBaj9YwTBfd
+         yumx3/s1w6l6kA8uZ/hZI9kyZGAkYN9nz78niScaMKdRZGYMPjuua1vyQP9fkKQvyski
+         WjKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sgFso1FaRAWQJ83kT84q4SS+gpbh+wtZ0NmrEVRj1YY=;
-        b=JEeYA3H21scMHN91lpqzdCc2WEyA7QBLvMBPU54OSb8+D3/TrbzghnO+nf3DP4kSwk
-         top+O1KROKOqjOgfiiabZ1HMZdQw9hxvyc46rHdNfkMaydPQBDvyfLI2f2ox4HAR9Vo4
-         3qvkWGSmMq6hF0NM7t3PLsoMA57/V/KcbT5by7r5WTJWfkGkzvzRz60GFU/E1BXMKNeu
-         9yXLERg0b1k6LB91F7HBLY8ig8A8ZFWA9GWUjYBtxTwiZ4q+ge9WeL1qECOdjdjJkzhc
-         EmOtDtw9yGYLJNjNA9mzYvl2cylOGR0Gk8d0w70TURCTw5HcWdJ7JSXR5mehLP+X7UoS
-         seIw==
-X-Gm-Message-State: ACrzQf0HIPIVFQX0IeigGwiHD4BKdrSLNJTYThouyDgrmCt3eE+2IgtC
-        kBZcl0wWE0oYmratV3fq1s/6gbAzeWrb7A==
-X-Google-Smtp-Source: AMsMyM7kV5I1xzy3WptmBGmtY5SIvtzh+zDKIMpSuQGpTci8zxKxtKKmQFNzFDiSCDHAyut8AiTibg==
-X-Received: by 2002:a0c:8d4b:0:b0:4bb:798f:5251 with SMTP id s11-20020a0c8d4b000000b004bb798f5251mr1900924qvb.51.1666613360740;
-        Mon, 24 Oct 2022 05:09:20 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id z15-20020a05622a124f00b0039a08c0a594sm12631508qtx.82.2022.10.24.05.09.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 05:09:20 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 63so10776097ybq.4;
-        Mon, 24 Oct 2022 05:09:19 -0700 (PDT)
-X-Received: by 2002:a25:687:0:b0:6c2:2b0c:26e with SMTP id 129-20020a250687000000b006c22b0c026emr28296908ybg.202.1666613359730;
- Mon, 24 Oct 2022 05:09:19 -0700 (PDT)
+        bh=KcmwET9ycGmnRj9dlzSF/IaZ72SsXSbPQdLAIqBeDMc=;
+        b=RkoJ8Z4wYKOa5jks205YSLNbLVqry3pbLvqH7k8izRpJAGnDod7znl+HBuT8tbsFbO
+         md9Ijel3XuaYqu7UScPAcuaY8AaopQZvSsBcnlqriay2BY46kE8PagAtMY1Dw3N/wN7n
+         Jwr4cUM0gg1I50ClTL3FHKoUSQCi1IX4noO7qte0DSEWN9/ssfUu5uiaXs8H/2XDdl2U
+         Yb+OvgaZbSY3cZJI+q8S2HFiyJOj3eYhn5JNeJjNeeUr2SlxnIBoxRRvAA8l7OoTLe6Y
+         KL+fXOiNUSiyVfAphL7BvE0lhS5/YFKxhJKp+XM/BDKD5vPYdZoCssVl7MaT4kNfNuBB
+         nmGw==
+X-Gm-Message-State: ACrzQf2vT4bzmh6NNe9VTwsFowVTqQg8/IPrfrRtWpe+Mn4Jl85IVHhv
+        7vwFx0B20cSy8mg8fw274ufrN0X54weDcQ==
+X-Google-Smtp-Source: AMsMyM45EyK5jQDu4AOnll/E1IFdddpVGBZ0J1eUwpG9UPsnJI5LceNM6pArAYOPOedaJZetWg2orA==
+X-Received: by 2002:a19:8c5e:0:b0:4a2:2d7b:eef with SMTP id i30-20020a198c5e000000b004a22d7b0eefmr11249584lfj.206.1666613769564;
+        Mon, 24 Oct 2022 05:16:09 -0700 (PDT)
+Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id i22-20020a0565123e1600b004acb2adfa21sm165285lfv.297.2022.10.24.05.16.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 05:16:08 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Russell King <linux@arm.linux.org.uk>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH] amba: Drop redundant assignments of the system PM callbacks
+Date:   Mon, 24 Oct 2022 14:16:01 +0200
+Message-Id: <20221024121601.156514-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221023182437.15263-1-afd@ti.com> <20221023182437.15263-4-afd@ti.com>
-In-Reply-To: <20221023182437.15263-4-afd@ti.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 24 Oct 2022 14:09:08 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW+31HbDvKORyiNFXOGh5dyYYTM2fcpEJEnuMD8ANA5Cw@mail.gmail.com>
-Message-ID: <CAMuHMdW+31HbDvKORyiNFXOGh5dyYYTM2fcpEJEnuMD8ANA5Cw@mail.gmail.com>
-Subject: Re: [PATCH 3/6] of: overlay: rename overlay source files from .dts to .dtso
-To:     Andrew Davis <afd@ti.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 8:25 PM Andrew Davis <afd@ti.com> wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
->
-> In drivers/of/unittest-data/:
->    - Rename .dts overlay source files to use .dtso suffix.
->
-> Modify driver/of/unitest.c to use .dtbo.o based symbols instead of .dtb.o
->
-> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
-> Signed-off-by: Andrew Davis <afd@ti.com>
+If the system PM callbacks haven't been assigned, the PM core falls back to
+invoke the corresponding the pm_generic_* helpers for the device. Let's
+rely on this behaviour and drop the redundant assignments.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/amba/bus.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Gr{oetje,eeting}s,
+diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+index 110a535648d2..ff7454a38058 100644
+--- a/drivers/amba/bus.c
++++ b/drivers/amba/bus.c
+@@ -421,12 +421,6 @@ static int amba_pm_runtime_resume(struct device *dev)
+ #endif /* CONFIG_PM */
+ 
+ static const struct dev_pm_ops amba_pm = {
+-	.suspend	= pm_generic_suspend,
+-	.resume		= pm_generic_resume,
+-	.freeze		= pm_generic_freeze,
+-	.thaw		= pm_generic_thaw,
+-	.poweroff	= pm_generic_poweroff,
+-	.restore	= pm_generic_restore,
+ 	SET_RUNTIME_PM_OPS(
+ 		amba_pm_runtime_suspend,
+ 		amba_pm_runtime_resume,
+-- 
+2.34.1
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
