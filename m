@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB3C60AB2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E306A60A822
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236446AbiJXNoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S235145AbiJXNBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236220AbiJXNja (ORCPT
+        with ESMTP id S235079AbiJXM7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:39:30 -0400
+        Mon, 24 Oct 2022 08:59:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428D9B03C0;
-        Mon, 24 Oct 2022 05:36:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768D89AC0F;
+        Mon, 24 Oct 2022 05:18:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F137561338;
-        Mon, 24 Oct 2022 12:36:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D853C433C1;
-        Mon, 24 Oct 2022 12:36:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8082361325;
+        Mon, 24 Oct 2022 12:16:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E78C433D6;
+        Mon, 24 Oct 2022 12:16:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614981;
-        bh=um3TlDirkaO8Yd9NWj9UcXiZF1CG49YqDeFKM79ZEno=;
+        s=korg; t=1666613815;
+        bh=sAAZ5pRd2DSlqiAtcZGxWiOGWMZMMsEwtSJnTlmIEPk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ExqiGb+A3CQtkg9Fd6q4FumAN2hNj0bWXmo2iwmXSDkAv6TIVUSDLBo0trEjPyzbY
-         NVx7x9NyP7OeklpdU1TyCA4F8csp/y6tK64kTlpxDva0bFPQFDfFKPHQs1CpcF8eSn
-         qEyxgpoXheQeedxZ/V7jXOVSX2Dc7gDdR1I5xr9I=
+        b=itJ6N4RPEFtzvGHX0oGVDQFD2qpLILHsh4hX850zhGyTf9QIwkPAefG8MiW6i3p4o
+         VrJ7emUseJu7PE4uPbn7ihF1J87uZ18F8ugOse1oriBGMF4LN2X6c3rGmROi/VCKn3
+         U2+/F8TN2YIxrHxScrx6ybVJ9edn/s3jU9lGuGIU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hyunchul Lee <hyc.lee@gmail.com>,
-        Steve French <smfrench@gmail.com>,
-        =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 077/530] ksmbd: Fix user namespace mapping
-Date:   Mon, 24 Oct 2022 13:27:01 +0200
-Message-Id: <20221024113048.494978107@linuxfoundation.org>
+        stable@vger.kernel.org, Andri Yngvason <andri@yngvason.is>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 5.10 025/390] HID: multitouch: Add memory barriers
+Date:   Mon, 24 Oct 2022 13:27:02 +0200
+Message-Id: <20221024113023.636657531@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,55 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mickaël Salaün <mic@digikod.net>
+From: Andri Yngvason <andri@yngvason.is>
 
-commit 7c88c1e0ab1704bacb751341ee6431c3be34b834 upstream.
+commit be6e2b5734a425941fcdcdbd2a9337be498ce2cf upstream.
 
-A kernel daemon should not rely on the current thread, which is unknown
-and might be malicious.  Before this security fix,
-ksmbd_override_fsids() didn't correctly override FS UID/GID which means
-that arbitrary user space threads could trick the kernel to impersonate
-arbitrary users or groups for file system access checks, leading to
-file system access bypass.
+This fixes broken atomic checks which cause a race between the
+release-timer and processing of hid input.
 
-This was found while investigating truncate support for Landlock:
-https://lore.kernel.org/r/CAKYAXd8fpMJ7guizOjHgxEyyjoUwPsx3jLOPZP=wPYcbhkVXqA@mail.gmail.com
+I noticed that contacts were sometimes sticking, even with the "sticky
+fingers" quirk enabled. This fixes that problem.
 
-Fixes: e2f34481b24d ("cifsd: add server-side procedures for SMB3")
-Cc: Hyunchul Lee <hyc.lee@gmail.com>
-Cc: Steve French <smfrench@gmail.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20220929100447.108468-1-mic@digikod.net
-Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Fixes: 9609827458c3 ("HID: multitouch: optimize the sticky fingers timer")
+Signed-off-by: Andri Yngvason <andri@yngvason.is>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20220907150159.2285460-1-andri@yngvason.is
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/smb_common.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/hid/hid-multitouch.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/fs/ksmbd/smb_common.c
-+++ b/fs/ksmbd/smb_common.c
-@@ -4,6 +4,8 @@
-  *   Copyright (C) 2018 Namjae Jeon <linkinjeon@kernel.org>
-  */
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -1155,7 +1155,7 @@ static void mt_touch_report(struct hid_d
+ 	int contact_count = -1;
  
-+#include <linux/user_namespace.h>
-+
- #include "smb_common.h"
- #include "server.h"
- #include "misc.h"
-@@ -624,8 +626,8 @@ int ksmbd_override_fsids(struct ksmbd_wo
- 	if (!cred)
- 		return -ENOMEM;
+ 	/* sticky fingers release in progress, abort */
+-	if (test_and_set_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
++	if (test_and_set_bit_lock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
+ 		return;
  
--	cred->fsuid = make_kuid(current_user_ns(), uid);
--	cred->fsgid = make_kgid(current_user_ns(), gid);
-+	cred->fsuid = make_kuid(&init_user_ns, uid);
-+	cred->fsgid = make_kgid(&init_user_ns, gid);
+ 	scantime = *app->scantime;
+@@ -1236,7 +1236,7 @@ static void mt_touch_report(struct hid_d
+ 			del_timer(&td->release_timer);
+ 	}
  
- 	gi = groups_alloc(0);
- 	if (!gi) {
+-	clear_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
++	clear_bit_unlock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
+ }
+ 
+ static int mt_touch_input_configured(struct hid_device *hdev,
+@@ -1671,11 +1671,11 @@ static void mt_expired_timeout(struct ti
+ 	 * An input report came in just before we release the sticky fingers,
+ 	 * it will take care of the sticky fingers.
+ 	 */
+-	if (test_and_set_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
++	if (test_and_set_bit_lock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
+ 		return;
+ 	if (test_bit(MT_IO_FLAGS_PENDING_SLOTS, &td->mt_io_flags))
+ 		mt_release_contacts(hdev);
+-	clear_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
++	clear_bit_unlock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
+ }
+ 
+ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
 
 
