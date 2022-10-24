@@ -2,210 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9226660BF0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 446DE60BD15
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiJXXx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
+        id S231791AbiJXWGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiJXXxT (ORCPT
+        with ESMTP id S231895AbiJXWGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:53:19 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B8F1911C5;
-        Mon, 24 Oct 2022 15:10:59 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 7f9f6f99fe18a591; Mon, 24 Oct 2022 21:23:34 +0200
-Received: from kreacher.localnet (unknown [213.134.163.181])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id D31266692BC;
-        Mon, 24 Oct 2022 21:23:33 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Subject: [PATCH v1 2/2] cpufreq: intel_pstate: hybrid: Use known scaling factor for P-cores
-Date:   Mon, 24 Oct 2022 21:22:48 +0200
-Message-ID: <8132750.T7Z3S40VBb@kreacher>
-In-Reply-To: <2258064.ElGaqSPkdT@kreacher>
-References: <2258064.ElGaqSPkdT@kreacher>
+        Mon, 24 Oct 2022 18:06:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F4086F8C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666642695;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+oLikKrpTwfN5eZoO3ZPy9VDegRTEaRcO7+/yERF3Ng=;
+        b=iheMMNI2V9RRqz/nwzbld6v5mNwPXjpvQ9J+3ZA8M/ssjI1pgsQ4SVX3j25mzT7LmIdIAC
+        P/OA2OaJ/Ydo1r69oDIB8lVeKjAktLpciMyAjv7lyPH31MSK0AZbCSeerL71MkqpVTGFg5
+        z+ZhNwZJD6cdKaVAXAyiFzYpY7F23/8=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-324-OKMad_OpMgevCwNq-3S7BQ-1; Mon, 24 Oct 2022 15:33:39 -0400
+X-MC-Unique: OKMad_OpMgevCwNq-3S7BQ-1
+Received: by mail-qt1-f198.google.com with SMTP id a19-20020a05622a02d300b0039a3711179dso7651083qtx.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:33:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+oLikKrpTwfN5eZoO3ZPy9VDegRTEaRcO7+/yERF3Ng=;
+        b=48odAFCI5rm8lh6t23vM4bdFI7tOpRTLVc9hPbM2oph94TisSWh5ft1GurvRdrx2lK
+         t6Rxk8TFRiUsQ0auHHbe9DHICIvn7y6XztdzDwhsdfQxs4uEQi+VDxtYRGBk2Z3iRvFX
+         VM4vuPhDtYL5JJM4HF90yMqYTmdhzvIp7qm3Mb9FZWLZv8XDjRujCmlFcaexTg6Cmg/c
+         akJoFla0UTEBYQD9CkRTMoa6UAbB2grkrKd1D1H6/9W3dQ9nSOgFlmslFRx5PmFdZejg
+         cTpA71ijuXJ2Kmge8B4gb0F2tmfK3Qxp7z3R4UWlFWU+GvAd3BuQGjLEi7VfT7zpo1l8
+         VMLw==
+X-Gm-Message-State: ACrzQf0MrWCSC2BaXN772mLzuKFUdUslKhUkPSUNfbF2w6IYPQiQ2z7p
+        l8YAsK2/gSYWHNTDux7rWC5l4WfaNdopBWsrzmkVkDLrnyXqUmVly6oen3tcYapcWXkkm7Zr5DC
+        Ox/WqvOpPHcXBLV747lHeIKB8
+X-Received: by 2002:a05:622a:8b:b0:39c:f732:f282 with SMTP id o11-20020a05622a008b00b0039cf732f282mr29083464qtw.391.1666640018855;
+        Mon, 24 Oct 2022 12:33:38 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6xnlmrmBflA5e08eff5fSpy4VsFWvEQXtWJgjrlbwS9+Ulhuq7Bln2MzR7zdfaCZEy1gPM9A==
+X-Received: by 2002:a05:622a:8b:b0:39c:f732:f282 with SMTP id o11-20020a05622a008b00b0039cf732f282mr29083448qtw.391.1666640018605;
+        Mon, 24 Oct 2022 12:33:38 -0700 (PDT)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id t15-20020a05620a450f00b006cddf59a600sm545164qkp.34.2022.10.24.12.33.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 12:33:38 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Axel Rasmussen <axelrasmussen@google.com>, peterx@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: [PATCH 0/2] mm/uffd: Fix vma check
+Date:   Mon, 24 Oct 2022 15:33:34 -0400
+Message-Id: <20221024193336.1233616-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.181
-X-CLIENT-HOSTNAME: 213.134.163.181
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgudefudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudeifedrudekudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddukedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvnhdrsghrohifnhesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghl
- rdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+I just got time to have a closer look on the uffd-wp triggering of the
+warning here:
 
-Commit 46573fd6369f ("cpufreq: intel_pstate: hybrid: Rework HWP
-calibration") attempted to use the information from CPPC (the nominal
-performance in particular) to obtain the scaling factor allowing the
-frequency to be computed if the HWP performance level of the given CPU
-is known or vice versa.
+https://lore.kernel.org/all/YzeR+R6b4bwBlBHh@x1n/T/#u
 
-However, it turns out that on some platforms this doesn't work, because
-the CPPC information on them does not align with the contents of the
-MSR_HWP_CAPABILITIES registers.
+It turns out to be a wrong check on vma, and with the fix attached we
+should be able to remove the ugly macro checks.  Sorry for the bothersome.
 
-This basically means that the only way to make intel_pstate work on all
-of the hybrid platforms to date is to use the observation that on all
-of them the scaling factor between the HWP performance levels and
-frequency for P-cores is 78741 (approximately 100000/1.27).  For
-E-cores it is 100000, which is the same as for all of the non-hybrid
-"core" platforms and does not require any changes.
+Please have a look, thanks.
 
-Accordingly, make intel_pstate use 78741 as the scaling factor between
-HWP performance levels and frequency for P-cores on all hybrid platforms
-and drop the dependency of the HWP calibration code on CPPC.
+Peter Xu (2):
+  mm/uffd: Fix vma check on userfault for wp
+  Revert "mm/uffd: fix warning without PTE_MARKER_UFFD_WP compiled in"
 
-Fixes: 46573fd6369f ("cpufreq: intel_pstate: hybrid: Rework HWP calibration")
-Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |   69 ++++++++---------------------------------
- 1 file changed, 15 insertions(+), 54 deletions(-)
+ include/linux/userfaultfd_k.h | 6 +++---
+ mm/hugetlb.c                  | 4 ----
+ mm/memory.c                   | 2 --
+ mm/mprotect.c                 | 2 --
+ 4 files changed, 3 insertions(+), 11 deletions(-)
 
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -27,6 +27,7 @@
- #include <linux/pm_qos.h>
- #include <trace/events/power.h>
- 
-+#include <asm/cpu.h>
- #include <asm/div64.h>
- #include <asm/msr.h>
- #include <asm/cpu_device_id.h>
-@@ -398,16 +399,6 @@ static int intel_pstate_get_cppc_guarant
- 
- 	return cppc_perf.nominal_perf;
- }
--
--static u32 intel_pstate_cppc_nominal(int cpu)
--{
--	u64 nominal_perf;
--
--	if (cppc_get_nominal_perf(cpu, &nominal_perf))
--		return 0;
--
--	return nominal_perf;
--}
- #else /* CONFIG_ACPI_CPPC_LIB */
- static inline void intel_pstate_set_itmt_prio(int cpu)
- {
-@@ -532,34 +523,17 @@ static void intel_pstate_hybrid_hwp_adju
- 	int perf_ctl_max_phys = cpu->pstate.max_pstate_physical;
- 	int perf_ctl_scaling = cpu->pstate.perf_ctl_scaling;
- 	int perf_ctl_turbo = pstate_funcs.get_turbo(cpu->cpu);
--	int turbo_freq = perf_ctl_turbo * perf_ctl_scaling;
- 	int scaling = cpu->pstate.scaling;
- 
- 	pr_debug("CPU%d: perf_ctl_max_phys = %d\n", cpu->cpu, perf_ctl_max_phys);
--	pr_debug("CPU%d: perf_ctl_max = %d\n", cpu->cpu, pstate_funcs.get_max(cpu->cpu));
- 	pr_debug("CPU%d: perf_ctl_turbo = %d\n", cpu->cpu, perf_ctl_turbo);
- 	pr_debug("CPU%d: perf_ctl_scaling = %d\n", cpu->cpu, perf_ctl_scaling);
- 	pr_debug("CPU%d: HWP_CAP guaranteed = %d\n", cpu->cpu, cpu->pstate.max_pstate);
- 	pr_debug("CPU%d: HWP_CAP highest = %d\n", cpu->cpu, cpu->pstate.turbo_pstate);
- 	pr_debug("CPU%d: HWP-to-frequency scaling factor: %d\n", cpu->cpu, scaling);
- 
--	/*
--	 * If the product of the HWP performance scaling factor and the HWP_CAP
--	 * highest performance is greater than the maximum turbo frequency
--	 * corresponding to the pstate_funcs.get_turbo() return value, the
--	 * scaling factor is too high, so recompute it to make the HWP_CAP
--	 * highest performance correspond to the maximum turbo frequency.
--	 */
--	cpu->pstate.turbo_freq = cpu->pstate.turbo_pstate * scaling;
--	if (turbo_freq < cpu->pstate.turbo_freq) {
--		cpu->pstate.turbo_freq = turbo_freq;
--		scaling = DIV_ROUND_UP(turbo_freq, cpu->pstate.turbo_pstate);
--		cpu->pstate.scaling = scaling;
--
--		pr_debug("CPU%d: refined HWP-to-frequency scaling factor: %d\n",
--			 cpu->cpu, scaling);
--	}
--
-+	cpu->pstate.turbo_freq = rounddown(cpu->pstate.turbo_pstate * scaling,
-+					   perf_ctl_scaling);
- 	cpu->pstate.max_freq = rounddown(cpu->pstate.max_pstate * scaling,
- 					 perf_ctl_scaling);
- 
-@@ -1965,37 +1939,24 @@ static int knl_get_turbo_pstate(int cpu)
- 	return ret;
- }
- 
--#ifdef CONFIG_ACPI_CPPC_LIB
--static u32 hybrid_ref_perf;
--
--static int hybrid_get_cpu_scaling(int cpu)
-+static void hybrid_get_type(void *data)
- {
--	return DIV_ROUND_UP(core_get_scaling() * hybrid_ref_perf,
--			    intel_pstate_cppc_nominal(cpu));
-+	u8 *cpu_type = data;
-+
-+	*cpu_type = get_this_hybrid_cpu_type();
- }
- 
--static void intel_pstate_cppc_set_cpu_scaling(void)
-+static int hybrid_get_cpu_scaling(int cpu)
- {
--	u32 min_nominal_perf = U32_MAX;
--	int cpu;
-+	u8 cpu_type = 0;
- 
--	for_each_present_cpu(cpu) {
--		u32 nominal_perf = intel_pstate_cppc_nominal(cpu);
-+	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
-+	/* P-cores have a smaller perf level-to-freqency scaling factor. */
-+	if (cpu_type == 0x40)
-+		return 78741;
- 
--		if (nominal_perf && nominal_perf < min_nominal_perf)
--			min_nominal_perf = nominal_perf;
--	}
--
--	if (min_nominal_perf < U32_MAX) {
--		hybrid_ref_perf = min_nominal_perf;
--		pstate_funcs.get_cpu_scaling = hybrid_get_cpu_scaling;
--	}
-+	return core_get_scaling();
- }
--#else
--static inline void intel_pstate_cppc_set_cpu_scaling(void)
--{
--}
--#endif /* CONFIG_ACPI_CPPC_LIB */
- 
- static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
- {
-@@ -3450,7 +3411,7 @@ static int __init intel_pstate_init(void
- 				default_driver = &intel_pstate;
- 
- 			if (boot_cpu_has(X86_FEATURE_HYBRID_CPU))
--				intel_pstate_cppc_set_cpu_scaling();
-+				pstate_funcs.get_cpu_scaling = hybrid_get_cpu_scaling;
- 
- 			goto hwp_cpu_matched;
- 		}
-
-
+-- 
+2.37.3
 
