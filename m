@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A5D60A637
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6347960A9DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234005AbiJXMc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S230102AbiJXNZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbiJXM3I (ORCPT
+        with ESMTP id S234058AbiJXNXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE88876A9;
-        Mon, 24 Oct 2022 05:02:54 -0700 (PDT)
+        Mon, 24 Oct 2022 09:23:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6A12F397;
+        Mon, 24 Oct 2022 05:29:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F5A3612F0;
-        Mon, 24 Oct 2022 12:02:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E5AC433C1;
-        Mon, 24 Oct 2022 12:02:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D997A612E9;
+        Mon, 24 Oct 2022 12:27:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC516C433D6;
+        Mon, 24 Oct 2022 12:27:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612959;
-        bh=HBy6+WmctVCFgQnZHbWI3wpfmscQhg4m+1LqT9t11gg=;
+        s=korg; t=1666614476;
+        bh=AlKGxA5oHb1mhMs88++LuDXBhLryEnVpofotGpHubyE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fdi34MexhO9PSH7fYTllHDpXtCgO5tMYpiwkOcI2s0JpVRqJWhh20VbOVQ5otHyub
-         aD8dlcPCTF9ZFabrzWDhiYj0HVrmfbsxsF02aVgZdjp9j0CBjwiySy7MffoocOIHyW
-         xSeaI9uMBRk5hcMJ/7CTBDm6PhtIUgCswabzFDm8=
+        b=k5uMHShrY1q2NtApzvhZieoSnKLhkEktpFNG9HOCNpVmRTYp0JEIrwk+6au1sjCvM
+         FcPfkEKiY7SA4l5UtX1jRcxclubOGDFJ8GB2JKsnwp0hpAcPur8+KcyBvawluaWahm
+         Zw0nXrV6yWiRQK3+m+ZPdxvvV1np83CQwW5GXnPc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 153/229] mfd: sm501: Add check for platform_driver_register()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 275/390] iommu/omap: Fix buffer overflow in debugfs
 Date:   Mon, 24 Oct 2022 13:31:12 +0200
-Message-Id: <20221024113003.961820486@linuxfoundation.org>
+Message-Id: <20221024113034.648307904@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,41 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 8325a6c24ad78b8c1acc3c42b098ee24105d68e5 ]
+[ Upstream commit 184233a5202786b20220acd2d04ddf909ef18f29 ]
 
-As platform_driver_register() can return error numbers,
-it should be better to check platform_driver_register()
-and deal with the exception.
+There are two issues here:
 
-Fixes: b6d6454fdb66 ("[PATCH] mfd: SM501 core driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20220913091112.1739138-1-jiasheng@iscas.ac.cn
+1) The "len" variable needs to be checked before the very first write.
+   Otherwise if omap2_iommu_dump_ctx() with "bytes" less than 32 it is a
+   buffer overflow.
+2) The snprintf() function returns the number of bytes that *would* have
+   been copied if there were enough space.  But we want to know the
+   number of bytes which were *actually* copied so use scnprintf()
+   instead.
+
+Fixes: bd4396f09a4a ("iommu/omap: Consolidate OMAP IOMMU modules")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Link: https://lore.kernel.org/r/YuvYh1JbE3v+abd5@kili
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/sm501.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/iommu/omap-iommu-debug.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/sm501.c b/drivers/mfd/sm501.c
-index ec1ac61a21ed..6254b4025b5e 100644
---- a/drivers/mfd/sm501.c
-+++ b/drivers/mfd/sm501.c
-@@ -1738,7 +1738,12 @@ static struct platform_driver sm501_plat_driver = {
+diff --git a/drivers/iommu/omap-iommu-debug.c b/drivers/iommu/omap-iommu-debug.c
+index a99afb5d9011..259f65291d90 100644
+--- a/drivers/iommu/omap-iommu-debug.c
++++ b/drivers/iommu/omap-iommu-debug.c
+@@ -32,12 +32,12 @@ static inline bool is_omap_iommu_detached(struct omap_iommu *obj)
+ 		ssize_t bytes;						\
+ 		const char *str = "%20s: %08x\n";			\
+ 		const int maxcol = 32;					\
+-		bytes = snprintf(p, maxcol, str, __stringify(name),	\
++		if (len < maxcol)					\
++			goto out;					\
++		bytes = scnprintf(p, maxcol, str, __stringify(name),	\
+ 				 iommu_read_reg(obj, MMU_##name));	\
+ 		p += bytes;						\
+ 		len -= bytes;						\
+-		if (len < maxcol)					\
+-			goto out;					\
+ 	} while (0)
  
- static int __init sm501_base_init(void)
- {
--	platform_driver_register(&sm501_plat_driver);
-+	int ret;
-+
-+	ret = platform_driver_register(&sm501_plat_driver);
-+	if (ret < 0)
-+		return ret;
-+
- 	return pci_register_driver(&sm501_pci_driver);
- }
- 
+ static ssize_t
 -- 
 2.35.1
 
