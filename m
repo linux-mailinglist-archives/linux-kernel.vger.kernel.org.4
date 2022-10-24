@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682CE60C045
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECAC860BF31
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiJYA6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S230488AbiJYAEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiJYA5s (ORCPT
+        with ESMTP id S230111AbiJYAEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:57:48 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E5F1958E6;
-        Mon, 24 Oct 2022 16:47:27 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id a5so20830738edb.11;
-        Mon, 24 Oct 2022 16:47:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vv94IJw0kdIEEkWt8rQ9gH30jfzf13dqU9/U5kXWOvU=;
-        b=E5kIV0DdN3kQo5cUxiC+zGK6FJkakAHZAXyVKHjDZLCxXz9aDth+XDxdWwK2T1AlTt
-         XkK4PsSXmBTQz+rWBwsIusnRCoUNLMS+5VyHSr8g0o8hHA9Jq50GIvPT8F50TJKJ2A08
-         /M5MDBDROiWUwsl/WF1RB5N/1JbUTMGZxXV0moLbI/YfHdskn15RH/x5FvxTI2wd5vpb
-         dfovIJjpT7lJceN3bV26JBMJu3B0UW0XqXP9IR83ufguB/4gKwErk6R9nstNHx1aIsxV
-         XRjPvvsbu1pDic0vQdtX7DPRS5C6FQhoFLUHopNLUlTm8//yAmgDTkHgzXNuULXQSKPB
-         Sgew==
+        Mon, 24 Oct 2022 20:04:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CE5309D42
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666650009;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yAu84s8rk3cqzQWkUOACGj/hySV4th5LzQjIQBUH6pI=;
+        b=gfmXwV5shwSP+nGMsmnak8+97jWna3GrRAgzq/F44vjxxJUjQiiv76EGn4l0tDLKre8Err
+        i+3+Gr0NQkeBQ6mueh+pyBVgjoW0nrQ1dndFRObx5DDDLUTO221wGbjVlrIeadoVKprpgp
+        VClfycOsnsyK3k9ANBQvsUuH8lBWAj0=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-371-k-dAE6tfOru1pAHEqhYKCg-1; Mon, 24 Oct 2022 16:02:28 -0400
+X-MC-Unique: k-dAE6tfOru1pAHEqhYKCg-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-13b273d54dbso5538321fac.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:02:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vv94IJw0kdIEEkWt8rQ9gH30jfzf13dqU9/U5kXWOvU=;
-        b=uhKRFYaBvi7YR/guFcgb0fMOSmYBuXk3OmaE5hbVjdtx4UcgQqETlDqx3X4PLo6XPh
-         l5x8ZP+lOPtlUGO8ztYNtFgdUA3YmjL89EdEhlPNQhWR1Xfa30n8Hsw7SZkQTiGV4Pw1
-         QmsJFUV0MUaTcwqXS5Wq+XPH6RG8B0amjXo4fcM2U6fvBfhmBV2V0xOXdY6Y8mNSkBxM
-         /9ZpFLVaIqSwu04f5VT5GBD7YrCShotPdzutiCaA1I8/SV7xL5OUfhgHYRb5FCcXJaDy
-         A8vzblx7UogLARMEu9oJtoTXIY3PxaEVAX9YekkJdSfuyCFffBHirTE+ijjzxQOqCGjE
-         3Rig==
-X-Gm-Message-State: ACrzQf2cP0UxHwppcdALNf460cANSFqoZZWucdkfpsB7SdJk4FdenTh6
-        4m+rcNVcErkIWKV3oLvcgtg=
-X-Google-Smtp-Source: AMsMyM5Jb1fSXTeyvNUJkf/S6DJvzmqZGtrY8OuJyVThC3sw0mQWs49D/+/9xmzn0XDBJyhPPNA+YQ==
-X-Received: by 2002:a05:6402:1394:b0:456:97cd:e9d4 with SMTP id b20-20020a056402139400b0045697cde9d4mr34194745edv.174.1666655245296;
-        Mon, 24 Oct 2022 16:47:25 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.gmail.com with ESMTPSA id a2-20020a170906468200b007417041fb2bsm505900ejr.116.2022.10.24.16.47.23
+        bh=yAu84s8rk3cqzQWkUOACGj/hySV4th5LzQjIQBUH6pI=;
+        b=WF3fAWdv2ODI8VKGdWQmoZEC55NWS6x31DljA9SvUvoej86vFgy5As6hjtuEB9XzYq
+         jxLBX+dk9BocPLNmK9ZOdO+GIKVxAepv24kg6dhs+fGE+csNNlnQ3rakwJsBp+MgY6Z7
+         npNQUG5VSBFovvlT4a8L1y56VAQFIM+Din3Pe79QxywudTsw6YjELMRSt0GZjzCC3pE3
+         gtrLqoLr7e9dX7BKMETxuhxChhaBlhYcBVeqnK0zuIB9hA8jAESL7o4Xgm1Bl98ak5Ep
+         eGTcdaEM63ecxD0IzQYou7Bnz3w+fdQ4gep5YUDXW56WQlqVhqRn3SSbwMGIJx0jDG5m
+         uVwg==
+X-Gm-Message-State: ACrzQf0nHyKKV2j3ONv/mKnbiKADEhXMAqrCQQk2HmPrqiNBU3sEnzCd
+        1MGFmRsy3iT2PiXGFdbgIECS16+lp9pmmzwyIlmkjNC+dseI4duwPFbqeG8sjpX8w5sLkefHZMt
+        9l7Fba/dz1dHoe+4oGWeHzGwP
+X-Received: by 2002:a05:6870:f202:b0:13b:c2c5:ed3d with SMTP id t2-20020a056870f20200b0013bc2c5ed3dmr3016214oao.252.1666641746026;
+        Mon, 24 Oct 2022 13:02:26 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM54g8rhYLOuCJEYPTIti3cvvmXOtuSfRfS5sohQPzeU0IGnm6DuA2ng30T7rsaeW4R33wdz9Q==
+X-Received: by 2002:a05:6870:f202:b0:13b:c2c5:ed3d with SMTP id t2-20020a056870f20200b0013bc2c5ed3dmr3016197oao.252.1666641745716;
+        Mon, 24 Oct 2022 13:02:25 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id w16-20020a056830061000b006619f38a686sm154449oti.56.2022.10.24.13.02.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 16:47:24 -0700 (PDT)
-Message-ID: <6357240c.170a0220.999b2.23d6@mx.google.com>
-X-Google-Original-Message-ID: <Y1buJ29mCdJXk3jZ@Ansuel-xps.>
-Date:   Mon, 24 Oct 2022 21:57:27 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Russell King <linux@armlinux.org.uk>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Mon, 24 Oct 2022 13:02:25 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 15:02:22 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Nick Hawkins <nick.hawkins@hpe.com>,
-        John Crispin <john@phrozen.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] ARM: mach-qcom: fix support for ipq806x
-References: <20221021181016.14740-1-ansuelsmth@gmail.com>
- <CACRpkdbfvr1pkVb3XhBZLnmn7vy3XyzavwVjW_VmFKTdh3LABQ@mail.gmail.com>
- <63531543.050a0220.b6bf5.284d@mx.google.com>
- <CACRpkdbOQq9hUT=d1QBDMmgLaJ1wZ=hd44ciMnjFVgpLCnK8Wg@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        echanude@redhat.com
+Subject: Re: [PATCH 2/4] soc: qcom: pmic_glink: Introduce base PMIC GLINK
+ driver
+Message-ID: <20221024200222.vg7vhu7dfd3wlnkc@halaney-x13s>
+References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
+ <20220818031512.319310-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdbOQq9hUT=d1QBDMmgLaJ1wZ=hd44ciMnjFVgpLCnK8Wg@mail.gmail.com>
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <20220818031512.319310-3-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,100 +85,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 04:21:28PM +0200, Linus Walleij wrote:
-> On Fri, Oct 21, 2022 at 11:55 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
-> > On Fri, Oct 21, 2022 at 11:44:56PM +0200, Linus Walleij wrote:
+On Wed, Aug 17, 2022 at 08:15:10PM -0700, Bjorn Andersson wrote:
+> The PMIC GLINK service runs on one of the co-processors of some modern
+> Qualcomm platforms and implements USB-C and battery managements. It uses
+> a message based protocol over GLINK for communication with the OS, hence
+> the name.
 > 
-> > > Is it not possible to use Geert's linux,usable-memory-range in
-> > > the chosen node to make the kernel stay off the memory?
-> > > (See examples by grep usable-memory in the kernel.)
-> > >
-> >
-> > Hi,
-> > just to confirm this is one of the example you are suggesting?
-> >
-> > chosen {
-> >                 bootargs = "console=ttyS0,115200 earlycon";
-> >                 stdout-path = "serial0:115200n8";
-> >                 linux,usable-memory-range = <0x80200000 0x1fe00000>;
-> >         };
+> The driver implemented provides the rpmsg device for communication and
+> uses auxilirary bus to spawn off individual devices in respsective
+> subsystem. The auxilirary devices are spawned off from a
+> platform_device, so that the drm_bridge is available early, to allow the
+> DisplayPort driver to probe even before the remoteproc has spun up.
 > 
-> Yep that thing!
-> 
-> > Main problem here is that uboot in some case doesn't support dt and pass
-> > wrong ATAGS (with the memory not reserved) and AUTO_ZRELADDR calculate
-> > the wrong addr I assume?
-> 
-> You do have a DTB right, just that it is attached, and then the kernel
-> uses the ATAGs to augment the memory?
-> 
-> In that case what about disabling ARM_ATAG_DTB_COMPAT
-> and adding the actual valid memory to the top-level DTS
-> file? Just like that:
-> 
->       memory {
->                 device_type = "memory";
->                 reg = <0x42000000 0xnnnnnnnn>;
->         };
-> 
-> 
-> > I will test the usable-memory-range but isn't the same of declaring
-> > reserved space in the dts? Or the zimage decompressor checks
-> > linux,usable-memory-range bypassing atags?
-> 
-> As long as it just pass "too much" memory it should do the job,
-> I *think*.
-> 
-> Since I wrote this article:
-> https://people.kernel.org/linusw/how-the-arm32-linux-kernel-decompresses
-> Geert introduced some very elaborate low-level OF code and I
-> do think it kicks in and makes sure to reserve this memory even
-> before the decompressor goes to work (in difference from e.g.
-> "reserved memory nodes" that are not inspected until later).
-> 
-> See:
-> commit 48342ae751c797ac73ac9c894b3f312df18ffd21
-> "ARM: 9124/1: uncompress: Parse "linux,usable-memory-range" DT property"
-> 
-> Then if the memory node is in the DTB originally or patched in
-> by U-Boot shouldn't really matter, usable-memory-range should
-> kick in in either case.
-> 
-> It is described as used for kexec (which I never use) but I think it can
-> solve your problem too.
-> 
-> The DT property is (by agreement) an undocumented Linux extension,
-> so Geert knows the intended usecases better :)
-> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+<snip>
+> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+> new file mode 100644
+> index 000000000000..d42127521eca
+> --- /dev/null
+> +++ b/drivers/soc/qcom/pmic_glink.c
+> @@ -0,0 +1,336 @@
+<snip>
+> +
+> +static void _devm_pmic_glink_release_client(struct device *dev, void *res)
+> +{
+> +	struct pmic_glink_client *client = *(struct pmic_glink_client **)res;
 
-Hi,
-bad news... yesterday I tested this binding and it's problematic. It
-does work and the router correctly boot... problem is that SMEM is
-broken with such configuration... I assume with this binding, by the
-system view ram starts from 0x42000000 instead of 0x40000000 and this
-cause SMEM to fail probe with the error "SBL didn't init SMEM".
+As Eric Chanudet pointed out to me, this should be:
 
-This is the location of SMEM entry in ram
+	struct pmic_glink_client *client = (struct pmic_glink_client *)res;
 
-		smem: smem@41000000 {
-			compatible = "qcom,smem";
-			reg = <0x41000000 0x200000>;
-			no-map;
+Otherwise you get a splat like below (which somehow resulted in my
+panel output not to work on my x13s... not sure of the connection
+there, and is easily reproducible with a probe deferal or qcom_battmgr
+unload):
 
-			hwlocks = <&sfpb_mutex 3>;
-		};
+        Unable to handle kernel NULL pointer dereference at virtual address 0000000000000958
+        Mem abort info:
+          ESR = 0x0000000096000004
+          EC = 0x25: DABT (current EL), IL = 32 bits
+          ESR = 0x0000000096000004
+          EC = 0x25: DABT (current EL), IL = 32 bits
+          SET = 0, FnV = 0
+          EA = 0, S1PTW = 0
+          FSC = 0x04: level 0 translation fault
+        Data abort info:
+          ISV = 0, ISS = 0x00000004
+          CM = 0, WnR = 0
+        user pgtable: 4k pages, 48-bit VAs, pgdp=0000000106b92000
+        [0000000000000958] pgd=0000000000000000, p4d=0000000000000000
+        Internal error: Oops: 96000004 [#1] PREEMPT SMP
+        Modules linked in: llcc_qcom qcom_battmgr aes_ce_blk pmic_glink_altmode aes_ce_cipher ghash_ce gf128mul sha2_ce sha256_arm64 sha1_ce gpio_sbu_mux pmic_glink gpio_keys autofs4
+        CPU: 2 PID: 182 Comm: kworker/u16:5 Not tainted 6.0.0-rc6 #29
+        Hardware name: LENOVO 21BX0016US/21BX0016US, BIOS N3HET47W (1.19 ) 07/04/2022
+        Workqueue: events_unbound deferred_probe_work_func
+        pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+        pc : mutex_lock+0x1c/0x60
+        lr : _devm_pmic_glink_release_client+0x2c/0x74 [pmic_glink]
+        sp : ffff80000c553970
+        x29: ffff80000c553970 x28: 0000000000000000 x27: 0000000000000000
+        x26: ffffc297e181e0e8 x25: ffffc297e181d000 x24: ffffc2984efd9a80
+        x23: ffffc2984ea7a008 x22: ffff1738863cc3a0 x21: ffff80000c553a28
+        x20: 0000000000000958 x19: ffff1738863cc9f8 x18: ffffffffffffffff
+        x17: 0000000000000000 x16: ffffc2984e1bb110 x15: 61622d6d6f63713d
+        x14: ffffc2984f3b23e0 x13: 554e514553007972 x12: 0000000000000000
+        x11: 00313731333d4d55 x10: 0000000000000000 x9 : ffffc297e181d1cc
+        x8 : ffff80000c553910 x7 : 0000000000000000 x6 : 0000000080200016
+        x5 : 0000000000000038 x4 : 0000000000000000 x3 : 0000000000000958
+        x2 : ffff17388522c100 x1 : 0000000000000000 x0 : 0000000000000958
+        Call trace:
+         mutex_lock+0x1c/0x60
+         release_nodes+0x68/0x100
+         devres_release_all+0x94/0xf0
+         device_unbind_cleanup+0x20/0x70
+         device_release_driver_internal+0x214/0x260
+         device_release_driver+0x20/0x30
+         bus_remove_device+0xdc/0x170
+         device_del+0x178/0x3ac
+         pmic_glink_probe+0x1e8/0x240 [pmic_glink]
+         platform_probe+0x70/0xcc
+         really_probe+0xc8/0x3e0
+         __driver_probe_device+0x84/0x190
+         driver_probe_device+0x44/0x100
+         __device_attach_driver+0xc4/0x160
+         bus_for_each_drv+0x84/0xe0
+         __device_attach+0xa4/0x1c4
+         device_initial_probe+0x1c/0x30
+         bus_probe_device+0xa4/0xb0
+         deferred_probe_work_func+0xc0/0x114
+         process_one_work+0x1ec/0x470
+         worker_thread+0x74/0x410
+         kthread+0xfc/0x110
+         ret_from_fork+0x10/0x20
+        Code: d5384102 d503201f d2800001 aa0103e4 (c8e47c02)
+        ---[ end trace 0000000000000000 ]---
 
-On openwrt (kernel 5.10 and 5.15) we currently use a mix of the old Makefile.boot
-infra and a patch to ignore atags. With the current configuration we can
-correctly bootup the system by passing the load addr to the decompressor
-to 0x42000000 (+TEXT_OFFEST) and also use SMEM as it gets correctly init
-in the not mapped ram addr.
+All credit to Eric[0] on that, I'm just tying up loose ends.
 
-We are now working on adding 6.1 kernel support and since Makefile.boot
-infra got dropped, I'm searching a better solution that can also be
-upstreamed, for now PHY_OFFSET seems the only solution.
+[0] https://gitlab.com/ahalaney/linux/-/commit/1819fbccd03de430d9fd4c58ded35f5be83e9aa8
 
-Wonder if you have other ideas about this.
+Thanks,
+Andrew
 
--- 
-	Ansuel
