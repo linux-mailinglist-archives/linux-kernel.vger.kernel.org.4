@@ -2,98 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC9260B592
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA4160B4D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbiJXScn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S231455AbiJXSFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiJXScM (ORCPT
+        with ESMTP id S231433AbiJXSFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:32:12 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4EC9F35F;
-        Mon, 24 Oct 2022 10:13:50 -0700 (PDT)
+        Mon, 24 Oct 2022 14:05:03 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95652196B7E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:45:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666629952; x=1698165952;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Xn1TOqw7IhBUho1yRhZeDMBe5NzP0KIkvACmVcMyRzw=;
+  b=XN2Oj4FIwLjsZ+Scc4FEzfuk+Xkx5OyXBloDkOAwkBqIMpUJqG68ZY1z
+   QHS6H1AB413jfhYuX2irgLaZcomvx3VU1AsHE0F8LitVanCcp2x4ApZ7a
+   bpXc6MWMoO5La934KHDsWZV0CjpODsW2cvnhOLdXaSJbcVBhdN8fzVNDi
+   hioLz7PGbNK8eeuCne9TEWRZdj1vZocNz2Ngx0GTxl5AZqkCkYjZmNrHC
+   bF1EREpMftFwAWvM/6NZxmys0GJpXf4mjZ6Aiq4xYzNvinfa0GHuXFjUm
+   5En7LnrePuyRB8QxH90GFdZ6dr3Lm4C1sfPKLqDyDTuLrjYMcZj0iIThu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="393784909"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="393784909"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 09:45:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="756633884"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="756633884"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga004.jf.intel.com with ESMTP; 24 Oct 2022 09:45:20 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 09:45:19 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 09:45:19 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 24 Oct 2022 09:45:19 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.176)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 24 Oct 2022 09:45:19 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JKGnDe4vMRojKAqiTxYCdWqsAR+EimfWA0AixKokXULfiAgkOu2Uo3xGcnhhF/nyJDVpsCnoW71SK7ZdmjQ9F9Q1Nni6Nz9JrWEc18txX8K1Uzu359zvL2m/cvFTHt+04rMjHdz2dJGtRBoxhdHglMepNN0ETLtaY/Urqm+amx2DQczQB/kSq7FM1k8Zsp/Y2UXdrxzUw14tVdAwjjdGwbVPIXvIHi+n6a9GpsDdyS55lzlZ6ZUAoB+weqVSnNT9p2jrysamI0EoG4JWNXpYmcnGuPkk/bHqthQFrN899BE2SUpcVzjrovc67uyucCjoy5L2VcKq5E0638gAlDGB9Q==
+ b=DWM16TUhCsB2S5i/pzLWG/GFhuiNcGBGR9wq8y1QyURZDJy17CNl9elXSffYYX7tF7Fh94i7By5NakabGJV6NDupl5nE5KZjPnGT90afBR21luQouuX6yxXL8fKMtJbch5kfOcM83t9GdIp2riqHQbIW/CjU5u6gCG5OyJU9lqq6JTxn7EGaf47VBYdb/UQi6vEhmzInrifHsZMIzIYh1hkPL4qJYEnk6dwOZH+ydmqSjohaQMP3WQaOI1xWfd7kVU5MxLe/DoMLskbdgeSIr0RECPV0F33yxD15UGgl6yr7XAaBuhH4HGL/wTR0DxVrlXz9GtlTg8jYZ/5lPiBfRA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A9iKsBUGwR+SgYQ/lkBvTga3ZX3tnXfl9X7OStOl4po=;
- b=g6kCaEu5DAOcr8Hg+6X5LAuofIc/RH0TTePTdoXTSh1Pfb1J8zdy7qapBgp/3Me5g8Djl+VciD2wLB5kgqAy8exz2fU6JTDbcn6TeV242XSRWxr4kCFPYyBCIAXAi7IS1yegcBJ7buf6DO1C5kKBMAkuVZWtmZ0LBgFDI0b1g6r5VUM9gerlz18OqCSPHAbnbgNRpV+tnSWu5bYHJUC/YwsSjlJjLH1BOJSfNotYFTEfKsxCX8i1rQ042FARqWixYMdRsVpxIfDSgq4QMDzCSIlXT7CLzqUGdWFH8Qfyrc+ZY7p0BSlDz3NalLm+wRvrGeRciVVWhBW3ZmaksAhlSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A9iKsBUGwR+SgYQ/lkBvTga3ZX3tnXfl9X7OStOl4po=;
- b=brj9CfbUZkiENHdjoV4HD83JSLEGSj96wTow3Mc5FTI1vEZJTBk2ZYSAM5pOTn+Sx2ein1w3B9tva9+eZYDqMDNi9uMRbMh82lEAG9302CGq5LldCnn/CitfihG4RI9C/+QehG/IugEXPYXZLyx4pZlJuBO2WVoWaoAbVYTPyA0=
-Received: from MW2PR2101CA0014.namprd21.prod.outlook.com (2603:10b6:302:1::27)
- by CY5PR12MB6348.namprd12.prod.outlook.com (2603:10b6:930:f::13) with
+ bh=E+Ro++tJl4/lHFYwsNwY/R84kgXEfwppF17S9pFcw4I=;
+ b=gFIXx8n9jQwRn6lmWVVfE/A4og7gEC/lTu3iluonkUExrFYvuTzDp/dQhJ2PUAZqJjy39i1tejvlY2BKyVAsXIbSfiAoyRRj5XwbUmeSCc2f2O2a3Oudk/J3TV9hCs0koH58D8x67a+7DI+yt2856HbefUzanaBRss5U3HImIFdva0J1Njuae91NVCuMgI2aS05ByeZbDnDqnjqeg7ppJODZVbTQtuALOL/AUYeFvylPw9/J/f7QRcvmK7os39ayX4WU1QCq0kT/dRHUnBo2nqcfTTjEgV+TrWOT2zxR3Mlx7fpavx/o30JmUeygTGhh/XtNgMtvBBkNvSeLOzsd/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
+ by DS7PR11MB6245.namprd11.prod.outlook.com (2603:10b6:8:9a::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Mon, 24 Oct
- 2022 16:44:50 +0000
-Received: from CO1NAM11FT036.eop-nam11.prod.protection.outlook.com
- (2603:10b6:302:1:cafe::68) by MW2PR2101CA0014.outlook.office365.com
- (2603:10b6:302:1::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.0 via Frontend
- Transport; Mon, 24 Oct 2022 16:44:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CO1NAM11FT036.mail.protection.outlook.com (10.13.174.124) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Mon, 24 Oct 2022 16:44:50 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
- 2022 11:44:49 -0500
-Received: from iron-maiden.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
- Transport; Mon, 24 Oct 2022 11:44:48 -0500
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-To:     <pbonzini@redhat.com>
-CC:     <seanjc@google.com>, <bp@alien8.de>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <dave.hansen@linux.intel.com>,
-        <x86@kernel.org>, <hpa@zytor.com>, <venu.busireddy@oracle.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Thomas.Lendacky@amd.com>, <bilbao@vt.edu>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: [PATCH] KVM: SVM: Name and check reserved fields with structs offset
-Date:   Mon, 24 Oct 2022 11:44:48 -0500
-Message-ID: <20221024164448.203351-1-carlos.bilbao@amd.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+ 2022 16:45:17 +0000
+Received: from CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::207e:ab0b:9e29:6a4b]) by CY4PR11MB1862.namprd11.prod.outlook.com
+ ([fe80::207e:ab0b:9e29:6a4b%12]) with mapi id 15.20.5746.023; Mon, 24 Oct
+ 2022 16:45:17 +0000
+Message-ID: <bbc21b48-58b5-6356-0248-656e22d95281@intel.com>
+Date:   Mon, 24 Oct 2022 09:45:14 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.0
+Subject: Re: [PATCH v2] x86/resctrl: Clear the stale staged config after the
+ configuration is completed
+To:     Shawn Wang <shawnwang@linux.alibaba.com>, <fenghua.yu@intel.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        James Morse <james.morse@arm.com>, <jamie@nuviainc.com>,
+        <linux-kernel@vger.kernel.org>
+References: <1665304608-120466-1-git-send-email-shawnwang@linux.alibaba.com>
+ <7fa6ed4e-abae-85fb-4e95-8c73755a4263@intel.com>
+ <ad08eee6-cfea-3858-0def-e2e3fef315fb@linux.alibaba.com>
+ <ff44b0ff-6adb-3bae-d17e-4c341c09df5d@intel.com>
+ <86fc22a2-e779-b7ab-67d6-a3aff975ae56@linux.alibaba.com>
+ <30637459-7419-6497-6230-b13c73a947de@intel.com>
+ <2cdfbe28-01cc-926d-2f6d-2a974a4c5a74@linux.alibaba.com>
+Content-Language: en-US
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <2cdfbe28-01cc-926d-2f6d-2a974a4c5a74@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: BY5PR17CA0019.namprd17.prod.outlook.com
+ (2603:10b6:a03:1b8::32) To CY4PR11MB1862.namprd11.prod.outlook.com
+ (2603:10b6:903:124::18)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT036:EE_|CY5PR12MB6348:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9b89306f-608e-4254-80ac-08dab5df117a
+X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|DS7PR11MB6245:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f67b7c9-d717-4578-09f6-08dab5df21cf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GIFj4rwN2RRZhUMe48LIN1SwwypcSUXoVVxdcKzL+7YYc5zptuTXXpB4xKD3XJxNjISjzkz4XUvERstnLEc+5JqN+RFPME+yrhVP3nBth3kpoHOQw0P7jk/XS8Nm1wOCwimJl5jhdkuXNA0lUw+DQ68LV47hryfDxnZU8ETA6kU6q+dGnEjkjLyEhVY5G3uvKmxJ6nP6qlnVpdgxVnrWWFue+8cxf8MzuPnNUTPGXx4sQ0W30NNgiEC51klpApCvgK3YrrfMwSN3WS9fWp89Fi0ahrYXx0r4EiMCxaZ/lluamAk0frybcJS8f0F4NQTVuF2K+R9NuWrA3dwxXUNZoSZXqLEKwN3FfOH0GSe46VP4mjA+TogvBvhSBPpDMOp9E7MavhgGGJZBh7rRfPKyz+VK4yqlpkyxu1CJkJP5W+1jzcPAzdvH1xCOpl9xRtnmarKQl8ZeK0IpwCb5cvh7ZYeO9MyWPn4e8kb/2/I+IaZ7Wrbm6CK7/bFzvrPXIhDczwjZkg0obHuDILbO8v9347+hobLqH9LKjOCSKCLTMBIt1vWs0wYqZ0YCe2Igi3yIQMSsgoRav74GXRUOoO9n+T1OMKZvoRj+QRBVC97fUtl8waGVnAkMSZRZ89HvFusUDnCUomAHPolJdqvgMvulxZUXhEH1e6v2LCtX63SQEDEZspEQJCwQ46QP/Jd+kEEdYao0xAehM7CMIHKliaJcSS6k/ga6l8DJteENQyoWUuBVfCL4uOMVGdELZDwov2JIt7zgvJ+vQWnW3cSZiihUlAB2wS7ypxaDy5JzTqMw3UxvJqGp7mHa85dm4oSf3y+efbqgX1s23q8Jk9DqYeuXQQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(41300700001)(8936002)(336012)(81166007)(2906002)(186003)(1076003)(356005)(82310400005)(7696005)(966005)(316002)(36756003)(478600001)(6916009)(40460700003)(86362001)(54906003)(36860700001)(4326008)(70586007)(8676002)(70206006)(2616005)(7416002)(26005)(40480700001)(83380400001)(82740400003)(5660300002)(44832011)(426003)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 16:44:50.0047
+X-Microsoft-Antispam-Message-Info: +lYOKoQYQLHdo20gWiNZWA7aE++ExoPCHi0KURViYCWd176WTzR5ap2mOL9vhmX/zcMUZkxNFuRgoqKxtkr2GO/JVTQYhIoG+NTDlHGOClucii0xOVOCC92E97vD8siaqOYHHys3ON6NERcWheFs4RMB/o0eN2uV6ExKxl4lblEOlOXJCCKbjMMI3b/wl/4vYbYal7pvctNay2sEZl+VFU4DZ6eg0hqcrrhZhbPpYkABJUCh7WNwpdyhoADabkqq6HQowlBA/hfm8gzNY8YPwWmKKw93tEv9c6xL7PABwNR5RKfMsXFFIHdXfbzU3a3cQCnLbOQ5xIO/Vbqt262r7P5cgggJQ2TC3SZXlhtefbndV71hCeawZenjgs+qNETemncaOOR5wvO1pcqoFn7fuhzXb1BDZxxEjhk44enF+3LGsFA6PhKZcM3zcBFYxRuwPzTsbh9kwEIcRRXUS0b7z7sPh4EaZMRgpwK2VFiA3TFmzVNTO4OhTg4LMj+khoK2rqzmqKtbzYl1gns558I5GKFJb7/Ugcto9xOIGmS/998gdnnOHKiCIpJvbpyAumFa/JqtMYa2RejmF1paoc3TtIRApvpvjx+NO8b5U7M+Xpeh10qFaflHa/Po8FKB6jTpNuTVJmTlLa4CQjJU+4bsmVhNlKmYBCIZdoF99YfYnLyhbCt6Z97nFA2gvuuogRXRbMM2iZfjQ4kLZVchv3bEF/KRiOP2Ra4HRzpKIfAMla+3jTsMd/pqVAQPhYdV3I9NIWGShOO83j7EJx4WkLNsjjy5upU3AW0aXaGKLbhy/Ss=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199015)(6636002)(31686004)(41300700001)(66476007)(4326008)(8676002)(66556008)(8936002)(44832011)(66946007)(7416002)(86362001)(2906002)(6512007)(478600001)(31696002)(26005)(6486002)(53546011)(36756003)(6506007)(6666004)(83380400001)(186003)(316002)(82960400001)(5660300002)(2616005)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Uyt6d0oyVnQzMm9pTit5TkdSZDdKTzVSWnE1ZU9jNDREZWtGRVk4RmJWeVVX?=
+ =?utf-8?B?TzZ3NTFJSjRqcmQ1UjNxTlVLL0FYcFFvSE5teThoaDUreW5rYVNuak9ZK2tO?=
+ =?utf-8?B?cjZqK0ZneXdlREdvTHpXVnhOZ1Faa2RWZmVzN3RSZVpFZ09jeEhXZHZpU0Vh?=
+ =?utf-8?B?Y0poVk1IdEE4TXhCcVVoMlN1a2k1TXpPYmk4aG15T2Y3TTBjNHdHWVB0cDQ4?=
+ =?utf-8?B?eHdZME93NEUxNU9aNi9EQWZRdllMUW5ReG14bEdKZ2F5QXU2MmJGcjRyaXhx?=
+ =?utf-8?B?TjRRWit5TklUMUcvczZyUmgzaGw3R2Q4TVVRYVg1Z2Q1Z09kbHI4RjYrcFdU?=
+ =?utf-8?B?MWpmUmJEbTh6dVNqK3NURFBnUEtEaFM4UjNHK2RjTHNEVlQ5QjFPdDByQnB1?=
+ =?utf-8?B?MlpFYlZ1ZWZISXgyd1pCVExWMzFZTUpodFRRMEhTaEN2a2dQR05vdU9xVDNB?=
+ =?utf-8?B?U1FMWHVwNHFGY3h0WXZLejJoN3BNM0VZdFZyZ0xhNU5mUW8xVTNFYkN1OFBJ?=
+ =?utf-8?B?RTd5eGREa0J0bHd6Z3l3VG9TZVhlcFpDSmI3ZXBlNkRsanE3REZlYU5ZaW1h?=
+ =?utf-8?B?cENCdHROL1FoSVV0MExweWlvSi8wTWVEQXBQaFhpVUp4K1l4QVZTN0hIenky?=
+ =?utf-8?B?Q0ZmeEUwZTJwRWJEcDFRM3Z2b2R0VVd5MTBFWmN2WkxuTC82NGIyVDBkaE9j?=
+ =?utf-8?B?b0hvRHFDeDdXdDczTWxvZWp5c2QwODZjTWhmK1F5eHZtSXBmYmhVUXlQcmR1?=
+ =?utf-8?B?clU4QmJWZ2h6VmkzeFN2YzRMS1lJYit0bjU0eG9PUkcya1pHRjhqSk8zUnhj?=
+ =?utf-8?B?NENYYytsNlcwNDJZNXV3ZTVXaDFubmZ4a29xVUZJYlZycWJ6cCtMNmRKS3dG?=
+ =?utf-8?B?RTcxQ3Z6TThVQ29kQ0lZN3R1OUtaQi9xUmRjNGwyajg1L2F3YlgyUGNaUGpH?=
+ =?utf-8?B?dS9FK2dpUC9nRjQ0MERDajdjNWl3K0JBYnhUTStCSTZFV05pUkRVSVdhNFMw?=
+ =?utf-8?B?Vi9jUnVxcG1XOUhTN2NZOFd2bWl0ZkN5V1JrNndRMEZVaWM1QWZKY2pKRjR5?=
+ =?utf-8?B?MThEWFprWE1iSjdoVEQxVmlZaXVRMmd1eDNkTStzKzBlUE1TdG5Mc3BFYVA0?=
+ =?utf-8?B?VlkyczBBSmhzK0JZR0t6Ly9ITnMxS053VFl1U2JIbUdqcHVWNFVkRDg5ZUZz?=
+ =?utf-8?B?TmNZakhQUUVzUHplNFVGSzJJMzhvc1FWdVRpcDFnOUJzRDFFOTZyUFpwQ0JQ?=
+ =?utf-8?B?dGYvVkNxNWZwQXVvSnFJMkM0VjZVVnZUc3JMcWNtcHpZTHlYMFN3WGNFdC81?=
+ =?utf-8?B?S0xzVS9ZU29FZlhQeFpvVUNXSDdTa2RJT2JHRmZPbFJCdDBHZ1MzL1pKRTlq?=
+ =?utf-8?B?UDg5ZGNWanh6OVdZT2huZTJjek51MEZiRFI3bnFlMzdlZFBlMTlnOTducEdD?=
+ =?utf-8?B?ZmwyRkxVREo0YnZiSGNUai94Y0NlVHowbzFsZjc2eGtOVFRuckVscHg3YkR5?=
+ =?utf-8?B?bW9rWEhzZ3VKUmRKaWllbmVSV01CL0h5RzlNZ2hYNG0yVTFYQjlXbXloUTFX?=
+ =?utf-8?B?RWJsbm8zR2FHelNpQitnR3JUNlNnUUx6NjUyazBOQWg3aUhpbkM0aW55Z21F?=
+ =?utf-8?B?TmpPbFNic292SHoyclQrUUxzUXFQWGlUTW1icWtWY0dmbFAzanpGRUhiSHd5?=
+ =?utf-8?B?dDFFYmV0dzNLWmVoeVRxcTluTzQ5SjB6VktjK25zOVJDZzhEZnhtUHdxTklu?=
+ =?utf-8?B?NUlNQVQxS2tnS25XRkFrcHBVQUEvOTMrR2YzQU5DWWIwaGJlTXVXMmRjVk5t?=
+ =?utf-8?B?b2llajJqbWM1K1czbnBYZjVvWEg2THkvOXpQMzlEWVdvZVcvUUFrVThxMm9H?=
+ =?utf-8?B?bnpWeSsvMm12OU1sVlU0M01FMjdIYVltN1AraHdSaVJpSGpTZHJ2TThoSE5Z?=
+ =?utf-8?B?dHJuWXg2NW80QjMzYm5DQVNCZnVZS09RTllxc1kvQkhzQzFOR05hd2g5QU41?=
+ =?utf-8?B?VmtGcmsvWkFpOGZXcG5Dc3NRMWNXS2l6b2FOMTc3T1ZEQ1JzbTR3cDZGY09h?=
+ =?utf-8?B?TDlmRm5zc0lGa29BNWl1MkZjMFhoT0x3b1FoQlRwdm5nWG43YVlDUVpiODdQ?=
+ =?utf-8?B?UUhyNUNRSW9QK21aTUM1Y1JPYmlaVCthakhaRE91WkRIUGNMQWlSRjErVE5i?=
+ =?utf-8?B?bVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f67b7c9-d717-4578-09f6-08dab5df21cf
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 16:45:17.7616
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b89306f-608e-4254-80ac-08dab5df117a
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT036.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6348
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FJi6SznpfoZMYtI427rCI8w3GN6GHKBqllpPiQw6pc5NkSyQQ6qLWQNLVektkNf18qvQrg1hwwb8rNGkOCkfFbCcHA6P9wvEYR5lJ5pIE3c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6245
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,243 +170,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename reserved fields on all structs in arch/x86/include/asm/svm.h
-following their offset within the structs. Include compile time checks for
-this in the same place where other BUILD_BUG_ON for the structs are.
+Hi Shawn,
 
-This also solves that fields of struct sev_es_save_area are named by their
-order of appearance, but right now they jump from reserved_5 to reserved_7.
+On 10/23/2022 7:31 PM, Shawn Wang wrote:
+> On 10/22/2022 2:05 AM, Reinette Chatre wrote:
+> 
+> ...
+> 
+>>> It may not be enough to just clear staged_config[] when
+>>> resctrl_arch_update_domains() exits. I think the fix needs to make
+>>> sure staged_config[] can be cleared where it is set.
+>>>
+>>> The modification of staged_config[] comes from two paths:
+>>>
+>>> Path 1:
+>>> rdtgroup_schemata_write() {
+>>>      ...
+>>>      rdtgroup_parse_resource()     // set staged_config[]
+>>>      ...
+>>>      resctrl_arch_update_domains()     // clear staged_config[]
+>>>      ...
+>>> }
+>>>
+>>> Path 2:
+>>> rdtgroup_init_alloc() {
+>>>      ...
+>>>      rdtgroup_init_mba()/rdtgroup_init_cat()    // set staged_config[]
+>>>      ...
+>>>      resctrl_arch_update_domains()        // clear staged_config[]
+>>>      ...
+>>> }
+>>>
+>>> If we clear staged_config[] in resctrl_arch_update_domains(), goto
+>>> statement for error handling between setting staged_config[] and
+>>> calling resctrl_arch_update_domains() will be ignored. This can still
+>>> remain the stale staged_config[].
+>> ah - indeed. Thank you for catching that.
+>>
+>>>
+>>> I think maybe it is better to put the clearing work where
+>>> rdtgroup_schemata_write() and rdtgroup_init_alloc() exit.
+>>>
+>>
+>> It may be more robust to let rdtgroup_init_alloc() follow
+>> how rdtgroup_schemata_write() already ensures that it is
+>> working with a clean state by clearing staged_config[] before
+>> placing its staged config within.
+>>
+> 
+> I want to make sure, do you mean just ignore the stale value and
+> place the clearing work before staged_config[] is used? If so, maybe
+> the only thing the fix should do is to add memset() to
+> rdtgroup_init_alloc().> 
 
-Link: https://lkml.org/lkml/2022/10/22/376
-Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
----
- arch/x86/include/asm/svm.h | 94 ++++++++++++++++++++++++++------------
- 1 file changed, 66 insertions(+), 28 deletions(-)
+No, let us not leave stale data lying around.
 
-diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
-index 0361626841bc..41d5188bf91a 100644
---- a/arch/x86/include/asm/svm.h
-+++ b/arch/x86/include/asm/svm.h
-@@ -293,12 +293,13 @@ struct vmcb_save_area {
- 	struct vmcb_seg ldtr;
- 	struct vmcb_seg idtr;
- 	struct vmcb_seg tr;
--	u8 reserved_1[42];
-+	/* Reserved fields are named following their struct offset */
-+	u8 reserved_0xa0[42];
- 	u8 vmpl;
- 	u8 cpl;
--	u8 reserved_2[4];
-+	u8 reserved_0xcc[4];
- 	u64 efer;
--	u8 reserved_3[112];
-+	u8 reserved_0xd8[112];
- 	u64 cr4;
- 	u64 cr3;
- 	u64 cr0;
-@@ -306,7 +307,7 @@ struct vmcb_save_area {
- 	u64 dr6;
- 	u64 rflags;
- 	u64 rip;
--	u8 reserved_4[88];
-+	u8 reserved_0x180[88];
- 	u64 rsp;
- 	u64 s_cet;
- 	u64 ssp;
-@@ -321,14 +322,14 @@ struct vmcb_save_area {
- 	u64 sysenter_esp;
- 	u64 sysenter_eip;
- 	u64 cr2;
--	u8 reserved_5[32];
-+	u8 reserved_0x248[32];
- 	u64 g_pat;
- 	u64 dbgctl;
- 	u64 br_from;
- 	u64 br_to;
- 	u64 last_excp_from;
- 	u64 last_excp_to;
--	u8 reserved_6[72];
-+	u8 reserved_0x298[72];
- 	u32 spec_ctrl;		/* Guest version of SPEC_CTRL at 0x2E0 */
- } __packed;
- 
-@@ -349,12 +350,12 @@ struct sev_es_save_area {
- 	u64 vmpl2_ssp;
- 	u64 vmpl3_ssp;
- 	u64 u_cet;
--	u8 reserved_1[2];
-+	u8 reserved_0xc8[2];
- 	u8 vmpl;
- 	u8 cpl;
--	u8 reserved_2[4];
-+	u8 reserved_0xcc[4];
- 	u64 efer;
--	u8 reserved_3[104];
-+	u8 reserved_0xd8[104];
- 	u64 xss;
- 	u64 cr4;
- 	u64 cr3;
-@@ -371,7 +372,7 @@ struct sev_es_save_area {
- 	u64 dr1_addr_mask;
- 	u64 dr2_addr_mask;
- 	u64 dr3_addr_mask;
--	u8 reserved_4[24];
-+	u8 reserved_0x1c0[24];
- 	u64 rsp;
- 	u64 s_cet;
- 	u64 ssp;
-@@ -386,21 +387,21 @@ struct sev_es_save_area {
- 	u64 sysenter_esp;
- 	u64 sysenter_eip;
- 	u64 cr2;
--	u8 reserved_5[32];
-+	u8 reserved_0x248[32];
- 	u64 g_pat;
- 	u64 dbgctl;
- 	u64 br_from;
- 	u64 br_to;
- 	u64 last_excp_from;
- 	u64 last_excp_to;
--	u8 reserved_7[80];
-+	u8 reserved_0x2e4[80];
- 	u32 pkru;
--	u8 reserved_8[20];
--	u64 reserved_9;		/* rax already available at 0x01f8 */
-+	u8 reserved_0x2ec[20];
-+	u64 reserved_0x300;	/* rax already available at 0x01f8 */
- 	u64 rcx;
- 	u64 rdx;
- 	u64 rbx;
--	u64 reserved_10;	/* rsp already available at 0x01d8 */
-+	u64 reserved_0x320;	/* rsp already available at 0x01d8 */
- 	u64 rbp;
- 	u64 rsi;
- 	u64 rdi;
-@@ -412,7 +413,7 @@ struct sev_es_save_area {
- 	u64 r13;
- 	u64 r14;
- 	u64 r15;
--	u8 reserved_11[16];
-+	u8 reserved_0x380[16];
- 	u64 guest_exit_info_1;
- 	u64 guest_exit_info_2;
- 	u64 guest_exit_int_info;
-@@ -425,7 +426,7 @@ struct sev_es_save_area {
- 	u64 pcpu_id;
- 	u64 event_inj;
- 	u64 xcr0;
--	u8 reserved_12[16];
-+	u8 reserved_0x3f0[16];
- 
- 	/* Floating point area */
- 	u64 x87_dp;
-@@ -443,23 +444,23 @@ struct sev_es_save_area {
- } __packed;
- 
- struct ghcb_save_area {
--	u8 reserved_1[203];
-+	u8 reserved_0x0[203];
- 	u8 cpl;
--	u8 reserved_2[116];
-+	u8 reserved_0xcc[116];
- 	u64 xss;
--	u8 reserved_3[24];
-+	u8 reserved_0x148[24];
- 	u64 dr7;
--	u8 reserved_4[16];
-+	u8 reserved_0x168[16];
- 	u64 rip;
--	u8 reserved_5[88];
-+	u8 reserved_0x180[88];
- 	u64 rsp;
--	u8 reserved_6[24];
-+	u8 reserved_0x1e0[24];
- 	u64 rax;
--	u8 reserved_7[264];
-+	u8 reserved_0x200[264];
- 	u64 rcx;
- 	u64 rdx;
- 	u64 rbx;
--	u8 reserved_8[8];
-+	u8 reserved_0x320[8];
- 	u64 rbp;
- 	u64 rsi;
- 	u64 rdi;
-@@ -471,12 +472,12 @@ struct ghcb_save_area {
- 	u64 r13;
- 	u64 r14;
- 	u64 r15;
--	u8 reserved_9[16];
-+	u8 reserved_0x380[16];
- 	u64 sw_exit_code;
- 	u64 sw_exit_info_1;
- 	u64 sw_exit_info_2;
- 	u64 sw_scratch;
--	u8 reserved_10[56];
-+	u8 reserved_0x3b0[56];
- 	u64 xcr0;
- 	u8 valid_bitmap[16];
- 	u64 x87_state_gpa;
-@@ -490,7 +491,7 @@ struct ghcb {
- 
- 	u8 shared_buffer[GHCB_SHARED_BUF_SIZE];
- 
--	u8 reserved_1[10];
-+	u8 reserved_0xff0[10];
- 	u16 protocol_version;	/* negotiated SEV-ES/GHCB protocol version */
- 	u32 ghcb_usage;
- } __packed;
-@@ -502,6 +503,9 @@ struct ghcb {
- #define EXPECTED_VMCB_CONTROL_AREA_SIZE		1024
- #define EXPECTED_GHCB_SIZE			PAGE_SIZE
- 
-+#define BUILD_BUG_RESERVED_OFFSET(x, y) \
-+	BUILD_BUG_ON(offsetof(struct x, reserved ## _ ## y) != y)
-+
- static inline void __unused_size_checks(void)
- {
- 	BUILD_BUG_ON(sizeof(struct vmcb_save_area)	!= EXPECTED_VMCB_SAVE_AREA_SIZE);
-@@ -509,6 +513,40 @@ static inline void __unused_size_checks(void)
- 	BUILD_BUG_ON(sizeof(struct sev_es_save_area)	!= EXPECTED_SEV_ES_SAVE_AREA_SIZE);
- 	BUILD_BUG_ON(sizeof(struct vmcb_control_area)	!= EXPECTED_VMCB_CONTROL_AREA_SIZE);
- 	BUILD_BUG_ON(sizeof(struct ghcb)		!= EXPECTED_GHCB_SIZE);
-+
-+	/* Check offsets of reserved fields */
-+
-+	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xa0);
-+	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xcc);
-+	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0xd8);
-+	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x180);
-+	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x248);
-+	BUILD_BUG_RESERVED_OFFSET(vmcb_save_area, 0x298);
-+
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0xc8);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0xcc);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0xd8);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0x1c0);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0x248);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0x2e4);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0x2ec);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0x300);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0x320);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0x380);
-+	BUILD_BUG_RESERVED_OFFSET(sev_es_save_area, 0x3f0);
-+
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x0);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0xcc);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x148);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x168);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x180);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x1e0);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x200);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x320);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x380);
-+	BUILD_BUG_RESERVED_OFFSET(ghcb_save_area, 0x3b0);
-+
-+	BUILD_BUG_RESERVED_OFFSET(ghcb, 0xff0);
- }
- 
- struct vmcb {
--- 
-2.34.1
+The idea is that the function calling resctrl_arch_update_domains() is
+responsible for initializing staged_config[] correctly and completely.
+To confirm, yes, the idea is to clear the staged_config[] in
+rdtgroup_init_alloc() before resctrl_arch_update_domains() is called
+to follow how it is currently done in rdtgroup_schemata_write().
+
+But, as you indicate, by itself this would leave stale data lying around.
+
+The solution that you suggested earlier, to put the clearing work where
+rdtgroup_schemata_write() and rdtgroup_init_alloc() exit, is most logical.
+That makes the code symmetrical in that staged_config[] is cleared
+where it is initialized and no stale data is left lying around. What was
+not clear to me is how this would look in the end. Were you planning to
+keep the staged_config[] clearing within rdtgroup_schemata_write() but
+not do so in rdtgroup_init_alloc()? rdtgroup_schemata_write() and
+rdtgroup_init_alloc() has to follow the same pattern to reduce confusion.
+
+So, to be more robust, how about:
+
+/* Clear staged_config[] to make sure working from a clean slate */
+resctrl_arch_update_domains()
+/* Clear staged_config[] to not leave stale data lying around */
+
+Reinette
+
 
