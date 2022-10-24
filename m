@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0DD60B3A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6791260B1E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233538AbiJXRMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S234327AbiJXQjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbiJXRMg (ORCPT
+        with ESMTP id S233948AbiJXQjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:12:36 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1165A3C4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:47:41 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Mwyzq5YM5z15M0P;
-        Mon, 24 Oct 2022 23:05:11 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 23:10:02 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 23:10:01 +0800
-Subject: Re: [PATCH v2] kset: fix memory leak when kset_register() returns
- error
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-erofs@lists.ozlabs.org>, <ocfs2-devel@oss.oracle.com>,
-        <linux-mtd@lists.infradead.org>, <amd-gfx@lists.freedesktop.org>,
-        <rafael@kernel.org>, <somlo@cmu.edu>, <mst@redhat.com>,
-        <jaegeuk@kernel.org>, <chao@kernel.org>,
-        <hsiangkao@linux.alibaba.com>, <huangjianan@oppo.com>,
-        <mark@fasheh.com>, <jlbec@evilplan.org>,
-        <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
-        <alexander.deucher@amd.com>, <luben.tuikov@amd.com>,
-        <richard@nod.at>, <liushixin2@huawei.com>,
-        <yangyingliang@huawei.com>
-References: <20221024121910.1169801-1-yangyingliang@huawei.com>
- <Y1aYuLmlXBRvMP1Z@kroah.com>
- <8281fc72-948a-162d-6e5f-a9fe29d8ee46@huawei.com>
- <Y1am4mjS+obAbUTJ@kroah.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <87e4e75b-a26e-6b4b-4799-c56c0b8891c0@huawei.com>
-Date:   Mon, 24 Oct 2022 23:10:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 24 Oct 2022 12:39:17 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CFB220EF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:26:44 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c24so8714100pls.9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3u6vBok7fkMUG4gQWkOOT25X5n6LqbLhBS964rQOfgo=;
+        b=Kz+/GLpa/rMZEKMRFCEZyGkW+wQIX+WLtvg3AqAFKkv7GxVd9S5MEc9DNnBkxkki6d
+         APip50piSLHmTJSariD3lrJhc1qzkkNwNkXfF6wjhyBxIhu9E2ICsEOoXQu5Bfc0PqPu
+         M0xJ/K4Zbe6P5QWU15D3awM4jBuK+Uv5EL8n93jX5bqnOgql9u8HYWupBuhjQrZjLug+
+         uz9cApNtOQ38jVejrBNX+nYdYdf12xnZrlPNUrfAHx6SbeN9iTmyDJumfinVFz54vXXS
+         t3YjyHKmsIsC6kZjxCR+kZDB2gCG6R1AHuHDN7+BJW032blVD8B58y2NzU2JOraDV3aU
+         5mbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3u6vBok7fkMUG4gQWkOOT25X5n6LqbLhBS964rQOfgo=;
+        b=3uCCGtx4JLEpHG2Bunl+S0QcQIBJetuwyk4AijZQRdtxeZersOL0jCdP5E++y8UDJC
+         JBvBFPSEtVfi3VK41MJCcW3BIG/AwZv1BOxRyeV5I5O5Ns5cg4xKLYRvaWMrNFbxmWNA
+         CUpNbGBZ7/vtuK9KJDbAuUgWkS1Vcu9vyA3/1ypheChGofFKqOVr+lQxpS57IF6u7cGs
+         K/HNSy+XR5CliuuVNK7keeyUC8oJlDdapCv5VM0oFpC1SLWPFuCq+2tdYJ+vFOsdm63O
+         eR/IqwqLOPMvj+/Iu1gnAW6jWJiyiNiAbtPNkb8DA+bI12S1TlBmUfgAhK0w0hULpPqX
+         aYhQ==
+X-Gm-Message-State: ACrzQf36cgCDd+1j0xyRrWZBev7y0BIq4+3JE62wtqA7r7cBtFw/smBx
+        XKlev5EbC8rPaSVUTX9ncZWMwsPMf4jI/tDnYQd5p8Jf
+X-Google-Smtp-Source: AMsMyM5zu8pxT5x+9L6CqBXSAp02gnlW9du+lUi7pOpMdclbUdyibdNIstYatHC6YgUrUSsa0RtL7BLxxriz1VEb260=
+X-Received: by 2002:a05:6102:224d:b0:3a7:68fc:9163 with SMTP id
+ e13-20020a056102224d00b003a768fc9163mr17650095vsb.74.1666624238228; Mon, 24
+ Oct 2022 08:10:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Y1am4mjS+obAbUTJ@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221022214622.18042-1-ogabbay@kernel.org> <CADnq5_PwNwsSUeyhXDkoy-y1JXFrTj99AgVV02oHX0a29QUXpQ@mail.gmail.com>
+ <CAFCwf11CPvW8uqbDs8-qyMVMbPhw1tPF9ddfjee1MvKthRQb+g@mail.gmail.com>
+In-Reply-To: <CAFCwf11CPvW8uqbDs8-qyMVMbPhw1tPF9ddfjee1MvKthRQb+g@mail.gmail.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 24 Oct 2022 11:10:25 -0400
+Message-ID: <CADnq5_PsM1xPzZgj_2sVBQQnDerzOEestLh_PmTQxpddD5Dsvg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,85 +83,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 24, 2022 at 10:41 AM Oded Gabbay <ogabbay@kernel.org> wrote:
+>
+> On Mon, Oct 24, 2022 at 4:55 PM Alex Deucher <alexdeucher@gmail.com> wrote:
+> >
+> > On Sat, Oct 22, 2022 at 5:46 PM Oded Gabbay <ogabbay@kernel.org> wrote:
+> > >
+> > > In the last couple of months we had a discussion [1] about creating a new
+> > > subsystem for compute accelerator devices in the kernel.
+> > >
+> > > After an analysis that was done by DRM maintainers and myself, and following
+> > > a BOF session at the Linux Plumbers conference a few weeks ago [2], we
+> > > decided to create a new subsystem that will use the DRM subsystem's code and
+> > > functionality. i.e. the accel core code will be part of the DRM subsystem.
+> > >
+> > > This will allow us to leverage the extensive DRM code-base and
+> > > collaborate with DRM developers that have experience with this type of
+> > > devices. In addition, new features that will be added for the accelerator
+> > > drivers can be of use to GPU drivers as well (e.g. RAS).
+> > >
+> > > As agreed in the BOF session, the accelerator devices will be exposed to
+> > > user-space with a new, dedicated device char files and a dedicated major
+> > > number (261), to clearly separate them from graphic cards and the graphic
+> > > user-space s/w stack. Furthermore, the drivers will be located in a separate
+> > > place in the kernel tree (drivers/accel/).
+> > >
+> > > This series of patches is the first step in this direction as it adds the
+> > > necessary infrastructure for accelerator devices to DRM. The new devices will
+> > > be exposed with the following convention:
+> > >
+> > > device char files - /dev/accel/accel*
+> > > sysfs             - /sys/class/accel/accel*/
+> > > debugfs           - /sys/kernel/debug/accel/accel*/
+> > >
+> > > I tried to reuse the existing DRM code as much as possible, while keeping it
+> > > readable and maintainable.
+> >
+> > Wouldn't something like this:
+> > https://patchwork.freedesktop.org/series/109575/
+> > Be simpler and provide better backwards compatibility for existing
+> > non-gfx devices in the drm subsystem as well as newer devices?
+>
+> As Greg said, see the summary. The consensus in the LPC session was
+> that we need to clearly separate accel devices from existing gpu
+> devices (whether they use primary and/or render nodes). That is the
+> main guideline according to which I wrote the patches. I don't think I
+> want to change this decision.
+>
+> Also, there was never any intention to provide backward compatibility
+> for existing non-gfx devices. Why would we want that ? We are mainly
+> talking about drivers that are currently trying to get upstream, and
+> the habana driver.
 
-On 2022/10/24 22:53, Greg KH wrote:
-> On Mon, Oct 24, 2022 at 10:39:44PM +0800, Yang Yingliang wrote:
->> On 2022/10/24 21:52, Greg KH wrote:
->>> On Mon, Oct 24, 2022 at 08:19:10PM +0800, Yang Yingliang wrote:
->>>> Inject fault while loading module, kset_register() may fail.
->>>> If it fails, the name allocated by kobject_set_name() which
->>>> is called before kset_register() is leaked, because refcount
->>>> of kobject is hold in kset_init().
->>>>
->>>> As a kset may be embedded in a larger structure which needs
->>>> be freed in release() function or error path in callers, we
->>>> can not call kset_put() in kset_register(), or it will cause
->>>> double free, so just call kfree_const() to free the name and
->>>> set it to NULL.
->>>>
->>>> With this fix, the callers don't need to care about the name
->>>> freeing and call an extra kset_put() if kset_register() fails.
->>>>
->>>> Suggested-by: Luben Tuikov <luben.tuikov@amd.com>
->>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->>>> ---
->>>> v1 -> v2:
->>>>     Free name inside of kset_register() instead of calling kset_put()
->>>>     in drivers.
->>>> ---
->>>>    lib/kobject.c | 8 +++++++-
->>>>    1 file changed, 7 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/lib/kobject.c b/lib/kobject.c
->>>> index a0b2dbfcfa23..3409a89c81e5 100644
->>>> --- a/lib/kobject.c
->>>> +++ b/lib/kobject.c
->>>> @@ -834,6 +834,9 @@ EXPORT_SYMBOL_GPL(kobj_sysfs_ops);
->>>>    /**
->>>>     * kset_register() - Initialize and add a kset.
->>>>     * @k: kset.
->>>> + *
->>>> + * NOTE: On error, the kset.kobj.name allocated by() kobj_set_name()
->>>> + * which is called before kset_register() in caller need be freed.
->>> This comment doesn't make any sense anymore.  No caller needs to worry
->>> about this, right?
->> With this fix, the name is freed inside of kset_register(), it can not be
->> accessed,
-> Agreed.
->
->> if it allocated dynamically, but callers don't know this if no comment here,
->> they may use it in error path (something like to print error message with
->> it),
->> so how about comment like this to tell callers not to use the name:
->>
->> NOTE: On error, the kset.kobj.name allocated by() kobj_set_name()
->> is freed, it can not be used any more.
-> Sure, that's a better way to word it.
->
->>>>     */
->>>>    int kset_register(struct kset *k)
->>>>    {
->>>> @@ -844,8 +847,11 @@ int kset_register(struct kset *k)
->>>>    	kset_init(k);
->>>>    	err = kobject_add_internal(&k->kobj);
->>>> -	if (err)
->>>> +	if (err) {
->>>> +		kfree_const(k->kobj.name);
->>>> +		k->kobj.name = NULL;
->>> Why are you setting the name here to NULL?
->> I set it to NULL to avoid accessing bad pointer in callers,
->> if callers use it in error path, current callers won't use this
->> name pointer in error path, so we can remove this assignment?
-> Ah, I didn't think about using it on error paths.  Ideally that would
-> never happen, but that's good to set just to make it obvious.  How about
-> adding a small comment here saying why you are setting it so we all
-> remember it in 5 years when we look at the code again.
-OK, I can add it in v3.
+If someone already has a non-gfx device which uses the drm subsystem,
+should they be converted to the new accel stuff?  What about new
+devices that utilize the same driver?  SHould they use accel or
+continue to use drm?  For the sake of the rest of the stack drm would
+make more sense, but if accel grows a bunch of stuff that all accel
+drivers should be using what do we do?  Also using render nodes also
+makes the devices compatible with all of the existing user space tools
+that use the existing drm device nodes like libdrm, etc.  I'm failing
+to see what advantage accel brings other than requiring userspace to
+support two very similar device nodes.
 
-Thanks,
-Yang
+Alex
+
 >
-> thanks,
->
-> greg k-h
-> .
+> Oded
+> >
+> > Alex
+> >
+> > >
+> > > One thing that is missing from this series is defining a namespace for the
+> > > new accel subsystem, while I'll add in the next iteration of this patch-set,
+> > > after I will receive feedback from the community.
+> > >
+> > > As for drivers, once this series will be accepted (after adding the namespace),
+> > > I will start working on migrating the habanalabs driver to the new accel
+> > > subsystem. I have talked about it with Dave and we agreed that it will be
+> > > a good start to simply move the driver as-is with minimal changes, and then
+> > > start working on the driver's individual features that will be either added
+> > > to the accel core code (with or without changes), or will be removed and
+> > > instead the driver will use existing DRM code.
+> > >
+> > > In addition, I know of at least 3 or 4 drivers that were submitted for review
+> > > and are good candidates to be included in this new subsystem, instead of being
+> > > a drm render node driver or a misc driver.
+> > >
+> > > [1] https://lkml.org/lkml/2022/7/31/83
+> > > [2] https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summary.html
+> > >
+> > > Thanks,
+> > > Oded
+> > >
+> > > Oded Gabbay (3):
+> > >   drivers/accel: add new kconfig and update MAINTAINERS
+> > >   drm: define new accel major and register it
+> > >   drm: add dedicated minor for accelerator devices
+> > >
+> > >  Documentation/admin-guide/devices.txt |   5 +
+> > >  MAINTAINERS                           |   8 +
+> > >  drivers/Kconfig                       |   2 +
+> > >  drivers/accel/Kconfig                 |  24 +++
+> > >  drivers/gpu/drm/drm_drv.c             | 214 +++++++++++++++++++++-----
+> > >  drivers/gpu/drm/drm_file.c            |  69 ++++++---
+> > >  drivers/gpu/drm/drm_internal.h        |   5 +-
+> > >  drivers/gpu/drm/drm_sysfs.c           |  81 +++++++++-
+> > >  include/drm/drm_device.h              |   3 +
+> > >  include/drm/drm_drv.h                 |   8 +
+> > >  include/drm/drm_file.h                |  21 ++-
+> > >  include/drm/drm_ioctl.h               |   1 +
+> > >  12 files changed, 374 insertions(+), 67 deletions(-)
+> > >  create mode 100644 drivers/accel/Kconfig
+> > >
+> > > --
+> > > 2.34.1
+> > >
