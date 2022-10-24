@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018E160ABF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF5660A787
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiJXN7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S234627AbiJXMwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233393AbiJXN61 (ORCPT
+        with ESMTP id S234842AbiJXMpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:58:27 -0400
+        Mon, 24 Oct 2022 08:45:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1663B71E;
-        Mon, 24 Oct 2022 05:45:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A67A24BA55;
+        Mon, 24 Oct 2022 05:10:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E200612FC;
-        Mon, 24 Oct 2022 12:44:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0C4C433C1;
-        Mon, 24 Oct 2022 12:44:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC40661280;
+        Mon, 24 Oct 2022 12:09:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4108C433C1;
+        Mon, 24 Oct 2022 12:09:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615452;
-        bh=3i1Ed3bk0XkELjKa8ysuyW1Wad/0dMDZaLkwWHH547Y=;
+        s=korg; t=1666613398;
+        bh=Bi/jTu3vv3ASwo99EidjsRPHNNx3PdUduh5fUYjNiGY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q4AOtosjaHRD//CqEcA4BsM+d5Bh3/oa6qRsTcuoK6Anb8czq0R3a/KbibXennkaP
-         YCn5nFBqyK23m8a4LjyuU2e3fKrSm7MKCgpPfXTneGeVn9WYLNgG525m+t25t7YOKW
-         PEMjYLBqJWNyOqTJQyJ34qJ780zgS2E/9AQEVnpE=
+        b=lZaQS7xdINCFy3cGfWMrectNkc/JeuHMSr5vrRaIiOCJFaCSAJydjWG1RgIjfRj5Y
+         PwEYebEtHrQr5IUM+7B3nIvPT+0S0MiFa7qDuN+hdiKu+XJ0d/mvAxNHXJbT1uKLD7
+         ZSUFAQkFj4JPm8IZqkW7qBbtY1/Ms70eSbX6gZ/U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-ia64@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Keith Mannthey <kmannth@us.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 256/530] ia64: export memory_add_physaddr_to_nid to fix cxl build error
-Date:   Mon, 24 Oct 2022 13:30:00 +0200
-Message-Id: <20221024113056.660776851@linuxfoundation.org>
+Subject: [PATCH 5.4 091/255] platform/chrome: fix memory corruption in ioctl
+Date:   Mon, 24 Oct 2022 13:30:01 +0200
+Message-Id: <20221024113005.527640362@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,44 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 97c318bfbe84efded246e80428054f300042f110 ]
+[ Upstream commit 8a07b45fd3c2dda24fad43639be5335a4595196a ]
 
-cxl_pmem.ko uses memory_add_physaddr_to_nid() but ia64 does not export it,
-so this causes a build error:
+If "s_mem.bytes" is larger than the buffer size it leads to memory
+corruption.
 
-ERROR: modpost: "memory_add_physaddr_to_nid" [drivers/cxl/cxl_pmem.ko] undefined!
-
-Fix this by exporting that function.
-
-Fixes: 8c2676a5870a ("hot-add-mem x86_64: memory_add_physaddr_to_nid node fixup")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Cc: Ben Widawsky <bwidawsk@kernel.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: linux-ia64@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Keith Mannthey <kmannth@us.ibm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: eda2e30c6684 ("mfd / platform: cros_ec: Miscellaneous character device to talk with the EC")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Link: https://lore.kernel.org/r/Yv8dpCFZJdbUT5ye@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/ia64/mm/numa.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/platform/chrome/cros_ec_chardev.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/ia64/mm/numa.c b/arch/ia64/mm/numa.c
-index d6579ec3ea32..4c7b1f50e3b7 100644
---- a/arch/ia64/mm/numa.c
-+++ b/arch/ia64/mm/numa.c
-@@ -75,5 +75,6 @@ int memory_add_physaddr_to_nid(u64 addr)
- 		return 0;
- 	return nid;
- }
-+EXPORT_SYMBOL(memory_add_physaddr_to_nid);
- #endif
- #endif
+diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
+index 74ded441bb50..1f5f4a46ab74 100644
+--- a/drivers/platform/chrome/cros_ec_chardev.c
++++ b/drivers/platform/chrome/cros_ec_chardev.c
+@@ -328,6 +328,9 @@ static long cros_ec_chardev_ioctl_readmem(struct cros_ec_dev *ec,
+ 	if (copy_from_user(&s_mem, arg, sizeof(s_mem)))
+ 		return -EFAULT;
+ 
++	if (s_mem.bytes > sizeof(s_mem.buffer))
++		return -EINVAL;
++
+ 	num = ec_dev->cmd_readmem(ec_dev, s_mem.offset, s_mem.bytes,
+ 				  s_mem.buffer);
+ 	if (num <= 0)
 -- 
 2.35.1
 
