@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E8E60A782
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B5160AAB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbiJXMvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S235970AbiJXNhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbiJXMpi (ORCPT
+        with ESMTP id S233753AbiJXNbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC9843AC0;
-        Mon, 24 Oct 2022 05:10:03 -0700 (PDT)
+        Mon, 24 Oct 2022 09:31:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02D014006;
+        Mon, 24 Oct 2022 05:34:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC74E61278;
-        Mon, 24 Oct 2022 12:09:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0985BC433D6;
-        Mon, 24 Oct 2022 12:09:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B172B8159F;
+        Mon, 24 Oct 2022 12:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D061C433D7;
+        Mon, 24 Oct 2022 12:09:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613390;
-        bh=/WVprh8LeBA0UjKyNAbI/MRXBmvmQYtP0wwgE/nsLvA=;
+        s=korg; t=1666613393;
+        bh=j7U+p6jbLuBWIM6XPMkClhUXNjuV4Gfk8DCzNUWWSHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BYrHfZTtBq0UXCHysDVhTBdoa4HpVi6BWStnFwzEx3PWqoDQLa5tHPzxkHArmuMPQ
-         cHxIzRLXsIOX9H8+a2F1QNzoRoJZDRaGVsh9gYtIzY34lkpZX5aPsil6wsX6QZRITA
-         T3UQ/8rYiglFRVTB+w2ZwY6ildOrATAUrAEeaTdU=
+        b=kdTKq6mazV8n0femrqSa6hqSe9FQbgJbpDMr8ueVjtmRIJv2fSkahKa4lDTZoeCak
+         o9eqo9a9H3HNy2xm+ZQHPS2gjGjOoJ1tx+VC58X2nOihn8b9UP5g9oFYVpZvAiYlLA
+         YoxVBXLEExOjonQEgsSFcC+yn95kN13kfRnw8xDI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 117/255] ARM: dts: exynos: fix polarity of VBUS GPIO of Origen
-Date:   Mon, 24 Oct 2022 13:30:27 +0200
-Message-Id: <20221024113006.416588347@linuxfoundation.org>
+Subject: [PATCH 5.4 118/255] iio: adc: at91-sama5d2_adc: fix AT91_SAMA5D2_MR_TRACKTIM_MAX
+Date:   Mon, 24 Oct 2022 13:30:28 +0200
+Message-Id: <20221024113006.446760310@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
 References: <20221024113002.471093005@linuxfoundation.org>
@@ -55,37 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+From: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-[ Upstream commit a08137bd1e0a7ce951dce9ce4a83e39d379b6e1b ]
+[ Upstream commit bb73d5d9164c57c4bb916739a98e5cd8e0a5ed8c ]
 
-EHCI Oxynos (drivers/usb/host/ehci-exynos.c) drives VBUS GPIO high when
-trying to power up the bus, therefore the GPIO in DTS must be marked as
-"active high". This will be important when EHCI driver is converted to
-gpiod API that respects declared polarities.
+All ADC HW versions handled by this driver (SAMA5D2, SAM9X60, SAMA7G5)
+have MR.TRACKTIM on 4 bits. Fix AT91_SAMA5D2_MR_TRACKTIM_MAX to reflect
+this.
 
-Fixes: 4e8991def565 ("ARM: dts: exynos: Enable AX88760 USB hub on Origen board")
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Link: https://lore.kernel.org/r/20220927220504.3744878-1-dmitry.torokhov@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: 27e177190891 ("iio:adc:at91_adc8xx: introduce new atmel adc driver")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220803102855.2191070-2-claudiu.beznea@microchip.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/exynos4412-origen.dts | 2 +-
+ drivers/iio/adc/at91-sama5d2_adc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/exynos4412-origen.dts b/arch/arm/boot/dts/exynos4412-origen.dts
-index ecd14b283a6b..c6678c120cbd 100644
---- a/arch/arm/boot/dts/exynos4412-origen.dts
-+++ b/arch/arm/boot/dts/exynos4412-origen.dts
-@@ -86,7 +86,7 @@
- };
- 
- &ehci {
--	samsung,vbus-gpio = <&gpx3 5 1>;
-+	samsung,vbus-gpio = <&gpx3 5 GPIO_ACTIVE_HIGH>;
- 	status = "okay";
- 	phys = <&exynos_usbphy 2>, <&exynos_usbphy 3>;
- 	phy-names = "hsic0", "hsic1";
+diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+index 8854da453669..090cc1e8b4ea 100644
+--- a/drivers/iio/adc/at91-sama5d2_adc.c
++++ b/drivers/iio/adc/at91-sama5d2_adc.c
+@@ -73,7 +73,7 @@
+ #define	AT91_SAMA5D2_MR_ANACH		BIT(23)
+ /* Tracking Time */
+ #define	AT91_SAMA5D2_MR_TRACKTIM(v)	((v) << 24)
+-#define	AT91_SAMA5D2_MR_TRACKTIM_MAX	0xff
++#define	AT91_SAMA5D2_MR_TRACKTIM_MAX	0xf
+ /* Transfer Time */
+ #define	AT91_SAMA5D2_MR_TRANSFER(v)	((v) << 28)
+ #define	AT91_SAMA5D2_MR_TRANSFER_MAX	0x3
 -- 
 2.35.1
 
