@@ -2,113 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0388260B5B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D11460B5C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232167AbiJXSif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S230472AbiJXSjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiJXSiQ (ORCPT
+        with ESMTP id S232580AbiJXSjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:38:16 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5726589
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:20:15 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id q127so3650965vsa.7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:20:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kQzpFZcP8Coy3MtkwLvplRdsueJt1u6B3qt5xoqDDG0=;
-        b=DC/JXvGYxRCs4XEoLBmqW0D0Vz2KsH2C3DgLHL1fXNfSPBwBNLhBvG1aiiz7Uuj8I5
-         WmXcMVYsgZ0vNojncjGyGTEg7WfCECT/PHBTwyfOAa1wN5JjymQANnwgpOuOnPLj5cBC
-         azfIciBEYryDpqGxNAu6DhUj9whA1Y6gO1Ggc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kQzpFZcP8Coy3MtkwLvplRdsueJt1u6B3qt5xoqDDG0=;
-        b=ooWtzP8IjhEydGSEvu834rju3Eb7c/UnU9lFHlxXfq1Cj36FNOuzdFKxikJWQwYkXr
-         g2Ae9VhYq3FlOzs7whuKOk0Tt1M1MGAY0EVEMqCdBdgpj2aMJxD/b/MCdtF4PRi/1VaZ
-         rasVeohjmeBjmXTEwk+dDRRJTanBhyM6x9S7iDta6eyvhlJWnWoLomGIThes4aiMwWo+
-         Fbofo28/VeNSpk470Aix62MNb9sZwM10mUMwk2mrncTZ/5yNvDigPim5IEfcELZlTW6J
-         4eytPZmNprkqoeK6wLHT5JlStQBifYEiLoas5QFTYBkp7QPhH7Nyb11kskICfLGot14s
-         kcBg==
-X-Gm-Message-State: ACrzQf0V8DjQGvLiKkwJ99CUuw4s/hE5+2lmsNe8YvQK4xFCgf9RqTAm
-        apTHICME60zsLtlyawoOL5OshxWbt6kw+Q==
-X-Google-Smtp-Source: AMsMyM6FEitJGPsRHjisdkHAUPEM0ruUnVpPb6hbNLxjVbOYVZhQ3bjSyuzrN9+6KLLnMwN7klMeRQ==
-X-Received: by 2002:a0c:aacd:0:b0:4ad:fe0:4e84 with SMTP id g13-20020a0caacd000000b004ad0fe04e84mr28565849qvb.8.1666631472425;
-        Mon, 24 Oct 2022 10:11:12 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id j15-20020ac806cf000000b00359961365f1sm210801qth.68.2022.10.24.10.11.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 10:11:10 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-3321c2a8d4cso91468527b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:11:09 -0700 (PDT)
-X-Received: by 2002:a81:d34c:0:b0:349:1e37:ce4e with SMTP id
- d12-20020a81d34c000000b003491e37ce4emr30065031ywl.112.1666631469533; Mon, 24
- Oct 2022 10:11:09 -0700 (PDT)
+        Mon, 24 Oct 2022 14:39:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52007B7ECA;
+        Mon, 24 Oct 2022 10:21:26 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 17:10:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666631457;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xGfm3vLqdme7A5E0vyS+E4k+G5iTckWHeneSgjrt6Us=;
+        b=UKmarg7xrPzCAcoEp+bwHWS888Y2NGkmsLTIhizgYRqQ3yZPiiHF8I1CuMmQvXF0uPtkkU
+        cLbUlYmJRN+oM4HWNXq3i0+CZB0h74B3bk48gsry6InceAr69b6cgPCIKSiBb/w+S3kTub
+        /28XeC6D14gmQjexuCu3LZ86rnBfCCVBj8nblKU0OFrH15+oIeqsOgqzu2R6Z2+R5fBRyE
+        FUxM3te0nwG3ZYLh7TkNtrWimUZmbwqFKmTQpIGsQGWLpqBaYa6Ms906yCltFUdqzMAZUi
+        GpCXv8u0grRWg+2QYvlUPWD52JluOi8XUtvjcSN5z8vhUujPdXSgQR6XbhZf8g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666631457;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xGfm3vLqdme7A5E0vyS+E4k+G5iTckWHeneSgjrt6Us=;
+        b=xtGsC+xq2tYNrwJEDZZ2euO/az4mPKT84I09CS6MNlNNkVmsn4eiB/REMA3+NP4GKNSYdE
+        ghzTm+JYB3uScYBQ==
+From:   "tip-bot2 for Jiri Olsa" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/syscall: Include asm/ptrace.h in syscall_wrapper header
+Cc:     Akihiro HARAI <jharai0815@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Andrii Nakryiko <andrii@kernel.org>, <stable@vger.kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20221018122708.823792-1-jolsa@kernel.org>
+References: <20221018122708.823792-1-jolsa@kernel.org>
 MIME-Version: 1.0
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com> <20221019203034.3795710-1-Jason@zx2c4.com>
- <Y1ZZyP4ZRBIbv+Kg@kili> <Y1ZbI4IzAOaNwhoD@kadam> <Y1a+cHkFt54gJv54@zx2c4.com>
-In-Reply-To: <Y1a+cHkFt54gJv54@zx2c4.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 24 Oct 2022 10:10:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgK3Vs+7Kor-SisRHJYzV1tXD+=D4+W1XkfHOV2KN_OGw@mail.gmail.com>
-Message-ID: <CAHk-=wgK3Vs+7Kor-SisRHJYzV1tXD+=D4+W1XkfHOV2KN_OGw@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Message-ID: <166663145589.401.720002161640534427.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 9:34 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> Give these a minute to hit Lore, but patches just submitted to various
-> maintainers as fixes (for 6.1), since these are already broken on some
-> architecture.
+The following commit has been merged into the x86/urgent branch of tip:
 
-Hold up a minute.
+Commit-ID:     9440c42941606af4c379afa3cf8624f0dc43a629
+Gitweb:        https://git.kernel.org/tip/9440c42941606af4c379afa3cf8624f0dc43a629
+Author:        Jiri Olsa <olsajiri@gmail.com>
+AuthorDate:    Tue, 18 Oct 2022 14:27:08 +02:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 24 Oct 2022 17:57:28 +02:00
 
-Some of those may need more thought. For example, that first one:
+x86/syscall: Include asm/ptrace.h in syscall_wrapper header
 
-> https://lore.kernel.org/all/20221024163005.536097-1-Jason@zx2c4.com
+With just the forward declaration of the 'struct pt_regs' in
+syscall_wrapper.h, the syscall stub functions:
 
-looks just *strange*. As far as I can tell, no other wireless drivers
-do any sign checks at all.
+  __[x64|ia32]_sys_*(struct pt_regs *regs)
 
-Now, I didn't really look around a lot, but looking at a few other
-SIOCSIWESSID users, most don't even seem to treat it as a string at
-all, but as just a byte dump (so memcpy() instead of strncpy())
+will have different definition of 'regs' argument in BTF data
+based on which object file they are defined in.
 
-As far as I know, there are no actual rules for SSID character sets,
-and while using utf-8 or something else might cause interoperability
-problems, this driver seems to be just confused. If you want to check
-for "printable characters", that check is still wrong.
+If the syscall's object includes 'struct pt_regs' definition,
+the BTF argument data will point to a 'struct pt_regs' record,
+like:
 
-So I don't think this is a "assume char is signed" issue. I think this
-is a "driver is confused" issue.
+  [226] STRUCT 'pt_regs' size=168 vlen=21
+         'r15' type_id=1 bits_offset=0
+         'r14' type_id=1 bits_offset=64
+         'r13' type_id=1 bits_offset=128
+  ...
 
-IOW, I don't think these are 6.1 material as some kind of obvious
-fixes, at least not without driver author acks.
+If not, it will point to a fwd declaration record:
 
-                Linus
+  [15439] FWD 'pt_regs' fwd_kind=struct
+
+and make bpf tracing program hooking on those functions unable
+to access fields from 'struct pt_regs'.
+
+Include asm/ptrace.h directly in syscall_wrapper.h to make sure all
+syscalls see 'struct pt_regs' definition. This then results in BTF for
+'__*_sys_*(struct pt_regs *regs)' functions to point to the actual
+struct, not just the forward declaration.
+
+  [ bp: No Fixes tag as this is not really a bug fix but "adjustment" so
+    that BTF is happy. ]
+
+Reported-by: Akihiro HARAI <jharai0815@gmail.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Cc: <stable@vger.kernel.org> # this is needed only for BTF so kernels >= 5.15
+Link: https://lore.kernel.org/r/20221018122708.823792-1-jolsa@kernel.org
+---
+ arch/x86/include/asm/syscall_wrapper.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/syscall_wrapper.h b/arch/x86/include/asm/syscall_wrapper.h
+index 59358d1..fd2669b 100644
+--- a/arch/x86/include/asm/syscall_wrapper.h
++++ b/arch/x86/include/asm/syscall_wrapper.h
+@@ -6,7 +6,7 @@
+ #ifndef _ASM_X86_SYSCALL_WRAPPER_H
+ #define _ASM_X86_SYSCALL_WRAPPER_H
+ 
+-struct pt_regs;
++#include <asm/ptrace.h>
+ 
+ extern long __x64_sys_ni_syscall(const struct pt_regs *regs);
+ extern long __ia32_sys_ni_syscall(const struct pt_regs *regs);
