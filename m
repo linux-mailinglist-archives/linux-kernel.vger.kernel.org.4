@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3429660A3E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232C160A3E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbiJXMBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
+        id S232503AbiJXMB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiJXL7P (ORCPT
+        with ESMTP id S232616AbiJXL7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:59:15 -0400
+        Mon, 24 Oct 2022 07:59:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6073E7C1E8;
-        Mon, 24 Oct 2022 04:48:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B86E7C333;
+        Mon, 24 Oct 2022 04:48:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF9A36128E;
-        Mon, 24 Oct 2022 11:47:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFAD6C433C1;
-        Mon, 24 Oct 2022 11:47:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ADBD61252;
+        Mon, 24 Oct 2022 11:48:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C542C433D6;
+        Mon, 24 Oct 2022 11:48:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612078;
-        bh=PXpipTnBrRLPqsNN64DZFWvxTM737PnWfsW5sg9ZY+w=;
+        s=korg; t=1666612094;
+        bh=5bSnUp5dX34XQ99c1SQZmiSSKHcGvqw4nlmJQKpbDSk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LN8WMaNCCi7KFXAY/V1XaiaHhofeOI8JAxLDenexJp5QR4qZzXCr/1RC8zChm3otJ
-         uyIZDcy8MkHosRqwD1UuVZCB2rCt0YwjaUJxzFnGdUPVs3Ivx4hcgHKnrVw4zNHG1E
-         ms7U0rFsvMIawf+Yowi8cfl/MKHKD6b8lR2Mf5IY=
+        b=ChASDfRQ3cezodCy6I3Y1VplWqK6hy+HSvbBzRNC3YoXKMQQyjNhuXCNHTAAzUOF5
+         lWbawIDtpu1GL79xj+UPa8zmzNX2O7sY6/7NXloK1nTg/tgG4tYkrddsOaVQlhWo9m
+         C1s+l/qsCthU1MUzNXhWVGPDJH7bg63o/qmsb+QE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andrew Chernyakov <acherniakov@astralinux.ru>
-Subject: [PATCH 4.14 034/210] rpmsg: qcom: glink: replace strncpy() with strscpy_pad()
-Date:   Mon, 24 Oct 2022 13:29:11 +0200
-Message-Id: <20221024112958.072393418@linuxfoundation.org>
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        syzbot+2b32eb36c1a825b7a74c@syzkaller.appspotmail.com,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.14 036/210] nilfs2: fix NULL pointer dereference at nilfs_bmap_lookup_at_level()
+Date:   Mon, 24 Oct 2022 13:29:13 +0200
+Message-Id: <20221024112958.154110294@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
 References: <20221024112956.797777597@linuxfoundation.org>
@@ -56,63 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-commit 766279a8f85df32345dbda03b102ca1ee3d5ddea upstream.
+commit 21a87d88c2253350e115029f14fe2a10a7e6c856 upstream.
 
-The use of strncpy() is considered deprecated for NUL-terminated
-strings[1]. Replace strncpy() with strscpy_pad(), to keep existing
-pad-behavior of strncpy, similarly to commit 08de420a8014 ("rpmsg:
-glink: Replace strncpy() with strscpy_pad()").  This fixes W=1 warning:
+If the i_mode field in inode of metadata files is corrupted on disk, it
+can cause the initialization of bmap structure, which should have been
+called from nilfs_read_inode_common(), not to be called.  This causes a
+lockdep warning followed by a NULL pointer dereference at
+nilfs_bmap_lookup_at_level().
 
-  In function ‘qcom_glink_rx_close’,
-    inlined from ‘qcom_glink_work’ at ../drivers/rpmsg/qcom_glink_native.c:1638:4:
-  drivers/rpmsg/qcom_glink_native.c:1549:17: warning: ‘strncpy’ specified bound 32 equals destination size [-Wstringop-truncation]
-   1549 |                 strncpy(chinfo.name, channel->name, sizeof(chinfo.name));
+This patch fixes these issues by adding a missing sanitiy check for the
+i_mode field of metadata file's inode.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strncpy-on-nul-terminated-strings
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220519073330.7187-1-krzysztof.kozlowski@linaro.org
-Signed-off-by: Andrew Chernyakov <acherniakov@astralinux.ru>
+Link: https://lkml.kernel.org/r/20221002030804.29978-1-konishi.ryusuke@gmail.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: syzbot+2b32eb36c1a825b7a74c@syzkaller.appspotmail.com
+Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rpmsg/qcom_glink_native.c |    2 +-
- drivers/rpmsg/qcom_smd.c          |    4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ fs/nilfs2/inode.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -1447,7 +1447,7 @@ static void qcom_glink_rx_close(struct q
- 	cancel_work_sync(&channel->intent_work);
+--- a/fs/nilfs2/inode.c
++++ b/fs/nilfs2/inode.c
+@@ -455,6 +455,8 @@ int nilfs_read_inode_common(struct inode
+ 	inode->i_atime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
+ 	inode->i_ctime.tv_nsec = le32_to_cpu(raw_inode->i_ctime_nsec);
+ 	inode->i_mtime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
++	if (nilfs_is_metadata_file_inode(inode) && !S_ISREG(inode->i_mode))
++		return -EIO; /* this inode is for metadata and corrupted */
+ 	if (inode->i_nlink == 0)
+ 		return -ESTALE; /* this inode is deleted */
  
- 	if (channel->rpdev) {
--		strncpy(chinfo.name, channel->name, sizeof(chinfo.name));
-+		strscpy_pad(chinfo.name, channel->name, sizeof(chinfo.name));
- 		chinfo.src = RPMSG_ADDR_ANY;
- 		chinfo.dst = RPMSG_ADDR_ANY;
- 
---- a/drivers/rpmsg/qcom_smd.c
-+++ b/drivers/rpmsg/qcom_smd.c
-@@ -1000,7 +1000,7 @@ static int qcom_smd_create_device(struct
- 
- 	/* Assign public information to the rpmsg_device */
- 	rpdev = &qsdev->rpdev;
--	strncpy(rpdev->id.name, channel->name, RPMSG_NAME_SIZE);
-+	strscpy_pad(rpdev->id.name, channel->name, RPMSG_NAME_SIZE);
- 	rpdev->src = RPMSG_ADDR_ANY;
- 	rpdev->dst = RPMSG_ADDR_ANY;
- 
-@@ -1230,7 +1230,7 @@ static void qcom_channel_state_worker(st
- 
- 		spin_unlock_irqrestore(&edge->channels_lock, flags);
- 
--		strncpy(chinfo.name, channel->name, sizeof(chinfo.name));
-+		strscpy_pad(chinfo.name, channel->name, sizeof(chinfo.name));
- 		chinfo.src = RPMSG_ADDR_ANY;
- 		chinfo.dst = RPMSG_ADDR_ANY;
- 		rpmsg_unregister_device(&edge->dev, &chinfo);
 
 
