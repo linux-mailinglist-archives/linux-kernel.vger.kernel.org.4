@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E660660ABC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A880860A918
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236784AbiJXN4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
+        id S235747AbiJXNPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236769AbiJXNyE (ORCPT
+        with ESMTP id S233079AbiJXNNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:54:04 -0400
+        Mon, 24 Oct 2022 09:13:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803B4BCBA2;
-        Mon, 24 Oct 2022 05:43:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BF732D9C;
+        Mon, 24 Oct 2022 05:24:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6F9661252;
-        Mon, 24 Oct 2022 12:43:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE16BC433C1;
-        Mon, 24 Oct 2022 12:43:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 213B6612D1;
+        Mon, 24 Oct 2022 12:23:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DFC3C433D7;
+        Mon, 24 Oct 2022 12:23:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615395;
-        bh=FDJj57zct8g34Bx1kgQb5O2g5HvH0eUpe2PeLXP760g=;
+        s=korg; t=1666614234;
+        bh=VMdw8bJy5Kr6jBkW3N+JdCV3TTZit0h7aUXL1hDm2/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fCF/EhKv1tA56lw9pQCnIEbqTCLWvL7DOD3DZ6lZlI/8KlPEmtHu2ZSTOytJkcpX/
-         3ddcd1IjS9TCmHIleLBD+IoAeOkI8sabjWYzLq7Mn14uZulruZwkE0URhYEF919HyV
-         jWi74y8T4s0rv9hVzZrS5Ywrhy7bm+MPbOxTttVc=
+        b=sKxQeD4chB1co2Ul/xr5YiVAJDe/TXVg2LnXcd+6/8aZN4fVQdF3wZBMogWTqkxON
+         SlL20+nYnRIS8yMeKLOV3iXNXlR0veL1jYYX5/vQBxQOdsZBzqt6zm3upWiwGR0FdZ
+         8veD8Np14M3exHN1++BlQSHV4xqwusm23oEGbiOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 203/530] bnx2x: fix potential memory leak in bnx2x_tpa_stop()
+Subject: [PATCH 5.10 150/390] ASoC: tas2764: Drop conflicting set_bias_level power setting
 Date:   Mon, 24 Oct 2022 13:29:07 +0200
-Message-Id: <20221024113054.252297412@linuxfoundation.org>
+Message-Id: <20221024113029.074859597@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Martin Povišer <povik+lin@cutebit.org>
 
-[ Upstream commit b43f9acbb8942b05252be83ac25a81cec70cc192 ]
+[ Upstream commit 09273f38832406db19a8907a934687cc10660a6b ]
 
-bnx2x_tpa_stop() allocates a memory chunk from new_data with
-bnx2x_frag_alloc(). The new_data should be freed when gets some error.
-But when "pad + len > fp->rx_buf_size" is true, bnx2x_tpa_stop() returns
-without releasing the new_data, which will lead to a memory leak.
+The driver is setting the PWR_CTRL field in both the set_bias_level
+callback and on DAPM events of the DAC widget (and also in the
+mute_stream method). Drop the set_bias_level callback altogether as the
+power setting it does is in conflict with the other code paths.
 
-We should free the new_data with bnx2x_frag_free() when "pad + len >
-fp->rx_buf_size" is true.
+(This mirrors commit c8a6ae3fe1c8 ("ASoC: tas2770: Drop conflicting
+set_bias_level power setting") which was a fix to the tas2770 driver.)
 
-Fixes: 07b0f00964def8af9321cfd6c4a7e84f6362f728 ("bnx2x: fix possible panic under memory stress")
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 827ed8a0fa50 ("ASoC: tas2764: Add the driver for the TAS2764")
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+Link: https://lore.kernel.org/r/20220825140241.53963-3-povik+lin@cutebit.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/codecs/tas2764.c | 33 ---------------------------------
+ 1 file changed, 33 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-index 198e041d8410..4f669e7c7558 100644
---- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-@@ -788,6 +788,7 @@ static void bnx2x_tpa_stop(struct bnx2x *bp, struct bnx2x_fastpath *fp,
- 			BNX2X_ERR("skb_put is about to fail...  pad %d  len %d  rx_buf_size %d\n",
- 				  pad, len, fp->rx_buf_size);
- 			bnx2x_panic();
-+			bnx2x_frag_free(fp, new_data);
- 			return;
- 		}
- #endif
+diff --git a/sound/soc/codecs/tas2764.c b/sound/soc/codecs/tas2764.c
+index bde92f080459..6b6e30b072f2 100644
+--- a/sound/soc/codecs/tas2764.c
++++ b/sound/soc/codecs/tas2764.c
+@@ -50,38 +50,6 @@ static void tas2764_reset(struct tas2764_priv *tas2764)
+ 	usleep_range(1000, 2000);
+ }
+ 
+-static int tas2764_set_bias_level(struct snd_soc_component *component,
+-				 enum snd_soc_bias_level level)
+-{
+-	struct tas2764_priv *tas2764 = snd_soc_component_get_drvdata(component);
+-
+-	switch (level) {
+-	case SND_SOC_BIAS_ON:
+-		snd_soc_component_update_bits(component, TAS2764_PWR_CTRL,
+-					      TAS2764_PWR_CTRL_MASK,
+-					      TAS2764_PWR_CTRL_ACTIVE);
+-		break;
+-	case SND_SOC_BIAS_STANDBY:
+-	case SND_SOC_BIAS_PREPARE:
+-		snd_soc_component_update_bits(component, TAS2764_PWR_CTRL,
+-					      TAS2764_PWR_CTRL_MASK,
+-					      TAS2764_PWR_CTRL_MUTE);
+-		break;
+-	case SND_SOC_BIAS_OFF:
+-		snd_soc_component_update_bits(component, TAS2764_PWR_CTRL,
+-					      TAS2764_PWR_CTRL_MASK,
+-					      TAS2764_PWR_CTRL_SHUTDOWN);
+-		break;
+-
+-	default:
+-		dev_err(tas2764->dev,
+-				"wrong power level setting %d\n", level);
+-		return -EINVAL;
+-	}
+-
+-	return 0;
+-}
+-
+ #ifdef CONFIG_PM
+ static int tas2764_codec_suspend(struct snd_soc_component *component)
+ {
+@@ -549,7 +517,6 @@ static const struct snd_soc_component_driver soc_component_driver_tas2764 = {
+ 	.probe			= tas2764_codec_probe,
+ 	.suspend		= tas2764_codec_suspend,
+ 	.resume			= tas2764_codec_resume,
+-	.set_bias_level		= tas2764_set_bias_level,
+ 	.controls		= tas2764_snd_controls,
+ 	.num_controls		= ARRAY_SIZE(tas2764_snd_controls),
+ 	.dapm_widgets		= tas2764_dapm_widgets,
 -- 
 2.35.1
 
