@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB83760ADCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98B5060AED1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbiJXOer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32816 "EHLO
+        id S231128AbiJXPQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237223AbiJXOeH (ORCPT
+        with ESMTP id S231699AbiJXPPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:34:07 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FA0109C;
-        Mon, 24 Oct 2022 06:09:30 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id f140so8932190pfa.1;
-        Mon, 24 Oct 2022 06:09:30 -0700 (PDT)
+        Mon, 24 Oct 2022 11:15:44 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C62721E29;
+        Mon, 24 Oct 2022 06:54:41 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so13055780pji.1;
+        Mon, 24 Oct 2022 06:54:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aSpoXN2MutncQ4V4fSkz8rocQLQbOT8gk060tfwv6HA=;
-        b=VM2TGjTfd+9M4I2mEG2+ugX0olw7fq2OtJFlXmjmJ0HzOFp220J+qB0zejrhdaF4Pb
-         gCEBZqVjF4BeYFyXIkaryPMseczZTWPyf4E3skQlhv67F/KKEbIMTtkW7zLU7cwnvZh3
-         Ps8enynyDxVDq274klUmbkSQ0V5geo7J3t9XjD4PTqpbeVuGCmEB2gp6hvUrYqPw1qat
-         9ZM/PvWkZEAHNH5ohtZShp+bopXN36SDFa3D6IWMh2koKC9/jKK7eLn5KNPcT6blEH9N
-         MgMznOG8jO6ztumaiHZRQkcki9Rafmm+EXr5vmFK/WB+ezpEmvrIbIf4eYS17OFbSoGn
-         2y6w==
+        bh=8lEhJhNYrJyVdV9ncTkj+ktV/kTdL2ObxQ9D4QNhvTU=;
+        b=bTuKS/c1mvo5li261XMFcNENZgJuwEYgzg97KVKYJ0dS21QtyKdjaTgOcWToSC8aO7
+         KZxWd2wUqwtWm8mkG9zQekHqUyMAhCsbSFptSGiaD+MyDkaAVCzwZcatk3pXuoqIYnN2
+         O9xk3RMtwVz9iFHV6nKOnRKM2uV8cTq9ldu9AWEBL9zfDEoPGWTOq0V9k/nur56Vkce6
+         Zig/2QN4kJkMC9UTz2mgc27mpsM/U+ENjK7lUU31UKg6ltePg0LDUBNwgbk/WVjaghGB
+         JNuDVLFbKGOc9agHYJejVEyie9aMCAQPXnkqRRia+DMK5blFCQFFkicLQL1X4klC7vMH
+         Qnrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aSpoXN2MutncQ4V4fSkz8rocQLQbOT8gk060tfwv6HA=;
-        b=6Cy3sovahQzWfvbF4o+ofXl3X3MWP8gbP5fOk/nBnarIRYhUzZSheuNdhfIUj2Far6
-         VKT0dXkWHSO1rYbW8/nwxW4xsst33CkUxR/Mh/ZSO4HlOi4Ex/QXOQdNljYX1g8mAqux
-         YwJqVfvTP84pI0IhNU6gFbn01wc9Ueh7cLJPQWg37C5k6UjIZUer9MvfHdIk5pEakAnT
-         c+wn/KfojV5VJuLEc/HbcWObgZECKdSuX2cIt6mhy1rAaisD+tffkklvdgx5plXEV5I1
-         aIjCGZu3w2GpQam1S9R5fi1AuNkLXwy4F7QtHHYOnNBj/Rpe3FSJo2X2iD/9TZN/CMKA
-         cVng==
-X-Gm-Message-State: ACrzQf2X7LXNaqzuJOZZjec1GeceCKmT68KHDzP743LYa2UoCmdAVDUw
-        DDnLcvEDAc+/GhMAVqLo3Vk8ZxNp3jvIWg==
-X-Google-Smtp-Source: AMsMyM4Itf01KbOxiaNjiBUgyf+DpgIlzp3VGzHaSWpIcHHq161KV+eJ6EGMlbFzo7SnxI5ZcF332Q==
-X-Received: by 2002:a63:5761:0:b0:46e:b96b:e76 with SMTP id h33-20020a635761000000b0046eb96b0e76mr14719715pgm.534.1666612658465;
-        Mon, 24 Oct 2022 04:57:38 -0700 (PDT)
+        bh=8lEhJhNYrJyVdV9ncTkj+ktV/kTdL2ObxQ9D4QNhvTU=;
+        b=NTozIYDRELTnDmjVOZ2CY/m3hMev34PaFn5L8U3y97J7ruiI6aVALBI0H3QBtDfijL
+         +MtYSnrVjrIzhwhxuHOcisc0X/i7Kieb77k0NBiJ0QRRjRmjhAvFSwNUOfjvYTDj/owb
+         Z27VHXWffXulp9sRaxaRNJmswRfxSDrSZr+hlbkk0aYSS/xIlfg6Wpb/eXnZLeDAa1AM
+         THq+3/m+6LMGUIsbQ0pEl0gVB6SyiZsVroLuaM8j4RElpBsdu7g7RZBiJlC8mjFYGFBd
+         ilgaUMcUssmgMNz6+6OeGMmVuuDf9lrYsF+J5H+aYwSiELi0d8FaDiGghblAFPaLyHX4
+         xNJg==
+X-Gm-Message-State: ACrzQf0lprxmZNqDI53cDA8JAulabgwm+vXHlVnZ7zhEABuUYv1Rt2/p
+        T26iLIKc17aAmYry6ebR9KNC8/EJKY0hDA==
+X-Google-Smtp-Source: AMsMyM6rrLGnzYSpUMpqzUHEUu978FrkEXYqX08g8cmUrmbT1TyyLxE8Jdo+56cIy5QKoDk3jkSuvA==
+X-Received: by 2002:a17:903:1112:b0:178:a030:5f72 with SMTP id n18-20020a170903111200b00178a0305f72mr33101227plh.12.1666612774369;
+        Mon, 24 Oct 2022 04:59:34 -0700 (PDT)
 Received: from google.com ([2620:15c:9d:2:3698:60f8:9964:1fb4])
-        by smtp.gmail.com with ESMTPSA id e28-20020a056a0000dc00b0056afd55722asm5560034pfj.153.2022.10.24.04.57.37
+        by smtp.gmail.com with ESMTPSA id o15-20020a6548cf000000b0043c22e926f8sm17238603pgs.84.2022.10.24.04.59.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 04:57:37 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 04:57:34 -0700
+        Mon, 24 Oct 2022 04:59:33 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 04:59:31 -0700
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-input@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 17/21] input: remove s3c24xx touchscreen driver
-Message-ID: <Y1Z9rrO2rVRtF22f@google.com>
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-17-arnd@kernel.org>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     linux-input@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Input: tps6507x-ts: remove variable loops
+Message-ID: <Y1Z+I7EBn+P0m6wG@google.com>
+References: <20221020181642.24417-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221021203329.4143397-17-arnd@kernel.org>
+In-Reply-To: <20221020181642.24417-1-colin.i.king@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -77,17 +71,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 10:27:50PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Oct 20, 2022 at 07:16:42PM +0100, Colin Ian King wrote:
+> The variable loops is being incremented but is never referenced,
+> it is redundant and can be removed.
 > 
-> The s3c24xx SoC support and its adc driver was removed, so this driver
-> has no remaining users.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
-Thanks.
+Applied, thank you.
 
 -- 
 Dmitry
