@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D6360ADCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D90760AF2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbiJXOfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
+        id S231575AbiJXPic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237266AbiJXOeO (ORCPT
+        with ESMTP id S230200AbiJXPiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:34:14 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E60413F60;
-        Mon, 24 Oct 2022 06:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666616976; x=1698152976;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=H+UH4sWxAAafC5t6pknnfnxHhfMUxgyES/6UxjAPSZ0=;
-  b=hy4I2kBIRmn5inwr3Cg49OmTZ7m/MPdFCoYqI4VepUH9JTw4YV6DKajS
-   FFw5d3PqwENDXkuvF1V5qkUwAg9qW0oVz6EsoySzoRmomKoJpftthJCCt
-   HpuFqPsyy6DjT47lHDVlVI8U8Php5TvzvcmK9mZ/FZ/Y2cfFfyIiArF9d
-   F7vvOkm7UBGplwJCdxK2SoTFLueYDHqfjCQeM/RheLjakyLn7WZh1MEjG
-   SN0PTjN+LGSwp6o78pi30WBXqdUYM5cNs3JSkOC0G1zJD7pps+ZWywxSI
-   +YT9ub2mEVrxpKVcs5kUwc0KZ7OumQrZk7t6f3F1LyGE50kfXLMBiYdxc
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="333996261"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="333996261"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 06:06:55 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="662424350"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="662424350"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.30.136]) ([10.255.30.136])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 06:06:52 -0700
-Message-ID: <d65ad6f3-1850-a82e-adaa-91657c38a6f4@intel.com>
-Date:   Mon, 24 Oct 2022 21:06:49 +0800
+        Mon, 24 Oct 2022 11:38:14 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40981D4428;
+        Mon, 24 Oct 2022 07:26:58 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id g129so7177009pgc.7;
+        Mon, 24 Oct 2022 07:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uZ6iF6T0zIUXPA/iUJjlbeVV5R7S7nny4K0HA6GOdU4=;
+        b=aBt95Awussn3Wm9r/7PTxZWOl2PYOTP2QP85zW2nDHTj6f0Z4ydtLbWgZP+DizE+WZ
+         3RrO3kAVi5tEUW2z922K+9+VBVIiAmy4certMrulkqwPFLW2QUEPeIPhfKt5YX6xgC2X
+         hT0wlr4oFClhrk1S6jPKQ1aGgvGR8rEur++3wxN35ylNqKHOpzwPhsi6i5rmg1Pj39vW
+         8KqwhF5XlyaoczOuLNvLbUVXiLOmRRIjK4W6VBMNst8CsSS8QPq6jMLaPuTtJyMV5t0G
+         TGK1La8qEpPCx3OPzQqieGFUARQIAQhZ6XW6unCf29WwOFBbguF9OI1fnOYuSWXJsbes
+         Mt/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uZ6iF6T0zIUXPA/iUJjlbeVV5R7S7nny4K0HA6GOdU4=;
+        b=7Fr7iZV7+oTUNt8FeL0TP9dX+OjwqztAbneVIkBYI1lGwE+CYqt7jvhlz1JxyNxoqX
+         2Ugrmw24v04h/xASv8LGUicN5uQjOksTBaVJwWwNRhuv4/DVoUPg3K9zxJ3zTOvBjavE
+         ihm1awz1m6AfF54diyfIulqe1CiP867TKTKzi+o0nWbzzL2MPctVYW07/KtvlQpk3qy9
+         DtxseSqbzKTlC0MbgtC6UqN+T6TUvg9uR1n+MSuAOIJ4fe17YQD/v/NpzpJTgZvdlxUb
+         CTQFGlBswcnO+qr8pTeGqkAbUSLubHyfxhVaf3X0QAWsnxE9xJYcjx0jqY8LvZ2DSfAc
+         7wcA==
+X-Gm-Message-State: ACrzQf0312J25BLi+m0qxw5U7skK9Qz72tSDcYEyy/qADdT9VQ25lCaU
+        IlFXryzIGzPjGCfCGn0gnDYW8hY8PzBFe7ZYPAaU4uWs
+X-Google-Smtp-Source: AMsMyM6sSiIpLatv76v+ujr0bWsW3B2wikZU8HsGumExxEGBwIcNwvwahd77TVvlPjWHjMiTM3YrQ9QlZn5WzGuzj8o=
+X-Received: by 2002:a17:902:b190:b0:186:b9b2:9268 with SMTP id
+ s16-20020a170902b19000b00186b9b29268mr754073plr.32.1666616889648; Mon, 24 Oct
+ 2022 06:08:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.3.3
-Subject: Re: [PATCH] KVM: x86: Do not expose the host value of CPUID.8000001EH
-Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, jmattson@google.com
-References: <20221022082643.1725875-1-pbonzini@redhat.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20221022082643.1725875-1-pbonzini@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221024115429.1343257-1-heiko.thiery@gmail.com>
+ <20221024122659.2krt2hh2sdvxuurn@pengutronix.de> <CAEyMn7Y9uxeFLM7-6jR=bonusdwjX=ukRotZm=7x_3QyxVW-DQ@mail.gmail.com>
+ <20221024125630.frrbq4hy2bfxhjtq@pengutronix.de>
+In-Reply-To: <20221024125630.frrbq4hy2bfxhjtq@pengutronix.de>
+From:   Heiko Thiery <heiko.thiery@gmail.com>
+Date:   Mon, 24 Oct 2022 15:07:57 +0200
+Message-ID: <CAEyMn7ZVT+jR1sH6-RB8C6GnLF4bYvnd8f154AGKKZiPzmGbDA@mail.gmail.com>
+Subject: Re: [PATCH v3] arm64: dts: imx8mq-kontron-pitx-imx8m: remove
+ off-on-delay-us for regulator-usdhc2-vmmc
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,39 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/22/2022 4:26 PM, Paolo Bonzini wrote:
-> Several fields of CPUID.8000001EH (ExtendedApicId in EAX[31:0],
-> CoreId in EBX[7:0], NodeId in ECX[7:0]) vary on each processor,
-> and it is simply impossible to fit the right values in the
-> KVM_GET_SUPPORTED_CPUID API, in such a way that they can be
-> passed to KVM_SET_CPUID2.
-> 
-> The most likely way to avoid confusion in the guest is to zero
-> out all the values.  Userspace will most likely override it
-> anyway if it want to present a specific topology to the guest.
-> 
-> This patch essentially reverts commit 382409b4c43e ("kvm: x86: Include
-> CPUID leaf 0x8000001e in kvm's supported CPUID").
+Hi Marco,
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+Am Mo., 24. Okt. 2022 um 14:58 Uhr schrieb Marco Felsch
+<m.felsch@pengutronix.de>:
+>
+> On 22-10-24, Heiko Thiery wrote:
+> > Hi Marco,
+> >
+> > Am Mo., 24. Okt. 2022 um 14:34 Uhr schrieb Marco Felsch
+> > <m.felsch@pengutronix.de>:
+> > >
+> > > Hi Heiko,
+> > >
+> > > On 22-10-24, Heiko Thiery wrote:
+> > > > With that delay U-Boot is not able to store the environment variables in
+> > > > the SD card. Since the delay is not required it can be remove.
+> > >
+> > > Now I'm curious, since this doesn't tell us the why, it just tell us
+> > > about the end result. I'm asking because the NXP EVKs have an issue with
+> > > the sd-card power line capacity and we need this delay to reach a level
+> > > which is marked as low within the sd-spec.
+> >
+> > I must admit that I do not know at all why this entry was made. I have
+> > now looked at the dtbs of the imx8 EVKs and except for imx8dxl-evk.dts
+> > I see no delay here.
+>
+> Please see <20221024031351.4135651-10-peng.fan@oss.nxp.com>, they will
+> be added.
 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->   arch/x86/kvm/cpuid.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-> index a0292ba650df..380b71600a9e 100644
-> --- a/arch/x86/kvm/cpuid.c
-> +++ b/arch/x86/kvm/cpuid.c
-> @@ -1193,6 +1193,9 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
->   		entry->ebx = entry->ecx = entry->edx = 0;
->   		break;
->   	case 0x8000001e:
-> +		/* Different on each processor, just hide it.  */
-> +		entry->eax = entry->ebx = entry->ecx = 0;
-> +		entry->edx = 0;
->   		break;
->   	case 0x8000001F:
->   		if (!kvm_cpu_cap_has(X86_FEATURE_SEV)) {
+I think I have to re-check that and especially why U-Boot is not able
+with that setting to access the SD card for writing the environment.
 
+Thanks!
+
+>
+> Regards,
+>   Marco
