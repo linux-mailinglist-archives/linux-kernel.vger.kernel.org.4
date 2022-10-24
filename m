@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2307B60A1A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F02B60A395
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiJXLbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
+        id S232361AbiJXL53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiJXLbt (ORCPT
+        with ESMTP id S232144AbiJXLzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:31:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500DC55C58;
-        Mon, 24 Oct 2022 04:31:48 -0700 (PDT)
+        Mon, 24 Oct 2022 07:55:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46727B1DC;
+        Mon, 24 Oct 2022 04:46:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01F1DB8113A;
-        Mon, 24 Oct 2022 11:31:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51AD2C433C1;
-        Mon, 24 Oct 2022 11:31:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5BC661298;
+        Mon, 24 Oct 2022 11:44:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03219C433C1;
+        Mon, 24 Oct 2022 11:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611105;
-        bh=fCOJG6u/PwN900egkfC9xg+Is3FCL/e8k21sKERtIMc=;
+        s=korg; t=1666611891;
+        bh=b+dCW2i6SlbVAsvvFo6j2dv3TAz1oQHd4db67WosFHs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N3AUODOSzfm2i6+P6zM3a4cMGG0dA9t2/2qFvMjNVJRQlRSiT4u8uq5EEm8NAVKuF
-         SCF+/BdbCfJOA5IjKBZRPBVN16l3BvKLB2SGFZw9rkX5eGs1fZjgOYJ5lexDq3wDuc
-         ypumWyWW9HD5IhGAUSpNE+KyfgHBMij01PBXwDHs=
+        b=XfykyGGzuEbEYg1bkXwfTCiyjA9L83NAPsXZfibDMxMonp3xA+GTOV90Uynfs2xqZ
+         AfusgeM+cHIvg+7FxFjCOabXAv/6zQakyXyDV13Dm3+RVV2FGONdPR3SSZJUsxQ3Lr
+         FH3PbGE730laqYThgDl9F/iNNw6q+OB+nhLF7nRQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 6.0 11/20] drm/amd/pm: disable cstate feature for gpu reset scenario
-Date:   Mon, 24 Oct 2022 13:31:13 +0200
-Message-Id: <20221024112934.902288047@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 120/159] powerpc: Fix SPE Power ISA properties for e500v1 platforms
+Date:   Mon, 24 Oct 2022 13:31:14 +0200
+Message-Id: <20221024112953.883507096@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-References: <20221024112934.415391158@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,80 +55,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Quan <evan.quan@amd.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 3059cd8c5f797ad83d2b194ae66339f5c007ca43 upstream.
+[ Upstream commit 37b9345ce7f4ab17538ea62def6f6d430f091355 ]
 
-Suggested by PMFW team and same as what did for gfxoff feature.
-This can address some Mode1Reset failures observed on SMU13.0.0.
+Commit 2eb28006431c ("powerpc/e500v2: Add Power ISA properties to comply
+with ePAPR 1.1") introduced new include file e500v2_power_isa.dtsi and
+should have used it for all e500v2 platforms. But apparently it was used
+also for e500v1 platforms mpc8540, mpc8541, mpc8555 and mpc8560.
 
-Signed-off-by: Evan Quan <evan.quan@amd.com>
-Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org # 6.0.x
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+e500v1 cores compared to e500v2 do not support double precision floating
+point SPE instructions. Hence power-isa-sp.fd should not be set on e500v1
+platforms, which is in e500v2_power_isa.dtsi include file.
+
+Fix this issue by introducing a new e500v1_power_isa.dtsi include file and
+use it in all e500v1 device tree files.
+
+Fixes: 2eb28006431c ("powerpc/e500v2: Add Power ISA properties to comply with ePAPR 1.1")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220902212103.22534-1-pali@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |    8 ++++++++
- drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c  |    8 ++++++++
- drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c |    9 +++++++++
- 3 files changed, 25 insertions(+)
+ .../boot/dts/fsl/e500v1_power_isa.dtsi        | 51 +++++++++++++++++++
+ arch/powerpc/boot/dts/fsl/mpc8540ads.dts      |  2 +-
+ arch/powerpc/boot/dts/fsl/mpc8541cds.dts      |  2 +-
+ arch/powerpc/boot/dts/fsl/mpc8555cds.dts      |  2 +-
+ arch/powerpc/boot/dts/fsl/mpc8560ads.dts      |  2 +-
+ 5 files changed, 55 insertions(+), 4 deletions(-)
+ create mode 100644 arch/powerpc/boot/dts/fsl/e500v1_power_isa.dtsi
 
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -2926,6 +2926,14 @@ static int amdgpu_device_ip_suspend_phas
- 	amdgpu_device_set_pg_state(adev, AMD_PG_STATE_UNGATE);
- 	amdgpu_device_set_cg_state(adev, AMD_CG_STATE_UNGATE);
+diff --git a/arch/powerpc/boot/dts/fsl/e500v1_power_isa.dtsi b/arch/powerpc/boot/dts/fsl/e500v1_power_isa.dtsi
+new file mode 100644
+index 000000000000..7e2a90cde72e
+--- /dev/null
++++ b/arch/powerpc/boot/dts/fsl/e500v1_power_isa.dtsi
+@@ -0,0 +1,51 @@
++/*
++ * e500v1 Power ISA Device Tree Source (include)
++ *
++ * Copyright 2012 Freescale Semiconductor Inc.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions are met:
++ *     * Redistributions of source code must retain the above copyright
++ *       notice, this list of conditions and the following disclaimer.
++ *     * Redistributions in binary form must reproduce the above copyright
++ *       notice, this list of conditions and the following disclaimer in the
++ *       documentation and/or other materials provided with the distribution.
++ *     * Neither the name of Freescale Semiconductor nor the
++ *       names of its contributors may be used to endorse or promote products
++ *       derived from this software without specific prior written permission.
++ *
++ *
++ * ALTERNATIVELY, this software may be distributed under the terms of the
++ * GNU General Public License ("GPL") as published by the Free Software
++ * Foundation, either version 2 of that License or (at your option) any
++ * later version.
++ *
++ * THIS SOFTWARE IS PROVIDED BY Freescale Semiconductor "AS IS" AND ANY
++ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
++ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
++ * DISCLAIMED. IN NO EVENT SHALL Freescale Semiconductor BE LIABLE FOR ANY
++ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
++ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
++ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
++ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
++ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
++ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ */
++
++/ {
++	cpus {
++		power-isa-version = "2.03";
++		power-isa-b;		// Base
++		power-isa-e;		// Embedded
++		power-isa-atb;		// Alternate Time Base
++		power-isa-cs;		// Cache Specification
++		power-isa-e.le;		// Embedded.Little-Endian
++		power-isa-e.pm;		// Embedded.Performance Monitor
++		power-isa-ecl;		// Embedded Cache Locking
++		power-isa-mmc;		// Memory Coherence
++		power-isa-sp;		// Signal Processing Engine
++		power-isa-sp.fs;	// SPE.Embedded Float Scalar Single
++		power-isa-sp.fv;	// SPE.Embedded Float Vector
++		mmu-type = "power-embedded";
++	};
++};
+diff --git a/arch/powerpc/boot/dts/fsl/mpc8540ads.dts b/arch/powerpc/boot/dts/fsl/mpc8540ads.dts
+index e6d0b166d68d..b4314aa6769c 100644
+--- a/arch/powerpc/boot/dts/fsl/mpc8540ads.dts
++++ b/arch/powerpc/boot/dts/fsl/mpc8540ads.dts
+@@ -11,7 +11,7 @@
  
-+	/*
-+	 * Per PMFW team's suggestion, driver needs to handle gfxoff
-+	 * and df cstate features disablement for gpu reset(e.g. Mode1Reset)
-+	 * scenario. Add the missing df cstate disablement here.
-+	 */
-+	if (amdgpu_dpm_set_df_cstate(adev, DF_CSTATE_DISALLOW))
-+		dev_warn(adev->dev, "Failed to disallow df cstate");
-+
- 	for (i = adev->num_ip_blocks - 1; i >= 0; i--) {
- 		if (!adev->ip_blocks[i].status.valid)
- 			continue;
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/arcturus_ppt.c
-@@ -2242,9 +2242,17 @@ static void arcturus_get_unique_id(struc
- static int arcturus_set_df_cstate(struct smu_context *smu,
- 				  enum pp_df_cstate state)
- {
-+	struct amdgpu_device *adev = smu->adev;
- 	uint32_t smu_version;
- 	int ret;
+ /dts-v1/;
  
-+	/*
-+	 * Arcturus does not need the cstate disablement
-+	 * prerequisite for gpu reset.
-+	 */
-+	if (amdgpu_in_reset(adev) || adev->in_suspend)
-+		return 0;
-+
- 	ret = smu_cmn_get_smc_version(smu, NULL, &smu_version);
- 	if (ret) {
- 		dev_err(smu->adev->dev, "Failed to get smu version!\n");
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
-@@ -1640,6 +1640,15 @@ static bool aldebaran_is_baco_supported(
- static int aldebaran_set_df_cstate(struct smu_context *smu,
- 				   enum pp_df_cstate state)
- {
-+	struct amdgpu_device *adev = smu->adev;
-+
-+	/*
-+	 * Aldebaran does not need the cstate disablement
-+	 * prerequisite for gpu reset.
-+	 */
-+	if (amdgpu_in_reset(adev) || adev->in_suspend)
-+		return 0;
-+
- 	return smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_DFCstateControl, state, NULL);
- }
+-/include/ "e500v2_power_isa.dtsi"
++/include/ "e500v1_power_isa.dtsi"
  
+ / {
+ 	model = "MPC8540ADS";
+diff --git a/arch/powerpc/boot/dts/fsl/mpc8541cds.dts b/arch/powerpc/boot/dts/fsl/mpc8541cds.dts
+index 9fa2c734a988..48492c621edf 100644
+--- a/arch/powerpc/boot/dts/fsl/mpc8541cds.dts
++++ b/arch/powerpc/boot/dts/fsl/mpc8541cds.dts
+@@ -11,7 +11,7 @@
+ 
+ /dts-v1/;
+ 
+-/include/ "e500v2_power_isa.dtsi"
++/include/ "e500v1_power_isa.dtsi"
+ 
+ / {
+ 	model = "MPC8541CDS";
+diff --git a/arch/powerpc/boot/dts/fsl/mpc8555cds.dts b/arch/powerpc/boot/dts/fsl/mpc8555cds.dts
+index 272f08caea92..325c817dedeb 100644
+--- a/arch/powerpc/boot/dts/fsl/mpc8555cds.dts
++++ b/arch/powerpc/boot/dts/fsl/mpc8555cds.dts
+@@ -11,7 +11,7 @@
+ 
+ /dts-v1/;
+ 
+-/include/ "e500v2_power_isa.dtsi"
++/include/ "e500v1_power_isa.dtsi"
+ 
+ / {
+ 	model = "MPC8555CDS";
+diff --git a/arch/powerpc/boot/dts/fsl/mpc8560ads.dts b/arch/powerpc/boot/dts/fsl/mpc8560ads.dts
+index 7a822b08aa35..b5fb5ae3ed68 100644
+--- a/arch/powerpc/boot/dts/fsl/mpc8560ads.dts
++++ b/arch/powerpc/boot/dts/fsl/mpc8560ads.dts
+@@ -11,7 +11,7 @@
+ 
+ /dts-v1/;
+ 
+-/include/ "e500v2_power_isa.dtsi"
++/include/ "e500v1_power_isa.dtsi"
+ 
+ / {
+ 	model = "MPC8560ADS";
+-- 
+2.35.1
+
 
 
