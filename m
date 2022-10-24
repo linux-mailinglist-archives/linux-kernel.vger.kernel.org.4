@@ -2,154 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6252060B32C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB1760B16B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbiJXQ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S232212AbiJXQXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235845AbiJXQzN (ORCPT
+        with ESMTP id S234133AbiJXQWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:55:13 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C561AE290;
-        Mon, 24 Oct 2022 08:36:03 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id j130so11415944ybj.9;
-        Mon, 24 Oct 2022 08:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WrYoOZbKFCccOrtXPnngnmJRm0Dj9ejvdDDgWvdIOc4=;
-        b=j2U/GyYCVlBhA/+vasoTYYyganc6QSHUuLmYGE461nM2B2j7L8BHyYJbCAxBhVG1XX
-         acQEn8DfB15lQQ3cUHrYLqtiRlayPkTmfzIFDmBmW5dcYFdLQND9nnxZTdvKCr6uWVWP
-         lQ/YxKxb8xTwyqrUVGSy4HmT9X8ii3nCf4v54hhleQEB63NKf+9vkZs57xlDOQZ3auCn
-         ShBrinqTkg3S34wjdreAKCRKmFJec1d+fPErUSGV0Dis+Q+dbROR4jlIeogJ8DkVUOal
-         yrAtF7Ri5T52VTE5VHwBXhGCANjLxUew9ZeBxt+lQ/waEnuFDltPYahUmXVQ3BlssTh+
-         nQrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WrYoOZbKFCccOrtXPnngnmJRm0Dj9ejvdDDgWvdIOc4=;
-        b=Ki97YgnAKB9oYIxqBm8AShP4AaV1ZOoYo54Ofuk6aAssCesp4QZT9ijd4Ykxbf7pJC
-         akBINcoFmqxL04GpGdsehkMrsXSCWw7WTuFDFnen9SzftYl2U1OKMxOrguBCMR65FdYv
-         SuHtoFCIT/eSP52CJx9ayEeEp7w0OvSN47hICZ28ethJDyPsM93hjXR/eOx9zGgfElYc
-         USpGu1zjoCOHcLyKITnQVNRQcp9S6rBSGaAqXYPnfiVzl1VVXWaqjvjI69x9mCTCymw1
-         7fRgZUvztZXF+uBfGia69s9TQ5q0wvRXDNGGYuYhco2qbmw1v4h5dvWux0owzxTRvq8j
-         NbeA==
-X-Gm-Message-State: ACrzQf0shYZWjlkTDWvvxREwx7ADzEatUo9RY6Hsl65wCd1Y0+zjpjfE
-        S+FiBtZhVJHN+TSbZ4n3+E7CUkI9nx7kHQbQFeXZxmRf
-X-Google-Smtp-Source: AMsMyM6EvysaHiUabvYs4baVZTymhfLHCC/g/dii9bVMJWWAuOyZVdmdE7eqTdRMvsDXi3jbZf8C43NqJDJvCUeug1s=
-X-Received: by 2002:a9d:7859:0:b0:661:b842:80d2 with SMTP id
- c25-20020a9d7859000000b00661b84280d2mr16537790otm.328.1666623706022; Mon, 24
- Oct 2022 08:01:46 -0700 (PDT)
+        Mon, 24 Oct 2022 12:22:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D822A17999D;
+        Mon, 24 Oct 2022 08:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666624103; x=1698160103;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Z0suAyxf1/ZAu8tFjbvLacyB7CnvbP884nhki9jkwsc=;
+  b=FGJoRQ2A+k+xu3St7RQ+seN6ScpaYuJMhLr1DbZnH1xxAFEYv3dUwOpi
+   1wT/8rToMSqhwW9wv3+nGKnqbVipYUXcXTfcwTfKzyeQXMUREyzazYvYs
+   myPvupTfF3tMFDushDtwJtGhHaZviJrl8IJrBkkF6Evvh90q6HJEpJq6P
+   rpLR0yvQtUm+Gs8+bSdm6D9O41qHrZEbl1+O5FY7UB3EuZ/Gc77WYGLDB
+   YdzubdPISe/CGy0ZL6EsxRNe2IEJa8N1UG3hjxBQYSv47+3eX6TW1TFmR
+   Y3YUPrrgrGl4pA/x7T5i1RbXZV0iypXZBPrLCMZtMcEhuE+W5bolTvFgC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="371655874"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="371655874"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:01:42 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="662458157"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="662458157"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:01:42 -0700
+Date:   Mon, 24 Oct 2022 08:01:59 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
+        jirislaby@kernel.org, geert+renesas@glider.be,
+        andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Subject: Re: [PATCH v4 1/4] Documentation: fpga: dfl: Add documentation for
+ DFHv1
+In-Reply-To: <Y1IYPTOJaxTfLDQe@debian.me>
+Message-ID: <alpine.DEB.2.22.394.2210240801360.2070724@rhweight-WRK1>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-2-matthew.gerlach@linux.intel.com> <Y1IYPTOJaxTfLDQe@debian.me>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20220913085320.8577-1-johan+linaro@kernel.org>
- <YymCll02tRIMb+9Z@hovoldconsulting.com> <Y1I77HYeOkx1fz1E@hovoldconsulting.com>
- <139426b9-0e5b-e4c3-27c6-584ab48517c2@quicinc.com> <Y1Z4HrEcLDhe6gQr@hovoldconsulting.com>
-In-Reply-To: <Y1Z4HrEcLDhe6gQr@hovoldconsulting.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 24 Oct 2022 08:01:55 -0700
-Message-ID: <CAF6AEGuMFCSN2YtXiPmzL_4t82PPp_-K6DB+UHtScygD8PCQHw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/10] drm/msm: probe deferral fixes
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 4:34 AM Johan Hovold <johan@kernel.org> wrote:
->
-> On Fri, Oct 21, 2022 at 09:05:52AM -0700, Abhinav Kumar wrote:
-> > Hi Johan
-> >
-> > On 10/20/2022 11:27 PM, Johan Hovold wrote:
-> > > On Tue, Sep 20, 2022 at 11:06:30AM +0200, Johan Hovold wrote:
-> > >> On Tue, Sep 13, 2022 at 10:53:10AM +0200, Johan Hovold wrote:
-> > >>> The MSM DRM driver is currently broken in multiple ways with respect to
-> > >>> probe deferral. Not only does the driver currently fail to probe again
-> > >>> after a late deferral, but due to a related use-after-free bug this also
-> > >>> triggers NULL-pointer dereferences.
-> > >>>
-> > >>> These bugs are not new but have become critical with the release of
-> > >>> 5.19 where probe is deferred in case the aux-bus EP panel driver has not
-> > >>> yet been loaded.
-> > >>>
-> > >>> The underlying problem is lifetime issues due to careless use of
-> > >>> device-managed resources.
-> > >>
-> > >> Any chance of getting this merged for 6.1?
-> > >
-> > > Is anyone picking these up as fixes for 6.1-rc as we discussed?
-> > >
-> > > Johan
-> >
-> > All of these except the last two ( as discussed ) have landed in the
-> > -fixes tree
-> >
-> > https://gitlab.freedesktop.org/drm/msm/-/commit/6808abdb33bf90330e70a687d29f038507e06ebb
->
-> Ah, perfect, thanks.
->
-> When do you expect to send these on so that they end up in linux-next
-> and eventually Linus's tree?
 
-I'll send a -fixes PR this week
 
-> Note that it looks like something happened with the commit messages when
-> you applied these. Specifically, the Fixes tags appears to now have a
-> line break in them and there's also some random whitespace before your
-> SoB:
->
->         Fixes: c3bf8e21
->
->          ("drm/msm/dp: Add eDP support via aux_bus")
+On Fri, 21 Oct 2022, Bagas Sanjaya wrote:
 
-naw, that is just some problem with gitlab's html generation, the
-actual patch is fine ;-)
+> On Thu, Oct 20, 2022 at 02:26:07PM -0700, matthew.gerlach@linux.intel.com wrote:
+>> +Device Feature Header - Version 0
+>> +===========================================
+>> +The format of Version 0 of a Device Feature Header (DFH) is shown below::
+>> +
+>> +    +-----------------------------------------------------------------------+
+>> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
+>> +    +-----------------------------------------------------------------------+
+>> +    |63                                 GUID_L                             0| 0x08
+>> +    +-----------------------------------------------------------------------+
+>> +    |63                                 GUID_H                             0| 0x10
+>> +    +-----------------------------------------------------------------------+
+>> +
+>> +Offset 0x00
+>> +Type - The type of DFH (e.g. FME, AFU, or private feature).
+>> +DFH VER - The version of the DFH.
+>> +Rsvd - Currently unused.
+>> +EOL - Set if this DFH is the end of the Device Feature List (DFL).
+>> +Next - The offset of the next DFH in the DFL from the start of the DFH.
+>> +If EOL is set, Next refers to size of mmio for last feature in the list.
+>> +ID - If Type field is 'private feature', then ID of the private feature.
+>> +
+>> +Offset 0x08
+>> +GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier
+>> +if Type is FME or AFU.
+>> +
+>> +Offset 0x10
+>> +GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
+>> +if Type is FME or AFU.
+>> +
+>> +
+>> +Device Feature Header - Version 1
+>> +===========================================
+>> +The format of Version 1 of a Device Feature Header (DFH) is shown below::
+>> +
+>> +    +-----------------------------------------------------------------------+
+>> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
+>> +    +-----------------------------------------------------------------------+
+>> +    |63                                 GUID_L                             0| 0x08
+>> +    +-----------------------------------------------------------------------+
+>> +    |63                                 GUID_H                             0| 0x10
+>> +    +-----------------------------------------------------------------------+
+>> +    |63                 Address/Offset                            1|  Rel  0| 0x18
+>> +    +-----------------------------------------------------------------------+
+>> +    |63        Reg Size       32|Params 31|30 Group    16|15 Instance      0| 0x20
+>> +    +-----------------------------------------------------------------------+
+>> +    |63 Next      34|RSV33|EOP32|31 Param Version 16|15 Param ID           0| 0x28
+>> +    +-----------------------------------------------------------------------+
+>> +    |63                 Parameter Data                                     0| 0x30
+>> +    +-----------------------------------------------------------------------+
+>> +
+>> +                                  ...
+>> +
+>> +    +-----------------------------------------------------------------------+
+>> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
+>> +    +-----------------------------------------------------------------------+
+>> +    |63                 Parameter Data                                     0|
+>> +    +-----------------------------------------------------------------------+
+>> +
+>> +Offset 0x00
+>> +Type - The type of DFH (e.g. FME, AFU, or private feature).
+>> +DFH VER - The version of the DFH.
+>> +Rsvd - Currently unused.
+>> +EOL - Set if this DFH is the end of the Device Feature List (DFL).
+>> +Next - The offset of the next DFH in the DFL from the start of the DFH.
+>> +If EOL is set, Next refers to size of mmio for last feature in the list.
+>> +ID - If Type field is 'private feature', then ID of the private feature.
+>> +
+>> +Offset 0x08
+>> +GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier.
+>> +
+>> +Offset 0x10
+>> +GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
+>> +if Type is FME or AFU.
+>> +
+>> +Offset 0x18
+>> +Address/Offset - If Rel bit is set, then high 63 bits of a 16 bit aligned
+>> +absolute address for the location of the feature's registers.
+>> +If Rel bit is clear, then the feature's registers start at the
+>> +offset from the start of the DFH.
+>> +
+>> +Offset 0x20
+>> +Reg Size - Size of feature's register set.
+>> +Params - Set if DFH has one or more parameter blocks.
+>> +Group - Id of group if feature is part of a group.
+>> +Instance - Id of instance of feature within a group.
+>> +
+>> +Offset 0x28 if feature has parameters
+>> +Next - High 30 bits of a 32 bit aligned offset to the next parameter block.
+>> +If EOP set, size of last parameter.
+>> +Param Version - Version of Param ID.
+>> +Param ID - ID of parameter.
+>> +
+>> +Offset 0x30
+>> +Parameter Data - Parameter data whose size and format is defined by version
+>> +and ID of the parameter.
+>> +
+>
+> The offset fields list should be formatted with nested list (with
+> prose improv):
+>
+> ---- >8 ----
 
-BR,
--R
+Thanks for the good suggestion.
 
->         Cc: stable@vger.kernel.org      # 5.19
->         Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->         Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
->         Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->         Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->         Patchwork: https://patchwork.freedesktop.org/patch/502667/
->         Link: https://lore.kernel.org/r/20220913085320.8577-8-johan+linaro@kernel.org
+>
+> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
+> index 12365be435a812..9c19ee62d4ac44 100644
+> --- a/Documentation/fpga/dfl.rst
+> +++ b/Documentation/fpga/dfl.rst
+> @@ -573,22 +573,27 @@ The format of Version 0 of a Device Feature Header (DFH) is shown below::
+>     |63                                 GUID_H                             0| 0x10
+>     +-----------------------------------------------------------------------+
+>
+> -Offset 0x00
+> -Type - The type of DFH (e.g. FME, AFU, or private feature).
+> -DFH VER - The version of the DFH.
+> -Rsvd - Currently unused.
+> -EOL - Set if this DFH is the end of the Device Feature List (DFL).
+> -Next - The offset of the next DFH in the DFL from the start of the DFH.
+> -If EOL is set, Next refers to size of mmio for last feature in the list.
+> -ID - If Type field is 'private feature', then ID of the private feature.
+> +The fields are:
+>
+> -Offset 0x08
+> -GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier
+> -if Type is FME or AFU.
+> +  * Offset 0x00
+>
+> -Offset 0x10
+> -GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
+> -if Type is FME or AFU.
+> +    * Type - The type of DFH (e.g. FME, AFU, or private feature).
+> +    * DFH VER - The version of the DFH.
+> +    * Rsvd - Currently unused.
+> +    * EOL - Set if this DFH is the end of the Device Feature List (DFL).
+> +
+> +    * Next - The offset of the next DFH in the DFL from the start of the DFH.
+> +      If EOL is set, Next refers to size of mmio for last feature in the list.
+> +
+> +    * ID - Private feature ID if Type is private feature.
+> +
+> +  * Offset 0x08
+> +
+> +    * GUID_L - Least significant half of a 128-bit GUID if Type is FME or AFU.
+> +
+> +  * Offset 0x10
+> +
+> +    * GUID_H - Most significant half of a 128-bit GUID if Type if FME or AFU.
 >
 >
->         Signed-off-by: Abhinav Kumar's avatarAbhinav Kumar <quic_abhinavk@quicinc.com>
+> Device Feature Header - Version 1
+> @@ -619,43 +624,53 @@ The format of Version 1 of a Device Feature Header (DFH) is shown below::
+>     |63                 Parameter Data                                     0|
+>     +-----------------------------------------------------------------------+
 >
-> It's possible just the gitlab UI that's messed up, but perhaps you can
-> double check before they hit linux-next, which should complain about
-> this otherwise.
+> -Offset 0x00
+> -Type - The type of DFH (e.g. FME, AFU, or private feature).
+> -DFH VER - The version of the DFH.
+> -Rsvd - Currently unused.
+> -EOL - Set if this DFH is the end of the Device Feature List (DFL).
+> -Next - The offset of the next DFH in the DFL from the start of the DFH.
+> -If EOL is set, Next refers to size of mmio for last feature in the list.
+> -ID - If Type field is 'private feature', then ID of the private feature.
+> +The fields are:
 >
-> Johan
+> -Offset 0x08
+> -GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier.
+> +  * Offset 0x00
+>
+> -Offset 0x10
+> -GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
+> -if Type is FME or AFU.
+> +    * Type - The type of DFH (e.g. FME, AFU, or private feature).
+> +    * DFH VER - The version of the DFH.
+> +    * Rsvd - Currently unused.
+> +    * EOL - Set if this DFH is the end of the Device Feature List (DFL).
+>
+> -Offset 0x18
+> -Address/Offset - If Rel bit is set, then high 63 bits of a 16 bit aligned
+> -absolute address for the location of the feature's registers.
+> -If Rel bit is clear, then the feature's registers start at the
+> -offset from the start of the DFH.
+> +    * Next - The offset of the next DFH in the DFL from the start of the DFH.
+> +      If EOL is set, Next refers to size of mmio for last feature in the list.
+>
+> -Offset 0x20
+> -Reg Size - Size of feature's register set.
+> -Params - Set if DFH has one or more parameter blocks.
+> -Group - Id of group if feature is part of a group.
+> -Instance - Id of instance of feature within a group.
+> +    * ID - Private feature ID if Type is private feature.
+>
+> -Offset 0x28 if feature has parameters
+> -Next - High 30 bits of a 32 bit aligned offset to the next parameter block.
+> -If EOP set, size of last parameter.
+> -Param Version - Version of Param ID.
+> -Param ID - ID of parameter.
+> +  * Offset 0x08
+>
+> -Offset 0x30
+> -Parameter Data - Parameter data whose size and format is defined by version
+> -and ID of the parameter.
+> +    * GUID_L - Least significant half of a 128-bit GUID if Type is FME or APU.
+> +
+> +  * Offset 0x10
+> +
+> +    * GUID_H - Most significant half of a 128-bit GUID if Type is FME or AFU.
+> +
+> +  * Offset 0x18
+> +
+> +    * Address/Offset - If Rel bit is set, upper 63 bits of a 16-bit aligned
+> +      absolute address for the location of feature registers; otherwise
+> +      registers of the feature start at the offset from the start of the DFH.
+> +
+> +  * Offset 0x20
+> +
+> +    * Reg Size - Size of register set of the feature.
+> +    * Params - Set if DFH has one or more parameter blocks.
+> +    * Group - ID of group if the feature is part of a group.
+> +    * Instance - ID of instance of the feature within a group.
+> +
+> +  * Offset 0x28 (if the feature has parameters)
+> +
+> +    * Next - Upper 30 bits of a 32-bit aligned offset to the next parameter
+> +      block. If EOP is set, size of last parameter.
+> +
+> +    * Param Version - Version of Param ID.
+> +    * Param ID - ID of parameter.
+> +
+> +  * Offset 0x30 (if the feature has parameters)
+> +
+> +    * Parameter Data - Parameter data whose size and format is defined by
+> +      version and ID of the parameter.
+>
+> Open discussion
+> ===============
+>
+> Thanks.
+>
+> -- 
+> An old man doll... just what I always wanted! - Clara
+>
