@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33C9609EB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEF8609EBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiJXKH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
+        id S231258AbiJXKIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbiJXKHL (ORCPT
+        with ESMTP id S231215AbiJXKIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:07:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8231A07B;
-        Mon, 24 Oct 2022 03:07:09 -0700 (PDT)
+        Mon, 24 Oct 2022 06:08:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BED565031;
+        Mon, 24 Oct 2022 03:07:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD09D611BE;
-        Mon, 24 Oct 2022 10:07:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DC04C4FF19;
-        Mon, 24 Oct 2022 10:07:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6E4A8B810B9;
+        Mon, 24 Oct 2022 10:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2332FC43148;
+        Mon, 24 Oct 2022 10:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666606024;
-        bh=VUmrOTJs2EFOchTZknb6MkKhbnENFHL5paq8fgMjNFg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ERG2y6T7SeqkM6IJuQ4pFxv9V4UIxlt0+QC3FUw1z6NJ1+yChd9gGYFHixQZEaKT+
-         JcTSehV/y2munWcaTrE1jOK7w7AcPhqEzCBAvrZIFhtmP8vHD32wOsib1lg2MyLufF
-         A2o4kIRMP8/s/ZShQZAIOUTSwTQSLEZgPKWQ4KTBUcJy7P/hVSCjkB8R9TuFCzHVR4
-         uSZjVCQAyclqQ92tAXnKy9vsXsjPRmshyJXmPjYJ2CU4Lwjbay2IBMtdy2NIBvttMw
-         ID48rtATIS5qexPUldTN+H5TjhFKCEpFAvEvKsPv2YrMgiNqTpq1WvTDbCVMA30DaG
-         H7P9VsnEJGhFQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1omuM3-0005N7-Qz; Mon, 24 Oct 2022 12:06:47 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 13/13] phy: qcom-qmp-usb: add support for updated sc8280xp binding
-Date:   Mon, 24 Oct 2022 12:06:32 +0200
-Message-Id: <20221024100632.20549-14-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221024100632.20549-1-johan+linaro@kernel.org>
-References: <20221024100632.20549-1-johan+linaro@kernel.org>
+        s=k20201202; t=1666606041;
+        bh=sHcd7a6CJYMXJN0T3O0Gmv4Ta3CAm5TN0dTsZcDGJ14=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ReZ2aXSu4iGUnECx43CmDCXR51jonPgXWttAkMbJ1vxW/RfZox0LtcML3bEU7c6D7
+         hdY6vFzKrPAA6r4Rm+e+K9hwkdX6VDQBN3H/19MwBbioinWgiIdaWnhaFmEg45/IOe
+         k8lDkDEQqTW4YPjEYFwOUXoRMUJLb0fRcW99YI6C7iH8dt/CzZ3ykwxv/iRXvKLaUR
+         hl5j4uzA33e/5/L/4GxfTd0EaJRBYEzeKNcQXqS2bEYHXJxQyEvvaPwkW6k+ORlR9B
+         JP/TPxwM/0BQiitncrp9Xhx3Y5OspSVCm1pgRk+AaXFrhkig3okDrlgpl/cmP8aYe3
+         7JiaGnT4JjCsw==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1322d768ba7so11288672fac.5;
+        Mon, 24 Oct 2022 03:07:21 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0njA5MyTXB1kRWssL0s5jBIsCMszVXzhcaEXhkW/6GAdkP7VWg
+        PQhfsBJEhlNJKvjz3v7uV9hyYAE/EdH+gOf0sL0=
+X-Google-Smtp-Source: AMsMyM7QXKv6uxTpUWFoPA/4LGtlOREZxkoYaz1p9CiCmnpdXChNo5b56CWYTdva7IGbg7H9Bi+XdpUjePtX7f4UGH0=
+X-Received: by 2002:a05:6870:5803:b0:12c:c3e0:99dc with SMTP id
+ r3-20020a056870580300b0012cc3e099dcmr35011449oap.19.1666606040276; Mon, 24
+ Oct 2022 03:07:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221020135913.2850550-1-guoren@kernel.org> <Y1Fb4HGzJEKCD1SF@zn.tnic>
+In-Reply-To: <Y1Fb4HGzJEKCD1SF@zn.tnic>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 24 Oct 2022 18:07:08 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTR92khYqensUorjWTQz=8u9HSsbmwSa2FBWmRsUkoxJcA@mail.gmail.com>
+Message-ID: <CAJF2gTR92khYqensUorjWTQz=8u9HSsbmwSa2FBWmRsUkoxJcA@mail.gmail.com>
+Subject: Re: [PATCH] arch: crash: Remove duplicate declaration in smp.h
+To:     arnd@arndb.de, Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        heiko@sntech.de, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,182 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the new SC8280XP binding.
+On Thu, Oct 20, 2022 at 10:32 PM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Thu, Oct 20, 2022 at 09:59:13AM -0400, guoren@kernel.org wrote:
+> > diff --git a/arch/x86/include/asm/crash.h b/arch/x86/include/asm/crash.h
+> > index 8b6bd63530dc..6a9be4907c82 100644
+> > --- a/arch/x86/include/asm/crash.h
+> > +++ b/arch/x86/include/asm/crash.h
+> > @@ -7,6 +7,5 @@ struct kimage;
+> >  int crash_load_segments(struct kimage *image);
+> >  int crash_setup_memmap_entries(struct kimage *image,
+> >               struct boot_params *params);
+> > -void crash_smp_send_stop(void);
+> >
+> >  #endif /* _ASM_X86_CRASH_H */
+>
+> Acked-by: Borislav Petkov <bp@suse.de>
+Thx.
 
-Note that the binding does not try to describe every register subregion
-and instead the driver holds the corresponding offsets. This includes
-the PCS_USB region which was initially overlooked.
+Hi, Arnd
 
-Note that the driver will no longer accept the old binding due to the
-fixed "phy_phy" reset name.
+Because it crosses the architecture, could you take this in your next-tree?
 
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 82 ++++++++++++++++++++-----
- 1 file changed, 67 insertions(+), 15 deletions(-)
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index 3f5e22b1d29e..372f9853c749 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -1414,10 +1414,20 @@ static const struct qmp_phy_init_tbl sc8280xp_usb3_uniphy_pcs_tbl[] = {
- 	QMP_PHY_INIT_CFG(QPHY_V5_PCS_REFGEN_REQ_CONFIG1, 0x21),
- };
- 
-+struct qmp_usb_offsets {
-+	u16 serdes;
-+	u16 pcs;
-+	u16 pcs_usb;
-+	u16 tx;
-+	u16 rx;
-+};
-+
- /* struct qmp_phy_cfg - per-PHY initialization config */
- struct qmp_phy_cfg {
- 	int lanes;
- 
-+	const struct qmp_usb_offsets *offsets;
-+
- 	/* Init sequence for PHY blocks - serdes, tx, rx, pcs */
- 	const struct qmp_phy_init_tbl *serdes_tbl;
- 	int serdes_tbl_num;
-@@ -1548,6 +1558,14 @@ static const char * const qmp_phy_vreg_l[] = {
- 	"vdda-phy", "vdda-pll",
- };
- 
-+static const struct qmp_usb_offsets qmp_usb_offsets_v5 = {
-+	.serdes		= 0,
-+	.pcs		= 0x0200,
-+	.pcs_usb	= 0x1200,
-+	.tx		= 0x0e00,
-+	.rx		= 0x1000,
-+};
-+
- static const struct qmp_phy_cfg ipq8074_usb3phy_cfg = {
- 	.lanes			= 1,
- 
-@@ -1637,6 +1655,8 @@ static const struct qmp_phy_cfg sc7180_usb3phy_cfg = {
- static const struct qmp_phy_cfg sc8280xp_usb3_uniphy_cfg = {
- 	.lanes			= 1,
- 
-+	.offsets		= &qmp_usb_offsets_v5,
-+
- 	.serdes_tbl		= sc8280xp_usb3_uniphy_serdes_tbl,
- 	.serdes_tbl_num		= ARRAY_SIZE(sc8280xp_usb3_uniphy_serdes_tbl),
- 	.tx_tbl			= sc8280xp_usb3_uniphy_tx_tbl,
-@@ -1647,12 +1667,11 @@ static const struct qmp_phy_cfg sc8280xp_usb3_uniphy_cfg = {
- 	.pcs_tbl_num		= ARRAY_SIZE(sc8280xp_usb3_uniphy_pcs_tbl),
- 	.clk_list		= qmp_v4_phy_clk_l,
- 	.num_clks		= ARRAY_SIZE(qmp_v4_phy_clk_l),
--	.reset_list		= msm8996_usb3phy_reset_l,
--	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
-+	.reset_list		= qcm2290_usb3phy_reset_l,
-+	.num_resets		= ARRAY_SIZE(qcm2290_usb3phy_reset_l),
- 	.vreg_list		= qmp_phy_vreg_l,
- 	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
- 	.regs			= qmp_v4_usb3phy_regs_layout,
--	.pcs_usb_offset		= 0x1000,
- };
- 
- static const struct qmp_phy_cfg qmp_v3_usb3_uniphy_cfg = {
-@@ -2461,11 +2480,41 @@ static int qmp_usb_parse_dt_legacy(struct qmp_usb *qmp, struct device_node *np)
- 	return 0;
- }
- 
-+static int qmp_usb_parse_dt(struct qmp_usb *qmp)
-+{
-+	struct platform_device *pdev = to_platform_device(qmp->dev);
-+	const struct qmp_phy_cfg *cfg = qmp->cfg;
-+	const struct qmp_usb_offsets *offs = cfg->offsets;
-+	struct device *dev = qmp->dev;
-+	void __iomem *base;
-+
-+	if (!offs)
-+		return -EINVAL;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	qmp->serdes = base + offs->serdes;
-+	qmp->pcs = base + offs->pcs;
-+	qmp->pcs_usb = base + offs->pcs_usb;
-+	qmp->tx = base + offs->tx;
-+	qmp->rx = base + offs->rx;
-+
-+	qmp->pipe_clk = devm_clk_get(dev, "pipe");
-+	if (IS_ERR(qmp->pipe_clk)) {
-+		return dev_err_probe(dev, PTR_ERR(qmp->pipe_clk),
-+				     "failed to get pipe clock\n");
-+	}
-+
-+	return 0;
-+}
-+
- static int qmp_usb_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct device_node *child;
- 	struct phy_provider *phy_provider;
-+	struct device_node *np;
- 	struct qmp_usb *qmp;
- 	int ret;
- 
-@@ -2491,9 +2540,16 @@ static int qmp_usb_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	child = of_get_next_available_child(dev->of_node, NULL);
--	if (!child)
--		return -EINVAL;
-+	/* Check for legacy binding with child node. */
-+	np = of_get_next_available_child(dev->of_node, NULL);
-+	if (np) {
-+		ret = qmp_usb_parse_dt_legacy(qmp, np);
-+	} else {
-+		np = of_node_get(dev->of_node);
-+		ret = qmp_usb_parse_dt(qmp);
-+	}
-+	if (ret)
-+		goto err_node_put;
- 
- 	pm_runtime_set_active(dev);
- 	ret = devm_pm_runtime_enable(dev);
-@@ -2505,15 +2561,11 @@ static int qmp_usb_probe(struct platform_device *pdev)
- 	 */
- 	pm_runtime_forbid(dev);
- 
--	ret = qmp_usb_parse_dt_legacy(qmp, child);
--	if (ret)
--		goto err_node_put;
--
--	ret = phy_pipe_clk_register(qmp, child);
-+	ret = phy_pipe_clk_register(qmp, np);
- 	if (ret)
- 		goto err_node_put;
- 
--	qmp->phy = devm_phy_create(dev, child, &qmp_usb_phy_ops);
-+	qmp->phy = devm_phy_create(dev, np, &qmp_usb_phy_ops);
- 	if (IS_ERR(qmp->phy)) {
- 		ret = PTR_ERR(qmp->phy);
- 		dev_err(dev, "failed to create PHY: %d\n", ret);
-@@ -2522,14 +2574,14 @@ static int qmp_usb_probe(struct platform_device *pdev)
- 
- 	phy_set_drvdata(qmp->phy, qmp);
- 
--	of_node_put(child);
-+	of_node_put(np);
- 
- 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
- 
- 	return PTR_ERR_OR_ZERO(phy_provider);
- 
- err_node_put:
--	of_node_put(child);
-+	of_node_put(np);
- 	return ret;
- }
- 
+
+
 -- 
-2.37.3
-
+Best Regards
+ Guo Ren
