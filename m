@@ -2,318 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB1760B16B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A0860B21A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiJXQXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
+        id S234592AbiJXQmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234133AbiJXQWr (ORCPT
+        with ESMTP id S231974AbiJXQlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:22:47 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D822A17999D;
-        Mon, 24 Oct 2022 08:08:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666624103; x=1698160103;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Z0suAyxf1/ZAu8tFjbvLacyB7CnvbP884nhki9jkwsc=;
-  b=FGJoRQ2A+k+xu3St7RQ+seN6ScpaYuJMhLr1DbZnH1xxAFEYv3dUwOpi
-   1wT/8rToMSqhwW9wv3+nGKnqbVipYUXcXTfcwTfKzyeQXMUREyzazYvYs
-   myPvupTfF3tMFDushDtwJtGhHaZviJrl8IJrBkkF6Evvh90q6HJEpJq6P
-   rpLR0yvQtUm+Gs8+bSdm6D9O41qHrZEbl1+O5FY7UB3EuZ/Gc77WYGLDB
-   YdzubdPISe/CGy0ZL6EsxRNe2IEJa8N1UG3hjxBQYSv47+3eX6TW1TFmR
-   Y3YUPrrgrGl4pA/x7T5i1RbXZV0iypXZBPrLCMZtMcEhuE+W5bolTvFgC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="371655874"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="371655874"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:01:42 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="662458157"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="662458157"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:01:42 -0700
-Date:   Mon, 24 Oct 2022 08:01:59 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        jirislaby@kernel.org, geert+renesas@glider.be,
-        andriy.shevchenko@linux.intel.com,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
-        marpagan@redhat.com
-Subject: Re: [PATCH v4 1/4] Documentation: fpga: dfl: Add documentation for
- DFHv1
-In-Reply-To: <Y1IYPTOJaxTfLDQe@debian.me>
-Message-ID: <alpine.DEB.2.22.394.2210240801360.2070724@rhweight-WRK1>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-2-matthew.gerlach@linux.intel.com> <Y1IYPTOJaxTfLDQe@debian.me>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 12:41:49 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5246226C9;
+        Mon, 24 Oct 2022 08:28:47 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OEijmo002466;
+        Mon, 24 Oct 2022 15:07:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=CXbPk6KfVbEUj4mvUy75NRKeO6rjMSSdAQ2/7/QtbBo=;
+ b=ZZmSvkhLj5SSBrPdoeQWpzZWaAldgYJ0njL5k3kby2GdmItkePmhuW7YERbZk0V+HFz1
+ ZTryhdspaoIHlwMdwnSZBKOByuctSIexpOWpEUy3t53QRKQLEhMj4fBnFgdsK2MbCnNY
+ zVGkR7Nc7LgLQwPOYmLMkkBOSlaaUTZH/qwoEPoITXJ0ckOK9IK8dZFpqtGcBlrOcfCB
+ HqoeFbkci+wi3G5rg4HpGwTiDnejnIFKWDHCBY9EYpAzvt1YXILNTfyINbeTmevH9WTz
+ TR8lv+Ssx8Fy/b0fTnNWMgQpOYB4e2J+jlM7yzJ+RgiGhpizk2CvY0a9CQACnfeaXN7l aQ== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kdvqy106m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 15:07:18 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29OEoQSe019281;
+        Mon, 24 Oct 2022 15:02:16 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3kc7sj2kqc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 15:02:16 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29OF2Cst35586708
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Oct 2022 15:02:12 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8E21AA4054;
+        Mon, 24 Oct 2022 15:02:12 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7C1DA405F;
+        Mon, 24 Oct 2022 15:02:11 +0000 (GMT)
+Received: from sig-9-145-54-55.uk.ibm.com (unknown [9.145.54.55])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Oct 2022 15:02:11 +0000 (GMT)
+Message-ID: <e16bbc699445c15788727b2094b032323168bad1.camel@linux.ibm.com>
+Subject: Re: [PATCH v7 3/6] iommu/s390: Fix potential s390_domain aperture
+ shrinking
+From:   Niklas Schnelle <schnelle@linux.ibm.com>
+To:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org
+Date:   Mon, 24 Oct 2022 17:02:11 +0200
+In-Reply-To: <20221017124558.1386337-4-schnelle@linux.ibm.com>
+References: <20221017124558.1386337-1-schnelle@linux.ibm.com>
+         <20221017124558.1386337-4-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mp3qej8oda2Ka77tiT84HKTasKin6PS0
+X-Proofpoint-GUID: mp3qej8oda2Ka77tiT84HKTasKin6PS0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=999 clxscore=1015 phishscore=0 mlxscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210240092
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 2022-10-17 at 14:45 +0200, Niklas Schnelle wrote:
+> The s390 IOMMU driver currently sets the IOMMU domain's aperture to
+> match the device specific DMA address range of the device that is first
+> attached. This is not ideal. For one if the domain has no device
+> attached in the meantime the aperture could be shrunk allowing
+> translations outside the aperture to exist in the translation tables.
+> Also this is a bit of a misuse of the aperture which really should
+> describe what addresses can be translated and not some device specific
+> limitations.
+> 
+> Instead of misusing the aperture like this we can instead create
+> reserved ranges for the ranges inaccessible to the attached devices
+> allowing devices with overlapping ranges to still share an IOMMU domain.
+> This also significantly simplifies s390_iommu_attach_device() allowing
+> us to move the aperture check to the beginning of the function and
+> removing the need to hold the device list's lock to check the aperture.
+> 
+> As we then use the same aperture for all domains and it only depends on
+> the table properties we can already check zdev->start_dma/end_dma at
+> probe time and turn the check on attach into a WARN_ON().
+> 
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+> v5->v6:
+> - Return -EINVAL after WARN_ON() in attach
+> v4->v5:
+> - Make aperture check in attach a WARN_ON() and fail in probe if
+>   zdev->start_dma/end_dma doesn't git in aperture  (Jason)
+> 
+>  drivers/iommu/s390-iommu.c | 63 ++++++++++++++++++++++++++------------
+>  1 file changed, 43 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+> index af83ccde16a4..c4203a37faa4 100644
+> --- a/drivers/iommu/s390-iommu.c
+> +++ b/drivers/iommu/s390-iommu.c
+> @@ -62,6 +62,9 @@ static struct iommu_domain *s390_domain_alloc(unsigned domain_type)
+>  		kfree(s390_domain);
+>  		return NULL;
+>  	}
+> +	s390_domain->domain.geometry.force_aperture = true;
+> +	s390_domain->domain.geometry.aperture_start = 0;
+> +	s390_domain->domain.geometry.aperture_end = ZPCI_TABLE_SIZE_RT - 1;
+>  
+>  	spin_lock_init(&s390_domain->dma_table_lock);
+>  	spin_lock_init(&s390_domain->list_lock);
+> @@ -102,11 +105,15 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>  	struct s390_domain *s390_domain = to_s390_domain(domain);
+>  	struct zpci_dev *zdev = to_zpci_dev(dev);
+>  	unsigned long flags;
+> -	int cc, rc = 0;
+> +	int cc;
+>  
+>  	if (!zdev)
+>  		return -ENODEV;
+>  
+> +	if (WARN_ON(domain->geometry.aperture_start > zdev->end_dma ||
+> +		domain->geometry.aperture_end < zdev->start_dma))
+> +		return -EINVAL;
+> +
+>  	if (zdev->s390_domain)
+>  		__s390_iommu_detach_device(zdev);
+>  	else if (zdev->dma_table)
+> @@ -118,30 +125,14 @@ static int s390_iommu_attach_device(struct iommu_domain *domain,
+>  		return -EIO;
+>  	zdev->dma_table = s390_domain->dma_table;
+>  
+> -	spin_lock_irqsave(&s390_domain->list_lock, flags);
+> -	/* First device defines the DMA range limits */
+> -	if (list_empty(&s390_domain->devices)) {
+> -		domain->geometry.aperture_start = zdev->start_dma;
+> -		domain->geometry.aperture_end = zdev->end_dma;
+> -		domain->geometry.force_aperture = true;
+> -	/* Allow only devices with identical DMA range limits */
+> -	} else if (domain->geometry.aperture_start != zdev->start_dma ||
+> -		   domain->geometry.aperture_end != zdev->end_dma) {
+> -		spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+> -		rc = -EINVAL;
+> -		goto out_unregister;
+> -	}
+> +	zdev->dma_table = s390_domain->dma_table;
+>  	zdev->s390_domain = s390_domain;
+> +
+> +	spin_lock_irqsave(&s390_domain->list_lock, flags);
+>  	list_add(&zdev->iommu_list, &s390_domain->devices);
+>  	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>  
+>  	return 0;
+> -
+> -out_unregister:
+> -	zpci_unregister_ioat(zdev, 0);
+> -	zdev->dma_table = NULL;
+> -
+> -	return rc;
+>  }
+>  
+>  static void s390_iommu_detach_device(struct iommu_domain *domain,
+> @@ -155,6 +146,30 @@ static void s390_iommu_detach_device(struct iommu_domain *domain,
+>  	zpci_dma_init_device(zdev);
+>  }
+>  
+> +static void s390_iommu_get_resv_regions(struct device *dev,
+> +					struct list_head *list)
+> +{
+> +	struct zpci_dev *zdev = to_zpci_dev(dev);
+> +	struct iommu_resv_region *region;
+> +
+> +	if (zdev->start_dma) {
+> +		region = iommu_alloc_resv_region(0, zdev->start_dma, 0,
+> +						 IOMMU_RESV_RESERVED);
+
+Heads up! The iommu_alloc_resv_region() function gained a gfp parameter
+from v6.1-rc1 to v6.1-rc2 so the above needs "…, GFP_KERNEL);".
+@Joerg, @Will if you don't mind I'll rebase on v6.1-rc2 and resend.
+@Jason if you want to re-add your R-b this would be good time.
 
 
-On Fri, 21 Oct 2022, Bagas Sanjaya wrote:
+> +		if (!region)
+> +			return;
+> +		list_add_tail(&region->list, list);
+> +	}
+> +
+> +	if (zdev->end_dma < ZPCI_TABLE_SIZE_RT - 1) {
+> +		region = iommu_alloc_resv_region(zdev->end_dma + 1,
+> +						 ZPCI_TABLE_SIZE_RT - zdev->end_dma - 1,
+> +						 0, IOMMU_RESV_RESERVED);
 
-> On Thu, Oct 20, 2022 at 02:26:07PM -0700, matthew.gerlach@linux.intel.com wrote:
->> +Device Feature Header - Version 0
->> +===========================================
->> +The format of Version 0 of a Device Feature Header (DFH) is shown below::
->> +
->> +    +-----------------------------------------------------------------------+
->> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
->> +    +-----------------------------------------------------------------------+
->> +    |63                                 GUID_L                             0| 0x08
->> +    +-----------------------------------------------------------------------+
->> +    |63                                 GUID_H                             0| 0x10
->> +    +-----------------------------------------------------------------------+
->> +
->> +Offset 0x00
->> +Type - The type of DFH (e.g. FME, AFU, or private feature).
->> +DFH VER - The version of the DFH.
->> +Rsvd - Currently unused.
->> +EOL - Set if this DFH is the end of the Device Feature List (DFL).
->> +Next - The offset of the next DFH in the DFL from the start of the DFH.
->> +If EOL is set, Next refers to size of mmio for last feature in the list.
->> +ID - If Type field is 'private feature', then ID of the private feature.
->> +
->> +Offset 0x08
->> +GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier
->> +if Type is FME or AFU.
->> +
->> +Offset 0x10
->> +GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
->> +if Type is FME or AFU.
->> +
->> +
->> +Device Feature Header - Version 1
->> +===========================================
->> +The format of Version 1 of a Device Feature Header (DFH) is shown below::
->> +
->> +    +-----------------------------------------------------------------------+
->> +    |63 Type 60|59 DFH VER 52|51 Rsvd 41|40 EOL|39 Next 16|15 VER 12|11 ID 0| 0x00
->> +    +-----------------------------------------------------------------------+
->> +    |63                                 GUID_L                             0| 0x08
->> +    +-----------------------------------------------------------------------+
->> +    |63                                 GUID_H                             0| 0x10
->> +    +-----------------------------------------------------------------------+
->> +    |63                 Address/Offset                            1|  Rel  0| 0x18
->> +    +-----------------------------------------------------------------------+
->> +    |63        Reg Size       32|Params 31|30 Group    16|15 Instance      0| 0x20
->> +    +-----------------------------------------------------------------------+
->> +    |63 Next      34|RSV33|EOP32|31 Param Version 16|15 Param ID           0| 0x28
->> +    +-----------------------------------------------------------------------+
->> +    |63                 Parameter Data                                     0| 0x30
->> +    +-----------------------------------------------------------------------+
->> +
->> +                                  ...
->> +
->> +    +-----------------------------------------------------------------------+
->> +    |63 Next parameter offset 32|31 Param Version 16|15 Param ID           0|
->> +    +-----------------------------------------------------------------------+
->> +    |63                 Parameter Data                                     0|
->> +    +-----------------------------------------------------------------------+
->> +
->> +Offset 0x00
->> +Type - The type of DFH (e.g. FME, AFU, or private feature).
->> +DFH VER - The version of the DFH.
->> +Rsvd - Currently unused.
->> +EOL - Set if this DFH is the end of the Device Feature List (DFL).
->> +Next - The offset of the next DFH in the DFL from the start of the DFH.
->> +If EOL is set, Next refers to size of mmio for last feature in the list.
->> +ID - If Type field is 'private feature', then ID of the private feature.
->> +
->> +Offset 0x08
->> +GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier.
->> +
->> +Offset 0x10
->> +GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
->> +if Type is FME or AFU.
->> +
->> +Offset 0x18
->> +Address/Offset - If Rel bit is set, then high 63 bits of a 16 bit aligned
->> +absolute address for the location of the feature's registers.
->> +If Rel bit is clear, then the feature's registers start at the
->> +offset from the start of the DFH.
->> +
->> +Offset 0x20
->> +Reg Size - Size of feature's register set.
->> +Params - Set if DFH has one or more parameter blocks.
->> +Group - Id of group if feature is part of a group.
->> +Instance - Id of instance of feature within a group.
->> +
->> +Offset 0x28 if feature has parameters
->> +Next - High 30 bits of a 32 bit aligned offset to the next parameter block.
->> +If EOP set, size of last parameter.
->> +Param Version - Version of Param ID.
->> +Param ID - ID of parameter.
->> +
->> +Offset 0x30
->> +Parameter Data - Parameter data whose size and format is defined by version
->> +and ID of the parameter.
->> +
->
-> The offset fields list should be formatted with nested list (with
-> prose improv):
->
-> ---- >8 ----
+Same as above.
 
-Thanks for the good suggestion.
+> +		if (!region)
+> +			return;
+> +		list_add_tail(&region->list, list);
+> +	}
+> +}
+> +
+>  static struct iommu_device *s390_iommu_probe_device(struct device *dev)
+>  {
+>  	struct zpci_dev *zdev;
+> @@ -164,6 +179,13 @@ static struct iommu_device *s390_iommu_probe_device(struct device *dev)
+>  
+>  	zdev = to_zpci_dev(dev);
+>  
+> +	if (zdev->start_dma > zdev->end_dma ||
+> +	    zdev->start_dma > ZPCI_TABLE_SIZE_RT - 1)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (zdev->end_dma > ZPCI_TABLE_SIZE_RT - 1)
+> +		zdev->end_dma = ZPCI_TABLE_SIZE_RT - 1;
+> +
+>  	return &zdev->iommu_dev;
+>  }
+>  
+> @@ -342,6 +364,7 @@ static const struct iommu_ops s390_iommu_ops = {
+>  	.release_device = s390_iommu_release_device,
+>  	.device_group = generic_device_group,
+>  	.pgsize_bitmap = S390_IOMMU_PGSIZES,
+> +	.get_resv_regions = s390_iommu_get_resv_regions,
+>  	.default_domain_ops = &(const struct iommu_domain_ops) {
+>  		.attach_dev	= s390_iommu_attach_device,
+>  		.detach_dev	= s390_iommu_detach_device,
 
->
-> diff --git a/Documentation/fpga/dfl.rst b/Documentation/fpga/dfl.rst
-> index 12365be435a812..9c19ee62d4ac44 100644
-> --- a/Documentation/fpga/dfl.rst
-> +++ b/Documentation/fpga/dfl.rst
-> @@ -573,22 +573,27 @@ The format of Version 0 of a Device Feature Header (DFH) is shown below::
->     |63                                 GUID_H                             0| 0x10
->     +-----------------------------------------------------------------------+
->
-> -Offset 0x00
-> -Type - The type of DFH (e.g. FME, AFU, or private feature).
-> -DFH VER - The version of the DFH.
-> -Rsvd - Currently unused.
-> -EOL - Set if this DFH is the end of the Device Feature List (DFL).
-> -Next - The offset of the next DFH in the DFL from the start of the DFH.
-> -If EOL is set, Next refers to size of mmio for last feature in the list.
-> -ID - If Type field is 'private feature', then ID of the private feature.
-> +The fields are:
->
-> -Offset 0x08
-> -GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier
-> -if Type is FME or AFU.
-> +  * Offset 0x00
->
-> -Offset 0x10
-> -GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
-> -if Type is FME or AFU.
-> +    * Type - The type of DFH (e.g. FME, AFU, or private feature).
-> +    * DFH VER - The version of the DFH.
-> +    * Rsvd - Currently unused.
-> +    * EOL - Set if this DFH is the end of the Device Feature List (DFL).
-> +
-> +    * Next - The offset of the next DFH in the DFL from the start of the DFH.
-> +      If EOL is set, Next refers to size of mmio for last feature in the list.
-> +
-> +    * ID - Private feature ID if Type is private feature.
-> +
-> +  * Offset 0x08
-> +
-> +    * GUID_L - Least significant half of a 128-bit GUID if Type is FME or AFU.
-> +
-> +  * Offset 0x10
-> +
-> +    * GUID_H - Most significant half of a 128-bit GUID if Type if FME or AFU.
->
->
-> Device Feature Header - Version 1
-> @@ -619,43 +624,53 @@ The format of Version 1 of a Device Feature Header (DFH) is shown below::
->     |63                 Parameter Data                                     0|
->     +-----------------------------------------------------------------------+
->
-> -Offset 0x00
-> -Type - The type of DFH (e.g. FME, AFU, or private feature).
-> -DFH VER - The version of the DFH.
-> -Rsvd - Currently unused.
-> -EOL - Set if this DFH is the end of the Device Feature List (DFL).
-> -Next - The offset of the next DFH in the DFL from the start of the DFH.
-> -If EOL is set, Next refers to size of mmio for last feature in the list.
-> -ID - If Type field is 'private feature', then ID of the private feature.
-> +The fields are:
->
-> -Offset 0x08
-> -GUID_L - Least significant 64 bits of a 128 bit Globally Unique Identifier.
-> +  * Offset 0x00
->
-> -Offset 0x10
-> -GUID_H - Most significant 64 bits of a 128 bit Globally Unique Identifier
-> -if Type is FME or AFU.
-> +    * Type - The type of DFH (e.g. FME, AFU, or private feature).
-> +    * DFH VER - The version of the DFH.
-> +    * Rsvd - Currently unused.
-> +    * EOL - Set if this DFH is the end of the Device Feature List (DFL).
->
-> -Offset 0x18
-> -Address/Offset - If Rel bit is set, then high 63 bits of a 16 bit aligned
-> -absolute address for the location of the feature's registers.
-> -If Rel bit is clear, then the feature's registers start at the
-> -offset from the start of the DFH.
-> +    * Next - The offset of the next DFH in the DFL from the start of the DFH.
-> +      If EOL is set, Next refers to size of mmio for last feature in the list.
->
-> -Offset 0x20
-> -Reg Size - Size of feature's register set.
-> -Params - Set if DFH has one or more parameter blocks.
-> -Group - Id of group if feature is part of a group.
-> -Instance - Id of instance of feature within a group.
-> +    * ID - Private feature ID if Type is private feature.
->
-> -Offset 0x28 if feature has parameters
-> -Next - High 30 bits of a 32 bit aligned offset to the next parameter block.
-> -If EOP set, size of last parameter.
-> -Param Version - Version of Param ID.
-> -Param ID - ID of parameter.
-> +  * Offset 0x08
->
-> -Offset 0x30
-> -Parameter Data - Parameter data whose size and format is defined by version
-> -and ID of the parameter.
-> +    * GUID_L - Least significant half of a 128-bit GUID if Type is FME or APU.
-> +
-> +  * Offset 0x10
-> +
-> +    * GUID_H - Most significant half of a 128-bit GUID if Type is FME or AFU.
-> +
-> +  * Offset 0x18
-> +
-> +    * Address/Offset - If Rel bit is set, upper 63 bits of a 16-bit aligned
-> +      absolute address for the location of feature registers; otherwise
-> +      registers of the feature start at the offset from the start of the DFH.
-> +
-> +  * Offset 0x20
-> +
-> +    * Reg Size - Size of register set of the feature.
-> +    * Params - Set if DFH has one or more parameter blocks.
-> +    * Group - ID of group if the feature is part of a group.
-> +    * Instance - ID of instance of the feature within a group.
-> +
-> +  * Offset 0x28 (if the feature has parameters)
-> +
-> +    * Next - Upper 30 bits of a 32-bit aligned offset to the next parameter
-> +      block. If EOP is set, size of last parameter.
-> +
-> +    * Param Version - Version of Param ID.
-> +    * Param ID - ID of parameter.
-> +
-> +  * Offset 0x30 (if the feature has parameters)
-> +
-> +    * Parameter Data - Parameter data whose size and format is defined by
-> +      version and ID of the parameter.
->
-> Open discussion
-> ===============
->
-> Thanks.
->
-> -- 
-> An old man doll... just what I always wanted! - Clara
->
+
