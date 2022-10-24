@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CE660A6B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DB660AA10
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbiJXMiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S235945AbiJXN2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiJXMem (ORCPT
+        with ESMTP id S231731AbiJXNZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:34:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11574A807;
-        Mon, 24 Oct 2022 05:05:04 -0700 (PDT)
+        Mon, 24 Oct 2022 09:25:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C31CA8CFE;
+        Mon, 24 Oct 2022 05:31:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D53E612BF;
-        Mon, 24 Oct 2022 12:04:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE76C433C1;
-        Mon, 24 Oct 2022 12:04:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77A7D61313;
+        Mon, 24 Oct 2022 12:31:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D81AC433C1;
+        Mon, 24 Oct 2022 12:30:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613087;
-        bh=nU5shlmlTDL+WA15wXTBEMZOu70bg3gompzMDfGsWu8=;
+        s=korg; t=1666614659;
+        bh=iKZ/2Bz6UW9cY4lla+MqAFAxTOi1scQ+KSJMNOOVpDE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hL3a5z6l2Qr4q2CC+F7xlvybcngWdUmP0CH8b3G3ITelh5Eejbfb14fMgIk9iWj/t
-         zTvzTlD1ph2n/77BFkecYMbeRceu0rJcglBDqmPiBTi7iH5U3BgrY/zyP1+3NR0F35
-         M4WcJg7dCGhjcFs5oiEY1kwYP4efYORP92GwrZG8=
+        b=OhyR1A6DBhDzArwvR4fVPfqKZsEk03BHVzDs1/JRQI8ozP5zFYFfTZp5MA5PgFm3J
+         G2ueVNIQON0h2RDsHTQ+3Xhp272A+urQLfyXHVjaj2lqUY7Aaf5QYRF41st6oWO0Yh
+         N+bdvlzuvxlM6XbkYjdO/+x7s7OcMCDpdvWZRWWE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.19 222/229] net: ieee802154: return -EINVAL for unknown addr type
+        stable@vger.kernel.org,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 344/390] ARM: dts: imx6dl: add missing properties for sram
 Date:   Mon, 24 Oct 2022 13:32:21 +0200
-Message-Id: <20221024113006.446380153@linuxfoundation.org>
+Message-Id: <20221024113037.643529034@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,54 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Aring <aahringo@redhat.com>
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-commit 30393181fdbc1608cc683b4ee99dcce05ffcc8c7 upstream.
+[ Upstream commit f5848b95633d598bacf0500e0108dc5961af88c0 ]
 
-This patch adds handling to return -EINVAL for an unknown addr type. The
-current behaviour is to return 0 as successful but the size of an
-unknown addr type is not defined and should return an error like -EINVAL.
+All 3 properties are required by sram.yaml. Fixes the dtbs_check warning:
+sram@900000: '#address-cells' is a required property
+sram@900000: '#size-cells' is a required property
+sram@900000: 'ranges' is a required property
 
-Fixes: 94160108a70c ("net/ieee802154: fix uninit value bug in dgram_sendmsg")
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/ieee802154_netdev.h |   12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/imx6dl.dtsi | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/include/net/ieee802154_netdev.h
-+++ b/include/net/ieee802154_netdev.h
-@@ -193,21 +193,27 @@ static inline int
- ieee802154_sockaddr_check_size(struct sockaddr_ieee802154 *daddr, int len)
- {
- 	struct ieee802154_addr_sa *sa;
-+	int ret = 0;
+diff --git a/arch/arm/boot/dts/imx6dl.dtsi b/arch/arm/boot/dts/imx6dl.dtsi
+index fdd81fdc3f35..cd3183c36488 100644
+--- a/arch/arm/boot/dts/imx6dl.dtsi
++++ b/arch/arm/boot/dts/imx6dl.dtsi
+@@ -84,6 +84,9 @@
+ 		ocram: sram@900000 {
+ 			compatible = "mmio-sram";
+ 			reg = <0x00900000 0x20000>;
++			ranges = <0 0x00900000 0x20000>;
++			#address-cells = <1>;
++			#size-cells = <1>;
+ 			clocks = <&clks IMX6QDL_CLK_OCRAM>;
+ 		};
  
- 	sa = &daddr->addr;
- 	if (len < IEEE802154_MIN_NAMELEN)
- 		return -EINVAL;
- 	switch (sa->addr_type) {
-+	case IEEE802154_ADDR_NONE:
-+		break;
- 	case IEEE802154_ADDR_SHORT:
- 		if (len < IEEE802154_NAMELEN_SHORT)
--			return -EINVAL;
-+			ret = -EINVAL;
- 		break;
- 	case IEEE802154_ADDR_LONG:
- 		if (len < IEEE802154_NAMELEN_LONG)
--			return -EINVAL;
-+			ret = -EINVAL;
-+		break;
-+	default:
-+		ret = -EINVAL;
- 		break;
- 	}
--	return 0;
-+	return ret;
- }
- 
- static inline void ieee802154_addr_from_sa(struct ieee802154_addr *a,
+-- 
+2.35.1
+
 
 
