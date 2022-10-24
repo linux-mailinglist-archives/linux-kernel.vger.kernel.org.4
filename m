@@ -2,130 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A5B60BBB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D9F60BBB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiJXVLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
+        id S233207AbiJXVK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbiJXVKg (ORCPT
+        with ESMTP id S235647AbiJXVKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:10:36 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1E42CE608
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:17:11 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id io19so4321468plb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:17:11 -0700 (PDT)
+        Mon, 24 Oct 2022 17:10:24 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6BE2CFD25
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:17:12 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id a24so6190116qto.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:17:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lEIAgIaq7xwDYOXkCfqCwVLGJ7bTE5nHIiB+jrGhv9o=;
-        b=N+cAdNyMQXR/tbR8q02b2KsJU34NsOg8AsmZchm09Z2l4h6y4DUccY8EGCAKpFsyo+
-         hVUIcNMrL7/tnzDf5cv+joc3p07uIr/yzJbz+OvO17e7SsF6tb9f4yBJcOuBSoLp0ES1
-         s5B1qsFCCADwGRqSnL8cxDy82PrJ3kjygJ5mqJ1q4rkm1CSxew9saqIaoal+qYo0pRBR
-         aVvUz4wGZQqnUzXObp4x9hDTVuLE6IUQIzjb7EFc+ekpHAaHAGFmTgdGFyAK6CfK6rLf
-         3dxwl447zqq1U/1aHH7GQL+/vSEEBAS7gtdGRmuVyzUfhMRuBOxs7t7JZNTQhO2xnzhh
-         o9pQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1Uz1LChqXvtTQgQ4UX3FdXnaqMoy3szlw7sN3/aSmaU=;
+        b=tO1Rtjv/pG5rdUtCJjc6Wqt0VphLY9rbHOBvebxi2pLOg9CMzvOwLqxl5td/ZiJbDR
+         CxBLEnpssf2Hcj65gyijNBp3wfyR70YsaslP59G/9ILBxHNJQxhiqF3EjYB1nQhNgdsr
+         dLHQdqbl6kuFOFs8yG0s/B8+REWHQiazIrfKs8e4a21x44MIoVUed3ja3QA71XicAYUU
+         Az7fiBMGYXyIu3QWSBtDzqvE6UqvcctEthUw4epcTeSiZV+iko/F0e9LChCnGPT1WSIv
+         cKjUDn63w8MyUYYjmjTswQn8mmtsL0pO74ZN2j0dnGQCOMkriBgfBmNUg+Z5MerPWMrP
+         xGeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lEIAgIaq7xwDYOXkCfqCwVLGJ7bTE5nHIiB+jrGhv9o=;
-        b=HczYUBhVTv+LshpJg/6NhqU8dmQQB+rERJklSYcZSxabx5msu1O2N8pfFeUBsOeR2Y
-         vQyQQYujV62bdMOrGKbmrFQkd1VH7nmp2e3sIvrtV5nFaUhDbYKrorJMdYYpcCD0YIj3
-         65VYuhOzj0+92mNBZNTGU4K61LqaOUmjwGqKe9h6PVxgPzeHeI/vPjtpYhoLH+5F9l47
-         LoToEqkUeV32Swa1XCfJkrqewK2pdUyyrvx5FculYb+NdxokY5Sh5gFg6Gk5vA/+f5u3
-         22eIV473I6bUGPHAIXX+erb1Q3CggDPSEr2tr6aXbWAZ8bhbpKGhjySsBLKZltpFpLTO
-         2D3g==
-X-Gm-Message-State: ACrzQf0ZlDbXEFCRKYkXOvP7gTCK5BMdyKANAjlF9SHGQ8ooO8DAcmO+
-        MfGyJSYO8h9DVdrQpqmdwpmj81hsNLKKr4V0J3Zxiw==
-X-Google-Smtp-Source: AMsMyM7tbBbsSJUv0yupVMnL0+TpbuvReM9TeIGhfkgoLv6T1JBl44WEe3hE4Q6zQu0W3AhFNSVNU/KHSbG8x77l5ik=
-X-Received: by 2002:a17:902:b210:b0:17d:c3ca:4a4f with SMTP id
- t16-20020a170902b21000b0017dc3ca4a4fmr33920252plr.33.1666638950116; Mon, 24
- Oct 2022 12:15:50 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Uz1LChqXvtTQgQ4UX3FdXnaqMoy3szlw7sN3/aSmaU=;
+        b=2xeswhfpqgmLFpknx/Rdk1cg0AzZs3C5hd0aA87J8Fk0sw7i22SNCT1jvdaiFHokcs
+         bJoUaUemLUZhmXS9P1cxNdGBeDw22gx+mYnWcj5u0uDeDWK999E82VCuAljC5CrTBQQr
+         vPe0nh2ASr+yP1YTc6fGUl+nxFLuyb7N6nQPs1udNpn5LpuytqIu1AR/dbHhsS8SHRLz
+         YV7KUAQCUjcn5ZH4WXP0rzGkSMyEhJ5poiJLRzTckaKfAKKo41m3Rw7xY++SoT2Usdzh
+         EbFHwLUnwFq+bsaMiufji018gnUCgya/83W6LftAd26aoHNdQp4IteLBU43bQi/IyHPH
+         6EoQ==
+X-Gm-Message-State: ACrzQf3BeWIrHD924ZZuiBQkzYG3JLlA9S4QzIpxi+eLFq+R+ZDsLlwQ
+        UG35+5RicRiEl4GVcNk9GZEEaA==
+X-Google-Smtp-Source: AMsMyM4tuMOGYErwIW725XTlNxvY5jz9YlLp4nfLliYmjmdkBBtut5knzrkgWET62BwZrVWyS086hQ==
+X-Received: by 2002:a05:622a:3ca:b0:39c:c860:fc2f with SMTP id k10-20020a05622a03ca00b0039cc860fc2fmr28860824qtx.489.1666638949713;
+        Mon, 24 Oct 2022 12:15:49 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id v8-20020a05620a440800b006ec59941acasm546994qkp.11.2022.10.24.12.15.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 12:15:48 -0700 (PDT)
+Message-ID: <bf67b30f-074b-22b5-8d23-b1531ad30d74@linaro.org>
+Date:   Mon, 24 Oct 2022 14:15:46 -0500
 MIME-Version: 1.0
-References: <20221023195257.175946-1-masahiroy@kernel.org>
-In-Reply-To: <20221023195257.175946-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 24 Oct 2022 12:15:38 -0700
-Message-ID: <CAKwvOd=pimEoN_OvyefPiTTsOdzo+Xda1gJrYg8+jAE5GA0rqA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: fix 'Broken pipe' message for AR=gcc-ar
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>, eng.stk@sapo.pt
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] net: ipa: fix some resource limit max values
+Content-Language: en-US
+To:     Caleb Connolly <caleb.connolly@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Alex Elder <elder@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+References: <20221024165636.3979249-1-caleb.connolly@linaro.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20221024165636.3979249-1-caleb.connolly@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 12:53 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Since commit 321648455061 ("kbuild: use obj-y instead extra-y for
-> objects placed at the head"), 'make AR=gcc-ar' shows the following
-> message:
->
->   /usr/bin/ar terminated with signal 13 [Broken pipe]
+On 10/24/22 11:56 AM, Caleb Connolly wrote:
+> Some resource limits on IPA v3.1 and v3.5.1 have their max values set to
+> 255, this causes a few splats in ipa_reg_encode and prevents it from booting.
+> The limits are all 6 bits wide so adjust the max values to 63.
 
-Not just AR=gcc-ar, but also AR=llvm-ar:
+Thank you for sending this Caleb.
 
-error: write on a pipe with no reader
+On IPA v3.5.1 (SDM845) I confirm that these resource limit fields are
+6 bits wide, while the values we assign are in some cases 255, which
+cannot be represented in 6 bits.  Your fix in this case is proper,
+changing the maximum limit from 255 to be 63.  (Just in case, I've
+sent a note to Qualcomm to ask them to confirm this, but I think this
+is fine.)
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1651
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+I re-checked the definitions of the MIN_LIMIT and MAX_LIMIT fields
+for IPA v3.1, and it turns out in that case the *register field*
+definitions were wrong.  They should, in fact, be 8 bits wide rather
+than just 6.  So in that case, 255 would be a reasonable limit value.
 
-Note that due to
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8017ce50641c303b9b5d96f3c10229ecfd770a70
-we should send a backport to stable like:
-https://github.com/engstk/op8/commit/6f2688e3eb4ec06b276e541640d4f06364b68442
+Did you observe these splats when doing actual testing on an msm8998
+(which has IPA v3.1)?  Or did you just double-check the code?  I
+looked at the other currently-supported platforms and didn't see
+this sort of problem elsewhere (IPA v4.2, 4.5, 4.9, 4.11).
 
->
-> The resulting vmlinux is correct, but it is better to silence this.
->
-> 'head -n1' exits after reading the first line, so the pipe is closed.
->
-> Use 'sed -n 1p' to eat the stream till the end.
->
-> Fixes: 321648455061 ("kbuild: use obj-y instead extra-y for objects placed at the head")
-> Reported-by: Jiri Slaby <jirislaby@kernel.org>
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+
+Could you please send a new version of your patch, which fixes the
+register definition in "ipa_reg-v3.1.c" instead?
+
+It might be best to fix the two issues in separate patches, since
+they will parts pf the code with different development histories.
+
+Thanks!
+
+					-Alex
+
+> Fixes: 1c418c4a929c ("net: ipa: define resource group/type IPA register fields")
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
 > ---
->
->  Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Makefile b/Makefile
-> index f41ec8c8426b..0e42a7982826 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
->        cmd_ar_vmlinux.a = \
->         rm -f $@; \
->         $(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
-> -       $(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
-> +       $(AR) mPiT $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
->
->  targets += vmlinux.a
->  vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
-> --
-> 2.34.1
->
+>   drivers/net/ipa/data/ipa_data-v3.1.c   | 62 +++++++++++++-------------
+>   drivers/net/ipa/data/ipa_data-v3.5.1.c |  4 +-
+>   2 files changed, 33 insertions(+), 33 deletions(-)
+> 
+> diff --git a/drivers/net/ipa/data/ipa_data-v3.1.c b/drivers/net/ipa/data/ipa_data-v3.1.c
+> index e0d71f609272..7ff093f982ad 100644
+> --- a/drivers/net/ipa/data/ipa_data-v3.1.c
+> +++ b/drivers/net/ipa/data/ipa_data-v3.1.c
+> @@ -187,53 +187,53 @@ static const struct ipa_gsi_endpoint_data ipa_gsi_endpoint_data[] = {
+>   static const struct ipa_resource ipa_resource_src[] = {
+>   	[IPA_RESOURCE_TYPE_SRC_PKT_CONTEXTS] = {
+>   		.limits[IPA_RSRC_GROUP_SRC_UL] = {
+> -			.min = 3,	.max = 255,
+> +			.min = 3,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DL] = {
+> -			.min = 3,	.max = 255,
+> +			.min = 3,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DIAG] = {
+> -			.min = 1,	.max = 255,
+> +			.min = 1,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DMA] = {
+> -			.min = 1,	.max = 255,
+> +			.min = 1,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_UC_RX_Q] = {
+> -			.min = 2,	.max = 255,
+> +			.min = 2,	.max = 63,
+>   		},
+>   	},
+>   	[IPA_RESOURCE_TYPE_SRC_HDR_SECTORS] = {
+>   		.limits[IPA_RSRC_GROUP_SRC_UL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DIAG] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DMA] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_UC_RX_Q] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   	},
+>   	[IPA_RESOURCE_TYPE_SRC_HDRI1_BUFFER] = {
+>   		.limits[IPA_RSRC_GROUP_SRC_UL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DIAG] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DMA] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_UC_RX_Q] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   	},
+>   	[IPA_RESOURCE_TYPE_SRC_DESCRIPTOR_LISTS] = {
+> @@ -272,36 +272,36 @@ static const struct ipa_resource ipa_resource_src[] = {
+>   	},
+>   	[IPA_RESOURCE_TYPE_SRC_HDRI2_BUFFERS] = {
+>   		.limits[IPA_RSRC_GROUP_SRC_UL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DIAG] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DMA] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_UC_RX_Q] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   	},
+>   	[IPA_RESOURCE_TYPE_SRC_HPS_DMARS] = {
+>   		.limits[IPA_RSRC_GROUP_SRC_UL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DIAG] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_DMA] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_UC_RX_Q] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   	},
+>   	[IPA_RESOURCE_TYPE_SRC_ACK_ENTRIES] = {
+> @@ -345,22 +345,22 @@ static const struct ipa_resource ipa_resource_dst[] = {
+>   	},
+>   	[IPA_RESOURCE_TYPE_DST_DATA_SECTOR_LISTS] = {
+>   		.limits[IPA_RSRC_GROUP_DST_UL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_DST_DL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_DST_DIAG_DPL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_DST_DMA] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_DST_Q6ZIP_GENERAL] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_DST_Q6ZIP_ENGINE] = {
+> -			.min = 0,	.max = 255,
+> +			.min = 0,	.max = 63,
+>   		},
+>   	},
+>   	[IPA_RESOURCE_TYPE_DST_DPS_DMARS] = {
+> diff --git a/drivers/net/ipa/data/ipa_data-v3.5.1.c b/drivers/net/ipa/data/ipa_data-v3.5.1.c
+> index 383ef1890065..42f2c88a92d4 100644
+> --- a/drivers/net/ipa/data/ipa_data-v3.5.1.c
+> +++ b/drivers/net/ipa/data/ipa_data-v3.5.1.c
+> @@ -179,10 +179,10 @@ static const struct ipa_gsi_endpoint_data ipa_gsi_endpoint_data[] = {
+>   static const struct ipa_resource ipa_resource_src[] = {
+>   	[IPA_RESOURCE_TYPE_SRC_PKT_CONTEXTS] = {
+>   		.limits[IPA_RSRC_GROUP_SRC_LWA_DL] = {
+> -			.min = 1,	.max = 255,
+> +			.min = 1,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_UL_DL] = {
+> -			.min = 1,	.max = 255,
+> +			.min = 1,	.max = 63,
+>   		},
+>   		.limits[IPA_RSRC_GROUP_SRC_UC_RX_Q] = {
+>   			.min = 1,	.max = 63,
 
-
--- 
-Thanks,
-~Nick Desaulniers
