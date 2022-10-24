@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2AE60AB35
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 665AC60AB32
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236365AbiJXNqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S236306AbiJXNqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236499AbiJXNoT (ORCPT
+        with ESMTP id S236417AbiJXNoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:44:19 -0400
+        Mon, 24 Oct 2022 09:44:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC79329C99;
-        Mon, 24 Oct 2022 05:40:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE332BE2F;
+        Mon, 24 Oct 2022 05:40:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A66161328;
-        Mon, 24 Oct 2022 12:38:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD304C433D6;
-        Mon, 24 Oct 2022 12:38:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E52061345;
+        Mon, 24 Oct 2022 12:38:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88AA7C433C1;
+        Mon, 24 Oct 2022 12:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615091;
-        bh=zWdJyAQ0UOjtuAePa70o5bEUnFcKPi9EhvQ88yL2+Qw=;
+        s=korg; t=1666615098;
+        bh=BMhRM4nqWbjmRpKYBjSHNb+WOA6zO/H96SN3tqK7YGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UCqgb//hswW4bGXpxfQvNw0bq7R0oKnJciV+5yidSlwqy0dsdTVJlRiKX0zUmdpFk
-         H9Y+dkCxJuitA73zpI7zGWo8ewILfnWVXA42+6MhB7wqV90QICwtmOxxwOw0n+uQ1n
-         EOHvFzLh6I6txx0ELlS7l5nSdEbFtG/Xp6MLH2Js=
+        b=YwhioM/21g5sm/yzcDulbZpsIrks8bUuNhERB1BiZxqnzgWTtK/teiNXtjM1G73X2
+         NTF26zgx7Zb47EHJDCJQ0vHzl5yCXl2/uSXwW4CY6U2SY8t3bRBy8q787XMbsOkB7n
+         vRVCmBnThXAZ+NvDzlEmwh7Wz4XGrK5FhQaHDRKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 5.15 118/530] thunderbolt: Explicitly enable lane adapter hotplug events at startup
-Date:   Mon, 24 Oct 2022 13:27:42 +0200
-Message-Id: <20221024113050.380730907@linuxfoundation.org>
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH 5.15 121/530] media: cedrus: Fix endless loop in cedrus_h265_skip_bits()
+Date:   Mon, 24 Oct 2022 13:27:45 +0200
+Message-Id: <20221024113050.527524218@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
 References: <20221024113044.976326639@linuxfoundation.org>
@@ -54,116 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-commit 5d2569cb4a65c373896ec0217febdf88739ed295 upstream.
+commit 91db7a3fc7fe670cf1770a398a43bb4a1f776bf1 upstream.
 
-Software that has run before the USB4 CM in Linux runs may have disabled
-hotplug events for a given lane adapter.
-
-Other CMs such as that one distributed with Windows 11 will enable hotplug
-events. Do the same thing in the Linux CM which fixes hotplug events on
-"AMD Pink Sardine".
+The busy status bit may never de-assert if number of programmed skip
+bits is incorrect, resulting in a kernel hang because the bit is polled
+endlessly in the code. Fix it by adding timeout for the bit-polling.
+This problem is reproducible by setting the data_bit_offset field of
+the HEVC slice params to a wrong value by userspace.
 
 Cc: stable@vger.kernel.org
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Fixes: 7678c5462680 (media: cedrus: Fix decoding for some HEVC videos)
+Reported-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thunderbolt/switch.c  |   24 ++++++++++++++++++++++++
- drivers/thunderbolt/tb.h      |    1 +
- drivers/thunderbolt/tb_regs.h |    1 +
- drivers/thunderbolt/usb4.c    |   20 ++++++++++++++++++++
- 4 files changed, 46 insertions(+)
+ drivers/staging/media/sunxi/cedrus/cedrus_h265.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -2690,6 +2690,26 @@ static void tb_switch_credits_init(struc
- 		tb_sw_info(sw, "failed to determine preferred buffer allocation, using defaults\n");
- }
+--- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+@@ -234,8 +234,9 @@ static void cedrus_h265_skip_bits(struct
+ 		cedrus_write(dev, VE_DEC_H265_TRIGGER,
+ 			     VE_DEC_H265_TRIGGER_FLUSH_BITS |
+ 			     VE_DEC_H265_TRIGGER_TYPE_N_BITS(tmp));
+-		while (cedrus_read(dev, VE_DEC_H265_STATUS) & VE_DEC_H265_STATUS_VLD_BUSY)
+-			udelay(1);
++
++		if (cedrus_wait_for(dev, VE_DEC_H265_STATUS, VE_DEC_H265_STATUS_VLD_BUSY))
++			dev_err_ratelimited(dev->dev, "timed out waiting to skip bits\n");
  
-+static int tb_switch_port_hotplug_enable(struct tb_switch *sw)
-+{
-+	struct tb_port *port;
-+
-+	if (tb_switch_is_icm(sw))
-+		return 0;
-+
-+	tb_switch_for_each_port(sw, port) {
-+		int res;
-+
-+		if (!port->cap_usb4)
-+			continue;
-+
-+		res = usb4_port_hotplug_enable(port);
-+		if (res)
-+			return res;
-+	}
-+	return 0;
-+}
-+
- /**
-  * tb_switch_add() - Add a switch to the domain
-  * @sw: Switch to add
-@@ -2761,6 +2781,10 @@ int tb_switch_add(struct tb_switch *sw)
- 			return ret;
+ 		count += tmp;
  	}
- 
-+	ret = tb_switch_port_hotplug_enable(sw);
-+	if (ret)
-+		return ret;
-+
- 	ret = device_add(&sw->dev);
- 	if (ret) {
- 		dev_err(&sw->dev, "failed to add device: %d\n", ret);
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1067,6 +1067,7 @@ int usb4_switch_add_ports(struct tb_swit
- void usb4_switch_remove_ports(struct tb_switch *sw);
- 
- int usb4_port_unlock(struct tb_port *port);
-+int usb4_port_hotplug_enable(struct tb_port *port);
- int usb4_port_configure(struct tb_port *port);
- void usb4_port_unconfigure(struct tb_port *port);
- int usb4_port_configure_xdomain(struct tb_port *port);
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -301,6 +301,7 @@ struct tb_regs_port_header {
- #define ADP_CS_5				0x05
- #define ADP_CS_5_LCA_MASK			GENMASK(28, 22)
- #define ADP_CS_5_LCA_SHIFT			22
-+#define ADP_CS_5_DHP				BIT(31)
- 
- /* TMU adapter registers */
- #define TMU_ADP_CS_3				0x03
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -1068,6 +1068,26 @@ int usb4_port_unlock(struct tb_port *por
- 	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_4, 1);
- }
- 
-+/**
-+ * usb4_port_hotplug_enable() - Enables hotplug for a port
-+ * @port: USB4 port to operate on
-+ *
-+ * Enables hot plug events on a given port. This is only intended
-+ * to be used on lane, DP-IN, and DP-OUT adapters.
-+ */
-+int usb4_port_hotplug_enable(struct tb_port *port)
-+{
-+	int ret;
-+	u32 val;
-+
-+	ret = tb_port_read(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
-+	if (ret)
-+		return ret;
-+
-+	val &= ~ADP_CS_5_DHP;
-+	return tb_port_write(port, &val, TB_CFG_PORT, ADP_CS_5, 1);
-+}
-+
- static int usb4_port_set_configured(struct tb_port *port, bool configured)
- {
- 	int ret;
 
 
