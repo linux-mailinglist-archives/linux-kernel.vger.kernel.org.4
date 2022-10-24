@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA1460AE1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD5260AE7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbiJXOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
+        id S231395AbiJXPC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiJXOtG (ORCPT
+        with ESMTP id S233053AbiJXPCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:49:06 -0400
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8051004A0;
-        Mon, 24 Oct 2022 06:26:33 -0700 (PDT)
-Received: by mail-lj1-f178.google.com with SMTP id s24so2247615ljs.11;
-        Mon, 24 Oct 2022 06:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/f6QvgWEK2QKd8Bu9REf8ADv1aw2vVd3Yv4HOVOz7Ak=;
-        b=EhOMIEgIRErpnbm8prEnZ+El1XlhTxkfIZ0a7AXi1Hv2jclABTle/FG3DepAdDAD8E
-         nluCcmdihUyFrYzoakm8C8ToLqtOkfeQYYl/DizhDL4VcuRnignLvmRKAvRvnKIKyWuX
-         xrcQsyYy7ZJXQT4ZiWOItzrXVtV5khRPxtRkREb5vkewPCMg1rtU3yzWWaE/unpowqJs
-         YrozlDAxnn5OjtOgQZKYrD/YPGKirnrpQE46OlU3pCnxcWLqx8L9ZOKmZ0SJlCxiJ/DL
-         YGeVbVeiL74nXkd0X0HclwjzNF5kc4UILSxZzjCMmTzx6QZYswqNJtZbhS+jFh/o4Ltw
-         TMug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/f6QvgWEK2QKd8Bu9REf8ADv1aw2vVd3Yv4HOVOz7Ak=;
-        b=SPqxX/j9liyCKvohhtxoGSenZZ7ZyKo3aZbIRn43p+9qtcVtOYmFt0uxw/Q0cg+t4U
-         bg3wN+BCgVMpZ9bY0+VH2HtWb3zS2QvS4KB2PfhmXzw/KbJPe3Bpn+GoNNpY62QVsXmS
-         UcUG6+eG5VGT2loNdNjpbCswgkkwj/MdUWR1Or+umDQOwd78Mj33fRCv4kHhyxgeCTbY
-         56FAUD6yftHI5/bUpKXHmDwIMB7H/xACAxg/5YFMpuWGdvhxijcvsdxp3z3lPbJ+HPeD
-         bWX0RtkCW7t2VqHRuWM01s/2Yd2dQw9wJUlgYgS3k62/XHRfxtdEqfALpsVhdUgfBS9z
-         rAWQ==
-X-Gm-Message-State: ACrzQf2jZmNkWjS4ZnjEZvp0n7xboCl5I4oH5NK+FES/LT9gwJizTux9
-        szvhLwbUW0HqwzxyXI7zBtYCqcGn4qE=
-X-Google-Smtp-Source: AMsMyM56lIO+9BhSuf6T//Z7gcQumbNn2vHE9335uPa1WiK0ku4dyd2GjwOAotSh/CqivYpDYh4kDQ==
-X-Received: by 2002:a17:907:3e87:b0:78d:bb06:9066 with SMTP id hs7-20020a1709073e8700b0078dbb069066mr27596749ejc.387.1666617778278;
-        Mon, 24 Oct 2022 06:22:58 -0700 (PDT)
-Received: from felia.fritz.box (200116b826dcce007dd5aa083ba5848a.dip.versatel-1u1.de. [2001:16b8:26dc:ce00:7dd5:aa08:3ba5:848a])
-        by smtp.gmail.com with ESMTPSA id p1-20020a17090653c100b007a23fe14442sm3065202ejo.195.2022.10.24.06.22.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 06:22:57 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: adjust entry after renaming parisc serial driver
-Date:   Mon, 24 Oct 2022 15:22:23 +0200
-Message-Id: <20221024132223.9697-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        Mon, 24 Oct 2022 11:02:31 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C58614080
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:39:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666618773; x=1698154773;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wiyL2LwtApEGjq+jVyXmvOIij+KLZlgpbNyS0mpR3bQ=;
+  b=L4dYwOlvc4TaCZFQ6Dlw3aQzX5vqxg1TEs+mBjQLOeuDXtQPOEMiiBHV
+   aoLhi9wyhMpQSYdGrUgqhHN/oRmxxLe/OvSJtCyHFiTZALmhd3M7i3/46
+   vhJLxlxkmmF+BBtnxKjqnytoZx+8JxAtZJUIwD0InZ2DPJM8H0VT2PtJG
+   LaCcucB3VeNOqs3GO2qkBR2qSMEdfRP20tAveETPSLujs2+Es1FZC++gk
+   buYwg3K6y7Lo4lpS3IY50erO9vDwkfhkpEFsX2bRZA7V4/WzwUInIZ/+B
+   t1d4ddvIwsTQ04TKSnNSeuksSVytTki40fDh67HiwZ1DuQvWvKfq2SzWV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="294812443"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="294812443"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 06:22:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="609188617"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="609188617"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 24 Oct 2022 06:22:53 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1omxPn-001SFs-1y;
+        Mon, 24 Oct 2022 16:22:51 +0300
+Date:   Mon, 24 Oct 2022 16:22:51 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH v2 1/1] linux/container_of.h: Warn about loss of constness
+Message-ID: <Y1aRq0stHSY3zDDM@smile.fi.intel.com>
+References: <20221024111627.75183-1-sakari.ailus@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024111627.75183-1-sakari.ailus@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,33 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 9e4e2ce1a78e ("parisc/serial: Rename 8250_gsc.c to 8250_parisc.c")
-renames the parisc serial driver file, but does not adjust the entry in
-MAINTAINERS.
+On Mon, Oct 24, 2022 at 02:16:27PM +0300, Sakari Ailus wrote:
+> container_of() casts the original type to another which leads to the loss
+> of the const qualifier if it is not specified in the caller-provided type.
+> This easily leads to container_of() returning a non-const pointer to a
+> const struct which the C compiler does not warn about.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Repair this file reference in PARISC ARCHITECTURE.
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> ---
+>  include/linux/container_of.h | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/linux/container_of.h b/include/linux/container_of.h
+> index 2f4944b791b81..591db643269aa 100644
+> --- a/include/linux/container_of.h
+> +++ b/include/linux/container_of.h
+> @@ -13,6 +13,7 @@
+>   * @type:	the type of the container struct this is embedded in.
+>   * @member:	the name of the member within the struct.
+>   *
+> + * WARNING: any const qualifier of @ptr is lost.
+>   */
+>  #define container_of(ptr, type, member) ({				\
+>  	void *__mptr = (void *)(ptr);					\
+> -- 
+> 2.30.2
+> 
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 91d95924cff4..0c8198b3329a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15637,7 +15637,7 @@ F:	drivers/input/serio/gscps2.c
- F:	drivers/input/serio/hp_sdc*
- F:	drivers/parisc/
- F:	drivers/parport/parport_gsc.*
--F:	drivers/tty/serial/8250/8250_gsc.c
-+F:	drivers/tty/serial/8250/8250_parisc.c
- F:	drivers/video/console/sti*
- F:	drivers/video/fbdev/sti*
- F:	drivers/video/logo/logo_parisc*
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
+
 
