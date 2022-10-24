@@ -2,86 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F170D609AB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 08:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4141609AD3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 08:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiJXGrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 02:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        id S230030AbiJXG6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 02:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiJXGrO (ORCPT
+        with ESMTP id S229455AbiJXG6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 02:47:14 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A93D5DF33
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 23:46:55 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id u7so5964275qvn.13
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 23:46:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lxnav.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DKf+A6HhtX9mc2hAkoHaxtvJcmxghygi4kxKwGPcH54=;
-        b=iwHnzLCm7oFOSTBLS3J2/nP0hfKORtPMV5RPaK1XwwLcMM+/ag2fq0iOotOa4f6I6j
-         SwE1PIETbxH83QXsJqYrNMqPSzAppnKgEii6EeWcV19D/hk/dEHFcwaPRqcPMsHUKZbN
-         GXxBlBuQN/vjxvqG91b60BO2rgfh+7x4M7emg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DKf+A6HhtX9mc2hAkoHaxtvJcmxghygi4kxKwGPcH54=;
-        b=ih177rLxBQTtRh06msD7unnV6MdtBh1MZmbUSmWElsBrmUoF6imcJ6KRJrSET0W2Rd
-         hGsnzoOao6dJ5RpYAea21NMHI9UVLGsntDdwek2q2mHdgz3h6Yg+qjeyLnBv5r8zcLm+
-         WR0GoiqRHTkrY+9Ys44PHpjS+tL0clH5ZKah0jBx3fDrsSwYcUR6B/sl2kv6BHK0ZbYr
-         qHcuZhWTkDKd0rkQV6GPs6Dun8LwPTIAf4J68uiBCmbEQ/PyxZPg+mxkZX77JRaOApTb
-         1kOJtEbJIEa0VJdiRKopqtpg5JaUXa5YRDdBeR4xLT9OZQj/8I7tBQpznemGBYVPhR8+
-         H1/Q==
-X-Gm-Message-State: ACrzQf2omr8m5HCX8Wrl3djo2FInEMQWkKy6YWBFmGpXynnr0YeFOKSp
-        HnlVGSbbg27opnHwADmJw4SL/HGxNKzX81Pg4dWFng==
-X-Google-Smtp-Source: AMsMyM6FjMmilmr/1MGP2WwAanNef8DNvM6W2Bl6M6zASp15U5hmP3GXP7D3gEMuTBUdFJtU75sPsmKzeFZtkXvK6MM=
-X-Received: by 2002:a05:6214:e4f:b0:4bb:769f:19a9 with SMTP id
- o15-20020a0562140e4f00b004bb769f19a9mr1781205qvc.2.1666594014701; Sun, 23 Oct
- 2022 23:46:54 -0700 (PDT)
+        Mon, 24 Oct 2022 02:58:10 -0400
+X-Greylist: delayed 429 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 23 Oct 2022 23:58:06 PDT
+Received: from smtp-out-03.comm2000.it (smtp-out-03.comm2000.it [212.97.32.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1395EDE7;
+        Sun, 23 Oct 2022 23:58:02 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-03.comm2000.it (Postfix) with ESMTPSA id 74882B4357B;
+        Mon, 24 Oct 2022 08:50:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1666594252;
+        bh=3DmqS6uviGKDrbnLwBKbh5oj+ySmwKcSbnQtg2IBmBg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=OjYEM7mqjlZ7R3UD6qIqDUZ7wFi/IjeWGsso4J6ivIr/FHP65U1yfilwdGB1Vi2gL
+         jcxbrYWnn6yKJlwXK5M1BtYToTgl1tM0nL2zc6Rbjro0rGxTKlqHdt0sghmiR4/Edp
+         ZLzQ6mG2qAROWja3/SCtR9PiaaAwcnMapnlOfA456eufVxWV/2hrso0QaAZv2Q2kcm
+         aBXOnBpf2muuOunNGkmD6neKVNM0en/QB7FBhJuJDMz4br4dIRFnQUp/tPcfDlW8PM
+         bkiWFqGcAQE1Lanm4gol9Cy1u5OIn7XywTakSmxb2l7l9+cbohmJTdKu1pj6yMWh+o
+         P6UaJrDrp4y3A==
+Date:   Mon, 24 Oct 2022 08:50:47 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shawn Guo <shawnguo@kernel.org>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the imx-mxs tree
+Message-ID: <Y1Y1x0heHVqIXjJ4@francesco-nb.int.toradex.com>
+References: <20221024153720.5e387e34@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20221021135827.1444793-1-mitja@lxnav.com> <20221021135827.1444793-3-mitja@lxnav.com>
- <Y1K7hWKl0siEtaAl@gmail.com> <20221023121002.742bc48f@jic23-huawei>
-In-Reply-To: <20221023121002.742bc48f@jic23-huawei>
-From:   =?UTF-8?Q?Mitja_=C5=A0pes?= <mitja@lxnav.com>
-Date:   Mon, 24 Oct 2022 08:46:27 +0200
-Message-ID: <CACbQKWf2zfbQ5DvMZs50VVfQbmcGp63b9yg6aZ29NbiQ01QmFg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] iio: pressure: ms5611: changed hardcoded SPI speed
- to value limited
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Tomasz Duszynski <tduszyns@gmail.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024153720.5e387e34@canb.auug.org.au>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 1:09 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> Please give a fixes tag for this one as well.
-> The driver should never have been doing this.
+On Mon, Oct 24, 2022 at 03:37:20PM +1100, Stephen Rothwell wrote:
+> In commit
+> 
+>   c9545754e9a7 ("arm64: dts: verdin-imx8mp: fix ctrl_sleep_moci")
+> 
+> Fixes tag
+> 
+>   Fixes: 1d8df9c74bff ("arm64: dts: freescale: add initial support for verdin imx8m plus")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: a39ed23bdf6e ("arm64: dts: freescale: add initial support for verdin imx8m plus")
+correct, sorry for the mistake :/
 
-Fixes: c0644160a8b5 ("iio: pressure: add support for MS5611 pressure
-and temperature sensor")
+Shawn: I assume you can fix it, let me know otherwise.
 
-Kind regards,
-Mitja
+Hopefully since commit  bd17e036b495 ("checkpatch: warn for non-standard fixes tag style")
+was merged these kind of mistakes should be less and less frequent.
+
+Francesco
