@@ -2,62 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CDD6098E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1C66098E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiJXDan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 23:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S230289AbiJXDbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 23:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiJXDaH (ORCPT
+        with ESMTP id S229738AbiJXDa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 23:30:07 -0400
-Received: from esa5.hc1455-7.c3s2.iphmx.com (esa5.hc1455-7.c3s2.iphmx.com [68.232.139.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F18D664D6;
-        Sun, 23 Oct 2022 20:26:45 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="92959263"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661785200"; 
-   d="scan'208";a="92959263"
-Received: from unknown (HELO oym-r3.gw.nic.fujitsu.com) ([210.162.30.91])
-  by esa5.hc1455-7.c3s2.iphmx.com with ESMTP; 24 Oct 2022 12:26:43 +0900
-Received: from oym-m4.gw.nic.fujitsu.com (oym-nat-oym-m4.gw.nic.fujitsu.com [192.168.87.61])
-        by oym-r3.gw.nic.fujitsu.com (Postfix) with ESMTP id C7B22D6476;
-        Mon, 24 Oct 2022 12:26:41 +0900 (JST)
-Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
-        by oym-m4.gw.nic.fujitsu.com (Postfix) with ESMTP id C663ED4BE5;
-        Mon, 24 Oct 2022 12:26:40 +0900 (JST)
-Received: from [10.167.226.45] (unknown [10.167.226.45])
-        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id 207812340C17;
-        Mon, 24 Oct 2022 12:26:38 +0900 (JST)
-Message-ID: <58522e46-9d45-53f3-9a19-351cc58c88e9@fujitsu.com>
-Date:   Mon, 24 Oct 2022 11:26:37 +0800
+        Sun, 23 Oct 2022 23:30:28 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F967AC2E;
+        Sun, 23 Oct 2022 20:27:52 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id h9so3031075wrt.0;
+        Sun, 23 Oct 2022 20:27:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O2esLByeb54271i903kEfYtOSyfIyaU9h31aBI1kHSw=;
+        b=lCa50AmhMTksHcOD90KBgXpupfnNLPbfG/5ZPGhmRq7XEue+QE1lgitzcgeCQrvplY
+         hzAWzEJ8uQ++kiBiZpV48ZTS2Irsi2kp/kyiJrwGlOz9NimpeR96yru/S1Eje+9x8D6h
+         iIVDFMEpvb9pVYYuYWakU4qie+9RfEb0dSVmrXPB+FW7Gtw8Rneh+IDU215btfBzf5iO
+         VplAG0In1C79anDxBVoDU/VrbqQSAhl1TOMioUowdZNnEdsgkZNu1xhgjn5bOI8KaWxQ
+         0mvJoCMW0htOmZXWBMd+d9GhKqbMfr/TT2gFmFkdbq55MSW2FtcEGS/5GWOxB/j/EVDw
+         DqQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O2esLByeb54271i903kEfYtOSyfIyaU9h31aBI1kHSw=;
+        b=e5nExVe5YE2e3mLeswR3enz9s+SiGktzxAFJdDPnFzgukPZqtLMj/DVOaWDgqJNXlx
+         THbl+JEE+GxWEfLMfCHR4RFw+SqW7bo8srN8av6XD3m25LIA+BXbo9adRWP8nhoXQmp6
+         XpI8K3qqoXI5rhTRcVAv/yfvzvxeZ7jLnRSeBDBGMzSCfFWeBVP9ezjF9Avbtm/dIoat
+         9f1vpT8s2/v+EypwOCDNtTw6orwE00UjpBiaZ7qAlSnGObRyzXITd8uUT8uT6i88H5UV
+         0NpHAcTztK1Q4/vwaq633CrgkK/J7zaS3zmipBfVQ4Ji3iGVdK0bbf7rpMfxStk6Yeaj
+         dBYQ==
+X-Gm-Message-State: ACrzQf31Zog8+oYMM355msJoCHe25z6BbObe+VyYHlXz+RixTkXZO/+4
+        M0wlbD21/QhO71dRf6iOugM99qE6gggzEpz/sREO2NahbJBfWg==
+X-Google-Smtp-Source: AMsMyM4DhnQrMnsG4wcbCpqMZPxR8IShg+7kF/L6jDrU6EOYLyRvQe6ig0PatWYhRNhIhb1qc4kvGu7gcZJBrAsk0aI=
+X-Received: by 2002:adf:e502:0:b0:234:bb21:e9cc with SMTP id
+ j2-20020adfe502000000b00234bb21e9ccmr15184069wrm.389.1666582070646; Sun, 23
+ Oct 2022 20:27:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [for-next PATCH v2 1/2] RDMA/rxe: Remove unnecessary mr testing
-Content-Language: en-US
-To:     zyjzyj2000@gmail.com, jgg@ziepe.ca, leon@kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <1666338764-2-1-git-send-email-lizhijian@fujitsu.com>
- <1666338764-2-2-git-send-email-lizhijian@fujitsu.com>
-From:   Li Zhijian <lizhijian@fujitsu.com>
-In-Reply-To: <1666338764-2-2-git-send-email-lizhijian@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27220.004
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27220.004
-X-TMASE-Result: 10--10.295300-10.000000
-X-TMASE-MatchedRID: a3o/0593/lqPvrMjLFD6eLFpbR9jggy4C//1TMV5chNWjSWvFszxq01N
-        J2MN+nPkH3zzqJhH7/QB11rlDcR0Vj+7nvNv6fe6qhcdnP91eXHBOVz0Jwcxl6vCrG0TnfVUilv
-        Ab18i4hNvF9oQ/B54yP+UfwCF49dBGAdnzrnkM485f9Xw/xqKXZwhktVkBBrQeFIQTy0Zb4b7H+
-        hZKy6/KwtuKBGekqUpI/NGWt0UYPCAWRagkK8OlcpPWztRNE55WOAKjUHD68q6kZurkcq+ZnQEk
-        Bs4wl7w
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
+References: <CAPm50a+aygp3T1mNjzGXtL2nyNm-mHFZ3YO8F7eO0gCxZDuQsA@mail.gmail.com>
+ <Y0BeEVxkDkctmTIX@google.com> <CAPm50aLzOLyURhvhYkCyp1hpRagAczFXg9jYbFg_86Qaf5usbg@mail.gmail.com>
+ <Y0RYp7CZO5u1Eg/s@google.com>
+In-Reply-To: <Y0RYp7CZO5u1Eg/s@google.com>
+From:   Hao Peng <flyingpenghao@gmail.com>
+Date:   Mon, 24 Oct 2022 11:27:38 +0800
+Message-ID: <CAPm50aJUjCumrMmEGCw2eNc6nPi5y=ZzTMi8MC2aJwkatQGnww@mail.gmail.com>
+Subject: Re: [PATCH] kvm: x86: keep srcu writer side operation mutually exclusive
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,43 +69,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just noticed i didn't post [2/2] successfully, will sent it in next version.
-
-
-
-On 21/10/2022 15:52, Li Zhijian wrote:
-> Before the testing, we already passed it to rxe_mr_copy() where mr could
-> be dereferenced. so this checking is not exactly correct.
+On Tue, Oct 11, 2022 at 1:38 AM Sean Christopherson <seanjc@google.com> wrote:
 >
-> I tried to figure out the details how/when mr could be NULL, but failed
-> at last. Add a WARN_ON(!mr) to that path to tell us more when it
-> happends.
+> On Sun, Oct 09, 2022, Hao Peng wrote:
+> > On Sat, Oct 8, 2022 at 1:12 AM Sean Christopherson <seanjc@google.com> wrote:
+> > >
+> > > On Sat, Oct 08, 2022, Hao Peng wrote:
+> > > > From: Peng Hao <flyingpeng@tencent.com>
+> > > >
+> > > > Synchronization operations on the writer side of SRCU should be
+> > > > invoked within the mutex.
+> > >
+> > > Why?  Synchronizing SRCU is necessary only to ensure that all previous readers go
+> > > away before the old filter is freed.  There's no need to serialize synchronization
+> > > between writers.  The mutex ensures each writer operates on the "new" filter that's
+> > > set by the previous writer, i.e. there's no danger of a double-free.  And the next
+> > > writer will wait for readers to _its_ "new" filter.
+> > >
+> > Array srcu_lock_count/srcu_unlock_count[] in srcu_data, which is used
+> > alternately to determine
+> > which readers need to wait to get out of the critical area. If  two
+> > synchronize_srcu are initiated concurrently,
+> > there may be a problem with the judgment of gp. But if it is confirmed
+> > that there will be no writer concurrency,
+> > it is not necessary to ensure that synchronize_srcu is executed within
+> > the scope of the mutex lock.
 >
-> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-> ---
->   drivers/infiniband/sw/rxe/rxe_resp.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> I don't see anything in the RCU documentation or code that suggests that callers
+> need to serialize synchronization calls.  E.g. the "tree" SRCU implementation uses
+> a dedicated mutex to serialize grace period work
 >
-> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-> index ed5a09e86417..218c14fb07c6 100644
-> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
-> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-> @@ -778,6 +778,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
->   	if (res->state == rdatm_res_state_new) {
->   		if (!res->replay) {
->   			mr = qp->resp.mr;
-> +			WARN_ON(!mr);
->   			qp->resp.mr = NULL;
->   		} else {
->   			mr = rxe_recheck_mr(qp, res->read.rkey);
-> @@ -811,8 +812,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
->   
->   	rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
->   		    payload, RXE_FROM_MR_OBJ);
-> -	if (mr)
-> -		rxe_put(mr);
-> +	rxe_put(mr);
->   
->   	if (bth_pad(&ack_pkt)) {
->   		u8 *pad = payload_addr(&ack_pkt) + payload;
+>         struct mutex srcu_gp_mutex;             /* Serialize GP work. */
+>
+> static void srcu_advance_state(struct srcu_struct *ssp)
+> {
+>         int idx;
+>
+>         mutex_lock(&ssp->srcu_gp_mutex);
+>
+>         <magic>
+> }
+>
+>
+> and its state machine explicitly accounts for "Someone else" starting a grace
+> period
+>
+>                 if (idx != SRCU_STATE_IDLE) {
+>                         mutex_unlock(&ssp->srcu_gp_mutex);
+>                         return; /* Someone else started the grace period. */
+>                 }
+>
+> and srcu_gp_end() also guards against creating more than 2 grace periods.
+>
+>         /* Prevent more than one additional grace period. */
+>         mutex_lock(&ssp->srcu_cb_mutex);
+>
+> And if this is a subtle requirement, there is a lot of broken kernel code, e.g.
+> mmu_notifier, other KVM code, srcu_notifier_chain_unregister(), etc...
 
+srcu_gp_mutex is meaningless because the workqueue already guarantees
+that the same work_struct will not be reentrant.
+If synchronize_srcu is not mutually exclusive on the update side, it may cause
+a GP to fail for a long time. I will continue to analyze when I have time.
