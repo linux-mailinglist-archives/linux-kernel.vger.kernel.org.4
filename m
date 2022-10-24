@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9214560A4F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F23960A9FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233257AbiJXMTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
+        id S233418AbiJXN1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233095AbiJXMSH (ORCPT
+        with ESMTP id S236150AbiJXNYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:18:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF8277542;
-        Mon, 24 Oct 2022 04:57:05 -0700 (PDT)
+        Mon, 24 Oct 2022 09:24:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA5CA8CF0;
+        Mon, 24 Oct 2022 05:30:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 567A0B811A1;
-        Mon, 24 Oct 2022 11:53:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B50C433D6;
-        Mon, 24 Oct 2022 11:53:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 14FBF61280;
+        Mon, 24 Oct 2022 12:29:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27905C433D7;
+        Mon, 24 Oct 2022 12:29:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612405;
-        bh=m6NQJ5EmDqzyBSscFVL9+7RWcSwAfWV9TMWJzvPm/kc=;
+        s=korg; t=1666614586;
+        bh=afOYIS3FPYL4NSLiTIHXXLe3RlmHLDq9fyBIsk/Z1Ew=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hiKIzA1zAInlGpBMMoB4C7wlWOL7Re7MhfZhge68XSw0yH5MPoZLt64PDKVzpzdgL
-         IsNf8RTfinOds2pjawK8p0oW+ZTEy6QGukwW3wI01kPnFbv44Wf1TL+Z2polw2J+w6
-         Hhw7fpx08hEbVvdfMm9Yf+jr7q0jODgRGsG/DCKc=
+        b=oLKWArC45giydtcq55y2AZkKEauX45CeRxRvwWKJSOvc4ti9lx8KHg/9LoLPRG47B
+         W5SiHToO+Vk1IRKYbUWMb/Mw6EROuL3lwxwhkFp2JVKRRR0uasAIrtoy9kBDOu4HA+
+         wUZyRctj0VNGsKQJTDKm9LhBkX5y7rVGi1bpJkuc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Pattrick <mkp@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 168/210] openvswitch: Fix double reporting of drops in dropwatch
+Subject: [PATCH 5.10 288/390] crypto: cavium - prevent integer overflow loading firmware
 Date:   Mon, 24 Oct 2022 13:31:25 +0200
-Message-Id: <20221024113002.413948464@linuxfoundation.org>
+Message-Id: <20221024113035.229417744@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,50 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Pattrick <mkp@redhat.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 1100248a5c5ccd57059eb8d02ec077e839a23826 ]
+[ Upstream commit 2526d6bf27d15054bb0778b2f7bc6625fd934905 ]
 
-Frames sent to userspace can be reported as dropped in
-ovs_dp_process_packet, however, if they are dropped in the netlink code
-then netlink_attachskb will report the same frame as dropped.
+The "code_length" value comes from the firmware file.  If your firmware
+is untrusted realistically there is probably very little you can do to
+protect yourself.  Still we try to limit the damage as much as possible.
+Also Smatch marks any data read from the filesystem as untrusted and
+prints warnings if it not capped correctly.
 
-This patch checks for error codes which indicate that the frame has
-already been freed.
+The "ntohl(ucode->code_length) * 2" multiplication can have an
+integer overflow.
 
-Signed-off-by: Mike Pattrick <mkp@redhat.com>
-Link: https://bugzilla.redhat.com/show_bug.cgi?id=2109946
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 9e2c7d99941d ("crypto: cavium - Add Support for Octeon-tx CPT Engine")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/openvswitch/datapath.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ drivers/crypto/cavium/cpt/cptpf_main.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-index 3248cf04d0b3..42616aca0ce4 100644
---- a/net/openvswitch/datapath.c
-+++ b/net/openvswitch/datapath.c
-@@ -276,10 +276,17 @@ void ovs_dp_process_packet(struct sk_buff *skb, struct sw_flow_key *key)
- 		upcall.portid = ovs_vport_find_upcall_portid(p, skb);
- 		upcall.mru = OVS_CB(skb)->mru;
- 		error = ovs_dp_upcall(dp, skb, key, &upcall, 0);
--		if (unlikely(error))
--			kfree_skb(skb);
--		else
-+		switch (error) {
-+		case 0:
-+		case -EAGAIN:
-+		case -ERESTARTSYS:
-+		case -EINTR:
- 			consume_skb(skb);
-+			break;
-+		default:
-+			kfree_skb(skb);
-+			break;
-+		}
- 		stats_counter = &stats->n_missed;
- 		goto out;
+diff --git a/drivers/crypto/cavium/cpt/cptpf_main.c b/drivers/crypto/cavium/cpt/cptpf_main.c
+index 781949027451..d9362199423f 100644
+--- a/drivers/crypto/cavium/cpt/cptpf_main.c
++++ b/drivers/crypto/cavium/cpt/cptpf_main.c
+@@ -254,6 +254,7 @@ static int cpt_ucode_load_fw(struct cpt_device *cpt, const u8 *fw, bool is_ae)
+ 	const struct firmware *fw_entry;
+ 	struct device *dev = &cpt->pdev->dev;
+ 	struct ucode_header *ucode;
++	unsigned int code_length;
+ 	struct microcode *mcode;
+ 	int j, ret = 0;
+ 
+@@ -264,11 +265,12 @@ static int cpt_ucode_load_fw(struct cpt_device *cpt, const u8 *fw, bool is_ae)
+ 	ucode = (struct ucode_header *)fw_entry->data;
+ 	mcode = &cpt->mcode[cpt->next_mc_idx];
+ 	memcpy(mcode->version, (u8 *)fw_entry->data, CPT_UCODE_VERSION_SZ);
+-	mcode->code_size = ntohl(ucode->code_length) * 2;
+-	if (!mcode->code_size) {
++	code_length = ntohl(ucode->code_length);
++	if (code_length == 0 || code_length >= INT_MAX / 2) {
+ 		ret = -EINVAL;
+ 		goto fw_release;
  	}
++	mcode->code_size = code_length * 2;
+ 
+ 	mcode->is_ae = is_ae;
+ 	mcode->core_mask = 0ULL;
 -- 
 2.35.1
 
