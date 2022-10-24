@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1199660B846
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A028C60B7C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbiJXTnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        id S232448AbiJXTdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232117AbiJXTlx (ORCPT
+        with ESMTP id S230006AbiJXTcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:41:53 -0400
+        Mon, 24 Oct 2022 15:32:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D5A265C64;
-        Mon, 24 Oct 2022 11:11:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01601D73E5;
+        Mon, 24 Oct 2022 11:03:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED2DBB81144;
-        Mon, 24 Oct 2022 11:54:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54B85C433C1;
-        Mon, 24 Oct 2022 11:54:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54178B816AF;
+        Mon, 24 Oct 2022 12:30:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFBCC433D7;
+        Mon, 24 Oct 2022 12:30:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612483;
-        bh=5Vy4jq/SW/H+3NBkjZm5KJ4gAaL+cSLzxnmDanCaLrA=;
+        s=korg; t=1666614639;
+        bh=Rb9Cpi+DHBOf+LtpoHqa9AhLp5UsfP7z+yEnGXy9dsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZFYER+HXM2Frq6TZY9nZleSw3N1gSs1wzpe3plILQSvUYDy+dmIpkZIoX0WWz3lQ6
-         /XP7aF9o3qYzTjp4fWrQGCTw5fs0dnLFmiSbQW8Qb0i2rujTC1kLCz0q3OA06J4qiL
-         IcdOcHhQ2wsBY2aMgp2OU8CcKT+KDYV997O4JSTY=
+        b=0ijuYElF0bGi62adrIGP93RBmdI20x126a0i4nsXwOdJh7jsZLoNhqrhUkU1mK4n6
+         wL6DX0UHaG4dhmz0zqyDuwVV++Boif2cjMcVJdokRL6/3yb38pzh43E9w2++ngwqTJ
+         VSw1qVzksC/bhUoVpFogguVz+fVIxtE29fDwKnAc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot <syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Alexander Aring <aahringo@redhat.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
+        stable@vger.kernel.org, hongao <hongao@uniontech.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 205/210] net/ieee802154: dont warn zero-sized raw_sendmsg()
-Date:   Mon, 24 Oct 2022 13:32:02 +0200
-Message-Id: <20221024113003.651648084@linuxfoundation.org>
+Subject: [PATCH 5.10 337/390] drm/amdgpu: fix initial connector audio value
+Date:   Mon, 24 Oct 2022 13:32:14 +0200
+Message-Id: <20221024113037.353781579@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,62 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: hongao <hongao@uniontech.com>
 
-[ Upstream commit b12e924a2f5b960373459c8f8a514f887adf5cac ]
+[ Upstream commit 4bb71fce58f30df3f251118291d6b0187ce531e6 ]
 
-syzbot is hitting skb_assert_len() warning at __dev_queue_xmit() [1],
-for PF_IEEE802154 socket's zero-sized raw_sendmsg() request is hitting
-__dev_queue_xmit() with skb->len == 0.
+This got lost somewhere along the way, This fixes
+audio not working until set_property was called.
 
-Since PF_IEEE802154 socket's zero-sized raw_sendmsg() request was
-able to return 0, don't call __dev_queue_xmit() if packet length is 0.
-
-  ----------
-  #include <sys/socket.h>
-  #include <netinet/in.h>
-
-  int main(int argc, char *argv[])
-  {
-    struct sockaddr_in addr = { .sin_family = AF_INET, .sin_addr.s_addr = htonl(INADDR_LOOPBACK) };
-    struct iovec iov = { };
-    struct msghdr hdr = { .msg_name = &addr, .msg_namelen = sizeof(addr), .msg_iov = &iov, .msg_iovlen = 1 };
-    sendmsg(socket(PF_IEEE802154, SOCK_RAW, 0), &hdr, 0);
-    return 0;
-  }
-  ----------
-
-Note that this might be a sign that commit fd1894224407c484 ("bpf: Don't
-redirect packets with invalid pkt_len") should be reverted, for
-skb->len == 0 was acceptable for at least PF_IEEE802154 socket.
-
-Link: https://syzkaller.appspot.com/bug?extid=5ea725c25d06fb9114c4 [1]
-Reported-by: syzbot <syzbot+5ea725c25d06fb9114c4@syzkaller.appspotmail.com>
-Fixes: fd1894224407c484 ("bpf: Don't redirect packets with invalid pkt_len")
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Link: https://lore.kernel.org/r/20221005014750.3685555-2-aahringo@redhat.com
-Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
+Signed-off-by: hongao <hongao@uniontech.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ieee802154/socket.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/net/ieee802154/socket.c b/net/ieee802154/socket.c
-index 16bf114118c3..a8929675b5ab 100644
---- a/net/ieee802154/socket.c
-+++ b/net/ieee802154/socket.c
-@@ -284,6 +284,10 @@ static int raw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 		err = -EMSGSIZE;
- 		goto out_dev;
- 	}
-+	if (!size) {
-+		err = 0;
-+		goto out_dev;
-+	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+index df1f9b88a53f..98d3661336a4 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+@@ -1671,10 +1671,12 @@ amdgpu_connector_add(struct amdgpu_device *adev,
+ 						   adev->mode_info.dither_property,
+ 						   AMDGPU_FMT_DITHER_DISABLE);
  
- 	hlen = LL_RESERVED_SPACE(dev);
- 	tlen = dev->needed_tailroom;
+-			if (amdgpu_audio != 0)
++			if (amdgpu_audio != 0) {
+ 				drm_object_attach_property(&amdgpu_connector->base.base,
+ 							   adev->mode_info.audio_property,
+ 							   AMDGPU_AUDIO_AUTO);
++				amdgpu_connector->audio = AMDGPU_AUDIO_AUTO;
++			}
+ 
+ 			subpixel_order = SubPixelHorizontalRGB;
+ 			connector->interlace_allowed = true;
+@@ -1796,6 +1798,7 @@ amdgpu_connector_add(struct amdgpu_device *adev,
+ 				drm_object_attach_property(&amdgpu_connector->base.base,
+ 							   adev->mode_info.audio_property,
+ 							   AMDGPU_AUDIO_AUTO);
++				amdgpu_connector->audio = AMDGPU_AUDIO_AUTO;
+ 			}
+ 			drm_object_attach_property(&amdgpu_connector->base.base,
+ 						   adev->mode_info.dither_property,
+@@ -1849,6 +1852,7 @@ amdgpu_connector_add(struct amdgpu_device *adev,
+ 				drm_object_attach_property(&amdgpu_connector->base.base,
+ 							   adev->mode_info.audio_property,
+ 							   AMDGPU_AUDIO_AUTO);
++				amdgpu_connector->audio = AMDGPU_AUDIO_AUTO;
+ 			}
+ 			drm_object_attach_property(&amdgpu_connector->base.base,
+ 						   adev->mode_info.dither_property,
+@@ -1899,6 +1903,7 @@ amdgpu_connector_add(struct amdgpu_device *adev,
+ 				drm_object_attach_property(&amdgpu_connector->base.base,
+ 							   adev->mode_info.audio_property,
+ 							   AMDGPU_AUDIO_AUTO);
++				amdgpu_connector->audio = AMDGPU_AUDIO_AUTO;
+ 			}
+ 			drm_object_attach_property(&amdgpu_connector->base.base,
+ 						   adev->mode_info.dither_property,
 -- 
 2.35.1
 
