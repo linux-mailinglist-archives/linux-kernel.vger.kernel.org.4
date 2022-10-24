@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC8960A92C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74C160A72B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235877AbiJXNQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S234060AbiJXMsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236097AbiJXNOr (ORCPT
+        with ESMTP id S232313AbiJXMnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:14:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D68A2A8D;
-        Mon, 24 Oct 2022 05:25:45 -0700 (PDT)
+        Mon, 24 Oct 2022 08:43:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B2F6F26C;
+        Mon, 24 Oct 2022 05:08:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FFE1612D2;
-        Mon, 24 Oct 2022 12:25:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BFC2C433D6;
-        Mon, 24 Oct 2022 12:25:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5069C612E9;
+        Mon, 24 Oct 2022 11:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6208CC433C1;
+        Mon, 24 Oct 2022 11:58:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614315;
-        bh=zmCdnqZhVJQJyc3EsuY4FxJn+vF7xfP1KOgUoH30fl8=;
+        s=korg; t=1666612711;
+        bh=2DLMFDvTjxIF3yJGEqdfltqyhOlUkWuzddtXO9fj3Yo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b00ZQz3hdyF0TjtPu60oGS8NZIXBkxI8YlMcQp0Y+ahE7B2OsYekEUQmPtHUC87Gg
-         RRob5q5cdfyNEq3oJNQ1lHmZIwl/I5VwbFr6DVukerNPB2KtnUZXj3RL83QUWgdwD5
-         sShIrSnrDWRAJi5U9rRKi83TUwHp6srA57H4CQ5s=
+        b=ZYeMa8CjquGVjIVXX4f+hZxB7jewBJ98xpUwAlLXIpwHftXOwmt3hYFR7V7xlPcoR
+         US2zBzY/u1sxPbil1NJg4O5mgqpAoR43ZYPbDKRI+xGQ8SKVIPIDoCZVZxnQ4xJDjF
+         106w+gjSfVcXxGMAW21WF7ZlYA4T7xAUV8iBRPkI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Xu Yilun <yilun.xu@intel.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 213/390] fpga: prevent integer overflow in dfl_feature_ioctl_set_irq()
+        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 091/229] bnx2x: fix potential memory leak in bnx2x_tpa_stop()
 Date:   Mon, 24 Oct 2022 13:30:10 +0200
-Message-Id: <20221024113031.867017383@linuxfoundation.org>
+Message-Id: <20221024113001.996309598@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,36 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-[ Upstream commit 939bc5453b8cbdde9f1e5110ce8309aedb1b501a ]
+[ Upstream commit b43f9acbb8942b05252be83ac25a81cec70cc192 ]
 
-The "hdr.count * sizeof(s32)" multiplication can overflow on 32 bit
-systems leading to memory corruption.  Use array_size() to fix that.
+bnx2x_tpa_stop() allocates a memory chunk from new_data with
+bnx2x_frag_alloc(). The new_data should be freed when gets some error.
+But when "pad + len > fp->rx_buf_size" is true, bnx2x_tpa_stop() returns
+without releasing the new_data, which will lead to a memory leak.
 
-Fixes: 322b598be4d9 ("fpga: dfl: introduce interrupt trigger setting API")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-Link: https://lore.kernel.org/r/YxBAtYCM38dM7yzI@kili
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+We should free the new_data with bnx2x_frag_free() when "pad + len >
+fp->rx_buf_size" is true.
+
+Fixes: 07b0f00964def8af9321cfd6c4a7e84f6362f728 ("bnx2x: fix possible panic under memory stress")
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/fpga/dfl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index b450870b75ed..eb8a6e329af9 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -1857,7 +1857,7 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
- 		return -EINVAL;
- 
- 	fds = memdup_user((void __user *)(arg + sizeof(hdr)),
--			  hdr.count * sizeof(s32));
-+			  array_size(hdr.count, sizeof(s32)));
- 	if (IS_ERR(fds))
- 		return PTR_ERR(fds);
- 
+diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+index 2610acf9ac36..53b1b05f905e 100644
+--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
++++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+@@ -788,6 +788,7 @@ static void bnx2x_tpa_stop(struct bnx2x *bp, struct bnx2x_fastpath *fp,
+ 			BNX2X_ERR("skb_put is about to fail...  pad %d  len %d  rx_buf_size %d\n",
+ 				  pad, len, fp->rx_buf_size);
+ 			bnx2x_panic();
++			bnx2x_frag_free(fp, new_data);
+ 			return;
+ 		}
+ #endif
 -- 
 2.35.1
 
