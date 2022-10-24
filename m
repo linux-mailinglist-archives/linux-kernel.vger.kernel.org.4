@@ -2,125 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E617E60B69C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F8560B663
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232020AbiJXTFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        id S231582AbiJXS4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiJXTEk (ORCPT
+        with ESMTP id S232701AbiJXSzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:04:40 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BE751422
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:44:29 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id f8so6535696qkg.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XSvXu+gDOhTNTjin0OY8IbTXcIFF0gLkR0gNINOAEVY=;
-        b=Ofawpqmt1wvR6qRkmACgRChvaROTlZwjg9Q/uHnxpjvNWzHzLoEkXXSDzQxufmcuon
-         URMQUvhuKpQLeqGBiy7r7+kF2P77Xw8wAMJFMtyulo1Q9TJu8ea/+a5Ct8f9FDhprWkX
-         q3egOEXcTWvNJiH9ylpuvtDp+E1ZYWFt1rRJPP0aIkGMmcLuxMb/6pCDrMkWKfdpqB8j
-         RaQlitvQnLkHATwNsZCJQTl24+rHDn4y5ZTw22gKQkqb5i3cQ5k+L52MkA2XWik08JiQ
-         m3Eeu+v4fk9Nl7Q/9fUYcmG5x4Ct1ZWSRTKeJ8nAxiLrE09VQbeJAVIjeyad/UEVMB1m
-         MxMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XSvXu+gDOhTNTjin0OY8IbTXcIFF0gLkR0gNINOAEVY=;
-        b=62xFM4B/MMQeiu4wVwIoKbeEpEZ8aZAG/c6g1z2fOovuslm5zsiFVBDCkW+JA1In03
-         cKCF7UpiPHhAnjyEgf+MAnUIMEB+4104TAXkFFcUW9wpuNMv6zHlZyOK+qqlDVn/Ig8d
-         4gB9NchXw5BzhfOEYVWvfBIRSws2fqtpffYXIo7sJPZtcXecz+nEJjNWwco+U93u4AFe
-         EW6RwQ9FIhUdY+cT+UU+9Ae+Br2Jy9ethG2qUU38XgFHFqC+jOYaLYAXplWNYDx03iGt
-         5ciKdcktdPs4VKILTyBqhqGyeGwzZRCCNd1KJFqrra8fgPqCCBBN09Yo5QsXjafQxZ9+
-         vD1A==
-X-Gm-Message-State: ACrzQf17MfjUDINDKvRUrLVPrWi5i1b05o1SbMVl8AVqvxrrVWddijUS
-        1ycTNyijFJDm9nC3jmPyVATMn4fI0maUhg==
-X-Google-Smtp-Source: AMsMyM5QltID/w6i0aH33QyG9ZPWQRp5av4QDzHcJoZdh6g4+6HsPOFZa+kLevpL0SjCg9WoCSmC+g==
-X-Received: by 2002:a05:620a:3720:b0:6dd:beba:b3a1 with SMTP id de32-20020a05620a372000b006ddbebab3a1mr22716083qkb.138.1666629117980;
-        Mon, 24 Oct 2022 09:31:57 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id s14-20020a05620a254e00b006cf8fc6e922sm211619qko.119.2022.10.24.09.31.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 09:31:57 -0700 (PDT)
-Message-ID: <2901a037-7b0c-1cf4-60fb-b3f6966454ad@linaro.org>
-Date:   Mon, 24 Oct 2022 12:31:55 -0400
+        Mon, 24 Oct 2022 14:55:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D917BB97B2;
+        Mon, 24 Oct 2022 10:35:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ECAE614C7;
+        Mon, 24 Oct 2022 16:34:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C6DAC433C1;
+        Mon, 24 Oct 2022 16:33:59 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="coJh9+5N"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666629237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=A5GZRDB4rbQnStmsUvEvn9MTvGqeI6fsKSlR5kgaMBk=;
+        b=coJh9+5N4coe3q0l8+g431w1AVe444AG6un5QCSRH/ZjlA9o0QFDl+23R8A0v5DRzx6+Kl
+        TltxQiuDLr+IC92Kg0MiuJUD5pripqalYQcoTojAONq8F67nAv/J4Upm1DJyJbetlcwbt1
+        TFmi757DMTcB4kyBTvUBIeVg771pXUY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c5b9daa8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 24 Oct 2022 16:33:57 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 18:33:52 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
+Message-ID: <Y1a+cHkFt54gJv54@zx2c4.com>
+References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
+ <20221019203034.3795710-1-Jason@zx2c4.com>
+ <Y1ZZyP4ZRBIbv+Kg@kili>
+ <Y1ZbI4IzAOaNwhoD@kadam>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: add TCSR node
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221024125843.25261-1-johan+linaro@kernel.org>
- <94e05a63-e7f3-a78f-d0a6-8efcae619726@linaro.org>
- <Y1aWPhP7/ft8s+bh@hovoldconsulting.com>
- <826176ba-d7c6-a64f-e15e-d2694571cb72@linaro.org>
- <Y1anKh24QaXcsS74@hovoldconsulting.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y1anKh24QaXcsS74@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y1ZbI4IzAOaNwhoD@kadam>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 10:54, Johan Hovold wrote:
->>
->>> The binding has been picked up by Lee now so I posted the dts change.
->>> Could have added a lore link though.
->>
->> This also would work and help a lot.
->>
->> It depends in general on the maintainer - for example Greg does not want
->> to deal with individual patches, especially if DTS is just one patch and
->> USB would be 10 of them. Our toolset is not good for picking up 10 out
->> of 11. For all such cases - please provide link to lore.
->>
->> If however there are just two patches - one DTS and one for maintainer -
->> then having them in one patchset should not cause additional effort for
->> the maintainer.
+On Mon, Oct 24, 2022 at 12:30:11PM +0300, Dan Carpenter wrote:
+> On Mon, Oct 24, 2022 at 12:24:24PM +0300, Dan Carpenter wrote:
+> > On Wed, Oct 19, 2022 at 02:30:34PM -0600, Jason A. Donenfeld wrote:
+> > > Recently, some compile-time checking I added to the clamp_t family of
+> > > functions triggered a build error when a poorly written driver was
+> > > compiled on ARM, because the driver assumed that the naked `char` type
+> > > is signed, but ARM treats it as unsigned, and the C standard says it's
+> > > architecture-dependent.
+> > > 
+> > > I doubt this particular driver is the only instance in which
+> > > unsuspecting authors make assumptions about `char` with no `signed` or
+> > > `unsigned` specifier. We were lucky enough this time that that driver
+> > > used `clamp_t(char, negative_value, positive_value)`, so the new
+> > > checking code found it, and I've sent a patch to fix it, but there are
+> > > likely other places lurking that won't be so easily unearthed.
+> > > 
+> > > So let's just eliminate this particular variety of heisensign bugs
+> > > entirely. Set `-funsigned-char` globally, so that gcc makes the type
+> > > unsigned on all architectures.
+> > > 
+> > > This will break things in some places and fix things in others, so this
+> > > will likely cause a bit of churn while reconciling the type misuse.
+> > > 
+> > 
+> > This is a very daring change and obviously is going to introduce bugs.
+> > It might be better to create a static checker rule that says "char"
+> > without explicit signedness can only be used for strings.
+> > 
+> > arch/parisc/kernel/drivers.c:337 print_hwpath() warn: impossible condition '(path->bc[i] == -1) => (0-255 == (-1))'
+> > arch/parisc/kernel/drivers.c:410 setup_bus_id() warn: impossible condition '(path.bc[i] == -1) => (0-255 == (-1))'
+> > arch/parisc/kernel/drivers.c:486 create_parisc_device() warn: impossible condition '(modpath->bc[i] == -1) => (0-255 == (-1))'
+> > arch/parisc/kernel/drivers.c:759 hwpath_to_device() warn: impossible condition '(modpath->bc[i] == -1) => (0-255 == (-1))'
+> > drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: assigning (-9) to unsigned variable 'tm'
+> > drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: we never enter this loop
+> > drivers/misc/sgi-gru/grumain.c:711 gru_check_chiplet_assignment() warn: 'gts->ts_user_chiplet_id' is unsigned
+> > drivers/net/wireless/cisco/airo.c:5316 proc_wepkey_on_close() warn: assigning (-16) to unsigned variable 'key[i / 3]'
+> > drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9415 rt2800_iq_search() warn: assigning (-32) to unsigned variable 'idx0'
+> > drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9470 rt2800_iq_search() warn: assigning (-32) to unsigned variable 'perr'
+> > drivers/video/fbdev/sis/init301.c:3549 SiS_GetCRT2Data301() warn: 'SiS_Pr->SiS_EModeIDTable[ModeIdIndex]->ROMMODEIDX661' is unsigned
+> > sound/pci/au88x0/au88x0_core.c:2029 vortex_adb_checkinout() warn: signedness bug returning '(-22)'
+> > sound/pci/au88x0/au88x0_core.c:2046 vortex_adb_checkinout() warn: signedness bug returning '(-12)'
+> > sound/pci/au88x0/au88x0_core.c:2125 vortex_adb_allocroute() warn: 'vortex_adb_checkinout(vortex, (0), en, 0)' is unsigned
+> > sound/pci/au88x0/au88x0_core.c:2170 vortex_adb_allocroute() warn: 'vortex_adb_checkinout(vortex, stream->resources, en, 4)' is unsigned
+> > sound/pci/rme9652/hdsp.c:3953 hdsp_channel_buffer_location() warn: 'hdsp->channel_map[channel]' is unsigned
+> > sound/pci/rme9652/rme9652.c:1833 rme9652_channel_buffer_location() warn: 'rme9652->channel_map[channel]' is unsigned
 > 
-> I'm pretty sure I saw Lee complaining about Bjorn taking also the
-> binding update through the qcom tree recently when someone did just
-> that. Apparently it was TCSR related too:
+> Here are some more:
 > 
-> 	https://lore.kernel.org/all/Yzbk%2F6SQdpNQTahV@google.com/
+> drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9472 rt2800_iq_search() warn: impossible condition '(gerr < -7) => (0-255 < (-7))'
+> drivers/net/wireless/ralink/rt2x00/rt2800lib.c:9476 rt2800_iq_search() warn: impossible condition '(perr < -31) => (0-255 < (-31))'
+> drivers/staging/rtl8192e/rtllib_softmac_wx.c:459 rtllib_wx_set_essid() warn: impossible condition '(extra[i] < 0) => (0-255 < 0)'
+> sound/pci/rme9652/hdsp.c:4153 snd_hdsp_channel_info() warn: impossible condition '(hdsp->channel_map[channel] < 0) => (0-255 < 0)'
 > 
-> Heh. That was you. :)
+> This might be interesting for backports if everyone starts to rely on
+> the fact that char is unsigned as the PPC people currently do.
 
-Yep. It was a patchset of 16 patches where one should go to MFD and 15
-to Qualcomm SoC.
+Give these a minute to hit Lore, but patches just submitted to various
+maintainers as fixes (for 6.1), since these are already broken on some
+architecture.
 
->  
->> As you can see on the list, majority of patchsets consist of
->> bindings+DTS. Pretty often entire piece - bindings+driver+DTS.
-> 
-> Yeah, and whatever alternative you go with, someone will get it wrong or
-> complain it seems.
+https://lore.kernel.org/all/20221024163005.536097-1-Jason@zx2c4.com
+https://lore.kernel.org/all/20221024162947.536060-1-Jason@zx2c4.com
+https://lore.kernel.org/all/20221024162929.536004-1-Jason@zx2c4.com
+https://lore.kernel.org/all/20221024162901.535972-1-Jason@zx2c4.com
+https://lore.kernel.org/all/20221024162843.535921-1-Jason@zx2c4.com
+https://lore.kernel.org/all/20221024162823.535884-1-Jason@zx2c4.com
+https://lore.kernel.org/all/20221024162756.535776-1-Jason@zx2c4.com
 
-:)
-
-Best regards,
-Krzysztof
-
+Jason
