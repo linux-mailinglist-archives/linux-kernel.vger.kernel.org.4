@@ -2,205 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837EB60BE0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F014E60BE3A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiJXW70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
+        id S230150AbiJXXKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiJXW6w (ORCPT
+        with ESMTP id S230075AbiJXXJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:58:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D0C63286B9;
-        Mon, 24 Oct 2022 14:20:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9513AD6E;
-        Mon, 24 Oct 2022 14:05:03 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8260E3F7B4;
-        Mon, 24 Oct 2022 14:04:56 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 22:04:46 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     daniel.lezcano@linaro.org, sudeep.holla@arm.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (bug report) HWMON & Thermal interactions
-Message-ID: <Y1b97mhilWF8C99d@e120937-lin>
-References: <Y1WHnJ6h1RSOipV4@e120937-lin>
- <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
- <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
- <Y1aJTxVdOS6BIVTV@e120937-lin>
- <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
+        Mon, 24 Oct 2022 19:09:43 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA99E1905CC;
+        Mon, 24 Oct 2022 14:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666645537; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1UD+7xSqDi+aiCecEHlellc6AlNFN+6Hnf+64Mwju04=;
+        b=1/RwB8pLXZAOeHRrHgf4rRHS77BqdNxIP1WQmi34UGYci7+f217kiaTRID++zeaPUCqz3g
+        Ql95hcwli5XhoLHbexC4jHVyRa51yTlAw+MYQLkn2jvjVjrlJXWSljIgvN1fy4gQYC/QdD
+        ZTw2ZfxmFDr4/9eq+to0U3GMC2WEHTc=
+Date:   Mon, 24 Oct 2022 22:05:27 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v3 2/2] serial: 8250/ingenic: Add support for the
+ JZ4750/JZ4755
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <3XZ9KR.KOUPAEJY0VWY2@crapouillou.net>
+In-Reply-To: <20221022165047.4020785-3-lis8215@gmail.com>
+References: <20221022165047.4020785-1-lis8215@gmail.com>
+        <20221022165047.4020785-3-lis8215@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 07:51:09AM -0700, Guenter Roeck wrote:
-> On 10/24/22 05:47, Cristian Marussi wrote:
-> > On Mon, Oct 24, 2022 at 04:56:43AM -0700, Guenter Roeck wrote:
-> > > On 10/23/22 14:23, Guenter Roeck wrote:
-> > > > On 10/23/22 11:27, Cristian Marussi wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
-> > > > > to the fact that no trip points were (ever !) defined in the DT; bisecting it
-> > > > > looks like that after:
-> > > > > 
-> > > > > https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
-> > > > > 
-> > > > > the presence of the mandatory trips node within thermal zones is now
-> > > > > enforced.
-> > > > > 
-> > > > > So, this is NOT what this bug report is about (I'll post soon patches for
-> > > > > the JUNO DT missing trips) BUT once this problem was solved in the DT,
-> > > > > another issue appeared:
-> > > > > 
-> > > > > [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
-> > > > > 
-> > > > > that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
-> > > > > embedding that sensors, only the first one is found as belonging to one ThermZ.
-> > > > > (this happens ALSO with v6.0 once I added the trips...)
-> > > > > 
-> > > > > Digging deep into this, it turned out that inside the call chain
-> > > > > 
-> > > > > devm_hwmon_device_register_with_info
-> > > > >     hwmon_device_register_with_info
-> > > > >       __hwmon_device_register
-> > > > >      hwmon_thermal_register_sensors(dev)
-> > > > >          --> hwmon_thermal_add_sensor(dev, j)
-> > > > >              --> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
-> > > > > 
-> > > > > the HWMON channel index j is passed to the Thermal framework in order to
-> > > > > search and bind sensors with defined thermal zone, but this lead to the
-> > > > > assumption that sequential HWMON channel indexes corresponds one-to-one to the
-> > > > > underlying real sensor IDs that the ThermalFramework uses for matching
-> > > > > within the DT.
-> > > > > 
-> > > > > On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
-> > > > > thermal zones like:
-> > > > > 
-> > > > > thernal_zones {
-> > > > >      pmic {
-> > > > >          ...
-> > > > >          thermal-sensors = <&scmi_sensors0 0>;
-> > > > >          ...
-> > > > >          trips {
-> > > > >              ...
-> > > > >          }
-> > > > >      soc {
-> > > > >          ...
-> > > > >          thermal-sensors = <&scmi_sensors0 3>;
-> > > > >          ...
-> > > > >          trips {
-> > > > >              ...
-> > > > >          }
-> > > > >      }
-> > > > > }
-> > > > > 
-> > > > > This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
-> > > > > the soc where J=1 BUT the real sensor ID is 3.
-> > > > > 
-> > > > > Note that there can be a number of sensors, not all of them of a type handled
-> > > > > by HWMON, and enumerated by SCMI in different ways depending on the
-> > > > > platform.
-> > > > > 
-> > > > > I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
-> > > > > context, where sensors are purely defined in the DT, the solution can be
-> > > > > more easily attained (i.e. renumber the sensors).
-> > > > > 
-> > > > > At first I tried to solve this inside scmi-hwmon.c BUT I could not find
-> > > > > a way to present to the HWMON subsystem the list of sensors preserving
-> > > > > the above index/sensor_id matching (not even with a hack like passing
-> > > > > down dummy sensors to the HWMON subsystem to fill the 'holes' in the
-> > > > > numbering)
-> > > > > 
-> > > > > My tentative solution, which works fine for me in my context, was to add
-> > > > > an optional HWMON hwops, so that the core hwmon can retrieve if needed the
-> > > > > real sensor ID if different from the channel index (using an optional hwops
-> > > > > instead of some static hwinfo var let me avoid to have to patch all the
-> > > > > existent hwmon drivers that happens to just work fine as of today...but
-> > > > > maybe it is not necessarily the proper final solution...)
-> > > > > 
-> > > > > i.e.
-> > > > > 
-> > > > > ----8<----
-> > > > > 
-> > > > > Author: Cristian Marussi <cristian.marussi@arm.com>
-> > > > > Date:   Fri Oct 21 17:24:04 2022 +0100
-> > > > > 
-> > > > >       hwmon: Add new .get_sensor_id hwops
-> > > > >       Add a new optional helper which can be defined to allow an hwmon chip to
-> > > > >       provide the logic to map hwmon indexes to the real underlying sensor IDs.
-> > > > 
-> > > > Maybe I am missing something, but ...
-> > > > 
-> > > > The driver isn't supposed to know anything about thermal devices and
-> > > > thermal zones. If that no longer works, and drivers have to know about
-> > > > thermal zones and thermal zone device index values anyway, we might
-> > > > as well pull thermal device support from the hwmon core and implement
-> > > > it in drivers.
-> > > > 
-> > > 
-> > > No, wait: The question is really: Why does the scmi driver present the sensor
-> > > with index 3 to the hwmon subsystem as sensor with index 1 ?
-> > > 
-> > > If the sensor has index 3, and is presented to other entities as sensor
-> > > with index 3, it should be presented to the hwmon subsystem as sensor with
-> > > index 3, not with index 1. If sensors with index 1..2 do not exist,
-> > > the is_visible function should return 0 for those sensors.
-> > > 
-> > 
-> > My understanding was that the hwmon index is the index of the channel
-> > and hwmon_channel_info struct groups channels by type while the index is
-> > really used as a pointer in the hwmon_channel_info.config field, so in
-> > this case you're saying I should present 4 temp sensors placing a 'hole'
-> > at sensor 1,2 making is_visible return 0 for those channels ?
-> > 
-> > Basically keeping the channel indexes in sync with the real sensor ID by
-> > the means of some dummy sensor entries in the config field: this could result
-> > potentially in a lot of holes given in SCMI the sensor_id is 16 bits and
-> > I thought that was too hackish but I can try.
-> > 
-> 
-> The underlying idea with the hwmon -> thermal bridge is that index values
-> used by thermal and by the hwmon subsystem match and, yes, that there would
-> if necessary be holes in hwmon index values (normally this is not a 16-bit
-> number space). If that doesn't work for scmi, and if there could indeed be
-> something like
-> 
->         thermal-sensors = <&scmi_sensors0 12345>;
-> 
-> then I think the solution is indeed to not rely on the hwmon->thermal bridge
-> in the hwmon core for this driver.
+Hi Siarhei,
 
-Even though implausible it could be possible to have an SCMI fw platform
-advertising such high sensor IDs.
+Le sam. 22 oct. 2022 =E0 19:50:47 +0300, Siarhei Volkau=20
+<lis8215@gmail.com> a =E9crit :
+> JZ4750/55/60 (but not JZ4760b) have an extra divisor in between extclk
+> and peripheral clock, called CPCCR.ECS, the driver can't figure out=20
+> the
+> real state of the divisor without dirty hack - peek CGU CPCCR=20
+> register.
+> However, we can rely on a vendor's bootloader (u-boot 1.1.6) behavior:
+> if (extclk > 16MHz)
+>     the divisor is enabled, so the UART driving clock is extclk/2.
+>=20
+> This behavior relies on hardware differences: most boards (if not all)
+> with those SoCs have 12 or 24 MHz oscillators but many peripherals=20
+> want
+> 12Mhz to operate properly (AIC and USB-PHY at least).
+>=20
+> The patch doesn't affect JZ4760's behavior as it is subject for=20
+> another
+> patchset with re-classification of all supported ingenic UARTs.
+>=20
+> Link:=20
+> https://github.com/carlos-wong/uboot_jz4755/blob/master/cpu/mips/jz_seria=
+l.c#L158
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> ---
+>  drivers/tty/serial/8250/8250_ingenic.c | 48=20
+> ++++++++++++++++++++++----
+>  1 file changed, 42 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/tty/serial/8250/8250_ingenic.c=20
+> b/drivers/tty/serial/8250/8250_ingenic.c
+> index 2b2f5d8d2..744705467 100644
+> --- a/drivers/tty/serial/8250/8250_ingenic.c
+> +++ b/drivers/tty/serial/8250/8250_ingenic.c
+> @@ -87,24 +87,19 @@ static void __init=20
+> ingenic_early_console_setup_clock(struct earlycon_device *dev
+>  	dev->port.uartclk =3D be32_to_cpup(prop);
+>  }
+>=20
+> -static int __init ingenic_early_console_setup(struct earlycon_device=20
+> *dev,
+> +static int __init ingenic_earlycon_setup_tail(struct earlycon_device=20
+> *dev,
+>  					      const char *opt)
+>  {
+>  	struct uart_port *port =3D &dev->port;
+>  	unsigned int divisor;
+>  	int baud =3D 115200;
+>=20
+> -	if (!dev->port.membase)
+> -		return -ENODEV;
 
-> 
-> > In the meantime, I gave it a go at what you suggested early (if I got it
-> > right...) by removing from the scmi-hwmon driver the HWMON_C_REGISTER_TZ
-> > attribute and adding a few explicit calls to devm_thermal_of_zone_register() at
-> > the end of the probe to specifically register the needed temp sensors (and
-> > associated real sensor IDs) with the ThermalFramework without relying on the
-> > HWMON core for Thermal and it works fine indeed.
-> > 
-> 
-> Excellent.
-> 
+Again, as I said on your v2, you can keep this here. Then you won't=20
+have to duplicate code.
 
-I'll follow this path.
+> -
+>  	if (opt) {
+>  		unsigned int parity, bits, flow; /* unused for now */
+>=20
+>  		uart_parse_options(opt, &baud, &parity, &bits, &flow);
+>  	}
+>=20
+> -	ingenic_early_console_setup_clock(dev);
+> -
+>  	if (dev->baud)
+>  		baud =3D dev->baud;
+>  	divisor =3D DIV_ROUND_CLOSEST(port->uartclk, 16 * baud);
+> @@ -129,9 +124,49 @@ static int __init=20
+> ingenic_early_console_setup(struct earlycon_device *dev,
+>  	return 0;
+>  }
+>=20
+> +static int __init ingenic_early_console_setup(struct earlycon_device=20
+> *dev,
+> +					      const char *opt)
+> +{
+> +	if (!dev->port.membase)
+> +		return -ENODEV;
+> +
+> +	ingenic_early_console_setup_clock(dev);
+> +
+> +	return ingenic_earlycon_setup_tail(dev, opt);
+> +}
+> +
+> +static int __init jz4750_early_console_setup(struct earlycon_device=20
+> *dev,
+> +					     const char *opt)
+> +{
+> +	if (!dev->port.membase)
+> +		return -ENODEV;
+> +
+> +	/*
+> +	 * JZ4750/55/60 (not JZ4760b) have an extra divisor
+> +	 * between extclk and peripheral clock, the
+> +	 * driver can't figure out the real state of the
+> +	 * divisor without dirty hacks (peek CGU register).
+> +	 * However, we can rely on a vendor's behavior:
+> +	 * if (extclk > 16MHz)
+> +	 *   the divisor is enabled.
+> +	 * This behavior relies on hardware differences:
+> +	 * most boards with those SoCs have 12 or 24 MHz
+> +	 * oscillators but many peripherals want 12Mhz
+> +	 * to operate properly (AIC and USB-phy at least).
+> +	 */
+> +	ingenic_early_console_setup_clock(dev);
+> +	if (dev->port.uartclk > 16000000)
+> +		dev->port.uartclk /=3D 2;
 
-Thanks for your help & feedback.
-Cristian
+I'm OK with this code, but the comment is not very clear.
+
+What about:
+
+"JZ4750/55/60 have an optional /2 divider between the EXT oscillator=20
+and some peripherals including UART, which will be enabled if using a=20
+24 MHz oscillator, and disabled when using a 12 MHz oscillator."
+
+Cheers,
+-Paul
+
+> +
+> +	return ingenic_earlycon_setup_tail(dev, opt);
+> +}
+> +
+>  OF_EARLYCON_DECLARE(jz4740_uart, "ingenic,jz4740-uart",
+>  		    ingenic_early_console_setup);
+>=20
+> +OF_EARLYCON_DECLARE(jz4750_uart, "ingenic,jz4750-uart",
+> +		    jz4750_early_console_setup);
+> +
+>  OF_EARLYCON_DECLARE(jz4770_uart, "ingenic,jz4770-uart",
+>  		    ingenic_early_console_setup);
+>=20
+> @@ -328,6 +363,7 @@ static const struct ingenic_uart_config=20
+> x1000_uart_config =3D {
+>=20
+>  static const struct of_device_id of_match[] =3D {
+>  	{ .compatible =3D "ingenic,jz4740-uart", .data =3D &jz4740_uart_config=20
+> },
+> +	{ .compatible =3D "ingenic,jz4750-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4760-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4770-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4775-uart", .data =3D &jz4760_uart_config=20
+> },
+> --
+> 2.36.1
+>=20
+
 
