@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A317460AC0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC10260A58D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbiJXOB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47480 "EHLO
+        id S233694AbiJXM0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236845AbiJXOAG (ORCPT
+        with ESMTP id S233442AbiJXMX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:00:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AF08E9BB;
-        Mon, 24 Oct 2022 05:47:20 -0700 (PDT)
+        Mon, 24 Oct 2022 08:23:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91201B9C7;
+        Mon, 24 Oct 2022 04:59:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDF2DB819D0;
-        Mon, 24 Oct 2022 12:45:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E27C433C1;
-        Mon, 24 Oct 2022 12:45:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D51F6129D;
+        Mon, 24 Oct 2022 11:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC3E9C433D6;
+        Mon, 24 Oct 2022 11:59:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615536;
-        bh=qk1x7FS+7/9XlMI7Pely4OH1lsNVEiXwS1ASEs8Kino=;
+        s=korg; t=1666612775;
+        bh=RLkQdPDMRCOU/IECOAC2hHaLhoeqjEyfi9vzRWGTaUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I96AqUshqSpINYAxpWk+zgOVJP97T0gE2GlIoZNxPSJ73yv8AUWiQnV5AoxZivLkg
-         tAesYV645rIA3KNhe+u5fWsZalG9OtfckHW+V71Yi9TAUvtGL9DiBf4t9Uj3p7EenQ
-         m99FX9kZNyRsDEIvYMxodzjNZuZdvqpJz6AFNHlc=
+        b=lsmr1yYGpl6Op8WcFhTiG6k9bCteAw+l0wy3R0EA1EoqEpFOFrI8sIeklZYtO+l8g
+         zP2SVYMfuxnDtelQJMaEviF5i6KbCoQr6wxfGs0cES85ZFfvvayq5YGabBF4U/bpfM
+         SFTuIsQUQXPJv6JuBsGewieV/rJ3H7uhndJ+PMVQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yunke Cao <yunkec@google.com>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 288/530] media: uvcvideo: Use entity get_cur in uvc_ctrl_set
+Subject: [PATCH 4.19 113/229] ARM: dts: kirkwood: lsxl: remove first ethernet port
 Date:   Mon, 24 Oct 2022 13:30:32 +0200
-Message-Id: <20221024113058.096628238@linuxfoundation.org>
+Message-Id: <20221024113002.657892483@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,132 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yunke Cao <yunkec@google.com>
+From: Michael Walle <michael@walle.cc>
 
-[ Upstream commit 5f36851c36b30f713f588ed2b60aa7b4512e2c76 ]
+[ Upstream commit 2d528eda7c96ce5c70f895854ecd5684bd5d80b9 ]
 
-Entity controls should get_cur using an entity-defined function
-instead of via a query. Fix this in uvc_ctrl_set.
+Both the Linkstation LS-CHLv2 and the LS-XHL have only one ethernet
+port. This has always been wrong, i.e. the board code used to set up
+both ports, but the driver will play nice and return -ENODEV if the
+assiciated PHY is not found. Nevertheless, it is wrong. Remove it.
 
-Fixes: 65900c581d01 ("media: uvcvideo: Allow entity-defined get_info and get_cur")
-Signed-off-by: Yunke Cao <yunkec@google.com>
-Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 876e23333511 ("ARM: kirkwood: add gigabit ethernet and mvmdio device tree nodes")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/uvc/uvc_ctrl.c | 83 ++++++++++++++++++--------------
- 1 file changed, 46 insertions(+), 37 deletions(-)
+ arch/arm/boot/dts/kirkwood-lsxl.dtsi | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-index b3dde98499f4..5bb29fc49538 100644
---- a/drivers/media/usb/uvc/uvc_ctrl.c
-+++ b/drivers/media/usb/uvc/uvc_ctrl.c
-@@ -988,36 +988,56 @@ static s32 __uvc_ctrl_get_value(struct uvc_control_mapping *mapping,
- 	return value;
- }
+diff --git a/arch/arm/boot/dts/kirkwood-lsxl.dtsi b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
+index 321a40a98ed2..88b70ba1c8fe 100644
+--- a/arch/arm/boot/dts/kirkwood-lsxl.dtsi
++++ b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
+@@ -218,22 +218,11 @@
+ &mdio {
+ 	status = "okay";
  
--static int __uvc_ctrl_get(struct uvc_video_chain *chain,
--	struct uvc_control *ctrl, struct uvc_control_mapping *mapping,
--	s32 *value)
-+static int __uvc_ctrl_load_cur(struct uvc_video_chain *chain,
-+			       struct uvc_control *ctrl)
- {
-+	u8 *data;
- 	int ret;
- 
--	if ((ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) == 0)
--		return -EACCES;
-+	if (ctrl->loaded)
-+		return 0;
- 
--	if (!ctrl->loaded) {
--		if (ctrl->entity->get_cur) {
--			ret = ctrl->entity->get_cur(chain->dev,
--				ctrl->entity,
--				ctrl->info.selector,
--				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
--				ctrl->info.size);
--		} else {
--			ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR,
--				ctrl->entity->id,
--				chain->dev->intfnum,
--				ctrl->info.selector,
--				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
--				ctrl->info.size);
--		}
--		if (ret < 0)
--			return ret;
-+	data = uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT);
- 
-+	if ((ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) == 0) {
-+		memset(data, 0, ctrl->info.size);
- 		ctrl->loaded = 1;
-+
-+		return 0;
- 	}
- 
-+	if (ctrl->entity->get_cur)
-+		ret = ctrl->entity->get_cur(chain->dev, ctrl->entity,
-+					    ctrl->info.selector, data,
-+					    ctrl->info.size);
-+	else
-+		ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR,
-+				     ctrl->entity->id, chain->dev->intfnum,
-+				     ctrl->info.selector, data,
-+				     ctrl->info.size);
-+
-+	if (ret < 0)
-+		return ret;
-+
-+	ctrl->loaded = 1;
-+
-+	return ret;
-+}
-+
-+static int __uvc_ctrl_get(struct uvc_video_chain *chain,
-+			  struct uvc_control *ctrl,
-+			  struct uvc_control_mapping *mapping,
-+			  s32 *value)
-+{
-+	int ret;
-+
-+	if ((ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) == 0)
-+		return -EACCES;
-+
-+	ret = __uvc_ctrl_load_cur(chain, ctrl);
-+	if (ret < 0)
-+		return ret;
-+
- 	*value = __uvc_ctrl_get_value(mapping,
- 				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT));
- 
-@@ -1667,21 +1687,10 @@ int uvc_ctrl_set(struct uvc_fh *handle,
- 	 * needs to be loaded from the device to perform the read-modify-write
- 	 * operation.
- 	 */
--	if (!ctrl->loaded && (ctrl->info.size * 8) != mapping->size) {
--		if ((ctrl->info.flags & UVC_CTRL_FLAG_GET_CUR) == 0) {
--			memset(uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
--				0, ctrl->info.size);
--		} else {
--			ret = uvc_query_ctrl(chain->dev, UVC_GET_CUR,
--				ctrl->entity->id, chain->dev->intfnum,
--				ctrl->info.selector,
--				uvc_ctrl_data(ctrl, UVC_CTRL_DATA_CURRENT),
--				ctrl->info.size);
--			if (ret < 0)
--				return ret;
--		}
+-	ethphy0: ethernet-phy@0 {
+-		reg = <0>;
+-	};
 -
--		ctrl->loaded = 1;
-+	if ((ctrl->info.size * 8) != mapping->size) {
-+		ret = __uvc_ctrl_load_cur(chain, ctrl);
-+		if (ret < 0)
-+			return ret;
- 	}
+ 	ethphy1: ethernet-phy@8 {
+ 		reg = <8>;
+ 	};
+ };
  
- 	/* Backup the current value in case we need to rollback later. */
+-&eth0 {
+-	status = "okay";
+-	ethernet0-port@0 {
+-		phy-handle = <&ethphy0>;
+-	};
+-};
+-
+ &eth1 {
+ 	status = "okay";
+ 	ethernet1-port@0 {
 -- 
 2.35.1
 
