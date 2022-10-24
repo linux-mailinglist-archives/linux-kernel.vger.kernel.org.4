@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351BD60A583
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C487D60A771
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbiJXMZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S234376AbiJXMuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233543AbiJXMXp (ORCPT
+        with ESMTP id S234621AbiJXMpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:23:45 -0400
+        Mon, 24 Oct 2022 08:45:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F605275F3;
-        Mon, 24 Oct 2022 04:59:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8C72872B;
+        Mon, 24 Oct 2022 05:09:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDEB461257;
-        Mon, 24 Oct 2022 11:59:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0C1C433D6;
-        Mon, 24 Oct 2022 11:59:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20C71612DB;
+        Mon, 24 Oct 2022 12:08:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F7AC433D6;
+        Mon, 24 Oct 2022 12:08:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612793;
-        bh=7JSOKnN3EJHVsIrkcfYIdDr89HElem67G5x8SxQh7dA=;
+        s=korg; t=1666613337;
+        bh=reVmjF1orNsb6WREl5L1JcF/8r41j2eq9TSpDSt3XMo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b2lvme8Pg1gThCv+SinYO8YoZlHJ3qKuDzbjJVJKGxqwLBoiaJS5v8ZOq284ugXqf
-         m1/vpHPFMl4z5NNh3z13pn3mZgBlYR/1FTK3/aDn56kXmrcz/qGBo8nKii9Pco1ucQ
-         iEH3qwgNHKSfjJ2NmpDujjZ64mjXvpR2YBGoHpJk=
+        b=Br16Cn6SNEiSz5OU16XrhzKDVxfSTD8k6YKP4p2ulsvSfQ1H+fBAdynVEa6cK1crB
+         niNmQG4FxjGpRErQ0MqIND7rnEgQigCcEOE1wST/8hAjij+KoR3LfTwv+IZ3N3RSCt
+         a3Z9kTbIXLaZix7gfJz8Rk+swBuaLpmsIJ1nAgdI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot <syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        "David S. Miller" <davem@davemloft.net>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 090/229] net: rds: dont hold sock lock when cancelling work from rds_tcp_reset_callbacks()
+Subject: [PATCH 5.4 099/255] mmc: au1xmmc: Fix an error handling path in au1xmmc_probe()
 Date:   Mon, 24 Oct 2022 13:30:09 +0200
-Message-Id: <20221024113001.961587129@linuxfoundation.org>
+Message-Id: <20221024113005.774025102@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit a91b750fd6629354460282bbf5146c01b05c4859 ]
+[ Upstream commit 5cbedf52608cc3cbc1c2a9a861fb671620427a20 ]
 
-syzbot is reporting lockdep warning at rds_tcp_reset_callbacks() [1], for
-commit ac3615e7f3cffe2a ("RDS: TCP: Reduce code duplication in
-rds_tcp_reset_callbacks()") added cancel_delayed_work_sync() into a section
-protected by lock_sock() without realizing that rds_send_xmit() might call
-lock_sock().
+If clk_prepare_enable() fails, there is no point in calling
+clk_disable_unprepare() in the error handling path.
 
-We don't need to protect cancel_delayed_work_sync() using lock_sock(), for
-even if rds_{send,recv}_worker() re-queued this work while __flush_work()
- from cancel_delayed_work_sync() was waiting for this work to complete,
-retried rds_{send,recv}_worker() is no-op due to the absence of RDS_CONN_UP
-bit.
+Move the out_clk label at the right place.
 
-Link: https://syzkaller.appspot.com/bug?extid=78c55c7bc6f66e53dce2 [1]
-Reported-by: syzbot <syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com>
-Co-developed-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Hillf Danton <hdanton@sina.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: syzbot <syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com>
-Fixes: ac3615e7f3cffe2a ("RDS: TCP: Reduce code duplication in rds_tcp_reset_callbacks()")
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: b6507596dfd6 ("MIPS: Alchemy: au1xmmc: use clk framework")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Link: https://lore.kernel.org/r/21d99886d07fa7fcbec74992657dabad98c935c4.1661412818.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/rds/tcp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mmc/host/au1xmmc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/rds/tcp.c b/net/rds/tcp.c
-index d4e6466d3989..645cbb17c13a 100644
---- a/net/rds/tcp.c
-+++ b/net/rds/tcp.c
-@@ -176,10 +176,10 @@ void rds_tcp_reset_callbacks(struct socket *sock,
- 	 */
- 	atomic_set(&cp->cp_state, RDS_CONN_RESETTING);
- 	wait_event(cp->cp_waitq, !test_bit(RDS_IN_XMIT, &cp->cp_flags));
--	lock_sock(osock->sk);
- 	/* reset receive side state for rds_tcp_data_recv() for osock  */
- 	cancel_delayed_work_sync(&cp->cp_send_w);
- 	cancel_delayed_work_sync(&cp->cp_recv_w);
-+	lock_sock(osock->sk);
- 	if (tc->t_tinc) {
- 		rds_inc_put(&tc->t_tinc->ti_inc);
- 		tc->t_tinc = NULL;
+diff --git a/drivers/mmc/host/au1xmmc.c b/drivers/mmc/host/au1xmmc.c
+index bc8aeb47a7b4..9c4a67f4195e 100644
+--- a/drivers/mmc/host/au1xmmc.c
++++ b/drivers/mmc/host/au1xmmc.c
+@@ -1116,8 +1116,9 @@ static int au1xmmc_probe(struct platform_device *pdev)
+ 	if (host->platdata && host->platdata->cd_setup &&
+ 	    !(mmc->caps & MMC_CAP_NEEDS_POLL))
+ 		host->platdata->cd_setup(mmc, 0);
+-out_clk:
++
+ 	clk_disable_unprepare(host->clk);
++out_clk:
+ 	clk_put(host->clk);
+ out_irq:
+ 	free_irq(host->irq, host);
 -- 
 2.35.1
 
