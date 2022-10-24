@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57A3B60A6B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D91860A525
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230438AbiJXMh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S233363AbiJXMVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbiJXMcd (ORCPT
+        with ESMTP id S233404AbiJXMTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:32:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87CF474C2;
-        Mon, 24 Oct 2022 05:04:57 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AED982775;
+        Mon, 24 Oct 2022 04:58:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50C706129D;
-        Mon, 24 Oct 2022 12:01:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF56C433D7;
-        Mon, 24 Oct 2022 12:01:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E574612A0;
+        Mon, 24 Oct 2022 11:44:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B20C433C1;
+        Mon, 24 Oct 2022 11:44:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612914;
-        bh=7ntdUPCMIhqIzNNSYQ6C+sDToY+GcTkHMTAcv/S2QEE=;
+        s=korg; t=1666611846;
+        bh=ZM8KwLzQMU6Z+0eJcv/Gy/7anpAdhPECPWXhIWxPZPQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zutc/YmSizbNt0liIr48Qd+uERmzsffoT7MGVdxkFmyKFtllVGpnfeUFdpa09m59N
-         v/Mp+zxeY+YbVCpfhcokvmRCeXZQ2kFE9WMOfICQk28R72907eUVaeVx85Tq+zaE9g
-         wQnQRUGGsQ3EYkabnu8EOkOC31U9ThqJJvtI/d9M=
+        b=TutMja1FKraUaEqw/6lgjY1zVXghJvHmZJaxEMlh6zC6xAqMooETO8iR8+vArGAJY
+         FZkchDehEsI+Cnba2s1JQhxKejua0J4t78zrI/CUqx0MTqnxH73oiRVjwnC8SaA5tW
+         9wE7NC6tirggYfTd9kIIjJD9hm+AwJXfq3xxShaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 168/229] crypto: cavium - prevent integer overflow loading firmware
+Subject: [PATCH 4.9 133/159] can: bcm: check the result of can_send() in bcm_can_tx()
 Date:   Mon, 24 Oct 2022 13:31:27 +0200
-Message-Id: <20221024113004.509292196@linuxfoundation.org>
+Message-Id: <20221024112954.335214620@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Ziyang Xuan <william.xuanziyang@huawei.com>
 
-[ Upstream commit 2526d6bf27d15054bb0778b2f7bc6625fd934905 ]
+[ Upstream commit 3fd7bfd28cfd68ae80a2fe92ea1615722cc2ee6e ]
 
-The "code_length" value comes from the firmware file.  If your firmware
-is untrusted realistically there is probably very little you can do to
-protect yourself.  Still we try to limit the damage as much as possible.
-Also Smatch marks any data read from the filesystem as untrusted and
-prints warnings if it not capped correctly.
+If can_send() fail, it should not update frames_abs counter
+in bcm_can_tx(). Add the result check for can_send() in bcm_can_tx().
 
-The "ntohl(ucode->code_length) * 2" multiplication can have an
-integer overflow.
-
-Fixes: 9e2c7d99941d ("crypto: cavium - Add Support for Octeon-tx CPT Engine")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Suggested-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Link: https://lore.kernel.org/all/9851878e74d6d37aee2f1ee76d68361a46f89458.1663206163.git.william.xuanziyang@huawei.com
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/cavium/cpt/cptpf_main.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ net/can/bcm.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/crypto/cavium/cpt/cptpf_main.c b/drivers/crypto/cavium/cpt/cptpf_main.c
-index 06ad85ab5e86..7416f30ee976 100644
---- a/drivers/crypto/cavium/cpt/cptpf_main.c
-+++ b/drivers/crypto/cavium/cpt/cptpf_main.c
-@@ -257,6 +257,7 @@ static int cpt_ucode_load_fw(struct cpt_device *cpt, const u8 *fw, bool is_ae)
- 	const struct firmware *fw_entry;
- 	struct device *dev = &cpt->pdev->dev;
- 	struct ucode_header *ucode;
-+	unsigned int code_length;
- 	struct microcode *mcode;
- 	int j, ret = 0;
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index bfb507223468..ece04ad50348 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -285,6 +285,7 @@ static void bcm_can_tx(struct bcm_op *op)
+ 	struct sk_buff *skb;
+ 	struct net_device *dev;
+ 	struct canfd_frame *cf = op->frames + op->cfsiz * op->currframe;
++	int err;
  
-@@ -267,11 +268,12 @@ static int cpt_ucode_load_fw(struct cpt_device *cpt, const u8 *fw, bool is_ae)
- 	ucode = (struct ucode_header *)fw_entry->data;
- 	mcode = &cpt->mcode[cpt->next_mc_idx];
- 	memcpy(mcode->version, (u8 *)fw_entry->data, CPT_UCODE_VERSION_SZ);
--	mcode->code_size = ntohl(ucode->code_length) * 2;
--	if (!mcode->code_size) {
-+	code_length = ntohl(ucode->code_length);
-+	if (code_length == 0 || code_length >= INT_MAX / 2) {
- 		ret = -EINVAL;
- 		goto fw_release;
- 	}
-+	mcode->code_size = code_length * 2;
+ 	/* no target device? => exit */
+ 	if (!op->ifindex)
+@@ -309,11 +310,11 @@ static void bcm_can_tx(struct bcm_op *op)
+ 	/* send with loopback */
+ 	skb->dev = dev;
+ 	can_skb_set_owner(skb, op->sk);
+-	can_send(skb, 1);
++	err = can_send(skb, 1);
++	if (!err)
++		op->frames_abs++;
  
- 	mcode->is_ae = is_ae;
- 	mcode->core_mask = 0ULL;
+-	/* update statistics */
+ 	op->currframe++;
+-	op->frames_abs++;
+ 
+ 	/* reached last frame? */
+ 	if (op->currframe >= op->nframes)
 -- 
 2.35.1
 
