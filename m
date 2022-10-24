@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CB060BBFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2744F60BBF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233328AbiJXVTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S234389AbiJXVSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231559AbiJXVSh (ORCPT
+        with ESMTP id S233999AbiJXVSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:18:37 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE19D57566;
-        Mon, 24 Oct 2022 12:24:48 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-369c2f83697so86961827b3.3;
-        Mon, 24 Oct 2022 12:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YNQKfFH/J4u1O0RDYXKWFImeY+htr9CT0XG4blIptF8=;
-        b=BZ07ttqeleBSPnDK6U+YYl4PqDUBbDSEX+WjIwTCayimKOvCWQ7QJMsRTbYZsiVgqd
-         EPz3Kssuzqwb+DuV01u77FroRmxl2Oh6cZq5to1O1dgnkU1zmgohLPGe1Vnqvzt4EEfq
-         UidgeyS0Y9tA7MFOSRR/Hl408Q6977DSlBV5an5pjChLODwH4qrSLz+huTxqO2oeeugs
-         Y5lojn/s8STiv9jUlWIiLpxr1Ml7lBHDrgQGF6DCe76VDPmKxmi79ylCmm7nM5tyKHUQ
-         XKsULy6TfrVTx89x+MSxKDo6XFVnqqivPcXKUNiJ2AXL3gDfjx2EKDTvO6VMcUmcvqOP
-         zWwg==
+        Mon, 24 Oct 2022 17:18:23 -0400
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1075357E1;
+        Mon, 24 Oct 2022 12:24:38 -0700 (PDT)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-13b103a3e5dso13028511fac.2;
+        Mon, 24 Oct 2022 12:24:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YNQKfFH/J4u1O0RDYXKWFImeY+htr9CT0XG4blIptF8=;
-        b=uSaBudvZBCOVfJGC4D+t2LbZyvlAEhlwN3ldg41gLMXnoNZqGJLa7Q5+ZAN1li3wKl
-         i/BLpJg4HQLW0D71PvBb6PQaDxZfugRY0DneODCI//rcLYIr73LD2Tl/Bdy7o1mCtYcn
-         +pgIa709NnfnQvhtUAWQ2zjjpD53kwsTKi9bWSsSOX1FM5o2yncnkY2JphZJQofNjeGc
-         iZiZ8ThNnCVYInMr/hmbp2a4j490k87v7JrA2gq2sStwMy1MOEDYTkXIY3azcqJE3rhT
-         dF/WTX9oWSsX/NSGa7omRyXVW83YkSyxSOx0PmiVrwuYI7ggpP/j6Ri0SHUKcKOSkfjo
-         P2Nw==
-X-Gm-Message-State: ACrzQf1sow6xW7qEDrMWDW2ZdheyH8dL+c0ICSoWXkFXpmz06kjwfnGo
-        MtFkgkksokjWuLbPZGhq9dDaAPpNYES2uISH+eY8NC1uiRs=
-X-Google-Smtp-Source: AMsMyM4zQHncqMnc13JolI9a0bQPoGwvoozFFIXgkb0S+8TY5Wbz7IROxLSB7QZhSNOK0oJhcsH0Lm1a9opE48XevoI=
-X-Received: by 2002:a81:71c6:0:b0:36a:5682:2c44 with SMTP id
- m189-20020a8171c6000000b0036a56822c44mr14280778ywc.308.1666639398914; Mon, 24
- Oct 2022 12:23:18 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vqLHNCC4h3WefblPd4YUovHfNe5etB8EwtpDxyh2rNg=;
+        b=wzi8euRnhAA1EdmwU3Q2/xYWlC+fk8VExj1JthqCgUfw2dTqoVhlZ7+/4g3FDrnVKn
+         pyZYikoEqH7C3cD/b9CaZdW+c4o8ysbHUJyYc/eBDokNmHbHM/syLFuJNoY94lSo6Ks6
+         2q7TaiSO3K8Qjv3t/w51rXNciTTvjw1w6tfgStuQPXCQG7NmnEkrI+rjI4hM53FJtGB/
+         ErbIYdSB2vsRDe3tuwaCm2ojOBz9VWel1KDfnjdqio68urfLRnzKNkop8JzLMTp7lCo7
+         pXTROgD+ja2gGfOLeaVe7yyv/leKS398LHwolxpbXW56Q+ncsxgE6d1gYKiBwH0EHnht
+         V1zA==
+X-Gm-Message-State: ACrzQf0qldZ/05ZRRciHj7bRQl4BQKW52LZTzwkg8IkBGtH5jtk+G4CL
+        3Hv4n1pOWnjt/dUEPhB0FQ==
+X-Google-Smtp-Source: AMsMyM5ai7TBx2hq9Yw2a73b9Dx0NsSpGKlCAqRK1rsVAwL1TyUeCKFTJoiykMmsw8LzRorV6iZ2tQ==
+X-Received: by 2002:a05:6870:2054:b0:132:d1fb:ddf0 with SMTP id l20-20020a056870205400b00132d1fbddf0mr39306295oad.283.1666639392419;
+        Mon, 24 Oct 2022 12:23:12 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u4-20020a4ac984000000b004768f725b7csm332279ooq.23.2022.10.24.12.23.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 12:23:11 -0700 (PDT)
+Received: (nullmailer pid 2071537 invoked by uid 1000);
+        Mon, 24 Oct 2022 19:23:13 -0000
+Date:   Mon, 24 Oct 2022 14:23:13 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sam Shih <Sam.Shih@mediatek.com>,
+        Steven Liu <steven.liu@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/3] dt-bindings: PCI: mediatek-gen3: add mt7986 clock
+ config
+Message-ID: <20221024192313.GA2069519-robh@kernel.org>
+References: <20221023170234.83621-1-linux@fw-web.de>
+ <20221023170234.83621-4-linux@fw-web.de>
 MIME-Version: 1.0
-References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-18-vishal.moola@gmail.com>
-In-Reply-To: <20221017202451.4951-18-vishal.moola@gmail.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Mon, 24 Oct 2022 12:23:07 -0700
-Message-ID: <CAOzc2pya9kuNYT3Uff3wVmrZ3JVSnFs2kwH5CK8ite6Qn67mRg@mail.gmail.com>
-Subject: Re: [PATCH v3 17/23] gfs2: Convert gfs2_write_cache_jdata() to use filemap_get_folios_tag()
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
-        rpeterso@redhat.com, agruenba@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221023170234.83621-4-linux@fw-web.de>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,174 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 1:25 PM Vishal Moola (Oracle)
-<vishal.moola@gmail.com> wrote:
->
-> Converted function to use folios throughout. This is in preparation for
-> the removal of find_get_pgaes_range_tag().
->
-> Also had to modify and rename gfs2_write_jdata_pagevec() to take in
-> and utilize folio_batch rather than pagevec and use folios rather
-> than pages. gfs2_write_jdata_batch() now supports large folios.
->
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
->  fs/gfs2/aops.c | 64 +++++++++++++++++++++++++++-----------------------
->  1 file changed, 35 insertions(+), 29 deletions(-)
->
-> diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
-> index 05bee80ac7de..8f87c2551a3d 100644
-> --- a/fs/gfs2/aops.c
-> +++ b/fs/gfs2/aops.c
-> @@ -195,67 +195,71 @@ static int gfs2_writepages(struct address_space *mapping,
->  }
->
->  /**
-> - * gfs2_write_jdata_pagevec - Write back a pagevec's worth of pages
-> + * gfs2_write_jdata_batch - Write back a folio batch's worth of folios
->   * @mapping: The mapping
->   * @wbc: The writeback control
-> - * @pvec: The vector of pages
-> - * @nr_pages: The number of pages to write
-> + * @fbatch: The batch of folios
->   * @done_index: Page index
->   *
->   * Returns: non-zero if loop should terminate, zero otherwise
->   */
->
-> -static int gfs2_write_jdata_pagevec(struct address_space *mapping,
-> +static int gfs2_write_jdata_batch(struct address_space *mapping,
->                                     struct writeback_control *wbc,
-> -                                   struct pagevec *pvec,
-> -                                   int nr_pages,
-> +                                   struct folio_batch *fbatch,
->                                     pgoff_t *done_index)
->  {
->         struct inode *inode = mapping->host;
->         struct gfs2_sbd *sdp = GFS2_SB(inode);
-> -       unsigned nrblocks = nr_pages * (PAGE_SIZE >> inode->i_blkbits);
-> +       unsigned nrblocks;
->         int i;
->         int ret;
-> +       int nr_pages = 0;
-> +       int nr_folios = folio_batch_count(fbatch);
-> +
-> +       for (i = 0; i < nr_folios; i++)
-> +               nr_pages += folio_nr_pages(fbatch->folios[i]);
-> +       nrblocks = nr_pages * (PAGE_SIZE >> inode->i_blkbits);
->
->         ret = gfs2_trans_begin(sdp, nrblocks, nrblocks);
->         if (ret < 0)
->                 return ret;
->
-> -       for(i = 0; i < nr_pages; i++) {
-> -               struct page *page = pvec->pages[i];
-> +       for (i = 0; i < nr_folios; i++) {
-> +               struct folio *folio = fbatch->folios[i];
->
-> -               *done_index = page->index;
-> +               *done_index = folio->index;
->
-> -               lock_page(page);
-> +               folio_lock(folio);
->
-> -               if (unlikely(page->mapping != mapping)) {
-> +               if (unlikely(folio->mapping != mapping)) {
->  continue_unlock:
-> -                       unlock_page(page);
-> +                       folio_unlock(folio);
->                         continue;
->                 }
->
-> -               if (!PageDirty(page)) {
-> +               if (!folio_test_dirty(folio)) {
->                         /* someone wrote it for us */
->                         goto continue_unlock;
->                 }
->
-> -               if (PageWriteback(page)) {
-> +               if (folio_test_writeback(folio)) {
->                         if (wbc->sync_mode != WB_SYNC_NONE)
-> -                               wait_on_page_writeback(page);
-> +                               folio_wait_writeback(folio);
->                         else
->                                 goto continue_unlock;
->                 }
->
-> -               BUG_ON(PageWriteback(page));
-> -               if (!clear_page_dirty_for_io(page))
-> +               BUG_ON(folio_test_writeback(folio));
-> +               if (!folio_clear_dirty_for_io(folio))
->                         goto continue_unlock;
->
->                 trace_wbc_writepage(wbc, inode_to_bdi(inode));
->
-> -               ret = __gfs2_jdata_writepage(page, wbc);
-> +               ret = __gfs2_jdata_writepage(&folio->page, wbc);
->                 if (unlikely(ret)) {
->                         if (ret == AOP_WRITEPAGE_ACTIVATE) {
-> -                               unlock_page(page);
-> +                               folio_unlock(folio);
->                                 ret = 0;
->                         } else {
->
-> @@ -268,7 +272,8 @@ static int gfs2_write_jdata_pagevec(struct address_space *mapping,
->                                  * not be suitable for data integrity
->                                  * writeout).
->                                  */
-> -                               *done_index = page->index + 1;
-> +                               *done_index = folio->index +
-> +                                       folio_nr_pages(folio);
->                                 ret = 1;
->                                 break;
->                         }
-> @@ -305,8 +310,8 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
->  {
->         int ret = 0;
->         int done = 0;
-> -       struct pagevec pvec;
-> -       int nr_pages;
-> +       struct folio_batch fbatch;
-> +       int nr_folios;
->         pgoff_t writeback_index;
->         pgoff_t index;
->         pgoff_t end;
-> @@ -315,7 +320,7 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
->         int range_whole = 0;
->         xa_mark_t tag;
->
-> -       pagevec_init(&pvec);
-> +       folio_batch_init(&fbatch);
->         if (wbc->range_cyclic) {
->                 writeback_index = mapping->writeback_index; /* prev offset */
->                 index = writeback_index;
-> @@ -341,17 +346,18 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
->                 tag_pages_for_writeback(mapping, index, end);
->         done_index = index;
->         while (!done && (index <= end)) {
-> -               nr_pages = pagevec_lookup_range_tag(&pvec, mapping, &index, end,
-> -                               tag);
-> -               if (nr_pages == 0)
-> +               nr_folios = filemap_get_folios_tag(mapping, &index, end,
-> +                               tag, &fbatch);
-> +               if (nr_folios == 0)
->                         break;
->
-> -               ret = gfs2_write_jdata_pagevec(mapping, wbc, &pvec, nr_pages, &done_index);
-> +               ret = gfs2_write_jdata_batch(mapping, wbc, &fbatch,
-> +                               &done_index);
->                 if (ret)
->                         done = 1;
->                 if (ret > 0)
->                         ret = 0;
-> -               pagevec_release(&pvec);
-> +               folio_batch_release(&fbatch);
->                 cond_resched();
->         }
->
-> --
-> 2.36.1
->
+On Sun, Oct 23, 2022 at 07:02:34PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> MT7986 needs 4 clocks for PCIe, define them in binding.
 
-Would anyone familiar with gfs2 have time to look over this patch (17/23)?
-I've cc-ed the gfs2 supporters, feedback would be appreciated.
+Patch 2 is incomplete without this one. Therefore, patch 2 and 3 should 
+be 1 patch.
+
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  .../bindings/pci/mediatek-pcie-gen3.yaml         | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> index 3662422b38ea..e6020e684c00 100644
+> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> @@ -79,9 +79,11 @@ properties:
+>        - const: mac
+>  
+>    clocks:
+> +    minItems: 4
+>      maxItems: 6
+>  
+>    clock-names:
+> +    minItems: 4
+>      maxItems: 6
+>  
+>    assigned-clocks:
+> @@ -162,6 +164,20 @@ allOf:
+>              - const: tl_32k
+>              - const: peri_26m
+>              - const: peri_mem
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt7986-pcie
+> +    then:
+> +      properties:
+> +        clock-names:
+> +          items:
+> +            - const: pl_250m
+> +            - const: tl_26m
+> +            - const: peri_26m
+> +            - const: top_133m
+>  
+>  unevaluatedProperties: false
+>  
+> -- 
+> 2.34.1
+> 
+> 
