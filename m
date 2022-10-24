@@ -2,54 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6270609C7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E727609CA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiJXI1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+        id S231146AbiJXI2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbiJXI0g (ORCPT
+        with ESMTP id S230336AbiJXI2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:26:36 -0400
-Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09AB013F00;
-        Mon, 24 Oct 2022 01:26:24 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 8D82E1E80D74;
-        Mon, 24 Oct 2022 16:25:07 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id D7XCuSzGAQ4o; Mon, 24 Oct 2022 16:25:05 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id DDC621E80CA5;
-        Mon, 24 Oct 2022 16:25:04 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     bagasdotme@gmail.com
-Cc:     krisman@collabora.com, kunyu@nfschina.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] unicode: mkutf8data: Add compound malloc function
-Date:   Mon, 24 Oct 2022 16:26:18 +0800
-Message-Id: <20221024082619.178940-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-In-Reply-To: <Y1ZFLO98zNoAgniW@debian.me>
-References: <Y1ZFLO98zNoAgniW@debian.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 04:28:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207AF645F9;
+        Mon, 24 Oct 2022 01:28:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48CCE60B47;
+        Mon, 24 Oct 2022 08:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F31C433D6;
+        Mon, 24 Oct 2022 08:27:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666600057;
+        bh=ysnt+Y6t1FMRzHAEEL6QxFMl6KRfQ8Smz2P0BWUTlFs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pmbef9SJDQK3+et4z6SVFeBoNmRtPQm5LBLxdzkgLUEDz6z+wVGn2cUUK5TCA9K2i
+         k7KoAS6Rn4ie14xWdPBhUguCdlT4ZZ0wvcCB9Z3ATiGLhHl+04pO5ELZbgPMuLpTZ/
+         8YSg3v1wRDGMjHJ+77Y/KFtNul2W1qNO2oBPMHHPEWlE8pMpdOhDAO+0CH2cuhlVif
+         bCA9QyKF4l2SYGe3WZU0+5iksVrZRroVmmFLyBBXeZ62RPGzQAOYuaWjeHofcYwFcq
+         FWhAPlcbFl29DPw6NOVyMawkj8JRf9lcQOuXkcyGvxQoRcfZy2fhj1CnW/Q05PN86L
+         +OBW3rh88n+mQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1omso3-001630-E9;
+        Mon, 24 Oct 2022 09:27:35 +0100
+Date:   Mon, 24 Oct 2022 09:27:35 +0100
+Message-ID: <8635bdocco.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/5] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+In-Reply-To: <20221024043925.25379-5-marcan@marcan.st>
+References: <20221024043925.25379-1-marcan@marcan.st>
+        <20221024043925.25379-5-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, rafael@kernel.org, viresh.kumar@linaro.org, matthias.bgg@gmail.com, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org, ulf.hansson@linaro.org, mark.kettenis@xs4all.nl, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 24 Oct 2022 05:39:24 +0100,
+Hector Martin <marcan@marcan.st> wrote:
+> 
+> This driver implements CPU frequency scaling for Apple Silicon SoCs,
+> including M1 (t8103), M1 Max/Pro/Ultra (t600x), and M2 (t8112).
+> 
+> Each CPU cluster has its own register set, and frequency management is
+> fully automated by the hardware; the driver only has to write one
+> register. There is boost frequency support, but the hardware will only
+> allow their use if only a subset of cores in a cluster are in
+> non-deep-idle. Since we don't support deep idle yet, these frequencies
+> are not achievable, but the driver supports them. They will remain
+> disabled in the device tree until deep idle is implemented, to avoid
+> confusing users.
+> 
+> This driver does not yet implement the memory controller performance
+> state tuning that usually accompanies higher CPU p-states. This will be
+> done in a future patch.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/cpufreq/Kconfig.arm          |   9 +
+>  drivers/cpufreq/Makefile             |   1 +
+>  drivers/cpufreq/apple-soc-cpufreq.c  | 352 +++++++++++++++++++++++++++
+>  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
+>  4 files changed, 364 insertions(+)
+>  create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
+>
 
-I send the 1/2 and 2/2 patches separately, and divide the two functions and related modifications in the 2/2 patch into two patches.
+[...]
 
-thanks,
-kunyu
+> +static struct freq_attr *apple_soc_cpufreq_hw_attr[] = {
+> +	&cpufreq_freq_attr_scaling_available_freqs,
+> +	NULL,
+> +	NULL,
 
+nit: extra NULL?
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
