@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1C66098E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89A986098E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiJXDbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 23:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S230005AbiJXDca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 23:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiJXDa2 (ORCPT
+        with ESMTP id S229613AbiJXDcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 23:30:28 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F967AC2E;
-        Sun, 23 Oct 2022 20:27:52 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h9so3031075wrt.0;
-        Sun, 23 Oct 2022 20:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O2esLByeb54271i903kEfYtOSyfIyaU9h31aBI1kHSw=;
-        b=lCa50AmhMTksHcOD90KBgXpupfnNLPbfG/5ZPGhmRq7XEue+QE1lgitzcgeCQrvplY
-         hzAWzEJ8uQ++kiBiZpV48ZTS2Irsi2kp/kyiJrwGlOz9NimpeR96yru/S1Eje+9x8D6h
-         iIVDFMEpvb9pVYYuYWakU4qie+9RfEb0dSVmrXPB+FW7Gtw8Rneh+IDU215btfBzf5iO
-         VplAG0In1C79anDxBVoDU/VrbqQSAhl1TOMioUowdZNnEdsgkZNu1xhgjn5bOI8KaWxQ
-         0mvJoCMW0htOmZXWBMd+d9GhKqbMfr/TT2gFmFkdbq55MSW2FtcEGS/5GWOxB/j/EVDw
-         DqQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O2esLByeb54271i903kEfYtOSyfIyaU9h31aBI1kHSw=;
-        b=e5nExVe5YE2e3mLeswR3enz9s+SiGktzxAFJdDPnFzgukPZqtLMj/DVOaWDgqJNXlx
-         THbl+JEE+GxWEfLMfCHR4RFw+SqW7bo8srN8av6XD3m25LIA+BXbo9adRWP8nhoXQmp6
-         XpI8K3qqoXI5rhTRcVAv/yfvzvxeZ7jLnRSeBDBGMzSCfFWeBVP9ezjF9Avbtm/dIoat
-         9f1vpT8s2/v+EypwOCDNtTw6orwE00UjpBiaZ7qAlSnGObRyzXITd8uUT8uT6i88H5UV
-         0NpHAcTztK1Q4/vwaq633CrgkK/J7zaS3zmipBfVQ4Ji3iGVdK0bbf7rpMfxStk6Yeaj
-         dBYQ==
-X-Gm-Message-State: ACrzQf31Zog8+oYMM355msJoCHe25z6BbObe+VyYHlXz+RixTkXZO/+4
-        M0wlbD21/QhO71dRf6iOugM99qE6gggzEpz/sREO2NahbJBfWg==
-X-Google-Smtp-Source: AMsMyM4DhnQrMnsG4wcbCpqMZPxR8IShg+7kF/L6jDrU6EOYLyRvQe6ig0PatWYhRNhIhb1qc4kvGu7gcZJBrAsk0aI=
-X-Received: by 2002:adf:e502:0:b0:234:bb21:e9cc with SMTP id
- j2-20020adfe502000000b00234bb21e9ccmr15184069wrm.389.1666582070646; Sun, 23
- Oct 2022 20:27:50 -0700 (PDT)
+        Sun, 23 Oct 2022 23:32:25 -0400
+Received: from mail3.bemta32.messagelabs.com (mail3.bemta32.messagelabs.com [195.245.230.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B1B5D0DF;
+        Sun, 23 Oct 2022 20:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1666582342; i=@fujitsu.com;
+        bh=gSj5HP5Q4BCk7l2MSunyvqKKrQUvd3/P7n/yyf89a9Y=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=m425p0/9V+EZbQHP7bevmi9ascdTJBdgsFZBInngWkEwmJkE47/sKEWAqbcS3A4DS
+         QOF0dp+7/iKQcRbw8iQCIMn5KZUiT83VJWx+Y0/qsnT2Mbevodc7yIXTGq1kgELJKD
+         CW30i8bxrxp5TzikvE4EFxo/8cCbE/kxBriim4rg13EQcQsI+x1dpwFZjtiJddamyk
+         gsxbAJigcIqq5XuVCtoDACADUs63gGLlH8rXUMJAIP5wzBQGqaEZk2UUH6qiOCDbxk
+         BHK3dHGihmN+k3Nu6IVQN5Gg0K1f5AUksR96BFo32wo6aVAu0FIXO2w+c4eK7KRxNW
+         qRMhJ/53pYVcw==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRWlGSWpSXmKPExsViZ8MxSdeFPSz
+  ZYOtuDouZM04wWkz5tZTZ4vKuOWwWzw71slh8mTqN2eL8sX52BzaPnbPusntsWtXJ5vF5k5zH
+  1s+3WQJYolgz85LyKxJYM071WRTM4qqY9JOzgXEyRxcjJ4eQwBZGif6Hhl2MXED2ciaJrW/Os
+  0E4Bxgl2hdNYgepYhPQkLjXcpMRxBYRiJH4d+wXmM0skCfx9c8uli5GDg5hAQ+JaXNEQUwWAV
+  WJpgvOIBW8Ao4SbZMOgE2REFCQmPLwPTNEXFDi5MwnLBBTJCQOvnjBDNIqIaAkMbM7HqK8QmL
+  WrDYmCFtN4uq5TcwTGPlnIemehaR7ASPTKkaz4tSistQiXUNTvaSizPSMktzEzBy9xCrdRL3U
+  Ut3y1OISXUO9xPJivdTiYr3iytzknBS9vNSSTYzAgE4pZi/ewfhg2R+9Q4ySHExKorwr3gclC
+  /El5adUZiQWZ8QXleakFh9ilOHgUJLgZf0amiwkWJSanlqRlpkDjC6YtAQHj5II7/2TQGne4o
+  LE3OLMdIjUKUZFKXFeZrawZCEBkERGaR5cGyyiLzHKSgnzMjIwMAjxFKQW5WaWoMq/YhTnYFQ
+  S5lVjBZrCk5lXAjf9FdBiJqDFl1YEgSwuSURISTUwJRnFLJr28oXYBFuFH6FXtvzMSO5ZVSzq
+  c83367wsF8F33cn/P578FXtrdfjtJZfj7EPbfoctkDjvV7y/QkXDM+ZZnM7s9a0vV26XWeTJf
+  HRzl8vkBe3fw868CbvjGeNps1+DXz763Bnv6V0RDa0/VwSqfFY4EqJy7O3ff4XlC+8Jvm+Ru+
+  e5rPhNrdHvR/ah3xl5jyYqya5ZfyQjlTd0jVHPw+NO2+rkWKdXSuet+/3+2OIV1/RTxF12Kvj
+  1Roh/TPnQlNiioHpCLj7cOojVfJN33btV09pvdzB19q069TcuTNmq2FtyS8k9cxGvXXffmoe4
+  mJyYI1AnnsPZGFt86M4m/Rbpk6c/xZa0H7+pxFKckWioxVxUnAgAFpSigGMDAAA=
+X-Env-Sender: lizhijian@fujitsu.com
+X-Msg-Ref: server-6.tower-585.messagelabs.com!1666582339!189538!1
+X-Originating-IP: [62.60.8.146]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.100.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 25280 invoked from network); 24 Oct 2022 03:32:20 -0000
+Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
+  by server-6.tower-585.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 24 Oct 2022 03:32:20 -0000
+Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id B7F701000FB;
+        Mon, 24 Oct 2022 04:32:19 +0100 (BST)
+Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id AA3E11000E9;
+        Mon, 24 Oct 2022 04:32:19 +0100 (BST)
+Received: from e02445334835.localdomain (10.167.225.141) by
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Mon, 24 Oct 2022 04:32:16 +0100
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     <zyjzyj2000@gmail.com>, <jgg@ziepe.ca>, <leon@kernel.org>,
+        <linux-rdma@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>,
+        "Bob Pearson" <rpearsonhpe@gmail.com>
+Subject: [PATCH for-next v3 1/2] RDMA/rxe: Remove unnecessary mr testing
+Date:   Mon, 24 Oct 2022 03:31:54 +0000
+Message-ID: <1666582315-2-1-git-send-email-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <CAPm50a+aygp3T1mNjzGXtL2nyNm-mHFZ3YO8F7eO0gCxZDuQsA@mail.gmail.com>
- <Y0BeEVxkDkctmTIX@google.com> <CAPm50aLzOLyURhvhYkCyp1hpRagAczFXg9jYbFg_86Qaf5usbg@mail.gmail.com>
- <Y0RYp7CZO5u1Eg/s@google.com>
-In-Reply-To: <Y0RYp7CZO5u1Eg/s@google.com>
-From:   Hao Peng <flyingpenghao@gmail.com>
-Date:   Mon, 24 Oct 2022 11:27:38 +0800
-Message-ID: <CAPm50aJUjCumrMmEGCw2eNc6nPi5y=ZzTMi8MC2aJwkatQGnww@mail.gmail.com>
-Subject: Re: [PATCH] kvm: x86: keep srcu writer side operation mutually exclusive
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.167.225.141]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
+X-Virus-Scanned: ClamAV using ClamSMTP
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,65 +86,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 1:38 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Sun, Oct 09, 2022, Hao Peng wrote:
-> > On Sat, Oct 8, 2022 at 1:12 AM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Sat, Oct 08, 2022, Hao Peng wrote:
-> > > > From: Peng Hao <flyingpeng@tencent.com>
-> > > >
-> > > > Synchronization operations on the writer side of SRCU should be
-> > > > invoked within the mutex.
-> > >
-> > > Why?  Synchronizing SRCU is necessary only to ensure that all previous readers go
-> > > away before the old filter is freed.  There's no need to serialize synchronization
-> > > between writers.  The mutex ensures each writer operates on the "new" filter that's
-> > > set by the previous writer, i.e. there's no danger of a double-free.  And the next
-> > > writer will wait for readers to _its_ "new" filter.
-> > >
-> > Array srcu_lock_count/srcu_unlock_count[] in srcu_data, which is used
-> > alternately to determine
-> > which readers need to wait to get out of the critical area. If  two
-> > synchronize_srcu are initiated concurrently,
-> > there may be a problem with the judgment of gp. But if it is confirmed
-> > that there will be no writer concurrency,
-> > it is not necessary to ensure that synchronize_srcu is executed within
-> > the scope of the mutex lock.
->
-> I don't see anything in the RCU documentation or code that suggests that callers
-> need to serialize synchronization calls.  E.g. the "tree" SRCU implementation uses
-> a dedicated mutex to serialize grace period work
->
->         struct mutex srcu_gp_mutex;             /* Serialize GP work. */
->
-> static void srcu_advance_state(struct srcu_struct *ssp)
-> {
->         int idx;
->
->         mutex_lock(&ssp->srcu_gp_mutex);
->
->         <magic>
-> }
->
->
-> and its state machine explicitly accounts for "Someone else" starting a grace
-> period
->
->                 if (idx != SRCU_STATE_IDLE) {
->                         mutex_unlock(&ssp->srcu_gp_mutex);
->                         return; /* Someone else started the grace period. */
->                 }
->
-> and srcu_gp_end() also guards against creating more than 2 grace periods.
->
->         /* Prevent more than one additional grace period. */
->         mutex_lock(&ssp->srcu_cb_mutex);
->
-> And if this is a subtle requirement, there is a lot of broken kernel code, e.g.
-> mmu_notifier, other KVM code, srcu_notifier_chain_unregister(), etc...
+Before the testing, we already passed it to rxe_mr_copy() where mr could
+be dereferenced. so this checking is not needed.
 
-srcu_gp_mutex is meaningless because the workqueue already guarantees
-that the same work_struct will not be reentrant.
-If synchronize_srcu is not mutually exclusive on the update side, it may cause
-a GP to fail for a long time. I will continue to analyze when I have time.
+The only way that mr is NULL is when it reaches below line 780 with
+ 'qp->resp.mr = NULL', which is not possible in Bob's explanation[1].
+
+ 778         if (res->state == rdatm_res_state_new) {
+ 779                 if (!res->replay) {
+ 780                         mr = qp->resp.mr;
+ 781                         qp->resp.mr = NULL;
+ 782                 } else {
+
+[1] https://lore.kernel.org/lkml/30ff25c4-ce66-eac4-eaa2-64c0db203a19@gmail.com/
+
+CC: Bob Pearson <rpearsonhpe@gmail.com>
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+---
+V3: remove WARN_ON # Yanjun and Bob
+---
+ drivers/infiniband/sw/rxe/rxe_resp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+index ed5a09e86417..b02639cf8cba 100644
+--- a/drivers/infiniband/sw/rxe/rxe_resp.c
++++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+@@ -811,8 +811,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
+ 
+ 	rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
+ 		    payload, RXE_FROM_MR_OBJ);
+-	if (mr)
+-		rxe_put(mr);
++	rxe_put(mr);
+ 
+ 	if (bth_pad(&ack_pkt)) {
+ 		u8 *pad = payload_addr(&ack_pkt) + payload;
+-- 
+1.8.3.1
+
