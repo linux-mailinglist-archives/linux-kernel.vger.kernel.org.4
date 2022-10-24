@@ -2,177 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CDB360B04A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BE260B1C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiJXQDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S230451AbiJXQg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbiJXQCh (ORCPT
+        with ESMTP id S231213AbiJXQgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:02:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C27211879B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:56:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C0F1B81BAB
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:41:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8BCFC433B5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:41:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666622490;
-        bh=573Ln4cycAv4yHsGNxf7bxVDj7O7ePVFwztAvN6jSoM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=q9TqLvaN+1UAy9IG2bu4Iozalg8dBOv6S4MbjtkwkQAHMAmVtgRXAeMEDhyVNTJ+v
-         nKBekhnevPjEqKbHFZkvk+dR2lwIsgOLNAlUhOtlYMceOENsH09bhBjGkutO9Ignm0
-         Gt8bVLTUI3ozmgVX0QUAXK+hWg7Xpkx2mMdYfPWILw3hgLCHv40bsit4MiRn4S4KkM
-         0Muuz4v57rq2D+QAOskyqlCIy0cezoX/Pl89TPnnieF6kxnIUlypt61w7+FuN+LCcx
-         7NpgPhvkrH5kdTKAIg0Rbzfz2AluAsaI7cGxEFJ0ZqKJaKLi0pgOWnc30aDt7Peqzw
-         AYsTJZuEfxkiw==
-Received: by mail-ed1-f51.google.com with SMTP id a67so32082248edf.12
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:41:30 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0PFCCguyPdPZvgCaGJE3FI3JFlRZnmshY8qbXX86lWww0fjLJg
-        G7esLjhkL9ZMRqd6rHvOcwtYO2AslCHBvlSCPjo=
-X-Google-Smtp-Source: AMsMyM7sKGmviZaWbmgBjJrmStEDKqj4gFQWVeLtPAXAlPTvbW1zSztmy5BKQLk0oZ5O9EqH/+4IOlfmDyFvTrQiihU=
-X-Received: by 2002:a17:906:ef90:b0:7ab:1b2c:b654 with SMTP id
- ze16-20020a170906ef9000b007ab1b2cb654mr906693ejb.627.1666622489127; Mon, 24
- Oct 2022 07:41:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221022214622.18042-1-ogabbay@kernel.org> <CADnq5_PwNwsSUeyhXDkoy-y1JXFrTj99AgVV02oHX0a29QUXpQ@mail.gmail.com>
-In-Reply-To: <CADnq5_PwNwsSUeyhXDkoy-y1JXFrTj99AgVV02oHX0a29QUXpQ@mail.gmail.com>
-From:   Oded Gabbay <ogabbay@kernel.org>
-Date:   Mon, 24 Oct 2022 17:41:02 +0300
-X-Gmail-Original-Message-ID: <CAFCwf11CPvW8uqbDs8-qyMVMbPhw1tPF9ddfjee1MvKthRQb+g@mail.gmail.com>
-Message-ID: <CAFCwf11CPvW8uqbDs8-qyMVMbPhw1tPF9ddfjee1MvKthRQb+g@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Arnd Bergmann <arnd@arndb.de>,
+        Mon, 24 Oct 2022 12:36:03 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EC31863D0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:23:26 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id k8so8126048wrh.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sQyeI3iWyNHZjtENn8DPYNUxwogrtaagMEXW+y/NypA=;
+        b=mdfvV7EMrnMzMfiq/epK8Pii9oFAzgTAvPfpGQ0cibGpOEYZ5ROakOkngZ/DzqnpR1
+         i4wUoiwGayt5INMX+SKcL5W3nifaLuJTl2+tz+JGmx1oMOZViTLmWHuiohgGa2PfLXj4
+         vzQOsN+6WIH1aPsO9YqLjCNHnslwyZGVDRVkL5ekZSJNGDv6l4xelj4aiSKJZWtps05G
+         JmVEDx9i8IqfiFEk1/NUEAcaZDRSif419q8EoDJfDY5sio+9SvjrClJhMJlf8fPFhOZz
+         B/wo1TWrWwEMiSD4ih0sDC7Vstx4wgw+Gfb5b85aDd8cwdtrI/PiPjBRDgsCywKo0yHD
+         Peyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sQyeI3iWyNHZjtENn8DPYNUxwogrtaagMEXW+y/NypA=;
+        b=EYQ4gLWFBsKOAzFsDFyQuvLoxRfukkByDf0bRrS+/sa6n72+LhA727UNmSOyBdLY5n
+         lX0wVzwJMBbWwCMYgUxjoeF2aA3U9TayojzFtDJlyHS5+JXCOyy/u3HajhBAaMb5Hg/q
+         HNGUg+e8UxDKE5zCZvoo0K5qviNLSpkKC3YEvgZJHjerxl7oS91PTOhTYly1zXgLcO3a
+         JD/PQoNtgqTPoLJy1z+mVegqiBxlhR8DfgRgdVNP5m5sq8HVpQFzcAQ9DHUlqavbLY4j
+         qF+b/v6Oz0eEzs96jNcEzJh+SL2mubSGb0ZotER0wml2qz6hczb5HHKE8KnMTLiu2d4e
+         L2yA==
+X-Gm-Message-State: ACrzQf0nIlJLcYGfD61eyWROvDBUZFbMUVTtx4OfA/paFE6v4MZYLMs/
+        bhz++V1Aq4Ci2MbHUtqDzZRuUnMTZob9qg==
+X-Google-Smtp-Source: AMsMyM4cYodD69HYnsNl9PmV/C27D0XivwktN7mQHyiN/OCBLBuzGLBnqTOplabDhZvWBrHfB/4HzA==
+X-Received: by 2002:a5d:6f12:0:b0:236:6b05:7a78 with SMTP id ay18-20020a5d6f12000000b002366b057a78mr5565708wrb.374.1666622648215;
+        Mon, 24 Oct 2022 07:44:08 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u8-20020a05600c00c800b003b4935f04a4sm163258wmm.5.2022.10.24.07.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 07:44:07 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH] PM: domains: Reverse the order of performance and enabling ops
+Date:   Mon, 24 Oct 2022 17:43:04 +0300
+Message-Id: <20221024144304.198689-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 4:55 PM Alex Deucher <alexdeucher@gmail.com> wrote:
->
-> On Sat, Oct 22, 2022 at 5:46 PM Oded Gabbay <ogabbay@kernel.org> wrote:
-> >
-> > In the last couple of months we had a discussion [1] about creating a new
-> > subsystem for compute accelerator devices in the kernel.
-> >
-> > After an analysis that was done by DRM maintainers and myself, and following
-> > a BOF session at the Linux Plumbers conference a few weeks ago [2], we
-> > decided to create a new subsystem that will use the DRM subsystem's code and
-> > functionality. i.e. the accel core code will be part of the DRM subsystem.
-> >
-> > This will allow us to leverage the extensive DRM code-base and
-> > collaborate with DRM developers that have experience with this type of
-> > devices. In addition, new features that will be added for the accelerator
-> > drivers can be of use to GPU drivers as well (e.g. RAS).
-> >
-> > As agreed in the BOF session, the accelerator devices will be exposed to
-> > user-space with a new, dedicated device char files and a dedicated major
-> > number (261), to clearly separate them from graphic cards and the graphic
-> > user-space s/w stack. Furthermore, the drivers will be located in a separate
-> > place in the kernel tree (drivers/accel/).
-> >
-> > This series of patches is the first step in this direction as it adds the
-> > necessary infrastructure for accelerator devices to DRM. The new devices will
-> > be exposed with the following convention:
-> >
-> > device char files - /dev/accel/accel*
-> > sysfs             - /sys/class/accel/accel*/
-> > debugfs           - /sys/kernel/debug/accel/accel*/
-> >
-> > I tried to reuse the existing DRM code as much as possible, while keeping it
-> > readable and maintainable.
->
-> Wouldn't something like this:
-> https://patchwork.freedesktop.org/series/109575/
-> Be simpler and provide better backwards compatibility for existing
-> non-gfx devices in the drm subsystem as well as newer devices?
+The ->set_performance_state() needs to be called before ->power_on()
+when a genpd is powered on, and after ->power_off() when a genpd is
+powered off. Do this in order to let the provider know to which
+performance state to power on the genpd, on the power on sequence, and
+also to maintain the performance for that genpd until after powering off,
+on power off sequence.
 
-As Greg said, see the summary. The consensus in the LPC session was
-that we need to clearly separate accel devices from existing gpu
-devices (whether they use primary and/or render nodes). That is the
-main guideline according to which I wrote the patches. I don't think I
-want to change this decision.
+There is no scenario where a consumer would need its genpd enabled and
+then its performance state increased. Instead, in every scenario, the
+consumer needs the genpd to be enabled from the start at a specific
+performance state.
 
-Also, there was never any intention to provide backward compatibility
-for existing non-gfx devices. Why would we want that ? We are mainly
-talking about drivers that are currently trying to get upstream, and
-the habana driver.
+And same logic applies to the powering down. No consumer would need its
+genpd performance state dropped right before powering down.
 
-Oded
->
-> Alex
->
-> >
-> > One thing that is missing from this series is defining a namespace for the
-> > new accel subsystem, while I'll add in the next iteration of this patch-set,
-> > after I will receive feedback from the community.
-> >
-> > As for drivers, once this series will be accepted (after adding the namespace),
-> > I will start working on migrating the habanalabs driver to the new accel
-> > subsystem. I have talked about it with Dave and we agreed that it will be
-> > a good start to simply move the driver as-is with minimal changes, and then
-> > start working on the driver's individual features that will be either added
-> > to the accel core code (with or without changes), or will be removed and
-> > instead the driver will use existing DRM code.
-> >
-> > In addition, I know of at least 3 or 4 drivers that were submitted for review
-> > and are good candidates to be included in this new subsystem, instead of being
-> > a drm render node driver or a misc driver.
-> >
-> > [1] https://lkml.org/lkml/2022/7/31/83
-> > [2] https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summary.html
-> >
-> > Thanks,
-> > Oded
-> >
-> > Oded Gabbay (3):
-> >   drivers/accel: add new kconfig and update MAINTAINERS
-> >   drm: define new accel major and register it
-> >   drm: add dedicated minor for accelerator devices
-> >
-> >  Documentation/admin-guide/devices.txt |   5 +
-> >  MAINTAINERS                           |   8 +
-> >  drivers/Kconfig                       |   2 +
-> >  drivers/accel/Kconfig                 |  24 +++
-> >  drivers/gpu/drm/drm_drv.c             | 214 +++++++++++++++++++++-----
-> >  drivers/gpu/drm/drm_file.c            |  69 ++++++---
-> >  drivers/gpu/drm/drm_internal.h        |   5 +-
-> >  drivers/gpu/drm/drm_sysfs.c           |  81 +++++++++-
-> >  include/drm/drm_device.h              |   3 +
-> >  include/drm/drm_drv.h                 |   8 +
-> >  include/drm/drm_file.h                |  21 ++-
-> >  include/drm/drm_ioctl.h               |   1 +
-> >  12 files changed, 374 insertions(+), 67 deletions(-)
-> >  create mode 100644 drivers/accel/Kconfig
-> >
-> > --
-> > 2.34.1
-> >
+Now, there are currently two vendors which use ->set_performance_state()
+in their genpd providers. One of them is Tegra, but the only genpd provider
+(PMC) that makes use of ->set_performance_state() doesn't implement the
+->power_on() or ->power_off(), and so it will not be affected by the ops
+reversal.
+
+The other vendor that uses it is Qualcomm, in multiple genpd providers
+actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
+use of ->set_performance_state() need the order between enabling ops and
+the performance setting op to be reversed. And the reason for that is that
+it currently translates into two different voltages in order to power on
+a genpd to a specific performance state. Basically, ->power_on() switches
+to the minimum (enabling) voltage for that genpd, and then
+->set_performance_state() sets it to the voltage level required by the
+consumer.
+
+By reversing the call order, we rely on the provider to know what to do
+on each call, but most popular usecase is to cache the performance state
+and postpone the voltage setting until the ->power_on() gets called.
+
+As for the reason of still needing the ->power_on() and ->power_off() for a
+provider which could get away with just having ->set_performance_state()
+implemented, there are consumers that do not (nor should) provide an
+opp-table. For those consumers, ->set_performance_state() will not be
+called, and so they will enable the genpd to its minimum performance state
+by a ->power_on() call. Same logic goes for the disabling.
+
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+ drivers/base/power/domain.c | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index ead135c7044c..e66a711fec88 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -939,8 +939,8 @@ static int genpd_runtime_suspend(struct device *dev)
+ 		return 0;
+ 
+ 	genpd_lock(genpd);
+-	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+ 	genpd_power_off(genpd, true, 0);
++	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+ 	genpd_unlock(genpd);
+ 
+ 	return 0;
+@@ -978,9 +978,8 @@ static int genpd_runtime_resume(struct device *dev)
+ 		goto out;
+ 
+ 	genpd_lock(genpd);
++	genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+ 	ret = genpd_power_on(genpd, 0);
+-	if (!ret)
+-		genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+ 	genpd_unlock(genpd);
+ 
+ 	if (ret)
+@@ -1018,8 +1017,8 @@ static int genpd_runtime_resume(struct device *dev)
+ err_poweroff:
+ 	if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
+ 		genpd_lock(genpd);
+-		gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+ 		genpd_power_off(genpd, true, 0);
++		gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+ 		genpd_unlock(genpd);
+ 	}
+ 
+@@ -2749,17 +2748,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 	dev->pm_domain->detach = genpd_dev_pm_detach;
+ 	dev->pm_domain->sync = genpd_dev_pm_sync;
+ 
+-	if (power_on) {
+-		genpd_lock(pd);
+-		ret = genpd_power_on(pd, 0);
+-		genpd_unlock(pd);
+-	}
+-
+-	if (ret) {
+-		genpd_remove_device(pd, dev);
+-		return -EPROBE_DEFER;
+-	}
+-
+ 	/* Set the default performance state */
+ 	pstate = of_get_required_opp_performance_state(dev->of_node, index);
+ 	if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
+@@ -2771,6 +2759,18 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 			goto err;
+ 		dev_gpd_data(dev)->default_pstate = pstate;
+ 	}
++
++	if (power_on) {
++		genpd_lock(pd);
++		ret = genpd_power_on(pd, 0);
++		genpd_unlock(pd);
++	}
++
++	if (ret) {
++		genpd_remove_device(pd, dev);
++		return -EPROBE_DEFER;
++	}
++
+ 	return 1;
+ 
+ err:
+-- 
+2.34.1
+
