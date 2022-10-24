@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B60660A4E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5734960A78E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiJXMSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:18:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S234660AbiJXMwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbiJXMQ6 (ORCPT
+        with ESMTP id S232287AbiJXMrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:16:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FA7814FD;
-        Mon, 24 Oct 2022 04:56:36 -0700 (PDT)
+        Mon, 24 Oct 2022 08:47:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908469184B;
+        Mon, 24 Oct 2022 05:12:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F193B81186;
-        Mon, 24 Oct 2022 11:52:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B025C433D6;
-        Mon, 24 Oct 2022 11:52:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3904D61252;
+        Mon, 24 Oct 2022 12:11:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D07AC433C1;
+        Mon, 24 Oct 2022 12:11:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612371;
-        bh=e/KEj574MmNa/M0sn4QvklxgLeOlAyMdJQf52uy5n4c=;
+        s=korg; t=1666613471;
+        bh=NwiRgoGNNgwSk51Vc6rEQuhFQM5Y9IwYt/EDlaVrrCg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZY3Sw3xgXggeSkY96fjQfH5yJOQ8eWrsUaC/Mb5SZ78YGxmVBRnYEKIHzX5ByJqR1
-         CIoKVdKGcAYdxak56Z/P7uYHP8h2VRKSw33ug9R8JXy1s150JdWoIfYXBEAEkn+Jiv
-         xUqU/vkMr80VDONQ/dsEtkGZkuE0ctBz/cIipjhk=
+        b=LBBuclyt0fxruzcZQH7fW6R0THoP7BGCDRiPn4KccOlbTW12Y0jflcyXUDdRxdOgh
+         xwV04EsaJVCvQVpAmar7TjIJ0blws+TKedyKTnKHSwSrQeL7HYZuBoSrErNpXMEFJw
+         iQ0Jw8kGU8ZIriyiYiiYMHtkS/5wYMdxRo5G9dUQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 142/210] mfd: intel_soc_pmic: Fix an error handling path in intel_soc_pmic_i2c_probe()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 149/255] drivers: serial: jsm: fix some leaks in probe
 Date:   Mon, 24 Oct 2022 13:30:59 +0200
-Message-Id: <20221024113001.588033162@linuxfoundation.org>
+Message-Id: <20221024113007.570051825@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 48749cabba109397b4e7dd556e85718ec0ec114d ]
+[ Upstream commit 1d5859ef229e381f4db38dce8ed58e4bf862006b ]
 
-The commit in Fixes: has added a pwm_add_table() call in the probe() and
-a pwm_remove_table() call in the remove(), but forget to update the error
-handling path of the probe.
+This error path needs to unwind instead of just returning directly.
 
-Add the missing pwm_remove_table() call.
-
-Fixes: a3aa9a93df9f ("mfd: intel_soc_pmic_core: ADD PWM lookup table for CRC PMIC based PWM")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20220801114211.36267-1-andriy.shevchenko@linux.intel.com
+Fixes: 03a8482c17dd ("drivers: serial: jsm: Enable support for Digi Classic adapters")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/YyxFh1+lOeZ9WfKO@kili
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/intel_soc_pmic_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/serial/jsm/jsm_driver.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
-index 36adf9e8153e..eb9ff34294e6 100644
---- a/drivers/mfd/intel_soc_pmic_core.c
-+++ b/drivers/mfd/intel_soc_pmic_core.c
-@@ -119,6 +119,7 @@ static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
- 	return 0;
+diff --git a/drivers/tty/serial/jsm/jsm_driver.c b/drivers/tty/serial/jsm/jsm_driver.c
+index 592e51d8944e..07e9be9865c7 100644
+--- a/drivers/tty/serial/jsm/jsm_driver.c
++++ b/drivers/tty/serial/jsm/jsm_driver.c
+@@ -212,7 +212,8 @@ static int jsm_probe_one(struct pci_dev *pdev, const struct pci_device_id *ent)
  
- err_del_irq_chip:
-+	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
- 	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
- 	return ret;
- }
+ 		break;
+ 	default:
+-		return -ENXIO;
++		rc = -ENXIO;
++		goto out_kfree_brd;
+ 	}
+ 
+ 	rc = request_irq(brd->irq, brd->bd_ops->intr, IRQF_SHARED, "JSM", brd);
 -- 
 2.35.1
 
