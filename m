@@ -2,98 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C204860C038
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F7960C13A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbiJYAxO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Oct 2022 20:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S230488AbiJYBne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiJYAwk (ORCPT
+        with ESMTP id S231579AbiJYBnI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:52:40 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACE115994D;
-        Mon, 24 Oct 2022 16:34:13 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1omzeK-00031R-RG; Mon, 24 Oct 2022 17:46:00 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnaud Patard <arnaud.patard@rtp-net.org>,
-        Christer Weinigel <christer@weinigel.se>,
-        Guillaume GOURAT <guillaume.gourat@nexvision.tv>,
-        openmoko-kernel@lists.openmoko.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Mon, 24 Oct 2022 21:43:08 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C83A11448;
+        Mon, 24 Oct 2022 18:26:24 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29OHYd1D012521;
+        Mon, 24 Oct 2022 12:34:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666632879;
+        bh=L6XcoFGyR7HmQUHNnt8y16oVUY/v1odNW85+8MxB5To=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=Niyw885wqwUJO9eyy8Cefbci/NHHdKb6IJ5wH7ykaJC9+eSBhsW/tSHLGIC5jxJ3w
+         obDb0R9JfMoeWwhxTG04MZdxmjyJTOJDPQN2DJUABQGh0HFmLn/jX9gHDTe3NUDHvW
+         Ukc0eeivcT4tiMTai3DgojTctDmDNhvi7HDGmqaw=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29OHYdEr019602
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 24 Oct 2022 12:34:39 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 24
+ Oct 2022 12:34:38 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 24 Oct 2022 12:34:38 -0500
+Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29OHYYJ2039154;
+        Mon, 24 Oct 2022 12:34:37 -0500
+From:   Andrew Davis <afd@ti.com>
+To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-doc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-clk@vger.kernel.org
-Subject: Re: [PATCH 01/21] ARM: s3c: remove all s3c24xx support
-Date:   Mon, 24 Oct 2022 17:45:59 +0200
-Message-ID: <2120112.irdbgypaU6@diego>
-In-Reply-To: <8d6ddb0d-98be-4c4d-9523-f024c339c8d0@app.fastmail.com>
-References: <20221021202254.4142411-1-arnd@kernel.org> <2204103.iZASKD2KPV@diego> <8d6ddb0d-98be-4c4d-9523-f024c339c8d0@app.fastmail.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Frank Rowand <frowand.list@gmail.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Andrew Davis <afd@ti.com>
+Subject: [PATCH v2 4/7] arm64: dts: freescale: Rename DTB overlay source files from .dts to .dtso
+Date:   Mon, 24 Oct 2022 12:34:31 -0500
+Message-ID: <20221024173434.32518-5-afd@ti.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221024173434.32518-1-afd@ti.com>
+References: <20221024173434.32518-1-afd@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 24. Oktober 2022, 16:27:31 CEST schrieb Arnd Bergmann:
-> On Sat, Oct 22, 2022, at 22:56, Heiko Stübner wrote:
-> > Am Freitag, 21. Oktober 2022, 22:27:34 CEST schrieb Arnd Bergmann:
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >> 
-> >> The platform was deprecated in commit 6a5e69c7ddea ("ARM: s3c: mark
-> >> as deprecated and schedule removal") and can be removed. This includes
-> >> all files that are exclusively for s3c24xx and not shared with s3c64xx,
-> >> as well as the glue logic in Kconfig and the maintainer file entries.
-> >> 
-> >> Cc: Arnaud Patard <arnaud.patard@rtp-net.org>
-> >> Cc: Ben Dooks <ben-linux@fluff.org>
-> >> Cc: Christer Weinigel <christer@weinigel.se>
-> >> Cc: Guillaume GOURAT <guillaume.gourat@nexvision.tv>
-> >> Cc: Heiko Stuebner <heiko@sntech.de>
-> >> Cc: Simtec Linux Team <linux@simtec.co.uk>
-> >> Cc: openmoko-kernel@lists.openmoko.org
-> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >
-> > So many memories of me starting out in the kernel on s3c24xx.
-> > But it's no use trying to keep stuff around that nobody will likely
-> > ever use again. So with a sad face
-> >
-> > Acked-by: Heiko Stuebner <heiko@sntech.de>
-> >
-> >
-> > though you might want to also include
-> > 	drivers/dma/s3c24xx-dma.c
-> 
-> This was in a separate patch that removes the driver:
-> 
-> https://lore.kernel.org/linux-arm-kernel/20221021203329.4143397-14-arnd@kernel.org/
+DTB Overlays (.dtbo) can now be built from source files with the
+extension (.dtso). This makes it clear what is the content of the files
+and differentiates them from base DTB source files.
 
-ah ok, I guess git-send-email didn't want to send me that patch.
-So all is good in that part then :-)
+Convert the DTB overlay source files in the arm64/freescale directory.
 
+Signed-off-by: Andrew Davis <afd@ti.com>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ .../{fsl-ls1028a-qds-13bb.dts => fsl-ls1028a-qds-13bb.dtso}       | 0
+ .../{fsl-ls1028a-qds-65bb.dts => fsl-ls1028a-qds-65bb.dtso}       | 0
+ .../{fsl-ls1028a-qds-7777.dts => fsl-ls1028a-qds-7777.dtso}       | 0
+ .../{fsl-ls1028a-qds-85bb.dts => fsl-ls1028a-qds-85bb.dtso}       | 0
+ .../{fsl-ls1028a-qds-899b.dts => fsl-ls1028a-qds-899b.dtso}       | 0
+ .../{fsl-ls1028a-qds-9999.dts => fsl-ls1028a-qds-9999.dtso}       | 0
+ ...e-gw72xx-0x-imx219.dts => imx8mm-venice-gw72xx-0x-imx219.dtso} | 0
+ ...xx-0x-rs232-rts.dts => imx8mm-venice-gw72xx-0x-rs232-rts.dtso} | 0
+ ...ice-gw72xx-0x-rs422.dts => imx8mm-venice-gw72xx-0x-rs422.dtso} | 0
+ ...ice-gw72xx-0x-rs485.dts => imx8mm-venice-gw72xx-0x-rs485.dtso} | 0
+ ...e-gw73xx-0x-imx219.dts => imx8mm-venice-gw73xx-0x-imx219.dtso} | 0
+ ...xx-0x-rs232-rts.dts => imx8mm-venice-gw73xx-0x-rs232-rts.dtso} | 0
+ ...ice-gw73xx-0x-rs422.dts => imx8mm-venice-gw73xx-0x-rs422.dtso} | 0
+ ...ice-gw73xx-0x-rs485.dts => imx8mm-venice-gw73xx-0x-rs485.dtso} | 0
+ 14 files changed, 0 insertions(+), 0 deletions(-)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-13bb.dts => fsl-ls1028a-qds-13bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-65bb.dts => fsl-ls1028a-qds-65bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-7777.dts => fsl-ls1028a-qds-7777.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-85bb.dts => fsl-ls1028a-qds-85bb.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-899b.dts => fsl-ls1028a-qds-899b.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-9999.dts => fsl-ls1028a-qds-9999.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-imx219.dts => imx8mm-venice-gw72xx-0x-imx219.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs232-rts.dts => imx8mm-venice-gw72xx-0x-rs232-rts.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs422.dts => imx8mm-venice-gw72xx-0x-rs422.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs485.dts => imx8mm-venice-gw72xx-0x-rs485.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-imx219.dts => imx8mm-venice-gw73xx-0x-imx219.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs232-rts.dts => imx8mm-venice-gw73xx-0x-rs232-rts.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs422.dts => imx8mm-venice-gw73xx-0x-rs422.dtso} (100%)
+ rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs485.dts => imx8mm-venice-gw73xx-0x-rs485.dtso} (100%)
 
-Heiko
-
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dtso
+diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
+rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dtso
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dtso
+similarity index 100%
+rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
+rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dtso
+-- 
+2.37.3
 
