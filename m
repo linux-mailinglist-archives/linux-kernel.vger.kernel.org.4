@@ -2,68 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135D160BB74
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC7A60B915
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231857AbiJXVAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36722 "EHLO
+        id S232095AbiJXUCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235522AbiJXU7b (ORCPT
+        with ESMTP id S232257AbiJXUBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:59:31 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CD31057F7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:05:53 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso6436502otb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:05:53 -0700 (PDT)
+        Mon, 24 Oct 2022 16:01:18 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B772324E410
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:22:51 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bs21so1613822wrb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:22:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jIUhXCylWTZyNF0ZZmlYqRt2dvHO3F0L1QAEk1qEOdA=;
-        b=HKNQqa9nE7I5KHjD1Kgg9r8gsp+/lkT00xq1s1N/WqPzv82hGtdg4ru/MPSat9GVQH
-         mKihWdsl2O7Jk3W2xsc2tl9n3av8Dex2X0OBP3Nkk8X34r1018FV1Sf2lzONZxhV8h2X
-         kLjJMF2Wug76tH7D/OJiZeNyz/ulzWzidfQJ5yiiN5wV8RbBh7k/jL6DPQMnpd6U1pfn
-         61wE4Z58mlmj93aoi+K16koSgiH47MsJdLheTEeLcMTLXCpOM7P5u+TOY4NrOdriVmvW
-         S8dVPijwh8oXQlYMtpbdAmQYz3z3bTSSOV+coYntKJm7naJxl7wfG7mVFbfvr6C+bewi
-         mY9g==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4cTRya7BWPcqsR7OtszqL7KchFavr9g3TQZiRi/8988=;
+        b=bGBaY2g3DIx/8hN0JHcD0TSN7Cpg0DthUSR9UhTbI2bCgNeTHiMw6mcP0Y+qmezrXx
+         oVhpnBDu7LPbNPgQDkEoau1+okRNRNBSvdRInQrBleUZ/rlVAEBAxMeuwIMsA2WiyooH
+         c+jwwWtZTdq/Z6kh2GP5lPoNiRku3hx1+gkKo5vkQgUSwhtzNIwCq3fRecW3BvfG4v3V
+         ui5JcfOo0f3c9au75ma9f2rZqthRhTqUaVI8ca6ODWd0sMgYbvsJ2wej/aaf0oxQSOgs
+         BYJDEIqoUcI/e3t4dgxdCC9Yumymc2Dw7VHTaqMEfn/13Axv/+dHEWogGDaV0MN/nbwd
+         +Jdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jIUhXCylWTZyNF0ZZmlYqRt2dvHO3F0L1QAEk1qEOdA=;
-        b=Fu4zonKC7wxwxok2Ph3m2PP+GTf9ycY05Byk3ejoEkBlSsV3a/q9fRsEsyQi5dz9iP
-         R1sMKJmJQmYzgZRbF3fkjnnuak1pumPxP+hODuuV1LXHRzmhuOrwgelyTr/h7fIlUmIL
-         ezqsy+/SoJUeodGqm6RoR1JdUMkcwNk92n8cWDnre2Ulz1Ko86fPXC9jRiVZII2gBywv
-         GJ/UVhn1b3tvPOfGPYbWtAXa9Olsl5trA0cGorgfDp7a3+GdtQ03T1ck8R4QCY08UYC7
-         LzVtnefCWNGFqPQ4ASC7rdegIRY6Goocy24VzZpbwaAFDR30RFOA9N8ONCMbiKCjH0R6
-         qU0g==
-X-Gm-Message-State: ACrzQf0sDEj08LkX27FBfnXyYkagiJBQITc/s6MWkZoVPLJ0QrBlGBEo
-        wTeRqBnS0qD22E+Ky/t1U7ZqoO5dlYy/T07MfYQoUgkgM9Q=
-X-Google-Smtp-Source: AMsMyM7v32guca965IG+5az6BzOI3Xcx78mmvt0lTEpANPeogcGiz1tjcRfDBpEOXd60mtEGsL6cmh7O797JScjDu50=
-X-Received: by 2002:a9f:3626:0:b0:3b5:c921:e0aa with SMTP id
- r35-20020a9f3626000000b003b5c921e0aamr20604005uad.92.1666634228830; Mon, 24
- Oct 2022 10:57:08 -0700 (PDT)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4cTRya7BWPcqsR7OtszqL7KchFavr9g3TQZiRi/8988=;
+        b=N9K+Dx4EqS9RV2HeH+p4cUtC863I60ElFZR927UMJQvo3p+h8S+PVRFLDWEzaizona
+         FgkHJHw1v2ew4abnXsdZ0APqj4mlmxJh95k4fpra4/7cilHPLf6KmT1GR0HU2Im+8DJa
+         hIPmdsj74sOtHDf8NbBlPr8XbuFV7DvrrMzmgtvfISxzw47IFiv3Naaq1IOPxN6KLwhW
+         nUF2oI8vxTzJZOD+to1fIm8rJbIALvbzj5QDN1y1CIH1C1Sq296GVtzWk0fttM3/I5iR
+         TfIFfuhaHv30cpwG+QTl9wl59MTEcFi/qk+JKhldEk0TAt3gG8jgBbpE9PYSyAXPrZ1d
+         6vyQ==
+X-Gm-Message-State: ACrzQf2fS4CWAiJtjyladljxTE45Kgcg1/pOFW8O6THPos3qxVvkXVrI
+        iX0QLgrd4UFXm5BHcnp64VnwbLhiMA==
+X-Google-Smtp-Source: AMsMyM7phEjSOHENdC39JCV36gTWfESdUZdOrwSSNunj4EMVMPrhsvQC9432ZKEasvXqxFOKlgFmgQ==
+X-Received: by 2002:adf:f4ce:0:b0:236:6578:48b2 with SMTP id h14-20020adff4ce000000b00236657848b2mr7343482wrp.181.1666634891401;
+        Mon, 24 Oct 2022 11:08:11 -0700 (PDT)
+Received: from p183 ([46.53.250.110])
+        by smtp.gmail.com with ESMTPSA id h6-20020adfa4c6000000b002206203ed3dsm330262wrb.29.2022.10.24.11.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 11:08:10 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 21:08:09 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] proc: fixup uptime test
+Message-ID: <Y1bUiT7VRXlXPQa1@p183>
 MIME-Version: 1.0
-References: <20221021222811.2366215-1-eugenis@google.com> <Y1OdfXuLmp/gr1Z4@kroah.com>
-In-Reply-To: <Y1OdfXuLmp/gr1Z4@kroah.com>
-From:   Evgenii Stepanov <eugenis@google.com>
-Date:   Mon, 24 Oct 2022 10:56:57 -0700
-Message-ID: <CAFKCwrg4=MdqNVcma-OnbmDDZXtporAr0x=uBn3rCO7dbC4hFQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64/mm: Consolidate TCR_EL1 fields
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,8 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 1:15 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
-> What stable kernel branch(es) do you want this applied to?
+syscall(3) returns -1 and sets errno on error, unlike "syscall"
+instruction.
 
-5.15, sorry I forgot to mention that. Thank you!
+Systems which have <= 32/64 CPUs are unaffected. Test won't bounce
+to all CPUs before completing if there are more of them.
+
+Fixes: 1f5bd0547654 ("proc: selftests: test /proc/uptime")
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+---
+
+ tools/testing/selftests/proc/proc-uptime-002.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+--- a/tools/testing/selftests/proc/proc-uptime-002.c
++++ b/tools/testing/selftests/proc/proc-uptime-002.c
+@@ -17,6 +17,7 @@
+ // while shifting across CPUs.
+ #undef NDEBUG
+ #include <assert.h>
++#include <errno.h>
+ #include <unistd.h>
+ #include <sys/syscall.h>
+ #include <stdlib.h>
+@@ -54,7 +55,7 @@ int main(void)
+ 		len += sizeof(unsigned long);
+ 		free(m);
+ 		m = malloc(len);
+-	} while (sys_sched_getaffinity(0, len, m) == -EINVAL);
++	} while (sys_sched_getaffinity(0, len, m) == -1 && errno == EINVAL);
+ 
+ 	fd = open("/proc/uptime", O_RDONLY);
+ 	assert(fd >= 0);
