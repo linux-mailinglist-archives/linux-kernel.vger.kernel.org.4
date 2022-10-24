@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23A5D60BD16
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5F860BD32
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbiJXWHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S231459AbiJXWOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbiJXWGn (ORCPT
+        with ESMTP id S232842AbiJXWOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:06:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AE729C491;
-        Mon, 24 Oct 2022 13:20:06 -0700 (PDT)
+        Mon, 24 Oct 2022 18:14:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC6DA3BBA;
+        Mon, 24 Oct 2022 13:30:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CFE2B81212;
-        Mon, 24 Oct 2022 20:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 210ABC433D7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D065F615C2;
+        Mon, 24 Oct 2022 20:06:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 35CDFC43470;
         Mon, 24 Oct 2022 20:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666642018;
-        bh=Qsye84xGRaBi9tSqB7PN+0CTel2A+AamhqEIPkbkMio=;
+        bh=CARoY+Ok4svh1OGrY05r3kFMP7KpVCIBpNkOyX5Xy6w=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=pUVPc/u2OHDU/o9BK3GwuQTkIOJZ3Ts2hoi9XLZTIi4f5IsMXjELXwwOjGs0DEbDy
-         H/RZxgPfISOvOKsQMHfScVOaAA9ImswMl5W1gO2M4DmfsViHVIfSlqSXE1s/qjrLZq
-         GUYdI/oXi4Gx6P+E997btDSKiKTQoVfbh0QQb7BlA8ad0vgSF5NbTOdT2J0rBf1DVI
-         yyMFqkhAORGNt1XO6wI6/X7ul7QwicOhnO/zp8JUZ+TxczmQSpH6AticvUG71VywIx
-         7NAKUj6UWUc2CzZmZ0cYh3dmuYIV+j37DsYqZY7rhZerNCMzqtdrdbcsCCC3cAEJRn
-         kXIPbB9pkE3Cw==
+        b=FpxIlJxG9oUrwlv/DxM2q6NQX+8Pd9O5jGB3Pi/TCAGAU3mrQTNkz1zgrN8c+Osf/
+         ZJTOF1jftVhMVNzhzPtw1dKqXXtbg5wwgbSB+2p8cVg1xinF2+SF9y3VEHRODXsdwb
+         /zIaKIbpqfqEIXYP254uu57G7c9fgLkt/tOGUjghD3tkVV0Evo6IAsveMtZ7guQr/D
+         BN1LP7E2PKuuso4uCj0xEpaQlZGyXxsc6dteHGudka6Z07V9asTgfB3M/zQtHHQu0s
+         +376ky6/NZYCS75KnAl2w8Wk1lgSOAdBw78m2mKYlpXhZq3/HpoKc0I8aRzeRsAeCz
+         BLo2AYZBwQSjw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0DB1CE4D005;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 21727E270DD;
         Mon, 24 Oct 2022 20:06:58 +0000 (UTC)
-Subject: Re: [GIT PULL] Keep synchronize_rcu() from enabling irqs in early boot
+Subject: Re: [PULL] Networking for v6.1-rc3 (part 1)
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221024165421.GA1246679@paulmck-ThinkPad-P17-Gen-1>
-References: <20221024165421.GA1246679@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20221024181835.475631-1-kuba@kernel.org>
+References: <20221024181835.475631-1-kuba@kernel.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221024165421.GA1246679@paulmck-ThinkPad-P17-Gen-1>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu-urgent.2022.10.20a
-X-PR-Tracked-Commit-Id: 31d8aaa87fcef1be5932f3813ea369e21bd3b11d
+X-PR-Tracked-Message-Id: <20221024181835.475631-1-kuba@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.1-rc3-1
+X-PR-Tracked-Commit-Id: 720ca52bcef225b967a339e0fffb6d0c7e962240
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f6602a97a11a3ddc077889fec2c026113c33c670
-Message-Id: <166664201805.4311.12142131558870472599.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 337a0a0b63f1c30195733eaacf39e4310a592a68
+Message-Id: <166664201813.4311.1413049515114810298.pr-tracker-bot@kernel.org>
 Date:   Mon, 24 Oct 2022 20:06:58 +0000
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     torvalds@linux-foundation.org, mingo@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de,
-        rcu@vger.kernel.org, kernel-team@fb.com, rostedt@goodmis.org
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,12 +61,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Mon, 24 Oct 2022 09:54:21 -0700:
+The pull request you sent on Mon, 24 Oct 2022 11:18:35 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/rcu-urgent.2022.10.20a
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.1-rc3-1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f6602a97a11a3ddc077889fec2c026113c33c670
+https://git.kernel.org/torvalds/c/337a0a0b63f1c30195733eaacf39e4310a592a68
 
 Thank you!
 
