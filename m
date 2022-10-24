@@ -2,177 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A726609C76
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0790F609C7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiJXI07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
+        id S230387AbiJXI1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiJXI0d (ORCPT
+        with ESMTP id S230341AbiJXI0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:26:33 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718013F1EC;
-        Mon, 24 Oct 2022 01:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666599936; x=1698135936;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=h6vVDwnnEIYrZbU2Lnzxt0EZEFuZqlq6YJWy0K1QXkw=;
-  b=JsJHSGipunFV/VAE+28BxIMm6bLT2p7I5rKI2l327Av2QxOlMGQ2XeuJ
-   rDRNjEoE0x1Rui0PficdUV/doz2TKWraMPyft4BlC2j3Ap5nR+FxU/6wz
-   Qp/wZZQl7YdzrPt+lPS8dtRhfJlbYagsbRNXep1Cs4Jhkk62nGmSWOOpr
-   8u6M00OsRCH/QKV85P3wFYtMKEjtWEd5Cr6XlOqDrfngsNLeJ712ecsDF
-   U3i6wjCEoHnGh/ZoQmOjZl/Fi2nFr3Cnw35EugncPfFWIChaE19Oi44lU
-   0Jsq2AKSmJF7v/DJvZPMHcsLoxSrnjKFyzvbeHBaaO40ufZucUaq96GxD
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="185983469"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Oct 2022 01:25:34 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Mon, 24 Oct 2022 01:25:32 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Mon, 24 Oct 2022 01:25:28 -0700
-From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
-        <hkallweit1@gmail.com>, <pabeni@redhat.com>, <edumazet@google.com>,
-        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <Ian.Saturley@microchip.com>
-Subject: [PATCH net-next V1 2/2] net: phy: micrel: Add PHY Auto/MDI/MDI-X set driver for KSZ9131
-Date:   Mon, 24 Oct 2022 13:55:16 +0530
-Message-ID: <20221024082516.661199-3-Raju.Lakkaraju@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221024082516.661199-1-Raju.Lakkaraju@microchip.com>
-References: <20221024082516.661199-1-Raju.Lakkaraju@microchip.com>
+        Mon, 24 Oct 2022 04:26:36 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0B84D4D7;
+        Mon, 24 Oct 2022 01:26:09 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29O7nHTW020020;
+        Mon, 24 Oct 2022 10:25:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=y1rr3SuzTx4+VSNLhUbJG8kHUD97eG7n0PTphv4eVAg=;
+ b=tP96pfR7y0WNwl5Oahwq626J46hrmj+Uco9tUYaSC2Mlfr1q5BFTCkj8bCSogw81G5ou
+ 8N7U2a+TTaoySn8KvuXHIZEHCFlVB9alEniWHRuPafegtNoo+8D6m71INR0h2atkiLD5
+ iz7J1T80xQQtAs6axzTcRKZe3GtZAKZJloM/Gj4FDkqkH1JA/Onb2Fgs+YLr+RF7xB4+
+ 8ZVAKgSo7USM3szfz3vFWC5/Z46XAVmlN8Ef+OpmYWQhLRi//qdeJmN6IqEQox7VQqSA
+ O/QbWMFzQhl411UylzZ9tibtHg/kb3fSF4FjK80Mst1+wmAsu5cZpAnMfztpd/CSI1m3 Sw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kc7v29djc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 10:25:42 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 57F0610002A;
+        Mon, 24 Oct 2022 10:25:36 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EC7A621683A;
+        Mon, 24 Oct 2022 10:25:36 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
+ 2022 10:25:36 +0200
+Message-ID: <3392048d-e7a9-efb2-b795-30ee0c6ad6d1@foss.st.com>
+Date:   Mon, 24 Oct 2022 10:25:35 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] ARM: dts: stm32: add support for USB2514B onboard hub on
+ stm32mp157c-ev1
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <amelie.delaunay@foss.st.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20220930145643.249099-1-fabrice.gasnier@foss.st.com>
+Content-Language: en-US
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20220930145643.249099-1-fabrice.gasnier@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_02,2022-10-21_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for MDI-X status and configuration for KSZ9131 chips
+Hi Fabrice,
 
-Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
----
-Change List:
-============
-V0 -> V1:
- - Drop the "_" from the end of the macros
- - Add KSZ9131 MDI-X specific register contain 9131 in macro names 
+On 9/30/22 16:56, Fabrice Gasnier wrote:
+> Add support for USB2514B onboard hub on stm32mp157c EV1 board. The HUB
+> is supplied by a 3v3 PMIC regulator.
+> 
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+>   arch/arm/boot/dts/stm32mp157c-ev1.dts | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp157c-ev1.dts b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+> index e22e394832a8..a0ff92662e02 100644
+> --- a/arch/arm/boot/dts/stm32mp157c-ev1.dts
+> +++ b/arch/arm/boot/dts/stm32mp157c-ev1.dts
+> @@ -362,6 +362,14 @@ &usart3 {
+>   &usbh_ehci {
+>   	phys = <&usbphyc_port0>;
+>   	status = "okay";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	/* onboard HUB */
+> +	hub@1 {
+> +		compatible = "usb424,2514";
+> +		reg = <1>;
+> +		vdd-supply = <&v3v3>;
+> +	};
+>   };
+>   
+>   &usbotg_hs {
 
- drivers/net/phy/micrel.c | 77 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+Applied on stm32-next.
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 54a17b576eac..26ce0c5defcd 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -1295,6 +1295,81 @@ static int ksz9131_config_init(struct phy_device *phydev)
- 	return 0;
- }
- 
-+#define MII_KSZ9131_AUTO_MDIX		0x1C
-+#define MII_KSZ9131_AUTO_MDI_SET	BIT(7)
-+#define MII_KSZ9131_AUTO_MDIX_SWAP_OFF	BIT(6)
-+
-+static int ksz9131_mdix_update(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	ret = phy_read(phydev, MII_KSZ9131_AUTO_MDIX);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (ret & MII_KSZ9131_AUTO_MDIX_SWAP_OFF) {
-+		if (ret & MII_KSZ9131_AUTO_MDI_SET)
-+			phydev->mdix_ctrl = ETH_TP_MDI;
-+		else
-+			phydev->mdix_ctrl = ETH_TP_MDI_X;
-+	} else {
-+		phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
-+	}
-+
-+	if (ret & MII_KSZ9131_AUTO_MDI_SET)
-+		phydev->mdix = ETH_TP_MDI;
-+	else
-+		phydev->mdix = ETH_TP_MDI_X;
-+
-+	return 0;
-+}
-+
-+static int ksz9131_config_mdix(struct phy_device *phydev, u8 ctrl)
-+{
-+	u16 val;
-+
-+	switch (ctrl) {
-+	case ETH_TP_MDI:
-+		val = MII_KSZ9131_AUTO_MDIX_SWAP_OFF |
-+		      MII_KSZ9131_AUTO_MDI_SET;
-+		break;
-+	case ETH_TP_MDI_X:
-+		val = MII_KSZ9131_AUTO_MDIX_SWAP_OFF;
-+		break;
-+	case ETH_TP_MDI_AUTO:
-+		val = 0;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	return phy_modify(phydev, MII_KSZ9131_AUTO_MDIX,
-+			  MII_KSZ9131_AUTO_MDIX_SWAP_OFF |
-+			  MII_KSZ9131_AUTO_MDI_SET, val);
-+}
-+
-+static int ksz9131_read_status(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	ret = ksz9131_mdix_update(phydev);
-+	if (ret < 0)
-+		return ret;
-+
-+	return genphy_read_status(phydev);
-+}
-+
-+static int ksz9131_config_aneg(struct phy_device *phydev)
-+{
-+	int ret;
-+
-+	ret = ksz9131_config_mdix(phydev, phydev->mdix_ctrl);
-+	if (ret)
-+		return ret;
-+
-+	return genphy_config_aneg(phydev);
-+}
-+
- #define KSZ8873MLL_GLOBAL_CONTROL_4	0x06
- #define KSZ8873MLL_GLOBAL_CONTROL_4_DUPLEX	BIT(6)
- #define KSZ8873MLL_GLOBAL_CONTROL_4_SPEED	BIT(4)
-@@ -3304,6 +3379,8 @@ static struct phy_driver ksphy_driver[] = {
- 	.probe		= kszphy_probe,
- 	.config_init	= ksz9131_config_init,
- 	.config_intr	= kszphy_config_intr,
-+	.config_aneg	= ksz9131_config_aneg,
-+	.read_status	= ksz9131_read_status,
- 	.handle_interrupt = kszphy_handle_interrupt,
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
--- 
-2.25.1
-
+Thanks
+Alex
