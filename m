@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123F760BFA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9AE60BFAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbiJYAdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
+        id S229678AbiJYAfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJYAdO (ORCPT
+        with ESMTP id S230175AbiJYAex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:33:14 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9082BB1E;
-        Mon, 24 Oct 2022 15:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666652294; x=1698188294;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Dg022xT9wrRgqUOEQj0+Hywo+Hdp+CKqSuOIoBjxANA=;
-  b=C22EG5XcyJX2f9Ys6Grt+UBMZlGLH/lCGgd7tZ1gN1686+UC7ougWr99
-   aIrHkzfS74BbWWuz0Ch+Fdb+qBXcqD2O1oHy+0BMpHJl9ZaYRYZwz16Pt
-   /IBNuH/SgBPSY7gxkAm+dO19oVm9ev8d+Mr0Texj/K9+28FugoE/Kf0mr
-   JFXCkeOWuAlqGL0L87ToRM0OzVfrlqdHNIwYED8UGTK+tI3PwDgi3t+3g
-   xSciMN9ruUD6oYTfGDUSXspM1IbIYMZ3GrZCpQ3BQynOshUa7SnLsxUG/
-   lPZFlnO4LglySCyrzjRs5lXame45ywF+xnPOe50wc30nNrQlui1ugoyp3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="308633276"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="308633276"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 15:57:56 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="609363407"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="609363407"
-Received: from pkearns-mobl1.amr.corp.intel.com (HELO guptapa-desk.intel.com) ([10.252.131.64])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 15:57:56 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     scott.d.constable@intel.com, daniel.sneddon@linux.intel.com,
-        Jakub Kicinski <kuba@kernel.org>, dave.hansen@intel.com,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        antonio.gomez.iglesias@linux.intel.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, gregkh@linuxfoundation.org, netdev@vger.kernel.org
-Subject: [RFC PATCH 2/2] minstrel_ht: Mitigate BTI gadget minstrel_ht_get_expected_throughput()
-Date:   Mon, 24 Oct 2022 15:57:47 -0700
-Message-Id: <ceb2bcdc79f1494151e85734fa7bdc639df275bb.1666651511.git.pawan.kumar.gupta@linux.intel.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <cover.1666651511.git.pawan.kumar.gupta@linux.intel.com>
-References: <cover.1666651511.git.pawan.kumar.gupta@linux.intel.com>
+        Mon, 24 Oct 2022 20:34:53 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8082D8736;
+        Mon, 24 Oct 2022 16:00:55 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mx9Xf3qLKz4x1V;
+        Tue, 25 Oct 2022 10:00:50 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666652451;
+        bh=eotwvGasqAc4vnaOIwXKE/43nzNnMiRZsXgTE3pyD1k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VcS/ETfzGrzXYQEwO8swqZ0EakpKIb0yKyGtXJzUMSeYFUvv2foRfXl81HxhqP9Bo
+         J43k3qY0moQ0pRem55wC8Q4C/aB2QlvRlw5LJo9j6ZvPkT9AeVKH+yg+6UV4w3k0Qz
+         fxsjrlNQgT2ajxVYJyUyIc7bMIDrPoOzTB1pof2cXFjnW01ItjSFJqrbtFwRNMlLl0
+         3QWvaTghiO1ckzYPjoy8ByR+gFovnZLCyGxasSVs5lEZDnMiSOmZkEVZczrl8xY5tW
+         bRh11zbH3O0ofvaaWLlPmcqEyuS1wlAtFLIxm0WN0Mjvcmxt14hqh7iTBWv2udo7Ym
+         29x0vYYV8RcqA==
+Date:   Tue, 25 Oct 2022 10:00:48 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the input tree
+Message-ID: <20221025100048.49384530@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/J7Z6Km5Qa2LFiaGFGDNFuRp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Static analysis indicate that indirect target
-minstrel_ht_get_expected_throughput() could be used as a disclosure
-gadget for Intra-mode Branch Target Injection (IMBTI) and Branch History
-Injection (BHI).
+--Sig_/J7Z6Km5Qa2LFiaGFGDNFuRp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-ASM generated by compilers indicate a construct of a typical disclosure
-gadget, where an adversary-controlled register contents can be used to
-transiently access an arbitrary memory location.
+Hi all,
 
-Although there are no known ways to exploit this, but to be on safer
-side mitigate it by adding a speculation barrier.
+After merging the input tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Reported-by: Scott D. Constable <scott.d.constable@intel.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
----
- net/mac80211/rc80211_minstrel_ht.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+drivers/input/keyboard/stmpe-keypad.c: In function 'stmpe_keypad_probe':
+drivers/input/keyboard/stmpe-keypad.c:353:9: error: implicit declaration of=
+ function 'of_property_read_u32' [-Werror=3Dimplicit-function-declaration]
+  353 |         of_property_read_u32(np, "debounce-interval", &keypad->debo=
+unce_ms);
+      |         ^~~~~~~~~~~~~~~~~~~~
+drivers/input/keyboard/stmpe-keypad.c:355:33: error: implicit declaration o=
+f function 'of_property_read_bool' [-Werror=3Dimplicit-function-declaration]
+  355 |         keypad->no_autorepeat =3D of_property_read_bool(np, "st,no-=
+autorepeat");
+      |                                 ^~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-diff --git a/net/mac80211/rc80211_minstrel_ht.c b/net/mac80211/rc80211_minstrel_ht.c
-index 3d91b98db099..7cf90666a865 100644
---- a/net/mac80211/rc80211_minstrel_ht.c
-+++ b/net/mac80211/rc80211_minstrel_ht.c
-@@ -11,6 +11,7 @@
- #include <linux/moduleparam.h>
- #include <linux/ieee80211.h>
- #include <linux/minmax.h>
-+#include <linux/nospec.h>
- #include <net/mac80211.h>
- #include "rate.h"
- #include "sta_info.h"
-@@ -1999,6 +2000,14 @@ static u32 minstrel_ht_get_expected_throughput(void *priv_sta)
- 	struct minstrel_ht_sta *mi = priv_sta;
- 	int i, j, prob, tp_avg;
- 
-+	/*
-+	 * Protect against IMBTI/BHI.
-+	 *
-+	 * Transiently executing this function with an adversary controlled
-+	 * argument may disclose secrets. Speculation barrier prevents that.
-+	 */
-+	barrier_nospec();
-+
- 	i = MI_RATE_GROUP(mi->max_tp_rate[0]);
- 	j = MI_RATE_IDX(mi->max_tp_rate[0]);
- 	prob = mi->groups[i].rates[j].prob_avg;
--- 
-2.37.3
+Caused by commit
 
+  8b96465c93a8 ("Input: matrix_keypad - replace header inclusions by forwar=
+d declarations")
+
+I have used the input tree from next-20221024 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/J7Z6Km5Qa2LFiaGFGDNFuRp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNXGSAACgkQAVBC80lX
+0GwSawf/c802VDOd96XgmbLkMH1QBVAKFfQdYBzdIZUAMDHcpAzn7InFvIotmYPf
+uo7mGcEor0woempAZv8iLrdpJYA6JvoGko8J0cyEzaHtRRBOmqDITa3KbbBwr28V
+lzI39ItsRAV3sMnWX1l2n2exmQ63MqXx04+C3/vkciq+Xj5wgEfYgOJ9Qle/4s4p
+a7fO4oCDI0vZ25GZHOgDkXhaVON+tZPZTzCop/1FKTNTwnQvRFcjIM4URX+JHnqn
+UziJAxCKvSalmB/b7WGwdFV/HWQE4O/ynZ4Do8mVoe435F+bJSWEEtl0l6Lz4/H+
+38ftIex7fdrS81Nzre7XBiafqJqkqg==
+=b6b1
+-----END PGP SIGNATURE-----
+
+--Sig_/J7Z6Km5Qa2LFiaGFGDNFuRp--
