@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E44860BB3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 117DF60BB4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235232AbiJXUwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44554 "EHLO
+        id S235084AbiJXUyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235158AbiJXUv7 (ORCPT
+        with ESMTP id S235242AbiJXUxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:51:59 -0400
+        Mon, 24 Oct 2022 16:53:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E806D84C;
-        Mon, 24 Oct 2022 11:58:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A4BA7AB3;
+        Mon, 24 Oct 2022 12:00:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8F7D6125A;
-        Mon, 24 Oct 2022 12:01:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0537C433D6;
-        Mon, 24 Oct 2022 12:01:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BDCE61259;
+        Mon, 24 Oct 2022 12:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51696C433D7;
+        Mon, 24 Oct 2022 12:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612875;
-        bh=JQ1YhggFy28azsY8urVLO5ERLFM3p0+gWjXW8vwNE0I=;
+        s=korg; t=1666613421;
+        bh=mgOxfyx21Abf6dzZ0R2ImjjUuO/7RuhL89xIScdUt0k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FW2icNrybvPuk32RgZfs9DiGAGy4skpoIxkyGC94whg/EGAImrtFycTUH9KrU7BZE
-         r9Gggxubsjiq2gNBOGUb6ik38qa2sPjeqmNhSoK+623TMFe2+epkYuipET2ppApaw4
-         EREr3onGw71vGhFirub+oWtIkWBa+rqXhi1gTESA=
+        b=m1C96i4iZZXtthMlmJl5Lwez+aY9iKNLZIwPCTpeGhX8A2zowxPS9a/f3jqBYM7bM
+         xftQJowQnxiXbPDDY8kVJrIaw+lq8tuXuWKHwmd6mnBLrATQs3zO0aPQSpKDFV67Oo
+         Wy+3SEIsSoXtZEYnwokZdOPQeLwaBbsCyctZAQmQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 121/229] clk: oxnas: Hold reference returned by of_get_parent()
-Date:   Mon, 24 Oct 2022 13:30:40 +0200
-Message-Id: <20221024113002.910201690@linuxfoundation.org>
+Subject: [PATCH 5.4 131/255] media: exynos4-is: fimc-is: Add of_node_put() when breaking out of loop
+Date:   Mon, 24 Oct 2022 13:30:41 +0200
+Message-Id: <20221024113006.929167878@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +57,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Liang He <windhl@126.com>
 
-[ Upstream commit 1d6aa08c54cd0e005210ab8e3b1e92ede70f8a4f ]
+[ Upstream commit 211f8304fa21aaedc2c247f0c9d6c7f1aaa61ad7 ]
 
-In oxnas_stdclk_probe(), we need to hold the reference returned by
-of_get_parent() and use it to call of_node_put() for refcount
-balance.
+In fimc_is_register_subdevs(), we need to call of_node_put() for
+the reference 'i2c_bus' when breaking out of the
+for_each_compatible_node() which has increased the refcount.
 
-Fixes: 0bbd72b4c64f ("clk: Add Oxford Semiconductor OXNAS Standard Clocks")
+Fixes: 9a761e436843 ("[media] exynos4-is: Add Exynos4x12 FIMC-IS driver")
 Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220628143155.170550-1-windhl@126.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/clk-oxnas.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-is.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/clk-oxnas.c b/drivers/clk/clk-oxnas.c
-index e51e0023fc6e..a92bf71f03ac 100644
---- a/drivers/clk/clk-oxnas.c
-+++ b/drivers/clk/clk-oxnas.c
-@@ -218,7 +218,7 @@ static const struct of_device_id oxnas_stdclk_dt_ids[] = {
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+index 9bb14bb2e498..c78c2a7f03fa 100644
+--- a/drivers/media/platform/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/exynos4-is/fimc-is.c
+@@ -214,6 +214,7 @@ static int fimc_is_register_subdevs(struct fimc_is *is)
  
- static int oxnas_stdclk_probe(struct platform_device *pdev)
- {
--	struct device_node *np = pdev->dev.of_node;
-+	struct device_node *np = pdev->dev.of_node, *parent_np;
- 	const struct oxnas_stdclk_data *data;
- 	const struct of_device_id *id;
- 	struct regmap *regmap;
-@@ -230,7 +230,9 @@ static int oxnas_stdclk_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	data = id->data;
- 
--	regmap = syscon_node_to_regmap(of_get_parent(np));
-+	parent_np = of_get_parent(np);
-+	regmap = syscon_node_to_regmap(parent_np);
-+	of_node_put(parent_np);
- 	if (IS_ERR(regmap)) {
- 		dev_err(&pdev->dev, "failed to have parent regmap\n");
- 		return PTR_ERR(regmap);
+ 			if (ret < 0 || index >= FIMC_IS_SENSORS_NUM) {
+ 				of_node_put(child);
++				of_node_put(i2c_bus);
+ 				return ret;
+ 			}
+ 			index++;
 -- 
 2.35.1
 
