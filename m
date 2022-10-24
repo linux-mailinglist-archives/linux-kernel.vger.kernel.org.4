@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB38160A970
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5EA60ABBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiJXNUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S236735AbiJXNzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235987AbiJXNS4 (ORCPT
+        with ESMTP id S236437AbiJXNxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:18:56 -0400
+        Mon, 24 Oct 2022 09:53:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C653CA52EF;
-        Mon, 24 Oct 2022 05:27:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37967BC466;
+        Mon, 24 Oct 2022 05:43:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E7069612CA;
-        Mon, 24 Oct 2022 12:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E70C433D6;
-        Mon, 24 Oct 2022 12:23:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C575612B3;
+        Mon, 24 Oct 2022 12:43:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B204CC433D6;
+        Mon, 24 Oct 2022 12:43:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614187;
-        bh=FGLUiA+nI5EoWurmpv9dwxt2Cwd9+rHSJ5m5kYCZDGs=;
+        s=korg; t=1666615390;
+        bh=HZaN/LuBXVRxq6KpjERBiJycbpJDZKdsXB0MQGoEFeE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MMQESAQPUb6KUjoQkKO64OFIbjeZMEMtSdC1A2Ehfh/NfXEsAAmLpEBWN/ZZk3iSJ
-         NL8fQiUszwPjBPAOGmS4+/Hc88LJoBGC/LrzEhuJp/C4axjHSw7Y/aFhKg1r5DEkvL
-         CIiSjg+X9NWz76G3U56G+vjS/2xWXUVrXsQ6eurM=
+        b=08TjDNxjNkBCXxfKmMJTCLZF5FrVnozWNReXorZPYJ7M6pXnqSearYuLAGshFNbJo
+         9mFbyIWKnxe1wlRJMlWA7IUdH8+TR+Zl/WdZ0NV7PqJfTZlq7pnSZ+Na6rJjvVXSYK
+         OMg99vGkYieq7D6YtazYC14aDZDRKtQLGC6vUs5o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
+        stable@vger.kernel.org, Oleksandr Shamray <oleksandrs@nvidia.com>,
+        Vadim Pasternak <vadimp@nvidia.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 148/390] platform/chrome: fix memory corruption in ioctl
+Subject: [PATCH 5.15 201/530] hwmon: (pmbus/mp2888) Fix sensors readouts for MPS Multi-phase mp2888 controller
 Date:   Mon, 24 Oct 2022 13:29:05 +0200
-Message-Id: <20221024113028.991208637@linuxfoundation.org>
+Message-Id: <20221024113054.151557603@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Oleksandr Shamray <oleksandrs@nvidia.com>
 
-[ Upstream commit 8a07b45fd3c2dda24fad43639be5335a4595196a ]
+[ Upstream commit 525dd5aed67a2f4f7278116fb92a24e6a53e2622 ]
 
-If "s_mem.bytes" is larger than the buffer size it leads to memory
-corruption.
+Fix scale factors for reading MPS Multi-phase mp2888 controller.
+Fixed sensors:
+    - PIN/POUT: based on vendor documentation, set bscale factor 0.5W/LSB
+    - IOUT: based on vendor documentation, set scale factor 0.25 A/LSB
 
-Fixes: eda2e30c6684 ("mfd / platform: cros_ec: Miscellaneous character device to talk with the EC")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-Link: https://lore.kernel.org/r/Yv8dpCFZJdbUT5ye@kili
+Fixes: e4db7719d037 ("hwmon: (pmbus) Add support for MPS Multi-phase mp2888 controller")
+Signed-off-by: Oleksandr Shamray <oleksandrs@nvidia.com>
+Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+Link: https://lore.kernel.org/r/20220929121642.63051-1-oleksandrs@nvidia.com
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/chrome/cros_ec_chardev.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/hwmon/pmbus/mp2888.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
-index fd33de546aee..0de7c255254e 100644
---- a/drivers/platform/chrome/cros_ec_chardev.c
-+++ b/drivers/platform/chrome/cros_ec_chardev.c
-@@ -327,6 +327,9 @@ static long cros_ec_chardev_ioctl_readmem(struct cros_ec_dev *ec,
- 	if (copy_from_user(&s_mem, arg, sizeof(s_mem)))
- 		return -EFAULT;
+diff --git a/drivers/hwmon/pmbus/mp2888.c b/drivers/hwmon/pmbus/mp2888.c
+index 8ecd4adfef40..24e5194706cf 100644
+--- a/drivers/hwmon/pmbus/mp2888.c
++++ b/drivers/hwmon/pmbus/mp2888.c
+@@ -34,7 +34,7 @@ struct mp2888_data {
+ 	int curr_sense_gain;
+ };
  
-+	if (s_mem.bytes > sizeof(s_mem.buffer))
-+		return -EINVAL;
-+
- 	num = ec_dev->cmd_readmem(ec_dev, s_mem.offset, s_mem.bytes,
- 				  s_mem.buffer);
- 	if (num <= 0)
+-#define to_mp2888_data(x)  container_of(x, struct mp2888_data, info)
++#define to_mp2888_data(x)	container_of(x, struct mp2888_data, info)
+ 
+ static int mp2888_read_byte_data(struct i2c_client *client, int page, int reg)
+ {
+@@ -109,7 +109,7 @@ mp2888_read_phase(struct i2c_client *client, struct mp2888_data *data, int page,
+ 	 * - Kcs is the DrMOS current sense gain of power stage, which is obtained from the
+ 	 *   register MP2888_MFR_VR_CONFIG1, bits 13-12 with the following selection of DrMOS
+ 	 *   (data->curr_sense_gain):
+-	 *   00b - 5µA/A, 01b - 8.5µA/A, 10b - 9.7µA/A, 11b - 10µA/A.
++	 *   00b - 8.5µA/A, 01b - 9.7µA/A, 1b - 10µA/A, 11b - 5µA/A.
+ 	 * - Rcs is the internal phase current sense resistor. This parameter depends on hardware
+ 	 *   assembly. By default it is set to 1kΩ. In case of different assembly, user should
+ 	 *   scale this parameter by dividing it by Rcs.
+@@ -118,10 +118,9 @@ mp2888_read_phase(struct i2c_client *client, struct mp2888_data *data, int page,
+ 	 * because sampling of current occurrence of bit weight has a big deviation, especially for
+ 	 * light load.
+ 	 */
+-	ret = DIV_ROUND_CLOSEST(ret * 100 - 9800, data->curr_sense_gain);
+-	ret = (data->phase_curr_resolution) ? ret * 2 : ret;
++	ret = DIV_ROUND_CLOSEST(ret * 200 - 19600, data->curr_sense_gain);
+ 	/* Scale according to total current resolution. */
+-	ret = (data->total_curr_resolution) ? ret * 8 : ret * 4;
++	ret = (data->total_curr_resolution) ? ret * 2 : ret;
+ 	return ret;
+ }
+ 
+@@ -212,7 +211,7 @@ static int mp2888_read_word_data(struct i2c_client *client, int page, int phase,
+ 		ret = pmbus_read_word_data(client, page, phase, reg);
+ 		if (ret < 0)
+ 			return ret;
+-		ret = data->total_curr_resolution ? ret * 2 : ret;
++		ret = data->total_curr_resolution ? ret : DIV_ROUND_CLOSEST(ret, 2);
+ 		break;
+ 	case PMBUS_POUT_OP_WARN_LIMIT:
+ 		ret = pmbus_read_word_data(client, page, phase, reg);
+@@ -223,7 +222,7 @@ static int mp2888_read_word_data(struct i2c_client *client, int page, int phase,
+ 		 * set 1. Actual power is reported with 0.5W or 1W respectively resolution. Scaling
+ 		 * is needed to match both.
+ 		 */
+-		ret = data->total_curr_resolution ? ret * 4 : ret * 2;
++		ret = data->total_curr_resolution ? ret * 2 : ret;
+ 		break;
+ 	/*
+ 	 * The below registers are not implemented by device or implemented not according to the
 -- 
 2.35.1
 
