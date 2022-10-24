@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD6160A47F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31FD60A7AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbiJXMLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S234759AbiJXMzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiJXMKD (ORCPT
+        with ESMTP id S234946AbiJXMyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:10:03 -0400
+        Mon, 24 Oct 2022 08:54:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAD12BB0A;
-        Mon, 24 Oct 2022 04:53:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB20D14D2E;
+        Mon, 24 Oct 2022 05:14:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29C516129E;
-        Mon, 24 Oct 2022 11:46:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37632C433D6;
-        Mon, 24 Oct 2022 11:46:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23004612B3;
+        Mon, 24 Oct 2022 11:56:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 348DFC433D6;
+        Mon, 24 Oct 2022 11:56:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611972;
-        bh=iafMQX0LLGAsrS6c7Ds92V5u8tPAuViCsplCLjBiFQs=;
+        s=korg; t=1666612606;
+        bh=5/+T7+Hbc+gs+Q2MxLjLyv7qCijM55C8bgamH/I/2XQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l8tpyBib/eObZuC/jQB6lR2lLm8XFJGAIYMhB1b2UJ6Zo/89GV3IdLQu/H47YsJw9
-         8I25WGivDCfCoaGnGxnovfKe5mC5nHJrwHQ+tx/Rm0WNdHLzY0R4CDgU8pu9S9VQF1
-         m9GJcLL3RjnbfLG+wiCl9Oe5wJ8eYMuuqtlpHulk=
+        b=ge9O/pTENp2klJzHO4VlyiHqLK3YDCVeS45Wt6/+sEumoQ9FwY/Wg56ridGV1/G+B
+         6Msr6nl1wtyO74eKN4IaF+8t4f1W2tXpWGcC5dCHDKrJJ09l9leMmGfOZ1rOd0YHim
+         7stdK2V+zCQxH6F652gIUO24ZIId/IZkx15uLxpk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Popov <alex.popov@linux.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@the-dreams.de>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Subject: [PATCH 4.14 021/210] i2c: dev: prevent ZERO_SIZE_PTR deref in i2cdev_ioctl_rdwr()
-Date:   Mon, 24 Oct 2022 13:28:58 +0200
-Message-Id: <20221024112957.648694176@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        syzbot+fbb3e0b24e8dae5a16ee@syzkaller.appspotmail.com,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.19 020/229] nilfs2: replace WARN_ONs by nilfs_error for checkpoint acquisition failure
+Date:   Mon, 24 Oct 2022 13:28:59 +0200
+Message-Id: <20221024112959.796764482@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Popov <alex.popov@linux.com>
+From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-commit 23a27722b5292ef0b27403c87a109feea8296a5c upstream.
+commit 723ac751208f6d6540191689cfbf6c77135a7a1b upstream.
 
-i2cdev_ioctl_rdwr() allocates i2c_msg.buf using memdup_user(), which
-returns ZERO_SIZE_PTR if i2c_msg.len is zero.
+If creation or finalization of a checkpoint fails due to anomalies in the
+checkpoint metadata on disk, a kernel warning is generated.
 
-Currently i2cdev_ioctl_rdwr() always dereferences the buf pointer in case
-of I2C_M_RD | I2C_M_RECV_LEN transfer. That causes a kernel oops in
-case of zero len.
+This patch replaces the WARN_ONs by nilfs_error, so that a kernel, booted
+with panic_on_warn, does not panic.  A nilfs_error is appropriate here to
+handle the abnormal filesystem condition.
 
-Let's check the len against zero before dereferencing buf pointer.
+This also replaces the detected error codes with an I/O error so that
+neither of the internal error codes is returned to callers.
 
-This issue was triggered by syzkaller.
-
-Signed-off-by: Alexander Popov <alex.popov@linux.com>
-Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-[wsa: use '< 1' instead of '!' for easier readability]
-Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
-[Harshit: backport to 4.14.y, use rdwr_pa[i].len instead of msgs[i].len
-as the 4.14.y  code uses rdwr_pa.]
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Link: https://lkml.kernel.org/r/20220929123330.19658-1-konishi.ryusuke@gmail.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: syzbot+fbb3e0b24e8dae5a16ee@syzkaller.appspotmail.com
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/i2c-dev.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nilfs2/segment.c |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -297,7 +297,7 @@ static noinline int i2cdev_ioctl_rdwr(st
- 		 */
- 		if (rdwr_pa[i].flags & I2C_M_RECV_LEN) {
- 			if (!(rdwr_pa[i].flags & I2C_M_RD) ||
--			    rdwr_pa[i].buf[0] < 1 ||
-+			    rdwr_pa[i].len < 1 || rdwr_pa[i].buf[0] < 1 ||
- 			    rdwr_pa[i].len < rdwr_pa[i].buf[0] +
- 					     I2C_SMBUS_BLOCK_MAX) {
- 				i++;
+--- a/fs/nilfs2/segment.c
++++ b/fs/nilfs2/segment.c
+@@ -880,9 +880,11 @@ static int nilfs_segctor_create_checkpoi
+ 		nilfs_mdt_mark_dirty(nilfs->ns_cpfile);
+ 		nilfs_cpfile_put_checkpoint(
+ 			nilfs->ns_cpfile, nilfs->ns_cno, bh_cp);
+-	} else
+-		WARN_ON(err == -EINVAL || err == -ENOENT);
+-
++	} else if (err == -EINVAL || err == -ENOENT) {
++		nilfs_error(sci->sc_super,
++			    "checkpoint creation failed due to metadata corruption.");
++		err = -EIO;
++	}
+ 	return err;
+ }
+ 
+@@ -896,7 +898,11 @@ static int nilfs_segctor_fill_in_checkpo
+ 	err = nilfs_cpfile_get_checkpoint(nilfs->ns_cpfile, nilfs->ns_cno, 0,
+ 					  &raw_cp, &bh_cp);
+ 	if (unlikely(err)) {
+-		WARN_ON(err == -EINVAL || err == -ENOENT);
++		if (err == -EINVAL || err == -ENOENT) {
++			nilfs_error(sci->sc_super,
++				    "checkpoint finalization failed due to metadata corruption.");
++			err = -EIO;
++		}
+ 		goto failed_ibh;
+ 	}
+ 	raw_cp->cp_snapshot_list.ssl_next = 0;
 
 
