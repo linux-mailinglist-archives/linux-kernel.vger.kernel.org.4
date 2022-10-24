@@ -2,174 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773D560BC33
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF8160BC40
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbiJXVbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
+        id S231994AbiJXVdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:33:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbiJXVbN (ORCPT
+        with ESMTP id S229671AbiJXVcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:31:13 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F9F2DCB03
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:37:52 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id s22-20020a17090a075600b002130d2ad62aso3110939pje.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F4R18gWw/NyoA4yOCOs9gzOiiPzbgm4s4hgI5dEXU5E=;
-        b=BHhNWHxiLYRRxn2eEv1Y4eL+d54HNily+HajG8G28PIYrAruN9T50GK1FaIOAt3zSW
-         n5y8w9mU/wbNZrI2roXWmte8p//RntSifApJgIl2rmMOCFdYZN6e7QB3KzNasrmniMeu
-         J+ztLxuK0nnMq/U96KAf2mpDV/1cYo35ROWZ+KTqYMkNEo5v4F38kaVwP7Zvo2Me5Dio
-         tN/01b7AU5kkW+ZwmsRwhg/o7s0+IMTjSaIdktV5CGvbJom8jLAq8L8kwnEBjL1er09C
-         SdX34x/+rqaHgbuEBNsWrnvInQB7cyzQdxuI1OysCKqxJuYI6oo2EEhyGbulgWT58L1F
-         l8vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F4R18gWw/NyoA4yOCOs9gzOiiPzbgm4s4hgI5dEXU5E=;
-        b=JyETLOi0lVaFWIDhlZ7I2WaKppLO3BtwZsOs11NR3DUoygx6QQvJfz7ciLtBDxIsTO
-         B4z60drkjA2LPNEVSmlHK8f6Oe3H8NgmZ8ST/yYhUyJXHd2RsVzVGJB4DwhcsHIakK2E
-         ccglKHIPJFR2Ruw+P6uS+jwcN+QhhOrv7LZFJowJI2efzEQFyJ8sZfXWRGtkFyIgJNf5
-         QHjKKbCV0jjI+sdlA1xqDnCP7+2BGcIyy+8XFgjdrnHxMcckU2OCzp38ECFiRVvFdvOz
-         43LSPZh6DfEFtK+zmxPXMQuWIiFQZ7xCXUC0DgCTTMa4bbUNjiW2J9aYeIdbQ7TrLT+j
-         c8qA==
-X-Gm-Message-State: ACrzQf1aPXDZn7549R2D8kDd76Obyl4UdZHk52I0HQog7Y2747bHkk5h
-        k1QdX3rSlZUeHtLM8PLCJYFwfg==
-X-Google-Smtp-Source: AMsMyM7In0jAw/pPqnOgZ6bFpbRpbK+BszDf6oq9ay48JxN4rT3G+A4b0LMshpTxQEgyg/C77Pyf8Q==
-X-Received: by 2002:a17:902:ff0a:b0:185:293d:dbe3 with SMTP id f10-20020a170902ff0a00b00185293ddbe3mr35024715plj.28.1666640206449;
-        Mon, 24 Oct 2022 12:36:46 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id r10-20020a63d90a000000b00458a0649474sm106756pgg.11.2022.10.24.12.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 12:36:46 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 19:36:42 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, pbonzini@redhat.com,
-        dmatlack@google.com, kvm@vger.kernel.org, shujunxue@google.com,
-        terrytaehyun@google.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] Add Hyperv extended hypercall support in KVM
-Message-ID: <Y1bpSlNGeVkqRYxI@google.com>
-References: <20221021185916.1494314-1-vipinsh@google.com>
- <Y1L9Z8RgIs8yrU6o@google.com>
- <CAHVum0eoA5j7EPmmuuUb2y7XOU1jRpFwJO90tc+QBy0JNUtBsQ@mail.gmail.com>
- <Y1MXgjtPT9U6Cukk@google.com>
- <87k04pbfqd.fsf@ovpn-193-3.brq.redhat.com>
- <Y1atxgq2SDkHbP9I@google.com>
- <CAHVum0f=gRgrP=rTySn1zwPz65g6jm_3f-=qusmS7jOkKyUMSw@mail.gmail.com>
+        Mon, 24 Oct 2022 17:32:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCA2186DD;
+        Mon, 24 Oct 2022 12:39:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5E8661575;
+        Mon, 24 Oct 2022 19:37:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB923C433C1;
+        Mon, 24 Oct 2022 19:37:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666640271;
+        bh=GTzGyK5ICOdcW3TRbCJOV0+yXyHnU9QoAMm0ZKS8v1c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ALITZss1pRbrMLdGnnQCScYQIAox+NcvETAU1maabpqGSPYDt06K5VvFXuzFOtgAT
+         jnUpj/4Kf8pzKh4YkR7sbKknASD6DgQJlDKWscUF7ErS2PwmolbpJ9NUFUdmUwPueA
+         IgF7ZhjNzcHl46dHOByqrTfML814kg079KcqiHjuFhr0eCyyMuHY88XK1LI1SosyT8
+         RmlTXj2E59MkGAh/Mzcf3gbOXYexxeuJM6dfHGmjSxYb//EvbyHfzjWvSzb+x1fBhP
+         b7wI7EEXjwuDvwVeQRYKT5m20PvJ5Knq12gE3A7rfbPy826UEx4gyTJI5LksnTxp+5
+         h0pKCrJ70TL/g==
+From:   Conor Dooley <conor@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Padmarao Begari <padmarao.begari@microchip.com>
+Subject: [RFC] riscv: dts: microchip: add OPPs to mpfs
+Date:   Mon, 24 Oct 2022 20:36:48 +0100
+Message-Id: <20221024193647.1089769-1-conor@kernel.org>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHVum0f=gRgrP=rTySn1zwPz65g6jm_3f-=qusmS7jOkKyUMSw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022, Vipin Sharma wrote:
-> On Mon, Oct 24, 2022 at 8:22 AM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, Oct 24, 2022, Vitaly Kuznetsov wrote:
-> > > While some 'extended' hypercalls may indeed need to be handled in KVM,
-> > > there's no harm done in forwarding all unknown-to-KVM hypercalls to
-> > > userspace. The only issue I envision is how would userspace discover
-> > > which extended hypercalls are supported by KVM in case it (userspace) is
-> > > responsible for handling HvExtCallQueryCapabilities call which returns
-> > > the list of supported hypercalls. E.g. in case we decide to implement
-> > > HvExtCallMemoryHeatHint in KVM, how are we going to communicate this to
-> > > userspace?
-> > >
-> > > Normally, VMM discovers the availability of Hyper-V features through
-> > > KVM_GET_SUPPORTED_HV_CPUID but extended hypercalls are not listed in
-> > > CPUID. This can be always be solved by adding new KVM CAPs of
-> > > course. Alternatively, we can add a single
-> > > "KVM_CAP_HYPERV_EXT_CALL_QUERY" which will just return the list of
-> > > extended hypercalls supported by KVM (which Vipin's patch adds anyway to
-> > > *set* the list instead).
-> >
-> > AIUI, the TLFS uses a 64-bit mask to enumerate which extended hypercalls are
-> > supported, so a single CAP should be a perfect fit.  And KVM can use the capability
-> > to enumerate support for _and_ to allow userspace to enable in-kernel handling.  E.g.
-> >
-> > check():
-> >         case KVM_CAP_HYPERV_EXT_CALL:
-> >                 return KVM_SUPPORTED_HYPERV_EXT_CALL;
-> >
-> >
-> > enable():
-> >
-> >         case KVM_CAP_HYPERV_EXT_CALL:
-> >                 r = -EINVAL;
-> >                 if (mask & ~KVM_SUPPORTED_HYPERV_EXT_CALL)
-> >                         break;
-> >
-> >                 mutex_lock(&kvm->lock);
-> >                 if (!kvm->created_vcpus) {
-> 
-> Any reason for setting capability only after vcpus are created?
+From: Conor Dooley <conor.dooley@microchip.com>
 
-This only allows setting the capability _before_ vCPUs are created.  Attempting
-to set the cap after vCPUs are created gets rejected with -EINVAL.  This
-requirement means vCPUs don't need to take a lock to consume per-VM state, as KVM
-prevents the state from changing once vCPUs are created.
+The U-Boot dts for mpfs defines three OPPs which are missing from the
+Linux dts. For ease of synchronisation of the two, add the missing OPPs
+to the Linux dt too.
 
-> Also, in my patch I wrote the ioctl at kvm_vcpu_ioctl_enable_cap() as
-> all of the hyperv related code was there but since this capability is
-> a vm setting not a per vcpu setting, should this be at  kvm_vm_ioctl()
-> as a better choice?
+CC: Padmarao Begari <padmarao.begari@microchip.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
 
-Yep!
+Hey Padmarao,
+I've been trying to pick off the bits that're different between the Linux
+& U-Boot dts. Do you remember why we added OPPs to the U-Boot dts but
+didn't propagate them elsewhere?
 
-> >                         to_kvm_hv(kvm)->ext_call = cap->args[0];
-> >                         r = 0;
-> >                 }
-> >                 mutex_unlock(&kvm->lock);
-> >
-> > kvm_hv_hypercall()
-> >
-> >
-> >         case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
-> >                 if (unlikely(hc.fast)) {
-> >                         ret = HV_STATUS_INVALID_PARAMETER;
-> >                         break;
-> >                 }
-> >                 if (!(hc.code & to_kvm_hv(vcpu->kvm)->ext_call))
-> 
-> It won't be directly this. There will be a mapping of hc.code to the
-> corresponding bit and then "&" with ext_call.
-> 
-> 
-> >                         goto hypercall_userspace_exit;
-> >
-> >                 ret = kvm_hv_ext_hypercall(...)
-> >                 break;
-> >
-> >
-> > That maintains backwards compatibility with "exit on everything" as userspace
-> > still needs to opt-in to having KVM handle specific hypercalls in-kernel, and it
-> > provides the necessary knob for userspace to tell KVM which hypercalls should be
-> > allowed, i.e. ensures KVM doesn't violate HV_EXT_CALL_QUERY_CAPABILITIES.
-> 
-> So, should I send a version with KVM capability similar to above
+ arch/riscv/boot/dts/microchip/mpfs.dtsi | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-No, the above was just a sketch of how we can extend support if necessary.  In
-general, we try to avoid creating _any_ APIs before they are strictly required.
-For uAPIs, that's pretty much a hard rule.
+diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
+index 0a9bb84af438..9d9ff7174341 100644
+--- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
++++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
+@@ -23,6 +23,7 @@ cpu0: cpu@0 {
+ 			reg = <0>;
+ 			riscv,isa = "rv64imac";
+ 			clocks = <&clkcfg CLK_CPU>;
++			operating-points-v2 = <&cluster0_opps>;
+ 			status = "disabled";
+ 
+ 			cpu0_intc: interrupt-controller {
+@@ -51,6 +52,7 @@ cpu1: cpu@1 {
+ 			clocks = <&clkcfg CLK_CPU>;
+ 			tlb-split;
+ 			next-level-cache = <&cctrllr>;
++			operating-points-v2 = <&cluster0_opps>;
+ 			status = "okay";
+ 
+ 			cpu1_intc: interrupt-controller {
+@@ -79,6 +81,7 @@ cpu2: cpu@2 {
+ 			clocks = <&clkcfg CLK_CPU>;
+ 			tlb-split;
+ 			next-level-cache = <&cctrllr>;
++			operating-points-v2 = <&cluster0_opps>;
+ 			status = "okay";
+ 
+ 			cpu2_intc: interrupt-controller {
+@@ -107,6 +110,7 @@ cpu3: cpu@3 {
+ 			clocks = <&clkcfg CLK_CPU>;
+ 			tlb-split;
+ 			next-level-cache = <&cctrllr>;
++			operating-points-v2 = <&cluster0_opps>;
+ 			status = "okay";
+ 
+ 			cpu3_intc: interrupt-controller {
+@@ -136,6 +140,7 @@ cpu4: cpu@4 {
+ 			tlb-split;
+ 			next-level-cache = <&cctrllr>;
+ 			status = "okay";
++			operating-points-v2 = <&cluster0_opps>;
+ 			cpu4_intc: interrupt-controller {
+ 				#interrupt-cells = <1>;
+ 				compatible = "riscv,cpu-intc";
+@@ -166,6 +171,24 @@ core4 {
+ 				};
+ 			};
+ 		};
++
++		cluster0_opps: opp-table {
++			compatible = "operating-points-v2";
++			opp-shared;
++
++			opp-600000000 {
++			    opp-hz = /bits/ 64 <600000000>;
++			    opp-microvolt = <1100000>;
++			};
++			opp-300000000 {
++			    opp-hz = /bits/ 64 <300000000>;
++			    opp-microvolt = <950000>;
++			};
++			opp-150000000 {
++			    opp-hz = /bits/ 64 <150000000>;
++			    opp-microvolt = <750000>;
++			};
++		};
+ 	};
+ 
+ 	refclk: mssrefclk {
+-- 
+2.38.0
 
-> or for now just send the version which by default exit to userspace and later
-> whenever the need arises KVM capability can be added then?
-
-This one please :-)
