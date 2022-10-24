@@ -2,193 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029AA60BA43
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0A360B921
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiJXUbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S230332AbiJXUE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234307AbiJXUaj (ORCPT
+        with ESMTP id S234323AbiJXUEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:30:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909A8106A6E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:42:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D8205CE13C1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:15:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BAD9C433C1;
-        Mon, 24 Oct 2022 16:15:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666628118;
-        bh=fbb9TnyA4/QkQJN70OgJtJjtXVcbpv/1y+hOOr3/wPc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dFybjEOCLlMv8grYfY0I4MiqF+Ww8ZGQCeLIqhmF8tony0k7HuNvErIitm1JgIBbM
-         xGLMfLfjRLMYzjZJeZDOnHYrwoNh/GGB5tTW3yP/nnGPlOejt4fBaPAq40LUl3CArB
-         qMS8WTcP3IUBD6aoV4lxwRLFu5xaoKXbk9iCu5uIevLy7Ua9a/a5VB1b5ZmY4kXPSZ
-         Ut/FVUKndGeEFHwE0MDt2fKlaFJV2MhrdZZy63Xw2hl5SWy7+guy1NyMcpK4qgi9gf
-         FMjbCdzl4VRck7aj0nw7vTeMG6PPDsXHfAK5wcl95ScxdowLjS65D6TtMkrju/0JEY
-         jMtNnq48xwFlg==
-Date:   Mon, 24 Oct 2022 19:15:02 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] memblock: remove repeat round
-Message-ID: <Y1a6BoawCoDDCo/K@kernel.org>
-References: <20221019120337.2098298-1-yajun.deng@linux.dev>
+        Mon, 24 Oct 2022 16:04:33 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C2B171CC8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:25:43 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id d13so6602190qko.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kkHt7s7VueS+yqyVhguewaguIXeRKiiObRdiVTmhMq4=;
+        b=p0wlLhqXrK6ojJ02m/2cIRUXP1W6sSSk3fUAwF328I0sJ3lYsP6NXYr2EBQdrTxwg2
+         PsfXWuGh7tWOY6xhkbd7gS+lnkiqqnk1IRyGqLZpr0I3iqiGwYaHlbnH17OPz2jd4/7t
+         RFDImnE+MwfMzyynMlkQyRnRki3OTEGmgEUyfiae7ksAAjT6IbZRRpii6oigTWJnHqTq
+         Z6ZXpvHOvU+Plj6eytpMons6DnYioavxI0Me5Z5tokui3UGgaPY0v5ybWDUL8FRFegGO
+         stwFELVTywZ2tZ804IkaVmuI49Y3MGu/Bk9Al7X5/lwSelRbijnzB8I4ST9wr07V5uP+
+         JBbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kkHt7s7VueS+yqyVhguewaguIXeRKiiObRdiVTmhMq4=;
+        b=EXDunZ2AZazhyWg5jV2hsvcofj6RKbaKfBU/jntja/8Jb0xTJTfizVYILIbKcyXwp1
+         cC4lvwfaNJFSdH3R1Z7Ph/d01yelY5Kw1abXNXw1fJnsz585v6yhq8qI77AwoEEOfv+e
+         YPc7b3GEu+psL8eGpeT339avUwk2111CONNv9jP2zxToscRP86BLyBzsqWi2jX67+77o
+         B0d/GM2Eun+hEzooQc+J0cNxS9X1JrD98u9g9jpjntRtmzRdPmH1k/g0MD+VAo3HKpdw
+         toWFnMnN0EhDlYhLFqtfn+N1pUKLt3e1kTuAuXd6l8aPpmYXqoopeP+XHK/CPkTMpLgh
+         nwNw==
+X-Gm-Message-State: ACrzQf0TBc/ijCAYgcr5uSKVfaQb3q/ERq+IFvAfGaXEz9/2Ihq83NTl
+        d9HyTuVDBI3EH19zX+CE/LnNUl7UV5+elA==
+X-Google-Smtp-Source: AMsMyM4qoSseM95jLEm1elg8JEI6QXvCaGObqWcc5rQia54ewHUCVM578288JqDT4Iu4iJZI7rsS4Q==
+X-Received: by 2002:a05:622a:211:b0:39c:f429:e03a with SMTP id b17-20020a05622a021100b0039cf429e03amr29174644qtx.389.1666628200951;
+        Mon, 24 Oct 2022 09:16:40 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id d1-20020ac847c1000000b00398df095cf5sm181944qtr.34.2022.10.24.09.16.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 09:16:40 -0700 (PDT)
+Message-ID: <0312d875-3e94-ebb6-017f-5f7559269d9e@linaro.org>
+Date:   Mon, 24 Oct 2022 12:16:38 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019120337.2098298-1-yajun.deng@linux.dev>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 10/13] arm64: dts: qcom: sm8450: add spmi node
+To:     konrad.dybcio@somainline.org
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211209103505.197453-1-vkoul@kernel.org>
+ <20211209103505.197453-11-vkoul@kernel.org>
+ <5035b6a3-164b-afa0-b714-4deb886f9f90@linaro.org>
+ <59859752dbafda83c801c6a7bf0a06e1@somainline.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <59859752dbafda83c801c6a7bf0a06e1@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 24/10/2022 11:06, konrad.dybcio@somainline.org wrote:
+> On 2022-10-24 16:56, Krzysztof Kozlowski wrote:
+>> On 09/12/2021 05:35, Vinod Koul wrote:
+>>> Add the spmi bus as found in the SM8450 SoC
+>>>
+>>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 18 ++++++++++++++++++
+>>>  1 file changed, 18 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi 
+>>> b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> index f75de777f6ea..b80e34fd3fe1 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>> @@ -645,6 +645,24 @@ pdc: interrupt-controller@b220000 {
+>>>  			interrupt-controller;
+>>>  		};
+>>>
+>>> +		spmi_bus: spmi@c42d000 {
+>>> +			compatible = "qcom,spmi-pmic-arb";
+>>> +			reg = <0x0 0x0c400000 0x0 0x00003000>,
+>>> +			      <0x0 0x0c500000 0x0 0x00400000>,
+>>> +			      <0x0 0x0c440000 0x0 0x00080000>,
+>>> +			      <0x0 0x0c4c0000 0x0 0x00010000>,
+>>> +			      <0x0 0x0c42d000 0x0 0x00010000>;
+>>
+>> This is a patch from December 2021. Is there anything blocking it from
+>> being merged?
+> I think it depended on a series of changes to the driver, as 8450 has a 
+> newer SPMI ver
+>
 
-On Wed, Oct 19, 2022 at 08:03:37PM +0800, Yajun Deng wrote:
-> Subject: memblock: remove repeat round
+If the new device node in DTS (for new hardware) depends on driver
+changes, then something here is completely broken. Probably in the
+bindings for Qualcomm SPMI PMIC.
 
-Please make the patch subject more detailed. Say
+I expect adding DTS independently of driver changes. It anyway goes
+always via separate branches.
 
-membloc: don't run loop in memblock_add_range() twice
+Best regards,
+Krzysztof
 
-> There is no need round twice in memblock_add_range().
-> 
-> We can call memblock_double_array() to extand the size if type->cnt no
-
-                                        ^ extend
-
-> less than type->max before memblock_insert_region(), otherwise we can
-
-s/no less than/greater or equal to/
-
-> insert the new region directly.
-> 
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> ---
->  mm/memblock.c | 54 +++++++++++++++------------------------------------
->  1 file changed, 16 insertions(+), 38 deletions(-)
-> 
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 511d4783dcf1..1679244b4a1a 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -578,7 +578,6 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->  				phys_addr_t base, phys_addr_t size,
->  				int nid, enum memblock_flags flags)
->  {
-> -	bool insert = false;
->  	phys_addr_t obase = base;
->  	phys_addr_t end = base + memblock_cap_size(base, &size);
->  	int idx, nr_new;
-> @@ -598,22 +597,6 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->  		return 0;
->  	}
->  
-> -	/*
-> -	 * The worst case is when new range overlaps all existing regions,
-> -	 * then we'll need type->cnt + 1 empty regions in @type. So if
-> -	 * type->cnt * 2 + 1 is less than type->max, we know
-> -	 * that there is enough empty regions in @type, and we can insert
-> -	 * regions directly.
-> -	 */
-> -	if (type->cnt * 2 + 1 < type->max)
-> -		insert = true;
-> -
-> -repeat:
-> -	/*
-> -	 * The following is executed twice.  Once with %false @insert and
-> -	 * then with %true.  The first counts the number of regions needed
-> -	 * to accommodate the new area.  The second actually inserts them.
-> -	 */
->  	base = obase;
->  	nr_new = 0;
-
-I believe nr_new variable is no longer needed, is it?
-  
-> @@ -635,10 +618,14 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->  #endif
->  			WARN_ON(flags != rgn->flags);
->  			nr_new++;
-> -			if (insert)
-> -				memblock_insert_region(type, idx++, base,
-> -						       rbase - base, nid,
-> -						       flags);
-> +
-> +			if ((type->cnt >= type->max) &&
-> +			    (memblock_double_array(type, obase, size) < 0))
-
-	if ((type->cnt >= type->max) &&
-	    memblock_double_array(type, obase, size))
-
-would be just fine.
-
-I'd appreciate a comment above the if statement explaining when the
-allocation is required.
-
-> +				return -ENOMEM;
-> +
-> +			memblock_insert_region(type, idx++, base,
-> +					       rbase - base, nid,
-> +					       flags);
->  		}
->  		/* area below @rend is dealt with, forget about it */
->  		base = min(rend, end);
-> @@ -647,28 +634,19 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
->  	/* insert the remaining portion */
->  	if (base < end) {
->  		nr_new++;
-> -		if (insert)
-> -			memblock_insert_region(type, idx, base, end - base,
-> -					       nid, flags);
-> +		if ((type->cnt >= type->max) &&
-> +		    (memblock_double_array(type, obase, size) < 0))
-> +			return -ENOMEM;
-> +
-> +		memblock_insert_region(type, idx, base, end - base,
-> +				       nid, flags);
->  	}
->  
->  	if (!nr_new)
->  		return 0;
->  
-> -	/*
-> -	 * If this was the first round, resize array and repeat for actual
-> -	 * insertions; otherwise, merge and return.
-> -	 */
-> -	if (!insert) {
-> -		while (type->cnt + nr_new > type->max)
-> -			if (memblock_double_array(type, obase, size) < 0)
-> -				return -ENOMEM;
-> -		insert = true;
-> -		goto repeat;
-> -	} else {
-> -		memblock_merge_regions(type);
-> -		return 0;
-> -	}
-> +	memblock_merge_regions(type);
-
-A blank line here would be nice.
-
-> +	return 0;
->  }
->  
->  /**
-> -- 
-> 2.25.1
-> 
-> 
-
--- 
-Sincerely yours,
-Mike.
