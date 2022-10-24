@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFF960BB14
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4579060BA65
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiJXUqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
+        id S234487AbiJXUgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235564AbiJXUpG (ORCPT
+        with ESMTP id S233230AbiJXUgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:45:06 -0400
+        Mon, 24 Oct 2022 16:36:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3F918C942;
-        Mon, 24 Oct 2022 11:52:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055BA1B1572;
+        Mon, 24 Oct 2022 11:48:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59D89B819AA;
-        Mon, 24 Oct 2022 12:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A81B1C433D6;
-        Mon, 24 Oct 2022 12:43:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE0A9B819AB;
+        Mon, 24 Oct 2022 12:43:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B25CC433D6;
+        Mon, 24 Oct 2022 12:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615416;
-        bh=5DPq8quTcRFNe6hitrL+3zKyCXpM8J1RY/qwMK/2jnw=;
+        s=korg; t=1666615418;
+        bh=ZrkEGWId4ZhNj0J5PD/RwxU0pxiFWSFrDgAXTQr1kA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RE3Ll/kkiLAk2lNQcPhpVcFFxyQUlL9MtrZoF+9fujklmb5RmDPrzSd4b+R6XIRYz
-         0aUQLuEi4pXO+Zmd6CDoK8nBrCDj/pLtOYvnyO4a+oVz4/hSGO0TkNHjkG+m0aUIBU
-         qLaOp+QGSEV+HqqEv9hgjbRWfYLRPR8cjMxlVZvI=
+        b=g+pCMv9I9OGokHTpOCpAirNiBYNwS8UhuUfkXUT7RCM/g9gv6OFOEODHCurKaTyGe
+         6sdjHWG2P8CUqR/qQMV00q4uG72mm+hRz3nn0CGpYEF0NQESTAyWW9DpkKHgD5T4FO
+         dF2JZWkuvS6IeGahd/anDBm/WFVRzrQlOBXAG5g8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 243/530] ASoC: wm5102: Fix PM disable depth imbalance in wm5102_probe
-Date:   Mon, 24 Oct 2022 13:29:47 +0200
-Message-Id: <20221024113056.105559527@linuxfoundation.org>
+Subject: [PATCH 5.15 244/530] ASoC: mt6660: Fix PM disable depth imbalance in mt6660_i2c_probe
+Date:   Mon, 24 Oct 2022 13:29:48 +0200
+Message-Id: <20221024113056.156167635@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
 References: <20221024113044.976326639@linuxfoundation.org>
@@ -56,47 +56,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit fcbb60820cd3008bb44334a0395e5e57ccb77329 ]
+[ Upstream commit b73f11e895e140537e7f8c7251211ccd3ce0782b ]
 
 The pm_runtime_enable will increase power disable depth. Thus
 a pairing decrement is needed on the error handling path to
 keep it balanced according to context. We fix it by moving
-pm_runtime_enable to the endding of wm5102_probe.
+pm_runtime_enable to the endding of mt6660_i2c_probe.
 
-Fixes:93e8791dd34ca ("ASoC: wm5102: Initial driver")
+Fixes:f289e55c6eeb4 ("ASoC: Add MediaTek MT6660 Speaker Amp Driver")
 
 Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-Link: https://lore.kernel.org/r/20220928160116.125020-4-zhangqilong3@huawei.com
+Link: https://lore.kernel.org/r/20220928160116.125020-5-zhangqilong3@huawei.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/wm5102.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ sound/soc/codecs/mt6660.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/wm5102.c b/sound/soc/codecs/wm5102.c
-index 621598608bf0..c8adce8936bc 100644
---- a/sound/soc/codecs/wm5102.c
-+++ b/sound/soc/codecs/wm5102.c
-@@ -2087,9 +2087,6 @@ static int wm5102_probe(struct platform_device *pdev)
- 		regmap_update_bits(arizona->regmap, wm5102_digital_vu[i],
- 				   WM5102_DIG_VU, WM5102_DIG_VU);
- 
--	pm_runtime_enable(&pdev->dev);
--	pm_runtime_idle(&pdev->dev);
--
- 	ret = arizona_request_irq(arizona, ARIZONA_IRQ_DSP_IRQ1,
- 				  "ADSP2 Compressed IRQ", wm5102_adsp2_irq,
- 				  wm5102);
-@@ -2122,6 +2119,9 @@ static int wm5102_probe(struct platform_device *pdev)
- 		goto err_spk_irqs;
+diff --git a/sound/soc/codecs/mt6660.c b/sound/soc/codecs/mt6660.c
+index 358c500377df..a0a3fd60e93a 100644
+--- a/sound/soc/codecs/mt6660.c
++++ b/sound/soc/codecs/mt6660.c
+@@ -504,13 +504,17 @@ static int mt6660_i2c_probe(struct i2c_client *client,
+ 		dev_err(chip->dev, "read chip revision fail\n");
+ 		goto probe_fail;
  	}
+-	pm_runtime_set_active(chip->dev);
+-	pm_runtime_enable(chip->dev);
  
-+	pm_runtime_enable(&pdev->dev);
-+	pm_runtime_idle(&pdev->dev);
+ 	ret = devm_snd_soc_register_component(chip->dev,
+ 					       &mt6660_component_driver,
+ 					       &mt6660_codec_dai, 1);
++	if (!ret) {
++		pm_runtime_set_active(chip->dev);
++		pm_runtime_enable(chip->dev);
++	}
 +
  	return ret;
- 
- err_spk_irqs:
++
+ probe_fail:
+ 	_mt6660_chip_power_on(chip, 0);
+ 	mutex_destroy(&chip->io_lock);
 -- 
 2.35.1
 
