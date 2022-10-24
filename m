@@ -2,121 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8885609FDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524F2609FED
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJXLLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S229824AbiJXLNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiJXLLD (ORCPT
+        with ESMTP id S230076AbiJXLND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:11:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E570F3AB3C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:10:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 936BF21E6C;
-        Mon, 24 Oct 2022 11:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666609858; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c9LyPhw0fn06VJLpIWBBedHqVCQTOByd+fZNTw6i+9w=;
-        b=P7qhGZV/D7QYWARtAPR+FrgfXcrTC5U0U0uwHWNnGBGLmtf7c4Q62C/dBRUu+zp3S6pzSo
-        2S0X1nzT5dDsti3bk5WZuMZBPJGWaOZmw0LWOOtvCELQNjg57atjdUiIN8PIHXHLajP9ZK
-        KO84Y1BhxdEFbBoHPiBtih8zgdm6gu0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666609858;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c9LyPhw0fn06VJLpIWBBedHqVCQTOByd+fZNTw6i+9w=;
-        b=DbpVXtLXVrQcCfak4I6tx3O3sJjO2NeyGKACOfwHdp5t0U4ftk2WPocXxe+Xe4KV1VQZhT
-        bQ3A2yveLjESqXBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6733D13357;
-        Mon, 24 Oct 2022 11:10:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jkuAGMJyVmN+LAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 24 Oct 2022 11:10:58 +0000
-Message-ID: <e6b415c8-4905-8bbd-fe72-d3d95d77c890@suse.cz>
-Date:   Mon, 24 Oct 2022 13:10:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] mm/slub: remove dead code for debug caches on
- deactivate_slab()
-Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        Mon, 24 Oct 2022 07:13:03 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B7F52FEB;
+        Mon, 24 Oct 2022 04:12:48 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id k8so6874928wrh.1;
+        Mon, 24 Oct 2022 04:12:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nM1eROY2hqOAD8ZSvyDw9Yar9WGgqxzJ+6QCeBCS/mI=;
+        b=LLE2Yz7OEonPF7D0+0abGw2AQ3B93CdA35s8Uj7DGIvYZ3ijuFseCeEMTN5dimPron
+         saJAjcRy/VQp7h7qF7XT8FrjL7kYp9uU6FisfH2VjfUv9J7knOPELMIW8WdyusX2AHq9
+         rrjFQX04Sd3JucEIyl9Ln0/uHynkzEufVqavnRf139U9w9y2Z8QXrdTa/BALOBowxw8l
+         /jWFYC8QNPZDOquw8KbKMuClQOkUnnX0Uign4+5ovifV5mcqWI7plq5sGSs5ojnY///E
+         FV53R+BDOBr4IIfqsvRYnsEE8QTWA22Y8aTAj3jc7lPHivbZ2IHb4B80u0Wayczn+MaZ
+         9dug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nM1eROY2hqOAD8ZSvyDw9Yar9WGgqxzJ+6QCeBCS/mI=;
+        b=VMr+zGSak5SVbwku1rI5fVi3yuVINvYlCSw/QQ9pvxrDBQlKZbGy93gi0CrQLT6kf9
+         wSScOhiqU0TkUExgRbLhogX3ZJDgZllXg+ZNS0YBVFnN/sPdI/BC2UXiQ+HrCRrY+hha
+         nZXTrHtDLFw+H/n2bt7HYgj1tvFIjC/3hLM8YvGQUAKL9Kx4UJq4hj2mPANb4zYkO7c6
+         ynaD+wDTxtxVf1K2cCl91DyxxrrwbMIsF7hAqLGFsqstpuwgo5BVEbGDhzizQgjmJq/f
+         PZ9COXJq+o/CEdw8VcJSlPfjA+ORzfUt//jH5CjvKgZ0hDIcYDVuI3SjH2CEooXS+TPE
+         UlDA==
+X-Gm-Message-State: ACrzQf1pX/y5l2NZ2Yhh9XVIWunDWcDwXbml/AS/JnOci+ZovrybvZ4f
+        orZP3vw+xC7seGiBu9u+Z3gNZMQZmco=
+X-Google-Smtp-Source: AMsMyM7erXDlwc7JTKT7OdNomoEgHf0YYZIj8RVVOJBkjVDgpB9tfkweVLtmSfOU30d6WFXOj/ZMkA==
+X-Received: by 2002:a5d:522f:0:b0:235:c877:5cdc with SMTP id i15-20020a5d522f000000b00235c8775cdcmr14848004wra.352.1666609966590;
+        Mon, 24 Oct 2022 04:12:46 -0700 (PDT)
+Received: from hthiery.kontron.local ([213.135.10.150])
+        by smtp.gmail.com with ESMTPSA id d1-20020adffbc1000000b00236695ff94fsm4501309wrs.34.2022.10.24.04.12.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 04:12:45 -0700 (PDT)
+From:   Heiko Thiery <heiko.thiery@gmail.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-References: <20221014114322.97512-1-42.hyeyoo@gmail.com>
- <82e8147e-f031-6bc2-9395-56d2052e62cb@suse.cz> <Y1NuEhXgxmr2OHeH@hyeyoo>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <Y1NuEhXgxmr2OHeH@hyeyoo>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Heiko Thiery <heiko.thiery@gmail.com>
+Subject: [PATCH] arm64: dts: imx8mq-kontron-pitx-imx8m: remove off-on-delay-us for regulator-usdhc2-vmmc
+Date:   Mon, 24 Oct 2022 13:12:31 +0200
+Message-Id: <20221024111230.1335233-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/22/22 06:14, Hyeonggon Yoo wrote:
-> On Fri, Oct 21, 2022 at 12:43:42PM +0200, Vlastimil Babka wrote:
->> On 10/14/22 13:43, Hyeonggon Yoo wrote:
->> > After commit c7323a5ad0786 ("mm/slub: restrict sysfs validation to debug
->> > caches and make it safe"), SLUB does not take a slab from partial list for
->> 
->> I'm confused by "SLUB does not take a slab from partial list" here. Did you
->> mean something like "SLUB never installs (even temporarily) a percpu slab
->> for debug caches"?
-> 
-> Yes.
-> 
->> So that means we never deactivate percpu slabs for debug
->> caches.
-> 
-> Yes.
-> 
->> And since debug caches are also the only ones that use the full
->> list, we no longer need to care about the full list in deactivate_slab(), right?
-> 
-> Yes, You got it right, exactly!
-> 
-> Let me rephrase:
-> 
-> "After commit c7323a5ad0786 ("mm/slub: restrict sysfs validation to debug
-> caches and make it safe"), SLUB never installs percpu slab for debug caches
-> and thus never deactivates percpu slab for them.
-> 
-> Since only some of debug caches care about the full list, SLUB no longer
-> deactivates to full list. Remove dead code in deactivate_slab()."
-> 
-> 
-> Feel free to change this ;-)
+The delay is not required and can be remove.
 
-Great, thanks!
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-Pushed to slab/for-6.2/cleanups
-
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts b/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
+index a91c136797f6..21442e04a632 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
+@@ -51,7 +51,6 @@ reg_usdhc2_vmmc: regulator-usdhc2-vmmc {
+ 		regulator-min-microvolt = <3300000>;
+ 		regulator-max-microvolt = <3300000>;
+ 		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
+-		off-on-delay-us = <20000>;
+ 		enable-active-high;
+ 	};
+ };
+-- 
+2.30.2
 
