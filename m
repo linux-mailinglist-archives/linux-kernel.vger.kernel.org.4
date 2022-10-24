@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB1060A700
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C381D60A5AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234208AbiJXMni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
+        id S233784AbiJXM2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234081AbiJXMlz (ORCPT
+        with ESMTP id S233742AbiJXM1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:41:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720C28A7FB;
-        Mon, 24 Oct 2022 05:08:34 -0700 (PDT)
+        Mon, 24 Oct 2022 08:27:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0A2857D0;
+        Mon, 24 Oct 2022 05:01:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0581612B9;
-        Mon, 24 Oct 2022 11:56:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03D2C433D6;
-        Mon, 24 Oct 2022 11:56:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20225B81031;
+        Mon, 24 Oct 2022 11:46:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 762D6C433D7;
+        Mon, 24 Oct 2022 11:46:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612609;
-        bh=2Q21U+OZtgQgt7+d3W97F/pzkhbw11NkEC8p2AfJ2q0=;
+        s=korg; t=1666611977;
+        bh=Cp7+DWlpUZah8k86BOmAXEwfQ215gZeltIl98Wd2g/c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=urhT5ZuajtL4XZ+Y1udKcnzab0aupcjTfsS6nF4Pp4F923OghplBappwQTQWHI0Fl
-         om6tsh963BgZ9juqga7Q9Hg3gFSoI6rzFB38SBhRG9kJsm7iEcyQJ2BED8/hSmSDms
-         0BI1/8FNIpzfzaZopawAjIRFZCSZfwoTL6g/av3w=
+        b=nxaYOUH8vnpY3j2vEHT1rhGbpdubRHBUS/0zf8j7rUJN8ry1reXe+m0mhWTa0CPEQ
+         aMEG/k6GnNm2qvr8Gs0t/ezEschSCDMJpF9QOC507UliCzYKMLMXqZkzxs6Zjq2gye
+         c9lYrySmRChlJoa177CzaJBCzBDWFMOFWJNGpnj0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hu Weiwen <sehuww@mail.scut.edu.cn>,
-        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
-Subject: [PATCH 4.19 021/229] ceph: dont truncate file in atomic_open
+        stable@vger.kernel.org, butt3rflyh4ck <butterflyhuangxx@gmail.com>,
+        Hao Sun <sunhao.th@gmail.com>, Jiacheng Xu <stitch@zju.edu.cn>,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: [PATCH 4.14 023/210] fs: fix UAF/GPF bug in nilfs_mdt_destroy
 Date:   Mon, 24 Oct 2022 13:29:00 +0200
-Message-Id: <20221024112959.826609588@linuxfoundation.org>
+Message-Id: <20221024112957.719455844@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,52 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hu Weiwen <sehuww@mail.scut.edu.cn>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-commit 7cb9994754f8a36ae9e5ec4597c5c4c2d6c03832 upstream.
+commit 2e488f13755ffbb60f307e991b27024716a33b29 upstream.
 
-Clear O_TRUNC from the flags sent in the MDS create request.
+In alloc_inode, inode_init_always() could return -ENOMEM if
+security_inode_alloc() fails, which causes inode->i_private
+uninitialized. Then nilfs_is_metadata_file_inode() returns
+true and nilfs_free_inode() wrongly calls nilfs_mdt_destroy(),
+which frees the uninitialized inode->i_private
+and leads to crashes(e.g., UAF/GPF).
 
-`atomic_open' is called before permission check. We should not do any
-modification to the file here. The caller will do the truncation
-afterward.
+Fix this by moving security_inode_alloc just prior to
+this_cpu_inc(nr_inodes)
 
-Fixes: 124e68e74099 ("ceph: file operations")
-Signed-off-by: Hu Weiwen <sehuww@mail.scut.edu.cn>
-Reviewed-by: Xiubo Li <xiubli@redhat.com>
-Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
-[Xiubo: fixed a trivial conflict for 5.10 backport]
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
+Link: https://lkml.kernel.org/r/CAFcO6XOcf1Jj2SeGt=jJV59wmhESeSKpfR0omdFRq+J9nD1vfQ@mail.gmail.com
+Reported-by: butt3rflyh4ck <butterflyhuangxx@gmail.com>
+Reported-by: Hao Sun <sunhao.th@gmail.com>
+Reported-by: Jiacheng Xu <stitch@zju.edu.cn>
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: stable@vger.kernel.org
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ceph/file.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ fs/inode.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -446,6 +446,12 @@ int ceph_atomic_open(struct inode *dir,
- 	if (dentry->d_name.len > NAME_MAX)
- 		return -ENAMETOOLONG;
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -165,8 +165,6 @@ int inode_init_always(struct super_block
+ 	inode->i_wb_frn_history = 0;
+ #endif
  
-+	/*
-+	 * Do not truncate the file, since atomic_open is called before the
-+	 * permission check. The caller will do the truncation afterward.
-+	 */
-+	flags &= ~O_TRUNC;
+-	if (security_inode_alloc(inode))
+-		goto out;
+ 	spin_lock_init(&inode->i_lock);
+ 	lockdep_set_class(&inode->i_lock, &sb->s_type->i_lock_key);
+ 
+@@ -194,11 +192,12 @@ int inode_init_always(struct super_block
+ 	inode->i_fsnotify_mask = 0;
+ #endif
+ 	inode->i_flctx = NULL;
 +
- 	if (flags & O_CREAT) {
- 		if (ceph_quota_is_max_files_exceeded(dir))
- 			return -EDQUOT;
-@@ -478,9 +484,7 @@ int ceph_atomic_open(struct inode *dir,
++	if (unlikely(security_inode_alloc(inode)))
++		return -ENOMEM;
+ 	this_cpu_inc(nr_inodes);
  
- 	req->r_parent = dir;
- 	set_bit(CEPH_MDS_R_PARENT_LOCKED, &req->r_req_flags);
--	err = ceph_mdsc_do_request(mdsc,
--				   (flags & (O_CREAT|O_TRUNC)) ? dir : NULL,
--				   req);
-+	err = ceph_mdsc_do_request(mdsc, (flags & O_CREAT) ? dir : NULL, req);
- 	err = ceph_handle_snapdir(req, dentry, err);
- 	if (err)
- 		goto out_req;
+ 	return 0;
+-out:
+-	return -ENOMEM;
+ }
+ EXPORT_SYMBOL(inode_init_always);
+ 
 
 
