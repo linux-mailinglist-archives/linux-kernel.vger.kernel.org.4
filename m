@@ -2,97 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2912B60B34A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD3B60B261
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229895AbiJXRCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S234973AbiJXQqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiJXRA5 (ORCPT
+        with ESMTP id S234764AbiJXQor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:00:57 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE02EC51B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:38:15 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id g7so17361779lfv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uNRDUP9ouWlmlPu6POZXr/UqktEd3BwTrOrVcJ1HXpQ=;
-        b=Zre2CJjpDPgZ3ML+5uYe3oKtSH6m3xLiU4J6QrCHDDpo5kZY8xjs2ItrKKTfLcDYht
-         TVO4nENelYErdKgDYpqW6aR729OTlE/NHjfrcLDV8Crl51KvdX2Wyl3dH2Jegc8K29VM
-         lRVPQ90tlZl8N0YSyJgTFvwLm3nRrtNjasWxI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNRDUP9ouWlmlPu6POZXr/UqktEd3BwTrOrVcJ1HXpQ=;
-        b=sgXB0l2qgrIblvzP3bH/UXk3ypwutP6mdeYwpEGvncwI6aqeFVFWqUWALMwwnFOxuU
-         gvgdfA4gQWJ52WUhW+e8b0MxZRz4C9UiOdQ+AhEyCCGOnihr6JaAE48QpmzW5I0BTg9r
-         jU9kSTS++bI47Tzi7MUNBMrmvmUGDnSsHPM6M9i0RXwh0B528tquduLkdwBtHovPROlx
-         hAM9bFgTjvWc2YKbVTGwCFy5SWhnwq+XAd892hRLvZJtn8G7Kq7cD2FuWCtYiBfj8/WL
-         GON6/fki+fxszk3hA6Q9dK3LS1ZQgChebic/SEqELTU+B24eXlIcrxHsYSegtWjSuy7A
-         tppw==
-X-Gm-Message-State: ACrzQf1jE5dgP2T5/ZbAwpiaQhaHkrxk5YcMfQ4ov4wg7idzMCV1cs6C
-        nMqmrd/aPI3POOSm2t8Jb20zXZI5XIBgfe+QMkY=
-X-Google-Smtp-Source: AMsMyM6GLxv6YpStCWiwlAyLglFzeiLykSKUvCjuukVmFp1jXb2lI1FAJdRQEzwFTD2k7tzPsely6w==
-X-Received: by 2002:a2e:b11a:0:b0:26e:4c9:f7f7 with SMTP id p26-20020a2eb11a000000b0026e04c9f7f7mr11624761ljl.522.1666619290405;
-        Mon, 24 Oct 2022 06:48:10 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id o20-20020a2e7314000000b0025ebaef9570sm4954322ljc.40.2022.10.24.06.48.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 06:48:09 -0700 (PDT)
-Message-ID: <814496ae-4007-9a4e-0466-a0386aec6316@rasmusvillemoes.dk>
-Date:   Mon, 24 Oct 2022 15:48:08 +0200
+        Mon, 24 Oct 2022 12:44:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE4014138A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:30:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C664B81B75
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:52:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1728C433C1;
+        Mon, 24 Oct 2022 13:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666619524;
+        bh=QIHnXVxCIGETsd0dywR9WOXQe2R85leBxjgt9psJDlE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a2H9OWmUuPXe1nsvDHzMz7pk28v9U01aePXWCqE/PYv8mU+b3XDQLri0CqGVaRsJz
+         jDX3YxQNP/rC/SyUqCZ86yUqxIXbKkp05GDQaItPKZLX+Z/tQqtvt0HtDKDldCwU2Z
+         RC0760eEL3DTVNddcLXXtAu1W45/R1VDk/n+VsGo=
+Date:   Mon, 24 Oct 2022 15:52:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org,
+        rafael@kernel.org, somlo@cmu.edu, mst@redhat.com,
+        jaegeuk@kernel.org, chao@kernel.org, hsiangkao@linux.alibaba.com,
+        huangjianan@oppo.com, mark@fasheh.com, jlbec@evilplan.org,
+        joseph.qi@linux.alibaba.com, akpm@linux-foundation.org,
+        alexander.deucher@amd.com, luben.tuikov@amd.com, richard@nod.at,
+        liushixin2@huawei.com
+Subject: Re: [PATCH v2] kset: fix memory leak when kset_register() returns
+ error
+Message-ID: <Y1aYuLmlXBRvMP1Z@kroah.com>
+References: <20221024121910.1169801-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] clk: imx8mp: register driver at arch_initcall time
-Content-Language: en-US
-To:     Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20220928124108.500369-1-linux@rasmusvillemoes.dk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20220928124108.500369-1-linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024121910.1169801-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/09/2022 14.41, Rasmus Villemoes wrote:
-> We have an imx8mp-based board with an external gpio-triggered
-> watchdog. Currently, we don't get to handle that in time before it
-> resets the board.
+On Mon, Oct 24, 2022 at 08:19:10PM +0800, Yang Yingliang wrote:
+> Inject fault while loading module, kset_register() may fail.
+> If it fails, the name allocated by kobject_set_name() which
+> is called before kset_register() is leaked, because refcount
+> of kobject is hold in kset_init().
 > 
-> The probe of the watchdog device gets deferred because the SOC's GPIO
-> controller is not yet ready, and the probe of that in turn gets deferred
-> because its clock provider (namely, this driver) is not yet
-> ready. Altogether, the watchdog does not get handled until the late
-> initcall deferred_probe_initcall has made sure all leftover devices
-> have been probed, and that's way too late.
+> As a kset may be embedded in a larger structure which needs
+> be freed in release() function or error path in callers, we
+> can not call kset_put() in kset_register(), or it will cause
+> double free, so just call kfree_const() to free the name and
+> set it to NULL.
 > 
-> Aside from being necessary for our board, this also reduces total boot
-> time because fewer device probes get deferred.
+> With this fix, the callers don't need to care about the name
+> freeing and call an extra kset_put() if kset_register() fails.
+> 
+> Suggested-by: Luben Tuikov <luben.tuikov@amd.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> ---
+> v1 -> v2:
+>   Free name inside of kset_register() instead of calling kset_put()
+>   in drivers.
+> ---
+>  lib/kobject.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/kobject.c b/lib/kobject.c
+> index a0b2dbfcfa23..3409a89c81e5 100644
+> --- a/lib/kobject.c
+> +++ b/lib/kobject.c
+> @@ -834,6 +834,9 @@ EXPORT_SYMBOL_GPL(kobj_sysfs_ops);
+>  /**
+>   * kset_register() - Initialize and add a kset.
+>   * @k: kset.
+> + *
+> + * NOTE: On error, the kset.kobj.name allocated by() kobj_set_name()
+> + * which is called before kset_register() in caller need be freed.
 
-ping
+This comment doesn't make any sense anymore.  No caller needs to worry
+about this, right?
 
-Rasmus
+>   */
+>  int kset_register(struct kset *k)
+>  {
+> @@ -844,8 +847,11 @@ int kset_register(struct kset *k)
+>  
+>  	kset_init(k);
+>  	err = kobject_add_internal(&k->kobj);
+> -	if (err)
+> +	if (err) {
+> +		kfree_const(k->kobj.name);
+> +		k->kobj.name = NULL;
+
+Why are you setting the name here to NULL?
+
+thanks,
+
+greg k-h
