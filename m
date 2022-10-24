@@ -2,44 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E670460A3F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3490B60A426
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232555AbiJXMC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S230269AbiJXMFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbiJXL7w (ORCPT
+        with ESMTP id S232498AbiJXMDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:59:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281957CA8B;
-        Mon, 24 Oct 2022 04:48:53 -0700 (PDT)
+        Mon, 24 Oct 2022 08:03:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95B82529A;
+        Mon, 24 Oct 2022 04:49:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C5C1612A4;
-        Mon, 24 Oct 2022 11:46:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B07BC433C1;
-        Mon, 24 Oct 2022 11:46:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 160E661297;
+        Mon, 24 Oct 2022 11:46:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2F4C433C1;
+        Mon, 24 Oct 2022 11:46:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612011;
-        bh=bqt6m1xLhtyg7igUxTT0mC5o4h7myk1GVhOnPHbzFAE=;
+        s=korg; t=1666612014;
+        bh=jhLDQTT4TMT/PEN5WFUx8lDz+PpXY7GMiLZ2aEmsCXc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OSTTq83wf82BsAi0l+uWAh59MPwsxiSOX44wWHhZ72p61mr/FgqONDDK0HxNjA/vD
-         cl79YFqMKfOhl+ysA+YA+eNT6E7yYHYp6Il5CmemiWuizKouLbxbgEbwbvYxFGkxXd
-         1QhbgZyznnGVledpsrSiyCt16iiK/26WVPRPrpPY=
+        b=wstHEplyTeePBHY9czhAmpdBhzlSqpqglyEk3AC068+HhOGl7CVt5ZfpXrwwFP1AV
+         2CGkSUrJBrT2R1sjGtJZt7m1Y7wOe0/vB2zSvgeAghGh47JbmToQg572FMWTQb9oYI
+         7PKuWKeeBLzd+It7hsYD+61Yf5ScLqOWoSDw/JWc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maurizio Lombardi <mlombard@redhat.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Chen Lin <chen45464546@163.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        huang ying <huang.ying.caritas@gmail.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Ralph Campbell <rcampbell@nvidia.com>,
         Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.14 008/210] mm: prevent page_frag_alloc() from corrupting the memory
-Date:   Mon, 24 Oct 2022 13:28:45 +0200
-Message-Id: <20221024112957.152189709@linuxfoundation.org>
+Subject: [PATCH 4.14 009/210] mm/migrate_device.c: flush TLB while holding PTL
+Date:   Mon, 24 Oct 2022 13:28:46 +0200
+Message-Id: <20221024112957.183720272@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
 References: <20221024112956.797777597@linuxfoundation.org>
@@ -56,54 +69,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maurizio Lombardi <mlombard@redhat.com>
+From: Alistair Popple <apopple@nvidia.com>
 
-commit dac22531bbd4af2426c4e29e05594415ccfa365d upstream.
+commit 60bae73708963de4a17231077285bd9ff2f41c44 upstream.
 
-A number of drivers call page_frag_alloc() with a fragment's size >
-PAGE_SIZE.
+When clearing a PTE the TLB should be flushed whilst still holding the PTL
+to avoid a potential race with madvise/munmap/etc.  For example consider
+the following sequence:
 
-In low memory conditions, __page_frag_cache_refill() may fail the order
-3 cache allocation and fall back to order 0; In this case, the cache
-will be smaller than the fragment, causing memory corruptions.
+  CPU0                          CPU1
+  ----                          ----
 
-Prevent this from happening by checking if the newly allocated cache is
-large enough for the fragment; if not, the allocation will fail and
-page_frag_alloc() will return NULL.
+  migrate_vma_collect_pmd()
+  pte_unmap_unlock()
+                                madvise(MADV_DONTNEED)
+                                -> zap_pte_range()
+                                pte_offset_map_lock()
+                                [ PTE not present, TLB not flushed ]
+                                pte_unmap_unlock()
+                                [ page is still accessible via stale TLB ]
+  flush_tlb_range()
 
-Link: https://lkml.kernel.org/r/20220715125013.247085-1-mlombard@redhat.com
-Fixes: b63ae8ca096d ("mm/net: Rename and move page fragment handling from net/ to mm/")
-Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
-Cc: Chen Lin <chen45464546@163.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
+In this case the page may still be accessed via the stale TLB entry after
+madvise returns.  Fix this by flushing the TLB while holding the PTL.
+
+Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
+Link: https://lkml.kernel.org/r/9f801e9d8d830408f2ca27821f606e09aa856899.1662078528.git-series.apopple@nvidia.com
+Signed-off-by: Alistair Popple <apopple@nvidia.com>
+Reported-by: Nadav Amit <nadav.amit@gmail.com>
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+Acked-by: David Hildenbrand <david@redhat.com>
+Acked-by: Peter Xu <peterx@redhat.com>
+Cc: Alex Sierra <alex.sierra@amd.com>
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: Felix Kuehling <Felix.Kuehling@amd.com>
+Cc: huang ying <huang.ying.caritas@gmail.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Karol Herbst <kherbst@redhat.com>
+Cc: Logan Gunthorpe <logang@deltatee.com>
+Cc: Lyude Paul <lyude@redhat.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Paul Mackerras <paulus@ozlabs.org>
+Cc: Ralph Campbell <rcampbell@nvidia.com>
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/page_alloc.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ mm/migrate.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -4391,6 +4391,18 @@ refill:
- 		/* reset page count bias and offset to start of new frag */
- 		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
- 		offset = size - fragsz;
-+		if (unlikely(offset < 0)) {
-+			/*
-+			 * The caller is trying to allocate a fragment
-+			 * with fragsz > PAGE_SIZE but the cache isn't big
-+			 * enough to satisfy the request, this may
-+			 * happen in low memory conditions.
-+			 * We don't release the cache page because
-+			 * it could make memory pressure worse
-+			 * so we simply return NULL here.
-+			 */
-+			return NULL;
-+		}
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -2349,13 +2349,14 @@ next:
+ 		migrate->dst[migrate->npages] = 0;
+ 		migrate->src[migrate->npages++] = mpfn;
  	}
+-	arch_leave_lazy_mmu_mode();
+-	pte_unmap_unlock(ptep - 1, ptl);
  
- 	nc->pagecnt_bias--;
+ 	/* Only flush the TLB if we actually modified any entries */
+ 	if (unmapped)
+ 		flush_tlb_range(walk->vma, start, end);
+ 
++	arch_leave_lazy_mmu_mode();
++	pte_unmap_unlock(ptep - 1, ptl);
++
+ 	return 0;
+ }
+ 
 
 
