@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209D460A6E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0B760A4C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbiJXMlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S233073AbiJXMQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233901AbiJXMiD (ORCPT
+        with ESMTP id S233181AbiJXMOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:38:03 -0400
+        Mon, 24 Oct 2022 08:14:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E5089CF3;
-        Mon, 24 Oct 2022 05:06:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D67041525;
+        Mon, 24 Oct 2022 04:55:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 879AD612C3;
-        Mon, 24 Oct 2022 12:05:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E3AC433C1;
-        Mon, 24 Oct 2022 12:05:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4516612CE;
+        Mon, 24 Oct 2022 11:54:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB427C433D6;
+        Mon, 24 Oct 2022 11:54:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613156;
-        bh=QZ6pfJr0Ucw6vmD9lJggPgJH3hSM93RxrgY4K2fGqG0=;
+        s=korg; t=1666612494;
+        bh=fUXui3hNiQJBFOrbrz2xSQ/YsqpV42/0c9IkyRDduHY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hkc4Au0Rdyt98qvd+NcpyEsPaSiuf/0LdB1eoCPWwToV8zsjUb0CxUC71MiMKFkjq
-         ZoJZHDto1sXooTWvZX0EeCIaQsznkEhQ8xU+kPtds8UJrzXs0JDhmlI3W/fQcDoHH7
-         qVkyEL7jx3pC7dGo5F+ZdBS8KGHafoffHFMV90V0=
+        b=hJE8d7/R1pd1q2VTvlryBNw9+Kcgto38mUVqk4hxy+jPXEIrRw91LILPmFhGeftpO
+         85oCVULEuSN4JCi1SZmfvrFrj9VAkJqf4Tw4jXtN7shKcfxYTqdy/8Ac5u9rlfjTuY
+         gBOlz0VhEvmrNKKWwOwY/eife5RUHUJ5ARtc4Jr0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Alexander Dahl <ada@thorsis.com>,
-        Peter Rosin <peda@axentia.se>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.4 009/255] mtd: rawnand: atmel: Unmap streaming DMA mappings
-Date:   Mon, 24 Oct 2022 13:28:39 +0200
-Message-Id: <20221024113002.759123643@linuxfoundation.org>
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 4.19 001/229] Makefile.extrawarn: Move -Wcast-function-type-strict to W=1
+Date:   Mon, 24 Oct 2022 13:28:40 +0200
+Message-Id: <20221024112959.142534431@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -57,39 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tudor Ambarus <tudor.ambarus@microchip.com>
+From: Sami Tolvanen <samitolvanen@google.com>
 
-commit 1161703c9bd664da5e3b2eb1a3bb40c210e026ea upstream.
+commit 2120635108b35ecad9c59c8b44f6cbdf4f98214e upstream.
 
-Every dma_map_single() call should have its dma_unmap_single() counterpart,
-because the DMA address space is a shared resource and one could render the
-machine unusable by consuming all DMA addresses.
+We enable -Wcast-function-type globally in the kernel to warn about
+mismatching types in function pointer casts. Compilers currently
+warn only about ABI incompability with this flag, but Clang 16 will
+enable a stricter version of the check by default that checks for an
+exact type match. This will be very noisy in the kernel, so disable
+-Wcast-function-type-strict without W=1 until the new warnings have
+been addressed.
 
-Link: https://lore.kernel.org/lkml/13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se/
 Cc: stable@vger.kernel.org
-Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Acked-by: Alexander Dahl <ada@thorsis.com>
-Reported-by: Peter Rosin <peda@axentia.se>
-Tested-by: Alexander Dahl <ada@thorsis.com>
-Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
-Tested-by: Peter Rosin <peda@axentia.se>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220728074014.145406-1-tudor.ambarus@microchip.com
+Link: https://reviews.llvm.org/D134831
+Link: https://github.com/ClangBuiltLinux/linux/issues/1724
+Suggested-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220930203310.4010564-1-samitolvanen@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mtd/nand/raw/atmel/nand-controller.c |    1 +
+ scripts/Makefile.extrawarn |    1 +
  1 file changed, 1 insertion(+)
 
---- a/drivers/mtd/nand/raw/atmel/nand-controller.c
-+++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
-@@ -402,6 +402,7 @@ static int atmel_nand_dma_transfer(struc
- 
- 	dma_async_issue_pending(nc->dmac);
- 	wait_for_completion(&finished);
-+	dma_unmap_single(nc->dev, buf_dma, len, dir);
- 
- 	return 0;
- 
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -74,5 +74,6 @@ KBUILD_CFLAGS += $(call cc-disable-warni
+ KBUILD_CFLAGS += $(call cc-disable-warning, uninitialized)
+ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+ KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
++KBUILD_CFLAGS += $(call cc-disable-warning, cast-function-type-strict)
+ endif
+ endif
 
 
