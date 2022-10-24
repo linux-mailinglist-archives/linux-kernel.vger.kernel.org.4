@@ -2,208 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1C9260BB30
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0479660BBFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234898AbiJXUtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S234038AbiJXVT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235233AbiJXUtE (ORCPT
+        with ESMTP id S235412AbiJXVTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:49:04 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90DA250282;
-        Mon, 24 Oct 2022 11:56:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9095DCE11C4;
-        Mon, 24 Oct 2022 15:38:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FBC5C43470;
-        Mon, 24 Oct 2022 15:38:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666625913;
-        bh=L8c5GKayylADfUAdeL37/p0TLa+9ODsAQQCP/0C+a3Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I4swKEqdMKks6DlQ3eZsx+gxQvCUyIlLLYQoSdM129IBmuRlJ8/6nQ5ewds45lv7C
-         CS5yiQ3wSv/cwFd8l2pp3RdxITgaYhESS1mobuFPvSF6gRzewB48TD7gpIFHSokb3L
-         zd4eLbWZcc1yXcyYbUL0iYVOgJcGcKMGKrjR3fJP9+k6xKp7yg2ldVJwN5634n/+BM
-         OVxNSE5gWKtUJLz+9n8Cvyna0P4vDCrnNgEs3GpMIl1c8AdexxxHkI/EUUhyjfmao9
-         zUAsqHsbBHF3Qw4wWJpujZzYV0w971fFEnR1IfAxfQgwWYCs9rWSXZTMaBMiO1lTH+
-         vNSNf9R+6Ha7w==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 05/10] ARM: omap2: remove APLL control
-Date:   Mon, 24 Oct 2022 17:38:09 +0200
-Message-Id: <20221024153814.254652-6-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20221024153814.254652-1-arnd@kernel.org>
-References: <20221024153814.254652-1-arnd@kernel.org>
+        Mon, 24 Oct 2022 17:19:34 -0400
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D121C96CD;
+        Mon, 24 Oct 2022 12:25:46 -0700 (PDT)
+Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 08002C16B0;
+        Mon, 24 Oct 2022 15:40:51 +0000 (UTC)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9001540008;
+        Mon, 24 Oct 2022 15:39:14 +0000 (UTC)
+Message-ID: <1ac55929-4399-484c-e3ee-1a04f8e90046@ovn.org>
+Date:   Mon, 24 Oct 2022 17:39:13 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Cc:     i.maximets@ovn.org, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Content-Language: en-US
+To:     nicolas.dichtel@6wind.com, Jakub Kicinski <kuba@kernel.org>
+References: <20221021114921.3705550-1-i.maximets@ovn.org>
+ <20221021090756.0ffa65ee@kernel.org>
+ <eb6903b7-c0d9-cc70-246e-8dbde0412433@6wind.com>
+ <ded477ea-08fa-b96d-c192-9640977b42e6@ovn.org>
+ <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [RFE net-next] net: tun: 1000x speed up
+In-Reply-To: <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 10/24/22 14:27, Nicolas Dichtel wrote:
+> Le 24/10/2022 à 13:56, Ilya Maximets a écrit :
+>> On 10/24/22 11:44, Nicolas Dichtel wrote:
+>>> Le 21/10/2022 à 18:07, Jakub Kicinski a écrit :
+>>>> On Fri, 21 Oct 2022 13:49:21 +0200 Ilya Maximets wrote:
+>>>>> Bump the advertised speed to at least match the veth.  10Gbps also
+>>>>> seems like a more or less fair assumption these days, even though
+>>>>> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
+>>>>> and let the application/user decide on a right value for them.
+>>>>
+>>>> UNKOWN would seem more appropriate but at this point someone may depend
+>>>> on the speed being populated so it could cause regressions, I fear :S
+>>> If it is put in a bonding, it may cause some trouble. Maybe worth than
+>>> advertising 10M.
+>>
+>> My thoughts were that changing the number should have a minimal impact
+>> while changing it to not report any number may cause some issues in
+>> applications that doesn't expect that for some reason (not having a
+>> fallback in case reported speed is unknown isn't great, and the argument
+>> can be made that applications should check that, but it's hard to tell
+>> for every application if they actually do that today).
+>>
+>> Bonding is also a good point indeed, since it's even in-kernel user.
+>>
+>>
+>> The speed bump doesn't solve the problem per se.  It kind of postpones
+>> the decision, since we will run into the same issue eventually again.
+>> That's why I wanted to discuss that first.
+>>
+>> Though I think that at least unification across virtual devices (tun and
+>> veth) should be a step in a right direction.
+> Just to make it clear, I'm not against aligning speed with veth, I'm only
+> against reporting UNKNOWN.
 
-These functions have no callers and can just be removed.
+Ack.  Thanks for the clarification!
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/mach-omap2/cm2xxx.c      | 97 -------------------------------
- arch/arm/mach-omap2/cm2xxx.h      |  5 --
- arch/arm/mach-omap2/cm2xxx_3xxx.h |  5 --
- 3 files changed, 107 deletions(-)
+> 
+>>
+>>>
+>>> Note that this value could be configured with ethtool:
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e24f2dd516ed
+>>
+>> This is interesting, but it's a bit hard to manage, because in order
+>> to make a decision to bump the speed, application should already know
+>> that this is a tun/tap device.  So, there has to be a special case
+> But this should be done by the application which creates this tun interface. Not
+> by the application that uses this information.
+> 
+>> implemented in the code that detects the driver and changes the speed
+>> (this is about application that is using the interface, but didn't
+>> create it), but if we already know the driver, then it doesn't make
+>> sense to actually change the speed in many cases as application can
+>> already act accordingly.
+>>
+>> Also, the application may not have permissions to do that (I didn't
+>> check the requirements, but my guess would be at least CAP_NET_ADMIN?).
+> Sure, but the one who creates it, has the right to configure it correctly. It's
+> part of the configuration of the interface.
+I mostly agree with that, but that still means changing userspace
+applications.  I'm pretty sure very little number of applications,
+if any at all, do that today.
 
-diff --git a/arch/arm/mach-omap2/cm2xxx.c b/arch/arm/mach-omap2/cm2xxx.c
-index 0827acb60584..17833e0f22f8 100644
---- a/arch/arm/mach-omap2/cm2xxx.c
-+++ b/arch/arm/mach-omap2/cm2xxx.c
-@@ -95,103 +95,6 @@ void omap2xxx_cm_set_dpll_auto_low_power_stop(void)
- 	_omap2xxx_set_dpll_autoidle(DPLL_AUTOIDLE_DISABLE);
- }
- 
--/*
-- * APLL control
-- */
--
--static void _omap2xxx_set_apll_autoidle(u8 m, u32 mask)
--{
--	u32 v;
--
--	v = omap2_cm_read_mod_reg(PLL_MOD, CM_AUTOIDLE);
--	v &= ~mask;
--	v |= m << __ffs(mask);
--	omap2_cm_write_mod_reg(v, PLL_MOD, CM_AUTOIDLE);
--}
--
--void omap2xxx_cm_set_apll54_disable_autoidle(void)
--{
--	_omap2xxx_set_apll_autoidle(OMAP2XXX_APLL_AUTOIDLE_LOW_POWER_STOP,
--				    OMAP24XX_AUTO_54M_MASK);
--}
--
--void omap2xxx_cm_set_apll54_auto_low_power_stop(void)
--{
--	_omap2xxx_set_apll_autoidle(OMAP2XXX_APLL_AUTOIDLE_DISABLE,
--				    OMAP24XX_AUTO_54M_MASK);
--}
--
--void omap2xxx_cm_set_apll96_disable_autoidle(void)
--{
--	_omap2xxx_set_apll_autoidle(OMAP2XXX_APLL_AUTOIDLE_LOW_POWER_STOP,
--				    OMAP24XX_AUTO_96M_MASK);
--}
--
--void omap2xxx_cm_set_apll96_auto_low_power_stop(void)
--{
--	_omap2xxx_set_apll_autoidle(OMAP2XXX_APLL_AUTOIDLE_DISABLE,
--				    OMAP24XX_AUTO_96M_MASK);
--}
--
--/* Enable an APLL if off */
--static int _omap2xxx_apll_enable(u8 enable_bit, u8 status_bit)
--{
--	u32 v, m;
--
--	m = EN_APLL_LOCKED << enable_bit;
--
--	v = omap2_cm_read_mod_reg(PLL_MOD, CM_CLKEN);
--	if (v & m)
--		return 0;   /* apll already enabled */
--
--	v |= m;
--	omap2_cm_write_mod_reg(v, PLL_MOD, CM_CLKEN);
--
--	omap2xxx_cm_wait_module_ready(0, PLL_MOD, 1, status_bit);
--
--	/*
--	 * REVISIT: Should we return an error code if
--	 * omap2xxx_cm_wait_module_ready() fails?
--	 */
--	return 0;
--}
--
--/* Stop APLL */
--static void _omap2xxx_apll_disable(u8 enable_bit)
--{
--	u32 v;
--
--	v = omap2_cm_read_mod_reg(PLL_MOD, CM_CLKEN);
--	v &= ~(EN_APLL_LOCKED << enable_bit);
--	omap2_cm_write_mod_reg(v, PLL_MOD, CM_CLKEN);
--}
--
--/* Enable an APLL if off */
--int omap2xxx_cm_apll54_enable(void)
--{
--	return _omap2xxx_apll_enable(OMAP24XX_EN_54M_PLL_SHIFT,
--				     OMAP24XX_ST_54M_APLL_SHIFT);
--}
--
--/* Enable an APLL if off */
--int omap2xxx_cm_apll96_enable(void)
--{
--	return _omap2xxx_apll_enable(OMAP24XX_EN_96M_PLL_SHIFT,
--				     OMAP24XX_ST_96M_APLL_SHIFT);
--}
--
--/* Stop APLL */
--void omap2xxx_cm_apll54_disable(void)
--{
--	_omap2xxx_apll_disable(OMAP24XX_EN_54M_PLL_SHIFT);
--}
--
--/* Stop APLL */
--void omap2xxx_cm_apll96_disable(void)
--{
--	_omap2xxx_apll_disable(OMAP24XX_EN_96M_PLL_SHIFT);
--}
--
- /**
-  * omap2xxx_cm_split_idlest_reg - split CM_IDLEST reg addr into its components
-  * @idlest_reg: CM_IDLEST* virtual address
-diff --git a/arch/arm/mach-omap2/cm2xxx.h b/arch/arm/mach-omap2/cm2xxx.h
-index 004016d7459e..ee0cb40691b2 100644
---- a/arch/arm/mach-omap2/cm2xxx.h
-+++ b/arch/arm/mach-omap2/cm2xxx.h
-@@ -46,11 +46,6 @@
- extern void omap2xxx_cm_set_dpll_disable_autoidle(void);
- extern void omap2xxx_cm_set_dpll_auto_low_power_stop(void);
- 
--extern void omap2xxx_cm_set_apll54_disable_autoidle(void);
--extern void omap2xxx_cm_set_apll54_auto_low_power_stop(void);
--extern void omap2xxx_cm_set_apll96_disable_autoidle(void);
--extern void omap2xxx_cm_set_apll96_auto_low_power_stop(void);
--
- int omap2xxx_cm_wait_module_ready(u8 part, s16 prcm_mod, u16 idlest_id,
- 				  u8 idlest_shift);
- extern int omap2xxx_cm_fclks_active(void);
-diff --git a/arch/arm/mach-omap2/cm2xxx_3xxx.h b/arch/arm/mach-omap2/cm2xxx_3xxx.h
-index 70944b94cc09..6dfc09383160 100644
---- a/arch/arm/mach-omap2/cm2xxx_3xxx.h
-+++ b/arch/arm/mach-omap2/cm2xxx_3xxx.h
-@@ -93,11 +93,6 @@ static inline u32 omap2_cm_clear_mod_reg_bits(u32 bits, s16 module, s16 idx)
- 	return omap2_cm_rmw_mod_reg_bits(bits, 0x0, module, idx);
- }
- 
--extern int omap2xxx_cm_apll54_enable(void);
--extern void omap2xxx_cm_apll54_disable(void);
--extern int omap2xxx_cm_apll96_enable(void);
--extern void omap2xxx_cm_apll96_disable(void);
--
- #endif
- 
- /* CM register bits shared between 24XX and 3430 */
--- 
-2.29.2
+> 
+> Setting an higher default speed seems to be a workaround to fix an incorrect
+> configuration. And as you said, it will probably be wrong again in a few years ;-)
 
+Yep.
+
+Workarounds do exist today.  For example, if you specify max-rate
+in QoS configuration for OVS, it will not use the link speed as a
+reference at all.  I'm just not sure if replacing one workaround
+with another workaround is a good option.  Especially because that
+will require changing userspace applications and the problem itself
+is kind of artificial.
+
+> 
+>>
+>> For the human user it's still one extra configuration step that they
+>> need to remember to perform.
+> I don't buy this argument. There are already several steps: creating and
+> configuring an interface requires more than one command.
+
+Muscle memory, I guess. :)
+But yes, might not be a huge deal for human users, I agree.
+
+It's more of a concern for multi-layer systems where actual interfaces
+are created somewhere deep inside the software stack and actual humans
+don't really perform these commands by hands.
+
+Best regards, Ilya Maximets.
