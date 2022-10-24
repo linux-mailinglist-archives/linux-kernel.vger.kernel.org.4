@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADFA60A1E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F219160A1E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiJXLfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57596 "EHLO
+        id S230462AbiJXLfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbiJXLfJ (ORCPT
+        with ESMTP id S230457AbiJXLfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:35:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A06659A;
-        Mon, 24 Oct 2022 04:34:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D38826125E;
-        Mon, 24 Oct 2022 11:34:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 319D0C433C1;
-        Mon, 24 Oct 2022 11:34:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666611247;
-        bh=XONUYrrBTIpNDIVeQuanVcQ94OVXm/q30QmP4QTO20M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sAQ8DdUTn4cA4kXBumIiWfgCwZj8r++TXQs31zZ9q2+/MniKi1/s9M+kJykih7j0A
-         BqF0YmiSmJB6PuGkssIdCnKPxV5B/gTla9yErlk0SoVDIeZlZQE2J2YU9dSlM1hJHU
-         OhMBypH7gjMmdD0xcPXyT/X59MRJRufxXiKMCu2eWqm0hu353yVHeJHmuQVFsYUMIW
-         LH/cB0bDDcRc1pGLgxQpuYhs7ZMW6yCvvMxuOGnZP//S+Owfjx+QZDbNLtwPQi5nMz
-         o80e4z2fIZgkn5jOIm7wQSEvg6P22nA9KGNllj2gEjIPXKTfraSyfbII3HaJaBSk8T
-         7+l0vbOwjVBYA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1omviI-0006Ky-GC; Mon, 24 Oct 2022 13:33:50 +0200
-Date:   Mon, 24 Oct 2022 13:33:50 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Steev Klimaszewski <steev@kali.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] drm/msm: probe deferral fixes
-Message-ID: <Y1Z4HrEcLDhe6gQr@hovoldconsulting.com>
-References: <20220913085320.8577-1-johan+linaro@kernel.org>
- <YymCll02tRIMb+9Z@hovoldconsulting.com>
- <Y1I77HYeOkx1fz1E@hovoldconsulting.com>
- <139426b9-0e5b-e4c3-27c6-584ab48517c2@quicinc.com>
+        Mon, 24 Oct 2022 07:35:02 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA15664D9;
+        Mon, 24 Oct 2022 04:34:18 -0700 (PDT)
+Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Mon, 24 Oct
+ 2022 19:33:53 +0800
+Message-ID: <a53dcf50-760c-cb63-7768-efd5d7a381a9@amlogic.com>
+Date:   Mon, 24 Oct 2022 19:33:52 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <139426b9-0e5b-e4c3-27c6-584ab48517c2@quicinc.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH V3 3/6] clk: meson: S4: add support for Amlogic S4 SoC PLL
+ clock driver
+Content-Language: en-US
+To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+References: <20220805085716.5635-1-yu.tu@amlogic.com>
+ <20220805085716.5635-4-yu.tu@amlogic.com>
+ <1jiln0yzgj.fsf@starbuckisacylon.baylibre.com>
+ <ed4038fb-c230-fc27-800c-c99bd1770a1c@amlogic.com>
+ <4e3cdd6b-5861-8a4f-1df7-af763f77bad5@amlogic.com>
+ <1jsflftm1y.fsf@starbuckisacylon.baylibre.com>
+ <0c7e6d90-2ce3-25ab-84b6-026ce8a238a8@amlogic.com>
+ <1jtu5uz0ry.fsf@starbuckisacylon.baylibre.com>
+ <9f9cf980-c0c6-d5c3-ced8-8ab50e392470@amlogic.com>
+ <21e14cc1-6b34-e6b0-8da2-ad4b34dac149@amlogic.com>
+ <1jy1u3zfas.fsf@starbuckisacylon.baylibre.com>
+ <095f1bd9-c390-196f-cccc-700d75c70cb0@amlogic.com>
+ <1j4jvwavoe.fsf@starbuckisacylon.baylibre.com>
+From:   Yu Tu <yu.tu@amlogic.com>
+In-Reply-To: <1j4jvwavoe.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.18.29.47]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,61 +66,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 09:05:52AM -0700, Abhinav Kumar wrote:
-> Hi Johan
+Hi Jerome,
+	Thank you for your reply.
+
+On 2022/10/22 20:22, Jerome Brunet wrote:
+> [ EXTERNAL EMAIL ]
 > 
-> On 10/20/2022 11:27 PM, Johan Hovold wrote:
-> > On Tue, Sep 20, 2022 at 11:06:30AM +0200, Johan Hovold wrote:
-> >> On Tue, Sep 13, 2022 at 10:53:10AM +0200, Johan Hovold wrote:
-> >>> The MSM DRM driver is currently broken in multiple ways with respect to
-> >>> probe deferral. Not only does the driver currently fail to probe again
-> >>> after a late deferral, but due to a related use-after-free bug this also
-> >>> triggers NULL-pointer dereferences.
-> >>>
-> >>> These bugs are not new but have become critical with the release of
-> >>> 5.19 where probe is deferred in case the aux-bus EP panel driver has not
-> >>> yet been loaded.
-> >>>
-> >>> The underlying problem is lifetime issues due to careless use of
-> >>> device-managed resources.
-> >>
-> >> Any chance of getting this merged for 6.1?
-> > 
-> > Is anyone picking these up as fixes for 6.1-rc as we discussed?
-> > 
-> > Johan
 > 
-> All of these except the last two ( as discussed ) have landed in the 
-> -fixes tree
+> On Thu 29 Sep 2022 at 15:07, Yu Tu <yu.tu@amlogic.com> wrote:
 > 
-> https://gitlab.freedesktop.org/drm/msm/-/commit/6808abdb33bf90330e70a687d29f038507e06ebb
+>> Hi Jerome,
+>> 	Thank you for your reply.
+>>
+>> On 2022/9/28 23:27, Jerome Brunet wrote:
+>>> [ EXTERNAL EMAIL ]
+>>> On Wed 21 Sep 2022 at 16:40, Yu Tu <yu.tu@amlogic.com> wrote:
+>>>
+>>>> Hi Jerome，
+>>>>
+>>>> On 2022/8/30 15:37, Yu Tu wrote:
+>>>>> On 2022/8/30 14:44, Jerome Brunet wrote:
+>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>
+>>>>>>
+>>>>>> On Tue 30 Aug 2022 at 14:13, Yu Tu <yu.tu@amlogic.com> wrote:
+>>>>>>
+>>>>>>> On 2022/8/29 17:48, Jerome Brunet wrote:
+>>>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>>> On Mon 15 Aug 2022 at 21:20, Yu Tu <yu.tu@amlogic.com> wrote:
+>>>>>>>>
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +static struct clk_regmap s4_hdmi_pll_dco = {
+>>>>>>>>>>>> +    .data = &(struct meson_clk_pll_data){
+>>>>>>>>>>>> +        .en = {
+>>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>>>>>> +            .shift   = 28,
+>>>>>>>>>>>> +            .width   = 1,
+>>>>>>>>>>>> +        },
+>>>>>>>>>>>> +        .m = {
+>>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>>>>>> +            .shift   = 0,
+>>>>>>>>>>>> +            .width   = 8,
+>>>>>>>>>>>> +        },
+>>>>>>>>>>>> +        .n = {
+>>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>>>>>> +            .shift   = 10,
+>>>>>>>>>>>> +            .width   = 5,
+>>>>>>>>>>>> +        },
+>>>>>>>>>>>> +        .frac = {
+>>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL1,
+>>>>>>>>>>>> +            .shift   = 0,
+>>>>>>>>>>>> +            .width   = 17,
+>>>>>>>>>>>> +        },
+>>>>>>>>>>>> +        .l = {
+>>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>>>>>> +            .shift   = 31,
+>>>>>>>>>>>> +            .width   = 1,
+>>>>>>>>>>>> +        },
+>>>>>>>>>>>> +        .rst = {
+>>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
+>>>>>>>>>>>> +            .shift   = 29,
+>>>>>>>>>>>> +            .width   = 1,
+>>>>>>>>>>>> +        },
+>>>>>>>>>>>> +    },
+>>>>>>>>>>>> +    .hw.init = &(struct clk_init_data){
+>>>>>>>>>>>> +        .name = "hdmi_pll_dco",
+>>>>>>>>>>>> +        .ops = &meson_clk_pll_ro_ops,
+>>>>>>>>>>>> +        .parent_data = (const struct clk_parent_data []) {
+>>>>>>>>>>>> +            { .fw_name = "xtal", }
+>>>>>>>>>>>> +        },
+>>>>>>>>>>>> +        .num_parents = 1,
+>>>>>>>>>>>> +        /*
+>>>>>>>>>>>> +         * Display directly handle hdmi pll registers ATM, we need
+>>>>>>>>>>>> +         * NOCACHE to keep our view of the clock as accurate as
+>>>>>>>>>>>> +         * possible
+>>>>>>>>>>>> +         */
+>>>>>>>>>>>
+>>>>>>>>>>> Is it really ?
+>>>>>>>>>>>
+>>>>>>>>>>> Given that HDMI support for the s4 is there yet, the
+>>>>>>>>>>> addresses have changes and the region is no longer a syscon, it is
+>>>>>>>>>>> time
+>>>>>>>>>>> for the HDMI driver to get fixed.
+>>>>>>>>> The HDMI PLL is configured in the Uboot phase and does not change the
+>>>>>>>>> frequency in the kernel phase. So we use the NOCACHE flag and
+>>>>>>>>> "ro_ops".
+>>>>>>>> That's no reason to put NOCACHE or ro-ops
+>>>>>>>> If you want the frequencies to be statically assinged, the correct way
+>>>>>>>> would be through assigned-rate in DT I guess.
+>>>>>>>
+>>>>>>> Okay. You're right. However, when registering with OPS, HDMI PLL will be
+>>>>>>> reset. It takes time for PLL to stabilize the output frequency, which
+>>>>>>> will
+>>>>>>> lead to the startup screen flashing.
+>>>>>>>
+>>>>>>> I would like to know how to solve this problem if not using ro_ops.
+>>>>>>>
+>>>>>>>>
+>>>>>>
+>>>>>> You can add new ops or tweak the current init function.
+>>>>> HDMI PLL is not different from other PLLS, so I think adding OPS is
+>>>>> weird.
+>>>>>
+>>>>>>
+>>>>>> Safest would be to do the following :
+>>>>>>     * Check if the PLLs is already on.
+>>>>>>     * Check if the 'pll->init_regs' matches what is already set
+>>>>>>       - if so, you can skip the reset
+>>>>>>       - if not, you need to reset as usual
+>>>>> static int meson_clk_pll_init(struct clk_hw *hw)
+>>>>> {
+>>>>>            struct clk_regmap *clk = to_clk_regmap(hw);
+>>>>>            struct meson_clk_pll_data *pll = meson_clk_pll_data(clk);
+>>>>>            if (pll->init_count) {
+>>>>>                    meson_parm_write(clk->map, &pll->rst, 1);
+>>>>>                    regmap_multi_reg_write(clk->map, pll->init_regs,
+>>>>>                                    |      pll->init_count);
+>>>>>                    meson_parm_write(clk->map, &pll->rst, 0);
+>>>>>            }
+>>>>>            return 0;
+>>>>> }
+>>>>> Because the init function looks like this. Therefore, HDMI PLL init_count
+>>>>> is not given.
+>>> I don't get the remark. You've got pll->init_count right there.
+>>>
+>>>>> Can I change it like this?
+>>> What change ? The function above looks a lot like  meson_clk_pll_init()
+>>> in the actual source
+>>>
+>>>>
+>>>> I don't know if this change meets your requirements? Please give us your
+>>>> valuable advice.
+>>> What change ?
+>>
+>> static struct clk_regmap s4_hdmi_pll_dco = {          .data = &(struct
+>> meson_clk_pll_data){                  .en = {
+>> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 28,
+>> .width   = 1,                  },                  .m = {
+>> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 0,
+>> .width   = 8,                  },                  .n = {
+>> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 10,
+>> .width   = 5,                  },                  .frac = {
+>> .reg_off = ANACTRL_HDMIPLL_CTRL1,                          .shift   = 0,
+>> .width   = 17,                  },                  .l = {
+>> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 31,
+>> .width   = 1,                  },                  .rst = {
+>> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 29,
+>> .width   = 1,                  },                  .range =
+>> &s4_gp0_pll_mult_range,          },          .hw.init = &(struct
+>> clk_init_data){                  .name = "hdmi_pll_dco",
+>> .ops = &meson_clk_pll_ops,                  .parent_data = (const struct
+>> clk_parent_data []) {                          { .fw_name = "xtal", }
+>> },                  .num_parents = 1,          }, };
+> 
+> I'm sorry but I can't read this
+> 
+>>
+>> This is my code right now. Because init_count and init_regs are not
+>> defined, HDMI PLL is not reset. In this way, the kernel will not blink when
+>> the Uboot starts. Then in the kernel stage, if we want to change the HDMI
+>> PLL frequency value, we can directly change M, N and OD. In fact, we will
+>> not change the HDMI PLL frequency value later.
+>>
+>> I wonder if you accept this change?
 
-Ah, perfect, thanks.
+Sorry, the code is not formatted properly.
 
-When do you expect to send these on so that they end up in linux-next
-and eventually Linus's tree?
+> 
+> I think it would be better to separate this topic from your new SoC support
+> 
+> I think you can make another version of the clock controller for the new
+> SoC, keeping the pll_ops as it is now.
+> 
+> With another series, you may submit something to avoid reseting the PLL if
+> is already correctly initialized. This can be useful to all the SoC, not
+> just the last one. It will be easier to discuss on properly formatted
+> patches
 
-Note that it looks like something happened with the commit messages when
-you applied these. Specifically, the Fixes tags appears to now have a
-line break in them and there's also some random whitespace before your
-SoB:
+Do you mean that hdmi_pll, I will submit the next version of code 
+according to pll_ro_ops first, and then we will discuss how to reject 
+the patch of reset pll in another topic?
 
-	Fixes: c3bf8e21
-	
-	 ("drm/msm/dp: Add eDP support via aux_bus")
-	Cc: stable@vger.kernel.org      # 5.19
-	Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-	Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-	Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-	Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-	Patchwork: https://patchwork.freedesktop.org/patch/502667/
-	Link: https://lore.kernel.org/r/20220913085320.8577-8-johan+linaro@kernel.org
-	
-	
-	Signed-off-by: Abhinav Kumar's avatarAbhinav Kumar <quic_abhinavk@quicinc.com>
-
-It's possible just the gitlab UI that's messed up, but perhaps you can
-double check before they hit linux-next, which should complain about
-this otherwise.
-
-Johan
