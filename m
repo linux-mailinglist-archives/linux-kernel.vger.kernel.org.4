@@ -2,150 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF95160BFF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB8760BFFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJYAoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35560 "EHLO
+        id S229929AbiJYApB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiJYAn4 (ORCPT
+        with ESMTP id S230308AbiJYAoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:43:56 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A3B814138B;
-        Mon, 24 Oct 2022 16:16:54 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OKTuTC021680;
-        Mon, 24 Oct 2022 23:14:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=RUFUoQQTQZeXUIcbKhBYWPkrkMyKUPIQ7codJL9dFt8=;
- b=WIQvTCiuuZN7ostCt8VFJw0FOMsoQdmgIXGjMcWf8uF2rVDeiN7alZ3kumE9Voi5puuB
- IYs+7ZkpNRG8ZcT5SrnemFQ8R08OfSkJVYT0A9/IqgU4bsR8iZNYPjq24iIOt2Eygrmk
- ywyhv98cEEWPYu8r70DZkz14D5Kcy8e8RdtmVmYNVczbIPJtWSN0uHYR5kc75re62tFP
- OMVSM52hzwLnJDqH6cSZk3fw/Q5ivbtQW7QP7ZBCNTdreFf+Kdll2elxG9YGs4lmr4RU
- ZL3ctpkdrpX34hfUZBi9Y7DJARjLZCDBq8esZ5A1wa8EG8A7IRNngfkb0AwTnJLT5Fej vg== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kc9396vpr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Oct 2022 23:14:31 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29OM9J4k039912;
-        Mon, 24 Oct 2022 23:14:29 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2048.outbound.protection.outlook.com [104.47.66.48])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kc6ya3khn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Oct 2022 23:14:29 +0000
+        Mon, 24 Oct 2022 20:44:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D704A32A84;
+        Mon, 24 Oct 2022 16:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666653435; x=1698189435;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=xwc1EIBw+fUVtrzuGrNYZgAYWIWlE3dwr1MS1anqiac=;
+  b=j8rmyhcBGm8NMXSaFshKU8ihj27bjNeL4FHKOwIFe4yKbjzcXa5SD1Ug
+   4u36lyac3ZYt2Z1Aj/NE+gA6L6IZ+ML330WQAg++opG0U94d63BzIH9rp
+   e/t7Yi+vQbkQSB8xlS2CKJIkneKFqBvIJ4q6PJ16rtRE2m35NPw2D++TY
+   H2LbOgtIFxoK49UiV76mip9/NFUvc+RMFKfi6frGHU6qx0k2M6wEJSi9W
+   63fIaQ2wWUwnGmP8y34uO9er6qoTSxTCxW/Z/NB3aNjKnoE8Obbz45qMM
+   e8gb0O+efmyt+o+l0HBoxN5F3gqn/2E7Y05yF31en9unZCMSD+46otuBj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="309230591"
+X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
+   d="scan'208";a="309230591"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 16:17:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="720649849"
+X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
+   d="scan'208";a="720649849"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by FMSMGA003.fm.intel.com with ESMTP; 24 Oct 2022 16:17:07 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 16:17:07 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 16:17:06 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Mon, 24 Oct 2022 16:17:06 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Mon, 24 Oct 2022 16:17:06 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YlSfrgXt7Qo6E5Ey5nsOLKeDREXOVUZ3gGUaBxcfn3bphQyiDfWtjm4l2AYeHuYgTFRSJAeEtjAGdpwFSkX/fLiulhuifvBdT1OGg5mG0BcKDKtqann5G8jOzyeDPSAiOezRuSlvHmHKUsAvb5YQ0jHPh558Ztwxv5J0jX3DnDtzZutjA3EeSwSpcnyMXjXbnCVkyAs2zXt/4qTuYnNsaO5sLSPRpKbFv8HmhSfXfoPG9gtTDAMw8U+uhzGRpW2C3SyFTxcNgGHwOqHwYYtOsybPqDyVVkghG+FtxPC2NcOywgPpOVSNDu5zUxFuUi2p9m7X50z+bOePK5LZX43nzg==
+ b=Fa9E7PqbaY/N4Zm+eEuhhYadaDqxL5gfkYoqaH0R2U4b/jbNRgx5a/3oGJ+OvXGBVglh5Qnl0ySMj/2w2Iy7qa6FX01kw3H8XeOu4wprVlwMXn1O2elusGCwEX/QLj2ZAebq1/9ElaQbdXEgtDojB9FKzPNup+W+J6rsvrgnEgVyEWbVUJmxDGbMVx5l3e1vNz5VHQVPLTdvZItQEg0rcCjSarRaeQ1gYmttTmDolu4nsprX7h+wqurXrPSjg7niAks/M0obGVclKash4QdQAp9qwYaJnoFP0HVggf9AkU6Br91arJx+F9vSO1/fxFVn1C4OwaP7qnA0WYRwTT1IXQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RUFUoQQTQZeXUIcbKhBYWPkrkMyKUPIQ7codJL9dFt8=;
- b=MzEc86VV2zw8lw+bb4AcqjnRU+t+T9eFrCqTW+v0he3OedrfI7SMMBDe35cE73ISXiKWlWGbI8X3hWVt1KyLuqntJG4tG5LSP7SU6dg7Lk13GuoGWT9EQ7NWQL0LIvuKzIahsRTuItX8N0qllCmeJXy9QotG7YDffNTYnuocf+fZVPLuRIChsSNC2nMk4n0Hz1tIpXdPTPYB/MWPCRwm20a+wdOFepmsE0CASRjWaLtb7ujSSCzKKpGlL9AGhONHm7ChawVZD+mgy2R9Jn8SR97CCwHVXkMkl+8/Yz3skMf4gICwBzs6GpdTm88unVH5cLLxe40IYSoz1CJitIu6Zw==
+ bh=M5yMS/tJjphfgyA29AsJAcUCz0ux34eFM4/zQaCwqg0=;
+ b=etwYnrCjDaSWQJNPNdL+KQtlVHQ20qdXWDn3V4nuC2D3C4S+JlgHYGzXTwEN1eBNnyrXDUW6kuHL32E0H1cc414fomrwWu/oAjEsglBm5CjZE+lblzE3VpJiB/HH6nhyXkKnggVy5qLpapOOpqvnISAuo2hM08iskYSgTcfeCG77BAMzRUjFs4D+AD1rJB7ZqGGQUUGlzT0QDZ0403qWKIJeT1lZ2y2mg/xo6f/x/aJf9zgeNOU7DLT7o8oNyh0dh77FzDE3Fg2pF+frAjc3z7vsJxkPVpGUyHCcXrk9nTW1twHdAeUIY6EIhAed2MWkROdKYnta58AAeUoIbFOM9A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RUFUoQQTQZeXUIcbKhBYWPkrkMyKUPIQ7codJL9dFt8=;
- b=x1iV0qV0FN7lokOOTRyUNB4V1wy59NmjZ0WcXkPn6izdT8tzK4CZuH6O8wZ+hAJTaD/HbBy/T625rUbS7P8g90Q1cw3wcjMO/DJEjD9ePRMvuk8nez5/RWmZdS0jmMaeJcTutKqUb/qF6ojeAcgVMtgaFoyCvM42V+EvF6U4uRQ=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by SJ0PR10MB6328.namprd10.prod.outlook.com (2603:10b6:a03:44e::22) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3768.namprd11.prod.outlook.com (2603:10b6:a03:fa::20)
+ by BL1PR11MB5541.namprd11.prod.outlook.com (2603:10b6:208:31f::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
- 2022 23:14:26 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::58e9:95ba:d31e:ddd3]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::58e9:95ba:d31e:ddd3%5]) with mapi id 15.20.5746.026; Mon, 24 Oct 2022
- 23:14:26 +0000
-Date:   Mon, 24 Oct 2022 16:14:23 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Peter Xu <peterx@redhat.com>, Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Chen <harperchen1110@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] hugetlb: don't delete vma_lock in hugetlb
- MADV_DONTNEED processing
-Message-ID: <Y1ccT8Q9ESmR3+X9@monkey>
-References: <20221023025047.470646-1-mike.kravetz@oracle.com>
- <Y1cJz6i5YMNfSeAm@monkey>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1cJz6i5YMNfSeAm@monkey>
-X-ClientProxiedBy: MW4PR03CA0104.namprd03.prod.outlook.com
- (2603:10b6:303:b7::19) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Mon, 24 Oct
+ 2022 23:17:04 +0000
+Received: from BYAPR11MB3768.namprd11.prod.outlook.com
+ ([fe80::f98a:551a:1689:d091]) by BYAPR11MB3768.namprd11.prod.outlook.com
+ ([fe80::f98a:551a:1689:d091%7]) with mapi id 15.20.5746.026; Mon, 24 Oct 2022
+ 23:17:04 +0000
+Message-ID: <c4351aaf-d04c-6b13-6dbb-d75509b5ad4f@intel.com>
+Date:   Mon, 24 Oct 2022 16:17:01 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 02/14] platform/x86/intel/ifs: Propagate load failure
+ error code
+Content-Language: en-US
+To:     Sohil Mehta <sohil.mehta@intel.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <gregkh@linuxfoundation.org>, <ashok.raj@intel.com>,
+        <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>, <patches@lists.linux.dev>,
+        <ravi.v.shankar@intel.com>, <thiago.macieira@intel.com>,
+        <athenas.jimenez.gonzalez@intel.com>, <hdegoede@redhat.com>,
+        <markgross@kernel.org>
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221021203413.1220137-3-jithu.joseph@intel.com>
+ <4028a1c7-ed84-37a8-1d94-178b5aa201a9@intel.com>
+From:   "Joseph, Jithu" <jithu.joseph@intel.com>
+In-Reply-To: <4028a1c7-ed84-37a8-1d94-178b5aa201a9@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR05CA0187.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::12) To BYAPR11MB3768.namprd11.prod.outlook.com
+ (2603:10b6:a03:fa::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SJ0PR10MB6328:EE_
-X-MS-Office365-Filtering-Correlation-Id: f53e8247-7c53-4754-b50d-08dab6157ebd
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3768:EE_|BL1PR11MB5541:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4b88ee4-4792-4c93-d89d-08dab615dcdd
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V6Vson3kjznmZGiK9VVAnfkRZsX5gyVZUIe+H4ajrtBPghFMMSHKTfbcQ5Rp+2pbeNxuAmyi5r3pYqAxPOPLAUHI6tw2w9uVQh++CgDHau4uSKR4YIhDHwcWCUBoNhpWfnunKVswjxFOh3r3z9orf0FcXBTtltub3Pbf89OTIgl2s3zcUEhlhnpqh3CUXbzVryKnlnAh0KSBIhSVzPRqZX/UoEwsRHtYpyJwDxyKh3PFS5X77IG781ZCNxMIKPm/SzpTnJEVfILehJibNUVKBrMRqY7eTCW/XpWDgiikTWIL3Bg5zA+acG7b/zoTi384cS9/72Rbcmix94OVWwGhPWxNXr3O8SvoWVtQCjXAeWzQPbCucGWnHjoSVzhK6v2/KKyjNISWxAXNkLT1cedTfQg5a2CGR3udrlyOLbA8UJT/YjKNSKixj8x2NYTkVdNenv01KJOQ24hgCDUJHN6bMTggHMa2VccPbZ+N96zIzeIyA92pzaKwh5OnZDsV5OdAxWPbHqZdczhSwTSsP57JHdHCZ1TOrpHj4FV9rr9QCJrod6ij89xueOmHhr4lfmNuUGHji+oh8Mrtex2FvKnlLbdGx/nQ2+7AqEeubp5LwhanqW4zetBkYR7kzxN0hXYqY489J34ZFJT/mWsbels2zfPaQKlbovziyi4YVw/b5Azi/RJ2rJE2ZExKbLLU/uVolzlrKJwxFmKjbftoz6NIM7586xz/vdQoepXZiLIiCHvLGO7fGdivGpicZS08SUt0dr7wC8nOU5XI92TVYdp4r4+4QicGwRZnxUfhJSmTnF1NL/8OnKipL3oq0iKOSBBOk0zJmC7IgooB5hybkwnSjg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(346002)(396003)(366004)(136003)(376002)(39860400002)(451199015)(9686003)(6506007)(86362001)(44832011)(6512007)(2906002)(38100700002)(83380400001)(66946007)(6666004)(6486002)(53546011)(26005)(66556008)(316002)(186003)(4326008)(8676002)(66476007)(5660300002)(54906003)(33716001)(7416002)(8936002)(41300700001)(966005)(478600001)(67856001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: OBDJ8fc4WKc3YiYMjQx4QWU388+7IGlqRO3vJRIQFPgvw6/Hjxb8Y5gutdnvA0HpBstJr0c/ZUFISBTEgoXB3htnaRBHB6tBuN+RFsnLkRLnEk8asVwOn0wYrCM8MUwm9q74G6CGS+QsZ6zuiUW1xwmElIwmnukkyFu7BLPQSaNgeSZhPnaCvSHBPIxiFTQeZKjNJ3pCuEcVTW8K19zCuzwiCtOMghNMRVlnOLEBFAT9/wmf+5rMlQUBtOSws6b6XR2sYS+omno5fXlT4C8eE4t18e10EluAwj/yPof+SxlqV6JBxpPcEf2vEzOa5sY31kgYeJglcNiPPK1ji58vyjKI+DkEiUCr+2T73BpI+htcHcnv4cMPelEe9VtK7QA0/hzhqvyw144f4ftRvj0uHdqZRQkKwwIx6M8I8Vd/K3ta4GlVLqTjCO/SlfaBVFWUiNPBQ4WcAuDp1c6T9eL1BsCjmJnuXqtVAurN/kXxotmHz0unkX4WVUbFTqC2lXedVFBbc7of+JoAsbkw6rfRbRxMBry7NQLVGuwrS7tAkA7DeoNSpQCdJjGG8LpUhBnA7WuPfCp4RwbwqPdnhyX1vuQ4TvM2FCFUsZhS9NtjabC44yNs5mZzEVB/1QjNNGbC8ItT8Qe4sGdLEaTHfeOb0N7XxmTFAkbas4alaQB4bFr5eN9PM+AOqCMtFByq29iRacQdoQjnB717DDOoFAQVMD1KebgKJSGWyEcxJnsNJpEUDGQ8sjK5+JsJYwHEQkTGNlDEfr9bWEKHBmsrKvRpZxuWqaSGnSNiMRk1XB3vF5w=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3768.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(39860400002)(376002)(366004)(346002)(451199015)(26005)(6486002)(478600001)(86362001)(83380400001)(2906002)(6512007)(31696002)(31686004)(6506007)(6666004)(316002)(66556008)(6862004)(4326008)(8936002)(37006003)(41300700001)(6636002)(7416002)(36756003)(53546011)(8676002)(2616005)(186003)(82960400001)(66946007)(66476007)(5660300002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qabp5TTW9bAQECvJ+ygrzZYrLI6HnBFJwj8YubDZF5+b+oh2AaWXHBxgN6Xx?=
- =?us-ascii?Q?L8RuQt8j5N2+y6MaXL7VZLBHtkaNZFUSPX+53UVrHnmkeSHUAKsh5nPKFT2i?=
- =?us-ascii?Q?KqtRW1KeMjsnhjYUY1lk3WNNyKWpVNA+7mooQsMPmcsasiN005udz1Sp94mW?=
- =?us-ascii?Q?ElBHI7trzxqVtJgfixyEMt7oS4gUivCd124WihVAn3TKGkj9Il5aYOM1zhME?=
- =?us-ascii?Q?xrpvMyUZkNNZ4Af1oAIKtKFAA/N8d3JtCHXSHiIP8OElq/0U/LuFQqCQ1UlI?=
- =?us-ascii?Q?ZHA1m5fwg/RQwDnBtu97ARsye2rxtE4L9ublrtqT6oHdqW2udTlGEB8Y3p66?=
- =?us-ascii?Q?Q7REeYNa6ulea2+Snp6bn3yQkxzvon93xsqJT/Ag/s8Cshx7OtK7dN7GNYnu?=
- =?us-ascii?Q?rsmBKJ8QEZxH7IukDIt970QHrmVe+PDmXso8u03/jlJgXXooNVHX2nqua1Aw?=
- =?us-ascii?Q?nh5cKYWkckvA+6L7a/OdRw7OTze3auJU9m05poZK1LZIyjbWy/YDg8uyXg2D?=
- =?us-ascii?Q?lhMwxGM8N5DiwxMl0MZVASnygRzQZO+2H9B99jiENcwhj8jG1JssqVqh9mE3?=
- =?us-ascii?Q?I4QjOE02rp9c2BthJlTsz4KPZjV2sOu1g7j2kF/Ly42JPbvUCwYshwUWVZp0?=
- =?us-ascii?Q?mm+ztGvxPfO/Usgpto9BoQd9q3OvJ00CurjhbMafL7tBdl2+ptBYrKKoZUN/?=
- =?us-ascii?Q?PiDQvJBX6AHbkWHQINR7ccXR1tKOvZozg6seXJMa7fkqiooeYTwoSR/9EbyG?=
- =?us-ascii?Q?8vddGfsaior9oHfWH8MQNItRqmyPhWQBoiP6ipHK1qYY8XmhMNaclHFDZL7x?=
- =?us-ascii?Q?gAgaN6YDls6Q2YkCed8F/596pfEURssL6xrG+LGbuxpyk6Iv0fJZvhEEii9f?=
- =?us-ascii?Q?uAN0MjPOMOo0HZh0n5y1ww50kTNciYjF+7jfd91b0II0pqu/MmLiy0Q6XZsG?=
- =?us-ascii?Q?YqrYkxLdkZMIPMw2OrdHf+TU03vNZoG15j8ftRrrN+Zfo9rT0Sxo4i2hvKZC?=
- =?us-ascii?Q?SZry4t7JNBJb8KlUFDXTk5vpEOmbHH7vbgBbl5Buzyn78qiI+w9sLBaNpFD/?=
- =?us-ascii?Q?JWhBaLQwEgk5GvtXLTYD05lpaxvo/M3PQEsEp0O8SC3rC+kX7tRf/tq8GZ8A?=
- =?us-ascii?Q?SFlZ0hbuAC4OIFeMmnZDUv+vm4hncpKRPOCzxrs9VOr7MNj3MP2gfj9/qB4d?=
- =?us-ascii?Q?mG1IVakvb25P4Fy2bY70hs/CTz8+3MP1A1bRJRFbHWvHKJNPDMNvyow6QwnT?=
- =?us-ascii?Q?Gl8kpzynXPwDnNx+23bRS5PPghP1NNlC5FoldcreGOxanHsNrKlUHvxtyyT/?=
- =?us-ascii?Q?1yYllh0Q1/oovZAUEyVCxH2gWMM6z7wJZvCXTB+PsPF6/9K0hFxFAQQccOVh?=
- =?us-ascii?Q?/3J9k+jPqzTT71FOi/MCKEjM8xPqCw09LhaYQ64fJ8XwXOZV1VZMKpjHc4SG?=
- =?us-ascii?Q?bpMYYLbglGhjFOFrNPesged2ud2GFQMvCkUOp5k62J/utTkY5AGFVZ8PopQ/?=
- =?us-ascii?Q?iuAkbM+8rWTJSypUpUyAJlIN8KKLx6hkTAUDp4bq0b6JEtjWSOqR+lY/TOQG?=
- =?us-ascii?Q?OzeDVhTyyu3mF8Dwc7Uh67hWQyIgdL+a5fm/hXgB6rSkOe4TxWlgVNnVxJ13?=
- =?us-ascii?Q?gQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f53e8247-7c53-4754-b50d-08dab6157ebd
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z0Npb0IwUjNUc3A2Y1BTa280ZjliN1pTdnczb3lSVGE4cFI1TUNnWXJZckN5?=
+ =?utf-8?B?eUx2bS9IaGw3c0ozcHlqZExZMkJJUG5QMlgyMU5JTWRDM0pDVy9uMmlsT0Y4?=
+ =?utf-8?B?NWVvc2dsemFhcHFsdzNndWVvSFlhb0phMFpaVDhHTjNaSVdEUVBLeVFRS3VM?=
+ =?utf-8?B?Vkdua2NmeVNOSnVqd3dOYkxaUUhNbDJheUxxT2p3UkNpcGR2Q2xzWXZ1cWpT?=
+ =?utf-8?B?K2FQSW16emlnOG5OeG42bXNnS2U1eitlb2QwRzlZTWFCaktTTm9XcG9SNjJy?=
+ =?utf-8?B?K3VKZ0FyemxpbFh0MTZaODFZUnJLSXNiUHRUSVBFanNyM2FzNXRPeHRmSlBZ?=
+ =?utf-8?B?SUtoR1kzSFNaRDk5ak5UQ09nQTNydWN6cHdJbVNLdkYyS1FZZHlJOFFRc202?=
+ =?utf-8?B?VFlubkp2MW94Z3ZkREI3NkFFdHM2VUxoWjFIWG1nNEdDSW1MNGlnQUlaT2F5?=
+ =?utf-8?B?K3FuYnJMTlhYMzRDRHN3SHU4dVZkUjhVUG5KcldINE1kYjF0NU4vNllEYWY5?=
+ =?utf-8?B?TnQ5bVQra29sbk5IckdRMit1Mkc2NDVJK2xTeWgxU0ZMUmk4c3RhcVE5ajli?=
+ =?utf-8?B?N3JjSHZCTFZ5R2Vha2lQeXNrT0dEVVJJK2Zsd3ZLM3VqVXJWZjZ2Nkd2ZCtR?=
+ =?utf-8?B?VXpYNXdRZXBpbXpRbENlSHpNWWZwaGs0VDdWWGhOMFJDb0U4MTAxUGpWdWh6?=
+ =?utf-8?B?elM1eFVlY3JuNEVJdDhjM0twYXhPSDdYbU5WOU5lanYramkrRTlFdE04UlhV?=
+ =?utf-8?B?VUtiZ3VtUUFMNGpCc0U2bGRGUzQ3Mjl3M2R0eURuR2d5dHJ3WlRIREFqQzJT?=
+ =?utf-8?B?WUFQRG41NVpUMmlDcE9rQzI5MXFhRTV5TXpJK0s0Rk1qK2kzWlJMT1dFL2d2?=
+ =?utf-8?B?RXRwMTZOZjd1THpVUVZNbk1hNVQvbms5RnNTN09nREdhajdPV25rVHFaSm0w?=
+ =?utf-8?B?OUpJUFFjbEdVMVRENU9xbnUycHNQTGlXSnZVRXhqYTlhSDh0NDVXdGRralQr?=
+ =?utf-8?B?eUZUMzhKZFRNVm9NTmYxdTVjQlRzQkZvdnpZQVVPeUVXb2dtWnZRcUJPaTlq?=
+ =?utf-8?B?b1BDT0FWMmVwRXc5ZnVJWG4yeWZUbThhSUxxSGFNY3BybXpia0lWQjZ4WDhW?=
+ =?utf-8?B?V1Q1SW90UWZQWURib0IreVBuRzEvYjVyd3VGZ0tXZnFUY1MrMDVjZWN0NWEr?=
+ =?utf-8?B?d3IyMUxGdlA0SlF2ZnJEZVRhMGx4MmRYUEhDR0xtUWtNK1NqV2lOYmhodVpl?=
+ =?utf-8?B?Ti9VT0lOVWlLK0F0T3UzQ2tNaFlCZTR1c1RXdVlnNTBIK3hDRDdBU2JVbm9Q?=
+ =?utf-8?B?QzVyZTM1MHpPMkE3MEtxMnB0QWczOUVqNWo4eHFDY25JaGxFcVg1SDdEaity?=
+ =?utf-8?B?bktzeDFjL09OQVFDaURpQ2tLS29CRnV5Q2lUMEtqUVRMSi91aGxjNFMvS2V4?=
+ =?utf-8?B?bHdDdzhITGIvc0JUdld2aXNPOEZkS25HSXlVRk1BeS9MaUpEVVE5aktDUGJL?=
+ =?utf-8?B?dHh6bUFIaHphZ2dRQ2NEYUhCQVlLdmk0WW1KRHJrOGx2d0phbGE1ZVFiRmtE?=
+ =?utf-8?B?R21IaVIrMG9MWUZlbnFWVTRGOWY4RmcyL2QzL1c2MS9QenFnUWZyM3F0RXI2?=
+ =?utf-8?B?c0ZQTTRja1p6YzRjWWZTZ2FUUlovZWxLYTdKSm5LWDhMeTFka0ZDNEdrQXZN?=
+ =?utf-8?B?R0RMVHo0WWdTdVFFWVo5UTQrUE1mU0diN1lVT1JUdVFoZHZzaTJMU1hqaVpK?=
+ =?utf-8?B?N2lGRFlCOFJNMGc5L1gvM3g1emIrU2RBdzZIbGNSWkNyZi94bHBTdG0vbDA1?=
+ =?utf-8?B?OThFNXFwTXJ6c2VCVnR1WklDa1VhSzloNDVRajdmNUtyZ2pETFRhU0JOcEFa?=
+ =?utf-8?B?dmpVRUh6RGdna0xiN2s5SFNmY0J5Q3hzTmNCTVBaa3gycng0MWxNa1VTcnRW?=
+ =?utf-8?B?L0xualB3Q3hGTnUzQTZEbFJnZEs1V1h4OW9sR0E1ekhuMzc0bW9LNUNmcWdv?=
+ =?utf-8?B?eGgwTFZ2TjFWTnd1MjVsa09sMm9zbUQzWVVqZzVwb1Q4NndmaWZoMUFnUW4w?=
+ =?utf-8?B?TWxsQTE0Y29FdzFzSVZpd1JCbTV1RU4zNEljWldaVWJmOFBiNGVBU295Tmhz?=
+ =?utf-8?B?Ty80NWRHU3VOVGlBL3J2b2F6eVNHUVFMMTR3bm12WXNBR2xrVkhJZFFoOVRZ?=
+ =?utf-8?B?Wmc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4b88ee4-4792-4c93-d89d-08dab615dcdd
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3768.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 23:14:26.5765
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 23:17:04.4472
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cEPR7J3usxEsy/cY1MYcIyJ0Lse1pNbvShOc5yBXs5rZSkJOksXi0t9hini9f8/ieRE5wC1+Ux/Kqb4yQgw4Dw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB6328
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_07,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0
- mlxlogscore=957 malwarescore=0 spamscore=0 bulkscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210240139
-X-Proofpoint-GUID: OQLcoo22KdsKwzastAiIsVYfed5xsCCw
-X-Proofpoint-ORIG-GUID: OQLcoo22KdsKwzastAiIsVYfed5xsCCw
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-UserPrincipalName: nP/AG9A2TWTcbGMuFIZmIfBCq3jbPkWnIBIQXu617oKFp6merWtaxF/yR56cuQwd0XzFIiDt+2PfvuTTo6agTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5541
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -153,192 +171,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 14:55, Mike Kravetz wrote:
-> On 10/22/22 19:50, Mike Kravetz wrote:
-> > madvise(MADV_DONTNEED) ends up calling zap_page_range() to clear the
-> > page tables associated with the address range.  For hugetlb vmas,
-> > zap_page_range will call __unmap_hugepage_range_final.  However,
-> > __unmap_hugepage_range_final assumes the passed vma is about to be
-> > removed and deletes the vma_lock to prevent pmd sharing as the vma is
-> > on the way out.  In the case of madvise(MADV_DONTNEED) the vma remains,
-> > but the missing vma_lock prevents pmd sharing and could potentially
-> > lead to issues with truncation/fault races.
-> > 
-> > This issue was originally reported here [1] as a BUG triggered in
-> > page_try_dup_anon_rmap.  Prior to the introduction of the hugetlb
-> > vma_lock, __unmap_hugepage_range_final cleared the VM_MAYSHARE flag to
-> > prevent pmd sharing.  Subsequent faults on this vma were confused as
-> > VM_MAYSHARE indicates a sharable vma, but was not set so page_mapping
-> > was not set in new pages added to the page table.  This resulted in
-> > pages that appeared anonymous in a VM_SHARED vma and triggered the BUG.
-> > 
-> > Create a new routine clear_hugetlb_page_range() that can be called from
-> > madvise(MADV_DONTNEED) for hugetlb vmas.  It has the same setup as
-> > zap_page_range, but does not delete the vma_lock.
+
+
+On 10/24/2022 3:52 PM, Sohil Mehta wrote:
+> Hi Jithu,
 > 
-> After seeing a syzbot use after free report [2] that is also addressed by
-> this patch, I started thinking ... 
+> On 10/21/2022 1:34 PM, Jithu Joseph wrote:
+>> Existing implementation was returning fixed error code to user space
+>> regardless of the load failure encountered.
+>>
 > 
-> When __unmap_hugepage_range_final was created, the only time unmap_single_vma
-> was called for hugetlb vmas was during process exit time via exit_mmap.  I got
-> in trouble when I added a call via madvise(MADV_DONTNEED) which calls
-> zap_page_range.  This patch takes care of that calling path by having
-> madvise(MADV_DONTNEED) call a new routine clear_hugetlb_page_range instead of
-> zap_page_range for hugetlb vmas.  The use after free bug had me auditing code
-> paths to make sure __unmap_hugepage_range_final was REALLY only called at
-> process exit time.  If not, and we could fault on a vma after calling
-> __unmap_hugepage_range_final we would be in trouble.
+> The tense is a bit confusing here. Also, 'Existing implementation' is typically implied and unnecessary. Would something like this be better?
 > 
-> My thought was, what if we had __unmap_hugepage_range_final check mm->mm_users
-> to determine if it was being called in the process exit path?  If !mm_users,
-> then we can delete the vma_lock to prevent pmd sharing as we know the process
-> is exiting.  If not, we do not delete the lock.  That seems to be more robust
-> and would prevent issues if someone accidentally introduces a new code path
-> where __unmap_hugepage_range_final (unmap_single_vma for a hugetlb vma)
-> could be called outside process exit context.
+> The reload operation returns a fixed error code to user space regardless of the load failure encountered.
+
+Thanks Sohil for the review, will reword as you suggest above
+
 > 
-> Thoughts?
+> Modify..
 > 
-> [2] https://lore.kernel.org/linux-mm/000000000000d5e00a05e834962e@google.com/
+>> Modify this to propagate the actual error code to user space.
+>>
+> 
+> ...
+> 
+>> diff --git a/drivers/platform/x86/intel/ifs/load.c b/drivers/platform/x86/intel/ifs/load.c
+>> index d056617ddc85..ebaa1d6a2b18 100644
+>> --- a/drivers/platform/x86/intel/ifs/load.c
+>> +++ b/drivers/platform/x86/intel/ifs/load.c
+>> @@ -234,7 +234,7 @@ static bool ifs_image_sanity_check(struct device *dev, const struct microcode_he
+>>    * Load ifs image. Before loading ifs module, the ifs image must be located
+>>    * in /lib/firmware/intel/ifs and named as {family/model/stepping}.{testname}.
+>>    */
+>> -void ifs_load_firmware(struct device *dev)
+>> +int ifs_load_firmware(struct device *dev)
+>>   {
+>>       struct ifs_data *ifsd = ifs_get_data(dev);
+>>       const struct firmware *fw;
+>> @@ -263,4 +263,6 @@ void ifs_load_firmware(struct device *dev)
+>>       release_firmware(fw);
+>>   done:
+>>       ifsd->loaded = (ret == 0);
+>> +
+>> +    return ret;
+>>   }
 
-Sorry if this seems like I am talking to myself.  Here is a proposed v3 as
-described above.
+This change is still needed by the new code, more below
 
-From 1466fd43e180ede3f6479d1dca4e7f350f86f80b Mon Sep 17 00:00:00 2001
-From: Mike Kravetz <mike.kravetz@oracle.com>
-Date: Mon, 24 Oct 2022 15:40:05 -0700
-Subject: [PATCH v3] hugetlb: don't delete vma_lock in hugetlb MADV_DONTNEED
- processing
+>> diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
+>> index 37d8380d6fa8..4af4e1bea98d 100644
+>> --- a/drivers/platform/x86/intel/ifs/sysfs.c
+>> +++ b/drivers/platform/x86/intel/ifs/sysfs.c
+>> @@ -94,9 +94,8 @@ static ssize_t reload_store(struct device *dev,
+>>                   struct device_attribute *attr,
+>>                   const char *buf, size_t count)
+>>   {
+>> -    struct ifs_data *ifsd = ifs_get_data(dev);
+>>       bool res;
+>> -
+>> +    int rc;
+>>   
+> 
+> Does rc refer to return code? The other IFS functions like above use the commonly used 'ret' variable. Any specific reason for the inconsistency?
+> 
+> Also, patch 11 completely removes the reload_store() function. Should we avoid a separate patch to fix something that is going to be removed soon? Would re-ordering the patches help in that regard?
 
-When hugetlb madvise(MADV_DONTNEED) support was added, the existing
-code to call zap_page_range() to clear the page tables associated
-with the address range was not modified.  However, for hugetlb vmas
-zap_page_range will call __unmap_hugepage_range_final. This routine
-assumes the passed hugetlb vma is about to be removed and deletes
-the vma_lock to prevent pmd sharing as the vma is on the way out.  In
-the case of madvise(MADV_DONTNEED) the vma remains, but the missing
-vma_lock prevents pmd sharing and could potentially lead to issues
-with truncation/fault races.
+You are right that reload is removed subsequently, only the ifs_load_firmware() part above is needed for the new code . Will move the above to a new patch between current patches 11 and 12 (and drop this patch)
 
-This issue was originally reported here [1] as a BUG triggered in
-page_try_dup_anon_rmap.  Prior to the introduction of the hugetlb
-vma_lock, __unmap_hugepage_range_final cleared the VM_MAYSHARE flag
-to prevent pmd sharing.  Subsequent faults on this vma were confused
-as VM_MAYSHARE indicates a sharable vma, but was not set so page_mapping
-was not set in new pages added to the page table.  This resulted in
-pages that appeared anonymous in a VM_SHARED vma and triggered the BUG.
 
-__unmap_hugepage_range_final was originally designed only to be called
-in the context of process exit (exit_mmap).  It is now called in the
-context of madvise(MADV_DONTNEED).  Restructure the routine and check
-for !mm_users which indicates it is being called in the context of
-process exit.  If being called in process exit context, delete the
-vma_lock.  Otherwise, just unmap and leave the lock.  Since the routine
-is called in more than just process exit context, rename to eliminate
-'final' as __unmap_hugetlb_page_range.
 
-[1] https://lore.kernel.org/lkml/CAO4mrfdLMXsao9RF4fUE8-Wfde8xmjsKrTNMNC9wjUb6JudD0g@mail.gmail.com/
-
-Fixes: 90e7e7f5ef3f ("mm: enable MADV_DONTNEED for hugetlb mappings")
-Reported-by: Wei Chen <harperchen1110@gmail.com>
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: <stable@vger.kernel.org>
----
-v3 - Check for !mm_users in __unmap_hugepage_range_final instead of
-     creating a separate function.
-
- include/linux/hugetlb.h |  4 ++--
- mm/hugetlb.c            | 30 ++++++++++++++++++++----------
- mm/memory.c             |  2 +-
- 3 files changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index a899bc76d677..bc19a1f6ca10 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -158,7 +158,7 @@ long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
- void unmap_hugepage_range(struct vm_area_struct *,
- 			  unsigned long, unsigned long, struct page *,
- 			  zap_flags_t);
--void __unmap_hugepage_range_final(struct mmu_gather *tlb,
-+void __unmap_hugetlb_page_range(struct mmu_gather *tlb,
- 			  struct vm_area_struct *vma,
- 			  unsigned long start, unsigned long end,
- 			  struct page *ref_page, zap_flags_t zap_flags);
-@@ -418,7 +418,7 @@ static inline unsigned long hugetlb_change_protection(
- 	return 0;
- }
- 
--static inline void __unmap_hugepage_range_final(struct mmu_gather *tlb,
-+static inline void __unmap_hugetlb_page_range(struct mmu_gather *tlb,
- 			struct vm_area_struct *vma, unsigned long start,
- 			unsigned long end, struct page *ref_page,
- 			zap_flags_t zap_flags)
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 931789a8f734..3fe1152c3c20 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5202,27 +5202,37 @@ static void __unmap_hugepage_range(struct mmu_gather *tlb, struct vm_area_struct
- 		tlb_flush_mmu_tlbonly(tlb);
- }
- 
--void __unmap_hugepage_range_final(struct mmu_gather *tlb,
-+void __unmap_hugetlb_page_range(struct mmu_gather *tlb,
- 			  struct vm_area_struct *vma, unsigned long start,
- 			  unsigned long end, struct page *ref_page,
- 			  zap_flags_t zap_flags)
- {
-+	struct mm_struct *mm = vma->vm_mm;
-+
- 	hugetlb_vma_lock_write(vma);
- 	i_mmap_lock_write(vma->vm_file->f_mapping);
- 
- 	__unmap_hugepage_range(tlb, vma, start, end, ref_page, zap_flags);
- 
- 	/*
--	 * Unlock and free the vma lock before releasing i_mmap_rwsem.  When
--	 * the vma_lock is freed, this makes the vma ineligible for pmd
--	 * sharing.  And, i_mmap_rwsem is required to set up pmd sharing.
--	 * This is important as page tables for this unmapped range will
--	 * be asynchrously deleted.  If the page tables are shared, there
--	 * will be issues when accessed by someone else.
-+	 * Free the vma_lock here if process exiting
- 	 */
--	__hugetlb_vma_unlock_write_free(vma);
--
--	i_mmap_unlock_write(vma->vm_file->f_mapping);
-+	if (!atomic_read(&mm->mm_users)) {
-+		/*
-+		 * Unlock and free the vma lock before releasing i_mmap_rwsem.
-+		 * When the vma_lock is freed, this makes the vma ineligible
-+		 * for pmd sharing.  And, i_mmap_rwsem is required to set up
-+		 * pmd sharing.  This is important as page tables for this
-+		 * unmapped range will be asynchrously deleted.  If the page
-+		 * tables are shared, there will be issues when accessed by
-+		 * someone else.
-+		 */
-+		__hugetlb_vma_unlock_write_free(vma);
-+		i_mmap_unlock_write(vma->vm_file->f_mapping);
-+	} else {
-+		i_mmap_unlock_write(vma->vm_file->f_mapping);
-+		hugetlb_vma_unlock_write(vma);
-+	}
- }
- 
- void unmap_hugepage_range(struct vm_area_struct *vma, unsigned long start,
-diff --git a/mm/memory.c b/mm/memory.c
-index 8e72f703ed99..1de8ea504047 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -1687,7 +1687,7 @@ static void unmap_single_vma(struct mmu_gather *tlb,
- 			if (vma->vm_file) {
- 				zap_flags_t zap_flags = details ?
- 				    details->zap_flags : 0;
--				__unmap_hugepage_range_final(tlb, vma, start, end,
-+				__unmap_hugetlb_page_range(tlb, vma, start, end,
- 							     NULL, zap_flags);
- 			}
- 		} else
--- 
-2.37.3
-
+Jithu
