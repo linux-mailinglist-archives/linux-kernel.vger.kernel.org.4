@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6AE60A6E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB38160A970
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbiJXMlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
+        id S230096AbiJXNUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbiJXMiF (ORCPT
+        with ESMTP id S235987AbiJXNS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:38:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F028A1C1;
-        Mon, 24 Oct 2022 05:06:44 -0700 (PDT)
+        Mon, 24 Oct 2022 09:18:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C653CA52EF;
+        Mon, 24 Oct 2022 05:27:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C03FF612E6;
-        Mon, 24 Oct 2022 12:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D80FEC433D6;
-        Mon, 24 Oct 2022 12:06:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7069612CA;
+        Mon, 24 Oct 2022 12:23:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E70C433D6;
+        Mon, 24 Oct 2022 12:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613169;
-        bh=alETWVNsuyM1X64cVYCBiCkJ9fiVjtFgAaSa0450EIs=;
+        s=korg; t=1666614187;
+        bh=FGLUiA+nI5EoWurmpv9dwxt2Cwd9+rHSJ5m5kYCZDGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1mrZGVK3m6jVoRntgJoSFIKMo1eOj31ZyM3giS4/EAz8VtC5r/tl3cXwiP4WSe6Pe
-         2muMjNznUTHVbSOxe7DallKpt4oMTdy8nGQn7Sn50tKBtKBQVn/gmX0iFHc6yuAUJQ
-         0yFWrAy8GQeRikc0ZqCjhD9q+ZHSgg3uJdHuI8eQ=
+        b=MMQESAQPUb6KUjoQkKO64OFIbjeZMEMtSdC1A2Ehfh/NfXEsAAmLpEBWN/ZZk3iSJ
+         NL8fQiUszwPjBPAOGmS4+/Hc88LJoBGC/LrzEhuJp/C4axjHSw7Y/aFhKg1r5DEkvL
+         CIiSjg+X9NWz76G3U56G+vjS/2xWXUVrXsQ6eurM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
-        Qu Wenruo <wqu@suse.com>, Filipe Manana <fdmanana@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.4 035/255] btrfs: fix race between quota enable and quota rescan ioctl
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 148/390] platform/chrome: fix memory corruption in ioctl
 Date:   Mon, 24 Oct 2022 13:29:05 +0200
-Message-Id: <20221024113003.608998685@linuxfoundation.org>
+Message-Id: <20221024113028.991208637@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,60 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 331cd9461412e103d07595a10289de90004ac890 upstream.
+[ Upstream commit 8a07b45fd3c2dda24fad43639be5335a4595196a ]
 
-When enabling quotas, at btrfs_quota_enable(), after committing the
-transaction, we change fs_info->quota_root to point to the quota root we
-created and set BTRFS_FS_QUOTA_ENABLED at fs_info->flags. Then we try
-to start the qgroup rescan worker, first by initializing it with a call
-to qgroup_rescan_init() - however if that fails we end up freeing the
-quota root but we leave fs_info->quota_root still pointing to it, this
-can later result in a use-after-free somewhere else.
+If "s_mem.bytes" is larger than the buffer size it leads to memory
+corruption.
 
-We have previously set the flags BTRFS_FS_QUOTA_ENABLED and
-BTRFS_QGROUP_STATUS_FLAG_ON, so we can only fail with -EINPROGRESS at
-btrfs_quota_enable(), which is possible if someone already called the
-quota rescan ioctl, and therefore started the rescan worker.
-
-So fix this by ignoring an -EINPROGRESS and asserting we can't get any
-other error.
-
-Reported-by: Ye Bin <yebin10@huawei.com>
-Link: https://lore.kernel.org/linux-btrfs/20220823015931.421355-1-yebin10@huawei.com/
-CC: stable@vger.kernel.org # 4.19+
-Reviewed-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: eda2e30c6684 ("mfd / platform: cros_ec: Miscellaneous character device to talk with the EC")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Link: https://lore.kernel.org/r/Yv8dpCFZJdbUT5ye@kili
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/qgroup.c |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/platform/chrome/cros_ec_chardev.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/fs/btrfs/qgroup.c
-+++ b/fs/btrfs/qgroup.c
-@@ -1075,6 +1075,21 @@ out_add_root:
- 		fs_info->qgroup_rescan_running = true;
- 	        btrfs_queue_work(fs_info->qgroup_rescan_workers,
- 	                         &fs_info->qgroup_rescan_work);
-+	} else {
-+		/*
-+		 * We have set both BTRFS_FS_QUOTA_ENABLED and
-+		 * BTRFS_QGROUP_STATUS_FLAG_ON, so we can only fail with
-+		 * -EINPROGRESS. That can happen because someone started the
-+		 * rescan worker by calling quota rescan ioctl before we
-+		 * attempted to initialize the rescan worker. Failure due to
-+		 * quotas disabled in the meanwhile is not possible, because
-+		 * we are holding a write lock on fs_info->subvol_sem, which
-+		 * is also acquired when disabling quotas.
-+		 * Ignore such error, and any other error would need to undo
-+		 * everything we did in the transaction we just committed.
-+		 */
-+		ASSERT(ret == -EINPROGRESS);
-+		ret = 0;
- 	}
+diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
+index fd33de546aee..0de7c255254e 100644
+--- a/drivers/platform/chrome/cros_ec_chardev.c
++++ b/drivers/platform/chrome/cros_ec_chardev.c
+@@ -327,6 +327,9 @@ static long cros_ec_chardev_ioctl_readmem(struct cros_ec_dev *ec,
+ 	if (copy_from_user(&s_mem, arg, sizeof(s_mem)))
+ 		return -EFAULT;
  
- out_free_path:
++	if (s_mem.bytes > sizeof(s_mem.buffer))
++		return -EINVAL;
++
+ 	num = ec_dev->cmd_readmem(ec_dev, s_mem.offset, s_mem.bytes,
+ 				  s_mem.buffer);
+ 	if (num <= 0)
+-- 
+2.35.1
+
 
 
