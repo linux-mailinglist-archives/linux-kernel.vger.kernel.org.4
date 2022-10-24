@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744EC60BB6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CED60B962
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiJXU7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S230385AbiJXUKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235424AbiJXU7V (ORCPT
+        with ESMTP id S233998AbiJXUI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:59:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB74416D563
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:05:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 109D6150C;
-        Mon, 24 Oct 2022 08:24:02 -0700 (PDT)
-Received: from [10.57.68.77] (unknown [10.57.68.77])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8DCFA3F792;
-        Mon, 24 Oct 2022 08:23:54 -0700 (PDT)
-Message-ID: <ad13afb6-a7d9-849b-b517-ab17d190b858@arm.com>
-Date:   Mon, 24 Oct 2022 16:23:53 +0100
+        Mon, 24 Oct 2022 16:08:59 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F99CB4481;
+        Mon, 24 Oct 2022 11:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=smrlip5a13obHQefsrQCDEQn5FVgi9wQ3jfaysBd41A=; b=NsKy3KADUVtTLDLcow8PjYW4Wo
+        u6xSIAOYezInwqNo4+VT4wXNh9YuZGynjlYH9HyRLsxjXAu7kOE3YYpM5vo2KK5Pd+utDaLWiQbYC
+        HRXXEhnWxE4UH/sbLmRBRQr0Xt9ABDoMTGEbbr4YxdTsO1AI5D+O2/MoLsnrLCzvQ/823wQayvkRq
+        FhklZ7JXqNnbcsXc9bH5iJMN03RBwLg5kZ7KeA8EJBlppNQ3vcpgBt2Jj3NjIoakO14Nx+KJKtJ9m
+        GrXYA5oVoFe3jLO7ovLun05d0vuXmlnCFUL7TNGWThrId8XaRc6F1+Ve1ZxMF/YkvUsUQ3HPSO1r2
+        lA9+dfiQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1omzUq-0026gk-I2; Mon, 24 Oct 2022 15:36:12 +0000
+Date:   Mon, 24 Oct 2022 08:36:12 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     hpa@zytor.com, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        luto@kernel.org, peterz@infradead.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, arnd@arndb.de, hch@infradead.org,
+        m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+Subject: Re: [PATCH 06/12] swiotlb: Remove bounce buffer remapping for Hyper-V
+Message-ID: <Y1aw7L5IdpjFpQvw@infradead.org>
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-7-git-send-email-mikelley@microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH] coresight: cti: Remove unused variables in
- cti_{dis,en}able_hw()
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221024151201.2215380-1-nathan@kernel.org>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20221024151201.2215380-1-nathan@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1666288635-72591-7-git-send-email-mikelley@microsoft.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nathan
-
-On 24/10/2022 16:12, Nathan Chancellor wrote:
-> Clean up the following warnings, as the variables are no longer used.
+On Thu, Oct 20, 2022 at 10:57:09AM -0700, Michael Kelley wrote:
+> With changes to how Hyper-V guest VMs flip memory between private
+> (encrypted) and shared (decrypted), creating a second kernel virtual
+> mapping for shared memory is no longer necessary. Everything needed
+> for the transition to shared is handled by set_memory_decrypted().
 > 
->    drivers/hwtracing/coresight/coresight-cti-core.c:93:17: warning: unused variable 'dev' [-Wunused-variable]
->            struct device *dev = &drvdata->csdev->dev;
->                          ^
->    drivers/hwtracing/coresight/coresight-cti-core.c:154:17: warning: unused variable 'dev' [-Wunused-variable]
->            struct device *dev = &drvdata->csdev->dev;
->                          ^
->    2 warnings generated.
+> As such, remove swiotlb_unencrypted_base and the associated
+> code.
 > 
-> Fixes: 665c157e0204 ("coresight: cti: Fix hang in cti_disable_hw()")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-Thanks for your patch, this is now reverted upstream. I have
-queued a patch locally to sqaush the changes and plan to push
-it once the revert lands upstream.
+I'm more than glad that we can kill this code:
 
-Thanks
-Suzuki
-
+Acked-by: Christoph Hellwig <hch@lst.de>
