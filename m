@@ -2,74 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB9D60B1CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B74D60B30F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbiJXQhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
+        id S236046AbiJXQzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiJXQhO (ORCPT
+        with ESMTP id S233181AbiJXQuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:37:14 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 402F25A3CF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:25:03 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id b185so3027482pfb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=noL1xjB++BHKxIQ74zu34lPbtV2ZHlwYE3worwYqF+4=;
-        b=rzZW0mUO4WL5U9ltiHrYyvTcHY/hw+drJJ8LrSrZ6ByIUFyHa9GQLcXl/QTDhYuWSL
-         w93SyVrGiHuvD8PFOCFdO6rkvqciJEIzj01xWY+9ypIebIbGe0jCj8CGiGdE/MQRN3Og
-         cH665WRC2sd3N0osVuuV+diqngRFNwv4YR6urTNA6sHNIW4Dcgv51Bojsf3I+zQJvy4z
-         MU7mOcaqjwBgCOG9IUOXXtja0IITmnwr+e3jLKmBiJiWVONMziKqWVdAMOR+C1jG5GU/
-         37G/9xwyYOAps1td0fhMdQnFn4AuG9cgwYqlE0lRAn+pC8caU1a07qiK05AlhUa5Ytxj
-         1qGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=noL1xjB++BHKxIQ74zu34lPbtV2ZHlwYE3worwYqF+4=;
-        b=RdR/+z8/ADqtESrZdtLQ4T+fBneF/PxMSC9NY13WQloAJKFo2tc7/MiXcSApYA66LQ
-         F0fgxSJrp9G9hiuOl5mZAvtgvbAr0QfdsUhwgV7Zt+3CM9w1242ilq0vqDO+hfv72ca4
-         cK4kloVBq6nBarJcolmr8SWER6QM9oldfZoN8x1/hCkad1OVIDoz8W8I+/xnGHYySD1n
-         ny1o04fsBct0j6QZk59opJcER7qMmaSdF0he9Y1EhVcJuZp3Z1h3Hv5jU2Tkv7ihqZjC
-         g2P0P+4q5q+IFCqse1mJe286PshZ7iqsZbQu4jN5Rq4hnLapw98QdktRCSuSW0lK6LyA
-         rNqg==
-X-Gm-Message-State: ACrzQf2K0ot6QqN3+tWali6NA1s7KbAF7ptS2ZiRzfNHEwBesr8IZuxl
-        9fqqBGtQrDT3r8zoRYj2KXsqVQ==
-X-Google-Smtp-Source: AMsMyM7QvPiBAd8HgKZr8YJGCQNkbnlyYYh2aIazRZqncMC+dmNf9NqNJ8v+MPVG3mPwkKzZ6+t3fg==
-X-Received: by 2002:a63:1a46:0:b0:464:3966:54b9 with SMTP id a6-20020a631a46000000b00464396654b9mr29031315pgm.390.1666624970185;
-        Mon, 24 Oct 2022 08:22:50 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id az1-20020a17090b028100b00212daa6f41dsm61327pjb.28.2022.10.24.08.22.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 08:22:49 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 15:22:46 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Vipin Sharma <vipinsh@google.com>, pbonzini@redhat.com,
-        dmatlack@google.com, kvm@vger.kernel.org, shujunxue@google.com,
-        terrytaehyun@google.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] Add Hyperv extended hypercall support in KVM
-Message-ID: <Y1atxgq2SDkHbP9I@google.com>
-References: <20221021185916.1494314-1-vipinsh@google.com>
- <Y1L9Z8RgIs8yrU6o@google.com>
- <CAHVum0eoA5j7EPmmuuUb2y7XOU1jRpFwJO90tc+QBy0JNUtBsQ@mail.gmail.com>
- <Y1MXgjtPT9U6Cukk@google.com>
- <87k04pbfqd.fsf@ovpn-193-3.brq.redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k04pbfqd.fsf@ovpn-193-3.brq.redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        Mon, 24 Oct 2022 12:50:24 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F9917054;
+        Mon, 24 Oct 2022 08:33:53 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id E9F103200312;
+        Mon, 24 Oct 2022 11:28:13 -0400 (EDT)
+Received: from imap49 ([10.202.2.99])
+  by compute5.internal (MEProxy); Mon, 24 Oct 2022 11:28:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666625293; x=1666711693; bh=q4fzVob94O
+        +Bj0fcl99z5CvnsJigYyvI50uZH9qLdLQ=; b=gE9VoD+k5nuto7UW3tGPkjrh4Z
+        LBPp1sOCTOR+PMEVTN+amj0Su9uWbyFg0HFn9tIAW3xLKYs8AEudtbc2AYpGqt0/
+        s8s9HscR0DrTrK+WxzsBanU6MytNxDou9BHdX0I6T5XmCVO0COy87EiJ3S7vsRmb
+        Pz9g+IB1TmftSsh+UmIXDaV407JKYzlBW9AMbsrpzvBjotlNkzknPbBSF427ZXCT
+        NvAe537LeJ3Wo3AZ+xKqKeYLtoED4anUUs09Dq81AWsAylnHVpZAz+74ngmd3x8S
+        ChGRohwpIMi/Xg1PLFvPQgFOyT+7FQfRjy6f/iQl8mEYQjff90eMb2enM7zw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666625293; x=1666711693; bh=q4fzVob94O+Bj0fcl99z5CvnsJig
+        YyvI50uZH9qLdLQ=; b=VKNjPbUVy84sNof68wyF5lA3rZWmQB8RTY+iy4R4T/ct
+        gui83QOxvC/onSgZiaOds17v5HqyMqarCGkeSmbobWeaK+QH76r5ZUol9LxjKCKR
+        Btdw7m7Tv1DeZ7EXWSpr2+/ngXDwf2KHLHn97VbYhjt3hACLuXEsj56IDzOfRpmD
+        YvzDfC66h1TobFQB7xxauJE6YwKTNhW23hu7cr0TsosqfovH+SIocaZfqT0bWjrM
+        NDdRx2h9nwrcDcZt1WZGsPX05tOQO4QfXOz7Ru5ybqXy21zAEunW7066nJ3kGSft
+        yuS7eXi1mvRdZQTrr0IMNjhZOHhxrlaSu8b25bUtgA==
+X-ME-Sender: <xms:Da9WY8Si5Qwn8-KAfWStUJcj3BWClEyNbJoW2gxfaHS1FNDuaPXuXQ>
+    <xme:Da9WY5yBqBrPC2AfbkY3z_hl4HWlK1WIumMtLywhvIOjKlxEBjBht18Y3005_Qr0s
+    RQYsTC3DPjpiayKcw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgkeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfnfho
+    rhgvnhiiuceurghuvghrfdcuoehoshhssehlmhgsrdhioheqnecuggftrfgrthhtvghrnh
+    epffdugfeggfeiheefieehffetgeektddvtdffheekffeiueeiuddvffeljedvheevnecu
+    ffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepohhssheslhhmsgdrihho
+X-ME-Proxy: <xmx:Da9WY52vYXkrFSWZU2lNPQ_VMP_x9hDLpRthaK5jAj7sjx3DY7Ci0Q>
+    <xmx:Da9WYwBA_sHQeq3E_5Tmc2su5ThPUUAFBH4x-eDJJdCbTVWQL93i7A>
+    <xmx:Da9WY1gEBUOYH4Qdqdd7jENf2P__CFKz-R7EeVHrY6XmpTA7R0XYTA>
+    <xmx:Da9WY8Xx6e36INu7jeMRtUSlftqxweUm9CLA09A1axjU745wVQgAFA>
+Feedback-ID: icd3146c6:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 09BEC15A0087; Mon, 24 Oct 2022 11:28:12 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <6c859203-68a4-4dd9-bd7c-e93c65c686f2@app.fastmail.com>
+In-Reply-To: <20221018122708.823792-1-jolsa@kernel.org>
+References: <20221018122708.823792-1-jolsa@kernel.org>
+Date:   Mon, 24 Oct 2022 16:26:21 +0100
+From:   "Lorenz Bauer" <oss@lmb.io>
+To:     "Jiri Olsa" <jolsa@kernel.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Andy Lutomirski" <luto@kernel.org>
+Cc:     "Akihiro HARAI" <jharai0815@gmail.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Martin KaFai Lau" <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        "KP Singh" <kpsingh@chromium.org>,
+        "Stanislav Fomichev" <sdf@google.com>,
+        "Hao Luo" <haoluo@google.com>
+Subject: Re: [PATCH] x86: Include asm/ptrace.h in syscall_wrapper header
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,63 +96,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022, Vitaly Kuznetsov wrote:
-> While some 'extended' hypercalls may indeed need to be handled in KVM,
-> there's no harm done in forwarding all unknown-to-KVM hypercalls to
-> userspace. The only issue I envision is how would userspace discover
-> which extended hypercalls are supported by KVM in case it (userspace) is
-> responsible for handling HvExtCallQueryCapabilities call which returns
-> the list of supported hypercalls. E.g. in case we decide to implement
-> HvExtCallMemoryHeatHint in KVM, how are we going to communicate this to
-> userspace?
-> 
-> Normally, VMM discovers the availability of Hyper-V features through
-> KVM_GET_SUPPORTED_HV_CPUID but extended hypercalls are not listed in
-> CPUID. This can be always be solved by adding new KVM CAPs of
-> course. Alternatively, we can add a single
-> "KVM_CAP_HYPERV_EXT_CALL_QUERY" which will just return the list of
-> extended hypercalls supported by KVM (which Vipin's patch adds anyway to
-> *set* the list instead).
+On Tue, 18 Oct 2022, at 13:27, Jiri Olsa wrote:
+> From: Jiri Olsa <olsajiri@gmail.com>
+>
+> With just the forward declaration of the 'struct pt_regs' in
+> syscall_wrapper.h, the syscall stub functions:
+>
+>   __[x64|ia32]_sys_*(struct pt_regs *regs)
 
-AIUI, the TLFS uses a 64-bit mask to enumerate which extended hypercalls are
-supported, so a single CAP should be a perfect fit.  And KVM can use the capability
-to enumerate support for _and_ to allow userspace to enable in-kernel handling.  E.g.
+I think arm64 has a similar problem: https://elixir.bootlin.com/linux/v6.1-rc2/source/arch/arm64/include/asm/syscall_wrapper.h#L11
 
-check():
-	case KVM_CAP_HYPERV_EXT_CALL:
-		return KVM_SUPPORTED_HYPERV_EXT_CALL;
-
-
-enable():
-
-	case KVM_CAP_HYPERV_EXT_CALL:
-		r = -EINVAL;
-		if (mask & ~KVM_SUPPORTED_HYPERV_EXT_CALL)
-			break;
-
-		mutex_lock(&kvm->lock);
-		if (!kvm->created_vcpus) {
-			to_kvm_hv(kvm)->ext_call = cap->args[0];
-			r = 0;
-		}
-		mutex_unlock(&kvm->lock);
-
-kvm_hv_hypercall()
-
-
-	case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
-		if (unlikely(hc.fast)) {
-			ret = HV_STATUS_INVALID_PARAMETER;
-			break;
-		}
-		if (!(hc.code & to_kvm_hv(vcpu->kvm)->ext_call))
-			goto hypercall_userspace_exit;
-
-		ret = kvm_hv_ext_hypercall(...)
-		break;
-
-
-That maintains backwards compatibility with "exit on everything" as userspace
-still needs to opt-in to having KVM handle specific hypercalls in-kernel, and it
-provides the necessary knob for userspace to tell KVM which hypercalls should be
-allowed, i.e. ensures KVM doesn't violate HV_EXT_CALL_QUERY_CAPABILITIES.
+Best
+Lorenz
