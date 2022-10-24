@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDAF60A6BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F1A60A9F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiJXMiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S232235AbiJXN02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234337AbiJXMew (ORCPT
+        with ESMTP id S233747AbiJXNXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:34:52 -0400
+        Mon, 24 Oct 2022 09:23:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B306F58504;
-        Mon, 24 Oct 2022 05:05:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A3A5072F;
+        Mon, 24 Oct 2022 05:30:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DB0161311;
-        Mon, 24 Oct 2022 12:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D272C433D6;
-        Mon, 24 Oct 2022 12:02:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD4EB61328;
+        Mon, 24 Oct 2022 12:28:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC79EC433C1;
+        Mon, 24 Oct 2022 12:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612927;
-        bh=D10J9yBbVDhCPyPeEabyHA9i/KE6B7sbMw0ny/UqgeY=;
+        s=korg; t=1666614523;
+        bh=SQBhvpbr67nNnwBS9iLoISYpMqP1aXfZOUUFaVU+bMg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=URM9KukGNMflYMSxV4AYHJM51WBO74L1qcIc199vtWFHX/lL2X0zwMtiYW9v5jS4F
-         YR1TUTwYXF3VWxeJliqJdi+0zlqketSCGpqzkyp/fTsCP1BacNDrz6Z4Ucu0Jvzl8f
-         tITkcTZuguvK5zj5h9zzE02kN1LbtOYHR7Plc+CU=
+        b=jOJwNlQk/bc7Y1f4MO3jGG0G262z/aomhlQ8tcnOdXvb2qkRDQpvERoNZxWn3MZ3M
+         i8yb/Vs/Ma4coqK8bEWnVjc2o8QmHuuOwI7K8KQZ0f7vd98YwgGtVzWKIxy8slXcFv
+         5TSAZkTou9cu+CbNhcwOz0qDLJ9WFGd69zzjVwCo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Qin <chao.qin@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 172/229] powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
+Subject: [PATCH 5.10 294/390] selftest: tpm2: Add Client.__del__() to close /dev/tpm* handle
 Date:   Mon, 24 Oct 2022 13:31:31 +0200
-Message-Id: <20221024113004.659711297@linuxfoundation.org>
+Message-Id: <20221024113035.525923548@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Qin <chao.qin@intel.com>
+From: Stefan Berger <stefanb@linux.ibm.com>
 
-[ Upstream commit 2d93540014387d1c73b9ccc4d7895320df66d01b ]
+[ Upstream commit 2d869f0b458547386fbcd8cf3004b271b7347b7f ]
 
-When value < time_unit, the parameter of ilog2() will be zero and
-the return value is -1. u64(-1) is too large for shift exponent
-and then will trigger shift-out-of-bounds:
+The following output can bee seen when the test is executed:
 
-shift exponent 18446744073709551615 is too large for 32-bit type 'int'
-Call Trace:
- rapl_compute_time_window_core
- rapl_write_data_raw
- set_time_window
- store_constraint_time_window_us
+  test_flush_context (tpm2_tests.SpaceTest) ... \
+    /usr/lib64/python3.6/unittest/case.py:605: ResourceWarning: \
+    unclosed file <_io.FileIO name='/dev/tpmrm0' mode='rb+' closefd=True>
 
-Signed-off-by: Chao Qin <chao.qin@intel.com>
-Acked-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+An instance of Client does not implicitly close /dev/tpm* handle, once it
+gets destroyed. Close the file handle in the class destructor
+Client.__del__().
+
+Fixes: 6ea3dfe1e0732 ("selftests: add TPM 2.0 tests")
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/powercap/intel_rapl.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/tpm2/tpm2.py | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
-index 8cbfcce57a06..ae6721333c0f 100644
---- a/drivers/powercap/intel_rapl.c
-+++ b/drivers/powercap/intel_rapl.c
-@@ -1068,6 +1068,9 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
- 		y = value & 0x1f;
- 		value = (1 << y) * (4 + f) * rp->time_unit / 4;
- 	} else {
-+		if (value < rp->time_unit)
-+			return 0;
+diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+index f34486cd7342..3e67fdb518ec 100644
+--- a/tools/testing/selftests/tpm2/tpm2.py
++++ b/tools/testing/selftests/tpm2/tpm2.py
+@@ -370,6 +370,10 @@ class Client:
+             fcntl.fcntl(self.tpm, fcntl.F_SETFL, flags)
+             self.tpm_poll = select.poll()
+ 
++    def __del__(self):
++        if self.tpm:
++            self.tpm.close()
 +
- 		do_div(value, rp->time_unit);
- 		y = ilog2(value);
- 		f = div64_u64(4 * (value - (1 << y)), 1 << y);
+     def close(self):
+         self.tpm.close()
+ 
 -- 
 2.35.1
 
