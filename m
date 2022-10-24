@@ -2,107 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A840960B18E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A710560B3CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiJXQ1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        id S234535AbiJXRQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiJXQ1B (ORCPT
+        with ESMTP id S233090AbiJXRQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:27:01 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221F536784;
-        Mon, 24 Oct 2022 08:13:48 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id k8so8081408wrh.1;
-        Mon, 24 Oct 2022 08:13:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HLvEf6cgm6sbQwXMxy/K8YYDKY0VqrhdGwpIdzPVH88=;
-        b=BXqxvyJx37nuxTzExYLJzUYDjNDJHiRMEWZr5/N0KD/wXa3Z8nqCIAS8Ga5wJBhmjo
-         qernecX4jmVm1Hw4o9kqWvEljFarITLtcT9Pis97MIvK3PdSs78xp6pdeEADH3f4QvYB
-         RDGUJ3dJLj4YpWwFj+woEgB59vg0EcVSzVBYuUGsfxtj8P3QtxXNcjYO1g/R+pAGQRk2
-         yz53bTms6FtOaoW0uk692Rqgcc9zdK5qJf/KKce+qma2zbAzNeUZ+lpmFZMQ6f2BIfy8
-         FLdz0q0yduzNkrCZX7ncd/Fug8Vyb278JdRvc/U1S15QXjNskQEAla4lm6MiiKWo11pv
-         +X2g==
+        Mon, 24 Oct 2022 13:16:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C24E187097
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:51:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666626609;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=St4Oo1+ZOBe0lGhOZfdzJtwdKULc2yTF38gsrCy5cIs=;
+        b=hB8c1OSRjCEv9KDBqzrnFqkidQMjM+tkDJ8Ga+AdswYMOEgTgCPJ1j6wsCo95b2Petvbej
+        +7CUyUje5XBxdMwyaAa4xIwwyzwto5DXgDeI3NhaqCTZNDXwR60dZuAIcu7dMM7Na5kC3j
+        BND2Qi3B9Jo2CIcJJBNgaUT0i0xFRhE=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-659-lPmyy-T7PTisCUyRPOWjNg-1; Mon, 24 Oct 2022 10:32:42 -0400
+X-MC-Unique: lPmyy-T7PTisCUyRPOWjNg-1
+Received: by mail-ed1-f69.google.com with SMTP id h9-20020a05640250c900b00461d8ee12e2so2510123edb.23
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:32:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HLvEf6cgm6sbQwXMxy/K8YYDKY0VqrhdGwpIdzPVH88=;
-        b=eVG+KKN5KMBboB9azDd3jy/IJ2a3nTnyIOdeA8ucANEG11dwJ+DqPoaqMtL5FUg7pH
-         eRoJi9fHF+mGhTv35TFSIkYs/FfzZ6xtnXHAQc8m/dhd8v+YNPX2pPK3YBlbXTjQRq62
-         F6WsMQV5PIU0lZIY40rqE6wO2BJLtwv1kP+NnhReUSjFJe3gbm16547mf/HCscLIWIe0
-         /HA6HinBWN9FXw7dLGSyuWpqFpV9z964747ulM4F1JpveTZWtZy/NZgexJtd1ZPU+fEy
-         6aZdRizqKseCm1C39M/k5empoRKYvzx5YxiKUlK2yYa9vk6g4jLZ1Yh17mnU1/3p4+82
-         IL5Q==
-X-Gm-Message-State: ACrzQf0WzDCFAQwv0a8yuC8VQSDr5qac2+v2bVQ3dJAdICB92crVkS4Q
-        DjwEeWZ6r9pFAZWI+KSDu08oYBwct2yQdKDQ
-X-Google-Smtp-Source: AMsMyM5u1eInNT1r9xcmMJ5uXkwfkGtcne6ly9VzSeiUg9N5Tp/rAgzc+v1zRziRe+O4HB8npZ25Qw==
-X-Received: by 2002:a5d:5503:0:b0:236:1722:845d with SMTP id b3-20020a5d5503000000b002361722845dmr15307415wrv.351.1666621795315;
-        Mon, 24 Oct 2022 07:29:55 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id d12-20020adfa40c000000b0022ca921dc67sm26037895wra.88.2022.10.24.07.29.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 07:29:54 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: dvb-core: remove variable n, turn for-loop to while-loop
-Date:   Mon, 24 Oct 2022 15:29:54 +0100
-Message-Id: <20221024142954.2162920-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=St4Oo1+ZOBe0lGhOZfdzJtwdKULc2yTF38gsrCy5cIs=;
+        b=zVY4rzM5dElev7XPFRZZ4bn3raUGLZAi35eqcnc3fsEZRDJ4LLqYbqjRxYnolNYiH7
+         f664OybVL3hNZMnHV8v6sqvdyH595/+Y9M0uIZ/ZYy5yxxz+kkA3cNWNbxuT8vOikHSJ
+         ryCsJP9A3KvJ05xx1WNo9Wykz8R92IADKy901HKtU+kfIgEgXUKHNwKSS8J9wrtl2EE9
+         R8JzfVZEjeFfRmZm0gMkv8JS1WcZ0jMLhZypYKwuNAVLd+udYRamOCInNi0jIVAkpJD1
+         C5D3p62ZbYIfyzjByNLmbyd4sIxiD3yViwT7PGeE8KuhU5XyfkmbDlWMRJsl5rtvfW4i
+         EJaw==
+X-Gm-Message-State: ACrzQf1Bgv++yjNTIUetYujwNKoq7AqAqXd+WCQuk2r5ZO3ZrInH2RXl
+        xGbnSiaPhK8Fv/dBKwfBU34U3dZOYoS8cCz/TGUjWeHmhgeM4FlMN2H8Xvk7+LJbIpL08bycfuA
+        DxG0q/vNhKrxVpp0jOnfq8jAf
+X-Received: by 2002:a05:6402:2710:b0:45c:d7b4:6948 with SMTP id y16-20020a056402271000b0045cd7b46948mr30996978edd.215.1666621960895;
+        Mon, 24 Oct 2022 07:32:40 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7FteBuj1i+suD+fzUBHUwobCQ42/zPj3LuJ2XNuBwLGr/mL3KqKm8I/n6s3gjZh8Jv/+v1Ag==
+X-Received: by 2002:a05:6402:2710:b0:45c:d7b4:6948 with SMTP id y16-20020a056402271000b0045cd7b46948mr30996964edd.215.1666621960720;
+        Mon, 24 Oct 2022 07:32:40 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id ed5-20020a056402294500b00461621cae1fsm4010174edb.16.2022.10.24.07.32.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 07:32:39 -0700 (PDT)
+Message-ID: <dda4b024-69d2-1d1d-da23-e922e5b6128a@redhat.com>
+Date:   Mon, 24 Oct 2022 16:32:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2] ACPI: video: Fix missing native backlight on
+ Chromebooks
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Akihiko Odaki <akihiko.odaki@daynix.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     kernel@collabora.com, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221024141210.67784-1-dmitry.osipenko@collabora.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221024141210.67784-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable n is just being incremented and it's never used
-anywhere else. The variable and the increment are redundant so
-remove it. This allows the for-loop to be replaced with a
-while-loop.
+Hi,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/media/dvb-core/dvb_demux.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 10/24/22 16:12, Dmitry Osipenko wrote:
+> Chromebooks don't have backlight in ACPI table, they suppose to use
+> native backlight in this case. Check presence of the CrOS embedded
+> controller ACPI device and prefer the native backlight if EC found.
+> 
+> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+> Fixes: 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native() helper")
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+> 
+> Changelog:
+> 
+> v2: - Added explanatory comment to the code and added check for the
+>       native backlight presence, like was requested by Hans de Goede.
 
-diff --git a/drivers/media/dvb-core/dvb_demux.c b/drivers/media/dvb-core/dvb_demux.c
-index 83cc32ad7e12..398c86279b5b 100644
---- a/drivers/media/dvb-core/dvb_demux.c
-+++ b/drivers/media/dvb-core/dvb_demux.c
-@@ -233,7 +233,7 @@ static int dvb_dmx_swfilter_section_copy_dump(struct dvb_demux_feed *feed,
- {
- 	struct dvb_demux *demux = feed->demux;
- 	struct dmx_section_feed *sec = &feed->feed.sec;
--	u16 limit, seclen, n;
-+	u16 limit, seclen;
- 
- 	if (sec->tsfeedp >= DMX_MAX_SECFEED_SIZE)
- 		return 0;
-@@ -262,7 +262,7 @@ static int dvb_dmx_swfilter_section_copy_dump(struct dvb_demux_feed *feed,
- 	/* to be sure always set secbuf */
- 	sec->secbuf = sec->secbuf_base + sec->secbufp;
- 
--	for (n = 0; sec->secbufp + 2 < limit; n++) {
-+	while (sec->secbufp + 2 < limit) {
- 		seclen = section_length(sec->secbuf);
- 		if (seclen <= 0 || seclen > DMX_MAX_SECTION_SIZE
- 		    || seclen + sec->secbufp > limit)
--- 
-2.37.3
+Thanks this version looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Rafael, can you pick this up and send it in a fixes pull-req
+for 6.1 to Linus? Or shall I pick this one up and include it
+in my next pull-req?
+
+Regards,
+
+Hans
+
+
+
+
+
+> 
+>  drivers/acpi/video_detect.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
+> index 0d9064a9804c..9cd8797d12bb 100644
+> --- a/drivers/acpi/video_detect.c
+> +++ b/drivers/acpi/video_detect.c
+> @@ -668,6 +668,11 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
+>  	{ },
+>  };
+>  
+> +static bool google_cros_ec_present(void)
+> +{
+> +	return acpi_dev_found("GOOG0004");
+> +}
+> +
+>  /*
+>   * Determine which type of backlight interface to use on this system,
+>   * First check cmdline, then dmi quirks, then do autodetect.
+> @@ -730,6 +735,13 @@ static enum acpi_backlight_type __acpi_video_get_backlight_type(bool native)
+>  			return acpi_backlight_video;
+>  	}
+>  
+> +	/*
+> +	 * Chromebooks that don't have backlight handle in ACPI table
+> +	 * are supposed to use native backlight if it's available.
+> +	 */
+> +	if (google_cros_ec_present() && native_available)
+> +		return acpi_backlight_native;
+> +
+>  	/* No ACPI video (old hw), use vendor specific fw methods. */
+>  	return acpi_backlight_vendor;
+>  }
 
