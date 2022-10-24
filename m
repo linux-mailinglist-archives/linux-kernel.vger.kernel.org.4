@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD1460A486
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A943C60A58B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbiJXML4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
+        id S233666AbiJXM0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbiJXMLH (ORCPT
+        with ESMTP id S233836AbiJXMYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:11:07 -0400
+        Mon, 24 Oct 2022 08:24:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78BE33362;
-        Mon, 24 Oct 2022 04:53:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C79842D4E;
+        Mon, 24 Oct 2022 05:00:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5679461253;
-        Mon, 24 Oct 2022 11:40:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A7AEC433D6;
-        Mon, 24 Oct 2022 11:40:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B13B2612BE;
+        Mon, 24 Oct 2022 11:47:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5EF2C433C1;
+        Mon, 24 Oct 2022 11:47:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611641;
-        bh=ZEqcaliMDR/EDegFBvq7Wbf6roDmqbNtSYEaefYeYHE=;
+        s=korg; t=1666612054;
+        bh=KJ2cmYkVYWZemHCOGauIePDWAFHhV8/OUEmdQkb57Tg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=guIFiKPQEim1ju0+ZOtqA9FaZDKSalc1Zbk11dpkXr4OMH+N8Htm+DoFvhKVdscVh
-         DvTelgTG6Xky6BtJSWnsIslFAb1do7j8wlOpgJuc3DaUCyUv1Vv/TS8nomejXmTIGj
-         2S5bQUHUF6Ru9E+al0VtvwABR3tyY5Gc5drOFiZE=
+        b=wcIvQc3KZbUVP1t7qSepJvV+67QLsEvUdAgf54bjboFn/wI1bL+jbhRlib0GdQKlU
+         rH/LEva47UNFNVpWroEIOqch2o4d/pQnrkGa1SDEETY0WwrRguxP8PVXk8e5o63zdJ
+         W0FoKMOQMTHsYyMrDSju6DVW6XPeVLACHkXqmxUc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 015/159] clk: iproc: Do not rely on node name for correct PLL setup
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.14 052/210] ALSA: usb-audio: Fix potential memory leaks
 Date:   Mon, 24 Oct 2022 13:29:29 +0200
-Message-Id: <20221024112949.908348716@linuxfoundation.org>
+Message-Id: <20221024112958.689353440@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +52,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 1b24a132eba7a1c19475ba2510ec1c00af3ff914 ]
+commit 6382da0828995af87aa8b8bef28cc61aceb4aff3 upstream.
 
-After commit 31fd9b79dc58 ("ARM: dts: BCM5301X: update CRU block
-description") a warning from clk-iproc-pll.c was generated due to a
-duplicate PLL name as well as the console stopped working. Upon closer
-inspection it became clear that iproc_pll_clk_setup() used the Device
-Tree node unit name as an unique identifier as well as a parent name to
-parent all clocks under the PLL.
+When the driver hits -ENOMEM at allocating a URB or a buffer, it
+aborts and goes to the error path that releases the all previously
+allocated resources.  However, when -ENOMEM hits at the middle of the
+sync EP URB allocation loop, the partially allocated URBs might be
+left without released, because ep->nurbs is still zero at that point.
 
-BCM5301X was the first platform on which that got noticed because of the
-DT node unit name renaming but the same assumptions hold true for any
-user of the iproc_pll_clk_setup() function.
+Fix it by setting ep->nurbs at first, so that the error handler loops
+over the full URB list.
 
-The first 'clock-output-names' property is always guaranteed to be
-unique as well as providing the actual desired PLL clock name, so we
-utilize that to register the PLL and as a parent name of all children
-clock.
-
-Fixes: 5fe225c105fd ("clk: iproc: add initial common clock support")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Acked-by: Rafał Miłecki <rafal@milecki.pl>
-Link: https://lore.kernel.org/r/20220905161504.1526-1-f.fainelli@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220930100151.19461-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/bcm/clk-iproc-pll.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ sound/usb/endpoint.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/clk/bcm/clk-iproc-pll.c b/drivers/clk/bcm/clk-iproc-pll.c
-index 53006f4305f8..d52f2b810a4b 100644
---- a/drivers/clk/bcm/clk-iproc-pll.c
-+++ b/drivers/clk/bcm/clk-iproc-pll.c
-@@ -621,6 +621,7 @@ void __init iproc_pll_clk_setup(struct device_node *node,
- 	const char *parent_name;
- 	struct iproc_clk *iclk_array;
- 	struct clk_hw_onecell_data *clk_data;
-+	const char *clk_name;
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -818,6 +818,7 @@ static int sync_ep_set_params(struct snd
+ 	if (!ep->syncbuf)
+ 		return -ENOMEM;
  
- 	if (WARN_ON(!pll_ctrl) || WARN_ON(!clk_ctrl))
- 		return;
-@@ -669,7 +670,12 @@ void __init iproc_pll_clk_setup(struct device_node *node,
- 	iclk = &iclk_array[0];
- 	iclk->pll = pll;
++	ep->nurbs = SYNC_URBS;
+ 	for (i = 0; i < SYNC_URBS; i++) {
+ 		struct snd_urb_ctx *u = &ep->urb[i];
+ 		u->index = i;
+@@ -837,8 +838,6 @@ static int sync_ep_set_params(struct snd
+ 		u->urb->complete = snd_complete_urb;
+ 	}
  
--	init.name = node->name;
-+	ret = of_property_read_string_index(node, "clock-output-names",
-+					    0, &clk_name);
-+	if (WARN_ON(ret))
-+		goto err_pll_register;
-+
-+	init.name = clk_name;
- 	init.ops = &iproc_pll_ops;
- 	init.flags = 0;
- 	parent_name = of_clk_get_parent_name(node, 0);
-@@ -689,13 +695,11 @@ void __init iproc_pll_clk_setup(struct device_node *node,
- 		goto err_pll_register;
- 
- 	clk_data->hws[0] = &iclk->hw;
-+	parent_name = clk_name;
- 
- 	/* now initialize and register all leaf clocks */
- 	for (i = 1; i < num_clks; i++) {
--		const char *clk_name;
+-	ep->nurbs = SYNC_URBS;
 -
- 		memset(&init, 0, sizeof(init));
--		parent_name = node->name;
+ 	return 0;
  
- 		ret = of_property_read_string_index(node, "clock-output-names",
- 						    i, &clk_name);
--- 
-2.35.1
-
+ out_of_memory:
 
 
