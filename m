@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B583E60AFC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4FC60AEB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbiJXP5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 11:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S231298AbiJXPNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232055AbiJXP4T (ORCPT
+        with ESMTP id S232288AbiJXPNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:56:19 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225669E0EF;
-        Mon, 24 Oct 2022 07:51:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id j15so6108866wrq.3;
-        Mon, 24 Oct 2022 07:51:28 -0700 (PDT)
+        Mon, 24 Oct 2022 11:13:09 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3353D8B2CB
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:50:32 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id x15so6530300qvp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+yJKU+ExsNVkoi0YWDqZM4bb9zmcpHW/L+eJL77nzMo=;
-        b=kcv9Q+DGTmLpvKENjUYPRYpWizSHVrOgrm+lnz4MJuEdYVWaq5N0gjzP4o01iAcCSG
-         YrsI+MN8HZ956OjH2SbOJJINv3DRIw7PdSgpjpbxCI/odXAG7+BpZBbtmpMqAC4Ff9zb
-         /wYIuCxT+Z8UDT0t42DzUnOfgandRkJUTCKQWHIo2RyZHFulWJlCKfmA31croirefIt8
-         S3Hp4huGYJxTnvUbkY1x4W2JN7sX1K++VMfdz5ocAp5gE2moYkar/NzKH7dCk4qpe9Jz
-         0TibPn17yCIbUmWZjWwOmpISYfRcNFqsCd5nBdU+MbIQNFSJL2o63evumX3YhgfPNCmf
-         XOsA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NXoecYdGJC2+HYOwpiaqnVwgAvwqsGUF9D69/wSkRhI=;
+        b=NyZbVP20rPDepGnbV4uu3v6EY8m6TGiQ6owV05m+b7aGpSMSKydOIRIenlYnKDcMtN
+         92nqgn3EfAG3rvUW2nKJDgjqap4Ph6+UVA3Rb4ouirWkfeWybax0GYTN7teugD4g2RsE
+         OZyIglRWI1Lo57i02HkqyJLjAz0aMvSLZMwx+KjcVQEHuyYWXbeB7NzoIExp9JBKZk5Y
+         YrRbm/syzdFgCJKAK1+Dv+eRhnhCBn0T/imisPeV+IvvKzgjzzBeW8gZ0wzWHTXvzfkE
+         v7ePwrOkM2wiELe0ZJVn0vRRtCSkLyIU20+qfUStwClTv5o9vuuw1LMPSEe9Fq+nj+Es
+         a58w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+yJKU+ExsNVkoi0YWDqZM4bb9zmcpHW/L+eJL77nzMo=;
-        b=qo4ERZZ6M6Nnc5jcEiNtR/1/ejDN5pIjgjKhpUROQaq6EC8xc2KhXb+7sF090EPcm1
-         GmBmeb07C5CB1G4AOvJwGZaijYk3JikoaCEJnvgxnEoDD1H7yPHRKYfIwXHft6mVkDsQ
-         xitz/qpGLpjLN0nzMppC7BZLAK5zNrrejUrITFTHn8mIWVjkjBFqnDq3DL1+2EsdgsUI
-         KEfkvzMYvfIZxUIp7cpWiX8wWNszZGHfyQ35qE4wkS+SINQMy2qTO8aHo9Er79S5/y3p
-         GobumggYov3c6S3tqA5XUXy4w6ZxLkmL/6Xsf1KCFRzjHS0KgQ+//Dy38Yk091a5oZsn
-         WbWg==
-X-Gm-Message-State: ACrzQf06PcIPX7aoyKFZM0jbEcnAt/Nk0740lyhWAEcK0EPcLdpibXGg
-        4ASRYjxdyba4VcrvYw9Q9r4z6cYj50jy/xJx
-X-Google-Smtp-Source: AMsMyM5YJA4vDeVWRHAhN/daBb/BroIvZUmIYaT5xU2j8Ed1+mwRu1JA77YbwvqrAdNQOD0uGsO+DQ==
-X-Received: by 2002:a5d:5a85:0:b0:236:6c52:bc27 with SMTP id bp5-20020a5d5a85000000b002366c52bc27mr5126054wrb.581.1666618380046;
-        Mon, 24 Oct 2022 06:33:00 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bk16-20020a0560001d9000b002366f9bd717sm4017259wrb.45.2022.10.24.06.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 06:32:59 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ACPI: processor_throttling: remove variable count
-Date:   Mon, 24 Oct 2022 14:32:58 +0100
-Message-Id: <20221024133258.2158083-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NXoecYdGJC2+HYOwpiaqnVwgAvwqsGUF9D69/wSkRhI=;
+        b=nXIelBNDp/1uROcuGFx4PnCGFPcPtS4vpDPOEthWg0/uB0bKm6dxYlekus/Mxa9iJ+
+         t0dvkiEeafrLk8n0FMIvhb8tNxOW/wMTo2kL/7ZOchH3k+TDZX3hEci/QW5LAeSfwOSr
+         QZTtzkkPLlEfZvWe9P9UyrcO/5+kUWhLPYGXSn31otewXBeN+L4xIB8BLTZIivcpouYO
+         EW7FWL90Q6AG8lRbOqK7JDL9bYfVuybMBlGNBDm9yN33j3yh5eAG2QXXNkfmcN2cf/oP
+         i9tqyli7uIX3PmEviM/saFIu6TIJfDmWK9YCMDU5vGTZO9idIPc+190XXeomCjNjK8wF
+         ptLQ==
+X-Gm-Message-State: ACrzQf1NHpHL5+67IYZzxpGMoULaDOORYofg9GcVRjri+V7kmvf8hCPr
+        qExe82XPBeN9aIPs+CZQloEauGbipw9Srg==
+X-Google-Smtp-Source: AMsMyM4y39uLjjaZ3gT918SpmBGdDRV0vI6kOQrzttG9MnzBiUJO3QTYH6cfUlxXpAT4n9ebBvALdg==
+X-Received: by 2002:a05:6214:769:b0:4bb:77d5:bb53 with SMTP id f9-20020a056214076900b004bb77d5bb53mr2697128qvz.118.1666618464634;
+        Mon, 24 Oct 2022 06:34:24 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id bl9-20020a05620a1a8900b006cf38fd659asm14557889qkb.103.2022.10.24.06.34.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 06:34:24 -0700 (PDT)
+Message-ID: <94e05a63-e7f3-a78f-d0a6-8efcae619726@linaro.org>
+Date:   Mon, 24 Oct 2022 09:34:22 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: add TCSR node
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221024125843.25261-1-johan+linaro@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221024125843.25261-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,44 +80,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable count is just being incremented and it's never used
-anywhere else. The variable and the increment are redundant so
-remove it.
+On 24/10/2022 08:58, Johan Hovold wrote:
+> Add the TCSR node which is needed for PCIe configuration.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 5 +++++
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/acpi/processor_throttling.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Please send the patches together with the binding. There is no need to
+have this split and it causes additional effort during review - lookup
+of the binding.
 
-diff --git a/drivers/acpi/processor_throttling.c b/drivers/acpi/processor_throttling.c
-index a822fe410dda..00d045e5f524 100644
---- a/drivers/acpi/processor_throttling.c
-+++ b/drivers/acpi/processor_throttling.c
-@@ -50,7 +50,7 @@ static int __acpi_processor_set_throttling(struct acpi_processor *pr,
- 
- static int acpi_processor_update_tsd_coord(void)
- {
--	int count, count_target;
-+	int count_target;
- 	int retval = 0;
- 	unsigned int i, j;
- 	cpumask_var_t covered_cpus;
-@@ -107,7 +107,6 @@ static int acpi_processor_update_tsd_coord(void)
- 
- 		/* Validate the Domain info */
- 		count_target = pdomain->num_processors;
--		count = 1;
- 
- 		for_each_possible_cpu(j) {
- 			if (i == j)
-@@ -140,7 +139,6 @@ static int acpi_processor_update_tsd_coord(void)
- 
- 			cpumask_set_cpu(j, covered_cpus);
- 			cpumask_set_cpu(j, pthrottling->shared_cpu_map);
--			count++;
- 		}
- 		for_each_possible_cpu(j) {
- 			if (i == j)
--- 
-2.37.3
+Also additional effort during binding review - lack of usage of bindings.
+
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
