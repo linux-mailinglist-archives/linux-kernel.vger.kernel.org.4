@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3631B609F67
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B547609F6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiJXKzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S229838AbiJXKze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiJXKyk (ORCPT
+        with ESMTP id S229851AbiJXKy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:54:40 -0400
+        Mon, 24 Oct 2022 06:54:58 -0400
 Received: from mail.nearlyone.de (mail.nearlyone.de [46.163.114.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB40CE0E;
-        Mon, 24 Oct 2022 03:54:31 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id F0CAF61D7A;
-        Mon, 24 Oct 2022 12:44:31 +0200 (CEST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C78D13F0E;
+        Mon, 24 Oct 2022 03:54:38 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9CD8E61D7D;
+        Mon, 24 Oct 2022 12:44:32 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
         t=1666608272; h=from:subject:date:message-id:to:cc:mime-version:
          content-transfer-encoding:in-reply-to:references;
-        bh=s6+zpCqS6FPxz8ZLKaj1J443b3jYNWuEs6pNuizXfBs=;
-        b=cLi1hzzFHj8dNkBW0yrnn+LRsRdGoWuCmaLSI+VBf2/mX7lC78Gmie4gPpJH1URSSet0TW
-        Un8fW2WYnNd2MfYt8nPZwl56cNZSBWJfaXaIXLC0dsHQaXefyftS5cTmUf+95gdot1Et6p
-        4u1TipPziBcE6dw4QlQ2YPSekpcidzfFDtNF2n7ggsPHF7gpgZjvBq/wlRpvdFaY9DfrUw
-        gVW37QGelHsXHePuKfGb6OIEq/pWRP4XJ3WeMBcUO7IyFblXtW4fCNSZdWxupzVduwLZpu
-        E3P3Md1gbUfo+moCh7DDDnaxhZUQllbRiRZ3BL2WWzS0g78pE5ScnNROjc0uAg==
+        bh=Ewd7YIr3/bEdlcKC7v2uy0s+SHWdjFr5K1Yi5NyIu0o=;
+        b=C4+RmTg5hzIEjuwHdWs8SjfZlMU3wo4WAXs4hFa2XAeFvu7j/5Ex526Dr8JBA/Rpd8240j
+        Lvl25pbIOnbMYiQ5Q63Zn9n+AiEZNa8+hsqjOdes0N1hWylcOuqwZqclS7EoN9ydqC1XCE
+        C71lqELBsDMUJrw5ZSB8NzDLSXqMCnEuaGiCzQU+lFylRPG5OBNSQKEYHaDfJ8Ni2Nfirs
+        sfim8pizNBl+Hcuy1Nz4M+DraDhnpArs/5hMlNI5ZejIYJqtdLdTW1CBuIXthe1cp1LycB
+        FeVnF3jK7IQeCZiETOlo/kkfmj+S7+V+oiDu1bqT2W0G1/OU3CpgdiWN02iWiw==
 From:   Daniel Wagner <wagi@monom.org>
 To:     LKML <linux-kernel@vger.kernel.org>,
         linux-rt-users <linux-rt-users@vger.kernel.org>,
@@ -38,9 +38,9 @@ To:     LKML <linux-kernel@vger.kernel.org>,
         Clark Williams <williams@redhat.com>,
         Pavel Machek <pavel@denx.de>
 Cc:     Daniel Wagner <wagi@monom.org>
-Subject: [PATCH RT 4/9] Revert "workqueue: Use local irq lock instead of irq disable regions"
-Date:   Mon, 24 Oct 2022 12:44:20 +0200
-Message-Id: <20221024104425.16423-5-wagi@monom.org>
+Subject: [PATCH RT 5/9] timers: Keep interrupts disabled for TIMER_IRQSAFE timer.
+Date:   Mon, 24 Oct 2022 12:44:21 +0200
+Message-Id: <20221024104425.16423-6-wagi@monom.org>
 In-Reply-To: <20221024104425.16423-1-wagi@monom.org>
 References: <20221024104425.16423-1-wagi@monom.org>
 MIME-Version: 1.0
@@ -63,38 +63,31 @@ If anyone has any objections, please let me know.
 -----------
 
 
-This reverts the PREEMPT_RT related changes to workqueue. It reverts the
-usage of local_locks() and cpu_chill().
-
-This is a preparation to pull in the PREEMPT_RT related changes which
-were merged upstream.
+Keep interrupts disabled across callback invocation for the
+TIMER_IRQSAFE as expected.
+This is required for the timer used by workqueue after the upcomming
+rework.
 
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-[wagi: 827b6f6962da ("workqueue: rework") already reverted
-       most of the changes, except the missing update in
-       put_pwq_unlocked.]
 Signed-off-by: Daniel Wagner <wagi@monom.org>
 ---
- kernel/workqueue.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ kernel/time/timer.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 4ed22776b2ee..d97c2ad8dc08 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1496,11 +1496,9 @@ EXPORT_SYMBOL(queue_work_on);
- void delayed_work_timer_fn(struct timer_list *t)
- {
- 	struct delayed_work *dwork = from_timer(dwork, t, timer);
--	unsigned long flags;
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index a2be2277506d..3e2c0bd03004 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1397,8 +1397,7 @@ static void expire_timers(struct timer_base *base, struct hlist_head *head)
  
--	local_irq_save(flags);
-+	/* should have been called from irqsafe timer with irq already off */
- 	__queue_work(dwork->cpu, dwork->wq, &dwork->work);
--	local_irq_restore(flags);
- }
- EXPORT_SYMBOL(delayed_work_timer_fn);
+ 		fn = timer->function;
  
+-		if (!IS_ENABLED(CONFIG_PREEMPT_RT_FULL) &&
+-		    timer->flags & TIMER_IRQSAFE) {
++		if (timer->flags & TIMER_IRQSAFE) {
+ 			raw_spin_unlock(&base->lock);
+ 			call_timer_fn(timer, fn);
+ 			base->running_timer = NULL;
 -- 
 2.38.0
 
