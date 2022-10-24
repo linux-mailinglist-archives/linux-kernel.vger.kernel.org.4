@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7384960BC30
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 773D560BC33
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiJXVbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S233105AbiJXVbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231858AbiJXVav (ORCPT
+        with ESMTP id S232422AbiJXVbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:30:51 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125FF97EDD;
-        Mon, 24 Oct 2022 12:37:24 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-368edbc2c18so94377387b3.13;
-        Mon, 24 Oct 2022 12:37:24 -0700 (PDT)
+        Mon, 24 Oct 2022 17:31:13 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F9F2DCB03
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:37:52 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id s22-20020a17090a075600b002130d2ad62aso3110939pje.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:37:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OhQpzoeVGEwmo14h6MNRUCVjD46EBvZeUnXF6FjYKqc=;
-        b=LWqs5CgYoI2G7bwSrxm509BXkoJoj4h1+NAumrnw8GvlsTUUX0V7puTaejDjA+a+Se
-         JZxLEhr98Isu6X1gDcr7CkjpAxT8QlsxaP3cMesu5io+uJ/hiaxizHNPmkvonW4ZrSM3
-         9FJelnA+mhjpIKDB4wzNLTg8Yl25Bz2AgN5mLB8NjrqH3r4M0xDO+raYYo0KOsCBYSik
-         v9TQ8VEWW7hntj+Pu46z7CX8Gt3ApfbvP2i70kguAt+Ou14BtRsnM5RXks+7xrvrVctd
-         Sdn2UK8OpZrhDItYKOmqTRxqsyQ+eocL2ZMu5oL7CUQlM4vOpL4lrxfytXhVZRRPAgrU
-         MCiQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F4R18gWw/NyoA4yOCOs9gzOiiPzbgm4s4hgI5dEXU5E=;
+        b=BHhNWHxiLYRRxn2eEv1Y4eL+d54HNily+HajG8G28PIYrAruN9T50GK1FaIOAt3zSW
+         n5y8w9mU/wbNZrI2roXWmte8p//RntSifApJgIl2rmMOCFdYZN6e7QB3KzNasrmniMeu
+         J+ztLxuK0nnMq/U96KAf2mpDV/1cYo35ROWZ+KTqYMkNEo5v4F38kaVwP7Zvo2Me5Dio
+         tN/01b7AU5kkW+ZwmsRwhg/o7s0+IMTjSaIdktV5CGvbJom8jLAq8L8kwnEBjL1er09C
+         SdX34x/+rqaHgbuEBNsWrnvInQB7cyzQdxuI1OysCKqxJuYI6oo2EEhyGbulgWT58L1F
+         l8vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OhQpzoeVGEwmo14h6MNRUCVjD46EBvZeUnXF6FjYKqc=;
-        b=heEoh4/Yztkfi7Fe3Z+xAG6aD+gs7Q1C8tkpHBUoQVAaJI3ZtnFZgt+RJtQdfw9Pna
-         GYBOS2afr4d3iYbwV/WwyAzKYhnqHafNwlCW1lwRdXuNSE4Kvs832YIieMQYZQuoYd7U
-         PvEfI+3diuTorT4gH8TkmO3Pn5TNhtnVmhTtMNQ3h2bT4FMtnONuvuWxAhU8ZtGgbitu
-         Cz0/bk4Peb7Yk3tEJ4mjWyVeolngNkTlEzibTDzUQf5v4CaEIeMf/wpF/1dkNl7yqYVL
-         KxvCyUu78+sYNWI38UjvpzKlByQH4OwPAOe/l1rITpNP+m8EYRxCD1A/3Xsq+7tXMX6E
-         /+5g==
-X-Gm-Message-State: ACrzQf3E1V+PgAGtQ013UvJWJskVgrSwAuIdwl8ttVw+m7KNocO8Dlqv
-        XEs66wR9OEwpP/GUP189U2w4nY8u9pLaNzglaNHck+9ZeCg=
-X-Google-Smtp-Source: AMsMyM7XF706RQysgvnkUL+jiUes9sa+q4VpOE9nihO77SiOflxp7+5NwMrZHWz4l1+JriXP7Udvq8USTVKNN8z/wRE=
-X-Received: by 2002:a81:71c6:0:b0:36a:5682:2c44 with SMTP id
- m189-20020a8171c6000000b0036a56822c44mr14328584ywc.308.1666640181761; Mon, 24
- Oct 2022 12:36:21 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F4R18gWw/NyoA4yOCOs9gzOiiPzbgm4s4hgI5dEXU5E=;
+        b=JyETLOi0lVaFWIDhlZ7I2WaKppLO3BtwZsOs11NR3DUoygx6QQvJfz7ciLtBDxIsTO
+         B4z60drkjA2LPNEVSmlHK8f6Oe3H8NgmZ8ST/yYhUyJXHd2RsVzVGJB4DwhcsHIakK2E
+         ccglKHIPJFR2Ruw+P6uS+jwcN+QhhOrv7LZFJowJI2efzEQFyJ8sZfXWRGtkFyIgJNf5
+         QHjKKbCV0jjI+sdlA1xqDnCP7+2BGcIyy+8XFgjdrnHxMcckU2OCzp38ECFiRVvFdvOz
+         43LSPZh6DfEFtK+zmxPXMQuWIiFQZ7xCXUC0DgCTTMa4bbUNjiW2J9aYeIdbQ7TrLT+j
+         c8qA==
+X-Gm-Message-State: ACrzQf1aPXDZn7549R2D8kDd76Obyl4UdZHk52I0HQog7Y2747bHkk5h
+        k1QdX3rSlZUeHtLM8PLCJYFwfg==
+X-Google-Smtp-Source: AMsMyM7In0jAw/pPqnOgZ6bFpbRpbK+BszDf6oq9ay48JxN4rT3G+A4b0LMshpTxQEgyg/C77Pyf8Q==
+X-Received: by 2002:a17:902:ff0a:b0:185:293d:dbe3 with SMTP id f10-20020a170902ff0a00b00185293ddbe3mr35024715plj.28.1666640206449;
+        Mon, 24 Oct 2022 12:36:46 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id r10-20020a63d90a000000b00458a0649474sm106756pgg.11.2022.10.24.12.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 12:36:46 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 19:36:42 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, pbonzini@redhat.com,
+        dmatlack@google.com, kvm@vger.kernel.org, shujunxue@google.com,
+        terrytaehyun@google.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] Add Hyperv extended hypercall support in KVM
+Message-ID: <Y1bpSlNGeVkqRYxI@google.com>
+References: <20221021185916.1494314-1-vipinsh@google.com>
+ <Y1L9Z8RgIs8yrU6o@google.com>
+ <CAHVum0eoA5j7EPmmuuUb2y7XOU1jRpFwJO90tc+QBy0JNUtBsQ@mail.gmail.com>
+ <Y1MXgjtPT9U6Cukk@google.com>
+ <87k04pbfqd.fsf@ovpn-193-3.brq.redhat.com>
+ <Y1atxgq2SDkHbP9I@google.com>
+ <CAHVum0f=gRgrP=rTySn1zwPz65g6jm_3f-=qusmS7jOkKyUMSw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-2-vishal.moola@gmail.com>
-In-Reply-To: <20221017202451.4951-2-vishal.moola@gmail.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Mon, 24 Oct 2022 12:36:10 -0700
-Message-ID: <CAOzc2py2E_zFukvSv-BcDm+mJis44Zp0fksd49mudMkU52HpZA@mail.gmail.com>
-Subject: Re: [PATCH v3 01/23] pagemap: Add filemap_grab_folio()
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHVum0f=gRgrP=rTySn1zwPz65g6jm_3f-=qusmS7jOkKyUMSw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,53 +79,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 1:24 PM Vishal Moola (Oracle)
-<vishal.moola@gmail.com> wrote:
->
-> Add function filemap_grab_folio() to grab a folio from the page cache.
-> This function is meant to serve as a folio replacement for
-> grab_cache_page, and is used to facilitate the removal of
-> find_get_pages_range_tag().
->
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
->  include/linux/pagemap.h | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->
-> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-> index bbccb4044222..74d87e37a142 100644
-> --- a/include/linux/pagemap.h
-> +++ b/include/linux/pagemap.h
-> @@ -547,6 +547,26 @@ static inline struct folio *filemap_lock_folio(struct address_space *mapping,
->         return __filemap_get_folio(mapping, index, FGP_LOCK, 0);
->  }
->
-> +/**
-> + * filemap_grab_folio - grab a folio from the page cache
-> + * @mapping: The address space to search
-> + * @index: The page index
-> + *
-> + * Looks up the page cache entry at @mapping & @index. If no folio is found,
-> + * a new folio is created. The folio is locked, marked as accessed, and
-> + * returned.
-> + *
-> + * Return: A found or created folio. NULL if no folio is found and failed to
-> + * create a folio.
-> + */
-> +static inline struct folio *filemap_grab_folio(struct address_space *mapping,
-> +                                       pgoff_t index)
-> +{
-> +       return __filemap_get_folio(mapping, index,
-> +                       FGP_LOCK | FGP_ACCESSED | FGP_CREAT,
-> +                       mapping_gfp_mask(mapping));
-> +}
-> +
->  /**
->   * find_get_page - find and get a page reference
->   * @mapping: the address_space to search
-> --
-> 2.36.1
->
+On Mon, Oct 24, 2022, Vipin Sharma wrote:
+> On Mon, Oct 24, 2022 at 8:22 AM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Mon, Oct 24, 2022, Vitaly Kuznetsov wrote:
+> > > While some 'extended' hypercalls may indeed need to be handled in KVM,
+> > > there's no harm done in forwarding all unknown-to-KVM hypercalls to
+> > > userspace. The only issue I envision is how would userspace discover
+> > > which extended hypercalls are supported by KVM in case it (userspace) is
+> > > responsible for handling HvExtCallQueryCapabilities call which returns
+> > > the list of supported hypercalls. E.g. in case we decide to implement
+> > > HvExtCallMemoryHeatHint in KVM, how are we going to communicate this to
+> > > userspace?
+> > >
+> > > Normally, VMM discovers the availability of Hyper-V features through
+> > > KVM_GET_SUPPORTED_HV_CPUID but extended hypercalls are not listed in
+> > > CPUID. This can be always be solved by adding new KVM CAPs of
+> > > course. Alternatively, we can add a single
+> > > "KVM_CAP_HYPERV_EXT_CALL_QUERY" which will just return the list of
+> > > extended hypercalls supported by KVM (which Vipin's patch adds anyway to
+> > > *set* the list instead).
+> >
+> > AIUI, the TLFS uses a 64-bit mask to enumerate which extended hypercalls are
+> > supported, so a single CAP should be a perfect fit.  And KVM can use the capability
+> > to enumerate support for _and_ to allow userspace to enable in-kernel handling.  E.g.
+> >
+> > check():
+> >         case KVM_CAP_HYPERV_EXT_CALL:
+> >                 return KVM_SUPPORTED_HYPERV_EXT_CALL;
+> >
+> >
+> > enable():
+> >
+> >         case KVM_CAP_HYPERV_EXT_CALL:
+> >                 r = -EINVAL;
+> >                 if (mask & ~KVM_SUPPORTED_HYPERV_EXT_CALL)
+> >                         break;
+> >
+> >                 mutex_lock(&kvm->lock);
+> >                 if (!kvm->created_vcpus) {
+> 
+> Any reason for setting capability only after vcpus are created?
 
-Following up on the filemap-related patches (01/23, 02/23, 03/23, 04/23),
-does anyone have time to review them this week?
+This only allows setting the capability _before_ vCPUs are created.  Attempting
+to set the cap after vCPUs are created gets rejected with -EINVAL.  This
+requirement means vCPUs don't need to take a lock to consume per-VM state, as KVM
+prevents the state from changing once vCPUs are created.
+
+> Also, in my patch I wrote the ioctl at kvm_vcpu_ioctl_enable_cap() as
+> all of the hyperv related code was there but since this capability is
+> a vm setting not a per vcpu setting, should this be at  kvm_vm_ioctl()
+> as a better choice?
+
+Yep!
+
+> >                         to_kvm_hv(kvm)->ext_call = cap->args[0];
+> >                         r = 0;
+> >                 }
+> >                 mutex_unlock(&kvm->lock);
+> >
+> > kvm_hv_hypercall()
+> >
+> >
+> >         case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
+> >                 if (unlikely(hc.fast)) {
+> >                         ret = HV_STATUS_INVALID_PARAMETER;
+> >                         break;
+> >                 }
+> >                 if (!(hc.code & to_kvm_hv(vcpu->kvm)->ext_call))
+> 
+> It won't be directly this. There will be a mapping of hc.code to the
+> corresponding bit and then "&" with ext_call.
+> 
+> 
+> >                         goto hypercall_userspace_exit;
+> >
+> >                 ret = kvm_hv_ext_hypercall(...)
+> >                 break;
+> >
+> >
+> > That maintains backwards compatibility with "exit on everything" as userspace
+> > still needs to opt-in to having KVM handle specific hypercalls in-kernel, and it
+> > provides the necessary knob for userspace to tell KVM which hypercalls should be
+> > allowed, i.e. ensures KVM doesn't violate HV_EXT_CALL_QUERY_CAPABILITIES.
+> 
+> So, should I send a version with KVM capability similar to above
+
+No, the above was just a sketch of how we can extend support if necessary.  In
+general, we try to avoid creating _any_ APIs before they are strictly required.
+For uAPIs, that's pretty much a hard rule.
+
+> or for now just send the version which by default exit to userspace and later
+> whenever the need arises KVM capability can be added then?
+
+This one please :-)
