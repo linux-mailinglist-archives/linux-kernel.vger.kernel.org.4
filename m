@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD9960A71B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC43360A9D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbiJXMr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S235893AbiJXNX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbiJXMmy (ORCPT
+        with ESMTP id S231822AbiJXNW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:42:54 -0400
+        Mon, 24 Oct 2022 09:22:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657237E80C;
-        Mon, 24 Oct 2022 05:08:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2C624083;
+        Mon, 24 Oct 2022 05:29:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DFFB6125D;
-        Mon, 24 Oct 2022 11:51:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3AF4C433C1;
-        Mon, 24 Oct 2022 11:51:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 291C8612B3;
+        Mon, 24 Oct 2022 12:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B77C433D7;
+        Mon, 24 Oct 2022 12:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612316;
-        bh=erAD5uHFs99vtk9Q9Iu4F3CHrxzngC84yqaARqMsmBg=;
+        s=korg; t=1666614468;
+        bh=13fqtjI0vtQERfNaoLg9PyWP43Gb0mwjx4u9RK6NVrU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sciuVf8BEpSCfWQ4Eo69Ag+bt8mgCnrgyEtYa5xYP+ZARe/lnSB0s1LKBYijz37Uw
-         qsnp6prVb6RgZJj8aA3Oa9nC4ArfTE6T0MZFfZUwqgx0s2Lu4H/3sHGGQotdWEEM2B
-         qKS36GxDwgNfvd+il+kmICA59xysQxiSgxOMDBrY=
+        b=H0Oh5VnjahO4av0fg20QPobzmMtDnL4C8GL2GRkdoWdH4jyfs7NUIrtN4VtHV/9Mi
+         S3lygTiD4xGMUVChgN4xf77a4iEewvV39furyPTDDZd5FVV4+eJL1tK2tr6561jnjH
+         Q1YtH3Z89DWNkqKZkEJ/Ly1Y/S0qw+FvH3Mof774=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Ye Weihua <yeweihua4@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 152/210] powerpc/math_emu/efp: Include module.h
+Subject: [PATCH 5.10 272/390] crypto: hisilicon/zip - fix mismatch in get/set sgl_sge_nr
 Date:   Mon, 24 Oct 2022 13:31:09 +0200
-Message-Id: <20221024113001.909695419@linuxfoundation.org>
+Message-Id: <20221024113034.510104215@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Ye Weihua <yeweihua4@huawei.com>
 
-[ Upstream commit cfe0d370e0788625ce0df3239aad07a2506c1796 ]
+[ Upstream commit d74f9340097a881869c4c22ca376654cc2516ecc ]
 
-When building with a recent version of clang, there are a couple of
-errors around the call to module_init():
+KASAN reported this Bug:
 
-  arch/powerpc/math-emu/math_efp.c:927:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
-  module_init(spe_mathemu_init);
-  ^
-  int
-  arch/powerpc/math-emu/math_efp.c:927:13: error: a parameter list without types is only allowed in a function definition
-  module_init(spe_mathemu_init);
-              ^
-  2 errors generated.
+	[17619.659757] BUG: KASAN: global-out-of-bounds in param_get_int+0x34/0x60
+	[17619.673193] Read of size 4 at addr fffff01332d7ed00 by task read_all/1507958
+	...
+	[17619.698934] The buggy address belongs to the variable:
+	[17619.708371]  sgl_sge_nr+0x0/0xffffffffffffa300 [hisi_zip]
 
-module_init() is a macro, which is not getting expanded because module.h
-is not included in this file. Add the include so that the macro can
-expand properly, clearing up the build failure.
+There is a mismatch in hisi_zip when get/set the variable sgl_sge_nr.
+The type of sgl_sge_nr is u16, and get/set sgl_sge_nr by
+param_get/set_int.
 
-Fixes: ac6f120369ff ("powerpc/85xx: Workaroudn e500 CPU erratum A005")
-[chleroy: added fixes tag]
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Link: https://lore.kernel.org/r/8403854a4c187459b2f4da3537f51227b70b9223.1662134272.git.christophe.leroy@csgroup.eu
+Replacing param_get/set_int to param_get/set_ushort can fix this bug.
+
+Fixes: f081fda293ffb ("crypto: hisilicon - add sgl_sge_nr module param for zip")
+Signed-off-by: Ye Weihua <yeweihua4@huawei.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/math-emu/math_efp.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/crypto/hisilicon/zip/zip_crypto.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/powerpc/math-emu/math_efp.c b/arch/powerpc/math-emu/math_efp.c
-index 581f404caa1d..b9848179dbaa 100644
---- a/arch/powerpc/math-emu/math_efp.c
-+++ b/arch/powerpc/math-emu/math_efp.c
-@@ -21,6 +21,7 @@
+diff --git a/drivers/crypto/hisilicon/zip/zip_crypto.c b/drivers/crypto/hisilicon/zip/zip_crypto.c
+index 08b4660b014c..5db7cdea994a 100644
+--- a/drivers/crypto/hisilicon/zip/zip_crypto.c
++++ b/drivers/crypto/hisilicon/zip/zip_crypto.c
+@@ -107,12 +107,12 @@ static int sgl_sge_nr_set(const char *val, const struct kernel_param *kp)
+ 	if (ret || n == 0 || n > HISI_ACC_SGL_SGE_NR_MAX)
+ 		return -EINVAL;
  
- #include <linux/types.h>
- #include <linux/prctl.h>
-+#include <linux/module.h>
+-	return param_set_int(val, kp);
++	return param_set_ushort(val, kp);
+ }
  
- #include <linux/uaccess.h>
- #include <asm/reg.h>
+ static const struct kernel_param_ops sgl_sge_nr_ops = {
+ 	.set = sgl_sge_nr_set,
+-	.get = param_get_int,
++	.get = param_get_ushort,
+ };
+ 
+ static u16 sgl_sge_nr = HZIP_SGL_SGE_NR;
 -- 
 2.35.1
 
