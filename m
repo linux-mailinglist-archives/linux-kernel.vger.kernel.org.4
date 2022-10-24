@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE2660ADF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F6D60AE2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236780AbiJXOmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S232758AbiJXOvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbiJXOlk (ORCPT
+        with ESMTP id S229515AbiJXOup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:41:40 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A18F01AB;
-        Mon, 24 Oct 2022 06:18:14 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id i21so10037259edj.10;
-        Mon, 24 Oct 2022 06:18:13 -0700 (PDT)
+        Mon, 24 Oct 2022 10:50:45 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488A1109D74
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:28:24 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id a14so13431110wru.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WHhhh1m1Ank9pgC7SXLMOjGjiWt+7yExjFZnNqxa60k=;
-        b=iBQhkfqiP8vMNzFD1+pp3Nr5/vSgodxgarna9rmg6FXxz3Y06TDvL2s/BhVRP9Ec9H
-         MZ97tWHqLPNZ8gGbu52VdiFvWNdq2d/FV7eUitVqyA4uyXMwuEPUwif+bFFpsjxgRKgM
-         m5UX5n4J6mXGbrb44CvgBIulEKVdNCGzeux46pA4Xy8ACkoXJM2COLrKtOZP/DteMfag
-         XYwqXWYY90AccLVPNVmSbr656vLzz+EFXWeLx2h3s1jdEtAaWaaOfat+5KoLf2gNoh3p
-         CrqYLW+q1NzVT7BJmV0iTn6hArR3fhtKwSuZGiLEaE9JvKxrsRy8+5jFKUxjCzxZIOET
-         OU7A==
+        bh=97PYge/1MTmObwJ7LXSqk7SH569eS9TzAoTm4p09NqE=;
+        b=ozxe0mOn9EGDZvMKzeOdMD86FrhZjb1xYaPuoB+6ff8bXiHAL0VZWJmPm2Cjfo7t28
+         vnsa87erDfablZGIiGSkzAHC1FZuLuT0sknv7QNo7qjCgRwhGgpKbwi9uS/FhnCmLW96
+         RRgUqWoEMGqdAa9PuCuZSATiZW1D8kprBrW8bwwdp9lNDLOtM0w/9MrtaeLXHWyklgWF
+         xIkk8gHKHrMmyCNijTxyBu8UfFG2oACXSikL5RPQ9SPLmJv2yTbr+cqGA5wHEpKg0BXM
+         rTHiIvidbAaZiBkm/Feyw5nA6I3d4YL3UtHJ0gP+xXiZFmwVua2UUCiDIv9LdJ06gHRn
+         JqVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WHhhh1m1Ank9pgC7SXLMOjGjiWt+7yExjFZnNqxa60k=;
-        b=QdJMbf3SZTAzjTK0xjn3QWM5G/tUVuzKB1yUHkikJTjQ0OaF5f/nWD2mLaUpn4buta
-         OOeq74/Mjm++OhvKFAJYaPbu8bC7zgsGqdjnL3Z5YXAkdsvLJy3iUMftHgnI97JKw7yj
-         3KtX0lE7FYkT7NS46//qv51Y9A+i353cdmXtlwIzT+FC6ewtgcHuVirZTAFhgXMCQXNa
-         mvIBCIguWIfxtNwgYwS44SWmW66f0iwIZAgP+iexdPW5QNnTWI1esCdk5YFDPQ3+blVQ
-         WSGEn4y4Xd5z6pUmjWgjvEUNiMGLP29N6MF3IEYXLPOzIkX5IB7yf+Pn7PwXLP3r7Kqn
-         2+tQ==
-X-Gm-Message-State: ACrzQf3nJj2aAhEuuVjkJQZp8KW3XpzOeZYBeCJRxypgbE09RxbGzZZt
-        14wvhfgqbapJGvQ0opgoEFI=
-X-Google-Smtp-Source: AMsMyM60AGGuzqAkSsx5ALiyT2hDq2SbX+gt5Hfevx9ogvvaQ6UuZajA3LN9fM+GSOuoNvI/zCGpYw==
-X-Received: by 2002:a17:907:3f90:b0:78d:afad:2a78 with SMTP id hr16-20020a1709073f9000b0078dafad2a78mr28190463ejc.68.1666617329498;
-        Mon, 24 Oct 2022 06:15:29 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 4-20020a170906310400b00780ab5a9116sm15584053ejx.211.2022.10.24.06.15.27
+        bh=97PYge/1MTmObwJ7LXSqk7SH569eS9TzAoTm4p09NqE=;
+        b=MbyuanbmuxwtGqlvcrxwAYTBXQ3y6U8pk7ICaA63NQIy2Y2TSPB/pu0+kz5klUoD1P
+         OrrH4n8cxzrPnJ3TUbRlc73j275rhq7micblxXPVWJtsou4NERXu0m5mslH9tIwEY2Dt
+         bGrAtYzOg0mU5Fz2c8cmdF3uBSjd90cYZt1eZv8fOP1gMqYlBF37UPD6mI7xB0PUUYDk
+         1kmPjLFcLQtImhs/reWuM2l40hDU6VE7XvZ0/VNvQhRKs8TUsfi4EAfigpzHUL5xfpzA
+         jqmMuBHJMk5d7atKxdRPXDnoA5bplppUe9O2g9ifjqrWLkFPJYbxhLFnijpVxzNTIZs2
+         EUHA==
+X-Gm-Message-State: ACrzQf1gYhC2oJpXc/ce9SS/eHc2Fzhcr2gmDvKPUR70tceqjaDX0Kcn
+        sgM5QzP/evNhaPrK7ZHzOjAAJMfnyATIhkeJ
+X-Google-Smtp-Source: AMsMyM4WtwquW4/J7jv44/X1hX48qBjqbYlqrlzQyCgMTaKDJpyW1NDhe1IVMdHGjvdWa4zBAYv3Qw==
+X-Received: by 2002:adf:a4cc:0:b0:235:f41c:aa1e with SMTP id h12-20020adfa4cc000000b00235f41caa1emr15136314wrb.515.1666617378216;
+        Mon, 24 Oct 2022 06:16:18 -0700 (PDT)
+Received: from fadwachiby.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id l24-20020a056000023800b00236627c078esm6322307wrz.110.2022.10.24.06.16.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 06:15:28 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 15:15:26 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
+        Mon, 24 Oct 2022 06:16:16 -0700 (PDT)
+From:   Fadwa CHIBY <fchiby@baylibre.com>
+X-Google-Original-From: Fadwa CHIBY
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Ashish Mhetre <amhetre@nvidia.com>,
-        Sameer Pujar <spujar@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/8] memory: tegra: Add API for retrieving carveout
- bounds
-Message-ID: <Y1aP7kDi8cJUTcGN@orome>
-References: <20220920081203.3237744-1-cyndis@kapsi.fi>
- <20220920081203.3237744-2-cyndis@kapsi.fi>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        "Zhiyong . Tao" <zhiyong.tao@mediatek.com>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Fadwa CHIBY <fchiby@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Sen Chu <sen.chu@mediatek.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 1/3] dt-bindings: soc: mediatek: pwrap: add MT8365 SoC bindings
+Date:   Mon, 24 Oct 2022 15:15:41 +0200
+Message-Id: <20221024131544.31219-2-fchiby@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221024131544.31219-1-fchiby@baylibre.com>
+References: <20221024131544.31219-1-fchiby@baylibre.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+8zFj/rzOJcr5x3I"
-Content-Disposition: inline
-In-Reply-To: <20220920081203.3237744-2-cyndis@kapsi.fi>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,59 +83,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Fabien Parent <fparent@baylibre.com>
 
---+8zFj/rzOJcr5x3I
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add pwrap binding documentation for
 
-On Tue, Sep 20, 2022 at 11:11:56AM +0300, Mikko Perttunen wrote:
-> From: Mikko Perttunen <mperttunen@nvidia.com>
->=20
-> On Tegra234 NVDEC firmware is loaded from a secure carveout, where it
-> has been loaded by a bootloader. When booting NVDEC, we need to tell it
-> the address of this firmware, which we can determine by checking the
-> starting address of the carveout. As such, add an MC API to query the
-> bounds of carveouts, and add related information on Tegra234.
->=20
-> Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
-> ---
-> v2:
-> - Add check for 64-bit phys_addr_t. In practice phys_addr_t
->   is always 64 bits where this runs, but it avoids warnings in
->   compile test.
-> ---
->  drivers/memory/tegra/mc.c       | 25 +++++++++++++++++++++++++
->  drivers/memory/tegra/tegra234.c |  5 +++++
->  include/soc/tegra/mc.h          | 11 +++++++++++
->  3 files changed, 41 insertions(+)
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
+Signed-off-by: Fadwa CHIBY <fchiby@baylibre.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/soc/mediatek/pwrap.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Krzysztof,
+diff --git a/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt b/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
+index d24e2bc444be..8424b93c432e 100644
+--- a/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
++++ b/Documentation/devicetree/bindings/soc/mediatek/pwrap.txt
+@@ -30,6 +30,7 @@ Required properties in pwrap device node.
+ 	"mediatek,mt8186-pwrap" for MT8186 SoCs
+ 	"mediatek,mt8188-pwrap", "mediatek,mt8195-pwrap" for MT8188 SoCs
+ 	"mediatek,mt8195-pwrap" for MT8195 SoCs
++	"mediatek,mt8365-pwrap" for MT8365 SoCs
+ 	"mediatek,mt8516-pwrap" for MT8516 SoCs
+ - interrupts: IRQ for pwrap in SOC
+ - reg-names: "pwrap" is required; "pwrap-bridge" is optional.
+@@ -39,6 +40,8 @@ Required properties in pwrap device node.
+ - clock-names: Must include the following entries:
+   "spi": SPI bus clock
+   "wrap": Main module clock
++  "sys": System module clock (for MT8365 SoC)
++  "tmr": Timer module clock (for MT8365 SoC)
+ - clocks: Must contain an entry for each entry in clock-names.
+ 
+ Optional properities:
+-- 
+2.25.1
 
-I've applied this to the same tree as the patch that uses it for now.
-Let me know if you want me to put this on a separate stable branch for
-you to pull in.
-
-Thierry
-
---+8zFj/rzOJcr5x3I
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNWj+4ACgkQ3SOs138+
-s6FY2Q//bQUj39dvu/5Swb+Y6wOhHV3XtEERAJsg3FDGGZR05duhgkto+Fqf+WYs
-kest5BIuQfrjuEg19XXUDMgrJ20PPfkl9PriRw0D3/yZomyS2bieEz9Tl00/7cup
-SVPIunSj9lPuCRD5R8x7xCe20CFCI9SnDDEpZAbRXK11xiLxRBsEPrSS2ltJ3cIv
-/6p9GT37fUtNfEOuFkGPUIW8hVhhM4aBOXv4PqyRnHzWg+MamLmNWyy6mOf/a5dt
-qUs7YLas5jxgOdGAm+dLjO1ao/F6Py7pDTtIBb/akd6maRHBHexpg/cqo9UqMaT1
-VE8Y4A+1nCQHIsrslIpmYg0FN+v80pIaMn20mh1OvAkwnL91ggeK5z55YgLbzm6O
-Lfy6tX0VcaB0mONVoDGQ9+1uMY/A7OaGDuBFUaQeFqH8dYVM6XnFVpl7LFUwkoqy
-UtcH7I0jxcmlxxuh8bYM1dsKksAtp0RsBgAyddgPReNoAyK7ZqlUbP6yyfjlWSvN
-MIP9xQlmec7Al97s5RzvW2HDYWVIWQ5FeY9vZfAoeTGzBzqXLjA1vQpbJa1Wj8FR
-NqCparCt6JlFKPDKHOSsja50h0605RKGJdGZS5426lNwh2hSQozsimta3ATvmfyk
-jm77BUlj33ECmgTCa1THNJG7qnLjI7rLk4Z+CDadDRHh/j6VYVc=
-=E8o3
------END PGP SIGNATURE-----
-
---+8zFj/rzOJcr5x3I--
