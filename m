@@ -2,78 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5101560B97B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7AA60B99F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbiJXUNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S234114AbiJXUPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231607AbiJXUMn (ORCPT
+        with ESMTP id S234249AbiJXUOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:12:43 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271C1183DBE;
-        Mon, 24 Oct 2022 11:31:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666636167;
-        bh=icVbzJtZ9pqflJ14jNdNOlB/DYImZ+gyK6fC/SDHPeo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=Kkvqf/+txMBi7sxfZs0V/5+nqVslh0tnBxX4/FfBbX4K5PxEYxT5PP/zpCOkVp7bv
-         AjdzA1IvFe+Vl83LXPdeQMLwEY5VuZuTJREUOnmXgB7DCslsdCKNZhD1ffx1GoVLqb
-         rKyNNUqFB0P2skYG5FNKeRZ8QSxQWKQjW3JNG1LI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.136.30]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIdiZ-1oqd7434DN-00EaCt; Mon, 24
- Oct 2022 20:29:27 +0200
-Message-ID: <ec8edb92-a21b-6291-4275-d7cba97d7ad7@gmx.de>
-Date:   Mon, 24 Oct 2022 20:29:26 +0200
+        Mon, 24 Oct 2022 16:14:19 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9C0A3458;
+        Mon, 24 Oct 2022 11:32:38 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-12c8312131fso12850314fac.4;
+        Mon, 24 Oct 2022 11:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fvFflD4k0dWfCuYnPUW0ROCVRGYaVIG1roLKu8FKCdY=;
+        b=BV/EmlmhOfkGh96zgpr5heGMJHF9iIPFwBo3y5qUGgPUcFUPlpNyjL3LLhMOaBsos1
+         bl5959lTbyvNix2tbCWCSovXLVh820Alq2uWTazz64wOdvTFRMJhpoozaOKZ0YitKI7j
+         lYz8O3JfL4Z2o9uondujoJ45ddY3QWMpj5ibNl8XRB1neP+MII4/U6fOB0GGRsIuWOUT
+         DoW6b/oalr6I51oONiP6/e6yjYQQ1DsqCcuB5xGmFxNCrTO+VMEYDE0JcHJwejDRMKyL
+         edS/Vw6kvdAv5EdFYUyTeNtK2lAB08CNboy0L/VRM8b2mTC2ht/xlugyAGzW3+0YDnLW
+         zXeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fvFflD4k0dWfCuYnPUW0ROCVRGYaVIG1roLKu8FKCdY=;
+        b=0hSusIEscwYF96yoHNfcTek6lfL/bx9uNwmRR4N/Sy6TmnMlggUekXAK39KU980KJr
+         EG7JbtzimPJopyL5gQBI1HkivfUwl9B3ob0oBsA2Z0G17DHLhdw3AZ+jCo1p5tYrqLUj
+         EsqjvahsjGajKL9rdfiH5bbOPLpK9MMjWVbfDMmfZzS61YxKGJ9qJKNYvQTjfdQ1vSbT
+         /23Orp7A1PyALO+39Br+EOfsZ4AGC9ltW7YnOyiHeZTOituyekDbSRZEkbsJz+PecXh+
+         rqS+LJrSHLxC70BzpZrvaLIaNM6+4npc4wOqyBw7IHqwXo9h/dKIro7PBMD6HHgoma3z
+         NGXg==
+X-Gm-Message-State: ACrzQf3xfUJ9oLNFYVDjcNRhUCvqHQzs9sIs80DncO/oa5TbJtLj0M+y
+        9DqnP1fb+GfVc1KN+FqvY4E=
+X-Google-Smtp-Source: AMsMyM4phKWoFOpnP3ROaCGKVpMoWsQCIfEncptYfxkNNKjzjEJGGH39043aBXmgttZIQymNrwcBMg==
+X-Received: by 2002:a05:6870:ec90:b0:13b:b20a:ae81 with SMTP id eo16-20020a056870ec9000b0013bb20aae81mr3500501oab.77.1666636310880;
+        Mon, 24 Oct 2022 11:31:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z17-20020a05683008d100b006618b23df05sm88188otg.21.2022.10.24.11.31.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 11:31:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 24 Oct 2022 11:31:48 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
+Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v5] iio: temperature: Add driver support for Maxim
+ MAX30208
+Message-ID: <20221024183148.GA3170088@roeck-us.net>
+References: <20221024165658.181340-1-rajat.khandelwal@linux.intel.com>
+ <20221024112829.GA2807876@roeck-us.net>
+ <CO1PR11MB483509CDD93AFA3176C42080962E9@CO1PR11MB4835.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] video: fbdev: sis: use explicitly signed char
-Content-Language: en-US
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Winischhofer <thomas@winischhofer.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221024162901.535972-1-Jason@zx2c4.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20221024162901.535972-1-Jason@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:fgln+OSb5Fs7l921QypIIY6GvbB8Dpo8NbcH6CX//FlDdIZKoPn
- HTH8weoBRqVlYnQaJOUuVnLRopE3hTyC0rQ7NFop1qJoWADAuwh/gwd/DNyU80Z/nBkvvlj
- xLpYb1wKKdGZeA8sSZnuNeBXV4k3vo2v4nRR1R3a5fNPt5ryrwPOPk8q//T+CrXTBvb8tGY
- ylAA2rLff9VDqREvNVy4Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:YeTgNuQ6oBE=:x+MrTPIRv+ADg3bGSjOX2x
- c8XbmCSjtFftDhFgoBgA63vaJowCwC+3di5UjTuwo1cjyBDugLxf99Ls4mxXN6KNNLDlOGAj3
- Wl6mR0AP9W+8LUZDKcgR9x2KCpFAxB7TRmVgTZk88Hvdh10HEecFZtsnjASzNO8/2eG8/PskI
- zCW1cPfDSUtI/WSbPa7xipFxEn0bVZTrkHYJEJucNxTHt47sb0MMTLPuKU305/eTDuJh2MnFy
- N7dUAut84zTqvFUU4rVzQEaytLznUNTgQWuMw8iJhg0Y9r1gxdBobn/uS7A7UwpBfvcO95+la
- ExXo7tBr/QBo2R1zZFQqkWyLFfgq3Ucb+aUoRrs8RCU5lp3A+epBw+c2uzINC6vK/bTysxH4u
- 74VxveNrMEvEJeCuNwYfaQuCUZWS03JmRx0e8zzV08dapRsrcIyXp90UUGCB0ofpbwRdKa6z4
- iVJS+44cs4OdFyrWLx+JvO3V2lW2Ha1db3TeAI9VZOZvaWPWtO6g3smWISdQxmx26grR9QzR8
- lJ7/VCImckMTs7vQOJleMD4MEatVye+/uZlIWjiuxRpIOwD4mH23TQvkwYlVXhNnZB/5GsqLz
- VUqAexb1W2LapEPynIWtHfq6YnO/C6tIguZH2VlDJctLyBTyY5Ldteibfif7AdyVT3wbM3fg2
- n5zXbAYkC8SArLNKh7IcZp/j+BSvyWaVeWjbChcVR4rtPN+mKVI1BPOUYspQKnVDix+qvsoSE
- uLcConOmvdqLBSSqMr/QhnSEN8rMQhQdcMJxiNm60kLCxDxmZPMBEQ/gcuWMJjIfQdxzCQzXx
- XMUEoYR2xhoeI2ejsM8HtXUrRjSf1Apkwn2dlggGOeQrwU6mA+BQiIYmNFITAcbeVZxxG6x8O
- 746n9OVaOt4FrW0BToKm4gwFWCF1UFE3c/CEWVbzDYx73EzfCMuD/Z/dtVcAYNxxwjhNnFDp5
- 8utlguY9KCJgr07er4rwSu0GsC3jknq0TAIeME9v16xKSDcc2TIVpo976zBvonR0+MPybIcCM
- h2H2g5OJOn9BrqbcG9Fk4omj8xfqBjsC2nI7ULK4ZNtwSNkL4RWX1lUChj6VQVFEHo5ptjBdt
- UYRiyhO9rWcu/rgcBPXb83TqbyZiBMwK61+QvZcn0+DacPRzUpqe9iHCYEohp87oJsMkDWf7g
- 5tWzTVkU2WEhcEoBQOaIM9TLnOhpui0xVHCt3i2ChLG+oBQnDCdeqVmhOuP3nugZ4AFSHjm5s
- 1Vj1RWF2rhVPMK22jsLg7C4VPdecfyXbhtdJXGBCMdC5/PesfYAfQcVD1YpLkNrA9PuFXEDXh
- RC9SkKW4N7S/kPU5B8dCwYXVWnbtCTZlsjLfNmRqDveBSnMo782+7qGudFzP/fPnD3AzOq2WG
- C4txTHKBUgDkTOOgru1dp0fjnM5oXhkcvzC4mApzEc+DFHwaxpAHbIp2ScSj95wpB6eVqAIlb
- sXZ20FkJ2MN+Mk7WiXrpUkwEEJdEn2cTKNP1vqFwpg4tR3vGSP7j4/hbYLpbli5f3N1phP2fq
- r6dpFpstHxDSUm+0+SFiELW5DZ+6atWpEcW35DAGYFASa
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CO1PR11MB483509CDD93AFA3176C42080962E9@CO1PR11MB4835.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,59 +82,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 18:29, Jason A. Donenfeld wrote:
-> With char becoming unsigned by default, and with `char` alone being
-> ambiguous and based on architecture, signed chars need to be marked
-> explicitly as such. This fixes warnings like:
->
-> drivers/video/fbdev/sis/init301.c:3549 SiS_GetCRT2Data301() warn: 'SiS_P=
-r->SiS_EModeIDTable[ModeIdIndex]->ROMMODEIDX661' is unsigned
->
-> Cc: Thomas Winischhofer <thomas@winischhofer.net>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+On Mon, Oct 24, 2022 at 05:11:17PM +0000, Khandelwal, Rajat wrote:
+> Hi Guenter,
+> Thanks for the acknowledgement.
+> 
+> >Agreed; the sensor doesn't seem to be very useful for traditional hardware
+> >monitoring. The driver better resides in IIO.
+> Cool! I didn't know the categorical reasoning behind this but since this is 
+> accepted in IIO, I don't have to do anything more. 
 
-Applied to linux-fbdev git tree.
+Huh. There is no "categorical" reasoning. Call it a gut feeling.
+I can not imagine anyone using this chip for hardware monitoring,
+and presumably you have an IIO use case or you would not have
+implemented an IIO driver.
+
+> 
+> >I don't understand why readings are discarded. Why trigger multiple
+> >readings just to discard all but the last one ? I thought iio would
+> >be expected to return all values.
+> Ok. The plan is to trigger temperature conversion on the GPIO input also.
+> The user can trigger as many times the temperature conversion he wants (I accept unnecessary),
+> which will keep the FIFO increasing (without reading converted values) but the driver should be
+> resilient to all the erroneous zones. Also, when the user does really make a syscall to read the
+> temperature, it definitely should be the last converted reading. 
+
+That is your use case. I don't know how IIO drivers are normally
+implemented, but I would expect a generic driver. In this case,
+I would expect userspace to decide what it wants to with the data
+and not let the kernel driver discard most of it.
+
+> 
+> >This is really pointless. The register has only one bit to set.
+> >Just write that bit; reading the register before that is pointless.
+> I think the register also has some bits which are reserved. Hence, rather than to make a number
+> for specifically the value keeping those bits the same, I read whatever is there and only store the
+> required one. 
+> 
+I personally would not accept that kind of code, but that is just
+me.
+
+> >Also, the code assumes that one of the gpio input registers would be used
+> >to trigger temperature readings. Why trigger another one if this is indeed
+> >the case ? Triggering a temperature reading should only be necessary if
+> >there is no data in the fifo.
+> GPIO input triggering is yet not implemented as I would have to work on ACPI interrupts and I have
+> written the driver for now to get it included in Linux. 
+> There are 2 ways - via GPIO and making a syscall. I agree that temperature reading should be
+> necessary only when there is no data in FIFO but since we intend to keep GPIO as a trigger point,
+> user can keep triggering conversions and not reading them out. (As pointed above, driver should be
+> resilient to all erroneous zones).
+
+What does that have to do with interrupts ? Anything connected to the
+gpio pin would trigger a reading.
+
+> 
+> >The datasheet says that it can take up to 50 ms to report a result.
+> >10 retries with 50ms wait each time seems overkill.
+> That's correct. But, the response time can be up to 500 ms. Also, while debugging I had put timestamps
+> which when analyzed, indicated that time may go beyond 50 ms. 
+> 
+
+It seems to me that this would warrant an explanation in the driver.
+500ms seems hard to believe.
+
+> >And why use usleep_range() here
+> >but msleep() above ?
+> I am sorry about that. I have converted usleep_range into msleep (2 places). 
+> 
+> >This is wrong. It uses the overflow counter as data counter if it
+> >is != 0. The overflow counter counts the number of overflows, not
+> >the number of entries in the fifo.
+> So there is no such thing as 'overflow counter'. The point is if the overflow counter has
+
+Interesting statement. MAX30208_FIFO_OVF_CNTR very much
+sounds like overflow counter to me, and the datasheet
+suggests the same.
+
+> even one word, I use the data count equal to the overflow counter value. However, if it
+> has zero, then use the number of words in actual FIFO. 
+> This logic is just used to count how many values to pop to get the most recent reading.
+> 
+
+The code is
+
++       ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
++       if (ret < 0) {
++               dev_err(&data->client->dev, "Error reading reg FIFO overflow counter\n");
++               goto unlock;
++       } else if (!ret) {
++               ret = i2c_smbus_read_byte_data(data->client,
++                                              MAX30208_FIFO_DATA_CNTR);
++               if (ret < 0) {
++                       dev_err(&data->client->dev, "Error reading reg FIFO data counter\n");
++                       goto unlock;
++               }
++       }
++
++       data_count = ret;
+
+If reading MAX30208_FIFO_OVF_CNTR returns a value > 0, it is used as
+data_count. That does not seem correct. The data sheet says if
+MAX30208_FIFO_OVF_CNTR is != 0, data_count is 32. Maybe the datasheet
+is wrong all over the place, but at least in this case that seems
+very unlikely.
+
+> > data_count is declared as u8 and will never be < 0.
+> Data count can never be <0 as only first few bits of the 8 bits are used in the register. 
+> 
+	u8 data_count;
+...
+	data_count = i2c_smbus_read_byte_data(data->client,
+                                              MAX30208_FIFO_DATA_CNTR);
+        if (data_count < 0) {
+
+Really ? Static analyzers will have a field day with this code.
+
+Anyway, I don't really care much about this code, so I'll let
+Jonathan take it from here. I just wanted to share my observations.
 
 Thanks,
-Helge
-
-
-> ---
->   drivers/usb/misc/sisusbvga/sisusb_struct.h | 2 +-
->   drivers/video/fbdev/sis/vstruct.h          | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/misc/sisusbvga/sisusb_struct.h b/drivers/usb/mi=
-sc/sisusbvga/sisusb_struct.h
-> index 3df64d2a9d43..a86032a26d36 100644
-> --- a/drivers/usb/misc/sisusbvga/sisusb_struct.h
-> +++ b/drivers/usb/misc/sisusbvga/sisusb_struct.h
-> @@ -91,7 +91,7 @@ struct SiS_Ext {
->   	unsigned char VB_ExtTVYFilterIndex;
->   	unsigned char VB_ExtTVYFilterIndexROM661;
->   	unsigned char REFindex;
-> -	char ROMMODEIDX661;
-> +	signed char ROMMODEIDX661;
->   };
->
->   struct SiS_Ext2 {
-> diff --git a/drivers/video/fbdev/sis/vstruct.h b/drivers/video/fbdev/sis=
-/vstruct.h
-> index ea94d214dcff..d7a14e63ba5a 100644
-> --- a/drivers/video/fbdev/sis/vstruct.h
-> +++ b/drivers/video/fbdev/sis/vstruct.h
-> @@ -148,7 +148,7 @@ struct SiS_Ext {
->   	unsigned char  VB_ExtTVYFilterIndex;
->   	unsigned char  VB_ExtTVYFilterIndexROM661;
->   	unsigned char  REFindex;
-> -	char           ROMMODEIDX661;
-> +	signed char    ROMMODEIDX661;
->   };
->
->   struct SiS_Ext2 {
-
+Guenter
