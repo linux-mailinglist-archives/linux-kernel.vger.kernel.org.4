@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050A260AED5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83ACE60ACC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiJXPQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 11:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S234283AbiJXONI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbiJXPQ3 (ORCPT
+        with ESMTP id S237093AbiJXOKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:16:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27321BC440;
-        Mon, 24 Oct 2022 06:55:26 -0700 (PDT)
+        Mon, 24 Oct 2022 10:10:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1466C786B;
+        Mon, 24 Oct 2022 05:52:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FBDF61274;
-        Mon, 24 Oct 2022 11:45:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E90CC433C1;
-        Mon, 24 Oct 2022 11:45:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58E36B81913;
+        Mon, 24 Oct 2022 12:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB952C433C1;
+        Mon, 24 Oct 2022 12:40:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611938;
-        bh=seFHqFqmEKe+2WHH8qWbEC8yoHQChYekB21rkTHJEvg=;
+        s=korg; t=1666615243;
+        bh=C6CwbD+x4Djmkf1hfONC+CIP9Mm3gn2aJ3WQUw0pJs4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OtlkLIhNssGHOUrlo6dBigDYlTRRxXucgxFYERVu4R/QKcQOvLWxyTcabnGQrA7eu
-         wmBbIpOTS+s5mHRUPiz10ompIfx3D5kW0PyYFwpnB7ejZwD5MlSm8utVElvOEBPmto
-         edGWOvs9slkKS2VogBhZ0dlHeJnXd4w8awYzITo8=
+        b=aC7SgkvuYPVfNu4SQspHc22WqluYcx4jwCmoXejrqkzfJFuki7eGcBtjdQyeGg4G2
+         p8Pi4BlcMVpo+5VtEu0/KNn2TEEDvrMveUKxQyKNliepzY1jlYl8jOVBx552a5I+ZC
+         gQ6c4dIKP7NEAglJXV3u6MK+odi5/pTsBc93WOT4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        stable <stable@kernel.org>,
-        Hongling Zeng <zenghongling@kylinos.cn>
-Subject: [PATCH 4.14 001/210] uas: add no-uas quirk for Hiksemi usb_disk
-Date:   Mon, 24 Oct 2022 13:28:38 +0200
-Message-Id: <20221024112956.876544846@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 177/530] Bluetooth: RFCOMM: Fix possible deadlock on socket shutdown/release
+Date:   Mon, 24 Oct 2022 13:28:41 +0200
+Message-Id: <20221024113053.033911746@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,50 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hongling Zeng <zenghongling@kylinos.cn>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-commit a625a4b8806cc1e928b7dd2cca1fee709c9de56e upstream.
+[ Upstream commit 812e92b824c1db16c9519f8624d48a9901a0d38f ]
 
-The UAS mode of Hiksemi is reported to fail to work on several platforms
-with the following error message, then after re-connecting the device will
-be offlined and not working at all.
+Due to change to switch to use lock_sock inside rfcomm_sk_state_change
+the socket shutdown/release procedure can cause a deadlock:
 
-[  592.518442][ 2] sd 8:0:0:0: [sda] tag#17 uas_eh_abort_handler 0 uas-tag 18
-                   inflight: CMD
-[  592.527575][ 2] sd 8:0:0:0: [sda] tag#17 CDB: Write(10) 2a 00 03 6f 88 00 00
-                   04 00 00
-[  592.536330][ 2] sd 8:0:0:0: [sda] tag#0 uas_eh_abort_handler 0 uas-tag 1
-                   inflight: CMD
-[  592.545266][ 2] sd 8:0:0:0: [sda] tag#0 CDB: Write(10) 2a 00 07 44 1a 88 00
-                   00 08 00
+    rfcomm_sock_shutdown():
+      lock_sock();
+      __rfcomm_sock_close():
+        rfcomm_dlc_close():
+          __rfcomm_dlc_close():
+            rfcomm_dlc_lock();
+            rfcomm_sk_state_change():
+              lock_sock();
 
-These disks have a broken uas implementation, the tag field of the status
-iu-s is not set properly,so we need to fall-back to usb-storage.
+To fix this when the call __rfcomm_sock_close is now done without
+holding the lock_sock since rfcomm_dlc_lock exists to protect
+the dlc data there is no need to use lock_sock in that code path.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: stable <stable@kernel.org>
-Signed-off-by: Hongling Zeng <zenghongling@kylinos.cn>
-Link: https://lore.kernel.org/r/1663901173-21020-1-git-send-email-zenghongling@kylinos.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/all/CAD+dNTsbuU4w+Y_P7o+VEN7BYCAbZuwZx2+tH+OTzCdcZF82YA@mail.gmail.com/
+Fixes: b7ce436a5d79 ("Bluetooth: switch to lock_sock in RFCOMM")
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/unusual_uas.h |    7 +++++++
- 1 file changed, 7 insertions(+)
+ net/bluetooth/rfcomm/sock.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -65,6 +65,13 @@ UNUSUAL_DEV(0x059f, 0x1061, 0x0000, 0x99
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
- 
-+/* Reported-by: Hongling Zeng <zenghongling@kylinos.cn> */
-+UNUSUAL_DEV(0x090c, 0x2000, 0x0000, 0x9999,
-+		"Hiksemi",
-+		"External HDD",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_IGNORE_UAS),
+diff --git a/net/bluetooth/rfcomm/sock.c b/net/bluetooth/rfcomm/sock.c
+index 4bf4ea6cbb5e..21e24da4847f 100644
+--- a/net/bluetooth/rfcomm/sock.c
++++ b/net/bluetooth/rfcomm/sock.c
+@@ -902,7 +902,10 @@ static int rfcomm_sock_shutdown(struct socket *sock, int how)
+ 	lock_sock(sk);
+ 	if (!sk->sk_shutdown) {
+ 		sk->sk_shutdown = SHUTDOWN_MASK;
 +
- /*
-  * Apricorn USB3 dongle sometimes returns "USBSUSBSUSBS" in response to SCSI
-  * commands in UAS mode.  Observed with the 1.28 firmware; are there others?
++		release_sock(sk);
+ 		__rfcomm_sock_close(sk);
++		lock_sock(sk);
+ 
+ 		if (sock_flag(sk, SOCK_LINGER) && sk->sk_lingertime &&
+ 		    !(current->flags & PF_EXITING))
+-- 
+2.35.1
+
 
 
