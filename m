@@ -2,97 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B502B60B3F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723B760B3D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiJXRWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
+        id S232679AbiJXRRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234416AbiJXRWB (ORCPT
+        with ESMTP id S231960AbiJXRRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:22:01 -0400
-Received: from mout-y-209.mailbox.org (mout-y-209.mailbox.org [IPv6:2001:67c:2050:103:465::209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7070419C058;
-        Mon, 24 Oct 2022 08:56:40 -0700 (PDT)
-Received: from smtp1.mailbox.org (unknown [91.198.250.123])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-y-209.mailbox.org (Postfix) with ESMTPS id 4MwxXz37PLz9tXK;
-        Mon, 24 Oct 2022 16:00:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=noorman.info;
-        s=MBO0001; t=1666620019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jwBbiiF+pKf0bcTgRsblZnn0hi/Wak5zHyTIoUTbsXg=;
-        b=X9tiX3WtVJIGoT6Io4l77o5nM7sGiyP2NDU2lLNKA1lc58X1abNUvndGiAM2k7TgLlfIkE
-        kwvGHv4g+T1hllgldThejlma9JjOR5KhDPL9LYRjWSzr7E7kjLO0UljYTlqRn2QyBX9lQg
-        wg/fGUc1BRTbXLEvbxeCb6j1HN+eDro1n2De/CIXnpWL3jmlxn24lQrmsvYlTaOLMb2ic5
-        LYNXk0Aa59+OSl/OoEOujYf0iNhGuyp++GrYYi9KtSGhpvIAI05QiiRsztxkUr1MXk8UUW
-        Nd31b+DsTTonahKvjjx5mcUYzOGtTPlm8eUY5BkayKNBj5tAgJUT6h0rvS+jAQ==
-From:   Job Noorman <job@noorman.info>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, Job Noorman <job@noorman.info>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 3/3] arm64: dts: qcom: sdm632: fairphone-fp3: add touchscreen
-Date:   Mon, 24 Oct 2022 15:59:59 +0200
-Message-Id: <20221024140001.139111-4-job@noorman.info>
-In-Reply-To: <20221024140001.139111-1-job@noorman.info>
-References: <20221024140001.139111-1-job@noorman.info>
+        Mon, 24 Oct 2022 13:17:07 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E77EE0E;
+        Mon, 24 Oct 2022 08:51:49 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id bu30so16944594wrb.8;
+        Mon, 24 Oct 2022 08:51:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=12Hfsvc693TZxjDoiKEIy9pxMoUJGBSzkAbLmqYNUHc=;
+        b=MBySkf9aiTOI+X0qset5bfU5PmhUY3Ddaq86yiT1By0eVERf8SGpEeZpxIFyVTJT5F
+         yUdEstP4Ftp6i17BqHD6xRh1NNuu/bFwj+j9EedEGRk8Vm/D7/79iUMl8G2VoGkZhm1Z
+         +eu3sEytauSBAkVW2OBZktRjqAHjwPxZ43MyGARfBCc3onPefeVwvswHGkgZ1JrXSf7/
+         n4k3vxKaiH6OQtbeWrL2zVOWM8k3z56iQyspfP89r7TC1mUVR+b6c17JLHui95+x9/y2
+         x2vDtI2Hs/ljNsKzmRpQSs9I1X9DQ8nU4dT2xjc+eoCEFy3cNty2sym4/m0JK9/VjihE
+         ERQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=12Hfsvc693TZxjDoiKEIy9pxMoUJGBSzkAbLmqYNUHc=;
+        b=jEkbzvcHc4eOP2CQgDD3pVCGRXphWGo4Gz6TSDyCQ8ornbJgAHcwrNHl33jkTJ8uCq
+         W+KLDk5Sf+Whuktazcmt6wdUL7BBJghowUTv3DfHx1GyFCDCXJahyaMlxxvqc6gb7+G3
+         NwGv6RlW4doEthqQNRxz/CTYcaqUnZawBkOYZQ1peQSz6cgOTJQ9kumAvI8GmHr8fxnj
+         g4t+zJj54uocDyiSQUneqgw+ddHLPJ5C/t4LTNT5XjMySe/dp779X/r+JsxGnEcx87Gf
+         68ct01ZTxIr3fV9NzwREtqRj0pA95OLH2pAekL0BWCJyw0LuYasMsptWK5zJIml0nrJQ
+         mdYQ==
+X-Gm-Message-State: ACrzQf1o9852AxWCIJLg8bDQPZg7Bs70ocoHhtluni1F9vUtUVAvBigf
+        eiPuy0wONv9XlhE2nIeiZLlso1k572O8lZV1
+X-Google-Smtp-Source: AMsMyM7ru3zgHPhzmq1cPiu4/GsUgya8geED2sp+Kl1Z2vuNu9KGxL3Ep5jk0PULaQ1+0iBhJn7zEg==
+X-Received: by 2002:adf:eb84:0:b0:22a:917e:1c20 with SMTP id t4-20020adfeb84000000b0022a917e1c20mr21439631wrn.223.1666620061633;
+        Mon, 24 Oct 2022 07:01:01 -0700 (PDT)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id v1-20020adfedc1000000b00228daaa84aesm27118102wro.25.2022.10.24.07.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 07:01:01 -0700 (PDT)
+Message-ID: <aeec15d5-6f7a-2c4f-0f90-72c52d082ce8@gmail.com>
+Date:   Mon, 24 Oct 2022 15:00:59 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4MwxXz37PLz9tXK
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Content-Language: en-US
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+Subject: Variables being modified but not used in
+ net/wireless/lib80211_crypt_tkip.c
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Himax hx83112b touchscreen to the FP3 DT.
+Hi,
 
-Signed-off-by: Job Noorman <job@noorman.info>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+I was reviewing some clang scan build static analysis results and found 
+an interesting warning:
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-index 891e314bc782..2920504461d3 100644
---- a/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts
-@@ -49,6 +49,20 @@ &hsusb_phy {
- 	vdda-phy-dpdm-supply = <&pm8953_l13>;
- };
- 
-+&i2c_3 {
-+	status = "okay";
-+
-+	touchscreen@48 {
-+		compatible = "himax,hx83112b";
-+		reg = <0x48>;
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <65 IRQ_TYPE_LEVEL_LOW>;
-+		touchscreen-size-x = <1080>;
-+		touchscreen-size-y = <2160>;
-+		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
- &pm8953_resin {
- 	status = "okay";
- 	linux,code = <KEY_VOLUMEDOWN>;
--- 
-2.38.1
+Source: net/wireless/lib80211_crypt_tkip.c
 
+net/wireless/lib80211_crypt_tkip.c:667:7: warning: variable 'iv32' set 
+but not used [-Wunused-but-set-variable]
+                 u32 iv32 = tkey->tx_iv32;
+
+The variables iv32 and iv16 are being decremented, but are not 
+referenced after that. The seq[] array is being updated with the 
+pre-decremented values. Is that correct?
+
+         if (seq) {
+                 /* Return the sequence number of the last transmitted 
+frame. */
+                 u16 iv16 = tkey->tx_iv16;
+                 u32 iv32 = tkey->tx_iv32;
+                 if (iv16 == 0)
+                         iv32--;
+                 iv16--;
+                 seq[0] = tkey->tx_iv16;
+                 seq[1] = tkey->tx_iv16 >> 8;
+                 seq[2] = tkey->tx_iv32;
+                 seq[3] = tkey->tx_iv32 >> 8;
+                 seq[4] = tkey->tx_iv32 >> 16;
+                 seq[5] = tkey->tx_iv32 >> 24;
+         }
+
+         return TKIP_KEY_LEN;
+
+Colin
