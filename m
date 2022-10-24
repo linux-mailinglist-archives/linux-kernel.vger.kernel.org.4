@@ -2,102 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E82160B547
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F9860B5C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiJXSTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S231491AbiJXSjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbiJXSS5 (ORCPT
+        with ESMTP id S232103AbiJXSi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:18:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280D2237F5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:59:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 24 Oct 2022 14:38:56 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0237E8559F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:21:12 -0700 (PDT)
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C07C9614AC
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:21:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7231BC433C1;
-        Mon, 24 Oct 2022 16:21:52 +0000 (UTC)
-Date:   Mon, 24 Oct 2022 12:22:02 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Cc:     Shuah Khan <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Akanksha J N <akanksha@linux.vnet.ibm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v2 0/2] selftests/ftrace: Capture dependency on external
- programs
-Message-ID: <20221024122202.01b643c6@gandalf.local.home>
-In-Reply-To: <20221018103033.3af4c9d2@gandalf.local.home>
-References: <cover.1666101523.git.naveen.n.rao@linux.vnet.ibm.com>
-        <20221018103033.3af4c9d2@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DB0A3412E3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:25:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1666628712;
+        bh=Ixu77uPqydiuHG6fPGpxDklyUTJBN1ymlRpdiLOxoy4=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=TYq8Ft/rl5vJFO55sJuGYWEFsSDImWZXHZ8o99RfiSfIPmnc9b8T578nGAi4X0gZx
+         KxfT2iNW9k8rPG1pZYkm2RJ2I8jKftnnE1YfJujNGXdPUYw+PxvWnd26VwdFdgNDvB
+         ATI6+NjxdxTzR8/VFLDEk3q13+jfGtZLndXs8MRaVbJS5driOxWhlTYZ59rnYawcnj
+         0tZdy1z31+/77kw6FHMA4iEGv45XgEtBsPjMKWnWenbn0sxMEDCtHDBjy1GPRX6Z3P
+         2b3WXGLTUDB+YRZ/n+q5ss4ejfx+ieEtIG870u7GIXAtHgNvJLWF1WQRGdMnZWhY48
+         iqE1nrkGx/uPQ==
+Received: by mail-pj1-f69.google.com with SMTP id n4-20020a17090a2fc400b002132adb9485so483989pjm.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:25:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:content-transfer-encoding:mime-version:comments
+         :references:in-reply-to:subject:cc:to:from:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ixu77uPqydiuHG6fPGpxDklyUTJBN1ymlRpdiLOxoy4=;
+        b=IuSwbupQJM/y2yTTIta1+cXekDrSJMfMKCcmDHmYwei/u/key35hCEs60no6uju/oH
+         PzuxfomSXgeFyW1bkJRIl7V/SQVMwjPG+Y5Sjk6MiGFFNl6scyxlJoHh0gumY/bunROa
+         wJSt34rEG/F0KkZWn91Ltjjzz8c8Hgb/ETRPsM5dxleVRmCze0s35suSgDZTdzuku/cn
+         Xw3CHMAF/Xh8whBwpn55Le8kDPf6l0lGp2awQ5vQa79JqOgIvm+Mx/fG9P9nKzBK2nRc
+         /qd31N5CmLD1EoObTehOm7qYGQ2BvzCbRAjAhPZEyM5fdlY6M8nk2lQkr1b1Agfecyjd
+         8OgQ==
+X-Gm-Message-State: ACrzQf3T4hVTWn32ym+dCoGyceWrDYVXWMq9ppPvo/6ee+gjeJteO3VP
+        5b7uv/f1JRwULg5kSBYQGAR4c8ldvBJAp+RB8GU1fy8EfAdXObOD1p0aSpSv502BnSsP7Inj5sq
+        CJPtK3Eh5Ghx8ej3xZtweodhJZEjOeDKkQzW3cvab8Q==
+X-Received: by 2002:a17:902:8a88:b0:17f:8642:7c9a with SMTP id p8-20020a1709028a8800b0017f86427c9amr35266066plo.13.1666628711432;
+        Mon, 24 Oct 2022 09:25:11 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6UhqBLQBcXTciVK82+Hw2AgWJIhdAmL0U73IMMIQQNfpE/hHan6un1+M0e7JUSpxgxZB0ZXA==
+X-Received: by 2002:a17:902:8a88:b0:17f:8642:7c9a with SMTP id p8-20020a1709028a8800b0017f86427c9amr35266042plo.13.1666628711092;
+        Mon, 24 Oct 2022 09:25:11 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id d185-20020a6236c2000000b0056286c552ecsm11771pfa.184.2022.10.24.09.25.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Oct 2022 09:25:10 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 0494260DBF; Mon, 24 Oct 2022 09:25:09 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id F1B29A06A7;
+        Mon, 24 Oct 2022 09:25:09 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Steven Hsieh <steven.hsieh@broadcom.com>
+cc:     Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] bonding: 3ad: bonding of links with different data rate
+In-reply-to: <20221022220158.74933-1-steven.hsieh@broadcom.com>
+References: <20221022220158.74933-1-steven.hsieh@broadcom.com>
+Comments: In-reply-to Steven Hsieh <steven.hsieh@broadcom.com>
+   message dated "Sat, 22 Oct 2022 15:01:58 -0700."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 24 Oct 2022 09:25:09 -0700
+Message-ID: <15633.1666628709@famine>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Steven Hsieh <steven.hsieh@broadcom.com> wrote:
 
-Hi Shuah,
+>Current Linux Bonding driver supports IEEE802.3ad-2000.
+>Operation across multiple data rates=E2=80=94
+>All links in a Link Aggregation Group operate at the same data rate.
+>
+>In IEEE802.1AX-2014
+>Aggregation of links of different data rates is not prohibited
+>nor required by this standard.
 
-Can you take this through your tree?
+	The -2014 and -2020 versions change a lot of things at once; I'm
+not sure we can just cherry pick out one thing (or maybe we can, I'm
+reading through the changes).  Notably, the -2020 version states, in
+reference to changes added at -2014,
 
--- Steve
+"[...] it explicitly allowed the aggregation of point-to-point links of
+any speed using any physical media or logical connection capable of
+supporting the Internal Sublayer Service specified in IEEE Std
+802.1AC."
 
-On Tue, 18 Oct 2022 10:30:33 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+	whereas the -2008 standard specifies "CSMA/CD MACs" instead of
+the ISS from 802.1AC.  I'm not yet sure if this makes any relevant
+difference.
 
-> Masami,
-> 
-> If you are OK with this patch set, perhaps Shuah can take it through her
-> tree?
-> 
-> -- Steve
-> 
-> 
-> On Tue, 18 Oct 2022 19:33:39 +0530
-> "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com> wrote:
-> 
-> > This is v2 of the below patch:
-> > http://lkml.kernel.org/r/20221017101927.303547-1-naveen.n.rao@linux.vnet.ibm.com
-> > 
-> > The second patch is new, and converts some other tests to use the new 
-> > way of specifying dependency on external programs.
-> > 
-> > - Naveen
-> > 
-> > 
-> > Naveen N. Rao (2):
-> >   selftests/ftrace: Add check for ping command for trigger tests
-> >   selftests/ftrace: Convert tracer tests to use 'requires' to specify
-> >     program dependency
-> > 
-> >  tools/testing/selftests/ftrace/test.d/functions           | 8 +++++++-
-> >  tools/testing/selftests/ftrace/test.d/tracer/wakeup.tc    | 7 +------
-> >  tools/testing/selftests/ftrace/test.d/tracer/wakeup_rt.tc | 7 +------
-> >  .../trigger/inter-event/trigger-field-variable-support.tc | 2 +-
-> >  .../inter-event/trigger-inter-event-combined-hist.tc      | 2 +-
-> >  .../trigger/inter-event/trigger-onchange-action-hist.tc   | 2 +-
-> >  .../trigger/inter-event/trigger-onmatch-action-hist.tc    | 2 +-
-> >  .../inter-event/trigger-onmatch-onmax-action-hist.tc      | 2 +-
-> >  .../trigger/inter-event/trigger-onmax-action-hist.tc      | 2 +-
-> >  .../trigger/inter-event/trigger-snapshot-action-hist.tc   | 2 +-
-> >  .../inter-event/trigger-synthetic-event-dynstring.tc      | 2 +-
-> >  .../trigger/inter-event/trigger-trace-action-hist.tc      | 2 +-
-> >  12 files changed, 18 insertions(+), 22 deletions(-)
-> > 
-> > 
-> > base-commit: 6c0f39e87b6ab1a3009e3a49d3e6f6db8dc756a8  
-> 
+>This patch provides configuration option to allow aggregation of links
+>with different speed.
 
+	Have you tested all of the edge cases?  E.g., what is the
+behavior with and without the option enabled when an interface in an
+aggregator changes its speed?
+
+	If you have tests, consider including test scripts in
+tools/testing/selftests/drivers/net/bonding/
+
+>Enhancement is disabled by default and can be enabled thru
+> echo 1 > /sys/class/net/bond*/bonding/async_linkspeed
+
+	New option settings like this require (a) support in iproute2
+(to set/get the option like any other bonding option), and (b) updates
+to the documentation (Documentation/networking/bonding.rst).
+
+	I'm not completely sold on the name, either, "async" doesn't
+really describe "differing data rates" in my mind.  Perhaps an option
+named "ad_link_speed" with allowed values of "same" or "any"?
+
+	-J
+
+>Signed-off-by: Steven Hsieh <steven.hsieh@broadcom.com>
+>
+>---
+>
+> drivers/net/bonding/bond_3ad.c     | 12 +++++++++++-
+> drivers/net/bonding/bond_options.c | 26 ++++++++++++++++++++++++++
+> drivers/net/bonding/bond_sysfs.c   | 15 +++++++++++++++
+> include/net/bond_options.h         |  1 +
+> include/net/bonding.h              |  1 +
+> 5 files changed, 54 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad=
+.c
+>index e58a1e0cadd2..f5689dae88c3 100644
+>--- a/drivers/net/bonding/bond_3ad.c
+>+++ b/drivers/net/bonding/bond_3ad.c
+>@@ -385,6 +385,13 @@ static void __ad_actor_update_port(struct port *port)
+> 	port->actor_system_priority =3D BOND_AD_INFO(bond).system.sys_priority;
+> }
+>=20
+>+static inline u32 __get_agg_async_linkspeed(struct port *port)
+>+{
+>+	const struct bonding *bond =3D bond_get_bond_by_slave(port->slave);
+>+
+>+	return (bond) ? bond->params.async_linkspeed : 0;
+>+}
+>+
+> /* Conversions */
+>=20
+> /**
+>@@ -2476,7 +2483,10 @@ static void ad_update_actor_keys(struct port *port,=
+ bool reset)
+> 		speed =3D __get_link_speed(port);
+> 		ospeed =3D (old_oper_key & AD_SPEED_KEY_MASKS) >> 1;
+> 		duplex =3D __get_duplex(port);
+>-		port->actor_admin_port_key |=3D (speed << 1) | duplex;
+>+		if (__get_agg_async_linkspeed(port))
+>+			port->actor_admin_port_key |=3D duplex;
+>+		else
+>+			port->actor_admin_port_key |=3D (speed << 1) | duplex;
+> 	}
+> 	port->actor_oper_port_key =3D port->actor_admin_port_key;
+>=20
+>diff --git a/drivers/net/bonding/bond_options.c b/drivers/net/bonding/bond=
+_options.c
+>index 3498db1c1b3c..cd871075b85c 100644
+>--- a/drivers/net/bonding/bond_options.c
+>+++ b/drivers/net/bonding/bond_options.c
+>@@ -84,6 +84,8 @@ static int bond_option_ad_user_port_key_set(struct bondi=
+ng *bond,
+> 					    const struct bond_opt_value *newval);
+> static int bond_option_missed_max_set(struct bonding *bond,
+> 				      const struct bond_opt_value *newval);
+>+static int bond_option_async_linkspeed_set(struct bonding *bond,
+>+					   const struct bond_opt_value *newval);
+>=20
+>=20
+> static const struct bond_opt_value bond_mode_tbl[] =3D {
+>@@ -226,6 +228,12 @@ static const struct bond_opt_value bond_missed_max_tb=
+l[] =3D {
+> 	{ NULL,		-1,	0},
+> };
+>=20
+>+static const struct bond_opt_value bond_async_linkspeed_tbl[] =3D {
+>+	{ "off", 0,  BOND_VALFLAG_DEFAULT},
+>+	{ "on",  1,  0},
+>+	{ NULL,  -1, 0},
+>+};
+>+
+> static const struct bond_option bond_opts[BOND_OPT_LAST] =3D {
+> 	[BOND_OPT_MODE] =3D {
+> 		.id =3D BOND_OPT_MODE,
+>@@ -360,6 +368,14 @@ static const struct bond_option bond_opts[BOND_OPT_LA=
+ST] =3D {
+> 		.values =3D bond_num_peer_notif_tbl,
+> 		.set =3D bond_option_num_peer_notif_set
+> 	},
+>+	[BOND_OPT_ASYNC_LINKSPEED] =3D {
+>+		.id =3D BOND_OPT_ASYNC_LINKSPEED,
+>+		.name =3D "async_linkspeed",
+>+		.desc =3D "Enable aggregation of links of different data rates",
+>+		.unsuppmodes =3D BOND_MODE_ALL_EX(BIT(BOND_MODE_8023AD)),
+>+		.values =3D bond_async_linkspeed_tbl,
+>+		.set =3D bond_option_async_linkspeed_set
+>+	},
+> 	[BOND_OPT_MIIMON] =3D {
+> 		.id =3D BOND_OPT_MIIMON,
+> 		.name =3D "miimon",
+>@@ -1702,3 +1718,13 @@ static int bond_option_ad_user_port_key_set(struct =
+bonding *bond,
+> 	bond->params.ad_user_port_key =3D newval->value;
+> 	return 0;
+> }
+>+
+>+static int bond_option_async_linkspeed_set(struct bonding *bond,
+>+					   const struct bond_opt_value *newval)
+>+{
+>+	netdev_info(bond->dev, "Setting async_linkspeed to %s (%llu)\n",
+>+		    newval->string, newval->value);
+>+	bond->params.async_linkspeed =3D newval->value;
+>+
+>+	return 0;
+>+}
+>diff --git a/drivers/net/bonding/bond_sysfs.c b/drivers/net/bonding/bond_s=
+ysfs.c
+>index 8996bd0a194a..6a0b4e1098af 100644
+>--- a/drivers/net/bonding/bond_sysfs.c
+>+++ b/drivers/net/bonding/bond_sysfs.c
+>@@ -753,6 +753,20 @@ static ssize_t bonding_show_ad_user_port_key(struct d=
+evice *d,
+> static DEVICE_ATTR(ad_user_port_key, 0644,
+> 		   bonding_show_ad_user_port_key, bonding_sysfs_store_option);
+>=20
+>+static ssize_t bonding_show_async_linkspeed(struct device *d,
+>+					    struct device_attribute *attr,
+>+					    char *buf)
+>+{
+>+	struct bonding *bond =3D to_bond(d);
+>+	const struct bond_opt_value *val;
+>+
+>+	val =3D bond_opt_get_val(BOND_OPT_ASYNC_LINKSPEED, bond->params.async_li=
+nkspeed);
+>+
+>+	return sprintf(buf, "%s %d\n", val->string, bond->params.async_linkspeed=
+);
+>+}
+>+static DEVICE_ATTR(async_linkspeed, (00400 | 00040 | 00004) | 00200, /*S_=
+IRUGO | S_IWUSR,*/
+>+		   bonding_show_async_linkspeed, bonding_sysfs_store_option);
+>+
+> static struct attribute *per_bond_attrs[] =3D {
+> 	&dev_attr_slaves.attr,
+> 	&dev_attr_mode.attr,
+>@@ -792,6 +806,7 @@ static struct attribute *per_bond_attrs[] =3D {
+> 	&dev_attr_ad_actor_system.attr,
+> 	&dev_attr_ad_user_port_key.attr,
+> 	&dev_attr_arp_missed_max.attr,
+>+	&dev_attr_async_linkspeed.attr,
+> 	NULL,
+> };
+>=20
+>diff --git a/include/net/bond_options.h b/include/net/bond_options.h
+>index 69292ecc0325..5b33f8b3e1c7 100644
+>--- a/include/net/bond_options.h
+>+++ b/include/net/bond_options.h
+>@@ -76,6 +76,7 @@ enum {
+> 	BOND_OPT_MISSED_MAX,
+> 	BOND_OPT_NS_TARGETS,
+> 	BOND_OPT_PRIO,
+>+	BOND_OPT_ASYNC_LINKSPEED,
+> 	BOND_OPT_LAST
+> };
+>=20
+>diff --git a/include/net/bonding.h b/include/net/bonding.h
+>index e999f851738b..5d83daab0669 100644
+>--- a/include/net/bonding.h
+>+++ b/include/net/bonding.h
+>@@ -146,6 +146,7 @@ struct bond_params {
+> 	int lp_interval;
+> 	int packets_per_slave;
+> 	int tlb_dynamic_lb;
+>+	int async_linkspeed;
+> 	struct reciprocal_value reciprocal_packets_per_slave;
+> 	u16 ad_actor_sys_prio;
+> 	u16 ad_user_port_key;
+>--=20
+>2.34.1
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com
