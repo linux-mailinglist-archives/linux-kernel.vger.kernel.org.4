@@ -2,125 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C936098A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82746098AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiJXDSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 23:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        id S230220AbiJXDVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 23:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiJXDST (ORCPT
+        with ESMTP id S230168AbiJXDU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 23:18:19 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C67976577
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 20:15:57 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id b11so1041917pjp.2
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 20:15:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LbngZZcoSCG0fJlFW1rE9Wmi/NeV6JY9aiQpj2nFf58=;
-        b=m08E3eUp1hqJIoFx2LtjY0uKWF2WyfWN0kjzWstmU6wI4/KTZu58YKUs5QVx+cjTTx
-         Z0jMr7Sj5WKc57ZyMq2WUbZ/1R6cB46O4FY5KSltGlaCapPr0TfR9rO4eHyGO2pemF0K
-         kf5n1SAxA9ydBdof/GvajY02kV48SaV4ZcZNoLanPppvF+q123jDXsW/vmheSSnbS0Lh
-         ikf7jvlrUwa1TOydQyf5+25saYLpx10Z8ZFdqNt1NzvufehByZQsaHHadZHdxvchc1we
-         Bi87zUcWY3ElnchBKamm1IUwnUTJpUWcMwd7V9kzSTW6VNZSho5Yz4DZv+VHL7Duol6B
-         kaNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LbngZZcoSCG0fJlFW1rE9Wmi/NeV6JY9aiQpj2nFf58=;
-        b=4ycA57MtScVpTy2YfhODG47ZMI0DyX6ekk0v3ARW0OPGGVgamqrg/8zIOPxspig17W
-         eikRWjfulXbXyx6k5nbM7fqMoSwcsXPjHvGJz2aRboQwssOsjp0xX3nEJxOUuhDa1XBk
-         thLpeM7uXgVaxoP5K3ROPicDp3mWHxnKy/fwL7in5j6uZ1F1uSA20TJZeaQBnOBHoeDU
-         w7rxqUZ+kSW8YM3OPqt4pvoG3/VhEUEk30wRxSDSBMR7DmudFrvhkc/ooMUZYs7l0GtF
-         KGDsyGDG1j1V6wPdkB1FhtjuT4v2bV9HUfArnGkvipt2KLRt9S1xJUeLdLBLVfezGCN3
-         rgjA==
-X-Gm-Message-State: ACrzQf0W8AzsJcssjH/w0xPLQ18qAHmaoS4+tl65voLumfnju4XbjdgY
-        2rX7+r7IMZM1WwHgHYP93Io=
-X-Google-Smtp-Source: AMsMyM5FN3i0fXqxHo7XhBWcloLUQyW2EcovEivECpboSu0lSGoRQeOPlHxVNUvBTrrp1uSZRIk1OA==
-X-Received: by 2002:a17:902:bc46:b0:186:a8a8:e9d9 with SMTP id t6-20020a170902bc4600b00186a8a8e9d9mr3205488plz.13.1666581351480;
-        Sun, 23 Oct 2022 20:15:51 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-9.three.co.id. [180.214.232.9])
-        by smtp.gmail.com with ESMTPSA id ot18-20020a17090b3b5200b002008d0e5cb5sm3300779pjb.47.2022.10.23.20.15.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 20:15:51 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 82D96103B1A; Mon, 24 Oct 2022 10:15:48 +0700 (WIB)
-Date:   Mon, 24 Oct 2022 10:15:48 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     uroshm <uroshm@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        micky_ching@realsil.com.cn
-Subject: Re: Fixing rts5208 driver code style
-Message-ID: <Y1YDZH50yYyhPDow@debian.me>
-References: <3dbf8c82-9e07-5b9f-e969-4a7cd83e4d9e@komputer>
+        Sun, 23 Oct 2022 23:20:29 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1AB7B1DC;
+        Sun, 23 Oct 2022 20:17:46 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29O3FpUS016404;
+        Mon, 24 Oct 2022 03:17:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dyymc5XR/iziRTvi3y8RNFC2R9mx4OC4Q4sRKcbXEl4=;
+ b=PqX4MhFmawF4+Kuv+pCATMw+YLLjVMnw9e0ZzaZu4g5Ouk9KdyOG7MLoMrQdens7fdas
+ I8KYcfHDwDP/dsK28k5lend6ZT1hMUnJmOtVgVZR5ta1/dDiX059tQ/ftBFIqhZGHR+y
+ WpjVPN80kJFRAi4QdEEVBdI7t52/gx23I0AzHDRMvvuk6BQ8GYH2uGyUnT7zNg/sdT8p
+ dzHsJaKKUbBG2nFovXw9Pddv4EobkMdVhtJlaz5IWikBNb3YJjsr+jpExXjGcjKEhYoo
+ OqjVW18J1cCC5x1jDIpI5Itgu5Hbqqqj6fWKdvkfxnops6DF88qCRGctk45iwvyZXFW8 9g== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kc8wg2nwe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 03:17:06 +0000
+Received: from nasanex01a.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29O3H5mH011755
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 03:17:05 GMT
+Received: from [10.239.133.73] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Sun, 23 Oct
+ 2022 20:17:03 -0700
+Message-ID: <70828854-8427-8ce1-1535-e14261fd122d@quicinc.com>
+Date:   Mon, 24 Oct 2022 11:17:01 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8m0FXoPQvXWlTEpH"
-Content-Disposition: inline
-In-Reply-To: <3dbf8c82-9e07-5b9f-e969-4a7cd83e4d9e@komputer>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4] remoteproc: core: do pm relax when in RPROC_OFFLINE
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_clew@quicinc.com>
+References: <128dc161-8949-1146-bf8b-310aa33c06a8@quicinc.com>
+ <1663312351-28476-1-git-send-email-quic_aiquny@quicinc.com>
+ <20221012204344.GA1178915@p14s>
+ <792f05fc-995e-9a87-ab7d-bee03f15bc79@quicinc.com>
+ <20221013173442.GA1279972@p14s> <20221013180334.GB1279972@p14s>
+ <8807a9a6-d93d-aef5-15f4-88648a6ecbe2@quicinc.com>
+ <CANLsYkx8Vcha9FpfRvJEkq2pd+mSYFeZQBXj65YoiSBv+WEY4A@mail.gmail.com>
+From:   "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+In-Reply-To: <CANLsYkx8Vcha9FpfRvJEkq2pd+mSYFeZQBXj65YoiSBv+WEY4A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: FcWGSD1tVuCRZa0_N4jR-ZI_ioJolA0t
+X-Proofpoint-GUID: FcWGSD1tVuCRZa0_N4jR-ZI_ioJolA0t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-21_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ mlxscore=0 adultscore=0 impostorscore=0 clxscore=1011 phishscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxlogscore=999 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210240019
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/22/2022 3:34 AM, Mathieu Poirier wrote:
+> On Wed, 19 Oct 2022 at 23:52, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+>>
+>> On 10/14/2022 2:03 AM, Mathieu Poirier wrote:
+>>> On Thu, Oct 13, 2022 at 11:34:42AM -0600, Mathieu Poirier wrote:
+>>>> On Thu, Oct 13, 2022 at 09:40:09AM +0800, Aiqun(Maria) Yu wrote:
+>>>>> Hi Mathieu,
+>>>>>
+>>>>> On 10/13/2022 4:43 AM, Mathieu Poirier wrote:
+>>>>>> Please add what has changed from one version to another, either in a cover
+>>>>>> letter or after the "Signed-off-by".  There are many examples on how to do that
+>>>>>> on the mailing list.
+>>>>>>
+>>>>> Thx for the information, will take a note and benefit for next time.
+>>>>>
+>>>>>> On Fri, Sep 16, 2022 at 03:12:31PM +0800, Maria Yu wrote:
+>>>>>>> RPROC_OFFLINE state indicate there is no recovery process
+>>>>>>> is in progress and no chance to do the pm_relax.
+>>>>>>> Because when recovering from crash, rproc->lock is held and
+>>>>>>> state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+>>>>>>> and then unlock rproc->lock.
+>>>>>>
+>>>>>> You are correct - because the lock is held rproc->state should be set to RPROC_RUNNING
+>>>>>> when rproc_trigger_recovery() returns.  If that is not the case then something
+>>>>>> went wrong.
+>>>>>>
+>>>>>> Function rproc_stop() sets rproc->state to RPROC_OFFLINE just before returning,
+>>>>>> so we know the remote processor was stopped.  Therefore if rproc->state is set
+>>>>>> to RPROC_OFFLINE something went wrong in either request_firmware() or
+>>>>>> rproc_start().  Either way the remote processor is offline and the system probably
+>>>>>> in an unknown/unstable.  As such I don't see how calling pm_relax() can help
+>>>>>> things along.
+>>>>>>
+>>>>> PROC_OFFLINE is possible that rproc_shutdown is triggered and successfully
+>>>>> finished.
+>>>>> Even if it is multi crash rproc_crash_handler_work contention issue, and
+>>>>> last rproc_trigger_recovery bailed out with only
+>>>>> rproc->state==RPROC_OFFLINE, it is still worth to do pm_relax in pair.
+>>>>> Since the subsystem may still can be recovered with customer's next trigger
+>>>>> of rproc_start, and we can make each error out path clean with pm resources.
+>>>>>
+>>>>>> I suggest spending time understanding what leads to the failure when recovering
+>>>>>> from a crash and address that problem(s).
+>>>>>>
+>>>>> In current case, the customer's information is that the issue happened when
+>>>>> rproc_shutdown is triggered at similar time. So not an issue from error out
+>>>>> of rproc_trigger_recovery.
+>>>>
+>>>> That is a very important element to consider and should have been mentioned from
+>>>> the beginning.  What I see happening is the following:
+>>>>
+>>>> rproc_report_crash()
+>>>>           pm_stay_awake()
+>>>>           queue_work() // current thread is suspended
+>>>>
+>>>> rproc_shutdown()
+>>>>           rproc_stop()
+>>>>                   rproc->state = RPROC_OFFLINE;
+>>>>
+>>>> rproc_crash_handler_work()
+>>>>           if (rproc->state == RPROC_OFFLINE)
+>>>>                   return // pm_relax() is not called
+>>>>
+>>>> The right way to fix this is to add a pm_relax() in rproc_shutdown() and
+>>>> rproc_detach(), along with a very descriptive comment as to why it is needed.
+>>>
+>>> Thinking about this further there are more ramifications to consider.  Please
+>>> confirm the above scenario is what you are facing.  I will advise on how to move
+>>> forward if that is the case.
+>>>
+>> Not sure if the situation is clear or not. So resend the email again.
+>>
+>> The above senario is what customer is facing. crash hanppened while at
+>> the same time shutdown is triggered.
+> 
+> Unfortunately this is not enough details to address a problem as
+> complex as this one.
+> 
+>> And the device cannto goes to suspend state after that.
+>> the subsystem can still be start normally after this.
+> 
+> If the code flow I pasted above reflects the problem at hand, the
+> current patch will not be sufficient to address the issue.  If Arnaud
+> confirms my suspicions we will have to think about a better solution.
+>
 
---8m0FXoPQvXWlTEpH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Mathiew,
 
-On Sun, Oct 23, 2022 at 03:32:31PM -0400, uroshm wrote:
->=20
-> diff --git a/drivers/staging/rts5208/general.c
-> b/drivers/staging/rts5208/general.c
-> index 0f912b011064..4694593af4d9 100644
-> --- a/drivers/staging/rts5208/general.c
-> +++ b/drivers/staging/rts5208/general.c
-> @@ -9,7 +9,7 @@
->   *   Micky Ching (micky_ching@realsil.com.cn)
->   */
->=20
-> -#include "general.h"
-> + #include "general.h"
->=20
->  int bit1cnt_long(u32 data)
->  {
->=20
->=20
-> Signed-off-by: Uros Milojkovic <uroshm@gmail.com>
->=20
+Could you pls have more details of any side effects other then power 
+issue of the current senario?
+Why the current patch is not sufficient pls?
 
-"Strong fishy" smelled (patch corrupted, no description, improper patch
-subject).
 
-Please see Documentation/process/{email-clients,submitting-patches}.rst
-for how to properly submit patches.
+Have the current senario in details with rproc->lock information in details:
 
-Thanks.
+| subsystem crashed interrupt issued      | user trigger shutdown
+| rproc_report_crash()                    |
+|          pm_stay_awake()                |
+|          queue_work()                   |
+|                                         |rproc_shutdown
+|                                         |mutex_lock(&rproc->lock);
+|                                         |rproc_stop()
+|rproc_crash_handler_work()               |rproc->state = RPROC_OFFLINE;
+|                                         |mutex_unlock(&rproc->lock);
+|mutex_lock(&rproc->lock);                |
+|if (rproc->state == RPROC_OFFLINE)       |
+|return // pm_relax() is not called       |rproc_boot
+|mutex_unlock(&rproc->lock);              |
+|                                         |mutex_lock(&rproc->lock);
+|                                         |rproc_start()
+|                                         |mutex_unlock(&rproc->lock);
 
---=20
-An old man doll... just what I always wanted! - Clara
 
---8m0FXoPQvXWlTEpH
-Content-Type: application/pgp-signature; name="signature.asc"
+>>
+>>>>
+>>>>
+>>>>>> Thanks,
+>>>>>> Mathieu
+>>>>>>
+>>>>>>
+>>>>>>> When the state is in RPROC_OFFLINE it means separate request
+>>>>>>> of rproc_stop was done and no need to hold the wakeup source
+>>>>>>> in crash handler to recover any more.
+>>>>>>>
+>>>>>>> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
+>>>>>>> ---
+>>>>>>>     drivers/remoteproc/remoteproc_core.c | 11 +++++++++++
+>>>>>>>     1 file changed, 11 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+>>>>>>> index e5279ed9a8d7..6bc7b8b7d01e 100644
+>>>>>>> --- a/drivers/remoteproc/remoteproc_core.c
+>>>>>>> +++ b/drivers/remoteproc/remoteproc_core.c
+>>>>>>> @@ -1956,6 +1956,17 @@ static void rproc_crash_handler_work(struct work_struct *work)
+>>>>>>>            if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
+>>>>>>>                    /* handle only the first crash detected */
+>>>>>>>                    mutex_unlock(&rproc->lock);
+>>>>>>> +         /*
+>>>>>>> +          * RPROC_OFFLINE state indicate there is no recovery process
+>>>>>>> +          * is in progress and no chance to have pm_relax in place.
+>>>>>>> +          * Because when recovering from crash, rproc->lock is held and
+>>>>>>> +          * state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+>>>>>>> +          * and then unlock rproc->lock.
+>>>>>>> +          * RPROC_OFFLINE is only an intermediate state in recovery
+>>>>>>> +          * process.
+>>>>>>> +          */
+>>>>>>> +         if (rproc->state == RPROC_OFFLINE)
+>>>>>>> +                 pm_relax(rproc->dev.parent);
+>>>>>>>                    return;
+>>>>>>>            }
+>>>>>>> --
+>>>>>>> 2.7.4
+>>>>>>>
+>>>>>
+>>>>>
+>>>>> --
+>>>>> Thx and BRs,
+>>>>> Aiqun(Maria) Yu
+>>
+>>
+>> --
+>> Thx and BRs,
+>> Aiqun(Maria) Yu
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1YDYAAKCRD2uYlJVVFO
-o+dwAP97+iXZgFIRmsHvQ/SNT3q6O0pYNBrv3VJWfZoCsGRBrgEA98Vl5ssUTbJu
-uxuogtCRP9r/QSI7T4kZXZI9A13vxgY=
-=eWOT
------END PGP SIGNATURE-----
-
---8m0FXoPQvXWlTEpH--
+-- 
+Thx and BRs,
+Aiqun(Maria) Yu
