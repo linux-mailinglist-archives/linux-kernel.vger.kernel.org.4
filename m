@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754B660A53A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404CA60A95D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233478AbiJXMWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
+        id S231963AbiJXNSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233572AbiJXMTv (ORCPT
+        with ESMTP id S232806AbiJXNRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:51 -0400
+        Mon, 24 Oct 2022 09:17:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7A67990A;
-        Mon, 24 Oct 2022 04:58:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB99814EA;
+        Mon, 24 Oct 2022 05:26:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78DE2612BC;
-        Mon, 24 Oct 2022 11:41:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AAB1C433D7;
-        Mon, 24 Oct 2022 11:41:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21061612D1;
+        Mon, 24 Oct 2022 12:25:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3025BC433D6;
+        Mon, 24 Oct 2022 12:25:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611678;
-        bh=TU4uPUlz2aBAo5ptSH8Omzj8EzskygPLm/0gr2snHyE=;
+        s=korg; t=1666614347;
+        bh=2vgZYrGdBLmeat8hb0agASqFn5UrbCmTTg2/geDVt9Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=StokCbB0kb8SQUL4H2sLUB2B8dU0ZaFi2N4+kMh7tYaih3xESn2Mme6QDnFS2pi6p
-         8MsaTTstD2mSZ8ehleHUSEhLbxRBjLgs2l9ids7BUFS87bpVfLfaEHK3hL4xi/+p84
-         k7vNDuDYbWEHO9mj4od6YDOITPR0tYOy9Q51Nzms=
+        b=jAYoqm9rPe9vq3bpPNWMw5IKp3B/WaSX0iJkadZ+E0wBytEsv6jgPkChaBhr+L0Pr
+         nfn408zRDVMB5IWYJ00qKmaGLnlMgpTFCNFZ11sMeTYsvDVcFYDkD+F7hu+1CcIe4e
+         5fW89e/x88sM1Q6P8HXEALJOP+sYp890/Yj/3oWI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Qiang <xuqiang36@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 069/159] spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
-Date:   Mon, 24 Oct 2022 13:30:23 +0200
-Message-Id: <20221024112951.985158304@linuxfoundation.org>
+Subject: [PATCH 5.10 227/390] ata: fix ata_id_has_dipm()
+Date:   Mon, 24 Oct 2022 13:30:24 +0200
+Message-Id: <20221024113032.448471522@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Qiang <xuqiang36@huawei.com>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-[ Upstream commit 494a22765ce479c9f8ad181c5d24cffda9f534bb ]
+[ Upstream commit 630624cb1b5826d753ac8e01a0e42de43d66dedf ]
 
-Add the missing clk_disable_unprepare() before return
-from spi_qup_pm_resume_runtime() in the error handling case.
+ACS-5 section
+7.13.6.36 Word 78: Serial ATA features supported
+states that:
 
-Fixes: dae1a7700b34 (“spi: qup: Handle clocks in pm_runtime suspend and resume”)
-Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
-Link: https://lore.kernel.org/r/20220825065324.68446-2-xuqiang36@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+If word 76 is not 0000h or FFFFh, word 78 reports the features supported
+by the device. If this word is not supported, the word shall be cleared
+to zero.
+
+(This text also exists in really old ACS standards, e.g. ACS-3.)
+
+The problem with ata_id_has_dipm() is that the while it performs a
+check against 0 and 0xffff, it performs the check against
+ATA_ID_FEATURE_SUPP (word 78), the same word where the feature bit
+is stored.
+
+Fix this by performing the check against ATA_ID_SATA_CAPABILITY
+(word 76), like required by the spec. The feature bit check itself
+is of course still performed against ATA_ID_FEATURE_SUPP (word 78).
+
+Additionally, move the macro to the other ATA_ID_FEATURE_SUPP macros
+(which already have this check), thus making it more likely that the
+next ATA_ID_FEATURE_SUPP macro that is added will include this check.
+
+Fixes: ca77329fb713 ("[libata] Link power management infrastructure")
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-qup.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ include/linux/ata.h | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index 431cb184595f..bfca5f38d7b7 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -956,8 +956,10 @@ static int spi_qup_pm_resume_runtime(struct device *device)
- 		return ret;
+diff --git a/include/linux/ata.h b/include/linux/ata.h
+index 94f7872da983..6d2d31b03b4d 100644
+--- a/include/linux/ata.h
++++ b/include/linux/ata.h
+@@ -573,6 +573,10 @@ struct ata_bmdma_prd {
+ 	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
+ 	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
+ 	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 7)))
++#define ata_id_has_dipm(id)	\
++	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
++	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
++	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 3)))
+ #define ata_id_iordy_disable(id) ((id)[ATA_ID_CAPABILITY] & (1 << 10))
+ #define ata_id_has_iordy(id) ((id)[ATA_ID_CAPABILITY] & (1 << 11))
+ #define ata_id_u32(id,n)	\
+@@ -596,17 +600,6 @@ static inline bool ata_id_has_hipm(const u16 *id)
+ 	return val & (1 << 9);
+ }
  
- 	ret = clk_prepare_enable(controller->cclk);
--	if (ret)
-+	if (ret) {
-+		clk_disable_unprepare(controller->iclk);
- 		return ret;
-+	}
- 
- 	/* Disable clocks auto gaiting */
- 	config = readl_relaxed(controller->base + QUP_CONFIG);
+-static inline bool ata_id_has_dipm(const u16 *id)
+-{
+-	u16 val = id[ATA_ID_FEATURE_SUPP];
+-
+-	if (val == 0 || val == 0xffff)
+-		return false;
+-
+-	return val & (1 << 3);
+-}
+-
+-
+ static inline bool ata_id_has_fua(const u16 *id)
+ {
+ 	if ((id[ATA_ID_CFSSE] & 0xC000) != 0x4000)
 -- 
 2.35.1
 
