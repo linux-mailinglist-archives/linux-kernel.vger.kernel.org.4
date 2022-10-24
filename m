@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3B6609EA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25FE7609E9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbiJXKHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S230234AbiJXKHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiJXKHJ (ORCPT
+        with ESMTP id S230214AbiJXKHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Oct 2022 06:07:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E631E33E08;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BABB1A07B;
         Mon, 24 Oct 2022 03:07:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75E79611B3;
-        Mon, 24 Oct 2022 10:07:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538C9C4347C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F188F611B0;
+        Mon, 24 Oct 2022 10:07:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501D9C43470;
         Mon, 24 Oct 2022 10:07:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666606023;
-        bh=PEit2jIpLlK9bUU+cJjrQ+dNfgmnYX9dhRSclH2YI4I=;
+        bh=qT9xd2ZxMnnwGXQobvtyOi93Q/igV97gvEakODESvZw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fZOzXIUkJ1DGrg56weHIwToQSxV84wnvlQoYIcee6JGfsA8tNIlh81YZYIAxgihTb
-         /8gdvrJUgPgM4BW4uLNpgprFw1c0PtRCwL+ems5nP1z71FD9VO+0jA4ZtdZE1HMyHw
-         sl7B5ZQVJrb+7VsPIlNgWpkZnDeJO6k57TGvqttN1CZ8KAWGMP5L0ZDuqoBftxOf/U
-         ltIhNQrqjdy6BqGVSPvTHP4D8QwIdg0mjbh9S74ih3KCO2KVZInaBV49IVOzscC9h9
-         1n1/rC2oEPwXKxw3PNl99FQ5SdFte3bTbgQUnbNaaZIztRcGToqxxYgbpBfuPH7LLd
-         Xhz+tSIHoZvFA==
+        b=JFaUB3fwVC2/HyAJmEyBTK/n5dpGRbXpCoQKmWApXIrs9LkZ5U+U/KWYcySdW9fOf
+         fB42xW8hU6Ln9IrgI3oSnfYR55CEag5BO6vHkDRH0TFC+NNu7azKp5wxcVFvumrXVo
+         34d8aLhqV4hm0m4xdR4UPECCNl59nc6daXQSYFgseDrCmkiBtTcoVOIj6W3Y2ftf2H
+         lyRobXruCaCqKo4WTzE7iisplXY9p8vSALRWol0PiWFSXo/Cinrv3ibyES5Ff1dVlk
+         hE7P+cAIojZnsIaR7AxrnkLO0l9J3pXfsQEf5LEfUWyvUO5jkH3R9NimJ1QFm8Mmjc
+         fZk5LrVOOQosA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1omuM3-0005MJ-5h; Mon, 24 Oct 2022 12:06:47 +0200
+        id 1omuM3-0005MM-8D; Mon, 24 Oct 2022 12:06:47 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 06/13] phy: qcom-qmp-usb: clean up device-tree parsing
-Date:   Mon, 24 Oct 2022 12:06:25 +0200
-Message-Id: <20221024100632.20549-7-johan+linaro@kernel.org>
+Subject: [PATCH 07/13] phy: qcom-qmp-usb: clean up probe initialisation
+Date:   Mon, 24 Oct 2022 12:06:26 +0200
+Message-Id: <20221024100632.20549-8-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221024100632.20549-1-johan+linaro@kernel.org>
 References: <20221024100632.20549-1-johan+linaro@kernel.org>
@@ -63,89 +63,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the QMP driver split there will be at most a single child node so
-drop the obsolete iteration construct.
-
-While at it, drop the verbose error logging that would have been
-printed also on probe deferrals.
-
-Note that there's no need to check if there are additional child nodes
-(the kernel is not a devicetree validator), but let's return an error if
-there are no child nodes at all for now.
+Stop abusing the driver data pointer and instead pass the driver state
+structure directly to the initialisation helpers during probe.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 40 ++++++++-----------------
- 1 file changed, 12 insertions(+), 28 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 46 ++++++++++++-------------
+ 1 file changed, 22 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-index e009d63260e7..ccb834a08d5b 100644
+index ccb834a08d5b..2e603831e45e 100644
 --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
 +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-@@ -2471,7 +2471,6 @@ static int qmp_usb_probe(struct platform_device *pdev)
- 	void __iomem *serdes;
- 	const struct qmp_phy_cfg *cfg = NULL;
- 	struct qmp_usb *qmp;
--	int num, id;
+@@ -2250,9 +2250,10 @@ static const struct dev_pm_ops qmp_usb_pm_ops = {
+ 			   qmp_usb_runtime_resume, NULL)
+ };
+ 
+-static int qmp_usb_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
++static int qmp_usb_vreg_init(struct qmp_usb *qmp)
+ {
+-	struct qmp_usb *qmp = dev_get_drvdata(dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	struct device *dev = qmp->dev;
+ 	int num = cfg->num_vregs;
+ 	int i;
+ 
+@@ -2266,9 +2267,10 @@ static int qmp_usb_vreg_init(struct device *dev, const struct qmp_phy_cfg *cfg)
+ 	return devm_regulator_bulk_get(dev, num, qmp->vregs);
+ }
+ 
+-static int qmp_usb_reset_init(struct device *dev, const struct qmp_phy_cfg *cfg)
++static int qmp_usb_reset_init(struct qmp_usb *qmp)
+ {
+-	struct qmp_usb *qmp = dev_get_drvdata(dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	struct device *dev = qmp->dev;
+ 	int i;
  	int ret;
  
- 	qmp = devm_kzalloc(dev, sizeof(*qmp), GFP_KERNEL);
-@@ -2507,44 +2506,29 @@ static int qmp_usb_probe(struct platform_device *pdev)
+@@ -2287,9 +2289,10 @@ static int qmp_usb_reset_init(struct device *dev, const struct qmp_phy_cfg *cfg)
+ 	return 0;
+ }
+ 
+-static int qmp_usb_clk_init(struct device *dev, const struct qmp_phy_cfg *cfg)
++static int qmp_usb_clk_init(struct qmp_usb *qmp)
+ {
+-	struct qmp_usb *qmp = dev_get_drvdata(dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	struct device *dev = qmp->dev;
+ 	int num = cfg->num_clks;
+ 	int i;
+ 
+@@ -2385,10 +2388,10 @@ static void __iomem *qmp_usb_iomap(struct device *dev, struct device_node *np,
+ 	return devm_of_iomap(dev, np, index, NULL);
+ }
+ 
+-static int qmp_usb_create(struct device *dev, struct device_node *np,
+-			void __iomem *serdes, const struct qmp_phy_cfg *cfg)
++static int qmp_usb_create(struct qmp_usb *qmp, struct device_node *np)
+ {
+-	struct qmp_usb *qmp = dev_get_drvdata(dev);
++	const struct qmp_phy_cfg *cfg = qmp->cfg;
++	struct device *dev = qmp->dev;
+ 	struct phy *generic_phy;
+ 	bool exclusive = true;
+ 	int ret;
+@@ -2402,8 +2405,6 @@ static int qmp_usb_create(struct device *dev, struct device_node *np,
+ 	if (of_device_is_compatible(dev->of_node, "qcom,sm8350-qmp-usb3-uni-phy"))
+ 		exclusive = false;
+ 
+-	qmp->cfg = cfg;
+-	qmp->serdes = serdes;
+ 	/*
+ 	 * Get memory resources for the PHY:
+ 	 * Resources are indexed as: tx -> 0; rx -> 1; pcs -> 2.
+@@ -2468,8 +2469,6 @@ static int qmp_usb_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *child;
+ 	struct phy_provider *phy_provider;
+-	void __iomem *serdes;
+-	const struct qmp_phy_cfg *cfg = NULL;
+ 	struct qmp_usb *qmp;
+ 	int ret;
+ 
+@@ -2478,31 +2477,30 @@ static int qmp_usb_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	qmp->dev = dev;
+-	dev_set_drvdata(dev, qmp);
+ 
+-	cfg = of_device_get_match_data(dev);
+-	if (!cfg)
++	qmp->cfg = of_device_get_match_data(dev);
++	if (!qmp->cfg)
+ 		return -EINVAL;
+ 
+-	serdes = devm_platform_ioremap_resource(pdev, 0);
+-	if (IS_ERR(serdes))
+-		return PTR_ERR(serdes);
++	qmp->serdes = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(qmp->serdes))
++		return PTR_ERR(qmp->serdes);
+ 
+-	if (cfg->has_phy_dp_com_ctrl) {
++	if (qmp->cfg->has_phy_dp_com_ctrl) {
+ 		qmp->dp_com = devm_platform_ioremap_resource(pdev, 1);
+ 		if (IS_ERR(qmp->dp_com))
+ 			return PTR_ERR(qmp->dp_com);
+ 	}
+ 
+-	ret = qmp_usb_clk_init(dev, cfg);
++	ret = qmp_usb_clk_init(qmp);
  	if (ret)
  		return ret;
  
--	num = of_get_available_child_count(dev->of_node);
--	/* do we have a rogue child node ? */
--	if (num > 1)
-+	child = of_get_next_available_child(dev->of_node, NULL);
-+	if (!child)
- 		return -EINVAL;
- 
- 	pm_runtime_set_active(dev);
- 	ret = devm_pm_runtime_enable(dev);
+-	ret = qmp_usb_reset_init(dev, cfg);
++	ret = qmp_usb_reset_init(qmp);
  	if (ret)
--		return ret;
-+		goto err_node_put;
- 	/*
- 	 * Prevent runtime pm from being ON by default. Users can enable
- 	 * it using power/control in sysfs.
+ 		return ret;
+ 
+-	ret = qmp_usb_vreg_init(dev, cfg);
++	ret = qmp_usb_vreg_init(qmp);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -2520,7 +2518,7 @@ static int qmp_usb_probe(struct platform_device *pdev)
  	 */
  	pm_runtime_forbid(dev);
  
--	id = 0;
--	for_each_available_child_of_node(dev->of_node, child) {
--		/* Create per-lane phy */
--		ret = qmp_usb_create(dev, child, serdes, cfg);
--		if (ret) {
--			dev_err(dev, "failed to create lane%d phy, %d\n",
--				id, ret);
--			goto err_node_put;
--		}
--
--		/*
--		 * Register the pipe clock provided by phy.
--		 * See function description to see details of this pipe clock.
--		 */
--		ret = phy_pipe_clk_register(qmp, child);
--		if (ret) {
--			dev_err(qmp->dev,
--				"failed to register pipe clock source\n");
--			goto err_node_put;
--		}
--
--		id++;
--	}
-+	ret = qmp_usb_create(dev, child, serdes, cfg);
-+	if (ret)
-+		goto err_node_put;
-+
-+	ret = phy_pipe_clk_register(qmp, child);
-+	if (ret)
-+		goto err_node_put;
-+
-+	of_node_put(child);
- 
- 	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+-	ret = qmp_usb_create(dev, child, serdes, cfg);
++	ret = qmp_usb_create(qmp, child);
+ 	if (ret)
+ 		goto err_node_put;
  
 -- 
 2.37.3
