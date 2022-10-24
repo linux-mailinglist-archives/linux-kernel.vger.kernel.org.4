@@ -2,70 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A8160BC77
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F392360BC82
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbiJXVrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
+        id S230331AbiJXVux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbiJXVrT (ORCPT
+        with ESMTP id S230286AbiJXVuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:47:19 -0400
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 28A0814D1DF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:59:09 -0700 (PDT)
-Received: from pop-os.home ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id n3Scop2yXkifIn3ScotAlr; Mon, 24 Oct 2022 21:50:11 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 24 Oct 2022 21:50:11 +0200
-X-ME-IP: 86.243.100.34
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        dmaengine@vger.kernel.org
-Subject: [PATCH] dmaengine: mv_xor_v2: Fix a resource leak in mv_xor_v2_remove()
-Date:   Mon, 24 Oct 2022 21:50:09 +0200
-Message-Id: <e9e3837a680c9bd2438e4db2b83270c6c052d005.1666640987.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Oct 2022 17:50:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7724529361
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:03:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43E5EB810B2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 19:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 904DDC433D6;
+        Mon, 24 Oct 2022 19:54:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666641258;
+        bh=YRD1nZfisTmk9PSTyU7z/uzZUCz4EyKC3M9eXjeC60s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CIX/yThFQOifJaXu5hz+cLAzi6CJNAd2uQiOiW1RKfqS/dojHTnnSU/J2fSePXOIv
+         6i5dKd86qriZMtM+zFM5ljeKztF7uWQCsoE9VoLGqnB9za01PJleHtcOi90+MByHRt
+         saRRI0Lev8U6PbD+tEjlGDRUqyRSy2CqrgeADjTlq7MMQhvRSVzL+UPOZmAz92Q1UV
+         YNw4e1VcNEG/wj83mnXvq3GLKTFJVC6h2FRXrRpmoFdegPeix1VdU2H1sL1lWtXKHN
+         wpdiKHuX9rEROzzR0Up9S6W1lNF5u799zxl11SkMoD+w6T5xgdgU3qA+/U+783QL4E
+         V31JoiibZN25A==
+Date:   Mon, 24 Oct 2022 20:54:13 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Anup Patel <apatel@ventanamicro.com>, arnd@arndb.de
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Subject: Re: [PATCH v5 2/4] RISC-V: Fix MEMREMAP_WB for systems with Svpbmt
+Message-ID: <Y1btZRX/e+c+UDyv@spud>
+References: <20221020075846.305576-1-apatel@ventanamicro.com>
+ <20221020075846.305576-3-apatel@ventanamicro.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221020075846.305576-3-apatel@ventanamicro.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A clk_prepare_enable() call in the probe is not balanced by a corresponding
-clk_disable_unprepare() in the remove function.
+On Thu, Oct 20, 2022 at 01:28:44PM +0530, Anup Patel wrote:
+> Currently, the memremap() called with MEMREMAP_WB maps memory using
+> the generic ioremap() function which breaks on system with Svpbmt
+> because memory mapped using _PAGE_IOREMAP page attributes is treated
+> as strongly-ordered non-cacheable IO memory.
+> 
+> To address this, we implement RISC-V specific arch_memremap_wb()
+> which maps memory using _PAGE_KERNEL page attributes resulting in
+> write-back cacheable mapping on systems with Svpbmt.
+> 
+> Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
+> Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 
-Add the missing call.
+Hey Arnd,
+Does this look okay to you now?
+Thanks,
+Conor.
 
-Fixes: 3cd2c313f1d6 ("dmaengine: mv_xor_v2: Fix clock resource by adding a register clock")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/dma/mv_xor_v2.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/dma/mv_xor_v2.c b/drivers/dma/mv_xor_v2.c
-index f629ef6fd3c2..113834e1167b 100644
---- a/drivers/dma/mv_xor_v2.c
-+++ b/drivers/dma/mv_xor_v2.c
-@@ -893,6 +893,7 @@ static int mv_xor_v2_remove(struct platform_device *pdev)
- 	tasklet_kill(&xor_dev->irq_tasklet);
- 
- 	clk_disable_unprepare(xor_dev->clk);
-+	clk_disable_unprepare(xor_dev->reg_clk);
- 
- 	return 0;
- }
--- 
-2.34.1
-
+> ---
+>  arch/riscv/include/asm/io.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
+> index 92080a227937..42497d487a17 100644
+> --- a/arch/riscv/include/asm/io.h
+> +++ b/arch/riscv/include/asm/io.h
+> @@ -135,4 +135,9 @@ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
+>  
+>  #include <asm-generic/io.h>
+>  
+> +#ifdef CONFIG_MMU
+> +#define arch_memremap_wb(addr, size)	\
+> +	((__force void *)ioremap_prot((addr), (size), _PAGE_KERNEL))
+> +#endif
+> +
+>  #endif /* _ASM_RISCV_IO_H */
+> -- 
+> 2.34.1
+> 
