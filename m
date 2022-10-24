@@ -2,143 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68536609C0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D4F609C83
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiJXIGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S229755AbiJXI14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiJXIF6 (ORCPT
+        with ESMTP id S230233AbiJXI1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:05:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A7D56035
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:05:55 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jbe@pengutronix.de>)
-        id 1omsT4-0001Pc-9a; Mon, 24 Oct 2022 10:05:54 +0200
-Received: from [2a0a:edc0:0:900:1d::45] (helo=ginster)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <jbe@pengutronix.de>)
-        id 1omsT4-0004o7-Go; Mon, 24 Oct 2022 10:05:53 +0200
-Received: from jbe by ginster with local (Exim 4.94.2)
-        (envelope-from <jbe@pengutronix.de>)
-        id 1omsT2-0005TZ-2s; Mon, 24 Oct 2022 10:05:52 +0200
-From:   Juergen Borleis <jbe@pengutronix.de>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH v2] net: fec: limit register access on i.MX6UL
-Date:   Mon, 24 Oct 2022 10:05:52 +0200
-Message-Id: <20221024080552.21004-1-jbe@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: jbe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+        Mon, 24 Oct 2022 04:27:47 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0254A1B7AD;
+        Mon, 24 Oct 2022 01:27:38 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 853CD220E80;
+        Mon, 24 Oct 2022 10:27:05 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 57181220E60;
+        Mon, 24 Oct 2022 10:27:05 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 538481802201;
+        Mon, 24 Oct 2022 16:27:03 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
+        lorenzo.pieralisi@arm.com, shawnguo@kernel.org, kishon@ti.com,
+        kw@linux.com, frank.li@nxp.com
+Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: [PATCH v4 0/14] Add i.MX PCIe EP mode support
+Date:   Mon, 24 Oct 2022 16:06:29 +0800
+Message-Id: <1666598803-1912-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using 'ethtool -d […]' on an i.MX6UL leads to a kernel crash:
+i.MX PCIe controller is one dual mode PCIe controller, and can work either
+as RC or EP.
 
-   Unhandled fault: external abort on non-linefetch (0x1008) at […]
+This series add the i.MX PCIe EP mode support. And had been verified on
+i.MX8MQ, i.MX8MM EVK and i.MX8MP EVK boards.
 
-due to this SoC has less registers in its FEC implementation compared to other
-i.MX6 variants. Thus, a run-time decision is required to avoid access to
-non-existing registers.
+In the verification, one EVK board used as RC, the other one used as EP.
+Use the cross TX/RX differential cable connect the two PCIe ports of these
+two EVK boards.
 
-Signed-off-by: Juergen Borleis <jbe@pengutronix.de>
----
++-----------+                +------------+
+|   PCIe TX |<-------------->|PCIe RX     |
+|           |                |            |
+|EVK Board  |                |EVK Board   |
+|           |                |            |
+|   PCIe RX |<-------------->|PCIe TX     |
++-----------+                +------------+
 
-Notes:
-    v2: using of_machine_is_compatible() to detect the i.MX6UL SoC
+NOTE:
+Re-base to 6.1-rc1, and re-send the v4 series.
+BTW, the following PHY changes [1] is required when apply this series.
 
- drivers/net/ethernet/freescale/fec_main.c | 46 ++++++++++++++++++++++-
- 1 file changed, 44 insertions(+), 2 deletions(-)
+[1] https://patchwork.kernel.org/project/linux-pci/cover/1665625622-20551-1-git-send-email-hongxing.zhu@nxp.com/
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 98d5cd31..28ef4d3 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -2432,6 +2432,31 @@ static u32 fec_enet_register_offset[] = {
- 	IEEE_R_DROP, IEEE_R_FRAME_OK, IEEE_R_CRC, IEEE_R_ALIGN, IEEE_R_MACERR,
- 	IEEE_R_FDXFC, IEEE_R_OCTETS_OK
- };
-+/* for i.MX6ul */
-+static u32 fec_enet_register_offset_6ul[] = {
-+	FEC_IEVENT, FEC_IMASK, FEC_R_DES_ACTIVE_0, FEC_X_DES_ACTIVE_0,
-+	FEC_ECNTRL, FEC_MII_DATA, FEC_MII_SPEED, FEC_MIB_CTRLSTAT, FEC_R_CNTRL,
-+	FEC_X_CNTRL, FEC_ADDR_LOW, FEC_ADDR_HIGH, FEC_OPD, FEC_TXIC0, FEC_RXIC0,
-+	FEC_HASH_TABLE_HIGH, FEC_HASH_TABLE_LOW, FEC_GRP_HASH_TABLE_HIGH,
-+	FEC_GRP_HASH_TABLE_LOW, FEC_X_WMRK, FEC_R_DES_START_0,
-+	FEC_X_DES_START_0, FEC_R_BUFF_SIZE_0, FEC_R_FIFO_RSFL, FEC_R_FIFO_RSEM,
-+	FEC_R_FIFO_RAEM, FEC_R_FIFO_RAFL, FEC_RACC,
-+	RMON_T_DROP, RMON_T_PACKETS, RMON_T_BC_PKT, RMON_T_MC_PKT,
-+	RMON_T_CRC_ALIGN, RMON_T_UNDERSIZE, RMON_T_OVERSIZE, RMON_T_FRAG,
-+	RMON_T_JAB, RMON_T_COL, RMON_T_P64, RMON_T_P65TO127, RMON_T_P128TO255,
-+	RMON_T_P256TO511, RMON_T_P512TO1023, RMON_T_P1024TO2047,
-+	RMON_T_P_GTE2048, RMON_T_OCTETS,
-+	IEEE_T_DROP, IEEE_T_FRAME_OK, IEEE_T_1COL, IEEE_T_MCOL, IEEE_T_DEF,
-+	IEEE_T_LCOL, IEEE_T_EXCOL, IEEE_T_MACERR, IEEE_T_CSERR, IEEE_T_SQE,
-+	IEEE_T_FDXFC, IEEE_T_OCTETS_OK,
-+	RMON_R_PACKETS, RMON_R_BC_PKT, RMON_R_MC_PKT, RMON_R_CRC_ALIGN,
-+	RMON_R_UNDERSIZE, RMON_R_OVERSIZE, RMON_R_FRAG, RMON_R_JAB,
-+	RMON_R_RESVD_O, RMON_R_P64, RMON_R_P65TO127, RMON_R_P128TO255,
-+	RMON_R_P256TO511, RMON_R_P512TO1023, RMON_R_P1024TO2047,
-+	RMON_R_P_GTE2048, RMON_R_OCTETS,
-+	IEEE_R_DROP, IEEE_R_FRAME_OK, IEEE_R_CRC, IEEE_R_ALIGN, IEEE_R_MACERR,
-+	IEEE_R_FDXFC, IEEE_R_OCTETS_OK
-+};
- #else
- static __u32 fec_enet_register_version = 1;
- static u32 fec_enet_register_offset[] = {
-@@ -2456,7 +2481,24 @@ static void fec_enet_get_regs(struct net_device *ndev,
- 	u32 *buf = (u32 *)regbuf;
- 	u32 i, off;
- 	int ret;
-+#if defined(CONFIG_M523x) || defined(CONFIG_M527x) || defined(CONFIG_M528x) || \
-+	defined(CONFIG_M520x) || defined(CONFIG_M532x) || defined(CONFIG_ARM) || \
-+	defined(CONFIG_ARM64) || defined(CONFIG_COMPILE_TEST)
-+	u32 *reg_list;
-+	u32 reg_cnt;
- 
-+	if (!of_machine_is_compatible("fsl,imx6ul")) {
-+		reg_list = fec_enet_register_offset;
-+		reg_cnt = ARRAY_SIZE(fec_enet_register_offset);
-+	} else {
-+		reg_list = fec_enet_register_offset_6ul;
-+		reg_cnt = ARRAY_SIZE(fec_enet_register_offset_6ul);
-+	}
-+#else
-+	/* coldfire */
-+	static u32 *reg_list = fec_enet_register_offset;
-+	static const u32 reg_cnt = ARRAY_SIZE(fec_enet_register_offset);
-+#endif
- 	ret = pm_runtime_resume_and_get(dev);
- 	if (ret < 0)
- 		return;
-@@ -2465,8 +2507,8 @@ static void fec_enet_get_regs(struct net_device *ndev,
- 
- 	memset(buf, 0, regs->len);
- 
--	for (i = 0; i < ARRAY_SIZE(fec_enet_register_offset); i++) {
--		off = fec_enet_register_offset[i];
-+	for (i = 0; i < reg_cnt; i++) {
-+		off = reg_list[i];
- 
- 		if ((off == FEC_R_BOUND || off == FEC_R_FSTART) &&
- 		    !(fep->quirks & FEC_QUIRK_HAS_FRREG))
--- 
-2.30.2
+Main changes from v3 -> v4:
+- Add the Rob's ACK in the dt-binding patch.
+- Use "i.MX" to keep spell consistent.
+- Squash generic endpoint infrastructure changes of
+  "[12/14] PCI: imx6: Add iMX8MM PCIe EP mode" into Kconfig changes.
 
+Main changes from v2 -> v3:
+- Add the i.MX8MP PCIe EP support, and verified on i.MX8MP EVK board.
+- Rebase to latest pci/next branch(tag: v6.0-rc1 plus some PCIe changes).
+
+Main changes from v1 -> v2:
+- Add Rob's ACK into first two commits.
+- Rebase to the tag: pci-v5.20-changes of the pci/next branch.
+
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml |   3 ++
+arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi             |  14 ++++++
+arch/arm64/boot/dts/freescale/imx8mm.dtsi                 |  20 +++++++++
+arch/arm64/boot/dts/freescale/imx8mp-evk.dts              |  13 ++++++
+arch/arm64/boot/dts/freescale/imx8mp.dtsi                 |  19 ++++++++
+arch/arm64/boot/dts/freescale/imx8mq-evk.dts              |  12 ++++++
+arch/arm64/boot/dts/freescale/imx8mq.dtsi                 |  27 ++++++++++++
+drivers/misc/pci_endpoint_test.c                          |   2 +
+drivers/pci/controller/dwc/Kconfig                        |  23 +++++++++-
+drivers/pci/controller/dwc/pci-imx6.c                     | 200 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------
+10 files changed, 314 insertions(+), 19 deletions(-)
+
+[RESEND v4 01/14] dt-bindings: imx6q-pcie: Add i.MX8MM PCIe EP mode
+[RESEND v4 02/14] dt-bindings: imx6q-pcie: Add i.MX8MQ PCIe EP mode
+[RESEND v4 03/14] dt-bindings: imx6q-pcie: Add i.MX8MP PCIe EP mode
+[RESEND v4 04/14] arm64: dts: Add i.MX8MM PCIe EP support
+[RESEND v4 05/14] arm64: dts: Add i.MX8MM PCIe EP support on EVK
+[RESEND v4 06/14] arm64: dts: Add i.MX8MQ PCIe EP support
+[RESEND v4 07/14] arm64: dts: Add i.MX8MQ PCIe EP support on EVK
+[RESEND v4 08/14] arm64: dts: Add i.MX8MP PCIe EP support
+[RESEND v4 09/14] arm64: dts: Add i.MX8MP PCIe EP support on EVK
+[RESEND v4 10/14] misc: pci_endpoint_test: Add i.MX8 PCIe EP device
+[RESEND v4 11/14] PCI: imx6: Add i.MX PCIe EP mode support
+[RESEND v4 12/14] PCI: imx6: Add i.MX8MQ PCIe EP support
+[RESEND v4 13/14] PCI: imx6: Add i.MX8MM PCIe EP support
+[RESEND v4 14/14] PCI: imx6: Add i.MX8MP PCIe EP support
