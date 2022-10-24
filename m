@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FFB60AB5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268D660A8CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236510AbiJXNue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S235576AbiJXNLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236606AbiJXNtS (ORCPT
+        with ESMTP id S235221AbiJXNIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:49:18 -0400
+        Mon, 24 Oct 2022 09:08:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B437B7F5C;
-        Mon, 24 Oct 2022 05:41:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A4E9E698;
+        Mon, 24 Oct 2022 05:21:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9029161337;
-        Mon, 24 Oct 2022 12:40:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6421C433D7;
-        Mon, 24 Oct 2022 12:40:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D984061014;
+        Mon, 24 Oct 2022 12:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA88FC433C1;
+        Mon, 24 Oct 2022 12:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615259;
-        bh=FbcxVwY/7eJdCs1CnPnHTjWAkBq5YTLaLO4bfjHS09k=;
+        s=korg; t=1666614090;
+        bh=wBMz9c/+kTAzdDXShkoI5xBtRWobbz8zGVNHMA/nQ+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pndMdStqkin35F4vM8Nxfv+5ICupSf1yXackU6ou4VA7jKRYatEP8EsxdyBQ/Wc30
-         TB0Gu4OziYtNlUTLC64zCt9e5MS0r7aEI2gATkFjel5Wj+kNyGHEw4MeJwntsxDGuU
-         riaa+Rf8V8BU79FH8E+eLOoZeDkiGuXtQdAePdaY=
+        b=d6YdRVTOj8yNYBWql+xB26zipgJwFf3UvR5LK8atC+X46CQSi4gMf8I1/G1yslTca
+         P3IoykQ8Y06xOXP9oMg1fUr3+9r4i4Hvhd7UNjq5i6GCR9EVCjOqDpYvjALkc1ae+L
+         piJIVAWceMOW4skWxet4BEv/Fex6QYQUtEO8kKA8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Antoine Tenart <atenart@kernel.org>,
+        stable@vger.kernel.org,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 182/530] netfilter: conntrack: revisit the gc initial rescheduling bias
+Subject: [PATCH 5.10 129/390] spi: s3c64xx: Fix large transfers with DMA
 Date:   Mon, 24 Oct 2022 13:28:46 +0200
-Message-Id: <20221024113053.266428760@linuxfoundation.org>
+Message-Id: <20221024113028.166532087@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,63 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antoine Tenart <atenart@kernel.org>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-[ Upstream commit 2aa192757005f130b2dd3547dda6e462e761199f ]
+[ Upstream commit 1224e29572f655facfcd850cf0f0a4784f36a903 ]
 
-The previous commit changed the way the rescheduling delay is computed
-which has a side effect: the bias is now represented as much as the
-other entries in the rescheduling delay which makes the logic to kick in
-only with very large sets, as the initial interval is very large
-(INT_MAX).
+The COUNT_VALUE in the PACKET_CNT register is 16-bit so the maximum
+value is 65535.  Asking the driver to transfer a larger size currently
+leads to the DMA transfer timing out.  Implement ->max_transfer_size()
+and have the core split the transfer as needed.
 
-Revisit the GC initial bias to allow more frequent GC for smaller sets
-while still avoiding wakeups when a machine is mostly idle. We're moving
-from a large initial value to pretending we have 100 entries expiring at
-the upper bound. This way only a few entries having a small timeout
-won't impact much the rescheduling delay and non-idle machines will have
-enough entries to lower the delay when needed. This also improves
-readability as the initial bias is now linked to what is computed
-instead of being an arbitrary large value.
-
-Fixes: 2cfadb761d3d ("netfilter: conntrack: revisit gc autotuning")
-Suggested-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+Fixes: 230d42d422e7 ("spi: Add s3c64xx SPI Controller driver")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Link: https://lore.kernel.org/r/20220927112117.77599-5-vincent.whitchurch@axis.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_core.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/spi/spi-s3c64xx.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/net/netfilter/nf_conntrack_core.c b/net/netfilter/nf_conntrack_core.c
-index ee72da164190..9da5ee6c50cd 100644
---- a/net/netfilter/nf_conntrack_core.c
-+++ b/net/netfilter/nf_conntrack_core.c
-@@ -86,10 +86,12 @@ static DEFINE_MUTEX(nf_conntrack_mutex);
- /* clamp timeouts to this value (TCP unacked) */
- #define GC_SCAN_INTERVAL_CLAMP	(300ul * HZ)
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index dfa7c91e13aa..d435df1b715b 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -84,6 +84,7 @@
+ #define S3C64XX_SPI_ST_TX_FIFORDY		(1<<0)
  
--/* large initial bias so that we don't scan often just because we have
-- * three entries with a 1s timeout.
-+/* Initial bias pretending we have 100 entries at the upper bound so we don't
-+ * wakeup often just because we have three entries with a 1s timeout while still
-+ * allowing non-idle machines to wakeup more often when needed.
-  */
--#define GC_SCAN_INTERVAL_INIT	INT_MAX
-+#define GC_SCAN_INITIAL_COUNT	100
-+#define GC_SCAN_INTERVAL_INIT	GC_SCAN_INTERVAL_MAX
+ #define S3C64XX_SPI_PACKET_CNT_EN		(1<<16)
++#define S3C64XX_SPI_PACKET_CNT_MASK		GENMASK(15, 0)
  
- #define GC_SCAN_MAX_DURATION	msecs_to_jiffies(10)
- #define GC_SCAN_EXPIRED_MAX	(64000u / HZ)
-@@ -1450,7 +1452,7 @@ static void gc_worker(struct work_struct *work)
+ #define S3C64XX_SPI_PND_TX_UNDERRUN_CLR		(1<<4)
+ #define S3C64XX_SPI_PND_TX_OVERRUN_CLR		(1<<3)
+@@ -660,6 +661,13 @@ static int s3c64xx_spi_prepare_message(struct spi_master *master,
+ 	return 0;
+ }
  
- 	if (i == 0) {
- 		gc_work->avg_timeout = GC_SCAN_INTERVAL_INIT;
--		gc_work->count = 1;
-+		gc_work->count = GC_SCAN_INITIAL_COUNT;
- 		gc_work->start_time = start_time;
- 	}
- 
++static size_t s3c64xx_spi_max_transfer_size(struct spi_device *spi)
++{
++	struct spi_controller *ctlr = spi->controller;
++
++	return ctlr->can_dma ? S3C64XX_SPI_PACKET_CNT_MASK : SIZE_MAX;
++}
++
+ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+ 				    struct spi_device *spi,
+ 				    struct spi_transfer *xfer)
+@@ -1135,6 +1143,7 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
+ 	master->prepare_transfer_hardware = s3c64xx_spi_prepare_transfer;
+ 	master->prepare_message = s3c64xx_spi_prepare_message;
+ 	master->transfer_one = s3c64xx_spi_transfer_one;
++	master->max_transfer_size = s3c64xx_spi_max_transfer_size;
+ 	master->num_chipselect = sci->num_cs;
+ 	master->dma_alignment = 8;
+ 	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) |
 -- 
 2.35.1
 
