@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1140360AA39
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE1E60A6B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbiJXNbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S231367AbiJXMhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiJXN2e (ORCPT
+        with ESMTP id S233901AbiJXMbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:28:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7FBABD6B;
-        Mon, 24 Oct 2022 05:32:20 -0700 (PDT)
+        Mon, 24 Oct 2022 08:31:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C708820F55;
+        Mon, 24 Oct 2022 05:04:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDAE56128D;
-        Mon, 24 Oct 2022 12:28:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F184BC433C1;
-        Mon, 24 Oct 2022 12:28:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7CCFB81134;
+        Mon, 24 Oct 2022 12:02:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C479C433C1;
+        Mon, 24 Oct 2022 12:02:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614531;
-        bh=/hfU9Hs/EoqRC2bMqwxFdnQrXTEESji2BHKsq/LzPyQ=;
+        s=korg; t=1666612935;
+        bh=b5hxz7ELFsuA/ayGSxoTJzXWNM2liJklMoKmYT0WhN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZXqT+niDogm6V3WZfT9ZoCnpSNOjr6ZY4CibqziVrUcw4exQk42enaS06/oE6CSeA
-         r5Pe56YdS7Ao8W8vsQp3DOLGwB0lsh97cxWBdZjlJYWdIZq2LyaPe4hnle3bEauuIh
-         qeqCA03KBe9GwQFScB1vNIUlfYmBL2A6SqsT/PoM=
+        b=eQ8ecTBoX/FDJnQxjRuDb3yz6pLicC2MoeS6S9xrP0z7UJuezXA0JsQHoAPEeIleP
+         EXP++56Z5AqSIWZK450F47Mxv3kFEx7ldTUOe3ggQKNt7LhK+rhcKy1Z4D4GJPRtu8
+         SJBk4d2hfFCRRsxD58jTd8AwSfVxOppjzGbtl16Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Arvid Norlander <lkml@vorpal.se>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 297/390] ACPI: video: Add Toshiba Satellite/Portege Z830 quirk
+Subject: [PATCH 4.19 175/229] NFSD: Return nfserr_serverfault if splice_ok but buf->pages have data
 Date:   Mon, 24 Oct 2022 13:31:34 +0200
-Message-Id: <20221024113035.662313201@linuxfoundation.org>
+Message-Id: <20221024113004.748316952@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arvid Norlander <lkml@vorpal.se>
+From: Anna Schumaker <Anna.Schumaker@Netapp.com>
 
-[ Upstream commit 574160b8548deff8b80b174f03201e94ab8431e2 ]
+[ Upstream commit 06981d560606ac48d61e5f4fff6738b925c93173 ]
 
-Toshiba Satellite Z830 needs the quirk video_disable_backlight_sysfs_if
-for proper backlight control after suspend/resume cycles.
+This was discussed with Chuck as part of this patch set. Returning
+nfserr_resource was decided to not be the best error message here, and
+he suggested changing to nfserr_serverfault instead.
 
-Toshiba Portege Z830 is simply the same laptop rebranded for certain
-markets (I looked through the manual to other language sections to confirm
-this) and thus also needs this quirk.
-
-Thanks to Hans de Goede for suggesting this fix.
-
-Link: https://www.spinics.net/lists/platform-driver-x86/msg34394.html
-Suggested-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Arvid Norlander <lkml@vorpal.se>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Tested-by: Arvid Norlander <lkml@vorpal.se>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Link: https://lore.kernel.org/linux-nfs/20220907195259.926736-1-anna@kernel.org/T/#t
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpi_video.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ fs/nfsd/nfs4xdr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/acpi/acpi_video.c b/drivers/acpi/acpi_video.c
-index eb04b2f828ee..cf6c9ffe04a2 100644
---- a/drivers/acpi/acpi_video.c
-+++ b/drivers/acpi/acpi_video.c
-@@ -498,6 +498,22 @@ static const struct dmi_system_id video_dmi_table[] = {
- 		DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE R830"),
- 		},
- 	},
-+	{
-+	 .callback = video_disable_backlight_sysfs_if,
-+	 .ident = "Toshiba Satellite Z830",
-+	 .matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-+		DMI_MATCH(DMI_PRODUCT_NAME, "SATELLITE Z830"),
-+		},
-+	},
-+	{
-+	 .callback = video_disable_backlight_sysfs_if,
-+	 .ident = "Toshiba Portege Z830",
-+	 .matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TOSHIBA"),
-+		DMI_MATCH(DMI_PRODUCT_NAME, "PORTEGE Z830"),
-+		},
-+	},
- 	/*
- 	 * Some machine's _DOD IDs don't have bit 31(Device ID Scheme) set
- 	 * but the IDs actually follow the Device ID Scheme.
+diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+index f67c5de1aeb8..96b79bd90631 100644
+--- a/fs/nfsd/nfs4xdr.c
++++ b/fs/nfsd/nfs4xdr.c
+@@ -3594,7 +3594,7 @@ nfsd4_encode_read(struct nfsd4_compoundres *resp, __be32 nfserr,
+ 	if (resp->xdr.buf->page_len &&
+ 	    test_bit(RQ_SPLICE_OK, &resp->rqstp->rq_flags)) {
+ 		WARN_ON_ONCE(1);
+-		return nfserr_resource;
++		return nfserr_serverfault;
+ 	}
+ 	xdr_commit_encode(xdr);
+ 
 -- 
 2.35.1
 
