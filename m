@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA97609B2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6DF609B2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiJXHTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S229494AbiJXHU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiJXHTa (ORCPT
+        with ESMTP id S229721AbiJXHUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:19:30 -0400
+        Mon, 24 Oct 2022 03:20:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021A6D2E3;
-        Mon, 24 Oct 2022 00:19:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A3B167D7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:20:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91A5761038;
-        Mon, 24 Oct 2022 07:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C5EC433C1;
-        Mon, 24 Oct 2022 07:19:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF5B561036
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FF6C433B5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:20:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666595966;
-        bh=bJ1Pr5XAjs+U7xa/IYSKa65Wkjl1RkUCPiV+jFXoJ14=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mhmmYD0QCbpgcSTdkxpD5gXHMR6SnlOl7oTjTHRZIXx/KjAMN6W/n75DzBTuRKSHy
-         uaS/2ArPad2D2QwNHDEeglCXRLyBLNfL59XNxr0+zA+Y22XEFak65DehI7a4mIqax9
-         vyfkQVSHHmcZUos07K7mJEWHwE4bdUwom3mxV9nFHwYeSwEeZ6fkNrcHFEKBIsDHUJ
-         oKezVxo2IKTOBVYJQYQzm3/Bl2HwWSiDjVzmvRsueDi9qCoJ/Wrh0YFwwkG8Rm4eP6
-         z5XJgwu00yxxZzVEwvzuj9lJF83ylPr6EZuhLdHJP+sTE/zsfsaiuFppZdNMS52v3k
-         dmDlM9ZQ1VcvA==
-Date:   Mon, 24 Oct 2022 08:19:19 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] dt-bindings: soc: qcom: convert non-smd RPM
- bindings to dt-schema
-Message-ID: <Y1Y8dwwJSsTGnIg0@google.com>
-References: <20221005-mdm9615-pinctrl-yaml-v3-0-e5e045644971@linaro.org>
- <20221005-mdm9615-pinctrl-yaml-v3-4-e5e045644971@linaro.org>
+        s=k20201202; t=1666596020;
+        bh=Ty9NkDJERk08rww6GWq0fv6JMZmjA9hkVm/1UTl6Gew=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=soqKKgIavXRhZ62v8koldR2f0U/tPr0CABp32vpxSlg6ct7kFsnJAPq3QCgK1kqvB
+         MfxxSqO5E/C2Iy8fnf1d5VLTjSgELqca6fy+mfKH12YIK7VoHtBJ06LErJ6GmYxo0p
+         LqHByjU05gCnWf+JyfowGoVSU6sO+87IZ1k+MPAD7PB3vb1mg8NETVZm2zDSpUb5pQ
+         17X3kKHscLx83fm1GtQqq7f/Q89OzWSvllIjNb9THemBlK2bFCpwh+Sti4E0klVi1s
+         J38ZYW54812l4J39xsMgVrtJfNlk2s8+b2aTQcupKA6l4rAVsshi9YbFEP/hwmOpqS
+         1I0xgORQrgwtQ==
+Received: by mail-ed1-f50.google.com with SMTP id z97so27773517ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:20:20 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3ktvxkBSD/EJ4n+rm8sCjqpx4OBD2ilHdRah9Ay82nOMxliS+T
+        6yudQtvmBXYSxyOA2TbblvexDws9V9p24IUl4fQ=
+X-Google-Smtp-Source: AMsMyM4TqziqZFrPulpnYOMDfvg5oeGxMZ+ThBB4Hrbl8U9QezIK7K/8pKnOjFAowp0Rgwci0DgtpbzSguFKiCXw6sM=
+X-Received: by 2002:a17:907:3205:b0:770:8554:c4ee with SMTP id
+ xg5-20020a170907320500b007708554c4eemr26613904ejb.39.1666596018653; Mon, 24
+ Oct 2022 00:20:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221005-mdm9615-pinctrl-yaml-v3-4-e5e045644971@linaro.org>
+References: <20221022214622.18042-1-ogabbay@kernel.org> <20221022214622.18042-2-ogabbay@kernel.org>
+ <Y1U2Sy3hHmYfveaD@kroah.com>
+In-Reply-To: <Y1U2Sy3hHmYfveaD@kroah.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Mon, 24 Oct 2022 10:19:52 +0300
+X-Gmail-Original-Message-ID: <CAFCwf11RLTsd2bfc3SoKVKDthVPJ9tbiYjsKPnkTfjFp5djeSg@mail.gmail.com>
+Message-ID: <CAFCwf11RLTsd2bfc3SoKVKDthVPJ9tbiYjsKPnkTfjFp5djeSg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/3] drivers/accel: add new kconfig and update MAINTAINERS
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,18 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022, Neil Armstrong wrote:
-
-> Convert the non-SMD RPM node bindings to dt-schema, the old txt bindings
-> are now removed since all bindings were converted.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  Documentation/devicetree/bindings/mfd/qcom-rpm.txt | 283 ---------------------
->  .../devicetree/bindings/soc/qcom/qcom,ipc-rpm.yaml | 101 ++++++++
->  2 files changed, 101 insertions(+), 283 deletions(-)
-
-Acked-by: Lee Jones <lee@kernel.org>
-
--- 
-Lee Jones [李琼斯]
+On Sun, Oct 23, 2022 at 3:40 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Oct 23, 2022 at 12:46:20AM +0300, Oded Gabbay wrote:
+> > Add a new Kconfig for the accel subsystem. The Kconfig currently
+> > contains only the basic CONFIG_ACCEL option that will be used to
+> > decide whether to compile the accel registration code as part of the
+> > drm core functionality.
+> >
+> > I have taken the liberty to appropriate the dri-devel mailing list and
+> > the dri-devel IRC channel for the accel subsystem.
+> >
+> > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+> > ---
+> >  MAINTAINERS           |  8 ++++++++
+> >  drivers/Kconfig       |  2 ++
+> >  drivers/accel/Kconfig | 24 ++++++++++++++++++++++++
+>
+> YOu never use drivers/accel/ again in this patch series, was that
+> intentional?
+Yes, because I didn't plan for accel to have any core code at this stage.
+But according to your other comments, this will probably change
+(unless someone thinks otherwise).
+Oded
+>
+> thanks,
+>
+> greg k-h
