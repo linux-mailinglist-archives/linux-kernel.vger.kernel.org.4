@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0685060B545
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F7960B72D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiJXSSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S231389AbiJXTVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbiJXSRx (ORCPT
+        with ESMTP id S231477AbiJXTUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:17:53 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C555227E075;
-        Mon, 24 Oct 2022 09:59:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666630758; x=1698166758;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=7ZhNkL3lvgkekoLnvkErYGzQcvxtw6NFtK0TosGfS1I=;
-  b=hzq4kgpUkV5wF8WzQiVHWt5FVS47UZa5IYGCU1ikoLFe8L46edqcJJrf
-   0QeUZ+2vkFAvyS28uP/zsIB6GTHajjPh6PA30hVl1l6pL+7tbHlPfsoUo
-   5WG2DBxGbnsPzMS03kXt8UBkbR2Ld94SmlfnzAvyLzpfhWliMqIE0LT1S
-   Ypmxu0iLhl5bQLG2cRqNn9Nehbr+ukm2+gRZ/URi6pp1Ws7fGOUBqlVpc
-   i3ik1EmxiS5vuFeInyX00ez1EMRzgo32xnxQff032kqOZ926m5PmqytGf
-   xEjlhqJ3qGIIiFBHI0fupUq0Nrn1pHLRZj5tBOWHkJO3WDvSX81G0JW7C
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="305050380"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="305050380"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:03:28 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="582443519"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="582443519"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:03:28 -0700
-Date:   Mon, 24 Oct 2022 08:03:45 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-cc:     hao.wu@intel.com, yilun.xu@intel.com, russell.h.weight@intel.com,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
-        marpagan@redhat.com,
-        Basheer Ahmed Muddebihal 
-        <basheer.ahmed.muddebihal@linux.intel.com>
-Subject: Re: [PATCH v4 2/4] fpga: dfl: Add DFHv1 Register Definitions
-In-Reply-To: <4d609218-508f-6025-e99-71aac2b01369@linux.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2210240802580.2070724@rhweight-WRK1>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-3-matthew.gerlach@linux.intel.com> <4d609218-508f-6025-e99-71aac2b01369@linux.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 24 Oct 2022 15:20:43 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399C84F182;
+        Mon, 24 Oct 2022 10:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=q/e1Qu4FtWDfZNOOIMgHCz0SgGdfdg4tA5OsEGOoE3c=; b=FrQ93RbAeyAsBBB/x8a2KWyRjb
+        Pnwug+kpeEh3janb7pZacOSL53hYEgpXbZBGelbSUgmxB6EsqOHrLbauSQgOGjPeiGDOLMHKfUJTj
+        eXpvysgzSc9vtKgKY03QtgbNRpfMaitvj4ixAcvj0BMhQ9JkqWTiLpIagTjlxxgDg50PO3qC355SM
+        fEuSIZ9jjmDOeB1xrMW6o/bw+6Dso7BGdtfhvqVd/nraTKcfK+ODa4sLS+YJQSAJR0BMfRQxkgSjr
+        jJ3aUQxfS0YpMJ1jUdZ+uqZEBiBC+UuqDaNIXUqwFiEV+ocKj8ZQsHcKJ2irFxXvLGzFyiGKEmF+f
+        g9PhdxZw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1omz25-00FWrf-Vj; Mon, 24 Oct 2022 15:06:30 +0000
+Date:   Mon, 24 Oct 2022 16:06:29 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        David Laight <David.Laight@aculab.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        rcu@vger.kernel.org
+Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
+Message-ID: <Y1ap9YAcZKFuIt/I@casper.infradead.org>
+References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
+ <YzPgTtFzpKEfwPbK@hyeyoo>
+ <YzRQvoVsnJzsauwb@google.com>
+ <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
+ <ff905c1e-5eb3-eaf8-46de-38f189c0b7a5@google.com>
+ <de71b83a-c82c-4785-ef5a-3db4f17bbc8d@suse.cz>
+ <bcecece-f7ce-221d-1674-da3d5ab3fef@google.com>
+ <YzkmErHFyYW3awRn@hyeyoo>
+ <YzsVM8eToHUeTP75@casper.infradead.org>
+ <7dddca4c-bc36-2cf0-de1c-a770bef9e1b7@suse.cz>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-2133041476-1666623825=:2070724"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7dddca4c-bc36-2cf0-de1c-a770bef9e1b7@suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,131 +62,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Mon, Oct 24, 2022 at 04:35:04PM +0200, Vlastimil Babka wrote:
+> I would like to have a working safe version in -next, even if we are able
+> simplify it later thanks to frozen refcounts. I've made a formal patch of
+> yours, but I'm still convinced the slab check needs to be more paranoid so
+> it can't observe a false positive __folio_test_movable() while missing the
+> folio_test_slab(), hence I added the barriers as in my previous attempt [1].
+> Does that work for you and can I add your S-o-b?
 
---8323328-2133041476-1666623825=:2070724
-Content-Type: text/plain; charset=ISO-8859-15; format=flowed
-Content-Transfer-Encoding: 8BIT
+Thanks for picking this back up.
 
+> +++ b/mm/slab.c
+> @@ -1370,6 +1370,8 @@ static struct slab *kmem_getpages(struct kmem_cache *cachep, gfp_t flags,
+>  
+>  	account_slab(slab, cachep->gfporder, cachep, flags);
+>  	__folio_set_slab(folio);
+> +	/* Make the flag visible before any changes to folio->mapping */
+> +	smp_wmb();
 
+So what's the point of using __folio_set_slab() only to call smp_wmb()
+afterwards?  If we call folio_set_slab() instead, don't all the other
+barriers go away?  (This is a genuine question; I am bad at this kind
+of reasoning).  Obviously it would still need a comment.
 
-On Fri, 21 Oct 2022, Ilpo Järvinen wrote:
-
-> On Thu, 20 Oct 2022, matthew.gerlach@linux.intel.com wrote:
->
->> From: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
->>
->> This patch adds the definitions for DFHv1 header and related register
->> bitfields.
->>
->> Signed-off-by: Basheer Ahmed Muddebihal <basheer.ahmed.muddebihal@linux.intel.com>
->> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
->> ---
->> v4: s/MSIX/MSI_X/g
->>     move kerneldoc to implementation
->>     don't change copyright date
->>
->> v3:
->>     keep DFHv1 definitions "hidden" in drivers/fpga/dfl.h
->>
->> v2: clean up whitespace and one line comments
->>     remove extra space in commit
->>     use uniform number of digits in constants
->>     don't change copyright date because of removed content
->>
->> dfl.h s/MSIX/MSI_X/g move kerneldoc
->> ---
->>  drivers/fpga/dfl.h  | 33 +++++++++++++++++++++++++++++++++
->>  include/linux/dfl.h | 11 +++++++++++
->>  2 files changed, 44 insertions(+)
->>
->> diff --git a/drivers/fpga/dfl.h b/drivers/fpga/dfl.h
->> index 06cfcd5e84bb..45e6e1359a67 100644
->> --- a/drivers/fpga/dfl.h
->> +++ b/drivers/fpga/dfl.h
->> @@ -74,11 +74,44 @@
->>  #define DFH_REVISION		GENMASK_ULL(15, 12)	/* Feature revision */
->>  #define DFH_NEXT_HDR_OFST	GENMASK_ULL(39, 16)	/* Offset to next DFH */
->>  #define DFH_EOL			BIT_ULL(40)		/* End of list */
->> +#define DFH_VERSION		GENMASK_ULL(59, 52)	/* DFH version */
->>  #define DFH_TYPE		GENMASK_ULL(63, 60)	/* Feature type */
->>  #define DFH_TYPE_AFU		1
->>  #define DFH_TYPE_PRIVATE	3
->>  #define DFH_TYPE_FIU		4
->>
->> +/*
->> + * DFHv1 Register Offset definitons
->> + * In DHFv1, DFH + GUID + CSR_START + CSR_SIZE_GROUP + PARAM_HDR + PARAM_DATA
->> + * as common header registers
->> + */
->> +#define DFHv1_CSR_ADDR		0x18  /* CSR Register start address */
->> +#define DFHv1_CSR_SIZE_GRP	0x20  /* Size of Reg Block and Group/tag */
->> +#define DFHv1_PARAM_HDR		0x28  /* Optional First Param header */
->> +
->> +/*
->> + * CSR Rel Bit, 1'b0 = relative (offset from feature DFH start),
->> + * 1'b1 = absolute (ARM or other non-PCIe use)
->> + */
->> +#define DFHv1_CSR_ADDR_REL	BIT_ULL(0)
->> +
->> +/* CSR Header Register Bit Definitions */
->> +#define DFHv1_CSR_ADDR_MASK       GENMASK_ULL(63, 1)  /* 63:1 of CSR address */
->> +
->> +/* CSR SIZE Goup Register Bit Definitions */
->> +#define DFHv1_CSR_SIZE_GRP_INSTANCE_ID	GENMASK_ULL(15, 0)	/* Enumeration instantiated IP */
->> +#define DFHv1_CSR_SIZE_GRP_GROUPING_ID	GENMASK_ULL(30, 16)	/* Group Features/interfaces */
->> +#define DFHv1_CSR_SIZE_GRP_HAS_PARAMS	BIT_ULL(31)		/* Presence of Parameters */
->> +#define DFHv1_CSR_SIZE_GRP_SIZE		GENMASK_ULL(63, 32)	/* Size of CSR Block in bytes */
->
-> SIZE -> SZ would remove two letters w/o loss of info (remember to
-> rename the offset too if you make this change).
->
->> +/* PARAM Header Register Bit Definitions */
->> +#define DFHv1_PARAM_HDR_ID		GENMASK_ULL(15, 0) /* Id of this Param  */
->> +#define DFHv1_PARAM_HDR_VERSION		GENMASK_ULL(31, 16) /* Version Param */
->> +#define DFHv1_PARAM_HDR_NEXT_OFFSET	GENMASK_ULL(63, 32) /* Offset of next Param */
->> +#define DFHv1_PARAM_HDR_NEXT_EOL	BIT_ULL(0)
->> +#define DFHv1_PARAM_HDR_NEXT_MASK	GENMASK_ULL(1, 0)
->> +#define DFHv1_PARAM_DATA		0x08  /* Offset of Param data from Param header */
->> +
->>  /* Next AFU Register Bitfield */
->>  #define NEXT_AFU_NEXT_DFH_OFST	GENMASK_ULL(23, 0)	/* Offset to next AFU */
->>
->> diff --git a/include/linux/dfl.h b/include/linux/dfl.h
->> index 431636a0dc78..fea9e16d35b6 100644
->> --- a/include/linux/dfl.h
->> +++ b/include/linux/dfl.h
->> @@ -11,6 +11,17 @@
->>  #include <linux/device.h>
->>  #include <linux/mod_devicetable.h>
->>
->> +#define DFHv1_PARAM_ID_MSI_X		0x1
->> +#define DFHv1_PARAM_MSI_X_STARTV	0x0
->> +#define DFHv1_PARAM_MSI_X_NUMV		0x4
->> +
->> +#define DFHv1_PARAM_ID_CLK_FRQ    0x2
->> +#define DFHv1_PARAM_ID_FIFO_LEN   0x3
->> +
->> +#define DFHv1_PARAM_ID_REG_LAYOUT 0x4
->> +#define DFHv1_PARAM_ID_REG_WIDTH  GENMASK_ULL(63, 32)
->> +#define DFHv1_PARAM_ID_REG_SHIFT  GENMASK_ULL(31, 0)
->
-> Any particular reason why MSI_X parameters are given as offsets and
-> these REG_LAYOUT ones as bitfields (both are 32-bit)?
-
-I agree that it would be much better to be consistent.
-
->
-> The naming here would indicate that DFHv1_PARAM_ID_REG_WIDTH is one of the
-> parameters but it's part of param data instead. I suppose you'd want
-> DFHv1_PARAM_REG_LAYOUT_WIDTH instead.
-
-Thanks for the naming suggestions.
-
->
-> -- 
-> i.
->
->
---8323328-2133041476-1666623825=:2070724--
