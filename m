@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8633E60AFA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B09760AE8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiJXPyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 11:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45182 "EHLO
+        id S230254AbiJXPHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiJXPxm (ORCPT
+        with ESMTP id S232718AbiJXPHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:53:42 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFF1857F3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:48:54 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id kt23so16091ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:48:54 -0700 (PDT)
+        Mon, 24 Oct 2022 11:07:00 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2BE157884
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:44:04 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id m16so31281876edc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:44:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qaWaEd0PTNUwkHSdWBfjQaOKY0U/4iADkLwuX4tjYsI=;
-        b=QTLOedLCTWH0jSE73TXFDlpXIEqR6RHh3j3y/2qLMiCJ04s16ps7GqLwvgXl2lHMCR
-         QmogwGOsM/BiXf7D4uKAvaqjEXfvhYSXBEnHwAKLLIAkR693vNvKi/G8Wff7DnZiazsn
-         RQihbA1f6S6qq+gbrpZjQeISnvRLKUyDw7LBo/LaiQerMEgkc64xZtKkp7lkm6+sep0g
-         OGhS1kwhRltDJoXwCHK0nF7Gd0LdRMQBFkL5v2a8BR1GIcLQLgxg8JGz46Ifa7ePwUrs
-         7nvgAKnIoYg4sgNmHoBTsTTutjmfdoNR3rAoIFKeLeXKFa1RXF7lE7GI+CCpSvSIPM3v
-         Ridw==
+        bh=++QYeJg/+C+ik8WFdwtW/r8WZFhwmGFWmKV6qKEKsEI=;
+        b=yhSVHZPb0ESj6C8xSmwXNvjOVvewdiIzyVKUX4mPny9lGtJ2BPg0u3DGSxAVCCUIm1
+         bdtE1dIP7fWY5ExuowaZWT2rd/zZBPbKAzermaaykc+JyWRw2vQTAPwr5vxY0Ik06blA
+         fJAP8vB9xqJsOp5jTN5lmi0I1QzdxvaeFza1r2Vhz23qyZWZEB01YlN4jpR3gevocrUs
+         zYUJ2gtVxSe/D67RJoHil9/5iJlwNNlbvYVmeLMNxwkPaepPPoWgRlEvKMkzKZEaph9m
+         iAgBvRaKtqzy+P3egka50v18xpITEwYl5kgrIQzUwF2/h1CT4qgznjUpA62h7Qe8s+H/
+         DCBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qaWaEd0PTNUwkHSdWBfjQaOKY0U/4iADkLwuX4tjYsI=;
-        b=O6a2sN4+Fu+ONZPlGv0Tst3uNxNJtf4eZF01q5dI5qCHh2zARoGmaCckdigNEL7oFj
-         BZbQEs4wh4YNWgZOKy0Iea92wMRlEA1V4vnND1pbrjDLgvlhFKafijBTzcyoWy5Zknn3
-         7AHuizHSC5mT3sTRX9erXQ9jptD6izpYJiB3Gx9mOYPmwFArZWLBUNgh7HjSh0lMPmDR
-         6zaO92OuO25VdaBv8oSR589FEik4zmKAaEZ9u5J0JK8+zyUZiUPzcWunmjv4m/mhUwIJ
-         Dfri2voHMBAd7n8CUQN0KOmSbTd7IOqBCrjlqiJw/o0Gm6SiM+9kadmTvV7awIUO8ML2
-         0xGg==
-X-Gm-Message-State: ACrzQf1plO53BbQUX618ypu1B8uTK5K/FKN7gvVORmGfEJBLllpElSto
-        9hADkWiPoDbsZ7Ux1gq6z3jvEfCHM7XRakDx
-X-Google-Smtp-Source: AMsMyM6HpatqnbXqxsA3dpg5mU8rj42wb07sIMKMi3Kr589GIFHjAxaf7FDsiuupdql6gn3KoPVsDA==
-X-Received: by 2002:a05:6512:c0d:b0:4a2:4129:366e with SMTP id z13-20020a0565120c0d00b004a24129366emr12771891lfu.328.1666618230554;
-        Mon, 24 Oct 2022 06:30:30 -0700 (PDT)
+        bh=++QYeJg/+C+ik8WFdwtW/r8WZFhwmGFWmKV6qKEKsEI=;
+        b=beX9vo4szzN6eJQYWC7tVgcFteW6+9H1BdDTMRqPwLMjGQ9bmot3xWhUku81YHyPyz
+         C+Wm8GqAuaNjpbYA/fRFBILhymPBhNP4ihfmQntAIUXWRn2cRPApu1ECup2VZV8qH9/S
+         8HONY3Ae2qvVymVQmKCkRe6RjqrYZAUHmSVg+/HrN8BUz+wi0uYUuXuppjgZyw9L4fSP
+         IEG3vAAi/pQk2kbZ+PwCMYSIzjv8ABZk7obPDN1t8nRqOg5VJxEqzGdqMVqZECzwPCvY
+         6OIr4d4PxOmuDQmvjXrV3kNcIiaTRwGwprl9AgPCzbVd3bh4NPQuCkchilmGnUBoGZG4
+         RB+A==
+X-Gm-Message-State: ACrzQf19boK7Gv5Zl5UQTEMORxBtches83wBLa9nK+hKuE/p+Hv0EXFA
+        /8mLozIn9jGW4jFoyyvFsizI1CzynMW7vzvP
+X-Google-Smtp-Source: AMsMyM4GcW7E5WxrqWZrOBjhHWnWb9sXxY7y0kftJE13nf8nO3M9EScq/v7+TLu0j5Sskf6tDShnJw==
+X-Received: by 2002:a2e:be08:0:b0:26f:ce4e:c659 with SMTP id z8-20020a2ebe08000000b0026fce4ec659mr11387111ljq.16.1666618252427;
+        Mon, 24 Oct 2022 06:30:52 -0700 (PDT)
 Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id w25-20020ac24439000000b004a240eb0217sm4522460lfl.251.2022.10.24.06.30.29
+        by smtp.gmail.com with ESMTPSA id 6-20020ac25f46000000b00492d064e8f8sm4518918lfz.263.2022.10.24.06.30.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 06:30:30 -0700 (PDT)
-Message-ID: <65db9e0a-29ae-3584-9dcc-e45d8a8a1cb6@linaro.org>
-Date:   Mon, 24 Oct 2022 16:30:29 +0300
+        Mon, 24 Oct 2022 06:30:52 -0700 (PDT)
+Message-ID: <a0acba21-647f-c031-4fd3-5c2a37d63812@linaro.org>
+Date:   Mon, 24 Oct 2022 16:30:51 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH 02/10] phy: qcom-qmp-ufs: merge driver data
+Subject: Re: [PATCH 03/10] phy: qcom-qmp-ufs: clean up device-tree parsing
 Content-Language: en-GB
 To:     Johan Hovold <johan+linaro@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
@@ -67,15 +67,14 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20221024090041.19574-1-johan+linaro@kernel.org>
- <20221024090041.19574-3-johan+linaro@kernel.org>
+ <20221024090041.19574-4-johan+linaro@kernel.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221024090041.19574-3-johan+linaro@kernel.org>
+In-Reply-To: <20221024090041.19574-4-johan+linaro@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,13 +82,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 24/10/2022 12:00, Johan Hovold wrote:
-> The UFS QMP PHY driver only manages a single PHY so merge the old
-> qcom_qmp and qmp_phy structures and drop the PHY array.
+> Since the QMP driver split there will be at most a single child node so
+> drop the obsolete iteration construct.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 171 +++++++++---------------
->   1 file changed, 63 insertions(+), 108 deletions(-)
+> While at it, drop the verbose error logging that would have been
+> printed also on probe deferrals.
+> 
+> Note that there's no need to check if there are additional child nodes
+> (the kernel is not a devicetree validator), but let's return an error if
+> there are no child nodes at all for now.
 > 
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
