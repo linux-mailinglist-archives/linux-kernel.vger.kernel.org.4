@@ -2,92 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C59C60BC29
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7384960BC30
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232876AbiJXVax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
+        id S230080AbiJXVbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiJXVa1 (ORCPT
+        with ESMTP id S231858AbiJXVav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:30:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D65E295B1C;
-        Mon, 24 Oct 2022 12:37:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAA4461575;
-        Mon, 24 Oct 2022 19:36:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF505C433C1;
-        Mon, 24 Oct 2022 19:36:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666640171;
-        bh=fldEejBmWhb2dcNXpmcrmZPAcI08NnoyTAQGGcT+UNk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZjQkd+T/t3ZgB8kCMwcKd5h5QKQnhN3rF7FHtJiiRNpwHApD7Bw4+FUGk7noUPUby
-         lnKEcOo1sE7gJ6GaHYjMhJ2j5rLMe4pFhrL5zPLyGw3j0K4tGV/8hElPd8m1v7bZBT
-         1rzdBFF+qLA980xACh8aD8HIU8FwAMf35XYVJi1cAYqpYQJV/lMol/fACcofds5sfk
-         wD/pTD2l2ZSGK+NtmTpVVrGD6tnr4ggd4QUgtCIHQOIgGdOTE1fTeNvnCc8HXgvmaM
-         FKXE0UDLbz6tT5RQ6pkEvlSXqKjUoLfwubX18OncucgtQKrAGdIFAZIjJpwjWZqk3s
-         fdiwSGePzY9WA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id E08EF404BE; Mon, 24 Oct 2022 16:36:07 -0300 (-03)
-Date:   Mon, 24 Oct 2022 16:36:07 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 0/8] Update to C11, fix signal undefined behavior
-Message-ID: <Y1bpJ5zqDOBYCQCx@kernel.org>
-References: <20221024173523.602064-1-irogers@google.com>
- <Y1bQlxxABicj4k3+@kernel.org>
- <CAP-5=fWPdmHPXc9D2LP6TVmhuNf93gZCnogWXCVGytkhuqi2uQ@mail.gmail.com>
+        Mon, 24 Oct 2022 17:30:51 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125FF97EDD;
+        Mon, 24 Oct 2022 12:37:24 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-368edbc2c18so94377387b3.13;
+        Mon, 24 Oct 2022 12:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OhQpzoeVGEwmo14h6MNRUCVjD46EBvZeUnXF6FjYKqc=;
+        b=LWqs5CgYoI2G7bwSrxm509BXkoJoj4h1+NAumrnw8GvlsTUUX0V7puTaejDjA+a+Se
+         JZxLEhr98Isu6X1gDcr7CkjpAxT8QlsxaP3cMesu5io+uJ/hiaxizHNPmkvonW4ZrSM3
+         9FJelnA+mhjpIKDB4wzNLTg8Yl25Bz2AgN5mLB8NjrqH3r4M0xDO+raYYo0KOsCBYSik
+         v9TQ8VEWW7hntj+Pu46z7CX8Gt3ApfbvP2i70kguAt+Ou14BtRsnM5RXks+7xrvrVctd
+         Sdn2UK8OpZrhDItYKOmqTRxqsyQ+eocL2ZMu5oL7CUQlM4vOpL4lrxfytXhVZRRPAgrU
+         MCiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OhQpzoeVGEwmo14h6MNRUCVjD46EBvZeUnXF6FjYKqc=;
+        b=heEoh4/Yztkfi7Fe3Z+xAG6aD+gs7Q1C8tkpHBUoQVAaJI3ZtnFZgt+RJtQdfw9Pna
+         GYBOS2afr4d3iYbwV/WwyAzKYhnqHafNwlCW1lwRdXuNSE4Kvs832YIieMQYZQuoYd7U
+         PvEfI+3diuTorT4gH8TkmO3Pn5TNhtnVmhTtMNQ3h2bT4FMtnONuvuWxAhU8ZtGgbitu
+         Cz0/bk4Peb7Yk3tEJ4mjWyVeolngNkTlEzibTDzUQf5v4CaEIeMf/wpF/1dkNl7yqYVL
+         KxvCyUu78+sYNWI38UjvpzKlByQH4OwPAOe/l1rITpNP+m8EYRxCD1A/3Xsq+7tXMX6E
+         /+5g==
+X-Gm-Message-State: ACrzQf3E1V+PgAGtQ013UvJWJskVgrSwAuIdwl8ttVw+m7KNocO8Dlqv
+        XEs66wR9OEwpP/GUP189U2w4nY8u9pLaNzglaNHck+9ZeCg=
+X-Google-Smtp-Source: AMsMyM7XF706RQysgvnkUL+jiUes9sa+q4VpOE9nihO77SiOflxp7+5NwMrZHWz4l1+JriXP7Udvq8USTVKNN8z/wRE=
+X-Received: by 2002:a81:71c6:0:b0:36a:5682:2c44 with SMTP id
+ m189-20020a8171c6000000b0036a56822c44mr14328584ywc.308.1666640181761; Mon, 24
+ Oct 2022 12:36:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fWPdmHPXc9D2LP6TVmhuNf93gZCnogWXCVGytkhuqi2uQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-2-vishal.moola@gmail.com>
+In-Reply-To: <20221017202451.4951-2-vishal.moola@gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Mon, 24 Oct 2022 12:36:10 -0700
+Message-ID: <CAOzc2py2E_zFukvSv-BcDm+mJis44Zp0fksd49mudMkU52HpZA@mail.gmail.com>
+Subject: Re: [PATCH v3 01/23] pagemap: Add filemap_grab_folio()
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Oct 24, 2022 at 10:59:03AM -0700, Ian Rogers escreveu:
-> On Mon, Oct 24, 2022 at 10:51 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Mon, Oct 24, 2022 at 10:35:15AM -0700, Ian Rogers escreveu:
-> > > The use of C11 is mainstream in the kernel [1]. There was some
-> > > confusion on volatile and signal handlers in [2]. Switch to using
-> > > stdatomic.h (requires C11) and sig_atomic_t as per [3]. Thanks to Leo
-> > > Yan <leo.yan@linaro.org> for the suggestions.
-> > >
-> > > [1] https://lore.kernel.org/lkml/CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com/
-> > > [2] https://lore.kernel.org/lkml/20221024011024.462518-1-irogers@google.com/
-> > > [3] https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+objects+in+signal+handlers
-> >
-> > I think I'll apply this to perf/core, i.e. for 6.3, ok?
-> 
-> Sounds good to me. 6.3 or 6.2? I suspect there is more cleanup like
-> this and to the iterators (from C11) that can be done.
+On Mon, Oct 17, 2022 at 1:24 PM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> Add function filemap_grab_folio() to grab a folio from the page cache.
+> This function is meant to serve as a folio replacement for
+> grab_cache_page, and is used to facilitate the removal of
+> find_get_pages_range_tag().
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  include/linux/pagemap.h | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>
+> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+> index bbccb4044222..74d87e37a142 100644
+> --- a/include/linux/pagemap.h
+> +++ b/include/linux/pagemap.h
+> @@ -547,6 +547,26 @@ static inline struct folio *filemap_lock_folio(struct address_space *mapping,
+>         return __filemap_get_folio(mapping, index, FGP_LOCK, 0);
+>  }
+>
+> +/**
+> + * filemap_grab_folio - grab a folio from the page cache
+> + * @mapping: The address space to search
+> + * @index: The page index
+> + *
+> + * Looks up the page cache entry at @mapping & @index. If no folio is found,
+> + * a new folio is created. The folio is locked, marked as accessed, and
+> + * returned.
+> + *
+> + * Return: A found or created folio. NULL if no folio is found and failed to
+> + * create a folio.
+> + */
+> +static inline struct folio *filemap_grab_folio(struct address_space *mapping,
+> +                                       pgoff_t index)
+> +{
+> +       return __filemap_get_folio(mapping, index,
+> +                       FGP_LOCK | FGP_ACCESSED | FGP_CREAT,
+> +                       mapping_gfp_mask(mapping));
+> +}
+> +
+>  /**
+>   * find_get_page - find and get a page reference
+>   * @mapping: the address_space to search
+> --
+> 2.36.1
+>
 
-oops, 6.2, sure, 6.1 is the current one, merge window closed. :-)
-
-- Arnaldo
+Following up on the filemap-related patches (01/23, 02/23, 03/23, 04/23),
+does anyone have time to review them this week?
