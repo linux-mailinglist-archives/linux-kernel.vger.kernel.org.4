@@ -2,73 +2,387 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B29609F8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9D5609F93
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiJXK7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
+        id S230159AbiJXLAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbiJXK67 (ORCPT
+        with ESMTP id S230077AbiJXK7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:58:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7068065578;
-        Mon, 24 Oct 2022 03:57:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95B83B810F1;
-        Mon, 24 Oct 2022 10:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F7FC433D6;
-        Mon, 24 Oct 2022 10:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666609074;
-        bh=243wXPv4AR2wrZkqmi6qWWqrr84EZXHvLWH+aXKTZsc=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=JZvUXGBJ26inuxYa/KlwNRJoQGifNOjtPJkX/9C32foZtGJ8nTh8fuatdepOlb0Qt
-         M//aDMT33B6pKFUfBccCaG4jv9krcP0fpr5ZZuELySaI5JtM0qZ/LTaI1zL8V3lrNI
-         bi9FKJ1FamNwYCoC4QQdsRcrbtw6GmuVeWnt+FpUGH5H76zyLY6rHce8E3C3QnhCkG
-         9ia5dPvhbTxcZTgkB+L4t20u/2wowB/e3EHoYmdR/XcMBCGONZNFhsYYgrVTj+6gB/
-         cK6YSqyJtRrOXsdkwhf2JA7cG3w/zI5QQPgFCjou70h4iJPEuPZJArH8ukmxyk++ji
-         PG/s734059ngA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     gregory.greenman@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iwlwifi/mvm: fix repeated words in comments
-References: <20221022054244.31996-1-wangjianli@cdjrlc.com>
-Date:   Mon, 24 Oct 2022 13:57:50 +0300
-In-Reply-To: <20221022054244.31996-1-wangjianli@cdjrlc.com> (wangjianli's
-        message of "Sat, 22 Oct 2022 13:42:44 +0800")
-Message-ID: <87y1t5h4k1.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 24 Oct 2022 06:59:35 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6AB861B29;
+        Mon, 24 Oct 2022 03:58:34 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8AxbdrXb1Zj8hsCAA--.8520S3;
+        Mon, 24 Oct 2022 18:58:31 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxPuLRb1ZjIVIEAA--.16508S2;
+        Mon, 24 Oct 2022 18:58:29 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v1 1/2] soc: loongson: add GUTS driver for loongson2 platforms
+Date:   Mon, 24 Oct 2022 18:58:21 +0800
+Message-Id: <20221024105822.24514-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxPuLRb1ZjIVIEAA--.16508S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3AF43Zr4UXr1kurWfWF43trb_yoWfKr48pa
+        n3C34rGrWUJF43urs5Aa48CFyYka4xCasrZFWxWwn8ur97A34UZ3ZrJFyjyrs7ArykA342
+        qF95GayjkFWUJw7anT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bf8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq
+        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64
+        vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
+        14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1U
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
+        4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsG
+        vfC2KfnxnUUI43ZEXa7IU0TrW5UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wangjianli <wangjianli@cdjrlc.com> writes:
+The global utilities block controls PCIE device enabling, alternate
+function selection for multiplexed signals, consistency of HDA, USB
+and PCIE, configuration of memory controller, rtc controller, lio
+controller, and clock control.
 
-> Delete the redundant word 'the'.
->
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->  drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+This patch adds a driver to manage and access global utilities block.
+Initially only reading SVR and registering soc device are supported.
 
-The same here as well, it's easier if you fold this patch with the first
-iwlwifi patch.
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ MAINTAINERS                             |   7 +
+ drivers/soc/Kconfig                     |   1 +
+ drivers/soc/Makefile                    |   1 +
+ drivers/soc/loongson/Kconfig            |  17 +++
+ drivers/soc/loongson/Makefile           |   6 +
+ drivers/soc/loongson/loongson2_guts.c   | 168 ++++++++++++++++++++++++
+ include/linux/loongson/loongson2_guts.h |  35 +++++
+ 7 files changed, 235 insertions(+)
+ create mode 100644 drivers/soc/loongson/Kconfig
+ create mode 100644 drivers/soc/loongson/Makefile
+ create mode 100644 drivers/soc/loongson/loongson2_guts.c
+ create mode 100644 include/linux/loongson/loongson2_guts.h
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 2d002509fc65..f032096d5251 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11930,6 +11930,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
+ F:	drivers/pinctrl/pinctrl-loongson2.c
+ 
++LOONGSON2 SOC SERIES GUTS DRIVER
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	loongarch@lists.linux.dev
++S:	Maintained
++F:	drivers/soc/loongson/loongson2_guts.c
++F:	include/linux/loongson/loongson2_guts.h
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index e461c071189b..5dbb09f843f7 100644
+--- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -13,6 +13,7 @@ source "drivers/soc/fujitsu/Kconfig"
+ source "drivers/soc/imx/Kconfig"
+ source "drivers/soc/ixp4xx/Kconfig"
+ source "drivers/soc/litex/Kconfig"
++source "drivers/soc/loongson/Kconfig"
+ source "drivers/soc/mediatek/Kconfig"
+ source "drivers/soc/microchip/Kconfig"
+ source "drivers/soc/pxa/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 69ba6508cf2c..fff513bd522d 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -18,6 +18,7 @@ obj-y				+= imx/
+ obj-y				+= ixp4xx/
+ obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+ obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
++obj-y				+= loongson/
+ obj-y				+= mediatek/
+ obj-y				+= microchip/
+ obj-y				+= pxa/
+diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+new file mode 100644
+index 000000000000..5b97071ff352
+--- /dev/null
++++ b/drivers/soc/loongson/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Loongson2 series SoC drivers
++#
++
++menu "Loongson2 series SoC drivers"
++
++config LOONGSON2_GUTS
++	tristate "LOONGSON2 GUTS"
++	select SOC_BUS
++	help
++	  The global utilities block controls PCIE device enabling, alternate
++	  function selection for multiplexed signals, consistency of HDA, USB
++	  and PCIE, configuration of memory controller, rtc controller, lio
++	  controller, and clock control. This patch adds a driver to manage
++	  and access global utilities block. Initially only reading SVR and
++	  registering soc device are supported.
+diff --git a/drivers/soc/loongson/Makefile b/drivers/soc/loongson/Makefile
+new file mode 100644
+index 000000000000..acfc90a624c9
+--- /dev/null
++++ b/drivers/soc/loongson/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0+
++#
++# Makefile for the Linux Kernel SoC loongson2 specific device drivers
++#
++
++obj-$(CONFIG_LOONGSON2_GUTS)		+= loongson2_guts.o
+diff --git a/drivers/soc/loongson/loongson2_guts.c b/drivers/soc/loongson/loongson2_guts.c
+new file mode 100644
+index 000000000000..fc4af7d32174
+--- /dev/null
++++ b/drivers/soc/loongson/loongson2_guts.c
+@@ -0,0 +1,168 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/io.h>
++#include <linux/slab.h>
++#include <linux/module.h>
++#include <linux/of_fdt.h>
++#include <linux/sys_soc.h>
++#include <linux/of_address.h>
++#include <linux/platform_device.h>
++#include <linux/loongson/loongson2_guts.h>
++
++static struct soc_device_attribute soc_dev_attr;
++static struct soc_device *soc_dev;
++
++static struct guts {
++	struct scfg_guts __iomem *regs;
++	bool little_endian;
++} *guts;
++
++struct loongson2_soc_die_attr {
++	char	*die;
++	u32	svr;
++	u32	mask;
++};
++
++/* SoC die attribute definition for loongson platform */
++static const struct loongson2_soc_die_attr loongson2_soc_die[] = {
++
++	/*
++	 * LA-based SoCs Loongson2 Series
++	 */
++
++	/* Die: 2k1000la, SoC: 2k1000la */
++	{ .die		= "2K1000LA",
++	  .svr		= 0x00000013,
++	  .mask		= 0x000000ff,
++	},
++	{ },
++};
++
++static const struct loongson2_soc_die_attr *loongson2_soc_die_match(
++	u32 svr, const struct loongson2_soc_die_attr *matches)
++{
++	while (matches->svr) {
++		if (matches->svr == (svr & matches->mask))
++			return matches;
++		matches++;
++	};
++
++	return NULL;
++}
++
++static u32 loongson2_guts_get_svr(void)
++{
++	u32 svr = 0;
++
++	if (!guts || !guts->regs)
++		return svr;
++
++	if (guts->little_endian)
++		svr = ioread32(&guts->regs->svr);
++	else
++		svr = ioread32be(&guts->regs->svr);
++
++	return svr;
++}
++
++static int loongson2_guts_probe(struct platform_device *pdev)
++{
++	struct device_node *root, *np = pdev->dev.of_node;
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	const struct loongson2_soc_die_attr *soc_die;
++	const char *machine;
++	u32 svr;
++
++	/* Initialize guts */
++	guts = devm_kzalloc(dev, sizeof(*guts), GFP_KERNEL);
++	if (!guts)
++		return -ENOMEM;
++
++	guts->little_endian = of_property_read_bool(np, "little-endian");
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	guts->regs = ioremap(res->start, res->end - res->start + 1);
++	if (IS_ERR(guts->regs))
++		return PTR_ERR(guts->regs);
++
++	/* Register soc device */
++	root = of_find_node_by_path("/");
++	if (of_property_read_string(root, "model", &machine))
++		of_property_read_string_index(root, "compatible", 0, &machine);
++	of_node_put(root);
++	if (machine)
++		soc_dev_attr.machine = devm_kstrdup(dev, machine, GFP_KERNEL);
++
++	svr = loongson2_guts_get_svr();
++	soc_die = loongson2_soc_die_match(svr, loongson2_soc_die);
++	if (soc_die) {
++		soc_dev_attr.family = devm_kasprintf(dev, GFP_KERNEL,
++						     "Loongson %s", soc_die->die);
++	} else {
++		soc_dev_attr.family = devm_kasprintf(dev, GFP_KERNEL, "Loongson");
++	}
++	if (!soc_dev_attr.family)
++		return -ENOMEM;
++	soc_dev_attr.soc_id = devm_kasprintf(dev, GFP_KERNEL,
++					     "svr:0x%08x", svr);
++	if (!soc_dev_attr.soc_id)
++		return -ENOMEM;
++	soc_dev_attr.revision = devm_kasprintf(dev, GFP_KERNEL, "%d.%d",
++					       (svr >>  4) & 0xf, svr & 0xf);
++	if (!soc_dev_attr.revision)
++		return -ENOMEM;
++
++	soc_dev = soc_device_register(&soc_dev_attr);
++	if (IS_ERR(soc_dev))
++		return PTR_ERR(soc_dev);
++
++	pr_info("Machine: %s\n", soc_dev_attr.machine);
++	pr_info("SoC family: %s\n", soc_dev_attr.family);
++	pr_info("SoC ID: %s, Revision: %s\n",
++		soc_dev_attr.soc_id, soc_dev_attr.revision);
++
++	return 0;
++}
++
++static int loongson2_guts_remove(struct platform_device *dev)
++{
++	soc_device_unregister(soc_dev);
++
++	return 0;
++}
++
++/*
++ * Table for matching compatible strings, for device tree
++ * guts node, for Loongson2 SoCs.
++ */
++static const struct of_device_id loongson2_guts_of_match[] = {
++	{ .compatible = "loongson,ls2k-guts", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, loongson2_guts_of_match);
++
++static struct platform_driver loongson2_guts_driver = {
++	.driver = {
++		.name = "loongson2-guts",
++		.of_match_table = loongson2_guts_of_match,
++	},
++	.probe = loongson2_guts_probe,
++	.remove = loongson2_guts_remove,
++};
++
++static int __init loongson2_guts_init(void)
++{
++	return platform_driver_register(&loongson2_guts_driver);
++}
++core_initcall(loongson2_guts_init);
++
++static void __exit loongson2_guts_exit(void)
++{
++	platform_driver_unregister(&loongson2_guts_driver);
++}
++module_exit(loongson2_guts_exit);
+diff --git a/include/linux/loongson/loongson2_guts.h b/include/linux/loongson/loongson2_guts.h
+new file mode 100644
+index 000000000000..4e5de3ff05c3
+--- /dev/null
++++ b/include/linux/loongson/loongson2_guts.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#ifndef __LOONGSON2_GUTS_H__
++#define __LOONGSON2_GUTS_H__
++
++#include <linux/types.h>
++#include <linux/io.h>
++
++/**
++ * Global Utility Registers.
++ *
++ * Not all registers defined in this structure are available on all chips, so
++ * you are expected to know whether a given register actually exists on your
++ * chip before you access it.
++ *
++ * Also, some registers are similar on different chips but have slightly
++ * different names.  In these cases, one name is chosen to avoid extraneous
++ * #ifdefs.
++ */
++struct scfg_guts {
++	u32	svr;		/* Version Register */
++	u8	res0[4];
++	u16	feature;	/* Feature Register */
++	u32	vendor;		/* Vendor Register */
++	u8	res1[6];
++	u32	id;
++	u8	res2[0x3ff8 - 0x18];
++	u32	chip;
++} __packed;
++
++#endif
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.20.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
