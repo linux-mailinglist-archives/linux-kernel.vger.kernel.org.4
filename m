@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A9D60B765
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FF460B780
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbiJXTX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S233077AbiJXTX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:23:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiJXTVv (ORCPT
+        with ESMTP id S232246AbiJXTWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:21:51 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1650C2D75B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:57:14 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d10so9605406pfh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:57:14 -0700 (PDT)
+        Mon, 24 Oct 2022 15:22:02 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0D83AE66
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:57:22 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s196so9308434pgs.3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:57:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kj33p7JdC03bi8muflplwrkkTeKEhU1qK5ms8K2qnYw=;
-        b=nzykeBNFH40raHYAmGXOty01g/6nzbiDvq+zDWKIdNwOAPn5f8q4jxQnDVsAG1oDcC
-         AhM8H5Av+nJ9E6ng/FNVrDq75WbJDwmUEvLj2Kg814cjo2iUn/ASUE04gAbuSFX1lRDy
-         BCKNYIqneKZWIYFdZOXNRu+y0xg7hgX7j7WGY=
+        bh=PlyFLurvfH7029w8iwxQ1Sku/pg4fNXCW6GH7YT3X1o=;
+        b=oFFypgAmtRSfdYpG2g2vzrpENnpBptPReooSwNKcKMviZOjIzHdqvDt9dal43yElrs
+         pjMh+aBByGRMnMNHeptY6IphflqbfVd2BqYoYNmd7AMSahsxsSPrM47jqwMcKMV4XVBi
+         tKrPXznD/J4GqIn/JRB0IhdbNpRPvrVOg2Pqc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kj33p7JdC03bi8muflplwrkkTeKEhU1qK5ms8K2qnYw=;
-        b=bDCl2Lx2tGwDWSGt4BjSX9Bggi90kHK5YWQGVj6Xdp3/CFQUGsutaeJ6pzmRT5j7oj
-         N+Xuq/ZiXdSQBXGjZRvYtXCglocpAp0rfnh3Dr/6E3xqZ6kHoaW4U80Q1Yr1JcCIACK+
-         ze9d/Mxqo+wSPJWbrKyYxYu9UsL/KGEYqth9+HEt4TOlhV9KaLaE5JLJAazwfrE/CNr7
-         POU3ZL6LT9MDdymtMO+eJuMUCezD+GqdwRjztZ96TBHH7Ip4L55xyLIUyF1gwlFN2NsB
-         IW7oJnQRITHNrFisDXOVzePTtrc0MwMQwnmWgJUfhWPPMKcv9SXhp+xC4ldSxsqJn6vI
-         lHKw==
-X-Gm-Message-State: ACrzQf3wcYCWipNVZb8XJ1tt4NkFa80ipeVDxou/Gwcz5mzJDImpZIUe
-        y5cXEZHP1ilTnO/9wxTkMlLd+A==
-X-Google-Smtp-Source: AMsMyM5BdgZEyjt56UqLJ4vmOVqtMG2g5CTexuitasuGfHwHzRTZ7b/Y++JkhG9PKeh5Y7FxoCAnow==
-X-Received: by 2002:a05:6a00:e1b:b0:537:7c74:c405 with SMTP id bq27-20020a056a000e1b00b005377c74c405mr34703121pfb.43.1666634176496;
-        Mon, 24 Oct 2022 10:56:16 -0700 (PDT)
+        bh=PlyFLurvfH7029w8iwxQ1Sku/pg4fNXCW6GH7YT3X1o=;
+        b=1mjsmbcB5bIEVz0M5zy3aAZZrsn/sjCm70MyJbNBFwcZNJegYmh9wac8uD0ncp1wlF
+         2lDe5tZ+nTkGKO0p9t9NZDnX83hwJzqVk5gO6hW9PU6hH8BAtYGPQ4hGLTiqLb1UwRlB
+         v5HJWpN686gqWVRadFBG2FQmzKRjtgu9KElpek1I8fLWff4LbjMcAiMgXIMb+96LpGOk
+         rAul+8JW4d7ioyyBUtPCglf8xNu7wesmdtYJlpiKpIRh8jbuVeD9kkP1Bh9L0ufg0Fpf
+         Y8L3Dl0SlusvkXEe5vaKZyoGAwly3M2rYnc7rwfy7fGY6iReqgOdLEfMzBwSh7GlCnlT
+         WN4w==
+X-Gm-Message-State: ACrzQf0MHvWm8JhXRIXuAlOo5KILskyQnpFqFkVqhPxES0lqT95w6grN
+        FzNtvROVhBEgYjN3UWB50SfGOQ==
+X-Google-Smtp-Source: AMsMyM5aI4ESYUjnWx/ltF6ITQLbqR9WNBLs0vx0yVG9Dmuqqy2XQbiNxwdPWgnOeMLEHF8SpYrtzg==
+X-Received: by 2002:a63:f755:0:b0:44b:e438:ef2f with SMTP id f21-20020a63f755000000b0044be438ef2fmr30101590pgk.314.1666634180688;
+        Mon, 24 Oct 2022 10:56:20 -0700 (PDT)
 Received: from localhost ([2620:15c:9d:2:808b:e2f6:edcf:ccb0])
-        by smtp.gmail.com with UTF8SMTPSA id a1-20020a170902ecc100b0016cf3f124e1sm30195plh.234.2022.10.24.10.56.14
+        by smtp.gmail.com with UTF8SMTPSA id w20-20020a170902ca1400b001714e7608fdsm26385pld.256.2022.10.24.10.56.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 10:56:15 -0700 (PDT)
+        Mon, 24 Oct 2022 10:56:20 -0700 (PDT)
 From:   Brian Norris <briannorris@chromium.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Shawn Lin <shawn.lin@rock-chips.com>, linux-mmc@vger.kernel.org,
@@ -70,11 +70,10 @@ Cc:     Shawn Lin <shawn.lin@rock-chips.com>, linux-mmc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Faiz Abbas <faiz_abbas@ti.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Brian Norris <briannorris@chromium.org>,
-        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>
-Subject: [PATCH v3 2/7] mmc: sdhci-of-arasan: Fix SDHCI_RESET_ALL for CQHCI
-Date:   Mon, 24 Oct 2022 10:54:56 -0700
-Message-Id: <20221024105229.v3.2.I29f6a2189e84e35ad89c1833793dca9e36c64297@changeid>
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH v3 3/7] mmc: sdhci-brcmstb: Fix SDHCI_RESET_ALL for CQHCI
+Date:   Mon, 24 Oct 2022 10:54:57 -0700
+Message-Id: <20221024105229.v3.3.I6a715feab6d01f760455865e968ecf0d85036018@changeid>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 In-Reply-To: <20221024175501.2265400-1-briannorris@chromium.org>
 References: <20221024175501.2265400-1-briannorris@chromium.org>
@@ -90,66 +89,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ [[ NOTE: this is completely untested by the author, but included solely
+    because, as noted in commit df57d73276b8 ("mmc: sdhci-pci: Fix
+    SDHCI_RESET_ALL for CQHCI for Intel GLK-based controllers"), "other
+    drivers using CQHCI might benefit from a similar change, if they
+    also have CQHCI reset by SDHCI_RESET_ALL." We've now seen the same
+    bug on at least MSM, Arasan, and Intel hardware. ]]
+
 SDHCI_RESET_ALL resets will reset the hardware CQE state, but we aren't
 tracking that properly in software. When out of sync, we may trigger
 various timeouts.
 
-It's not typical to perform resets while CQE is enabled, but one
-particular case I hit commonly enough: mmc_suspend() -> mmc_power_off().
-Typically we will eventually deactivate CQE (cqhci_suspend() ->
-cqhci_deactivate()), but that's not guaranteed -- in particular, if
-we perform a partial (e.g., interrupted) system suspend.
+It's not typical to perform resets while CQE is enabled, but this may
+occur in some suspend or error recovery scenarios.
 
-The same bug was already found and fixed for two other drivers, in v5.7
-and v5.9:
+Include this fix by way of the new sdhci_and_cqhci_reset() helper.
 
-5cf583f1fb9c mmc: sdhci-msm: Deactivate CQE during SDHC reset
-df57d73276b8 mmc: sdhci-pci: Fix SDHCI_RESET_ALL for CQHCI for Intel GLK-based controllers
-
-The latter is especially prescient, saying "other drivers using CQHCI
-might benefit from a similar change, if they also have CQHCI reset by
-SDHCI_RESET_ALL."
-
-So like these other patches, deactivate CQHCI when resetting the
-controller. Do this via the new sdhci_and_cqhci_reset() helper.
-
-Fixes: 84362d79f436 ("mmc: sdhci-of-arasan: Add CQHCI support for arasan,sdhci-5.1")
-Cc: <stable@vger.kernel.org>
+Fixes: d46ba2d17f90 ("mmc: sdhci-brcmstb: Add support for Command Queuing (CQE)")
 Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
 
 Changes in v3:
- - Refactor to a "SDHCI and CQHCI" helper -- sdhci_and_cqhci_reset()
+ - Use new SDHCI+CQHCI helper
 
 Changes in v2:
- - Rely on cqhci_deactivate() to safely handle (ignore)
-   not-yet-initialized CQE support
+ - Rely on cqhci_deactivate() to handle NULL cqe_private, instead of
+   moving around CQE capability flags
 
- drivers/mmc/host/sdhci-of-arasan.c | 3 ++-
+ drivers/mmc/host/sdhci-brcmstb.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/sdhci-of-arasan.c b/drivers/mmc/host/sdhci-of-arasan.c
-index 3997cad1f793..cfb891430174 100644
---- a/drivers/mmc/host/sdhci-of-arasan.c
-+++ b/drivers/mmc/host/sdhci-of-arasan.c
-@@ -25,6 +25,7 @@
- #include <linux/firmware/xlnx-zynqmp.h>
+diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
+index aff36a933ebe..55d8bd232695 100644
+--- a/drivers/mmc/host/sdhci-brcmstb.c
++++ b/drivers/mmc/host/sdhci-brcmstb.c
+@@ -12,6 +12,7 @@
+ #include <linux/bitops.h>
+ #include <linux/delay.h>
  
- #include "cqhci.h"
 +#include "sdhci-cqhci.h"
  #include "sdhci-pltfm.h"
+ #include "cqhci.h"
  
- #define SDHCI_ARASAN_VENDOR_REGISTER	0x78
-@@ -366,7 +367,7 @@ static void sdhci_arasan_reset(struct sdhci_host *host, u8 mask)
+@@ -55,7 +56,7 @@ static void brcmstb_reset(struct sdhci_host *host, u8 mask)
  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
- 	struct sdhci_arasan_data *sdhci_arasan = sdhci_pltfm_priv(pltfm_host);
+ 	struct sdhci_brcmstb_priv *priv = sdhci_pltfm_priv(pltfm_host);
  
 -	sdhci_reset(host, mask);
 +	sdhci_and_cqhci_reset(host, mask);
  
- 	if (sdhci_arasan->quirks & SDHCI_ARASAN_QUIRK_FORCE_CDTEST) {
- 		ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
+ 	/* Reset will clear this, so re-enable it */
+ 	if (priv->flags & BRCMSTB_PRIV_FLAGS_GATE_CLOCK)
 -- 
 2.38.0.135.g90850a2211-goog
 
