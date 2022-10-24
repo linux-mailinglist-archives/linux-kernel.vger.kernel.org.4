@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4BC60B0A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894BB60B082
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233199AbiJXQGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
+        id S233037AbiJXQGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiJXQEI (ORCPT
+        with ESMTP id S232342AbiJXQD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:04:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8EB1E5741;
-        Mon, 24 Oct 2022 07:56:20 -0700 (PDT)
+        Mon, 24 Oct 2022 12:03:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3EB1C2F21;
+        Mon, 24 Oct 2022 07:56:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16E45B81689;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C136CB81684;
+        Mon, 24 Oct 2022 12:25:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E967C433C1;
         Mon, 24 Oct 2022 12:25:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738F6C433C1;
-        Mon, 24 Oct 2022 12:25:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614352;
-        bh=3P1RuKW+50OYJAFeMcmTfsusDpHOt5nIdo0NuyDhDno=;
+        s=korg; t=1666614355;
+        bh=XS0Hdfl2pYxATSwpgJxBoi+EwwhRfcxcGSPPYm0CGE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FnV4aPexrmT/4cg97X5a0nnfmxXcS5Vg4CRm3uKdzSgf7H8p4y6rNYpEQrkbCyrRd
-         xdgk/18bx21MkbSZAZQXRL9AKPgZ1jvS+KQHk2K59a0VfgFWXNZcCgm3xJxzY2Y+G9
-         up9E8jM4beHns03liDRIzSq6dHEHLjwSflF8oAJM=
+        b=td3JnOHc4VPI67rZqkuksIH0Hoj3IKwlgOekGdgSASBEUgYLkLW/F/0KeIZfWF3kH
+         mAvwP/E0f7HiHBR82o0LwF/T8HtfJEbONpSgEBllvpsRqriIs9xO7JNcaoEZH+DZEf
+         ZdKWUu0rW4qzJq+VyNAhOxSj2hWTaRySm2og2bEs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 229/390] md: Replace snprintf with scnprintf
-Date:   Mon, 24 Oct 2022 13:30:26 +0200
-Message-Id: <20221024113032.534421415@linuxfoundation.org>
+        stable@vger.kernel.org, Song Liu <song@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 230/390] md/raid5: Ensure stripe_fill happens on non-read IO with journal
+Date:   Mon, 24 Oct 2022 13:30:27 +0200
+Message-Id: <20221024113032.581886966@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -55,64 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com>
+From: Logan Gunthorpe <logang@deltatee.com>
 
-[ Upstream commit 1727fd5015d8f93474148f94e34cda5aa6ad4a43 ]
+[ Upstream commit e2eed85bc75138a9eeb63863d20f8904ac42a577 ]
 
-Current code produces a warning as shown below when total characters
-in the constituent block device names plus the slashes exceeds 200.
-snprintf() returns the number of characters generated from the given
-input, which could cause the expression “200 – len” to wrap around
-to a large positive number. Fix this by using scnprintf() instead,
-which returns the actual number of characters written into the buffer.
+When doing degrade/recover tests using the journal a kernel BUG
+is hit at drivers/md/raid5.c:4381 in handle_parity_checks5():
 
-[ 1513.267938] ------------[ cut here ]------------
-[ 1513.267943] WARNING: CPU: 15 PID: 37247 at <snip>/lib/vsprintf.c:2509 vsnprintf+0x2c8/0x510
-[ 1513.267944] Modules linked in:  <snip>
-[ 1513.267969] CPU: 15 PID: 37247 Comm: mdadm Not tainted 5.4.0-1085-azure #90~18.04.1-Ubuntu
-[ 1513.267969] Hardware name: Microsoft Corporation Virtual Machine/Virtual Machine, BIOS Hyper-V UEFI Release v4.1 05/09/2022
-[ 1513.267971] RIP: 0010:vsnprintf+0x2c8/0x510
-<-snip->
-[ 1513.267982] Call Trace:
-[ 1513.267986]  snprintf+0x45/0x70
-[ 1513.267990]  ? disk_name+0x71/0xa0
-[ 1513.267993]  dump_zones+0x114/0x240 [raid0]
-[ 1513.267996]  ? _cond_resched+0x19/0x40
-[ 1513.267998]  raid0_run+0x19e/0x270 [raid0]
-[ 1513.268000]  md_run+0x5e0/0xc50
-[ 1513.268003]  ? security_capable+0x3f/0x60
-[ 1513.268005]  do_md_run+0x19/0x110
-[ 1513.268006]  md_ioctl+0x195e/0x1f90
-[ 1513.268007]  blkdev_ioctl+0x91f/0x9f0
-[ 1513.268010]  block_ioctl+0x3d/0x50
-[ 1513.268012]  do_vfs_ioctl+0xa9/0x640
-[ 1513.268014]  ? __fput+0x162/0x260
-[ 1513.268016]  ksys_ioctl+0x75/0x80
-[ 1513.268017]  __x64_sys_ioctl+0x1a/0x20
-[ 1513.268019]  do_syscall_64+0x5e/0x200
-[ 1513.268021]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+  BUG_ON(!test_bit(R5_UPTODATE, &dev->flags));
 
-Fixes: 766038846e875 ("md/raid0: replace printk() with pr_*()")
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+This was found to occur because handle_stripe_fill() was skipped
+for stripes in the journal due to a condition in that function.
+Thus blocks were not fetched and R5_UPTODATE was not set when
+the code reached handle_parity_checks5().
+
+To fix this, don't skip handle_stripe_fill() unless the stripe is
+for read.
+
+Fixes: 07e83364845e ("md/r5cache: shift complex rmw from read path to write path")
+Link: https://lore.kernel.org/linux-raid/e05c4239-41a9-d2f7-3cfa-4aa9d2cea8c1@deltatee.com/
+Suggested-by: Song Liu <song@kernel.org>
+Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/raid0.c |    2 +-
+ drivers/md/raid5.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/raid0.c
-+++ b/drivers/md/raid0.c
-@@ -48,7 +48,7 @@ static void dump_zones(struct mddev *mdd
- 		int len = 0;
- 
- 		for (k = 0; k < conf->strip_zone[j].nb_dev; k++)
--			len += snprintf(line+len, 200-len, "%s%s", k?"/":"",
-+			len += scnprintf(line+len, 200-len, "%s%s", k?"/":"",
- 					bdevname(conf->devlist[j*raid_disks
- 							       + k]->bdev, b));
- 		pr_debug("md: zone%d=[%s]\n", j, line);
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -3936,7 +3936,7 @@ static void handle_stripe_fill(struct st
+ 		 * back cache (prexor with orig_page, and then xor with
+ 		 * page) in the read path
+ 		 */
+-		if (s->injournal && s->failed) {
++		if (s->to_read && s->injournal && s->failed) {
+ 			if (test_bit(STRIPE_R5C_CACHING, &sh->state))
+ 				r5c_make_stripe_write_out(sh);
+ 			goto out;
 
 
