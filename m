@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C487D60A771
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDEEE60A3F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbiJXMuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S232566AbiJXMDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234621AbiJXMpV (ORCPT
+        with ESMTP id S232181AbiJXMAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:21 -0400
+        Mon, 24 Oct 2022 08:00:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8C72872B;
-        Mon, 24 Oct 2022 05:09:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659AD2C13B;
+        Mon, 24 Oct 2022 04:49:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20C71612DB;
-        Mon, 24 Oct 2022 12:08:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F7AC433D6;
-        Mon, 24 Oct 2022 12:08:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 075066122D;
+        Mon, 24 Oct 2022 11:49:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDDFAC433C1;
+        Mon, 24 Oct 2022 11:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613337;
-        bh=reVmjF1orNsb6WREl5L1JcF/8r41j2eq9TSpDSt3XMo=;
+        s=korg; t=1666612160;
+        bh=9cEPUI0SO0/uP4WT5g3TlaqxPNGzZlpCwpnE79x7qNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Br16Cn6SNEiSz5OU16XrhzKDVxfSTD8k6YKP4p2ulsvSfQ1H+fBAdynVEa6cK1crB
-         niNmQG4FxjGpRErQ0MqIND7rnEgQigCcEOE1wST/8hAjij+KoR3LfTwv+IZ3N3RSCt
-         a3Z9kTbIXLaZix7gfJz8Rk+swBuaLpmsIJ1nAgdI=
+        b=wyhJ5D19w5GSfxqxzD2eAY5eqPucN1gPkaP0tvdo9zKSu+AeIVt4V+/CYGuIWXGv2
+         cw4wukLVBmqbGeSi6E2DGb2N/EuQaJkqNFAYvIC28ZuwaMhEKGE6w18bABKY/uKHTq
+         D9gj8aHE4PiYJ7v1zszAavk50DTstlwWa9kVDyUg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 099/255] mmc: au1xmmc: Fix an error handling path in au1xmmc_probe()
+Subject: [PATCH 4.14 092/210] spi: s3c64xx: Fix large transfers with DMA
 Date:   Mon, 24 Oct 2022 13:30:09 +0200
-Message-Id: <20221024113005.774025102@linuxfoundation.org>
+Message-Id: <20221024113000.021214538@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-[ Upstream commit 5cbedf52608cc3cbc1c2a9a861fb671620427a20 ]
+[ Upstream commit 1224e29572f655facfcd850cf0f0a4784f36a903 ]
 
-If clk_prepare_enable() fails, there is no point in calling
-clk_disable_unprepare() in the error handling path.
+The COUNT_VALUE in the PACKET_CNT register is 16-bit so the maximum
+value is 65535.  Asking the driver to transfer a larger size currently
+leads to the DMA transfer timing out.  Implement ->max_transfer_size()
+and have the core split the transfer as needed.
 
-Move the out_clk label at the right place.
-
-Fixes: b6507596dfd6 ("MIPS: Alchemy: au1xmmc: use clk framework")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Link: https://lore.kernel.org/r/21d99886d07fa7fcbec74992657dabad98c935c4.1661412818.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: 230d42d422e7 ("spi: Add s3c64xx SPI Controller driver")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Link: https://lore.kernel.org/r/20220927112117.77599-5-vincent.whitchurch@axis.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/au1xmmc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/spi/spi-s3c64xx.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/mmc/host/au1xmmc.c b/drivers/mmc/host/au1xmmc.c
-index bc8aeb47a7b4..9c4a67f4195e 100644
---- a/drivers/mmc/host/au1xmmc.c
-+++ b/drivers/mmc/host/au1xmmc.c
-@@ -1116,8 +1116,9 @@ static int au1xmmc_probe(struct platform_device *pdev)
- 	if (host->platdata && host->platdata->cd_setup &&
- 	    !(mmc->caps & MMC_CAP_NEEDS_POLL))
- 		host->platdata->cd_setup(mmc, 0);
--out_clk:
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 1a6ec226d6e4..0594e214a636 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -94,6 +94,7 @@
+ #define S3C64XX_SPI_ST_TX_FIFORDY		(1<<0)
+ 
+ #define S3C64XX_SPI_PACKET_CNT_EN		(1<<16)
++#define S3C64XX_SPI_PACKET_CNT_MASK		GENMASK(15, 0)
+ 
+ #define S3C64XX_SPI_PND_TX_UNDERRUN_CLR		(1<<4)
+ #define S3C64XX_SPI_PND_TX_OVERRUN_CLR		(1<<3)
+@@ -640,6 +641,13 @@ static int s3c64xx_spi_prepare_message(struct spi_master *master,
+ 	return 0;
+ }
+ 
++static size_t s3c64xx_spi_max_transfer_size(struct spi_device *spi)
++{
++	struct spi_controller *ctlr = spi->controller;
 +
- 	clk_disable_unprepare(host->clk);
-+out_clk:
- 	clk_put(host->clk);
- out_irq:
- 	free_irq(host->irq, host);
++	return ctlr->can_dma ? S3C64XX_SPI_PACKET_CNT_MASK : SIZE_MAX;
++}
++
+ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+ 				    struct spi_device *spi,
+ 				    struct spi_transfer *xfer)
+@@ -1067,6 +1075,7 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
+ 	master->prepare_transfer_hardware = s3c64xx_spi_prepare_transfer;
+ 	master->prepare_message = s3c64xx_spi_prepare_message;
+ 	master->transfer_one = s3c64xx_spi_transfer_one;
++	master->max_transfer_size = s3c64xx_spi_max_transfer_size;
+ 	master->num_chipselect = sci->num_cs;
+ 	master->dma_alignment = 8;
+ 	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) |
 -- 
 2.35.1
 
