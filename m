@@ -2,162 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7699360AEFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 902A660AED9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiJXPYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 11:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36044 "EHLO
+        id S231540AbiJXPS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:18:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232805AbiJXPYM (ORCPT
+        with ESMTP id S229930AbiJXPSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:24:12 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39922222A2;
-        Mon, 24 Oct 2022 07:09:38 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id a5so18625019edb.11;
-        Mon, 24 Oct 2022 07:09:38 -0700 (PDT)
+        Mon, 24 Oct 2022 11:18:07 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9382DF46
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:59:28 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-13b103a3e5dso11941466fac.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oYELRxnF68XUio0gSClzK4PTdwPd5dSjsPZvf3akxvw=;
-        b=g35ZrmlqtuiI2gLfeTeMpXJZ3kCVRvy8RnV753qcsjIGK4bSlryu6Z391pafv17Nr+
-         AB6dRZ6NfBBEtEe+LSEy9pS26cjY0KUif1dHZUEuAQgUWVKQvz6PmQzufD/UGapS5BFm
-         wCdOhJWM606avxkmmZtdJ5wPTGgCiccYw0zmNsJkHc0QG2yU9eKRcpY//pPDTlpeLQut
-         q8xcqdxbJotTcTRM2drgrOtT4KEjqQDNTAqWXL74fyP5xTrl4DQsZ2eYtfyatlGE829F
-         axp5yZnSmgBErmT1aoedhX6/0z9gKrcU4WpU148Z/FYHavFe1/pxKPNwGjfs4HesXk+o
-         mdGw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SLy1rvfHOR6fvZX4wUC0MNcz5p/zlg2NigI8l8/yRGs=;
+        b=CqIasuSZ5uIB8stglnpfvRgHPEbtPHy4hdOHecTc7Ln8YdB+iByVHXCFS9O2jfv8PS
+         wU3QKz7U4/dHwBkvlQPvjTn1W4rbR3OQc8uqQg/iaRau7l/WE8jbC8gL800Vqutztqmv
+         HTDTDtx6225EYgaNUh4EYdNwjXq9ogpoAVym2U2JDkBmcURzY1R/t+sjRk8LX+1CvCa3
+         QnVX3pCx0r7jePe6fBuwR9qmwLRL4fs0iNSYh8ss534bjb4SkiBCWp9jN62nGtG6koa1
+         a5Vhv1SQt0cCmuIBDKUsoD871gE8ZmPtDyAyIfEVdcAuYG9tej/ZJM103Xl1yLqmuWlG
+         k70w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oYELRxnF68XUio0gSClzK4PTdwPd5dSjsPZvf3akxvw=;
-        b=vBcJ1Bq51eGbfHDUAhv9SXtK+gQqnPVtbU1/Z5isfukkwQL6MfaigCOVGdXyXsIf9T
-         dqja35FcmkIxqB3/5b4NICUIvpu5oOCR2HCfThUN932M1h1CoFh6FiRNC6P5z/qhUy9H
-         uiJ7hfL7jSANalW4xI0BuWdO09ki3ScxHEUwzbCdNritwC2anPo9ObAz6XVt/JyIRXsM
-         arbRNKpqP+TrByePx96PeFRBPpsTXSXS1L0+k05/2Fhz1FEtL6Lf1/5xNrd+cBlk4C83
-         N4Rpf7pQMTvSirJbLD9muJqfGCnjgTU5oSD89B2lr7dJKLCIRI4BG2uzBK2g/HnOm2+4
-         4X6w==
-X-Gm-Message-State: ACrzQf3NQ+KySp0yxKpeeRXU0YPtjkpbPODurTKgHzHnb3zQwVkQzBql
-        LKXOfI2vktFIIn2nQxAtsxadv8GV/Y4=
-X-Google-Smtp-Source: AMsMyM5kzXA9S+Kqkq44HNjvQWOrAElJsiMmpkEv4LVxapTlW4dy6xbooM/GzTxh0y6IrOQrRPYY0g==
-X-Received: by 2002:a05:6402:528a:b0:454:8613:6560 with SMTP id en10-20020a056402528a00b0045486136560mr32011321edb.252.1666619578495;
-        Mon, 24 Oct 2022 06:52:58 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id nb36-20020a1709071ca400b0077f4f63a6f4sm15617587ejc.112.2022.10.24.06.52.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 06:52:57 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 15:52:55 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Prathamesh Shete <pshete@nvidia.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jonathanh@nvidia.com, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        smangipudi@nvidia.com, kyarlagadda@nvidia.com, anrao@nvidia.com
-Subject: Re: [PATCH v3] arm64: tegra: Add Tegra234 SDMMC1 device tree node
-Message-ID: <Y1aYt6mvD9NCPc9C@orome>
-References: <7bf3f70a-4af6-c62a-75fc-89591d5de04b@linaro.org>
- <20221007165941.16539-1-pshete@nvidia.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SLy1rvfHOR6fvZX4wUC0MNcz5p/zlg2NigI8l8/yRGs=;
+        b=M+3Oc9AGdcgAkikNz01IcQRX52fftBlflHBeCRfAsJr66fd0Sl+lZQDtGtzRdQXBpS
+         cLzIAKS3E11zVtT1q2V5KN73LnqUoovuGRQWWvBhj6hDd+CaCI8WI1pVgq6M3s5OTfdS
+         Zts1QBsNBIIR1bVrSp3OJhj54c+RH2fCdYX22oU0yEET5km6kcVdvcDqYAfejuQfLKpJ
+         2QDKYXvvMhqX9wMhoc5M/4hqXHLPcke9JgA1RlkFAzbJGVo6Odtl2E0pC771+nmBBym+
+         G6K1P2zSjirZuD4eIXEhAeT+xIawyBge5U6ZdgqQT4KqSTwQ580Edk+AtJUMl3Rf0jFT
+         k2aw==
+X-Gm-Message-State: ACrzQf33jvDFAciK+rxJXqQiMbk5ZOSs+Ju1M+AW7Rq63TjxIdvPq2+H
+        Ckrwc9IEdMaDgMz3dI2nIBBFS1xlXJfNjFxdBQE=
+X-Google-Smtp-Source: AMsMyM48BEV6gAD+fDU7fEZlSOoxZrxa19LvRseYRI0OoiztkA6ySW4NEyHuhDukEgkIZ/ClEr209+UfXCrwSUhHQqY=
+X-Received: by 2002:a05:6870:a116:b0:13a:f9de:6fd0 with SMTP id
+ m22-20020a056870a11600b0013af9de6fd0mr13348716oae.46.1666619717251; Mon, 24
+ Oct 2022 06:55:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="wzwNODuKfDHQoYpG"
-Content-Disposition: inline
-In-Reply-To: <20221007165941.16539-1-pshete@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
+References: <20221022214622.18042-1-ogabbay@kernel.org>
+In-Reply-To: <20221022214622.18042-1-ogabbay@kernel.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 24 Oct 2022 09:55:05 -0400
+Message-ID: <CADnq5_PwNwsSUeyhXDkoy-y1JXFrTj99AgVV02oHX0a29QUXpQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Oct 22, 2022 at 5:46 PM Oded Gabbay <ogabbay@kernel.org> wrote:
+>
+> In the last couple of months we had a discussion [1] about creating a new
+> subsystem for compute accelerator devices in the kernel.
+>
+> After an analysis that was done by DRM maintainers and myself, and following
+> a BOF session at the Linux Plumbers conference a few weeks ago [2], we
+> decided to create a new subsystem that will use the DRM subsystem's code and
+> functionality. i.e. the accel core code will be part of the DRM subsystem.
+>
+> This will allow us to leverage the extensive DRM code-base and
+> collaborate with DRM developers that have experience with this type of
+> devices. In addition, new features that will be added for the accelerator
+> drivers can be of use to GPU drivers as well (e.g. RAS).
+>
+> As agreed in the BOF session, the accelerator devices will be exposed to
+> user-space with a new, dedicated device char files and a dedicated major
+> number (261), to clearly separate them from graphic cards and the graphic
+> user-space s/w stack. Furthermore, the drivers will be located in a separate
+> place in the kernel tree (drivers/accel/).
+>
+> This series of patches is the first step in this direction as it adds the
+> necessary infrastructure for accelerator devices to DRM. The new devices will
+> be exposed with the following convention:
+>
+> device char files - /dev/accel/accel*
+> sysfs             - /sys/class/accel/accel*/
+> debugfs           - /sys/kernel/debug/accel/accel*/
+>
+> I tried to reuse the existing DRM code as much as possible, while keeping it
+> readable and maintainable.
 
---wzwNODuKfDHQoYpG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wouldn't something like this:
+https://patchwork.freedesktop.org/series/109575/
+Be simpler and provide better backwards compatibility for existing
+non-gfx devices in the drm subsystem as well as newer devices?
 
-On Fri, Oct 07, 2022 at 10:29:41PM +0530, Prathamesh Shete wrote:
-> Add device tree node for Tegra234 SDMMC1 instance.
-> Add and enable SD card instance in device tree.
->=20
-> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
-> ---
->  .../boot/dts/nvidia/tegra234-p3701-0000.dtsi  |  7 +++
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi      | 60 +++++++++++++++++++
->  2 files changed, 67 insertions(+)
+Alex
 
-Applied, with some minor changes (see below).
-
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi b/arch/a=
-rm64/boot/dts/nvidia/tegra234-p3701-0000.dtsi
-[...]
-> +		mmc@3400000 {
-> +			compatible =3D "nvidia,tegra194-sdhci", "nvidia,tegra234-sdhci";
-> +			reg =3D <0x03400000 0x20000>;
-> +			interrupts =3D <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks =3D <&bpmp TEGRA234_CLK_SDMMC1>,
-> +				 <&bpmp TEGRA234_CLK_SDMMC_LEGACY_TM>;
-> +			clock-names =3D "sdhci", "tmclk";
-> +			assigned-clocks =3D <&bpmp TEGRA234_CLK_SDMMC1>,
-> +					<&bpmp TEGRA234_CLK_PLLC4_MUXED>;
-
-I've aligned these.
-
-> +			assigned-clock-parents =3D
-> +					  <&bpmp TEGRA234_CLK_PLLC4_MUXED>,
-
-And put this on the previous line. checkpatch's character/row limit is
-100, so let's use that.
-
-> +					  <&bpmp TEGRA234_CLK_PLLC4_VCO_DIV2>;
-
-> +			resets =3D <&bpmp TEGRA234_RESET_SDMMC1>;
-> +			reset-names =3D "sdhci";
-> +			interconnects =3D <&mc TEGRA234_MEMORY_CLIENT_SDMMCRA &emc>,
-> +					<&mc TEGRA234_MEMORY_CLIENT_SDMMCWA &emc>;
-> +			interconnect-names =3D "dma-mem", "write";
-> +			iommus =3D <&smmu_niso1 TEGRA234_SID_SDMMC1A>;
-> +			pinctrl-names =3D "sdmmc-3v3", "sdmmc-1v8";
-> +			pinctrl-0 =3D <&sdmmc1_3v3>;
-> +			pinctrl-1 =3D <&sdmmc1_1v8>;
-> +			nvidia,pad-autocal-pull-up-offset-3v3-timeout =3D
-> +								      <0x07>;
-> +			nvidia,pad-autocal-pull-down-offset-3v3-timeout =3D
-> +									<0x07>;
-> +			nvidia,pad-autocal-pull-up-offset-1v8-timeout =3D <0x06>;
-> +			nvidia,pad-autocal-pull-down-offset-1v8-timeout =3D
-> +									<0x07>;
-
-Same here.
-
-Thanks,
-Thierry
-
---wzwNODuKfDHQoYpG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNWmLcACgkQ3SOs138+
-s6EPEhAArCthFJLRizBNMafRPRLeQdIn4Fb+3scor6my0Cmpk/H+g/axmMjnheIz
-H2rFrVY8wo6EYi94ronDAdo0V5K2n7EMROdxeQy3oCbh2Iuo/TUiDbN6vgWQ9Xh1
-ODDbc1DoEtS0ZRZj42DrjSENHUu3nM0Xim6wG0FxTWVJoDhHpCymw4jSe0HbZ9eu
-rfnOXV1MGDw9RJQMhM6uoKUUgZzW6aNEHcVAHpvJ25G22kaV79pVQjzoXP7UuuOD
-gckurjIZNz5iFvUTy8mJErcJms8txPg0kAEuEsAv/WtG5Hg0NMcSABOweJ6t87em
-oVyuqVgAmO1xaXLxUbN0Sqs0n/8ca3J+1uguOB5chcuBIBcDbcQA7x+LZixEsS2S
-uTMGBzCc7p9x36orTaqwRG8trFcINFmg68SVYJHiKbK4XNDJm505AJl8stlXNi1B
-PwjeV/Cx/wLUoCpa06Xh7/3nQTW+KkL4gk0JRWlo9fsu32PhhwqRnSRENnIyq4oY
-gIyEMLi2jt6mHojhJiYjS9JlPlMqLT+cjdyoiG/9A1cTtl9xokU3c0u0JgHZ3hUQ
-B4sBeMEGU9VpdF/1fLUixzm2qvLCxprxKtXaAeiOzdPX2K9IcTp3L8xTGHw+OAhb
-enofWbQ50GFh2bpuOkjWkQV7b0uHobQt90k7yZvWHpVw8O06o4k=
-=YLVL
------END PGP SIGNATURE-----
-
---wzwNODuKfDHQoYpG--
+>
+> One thing that is missing from this series is defining a namespace for the
+> new accel subsystem, while I'll add in the next iteration of this patch-set,
+> after I will receive feedback from the community.
+>
+> As for drivers, once this series will be accepted (after adding the namespace),
+> I will start working on migrating the habanalabs driver to the new accel
+> subsystem. I have talked about it with Dave and we agreed that it will be
+> a good start to simply move the driver as-is with minimal changes, and then
+> start working on the driver's individual features that will be either added
+> to the accel core code (with or without changes), or will be removed and
+> instead the driver will use existing DRM code.
+>
+> In addition, I know of at least 3 or 4 drivers that were submitted for review
+> and are good candidates to be included in this new subsystem, instead of being
+> a drm render node driver or a misc driver.
+>
+> [1] https://lkml.org/lkml/2022/7/31/83
+> [2] https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summary.html
+>
+> Thanks,
+> Oded
+>
+> Oded Gabbay (3):
+>   drivers/accel: add new kconfig and update MAINTAINERS
+>   drm: define new accel major and register it
+>   drm: add dedicated minor for accelerator devices
+>
+>  Documentation/admin-guide/devices.txt |   5 +
+>  MAINTAINERS                           |   8 +
+>  drivers/Kconfig                       |   2 +
+>  drivers/accel/Kconfig                 |  24 +++
+>  drivers/gpu/drm/drm_drv.c             | 214 +++++++++++++++++++++-----
+>  drivers/gpu/drm/drm_file.c            |  69 ++++++---
+>  drivers/gpu/drm/drm_internal.h        |   5 +-
+>  drivers/gpu/drm/drm_sysfs.c           |  81 +++++++++-
+>  include/drm/drm_device.h              |   3 +
+>  include/drm/drm_drv.h                 |   8 +
+>  include/drm/drm_file.h                |  21 ++-
+>  include/drm/drm_ioctl.h               |   1 +
+>  12 files changed, 374 insertions(+), 67 deletions(-)
+>  create mode 100644 drivers/accel/Kconfig
+>
+> --
+> 2.34.1
+>
