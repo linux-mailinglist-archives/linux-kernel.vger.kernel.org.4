@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DC660ABBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F74060AA5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236763AbiJXNzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S231932AbiJXNcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236724AbiJXNxu (ORCPT
+        with ESMTP id S235975AbiJXN3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:53:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10456BCBB3;
-        Mon, 24 Oct 2022 05:43:46 -0700 (PDT)
+        Mon, 24 Oct 2022 09:29:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE49E12A9A;
+        Mon, 24 Oct 2022 05:32:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA4526129B;
-        Mon, 24 Oct 2022 12:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A33C433C1;
-        Mon, 24 Oct 2022 12:43:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F34C5B81212;
+        Mon, 24 Oct 2022 12:07:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E0D6C4314E;
+        Mon, 24 Oct 2022 12:07:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615408;
-        bh=kJzoIagnr6iTBQpAuXXRmG5H3xo8e2I+NFwdsmxml8w=;
+        s=korg; t=1666613271;
+        bh=eu3dHn2Lu/ALN7PdPni6DW2q/Erc6p8YdVQGodhk4OA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dF9w39ZndW8XbJR8sEyMkuQxtkd5jlxUpOOFYXqOmYikkVyTHi/xlEpPN0CENIEum
-         XleJrXrwQEBPa9si5ArzbopfSXZz5sX5Fr6dbaNT1R4m89bvF/PsePaAdEplM3mz5x
-         ui7UsWLRe0lvVzsp+CSF7gb8sqZ1ZcdDuQWxooig=
+        b=WqGN/J9aNfxZggqej0WeCfHpFcT0YIFJ6Tg4/Ck09XW0zlt57UVyJWu1wmTHubJt9
+         GDRECsKBVPKeLr0/JDgCUu1yP3lL1h/WHoDPTdSyS7yjYXMCEm2ynaGZsvGUvY3GIf
+         bJTvK+t4IfyVP1fc+pMOvd+tOxW9xafjVWMo54NU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 240/530] mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
+        stable@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 074/255] bpf: Ensure correct locking around vulnerable function find_vpid()
 Date:   Mon, 24 Oct 2022 13:29:44 +0200
-Message-Id: <20221024113055.965296317@linuxfoundation.org>
+Message-Id: <20221024113004.972494500@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Lee Jones <lee@kernel.org>
 
-[ Upstream commit cb58188ad90a61784a56a64f5107faaf2ad323e7 ]
+[ Upstream commit 83c10cc362d91c0d8d25e60779ee52fdbbf3894d ]
 
-A dma_free_coherent() call is missing in the error handling path of the
-probe, as already done in the remove function.
+The documentation for find_vpid() clearly states:
 
-Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/53fc6ffa5d1c428fefeae7d313cf4a669c3a1e98.1663873255.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+  "Must be called with the tasklist_lock or rcu_read_lock() held."
+
+Presently we do neither for find_vpid() instance in bpf_task_fd_query().
+Add proper rcu_read_lock/unlock() to fix the issue.
+
+Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220912133855.1218900-1-lee@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/wmt-sdmmc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ kernel/bpf/syscall.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
-index cf10949fb0ac..8df722ec57ed 100644
---- a/drivers/mmc/host/wmt-sdmmc.c
-+++ b/drivers/mmc/host/wmt-sdmmc.c
-@@ -849,7 +849,7 @@ static int wmt_mci_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->clk_sdmmc)) {
- 		dev_err(&pdev->dev, "Error getting clock\n");
- 		ret = PTR_ERR(priv->clk_sdmmc);
--		goto fail5;
-+		goto fail5_and_a_half;
- 	}
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 9ebdcdaa5f16..de788761b708 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2787,7 +2787,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+ 	if (attr->task_fd_query.flags != 0)
+ 		return -EINVAL;
  
- 	ret = clk_prepare_enable(priv->clk_sdmmc);
-@@ -866,6 +866,9 @@ static int wmt_mci_probe(struct platform_device *pdev)
- 	return 0;
- fail6:
- 	clk_put(priv->clk_sdmmc);
-+fail5_and_a_half:
-+	dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
-+			  priv->dma_desc_buffer, priv->dma_desc_device_addr);
- fail5:
- 	free_irq(dma_irq, priv);
- fail4:
++	rcu_read_lock();
+ 	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
++	rcu_read_unlock();
+ 	if (!task)
+ 		return -ENOENT;
+ 
 -- 
 2.35.1
 
