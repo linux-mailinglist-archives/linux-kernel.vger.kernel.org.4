@@ -2,105 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D771560B9F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8562260BBA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbiJXUXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S232364AbiJXVIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233085AbiJXUWn (ORCPT
+        with ESMTP id S231974AbiJXVHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:22:43 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2FCEBD;
-        Mon, 24 Oct 2022 11:38:23 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id j15so7007872wrq.3;
-        Mon, 24 Oct 2022 11:38:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dJnt2GP1pm08BDpQHAhmkmMOzHCfFoZgxhdL+wvVQI0=;
-        b=gtZvIN8K3k7r1uHwhEc7+/ToiepvXrRLoYCsg65dKsJr7+zp+7Rd4BFPZHYq6xmI/s
-         U+BDXTd/r9PFSVMu/yjZ4Sf07IW0+jlWi5BvINZdqDm7Y7z4eQR2TmQ6RwSPTAdoTQQ9
-         jlARxJ/PCtHlhQUtJC0b66o3+iM/th1/2R2yyBOOVgiXpWltxMzpg0iH2T11K9+PdsH/
-         E6CT8BeZgFfsW1cADQNx54JCen+tOKsRze5ykzfigG/1Lghwvzyt39qVHE4SUCPGAbUx
-         p2pN82oHtzogmLIxs9vJScr2XN1xZHXZYehB8JEPVtddts4gJdARWTKXjZstKe6ZfFVD
-         6Xqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dJnt2GP1pm08BDpQHAhmkmMOzHCfFoZgxhdL+wvVQI0=;
-        b=3JwS7y9uEWRqhjI6bK7MrBztLA6eyfQsKvfY9/KUpJ7wx5uSQyY/ThkqskjTFFBWhC
-         9tcHyT6Q6cOIW77HE9pU6buqxSJH9WzkpGAX7+ySP1UzRF+qmyAGeerCGi2ZpaLTCCF4
-         s5yY/6VCnXIBO4yqr+qijCmv2mDxONEi9+ZdfjYCkrLish3XsfH4nSVQq0rYgFXtu5Tp
-         KyrVrgjUXgVQPnx1d8edJcLPSAk2kZZyT86FygIzihdgi4oPoMI4XlqbTJkBvEZELco3
-         Y5ppkKyAiAFXs/Cp8rsG+ZZxWQSlRAPxR6rRSfVeT+Uqmavv0Z/H3PWMifaW5SW0Y2lH
-         4qag==
-X-Gm-Message-State: ACrzQf2eUFmVHWCjybvIqRMM+WOR3uI6egmJT63egOV4LuwMgnJQS9Vu
-        Ka3GwU7ksgQPz50FD7we7kYUL0YCm+CdEVxo
-X-Google-Smtp-Source: AMsMyM4QQftM+1SbPAw/eMbzp1P4w7OUi/TXYHqvMABQeyIe0BWWf6rzp6zV9CjBu1IrRbbVd+x63Q==
-X-Received: by 2002:adf:d843:0:b0:236:6231:113b with SMTP id k3-20020adfd843000000b002366231113bmr7525187wrl.42.1666622102639;
-        Mon, 24 Oct 2022 07:35:02 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r2-20020adfe682000000b002366fb99cdasm3413379wrm.50.2022.10.24.07.35.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 07:35:02 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: dl2k: remove variable tx_use
-Date:   Mon, 24 Oct 2022 15:35:01 +0100
-Message-Id: <20221024143501.2163720-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 24 Oct 2022 17:07:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3342914D20;
+        Mon, 24 Oct 2022 12:14:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1F2E621BF0;
+        Mon, 24 Oct 2022 14:39:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666622379; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=atmIPW4pkPtSzPiN6DQiWJf8LCKdXKDapj4r6ahHn6s=;
+        b=rMvkFD4pVT61mPfUmVbAenV97V4QAIipqH2l4E48eJWx+giF535kqg4u1kGg2/HFBRQYD9
+        t12rKyjvbto/QZE4KbLAcDzIa2GmQJqPtLadiFs2oSzzJ5eFuI/A6xI/7UNwe3rZzMXse/
+        +fBTpwUig/Xo9+4lZbbQYw6lYNek7BY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666622379;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=atmIPW4pkPtSzPiN6DQiWJf8LCKdXKDapj4r6ahHn6s=;
+        b=CahLQ35+Cy29a0PVeJ16FbzxPprgdMJqGE4RUyHKI1eJuFK+Z5zo/a95RWeHIfWrch1T6H
+        hjNxA5M1zmeR3gDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EFBB413A79;
+        Mon, 24 Oct 2022 14:39:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6lW5OaqjVmN3KAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 24 Oct 2022 14:39:38 +0000
+From:   Takashi Iwai <tiwai@suse.de>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH 6.0.y] Revert "ALSA: hda: Fix page fault in snd_hda_codec_shutdown()"
+Date:   Mon, 24 Oct 2022 16:39:31 +0200
+Message-Id: <20221024143931.15722-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable tx_use is just being incremented and it's never used
-anywhere else. The variable and the increment are redundant so
-remove it.
+This reverts commit 7494e2e6c55ed192f2b91c821fd6832744ba8741.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Which was upstream commit f2bd1c5ae2cb0cf9525c9bffc0038c12dd7e1338.
+
+The patch caused a regression leading to the missing HD-audio device
+with ASoC SOF driver.  It was a part of large series and backporting
+it alone breaks things while backporting the whole is too intrusive
+as stable changes.  And, the issue the patch tries to address is a
+corner case, hence it's better to revert.
+
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216613
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/net/ethernet/dlink/dl2k.c | 2 --
- 1 file changed, 2 deletions(-)
+It's only for 6.0.y; 6.1-rc is fine
 
-diff --git a/drivers/net/ethernet/dlink/dl2k.c b/drivers/net/ethernet/dlink/dl2k.c
-index 2c67a857a42f..db6615aa921b 100644
---- a/drivers/net/ethernet/dlink/dl2k.c
-+++ b/drivers/net/ethernet/dlink/dl2k.c
-@@ -814,7 +814,6 @@ rio_free_tx (struct net_device *dev, int irq)
- {
- 	struct netdev_private *np = netdev_priv(dev);
- 	int entry = np->old_tx % TX_RING_SIZE;
--	int tx_use = 0;
- 	unsigned long flag = 0;
- 
- 	if (irq)
-@@ -839,7 +838,6 @@ rio_free_tx (struct net_device *dev, int irq)
- 
- 		np->tx_skbuff[entry] = NULL;
- 		entry = (entry + 1) % TX_RING_SIZE;
--		tx_use++;
+ sound/pci/hda/hda_codec.c | 41 ++++++++++++++++++++-------------------
+ 1 file changed, 21 insertions(+), 20 deletions(-)
+
+diff --git a/sound/pci/hda/hda_codec.c b/sound/pci/hda/hda_codec.c
+index 4ae8b9574778..384426d7e9dd 100644
+--- a/sound/pci/hda/hda_codec.c
++++ b/sound/pci/hda/hda_codec.c
+@@ -931,28 +931,8 @@ snd_hda_codec_device_init(struct hda_bus *bus, unsigned int codec_addr,
  	}
- 	if (irq)
- 		spin_unlock(&np->tx_lock);
+ 
+ 	codec->bus = bus;
+-	codec->depop_delay = -1;
+-	codec->fixup_id = HDA_FIXUP_ID_NOT_SET;
+-	codec->core.dev.release = snd_hda_codec_dev_release;
+-	codec->core.exec_verb = codec_exec_verb;
+ 	codec->core.type = HDA_DEV_LEGACY;
+ 
+-	mutex_init(&codec->spdif_mutex);
+-	mutex_init(&codec->control_mutex);
+-	snd_array_init(&codec->mixers, sizeof(struct hda_nid_item), 32);
+-	snd_array_init(&codec->nids, sizeof(struct hda_nid_item), 32);
+-	snd_array_init(&codec->init_pins, sizeof(struct hda_pincfg), 16);
+-	snd_array_init(&codec->driver_pins, sizeof(struct hda_pincfg), 16);
+-	snd_array_init(&codec->cvt_setups, sizeof(struct hda_cvt_setup), 8);
+-	snd_array_init(&codec->spdif_out, sizeof(struct hda_spdif_out), 16);
+-	snd_array_init(&codec->jacktbl, sizeof(struct hda_jack_tbl), 16);
+-	snd_array_init(&codec->verbs, sizeof(struct hda_verb *), 8);
+-	INIT_LIST_HEAD(&codec->conn_list);
+-	INIT_LIST_HEAD(&codec->pcm_list_head);
+-	INIT_DELAYED_WORK(&codec->jackpoll_work, hda_jackpoll_work);
+-	refcount_set(&codec->pcm_ref, 1);
+-	init_waitqueue_head(&codec->remove_sleep);
+-
+ 	return codec;
+ }
+ EXPORT_SYMBOL_GPL(snd_hda_codec_device_init);
+@@ -1005,8 +985,29 @@ int snd_hda_codec_device_new(struct hda_bus *bus, struct snd_card *card,
+ 	if (snd_BUG_ON(codec_addr > HDA_MAX_CODEC_ADDRESS))
+ 		return -EINVAL;
+ 
++	codec->core.dev.release = snd_hda_codec_dev_release;
++	codec->core.exec_verb = codec_exec_verb;
++
+ 	codec->card = card;
+ 	codec->addr = codec_addr;
++	mutex_init(&codec->spdif_mutex);
++	mutex_init(&codec->control_mutex);
++	snd_array_init(&codec->mixers, sizeof(struct hda_nid_item), 32);
++	snd_array_init(&codec->nids, sizeof(struct hda_nid_item), 32);
++	snd_array_init(&codec->init_pins, sizeof(struct hda_pincfg), 16);
++	snd_array_init(&codec->driver_pins, sizeof(struct hda_pincfg), 16);
++	snd_array_init(&codec->cvt_setups, sizeof(struct hda_cvt_setup), 8);
++	snd_array_init(&codec->spdif_out, sizeof(struct hda_spdif_out), 16);
++	snd_array_init(&codec->jacktbl, sizeof(struct hda_jack_tbl), 16);
++	snd_array_init(&codec->verbs, sizeof(struct hda_verb *), 8);
++	INIT_LIST_HEAD(&codec->conn_list);
++	INIT_LIST_HEAD(&codec->pcm_list_head);
++	refcount_set(&codec->pcm_ref, 1);
++	init_waitqueue_head(&codec->remove_sleep);
++
++	INIT_DELAYED_WORK(&codec->jackpoll_work, hda_jackpoll_work);
++	codec->depop_delay = -1;
++	codec->fixup_id = HDA_FIXUP_ID_NOT_SET;
+ 
+ #ifdef CONFIG_PM
+ 	codec->power_jiffies = jiffies;
 -- 
-2.37.3
+2.35.3
 
