@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04636609BC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1818A609BC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiJXHow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S229882AbiJXHsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiJXHo2 (ORCPT
+        with ESMTP id S229535AbiJXHs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:44:28 -0400
-Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5DF4DB3A;
-        Mon, 24 Oct 2022 00:43:57 -0700 (PDT)
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
-        by mxout1.routing.net (Postfix) with ESMTP id 16F603FEAE;
-        Mon, 24 Oct 2022 07:43:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1666597432;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PVFntkudDPcDUkrTjdaUD/wKnuxi9MDu9IdQDwEuaUA=;
-        b=lxo5WKqWxAHeKNpqTV3sVds4I5G5Eaq6eYEDf5hOUUpGQFjmNEkIXaHoGgqb/EU4wz5en5
-        9B180I2AsWJUqSc0ONgRXUJg+5O1oEpvhShCle0A8cE1YGDfHz8/iwHKkZlTGmxGvWEat5
-        b6CrTuy/9DDVZ5HtT8w1EKOpFBcWQ0U=
-Received: from frank-G5.. (fttx-pool-80.245.75.40.bambit.de [80.245.75.40])
-        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 4FF9A40112;
-        Mon, 24 Oct 2022 07:43:51 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: pinctrl: update pcie/pwm/spi bindings for MT7986 SoC
-Date:   Mon, 24 Oct 2022 09:43:49 +0200
-Message-Id: <20221024074349.7777-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
+        Mon, 24 Oct 2022 03:48:27 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFC8F7C;
+        Mon, 24 Oct 2022 00:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666597706; x=1698133706;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=n3t3hqdfKpJj89QtAfnOaDaNMLDzwcJ5D4O56CW6xdA=;
+  b=H52ta4TBlhkawcB5ikFVBAgHBYShyqTjM8B+CEWyd76/C7MJV2rOz7J8
+   EI3tuqewT8jBn4WxWyuJD0BVIxN5ZlZEYJ0ruP1zpnQ4ZUG9E3Y0dO3Xk
+   nKtDfSHycbaYAJiC8RVwHyYChqJwf4p19C/10NWJy6vsDGQjzwW2ujvY4
+   sUAFl2FfWprfCtVYEuZgbZ1lvZvhNrPrGIZzWROED/JNWe9hR/scNaoBG
+   hB4wqVe5XuKI6wOJOPJDoFZQ/pBaTOX7YMM1zKMEjTM5gNhDGUugDrs0c
+   ccexhUIjA8udpHsMmyK0oIM3rOSm2kohogecBxZADxUkAUAQ9Hvxte33G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="369427942"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="369427942"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 00:48:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="773733876"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="773733876"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 24 Oct 2022 00:48:23 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] thunderbolt: ACPI: Use the helper fwnode_find_reference()
+Date:   Mon, 24 Oct 2022 10:48:46 +0300
+Message-Id: <20221024074846.84805-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 4cf9fda7-e364-4d0a-b8d2-819af5223c20
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+Replacing the direct fwnode_property_get_reference_args()
+call will this wrapper function.
 
-Allow multiple items for pcie, pwm and spi function.
+No functional changes intended.
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- .../bindings/pinctrl/mediatek,mt7986-pinctrl.yaml    | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Changes since v1:
+- Leaving the adev check untouched.
+---
+ drivers/thunderbolt/acpi.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-index d5ab5e08badc..0a7d130ef112 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-@@ -201,7 +201,9 @@ patternProperties:
-             then:
-               properties:
-                 groups:
--                  enum: [pcie_clk, pcie_wake, pcie_pereset]
-+                  items:
-+                    enum: [pcie_clk, pcie_wake, pcie_pereset]
-+                  maxItems: 3
-           - if:
-               properties:
-                 function:
-@@ -209,7 +211,9 @@ patternProperties:
-             then:
-               properties:
-                 groups:
--                  enum: [pwm0, pwm1_0, pwm1_1]
-+                  items:
-+                    enum: [pwm0, pwm1_0, pwm1_1]
-+                  maxItems: 2
-           - if:
-               properties:
-                 function:
-@@ -217,7 +221,9 @@ patternProperties:
-             then:
-               properties:
-                 groups:
--                  enum: [spi0, spi0_wp_hold, spi1_0, spi1_1, spi1_2, spi1_3]
-+                  items:
-+                    enum: [spi0, spi0_wp_hold, spi1_0, spi1_1, spi1_2, spi1_3]
-+                  maxItems: 2
-           - if:
-               properties:
-                 function:
+diff --git a/drivers/thunderbolt/acpi.c b/drivers/thunderbolt/acpi.c
+index 7a8adf5ad5a09..317e4f5fdb979 100644
+--- a/drivers/thunderbolt/acpi.c
++++ b/drivers/thunderbolt/acpi.c
+@@ -15,24 +15,20 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 				    void **return_value)
+ {
+ 	struct acpi_device *adev = acpi_fetch_acpi_dev(handle);
+-	struct fwnode_reference_args args;
+ 	struct fwnode_handle *fwnode;
+ 	struct tb_nhi *nhi = data;
+ 	struct pci_dev *pdev;
+ 	struct device *dev;
+-	int ret;
+ 
+ 	if (!adev)
+ 		return AE_OK;
+ 
+-	fwnode = acpi_fwnode_handle(adev);
+-	ret = fwnode_property_get_reference_args(fwnode, "usb4-host-interface",
+-						 NULL, 0, 0, &args);
+-	if (ret)
++	fwnode = fwnode_find_reference(acpi_fwnode_handle(adev), "usb4-host-interface", 0);
++	if (IS_ERR(fwnode))
+ 		return AE_OK;
+ 
+ 	/* It needs to reference this NHI */
+-	if (dev_fwnode(&nhi->pdev->dev) != args.fwnode)
++	if (dev_fwnode(&nhi->pdev->dev) != fwnode)
+ 		goto out_put;
+ 
+ 	/*
+@@ -100,7 +96,7 @@ static acpi_status tb_acpi_add_link(acpi_handle handle, u32 level, void *data,
+ 	}
+ 
+ out_put:
+-	fwnode_handle_put(args.fwnode);
++	fwnode_handle_put(fwnode);
+ 	return AE_OK;
+ }
+ 
 -- 
-2.34.1
+2.35.1
 
