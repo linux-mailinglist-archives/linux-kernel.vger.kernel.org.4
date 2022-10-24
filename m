@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B7A60A8D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA2A60A8EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235624AbiJXNLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57098 "EHLO
+        id S235734AbiJXNMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235615AbiJXNJK (ORCPT
+        with ESMTP id S235955AbiJXNKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:09:10 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0C2A0249;
-        Mon, 24 Oct 2022 05:22:31 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id a5so5915231qkl.6;
-        Mon, 24 Oct 2022 05:22:31 -0700 (PDT)
+        Mon, 24 Oct 2022 09:10:15 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24029A2229;
+        Mon, 24 Oct 2022 05:23:51 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id a18so5956704qko.0;
+        Mon, 24 Oct 2022 05:23:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PgmDg2ARLgo0WshQ+wzSuhO5OWLg+Wj7tJFGuvTdLnc=;
-        b=eiKGrkXAPibHikZYc8djUb7jtoM27ZGLyL324qyJ5kKfaBANVnUMfT8a+IvITYOuVq
-         JLFyK72+92etrW/cf+svlm4kKYG582IddZFBEj+kf89jdYMvA1/MPSApspgln9gVJcce
-         fS0g5LaHSDq1eNhM8itjBgI0FiNW20NG/S169oCvabHRbkmsB1YZ63npIFSnTFy0+2bp
-         nqmNubsht5sTSnEbpoRvL3gpi1+u7cdF4jb866UcK9UJ8bx2lYanrhN9c8cbYJHpJwPH
-         n5VcCcBtcOxMfrHE5o0o4Mf3XSiYK4yckoG71/znqgZ4AeOqHSf5rgc7XmA45Gc8m1j0
-         MctQ==
-X-Gm-Message-State: ACrzQf0Ep/X9p6NF0nKpYu437WcFwpPf8pkMgXj/243NBKTCJ821EFxE
-        zrejkmIIArcr+RSnilL4lgzMkiJPFn3aFw==
-X-Google-Smtp-Source: AMsMyM49b/uRzLSPPQVjsi6KXKRex7YytWf0U+TIvA/Yg2BUbdexUTb7+xWRNRm21Shq8Adg9mB4Iw==
-X-Received: by 2002:ae9:e315:0:b0:6ee:761d:4b8b with SMTP id v21-20020ae9e315000000b006ee761d4b8bmr22501454qkf.748.1666613977070;
-        Mon, 24 Oct 2022 05:19:37 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id w18-20020a05620a425200b006eeb25369e9sm15078483qko.25.2022.10.24.05.19.35
+        bh=jJJRBYG1+d5KpGh/2jmIV9Sl5iQP2xw0J4yEZ82n6eQ=;
+        b=IkA+5sbIKfcxmG8tFlaHyvfi1M+6wZDyB+s+X+OQ9XeSShB5MqhEF/C8TGKRQNgJKF
+         MJ2il1ejvUHA4lXys1QIIrmWJgexRFMZC6hqFoMsx/JTTt26VctGyHKAwbCJWSbjEXuv
+         W1COSBzHvxDImlliG7RdAMuRxdl9UWAVcHoicHSwNPha1LLyxrel+PcDRFIppbipWHSK
+         CLOEhBpJ6U1dmWHWHVxBaLD11dnrHAnlBRp9PwGp5NrDwdo8CMZdgSHTJdUlOzK7VJAP
+         +Ct1ICRUNOpMysf4ODAqT7ty5PJ5CxPrbEWkcLwnkJye77QT9cd9ug60Advv9MAWbw2H
+         LfgQ==
+X-Gm-Message-State: ACrzQf3UwlqYRUvdZTUbaF4oR0AkO4IjYacdqOZ1TmSZuVRQM6vg2MJc
+        No01QU5Ht/OHVUVoenb1WuYfy16iwkZljw==
+X-Google-Smtp-Source: AMsMyM5pOaKQzlHRlHc92M8yTTzkNeBekva8dPbqBgmvo8zkbWeRR0adeazdwAqzf7FAvjYYaz7TkQ==
+X-Received: by 2002:a05:620a:12fb:b0:6ee:79f2:3716 with SMTP id f27-20020a05620a12fb00b006ee79f23716mr22442202qkl.348.1666614028294;
+        Mon, 24 Oct 2022 05:20:28 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id hf8-20020a05622a608800b0039cbbcc7da8sm12481924qtb.7.2022.10.24.05.20.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 05:19:35 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id o70so10789336yba.7;
-        Mon, 24 Oct 2022 05:19:35 -0700 (PDT)
-X-Received: by 2002:a25:2:0:b0:6c4:dc1:d37c with SMTP id 2-20020a250002000000b006c40dc1d37cmr27042715yba.380.1666613974849;
- Mon, 24 Oct 2022 05:19:34 -0700 (PDT)
+        Mon, 24 Oct 2022 05:20:27 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-35befab86a4so83762417b3.8;
+        Mon, 24 Oct 2022 05:20:27 -0700 (PDT)
+X-Received: by 2002:a81:9c49:0:b0:34a:de:97b8 with SMTP id n9-20020a819c49000000b0034a00de97b8mr28558715ywa.384.1666614027033;
+ Mon, 24 Oct 2022 05:20:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221023182437.15263-1-afd@ti.com> <20221023182437.15263-5-afd@ti.com>
-In-Reply-To: <20221023182437.15263-5-afd@ti.com>
+References: <20221023182437.15263-1-afd@ti.com> <20221023182437.15263-6-afd@ti.com>
+In-Reply-To: <20221023182437.15263-6-afd@ti.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 24 Oct 2022 14:19:23 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVLfmyWDRU0jhn-F4odWnBWkfkJrLrg_atMnXAwz3Pwpg@mail.gmail.com>
-Message-ID: <CAMuHMdVLfmyWDRU0jhn-F4odWnBWkfkJrLrg_atMnXAwz3Pwpg@mail.gmail.com>
-Subject: Re: [PATCH 4/6] arm64: dts: freescale: Rename DTB overlay source
- files from .dts to .dtso
+Date:   Mon, 24 Oct 2022 14:20:15 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUTdxQeRXjdDYGEW7EW4j+H64rgSeo58OMmgfOYZjEiaw@mail.gmail.com>
+Message-ID: <CAMuHMdUTdxQeRXjdDYGEW7EW4j+H64rgSeo58OMmgfOYZjEiaw@mail.gmail.com>
+Subject: Re: [PATCH 5/6] arm64: dts: renesas: Rename DTB overlay source files
+ from .dts to .dtso
 To:     Andrew Davis <afd@ti.com>
 Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
@@ -88,11 +88,12 @@ On Sun, Oct 23, 2022 at 8:24 PM Andrew Davis <afd@ti.com> wrote:
 
 > and differentiates them from base DTB source files.
 >
-> Convert the DTB overlay source files in the arm64/freescale directory.
+> Convert the DTB overlay source files in the arm64/renesas directory.
 >
 > Signed-off-by: Andrew Davis <afd@ti.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
