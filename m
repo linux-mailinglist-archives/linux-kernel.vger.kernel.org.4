@@ -2,290 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3614860B9B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C60C60B9BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232724AbiJXUSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
+        id S234162AbiJXUSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234136AbiJXUSD (ORCPT
+        with ESMTP id S234112AbiJXUSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:18:03 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B78F9E0C9;
-        Mon, 24 Oct 2022 11:34:57 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1324e7a1284so12825839fac.10;
-        Mon, 24 Oct 2022 11:34:57 -0700 (PDT)
+        Mon, 24 Oct 2022 16:18:13 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECC4FA038
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:35:19 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id z14so4016859wrn.7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a5wmw7XwD+ppaZR2w3Z9il63MoJr3+QslIiVrYauqc4=;
+        b=tOcfAA3FdBlp+oU8hIpAafb52EX0dDovvBrvTfAhwgBO9uH+TBPkajNOY8PAkgGT2L
+         GNdHzsmWFuI7hGyEehTLjg7PHkppHJ12ooSzMElD+c8+r7xPEnYZ/e9Mdn283DCub8iS
+         JGq2+JwsNhHDMr7TiuQnAaS2lhtnmVsWigKtjpEMtqlQzQmZ/Qm4gmToRDJ13UzTshhd
+         hb6PuUjQh6vy5IBbcVYuA8Q/JdPkJcAtk/8vKPIcVVw+YfDpPmxO7W9/VGB3SBstpnGO
+         YA3wfBANugkPFz6H9ibnDno5FXe3KOaxXSGS1yUec+88PI/LugHM16+uVKAMhlswgFTm
+         3JFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rzBt4DjigXC8g0JvW9vu6ypNBWVdZc7Uwm5ix9PgU48=;
-        b=l8RhsPRNCjYRjue3uFjnsWByocEsvT7aPHlQZmLfzcVH9U64nylMaX/fp8PJhbxRzV
-         CKUZmWhAV5ZBxD0aGfpV9oukJeHmc3HzbEk2HV/7b07TRdlqusbZIni3geBge7NonGiu
-         Gqwohtm5tlNGmfrehunugFajB7+vFDOqK6MaOq+yZWT4GhAjSPOht9LKCDuf744nslTi
-         Kq+TDrveXCgm9LqIcB7lf+ZrjASSXGA7RmrZ0Gut3KkV1WI7JBaEXgwWH7/Sdv1ZXto0
-         qHfE0UIYs1o/nHMHHdL1f3ilY/yxTTQk4ufl1Xxd6AynTphR76K0fH/oC9GUC1it0kiW
-         UH7Q==
-X-Gm-Message-State: ACrzQf2kzoc6TXirbEIoj0tgMD4MDm1bPdNtx4oGEBUawZ8d9TPBt6Vo
-        1rpNhVrGo36rd+Iatni55cqkJWzkpQ==
-X-Google-Smtp-Source: AMsMyM63340yiZHw0ES1B2eox2gZas5JR6G5Od4D1kId77fzF0hcyOGQovRxJgZLV1pXg57kCsy0hQ==
-X-Received: by 2002:a05:6870:7020:b0:137:360d:1f7 with SMTP id u32-20020a056870702000b00137360d01f7mr21622717oae.255.1666636436938;
-        Mon, 24 Oct 2022 11:33:56 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b24-20020a4ae818000000b004807de5c302sm293117oob.17.2022.10.24.11.33.55
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a5wmw7XwD+ppaZR2w3Z9il63MoJr3+QslIiVrYauqc4=;
+        b=46p6dvUuwS4aQx/85E9isFIV0GI+Cj57oL03I3GzWX1MPcNA0s2qXY19DX7NViP15K
+         h2ABmijhvUcEnWC3QyF3f95n1izWarzInq8VcB6GJsp0888KY+LZwLZq/K+tlOAv2tR6
+         KTD0xviCJfzC/OEGQ5plPdMoFrwtmwx5bWlVwejDXqfDDRgniVpAVlq6XRa+bc2a4UmT
+         XQAlePrQWtnbcTTHGWUkBQg9XYMX0rNuVjrj2VP6/NA/foKMbjy+qT1KHuVrdOpXiVg7
+         CrSVT5U8r/1a1wwsJPUeHiCyIidh0pAMtW2vFgAa7rImjaRkO68YMM0TlbfhjlYXsUVV
+         ZYeA==
+X-Gm-Message-State: ACrzQf2bnaqm+g0s+Sj5cYsGtGd7lmvw0WD0bRCC/JsGH3Dmox7RTVQJ
+        +H5cqj78FwqEv6vKPdnTzOa2PA==
+X-Google-Smtp-Source: AMsMyM7Ocm/YzwX6tHR2SReSGwytvm9K+LGAsDYabOb8Le76wl3BUIVn3rGLPSnRe4tqqbGPBh5+Mw==
+X-Received: by 2002:a5d:4745:0:b0:22e:3521:a557 with SMTP id o5-20020a5d4745000000b0022e3521a557mr21993951wrs.125.1666636450728;
+        Mon, 24 Oct 2022 11:34:10 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id n11-20020adff08b000000b00228692033dcsm280323wro.91.2022.10.24.11.34.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:33:56 -0700 (PDT)
-Received: (nullmailer pid 2018985 invoked by uid 1000);
-        Mon, 24 Oct 2022 18:33:57 -0000
-Date:   Mon, 24 Oct 2022 13:33:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Trevor Wu <trevor.wu@mediatek.com>
-Cc:     broonie@kernel.org, tiwai@suse.com, matthias.bgg@gmail.com,
-        p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 10/12] dt-bindings: mediatek: mt8188: add audio afe
- document
-Message-ID: <20221024183357.GA2012388-robh@kernel.org>
-References: <20221021082719.18325-1-trevor.wu@mediatek.com>
- <20221021082719.18325-11-trevor.wu@mediatek.com>
+        Mon, 24 Oct 2022 11:34:10 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Steev Klimaszewski <steev@kali.org>
+Subject: [PATCH 1/2] clk: Add generic sync_state callback for disabling unused clocks
+Date:   Mon, 24 Oct 2022 21:33:57 +0300
+Message-Id: <20221024183358.569765-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021082719.18325-11-trevor.wu@mediatek.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 04:27:17PM +0800, Trevor Wu wrote:
-> Add mt8188 audio afe document.
-> 
-> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
-> ---
->  .../bindings/sound/mt8188-afe-pcm.yaml        | 187 ++++++++++++++++++
->  1 file changed, 187 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
-> new file mode 100644
-> index 000000000000..b2c548c31e4d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
-> @@ -0,0 +1,187 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/mt8188-afe-pcm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek AFE PCM controller for mt8188
-> +
-> +maintainers:
-> +  - Trevor Wu <trevor.wu@mediatek.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8188-afe
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: audiosys
-> +
-> +  mediatek,topckgen:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: The phandle of the mediatek topckgen controller
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: 26M clock
-> +      - description: audio pll1 clock
-> +      - description: audio pll2 clock
-> +      - description: clock divider for i2si1_mck
-> +      - description: clock divider for i2si2_mck
-> +      - description: clock divider for i2so1_mck
-> +      - description: clock divider for i2so2_mck
-> +      - description: clock divider for dptx_mck
-> +      - description: a1sys hoping clock
-> +      - description: audio intbus clock
-> +      - description: audio hires clock
-> +      - description: audio local bus clock
-> +      - description: mux for dptx_mck
-> +      - description: mux for i2so1_mck
-> +      - description: mux for i2so2_mck
-> +      - description: mux for i2si1_mck
-> +      - description: mux for i2si2_mck
-> +      - description: audio 26m clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: clk26m
-> +      - const: apll1_ck
-> +      - const: apll2_ck
-> +      - const: apll12_div0
-> +      - const: apll12_div1
-> +      - const: apll12_div2
-> +      - const: apll12_div3
-> +      - const: apll12_div9
-> +      - const: a1sys_hp_sel
-> +      - const: aud_intbus_sel
-> +      - const: audio_h_sel
-> +      - const: audio_local_bus_sel
-> +      - const: dptx_m_sel
-> +      - const: i2so1_m_sel
-> +      - const: i2so2_m_sel
-> +      - const: i2si1_m_sel
-> +      - const: i2si2_m_sel
-> +      - const: adsp_audio_26m
-> +
-> +patternProperties:
-> +  "^mediatek,etdm-in[1-2]-chn-disabled$":
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    maxItems: 16
-> +    description: |
+There are unused clocks that need to remain untouched by clk_disable_unused,
+and most likely could be disabled later on sync_state. So provide a generic
+sync_state callback for the clock providers that register such clocks.
+Then, use the same mechanism as clk_disable_unused from that generic
+callback, but pass the device to make sure only the clocks belonging to
+the current clock provider get disabled, if unused. Also, during the
+default clk_disable_unused, if the driver that registered the clock has
+the generic clk_sync_state_disable_unused callback set for sync_state,
+skip disabling its clocks.
 
-Don't need '|'
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
 
-> +      Specify which input channel should be disabled, so the data of
-> +      specified channel won't be outputted to memory.
+Here is the link to the RFC:
 
-I'm not clear on what each of the 16 entries represents. What's index 0, 
-1, 2, etc.?
+https://lore.kernel.org/all/20220929151047.wom3m2ydgxme5nhh@builder.lan/
 
-> +    items:
-> +      enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+Changes since RFC:
+ * Added from_sync_state local variable, as Bjorn suggested
+ * Dropped the addition extra condition for the CLK_IGNORE_UNUSED
+ * Changed the comments above the sync_state checking
+ * Moved back the clk_ignore_unused check to clk_disable_unused_subtree
+ function, as Bjorn suggested
 
-maximum: 15
+ drivers/clk/clk.c            | 55 ++++++++++++++++++++++++++++++------
+ include/linux/clk-provider.h |  1 +
+ 2 files changed, 47 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index c3c3f8c07258..acf5139e16d8 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -1292,14 +1292,27 @@ static void clk_core_disable_unprepare(struct clk_core *core)
+ 	clk_core_unprepare_lock(core);
+ }
+ 
+-static void __init clk_unprepare_unused_subtree(struct clk_core *core)
++static void clk_unprepare_unused_subtree(struct clk_core *core,
++						struct device *dev)
+ {
++	bool from_sync_state = !!dev;
+ 	struct clk_core *child;
+ 
+ 	lockdep_assert_held(&prepare_lock);
+ 
+ 	hlist_for_each_entry(child, &core->children, child_node)
+-		clk_unprepare_unused_subtree(child);
++		clk_unprepare_unused_subtree(child, dev);
++
++	if (from_sync_state && core->dev != dev)
++		return;
++
++	/*
++	 * clock will be unprepared on sync_state,
++	 * so leave as is for now
++	 */
++	if (!from_sync_state && dev_has_sync_state(core->dev) &&
++		core->dev->driver->sync_state == clk_sync_state_disable_unused)
++		return;
+ 
+ 	if (core->prepare_count)
+ 		return;
+@@ -1322,15 +1335,28 @@ static void __init clk_unprepare_unused_subtree(struct clk_core *core)
+ 	clk_pm_runtime_put(core);
+ }
+ 
+-static void __init clk_disable_unused_subtree(struct clk_core *core)
++static void clk_disable_unused_subtree(struct clk_core *core,
++					struct device *dev)
+ {
++	bool from_sync_state = !!dev;
+ 	struct clk_core *child;
+ 	unsigned long flags;
+ 
+ 	lockdep_assert_held(&prepare_lock);
+ 
+ 	hlist_for_each_entry(child, &core->children, child_node)
+-		clk_disable_unused_subtree(child);
++		clk_disable_unused_subtree(child, dev);
++
++	if (from_sync_state && core->dev != dev)
++		return;
++
++	/*
++	 * clock will be disabled on sync_state,
++	 * so leave as is for now
++	 */
++	if (!from_sync_state &&
++		core->dev->driver->sync_state == clk_sync_state_disable_unused)
++		return;
+ 
+ 	if (core->flags & CLK_OPS_PARENT_ENABLE)
+ 		clk_core_prepare_enable(core->parent);
+@@ -1376,7 +1402,7 @@ static int __init clk_ignore_unused_setup(char *__unused)
+ }
+ __setup("clk_ignore_unused", clk_ignore_unused_setup);
+ 
+-static int __init clk_disable_unused(void)
++static void __clk_disable_unused(struct device *dev)
+ {
+ 	struct clk_core *core;
+ 
+@@ -1388,23 +1414,34 @@ static int __init clk_disable_unused(void)
+ 	clk_prepare_lock();
+ 
+ 	hlist_for_each_entry(core, &clk_root_list, child_node)
+-		clk_disable_unused_subtree(core);
++		clk_disable_unused_subtree(core, dev);
+ 
+ 	hlist_for_each_entry(core, &clk_orphan_list, child_node)
+-		clk_disable_unused_subtree(core);
++		clk_disable_unused_subtree(core, dev);
+ 
+ 	hlist_for_each_entry(core, &clk_root_list, child_node)
+-		clk_unprepare_unused_subtree(core);
++		clk_unprepare_unused_subtree(core, dev);
+ 
+ 	hlist_for_each_entry(core, &clk_orphan_list, child_node)
+-		clk_unprepare_unused_subtree(core);
++		clk_unprepare_unused_subtree(core, dev);
+ 
+ 	clk_prepare_unlock();
++}
++
++static int __init clk_disable_unused(void)
++{
++	__clk_disable_unused(NULL);
+ 
+ 	return 0;
+ }
+ late_initcall_sync(clk_disable_unused);
+ 
++void clk_sync_state_disable_unused(struct device *dev)
++{
++	__clk_disable_unused(dev);
++}
++EXPORT_SYMBOL_GPL(clk_sync_state_disable_unused);
++
+ static int clk_core_determine_round_nolock(struct clk_core *core,
+ 					   struct clk_rate_request *req)
+ {
+diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+index 267cd06b54a0..06a8622f90cf 100644
+--- a/include/linux/clk-provider.h
++++ b/include/linux/clk-provider.h
+@@ -718,6 +718,7 @@ struct clk *clk_register_divider_table(struct device *dev, const char *name,
+ 		void __iomem *reg, u8 shift, u8 width,
+ 		u8 clk_divider_flags, const struct clk_div_table *table,
+ 		spinlock_t *lock);
++void clk_sync_state_disable_unused(struct device *dev);
+ /**
+  * clk_register_divider - register a divider clock with the clock framework
+  * @dev: device registering this clock
+-- 
+2.34.1
 
-> +
-> +  "^mediatek,etdm-in[1-2]-mclk-always-on-rate-hz$":
-> +    description: Specify etdm in mclk output rate for always on case.
-> +
-> +  "^mediatek,etdm-out[1-3]-mclk-always-on-rate-hz$":
-> +    description: Specify etdm out mclk output rate for always on case.
-> +
-> +  "^mediatek,etdm-in[1-2]-multi-pin-mode$":
-> +    type: boolean
-> +    description: if present, the etdm data mode is I2S.
-> +
-> +  "^mediatek,etdm-out[1-3]-multi-pin-mode$":
-> +    type: boolean
-> +    description: if present, the etdm data mode is I2S.
-> +
-> +  "^mediatek,etdm-in[1-2]-cowork-source$":
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      etdm modules can share the same external clock pin. Specify
-> +      which etdm clock source is required by this etdm in moudule.
-> +    enum:
-> +      - 0 # etdm1_in
-> +      - 1 # etdm2_in
-> +      - 2 # etdm1_out
-> +      - 3 # etdm2_out
-> +
-> +  "^mediatek,etdm-out[1-2]-cowork-source$":
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      etdm modules can share the same external clock pin. Specify
-> +      which etdm clock source is required by this etdm out moudule.
-> +    enum:
-> +      - 0 # etdm1_in
-> +      - 1 # etdm2_in
-> +      - 2 # etdm1_out
-> +      - 3 # etdm2_out
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - resets
-> +  - reset-names
-> +  - mediatek,topckgen
-> +  - power-domains
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    afe: afe@10b10000 {
-> +        compatible = "mediatek,mt8188-afe";
-> +        reg = <0x10b10000 0x10000>;
-> +        interrupts = <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH 0>;
-> +        resets = <&watchdog 14>;
-> +        reset-names = "audiosys";
-> +        mediatek,topckgen = <&topckgen>;
-> +        power-domains = <&spm 13>; //MT8188_POWER_DOMAIN_AUDIO
-> +        clocks = <&clk26m>,
-> +                 <&topckgen 72>, //CLK_TOP_APLL1
-> +                 <&topckgen 73>, //CLK_TOP_APLL2
-> +                 <&topckgen 186>, //CLK_TOP_APLL12_CK_DIV0
-> +                 <&topckgen 187>, //CLK_TOP_APLL12_CK_DIV1
-> +                 <&topckgen 188>, //CLK_TOP_APLL12_CK_DIV2
-> +                 <&topckgen 189>, //CLK_TOP_APLL12_CK_DIV3
-> +                 <&topckgen 191>, //CLK_TOP_APLL12_CK_DIV9
-> +                 <&topckgen 83>, //CLK_TOP_A1SYS_HP
-> +                 <&topckgen 31>, //CLK_TOP_AUD_INTBUS
-> +                 <&topckgen 32>, //CLK_TOP_AUDIO_H
-> +                 <&topckgen 69>, //CLK_TOP_AUDIO_LOCAL_BUS
-> +                 <&topckgen 81>, //CLK_TOP_DPTX
-> +                 <&topckgen 77>, //CLK_TOP_I2SO1
-> +                 <&topckgen 78>, //CLK_TOP_I2SO2
-> +                 <&topckgen 79>, //CLK_TOP_I2SI1
-> +                 <&topckgen 80>, //CLK_TOP_I2SI2
-> +                 <&adsp_audio26m 0>; //CLK_AUDIODSP_AUDIO26M
-> +        clock-names = "clk26m",
-> +                      "apll1_ck",
-> +                      "apll2_ck",
-> +                      "apll12_div0",
-> +                      "apll12_div1",
-> +                      "apll12_div2",
-> +                      "apll12_div3",
-> +                      "apll12_div9",
-> +                      "a1sys_hp_sel",
-> +                      "aud_intbus_sel",
-> +                      "audio_h_sel",
-> +                      "audio_local_bus_sel",
-> +                      "dptx_m_sel",
-> +                      "i2so1_m_sel",
-> +                      "i2so2_m_sel",
-> +                      "i2si1_m_sel",
-> +                      "i2si2_m_sel",
-> +                      "adsp_audio_26m";
-
-It's good if the examples include optional properties so we at least 
-have some validation the schema matches the DTS.
-
-> +    };
-> +
-> +...
-> -- 
-> 2.18.0
-> 
-> 
