@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EC260977D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 02:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39563609781
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 02:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbiJXA2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 20:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60426 "EHLO
+        id S229707AbiJXAgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 20:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiJXA2x (ORCPT
+        with ESMTP id S229782AbiJXAgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 20:28:53 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318136CF65;
-        Sun, 23 Oct 2022 17:28:51 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MwbXc0NCmz4xGG;
-        Mon, 24 Oct 2022 11:28:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1666571329;
-        bh=oXkht8PncIo7uboj9jDm3LdspsvJwecchJoIiSPHl90=;
-        h=Date:From:To:Cc:Subject:From;
-        b=sTb9a2ute5IPFdAagJvbqTJLyM3Ibs/kyxBsRoZ2BjsuJe4aPAcbEuibVNth/yZ/S
-         /oGCfy8nR/9p1W1M0E6GOChW7QjQrf8UZNK/y4cI73IsSAbxqrDVxp55tQUv0tLgF2
-         YfCWLJzw7RpzYpFgLfGUd9RK/tBLaF1FaFNHPg0AdiSqHpfbglzwfzYcACJj9FjcSG
-         cNaGjBREOz7G+HO1TnZ1c2ScG4NYCK46+eL4mRtQqUsppQwQrIhnXsgoxXkGkwpJ0w
-         91TBEQeJviXLfxi+fA7UATJ8vPS90ouLSFRFgwifq3y3vCARcy8/tFs0DTjwxFcO7t
-         BeR3V0LIkcLJw==
-Date:   Mon, 24 Oct 2022 11:28:45 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tip tree
-Message-ID: <20221024112845.5efaa8c1@canb.auug.org.au>
+        Sun, 23 Oct 2022 20:36:13 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A50561710
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 17:36:12 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id r14so25723092edc.7
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 17:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rHb6gbIDggMDA41dKCNMQLkyqPbGap5CBWFlyWHfXFo=;
+        b=wY/W3mgTWqDQ8m/k6XAHNpokvp1viHHxLfpVYc6QsmD5mSRAzN+IQQvFapmUlOJPaJ
+         d+P79mK/u4vElljNrLTAnibmvkTUC3GyzwncKcoYVms9FW5nPvA8/xemue1bYQl1LgDF
+         MZ3eSHT/CQpEC952z1e86F5O09+ga9h0tx2QI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rHb6gbIDggMDA41dKCNMQLkyqPbGap5CBWFlyWHfXFo=;
+        b=okq2TOdrLowRuCWUy67GQBZcRdfxoxSTSjUItwkAIdDUYVazGGyY0sQuC4Jgfx8tfB
+         4vlTp7HMnOnXzNHRLxJN7k6Bzh1QYHLQ1KbMuBNzpE6F4lBw+seBq0fLXAI37biVXB1m
+         XMQyAkRQ7rppR1yoIyW5YWVoiOAbHfPkCPzNy4H3joE12NCmqMLQ780ocHldBLTn7Wzo
+         UFwfQHlZyV2whGRUOkfrP5ytbQGGonO0LbFMtpxSHiUutSyOtwQsGIPwsQR7sZtsIDtx
+         XwHibevb2KVET4GMijZg0cr5RofSb1CGjC5HQzBktPC2UyV3ccKUVAVxp3bniaaHotT2
+         X3Yg==
+X-Gm-Message-State: ACrzQf2EL8Y20eGKMWmZbFz1KrNE8WW88NSJF8cuTLFPMkHg+0E1bEXg
+        QRUgFYvuLdM4tFxVG0aHlrL+XfelMjqFXVNBzCyfuA==
+X-Google-Smtp-Source: AMsMyM4uhY6IO76XbaYij5t5Z/ChVREPYqJ/qPCIhCEZZ+p1XFM+sTLK/F5qML/vnnDuXv+c4AX+nwpEAOVyEKmVIr4=
+X-Received: by 2002:a05:6402:3551:b0:45d:a52f:2d77 with SMTP id
+ f17-20020a056402355100b0045da52f2d77mr29314760edd.67.1666571771048; Sun, 23
+ Oct 2022 17:36:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gylz_XNc9jVNztUtivDOobD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1> <20221019225144.2500095-13-paulmck@kernel.org>
+In-Reply-To: <20221019225144.2500095-13-paulmck@kernel.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 23 Oct 2022 20:36:00 -0400
+Message-ID: <CAEXW_YQgSwMYisZVctXkjFu6_5YhFCpL_E5o5H4oJooS5Syp+g@mail.gmail.com>
+Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use call_rcu_flush()
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Uladzislau Rezki <urezki@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/gylz_XNc9jVNztUtivDOobD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+On Wed, Oct 19, 2022 at 6:51 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> From: Uladzislau Rezki <urezki@gmail.com>
+>
+> call_rcu() changes to save power will slow down RCU workqueue items
+> queued via queue_rcu_work(). This may not be an issue, however we cannot
+> assume that workqueue users are OK with long delays. Use
+> call_rcu_flush() API instead which reverts to the old behavio
 
-After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-produced this warning:
+On ChromeOS, I can see that queue_rcu_work() is pretty noisy and the
+batching is much better if we can just keep it as call_rcu() instead
+of call_rcu_flush().
 
-vmlinux.o: warning: objtool: get_cpu_entry_area+0x4: call to cea_offset() l=
-eaves .noinstr.text section
+Is there really any reason to keep it as call_rcu_flush() ?  If I
+recall, the real reason Vlad's system was slowing down was because of
+scsi and the queue_rcu_work() conversion was really a red herring.
 
-Presumably something to do with commit
+Vlad, any thoughts?
 
-  1248fb6a8201 ("x86/mm: Randomize per-cpu entry area")
+thanks,
 
---=20
-Cheers,
-Stephen Rothwell
+ - Joel
 
---Sig_/gylz_XNc9jVNztUtivDOobD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNV3D0ACgkQAVBC80lX
-0Gzc0AgAloBNTU69KXOu+PbqKlcmt9FyceaR4yvw6QlUmLasPzfL5WTu0iSt9x95
-8nf3tCgbrr9461kTdXVyx5oNR9b3LSXuJlPXmQAQLLd2Wkt24BFdvHmsm2Fhiz20
-PKnvNNoFbJEtgYvEOOewCtAaYugZPQhbAlrYJFV3zCbvXZdiaRiH11RGVczlVcgX
-xlbUpyw6j4CwI6G/Nl3LVG3ETpTwva3GtYvnh0gvWTDLua97avso/teDvtYbXonC
-glT6+OjSQWVkHlvJ6GTXrKoOozJ2f/yNxG2RaOSs8bkaPOZgYyvvt3fdl0jqfBKQ
-Jh3dt/KTgz0MuW/uQv/AMZbxYpwP4Q==
-=aQVl
------END PGP SIGNATURE-----
-
---Sig_/gylz_XNc9jVNztUtivDOobD--
+.
+>
+> Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> ---
+>  kernel/workqueue.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 7cd5f5e7e0a1b..b4b0e828b529e 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
+>
+>         if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+>                 rwork->wq = wq;
+> -               call_rcu(&rwork->rcu, rcu_work_rcufn);
+> +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+>                 return true;
+>         }
+>
+> --
+> 2.31.1.189.g2e36527f23
+>
