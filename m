@@ -2,70 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFDE60980D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 04:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4B1609810
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 04:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiJXCEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 22:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
+        id S229851AbiJXCFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 22:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiJXCEp (ORCPT
+        with ESMTP id S229832AbiJXCFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 22:04:45 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D51F76;
-        Sun, 23 Oct 2022 19:04:41 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id f193so7599000pgc.0;
-        Sun, 23 Oct 2022 19:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sELHMMSLjSFUrw3fETJ84lyP+heILNDr8LGym6JE3PY=;
-        b=BI5fkkDbXG3/lwi14HhI7lex0aQYveaL9gtN5PDG82PN3MX1/RseHBDc9v8xVqRRPK
-         EUumVq5K08vbRH/xW6NKrWSH+hrJxb7kArlnoqW78eHsUxPk/2Ejad/qGI4n9u7rXgQ+
-         9swNFzS75rGCKeRcZJLzEEnTm1yxhSskUeVA2B6FaAUOc83Xp4g9dqOu5RI9Bukr0Fwy
-         0P8Bt2cVEqshlADO4PE26nZON8aB5pBfNQAvpsaNKZicWUd6FGvMZUMTXdqdARq3271z
-         fuVV7GcFSsIlGAp0HA0Jaa9Lfwvo2NGyK3c4qJCKt3ync4fe8+M7zw7nGI74EEU5etu2
-         jjXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sELHMMSLjSFUrw3fETJ84lyP+heILNDr8LGym6JE3PY=;
-        b=oFIePzJDmJW1RLdJVPnYw2D5CX3rjx0NtzgFMkfseHIgELOh/qtngWI/E7bRddn01s
-         BMXQ2UJ3jwWmg2iWc4n8heJznaOi8e4TrjXAg1TWQAw9cIcBg/2DhePeCA3E+EkhPBo8
-         vfKUW5j0QDxYq4UjzzqX8PeHVo1+xPxk7IY9pi8PBe+yhKnz7b1A12bBDXtsp6MN9suK
-         VLNZg4lXfIMmoBv8pL8eXWItN38+ZuGGzNZvlOyACUGnz6/4v1JkBcYiNU82FjYzOFA9
-         JrEj7Kw4gX7YvGJft45ZTKrSVAuOGDZ+paBQ9bGl3DJdWMz4pWiZU4oxEtQjdPzLP8du
-         pipQ==
-X-Gm-Message-State: ACrzQf1yOlWDc23euVKA4eSMft2Z8mu5Yf5B5gvIaFJV+opwClzTmwRw
-        Ziu+EPvEtKEoV+zo8XqvuWc=
-X-Google-Smtp-Source: AMsMyM6bPi4ihUhFOpD0M5q/9WcK3TevTyh2/7ZssfQubTIoYYJnBMYqa4fhjBl9QHx/dZ4NMiHLGg==
-X-Received: by 2002:a63:ed07:0:b0:442:87:3a38 with SMTP id d7-20020a63ed07000000b0044200873a38mr26692736pgi.216.1666577080381;
-        Sun, 23 Oct 2022 19:04:40 -0700 (PDT)
-Received: from localhost ([159.226.94.113])
-        by smtp.gmail.com with ESMTPSA id z189-20020a6233c6000000b0056b969ac928sm2854691pfz.47.2022.10.23.19.04.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Oct 2022 19:04:39 -0700 (PDT)
-From:   Hawkins Jiawei <yin31149@gmail.com>
-To:     xiubli@redhat.com
-Cc:     yin31149@gmail.com, idryomov@gmail.com, jlayton@kernel.org,
-        18801353760@163.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, ceph-devel@vger.kernel.org
-Subject: Re: [PATCH -next 3/5] ceph: fix possible null-ptr-deref when parsing param
-Date:   Mon, 24 Oct 2022 10:04:30 +0800
-Message-Id: <20221024020430.15795-1-yin31149@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <aa3f35c1-1550-a322-956f-1837cb2389a9@redhat.com>
-References: <aa3f35c1-1550-a322-956f-1837cb2389a9@redhat.com>
+        Sun, 23 Oct 2022 22:05:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085A23684C
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 19:05:12 -0700 (PDT)
+X-UUID: ce9610f6201d442cb5e66ff4fb32eb12-20221024
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=mqyrONuC+EXxhyAr1nd2evYoabOhakvcEv+wAgzZrnw=;
+        b=JBo2RwED5dyspr/hYgMRrajfZCmy291kt9mh4mTa4ow6vJD+P/RQqSacCuP1RymjUTBqbrPe7dru539fmKVWllHyzrBiryt37gBOx5JhRbhrMT+iN+aMeZJ/9aPetzIMO0LSm6lH9JYE60e4lZMK3qjuH1hTqsFpOGglfve9DWQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:6e336be1-441d-471e-9f45-caad61db7cc8,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:90
+X-CID-INFO: VERSION:1.1.12,REQID:6e336be1-441d-471e-9f45-caad61db7cc8,IP:0,URL
+        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:90
+X-CID-META: VersionHash:62cd327,CLOUDID:0621d96c-89d3-4bfa-baad-dc632a24bca3,B
+        ulkID:221024100505LDDE3LKK,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: ce9610f6201d442cb5e66ff4fb32eb12-20221024
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <xinlei.lee@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1211678878; Mon, 24 Oct 2022 10:05:03 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 24 Oct 2022 10:05:01 +0800
+Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 24 Oct 2022 10:05:01 +0800
+From:   <xinlei.lee@mediatek.com>
+To:     <matthias.bgg@gmail.com>, <rex-bc.chen@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <jason-jh.lin@mediatek.com>, <nfraprado@collabora.com>,
+        <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
+        <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Xinlei Lee <xinlei.lee@mediatek.com>
+Subject: [PATCH v13,0/3] Add dpi output format control for MT8186
+Date:   Mon, 24 Oct 2022 10:04:56 +0800
+Message-ID: <1666577099-3859-1-git-send-email-xinlei.lee@mediatek.com>
+X-Mailer: git-send-email 2.6.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,269 +70,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xiubo,
-On Mon, 24 Oct 2022 at 08:55, Xiubo Li <xiubli@redhat.com> wrote:
->
->
-> On 24/10/2022 00:39, Hawkins Jiawei wrote:
-> > According to commit "vfs: parse: deal with zero length string value",
-> > kernel will set the param->string to null pointer in vfs_parse_fs_string()
-> > if fs string has zero length.
-> >
-> > Yet the problem is that, ceph_parse_mount_param() will dereferences the
-> > param->string, without checking whether it is a null pointer, which may
-> > trigger a null-ptr-deref bug.
-> >
-> > This patch solves it by adding sanity check on param->string
-> > in ceph_parse_mount_param().
-> >
-> > Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
-> > ---
-> >   fs/ceph/super.c | 3 +++
-> >   1 file changed, 3 insertions(+)
-> >
-> > diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-> > index 3fc48b43cab0..341e23fe29eb 100644
-> > --- a/fs/ceph/super.c
-> > +++ b/fs/ceph/super.c
-> > @@ -417,6 +417,9 @@ static int ceph_parse_mount_param(struct fs_context *fc,
-> >               param->string = NULL;
-> >               break;
-> >       case Opt_mds_namespace:
-> > +             if (!param->string)
-> > +                     return invalfc(fc, "Bad value '%s' for mount option '%s'\n",
-> > +                                    param->string, param->key);
-> >               if (!namespace_equals(fsopt, param->string, strlen(param->string)))
-> >                       return invalfc(fc, "Mismatching mds_namespace");
-> >               kfree(fsopt->mds_namespace);
->
-> BTW, did you hit any crash issue when testing this ?
->
-> $ ./bin/mount.ceph :/ /mnt/kcephfs -o mds_namespace=
->
-> <5>[  375.535442] ceph: module verification failed: signature and/or
-> required key missing - tainting kernel
-> <6>[  375.698145] ceph: loaded (mds proto 32)
-> <3>[  375.801621] ceph: Bad value for 'mds_namespace'
->
->  From my test, the 'fsparam_string()' has already make sure it won't
-> trigger the null-ptr-deref bug.
-Did you test on linux-next tree?
+From: Xinlei Lee <xinlei.lee@mediatek.com>
 
-I just write a reproducer based on syzkaller's template(So please
-forgive me if it is too ugly to read)
+Base on the branch of linus/master v6.1 rc1.
 
-===========================================================
-// https://syzkaller.appspot.com/bug?id=76bbdfd28722f0160325e4350b57e33aa95b0bbe
-// autogenerated by syzkaller (https://github.com/google/syzkaller)
+Change since v12:
+1. Add MT8186_ prefix to variables added in mt8186-mmsys.h file.
 
-#define _GNU_SOURCE
+Change since v11:
+1. Rebase on v6.1-rc1. Change nothing.
 
-#include <dirent.h>
-#include <endian.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <stdarg.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/prctl.h>
-#include <sys/stat.h>
-#include <sys/syscall.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <time.h>
-#include <unistd.h>
+Change since v10:
+1. Modify patch title and add review tag.
 
-unsigned long long procid;
+Change since v9:
+1. Modify the location of the mmsys_dev member variable.
 
-static void sleep_ms(uint64_t ms)
-{
-  usleep(ms * 1000);
-}
+Change since v8:
+1. Modified the title and some description information.
 
-static uint64_t current_time_ms(void)
-{
-  struct timespec ts;
-  if (clock_gettime(CLOCK_MONOTONIC, &ts))
-    exit(1);
-  return (uint64_t)ts.tv_sec * 1000 + (uint64_t)ts.tv_nsec / 1000000;
-}
+Changes since v7:
+1. This series is based on the following patch:
+   [1] soc: mediatek: Add mmsys func to adapt to dpi output for MT8186
+   https://patchwork.kernel.org/project/linux-mediatek/patch/1663161662-1598-2-git-send-email-xinlei.lee@mediatek.com/
+2. Modify the DPI_FORMAT_MASK macro definition to GENMASK(1, 0);
+3. Add all settings to mtk_mmsys_ddp_dpi_fmt_config;
+4. Modify the commit title to Add mt8186 dpi compatibles and platform
+data.
 
-static bool write_file(const char* file, const char* what, ...)
-{
-  char buf[1024];
-  va_list args;
-  va_start(args, what);
-  vsnprintf(buf, sizeof(buf), what, args);
-  va_end(args);
-  buf[sizeof(buf) - 1] = 0;
-  int len = strlen(buf);
-  int fd = open(file, O_WRONLY | O_CLOEXEC);
-  if (fd == -1)
-    return false;
-  if (write(fd, buf, len) != len) {
-    int err = errno;
-    close(fd);
-    errno = err;
-    return false;
-  }
-  close(fd);
-  return true;
-}
+Changes since v6:
+1. Different from other ICs, when mt8186 DPI changes the output format,
+the mmsys_base+400 register needs to be set to be valid at the same
+time.
+   In this series, all the situations that mmsys need to be set up are
+perfected (not necessarily used in practice).
+2. Put the value that controls the mmsys function in mtk-mmsys.h.
+3. Encountered the sink ic switched between dual edge and single edge,
+perfected setting and clearing mmsys bit operations in mtk_dpi.c.
 
-static void kill_and_wait(int pid, int* status)
-{
-  kill(-pid, SIGKILL);
-  kill(pid, SIGKILL);
-  int i;
-  for (i = 0; i < 100; i++) {
-    if (waitpid(-1, status, WNOHANG | __WALL) == pid)
-      return;
-    usleep(1000);
-  }
-  DIR* dir = opendir("/sys/fs/fuse/connections");
-  if (dir) {
-    for (;;) {
-      struct dirent* ent = readdir(dir);
-      if (!ent)
-        break;
-      if (strcmp(ent->d_name, ".") == 0 || strcmp(ent->d_name, "..") == 0)
-        continue;
-      char abort[300];
-      snprintf(abort, sizeof(abort), "/sys/fs/fuse/connections/%s/abort",
-               ent->d_name);
-      int fd = open(abort, O_WRONLY);
-      if (fd == -1) {
-        continue;
-      }
-      if (write(fd, abort, 1) < 0) {
-      }
-      close(fd);
-    }
-    closedir(dir);
-  } else {
-  }
-  while (waitpid(-1, status, __WALL) != pid) {
-  }
-}
+Changes since v5:
+1. Separate the patch that adds edge_cfg_in_mmsys from the patch that
+adds mt8186 dpi support.
+2. Move the mmsys register definition to mmsys driver.
+ 
+Changes since v4:
+1. This series of cancellations is based on the following patches:
+   [1] Add MediaTek SoC(vdosys1) support for mt8195
+   https://patchwork.kernel.org/project/linux-mediatek/cover/20220711075245.10492-1-nancy.lin@mediatek.com/
+   [2] Add MediaTek SoC DRM (vdosys1) support for mt8195
+   https://patchwork.kernel.org/project/linux-mediatek/cover/20220804072827.22383-1-nancy.lin@mediatek.com/
+2. Added mtk_mmsys_update_bits function in mtk-mmsys.c;
+3. MMSYS 0x400 register is modified to MT8186_MMSYS_DPI_OUTPUT_FORMAT;
+4. Fix formatting issues.
 
-static void setup_test()
-{
-  prctl(PR_SET_PDEATHSIG, SIGKILL, 0, 0, 0);
-  setpgrp();
-  write_file("/proc/self/oom_score_adj", "1000");
-}
+Changes since v3:
+1. Fix formatting issues;
+2. Modify the edge output control name & description;
+3. Fix the threading problem.
 
-static void execute_one(void);
+Changes since v2:
+1. Modify key nouns in the description;
+2. Add the label of jitao to Co-developed-by;
+3. Macro definition address lowercase problem and function naming;
+4. Add missing a description of this property in the mtk_dpi_conf.
 
-#define WAIT_FLAGS __WALL
+Change since v1:
+1. Modify mt8186 compatiable location.
+2. Modify MT8186_DPI_OUTPUT_FORMAT name.
 
-static void loop(void)
-{
-  int iter;
-  for (iter = 0;; iter++) {
-    int pid = fork();
-    if (pid < 0)
-      exit(1);
-    if (pid == 0) {
-      setup_test();
-      execute_one();
-      exit(0);
-    }
-    int status = 0;
-    uint64_t start = current_time_ms();
-    for (;;) {
-      if (waitpid(-1, &status, WNOHANG | WAIT_FLAGS) == pid)
-        break;
-      sleep_ms(1);
-      if (current_time_ms() - start < 5 * 1000)
-        continue;
-      kill_and_wait(pid, &status);
-      break;
-    }
-  }
-}
+When MT8186 outputs dpi signal, it is necessary to add dual edge output
+format control in mmsys.
 
-void execute_one(void)
-{
-  char opt[] = "mds_namespace=,\x00";
-  memcpy((void*)0x20000080, "./file0\000", 8);
-  syscall(__NR_mknod, 0x20000080ul, 0ul, 0x700ul + procid * 2);
-  memcpy((void*)0x20000040, "[d::]:/8:", 9);
-  memcpy((void*)0x200000c0, "./file0\000", 8);
-  memcpy((void*)0x20000140, "ceph\000", 5);
-  memcpy((void*)0x20000150, opt, sizeof(opt));
-  syscall(__NR_mount, 0x20000040ul, 0x200000c0ul, 0x20000140ul, 0ul, 0x20000150);
-}
-int main(void)
-{
-  syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 3ul, 0x32ul, -1, 0);
-  for (procid = 0; procid < 6; procid++) {
-    if (fork() == 0) {
-      loop();
-    }
-  }
-  sleep(1000000);
-  return 0;
-}
-===========================================================
+Xinlei Lee (3):
+  soc: mediatek: Add all settings to mtk_mmsys_ddp_dpi_fmt_config func
+  drm: mediatek: Set dpi format in mmsys
+  drm: mediatek: Add mt8186 dpi compatibles and platform data
 
-And it triggers the null-ptr-deref bug described above,
-its log is shown as below:
-===========================================================
-[   90.779695][ T6513] KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-[   90.782502][ T6513] RIP: 0010:strlen+0x1a/0x90
-[ ... ]
-[   90.782502][ T6513] Call Trace:
-[   90.782502][ T6513]  <TASK>
-[   90.782502][ T6513]  ceph_parse_mount_param+0x89a/0x21e0
-[   90.782502][ T6513]  ? __kasan_unpoison_range-0xf/0x10
-[   90.782502][ T6513]  ? kasan_addr_to_slab-0xf/0x90
-[   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
-[   90.782502][ T6513]  ? ceph_parse_mount_param+0x0/0x21e0
-[   90.782502][ T6513]  ? audit_kill_trees+0x2b0/0x300
-[   90.782502][ T6513]  ? lock_release+0x0/0x760
-[   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
-[   90.782502][ T6513]  ? security_fs_context_parse_param+0x99/0xd0
-[   90.782502][ T6513]  ? ceph_parse_mount_param+0x0/0x21e0
-[   90.782502][ T6513]  vfs_parse_fs_param+0x20f/0x3d0
-[   90.782502][ T6513]  vfs_parse_fs_string+0xe4/0x180
-[   90.782502][ T6513]  ? vfs_parse_fs_string+0x0/0x180
-[   90.782502][ T6513]  ? rcu_read_lock_sched_held+0x0/0xd0
-[   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
-[   90.782502][ T6513]  ? kfree+0x129/0x1a0
-[   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
-[   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
-[   90.782502][ T6513]  generic_parse_monolithic+0x16f/0x1f0
-[   90.782502][ T6513]  ? generic_parse_monolithic+0x0/0x1f0
-[   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
-[   90.782502][ T6513]  ? alloc_fs_context+0x5cb/0xa00
-[   90.782502][ T6513]  path_mount+0x11d3/0x1cb0
-[   90.782502][ T6513]  ? path_mount+0x0/0x1cb0
-[   90.782502][ T6513]  ? putname+0xfe/0x140
-[   90.782502][ T6513]  do_mount+0xf3/0x110
-[   90.782502][ T6513]  ? do_mount+0x0/0x110
-[   90.782502][ T6513]  ? _copy_from_user+0xf7/0x170
-[   90.782502][ T6513]  ? __sanitizer_cov_trace_pc+0x1a/0x40
-[   90.782502][ T6513]  __x64_sys_mount+0x18f/0x230
-[   90.782502][ T6513]  do_syscall_64+0x35/0xb0
-[   90.782502][ T6513]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[ ... ]
-[   90.782502][ T6513]  </TASK>
-===========================================================
+ drivers/gpu/drm/mediatek/mtk_dpi.c     | 32 ++++++++++++++++++++++++++
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 ++
+ drivers/soc/mediatek/mt8186-mmsys.h    |  8 ++++---
+ drivers/soc/mediatek/mtk-mmsys.c       | 27 +++++++++++++++++-----
+ include/linux/soc/mediatek/mtk-mmsys.h |  7 ++++++
+ 5 files changed, 67 insertions(+), 9 deletions(-)
 
-By the way, commit "vfs: parse: deal with zero length string value"
-is still in discussion as below, so maybe this patchset is not
-needed.
-https://lore.kernel.org/all/17a1fdc-14a0-cf3c-784f-baa939895aef@google.com/
->
-> But it will always make sense to fix it in ceph code with your patch.
->
-> - Xiubo
->
->
->
+-- 
+2.18.0
+
