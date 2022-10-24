@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4C160A897
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B7A60A8D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235352AbiJXNI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S235624AbiJXNLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235480AbiJXNH0 (ORCPT
+        with ESMTP id S235615AbiJXNJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:07:26 -0400
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DC79AFFB;
-        Mon, 24 Oct 2022 05:21:09 -0700 (PDT)
-Received: by mail-pg1-f173.google.com with SMTP id r18so8498272pgr.12;
-        Mon, 24 Oct 2022 05:21:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HjYrkoNn/w9eCU7yrVbjTDIZhBvPD6ZScXpgw+5hr9c=;
-        b=jmeE2A9PVXonUBLYE7PJ3793dNwil86xAYE9ljfjd4t7qocg4X07EmUOSvkoi4GWGg
-         3j7buNCyCfdU5fd4gxgIr6A7CxvUQbD/Zx1vuS2ckTB8oZxX4qQf9zGjUtYY8MuHN2NG
-         KsByZ0HVvYKE6ftkVe10Iydy36VWtFpm4iwamAw4tUPqdUzqLF8xPEAro1qVFWflaBX2
-         e94veiUelAor5mzz64bjMgHnN6tXsJBP6hApA2LPApkRiMHl44NyQUR/zmZ7edBiaLoF
-         WU6zsVkKbCV1MyLiT+x7ZXHIaw7e68CK+CjLXpn0zFsTXD6Z/nswLva84gPZ47LRHqkX
-         diSg==
+        Mon, 24 Oct 2022 09:09:10 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0C2A0249;
+        Mon, 24 Oct 2022 05:22:31 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id a5so5915231qkl.6;
+        Mon, 24 Oct 2022 05:22:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HjYrkoNn/w9eCU7yrVbjTDIZhBvPD6ZScXpgw+5hr9c=;
-        b=Zyqg3oLXaCc20ECid6x4dwOrAAXNDSBlpKkr0qFw50QRitZ9/SgZfrfQq8SzBdspZM
-         joVYb6/djrw9Tu4kzksBQUAE8E3FwqiXiE+RwfLhYFJl1yKACIQJFZ9NQ5ZZz/GLgSyk
-         VW0inUQSDx+Z8ZpuJZzNYnu7FCtkGkhp1rgUwo2uRzut2IxJWIZn4BlG16/PMXoYNqJ9
-         +rXauJ2Jpu/CDgPQKDmiXlZS/koKkG9uKzaNKDy/WYxmtaCLb0YIjR9b1Y7aLN/ZJ58f
-         Hs1MjbavJAyqdfZmEVIY3Vh8zVs3KB4Zv/q9o4YtIabVgNH7eq38U8WE3BsaOtg1aDvM
-         XbMg==
-X-Gm-Message-State: ACrzQf1dCUM3YM+MQeC8or7JtEma/+jG3vdcuHASMKo8HPeuOmkF5MbA
-        u0mdgT8MDhMLS1dmbL6LlOI=
-X-Google-Smtp-Source: AMsMyM7OHnkxizf4KJ+aeemoWL1KT/VYuEttV1wJurdoHjrLQOkzJDccbujMlxPQq6ufJAVJVVSMIQ==
-X-Received: by 2002:a05:6a00:891:b0:565:85a7:a6e with SMTP id q17-20020a056a00089100b0056585a70a6emr32632316pfj.21.1666613891886;
-        Mon, 24 Oct 2022 05:18:11 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:3698:60f8:9964:1fb4])
-        by smtp.gmail.com with ESMTPSA id y9-20020aa793c9000000b0056bfd387c97sm549994pff.39.2022.10.24.05.18.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 05:18:11 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 05:18:08 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] Get rid of
- devm_fwnode_get_[index_]gpiod_from_child()
-Message-ID: <Y1aCgJihNIqExUR2@google.com>
-References: <20220902-get_gpiod_from_child-remove-v1-0-1e47125df20f@gmail.com>
- <YyzYKmsjKflqT1xZ@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PgmDg2ARLgo0WshQ+wzSuhO5OWLg+Wj7tJFGuvTdLnc=;
+        b=eiKGrkXAPibHikZYc8djUb7jtoM27ZGLyL324qyJ5kKfaBANVnUMfT8a+IvITYOuVq
+         JLFyK72+92etrW/cf+svlm4kKYG582IddZFBEj+kf89jdYMvA1/MPSApspgln9gVJcce
+         fS0g5LaHSDq1eNhM8itjBgI0FiNW20NG/S169oCvabHRbkmsB1YZ63npIFSnTFy0+2bp
+         nqmNubsht5sTSnEbpoRvL3gpi1+u7cdF4jb866UcK9UJ8bx2lYanrhN9c8cbYJHpJwPH
+         n5VcCcBtcOxMfrHE5o0o4Mf3XSiYK4yckoG71/znqgZ4AeOqHSf5rgc7XmA45Gc8m1j0
+         MctQ==
+X-Gm-Message-State: ACrzQf0Ep/X9p6NF0nKpYu437WcFwpPf8pkMgXj/243NBKTCJ821EFxE
+        zrejkmIIArcr+RSnilL4lgzMkiJPFn3aFw==
+X-Google-Smtp-Source: AMsMyM49b/uRzLSPPQVjsi6KXKRex7YytWf0U+TIvA/Yg2BUbdexUTb7+xWRNRm21Shq8Adg9mB4Iw==
+X-Received: by 2002:ae9:e315:0:b0:6ee:761d:4b8b with SMTP id v21-20020ae9e315000000b006ee761d4b8bmr22501454qkf.748.1666613977070;
+        Mon, 24 Oct 2022 05:19:37 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id w18-20020a05620a425200b006eeb25369e9sm15078483qko.25.2022.10.24.05.19.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 05:19:35 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id o70so10789336yba.7;
+        Mon, 24 Oct 2022 05:19:35 -0700 (PDT)
+X-Received: by 2002:a25:2:0:b0:6c4:dc1:d37c with SMTP id 2-20020a250002000000b006c40dc1d37cmr27042715yba.380.1666613974849;
+ Mon, 24 Oct 2022 05:19:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YyzYKmsjKflqT1xZ@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221023182437.15263-1-afd@ti.com> <20221023182437.15263-5-afd@ti.com>
+In-Reply-To: <20221023182437.15263-5-afd@ti.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 Oct 2022 14:19:23 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVLfmyWDRU0jhn-F4odWnBWkfkJrLrg_atMnXAwz3Pwpg@mail.gmail.com>
+Message-ID: <CAMuHMdVLfmyWDRU0jhn-F4odWnBWkfkJrLrg_atMnXAwz3Pwpg@mail.gmail.com>
+Subject: Re: [PATCH 4/6] arm64: dts: freescale: Rename DTB overlay source
+ files from .dts to .dtso
+To:     Andrew Davis <afd@ti.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 22, 2022 at 02:48:26PM -0700, Dmitry Torokhov wrote:
-> Hi Pavel, Marek,
-> 
-> On Fri, Sep 02, 2022 at 05:55:24PM -0700, Dmitry Torokhov wrote:
-> > This drops the last uses of devm_fwnode_get_[index_]gpiod_from_child()
-> > from the tree and drops the stubs implementing this API on top of
-> > devm_fwnode_gpiod_get_index().
-> > 
-> > Note that the bulk of users were converted in 2019, the couple of LED
-> > drivers are all that have remained.
-> > 
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > 
-> > ---
-> > Dmitry Torokhov (3):
-> >       leds: gpio: switch to using devm_fwnode_gpiod_get()
-> >       leds: lgm-sso: switch to using devm_fwnode_gpiod_get()
-> >       gpiolib: remove devm_fwnode_get_[index_]gpiod_from_child()
-> > 
-> >  drivers/leds/blink/leds-lgm-sso.c |  5 ++---
-> >  drivers/leds/leds-gpio.c          |  5 ++---
-> >  include/linux/gpio/consumer.h     | 21 ---------------------
-> >  3 files changed, 4 insertions(+), 27 deletions(-)
-> > ---
-> > base-commit: 7fd22855300e693668c3397771b3a2b3948f827a
-> > change-id: 20220902-get_gpiod_from_child-remove-a62638849e91
-> > 
-> 
-> Could you please consider picking this up for 6.1? Or would you be OK
-> with this going through other tree (GPIO maybe)?
+Hi Andrew,
 
-*ping* Could this go through GPIO tree? Dropping this API helps with
-some outstanding work that I have...
+Thanks for your patch!
 
-Thanks.
+On Sun, Oct 23, 2022 at 8:24 PM Andrew Davis <afd@ti.com> wrote:
+> DTB Overlays (.dtbo) can now be built from source files with the
+> extension (.dtso). This makes it clear the content of the file
 
--- 
-Dmitry
+... clear what is .. files?
+
+> and differentiates them from base DTB source files.
+>
+> Convert the DTB overlay source files in the arm64/freescale directory.
+>
+> Signed-off-by: Andrew Davis <afd@ti.com>
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
