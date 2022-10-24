@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C2160AC0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50DD60A76A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236919AbiJXOCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        id S234360AbiJXMuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231991AbiJXOBE (ORCPT
+        with ESMTP id S234589AbiJXMpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:01:04 -0400
+        Mon, 24 Oct 2022 08:45:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E317F270;
-        Mon, 24 Oct 2022 05:47:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6922F01D;
+        Mon, 24 Oct 2022 05:09:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BD936129B;
-        Mon, 24 Oct 2022 12:46:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71708C433D7;
-        Mon, 24 Oct 2022 12:46:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EA9A6129D;
+        Mon, 24 Oct 2022 12:09:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5EF2C433D6;
+        Mon, 24 Oct 2022 12:09:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615562;
-        bh=fpux3ZK3HL0FnpPPjW6CZnlPOsWtzyFLlyQgkydJFcw=;
+        s=korg; t=1666613348;
+        bh=ZrsYK6Nl2EM2TgK2s+s0ekaPojcy+Op5hVt+uaDoDp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SReCqQ96dM9yDN13MqG6eE6rmNy5urR2sHbe3pniWHaL5VN7igZWvQO2GG2eBmaE7
-         eOCsUoXhEG22Lq+tHgCMDYWQo6BA2aXJ2oAoQGH0qu/gEQ8IV/W8tgW0XYQUJu6vAt
-         ddOIyJ4T6jaSlapb6+Z1hB79+wfUrWM02sv0iTS0=
+        b=bkfhLekGj1NiNV+3WBWy8cQNLmrob0z49U4VDyVXPgiGuZ9JHAMRSsww9wiKl0IaI
+         Gm+EH15uX9gy+V6YzcohLotbDdjzML7rXE9bgT2Aot4lkJb7lxTbmr8+UZkMs3ms9J
+         8cwyXPRT4UB8wtP6KcX5ns9tHnVGzPs/BZhDtJhw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 269/530] iio: inkern: fix return value in devm_of_iio_channel_get_by_name()
+Subject: [PATCH 5.4 103/255] mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
 Date:   Mon, 24 Oct 2022 13:30:13 +0200
-Message-Id: <20221024113057.241089465@linuxfoundation.org>
+Message-Id: <20221024113005.892591461@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nuno Sá <nuno.sa@analog.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 9e878dbc0e8322f8b2f5ab0093c1e89926362dbe ]
+[ Upstream commit cb58188ad90a61784a56a64f5107faaf2ad323e7 ]
 
-of_iio_channel_get_by_name() can either return NULL or an error pointer
-so that only doing IS_ERR() is not enough. Fix it by checking the NULL
-pointer case and return -ENODEV in that case. Note this is done like this
-so that users of the function (which only check for error pointers) do
-not need to be changed. This is not ideal since we are losing error codes
-and as such, in a follow up change, things will be unified so that
-of_iio_channel_get_by_name() only returns error codes.
+A dma_free_coherent() call is missing in the error handling path of the
+probe, as already done in the remove function.
 
-Fixes: 6e39b145cef7 ("iio: provide of_iio_channel_get_by_name() and devm_ version it")
-Signed-off-by: Nuno Sá <nuno.sa@analog.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220715122903.332535-3-nuno.sa@analog.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/53fc6ffa5d1c428fefeae7d313cf4a669c3a1e98.1663873255.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/inkern.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/mmc/host/wmt-sdmmc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-index 30a8ecb692f8..bf9ce01c854b 100644
---- a/drivers/iio/inkern.c
-+++ b/drivers/iio/inkern.c
-@@ -395,6 +395,8 @@ struct iio_channel *devm_of_iio_channel_get_by_name(struct device *dev,
- 	channel = of_iio_channel_get_by_name(np, channel_name);
- 	if (IS_ERR(channel))
- 		return channel;
-+	if (!channel)
-+		return ERR_PTR(-ENODEV);
+diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
+index 2c4ba1fa4bbf..d774068dba30 100644
+--- a/drivers/mmc/host/wmt-sdmmc.c
++++ b/drivers/mmc/host/wmt-sdmmc.c
+@@ -849,7 +849,7 @@ static int wmt_mci_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->clk_sdmmc)) {
+ 		dev_err(&pdev->dev, "Error getting clock\n");
+ 		ret = PTR_ERR(priv->clk_sdmmc);
+-		goto fail5;
++		goto fail5_and_a_half;
+ 	}
  
- 	ret = devm_add_action_or_reset(dev, devm_iio_channel_free, channel);
- 	if (ret)
+ 	ret = clk_prepare_enable(priv->clk_sdmmc);
+@@ -866,6 +866,9 @@ static int wmt_mci_probe(struct platform_device *pdev)
+ 	return 0;
+ fail6:
+ 	clk_put(priv->clk_sdmmc);
++fail5_and_a_half:
++	dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
++			  priv->dma_desc_buffer, priv->dma_desc_device_addr);
+ fail5:
+ 	free_irq(dma_irq, priv);
+ fail4:
 -- 
 2.35.1
 
