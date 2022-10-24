@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FCE60A68C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0748D60A7C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234654AbiJXMfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
+        id S234850AbiJXM5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiJXM3w (ORCPT
+        with ESMTP id S234827AbiJXM5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37710895CB;
-        Mon, 24 Oct 2022 05:03:39 -0700 (PDT)
+        Mon, 24 Oct 2022 08:57:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5FA3AB14;
+        Mon, 24 Oct 2022 05:16:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CCDF7B81188;
-        Mon, 24 Oct 2022 12:00:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2D6C433C1;
-        Mon, 24 Oct 2022 12:00:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D34961252;
+        Mon, 24 Oct 2022 12:13:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 806F4C433C1;
+        Mon, 24 Oct 2022 12:13:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612851;
-        bh=NwiRgoGNNgwSk51Vc6rEQuhFQM5Y9IwYt/EDlaVrrCg=;
+        s=korg; t=1666613586;
+        bh=QVxdyH9Kh0TLvy8RfnKx31BeDg9LLwu7Ai4bBHeLUhU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GpdtwrXu7CUE3Z2O7TYMhuW+TqY3a+XO/I+cpnNQ4DGWt1lxwIoH13B1CrbsnVBMO
-         wXp0KCyib701ioeG6btZZzuY+h6GPq1olat5Jk2QsBQJqHir39m2DRvy+bdCMSGFtI
-         RaZQYtGJr3blDxMG10DvttGYwIyIPj6aJ0Hhk3ns=
+        b=Dj11ZVh/c2tVw3FZFfvE1QiIzoZBLuF3rsQgeFyopp44FL3vq+QECEA0NxKEgZ8lG
+         ZVAC4mjKO3tbVePETcoXrpzDuQalN1ijMy/9F6uWFBnt9nDD7NlhPkqaibhLUkqm6a
+         +rQKKTTpZsfa2RCfvBckf4dOGDcqF4GyHUSmWr8U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Evan Green <evgreen@chromium.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 143/229] drivers: serial: jsm: fix some leaks in probe
-Date:   Mon, 24 Oct 2022 13:31:02 +0200
-Message-Id: <20221024113003.637923278@linuxfoundation.org>
+Subject: [PATCH 5.4 153/255] firmware: google: Test spinlock on panic path to avoid lockups
+Date:   Mon, 24 Oct 2022 13:31:03 +0200
+Message-Id: <20221024113007.732606344@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +60,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-[ Upstream commit 1d5859ef229e381f4db38dce8ed58e4bf862006b ]
+[ Upstream commit 3e081438b8e639cc76ef1a5ce0c1bd8a154082c7 ]
 
-This error path needs to unwind instead of just returning directly.
+Currently the gsmi driver registers a panic notifier as well as
+reboot and die notifiers. The callbacks registered are called in
+atomic and very limited context - for instance, panic disables
+preemption and local IRQs, also all secondary CPUs (not executing
+the panic path) are shutdown.
 
-Fixes: 03a8482c17dd ("drivers: serial: jsm: Enable support for Digi Classic adapters")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YyxFh1+lOeZ9WfKO@kili
+With that said, taking a spinlock in this scenario is a dangerous
+invitation for lockup scenarios. So, fix that by checking if the
+spinlock is free to acquire in the panic notifier callback - if not,
+bail-out and avoid a potential hang.
+
+Fixes: 74c5b31c6618 ("driver: Google EFI SMI")
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: David Gow <davidgow@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Julius Werner <jwerner@chromium.org>
+Cc: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Link: https://lore.kernel.org/r/20220909200755.189679-1-gpiccoli@igalia.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/jsm/jsm_driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/firmware/google/gsmi.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/tty/serial/jsm/jsm_driver.c b/drivers/tty/serial/jsm/jsm_driver.c
-index 592e51d8944e..07e9be9865c7 100644
---- a/drivers/tty/serial/jsm/jsm_driver.c
-+++ b/drivers/tty/serial/jsm/jsm_driver.c
-@@ -212,7 +212,8 @@ static int jsm_probe_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 
- 		break;
- 	default:
--		return -ENXIO;
-+		rc = -ENXIO;
-+		goto out_kfree_brd;
- 	}
- 
- 	rc = request_irq(brd->irq, brd->bd_ops->intr, IRQF_SHARED, "JSM", brd);
+diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+index edaa4e5d84ad..517fb57d07d2 100644
+--- a/drivers/firmware/google/gsmi.c
++++ b/drivers/firmware/google/gsmi.c
+@@ -679,6 +679,15 @@ static struct notifier_block gsmi_die_notifier = {
+ static int gsmi_panic_callback(struct notifier_block *nb,
+ 			       unsigned long reason, void *arg)
+ {
++
++	/*
++	 * Panic callbacks are executed with all other CPUs stopped,
++	 * so we must not attempt to spin waiting for gsmi_dev.lock
++	 * to be released.
++	 */
++	if (spin_is_locked(&gsmi_dev.lock))
++		return NOTIFY_DONE;
++
+ 	gsmi_shutdown_reason(GSMI_SHUTDOWN_PANIC);
+ 	return NOTIFY_DONE;
+ }
 -- 
 2.35.1
 
