@@ -2,80 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BB660BF20
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C69760BF21
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiJXX6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S230242AbiJXX6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiJXX5t (ORCPT
+        with ESMTP id S231146AbiJXX6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:57:49 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDC7340C8E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:12:58 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id y20so5217288uao.8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+gEm7VONyS7UVuTvPLRkcNvl41HQoqLdSHbzsMHTSs=;
-        b=L3OSNOGMw4rOVmweIhebxGViBIgNhvyR7qzGaKgUw7RRl//uC1ARvYqlv1B6DAI1BS
-         m5BT0qCELCZs/zAsS7JKiewTklsvv+bD/SVebEh2sCIBcm0zyOhHgrqmM58CUBQ2nHAm
-         fOPt9JPgaFukt2vCQv1bnnfXkmpIpv6g4q6O4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2+gEm7VONyS7UVuTvPLRkcNvl41HQoqLdSHbzsMHTSs=;
-        b=R1rmFUuwRpL6wNEdOaGuktVqv5pyB/ZbXYGu0pea7XRR9CtZs94dpdTPT5G9YWUo6z
-         mAVThdCxKYQGU1+BhcdAPjbL9DSt6rZ3cxnSvAjnfwh8jqy4IT6W5ZArteMQqFkA2dxi
-         /QMsTrrZd/hLMMacQtDbaIhZUOPcmIGQErX9u42Zzfue707rh0Rv2DxQBzYjtN0oJfZx
-         rNMI3xRNBwUiaG5uq3NZ7D71XZ4N5Io0UCSApVR8WvouCCqd9jtVpWNgvFqISjALeuk1
-         om/LLgFLY4xZ90UpPgmM87vRoZxv0abPnk7u5p5zDP9TwoD8TUhCqskOq90kvjlIuxab
-         qPqg==
-X-Gm-Message-State: ACrzQf2nMleiWseHouyJN64l1buo7qFgrLdlSiaQRO6/AKuCHSSrjale
-        v1PUfWIZT0jkZZXguHmhB/0UECDsIxC/CsoX41lcIA==
-X-Google-Smtp-Source: AMsMyM5HAWHqJDUUEN4IizBWaZrMz7exN/+WucGtaa+xWdXV1aB7+frNt8M+3SYIkfMvqtKI2U2+EXEtnsKLuJ2uOgQ=
-X-Received: by 2002:a9f:29a3:0:b0:3d6:4c6f:9d92 with SMTP id
- s32-20020a9f29a3000000b003d64c6f9d92mr20097126uas.43.1666649577519; Mon, 24
- Oct 2022 15:12:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221024102307.33722-1-angelogioacchino.delregno@collabora.com> <20221024102307.33722-11-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221024102307.33722-11-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 24 Oct 2022 15:12:46 -0700
-Message-ID: <CAGXv+5HoMAyLJ=25weerEsHNUt-pZj1E7Aj-mWvM+hoCvovpOA@mail.gmail.com>
-Subject: Re: [PATCH 10/10] clk: mediatek: mt8186-topckgen: Add GPU clock mux notifier
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com, matthias.bgg@gmail.com,
-        miles.chen@mediatek.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, chun-jie.chen@mediatek.com,
-        jose.exposito89@gmail.com, yangyingliang@huawei.com,
-        msp@baylibre.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+        Mon, 24 Oct 2022 19:58:02 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF6D347B57;
+        Mon, 24 Oct 2022 15:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666649690; x=1698185690;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=IpovU0pr5GqNyG1RQY1BOg6p1QwyjDdZAzVeYeoqpcQ=;
+  b=SdBlbZeQKdECKVnMMqoOrJdEMoKXO0cf3IXrb6FZgu/ztduI2hD8kiXD
+   p3MCr9gJTe2FsaiKoE+NYpc7b+VK+OdnUVyoHnmEYuJ9yw6h2/U897t1n
+   IpnhClCcrf/SHY6/jlnH5MoWJXLdupuZuVKm+ZWz+JX6AUgkMX1ziz8Dr
+   8c0l98S0X5jFr8wlFh86v5yVjaiMeG/7t1/dRMGXRVWTrwJMU/q1xe9ag
+   deDA6JEA9RFv4gXC70RNwzvob9IUgjQaenB9nJ0oilQqD9KsrwdHsHNQO
+   BU/98oveVyMRxpeohG+Miet2hBrGtjC6AOaL1sO18du+JWfAOJiKQFLSj
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="308627361"
+X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
+   d="scan'208";a="308627361"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 15:14:39 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="694715326"
+X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
+   d="scan'208";a="694715326"
+Received: from hossain3-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.39.87])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 15:14:37 -0700
+Message-ID: <8bbd9bc65622aafd36433dbf0cf81338fde3007a.camel@linux.intel.com>
+Subject: Re: [PATCH 0/2] cpufreq: intel_pstate: Make HWP calibration work on
+ all hybrid platforms
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Date:   Mon, 24 Oct 2022 15:14:36 -0700
+In-Reply-To: <2258064.ElGaqSPkdT@kreacher>
+References: <2258064.ElGaqSPkdT@kreacher>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 3:23 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Following the changes done to MT8183, MT8192, MT8195, register a
-> clock notifier for MT8186, allowing safe clockrate updates for the
-> MFG PLL.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Mon, 2022-10-24 at 21:18 +0200, Rafael J. Wysocki wrote:
+> Hi All,
+> 
+> The HWP calibration in intel_pstate is needed to map HWP performance
+> levels to
+> frequencies, which are used in the cpufreq sysfs interface, in a
+> reliable way.
+> On all non-hybrid "core" platforms it is sufficient to multiply the
+> HWP
+> performance levels by 100000 to obtain the corresponding frequencies,
+> but on
+> hybrid ones there is a difference between P-cores and E-cores.
+> 
+> Previous attempts to make this work were based on using CPPC (and in
+> particular
+> the nominal performance values provided by _CPC), but it turns out
+> that the
+> CPPC information is not sufficiently reliable for this purpose and
+> the only
+> way to do it is to use a hard-coded scaling factors for P-cores and
+> for E-cores
+> (which fortunately is the same as in the non-hybrid case). 
+> Fortunately, the
+> same scaling factor for P-cores works on all of the hybrid platforms
+> to date.
+> 
+> The first patch in the series ensures that all of the CPUs will use
+> correct
+> information from MSRs by avoiding the situations in which an MSR
+> values read
+> on one CPU will be used for performance scaling of another CPU.
+> 
+> The second one implements the approach outlined above.
+> 
+> Please see the changelogs for details.
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+
+> 
+> Thanks!
+> 
+> 
+> 
+
