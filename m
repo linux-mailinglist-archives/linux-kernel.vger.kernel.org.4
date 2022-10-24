@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DDB60A496
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC4960A9F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbiJXMNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42672 "EHLO
+        id S233324AbiJXN0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiJXMMV (ORCPT
+        with ESMTP id S236043AbiJXNYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:12:21 -0400
+        Mon, 24 Oct 2022 09:24:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACBDBF5D;
-        Mon, 24 Oct 2022 04:54:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F2D2A711;
+        Mon, 24 Oct 2022 05:30:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5CE4612D6;
-        Mon, 24 Oct 2022 11:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A62C433C1;
-        Mon, 24 Oct 2022 11:53:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34CCB61325;
+        Mon, 24 Oct 2022 12:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47502C433D6;
+        Mon, 24 Oct 2022 12:29:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612397;
-        bh=zsc+NPBNRssYvuCi2pIfNAVP01gepb+7Au+cEg+X6mA=;
+        s=korg; t=1666614549;
+        bh=KwiBHAeC4ATIsxRiekASCeySPN3bCa3arjbO0thAJmo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A3/h6DPLc39DykkVOxjTecXz2RDh3s/JDgkSAmmyhS3z9BrJp9SHJerkmxde/cS9B
-         CglmrnH3MN/JvCsmI5DOQQJmhcUBpwtTzx8UW5AZbg0nyGYIk8jCFw1GLGm25Y2+yE
-         +PGyDTd9C9cmh44V3Dne7zz30HsLipBPekK72lDY=
+        b=uW+RLj3GcRMlfOekZcuYgvHgUdq2I/nfE9q18H47V9DUaKui5GKzfmiXKpL/zdxme
+         /HMTtfr9LjjCh1Cc4hjocJWIZk51q3bEvQU9YjOERdrSSEE1YbxUmAkjBAsFcIloS7
+         ZbYcE4z1bmfKPGCW9x6eU4aretz2j9D1nB/HKFZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Gaul <gaul@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 183/210] r8152: Rate limit overflow messages
+Subject: [PATCH 5.10 303/390] NFSD: Return nfserr_serverfault if splice_ok but buf->pages have data
 Date:   Mon, 24 Oct 2022 13:31:40 +0200
-Message-Id: <20221024113002.896969208@linuxfoundation.org>
+Message-Id: <20221024113035.915651681@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Gaul <gaul@gaul.org>
+From: Anna Schumaker <Anna.Schumaker@Netapp.com>
 
-[ Upstream commit 93e2be344a7db169b7119de21ac1bf253b8c6907 ]
+[ Upstream commit 06981d560606ac48d61e5f4fff6738b925c93173 ]
 
-My system shows almost 10 million of these messages over a 24-hour
-period which pollutes my logs.
+This was discussed with Chuck as part of this patch set. Returning
+nfserr_resource was decided to not be the best error message here, and
+he suggested changing to nfserr_serverfault instead.
 
-Signed-off-by: Andrew Gaul <gaul@google.com>
-Link: https://lore.kernel.org/r/20221002034128.2026653-1-gaul@google.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Link: https://lore.kernel.org/linux-nfs/20220907195259.926736-1-anna@kernel.org/T/#t
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/r8152.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/nfsd/nfs4xdr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index a5a4fef09b93..1ed358d0da84 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -1382,7 +1382,9 @@ static void intr_callback(struct urb *urb)
- 			   "Stop submitting intr, status %d\n", status);
- 		return;
- 	case -EOVERFLOW:
--		netif_info(tp, intr, tp->netdev, "intr status -EOVERFLOW\n");
-+		if (net_ratelimit())
-+			netif_info(tp, intr, tp->netdev,
-+				   "intr status -EOVERFLOW\n");
- 		goto resubmit;
- 	/* -EPIPE:  should clear the halt */
- 	default:
+diff --git a/fs/nfsd/nfs4xdr.c b/fs/nfsd/nfs4xdr.c
+index 46f825cf53f4..cc605ee0b2fa 100644
+--- a/fs/nfsd/nfs4xdr.c
++++ b/fs/nfsd/nfs4xdr.c
+@@ -3871,7 +3871,7 @@ nfsd4_encode_read(struct nfsd4_compoundres *resp, __be32 nfserr,
+ 	if (resp->xdr.buf->page_len &&
+ 	    test_bit(RQ_SPLICE_OK, &resp->rqstp->rq_flags)) {
+ 		WARN_ON_ONCE(1);
+-		return nfserr_resource;
++		return nfserr_serverfault;
+ 	}
+ 	xdr_commit_encode(xdr);
+ 
 -- 
 2.35.1
 
