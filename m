@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EBA60A778
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE7760A777
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbiJXMvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S234427AbiJXMvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234660AbiJXMp1 (ORCPT
+        with ESMTP id S234683AbiJXMp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:27 -0400
+        Mon, 24 Oct 2022 08:45:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0113A193DF;
-        Mon, 24 Oct 2022 05:09:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6265A6156;
+        Mon, 24 Oct 2022 05:10:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 855E76125D;
-        Mon, 24 Oct 2022 12:09:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B653C433C1;
-        Mon, 24 Oct 2022 12:09:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D1F86128E;
+        Mon, 24 Oct 2022 12:09:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FF02C433D6;
+        Mon, 24 Oct 2022 12:09:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613372;
-        bh=kQWJbAtvZifP1shAjObse3DkaoIE1hj0tuT6mBsGAMg=;
+        s=korg; t=1666613374;
+        bh=cHT/tctzQJbGiXiQn4s+uUUWvv1Z72ev5clpduBCXxw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=reDOfpneOrbcXU9Jlex5H13XUl9Sp/sjF3877AoXTUh5gNo7Rcq/gNhxdIzBeHgdh
-         eVg/Y3iTjsDp/vlgSBqCaK7gV5ugHcY35aIeMH6kI+cHzhmFRZF+8hMhxAkW7eOM1M
-         1QSuvAoE/2PP/watZM6sUo38vVqybmrMFZBdjE4Y=
+        b=BC2w4zXgazcjXBj03+wWOvmxN0Zkt8ShfQvMaUQnZxuLFovN8+DR/gsirqroUrma8
+         skFkL05ftvG/yNDHGQtFyDqgK7qNe8RQ947WW/AHl5AWKCeHEKlwTPuNDZUhd4IJyN
+         UAmQP4zTtuTYEOE7ZVBrKS09I8bgNcZDag2EVp5g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 111/255] soc: qcom: smem_state: Add refcounting for the state->of_node
-Date:   Mon, 24 Oct 2022 13:30:21 +0200
-Message-Id: <20221024113006.185176924@linuxfoundation.org>
+Subject: [PATCH 5.4 112/255] ARM: dts: turris-omnia: Fix mpp26 pin name and comment
+Date:   Mon, 24 Oct 2022 13:30:22 +0200
+Message-Id: <20221024113006.214478404@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
 References: <20221024113002.471093005@linuxfoundation.org>
@@ -54,44 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Marek Behún <kabel@kernel.org>
 
-[ Upstream commit 90681f53b9381c23ff7762a3b13826d620c272de ]
+[ Upstream commit 49e93898f0dc177e645c22d0664813567fd9ec00 ]
 
-In qcom_smem_state_register() and qcom_smem_state_release(), we
-should better use of_node_get() and of_node_put() for the reference
-creation and destruction of 'device_node'.
+There is a bug in Turris Omnia's schematics, whereupon the MPP[26] pin,
+which is routed to CN11 pin header, is documented as SPI CS1, but
+MPP[26] pin does not support this function. Instead it controls chip
+select 2 if in "spi0" mode.
 
-Fixes: 9460ae2ff308 ("soc: qcom: Introduce common SMEM state machine code")
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220721135217.1301039-2-windhl@126.com
+Fix the name of the pin node in pinctrl node and fix the comment in SPI
+node.
+
+Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/smem_state.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/armada-385-turris-omnia.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/soc/qcom/smem_state.c b/drivers/soc/qcom/smem_state.c
-index d2b558438deb..41e929407196 100644
---- a/drivers/soc/qcom/smem_state.c
-+++ b/drivers/soc/qcom/smem_state.c
-@@ -136,6 +136,7 @@ static void qcom_smem_state_release(struct kref *ref)
- 	struct qcom_smem_state *state = container_of(ref, struct qcom_smem_state, refcount);
+diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+index fde4c302f08e..92e08486ec81 100644
+--- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
++++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+@@ -307,7 +307,7 @@
+ 		marvell,function = "spi0";
+ 	};
  
- 	list_del(&state->list);
-+	of_node_put(state->of_node);
- 	kfree(state);
- }
+-	spi0cs1_pins: spi0cs1-pins {
++	spi0cs2_pins: spi0cs2-pins {
+ 		marvell,pins = "mpp26";
+ 		marvell,function = "spi0";
+ 	};
+@@ -342,7 +342,7 @@
+ 		};
+ 	};
  
-@@ -169,7 +170,7 @@ struct qcom_smem_state *qcom_smem_state_register(struct device_node *of_node,
+-	/* MISO, MOSI, SCLK and CS1 are routed to pin header CN11 */
++	/* MISO, MOSI, SCLK and CS2 are routed to pin header CN11 */
+ };
  
- 	kref_init(&state->refcount);
- 
--	state->of_node = of_node;
-+	state->of_node = of_node_get(of_node);
- 	state->ops = *ops;
- 	state->priv = priv;
- 
+ &uart0 {
 -- 
 2.35.1
 
