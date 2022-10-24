@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E1C60A987
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994E760A6AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiJXNVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        id S231537AbiJXMhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236440AbiJXNU2 (ORCPT
+        with ESMTP id S233719AbiJXMac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:20:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B9E86F8C;
-        Mon, 24 Oct 2022 05:28:39 -0700 (PDT)
+        Mon, 24 Oct 2022 08:30:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71EE20F70;
+        Mon, 24 Oct 2022 05:04:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C3D61253;
-        Mon, 24 Oct 2022 11:54:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B1CCC433D7;
-        Mon, 24 Oct 2022 11:54:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98A44B811A5;
+        Mon, 24 Oct 2022 12:02:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDE9EC433C1;
+        Mon, 24 Oct 2022 12:02:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612454;
-        bh=GNw7U/Xkv8pquzbA9AmKaKoga6BkHp1dOGVVlwjeDZo=;
+        s=korg; t=1666612930;
+        bh=KgnZvTami7Wf2KkSJ7asjZWoX20lDkMswAbmsI/MM1U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xrqWtcc8LjvNFwC9pm8JdCfRyu9cjKCGT6KuaskMDJctIRYg1xVDAAErkMW1aaVvH
-         SJO9v5CXIbqw1cXxN8AEugHmQR0KVSWF3misGeEB145fl6CxUcW1Ots7LykbdKztuQ
-         WZXRX85umg5mdvAO3R5it34CSBPKUIfvsCE1gVeM=
+        b=x/531WpZnbhV75V9NR5JxZr94sPoPRBiyEljS1wVzyKyMwvKJYzFKqA0W8avi2uQU
+         kPcGC6mE8Vz0NIK5xbPaMshqrdZIEJDNdPSaPkq5PtRh/pNyd1CczG4yo16k6LCp27
+         sj62EEpgzGFN4rtbpJAX2LeMjUFb30idnqkjPqaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Hawkins Jiawei <yin31149@gmail.com>,
+        stable@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 175/210] Bluetooth: hci_sysfs: Fix attempting to call device_add multiple times
+Subject: [PATCH 4.19 173/229] thermal: intel_powerclamp: Use get_cpu() instead of smp_processor_id() to avoid crash
 Date:   Mon, 24 Oct 2022 13:31:32 +0200
-Message-Id: <20221024113002.634850236@linuxfoundation.org>
+Message-Id: <20221024113004.689527133@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-[ Upstream commit 448a496f760664d3e2e79466aa1787e6abc922b5 ]
+[ Upstream commit 68b99e94a4a2db6ba9b31fe0485e057b9354a640 ]
 
-device_add shall not be called multiple times as stated in its
-documentation:
+When CPU 0 is offline and intel_powerclamp is used to inject
+idle, it generates kernel BUG:
 
- 'Do not call this routine or device_register() more than once for
- any device structure'
-
-Syzkaller reports a bug as follows [1]:
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:33!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-[...]
+BUG: using smp_processor_id() in preemptible [00000000] code: bash/15687
+caller is debug_smp_processor_id+0x17/0x20
+CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
 Call Trace:
- <TASK>
- __list_add include/linux/list.h:69 [inline]
- list_add_tail include/linux/list.h:102 [inline]
- kobj_kset_join lib/kobject.c:164 [inline]
- kobject_add_internal+0x18f/0x8f0 lib/kobject.c:214
- kobject_add_varg lib/kobject.c:358 [inline]
- kobject_add+0x150/0x1c0 lib/kobject.c:410
- device_add+0x368/0x1e90 drivers/base/core.c:3452
- hci_conn_add_sysfs+0x9b/0x1b0 net/bluetooth/hci_sysfs.c:53
- hci_le_cis_estabilished_evt+0x57c/0xae0 net/bluetooth/hci_event.c:6799
- hci_le_meta_evt+0x2b8/0x510 net/bluetooth/hci_event.c:7110
- hci_event_func net/bluetooth/hci_event.c:7440 [inline]
- hci_event_packet+0x63d/0xfd0 net/bluetooth/hci_event.c:7495
- hci_rx_work+0xae7/0x1230 net/bluetooth/hci_core.c:4007
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+<TASK>
+dump_stack_lvl+0x49/0x63
+dump_stack+0x10/0x16
+check_preemption_disabled+0xdd/0xe0
+debug_smp_processor_id+0x17/0x20
+powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
+...
+...
 
-Link: https://syzkaller.appspot.com/bug?id=da3246e2d33afdb92d66bc166a0934c5b146404a
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Tested-by: Hawkins Jiawei <yin31149@gmail.com>
+Here CPU 0 is the control CPU by default and changed to the current CPU,
+if CPU 0 offlined. This check has to be performed under cpus_read_lock(),
+hence the above warning.
+
+Use get_cpu() instead of smp_processor_id() to avoid this BUG.
+
+Suggested-by: Chen Yu <yu.c.chen@intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+[ rjw: Subject edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_sysfs.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/thermal/intel_powerclamp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/net/bluetooth/hci_sysfs.c b/net/bluetooth/hci_sysfs.c
-index b568f7c21b30..0c9249339790 100644
---- a/net/bluetooth/hci_sysfs.c
-+++ b/net/bluetooth/hci_sysfs.c
-@@ -48,6 +48,9 @@ void hci_conn_add_sysfs(struct hci_conn *conn)
+diff --git a/drivers/thermal/intel_powerclamp.c b/drivers/thermal/intel_powerclamp.c
+index 8e8328347c0e..079c8c1a5f15 100644
+--- a/drivers/thermal/intel_powerclamp.c
++++ b/drivers/thermal/intel_powerclamp.c
+@@ -550,8 +550,10 @@ static int start_power_clamp(void)
  
- 	BT_DBG("conn %p", conn);
+ 	/* prefer BSP */
+ 	control_cpu = 0;
+-	if (!cpu_online(control_cpu))
+-		control_cpu = smp_processor_id();
++	if (!cpu_online(control_cpu)) {
++		control_cpu = get_cpu();
++		put_cpu();
++	}
  
-+	if (device_is_registered(&conn->dev))
-+		return;
-+
- 	dev_set_name(&conn->dev, "%s:%d", hdev->name, conn->handle);
- 
- 	if (device_add(&conn->dev) < 0) {
+ 	clamping = true;
+ 	schedule_delayed_work(&poll_pkg_cstate_work, 0);
 -- 
 2.35.1
 
