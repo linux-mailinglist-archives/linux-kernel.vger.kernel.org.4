@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD89260A549
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 976C960A4E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233535AbiJXMWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:22:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S233104AbiJXMSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiJXMUh (ORCPT
+        with ESMTP id S233108AbiJXMQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:20:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C136583236;
-        Mon, 24 Oct 2022 04:58:50 -0700 (PDT)
+        Mon, 24 Oct 2022 08:16:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6A7AC36;
+        Mon, 24 Oct 2022 04:56:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 683FE612BB;
-        Mon, 24 Oct 2022 11:56:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A895C433C1;
-        Mon, 24 Oct 2022 11:56:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A802C612D3;
+        Mon, 24 Oct 2022 11:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9254C433D6;
+        Mon, 24 Oct 2022 11:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612592;
-        bh=7zRqFiuFdqs1g1fTMewFg4NAJ0rlLykQuJxkC+KCfFY=;
+        s=korg; t=1666612598;
+        bh=t+BBSIhts49B2P3FN9Z48QUqlQMj20aVsD3IeoAmpEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LFz0445FVYz7U9AzR/vpK7so8OjXaqNUjSW3m8Vc18gCnvWjRbMFC4wEa9dd/6FUO
-         PFJrvxF/1UeWGo1IzIIiOgFDfujYMjcbjd3Ui27jQuteg+Fl5ufW8ehBmCHNm/ijKp
-         zmww03ZhSftMBIBucEf/QoIOHDILKgDM9Ic1C2uI=
+        b=QGdnJzN2VxvAPRXu+cc8W7PUebo+W5L3mvQTtjvJn7qHp5a/2XiRoukl7hGmaWxEx
+         iZQfCZ3ovOdCjC6z7dy5FrPjWaPkhPhMOGTvULvz6RWJuyNlc7e7a5zTcYs6Bo+gom
+         TOLmDcLZwgeqfyNFQmNOfAMY4VxCBXfQxlI6c7AU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
-        David Teigland <teigland@redhat.com>
-Subject: [PATCH 4.19 045/229] fs: dlm: handle -EBUSY first in lock arg validation
-Date:   Mon, 24 Oct 2022 13:29:24 +0200
-Message-Id: <20221024113000.552249834@linuxfoundation.org>
+        stable@vger.kernel.org, Andri Yngvason <andri@yngvason.is>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH 4.19 046/229] HID: multitouch: Add memory barriers
+Date:   Mon, 24 Oct 2022 13:29:25 +0200
+Message-Id: <20221024113000.581586783@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
 References: <20221024112959.085534368@linuxfoundation.org>
@@ -53,57 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Aring <aahringo@redhat.com>
+From: Andri Yngvason <andri@yngvason.is>
 
-commit 44637ca41d551d409a481117b07fa209b330fca9 upstream.
+commit be6e2b5734a425941fcdcdbd2a9337be498ce2cf upstream.
 
-During lock arg validation, first check for -EBUSY cases, then for
--EINVAL cases. The -EINVAL checks look at lkb state variables
-which are not stable when an lkb is busy and would cause an
--EBUSY result, e.g. lkb->lkb_grmode.
+This fixes broken atomic checks which cause a race between the
+release-timer and processing of hid input.
+
+I noticed that contacts were sometimes sticking, even with the "sticky
+fingers" quirk enabled. This fixes that problem.
 
 Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: David Teigland <teigland@redhat.com>
+Fixes: 9609827458c3 ("HID: multitouch: optimize the sticky fingers timer")
+Signed-off-by: Andri Yngvason <andri@yngvason.is>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Link: https://lore.kernel.org/r/20220907150159.2285460-1-andri@yngvason.is
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/dlm/lock.c |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/hid/hid-multitouch.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/fs/dlm/lock.c
-+++ b/fs/dlm/lock.c
-@@ -2890,24 +2890,24 @@ static int set_unlock_args(uint32_t flag
- static int validate_lock_args(struct dlm_ls *ls, struct dlm_lkb *lkb,
- 			      struct dlm_args *args)
- {
--	int rv = -EINVAL;
-+	int rv = -EBUSY;
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -1154,7 +1154,7 @@ static void mt_touch_report(struct hid_d
+ 	int contact_count = -1;
  
- 	if (args->flags & DLM_LKF_CONVERT) {
--		if (lkb->lkb_flags & DLM_IFL_MSTCPY)
-+		if (lkb->lkb_status != DLM_LKSTS_GRANTED)
- 			goto out;
+ 	/* sticky fingers release in progress, abort */
+-	if (test_and_set_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
++	if (test_and_set_bit_lock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
+ 		return;
  
--		if (args->flags & DLM_LKF_QUECVT &&
--		    !__quecvt_compat_matrix[lkb->lkb_grmode+1][args->mode+1])
-+		if (lkb->lkb_wait_type)
- 			goto out;
- 
--		rv = -EBUSY;
--		if (lkb->lkb_status != DLM_LKSTS_GRANTED)
-+		if (is_overlap(lkb))
- 			goto out;
- 
--		if (lkb->lkb_wait_type)
-+		rv = -EINVAL;
-+		if (lkb->lkb_flags & DLM_IFL_MSTCPY)
- 			goto out;
- 
--		if (is_overlap(lkb))
-+		if (args->flags & DLM_LKF_QUECVT &&
-+		    !__quecvt_compat_matrix[lkb->lkb_grmode+1][args->mode+1])
- 			goto out;
+ 	scantime = *app->scantime;
+@@ -1235,7 +1235,7 @@ static void mt_touch_report(struct hid_d
+ 			del_timer(&td->release_timer);
  	}
  
+-	clear_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
++	clear_bit_unlock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
+ }
+ 
+ static int mt_touch_input_configured(struct hid_device *hdev,
+@@ -1672,11 +1672,11 @@ static void mt_expired_timeout(struct ti
+ 	 * An input report came in just before we release the sticky fingers,
+ 	 * it will take care of the sticky fingers.
+ 	 */
+-	if (test_and_set_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
++	if (test_and_set_bit_lock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
+ 		return;
+ 	if (test_bit(MT_IO_FLAGS_PENDING_SLOTS, &td->mt_io_flags))
+ 		mt_release_contacts(hdev);
+-	clear_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
++	clear_bit_unlock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
+ }
+ 
+ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
 
 
