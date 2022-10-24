@@ -2,80 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B4B60B5CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE89B60B653
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232269AbiJXSko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
+        id S232453AbiJXSyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbiJXSkT (ORCPT
+        with ESMTP id S231753AbiJXSxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:40:19 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A257A8365
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:22:20 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id ez6so8621707pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:22:20 -0700 (PDT)
+        Mon, 24 Oct 2022 14:53:46 -0400
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC2650525
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:34:56 -0700 (PDT)
+Received: by mail-pg1-f173.google.com with SMTP id q1so9219107pgl.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:34:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rfwpvweGi1Ucx8HQshpxviuI+RQIpmr8edZSxz2ZyS8=;
-        b=cRHBNse3LDl7knerfXifthateEO5UMiwl8a2j41s/BW6mt9+2V3xiOBC2HFZioyyJH
-         i+yc2YUJzK2L4RQsm7M3cbP6yJybDkXRaeZV/j2urLVjf0krimJh45HbXtqBVhQL1Iqq
-         JmXAxZ1V4PIuXYnDklyo4doMEr87jbivpe/Vc=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=h7u5l49jw0uI8snMuGlN/qKzrSpvO9jQze7XHi24T1M=;
+        b=krW7g60IFvrJDYp67iygKygcrvrEEsYceB5aIjV0J3CnDXzbclR9DuN0MYgqT7CSUk
+         y5AmAy6+a31rgWDTx6CdnADzKE/bjT2J0ghQViTdmp6COPxYJldt4rb/oRIlNFSe5p//
+         UVxmaylAYn54r5+KzPbkyIWqzez4+2EWIgm6F5yIc0OP4aZuMA6nfAKaw1Os9BGP6nOn
+         JMwxKFpIjokKj2qc3rP3ND4bZRP2mdOSteRe10uXMbXelesYYv96NjcDyXZohe1g71Yq
+         pD03Md9HbgjUZfREvL+whScKnRnTQKIR4q2hLoyCqcx259GZW1EhqqCt7ewQZqmOhx6g
+         Y4Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rfwpvweGi1Ucx8HQshpxviuI+RQIpmr8edZSxz2ZyS8=;
-        b=EWBu6cBAZB8xztusCBkReEzuVr1wvhomECDsFEKRcmm4LD54I30QgXFRcQLOF8PRvI
-         ViUg2sLpHfL9B1G8GfpqKX67Mq9a+hEgmO5E+XrT7pI8Vpw8KHFDL7Q+m1YAvgroLP9Y
-         EKW8rCCFQ+qefhFnUWILPqa5j0yRoHQgMB/qZMm3gfQ9IbkoTRQJsBFlpcrde2s4hqX/
-         3VS0mK8ry/TqASdWu+BL+9GHyDRif3k9qYeDQ9uM6a//YNt1NJEY4Z9ZtFyhwygfjpH1
-         qRY6cvZgVDdzzGrtsGOOqKWhe0oswoEKE0yKEtgsaZtvHH3Jk+rG397yZXgJbRSgjrUk
-         Y63w==
-X-Gm-Message-State: ACrzQf3vA7gQKkZXq69ULntMic9uW0/54EcXq0XBCDhHMBl5Rs8wu7BA
-        W9IDDJmFt1W8kbNV8Gy0+Ig/UQ==
-X-Google-Smtp-Source: AMsMyM7PFXJJIVqkR6UWadHj6ls9b0femM8h8ZBqzJ3mOQ08s0OS0x6/s1Yef5s8sJBjNsSBl/joMw==
-X-Received: by 2002:a17:903:2307:b0:181:e618:b4c5 with SMTP id d7-20020a170903230700b00181e618b4c5mr33087193plh.172.1666632060401;
-        Mon, 24 Oct 2022 10:21:00 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i188-20020a626dc5000000b0056262811c5fsm72421pfc.59.2022.10.24.10.20.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 10:20:59 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     "Darrick J . Wong" <djwong@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, Zorro Lang <zlang@redhat.com>,
-        linux-xfs@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Keith Packard <keithp@keithp.com>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 2/2] xfs: Use flex_cpy() to check extent copying
-Date:   Mon, 24 Oct 2022 10:20:58 -0700
-Message-Id: <20221024172058.534477-2-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221024171848.never.522-kees@kernel.org>
-References: <20221024171848.never.522-kees@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h7u5l49jw0uI8snMuGlN/qKzrSpvO9jQze7XHi24T1M=;
+        b=ZJix1uyI8EywjtVyBVAgXh3DtzFBILrdeNu18aOF42+luQFHv7Xx7aC+VMIXAA8xX7
+         n69CaIdQiJIRbqOUyzSEJPH0yp8jNrzY3BtLONBqFHZ0maimUdd5GbkmQ3hQ4gCOOA0w
+         fo2JaS2pnUaq4KedxDMr+camMrNrGhxmudkRTBEZ5ju26R3Cho2tGOXHOwxX4EQjBbPB
+         8BSTljWrdQwHzS7kR7Jzk8K2jy26UqHI089DzyGVMp4onU04mUfq0Y3EgTrvMpnDYRMr
+         MaE0llOdKaAAt+GH2Mfq+DFt7/VE4tOFPBCvIqLs5NR1SQKgpP8Hb+VZoA2fZQ6apg/Q
+         kgXQ==
+X-Gm-Message-State: ACrzQf3GXmMdC+caus3TwakEa+Wzcpr6Cizl+uXXy10AcgE1h1pDzhlC
+        5SHXb54Fu3NuZzxibeLjk99bF9TmOTG03PVgthHfLlzB
+X-Google-Smtp-Source: AMsMyM5hS6FGZqfULF7ZSRo0Ys8XJvXP8Iyo2AZMzh3DCMYIzwpnh8fDjR3yXJE2xbllZDPeVrCJXF/oboyQrooxPlc=
+X-Received: by 2002:a05:6a02:20c:b0:461:74e5:ce9f with SMTP id
+ bh12-20020a056a02020c00b0046174e5ce9fmr29467846pgb.294.1666632082324; Mon, 24
+ Oct 2022 10:21:22 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1465; h=from:subject; bh=x7Rm68JdcafZ41E9GsTynBW1VglPIkAcCBWjMgC1XZs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjVsl5e3fUqEVHLRTWTi07FP0i2KlufVIIqNEwvzK+ yPgcmKOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1bJeQAKCRCJcvTf3G3AJpMWEA CCEj7newKc7qcVZhldSpFBK/EeIB9fXY4+iLuVdu3LFqPY13Hef3MaSmkB/Y4IRnNYMG1z40nYXPIX BRl9opcuI31xnN1rs9ZUql+0uHLhCbkvPekMurdx40/rXV8JSpfAawk6g/Hu4CzhhSEZPdV2BCmaA2 gPls9t3srVcaoPQcet6h5Vl878GD2tUPabyGLFzf2zrvkrYFuVG9Vcf8M6rzhWjAgTUrKXTOgGosnk yGdKK2sRbrNnAI3hLfunqyLQKTE2SM35KEak96gL9DDY4Yj+Jir7NkBast9okeDQfOYj3pfkyZyvVv yq3vnuORIfjZgdqMs/p+kv8pQKeOqwBTmplsuSM9xrTvOT1ElTE4P2+4hKNvRivsAlyme/BYPaUdW/ sUfyLqIoCWWsRNTtJ1BkJsPqnHMTxkelyCDmn5xTuYv+GAbx/2UG13vPbNvmJUPLxYTw+YeksRdUYl ZrMgfde6Ifb4yzbsuerEt/fkpd6/85Y7vJ4vf/GtZOdVt/QN4BDxlETGpas8pgV+Bs4tqMNFPpHRHm eFd8JmG9/qGYmtuaMepu/Rn7zhnwIYUevSDwoH+OanWEGdftSxXaQyEO28EEoMYEGbyWDTqkz04/4O zC5bLw/JhL8gPbVuJHIo7cu+CcKMc0HdtDfDGHW0LDUBdHrqREEUb2tKT8hw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <de386aa864be9158d2f3b344091419ea7c38b2f7.1666599848.git.baolin.wang@linux.alibaba.com>
+In-Reply-To: <de386aa864be9158d2f3b344091419ea7c38b2f7.1666599848.git.baolin.wang@linux.alibaba.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Mon, 24 Oct 2022 10:21:09 -0700
+Message-ID: <CAHbLzko529=DehnHqqvRkhNA4NkgGjCLOvt1c=kmHV1LCKZpGA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] mm: migrate: Fix return value if all subpages of
+ THPs are migrated successfully
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     akpm@linux-foundation.org, david@redhat.com, ying.huang@intel.com,
+        ziy@nvidia.com, apopple@nvidia.com, jingshan@linux.alibaba.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,47 +69,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use flex_cpy() instead of memcpy() to copy the bui_fmt flexible array
-structure, which will perform bounds checking internally. Avoids the
-false positive warning seen under FORTIFY_SOURCE:
+On Mon, Oct 24, 2022 at 1:34 AM Baolin Wang
+<baolin.wang@linux.alibaba.com> wrote:
+>
+> During THP migration, if THPs are not migrated but they are split and all
+> subpages are migrated successfully, migrate_pages() will still return the
+> number of THP pages that were not migrated.  This will confuse the callers
+> of migrate_pages().  For example, the longterm pinning will failed though
+> all pages are migrated successfully.
+>
+> Thus we should return 0 to indicate that all pages are migrated in this
+> case
+>
+> Fixes: b5bade978e9b ("mm: migrate: fix the return value of migrate_pages()")
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: Alistair Popple <apopple@nvidia.com>
+> Cc: <stable@vger.kernel.org>
 
-  memcpy: detected field-spanning write (size 48) of single field "dst_bui_fmt" at fs/xfs/xfs_bmap_item.c:628 (size 16)
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-Reported-by: Zorro Lang <zlang@redhat.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216563
-Cc: "Darrick J. Wong" <djwong@kernel.org>
-Cc: linux-xfs@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- fs/xfs/xfs_bmap_item.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/fs/xfs/xfs_bmap_item.c b/fs/xfs/xfs_bmap_item.c
-index 51f66e982484..5f135893df66 100644
---- a/fs/xfs/xfs_bmap_item.c
-+++ b/fs/xfs/xfs_bmap_item.c
-@@ -24,6 +24,7 @@
- #include "xfs_error.h"
- #include "xfs_log_priv.h"
- #include "xfs_log_recover.h"
-+#include <linux/flex_array.h>
- 
- struct kmem_cache	*xfs_bui_cache;
- struct kmem_cache	*xfs_bud_cache;
-@@ -624,10 +625,10 @@ xfs_bui_copy_format(
- 	src_bui_fmt = buf->i_addr;
- 	len = xfs_bui_log_format_sizeof(src_bui_fmt->bui_nextents);
- 
--	if (buf->i_len == len) {
--		memcpy(dst_bui_fmt, src_bui_fmt, len);
-+	if (buf->i_len == len &&
-+	    __flex_cpy(dst_bui_fmt, src_bui_fmt,
-+		       bui_extents, bui_nextents, __passthru) == 0)
- 		return 0;
--	}
- 	XFS_ERROR_REPORT(__func__, XFS_ERRLEVEL_LOW, NULL);
- 	return -EFSCORRUPTED;
- }
--- 
-2.34.1
-
+> ---
+> Changes from v2:
+>  - Add Fixes tag suggested by Yang Shi and Huang, Ying.
+>  - Drop 'nr_thp_split' validation suggested by Alistair.
+>  - Add reviewed tag from Alistair.
+>  - Update the commit message suggested by Andrew.
+> Changes from v1:
+>  - Fix the return value of migrate_pages() instead of fixing the
+>    callers' validation.
+> ---
+>  mm/migrate.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 8e5eb6e..2eb16f8 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1582,6 +1582,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
+>          */
+>         list_splice(&ret_pages, from);
+>
+> +       /*
+> +        * Return 0 in case all subpages of fail-to-migrate THPs are
+> +        * migrated successfully.
+> +        */
+> +       if (list_empty(from))
+> +               rc = 0;
+> +
+>         count_vm_events(PGMIGRATE_SUCCESS, nr_succeeded);
+>         count_vm_events(PGMIGRATE_FAIL, nr_failed_pages);
+>         count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
+> --
+> 1.8.3.1
+>
