@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24B660B3EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780AD60B15F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbiJXRVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S229910AbiJXQUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbiJXRUg (ORCPT
+        with ESMTP id S234954AbiJXQTi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:20:36 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF618E09A8;
-        Mon, 24 Oct 2022 08:55:29 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id s17so6286319qkj.12;
-        Mon, 24 Oct 2022 08:55:29 -0700 (PDT)
+        Mon, 24 Oct 2022 12:19:38 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA681162CB;
+        Mon, 24 Oct 2022 08:05:48 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id f37so17170889lfv.8;
+        Mon, 24 Oct 2022 08:05:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7JPnJvXqFbvBoRpm+OqekbXXGAEcbqpdHjX7ItqpWs=;
+        b=VbYvePPjnjhYzFBxfrQKw+39o49V3T/55TmMcUR+G5etqw1/hoUwbhwb5c8izheWyg
+         HER1eEGVqTbiaVAA85krDx0VUrli00i0iV8upz0f7Rkt0MKftABDFmNeM9a5guJdUlox
+         NlQsitGp1DQRq7W4XBu9zkkOUgYqsNFyoncJoF0hccvlkGawFsv6MqnlL7LLKPox9mba
+         UsAxYimIcyRDai0sIwS/3DDBHQWH2aSSaSCt7zpyEOCDs7N3kYuI5urgcIWsU4FR4OSN
+         9O0ES/H0UOiqQtT2YqCdSFOT5Oj4gkvNGNyUXn9qjDZrT06zotXkQ2TiU5c795BOUfmu
+         17pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/9JNURUXQEdoailh8cSWsW1gqRLK/OiiBgpx3G6yCs4=;
-        b=ESqwTw8fL4Z+rrOKFuq9eK/iFx0KQ0htWC7PLF2FyMCyTL7E8HqT41/aSRpawiM4fA
-         ey06v2mJWG3I+17QoSrK3r1D2+eFYEcg9A0GZbJO7VSXBMzLd8fGs0XDZG9xatDtf2KS
-         6AoR6F4nkwW4LCNg0Q9VbSX/lQgL41BzOFsH0pL17IEpA1R1zrll/IxICi3m7gY/KzXF
-         tNjwtrLMHCjufQOQDAH96B/nRqoJcALCujw/dPQEPTljjCatWX0DfvkynREUjqaVf2+J
-         gxMXhLKfzKv0xX+DV7EDm/e/p8Ya3GSiRV8w1aJIdxUI5VsukSH0zaAVuusKbNMPRSh4
-         mmWQ==
-X-Gm-Message-State: ACrzQf0Wj+F3qTv44aDa7Y5FYI3Iy871hgJN4ch6wH321t3HXnZe41rM
-        BQW5t0TFxlm+UbQmjJFF9LbvHEut5PJTrEA4TmQRetFx
-X-Google-Smtp-Source: AMsMyM5SGXDg7cTE4lSjEiW49oL5yy1bPzXNvArWudgdK+XShf3cJ3UksyBK75y9XAWqp8MXMLDTd7Nhsr5DfB5EEyc=
-X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
- q9-20020a05620a0d8900b006cfc98b744cmr23009768qkl.443.1666622720212; Mon, 24
- Oct 2022 07:45:20 -0700 (PDT)
+        bh=s7JPnJvXqFbvBoRpm+OqekbXXGAEcbqpdHjX7ItqpWs=;
+        b=AY3mubHrHq+dx+ojfHaL9UUCkVzhvyFfOWaaS5goTLm0Zm2QSB+sC2Icj6GwHQbznA
+         sUBt49MAzqMzUEq71aOSawts3I86vdz0QdjWzNxlgSMlHtKEgbtgz6uKMO5xBoLP8PvU
+         yOavfSXVEnw2QEOa8DM8KJTiX8A6ZyhEDIiP28fJyR/PRAv0WgslyTWoDDJw5EuMKs9p
+         Tnmv+P7cknSeTEQRWbqxLFJmV6OGfQqsmQ9BPThhtDBPT+Xm/E39xFlHT3+PQ729vbku
+         epXg1Fnm4AKzkphg+pAkl3UqIZ+iO/1ACk3v+1MpxAnszMAGpDkGKfp1qogwr2YZ3HZJ
+         1PQg==
+X-Gm-Message-State: ACrzQf17AcTqfQB2wWKAtcV45Oy7bXNJ9yQTo+9jxio1owSaMo077Rww
+        XxQTgEGxcmxLDAVsjFaRcaYWFx2nIbS0PcQnFrJASjrljYY=
+X-Google-Smtp-Source: AMsMyM7e0L2h6G7AwXCVistYpyvTVjWoFBNncmJXYIRXEd7dzljAFiXwDB/SM4XTPbqfJ26lVYR907Pr/JcEilAWRYI=
+X-Received: by 2002:a17:907:2d2c:b0:78d:d289:7efd with SMTP id
+ gs44-20020a1709072d2c00b0078dd2897efdmr27869758ejc.166.1666622814120; Mon, 24
+ Oct 2022 07:46:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221024141210.67784-1-dmitry.osipenko@collabora.com> <dda4b024-69d2-1d1d-da23-e922e5b6128a@redhat.com>
-In-Reply-To: <dda4b024-69d2-1d1d-da23-e922e5b6128a@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 24 Oct 2022 16:45:09 +0200
-Message-ID: <CAJZ5v0irmk3aAK9t3UYcus+SXDL+AaT88LPXfyJU2PrXbkgfMg@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: video: Fix missing native backlight on Chromebooks
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>, kernel@collabora.com,
-        linux-acpi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+References: <20221021204126.927603-1-rafaelmendsr@gmail.com>
+In-Reply-To: <20221021204126.927603-1-rafaelmendsr@gmail.com>
+From:   Suwan Kim <suwan.kim027@gmail.com>
+Date:   Mon, 24 Oct 2022 23:46:42 +0900
+Message-ID: <CAFNWusaY7NyW1zEAki0mEGzuCPpOONXfo2bHPCdDG=5ktgAFuw@mail.gmail.com>
+Subject: Re: [PATCH] virtio_blk: Fix signedness bug in virtblk_prep_rq()
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 4:32 PM Hans de Goede <hdegoede@redhat.com> wrote:
+On Sat, Oct 22, 2022 at 5:42 AM Rafael Mendonca <rafaelmendsr@gmail.com> wrote:
 >
-> Hi,
+> The virtblk_map_data() function returns negative error codes, however, the
+> 'nents' field of vbr->sg_table is an unsigned int, which causes the error
+> handling not to work correctly.
 >
-> On 10/24/22 16:12, Dmitry Osipenko wrote:
-> > Chromebooks don't have backlight in ACPI table, they suppose to use
-> > native backlight in this case. Check presence of the CrOS embedded
-> > controller ACPI device and prefer the native backlight if EC found.
-> >
-> > Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> > Fixes: 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native() helper")
-> > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > ---
-> >
-> > Changelog:
-> >
-> > v2: - Added explanatory comment to the code and added check for the
-> >       native backlight presence, like was requested by Hans de Goede.
+> Fixes: 0e9911fa768f ("virtio-blk: support mq_ops->queue_rqs()")
+> Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+> ---
+>  drivers/block/virtio_blk.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> Thanks this version looks good to me:
+> diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
+> index 19da5defd734..291f705e61a8 100644
+> --- a/drivers/block/virtio_blk.c
+> +++ b/drivers/block/virtio_blk.c
+> @@ -321,16 +321,18 @@ static blk_status_t virtblk_prep_rq(struct blk_mq_hw_ctx *hctx,
+>                                         struct virtblk_req *vbr)
+>  {
+>         blk_status_t status;
+> +       int num;
 >
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+>         status = virtblk_setup_cmd(vblk->vdev, req, vbr);
+>         if (unlikely(status))
+>                 return status;
 >
-> Rafael, can you pick this up and send it in a fixes pull-req
-> for 6.1 to Linus? Or shall I pick this one up and include it
-> in my next pull-req?
+> -       vbr->sg_table.nents = virtblk_map_data(hctx, req, vbr);
+> -       if (unlikely(vbr->sg_table.nents < 0)) {
+> +       num = virtblk_map_data(hctx, req, vbr);
+> +       if (unlikely(num < 0)) {
+>                 virtblk_cleanup_cmd(req);
+>                 return BLK_STS_RESOURCE;
+>         }
+> +       vbr->sg_table.nents = num;
+>
+>         blk_mq_start_request(req);
+>
+> --
+> 2.34.1
+>
 
-It would be better if you could pick this up IMV, so please free to add
+Looks good to me!
 
-Acled-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-to it.
-
-Thanks!
-
-> >
-> >  drivers/acpi/video_detect.c | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
-> > index 0d9064a9804c..9cd8797d12bb 100644
-> > --- a/drivers/acpi/video_detect.c
-> > +++ b/drivers/acpi/video_detect.c
-> > @@ -668,6 +668,11 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
-> >       { },
-> >  };
-> >
-> > +static bool google_cros_ec_present(void)
-> > +{
-> > +     return acpi_dev_found("GOOG0004");
-> > +}
-> > +
-> >  /*
-> >   * Determine which type of backlight interface to use on this system,
-> >   * First check cmdline, then dmi quirks, then do autodetect.
-> > @@ -730,6 +735,13 @@ static enum acpi_backlight_type __acpi_video_get_backlight_type(bool native)
-> >                       return acpi_backlight_video;
-> >       }
-> >
-> > +     /*
-> > +      * Chromebooks that don't have backlight handle in ACPI table
-> > +      * are supposed to use native backlight if it's available.
-> > +      */
-> > +     if (google_cros_ec_present() && native_available)
-> > +             return acpi_backlight_native;
-> > +
-> >       /* No ACPI video (old hw), use vendor specific fw methods. */
-> >       return acpi_backlight_vendor;
-> >  }
->
+Reviewed-by: Suwan Kim <suwan.kim027@gmail.com>
