@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B1260B24B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019AD60B347
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234737AbiJXQoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34096 "EHLO
+        id S229810AbiJXRBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234819AbiJXQn4 (ORCPT
+        with ESMTP id S235261AbiJXRAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:43:56 -0400
+        Mon, 24 Oct 2022 13:00:20 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39ADF72857;
-        Mon, 24 Oct 2022 08:30:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090249C238;
+        Mon, 24 Oct 2022 08:37:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04555B81135;
-        Mon, 24 Oct 2022 12:08:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5016CC433C1;
-        Mon, 24 Oct 2022 12:08:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57542B811C2;
+        Mon, 24 Oct 2022 11:58:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1425C433C1;
+        Mon, 24 Oct 2022 11:58:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613329;
-        bh=34rtLmGZAXqTGiRi43XeZcJKLD8da60agJA5dgZICh0=;
+        s=korg; t=1666612738;
+        bh=HCgnyLFXNJ666+RLJs53imFRVFNh+zNwO7IvWGDTFNk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qiSpsSRi30TFG0i29SmA1l8bPYMGWP9G791VZBqQOanoLmjPpwx7Nx1XT5bVMY2Vk
-         eLpFISmBDQouXeTbjrqloNrvn4SmCNJ2upokAlRRMWuyCh71J4tig/SNWbWgoKzTzF
-         WAtP4QnoFlycitzKaf0cMW+ihTyd7QPGvTCxTZFo=
+        b=DJfT7d8CxXjgpoNLfAt4HBata9PV9gCCMOqWYb3ex8cEm6Dkk1xHNDtuMWEg+qkzE
+         JldkHZnfLsGffLeP8ZwwK3e1c22j4bjUKJ/6p45HRhxGPJtsXQjcGEsdABpvY4gYtq
+         PlziHNc8nJz6B8O4ZpM5BlFxZ2VYkCSdK53T+OH0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 088/255] drm: bridge: adv7511: fix CEC power down control register offset
-Date:   Mon, 24 Oct 2022 13:29:58 +0200
-Message-Id: <20221024113005.440362867@linuxfoundation.org>
+Subject: [PATCH 4.19 083/229] spi/omap100k:Fix PM disable depth imbalance in omap1_spi100k_probe
+Date:   Mon, 24 Oct 2022 13:30:02 +0200
+Message-Id: <20221024113001.753343782@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit 1d22b6033ea113a4c3850dfa2c0770885c81aec8 ]
+[ Upstream commit 29f65f2171c85a9633daa380df14009a365f42f2 ]
 
-The ADV7511_REG_CEC_CTRL = 0xE2 register is part of the main register
-map - not the CEC register map. As such, we shouldn't apply an offset to
-the register address. Doing so will cause us to address a bogus register
-for chips with a CEC register map offset (e.g. ADV7533).
+The pm_runtime_enable will increase power disable depth. Thus
+a pairing decrement is needed on the error handling path to
+keep it balanced according to context.
 
-Fixes: 3b1b975003e4 ("drm: adv7511/33: add HDMI CEC support")
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220612144854.2223873-2-alvin@pqrs.dk
+Fixes:db91841b58f9a ("spi/omap100k: Convert to runtime PM")
+
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Link: https://lore.kernel.org/r/20220924121310.78331-4-zhangqilong3@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/adv7511/adv7511.h     | 5 +----
- drivers/gpu/drm/bridge/adv7511/adv7511_cec.c | 4 ++--
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ drivers/spi/spi-omap-100k.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-index 52b2adfdc877..90a721226231 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-@@ -384,10 +384,7 @@ void adv7511_cec_irq_process(struct adv7511 *adv7511, unsigned int irq1);
- #else
- static inline int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- {
--	unsigned int offset = adv7511->type == ADV7533 ?
--						ADV7533_REG_CEC_OFFSET : 0;
--
--	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset,
-+	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL,
- 		     ADV7511_CEC_CTRL_POWER_DOWN);
- 	return 0;
- }
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-index a20a45c0b353..ddd1305b82b2 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-@@ -316,7 +316,7 @@ int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- 		goto err_cec_alloc;
- 	}
+diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
+index 2eeb0fe2eed2..022f5bccef81 100644
+--- a/drivers/spi/spi-omap-100k.c
++++ b/drivers/spi/spi-omap-100k.c
+@@ -425,6 +425,7 @@ static int omap1_spi100k_probe(struct platform_device *pdev)
+ 	return status;
  
--	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset, 0);
-+	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL, 0);
- 	/* cec soft reset */
- 	regmap_write(adv7511->regmap_cec,
- 		     ADV7511_REG_CEC_SOFT_RESET + offset, 0x01);
-@@ -343,7 +343,7 @@ int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- 	dev_info(dev, "Initializing CEC failed with error %d, disabling CEC\n",
- 		 ret);
- err_cec_parse_dt:
--	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset,
-+	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL,
- 		     ADV7511_CEC_CTRL_POWER_DOWN);
- 	return ret == -EPROBE_DEFER ? ret : 0;
- }
+ err_fck:
++	pm_runtime_disable(&pdev->dev);
+ 	clk_disable_unprepare(spi100k->fck);
+ err_ick:
+ 	clk_disable_unprepare(spi100k->ick);
 -- 
 2.35.1
 
