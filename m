@@ -2,225 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58BFB609E76
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925AC609E70
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbiJXKCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S230169AbiJXKCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiJXKCU (ORCPT
+        with ESMTP id S230210AbiJXKCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:02:20 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60E55A144
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 03:02:12 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id g12so5330390lfh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 03:02:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8Mcq4XElldK8n+d5RjVbZo8PZpT7nLSBwi7AAq7x+9Q=;
-        b=HsE0mA4YRF+d60FHuzR+bNY90b/LW7majYVX+xOOROK3Z+MKgT7jmevYrqo2wYLoZy
-         uf//LgVVDdHQcKYBWTwruvsD7xOrc/NsZA+xrb209tphyEmfhRTeSxYOpbU+dEsJ7w7g
-         2PXOGECSaVP98cQ7/VBM5C17duQLdBnbBBTs9B4QscvyNmul/c40bfSGVRd7Eg4NcV4P
-         onUBqmmQBHk8mXuAZr7qbWEMY7/Q1E4laD45ClXJDe8ijDnavvSdXEaWg7gPldNyfq50
-         DWcDoAy5iAUn36BS/gQmJRe/HMV5jCq3+xgU5dAJg3lLLfmc+4LeWF+Em5eBUnSeLrGW
-         BmpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8Mcq4XElldK8n+d5RjVbZo8PZpT7nLSBwi7AAq7x+9Q=;
-        b=0jIKbiKGGhk3xQZ+WqZT7K0760y/0wP3E24V5LJPKuEP4ZOukuQ1oVi2mUk8FZs9YX
-         z27QVRBZDM/VNESvh52FmalYhT2mltJ+YQbbc7M5WamUflHGac6n30/puwZuP5NTW275
-         Kg1y93IaneNc8piCIdficmvqm4Bko+9JW3aVRng4T7y1KOOWgi1tnxj/wBQOPbJAz7v3
-         FGYy/BS2R4caufR6Z8IzkEfpn/s57otU21kLqkbW/n72739OV67ewMFoDZG3m/tMKLr6
-         YO5B2aBM4uIqktavW4zndnE784wwcIfKQ/w0bwxA+ew4mXgVcxTrg1WIbmHzqfbhkciy
-         3v6A==
-X-Gm-Message-State: ACrzQf1v5QkspFwNEhAU66kIg0LYe9hEToltzBgooENTpaQolf17NCbP
-        EgrD4up97hg5YT8bgZScxdI=
-X-Google-Smtp-Source: AMsMyM7u1jDjv3m3O8AybqRqiuuPlyNqjc/uOhZXhZr3QldHhqEkX7gYnCuc6K6mgt+c2BgBJVZ7Yg==
-X-Received: by 2002:ac2:5e70:0:b0:4a9:cd8b:980b with SMTP id a16-20020ac25e70000000b004a9cd8b980bmr3368274lfr.516.1666605732170;
-        Mon, 24 Oct 2022 03:02:12 -0700 (PDT)
-Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
-        by smtp.googlemail.com with ESMTPSA id s9-20020a2eb629000000b0026dfbdfc1ddsm4896832ljn.11.2022.10.24.03.02.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 03:02:11 -0700 (PDT)
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Subject: [PATCH v4 3/6] staging: vt6655: refactor long lines of code in s_uFillDataHead
-Date:   Mon, 24 Oct 2022 10:01:49 +0000
-Message-Id: <a2e720d63f4e71dc9b37cf3440831e696c7e2fd1.1666605225.git.tanjubrunostar0@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666605225.git.tanjubrunostar0@gmail.com>
-References: <cover.1666605225.git.tanjubrunostar0@gmail.com>
+        Mon, 24 Oct 2022 06:02:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20D95A160
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 03:02:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C37061166
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:02:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5727BC433C1;
+        Mon, 24 Oct 2022 10:01:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666605719;
+        bh=cDnYOWhhOm4r0Ge2hDn+Dpz893psrd9PzlIJm4K3Ccw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L6SpKrWO9cG4NtrP6Fq23fZcUJpgRGq8BLbRKsY3NuPYToFuGyWRwMeWUSm3QwBWh
+         FR6y79wNO0nDJr7DZ0plT3Hn2MNCxSHIRycIOF3Dw2RX3FjvHzC62yRBxf0p50GDSK
+         3QKY0iNDoJ2byybbtpMAXkIunK/dh2VGK7B2c0bc=
+Date:   Mon, 24 Oct 2022 12:01:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
+Message-ID: <Y1ZilPypeNNjl/6J@kroah.com>
+References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
+ <Y1ZQSEMLkybFCadS@kroah.com>
+ <Y1ZQpcdK4sdy+5QZ@kroah.com>
+ <Y1ZW2WYli7Bfioxr@paasikivi.fi.intel.com>
+ <Y1ZZcL/Q7QJ+YYhJ@smile.fi.intel.com>
+ <fbe735d131a44c2a95248cc4ad51485b@AcuMS.aculab.com>
+ <Y1ZcyBd2Yjir/dNO@smile.fi.intel.com>
+ <57360b976d5944babe1e85fc51b3f6f6@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <57360b976d5944babe1e85fc51b3f6f6@AcuMS.aculab.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix checkpatch errors by refactoring long lines of code in the function: s_uFillDataHead
+On Mon, Oct 24, 2022 at 09:46:40AM +0000, David Laight wrote:
+> From: 'Andy Shevchenko'
+> > Sent: 24 October 2022 10:37
+> > ...
+> > 
+> > > > > > Wait, no one uses this macro, so why not just remove it entirely?
+> > > > >
+> > > > > Good question. It appears to be a (relatively) common pattern to look up
+> > > > > something and the return its containing object if the lookup was
+> > > > > successful. Doing a quick
+> > > > >
+> > > > > 	$ git grep 'container_of.*:' drivers include
+> > > > >
+> > > > > reveals more than 20 instances of the pattern. There are probably more
+> > > > > those that use if for testing for NULL. I guess people don't know about
+> > > > > this macro, apart from the developers of the staging driver it was added
+> > > > > for (commit 05e6557b8ed833546ee2b66ce6b58fecf09f439e).
+> > > >
+> > > > Maybe we can provide an example to keep this macro in the kernel, meaning
+> > > > convert one of the drivers / subsystem to actually use it?
+> > >
+> > > Adding _safe() to a function name doesn't actually tell you anything.
+> > > You still need to look up what it is 'safe' against.
+> > >
+> > > In this case the full code pattern is actually much clearer.
+> > >
+> > > It is also quite likely that it is followed by an:
+> > > 	if (!ptr)
+> > > 		return xxx;
+> > > You that can/should really be put before the container_of() call.
+> > 
+> > return statements in macros are no go. Or you meant something else?
+> 
+> I meant in the function itself.
+> 
+> It might be interesting to check how many of the function
+> can actually have a NULL pointer?
+> Especially in staging code might be being 'defensive'.
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
----
- drivers/staging/vt6655/rxtx.c | 97 ++++++++++++++++++++++++-----------
- 1 file changed, 67 insertions(+), 30 deletions(-)
+This is a pointless discussion, this macro will now be deleted, sorry.
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index 8e56a7ee8035..7b6571ba7c36 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -481,19 +481,28 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
- 			} else {
- 				/* Get Duration and TimeStamp */
- 				buf->duration_a =
--					cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A, cbFrameLength,
--									    byPktType, wCurrentRate, bNeedAck, uFragIdx,
--									    cbLastFragmentSize, uMACfragNum,
-+					cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A,
-+									    cbFrameLength,
-+									    byPktType,
-+									    wCurrentRate, bNeedAck,
-+									    uFragIdx,
-+									    cbLastFragmentSize,
-+									    uMACfragNum,
- 									    byFBOption));
- 				buf->duration_b =
--					cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B, cbFrameLength,
--									    PK_TYPE_11B, pDevice->byTopCCKBasicRate,
--									    bNeedAck, uFragIdx, cbLastFragmentSize,
--									    uMACfragNum, byFBOption));
-+					cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B,
-+									    cbFrameLength,
-+									    PK_TYPE_11B,
-+									    pDevice->byTopCCKBasicRate,
-+									    bNeedAck, uFragIdx,
-+									    cbLastFragmentSize,
-+									    uMACfragNum,
-+									    byFBOption));
- 			}
- 
- 			buf->time_stamp_off_a = vnt_time_stamp_off(pDevice, wCurrentRate);
--			buf->time_stamp_off_b = vnt_time_stamp_off(pDevice, pDevice->byTopCCKBasicRate);
-+			buf->time_stamp_off_b = vnt_time_stamp_off(pDevice,
-+								   pDevice->byTopCCKBasicRate);
- 
- 			return buf->duration_a;
- 		}
-@@ -506,14 +515,29 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
- 				  pDevice->byTopCCKBasicRate,
- 				  PK_TYPE_11B, &buf->b);
- 		/* Get Duration and TimeStamp */
--		buf->duration_a = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A, cbFrameLength, byPktType,
--								      wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
--		buf->duration_b = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B, cbFrameLength, PK_TYPE_11B,
--								       pDevice->byTopCCKBasicRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
--		buf->duration_a_f0 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F0, cbFrameLength, byPktType,
--									  wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
--		buf->duration_a_f1 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F1, cbFrameLength, byPktType,
--									 wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
-+		buf->duration_a = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A,
-+								      cbFrameLength, byPktType,
-+								      wCurrentRate, bNeedAck,
-+								      uFragIdx, cbLastFragmentSize,
-+								      uMACfragNum, byFBOption));
-+		buf->duration_b = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B,
-+								      cbFrameLength, PK_TYPE_11B,
-+								      pDevice->byTopCCKBasicRate,
-+								      bNeedAck, uFragIdx,
-+								      cbLastFragmentSize,
-+								      uMACfragNum, byFBOption));
-+		buf->duration_a_f0 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F0,
-+									 cbFrameLength, byPktType,
-+									 wCurrentRate, bNeedAck,
-+									 uFragIdx,
-+									 cbLastFragmentSize,
-+									 uMACfragNum, byFBOption));
-+		buf->duration_a_f1 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F1,
-+									 cbFrameLength, byPktType,
-+									 wCurrentRate, bNeedAck,
-+									 uFragIdx,
-+									 cbLastFragmentSize,
-+									 uMACfragNum, byFBOption));
- 
- 		buf->time_stamp_off_a = vnt_time_stamp_off(pDevice, wCurrentRate);
- 		buf->time_stamp_off_b = vnt_time_stamp_off(pDevice, pDevice->byTopCCKBasicRate);
-@@ -531,12 +555,24 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
- 					  byPktType, &buf->a);
- 
- 			/* Get Duration and TimeStampOff */
--			buf->duration = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A, cbFrameLength, byPktType,
--									    wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
--			buf->duration_f0 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F0, cbFrameLength, byPktType,
--									       wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
--			buf->duration_f1 = cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F1, cbFrameLength, byPktType,
--										wCurrentRate, bNeedAck, uFragIdx, cbLastFragmentSize, uMACfragNum, byFBOption));
-+			buf->duration =
-+				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A,
-+								    cbFrameLength, byPktType,
-+								    wCurrentRate, bNeedAck,
-+								    uFragIdx, cbLastFragmentSize,
-+								    uMACfragNum, byFBOption));
-+			buf->duration_f0 =
-+				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F0,
-+								    cbFrameLength, byPktType,
-+								    wCurrentRate, bNeedAck,
-+								    uFragIdx, cbLastFragmentSize,
-+								    uMACfragNum, byFBOption));
-+			buf->duration_f1 =
-+				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A_F1,
-+								    cbFrameLength, byPktType,
-+								    wCurrentRate, bNeedAck,
-+								    uFragIdx, cbLastFragmentSize,
-+								    uMACfragNum, byFBOption));
- 			buf->time_stamp_off = vnt_time_stamp_off(pDevice, wCurrentRate);
- 			return buf->duration;
- 		}
-@@ -552,10 +588,11 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
- 		} else {
- 			/* Get Duration and TimeStampOff */
- 			buf->duration =
--				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A, cbFrameLength, byPktType,
--								    wCurrentRate, bNeedAck, uFragIdx,
--								    cbLastFragmentSize, uMACfragNum,
--								    byFBOption));
-+				cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_A,
-+								    cbFrameLength, byPktType,
-+								    wCurrentRate, bNeedAck,
-+								    uFragIdx, cbLastFragmentSize,
-+								    uMACfragNum, byFBOption));
- 		}
- 
- 		buf->time_stamp_off = vnt_time_stamp_off(pDevice, wCurrentRate);
-@@ -573,10 +610,10 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
- 	} else {
- 		/* Get Duration and TimeStampOff */
- 		buf->duration =
--			cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B, cbFrameLength, byPktType,
--							    wCurrentRate, bNeedAck, uFragIdx,
--							    cbLastFragmentSize, uMACfragNum,
--							    byFBOption));
-+			cpu_to_le16((u16)s_uGetDataDuration(pDevice, DATADUR_B, cbFrameLength,
-+							    byPktType, wCurrentRate, bNeedAck,
-+							    uFragIdx, cbLastFragmentSize,
-+							    uMACfragNum, byFBOption));
- 	}
- 
- 	buf->time_stamp_off = vnt_time_stamp_off(pDevice, wCurrentRate);
--- 
-2.34.1
-
+greg k-h
