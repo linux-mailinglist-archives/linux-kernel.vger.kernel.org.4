@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECB460AAB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8680760AA60
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235996AbiJXNhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
+        id S233114AbiJXNco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbiJXNcX (ORCPT
+        with ESMTP id S235987AbiJXN3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:32:23 -0400
+        Mon, 24 Oct 2022 09:29:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7DA6302;
-        Mon, 24 Oct 2022 05:34:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6339AABD78;
+        Mon, 24 Oct 2022 05:32:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D7C2B6132D;
-        Mon, 24 Oct 2022 12:32:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC23C433D7;
-        Mon, 24 Oct 2022 12:31:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EF5B6132F;
+        Mon, 24 Oct 2022 12:32:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E413C433C1;
+        Mon, 24 Oct 2022 12:32:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614720;
-        bh=Wnt1e56a265JEkQ4o4iV0N8uiQJ92I/u9tYnSpq0WhQ=;
+        s=korg; t=1666614722;
+        bh=7sB32oWCb0KoLBpJX2Qr1UEhrUV8KsBVv2ewNAThFVE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wGZqH7xdYHGJcqSbv199Ar80ARgfJtBcBYU8TxhMZ46PA/dkqloKg1PLQD7e2IMaf
-         ZZgv5okNXuDhQNDhuu8/NRZwUgYRimkTmgFKi6FoMGrfrku9q8M9yPJDB4OOvZCsJ9
-         bmvpWbLpcl9n+9pLAJGhJYTpYTbvG+S09Lx6/WbE=
+        b=RaI9TUdN2fEHRi5BLXXzIRw3uIAP8Bw3HdJboKXAlFUFZbOf2Hn/deSz21W91o08O
+         qYUL66enrNgZquVnzztcb3HeUzCUPF0QLVkT1ku8iCE5GSqKIkY3RHOLKOboTtdzm1
+         MkFAqLq92b+RALvSJuFZprfvc4Iy/7geCdnJ69Z0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        stable@vger.kernel.org, Robin Guo <guoweibin@inspur.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 368/390] usb: host: xhci: Fix potential memory leak in xhci_alloc_stream_info()
-Date:   Mon, 24 Oct 2022 13:32:45 +0200
-Message-Id: <20221024113038.675947689@linuxfoundation.org>
+Subject: [PATCH 5.10 369/390] usb: musb: Fix musb_gadget.c rxstate overflow bug
+Date:   Mon, 24 Oct 2022 13:32:46 +0200
+Message-Id: <20221024113038.721314356@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -54,53 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Robin Guo <guoweibin@inspur.com>
 
-[ Upstream commit 7e271f42a5cc3768cd2622b929ba66859ae21f97 ]
+[ Upstream commit eea4c860c3b366369eff0489d94ee4f0571d467d ]
 
-xhci_alloc_stream_info() allocates stream context array for stream_info
-->stream_ctx_array with xhci_alloc_stream_ctx(). When some error occurs,
-stream_info->stream_ctx_array is not released, which will lead to a
-memory leak.
+The usb function device call musb_gadget_queue() adds the passed
+request to musb_ep::req_list,If the (request->length > musb_ep->packet_sz)
+and (is_buffer_mapped(req) return false),the rxstate() will copy all data
+in fifo to request->buf which may cause request->buf out of bounds.
 
-We can fix it by releasing the stream_info->stream_ctx_array with
-xhci_free_stream_ctx() on the error path to avoid the potential memory
-leak.
+Fix it by add the length check :
+fifocnt = min_t(unsigned, request->length - request->actual, fifocnt);
 
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20220921123450.671459-2-mathias.nyman@linux.intel.com
+Signed-off-by: Robin Guo <guoweibin@inspur.com>
+Link: https://lore.kernel.org/r/20220906102119.1b071d07a8391ff115e6d1ef@inspur.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-mem.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/usb/musb/musb_gadget.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 024e8911df34..1fba5605a88e 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -659,7 +659,7 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
- 			num_stream_ctxs, &stream_info->ctx_array_dma,
- 			mem_flags);
- 	if (!stream_info->stream_ctx_array)
--		goto cleanup_ctx;
-+		goto cleanup_ring_array;
- 	memset(stream_info->stream_ctx_array, 0,
- 			sizeof(struct xhci_stream_ctx)*num_stream_ctxs);
+diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
+index fb806b33178a..c273eee35aaa 100644
+--- a/drivers/usb/musb/musb_gadget.c
++++ b/drivers/usb/musb/musb_gadget.c
+@@ -760,6 +760,9 @@ static void rxstate(struct musb *musb, struct musb_request *req)
+ 			musb_writew(epio, MUSB_RXCSR, csr);
  
-@@ -720,6 +720,11 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
- 	}
- 	xhci_free_command(xhci, stream_info->free_streams_command);
- cleanup_ctx:
-+	xhci_free_stream_ctx(xhci,
-+		stream_info->num_stream_ctxs,
-+		stream_info->stream_ctx_array,
-+		stream_info->ctx_array_dma);
-+cleanup_ring_array:
- 	kfree(stream_info->stream_rings);
- cleanup_info:
- 	kfree(stream_info);
+ buffer_aint_mapped:
++			fifo_count = min_t(unsigned int,
++					request->length - request->actual,
++					(unsigned int)fifo_count);
+ 			musb_read_fifo(musb_ep->hw_ep, fifo_count, (u8 *)
+ 					(request->buf + request->actual));
+ 			request->actual += fifo_count;
 -- 
 2.35.1
 
