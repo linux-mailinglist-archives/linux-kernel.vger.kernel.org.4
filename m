@@ -2,130 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA0960BB18
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770E060BB34
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235174AbiJXUqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S234107AbiJXUvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbiJXUq0 (ORCPT
+        with ESMTP id S235206AbiJXUvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:46:26 -0400
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8456F7E312;
-        Mon, 24 Oct 2022 11:54:10 -0700 (PDT)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-13b6336a1acso7397038fac.3;
-        Mon, 24 Oct 2022 11:54:10 -0700 (PDT)
+        Mon, 24 Oct 2022 16:51:06 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE85A187DE7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:58:02 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id r19so6184722qtx.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jqGBPdHQZiFqUka1kDcHbUhHs0PplNnmpo9lzEnhfhE=;
+        b=bw0emhiUidncaichi3Vs/0u0jfym+MDqp1eOW9vF6cemZ8f2+cvCLG29+nBrYsWpMh
+         SKBbMW7cuWPVuNiRvOyi6FpyXATyV5EHdKfofc+I1AthLSamsZsLb9Z4pfoCqWr+6j06
+         3OYrzeY3aZdtTCrm0Y5nfMif4DWqTS0oM5it1ksTxmN/143y8BaEWmBSBpmPy34xHGT6
+         Uj8vf58vC13PpHIBSvvON2IaUSUQQDixm24OabegjWXtEwT0wW4pU1THQzw37/e406s5
+         ONR05STYbKGNcaHn7LC3LMQwwcB6aPQA7ey6dZsCgfB1q9UAxdaRl1DaVGwlSmoKughK
+         WPxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DSHoLmUbLuENurdrd9yEIJ7hkMBgnF+sF8cll6Ga1eM=;
-        b=mBoKb9rkw7+wi9jxwsRvhwyN7wmC9t3ti2xJFtu5CgkRxRNiVuTqY4C3d8w91ZVMdD
-         wLXnYs3sfUwclgeoj3mC5BM58y464sfU8vjqK0wEjBUno6F9cyb5kFP+fTuESw+lo1h9
-         6qjTHhFBiU0+wIG1ZCq5MWP5dh5tKvkdI5CpjlAff0JIQWISFBhmpZZrJFInHzm6m5E5
-         ONwVOSscnt0WnG5QdI+8W7V05dgaovFdnKXd8Rr7o48vQUJIyTVY/MaSWowsMgV2qeAV
-         FCLuOXknLAUgpkvWFAgUbAcyfvII8PtEc3gdl7F608G0eb+ToO7IeTCIf31x9gSbdh/j
-         QKOg==
-X-Gm-Message-State: ACrzQf0yJgZM9TXctxlgdwo1P1CBela+yDEnJsdvpV3BkIEpUQBVo8QH
-        KBN7HxCp5GnMpKRREU3eyw==
-X-Google-Smtp-Source: AMsMyM60L1DQX1I0FNOMN2C66nrnpuz8xkkH//1Hjf2/c4Iu3HvI00DUtqeyi7rYsrwDIgvGIKRlWQ==
-X-Received: by 2002:a05:6870:d29e:b0:131:c3df:1e93 with SMTP id d30-20020a056870d29e00b00131c3df1e93mr37559606oae.56.1666637594530;
-        Mon, 24 Oct 2022 11:53:14 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g4-20020a4ab044000000b0044b0465bd07sm296676oon.20.2022.10.24.11.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:53:14 -0700 (PDT)
-Received: (nullmailer pid 2039478 invoked by uid 1000);
-        Mon, 24 Oct 2022 18:53:12 -0000
-Date:   Mon, 24 Oct 2022 13:53:12 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH 1/1] dt-bindings: net: snps,dwmac: Document queue config
- subnodes
-Message-ID: <20221024185312.GA2037160-robh@kernel.org>
-References: <20221021171055.85888-1-sebastian.reichel@collabora.com>
- <761d6ae2-e779-2a4b-a735-960c716c3024@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jqGBPdHQZiFqUka1kDcHbUhHs0PplNnmpo9lzEnhfhE=;
+        b=4pcxSsjP0qopLbKq0d2TSJG2YC4IVT5wEgYYvEvpX/+o1u9ZLLd49LCWTIRJsMBPKE
+         W0y6aIQH91PUFhZU9d7R/veNGM6y2LWMfttYWnNV3TIsXb+f9i4ZHcKkGBr2uJiN9na/
+         IqoWbJyiw9p2dbBqt4C57/63PvL6vO57Sm/TwI3D+JOT8LcDL0rCPyXJECD5leLN4JZQ
+         1Id2c5v8wPfoTjHTtgEvJTr/Y2oksKNFw5Z8SzeF6FCuh+JiWh3OsyOO/EFlNjUPo760
+         AM3lFZVzwb2pOkomfwA7E1HY4BGAXUHRznBnmN77sKpEWPwsmTLVuyce0ziggd61nt4H
+         Mq8w==
+X-Gm-Message-State: ACrzQf1Cazf71QSz+oqDErUdimeBzPGxC2myCCrbSCeG6LakMj2udL2W
+        PJHOXKm3onD84fknQYLkF41X/4keiyGUNg==
+X-Google-Smtp-Source: AMsMyM7qADn0FOHMfkSwAlnDytaDQrl/fPHJ55zOMl6gP82fbHXNjnm09mZUi4Ab6e3NRNbmdf4Ifw==
+X-Received: by 2002:a05:622a:187:b0:39c:f998:8963 with SMTP id s7-20020a05622a018700b0039cf9988963mr25930035qtw.603.1666637783762;
+        Mon, 24 Oct 2022 11:56:23 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id s15-20020ac85ccf000000b0039cc22a2c49sm355571qta.47.2022.10.24.11.56.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 11:56:23 -0700 (PDT)
+Message-ID: <d5726896-e62b-d19d-454b-700dd1c42222@linaro.org>
+Date:   Mon, 24 Oct 2022 14:56:17 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <761d6ae2-e779-2a4b-a735-960c716c3024@linaro.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 10/13] arm64: dts: qcom: sm8450: add spmi node
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211209103505.197453-1-vkoul@kernel.org>
+ <20211209103505.197453-11-vkoul@kernel.org>
+ <5035b6a3-164b-afa0-b714-4deb886f9f90@linaro.org>
+ <9f696023-f2b4-ccd0-34a0-6f4d5848e862@linaro.org>
+ <8c1428a6-f268-cb03-3e55-887d30236924@linaro.org>
+ <3af48606-731f-6047-92ca-80435f401ae3@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <3af48606-731f-6047-92ca-80435f401ae3@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 12:05:15PM -0400, Krzysztof Kozlowski wrote:
-> On 21/10/2022 13:10, Sebastian Reichel wrote:
-> > The queue configuration is referenced by snps,mtl-rx-config and
-> > snps,mtl-tx-config. Most in-tree DTs put the referenced object
-> > as child node of the dwmac node.
-> > 
-> > This adds proper description for this setup, which has the
-> > advantage of properly making sure only known properties are
-> > used.
-> > 
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > ---
-> >  .../devicetree/bindings/net/snps,dwmac.yaml   | 154 ++++++++++++------
-> >  1 file changed, 108 insertions(+), 46 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > index 13b984076af5..0bf6112cec2f 100644
-> > --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > @@ -167,56 +167,118 @@ properties:
-> >    snps,mtl-rx-config:
-> >      $ref: /schemas/types.yaml#/definitions/phandle
-> >      description:
-> > -      Multiple RX Queues parameters. Phandle to a node that can
-> > -      contain the following properties
-> > -        * snps,rx-queues-to-use, number of RX queues to be used in the
-> > -          driver
-> > -        * Choose one of these RX scheduling algorithms
-> > -          * snps,rx-sched-sp, Strict priority
-> > -          * snps,rx-sched-wsp, Weighted Strict priority
-> > -        * For each RX queue
-> > -          * Choose one of these modes
-> > -            * snps,dcb-algorithm, Queue to be enabled as DCB
-> > -            * snps,avb-algorithm, Queue to be enabled as AVB
-> > -          * snps,map-to-dma-channel, Channel to map
-> > -          * Specifiy specific packet routing
-> > -            * snps,route-avcp, AV Untagged Control packets
-> > -            * snps,route-ptp, PTP Packets
-> > -            * snps,route-dcbcp, DCB Control Packets
-> > -            * snps,route-up, Untagged Packets
-> > -            * snps,route-multi-broad, Multicast & Broadcast Packets
-> > -          * snps,priority, bitmask of the tagged frames priorities assigned to
-> > -            the queue
-> > +      Multiple RX Queues parameters. Phandle to a node that
-> > +      implements the 'rx-queues-config' object described in
-> > +      this binding.
-> > +
-> > +  rx-queues-config:
+On 24/10/2022 12:48, Dmitry Baryshkov wrote:
+> On 24/10/2022 19:46, Krzysztof Kozlowski wrote:
+>> On 24/10/2022 12:45, Dmitry Baryshkov wrote:
+>>> On 24/10/2022 17:56, Krzysztof Kozlowski wrote:
+>>>> On 09/12/2021 05:35, Vinod Koul wrote:
+>>>>> Add the spmi bus as found in the SM8450 SoC
+>>>>>
+>>>>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>>>>> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>>>>> ---
+>>>>>    arch/arm64/boot/dts/qcom/sm8450.dtsi | 18 ++++++++++++++++++
+>>>>>    1 file changed, 18 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>> index f75de777f6ea..b80e34fd3fe1 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>>>>> @@ -645,6 +645,24 @@ pdc: interrupt-controller@b220000 {
+>>>>>    			interrupt-controller;
+>>>>>    		};
+>>>>>    
+>>>>> +		spmi_bus: spmi@c42d000 {
+>>>>> +			compatible = "qcom,spmi-pmic-arb";
+>>>>> +			reg = <0x0 0x0c400000 0x0 0x00003000>,
+>>>>> +			      <0x0 0x0c500000 0x0 0x00400000>,
+>>>>> +			      <0x0 0x0c440000 0x0 0x00080000>,
+>>>>> +			      <0x0 0x0c4c0000 0x0 0x00010000>,
+>>>>> +			      <0x0 0x0c42d000 0x0 0x00010000>;
+>>>>
+>>>> This is a patch from December 2021. Is there anything blocking it from
+>>>> being merged?
+>>>>
+>>>> The same applies to several other patches here.
+>>>
+>>> As far as I know, Stephen still didn't pick up the spmi-pmic-arb support
+>>> for the PMIC on the SM8450 platform. Thus we also can not merge the DT
+>>> parts.
+>>
+>> Why we cannot merge DTS? How is DTS with new nodes depending on any
+>> driver changes?
 > 
-> If this field is specific to this device, then you need vendor prefix:
-> snps,rq-queues-config
+> In this particular case, there was an open question, what should be the 
+> bindings for the PMIC ARB v7.
 
-Not for a node name...
+Ah, so it is about PMIC ARB v7 bindings? Then it's reasonable to wait
+with this one. I just had an impression that it's about driver changes...
 
-Rob
+> 
+>>
+>> Just like I replied to Konrad - if that's true, bindings are simply
+>> wrong and should be fixed.
+> 
+> Maybe I missed the reply. Which email are you referring to?
+
+I meant about this one:
+
+https://lore.kernel.org/linux-arm-msm/8c1428a6-f268-cb03-3e55-887d30236924@linaro.org/T/#m50f4c72775492046f9b0a172e974cab83563af3c
+
+Best regards,
+Krzysztof
+
