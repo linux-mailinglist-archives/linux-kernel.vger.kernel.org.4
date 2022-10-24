@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0387260A794
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1CA60A640
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbiJXMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S234041AbiJXMcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234808AbiJXMta (ORCPT
+        with ESMTP id S234001AbiJXM3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:49:30 -0400
+        Mon, 24 Oct 2022 08:29:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC00923ED;
-        Mon, 24 Oct 2022 05:13:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0114887FBF;
+        Mon, 24 Oct 2022 05:03:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36E2A612F3;
-        Mon, 24 Oct 2022 12:11:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413E3C433B5;
-        Mon, 24 Oct 2022 12:11:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E599612C4;
+        Mon, 24 Oct 2022 11:52:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F93C433D6;
+        Mon, 24 Oct 2022 11:52:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613505;
-        bh=V2dOPSF3+RqJgCZ0dAjorrygamRapc5bi17muQbPhos=;
+        s=korg; t=1666612331;
+        bh=oyLbuAvGHpzGiRHM5PDQER02O7OkAB/aDBnlGorzYC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JmRzCPD61aGrNBEKnHpnWHViaadflMAm3Uu1Udd0H6vuHO0BSSdKZ0QsopfK+fSUj
-         txviznu+DFlIHsDsOKXnZJQm8pEi5+TiCGncSydexO+RJm+Rz740pqyJuu9yoosV02
-         sAfoM1zipBJFYOU+9nJzubtSCHIFmNpTXiJld920=
+        b=Pel7MsoBY88CfxhsUOozHg2vE8lBkYC+oVEALgkBWBhUpuMwbIRoLlhy4JMnipMFz
+         dcZnuKtAyIZC0OIPtGbmXqj51A2VUuuIZR80lik812ff5AtWGzjBdRWssjX+DiOoLD
+         OBFEVc3lpp5DXClx0ycVg1yt/udkf+e8zUCzsnZw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 163/255] clk: mediatek: mt8183: mfgcfg: Propagate rate changes to parent
-Date:   Mon, 24 Oct 2022 13:31:13 +0200
-Message-Id: <20221024113008.118489236@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 157/210] iommu/omap: Fix buffer overflow in debugfs
+Date:   Mon, 24 Oct 2022 13:31:14 +0200
+Message-Id: <20221024113002.070661190@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 9f94f545f258b15bfa6357eb62e1e307b712851e ]
+[ Upstream commit 184233a5202786b20220acd2d04ddf909ef18f29 ]
 
-The only clock in the MT8183 MFGCFG block feeds the GPU. Propagate its
-rate change requests to its parent, so that DVFS for the GPU can work
-properly.
+There are two issues here:
 
-Fixes: acddfc2c261b ("clk: mediatek: Add MT8183 clock support")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220927101128.44758-3-angelogioacchino.delregno@collabora.com
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+1) The "len" variable needs to be checked before the very first write.
+   Otherwise if omap2_iommu_dump_ctx() with "bytes" less than 32 it is a
+   buffer overflow.
+2) The snprintf() function returns the number of bytes that *would* have
+   been copied if there were enough space.  But we want to know the
+   number of bytes which were *actually* copied so use scnprintf()
+   instead.
+
+Fixes: bd4396f09a4a ("iommu/omap: Consolidate OMAP IOMMU modules")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Link: https://lore.kernel.org/r/YuvYh1JbE3v+abd5@kili
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/mediatek/clk-mt8183-mfgcfg.c | 6 +++---
+ drivers/iommu/omap-iommu-debug.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/mediatek/clk-mt8183-mfgcfg.c b/drivers/clk/mediatek/clk-mt8183-mfgcfg.c
-index 37b4162c5882..3a33014eee7f 100644
---- a/drivers/clk/mediatek/clk-mt8183-mfgcfg.c
-+++ b/drivers/clk/mediatek/clk-mt8183-mfgcfg.c
-@@ -18,9 +18,9 @@ static const struct mtk_gate_regs mfg_cg_regs = {
- 	.sta_ofs = 0x0,
- };
+diff --git a/drivers/iommu/omap-iommu-debug.c b/drivers/iommu/omap-iommu-debug.c
+index cec33e90e399..a15c4d99b888 100644
+--- a/drivers/iommu/omap-iommu-debug.c
++++ b/drivers/iommu/omap-iommu-debug.c
+@@ -35,12 +35,12 @@ static inline bool is_omap_iommu_detached(struct omap_iommu *obj)
+ 		ssize_t bytes;						\
+ 		const char *str = "%20s: %08x\n";			\
+ 		const int maxcol = 32;					\
+-		bytes = snprintf(p, maxcol, str, __stringify(name),	\
++		if (len < maxcol)					\
++			goto out;					\
++		bytes = scnprintf(p, maxcol, str, __stringify(name),	\
+ 				 iommu_read_reg(obj, MMU_##name));	\
+ 		p += bytes;						\
+ 		len -= bytes;						\
+-		if (len < maxcol)					\
+-			goto out;					\
+ 	} while (0)
  
--#define GATE_MFG(_id, _name, _parent, _shift)			\
--	GATE_MTK(_id, _name, _parent, &mfg_cg_regs, _shift,	\
--		&mtk_clk_gate_ops_setclr)
-+#define GATE_MFG(_id, _name, _parent, _shift)				\
-+	GATE_MTK_FLAGS(_id, _name, _parent, &mfg_cg_regs, _shift,	\
-+		       &mtk_clk_gate_ops_setclr, CLK_SET_RATE_PARENT)
- 
- static const struct mtk_gate mfg_clks[] = {
- 	GATE_MFG(CLK_MFG_BG3D, "mfg_bg3d", "mfg_sel", 0)
+ static ssize_t
 -- 
 2.35.1
 
