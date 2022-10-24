@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8001160A6C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D443A60AA29
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234123AbiJXMjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
+        id S232105AbiJXNb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234651AbiJXMfj (ORCPT
+        with ESMTP id S232505AbiJXN10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:35:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25ADC474FA;
-        Mon, 24 Oct 2022 05:05:38 -0700 (PDT)
+        Mon, 24 Oct 2022 09:27:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E138AA37E;
+        Mon, 24 Oct 2022 05:31:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16DA0B811F9;
-        Mon, 24 Oct 2022 12:03:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65061C433D7;
-        Mon, 24 Oct 2022 12:03:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 684B561290;
+        Mon, 24 Oct 2022 12:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA58C433C1;
+        Mon, 24 Oct 2022 12:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612998;
-        bh=bWLgJsdT1xT7yzgqkpyFEL+i9+i23FLq//RwWqB7Aog=;
+        s=korg; t=1666614680;
+        bh=9F/WwTjHJoxdBWqRa6iOQ5UCJYl2sd5H82WhROoztuA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nIjiJGJWL5KcR/k5FoHk8Qb6H0s9OYt8q25g7mFYY8NdNkpanM2ygREKS1FaIY3cY
-         BxrkjZNo3tOTKP8Vf4p8XqOqF2XV7xzh6BU7Y0BZCwnD7qVnVUTEIbxidotIlnw6bJ
-         erLYqMb4M5xuydPoU/pd+viZvDoYVzYG4uHFvr8k=
+        b=BR4geQnmAZyt76ZPwnakLo+VwBIN1X1fLjsRZzPK0kuG98dIwnRFYdNu6veLds+E4
+         gkQBvUmrxyN0QCq5TjxxnCvY5NepyaUvUz+y4LLNUcNTMNP2FHiU47jpEhbC/VGZ9Q
+         k5QLGKpRfmh1XOYkyTi9YmnDn4XJxgPzS5pHsBgA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+        stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
+        Liu Jian <liujian56@huawei.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 200/229] ARM: dts: imx7d-sdb: config the max pressure for tsc2046
+Subject: [PATCH 5.10 322/390] net: If sock is dead dont access socks sk_wq in sk_stream_wait_memory
 Date:   Mon, 24 Oct 2022 13:31:59 +0200
-Message-Id: <20221024113005.616360725@linuxfoundation.org>
+Message-Id: <20221024113036.715388452@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +57,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Liu Jian <liujian56@huawei.com>
 
-[ Upstream commit e7c4ebe2f9cd68588eb24ba4ed122e696e2d5272 ]
+[ Upstream commit 3f8ef65af927db247418d4e1db49164d7a158fc5 ]
 
-Use the general touchscreen method to config the max pressure for
-touch tsc2046(data sheet suggest 8 bit pressure), otherwise, for
-ABS_PRESSURE, when config the same max and min value, weston will
-meet the following issue,
+Fixes the below NULL pointer dereference:
 
-[17:19:39.183] event1  - ADS7846 Touchscreen: is tagged by udev as: Touchscreen
-[17:19:39.183] event1  - ADS7846 Touchscreen: kernel bug: device has min == max on ABS_PRESSURE
-[17:19:39.183] event1  - ADS7846 Touchscreen: was rejected
-[17:19:39.183] event1  - not using input device '/dev/input/event1'
+  [...]
+  [   14.471200] Call Trace:
+  [   14.471562]  <TASK>
+  [   14.471882]  lock_acquire+0x245/0x2e0
+  [   14.472416]  ? remove_wait_queue+0x12/0x50
+  [   14.473014]  ? _raw_spin_lock_irqsave+0x17/0x50
+  [   14.473681]  _raw_spin_lock_irqsave+0x3d/0x50
+  [   14.474318]  ? remove_wait_queue+0x12/0x50
+  [   14.474907]  remove_wait_queue+0x12/0x50
+  [   14.475480]  sk_stream_wait_memory+0x20d/0x340
+  [   14.476127]  ? do_wait_intr_irq+0x80/0x80
+  [   14.476704]  do_tcp_sendpages+0x287/0x600
+  [   14.477283]  tcp_bpf_push+0xab/0x260
+  [   14.477817]  tcp_bpf_sendmsg_redir+0x297/0x500
+  [   14.478461]  ? __local_bh_enable_ip+0x77/0xe0
+  [   14.479096]  tcp_bpf_send_verdict+0x105/0x470
+  [   14.479729]  tcp_bpf_sendmsg+0x318/0x4f0
+  [   14.480311]  sock_sendmsg+0x2d/0x40
+  [   14.480822]  ____sys_sendmsg+0x1b4/0x1c0
+  [   14.481390]  ? copy_msghdr_from_user+0x62/0x80
+  [   14.482048]  ___sys_sendmsg+0x78/0xb0
+  [   14.482580]  ? vmf_insert_pfn_prot+0x91/0x150
+  [   14.483215]  ? __do_fault+0x2a/0x1a0
+  [   14.483738]  ? do_fault+0x15e/0x5d0
+  [   14.484246]  ? __handle_mm_fault+0x56b/0x1040
+  [   14.484874]  ? lock_is_held_type+0xdf/0x130
+  [   14.485474]  ? find_held_lock+0x2d/0x90
+  [   14.486046]  ? __sys_sendmsg+0x41/0x70
+  [   14.486587]  __sys_sendmsg+0x41/0x70
+  [   14.487105]  ? intel_pmu_drain_pebs_core+0x350/0x350
+  [   14.487822]  do_syscall_64+0x34/0x80
+  [   14.488345]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+  [...]
 
-This will then cause the APP weston-touch-calibrator can't list touch devices.
+The test scenario has the following flow:
 
-root@imx6ul7d:~# weston-touch-calibrator
-could not load cursor 'dnd-move'
-could not load cursor 'dnd-copy'
-could not load cursor 'dnd-none'
-No devices listed.
+thread1                               thread2
+-----------                           ---------------
+ tcp_bpf_sendmsg
+  tcp_bpf_send_verdict
+   tcp_bpf_sendmsg_redir              sock_close
+    tcp_bpf_push_locked                 __sock_release
+     tcp_bpf_push                         //inet_release
+      do_tcp_sendpages                    sock->ops->release
+       sk_stream_wait_memory          	   // tcp_close
+          sk_wait_event                      sk->sk_prot->close
+           release_sock(__sk);
+            ***
+                                                lock_sock(sk);
+                                                  __tcp_close
+                                                    sock_orphan(sk)
+                                                      sk->sk_wq  = NULL
+                                                release_sock
+            ****
+           lock_sock(__sk);
+          remove_wait_queue(sk_sleep(sk), &wait);
+             sk_sleep(sk)
+             //NULL pointer dereference
+             &rcu_dereference_raw(sk->sk_wq)->wait
 
-And accroding to binding Doc, "ti,x-max", "ti,y-max", "ti,pressure-max"
-belong to the deprecated properties, so remove them. Also for "ti,x-min",
-"ti,y-min", "ti,x-plate-ohms", the value set in dts equal to the default
-value in driver, so are redundant, also remove here.
+While waiting for memory in thread1, the socket is released with its wait
+queue because thread2 has closed it. This caused by tcp_bpf_send_verdict
+didn't increase the f_count of psock->sk_redir->sk_socket->file in thread1.
 
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+We should check if SOCK_DEAD flag is set on wakeup in sk_stream_wait_memory
+before accessing the wait queue.
+
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Liu Jian <liujian56@huawei.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/bpf/20220823133755.314697-2-liujian56@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx7d-sdb.dts | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ net/core/stream.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx7d-sdb.dts b/arch/arm/boot/dts/imx7d-sdb.dts
-index 317f1bcc56e2..bd2c3c8f4ebb 100644
---- a/arch/arm/boot/dts/imx7d-sdb.dts
-+++ b/arch/arm/boot/dts/imx7d-sdb.dts
-@@ -163,12 +163,7 @@
- 		interrupt-parent = <&gpio2>;
- 		interrupts = <29 0>;
- 		pendown-gpio = <&gpio2 29 GPIO_ACTIVE_HIGH>;
--		ti,x-min = /bits/ 16 <0>;
--		ti,x-max = /bits/ 16 <0>;
--		ti,y-min = /bits/ 16 <0>;
--		ti,y-max = /bits/ 16 <0>;
--		ti,pressure-max = /bits/ 16 <0>;
--		ti,x-plate-ohms = /bits/ 16 <400>;
-+		touchscreen-max-pressure = <255>;
- 		wakeup-source;
- 	};
- };
+diff --git a/net/core/stream.c b/net/core/stream.c
+index a166a32b411f..a61130504827 100644
+--- a/net/core/stream.c
++++ b/net/core/stream.c
+@@ -159,7 +159,8 @@ int sk_stream_wait_memory(struct sock *sk, long *timeo_p)
+ 		*timeo_p = current_timeo;
+ 	}
+ out:
+-	remove_wait_queue(sk_sleep(sk), &wait);
++	if (!sock_flag(sk, SOCK_DEAD))
++		remove_wait_queue(sk_sleep(sk), &wait);
+ 	return err;
+ 
+ do_error:
 -- 
 2.35.1
 
