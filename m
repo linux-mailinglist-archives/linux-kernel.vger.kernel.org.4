@@ -2,125 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6426E60ADFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2634560AE4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbiJXOm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S233030AbiJXO4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiJXOmD (ORCPT
+        with ESMTP id S232964AbiJXO4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:42:03 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764A8F4180;
-        Mon, 24 Oct 2022 06:18:51 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id m16so30981495edc.4;
-        Mon, 24 Oct 2022 06:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3ICJRxZH0RUpiutp3YbkbCUI9oCvNwfygdd1JOaKdoo=;
-        b=hAbJ76RJsSVi9rOp9fShaB9sC0hbYZsP17LtWwyfIN9yERneelucqWPF06HZXS36JR
-         ap4N+rrjvE8r22XJWqMW2s3ZgJo98QNDV7Kr3LFYcXjWlehg5b91u6BpITic591ki3YQ
-         hGuyWVfFK/D/VO1oKk8iFVQ2BK/HxyMzw8Dy+36CkPKnlPHPv7fKlD9CvTOu+LZuBKI3
-         xMfYBmkyXeGiVMtmNlvR3U+QQQde1xV9krR4BCtTF6ngFSvispJKzJ9aVmktRhj8JF56
-         2EYkYeDWLHSJULcr96ZblNk6Qd0scq2vDhTIKLsOAnG9yEW6nZqx1/TFPEmnqO4XcY3r
-         WBeQ==
+        Mon, 24 Oct 2022 10:56:21 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC70311E44E;
+        Mon, 24 Oct 2022 06:33:37 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id c23so5566765qtw.8;
+        Mon, 24 Oct 2022 06:33:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3ICJRxZH0RUpiutp3YbkbCUI9oCvNwfygdd1JOaKdoo=;
-        b=PjfNkapiB+nxkOXPqqEEybB7/o25EBVTeON0W2BA+lUqdu9Rg2P83RyKI428KLzNBs
-         Sr9gvwNm9RwGqwLw6i1RyHgQW0Fmxxfblf//Isf7eTMO1ckXkMR4nZlDltgnFncZN8hP
-         vRJH9nX714uXGn2FPsx9Qr6qOeXvV1nv7cqO4J4tseg3opx2cbqn82J1SXDL3NOYGC4P
-         agF2HR+pwyH6+UL8oldFe2ZcOBPOOa1sx5rFrzRyk3uaVAnwgklKhd0mzrkNdKOhK1M8
-         WeGu+7YuedXD/zGtTV8h7L4nVTTcUrRidfSbkfmkeEYcvzOR54X5sBCbVyuMKZYbGXVw
-         IGKg==
-X-Gm-Message-State: ACrzQf3ZPV6qtf3UD7U2fGD/ayY9NpBvqOXTNjTJly1U1CVraJVcZ6Ai
-        I9pDbeYvJ7vPzAE66XjZQWoXuvFaqGY=
-X-Google-Smtp-Source: AMsMyM4XWRNqnZkkyZP0VHD6FJw7YrdgS2D2rBdncvPGiuQ2162GtUIlTAcu/v0nCQwUoXYr7Bb2JA==
-X-Received: by 2002:a17:906:5dce:b0:78d:e71a:6e0 with SMTP id p14-20020a1709065dce00b0078de71a06e0mr27112534ejv.360.1666617385459;
-        Mon, 24 Oct 2022 06:16:25 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id lf18-20020a170906ae5200b007aa239cf4d9sm765350ejb.89.2022.10.24.06.16.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 06:16:24 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 15:16:22 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jonathanh@nvidia.com, mperttunen@nvidia.com,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V1] arm64: tegra: Fix Prefetchable aperture ranges of
- Tegra234 PCIe controllers
-Message-ID: <Y1aQJvrpfpueeeLa@orome>
-References: <20220928062731.18032-1-vidyas@nvidia.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z6pkCirM1du0QLowyMeKb8k7GUt9xLskqf6a9AwgXus=;
+        b=xcgiEm+h04p37vKW51s4aB5Lr1YlTh/SgVBQrDqQi2SMA7Ox7USZhePQZYN3awp5ye
+         E6ZxLnyJXem2+kXWVK6BwjSZvRimUyWocdoP48vgYXNc4rupoxHHtirc8ulMaAaMWCaJ
+         Rl8b2BAGYSc2fmRIVaoVX5sno18/ZjwC3eKOLzEnzuq7+EcqW6mpKcQkUdHqRPBCD+AU
+         rpq6sByb1OOIkIiBvE7KUmkW+FPNtajiluVS7NEo/I3pXRcvMLuMF2lX7hi6ZQj+UU1W
+         WesuyvMatgqjSnOYDjdxbbAU4rKaisfFspZcmZKXzpYJcxQRk5Yf8l/QpOYJwyDGPv/Y
+         Qvnw==
+X-Gm-Message-State: ACrzQf1mC3aq5I/7rxjz2sAwQgTYGkrGrlwQghaxVn4CEIvLEMrAZ0sn
+        Yv6Kr9EmGBER9oL7v4xuqnamxhqc34KsnE/rxz1VtfMC
+X-Google-Smtp-Source: AMsMyM6nHQNDAFsnz11hM7elkW90vDxD612pgJ8PqL+4eJNr7sCUj4zpzAqx7f2z/tRu//4XBPmTIs3UGfilHd58//U=
+X-Received: by 2002:ac8:7d02:0:b0:39c:bbef:178a with SMTP id
+ g2-20020ac87d02000000b0039cbbef178amr27032604qtb.357.1666617567783; Mon, 24
+ Oct 2022 06:19:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="fUB+8c/MuhUoy5ym"
-Content-Disposition: inline
-In-Reply-To: <20220928062731.18032-1-vidyas@nvidia.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220927204521.601887-1-W_Armin@gmx.de> <20220927204521.601887-2-W_Armin@gmx.de>
+In-Reply-To: <20220927204521.601887-2-W_Armin@gmx.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 24 Oct 2022 15:19:13 +0200
+Message-ID: <CAJZ5v0gMow5T3ty8UN9e6zZmQf+GhFWbrP-ab9x5scoAwsZOqA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] ACPI: battery: Pass battery hook pointer to hook callbacks
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, rafael@kernel.org,
+        lenb@kernel.org, hmh@hmh.eng.br, matan@svgalib.org,
+        corentin.chary@gmail.com, jeremy@system76.com,
+        productdev@system76.com, mario.limonciello@amd.com,
+        pobrn@protonmail.com, coproscefalo@gmail.com,
+        platform-driver-x86@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Sep 27, 2022 at 10:45 PM Armin Wolf <W_Armin@gmx.de> wrote:
+>
+> Right now, is impossible for battery hook callbacks
+> to access instance-specific data, forcing most drivers
+> to provide some sort of global state. This however is
+> difficult for drivers which can be instantiated multiple
+> times and/or are hotplug-capable.
+>
+> Pass a pointer to the batetry hook to those callbacks
+> for usage with container_of().
+>
+> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
 
---fUB+8c/MuhUoy5ym
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Wed, Sep 28, 2022 at 11:57:31AM +0530, Vidya Sagar wrote:
-> commit edf408b946d3 ("PCI: dwc: Validate iATU outbound mappings against
-> hardware constraints") exposes an issue with the existing partitioning of
-> the aperture space where the Prefetchable apertures of controllers
-> C5, C7 and C9 in Tegra234 cross the 32GB boundary hardware constraint.
-> This patch makes sure that the Prefetchable region doesn't spill over
-> the 32GB boundary.
->=20
-> Fixes: ec142c44b026 ("arm64: tegra: Add P2U and PCIe controller nodes to =
-Tegra234 DT")
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
 > ---
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-
-Applied, thanks.
-
-Thierry
-
---fUB+8c/MuhUoy5ym
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNWkCYACgkQ3SOs138+
-s6H7TBAAiv+ffzj8R37kH4ROZ5iKBTXm9qBUOe9FxkCm1S57aioqxeTL6fRlpjG3
-FKP6HSOWTjCSLxizOMns1R/qRVl5QLd/Ln5MbncagivcsxnyaEnM0jV7thAPocKI
-2e5HLrpvIMh6xNQN+BmXcNefURfNNirlY2Aj+KIsq2bhG8GDCYl4hQolnIouVGJ4
-ZQoraqc2Z35pQgmCZsr6tLwaLrxmjdvJ8u0wloUDfCwiaf+W0vBemhgGf/WnVg3E
-njKbd8vMP9hELuAJyKgN4DTzMFUS79MGDdXPN/S9/dxBS+6xBF39dMBo6KchTjqh
-wtKgC91LOSm/ZqsfH1JgudznS26OMR0hFdg42bNlQfypSotzwij2SId0Sdocm5dP
-lvZsdqv1Etb26iPtxL0FRHSEF/Dz9Zo0glvutWVdAIasaNzZYcVhjnwne7qlvBzu
-+IVGNxUG33ASuI4SWOoo/hhvksLOAq7j789593nJTk+0a9t9yTwuxD1WjZBdla0s
-1DLIslLNrIGMMo4UoSMd0O0LZec6yeNdc/ImW9FXSlOLta+SoGsfGwU2m9R047yK
-QJiVDHtDzcvf+ierAaJvfXnm7yWziCp4WV7HuaXcv9iRnFMZ2dY3g9qqM9acyq1V
-in07La0upqk26/7Jb0+QFoLBLoqWJdiRHPFBc50AAZvnYpcSCFM=
-=QODt
------END PGP SIGNATURE-----
-
---fUB+8c/MuhUoy5ym--
+>  drivers/acpi/battery.c               | 8 ++++----
+>  drivers/platform/x86/asus-wmi.c      | 4 ++--
+>  drivers/platform/x86/huawei-wmi.c    | 4 ++--
+>  drivers/platform/x86/lg-laptop.c     | 4 ++--
+>  drivers/platform/x86/system76_acpi.c | 4 ++--
+>  drivers/platform/x86/thinkpad_acpi.c | 4 ++--
+>  drivers/platform/x86/toshiba_acpi.c  | 4 ++--
+>  include/acpi/battery.h               | 4 ++--
+>  8 files changed, 18 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+> index 306513fec1e1..9482b0b6eadc 100644
+> --- a/drivers/acpi/battery.c
+> +++ b/drivers/acpi/battery.c
+> @@ -696,7 +696,7 @@ static void __battery_hook_unregister(struct acpi_battery_hook *hook, int lock)
+>         if (lock)
+>                 mutex_lock(&hook_mutex);
+>         list_for_each_entry(battery, &acpi_battery_list, list) {
+> -               hook->remove_battery(battery->bat);
+> +               hook->remove_battery(battery->bat, hook);
+>         }
+>         list_del(&hook->list);
+>         if (lock)
+> @@ -724,7 +724,7 @@ void battery_hook_register(struct acpi_battery_hook *hook)
+>          * its attributes.
+>          */
+>         list_for_each_entry(battery, &acpi_battery_list, list) {
+> -               if (hook->add_battery(battery->bat)) {
+> +               if (hook->add_battery(battery->bat, hook)) {
+>                         /*
+>                          * If a add-battery returns non-zero,
+>                          * the registration of the extension has failed,
+> @@ -762,7 +762,7 @@ static void battery_hook_add_battery(struct acpi_battery *battery)
+>          * during the battery module initialization.
+>          */
+>         list_for_each_entry_safe(hook_node, tmp, &battery_hook_list, list) {
+> -               if (hook_node->add_battery(battery->bat)) {
+> +               if (hook_node->add_battery(battery->bat, hook_node)) {
+>                         /*
+>                          * The notification of the extensions has failed, to
+>                          * prevent further errors we will unload the extension.
+> @@ -785,7 +785,7 @@ static void battery_hook_remove_battery(struct acpi_battery *battery)
+>          * custom attributes from the battery.
+>          */
+>         list_for_each_entry(hook, &battery_hook_list, list) {
+> -               hook->remove_battery(battery->bat);
+> +               hook->remove_battery(battery->bat, hook);
+>         }
+>         /* Then, just remove the battery from the list */
+>         list_del(&battery->list);
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index ae46af731de9..446669d11095 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -882,7 +882,7 @@ static ssize_t charge_control_end_threshold_show(struct device *device,
+>
+>  static DEVICE_ATTR_RW(charge_control_end_threshold);
+>
+> -static int asus_wmi_battery_add(struct power_supply *battery)
+> +static int asus_wmi_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         /* The WMI method does not provide a way to specific a battery, so we
+>          * just assume it is the first battery.
+> @@ -909,7 +909,7 @@ static int asus_wmi_battery_add(struct power_supply *battery)
+>         return 0;
+>  }
+>
+> -static int asus_wmi_battery_remove(struct power_supply *battery)
+> +static int asus_wmi_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         device_remove_file(&battery->dev,
+>                            &dev_attr_charge_control_end_threshold);
+> diff --git a/drivers/platform/x86/huawei-wmi.c b/drivers/platform/x86/huawei-wmi.c
+> index eac3e6b4ea11..1dec4427053a 100644
+> --- a/drivers/platform/x86/huawei-wmi.c
+> +++ b/drivers/platform/x86/huawei-wmi.c
+> @@ -468,7 +468,7 @@ static DEVICE_ATTR_RW(charge_control_start_threshold);
+>  static DEVICE_ATTR_RW(charge_control_end_threshold);
+>  static DEVICE_ATTR_RW(charge_control_thresholds);
+>
+> -static int huawei_wmi_battery_add(struct power_supply *battery)
+> +static int huawei_wmi_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         int err = 0;
+>
+> @@ -483,7 +483,7 @@ static int huawei_wmi_battery_add(struct power_supply *battery)
+>         return err;
+>  }
+>
+> -static int huawei_wmi_battery_remove(struct power_supply *battery)
+> +static int huawei_wmi_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         device_remove_file(&battery->dev, &dev_attr_charge_control_start_threshold);
+>         device_remove_file(&battery->dev, &dev_attr_charge_control_end_threshold);
+> diff --git a/drivers/platform/x86/lg-laptop.c b/drivers/platform/x86/lg-laptop.c
+> index 332868b140ed..d662b64b0ba9 100644
+> --- a/drivers/platform/x86/lg-laptop.c
+> +++ b/drivers/platform/x86/lg-laptop.c
+> @@ -546,7 +546,7 @@ static DEVICE_ATTR_RW(fn_lock);
+>  static DEVICE_ATTR_RW(charge_control_end_threshold);
+>  static DEVICE_ATTR_RW(battery_care_limit);
+>
+> -static int lg_battery_add(struct power_supply *battery)
+> +static int lg_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         if (device_create_file(&battery->dev,
+>                                &dev_attr_charge_control_end_threshold))
+> @@ -555,7 +555,7 @@ static int lg_battery_add(struct power_supply *battery)
+>         return 0;
+>  }
+>
+> -static int lg_battery_remove(struct power_supply *battery)
+> +static int lg_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         device_remove_file(&battery->dev,
+>                            &dev_attr_charge_control_end_threshold);
+> diff --git a/drivers/platform/x86/system76_acpi.c b/drivers/platform/x86/system76_acpi.c
+> index 958df41ad509..9031bd53253f 100644
+> --- a/drivers/platform/x86/system76_acpi.c
+> +++ b/drivers/platform/x86/system76_acpi.c
+> @@ -254,7 +254,7 @@ static struct attribute *system76_battery_attrs[] = {
+>
+>  ATTRIBUTE_GROUPS(system76_battery);
+>
+> -static int system76_battery_add(struct power_supply *battery)
+> +static int system76_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         // System76 EC only supports 1 battery
+>         if (strcmp(battery->desc->name, "BAT0") != 0)
+> @@ -266,7 +266,7 @@ static int system76_battery_add(struct power_supply *battery)
+>         return 0;
+>  }
+>
+> -static int system76_battery_remove(struct power_supply *battery)
+> +static int system76_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         device_remove_groups(&battery->dev, system76_battery_groups);
+>         return 0;
+> diff --git a/drivers/platform/x86/thinkpad_acpi.c b/drivers/platform/x86/thinkpad_acpi.c
+> index 8fbe21ebcc52..75ba9e61264e 100644
+> --- a/drivers/platform/x86/thinkpad_acpi.c
+> +++ b/drivers/platform/x86/thinkpad_acpi.c
+> @@ -9897,7 +9897,7 @@ ATTRIBUTE_GROUPS(tpacpi_battery);
+>
+>  /* ACPI battery hooking */
+>
+> -static int tpacpi_battery_add(struct power_supply *battery)
+> +static int tpacpi_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         int batteryid = tpacpi_battery_get_id(battery->desc->name);
+>
+> @@ -9908,7 +9908,7 @@ static int tpacpi_battery_add(struct power_supply *battery)
+>         return 0;
+>  }
+>
+> -static int tpacpi_battery_remove(struct power_supply *battery)
+> +static int tpacpi_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         device_remove_groups(&battery->dev, tpacpi_battery_groups);
+>         return 0;
+> diff --git a/drivers/platform/x86/toshiba_acpi.c b/drivers/platform/x86/toshiba_acpi.c
+> index 43cc25351aea..c8f01f8f435d 100644
+> --- a/drivers/platform/x86/toshiba_acpi.c
+> +++ b/drivers/platform/x86/toshiba_acpi.c
+> @@ -3113,7 +3113,7 @@ static struct attribute *toshiba_acpi_battery_attrs[] = {
+>
+>  ATTRIBUTE_GROUPS(toshiba_acpi_battery);
+>
+> -static int toshiba_acpi_battery_add(struct power_supply *battery)
+> +static int toshiba_acpi_battery_add(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         if (toshiba_acpi == NULL) {
+>                 pr_err("Init order issue\n");
+> @@ -3126,7 +3126,7 @@ static int toshiba_acpi_battery_add(struct power_supply *battery)
+>         return 0;
+>  }
+>
+> -static int toshiba_acpi_battery_remove(struct power_supply *battery)
+> +static int toshiba_acpi_battery_remove(struct power_supply *battery, struct acpi_battery_hook *hook)
+>  {
+>         device_remove_groups(&battery->dev, toshiba_acpi_battery_groups);
+>         return 0;
+> diff --git a/include/acpi/battery.h b/include/acpi/battery.h
+> index b8d56b702c7a..611a2561a014 100644
+> --- a/include/acpi/battery.h
+> +++ b/include/acpi/battery.h
+> @@ -12,8 +12,8 @@
+>
+>  struct acpi_battery_hook {
+>         const char *name;
+> -       int (*add_battery)(struct power_supply *battery);
+> -       int (*remove_battery)(struct power_supply *battery);
+> +       int (*add_battery)(struct power_supply *battery, struct acpi_battery_hook *hook);
+> +       int (*remove_battery)(struct power_supply *battery, struct acpi_battery_hook *hook);
+>         struct list_head list;
+>  };
+>
+> --
+> 2.30.2
+>
