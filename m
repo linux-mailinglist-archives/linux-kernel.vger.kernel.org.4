@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD8960A784
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134BE60A580
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234588AbiJXMvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S233481AbiJXMYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234775AbiJXMpk (ORCPT
+        with ESMTP id S233559AbiJXMXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F7A4A82E;
-        Mon, 24 Oct 2022 05:10:05 -0700 (PDT)
+        Mon, 24 Oct 2022 08:23:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F42D1C119;
+        Mon, 24 Oct 2022 04:59:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 315C0612A4;
-        Mon, 24 Oct 2022 12:09:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40EF0C433C1;
-        Mon, 24 Oct 2022 12:09:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58C0F61252;
+        Mon, 24 Oct 2022 11:59:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE14C433C1;
+        Mon, 24 Oct 2022 11:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613395;
-        bh=5KeHGDA8jHkPEmGTI8j1RHcmYxHd7OcD4B7p3LSoRwk=;
+        s=korg; t=1666612769;
+        bh=cHT/tctzQJbGiXiQn4s+uUUWvv1Z72ev5clpduBCXxw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HyvjqScGsy0cOjdU8OQI3LG0MObSwH5aYm9ivKkGodntoJHyFI9e6el6fkXuNBuak
-         NBsGBJm0zqdM0bHtrrvDdOsLM9XnBnMF0lcJTepVI9vQXe4P+sxFtC+RP2/3hSr2IX
-         ByOCvc930utQkjg98cYko8NMB48zWQ9u+7yeVMyU=
+        b=GPMJrVkwjJB/Tto61ezoEEuMcyRorrGSKq3t+SmwdENP6pjN/nLfLNVC4Am22kg5/
+         4y7RKc83HWpn8qyqVivu7J76UgCdFwBkwNBumj3r/iygAr26z0xroODp3kQ/HkotAS
+         1BhDqcMclNt46zX6U+f7YPw6vkpSb5NGmahTnXFA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 119/255] iio: adc: at91-sama5d2_adc: check return status for pressure and touch
-Date:   Mon, 24 Oct 2022 13:30:29 +0200
-Message-Id: <20221024113006.476298258@linuxfoundation.org>
+Subject: [PATCH 4.19 111/229] ARM: dts: turris-omnia: Fix mpp26 pin name and comment
+Date:   Mon, 24 Oct 2022 13:30:30 +0200
+Message-Id: <20221024113002.595984668@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Marek Behún <kabel@kernel.org>
 
-[ Upstream commit d84ace944a3b24529798dbae1340dea098473155 ]
+[ Upstream commit 49e93898f0dc177e645c22d0664813567fd9ec00 ]
 
-Check return status of at91_adc_read_position() and
-at91_adc_read_pressure() in at91_adc_read_info_raw().
+There is a bug in Turris Omnia's schematics, whereupon the MPP[26] pin,
+which is routed to CN11 pin header, is documented as SPI CS1, but
+MPP[26] pin does not support this function. Instead it controls chip
+select 2 if in "spi0" mode.
 
-Fixes: 6794e23fa3fe ("iio: adc: at91-sama5d2_adc: add support for oversampling resolution")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220803102855.2191070-3-claudiu.beznea@microchip.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fix the name of the pin node in pinctrl node and fix the comment in SPI
+node.
+
+Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/at91-sama5d2_adc.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/armada-385-turris-omnia.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
-index 090cc1e8b4ea..20ef858d65c7 100644
---- a/drivers/iio/adc/at91-sama5d2_adc.c
-+++ b/drivers/iio/adc/at91-sama5d2_adc.c
-@@ -1323,8 +1323,10 @@ static int at91_adc_read_info_raw(struct iio_dev *indio_dev,
- 		*val = tmp_val;
- 		mutex_unlock(&st->lock);
- 		iio_device_release_direct_mode(indio_dev);
-+		if (ret > 0)
-+			ret = at91_adc_adjust_val_osr(st, val);
+diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+index fde4c302f08e..92e08486ec81 100644
+--- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
++++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+@@ -307,7 +307,7 @@
+ 		marvell,function = "spi0";
+ 	};
  
--		return at91_adc_adjust_val_osr(st, val);
-+		return ret;
- 	}
- 	if (chan->type == IIO_PRESSURE) {
- 		ret = iio_device_claim_direct_mode(indio_dev);
-@@ -1337,8 +1339,10 @@ static int at91_adc_read_info_raw(struct iio_dev *indio_dev,
- 		*val = tmp_val;
- 		mutex_unlock(&st->lock);
- 		iio_device_release_direct_mode(indio_dev);
-+		if (ret > 0)
-+			ret = at91_adc_adjust_val_osr(st, val);
+-	spi0cs1_pins: spi0cs1-pins {
++	spi0cs2_pins: spi0cs2-pins {
+ 		marvell,pins = "mpp26";
+ 		marvell,function = "spi0";
+ 	};
+@@ -342,7 +342,7 @@
+ 		};
+ 	};
  
--		return at91_adc_adjust_val_osr(st, val);
-+		return ret;
- 	}
+-	/* MISO, MOSI, SCLK and CS1 are routed to pin header CN11 */
++	/* MISO, MOSI, SCLK and CS2 are routed to pin header CN11 */
+ };
  
- 	/* in this case we have a voltage channel */
+ &uart0 {
 -- 
 2.35.1
 
