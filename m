@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC62860AC7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EF460AD5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiJXOHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S235180AbiJXOWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236851AbiJXOD0 (ORCPT
+        with ESMTP id S231738AbiJXORm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:03:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87CEC1497;
-        Mon, 24 Oct 2022 05:48:45 -0700 (PDT)
+        Mon, 24 Oct 2022 10:17:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42193685D;
+        Mon, 24 Oct 2022 05:56:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 464F261335;
-        Mon, 24 Oct 2022 12:48:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533DBC433C1;
-        Mon, 24 Oct 2022 12:48:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 734BDB81696;
+        Mon, 24 Oct 2022 12:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0ABAC433C1;
+        Mon, 24 Oct 2022 12:28:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615705;
-        bh=hDIWTXnFPYaCL2NW+LTf3CWQC5jgrfHnhKhZtQhXzUs=;
+        s=korg; t=1666614539;
+        bh=sMbI5Gj5LiK/Mj6Nr4l6ukPafQ7m5GMQYGZXTlMT9Ck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OpeGZLtYGoYVTzMtQ1fmXHymWTe2ijDdZt9crcqpSrx+BGs9qvExhyoo8KB6HXdM0
-         wQ//UfSQI1AQZqVAjlPQx8oT0qtp1SJOuQ7cO4r9Jnl02CfKYrPtiM2wONHPxuDZnB
-         YyKOV/sHPmnSS94cZALnYUmk3LBU7fcfRbT0rRmU=
+        b=lYTtHGZglLl6iXzw0Nso53vN6fTm3Bg9USPDJy7B58BJ4udMpchiqRlYXCgAG8+hw
+         EJbGymFSs2QEcuI1ZHg22zojFhmaLp8yCNhQVGDTT0AQIqKzIfGbg2juzfG/qdlzSj
+         ovapUKCj9jAPoUIvqLEQoqxXgckgtVMRtoVdhrxw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 352/530] clk: baikal-t1: Fix invalid xGMAC PTP clock divider
-Date:   Mon, 24 Oct 2022 13:31:36 +0200
-Message-Id: <20221024113100.950806998@linuxfoundation.org>
+Subject: [PATCH 5.10 300/390] thermal: intel_powerclamp: Use get_cpu() instead of smp_processor_id() to avoid crash
+Date:   Mon, 24 Oct 2022 13:31:37 +0200
+Message-Id: <20221024113035.795106399@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-[ Upstream commit 3c742088686ce922704aec5b11d09bcc5a396589 ]
+[ Upstream commit 68b99e94a4a2db6ba9b31fe0485e057b9354a640 ]
 
-Most likely due to copy-paste mistake the divider has been set to 10 while
-according to the SoC reference manual it's supposed to be 8 thus having
-PTP clock frequency of 156.25 MHz.
+When CPU 0 is offline and intel_powerclamp is used to inject
+idle, it generates kernel BUG:
 
-Fixes: 353afa3a8d2e ("clk: Add Baikal-T1 CCU Dividers driver")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Link: https://lore.kernel.org/r/20220929225402.9696-3-Sergey.Semin@baikalelectronics.ru
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+BUG: using smp_processor_id() in preemptible [00000000] code: bash/15687
+caller is debug_smp_processor_id+0x17/0x20
+CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
+Call Trace:
+<TASK>
+dump_stack_lvl+0x49/0x63
+dump_stack+0x10/0x16
+check_preemption_disabled+0xdd/0xe0
+debug_smp_processor_id+0x17/0x20
+powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
+...
+...
+
+Here CPU 0 is the control CPU by default and changed to the current CPU,
+if CPU 0 offlined. This check has to be performed under cpus_read_lock(),
+hence the above warning.
+
+Use get_cpu() instead of smp_processor_id() to avoid this BUG.
+
+Suggested-by: Chen Yu <yu.c.chen@intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+[ rjw: Subject edits ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/baikal-t1/clk-ccu-div.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/intel/intel_powerclamp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/baikal-t1/clk-ccu-div.c b/drivers/clk/baikal-t1/clk-ccu-div.c
-index f141fda12b09..ea77eec40ddd 100644
---- a/drivers/clk/baikal-t1/clk-ccu-div.c
-+++ b/drivers/clk/baikal-t1/clk-ccu-div.c
-@@ -207,7 +207,7 @@ static const struct ccu_div_info sys_info[] = {
- 	CCU_DIV_GATE_INFO(CCU_SYS_XGMAC_REF_CLK, "sys_xgmac_ref_clk",
- 			  "eth_clk", CCU_SYS_XGMAC_BASE, 8),
- 	CCU_DIV_FIXED_INFO(CCU_SYS_XGMAC_PTP_CLK, "sys_xgmac_ptp_clk",
--			   "eth_clk", 10),
-+			   "eth_clk", 8),
- 	CCU_DIV_GATE_INFO(CCU_SYS_USB_CLK, "sys_usb_clk",
- 			  "eth_clk", CCU_SYS_USB_BASE, 10),
- 	CCU_DIV_VAR_INFO(CCU_SYS_PVT_CLK, "sys_pvt_clk",
+diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
+index b0eb5ece9243..14381f7587ff 100644
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -532,8 +532,10 @@ static int start_power_clamp(void)
+ 
+ 	/* prefer BSP */
+ 	control_cpu = 0;
+-	if (!cpu_online(control_cpu))
+-		control_cpu = smp_processor_id();
++	if (!cpu_online(control_cpu)) {
++		control_cpu = get_cpu();
++		put_cpu();
++	}
+ 
+ 	clamping = true;
+ 	schedule_delayed_work(&poll_pkg_cstate_work, 0);
 -- 
 2.35.1
 
