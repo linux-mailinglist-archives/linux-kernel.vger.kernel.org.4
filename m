@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDEA60ABEE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46EA60A980
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbiJXOAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S233687AbiJXNVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236969AbiJXN7D (ORCPT
+        with ESMTP id S236377AbiJXNUR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:59:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866B4B14DD;
-        Mon, 24 Oct 2022 05:46:15 -0700 (PDT)
+        Mon, 24 Oct 2022 09:20:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB72384E65;
+        Mon, 24 Oct 2022 05:28:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E574612B3;
-        Mon, 24 Oct 2022 12:44:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDF6C4314C;
-        Mon, 24 Oct 2022 12:44:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0B40B815AC;
+        Mon, 24 Oct 2022 12:10:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11D41C433C1;
+        Mon, 24 Oct 2022 12:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615462;
-        bh=iwSKkSwX+u2KdaUM5m/EksFFExQ9udfRUwuZwe1opOI=;
+        s=korg; t=1666613403;
+        bh=LMiQSmINL+WpJ+Efxa9vMNxwvWoH4bT4QVIx9zBBdls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N75IGfhEHfZI71xZME6m3OQZ1iYs5sXwQx6uyi3EqzZRNSSwt3vVECCC69yoFSqmO
-         1tf2VYemXCzJ0SCXTFI8KFVd0suFkRNOeNy279bVXRXf7e2Vcm9kKnIj/dVd17ALee
-         vlmt4rXu1M+XrhSR3Ch2g83lGN///Vzj83wJOjkU=
+        b=2WdqA9ppt+2yCOZfja4F/sCCZ/fu3lcDyj6qC4WrcoYbk0+4KXRfQaXlS3AHHdTC5
+         HSOS6vYkWES/A8WtLMH0t9K9sgitwxYj4v6x/qADmhnY9F37xYuPxempTKYS5fmWfw
+         sNNRWjYJd4lpyICEC5UHesZJijUkBXH6LZY0IOko=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 259/530] ARM: dts: exynos: correct s5k6a3 reset polarity on Midas family
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 093/255] platform/x86: msi-laptop: Fix resource cleanup
 Date:   Mon, 24 Oct 2022 13:30:03 +0200
-Message-Id: <20221024113056.786319823@linuxfoundation.org>
+Message-Id: <20221024113005.585622506@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 3ba2d4bb9592bf7a6a3fe3dbe711ecfc3d004bab ]
+[ Upstream commit 5523632aa10f906dfe2eb714ee748590dc7fc6b1 ]
 
-According to s5k6a3 driver code, the reset line for the chip appears to
-be active low. This also matches the typical polarity of reset lines in
-general. Let's fix it up as having correct polarity in DTS is important
-when the driver will be switched over to gpiod API.
+Fix the input-device not getting free-ed on probe-errors and
+fix the msi_touchpad_dwork not getting cancelled on neither
+probe-errors nor on remove.
 
-Fixes: b4fec64758ab ("ARM: dts: Add camera device nodes for Exynos4412 TRATS2 board")
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Link: https://lore.kernel.org/r/20220913164104.203957-1-dmitry.torokhov@gmail.com
-Link: https://lore.kernel.org/r/20220926104354.118578-2-krzysztof.kozlowski@linaro.org'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 143a4c0284dc ("msi-laptop: send out touchpad on/off key")
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220825141336.208597-3-hdegoede@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/exynos4412-midas.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/platform/x86/msi-laptop.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
-index 968c7943653e..49843e016828 100644
---- a/arch/arm/boot/dts/exynos4412-midas.dtsi
-+++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
-@@ -585,7 +585,7 @@
- 		clocks = <&camera 1>;
- 		clock-names = "extclk";
- 		samsung,camclk-out = <1>;
--		gpios = <&gpm1 6 GPIO_ACTIVE_HIGH>;
-+		gpios = <&gpm1 6 GPIO_ACTIVE_LOW>;
- 
- 		port {
- 			is_s5k6a3_ep: endpoint {
+diff --git a/drivers/platform/x86/msi-laptop.c b/drivers/platform/x86/msi-laptop.c
+index 0960205ee49f..3e935303b143 100644
+--- a/drivers/platform/x86/msi-laptop.c
++++ b/drivers/platform/x86/msi-laptop.c
+@@ -1116,6 +1116,8 @@ static int __init msi_init(void)
+ fail_create_group:
+ 	if (quirks->load_scm_model) {
+ 		i8042_remove_filter(msi_laptop_i8042_filter);
++		cancel_delayed_work_sync(&msi_touchpad_dwork);
++		input_unregister_device(msi_laptop_input_dev);
+ 		cancel_delayed_work_sync(&msi_rfkill_dwork);
+ 		cancel_work_sync(&msi_rfkill_work);
+ 		rfkill_cleanup();
+@@ -1136,6 +1138,7 @@ static void __exit msi_cleanup(void)
+ {
+ 	if (quirks->load_scm_model) {
+ 		i8042_remove_filter(msi_laptop_i8042_filter);
++		cancel_delayed_work_sync(&msi_touchpad_dwork);
+ 		input_unregister_device(msi_laptop_input_dev);
+ 		cancel_delayed_work_sync(&msi_rfkill_dwork);
+ 		cancel_work_sync(&msi_rfkill_work);
 -- 
 2.35.1
 
