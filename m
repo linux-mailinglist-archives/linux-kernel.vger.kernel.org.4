@@ -2,97 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E301360B38E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6678360B2FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235252AbiJXRKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
+        id S235066AbiJXQyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235672AbiJXRJf (ORCPT
+        with ESMTP id S235427AbiJXQte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:09:35 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E076B183A0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:44:47 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id hh9so5805989qtb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:44:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=23G6IRAZxWb674PHa8tupeqN+hPj8IaS0EymERZ275g=;
-        b=Dz6kdECH9awqquaIAb8L5ReL5RrQbVdYUBGUuO/TeGHjxqWMtVxvj7C8GR5UUKsn6Z
-         cjjvRsFSmsIzb1jkhiGA2p+Q30gQWXZIESDqNs0pFdI9//+JRwAePkvD5b1jqy8aIY73
-         0UKu86VLs2riLkNZrhjfail8f1UQBrFxvwmq4WCewK/5oiOqIR1u2h5qYgGQXC6wdH3h
-         8eRXyvG7mquddRw8Lnt6RBJCbUnzKMcLk2Y97x102sZDMqYbcw2LeM7GMq2cDBWJx5rM
-         fuxwPFdY3SpU/KPVoqgcwFFhsLmVroNx165Y5KOaWbbttwsS4Nu08boqN+jLsMkvV5g+
-         hXeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=23G6IRAZxWb674PHa8tupeqN+hPj8IaS0EymERZ275g=;
-        b=WCYCRUvgLSkLup71b0WgH0MlX5fobH37syFwGzmIBFnKmRNtfPVrvjttjGDQRU0W2W
-         7/fGYo+RuU+6uH8yQ0UYgnWU9jRIabcJWrZt4jXkRFVL/I/kHfKEUuS0U9OD5Lw5RpuF
-         6ySWD5/DGa4h8pGrPoMN9Mk5UoTajqtikJUaWZ7MHLw53upFLIcIiFDBzLdSTx4TRv4m
-         8+6sa5SPW9Uxy81bt6mzEZcJwjbabzgTWRWd2yiYztAbbcd7P5J8ZGZ4d0ESLBPCw3iY
-         x2ac/tNnrXaqz15bbRZCjRujDzFeFfkD+hRBlYzjgUlDhiR3I+5sFOPO4WfnK3YncTFa
-         w9JQ==
-X-Gm-Message-State: ACrzQf3FBlf5vBMJA8nxZk79e6sT0Q0oJDJjb5ASIX/2iWeNlgqkrhVl
-        M8bn71N+/jYkYzMY5quWt7R2Tsb+yuzVwg==
-X-Google-Smtp-Source: AMsMyM4TJpZ8bPgkeww9iiix6fKrutp9EVC5vYAocJxmQRCjgegrv44taFt4JuKpdamX58HtpJMu0Q==
-X-Received: by 2002:a37:f701:0:b0:6ce:f09b:9065 with SMTP id q1-20020a37f701000000b006cef09b9065mr22669096qkj.268.1666615164084;
-        Mon, 24 Oct 2022 05:39:24 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id cj24-20020a05622a259800b00399fe4aac3esm12847030qtb.50.2022.10.24.05.39.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 05:39:23 -0700 (PDT)
-Message-ID: <622768f7-a98f-3228-8d17-4eff6cf2c772@linaro.org>
-Date:   Mon, 24 Oct 2022 08:39:21 -0400
+        Mon, 24 Oct 2022 12:49:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703FA183E32
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:32:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64A1DB818A7
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:56:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5490C433D6;
+        Mon, 24 Oct 2022 12:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666616207;
+        bh=PCI6tEJdeb5cr0TT+br6JH/c5LPc/5OCtHMIqdIbwGk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MVaVZ1McalaJgbNPMmtxQ0nxlBBPOiM62rw89vuIixE73VIcaUQMXr82uDCT1xr7G
+         f9pr3DuabDNvrSp6VYom3lH0pFSv1N2hgtDLBX2OXLU8L00Tc10NHMIwHByR4kMyD4
+         lgvZ+C2fBX1HhFQsDfySn9zWeS/ML7up8zvafQ6A=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH] container_of: remove container_of_safe()
+Date:   Mon, 24 Oct 2022 14:39:33 +0200
+Message-Id: <20221024123933.3331116-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 13/21] usb: gadget: remove s3c24xx drivers
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-13-arnd@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221021203329.4143397-13-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1576; i=gregkh@linuxfoundation.org; h=from:subject; bh=PCI6tEJdeb5cr0TT+br6JH/c5LPc/5OCtHMIqdIbwGk=; b=owGbwMvMwCRo6H6F97bub03G02pJDMlh7c1X17N9qIsPWDBfLFEwuPD4r5U5pTk7i1PvxMhKRHD1 nxXoiGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIl4ODEsOP8nXPaifruM1fXQNwe419 +StCpYx7BgtUVbz6ygtZW5MxfNmZL0KO6GsG4aAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 16:27, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The s3c24xx platform is gone, so both the udc and hsudc drivers
-> can be removed as well.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+It came in from a staging driver that has been long removed from the
+tree, and there are no in-kernel users of the macro, and it's very
+dubious if anyone should ever use this thing, so just remove it
+entirely.
 
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/linux/container_of.h | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+diff --git a/include/linux/container_of.h b/include/linux/container_of.h
+index 2f4944b791b8..a6f242137b11 100644
+--- a/include/linux/container_of.h
++++ b/include/linux/container_of.h
+@@ -21,20 +21,4 @@
+ 		      "pointer type mismatch in container_of()");	\
+ 	((type *)(__mptr - offsetof(type, member))); })
+ 
+-/**
+- * container_of_safe - cast a member of a structure out to the containing structure
+- * @ptr:	the pointer to the member.
+- * @type:	the type of the container struct this is embedded in.
+- * @member:	the name of the member within the struct.
+- *
+- * If IS_ERR_OR_NULL(ptr), ptr is returned unchanged.
+- */
+-#define container_of_safe(ptr, type, member) ({				\
+-	void *__mptr = (void *)(ptr);					\
+-	static_assert(__same_type(*(ptr), ((type *)0)->member) ||	\
+-		      __same_type(*(ptr), void),			\
+-		      "pointer type mismatch in container_of_safe()");	\
+-	IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) :			\
+-		((type *)(__mptr - offsetof(type, member))); })
+-
+ #endif	/* _LINUX_CONTAINER_OF_H */
+-- 
+2.38.1
 
