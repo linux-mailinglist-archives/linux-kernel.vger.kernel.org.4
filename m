@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA5460A43E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C37C60ABFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiJXMHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
+        id S236920AbiJXOAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232915AbiJXMEh (ORCPT
+        with ESMTP id S237067AbiJXN7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:04:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A81ED73;
-        Mon, 24 Oct 2022 04:50:49 -0700 (PDT)
+        Mon, 24 Oct 2022 09:59:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6908C002;
+        Mon, 24 Oct 2022 05:46:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 82626612B2;
-        Mon, 24 Oct 2022 11:50:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96674C433D7;
-        Mon, 24 Oct 2022 11:50:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACCB8612B3;
+        Mon, 24 Oct 2022 12:46:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2B7EC433C1;
+        Mon, 24 Oct 2022 12:46:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612237;
-        bh=CW8gk3mYFvAel/RUsGWu75S5tMb8UzsMZGE5o3hFPAk=;
+        s=korg; t=1666615597;
+        bh=jggFdXoYPgsmJa9ZXLL1sfM4l5+1zveb2heyzFPoVHE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CP319DYXqlbPd4IGdPVTvW3rY6rEiiQ0ARfl0m9Tp7nFHewtGU6PJIysqu+TFb2+o
-         6cDgouG6chlRvRhd4kkKLDvBrpHC/LlxOwlvZrLd+XyVnZ0FvLPhGxT5aBsD+SXWCZ
-         9M/hLnL5k5WwkVh844f7Lh+/HiakcKcmsA8hvOTw=
+        b=ebSBJLyexLfwmKBfPDJWqiYGxeWWQMfovxmCqV8pzneJQMgtwf9YTF2zlMVjogAEx
+         8dUCNgVHBj4Fu9YikLOIU65MXjufmrdepVQInDVZPg3v6gjmiDDs6yFFgeNyx6EIUM
+         WizmtImyojSVsh2vTkDDllb6nOrFeYhiX21/TEcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 121/210] HSI: omap_ssi: Fix refcount leak in ssi_probe
+        stable@vger.kernel.org, Jie Hai <haijie1@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 294/530] dmaengine: hisilicon: Disable channels when unregister hisi_dma
 Date:   Mon, 24 Oct 2022 13:30:38 +0200
-Message-Id: <20221024113000.907205001@linuxfoundation.org>
+Message-Id: <20221024113058.376538032@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +54,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jie Hai <haijie1@huawei.com>
 
-[ Upstream commit 9a2ea132df860177b33c9fd421b26c4e9a0a9396 ]
+[ Upstream commit e3bdaa04ada31f46d0586df83a2789b8913053c5 ]
 
-When returning or breaking early from a
-for_each_available_child_of_node() loop, we need to explicitly call
-of_node_put() on the child node to possibly release the node.
+When hisi_dma is unloaded or unbinded, all of channels should be
+disabled. This patch disables DMA channels when driver is unloaded
+or unbinded.
 
-Fixes: b209e047bc74 ("HSI: Introduce OMAP SSI driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Fixes: e9f08b65250d ("dmaengine: hisilicon: Add Kunpeng DMA engine support")
+Signed-off-by: Jie Hai <haijie1@huawei.com>
+Acked-by: Zhou Wang <wangzhou1@hisilicon.com>
+Link: https://lore.kernel.org/r/20220830062251.52993-2-haijie1@huawei.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hsi/controllers/omap_ssi_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/dma/hisi_dma.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/hsi/controllers/omap_ssi_core.c b/drivers/hsi/controllers/omap_ssi_core.c
-index 3554443a609c..6e9d88d9d471 100644
---- a/drivers/hsi/controllers/omap_ssi_core.c
-+++ b/drivers/hsi/controllers/omap_ssi_core.c
-@@ -560,6 +560,7 @@ static int ssi_probe(struct platform_device *pd)
- 		if (!childpdev) {
- 			err = -ENODEV;
- 			dev_err(&pd->dev, "failed to create ssi controller port\n");
-+			of_node_put(child);
- 			goto out3;
- 		}
- 	}
+diff --git a/drivers/dma/hisi_dma.c b/drivers/dma/hisi_dma.c
+index f680e9b40bf7..70a0d784a6a3 100644
+--- a/drivers/dma/hisi_dma.c
++++ b/drivers/dma/hisi_dma.c
+@@ -180,7 +180,8 @@ static void hisi_dma_reset_qp_point(struct hisi_dma_dev *hdma_dev, u32 index)
+ 	hisi_dma_chan_write(hdma_dev->base, HISI_DMA_CQ_HEAD_PTR, index, 0);
+ }
+ 
+-static void hisi_dma_reset_hw_chan(struct hisi_dma_chan *chan)
++static void hisi_dma_reset_or_disable_hw_chan(struct hisi_dma_chan *chan,
++					      bool disable)
+ {
+ 	struct hisi_dma_dev *hdma_dev = chan->hdma_dev;
+ 	u32 index = chan->qp_num, tmp;
+@@ -201,8 +202,11 @@ static void hisi_dma_reset_hw_chan(struct hisi_dma_chan *chan)
+ 	hisi_dma_do_reset(hdma_dev, index);
+ 	hisi_dma_reset_qp_point(hdma_dev, index);
+ 	hisi_dma_pause_dma(hdma_dev, index, false);
+-	hisi_dma_enable_dma(hdma_dev, index, true);
+-	hisi_dma_unmask_irq(hdma_dev, index);
++
++	if (!disable) {
++		hisi_dma_enable_dma(hdma_dev, index, true);
++		hisi_dma_unmask_irq(hdma_dev, index);
++	}
+ 
+ 	ret = readl_relaxed_poll_timeout(hdma_dev->base +
+ 		HISI_DMA_Q_FSM_STS + index * HISI_DMA_OFFSET, tmp,
+@@ -218,7 +222,7 @@ static void hisi_dma_free_chan_resources(struct dma_chan *c)
+ 	struct hisi_dma_chan *chan = to_hisi_dma_chan(c);
+ 	struct hisi_dma_dev *hdma_dev = chan->hdma_dev;
+ 
+-	hisi_dma_reset_hw_chan(chan);
++	hisi_dma_reset_or_disable_hw_chan(chan, false);
+ 	vchan_free_chan_resources(&chan->vc);
+ 
+ 	memset(chan->sq, 0, sizeof(struct hisi_dma_sqe) * hdma_dev->chan_depth);
+@@ -394,7 +398,7 @@ static void hisi_dma_enable_qp(struct hisi_dma_dev *hdma_dev, u32 qp_index)
+ 
+ static void hisi_dma_disable_qp(struct hisi_dma_dev *hdma_dev, u32 qp_index)
+ {
+-	hisi_dma_reset_hw_chan(&hdma_dev->chan[qp_index]);
++	hisi_dma_reset_or_disable_hw_chan(&hdma_dev->chan[qp_index], true);
+ }
+ 
+ static void hisi_dma_enable_qps(struct hisi_dma_dev *hdma_dev)
 -- 
 2.35.1
 
