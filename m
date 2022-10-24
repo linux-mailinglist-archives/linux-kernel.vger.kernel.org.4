@@ -2,163 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC2D60B1C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A404A60B349
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbiJXQgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
+        id S235037AbiJXRBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233948AbiJXQgT (ORCPT
+        with ESMTP id S235313AbiJXRA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:36:19 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56A517F99C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:23:55 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OF0Qlh031384;
-        Mon, 24 Oct 2022 15:21:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xPfZHWn5BjNX1+I617jnln0xrq+61Y5jHhnLZ2Rzmfg=;
- b=W8zlbKxmPYvi7eUIKlWUTINrJJz4acVoGER7mu4MtWqKXZVIXEw436qVUAQfcokjoQLt
- xDCX86jdJvBbEKz4vBcBERH9zPOsj/VXwrBGIJT+F0kAlNxHWGUn1hBUtVL4+VMdPlUH
- Y8vYEuu4rOkk7Y4w8hiSvS3wctGoASXvFTblMa4sBFYz2o1QkYVtQyCkiWtfZVm8LlYN
- cWCyvyq4ILR+SoWhqE/da6p2ytkUEtXYFKyxTxHY80EsDYxSQJv/YKivaFcSyshDCtWU
- 6d4iSZpc4caAsr3Zghk0Tgom3IMPED62MvAunKepc9LJioNO0f8Ae+cnvfwZv0uTEwCt /A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kc67pmjng-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 15:21:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29OFLMBl018414
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 15:21:22 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 24 Oct
- 2022 08:21:20 -0700
-Message-ID: <bf8df463-3413-3027-0f4b-3977e6860404@quicinc.com>
-Date:   Mon, 24 Oct 2022 09:21:20 -0600
+        Mon, 24 Oct 2022 13:00:26 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974453BC48
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:37:58 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id t25so380164ejb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8GmmEDLhPtDYGFH5uDa8ewun8HTtWaYq8inIclFrr34=;
+        b=GUTUlgJsaHA4De+mJhZ+UmmvwF1ZwXh+aFlXzXw1Uu4YOSsKtA8lSWxzWzqwCsvU0Z
+         0W9ubaTYraX0YXrqxMJo8XFG00LMRq2xkz1EMOEcyav4RH0VPoDsyw9ITOOlvZIcxarm
+         LwlLO6dKyVXgUrdQCHGaotCIYgicdqB31t4+7XplhZ733ZuBWc3ZihwOliQFIuc/o/RF
+         aPPZIMoKikhNUUEgc2EQ6iUNWNtnkYRPLhVyMTeD71ZwVN3pVKHuwikMotGnLICTcDZ3
+         jOhoFcYkd/11Mz9N9lwn9OmKsNteueGXfzSicazT1Q+NkvHaBK/gwiLoG6wqL3u3CNPJ
+         tu1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8GmmEDLhPtDYGFH5uDa8ewun8HTtWaYq8inIclFrr34=;
+        b=sMoJbVMxX0cbU4aHhaFriXdyWd18I7jgIyiXV+Xmy+8Wv2/XIEbNAqviD8RxKFNlwU
+         x6730HYdk6UlcjMxkuEFktgVh8U8wBEM+oVZzD+Zf8v897Uk1p46rEXSxvKuNhVEre5T
+         V5aawdzKgJLSbFfmi/SJzv4EPeukkU9jtY+MQSi2zAO/6TuZshsesAmftPv4ahB2LUu2
+         uIxFGrZfPpTXQSoeB05nocSkfzunnPpZjXiNRBzU64/1cTzgaxAiCzIG0dIoV+i1D2cn
+         TmhutnAGjmauucM3kh4YFX1EL2ylz7bGwi7+XTiWD1WXF7h3u5bNYUw50rFtTlktujSV
+         DbSw==
+X-Gm-Message-State: ACrzQf1WNCw6GnTuBpo0+QGz7xWsmDcJqrCu6pxK2axQCsJwHhzx5fkD
+        tfejLBHJcwtcnLQi9ltUBgKSo18FF2QjpfIo
+X-Google-Smtp-Source: AMsMyM7TKRK5p/7QPJQNylGLX09PsYQBF/7sdHc8UeGpUuXeCeh4znls4acnCbTNBWbBWtUevXTOrw==
+X-Received: by 2002:a05:6512:a8c:b0:4a2:10f1:6e06 with SMTP id m12-20020a0565120a8c00b004a210f16e06mr11369220lfu.415.1666624940562;
+        Mon, 24 Oct 2022 08:22:20 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id v14-20020a2ea44e000000b0026dfd1fb1aesm6080ljn.25.2022.10.24.08.22.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 08:22:20 -0700 (PDT)
+Message-ID: <52e7a83b-bd83-ba63-55f9-a75cf549546d@linaro.org>
+Date:   Mon, 24 Oct 2022 18:22:19 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH 3/3] drm: add dedicated minor for accelerator devices
-Content-Language: en-US
-To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-References: <20221022214622.18042-1-ogabbay@kernel.org>
- <20221022214622.18042-4-ogabbay@kernel.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221022214622.18042-4-ogabbay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v8 01/15] drm/msm/disp/dpu: clear dpu_assign_crtc and get
+ crtc from connector state instead of dpu_enc
+Content-Language: en-GB
+To:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
+        quic_vproddut@quicinc.com, quic_bjorande@quicinc.com,
+        quic_aravindh@quicinc.com, quic_abhinavk@quicinc.com,
+        quic_sbillaka@quicinc.com
+References: <1665576159-3749-1-git-send-email-quic_vpolimer@quicinc.com>
+ <1665576159-3749-2-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1665576159-3749-2-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lBShfejFmUYvNpYyNQpcmxDz9QS-iVwR
-X-Proofpoint-ORIG-GUID: lBShfejFmUYvNpYyNQpcmxDz9QS-iVwR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- adultscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
- impostorscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210240093
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/22/2022 3:46 PM, Oded Gabbay wrote:
-> The accelerator devices are exposed to user-space using a dedicated
-> major. In addition, they are represented in /dev with new, dedicated
-> device char names: /dev/accel/accel*. This is done to make sure any
-> user-space software that tries to open a graphic card won't open
-> the accelerator device by mistake.
+On 12/10/2022 15:02, Vinod Polimera wrote:
+> Update crtc retrieval from dpu_enc to dpu_enc connector state,
+> since new links get set as part of the dpu enc virt mode set.
+> The dpu_enc->crtc cache is no more needed, hence cleaning it as
+> part of this change.
 > 
-> The above implies that the minor numbering should be separated from
-> the rest of the drm devices. However, to avoid code duplication, we
-> want the drm_minor structure to be able to represent the accelerator
-> device.
-> 
-> To achieve this, we add a new drm_minor* to drm_device that represents
-> the accelerator device. This pointer is initialized for drivers that
-> declare they handle compute accelerator, using a new driver feature
-> flag called DRIVER_COMPUTE_ACCEL. It is important to note that this
-> driver feature is mutually exclusive with DRIVER_RENDER. Devices that
-> want to expose both graphics and compute device char files should be
-> handled by two drivers that are connected using the auxiliary bus
-> framework.
-> 
-> In addition, we define a different idr to handle the accelerators
-> minors. This is done to make the minor's index be identical to the
-> device index in /dev/. In most places, this is hidden inside the drm
-> core functions except when calling drm_minor_acquire(), where I had to
-> add an extra parameter to specify the idr to use (because the
-> accelerators minors index and the drm primary minor index both begin
-> at 0).
-> 
-> Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
 > ---
->   drivers/gpu/drm/drm_drv.c      | 171 +++++++++++++++++++++++++--------
->   drivers/gpu/drm/drm_file.c     |  69 +++++++++----
->   drivers/gpu/drm/drm_internal.h |   2 +-
->   drivers/gpu/drm/drm_sysfs.c    |  29 ++++--
->   include/drm/drm_device.h       |   3 +
->   include/drm/drm_drv.h          |   8 ++
->   include/drm/drm_file.h         |  21 +++-
->   7 files changed, 235 insertions(+), 68 deletions(-)
-
-Can we please add something to Documentation?  I know this leverages DRM 
-a lot, but I believe that a new subsystem should not be introduced 
-without documentation.  A lot of the info in the commit message is very 
-good, but should not be buried in the git log.
-
-Besides, imagine this has been in mainline for N years, and someone 
-completely new to the kernel wants to write an accel driver.  They 
-should be able to get started with something from Documentation that 
-at-least gives that person some insight into what to grep the code for.
-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c    |  4 ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 42 +++++++++--------------------
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h |  8 ------
+>   3 files changed, 13 insertions(+), 41 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
-> index b58ffb1433d6..c13701a8d4be 100644
-> --- a/drivers/gpu/drm/drm_drv.c
-> +++ b/drivers/gpu/drm/drm_drv.c
-> @@ -56,6 +56,9 @@ MODULE_LICENSE("GPL and additional rights");
->   static DEFINE_SPINLOCK(drm_minor_lock);
->   static struct idr drm_minors_idr;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> index 13ce321..8ec9a13 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+> @@ -1029,7 +1029,6 @@ static void dpu_crtc_disable(struct drm_crtc *crtc,
+>   		 */
+>   		if (dpu_encoder_get_intf_mode(encoder) == INTF_MODE_VIDEO)
+>   			release_bandwidth = true;
+> -		dpu_encoder_assign_crtc(encoder, NULL);
+>   	}
 >   
-> +static DEFINE_SPINLOCK(accel_minor_lock);
-> +static struct idr accel_minors_idr;
+>   	/* wait for frame_event_done completion */
+> @@ -1099,9 +1098,6 @@ static void dpu_crtc_enable(struct drm_crtc *crtc,
+>   	trace_dpu_crtc_enable(DRMID(crtc), true, dpu_crtc);
+>   	dpu_crtc->enabled = true;
+>   
+> -	drm_for_each_encoder_mask(encoder, crtc->dev, crtc->state->encoder_mask)
+> -		dpu_encoder_assign_crtc(encoder, crtc);
+> -
+>   	/* Enable/restore vblank irq handling */
+>   	drm_crtc_vblank_on(crtc);
+>   }
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 9c6817b..d05b353 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -132,11 +132,6 @@ enum dpu_enc_rc_states {
+>    * @intfs_swapped:	Whether or not the phys_enc interfaces have been swapped
+>    *			for partial update right-only cases, such as pingpong
+>    *			split where virtual pingpong does not generate IRQs
+> - * @crtc:		Pointer to the currently assigned crtc. Normally you
+> - *			would use crtc->state->encoder_mask to determine the
+> - *			link between encoder/crtc. However in this case we need
+> - *			to track crtc in the disable() hook which is called
+> - *			_after_ encoder_mask is cleared.
+>    * @connector:		If a mode is set, cached pointer to the active connector
+>    * @crtc_kickoff_cb:		Callback into CRTC that will flush & start
+>    *				all CTL paths
+> @@ -181,7 +176,6 @@ struct dpu_encoder_virt {
+>   
+>   	bool intfs_swapped;
+>   
+> -	struct drm_crtc *crtc;
+>   	struct drm_connector *connector;
+>   
+>   	struct dentry *debugfs_root;
+> @@ -1288,7 +1282,7 @@ static void dpu_encoder_vblank_callback(struct drm_encoder *drm_enc,
+>   		struct dpu_encoder_phys *phy_enc)
+>   {
+>   	struct dpu_encoder_virt *dpu_enc = NULL;
+> -	unsigned long lock_flags;
+> +	struct drm_crtc *crtc;
+>   
+>   	if (!drm_enc || !phy_enc)
+>   		return;
+> @@ -1296,12 +1290,13 @@ static void dpu_encoder_vblank_callback(struct drm_encoder *drm_enc,
+>   	DPU_ATRACE_BEGIN("encoder_vblank_callback");
+>   	dpu_enc = to_dpu_encoder_virt(drm_enc);
+>   
+> -	atomic_inc(&phy_enc->vsync_cnt);
+> +	if (!dpu_enc->connector || !dpu_enc->connector->state ||
+> +	    !dpu_enc->connector->state->crtc)
+> +		return;
+>   
+> -	spin_lock_irqsave(&dpu_enc->enc_spinlock, lock_flags);
+> -	if (dpu_enc->crtc)
+> -		dpu_crtc_vblank_callback(dpu_enc->crtc);
+> -	spin_unlock_irqrestore(&dpu_enc->enc_spinlock, lock_flags);
+> +	atomic_inc(&phy_enc->vsync_cnt);
+> +	crtc = dpu_enc->connector->state->crtc;
+> +	dpu_crtc_vblank_callback(crtc);
 
-IDR is deprecated.  XArray is the preferred mechanism.
-Yes, there already is IDR here, but I believe we should not be adding 
-new uses.  Maybe at some point, the current IDR will be converted.  Also 
-with XArray, I think you don't need the spinlock since XArray has 
-internal locking already.
+So, what if the user commits the mode setting change on another CPU, 
+while we are handling the vblank callback here? Can this happen?
+
+>   
+>   	DPU_ATRACE_END("encoder_vblank_callback");
+>   }
+-- 
+With best wishes
+Dmitry
+
