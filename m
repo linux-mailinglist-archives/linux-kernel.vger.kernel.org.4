@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE229609A88
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 08:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98B6609A92
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 08:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiJXGbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 02:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S230170AbiJXGeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 02:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiJXGbO (ORCPT
+        with ESMTP id S229556AbiJXGeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 02:31:14 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A714E5B7AC
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 23:31:12 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id o70so9981958yba.7
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 23:31:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YL8/YQZkg0smeVQbpzhQExhm+ki4d4kEGLs07CFx0sI=;
-        b=I5XXb7u0o/1XWbdXDaLunCz6/t8XCW7NrO7Xa1kgiJcfoCGrkXJo2P6izC18NuwZdJ
-         bEXGj648zTqdR6Ynkz2FvNlUHgmpsJpSY/fTerTvA9//WM0GYGiIZwxs2TbbuAoRQDYV
-         SAWa8FfAvgCoiFmeYEnVfSRDPy6tNVlWGzsKj0Y/E0xFD/7BEm3Al01YiXODJg1+De+0
-         TZzXYJ/RnsRwtTunP/6AFS5UW4NvC8R1mkjqphPteKyxzfBIDPK9CwgU+Z8l3EOcNG/I
-         BJGa9BeKD9AduUZs8OVW9AXzEJ99XuPSTSoTg27DjUaMlICTkzzVQGDG0FitZB+PGCMP
-         lepg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YL8/YQZkg0smeVQbpzhQExhm+ki4d4kEGLs07CFx0sI=;
-        b=Kz/GHui1Ib+Yumg181KkSQ9WKaiDJ4VgDR5/CaOYMIDxBbZ/Mdd4YVExunwzJ9TDBp
-         o6P7juH1i2mWB6mjJ+/9Nc8OtBQz4n/FzyuJKtdisHM6u6Z4gG0cnwjgL3SPEBqk92jL
-         7EfrTrC4mMEgj6LZQu26uNzuoNjGc8UiaS3C/bWGlax8BwJ/jpuXRJGsTT/Q+Gvis3fb
-         c9SBuW1hSmvpxT1dJzMzTVTeSk/PWkSAzXhISyqGXmnmAD5MHB/LHhekCv7tbaNsuJnG
-         ZV8jh2jhG1DJN8eWlFNuu3OJhYJ6OgnAmXx4d31r1IM6KU74lKiNjWAwuRj023O48qn5
-         wVAw==
-X-Gm-Message-State: ACrzQf1WQPxl3sJlCi/sY0Axi5WpdAzrvTlFqEMJ646P7NA+DNn5pZ89
-        BqapubZHjD5AtqV6JBRfX6zoIfqX/+112Lf9XKYewg==
-X-Google-Smtp-Source: AMsMyM5mRCTSxrDEGtkUFWeZgVR1hNdtpCoL8rF4E+k9Xx4F60uPmsnH9I7TyJtwVjBZUuSWr16JAXBBDRyiB+3Qwvg=
-X-Received: by 2002:a25:d914:0:b0:6cb:13e2:a8cb with SMTP id
- q20-20020a25d914000000b006cb13e2a8cbmr2899839ybg.231.1666593071630; Sun, 23
- Oct 2022 23:31:11 -0700 (PDT)
+        Mon, 24 Oct 2022 02:34:05 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E325C378;
+        Sun, 23 Oct 2022 23:34:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Mwlf11YZBz4x1V;
+        Mon, 24 Oct 2022 17:34:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666593242;
+        bh=3eIP8TJRgX3pfB62JavefRCci5PsgV1Uc3dFFxPAOPU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nm2X4A/tccyE/53hOASvlOPGa4dVwgMemuut/bMuFtLozRGdhLMG6cgzmxEwdob7T
+         Lf96GZ+YRJ9MbdzlKK9RZI+0riQJUbqSuVK3W7HkbpPnJ16Bvloy1AjGaQBuhb1s71
+         S1Nllt5zKnFAhs9p8qXhoktZ61KenrzN9nZdQd7CtTa36xCH/VE7p1F7W2a/gmLBJ+
+         516srarOsHOmy3HmW72Imy0nf5KE6iYQh6GHKsuxMWlBfEoD67rZRRupQUscaHM3AQ
+         MRE6aTDv9p+8XHOOn+bgpqNayHibOS4DyaQpENSgx/QK+CJlEWpXjmJHBi8NLgobRf
+         pew0AaWqApgPw==
+Date:   Mon, 24 Oct 2022 17:33:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the random tree
+Message-ID: <20221024173358.43de55f6@canb.auug.org.au>
+In-Reply-To: <Y1YUhaHXpMV80gQO@zx2c4.com>
+References: <20221024132319.4b3910ad@canb.auug.org.au>
+        <Y1YUhaHXpMV80gQO@zx2c4.com>
 MIME-Version: 1.0
-References: <000000000000fd9a4005ebbeac67@google.com> <Y1YeSj2vwPvRAW61@gondor.apana.org.au>
- <CANn89i+41Whp=ACQo393s_wPx_MtWAZgL9DqG9aoLomN4ddwTg@mail.gmail.com> <Y1YrVGP+5TP7V1/R@gondor.apana.org.au>
-In-Reply-To: <Y1YrVGP+5TP7V1/R@gondor.apana.org.au>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Sun, 23 Oct 2022 23:31:00 -0700
-Message-ID: <CANn89i+JY3PA_p5t3FrCeO+tAo3YuYOtnkeOeyYvBcqKhpgNZQ@mail.gmail.com>
-Subject: Re: [v2 PATCH] af_key: Fix send_acquire race with pfkey_register
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     syzbot <syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com>,
-        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        steffen.klassert@secunet.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Type: multipart/signed; boundary="Sig_/83c648kI+Dlm_h3XYGb8NOb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,97 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 11:06 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> On Sun, Oct 23, 2022 at 10:21:05PM -0700, Eric Dumazet wrote:
-> >
-> > Are you sure we can sleep in mutex_lock() ?
-> >
-> > Use of GFP_ATOMIC would suggest otherwise :/
->
-> Good point.  Acquires are triggered from the network stack so
-> it may be in BH context.
->
-> ---8<---
-> With name space support, it is possible for a pfkey_register to
-> occur in the middle of a send_acquire, thus changing the number
-> of supported algorithms.
->
-> This can be fixed by taking a lock to make it single-threaded
-> again.  As this lock can be taken from both thread and softirq
-> contexts, we need to take the necessary precausions with disabling
-> BH and make it a spin lock.
->
-> Reported-by: syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com
-> Fixes: 283bc9f35bbb ("xfrm: Namespacify xfrm state/policy locks")
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
->
-> diff --git a/net/key/af_key.c b/net/key/af_key.c
-> index c85df5b958d2..4e0d21e2045e 100644
-> --- a/net/key/af_key.c
-> +++ b/net/key/af_key.c
-> @@ -23,6 +23,7 @@
->  #include <linux/proc_fs.h>
->  #include <linux/init.h>
->  #include <linux/slab.h>
-> +#include <linux/spinlock.h>
->  #include <net/net_namespace.h>
->  #include <net/netns/generic.h>
->  #include <net/xfrm.h>
-> @@ -39,6 +40,7 @@ struct netns_pfkey {
->         atomic_t socks_nr;
->  };
->  static DEFINE_MUTEX(pfkey_mutex);
-> +static DEFINE_SPINLOCK(pfkey_alg_lock);
->
->  #define DUMMY_MARK 0
->  static const struct xfrm_mark dummy_mark = {0, 0};
-> @@ -1697,11 +1699,11 @@ static int pfkey_register(struct sock *sk, struct sk_buff *skb, const struct sad
->                 pfk->registered |= (1<<hdr->sadb_msg_satype);
->         }
->
-> -       mutex_lock(&pfkey_mutex);
-> +       spin_lock_bh(&pfkey_alg_lock);
->         xfrm_probe_algs();
->
->         supp_skb = compose_sadb_supported(hdr, GFP_KERNEL | __GFP_ZERO);
+--Sig_/83c648kI+Dlm_h3XYGb8NOb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-s/GFP_KERNEL/GFP_ATOMIC/
+Hi Jason,
 
-> -       mutex_unlock(&pfkey_mutex);
-> +       spin_unlock_bh(&pfkey_alg_lock);
+On Mon, 24 Oct 2022 06:28:53 +0200 "Jason A. Donenfeld" <Jason@zx2c4.com> w=
+rote:
 >
->         if (!supp_skb) {
->                 if (hdr->sadb_msg_satype != SADB_SATYPE_UNSPEC)
-> @@ -3160,6 +3162,7 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
->                 (sockaddr_size * 2) +
->                 sizeof(struct sadb_x_policy);
->
-> +       spin_lock_bh(&pfkey_alg_lock);
->         if (x->id.proto == IPPROTO_AH)
->                 size += count_ah_combs(t);
->         else if (x->id.proto == IPPROTO_ESP)
-> @@ -3171,8 +3174,10 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
->         }
->
->         skb =  alloc_skb(size + 16, GFP_ATOMIC);
-> -       if (skb == NULL)
-> +       if (skb == NULL) {
-> +               spin_unlock_bh(&pfkey_alg_lock);
->                 return -ENOMEM;
-> +       }
->
->         hdr = skb_put(skb, sizeof(struct sadb_msg));
->         hdr->sadb_msg_version = PF_KEY_V2;
-> @@ -3228,6 +3233,7 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
->                 dump_ah_combs(skb, t);
->         else if (x->id.proto == IPPROTO_ESP)
->                 dump_esp_combs(skb, t);
-> +       spin_unlock_bh(&pfkey_alg_lock);
->
->         /* security context */
->         if (xfrm_ctx) {
-> --
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+> I'll remove the removal commit for now and will plan on handling that
+> separately at the end of the 6.2 merge window.
+
+OK, thanks.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/83c648kI+Dlm_h3XYGb8NOb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNWMdcACgkQAVBC80lX
+0GxImgf7BB6rs/X6unMpvO0EcNeGWymZSA9Z2/UgCw1Bdej+iGrj2yHTMvTfR/PE
++LAbBhvgNhijQYBYbZkyWssootUS7j72bPHqdW5wKThtlU7lJbHK6qsrug6xGClL
+lBpPRUIk/ZnnwyxPcnej57rfTU2jxZLOoIFf3+E9JwT4KPaCneAINFzZSt2rNOBk
+K594M6ewWMxaj/i2MapMK6B2nBWu0mMPn5evYw9klilfUGgDTIQYS3iUl9uptnZS
+6zZVJNt+Bzb1pIaggyrVsHrdzb7ZL57jN4v4wqT5uRabiNcbgm+YMG+Dgv6/Qdgm
+zzHNxW4geD4H8MCBp7igchGD/CsXIg==
+=OCAP
+-----END PGP SIGNATURE-----
+
+--Sig_/83c648kI+Dlm_h3XYGb8NOb--
