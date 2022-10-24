@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1238C60BD23
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A57A60BEB5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbiJXWJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S229728AbiJXXg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbiJXWJF (ORCPT
+        with ESMTP id S230097AbiJXXgU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:09:05 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC871300708;
-        Mon, 24 Oct 2022 13:22:59 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mwz9Y6CVTz6HJXk;
-        Mon, 24 Oct 2022 23:13:37 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 17:14:56 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
- 2022 16:14:56 +0100
-Date:   Mon, 24 Oct 2022 16:14:54 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Terry Bowman <terry.bowman@amd.com>
-CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <dave.jiang@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bhelgaas@google.com>, <rafael@kernel.org>, <lenb@kernel.org>,
-        <dave@stgolabs.net>, <rrichter@amd.com>
-Subject: Re: [PATCH 5/5] cxl/pci: Log CXL device's PCIe AER and CXL RAS
- error information
-Message-ID: <20221024161454.00003d18@huawei.com>
-In-Reply-To: <20221021185615.605233-6-terry.bowman@amd.com>
-References: <20221021185615.605233-1-terry.bowman@amd.com>
-        <20221021185615.605233-6-terry.bowman@amd.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Mon, 24 Oct 2022 19:36:20 -0400
+X-Greylist: delayed 12570 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 14:56:58 PDT
+Received: from smtp126.iad3a.emailsrvr.com (smtp126.iad3a.emailsrvr.com [173.203.187.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDF02D450B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:56:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
+        s=20170822-45nk5nwl; t=1666627158;
+        bh=btRk7swX7GdyOa27zjsvyKxH9I1WQ7w6KviW39ZTEjM=;
+        h=Date:Subject:To:From:From;
+        b=blXWXCXqvCfG2PGic4/7VMl3LwZfUC8IQYpr+XpvxgmdKQs0B45TKBoz5VnLiq7sz
+         CWVCpj8G4h/KWDWnw8Kt/NygCmhEXmPQtb4XkwR6R4aI4A+V+ujXxXDTixzb6c1r6s
+         Eqvxrr9WgHmu+1iG1wnMPfGxi9TwwJzx4y/Oe8Io=
+X-Auth-ID: antonio@openvpn.net
+Received: by smtp16.relay.iad3a.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id 8EF0B5C85;
+        Mon, 24 Oct 2022 11:59:16 -0400 (EDT)
+Message-ID: <cd51cf56-c729-87da-5e2e-03447c9a3d42@openvpn.net>
+Date:   Mon, 24 Oct 2022 17:59:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [RFE net-next] net: tun: 1000x speed up
+To:     nicolas.dichtel@6wind.com, Ilya Maximets <i.maximets@ovn.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+References: <20221021114921.3705550-1-i.maximets@ovn.org>
+ <20221021090756.0ffa65ee@kernel.org>
+ <eb6903b7-c0d9-cc70-246e-8dbde0412433@6wind.com>
+ <ded477ea-08fa-b96d-c192-9640977b42e6@ovn.org>
+ <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
+Content-Language: en-US
+From:   Antonio Quartulli <antonio@openvpn.net>
+In-Reply-To: <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Classification-ID: 0a266811-a982-4e0c-a42b-2cb7488dbf9b-1-1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,237 +58,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022 13:56:15 -0500
-Terry Bowman <terry.bowman@amd.com> wrote:
+Hi,
 
-> The CXL downport PCIe AER and CXL RAS capability information needs to be
-> logged during PCIe AER error handling.
+On 24/10/2022 14:27, Nicolas Dichtel wrote:
+> Le 24/10/2022 à 13:56, Ilya Maximets a écrit :
+>> On 10/24/22 11:44, Nicolas Dichtel wrote:
+>>> Le 21/10/2022 à 18:07, Jakub Kicinski a écrit :
+>>>> On Fri, 21 Oct 2022 13:49:21 +0200 Ilya Maximets wrote:
+>>>>> Bump the advertised speed to at least match the veth.  10Gbps also
+>>>>> seems like a more or less fair assumption these days, even though
+>>>>> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
+>>>>> and let the application/user decide on a right value for them.
+>>>>
+>>>> UNKOWN would seem more appropriate but at this point someone may depend
+>>>> on the speed being populated so it could cause regressions, I fear :S
+>>> If it is put in a bonding, it may cause some trouble. Maybe worth than
+>>> advertising 10M.
+>>
+>> My thoughts were that changing the number should have a minimal impact
+>> while changing it to not report any number may cause some issues in
+>> applications that doesn't expect that for some reason (not having a
+>> fallback in case reported speed is unknown isn't great, and the argument
+>> can be made that applications should check that, but it's hard to tell
+>> for every application if they actually do that today).
+>>
+>> Bonding is also a good point indeed, since it's even in-kernel user.
+>>
+>>
+>> The speed bump doesn't solve the problem per se.  It kind of postpones
+>> the decision, since we will run into the same issue eventually again.
+>> That's why I wanted to discuss that first.
+>>
+>> Though I think that at least unification across virtual devices (tun and
+>> veth) should be a step in a right direction.
+> Just to make it clear, I'm not against aligning speed with veth, I'm only
+> against reporting UNKNOWN.
 > 
-> The existing PCIe AER error handler logs native AER errors but does not
-> log upport/downport AER capability residing in the RCRB. The CXL1.1
-> RCRB does not have a BDF and is not enunmerable. The existing error handler
-> logic does not display CXL RAS details either.
-
-So this is doing two things? 
-If so split it into dealing with the non enumerable part, and then a separate
-patch to deal with the CXL RAS information. However, I'm only spotting the
-CXL RAS handling part in here.
-
-Also, there are numerous drivers that provide additional logging in response
-to an AER error. With the exception of providing a way to do that for
-corrected errors (as I mentioned in David Jiang's series on CXL 2.0+ RAS handling)
-I don't think we should be doing anything down in the PCI layers for this.
-We should see an internal AER error and then the CXL driver should handle that,
-adding more logging as needed.
-
+>>
+>>>
+>>> Note that this value could be configured with ethtool:
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e24f2dd516ed
+>>
+>> This is interesting, but it's a bit hard to manage, because in order
+>> to make a decision to bump the speed, application should already know
+>> that this is a tun/tap device.  So, there has to be a special case
+> But this should be done by the application which creates this tun interface. Not
+> by the application that uses this information.
 > 
-> Add a CXL error handler to the existing PCI error handlers. Add a call
-> to the CXL error handler within the PCIe AER error handler. Implement the
-> driver's CXL callback to log downport PCIe AER and CXL RAS capability
-> information.
+>> implemented in the code that detects the driver and changes the speed
+>> (this is about application that is using the interface, but didn't
+>> create it), but if we already know the driver, then it doesn't make
+>> sense to actually change the speed in many cases as application can
+>> already act accordingly.
+>>
+>> Also, the application may not have permissions to do that (I didn't
+>> check the requirements, but my guess would be at least CAP_NET_ADMIN?).
+> Sure, but the one who creates it, has the right to configure it correctly. It's
+> part of the configuration of the interface.
 > 
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> ---
->  drivers/cxl/pci.c      | 76 ++++++++++++++++++++++++++++++++++++++++++
->  drivers/pci/pcie/aer.c | 45 ++++++++++++++++++++++++-
->  include/linux/pci.h    |  4 +++
->  3 files changed, 124 insertions(+), 1 deletion(-)
+> Setting an higher default speed seems to be a workaround to fix an incorrect
+> configuration. And as you said, it will probably be wrong again in a few years ;-)
 > 
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index 80a01b304efe..dceda9f9fc60 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -7,6 +7,7 @@
->  #include <linux/sizes.h>
->  #include <linux/mutex.h>
->  #include <linux/list.h>
-> +#include <linux/aer.h>
->  #include <linux/pci.h>
->  #include <linux/pci-doe.h>
->  #include <linux/io.h>
-> @@ -14,6 +15,9 @@
->  #include "cxlpci.h"
->  #include "cxl.h"
->  
-> +extern void cxl_print_aer(struct pci_dev *dev, int aer_severity,
-> +			  struct aer_capability_regs *aer);
-> +
->  /**
->   * DOC: cxl pci
->   *
-> @@ -744,9 +748,80 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  	if (resource_size(&cxlds->pmem_res) && IS_ENABLED(CONFIG_CXL_PMEM))
->  		rc = devm_cxl_add_nvdimm(&pdev->dev, cxlmd);
->  
-> +	dev_set_drvdata(&pdev->dev, cxlmd);
-> +
->  	return rc;
->  }
->  
-> +struct ras_cap {
-> +	u32 uc_error_status;
-> +	u32 uc_error_mask;
-> +	u32 uc_error_severity;
-> +	u32 c_error_status;
-> +	u32 c_error_mask;
-> +	u32 ctrl;
-> +	u32 log[];
-> +};
-> +
-> +/*
-> + * Log the state of the CXL downport AER and RAS status registers.
-> + */
-> +static void cxl_error_report(struct cxl_memdev *cxlmd)
-> +{
-> +	struct pci_dev *pdev = to_pci_dev(cxlmd->cxlds->dev);
-> +	struct aer_capability_regs *aer_cap;
-> +	struct ras_cap *ras_cap;
-> +
-> +	aer_cap = (struct aer_capability_regs *)cxlmd->cxlds->aer_map.base;
-> +	ras_cap = (struct ras_cap *)cxlmd->cxlds->ras_map.base;
-> +
-> +	pci_err(pdev, "CXL Error Report\n");
-> +	pci_err(pdev, "AER Errors:\n");
-> +	if (aer_cap) {
-> +		cxl_print_aer(pdev, AER_CORRECTABLE, aer_cap);
-> +		cxl_print_aer(pdev, AER_NONFATAL, aer_cap);
-> +		cxl_print_aer(pdev, AER_FATAL, aer_cap);
-> +	}
-> +
-> +	pci_err(pdev, "RAS Errors:\n");
-> +	if (ras_cap) {
-> +		pci_err(pdev, "RAS: uc_error_status = %X\n", readl(&ras_cap->uc_error_status));
-> +		pci_err(pdev, "RAS: uc_error_mask = %X\n", readl(&ras_cap->uc_error_mask));
-> +		pci_err(pdev, "RAS: uc_error_severity = %X\n", readl(&ras_cap->uc_error_severity));
-> +		pci_err(pdev, "RAS: c_error_status = %X\n", readl(&ras_cap->c_error_status));
-> +		pci_err(pdev, "RAS: c_error_mask = %X\n", readl(&ras_cap->c_error_mask));
-> +		pci_err(pdev, "RAS: ras_caps->ctrl = %X\n", readl(&ras_cap->ctrl));
-> +		pci_err(pdev, "RAS: log = %X\n", readl(&ras_cap->log));
-> +	}
-> +}
-> +
-> +static void cxl_error_detected(struct pci_dev *pdev)
-> +{
-> +	struct cxl_memdev *cxlmd;
-> +
-> +	if (!is_cxl_memdev(&pdev->dev)) {
-> +		pci_err(pdev, "CXL memory device is invalid\n");
-> +		return;
-> +	}
-> +
-> +	cxlmd = dev_get_drvdata(&pdev->dev);
-> +	if (!cxlmd) {
-> +		pci_err(pdev, "CXL memory device is NULL\n");
-> +		return;
-> +	}
-> +
-> +	if (!cxlmd->cxlds) {
-> +		pci_err(pdev, "CXL device state object is NULL\n");
-> +		return;
-> +	}
-> +
-> +	cxl_error_report(cxlmd);
-> +}
-> +
-> +static struct pci_error_handlers cxl_error_handlers = {
-> +	.cxl_error_detected = cxl_error_detected,
-> +};
-> +
->  static const struct pci_device_id cxl_mem_pci_tbl[] = {
->  	/* PCI class code for CXL.mem Type-3 Devices */
->  	{ PCI_DEVICE_CLASS((PCI_CLASS_MEMORY_CXL << 8 | CXL_MEMORY_PROGIF), ~0)},
-> @@ -761,6 +836,7 @@ static struct pci_driver cxl_pci_driver = {
->  	.driver	= {
->  		.probe_type	= PROBE_PREFER_ASYNCHRONOUS,
->  	},
-> +	.err_handler		= &cxl_error_handlers,
->  };
->  
->  MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> index e2d8a74f83c3..dea04d412406 100644
-> --- a/drivers/pci/pcie/aer.c
-> +++ b/drivers/pci/pcie/aer.c
-> @@ -811,6 +811,13 @@ void cper_print_aer(struct pci_dev *dev, int aer_severity,
->  }
->  #endif
->  
-> +void cxl_print_aer(struct pci_dev *dev, int aer_severity,
-> +		    struct aer_capability_regs *aer)
-> +{
-> +	cper_print_aer(dev, aer_severity, aer);
-> +}
-> +EXPORT_SYMBOL_GPL(cxl_print_aer);
-> +
->  /**
->   * add_error_device - list device to be handled
->   * @e_info: pointer to error info
-> @@ -1169,6 +1176,40 @@ static void aer_isr_one_error(struct aer_rpc *rpc,
->  	}
->  }
->  
-> +static int report_cxl_errors_iter(struct pci_dev *pdev, void *data)
-> +{
-> +	struct pci_driver *pdrv = pdev->driver;
-> +
-> +	if (pdrv &&
-> +	    pdrv->err_handler &&
-> +	    pdrv->err_handler->cxl_error_detected)
-> +		pdrv->err_handler->cxl_error_detected(pdev);
-> +
-> +	return 0;
-> +}
-> +
-> +static void report_cxl_errors(struct aer_rpc *rpc,
-> +			      struct aer_err_source *e_src)
-> +{
-> +	struct pci_dev *pdev = rpc->rpd;
-> +	struct aer_err_info e_info;
-> +	u32 uncor_status, cor_status;
-> +
-> +	pci_read_config_dword(pdev, pdev->aer_cap + PCI_ERR_UNCOR_STATUS, &uncor_status);
-> +	pci_read_config_dword(pdev, pdev->aer_cap + PCI_ERR_COR_STATUS, &cor_status);
-> +
-> +	if (!uncor_status && !cor_status)
-> +		return;
-> +
-> +	if (pci_pcie_type(pdev) == PCI_EXP_TYPE_RC_EC)
-> +		pcie_walk_rcec(pdev, report_cxl_errors_iter, &e_info);
-> +	else
-> +		pci_walk_bus(pdev->subordinate, report_cxl_errors_iter, &e_info);
-> +
-> +	pci_write_config_dword(pdev, pdev->aer_cap + PCI_ERR_UNCOR_STATUS, uncor_status);
-> +	pci_write_config_dword(pdev, pdev->aer_cap + PCI_ERR_COR_STATUS, cor_status);
-> +}
-> +
->  /**
->   * aer_isr - consume errors detected by root port
->   * @irq: IRQ assigned to Root Port
-> @@ -1185,8 +1226,10 @@ static irqreturn_t aer_isr(int irq, void *context)
->  	if (kfifo_is_empty(&rpc->aer_fifo))
->  		return IRQ_NONE;
->  
-> -	while (kfifo_get(&rpc->aer_fifo, &e_src))
-> +	while (kfifo_get(&rpc->aer_fifo, &e_src)) {
-> +		report_cxl_errors(rpc, &e_src);
->  		aer_isr_one_error(rpc, &e_src);
-> +	}
->  	return IRQ_HANDLED;
->  }
->  
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 2bda4a4e47e8..4f4b3a8f5454 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -827,6 +827,10 @@ enum pci_ers_result {
->  
->  /* PCI bus error event callbacks */
->  struct pci_error_handlers {
-> +
-> +	/* CXL error detected on this device */
-> +	void (*cxl_error_detected)(struct pci_dev *dev);
-> +
->  	/* PCI bus error detected on this device */
->  	pci_ers_result_t (*error_detected)(struct pci_dev *dev,
->  					   pci_channel_state_t error);
 
+What if the real throughput is in the order of 10Mbps?
+
+The tun driver can be used for many purposes and the throughput will 
+depend on the specific case.
+
+Imagine an application using the reported speed for computing some kind 
+of metric: having 10Gbps will corrupt the result entirely.
+
+OTOH it is true that 10Mbps may corrupt the metric as well, but the 
+latter is closer to reality IMHO (when using tun to process and send 
+traffic over the network).
+
+At the end I also agree that the speed should be set by whoever creates 
+the interface. As they are the only one who knows what to expect for real.
+
+(Note: tun is used also to implement userspace VPNs, with throughput 
+ranging from 10Mbps to 1Gbps).
+
+my 2 cents.
+
+Cheers,
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.
