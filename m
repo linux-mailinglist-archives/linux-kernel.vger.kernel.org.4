@@ -2,187 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DE460A99C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E4860A6F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiJXNXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
+        id S234232AbiJXMm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbiJXNWK (ORCPT
+        with ESMTP id S234343AbiJXMjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:22:10 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DDE140BE
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:29:31 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id p6so8292257plr.7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:29:31 -0700 (PDT)
+        Mon, 24 Oct 2022 08:39:36 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D97F7D7A0;
+        Mon, 24 Oct 2022 05:07:18 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id j188so10574680oih.4;
+        Mon, 24 Oct 2022 05:07:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5+lNDU/7OVWZdRTzaQ0NNoHLmGlotseKeYdhpqFhZHk=;
-        b=ELM7yD3oiyJMNZjuq6+6Ex/rHcrMTY9mQ5tNeBwzHLydPg0gZHlF7XsvW1qorqNXit
-         +1clr9lF9YGe2kf2wSGlmcErC4WdUV2mJclhDusQXllPYQIVafBWeC2hY7DTDFJEA/gy
-         DHTUn82tj8FzO+vABFXg6YciJQBhFtT4OT6DVBod8WTp9mMJhhSI6vwxWE2MV7uVC1M9
-         CWg6mZN5LUXqiYcB5E6m33jGN8tYNt1DVe63+GyxUqJbAScwDkeBxMOxAxBg8Z/D9LBC
-         /rqOoSynJrCwt1BDkHRnNol0Ycqz9wssry5CJatx+rOA9oWm9IQ5GyMCZ7LZm+IMtk07
-         j8eQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=CbU95M10rqKY9XTXjrLAHGbidlvO8mcbEqMNhmT7zvE=;
+        b=lZ72Dng6YwE1VM+uB0t4UEk3Y1M9gpQwvU+esV+jNeqLh/Af6sPMswmzLSAnudaLSn
+         Vq6KW2BBQOJy6bgnGyAofVWyQQGJDoL78TW/swcYuOV/8v43h5Lf2cqGaZWcoPHBCC0B
+         +O5tahgUM9fWvEE7V2Ws8lynfYb+GyC9uAPsw769WBn+OtlHX+Gz/+TIZlfNDMeWYEah
+         pFZYUW+YmWwzCcq2C2FoziwEGUSx998jU1v7ZmgBq45oTvhCIEFoj/Y8efDUkCwPQBoC
+         eH/6/KtDuqtmOnmFZ82Jt1wg5VFyN0SRyjVDngcTQK7tmH9vHCgLbXpJ9zlUiPJnSbfv
+         ldHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5+lNDU/7OVWZdRTzaQ0NNoHLmGlotseKeYdhpqFhZHk=;
-        b=3B6BMakeAI31ltOol9ar0jWmwXueEDLaPZjw+78VpLmTUAZ0nQVuiDWiLKEAbI20dM
-         Yr7JxG213EiJIkVp0yXLbzhKroszzRkCtSYbgvlJP5YKMFi9UX7nVYmh4wX0ILnuN0RD
-         ABl7lRn2tNEy9o0mxuiUXzcl0hicAesjf/eCRsKc2lBhLXby7asn/+iqMZoFzTCICTVS
-         JBrb9Ny0bzB43cRoHTaZApWCOQZd+bRHjTaBgaatg5hFSAI3u+eUDS+LzmsfpMNfMHVR
-         SwbytVdYjtMGJpy2wPzRKqTs7B9ChXKedEHyoJeKhIWzjNr9oQssyEK+pXyLti1QJOzc
-         vVYQ==
-X-Gm-Message-State: ACrzQf2qpizRFts2rG0cJKHMnc7LtFrpmxn7i0mUARJtZG3aDdKJUnHn
-        2HmI9lK+ddaHPteRsqpa8wFoWA2PwK/5Sdug
-X-Google-Smtp-Source: AMsMyM52yf+fvqYPvZeS1DKLnZf/VX+KNJmRf5dcZ02xlrYFrlYIJNW33UZRrKUu0oE/cElVDg23zg==
-X-Received: by 2002:aa7:8011:0:b0:567:70cc:5b78 with SMTP id j17-20020aa78011000000b0056770cc5b78mr29115949pfi.29.1666612581441;
-        Mon, 24 Oct 2022 04:56:21 -0700 (PDT)
-Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id on16-20020a17090b1d1000b0020b21019086sm18524378pjb.3.2022.10.24.04.56.13
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CbU95M10rqKY9XTXjrLAHGbidlvO8mcbEqMNhmT7zvE=;
+        b=rIJcIO2Hv+sOijdSnNs0kO08GgdInm2wVTcyVZ8948IYk9swncFL0BciEkGnFmEaIU
+         31X21fmKzdcuMxsY3tGEImuz7HB5x6VfqcgcUbMtrzENOMM1Ou6ymS9m4Bx9w1dAJ6nF
+         VboMroPNC0ep9DfS0hiMFi5slNODxU3WCu+ftSD32ft5oeGyrLRdEJCBf5TsMh/F+ile
+         M89cWqagkmZ00BhDh5Zxr7befvzDDMueNBiwliRRSugsLpB7cLykbBZjDR+C3y59gKOF
+         +twnff2IvwMpRZ5+bsNW2x5VlzH6xrq2KfdIy8VloM6u4ULvPoGuS4kuupV36EE/cvm/
+         bk6Q==
+X-Gm-Message-State: ACrzQf16hVvz4qrtFLfoXG0xMkPNx87ewe3N9YNmJFS3RB2C8Yciuluj
+        2DdAf0O1eq3DpzRkkbKeexDHXgYlZeM=
+X-Google-Smtp-Source: AMsMyM7eUvJ+DnIELw80appBQ9f9gpDH65K7vBNEnv7NXO4DBYMxT/SuDsF5dZgN1MxDw4UuOtzYog==
+X-Received: by 2002:a05:6870:538a:b0:132:756f:2c98 with SMTP id h10-20020a056870538a00b00132756f2c98mr35892818oan.134.1666612607711;
+        Mon, 24 Oct 2022 04:56:47 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q9-20020a05683033c900b006622d085a7fsm3493018ott.50.2022.10.24.04.56.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 04:56:20 -0700 (PDT)
-Message-ID: <18478739-625b-0c16-cd5a-e05c5372a74a@daynix.com>
-Date:   Mon, 24 Oct 2022 20:56:11 +0900
+        Mon, 24 Oct 2022 04:56:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
+Date:   Mon, 24 Oct 2022 04:56:43 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 00/22] Fallback to native backlight
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "Lee, Chun-Yi" <jlee@suse.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Cezary Jackiewicz <cezary.jackiewicz@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Jonathan Woithe <jwoithe@just42.net>,
-        Ike Panhc <ike.pan@canonical.com>,
-        Daniel Dadap <ddadap@nvidia.com>,
-        Kenneth Chan <kenneth.t.chan@gmail.com>,
-        Mattia Dongili <malattia@linux.it>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Azael Avalos <coproscefalo@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Robert Moore <robert.moore@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        ibm-acpi-devel@lists.sourceforge.net, linux-fbdev@vger.kernel.org,
-        devel@acpica.org
-References: <20221024113513.5205-1-akihiko.odaki@daynix.com>
- <87tu3te92n.fsf@intel.com>
+ Thunderbird/102.2.2
+Subject: Re: (bug report) HWMON & Thermal interactions
 Content-Language: en-US
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <87tu3te92n.fsf@intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Cristian Marussi <cristian.marussi@arm.com>,
+        daniel.lezcano@linaro.org
+Cc:     sudeep.holla@arm.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <Y1WHnJ6h1RSOipV4@e120937-lin>
+ <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
+In-Reply-To: <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/24 20:48, Jani Nikula wrote:
-> On Mon, 24 Oct 2022, Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->> Commit 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native()
->> helper") and following commits made native backlight unavailable if
->> CONFIG_ACPI_VIDEO is set and the backlight feature of ACPI video is
->> unavailable, which broke the backlight functionality on Lenovo ThinkPad
->> C13 Yoga Chromebook. Allow to fall back to native backlight in such
->> cases.
-> 
-> Where's the bug report with relevant logs, kconfigs, etc?
-
-I haven't filed one. Should I? Please tell me where to report and what 
-information you would need (to bugzilla.kernel.org with things mentioned 
-in Documentation/admin-guide/reporting-issues.rst?)
-
-Regards,
-Akihiko Odaki
-
-> 
-> BR,
-> Jani.
-> 
+On 10/23/22 14:23, Guenter Roeck wrote:
+> On 10/23/22 11:27, Cristian Marussi wrote:
+>> Hi,
 >>
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>> Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
+>> to the fact that no trip points were (ever !) defined in the DT; bisecting it
+>> looks like that after:
 >>
->> Akihiko Odaki (22):
->>    drm/i915/opregion: Improve backlight request condition
->>    ACPI: video: Introduce acpi_video_get_backlight_types()
->>    LoongArch: Use acpi_video_get_backlight_types()
->>    platform/x86: acer-wmi: Use acpi_video_get_backlight_types()
->>    platform/x86: asus-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: asus-wmi: Use acpi_video_get_backlight_types()
->>    platform/x86: compal-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: eeepc-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: fujitsu-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: ideapad-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: msi-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: msi-wmi: Use acpi_video_get_backlight_types()
->>    platform/x86: nvidia-wmi-ec-backlight: Use
->>      acpi_video_get_backlight_types()
->>    platform/x86: panasonic-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: samsung-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: sony-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: thinkpad_acpi: Use acpi_video_get_backlight_types()
->>    platform/x86: toshiba_acpi: Use acpi_video_get_backlight_types()
->>    platform/x86: dell-laptop: Use acpi_video_get_backlight_types()
->>    platform/x86: intel_oaktrail: Use acpi_video_get_backlight_types()
->>    ACPI: video: Remove acpi_video_get_backlight_type()
->>    ACPI: video: Fallback to native backlight
+>> https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
 >>
->>   Documentation/gpu/todo.rst                    |  8 +--
->>   drivers/acpi/acpi_video.c                     |  2 +-
->>   drivers/acpi/video_detect.c                   | 54 ++++++++++---------
->>   drivers/gpu/drm/i915/display/intel_opregion.c |  3 +-
->>   drivers/platform/loongarch/loongson-laptop.c  |  4 +-
->>   drivers/platform/x86/acer-wmi.c               |  2 +-
->>   drivers/platform/x86/asus-laptop.c            |  2 +-
->>   drivers/platform/x86/asus-wmi.c               |  4 +-
->>   drivers/platform/x86/compal-laptop.c          |  2 +-
->>   drivers/platform/x86/dell/dell-laptop.c       |  2 +-
->>   drivers/platform/x86/eeepc-laptop.c           |  2 +-
->>   drivers/platform/x86/fujitsu-laptop.c         |  4 +-
->>   drivers/platform/x86/ideapad-laptop.c         |  2 +-
->>   drivers/platform/x86/intel/oaktrail.c         |  2 +-
->>   drivers/platform/x86/msi-laptop.c             |  2 +-
->>   drivers/platform/x86/msi-wmi.c                |  2 +-
->>   .../platform/x86/nvidia-wmi-ec-backlight.c    |  2 +-
->>   drivers/platform/x86/panasonic-laptop.c       |  2 +-
->>   drivers/platform/x86/samsung-laptop.c         |  2 +-
->>   drivers/platform/x86/sony-laptop.c            |  2 +-
->>   drivers/platform/x86/thinkpad_acpi.c          |  4 +-
->>   drivers/platform/x86/toshiba_acpi.c           |  2 +-
->>   drivers/video/backlight/backlight.c           | 18 +++++++
->>   include/acpi/video.h                          | 21 ++++----
->>   include/linux/backlight.h                     |  1 +
->>   25 files changed, 85 insertions(+), 66 deletions(-)
+>> the presence of the mandatory trips node within thermal zones is now
+>> enforced.
+>>
+>> So, this is NOT what this bug report is about (I'll post soon patches for
+>> the JUNO DT missing trips) BUT once this problem was solved in the DT,
+>> another issue appeared:
+>>
+>> [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
+>>
+>> that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
+>> embedding that sensors, only the first one is found as belonging to one ThermZ.
+>> (this happens ALSO with v6.0 once I added the trips...)
+>>
+>> Digging deep into this, it turned out that inside the call chain
+>>
+>> devm_hwmon_device_register_with_info
+>>    hwmon_device_register_with_info
+>>      __hwmon_device_register
+>>     hwmon_thermal_register_sensors(dev)
+>>         --> hwmon_thermal_add_sensor(dev, j)
+>>             --> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
+>>
+>> the HWMON channel index j is passed to the Thermal framework in order to
+>> search and bind sensors with defined thermal zone, but this lead to the
+>> assumption that sequential HWMON channel indexes corresponds one-to-one to the
+>> underlying real sensor IDs that the ThermalFramework uses for matching
+>> within the DT.
+>>
+>> On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
+>> thermal zones like:
+>>
+>> thernal_zones {
+>>     pmic {
+>>         ...
+>>         thermal-sensors = <&scmi_sensors0 0>;
+>>         ...
+>>         trips {
+>>             ...
+>>         }
+>>     soc {
+>>         ...
+>>         thermal-sensors = <&scmi_sensors0 3>;
+>>         ...
+>>         trips {
+>>             ...
+>>         }
+>>     }
+>> }
+>>
+>> This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
+>> the soc where J=1 BUT the real sensor ID is 3.
+>>
+>> Note that there can be a number of sensors, not all of them of a type handled
+>> by HWMON, and enumerated by SCMI in different ways depending on the
+>> platform.
+>>
+>> I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
+>> context, where sensors are purely defined in the DT, the solution can be
+>> more easily attained (i.e. renumber the sensors).
+>>
+>> At first I tried to solve this inside scmi-hwmon.c BUT I could not find
+>> a way to present to the HWMON subsystem the list of sensors preserving
+>> the above index/sensor_id matching (not even with a hack like passing
+>> down dummy sensors to the HWMON subsystem to fill the 'holes' in the
+>> numbering)
+>>
+>> My tentative solution, which works fine for me in my context, was to add
+>> an optional HWMON hwops, so that the core hwmon can retrieve if needed the
+>> real sensor ID if different from the channel index (using an optional hwops
+>> instead of some static hwinfo var let me avoid to have to patch all the
+>> existent hwmon drivers that happens to just work fine as of today...but
+>> maybe it is not necessarily the proper final solution...)
+>>
+>> i.e.
+>>
+>> ----8<----
+>>
+>> Author: Cristian Marussi <cristian.marussi@arm.com>
+>> Date:   Fri Oct 21 17:24:04 2022 +0100
+>>
+>>      hwmon: Add new .get_sensor_id hwops
+>>      Add a new optional helper which can be defined to allow an hwmon chip to
+>>      provide the logic to map hwmon indexes to the real underlying sensor IDs.
 > 
+> Maybe I am missing something, but ...
+> 
+> The driver isn't supposed to know anything about thermal devices and
+> thermal zones. If that no longer works, and drivers have to know about
+> thermal zones and thermal zone device index values anyway, we might
+> as well pull thermal device support from the hwmon core and implement
+> it in drivers.
+> 
+
+No, wait: The question is really: Why does the scmi driver present the sensor
+with index 3 to the hwmon subsystem as sensor with index 1 ?
+
+If the sensor has index 3, and is presented to other entities as sensor
+with index 3, it should be presented to the hwmon subsystem as sensor with
+index 3, not with index 1. If sensors with index 1..2 do not exist,
+the is_visible function should return 0 for those sensors.
+
+Guenter
+
+> Guenter
+> 
+
