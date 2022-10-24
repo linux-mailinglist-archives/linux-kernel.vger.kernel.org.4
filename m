@@ -2,111 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E3A609BB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49F7609BC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJXHnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S229738AbiJXHos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiJXHnC (ORCPT
+        with ESMTP id S229954AbiJXHoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:43:02 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD346175E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:42:47 -0700 (PDT)
-Received: from ginster.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::45])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <jbe@pengutronix.de>)
-        id 1oms6f-0005nn-99; Mon, 24 Oct 2022 09:42:45 +0200
-Message-ID: <caaf147aeb71d69d767cc8509809a2770d297cb9.camel@pengutronix.de>
-Subject: Re: [PATCH] net: fec: limit register access on i.MX6UL
-From:   Juergen Borleis <jbe@pengutronix.de>
-Reply-To: jbe@pengutronix.de
-To:     Marco Felsch <m.felsch@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Date:   Mon, 24 Oct 2022 09:42:44 +0200
-In-Reply-To: <20220920125011.em66q7t7buywvr4m@pengutronix.de>
-References: <20220920095106.66924-1-jbe@pengutronix.de>
-         <Yym2I8SYMW7HRWLD@lunn.ch> <20220920125011.em66q7t7buywvr4m@pengutronix.de>
-Organization: Pengutronix e.K.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 24 Oct 2022 03:44:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10607625E8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:43:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666597401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZIv2r2dWkEokiNFPkjqlVbo9H7afruyUMoFYLJNwyjU=;
+        b=XL+oh7/rsSmgOR6Iq4EfIB9RHCGxTEYE+crzBlE8pl282JUuLmw2hzDEPGnlAA/kDixll2
+        CXSzSnaV4NVZRI4ZFPRvy7S9XkwnX3aoookvXeu6aEnjd4yeXnAFFAOR5M0EN2zqmLVtTN
+        zvRnn9BoywLXbXhHP2xBIyOTKCnZXpw=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-178-RiSF1n9VPoO6toG_9AOdlw-1; Mon, 24 Oct 2022 03:43:11 -0400
+X-MC-Unique: RiSF1n9VPoO6toG_9AOdlw-1
+Received: by mail-qt1-f197.google.com with SMTP id bz12-20020a05622a1e8c00b0039ae6e887ffso6614382qtb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:43:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZIv2r2dWkEokiNFPkjqlVbo9H7afruyUMoFYLJNwyjU=;
+        b=oK700Swvh8U2m7xuhvbFrwZiDPXc4WXDtWe3EkezHXxcJtCWkC0gBdfndyocbTJ25E
+         OzgTB82dpMrrH/650i5r/kFN1mjiSYAtrVWCDLoaznZ41ART/pZ2n6enh8AQE7e3NGBg
+         gm3qHIlh53FGyZabT1xaYsrpM8nMqWzsYXXzFvP1Fm//Lz+PJoZ1mUEdLCHsHarmoWZ7
+         JXaYZSpd36vOQ5p4bxLsBy204QOmBpnbZOb4NPmh203YaoQRWALDCVf9+xvyLUGMUB0o
+         vhhzbxBqc54Uo6D+FBeL/GesMGbqPuOQxOvMj/xJ2ZaAyX9ITUhVa7cqWdufeEDpZhMX
+         7I8Q==
+X-Gm-Message-State: ACrzQf3iDktaHfFcGq1yU1ZbBGA/+o/50+P+5mGcXHPL9K8GJ1yyrQ+W
+        NtFGGNc4fcLSbfWJveLDwNTz5yxE15KWOgBIwNr8CJ5K2ieEdjkVYD8XjU9xQyRkqtUPTatsh5p
+        LxYCECNjNOeVvHyDMWK/kszyS
+X-Received: by 2002:a05:620a:22aa:b0:6ef:a22:f164 with SMTP id p10-20020a05620a22aa00b006ef0a22f164mr14256275qkh.697.1666597390492;
+        Mon, 24 Oct 2022 00:43:10 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM56ffpk5LHX1u7kc6YRwKSsol+j2ZCZ1+6tHhrTU4K+2HzRICzk+0ehzcxld8f1R1vpFng9YA==
+X-Received: by 2002:a05:620a:22aa:b0:6ef:a22:f164 with SMTP id p10-20020a05620a22aa00b006ef0a22f164mr14256262qkh.697.1666597390198;
+        Mon, 24 Oct 2022 00:43:10 -0700 (PDT)
+Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
+        by smtp.gmail.com with ESMTPSA id h6-20020ac85846000000b0039a9b55b829sm12647888qth.29.2022.10.24.00.43.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 00:43:09 -0700 (PDT)
+Message-ID: <4ef882c2-1535-d7df-d474-e5fab2975f53@redhat.com>
+Date:   Mon, 24 Oct 2022 09:43:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 4/4] KVM: use signals to abort enter_guest/blocking and
+ retry
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221022154819.1823133-1-eesposit@redhat.com>
+ <20221022154819.1823133-5-eesposit@redhat.com>
+ <5ee4eeb8-4d61-06fc-f80d-06efeeffe902@redhat.com>
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+In-Reply-To: <5ee4eeb8-4d61-06fc-f80d-06efeeffe902@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::45
-X-SA-Exim-Mail-From: jbe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, dem 20.09.2022 um 14:50 +0200 schrieb Marco Felsch:
-> On 22-09-20, Andrew Lunn wrote:
-> > > +/* for i.MX6ul */
-> > > +static u32 fec_enet_register_offset_6ul[] = {
-> > > +       FEC_IEVENT, FEC_IMASK, FEC_R_DES_ACTIVE_0, FEC_X_DES_ACTIVE_0,
-> > > +       FEC_ECNTRL, FEC_MII_DATA, FEC_MII_SPEED, FEC_MIB_CTRLSTAT,
-> > > FEC_R_CNTRL,
-> > > +       FEC_X_CNTRL, FEC_ADDR_LOW, FEC_ADDR_HIGH, FEC_OPD, FEC_TXIC0,
-> > > FEC_RXIC0,
-> > > +       FEC_HASH_TABLE_HIGH, FEC_HASH_TABLE_LOW, FEC_GRP_HASH_TABLE_HIGH,
-> > > +       FEC_GRP_HASH_TABLE_LOW, FEC_X_WMRK, FEC_R_DES_START_0,
-> > > +       FEC_X_DES_START_0, FEC_R_BUFF_SIZE_0, FEC_R_FIFO_RSFL,
-> > > FEC_R_FIFO_RSEM,
-> > > +       FEC_R_FIFO_RAEM, FEC_R_FIFO_RAFL, FEC_RACC,
-> > > +       RMON_T_DROP, RMON_T_PACKETS, RMON_T_BC_PKT, RMON_T_MC_PKT,
-> > > +       RMON_T_CRC_ALIGN, RMON_T_UNDERSIZE, RMON_T_OVERSIZE, RMON_T_FRAG,
-> > > +       RMON_T_JAB, RMON_T_COL, RMON_T_P64, RMON_T_P65TO127,
-> > > RMON_T_P128TO255,
-> > > +       RMON_T_P256TO511, RMON_T_P512TO1023, RMON_T_P1024TO2047,
-> > > +       RMON_T_P_GTE2048, RMON_T_OCTETS,
-> > > +       IEEE_T_DROP, IEEE_T_FRAME_OK, IEEE_T_1COL, IEEE_T_MCOL,
-> > > IEEE_T_DEF,
-> > > +       IEEE_T_LCOL, IEEE_T_EXCOL, IEEE_T_MACERR, IEEE_T_CSERR,
-> > > IEEE_T_SQE,
-> > > +       IEEE_T_FDXFC, IEEE_T_OCTETS_OK,
-> > > +       RMON_R_PACKETS, RMON_R_BC_PKT, RMON_R_MC_PKT, RMON_R_CRC_ALIGN,
-> > > +       RMON_R_UNDERSIZE, RMON_R_OVERSIZE, RMON_R_FRAG, RMON_R_JAB,
-> > > +       RMON_R_RESVD_O, RMON_R_P64, RMON_R_P65TO127, RMON_R_P128TO255,
-> > > +       RMON_R_P256TO511, RMON_R_P512TO1023, RMON_R_P1024TO2047,
-> > > +       RMON_R_P_GTE2048, RMON_R_OCTETS,
-> > > +       IEEE_R_DROP, IEEE_R_FRAME_OK, IEEE_R_CRC, IEEE_R_ALIGN,
-> > > IEEE_R_MACERR,
-> > > +       IEEE_R_FDXFC, IEEE_R_OCTETS_OK
-> > > +};
-> > >  #else
-> > >  static __u32 fec_enet_register_version = 1;
-> > 
-> > Seeing this, i wonder if the i.MX6ul needs its own register version,
-> > so that ethtool(1) knows what registers are valid?
+
+
+Am 23/10/2022 um 19:48 schrieb Paolo Bonzini:
+> On 10/22/22 17:48, Emanuele Giuseppe Esposito wrote:
+>> Once a vcpu exectues KVM_RUN, it could enter two states:
+>> enter guest mode, or block/halt.
+>> Use a signal to allow a vcpu to exit the guest state or unblock,
+>> so that it can exit KVM_RUN and release the read semaphore,
+>> allowing a pending KVM_KICK_ALL_RUNNING_VCPUS to continue.
+>>
+>> Note that the signal is not deleted and used to propagate the
+>> exit reason till vcpu_run(). It will be clearead only by
+>> KVM_RESUME_ALL_KICKED_VCPUS. This allows the vcpu to keep try
+>> entering KVM_RUN and perform again all checks done in
+>> kvm_arch_vcpu_ioctl_run() before entering the guest state,
+>> where it will return again if the request is still set.
+>>
+>> However, the userspace hypervisor should also try to avoid
+>> continuously calling KVM_RUN after invoking KVM_KICK_ALL_RUNNING_VCPUS,
+>> because such call will just translate in a back-to-back down_read()
+>> and up_read() (thanks to the signal).
 > 
-> Regarding the uAPI (uapi/linux/ethtool.h):
-> 8<-------------------------------------------------
->  * @version: Dump format version.  This is driver-specific and may
->  *      distinguish different chips/revisions.  Drivers must use new
->  *      version numbers whenever the dump format changes in an
->  *      incompatible way.
-> 8<-------------------------------------------------
-> I would say yes.
+> Since the userspace should anyway avoid going into this effectively-busy
+> wait, what about clearing the request after the first exit?  The
+> cancellation ioctl can be kept for vCPUs that are never entered after
+> KVM_KICK_ALL_RUNNING_VCPUS.  Alternatively, kvm_clear_all_cpus_request
+> could be done right before up_write().
 
-But there is no format change. Only a value change. Where the i.MX6 may report a
-value, the i.MX6UL just reports a zero.
+Clearing makes sense, but should we "trust" the userspace not to go into
+busy wait?
+What's the typical "contract" between KVM and the userspace? Meaning,
+should we cover the basic usage mistakes like forgetting to busy wait on
+KVM_RUN?
 
-jb
+If we don't, I can add a comment when clearing and of course also
+mention it in the API documentation (that I forgot to update, sorry :D)
 
--- 
-Pengutronix e.K.                       | Juergen Borleis             |
-Steuerwalder Str. 21                   | https://www.pengutronix.de/ |
-31137 Hildesheim, Germany              | Phone: +49-5121-206917-128  |
-Amtsgericht Hildesheim, HRA 2686       | Fax:   +49-5121-206917-9    |
+Emanuele
 
+> 
+> Paolo
+> 
+>> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+>> ---
+>>   arch/x86/include/asm/kvm_host.h |  2 ++
+>>   arch/x86/kvm/x86.c              |  8 ++++++++
+>>   virt/kvm/kvm_main.c             | 21 +++++++++++++++++++++
+>>   3 files changed, 31 insertions(+)
+>>
+>> diff --git a/arch/x86/include/asm/kvm_host.h
+>> b/arch/x86/include/asm/kvm_host.h
+>> index aa381ab69a19..d5c37f344d65 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -108,6 +108,8 @@
+>>       KVM_ARCH_REQ_FLAGS(30, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>>   #define KVM_REQ_MMU_FREE_OBSOLETE_ROOTS \
+>>       KVM_ARCH_REQ_FLAGS(31, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>> +#define KVM_REQ_USERSPACE_KICK        \
+>> +    KVM_ARCH_REQ_FLAGS(32, KVM_REQUEST_WAIT)
+>>     #define
+>> CR0_RESERVED_BITS                                               \
+>>       (~(unsigned long)(X86_CR0_PE | X86_CR0_MP | X86_CR0_EM |
+>> X86_CR0_TS \
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index b0c47b41c264..2af5f427b4e9 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -10270,6 +10270,10 @@ static int vcpu_enter_guest(struct kvm_vcpu
+>> *vcpu)
+>>       }
+>>         if (kvm_request_pending(vcpu)) {
+>> +        if (kvm_test_request(KVM_REQ_USERSPACE_KICK, vcpu)) {
+>> +            r = -EINTR;
+>> +            goto out;
+>> +        }
+>>           if (kvm_check_request(KVM_REQ_VM_DEAD, vcpu)) {
+>>               r = -EIO;
+>>               goto out;
+>> @@ -10701,6 +10705,10 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+>>               r = vcpu_block(vcpu);
+>>           }
+>>   +        /* vcpu exited guest/unblocked because of this request */
+>> +        if (kvm_test_request(KVM_REQ_USERSPACE_KICK, vcpu))
+>> +            return -EINTR;
+>> +
+>>           if (r <= 0)
+>>               break;
+>>   diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>> index ae0240928a4a..13fa7229b85d 100644
+>> --- a/virt/kvm/kvm_main.c
+>> +++ b/virt/kvm/kvm_main.c
+>> @@ -3431,6 +3431,8 @@ static int kvm_vcpu_check_block(struct kvm_vcpu
+>> *vcpu)
+>>           goto out;
+>>       if (kvm_check_request(KVM_REQ_UNBLOCK, vcpu))
+>>           goto out;
+>> +    if (kvm_test_request(KVM_REQ_USERSPACE_KICK, vcpu))
+>> +        goto out;
+>>         ret = 0;
+>>   out:
+>> @@ -4668,6 +4670,25 @@ static long kvm_vm_ioctl(struct file *filp,
+>>           r = kvm_vm_ioctl_enable_cap_generic(kvm, &cap);
+>>           break;
+>>       }
+>> +    case KVM_KICK_ALL_RUNNING_VCPUS: {
+>> +        /*
+>> +         * Notify all running vcpus that they have to stop.
+>> +         * Caught in kvm_arch_vcpu_ioctl_run()
+>> +         */
+>> +        kvm_make_all_cpus_request(kvm, KVM_REQ_USERSPACE_KICK);
+>> +
+>> +        /*
+>> +         * Use wr semaphore to wait for all vcpus to exit from KVM_RUN.
+>> +         */
+>> +        down_write(&memory_transaction);
+>> +        up_write(&memory_transaction);
+>> +        break;
+>> +    }
+>> +    case KVM_RESUME_ALL_KICKED_VCPUS: {
+>> +        /* Remove all requests sent with KVM_KICK_ALL_RUNNING_VCPUS */
+>> +        kvm_clear_all_cpus_request(kvm, KVM_REQ_USERSPACE_KICK);
+>> +        break;
+>> +    }
+>>       case KVM_SET_USER_MEMORY_REGION: {
+>>           struct kvm_userspace_memory_region kvm_userspace_mem;
+>>   
+> 
 
