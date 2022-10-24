@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C04560A79E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B798760A9EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234744AbiJXMxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33494 "EHLO
+        id S233046AbiJXN0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234574AbiJXMvq (ORCPT
+        with ESMTP id S229943AbiJXNXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:51:46 -0400
+        Mon, 24 Oct 2022 09:23:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22DF92CF0;
-        Mon, 24 Oct 2022 05:14:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301CA48A15;
+        Mon, 24 Oct 2022 05:30:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80A58612B7;
-        Mon, 24 Oct 2022 12:10:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95DDFC433D7;
-        Mon, 24 Oct 2022 12:10:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2BA46130D;
+        Mon, 24 Oct 2022 12:28:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CDB0C433D6;
+        Mon, 24 Oct 2022 12:28:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613456;
-        bh=xPThxkg/kWjmznk8UoQBVXx8Q5wQiDakS3AeMMjacOk=;
+        s=korg; t=1666614502;
+        bh=TLmvnCPtLOgPxWcVAByO0Hko9TcXO+3EfUVjcv844dA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cKiRExH+c8P+GI5RbgRHuDtSnctmsIbHZzNaTjwUX6PvjZns5zzI+wm1D9ILgOxVP
-         q4XwgljO8iB3JREZV9DVnKivfnsjxNyTpdH2CJMUSjrDT6OvrowovxBKvjP7B0AUYS
-         W3Q9zYeGIhnZbfhm2caG+fhpsL1l68iZOOLldhio=
+        b=O3ZiNkjISBBPt0w3ZhK38EmloNykAyDdQgh+7OdsXSRX8f5uI0j9ri8FY4v0GBWYs
+         em0Za6FUTDokHFJb+Mqf7p5CPuerIX3xjd8BR6G4ABs7nti0ULbdp1I22fwEwiEJjq
+         5eRuktUuPIGutVCV6fEErJbWVHcGl9AfZvlJR0ho=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 143/255] ata: fix ata_id_has_ncq_autosense()
+Subject: [PATCH 5.10 256/390] clk: vc5: Fix 5P49V6901 outputs disabling when enabling FOD
 Date:   Mon, 24 Oct 2022 13:30:53 +0200
-Message-Id: <20221024113007.361630001@linuxfoundation.org>
+Message-Id: <20221024113033.784470315@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Cassel <niklas.cassel@wdc.com>
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit a5fb6bf853148974dbde092ec1bde553bea5e49f ]
+[ Upstream commit c388cc804016cf0f65afdc2362b120aa594ff3e6 ]
 
-ACS-5 section
-7.13.6.36 Word 78: Serial ATA features supported
-states that:
+We have discovered random glitches during the system boot up procedure.
+The problem investigation led us to the weird outcomes: when none of the
+Renesas 5P49V6901 ports are explicitly enabled by the kernel driver, the
+glitches disappeared. It was a mystery since the SoC external clock
+domains were fed with different 5P49V6901 outputs. The driver code didn't
+seem like bogus either. We almost despaired to find out a root cause when
+the solution has been found for a more modern revision of the chip. It
+turned out the 5P49V6901 clock generator stopped its output for a short
+period of time during the VC5_OUT_DIV_CONTROL register writing. The same
+problem was found for the 5P49V6965 revision of the chip and was
+successfully fixed in commit fc336ae622df ("clk: vc5: fix output disabling
+when enabling a FOD") by enabling the "bypass_sync" flag hidden inside
+"Unused Factory Reserved Register". Even though the 5P49V6901 registers
+description and programming guide doesn't provide any intel regarding that
+flag, setting it up anyway in the officially unused register completely
+eliminated the denoted glitches. Thus let's activate the functionality
+submitted in commit fc336ae622df ("clk: vc5: fix output disabling when
+enabling a FOD") for the Renesas 5P49V6901 chip too in order to remove the
+ports implicit inter-dependency.
 
-If word 76 is not 0000h or FFFFh, word 78 reports the features supported
-by the device. If this word is not supported, the word shall be cleared
-to zero.
-
-(This text also exists in really old ACS standards, e.g. ACS-3.)
-
-Additionally, move the macro to the other ATA_ID_FEATURE_SUPP macros
-(which already have this check), thus making it more likely that the
-next ATA_ID_FEATURE_SUPP macro that is added will include this check.
-
-Fixes: 5b01e4b9efa0 ("libata: Implement NCQ autosense")
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: dbf6b16f5683 ("clk: vc5: Add support for IDT VersaClock 5P49V6901")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Link: https://lore.kernel.org/r/20220929225402.9696-2-Sergey.Semin@baikalelectronics.ru
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/ata.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/clk/clk-versaclock5.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/ata.h b/include/linux/ata.h
-index 8b884cd3a232..94f7872da983 100644
---- a/include/linux/ata.h
-+++ b/include/linux/ata.h
-@@ -569,6 +569,10 @@ struct ata_bmdma_prd {
- 	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
- 	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
- 	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 8)))
-+#define ata_id_has_ncq_autosense(id) \
-+	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
-+	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
-+	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 7)))
- #define ata_id_iordy_disable(id) ((id)[ATA_ID_CAPABILITY] & (1 << 10))
- #define ata_id_has_iordy(id) ((id)[ATA_ID_CAPABILITY] & (1 << 11))
- #define ata_id_u32(id,n)	\
-@@ -581,8 +585,6 @@ struct ata_bmdma_prd {
+diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
+index 4e741f94baf0..eb597ea7bb87 100644
+--- a/drivers/clk/clk-versaclock5.c
++++ b/drivers/clk/clk-versaclock5.c
+@@ -1116,7 +1116,7 @@ static const struct vc5_chip_info idt_5p49v6901_info = {
+ 	.model = IDT_VC6_5P49V6901,
+ 	.clk_fod_cnt = 4,
+ 	.clk_out_cnt = 5,
+-	.flags = VC5_HAS_PFD_FREQ_DBL,
++	.flags = VC5_HAS_PFD_FREQ_DBL | VC5_HAS_BYPASS_SYNC_BIT,
+ };
  
- #define ata_id_cdb_intr(id)	(((id)[ATA_ID_CONFIG] & 0x60) == 0x20)
- #define ata_id_has_da(id)	((id)[ATA_ID_SATA_CAPABILITY_2] & (1 << 4))
--#define ata_id_has_ncq_autosense(id) \
--				((id)[ATA_ID_FEATURE_SUPP] & (1 << 7))
- 
- static inline bool ata_id_has_hipm(const u16 *id)
- {
+ static const struct vc5_chip_info idt_5p49v6965_info = {
 -- 
 2.35.1
 
