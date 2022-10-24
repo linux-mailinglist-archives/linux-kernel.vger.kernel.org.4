@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA7360B117
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EE560B0AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbiJXQP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        id S232764AbiJXQHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231566AbiJXQMc (ORCPT
+        with ESMTP id S233170AbiJXQES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:12:32 -0400
+        Mon, 24 Oct 2022 12:04:18 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F872303EC;
-        Mon, 24 Oct 2022 08:01:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF96711D983;
+        Mon, 24 Oct 2022 07:56:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 079A3B81662;
-        Mon, 24 Oct 2022 12:23:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE29C433D7;
-        Mon, 24 Oct 2022 12:23:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 291C3B8114D;
+        Mon, 24 Oct 2022 11:39:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8474AC433D6;
+        Mon, 24 Oct 2022 11:39:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614184;
-        bh=kJzoIagnr6iTBQpAuXXRmG5H3xo8e2I+NFwdsmxml8w=;
+        s=korg; t=1666611550;
+        bh=Knoyj2ev+3EeXZB1JZ1QQ9InFBfJAJbjg7VhFi59HoM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PQOxZWZw09+XoZ11vr11iwEW+JV3hBcDOXFp11MzbGzVgZSQK5xWphcZ/zGynTkBA
-         wbB8781SeZPLRUhkfN39WaQkdQKqKjxia/KHob5a3q/WhDL3WnvcxkuKz+J5uY8RTw
-         vVxMV+J7LoRrfW+sFQwlBj8kpZEE3kXahXqFhrbE=
+        b=p68hk6mjYgufP0VS+B+7ek1HZ6yXFPLBD3hb4dyszigSbu6huv1ItI7CJVAASNbTM
+         nkFw6b6jzJsYK5rWaAx2xUX+o17RHdioKk+heOlalVRBWDmbRuHdd7aBUiT+q62Rz4
+         mbcmXhbAhgxD3lQ7jWQZk74ULVxnUIZMj9RzEiQc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 165/390] mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
-Date:   Mon, 24 Oct 2022 13:29:22 +0200
-Message-Id: <20221024113029.736175615@linuxfoundation.org>
+Subject: [PATCH 4.9 009/159] Input: melfas_mip4 - fix return value check in mip4_probe()
+Date:   Mon, 24 Oct 2022 13:29:23 +0200
+Message-Id: <20221024112949.703648319@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit cb58188ad90a61784a56a64f5107faaf2ad323e7 ]
+[ Upstream commit a54dc27bd25f20ee3ea2009584b3166d25178243 ]
 
-A dma_free_coherent() call is missing in the error handling path of the
-probe, as already done in the remove function.
+devm_gpiod_get_optional() may return ERR_PTR(-EPROBE_DEFER),
+add a minus sign to fix it.
 
-Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/53fc6ffa5d1c428fefeae7d313cf4a669c3a1e98.1663873255.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: 6ccb1d8f78bd ("Input: add MELFAS MIP4 Touchscreen driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Link: https://lore.kernel.org/r/20220924030715.1653538-1-yangyingliang@huawei.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/wmt-sdmmc.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/input/touchscreen/melfas_mip4.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
-index cf10949fb0ac..8df722ec57ed 100644
---- a/drivers/mmc/host/wmt-sdmmc.c
-+++ b/drivers/mmc/host/wmt-sdmmc.c
-@@ -849,7 +849,7 @@ static int wmt_mci_probe(struct platform_device *pdev)
- 	if (IS_ERR(priv->clk_sdmmc)) {
- 		dev_err(&pdev->dev, "Error getting clock\n");
- 		ret = PTR_ERR(priv->clk_sdmmc);
--		goto fail5;
-+		goto fail5_and_a_half;
- 	}
- 
- 	ret = clk_prepare_enable(priv->clk_sdmmc);
-@@ -866,6 +866,9 @@ static int wmt_mci_probe(struct platform_device *pdev)
- 	return 0;
- fail6:
- 	clk_put(priv->clk_sdmmc);
-+fail5_and_a_half:
-+	dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
-+			  priv->dma_desc_buffer, priv->dma_desc_device_addr);
- fail5:
- 	free_irq(dma_irq, priv);
- fail4:
+diff --git a/drivers/input/touchscreen/melfas_mip4.c b/drivers/input/touchscreen/melfas_mip4.c
+index 552a3773f79d..cec2df449f89 100644
+--- a/drivers/input/touchscreen/melfas_mip4.c
++++ b/drivers/input/touchscreen/melfas_mip4.c
+@@ -1416,7 +1416,7 @@ static int mip4_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 					      "ce", GPIOD_OUT_LOW);
+ 	if (IS_ERR(ts->gpio_ce)) {
+ 		error = PTR_ERR(ts->gpio_ce);
+-		if (error != EPROBE_DEFER)
++		if (error != -EPROBE_DEFER)
+ 			dev_err(&client->dev,
+ 				"Failed to get gpio: %d\n", error);
+ 		return error;
 -- 
 2.35.1
 
