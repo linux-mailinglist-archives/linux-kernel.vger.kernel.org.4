@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2786097DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 03:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F566097E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 03:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbiJXBiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 21:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S229610AbiJXBjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 21:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJXBiF (ORCPT
+        with ESMTP id S229874AbiJXBja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 21:38:05 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797B66D56C;
-        Sun, 23 Oct 2022 18:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666575484; x=1698111484;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2H2z3QDOm830n+Fd6QFs4UpTvtG9t3ftZ4pDHombJ+o=;
-  b=FGEEKm1IWLh3zj/SRgSUBEorlRO3ssbZRgmgphgww1qiUKsh4qf8CNq4
-   gkAZiBijlaF5ailX8tRyxbaXEWtQ7jgxT+iY9m3G/QX42nS+45+UrDFrQ
-   9lEG2c9Ekc4oAmyLPMqiOTKtdkgRZY0gAjCMdojnMFRYmE3G/cRKtExHQ
-   WzLQUJbHkULVENJmrghgmhp7Ttx7o3RpUkkmucS+w2CFtT6b/IiU3vhV0
-   cBsQIBNGC9SYgL9JYf91inGzpVNSgh9JZfXVwvKUwHxIuREb6dQkkW9qs
-   Bs6DdCr9BcfkDturJUxUl7Eial7TOfowyB0SVIadU+xnwxAjgey/zMQV5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="371536635"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="371536635"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 18:38:04 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="664392993"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="664392993"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.30.136]) ([10.255.30.136])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 18:38:02 -0700
-Message-ID: <70ea1214-38aa-3b51-9c1d-6661b3b45144@intel.com>
-Date:   Mon, 24 Oct 2022 09:37:59 +0800
+        Sun, 23 Oct 2022 21:39:30 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925C42BD4
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 18:39:28 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Mwd2y40B0zJn9C;
+        Mon, 24 Oct 2022 09:36:42 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 09:39:21 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 09:39:20 +0800
+Message-ID: <e803ec8e-a20a-949c-88b0-aee250f98208@huawei.com>
+Date:   Mon, 24 Oct 2022 09:39:20 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.3.3
-Subject: Re: [PATCH] KVM: x86: Fix the initial value of mcg_cap
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 3/3] mm: memory-failure: make action_result() return int
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221020031615.890400-1-xiaoyao.li@intel.com>
- <Y1FatU6Yf9n5pWB+@google.com>
- <092dc961-76f6-331a-6f91-a77a58f6732d@intel.com>
- <Y1F4AoeOhNFQnHnJ@google.com>
- <b40fd338-cb3b-b602-0059-39f775e77ad6@intel.com>
- <Y1LmWAyG7S4bgzBs@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <Y1LmWAyG7S4bgzBs@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20221021084611.53765-1-wangkefeng.wang@huawei.com>
+ <20221021084611.53765-3-wangkefeng.wang@huawei.com>
+ <20221023235633.GC4024629@hori.linux.bs1.fc.nec.co.jp>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20221023235633.GC4024629@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/22/2022 2:35 AM, Sean Christopherson wrote:
-> On Fri, Oct 21, 2022, Xiaoyao Li wrote:
->> On 10/21/2022 12:32 AM, Sean Christopherson wrote:
->>> If we really want to clean up this code, I think the correct approach would be to
->>> inject #GP on all relevant MSRs if CPUID.MCA==0, e.g.
->>
->> It's what I thought of as well. But I didn't find any statement in SDM of
->> "Accessing Machine Check MSRs gets #GP if no CPUID.MCA"
-> 
-> Ugh, stupid SDM.  Really old SDMs, e.g. circa 1997, explicity state in the
-> CPUID.MCA entry that:
-> 
->    Processor supports the MCG_CAP MSR.
-> 
-> But, when Intel introduced the "Architectural MSRs" section (2001 or so), the
-> wording was changed to be less explicit:
-> 
->    The Machine Check Architecture, which provides a compatible mechanism for error
->    reporting in P6 family, Pentium 4, and Intel Xeon processors, and future processors,
->    is supported. The MCG_CAP MSR contains feature bits describing how many banks of
->    error reporting MSRs are supported.
-> 
-> and the entry in the MSR index just lists P6 as the dependency:
-> 
->    IA32_MCG_CAP (MCG_CAP) Global Machine Check Capability (R/O) 06_01H
-> 
-> So I think it's technically true that MCG_CAP is supposed to exist iff CPUID.MCA=1,
-> but we'd probably need an SDM change to really be able to enforce that :-(
 
-I'll talk to Intel architects for this. :)
+On 2022/10/24 7:56, HORIGUCHI NAOYA(堀口 直也) wrote:
+> On Fri, Oct 21, 2022 at 04:46:11PM +0800, Kefeng Wang wrote:
+>> Check mf_result in action_result(), only return 0 when MF_RECOVERED,
+>> or return -EBUSY, which will simplify code a bit.
+>>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Thanks for the cleanup, Kefeng.
+> I basically agree with the change. I have one comment below ...
+>
+>> ---
+>>   mm/memory-failure.c | 42 ++++++++++++++++--------------------------
+>>   1 file changed, 16 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> index ca0199d0f79d..3f469e2da047 100644
+>> --- a/mm/memory-failure.c
+>> +++ b/mm/memory-failure.c
+>> @@ -1182,14 +1182,16 @@ static struct page_state error_states[] = {
+>>    * "Dirty/Clean" indication is not 100% accurate due to the possibility of
+>>    * setting PG_dirty outside page lock. See also comment above set_page_dirty().
+>>    */
+>> -static void action_result(unsigned long pfn, enum mf_action_page_type type,
+>> -			  enum mf_result result)
+>> +static int action_result(unsigned long pfn, enum mf_action_page_type type,
+>> +			 enum mf_result result)
+>>   {
+>>   	trace_memory_failure_event(pfn, type, result);
+>>   
+>>   	num_poisoned_pages_inc();
+>>   	pr_err("%#lx: recovery action for %s: %s\n",
+>>   		pfn, action_page_types[type], action_name[result]);
+>> +
+>> +	return result == MF_RECOVERED ? 0 : -EBUSY;
+> I think that MF_DELAYED may be considered as success (returning 0), then
+> page_action() can be cleaned up a little more (like below?)
+Yes, MF_DELAYED should be considered as success,
+>
+>      static int page_action(struct page_state *ps, struct page *p,
+>                              unsigned long pfn)
+>      {
+>              int result;
+>      
+>              /* page p should be unlocked after returning from ps->action().  */
+>              result = ps->action(ps, p);
+>      
+>              /* Could do more checks here if page looks ok */
+>              /*
+>               * Could adjust zone counters here to correct for the missing page.
+>               */
+>      
+>              return action_result(pfn, ps->type, result);
+>      }
+>
+> Existing direct callers (I mean action_result() called from other than
+> page_action()) are never called with result==MF_DELAYED, so this change
+> should not affect them.
+I will refresh this patch, thanks.
+> Does it make sense for you?
+>
+> Thanks,
+> Naoya Horiguchi
