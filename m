@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D110860A5AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD6160A47F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233804AbiJXM2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        id S232762AbiJXMLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiJXM1I (ORCPT
+        with ESMTP id S229782AbiJXMKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:27:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102C37B1E0;
-        Mon, 24 Oct 2022 05:01:32 -0700 (PDT)
+        Mon, 24 Oct 2022 08:10:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CAD12BB0A;
+        Mon, 24 Oct 2022 04:53:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B82BBB811D7;
-        Mon, 24 Oct 2022 11:56:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 180B8C433C1;
-        Mon, 24 Oct 2022 11:56:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29C516129E;
+        Mon, 24 Oct 2022 11:46:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37632C433D6;
+        Mon, 24 Oct 2022 11:46:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612595;
-        bh=4/0gbWRoGgXhcpCItadg29FCqoOIDIWdJPHkOeinRzA=;
+        s=korg; t=1666611972;
+        bh=iafMQX0LLGAsrS6c7Ds92V5u8tPAuViCsplCLjBiFQs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NCzedvpQOFX7vgVeWYxiERiZXxGvG2QJWpJV9E8NtnmZqgYjOiXbmjRF85mjxxIE0
-         G8bB5Ntca/w00xPVJ9g9UHNzoNe2X0qDo1rXLJW5WjvSTrd38Ln4tFHpf7ImPOrCfO
-         9ts6bXV52/UfBgy1S/Xs0Pgpciu2OgzgPGOE5pwA=
+        b=l8tpyBib/eObZuC/jQB6lR2lLm8XFJGAIYMhB1b2UJ6Zo/89GV3IdLQu/H47YsJw9
+         8I25WGivDCfCoaGnGxnovfKe5mC5nHJrwHQ+tx/Rm0WNdHLzY0R4CDgU8pu9S9VQF1
+         m9GJcLL3RjnbfLG+wiCl9Oe5wJ8eYMuuqtlpHulk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.19 019/229] nilfs2: fix leak of nilfs_root in case of writer thread creation failure
+        stable@vger.kernel.org, Alexander Popov <alex.popov@linux.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Wolfram Sang <wsa@the-dreams.de>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Subject: [PATCH 4.14 021/210] i2c: dev: prevent ZERO_SIZE_PTR deref in i2cdev_ioctl_rdwr()
 Date:   Mon, 24 Oct 2022 13:28:58 +0200
-Message-Id: <20221024112959.757408197@linuxfoundation.org>
+Message-Id: <20221024112957.648694176@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,71 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+From: Alexander Popov <alex.popov@linux.com>
 
-commit d0d51a97063db4704a5ef6bc978dddab1636a306 upstream.
+commit 23a27722b5292ef0b27403c87a109feea8296a5c upstream.
 
-If nilfs_attach_log_writer() failed to create a log writer thread, it
-frees a data structure of the log writer without any cleanup.  After
-commit e912a5b66837 ("nilfs2: use root object to get ifile"), this causes
-a leak of struct nilfs_root, which started to leak an ifile metadata inode
-and a kobject on that struct.
+i2cdev_ioctl_rdwr() allocates i2c_msg.buf using memdup_user(), which
+returns ZERO_SIZE_PTR if i2c_msg.len is zero.
 
-In addition, if the kernel is booted with panic_on_warn, the above
-ifile metadata inode leak will cause the following panic when the
-nilfs2 kernel module is removed:
+Currently i2cdev_ioctl_rdwr() always dereferences the buf pointer in case
+of I2C_M_RD | I2C_M_RECV_LEN transfer. That causes a kernel oops in
+case of zero len.
 
-  kmem_cache_destroy nilfs2_inode_cache: Slab cache still has objects when
-  called from nilfs_destroy_cachep+0x16/0x3a [nilfs2]
-  WARNING: CPU: 8 PID: 1464 at mm/slab_common.c:494 kmem_cache_destroy+0x138/0x140
-  ...
-  RIP: 0010:kmem_cache_destroy+0x138/0x140
-  Code: 00 20 00 00 e8 a9 55 d8 ff e9 76 ff ff ff 48 8b 53 60 48 c7 c6 20 70 65 86 48 c7 c7 d8 69 9c 86 48 8b 4c 24 28 e8 ef 71 c7 00 <0f> 0b e9 53 ff ff ff c3 48 81 ff ff 0f 00 00 77 03 31 c0 c3 53 48
-  ...
-  Call Trace:
-   <TASK>
-   ? nilfs_palloc_freev.cold.24+0x58/0x58 [nilfs2]
-   nilfs_destroy_cachep+0x16/0x3a [nilfs2]
-   exit_nilfs_fs+0xa/0x1b [nilfs2]
-    __x64_sys_delete_module+0x1d9/0x3a0
-   ? __sanitizer_cov_trace_pc+0x1a/0x50
-   ? syscall_trace_enter.isra.19+0x119/0x190
-   do_syscall_64+0x34/0x80
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-   ...
-   </TASK>
-  Kernel panic - not syncing: panic_on_warn set ...
+Let's check the len against zero before dereferencing buf pointer.
 
-This patch fixes these issues by calling nilfs_detach_log_writer() cleanup
-function if spawning the log writer thread fails.
+This issue was triggered by syzkaller.
 
-Link: https://lkml.kernel.org/r/20221007085226.57667-1-konishi.ryusuke@gmail.com
-Fixes: e912a5b66837 ("nilfs2: use root object to get ifile")
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Reported-by: syzbot+7381dc4ad60658ca4c05@syzkaller.appspotmail.com
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Alexander Popov <alex.popov@linux.com>
+Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+[wsa: use '< 1' instead of '!' for easier readability]
+Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+[Harshit: backport to 4.14.y, use rdwr_pa[i].len instead of msgs[i].len
+as the 4.14.y  code uses rdwr_pa.]
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/nilfs2/segment.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/i2c/i2c-dev.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/nilfs2/segment.c
-+++ b/fs/nilfs2/segment.c
-@@ -2786,10 +2786,9 @@ int nilfs_attach_log_writer(struct super
- 	inode_attach_wb(nilfs->ns_bdev->bd_inode, NULL);
- 
- 	err = nilfs_segctor_start_thread(nilfs->ns_writer);
--	if (err) {
--		kfree(nilfs->ns_writer);
--		nilfs->ns_writer = NULL;
--	}
-+	if (unlikely(err))
-+		nilfs_detach_log_writer(sb);
-+
- 	return err;
- }
- 
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -297,7 +297,7 @@ static noinline int i2cdev_ioctl_rdwr(st
+ 		 */
+ 		if (rdwr_pa[i].flags & I2C_M_RECV_LEN) {
+ 			if (!(rdwr_pa[i].flags & I2C_M_RD) ||
+-			    rdwr_pa[i].buf[0] < 1 ||
++			    rdwr_pa[i].len < 1 || rdwr_pa[i].buf[0] < 1 ||
+ 			    rdwr_pa[i].len < rdwr_pa[i].buf[0] +
+ 					     I2C_SMBUS_BLOCK_MAX) {
+ 				i++;
 
 
