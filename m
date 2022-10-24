@@ -2,192 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C57F609873
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DDB609876
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiJXDHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 23:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S229978AbiJXDHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 23:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiJXDHF (ORCPT
+        with ESMTP id S229971AbiJXDHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 23:07:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D046E748DA;
-        Sun, 23 Oct 2022 20:06:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1540CB80E9F;
-        Mon, 24 Oct 2022 03:06:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D936BC433B5;
-        Mon, 24 Oct 2022 03:06:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666580816;
-        bh=OTPB1px/TQ1L+ivbreKiJg+huXfwkJNCMLM8eFY1jAM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G8I5YOOq6RENk15yBPp/ILx1JAUkXY4gqIsDthh7TOQh993lkGqU98r2z2u65gbe6
-         Bka4zV0XH6p5JVKbSfMy5/zvPAEyqbt4vE0KDfLUMVy8ZQjEkVkLkINEVoIuMJA4r1
-         8jWiMBALMDYu2Mp2IqmKbuIFFmYUcLARHGVs4tKZsARCBVhZyLWmr/78zpdrz0oQVU
-         lv59UcOCKjlpNnFNj5DWNtOVU8Vy2fNO+XMV9I5/Fahy+h4d3q8/XZDSKawmCncY/G
-         hu7JPiSYNM26kmsctlGzBOx6C92aKUEFmUmLsLsCMQHVW1HUGk0fUzFNu2TNCFRm59
-         Iw+JhhEnNHxZw==
-Date:   Sun, 23 Oct 2022 22:06:48 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        viresh.kumar@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/4] cpufreq: qcom-hw: Add CPU clock provider support
-Message-ID: <20221024030648.dthglkkcy5wtziwd@baldur>
-References: <20221019135925.366162-1-manivannan.sadhasivam@linaro.org>
- <20221019135925.366162-4-manivannan.sadhasivam@linaro.org>
- <b88de305-cb1f-7251-ccb8-4ea3b62bc322@linaro.org>
- <20221021093140.GC93287@thinkpad>
+        Sun, 23 Oct 2022 23:07:48 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03850748DA
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 20:07:46 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so2278254pjc.3
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 20:07:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KSG5pKXEMOX4Hxoh4vkf2ZzKyaQJNTqhWFdegxKWYNo=;
+        b=gXThecH477Xe6h3lKH+zjHyVpBha0+4GyMD4kI2Ouw8rSEPKxO05R4ueRNAh9Q17bM
+         JPfEsYoOgtz7/l2zEAamfJ09dx+FtiqtyTGB4hzkNcfc9tBWT3C/C5hgUsRqlJbKRjcs
+         A7Ul7RP7+WIs+LzsqC4OXD1Soq+IDoaaZB2iYo9lhHlRzUfisZLJvuNouMlgcqXbnj0g
+         RFo6PK8/RLv9RPcLAMCszCj0qsXteSkAszhbEvP5zO1FyT11vG6jg8Qcm53aG/u2n4ay
+         u6Mq1pmMPSQMMJtAncbSBGZwRJlyi+XbgB92qYXsEY+F4FwIhW4iKUa2HkvaeuuvBwB4
+         ssrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KSG5pKXEMOX4Hxoh4vkf2ZzKyaQJNTqhWFdegxKWYNo=;
+        b=7obniq8/SCaEd0UoUTTqVf00j2Ku0vsNiFi0omH2gLFtjOe9S9Vbe9URg1ZWu/uloG
+         +VNsfA7Jdw+eXva+yp28z1qhwlScQgzG511apDP6ocgpNTJpP3ZRXCtcZpA47/S/xcRL
+         eL5oFkJ26vGiRw+Vp2VnFf/3ijvzGeuTyi7Yi5mnhpOzz6f83yXY/xad3AY/EpAJxs3R
+         kBN69Cjuy0whe5eOTGJZEPUsRRGJ4/doogU2iAUvC6CdE4rtOhxH8A5EcYl0OPKoVAkV
+         QaB5VX345e0bJ8LZrCHdo32SeeYTOEtL4AVyvBM1UQrVSQuuHTr0l1V81wakX2mr71Kw
+         6pRA==
+X-Gm-Message-State: ACrzQf3GxtxZ5i6TBtxbBC2aLRRdtN6LVYoRY3YAIcleGgXIo3oWJ1JQ
+        rBwliRAXElr1ZJLT424guY4=
+X-Google-Smtp-Source: AMsMyM4dVcREkXLNr99Ky41B9mBxLqhlPGQZOH2pvVdhRZ7nHByihwF8u8N64NZjHec2KzKZ6BJ7OQ==
+X-Received: by 2002:a17:903:1105:b0:178:ae31:aad with SMTP id n5-20020a170903110500b00178ae310aadmr31138447plh.3.1666580865525;
+        Sun, 23 Oct 2022 20:07:45 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id oa11-20020a17090b1bcb00b001f262f6f717sm2146971pjb.3.2022.10.23.20.07.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Oct 2022 20:07:44 -0700 (PDT)
+From:   xu xin <xu.xin.sc@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     david@redhat.com
+Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
+        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn
+Subject: Re:[PATCH v3 0/5] ksm: support tracking KSM-placed zero-pages
+Date:   Mon, 24 Oct 2022 03:07:41 +0000
+Message-Id: <20221024030741.440709-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <6eea25bf-08a8-641e-2360-68884e194608@redhat.com>
+References: <6eea25bf-08a8-641e-2360-68884e194608@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021093140.GC93287@thinkpad>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 03:01:40PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Oct 20, 2022 at 08:39:50AM +0300, Dmitry Baryshkov wrote:
-> > On 19/10/2022 16:59, Manivannan Sadhasivam wrote:
-> > > Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-> > > cores. But this relationship is not represented with the clk framework
-> > > so far.
-> > > 
-> > > So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-> > > clock producer/consumer relationship cleaner and is also useful for CPU
-> > > related frameworks like OPP to know the frequency at which the CPUs are
-> > > running.
-> > > 
-> > > The clock frequency provided by the driver is for each CPU policy. We
-> > > cannot get the frequency of each CPU core because, not all platforms
-> > > support per-core DCVS feature.
-> > > 
-> > > Also the frequency supplied by the driver is the actual frequency that
-> > > comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-> > > not same as what the CPUFreq framework has set but it is the one that gets
-> > > supplied to the CPUs after throttling by LMh.
-> > > 
-> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > ---
-> > >   drivers/cpufreq/qcom-cpufreq-hw.c | 67 +++++++++++++++++++++++++++++--
-> > >   1 file changed, 63 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > > index a5b3b8d0e164..4dd710f9fb69 100644
-> > > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> > > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > > @@ -4,6 +4,7 @@
-> > >    */
-> > >   #include <linux/bitfield.h>
-> > > +#include <linux/clk-provider.h>
-> > >   #include <linux/cpufreq.h>
-> > >   #include <linux/init.h>
-> > >   #include <linux/interconnect.h>
-> > > @@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
-> > >   	bool cancel_throttle;
-> > >   	struct delayed_work throttle_work;
-> > >   	struct cpufreq_policy *policy;
-> > > +	struct clk_hw cpu_clk;
-> > >   	bool per_core_dcvs;
-> > >   };
-> > > @@ -482,6 +484,54 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
-> > >   	free_irq(data->throttle_irq, data);
-> > >   }
-> > > +static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> > > +{
-> > > +	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
-> > > +
-> > > +	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
-> > > +}
-> > > +
-> > > +static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
-> > > +	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
-> > > +};
-> > > +
-> > > +static int qcom_cpufreq_hw_clk_add(struct qcom_cpufreq_data *data, u32 index)
-> > > +{
-> > > +	struct platform_device *pdev = cpufreq_get_driver_data();
-> > > +	struct device *dev = &pdev->dev;
-> > > +	char *clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", index);
-> > > +	static struct clk_init_data init = {};
-> > > +	int ret;
-> > > +
-> > > +	init.name = clk_name;
-> > > +	init.flags = CLK_GET_RATE_NOCACHE;
-> > > +	init.ops = &qcom_cpufreq_hw_clk_ops;
-> > > +	data->cpu_clk.init = &init;
-> > > +
-> > > +	ret = clk_hw_register(dev, &data->cpu_clk);
-> > > +	if (ret < 0) {
-> > > +		dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
-> > > +		return ret;
-> > > +	}
-> > > +
-> > > +	ret = of_clk_add_hw_provider(dev->of_node, of_clk_hw_simple_get, &data->cpu_clk);
-> > 
-> > This doesn't look corresponding to the DT bindings you are adding.
-> > of_clk_hw_simple_get() would return a single clock per dt node, whichever
-> > arguments were passed, while you are adding clocks correspoding to CPU
-> > clusters.
-> > 
-> > From what I see according to the bindings, you should register a single
-> > provider using the of_clk_hw_onecell_get() function.
-> > 
-> 
-> Well, that won't work either :( The detail that I missed in first place is
-> that the clock providers are added for the same DT node for each policy. So
-> there is a single clock under the clock provider for a policy but they all
-> belong to the same DT node.
-> 
-> This works when a clk provider gets added and then followed by "clk_get()"
-> (that's what happening during the ->init() callback). But each time a new
-> provider gets added, it is replacing the old for the same DT node.
-> 
-> The problem here is, we do not know how many policys are going to be there
-> during the probe time. I'll think about a proper solution and update.
-> 
+>
+>>>> A full description of the real-world end-user operational benefits of
+>>>> these changes would help, please.
+>>>>
+>>>
+>>> The core idea of this patch set is to enable users to perceive the number of any
+>>> pages merged by KSM, regardless of whether use_zero_page switch has been turned
+>>> on, so that users can know how much free memory increase is really due to their
+>>> madvise(MERGEABLE) actions.
+>> 
+>> OK, thanks.
+>> 
+>>> The motivation for me to do this is that when I do
+>>> an application optimization of KSM on embedded Linux for 5G platform, I find
+>>> that ksm_merging_pages of some process becomes very small(but used to be large),
+>>> which led me to think that there was any problem with the application KSM-madvise
+>>> strategy, but in fact, it was only because use_zero_pages is on.
+>> 
+>> Please expand on the above motivation and experience, and include it in
+>> the [0/n] changelog.  But let's leave it a few days to see if there's
+>> additional reviewer input.
+>> 
+>
+>I just posted a selftest:
+>
+>https://lore.kernel.org/all/20221021101141.84170-5-david@redhat.com/T/#u
+>
+>That could (should) be extended to test if unmerging works as expected.
+>
 
-You could get this by looping over all the cpus and count how many
-unique qcom,freq-domains you have.
+Yes. As you said, these selftests can be extended to test if unsharing KSM-placed
+zero pages works as expected, and I'm happy to do the extending after they are merged.
 
-But it seems like a bigger problem is that you need to register your
-clock "provider" at a device-level, rather than a policy level. I did
-some experiments with moving most of the resource management to probe
-and it did look quite promising, but in the end I figured out a shorter
-path to per-core frequency voting and threw that code out again.
+>
+>Having that said, I think we really want a second pair of (KSM-expert) 
+>eyes on these changes before moving forward with them.
 
-It seems however that this would be a good idea to pick up.
-
-
-Beyond resolving Viresh request though, we have the problem that on
-SM8350 and SC8280XP (at least), the L3 cache is controlled by per-core
-registers residing in the register blocks hogged by the cpufreq driver,
-and is configured in unit of Hz. So we can't directly use the osm-l3
-model - without hacking up the drivers to allow for overlapping ioremap.
-
-We could probably extend the cpufreq driver to express this as a path
-between each core and the L3 cache and just ignore the unit (kBps vs Hz)
-(i.e.  duplicate osm-l3 in the cpufreq driver).
-But it doesn't seem unreasonable to me to express this as a clock per
-CPU and just add another opp-hz value to the opp-table, now that this is
-supported.
-
-This design would also allow for profiling based mechanisms to pick
-these clocks up and issue clk_set_rate(), if such mechanisms would be
-desirable.
-
-Regards,
-Bjorn
+OK, don't worry. Let it be reviewed for a more time, so as to absorb more views later.
+If necessary, I will resend the patches to adjust to break_ksm()'s changes.
