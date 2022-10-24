@@ -2,155 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8C560BC02
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C632160BC0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233420AbiJXVWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
+        id S232969AbiJXVY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234123AbiJXVWc (ORCPT
+        with ESMTP id S234208AbiJXVXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:22:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB9DA7ABB
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:29:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E826B81031
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 19:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47E06C433C1;
-        Mon, 24 Oct 2022 19:26:46 +0000 (UTC)
-Date:   Mon, 24 Oct 2022 15:26:56 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH] x86/mm: Do not verify W^X at boot up
-Message-ID: <20221024152656.3b0cfa21@gandalf.local.home>
-In-Reply-To: <b772127d-8729-553a-000c-27cf4ddbf926@intel.com>
-References: <20221024114536.44686c83@gandalf.local.home>
-        <b772127d-8729-553a-000c-27cf4ddbf926@intel.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 24 Oct 2022 17:23:51 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FB0E9850;
+        Mon, 24 Oct 2022 12:30:18 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id z30so6683358qkz.13;
+        Mon, 24 Oct 2022 12:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PblChHtfw1S0go3t7WQnQiBCMoL2Al1+nyURPxA1TFc=;
+        b=pVgwI/qNobIFyNsTNyK1DM1nXPNJKIJg0NQd3DSCBVXEDuGq3PSRMiBcrOmUmgNC2t
+         r08RlVIreaIsjJFLehRvmZghm0dzS/xKGvp3xn/aRD2k9m+7ymCUTeBxbGGQ9YkY0iep
+         Ebcou5EMVqjiWqf3djGIWhIOm2vNGzhOTnsCO3Y7kWLSsT7LUy6UgRhQKcTkJoMtv+B0
+         a2L7a986B//XhylsbOADmew4tsadzzn+XrPG2fEfjAnp4azR3Bg3YPXqc0SAQUMzsuum
+         C1FuSaqyda5y8RaCivnahNU1TuLkoMDt0pPpiOMo5wVa6k/f1zEmdtSJjy5H/zdL34XH
+         MWmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PblChHtfw1S0go3t7WQnQiBCMoL2Al1+nyURPxA1TFc=;
+        b=MOsyfeMf4B/6Zwgk9Ytm9V63QS9WOo9xynwRYRdGZoZioQnEK8c+RVaopKL5R/CKXS
+         /ODo3+I7wTHRulRe7snU89RzetlkX+sKxKqz/Yz4ilBFhefH5slgLq4PqFhHsLjI6poh
+         W1lAFhNt6NWNd5EAAbX47umYrs6RHd44PWJH2QtnGVyt/Ec9ObSGqU/XadIu95EirUwn
+         mtcbVEEY8+wECsofJWhDA2vFuvzrGZNluqLnMz7oHrhgZRSnL6uNDjhAYCtB5xwcacRh
+         c4k6BjIw19A4/I4krAuWKNCojHJf/RkzGqLw7eRkRBX11VmtPAZoNDlFp6SFZRQoPRYy
+         VfeA==
+X-Gm-Message-State: ACrzQf3V1EXYCSp1xbd0LhQL8cprruXV1RzUoRiRIsir08fjJfJWFjAC
+        KZmA3FQBo6AgkIiL9xuB2Nc=
+X-Google-Smtp-Source: AMsMyM7QmKJLyxQqYLHdF1N2eaPHhvOCUXQoyoecmLGObHbifNpUoWsjfMl3upC4fAgtOMENY6GFiQ==
+X-Received: by 2002:a05:620a:c4a:b0:6f6:3b26:1576 with SMTP id u10-20020a05620a0c4a00b006f63b261576mr2820579qki.410.1666639713282;
+        Mon, 24 Oct 2022 12:28:33 -0700 (PDT)
+Received: from localhost.localdomain (bras-base-toroon3514w-grc-28-142-114-225-85.dsl.bell.ca. [142.114.225.85])
+        by smtp.gmail.com with ESMTPSA id bz26-20020a05622a1e9a00b0039c7b9522ecsm422650qtb.35.2022.10.24.12.28.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 12:28:32 -0700 (PDT)
+From:   Serentty <girpoole@gmail.com>
+X-Google-Original-From: Serentty <noname422@gmail.com>
+To:     torvalds@linux-foundation.org
+Cc:     Hi-Angel@yandex.ru, Michael@michaellarabel.com, ak@linux.intel.com,
+        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
+        axboe@kernel.dk, bgeffon@google.com, catalin.marinas@arm.com,
+        corbet@lwn.net, d@chaos-reins.com, dave.hansen@linux.intel.com,
+        djbyrne@mtu.edu, hannes@cmpxchg.org, hdanton@sina.com,
+        heftig@archlinux.org, holger@applied-asynchrony.com,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
+        mhocko@kernel.org, oleksandr@natalenko.name,
+        page-reclaim@google.com, peterz@infradead.org, rppt@kernel.org,
+        sofia.trinh@edi.works, steven@liquorix.net, suleiman@google.com,
+        szhai2@cs.rochester.edu, tj@kernel.org, vaibhav@linux.ibm.com,
+        vbabka@suse.cz, will@kernel.org, willy@infradead.org,
+        x86@kernel.org, yuzhao@google.com
+Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
+Date:   Mon, 24 Oct 2022 16:28:16 -0300
+Message-Id: <20221024192816.11527-1-noname422@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
+References: <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 09:14:45 -0700
-Dave Hansen <dave.hansen@intel.com> wrote:
+Trying sending again since I am not sure if it went through the first time. I’m not used to the mailing list.
 
-> On 10/24/22 08:45, Steven Rostedt wrote:
-> > --- a/arch/x86/mm/pat/set_memory.c
-> > +++ b/arch/x86/mm/pat/set_memory.c
-> > @@ -587,6 +587,10 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
-> >  {
-> >  	unsigned long end;
-> >  
-> > +	/* Kernel text is rw at boot up */
-> > +	if (system_state == SYSTEM_BOOTING)
-> > +		return new;  
-> 
-> Hi Steven,
-> 
-> Thanks for the report and the patch.  That seems reasonable, but I'm a
-> bit worried that it opens up a big hole (boot time) when a W+X mapping
-> could be created *anywhere*.
-> 
-> Could we restrict this bypass to *only* kernel text addresses during
-> boot?  Maybe something like this:
-> 
-> 	if ((system_state == SYSTEM_BOOTING) &&
-> 	    __kernel_text_address(start))
-> 		return new;
-> 
-> That would be safe because we know that kernel_text_address() addresses
-> will be made read-only by the time userspace shows up and that
-> is_kernel_inittext() addresses will be freed.
-> 
-> Long-term, I wonder if we could teach the early patching code that it
-> can't just use memcpy().
-> 
-
-This is hacky, and I agree with Linus, that ideally, we can get text_poke()
-working better and remove all theses "special cases", but in case we
-struggle to do so, the below patch also works.
-
-It only looks at the one case that ftrace is setting up its trampoline at
-early boot up.
-
--- Steve
-
-
-diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-index 908d99b127d3..41b3ecd23a08 100644
---- a/arch/x86/include/asm/ftrace.h
-+++ b/arch/x86/include/asm/ftrace.h
-@@ -25,6 +25,8 @@
- #ifndef __ASSEMBLY__
- extern void __fentry__(void);
- 
-+extern long ftrace_updated_trampoline;
-+
- static inline unsigned long ftrace_call_adjust(unsigned long addr)
- {
- 	/*
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index bd165004776d..e2a1fc7bbe7a 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -417,7 +417,11 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
- 
- 	if (likely(system_state != SYSTEM_BOOTING))
- 		set_memory_ro((unsigned long)trampoline, npages);
-+	else
-+		ftrace_updated_trampoline = trampoline;
- 	set_memory_x((unsigned long)trampoline, npages);
-+	ftrace_updated_trampoline = 0;
-+
- 	return (unsigned long)trampoline;
- fail:
- 	tramp_free(trampoline);
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 97342c42dda8..3fd3a45cafe8 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -32,6 +32,7 @@
- #include <asm/memtype.h>
- #include <asm/hyperv-tlfs.h>
- #include <asm/mshyperv.h>
-+#include <asm/ftrace.h>
- 
- #include "../mm_internal.h"
- 
-@@ -579,6 +580,8 @@ static inline pgprot_t static_protections(pgprot_t prot, unsigned long start,
- 	return __pgprot(pgprot_val(prot) & ~forbidden);
- }
- 
-+long ftrace_updated_trampoline;
-+
- /*
-  * Validate strict W^X semantics.
-  */
-@@ -587,6 +590,10 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
- {
- 	unsigned long end;
- 
-+	/* Kernel text is rw at boot up */
-+	if (system_state == SYSTEM_BOOTING && ftrace_updated_trampoline == start)
-+		return new;
-+
- 	/*
- 	 * 32-bit has some unfixable W+X issues, like EFI code
- 	 * and writeable data being in the same page.  Disable
+As someone who still regularly uses hardware from this era, and often runs Linux on it, this would definitely be a blow to which machines I can actively use. Linux support is a big part of how I use these machines, since I usually have them connected to my LAN and the internet, and networking support on MS-DOS and Windows 9x rots more each year in terms of support for modern protocols and security. I would be very disappointed, and impacted, if Linux dropped 486 support.
