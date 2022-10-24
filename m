@@ -2,203 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7AA60B99F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3614860B9B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234114AbiJXUPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S232724AbiJXUSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234249AbiJXUOT (ORCPT
+        with ESMTP id S234136AbiJXUSD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:14:19 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9C0A3458;
-        Mon, 24 Oct 2022 11:32:38 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-12c8312131fso12850314fac.4;
-        Mon, 24 Oct 2022 11:32:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fvFflD4k0dWfCuYnPUW0ROCVRGYaVIG1roLKu8FKCdY=;
-        b=BV/EmlmhOfkGh96zgpr5heGMJHF9iIPFwBo3y5qUGgPUcFUPlpNyjL3LLhMOaBsos1
-         bl5959lTbyvNix2tbCWCSovXLVh820Alq2uWTazz64wOdvTFRMJhpoozaOKZ0YitKI7j
-         lYz8O3JfL4Z2o9uondujoJ45ddY3QWMpj5ibNl8XRB1neP+MII4/U6fOB0GGRsIuWOUT
-         DoW6b/oalr6I51oONiP6/e6yjYQQ1DsqCcuB5xGmFxNCrTO+VMEYDE0JcHJwejDRMKyL
-         edS/Vw6kvdAv5EdFYUyTeNtK2lAB08CNboy0L/VRM8b2mTC2ht/xlugyAGzW3+0YDnLW
-         zXeA==
+        Mon, 24 Oct 2022 16:18:03 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B78F9E0C9;
+        Mon, 24 Oct 2022 11:34:57 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1324e7a1284so12825839fac.10;
+        Mon, 24 Oct 2022 11:34:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fvFflD4k0dWfCuYnPUW0ROCVRGYaVIG1roLKu8FKCdY=;
-        b=0hSusIEscwYF96yoHNfcTek6lfL/bx9uNwmRR4N/Sy6TmnMlggUekXAK39KU980KJr
-         EG7JbtzimPJopyL5gQBI1HkivfUwl9B3ob0oBsA2Z0G17DHLhdw3AZ+jCo1p5tYrqLUj
-         EsqjvahsjGajKL9rdfiH5bbOPLpK9MMjWVbfDMmfZzS61YxKGJ9qJKNYvQTjfdQ1vSbT
-         /23Orp7A1PyALO+39Br+EOfsZ4AGC9ltW7YnOyiHeZTOituyekDbSRZEkbsJz+PecXh+
-         rqS+LJrSHLxC70BzpZrvaLIaNM6+4npc4wOqyBw7IHqwXo9h/dKIro7PBMD6HHgoma3z
-         NGXg==
-X-Gm-Message-State: ACrzQf3xfUJ9oLNFYVDjcNRhUCvqHQzs9sIs80DncO/oa5TbJtLj0M+y
-        9DqnP1fb+GfVc1KN+FqvY4E=
-X-Google-Smtp-Source: AMsMyM4phKWoFOpnP3ROaCGKVpMoWsQCIfEncptYfxkNNKjzjEJGGH39043aBXmgttZIQymNrwcBMg==
-X-Received: by 2002:a05:6870:ec90:b0:13b:b20a:ae81 with SMTP id eo16-20020a056870ec9000b0013bb20aae81mr3500501oab.77.1666636310880;
-        Mon, 24 Oct 2022 11:31:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z17-20020a05683008d100b006618b23df05sm88188otg.21.2022.10.24.11.31.49
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rzBt4DjigXC8g0JvW9vu6ypNBWVdZc7Uwm5ix9PgU48=;
+        b=l8RhsPRNCjYRjue3uFjnsWByocEsvT7aPHlQZmLfzcVH9U64nylMaX/fp8PJhbxRzV
+         CKUZmWhAV5ZBxD0aGfpV9oukJeHmc3HzbEk2HV/7b07TRdlqusbZIni3geBge7NonGiu
+         Gqwohtm5tlNGmfrehunugFajB7+vFDOqK6MaOq+yZWT4GhAjSPOht9LKCDuf744nslTi
+         Kq+TDrveXCgm9LqIcB7lf+ZrjASSXGA7RmrZ0Gut3KkV1WI7JBaEXgwWH7/Sdv1ZXto0
+         qHfE0UIYs1o/nHMHHdL1f3ilY/yxTTQk4ufl1Xxd6AynTphR76K0fH/oC9GUC1it0kiW
+         UH7Q==
+X-Gm-Message-State: ACrzQf2kzoc6TXirbEIoj0tgMD4MDm1bPdNtx4oGEBUawZ8d9TPBt6Vo
+        1rpNhVrGo36rd+Iatni55cqkJWzkpQ==
+X-Google-Smtp-Source: AMsMyM63340yiZHw0ES1B2eox2gZas5JR6G5Od4D1kId77fzF0hcyOGQovRxJgZLV1pXg57kCsy0hQ==
+X-Received: by 2002:a05:6870:7020:b0:137:360d:1f7 with SMTP id u32-20020a056870702000b00137360d01f7mr21622717oae.255.1666636436938;
+        Mon, 24 Oct 2022 11:33:56 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b24-20020a4ae818000000b004807de5c302sm293117oob.17.2022.10.24.11.33.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:31:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 24 Oct 2022 11:31:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
-Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v5] iio: temperature: Add driver support for Maxim
- MAX30208
-Message-ID: <20221024183148.GA3170088@roeck-us.net>
-References: <20221024165658.181340-1-rajat.khandelwal@linux.intel.com>
- <20221024112829.GA2807876@roeck-us.net>
- <CO1PR11MB483509CDD93AFA3176C42080962E9@CO1PR11MB4835.namprd11.prod.outlook.com>
+        Mon, 24 Oct 2022 11:33:56 -0700 (PDT)
+Received: (nullmailer pid 2018985 invoked by uid 1000);
+        Mon, 24 Oct 2022 18:33:57 -0000
+Date:   Mon, 24 Oct 2022 13:33:57 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Trevor Wu <trevor.wu@mediatek.com>
+Cc:     broonie@kernel.org, tiwai@suse.com, matthias.bgg@gmail.com,
+        p.zabel@pengutronix.de, angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 10/12] dt-bindings: mediatek: mt8188: add audio afe
+ document
+Message-ID: <20221024183357.GA2012388-robh@kernel.org>
+References: <20221021082719.18325-1-trevor.wu@mediatek.com>
+ <20221021082719.18325-11-trevor.wu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CO1PR11MB483509CDD93AFA3176C42080962E9@CO1PR11MB4835.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221021082719.18325-11-trevor.wu@mediatek.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 05:11:17PM +0000, Khandelwal, Rajat wrote:
-> Hi Guenter,
-> Thanks for the acknowledgement.
+On Fri, Oct 21, 2022 at 04:27:17PM +0800, Trevor Wu wrote:
+> Add mt8188 audio afe document.
 > 
-> >Agreed; the sensor doesn't seem to be very useful for traditional hardware
-> >monitoring. The driver better resides in IIO.
-> Cool! I didn't know the categorical reasoning behind this but since this is 
-> accepted in IIO, I don't have to do anything more. 
-
-Huh. There is no "categorical" reasoning. Call it a gut feeling.
-I can not imagine anyone using this chip for hardware monitoring,
-and presumably you have an IIO use case or you would not have
-implemented an IIO driver.
-
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> ---
+>  .../bindings/sound/mt8188-afe-pcm.yaml        | 187 ++++++++++++++++++
+>  1 file changed, 187 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
 > 
-> >I don't understand why readings are discarded. Why trigger multiple
-> >readings just to discard all but the last one ? I thought iio would
-> >be expected to return all values.
-> Ok. The plan is to trigger temperature conversion on the GPIO input also.
-> The user can trigger as many times the temperature conversion he wants (I accept unnecessary),
-> which will keep the FIFO increasing (without reading converted values) but the driver should be
-> resilient to all the erroneous zones. Also, when the user does really make a syscall to read the
-> temperature, it definitely should be the last converted reading. 
+> diff --git a/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml b/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
+> new file mode 100644
+> index 000000000000..b2c548c31e4d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/mt8188-afe-pcm.yaml
+> @@ -0,0 +1,187 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/mt8188-afe-pcm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek AFE PCM controller for mt8188
+> +
+> +maintainers:
+> +  - Trevor Wu <trevor.wu@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt8188-afe
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    const: audiosys
+> +
+> +  mediatek,topckgen:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: The phandle of the mediatek topckgen controller
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: 26M clock
+> +      - description: audio pll1 clock
+> +      - description: audio pll2 clock
+> +      - description: clock divider for i2si1_mck
+> +      - description: clock divider for i2si2_mck
+> +      - description: clock divider for i2so1_mck
+> +      - description: clock divider for i2so2_mck
+> +      - description: clock divider for dptx_mck
+> +      - description: a1sys hoping clock
+> +      - description: audio intbus clock
+> +      - description: audio hires clock
+> +      - description: audio local bus clock
+> +      - description: mux for dptx_mck
+> +      - description: mux for i2so1_mck
+> +      - description: mux for i2so2_mck
+> +      - description: mux for i2si1_mck
+> +      - description: mux for i2si2_mck
+> +      - description: audio 26m clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: clk26m
+> +      - const: apll1_ck
+> +      - const: apll2_ck
+> +      - const: apll12_div0
+> +      - const: apll12_div1
+> +      - const: apll12_div2
+> +      - const: apll12_div3
+> +      - const: apll12_div9
+> +      - const: a1sys_hp_sel
+> +      - const: aud_intbus_sel
+> +      - const: audio_h_sel
+> +      - const: audio_local_bus_sel
+> +      - const: dptx_m_sel
+> +      - const: i2so1_m_sel
+> +      - const: i2so2_m_sel
+> +      - const: i2si1_m_sel
+> +      - const: i2si2_m_sel
+> +      - const: adsp_audio_26m
+> +
+> +patternProperties:
+> +  "^mediatek,etdm-in[1-2]-chn-disabled$":
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> +    maxItems: 16
+> +    description: |
 
-That is your use case. I don't know how IIO drivers are normally
-implemented, but I would expect a generic driver. In this case,
-I would expect userspace to decide what it wants to with the data
-and not let the kernel driver discard most of it.
+Don't need '|'
 
+> +      Specify which input channel should be disabled, so the data of
+> +      specified channel won't be outputted to memory.
+
+I'm not clear on what each of the 16 entries represents. What's index 0, 
+1, 2, etc.?
+
+> +    items:
+> +      enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+
+maximum: 15
+
+
+> +
+> +  "^mediatek,etdm-in[1-2]-mclk-always-on-rate-hz$":
+> +    description: Specify etdm in mclk output rate for always on case.
+> +
+> +  "^mediatek,etdm-out[1-3]-mclk-always-on-rate-hz$":
+> +    description: Specify etdm out mclk output rate for always on case.
+> +
+> +  "^mediatek,etdm-in[1-2]-multi-pin-mode$":
+> +    type: boolean
+> +    description: if present, the etdm data mode is I2S.
+> +
+> +  "^mediatek,etdm-out[1-3]-multi-pin-mode$":
+> +    type: boolean
+> +    description: if present, the etdm data mode is I2S.
+> +
+> +  "^mediatek,etdm-in[1-2]-cowork-source$":
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      etdm modules can share the same external clock pin. Specify
+> +      which etdm clock source is required by this etdm in moudule.
+> +    enum:
+> +      - 0 # etdm1_in
+> +      - 1 # etdm2_in
+> +      - 2 # etdm1_out
+> +      - 3 # etdm2_out
+> +
+> +  "^mediatek,etdm-out[1-2]-cowork-source$":
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      etdm modules can share the same external clock pin. Specify
+> +      which etdm clock source is required by this etdm out moudule.
+> +    enum:
+> +      - 0 # etdm1_in
+> +      - 1 # etdm2_in
+> +      - 2 # etdm1_out
+> +      - 3 # etdm2_out
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - resets
+> +  - reset-names
+> +  - mediatek,topckgen
+> +  - power-domains
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    afe: afe@10b10000 {
+> +        compatible = "mediatek,mt8188-afe";
+> +        reg = <0x10b10000 0x10000>;
+> +        interrupts = <GIC_SPI 822 IRQ_TYPE_LEVEL_HIGH 0>;
+> +        resets = <&watchdog 14>;
+> +        reset-names = "audiosys";
+> +        mediatek,topckgen = <&topckgen>;
+> +        power-domains = <&spm 13>; //MT8188_POWER_DOMAIN_AUDIO
+> +        clocks = <&clk26m>,
+> +                 <&topckgen 72>, //CLK_TOP_APLL1
+> +                 <&topckgen 73>, //CLK_TOP_APLL2
+> +                 <&topckgen 186>, //CLK_TOP_APLL12_CK_DIV0
+> +                 <&topckgen 187>, //CLK_TOP_APLL12_CK_DIV1
+> +                 <&topckgen 188>, //CLK_TOP_APLL12_CK_DIV2
+> +                 <&topckgen 189>, //CLK_TOP_APLL12_CK_DIV3
+> +                 <&topckgen 191>, //CLK_TOP_APLL12_CK_DIV9
+> +                 <&topckgen 83>, //CLK_TOP_A1SYS_HP
+> +                 <&topckgen 31>, //CLK_TOP_AUD_INTBUS
+> +                 <&topckgen 32>, //CLK_TOP_AUDIO_H
+> +                 <&topckgen 69>, //CLK_TOP_AUDIO_LOCAL_BUS
+> +                 <&topckgen 81>, //CLK_TOP_DPTX
+> +                 <&topckgen 77>, //CLK_TOP_I2SO1
+> +                 <&topckgen 78>, //CLK_TOP_I2SO2
+> +                 <&topckgen 79>, //CLK_TOP_I2SI1
+> +                 <&topckgen 80>, //CLK_TOP_I2SI2
+> +                 <&adsp_audio26m 0>; //CLK_AUDIODSP_AUDIO26M
+> +        clock-names = "clk26m",
+> +                      "apll1_ck",
+> +                      "apll2_ck",
+> +                      "apll12_div0",
+> +                      "apll12_div1",
+> +                      "apll12_div2",
+> +                      "apll12_div3",
+> +                      "apll12_div9",
+> +                      "a1sys_hp_sel",
+> +                      "aud_intbus_sel",
+> +                      "audio_h_sel",
+> +                      "audio_local_bus_sel",
+> +                      "dptx_m_sel",
+> +                      "i2so1_m_sel",
+> +                      "i2so2_m_sel",
+> +                      "i2si1_m_sel",
+> +                      "i2si2_m_sel",
+> +                      "adsp_audio_26m";
+
+It's good if the examples include optional properties so we at least 
+have some validation the schema matches the DTS.
+
+> +    };
+> +
+> +...
+> -- 
+> 2.18.0
 > 
-> >This is really pointless. The register has only one bit to set.
-> >Just write that bit; reading the register before that is pointless.
-> I think the register also has some bits which are reserved. Hence, rather than to make a number
-> for specifically the value keeping those bits the same, I read whatever is there and only store the
-> required one. 
 > 
-I personally would not accept that kind of code, but that is just
-me.
-
-> >Also, the code assumes that one of the gpio input registers would be used
-> >to trigger temperature readings. Why trigger another one if this is indeed
-> >the case ? Triggering a temperature reading should only be necessary if
-> >there is no data in the fifo.
-> GPIO input triggering is yet not implemented as I would have to work on ACPI interrupts and I have
-> written the driver for now to get it included in Linux. 
-> There are 2 ways - via GPIO and making a syscall. I agree that temperature reading should be
-> necessary only when there is no data in FIFO but since we intend to keep GPIO as a trigger point,
-> user can keep triggering conversions and not reading them out. (As pointed above, driver should be
-> resilient to all erroneous zones).
-
-What does that have to do with interrupts ? Anything connected to the
-gpio pin would trigger a reading.
-
-> 
-> >The datasheet says that it can take up to 50 ms to report a result.
-> >10 retries with 50ms wait each time seems overkill.
-> That's correct. But, the response time can be up to 500 ms. Also, while debugging I had put timestamps
-> which when analyzed, indicated that time may go beyond 50 ms. 
-> 
-
-It seems to me that this would warrant an explanation in the driver.
-500ms seems hard to believe.
-
-> >And why use usleep_range() here
-> >but msleep() above ?
-> I am sorry about that. I have converted usleep_range into msleep (2 places). 
-> 
-> >This is wrong. It uses the overflow counter as data counter if it
-> >is != 0. The overflow counter counts the number of overflows, not
-> >the number of entries in the fifo.
-> So there is no such thing as 'overflow counter'. The point is if the overflow counter has
-
-Interesting statement. MAX30208_FIFO_OVF_CNTR very much
-sounds like overflow counter to me, and the datasheet
-suggests the same.
-
-> even one word, I use the data count equal to the overflow counter value. However, if it
-> has zero, then use the number of words in actual FIFO. 
-> This logic is just used to count how many values to pop to get the most recent reading.
-> 
-
-The code is
-
-+       ret = i2c_smbus_read_byte_data(data->client, MAX30208_FIFO_OVF_CNTR);
-+       if (ret < 0) {
-+               dev_err(&data->client->dev, "Error reading reg FIFO overflow counter\n");
-+               goto unlock;
-+       } else if (!ret) {
-+               ret = i2c_smbus_read_byte_data(data->client,
-+                                              MAX30208_FIFO_DATA_CNTR);
-+               if (ret < 0) {
-+                       dev_err(&data->client->dev, "Error reading reg FIFO data counter\n");
-+                       goto unlock;
-+               }
-+       }
-+
-+       data_count = ret;
-
-If reading MAX30208_FIFO_OVF_CNTR returns a value > 0, it is used as
-data_count. That does not seem correct. The data sheet says if
-MAX30208_FIFO_OVF_CNTR is != 0, data_count is 32. Maybe the datasheet
-is wrong all over the place, but at least in this case that seems
-very unlikely.
-
-> > data_count is declared as u8 and will never be < 0.
-> Data count can never be <0 as only first few bits of the 8 bits are used in the register. 
-> 
-	u8 data_count;
-...
-	data_count = i2c_smbus_read_byte_data(data->client,
-                                              MAX30208_FIFO_DATA_CNTR);
-        if (data_count < 0) {
-
-Really ? Static analyzers will have a field day with this code.
-
-Anyway, I don't really care much about this code, so I'll let
-Jonathan take it from here. I just wanted to share my observations.
-
-Thanks,
-Guenter
