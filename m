@@ -2,176 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F7960C13A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3E060BF38
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiJYBne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S230520AbiJYAHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbiJYBnI (ORCPT
+        with ESMTP id S230472AbiJYAGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:43:08 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C83A11448;
-        Mon, 24 Oct 2022 18:26:24 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29OHYd1D012521;
-        Mon, 24 Oct 2022 12:34:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666632879;
-        bh=L6XcoFGyR7HmQUHNnt8y16oVUY/v1odNW85+8MxB5To=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Niyw885wqwUJO9eyy8Cefbci/NHHdKb6IJ5wH7ykaJC9+eSBhsW/tSHLGIC5jxJ3w
-         obDb0R9JfMoeWwhxTG04MZdxmjyJTOJDPQN2DJUABQGh0HFmLn/jX9gHDTe3NUDHvW
-         Ukc0eeivcT4tiMTai3DgojTctDmDNhvi7HDGmqaw=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29OHYdEr019602
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Oct 2022 12:34:39 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 24
- Oct 2022 12:34:38 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 24 Oct 2022 12:34:38 -0500
-Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29OHYYJ2039154;
-        Mon, 24 Oct 2022 12:34:37 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        Mon, 24 Oct 2022 20:06:45 -0400
+X-Greylist: delayed 4144 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 15:23:54 PDT
+Received: from elaine.keithp.com (home.keithp.com [63.227.221.253])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E665FAB;
+        Mon, 24 Oct 2022 15:23:53 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by elaine.keithp.com (Postfix) with ESMTP id 7417D3F337D5;
+        Mon, 24 Oct 2022 11:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
+        t=1666636504; bh=fE4YzItjZnxgJ2So2TV1go9hLn+lPre32wOumOrKUws=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=J7N7Q1zvtKPbtjJxuO8SPhuU6eB/sSiuxi7eHHlYqfr5p54G6TTYPR5/fdDy2oO/u
+         bDKxsE1xSaHWZTPR7GpzUAVoPRNs0q1GjObMcP6ooAgW7AhveBujGvz0zzxm7P5MRC
+         iS8+qTZ4YFUZjR/yDcUcSmXbXfEWvQDQi0lYlN9cFeeWmnpB2VT/ig79qMLZaVHm+a
+         sIFxcKS0V1qMOtWTuWRhmflduMPf3IKdAy3peoMNNG66ckZqXOB22eB98S064573zY
+         N6YzZAd4DSRKCt46xCvJ9dxTgPq4MN7AGqw/XPf6EjqJvksgNjydgKPzvm3sBWR0//
+         L5QIp3LgqMSdw==
+X-Virus-Scanned: Debian amavisd-new at keithp.com
+Received: from elaine.keithp.com ([127.0.0.1])
+        by localhost (elaine.keithp.com [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id EXR7_NEv1jGg; Mon, 24 Oct 2022 11:35:04 -0700 (PDT)
+Received: from keithp.com (koto.keithp.com [192.168.11.2])
+        by elaine.keithp.com (Postfix) with ESMTPSA id 0D46C3F337D4;
+        Mon, 24 Oct 2022 11:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
+        t=1666636504; bh=fE4YzItjZnxgJ2So2TV1go9hLn+lPre32wOumOrKUws=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=J7N7Q1zvtKPbtjJxuO8SPhuU6eB/sSiuxi7eHHlYqfr5p54G6TTYPR5/fdDy2oO/u
+         bDKxsE1xSaHWZTPR7GpzUAVoPRNs0q1GjObMcP6ooAgW7AhveBujGvz0zzxm7P5MRC
+         iS8+qTZ4YFUZjR/yDcUcSmXbXfEWvQDQi0lYlN9cFeeWmnpB2VT/ig79qMLZaVHm+a
+         sIFxcKS0V1qMOtWTuWRhmflduMPf3IKdAy3peoMNNG66ckZqXOB22eB98S064573zY
+         N6YzZAd4DSRKCt46xCvJ9dxTgPq4MN7AGqw/XPf6EjqJvksgNjydgKPzvm3sBWR0//
+         L5QIp3LgqMSdw==
+Received: by keithp.com (Postfix, from userid 1000)
+        id 95E081E601CE; Mon, 24 Oct 2022 11:35:03 -0700 (PDT)
+From:   Keith Packard <keithp@keithp.com>
+To:     Kees Cook <keescook@chromium.org>,
+        "Darrick J . Wong" <djwong@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Tadeusz Struk <tadeusz.struk@linaro.org>,
+        Zorro Lang <zlang@redhat.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Rowand <frowand.list@gmail.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH v2 4/7] arm64: dts: freescale: Rename DTB overlay source files from .dts to .dtso
-Date:   Mon, 24 Oct 2022 12:34:31 -0500
-Message-ID: <20221024173434.32518-5-afd@ti.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221024173434.32518-1-afd@ti.com>
-References: <20221024173434.32518-1-afd@ti.com>
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] Introduce flexible array struct helpers
+In-Reply-To: <20221024172058.534477-1-keescook@chromium.org>
+References: <20221024171848.never.522-kees@kernel.org>
+ <20221024172058.534477-1-keescook@chromium.org>
+Date:   Mon, 24 Oct 2022 11:35:03 -0700
+Message-ID: <87k04pf4tk.fsf@keithp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DTB Overlays (.dtbo) can now be built from source files with the
-extension (.dtso). This makes it clear what is the content of the files
-and differentiates them from base DTB source files.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Convert the DTB overlay source files in the arm64/freescale directory.
+Kees Cook <keescook@chromium.org> writes:
 
-Signed-off-by: Andrew Davis <afd@ti.com>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- .../{fsl-ls1028a-qds-13bb.dts => fsl-ls1028a-qds-13bb.dtso}       | 0
- .../{fsl-ls1028a-qds-65bb.dts => fsl-ls1028a-qds-65bb.dtso}       | 0
- .../{fsl-ls1028a-qds-7777.dts => fsl-ls1028a-qds-7777.dtso}       | 0
- .../{fsl-ls1028a-qds-85bb.dts => fsl-ls1028a-qds-85bb.dtso}       | 0
- .../{fsl-ls1028a-qds-899b.dts => fsl-ls1028a-qds-899b.dtso}       | 0
- .../{fsl-ls1028a-qds-9999.dts => fsl-ls1028a-qds-9999.dtso}       | 0
- ...e-gw72xx-0x-imx219.dts => imx8mm-venice-gw72xx-0x-imx219.dtso} | 0
- ...xx-0x-rs232-rts.dts => imx8mm-venice-gw72xx-0x-rs232-rts.dtso} | 0
- ...ice-gw72xx-0x-rs422.dts => imx8mm-venice-gw72xx-0x-rs422.dtso} | 0
- ...ice-gw72xx-0x-rs485.dts => imx8mm-venice-gw72xx-0x-rs485.dtso} | 0
- ...e-gw73xx-0x-imx219.dts => imx8mm-venice-gw73xx-0x-imx219.dtso} | 0
- ...xx-0x-rs232-rts.dts => imx8mm-venice-gw73xx-0x-rs232-rts.dtso} | 0
- ...ice-gw73xx-0x-rs422.dts => imx8mm-venice-gw73xx-0x-rs422.dtso} | 0
- ...ice-gw73xx-0x-rs485.dts => imx8mm-venice-gw73xx-0x-rs485.dtso} | 0
- 14 files changed, 0 insertions(+), 0 deletions(-)
- rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-13bb.dts => fsl-ls1028a-qds-13bb.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-65bb.dts => fsl-ls1028a-qds-65bb.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-7777.dts => fsl-ls1028a-qds-7777.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-85bb.dts => fsl-ls1028a-qds-85bb.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-899b.dts => fsl-ls1028a-qds-899b.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{fsl-ls1028a-qds-9999.dts => fsl-ls1028a-qds-9999.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-imx219.dts => imx8mm-venice-gw72xx-0x-imx219.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs232-rts.dts => imx8mm-venice-gw72xx-0x-rs232-rts.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs422.dts => imx8mm-venice-gw72xx-0x-rs422.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw72xx-0x-rs485.dts => imx8mm-venice-gw72xx-0x-rs485.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-imx219.dts => imx8mm-venice-gw73xx-0x-imx219.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs232-rts.dts => imx8mm-venice-gw73xx-0x-rs232-rts.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs422.dts => imx8mm-venice-gw73xx-0x-rs422.dtso} (100%)
- rename arch/arm64/boot/dts/freescale/{imx8mm-venice-gw73xx-0x-rs485.dts => imx8mm-venice-gw73xx-0x-rs485.dtso} (100%)
+> + * struct flex_array_struct_example {
+> + *	...			 // arbitrary members
+> + *	bounded_flex_array(
+> + *		u16, part_count, // count of elements stored in "parts" below.
+> + *		u32, parts	 // flexible array with elements of type u32.
+> + *	);
+> + * );
 
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dts
-rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-13bb.dtso
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dts
-rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-65bb.dtso
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dts
-rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-7777.dtso
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dts
-rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-85bb.dtso
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dts
-rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-899b.dtso
-diff --git a/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts b/arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dts
-rename to arch/arm64/boot/dts/freescale/fsl-ls1028a-qds-9999.dtso
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-imx219.dtso
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs232-rts.dtso
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs422.dtso
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx-0x-rs485.dtso
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dtso
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs232-rts.dtso
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs422.dtso
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dtso
-similarity index 100%
-rename from arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dts
-rename to arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rs485.dtso
--- 
-2.37.3
+> + * struct flex_array_struct_example {
+> + *	...		// position-sensitive members
+> + *	// count of elements stored in "parts" below.
+> + *	DECLARE_FAS_COUNT(u16, part_count);
+> + *	..		// position-sensitive members
+> + *	// flexible array with elements of type u32.
+> + *	DECLARE_FAS_ARRAY(u32, parts);
+> + * };
 
+I'm sure there's a good reason, but these two macros appear to be doing
+similar things and yet have very different naming conventions. Maybe:
+
+        FAS_DECLARE_COUNT(type, name)
+        FAS_DECLARE_ARRAY(type, name)
+        FAS_DECLARE(size_type, size_name, array_type, array_name)
+
+> +/* For use with flexible array structure helpers, in <linux/flex_array.h=
+> */
+> +#define __DECLARE_FAS_COUNT(TYPE, NAME)					\
+> +	union {								\
+> +		TYPE __flex_array_elements_count;			\
+> +		TYPE NAME;						\
+> +	}
+
+How often could that second "public" member be 'const'? That would catch
+places which accidentally assign to this field.
+
+For code which does want to write to this field, is it mostly trimming
+data from the end, or does it actually smash in arbitrary values? For
+the former case, would it be helpful to have a test to make sure the
+assigned size isn't larger than the real size (yeah, that would probably
+take an extra field holding the real size), or larger than the current size?
+
+=2D-=20
+=2Dkeith
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEw4O3eCVWE9/bQJ2R2yIaaQAAABEFAmNW2tcACgkQ2yIaaQAA
+ABGa6A//WlcPIt1OZ72U5DGohaUla3vfRSTFFWeGl9RRAdiWSeidLKpuq8iGBpWU
++/2UygeNpW3KV9kJe4WCX/+PLAd2aGmRD1Me7OP+FdHj3FTa5iBEClfjg782geI1
+5yQoGtsM3rujUSRAdlFTBF0S/n7YLE4JqtR51nCSu/jSsJ1GLbi9Yk5Wice/PsKL
+0B7UU1Jl1QPQI6+q/LkCarAizF3/yKnAqVHgKCWAz2neKmd/8JgXdsaX9Kj5GVjV
+q6CoXbrblbybvqaoV6LOARGs92rS55nFAIELZ6nmBdq3jfdpMlaSjGDh1NeIOM+o
+f4Ls+kewrBIKYQljausRJ3YAcWXZNcprnmPr4dQx2iygqcIpe2B5nH/wGwqbiKCK
+dXx8k33WjYJt0AbI9KZmJod52r1qsXk9sSiM/fOeIJ25J2GzCC4i/QjHEuopWdkp
+qMLDnSKQQrPyCTR52csOgHqSvL1cbmkBWyIrzZcMdMGvbTBPNiKBIhOQU/ijSh7g
+vM1sGPaRosgsgHgVMaLXDnUrrS6Lo0TwEM/43tt1KBSADkRx7K9pvhhh+yae3cK3
+KGqj7Rk+acwhC8LMU82VTC557ZNSfnzeQaT0AFZ3wQBVJXt61y2eAqkIRIS4PIKM
+iXFH76M95WGwitiO4kvqsEgcJkypic0/pYpAWAlMljyT6BJ2c9M=
+=g28z
+-----END PGP SIGNATURE-----
+--=-=-=--
