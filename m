@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12C060ABC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84FC60A51D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236809AbiJXN4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S233327AbiJXMUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236821AbiJXNyP (ORCPT
+        with ESMTP id S233353AbiJXMTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:54:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30928E0DC;
-        Mon, 24 Oct 2022 05:43:50 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E33574E38;
+        Mon, 24 Oct 2022 04:57:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E318461311;
-        Mon, 24 Oct 2022 12:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01A37C433C1;
-        Mon, 24 Oct 2022 12:43:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D355612D5;
+        Mon, 24 Oct 2022 11:57:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EDCFC433C1;
+        Mon, 24 Oct 2022 11:57:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615421;
-        bh=uVcgDQ+wkYU7b+xNOuyIVpRIzQjgcyGJLxKu5RuekhA=;
+        s=korg; t=1666612659;
+        bh=zyn4n4h+hCJZVFeLUjY46IkKRhJ1R1o5FUAeIwX4jUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g3cHilPXM4vebrcAOWTyjDCmBMCadobyuNT+RopKHax04mcP0GwT5NJucg0RuBtMP
-         iT2YezuC7nvR73e031qIrJsgUj53lK/dx2aRu3zGnOHU9vyvDPkopkxZMvOoQ+pRB+
-         VXR9/zhw031xrNDBeE0XnqDfZtYBYoJ9m9KWOjHI=
+        b=X4hUI9Gg4hG6pEmlE/jVqIrcMQqB6sOc75jwzeizsd8ErAFoUTJ9DOaSpIoeLaqQb
+         NQtJjo1wFCBAzxwtr3iWbTsLZQeq6rQhp1yZhGYF22yfSem2sqkz86GV0UeUQwT+0X
+         /9XCcqblwYNSzUXC8ZxMQ/wmbIkHF5TEengadnvs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brent Lu <brent.lu@intel.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 245/530] ALSA: hda/hdmi: Dont skip notification handling during PM operation
+        stable@vger.kernel.org,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 070/229] sh: machvec: Use char[] for section boundaries
 Date:   Mon, 24 Oct 2022 13:29:49 +0200
-Message-Id: <20221024113056.199767565@linuxfoundation.org>
+Message-Id: <20221024113001.345205044@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,61 +59,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 5226c7b9784eee215e3914f440b3c2e1764f67a8 ]
+[ Upstream commit c5783af354688b24abd359f7086c282ec74de993 ]
 
-The HDMI driver skips the notification handling from the graphics
-driver when the codec driver is being in the PM operation.  This
-behavior was introduced by the commit eb399d3c99d8 ("ALSA: hda - Skip
-ELD notification during PM process").  This skip may cause a problem,
-as we may miss the ELD update when the connection/disconnection
-happens right at the runtime-PM operation of the audio codec.
+As done for other sections, define the extern as a character array,
+which relaxes many of the compiler-time object size checks, which would
+otherwise assume it's a single long. Solves the following build error:
 
-Although this workaround was valid at that time, it's no longer true;
-the fix was required just because the ELD update procedure needed to
-wake up the audio codec, which had lead to a runtime-resume during a
-runtime-suspend.  Meanwhile, the ELD update procedure doesn't need a
-codec wake up any longer since the commit 788d441a164c ("ALSA: hda -
-Use component ops for i915 HDMI/DP audio jack handling"); i.e. there
-is no much reason for skipping the notification.
+arch/sh/kernel/machvec.c: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]:  => 105:33
 
-Let's drop those checks for addressing the missing notification.
-
-Fixes: 788d441a164c ("ALSA: hda - Use component ops for i915 HDMI/DP audio jack handling")
-Reported-by: Brent Lu <brent.lu@intel.com>
-Link: https://lore.kernel.org/r/20220927135807.4097052-1-brent.lu@intel.com
-Link: https://lore.kernel.org/r/20221001074809.7461-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: linux-sh@vger.kernel.org
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Link: https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2209050944290.964530@ramsan.of.borg/
+Fixes: 9655ad03af2d ("sh: Fixup machvec support.")
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Acked-by: Rich Felker <dalias@libc.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_hdmi.c | 6 ------
- 1 file changed, 6 deletions(-)
+ arch/sh/include/asm/sections.h |  2 +-
+ arch/sh/kernel/machvec.c       | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
-index 1994a83fa391..ba1289abd45f 100644
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -2685,9 +2685,6 @@ static void generic_acomp_pin_eld_notify(void *audio_ptr, int port, int dev_id)
- 	 */
- 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
- 		return;
--	/* ditto during suspend/resume process itself */
--	if (snd_hdac_is_in_pm(&codec->core))
--		return;
+diff --git a/arch/sh/include/asm/sections.h b/arch/sh/include/asm/sections.h
+index 8edb824049b9..0cb0ca149ac3 100644
+--- a/arch/sh/include/asm/sections.h
++++ b/arch/sh/include/asm/sections.h
+@@ -4,7 +4,7 @@
  
- 	check_presence_and_report(codec, pin_nid, dev_id);
- }
-@@ -2871,9 +2868,6 @@ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
- 	 */
- 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
- 		return;
--	/* ditto during suspend/resume process itself */
--	if (snd_hdac_is_in_pm(&codec->core))
--		return;
+ #include <asm-generic/sections.h>
  
- 	snd_hdac_i915_set_bclk(&codec->bus->core);
- 	check_presence_and_report(codec, pin_nid, dev_id);
+-extern long __machvec_start, __machvec_end;
++extern char __machvec_start[], __machvec_end[];
+ extern char __uncached_start, __uncached_end;
+ extern char __start_eh_frame[], __stop_eh_frame[];
+ 
+diff --git a/arch/sh/kernel/machvec.c b/arch/sh/kernel/machvec.c
+index ec05f491c347..a9f797a76e7c 100644
+--- a/arch/sh/kernel/machvec.c
++++ b/arch/sh/kernel/machvec.c
+@@ -22,8 +22,8 @@
+ #define MV_NAME_SIZE 32
+ 
+ #define for_each_mv(mv) \
+-	for ((mv) = (struct sh_machine_vector *)&__machvec_start; \
+-	     (mv) && (unsigned long)(mv) < (unsigned long)&__machvec_end; \
++	for ((mv) = (struct sh_machine_vector *)__machvec_start; \
++	     (mv) && (unsigned long)(mv) < (unsigned long)__machvec_end; \
+ 	     (mv)++)
+ 
+ static struct sh_machine_vector * __init get_mv_byname(const char *name)
+@@ -89,8 +89,8 @@ void __init sh_mv_setup(void)
+ 	if (!machvec_selected) {
+ 		unsigned long machvec_size;
+ 
+-		machvec_size = ((unsigned long)&__machvec_end -
+-				(unsigned long)&__machvec_start);
++		machvec_size = ((unsigned long)__machvec_end -
++				(unsigned long)__machvec_start);
+ 
+ 		/*
+ 		 * Sanity check for machvec section alignment. Ensure
+@@ -104,7 +104,7 @@ void __init sh_mv_setup(void)
+ 		 * vector (usually the only one) from .machvec.init.
+ 		 */
+ 		if (machvec_size >= sizeof(struct sh_machine_vector))
+-			sh_mv = *(struct sh_machine_vector *)&__machvec_start;
++			sh_mv = *(struct sh_machine_vector *)__machvec_start;
+ 	}
+ 
+ 	printk(KERN_NOTICE "Booting machvec: %s\n", get_system_type());
 -- 
 2.35.1
 
