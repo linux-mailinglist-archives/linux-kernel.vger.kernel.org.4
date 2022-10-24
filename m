@@ -2,170 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A017460B1C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6631060B1B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbiJXQhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S232261AbiJXQc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232662AbiJXQgn (ORCPT
+        with ESMTP id S230300AbiJXQcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:36:43 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7354432F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:24:23 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-132fb4fd495so12171797fac.12
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:24:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2V4dbYtLJOdrMkKDGWD6KitwsjwW003TmDHahg6j47c=;
-        b=ST/EXpXnGMVhqPz5639aoNMs/MJCJzl8dYjBtKZ3GcsF9hRU11tFH8h+hAVwsuz7Ya
-         ou3g2rW+Plt9PF+abw04hYxFyJSm9TK3Zc5f0f5VVZO5g8/1EqtsdnIw40CUpYiKDPyc
-         l1nM/cpbycbAYsrdPD8mjm3HQb1Jjx51O7y7NbyI+fwUdrsdHeybDUy91e+NsIa25apE
-         kIA2H2uRZuRl/NG+Em85SNDo7WgqTEz31CBkJFxFXVC0joUug26g3b4ejfutAY4sXqzL
-         Tnm9LZFmrc7FvMcHA93IL6vnTjpxZOjIIzqrZ/swDntvQeFcv7Ywd2Tvsz2itKp7iCTq
-         YX4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2V4dbYtLJOdrMkKDGWD6KitwsjwW003TmDHahg6j47c=;
-        b=lAMDCeeuQwJ10wLA7I6S92denwMQlbh5NO/mzRUlTly0hSWtqtb6+hmqTLWU4oG+JV
-         ahTa59VY4zzSAvCCBORRiMgayp8kDV9cpBFEV7LjlQhvykZYEErLfFTe8SnzsLl1kM1q
-         xX0T7aXhIGMeiCrkdHSwpNlBi6zO11YqU7VkWApeh5cVRdC+HOfNVCxIwYWM8QAUjX1k
-         +emp2CvTZCumEKJPX6KoRbPLZNYUeU9UvyCOy9uHv4KwWmVocRBdGvjPsvFBlhB/nZuL
-         0utYhzTB5uur3pHl3N8mJp3xWfW4kFpnkdRYhaEyu8ulGB02K4KnNh7SEbYeufK3IhJ/
-         OFFw==
-X-Gm-Message-State: ACrzQf2vDXoqKoFZl5Bg3M1eNJ0UaUV5dkIopG81XOwcly3qdDOTKqKy
-        uFQA+yW9tQb3qr/JhSqctUjtXVM4n5d/eZhr
-X-Google-Smtp-Source: AMsMyM69Ej5bscL4lukV/JMHX/W7kwNTTtbhzo5sbn6Z9pio8hw4ynMWZVObyRThBWw+9SwsG1ORmA==
-X-Received: by 2002:a17:90b:3e81:b0:20d:bbe5:f332 with SMTP id rj1-20020a17090b3e8100b0020dbbe5f332mr63515067pjb.112.1666624080464;
-        Mon, 24 Oct 2022 08:08:00 -0700 (PDT)
-Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id j10-20020a170902da8a00b0017f64ab80e5sm19732220plx.179.2022.10.24.08.07.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 08:07:59 -0700 (PDT)
-Message-ID: <3fe42888-30a1-9a94-1b78-b04d1ee4410a@daynix.com>
-Date:   Tue, 25 Oct 2022 00:07:56 +0900
+        Mon, 24 Oct 2022 12:32:36 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA4049B49
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:19:13 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OF0fcr031720;
+        Mon, 24 Oct 2022 15:09:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pqq6g8ciTR5QW5YOUa+7JCIfpE1AbJcmclYuS620PKk=;
+ b=DB1IYbwWR8Bjur2BBEqkToNs4cXx5yvr7qmatPZIHdmIRdzyUnWKlyJ842lbXC91jjmO
+ OvmneaDGc8hdHt05YXjohtUEsjmSPt71W0smFUTuFNwzM03mdSr/HD8iYwFP5c8w/qF6
+ 4XIy0JUHpnjLxFk25oXuI3pI7QeBmsjGHrVa8+MCsLX2RH88QdUjw3Fpl87c63aMxnwa
+ T3L/xqzq4s19q6FxvYpS1DLwAJJ2V8u2POZyxM5DjE50QbyEWqZI8e/8eRoI/LS+6NJL
+ Qj4iM/uEoCK5c45wXchcNmztb/OIaCxPBf76Mz3VEoC1pEZq76+kNqRQQyQ9YGGRiIK3 QA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kc67pmhq4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 15:08:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29OF8tY4002803
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 15:08:55 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 24 Oct
+ 2022 08:08:54 -0700
+Message-ID: <8b0dca0f-8444-92d7-38c9-06bc7503d874@quicinc.com>
+Date:   Mon, 24 Oct 2022 09:08:53 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2] ACPI: video: Fix missing native backlight on
- Chromebooks
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC PATCH 2/3] drm: define new accel major and register it
 Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>
-Cc:     kernel@collabora.com, linux-acpi@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20221024141210.67784-1-dmitry.osipenko@collabora.com>
- <37ec64ac-9e08-dd41-4b20-8701bf9413fb@daynix.com>
- <a75c2439-415c-a132-754c-7676029f792b@redhat.com>
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <a75c2439-415c-a132-754c-7676029f792b@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Dave Airlie <airlied@gmail.com>, Oded Gabbay <ogabbay@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+References: <20221022214622.18042-1-ogabbay@kernel.org>
+ <20221022214622.18042-3-ogabbay@kernel.org> <Y1U2K+fAnGbYug/+@kroah.com>
+ <CAFCwf11PxtcRZegVBxYfJQFpYO0AipobJXWWp4ch+7mMKRLuKg@mail.gmail.com>
+ <CAPM=9txP8N2kzeDHEbSbiO-oAy5cemJ_Ag4WqeCNzdx6b3quBA@mail.gmail.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <CAPM=9txP8N2kzeDHEbSbiO-oAy5cemJ_Ag4WqeCNzdx6b3quBA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wYnH4maOaRyiYeLY0MmKIxjF-hAHq86o
+X-Proofpoint-ORIG-GUID: wYnH4maOaRyiYeLY0MmKIxjF-hAHq86o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_04,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ adultscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
+ impostorscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210240093
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/10/24 23:59, Hans de Goede wrote:
-> Hi,
-> 
-> On 10/24/22 16:52, Akihiko Odaki wrote:
->> On 2022/10/24 23:12, Dmitry Osipenko wrote:
->>> Chromebooks don't have backlight in ACPI table, they suppose to use
->>> native backlight in this case. Check presence of the CrOS embedded
->>> controller ACPI device and prefer the native backlight if EC found.
->>>
->>> Suggested-by: Hans de Goede <hdegoede@redhat.com>
->>> Fixes: 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native() helper")
->>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>> ---
->>>
->>> Changelog:
->>>
->>> v2: - Added explanatory comment to the code and added check for the
->>>         native backlight presence, like was requested by Hans de Goede.
->>>
->>>    drivers/acpi/video_detect.c | 12 ++++++++++++
->>>    1 file changed, 12 insertions(+)
->>>
->>> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
->>> index 0d9064a9804c..9cd8797d12bb 100644
->>> --- a/drivers/acpi/video_detect.c
->>> +++ b/drivers/acpi/video_detect.c
->>> @@ -668,6 +668,11 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
->>>        { },
->>>    };
->>>    +static bool google_cros_ec_present(void)
->>> +{
->>> +    return acpi_dev_found("GOOG0004");
->>> +}
->>> +
->>>    /*
->>>     * Determine which type of backlight interface to use on this system,
->>>     * First check cmdline, then dmi quirks, then do autodetect.
->>> @@ -730,6 +735,13 @@ static enum acpi_backlight_type __acpi_video_get_backlight_type(bool native)
->>>                return acpi_backlight_video;
->>>        }
->>>    +    /*
->>> +     * Chromebooks that don't have backlight handle in ACPI table
->>> +     * are supposed to use native backlight if it's available.
->>> +     */
->>> +    if (google_cros_ec_present() && native_available)
->>> +        return acpi_backlight_native;
->>> +
->>>        /* No ACPI video (old hw), use vendor specific fw methods. */
->>>        return acpi_backlight_vendor;
->>>    }
+On 10/24/2022 1:52 AM, Dave Airlie wrote:
+> On Mon, 24 Oct 2022 at 17:23, Oded Gabbay <ogabbay@kernel.org> wrote:
 >>
->> Hi,
->>
->> The native_available check does not prevent duplicate registration if vendor backlight registers first. It was enough for the combination of ACPI video and native because ACPI video delays its registration, but it is not the case for vendor/native combination.
+>> On Sun, Oct 23, 2022 at 3:40 PM Greg Kroah-Hartman
+>> <gregkh@linuxfoundation.org> wrote:
+>>>
+>>> On Sun, Oct 23, 2022 at 12:46:21AM +0300, Oded Gabbay wrote:
+>>>> The accelerator devices will be exposed to the user space with a new,
+>>>> dedicated major number - 261.
+>>>>
+>>>> The drm core registers the new major number as a char device and create
+>>>> corresponding sysfs and debugfs root entries, same as for the drm major.
+>>>>
+>>>> In case CONFIG_ACCEL is not selected, this code is not compiled in.
+>>>>
+>>>> Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+>>>> ---
+>>>>   Documentation/admin-guide/devices.txt |  5 +++
+>>>>   drivers/gpu/drm/drm_drv.c             | 45 +++++++++++++++++++++++
+>>>>   drivers/gpu/drm/drm_internal.h        |  3 ++
+>>>>   drivers/gpu/drm/drm_sysfs.c           | 52 +++++++++++++++++++++++++++
+>>>>   include/drm/drm_ioctl.h               |  1 +
+>>>>   5 files changed, 106 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/admin-guide/devices.txt b/Documentation/admin-guide/devices.txt
+>>>> index 9764d6edb189..06c525e01ea5 100644
+>>>> --- a/Documentation/admin-guide/devices.txt
+>>>> +++ b/Documentation/admin-guide/devices.txt
+>>>> @@ -3080,6 +3080,11 @@
+>>>>                  ...
+>>>>                  255 = /dev/osd255     256th OSD Device
+>>>>
+>>>> + 261 char    Compute Acceleration Devices
+>>>> +               0 = /dev/accel/accel0 First acceleration device
+>>>> +               1 = /dev/accel/accel1 Second acceleration device
+>>>> +                 ...
+>>>> +
+>>>>    384-511 char        RESERVED FOR DYNAMIC ASSIGNMENT
+>>>>                Character devices that request a dynamic allocation of major
+>>>>                number will take numbers starting from 511 and downward,
+>>>> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+>>>> index 8214a0b1ab7f..b58ffb1433d6 100644
+>>>> --- a/drivers/gpu/drm/drm_drv.c
+>>>> +++ b/drivers/gpu/drm/drm_drv.c
+>>>> @@ -67,6 +67,10 @@ static bool drm_core_init_complete;
+>>>>
+>>>>   static struct dentry *drm_debugfs_root;
+>>>>
+>>>> +#ifdef CONFIG_ACCEL
+>>>> +static struct dentry *accel_debugfs_root;
+>>>> +#endif
+>>>> +
+>>>>   DEFINE_STATIC_SRCU(drm_unplug_srcu);
+>>>>
+>>>>   /*
+>>>> @@ -1031,9 +1035,19 @@ static const struct file_operations drm_stub_fops = {
+>>>>        .llseek = noop_llseek,
+>>>>   };
+>>>>
+>>>> +static void accel_core_exit(void)
+>>>> +{
+>>>> +#ifdef CONFIG_ACCEL
+>>>> +     unregister_chrdev(ACCEL_MAJOR, "accel");
+>>>> +     debugfs_remove(accel_debugfs_root);
+>>>> +     accel_sysfs_destroy();
+>>>> +#endif
+>>>> +}
+>>>
+>>> Why is all of this in drm_drv.c?
+>>>
+>>> Why not put it in drm/accel/accel.c or something like that?  Then put
+>>> the proper stuff into a .h file and then you have no #ifdef in the .c
+>>> files.
+>> I thought about that, adding an accel.c in drivers/accel/ and putting
+>> this code there.
+>> Eventually I thought that for two functions it's not worth it, but I
+>> guess that in addition to the reason you gave, one can argue that
+>> there will probably be more code in that file anyway, so why not open
+>> it now.
+>> I'll change this if no one else thinks otherwise.
 > 
-> There are no drivers providing acpi_backlight_vendor functionality on chromebooks.
-> 
-> All the drivers providing acpi_backlight_vendor functionality use vendor (Dell, Acer, Asus, etc.)
-> specific firmware (smbios, EC bitbanging or ACPI) backlight control method which are not available
-> on CoreBoot based ChromeBooks.
+> Seems like a good idea to start doing it now, might make things easier
+> to keep separated.
 
-Hi,
+I agree.  I was a bit confused going through this patch, and envisioning 
+how an accel driver would use the interface.  I think an 
+accel_internal.h would be clearer.
 
-Isn't the "native_available" check is for the case when 
-acpi_backlight_vendor functionality gets implemented on Chromebooks? If 
-it is, you don't want it to get broken when it actually happens. If you 
-can ignore the case, native_available check is simply unnecessary.
-
-> 
-> Also notice that the theoretical problem of a vendor driver loading first was already present
-> before the backlight refactor which landed in 6.1 and this has never been an issue.
-
-The situation is even a bit better than it was before the refactor since 
-duplication happened even when vendor driver loads later if I understand 
-it correctly.
-
-Regards,
-Akihiko Odaki
-
-> 
-> Regards,
-> 
-> Hans
-> 
+-Jeff
