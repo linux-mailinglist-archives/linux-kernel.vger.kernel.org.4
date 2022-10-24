@@ -2,157 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3E6609B5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66914609B56
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbiJXHdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
+        id S229685AbiJXHbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiJXHdO (ORCPT
+        with ESMTP id S229455AbiJXHbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:33:14 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF980606A9;
-        Mon, 24 Oct 2022 00:33:12 -0700 (PDT)
+        Mon, 24 Oct 2022 03:31:31 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00D14DB42;
+        Mon, 24 Oct 2022 00:31:10 -0700 (PDT)
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1A1AC5C00CC;
-        Mon, 24 Oct 2022 03:33:12 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 24 Oct 2022 03:33:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666596792; x=1666683192; bh=MLgwl6qVQ1
-        d5bswGgDHxIEJUCPcVEho8D9vRKEmhmk8=; b=GHgwqBJ1of6xGRv2pG2BGEt8rE
-        CewjyOnqG3XsUJOJdIk9/EbkQKJtPGc71OXxQ4Z85kQPLrrlOL0rB4lnZl8HLVjy
-        sL64F831eIsoYiZOo9PjdNOjd/BjBYFBj0PwZ+n2IZJFws6958OvauvdcTUbj6Xb
-        YAr94iVFFIJYpN29b+cbjGpjOzma0LABf7WPmoe6PS7PhnXuRNopy5RMTG593Hgg
-        gC+TxNaBT5kVJmUi4kU685zxWc3+UhLrKi4h4866RCchEH0Z1ZbwAMPl9AvZHg4T
-        IbIzj1S+xFoxWGl1Qx84pJSZC4X7ZgG1vE97hMqp9xPwuDUPFO/cqI1jZSHA==
+        by mailout.west.internal (Postfix) with ESMTP id 7075332002F9;
+        Mon, 24 Oct 2022 03:31:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 24 Oct 2022 03:31:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666596666; x=
+        1666683066; bh=Jjbu9JpIyS5CWKze1H/WOBDw+6BrnxDllrzE32pyM2A=; b=V
+        8buIz1jixNkr35PMRGseRhW44dRYrPEwOxEYO9BX2M4O9X8EBWP80wZUAPdzIhTS
+        6Z3ODm20WXMWoVDbbat6zBwSjdwOLag4fCoeoqUOwHrVvmTOvlhmftovFpDwWa+A
+        p1ci8MsyqQWs56tfrQ9xIIha5co9nOr1kVqjf0dXBdBN5x+Xu2a8d9g7tOo07FYP
+        U1gZfm7MosCZW2BNe6bYdeIF0rbH81NsOIfL7ihwlZDGr+hO3wt9DGtCDPv8h2BX
+        yzy9GfT6wfXHoWrdMGd6rXu8vxwT5qsS50pChylVtk0EiAtnwZX3jHJQnXP4as92
+        5Gppmo9kBmr2n53teijcA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666596792; x=1666683192; bh=MLgwl6qVQ1d5bswGgDHxIEJUCPcV
-        Eho8D9vRKEmhmk8=; b=aESBKGu4MQ+NP6k7XUxbGLXgLZBIv/NbQmZz+8PUdEom
-        ILy9GBFMOeowzyFjolQsKijHfCfiVos8c0zu+vkmwlQWvTcDdD6BFEhIp/2U1Yos
-        bIAJH+c5iJIVrIkfMwKXqKyjouaiKQW3I0qJq3FfWw0SpunlPNXb6qvLGyyr9wwE
-        d/kpCfcJNwKUY3aqbNLYQS/8BfdYoC3sUo6yZRhq8GH6pCxa0k5z1eXTIgTBLTwW
-        SIGHrfH57n/mXNmD2rMjKfviyRsXWh9aCSbhFoovg0BxFrWNcctSNq/zlL2dztRW
-        s6jgP5GqVavI7irhlwP5PZ7WRz8bRvFoFhIwhe8xZw==
-X-ME-Sender: <xms:tT9WY9-5vUjqBRClSOb2LUQsndEg3k1PTMeFg3PnUWGVF0QNYslDsA>
-    <xme:tT9WYxuaUHG11IOgzybvIygtbj-_H-OyYMuqbPf8PNfqqDdVaZYgqX00beELv8GSE
-    RP2l_mm6QeihXcqr74>
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666596666; x=
+        1666683066; bh=Jjbu9JpIyS5CWKze1H/WOBDw+6BrnxDllrzE32pyM2A=; b=e
+        xqIxGFS54BYZ0dII9pSZBFttWOx9RNcCB63ydbcRqXmKBv2TM6zy0bbyAnhH1CUO
+        g3cSFmuAWmCQ0Q0iBDKvWA+6xdZp15Rv5aSf5jVL/BEVRYKxNtH/n17dPaQ1rL/0
+        9frOxLW8vGAUqbKRX4eTl5ggIOGXF8xty+9B6kvTC4+pi5dA8svuZslfQrgcUV43
+        d6od4y5GdaHsJCTeYdjqJIWCxkBNOX7PcA4IXNQHzOEsDXOzTjfXiAOa2bzFsIV9
+        zzgsbs4RRO9EsFKWOnfYa+F70U4kk3U127wFzYxoZUFv1oFMl06q8uudBhdpFjdl
+        VcE6Y1q3tOc1DeS9g3fjA==
+X-ME-Sender: <xms:OT9WY7p9AJwVQEmqn5ZXnIPgt-smgsXb5avN3HyEEYeyIyIu_if8WA>
+    <xme:OT9WY1rAmFitzlJIvgew2I13Lacg-JkZ0IqEsB5nUc_7cI1wvJo9jP6AC7XYFIspV
+    Bxw-9zc38VI4JlZLEw>
+X-ME-Received: <xmr:OT9WY4MaM0xUrkmVVKz43JUcFssysOEz7n5RSPxhNAFuATdcQMtf7STAfur48bK4fel-6w>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtfedguddvfecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeeivdeutdetiefgffdvteehtdegkeehvdelueetheeggeelkedutdfggeeg
-    vedtheenucffohhmrghinheprhgvrggtthhoshdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:tT9WY7A3ChyT71AUD7f1miMNi0q7evkD_qnhGmqNWFbkDx2ZJHvTkw>
-    <xmx:tT9WYxdChVkxjAnL6_v5P5DCQ1iDQl2cjseazrjj5Lnzv9sJKr5UWQ>
-    <xmx:tT9WYyOSlfIubF34VFwb26LVW9aELgrlq47PkToWPe_Yfc-H7eMvUg>
-    <xmx:uD9WY6OYxMpe-JEqo9gKZJLODnRbZPxnb_f0gNPc3UdsGAUOSlqM1A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 89108B60086; Mon, 24 Oct 2022 03:33:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <ddb4a078-4d81-4124-8da0-6d7fbd3cd5c7@app.fastmail.com>
-In-Reply-To: <CAHk-=wgNZNNd4t004x0ehXm=DA+JmYY=0MgVNDXUtoV4ApyXvQ@mail.gmail.com>
-References: <20220815071332.627393-1-yuzhao@google.com>
- <20220815071332.627393-9-yuzhao@google.com>
- <Y0go8wWtdcyH1+Ch@hirez.programming.kicks-ass.net>
- <CAOUHufa9+FTO3Pv-5jC-e3S5goPsUGu-5KcPVHa4bWb0X+d2ug@mail.gmail.com>
- <CAHk-=wj1rc2t5noMtVOgu8XXeTM4KiggEub9PdcexxeQrYPZvA@mail.gmail.com>
- <Y1FXpHdyvXjrjbLw@hirez.programming.kicks-ass.net>
- <CAHk-=whQchubuDpRGFabhmcZuzdt13OOF8wznXb+Dbi3GzBQhQ@mail.gmail.com>
- <Y1GZjPO+szk7X0wP@hirez.programming.kicks-ass.net>
- <CAHk-=wikUaRM5H_y1Bc+QyvGi40dKDL8fnCTyz7ECbwK7aHNPQ@mail.gmail.com>
- <Y1IUMDJFScAMrCS5@casper.infradead.org>
- <CAHk-=wjrpH1+6cQQjTO6p-96ndBMiOnNH098vhS2jLybxD+7gA@mail.gmail.com>
- <alpine.DEB.2.21.2210211911390.50489@angie.orcam.me.uk>
- <CAHk-=wgNZNNd4t004x0ehXm=DA+JmYY=0MgVNDXUtoV4ApyXvQ@mail.gmail.com>
-Date:   Mon, 24 Oct 2022 09:30:09 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     "Matthew Wilcox" <willy@infradead.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Yu Zhao" <yuzhao@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "Aneesh Kumar" <aneesh.kumar@linux.ibm.com>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Hillf Danton" <hdanton@sina.com>, "Jens Axboe" <axboe@kernel.dk>,
-        "Johannes Weiner" <hannes@cmpxchg.org>,
-        "Jonathan Corbet" <corbet@lwn.net>, "Mel Gorman" <mgorman@suse.de>,
-        "Michael Larabel" <Michael@michaellarabel.com>,
-        "Michal Hocko" <mhocko@kernel.org>,
-        "Mike Rapoport" <rppt@kernel.org>, "Tejun Heo" <tj@kernel.org>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Will Deacon" <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        page-reclaim@google.com, "Brian Geffon" <bgeffon@google.com>,
-        "Jan Alexander Steffens" <heftig@archlinux.org>,
-        "Oleksandr Natalenko" <oleksandr@natalenko.name>,
-        "Steven Barrett" <steven@liquorix.net>,
-        "Suleiman Souhlal" <suleiman@google.com>,
-        "Daniel Byrne" <djbyrne@mtu.edu>,
-        "Donald Carr" <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        "Konstantin Kharlamov" <Hi-Angel@yandex.ru>,
-        "Shuang Zhai" <szhai2@cs.rochester.edu>,
-        "Sofia Trinh" <sofia.trinh@edi.works>,
-        "Vaibhav Jain" <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v14 08/14] mm: multi-gen LRU: support page table walks
-Content-Type: text/plain
+    enucfjughrpefhvfevjghfuffkffggtgfgofesthekredtredtjeenucfhrhhomhepmhgr
+    gihimhgvsegtvghrnhhordhtvggthhenucggtffrrghtthgvrhhnpeetfeehfefgueejud
+    fhueegffelteeuuedvhfelhfefjeetjefhtdfftdfgvdejleenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrth
+    gvtghh
+X-ME-Proxy: <xmx:OT9WY-5nO6tFm5SivglfFrYHBt0iUdGKW9Sf0SKgBPf4PbnkacQ_pg>
+    <xmx:OT9WY67YVrfPNNn-QH2hxcmL4ZV5qVkOS-8ebT7z0ZchPKNb22TTnw>
+    <xmx:OT9WY2gy9TuqChiVkvAWP3QL0Aq3Sa3kvL5KUD7sVz_6jvgkrA1_ZA>
+    <xmx:Oj9WY5TBSuMD22MflRmdFav_7arvBkIZ8u8G3268iypECFgAQjEj-g>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Oct 2022 03:31:05 -0400 (EDT)
+From:   maxime@cerno.tech
+To:     Maxime Ripard <mripard@kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Colin Ian King <colin.i.king@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+In-Reply-To: <20221021084035.65367-1-colin.i.king@gmail.com>
+References: <20221021084035.65367-1-colin.i.king@gmail.com>
+Subject: Re: (subset) [PATCH] drm/vc4: Fix spelling mistake "mmaping" -> "mmapping"
+Message-Id: <166659662709.12501.1270368575435453931.b4-ty@cerno.tech>
+Date:   Mon, 24 Oct 2022 09:30:27 +0200
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.1
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022, at 20:35, Linus Torvalds wrote:
->
-> Honestly, I wouldn't mind upgrading the minimum requirements to at
-> least M586TSC - leaving some of those early "fake Pentium" clones
-> behind too. Because 'rdtsc' is probably an even worse issue than
-> CMPXCHG8B.
+On Fri, 21 Oct 2022 09:40:35 +0100, Colin Ian King wrote:
+> There are a couple of spelling mistakes in DRM_DEBUG messages. Fix them.
+> 
+> 
 
-Kconfig treats X86_CMPXCHG64 as a strict subset of X86_TSC (except
-when enabling X86_PAE, which relies on cx8), so requiring both
-sounds like a good idea.
+Applied to drm/drm-misc (drm-misc-next).
 
-From the Kconfig history, I see you initially only enabled
-cx8 unconditionally for a couple of CPUs in 982d007a6eec ("x86:
-Optimize cmpxchg64() at build-time some more"), and Matthew
-Whitehead extended that list in f960cfd12650 ("x86/Kconfig:
-Add missing i586-class CPUs to the X86_CMPXCHG64 Kconfig group").
-
-There are still a handful of CPUs that according to [1] 
-claim cx8 support that we leave disabled, specifically the
-Kconfig symbols for MWINCHIP3D, MCRUSOE, MEFFICEON, MCYRIXIII,
-MVIAC3_2 and MVIAC7 should have both tsc and cx8, while the
-older MWINCHIPC6 and a small subset of M586 (Cyrix 6x86mx, C-II
-and AMD K5) apparently have cx8 but not tsc.
-
-Would you drop support for the 686-class chips that currently
-don't use cmpxchg8b, or just remove CONFIG_X86_CMPXCHG64 and
-assume they work after all?
-
-       Arnd
-
-[1] https://reactos.org/wiki/Supported_Hardware/CPU
+Thanks!
+Maxime
