@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B5E60A2B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72D9C60A30C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231500AbiJXLq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:46:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S231826AbiJXLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbiJXLok (ORCPT
+        with ESMTP id S231757AbiJXLsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:44:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D38875CFB;
-        Mon, 24 Oct 2022 04:42:19 -0700 (PDT)
+        Mon, 24 Oct 2022 07:48:22 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA9A10FEA;
+        Mon, 24 Oct 2022 04:43:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8D66B8113E;
-        Mon, 24 Oct 2022 11:41:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B031C433C1;
-        Mon, 24 Oct 2022 11:41:49 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7034BCE1346;
+        Mon, 24 Oct 2022 11:41:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67C44C433B5;
+        Mon, 24 Oct 2022 11:41:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611710;
-        bh=14mKDapbgbuh31OpS2MIP0VbUg71zVnPdpLmFUC99dY=;
+        s=korg; t=1666611715;
+        bh=62cxHPxacIeJObyCUvpGDXSutCGffzA9SR9xi6Ab0Pw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oYmxsm3TcQsX9x59NtEyrmR4zuNC93AtNMI54IHri5G/k6E0syjDsPg8hi36INtQa
-         O75L/xW7aDIOXO6VO1NuApPp0nRwcrm7Gm8aT2f1mj4CEF+Un61lS2xNMisBygui/f
-         MNf8vyctJR+o57o/bgv+PNgBKYXmeR8fkWkx3uAQ=
+        b=Hn06oHh5ktdp0XJf8WF4EnQ6zX9elWei8SRkJJW+GiwHhVZun8sV9qvfXDFNlSjUZ
+         fGtZVEWE89pKwTrFh6jj67Tra2adfId+1GdhMg3GZLrvlPzKgU+aI29/WpdUnjqOYV
+         A4eWc2X67s9XDgMaIi4dg3HQe9ELLFSedESkv7kk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 4.9 052/159] PCI: Sanitise firmware BAR assignments behind a PCI-PCI bridge
-Date:   Mon, 24 Oct 2022 13:30:06 +0200
-Message-Id: <20221024112951.319992639@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        syzbot+b8c672b0e22615c80fe0@syzkaller.appspotmail.com,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.9 054/159] nilfs2: fix use-after-free bug of struct nilfs_root
+Date:   Mon, 24 Oct 2022 13:30:08 +0200
+Message-Id: <20221024112951.405149610@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
 References: <20221024112949.358278806@linuxfoundation.org>
@@ -53,102 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-commit 0e32818397426a688f598f35d3bc762eca6d7592 upstream.
+commit d325dc6eb763c10f591c239550b8c7e5466a5d09 upstream.
 
-When pci_assign_resource() is unable to assign resources to a BAR, it uses
-pci_revert_fw_address() to fall back to a firmware assignment (if any).
-Previously pci_revert_fw_address() assumed all addresses could reach the
-device, but this is not true if the device is below a bridge that only
-forwards addresses within its windows.
+If the beginning of the inode bitmap area is corrupted on disk, an inode
+with the same inode number as the root inode can be allocated and fail
+soon after.  In this case, the subsequent call to nilfs_clear_inode() on
+that bogus root inode will wrongly decrement the reference counter of
+struct nilfs_root, and this will erroneously free struct nilfs_root,
+causing kernel oopses.
 
-This problem was observed on a Tyan Tomcat IV S1564D system where the BIOS
-did not assign valid addresses to several bridges and USB devices:
+This fixes the problem by changing nilfs_new_inode() to skip reserved
+inode numbers while repairing the inode bitmap.
 
-  pci 0000:00:11.0: PCI-to-PCIe bridge to [bus 01-ff]
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
-  pci 0000:01:00.0: PCIe Upstream Port to [bus 02-ff]
-  pci 0000:01:00.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:02:02.0: PCIe Downstream Port to [bus 05-ff]
-  pci 0000:02:02.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:05:00.0: PCIe-to-PCI bridge to [bus 06-ff]
-  pci 0000:05:00.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:06:08.0: USB UHCI 1.1
-  pci 0000:06:08.0: BAR 4: [io  0xfce0-0xfcff]            # unreachable
-  pci 0000:06:08.1: USB UHCI 1.1
-  pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff]            # unreachable
-  pci 0000:06:08.0: can't claim BAR 4 [io  0xfce0-0xfcff]: no compatible bridge window
-  pci 0000:06:08.1: can't claim BAR 4 [io  0xfce0-0xfcff]: no compatible bridge window
-
-During the first pass of assigning unassigned resources, there was not
-enough I/O space available, so we couldn't assign the 06:08.0 BAR and
-reverted to the firmware assignment (still unreachable).  Reverting the
-06:08.1 assignment failed because it conflicted with 06:08.0:
-
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
-  pci 0000:01:00.0: no space for bridge window [io  size 0x2000]
-  pci 0000:02:02.0: no space for bridge window [io  size 0x1000]
-  pci 0000:05:00.0: no space for bridge window [io  size 0x1000]
-  pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
-  pci 0000:06:08.0: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-  pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
-  pci 0000:06:08.1: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-  pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff] conflicts with 0000:06:08.0 [io  0xfce0-0xfcff]
-
-A subsequent pass assigned valid bridge windows and a valid 06:08.1 BAR,
-but left the 06:08.0 BAR alone, so the UHCI device was still unusable:
-
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff] released
-  pci 0000:00:11.0:   bridge window [io  0x1000-0x2fff]   # reassigned
-  pci 0000:01:00.0:   bridge window [io  0x1000-0x2fff]   # reassigned
-  pci 0000:02:02.0:   bridge window [io  0x2000-0x2fff]   # reassigned
-  pci 0000:05:00.0:   bridge window [io  0x2000-0x2fff]   # reassigned
-  pci 0000:06:08.0: BAR 4: assigned [io  0xfce0-0xfcff]   # left alone
-  pci 0000:06:08.1: BAR 4: assigned [io  0x2000-0x201f]
-  ...
-  uhci_hcd 0000:06:08.0: host system error, PCI problems?
-  uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
-  uhci_hcd 0000:06:08.0: host controller halted, very bad!
-  uhci_hcd 0000:06:08.0: HCRESET not completed yet!
-  uhci_hcd 0000:06:08.0: HC died; cleaning up
-
-If the address assigned by firmware is not reachable because it's not
-within upstream bridge windows, fail instead of assigning the unusable
-address from firmware.
-
-[bhelgaas: commit log, use pci_upstream_bridge()]
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=16263
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203012338460.46819@angie.orcam.me.uk
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2209211921250.29493@angie.orcam.me.uk
-Fixes: 58c84eda0756 ("PCI: fall back to original BIOS BAR addresses")
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: stable@vger.kernel.org # v2.6.35+
+Link: https://lkml.kernel.org/r/20221003150519.39789-1-konishi.ryusuke@gmail.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: syzbot+b8c672b0e22615c80fe0@syzkaller.appspotmail.com
+Reported-by: Khalid Masum <khalid.masum.92@gmail.com>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/setup-res.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ fs/nilfs2/inode.c |   18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
---- a/drivers/pci/setup-res.c
-+++ b/drivers/pci/setup-res.c
-@@ -214,6 +214,17 @@ static int pci_revert_fw_address(struct
+--- a/fs/nilfs2/inode.c
++++ b/fs/nilfs2/inode.c
+@@ -344,6 +344,7 @@ struct inode *nilfs_new_inode(struct ino
+ 	struct inode *inode;
+ 	struct nilfs_inode_info *ii;
+ 	struct nilfs_root *root;
++	struct buffer_head *bh;
+ 	int err = -ENOMEM;
+ 	ino_t ino;
  
- 	root = pci_find_parent_resource(dev, res);
- 	if (!root) {
-+		/*
-+		 * If dev is behind a bridge, accesses will only reach it
-+		 * if res is inside the relevant bridge window.
-+		 */
-+		if (pci_upstream_bridge(dev))
-+			return -ENXIO;
+@@ -359,11 +360,26 @@ struct inode *nilfs_new_inode(struct ino
+ 	ii->i_state = BIT(NILFS_I_NEW);
+ 	ii->i_root = root;
+ 
+-	err = nilfs_ifile_create_inode(root->ifile, &ino, &ii->i_bh);
++	err = nilfs_ifile_create_inode(root->ifile, &ino, &bh);
+ 	if (unlikely(err))
+ 		goto failed_ifile_create_inode;
+ 	/* reference count of i_bh inherits from nilfs_mdt_read_block() */
+ 
++	if (unlikely(ino < NILFS_USER_INO)) {
++		nilfs_msg(sb, KERN_WARNING,
++			  "inode bitmap is inconsistent for reserved inodes");
++		do {
++			brelse(bh);
++			err = nilfs_ifile_create_inode(root->ifile, &ino, &bh);
++			if (unlikely(err))
++				goto failed_ifile_create_inode;
++		} while (ino < NILFS_USER_INO);
 +
-+		/*
-+		 * On the root bus, assume the host bridge will forward
-+		 * everything.
-+		 */
- 		if (res->flags & IORESOURCE_IO)
- 			root = &ioport_resource;
- 		else
++		nilfs_msg(sb, KERN_INFO,
++			  "repaired inode bitmap for reserved inodes");
++	}
++	ii->i_bh = bh;
++
+ 	atomic64_inc(&root->inodes_count);
+ 	inode_init_owner(inode, dir, mode);
+ 	inode->i_ino = ino;
 
 
