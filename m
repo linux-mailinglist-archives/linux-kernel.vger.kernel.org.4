@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4912560A597
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B30F60A563
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiJXM1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S233555AbiJXMXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230439AbiJXM0o (ORCPT
+        with ESMTP id S233525AbiJXMWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:26:44 -0400
+        Mon, 24 Oct 2022 08:22:42 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E9D158EB5;
-        Mon, 24 Oct 2022 05:00:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEFD8323A;
+        Mon, 24 Oct 2022 04:59:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA22361291;
-        Mon, 24 Oct 2022 11:58:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E55C433D6;
-        Mon, 24 Oct 2022 11:58:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9798B61297;
+        Mon, 24 Oct 2022 11:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A90AAC4347C;
+        Mon, 24 Oct 2022 11:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612690;
-        bh=aOvtxZzoxLZvYMnqDsCHT9AR35HDLsRHaZZOOkdNEaQ=;
+        s=korg; t=1666612693;
+        bh=HWA7feJirUMvz4SMFoo8EJ7PDp2OxwPuFBriGn26Axk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wwkxBBdVYz6Gen91Jqhbiu0pv7glKyU0m+xuZEUjvhCKq6EYK2+sjt4eb6UsDqsMH
-         DB4wxsteOIXrM1LlsPWL4dhwsUZpXqHAnk8t6ZHvBm5Ym6p7bNE0KY+cULLMkJuG22
-         KXXCLyd/AGKx/Tu5R71CceEBpS09IiPJPEW4VGGg=
+        b=d7H/ZAn8cAl76yLWLD4YBpzEE6dQinFAI/ASPuU6weJ2kXB8bB42hu8aQEzCy0Mpj
+         uEXLVzMew2jo/YeZrbufq27hjfT/Ua8VjTsxKg8vuIVW593+CnGG0ZFGfYgc3cWGLf
+         40coMLb3WJv1IwStmMGKkFJfJRcBXHhprqPzXt44=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 4.19 053/229] PCI: Sanitise firmware BAR assignments behind a PCI-PCI bridge
-Date:   Mon, 24 Oct 2022 13:29:32 +0200
-Message-Id: <20221024113000.792508891@linuxfoundation.org>
+        stable@vger.kernel.org, Hyunwoo Kim <imv4bel@gmail.com>,
+        Helge Deller <deller@gmx.de>
+Subject: [PATCH 4.19 054/229] fbdev: smscufx: Fix use-after-free in ufx_ops_open()
+Date:   Mon, 24 Oct 2022 13:29:33 +0200
+Message-Id: <20221024113000.821981870@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
 References: <20221024112959.085534368@linuxfoundation.org>
@@ -53,102 +53,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Hyunwoo Kim <imv4bel@gmail.com>
 
-commit 0e32818397426a688f598f35d3bc762eca6d7592 upstream.
+commit 5610bcfe8693c02e2e4c8b31427f1bdbdecc839c upstream.
 
-When pci_assign_resource() is unable to assign resources to a BAR, it uses
-pci_revert_fw_address() to fall back to a firmware assignment (if any).
-Previously pci_revert_fw_address() assumed all addresses could reach the
-device, but this is not true if the device is below a bridge that only
-forwards addresses within its windows.
+A race condition may occur if the user physically removes the
+USB device while calling open() for this device node.
 
-This problem was observed on a Tyan Tomcat IV S1564D system where the BIOS
-did not assign valid addresses to several bridges and USB devices:
+This is a race condition between the ufx_ops_open() function and
+the ufx_usb_disconnect() function, which may eventually result in UAF.
 
-  pci 0000:00:11.0: PCI-to-PCIe bridge to [bus 01-ff]
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
-  pci 0000:01:00.0: PCIe Upstream Port to [bus 02-ff]
-  pci 0000:01:00.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:02:02.0: PCIe Downstream Port to [bus 05-ff]
-  pci 0000:02:02.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:05:00.0: PCIe-to-PCI bridge to [bus 06-ff]
-  pci 0000:05:00.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:06:08.0: USB UHCI 1.1
-  pci 0000:06:08.0: BAR 4: [io  0xfce0-0xfcff]            # unreachable
-  pci 0000:06:08.1: USB UHCI 1.1
-  pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff]            # unreachable
-  pci 0000:06:08.0: can't claim BAR 4 [io  0xfce0-0xfcff]: no compatible bridge window
-  pci 0000:06:08.1: can't claim BAR 4 [io  0xfce0-0xfcff]: no compatible bridge window
+So, add a mutex to the ufx_ops_open() and ufx_usb_disconnect() functions
+to avoid race contidion of krefs.
 
-During the first pass of assigning unassigned resources, there was not
-enough I/O space available, so we couldn't assign the 06:08.0 BAR and
-reverted to the firmware assignment (still unreachable).  Reverting the
-06:08.1 assignment failed because it conflicted with 06:08.0:
-
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
-  pci 0000:01:00.0: no space for bridge window [io  size 0x2000]
-  pci 0000:02:02.0: no space for bridge window [io  size 0x1000]
-  pci 0000:05:00.0: no space for bridge window [io  size 0x1000]
-  pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
-  pci 0000:06:08.0: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-  pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
-  pci 0000:06:08.1: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-  pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff] conflicts with 0000:06:08.0 [io  0xfce0-0xfcff]
-
-A subsequent pass assigned valid bridge windows and a valid 06:08.1 BAR,
-but left the 06:08.0 BAR alone, so the UHCI device was still unusable:
-
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff] released
-  pci 0000:00:11.0:   bridge window [io  0x1000-0x2fff]   # reassigned
-  pci 0000:01:00.0:   bridge window [io  0x1000-0x2fff]   # reassigned
-  pci 0000:02:02.0:   bridge window [io  0x2000-0x2fff]   # reassigned
-  pci 0000:05:00.0:   bridge window [io  0x2000-0x2fff]   # reassigned
-  pci 0000:06:08.0: BAR 4: assigned [io  0xfce0-0xfcff]   # left alone
-  pci 0000:06:08.1: BAR 4: assigned [io  0x2000-0x201f]
-  ...
-  uhci_hcd 0000:06:08.0: host system error, PCI problems?
-  uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
-  uhci_hcd 0000:06:08.0: host controller halted, very bad!
-  uhci_hcd 0000:06:08.0: HCRESET not completed yet!
-  uhci_hcd 0000:06:08.0: HC died; cleaning up
-
-If the address assigned by firmware is not reachable because it's not
-within upstream bridge windows, fail instead of assigning the unusable
-address from firmware.
-
-[bhelgaas: commit log, use pci_upstream_bridge()]
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=16263
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203012338460.46819@angie.orcam.me.uk
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2209211921250.29493@angie.orcam.me.uk
-Fixes: 58c84eda0756 ("PCI: fall back to original BIOS BAR addresses")
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: stable@vger.kernel.org # v2.6.35+
+Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/setup-res.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/video/fbdev/smscufx.c |   14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
---- a/drivers/pci/setup-res.c
-+++ b/drivers/pci/setup-res.c
-@@ -209,6 +209,17 @@ static int pci_revert_fw_address(struct
+--- a/drivers/video/fbdev/smscufx.c
++++ b/drivers/video/fbdev/smscufx.c
+@@ -140,6 +140,8 @@ static int ufx_submit_urb(struct ufx_dat
+ static int ufx_alloc_urb_list(struct ufx_data *dev, int count, size_t size);
+ static void ufx_free_urb_list(struct ufx_data *dev);
  
- 	root = pci_find_parent_resource(dev, res);
- 	if (!root) {
-+		/*
-+		 * If dev is behind a bridge, accesses will only reach it
-+		 * if res is inside the relevant bridge window.
-+		 */
-+		if (pci_upstream_bridge(dev))
-+			return -ENXIO;
++static DEFINE_MUTEX(disconnect_mutex);
 +
-+		/*
-+		 * On the root bus, assume the host bridge will forward
-+		 * everything.
-+		 */
- 		if (res->flags & IORESOURCE_IO)
- 			root = &ioport_resource;
- 		else
+ /* reads a control register */
+ static int ufx_reg_read(struct ufx_data *dev, u32 index, u32 *data)
+ {
+@@ -1073,9 +1075,13 @@ static int ufx_ops_open(struct fb_info *
+ 	if (user == 0 && !console)
+ 		return -EBUSY;
+ 
++	mutex_lock(&disconnect_mutex);
++
+ 	/* If the USB device is gone, we don't accept new opens */
+-	if (dev->virtualized)
++	if (dev->virtualized) {
++		mutex_unlock(&disconnect_mutex);
+ 		return -ENODEV;
++	}
+ 
+ 	dev->fb_count++;
+ 
+@@ -1099,6 +1105,8 @@ static int ufx_ops_open(struct fb_info *
+ 	pr_debug("open /dev/fb%d user=%d fb_info=%p count=%d",
+ 		info->node, user, info, dev->fb_count);
+ 
++	mutex_unlock(&disconnect_mutex);
++
+ 	return 0;
+ }
+ 
+@@ -1746,6 +1754,8 @@ static void ufx_usb_disconnect(struct us
+ {
+ 	struct ufx_data *dev;
+ 
++	mutex_lock(&disconnect_mutex);
++
+ 	dev = usb_get_intfdata(interface);
+ 
+ 	pr_debug("USB disconnect starting\n");
+@@ -1766,6 +1776,8 @@ static void ufx_usb_disconnect(struct us
+ 	kref_put(&dev->kref, ufx_free);
+ 
+ 	/* consider ufx_data freed */
++
++	mutex_unlock(&disconnect_mutex);
+ }
+ 
+ static struct usb_driver ufx_driver = {
 
 
