@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514F6609D09
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1175609D13
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiJXIpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
+        id S229535AbiJXIqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiJXIpe (ORCPT
+        with ESMTP id S230385AbiJXIq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:45:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F9E326DC
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:45:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4278A60DED
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:45:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F375C433C1;
-        Mon, 24 Oct 2022 08:45:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666601127;
-        bh=ZO+VTgM9VXFmY0M8fHk7daynC/+MUDqZPORFLMaf1p0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qUqqAC4bIyRX+W8dkbjaB7d8Ps2quaTmJ8ioBl5od+rzUAHxy+OBjrpkkiI6itvmC
-         dTcEKG+ZxT5S5N/uE3XCu82khuCB37wqEJSP5j5c8hkaBfEUfUDE0TmMPu3MbwAs04
-         6m4332DqwYDTUs7wCeU3FfFaZf75Jo6qxZrRXUl4=
-Date:   Mon, 24 Oct 2022 10:45:25 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Laight <David.Laight@aculab.com>
-Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
-Message-ID: <Y1ZQpcdK4sdy+5QZ@kroah.com>
-References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
- <Y1ZQSEMLkybFCadS@kroah.com>
+        Mon, 24 Oct 2022 04:46:29 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0459D67056;
+        Mon, 24 Oct 2022 01:46:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666601189; x=1698137189;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zr3WKsPxb7aaiIO0Wjz4+22fObmXP9eCkj8VHh8e+Zw=;
+  b=ivH+6Aiule3GXccJQb5bNmoDVy81GpkcZ4Q9RauKIkZsFODgkMs6cE8D
+   eFGKyNwTDiro+gbzfChUpsLiACAgyLA/UjPHvfoDhjRM1tfTncw8mSryk
+   AMWpg8pUSZiovFJseXClQKNSi6A3pmOv1u8iKJi+bE+/+X/ssl7lafhmq
+   AoPyfwkAvxgsnWTkGZQOPah2J+x8OHsBxqnZMjvtKn7WUvzKC9FMFlFwO
+   U6oIj/VvaULXWMi5uDK1WFA6Hg9WZpncT5wcNzJJTISMq29+c82SQSjpW
+   WrZJcxeKyTdy8nQtSeh29CBbJZFgPsyvwhDhshoyP3s+QOuIbMnfWFq9e
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="304978464"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="304978464"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 01:46:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="773746804"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="773746804"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 24 Oct 2022 01:46:20 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Oct 2022 11:46:20 +0300
+Date:   Mon, 24 Oct 2022 11:46:20 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Wayne Chang <waynec@nvidia.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        treding@nvidia.com, jonathanh@nvidia.com, thierry.reding@gmail.com,
+        ajayg@nvidia.com, kishon@ti.com, vkoul@kernel.org,
+        p.zabel@pengutronix.de, mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 06/11] usb: typec: ucsi_ccg: Replace ccgx to well-known
+ regex
+Message-ID: <Y1ZQ3NyR7Suxdltu@kuha.fi.intel.com>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-7-waynec@nvidia.com>
+ <Y1ZGZ2H0/ug3se6j@kuha.fi.intel.com>
+ <87czaheiag.fsf@balbi.sh>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1ZQSEMLkybFCadS@kroah.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87czaheiag.fsf@balbi.sh>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 10:43:52AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Oct 24, 2022 at 11:26:10AM +0300, Sakari Ailus wrote:
-> > container_of() casts the original type to another which leads to the loss
-> > of the const qualifier if it is not specified in the caller-provided type.
-> > This easily leads to container_of() returning a non-const pointer to a
-> > const struct which the C compiler does not warn about.
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > ---
-> >  include/linux/container_of.h | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-> > index 2f4944b791b81..c7c21d0f41a87 100644
-> > --- a/include/linux/container_of.h
-> > +++ b/include/linux/container_of.h
-> > @@ -13,6 +13,10 @@
-> >   * @type:	the type of the container struct this is embedded in.
-> >   * @member:	the name of the member within the struct.
-> >   *
-> > + * WARNING: as container_of() casts the given struct to another, also the
+On Mon, Oct 24, 2022 at 11:29:27AM +0300, Felipe Balbi wrote:
+> Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
 > 
-> No need for "also" here (sorry for the grammar nit.)
+> > On Mon, Oct 24, 2022 at 03:41:23PM +0800, Wayne Chang wrote:
+> >> ccgx is refer to the cypress cypd4226 typec controller.
+> >> Replace ccgx to well-known regex "cypress".
+> >> 
+> >> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> >> ---
+> >>  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >> 
+> >> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> >> index 139707a2f3d6..5d3099e6eb77 100644
+> >> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> >> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> >> @@ -1358,7 +1358,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
+> >>  	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
+> >>  
+> >>  	/* Only fail FW flashing when FW build information is not provided */
+> >> -	status = device_property_read_u16(dev, "ccgx,firmware-build",
+> >> +	status = device_property_read_u16(dev, "cypress,firmware-build",
+> >>  					  &uc->fw_build);
+> >>  	if (status)
+> >>  		dev_err(uc->dev, "failed to get FW build information\n");
+> >
+> > This will break bisectability. You need to first add that
+> > "cyppress,firmware-build" identifier without removing the old
+> > "ccgx,firmware-build" identifier, and then introduce a separate
+> > clean-up patch where you remove it when it's safe to remove:
+> >
+> > 1. Add new - This patch.
+> > 2. Modify users - PATCH 7/11.
+> > 3. Remove old - *missing*.
 > 
-> > + * possible const qualifier of @ptr is lost unless it is also specified in
-> > + * @type. This is not a problem if the containing object is not const. Use with
-> > + * care.
-> 
-> I do not think these last two sentences you added here are needed
-> either.
-> 
-> 
-> >   */
-> >  #define container_of(ptr, type, member) ({				\
-> >  	void *__mptr = (void *)(ptr);					\
-> > @@ -27,6 +31,11 @@
-> >   * @type:	the type of the container struct this is embedded in.
-> >   * @member:	the name of the member within the struct.
-> >   *
-> > + * WARNING: as container_of() casts the given struct to another, also the
+> will it ever be safe to remove? What about potential products in the
+> market with little to no upgrade path? There are likely to be products
+> with a DTB that will never be updated, no?
 
-Wrong function name here.
-
-> > + * possible const qualifier of @ptr is lost unless it is also specified in
-> > + * @type. This is not a problem if the containing object is not const. Use with
-> > + * care.
-> 
-> Same comments here.
-
-Wait, no one uses this macro, so why not just remove it entirely?
+Not the case here. OF support is only just added to this driver in
+this series. That old identifier has been used as a build-in property
+only.
 
 thanks,
 
-greg k-h
+-- 
+heikki
