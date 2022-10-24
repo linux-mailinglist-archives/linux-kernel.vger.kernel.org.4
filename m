@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74C160A72B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C329960A774
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbiJXMsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S234395AbiJXMut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiJXMnm (ORCPT
+        with ESMTP id S234644AbiJXMpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:43:42 -0400
+        Mon, 24 Oct 2022 08:45:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B2F6F26C;
-        Mon, 24 Oct 2022 05:08:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFDA28E06;
+        Mon, 24 Oct 2022 05:09:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5069C612E9;
-        Mon, 24 Oct 2022 11:58:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6208CC433C1;
-        Mon, 24 Oct 2022 11:58:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1E49612DF;
+        Mon, 24 Oct 2022 12:09:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A42C433D7;
+        Mon, 24 Oct 2022 12:08:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612711;
-        bh=2DLMFDvTjxIF3yJGEqdfltqyhOlUkWuzddtXO9fj3Yo=;
+        s=korg; t=1666613340;
+        bh=RhZY3f/cNX48ieii4f+tk/Br9qS6MllaouL23ztsNwk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZYeMa8CjquGVjIVXX4f+hZxB7jewBJ98xpUwAlLXIpwHftXOwmt3hYFR7V7xlPcoR
-         US2zBzY/u1sxPbil1NJg4O5mgqpAoR43ZYPbDKRI+xGQ8SKVIPIDoCZVZxnQ4xJDjF
-         106w+gjSfVcXxGMAW21WF7ZlYA4T7xAUV8iBRPkI=
+        b=QhHwUlGi+8zAk30SeKcfPSIeISYF01r+Ewl8sKtPayrlmvvjmEmt0HYkzzA0aapNz
+         0A7BteM0wqM2QaVrLW755W9kOrzY65jyZgRr/DCm4NSeefysQWpILmg+qS/wAYqCaG
+         MWIl5SDdMZIZNiVoPpFEulrrgPZwZ7rRi/Yq21B4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 091/229] bnx2x: fix potential memory leak in bnx2x_tpa_stop()
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Kelin Wang <wangkelin2023@163.com>
+Subject: [PATCH 5.4 100/255] ASoC: eureka-tlv320: Hold reference returned from of_find_xxx API
 Date:   Mon, 24 Oct 2022 13:30:10 +0200
-Message-Id: <20221024113001.996309598@linuxfoundation.org>
+Message-Id: <20221024113005.806514427@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jianglei Nie <niejianglei2021@163.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit b43f9acbb8942b05252be83ac25a81cec70cc192 ]
+[ Upstream commit bfb735a3ceff0bab6473bac275da96f9b2a06dec ]
 
-bnx2x_tpa_stop() allocates a memory chunk from new_data with
-bnx2x_frag_alloc(). The new_data should be freed when gets some error.
-But when "pad + len > fp->rx_buf_size" is true, bnx2x_tpa_stop() returns
-without releasing the new_data, which will lead to a memory leak.
+In eukrea_tlv320_probe(), we need to hold the reference returned
+from of_find_compatible_node() which has increased the refcount
+and then call of_node_put() with it when done.
 
-We should free the new_data with bnx2x_frag_free() when "pad + len >
-fp->rx_buf_size" is true.
-
-Fixes: 07b0f00964def8af9321cfd6c4a7e84f6362f728 ("bnx2x: fix possible panic under memory stress")
-Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 66f232908de2 ("ASoC: eukrea-tlv320: Add DT support.")
+Co-authored-by: Kelin Wang <wangkelin2023@163.com>
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220914134354.3995587-1-windhl@126.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/fsl/eukrea-tlv320.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-index 2610acf9ac36..53b1b05f905e 100644
---- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-+++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
-@@ -788,6 +788,7 @@ static void bnx2x_tpa_stop(struct bnx2x *bp, struct bnx2x_fastpath *fp,
- 			BNX2X_ERR("skb_put is about to fail...  pad %d  len %d  rx_buf_size %d\n",
- 				  pad, len, fp->rx_buf_size);
- 			bnx2x_panic();
-+			bnx2x_frag_free(fp, new_data);
- 			return;
- 		}
- #endif
+diff --git a/sound/soc/fsl/eukrea-tlv320.c b/sound/soc/fsl/eukrea-tlv320.c
+index 6f3b768489f6..bf3d3f0aa858 100644
+--- a/sound/soc/fsl/eukrea-tlv320.c
++++ b/sound/soc/fsl/eukrea-tlv320.c
+@@ -86,7 +86,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
+ 	int ret;
+ 	int int_port = 0, ext_port;
+ 	struct device_node *np = pdev->dev.of_node;
+-	struct device_node *ssi_np = NULL, *codec_np = NULL;
++	struct device_node *ssi_np = NULL, *codec_np = NULL, *tmp_np = NULL;
+ 
+ 	eukrea_tlv320.dev = &pdev->dev;
+ 	if (np) {
+@@ -143,7 +143,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	if (machine_is_eukrea_cpuimx27() ||
+-	    of_find_compatible_node(NULL, NULL, "fsl,imx21-audmux")) {
++	    (tmp_np = of_find_compatible_node(NULL, NULL, "fsl,imx21-audmux"))) {
+ 		imx_audmux_v1_configure_port(MX27_AUDMUX_HPCR1_SSI0,
+ 			IMX_AUDMUX_V1_PCR_SYN |
+ 			IMX_AUDMUX_V1_PCR_TFSDIR |
+@@ -158,10 +158,11 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
+ 			IMX_AUDMUX_V1_PCR_SYN |
+ 			IMX_AUDMUX_V1_PCR_RXDSEL(MX27_AUDMUX_HPCR1_SSI0)
+ 		);
++		of_node_put(tmp_np);
+ 	} else if (machine_is_eukrea_cpuimx25sd() ||
+ 		   machine_is_eukrea_cpuimx35sd() ||
+ 		   machine_is_eukrea_cpuimx51sd() ||
+-		   of_find_compatible_node(NULL, NULL, "fsl,imx31-audmux")) {
++		   (tmp_np = of_find_compatible_node(NULL, NULL, "fsl,imx31-audmux"))) {
+ 		if (!np)
+ 			ext_port = machine_is_eukrea_cpuimx25sd() ?
+ 				4 : 3;
+@@ -178,6 +179,7 @@ static int eukrea_tlv320_probe(struct platform_device *pdev)
+ 			IMX_AUDMUX_V2_PTCR_SYN,
+ 			IMX_AUDMUX_V2_PDCR_RXDSEL(int_port)
+ 		);
++		of_node_put(tmp_np);
+ 	} else {
+ 		if (np) {
+ 			/* The eukrea,asoc-tlv320 driver was explicitly
 -- 
 2.35.1
 
