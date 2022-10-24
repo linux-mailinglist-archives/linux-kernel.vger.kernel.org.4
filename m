@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E727609CA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1513609CB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbiJXI2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
+        id S230417AbiJXIao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbiJXI2U (ORCPT
+        with ESMTP id S230495AbiJXIaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:28:20 -0400
+        Mon, 24 Oct 2022 04:30:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207AF645F9;
-        Mon, 24 Oct 2022 01:28:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFBA32BBE;
+        Mon, 24 Oct 2022 01:29:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48CCE60B47;
-        Mon, 24 Oct 2022 08:27:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F31C433D6;
-        Mon, 24 Oct 2022 08:27:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24EA360C15;
+        Mon, 24 Oct 2022 08:28:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7928AC433D6;
+        Mon, 24 Oct 2022 08:28:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666600057;
-        bh=ysnt+Y6t1FMRzHAEEL6QxFMl6KRfQ8Smz2P0BWUTlFs=;
+        s=k20201202; t=1666600133;
+        bh=uC7mKT8uDqXXd0XO6Nf+G9XWZ6e3itlzM+GC1HHhwag=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pmbef9SJDQK3+et4z6SVFeBoNmRtPQm5LBLxdzkgLUEDz6z+wVGn2cUUK5TCA9K2i
-         k7KoAS6Rn4ie14xWdPBhUguCdlT4ZZ0wvcCB9Z3ATiGLhHl+04pO5ELZbgPMuLpTZ/
-         8YSg3v1wRDGMjHJ+77Y/KFtNul2W1qNO2oBPMHHPEWlE8pMpdOhDAO+0CH2cuhlVif
-         bCA9QyKF4l2SYGe3WZU0+5iksVrZRroVmmFLyBBXeZ62RPGzQAOYuaWjeHofcYwFcq
-         FWhAPlcbFl29DPw6NOVyMawkj8JRf9lcQOuXkcyGvxQoRcfZy2fhj1CnW/Q05PN86L
-         +OBW3rh88n+mQ==
+        b=dcH5Ozu/tQLQGNGU98OnUJBu9h8Ei6xr0Op9knsWMQvUB0j08FvS2ucjeD/ciG27W
+         0PUi6CnyMjfgji7ySgaoqEkfah2qZQOPcXal7gn0E7w+iNL2MyZsGBMXGRp2D1UIA+
+         GjVI0gkXe/ntofPeJqdZDeCKQUQFU4HeUzDhND5Je/I516gjwBN92jzglcamxHSwZS
+         PoYbh5m/WTlPxfvoHNEcbF6prff8q4XhdjbwxbaGgVGokjWVgLGtRM2YDErg2tW+ST
+         1cgbJHYWZcnjCUTLr8V35gzjHELlDDVadmCev84JrPiCjwm+HkY4FReDY8viTny20D
+         195z2HoM3+zpw==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
         by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.95)
         (envelope-from <maz@kernel.org>)
-        id 1omso3-001630-E9;
-        Mon, 24 Oct 2022 09:27:35 +0100
-Date:   Mon, 24 Oct 2022 09:27:35 +0100
-Message-ID: <8635bdocco.wl-maz@kernel.org>
+        id 1omspH-00165X-99;
+        Mon, 24 Oct 2022 09:28:51 +0100
+Date:   Mon, 24 Oct 2022 09:28:50 +0100
+Message-ID: <861qqxocal.wl-maz@kernel.org>
 From:   Marc Zyngier <maz@kernel.org>
 To:     Hector Martin <marcan@marcan.st>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -54,10 +54,9 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
-In-Reply-To: <20221024043925.25379-5-marcan@marcan.st>
+Subject: Re: [PATCH v3 0/5] Apple SoC cpufreq driver
+In-Reply-To: <20221024043925.25379-1-marcan@marcan.st>
 References: <20221024043925.25379-1-marcan@marcan.st>
-        <20221024043925.25379-5-marcan@marcan.st>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
  FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
  (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
@@ -76,43 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 05:39:24 +0100,
+On Mon, 24 Oct 2022 05:39:20 +0100,
 Hector Martin <marcan@marcan.st> wrote:
 > 
-> This driver implements CPU frequency scaling for Apple Silicon SoCs,
-> including M1 (t8103), M1 Max/Pro/Ultra (t600x), and M2 (t8112).
+> Hi folks,
 > 
-> Each CPU cluster has its own register set, and frequency management is
-> fully automated by the hardware; the driver only has to write one
-> register. There is boost frequency support, but the hardware will only
-> allow their use if only a subset of cores in a cluster are in
-> non-deep-idle. Since we don't support deep idle yet, these frequencies
-> are not achievable, but the driver supports them. They will remain
-> disabled in the device tree until deep idle is implemented, to avoid
-> confusing users.
+> Third time's the charm? Here's v3 of the cpufreq driver for Apple SoCs.
+> This version takes a page from both v1 and v2, keeping the dedicated
+> cpufreq style (instead of pretending to be a clock controller) but using
+> dedicated DT nodes for each cluster, which accurately represents the
+> hardware. In particular, this makes supporting t6002 (M1 Ultra) a lot
+> more reasonable on the DT side.
 > 
-> This driver does not yet implement the memory controller performance
-> state tuning that usually accompanies higher CPU p-states. This will be
-> done in a future patch.
+> This version also switches to the standard performance-domains binding,
+> so we don't need any more vendor-specific properties. In order to
+> support this, I had to make the performance-domains parsing code more
+> generic. This required a minor change to the only consumer
+> (mediatek-cpufreq-hw).
 > 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  drivers/cpufreq/Kconfig.arm          |   9 +
->  drivers/cpufreq/Makefile             |   1 +
->  drivers/cpufreq/apple-soc-cpufreq.c  | 352 +++++++++++++++++++++++++++
->  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
->  4 files changed, 364 insertions(+)
+> The Linux driver probes based on platform compatible, and then attempts
+> to locate the cluster nodes by following the performance-domains links
+> from CPU nodes (this will then fail for any incompatible nodes, e.g. if
+> a future SoC needs a new compatible and can't fall back). This approach
+> was suggested by robh as the right way to handle the impedance mismatch
+> between the hardware, which has separate controllers per cluster, and
+> the Linux model where there can only be one CPUFreq driver instance.
+> 
+> Functionality-wise, there are no significant changes from v2. The only
+> notable difference is support for t8112 (M2). This works largely the
+> same as the other SoCs, but they ran out of bits in the current PState
+> register, so that needs a SoC-specific quirk. Since that register is
+> not used by macOS (it was discovered experimentally) and is not critical
+> for functionality (it just allows accurately reporting the current
+> frequency to userspace, given boost clock limitations), I've decided to
+> only use it when a SoC-specific compatible is present. The default
+> fallback code will simply report the requested frequency as actual.
+> I expect this will work for future SoCs.
+> 
+> As usual, MAINTAINERS and DT changes are split. I expect patches #2~#4
+> to go through the cpufreq tree, and we'll take care of #1 and #5 via
+> the asahi-soc tree.
+> 
+> Hector Martin (5):
+>   MAINTAINERS: Add entries for Apple SoC cpufreq driver
+>   dt-bindings: cpufreq: apple,soc-cpufreq: Add binding for Apple SoC
+>     cpufreq
+>   cpufreq: Generalize of_perf_domain_get_sharing_cpumask phandle format
+>   cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+>   arm64: dts: apple: Add CPU topology & cpufreq nodes for t8103
+> 
+>  .../cpufreq/apple,cluster-cpufreq.yaml        | 119 ++++++
+>  MAINTAINERS                                   |   2 +
+>  arch/arm64/boot/dts/apple/t8103.dtsi          | 206 +++++++++-
+>  drivers/cpufreq/Kconfig.arm                   |   9 +
+>  drivers/cpufreq/Makefile                      |   1 +
+>  drivers/cpufreq/apple-soc-cpufreq.c           | 352 ++++++++++++++++++
+>  drivers/cpufreq/cpufreq-dt-platdev.c          |   2 +
+>  drivers/cpufreq/mediatek-cpufreq-hw.c         |  14 +-
+>  include/linux/cpufreq.h                       |  28 +-
+>  9 files changed, 706 insertions(+), 27 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
 >  create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
->
 
-[...]
+FWIW, and for the whole series:
 
-> +static struct freq_attr *apple_soc_cpufreq_hw_attr[] = {
-> +	&cpufreq_freq_attr_scaling_available_freqs,
-> +	NULL,
-> +	NULL,
-
-nit: extra NULL?
+Acked-by: Marc Zyngier <maz@kernel.org>
 
 	M.
 
