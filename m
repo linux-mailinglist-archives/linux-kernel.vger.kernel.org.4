@@ -2,97 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B0D60B62A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BF560B5BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbiJXStc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
+        id S231345AbiJXSil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232730AbiJXSsz (ORCPT
+        with ESMTP id S231913AbiJXSiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:48:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D9B8BB99
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:29:47 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1omxzm-0001Lg-Qs; Mon, 24 Oct 2022 16:00:02 +0200
-Message-ID: <ed50cdff-8fd2-6714-9b0b-1ce47a5c9d37@pengutronix.de>
-Date:   Mon, 24 Oct 2022 16:00:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] clk: imx8mp: register driver at arch_initcall time
-Content-Language: en-US
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20220928124108.500369-1-linux@rasmusvillemoes.dk>
- <814496ae-4007-9a4e-0466-a0386aec6316@rasmusvillemoes.dk>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <814496ae-4007-9a4e-0466-a0386aec6316@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 14:38:19 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6CD748FD;
+        Mon, 24 Oct 2022 10:20:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EE32922094;
+        Mon, 24 Oct 2022 14:01:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666620113; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O5wbJg24BnX4/aa3sBO7xy1JrwZ2Eu5mva+x7WgR2s0=;
+        b=wtlsJZiFpbcse0yZ1XcfhZAW9a4I12chUbKZdqDK8vwbTXcegmAVP2Pbl8Jl/G+3Jl5gPg
+        BUVgjZpLbUmJmNExhEpQglUAQsdqcSp4dlGtvNM31lPqB0poIbuYQtArpkysonVEtTm9bO
+        zUSCNbkiXG3yJeWyMSoku0YJPCFPiYk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666620113;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=O5wbJg24BnX4/aa3sBO7xy1JrwZ2Eu5mva+x7WgR2s0=;
+        b=qX3M7QosHLUYDxA//KII7/1t6AKBpowqpmkPzLt6DKHctgwFvd6rHqRSvEgoEbsIs64wWh
+        szZz1LFrEoqchUBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C71C013357;
+        Mon, 24 Oct 2022 14:01:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id k4X1L9GaVmOdEQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 24 Oct 2022 14:01:53 +0000
+Date:   Mon, 24 Oct 2022 16:01:53 +0200
+Message-ID: <87h6zt8gmm.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: rawmidi: remove variable dest_frames
+In-Reply-To: <20221024130415.2155860-1-colin.i.king@gmail.com>
+References: <20221024130415.2155860-1-colin.i.king@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Rasmus,
-
-On 24.10.22 15:48, Rasmus Villemoes wrote:
-> On 28/09/2022 14.41, Rasmus Villemoes wrote:
->> We have an imx8mp-based board with an external gpio-triggered
->> watchdog. Currently, we don't get to handle that in time before it
->> resets the board.
->>
->> The probe of the watchdog device gets deferred because the SOC's GPIO
->> controller is not yet ready, and the probe of that in turn gets deferred
->> because its clock provider (namely, this driver) is not yet
->> ready. Altogether, the watchdog does not get handled until the late
->> initcall deferred_probe_initcall has made sure all leftover devices
->> have been probed, and that's way too late.
->>
->> Aside from being necessary for our board, this also reduces total boot
->> time because fewer device probes get deferred.
+On Mon, 24 Oct 2022 15:04:15 +0200,
+Colin Ian King wrote:
 > 
-> ping
-
-Module build is unaffected, because arch_initcall expands to module_init
-if it's built as a module, right? Noting that in the commit message would
-be good I think.
-
-Also, did you try booting with fw_devlink=on? This should have resolved
-your issue too. Not sure what other issues it may cause on i.MX8MP.
-
-Cheers,
-Ahmad
-
+> Variable dest_frames is just being incremented and it's never used
+> anywhere else. The variable and the increment are redundant so
+> remove it.
 > 
-> Rasmus
-> 
-> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+
+Thanks, applied.
 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Takashi
