@@ -2,104 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E97560AEF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4448960AED8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiJXPWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 11:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S231561AbiJXPSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiJXPWa (ORCPT
+        with ESMTP id S231411AbiJXPR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:22:30 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3568C41D05
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:06:18 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id bn35so4209810ljb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yXDMfbSvdfRJmnrB7Bcegq0YwNab1P2a/cSzHqB7sk4=;
-        b=Ev+R/iByfTSfP39Rd2yDi4ivGXPJP5rkZVEBuevoWI0BvgeqNL+TSY6mhXtGIKwAhs
-         ngHWlJBs81jFtaPLSADx2fpR2B4ks+F6s9CVTD9Z1N1O7+QS6857TmtElBy/GHDS+8ZK
-         dlXdeTldpBr9U5hITtsE+ZKC1GFjSruwzYXeuo3XTQvOMvszIrmwL5H1y9KzEFwNMfWJ
-         Hy0EEuVWDpdO/svJ34mDSlm050tJrCzO8ALcErUMTRuBDgXI6lU82FxOw0TVX/p6LXTr
-         gYoG9fzwdT7v5ln2medVBSwR1ESi4a6LhTqJ0rh33pvq8KKUfMzcp01ERiQLVu4Ns2bJ
-         zlMA==
+        Mon, 24 Oct 2022 11:17:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702E68D210
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666619761;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EmWmTkMoJsoEVALl9wy+YXRPF7l0NRbRGxqJeQt3D1w=;
+        b=BcM3NIc5uO7dMDq/u6doYif/87egGZjT+Cs6pNQIMGU7iNr7IHCu1kmGtA+yv9wEcJr2Af
+        OUIhrLsJ/jRuBruS+SD/KFwx7c5SD2W8rz9pGVHTN7Il5ERp3Az0zj7pRM8yv1EAYv1VBy
+        HpzLzfuK6IxqSFgHRM7BpZaAS5Kd5ew=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-27-9aQHBqLMPCONnZ_MkZvvbg-1; Mon, 24 Oct 2022 09:32:56 -0400
+X-MC-Unique: 9aQHBqLMPCONnZ_MkZvvbg-1
+Received: by mail-wm1-f71.google.com with SMTP id z10-20020a05600c220a00b003c6ecad1decso1884965wml.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:32:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yXDMfbSvdfRJmnrB7Bcegq0YwNab1P2a/cSzHqB7sk4=;
-        b=n6rHMWyNNmdg4LKy/yPnUJObc7rQArHFNqbASRjM8hkPzh53Vyi8LlxqzzAx5xO9q3
-         c+0A2lP23NwsMavb1nNsX0sDuQ0dey657lM0ESJjTJDvyZPD8+CtO5eBK1udEhKlMylH
-         cKqIQF3SmRiDU+b5/ZDUSadKnQMLz6WSR0XSQMcpANtut0+hMpY/VU2S2o3oPXFFBYk3
-         b04v71ajD4X0F677eu7eJMrFtWUyN+ebRxdBH5zUhV3FyDqtyxT8ZCifncL2Xkc5swso
-         /Yug8lE8+27AnGQz0xN3FoAcz2VQiB4MLn1D9dHBr0sAE9zW2BvIpK+adNCLeb1W0ned
-         hDDA==
-X-Gm-Message-State: ACrzQf0HfVj+O9WH4qqeV8Iv/NZbq9MuYAk8kC5kBiFiYfxPoWb81b1j
-        9k0+BvTTbkgrpPORqRJoYgNVywQMnLZzycPB
-X-Google-Smtp-Source: AMsMyM4PJ88PVCPjMKghg+zRn3JJ16K/+Z7xJXEWO8J3+ykBBXlXRim6GW7JveGLx2JhXB2MEZMuAg==
-X-Received: by 2002:a05:651c:242:b0:26d:fb4b:9c8 with SMTP id x2-20020a05651c024200b0026dfb4b09c8mr12278995ljn.353.1666618345667;
-        Mon, 24 Oct 2022 06:32:25 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id o17-20020a056512231100b0049f5c71f1c4sm4518301lfu.198.2022.10.24.06.32.25
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EmWmTkMoJsoEVALl9wy+YXRPF7l0NRbRGxqJeQt3D1w=;
+        b=IlPzgm9OnO62ONKVah3ZrRQnqmPXqsNstq8oXHE4YUODjTVV28zA1xfRp5Obin7vFU
+         baFhgKPRgKe/w3RLK/y4BeyRgHgRn7HRXr4/Uqjlp5SZTJInxkOKxmd/I2gMNX35f1et
+         rWP9E7+L4SgltpjReiekANFmuCZqnmmDquAtZK8U/8K/jtinraxem/mkrxVSKDyc2soo
+         K45/U8x6d0TaEO4sS/cykveQJ2cOyO0HlE/haIEkXDhPMwGe/5CoBJR/8qUu5/DAMr1I
+         UKhxGEBoxcEiBGSZdB3zBG/RAA8Fv6RksOx8EKD2fPt263QlLMn1ymAJ5iYPSaLF/e81
+         D9Fw==
+X-Gm-Message-State: ACrzQf2LmMrfd63wymlxWj6qfsenFc9i3/Dp8O54ngH0eirM42KJrT1B
+        A/Ch87jBJXkT2cv+V7M9PmPnGVB03Ky3rMaCOicca0ONLDH/dQkNXJHl+n/Do92t/1E3yVhgIa2
+        Ti+17/gF9F3lBIfBvYZwqKdMW
+X-Received: by 2002:a05:600c:a05:b0:3b9:cecc:9846 with SMTP id z5-20020a05600c0a0500b003b9cecc9846mr42424843wmp.3.1666618374108;
+        Mon, 24 Oct 2022 06:32:54 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6cL1e1sL/077dBTDCluX2MmyW8nmK9GM4RgH8uNgnfIETcBEk9GgLo7C6+FEvUqbj6uWuw5A==
+X-Received: by 2002:a05:600c:a05:b0:3b9:cecc:9846 with SMTP id z5-20020a05600c0a0500b003b9cecc9846mr42424822wmp.3.1666618373813;
+        Mon, 24 Oct 2022 06:32:53 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:f100:6371:a05b:e038:ac2c? (p200300cbc704f1006371a05be038ac2c.dip0.t-ipconnect.de. [2003:cb:c704:f100:6371:a05b:e038:ac2c])
+        by smtp.gmail.com with ESMTPSA id d4-20020a05600c3ac400b003c64c186206sm10958540wms.16.2022.10.24.06.32.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 06:32:25 -0700 (PDT)
-Message-ID: <966b0ca2-c474-9009-04ed-5c57a68dc2b5@linaro.org>
-Date:   Mon, 24 Oct 2022 16:32:24 +0300
+        Mon, 24 Oct 2022 06:32:53 -0700 (PDT)
+Message-ID: <c14a306e-2814-2c9a-21f6-35d477b0fe3d@redhat.com>
+Date:   Mon, 24 Oct 2022 15:32:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 10/10] phy: qcom-qmp-ufs: add support for updated sc8280xp
- binding
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221024090041.19574-1-johan+linaro@kernel.org>
- <20221024090041.19574-11-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221024090041.19574-11-johan+linaro@kernel.org>
+ Thunderbird/102.3.1
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>
+References: <20221021101141.84170-1-david@redhat.com>
+ <20221021125724.0bc29fdad1c696b8fe92f7f9@linux-foundation.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 0/9] mm/ksm: break_ksm() cleanups and fixes
+In-Reply-To: <20221021125724.0bc29fdad1c696b8fe92f7f9@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 12:00, Johan Hovold wrote:
-> Add support for the new SC8280XP binding.
+On 21.10.22 21:57, Andrew Morton wrote:
+> On Fri, 21 Oct 2022 12:11:32 +0200 David Hildenbrand <david@redhat.com> wrote:
 > 
-> Note that the binding does not try to describe every register subregion
-> and instead the driver holds the corresponding offsets.
+>> This series cleans up and fixes break_ksm().
 > 
-> Also note that the driver will continue to accept the old binding, at
-> least for the time being.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 90 ++++++++++++++++++++++---
->   1 file changed, 80 insertions(+), 10 deletions(-)
+> Quite a lot of fixups were needed merging this.  I guess you couldn't
+> develop against mm-unstable because the v1 series was already in there.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Nowadays, I tend to send against mm-stable (I remember that was the 
+suggestion). Usually it works because there are no conflicts -- this 
+time there are probably quite some kvm unit test conflicts.
+
+Feel free to ask me next time to rebase on XYZ so I can make you life 
+easier ;)
+
+> 
+> For this reason I'll henceforth be more inclined to drop serieses when
+> I know a full resend is coming out.
+
+Yes, good idea. While the fixup-patch process works for small 
+adjustments, it's not a good fit for bigger changes, especially once 
+involving new patches.
+
+> 
+> So please do let me know when a full resend is coming out. 
+
+Will do; I kind-of did that [1] but I should have been more clear 
+("Please drop the current series, I'll send a new version.").
+
+> Or, of
+> course, send little fixes against the current version.
+
+I prefer a full resend when there are bigger changes that involve 
+modifications to multiple patches ... which also makes life easier for 
+reviewers.
+
+
+[1] 
+https://lore.kernel.org/all/87104912-6615-4917-eae1-6ae0a80677e1@redhat.com/T/#u
 
 -- 
-With best wishes
-Dmitry
+Thanks,
+
+David / dhildenb
 
