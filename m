@@ -2,133 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126C1609D16
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413C0609D19
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiJXIrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
+        id S230141AbiJXIti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJXIrd (ORCPT
+        with ESMTP id S229916AbiJXItg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:47:33 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BF823EAB;
-        Mon, 24 Oct 2022 01:47:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 56A2121A31;
-        Mon, 24 Oct 2022 08:47:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666601251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QoVcV9gbQThkvscNugr29PVp2ZbHse5aemDFMb3FVME=;
-        b=J9s2V8zycLD77Lz2SnE+jZElvElJAACENvJ3DiGpSjMaY1Vs8cQIVNaQMCyCYLVUs6Uldu
-        7Z/+/8/dv/L5CHzXxYjtXmMX2skPc1KWmO0ykcnt+KS+f404plQ6V9WhJTqbpwloHXb0X2
-        MwMBCX+U43pXQ5lOvpXTLabvsBxZwnA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666601251;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QoVcV9gbQThkvscNugr29PVp2ZbHse5aemDFMb3FVME=;
-        b=kCjJuKCeEjB0/Lrz0AE0IhsorVpD5YAAkRomV0kYIhg+nxgEwsjU73AIpAPVJFL3LmWIIx
-        UUThjllY9ycrbkCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 20E4313357;
-        Mon, 24 Oct 2022 08:47:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FfHEBiNRVmNFWQAAMHmgww
-        (envelope-from <nstange@suse.de>); Mon, 24 Oct 2022 08:47:31 +0000
-From:   Nicolai Stange <nstange@suse.de>
-To:     Daniel Jordan <daniel.m.jordan@oracle.com>
-Cc:     Nicolai Stange <nstange@suse.de>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Martin Doucha <mdoucha@suse.cz>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] padata: fix liftime issues after ->serial() has
- completed
-References: <20221019083708.27138-1-nstange@suse.de>
-        <20221021213540.7zlhwbbbp7og4lrl@parnassus.localdomain>
-Date:   Mon, 24 Oct 2022 10:47:30 +0200
-In-Reply-To: <20221021213540.7zlhwbbbp7og4lrl@parnassus.localdomain> (Daniel
-        Jordan's message of "Fri, 21 Oct 2022 17:35:40 -0400")
-Message-ID: <87wn8pip5p.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+        Mon, 24 Oct 2022 04:49:36 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C73711834
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:49:32 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id pb15so7611264pjb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:49:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=K+s6WZgeKaPfeQHcekkW8Ox7ZRAZvlVZ2Z557UTtxdk=;
+        b=Xjhv4+BfmtiQqKzLdyZt2chX1y1vr6iFD9xqFMS0L2XzozrhputSf+9xH6/p1YmSrr
+         BnaUeuXuVCRFZj8UkEzeiQQW9udTbSuMGqQhIex3q2rCrT5rG6R8Bee92gySstNkxPz3
+         PW2O25T9O+k+yGOCA7kMbpQi9s3z61l/RSwkqxgXO2cld6aA/m+TEZLiD6sroVcrjyD5
+         oBcBzYORhP2XZWdSeSOPkboCP5v1vs0cJ/1ffJRN/nOjrSw4K7MUdoZVk2wWEPF7s528
+         6SXvArfkBTgke1X2vd6H4DzmB7wEZLtPk9sH77TpZUiRpZRpl0lA+sThvrmSJVWRGRsj
+         S7CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K+s6WZgeKaPfeQHcekkW8Ox7ZRAZvlVZ2Z557UTtxdk=;
+        b=O/80X/qw2hM0MiXEGid4uRZg/Wye960ZEmEaiBS25w9mYk8P+zFbG/1fB7ab0FP7AX
+         kNfLXrsX01R8XIndJGgUL6xzkD9/iaQGCo8nLD/Qber1tjOyMQO444qIy9dz8O/NMYf5
+         X5IlYGN2pLy1RW/bemStZFSYEIpIuUOWSLJZG1UjoR0MvpDxNEd/gu7oCjMQ/Swq4I03
+         3HDhY+0q4Adr4Obsxah7MGiI+1d2CIVTuahog3MOkmtUL4hvZtmmeC9yifBstnNq5KSU
+         BMgxmPnhIC3en0zPRNjBEsLkOEQcuTls25TyFxf9k7le1TzQZbiY0aOAtNW6OFW4Krjm
+         vVmA==
+X-Gm-Message-State: ACrzQf27eFBXdgH4dGtv3XMel1PYO+mhB1sLewmuyxIWfkyJoBvhAKZ8
+        fY4CJpWUVLOzw/wRU9VpaPY=
+X-Google-Smtp-Source: AMsMyM4jDEauWeYK6sBISqpDmbUgxT9fVFb1s3oYUQOqMjQoJn/OyABs8Xkk17efbv3H4Rg4hG6F8Q==
+X-Received: by 2002:a17:90a:3e81:b0:212:cc3c:b02f with SMTP id k1-20020a17090a3e8100b00212cc3cb02fmr20029696pjc.67.1666601371746;
+        Mon, 24 Oct 2022 01:49:31 -0700 (PDT)
+Received: from uftrace.. ([14.5.161.231])
+        by smtp.gmail.com with ESMTPSA id r2-20020a63a542000000b00434e1d3b2ecsm17245124pgu.79.2022.10.24.01.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 01:49:31 -0700 (PDT)
+From:   Kang Minchul <tegongkang@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Kang Minchul <tegongkang@gmail.com>
+Subject: [PATCH v2 0/4] staging: r8188eu: cleaning up unused variables
+Date:   Mon, 24 Oct 2022 17:49:21 +0900
+Message-Id: <20221024084925.262289-1-tegongkang@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+This patch series cleans up unused variables in r8188eu
+causing coccicheck warnings. 
 
-Daniel Jordan <daniel.m.jordan@oracle.com> writes:
+Difference between v1 and this patch is that this patch series
+include making function amsdu_to_msdu in /r8188eu/core/rtw_recv.c 
+into void function.
 
-> On Wed, Oct 19, 2022 at 10:37:03AM +0200, Nicolai Stange wrote:
->> this series is supposed to fix some lifetime issues all related to the f=
-act that
->> once the last ->serial() has been invoked, the padata user (i.e. pcrypt)=
- is well
->> with its right to tear down the associated padata_shell or parallel_data
->> instance respectively.
->>=20
->> Only the first one, addressed by patch [2/5], has actually been observed=
-, namely
->> on a (downstream) RT kernel under a very specific workload involving LTP=
-'s
->> pcrypt_aead01. On non-RT, I've been unable to reproduce.
->
-> I haven't been able to hit the issue in 2/5 on RT on a v6.0 kernel in an
-> x86 vm.  Were there any other things running on the system besides
-> pcrypt_aead01?  More details about your environment and your kernel
-> config would be helpful.
+Kang Minchul (4):
+  staging: r8188eu: remove unnecessary variable in ioctl_linux
+  staging: r8188eu: make amsdu_to_msdu void function
+  staging: r8188eu: remove unnecessary variable in rtl8188eu_xmit
+  staging: r8188eu: remove unnecessary variable in rtw_ap
 
-Right, the issue is indeed hard to reproduce, unfortunately. It has
-originally been reported internally by our QA Maintenance team, which --
-for unknown reason -- suddenly started to hit the issue once every while
-in their testing environment. I did manage to reproduce it once or twice
-myself, but it took me several days running pcrypt_aead01 in a loop each
-time. AFAIR, I allocated a single cpu to the VM only and increased the
-priority of pcrypt_aead01 a bit, with the intent to make preemption of
-the ->serial() worker by DELALG more likely. But really, I cannot tell
-if that did in fact contribute to the likelihood of triggering the race
-or whether I've just been lucky.
+ drivers/staging/r8188eu/core/rtw_ap.c        | 5 ++---
+ drivers/staging/r8188eu/core/rtw_recv.c      | 5 +----
+ drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
+ 4 files changed, 5 insertions(+), 12 deletions(-)
 
-Also, as mentioned in the cover letter, the RT kernel this has been
-observed on is a downstream one, based on 5.3.18 (source tree at [1],
-config at [2]), but with quite some additional patches on top. A
-backport of this patch series here had been subject to testing in the
-same environment the issue originally showed up in on a fairly regular
-basis and no new crashes have been observed since.
+-- 
+2.34.1
 
-Let me know if I could provide you with any more details.
-
-Thanks,
-
-Nicolai
-
-[1] https://github.com/SUSE/kernel/tree/SLE15-SP3-RT
-[2] https://github.com/SUSE/kernel-source/blob/SLE15-SP3-RT/config/x86_64/rt
-
---=20
-SUSE Software Solutions Germany GmbH, Frankenstra=C3=9Fe 146, 90461 N=C3=BC=
-rnberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-(HRB 36809, AG N=C3=BCrnberg)
