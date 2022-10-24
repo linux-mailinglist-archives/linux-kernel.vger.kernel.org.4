@@ -2,89 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461EC609D24
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51E5E609D29
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiJXIvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
+        id S229995AbiJXIwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiJXIvH (ORCPT
+        with ESMTP id S229720AbiJXIwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:51:07 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47CE4F692
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:51:03 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id v27so6276252eda.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=48RogcYAddblRnrwwegwTV8L7KkpXpBRUanF9H4ZX04=;
-        b=Mt4BNTviARWRqeEoVFmvLXAErFK2+IHQQ8hrJWYLW4IAjOmj8YOZjI2mcJYnFm9PG7
-         B30YYlX0Cip1NK7gxjfWE7B8qymm72JXogMpRH6sD5/QtmK5daJQo03sC5lDDl6hvahp
-         ggpMlxtLLPqnbjAYF6cN3yclnYgt2zm2qdRiE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=48RogcYAddblRnrwwegwTV8L7KkpXpBRUanF9H4ZX04=;
-        b=OoRRjDPIzpWFbFRcIgJNCBk8JM7XpzCADfmcEkVlfLUyjhXa5QZwD+fRS23Bm3hxpk
-         CMRmG0h8EuyHBpI0RFPC8FHj928yK0jefrroiYZqwwMVEQnrRNq0pQq76Q3SNI3oSW6N
-         3fzOUM6thEZdOmoPwjvWGtp+v1DUVJ14IcTp1LOOUG0w4UnJnMSUrFyVXIO7FyLEXW10
-         NU/MH0XecAMRJ7DY47+XiI/nF6j2e6qHmvSpuLYZUGUiSsxTNTOH5v9lT1jisWA8bJAK
-         HktzXVzvE0x8sAWWKOtLVE1Wsofpz8+dWVc4c1Mxnb4k9cDXM46UqEIfpylAOQGIK4G9
-         jbpg==
-X-Gm-Message-State: ACrzQf3RVuUtpgm0w3E4wqmrdImmG89T5Oz+ClW1Mf4HbfNIyQ7fn1+M
-        74BvSbIQ+zts4QOpQPpqk7kATUNvbKIOtMebUhfxJQ==
-X-Google-Smtp-Source: AMsMyM6iH131rcAchW3ZShlH0w+uAPCPW3uuAwqryut5H5gN8dmdqS5j27qGCV73XiNvasRcqV71S1SQk1ja+nYjvck=
-X-Received: by 2002:a05:6402:370c:b0:453:9fab:1b53 with SMTP id
- ek12-20020a056402370c00b004539fab1b53mr30540317edb.28.1666601462322; Mon, 24
- Oct 2022 01:51:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <166606025456.13363.3829702374064563472.stgit@donald.themaw.net> <166606036215.13363.1288735296954908554.stgit@donald.themaw.net>
-In-Reply-To: <166606036215.13363.1288735296954908554.stgit@donald.themaw.net>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 24 Oct 2022 10:50:51 +0200
-Message-ID: <CAJfpegsciAuJD-UAcW3Ns43G5m1G466opq6_Y6RG1G4iVHwcHQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kernfs: dont take i_lock on inode attr read
-To:     Ian Kent <raven@themaw.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>, Minchan Kim <minchan@kernel.org>,
-        Eric Sandeen <sandeen@sandeen.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Rick Lindsley <ricklind@linux.vnet.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 24 Oct 2022 04:52:35 -0400
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F37156BA3;
+        Mon, 24 Oct 2022 01:52:33 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 40B871E80D74;
+        Mon, 24 Oct 2022 16:51:16 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id z6o2LBHNephC; Mon, 24 Oct 2022 16:51:13 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 5B6531E80CA5;
+        Mon, 24 Oct 2022 16:51:13 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     krisman@collabora.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li kunyu <kunyu@nfschina.com>
+Subject: [PATCH] unicode: mkutf8data: Add unicode_data_malloc function
+Date:   Mon, 24 Oct 2022 16:52:22 +0800
+Message-Id: <20221024085222.179528-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 04:32, Ian Kent <raven@themaw.net> wrote:
->
-> The kernfs write lock is held when the kernfs node inode attributes
-> are updated. Therefore, when either kernfs_iop_getattr() or
-> kernfs_iop_permission() are called the kernfs node inode attributes
-> won't change.
->
-> Consequently concurrent kernfs_refresh_inode() calls always copy the
-> same values from the kernfs node.
->
-> So there's no need to take the inode i_lock to get consistent values
-> for generic_fillattr() and generic_permission(), the kernfs read lock
-> is sufficient.
->
-> Signed-off-by: Ian Kent <raven@themaw.net>
+Add unicode_data_malloc function, used to simplify unicode_data member
+assignment use.
 
-Reviewed-by: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Li kunyu <kunyu@nfschina.com>
+---
+ fs/unicode/mkutf8data.c | 43 +++++++++++++++++++----------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
+
+diff --git a/fs/unicode/mkutf8data.c b/fs/unicode/mkutf8data.c
+index bc1a7c8b5c8d..f86fa700f7dc 100644
+--- a/fs/unicode/mkutf8data.c
++++ b/fs/unicode/mkutf8data.c
+@@ -2113,6 +2113,16 @@ static int ignore_compatibility_form(char *type)
+ 	return 0;
+ }
+ 
++static void unicode_data_malloc(void *src, void **dst, size_t len)
++{
++	unsigned int *um = malloc(len);
++
++	if (um)
++		memcpy(um, src, len);
++
++	*dst = um;
++}
++
+ static void nfdi_init(void)
+ {
+ 	FILE *file;
+@@ -2120,7 +2130,6 @@ static void nfdi_init(void)
+ 	unsigned int mapping[19]; /* Magic - guaranteed not to be exceeded. */
+ 	char *s;
+ 	char *type;
+-	unsigned int *um;
+ 	int count;
+ 	int i;
+ 	int ret;
+@@ -2159,10 +2168,8 @@ static void nfdi_init(void)
+ 		}
+ 		mapping[i++] = 0;
+ 
+-		um = malloc(i * sizeof(unsigned int));
+-		memcpy(um, mapping, i * sizeof(unsigned int));
+-		unicode_data[unichar].utf32nfdi = um;
+-
++		unicode_data_malloc(mapping, &unicode_data[unichar].utf32nfdi,
++				i * sizeof(unsigned int));
+ 		if (verbose > 1)
+ 			print_utf32nfdi(unichar);
+ 		count++;
+@@ -2181,7 +2188,6 @@ static void nfdicf_init(void)
+ 	unsigned int mapping[19]; /* Magic - guaranteed not to be exceeded. */
+ 	char status;
+ 	char *s;
+-	unsigned int *um;
+ 	int i;
+ 	int count;
+ 	int ret;
+@@ -2215,10 +2221,8 @@ static void nfdicf_init(void)
+ 		}
+ 		mapping[i++] = 0;
+ 
+-		um = malloc(i * sizeof(unsigned int));
+-		memcpy(um, mapping, i * sizeof(unsigned int));
+-		unicode_data[unichar].utf32nfdicf = um;
+-
++		unicode_data_malloc(mapping, &unicode_data[unichar].utf32nfdicf,
++				i * sizeof(unsigned int));
+ 		if (verbose > 1)
+ 			print_utf32nfdicf(unichar);
+ 		count++;
+@@ -2307,7 +2311,6 @@ static void corrections_init(void)
+ 	unsigned int minor;
+ 	unsigned int revision;
+ 	unsigned int age;
+-	unsigned int *um;
+ 	unsigned int mapping[19]; /* Magic - guaranteed not to be exceeded. */
+ 	char *s;
+ 	int i;
+@@ -2359,10 +2362,8 @@ static void corrections_init(void)
+ 		}
+ 		mapping[i++] = 0;
+ 
+-		um = malloc(i * sizeof(unsigned int));
+-		memcpy(um, mapping, i * sizeof(unsigned int));
+-		corrections[count].utf32nfdi = um;
+-
++		unicode_data_malloc(mapping, &corrections[count].utf32nfdi,
++				i * sizeof(unsigned int));
+ 		if (verbose > 1)
+ 			printf(" %X -> %s -> %s V%d_%d_%d\n",
+ 				unichar, buf0, buf1, major, minor, revision);
+@@ -2437,7 +2438,6 @@ static void hangul_decompose(void)
+ 	/* unsigned int sc = (lc * nc); */
+ 	unsigned int unichar;
+ 	unsigned int mapping[4];
+-	unsigned int *um;
+         int count;
+ 	int i;
+ 
+@@ -2458,15 +2458,12 @@ static void hangul_decompose(void)
+ 			mapping[i++] = tb + ti;
+ 		mapping[i++] = 0;
+ 
+-		assert(!unicode_data[unichar].utf32nfdi);
+-		um = malloc(i * sizeof(unsigned int));
+-		memcpy(um, mapping, i * sizeof(unsigned int));
+-		unicode_data[unichar].utf32nfdi = um;
++		unicode_data_malloc(mapping, &unicode_data[unichar].utf32nfdi,
++				i * sizeof(unsigned int));
+ 
+ 		assert(!unicode_data[unichar].utf32nfdicf);
+-		um = malloc(i * sizeof(unsigned int));
+-		memcpy(um, mapping, i * sizeof(unsigned int));
+-		unicode_data[unichar].utf32nfdicf = um;
++		unicode_data_malloc(mapping, &unicode_data[unichar].utf32nfdicf,
++				i * sizeof(unsigned int));
+ 
+ 		/*
+ 		 * Add a cookie as a reminder that the hangul syllable
+-- 
+2.18.2
+
