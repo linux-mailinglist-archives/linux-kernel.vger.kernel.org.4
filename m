@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3077860B83B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3FC260B7FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbiJXTmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S232537AbiJXTjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233475AbiJXTla (ORCPT
+        with ESMTP id S232810AbiJXTi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:41:30 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7062E263B69;
-        Mon, 24 Oct 2022 11:11:19 -0700 (PDT)
+        Mon, 24 Oct 2022 15:38:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30226E028;
+        Mon, 24 Oct 2022 11:09:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CE2FECE12E6;
-        Mon, 24 Oct 2022 12:30:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB85C433D6;
-        Mon, 24 Oct 2022 12:30:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74A77B818A3;
+        Mon, 24 Oct 2022 12:51:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAA13C433C1;
+        Mon, 24 Oct 2022 12:51:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614644;
-        bh=mUdPkcinbaaDmr2EIH5eTUOcBG9ba61MG0Xo4Gj1jWg=;
+        s=korg; t=1666615910;
+        bh=VvCdVM0o6p1PxXk6TZ1vPl1OdkJWcfXxLrIRwfpPLSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b+91PZ3FGNIQscWh30z8uC1xAq2naUGF5Ag4eSlQkIdjEAqA0Fcv45Ga5r6hsft2o
-         jZCMEitJWtrPOFYxb9ojXQGSHCbL5/84MfWMefmcoiT3tMlED6uD/+OXVhpFVFsIHQ
-         pnFsTrVaeQswqkHiQk5v4UP0Pd/cegg+pGPbqlqo=
+        b=MBMcqb7SFhtKU8njGPqGUbtRGvyDAbyu3jAazPN9htv7lTlb+tkn0S0g1SLrL/sxp
+         UgXNvTdFqK0EE/jSi56p8gu2hTIJWDcSqmTVFEd4FwiBj+Y2Ddfx9jXtWGPsiopiOm
+         20JrerD519c/rayXt44Ah1ICehGe0JVdHRLYExFI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Acayan <mailingradian@gmail.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 339/390] mmc: sdhci-msm: add compatible string check for sdm670
-Date:   Mon, 24 Oct 2022 13:32:16 +0200
-Message-Id: <20221024113037.444908281@linuxfoundation.org>
+Subject: [PATCH 5.15 397/530] f2fs: fix race condition on setting FI_NO_EXTENT flag
+Date:   Mon, 24 Oct 2022 13:32:21 +0200
+Message-Id: <20221024113103.054470178@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Acayan <mailingradian@gmail.com>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit 4de95950d970c71a9e82a24573bb7a44fd95baa1 ]
+[ Upstream commit 07725adc55c0a414c10acb5c8c86cea34b95ddef ]
 
-The Snapdragon 670 has the same quirk as Snapdragon 845 (needing to
-restore the dll config). Add a compatible string check to detect the need
-for this.
+The following scenarios exist.
+process A:               process B:
+->f2fs_drop_extent_tree  ->f2fs_update_extent_cache_range
+                          ->f2fs_update_extent_tree_range
+                           ->write_lock
+ ->set_inode_flag
+                           ->is_inode_flag_set
+                           ->__free_extent_tree // Shouldn't
+                                                // have been
+                                                // cleaned up
+                                                // here
+  ->write_lock
 
-Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220923014322.33620-3-mailingradian@gmail.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+In this case, the "FI_NO_EXTENT" flag is set between
+f2fs_update_extent_tree_range and is_inode_flag_set
+by other process. it leads to clearing the whole exten
+tree which should not have happened. And we fix it by
+move the setting it to the range of write_lock.
+
+Fixes:5f281fab9b9a3 ("f2fs: disable extent_cache for fcollapse/finsert inodes")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/sdhci-msm.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/f2fs/extent_cache.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-index 192cb8b20b47..ad2e73f9a58f 100644
---- a/drivers/mmc/host/sdhci-msm.c
-+++ b/drivers/mmc/host/sdhci-msm.c
-@@ -2182,6 +2182,7 @@ static const struct sdhci_msm_variant_info sm8250_sdhci_var = {
- static const struct of_device_id sdhci_msm_dt_match[] = {
- 	{.compatible = "qcom,sdhci-msm-v4", .data = &sdhci_msm_mci_var},
- 	{.compatible = "qcom,sdhci-msm-v5", .data = &sdhci_msm_v5_var},
-+	{.compatible = "qcom,sdm670-sdhci", .data = &sdm845_sdhci_var},
- 	{.compatible = "qcom,sdm845-sdhci", .data = &sdm845_sdhci_var},
- 	{.compatible = "qcom,sm8250-sdhci", .data = &sm8250_sdhci_var},
- 	{.compatible = "qcom,sc7180-sdhci", .data = &sdm845_sdhci_var},
+diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+index 866e72b29bd5..761fd42c93f2 100644
+--- a/fs/f2fs/extent_cache.c
++++ b/fs/f2fs/extent_cache.c
+@@ -804,9 +804,8 @@ void f2fs_drop_extent_tree(struct inode *inode)
+ 	if (!f2fs_may_extent_tree(inode))
+ 		return;
+ 
+-	set_inode_flag(inode, FI_NO_EXTENT);
+-
+ 	write_lock(&et->lock);
++	set_inode_flag(inode, FI_NO_EXTENT);
+ 	__free_extent_tree(sbi, et);
+ 	if (et->largest.len) {
+ 		et->largest.len = 0;
 -- 
 2.35.1
 
