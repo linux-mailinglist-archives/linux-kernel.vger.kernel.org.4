@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A3B60A737
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3130760A76D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232313AbiJXMs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38270 "EHLO
+        id S234188AbiJXMtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234284AbiJXMoH (ORCPT
+        with ESMTP id S234524AbiJXMpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:44:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA03A7EFCF;
-        Mon, 24 Oct 2022 05:09:05 -0700 (PDT)
+        Mon, 24 Oct 2022 08:45:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3E11CFD3;
+        Mon, 24 Oct 2022 05:09:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0373461259;
-        Mon, 24 Oct 2022 11:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191F8C433D6;
-        Mon, 24 Oct 2022 11:57:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 987EB612BB;
+        Mon, 24 Oct 2022 12:08:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75BEC433C1;
+        Mon, 24 Oct 2022 12:08:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612669;
-        bh=brYtHU42pdCzx+EVdOKsAMZy1gp+KJ7GwY6PpsFheis=;
+        s=korg; t=1666613298;
+        bh=Nlr3whkKSXmBdqljoxTbdkcPVBXygdd7SJC2WUfTS7M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L/HhGeQR/5Lajsc4pQjxpeM4uCE5eGpzWpMpIdmDYUKy69M5Rn1+LgLVNyywu1j5u
-         r8iWWd4nS5kjF4YirfFi/Rs4flqFaUgYZVVvoHDW6LV/LkH4MbqgY1dqt65/eP5+Zd
-         bjojZ3pK8Kkk3EoxgeZcB/SlQFOE72PLvzSGdi8o=
+        b=NPT7XOp5Kx0FCjiLeTtF4grtwhlZrNeULLDXK+3KexK7VL4XB46ASekto2jvRQ4Hu
+         /ptMeCOp1LyIch7Ok4nRrddaabgt9QoxJ3+9BRsq3uV1t0GE7QqkPwEUwGqTFlz4Xe
+         VZitWP/vs8ed5qRJUNvXy8vwkwG3ktBmFtrac3IA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        syzbot <syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 074/229] spi: mt7621: Fix an error message in mt7621_spi_probe()
+Subject: [PATCH 5.4 083/255] net: rds: dont hold sock lock when cancelling work from rds_tcp_reset_callbacks()
 Date:   Mon, 24 Oct 2022 13:29:53 +0200
-Message-Id: <20221024113001.469797349@linuxfoundation.org>
+Message-Id: <20221024113005.267727463@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +57,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit 2b2bf6b7faa9010fae10dc7de76627a3fdb525b3 ]
+[ Upstream commit a91b750fd6629354460282bbf5146c01b05c4859 ]
 
-'status' is known to be 0 at this point. The expected error code is
-PTR_ERR(clk).
+syzbot is reporting lockdep warning at rds_tcp_reset_callbacks() [1], for
+commit ac3615e7f3cffe2a ("RDS: TCP: Reduce code duplication in
+rds_tcp_reset_callbacks()") added cancel_delayed_work_sync() into a section
+protected by lock_sock() without realizing that rds_send_xmit() might call
+lock_sock().
 
-Switch to dev_err_probe() in order to display the expected error code (in a
-human readable way).
-This also filters -EPROBE_DEFER cases, should it happen.
+We don't need to protect cancel_delayed_work_sync() using lock_sock(), for
+even if rds_{send,recv}_worker() re-queued this work while __flush_work()
+ from cancel_delayed_work_sync() was waiting for this work to complete,
+retried rds_{send,recv}_worker() is no-op due to the absence of RDS_CONN_UP
+bit.
 
-Fixes: 1ab7f2a43558 ("staging: mt7621-spi: add mt7621 support")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-Link: https://lore.kernel.org/r/928f3fb507d53ba0774df27cea0bbba4b055993b.1661599671.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://syzkaller.appspot.com/bug?extid=78c55c7bc6f66e53dce2 [1]
+Reported-by: syzbot <syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com>
+Co-developed-by: Hillf Danton <hdanton@sina.com>
+Signed-off-by: Hillf Danton <hdanton@sina.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Tested-by: syzbot <syzbot+78c55c7bc6f66e53dce2@syzkaller.appspotmail.com>
+Fixes: ac3615e7f3cffe2a ("RDS: TCP: Reduce code duplication in rds_tcp_reset_callbacks()")
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/mt7621-spi/spi-mt7621.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ net/rds/tcp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/mt7621-spi/spi-mt7621.c b/drivers/staging/mt7621-spi/spi-mt7621.c
-index 75ed48f60c8c..b73823830e3a 100644
---- a/drivers/staging/mt7621-spi/spi-mt7621.c
-+++ b/drivers/staging/mt7621-spi/spi-mt7621.c
-@@ -442,11 +442,9 @@ static int mt7621_spi_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(clk)) {
--		dev_err(&pdev->dev, "unable to get SYS clock, err=%d\n",
--			status);
--		return PTR_ERR(clk);
--	}
-+	if (IS_ERR(clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
-+				     "unable to get SYS clock\n");
- 
- 	status = clk_prepare_enable(clk);
- 	if (status)
+diff --git a/net/rds/tcp.c b/net/rds/tcp.c
+index d55d81b01d37..bfb8d4d6a994 100644
+--- a/net/rds/tcp.c
++++ b/net/rds/tcp.c
+@@ -176,10 +176,10 @@ void rds_tcp_reset_callbacks(struct socket *sock,
+ 	 */
+ 	atomic_set(&cp->cp_state, RDS_CONN_RESETTING);
+ 	wait_event(cp->cp_waitq, !test_bit(RDS_IN_XMIT, &cp->cp_flags));
+-	lock_sock(osock->sk);
+ 	/* reset receive side state for rds_tcp_data_recv() for osock  */
+ 	cancel_delayed_work_sync(&cp->cp_send_w);
+ 	cancel_delayed_work_sync(&cp->cp_recv_w);
++	lock_sock(osock->sk);
+ 	if (tc->t_tinc) {
+ 		rds_inc_put(&tc->t_tinc->ti_inc);
+ 		tc->t_tinc = NULL;
 -- 
 2.35.1
 
