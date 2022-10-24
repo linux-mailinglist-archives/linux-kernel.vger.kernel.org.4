@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D323260A42B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1290960A927
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232618AbiJXMGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S235853AbiJXNQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbiJXMD4 (ORCPT
+        with ESMTP id S236010AbiJXNO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:03:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B504B4B2;
-        Mon, 24 Oct 2022 04:50:06 -0700 (PDT)
+        Mon, 24 Oct 2022 09:14:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF992558F6;
+        Mon, 24 Oct 2022 05:25:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A8C8B811A1;
-        Mon, 24 Oct 2022 11:48:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6537AC433C1;
-        Mon, 24 Oct 2022 11:48:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79983612DF;
+        Mon, 24 Oct 2022 12:24:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA06C433C1;
+        Mon, 24 Oct 2022 12:24:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612122;
-        bh=0+56YQKLRS3I50WR/rVpZJDlwNIJzh94dKECmtCa8lc=;
+        s=korg; t=1666614273;
+        bh=aMhgMqMGgRl1+zscEHQn3kdfGb1OaQRYRmBXmXDblFE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0UpgXqReQz47ptCu7Yhozcknkc6IVdokyOlX+rk5XaeOAZ/bdxYaNMwW9+hD15IcV
-         zajoXCcsCOeGOZE9k2ciiKp5jQYY07+uVtjqy6FNvq80sd8nqoN8ePyov7OuUf9meG
-         uJ/542Icvs/Zfq0rzXqFOI01DSryf7MacurfT0ek=
+        b=Xuuz4J9SvyE18GpjJQZPFfjQreME7g+kOXum7ZuXKC7pem0EzXzV23yPb1IR7xh9v
+         T7SW0c02HMSf4BteNd1mx5SRXLCvU4Q0q2AqBTBzSK6851FSokij74/2LTznNs2zDn
+         RWIGbbEUIWgWojp11jcDXnbMF6SV9J9mhKwn6uE4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.14 079/210] gcov: support GCC 12.1 and newer compilers
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 199/390] clk: berlin: Add of_node_put() for of_get_parent()
 Date:   Mon, 24 Oct 2022 13:29:56 +0200
-Message-Id: <20221024112959.627318144@linuxfoundation.org>
+Message-Id: <20221024113031.260034287@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,80 +54,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Liska <mliska@suse.cz>
+From: Liang He <windhl@126.com>
 
-commit 977ef30a7d888eeb52fb6908f99080f33e5309a8 upstream.
+[ Upstream commit 37c381b812dcbfde9c3f1f3d3e75fdfc1b40d5bc ]
 
-Starting with GCC 12.1, the created .gcda format can't be read by gcov
-tool.  There are 2 significant changes to the .gcda file format that
-need to be supported:
+In berlin2_clock_setup() and berlin2q_clock_setup(), we need to
+call of_node_put() for the reference returned by of_get_parent()
+which has increased the refcount. We should call *_put() in fail
+path or when it is not used anymore.
 
-a) [gcov: Use system IO buffering]
-   (23eb66d1d46a34cb28c4acbdf8a1deb80a7c5a05) changed that all sizes in
-   the format are in bytes and not in words (4B)
-
-b) [gcov: make profile merging smarter]
-   (72e0c742bd01f8e7e6dcca64042b9ad7e75979de) add a new checksum to the
-   file header.
-
-Tested with GCC 7.5, 10.4, 12.2 and the current master.
-
-Link: https://lkml.kernel.org/r/624bda92-f307-30e9-9aaa-8cc678b2dfb2@suse.cz
-Signed-off-by: Martin Liska <mliska@suse.cz>
-Tested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 26b3b6b959b2 ("clk: berlin: prepare simple-mfd conversion")
+Signed-off-by: Liang He <windhl@126.com>
+Link: https://lore.kernel.org/r/20220708084900.311684-1-windhl@126.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/gcov/gcc_4_7.c |   18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/clk/berlin/bg2.c  | 5 ++++-
+ drivers/clk/berlin/bg2q.c | 6 +++++-
+ 2 files changed, 9 insertions(+), 2 deletions(-)
 
---- a/kernel/gcov/gcc_4_7.c
-+++ b/kernel/gcov/gcc_4_7.c
-@@ -33,6 +33,13 @@
+diff --git a/drivers/clk/berlin/bg2.c b/drivers/clk/berlin/bg2.c
+index bccdfa00fd37..67a9edbba29c 100644
+--- a/drivers/clk/berlin/bg2.c
++++ b/drivers/clk/berlin/bg2.c
+@@ -500,12 +500,15 @@ static void __init berlin2_clock_setup(struct device_node *np)
+ 	int n, ret;
  
- #define GCOV_TAG_FUNCTION_LENGTH	3
+ 	clk_data = kzalloc(struct_size(clk_data, hws, MAX_CLKS), GFP_KERNEL);
+-	if (!clk_data)
++	if (!clk_data) {
++		of_node_put(parent_np);
+ 		return;
++	}
+ 	clk_data->num = MAX_CLKS;
+ 	hws = clk_data->hws;
  
-+/* Since GCC 12.1 sizes are in BYTES and not in WORDS (4B). */
-+#if (__GNUC__ >= 12)
-+#define GCOV_UNIT_SIZE				4
-+#else
-+#define GCOV_UNIT_SIZE				1
-+#endif
-+
- static struct gcov_info *gcov_info_head;
+ 	gbase = of_iomap(parent_np, 0);
++	of_node_put(parent_np);
+ 	if (!gbase)
+ 		return;
  
- /**
-@@ -439,12 +446,18 @@ static size_t convert_to_gcda(char *buff
- 	pos += store_gcov_u32(buffer, pos, info->version);
- 	pos += store_gcov_u32(buffer, pos, info->stamp);
+diff --git a/drivers/clk/berlin/bg2q.c b/drivers/clk/berlin/bg2q.c
+index e9518d35f262..dd2784bb75b6 100644
+--- a/drivers/clk/berlin/bg2q.c
++++ b/drivers/clk/berlin/bg2q.c
+@@ -286,19 +286,23 @@ static void __init berlin2q_clock_setup(struct device_node *np)
+ 	int n, ret;
  
-+#if (__GNUC__ >= 12)
-+	/* Use zero as checksum of the compilation unit. */
-+	pos += store_gcov_u32(buffer, pos, 0);
-+#endif
-+
- 	for (fi_idx = 0; fi_idx < info->n_functions; fi_idx++) {
- 		fi_ptr = info->functions[fi_idx];
+ 	clk_data = kzalloc(struct_size(clk_data, hws, MAX_CLKS), GFP_KERNEL);
+-	if (!clk_data)
++	if (!clk_data) {
++		of_node_put(parent_np);
+ 		return;
++	}
+ 	clk_data->num = MAX_CLKS;
+ 	hws = clk_data->hws;
  
- 		/* Function record. */
- 		pos += store_gcov_u32(buffer, pos, GCOV_TAG_FUNCTION);
--		pos += store_gcov_u32(buffer, pos, GCOV_TAG_FUNCTION_LENGTH);
-+		pos += store_gcov_u32(buffer, pos,
-+			GCOV_TAG_FUNCTION_LENGTH * GCOV_UNIT_SIZE);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->ident);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->lineno_checksum);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->cfg_checksum);
-@@ -458,7 +471,8 @@ static size_t convert_to_gcda(char *buff
- 			/* Counter record. */
- 			pos += store_gcov_u32(buffer, pos,
- 					      GCOV_TAG_FOR_COUNTER(ct_idx));
--			pos += store_gcov_u32(buffer, pos, ci_ptr->num * 2);
-+			pos += store_gcov_u32(buffer, pos,
-+				ci_ptr->num * 2 * GCOV_UNIT_SIZE);
+ 	gbase = of_iomap(parent_np, 0);
+ 	if (!gbase) {
++		of_node_put(parent_np);
+ 		pr_err("%pOF: Unable to map global base\n", np);
+ 		return;
+ 	}
  
- 			for (cv_idx = 0; cv_idx < ci_ptr->num; cv_idx++) {
- 				pos += store_gcov_u64(buffer, pos,
+ 	/* BG2Q CPU PLL is not part of global registers */
+ 	cpupll_base = of_iomap(parent_np, 1);
++	of_node_put(parent_np);
+ 	if (!cpupll_base) {
+ 		pr_err("%pOF: Unable to map cpupll base\n", np);
+ 		iounmap(gbase);
+-- 
+2.35.1
+
 
 
