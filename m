@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43F760A516
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4508E60A8EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233290AbiJXMUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S235742AbiJXNMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233308AbiJXMTJ (ORCPT
+        with ESMTP id S235609AbiJXNJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:09 -0400
+        Mon, 24 Oct 2022 09:09:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F288285D;
-        Mon, 24 Oct 2022 04:57:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661269E6A4;
+        Mon, 24 Oct 2022 05:22:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F593612B2;
-        Mon, 24 Oct 2022 11:55:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8209CC433D7;
-        Mon, 24 Oct 2022 11:55:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78DEB612A8;
+        Mon, 24 Oct 2022 12:21:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86202C433C1;
+        Mon, 24 Oct 2022 12:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612528;
-        bh=baATQorB7E7tji15g54jQol3I3flzO4pwiVl9pgM6Bk=;
+        s=korg; t=1666614092;
+        bh=mmJf2WmHjYvNc14I4worNIpdJc0e+5xAMFPez2Swz+o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aOFMJQDH7NE589CQuVTvNkQNSIq4zPzviMr7VY1KNV+LYCISOiDEIGKN3KSHNr44u
-         kxJvaYwvLJl2h/qX8P3oRXMGk2C5seycSloMuroz08VVvjJlNI2UVfXiMEsUWxpqmY
-         EhBbxa3JtKokM81FLjhS8cZ8RAEJBd/4eUpOlzB4=
+        b=YoebTVL3mwfN/JVgxnzwG2dNVKyb7WL0gfxjxVWcHNvehJMzWyqrMHdxekbterUYT
+         EvEa7dExeS3LDM3LkRqJ+7kJsqmxR6xHrBqzppI0R8kfwqc2UVuxvFglrl4hs7yWAV
+         GxQI0qP3EME1X+Ql8aw6SZh2scNo1StVtx+CupAs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Sergei Antonov <saproj@gmail.com>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 008/229] ARM: dts: fix Moxa SDIO compatible, remove sdhci misnomer
+        stable@vger.kernel.org, Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+        Jes Sorensen <jes@trained-monkey.org>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 130/390] wifi: rtl8xxxu: Fix AIFS written to REG_EDCA_*_PARAM
 Date:   Mon, 24 Oct 2022 13:28:47 +0200
-Message-Id: <20221024112959.385972274@linuxfoundation.org>
+Message-Id: <20221024113028.213257065@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,75 +54,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergei Antonov <saproj@gmail.com>
+From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
 
-[ Upstream commit 02181e68275d28cab3c3f755852770367f1bc229 ]
+[ Upstream commit 5574d3290449916397f3092dcd2bac92415498e1 ]
 
-Driver moxart-mmc.c has .compatible = "moxa,moxart-mmc".
+ieee80211_tx_queue_params.aifs is not supposed to be written directly
+to the REG_EDCA_*_PARAM registers. Instead process it like the vendor
+drivers do. It's kinda hacky but it works.
 
-But moxart .dts/.dtsi and the documentation file moxa,moxart-dma.txt
-contain compatible = "moxa,moxart-sdhci".
+This change boosts the download speed and makes it more stable.
 
-Change moxart .dts/.dtsi files and moxa,moxart-dma.txt to match the driver.
+Tested with RTL8188FU but all the other supported chips should also
+benefit.
 
-Replace 'sdhci' with 'mmc' in names too, since SDHCI is a different
-controller from FTSDC010.
-
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Sergei Antonov <saproj@gmail.com>
-Cc: Jonas Jensen <jonas.jensen@gmail.com>
-Link: https://lore.kernel.org/r/20220907175341.1477383-1-saproj@gmail.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
+Signed-off-by: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Acked-by: Jes Sorensen <jes@trained-monkey.org>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/038cc03f-3567-77ba-a7bd-c4930e3b2fad@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt | 4 ++--
- arch/arm/boot/dts/moxart-uc7112lx.dts                     | 2 +-
- arch/arm/boot/dts/moxart.dtsi                             | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt b/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
-index 8a9f3559335b..7e14e26676ec 100644
---- a/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
-+++ b/Documentation/devicetree/bindings/dma/moxa,moxart-dma.txt
-@@ -34,8 +34,8 @@ Example:
- Use specific request line passing from dma
- For example, MMC request line is 5
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+index 7818a7ea0498..e34cd6fed7e8 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
++++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+@@ -4507,6 +4507,53 @@ rtl8xxxu_wireless_mode(struct ieee80211_hw *hw, struct ieee80211_sta *sta)
+ 	return network_type;
+ }
  
--	sdhci: sdhci@98e00000 {
--		compatible = "moxa,moxart-sdhci";
-+	mmc: mmc@98e00000 {
-+		compatible = "moxa,moxart-mmc";
- 		reg = <0x98e00000 0x5C>;
- 		interrupts = <5 0>;
- 		clocks = <&clk_apb>;
-diff --git a/arch/arm/boot/dts/moxart-uc7112lx.dts b/arch/arm/boot/dts/moxart-uc7112lx.dts
-index 4a962a26482d..59d8775a3a93 100644
---- a/arch/arm/boot/dts/moxart-uc7112lx.dts
-+++ b/arch/arm/boot/dts/moxart-uc7112lx.dts
-@@ -80,7 +80,7 @@ &clk_pll {
- 	clocks = <&ref12>;
- };
++static void rtl8xxxu_set_aifs(struct rtl8xxxu_priv *priv, u8 slot_time)
++{
++	u32 reg_edca_param[IEEE80211_NUM_ACS] = {
++		[IEEE80211_AC_VO] = REG_EDCA_VO_PARAM,
++		[IEEE80211_AC_VI] = REG_EDCA_VI_PARAM,
++		[IEEE80211_AC_BE] = REG_EDCA_BE_PARAM,
++		[IEEE80211_AC_BK] = REG_EDCA_BK_PARAM,
++	};
++	u32 val32;
++	u16 wireless_mode = 0;
++	u8 aifs, aifsn, sifs;
++	int i;
++
++	if (priv->vif) {
++		struct ieee80211_sta *sta;
++
++		rcu_read_lock();
++		sta = ieee80211_find_sta(priv->vif, priv->vif->bss_conf.bssid);
++		if (sta)
++			wireless_mode = rtl8xxxu_wireless_mode(priv->hw, sta);
++		rcu_read_unlock();
++	}
++
++	if (priv->hw->conf.chandef.chan->band == NL80211_BAND_5GHZ ||
++	    (wireless_mode & WIRELESS_MODE_N_24G))
++		sifs = 16;
++	else
++		sifs = 10;
++
++	for (i = 0; i < IEEE80211_NUM_ACS; i++) {
++		val32 = rtl8xxxu_read32(priv, reg_edca_param[i]);
++
++		/* It was set in conf_tx. */
++		aifsn = val32 & 0xff;
++
++		/* aifsn not set yet or already fixed */
++		if (aifsn < 2 || aifsn > 15)
++			continue;
++
++		aifs = aifsn * slot_time + sifs;
++
++		val32 &= ~0xff;
++		val32 |= aifs;
++		rtl8xxxu_write32(priv, reg_edca_param[i], val32);
++	}
++}
++
+ static void
+ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 			  struct ieee80211_bss_conf *bss_conf, u32 changed)
+@@ -4592,6 +4639,8 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 		else
+ 			val8 = 20;
+ 		rtl8xxxu_write8(priv, REG_SLOT, val8);
++
++		rtl8xxxu_set_aifs(priv, val8);
+ 	}
  
--&sdhci {
-+&mmc {
- 	status = "okay";
- };
- 
-diff --git a/arch/arm/boot/dts/moxart.dtsi b/arch/arm/boot/dts/moxart.dtsi
-index da7b3237bfe9..804a2bc6ec82 100644
---- a/arch/arm/boot/dts/moxart.dtsi
-+++ b/arch/arm/boot/dts/moxart.dtsi
-@@ -93,8 +93,8 @@ watchdog: watchdog@98500000 {
- 			clock-names = "PCLK";
- 		};
- 
--		sdhci: sdhci@98e00000 {
--			compatible = "moxa,moxart-sdhci";
-+		mmc: mmc@98e00000 {
-+			compatible = "moxa,moxart-mmc";
- 			reg = <0x98e00000 0x5C>;
- 			interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&clk_apb>;
+ 	if (changed & BSS_CHANGED_BSSID) {
 -- 
 2.35.1
 
