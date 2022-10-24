@@ -2,589 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934B660BD61
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFBF760BF1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbiJXW3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S230311AbiJXX42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiJXW2m (ORCPT
+        with ESMTP id S230037AbiJXX4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:28:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A347F18A018
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:51:02 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2944D143D;
-        Mon, 24 Oct 2022 07:09:08 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AD7BD3F792;
-        Mon, 24 Oct 2022 07:09:00 -0700 (PDT)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        mark.rutland@arm.com, mhiramat@kernel.org, revest@chromium.org,
-        rostedt@goodmis.org, will@kernel.org
-Subject: [PATCH 4/4] ftrace: arm64: move from REGS to ARGS
-Date:   Mon, 24 Oct 2022 15:08:46 +0100
-Message-Id: <20221024140846.3555435-5-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221024140846.3555435-1-mark.rutland@arm.com>
-References: <20221024140846.3555435-1-mark.rutland@arm.com>
+        Mon, 24 Oct 2022 19:56:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB2E304CC1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:12:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666649541;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sj0H0AetxBx+UDf7B/9MIT35ZXn55Y7gNC/8ryl/LHw=;
+        b=fg+LtAVKPypwnN407ScrG/AlWyZ62vZW6hWhZFge1ZHZMA+co7501fft3QT5Rwttb9nMLj
+        7M81iDHY3NTa3LmXVUOIyIp3/Ccvhgt2k6vGd1TjRRmS1u9pLnlNejEnMB6XknS0TpcnOO
+        J40oA8pPhEUOkpZVCCCXnh9zkeK8kZ0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-111-a4TtjfNKPyaB_-eDOf7oGA-1; Mon, 24 Oct 2022 10:37:46 -0400
+X-MC-Unique: a4TtjfNKPyaB_-eDOf7oGA-1
+Received: by mail-ed1-f72.google.com with SMTP id t5-20020a056402524500b0045cf8249863so9833458edd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:37:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sj0H0AetxBx+UDf7B/9MIT35ZXn55Y7gNC/8ryl/LHw=;
+        b=krjofZiaaEHPG/abVudCpaJhVJ9grbFB1ELxBsRza527i6dcGUcFMW/h3uHOj1HLZ8
+         1UI8VrqrEG0hA06s87IkQ5vlJpOVtmGfRRirU/p56vMcOcPb0SafylrfR8IAsbN0ht85
+         EygYVY9qTUPXfOZ9GTlD8PvLg0f50tBtbkEU60pFm3H+YPga3F4wTnhEXpqlahBiNgHd
+         hBS0Xs995k4HUK2QHTxhN7HwMdif4SPYOCaMqYowG+LEI0ofkkJUBEFvmvoYNSU13dj6
+         tGBKR6DxGE/2QSLhA2/oDYu8r1DlmXFL9ICmu/aFpAjM7NH3uQp6xHPRAcm8tbhWFjuB
+         MODA==
+X-Gm-Message-State: ACrzQf2IUjO31kGftOFBZ/5aONCn53k36dMLHwyNE6sOt1TSFV7hH0S3
+        lx8i1LBToj665wO2fve7WS4gYcAERac/MpPQhmBarIJefyvYum0DUyyDQoYwmpx6dILstBJeRSD
+        bUFbS7NOnDcaJROz2RCg8arpo
+X-Received: by 2002:a17:906:fd8d:b0:780:997:8b7b with SMTP id xa13-20020a170906fd8d00b0078009978b7bmr28416049ejb.635.1666622265535;
+        Mon, 24 Oct 2022 07:37:45 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5laScRkt+5EsmfdhfrsisIZfhqwZSfSpP1Rz+6FzomB1hR4A5mm5gyOzvnRAXCnpM0u8CWVA==
+X-Received: by 2002:a17:906:eec9:b0:73d:c369:690f with SMTP id wu9-20020a170906eec900b0073dc369690fmr27976822ejb.767.1666622254606;
+        Mon, 24 Oct 2022 07:37:34 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170906540700b0078d9cd0d2d6sm15976572ejo.11.2022.10.24.07.37.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 07:37:33 -0700 (PDT)
+Message-ID: <ae3497ed-b68d-c36a-6b6f-f7b9771d9238@redhat.com>
+Date:   Mon, 24 Oct 2022 16:37:32 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 00/22] Fallback to native backlight
+Content-Language: en-US
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "Lee, Chun-Yi" <jlee@suse.com>, Mark Gross <markgross@kernel.org>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Cezary Jackiewicz <cezary.jackiewicz@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Jonathan Woithe <jwoithe@just42.net>,
+        Ike Panhc <ike.pan@canonical.com>,
+        Daniel Dadap <ddadap@nvidia.com>,
+        Kenneth Chan <kenneth.t.chan@gmail.com>,
+        Mattia Dongili <malattia@linux.it>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Azael Avalos <coproscefalo@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Robert Moore <robert.moore@intel.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net,
+        ibm-acpi-devel@lists.sourceforge.net, linux-fbdev@vger.kernel.org,
+        devel@acpica.org
+References: <20221024113513.5205-1-akihiko.odaki@daynix.com>
+ <746e5cc6-516f-8f69-9d4b-8fe237de8fd6@redhat.com>
+ <edec5950-cec8-b647-ccb1-ba48f9b3bbb0@daynix.com>
+ <60672af8-05d2-113c-12b9-d635608be0dd@redhat.com>
+ <ea69242c-0bc8-c7bb-9602-c7489bb69684@daynix.com>
+ <7373e258-f7cc-4416-9b1c-c8c9dab59ada@daynix.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <7373e258-f7cc-4416-9b1c-c8c9dab59ada@daynix.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit replaces arm64's support for FTRACE_WITH_REGS with support
-for FTRACE_WITH_ARGS. This removes some overhead and complexity, and
-removes some latent issues with inconsistent presentation of struct
-pt_regs (which can only be reliably saved/restored at exception
-boundaries).
+Hi,
 
-FTRACE_WITH_REGS has been supported on arm64 since commit:
+On 10/24/22 16:31, Akihiko Odaki wrote:
+> On 2022/10/24 23:06, Akihiko Odaki wrote:
+>> On 2022/10/24 22:21, Hans de Goede wrote:
+>>> Hi,
+>>>
+>>> On 10/24/22 14:58, Akihiko Odaki wrote:
+>>>> On 2022/10/24 20:53, Hans de Goede wrote:
+>>>>> Hi Akihiko,
+>>>>>
+>>>>> On 10/24/22 13:34, Akihiko Odaki wrote:
+>>>>>> Commit 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native()
+>>>>>> helper") and following commits made native backlight unavailable if
+>>>>>> CONFIG_ACPI_VIDEO is set and the backlight feature of ACPI video is
+>>>>>> unavailable, which broke the backlight functionality on Lenovo ThinkPad
+>>>>>> C13 Yoga Chromebook. Allow to fall back to native backlight in such
+>>>>>> cases.
+>>>>>
+>>>>> I appreciate your work on this, but what this in essence does is
+>>>>> it allows 2 backlight drivers (vendor + native) to get registered
+>>>>> for the same panel again. While the whole goal of the backlight refactor
+>>>>> series landing in 6.1 was to make it so that there always is only
+>>>>> *1* backlight device registered instead of (possibly) registering
+>>>>> multiple and letting userspace figure it out. It is also important
+>>>>> to only always have 1 backlight device per panel for further
+>>>>> upcoming changes.
+>>>>>
+>>>>> So nack for this solution, sorry.
+>>>>>
+>>>>> I am aware that this breaks backlight control on some Chromebooks,
+>>>>> this was already reported and I wrote a long reply explaining why
+>>>>> things are done the way they are done now and also suggesting
+>>>>> 2 possible (much simpler) fixes, see:
+>>>>> https://lore.kernel.org/linux-acpi/42a5f2c9-a1dc-8fc0-7334-fe6c390ecfbb@redhat.com/
+>>>>>
+>>>>> Unfortunately the reported has not followed-up on this and
+>>>>> I don't have the hardware to test this myself.
+>>>>>
+>>>>> Can you please try implementing 1 of the fixes suggested there
+>>>>> and then submit that upstream ?
+>>>>>
+>>>>> Regards,
+>>>>>
+>>>>> Hans
+>>>>>
+>>>>
+>>>> Hi Hans,
+>>>>
+>>>> Thanks for reviewing and letting me know the prior attempt.
+>>>>
+>>>> In this case, there is only a native backlight device and no vendor backlight device so the duplication of backlight devices does not happen. I think it is better to handle such a case without quirks.
+>>>
+>>> Adding a single heuristic for all chromebooks is something completely different
+>>> then adding per model quirks which indeed ideally should be avoided (but this
+>>> is not always possible).
+>>>
+>>>> I understand it is still questionable to cover the case by allowing duplication when both of a vendor backlight device and native one. To explain my understanding and reasoning for *not* trying to apply the de-duplication rule to the vendor/native combination, let me first describe that the de-duplication which happens in acpi_video_get_backlight_type() is a heuristics and limited.
+>>>>
+>>>> As the background of acpi_video_get_backlight_type(), there is an assumption that it should be common that both of the firmware, implementing ACPI, and the kernel have code to drive backlight. In the case, the more reliable one should be picked instead of using both, and that is what the statements in `if (video_caps & ACPI_VIDEO_BACKLIGHT)` does.
+>>>>
+>>>> However, the method has two limitations:
+>>>> 1. It does not cover the case where two backlight devices with the same type exist.
+>>>
+>>> This only happens when there are 2 panels; or 2 gpus driving a single panel
+>>> which are both special cases where we actually want 2 backlight devices.
+>>>
+>>>> 2. The underlying assumption does not apply to vendor/native combination.
+>>>>
+>>>> Regarding the second limitation, I don't even understand the difference between vendor and native. My guess is that a vendor backlight device uses vendor-specific ACPI interface, and a native one directly uses hardware registers. If my guess is correct, the difference between vendor and native does not imply that both of them are likely to exist at the same time. As the conclusion, there is no more motivation to try to de-duplicate the vendor/native combination than to try to de-duplicate combination of devices with a single type.
+>>>>
+>>>> Of course, it is better if we could also avoid registering two devices with one type for one physical device. Possibly we can do so by providing a parameter to indicate that it is for the same "internal" backlight to devm_backlight_device_register(), and let the function check for the duplication. However, this rule may be too restrict, or may have problems I missed.
+>>>>
+>>>> Based on the discussion above, we can deduce three possibilities:
+>>>> a. There is no reason to distinguish vendor and native in this case, and we can stick to my current proposal.
+>>>> b. There is a valid reason to distinguish vendor and native, and we can adopt the same strategy that already adopted for ACPI video/vendor combination.
+>>>> c. We can implement de-duplication in devm_backlight_device_register().
+>>>> d. The other possible options are not worth, and we can just implement quirks specific to Chromebook/coreboot.
+>>>>
+>>>> In case b, it should be noted that vendor and native backlight device do not require ACPI video, and CONFIG_ACPI_VIDEO may not be enabled. In the case, the de-duplication needs to be implemented in backlight class device.
+>>>
+>>> I have been working on the ACPI/x86 backlight detection code since 2015, please trust
+>>> me when I say that allowing both vendor + native backlight devices at the same time
+>>> is a bad idea.
+>>>
+>>> I'm currently in direct contact with the ChromeOS team about fixing the Chromebook
+>>> backlight issue introduced in 6.1-rc1.
+>>>
+>>> If you wan to help, please read:
+>>>
+>>> https://lore.kernel.org/linux-acpi/42a5f2c9-a1dc-8fc0-7334-fe6c390ecfbb@redhat.com/
+>>>
+>>> And try implementing 1 if the 2 solutions suggested there.
+>>>
+>>> Regards,
+>>>
+>>> Hans
+>>
+>> Hi,
+>>
+>> I just wanted to confirm your intention that we should distinguish vendor and native. In the case I think it is better to modify __acpi_video_get_backlight_type() and add "native_available" check in case of no ACPI video as already done for the ACPI video/native combination.
+>>
+>> Unfortunately this has one pitfall though: it does not work if CONFIG_ACPI_VIDEO is disabled. If it is, acpi_video_get_backlight_type() always return acpi_backlight_vendor, and acpi_video_backlight_use_native() always returns true. It is not a regression but the current behavior. Fixing it requires also refactoring touching both of ACPI video and backlight class driver so I guess I'm not an appropriate person to do that, and I should just add "native_available" check to __acpi_video_get_backlight_type().
+>>
+>> Does that sound good?
+> 
+> Well, it would not be that easy since just adding native_available cannot handle the case where the vendor driver gets registered first. Checking with "native_available" was possible for ACPI video/vendor combination because ACPI video registers its backlight after some delay. I still think it does not overcomplicate things to modify __acpi_video_get_backlight_type() so that it can use both of vendor and native as fallback while preventing duplicate registration.
 
-  3b23e4991fb66f6d ("arm64: implement ftrace with regs")
+In the mean time this has already been fixed by a single patch of just a few
+lines, rather then requiring 22 patches, see:
 
-As noted in the commit message, the major reasons for implementing
-FTRACE_WITH_REGS were:
+https://lore.kernel.org/dri-devel/20221024141210.67784-1-dmitry.osipenko@collabora.com/
 
-(1) To make it possible to use the ftrace graph tracer with pointer
-    authentication, where it's necessary to snapshot/manipulate the LR
-    before it is signed by the instrumented function.
+Regards,
 
-(2) To make it possible to implement LIVEPATCH in future, where we need
-    to hook function entry before an instrumented function manipulates
-    the stack or argument registers. Practically speaking, we need to
-    preserve the argument/return registers, PC, LR, and SP.
+Hans
 
-Neither of these need a struct pt_regs, and only require the set of
-registers which are live at function call/return boundaries. Our calling
-convention is defined by "Procedure Call Standard for the Arm® 64-bit
-Architecture (AArch64)" (AKA "AAPCS64"), which can currently be found
-at:
 
-  https://github.com/ARM-software/abi-aa/blob/main/aapcs64/aapcs64.rst
 
-Per AAPCS64, all function call argument and return values are held in
-the following GPRs:
 
-* X0 - X7 : parameter / result registers
-* X8      : indirect result location register
-* SP      : stack pointer (AKA SP)
-
-Additionally, ad function call boundaries, the following GPRs hold
-context/return information:
-
-* X29 : frame pointer (AKA FP)
-* X30 : link register (AKA LR)
-
-... and for ftrace we need to capture the instrumented address:
-
- * PC  : program counter
-
-No other GPRs are relevant, as none of the other arguments hold
-parameters or return values:
-
-* X9  - X17 : temporaries, may be clobbered
-* X18       : shadow call stack pointer (or temorary)
-* X19 - X28 : callee saved
-
-This patch implements FTRACE_WITH_ARGS for arm64, only saving/restoring
-the minimal set of registers necessary. This is always sufficient to
-manipulate control flow (e.g. for live-patching) or to manipulate
-function arguments and return values.
-
-As there is no longer a need to save different sets of registers for
-different features, we no longer need distinct `ftrace_caller` and
-`ftrace_regs_caller` trampolines. This allows the trampoline assembly to
-be simpler, and simplifies code which previously had to handle the two
-trampolines.
-
-I've tested this with the ftrace selftests, where there are no
-unexpected failures.
-
-Co-developed-by: Florent Revest <revest@chromium.org>
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Signed-off-by: Florent Revest <revest@chromium.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Will Deacon <will@kernel.org>
----
- arch/arm64/Kconfig               |  18 ++---
- arch/arm64/Makefile              |   2 +-
- arch/arm64/include/asm/ftrace.h  |  70 ++++++++++++++++--
- arch/arm64/kernel/asm-offsets.c  |  13 ++++
- arch/arm64/kernel/entry-ftrace.S | 117 ++++++++++++-------------------
- arch/arm64/kernel/ftrace.c       |  37 ++--------
- arch/arm64/kernel/module.c       |   3 -
- 7 files changed, 138 insertions(+), 122 deletions(-)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 505c8a1ccbe0..b6b3305ba701 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -181,8 +181,10 @@ config ARM64
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DMA_CONTIGUOUS
- 	select HAVE_DYNAMIC_FTRACE
-+	select HAVE_DYNAMIC_FTRACE_WITH_ARGS \
-+		if $(cc-option,-fpatchable-function-entry=2)
- 	select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY \
--		if DYNAMIC_FTRACE_WITH_REGS
-+		if DYNAMIC_FTRACE_WITH_ARGS
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
- 	select HAVE_FAST_GUP
- 	select HAVE_FTRACE_MCOUNT_RECORD
-@@ -233,16 +235,16 @@ config ARM64
- 	help
- 	  ARM 64-bit (AArch64) Linux support.
- 
--config CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_REGS
-+config CLANG_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS
- 	def_bool CC_IS_CLANG
- 	# https://github.com/ClangBuiltLinux/linux/issues/1507
- 	depends on AS_IS_GNU || (AS_IS_LLVM && (LD_IS_LLD || LD_VERSION >= 23600))
--	select HAVE_DYNAMIC_FTRACE_WITH_REGS
-+	select HAVE_DYNAMIC_FTRACE_WITH_ARGS
- 
--config GCC_SUPPORTS_DYNAMIC_FTRACE_WITH_REGS
-+config GCC_SUPPORTS_DYNAMIC_FTRACE_WITH_ARGS
- 	def_bool CC_IS_GCC
- 	depends on $(cc-option,-fpatchable-function-entry=2)
--	select HAVE_DYNAMIC_FTRACE_WITH_REGS
-+	select HAVE_DYNAMIC_FTRACE_WITH_ARGS
- 
- config 64BIT
- 	def_bool y
-@@ -1816,7 +1818,7 @@ config ARM64_PTR_AUTH_KERNEL
- 	# which is only understood by binutils starting with version 2.33.1.
- 	depends on LD_IS_LLD || LD_VERSION >= 23301 || (CC_IS_GCC && GCC_VERSION < 90100)
- 	depends on !CC_IS_CLANG || AS_HAS_CFI_NEGATE_RA_STATE
--	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_REGS)
-+	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_ARGS)
- 	help
- 	  If the compiler supports the -mbranch-protection or
- 	  -msign-return-address flag (e.g. GCC 7 or later), then this option
-@@ -1826,7 +1828,7 @@ config ARM64_PTR_AUTH_KERNEL
- 	  disabled with minimal loss of protection.
- 
- 	  This feature works with FUNCTION_GRAPH_TRACER option only if
--	  DYNAMIC_FTRACE_WITH_REGS is enabled.
-+	  DYNAMIC_FTRACE_WITH_ARGS is enabled.
- 
- config CC_HAS_BRANCH_PROT_PAC_RET
- 	# GCC 9 or later, clang 8 or later
-@@ -1924,7 +1926,7 @@ config ARM64_BTI_KERNEL
- 	depends on !CC_IS_GCC
- 	# https://github.com/llvm/llvm-project/commit/a88c722e687e6780dcd6a58718350dc76fcc4cc9
- 	depends on !CC_IS_CLANG || CLANG_VERSION >= 120000
--	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_REGS)
-+	depends on (!FUNCTION_GRAPH_TRACER || DYNAMIC_FTRACE_WITH_ARGS)
- 	help
- 	  Build the kernel with Branch Target Identification annotations
- 	  and enable enforcement of this for kernel code. When this option
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 5e56d26a2239..b1202fa84bab 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -128,7 +128,7 @@ endif
- 
- CHECKFLAGS	+= -D__aarch64__
- 
--ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_REGS),y)
-+ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-   CC_FLAGS_FTRACE := -fpatchable-function-entry=2
- endif
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index 329dbbd4d50b..2691064d4e04 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -23,7 +23,7 @@
-  */
- #define HAVE_FUNCTION_GRAPH_RET_ADDR_PTR
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
- #define ARCH_SUPPORTS_FTRACE_OPS 1
- #else
- #define MCOUNT_ADDR		((unsigned long)_mcount)
-@@ -33,8 +33,7 @@
- #define MCOUNT_INSN_SIZE	AARCH64_INSN_SIZE
- 
- #define FTRACE_PLT_IDX		0
--#define FTRACE_REGS_PLT_IDX	1
--#define NR_FTRACE_PLTS		2
-+#define NR_FTRACE_PLTS		1
- 
- /*
-  * Currently, gcc tends to save the link register after the local variables
-@@ -69,7 +68,7 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
- 	 * Adjust addr to point at the BL in the callsite.
- 	 * See ftrace_init_nop() for the callsite sequence.
- 	 */
--	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
-+	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_ARGS))
- 		return addr + AARCH64_INSN_SIZE;
- 	/*
- 	 * addr is the address of the mcount call instruction.
-@@ -78,10 +77,69 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
- 	return addr;
- }
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
- struct dyn_ftrace;
- struct ftrace_ops;
--struct ftrace_regs;
-+
-+#define arch_ftrace_get_regs(regs) NULL
-+
-+struct ftrace_regs {
-+	/* x0 - x8 */
-+	unsigned long regs[9];
-+	unsigned long __unused;
-+
-+	unsigned long fp;
-+	unsigned long lr;
-+
-+	unsigned long sp;
-+	unsigned long pc;
-+};
-+
-+static __always_inline unsigned long
-+ftrace_regs_get_instruction_pointer(const struct ftrace_regs *fregs)
-+{
-+	return fregs->pc;
-+}
-+
-+static __always_inline void
-+ftrace_regs_set_instruction_pointer(struct ftrace_regs *fregs,
-+				    unsigned long pc)
-+{
-+	fregs->pc = pc;
-+}
-+
-+static __always_inline unsigned long
-+ftrace_regs_get_stack_pointer(const struct ftrace_regs *fregs)
-+{
-+	return fregs->sp;
-+}
-+
-+static __always_inline unsigned long
-+ftrace_regs_get_argument(struct ftrace_regs *fregs, unsigned int n)
-+{
-+	if (n < 8)
-+		return fregs->regs[n];
-+	return 0;
-+}
-+
-+static __always_inline unsigned long
-+ftrace_regs_get_return_value(const struct ftrace_regs *fregs)
-+{
-+	return fregs->regs[0];
-+}
-+
-+static __always_inline void
-+ftrace_regs_set_return_value(struct ftrace_regs *fregs,
-+			     unsigned long ret)
-+{
-+	fregs->regs[0] = ret;
-+}
-+
-+static __always_inline void
-+ftrace_override_function_with_return(struct ftrace_regs *fregs)
-+{
-+	fregs->pc = fregs->lr;
-+}
- 
- int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
- #define ftrace_init_nop ftrace_init_nop
-diff --git a/arch/arm64/kernel/asm-offsets.c b/arch/arm64/kernel/asm-offsets.c
-index 1197e7679882..2234624536d9 100644
---- a/arch/arm64/kernel/asm-offsets.c
-+++ b/arch/arm64/kernel/asm-offsets.c
-@@ -82,6 +82,19 @@ int main(void)
-   DEFINE(S_STACKFRAME,		offsetof(struct pt_regs, stackframe));
-   DEFINE(PT_REGS_SIZE,		sizeof(struct pt_regs));
-   BLANK();
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
-+  DEFINE(FREGS_X0,		offsetof(struct ftrace_regs, regs[0]));
-+  DEFINE(FREGS_X2,		offsetof(struct ftrace_regs, regs[2]));
-+  DEFINE(FREGS_X4,		offsetof(struct ftrace_regs, regs[4]));
-+  DEFINE(FREGS_X6,		offsetof(struct ftrace_regs, regs[6]));
-+  DEFINE(FREGS_X8,		offsetof(struct ftrace_regs, regs[8]));
-+  DEFINE(FREGS_FP,		offsetof(struct ftrace_regs, fp));
-+  DEFINE(FREGS_LR,		offsetof(struct ftrace_regs, lr));
-+  DEFINE(FREGS_SP,		offsetof(struct ftrace_regs, sp));
-+  DEFINE(FREGS_PC,		offsetof(struct ftrace_regs, pc));
-+  DEFINE(FREGS_SIZE,		sizeof(struct ftrace_regs));
-+  BLANK();
-+#endif
- #ifdef CONFIG_COMPAT
-   DEFINE(COMPAT_SIGFRAME_REGS_OFFSET,		offsetof(struct compat_sigframe, uc.uc_mcontext.arm_r0));
-   DEFINE(COMPAT_RT_SIGFRAME_REGS_OFFSET,	offsetof(struct compat_rt_sigframe, sig.uc.uc_mcontext.arm_r0));
-diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-index 795344ab4ec4..4d3050549aa6 100644
---- a/arch/arm64/kernel/entry-ftrace.S
-+++ b/arch/arm64/kernel/entry-ftrace.S
-@@ -13,83 +13,58 @@
- #include <asm/ftrace.h>
- #include <asm/insn.h>
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
- /*
-  * Due to -fpatchable-function-entry=2, the compiler has placed two NOPs before
-  * the regular function prologue. For an enabled callsite, ftrace_init_nop() and
-  * ftrace_make_call() have patched those NOPs to:
-  *
-  * 	MOV	X9, LR
-- * 	BL	<entry>
-- *
-- * ... where <entry> is either ftrace_caller or ftrace_regs_caller.
-+ * 	BL	ftrace_caller
-  *
-  * Each instrumented function follows the AAPCS, so here x0-x8 and x18-x30 are
-  * live (x18 holds the Shadow Call Stack pointer), and x9-x17 are safe to
-  * clobber.
-  *
-- * We save the callsite's context into a pt_regs before invoking any ftrace
-- * callbacks. So that we can get a sensible backtrace, we create a stack record
-- * for the callsite and the ftrace entry assembly. This is not sufficient for
-- * reliable stacktrace: until we create the callsite stack record, its caller
-- * is missing from the LR and existing chain of frame records.
-+ * We save the callsite's context into a struct ftrace_regs before invoking any
-+ * ftrace callbacks. So that we can get a sensible backtrace, we create frame
-+ * records for the callsite and the ftrace entry assembly. This is not
-+ * sufficient for reliable stacktrace: until we create the callsite stack
-+ * record, its caller is missing from the LR and existing chain of frame
-+ * records.
-  */
--	.macro  ftrace_regs_entry, allregs=0
--	/* Make room for pt_regs, plus a callee frame */
--	sub	sp, sp, #(PT_REGS_SIZE + 16)
--
--	/* Save function arguments (and x9 for simplicity) */
--	stp	x0, x1, [sp, #S_X0]
--	stp	x2, x3, [sp, #S_X2]
--	stp	x4, x5, [sp, #S_X4]
--	stp	x6, x7, [sp, #S_X6]
--	stp	x8, x9, [sp, #S_X8]
--
--	/* Optionally save the callee-saved registers, always save the FP */
--	.if \allregs == 1
--	stp	x10, x11, [sp, #S_X10]
--	stp	x12, x13, [sp, #S_X12]
--	stp	x14, x15, [sp, #S_X14]
--	stp	x16, x17, [sp, #S_X16]
--	stp	x18, x19, [sp, #S_X18]
--	stp	x20, x21, [sp, #S_X20]
--	stp	x22, x23, [sp, #S_X22]
--	stp	x24, x25, [sp, #S_X24]
--	stp	x26, x27, [sp, #S_X26]
--	stp	x28, x29, [sp, #S_X28]
--	.else
--	str	x29, [sp, #S_FP]
--	.endif
--
--	/* Save the callsite's SP and LR */
--	add	x10, sp, #(PT_REGS_SIZE + 16)
--	stp	x9, x10, [sp, #S_LR]
-+SYM_CODE_START(ftrace_caller)
-+	bti	c
- 
--	/* Save the PC after the ftrace callsite */
--	str	x30, [sp, #S_PC]
-+	/* Save original SP */
-+	mov	x10, sp
- 
--	/* Create a frame record for the callsite above pt_regs */
--	stp	x29, x9, [sp, #PT_REGS_SIZE]
--	add	x29, sp, #PT_REGS_SIZE
-+	/* Make room for ftrace regs, plus two frame records */
-+	sub	sp, sp, #(FREGS_SIZE + 32)
- 
--	/* Create our frame record within pt_regs. */
--	stp	x29, x30, [sp, #S_STACKFRAME]
--	add	x29, sp, #S_STACKFRAME
--	.endm
-+	/* Save function arguments */
-+	stp	x0, x1, [sp, #FREGS_X0]
-+	stp	x2, x3, [sp, #FREGS_X2]
-+	stp	x4, x5, [sp, #FREGS_X4]
-+	stp	x6, x7, [sp, #FREGS_X6]
-+	str	x8,     [sp, #FREGS_X8]
- 
--SYM_CODE_START(ftrace_regs_caller)
--	bti	c
--	ftrace_regs_entry	1
--	b	ftrace_common
--SYM_CODE_END(ftrace_regs_caller)
-+	/* Save the callsite's FP, LR, SP */
-+	str	x29, [sp, #FREGS_FP]
-+	str	x9,  [sp, #FREGS_LR]
-+	str	x10, [sp, #FREGS_SP]
- 
--SYM_CODE_START(ftrace_caller)
--	bti	c
--	ftrace_regs_entry	0
--	b	ftrace_common
--SYM_CODE_END(ftrace_caller)
-+	/* Save the PC after the ftrace callsite */
-+	str	x30, [sp, #FREGS_PC]
-+
-+	/* Create a frame record for the callsite above the ftrace regs */
-+	stp	x29, x9, [sp, #FREGS_SIZE + 16]
-+	add	x29, sp, #FREGS_SIZE + 16
-+
-+	/* Create our frame record above the ftrace regs */
-+	stp	x29, x30, [sp, #FREGS_SIZE]
-+	add	x29, sp, #FREGS_SIZE
- 
--SYM_CODE_START(ftrace_common)
- 	sub	x0, x30, #AARCH64_INSN_SIZE	// ip (callsite's BL insn)
- 	mov	x1, x9				// parent_ip (callsite's LR)
- 	ldr_l	x2, function_trace_op		// op
-@@ -104,24 +79,24 @@ SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
-  * to restore x0-x8, x29, and x30.
-  */
- 	/* Restore function arguments */
--	ldp	x0, x1, [sp]
--	ldp	x2, x3, [sp, #S_X2]
--	ldp	x4, x5, [sp, #S_X4]
--	ldp	x6, x7, [sp, #S_X6]
--	ldr	x8, [sp, #S_X8]
-+	ldp	x0, x1, [sp, #FREGS_X0]
-+	ldp	x2, x3, [sp, #FREGS_X2]
-+	ldp	x4, x5, [sp, #FREGS_X4]
-+	ldp	x6, x7, [sp, #FREGS_X6]
-+	ldr	x8,     [sp, #FREGS_X8]
- 
- 	/* Restore the callsite's FP, LR, PC */
--	ldr	x29, [sp, #S_FP]
--	ldr	x30, [sp, #S_LR]
--	ldr	x9, [sp, #S_PC]
-+	ldr	x29, [sp, #FREGS_FP]
-+	ldr	x30, [sp, #FREGS_LR]
-+	ldr	x9,  [sp, #FREGS_PC]
- 
- 	/* Restore the callsite's SP */
--	add	sp, sp, #PT_REGS_SIZE + 16
-+	add	sp, sp, #FREGS_SIZE + 32
- 
- 	ret	x9
--SYM_CODE_END(ftrace_common)
-+SYM_CODE_END(ftrace_caller)
- 
--#else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-+#else /* CONFIG_DYNAMIC_FTRACE_WITH_ARGS */
- 
- /*
-  * Gcc with -pg will put the following code in the beginning of each function:
-@@ -293,7 +268,7 @@ SYM_FUNC_START(ftrace_graph_caller)
- 	mcount_exit
- SYM_FUNC_END(ftrace_graph_caller)
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
--#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-+#endif /* CONFIG_DYNAMIC_FTRACE_WITH_ARGS */
- 
- SYM_TYPED_FUNC_START(ftrace_stub)
- 	ret
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index 8745175f4a75..ed6b8a70c0d1 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -70,9 +70,6 @@ static struct plt_entry *get_ftrace_plt(struct module *mod, unsigned long addr)
- 
- 	if (addr == FTRACE_ADDR)
- 		return &plt[FTRACE_PLT_IDX];
--	if (addr == FTRACE_REGS_ADDR &&
--	    IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
--		return &plt[FTRACE_REGS_PLT_IDX];
- #endif
- 	return NULL;
- }
-@@ -154,25 +151,7 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
- 	return ftrace_modify_code(pc, old, new, true);
- }
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
--int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
--			unsigned long addr)
--{
--	unsigned long pc = rec->ip;
--	u32 old, new;
--
--	if (!ftrace_find_callable_addr(rec, NULL, &old_addr))
--		return -EINVAL;
--	if (!ftrace_find_callable_addr(rec, NULL, &addr))
--		return -EINVAL;
--
--	old = aarch64_insn_gen_branch_imm(pc, old_addr,
--					  AARCH64_INSN_BRANCH_LINK);
--	new = aarch64_insn_gen_branch_imm(pc, addr, AARCH64_INSN_BRANCH_LINK);
--
--	return ftrace_modify_code(pc, old, new, true);
--}
--
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
- /*
-  * The compiler has inserted two NOPs before the regular function prologue.
-  * All instrumented functions follow the AAPCS, so x0-x8 and x19-x30 are live,
-@@ -279,19 +258,11 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
--#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
- void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
- 		       struct ftrace_ops *op, struct ftrace_regs *fregs)
- {
--	/*
--	 * When DYNAMIC_FTRACE_WITH_REGS is selected, `fregs` can never be NULL
--	 * and arch_ftrace_get_regs(fregs) will always give a non-NULL pt_regs
--	 * in which we can safely modify the LR.
--	 */
--	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
--	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
--
--	prepare_ftrace_return(ip, parent, frame_pointer(regs));
-+	prepare_ftrace_return(ip, &fregs->lr, fregs->fp);
- }
- #else
- /*
-@@ -323,6 +294,6 @@ int ftrace_disable_ftrace_graph_caller(void)
- {
- 	return ftrace_modify_graph_caller(false);
- }
--#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-+#endif /* CONFIG_DYNAMIC_FTRACE_WITH_ARGS */
- #endif /* CONFIG_DYNAMIC_FTRACE */
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
-index 76b41e4ca9fa..acd0d883e9ca 100644
---- a/arch/arm64/kernel/module.c
-+++ b/arch/arm64/kernel/module.c
-@@ -497,9 +497,6 @@ static int module_init_ftrace_plt(const Elf_Ehdr *hdr,
- 
- 	__init_plt(&plts[FTRACE_PLT_IDX], FTRACE_ADDR);
- 
--	if (IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS))
--		__init_plt(&plts[FTRACE_REGS_PLT_IDX], FTRACE_REGS_ADDR);
--
- 	mod->arch.ftrace_trampolines = plts;
- #endif
- 	return 0;
--- 
-2.30.2
+>>>>>> Akihiko Odaki (22):
+>>>>>>     drm/i915/opregion: Improve backlight request condition
+>>>>>>     ACPI: video: Introduce acpi_video_get_backlight_types()
+>>>>>>     LoongArch: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: acer-wmi: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: asus-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: asus-wmi: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: compal-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: eeepc-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: fujitsu-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: ideapad-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: msi-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: msi-wmi: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: nvidia-wmi-ec-backlight: Use
+>>>>>>       acpi_video_get_backlight_types()
+>>>>>>     platform/x86: panasonic-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: samsung-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: sony-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: thinkpad_acpi: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: toshiba_acpi: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: dell-laptop: Use acpi_video_get_backlight_types()
+>>>>>>     platform/x86: intel_oaktrail: Use acpi_video_get_backlight_types()
+>>>>>>     ACPI: video: Remove acpi_video_get_backlight_type()
+>>>>>>     ACPI: video: Fallback to native backlight
+>>>>>>
+>>>>>>    Documentation/gpu/todo.rst                    |  8 +--
+>>>>>>    drivers/acpi/acpi_video.c                     |  2 +-
+>>>>>>    drivers/acpi/video_detect.c                   | 54 ++++++++++---------
+>>>>>>    drivers/gpu/drm/i915/display/intel_opregion.c |  3 +-
+>>>>>>    drivers/platform/loongarch/loongson-laptop.c  |  4 +-
+>>>>>>    drivers/platform/x86/acer-wmi.c               |  2 +-
+>>>>>>    drivers/platform/x86/asus-laptop.c            |  2 +-
+>>>>>>    drivers/platform/x86/asus-wmi.c               |  4 +-
+>>>>>>    drivers/platform/x86/compal-laptop.c          |  2 +-
+>>>>>>    drivers/platform/x86/dell/dell-laptop.c       |  2 +-
+>>>>>>    drivers/platform/x86/eeepc-laptop.c           |  2 +-
+>>>>>>    drivers/platform/x86/fujitsu-laptop.c         |  4 +-
+>>>>>>    drivers/platform/x86/ideapad-laptop.c         |  2 +-
+>>>>>>    drivers/platform/x86/intel/oaktrail.c         |  2 +-
+>>>>>>    drivers/platform/x86/msi-laptop.c             |  2 +-
+>>>>>>    drivers/platform/x86/msi-wmi.c                |  2 +-
+>>>>>>    .../platform/x86/nvidia-wmi-ec-backlight.c    |  2 +-
+>>>>>>    drivers/platform/x86/panasonic-laptop.c       |  2 +-
+>>>>>>    drivers/platform/x86/samsung-laptop.c         |  2 +-
+>>>>>>    drivers/platform/x86/sony-laptop.c            |  2 +-
+>>>>>>    drivers/platform/x86/thinkpad_acpi.c          |  4 +-
+>>>>>>    drivers/platform/x86/toshiba_acpi.c           |  2 +-
+>>>>>>    drivers/video/backlight/backlight.c           | 18 +++++++
+>>>>>>    include/acpi/video.h                          | 21 ++++----
+>>>>>>    include/linux/backlight.h                     |  1 +
+>>>>>>    25 files changed, 85 insertions(+), 66 deletions(-)
+>>>>>>
+>>>>>
+>>>>
+>>>
+> 
 
