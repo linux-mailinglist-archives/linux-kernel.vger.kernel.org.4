@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED9F60A306
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD4060A1C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiJXLuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
+        id S229954AbiJXLdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiJXLsL (ORCPT
+        with ESMTP id S230301AbiJXLcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:48:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB33351414;
-        Mon, 24 Oct 2022 04:43:25 -0700 (PDT)
+        Mon, 24 Oct 2022 07:32:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFABD6068F;
+        Mon, 24 Oct 2022 04:32:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 386E3612B8;
-        Mon, 24 Oct 2022 11:43:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D66EC433C1;
-        Mon, 24 Oct 2022 11:43:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1AE161251;
+        Mon, 24 Oct 2022 11:32:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8121C433D6;
+        Mon, 24 Oct 2022 11:32:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611791;
-        bh=qyPKBhptZLK8DelWc0viy1Dy4e9UgeA6goOXR9m28iE=;
+        s=korg; t=1666611137;
+        bh=nInlbStH9a5FQ1hxPfb1aIWblv3RMo5lp/f/c/5RMyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P+t/zJBhYbULSxjC3KA3tBWzKlxeHDrPfxkWmoqu3nV3uME3W/jXDfUt0UOQBlcBI
-         m24NMl8ezZCZR7sUtK4Sp2JsAcq0GDhQ/zZy4lJ0evI03ZxKyTIPxlLlCCvFCkC28S
-         QkmhbiSzQ/YPYYGtn/yxuveL0Y0aMSzRKlP/2gMo=
+        b=MDWNg7apRfJPOnTX6yzSJszcqk5EkYrL+IQ4lrRsmrxO1HwPdT4eK/VFBt6/1BoBw
+         QN6c1Y9oSaS62mpPmpO2rlWJAopO2GEVleE0o4qPcBXdxt916lZDOEUSTE20dS3ddC
+         syXZRCV4nP7/EpUhvRT7wCBRPROogjsiscHkaR2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 111/159] mfd: intel_soc_pmic: Fix an error handling path in intel_soc_pmic_i2c_probe()
-Date:   Mon, 24 Oct 2022 13:31:05 +0200
-Message-Id: <20221024112953.508551717@linuxfoundation.org>
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH 6.0 04/20] thermal: intel_powerclamp: Use first online CPU as control_cpu
+Date:   Mon, 24 Oct 2022 13:31:06 +0200
+Message-Id: <20221024112934.600700322@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
+References: <20221024112934.415391158@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit 48749cabba109397b4e7dd556e85718ec0ec114d ]
+commit 4bb7f6c2781e46fc5bd00475a66df2ea30ef330d upstream.
 
-The commit in Fixes: has added a pwm_add_table() call in the probe() and
-a pwm_remove_table() call in the remove(), but forget to update the error
-handling path of the probe.
+Commit 68b99e94a4a2 ("thermal: intel_powerclamp: Use get_cpu() instead
+of smp_processor_id() to avoid crash") fixed an issue related to using
+smp_processor_id() in preemptible context by replacing it with a pair
+of get_cpu()/put_cpu(), but what is needed there really is any online
+CPU and not necessarily the one currently running the code.  Arguably,
+getting the one that's running the code in there is confusing.
 
-Add the missing pwm_remove_table() call.
+For this reason, simply give the control CPU role to the first online
+one which automatically will be CPU0 if it is online, so one check
+can be dropped from the code for an added benefit.
 
-Fixes: a3aa9a93df9f ("mfd: intel_soc_pmic_core: ADD PWM lookup table for CRC PMIC based PWM")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20220801114211.36267-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/linux-pm/20221011113646.GA12080@duo.ucw.cz/
+Fixes: 68b99e94a4a2 ("thermal: intel_powerclamp: Use get_cpu() instead of smp_processor_id() to avoid crash")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Chen Yu <yu.c.chen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mfd/intel_soc_pmic_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/intel/intel_powerclamp.c |    6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
-index 12d6ebb4ae5d..e233585645b9 100644
---- a/drivers/mfd/intel_soc_pmic_core.c
-+++ b/drivers/mfd/intel_soc_pmic_core.c
-@@ -118,6 +118,7 @@ static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
- 	return 0;
+--- a/drivers/thermal/intel/intel_powerclamp.c
++++ b/drivers/thermal/intel/intel_powerclamp.c
+@@ -531,11 +531,7 @@ static int start_power_clamp(void)
+ 	cpus_read_lock();
  
- err_del_irq_chip:
-+	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
- 	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
- 	return ret;
- }
--- 
-2.35.1
-
+ 	/* prefer BSP */
+-	control_cpu = 0;
+-	if (!cpu_online(control_cpu)) {
+-		control_cpu = get_cpu();
+-		put_cpu();
+-	}
++	control_cpu = cpumask_first(cpu_online_mask);
+ 
+ 	clamping = true;
+ 	schedule_delayed_work(&poll_pkg_cstate_work, 0);
 
 
