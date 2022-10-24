@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D98960ABD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 713FB60A46C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236877AbiJXN6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
+        id S232747AbiJXMKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236869AbiJXN5o (ORCPT
+        with ESMTP id S232831AbiJXMI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:57:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D18696ED;
-        Mon, 24 Oct 2022 05:45:23 -0700 (PDT)
+        Mon, 24 Oct 2022 08:08:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A27777E036;
+        Mon, 24 Oct 2022 04:52:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 94C2A612A1;
-        Mon, 24 Oct 2022 12:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A89CEC433C1;
-        Mon, 24 Oct 2022 12:45:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3158CB811A1;
+        Mon, 24 Oct 2022 11:51:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FABEC433B5;
+        Mon, 24 Oct 2022 11:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615502;
-        bh=OIJs8jEJDlE4X49d2dwxy8tysOIHP5M9KVrpH9pEbiM=;
+        s=korg; t=1666612273;
+        bh=bZwGPZDTogpLUxzxQ5yHMwfGBVlcNdR2myoMTG7FLZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l43SvPKAZKYicyHLly6rQxb4HRlNMvhbKEz2Vv5lkMxVg1Y1Y+fRu7swqP1S0typO
-         Gb6ufAY54UZQQQyR9uzmRLCf9oom8tL9utLWhNE1jKDRx0c0dTchSCSlO/yR3Pb3Ax
-         a1K1EVC+CCmPzOGPDwkoCXIZy0bcGvmt9KjOMSbQ=
+        b=i1S+8W9DTxoUU0Q+1mQATXu0c0KULHHXi5G2Qah1lXHWsTyqYCb0Zq1vtevwZgXDW
+         uGAzvxbHDbX6RSdOTGGgVzV/luUw8JPOXiyPBrL2yu8JjHoYniEYQYJEkzZs2Rd47x
+         N7ISjJC1w+maDC5ylLQ9HvPnOKIVsiaBgMJBN6G0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 276/530] clk: qoriq: Hold reference returned by of_get_parent()
-Date:   Mon, 24 Oct 2022 13:30:20 +0200
-Message-Id: <20221024113057.576048453@linuxfoundation.org>
+        stable@vger.kernel.org, Andreas Pape <apape@de.adit-jv.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 104/210] ALSA: dmaengine: increment buffer pointer atomically
+Date:   Mon, 24 Oct 2022 13:30:21 +0200
+Message-Id: <20221024113000.387398401@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Andreas Pape <apape@de.adit-jv.com>
 
-[ Upstream commit a8ea4273bc26256ce3cce83164f0f51c5bf6e127 ]
+[ Upstream commit d1c442019594692c64a70a86ad88eb5b6db92216 ]
 
-In legacy_init_clockgen(), we need to hold the reference returned
-by of_get_parent() and use it to call of_node_put() for refcount
-balance.
+Setting pointer and afterwards checking for wraparound leads
+to the possibility of returning the inconsistent pointer position.
 
-Beside, in create_sysclk(), we need to call of_node_put() on 'sysclk'
-also for refcount balance.
+This patch increments buffer pointer atomically to avoid this issue.
 
-Fixes: 0dfc86b3173f ("clk: qoriq: Move chip-specific knowledge into driver")
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220628143851.171299-1-windhl@126.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: e7f73a1613567a ("ASoC: Add dmaengine PCM helper functions")
+Signed-off-by: Andreas Pape <apape@de.adit-jv.com>
+Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Link: https://lore.kernel.org/r/1664211493-11789-1-git-send-email-erosca@de.adit-jv.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/clk-qoriq.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ sound/core/pcm_dmaengine.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/clk-qoriq.c b/drivers/clk/clk-qoriq.c
-index 88898b97a443..5eddb9f0d6bd 100644
---- a/drivers/clk/clk-qoriq.c
-+++ b/drivers/clk/clk-qoriq.c
-@@ -1063,8 +1063,13 @@ static void __init _clockgen_init(struct device_node *np, bool legacy);
-  */
- static void __init legacy_init_clockgen(struct device_node *np)
- {
--	if (!clockgen.node)
--		_clockgen_init(of_get_parent(np), true);
-+	if (!clockgen.node) {
-+		struct device_node *parent_np;
-+
-+		parent_np = of_get_parent(np);
-+		_clockgen_init(parent_np, true);
-+		of_node_put(parent_np);
-+	}
- }
+diff --git a/sound/core/pcm_dmaengine.c b/sound/core/pcm_dmaengine.c
+index 8eb58c709b14..6f6da1128edc 100644
+--- a/sound/core/pcm_dmaengine.c
++++ b/sound/core/pcm_dmaengine.c
+@@ -139,12 +139,14 @@ EXPORT_SYMBOL_GPL(snd_dmaengine_pcm_set_config_from_dai_data);
  
- /* Legacy node */
-@@ -1159,6 +1164,7 @@ static struct clk * __init create_sysclk(const char *name)
- 	sysclk = of_get_child_by_name(clockgen.node, "sysclk");
- 	if (sysclk) {
- 		clk = sysclk_from_fixed(sysclk, name);
-+		of_node_put(sysclk);
- 		if (!IS_ERR(clk))
- 			return clk;
- 	}
+ static void dmaengine_pcm_dma_complete(void *arg)
+ {
++	unsigned int new_pos;
+ 	struct snd_pcm_substream *substream = arg;
+ 	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
+ 
+-	prtd->pos += snd_pcm_lib_period_bytes(substream);
+-	if (prtd->pos >= snd_pcm_lib_buffer_bytes(substream))
+-		prtd->pos = 0;
++	new_pos = prtd->pos + snd_pcm_lib_period_bytes(substream);
++	if (new_pos >= snd_pcm_lib_buffer_bytes(substream))
++		new_pos = 0;
++	prtd->pos = new_pos;
+ 
+ 	snd_pcm_period_elapsed(substream);
+ }
 -- 
 2.35.1
 
