@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3E460AC18
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECDE60ACD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233836AbiJXOCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S233304AbiJXOQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235689AbiJXOBq (ORCPT
+        with ESMTP id S235442AbiJXOOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:01:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6BDDBECF5;
-        Mon, 24 Oct 2022 05:47:57 -0700 (PDT)
+        Mon, 24 Oct 2022 10:14:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9FAF5AC;
+        Mon, 24 Oct 2022 05:54:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A70561331;
-        Mon, 24 Oct 2022 12:37:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A6C9C433D6;
-        Mon, 24 Oct 2022 12:37:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F8F861330;
+        Mon, 24 Oct 2022 12:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8035BC433D6;
+        Mon, 24 Oct 2022 12:37:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615038;
-        bh=653/S0Iu4rIBlyYSyR4pxaXzk/foA4iGfHEqjAPnY0w=;
+        s=korg; t=1666615046;
+        bh=lA0JoAyBfqKQ2fpj8FNAGAyuZ3ZEHwQ7RpJkvR7YOiM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pj4m6l1twr0f6IZjusQ8slWBozVVJ1djP8hFTz4bA2BProqwF6B+0o48AZVFZCyIE
-         Mfu8ZjvPk9fO97b+ySyy/MPOpq1Ti6pTsGaDhClKECuX2L/WJ5Sj4E9uSAChIWOLol
-         vMwDmAH1ioq5/sQTpmgxBDN0NLkgZGs8IHiVncYY=
+        b=ZepKnfI5V33cgnj7/kVc851PD4zl5SgLI6ikHyTC9kLgsKlPv/UfSA8R73X8yyCZj
+         7LBm+qU19JzkHDz6l9IwXwjMJmQR00Y2IhV+7BkQGLm+UdINoxKh7feUbhi0wUYVct
+         +wfMuReABvn46D9Jw4JDyRKAnIJ59fM3R0JoMSlo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 5.15 069/530] slimbus: qcom-ngd: use correct error in message of pdr_add_lookup() failure
-Date:   Mon, 24 Oct 2022 13:26:53 +0200
-Message-Id: <20221024113048.145344557@linuxfoundation.org>
+        stable@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 5.15 072/530] gpio: rockchip: request GPIO mux to pinctrl when setting direction
+Date:   Mon, 24 Oct 2022 13:26:56 +0200
+Message-Id: <20221024113048.278272143@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
 References: <20221024113044.976326639@linuxfoundation.org>
@@ -54,35 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
 
-commit 5038d21dde818fe74ba1fcb6f2cee35b8c2ebbf2 upstream.
+commit 8ea8af6c8469156ac2042d83d73f6b74eb4b4b45 upstream.
 
-Use correct error code, instead of previous 'ret' value, when printing
-error from pdr_add_lookup() failure.
+Before the split of gpio and pinctrl sections in their own driver,
+rockchip_set_mux was called in pinmux_ops.gpio_set_direction for
+configuring a pin in its GPIO function.
 
-Fixes: e1ae85e1830e ("slimbus: qcom-ngd-ctrl: add Protection Domain Restart Support")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20220916122910.170730-2-srinivas.kandagatla@linaro.org
+This is essential for cases where pinctrl is "bypassed" by gpio
+consumers otherwise the GPIO function is not configured for the pin and
+it does not work. Such was the case for the sysfs/libgpiod userspace
+GPIO handling.
+
+Let's call pinctrl_gpio_direction_input/output when setting the
+direction of a GPIO so that the pinctrl core requests from the rockchip
+pinctrl driver to put the pin in its GPIO function.
+
+Fixes: 9ce9a02039de ("pinctrl/rockchip: drop the gpio related codes")
+Fixes: 936ee2675eee ("gpio/rockchip: add driver for rockchip gpio")
+Cc: stable@vger.kernel.org
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Link: https://lore.kernel.org/r/20220930132033.4003377-3-foss+kernel@0leil.net
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/slimbus/qcom-ngd-ctrl.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpio/gpio-rockchip.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/drivers/slimbus/qcom-ngd-ctrl.c
-+++ b/drivers/slimbus/qcom-ngd-ctrl.c
-@@ -1572,8 +1572,9 @@ static int qcom_slim_ngd_ctrl_probe(stru
+--- a/drivers/gpio/gpio-rockchip.c
++++ b/drivers/gpio/gpio-rockchip.c
+@@ -19,6 +19,7 @@
+ #include <linux/of_address.h>
+ #include <linux/of_device.h>
+ #include <linux/of_irq.h>
++#include <linux/pinctrl/consumer.h>
+ #include <linux/pinctrl/pinconf-generic.h>
+ #include <linux/regmap.h>
  
- 	pds = pdr_add_lookup(ctrl->pdr, "avs/audio", "msm/adsp/audio_pd");
- 	if (IS_ERR(pds) && PTR_ERR(pds) != -EALREADY) {
-+		ret = PTR_ERR(pds);
- 		dev_err(dev, "pdr add lookup failed: %d\n", ret);
--		return PTR_ERR(pds);
-+		return ret;
- 	}
+@@ -155,6 +156,12 @@ static int rockchip_gpio_set_direction(s
+ 	unsigned long flags;
+ 	u32 data = input ? 0 : 1;
  
- 	platform_driver_register(&qcom_slim_ngd_driver);
++
++	if (input)
++		pinctrl_gpio_direction_input(bank->pin_base + offset);
++	else
++		pinctrl_gpio_direction_output(bank->pin_base + offset);
++
+ 	raw_spin_lock_irqsave(&bank->slock, flags);
+ 	rockchip_gpio_writel_bit(bank, offset, data, bank->gpio_regs->port_ddr);
+ 	raw_spin_unlock_irqrestore(&bank->slock, flags);
 
 
