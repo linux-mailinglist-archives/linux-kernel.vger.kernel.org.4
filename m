@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6272E60A52D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9147160ABBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233406AbiJXMVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S236778AbiJXN4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiJXMTk (ORCPT
+        with ESMTP id S236759AbiJXNyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE1282D14;
-        Mon, 24 Oct 2022 04:58:02 -0700 (PDT)
+        Mon, 24 Oct 2022 09:54:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E56E8D0FF;
+        Mon, 24 Oct 2022 05:43:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED61F6129E;
-        Mon, 24 Oct 2022 11:56:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E1EC433C1;
-        Mon, 24 Oct 2022 11:56:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64A7C612DB;
+        Mon, 24 Oct 2022 12:43:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 774D0C433D6;
+        Mon, 24 Oct 2022 12:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612566;
-        bh=F//YHv1bkUtABcaNo0CCRonpfHuEaxZGVHMrMkrR4lY=;
+        s=korg; t=1666615397;
+        bh=fdoR0xvzYT9V9vLf+cdHsA/B+SRWhC/HM+ZFo35VXrE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=irx3rxgJzsVnCmLHJ6evza4kILRLkyt+7bdDU/PUq2mozPOu39yDa97x+uOYvEa5A
-         dEs1kNtYW+3KBRjSH+tg79A2feGobG+uLZRxM7UamsHJ6KsWr5AJzv1YcfPmld7npz
-         xG3hedm6vN3d290U9UgcvzVSaFH7kCgyzhhk9QhE=
+        b=ChU5BYqR7Pk+95lesD1TzvfWbF0AUdTskL6Ww5xLnW7Rlxe4/7Xjc8T61ll2eNaI3
+         9tAMYOl7xsrVMQ7SQ6xjqMGCwNyNxEBaFBOwxfCt+/0ES52foGyitHWojJsqOXql3F
+         EzuOaOY7rPWZCQKSWNRWpQw++PxlAPZ6mjLI8Awo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        syzbot+2b32eb36c1a825b7a74c@syzkaller.appspotmail.com,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.19 018/229] nilfs2: fix NULL pointer dereference at nilfs_bmap_lookup_at_level()
-Date:   Mon, 24 Oct 2022 13:28:57 +0200
-Message-Id: <20221024112959.727858779@linuxfoundation.org>
+        stable@vger.kernel.org, Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+        Jes Sorensen <jes@trained-monkey.org>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 194/530] wifi: rtl8xxxu: Fix AIFS written to REG_EDCA_*_PARAM
+Date:   Mon, 24 Oct 2022 13:28:58 +0200
+Message-Id: <20221024113053.824788491@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +54,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
 
-commit 21a87d88c2253350e115029f14fe2a10a7e6c856 upstream.
+[ Upstream commit 5574d3290449916397f3092dcd2bac92415498e1 ]
 
-If the i_mode field in inode of metadata files is corrupted on disk, it
-can cause the initialization of bmap structure, which should have been
-called from nilfs_read_inode_common(), not to be called.  This causes a
-lockdep warning followed by a NULL pointer dereference at
-nilfs_bmap_lookup_at_level().
+ieee80211_tx_queue_params.aifs is not supposed to be written directly
+to the REG_EDCA_*_PARAM registers. Instead process it like the vendor
+drivers do. It's kinda hacky but it works.
 
-This patch fixes these issues by adding a missing sanitiy check for the
-i_mode field of metadata file's inode.
+This change boosts the download speed and makes it more stable.
 
-Link: https://lkml.kernel.org/r/20221002030804.29978-1-konishi.ryusuke@gmail.com
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Reported-by: syzbot+2b32eb36c1a825b7a74c@syzkaller.appspotmail.com
-Reported-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Tested with RTL8188FU but all the other supported chips should also
+benefit.
+
+Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
+Signed-off-by: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Acked-by: Jes Sorensen <jes@trained-monkey.org>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/038cc03f-3567-77ba-a7bd-c4930e3b2fad@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nilfs2/inode.c |    2 ++
- 1 file changed, 2 insertions(+)
+ .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
---- a/fs/nilfs2/inode.c
-+++ b/fs/nilfs2/inode.c
-@@ -451,6 +451,8 @@ int nilfs_read_inode_common(struct inode
- 	inode->i_atime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
- 	inode->i_ctime.tv_nsec = le32_to_cpu(raw_inode->i_ctime_nsec);
- 	inode->i_mtime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
-+	if (nilfs_is_metadata_file_inode(inode) && !S_ISREG(inode->i_mode))
-+		return -EIO; /* this inode is for metadata and corrupted */
- 	if (inode->i_nlink == 0)
- 		return -ESTALE; /* this inode is deleted */
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+index fb2a5fc1a4e6..e74c885a04e5 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
++++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+@@ -4507,6 +4507,53 @@ rtl8xxxu_wireless_mode(struct ieee80211_hw *hw, struct ieee80211_sta *sta)
+ 	return network_type;
+ }
  
++static void rtl8xxxu_set_aifs(struct rtl8xxxu_priv *priv, u8 slot_time)
++{
++	u32 reg_edca_param[IEEE80211_NUM_ACS] = {
++		[IEEE80211_AC_VO] = REG_EDCA_VO_PARAM,
++		[IEEE80211_AC_VI] = REG_EDCA_VI_PARAM,
++		[IEEE80211_AC_BE] = REG_EDCA_BE_PARAM,
++		[IEEE80211_AC_BK] = REG_EDCA_BK_PARAM,
++	};
++	u32 val32;
++	u16 wireless_mode = 0;
++	u8 aifs, aifsn, sifs;
++	int i;
++
++	if (priv->vif) {
++		struct ieee80211_sta *sta;
++
++		rcu_read_lock();
++		sta = ieee80211_find_sta(priv->vif, priv->vif->bss_conf.bssid);
++		if (sta)
++			wireless_mode = rtl8xxxu_wireless_mode(priv->hw, sta);
++		rcu_read_unlock();
++	}
++
++	if (priv->hw->conf.chandef.chan->band == NL80211_BAND_5GHZ ||
++	    (wireless_mode & WIRELESS_MODE_N_24G))
++		sifs = 16;
++	else
++		sifs = 10;
++
++	for (i = 0; i < IEEE80211_NUM_ACS; i++) {
++		val32 = rtl8xxxu_read32(priv, reg_edca_param[i]);
++
++		/* It was set in conf_tx. */
++		aifsn = val32 & 0xff;
++
++		/* aifsn not set yet or already fixed */
++		if (aifsn < 2 || aifsn > 15)
++			continue;
++
++		aifs = aifsn * slot_time + sifs;
++
++		val32 &= ~0xff;
++		val32 |= aifs;
++		rtl8xxxu_write32(priv, reg_edca_param[i], val32);
++	}
++}
++
+ static void
+ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 			  struct ieee80211_bss_conf *bss_conf, u32 changed)
+@@ -4592,6 +4639,8 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+ 		else
+ 			val8 = 20;
+ 		rtl8xxxu_write8(priv, REG_SLOT, val8);
++
++		rtl8xxxu_set_aifs(priv, val8);
+ 	}
+ 
+ 	if (changed & BSS_CHANGED_BSSID) {
+-- 
+2.35.1
+
 
 
