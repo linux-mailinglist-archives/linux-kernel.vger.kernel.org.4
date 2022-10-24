@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0337060AABA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6424060A592
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:26:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236032AbiJXNh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
+        id S233643AbiJXM0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbiJXNcp (ORCPT
+        with ESMTP id S230472AbiJXMZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:32:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01B51DA70;
-        Mon, 24 Oct 2022 05:34:42 -0700 (PDT)
+        Mon, 24 Oct 2022 08:25:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB5258140;
+        Mon, 24 Oct 2022 05:00:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3D7B1B81190;
-        Mon, 24 Oct 2022 12:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C16C433C1;
-        Mon, 24 Oct 2022 12:06:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6FA6B8118A;
+        Mon, 24 Oct 2022 11:48:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 111AFC433D6;
+        Mon, 24 Oct 2022 11:48:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613200;
-        bh=kapTbQ2ku69T4B7Gewk0shhG4KoU6HkPfCsKrGr7XUw=;
+        s=korg; t=1666612104;
+        bh=Sf4p/I5+I0rasfxMUpNRv3gda7JlSUROFiBRNveWqCk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B6Ckco5PkqMDXkPCCymZE5ylLPnpdreYzBdkXKP5WK7vQQJB2ePC69cXPN6iZQXh7
-         7RoYO2/2Sa0dwVhfaNDzxYqBlpepvy+my7RHfOkBT1q20M8rvPUK3WZ7FOCsodQ8qI
-         sJUDtHCyNT0pb6CYpfslMMjq4juJ9s1farO0aR7E=
+        b=vi1rAUrhZfxizR3g36tsgkkye98QnJztEKh1rqMN81XdOfKOk9r9du9NSTnyVJIyw
+         k4Wwnaio3ARfTwy23AMkyj1Lvk1UREycdQJsoeTfESCLBqQfztDjfDHR1DFbZyFkCM
+         uvTJgEoW0ZGeffb//xIQ2MXUkU8Ma6+zJ3dV+t1I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, mingo@redhat.com,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 5.4 046/255] ftrace: Properly unset FTRACE_HASH_FL_MOD
-Date:   Mon, 24 Oct 2022 13:29:16 +0200
-Message-Id: <20221024113003.960842024@linuxfoundation.org>
+        stable@vger.kernel.org, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH 4.14 040/210] random: clamp credited irq bits to maximum mixed
+Date:   Mon, 24 Oct 2022 13:29:17 +0200
+Message-Id: <20221024112958.289237020@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +52,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yejian <zhengyejian1@huawei.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit 0ce0638edf5ec83343302b884fa208179580700a upstream.
+commit e78a802a7b4febf53f2a92842f494b01062d85a8 upstream.
 
-When executing following commands like what document said, but the log
-"#### all functions enabled ####" was not shown as expect:
-  1. Set a 'mod' filter:
-    $ echo 'write*:mod:ext3' > /sys/kernel/tracing/set_ftrace_filter
-  2. Invert above filter:
-    $ echo '!write*:mod:ext3' >> /sys/kernel/tracing/set_ftrace_filter
-  3. Read the file:
-    $ cat /sys/kernel/tracing/set_ftrace_filter
+Since the most that's mixed into the pool is sizeof(long)*2, don't
+credit more than that many bytes of entropy.
 
-By some debugging, I found that flag FTRACE_HASH_FL_MOD was not unset
-after inversion like above step 2 and then result of ftrace_hash_empty()
-is incorrect.
-
-Link: https://lkml.kernel.org/r/20220926152008.2239274-1-zhengyejian1@huawei.com
-
-Cc: <mingo@redhat.com>
+Fixes: e3e33fc2ea7f ("random: do not use input pool from hard IRQs")
 Cc: stable@vger.kernel.org
-Fixes: 8c08f0d5c6fb ("ftrace: Have cached module filters be an active filter")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/trace/ftrace.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/char/random.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5084,8 +5084,12 @@ int ftrace_regex_release(struct inode *i
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -976,7 +976,7 @@ static void mix_interrupt_randomness(str
+ 	local_irq_enable();
  
- 		if (filter_hash) {
- 			orig_hash = &iter->ops->func_hash->filter_hash;
--			if (iter->tr && !list_empty(&iter->tr->mod_trace))
--				iter->hash->flags |= FTRACE_HASH_FL_MOD;
-+			if (iter->tr) {
-+				if (list_empty(&iter->tr->mod_trace))
-+					iter->hash->flags &= ~FTRACE_HASH_FL_MOD;
-+				else
-+					iter->hash->flags |= FTRACE_HASH_FL_MOD;
-+			}
- 		} else
- 			orig_hash = &iter->ops->func_hash->notrace_hash;
+ 	mix_pool_bytes(pool, sizeof(pool));
+-	credit_init_bits(max(1u, (count & U16_MAX) / 64));
++	credit_init_bits(clamp_t(unsigned int, (count & U16_MAX) / 64, 1, sizeof(pool) * 8));
  
+ 	memzero_explicit(pool, sizeof(pool));
+ }
 
 
