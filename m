@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2C760A6AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAC460ABF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbiJXMgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S236103AbiJXOAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbiJXMaE (ORCPT
+        with ESMTP id S236753AbiJXN6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:30:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9805631DFF;
-        Mon, 24 Oct 2022 05:04:04 -0700 (PDT)
+        Mon, 24 Oct 2022 09:58:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7DA131DE1;
+        Mon, 24 Oct 2022 05:45:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 91DE6B811AB;
-        Mon, 24 Oct 2022 11:51:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5BDFC433D6;
-        Mon, 24 Oct 2022 11:51:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D3361328;
+        Mon, 24 Oct 2022 12:45:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F0BC433C1;
+        Mon, 24 Oct 2022 12:45:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612284;
-        bh=E6nMjH9elQkFPPehNJVGitkxW67b30EoBEbRIBxoJYw=;
+        s=korg; t=1666615520;
+        bh=9+NtXeXBvF4Ebv92J6wPhWRQ5nQ9JXpxZQzq7UfEEhk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wRo7FNJHlHiS0+GcLZuJsRLilyHnWHFC7+WwJqWnc7q1EQSVWQjVQMbicJC1keG78
-         unq8WAaFAJfkE8YeNy8pN5tM5zqoUM50DRLZpSALmBb+uczfgyvzI9aBdwatQfiMCv
-         RxecflTe7Bh8MlALzCeE0/kfMlJ9Rg7wRVGX9JlM=
+        b=Gi9+Vy8rc7FGKTKEkxG6lhiCSZPYtK3ozE6V+Lqak3dxoCqHXaqOKL9uE0BV/RWhn
+         8fdeFdEW7PfbWmrrrO9kZOR7ryRWVww/6GOItJtMQz1zAt0/j3zRVx6C6e61F8JVpe
+         GxbqqMpTq/tettXKYVemvWZJeWeqy6N4zXkcYHYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 108/210] soc: qcom: smem_state: Add refcounting for the state->of_node
-Date:   Mon, 24 Oct 2022 13:30:25 +0200
-Message-Id: <20221024113000.516514952@linuxfoundation.org>
+Subject: [PATCH 5.15 282/530] HSI: omap_ssi: Fix refcount leak in ssi_probe
+Date:   Mon, 24 Oct 2022 13:30:26 +0200
+Message-Id: <20221024113057.837457886@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 90681f53b9381c23ff7762a3b13826d620c272de ]
+[ Upstream commit 9a2ea132df860177b33c9fd421b26c4e9a0a9396 ]
 
-In qcom_smem_state_register() and qcom_smem_state_release(), we
-should better use of_node_get() and of_node_put() for the reference
-creation and destruction of 'device_node'.
+When returning or breaking early from a
+for_each_available_child_of_node() loop, we need to explicitly call
+of_node_put() on the child node to possibly release the node.
 
-Fixes: 9460ae2ff308 ("soc: qcom: Introduce common SMEM state machine code")
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220721135217.1301039-2-windhl@126.com
+Fixes: b209e047bc74 ("HSI: Introduce OMAP SSI driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/smem_state.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/hsi/controllers/omap_ssi_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/qcom/smem_state.c b/drivers/soc/qcom/smem_state.c
-index d5437ca76ed9..1502cf037a6b 100644
---- a/drivers/soc/qcom/smem_state.c
-+++ b/drivers/soc/qcom/smem_state.c
-@@ -144,6 +144,7 @@ static void qcom_smem_state_release(struct kref *ref)
- 	struct qcom_smem_state *state = container_of(ref, struct qcom_smem_state, refcount);
- 
- 	list_del(&state->list);
-+	of_node_put(state->of_node);
- 	kfree(state);
- }
- 
-@@ -177,7 +178,7 @@ struct qcom_smem_state *qcom_smem_state_register(struct device_node *of_node,
- 
- 	kref_init(&state->refcount);
- 
--	state->of_node = of_node;
-+	state->of_node = of_node_get(of_node);
- 	state->ops = *ops;
- 	state->priv = priv;
- 
+diff --git a/drivers/hsi/controllers/omap_ssi_core.c b/drivers/hsi/controllers/omap_ssi_core.c
+index 44a3f5660c10..eb9820158318 100644
+--- a/drivers/hsi/controllers/omap_ssi_core.c
++++ b/drivers/hsi/controllers/omap_ssi_core.c
+@@ -524,6 +524,7 @@ static int ssi_probe(struct platform_device *pd)
+ 		if (!childpdev) {
+ 			err = -ENODEV;
+ 			dev_err(&pd->dev, "failed to create ssi controller port\n");
++			of_node_put(child);
+ 			goto out3;
+ 		}
+ 	}
 -- 
 2.35.1
 
