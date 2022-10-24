@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2744F60BBF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F385160BC0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbiJXVSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
+        id S233480AbiJXVXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233999AbiJXVSX (ORCPT
+        with ESMTP id S232677AbiJXVXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:18:23 -0400
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1075357E1;
-        Mon, 24 Oct 2022 12:24:38 -0700 (PDT)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-13b103a3e5dso13028511fac.2;
-        Mon, 24 Oct 2022 12:24:38 -0700 (PDT)
+        Mon, 24 Oct 2022 17:23:11 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFEEF6800;
+        Mon, 24 Oct 2022 12:29:37 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id f205so12169709yba.2;
+        Mon, 24 Oct 2022 12:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=msuUebF694+hZC0rqt6N8CJWQi+fRr7tKzxI1kK1XSA=;
+        b=Nbh/LUYRRXN+W8H+09HFirleOER72S3l+cyZmuDy+8Pib1Gn+U4wfzzFfRtAjMjFcF
+         fvo3jJ3RCWGObovpQORWc3/9IkNJGMgPUfku6KvUFl6cu6AMUPfoT9oK95yTGj66jhjH
+         7WGhQNpuF6d0iem0QTBy19EivSDPd2VqHFxQ3x16D8kkerWE0rDHVR2hrPPsFrR5kbrm
+         D3RRZ03JmkZtNZSKaozG5JauPmqkajAnvSOqe8wpHj28aX62NhSnkQiYABEysxpon0kM
+         LH9dhzEwQZXR7plJ46sFDvDg1wrk4joIrl4DRR8/CJkQwJDkuqnpXoWVFb+tCDqZEjny
+         JZbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vqLHNCC4h3WefblPd4YUovHfNe5etB8EwtpDxyh2rNg=;
-        b=wzi8euRnhAA1EdmwU3Q2/xYWlC+fk8VExj1JthqCgUfw2dTqoVhlZ7+/4g3FDrnVKn
-         pyZYikoEqH7C3cD/b9CaZdW+c4o8ysbHUJyYc/eBDokNmHbHM/syLFuJNoY94lSo6Ks6
-         2q7TaiSO3K8Qjv3t/w51rXNciTTvjw1w6tfgStuQPXCQG7NmnEkrI+rjI4hM53FJtGB/
-         ErbIYdSB2vsRDe3tuwaCm2ojOBz9VWel1KDfnjdqio68urfLRnzKNkop8JzLMTp7lCo7
-         pXTROgD+ja2gGfOLeaVe7yyv/leKS398LHwolxpbXW56Q+ncsxgE6d1gYKiBwH0EHnht
-         V1zA==
-X-Gm-Message-State: ACrzQf0qldZ/05ZRRciHj7bRQl4BQKW52LZTzwkg8IkBGtH5jtk+G4CL
-        3Hv4n1pOWnjt/dUEPhB0FQ==
-X-Google-Smtp-Source: AMsMyM5ai7TBx2hq9Yw2a73b9Dx0NsSpGKlCAqRK1rsVAwL1TyUeCKFTJoiykMmsw8LzRorV6iZ2tQ==
-X-Received: by 2002:a05:6870:2054:b0:132:d1fb:ddf0 with SMTP id l20-20020a056870205400b00132d1fbddf0mr39306295oad.283.1666639392419;
-        Mon, 24 Oct 2022 12:23:12 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u4-20020a4ac984000000b004768f725b7csm332279ooq.23.2022.10.24.12.23.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 12:23:11 -0700 (PDT)
-Received: (nullmailer pid 2071537 invoked by uid 1000);
-        Mon, 24 Oct 2022 19:23:13 -0000
-Date:   Mon, 24 Oct 2022 14:23:13 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Sam Shih <Sam.Shih@mediatek.com>,
-        Steven Liu <steven.liu@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/3] dt-bindings: PCI: mediatek-gen3: add mt7986 clock
- config
-Message-ID: <20221024192313.GA2069519-robh@kernel.org>
-References: <20221023170234.83621-1-linux@fw-web.de>
- <20221023170234.83621-4-linux@fw-web.de>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=msuUebF694+hZC0rqt6N8CJWQi+fRr7tKzxI1kK1XSA=;
+        b=giOSsn6YjPnMCp9DGaqik+7hm0Hba0FhNqI+yBgk7ttJ2Y2oyMh9WKqz4AG9Uw8LSg
+         6hNaGRdu5+9/IIa6+i8c+1rSOvLnSMRdEE3DRgsp71d7h4cgsY+m2b6LiZ/3zd1/aNua
+         gOgw6nEdFUrCgWEz6FjxVGrTyPXRdN+4PcOz9LzUUcFB3BmGf+GEbkaOsKNUXchlJgLk
+         QuENJ4lpgjqfPugivwcwdMTtZUn28X5y1Tq9zewUZaQ/1hkKLkOma2X+b8uznKBmoc5e
+         EorCvo3waOEKVy+kMu9V1wjUgUkc8uNMcyn6iHW4Z1NbnSq1LlIA37bqV+sw14IuJyTg
+         0xdA==
+X-Gm-Message-State: ACrzQf23ED63pDEfljhwnmiDs+YlYdulK0uJET7cN9VtjGDy3PXyXI72
+        cpNBdEGEt3Ko6u/3MWp/9hHf9mSS5wEsc5l9z9uBAXWcPm4=
+X-Google-Smtp-Source: AMsMyM5vg8N9dDW35cXYnRV0vMdNWWQOk5I20+pSLu1UdubJKDDQpcDyA6OCK60nRt7T9Q9hMWGXE3CrFggT3+iul/0=
+X-Received: by 2002:a5b:9c5:0:b0:6ca:d6da:30c1 with SMTP id
+ y5-20020a5b09c5000000b006cad6da30c1mr8707218ybq.372.1666639612737; Mon, 24
+ Oct 2022 12:26:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221023170234.83621-4-linux@fw-web.de>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-11-vishal.moola@gmail.com>
+In-Reply-To: <20221017202451.4951-11-vishal.moola@gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Mon, 24 Oct 2022 12:26:41 -0700
+Message-ID: <CAOzc2pz53R5ZT0=U8uav9=FL7_rn+6pUrkfeTZ-bx5_3Pac-xg@mail.gmail.com>
+Subject: Re: [PATCH v3 10/23] ext4: Convert mpage_prepare_extent_to_map() to
+ use filemap_get_folios_tag()
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-nilfs@vger.kernel.org, linux-mm@kvack.org, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,58 +71,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 07:02:34PM +0200, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> MT7986 needs 4 clocks for PCIe, define them in binding.
-
-Patch 2 is incomplete without this one. Therefore, patch 2 and 3 should 
-be 1 patch.
-
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+On Mon, Oct 17, 2022 at 1:25 PM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> Converted the function to use folios throughout. This is in preparation
+> for the removal of find_get_pages_range_tag(). Now supports large
+> folios.
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 > ---
->  .../bindings/pci/mediatek-pcie-gen3.yaml         | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> index 3662422b38ea..e6020e684c00 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> @@ -79,9 +79,11 @@ properties:
->        - const: mac
->  
->    clocks:
-> +    minItems: 4
->      maxItems: 6
->  
->    clock-names:
-> +    minItems: 4
->      maxItems: 6
->  
->    assigned-clocks:
-> @@ -162,6 +164,20 @@ allOf:
->              - const: tl_32k
->              - const: peri_26m
->              - const: peri_mem
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt7986-pcie
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          items:
-> +            - const: pl_250m
-> +            - const: tl_26m
-> +            - const: peri_26m
-> +            - const: top_133m
->  
->  unevaluatedProperties: false
->  
-> -- 
-> 2.34.1
-> 
-> 
+>  fs/ext4/inode.c | 55 ++++++++++++++++++++++++-------------------------
+>  1 file changed, 27 insertions(+), 28 deletions(-)
+>
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index 2b5ef1b64249..69a0708c8e87 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -2572,8 +2572,8 @@ static int ext4_da_writepages_trans_blocks(struct inode *inode)
+>  static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+>  {
+>         struct address_space *mapping = mpd->inode->i_mapping;
+> -       struct pagevec pvec;
+> -       unsigned int nr_pages;
+> +       struct folio_batch fbatch;
+> +       unsigned int nr_folios;
+>         long left = mpd->wbc->nr_to_write;
+>         pgoff_t index = mpd->first_page;
+>         pgoff_t end = mpd->last_page;
+> @@ -2587,18 +2587,17 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+>                 tag = PAGECACHE_TAG_TOWRITE;
+>         else
+>                 tag = PAGECACHE_TAG_DIRTY;
+> -
+> -       pagevec_init(&pvec);
+> +       folio_batch_init(&fbatch);
+>         mpd->map.m_len = 0;
+>         mpd->next_page = index;
+>         while (index <= end) {
+> -               nr_pages = pagevec_lookup_range_tag(&pvec, mapping, &index, end,
+> -                               tag);
+> -               if (nr_pages == 0)
+> +               nr_folios = filemap_get_folios_tag(mapping, &index, end,
+> +                               tag, &fbatch);
+> +               if (nr_folios == 0)
+>                         break;
+>
+> -               for (i = 0; i < nr_pages; i++) {
+> -                       struct page *page = pvec.pages[i];
+> +               for (i = 0; i < nr_folios; i++) {
+> +                       struct folio *folio = fbatch.folios[i];
+>
+>                         /*
+>                          * Accumulated enough dirty pages? This doesn't apply
+> @@ -2612,10 +2611,10 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+>                                 goto out;
+>
+>                         /* If we can't merge this page, we are done. */
+> -                       if (mpd->map.m_len > 0 && mpd->next_page != page->index)
+> +                       if (mpd->map.m_len > 0 && mpd->next_page != folio->index)
+>                                 goto out;
+>
+> -                       lock_page(page);
+> +                       folio_lock(folio);
+>                         /*
+>                          * If the page is no longer dirty, or its mapping no
+>                          * longer corresponds to inode we are writing (which
+> @@ -2623,16 +2622,16 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+>                          * page is already under writeback and we are not doing
+>                          * a data integrity writeback, skip the page
+>                          */
+> -                       if (!PageDirty(page) ||
+> -                           (PageWriteback(page) &&
+> +                       if (!folio_test_dirty(folio) ||
+> +                           (folio_test_writeback(folio) &&
+>                              (mpd->wbc->sync_mode == WB_SYNC_NONE)) ||
+> -                           unlikely(page->mapping != mapping)) {
+> -                               unlock_page(page);
+> +                           unlikely(folio->mapping != mapping)) {
+> +                               folio_unlock(folio);
+>                                 continue;
+>                         }
+>
+> -                       wait_on_page_writeback(page);
+> -                       BUG_ON(PageWriteback(page));
+> +                       folio_wait_writeback(folio);
+> +                       BUG_ON(folio_test_writeback(folio));
+>
+>                         /*
+>                          * Should never happen but for buggy code in
+> @@ -2643,33 +2642,33 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
+>                          *
+>                          * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
+>                          */
+> -                       if (!page_has_buffers(page)) {
+> -                               ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
+> -                               ClearPageDirty(page);
+> -                               unlock_page(page);
+> +                       if (!folio_buffers(folio)) {
+> +                               ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", folio->index);
+> +                               folio_clear_dirty(folio);
+> +                               folio_unlock(folio);
+>                                 continue;
+>                         }
+>
+>                         if (mpd->map.m_len == 0)
+> -                               mpd->first_page = page->index;
+> -                       mpd->next_page = page->index + 1;
+> +                               mpd->first_page = folio->index;
+> +                       mpd->next_page = folio->index + folio_nr_pages(folio);
+>                         /* Add all dirty buffers to mpd */
+> -                       lblk = ((ext4_lblk_t)page->index) <<
+> +                       lblk = ((ext4_lblk_t)folio->index) <<
+>                                 (PAGE_SHIFT - blkbits);
+> -                       head = page_buffers(page);
+> +                       head = folio_buffers(folio);
+>                         err = mpage_process_page_bufs(mpd, head, head, lblk);
+>                         if (err <= 0)
+>                                 goto out;
+>                         err = 0;
+> -                       left--;
+> +                       left -= folio_nr_pages(folio);
+>                 }
+> -               pagevec_release(&pvec);
+> +               folio_batch_release(&fbatch);
+>                 cond_resched();
+>         }
+>         mpd->scanned_until_end = 1;
+>         return 0;
+>  out:
+> -       pagevec_release(&pvec);
+> +       folio_batch_release(&fbatch);
+>         return err;
+>  }
+>
+> --
+> 2.36.1
+>
+
+Does anyone have some time to look over this ext4 patch this week?
+Feedback is appreciated.
