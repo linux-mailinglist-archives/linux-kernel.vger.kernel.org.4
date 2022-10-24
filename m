@@ -2,230 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A0EA609BE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449DD609BE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiJXH4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
+        id S229756AbiJXH46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiJXH4a (ORCPT
+        with ESMTP id S230023AbiJXH4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:56:30 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577915D105
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:56:28 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id a13so28193977edj.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:56:28 -0700 (PDT)
+        Mon, 24 Oct 2022 03:56:35 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB735D0F7;
+        Mon, 24 Oct 2022 00:56:34 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 20so8061940pgc.5;
+        Mon, 24 Oct 2022 00:56:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SwWQb8oemB4+jz+zwrXGcKHoP4NnD8EJpRvthEA+8Xk=;
-        b=mgc9eBnmWDCw/KI1b91Hzr+SXtXXihZ/IZ9Xf8LZFla/f4O2nMMhiJcxnD5FHTUO28
-         ddZDYlhmLoY3rz9RezoehbyUY5h3vvGLTYJWNpSdV15+LS0vYKA9CHdUbQCHLFAffqwy
-         Sx/Tn2r5KJ/Xen6DU4SyJiS3ToqUcyttByQZ8Q5MToumbr/lWg3mKJOnMWa/T1BLKei2
-         G5aw8oQ8sYmsEDkHbRMOG/QzUhxM1tH1H6HRVyvCb18c7wY2csgSfgenX/JsVdGScI48
-         M8omtLWbBOmopwbnZ9IUqsSFuWgKPiv8x+IoEZsv6KeGkFGDbbSatsjmvTlA82lpOLvk
-         cobw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p8SE1tvfGUXU0O91MO2mkN0g4QvMjQD0SGq7REgmz8M=;
+        b=RCXm6D6yJPEsCUFi5KVr5WzqZ+DLz2rJpww5vdWlat6dGr0dSdaoXdg4IBlbcQ2PAd
+         sjCrzW5IotuY0TwwksR86RRVL14Xus163hE2eNh2MbMaJRIVUDH9dyGzZWoaZXu7J+0p
+         q8jUGQIwfN3M3s4q+j5iyli+wWpexUCeK32vVMR/Hf9x1WDV6t8ZvMkgtdOJJ+M8KPeV
+         nl1VwQCsCTqORRR8PY8hKG1HE8q5PygoEACPTX4IwDosf/SgpBgTqJOxTYwNOL7BIGd0
+         VZ5hjUVowuJHfFQZ0Ch5N/uebe7/lWxoB3FNQZpm+oh4fZ8RQsQEwFEe2H8UfZmXiVUw
+         t1SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SwWQb8oemB4+jz+zwrXGcKHoP4NnD8EJpRvthEA+8Xk=;
-        b=8H6nUobnLXlj7SFDuFhBvz3MxLAqBXlIp8YfgfAW1DAx61Zet0t7UkR+XS0wdtli7p
-         X19o+1fsfSCQ1YS2Nw9ChdRcTCuqLxbDKt9PpQUwW1MVYC48sK+OQ6Ae7HIQrcP9lwvW
-         7LQUYlhZbjq3YC6+QGiUSmI2HRcspJUTLDCOiZSJoqDM1r4BNCpIT0J9QiYpSzh84xwq
-         SjRlt1RHeOPpJEXw+0YAKpY6tOmywQn298c0F2Fe8dFTRwnmDP4K9CQdjqu29fzj/sry
-         dLTQqrsQFCFd889qNCavq8yCgkylP/h8vzppSeAV1LOGLq4bEiHtO/hxyh8y9Gg1uocf
-         AAmA==
-X-Gm-Message-State: ACrzQf3VYee+c10xImG9/iQ0EGaYsVgC056e2lJ1+Epm5vWVkX0c4LOI
-        lZKRoUEGKQ2/8DjiEuUmeOEcH/n9lATNrleay4L+bg==
-X-Google-Smtp-Source: AMsMyM6iTIpIj01086FgzlaMlYcgrK55GCiS7dDyxU3CMtDClj3564oTprjeQT+ELvW3jRF4OVfa+S60/W69KvNmfAg=
-X-Received: by 2002:a05:6402:2402:b0:45c:a1ce:94d8 with SMTP id
- t2-20020a056402240200b0045ca1ce94d8mr28776441eda.50.1666598186547; Mon, 24
- Oct 2022 00:56:26 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p8SE1tvfGUXU0O91MO2mkN0g4QvMjQD0SGq7REgmz8M=;
+        b=aGc7TJCgNM7xVdoZ/Ccxob7DsyXtQPU7G95rJCmMYlh1scQCgAAUZl9ES3x0t03pNn
+         O4IgrDtqPI97Sh/6oRpy1MLqnV0+f8kW2pK2Gsi1ivqrHo1lwRTLlvDnPs4LVHn25/BJ
+         NAnAvEWCZeTuoroiI1bc/wPwmGr6Dptcu31VIeC3KRj6QlkdIimVrdklb3yKJojj7so1
+         XqDbZfqqVyoOBqRqu/5xumMahgAV31s3Ch7wPbA0Yh5iP/5TLOTjDXAcsLAcgWU0vXR/
+         gcTmdgj6Ste9VhFYyRQK0n8jf5xJbFaLhsemwwI24vRSCmUK1IjPspAYlvV45Ls/G65L
+         K3yA==
+X-Gm-Message-State: ACrzQf1IJekoJOR/qyivxGOVwS8LwRKOFzokcYr0/jub6b/kMSmTyRVa
+        0/oL3lX8PYCABCydHqIKo1U=
+X-Google-Smtp-Source: AMsMyM4cjpzYSQ8OSAnpmfMKqhZaQnszcUx+wi8yJQdul3prtTUO+tTBmjly69B4d9DJGR8PNsSLgw==
+X-Received: by 2002:a63:6986:0:b0:43c:8417:8dac with SMTP id e128-20020a636986000000b0043c84178dacmr27054128pgc.286.1666598193357;
+        Mon, 24 Oct 2022 00:56:33 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-77.three.co.id. [180.214.233.77])
+        by smtp.gmail.com with ESMTPSA id l3-20020a170903244300b00174f7d107c8sm19329495pls.293.2022.10.24.00.56.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 00:56:32 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 681871004AF; Mon, 24 Oct 2022 14:56:29 +0700 (WIB)
+Date:   Mon, 24 Oct 2022 14:56:28 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     krisman@collabora.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] unicode: mkutf8data: Add compound malloc function
+Message-ID: <Y1ZFLO98zNoAgniW@debian.me>
+References: <20221024045030.177438-1-kunyu@nfschina.com>
 MIME-Version: 1.0
-References: <20221013110411.1674359-1-treapking@chromium.org> <20221013110411.1674359-3-treapking@chromium.org>
-In-Reply-To: <20221013110411.1674359-3-treapking@chromium.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 24 Oct 2022 09:56:15 +0200
-Message-ID: <CAG3jFyskXfbX=rTye9ygT36kKmqJRr0rO1eQrKSr1V7hOHxDcA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] drm/bridge: it6505: Setup links in it6505_irq_hpd
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="sDFdsZx+99thmPxE"
+Content-Disposition: inline
+In-Reply-To: <20221024045030.177438-1-kunyu@nfschina.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 at 13:04, Pin-yen Lin <treapking@chromium.org> wrote:
->
-> Move the DPCD read and link setup steps to HPD IRQ handler to remove
-> an unnecessary dependency between .detect callback and the HPD IRQ
-> handler before registering it6505 as a DRM bridge. This is safe because
-> there is always a .detect call after each HPD IRQ handler triggered by
-> the drm_helper_hpd_irq_event call.
->
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> ---
->
-> Changes in v2:
-> - Remove redundant spaces in it6505_detect
-> - Read sink count in it6505_irq_hpd
->
->  drivers/gpu/drm/bridge/ite-it6505.c | 80 +++++++++++++----------------
->  1 file changed, 35 insertions(+), 45 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index f7f6c3e20fae..4b6061272599 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -725,28 +725,6 @@ static void it6505_calc_video_info(struct it6505 *it6505)
->                              DRM_MODE_ARG(&it6505->video_info));
->  }
->
-> -static int it6505_drm_dp_link_probe(struct drm_dp_aux *aux,
-> -                                   struct it6505_drm_dp_link *link)
-> -{
-> -       u8 values[3];
-> -       int err;
-> -
-> -       memset(link, 0, sizeof(*link));
-> -
-> -       err = drm_dp_dpcd_read(aux, DP_DPCD_REV, values, sizeof(values));
-> -       if (err < 0)
-> -               return err;
-> -
-> -       link->revision = values[0];
-> -       link->rate = drm_dp_bw_code_to_link_rate(values[1]);
-> -       link->num_lanes = values[2] & DP_MAX_LANE_COUNT_MASK;
-> -
-> -       if (values[2] & DP_ENHANCED_FRAME_CAP)
-> -               link->capabilities = DP_ENHANCED_FRAME_CAP;
-> -
-> -       return 0;
-> -}
-> -
->  static int it6505_drm_dp_link_set_power(struct drm_dp_aux *aux,
->                                         struct it6505_drm_dp_link *link,
->                                         u8 mode)
-> @@ -1456,11 +1434,19 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
->         int bcaps;
->
->         if (it6505->dpcd[0] == 0) {
-> -               it6505_aux_on(it6505);
-> -               it6505_get_dpcd(it6505, DP_DPCD_REV, it6505->dpcd,
-> -                               ARRAY_SIZE(it6505->dpcd));
-> +               dev_err(dev, "DPCD is not initialized");
-> +               return;
->         }
->
-> +       memset(link, 0, sizeof(*link));
-> +
-> +       link->revision = it6505->dpcd[0];
-> +       link->rate = drm_dp_bw_code_to_link_rate(it6505->dpcd[1]);
-> +       link->num_lanes = it6505->dpcd[2] & DP_MAX_LANE_COUNT_MASK;
-> +
-> +       if (it6505->dpcd[2] & DP_ENHANCED_FRAME_CAP)
-> +               link->capabilities = DP_ENHANCED_FRAME_CAP;
-> +
->         DRM_DEV_DEBUG_DRIVER(dev, "DPCD Rev.: %d.%d",
->                              link->revision >> 4, link->revision & 0x0F);
->
-> @@ -2323,19 +2309,32 @@ static int it6505_process_hpd_irq(struct it6505 *it6505)
->  static void it6505_irq_hpd(struct it6505 *it6505)
->  {
->         struct device *dev = &it6505->client->dev;
-> +       int dp_sink_count;
->
->         it6505->hpd_state = it6505_get_sink_hpd_status(it6505);
->         DRM_DEV_DEBUG_DRIVER(dev, "hpd change interrupt, change to %s",
->                              it6505->hpd_state ? "high" : "low");
->
-> -       if (it6505->bridge.dev)
-> -               drm_helper_hpd_irq_event(it6505->bridge.dev);
-> -       DRM_DEV_DEBUG_DRIVER(dev, "it6505->sink_count: %d",
-> -                            it6505->sink_count);
-> -
->         if (it6505->hpd_state) {
->                 wait_for_completion_timeout(&it6505->wait_edid_complete,
->                                             msecs_to_jiffies(6000));
-> +               it6505_aux_on(it6505);
-> +               if (it6505->dpcd[0] == 0) {
-> +                       it6505_get_dpcd(it6505, DP_DPCD_REV, it6505->dpcd,
-> +                                       ARRAY_SIZE(it6505->dpcd));
-> +                       it6505_variable_config(it6505);
-> +                       it6505_parse_link_capabilities(it6505);
-> +               }
-> +               it6505->auto_train_retry = AUTO_TRAIN_RETRY;
-> +
-> +               it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
-> +                                            DP_SET_POWER_D0);
-> +               dp_sink_count = it6505_dpcd_read(it6505, DP_SINK_COUNT);
-> +               it6505->sink_count = DP_GET_SINK_COUNT(dp_sink_count);
-> +
-> +               DRM_DEV_DEBUG_DRIVER(dev, "it6505->sink_count: %d",
-> +                                    it6505->sink_count);
-> +
->                 it6505_lane_termination_on(it6505);
->                 it6505_lane_power_on(it6505);
->
-> @@ -2363,6 +2362,9 @@ static void it6505_irq_hpd(struct it6505 *it6505)
->                 it6505_lane_off(it6505);
->                 it6505_link_reset_step_train(it6505);
->         }
-> +
-> +       if (it6505->bridge.dev)
-> +               drm_helper_hpd_irq_event(it6505->bridge.dev);
->  }
->
->  static void it6505_irq_hpd_irq(struct it6505 *it6505)
-> @@ -2625,26 +2627,14 @@ static enum drm_connector_status it6505_detect(struct it6505 *it6505)
->                 goto unlock;
->
->         if (it6505->enable_drv_hold) {
-> -               status = it6505_get_sink_hpd_status(it6505) ?
-> -                                       connector_status_connected :
-> -                                       connector_status_disconnected;
-> +               status = it6505->hpd_state ? connector_status_connected :
-> +                                            connector_status_disconnected;
->                 goto unlock;
->         }
->
-> -       if (it6505_get_sink_hpd_status(it6505)) {
-> -               it6505_aux_on(it6505);
-> -               it6505_drm_dp_link_probe(&it6505->aux, &it6505->link);
-> +       if (it6505->hpd_state) {
->                 it6505_drm_dp_link_set_power(&it6505->aux, &it6505->link,
->                                              DP_SET_POWER_D0);
-> -               it6505->auto_train_retry = AUTO_TRAIN_RETRY;
-> -
-> -               if (it6505->dpcd[0] == 0) {
-> -                       it6505_get_dpcd(it6505, DP_DPCD_REV, it6505->dpcd,
-> -                                       ARRAY_SIZE(it6505->dpcd));
-> -                       it6505_variable_config(it6505);
-> -                       it6505_parse_link_capabilities(it6505);
-> -               }
-> -
->                 dp_sink_count = it6505_dpcd_read(it6505, DP_SINK_COUNT);
->                 it6505->sink_count = DP_GET_SINK_COUNT(dp_sink_count);
->                 DRM_DEV_DEBUG_DRIVER(dev, "it6505->sink_count:%d branch:%d",
-> --
-> 2.38.0.rc1.362.ged0d419d3c-goog
->
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+--sDFdsZx+99thmPxE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Oct 24, 2022 at 12:50:30PM +0800, Li kunyu wrote:
+> The patch has the following modifications.
+> 1. Add unicode_data_malloc function, which realizes the combined use of
+> malloc and memcpy, and assigns values to dst.
+> 2. Add unicode_data_remalloc function assigns 0 to the data in the
+> allocated memory pointer. When the integer free parameter specifies 1,
+> execute free (* dst), and finally assign the value to dst.
+> 3. Remove the original um pointer related code and replace it with these
+> two functions.
+>=20
+
+These changes should be split into separate patches.
+
+Also, please take a time to review the patch description because what I
+read above is somewhat confusing.
+
+And the last, please learn how to use git-format-patch(1) and
+git-send-email(1) correctly.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--sDFdsZx+99thmPxE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1ZFJgAKCRD2uYlJVVFO
+o1tBAQDwKcOlq0JzuNcNkJwSJ+z+jSIrFDjUUSEmst/w6+/sRAD/QZLv948kpqlF
+MELLTE9UeUW+RBSMxJR3O3F8O+oKVgs=
+=j9Vn
+-----END PGP SIGNATURE-----
+
+--sDFdsZx+99thmPxE--
