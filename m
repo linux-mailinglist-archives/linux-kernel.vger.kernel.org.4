@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B38660A432
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6728060A480
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiJXMGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
+        id S232897AbiJXMLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232673AbiJXMEC (ORCPT
+        with ESMTP id S229947AbiJXMKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:04:02 -0400
+        Mon, 24 Oct 2022 08:10:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B30656B93;
-        Mon, 24 Oct 2022 04:50:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCC380496;
+        Mon, 24 Oct 2022 04:53:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CD94612C3;
-        Mon, 24 Oct 2022 11:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CA4BC43141;
-        Mon, 24 Oct 2022 11:50:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F12656122D;
+        Mon, 24 Oct 2022 11:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF66C433C1;
+        Mon, 24 Oct 2022 11:50:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612215;
-        bh=oAZKZd2en7IVL08gIN/hLuFHSzYPctft03ltwnPQ5vI=;
+        s=korg; t=1666612218;
+        bh=DC0BF9IcilZ6vNyknUu5VstpmDbJb6Kcs0pf3U3tFKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m5sLMSZwHHDafSX66ete3cTwbYuL4Pb9YoCvhuy+YNLIhB9KE/ehCAkigPY8gsrj8
-         ZtEYHQ552V7nWHOe1s5VrhecnsZ/iYJZkRyTR4QmfYIvBJZsVvX5OiE8zD/4q0Ofb1
-         O+yG937pE0Nzy+oEXHRVyZBHIHfPqQ4LgNh1yQK4=
+        b=jQyQUsQPQ2qBKheLWxj8W3Jd+OPN1OLuj9HYJ2Vvi9itN2M48bhnzeFMje+18KWOk
+         NDbdNbT1cZ75ule69pmj402F7ZxpBytXxUtiPz1fFLiMRoEui9t/4MD9j2UIkKWLf8
+         oQlJqKCD3d4fcnEAFVtePKm4+LlXfvM5U/xM1zLM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 114/210] iio: adc: at91-sama5d2_adc: fix AT91_SAMA5D2_MR_TRACKTIM_MAX
-Date:   Mon, 24 Oct 2022 13:30:31 +0200
-Message-Id: <20221024113000.694338958@linuxfoundation.org>
+Subject: [PATCH 4.14 115/210] iio: inkern: only release the device node when done with it
+Date:   Mon, 24 Oct 2022 13:30:32 +0200
+Message-Id: <20221024113000.724877639@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
 References: <20221024112956.797777597@linuxfoundation.org>
@@ -55,36 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Nuno Sá <nuno.sa@analog.com>
 
-[ Upstream commit bb73d5d9164c57c4bb916739a98e5cd8e0a5ed8c ]
+[ Upstream commit 79c3e84874c7d14f04ad58313b64955a0d2e9437 ]
 
-All ADC HW versions handled by this driver (SAMA5D2, SAM9X60, SAMA7G5)
-have MR.TRACKTIM on 4 bits. Fix AT91_SAMA5D2_MR_TRACKTIM_MAX to reflect
-this.
+'of_node_put()' can potentially release the memory pointed to by
+'iiospec.np' which would leave us with an invalid pointer (and we would
+still pass it in 'of_xlate()'). Note that it is not guaranteed for the
+of_node lifespan to be attached to the device (to which is attached)
+lifespan so that there is (even though very unlikely) the possibility
+for the node to be freed while the device is still around. Thus, as there
+are indeed some of_xlate users which do access the node, a race is indeed
+possible.
 
-Fixes: 27e177190891 ("iio:adc:at91_adc8xx: introduce new atmel adc driver")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220803102855.2191070-2-claudiu.beznea@microchip.com
+As such, we can only release the node after we are done with it.
+
+Fixes: 17d82b47a215d ("iio: Add OF support")
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+Link: https://lore.kernel.org/r/20220715122903.332535-2-nuno.sa@analog.com
 Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/at91-sama5d2_adc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/inkern.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
-index 34639ee2d2ce..e015b86be6b0 100644
---- a/drivers/iio/adc/at91-sama5d2_adc.c
-+++ b/drivers/iio/adc/at91-sama5d2_adc.c
-@@ -79,7 +79,7 @@
- #define	AT91_SAMA5D2_MR_ANACH		BIT(23)
- /* Tracking Time */
- #define	AT91_SAMA5D2_MR_TRACKTIM(v)	((v) << 24)
--#define	AT91_SAMA5D2_MR_TRACKTIM_MAX	0xff
-+#define	AT91_SAMA5D2_MR_TRACKTIM_MAX	0xf
- /* Transfer Time */
- #define	AT91_SAMA5D2_MR_TRANSFER(v)	((v) << 28)
- #define	AT91_SAMA5D2_MR_TRANSFER_MAX	0x3
+diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+index f12bad60a581..599069b4fe5d 100644
+--- a/drivers/iio/inkern.c
++++ b/drivers/iio/inkern.c
+@@ -139,9 +139,10 @@ static int __of_iio_channel_get(struct iio_channel *channel,
+ 
+ 	idev = bus_find_device(&iio_bus_type, NULL, iiospec.np,
+ 			       iio_dev_node_match);
+-	of_node_put(iiospec.np);
+-	if (idev == NULL)
++	if (idev == NULL) {
++		of_node_put(iiospec.np);
+ 		return -EPROBE_DEFER;
++	}
+ 
+ 	indio_dev = dev_to_iio_dev(idev);
+ 	channel->indio_dev = indio_dev;
+@@ -149,6 +150,7 @@ static int __of_iio_channel_get(struct iio_channel *channel,
+ 		index = indio_dev->info->of_xlate(indio_dev, &iiospec);
+ 	else
+ 		index = __of_iio_simple_xlate(indio_dev, &iiospec);
++	of_node_put(iiospec.np);
+ 	if (index < 0)
+ 		goto err_put;
+ 	channel->channel = &indio_dev->channels[index];
 -- 
 2.35.1
 
