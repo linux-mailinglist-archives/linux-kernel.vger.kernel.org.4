@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FDE60A9FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEB060A67D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233648AbiJXN1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
+        id S234332AbiJXMev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236253AbiJXNYv (ORCPT
+        with ESMTP id S234208AbiJXM3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:24:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766E088A06;
-        Mon, 24 Oct 2022 05:30:30 -0700 (PDT)
+        Mon, 24 Oct 2022 08:29:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE7E895F1;
+        Mon, 24 Oct 2022 05:03:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0BFCF61330;
-        Mon, 24 Oct 2022 12:29:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 208E2C433D6;
-        Mon, 24 Oct 2022 12:29:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 292156128E;
+        Mon, 24 Oct 2022 12:02:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C5ECC433C1;
+        Mon, 24 Oct 2022 12:02:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614557;
-        bh=s/TgH2cZHDS2UeT0O4dRQAweALS5Vjeej9+FSzcTV9Q=;
+        s=korg; t=1666612977;
+        bh=/BleCwNH4q+MxKT7DR0P99zio7f8ZwEn9aOrqdQJuJE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dCdCVu3OAUtfAGnxHeFcvJ6NEEYb7p7A3Yg5um20KOgcjY7C40ED99oVgTpRrFHOB
-         U/T9SGL8oOVEw6drLtDP+QK1bCdwgN5WI39gzR8Grxc+bJcizqVrpvjf9q3CwZHrPi
-         dXm3+2mnSucz/AwIjVfcUKDQSCA6lYDFMDTy/HCo=
+        b=WTfOdAAaGCLlIr9/cNzTuzQ8Bu5P/PDG9zXMUQ9wgFBPyN44EkkQWFW2Yz5JJ7gt5
+         19gtG9ILGeQgO/VW162ETjoqrtwHXhnyvPvQSB7BAwgw+Hc2zIxdZSjP34KocCFlqI
+         LA4kll60HcF5cytvOscFqUQuS3sL2nMOyDWy5KIU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Quentin Monnet <quentin@isovalent.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Hawkins Jiawei <yin31149@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 306/390] bpftool: Clear errno after libcaps checks
+Subject: [PATCH 4.19 184/229] Bluetooth: hci_sysfs: Fix attempting to call device_add multiple times
 Date:   Mon, 24 Oct 2022 13:31:43 +0200
-Message-Id: <20221024113036.032845428@linuxfoundation.org>
+Message-Id: <20221024113005.052777577@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quentin Monnet <quentin@isovalent.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit cea558855c39b7f1f02ff50dcf701ca6596bc964 ]
+[ Upstream commit 448a496f760664d3e2e79466aa1787e6abc922b5 ]
 
-When bpftool is linked against libcap, the library runs a "constructor"
-function to compute the number of capabilities of the running kernel
-[0], at the beginning of the execution of the program. As part of this,
-it performs multiple calls to prctl(). Some of these may fail, and set
-errno to a non-zero value:
+device_add shall not be called multiple times as stated in its
+documentation:
 
-    # strace -e prctl ./bpftool version
-    prctl(PR_CAPBSET_READ, CAP_MAC_OVERRIDE) = 1
-    prctl(PR_CAPBSET_READ, 0x30 /* CAP_??? */) = -1 EINVAL (Invalid argument)
-    prctl(PR_CAPBSET_READ, CAP_CHECKPOINT_RESTORE) = 1
-    prctl(PR_CAPBSET_READ, 0x2c /* CAP_??? */) = -1 EINVAL (Invalid argument)
-    prctl(PR_CAPBSET_READ, 0x2a /* CAP_??? */) = -1 EINVAL (Invalid argument)
-    prctl(PR_CAPBSET_READ, 0x29 /* CAP_??? */) = -1 EINVAL (Invalid argument)
-    ** fprintf added at the top of main(): we have errno == 1
-    ./bpftool v7.0.0
-    using libbpf v1.0
-    features: libbfd, libbpf_strict, skeletons
-    +++ exited with 0 +++
+ 'Do not call this routine or device_register() more than once for
+ any device structure'
 
-This has been addressed in libcap 2.63 [1], but until this version is
-available everywhere, we can fix it on bpftool side.
+Syzkaller reports a bug as follows [1]:
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:33!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+[...]
+Call Trace:
+ <TASK>
+ __list_add include/linux/list.h:69 [inline]
+ list_add_tail include/linux/list.h:102 [inline]
+ kobj_kset_join lib/kobject.c:164 [inline]
+ kobject_add_internal+0x18f/0x8f0 lib/kobject.c:214
+ kobject_add_varg lib/kobject.c:358 [inline]
+ kobject_add+0x150/0x1c0 lib/kobject.c:410
+ device_add+0x368/0x1e90 drivers/base/core.c:3452
+ hci_conn_add_sysfs+0x9b/0x1b0 net/bluetooth/hci_sysfs.c:53
+ hci_le_cis_estabilished_evt+0x57c/0xae0 net/bluetooth/hci_event.c:6799
+ hci_le_meta_evt+0x2b8/0x510 net/bluetooth/hci_event.c:7110
+ hci_event_func net/bluetooth/hci_event.c:7440 [inline]
+ hci_event_packet+0x63d/0xfd0 net/bluetooth/hci_event.c:7495
+ hci_rx_work+0xae7/0x1230 net/bluetooth/hci_core.c:4007
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
-Let's clean errno at the beginning of the main() function, to make sure
-that these checks do not interfere with the batch mode, where we error
-out if errno is set after a bpftool command.
-
-  [0] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/tree/libcap/cap_alloc.c?h=libcap-2.65#n20
-  [1] https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=f25a1b7e69f7b33e6afb58b3e38f3450b7d2d9a0
-
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20220815162205.45043-1-quentin@isovalent.com
+Link: https://syzkaller.appspot.com/bug?id=da3246e2d33afdb92d66bc166a0934c5b146404a
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Tested-by: Hawkins Jiawei <yin31149@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/main.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ net/bluetooth/hci_sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index 1854d6b97860..4fd4e3462ebc 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -398,6 +398,16 @@ int main(int argc, char **argv)
+diff --git a/net/bluetooth/hci_sysfs.c b/net/bluetooth/hci_sysfs.c
+index b69d88b88d2e..ccd2c377bf83 100644
+--- a/net/bluetooth/hci_sysfs.c
++++ b/net/bluetooth/hci_sysfs.c
+@@ -48,6 +48,9 @@ void hci_conn_add_sysfs(struct hci_conn *conn)
  
- 	setlinebuf(stdout);
+ 	BT_DBG("conn %p", conn);
  
-+#ifdef USE_LIBCAP
-+	/* Libcap < 2.63 hooks before main() to compute the number of
-+	 * capabilities of the running kernel, and doing so it calls prctl()
-+	 * which may fail and set errno to non-zero.
-+	 * Let's reset errno to make sure this does not interfere with the
-+	 * batch mode.
-+	 */
-+	errno = 0;
-+#endif
++	if (device_is_registered(&conn->dev))
++		return;
 +
- 	last_do_help = do_help;
- 	pretty_output = false;
- 	json_output = false;
+ 	dev_set_name(&conn->dev, "%s:%d", hdev->name, conn->handle);
+ 
+ 	if (device_add(&conn->dev) < 0) {
 -- 
 2.35.1
 
