@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08A3609C2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67B4609C30
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiJXIM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S230193AbiJXIOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiJXIMu (ORCPT
+        with ESMTP id S229949AbiJXIOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:12:50 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0570862ABF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:12:46 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id a5so15159730edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QSxvFzOFCLmcptkg3wr863k62dNqq04eMd3Fa7R2F2k=;
-        b=O+JWdsPBF1w2HOtUvgOkPasKcpF5j0l09ByjY6bvcTQCHnTlqZvWE3I2LovYgU9SMd
-         TM4mj08R9g220p33OTG3qhlZbCJQcYfg16kzEvN1oDE99kd7CzFLtN2NPlfYHzH6vuBd
-         SHTkAMSPGeGGMwmdwMGgU6N0nz3RcbAcUzuVhFX8GemfJ5USURweA0GFm7YqOii1PuKJ
-         GOU3aUxGWb8lKxK07tu95Aup+jrWTS+7pfSO5oQg2F4mpXQ1D0eT0jxJnhJxNfwDyKeI
-         ZCw/pxxSY7Cz0RZi6lwSnMP9THSEhZozWk9S1t+GatIp3xo1emRC72O2/OE0s+Cal0By
-         +cVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QSxvFzOFCLmcptkg3wr863k62dNqq04eMd3Fa7R2F2k=;
-        b=HkfDAVrVUNDTQJ1lp4SoztxFdo84HFlbTin5MGfpdSXx0EHOm1Qg2pegDYNIjrU4MR
-         sfsqrFxecdGFOppuADcKsbVIw+7nGfLPSegnjUVehfhMofxs0vj55iMoIgb/YjB2zDQc
-         Khioygl++EjBLhN28vI+OH7Yi74061KB+JbsgttIp4XrGrKJarvUzx/TuDAvusshO5rc
-         2CoOxTTp6YBofYgh0FHICw0ZFOyeOIK3tLxVuPRJAHXdmUwvp9AsbSPd1lRQ7eHz7EzJ
-         fIUF0W9FoIGuhciJWkxW+YAD3jwaagKPIqEwAmlz+WBxZD6BQ1Wy72oajJSG24vgDyDI
-         O/hA==
-X-Gm-Message-State: ACrzQf0MDqi+1kFBle3X7v+dpV9KbTDOq4XyQzo/NSroek6/KSpGs2N9
-        nCS35f4xxYr5KTqSsOhpHtFNHu3oh4jWGF12ml+IKw==
-X-Google-Smtp-Source: AMsMyM7yzlJ2pG0fMAkHGDkB0Atzc8h78rHcoaG1puqRvymzarDQxeihvLf9f+xLcTOOO53VUi9KB35gvD1Ak7QbceA=
-X-Received: by 2002:a17:907:16aa:b0:6fe:91d5:18d2 with SMTP id
- hc42-20020a17090716aa00b006fe91d518d2mr27007120ejc.190.1666599163952; Mon, 24
- Oct 2022 01:12:43 -0700 (PDT)
+        Mon, 24 Oct 2022 04:14:33 -0400
+Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30551EAEB
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:14:29 -0700 (PDT)
+Received: from ipservice-092-217-079-032.092.217.pools.vodafone-ip.de ([92.217.79.32] helo=martin-debian-2.paytec.ch)
+        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <martin@kaiser.cx>)
+        id 1omsbI-0000nk-Vq; Mon, 24 Oct 2022 10:14:25 +0200
+From:   Martin Kaiser <martin@kaiser.cx>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Martin Kaiser <martin@kaiser.cx>
+Subject: [PATCH 00/17] staging: r8188eu: clean up mlme handlers
+Date:   Mon, 24 Oct 2022 10:14:00 +0200
+Message-Id: <20221024081417.66441-1-martin@kaiser.cx>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20221024003747.36021-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024003747.36021-1-krzysztof.kozlowski@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 24 Oct 2022 10:12:32 +0200
-Message-ID: <CACRpkdaO4=TxT+UzcrWrvbA63wcJF-=LPmTeY3U=QKbucuTehw@mail.gmail.com>
-Subject: Re: [GIT PULL] pinctrl: dt-bindings: qcom: Improvements for v6.2
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 2:37 AM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+This series cleans up the mlme handlers that process incoming management
+frames.
 
-> All my existing Qualcomm pinctrl bindings combined, plus one Neil's.
+We can reorder the handler functions and remove forward declarations. We
+can also remove unused return values and simplify the error handling.
 
-Excellent Krzysztof, pulled into my devel branch for v6.2 and merged
-cleanly!
+This series should be applied after the "some more small cleanups" series.
 
-Yours.
-Linus Walleij
+As usual, this series was tested with EdimaxV2 on an arm32 system.
+
+Martin Kaiser (17):
+  staging: r8188eu: restructure mlme subfunction handling
+  staging: r8188eu: make OnAssocReq static
+  staging: r8188eu: make OnAssocRsp static
+  staging: r8188eu: make OnProbeReq static
+  staging: r8188eu: make OnProbeRsp static
+  staging: r8188eu: make OnBeacon static
+  staging: r8188eu: make OnDisassoc static
+  staging: r8188eu: make OnAuthClient static
+  staging: r8188eu: make OnDeAuth static
+  staging: r8188eu: make OnAction static
+  staging: r8188eu: make OnAuth static
+  staging: r8188eu: change mlme handlers to void
+  staging: r8188eu: remove unnecessary label
+  staging: r8188eu: remove unnecessary else branch
+  staging: r8188eu: remove unnecessary return
+  staging: r8188eu: remove an else branch
+  staging: r8188eu: go2asoc is not needed
+
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c   | 226 ++++++++----------
+ .../staging/r8188eu/include/rtw_mlme_ext.h    |  23 +-
+ 2 files changed, 100 insertions(+), 149 deletions(-)
+
+-- 
+2.30.2
+
