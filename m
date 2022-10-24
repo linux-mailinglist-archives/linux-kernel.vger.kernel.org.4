@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4E660A523
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40ACF60A762
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233357AbiJXMVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S230335AbiJXMto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbiJXMTV (ORCPT
+        with ESMTP id S234502AbiJXMo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F6682D36;
-        Mon, 24 Oct 2022 04:58:07 -0700 (PDT)
+        Mon, 24 Oct 2022 08:44:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68C5140E7;
+        Mon, 24 Oct 2022 05:09:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E025FB811BB;
-        Mon, 24 Oct 2022 11:49:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D59C433C1;
-        Mon, 24 Oct 2022 11:49:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F48A61278;
+        Mon, 24 Oct 2022 12:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF9CC433C1;
+        Mon, 24 Oct 2022 12:08:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612194;
-        bh=YpURN54bP3lO0GSk/IShWNXb2+lp0qTSkE0YhNm2eEo=;
+        s=korg; t=1666613292;
+        bh=kwbVD9Us+cXE954oSglAIQMXgHk6yPoSGcch9kkRkps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DHk/5euKyDhMNbphkCF25eVXj0M0B93EdbhGD6Yk9ZL4ThA3FXH8oww5xDKbFWmTm
-         Q2J6V5fNBxHPSgmK8XvWwrY0+ImIAdy/7xqMGRhQnsgwHGPiHBFl3lNfPJqweDdvuT
-         ODoHZZhceB8gtIomNa1HNS+MhnsgfoBF1HUidRWc=
+        b=ek5GJSBKXp7x9GCKUFLPDn3N4u4MrXRqK2H3Bbfe+0r3FF97JCzlrZT6Bw0GeWGLH
+         l8kSBJp8R34Cf81ExDhgqMb1Fgi3rY1/vXQXn8el75Jurs0WwQQoTsNVhgl9mlWRJO
+         34ymamJH+FsZ6vgBI7EzTecLjDmZ6I3oiqwQcZqs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 4.14 074/210] ring-buffer: Allow splice to read previous partially read pages
+        syzbot+a236dd8e9622ed8954a3@syzkaller.appspotmail.com,
+        Xin Long <lucien.xin@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 081/255] sctp: handle the error returned from sctp_auth_asoc_init_active_key
 Date:   Mon, 24 Oct 2022 13:29:51 +0200
-Message-Id: <20221024112959.465611437@linuxfoundation.org>
+Message-Id: <20221024113005.198074246@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,52 +56,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (Google) <rostedt@goodmis.org>
+From: Xin Long <lucien.xin@gmail.com>
 
-commit fa8f4a89736b654125fb254b0db753ac68a5fced upstream.
+[ Upstream commit 022152aaebe116a25c39818a07e175a8cd3c1e11 ]
 
-If a page is partially read, and then the splice system call is run
-against the ring buffer, it will always fail to read, no matter how much
-is in the ring buffer. That's because the code path for a partial read of
-the page does will fail if the "full" flag is set.
+When it returns an error from sctp_auth_asoc_init_active_key(), the
+active_key is actually not updated. The old sh_key will be freeed
+while it's still used as active key in asoc. Then an use-after-free
+will be triggered when sending patckets, as found by syzbot:
 
-The splice system call wants full pages, so if the read of the ring buffer
-is not yet full, it should return zero, and the splice will block. But if
-a previous read was done, where the beginning has been consumed, it should
-still be given to the splice caller if the rest of the page has been
-written to.
+  sctp_auth_shkey_hold+0x22/0xa0 net/sctp/auth.c:112
+  sctp_set_owner_w net/sctp/socket.c:132 [inline]
+  sctp_sendmsg_to_asoc+0xbd5/0x1a20 net/sctp/socket.c:1863
+  sctp_sendmsg+0x1053/0x1d50 net/sctp/socket.c:2025
+  inet_sendmsg+0x99/0xe0 net/ipv4/af_inet.c:819
+  sock_sendmsg_nosec net/socket.c:714 [inline]
+  sock_sendmsg+0xcf/0x120 net/socket.c:734
 
-This caused the splice command to never consume data in this scenario, and
-let the ring buffer just fill up and lose events.
+This patch is to fix it by not replacing the sh_key when it returns
+errors from sctp_auth_asoc_init_active_key() in sctp_auth_set_key().
+For sctp_auth_set_active_key(), old active_key_id will be set back
+to asoc->active_key_id when the same thing happens.
 
-Link: https://lkml.kernel.org/r/20220927144317.46be6b80@gandalf.local.home
-
-Cc: stable@vger.kernel.org
-Fixes: 8789a9e7df6bf ("ring-buffer: read page interface")
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 58acd1009226 ("sctp: update active_key for asoc when old key is being replaced")
+Reported-by: syzbot+a236dd8e9622ed8954a3@syzkaller.appspotmail.com
+Signed-off-by: Xin Long <lucien.xin@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/ring_buffer.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ net/sctp/auth.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -4639,7 +4639,15 @@ int ring_buffer_read_page(struct ring_bu
- 		unsigned int pos = 0;
- 		unsigned int size;
+diff --git a/net/sctp/auth.c b/net/sctp/auth.c
+index 3b2d0bd616dd..6b97b734a16f 100644
+--- a/net/sctp/auth.c
++++ b/net/sctp/auth.c
+@@ -869,12 +869,17 @@ int sctp_auth_set_key(struct sctp_endpoint *ep,
+ 	}
  
--		if (full)
-+		/*
-+		 * If a full page is expected, this can still be returned
-+		 * if there's been a previous partial read and the
-+		 * rest of the page can be read and the commit page is off
-+		 * the reader page.
-+		 */
-+		if (full &&
-+		    (!read || (len < (commit - read)) ||
-+		     cpu_buffer->reader_page == cpu_buffer->commit_page))
- 			goto out_unlock;
+ 	list_del_init(&shkey->key_list);
+-	sctp_auth_shkey_release(shkey);
+ 	list_add(&cur_key->key_list, sh_keys);
  
- 		if (len > (commit - read))
+-	if (asoc && asoc->active_key_id == auth_key->sca_keynumber)
+-		sctp_auth_asoc_init_active_key(asoc, GFP_KERNEL);
++	if (asoc && asoc->active_key_id == auth_key->sca_keynumber &&
++	    sctp_auth_asoc_init_active_key(asoc, GFP_KERNEL)) {
++		list_del_init(&cur_key->key_list);
++		sctp_auth_shkey_release(cur_key);
++		list_add(&shkey->key_list, sh_keys);
++		return -ENOMEM;
++	}
+ 
++	sctp_auth_shkey_release(shkey);
+ 	return 0;
+ }
+ 
+@@ -908,8 +913,13 @@ int sctp_auth_set_active_key(struct sctp_endpoint *ep,
+ 		return -EINVAL;
+ 
+ 	if (asoc) {
++		__u16  active_key_id = asoc->active_key_id;
++
+ 		asoc->active_key_id = key_id;
+-		sctp_auth_asoc_init_active_key(asoc, GFP_KERNEL);
++		if (sctp_auth_asoc_init_active_key(asoc, GFP_KERNEL)) {
++			asoc->active_key_id = active_key_id;
++			return -ENOMEM;
++		}
+ 	} else
+ 		ep->active_key_id = key_id;
+ 
+-- 
+2.35.1
+
 
 
