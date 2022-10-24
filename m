@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2F560AE5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D4060AC83
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233098AbiJXO6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
+        id S229967AbiJXOH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233920AbiJXO5y (ORCPT
+        with ESMTP id S236957AbiJXOEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:57:54 -0400
+        Mon, 24 Oct 2022 10:04:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850455143A;
-        Mon, 24 Oct 2022 06:35:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20FE90811;
+        Mon, 24 Oct 2022 05:49:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D80E7612A0;
-        Mon, 24 Oct 2022 12:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADE9C433C1;
-        Mon, 24 Oct 2022 12:27:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1CB06134C;
+        Mon, 24 Oct 2022 12:47:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0459C433D6;
+        Mon, 24 Oct 2022 12:47:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614455;
-        bh=6S8wkVtGZt0abelM+HE995JPE3aIj7ImAwxa7yJSGBE=;
+        s=korg; t=1666615631;
+        bh=0yp0MeoCQn55dZ0Ly+Cfe8r8xQVfv9yqt30m368kJ1M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gFl6nXr/Mk7NW7ND0cOyVqqN2sGDZjHK4Uv83Z+Ig6WQQau0wGD8GIIxO4JT55kPs
-         yOblhYfGS1ZR2nq+3qJj0zfuQbg+WeP3Vahja4IB3LoECeXZbRxHwi0MiIJ03ICz91
-         UKi6UJwnIKd6goxaOqLK+AtoDKBOo+7LtT5KXG30=
+        b=bdr/nQp8157SAdL6QS1S4VICElTgzPOm6zNAo7hHdIIS/cglF2xmeQxeppug63MHR
+         Hc3q5BO0nacCfwTEzDOKY6mOt+RhKC+nRLyB08TCtZWdELq2tb33HulneIv5IL5cyr
+         g9JrN5vxaiO9S1ctIjLf5hmIRernKMBRTzbmgQNE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org, Albert Briscoe <albertsbriscoe@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 268/390] x86/hyperv: Fix struct hv_enlightened_vmcs definition
-Date:   Mon, 24 Oct 2022 13:31:05 +0200
-Message-Id: <20221024113034.330762947@linuxfoundation.org>
+Subject: [PATCH 5.15 323/530] usb: gadget: function: fix dangling pnp_string in f_printer.c
+Date:   Mon, 24 Oct 2022 13:31:07 +0200
+Message-Id: <20221024113059.654682359@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +53,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Albert Briscoe <albertsbriscoe@gmail.com>
 
-[ Upstream commit ea9da788a61e47e7ab9cbad397453e51cd82ac0d ]
+[ Upstream commit 24b7ba2f88e04800b54d462f376512e8c41b8a3c ]
 
-Section 1.9 of TLFS v6.0b says:
+When opts->pnp_string is changed with configfs, new memory is allocated for
+the string. It does not, however, update dev->pnp_string, even though the
+memory is freed. When rquesting the string, the host then gets old or
+corrupted data rather than the new string. The ieee 1284 id string should
+be allowed to change while the device is connected.
 
-"All structures are padded in such a way that fields are aligned
-naturally (that is, an 8-byte field is aligned to an offset of 8 bytes
-and so on)".
+The bug was introduced in commit fdc01cc286be ("usb: gadget: printer:
+Remove pnp_string static buffer"), which changed opts->pnp_string from a
+char[] to a char*.
+This patch changes dev->pnp_string from a char* to a char** pointing to
+opts->pnp_string.
 
-'struct enlightened_vmcs' has a glitch:
-
-...
-        struct {
-                u32                nested_flush_hypercall:1; /*   836: 0  4 */
-                u32                msr_bitmap:1;         /*   836: 1  4 */
-                u32                reserved:30;          /*   836: 2  4 */
-        } hv_enlightenments_control;                     /*   836     4 */
-        u32                        hv_vp_id;             /*   840     4 */
-        u64                        hv_vm_id;             /*   844     8 */
-        u64                        partition_assist_page; /*   852     8 */
-...
-
-And the observed values in 'partition_assist_page' make no sense at
-all. Fix the layout by padding the structure properly.
-
-Fixes: 68d1eb72ee99 ("x86/hyper-v: define struct hv_enlightened_vmcs and clean field bits")
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Link: https://lore.kernel.org/r/20220830133737.1539624-2-vkuznets@redhat.com
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Fixes: fdc01cc286be ("usb: gadget: printer: Remove pnp_string static buffer")
+Signed-off-by: Albert Briscoe <albertsbriscoe@gmail.com>
+Link: https://lore.kernel.org/r/20220911223753.20417-1-albertsbriscoe@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/hyperv-tlfs.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/f_printer.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 0ed20e8bba9e..ae7192b75136 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -474,7 +474,7 @@ struct hv_enlightened_vmcs {
- 	u64 guest_rip;
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index abec5c58f525..a881c69b1f2b 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -89,7 +89,7 @@ struct printer_dev {
+ 	u8			printer_cdev_open;
+ 	wait_queue_head_t	wait;
+ 	unsigned		q_len;
+-	char			*pnp_string;	/* We don't own memory! */
++	char			**pnp_string;	/* We don't own memory! */
+ 	struct usb_function	function;
+ };
  
- 	u32 hv_clean_fields;
--	u32 hv_padding_32;
-+	u32 padding32_1;
- 	u32 hv_synthetic_controls;
- 	struct {
- 		u32 nested_flush_hypercall:1;
-@@ -482,7 +482,7 @@ struct hv_enlightened_vmcs {
- 		u32 reserved:30;
- 	}  __packed hv_enlightenments_control;
- 	u32 hv_vp_id;
--
-+	u32 padding32_2;
- 	u64 hv_vm_id;
- 	u64 partition_assist_page;
- 	u64 padding64_4[4];
+@@ -1000,16 +1000,16 @@ static int printer_func_setup(struct usb_function *f,
+ 			if ((wIndex>>8) != dev->interface)
+ 				break;
+ 
+-			if (!dev->pnp_string) {
++			if (!*dev->pnp_string) {
+ 				value = 0;
+ 				break;
+ 			}
+-			value = strlen(dev->pnp_string);
++			value = strlen(*dev->pnp_string);
+ 			buf[0] = (value >> 8) & 0xFF;
+ 			buf[1] = value & 0xFF;
+-			memcpy(buf + 2, dev->pnp_string, value);
++			memcpy(buf + 2, *dev->pnp_string, value);
+ 			DBG(dev, "1284 PNP String: %x %s\n", value,
+-			    dev->pnp_string);
++			    *dev->pnp_string);
+ 			break;
+ 
+ 		case GET_PORT_STATUS: /* Get Port Status */
+@@ -1475,7 +1475,7 @@ static struct usb_function *gprinter_alloc(struct usb_function_instance *fi)
+ 	kref_init(&dev->kref);
+ 	++opts->refcnt;
+ 	dev->minor = opts->minor;
+-	dev->pnp_string = opts->pnp_string;
++	dev->pnp_string = &opts->pnp_string;
+ 	dev->q_len = opts->q_len;
+ 	mutex_unlock(&opts->lock);
+ 
 -- 
 2.35.1
 
