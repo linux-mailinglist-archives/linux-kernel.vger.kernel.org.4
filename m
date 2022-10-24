@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3261960A6BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D6B60A99A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiJXMiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S235578AbiJXNXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234452AbiJXMfE (ORCPT
+        with ESMTP id S232767AbiJXNWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:35:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C263E57BEE;
-        Mon, 24 Oct 2022 05:05:11 -0700 (PDT)
+        Mon, 24 Oct 2022 09:22:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376E41A5;
+        Mon, 24 Oct 2022 05:29:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D1A7B811F3;
-        Mon, 24 Oct 2022 12:02:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9747DC433C1;
-        Mon, 24 Oct 2022 12:02:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E65612A1;
+        Mon, 24 Oct 2022 12:27:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6851FC433D6;
+        Mon, 24 Oct 2022 12:27:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612975;
-        bh=AnpJOvKIYkYcjJKzinlWrtkIErjeO2lFOTxCU7ONgSg=;
+        s=korg; t=1666614465;
+        bh=wq/nKH4U/hcOoZ8jQjN/KSVSJfCus0aPmsR5bOW/2xs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qbwkoaz8N2BJEvUCIJ13PnwvaaL3+GZYWQ/zXq8v8ipiGxsY3aGYRMKfhrPskAZok
-         gZ9enuX/7rPbkpSGY0nBQMSPS2uLngJFGtHt3jVQ4aDGENyhalDGKOUtHnYaIq8TS6
-         3owYfwg3Lae+BZ3tknjH1/NfuvHJNqrYn5qMcKxk=
+        b=nQ+3/juHrRKDOH9xaZ38qjRkE0aDBVQdN3bHKf7C+ZiRI2gpQ6OqKA00qaYdX7XZg
+         TbjexPOOfSDVhASnZabtgMzCrNPNNy38/Gb357xcOqjLl2SWVAZHfVMDCaqjtrAlBG
+         ULNn4C1bkkId7pW7AgEr1eOj3YSQq1NakU/EggUs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 149/229] mfd: intel_soc_pmic: Fix an error handling path in intel_soc_pmic_i2c_probe()
+        stable@vger.kernel.org, Zhengchao Shao <shaozhengchao@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 271/390] crypto: sahara - dont sleep when in softirq
 Date:   Mon, 24 Oct 2022 13:31:08 +0200
-Message-Id: <20221024113003.832209259@linuxfoundation.org>
+Message-Id: <20221024113034.469304263@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +54,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Zhengchao Shao <shaozhengchao@huawei.com>
 
-[ Upstream commit 48749cabba109397b4e7dd556e85718ec0ec114d ]
+[ Upstream commit 108586eba094b318e6a831f977f4ddcc403a15da ]
 
-The commit in Fixes: has added a pwm_add_table() call in the probe() and
-a pwm_remove_table() call in the remove(), but forget to update the error
-handling path of the probe.
+Function of sahara_aes_crypt maybe could be called by function
+of crypto_skcipher_encrypt during the rx softirq, so it is not
+allowed to use mutex lock.
 
-Add the missing pwm_remove_table() call.
-
-Fixes: a3aa9a93df9f ("mfd: intel_soc_pmic_core: ADD PWM lookup table for CRC PMIC based PWM")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20220801114211.36267-1-andriy.shevchenko@linux.intel.com
+Fixes: c0c3c89ae347 ("crypto: sahara - replace tasklets with...")
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/intel_soc_pmic_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/crypto/sahara.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
-index 274306d98ac1..75a2a793ac14 100644
---- a/drivers/mfd/intel_soc_pmic_core.c
-+++ b/drivers/mfd/intel_soc_pmic_core.c
-@@ -118,6 +118,7 @@ static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
- 	return 0;
+diff --git a/drivers/crypto/sahara.c b/drivers/crypto/sahara.c
+index d60679c79822..2043dd061121 100644
+--- a/drivers/crypto/sahara.c
++++ b/drivers/crypto/sahara.c
+@@ -25,10 +25,10 @@
+ #include <linux/kernel.h>
+ #include <linux/kthread.h>
+ #include <linux/module.h>
+-#include <linux/mutex.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
+ #include <linux/platform_device.h>
++#include <linux/spinlock.h>
  
- err_del_irq_chip:
-+	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
- 	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
- 	return ret;
- }
+ #define SHA_BUFFER_LEN		PAGE_SIZE
+ #define SAHARA_MAX_SHA_BLOCK_SIZE	SHA256_BLOCK_SIZE
+@@ -195,7 +195,7 @@ struct sahara_dev {
+ 	void __iomem		*regs_base;
+ 	struct clk		*clk_ipg;
+ 	struct clk		*clk_ahb;
+-	struct mutex		queue_mutex;
++	spinlock_t		queue_spinlock;
+ 	struct task_struct	*kthread;
+ 	struct completion	dma_completion;
+ 
+@@ -641,9 +641,9 @@ static int sahara_aes_crypt(struct skcipher_request *req, unsigned long mode)
+ 
+ 	rctx->mode = mode;
+ 
+-	mutex_lock(&dev->queue_mutex);
++	spin_lock_bh(&dev->queue_spinlock);
+ 	err = crypto_enqueue_request(&dev->queue, &req->base);
+-	mutex_unlock(&dev->queue_mutex);
++	spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 	wake_up_process(dev->kthread);
+ 
+@@ -1042,10 +1042,10 @@ static int sahara_queue_manage(void *data)
+ 	do {
+ 		__set_current_state(TASK_INTERRUPTIBLE);
+ 
+-		mutex_lock(&dev->queue_mutex);
++		spin_lock_bh(&dev->queue_spinlock);
+ 		backlog = crypto_get_backlog(&dev->queue);
+ 		async_req = crypto_dequeue_request(&dev->queue);
+-		mutex_unlock(&dev->queue_mutex);
++		spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 		if (backlog)
+ 			backlog->complete(backlog, -EINPROGRESS);
+@@ -1091,9 +1091,9 @@ static int sahara_sha_enqueue(struct ahash_request *req, int last)
+ 		rctx->first = 1;
+ 	}
+ 
+-	mutex_lock(&dev->queue_mutex);
++	spin_lock_bh(&dev->queue_spinlock);
+ 	ret = crypto_enqueue_request(&dev->queue, &req->base);
+-	mutex_unlock(&dev->queue_mutex);
++	spin_unlock_bh(&dev->queue_spinlock);
+ 
+ 	wake_up_process(dev->kthread);
+ 
+@@ -1454,7 +1454,7 @@ static int sahara_probe(struct platform_device *pdev)
+ 
+ 	crypto_init_queue(&dev->queue, SAHARA_QUEUE_LENGTH);
+ 
+-	mutex_init(&dev->queue_mutex);
++	spin_lock_init(&dev->queue_spinlock);
+ 
+ 	dev_ptr = dev;
+ 
 -- 
 2.35.1
 
