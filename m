@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF96860A786
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C4260A588
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234296AbiJXMwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49542 "EHLO
+        id S233622AbiJXMZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234823AbiJXMpt (ORCPT
+        with ESMTP id S233744AbiJXMYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:49 -0400
+        Mon, 24 Oct 2022 08:24:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C2F6557D;
-        Mon, 24 Oct 2022 05:10:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3BC44575;
+        Mon, 24 Oct 2022 05:00:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7987761252;
-        Mon, 24 Oct 2022 12:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EEFC433C1;
-        Mon, 24 Oct 2022 12:10:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 912CB6121A;
+        Mon, 24 Oct 2022 11:48:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A138FC433C1;
+        Mon, 24 Oct 2022 11:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613413;
-        bh=IpTc00b1WooAfUaExUTL18xyD+b8NPRY2MQZns4Lg+Y=;
+        s=korg; t=1666612128;
+        bh=zyn4n4h+hCJZVFeLUjY46IkKRhJ1R1o5FUAeIwX4jUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dZleLuhDwZqjp8RHojkJyupNK/H+KkQDGb1C3B2miGlTlbZQQ1fh/sEopssc/8ZTf
-         b5M7sV2FhMcCvKdXtRtQQIC6CDKWRfM5M24xlvltTgqBbpT+MUzEJSJOSTntC7iry3
-         gb0jk6Kr1wd8eIVv/78NP55GiPYSQFtHcql6NZ1A=
+        b=p/QdONgUSjEp4tkelSgNvYdRZo8YFIKGFU2nS/JIlC42Y5O6FAwkDh3dyrFH9yr5P
+         rOQL16i4BpfL6OokJXYfdUmqwksOV+qD1R//jtTjM93EIOk9G80scNfHGMH/aihnWB
+         5u/JRtXBpTPqawBVfET/eh4SYtzSpOQ9bB059T7c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 087/255] net: mvpp2: fix mvpp2 debugfs leak
-Date:   Mon, 24 Oct 2022 13:29:57 +0200
-Message-Id: <20221024113005.405586497@linuxfoundation.org>
+Subject: [PATCH 4.14 081/210] sh: machvec: Use char[] for section boundaries
+Date:   Mon, 24 Oct 2022 13:29:58 +0200
+Message-Id: <20221024112959.690828237@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,105 +59,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit 0152dfee235e87660f52a117fc9f70dc55956bb4 ]
+[ Upstream commit c5783af354688b24abd359f7086c282ec74de993 ]
 
-When mvpp2 is unloaded, the driver specific debugfs directory is not
-removed, which technically leads to a memory leak. However, this
-directory is only created when the first device is probed, so the
-hardware is present. Removing the module is only something a developer
-would to when e.g. testing out changes, so the module would be
-reloaded. So this memory leak is minor.
+As done for other sections, define the extern as a character array,
+which relaxes many of the compiler-time object size checks, which would
+otherwise assume it's a single long. Solves the following build error:
 
-The original attempt in commit fe2c9c61f668 ("net: mvpp2: debugfs: fix
-memory leak when using debugfs_lookup()") that was labelled as a memory
-leak fix was not, it fixed a refcount leak, but in doing so created a
-problem when the module is reloaded - the directory already exists, but
-mvpp2_root is NULL, so we lose all debugfs entries. This fix has been
-reverted.
+arch/sh/kernel/machvec.c: error: array subscript 'struct sh_machine_vector[0]' is partly outside array bounds of 'long int[1]' [-Werror=array-bounds]:  => 105:33
 
-This is the alternative fix, where we remove the offending directory
-whenever the driver is unloaded.
-
-Fixes: 21da57a23125 ("net: mvpp2: add a debugfs interface for the Header Parser")
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Marcin Wojtas <mw@semihalf.com>
-Link: https://lore.kernel.org/r/E1ofOAB-00CzkG-UO@rmk-PC.armlinux.org.uk
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
+Cc: linux-sh@vger.kernel.org
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Link: https://lore.kernel.org/lkml/alpine.DEB.2.22.394.2209050944290.964530@ramsan.of.borg/
+Fixes: 9655ad03af2d ("sh: Fixup machvec support.")
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Acked-by: Rich Felker <dalias@libc.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/marvell/mvpp2/mvpp2.h         |  1 +
- drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c | 10 ++++++++--
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c    | 13 ++++++++++++-
- 3 files changed, 21 insertions(+), 3 deletions(-)
+ arch/sh/include/asm/sections.h |  2 +-
+ arch/sh/kernel/machvec.c       | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2.h b/drivers/net/ethernet/marvell/mvpp2/mvpp2.h
-index 543a310ec102..cf45b9210c15 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2.h
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2.h
-@@ -1202,5 +1202,6 @@ u32 mvpp2_read(struct mvpp2 *priv, u32 offset);
- void mvpp2_dbgfs_init(struct mvpp2 *priv, const char *name);
+diff --git a/arch/sh/include/asm/sections.h b/arch/sh/include/asm/sections.h
+index 8edb824049b9..0cb0ca149ac3 100644
+--- a/arch/sh/include/asm/sections.h
++++ b/arch/sh/include/asm/sections.h
+@@ -4,7 +4,7 @@
  
- void mvpp2_dbgfs_cleanup(struct mvpp2 *priv);
-+void mvpp2_dbgfs_exit(void);
+ #include <asm-generic/sections.h>
  
- #endif
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
-index 4a3baa7e0142..75e83ea2a926 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_debugfs.c
-@@ -691,6 +691,13 @@ static int mvpp2_dbgfs_port_init(struct dentry *parent,
- 	return 0;
- }
+-extern long __machvec_start, __machvec_end;
++extern char __machvec_start[], __machvec_end[];
+ extern char __uncached_start, __uncached_end;
+ extern char __start_eh_frame[], __stop_eh_frame[];
  
-+static struct dentry *mvpp2_root;
-+
-+void mvpp2_dbgfs_exit(void)
-+{
-+	debugfs_remove(mvpp2_root);
-+}
-+
- void mvpp2_dbgfs_cleanup(struct mvpp2 *priv)
- {
- 	debugfs_remove_recursive(priv->dbgfs_dir);
-@@ -700,10 +707,9 @@ void mvpp2_dbgfs_cleanup(struct mvpp2 *priv)
+diff --git a/arch/sh/kernel/machvec.c b/arch/sh/kernel/machvec.c
+index ec05f491c347..a9f797a76e7c 100644
+--- a/arch/sh/kernel/machvec.c
++++ b/arch/sh/kernel/machvec.c
+@@ -22,8 +22,8 @@
+ #define MV_NAME_SIZE 32
  
- void mvpp2_dbgfs_init(struct mvpp2 *priv, const char *name)
- {
--	struct dentry *mvpp2_dir, *mvpp2_root;
-+	struct dentry *mvpp2_dir;
- 	int ret, i;
+ #define for_each_mv(mv) \
+-	for ((mv) = (struct sh_machine_vector *)&__machvec_start; \
+-	     (mv) && (unsigned long)(mv) < (unsigned long)&__machvec_end; \
++	for ((mv) = (struct sh_machine_vector *)__machvec_start; \
++	     (mv) && (unsigned long)(mv) < (unsigned long)__machvec_end; \
+ 	     (mv)++)
  
--	mvpp2_root = debugfs_lookup(MVPP2_DRIVER_NAME, NULL);
- 	if (!mvpp2_root)
- 		mvpp2_root = debugfs_create_dir(MVPP2_DRIVER_NAME, NULL);
+ static struct sh_machine_vector * __init get_mv_byname(const char *name)
+@@ -89,8 +89,8 @@ void __init sh_mv_setup(void)
+ 	if (!machvec_selected) {
+ 		unsigned long machvec_size;
  
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index d700f1b5a4bf..31dde6fbdbdc 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -6004,7 +6004,18 @@ static struct platform_driver mvpp2_driver = {
- 	},
- };
+-		machvec_size = ((unsigned long)&__machvec_end -
+-				(unsigned long)&__machvec_start);
++		machvec_size = ((unsigned long)__machvec_end -
++				(unsigned long)__machvec_start);
  
--module_platform_driver(mvpp2_driver);
-+static int __init mvpp2_driver_init(void)
-+{
-+	return platform_driver_register(&mvpp2_driver);
-+}
-+module_init(mvpp2_driver_init);
-+
-+static void __exit mvpp2_driver_exit(void)
-+{
-+	platform_driver_unregister(&mvpp2_driver);
-+	mvpp2_dbgfs_exit();
-+}
-+module_exit(mvpp2_driver_exit);
+ 		/*
+ 		 * Sanity check for machvec section alignment. Ensure
+@@ -104,7 +104,7 @@ void __init sh_mv_setup(void)
+ 		 * vector (usually the only one) from .machvec.init.
+ 		 */
+ 		if (machvec_size >= sizeof(struct sh_machine_vector))
+-			sh_mv = *(struct sh_machine_vector *)&__machvec_start;
++			sh_mv = *(struct sh_machine_vector *)__machvec_start;
+ 	}
  
- MODULE_DESCRIPTION("Marvell PPv2 Ethernet Driver - www.marvell.com");
- MODULE_AUTHOR("Marcin Wojtas <mw@semihalf.com>");
+ 	printk(KERN_NOTICE "Booting machvec: %s\n", get_system_type());
 -- 
 2.35.1
 
