@@ -2,100 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428B4609DBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C25609DB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230225AbiJXJQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S230150AbiJXJQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbiJXJQE (ORCPT
+        with ESMTP id S230472AbiJXJQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:16:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBA94D162;
-        Mon, 24 Oct 2022 02:15:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 924666108B;
-        Mon, 24 Oct 2022 09:15:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D434BC433D7;
-        Mon, 24 Oct 2022 09:15:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666602940;
-        bh=/59S997d8HJo0WppUTEKLowxRoQ4GCM2JDP0Y998Dq0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LV0WQ8I27+oCDDOeeB8dTlnh2+56dc9iq1ssU4q6pmXt7dlxZcE0yix/IlXBlsAEv
-         HkdaSwbSaugB+uM6/2eMSs1Ws620zoMCBrZmP7XY0grc4yfJRemxlEskdCGkGbWSmC
-         KT5Ft2+GWpunOssq+TD8/36HJ/HwgG4V951GeDDwJsUYHo+The0+A/ytN6cHtgp5xe
-         VfSiGQRDsrUDpxTLA6qwrNnYW4ojZjSDiFMkPIHE97mnlNS7U2AwzgHHKpHTtvzlRR
-         iwPJYyKR17hKAPDvHLy7i3HoW0QNF5GXAw0nWuEhzmhLhfFEJI9hwNWEGyRxaNyZGF
-         5A7lLRHqRdlpQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1omtYK-0005J4-JD; Mon, 24 Oct 2022 11:15:24 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 4/4] arm64: dts: qcom: sm8450: fix UFS PHY registers
-Date:   Mon, 24 Oct 2022 11:15:07 +0200
-Message-Id: <20221024091507.20342-5-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221024091507.20342-1-johan+linaro@kernel.org>
-References: <20221024091507.20342-1-johan+linaro@kernel.org>
+        Mon, 24 Oct 2022 05:16:03 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F97546238;
+        Mon, 24 Oct 2022 02:15:41 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29O6ogAs020583;
+        Mon, 24 Oct 2022 11:15:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=z+1JCm1pKs2pubgyamSKK+Q6QSmrDxZrpGoChFw5Hls=;
+ b=UZATB/6EVJaHP+kheMoZbkdycFbxldtahGwBzhpxjYAcjpuEPD0sA1D9XwalMRuhsC5q
+ wOWttOFXaS6PvbJqRk0M41AZInYX2uW0oZVpZE2hMRrgIgCqEX79GUMyrH9B5Yn01bFH
+ ao4Jxsc0OZSJcZkEe+hpCMoRhF0nitIDPMaVpGNiSwq9z3oc8F99dqn4JN22Hex0/l1+
+ b2iVvuc3y9O+0xNrDaQHV+Er/WNHF4p9FtyoLlGJI1DLAVHI4z6FkhrRWrz7uvSUL5Lm
+ O6P9rn6lvscZF6swMPPhDCX9LIxqYMFEzS78uXjKhIjlHzI3tlsDEJKAvxvtlMMARXqq rA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kc7v29rdd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 11:15:19 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BCF0610002A;
+        Mon, 24 Oct 2022 11:15:14 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B7CC1217B88;
+        Mon, 24 Oct 2022 11:15:14 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
+ 2022 11:15:13 +0200
+Message-ID: <19d20435-ad5d-dc61-7b54-36b7bac72266@foss.st.com>
+Date:   Mon, 24 Oct 2022 11:15:13 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 0/8] iio: stm32-adc: add support of adc for stm32mp13
+Content-Language: en-US
+To:     Olivier Moysan <olivier.moysan@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <devicetree@vger.kernel.org>
+References: <20221012142205.13041-1-olivier.moysan@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20221012142205.13041-1-olivier.moysan@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_02,2022-10-21_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sizes of the UFS PHY register regions are too small and does
-specifically not cover all registers used by the Linux driver.
+Hi Olivier
 
-As Linux maps these regions as full pages this is currently not an issue
-on Linux, but let's update the sizes to match the vendor driver.
+On 10/12/22 16:21, Olivier Moysan wrote:
+> On STM32MP13 SoCs, each ADC peripheral has a single ADC block.
+> These ADC peripherals, ADC1 and ADC2, are fully independent.
+> The STM32MP131 SoC provides only ADC2, while other STM32MP13x
+> SoCs provide both ADC1 and ADC2.
+> 
+> The STM32MP13 ADC features and characteristics are slightly
+> different from STM32MP15 ADC ones, requiring a specific support
+> in the driver.
+> 
+> This patchset enables the ADC peripheral on STM32MP135F-DK board.
+> 
+> On STM32MP135F-DK board the ADC is connected to VDDA voltage
+> provided by the PMIC LOD1 supply, which has to be enabled through
+> SCMI regulator framework.
+> This serie introduces a fixed regulator to allow ADC probing,
+> while SCMI regulators support is not available. This does
+> not ensure ADC regulator enabling however.
+> 
+> Changes in v4:
+> - reformat patch 1 commit message
+> - reorder adc1 node
+> 
+> v3:
+> - Remove blank line in tag block
+> - Use HZ_PER_MHZ unit for max frequency definition
+> - Coding style updates
+> 
+> v2:
+> - Rework commit message length
+> - Add missing spaces
+> - Remove useless defines
+> 
+> Olivier Moysan (8):
+>    iio: adc: stm32-adc: fix channel sampling time init
+>    dt-bindings: iio: adc: stm32-adc: add stm32mp13 compatibles
+>    iio: adc: stm32-adc: add stm32mp13 support
+>    iio: adc: stm32: manage min sampling time on all internal channels
+>    ARM: dts: stm32: add adc support to stm32mp13
+>    ARM: dts: stm32: add adc pins muxing on stm32mp135f-dk
+>    ARM: dts: stm32: add dummy vdd_adc regulator on stm32mp135f-dk
+>    ARM: dts: stm32: add adc support on stm32mp135f-dk
+> 
 
-Fixes: 07fa917a335e ("arm64: dts: qcom: sm8450: add ufs nodes")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+DT patches [5 to 8] applied on stm32-next.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index d32f08df743d..dfc799244180 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -3161,11 +3161,11 @@ ufs_mem_phy: phy@1d87000 {
- 			status = "disabled";
- 
- 			ufs_mem_phy_lanes: phy@1d87400 {
--				reg = <0 0x01d87400 0 0x108>,
--				      <0 0x01d87600 0 0x1e0>,
--				      <0 0x01d87c00 0 0x1dc>,
--				      <0 0x01d87800 0 0x108>,
--				      <0 0x01d87a00 0 0x1e0>;
-+				reg = <0 0x01d87400 0 0x188>,
-+				      <0 0x01d87600 0 0x200>,
-+				      <0 0x01d87c00 0 0x200>,
-+				      <0 0x01d87800 0 0x188>,
-+				      <0 0x01d87a00 0 0x200>;
- 				#phy-cells = <0>;
- 			};
- 		};
--- 
-2.37.3
+Thanks
+Alex
+
 
