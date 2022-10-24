@@ -2,137 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58FC760B45B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B5760B477
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbiJXRje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
+        id S231966AbiJXRpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbiJXRi5 (ORCPT
+        with ESMTP id S232484AbiJXRpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:38:57 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8893341F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:14:44 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q1so9036358pgl.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:14:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6K/W/tGQbEGTcjFYFF7obhZCetWTg/joFwdMrcbbg88=;
-        b=h/ytl5e9/k/342yB1H8BeaL02HxFJn4GIfjrkkGet6ZLG4cPmCYS/DpaC6IXsHL+CF
-         Dqi4snGmU88lbGI0yHxHTbbvOMuiht6icq3YEZzVWdCQhtsW7U7x/xCJt2ThlpE5kCpa
-         Ai42HwHKaNshye+8lyPpeRjxySViQ+q8azKSc=
+        Mon, 24 Oct 2022 13:45:24 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D3E1E0996;
+        Mon, 24 Oct 2022 09:21:05 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id g10so11328162oif.10;
+        Mon, 24 Oct 2022 09:21:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6K/W/tGQbEGTcjFYFF7obhZCetWTg/joFwdMrcbbg88=;
-        b=Il9EaMoTwJSi+spYhN9sFPMGvPSEGGuAp/EmmwuCUAQPdcMO0qB8CCPQ/+AHEtKCFb
-         M1DykAqNn+K3iICO/xbRqnLxu1ohN6im2Ftu3QGbA5x0GifybuKGGB/xuagFj0RdcSFg
-         FnAzulVHwzi/49H9mPDM/dd3c8u5Rv09fPD/x/4Zk5Z3Jz0nVTGPE+n1JB4lAfZMmVHF
-         rw9yI9m5BmVLfw2Kf4LRkk+qfaDFRm9VGfhkSBuzAVR+FCrG9AlXF6G877RP42CwS/a7
-         rzlQEMwWzSYYiK+BQG7p4RpRUSUJZtqt1e4zD4eqNHY3U+A1EMR/nS3wX5tFoPnl+o1b
-         FB6g==
-X-Gm-Message-State: ACrzQf1PieDyh7a0bF+vn3cE24qzOaXmeVkT51KOWEuyT9d3D8tDrs49
-        rkkcOn4DjtnFy9uGsc2cLvrmwqNJ3BGxHQ==
-X-Google-Smtp-Source: AMsMyM6r66uB7r6D2ptdiXjTVDlaxnxa9zKkBZ7u4HiaYC5rYlVx5f3Cp2DY+F+I/EBCylyyXNBZBg==
-X-Received: by 2002:a05:6a00:1799:b0:56c:1495:70bc with SMTP id s25-20020a056a00179900b0056c149570bcmr119687pfg.12.1666627961483;
-        Mon, 24 Oct 2022 09:12:41 -0700 (PDT)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:5f9c:c5bc:902f:3da4])
-        by smtp.gmail.com with ESMTPSA id u70-20020a627949000000b0056b8726d2d3sm5162pfc.157.2022.10.24.09.12.39
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xmB3s2OqT66rk7MgqqeQlYz/bdEkGy0qgYIJeA+CLy0=;
+        b=FnOFaJ798AxvaRulplcwTZJhJ0Buvqy54tQAH+JiCsqQCYisMfdawARe6FxTB/sXPz
+         pfM28WLF9zUc6Atl08zL9WaWAYNpvCu/hxRowDXVWqJbRaQzoSumXhqhUkHYw9qDje5f
+         D4e0RWdBqYCrzjaxw25HfH/NKBxAlqXX5szyJAq5tk+Vnnamr+MplNDrPeqr0x8zZxp5
+         FWT65b5ShPpOSFbcvubbVIWh/pRYGcdMxWVE3/RgrRxtXbgjZEO6Uu9l0BT5eBsup8VS
+         g4PNhnqPE8/yq/tmJrCZNew5m6AiETdeMuyoxTqMMWozqUwLWlgDFIBh79eYJ1C3EgAk
+         9t8w==
+X-Gm-Message-State: ACrzQf0hPbDOEYY86bPBwWeAJysCdzxScObtmk+8cMlI/0wZ7YMqVbls
+        IVYobjabJe467ZuzweFz8Vwr8l3SWw==
+X-Google-Smtp-Source: AMsMyM5GgVf+Fq2zW0aTr2tqUvK6jEfRogxjv/ZwsWgOlV1NxE7O2hFWOphibJoEQeTRkOA57/pCWg==
+X-Received: by 2002:aca:3083:0:b0:355:afb:cdb5 with SMTP id w125-20020aca3083000000b003550afbcdb5mr28020261oiw.110.1666628285473;
+        Mon, 24 Oct 2022 09:18:05 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c23-20020a056808105700b0035486165f4csm3334oih.37.2022.10.24.09.18.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 09:12:40 -0700 (PDT)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>
-Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCH 6/6] zsmalloc: make sure we select best zspage size
-Date:   Tue, 25 Oct 2022 01:12:13 +0900
-Message-Id: <20221024161213.3221725-7-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-In-Reply-To: <20221024161213.3221725-1-senozhatsky@chromium.org>
-References: <20221024161213.3221725-1-senozhatsky@chromium.org>
+        Mon, 24 Oct 2022 09:18:04 -0700 (PDT)
+Received: (nullmailer pid 1869834 invoked by uid 1000);
+        Mon, 24 Oct 2022 16:18:06 -0000
+Date:   Mon, 24 Oct 2022 11:18:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Message-ID: <20221024161806.GA1855651-robh@kernel.org>
+References: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
+ <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We currently decide the best zspage size by looking at
-used percentage value. This is not exactly enough as
-zspage usage percentage calculation is not accurate.
+On Thu, Oct 13, 2022 at 11:48:36AM +0200, Naresh Solanki wrote:
+> Add common fan properties bindings to a schema.
+> 
+> Bindings for fan controllers can reference the common schema for the
+> fan
+> 
+> child nodes:
+> 
+>   patternProperties:
+>     "^fan@[0-2]":
+>       type: object
+>       $ref: fan-common.yaml#
+> 
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../devicetree/bindings/hwmon/fan-common.yaml | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/fan-common.yaml b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> new file mode 100644
+> index 000000000000..224f5013c93f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/hwmon/fan-common.yaml
+> @@ -0,0 +1,48 @@
+> +# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/hwmon/fan-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Common fan properties
+> +
+> +maintainers:
+> +  - Naresh Solanki <naresh.solanki@9elements.com>
+> +
+> +properties:
+> +  max-rpm:
+> +    description:
+> +      Max RPM supported by fan.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pulses-per-revolution:
+> +    description:
+> +      The number of pulse from fan sensor per revolution.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  default-rpm:
+> +    description:
+> +      Target RPM the fan should be configured during driver probe.
 
-For example, let's look at size class 208
+So if we unload and reload the driver module, it should go back to the 
+default? 
 
-pages per zspage       wasted bytes         used%
-       1                   144               96
-       2                    80               99
-       3                    16               99
-       4                   160               99
+I think it is really, 'target RPM if not already configured' which could 
+be keep the setting from a register (e.g. what the bootloader set) or 
+perhaps you already have temperature information to use...
 
-We will select 2 page per zspage configuration, as it
-is the first one to reach 99%. However, 3 pages per
-zspage wastes less memory. Hence we need to also consider
-wasted space metrics when device zspage size.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
-Additionally, rename max_usedpc_order because it does
-not hold zspage order, it holds maximum pages per-zspage
-value.
+> +  pwm-frequency:
+> +    description:
+> +      PWM frequency for fan in Hertz(Hz).
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +  pwm-polarity-inverse:
+> +    description:
+> +      Inverse PWM polarity for fan.
+> +    type: boolean
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
----
- mm/zsmalloc.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+As I said before, the PWM binding handles these 2 settings. Use it. Yes, 
+it's a bit of an overkill when the child is the consumer of the parent. 
+Until some 'clever' h/w engineer decides to use one of the PWMs for 
+something else like a backlight.
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 40a09b1f63b5..5de56f4cd16a 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -775,8 +775,9 @@ static enum fullness_group fix_fullness_group(struct size_class *class,
- static int get_pages_per_zspage(struct zs_pool *pool, int class_size)
- {
- 	int i, max_usedpc = 0;
--	/* zspage order which gives maximum used size per KB */
--	int max_usedpc_order = 1;
-+	/* zspage size which gives maximum used size per KB */
-+	int pages_per_zspage = 1;
-+	int min_waste = INT_MAX;
- 
- 	for (i = 1; i <= pool->max_pages_per_zspage; i++) {
- 		int zspage_size;
-@@ -788,14 +789,19 @@ static int get_pages_per_zspage(struct zs_pool *pool, int class_size)
- 
- 		if (usedpc > max_usedpc) {
- 			max_usedpc = usedpc;
--			max_usedpc_order = i;
-+			pages_per_zspage = i;
- 		}
- 
- 		if (usedpc == 100)
- 			break;
-+
-+		if (waste < min_waste) {
-+			min_waste = waste;
-+			pages_per_zspage = i;
-+		}
- 	}
- 
--	return max_usedpc_order;
-+	return pages_per_zspage;
- }
- 
- static struct zspage *get_zspage(struct page *page)
--- 
-2.38.0.135.g90850a2211-goog
-
+Rob
