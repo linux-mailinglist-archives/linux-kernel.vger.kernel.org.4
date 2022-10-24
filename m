@@ -2,129 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA0F60B4A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBAA60B49F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbiJXR7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S232147AbiJXR5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbiJXR6i (ORCPT
+        with ESMTP id S231868AbiJXR5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:58:38 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1252DCAE9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:38:56 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id g11so5944822qts.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:38:56 -0700 (PDT)
+        Mon, 24 Oct 2022 13:57:25 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B190F02C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:37:11 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id l127so8144975iof.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lGJrVQPc2u8BmXJHhbTLdghe4GhptaKKpCGXInaxYBc=;
-        b=mN9JEcfA/k4mMvL/hZaY6pEx5NHRiDoUSSXyXc+7ktUksysoXmwb7A6j3c0J4sBPi4
-         royZIXe/7FbOVh+Zgynooe8CQ6KGcnTMryluWGp/CC7+Jo2d71hU3E9h0GVnOqB/73pM
-         01WzsLuqJqxdiWhX4TwvucbzFKYn/XKnzc1zj5xd5yNc+6bfcutHdo/ecPMD3+lnY9kE
-         ntJp9Unx/qmeWLKaVGGdjj5fqj21OBcVJTOmLNpHZbzvmC+++I2G8TVFA6fA8YOhKjHO
-         vJHvmuMw/P/QZeMQ9cwuHJlk4u26ZZ03c0wwxvS4tI5T6mauuDgA2sEB+KXEOybpwQ3r
-         71Ew==
+        d=linuxfoundation.org; s=google;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=891IdAC6CjPU3houg/K1WEgsqjrUAZT4ffved4EQYDA=;
+        b=TaRZkPb1/z/kV9Db//RMXbx8MK5LTkSyccyxyw5nqO7feqrdkaBAosOG6rCahvTmgV
+         WSeg5F3DIzLWcbeoMHg8junZ4TJp56Ag24+XkrnsRJstzOYeddbehVKhQBtP2wzCm7dB
+         JPQiAI2pt+Zk6vY6E7M0nbGL19LaLXNVnMT/k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lGJrVQPc2u8BmXJHhbTLdghe4GhptaKKpCGXInaxYBc=;
-        b=GiE5zTdC+bgdbTjYkT5eDRJKx0SgTBnRnuA5DASzetDK7wb//yTV9drDtPD179+WdI
-         1ayC/cuvaPQ/yM7AXWd4u2xIa8jYuuyTqRSIGOUTUoXHd90vyzzxhcPbdb6u7PCUvTUZ
-         c0t4G5AgCMJh4i4tea6TNGRgEqjaAbJbXAbNcAoMboi/TTc7r4iYsVt7IwscTDQbb8P9
-         DasvNCDsO/sNlHTR4js3l8PyVr/k7k2s7esCEdEp8CcJ1ug7YcbEyCNyxkDbZMUVvSbG
-         +n2Gn0xyYPMmfH4sSNyKOYY7I/rDHhwZGbsSfEFZXzckvtvjn0prHJqXE1JxYZrprfGL
-         sCjQ==
-X-Gm-Message-State: ACrzQf0jM2C4hBeX4/hAvPKUVkA5NnhEdSGGnujG0s7RDAD/7d2TQ8G2
-        7YpVX2WAbw9K1kjpXSSp42rhbAj1VjZjMQ==
-X-Google-Smtp-Source: AMsMyM6nNKEGA5WXpAqyAoIBFJfkWQ0wIqWX2Rnnj9/gvhCBUBxmQ8Wb0wGieNxJDAU17FPd6rMxeQ==
-X-Received: by 2002:a05:620a:858:b0:6ea:8a17:19fd with SMTP id u24-20020a05620a085800b006ea8a1719fdmr23874112qku.397.1666628955532;
-        Mon, 24 Oct 2022 09:29:15 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id h7-20020a05620a284700b006ea7f9d8644sm201040qkp.96.2022.10.24.09.29.13
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=891IdAC6CjPU3houg/K1WEgsqjrUAZT4ffved4EQYDA=;
+        b=Y7OxrWxbxPk75ihDYmLNIbai+zJx/Tl4vX6aZvsl4YHNrdO8b1h6YuCFTlcJ+F+dfV
+         n7X9eGHejcWlP9wtRYIMiCQdJxn8lNIBQqLNILDg6htL5iugnnUfJlTAX6GDmJW2vb3W
+         VCOZdqARweja2IgIKNVVjhab7rkJaiq9p100Nmzos8tnAAmq2GvwqHlV6/f4jiH++BTX
+         IUJNHv+ATbKjnGaN+9dcx872qJJVa5GROi3QS9kUE3+kDzy3tBwSvlXt8xZlBoO+3CDN
+         VVWK+kP0tUMRCmC9iCD1iqGx9UZnwLDkIqCmzt1uK7W37aciPpWb73vRL4+IJMSgGjyg
+         KdKA==
+X-Gm-Message-State: ACrzQf3EI3dW1razUS9BlhesgJyNeZsvlVyVA01u2MjBLPKm6kB+s0Y/
+        Hc43+pc7g44FX+UuO/v4Oe3EAg==
+X-Google-Smtp-Source: AMsMyM4X95FvpzI6NSk3WYvl5Tu0S3diBPj6eWa8tZDZ5IW9thNvqA27Rjt3z5OhnWbilf42kMfWqA==
+X-Received: by 2002:a05:6602:3410:b0:6bc:c4b2:3577 with SMTP id n16-20020a056602341000b006bcc4b23577mr20608128ioz.52.1666629344157;
+        Mon, 24 Oct 2022 09:35:44 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id m2-20020a0566022e8200b00689257fef39sm101581iow.4.2022.10.24.09.35.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 09:29:14 -0700 (PDT)
-Message-ID: <1f56ff1d-4b59-97f9-60d0-12197100ae4a@linaro.org>
-Date:   Mon, 24 Oct 2022 12:29:12 -0400
+        Mon, 24 Oct 2022 09:35:43 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------VQ0pGbV09a28TYDKCWYl6zh9"
+Message-ID: <b9c14ec8-b410-c742-3cb4-0067e2bf7100@linuxfoundation.org>
+Date:   Mon, 24 Oct 2022 10:35:43 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 3/3] ASoC: dt-bindings: rt5682: Add AVDD, MICVDD and VBAT
- supplies
+ Thunderbird/102.2.2
 Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221021190908.1502026-1-nfraprado@collabora.com>
- <20221021190908.1502026-4-nfraprado@collabora.com>
- <f7007c75-9c99-902d-170f-383b7347922c@linaro.org>
- <20221024160029.cfpyp2cptwig27jd@notapiano>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024160029.cfpyp2cptwig27jd@notapiano>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 6.1-rc3
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 12:00, Nícolas F. R. A. Prado wrote:
-> On Sat, Oct 22, 2022 at 12:41:01PM -0400, Krzysztof Kozlowski wrote:
->> On 21/10/2022 15:09, Nícolas F. R. A. Prado wrote:
->>> The rt5682 codec can have three supplies: AVDD, MICVDD and VBAT. Add
->>> properties for them.
->>>
->>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>> ---
->>>
->>>  Documentation/devicetree/bindings/sound/rt5682.txt | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/sound/rt5682.txt b/Documentation/devicetree/bindings/sound/rt5682.txt
->>> index c5f2b8febcee..5ccf4eaf12a9 100644
->>> --- a/Documentation/devicetree/bindings/sound/rt5682.txt
->>> +++ b/Documentation/devicetree/bindings/sound/rt5682.txt
->>> @@ -48,6 +48,12 @@ Optional properties:
->>>  
->>>  - #sound-dai-cells: Should be set to '<0>'.
->>>  
->>> +- AVDD-supply: phandle to the regulator supplying AVDD
->>> +
->>> +- MICVDD-supply: phandle to the regulator supplying MICVDD
->>> +
->>> +- VBAT-supply: phandle to the regulator supplying VBAT
->>
->> Lowercase.
-> 
-> Actually looks like there's already a DT using these properties before the
-> binding was added:
-> 
-> arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-> 
-> In this case should we keep them uppercase for compatibility or carry on with
-> the name changes and also update the DT? (the driver also uses uppercase names)
+This is a multi-part message in MIME format.
+--------------VQ0pGbV09a28TYDKCWYl6zh9
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Driver seems to use them as well, then uppercase is fine. But you need
-to describe it in commit msg, that you document existing usage, not
-adding new properties.
+Hi Linus,
 
-Best regards,
-Krzysztof
+Please pull the following Kselftest fixes update for Linux 6.1-rc3.
 
+This Kselftest fixes update for Linux 6.1-rc3 consists of:
+
+- futex, intel_pstate, kexec build fixes
+- ftrace dynamic_events dependency check fix
+- memory-hotplug fix to remove redundant warning from test report
+
+diff for this pull request is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.1-rc3
+
+for you to fetch changes up to cb05c81ada76a30a25a5f79b249375e33473af33:
+
+   selftests/ftrace: fix dynamic_events dependency check (2022-10-18 14:27:23 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-6.1-rc3
+
+This Kselftest fixes update for Linux 6.1-rc3 consists of:
+
+- futex, intel_pstate, kexec build fixes
+- ftrace dynamic_events dependency check fix
+- memory-hotplug fix to remove redundant warning from test report
+
+----------------------------------------------------------------
+Ricardo Cañuelo (3):
+       selftests/futex: fix build for clang
+       selftests/intel_pstate: fix build for ARCH=x86_64
+       selftests/kexec: fix build for ARCH=x86_64
+
+Sven Schnelle (1):
+       selftests/ftrace: fix dynamic_events dependency check
+
+Zhao Gongyi (1):
+       selftests/memory-hotplug: Remove the redundant warning information
+
+  tools/testing/selftests/ftrace/test.d/dynevent/test_duplicates.tc   | 2 +-
+  .../ftrace/test.d/trigger/inter-event/trigger-synthetic-eprobe.tc   | 2 +-
+  tools/testing/selftests/futex/functional/Makefile                   | 6 ++----
+  tools/testing/selftests/intel_pstate/Makefile                       | 6 +++---
+  tools/testing/selftests/kexec/Makefile                              | 6 +++---
+  tools/testing/selftests/memory-hotplug/mem-on-off-test.sh           | 1 -
+  6 files changed, 10 insertions(+), 13 deletions(-)
+----------------------------------------------------------------
+--------------VQ0pGbV09a28TYDKCWYl6zh9
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-6.1-rc3.diff"
+Content-Disposition: attachment; filename="linux-kselftest-fixes-6.1-rc3.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvZHlu
+ZXZlbnQvdGVzdF9kdXBsaWNhdGVzLnRjIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZnRy
+YWNlL3Rlc3QuZC9keW5ldmVudC90ZXN0X2R1cGxpY2F0ZXMudGMKaW5kZXggZGI1MjI1Nzdm
+Zjc4Li5kM2E3OWRhMjE1YzggMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L2Z0cmFjZS90ZXN0LmQvZHluZXZlbnQvdGVzdF9kdXBsaWNhdGVzLnRjCisrKyBiL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvZHluZXZlbnQvdGVzdF9kdXBsaWNh
+dGVzLnRjCkBAIC0xLDcgKzEsNyBAQAogIyEvYmluL3NoCiAjIFNQRFgtTGljZW5zZS1JZGVu
+dGlmaWVyOiBHUEwtMi4wCiAjIGRlc2NyaXB0aW9uOiBHZW5lcmljIGR5bmFtaWMgZXZlbnQg
+LSBjaGVjayBpZiBkdXBsaWNhdGUgZXZlbnRzIGFyZSBjYXVnaHQKLSMgcmVxdWlyZXM6IGR5
+bmFtaWNfZXZlbnRzICJlWzpbPGdyb3VwPi9dPGV2ZW50Pl0gPGF0dGFjaGVkLWdyb3VwPi48
+YXR0YWNoZWQtZXZlbnQ+IFs8YXJncz5dIjpSRUFETUUKKyMgcmVxdWlyZXM6IGR5bmFtaWNf
+ZXZlbnRzICJlWzpbPGdyb3VwPi9dWzxldmVudD5dXSA8YXR0YWNoZWQtZ3JvdXA+LjxhdHRh
+Y2hlZC1ldmVudD4gWzxhcmdzPl0iOlJFQURNRQogCiBlY2hvIDAgPiBldmVudHMvZW5hYmxl
+CiAKZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQv
+dHJpZ2dlci9pbnRlci1ldmVudC90cmlnZ2VyLXN5bnRoZXRpYy1lcHJvYmUudGMgYi90b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9mdHJhY2UvdGVzdC5kL3RyaWdnZXIvaW50ZXItZXZlbnQv
+dHJpZ2dlci1zeW50aGV0aWMtZXByb2JlLnRjCmluZGV4IDkxNGZlMmU1ZDAzMC4uNjQ2MWMz
+NzU2OTRmIDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9mdHJhY2UvdGVz
+dC5kL3RyaWdnZXIvaW50ZXItZXZlbnQvdHJpZ2dlci1zeW50aGV0aWMtZXByb2JlLnRjCisr
+KyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvdHJpZ2dlci9pbnRl
+ci1ldmVudC90cmlnZ2VyLXN5bnRoZXRpYy1lcHJvYmUudGMKQEAgLTEsNyArMSw3IEBACiAj
+IS9iaW4vc2gKICMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAKICMgZGVzY3Jp
+cHRpb246IGV2ZW50IHRyaWdnZXIgLSB0ZXN0IGludGVyLWV2ZW50IGhpc3RvZ3JhbSB0cmln
+Z2VyIGVwcm9iZSBvbiBzeW50aGV0aWMgZXZlbnQKLSMgcmVxdWlyZXM6IGR5bmFtaWNfZXZl
+bnRzIHN5bnRoZXRpY19ldmVudHMgZXZlbnRzL3N5c2NhbGxzL3N5c19lbnRlcl9vcGVuYXQv
+aGlzdCAiZVs6Wzxncm91cD4vXTxldmVudD5dIDxhdHRhY2hlZC1ncm91cD4uPGF0dGFjaGVk
+LWV2ZW50PiBbPGFyZ3M+XSI6UkVBRE1FCisjIHJlcXVpcmVzOiBkeW5hbWljX2V2ZW50cyBz
+eW50aGV0aWNfZXZlbnRzIGV2ZW50cy9zeXNjYWxscy9zeXNfZW50ZXJfb3BlbmF0L2hpc3Qg
+ImVbOls8Z3JvdXA+L11bPGV2ZW50Pl1dIDxhdHRhY2hlZC1ncm91cD4uPGF0dGFjaGVkLWV2
+ZW50PiBbPGFyZ3M+XSI6UkVBRE1FCiAKIGVjaG8gMCA+IGV2ZW50cy9lbmFibGUKIApkaWZm
+IC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvZnV0ZXgvZnVuY3Rpb25hbC9NYWtl
+ZmlsZSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z1dGV4L2Z1bmN0aW9uYWwvTWFrZWZp
+bGUKaW5kZXggNzMyMTQ5MDExNjkyLi41YTBlMGRmOGRlOWIgMTAwNjQ0Ci0tLSBhL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL2Z1dGV4L2Z1bmN0aW9uYWwvTWFrZWZpbGUKKysrIGIvdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMvZnV0ZXgvZnVuY3Rpb25hbC9NYWtlZmlsZQpAQCAtMywx
+MSArMywxMSBAQCBJTkNMVURFUyA6PSAtSS4uL2luY2x1ZGUgLUkuLi8uLi8gLUkuLi8uLi8u
+Li8uLi8uLi91c3IvaW5jbHVkZS8KIENGTEFHUyA6PSAkKENGTEFHUykgLWcgLU8yIC1XYWxs
+IC1EX0dOVV9TT1VSQ0UgLXB0aHJlYWQgJChJTkNMVURFUykgJChLSERSX0lOQ0xVREVTKQog
+TERMSUJTIDo9IC1scHRocmVhZCAtbHJ0CiAKLUhFQURFUlMgOj0gXAorTE9DQUxfSERSUyA6
+PSBcCiAJLi4vaW5jbHVkZS9mdXRleHRlc3QuaCBcCiAJLi4vaW5jbHVkZS9hdG9taWMuaCBc
+CiAJLi4vaW5jbHVkZS9sb2dnaW5nLmgKLVRFU1RfR0VOX0ZJTEVTIDo9IFwKK1RFU1RfR0VO
+X1BST0dTIDo9IFwKIAlmdXRleF93YWl0X3RpbWVvdXQgXAogCWZ1dGV4X3dhaXRfd291bGRi
+bG9jayBcCiAJZnV0ZXhfcmVxdWV1ZV9waSBcCkBAIC0yNCw1ICsyNCwzIEBAIFRFU1RfUFJP
+R1MgOj0gcnVuLnNoCiB0b3Bfc3JjZGlyID0gLi4vLi4vLi4vLi4vLi4KIERFRkFVTFRfSU5T
+VEFMTF9IRFJfUEFUSCA6PSAxCiBpbmNsdWRlIC4uLy4uL2xpYi5tawotCi0kKFRFU1RfR0VO
+X0ZJTEVTKTogJChIRUFERVJTKQpkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
+dHMvaW50ZWxfcHN0YXRlL01ha2VmaWxlIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvaW50
+ZWxfcHN0YXRlL01ha2VmaWxlCmluZGV4IDM5ZjBmYTJhOGZkNi4uMDVkNjZlZjUwYzk3IDEw
+MDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9pbnRlbF9wc3RhdGUvTWFrZWZp
+bGUKKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvaW50ZWxfcHN0YXRlL01ha2VmaWxl
+CkBAIC0yLDEwICsyLDEwIEBACiBDRkxBR1MgOj0gJChDRkxBR1MpIC1XYWxsIC1EX0dOVV9T
+T1VSQ0UKIExETElCUyArPSAtbG0KIAotdW5hbWVfTSA6PSAkKHNoZWxsIHVuYW1lIC1tIDI+
+L2Rldi9udWxsIHx8IGVjaG8gbm90KQotQVJDSCA/PSAkKHNoZWxsIGVjaG8gJCh1bmFtZV9N
+KSB8IHNlZCAtZSBzL2kuODYveDg2LyAtZSBzL3g4Nl82NC94ODYvKQorQVJDSCA/PSAkKHNo
+ZWxsIHVuYW1lIC1tIDI+L2Rldi9udWxsIHx8IGVjaG8gbm90KQorQVJDSF9QUk9DRVNTRUQg
+Oj0gJChzaGVsbCBlY2hvICQoQVJDSCkgfCBzZWQgLWUgcy9pLjg2L3g4Ni8gLWUgcy94ODZf
+NjQveDg2LykKIAotaWZlcSAoeDg2LCQoQVJDSCkpCitpZmVxICh4ODYsJChBUkNIX1BST0NF
+U1NFRCkpCiBURVNUX0dFTl9GSUxFUyA6PSBtc3IgYXBlcmYKIGVuZGlmCiAKZGlmZiAtLWdp
+dCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tleGVjL01ha2VmaWxlIGIvdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMva2V4ZWMvTWFrZWZpbGUKaW5kZXggODA2YTE1MDY0OGMzLi42N2Zl
+N2E0NmNiNjIgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tleGVjL01h
+a2VmaWxlCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tleGVjL01ha2VmaWxlCkBA
+IC0xLDEwICsxLDEwIEBACiAjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9u
+bHkKICMgTWFrZWZpbGUgZm9yIGtleGVjIHRlc3RzCiAKLXVuYW1lX00gOj0gJChzaGVsbCB1
+bmFtZSAtbSAyPi9kZXYvbnVsbCB8fCBlY2hvIG5vdCkKLUFSQ0ggPz0gJChzaGVsbCBlY2hv
+ICQodW5hbWVfTSkgfCBzZWQgLWUgcy9pLjg2L3g4Ni8gLWUgcy94ODZfNjQveDg2LykKK0FS
+Q0ggPz0gJChzaGVsbCB1bmFtZSAtbSAyPi9kZXYvbnVsbCB8fCBlY2hvIG5vdCkKK0FSQ0hf
+UFJPQ0VTU0VEIDo9ICQoc2hlbGwgZWNobyAkKEFSQ0gpIHwgc2VkIC1lIHMvaS44Ni94ODYv
+IC1lIHMveDg2XzY0L3g4Ni8pCiAKLWlmZXEgKCQoQVJDSCksJChmaWx0ZXIgJChBUkNIKSx4
+ODYgcHBjNjRsZSkpCitpZmVxICgkKEFSQ0hfUFJPQ0VTU0VEKSwkKGZpbHRlciAkKEFSQ0hf
+UFJPQ0VTU0VEKSx4ODYgcHBjNjRsZSkpCiBURVNUX1BST0dTIDo9IHRlc3Rfa2V4ZWNfbG9h
+ZC5zaCB0ZXN0X2tleGVjX2ZpbGVfbG9hZC5zaAogVEVTVF9GSUxFUyA6PSBrZXhlY19jb21t
+b25fbGliLnNoCiAKZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21lbW9y
+eS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaCBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaAppbmRleCA3NGVlNTA2N2E4Y2Uu
+LjYxMWJlODZlYWYzZCAxMDA3NTUKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbWVt
+b3J5LWhvdHBsdWcvbWVtLW9uLW9mZi10ZXN0LnNoCisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL21lbW9yeS1ob3RwbHVnL21lbS1vbi1vZmYtdGVzdC5zaApAQCAtMTM4LDcgKzEz
+OCw2IEBAIG9ubGluZV9hbGxfb2ZmbGluZV9tZW1vcnkoKQogewogCWZvciBtZW1vcnkgaW4g
+YGhvdHBsdWdnYWJsZV9vZmZsaW5lX21lbW9yeWA7IGRvCiAJCWlmICEgb25saW5lX21lbW9y
+eV9leHBlY3Rfc3VjY2VzcyAkbWVtb3J5OyB0aGVuCi0JCQllY2hvICIkRlVOQ05BTUUgJG1l
+bW9yeTogdW5leHBlY3RlZCBmYWlsIiA+JjIKIAkJCXJldHZhbD0xCiAJCWZpCiAJZG9uZQo=
+
+
+--------------VQ0pGbV09a28TYDKCWYl6zh9--
