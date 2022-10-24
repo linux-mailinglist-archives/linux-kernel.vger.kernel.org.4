@@ -2,152 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD3E060BF38
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682CE60C045
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiJYAHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S229934AbiJYA6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiJYAGp (ORCPT
+        with ESMTP id S230422AbiJYA5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:06:45 -0400
-X-Greylist: delayed 4144 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 15:23:54 PDT
-Received: from elaine.keithp.com (home.keithp.com [63.227.221.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E665FAB;
-        Mon, 24 Oct 2022 15:23:53 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by elaine.keithp.com (Postfix) with ESMTP id 7417D3F337D5;
-        Mon, 24 Oct 2022 11:35:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
-        t=1666636504; bh=fE4YzItjZnxgJ2So2TV1go9hLn+lPre32wOumOrKUws=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=J7N7Q1zvtKPbtjJxuO8SPhuU6eB/sSiuxi7eHHlYqfr5p54G6TTYPR5/fdDy2oO/u
-         bDKxsE1xSaHWZTPR7GpzUAVoPRNs0q1GjObMcP6ooAgW7AhveBujGvz0zzxm7P5MRC
-         iS8+qTZ4YFUZjR/yDcUcSmXbXfEWvQDQi0lYlN9cFeeWmnpB2VT/ig79qMLZaVHm+a
-         sIFxcKS0V1qMOtWTuWRhmflduMPf3IKdAy3peoMNNG66ckZqXOB22eB98S064573zY
-         N6YzZAd4DSRKCt46xCvJ9dxTgPq4MN7AGqw/XPf6EjqJvksgNjydgKPzvm3sBWR0//
-         L5QIp3LgqMSdw==
-X-Virus-Scanned: Debian amavisd-new at keithp.com
-Received: from elaine.keithp.com ([127.0.0.1])
-        by localhost (elaine.keithp.com [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id EXR7_NEv1jGg; Mon, 24 Oct 2022 11:35:04 -0700 (PDT)
-Received: from keithp.com (koto.keithp.com [192.168.11.2])
-        by elaine.keithp.com (Postfix) with ESMTPSA id 0D46C3F337D4;
-        Mon, 24 Oct 2022 11:35:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=keithp.com; s=mail;
-        t=1666636504; bh=fE4YzItjZnxgJ2So2TV1go9hLn+lPre32wOumOrKUws=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=J7N7Q1zvtKPbtjJxuO8SPhuU6eB/sSiuxi7eHHlYqfr5p54G6TTYPR5/fdDy2oO/u
-         bDKxsE1xSaHWZTPR7GpzUAVoPRNs0q1GjObMcP6ooAgW7AhveBujGvz0zzxm7P5MRC
-         iS8+qTZ4YFUZjR/yDcUcSmXbXfEWvQDQi0lYlN9cFeeWmnpB2VT/ig79qMLZaVHm+a
-         sIFxcKS0V1qMOtWTuWRhmflduMPf3IKdAy3peoMNNG66ckZqXOB22eB98S064573zY
-         N6YzZAd4DSRKCt46xCvJ9dxTgPq4MN7AGqw/XPf6EjqJvksgNjydgKPzvm3sBWR0//
-         L5QIp3LgqMSdw==
-Received: by keithp.com (Postfix, from userid 1000)
-        id 95E081E601CE; Mon, 24 Oct 2022 11:35:03 -0700 (PDT)
-From:   Keith Packard <keithp@keithp.com>
-To:     Kees Cook <keescook@chromium.org>,
-        "Darrick J . Wong" <djwong@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Daniel Axtens <dja@axtens.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Zorro Lang <zlang@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] Introduce flexible array struct helpers
-In-Reply-To: <20221024172058.534477-1-keescook@chromium.org>
-References: <20221024171848.never.522-kees@kernel.org>
- <20221024172058.534477-1-keescook@chromium.org>
-Date:   Mon, 24 Oct 2022 11:35:03 -0700
-Message-ID: <87k04pf4tk.fsf@keithp.com>
+        Mon, 24 Oct 2022 20:57:48 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E5F1958E6;
+        Mon, 24 Oct 2022 16:47:27 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id a5so20830738edb.11;
+        Mon, 24 Oct 2022 16:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vv94IJw0kdIEEkWt8rQ9gH30jfzf13dqU9/U5kXWOvU=;
+        b=E5kIV0DdN3kQo5cUxiC+zGK6FJkakAHZAXyVKHjDZLCxXz9aDth+XDxdWwK2T1AlTt
+         XkK4PsSXmBTQz+rWBwsIusnRCoUNLMS+5VyHSr8g0o8hHA9Jq50GIvPT8F50TJKJ2A08
+         /M5MDBDROiWUwsl/WF1RB5N/1JbUTMGZxXV0moLbI/YfHdskn15RH/x5FvxTI2wd5vpb
+         dfovIJjpT7lJceN3bV26JBMJu3B0UW0XqXP9IR83ufguB/4gKwErk6R9nstNHx1aIsxV
+         XRjPvvsbu1pDic0vQdtX7DPRS5C6FQhoFLUHopNLUlTm8//yAmgDTkHgzXNuULXQSKPB
+         Sgew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vv94IJw0kdIEEkWt8rQ9gH30jfzf13dqU9/U5kXWOvU=;
+        b=uhKRFYaBvi7YR/guFcgb0fMOSmYBuXk3OmaE5hbVjdtx4UcgQqETlDqx3X4PLo6XPh
+         l5x8ZP+lOPtlUGO8ztYNtFgdUA3YmjL89EdEhlPNQhWR1Xfa30n8Hsw7SZkQTiGV4Pw1
+         QmsJFUV0MUaTcwqXS5Wq+XPH6RG8B0amjXo4fcM2U6fvBfhmBV2V0xOXdY6Y8mNSkBxM
+         /9ZpFLVaIqSwu04f5VT5GBD7YrCShotPdzutiCaA1I8/SV7xL5OUfhgHYRb5FCcXJaDy
+         A8vzblx7UogLARMEu9oJtoTXIY3PxaEVAX9YekkJdSfuyCFffBHirTE+ijjzxQOqCGjE
+         3Rig==
+X-Gm-Message-State: ACrzQf2cP0UxHwppcdALNf460cANSFqoZZWucdkfpsB7SdJk4FdenTh6
+        4m+rcNVcErkIWKV3oLvcgtg=
+X-Google-Smtp-Source: AMsMyM5Jb1fSXTeyvNUJkf/S6DJvzmqZGtrY8OuJyVThC3sw0mQWs49D/+/9xmzn0XDBJyhPPNA+YQ==
+X-Received: by 2002:a05:6402:1394:b0:456:97cd:e9d4 with SMTP id b20-20020a056402139400b0045697cde9d4mr34194745edv.174.1666655245296;
+        Mon, 24 Oct 2022 16:47:25 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.gmail.com with ESMTPSA id a2-20020a170906468200b007417041fb2bsm505900ejr.116.2022.10.24.16.47.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 16:47:24 -0700 (PDT)
+Message-ID: <6357240c.170a0220.999b2.23d6@mx.google.com>
+X-Google-Original-Message-ID: <Y1buJ29mCdJXk3jZ@Ansuel-xps.>
+Date:   Mon, 24 Oct 2022 21:57:27 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Russell King <linux@armlinux.org.uk>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        John Crispin <john@phrozen.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] ARM: mach-qcom: fix support for ipq806x
+References: <20221021181016.14740-1-ansuelsmth@gmail.com>
+ <CACRpkdbfvr1pkVb3XhBZLnmn7vy3XyzavwVjW_VmFKTdh3LABQ@mail.gmail.com>
+ <63531543.050a0220.b6bf5.284d@mx.google.com>
+ <CACRpkdbOQq9hUT=d1QBDMmgLaJ1wZ=hd44ciMnjFVgpLCnK8Wg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACRpkdbOQq9hUT=d1QBDMmgLaJ1wZ=hd44ciMnjFVgpLCnK8Wg@mail.gmail.com>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Sat, Oct 22, 2022 at 04:21:28PM +0200, Linus Walleij wrote:
+> On Fri, Oct 21, 2022 at 11:55 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+> > On Fri, Oct 21, 2022 at 11:44:56PM +0200, Linus Walleij wrote:
+> 
+> > > Is it not possible to use Geert's linux,usable-memory-range in
+> > > the chosen node to make the kernel stay off the memory?
+> > > (See examples by grep usable-memory in the kernel.)
+> > >
+> >
+> > Hi,
+> > just to confirm this is one of the example you are suggesting?
+> >
+> > chosen {
+> >                 bootargs = "console=ttyS0,115200 earlycon";
+> >                 stdout-path = "serial0:115200n8";
+> >                 linux,usable-memory-range = <0x80200000 0x1fe00000>;
+> >         };
+> 
+> Yep that thing!
+> 
+> > Main problem here is that uboot in some case doesn't support dt and pass
+> > wrong ATAGS (with the memory not reserved) and AUTO_ZRELADDR calculate
+> > the wrong addr I assume?
+> 
+> You do have a DTB right, just that it is attached, and then the kernel
+> uses the ATAGs to augment the memory?
+> 
+> In that case what about disabling ARM_ATAG_DTB_COMPAT
+> and adding the actual valid memory to the top-level DTS
+> file? Just like that:
+> 
+>       memory {
+>                 device_type = "memory";
+>                 reg = <0x42000000 0xnnnnnnnn>;
+>         };
+> 
+> 
+> > I will test the usable-memory-range but isn't the same of declaring
+> > reserved space in the dts? Or the zimage decompressor checks
+> > linux,usable-memory-range bypassing atags?
+> 
+> As long as it just pass "too much" memory it should do the job,
+> I *think*.
+> 
+> Since I wrote this article:
+> https://people.kernel.org/linusw/how-the-arm32-linux-kernel-decompresses
+> Geert introduced some very elaborate low-level OF code and I
+> do think it kicks in and makes sure to reserve this memory even
+> before the decompressor goes to work (in difference from e.g.
+> "reserved memory nodes" that are not inspected until later).
+> 
+> See:
+> commit 48342ae751c797ac73ac9c894b3f312df18ffd21
+> "ARM: 9124/1: uncompress: Parse "linux,usable-memory-range" DT property"
+> 
+> Then if the memory node is in the DTB originally or patched in
+> by U-Boot shouldn't really matter, usable-memory-range should
+> kick in in either case.
+> 
+> It is described as used for kexec (which I never use) but I think it can
+> solve your problem too.
+> 
+> The DT property is (by agreement) an undocumented Linux extension,
+> so Geert knows the intended usecases better :)
+> 
 
-Kees Cook <keescook@chromium.org> writes:
+Hi,
+bad news... yesterday I tested this binding and it's problematic. It
+does work and the router correctly boot... problem is that SMEM is
+broken with such configuration... I assume with this binding, by the
+system view ram starts from 0x42000000 instead of 0x40000000 and this
+cause SMEM to fail probe with the error "SBL didn't init SMEM".
 
-> + * struct flex_array_struct_example {
-> + *	...			 // arbitrary members
-> + *	bounded_flex_array(
-> + *		u16, part_count, // count of elements stored in "parts" below.
-> + *		u32, parts	 // flexible array with elements of type u32.
-> + *	);
-> + * );
+This is the location of SMEM entry in ram
 
-> + * struct flex_array_struct_example {
-> + *	...		// position-sensitive members
-> + *	// count of elements stored in "parts" below.
-> + *	DECLARE_FAS_COUNT(u16, part_count);
-> + *	..		// position-sensitive members
-> + *	// flexible array with elements of type u32.
-> + *	DECLARE_FAS_ARRAY(u32, parts);
-> + * };
+		smem: smem@41000000 {
+			compatible = "qcom,smem";
+			reg = <0x41000000 0x200000>;
+			no-map;
 
-I'm sure there's a good reason, but these two macros appear to be doing
-similar things and yet have very different naming conventions. Maybe:
+			hwlocks = <&sfpb_mutex 3>;
+		};
 
-        FAS_DECLARE_COUNT(type, name)
-        FAS_DECLARE_ARRAY(type, name)
-        FAS_DECLARE(size_type, size_name, array_type, array_name)
+On openwrt (kernel 5.10 and 5.15) we currently use a mix of the old Makefile.boot
+infra and a patch to ignore atags. With the current configuration we can
+correctly bootup the system by passing the load addr to the decompressor
+to 0x42000000 (+TEXT_OFFEST) and also use SMEM as it gets correctly init
+in the not mapped ram addr.
 
-> +/* For use with flexible array structure helpers, in <linux/flex_array.h=
-> */
-> +#define __DECLARE_FAS_COUNT(TYPE, NAME)					\
-> +	union {								\
-> +		TYPE __flex_array_elements_count;			\
-> +		TYPE NAME;						\
-> +	}
+We are now working on adding 6.1 kernel support and since Makefile.boot
+infra got dropped, I'm searching a better solution that can also be
+upstreamed, for now PHY_OFFSET seems the only solution.
 
-How often could that second "public" member be 'const'? That would catch
-places which accidentally assign to this field.
+Wonder if you have other ideas about this.
 
-For code which does want to write to this field, is it mostly trimming
-data from the end, or does it actually smash in arbitrary values? For
-the former case, would it be helpful to have a test to make sure the
-assigned size isn't larger than the real size (yeah, that would probably
-take an extra field holding the real size), or larger than the current size?
-
-=2D-=20
-=2Dkeith
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEw4O3eCVWE9/bQJ2R2yIaaQAAABEFAmNW2tcACgkQ2yIaaQAA
-ABGa6A//WlcPIt1OZ72U5DGohaUla3vfRSTFFWeGl9RRAdiWSeidLKpuq8iGBpWU
-+/2UygeNpW3KV9kJe4WCX/+PLAd2aGmRD1Me7OP+FdHj3FTa5iBEClfjg782geI1
-5yQoGtsM3rujUSRAdlFTBF0S/n7YLE4JqtR51nCSu/jSsJ1GLbi9Yk5Wice/PsKL
-0B7UU1Jl1QPQI6+q/LkCarAizF3/yKnAqVHgKCWAz2neKmd/8JgXdsaX9Kj5GVjV
-q6CoXbrblbybvqaoV6LOARGs92rS55nFAIELZ6nmBdq3jfdpMlaSjGDh1NeIOM+o
-f4Ls+kewrBIKYQljausRJ3YAcWXZNcprnmPr4dQx2iygqcIpe2B5nH/wGwqbiKCK
-dXx8k33WjYJt0AbI9KZmJod52r1qsXk9sSiM/fOeIJ25J2GzCC4i/QjHEuopWdkp
-qMLDnSKQQrPyCTR52csOgHqSvL1cbmkBWyIrzZcMdMGvbTBPNiKBIhOQU/ijSh7g
-vM1sGPaRosgsgHgVMaLXDnUrrS6Lo0TwEM/43tt1KBSADkRx7K9pvhhh+yae3cK3
-KGqj7Rk+acwhC8LMU82VTC557ZNSfnzeQaT0AFZ3wQBVJXt61y2eAqkIRIS4PIKM
-iXFH76M95WGwitiO4kvqsEgcJkypic0/pYpAWAlMljyT6BJ2c9M=
-=g28z
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+	Ansuel
