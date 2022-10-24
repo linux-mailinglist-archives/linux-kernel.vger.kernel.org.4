@@ -2,101 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA3360AE52
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A6360AE2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbiJXO5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S235537AbiJXOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiJXO4r (ORCPT
+        with ESMTP id S231139AbiJXOui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:56:47 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4408811E47E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:34:02 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id u2so5163384ilv.6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lfbbdd8m3exY54PJ70XsxZ5WZRKTVQmtXn7p16MZtx8=;
-        b=mK/sJ2sAUxDQqsX9xUPzACU5yfL0+2msGHbuXQDVEeIvNxrwdifcNpDdAYflyFO2h5
-         wQcMQhzfdz3AJ/Erw7lKDzb4gZ0kOmaxDzRulOLeqCajZwQymVAbq88Uj7k7PUWjkTGW
-         q5oEralxI+44cfMTT67LEVv/v81sdhOfzFVXZdSnjD8bxC2l/EU5EXJvWFz6qoMOHKOa
-         3200txfgWKrCd8u7CotU3KKQRen9qXiZ+PxmhuM7xoC/7V6WYBlr+9fQ2lV7WM4zH1bQ
-         FEIDv9ROi6rG7pDI9llgkWewWTRT8ViJ9piEpRkrc10WNMJzRGWhgCAXPWn4Lm+LlOUm
-         AKVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Lfbbdd8m3exY54PJ70XsxZ5WZRKTVQmtXn7p16MZtx8=;
-        b=m3qhaqXlAMZyEsnQvQFClA67DcatdKMcIsbhRp676Hc0a2J639v28idexwkY8GN2To
-         j9TtkoESjUOQJra7yJlMoeuKRq5S7DnRa0FukVjP7BT3/Y2cIlByWpcffdTdjzU4kxYd
-         3ib1t1NZofb8iHVc6Gco1Qy6QZG+YFdOmp+YFECMSgwNnEPx3uK7FTtSxFXfdSp/G67o
-         HvuSKOjnJxaiSFMFX+y5eusCIkOIg+F1u4vhtX/ZF9A3vun6IuGHWxA3gsDX72nTsc0K
-         aSE/FLeeorYv/0K0lHfqTnG0J10PXrM07H+vs/cwgc0tdTPP1ob2tcHsG+02gUHRdenp
-         NQqg==
-X-Gm-Message-State: ACrzQf2pUOnW4UGd2O3WMRBTdxtqcmd/0Ebeg/kHmWXi/efXfCTo4mcw
-        NUSzR2joCEQ/dJFPQyATCei3wE80LsA6mebi
-X-Google-Smtp-Source: AMsMyM59y1Lej1SJlG4qCtG52x3QuFnZ69Tk1DkYp7mNgm22zXD3dqT423+Xg2qU6Njxb8kI19Zxzw==
-X-Received: by 2002:a63:2215:0:b0:43b:e00f:7c7b with SMTP id i21-20020a632215000000b0043be00f7c7bmr28034739pgi.511.1666616469665;
-        Mon, 24 Oct 2022 06:01:09 -0700 (PDT)
-Received: from [10.85.115.102] ([139.177.225.244])
-        by smtp.gmail.com with ESMTPSA id d68-20020a621d47000000b0056bbba4302fsm2265363pfd.117.2022.10.24.06.01.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 06:01:08 -0700 (PDT)
-Message-ID: <e9bb46e4-c8d3-d5a0-9bed-27eccc2ea2ab@bytedance.com>
-Date:   Mon, 24 Oct 2022 21:01:00 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [External] Re: [PATCH 0/2] Optimize the process of scanning CPU
- for some functions
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, mingo@kernel.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
-References: <20221021061558.34767-1-jiahao.os@bytedance.com>
- <Y1ZiKz1rxEcQ886D@hirez.programming.kicks-ass.net>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <Y1ZiKz1rxEcQ886D@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 10:50:38 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4699D109D45;
+        Mon, 24 Oct 2022 06:28:13 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 39C833200929;
+        Mon, 24 Oct 2022 09:02:29 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Mon, 24 Oct 2022 09:02:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666616548; x=1666702948; bh=fnUx1p++KA
+        gQPiBJE68Mp5QTxMcFigBIoFmgz0FSbXg=; b=Ciftl+pnvzR/NkjC1/DqpZioet
+        mnNu0E4l+5B5n770Eka+AsL+NG9UmPQs+qyqA2ZBWqJ+Dj3pgiq48TNSrHK8Y00G
+        j9pND3I5ATMW4osmuiOo3MO2pojazrzNveyiTSMpJxZV1ABR0llIR/RDp9q+jhYJ
+        nZfr/R03qN1h4sDqh6YSWRvk9hBlAye8YkblCCxOQOox4dJfaca7aDmlgW5vxXOE
+        y/ZNkpWYYum/YVp0Q6e7VyxjCDmFtoadWL0DkFP9FRtj+WHfcgPvwOvYBtRXOSyq
+        sYuY1iLMGMy2+weG0qbv+iT8zD85+jEc2LAs38vu1H9FTCAE2NQB/pNnlj2g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666616548; x=1666702948; bh=fnUx1p++KAgQPiBJE68Mp5QTxMcF
+        igBIoFmgz0FSbXg=; b=HIpo0JS8spKcPxCx6vTiUvfI6jPkE2rb6B6ulpnKkEFl
+        tGqWSJV6LtM2znMrj8lziMf6SxqYZojDYy+XI7UjBDiIl3UYBBMEhTmZ+/nNciAC
+        U9qz59tXzdxVkfJ4ylHx4kRYQRHqd5zzHUMEsNw4i7tyitA7DpZKYqRzNsSjLK/N
+        6y4vifV5AFXDdcWLOZ4yCjjVOlnvNqqCYrYZcTvEQpEwXI1CLoW4wPEYfk8jekBE
+        /rlircUjRq5yi94BjKD7Fro9jGC3GekcTBhiJo6ia5BdspcPMtSCEnfF/0vVqqBF
+        aLYRR6m50F5dBOFixJeCSvbF/NfUD7RBB9EkTU9o/w==
+X-ME-Sender: <xms:44xWYwGcAcFGNJwxn-swI999BN6vmv1YzLwrVhBvg3kbnxMX6wrFIw>
+    <xme:44xWY5VuupZ59qDiHlR6FnEZiJiZsrFSBhG409gAIsjCbhaDoYNFwas4ag-F2EA4Q
+    P_c-_9TUFFkorRAkt4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgheehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:44xWY6JLd8s5lkVR7mtvPK1NGJ6oUaz4YqP25rn05Evd7HF42aO2Qg>
+    <xmx:44xWYyEs-kkQDDpW1Vltbq1EQuyg2l-v2Zw6KTgvs4KhJtYPx8bFiQ>
+    <xmx:44xWY2U02svQNmG5lwDMe_lplRsbvj006jLf6f7LvvtoMsOh_eXc2A>
+    <xmx:5IxWYxHIIKjif0AqMcgy4jrMKZSSy2ObDXHVcpxf3QTNRkhcDXB2lA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 876A9B6008D; Mon, 24 Oct 2022 09:02:27 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <a074e9c5-7a1e-4b76-b75e-9f46d621ec0e@app.fastmail.com>
+In-Reply-To: <ce7c18ef-8619-1719-59e8-7983e4b0bdc1@linaro.org>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-17-arnd@kernel.org>
+ <ce7c18ef-8619-1719-59e8-7983e4b0bdc1@linaro.org>
+Date:   Mon, 24 Oct 2022 15:02:07 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
+        "Simtec Linux Team" <linux@simtec.co.uk>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        linux-input@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 17/21] input: remove s3c24xx touchscreen driver
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 24, 2022, at 14:50, Krzysztof Kozlowski wrote:
+> On 21/10/2022 16:27, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> The s3c24xx SoC support and its adc driver was removed, so this driver
+>> has no remaining users.
+>> 
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> ---
+>>  drivers/input/touchscreen/Kconfig      |  12 -
+>>  drivers/input/touchscreen/Makefile     |   1 -
+>>  drivers/input/touchscreen/s3c2410_ts.c | 464 -------------------------
+>>  3 files changed, 477 deletions(-)
+>
+> This also could be usable on S3C64xx, but it seems no one added any DT
+> nodes, so:
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Thanks. To clarify, the key bit here is the 'depends on S3C_ADC',
+and that driver in turn 'depends on !ARCH_MULTIPLATFORM' since
+2014. So even for the boardfile variant of s3c64xx, it was
+already impossible to use for a long time without anyone complaining
+or trying to fix it.
 
-On 2022/10/24 Peter Zijlstra wrote:
-> On Fri, Oct 21, 2022 at 02:15:56PM +0800, Hao Jia wrote:
->> These two patches optimize the process of scanning the CPU by
->> adjusting the search order or breaking the loop.
-> 
-> Is it really optimization, as in it now runs measurably faster, or just
-> cleanups?
-
-I'm very sorry that my description confused you.
-
-Yes, these two patches should just be cleanups.
-
-Reduce the number of attempts by adjusting the scan order or breaking 
-the loop in time.
-IMHO, it will lead to a little optimization in most cases.
-But they won't bring significant performance gains. So, it's just cleanups.
-
-
-Thanks,
-Hao
+     Arnd
