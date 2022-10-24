@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4182B60A800
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2707260A6F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbiJXNAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S234211AbiJXMmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234900AbiJXM6f (ORCPT
+        with ESMTP id S234276AbiJXMjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:58:35 -0400
+        Mon, 24 Oct 2022 08:39:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7CE80F42;
-        Mon, 24 Oct 2022 05:17:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659958B2C0;
+        Mon, 24 Oct 2022 05:07:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FE1A61313;
-        Mon, 24 Oct 2022 12:14:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A26B3C433D6;
-        Mon, 24 Oct 2022 12:14:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5DB46128E;
+        Mon, 24 Oct 2022 12:04:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B3BC433C1;
+        Mon, 24 Oct 2022 12:04:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613698;
-        bh=D8ozL383GaaeAGtKQvIA9IdpVRSMEvGm6dPoBfIkAio=;
+        s=korg; t=1666613072;
+        bh=jUlYH+CCO+C1GozJgPk99oAfl+QuIg9M6++iiseMq9I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dbA2uNCQnV4h5HCOXnGkYLN/8Qb2xwnK99Pz6bY0LrLT31slTajDaLOOKic7kUjku
-         bXDOiVY/PMxtlvnGpx1zpNV0fngK8kNB8xXBPkve+35FO2905MkNS40uOgM7W+ZqRr
-         ND/XZHwhbUB2ksA29AoctX8I/KKNPdcDJ73siquo=
+        b=xKjBEAbkIafJ/5IzASvz7RZbb6Ri1ddILtXgv61ynTSUADUtElmhTPWDnnh7cg/gJ
+         J/2GY9gblUw3EXXWnmGtlGCLA68wtyZReKSFogLQTW/Fx6w3w+n+T9JdMOGM0MKk1h
+         oaYx2XPWAejI4A6S7Q2aSdeDTlm3faPTPAHFjA7A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hyunwoo Kim <imv4bel@gmail.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 236/255] HID: roccat: Fix use-after-free in roccat_read()
-Date:   Mon, 24 Oct 2022 13:32:26 +0200
-Message-Id: <20221024113011.053440968@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH 4.19 228/229] thermal: intel_powerclamp: Use first online CPU as control_cpu
+Date:   Mon, 24 Oct 2022 13:32:27 +0200
+Message-Id: <20221024113006.655375423@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,108 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hyunwoo Kim <imv4bel@gmail.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit cacdb14b1c8d3804a3a7d31773bc7569837b71a4 ]
+commit 4bb7f6c2781e46fc5bd00475a66df2ea30ef330d upstream.
 
-roccat_report_event() is responsible for registering
-roccat-related reports in struct roccat_device.
+Commit 68b99e94a4a2 ("thermal: intel_powerclamp: Use get_cpu() instead
+of smp_processor_id() to avoid crash") fixed an issue related to using
+smp_processor_id() in preemptible context by replacing it with a pair
+of get_cpu()/put_cpu(), but what is needed there really is any online
+CPU and not necessarily the one currently running the code.  Arguably,
+getting the one that's running the code in there is confusing.
 
-int roccat_report_event(int minor, u8 const *data)
-{
-	struct roccat_device *device;
-	struct roccat_reader *reader;
-	struct roccat_report *report;
-	uint8_t *new_value;
+For this reason, simply give the control CPU role to the first online
+one which automatically will be CPU0 if it is online, so one check
+can be dropped from the code for an added benefit.
 
-	device = devices[minor];
-
-	new_value = kmemdup(data, device->report_size, GFP_ATOMIC);
-	if (!new_value)
-		return -ENOMEM;
-
-	report = &device->cbuf[device->cbuf_end];
-
-	/* passing NULL is safe */
-	kfree(report->value);
-	...
-
-The registered report is stored in the struct roccat_device member
-"struct roccat_report cbuf[ROCCAT_CBUF_SIZE];".
-If more reports are received than the "ROCCAT_CBUF_SIZE" value,
-kfree() the saved report from cbuf[0] and allocates a new reprot.
-Since there is no lock when this kfree() is performed,
-kfree() can be performed even while reading the saved report.
-
-static ssize_t roccat_read(struct file *file, char __user *buffer,
-		size_t count, loff_t *ppos)
-{
-	struct roccat_reader *reader = file->private_data;
-	struct roccat_device *device = reader->device;
-	struct roccat_report *report;
-	ssize_t retval = 0, len;
-	DECLARE_WAITQUEUE(wait, current);
-
-	mutex_lock(&device->cbuf_lock);
-
-	...
-
-	report = &device->cbuf[reader->cbuf_start];
-	/*
-	 * If report is larger than requested amount of data, rest of report
-	 * is lost!
-	 */
-	len = device->report_size > count ? count : device->report_size;
-
-	if (copy_to_user(buffer, report->value, len)) {
-		retval = -EFAULT;
-		goto exit_unlock;
-	}
-	...
-
-The roccat_read() function receives the device->cbuf report and
-delivers it to the user through copy_to_user().
-If the N+ROCCAT_CBUF_SIZE th report is received while copying of
-the Nth report->value is in progress, the pointer that copy_to_user()
-is working on is kfree()ed and UAF read may occur. (race condition)
-
-Since the device node of this driver does not set separate permissions,
-this is not a security vulnerability, but because it is used for
-requesting screen display of profile or dpi settings,
-a user using the roccat device can apply udev to this device node or
-There is a possibility to use it by giving.
-
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/linux-pm/20221011113646.GA12080@duo.ucw.cz/
+Fixes: 68b99e94a4a2 ("thermal: intel_powerclamp: Use get_cpu() instead of smp_processor_id() to avoid crash")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Chen Yu <yu.c.chen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-roccat.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/thermal/intel_powerclamp.c |    6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/hid/hid-roccat.c b/drivers/hid/hid-roccat.c
-index 26373b82fe81..6da80e442fdd 100644
---- a/drivers/hid/hid-roccat.c
-+++ b/drivers/hid/hid-roccat.c
-@@ -257,6 +257,8 @@ int roccat_report_event(int minor, u8 const *data)
- 	if (!new_value)
- 		return -ENOMEM;
+--- a/drivers/thermal/intel_powerclamp.c
++++ b/drivers/thermal/intel_powerclamp.c
+@@ -549,11 +549,7 @@ static int start_power_clamp(void)
+ 	get_online_cpus();
  
-+	mutex_lock(&device->cbuf_lock);
-+
- 	report = &device->cbuf[device->cbuf_end];
+ 	/* prefer BSP */
+-	control_cpu = 0;
+-	if (!cpu_online(control_cpu)) {
+-		control_cpu = get_cpu();
+-		put_cpu();
+-	}
++	control_cpu = cpumask_first(cpu_online_mask);
  
- 	/* passing NULL is safe */
-@@ -276,6 +278,8 @@ int roccat_report_event(int minor, u8 const *data)
- 			reader->cbuf_start = (reader->cbuf_start + 1) % ROCCAT_CBUF_SIZE;
- 	}
- 
-+	mutex_unlock(&device->cbuf_lock);
-+
- 	wake_up_interruptible(&device->wait);
- 	return 0;
- }
--- 
-2.35.1
-
+ 	clamping = true;
+ 	schedule_delayed_work(&poll_pkg_cstate_work, 0);
 
 
