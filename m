@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B48460A86C
+	by mail.lfdr.de (Postfix) with ESMTP id D58FC60A86D
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235269AbiJXNFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
+        id S235283AbiJXNFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234950AbiJXNCS (ORCPT
+        with ESMTP id S234955AbiJXNCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:02:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701D72BE3D;
+        Mon, 24 Oct 2022 09:02:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703092C10F;
         Mon, 24 Oct 2022 05:19:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41A7461015;
-        Mon, 24 Oct 2022 12:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56E83C433C1;
-        Mon, 24 Oct 2022 12:18:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D831A61218;
+        Mon, 24 Oct 2022 12:18:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC0EC433D6;
+        Mon, 24 Oct 2022 12:18:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613918;
-        bh=KF7sCAIdsozvMpIIucsXaQ/gNGcJr/ewwbxuXNv2Q88=;
+        s=korg; t=1666613921;
+        bh=vwwx69rsb2FIxihCa6bfk7flG0j7C7NEHsW48/SnURQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ys+h9LLBapuE71RGENcQ8bYEPDUfWZx+uOncRBon6Rld7u36TBSBRTETx/Pd2vdSV
-         cxIP2nIR+Pnh+qsls56jwGZX3DuFfr8nKGBpYM35/83ZuTrCvEyfv4Kvo8gUbnRXY2
-         eIB7GGcyyOJrBVZ4TrjnjBVE9CsuzaZR3LXALKNc=
+        b=oQ5seF0om/VALfHykfCZe1ITSWGWJZ3coHEGjFq3lw31hpbeIBn4kTRv17mGVV01F
+         RprSpuvutmizxpSoYmOfdwBo8aCnySFBx/XJC5v6ImhvkOpClgFamtjN31KWS6Da91
+         J2EsPrT7b6xk7JZDMEpHVGxDGyiIetW7JDNeOZRs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, stable@kernel.org,
-        Lukas Czerner <lczerner@redhat.com>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>,
+        Zhang Yi <yi.zhang@huawei.com>, Jan Kara <jack@suse.cz>,
         Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.10 064/390] ext4: dont increase iversion counter for ea_inodes
-Date:   Mon, 24 Oct 2022 13:27:41 +0200
-Message-Id: <20221024113025.347225145@linuxfoundation.org>
+Subject: [PATCH 5.10 065/390] ext4: ext4_read_bh_lock() should submit IO if the buffer isnt uptodate
+Date:   Mon, 24 Oct 2022 13:27:42 +0200
+Message-Id: <20221024113025.388075487@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -56,44 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Czerner <lczerner@redhat.com>
+From: Zhang Yi <yi.zhang@huawei.com>
 
-commit 50f094a5580e6297bf10a807d16f0ee23fa576cf upstream.
+commit 0b73284c564d3ae4feef4bc920292f004acf4980 upstream.
 
-ea_inodes are using i_version for storing part of the reference count so
-we really need to leave it alone.
+Recently we notice that ext4 filesystem would occasionally fail to read
+metadata from disk and report error message, but the disk and block
+layer looks fine. After analyse, we lockon commit 88dbcbb3a484
+("blkdev: avoid migration stalls for blkdev pages"). It provide a
+migration method for the bdev, we could move page that has buffers
+without extra users now, but it lock the buffers on the page, which
+breaks the fragile metadata read operation on ext4 filesystem,
+ext4_read_bh_lock() was copied from ll_rw_block(), it depends on the
+assumption of that locked buffer means it is under IO. So it just
+trylock the buffer and skip submit IO if it lock failed, after
+wait_on_buffer() we conclude IO error because the buffer is not
+uptodate.
 
-The problem can be reproduced by xfstest ext4/026 when iversion is
-enabled. Fix it by not calling inode_inc_iversion() for EXT4_EA_INODE_FL
-inodes in ext4_mark_iloc_dirty().
+This issue could be easily reproduced by add some delay just after
+buffer_migrate_lock_buffers() in __buffer_migrate_folio() and do
+fsstress on ext4 filesystem.
+
+  EXT4-fs error (device pmem1): __ext4_find_entry:1658: inode #73193:
+  comm fsstress: reading directory lblock 0
+  EXT4-fs error (device pmem1): __ext4_find_entry:1658: inode #75334:
+  comm fsstress: reading directory lblock 0
+
+Fix it by removing the trylock logic in ext4_read_bh_lock(), just lock
+the buffer and submit IO if it's not uptodate, and also leave over
+readahead helper.
 
 Cc: stable@kernel.org
-Signed-off-by: Lukas Czerner <lczerner@redhat.com>
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
 Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-Link: https://lore.kernel.org/r/20220824160349.39664-1-lczerner@redhat.com
+Link: https://lore.kernel.org/r/20220831074629.3755110-1-yi.zhang@huawei.com
 Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/inode.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ fs/ext4/super.c |   16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -5769,7 +5769,12 @@ int ext4_mark_iloc_dirty(handle_t *handl
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -188,19 +188,12 @@ int ext4_read_bh(struct buffer_head *bh,
+ 
+ int ext4_read_bh_lock(struct buffer_head *bh, int op_flags, bool wait)
+ {
+-	if (trylock_buffer(bh)) {
+-		if (wait)
+-			return ext4_read_bh(bh, op_flags, NULL);
++	lock_buffer(bh);
++	if (!wait) {
+ 		ext4_read_bh_nowait(bh, op_flags, NULL);
+ 		return 0;
  	}
- 	ext4_fc_track_inode(handle, inode);
+-	if (wait) {
+-		wait_on_buffer(bh);
+-		if (buffer_uptodate(bh))
+-			return 0;
+-		return -EIO;
+-	}
+-	return 0;
++	return ext4_read_bh(bh, op_flags, NULL);
+ }
  
--	if (IS_I_VERSION(inode))
-+	/*
-+	 * ea_inodes are using i_version for storing reference count, don't
-+	 * mess with it
-+	 */
-+	if (IS_I_VERSION(inode) &&
-+	    !(EXT4_I(inode)->i_flags & EXT4_EA_INODE_FL))
- 		inode_inc_iversion(inode);
+ /*
+@@ -247,7 +240,8 @@ void ext4_sb_breadahead_unmovable(struct
+ 	struct buffer_head *bh = sb_getblk_gfp(sb, block, 0);
  
- 	/* the do_update_inode consumes one bh->b_count */
+ 	if (likely(bh)) {
+-		ext4_read_bh_lock(bh, REQ_RAHEAD, false);
++		if (trylock_buffer(bh))
++			ext4_read_bh_nowait(bh, REQ_RAHEAD, NULL);
+ 		brelse(bh);
+ 	}
+ }
 
 
