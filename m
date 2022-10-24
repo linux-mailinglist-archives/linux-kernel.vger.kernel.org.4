@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406CC60A8D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD83E60A4E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235607AbiJXNLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
+        id S233212AbiJXMSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235572AbiJXNJD (ORCPT
+        with ESMTP id S233074AbiJXMQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:09:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB299F367;
-        Mon, 24 Oct 2022 05:22:11 -0700 (PDT)
+        Mon, 24 Oct 2022 08:16:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0E8B7AB1B;
+        Mon, 24 Oct 2022 04:56:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83509B815B3;
-        Mon, 24 Oct 2022 12:11:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D884EC433C1;
-        Mon, 24 Oct 2022 12:11:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0C71612D3;
+        Mon, 24 Oct 2022 11:52:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF748C433D6;
+        Mon, 24 Oct 2022 11:52:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613461;
-        bh=5gRo8IX02SsCQBABh41eIAqNTl+yzSyxn8vl9XNFPkU=;
+        s=korg; t=1666612363;
+        bh=sqEKswuUxTriNBWzsTySPH303zgQ9wiLoNPZnKShKxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nIEXaxKv4lGWbcNS1eOuc9iqurLvwsK+nhlhDXTCIWEnT+Henla8f/UgPxlXOc7Vr
-         OVOatDsoYUQpSPJf5uLgB6RTJ+RqrSD6hFkt5bDw8ERXjv+Y/KpJlgMVbDNTX8V2lz
-         95S1d3xspAgxDyKcLgi//VW09GVpieFinn9m9G9g=
+        b=LL9sXAzbiKU+xmq0W5kX/y0XmIKW0AS35CpJa7V9er5SkZ8CA1eEl/GExnY66frir
+         L3lIxFlkQSNGNWXjrEypuI3sESKvkpbwQhqXlwp9CcGKdsQpUMl9LBlxDc8tS8O1U+
+         y+jANXG2M6uZNdlFJ4fkxL7CFb7DFLkjGBY882fs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Evan Green <evgreen@chromium.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 145/255] mtd: rawnand: meson: fix bit map use in meson_nfc_ecc_correct()
-Date:   Mon, 24 Oct 2022 13:30:55 +0200
-Message-Id: <20221024113007.441345681@linuxfoundation.org>
+Subject: [PATCH 4.14 139/210] firmware: google: Test spinlock on panic path to avoid lockups
+Date:   Mon, 24 Oct 2022 13:30:56 +0200
+Message-Id: <20221024113001.499468167@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-[ Upstream commit 3e4ad3212cf22687410b1e8f4e68feec50646113 ]
+[ Upstream commit 3e081438b8e639cc76ef1a5ce0c1bd8a154082c7 ]
 
-The meson_nfc_ecc_correct() function accidentally does a right shift
-instead of a left shift so it only works for BIT(0).  Also use
-BIT_ULL() because "correct_bitmap" is a u64 and we want to avoid
-shift wrapping bugs.
+Currently the gsmi driver registers a panic notifier as well as
+reboot and die notifiers. The callbacks registered are called in
+atomic and very limited context - for instance, panic disables
+preemption and local IRQs, also all secondary CPUs (not executing
+the panic path) are shutdown.
 
-Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Liang Yang <liang.yang@amlogic.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/YuI2zF1hP65+LE7r@kili
+With that said, taking a spinlock in this scenario is a dangerous
+invitation for lockup scenarios. So, fix that by checking if the
+spinlock is free to acquire in the panic notifier callback - if not,
+bail-out and avoid a potential hang.
+
+Fixes: 74c5b31c6618 ("driver: Google EFI SMI")
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: David Gow <davidgow@google.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Julius Werner <jwerner@chromium.org>
+Cc: Petr Mladek <pmladek@suse.com>
+Reviewed-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Link: https://lore.kernel.org/r/20220909200755.189679-1-gpiccoli@igalia.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/meson_nand.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/firmware/google/gsmi.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index 28dc26e1a20a..a65aadb54af6 100644
---- a/drivers/mtd/nand/raw/meson_nand.c
-+++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -454,7 +454,7 @@ static int meson_nfc_ecc_correct(struct nand_chip *nand, u32 *bitflips,
- 		if (ECC_ERR_CNT(*info) != ECC_UNCORRECTABLE) {
- 			mtd->ecc_stats.corrected += ECC_ERR_CNT(*info);
- 			*bitflips = max_t(u32, *bitflips, ECC_ERR_CNT(*info));
--			*correct_bitmap |= 1 >> i;
-+			*correct_bitmap |= BIT_ULL(i);
- 			continue;
- 		}
- 		if ((nand->options & NAND_NEED_SCRAMBLING) &&
-@@ -800,7 +800,7 @@ static int meson_nfc_read_page_hwecc(struct nand_chip *nand, u8 *buf,
- 			u8 *data = buf + i * ecc->size;
- 			u8 *oob = nand->oob_poi + i * (ecc->bytes + 2);
- 
--			if (correct_bitmap & (1 << i))
-+			if (correct_bitmap & BIT_ULL(i))
- 				continue;
- 			ret = nand_check_erased_ecc_chunk(data,	ecc->size,
- 							  oob, ecc->bytes + 2,
+diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+index 62337be07afc..2e3ef0eb6e82 100644
+--- a/drivers/firmware/google/gsmi.c
++++ b/drivers/firmware/google/gsmi.c
+@@ -661,6 +661,15 @@ static struct notifier_block gsmi_die_notifier = {
+ static int gsmi_panic_callback(struct notifier_block *nb,
+ 			       unsigned long reason, void *arg)
+ {
++
++	/*
++	 * Panic callbacks are executed with all other CPUs stopped,
++	 * so we must not attempt to spin waiting for gsmi_dev.lock
++	 * to be released.
++	 */
++	if (spin_is_locked(&gsmi_dev.lock))
++		return NOTIFY_DONE;
++
+ 	gsmi_shutdown_reason(GSMI_SHUTDOWN_PANIC);
+ 	return NOTIFY_DONE;
+ }
 -- 
 2.35.1
 
