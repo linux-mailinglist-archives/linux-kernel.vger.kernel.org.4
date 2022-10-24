@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB60060B365
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A017460B1C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbiJXRFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S234220AbiJXQhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235441AbiJXREg (ORCPT
+        with ESMTP id S232662AbiJXQgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:04:36 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC90CA8A0;
-        Mon, 24 Oct 2022 08:40:22 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1322fa1cf6fso12274660fac.6;
-        Mon, 24 Oct 2022 08:40:22 -0700 (PDT)
+        Mon, 24 Oct 2022 12:36:43 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7354432F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:24:23 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-132fb4fd495so12171797fac.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:24:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xf1QpnlooM/EzBO71nDJaALY4Af30m+RUToV/sEcQc0=;
-        b=YWb/8dOxbdWFi4W7XwLCdMiy/5vsnQT8eIL9iFMK1j1zGHbcH8zlhIrf2maHvqZxWd
-         oXNooHcb+yWL1U45waazeowROIGQd7Opoztx9JkTr5CXm7YXwfkNq9uZxy19vgCpYoZc
-         +D6jAY30f5t9XUbRvHErE3uyr92pqndnuW3B+graI/nmQAZZzZtKSSo5ZeBdMEdJjnZa
-         IkqKtQ9YM2lhnJpZcwB6vcZpn0138OfBhnxoj9zBFEcnowyJ1GIHob6C7oUe8PAzCUOV
-         shDXtPOYUIy8/3fp5UcXXxnQbWXJhO81EVz0OLw9904X5s1+AQvgnFws0JLZjCJXOJD/
-         +FLg==
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2V4dbYtLJOdrMkKDGWD6KitwsjwW003TmDHahg6j47c=;
+        b=ST/EXpXnGMVhqPz5639aoNMs/MJCJzl8dYjBtKZ3GcsF9hRU11tFH8h+hAVwsuz7Ya
+         ou3g2rW+Plt9PF+abw04hYxFyJSm9TK3Zc5f0f5VVZO5g8/1EqtsdnIw40CUpYiKDPyc
+         l1nM/cpbycbAYsrdPD8mjm3HQb1Jjx51O7y7NbyI+fwUdrsdHeybDUy91e+NsIa25apE
+         kIA2H2uRZuRl/NG+Em85SNDo7WgqTEz31CBkJFxFXVC0joUug26g3b4ejfutAY4sXqzL
+         Tnm9LZFmrc7FvMcHA93IL6vnTjpxZOjIIzqrZ/swDntvQeFcv7Ywd2Tvsz2itKp7iCTq
+         YX4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xf1QpnlooM/EzBO71nDJaALY4Af30m+RUToV/sEcQc0=;
-        b=xC+aEI6jMN01pDb+ydbBfvleuZlw4x0Ez/M6l5q6GRMsvB4h6TVr/fnhHquhXZc3NA
-         2te+LBNTPLdexYcYqwLC+kyClqDS1y0tLqki4ZnqdgKiDZS2DeCnEQA2+YhfQTGVS9cA
-         vTUIUBUTneDLtOhk8jahIkXRfFSEMU5bKlnMwDnx4nnUJvrFzjzfoS0RppCvdUsWBG1i
-         59EdYTH1oTEdsdWutGHZ4UJEZqhtTqgYR8fnt7MlPI+wlwZ8EfPEN8K3Zw2z/9NIsyeA
-         lvvDRAv5Lp5JypwhWWDy9Qgd2Z4WW1KVQCXv4nys+AC3FrXkXT+q87G5w6R4M9NIXQqI
-         7mNA==
-X-Gm-Message-State: ACrzQf2yGSqm1EBiffF66g7mb8MXKE+vhYnf8wdxcFMXQq50Ad7KFmba
-        gI5tOEjzTB+HpDb0gofjon968UK6ChE=
-X-Google-Smtp-Source: AMsMyM5RpJNF3gJeZ9+k4mWvaTefhcNVEdR3otp/3VizCshKQP+5vqFHs/wyK0UugSqNcNfbJ+mZvg==
-X-Received: by 2002:a05:6871:112:b0:13b:99e0:2be3 with SMTP id y18-20020a056871011200b0013b99e02be3mr4297213oab.299.1666624105441;
-        Mon, 24 Oct 2022 08:08:25 -0700 (PDT)
-Received: from gabriel-Nitro-AN515-54.. (201-27-204-68.dsl.telesp.net.br. [201.27.204.68])
-        by smtp.gmail.com with ESMTPSA id e18-20020a056830201200b00661ad8741b4sm4532583otp.24.2022.10.24.08.08.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 08:08:24 -0700 (PDT)
-From:   Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
-To:     Rui Miguel Silva <rmfrfs@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Steve Longerbeam <slongerbeam@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Cc:     Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
-Subject: [PATCH] staging: media: imx: imx7-media-csi: Fix parenthesis alignment
-Date:   Mon, 24 Oct 2022 12:07:44 -0300
-Message-Id: <20221024150744.72641-1-lima.gabriel.luz@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2V4dbYtLJOdrMkKDGWD6KitwsjwW003TmDHahg6j47c=;
+        b=lAMDCeeuQwJ10wLA7I6S92denwMQlbh5NO/mzRUlTly0hSWtqtb6+hmqTLWU4oG+JV
+         ahTa59VY4zzSAvCCBORRiMgayp8kDV9cpBFEV7LjlQhvykZYEErLfFTe8SnzsLl1kM1q
+         xX0T7aXhIGMeiCrkdHSwpNlBi6zO11YqU7VkWApeh5cVRdC+HOfNVCxIwYWM8QAUjX1k
+         +emp2CvTZCumEKJPX6KoRbPLZNYUeU9UvyCOy9uHv4KwWmVocRBdGvjPsvFBlhB/nZuL
+         0utYhzTB5uur3pHl3N8mJp3xWfW4kFpnkdRYhaEyu8ulGB02K4KnNh7SEbYeufK3IhJ/
+         OFFw==
+X-Gm-Message-State: ACrzQf2vDXoqKoFZl5Bg3M1eNJ0UaUV5dkIopG81XOwcly3qdDOTKqKy
+        uFQA+yW9tQb3qr/JhSqctUjtXVM4n5d/eZhr
+X-Google-Smtp-Source: AMsMyM69Ej5bscL4lukV/JMHX/W7kwNTTtbhzo5sbn6Z9pio8hw4ynMWZVObyRThBWw+9SwsG1ORmA==
+X-Received: by 2002:a17:90b:3e81:b0:20d:bbe5:f332 with SMTP id rj1-20020a17090b3e8100b0020dbbe5f332mr63515067pjb.112.1666624080464;
+        Mon, 24 Oct 2022 08:08:00 -0700 (PDT)
+Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id j10-20020a170902da8a00b0017f64ab80e5sm19732220plx.179.2022.10.24.08.07.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 08:07:59 -0700 (PDT)
+Message-ID: <3fe42888-30a1-9a94-1b78-b04d1ee4410a@daynix.com>
+Date:   Tue, 25 Oct 2022 00:07:56 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2] ACPI: video: Fix missing native backlight on
+ Chromebooks
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     kernel@collabora.com, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221024141210.67784-1-dmitry.osipenko@collabora.com>
+ <37ec64ac-9e08-dd41-4b20-8701bf9413fb@daynix.com>
+ <a75c2439-415c-a132-754c-7676029f792b@redhat.com>
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <a75c2439-415c-a132-754c-7676029f792b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,30 +83,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to Linux kernel coding style.
 
-Reported by checkpatch:
 
-CHECK: Alignment should match open parenthesis
+On 2022/10/24 23:59, Hans de Goede wrote:
+> Hi,
+> 
+> On 10/24/22 16:52, Akihiko Odaki wrote:
+>> On 2022/10/24 23:12, Dmitry Osipenko wrote:
+>>> Chromebooks don't have backlight in ACPI table, they suppose to use
+>>> native backlight in this case. Check presence of the CrOS embedded
+>>> controller ACPI device and prefer the native backlight if EC found.
+>>>
+>>> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+>>> Fixes: 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native() helper")
+>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>> ---
+>>>
+>>> Changelog:
+>>>
+>>> v2: - Added explanatory comment to the code and added check for the
+>>>         native backlight presence, like was requested by Hans de Goede.
+>>>
+>>>    drivers/acpi/video_detect.c | 12 ++++++++++++
+>>>    1 file changed, 12 insertions(+)
+>>>
+>>> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
+>>> index 0d9064a9804c..9cd8797d12bb 100644
+>>> --- a/drivers/acpi/video_detect.c
+>>> +++ b/drivers/acpi/video_detect.c
+>>> @@ -668,6 +668,11 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
+>>>        { },
+>>>    };
+>>>    +static bool google_cros_ec_present(void)
+>>> +{
+>>> +    return acpi_dev_found("GOOG0004");
+>>> +}
+>>> +
+>>>    /*
+>>>     * Determine which type of backlight interface to use on this system,
+>>>     * First check cmdline, then dmi quirks, then do autodetect.
+>>> @@ -730,6 +735,13 @@ static enum acpi_backlight_type __acpi_video_get_backlight_type(bool native)
+>>>                return acpi_backlight_video;
+>>>        }
+>>>    +    /*
+>>> +     * Chromebooks that don't have backlight handle in ACPI table
+>>> +     * are supposed to use native backlight if it's available.
+>>> +     */
+>>> +    if (google_cros_ec_present() && native_available)
+>>> +        return acpi_backlight_native;
+>>> +
+>>>        /* No ACPI video (old hw), use vendor specific fw methods. */
+>>>        return acpi_backlight_vendor;
+>>>    }
+>>
+>> Hi,
+>>
+>> The native_available check does not prevent duplicate registration if vendor backlight registers first. It was enough for the combination of ACPI video and native because ACPI video delays its registration, but it is not the case for vendor/native combination.
+> 
+> There are no drivers providing acpi_backlight_vendor functionality on chromebooks.
+> 
+> All the drivers providing acpi_backlight_vendor functionality use vendor (Dell, Acer, Asus, etc.)
+> specific firmware (smbios, EC bitbanging or ACPI) backlight control method which are not available
+> on CoreBoot based ChromeBooks.
 
-Signed-off-by: Gabriel Lima Luz <lima.gabriel.luz@gmail.com>
----
- drivers/staging/media/imx/imx7-media-csi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/staging/media/imx/imx7-media-csi.c b/drivers/staging/media/imx/imx7-media-csi.c
-index cbc66ef0eda8..9ad7205a3f2f 100644
---- a/drivers/staging/media/imx/imx7-media-csi.c
-+++ b/drivers/staging/media/imx/imx7-media-csi.c
-@@ -1704,7 +1704,7 @@ static int imx7_csi_init_cfg(struct v4l2_subdev *sd,
- 		mf->xfer_func = V4L2_MAP_XFER_FUNC_DEFAULT(mf->colorspace);
- 		mf->ycbcr_enc = V4L2_MAP_YCBCR_ENC_DEFAULT(mf->colorspace);
- 		mf->quantization = V4L2_MAP_QUANTIZATION_DEFAULT(!cc->yuv,
--					mf->colorspace, mf->ycbcr_enc);
-+								 mf->colorspace, mf->ycbcr_enc);
- 
- 		csi->cc[i] = cc;
- 	}
--- 
-2.34.1
+Isn't the "native_available" check is for the case when 
+acpi_backlight_vendor functionality gets implemented on Chromebooks? If 
+it is, you don't want it to get broken when it actually happens. If you 
+can ignore the case, native_available check is simply unnecessary.
 
+> 
+> Also notice that the theoretical problem of a vendor driver loading first was already present
+> before the backlight refactor which landed in 6.1 and this has never been an issue.
+
+The situation is even a bit better than it was before the refactor since 
+duplication happened even when vendor driver loads later if I understand 
+it correctly.
+
+Regards,
+Akihiko Odaki
+
+> 
+> Regards,
+> 
+> Hans
+> 
