@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E54260A53E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9F960A5E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbiJXMWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S233803AbiJXMat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbiJXMTz (ORCPT
+        with ESMTP id S233853AbiJXM20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567FA836C1;
-        Mon, 24 Oct 2022 04:59:00 -0700 (PDT)
+        Mon, 24 Oct 2022 08:28:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3304F84E49;
+        Mon, 24 Oct 2022 05:02:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C714B612D2;
-        Mon, 24 Oct 2022 11:57:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCB30C433C1;
-        Mon, 24 Oct 2022 11:57:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2A81AB811EC;
+        Mon, 24 Oct 2022 11:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EF2C433D6;
+        Mon, 24 Oct 2022 11:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612677;
-        bh=1dNVR3X2IySjniVZceBtGxiJ2W3mMOjlJ9Z7yNLlviY=;
+        s=korg; t=1666612679;
+        bh=uFYB0cMrlpLGVch5KrvwzaqTPsuapCqPShLgRKBJC3Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bJ3yL4Rz36fXRYrfEoC7gdEP6IMpuBqiF65LBoeui5XSgLsvaNXdl2Rbd8W2LGJWS
-         P9dITkQrO1JwtOmLUkgGFX+3MrNrJtZGj8uKoKI+8V4EhoepNOhJeIdF670eQs9ZHl
-         SFxvRybudfY1fWS1fHWYpBO+802c/1Ob0moqZbhw=
+        b=g6O01pwLlDLiFgkcFQ9R+Sg8R2HCKZhk7yvJgH/93f0pLEMosLGBsHlopUqXL+6IN
+         iJqdTu0YXeQZBmYPv3Lohx/FPWBQdEzP93+uUj+SpXPk5hxu3clBddJ+GtrWEzqkn0
+         6L8CyS8497GXiRtr/G8QlOhb2tgJiaVfPwfmfQFU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Qiang <xuqiang36@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 077/229] spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
-Date:   Mon, 24 Oct 2022 13:29:56 +0200
-Message-Id: <20221024113001.561231833@linuxfoundation.org>
+        stable@vger.kernel.org, Bitterblue Smith <rtl8821cerfe2@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 078/229] wifi: rtl8xxxu: Fix skb misuse in TX queue selection
+Date:   Mon, 24 Oct 2022 13:29:57 +0200
+Message-Id: <20221024113001.589827008@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
 References: <20221024112959.085534368@linuxfoundation.org>
@@ -54,38 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Qiang <xuqiang36@huawei.com>
+From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
 
-[ Upstream commit 494a22765ce479c9f8ad181c5d24cffda9f534bb ]
+[ Upstream commit edd5747aa12ed61a5ecbfa58d3908623fddbf1e8 ]
 
-Add the missing clk_disable_unprepare() before return
-from spi_qup_pm_resume_runtime() in the error handling case.
+rtl8xxxu_queue_select() selects the wrong TX queues because it's
+reading memory from the wrong address. It expects to find ieee80211_hdr
+at skb->data, but that's not the case after skb_push(). Move the call
+to rtl8xxxu_queue_select() before the call to skb_push().
 
-Fixes: dae1a7700b34 (“spi: qup: Handle clocks in pm_runtime suspend and resume”)
-Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
-Link: https://lore.kernel.org/r/20220825065324.68446-2-xuqiang36@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
+Signed-off-by: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/7fa4819a-4f20-b2af-b7a6-8ee01ac49295@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-qup.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index c5c727274814..1ca678bcb527 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -1172,8 +1172,10 @@ static int spi_qup_pm_resume_runtime(struct device *device)
- 		return ret;
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+index dd345ed1a717..ccd76c1da40c 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
++++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+@@ -4955,6 +4955,8 @@ static void rtl8xxxu_tx(struct ieee80211_hw *hw,
+ 	if (control && control->sta)
+ 		sta = control->sta;
  
- 	ret = clk_prepare_enable(controller->cclk);
--	if (ret)
-+	if (ret) {
-+		clk_disable_unprepare(controller->iclk);
- 		return ret;
-+	}
++	queue = rtl8xxxu_queue_select(hw, skb);
++
+ 	tx_desc = skb_push(skb, tx_desc_size);
  
- 	/* Disable clocks auto gaiting */
- 	config = readl_relaxed(controller->base + QUP_CONFIG);
+ 	memset(tx_desc, 0, tx_desc_size);
+@@ -4967,7 +4969,6 @@ static void rtl8xxxu_tx(struct ieee80211_hw *hw,
+ 	    is_broadcast_ether_addr(ieee80211_get_DA(hdr)))
+ 		tx_desc->txdw0 |= TXDESC_BROADMULTICAST;
+ 
+-	queue = rtl8xxxu_queue_select(hw, skb);
+ 	tx_desc->txdw1 = cpu_to_le32(queue << TXDESC_QUEUE_SHIFT);
+ 
+ 	if (tx_info->control.hw_key) {
 -- 
 2.35.1
 
