@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F64560BDAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0AB60BD0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbiJXWn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40978 "EHLO
+        id S231701AbiJXWFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbiJXWnY (ORCPT
+        with ESMTP id S231476AbiJXWET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:43:24 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7922D32ABF
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:06:09 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id bk15so17969829wrb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:06:09 -0700 (PDT)
+        Mon, 24 Oct 2022 18:04:19 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BBD2FBDE3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:18:25 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id h185so9581605pgc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:18:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xGRUq34sY2BcU0VG83zmHayB6ouI/Pi+41LBRR9R888=;
-        b=qnmD+76EU90dLFEzox/jjgBgvr3SF/Rt5FT93hrKpS1KJBM13MjuboaAzL/9SiUTGG
-         OASLggFFnLpSmhh9u67mBgL78BNej/MSy3WmyWVwX5rta0HB/sq+qPNIxk9D9Wq2R7kp
-         xCfHhEd4dUmLgErz6Zhpu/Pv7HCGgTBxootQacnPZ70q5MNI5sIYt7VH0+bxI7dX7MrX
-         fqpG2wa0TJ/Xuj2ZQ/QMhl+/7jzzxaLSsORQs1EpKsrZLi8SJft+I6PXxrYwx9xkwq9+
-         G094QXH+ulHW4KAs31Xl/8aOnrKnPnZzb82KZIJvDIY+Wk8Mir8E16LB8uxDMK1K1qOo
-         YjvA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=68E5Ha7/DS7qwEFnJjSfWPZzK2S5tKKTKIK0mHztCMQ=;
+        b=IKCTEnaYAHL4RZpwBlyQw/sXYB7OTDQkhlcWXL0C4dC/df5OC2THSFbh78WKdyi5BP
+         gYqnCJclhBI4ZspWE/iHY+USq9at9lEbPb4fa6nGCfk++KtWFBroh97X7pr68rBu23IP
+         LoCeCrSiI4c/VaHdCf/Jo/FG6gA0rbB/1XfLx5oKhcCEbYmo626mOerRSlgXexMSuilS
+         WRw0PuOzz2X/eRkbx/d4kT0GnBJrZmyw0ECy6obwQa4x45PdaV9ImnZdb6ChjtDR/etO
+         XXET59rN48cajLfRmeZj7K8705GGX3+ubggeUg2ca/V9Y4t0PoKSFAwQ2EeP6llLp6gh
+         uqAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xGRUq34sY2BcU0VG83zmHayB6ouI/Pi+41LBRR9R888=;
-        b=i1A8qHds3Q/FXbiRs3AbwthPAyqAE/K2V5RKcVjCxp0vVkkOSlnZjFAO2WnfhtK2o3
-         ccdQhMslBIft6RxpxlzZv4s2OVhaT05v2LRJjM2HFltBou8+u5Jpo3YZ18X+5sHgHqSQ
-         cP1q9qjwpphyIJTQL9LZZdKF4HmAAeuq8T2ijOhoyC7Ux2/+lovDBOm7UWfprXAVjIkz
-         jL7ju7HNCojALbMnTs7sGmRv/OoQ8s5ogeYB1h/ybkQ+oIPApf11/clKa835qxDqnRh8
-         w9gzRfb7bCmWvxmYhwt5aM1JpA8P1fYNa3gVkzaTCScii8yiyepZ7rIK951s250XBnMQ
-         QETQ==
-X-Gm-Message-State: ACrzQf3HwMsHL87nqBr+w2ZP9b56Wn6mdaG8oMkcUt/rJWEs4T4Lg0q1
-        WGvLeJN2fyQnp27d2Iy1kLgMplGYgzDQC1LHMUG730MaIqE=
-X-Google-Smtp-Source: AMsMyM5FAUdkTzGBTeY5NjATCk2EFYG5Nn83B7nDB5iDQnymcfT58qDCIKjRWaHAHnfkfpMEJ1ttyDy/0hsf9BDg6Ck=
-X-Received: by 2002:adf:f081:0:b0:236:5e7c:4ec2 with SMTP id
- n1-20020adff081000000b002365e7c4ec2mr9086578wro.641.1666643078179; Mon, 24
- Oct 2022 13:24:38 -0700 (PDT)
+        bh=68E5Ha7/DS7qwEFnJjSfWPZzK2S5tKKTKIK0mHztCMQ=;
+        b=P7QirY+eA/14omVX2x8NikVCJI50P58OAL/oPBoyI+kDTevM3n5cnWzVSdgtwm4yap
+         6vrhB1zRQHcv6l0U0PQRDlw455oisHIiG+3jJqIvCpE2qOyHdVo5n6tCXfVwDSUvlvfl
+         xpkQ/UUkofirXskU3kC7YqyZyMA0K2ZXTX+Nsr8Jh0q42odAfvYCfe7TediAaqcc+YzY
+         1W/IhGPuhXNg+l88v37FI7NHnmmLBXPyUus0fgET/0JFWcs3+61n4XBN++7/eKDHkHLg
+         qcJC5XHvP4AlSV3Q6rP2t+9M/38ePM1qOn3EAz0ffjBgzz5UcQTUHQWvPHw/AGDcr6+a
+         HcNw==
+X-Gm-Message-State: ACrzQf0sH/UfVCn+f1xUeVix/rX51FG7AZRDnK0v/tCZW8AI+spZKIgp
+        z+YwUQYtauSDt9M8bd3nrQ4=
+X-Google-Smtp-Source: AMsMyM5S+IGQLtSOvb+c2AGI5lcOKOn4ZtqaDUqUl0LF4sxJtC2mZjhf1JeomV7qjiWFyZC9+xn4zw==
+X-Received: by 2002:a05:6a00:4396:b0:563:6fd7:9c98 with SMTP id bt22-20020a056a00439600b005636fd79c98mr35750833pfb.13.1666642607816;
+        Mon, 24 Oct 2022 13:16:47 -0700 (PDT)
+Received: from localhost.localdomain (c-98-35-160-214.hsd1.ca.comcast.net. [98.35.160.214])
+        by smtp.gmail.com with ESMTPSA id k14-20020aa7972e000000b0056bb4dc8164sm173518pfg.193.2022.10.24.13.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 13:16:47 -0700 (PDT)
+From:   Nick Terrell <nickrterrell@gmail.com>
+To:     Nick Terrell <terrelln@fb.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Nick Terrell <nickrterrell@gmail.com>,
+        =?UTF-8?q?Andr=C3=A9=20Goddard=20Rosa?= <andre.goddard@gmail.com>,
+        David Sterba <dsterba@suse.com>,
+        Sam Hardeman <natrox@outlook.com>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: [PATCH 0/2] zstd: Update to upstream v1.5.2
+Date:   Mon, 24 Oct 2022 13:26:04 -0700
+Message-Id: <20221024202606.404049-1-nickrterrell@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221021185916.1494314-1-vipinsh@google.com> <Y1L9Z8RgIs8yrU6o@google.com>
- <CAHVum0eoA5j7EPmmuuUb2y7XOU1jRpFwJO90tc+QBy0JNUtBsQ@mail.gmail.com>
- <Y1MXgjtPT9U6Cukk@google.com> <87k04pbfqd.fsf@ovpn-193-3.brq.redhat.com>
- <Y1atxgq2SDkHbP9I@google.com> <CAHVum0f=gRgrP=rTySn1zwPz65g6jm_3f-=qusmS7jOkKyUMSw@mail.gmail.com>
- <Y1bpSlNGeVkqRYxI@google.com>
-In-Reply-To: <Y1bpSlNGeVkqRYxI@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 24 Oct 2022 13:24:01 -0700
-Message-ID: <CAHVum0cnj+bWwAwDeEj+MrqNNbWEYAW5k=-GWVJpm4g8sQ9-Xw@mail.gmail.com>
-Subject: Re: [RFC PATCH] Add Hyperv extended hypercall support in KVM
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, pbonzini@redhat.com,
-        dmatlack@google.com, kvm@vger.kernel.org, shujunxue@google.com,
-        terrytaehyun@google.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,30 +73,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 12:36 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Oct 24, 2022, Vipin Sharma wrote:
-> > On Mon, Oct 24, 2022 at 8:22 AM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > On Mon, Oct 24, 2022, Vitaly Kuznetsov wrote:
-> > > enable():
-> > >
-> > >         case KVM_CAP_HYPERV_EXT_CALL:
-> > >                 r = -EINVAL;
-> > >                 if (mask & ~KVM_SUPPORTED_HYPERV_EXT_CALL)
-> > >                         break;
-> > >
-> > >                 mutex_lock(&kvm->lock);
-> > >                 if (!kvm->created_vcpus) {
-> >
-> > Any reason for setting capability only after vcpus are created?
->
-> This only allows setting the capability _before_ vCPUs are created.  Attempting
-> to set the cap after vCPUs are created gets rejected with -EINVAL.  This
-> requirement means vCPUs don't need to take a lock to consume per-VM state, as KVM
-> prevents the state from changing once vCPUs are created.
+From: Nick Terrell <terrelln@fb.com>
 
-I totally misread the condition and didn't notice the '!' in the if()
-statement.
+This series first prepares the kernel's zstd for the update and then updates to
+upstream zstd v1.5.2. I've separated the first patch out because it is a change
+for the kernel build system, and I want to make sure it can be separately
+reviewed.
 
-Thanks for the feedback.
+The latest upstream release is v1.5.2, and I am targeting this patch for the v6.2
+kernel. We will be working on a new upstream release later this year. If it is
+ready by the team the v6.2 merge window rolls around, I will add another update
+patch to this series.
+
+I will be merging this into my `zstd-next` branch [0] which gets pulled into
+`linux-next` for testing. So this patch series will also be available here:
+
+  https://github.com/terrelln/linux.git tags/zstd-v1.5.2-v1
+
+Best,
+Nick Terrell
+
+[0] https://github.com/terrelln/linux/tree/zstd-next
+
+Nick Terrell (2):
+  zstd: Move zstd-common module exports to zstd_common_module.c
+  zstd: import usptream v1.5.2
+
+ include/linux/zstd_lib.h                      |  479 ++--
+ lib/zstd/Makefile                             |    1 +
+ lib/zstd/common/bitstream.h                   |    9 +
+ lib/zstd/common/compiler.h                    |   67 +-
+ lib/zstd/common/entropy_common.c              |   11 +-
+ lib/zstd/common/error_private.h               |   81 +-
+ lib/zstd/common/fse.h                         |    3 +-
+ lib/zstd/common/fse_decompress.c              |    2 +-
+ lib/zstd/common/huf.h                         |   46 +-
+ lib/zstd/common/mem.h                         |    2 +
+ lib/zstd/common/portability_macros.h          |   93 +
+ lib/zstd/common/zstd_common.c                 |   10 -
+ lib/zstd/common/zstd_internal.h               |  175 +-
+ lib/zstd/compress/clevels.h                   |  132 ++
+ lib/zstd/compress/fse_compress.c              |   83 +-
+ lib/zstd/compress/huf_compress.c              |  644 +++++-
+ lib/zstd/compress/zstd_compress.c             | 2000 +++++++++++++----
+ lib/zstd/compress/zstd_compress_internal.h    |  375 +++-
+ lib/zstd/compress/zstd_compress_literals.c    |    9 +-
+ lib/zstd/compress/zstd_compress_literals.h    |    4 +-
+ lib/zstd/compress/zstd_compress_sequences.c   |   31 +-
+ lib/zstd/compress/zstd_compress_superblock.c  |  295 +--
+ lib/zstd/compress/zstd_cwksp.h                |  225 +-
+ lib/zstd/compress/zstd_double_fast.c          |  413 +++-
+ lib/zstd/compress/zstd_fast.c                 |  441 ++--
+ lib/zstd/compress/zstd_lazy.c                 | 1352 ++++++++---
+ lib/zstd/compress/zstd_lazy.h                 |   38 +
+ lib/zstd/compress/zstd_ldm.c                  |   76 +-
+ lib/zstd/compress/zstd_ldm.h                  |    1 +
+ lib/zstd/compress/zstd_ldm_geartab.h          |    5 +-
+ lib/zstd/compress/zstd_opt.c                  |  402 ++--
+ lib/zstd/decompress/huf_decompress.c          |  912 ++++++--
+ lib/zstd/decompress/zstd_decompress.c         |   80 +-
+ lib/zstd/decompress/zstd_decompress_block.c   | 1022 +++++++--
+ lib/zstd/decompress/zstd_decompress_block.h   |   10 +-
+ .../decompress/zstd_decompress_internal.h     |   38 +-
+ lib/zstd/decompress_sources.h                 |    6 +
+ lib/zstd/zstd_common_module.c                 |   32 +
+ lib/zstd/zstd_compress_module.c               |    6 +-
+ 39 files changed, 6988 insertions(+), 2623 deletions(-)
+ create mode 100644 lib/zstd/common/portability_macros.h
+ create mode 100644 lib/zstd/compress/clevels.h
+ create mode 100644 lib/zstd/zstd_common_module.c
+
+--
+2.38.1
+
