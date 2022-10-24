@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3756A60A832
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 422CF60A6DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235009AbiJXNCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S231345AbiJXMkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235189AbiJXM7g (ORCPT
+        with ESMTP id S232012AbiJXMgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:59:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDDC8168B;
-        Mon, 24 Oct 2022 05:19:05 -0700 (PDT)
+        Mon, 24 Oct 2022 08:36:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D288982C;
+        Mon, 24 Oct 2022 05:06:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DF22612E1;
-        Mon, 24 Oct 2022 11:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 422BFC433C1;
-        Mon, 24 Oct 2022 11:53:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEB98B811C0;
+        Mon, 24 Oct 2022 12:03:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39967C433D6;
+        Mon, 24 Oct 2022 12:03:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612407;
-        bh=vE5rL+QOIEbIK8xVnEOaxCra1ZgilolzKDEk5wzU78s=;
+        s=korg; t=1666613006;
+        bh=Kzis1vLhezwehNxVB+MAMkeHuzcWMxACM/LeTgmHF4I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b/lbCdeVB3B/FEWDkCwVUoUGMo++i0oegFHRSq2s4JIaPLYauxYtqRg79+wPrjQgw
-         LjiIWgFnxJPJ+pBVYjq/6zlpcvyTCt4LIUWlnmrmguy7UFRBrUPlHF1hMJm7R03JZ7
-         voxlmIdbxmkT47vefwCOS0MjqtPE9E9gsBMhKiuk=
+        b=q9nKZmr1BlrXFhLC9us8I+JsMl31x0b8DGn5b46wnRnOAYQbLvGFU50Q6/lzf+aq0
+         tobXf4lRVCvmNPGjz0XErnezM9BeHe+kAxL8zqA6jdSn2M1OEzXWvKtpUncIBPSxtU
+         s51SksCwiw1PfjnAsLgEJ7RViKU0/imN6O7+2HKA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Ziyang Xuan <william.xuanziyang@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 186/210] drm/vc4: vec: Fix timings for VEC modes
-Date:   Mon, 24 Oct 2022 13:31:43 +0200
-Message-Id: <20221024113002.996469012@linuxfoundation.org>
+Subject: [PATCH 4.19 185/229] can: bcm: check the result of can_send() in bcm_can_tx()
+Date:   Mon, 24 Oct 2022 13:31:44 +0200
+Message-Id: <20221024113005.097019844@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+From: Ziyang Xuan <william.xuanziyang@huawei.com>
 
-[ Upstream commit 30d7565be96b3946c18a1ce3fd538f7946839092 ]
+[ Upstream commit 3fd7bfd28cfd68ae80a2fe92ea1615722cc2ee6e ]
 
-This commit fixes vertical timings of the VEC (composite output) modes
-to accurately represent the 525-line ("NTSC") and 625-line ("PAL") ITU-R
-standards.
+If can_send() fail, it should not update frames_abs counter
+in bcm_can_tx(). Add the result check for can_send() in bcm_can_tx().
 
-Previous timings were actually defined as 502 and 601 lines, resulting
-in non-standard 62.69 Hz and 52 Hz signals being generated,
-respectively.
-
-Signed-off-by: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Acked-by: Noralf Trønnes <noralf@tronnes.org>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220728-rpi-analog-tv-properties-v2-28-459522d653a7@cerno.tech
+Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Suggested-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Link: https://lore.kernel.org/all/9851878e74d6d37aee2f1ee76d68361a46f89458.1663206163.git.william.xuanziyang@huawei.com
+Acked-by: Oliver Hartkopp <socketcan@hartkopp.net>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_vec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ net/can/bcm.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_vec.c b/drivers/gpu/drm/vc4/vc4_vec.c
-index 3a9a302247a2..bcf7880f84a8 100644
---- a/drivers/gpu/drm/vc4/vc4_vec.c
-+++ b/drivers/gpu/drm/vc4/vc4_vec.c
-@@ -291,7 +291,7 @@ static void vc4_vec_ntsc_j_mode_set(struct vc4_vec *vec)
- static const struct drm_display_mode ntsc_mode = {
- 	DRM_MODE("720x480", DRM_MODE_TYPE_DRIVER, 13500,
- 		 720, 720 + 14, 720 + 14 + 64, 720 + 14 + 64 + 60, 0,
--		 480, 480 + 3, 480 + 3 + 3, 480 + 3 + 3 + 16, 0,
-+		 480, 480 + 7, 480 + 7 + 6, 525, 0,
- 		 DRM_MODE_FLAG_INTERLACE)
- };
+diff --git a/net/can/bcm.c b/net/can/bcm.c
+index 3c825b158fb5..74e555a22de7 100644
+--- a/net/can/bcm.c
++++ b/net/can/bcm.c
+@@ -273,6 +273,7 @@ static void bcm_can_tx(struct bcm_op *op)
+ 	struct sk_buff *skb;
+ 	struct net_device *dev;
+ 	struct canfd_frame *cf = op->frames + op->cfsiz * op->currframe;
++	int err;
  
-@@ -313,7 +313,7 @@ static void vc4_vec_pal_m_mode_set(struct vc4_vec *vec)
- static const struct drm_display_mode pal_mode = {
- 	DRM_MODE("720x576", DRM_MODE_TYPE_DRIVER, 13500,
- 		 720, 720 + 20, 720 + 20 + 64, 720 + 20 + 64 + 60, 0,
--		 576, 576 + 2, 576 + 2 + 3, 576 + 2 + 3 + 20, 0,
-+		 576, 576 + 4, 576 + 4 + 6, 625, 0,
- 		 DRM_MODE_FLAG_INTERLACE)
- };
+ 	/* no target device? => exit */
+ 	if (!op->ifindex)
+@@ -297,11 +298,11 @@ static void bcm_can_tx(struct bcm_op *op)
+ 	/* send with loopback */
+ 	skb->dev = dev;
+ 	can_skb_set_owner(skb, op->sk);
+-	can_send(skb, 1);
++	err = can_send(skb, 1);
++	if (!err)
++		op->frames_abs++;
  
+-	/* update statistics */
+ 	op->currframe++;
+-	op->frames_abs++;
+ 
+ 	/* reached last frame? */
+ 	if (op->currframe >= op->nframes)
 -- 
 2.35.1
 
