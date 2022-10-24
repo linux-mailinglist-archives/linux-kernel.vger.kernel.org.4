@@ -2,174 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF98260B448
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B70460B3C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233575AbiJXRfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S232026AbiJXRPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233237AbiJXRex (ORCPT
+        with ESMTP id S231400AbiJXRPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:34:53 -0400
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C1A4DF13;
-        Mon, 24 Oct 2022 09:09:52 -0700 (PDT)
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OCu0pT011978;
-        Mon, 24 Oct 2022 07:04:57 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=/pk38fEZ9U0+nRNaqE9OQAzzGVgDKqaCIE5yNVgKWZU=;
- b=Gbt7rWGO+gU4SbmxkflEj+uVO8bmRjccs3rk0hkDaH8GORI/Rv3LjQ2Dpd55P6QToMRR
- d41el+UdBN9oRf+IZGPpjQmJeBfhpJ/TNU83WBi1toEzJ+7QMEXdjt8Dn4vfWsX6GM4X
- 2rK0Yknc6+HzD2O4lzoaIHZXHjLz+G86o3rck9PuFoWri3toHoru2qdRR91eFmDqo+Pz
- YZQ+TIKRhxEgboKpt6bpGSHQ+p0WaMEhH97T7oRoJ1W44NmjcmMhC0iuptiHqquqGJbV
- RZ2lNEkp97vrxRnWFG3koBgTcMvinWBB1rU/gx7wbexmbMtkB+I7myGOMBPxWqY2dqIm Og== 
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2049.outbound.protection.outlook.com [104.47.74.49])
-        by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3kcd30rex2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 07:04:57 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WlHDOm/tLup3L4hgHeUlBNMDV+4ySZ3hW/935urcMP61tBHKgjKcdnjIIEZZZXCpNz8FLt23+Fi3RAx/gNiO7uk8xe5Q4c9sAcYXIXaXICejPTCJu2aZ2pLcPaRNtm2bkLAadBA+zu7bXZyOPweq6arM9ttSK62pQ1kSxPLrroOVLbEkyThtmHSstaU61zPZvXc2FSfmskb0R//tqMNvyH7DRD+/rxbq+8oOs5FBEkDAvujSLYngAKX292mSlJe4suwRHzDdoDacRYKDLuxCCHwIb+X33F7sXU207/Qv5yYOiG/K7SVdSXja3oXi2zVgzD7Xe85c63IxTxDEYjUmsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/pk38fEZ9U0+nRNaqE9OQAzzGVgDKqaCIE5yNVgKWZU=;
- b=ksBvzV+/bfv5H+tEufqDiR+z3EgStM459rfPRYV8KKCHvYWB+cuLvLrXBEDGy1SojpgRzRyedBncjOXRer47zxPsTmEFN+hvqdl6RhigT8NimSRgc+r86d+fqnjVy7gTj4XL+o6x+aSpx5oalJJeypH//VnSIoqIVTExziFbm/Fdv5LoRhlZ+6ntuSNul7t1XxEZxjZZwu14d/32NTa0OAnt5oXgwRayvBBgI12pP9T1fq8/tpqSwrzCYC9H0plD5kXfGK1J2+k2Dve2enbf4AHV2jjR7SJSRZAHgNdOtnz6TDzaOYvb8I/lLPms4JntvL1gPB43NWdTbWixECxlbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.147) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/pk38fEZ9U0+nRNaqE9OQAzzGVgDKqaCIE5yNVgKWZU=;
- b=03Kw9fEZEBOyZYjM7x1+NnFSuC5ZaXB7xMoTs18WuOBN5VJWg8jApeOnG5bC1QN5uekFIbRCW3/qbl4r4zJtF1PkqHz4fzAiIrMrZOaUSEula65jTjORIU3zoV4YpoD5NUhWg2dwGql21qP9f8zNPGj6oZ6LvIchZ9K0I0X+dpg=
-Received: from MW4P221CA0007.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::12)
- by PH8PR07MB9582.namprd07.prod.outlook.com (2603:10b6:510:225::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 24 Oct
- 2022 14:04:53 +0000
-Received: from MW2NAM12FT010.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:8b:cafe::db) by MW4P221CA0007.outlook.office365.com
- (2603:10b6:303:8b::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26 via Frontend
- Transport; Mon, 24 Oct 2022 14:04:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com; pr=C
-Received: from sjmaillnx1.cadence.com (158.140.1.147) by
- MW2NAM12FT010.mail.protection.outlook.com (10.13.180.77) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.10 via Frontend Transport; Mon, 24 Oct 2022 14:04:52 +0000
-Received: from maileu4.global.cadence.com (eudvw-maileu4.cadence.com [10.160.110.201])
-        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 29OE4o46005187
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Oct 2022 07:04:51 -0700
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 24 Oct 2022 16:04:49 +0200
-Received: from eu-cn01.cadence.com (10.160.89.184) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24 via Frontend Transport; Mon, 24 Oct 2022 16:04:49 +0200
-Received: from eu-cn01.cadence.com (localhost.localdomain [127.0.0.1])
-        by eu-cn01.cadence.com (8.14.7/8.14.7) with ESMTP id 29OE4naR139902;
-        Mon, 24 Oct 2022 10:04:49 -0400
-Received: (from pawell@localhost)
-        by eu-cn01.cadence.com (8.14.7/8.14.7/Submit) id 29OE4nnV139899;
-        Mon, 24 Oct 2022 10:04:49 -0400
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: cdnsp: fix issue with ZLP - added TD_SIZE = 1
-Date:   Mon, 24 Oct 2022 10:04:35 -0400
-Message-ID: <1666620275-139704-1-git-send-email-pawell@cadence.com>
-X-Mailer: git-send-email 2.4.5
+        Mon, 24 Oct 2022 13:15:23 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4A7ACF47
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:50:35 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id f193so9046444pgc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7+MkoWFNQoVdWnLkab3Y9DZaM5nvmdYcBjgc3woGa54=;
+        b=c1gNoqutejHxV9umdTzmIagqiCJV69apaAevdW2UpKYQz+Zn/NuVWutGM/YyHbwE0o
+         /uoXmYaMEm570G59NSSCq2UDtZsNeJPH8xk4uSAfFl0o2Osm5MidCMyIZ2FpgKTLHCva
+         WWHgqXOeEbnOqxzoArxE/7X9oWxGF8t9it/xEkfSJAJ6ERGYTfEwewG3GgnoVyC1DtRn
+         00F3K/Zv1CE/OT2dhmTi4kXOQnmMj+IV6iWd/4O7D3fFOKcUe9J2rY7TriB9PESwQsvd
+         mKAsycwSbnF9wDykv4F6fmKfUJFBH8ljBwaekefiNF7TYoh9usxJME1I+R0bFBvDjhPS
+         BaMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7+MkoWFNQoVdWnLkab3Y9DZaM5nvmdYcBjgc3woGa54=;
+        b=nLQrXOe8RbqiiK2F3Wq6XOUGgLaURmQWLFhVVh/wYUscfJOE8lIds15mDk50Hy2O+J
+         2bTcJ+/2fE8Icqs/rFsdilTmcbZVSM7RIFZTYfIpz+MhgZRuCeSBCmvEVdsTyM2tBtxp
+         p8cFa3tqHg/+0hhtgbgGSPNzUpUraCMzliZNL5c+gCRs7Y1FylCcY4ton8HTLMOkkwhQ
+         R/M3wsr+XT/lwwTtbTX5VHZt7eyv942elyTUjJ6O0l5TBh0uGkrtZbYpQptZpxv8XOk8
+         huC+BcCpiMXpINN/cqv2yRBAbCaudS/dOip/x/VE6dx9xqnebQ3N9PuWEVQdtcm6m0Qr
+         oowQ==
+X-Gm-Message-State: ACrzQf3HfNVmQko1pBDP8oUX4bJk6eXXVFgD9JuKDlBqnMkAJjxgOZyu
+        xHizkg21C+pjEGlfEYgAwIUiPUdWPCzIOAbK
+X-Google-Smtp-Source: AMsMyM7C0IazWzy3HA8nTr96CFU5mJxNLjdMOfhK1OqeatyAtyzrY7Q8nl54RHyMlfuIrocLA0TzAQ==
+X-Received: by 2002:a65:56cb:0:b0:460:442e:b293 with SMTP id w11-20020a6556cb000000b00460442eb293mr27895498pgs.49.1666620377847;
+        Mon, 24 Oct 2022 07:06:17 -0700 (PDT)
+Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
+        by smtp.gmail.com with ESMTPSA id m4-20020a170902f64400b00176b84eb29asm19240154plg.301.2022.10.24.07.06.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 07:06:17 -0700 (PDT)
+Message-ID: <ea69242c-0bc8-c7bb-9602-c7489bb69684@daynix.com>
+Date:   Mon, 24 Oct 2022 23:06:07 +0900
 MIME-Version: 1.0
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu4.global.cadence.com
-X-OrganizationHeadersPreserved: maileu4.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2NAM12FT010:EE_|PH8PR07MB9582:EE_
-X-MS-Office365-Filtering-Correlation-Id: f13f8119-9b9d-481b-52aa-08dab5c8b916
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qWBGWRT2dlEd/SbxcXbSGdqZZMKdvTE3xmC3+4C8AVlpPv6jP0YlA2qWqrcci3RW3/fJ6qBaT8Zx1iEZ17MKSgI7X+B03MV0vx+wBOVO9EyHWJPjCSqfabszxKXCHnwbgbjUBvrf5T5EqwfCEx3TwRTmR1Icsl2j1u0Gmb3nkN9OECIU5msZC2pGam6ukKzSbOdDSiZ3n2qrmMtuY27visZEI5wKx8zlGlxLQfR7OoGfCWsRUvr5ClA0MwhWjG8izJbvuLezkixsK/r1OGcDvkIJScsNkdya69nJoALONYjCsiJiBbjTlVt6ouddv8J/bQ0kqesydqiIQKCxtWsqXD0gCiO6EeeiCD3hlzj25mZA8/r9ww8Kpab1huEXJQ8LQLJsivxSiuWDmUz36ioPjEBuVymLN7ZmKu/jktUMi7nxNFwLn5mKI0Liwj5coeG7wTRhne7Lo16dgPnagH1EmQ5/LXBe96lO583Z0vl+oksDUyfXRfuB5WPJmjCggh0KQfpLn+o9YkvcXgIHToCnTUuod3CGZ2PdHsjMD5lN+jAzr1T2+Z7dEKk65JC/i/hYUzeVfk+LvbiE6TCSDm2JOzd9QHY4wyWe5RbOA3DVXxJMSlvuvFFe5yuAUCmrhqJN6+KjZIpZzAdyhxhy4hAxJVCrwRMCjt/ftVQjAQg+iVIru76Nn1Rh/G69bnSxO6kRQyf5oH2Ek6iC2aH50aziXX11JugPwz5XN1WnpcCjb++qaKP6rWbfoBYvQUm5ykyJoL96h5KAaFsgZRSCAfdyhA==
-X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(39860400002)(376002)(36092001)(451199015)(40470700004)(46966006)(36840700001)(83380400001)(82310400005)(36756003)(2616005)(36860700001)(356005)(47076005)(54906003)(5660300002)(336012)(426003)(70206006)(7636003)(4326008)(186003)(6916009)(82740400003)(86362001)(70586007)(316002)(40480700001)(478600001)(40460700003)(42186006)(2906002)(41300700001)(8936002)(26005)(8676002)(6666004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 14:04:52.9212
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f13f8119-9b9d-481b-52aa-08dab5c8b916
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT010.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR07MB9582
-X-Proofpoint-GUID: RXyMBqr0p2137ijI-LzIFHmLtizwhBRq
-X-Proofpoint-ORIG-GUID: RXyMBqr0p2137ijI-LzIFHmLtizwhBRq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 malwarescore=0
- adultscore=0 suspectscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
- mlxlogscore=488 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210240086
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 00/22] Fallback to native backlight
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        "Lee, Chun-Yi" <jlee@suse.com>, Mark Gross <markgross@kernel.org>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Cezary Jackiewicz <cezary.jackiewicz@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Jonathan Woithe <jwoithe@just42.net>,
+        Ike Panhc <ike.pan@canonical.com>,
+        Daniel Dadap <ddadap@nvidia.com>,
+        Kenneth Chan <kenneth.t.chan@gmail.com>,
+        Mattia Dongili <malattia@linux.it>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Azael Avalos <coproscefalo@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Robert Moore <robert.moore@intel.com>,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org,
+        acpi4asus-user@lists.sourceforge.net,
+        ibm-acpi-devel@lists.sourceforge.net, linux-fbdev@vger.kernel.org,
+        devel@acpica.org
+References: <20221024113513.5205-1-akihiko.odaki@daynix.com>
+ <746e5cc6-516f-8f69-9d4b-8fe237de8fd6@redhat.com>
+ <edec5950-cec8-b647-ccb1-ba48f9b3bbb0@daynix.com>
+ <60672af8-05d2-113c-12b9-d635608be0dd@redhat.com>
+Content-Language: en-US
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <60672af8-05d2-113c-12b9-d635608be0dd@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch modifies the TD_SIZE in TRB before ZLP TRB.
-The TD_SIZE in TRB before ZLP TRB must be set to 1 to force
-processing ZLP TRB by controller.
+On 2022/10/24 22:21, Hans de Goede wrote:
+> Hi,
+> 
+> On 10/24/22 14:58, Akihiko Odaki wrote:
+>> On 2022/10/24 20:53, Hans de Goede wrote:
+>>> Hi Akihiko,
+>>>
+>>> On 10/24/22 13:34, Akihiko Odaki wrote:
+>>>> Commit 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native()
+>>>> helper") and following commits made native backlight unavailable if
+>>>> CONFIG_ACPI_VIDEO is set and the backlight feature of ACPI video is
+>>>> unavailable, which broke the backlight functionality on Lenovo ThinkPad
+>>>> C13 Yoga Chromebook. Allow to fall back to native backlight in such
+>>>> cases.
+>>>
+>>> I appreciate your work on this, but what this in essence does is
+>>> it allows 2 backlight drivers (vendor + native) to get registered
+>>> for the same panel again. While the whole goal of the backlight refactor
+>>> series landing in 6.1 was to make it so that there always is only
+>>> *1* backlight device registered instead of (possibly) registering
+>>> multiple and letting userspace figure it out. It is also important
+>>> to only always have 1 backlight device per panel for further
+>>> upcoming changes.
+>>>
+>>> So nack for this solution, sorry.
+>>>
+>>> I am aware that this breaks backlight control on some Chromebooks,
+>>> this was already reported and I wrote a long reply explaining why
+>>> things are done the way they are done now and also suggesting
+>>> 2 possible (much simpler) fixes, see:
+>>> https://lore.kernel.org/linux-acpi/42a5f2c9-a1dc-8fc0-7334-fe6c390ecfbb@redhat.com/
+>>>
+>>> Unfortunately the reported has not followed-up on this and
+>>> I don't have the hardware to test this myself.
+>>>
+>>> Can you please try implementing 1 of the fixes suggested there
+>>> and then submit that upstream ?
+>>>
+>>> Regards,
+>>>
+>>> Hans
+>>>
+>>
+>> Hi Hans,
+>>
+>> Thanks for reviewing and letting me know the prior attempt.
+>>
+>> In this case, there is only a native backlight device and no vendor backlight device so the duplication of backlight devices does not happen. I think it is better to handle such a case without quirks.
+> 
+> Adding a single heuristic for all chromebooks is something completely different
+> then adding per model quirks which indeed ideally should be avoided (but this
+> is not always possible).
+> 
+>> I understand it is still questionable to cover the case by allowing duplication when both of a vendor backlight device and native one. To explain my understanding and reasoning for *not* trying to apply the de-duplication rule to the vendor/native combination, let me first describe that the de-duplication which happens in acpi_video_get_backlight_type() is a heuristics and limited.
+>>
+>> As the background of acpi_video_get_backlight_type(), there is an assumption that it should be common that both of the firmware, implementing ACPI, and the kernel have code to drive backlight. In the case, the more reliable one should be picked instead of using both, and that is what the statements in `if (video_caps & ACPI_VIDEO_BACKLIGHT)` does.
+>>
+>> However, the method has two limitations:
+>> 1. It does not cover the case where two backlight devices with the same type exist.
+> 
+> This only happens when there are 2 panels; or 2 gpus driving a single panel
+> which are both special cases where we actually want 2 backlight devices.
+> 
+>> 2. The underlying assumption does not apply to vendor/native combination.
+>>
+>> Regarding the second limitation, I don't even understand the difference between vendor and native. My guess is that a vendor backlight device uses vendor-specific ACPI interface, and a native one directly uses hardware registers. If my guess is correct, the difference between vendor and native does not imply that both of them are likely to exist at the same time. As the conclusion, there is no more motivation to try to de-duplicate the vendor/native combination than to try to de-duplicate combination of devices with a single type.
+>>
+>> Of course, it is better if we could also avoid registering two devices with one type for one physical device. Possibly we can do so by providing a parameter to indicate that it is for the same "internal" backlight to devm_backlight_device_register(), and let the function check for the duplication. However, this rule may be too restrict, or may have problems I missed.
+>>
+>> Based on the discussion above, we can deduce three possibilities:
+>> a. There is no reason to distinguish vendor and native in this case, and we can stick to my current proposal.
+>> b. There is a valid reason to distinguish vendor and native, and we can adopt the same strategy that already adopted for ACPI video/vendor combination.
+>> c. We can implement de-duplication in devm_backlight_device_register().
+>> d. The other possible options are not worth, and we can just implement quirks specific to Chromebook/coreboot.
+>>
+>> In case b, it should be noted that vendor and native backlight device do not require ACPI video, and CONFIG_ACPI_VIDEO may not be enabled. In the case, the de-duplication needs to be implemented in backlight class device.
+> 
+> I have been working on the ACPI/x86 backlight detection code since 2015, please trust
+> me when I say that allowing both vendor + native backlight devices at the same time
+> is a bad idea.
+> 
+> I'm currently in direct contact with the ChromeOS team about fixing the Chromebook
+> backlight issue introduced in 6.1-rc1.
+> 
+> If you wan to help, please read:
+> 
+> https://lore.kernel.org/linux-acpi/42a5f2c9-a1dc-8fc0-7334-fe6c390ecfbb@redhat.com/
+> 
+> And try implementing 1 if the 2 solutions suggested there.
+> 
+> Regards,
+> 
+> Hans
 
-cc: <stable@vger.kernel.org>
-Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Hi,
 
----
-Changelog:
-v2:
-- returned value for last TRB must be 0
+I just wanted to confirm your intention that we should distinguish 
+vendor and native. In the case I think it is better to modify 
+__acpi_video_get_backlight_type() and add "native_available" check in 
+case of no ACPI video as already done for the ACPI video/native combination.
 
- drivers/usb/cdns3/cdnsp-ring.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Unfortunately this has one pitfall though: it does not work if 
+CONFIG_ACPI_VIDEO is disabled. If it is, acpi_video_get_backlight_type() 
+always return acpi_backlight_vendor, and 
+acpi_video_backlight_use_native() always returns true. It is not a 
+regression but the current behavior. Fixing it requires also refactoring 
+touching both of ACPI video and backlight class driver so I guess I'm 
+not an appropriate person to do that, and I should just add 
+"native_available" check to __acpi_video_get_backlight_type().
 
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 04dfcaa08dc4..aa79bce89d8a 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -1769,8 +1769,13 @@ static u32 cdnsp_td_remainder(struct cdnsp_device *pdev,
- 
- 	/* One TRB with a zero-length data packet. */
- 	if (!more_trbs_coming || (transferred == 0 && trb_buff_len == 0) ||
--	    trb_buff_len == td_total_len)
-+	    trb_buff_len == td_total_len) {
-+		/* Before ZLP driver needs set TD_SIZE=1. */
-+		if (more_trbs_coming)
-+			return 1;
-+
- 		return 0;
-+	}
- 
- 	maxp = usb_endpoint_maxp(preq->pep->endpoint.desc);
- 	total_packet_count = DIV_ROUND_UP(td_total_len, maxp);
--- 
-2.25.1
+Does that sound good?
 
+Regards,
+Akihiko Odaki
+
+>  >
+> 
+>>>> Akihiko Odaki (22):
+>>>>     drm/i915/opregion: Improve backlight request condition
+>>>>     ACPI: video: Introduce acpi_video_get_backlight_types()
+>>>>     LoongArch: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: acer-wmi: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: asus-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: asus-wmi: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: compal-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: eeepc-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: fujitsu-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: ideapad-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: msi-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: msi-wmi: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: nvidia-wmi-ec-backlight: Use
+>>>>       acpi_video_get_backlight_types()
+>>>>     platform/x86: panasonic-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: samsung-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: sony-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: thinkpad_acpi: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: toshiba_acpi: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: dell-laptop: Use acpi_video_get_backlight_types()
+>>>>     platform/x86: intel_oaktrail: Use acpi_video_get_backlight_types()
+>>>>     ACPI: video: Remove acpi_video_get_backlight_type()
+>>>>     ACPI: video: Fallback to native backlight
+>>>>
+>>>>    Documentation/gpu/todo.rst                    |  8 +--
+>>>>    drivers/acpi/acpi_video.c                     |  2 +-
+>>>>    drivers/acpi/video_detect.c                   | 54 ++++++++++---------
+>>>>    drivers/gpu/drm/i915/display/intel_opregion.c |  3 +-
+>>>>    drivers/platform/loongarch/loongson-laptop.c  |  4 +-
+>>>>    drivers/platform/x86/acer-wmi.c               |  2 +-
+>>>>    drivers/platform/x86/asus-laptop.c            |  2 +-
+>>>>    drivers/platform/x86/asus-wmi.c               |  4 +-
+>>>>    drivers/platform/x86/compal-laptop.c          |  2 +-
+>>>>    drivers/platform/x86/dell/dell-laptop.c       |  2 +-
+>>>>    drivers/platform/x86/eeepc-laptop.c           |  2 +-
+>>>>    drivers/platform/x86/fujitsu-laptop.c         |  4 +-
+>>>>    drivers/platform/x86/ideapad-laptop.c         |  2 +-
+>>>>    drivers/platform/x86/intel/oaktrail.c         |  2 +-
+>>>>    drivers/platform/x86/msi-laptop.c             |  2 +-
+>>>>    drivers/platform/x86/msi-wmi.c                |  2 +-
+>>>>    .../platform/x86/nvidia-wmi-ec-backlight.c    |  2 +-
+>>>>    drivers/platform/x86/panasonic-laptop.c       |  2 +-
+>>>>    drivers/platform/x86/samsung-laptop.c         |  2 +-
+>>>>    drivers/platform/x86/sony-laptop.c            |  2 +-
+>>>>    drivers/platform/x86/thinkpad_acpi.c          |  4 +-
+>>>>    drivers/platform/x86/toshiba_acpi.c           |  2 +-
+>>>>    drivers/video/backlight/backlight.c           | 18 +++++++
+>>>>    include/acpi/video.h                          | 21 ++++----
+>>>>    include/linux/backlight.h                     |  1 +
+>>>>    25 files changed, 85 insertions(+), 66 deletions(-)
+>>>>
+>>>
+>>
+> 
