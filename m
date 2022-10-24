@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B2060A84C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB1060A700
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235303AbiJXNEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:04:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S234208AbiJXMni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235398AbiJXNAP (ORCPT
+        with ESMTP id S234081AbiJXMlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:00:15 -0400
+        Mon, 24 Oct 2022 08:41:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26EFF13DE7;
-        Mon, 24 Oct 2022 05:19:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720C28A7FB;
+        Mon, 24 Oct 2022 05:08:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15C29612F0;
-        Mon, 24 Oct 2022 12:07:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D0E1C433D6;
-        Mon, 24 Oct 2022 12:07:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0581612B9;
+        Mon, 24 Oct 2022 11:56:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03D2C433D6;
+        Mon, 24 Oct 2022 11:56:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613232;
-        bh=u8jCsQTg+AUQ8MfWiYmhRVCIrhrvAtAfKvtbHgYSGJM=;
+        s=korg; t=1666612609;
+        bh=2Q21U+OZtgQgt7+d3W97F/pzkhbw11NkEC8p2AfJ2q0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OXZ5/6NwDMPjcaEKA1bYzXWZb9W8vYpe4u1+k88/ahSKIe10v1VU84iy7dBaB3giE
-         Ix5Y4h13BsXiLLsqKDcoTdcMMBzAqJhhuOd4jPrbAs83XB17xQlvmA+mVLYukUDf9m
-         US8zG0Atez6zc4rRRI9EISdzO+zH/Sz+H7cIc3QU=
+        b=urhT5ZuajtL4XZ+Y1udKcnzab0aupcjTfsS6nF4Pp4F923OghplBappwQTQWHI0Fl
+         om6tsh963BgZ9juqga7Q9Hg3gFSoI6rzFB38SBhRG9kJsm7iEcyQJ2BED8/hSmSDms
+         0BI1/8FNIpzfzaZopawAjIRFZCSZfwoTL6g/av3w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Atish Patra <atishp@rivosinc.com>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.4 029/255] riscv: Allow PROT_WRITE-only mmap()
-Date:   Mon, 24 Oct 2022 13:28:59 +0200
-Message-Id: <20221024113003.412136922@linuxfoundation.org>
+        stable@vger.kernel.org, Hu Weiwen <sehuww@mail.scut.edu.cn>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Subject: [PATCH 4.19 021/229] ceph: dont truncate file in atomic_open
+Date:   Mon, 24 Oct 2022 13:29:00 +0200
+Message-Id: <20221024112959.826609588@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +53,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Bresticker <abrestic@rivosinc.com>
+From: Hu Weiwen <sehuww@mail.scut.edu.cn>
 
-commit 9e2e6042a7ec6504fe8e366717afa2f40cf16488 upstream.
+commit 7cb9994754f8a36ae9e5ec4597c5c4c2d6c03832 upstream.
 
-Commit 2139619bcad7 ("riscv: mmap with PROT_WRITE but no PROT_READ is
-invalid") made mmap() return EINVAL if PROT_WRITE was set wihtout
-PROT_READ with the justification that a write-only PTE is considered a
-reserved PTE permission bit pattern in the privileged spec. This check
-is unnecessary since we let VM_WRITE imply VM_READ on RISC-V, and it is
-inconsistent with other architectures that don't support write-only PTEs,
-creating a potential software portability issue. Just remove the check
-altogether and let PROT_WRITE imply PROT_READ as is the case on other
-architectures.
+Clear O_TRUNC from the flags sent in the MDS create request.
 
-Note that this also allows PROT_WRITE|PROT_EXEC mappings which were
-disallowed prior to the aforementioned commit; PROT_READ is implied in
-such mappings as well.
+`atomic_open' is called before permission check. We should not do any
+modification to the file here. The caller will do the truncation
+afterward.
 
-Fixes: 2139619bcad7 ("riscv: mmap with PROT_WRITE but no PROT_READ is invalid")
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
-Signed-off-by: Andrew Bresticker <abrestic@rivosinc.com>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220915193702.2201018-3-abrestic@rivosinc.com/
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Fixes: 124e68e74099 ("ceph: file operations")
+Signed-off-by: Hu Weiwen <sehuww@mail.scut.edu.cn>
+Reviewed-by: Xiubo Li <xiubli@redhat.com>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
+[Xiubo: fixed a trivial conflict for 5.10 backport]
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/kernel/sys_riscv.c |    3 ---
- 1 file changed, 3 deletions(-)
+ fs/ceph/file.c |   10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---- a/arch/riscv/kernel/sys_riscv.c
-+++ b/arch/riscv/kernel/sys_riscv.c
-@@ -18,9 +18,6 @@ static long riscv_sys_mmap(unsigned long
- 	if (unlikely(offset & (~PAGE_MASK >> page_shift_offset)))
- 		return -EINVAL;
+--- a/fs/ceph/file.c
++++ b/fs/ceph/file.c
+@@ -446,6 +446,12 @@ int ceph_atomic_open(struct inode *dir,
+ 	if (dentry->d_name.len > NAME_MAX)
+ 		return -ENAMETOOLONG;
  
--	if (unlikely((prot & PROT_WRITE) && !(prot & PROT_READ)))
--		return -EINVAL;
--
- 	return ksys_mmap_pgoff(addr, len, prot, flags, fd,
- 			       offset >> (PAGE_SHIFT - page_shift_offset));
- }
++	/*
++	 * Do not truncate the file, since atomic_open is called before the
++	 * permission check. The caller will do the truncation afterward.
++	 */
++	flags &= ~O_TRUNC;
++
+ 	if (flags & O_CREAT) {
+ 		if (ceph_quota_is_max_files_exceeded(dir))
+ 			return -EDQUOT;
+@@ -478,9 +484,7 @@ int ceph_atomic_open(struct inode *dir,
+ 
+ 	req->r_parent = dir;
+ 	set_bit(CEPH_MDS_R_PARENT_LOCKED, &req->r_req_flags);
+-	err = ceph_mdsc_do_request(mdsc,
+-				   (flags & (O_CREAT|O_TRUNC)) ? dir : NULL,
+-				   req);
++	err = ceph_mdsc_do_request(mdsc, (flags & O_CREAT) ? dir : NULL, req);
+ 	err = ceph_handle_snapdir(req, dentry, err);
+ 	if (err)
+ 		goto out_req;
 
 
