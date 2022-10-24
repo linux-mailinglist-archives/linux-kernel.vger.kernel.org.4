@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DA360A495
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DD060A620
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232851AbiJXMND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
+        id S231358AbiJXMcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232931AbiJXMMI (ORCPT
+        with ESMTP id S233954AbiJXM3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:12:08 -0400
+        Mon, 24 Oct 2022 08:29:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2056C950;
-        Mon, 24 Oct 2022 04:54:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529F45591;
+        Mon, 24 Oct 2022 05:02:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7378C612D5;
-        Mon, 24 Oct 2022 11:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86318C4314F;
-        Mon, 24 Oct 2022 11:53:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8637612E3;
+        Mon, 24 Oct 2022 12:02:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24C7C433C1;
+        Mon, 24 Oct 2022 12:02:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612391;
-        bh=v1r82cymzQPnMWu7S3606OX3gKWmSJrP2gwD0jxVRvI=;
+        s=korg; t=1666612951;
+        bh=m/QdiEsyaqsXyeYZVuoxXTWReCx/204ZsauJ1OlEs0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WCVYQ/hhDfDRXyKRqHpgVO/9ue5d8UmPtdS9f89ySMyxN7K7ZQGdNuKMYxwrkOjaB
-         GUndFICgXm4kAga22FtfvK5TRRkrY1wF/+8qExX31kvhqGpwRYe+KaXrJvcbofLVd/
-         vNOjATXJxCzhez7q6Mv7lRCyM91IW2RoqBVzd/ZM=
+        b=edw7Nym8mBVrLAJwlpVZG/MpX7AZRYNKPYs03A+BoxBW0awT2wsAHDCrp1cS8OCon
+         7IXBBt5xoopfHTZdD3FdxSttQpEIm2czBCNDifHnedzIIa2gVwz0h20He+4QqmJ/h+
+         B+xQ+g9BclVFPMxT+HM4fcef4LChXruVKKR1+x78=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
-        Liu Jian <liujian56@huawei.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
+        stable@vger.kernel.org,
+        syzbot <syzbot+2ca247c2d60c7023de7f@syzkaller.appspotmail.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 181/210] net: If sock is dead dont access socks sk_wq in sk_stream_wait_memory
-Date:   Mon, 24 Oct 2022 13:31:38 +0200
-Message-Id: <20221024113002.837817442@linuxfoundation.org>
+Subject: [PATCH 4.19 180/229] wifi: ath9k: avoid uninit memory read in ath9k_htc_rx_msg()
+Date:   Mon, 24 Oct 2022 13:31:39 +0200
+Message-Id: <20221024113004.915215859@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,104 +57,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liu Jian <liujian56@huawei.com>
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 
-[ Upstream commit 3f8ef65af927db247418d4e1db49164d7a158fc5 ]
+[ Upstream commit b383e8abed41cc6ff1a3b34de75df9397fa4878c ]
 
-Fixes the below NULL pointer dereference:
+syzbot is reporting uninit value at ath9k_htc_rx_msg() [1], for
+ioctl(USB_RAW_IOCTL_EP_WRITE) can call ath9k_hif_usb_rx_stream() with
+pkt_len = 0 but ath9k_hif_usb_rx_stream() uses
+__dev_alloc_skb(pkt_len + 32, GFP_ATOMIC) based on an assumption that
+pkt_len is valid. As a result, ath9k_hif_usb_rx_stream() allocates skb
+with uninitialized memory and ath9k_htc_rx_msg() is reading from
+uninitialized memory.
 
-  [...]
-  [   14.471200] Call Trace:
-  [   14.471562]  <TASK>
-  [   14.471882]  lock_acquire+0x245/0x2e0
-  [   14.472416]  ? remove_wait_queue+0x12/0x50
-  [   14.473014]  ? _raw_spin_lock_irqsave+0x17/0x50
-  [   14.473681]  _raw_spin_lock_irqsave+0x3d/0x50
-  [   14.474318]  ? remove_wait_queue+0x12/0x50
-  [   14.474907]  remove_wait_queue+0x12/0x50
-  [   14.475480]  sk_stream_wait_memory+0x20d/0x340
-  [   14.476127]  ? do_wait_intr_irq+0x80/0x80
-  [   14.476704]  do_tcp_sendpages+0x287/0x600
-  [   14.477283]  tcp_bpf_push+0xab/0x260
-  [   14.477817]  tcp_bpf_sendmsg_redir+0x297/0x500
-  [   14.478461]  ? __local_bh_enable_ip+0x77/0xe0
-  [   14.479096]  tcp_bpf_send_verdict+0x105/0x470
-  [   14.479729]  tcp_bpf_sendmsg+0x318/0x4f0
-  [   14.480311]  sock_sendmsg+0x2d/0x40
-  [   14.480822]  ____sys_sendmsg+0x1b4/0x1c0
-  [   14.481390]  ? copy_msghdr_from_user+0x62/0x80
-  [   14.482048]  ___sys_sendmsg+0x78/0xb0
-  [   14.482580]  ? vmf_insert_pfn_prot+0x91/0x150
-  [   14.483215]  ? __do_fault+0x2a/0x1a0
-  [   14.483738]  ? do_fault+0x15e/0x5d0
-  [   14.484246]  ? __handle_mm_fault+0x56b/0x1040
-  [   14.484874]  ? lock_is_held_type+0xdf/0x130
-  [   14.485474]  ? find_held_lock+0x2d/0x90
-  [   14.486046]  ? __sys_sendmsg+0x41/0x70
-  [   14.486587]  __sys_sendmsg+0x41/0x70
-  [   14.487105]  ? intel_pmu_drain_pebs_core+0x350/0x350
-  [   14.487822]  do_syscall_64+0x34/0x80
-  [   14.488345]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-  [...]
+Since bytes accessed by ath9k_htc_rx_msg() is not known until
+ath9k_htc_rx_msg() is called, it would be difficult to check minimal valid
+pkt_len at "if (pkt_len > 2 * MAX_RX_BUF_SIZE) {" line in
+ath9k_hif_usb_rx_stream().
 
-The test scenario has the following flow:
+We have two choices. One is to workaround by adding __GFP_ZERO so that
+ath9k_htc_rx_msg() sees 0 if pkt_len is invalid. The other is to let
+ath9k_htc_rx_msg() validate pkt_len before accessing. This patch chose
+the latter.
 
-thread1                               thread2
------------                           ---------------
- tcp_bpf_sendmsg
-  tcp_bpf_send_verdict
-   tcp_bpf_sendmsg_redir              sock_close
-    tcp_bpf_push_locked                 __sock_release
-     tcp_bpf_push                         //inet_release
-      do_tcp_sendpages                    sock->ops->release
-       sk_stream_wait_memory          	   // tcp_close
-          sk_wait_event                      sk->sk_prot->close
-           release_sock(__sk);
-            ***
-                                                lock_sock(sk);
-                                                  __tcp_close
-                                                    sock_orphan(sk)
-                                                      sk->sk_wq  = NULL
-                                                release_sock
-            ****
-           lock_sock(__sk);
-          remove_wait_queue(sk_sleep(sk), &wait);
-             sk_sleep(sk)
-             //NULL pointer dereference
-             &rcu_dereference_raw(sk->sk_wq)->wait
+Note that I'm not sure threshold condition is correct, for I can't find
+details on possible packet length used by this protocol.
 
-While waiting for memory in thread1, the socket is released with its wait
-queue because thread2 has closed it. This caused by tcp_bpf_send_verdict
-didn't increase the f_count of psock->sk_redir->sk_socket->file in thread1.
-
-We should check if SOCK_DEAD flag is set on wakeup in sk_stream_wait_memory
-before accessing the wait queue.
-
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Liu Jian <liujian56@huawei.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Cc: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/bpf/20220823133755.314697-2-liujian56@huawei.com
+Link: https://syzkaller.appspot.com/bug?extid=2ca247c2d60c7023de7f [1]
+Reported-by: syzbot <syzbot+2ca247c2d60c7023de7f@syzkaller.appspotmail.com>
+Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/7acfa1be-4b5c-b2ce-de43-95b0593fb3e5@I-love.SAKURA.ne.jp
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/stream.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/wireless/ath/ath9k/htc_hst.c | 43 +++++++++++++++---------
+ 1 file changed, 28 insertions(+), 15 deletions(-)
 
-diff --git a/net/core/stream.c b/net/core/stream.c
-index cbe52b169070..e5c6c9e5e0aa 100644
---- a/net/core/stream.c
-+++ b/net/core/stream.c
-@@ -159,7 +159,8 @@ int sk_stream_wait_memory(struct sock *sk, long *timeo_p)
- 		*timeo_p = current_timeo;
- 	}
- out:
--	remove_wait_queue(sk_sleep(sk), &wait);
-+	if (!sock_flag(sk, SOCK_DEAD))
-+		remove_wait_queue(sk_sleep(sk), &wait);
- 	return err;
+diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
+index e37de14bc502..6d69cf69fd86 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_hst.c
++++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
+@@ -367,33 +367,27 @@ void ath9k_htc_txcompletion_cb(struct htc_target *htc_handle,
+ }
  
- do_error:
+ static void ath9k_htc_fw_panic_report(struct htc_target *htc_handle,
+-				      struct sk_buff *skb)
++				      struct sk_buff *skb, u32 len)
+ {
+ 	uint32_t *pattern = (uint32_t *)skb->data;
+ 
+-	switch (*pattern) {
+-	case 0x33221199:
+-		{
++	if (*pattern == 0x33221199 && len >= sizeof(struct htc_panic_bad_vaddr)) {
+ 		struct htc_panic_bad_vaddr *htc_panic;
+ 		htc_panic = (struct htc_panic_bad_vaddr *) skb->data;
+ 		dev_err(htc_handle->dev, "ath: firmware panic! "
+ 			"exccause: 0x%08x; pc: 0x%08x; badvaddr: 0x%08x.\n",
+ 			htc_panic->exccause, htc_panic->pc,
+ 			htc_panic->badvaddr);
+-		break;
+-		}
+-	case 0x33221299:
+-		{
++		return;
++	}
++	if (*pattern == 0x33221299) {
+ 		struct htc_panic_bad_epid *htc_panic;
+ 		htc_panic = (struct htc_panic_bad_epid *) skb->data;
+ 		dev_err(htc_handle->dev, "ath: firmware panic! "
+ 			"bad epid: 0x%08x\n", htc_panic->epid);
+-		break;
+-		}
+-	default:
+-		dev_err(htc_handle->dev, "ath: unknown panic pattern!\n");
+-		break;
++		return;
+ 	}
++	dev_err(htc_handle->dev, "ath: unknown panic pattern!\n");
+ }
+ 
+ /*
+@@ -414,16 +408,26 @@ void ath9k_htc_rx_msg(struct htc_target *htc_handle,
+ 	if (!htc_handle || !skb)
+ 		return;
+ 
++	/* A valid message requires len >= 8.
++	 *
++	 *   sizeof(struct htc_frame_hdr) == 8
++	 *   sizeof(struct htc_ready_msg) == 8
++	 *   sizeof(struct htc_panic_bad_vaddr) == 16
++	 *   sizeof(struct htc_panic_bad_epid) == 8
++	 */
++	if (unlikely(len < sizeof(struct htc_frame_hdr)))
++		goto invalid;
+ 	htc_hdr = (struct htc_frame_hdr *) skb->data;
+ 	epid = htc_hdr->endpoint_id;
+ 
+ 	if (epid == 0x99) {
+-		ath9k_htc_fw_panic_report(htc_handle, skb);
++		ath9k_htc_fw_panic_report(htc_handle, skb, len);
+ 		kfree_skb(skb);
+ 		return;
+ 	}
+ 
+ 	if (epid < 0 || epid >= ENDPOINT_MAX) {
++invalid:
+ 		if (pipe_id != USB_REG_IN_PIPE)
+ 			dev_kfree_skb_any(skb);
+ 		else
+@@ -435,21 +439,30 @@ void ath9k_htc_rx_msg(struct htc_target *htc_handle,
+ 
+ 		/* Handle trailer */
+ 		if (htc_hdr->flags & HTC_FLAGS_RECV_TRAILER) {
+-			if (be32_to_cpu(*(__be32 *) skb->data) == 0x00C60000)
++			if (be32_to_cpu(*(__be32 *) skb->data) == 0x00C60000) {
+ 				/* Move past the Watchdog pattern */
+ 				htc_hdr = (struct htc_frame_hdr *)(skb->data + 4);
++				len -= 4;
++			}
+ 		}
+ 
+ 		/* Get the message ID */
++		if (unlikely(len < sizeof(struct htc_frame_hdr) + sizeof(__be16)))
++			goto invalid;
+ 		msg_id = (__be16 *) ((void *) htc_hdr +
+ 				     sizeof(struct htc_frame_hdr));
+ 
+ 		/* Now process HTC messages */
+ 		switch (be16_to_cpu(*msg_id)) {
+ 		case HTC_MSG_READY_ID:
++			if (unlikely(len < sizeof(struct htc_ready_msg)))
++				goto invalid;
+ 			htc_process_target_rdy(htc_handle, htc_hdr);
+ 			break;
+ 		case HTC_MSG_CONNECT_SERVICE_RESPONSE_ID:
++			if (unlikely(len < sizeof(struct htc_frame_hdr) +
++				     sizeof(struct htc_conn_svc_rspmsg)))
++				goto invalid;
+ 			htc_process_conn_rsp(htc_handle, htc_hdr);
+ 			break;
+ 		default:
 -- 
 2.35.1
 
