@@ -2,98 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 983C9609EC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08AD609EC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbiJXKMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47796 "EHLO
+        id S230176AbiJXKNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiJXKLs (ORCPT
+        with ESMTP id S229719AbiJXKNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:11:48 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401E9FD03
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 03:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666606305; x=1698142305;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q3EbVoHrvdRaDt4kUmz08IawMO1qoICyiLDHhEURsEo=;
-  b=VKey8xWCTfXuBRbRQIK+xoEk/fsS5vGA836Bcpz0B23x4+KJI/wWyJ53
-   424ckwhHFee4VTdR/49MBTNASYj8udpcxJ5R56iwgk9rcoS2cxh46xMEd
-   Hzq8hl94CW8vjMx4XoxJkgDD/3haLEdRIQal7NUFdNXTDzfoZ9hpQyWww
-   RqnzPe25ZOSZ7fJcidw+zSZs+wnk1iHKPCHlF5fFjTmDH/4s0irWgOMV1
-   WnuuaNAQCiQCQeGUvS33BIY6aMaqaQN/5pICPP7xzbFx9dQuXNQvtf+M0
-   VrHV+oWVZAWKUyARKAWVHK76HngmSfqmLKp1KhNIByzsMuuyOfJuM5FrR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="306113660"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="306113660"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 03:11:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="756525391"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="756525391"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 03:11:37 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id C465A2021B;
-        Mon, 24 Oct 2022 13:11:34 +0300 (EEST)
-Date:   Mon, 24 Oct 2022 10:11:34 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
-Message-ID: <Y1Zk1qrfzVOn/k87@paasikivi.fi.intel.com>
-References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
- <Y1ZQSEMLkybFCadS@kroah.com>
- <1b02ad7256564b5ca8a43df60f8d7a45@AcuMS.aculab.com>
+        Mon, 24 Oct 2022 06:13:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87751C35
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 03:13:42 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2FAAAED1;
+        Mon, 24 Oct 2022 03:13:48 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5F263F7B4;
+        Mon, 24 Oct 2022 03:13:37 -0700 (PDT)
+Message-ID: <dab347c1-3724-8ac6-c051-9d2caea20101@arm.com>
+Date:   Mon, 24 Oct 2022 12:13:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1b02ad7256564b5ca8a43df60f8d7a45@AcuMS.aculab.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH 07/11] sched: Add proxy execution
+Content-Language: en-US
+To:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org
+Cc:     kernel-team@android.com, John Stultz <jstultz@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+References: <20221003214501.2050087-1-connoro@google.com>
+ <20221003214501.2050087-8-connoro@google.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20221003214501.2050087-8-connoro@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On 03/10/2022 23:44, Connor O'Brien wrote:
+> From: Peter Zijlstra <peterz@infradead.org>
 
-On Mon, Oct 24, 2022 at 08:59:29AM +0000, David Laight wrote:
-> From: Greg Kroah-Hartman
-> > Sent: 24 October 2022 09:44
-> ...
-> > > + * WARNING: as container_of() casts the given struct to another, also the
-> > 
-> > No need for "also" here (sorry for the grammar nit.)
-> > 
-> > > + * possible const qualifier of @ptr is lost unless it is also specified in
-> > > + * @type. This is not a problem if the containing object is not const. Use with
-> > > + * care.
-> > 
-> > I do not think these last two sentences you added here are needed
-> > either.
-> 
-> It is all TL;DR :-)
-> 
-> Even just:
-> 
-> NOTE: any const qualifier of @ptr is lost.
-> 
-> Is probably more than enough.
+[...]
 
-Fine for me, but I'd prefer to keep the WARNING, making this:
+> + * Returns the task that is going to be used as execution context (the one
+> + * that is actually going to be put to run on cpu_of(rq)).
+> + */
+> +static struct task_struct *
+> +proxy(struct rq *rq, struct task_struct *next, struct rq_flags *rf)
+> +{
 
-	WARNING: any const qualifier of @ptr is lost.
+[...]
 
--- 
-Sakari Ailus
+> +migrate_task:
+
+[...]
+
+> +	/*
+> +	 * Since we're going to drop @rq, we have to put(@next) first,
+> +	 * otherwise we have a reference that no longer belongs to us.  Use
+> +	 * @fake_task to fill the void and make the next pick_next_task()
+           ^^^^^^^^^^
+
+There was a `static struct task_struct fake_task` in
+https://lkml.kernel.org/r/20181009092434.26221-6-juri.lelli@redhat.com
+but now IMHO we use `rq->idle` <-- (1)
+
+> +	 * invocation happy.
+> +	 *
+> +	 * XXX double, triple think about this.
+> +	 * XXX put doesn't work with ON_RQ_MIGRATE
+> +	 *
+> +	 * CPU0				CPU1
+> +	 *
+> +	 *				B mutex_lock(X)
+> +	 *
+> +	 * A mutex_lock(X) <- B
+> +	 * A __schedule()
+> +	 * A pick->A
+> +	 * A proxy->B
+> +	 * A migrate A to CPU1
+> +	 *				B mutex_unlock(X) -> A
+> +	 *				B __schedule()
+> +	 *				B pick->A
+> +	 *				B switch_to (A)
+> +	 *				A ... does stuff
+> +	 * A ... is still running here
+> +	 *
+> +	 *		* BOOM *
+> +	 */
+> +	put_prev_task(rq, next);
+> +	if (curr_in_chain) {
+> +		rq->proxy = rq->idle;
+> +		set_tsk_need_resched(rq->idle);
+> +		/*
+> +		 * XXX [juril] don't we still need to migrate @next to
+> +		 * @owner's CPU?
+> +		 */
+> +		return rq->idle;
+> +	}
+
+--> (1)
+
+> +	rq->proxy = rq->idle;
+> +
+> +	for (; p; p = p->blocked_proxy) {
+> +		int wake_cpu = p->wake_cpu;
+> +
+> +		WARN_ON(p == rq->curr);
+> +
+> +		deactivate_task(rq, p, 0);
+> +		set_task_cpu(p, that_cpu);
+> +		/*
+> +		 * We can abuse blocked_entry to migrate the thing, because @p is
+> +		 * still on the rq.
+> +		 */
+> +		list_add(&p->blocked_entry, &migrate_list);
+> +
+> +		/*
+> +		 * Preserve p->wake_cpu, such that we can tell where it
+> +		 * used to run later.
+> +		 */
+> +		p->wake_cpu = wake_cpu;
+> +	}
+> +
+> +	rq_unpin_lock(rq, rf);
+> +	raw_spin_rq_unlock(rq);
+
+Don't we run into rq_pin_lock()'s:
+
+SCHED_WARN_ON(rq->balance_callback && rq->balance_callback !=
+&balance_push_callback)
+
+by releasing rq lock between queue_balance_callback(, push_rt/dl_tasks)
+and __balance_callbacks()?
+
+[...]
