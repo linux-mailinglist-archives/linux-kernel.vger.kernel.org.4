@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE8660BCF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C927760BCEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiJXWBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S230070AbiJXWBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiJXWA5 (ORCPT
+        with ESMTP id S229730AbiJXWAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:00:57 -0400
-Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56334C2CAE
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:14:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1666614489; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=bCO05Frd3l1e7GFMj0QStWxMEIZ0L4MrT2j5UxWfTdfzpr5a9C/XjGmPhNDFSOQZca+zDu1ZrqlELF9qg5ZUi3zywXL4eu+A5TtXn8ELE8T5v53RVUuF6nl5/nga3zufjOjImC4HkXmXwQ5OXxMpCxvS7SNFyam23SDLEbWxECg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1666614489; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=9FpZ4A5T7voqbOtb74gaWvMXsMoiVeckh6eEapcdOwU=; 
-        b=PZNWBc9JFLzfHFbdpKwREoE6VSKVQiXuhTVr/PHXXv7z+Jiwn7n2D7JEf7NDeOi+MgKo6vGZOsTKHhRfGC6ezBDc1Y8hhBMi9HH+P37M1BwUjlvBhF/3GL4ZtS5jpgpjIxFa2SKiDpC1MlPVNyYMvomLxI4AM5xib0nV2RV3U08=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zohomail.com;
-        spf=pass  smtp.mailfrom=t4rmin@zohomail.com;
-        dmarc=pass header.from=<t4rmin@zohomail.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1666614489;
-        s=zm2022; d=zohomail.com; i=t4rmin@zohomail.com;
-        h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-        bh=9FpZ4A5T7voqbOtb74gaWvMXsMoiVeckh6eEapcdOwU=;
-        b=W1ykPqzAGRqfxLV2PBrSthno0U6ApUtPqg7cDRDiD51Ie8Bnxdzw3LmdeA9caYS1
-        HfoRqlt5b74MTDBDMalQuWkpBMZ8lA7RyFrqPDBq0V5vuxLqgfeOgnevaFlvj3/KlgT
-        02ftWHqw64jqlR2Xmlux+I1SSS5p+J6xxby5T2h4=
-Received: from plymouth (103.47.132.32 [103.47.132.32]) by mx.zohomail.com
-        with SMTPS id 1666614488843482.68623945604725; Mon, 24 Oct 2022 05:28:08 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 19:27:59 +0700
-From:   Aaron Lawrence <t4rmin@zohomail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] Staging: rtl8192e: rtllib_tx: added spaces around
- operators
-Message-ID: <b8bf422436ff4b2d9b530c61ebf814582ab8836a.1666612946.git.t4rmin@zohomail.com>
-References: <cover.1666612946.git.t4rmin@zohomail.com>
+        Mon, 24 Oct 2022 18:00:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3902E13D07
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:14:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666642404;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=boXDPcxpUocdHWEdF4boM/MTFdSB/GctSLK4grdDmW0=;
+        b=TIg7QuL467vYziuYUOo+xepZ7GADwL0SG7Mf5jipjw7tmgijheAscHTjjq6SsLXy2BOU+0
+        CvlxU4/b9bhsm7EEMgKCpxI4AeHdOw7sDKzOegsbBuXNjXwBT7zSQrs+Bt7tOBlbUPWfdR
+        4SFM4xmqY9Og6CPBseGt8fjP2s7SEpY=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-9-TD1FTsIWPWqHNxBLI2wa1g-1; Mon, 24 Oct 2022 08:32:49 -0400
+X-MC-Unique: TD1FTsIWPWqHNxBLI2wa1g-1
+Received: by mail-qk1-f199.google.com with SMTP id bk21-20020a05620a1a1500b006be9f844c59so8833138qkb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:32:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=boXDPcxpUocdHWEdF4boM/MTFdSB/GctSLK4grdDmW0=;
+        b=2dkljnLZCUEHHoQegVC7FRl496ZgQj3XEE1U4bZUO+dnR7k/Vpi94+E53j66lbiVhb
+         m6k55MM7oMZXTofOAUuiChTFExZXWHLn6Vc0vamEgqSrOC+cmy5546TDeNwUFGqfCnPj
+         rIq86cyxeXY7qzNlJTcb4z9tGKn5Jbl+ShzJEpDCo0D7znzW8SS0KRJdvyKc9D2uJa4w
+         /3Bg+TwYtdzD2SYMDBNBTe2Y9k5i+WLMu+d58mEh7H2s2ZZSkEzavEhMkUa4keda8ikQ
+         Zr4O0fPS696eq8IgLQfQNKswpISZmU5deOF1MJERLQb7OL2n+jEyYECTEpTT5J5iVX45
+         XvDw==
+X-Gm-Message-State: ACrzQf0+4RZr/Jeq3KGWNRDzXBEhyEJoE0n0IuF4M8W/bQWrIBv0L/Q5
+        rXD60a6DrLRK09Nv/6Y1zON+avqd4tTSU5fC75N34bRTnxw7TzNzfnCzb6ZLiKGh/ZHUnoJ+ib/
+        naZykAW2Z6BSfXce/Mr3XTxBv
+X-Received: by 2002:a05:620a:204d:b0:6ec:7d7:c267 with SMTP id d13-20020a05620a204d00b006ec07d7c267mr22249339qka.590.1666614769170;
+        Mon, 24 Oct 2022 05:32:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6UhB1DniE1v1NE2j7D6eQgJNHQkTjY/tKi8q+Ug9EaM9F0d6gOFPBNF3Bze0Eb+whBF2gc6w==
+X-Received: by 2002:a05:620a:204d:b0:6ec:7d7:c267 with SMTP id d13-20020a05620a204d00b006ec07d7c267mr22249321qka.590.1666614768907;
+        Mon, 24 Oct 2022 05:32:48 -0700 (PDT)
+Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
+        by smtp.gmail.com with ESMTPSA id r28-20020ae9d61c000000b006ed30a8fb21sm14882555qkk.76.2022.10.24.05.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 05:32:48 -0700 (PDT)
+Message-ID: <7bc85cd1e54300169ee287537fd794712ce93ea8.camel@redhat.com>
+Subject: Re: [PATCH v2 5/8] KVM: allow compiling out SMM support
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, maciej.szmigiero@oracle.com
+Date:   Mon, 24 Oct 2022 15:32:45 +0300
+In-Reply-To: <20220929172016.319443-6-pbonzini@redhat.com>
+References: <20220929172016.319443-1-pbonzini@redhat.com>
+         <20220929172016.319443-6-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1666612946.git.t4rmin@zohomail.com>
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,68 +80,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Added multiple spaces around operators which needs it as per the
-Linux kernel coding-style regulations. The issues were flagged by
-the checkpatch script.
+On Thu, 2022-09-29 at 13:20 -0400, Paolo Bonzini wrote:
+> Some users of KVM implement the UEFI variable store through a paravirtual device
+> that does not require the "SMM lockbox" component of edk2; allow them to
+> compile out system management mode, which is not a full implementation
+> especially in how it interacts with nested virtualization.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/Kconfig                          | 11 ++++++++++
+>  arch/x86/kvm/Makefile                         |  2 +-
+>  arch/x86/kvm/smm.h                            | 13 ++++++++++++
+>  arch/x86/kvm/svm/svm.c                        |  2 ++
+>  arch/x86/kvm/vmx/vmx.c                        |  2 ++
+>  arch/x86/kvm/x86.c                            | 21 +++++++++++++++++--
+>  tools/testing/selftests/kvm/x86_64/smm_test.c |  2 ++
+>  7 files changed, 50 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index a107df22ffee..1679f9b4e96d 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -88,6 +88,17 @@ config KVM_INTEL
+>  	  To compile this as a module, choose M here: the module
+>  	  will be called kvm-intel.
+>  
+> +config KVM_SMM
+> +	bool "System Management Mode emulation"
+> +	default y
+> +	depends on KVM
+> +	help
+> +	  Provides support for KVM to emulate System Management Mode (SMM)
+> +	  in virtual machines.  This can be used by the virtual machine
+> +	  firmware to implement UEFI secure boot.
+> +
+> +	  If unsure, say Y.
+> +
+>  config X86_SGX_KVM
+>  	bool "Software Guard eXtensions (SGX) Virtualization"
+>  	depends on X86_SGX && KVM_INTEL
+> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
+> index ec6f7656254b..6cf40f668277 100644
+> --- a/arch/x86/kvm/Makefile
+> +++ b/arch/x86/kvm/Makefile
+> @@ -20,7 +20,7 @@ endif
+>  
+>  kvm-$(CONFIG_X86_64) += mmu/tdp_iter.o mmu/tdp_mmu.o
+>  kvm-$(CONFIG_KVM_XEN)	+= xen.o
+> -kvm-y			+= smm.o
+> +kvm-$(CONFIG_KVM_SMM)	+= smm.o
+>  
+>  kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
+>  			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o
+> diff --git a/arch/x86/kvm/smm.h b/arch/x86/kvm/smm.h
+> index b0602a92e511..4c699fee4492 100644
+> --- a/arch/x86/kvm/smm.h
+> +++ b/arch/x86/kvm/smm.h
+> @@ -8,6 +8,7 @@
+>  #define PUT_SMSTATE(type, buf, offset, val)                      \
+>  	*(type *)((buf) + (offset) - 0x7e00) = val
+>  
+> +#ifdef CONFIG_KVM_SMM
+>  static inline int kvm_inject_smi(struct kvm_vcpu *vcpu)
+>  {
+>  	kvm_make_request(KVM_REQ_SMI, vcpu);
+> @@ -23,5 +24,17 @@ void kvm_smm_changed(struct kvm_vcpu *vcpu, bool in_smm);
+>  void enter_smm(struct kvm_vcpu *vcpu);
+>  int emulator_leave_smm(struct x86_emulate_ctxt *ctxt);
+>  void process_smi(struct kvm_vcpu *vcpu);
+> +#else
+> +static inline int kvm_inject_smi(struct kvm_vcpu *vcpu) { return -ENOTTY; }
+> +static inline bool is_smm(struct kvm_vcpu *vcpu) { return false; }
+> +static inline void kvm_smm_changed(struct kvm_vcpu *vcpu, bool in_smm) { WARN_ON_ONCE(1); }
+> +static inline void enter_smm(struct kvm_vcpu *vcpu) { WARN_ON_ONCE(1); }
+> +static inline void process_smi(struct kvm_vcpu *vcpu) { WARN_ON_ONCE(1); }
+> +
+> +/*
+> + * emulator_leave_smm is used as a function pointer, so the
+> + * stub is defined in x86.c.
 
-Signed-off-by: Aaron Lawrence <t4rmin@zohomail.com>
----
- drivers/staging/rtl8192e/rtllib_tx.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Took me a while to figure out this comment.
+I think it might be worth it to remove it, I don't think it helps much.
 
-diff --git a/drivers/staging/rtl8192e/rtllib_tx.c b/drivers/staging/rtl8192e/rtllib_tx.c
-index 38dfdcf99fec..fa998cd76917 100644
---- a/drivers/staging/rtl8192e/rtllib_tx.c
-+++ b/drivers/staging/rtl8192e/rtllib_tx.c
-@@ -306,7 +306,7 @@ static void rtllib_tx_query_agg_cap(struct rtllib_device *ieee,
- 			goto FORCED_AGG_SETTING;
- 		} else if (!pTxTs->bUsingBa) {
- 			if (SN_LESS(pTxTs->TxAdmittedBARecord.ba_start_seq_ctrl.field.seq_num,
--				    (pTxTs->TxCurSeq+1)%4096))
-+				    (pTxTs->TxCurSeq + 1) % 4096))
- 				pTxTs->bUsingBa = true;
- 			else
- 				goto FORCED_AGG_SETTING;
-@@ -403,7 +403,7 @@ static void rtllib_query_protectionmode(struct rtllib_device *ieee,
- 	if (tcb_desc->bBroadcast || tcb_desc->bMulticast)
- 		return;
- 
--	if (is_broadcast_ether_addr(skb->data+16))
-+	if (is_broadcast_ether_addr(skb->data + 16))
- 		return;
- 
- 	if (ieee->mode < IEEE_N_24G) {
-@@ -504,7 +504,7 @@ static u16 rtllib_query_seqnum(struct rtllib_device *ieee, struct sk_buff *skb,
- 			   skb->priority, TX_DIR, true))
- 			return 0;
- 		seqnum = pTS->TxCurSeq;
--		pTS->TxCurSeq = (pTS->TxCurSeq+1)%4096;
-+		pTS->TxCurSeq = (pTS->TxCurSeq + 1) % 4096;
- 		return seqnum;
- 	}
- 	return 0;
-@@ -611,7 +611,7 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
- 		if (skb->len > 282) {
- 			if (ether_type == ETH_P_IP) {
- 				const struct iphdr *ip = (struct iphdr *)
--					((u8 *)skb->data+14);
-+					((u8 *)skb->data + 14);
- 				if (ip->protocol == IPPROTO_UDP) {
- 					struct udphdr *udp;
- 
-@@ -815,10 +815,10 @@ static int rtllib_xmit_inter(struct sk_buff *skb, struct net_device *dev)
- 					 cpu_to_le16(rtllib_query_seqnum(ieee, skb_frag,
- 									 header.addr1));
- 				frag_hdr->seq_ctl =
--					 cpu_to_le16(le16_to_cpu(frag_hdr->seq_ctl)<<4 | i);
-+					 cpu_to_le16(le16_to_cpu(frag_hdr->seq_ctl) << 4 | i);
- 			} else {
- 				frag_hdr->seq_ctl =
--					 cpu_to_le16(ieee->seq_ctrl[0]<<4 | i);
-+					 cpu_to_le16(ieee->seq_ctrl[0] << 4 | i);
- 			}
- 			/* Put a SNAP header on the first fragment */
- 			if (i == 0) {
--- 
-2.38.1
+Or maybe even #ifdef the .leave_smm out of emulate_ops and check for NULL pointer,
+in em_rsm (which should just #UD at the very start of it anyway.
+
+Besides this:
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+
+Best regards,
+	Maxim Levitsky
+
+
+
+> + */
+> +#endif
+>  
+>  #endif
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 496ee7d1ae2f..6f7ceb35d2ff 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4150,6 +4150,8 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
+>  	case MSR_IA32_VMX_BASIC ... MSR_IA32_VMX_VMFUNC:
+>  		return false;
+>  	case MSR_IA32_SMBASE:
+> +		if (!IS_ENABLED(CONFIG_KVM_SMM))
+> +			return false;
+>  		/* SEV-ES guests do not support SMM, so report false */
+>  		if (kvm && sev_es_guest(kvm))
+>  			return false;
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 038809c68006..b22330a15adb 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -6841,6 +6841,8 @@ static bool vmx_has_emulated_msr(struct kvm *kvm, u32 index)
+>  {
+>  	switch (index) {
+>  	case MSR_IA32_SMBASE:
+> +		if (!IS_ENABLED(CONFIG_KVM_SMM))
+> +			return false;
+>  		/*
+>  		 * We cannot do SMM unless we can run the guest in big
+>  		 * real mode.
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 97a871635986..a9e050aefea6 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -3636,7 +3636,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  		break;
+>  	}
+>  	case MSR_IA32_SMBASE:
+> -		if (!msr_info->host_initiated)
+> +		if (!IS_ENABLED(CONFIG_KVM_SMM) || !msr_info->host_initiated)
+>  			return 1;
+>  		vcpu->arch.smbase = data;
+>  		break;
+> @@ -4052,7 +4052,7 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  		msr_info->data = vcpu->arch.ia32_misc_enable_msr;
+>  		break;
+>  	case MSR_IA32_SMBASE:
+> -		if (!msr_info->host_initiated)
+> +		if (!IS_ENABLED(CONFIG_KVM_SMM) || !msr_info->host_initiated)
+>  			return 1;
+>  		msr_info->data = vcpu->arch.smbase;
+>  		break;
+> @@ -4426,6 +4426,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  			r |= KVM_X86_DISABLE_EXITS_MWAIT;
+>  		break;
+>  	case KVM_CAP_X86_SMM:
+> +		if (!IS_ENABLED(CONFIG_KVM_SMM))
+> +			break;
+> +
+>  		/* SMBASE is usually relocated above 1M on modern chipsets,
+>  		 * and SMM handlers might indeed rely on 4G segment limits,
+>  		 * so do not report SMM to be available if real mode is
+> @@ -5176,6 +5179,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
+>  		vcpu->arch.apic->sipi_vector = events->sipi_vector;
+>  
+>  	if (events->flags & KVM_VCPUEVENT_VALID_SMM) {
+> +		if (!IS_ENABLED(CONFIG_KVM_SMM) &&
+> +		    (events->smi.smm ||
+> +		     events->smi.pending ||
+> +		     events->smi.smm_inside_nmi))
+> +			return -EINVAL;
+> +
+>  		if (!!(vcpu->arch.hflags & HF_SMM_MASK) != events->smi.smm) {
+>  			kvm_x86_ops.nested_ops->leave_nested(vcpu);
+>  			kvm_smm_changed(vcpu, events->smi.smm);
+> @@ -8066,6 +8075,14 @@ static unsigned emulator_get_hflags(struct x86_emulate_ctxt *ctxt)
+>  	return emul_to_vcpu(ctxt)->arch.hflags;
+>  }
+>  
+> +#ifndef CONFIG_KVM_SMM
+> +static int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
+> +{
+> +	WARN_ON_ONCE(1);
+> +	return X86EMUL_UNHANDLEABLE;
+> +}
+> +#endif
+> +
+>  static void emulator_triple_fault(struct x86_emulate_ctxt *ctxt)
+>  {
+>  	kvm_make_request(KVM_REQ_TRIPLE_FAULT, emul_to_vcpu(ctxt));
+> diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
+> index 1f136a81858e..cb38a478e1f6 100644
+> --- a/tools/testing/selftests/kvm/x86_64/smm_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
+> @@ -137,6 +137,8 @@ int main(int argc, char *argv[])
+>  	struct kvm_x86_state *state;
+>  	int stage, stage_reported;
+>  
+> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_SMM));
+> +
+>  	/* Create VM */
+>  	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+>  
+
 
