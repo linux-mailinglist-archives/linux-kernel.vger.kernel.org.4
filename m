@@ -2,148 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357AC60B4D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA0060B590
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiJXSFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S231447AbiJXScW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbiJXSEr (ORCPT
+        with ESMTP id S231241AbiJXSb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:04:47 -0400
-Received: from mail-io1-xd48.google.com (mail-io1-xd48.google.com [IPv6:2607:f8b0:4864:20::d48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27301C97D0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:45:20 -0700 (PDT)
-Received: by mail-io1-xd48.google.com with SMTP id j17-20020a5d93d1000000b006bcdc6b49cbso6785973ioo.22
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:45:20 -0700 (PDT)
+        Mon, 24 Oct 2022 14:31:59 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8163ECD0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:13:35 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id ml12so5880706qvb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pja81Rhvf+nc30IgGNzM8/t/SC1TJPZW1TXOrzNAkS8=;
+        b=qTJiWOwtCxymrtgegTu8qvv9CQdcqJAnAFOAwO7MQXk/GJaub7uJ/Eo9q0C48PrnUu
+         MP1ShQyQApNeVovj42GXJkeeh9mmItsIVuPzDTI+LHQ5WRp6ygqy9areYbnXiLM3SGSt
+         p+M6IUYlNMaExbgkJQuay/n9YOqKV6WFhB3LE/DHQMMT5CAPrrqNeqhnUkJmrcDPrtZ1
+         TeRE6P2w9J2z7wd55BWM/8Awft62HD7Bx3ERnWveVIDnFrXRrgCHS4PFrFhe4cgCVXTZ
+         yQLdVet5mUrGLpG3cE6+4IwzzqcS+CYMaAbTIp4yUFB5oGmS1Kyb+/7sWyhx1VvAWJQy
+         fySQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zTpt42zlFi3UfDN6VLOXH7hS4FWPzl+DdSyOQH5VzIg=;
-        b=loj/rysx4z53NXWrTd0PJkmdFp3hhgs6nMCygP3Z5ysYVlRNU75QH+/bpPAtZ4N9Vb
-         RBUmGNm+XG9EKBbTOkThTNGwpG1p6/0xwrDztk+y45UCpjg6JBqCKsmJyg7E7bwfTLqz
-         vXDiOLfOPryPW9P/zvHm4ZNiAf3lLiVmMBZ3km6iVMlUp3pChpi2eSCchdpaq4HcV8h7
-         oqRmVqQM50pupWkq/y+MokC+y3YCtOEO8iSEfrszFhl+iJjKMwBJHQejVEFihBGb8yDD
-         VSxW7ZQ1Z2PeW6bbbz36ckOFURLn8j0nYZiArmmlUAG/3zT5zb36ic4IJFncHFXXOEvu
-         8qXQ==
-X-Gm-Message-State: ACrzQf047Hg3XFbwE1srbInk4H7eiVVOttT0OaUjV2kA6itAl3kI4lC5
-        lDIuR/iboHqvzgLJpHPzW5QEboJGlzy+3PgLIJT+a8Jb6N5x
-X-Google-Smtp-Source: AMsMyM53XaSnBVhNd1Qcz5Tm+F2TLcYsibmARMi7jrN9rmxnYXub1/fH9aI1qNwdC4ERrgARDlkhw3C4+z7XimkFdNisADbyQPHT
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pja81Rhvf+nc30IgGNzM8/t/SC1TJPZW1TXOrzNAkS8=;
+        b=PX0bfElLfAgse43MhlMiobM8Nin+8H3SgjWio7Kcga/RJesFeiB/7CYDdmdkoQ2SBu
+         LcOfmJXd/wknahXf1cMSPXU0lcCQG39H8u9eH0osbCRtYtOosxJXMm7e8X1SzlhWG7Zq
+         gO6g/gLxPJB0fQ2wkmx/RZGf6V8yO1dBH/xUuhAkthVYoEzgOUcjRpvdcXD2rea3IiX5
+         3Esh4rYdQEXgzEeeA6hDJDqhMHc6J3W27DZoYTa2gFR7esFZTs+1voIYOC3ynZextbEu
+         4xxe07wiLdwrisqIQ7XHk6GFfhW8No7FR2uiRk/6Or4KD3cMBhBRRU51PXnnout1Rg0f
+         i9iA==
+X-Gm-Message-State: ACrzQf3ZISgCRoX26sYVXtnpO4QqR1NIwLg+BJXFQr2Vf1Y1D3R0aoUU
+        mBhUOw8UPVtrMLof304neBA57KDJWswtoQ==
+X-Google-Smtp-Source: AMsMyM7eLs7/zR87TlE5CHm/Vgtm5DIknIDhVY1qdoVER2IP3IgEtQwxxU6jlkqJcxhX1/uU6N02qQ==
+X-Received: by 2002:a17:902:bf46:b0:179:eba5:90ba with SMTP id u6-20020a170902bf4600b00179eba590bamr34424895pls.16.1666629540969;
+        Mon, 24 Oct 2022 09:39:00 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id g5-20020a170902e38500b0017ca9f4d22fsm6103522ple.209.2022.10.24.09.38.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 09:38:59 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 10:38:58 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Daniel Kestrel <kestrelseventyfour@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/3] Add support for WASP SoC on AVM router boards
+Message-ID: <20221024163858.GB626419@p14s>
+References: <20220804210806.4053-1-kestrelseventyfour@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2b92:b0:6a8:bdb5:a5d5 with SMTP id
- r18-20020a0566022b9200b006a8bdb5a5d5mr20403985iov.85.1666629520753; Mon, 24
- Oct 2022 09:38:40 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 09:38:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008e8b8505ebca6cc7@google.com>
-Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in filemap_free_folio
-From:   syzbot <syzbot+f1eb7f33bbf683a5e1e1@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804210806.4053-1-kestrelseventyfour@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Daniel,
 
-syzbot found the following issue on:
+I have started to review this patchset.  I expect the process to take several
+days and will clearly let you know when I am done.
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=15788ec2880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=f1eb7f33bbf683a5e1e1
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+Thanks,
+Mathieu
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f1eb7f33bbf683a5e1e1@syzkaller.appspotmail.com
-
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000050
-Mem abort info:
-  ESR = 0x0000000096000005
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x05: level 1 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000005
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000014a8d0000
-[0000000000000050] pgd=08000001532c9003, p4d=08000001532c9003, pud=0000000000000000
-Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3066 Comm: syz-executor.3 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : filemap_free_folio+0x20/0x288 mm/filemap.c:231
-lr : filemap_free_folio+0x1c/0x288 mm/filemap.c:227
-sp : ffff80001280b990
-x29: ffff80001280b990 x28: ffff000117b4ea00 x27: 0000000000000000
-x26: 0000000000000001 x25: ffff80000cb6fd9e x24: fffffffffffffffe
-x23: 0000000000000000 x22: fffffc0004cfa8c0 x21: 0000000000000001
-x20: ffff0001127af450 x19: fffffc0004cfa8c0 x18: 00000000000003b8
-x17: ffff80000bffd6bc x16: 0000000000000002 x15: 0000000000000000
-x14: 0000000000000000 x13: 0000000000000003 x12: ffff80000d5f02b0
-x11: ff808000083c31e8 x10: 0000000000000000 x9 : ffff8000083c31e8
-x8 : 0000000000000000 x7 : ffff80000856806c x6 : 0000000000000000
-x5 : 0000000000000080 x4 : 0000000000000000 x3 : 0000000000000000
-x2 : 0000000000000006 x1 : fffffc0004cfa8c0 x0 : ffff0001127af450
-Call trace:
- filemap_free_folio+0x20/0x288 mm/filemap.c:231
- delete_from_page_cache_batch+0x148/0x184 mm/filemap.c:341
- truncate_inode_pages_range+0x174/0xb94 mm/truncate.c:370
- truncate_inode_pages mm/truncate.c:452 [inline]
- truncate_inode_pages_final+0x8c/0x9c mm/truncate.c:487
- nilfs_evict_inode+0x58/0x1cc fs/nilfs2/inode.c:906
- evict+0xec/0x334 fs/inode.c:665
- dispose_list fs/inode.c:698 [inline]
- evict_inodes+0x2e0/0x354 fs/inode.c:748
- generic_shutdown_super+0x50/0x190 fs/super.c:480
- kill_block_super+0x30/0x78 fs/super.c:1427
- deactivate_locked_super+0x70/0xe8 fs/super.c:332
- deactivate_super+0xd0/0xd4 fs/super.c:363
- cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
- __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
- task_work_run+0xc4/0x14c kernel/task_work.c:177
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-Code: aa0103f3 aa0003f4 97fb728c f940de88 (f9402914) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	aa0103f3 	mov	x19, x1
-   4:	aa0003f4 	mov	x20, x0
-   8:	97fb728c 	bl	0xffffffffffedca38
-   c:	f940de88 	ldr	x8, [x20, #440]
-* 10:	f9402914 	ldr	x20, [x8, #80] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+On Thu, Aug 04, 2022 at 11:08:03PM +0200, Daniel Kestrel wrote:
+> There is a popular set of Lantiq xrx200 router boards by AVM in
+> Germany (AVM Fritzbox 3390, 3490, 5490, 5491 and 7490) which
+> have the strange implementation of having the wifi cards
+> connected to a separate memory only ATH79 based SoC. It has no
+> persistent storage and no access to any resource on the Lantiq
+> host, but is connect to the Lantiq GSWIP switch on an additional
+> fixed internal network port.
+> This kernel module is to support booting the secondary SoC called
+> Wireless Assistant Support Processor (WASP).
+> After turning it on, a small network boot firmware is sent to
+> the SoC by using mdio and when it is started, an initramfs
+> linux image is sent to the SoC using raw ethernet frames.
+> 
+> The whole procedure takes about 6 seconds, if there is no error.
+> So far tested on 3490, 5490 and 7490 devices based on OpenWrt, 3390
+> takes about 20 seconds.
+> 
+> Patch 1/3 adds the vendor name
+> Patch 2/3 adds the dt-bindings
+> Patch 3/3 adds the remoteproc driver
+> 
+> To build and run, there is OpenWrt PR 5075.
+> 
+> Please review.
+> 
+> Changes in v5:
+>   - Replace names for properties and descriptions as requested in the
+>     device tree documentation and change the driver to accept them
+>   - Change example in the device tree documentation
+>   - Restructure constants and defines in the beginning of the driver
+>     source for better readability
+>   - Combine m_start_addr and m_exec_addr into a single constant and
+>     change avm_wasp_netboot_write_header to use only this one constant
+>   - Change variable startup_gpio to power_gpio in driver
+> 
+> Changes in v4:
+>   - Fix compiler warnings with W=2 option
+> 
+> Changes in v3:
+>   - Replace generic avm,fritzboxx490-wasp with actual device names for
+>     device tree documentation and change the driver to accept them
+>   - Add maxItems to device tree documentation
+>   - Change example in the device tree documentation
+>   - Fix wait time to make the Wasp upload work for 3390 more reliable
+>   - Enable the SOC on driver load, use reset instead of disable/enable
+>     while driver is loaded and disable on unloading the driver
+>   - Change some messages printed to adhere to standards (e.g. remove !)
+> 
+> Changes in v2:
+>   - Remove firmware names from dt-binding and add as kmod parameters
+>   - Rename other bindings with vender prefix and fix gpios suffix
+>   - Change descriptions in dt-binding
+>   - Replace/Remove asynch load of firmware with request_firmware_direct
+>   - Fix comments to use the errno define instead of the number
+>   - Implement wait loops with read_poll_timeout() macro
+>   - Wrap read_poll_timeout() macro in function saving 6k module size
+>   - Return -ETIMEDOUT for all errors returned by read_poll_timeout
+>   - Replace mdio writes/reads with mdiobus_write and mdiobus_read and add
+>     return codes and their handling
+>   - Remove mutex for mdiobus_lock and add return code checking for mdio ops
+>   - Replaced the mdio register array with directly specifying registers
+>   - As a result of the previous 3 changes remove the functions for mdio
+>   - Consolidate error messages for mdio writes into a single one saved 1k
+>     for module size
+>   - Replaced mdelay with usleep_range saved 0,7k module size
+>   - Remove unneeded include <linux/interrupt.h> and <linux/error.h>
+>   - Wrap all blocks with {} and fix some indentation errors
+>   - Change const len in to size_t in avm_wasp_netboot_write_chunk
+>   - Make all methods static to fix kernel bot warning
+>   - Change read variable name in avm_wasp_load_initramfs_image
+>   - Change ssize_t variables to size_t in avm_wasp_load_initramfs_image
+>   - avm_wasp_netboot_write_chunk change for loop for 2 byte divisibility
+>   - Change uint32_t to u32
+>   - Change int count = -1 to u32 with U32_MAX initialisation
+>   - Add check for firmware len divisable by 4
+>   - Replace big endian bit shift operations with be32_to_cpu
+>   - Change loop to write 14 byte firmware chuncks like suggested
+>   - Change WASP_CHUNK_SIZE to ARRAY_SIZE(mac_data) for readability
+>   - Change int done to boolean
+>   - Change unsigned ints to u32
+>   - Change int to size_t for send_len
+>   - Use int for numbytes because kernel_recvmsg returns error or number
+>   - Two sockets are not needed, so reduce to one socket usage
+>   - Remove struct timeval definition, replace with __kernel_old_timeval
+>   - __kernel_old_timeval is depracated, but arch mips is 32bit platform
+>   - Replace &avmwasp->pdev->dev with local dev
+>   - Check if wasp network interface is up and fail if not in start method
+>   - Remove setsockopt for SO_REUSEADDR and SO_BINDTODEVICE
+>   - Remove packet_counter
+>   - Move firmware and firmware_end out of RESP_DISCOVER to make sure that
+>     they are initialized if RESP_DISCOVER is not happening first
+>   - indend break;
+>   - Move second half of the send/receive paket while loop to RESP_OK and
+>     let RESP_DISCOVER fall through
+>   - Remove bringing up the wasp network interface
+>   - Check if wasp network interface is up in probe and defer if not
+>   - Remove the check for the root device and replace it with match data
+>     for WASP device identification
+>   - Move of_read and find of mdio bus to rproc_start but delete reference
+>     after using it in the rproc_start method
+>   - Replace dev_set_drvdata with platform_set_drvdata
+>   - Remove avm_wasp_rproc_boot_addr because its not needed and move
+>     setting the fw struct pointer to avm_wasp_rproc_load
+>   - Move avm_wasp.h definitions to kernel module
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Daniel Kestrel (3):
+>   dt-bindings: vendor-prefixes: Add AVM
+>   dt-bindings: remoteproc: Add AVM WASP
+>   remoteproc: Add AVM WASP driver
+> 
+>  .../bindings/remoteproc/avm,wasp-rproc.yaml   |   61 +
+>  .../devicetree/bindings/vendor-prefixes.yaml  |    2 +
+>  drivers/remoteproc/Kconfig                    |   10 +
+>  drivers/remoteproc/Makefile                   |    1 +
+>  drivers/remoteproc/avm_wasp.c                 | 1051 +++++++++++++++++
+>  5 files changed, 1125 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
+>  create mode 100644 drivers/remoteproc/avm_wasp.c
+> 
+> -- 
+> 2.17.1
+> 
