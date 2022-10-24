@@ -2,120 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D024609F60
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44AEC609F62
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJXKx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S229839AbiJXKyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJXKxx (ORCPT
+        with ESMTP id S229556AbiJXKyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:53:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570525A17F;
-        Mon, 24 Oct 2022 03:53:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 070E3B810E5;
-        Mon, 24 Oct 2022 10:53:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F12ADC433C1;
-        Mon, 24 Oct 2022 10:53:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666608828;
-        bh=v7rB+owjUI2XRngBv9CTZ1gWDKmDyAWdqguhZux8HmA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=fiZnhN3PswtxXCKH8SLyd7AF3gQN9pVHS1SsekNPE4h/XZ5cF2dFl/wW/isGjG/3U
-         4x4kb6pVFaIlOFXs61Lj7p/0PWlpWB0gLXWFPv2IL7Rrkz43Ibuy+lLSzQOx9Bhxsy
-         2M+/bQRDbGtWFmkcKZTOSHFplPT7UTKcYrOHJFfKUiIOTfRbfOjZBzmUoiUac2ouC+
-         VLg3bnSfzjqoGVse7EwZBda/kSZSailffdxtv3A+rFmmBruP+cB2a2BxwZsyk9fTMq
-         cS2JcOVGxqPCk/g9crKzfxR0iQ2BsFZwwZQAN91ZmYq9f/JHyOsm0xsZ5+d8UyM/B2
-         eZaeM9R4VJXDw==
-Message-ID: <627dd3b048812fe8127058a66fd5a4aafca8242a.camel@kernel.org>
-Subject: Re: [PATCH -next 2/5] nfs: fix possible null-ptr-deref when parsing
- param
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Hawkins Jiawei <yin31149@gmail.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>
-Cc:     18801353760@163.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org
-Date:   Mon, 24 Oct 2022 06:53:46 -0400
-In-Reply-To: <20221023163945.39920-3-yin31149@gmail.com>
-References: <20221023163945.39920-1-yin31149@gmail.com>
-         <20221023163945.39920-3-yin31149@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 24 Oct 2022 06:54:19 -0400
+X-Greylist: delayed 589 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 03:54:19 PDT
+Received: from mail.nearlyone.de (mail.nearlyone.de [46.163.114.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5DC5A17D;
+        Mon, 24 Oct 2022 03:54:18 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 147C361C24;
+        Mon, 24 Oct 2022 12:54:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
+        t=1666608857;
+        h=from:subject:date:message-id:to:mime-version:content-type:in-reply-to:
+         references; bh=ggedhJh1EHWK9qNin4m66c03VGctJh9G7V0HKNEN04Y=;
+        b=fdFQpBm4T/UC47utgxrSqkY3N24nXcCQFT1qJ77mNYeZdEjDkAaf5MBUil6J4f4psSe43M
+        19VwejTI/p1KSwwjFeyjHwhJtOUswaUIACU/9lKyA+dvLc+tE5P1Yijz4s87fqZ/9s1QrN
+        x5J3GOPLc80mZTvAR3f3daRZIViZj8jIpthSNA3XAiCAIxTOE73MgavXez1EMRq6d3gZb8
+        CJYpsD+CHTG3S7+ClmMF4HhN9Au45IEEnzzC3IriyW4wpKhVyRhq5y84i3q/F1WSTipCIw
+        iHSmGI6007mTclyjUcix+03IAphOqLpOu3LSBO7zVlvkIEonFkRR0qXb5Ceb4w==
+Date:   Mon, 24 Oct 2022 12:54:16 +0200
+From:   Daniel Wagner <wagi@monom.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+Subject: Re: [PATCH RT 0/9] Linux v4.19.255-rt114-rc1
+Message-ID: <20221024105416.nflnrqhmzsyqqdzz@carbon.lan>
+References: <20221024104425.16423-1-wagi@monom.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024104425.16423-1-wagi@monom.org>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-10-24 at 00:39 +0800, Hawkins Jiawei wrote:
-> According to commit "vfs: parse: deal with zero length string value",
-> kernel will set the param->string to null pointer in vfs_parse_fs_string(=
-)
-> if fs string has zero length.
->=20
-> Yet the problem is that, nfs_fs_context_parse_param() will dereferences t=
-he
-> param->string, without checking whether it is a null pointer, which may
-> trigger a null-ptr-deref bug.
->=20
-> This patch solves it by adding sanity check on param->string
-> in nfs_fs_context_parse_param().
->=20
-> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
-> ---
->  fs/nfs/fs_context.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->=20
-> diff --git a/fs/nfs/fs_context.c b/fs/nfs/fs_context.c
-> index 4da701fd1424..0c330bc13ef2 100644
-> --- a/fs/nfs/fs_context.c
-> +++ b/fs/nfs/fs_context.c
-> @@ -684,6 +684,8 @@ static int nfs_fs_context_parse_param(struct fs_conte=
-xt *fc,
->  			return ret;
->  		break;
->  	case Opt_vers:
-> +		if (!param->string)
-> +			goto out_invalid_value;
->  		trace_nfs_mount_assign(param->key, param->string);
->  		ret =3D nfs_parse_version_string(fc, param->string);
->  		if (ret < 0)
-> @@ -696,6 +698,8 @@ static int nfs_fs_context_parse_param(struct fs_conte=
-xt *fc,
->  		break;
-> =20
->  	case Opt_proto:
-> +		if (!param->string)
-> +			goto out_invalid_value;
->  		trace_nfs_mount_assign(param->key, param->string);
->  		protofamily =3D AF_INET;
->  		switch (lookup_constant(nfs_xprt_protocol_tokens, param->string, -1)) =
-{
-> @@ -732,6 +736,8 @@ static int nfs_fs_context_parse_param(struct fs_conte=
-xt *fc,
->  		break;
-> =20
->  	case Opt_mountproto:
-> +		if (!param->string)
-> +			goto out_invalid_value;
->  		trace_nfs_mount_assign(param->key, param->string);
->  		mountfamily =3D AF_INET;
->  		switch (lookup_constant(nfs_xprt_protocol_tokens, param->string, -1)) =
-{
+On Mon, Oct 24, 2022 at 12:44:16PM +0200, Daniel Wagner wrote:
+> Dear RT Folks,
+>
+> This is the RT stable review cycle of patch 4.19.255-rt114-rc1.
+>
+> Please scream at me if I messed something up. Please test the patches
+> too.
+>
+> The -rc release will be uploaded to kernel.org and will be deleted
+> when the final release is out. This is just a review release (or
+> release candidate).
+>
+> The pre-releases will not be pushed to the git repository, only the
+> final release is.
+>
+> If all goes well, this patch will be converted to the next main
+> release on 2022-10-31.
+
+Timer changes seem not to be correct though:
+
+[   24.674424] BUG: sleeping function called from invalid context at kernel/locking/rtmutex.c:974
+[   24.674426] in_atomic(): 0, irqs_disabled(): 1, pid: 23, name: ktimersoftd/1
+[   25.730421] BUG: sleeping function called from invalid context at kernel/locking/rtmutex.c:974
+[   25.730424] in_atomic(): 0, irqs_disabled(): 1, pid: 11, name: ktimersoftd/0
+
+I get those for when running any of the rttests. I suppose I am missing
+an additional fix:
+
+-               if (!IS_ENABLED(CONFIG_PREEMPT_RT_FULL) &&
+-                   timer->flags & TIMER_IRQSAFE) {
++               if (timer->flags & TIMER_IRQSAFE) {
+                        raw_spin_unlock(&base->lock);
+                        call_timer_fn(timer, fn);
+                        base->running_timer = NULL;
 
 
-Looks reasonable. I took a quick look for other fsparam_string values
-that might not handle a NULL pointer correctly, but I didn't see any.
+is now queuing up fn callbacks with TIMER_IRQSAFE which then triggers:
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
++       if (IS_ENABLED(CONFIG_PREEMPT_RT) && !(timer->flags & TIMER_IRQSAFE))
++               might_sleep();
+
+in del_timer_sync(). But this is just a guess.
+
+Daniel
