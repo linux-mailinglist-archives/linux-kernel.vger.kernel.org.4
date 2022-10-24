@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1432760AC90
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7799C60AFC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiJXOIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S231831AbiJXP5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237288AbiJXOFQ (ORCPT
+        with ESMTP id S231989AbiJXP4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:05:16 -0400
+        Mon, 24 Oct 2022 11:56:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90373C8D6;
-        Mon, 24 Oct 2022 05:50:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A49F38B6;
+        Mon, 24 Oct 2022 07:52:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 85358B816A1;
-        Mon, 24 Oct 2022 12:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E38C3C433D6;
-        Mon, 24 Oct 2022 12:30:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0B10B819CC;
+        Mon, 24 Oct 2022 12:49:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A11C433C1;
+        Mon, 24 Oct 2022 12:49:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614618;
-        bh=qjR24BSMmkAFS/BFtuOkdK3KlnwctJ3VBLjJxkzooCQ=;
+        s=korg; t=1666615793;
+        bh=WnjtTeI6pe72IUF31PponLagAiZ6VtOW9n+5sKpOGsk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v6/hcnNzggMIrG3PZUIG76qoqjNyQOkakZvJd+0t2zjgSxRlNLnua+FVwlbMCXYBO
-         0+fdsVE0+wG7tNRWAuHElGUCF1uLL2MUpPqbquyHgfuxcZZ/PqD8z3ELAoa0HQ6TIv
-         9q1FT5nSUirlQghuFDfkHYs6TMzhBN4nofmyYpsE=
+        b=EKS/zyhS3R2gcu68HMdUOdpxTZv6vegInLq3PHjdBClfJJB5tMErllI6p2XfuF3qF
+         T9h+SaNr9/EpU0U3woyQS1hL4bPYKeZ8pmWS9FDwAy0YXqx+8bYuM8lNiwRFL2FCqe
+         d1Pu+iQ8pucTLhB8hnvJzs9ROp5tCFQngBpvkHiM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+c80e9ef5d8bb45894db0@syzkaller.appspotmail.com,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Vivek Kasireddy <vivek.kasireddy@intel.com>,
+        Damian Muszynski <damian.muszynski@intel.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 330/390] udmabuf: Set ubuf->sg = NULL if the creation of sg table fails
-Date:   Mon, 24 Oct 2022 13:32:07 +0200
-Message-Id: <20221024113037.057296244@linuxfoundation.org>
+Subject: [PATCH 5.15 385/530] crypto: qat - fix DMA transfer direction
+Date:   Mon, 24 Oct 2022 13:32:09 +0200
+Message-Id: <20221024113102.486118907@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,113 +56,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vivek Kasireddy <vivek.kasireddy@intel.com>
+From: Damian Muszynski <damian.muszynski@intel.com>
 
-[ Upstream commit d9c04a1b7a15b5e74b2977461d9511e497f05d8f ]
+[ Upstream commit cf5bb835b7c8a5fee7f26455099cca7feb57f5e9 ]
 
-When userspace tries to map the dmabuf and if for some reason
-(e.g. OOM) the creation of the sg table fails, ubuf->sg needs to be
-set to NULL. Otherwise, when the userspace subsequently closes the
-dmabuf fd, we'd try to erroneously free the invalid sg table from
-release_udmabuf resulting in the following crash reported by syzbot:
+When CONFIG_DMA_API_DEBUG is selected, while running the crypto self
+test on the QAT crypto algorithms, the function add_dma_entry() reports
+a warning similar to the one below, saying that overlapping mappings
+are not supported. This occurs in tests where the input and the output
+scatter list point to the same buffers (i.e. two different scatter lists
+which point to the same chunks of memory).
 
-general protection fault, probably for non-canonical address
-0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 PID: 3609 Comm: syz-executor487 Not tainted
-5.19.0-syzkaller-13930-g7ebfc85e2cd7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-Google 07/22/2022
-RIP: 0010:dma_unmap_sgtable include/linux/dma-mapping.h:378 [inline]
-RIP: 0010:put_sg_table drivers/dma-buf/udmabuf.c:89 [inline]
-RIP: 0010:release_udmabuf+0xcb/0x4f0 drivers/dma-buf/udmabuf.c:114
-Code: 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 2b 04 00 00 48 8d 7d 0c 4c
-8b 63 30 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 14
-02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 e2
-RSP: 0018:ffffc900037efd30 EFLAGS: 00010246
-RAX: dffffc0000000000 RBX: ffffffff8cb67800 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff84ad27e0 RDI: 0000000000000000
-RBP: fffffffffffffff4 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 000000000008c07c R12: ffff88801fa05000
-R13: ffff888073db07e8 R14: ffff888025c25440 R15: 0000000000000000
-FS:  0000555555fc4300(0000) GS:ffff8880b9a00000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc1c0ce06e4 CR3: 00000000715e6000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- dma_buf_release+0x157/0x2d0 drivers/dma-buf/dma-buf.c:78
- __dentry_kill+0x42b/0x640 fs/dcache.c:612
- dentry_kill fs/dcache.c:733 [inline]
- dput+0x806/0xdb0 fs/dcache.c:913
- __fput+0x39c/0x9d0 fs/file_table.c:333
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- ptrace_notify+0x114/0x140 kernel/signal.c:2353
- ptrace_report_syscall include/linux/ptrace.h:420 [inline]
- ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
- syscall_exit_work kernel/entry/common.c:249 [inline]
- syscall_exit_to_user_mode_prepare+0x129/0x280 kernel/entry/common.c:276
- __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
- syscall_exit_to_user_mode+0x9/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc1c0c35b6b
-Code: 0f 05 48 3d 00 f0 ff ff 77 45 c3 0f 1f 40 00 48 83 ec 18 89 7c 24
-0c e8 63 fc ff ff 8b 7c 24 0c 41 89 c0 b8 03 00 00 00 0f 05 <48> 3d 00
-f0 ff ff 77 35 44 89 c7 89 44 24 0c e8 a1 fc ff ff 8b 44
-RSP: 002b:00007ffd78a06090 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000007 RCX: 00007fc1c0c35b6b
-RDX: 0000000020000280 RSI: 0000000040086200 RDI: 0000000000000006
-RBP: 0000000000000007 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000293 R12: 000000000000000c
-R13: 0000000000000003 R14: 00007fc1c0cfe4a0 R15: 00007ffd78a06140
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:dma_unmap_sgtable include/linux/dma-mapping.h:378 [inline]
-RIP: 0010:put_sg_table drivers/dma-buf/udmabuf.c:89 [inline]
-RIP: 0010:release_udmabuf+0xcb/0x4f0 drivers/dma-buf/udmabuf.c:114
+The logic that implements the mapping uses the flag DMA_BIDIRECTIONAL
+for both the input and the output scatter lists which leads to
+overlapped write mappings. These are not supported by the DMA layer.
 
-Reported-by: syzbot+c80e9ef5d8bb45894db0@syzkaller.appspotmail.com
-Cc: Gerd Hoffmann <kraxel@redhat.com>
-Signed-off-by: Vivek Kasireddy <vivek.kasireddy@intel.com>
-Link: http://patchwork.freedesktop.org/patch/msgid/20220825063522.801264-1-vivek.kasireddy@intel.com
-Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+Fix by specifying the correct DMA transfer directions when mapping
+buffers. For in-place operations where the input scatter list
+matches the output scatter list, buffers are mapped once with
+DMA_BIDIRECTIONAL, otherwise input buffers are mapped using the flag
+DMA_TO_DEVICE and output buffers are mapped with DMA_FROM_DEVICE.
+Overlapping a read mapping with a write mapping is a valid case in
+dma-coherent devices like QAT.
+The function that frees and unmaps the buffers, qat_alg_free_bufl()
+has been changed accordingly to the changes to the mapping function.
+
+   DMA-API: 4xxx 0000:06:00.0: cacheline tracking EEXIST, overlapping mappings aren't supported
+   WARNING: CPU: 53 PID: 4362 at kernel/dma/debug.c:570 add_dma_entry+0x1e9/0x270
+   ...
+   Call Trace:
+   dma_map_page_attrs+0x82/0x2d0
+   ? preempt_count_add+0x6a/0xa0
+   qat_alg_sgl_to_bufl+0x45b/0x990 [intel_qat]
+   qat_alg_aead_dec+0x71/0x250 [intel_qat]
+   crypto_aead_decrypt+0x3d/0x70
+   test_aead_vec_cfg+0x649/0x810
+   ? number+0x310/0x3a0
+   ? vsnprintf+0x2a3/0x550
+   ? scnprintf+0x42/0x70
+   ? valid_sg_divisions.constprop.0+0x86/0xa0
+   ? test_aead_vec+0xdf/0x120
+   test_aead_vec+0xdf/0x120
+   alg_test_aead+0x185/0x400
+   alg_test+0x3d8/0x500
+   ? crypto_acomp_scomp_free_ctx+0x30/0x30
+   ? __schedule+0x32a/0x12a0
+   ? ttwu_queue_wakelist+0xbf/0x110
+   ? _raw_spin_unlock_irqrestore+0x23/0x40
+   ? try_to_wake_up+0x83/0x570
+   ? _raw_spin_unlock_irqrestore+0x23/0x40
+   ? __set_cpus_allowed_ptr_locked+0xea/0x1b0
+   ? crypto_acomp_scomp_free_ctx+0x30/0x30
+   cryptomgr_test+0x27/0x50
+   kthread+0xe6/0x110
+   ? kthread_complete_and_exit+0x20/0x20
+   ret_from_fork+0x1f/0x30
+
+Fixes: d370cec ("crypto: qat - Intel(R) QAT crypto interface")
+Link: https://lore.kernel.org/linux-crypto/20220223080400.139367-1-gilad@benyossef.com/
+Signed-off-by: Damian Muszynski <damian.muszynski@intel.com>
+Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma-buf/udmabuf.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/crypto/qat/qat_common/qat_algs.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/dma-buf/udmabuf.c b/drivers/dma-buf/udmabuf.c
-index b624f3d8f0e6..e359c5c6c4df 100644
---- a/drivers/dma-buf/udmabuf.c
-+++ b/drivers/dma-buf/udmabuf.c
-@@ -118,17 +118,20 @@ static int begin_cpu_udmabuf(struct dma_buf *buf,
- {
- 	struct udmabuf *ubuf = buf->priv;
- 	struct device *dev = ubuf->device->this_device;
-+	int ret = 0;
+diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
+index 873533dc43a7..9abdaf7cd2cf 100644
+--- a/drivers/crypto/qat/qat_common/qat_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_algs.c
+@@ -673,11 +673,14 @@ static void qat_alg_free_bufl(struct qat_crypto_instance *inst,
+ 	dma_addr_t blpout = qat_req->buf.bloutp;
+ 	size_t sz = qat_req->buf.sz;
+ 	size_t sz_out = qat_req->buf.sz_out;
++	int bl_dma_dir;
+ 	int i;
  
- 	if (!ubuf->sg) {
- 		ubuf->sg = get_sg_table(dev, buf, direction);
--		if (IS_ERR(ubuf->sg))
--			return PTR_ERR(ubuf->sg);
-+		if (IS_ERR(ubuf->sg)) {
-+			ret = PTR_ERR(ubuf->sg);
-+			ubuf->sg = NULL;
-+		}
- 	} else {
- 		dma_sync_sg_for_cpu(dev, ubuf->sg->sgl, ubuf->sg->nents,
- 				    direction);
++	bl_dma_dir = blp != blpout ? DMA_TO_DEVICE : DMA_BIDIRECTIONAL;
++
+ 	for (i = 0; i < bl->num_bufs; i++)
+ 		dma_unmap_single(dev, bl->bufers[i].addr,
+-				 bl->bufers[i].len, DMA_BIDIRECTIONAL);
++				 bl->bufers[i].len, bl_dma_dir);
+ 
+ 	dma_unmap_single(dev, blp, sz, DMA_TO_DEVICE);
+ 
+@@ -691,7 +694,7 @@ static void qat_alg_free_bufl(struct qat_crypto_instance *inst,
+ 		for (i = bufless; i < blout->num_bufs; i++) {
+ 			dma_unmap_single(dev, blout->bufers[i].addr,
+ 					 blout->bufers[i].len,
+-					 DMA_BIDIRECTIONAL);
++					 DMA_FROM_DEVICE);
+ 		}
+ 		dma_unmap_single(dev, blpout, sz_out, DMA_TO_DEVICE);
+ 
+@@ -715,6 +718,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 	struct scatterlist *sg;
+ 	size_t sz_out, sz = struct_size(bufl, bufers, n);
+ 	int node = dev_to_node(&GET_DEV(inst->accel_dev));
++	int bufl_dma_dir;
+ 
+ 	if (unlikely(!n))
+ 		return -EINVAL;
+@@ -732,6 +736,8 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 		qat_req->buf.sgl_src_valid = true;
  	}
  
--	return 0;
-+	return ret;
- }
++	bufl_dma_dir = sgl != sglout ? DMA_TO_DEVICE : DMA_BIDIRECTIONAL;
++
+ 	for_each_sg(sgl, sg, n, i)
+ 		bufl->bufers[i].addr = DMA_MAPPING_ERROR;
  
- static int end_cpu_udmabuf(struct dma_buf *buf,
+@@ -743,7 +749,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 
+ 		bufl->bufers[y].addr = dma_map_single(dev, sg_virt(sg),
+ 						      sg->length,
+-						      DMA_BIDIRECTIONAL);
++						      bufl_dma_dir);
+ 		bufl->bufers[y].len = sg->length;
+ 		if (unlikely(dma_mapping_error(dev, bufl->bufers[y].addr)))
+ 			goto err_in;
+@@ -786,7 +792,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 
+ 			bufers[y].addr = dma_map_single(dev, sg_virt(sg),
+ 							sg->length,
+-							DMA_BIDIRECTIONAL);
++							DMA_FROM_DEVICE);
+ 			if (unlikely(dma_mapping_error(dev, bufers[y].addr)))
+ 				goto err_out;
+ 			bufers[y].len = sg->length;
+@@ -816,7 +822,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 		if (!dma_mapping_error(dev, buflout->bufers[i].addr))
+ 			dma_unmap_single(dev, buflout->bufers[i].addr,
+ 					 buflout->bufers[i].len,
+-					 DMA_BIDIRECTIONAL);
++					 DMA_FROM_DEVICE);
+ 
+ 	if (!qat_req->buf.sgl_dst_valid)
+ 		kfree(buflout);
+@@ -830,7 +836,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 		if (!dma_mapping_error(dev, bufl->bufers[i].addr))
+ 			dma_unmap_single(dev, bufl->bufers[i].addr,
+ 					 bufl->bufers[i].len,
+-					 DMA_BIDIRECTIONAL);
++					 bufl_dma_dir);
+ 
+ 	if (!qat_req->buf.sgl_src_valid)
+ 		kfree(bufl);
 -- 
 2.35.1
 
