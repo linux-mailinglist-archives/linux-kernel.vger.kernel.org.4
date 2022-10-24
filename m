@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75CB60A67C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406CC60A8D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234172AbiJXMeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S235607AbiJXNLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234180AbiJXM3d (ORCPT
+        with ESMTP id S235572AbiJXNJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:33 -0400
+        Mon, 24 Oct 2022 09:09:03 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E3688A2B;
-        Mon, 24 Oct 2022 05:03:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB299F367;
+        Mon, 24 Oct 2022 05:22:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83B0BB81212;
-        Mon, 24 Oct 2022 12:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5CBC4314D;
-        Mon, 24 Oct 2022 12:00:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83509B815B3;
+        Mon, 24 Oct 2022 12:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D884EC433C1;
+        Mon, 24 Oct 2022 12:11:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612833;
-        bh=mT8ZRVYxjrruZWUmwxV+YGPFhC0ZsyPOFU+ocTtLHQc=;
+        s=korg; t=1666613461;
+        bh=5gRo8IX02SsCQBABh41eIAqNTl+yzSyxn8vl9XNFPkU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pGQemGjmp5UmjuitKDqemdIjo6rtLMB5pSVmThu/fvwuzj5te6wzbacCmZ9AD/Egv
-         3NsZTyB4XSiRDOyKuAJAbleyw2uAvJqbgoZ6I9jtlSL75K77NiqMCun4GN38qQcvov
-         06wGoWnn6HU325eW2BY+tXygjrxzGprgS1yz+TG4=
+        b=nIEXaxKv4lGWbcNS1eOuc9iqurLvwsK+nhlhDXTCIWEnT+Henla8f/UgPxlXOc7Vr
+         OVOatDsoYUQpSPJf5uLgB6RTJ+RqrSD6hFkt5bDw8ERXjv+Y/KpJlgMVbDNTX8V2lz
+         95S1d3xspAgxDyKcLgi//VW09GVpieFinn9m9G9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 136/229] ata: fix ata_id_sense_reporting_enabled() and ata_id_has_sense_reporting()
+Subject: [PATCH 5.4 145/255] mtd: rawnand: meson: fix bit map use in meson_nfc_ecc_correct()
 Date:   Mon, 24 Oct 2022 13:30:55 +0200
-Message-Id: <20221024113003.410828422@linuxfoundation.org>
+Message-Id: <20221024113007.441345681@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,69 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Cassel <niklas.cassel@wdc.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 690aa8c3ae308bc696ec8b1b357b995193927083 ]
+[ Upstream commit 3e4ad3212cf22687410b1e8f4e68feec50646113 ]
 
-ACS-5 section
-7.13.6.41 Words 85..87, 120: Commands and feature sets supported or enabled
-states that:
+The meson_nfc_ecc_correct() function accidentally does a right shift
+instead of a left shift so it only works for BIT(0).  Also use
+BIT_ULL() because "correct_bitmap" is a u64 and we want to avoid
+shift wrapping bugs.
 
-If bit 15 of word 86 is set to one, bit 14 of word 119 is set to one,
-and bit 15 of word 119 is cleared to zero, then word 119 is valid.
-
-If bit 15 of word 86 is set to one, bit 14 of word 120 is set to one,
-and bit 15 of word 120 is cleared to zero, then word 120 is valid.
-
-(This text also exists in really old ACS standards, e.g. ACS-3.)
-
-Currently, ata_id_sense_reporting_enabled() and
-ata_id_has_sense_reporting() both check bit 15 of word 86,
-but neither of them check that bit 14 of word 119 is set to one,
-or that bit 15 of word 119 is cleared to zero.
-
-Additionally, make ata_id_sense_reporting_enabled() return false
-if !ata_id_has_sense_reporting(), similar to how e.g.
-ata_id_flush_ext_enabled() returns false if !ata_id_has_flush_ext().
-
-Fixes: e87fd28cf9a2 ("libata: Implement support for sense data reporting")
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Liang Yang <liang.yang@amlogic.com>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/YuI2zF1hP65+LE7r@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/ata.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/mtd/nand/raw/meson_nand.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/ata.h b/include/linux/ata.h
-index 40d150ad7e07..351e58312e7d 100644
---- a/include/linux/ata.h
-+++ b/include/linux/ata.h
-@@ -786,16 +786,21 @@ static inline bool ata_id_has_read_log_dma_ext(const u16 *id)
+diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+index 28dc26e1a20a..a65aadb54af6 100644
+--- a/drivers/mtd/nand/raw/meson_nand.c
++++ b/drivers/mtd/nand/raw/meson_nand.c
+@@ -454,7 +454,7 @@ static int meson_nfc_ecc_correct(struct nand_chip *nand, u32 *bitflips,
+ 		if (ECC_ERR_CNT(*info) != ECC_UNCORRECTABLE) {
+ 			mtd->ecc_stats.corrected += ECC_ERR_CNT(*info);
+ 			*bitflips = max_t(u32, *bitflips, ECC_ERR_CNT(*info));
+-			*correct_bitmap |= 1 >> i;
++			*correct_bitmap |= BIT_ULL(i);
+ 			continue;
+ 		}
+ 		if ((nand->options & NAND_NEED_SCRAMBLING) &&
+@@ -800,7 +800,7 @@ static int meson_nfc_read_page_hwecc(struct nand_chip *nand, u8 *buf,
+ 			u8 *data = buf + i * ecc->size;
+ 			u8 *oob = nand->oob_poi + i * (ecc->bytes + 2);
  
- static inline bool ata_id_has_sense_reporting(const u16 *id)
- {
--	if (!(id[ATA_ID_CFS_ENABLE_2] & (1 << 15)))
-+	if (!(id[ATA_ID_CFS_ENABLE_2] & BIT(15)))
-+		return false;
-+	if ((id[ATA_ID_COMMAND_SET_3] & (BIT(15) | BIT(14))) != BIT(14))
- 		return false;
--	return id[ATA_ID_COMMAND_SET_3] & (1 << 6);
-+	return id[ATA_ID_COMMAND_SET_3] & BIT(6);
- }
- 
- static inline bool ata_id_sense_reporting_enabled(const u16 *id)
- {
--	if (!(id[ATA_ID_CFS_ENABLE_2] & (1 << 15)))
-+	if (!ata_id_has_sense_reporting(id))
-+		return false;
-+	/* ata_id_has_sense_reporting() == true, word 86 must have bit 15 set */
-+	if ((id[ATA_ID_COMMAND_SET_4] & (BIT(15) | BIT(14))) != BIT(14))
- 		return false;
--	return id[ATA_ID_COMMAND_SET_4] & (1 << 6);
-+	return id[ATA_ID_COMMAND_SET_4] & BIT(6);
- }
- 
- /**
+-			if (correct_bitmap & (1 << i))
++			if (correct_bitmap & BIT_ULL(i))
+ 				continue;
+ 			ret = nand_check_erased_ecc_chunk(data,	ecc->size,
+ 							  oob, ecc->bytes + 2,
 -- 
 2.35.1
 
