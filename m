@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C95609C38
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C06609C3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiJXIPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S229728AbiJXIPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiJXIOu (ORCPT
+        with ESMTP id S230225AbiJXIPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:14:50 -0400
+        Mon, 24 Oct 2022 04:15:00 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE25517A9E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:14:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72585D13E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:14:48 -0700 (PDT)
 Received: from ipservice-092-217-079-032.092.217.pools.vodafone-ip.de ([92.217.79.32] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1omsbZ-0000nk-1l; Mon, 24 Oct 2022 10:14:41 +0200
+        id 1omsbZ-0000nk-UH; Mon, 24 Oct 2022 10:14:41 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 13/17] staging: r8188eu: remove unnecessary label
-Date:   Mon, 24 Oct 2022 10:14:13 +0200
-Message-Id: <20221024081417.66441-14-martin@kaiser.cx>
+Subject: [PATCH 14/17] staging: r8188eu: remove unnecessary else branch
+Date:   Mon, 24 Oct 2022 10:14:14 +0200
+Message-Id: <20221024081417.66441-15-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221024081417.66441-1-martin@kaiser.cx>
 References: <20221024081417.66441-1-martin@kaiser.cx>
@@ -44,57 +44,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove a label on OnAuthClient that just calls return. We can return
-directly instead of jumping to this label.
+Remove an else branch in OnAuthClient that is not needed.
+
+If we go into the else branch, go2asoc is 0. We can simply continue and
+the last if condition will be false.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 074c95f76e27..01fe5019b333 100644
+index 01fe5019b333..3c6ea9912d7f 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -823,7 +823,7 @@ static void OnAuthClient(struct adapter *padapter, struct recv_frame *precv_fram
- 		}
- 
- 		set_link_timer(pmlmeext, 1);
--		goto authclnt_fail;
-+		return;
- 	}
- 
- 	if (seq == 2) {
-@@ -833,7 +833,7 @@ static void OnAuthClient(struct adapter *padapter, struct recv_frame *precv_fram
- 				pkt_len - WLAN_HDR_A3_LEN - _AUTH_IE_OFFSET_);
- 
- 			if (!p)
--				goto authclnt_fail;
-+				return;
- 
- 			memcpy((void *)(pmlmeinfo->chg_txt), (void *)(p + 2), len);
- 			pmlmeinfo->auth_seq = 3;
-@@ -849,18 +849,16 @@ static void OnAuthClient(struct adapter *padapter, struct recv_frame *precv_fram
- 		if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared)
+@@ -850,9 +850,6 @@ static void OnAuthClient(struct adapter *padapter, struct recv_frame *precv_fram
  			go2asoc = 1;
  		else
--			goto authclnt_fail;
-+			return;
- 	} else {
- 		/*  this is also illegal */
--		goto authclnt_fail;
-+		return;
+ 			return;
+-	} else {
+-		/*  this is also illegal */
+-		return;
  	}
  
  	if (go2asoc) {
- 		start_clnt_assoc(padapter);
- 		return;
- 	}
--authclnt_fail:
--	return;
- }
- 
- static void UpdateBrateTbl(u8 *mbrate)
 -- 
 2.30.2
 
