@@ -2,29 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73DB609F65
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30D7609F6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiJXKy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S229919AbiJXKzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiJXKyk (ORCPT
+        with ESMTP id S229912AbiJXKy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:54:40 -0400
+        Mon, 24 Oct 2022 06:54:58 -0400
 Received: from mail.nearlyone.de (mail.nearlyone.de [46.163.114.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393DA109E;
-        Mon, 24 Oct 2022 03:54:31 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5F33D618F7;
-        Mon, 24 Oct 2022 12:44:26 +0200 (CEST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8B613F34;
+        Mon, 24 Oct 2022 03:54:38 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D116061D78;
+        Mon, 24 Oct 2022 12:44:28 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
-        t=1666608268; h=from:subject:date:message-id:to:cc:mime-version:
-         content-transfer-encoding; bh=PwVx9GHMb7vRQqqXAMgZial/VEPJ+6ZVGwTJNOi99aE=;
-        b=K3hRJnqCu5P0Pd2UQLF4AxnIOnQot3DaXl5SULmhTFM8Z7z3T92QOLD7SPyGuCyXyoZ4f5
-        5pzQM/vurHFiUS0SWZ3uYUgvRERZitwJocG93sfTVeaiZ2XXWGbRNZTzdq1tksMfA0ry7H
-        xmm6In77LM5211h1yBYOupqEz5jHghxRBkkgWHl/w3n1xjEKzFkGWHHgmtPnOoPd0W7of5
-        ddmTf/wJtfnsbrv9RZL6IYr1GalSO3sIS0qK7rSvegH4RUEe90IVosvFc/XVd78dkixGWv
-        mdDhOvuSd47tGiwY5sCY+dIpQXDAXQ3ds976SUzCPMY8kxfbhKJcaQS46OeqBg==
+        t=1666608269; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding:in-reply-to:references;
+        bh=OO8ivmGitwcKDyAkmI+pQE3XfdhYBWotXa3wVqMIHE4=;
+        b=OVscYbQBs3+pgCis9WTsKntYC4FUwkJhmodaQtdp/Ujq7AL2cze7YucRBBlPBRyWtk39FW
+        skrs6X8tG7lzd6HPwuRtF/V0O5BCnvhjxWgYyjxaFz+TmiysVlBpxA+bqG7qGsR0m4jjJT
+        5CYIS8ae1T1it1DBGHa2736TDV94gwjMjETQqpabaH8MtlliOGOtJxkiW6dGqbvFtGeqHI
+        L7qpzbzQ1qgw5ME9vi7reGiE4u/Q76PdL6TbVJFDdLg/Xr0IfG2MhfsfLdk4VSdYVoTBgr
+        CgJ8bpBvW8TsRRj3asXaJpZflnO7hByW+Axx8VnTGUwNlTUMhAHtgcgfL/tNPg==
 From:   Daniel Wagner <wagi@monom.org>
 To:     LKML <linux-kernel@vger.kernel.org>,
         linux-rt-users <linux-rt-users@vger.kernel.org>,
@@ -37,9 +38,11 @@ To:     LKML <linux-kernel@vger.kernel.org>,
         Clark Williams <williams@redhat.com>,
         Pavel Machek <pavel@denx.de>
 Cc:     Daniel Wagner <wagi@monom.org>
-Subject: [PATCH RT 0/9] Linux v4.19.255-rt114-rc1
-Date:   Mon, 24 Oct 2022 12:44:16 +0200
-Message-Id: <20221024104425.16423-1-wagi@monom.org>
+Subject: [PATCH RT 1/9] Revert "random: Use local locks for crng context access"
+Date:   Mon, 24 Oct 2022 12:44:17 +0200
+Message-Id: <20221024104425.16423-2-wagi@monom.org>
+In-Reply-To: <20221024104425.16423-1-wagi@monom.org>
+References: <20221024104425.16423-1-wagi@monom.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
@@ -52,70 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear RT Folks,
+v4.19.255-rt114-rc1 stable review patch.
+If anyone has any objections, please let me know.
 
-This is the RT stable review cycle of patch 4.19.255-rt114-rc1.
-
-Please scream at me if I messed something up. Please test the patches
-too.
-
-The -rc release will be uploaded to kernel.org and will be deleted
-when the final release is out. This is just a review release (or
-release candidate).
-
-The pre-releases will not be pushed to the git repository, only the
-final release is.
-
-If all goes well, this patch will be converted to the next main
-release on 2022-10-31.
-
-To build 4.19.255-rt114-rc1 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.255.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/older/patch-4.19.255-rt114-rc1.patch.xz
-
-Signing key fingerprint:
-
-  5BF6 7BC5 0826 72CA BB45  ACAE 587C 5ECA 5D0A 306C
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Daniel
-
-Changes from v4.19.255-rt113:
+-----------
 
 
-Daniel Wagner (3):
-  Revert "random: Use local locks for crng context access"
-  rcu: Update rcuwait
-  Linux 4.19.255-rt114-rc1
+This reverts commit af5469c6f4f85f60f3ecc9bd541adfb6bdbeaff2.
+---
+ drivers/char/random.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-Sebastian Andrzej Siewior (6):
-  random: Bring back the local_locks
-  local_lock: Provide INIT_LOCAL_LOCK().
-  Revert "workqueue: Use local irq lock instead of irq disable regions"
-  timers: Keep interrupts disabled for TIMER_IRQSAFE timer.
-  timers: Don't block on ->expiry_lock for TIMER_IRQSAFE timers
-  workqueue: Use rcuwait for wq_manager_wait
-
- drivers/char/random.c         | 16 +++++++------
- include/linux/locallock.h     |  5 +++++
- include/linux/rcuwait.h       | 42 +++++++++++++++++++++++++++--------
- kernel/exit.c                 |  7 ++++--
- kernel/locking/percpu-rwsem.c |  2 +-
- kernel/rcu/update.c           |  8 +++++++
- kernel/time/timer.c           | 12 ++++++++--
- kernel/workqueue.c            | 28 +++++++++++++++++------
- localversion-rt               |  2 +-
- 9 files changed, 93 insertions(+), 29 deletions(-)
-
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index c06705a32246..2be38780a7f7 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -53,7 +53,6 @@
+ #include <linux/uaccess.h>
+ #include <linux/siphash.h>
+ #include <linux/uio.h>
+-#include <linux/locallock.h>
+ #include <crypto/chacha20.h>
+ #include <crypto/blake2s.h>
+ #include <asm/processor.h>
+@@ -235,7 +234,6 @@ struct crng {
+ static DEFINE_PER_CPU(struct crng, crngs) = {
+ 	.generation = ULONG_MAX
+ };
+-DEFINE_LOCAL_IRQ_LOCK(crngs_lock);
+ 
+ /* Used by crng_reseed() and crng_make_state() to extract a new seed from the input pool. */
+ static void extract_entropy(void *buf, size_t len);
+@@ -364,7 +362,7 @@ static void crng_make_state(u32 chacha_state[CHACHA20_BLOCK_SIZE / sizeof(u32)],
+ 	if (unlikely(crng_has_old_seed()))
+ 		crng_reseed();
+ 
+-	local_lock_irqsave(crngs_lock, flags);
++	local_irq_save(flags);
+ 	crng = raw_cpu_ptr(&crngs);
+ 
+ 	/*
+@@ -389,7 +387,7 @@ static void crng_make_state(u32 chacha_state[CHACHA20_BLOCK_SIZE / sizeof(u32)],
+ 	 * should wind up here immediately.
+ 	 */
+ 	crng_fast_key_erasure(crng->key, chacha_state, random_data, random_data_len);
+-	local_unlock_irqrestore(crngs_lock, flags);
++	local_irq_restore(flags);
+ }
+ 
+ static void _get_random_bytes(void *buf, size_t len)
+@@ -514,7 +512,6 @@ struct batch_ ##type {								\
+ static DEFINE_PER_CPU(struct batch_ ##type, batched_entropy_ ##type) = {	\
+ 	.position = UINT_MAX							\
+ };										\
+-static DEFINE_LOCAL_IRQ_LOCK(batched_entropy_lock_ ##type);			\
+ 										\
+ type get_random_ ##type(void)							\
+ {										\
+@@ -530,7 +527,7 @@ type get_random_ ##type(void)							\
+ 		return ret;							\
+ 	}									\
+ 										\
+-	local_lock_irqsave(batched_entropy_lock_ ##type, flags);		\
++	local_irq_save(flags);		\
+ 	batch = raw_cpu_ptr(&batched_entropy_##type);				\
+ 										\
+ 	next_gen = READ_ONCE(base_crng.generation);				\
+@@ -544,7 +541,7 @@ type get_random_ ##type(void)							\
+ 	ret = batch->entropy[batch->position];					\
+ 	batch->entropy[batch->position] = 0;					\
+ 	++batch->position;							\
+-	local_unlock_irqrestore(batched_entropy_lock_ ##type, flags);		\
++	local_irq_restore(flags);		\
+ 	return ret;								\
+ }										\
+ EXPORT_SYMBOL(get_random_ ##type);
 -- 
 2.38.0
 
