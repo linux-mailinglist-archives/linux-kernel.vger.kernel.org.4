@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833B360A49F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E0060A8F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233004AbiJXMNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S235755AbiJXNMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232832AbiJXMMx (ORCPT
+        with ESMTP id S235974AbiJXNKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:12:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04C3167F1;
-        Mon, 24 Oct 2022 04:54:30 -0700 (PDT)
+        Mon, 24 Oct 2022 09:10:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D0EA2236;
+        Mon, 24 Oct 2022 05:23:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BEF2612A5;
-        Mon, 24 Oct 2022 11:53:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B00CAC433C1;
-        Mon, 24 Oct 2022 11:53:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83472B81202;
+        Mon, 24 Oct 2022 12:04:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D12D3C433C1;
+        Mon, 24 Oct 2022 12:04:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612418;
-        bh=G2Iq+E2IQldK7wPBaBskETo3Zul+M0o1nQ7kNdoncQY=;
+        s=korg; t=1666613051;
+        bh=AV3dXYVdawBurlLUfKnkCxYe4h33AiN01pwO+9A7fS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AmlEc0rVutsK+K5vqSHdKlWO60LuFJtAcL+Fzw4BGZKC172tgUI5mWChJh6hHCa3S
-         R3nnZKE6rdHji/jgBOYPC2nS5xQ2hPYEdzlsT7Umlcqlv23wLdi0xgBiyad1BTrAed
-         NwCUKoTFtxdBkOB/8SWc+ZVJ3X3hCWSDY2MzS+K8=
+        b=xduJRwtE6Bx9EW//ISZ4limVgRRRPkh/xg5L6rF/f8xPP4fCqKUpzy0JsJd9Tnr+Z
+         Px+wtcKeRZYlDp2KJRTy8rnzY2bJNdVzedX55x6RghEf5CsCbrr73LtzW0TIPV2nEs
+         VvnJ+W3Oe+4bIgWvl6ltA/NXaoobo+bKR6kjXTh0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 190/210] ARM: dts: imx6q: add missing properties for sram
-Date:   Mon, 24 Oct 2022 13:31:47 +0200
-Message-Id: <20221024113003.119860896@linuxfoundation.org>
+        stable@vger.kernel.org, Serge Vasilugin <vasilugin@yandex.ru>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 189/229] wifi: rt2x00: correctly set BBP register 86 for MT7620
+Date:   Mon, 24 Oct 2022 13:31:48 +0200
+Message-Id: <20221024113005.238941629@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Daniel Golle <daniel@makrotopia.org>
 
-[ Upstream commit b11d083c5dcec7c42fe982c854706d404ddd3a5f ]
+[ Upstream commit c9aada64fe6493461127f1522d7e2f01792d2424 ]
 
-All 3 properties are required by sram.yaml. Fixes the dtbs_check warning:
-sram@900000: '#address-cells' is a required property
-sram@900000: '#size-cells' is a required property
-sram@900000: 'ranges' is a required property
+Instead of 0 set the correct value for BBP register 86 for MT7620.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+Reported-by: Serge Vasilugin <vasilugin@yandex.ru>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Acked-by: Stanislaw Gruszka <stf_xl@wp.pl>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/257267247ee4fa7ebc6a5d0c4948b3f8119c0d77.1663445157.git.daniel@makrotopia.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/imx6q.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireless/ralink/rt2x00/rt2800lib.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6q.dtsi b/arch/arm/boot/dts/imx6q.dtsi
-index 4747ede61acd..7b335e8050d3 100644
---- a/arch/arm/boot/dts/imx6q.dtsi
-+++ b/arch/arm/boot/dts/imx6q.dtsi
-@@ -82,6 +82,9 @@
- 		ocram: sram@00900000 {
- 			compatible = "mmio-sram";
- 			reg = <0x00900000 0x40000>;
-+			ranges = <0 0x00900000 0x40000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
- 			clocks = <&clks IMX6QDL_CLK_OCRAM>;
- 		};
+diff --git a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+index 9469517ac65f..c9fa56b721b2 100644
+--- a/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
++++ b/drivers/net/wireless/ralink/rt2x00/rt2800lib.c
+@@ -3658,7 +3658,10 @@ static void rt2800_config_channel(struct rt2x00_dev *rt2x00dev,
+ 		rt2800_bbp_write(rt2x00dev, 62, 0x37 - rt2x00dev->lna_gain);
+ 		rt2800_bbp_write(rt2x00dev, 63, 0x37 - rt2x00dev->lna_gain);
+ 		rt2800_bbp_write(rt2x00dev, 64, 0x37 - rt2x00dev->lna_gain);
+-		rt2800_bbp_write(rt2x00dev, 86, 0);
++		if (rt2x00_rt(rt2x00dev, RT6352))
++			rt2800_bbp_write(rt2x00dev, 86, 0x38);
++		else
++			rt2800_bbp_write(rt2x00dev, 86, 0);
+ 	}
  
+ 	if (rf->channel <= 14) {
 -- 
 2.35.1
 
