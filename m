@@ -2,132 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D24260A3AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F04960A1CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbiJXL6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S230403AbiJXLdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbiJXL5t (ORCPT
+        with ESMTP id S229744AbiJXLcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:57:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36FC7B79F;
-        Mon, 24 Oct 2022 04:47:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC35A612B4;
-        Mon, 24 Oct 2022 11:45:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E34C433D6;
-        Mon, 24 Oct 2022 11:45:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611912;
-        bh=gpFlxMFq9z9WFf3Ip2j0XYJri/W568vOh5sGgcJ2nzo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MFrplSOM3KDZK9pDy5Vpo8ozP3Bx8KhyjCWzDPegjMf1QKMn0RRrac7dis6TLBnIV
-         ynpMoPM58sSdECZavIiVc8SR32+OfU/X2BUi1gPGkLjYcyQVgXMWmvCijyYVLqkwG7
-         VLyAFMh/jaVDZT3jhYWItL2DdVm/OucsBHAkNtik=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.9 159/159] gcov: support GCC 12.1 and newer compilers
-Date:   Mon, 24 Oct 2022 13:31:53 +0200
-Message-Id: <20221024112955.234880986@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 24 Oct 2022 07:32:53 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B6961D4D;
+        Mon, 24 Oct 2022 04:32:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666611153; x=1698147153;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J//vhD4MqQrSeKUj+KUsipHKrzYYM8OFew0w8HAgIXg=;
+  b=ZbMMeY+SAqNctRFuAQVVyUldSf4gpstGVpSqqXsWskSQ77H/zy0OCCRi
+   kn96m9LP0e25JDpl+6BApxDdgEfj1l3Jyg1aQpYgYEMMtERf9p9W5H6aM
+   j99HxeBUyKcpe/6FRzdtRhY8mXw8k6W0Ek2SnZTOY6jO/RHhQVCPsQ5Kx
+   /mrNWgRSt/2wNnchBJbR212sRJByQDgugAn6hzLQovqk1myIlGRfSZzdQ
+   65Vh+KadXVkpF/I1esvsxXL8QhmFGs00wrEH6nRzlcmOxe0u2mnnCS95O
+   kgWBE617Yv3RN4FGb8EQh+hc+IlFoxQ3Z1hpfFmBJItVYWzzweiMFk0DA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="287790568"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="287790568"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 04:32:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="756541972"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="756541972"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 24 Oct 2022 04:32:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1omvgf-001Pmz-1z;
+        Mon, 24 Oct 2022 14:32:09 +0300
+Date:   Mon, 24 Oct 2022 14:32:09 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     ChiaEn Wu <peterwu.pub@gmail.com>
+Cc:     pavel@ucw.cz, matthias.bgg@gmail.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v15 0/2] Add MediaTek MT6370 PMIC support
+Message-ID: <Y1Z3uWt0dnWjqzTB@smile.fi.intel.com>
+References: <cover.1666636223.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1666636223.git.chiaen_wu@richtek.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Liska <mliska@suse.cz>
+On Mon, Oct 24, 2022 at 06:59:34PM +0800, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> This patch series add MediaTek MT6370 PMIC support and add a index macro
+> to <linear_range.h>.
 
-commit 977ef30a7d888eeb52fb6908f99080f33e5309a8 upstream.
+Is it? Please, align the cover letter and actual code series.
 
-Starting with GCC 12.1, the created .gcda format can't be read by gcov
-tool.  There are 2 significant changes to the .gcda file format that
-need to be supported:
 
-a) [gcov: Use system IO buffering]
-   (23eb66d1d46a34cb28c4acbdf8a1deb80a7c5a05) changed that all sizes in
-   the format are in bytes and not in words (4B)
-
-b) [gcov: make profile merging smarter]
-   (72e0c742bd01f8e7e6dcca64042b9ad7e75979de) add a new checksum to the
-   file header.
-
-Tested with GCC 7.5, 10.4, 12.2 and the current master.
-
-Link: https://lkml.kernel.org/r/624bda92-f307-30e9-9aaa-8cc678b2dfb2@suse.cz
-Signed-off-by: Martin Liska <mliska@suse.cz>
-Tested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- kernel/gcov/gcc_4_7.c |   18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
-
---- a/kernel/gcov/gcc_4_7.c
-+++ b/kernel/gcov/gcc_4_7.c
-@@ -32,6 +32,13 @@
- 
- #define GCOV_TAG_FUNCTION_LENGTH	3
- 
-+/* Since GCC 12.1 sizes are in BYTES and not in WORDS (4B). */
-+#if (__GNUC__ >= 12)
-+#define GCOV_UNIT_SIZE				4
-+#else
-+#define GCOV_UNIT_SIZE				1
-+#endif
-+
- static struct gcov_info *gcov_info_head;
- 
- /**
-@@ -438,12 +445,18 @@ static size_t convert_to_gcda(char *buff
- 	pos += store_gcov_u32(buffer, pos, info->version);
- 	pos += store_gcov_u32(buffer, pos, info->stamp);
- 
-+#if (__GNUC__ >= 12)
-+	/* Use zero as checksum of the compilation unit. */
-+	pos += store_gcov_u32(buffer, pos, 0);
-+#endif
-+
- 	for (fi_idx = 0; fi_idx < info->n_functions; fi_idx++) {
- 		fi_ptr = info->functions[fi_idx];
- 
- 		/* Function record. */
- 		pos += store_gcov_u32(buffer, pos, GCOV_TAG_FUNCTION);
--		pos += store_gcov_u32(buffer, pos, GCOV_TAG_FUNCTION_LENGTH);
-+		pos += store_gcov_u32(buffer, pos,
-+			GCOV_TAG_FUNCTION_LENGTH * GCOV_UNIT_SIZE);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->ident);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->lineno_checksum);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->cfg_checksum);
-@@ -457,7 +470,8 @@ static size_t convert_to_gcda(char *buff
- 			/* Counter record. */
- 			pos += store_gcov_u32(buffer, pos,
- 					      GCOV_TAG_FOR_COUNTER(ct_idx));
--			pos += store_gcov_u32(buffer, pos, ci_ptr->num * 2);
-+			pos += store_gcov_u32(buffer, pos,
-+				ci_ptr->num * 2 * GCOV_UNIT_SIZE);
- 
- 			for (cv_idx = 0; cv_idx < ci_ptr->num; cv_idx++) {
- 				pos += store_gcov_u64(buffer, pos,
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
