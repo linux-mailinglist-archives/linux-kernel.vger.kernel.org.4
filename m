@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12E0609B22
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB347609B1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbiJXHRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S230221AbiJXHRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbiJXHRc (ORCPT
+        with ESMTP id S230046AbiJXHRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:17:32 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC0C52DD2;
-        Mon, 24 Oct 2022 00:17:23 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29NLeKsd010847;
-        Mon, 24 Oct 2022 09:16:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=RGsQrACxVaiQ/PqYuY2b2GnpiqpCXdRkFoPEvUnvhcw=;
- b=zB9GoWQcvHm20Je2/l5foUJXJkxACJFDuypPhjL11OVGyW36PsI+qBMY57EHuEnJjIzq
- qo4fW5FYlaVE4mGXjqny+4CM2bcBRfjx07DwSvKNCuZIOm5OUPoiAU5UyS4yIdNx3U5w
- FijVzsUL+QZJw2/JzruM4+h447bLSRzkywiMQPIhG/EGwf1HkVfyIRUc4nSHHxvY9bXg
- v07HlHbvGfkAANoBBm2WLms9trQx56j52JOXtAwC3V0HBE8g9hvsP72+2RXV/fnxB1Sv
- QZez3mD2Hj4f97EYdYOc3M69F+NHYNIkazy9Wn+Gn9JKNeBAerFpDthaapYcWyCAfprU Ew== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kc7dk1cb5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 09:16:55 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E7121100039;
-        Mon, 24 Oct 2022 09:16:48 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A89102132E7;
-        Mon, 24 Oct 2022 09:16:48 +0200 (CEST)
-Received: from [10.201.21.72] (10.201.21.72) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
- 2022 09:16:48 +0200
-Message-ID: <ff2c969d-532e-8f18-041d-14c34e88eee9@foss.st.com>
-Date:   Mon, 24 Oct 2022 09:16:38 +0200
+        Mon, 24 Oct 2022 03:17:07 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCC64C004;
+        Mon, 24 Oct 2022 00:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666595822; x=1698131822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ahXYXj9DE/pVF8jQHrJ2tqdijJC/al1D0XongLdLCUI=;
+  b=OIXAoXXVqquo5+d6v3qiyU9W/30D6qvpc1qnxDMHJw/tW+J1JC4NWPDx
+   XsHe0v6C2ywXd715BvuipSkR9ubagy4+AfNQF5exiglQtwZQ3WAVYd178
+   SVwfZEUkICFkEe5FeT4wbOPXr1fKMQyhDxpx9uodeG1kA9VNVgEO4z7o7
+   kwb00J4J1Nepo6BJvSW2D6uC+4ORAM6jzFu5+FTyugy/2DHUmYfGMAX/k
+   1JhETkYfi/ljRUrEUD3v1OMh+8O/D+ESeZ27nXQjKn2ZU5c4aGch+D50r
+   /tZiklx3bSfmptmYg33ll/mmeAoG7TqeoxmPoTssCHQN2GZP8WwhxAHry
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="186088262"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Oct 2022 00:17:01 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Mon, 24 Oct 2022 00:17:01 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Mon, 24 Oct 2022 00:16:57 -0700
+Date:   Mon, 24 Oct 2022 12:46:56 +0530
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <hkallweit1@gmail.com>, <pabeni@redhat.com>, <edumazet@google.com>,
+        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
+        <Ian.Saturley@microchip.com>
+Subject: Re: [PATCH net-next 1/2] net: lan743x: Add support for
+ get_pauseparam and set_pauseparam
+Message-ID: <20221024071656.GA653394@raju-project-pc>
+References: <20221021055642.255413-1-Raju.Lakkaraju@microchip.com>
+ <20221021055642.255413-2-Raju.Lakkaraju@microchip.com>
+ <Y1Kiocu3WUubYyVe@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3] usb: dwc3: st: Rely on child's compatible instead of
- name
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jerome Audu <jerome.audu@st.com>,
-        Felipe Balbi <felipe@balbi.sh>
-References: <20220930142018.890535-1-patrice.chotard@foss.st.com>
- <Y1PFaOEbPVDN7313@kroah.com>
-Content-Language: en-US
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <Y1PFaOEbPVDN7313@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.72]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_01,2022-10-21_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <Y1Kiocu3WUubYyVe@lunn.ch>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrew,
 
+Thank you for review comments.
 
-On 10/22/22 12:26, Greg Kroah-Hartman wrote:
-> On Fri, Sep 30, 2022 at 04:20:18PM +0200, patrice.chotard@foss.st.com wrote:
->> From: Patrice Chotard <patrice.chotard@foss.st.com>
->>
->> To ensure that child node is found, don't rely on child's node name
->> which can take different value, but on child's compatible name.
->>
->> Fixes: f5c5936d6b4d ("usb: dwc3: st: Fix node's child name")
->> Cc: Jerome Audu <jerome.audu@st.com>
->> Reported-by: Felipe Balbi <felipe@balbi.sh>
->> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
->> ---
->> v3: - rebase on correct branch
->> v2: - add missing reported-by
->>     - add Fixes
->> ---
->>  drivers/usb/dwc3/dwc3-st.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
->> index 6c14a79279f9..fea5290de83f 100644
->> --- a/drivers/usb/dwc3/dwc3-st.c
->> +++ b/drivers/usb/dwc3/dwc3-st.c
->> @@ -251,7 +251,7 @@ static int st_dwc3_probe(struct platform_device *pdev)
->>  	/* Manage SoftReset */
->>  	reset_control_deassert(dwc3_data->rstc_rst);
->>  
->> -	child = of_get_child_by_name(node, "usb");
->> +	child = of_get_compatible_child(node, "snps,dwc3");
->>  	if (!child) {
->>  		dev_err(&pdev->dev, "failed to find dwc3 core node\n");
->>  		ret = -ENODEV;
->> -- 
->> 2.25.1
->>
+The 10/21/2022 15:46, Andrew Lunn wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > 
-> Is this still needed for 6.1-final?
+> > +static int lan743x_set_pauseparam(struct net_device *dev,
+> > +                               struct ethtool_pauseparam *pause)
+> > +{
+> > +     struct lan743x_adapter *adapter = netdev_priv(dev);
+> > +     struct phy_device *phydev = dev->phydev;
+> > +     struct lan743x_phy *phy = &adapter->phy;
+> > +
+> > +     if (!phydev)
+> > +             return -ENODEV;
+> > +
+> > +     if (!phy_validate_pause(phydev, pause))
+> > +             return -EINVAL;
+> > +
+> > +     phy->fc_request_control = 0;
+> > +     if (pause->rx_pause)
+> > +             phy->fc_request_control |= FLOW_CTRL_RX;
+> > +
+> > +     if (pause->tx_pause)
+> > +             phy->fc_request_control |= FLOW_CTRL_TX;
+> > +
+> > +     phy->fc_autoneg = pause->autoneg;
+> > +
+> > +     phy_set_asym_pause(phydev, pause->rx_pause,  pause->tx_pause);
+> > +
+> > +     if (pause->autoneg == AUTONEG_DISABLE)
+> > +             lan743x_mac_flow_ctrl_set_enables(adapter, pause->tx_pause,
+> > +                                               pause->rx_pause);
+> 
+> pause is not too well defined. But i think phy_set_asym_pause() should
+> be in an else clause. If pause autoneg is off, you directly set it in
+> the MAC and ignore what is negotiated. If it is enabled, you
+> negotiate. As far as i understand, you don't modify your negotiation
+> when pause autoneg is off.
 
-Yes, still needed for v6.1.
-
-Thanks
-Patrice
+O.K. I will change.
 
 > 
-> thanks,
-> 
-> greg k-h
+>         Andrew
+
+--------
+Thanks,
+Raju
