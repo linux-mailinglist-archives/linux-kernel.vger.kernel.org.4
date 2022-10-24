@@ -2,112 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B142B6099B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 07:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A536099B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 07:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiJXFVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 01:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
+        id S229536AbiJXFV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 01:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiJXFVJ (ORCPT
+        with ESMTP id S230041AbiJXFVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 01:21:09 -0400
-Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F8C61D51;
-        Sun, 23 Oct 2022 22:21:04 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="72828002"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661785200"; 
-   d="scan'208";a="72828002"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 24 Oct 2022 14:21:03 +0900
-Received: from yto-m3.gw.nic.fujitsu.com (yto-nat-yto-m3.gw.nic.fujitsu.com [192.168.83.66])
-        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id C80AFD66A3;
-        Mon, 24 Oct 2022 14:21:01 +0900 (JST)
-Received: from kws-ab1.gw.nic.fujitsu.com (kws-ab1.gw.nic.fujitsu.com [192.51.206.11])
-        by yto-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id E998FD9691;
-        Mon, 24 Oct 2022 14:21:00 +0900 (JST)
-Received: from FNSTPC.g08.fujitsu.local (unknown [10.167.226.45])
-        by kws-ab1.gw.nic.fujitsu.com (Postfix) with ESMTP id EE42911403E8;
-        Mon, 24 Oct 2022 14:20:59 +0900 (JST)
-From:   Li Zhijian <lizhijian@fujitsu.com>
-To:     zyjzyj2000@gmail.com, jgg@ziepe.ca, leon@kernel.org,
-        linux-rdma@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>
-Subject: [PATCH for-next v3 2/2] RDMA/rxe: Fix mr leak in RESPST_ERR_RNR
-Date:   Mon, 24 Oct 2022 13:20:49 +0800
-Message-Id: <20221024052049.20577-1-lizhijian@fujitsu.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <1666582315-2-1-git-send-email-lizhijian@fujitsu.com>
-References: <1666582315-2-1-git-send-email-lizhijian@fujitsu.com>
+        Mon, 24 Oct 2022 01:21:20 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BACC647DF
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 22:21:18 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-333a4a5d495so76317977b3.10
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 22:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/gAfybOY3UbaMo3X0FCxvHr2ytztZWyUcTh9xOi9xEU=;
+        b=hQ21BxPkmt1H8Nmam2/tzAclzxiS0ruEdg0J6+vXBspyMTBeNvU+tHLhB3RhiUVpk+
+         PJenENE2QaVAiFGnE6iLSur6Fkv89871tSt4aNHmsO00O8judWfptmptBeI77DJOmxoH
+         ULp+zDvqWXzT85LWfW0zXGzKDeB31xi9PU1a6CejVVBpyZIrH31lj1WH8GQfAl0x++Dl
+         tBH06d//si3z00oJz69YVieNg8aQanua5ri4kUwAdZex8k+MhYc2SZZTpMzgcpVcSxFm
+         XTwoTy6fMbrWsB6pb0quidvZTAVhTIp6OH5HcSik4Ly66jYSGJyxq6Bco+lDMP4EZLw2
+         m5aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/gAfybOY3UbaMo3X0FCxvHr2ytztZWyUcTh9xOi9xEU=;
+        b=HCoSegtJgmN1oJYSPfmyzD/qvcci+F5X82KxbC5pTMONaH5f3rHqJxad37k58bOyUf
+         TXy7nZkHVhyA2dZGylQhYEi8PWbdySWrr2P5cZQ0Lvw8YvgkdvUpJH9xowGeVUrA9T02
+         qpe9zr7vNmGpqAXLHxQglPLOFtrpW1recaqJfdIP5Tm5Tpu1mDJHfnKNpFQpHylnySCN
+         MmZU6mwsQBco3gUJinfUEcTlQ28Xfv1N7HKE0EVvnzEjwEgO/WESvcM42WwcfCbCbTCo
+         xzZU96gF56/zG23fDsx38QQnKMXaXZMxyZn13scGmzfqf95S2kkIq8QOqYwyn87zVSRP
+         8ToQ==
+X-Gm-Message-State: ACrzQf39ALY0Rgiy/GGxEl5nWePrZJ3vgGgRp0O7l+nr99WAaPlel6yt
+        YLVD4F2WvWNO8P3ZCKWMaotbqvTFN+BPVAQwuGjYNg==
+X-Google-Smtp-Source: AMsMyM7VT5V/to66r1kXM1NGE0qL8/INeyF6XhoraaYElRzcQ6FA2Ak10XT0CVmfUAotKRJd3cIEmehb2DKuR0wLnUY=
+X-Received: by 2002:a81:1b09:0:b0:35d:cf91:aadc with SMTP id
+ b9-20020a811b09000000b0035dcf91aadcmr27286274ywb.47.1666588876995; Sun, 23
+ Oct 2022 22:21:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27220.005
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27220.005
-X-TMASE-Result: 10-1.290000-10.000000
-X-TMASE-MatchedRID: 1qs/xP9nRfnyAV/ow31xq+9kW9mxCQvtndls9F9zmi2jEIt+uIPPOIre
-        5xUTEbm3PnkLz0tiKhf4k1dYqOhY3WYeY1r5+Sd7hdD+G7U5X/Sc/8UYyRuho3uaPw9VMh5j0Bh
-        ZSjgdIiQi+t+0AiFaYlDzs+ptu0k3pFPA9gan8yWRgPzABkqxIH0tCKdnhB58k4rY1r+vswgXvQ
-        kGi3tjz46HM5rqDwqt0PlwXS+MTWJauV6otRbPX1WTJvU4HQmnuUl9W5PYcaBtb5mbBxcqYOuhV
-        ACdVr98OBHWwUnqcG0h3LeAlyCOC9RSbtOqIybrFcG3+ZRETICP9kUX1Z+buE3LumkbQiNwVCqT
-        SPu8tVR7AxIEOt4h2Q==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000fd9a4005ebbeac67@google.com> <Y1YeSj2vwPvRAW61@gondor.apana.org.au>
+In-Reply-To: <Y1YeSj2vwPvRAW61@gondor.apana.org.au>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Sun, 23 Oct 2022 22:21:05 -0700
+Message-ID: <CANn89i+41Whp=ACQo393s_wPx_MtWAZgL9DqG9aoLomN4ddwTg@mail.gmail.com>
+Subject: Re: [PATCH] af_key: Fix send_acquire race with pfkey_register
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     syzbot <syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com>,
+        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        steffen.klassert@secunet.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rxe_recheck_mr() will increase mr's ref_cnt, so we should call rxe_put(mr)
-to drop mr's ref_cnt in RESPST_ERR_RNR to avoid below warning:
-[  633.447883] WARNING: CPU: 0 PID: 4156 at drivers/infiniband/sw/rxe/rxe_pool.c:259 __rxe_cleanup+0x1df/0x240 [rdma_rxe]
-...
-[  633.509482] Call Trace:
-[  633.510246]  <TASK>
-[  633.510962]  rxe_dereg_mr+0x4c/0x60 [rdma_rxe]
-[  633.512123]  ib_dereg_mr_user+0xa8/0x200 [ib_core]
-[  633.513444]  ib_mr_pool_destroy+0x77/0xb0 [ib_core]
-[  633.514763]  nvme_rdma_destroy_queue_ib+0x89/0x240 [nvme_rdma]
-[  633.516230]  nvme_rdma_free_queue+0x40/0x50 [nvme_rdma]
-[  633.517577]  nvme_rdma_teardown_io_queues.part.0+0xc3/0x120 [nvme_rdma]
-[  633.519204]  nvme_rdma_error_recovery_work+0x4d/0xf0 [nvme_rdma]
-[  633.520695]  process_one_work+0x582/0xa40
-[  633.522987]  ? pwq_dec_nr_in_flight+0x100/0x100
-[  633.524227]  ? rwlock_bug.part.0+0x60/0x60
-[  633.525372]  worker_thread+0x2a9/0x700
-[  633.526437]  ? process_one_work+0xa40/0xa40
-[  633.527589]  kthread+0x168/0x1a0
-[  633.528518]  ? kthread_complete_and_exit+0x20/0x20
-[  633.529792]  ret_from_fork+0x22/0x30
+On Sun, Oct 23, 2022 at 10:10 PM Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> With name space support, it is possible for a pfkey_register to
+> occur in the middle of a send_acquire, thus changing the number
+> of supported algorithms.
+>
+> This can be fixed by taking a mutex to make it single-threaded
+> again.
+>
+> Reported-by: syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com
+> Fixes: 283bc9f35bbb ("xfrm: Namespacify xfrm state/policy locks")
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+>
+> diff --git a/net/key/af_key.c b/net/key/af_key.c
+> index c85df5b958d2..4ceef96fef57 100644
+> --- a/net/key/af_key.c
+> +++ b/net/key/af_key.c
+> @@ -3160,6 +3160,7 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
+>                 (sockaddr_size * 2) +
+>                 sizeof(struct sadb_x_policy);
+>
+> +       mutex_lock(&pfkey_mutex);
+>         if (x->id.proto == IPPROTO_AH)
+>                 size += count_ah_combs(t);
+>         else if (x->id.proto == IPPROTO_ESP)
+> @@ -3171,8 +3172,10 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
+>         }
+>
+>         skb =  alloc_skb(size + 16, GFP_ATOMIC);
 
-CC: Bob Pearson <rpearsonhpe@gmail.com>
-Fixes: 8a1a0be894da ("RDMA/rxe: Replace mr by rkey in responder resources")
-Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
-V2: remove mr testing
----
- drivers/infiniband/sw/rxe/rxe_resp.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Are you sure we can sleep in mutex_lock() ?
 
-diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
-index b02639cf8cba..41250154a478 100644
---- a/drivers/infiniband/sw/rxe/rxe_resp.c
-+++ b/drivers/infiniband/sw/rxe/rxe_resp.c
-@@ -806,8 +806,10 @@ static enum resp_states read_reply(struct rxe_qp *qp,
- 
- 	skb = prepare_ack_packet(qp, &ack_pkt, opcode, payload,
- 				 res->cur_psn, AETH_ACK_UNLIMITED);
--	if (!skb)
-+	if (!skb) {
-+		rxe_put(mr);
- 		return RESPST_ERR_RNR;
-+	}
- 
- 	rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
- 		    payload, RXE_FROM_MR_OBJ);
--- 
-2.31.1
+Use of GFP_ATOMIC would suggest otherwise :/
 
+
+> -       if (skb == NULL)
+> +       if (skb == NULL) {
+> +               mutex_unlock(&pfkey_mutex);
+>                 return -ENOMEM;
+> +       }
+>
+>         hdr = skb_put(skb, sizeof(struct sadb_msg));
+>         hdr->sadb_msg_version = PF_KEY_V2;
+> @@ -3228,6 +3231,7 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
+>                 dump_ah_combs(skb, t);
+>         else if (x->id.proto == IPPROTO_ESP)
+>                 dump_esp_combs(skb, t);
+> +       mutex_unlock(&pfkey_mutex);
+>
+>         /* security context */
+>         if (xfrm_ctx) {
+> --
+> Email: Herbert Xu <herbert@gondor.apana.org.au>
+> Home Page: http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
