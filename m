@@ -2,118 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF57060A78F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FCE60A68C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234671AbiJXMwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
+        id S234654AbiJXMfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiJXMsp (ORCPT
+        with ESMTP id S234259AbiJXM3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:48:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F042923C5;
-        Mon, 24 Oct 2022 05:12:51 -0700 (PDT)
+        Mon, 24 Oct 2022 08:29:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37710895CB;
+        Mon, 24 Oct 2022 05:03:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B73DD612BB;
-        Mon, 24 Oct 2022 12:11:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1692C433D6;
-        Mon, 24 Oct 2022 12:11:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CCDF7B81188;
+        Mon, 24 Oct 2022 12:00:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2D6C433C1;
+        Mon, 24 Oct 2022 12:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613482;
-        bh=7BBawXnclGc7VD+m7l6mAXuY6gIVYHTlLGs2AC/M8g0=;
+        s=korg; t=1666612851;
+        bh=NwiRgoGNNgwSk51Vc6rEQuhFQM5Y9IwYt/EDlaVrrCg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d5M9xYr7hh/TZjwpuV/vsBo8+y0FfizhFHhPCfqu+s5IEXiEmALgRTvAIegtyEoh0
-         Iugr92MyI0QHofnfw9tP9mIUKpEI099XFe+/iGHj9jd8OIOhV9smxSYBxMxxJscvN3
-         TeLr7jtgfd+HGNJdJQMYGr7cpUzT6jRHdk4Kz2qI=
+        b=GpdtwrXu7CUE3Z2O7TYMhuW+TqY3a+XO/I+cpnNQ4DGWt1lxwIoH13B1CrbsnVBMO
+         wXp0KCyib701ioeG6btZZzuY+h6GPq1olat5Jk2QsBQJqHir39m2DRvy+bdCMSGFtI
+         RaZQYtGJr3blDxMG10DvttGYwIyIPj6aJ0Hhk3ns=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Philipp Hortmann <philipp.g.hortmann@gmail.com>,
-        Nam Cao <namcaov@gmail.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 152/255] staging: vt6655: fix some erroneous memory clean-up loops
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 143/229] drivers: serial: jsm: fix some leaks in probe
 Date:   Mon, 24 Oct 2022 13:31:02 +0200
-Message-Id: <20221024113007.691974379@linuxfoundation.org>
+Message-Id: <20221024113003.637923278@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nam Cao <namcaov@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 2a2db520e3ca5aafba7c211abfd397666c9b5f9d ]
+[ Upstream commit 1d5859ef229e381f4db38dce8ed58e4bf862006b ]
 
-In some initialization functions of this driver, memory is allocated with
-'i' acting as an index variable and increasing from 0. The commit in
-"Fixes" introduces some clean-up codes in case of allocation failure,
-which free memory in reverse order with 'i' decreasing to 0. However,
-there are some problems:
-  - The case i=0 is left out. Thus memory is leaked.
-  - In case memory allocation fails right from the start, the memory
-    freeing loops will start with i=-1 and invalid memory locations will
-    be accessed.
+This error path needs to unwind instead of just returning directly.
 
-One of these loops has been fixed in commit c8ff91535880 ("staging:
-vt6655: fix potential memory leak"). Fix the remaining erroneous loops.
-
-Link: https://lore.kernel.org/linux-staging/Yx9H1zSpxmNqx6Xc@kadam/
-Fixes: 5341ee0adb17 ("staging: vt6655: check for memory allocation failures")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Signed-off-by: Nam Cao <namcaov@gmail.com>
-Link: https://lore.kernel.org/r/20220912170429.29852-1-namcaov@gmail.com
+Fixes: 03a8482c17dd ("drivers: serial: jsm: Enable support for Digi Classic adapters")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/YyxFh1+lOeZ9WfKO@kili
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/vt6655/device_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/tty/serial/jsm/jsm_driver.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/vt6655/device_main.c b/drivers/staging/vt6655/device_main.c
-index 082302944c37..c1f9b263129e 100644
---- a/drivers/staging/vt6655/device_main.c
-+++ b/drivers/staging/vt6655/device_main.c
-@@ -560,7 +560,7 @@ static int device_init_rd0_ring(struct vnt_private *priv)
- 	kfree(desc->rd_info);
+diff --git a/drivers/tty/serial/jsm/jsm_driver.c b/drivers/tty/serial/jsm/jsm_driver.c
+index 592e51d8944e..07e9be9865c7 100644
+--- a/drivers/tty/serial/jsm/jsm_driver.c
++++ b/drivers/tty/serial/jsm/jsm_driver.c
+@@ -212,7 +212,8 @@ static int jsm_probe_one(struct pci_dev *pdev, const struct pci_device_id *ent)
  
- err_free_desc:
--	while (--i) {
-+	while (i--) {
- 		desc = &priv->aRD0Ring[i];
- 		device_free_rx_buf(priv, desc);
- 		kfree(desc->rd_info);
-@@ -606,7 +606,7 @@ static int device_init_rd1_ring(struct vnt_private *priv)
- 	kfree(desc->rd_info);
- 
- err_free_desc:
--	while (--i) {
-+	while (i--) {
- 		desc = &priv->aRD1Ring[i];
- 		device_free_rx_buf(priv, desc);
- 		kfree(desc->rd_info);
-@@ -710,7 +710,7 @@ static int device_init_td1_ring(struct vnt_private *priv)
- 	return 0;
- 
- err_free_desc:
--	while (--i) {
-+	while (i--) {
- 		desc = &priv->apTD1Rings[i];
- 		kfree(desc->td_info);
+ 		break;
+ 	default:
+-		return -ENXIO;
++		rc = -ENXIO;
++		goto out_kfree_brd;
  	}
+ 
+ 	rc = request_irq(brd->irq, brd->bd_ops->intr, IRQF_SHARED, "JSM", brd);
 -- 
 2.35.1
 
