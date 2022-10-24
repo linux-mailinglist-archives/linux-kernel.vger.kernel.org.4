@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493AE60A3F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA7860A6C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbiJXMDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S231728AbiJXMig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbiJXL7y (ORCPT
+        with ESMTP id S233888AbiJXM2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:59:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA6D7C32C;
-        Mon, 24 Oct 2022 04:48:56 -0700 (PDT)
+        Mon, 24 Oct 2022 08:28:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E93386FBB;
+        Mon, 24 Oct 2022 05:02:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D4A61218;
-        Mon, 24 Oct 2022 11:48:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4EFDC433C1;
-        Mon, 24 Oct 2022 11:48:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64C12B81150;
+        Mon, 24 Oct 2022 11:58:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF06C433D6;
+        Mon, 24 Oct 2022 11:58:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612136;
-        bh=imA00XoB1QibGoVcRmf2HbsfpTiVfj/6N8ZW4ewYQOc=;
+        s=korg; t=1666612709;
+        bh=KXBQ6MdwJlojy74YROK74a4S4l8XmysUHJstxMTskFQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RIoaaeJvQm8+wEVC0A64vux79lGAFWdYbk19XdVRNqZWSTjedhP+BzH3rRO2F+MKr
-         ODeNn95JzJLzRmEfRXhw4WoJebRoJmQor7FVSsHAE9MvAndyoM2N25VoF+zVKztlqV
-         cNFy1dKE2Vf+4AeQDLBK/gOxZoBWXK9EA9TES44E=
+        b=sOMUvPi7gmYmooroz3cYA+glwU2WBlIVqGb5BM2bdUbdIyEWTkw5T8hJXOebmrHPr
+         4a5kWokoGWJKP9zChRZNuou0aMjigxDgWTRUVHe+Ev5fyBn/3dtZmrvTTD0Jl7b368
+         QI2zItdFX31ytmr7rgF1gN6rbjAkdTLbwSCwXTsI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Jes Sorensen <Jes.Sorensen@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 084/210] wifi: rtl8xxxu: tighten bounds checking in rtl8xxxu_read_efuse()
+        stable@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 082/229] bpf: Ensure correct locking around vulnerable function find_vpid()
 Date:   Mon, 24 Oct 2022 13:30:01 +0200
-Message-Id: <20221024112959.780851591@linuxfoundation.org>
+Message-Id: <20221024113001.724483738@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,57 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Lee Jones <lee@kernel.org>
 
-[ Upstream commit 620d5eaeb9059636864bda83ca1c68c20ede34a5 ]
+[ Upstream commit 83c10cc362d91c0d8d25e60779ee52fdbbf3894d ]
 
-There some bounds checking to ensure that "map_addr" is not out of
-bounds before the start of the loop.  But the checking needs to be
-done as we iterate through the loop because "map_addr" gets larger as
-we iterate.
+The documentation for find_vpid() clearly states:
 
-Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Jes Sorensen <Jes.Sorensen@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/Yv8eGLdBslLAk3Ct@kili
+  "Must be called with the tasklist_lock or rcu_read_lock() held."
+
+Presently we do neither for find_vpid() instance in bpf_task_fd_query().
+Add proper rcu_read_lock/unlock() to fix the issue.
+
+Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220912133855.1218900-1-lee@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c  | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ kernel/bpf/syscall.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index 5cf61710ae2f..5588518daa96 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -1879,13 +1879,6 @@ static int rtl8xxxu_read_efuse(struct rtl8xxxu_priv *priv)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index e940c1f65938..02e5bdb82a9a 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2325,7 +2325,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+ 	if (attr->task_fd_query.flags != 0)
+ 		return -EINVAL;
  
- 		/* We have 8 bits to indicate validity */
- 		map_addr = offset * 8;
--		if (map_addr >= EFUSE_MAP_LEN) {
--			dev_warn(dev, "%s: Illegal map_addr (%04x), "
--				 "efuse corrupt!\n",
--				 __func__, map_addr);
--			ret = -EINVAL;
--			goto exit;
--		}
- 		for (i = 0; i < EFUSE_MAX_WORD_UNIT; i++) {
- 			/* Check word enable condition in the section */
- 			if (word_mask & BIT(i)) {
-@@ -1896,6 +1889,13 @@ static int rtl8xxxu_read_efuse(struct rtl8xxxu_priv *priv)
- 			ret = rtl8xxxu_read_efuse8(priv, efuse_addr++, &val8);
- 			if (ret)
- 				goto exit;
-+			if (map_addr >= EFUSE_MAP_LEN - 1) {
-+				dev_warn(dev, "%s: Illegal map_addr (%04x), "
-+					 "efuse corrupt!\n",
-+					 __func__, map_addr);
-+				ret = -EINVAL;
-+				goto exit;
-+			}
- 			priv->efuse_wifi.raw[map_addr++] = val8;
++	rcu_read_lock();
+ 	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
++	rcu_read_unlock();
+ 	if (!task)
+ 		return -ENOENT;
  
- 			ret = rtl8xxxu_read_efuse8(priv, efuse_addr++, &val8);
 -- 
 2.35.1
 
