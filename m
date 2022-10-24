@@ -2,120 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE96460A98B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EC360AA0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiJXNWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
+        id S232316AbiJXN2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231907AbiJXNUq (ORCPT
+        with ESMTP id S236401AbiJXNZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:20:46 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09631015
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:29:14 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id c8so5663392qvn.10
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:29:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jh8UQ4JmTZN9hL0/8CXAkNYRnuwMy/n4/v6mITjc4KY=;
-        b=y0W+zUyiBftSd0JgAGoPOqPtmV13guRpqzbMHskUNvLCEuQ6pihIc7oGP6TuC3oQt5
-         NjC6zT2GBgFpwt3TaO3sCktoTg2zHU1fTtWzfcwSmh6ykgmIp95Eot8a0sqsecpFyW7x
-         1HT6dR9s6lU9w8AQMYPhYLXd1Gu3x1edoP1WhBwFF/jIaERMSCG6bAABteTZbOS+Taz8
-         m7SCCh9de8RQXNTOTCxekuN5wUYGpUE+af/pdLsiLsH9H7ozUi1IJplIrGjD7sC4Tf7t
-         s+A+OHtLvPIWSHgE+4xzSs5FzW53+pzJ7Liv/i1SA0R2VvOs5lkPyZK2zhrwcwhQeqwz
-         cUfg==
+        Mon, 24 Oct 2022 09:25:39 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2830A9DD84;
+        Mon, 24 Oct 2022 05:31:20 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id x13so4892020qvn.6;
+        Mon, 24 Oct 2022 05:31:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jh8UQ4JmTZN9hL0/8CXAkNYRnuwMy/n4/v6mITjc4KY=;
-        b=fhNtXC3YR+1YR7wDtnMgjG9fofaYeQG95ZxJ21WYDfDFVb1wsHudqiHIpDvuHOXDrG
-         0zQzzl+7WamHVYhb2IybsTwn81FkyMOKOWIzfvhqhRFMXkIf6SfwNEDh4bGt9wQfNN1a
-         qQsV5ScXovffxBiQbGWUSBpIBAJRsW7h/dBz1OfGcUONGjfmQTsryPycJmHljVxz0Mh/
-         1DwvZhVl/EKdjZDrTu8mTsYicc8LELkKd9bt3xry/zzr1SZJxQYNF2Vt3MSCk33HBkWT
-         mRwoev5T66cpIxPxyXCGGlQCLUrWKtKA5eckX+iA1Mt7Udt71WkXGwI9q8FpdhE1tRy1
-         y8iA==
-X-Gm-Message-State: ACrzQf10+jhfZu4vyPALqE/kMrfykiXaCngbO7zstFBfW/GDvxDH5SaD
-        W3gi9yiRQqCcUwqRwWUm0fcw1Q==
-X-Google-Smtp-Source: AMsMyM64HS96JA+t5NegWTBhGoXrPmUTvN8S9j1oIuC6j5JnhVzd28Edhbio8VxlddWIvdR7T0/thQ==
-X-Received: by 2002:a0c:8ccc:0:b0:4b2:382e:ddaa with SMTP id q12-20020a0c8ccc000000b004b2382eddaamr27200510qvb.33.1666614368794;
-        Mon, 24 Oct 2022 05:26:08 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id u30-20020a37ab1e000000b006ef0350db8asm9109052qke.128.2022.10.24.05.26.06
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BNStuAYK228vf5LzbOeaSSraZdrDlZ0Sjhs1zL+VQXA=;
+        b=aetePGMNRUTGhTxl+a2+y0oXCuyNsQZtyS/7Eux79lxe3tm6ZG8C5bGNWQboOF62IP
+         ZRdKAmn6x2bO6jkPjo4Wa2zzV1z/6ipcBld2PRZwx/Pkw5/6CB157iUy7MUglthnC/ip
+         16vQ81X+mP4lFT9cwmfARQ4BcZ3Is0ufPELUIVgtdnxX36/6ccUHgYaYjYDg2ijtMdvr
+         VqLg23hfjzgS+vt0ZAYN5V/v2zQSG4xHQ8cmp0V4z07TmpkxmUnFDVs2sRCOd+uTJgie
+         np85bDbiwFQC4zACzo8lSkIU8UW7GjhkuRue8Ag24ye0DH4G7XOou3KYovEwLAnUXl3G
+         YinQ==
+X-Gm-Message-State: ACrzQf2ChBQmGunVGigwko1OYdZzGeirx7N8x99n/KF7bLEta2a+Vq7N
+        A98vZ4WN6SD7uebPmOT1NdBIKLDW+Hgs2w==
+X-Google-Smtp-Source: AMsMyM5Rrr1o3yktWRbt9a9lsU1jlKSQ4Tonxkm1QHUtyNCgn4pHDNfL6DrDIuYaqr+yIONtv2yacw==
+X-Received: by 2002:a05:6214:76a:b0:4bb:6fa5:bee2 with SMTP id f10-20020a056214076a00b004bb6fa5bee2mr4265934qvz.53.1666614517409;
+        Mon, 24 Oct 2022 05:28:37 -0700 (PDT)
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
+        by smtp.gmail.com with ESMTPSA id bi17-20020a05620a319100b006eeca296c00sm5072062qkb.104.2022.10.24.05.28.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 05:26:08 -0700 (PDT)
-Message-ID: <a354c24d-0355-7c9d-ad05-4c21561af4dc@linaro.org>
-Date:   Mon, 24 Oct 2022 08:26:05 -0400
+        Mon, 24 Oct 2022 05:28:36 -0700 (PDT)
+Received: by mail-yb1-f180.google.com with SMTP id 187so1732755ybe.1;
+        Mon, 24 Oct 2022 05:28:36 -0700 (PDT)
+X-Received: by 2002:a5b:104:0:b0:6b0:429:3fe9 with SMTP id 4-20020a5b0104000000b006b004293fe9mr27655514ybx.543.1666614516350;
+ Mon, 24 Oct 2022 05:28:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
+References: <20221023182437.15263-1-afd@ti.com>
+In-Reply-To: <20221023182437.15263-1-afd@ti.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 24 Oct 2022 14:28:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVSeqcgj=ocY-9XAf9A312xBwdypBCNk-fsnh+bWiCtTg@mail.gmail.com>
+Message-ID: <CAMuHMdVSeqcgj=ocY-9XAf9A312xBwdypBCNk-fsnh+bWiCtTg@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Rename DTB overlay source files
+To:     Andrew Davis <afd@ti.com>
+Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-2-arnd@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/10/2022 16:27, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
-> similar symbols that are no longer available with the platform gone,
-> though the drivers themselves are still used on newer platforms,
-> so remove these hacks.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Andrew,
 
+On Sun, Oct 23, 2022 at 8:24 PM Andrew Davis <afd@ti.com> wrote:
+> This is a series based on my patch here[0]. As suggested by Rob
+> I've resurrected Frank's patch and appended it to mine as a series.
+>
+> First patch here is my original patch, 3rd is Frank's patch but with
+> the unittest changes pulled out into the 2nd patch. That was re-worked
+> moving the source building macro into scripts/Makefile.lib.
+>
+> Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
+> overlays. Split out by platform so they could be taken by platform
+> maintainers or if easier ACK'd here and taken all together.
+>
+> This should cover all the DTB overlays so we can remove the old .dts
+> rule for overlays and make .dtso the only supported way, let me know
+> if we want that this cycle and I can post that too.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks a lot for picking this up!
 
-Best regards,
-Krzysztof
+Everything builds still fine, and the OF unit tests still run fine, so
+Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+BTW, you missed the Smarthome-Wolf Pi433 overlay[1] and its
+documentation[2] under drivers/staging/, but perhaps that was
+intentional, as it is not tied into the build system?
+
+[1] drivers/staging/pi433/Documentation/devicetree/pi433-overlay.dts
+[2] drivers/staging/pi433/Documentation/devicetree/pi433.txt
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
