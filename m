@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C39BF60BE22
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371E060BE20
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiJXXEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S230174AbiJXXEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbiJXXDd (ORCPT
+        with ESMTP id S230384AbiJXXDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:03:33 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B9632BB27
+        Mon, 24 Oct 2022 19:03:37 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FBC32BB2D
         for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:24:32 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z97so33527734ede.8
+Received: by mail-ej1-x62d.google.com with SMTP id fy4so7995371ejc.5
         for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:24:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O4TfgwncnU/HwDrEet2mPSVCmyGRLpO7aAKR17oXTOM=;
-        b=ZvCH3I055bsQxyZ2EFbe/WK0etuo4Ftc4KWHjKWllkkcQHDdtU9Wih+G9leYJphdlX
-         Eqo72/eHiCAO9cKSri1OYJOUn7RxXYE8rqflcXWY5suZSedpJykeoNPQImJy9RNN7zF5
-         jG0e+X9NHnXcyOZuXz0CMwmvzUSkQ7qWuAbk4bEIGCZk6nUsh4RJKCXjAY55hGqmPAib
-         jc36hCrwkdajUgB6zbzmUgw728cGkuBMXe91Kurk5XmL5KvB5cGJ6jBlQJvp4RQVmVRC
-         k5kucKtxMeIEd6E5Rc6hb/Y7ZV0/gatFY7c8jwDT+tg6kQalpdC6nsclVEeaxYVnOYKm
-         vJIA==
+        bh=ZnIGn/8lQxIvkBxIYAS0VX64KIDCnkMm+kr3eEDYl88=;
+        b=XIP4bEFIcdIw/T9jh4VAzKatrQJkOlQZmO7SqvJALwsEKkkJYu8vPujUgOwlI8cLot
+         F20Fp89nNXajchE43quObfLKMOnQgDQBC0Tn3nBTJ5Ex9cAN+zbOR30X9n42DcyYOyQB
+         G97s31gHJPtUnkFRmIjo06ukG++F4eHcJOxj3jPX7u4NKtVfGpxk5PBvMRvFkAeKI86t
+         8URuIMqoVKs7vr5qg4W+0yWE1aTn2nu74wsZYjAyZbVkWVJhqlsKtVZ/IDxCmQiA80HM
+         WuWcrzYlFmozzQRs8+MnWdWkfiUJesTAYwzTxfFA2U1/g0STRvhu8xe97VMEmYgt1UpN
+         ZDFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O4TfgwncnU/HwDrEet2mPSVCmyGRLpO7aAKR17oXTOM=;
-        b=599izUmLkPR8Y2iWu7QYvxbe9hMRYFL5/CaA/loS3DGNrhZ1qvxPrr54a1pSW79bsS
-         +PbphnSJEF/G/QeLQlP0LrnTGwuO+odXdsfH4UNs7EFhUN6YrauN7XT389k2yGMc5Buw
-         DNmvpBk57treA/LUMfRvxfeoUV5/+xhLOvRvnNZK4DY6mSnDr9/XpYdRb+avXyU0CzSs
-         UnqB8RVNVBJY3gnS16vi+dPOfqsFfioGs9imUb6tsEpNZJL97Q7fgZwQtIgEQedde58V
-         vdInUcVePiybOtCOCYDHaX6jCeiAS4ZKlhZrzfOLs90NO8cpqJICElyLG9Hnl287uJJO
-         9rTQ==
-X-Gm-Message-State: ACrzQf3qz450WMlRe5Ni8ssHp4WqlNWUPbzkKOPLzIHf6bAZ4l0nbj1/
-        sSrUu9IYCD1bHyqp3K2UTvU=
-X-Google-Smtp-Source: AMsMyM7VgT0h8faK9qer4AruU019XwyqUcMD+U0WYjbRMdtVTBL+cM4HSyxblSfwbMnnndIhUT9SEg==
-X-Received: by 2002:a05:6402:40c7:b0:461:ecdb:1c41 with SMTP id z7-20020a05640240c700b00461ecdb1c41mr3511218edb.288.1666646666234;
-        Mon, 24 Oct 2022 14:24:26 -0700 (PDT)
+        bh=ZnIGn/8lQxIvkBxIYAS0VX64KIDCnkMm+kr3eEDYl88=;
+        b=O7RZ1dJAODBgUrZnaqa+oaeM+zx4FQfrvTKBjGTgId+pfC3gpaNvM8YSjl1rykbIwu
+         0hBkX2O5icfXo/rhSmv6DrGZIKPiht0SYy5D2x26qVkMFt+g0kKETE5vaeM/EPx670sk
+         P7vgkw9riFBk13CvM8LWxlwLkMUPB5ZhDCutQ/qPVKWYO4Y872TqPBdhD3Jq2Hg0/0lN
+         iecRAXpqa/Q0Mnl3lHonUWbWUBU68u+tpSqDpgKvoBEXTbSWol9FuLb/p9zCUeTQPW7m
+         FElGhcmzmJYlf9DMRkI/7fAGJAV0im6CHjM4FoJXEqnjxRv3cSRjX9UVuMLXvmeL/pNp
+         x3cg==
+X-Gm-Message-State: ACrzQf3nDBOHAgc52sCaaSH0xpM9evv1jwRQIrsdhejZkibVwlSDmsjp
+        XDf7hAaejhqKweslEaae96c=
+X-Google-Smtp-Source: AMsMyM4As13GMai/yS+FNzNmUkg75fu7jjtSd9W12kGYnpIJ+ZxCsw0m14bKSffg3fiLMS28oMuarg==
+X-Received: by 2002:a17:906:9b93:b0:78d:eb36:1ce7 with SMTP id dd19-20020a1709069b9300b0078deb361ce7mr29772911ejc.621.1666646667267;
+        Mon, 24 Oct 2022 14:24:27 -0700 (PDT)
 Received: from localhost.localdomain (ip-217-105-46-178.ip.prioritytelecom.net. [217.105.46.178])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b007a9c3831409sm379354ejg.137.2022.10.24.14.24.25
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b007a9c3831409sm379354ejg.137.2022.10.24.14.24.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 14:24:25 -0700 (PDT)
+        Mon, 24 Oct 2022 14:24:26 -0700 (PDT)
 From:   Nam Cao <namcaov@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     namcaov@gmail.com, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] staging: rtl8712: check for return value of _r8712_init_xmit_priv()
-Date:   Mon, 24 Oct 2022 23:24:08 +0200
-Message-Id: <9314f33cc91f69d7d5c79912fe55136faca7927f.1666645510.git.namcaov@gmail.com>
+Subject: [PATCH 4/4] staging: rtl8712: fix potential memory leak
+Date:   Mon, 24 Oct 2022 23:24:09 +0200
+Message-Id: <43674a56b0734618291dccee5bbeb756d940f55b.1666645510.git.namcaov@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1666645510.git.namcaov@gmail.com>
 References: <cover.1666645510.git.namcaov@gmail.com>
@@ -74,34 +74,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of _r8712_init_xmit_priv() is never checked and the driver
-always continue execution as if all is well. This will cause problems
-if, for example, buffers cannot be allocated and the driver continue and
-use those buffers.
+In r8712_init_drv_sw(), whenever any function call returns error, it is
+returned immediately without properly cleaning up the other successfully
+executed functions. This can cause memory leak.
 
-Check for return value of _r8712_init_xmit_priv() and return error (if any)
-during probing.
+Instead of return immediately, free all the allocated buffers first.
 
 Signed-off-by: Nam Cao <namcaov@gmail.com>
 ---
- drivers/staging/rtl8712/os_intfs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/staging/rtl8712/os_intfs.c | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
-index 47d7d998fa86..ade57dd89eee 100644
+index ade57dd89eee..a2f3645be0cc 100644
 --- a/drivers/staging/rtl8712/os_intfs.c
 +++ b/drivers/staging/rtl8712/os_intfs.c
-@@ -308,7 +308,9 @@ int r8712_init_drv_sw(struct _adapter *padapter)
+@@ -304,28 +304,42 @@ int r8712_init_drv_sw(struct _adapter *padapter)
+ 	padapter->cmdpriv.padapter = padapter;
+ 	ret = r8712_init_evt_priv(&padapter->evtpriv);
+ 	if (ret)
+-		return ret;
++		goto free_cmd;
  	ret = r8712_init_mlme_priv(padapter);
  	if (ret)
- 		return ret;
--	_r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
-+	ret = _r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
-+	if (ret)
-+		return ret;
+-		return ret;
++		goto free_evt;
+ 	ret = _r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
+ 	if (ret)
+-		return ret;
++		goto free_mlme;
  	ret = _r8712_init_recv_priv(&padapter->recvpriv, padapter);
- 		return ret;
+-		return ret;
++	if (ret)
++		goto free_xmit;
  	memset((unsigned char *)&padapter->securitypriv, 0,
+ 	       sizeof(struct security_priv));
+ 	timer_setup(&padapter->securitypriv.tkip_timer,
+ 		    r8712_use_tkipkey_handler, 0);
+ 	ret = _r8712_init_sta_priv(&padapter->stapriv);
+ 	if (ret)
+-		return ret;
++		goto free_recv;
+ 	padapter->stapriv.padapter = padapter;
+ 	r8712_init_bcmc_stainfo(padapter);
+ 	r8712_init_pwrctrl_priv(padapter);
+ 	mp871xinit(padapter);
+ 	init_default_value(padapter);
+ 	r8712_InitSwLeds(padapter);
++
++	return 0;
++
++free_recv:
++	_r8712_free_recv_priv(&padapter->recvpriv);
++free_xmit:
++	_free_xmit_priv(&padapter->xmitpriv);
++free_mlme:
++	r8712_free_mlme_priv(&padapter->mlmepriv);
++free_evt:
++	r8712_free_evt_priv(&padapter->evtpriv);
++free_cmd:
++	r8712_free_cmd_priv(&padapter->cmdpriv);
+ 	return ret;
+ }
+ 
 -- 
 2.25.1
 
