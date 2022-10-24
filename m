@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5944060A4A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A11960A533
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233011AbiJXMNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S233446AbiJXMV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232938AbiJXMNK (ORCPT
+        with ESMTP id S233541AbiJXMTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:13:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545C111473;
-        Mon, 24 Oct 2022 04:54:42 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB40F753B9;
+        Mon, 24 Oct 2022 04:58:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8420612DB;
-        Mon, 24 Oct 2022 11:54:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6A92C43470;
-        Mon, 24 Oct 2022 11:54:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A71A461278;
+        Mon, 24 Oct 2022 11:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F60C433D6;
+        Mon, 24 Oct 2022 11:44:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612444;
-        bh=m/QdiEsyaqsXyeYZVuoxXTWReCx/204ZsauJ1OlEs0U=;
+        s=korg; t=1666611852;
+        bh=5Iqm60SwyyyRfJTCk22dEZia1Xh8h760FMFhJi50/Ik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yXKhSn3c9zyz7azQCNhd95XmoXQZJScmipbraXVs3cYhKydUo7kPoFXc0mQxM5EPz
-         CDxEZ5VmpC0eFKjoxhCnsKAiODMVQe2Pg7eNPb5mpatCO/fe/L2edFRXMVal031cNP
-         Y9px+22nGJUmXvZ+8fT+sxwKCW2rJGvWSxRZtwrw=
+        b=IBbSC5Rv6funo+s+4ddbfw5c8SixcdkAs8OtTpaVZpQqaNWxdqIKkk4hHzvu0BLxL
+         znLS0VBPeQiKOk7UhGgbOSw6zh0eoNcs+/p2WiRieJgCQvbP1j7lf7J56LnFhl78Wb
+         tzrenB2p7VW6shm9RveEwP0h9Q2sce4rvdz2MM9o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot <syzbot+2ca247c2d60c7023de7f@syzkaller.appspotmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 171/210] wifi: ath9k: avoid uninit memory read in ath9k_htc_rx_msg()
-Date:   Mon, 24 Oct 2022 13:31:28 +0200
-Message-Id: <20221024113002.508144717@linuxfoundation.org>
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Sungwoo Kim <iam@sung-woo.kim>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 135/159] Bluetooth: L2CAP: Fix user-after-free
+Date:   Mon, 24 Oct 2022 13:31:29 +0200
+Message-Id: <20221024112954.396342352@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,147 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit b383e8abed41cc6ff1a3b34de75df9397fa4878c ]
+[ Upstream commit 35fcbc4243aad7e7d020b7c1dfb14bb888b20a4f ]
 
-syzbot is reporting uninit value at ath9k_htc_rx_msg() [1], for
-ioctl(USB_RAW_IOCTL_EP_WRITE) can call ath9k_hif_usb_rx_stream() with
-pkt_len = 0 but ath9k_hif_usb_rx_stream() uses
-__dev_alloc_skb(pkt_len + 32, GFP_ATOMIC) based on an assumption that
-pkt_len is valid. As a result, ath9k_hif_usb_rx_stream() allocates skb
-with uninitialized memory and ath9k_htc_rx_msg() is reading from
-uninitialized memory.
+This uses l2cap_chan_hold_unless_zero() after calling
+__l2cap_get_chan_blah() to prevent the following trace:
 
-Since bytes accessed by ath9k_htc_rx_msg() is not known until
-ath9k_htc_rx_msg() is called, it would be difficult to check minimal valid
-pkt_len at "if (pkt_len > 2 * MAX_RX_BUF_SIZE) {" line in
-ath9k_hif_usb_rx_stream().
+Bluetooth: l2cap_core.c:static void l2cap_chan_destroy(struct kref
+*kref)
+Bluetooth: chan 0000000023c4974d
+Bluetooth: parent 00000000ae861c08
+==================================================================
+BUG: KASAN: use-after-free in __mutex_waiter_is_first
+kernel/locking/mutex.c:191 [inline]
+BUG: KASAN: use-after-free in __mutex_lock_common
+kernel/locking/mutex.c:671 [inline]
+BUG: KASAN: use-after-free in __mutex_lock+0x278/0x400
+kernel/locking/mutex.c:729
+Read of size 8 at addr ffff888006a49b08 by task kworker/u3:2/389
 
-We have two choices. One is to workaround by adding __GFP_ZERO so that
-ath9k_htc_rx_msg() sees 0 if pkt_len is invalid. The other is to let
-ath9k_htc_rx_msg() validate pkt_len before accessing. This patch chose
-the latter.
-
-Note that I'm not sure threshold condition is correct, for I can't find
-details on possible packet length used by this protocol.
-
-Link: https://syzkaller.appspot.com/bug?extid=2ca247c2d60c7023de7f [1]
-Reported-by: syzbot <syzbot+2ca247c2d60c7023de7f@syzkaller.appspotmail.com>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/7acfa1be-4b5c-b2ce-de43-95b0593fb3e5@I-love.SAKURA.ne.jp
+Link: https://lore.kernel.org/lkml/20220622082716.478486-1-lee.jones@linaro.org
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/htc_hst.c | 43 +++++++++++++++---------
- 1 file changed, 28 insertions(+), 15 deletions(-)
+ net/bluetooth/l2cap_core.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
-index e37de14bc502..6d69cf69fd86 100644
---- a/drivers/net/wireless/ath/ath9k/htc_hst.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
-@@ -367,33 +367,27 @@ void ath9k_htc_txcompletion_cb(struct htc_target *htc_handle,
- }
- 
- static void ath9k_htc_fw_panic_report(struct htc_target *htc_handle,
--				      struct sk_buff *skb)
-+				      struct sk_buff *skb, u32 len)
- {
- 	uint32_t *pattern = (uint32_t *)skb->data;
- 
--	switch (*pattern) {
--	case 0x33221199:
--		{
-+	if (*pattern == 0x33221199 && len >= sizeof(struct htc_panic_bad_vaddr)) {
- 		struct htc_panic_bad_vaddr *htc_panic;
- 		htc_panic = (struct htc_panic_bad_vaddr *) skb->data;
- 		dev_err(htc_handle->dev, "ath: firmware panic! "
- 			"exccause: 0x%08x; pc: 0x%08x; badvaddr: 0x%08x.\n",
- 			htc_panic->exccause, htc_panic->pc,
- 			htc_panic->badvaddr);
--		break;
--		}
--	case 0x33221299:
--		{
-+		return;
-+	}
-+	if (*pattern == 0x33221299) {
- 		struct htc_panic_bad_epid *htc_panic;
- 		htc_panic = (struct htc_panic_bad_epid *) skb->data;
- 		dev_err(htc_handle->dev, "ath: firmware panic! "
- 			"bad epid: 0x%08x\n", htc_panic->epid);
--		break;
--		}
--	default:
--		dev_err(htc_handle->dev, "ath: unknown panic pattern!\n");
--		break;
-+		return;
- 	}
-+	dev_err(htc_handle->dev, "ath: unknown panic pattern!\n");
- }
- 
- /*
-@@ -414,16 +408,26 @@ void ath9k_htc_rx_msg(struct htc_target *htc_handle,
- 	if (!htc_handle || !skb)
- 		return;
- 
-+	/* A valid message requires len >= 8.
-+	 *
-+	 *   sizeof(struct htc_frame_hdr) == 8
-+	 *   sizeof(struct htc_ready_msg) == 8
-+	 *   sizeof(struct htc_panic_bad_vaddr) == 16
-+	 *   sizeof(struct htc_panic_bad_epid) == 8
-+	 */
-+	if (unlikely(len < sizeof(struct htc_frame_hdr)))
-+		goto invalid;
- 	htc_hdr = (struct htc_frame_hdr *) skb->data;
- 	epid = htc_hdr->endpoint_id;
- 
- 	if (epid == 0x99) {
--		ath9k_htc_fw_panic_report(htc_handle, skb);
-+		ath9k_htc_fw_panic_report(htc_handle, skb, len);
- 		kfree_skb(skb);
- 		return;
- 	}
- 
- 	if (epid < 0 || epid >= ENDPOINT_MAX) {
-+invalid:
- 		if (pipe_id != USB_REG_IN_PIPE)
- 			dev_kfree_skb_any(skb);
- 		else
-@@ -435,21 +439,30 @@ void ath9k_htc_rx_msg(struct htc_target *htc_handle,
- 
- 		/* Handle trailer */
- 		if (htc_hdr->flags & HTC_FLAGS_RECV_TRAILER) {
--			if (be32_to_cpu(*(__be32 *) skb->data) == 0x00C60000)
-+			if (be32_to_cpu(*(__be32 *) skb->data) == 0x00C60000) {
- 				/* Move past the Watchdog pattern */
- 				htc_hdr = (struct htc_frame_hdr *)(skb->data + 4);
-+				len -= 4;
-+			}
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 42df17fa7f16..ec04a7ea5537 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -4039,6 +4039,12 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
  		}
+ 	}
  
- 		/* Get the message ID */
-+		if (unlikely(len < sizeof(struct htc_frame_hdr) + sizeof(__be16)))
-+			goto invalid;
- 		msg_id = (__be16 *) ((void *) htc_hdr +
- 				     sizeof(struct htc_frame_hdr));
++	chan = l2cap_chan_hold_unless_zero(chan);
++	if (!chan) {
++		err = -EBADSLT;
++		goto unlock;
++	}
++
+ 	err = 0;
  
- 		/* Now process HTC messages */
- 		switch (be16_to_cpu(*msg_id)) {
- 		case HTC_MSG_READY_ID:
-+			if (unlikely(len < sizeof(struct htc_ready_msg)))
-+				goto invalid;
- 			htc_process_target_rdy(htc_handle, htc_hdr);
- 			break;
- 		case HTC_MSG_CONNECT_SERVICE_RESPONSE_ID:
-+			if (unlikely(len < sizeof(struct htc_frame_hdr) +
-+				     sizeof(struct htc_conn_svc_rspmsg)))
-+				goto invalid;
- 			htc_process_conn_rsp(htc_handle, htc_hdr);
- 			break;
- 		default:
+ 	l2cap_chan_lock(chan);
+@@ -4068,6 +4074,7 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
+ 	}
+ 
+ 	l2cap_chan_unlock(chan);
++	l2cap_chan_put(chan);
+ 
+ unlock:
+ 	mutex_unlock(&conn->chan_lock);
 -- 
 2.35.1
 
