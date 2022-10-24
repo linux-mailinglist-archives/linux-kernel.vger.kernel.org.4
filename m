@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3689560A67A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF3E60A68B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234300AbiJXMeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52360 "EHLO
+        id S234020AbiJXM3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234206AbiJXM3i (ORCPT
+        with ESMTP id S233828AbiJXM2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:38 -0400
+        Mon, 24 Oct 2022 08:28:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86197FF2;
-        Mon, 24 Oct 2022 05:03:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A3786801;
+        Mon, 24 Oct 2022 05:01:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3248612CA;
-        Mon, 24 Oct 2022 11:51:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12CACC4314D;
-        Mon, 24 Oct 2022 11:51:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F371A6127D;
+        Mon, 24 Oct 2022 12:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175CCC433C1;
+        Mon, 24 Oct 2022 12:00:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612268;
-        bh=/AwGkdnNk5NaqZP67LHlYM5+TteTg5wF/F0cltxUsYg=;
+        s=korg; t=1666612814;
+        bh=py1Zph9NUQ/OJNirFXbkvul6N/qlUoss8U2ugj+VCtU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o+qSPsNOk1yYFv1HLjkQmczRusBfw8palr7oGgGlq0oz5Vyc8OaSUnWnKdE8a2Y2j
-         843eNq89gQTkFcpfD+8NxPbvYkU+Ga23Izv5tHEb2O+0Rhh9fWKWsaAGnGpBK9fxBy
-         S5m6Ut6rE4sx+b2LwmgIvlj3sRbSFI9MQIhcfoUw=
+        b=tRIQGIRBZthN8AeZx2X77+0HVeCvFbSplqpdMJqPiSsLSvhsT6BWkqZAAT4y/aR32
+         F888jRoKAX457Fvd8Z2oT623zdY91F03xVZjY0t7v+sb4DJGIqq8PCI42C0v4qt+K5
+         t5ZIxAGW5iiK6SH+5wlrHDlZkq0RPoL4ZAFQC1YI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 132/210] ata: fix ata_id_has_ncq_autosense()
+Subject: [PATCH 4.19 130/229] media: xilinx: vipp: Fix refcount leak in xvip_graph_dma_init
 Date:   Mon, 24 Oct 2022 13:30:49 +0200
-Message-Id: <20221024113001.278988772@linuxfoundation.org>
+Message-Id: <20221024113003.210505896@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,56 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Cassel <niklas.cassel@wdc.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit a5fb6bf853148974dbde092ec1bde553bea5e49f ]
+[ Upstream commit 1c78f19c3a0ea312a8178a6bfd8934eb93e9b10a ]
 
-ACS-5 section
-7.13.6.36 Word 78: Serial ATA features supported
-states that:
+of_get_child_by_name() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-If word 76 is not 0000h or FFFFh, word 78 reports the features supported
-by the device. If this word is not supported, the word shall be cleared
-to zero.
-
-(This text also exists in really old ACS standards, e.g. ACS-3.)
-
-Additionally, move the macro to the other ATA_ID_FEATURE_SUPP macros
-(which already have this check), thus making it more likely that the
-next ATA_ID_FEATURE_SUPP macro that is added will include this check.
-
-Fixes: 5b01e4b9efa0 ("libata: Implement NCQ autosense")
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: df3305156f98 ("[media] v4l: xilinx: Add Xilinx Video IP core")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/ata.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/platform/xilinx/xilinx-vipp.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/ata.h b/include/linux/ata.h
-index c2beacc9e522..641545929efb 100644
---- a/include/linux/ata.h
-+++ b/include/linux/ata.h
-@@ -583,6 +583,10 @@ struct ata_bmdma_prd {
- 	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
- 	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
- 	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 8)))
-+#define ata_id_has_ncq_autosense(id) \
-+	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
-+	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
-+	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 7)))
- #define ata_id_iordy_disable(id) ((id)[ATA_ID_CAPABILITY] & (1 << 10))
- #define ata_id_has_iordy(id) ((id)[ATA_ID_CAPABILITY] & (1 << 11))
- #define ata_id_u32(id,n)	\
-@@ -595,8 +599,6 @@ struct ata_bmdma_prd {
- 
- #define ata_id_cdb_intr(id)	(((id)[ATA_ID_CONFIG] & 0x60) == 0x20)
- #define ata_id_has_da(id)	((id)[ATA_ID_SATA_CAPABILITY_2] & (1 << 4))
--#define ata_id_has_ncq_autosense(id) \
--				((id)[ATA_ID_FEATURE_SUPP] & (1 << 7))
- 
- static inline bool ata_id_has_hipm(const u16 *id)
+diff --git a/drivers/media/platform/xilinx/xilinx-vipp.c b/drivers/media/platform/xilinx/xilinx-vipp.c
+index 6d95ec1e9a6b..9177db789b07 100644
+--- a/drivers/media/platform/xilinx/xilinx-vipp.c
++++ b/drivers/media/platform/xilinx/xilinx-vipp.c
+@@ -464,7 +464,7 @@ static int xvip_graph_dma_init(struct xvip_composite_device *xdev)
  {
+ 	struct device_node *ports;
+ 	struct device_node *port;
+-	int ret;
++	int ret = 0;
+ 
+ 	ports = of_get_child_by_name(xdev->dev->of_node, "ports");
+ 	if (ports == NULL) {
+@@ -474,13 +474,14 @@ static int xvip_graph_dma_init(struct xvip_composite_device *xdev)
+ 
+ 	for_each_child_of_node(ports, port) {
+ 		ret = xvip_graph_dma_init_one(xdev, port);
+-		if (ret < 0) {
++		if (ret) {
+ 			of_node_put(port);
+-			return ret;
++			break;
+ 		}
+ 	}
+ 
+-	return 0;
++	of_node_put(ports);
++	return ret;
+ }
+ 
+ static void xvip_graph_cleanup(struct xvip_composite_device *xdev)
 -- 
 2.35.1
 
