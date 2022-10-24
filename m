@@ -2,236 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8F760BDDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF2A60BDCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbiJXWvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        id S231229AbiJXWth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiJXWvA (ORCPT
+        with ESMTP id S232114AbiJXWs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:51:00 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0F231F00D;
-        Mon, 24 Oct 2022 14:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=gfB8tVU+LuMTrh+dIxvKpaRgS9+mcOLabQElZ+4YZuA=; b=EiQuqgLQV+7+7zXEfXvtROS+4l
-        2Yo8LkBUEGHw/Nx/yXX24JV4myFVVWDEKNFJKD1EABhMdu9wY4gzKf5NeMgt+t00sWnUAkEbb48Lp
-        vUHdvmNBnUKYrYUBUksce1Ahga4TnCEQa1ekvnRz/QWujntk6DleTWy0JILlAfUEPn9mcvidZAeTK
-        6/bVcCS65cNo0vNH+U6/MUha/LhtXGJjzeYkvEI0CsC2ztYwhQigqhPsetS8wl0S+qmj4KHnJipi7
-        Vcdh52L7H4sqjm+qdagO8/8El7I2NEWID34XPdYHS75dtk6ukXPnbHfCziT+BQCpRIkLDGxXLJ82F
-        /h7zB9nA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1on3Vo-00DZ91-2k;
-        Mon, 24 Oct 2022 19:53:28 +0000
-Date:   Mon, 24 Oct 2022 20:53:28 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>, willy@infradead.org,
-        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>, torvalds@linux-foundation.org,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jlayton@redhat.com
-Subject: Re: How to convert I/O iterators to iterators, sglists and RDMA lists
-Message-ID: <Y1btOP0tyPtcYajo@ZenIV>
-References: <Y01VjOE2RrLVA2T6@infradead.org>
- <1762414.1665761217@warthog.procyon.org.uk>
- <1415915.1666274636@warthog.procyon.org.uk>
- <Y1an1NFcowiSS9ms@infradead.org>
+        Mon, 24 Oct 2022 18:48:59 -0400
+Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4882DB7BF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:10:41 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id C67378C2181;
+        Mon, 24 Oct 2022 20:16:41 +0000 (UTC)
+Received: from pdx1-sub0-mail-a298.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 0D1978C22EE;
+        Mon, 24 Oct 2022 20:16:41 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1666642601; a=rsa-sha256;
+        cv=none;
+        b=4I7a8bEr2vI+XSkkI9KU3OcV2gMVY0CaQpzmCkUpr+kIB/gPRyWihiBQLCM7/GsyQWsbwr
+        dQEqOjeXp/WtOl34EngTdnC4itwlJLv7ZtfPzk3DVFkmSKYNtCefCMgetfzAdG94d8Y1q6
+        qNTOZavCI6hs7hYhx7Qrpkjoo8KKoDf4xLhmK35kkLb6KGdYJICYQeNq7XNAFqe4VqXYlg
+        qj64WXbQHuz68KW1/WBx7MzbWIQ7I5TXrjTP1oE9AMAFkz3WlPspbPPK+C+zNL5CiDBs6t
+        MH5K2nYkLARhSMvDXJQ+FiQJw/RQ3gGrvw4MKo3Xg/QCe1ACQ4SvtxhOCb+UeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1666642601;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=E+6NG2mvlpLLJ85Th2asX21rqEhsiDSrdhbac4JqZAs=;
+        b=vpCxxjsVyCHjunATIg6t6Nq5aj+QJKIj2PIjGf9C59Mc7lRcJdfhrePFLZt0jMks0GL3ED
+        L700ajNbsudC7lhuZ/KTGxvWSLM+X4ghD5I4T3x6NCR4moTy3nuu0gVe3l8bHU8TNpU9fU
+        TfGp70BoxTuuR8Co/rYeMHG5kF3hipSwxjiSPF+iizNulMO9JEzvYZdOMcCppEWpq+QAAX
+        0Xzdb0l8HCyPAqLv0j63pug0Mq2Hanm67D6rjtWTsREZy+sHOTyrRp2GdyauERMIgZSwMA
+        mnN6NodTO7qkvIDzRiHT+gZWEnicZm7ke4okyDuGG74SHXlCJHyNieqewieBLw==
+ARC-Authentication-Results: i=1;
+        rspamd-6955c7cd5b-qjg4r;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Lyrical-Juvenile: 08f0602734b81ede_1666642601522_1040466824
+X-MC-Loop-Signature: 1666642601522:267415736
+X-MC-Ingress-Time: 1666642601521
+Received: from pdx1-sub0-mail-a298.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.122.234.250 (trex/6.7.1);
+        Mon, 24 Oct 2022 20:16:41 +0000
+Received: from offworld (unknown [104.36.25.250])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a298.dreamhost.com (Postfix) with ESMTPSA id 4Mx5vB0LRzz3d;
+        Mon, 24 Oct 2022 13:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1666642600;
+        bh=E+6NG2mvlpLLJ85Th2asX21rqEhsiDSrdhbac4JqZAs=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=KYbZkHKpdEDF1x0BlTWLzp9CTXdEWEk9M1lgjqwPTuVcXo6SE4L1p1q+2O4+8rCTv
+         YDzeaGhgJywuZv8zfj7ERNVrlel523vFZYFxa0rXXdcMG8Y7zb1qEkhCjXRIWeA2h0
+         SQ/dPPYZ9T2Hj/GQ+ghU773V4+Jo8xQWC6eD/gvNddH/8nfF9G+M6E+MGNIop/nFgc
+         taQ0fLYK654E4pk6A0Is/hMyQYz5+/qdBrjLdTHhQYW/WLNXUxVK1LMq7aBQYC8bCY
+         HCuziWKrZOs/hll0g1PRW623Jyjk2JnVZRDUkgLcuyGS9GhbD2kHe0sf2bkRwAtLAd
+         +6KkjRs9+sPcw==
+Date:   Mon, 24 Oct 2022 12:55:04 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Huang Ying <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH] memory tier, sysfs: rename attribute "nodes" to
+ "nodelist"
+Message-ID: <20221024195504.k4j44l7rtowhpdx7@offworld>
+Mail-Followup-To: Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Michal Hocko <mhocko@kernel.org>, Tim Chen <tim.c.chen@intel.com>,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>
+References: <20221020015122.290097-1-ying.huang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <Y1an1NFcowiSS9ms@infradead.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221020015122.290097-1-ying.huang@intel.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 07:57:24AM -0700, Christoph Hellwig wrote:
+On Thu, 20 Oct 2022, Huang Ying wrote:
 
-> So I think the iterator to iterator is a really bad idea and we should
-> not have it at all.  It just works around the issue about not being
-> able to easily keeping state after an iter based get_user_pages, but
-> that is beeing addressed at the moment.  The iter to ib_sge/scatterlist
-> are very much RDMA specific at the moment, so I guess that might be a
-> good place to keep them.  In fact I suspect the scatterlist conversion
-> should not be a public API at all, but hidden in rw.c and only be used
-> internally for the DMA mapping.
+>In sysfs, we use attribute name "cpumap" or "cpus" for cpu mask and
+>"cpulist" or "cpus_list" for cpu list.  For example, in my system,
+>
+> $ cat /sys/devices/system/node/node0/cpumap
+> f,ffffffff
+> $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus
+> 0,00100004
+> $ cat cat /sys/devices/system/node/node0/cpulist
+> 0-35
+> $ cat /sys/devices/system/cpu/cpu2/topology/core_cpus_list
+> 2,20
+>
+>It looks reasonable to use "nodemap" for node mask and "nodelist" for
+>node list.  So, rename the attribute to follow the naming convention.
+>
+>Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+>Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>Cc: Alistair Popple <apopple@nvidia.com>
+>Cc: Bharata B Rao <bharata@amd.com>
+>Cc: Dan Williams <dan.j.williams@intel.com>
+>Cc: Dave Hansen <dave.hansen@intel.com>
+>Cc: Davidlohr Bueso <dave@stgolabs.net>
+>Cc: Hesham Almatary <hesham.almatary@huawei.com>
+>Cc: Jagdish Gediya <jvgediya.oss@gmail.com>
+>Cc: Johannes Weiner <hannes@cmpxchg.org>
+>Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>Cc: Michal Hocko <mhocko@kernel.org>
+>Cc: Tim Chen <tim.c.chen@intel.com>
+>Cc: Wei Xu <weixugc@google.com>
+>Cc: Yang Shi <shy828301@gmail.com>
 
-1) iter-to-scatterlist use is much wider than RDMA.  Other places like that
-include e.g. vhost_scsi_map_to_sgl(), p9_get_mapped_pages(),
-rds_message_zcopy_from_user(), tls_setup_from_iter()...
-
-2) there's a limit to how far we can propagate an arbitrary iov_iter -
-ITER_IOVEC/ITER_UBUF ones are absolutely tied to mm_struct of the
-originating process.  We can't use them for anything async - not
-without the horrors a-la use_mm().
-
-3) sendmsg() and recvmsg() are not suited for the situations where
-we have a bunch of pages + some kmalloc'ed object.  Consider e.g.
-NFS write; what goes on the wire is a combination of fixed-sized
-request put together by NFS client code with pages containing the
-data to be sent.  Ideally we'd like to send the entire bunch at
-once; AFAICS there are only 3 ways to do that -
-	* virt_to_page() for the fixed-sized part, build ITER_BVEC
-iterator in ->msg_iter containing that page + the rest of submitted
-pages, pass to ->sendmsg().
-	* kmap() each data page, build ITER_KVEC iterator, pass to
-->sendmsg().  Forget about any kind of zero-copy.  And that's
-kmap(), not kmap_local_page().
-	* try to implement heterogeneous iov_iter, with mix of (at
-least) kvec and bvec parts.  Fucking nightmare, IMO, and anything
-similar to iov_iter_get_pages() on those will have an insane
-semantics.
-	We can do separate sendmsg() for kvec and bvec parts,
-but that doesn't come for free either.  *AND* bvec part is very
-likely not the original iterator we got those pages from.
-
-Unless I'm misunderstanding dhowells, that's not too dissimilar to
-the reasons behind his proposed primitive...
-
-My problem with all that stuff is that we ought to sort out the
-lifetime and pin_user issues around the iov_iter.  What I really
-want to avoid is "no worries, we'd extracted stuff into ITER_BVEC, it's
-stable and can be passed around in arbitrary way" kind of primitive.
-Because *that* has no chance to work.
-
-As far as I can see, we have the following constraints:
-
-	* page references put into ITER_BVEC (and ITER_XARRAY) must not
-go away while the iov_iter is being used.  That's on the creator of
-iov_iter.
-
-	* pages found in iterator might be used past the lifetime of
-iterator.  We need the underlying pages to survive until the last
-use.  "Grab a page reference" is *NOT* a solution in general case.
-
-	* pages found in data-destination iterator may have their
-contents modified, both during the iterator lifetime and asynchronously.
-If it has a chance to be a user-mapped page, we must either
-	a) have it locked by caller and have no modifications after
-it gets unlocked or
-	b) have it pinned (sensu pin_user_pages()) by the caller and
-have no modifications until the unpin_user_page().
-
-	* data objects located in those pages might have the
-lifetime *NOT* controlled by page refcount.  In particular, if we
-grab a page reference to something kmalloc'ed, holding onto that
-reference is not enough to make the access to data safe in any sense
-other than "it won't oops on you".  kfree() won't care about the
-elevated page refcount and kmalloc() after that kfree() might reuse
-the same memory.  That's the main reason why iov_iter_get_pages()
-on ITER_KVEC is a non-starter - too dangerous.  We can find the
-underlying pages, but we shouldn't grab references to those;
-the caller must make sure that object will not be freed until
-after the async access ends (by arranging a suitable completion
-callback of some sort, etc.)
-
-	* iov_iter_get_pages...() is the only place where we find
-the underlying pages.  All other primitives are synchronous -
-they need pages to be alive and in a suitable state for access
-at the moment they are called, but that's it.
-
-	* page references obtained from iov_iter_get_pages...() can
-end up in various places.  No, it's not just bio - not even close
-to that.  Any place where we might retain those references for
-async work MUST have a way to tell whether the reference is counting
-and whether we should do unpin_user_page when we are done.  This
-really needs to be audited.  We need to understand where those
-page references might end up and how can the caller tell when
-async access is finished.
-	Note that one of those places is skb fragment list; MSG_ZEROCOPY
-sendmsg() can and will stick page references in there.  "managed" shite
-tries to deal with that.  I'm not fond of the way it's done, to put it mildly.
-It _might_ cope with everything io-uring throws at it at the moment,
-but the whole skb_zcopy_downgrade_managed() thing is asking for
-trouble.  Again, randomly deciding to go grab a reference to
-a page we got from fuck knows where is a bad, bad idea.
-
-	BTW, for some taste of the fun involved in that audit,
-try to track the call chains leading to osd_req_op_extent_osd_data_bvec_pos()
-and see what pages might end up stuffed into ceph_osd_data by it; later
-(possibly much later) those will be stuffed into ITER_BVEC msg->msg_iter...
-You'll come to hate drivers/block/rbd.c long before you are done with
-that ;-/
-
-
-	AFAICS, we need the following:
-
-1) audit all places where we stuff something into ITER_BVEC/ITER_XARRAY.
-I've some of that done (last cycle, so it might have been invalidated),
-but some really scary ones remain (ceph and nfs transport, mostly).
-
-2) audit all places where iov_iter_get_pages...() gets called, in order
-to find out where page references go and when are they dropped by the
-current mainline.  Note that there's a non-trivial interplay with
-ITER_BVEC audit - those pages can be used to populate an ITER_BVEC iterator
-*and* ITER_BVEC iterators can end up being passed to iov_iter_get_pages...().
-NOTE: in some cases we have logics for coalescing adjacent subranges of
-the same page; that can get interesting if we might end up mixing references
-of different sorts there (some pinning, some not).  AFAICS that should
-never happen for bio, but I'm not certain about e.g. nfs pagelists.
-
-My preference for iov_iter_get_pages...() replacement would be to have
-it do
-	pin_user_pages() if it's a data-destination user-backed iterator
-	get_user_pages() if it's a data-source user-backed iterator
-	just return the fucking struct page * if it's not user-backed.
-Caller of iov_iter_get_pages...() replacement should be aware of the
-kind of iterator it's dealing with, on the level of "is it user-backed"
-and "is it data-destination".  It needs that to decide what to do with
-the page references when we are done with them.  Blind grabbing refcount
-on pages from ITER_BVEC is a bad idea.
-
-Another issue with iov_iter_get_pages...() is that compound page turns
-into a bunch of references to individual subpages; io-uring folks have
-noticed the problem, but their solution is... inelegant.  I wonder if
-we would be better off with a variant of the primitive that would give
-out compound pages; it would need different calling conventions,
-obviously (current ones assume that all pages except the first and
-the last one have PAGE_SIZE worth of data in them).
-
-Some questions from partial ITER_BVEC/ITER_XARRAY audit I'd done last
-cycle:
-
-Can we assume that all pages involved ->issue_read() are supposed to be
-locked by the caller?  netfs question, so that's over to dhowells...
-
-What protects pages involved in ITER_XARRAY iterator created by
-afs_read_dir()?  Note that we are not guaranteed inode_lock() on
-the directory in question...
-
-What is guaranteed for the pages involved in ceph transport?  I have
-not managed to get through the call graph for that stuff - too deep,
-varied and nasty; besides, there's some work from jlayton in the
-area, so...
-
-io_import_fixed() sets ITER_BVEC over pinned pages; see io_pin_pages() for
-the place where that's done.  A scary question is what prevents an early
-unpin of those...
-
-vring: fuck knows.  We have physical addresses stored and we work with
-pfn_to_page() results.  Insertion is up to users of those primitives and
-so's the exclusion of use vs. removals.  Hell knows what they store there
-and what kind of exclusion (if any) are they using.  It is *not* uniform.
-Note that if we can get a userland page there, we have to deal with more
-than just the primitive that calls copy_to_iter() - there's one right
-next to it doing kmap_atomic() + modify + unmap, with no reference to
-any iov_iter.  And it has exact same needs as copy_to_iter()
-in that respect...  I don't know the vdpa stuff anywhere near well enough,
-unfortunately.
-
-FWIW, I've ported #work.iov_iter on top of 6.1-rc1; let's use that
-as base point for any further work in those directions.
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
