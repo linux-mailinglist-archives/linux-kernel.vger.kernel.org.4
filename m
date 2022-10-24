@@ -2,185 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3751860BFAF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07B360BFB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbiJYAfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60490 "EHLO
+        id S229819AbiJYAgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiJYAfI (ORCPT
+        with ESMTP id S230071AbiJYAgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:35:08 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28322F379C;
-        Mon, 24 Oct 2022 16:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666652484; x=1698188484;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=RoufeO9wEAxd9O3tDmYlLEfHOyDcD//1OLGEXMd5a2Q=;
-  b=FspmMtSVRKu40ZTcprIdDu/f6c6LxJkxkLVTWYiONIxhOJ0XX/yh5oBf
-   Nm+SNDncFTwKMZv2oVjuYKzocKQ36TX5SaXiD/Yy8HylMVTqOdINoTlP2
-   j4iQ6vlhwF43cexzKHzP/y0Y6gEFQOT6b5vbxyZd4jG1FB/c720YcwXRY
-   eltWTKE7rBZY6E8REQhZHF/4vPkQQiDBVe+9eBLw0FIZxGqVHP+qQoNG1
-   MDm7mGLUAFp//em+BbK7r+5TLbev9OGWwujAU0ix2dPrMIVytdHrQoxJS
-   /DJmt2/dilF8cYrPgsdUwEyXO72/j1o2qYmLOMcvUDRSIqOozrduBz1Gt
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="307533038"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="307533038"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 16:01:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="694726919"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="694726919"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga008.fm.intel.com with ESMTP; 24 Oct 2022 16:01:23 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 16:01:23 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 24 Oct 2022 16:01:23 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.44) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 24 Oct 2022 16:01:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bAUB0bKdSgT7vGxu4l1Vu7rdbH1hnN38nby4I4U7J/X93G271dEShXKxHPmj9lWQpyYn3Uf9Wgkzc0Xf+ENIQti4V5BqVV/5pLQhmMe1M/jy0/l8oAEhwue9y16W9S6SB3U3Vined1XfKYwtLyiqk8/OlXRQp6AAb1k46RrPrHbQS7dqiG2Wr9ORvrgNFXLSDEFac/7m79dBfxcwGjdcuUi3YoheMAa+3Mm7LQQCWsSjjkAwTbpAH4V4sE+w/1OiZ6CDmecGDz/ggPyb9yHg3cykVw+rDM7GspTNuK2nmbMcshaGmBiaDI0tb8Ms2GINcKZCvseeSyNECjLwkvToFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RoufeO9wEAxd9O3tDmYlLEfHOyDcD//1OLGEXMd5a2Q=;
- b=BrU5J4ZXb274kmbm2h0RlNuTdWV+VGARyjo1wJDOA+MfH8uKIPakxvo51V5z32Ld8fewXlOarnB/rg0MEMcwckWm8coNzhajMNn1GZohHih9r9//+K6h8VjO1ayvDJh/LzKBUsqYIwro4jQfqQCYLkt0+1gDr/0IR4opvnQnWTfhyQLq7Cb/bAOkAQivxeoZKRahJ/If6E+J6m2OPrX55NunjI8tgMYonInJU7rpP4YOwvNuOxn01KjxFTZ/Mi2rih9vBq2xRZf7ep07SgoBVz7WmCTr3fqtX+cjttRuOoU8SK1ms6wAKeWdvPxr09s5wa7xSEh6w0lX5MKBIznV6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by SJ0PR11MB5615.namprd11.prod.outlook.com (2603:10b6:a03:305::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
- 2022 23:01:21 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::10a6:b76c:4fb1:2d60]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::10a6:b76c:4fb1:2d60%6]) with mapi id 15.20.5723.033; Mon, 24 Oct 2022
- 23:01:21 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Mehta, Sohil" <sohil.mehta@intel.com>,
-        "Joseph, Jithu" <jithu.joseph@intel.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Macieira, Thiago" <thiago.macieira@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "markgross@kernel.org" <markgross@kernel.org>
-Subject: RE: [PATCH 03/14] platform/x86/intel/ifs: return a more appropriate
- Error code
-Thread-Topic: [PATCH 03/14] platform/x86/intel/ifs: return a more appropriate
- Error code
-Thread-Index: AQHY5YytAwM/DYnC50+zpM1ZuCkJ7a4eLNiAgAAAxtA=
-Date:   Mon, 24 Oct 2022 23:01:21 +0000
-Message-ID: <SJ1PR11MB60837A038C5D87ECF3768735FC2E9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221021203413.1220137-4-jithu.joseph@intel.com>
- <238b55b0-7fe6-4923-ef8c-fb1cc1cd1c66@intel.com>
-In-Reply-To: <238b55b0-7fe6-4923-ef8c-fb1cc1cd1c66@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|SJ0PR11MB5615:EE_
-x-ms-office365-filtering-correlation-id: 8111c2b3-9d01-4fc8-4eb5-08dab613aad7
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: StM3MA1+5MULltzswPRf7lQ5S3iyLCB2/lQKdyYcyEkNoAcW/i1dgkqAmGzkYMUclekf/LMk2YZvxvMwMhNmmP5GqDKyjAqGLTCF7JNV4kuZfzrV2kmQ0qhFBs+5r4qHVblSRjQSq3JOQPjebK8gw3NMD5Lo+VzpiefmJDLCnTQ5c9PqsCrgrNkz19TmFJoQBQyzaHvPtb94katZnKsTC4M1XjOCgkbpTuFnOGWOL+W61wA35AFMuD7HAyq6OBkhtZrLEJtAG+kp9RbOizJ0kdtELsr6TnrUZpSvL8qa+o0yymzsLS4uZrDmoAtVYlWhgUFWnNNtlm6kEuxNM+EfKWFm8rlITJvh8axdOPl1jKNcQc/WVzIlbsw2kfzG4iA0MrwGBaYK+HpjdBumVnFuSA0F3TKGgGsP66a0fE1kZtL66PH69y5UZjAFL+YdaVcCXxvo3MNf8WtlexAnodW1tU5fiz+ZyDvcwbCGf/1cdmyfTlRJLMR6RdjJ8XpKObu/5CPsMVkLLCXJ5jz13JSZ/9kc59OIMi79F9bmqwtvrc4Of+avnTJWOEqshZ2nNSZcuZthRjYkPIfbBGYXtq+pylkE75gUCVo7qek5zwkDkMheXTmLe+7QLU2K6951JSR4fwTJNZ+mNSVTaJ6LzYtgeVxX1cTZ+I665O+T4ITB6c4XbJsq1VZrcrWaDl7sUmyI3hSKR1oxz5V1ENiP8JvhxQid+buS5Qi6ir54AqxE/76MgevJE4ZAvmbpu4ro6KWU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(396003)(39860400002)(136003)(366004)(346002)(451199015)(8936002)(5660300002)(41300700001)(7416002)(52536014)(26005)(9686003)(6636002)(66946007)(54906003)(110136005)(76116006)(66556008)(64756008)(66446008)(66476007)(8676002)(4326008)(6506007)(7696005)(316002)(82960400001)(38070700005)(122000001)(38100700002)(55016003)(186003)(2906002)(558084003)(33656002)(86362001)(478600001)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SGU1WHF2TDRxWTQ3a3ViaVprcGw2QjlrZFAzK24yVEl0Q2VKbS9ITUI5dENL?=
- =?utf-8?B?MnplTEFIcWJEOFZkdVpBTjc5ellybXljQlNub2ZiWUZXbGJpbVp0a21PL1NW?=
- =?utf-8?B?NFBld2djR3FRbmhhWFZ2S0x6ZWdMcDYxUmRhQTk2dkVINWZaQk8wdWFXSUNl?=
- =?utf-8?B?VHNiV1pqUjVMTmt5KzhCNlEwK1ltb1FJb0NZS015K3lDQzNQeTNJVmdRODhR?=
- =?utf-8?B?dWplcDFxNWFRMDYyMjU2bWoybFhrUXZDZ3FpU1ZOY2lVZEs5dHl4eXNuS0dI?=
- =?utf-8?B?V29GN1d3b3dEVXkxRjRXSlBnTUxZMm5hSWRidEc0cFhpVG1sS1VDa1FkKy96?=
- =?utf-8?B?MlRrVDFES0UvUHhJdGUrUzFVc3ZVQ3NqSVpvQlN4cjJwUjRYci82d0E3MkEy?=
- =?utf-8?B?K3E3d2R5MnIxUlJBdGVLUUxYTE5ReERyMUc5TW9aOTZhVm9yYjcxTzVVNDBM?=
- =?utf-8?B?MmloQjRLUnZDdXVkMThYTlptOWVnaStodUtSNDRqV204dG5LV3pTQlRsSTk3?=
- =?utf-8?B?dW9kbmJmL3Q5Y0pQWHJ6VDFwaU5wN3pRSDlTL3cvQnZKUUpKK2xBWkt2Z3Qv?=
- =?utf-8?B?SFdIbVZ4UUFRcjM2VkYzbWxWVmdmS3UrK0d5Si95WWh1MUkrOFJCNWlaSzJN?=
- =?utf-8?B?TzdTQ3FwVGlHMWZETk9LTnBheDBZRzRLYVdlcEJaOStjQ0RhSDFPbmhoOGVo?=
- =?utf-8?B?NHJpWjJNN2xBUFVYWFk5TnRqVEoxdFVvT0hQQkc1NWNyTVRORUpLaUJIeHNz?=
- =?utf-8?B?cU9VOXVROEhvMTJwVlBseElLaEhKUERHaVRDOGtHdHpqTVZqZVZEK2p3RXRC?=
- =?utf-8?B?TFd1MEJMSXlmanQyV0FJRHBjWWVmZEkrZitsQy9HOXp0VVp4TnE2dXp5STFC?=
- =?utf-8?B?Z2NIblMrM3hyMldLQ3NYZjdoa1RPVTByb0ltWnJFSjgxTEwwTEtzcFMyZFo2?=
- =?utf-8?B?WEVJTkExY1BKQUJ5a1poeTRLd1NEQ2lsWUREc1hMc2RhR1lJb2hqL1BKRjBo?=
- =?utf-8?B?U0VLanhVRmtndUR5YW1KTkRRczlxQUhobUNXTisxYWZwU1JrR29WdmlNZ0ZP?=
- =?utf-8?B?bjBPVnFNVTlOeG4xUzlNZk5kR3J4dS8zR1QxRHVIVHlYU2pLWEhKWXVOQ2py?=
- =?utf-8?B?VUgwcjJVRWFQdUhYaUM1U09FYVg2WFU4V2Y0OHM0ZjFzanNiRDdWb2tvMVB5?=
- =?utf-8?B?eCt2bVZ6aWpmejNVRTRxSVUrcnN4aExvdktMVmd3YVpyVDFEVVV2WVpEdzB4?=
- =?utf-8?B?K0kxdWhFd0wya2o5WEZ0SnR4aWRuVEcySmdvYW8vck9NMnVSMW5VdCtackRs?=
- =?utf-8?B?cVNWN21rcVlhcXhCRDBGUmN2c05yTHd4eVNJTUk4S0RwUkNjZWVPdFVkd1p1?=
- =?utf-8?B?Y241aWI1ZENsc2ZSNkV3ZjNXZ0kxWThoVVAzZGZCbXl2Zk9UUkRhVW4xbVo2?=
- =?utf-8?B?cnJWdFBuYXdxTi9tcVNwV0VkaW5OcG9DNnExQmtJUFM4cnlkQlFnOFFyYWFL?=
- =?utf-8?B?QjJiY2dyTXNGTGRSS2lFd0hMSE5lNmR4andrNEF1Ujk2bXdOV1BIMzd1Y1pa?=
- =?utf-8?B?ZHVkOW1QSGxqUEZZQzA4cUNzMmFoN3BPNlg3NmVVb2RMWGVDV1FIekVWeTF6?=
- =?utf-8?B?NE81NGZPRXFYNWhCN25iUjh4RDlFTWhWQ3JzQjloMDFBTVVJRC94NmdtYllH?=
- =?utf-8?B?T21ITnp3bW1lRHFLY2hFQkNSRlZsNGUxUkRaTE1TSHdHNU5qUlFsUFZva1NU?=
- =?utf-8?B?MjB0TXBkQTZ3YnlsM3U1cWpHdzNLRnZUako0OXlCRzFvcnZzT25PTDBPNjVS?=
- =?utf-8?B?aVd5TEtEaVdrZDI4bzdCNDczbGp6aWU5ZTVXSTdYOW9GSVdSOTNjRGRIbEpo?=
- =?utf-8?B?NmYzMm8yK21WZlFnWjRIVjcvVXQvbmc3SnZrNWE0ZlU5dDVIOWphM25jTXpH?=
- =?utf-8?B?YnVsZG8rWDdEYnVLbUlQVEJXL2ExWnlwR0h2d281YzlZMkJoc3Bub1pLcWQ3?=
- =?utf-8?B?OFlZZnorc3hDOW1XQUs5emNybnBBSXpTbll0QjhFNUlyV3d5OWFGNC9CdlFK?=
- =?utf-8?B?SW15S2FMa0NrQ1F6ajVZb2NXMmtjUmN1ek9IU0xUWmExRlJDbXZ0ZGNQRm9t?=
- =?utf-8?Q?f87CQX6xULJmPxyccfTrdOqoo?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 24 Oct 2022 20:36:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C568683F15;
+        Mon, 24 Oct 2022 16:03:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 486AEB810B2;
+        Mon, 24 Oct 2022 23:03:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C80ECC433D7;
+        Mon, 24 Oct 2022 23:03:00 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 19:03:11 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arch@vger.kernel.org
+Subject: [RFC PATCH] text_poke/ftrace/x86: Allow text_poke() to be called in
+ early boot
+Message-ID: <20221024190311.65b89ecb@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8111c2b3-9d01-4fc8-4eb5-08dab613aad7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2022 23:01:21.2592
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: N+x2oCVjIzAe80jzwpMR6C4oM5Oh0YuEXcTZv9TSqMc3OX3C0cw+fx/3CbFkqikIFcNUM+GjCMIKpfrcPx3wqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5615
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBEbyB0aGUgZmlyc3QgMyBwYXRjaGVzIG5lZWQgYSAnRml4ZXMnIHRhZz8gT3IgaXMgdGhlIGlk
-ZWEgaGVyZSB0aGF0IHRoZSANCj4gZmVhdHVyZSBpc24ndCB0cnVseSBlbmFibGVkIHNvIGV2ZXJ5
-dGhpbmcgYmVmb3JlIHJlbW92aW5nIHRoZSBCUk9LRU4gdGFnIA0KPiB3aWxsIGJlIGNvbnNpZGVy
-ZWQgdG9nZXRoZXI/DQoNCk5vIHBvaW50IGluIGJhY2sgcG9ydGluZyBhICJGaXgiIHRvIGEgc3Rh
-YmxlIHJlbGVhc2UgdGhhdCBzdGlsbCBtYXJrcyB0aGUNCmRyaXZlciBhcyBCUk9LRU4NCg0KLVRv
-bnkNCg0KDQo=
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+
+Currently text_poke() just does a simple memcpy() on early boot because
+the kernel code is read writable at that time. But ftrace uses text_poke
+on the ftrace trampoline, which is not part of kernel text, and having non
+kernel text around that can be writable and executable causes several
+special cases where checks for system_state == SYSTEM_BOOTING needs to be
+done to ignore this special case. This is tricky and can lead to memory
+that can be kernel writable and executable after boot (due to bugs).
+
+By moving poking_init() to mm_init() which is called before ftrace_init(),
+this will allow ftrace to create its trampoline as read only, and the
+text_poke() will do its normal thing.
+
+This required some updates to fork and the maple_tree code to allow it to
+be called with enabling interrupts in the time when interrupts must remain
+disabled.
+
+text_poke() will still use memcpy() on kernel core text during boot up as
+it keeps things fast for all static_branch()es and such as well as
+modifying the ftrace locations at boot up too.
+
+This removes the special code added around ftrace trampolines in x86 to be
+writable and executable during boot up.
+
+Link: https://lore.kernel.org/r/20221024112730.180916b3@gandalf.local.home
+
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+
+ ** Note this may break other architectures. **
+
+ arch/x86/include/asm/ftrace.h |  6 ------
+ arch/x86/kernel/alternative.c |  6 ++++--
+ arch/x86/kernel/ftrace.c      | 29 +----------------------------
+ arch/x86/mm/init_64.c         |  2 --
+ init/main.c                   |  8 ++++----
+ kernel/fork.c                 |  8 +++++++-
+ lib/maple_tree.c              | 16 +++++++++++++++-
+ 7 files changed, 31 insertions(+), 44 deletions(-)
+
+diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+index 908d99b127d3..b27cd4de3fb3 100644
+--- a/arch/x86/include/asm/ftrace.h
++++ b/arch/x86/include/asm/ftrace.h
+@@ -85,12 +85,6 @@ struct dyn_arch_ftrace {
+ 
+ #ifndef __ASSEMBLY__
+ 
+-#if defined(CONFIG_FUNCTION_TRACER) && defined(CONFIG_DYNAMIC_FTRACE)
+-extern void set_ftrace_ops_ro(void);
+-#else
+-static inline void set_ftrace_ops_ro(void) { }
+-#endif
+-
+ #define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
+ static inline bool arch_syscall_match_sym_name(const char *sym, const char *name)
+ {
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 5cadcea035e0..ef30a6b78837 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1681,7 +1681,8 @@ void __ref text_poke_queue(void *addr, const void *opcode, size_t len, const voi
+ {
+ 	struct text_poke_loc *tp;
+ 
+-	if (unlikely(system_state == SYSTEM_BOOTING)) {
++	if (unlikely(system_state == SYSTEM_BOOTING &&
++		     core_kernel_text((unsigned long)addr))) {
+ 		text_poke_early(addr, opcode, len);
+ 		return;
+ 	}
+@@ -1707,7 +1708,8 @@ void __ref text_poke_bp(void *addr, const void *opcode, size_t len, const void *
+ {
+ 	struct text_poke_loc tp;
+ 
+-	if (unlikely(system_state == SYSTEM_BOOTING)) {
++	if (unlikely(system_state == SYSTEM_BOOTING &&
++		     core_kernel_text((unsigned long)addr))) {
+ 		text_poke_early(addr, opcode, len);
+ 		return;
+ 	}
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index bd165004776d..3aa4c02f63d2 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -415,8 +415,7 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 
+ 	set_vm_flush_reset_perms(trampoline);
+ 
+-	if (likely(system_state != SYSTEM_BOOTING))
+-		set_memory_ro((unsigned long)trampoline, npages);
++	set_memory_ro((unsigned long)trampoline, npages);
+ 	set_memory_x((unsigned long)trampoline, npages);
+ 	return (unsigned long)trampoline;
+ fail:
+@@ -424,32 +423,6 @@ create_trampoline(struct ftrace_ops *ops, unsigned int *tramp_size)
+ 	return 0;
+ }
+ 
+-void set_ftrace_ops_ro(void)
+-{
+-	struct ftrace_ops *ops;
+-	unsigned long start_offset;
+-	unsigned long end_offset;
+-	unsigned long npages;
+-	unsigned long size;
+-
+-	do_for_each_ftrace_op(ops, ftrace_ops_list) {
+-		if (!(ops->flags & FTRACE_OPS_FL_ALLOC_TRAMP))
+-			continue;
+-
+-		if (ops->flags & FTRACE_OPS_FL_SAVE_REGS) {
+-			start_offset = (unsigned long)ftrace_regs_caller;
+-			end_offset = (unsigned long)ftrace_regs_caller_end;
+-		} else {
+-			start_offset = (unsigned long)ftrace_caller;
+-			end_offset = (unsigned long)ftrace_caller_end;
+-		}
+-		size = end_offset - start_offset;
+-		size = size + RET_SIZE + sizeof(void *);
+-		npages = DIV_ROUND_UP(size, PAGE_SIZE);
+-		set_memory_ro((unsigned long)ops->trampoline, npages);
+-	} while_for_each_ftrace_op(ops);
+-}
+-
+ static unsigned long calc_trampoline_call_offset(bool save_regs)
+ {
+ 	unsigned long start_offset;
+diff --git a/arch/x86/mm/init_64.c b/arch/x86/mm/init_64.c
+index 3f040c6e5d13..03ac9f914f28 100644
+--- a/arch/x86/mm/init_64.c
++++ b/arch/x86/mm/init_64.c
+@@ -1398,8 +1398,6 @@ void mark_rodata_ro(void)
+ 	all_end = roundup((unsigned long)_brk_end, PMD_SIZE);
+ 	set_memory_nx(text_end, (all_end - text_end) >> PAGE_SHIFT);
+ 
+-	set_ftrace_ops_ro();
+-
+ #ifdef CONFIG_CPA_DEBUG
+ 	printk(KERN_INFO "Testing CPA: undo %lx-%lx\n", start, end);
+ 	set_memory_rw(start, (end-start) >> PAGE_SHIFT);
+diff --git a/init/main.c b/init/main.c
+index aa21add5f7c5..e5f4ae2d4cca 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -860,6 +860,10 @@ static void __init mm_init(void)
+ 	/* Should be run after espfix64 is set up. */
+ 	pti_init();
+ 	kmsan_init_runtime();
++	proc_caches_init();
++	radix_tree_init();
++	maple_tree_init();
++	poking_init();
+ }
+ 
+ #ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+@@ -1011,8 +1015,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	if (WARN(!irqs_disabled(),
+ 		 "Interrupts were enabled *very* early, fixing it\n"))
+ 		local_irq_disable();
+-	radix_tree_init();
+-	maple_tree_init();
+ 
+ 	/*
+ 	 * Set up housekeeping before setting up workqueues to allow the unbound
+@@ -1117,7 +1119,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	thread_stack_cache_init();
+ 	cred_init();
+ 	fork_init();
+-	proc_caches_init();
+ 	uts_ns_init();
+ 	key_init();
+ 	security_init();
+@@ -1134,7 +1135,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+ 	taskstats_init_early();
+ 	delayacct_init();
+ 
+-	poking_init();
+ 	check_bugs();
+ 
+ 	acpi_subsystem_init();
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 08969f5aa38d..672967a9cbe9 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -702,7 +702,13 @@ static __latent_entropy int dup_mmap(struct mm_struct *mm,
+ 	mas_destroy(&mas);
+ out:
+ 	mmap_write_unlock(mm);
+-	flush_tlb_mm(oldmm);
++	/*
++	 * poking_init() calls into here at early boot up.
++	 * At that time, there's no need to flush the tlb.
++	 * If we do, it will enable interrupts and cause a bug.
++	 */
++	if (likely(!early_boot_irqs_disabled))
++		flush_tlb_mm(oldmm);
+ 	mmap_write_unlock(oldmm);
+ 	dup_userfaultfd_complete(&uf);
+ fail_uprobe_end:
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index e1743803c851..e32206e840f6 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -1253,7 +1253,21 @@ static inline void mas_alloc_nodes(struct ma_state *mas, gfp_t gfp)
+ 		}
+ 
+ 		max_req = min(requested, max_req);
+-		count = mt_alloc_bulk(gfp, max_req, slots);
++
++		/*
++		 * text_poke() can be called very early, and it
++		 * calls dup_mm() which eventually leads down to here.
++		 * In that case, mt_alloc_bulk() will call kmem_cache_alloc_bulk()
++		 * which must be called with interrupts enabled. To avoid
++		 * doing that in early bootup, where interrupts must remain
++		 * disabled, just allocate a single slot.
++		 */
++		if (unlikely(early_boot_irqs_disabled)) {
++			slots[0] = mt_alloc_one(gfp | GFP_ATOMIC);
++			count = slots[0] ? 1 : 0;
++		} else {
++			count = mt_alloc_bulk(gfp, max_req, slots);
++		}
+ 		if (!count)
+ 			goto nomem_bulk;
+ 
+-- 
+2.35.1
+
