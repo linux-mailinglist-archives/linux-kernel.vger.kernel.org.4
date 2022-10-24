@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B04460A97E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3098060A530
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbiJXNVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37542 "EHLO
+        id S233429AbiJXMVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236272AbiJXNTp (ORCPT
+        with ESMTP id S233512AbiJXMTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:19:45 -0400
+        Mon, 24 Oct 2022 08:19:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5E484E6E;
-        Mon, 24 Oct 2022 05:28:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B058982D02;
+        Mon, 24 Oct 2022 04:58:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8798612E7;
-        Mon, 24 Oct 2022 12:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18C4C433C1;
-        Mon, 24 Oct 2022 12:24:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E58E661280;
+        Mon, 24 Oct 2022 11:49:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01680C433D6;
+        Mon, 24 Oct 2022 11:49:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614295;
-        bh=xnezvrP/hKkBp2MwA9j44y/EoiumJaeOfO3sR5XKtVY=;
+        s=korg; t=1666612144;
+        bh=1dNVR3X2IySjniVZceBtGxiJ2W3mMOjlJ9Z7yNLlviY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XclhKWIjRKZHnMWNr9aBKqgtaRtmqiwD1ygh7gUYZj/hnjoasGg5XH9JFwWaEkhyO
-         H7v7HPP/ZTjqEO80D/EIb+/MCyaE+IYmUI29IoIy9duasbNaF04Vdhxr0vwH0tUPYQ
-         Zcs+cpv9dx5LQ02AjIONKoVI5arK2eav87cvS8Dk=
+        b=LNVavv5WrR7OeYuLXPbo6uypjWfDIxZvKbTBq/6ik0/cX6Ex2Vx8ukiaaYECcKKUV
+         ZUBfLTCOnd/mkirCHLEHZ+9h5ypg7hZAKb6mGIRfNaON6oE4GQ/IPtR/wTzkLUF/5w
+         Hfy2PlbweD/FyzDzlrHoTyuWTit0Q1JoZhWYKFjA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Xu Qiang <xuqiang36@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 206/390] media: exynos4-is: fimc-is: Add of_node_put() when breaking out of loop
+Subject: [PATCH 4.14 086/210] spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
 Date:   Mon, 24 Oct 2022 13:30:03 +0200
-Message-Id: <20221024113031.541577286@linuxfoundation.org>
+Message-Id: <20221024112959.840946811@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Xu Qiang <xuqiang36@huawei.com>
 
-[ Upstream commit 211f8304fa21aaedc2c247f0c9d6c7f1aaa61ad7 ]
+[ Upstream commit 494a22765ce479c9f8ad181c5d24cffda9f534bb ]
 
-In fimc_is_register_subdevs(), we need to call of_node_put() for
-the reference 'i2c_bus' when breaking out of the
-for_each_compatible_node() which has increased the refcount.
+Add the missing clk_disable_unprepare() before return
+from spi_qup_pm_resume_runtime() in the error handling case.
 
-Fixes: 9a761e436843 ("[media] exynos4-is: Add Exynos4x12 FIMC-IS driver")
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: dae1a7700b34 (“spi: qup: Handle clocks in pm_runtime suspend and resume”)
+Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
+Link: https://lore.kernel.org/r/20220825065324.68446-2-xuqiang36@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/exynos4-is/fimc-is.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/spi/spi-qup.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
-index dc2a144cd29b..b52d2203eac5 100644
---- a/drivers/media/platform/exynos4-is/fimc-is.c
-+++ b/drivers/media/platform/exynos4-is/fimc-is.c
-@@ -213,6 +213,7 @@ static int fimc_is_register_subdevs(struct fimc_is *is)
+diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
+index c5c727274814..1ca678bcb527 100644
+--- a/drivers/spi/spi-qup.c
++++ b/drivers/spi/spi-qup.c
+@@ -1172,8 +1172,10 @@ static int spi_qup_pm_resume_runtime(struct device *device)
+ 		return ret;
  
- 			if (ret < 0 || index >= FIMC_IS_SENSORS_NUM) {
- 				of_node_put(child);
-+				of_node_put(i2c_bus);
- 				return ret;
- 			}
- 			index++;
+ 	ret = clk_prepare_enable(controller->cclk);
+-	if (ret)
++	if (ret) {
++		clk_disable_unprepare(controller->iclk);
+ 		return ret;
++	}
+ 
+ 	/* Disable clocks auto gaiting */
+ 	config = readl_relaxed(controller->base + QUP_CONFIG);
 -- 
 2.35.1
 
