@@ -2,82 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7692460C013
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7E060C019
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiJYAtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S230429AbiJYAuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiJYAtA (ORCPT
+        with ESMTP id S230361AbiJYAtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:49:00 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0A5BA26D;
-        Mon, 24 Oct 2022 16:26:01 -0700 (PDT)
-Received: by mail-pj1-f53.google.com with SMTP id s22-20020a17090a075600b002130d2ad62aso3567158pje.2;
-        Mon, 24 Oct 2022 16:26:01 -0700 (PDT)
+        Mon, 24 Oct 2022 20:49:45 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1423E8AA8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:28:34 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id j21so7065434qkk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7ffXUeVh0OWMsLu/w4dIsN2+l5Ec4+EQ+xcIE2wQCmE=;
+        b=a2/5uHiyoe4UgIkE7ENrtL5g7ilHiR0XYKYFFX+cB/VCqViv4ReVOIApDNRwA1/oQi
+         AIMj5Bk99GJleQE7A05crnkOmkMUeFiUt9Lj+VaoloAuv4XrC1c8AEaB3JZnPAK+P+Qn
+         HcZjWTal/8668BawnhwiAHPMneFkr+8Hcf8SoJEYzei/zbt1UCCEnhvM1jrEgnnwAp/d
+         dlB6Tqg+eIdfHa6V0GvX+rLTsbq85u3+yYR82Z9DPHTXRyNuCeqdF8ZnbG22JOG2W2Vs
+         CIF5+zc749bFf245Qm8forMkiuml/lzRxpxVgZeGXJ4gyZRWj3PND5XVME7LnTAFq6GN
+         JetA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q4tdyDrA1bdA8AvUPtQChZgerAt7IPUYG+zC2dp+joA=;
-        b=u07O9SJVSLR7qRka8foGel9DT3sLUDddTNoa4O0FcHQZ++2HDt/FG9oqFmfyX1GFlW
-         +GKWLKCPmx3JGiZ+ywQoayOOH47A8PcwGhWkMBaYDXQRp3oofsSxEm0A6yG621Umqx7U
-         mi+sQko0eJHmw/fEjsaIxgCXP2VpdWXV2Lt4ntHqsIkofL9qKRoNo+e7P9QtztZTwHF2
-         vw2ZhuctPJrUg5pnZ1Ava9JVBvOGfN1jLgxc2TagEsDKcD9Q2242Ya5QXtFYYwdcMlGh
-         KgDJ8EGwZtVhi3Bwsrp71joUDZMbhHJGR0/9P11TS40PhSVnfx/7sc8IeknzRPVky4r2
-         Jsyg==
-X-Gm-Message-State: ACrzQf35hKQ7ORMqAUxxRxlPDJmY62YBdx2VpAkiWnlyiV4l97RkXsAR
-        aeoc/EdclDaOk6kI9nXm3YM=
-X-Google-Smtp-Source: AMsMyM5ISj2GugLn8OCErSEf/BC8Ne0xIDQZiV/2jTZrT+QyKUlr71AWi7Pe9giCoHTbDoOYHizOBw==
-X-Received: by 2002:a17:902:ea10:b0:185:3d64:8d3f with SMTP id s16-20020a170902ea1000b001853d648d3fmr37259514plg.53.1666653961073;
-        Mon, 24 Oct 2022 16:26:01 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id t17-20020a17090340d100b001869e17baf4sm229018pld.127.2022.10.24.16.25.59
+        bh=7ffXUeVh0OWMsLu/w4dIsN2+l5Ec4+EQ+xcIE2wQCmE=;
+        b=I4q/vI60tSjglgrN+GS2oiNfklA+4GHy+iw+QmVBhmSIhw96BF3sZ1sVS7wmAlUMwj
+         bTEuejF+l/swkrD6tcb54c9TaoLO60EH4+VaZJo/HYF8YVvKLh4DLhrqDn3SRgAva04y
+         a5Dm1DEII3uIyCy8lVbehTetc3a43N4ddKYwUtH5NLFTR2Mj1htEDy2vdZ7fV8pnOxcj
+         u1lY5aY5jTXcyq+dTIBvA9PTX1K2Fs0bUkZcnNVhGVU6Gpp6mPdUToGo4abOrC7NSXho
+         q8QxDIAudIu8riWFU2bu7d7+sxm/BKACjmroX3/aIdYbIpxrWWhIyW4qQVnhqZ+2jMyu
+         X/lQ==
+X-Gm-Message-State: ACrzQf2HbLDMVti1dnJKyWNkTz2HSdo6ZFqgMzCz6hmzVZQP0H72bQ3w
+        dxWUVLsO4fhzcJ8OZDepRAG/Hg==
+X-Google-Smtp-Source: AMsMyM6OE1Xgo+EIkXchnxjWYVJphyHRmvaoCtraCQ355wUUL2Ho0SGvn8ttYeZbB/GzYv+kHFMA0A==
+X-Received: by 2002:a05:620a:152:b0:6ea:d82e:f7e2 with SMTP id e18-20020a05620a015200b006ead82ef7e2mr25057658qkn.164.1666654113300;
+        Mon, 24 Oct 2022 16:28:33 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id 135-20020a37068d000000b006b5cc25535fsm836772qkg.99.2022.10.24.16.28.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 16:26:00 -0700 (PDT)
-Message-ID: <76dfbb5c-24f9-2a7c-b16e-692b32a42593@acm.org>
-Date:   Mon, 24 Oct 2022 16:25:58 -0700
+        Mon, 24 Oct 2022 16:28:32 -0700 (PDT)
+Message-ID: <aa146042-2130-9fc3-adcd-c6d701084b4a@linaro.org>
+Date:   Mon, 24 Oct 2022 19:28:29 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v4 1/3] scsi: ufs: core: Revert "WB is only available on
- LUN #0 to #7"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/1] dt-bindings: net: snps,dwmac: Document queue config
+ subnodes
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20221021171055.85888-1-sebastian.reichel@collabora.com>
+ <761d6ae2-e779-2a4b-a735-960c716c3024@linaro.org>
+ <20221024222850.5zq426cnn75twmvn@mercury.elektranox.org>
 Content-Language: en-US
-To:     Bean Huo <beanhuo@iokpp.de>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
-        daejun7.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-References: <20221022213650.626766-1-beanhuo@iokpp.de>
- <20221022213650.626766-2-beanhuo@iokpp.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221022213650.626766-2-beanhuo@iokpp.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221024222850.5zq426cnn75twmvn@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/22/22 14:36, Bean Huo wrote:
-> One newer 'commit d3d9c4570285 ("scsi: ufs: Fix memory corruption by
+On 24/10/2022 18:28, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Sat, Oct 22, 2022 at 12:05:15PM -0400, Krzysztof Kozlowski wrote:
+>> On 21/10/2022 13:10, Sebastian Reichel wrote:
+>>> The queue configuration is referenced by snps,mtl-rx-config and
+>>> snps,mtl-tx-config. Most in-tree DTs put the referenced object
+>>> as child node of the dwmac node.
+>>>
+>>> This adds proper description for this setup, which has the
+>>> advantage of properly making sure only known properties are
+>>> used.
+>>>
+>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>>> ---
+>>> [...]
+>>
+>> Please update the DTS example with all this.
+> 
+> ok
 
-One -> A?
+BTW, I also found:
 
-> ufshcd_read_desc_param()")' has properly fixed stack overflow issue,
-> 'commit a2fca52ee640 ("scsi: ufs: WB is only available on LUN #0 to #7")'
-> is no longer required, we can revert it now.
+https://lore.kernel.org/linux-devicetree/20201214091616.13545-5-Sergey.Semin@baikalelectronics.ru/
+> 
+>>
+>>>  
+>>>    snps,mtl-tx-config:
+>>>      $ref: /schemas/types.yaml#/definitions/phandle
+>>>      description:
+>>> -      Multiple TX Queues parameters. Phandle to a node that can
+>>> -      contain the following properties
+>>> -        * snps,tx-queues-to-use, number of TX queues to be used in the
+>>> -          driver
+>>> -        * Choose one of these TX scheduling algorithms
+>>> -          * snps,tx-sched-wrr, Weighted Round Robin
+>>> -          * snps,tx-sched-wfq, Weighted Fair Queuing
+>>> -          * snps,tx-sched-dwrr, Deficit Weighted Round Robin
+>>> -          * snps,tx-sched-sp, Strict priority
+>>> -        * For each TX queue
+>>> -          * snps,weight, TX queue weight (if using a DCB weight
+>>> -            algorithm)
+>>> -          * Choose one of these modes
+>>> -            * snps,dcb-algorithm, TX queue will be working in DCB
+>>> -            * snps,avb-algorithm, TX queue will be working in AVB
+>>> -              [Attention] Queue 0 is reserved for legacy traffic
+>>> -                          and so no AVB is available in this queue.
+>>> -          * Configure Credit Base Shaper (if AVB Mode selected)
+>>> -            * snps,send_slope, enable Low Power Interface
+>>> -            * snps,idle_slope, unlock on WoL
+>>> -            * snps,high_credit, max write outstanding req. limit
+>>> -            * snps,low_credit, max read outstanding req. limit
+>>> -          * snps,priority, bitmask of the priorities assigned to the queue.
+>>> -            When a PFC frame is received with priorities matching the bitmask,
+>>> -            the queue is blocked from transmitting for the pause time specified
+>>> -            in the PFC frame.
+>>> +      Multiple TX Queues parameters. Phandle to a node that
+>>> +      implements the 'tx-queues-config' object described in
+>>> +      this binding.
+>>> +
+>>> +  tx-queues-config:
+>>> +    type: object
+>>> +    properties:
+>>> +      snps,tx-queues-to-use:
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>>> +        description: number of TX queues to be used in the driver
+>>> +      snps,tx-sched-wrr:
+>>> +        type: boolean
+>>> +        description: Weighted Round Robin
+>>> +      snps,tx-sched-wfq:
+>>> +        type: boolean
+>>> +        description: Weighted Fair Queuing
+>>> +      snps,tx-sched-dwrr:
+>>> +        type: boolean
+>>> +        description: Deficit Weighted Round Robin
+>>> +      snps,tx-sched-sp:
+>>> +        type: boolean
+>>> +        description: Strict priority
+>>> +    patternProperties:
+>>> +      "^queue[0-9]$":
+>>> +        description: Each subnode represents a queue.
+>>> +        type: object
+>>> +        properties:
+>>> +          snps,weight:
+>>> +            $ref: /schemas/types.yaml#/definitions/uint32
+>>> +            description: TX queue weight (if using a DCB weight algorithm)
+>>> +          snps,dcb-algorithm:
+>>> +            type: boolean
+>>> +            description: TX queue will be working in DCB
+>>> +          snps,avb-algorithm:
+>>
+>> Is DCB and AVB compatible with each other? If not, then this should be
+>> rather enum (with a string for algorithm name).
+>>
+>> This applies also to other fields which are mutually exclusive.
+> 
+> Yes and I agree it is ugly. But this is not a new binding, but just
+> properly describing the existing binding. It's not my fault :)
 
-Anyway:
+I understand (and did not think it's your fault), but you are
+redesigning them. Existing DTS will have to be updated. If this is
+already implemented by some other DTS, then well... they did not follow
+bindings, so it's their fault. :)
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+What I want to say, why refactoring it if the new format is still poor?
+> 
+>>> +            type: boolean
+>>> +            description:
+>>> +              TX queue will be working in AVB.
+>>> +              Queue 0 is reserved for legacy traffic and so no AVB is
+>>> +              available in this queue.
+>>> +          snps,send_slope:
+>>
+>> Use hyphens, no underscores.
+>> (This is already an incompatible change in bindings, so we can fix up
+>> the naming)
+> 
+> No, this is not an incompatible change in the bindings. It's 100%
+> compatible. What this patch does is removing the text description
+> for 'snps,mtl-tx-config' and instead documenting the node in YAML
+> syntax. 'snps,mtl-tx-config' does not specify where this node should
+> be, so many DTS files do this:
+
+Old binding did not document "tx-queues-config". Old binding had
+"snps,mtl-tx-config" which was a phandle, so this is an ABI break of
+bindings.
+
+You are changing the binding - adding new properties.
+
+> 
+> ethernet {
+>     compatible = "blabla";
+>     snps,mtl-tx-config = <&eth_tx_setup>;
+>     snps,mtl-rx-config = <&eth_rx_setup>;
+> 
+>     eth_tx_setup: tx-queues-config {
+>         properties;
+>     };
+> 
+>     eth_rx_setup: rx-queues-config {
+>         properties;
+>     };
+> };
+> 
+> This right now triggers a dt-validate warning, because the binding
+> does not expect 'tx-queues-config' and 'rx-queues-config'. This
+> patch fixes the binding to allow that common setup.
+
+Yes, I understand. It also brings a way to add new bindings bypassing
+the review process. It's super easy now to omit review, just do like this:
+1. Submit DTS with anything, without bindings.
+2. It might be applied. If not, keep resubmitting to different
+maintainers or platforms.
+3. Once it is in mainline, send whatever changes one wants saying "I am
+just fixing bindings" or "documenting existing usage".
+
+The properties were added in d976a525c371 ("net: stmmac: multiple queues
+dt configuration") which was not reviewed/acked by Rob.
+
+Awesome! My method of bypassing review works!
+
+> Also it improves
+> the validation for this common case. Having the queue config stored
+> somewhere else is still supported, but in that case the node is not
+> validated.
+
+I understand this as well and your way is good. I am not objecting to
+the method itself.
+
+But if you refactor this and introduce new properties to the binding,
+please make them correct.
+
+> 
+Best regards,
+Krzysztof
+
