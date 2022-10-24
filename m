@@ -2,154 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FC2609D2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5B6609D37
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiJXIwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
+        id S229835AbiJXI5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiJXIwk (ORCPT
+        with ESMTP id S229613AbiJXI5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:52:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF26744D;
-        Mon, 24 Oct 2022 01:52:38 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 08:52:33 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666601555;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fe5cUYaOyO4LInB2yVSxDGWGWGSQEQAqVZoCd+lv1ck=;
-        b=LolFnQFULv1Fw63R4S38bY84k68Fc5cR1/22CXCKBZdOohfKm+Sd5w8T+WtcOxuAR8M8hZ
-        9GxUOIhio6g0CSpYIuN6xBnu4DFLDJuw/aAaA4MF/II3BNQrRtVK/UElCrMnJ8yZ0+/Hh8
-        djq2c1IWuFmc7ZkgJGU7SiBTATJP9as+4ewRlHjmh+GjhVlFDI2oanmld6LQHkwXZe4dmz
-        NOXrA68IiS8LeNZ5LBfi8DgYL5ThwJHUjdlteHxhWORcrEC3wv8DZg72MroWTNaNFSwnrN
-        Skrv01/vjW1aiQOMU/Dr+3rLiHodrVWvQ3bvTzZ0qOtMedf/9GWqxbFo+TBZIg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666601555;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fe5cUYaOyO4LInB2yVSxDGWGWGSQEQAqVZoCd+lv1ck=;
-        b=f61ehkCpqmMwSZ3HulY48DC//dtlwp5xpmO8LseA3vZyAYcX/qB/vIW9yqCC/JpYFj/5UU
-        qoDdCzvlO37EVrCw==
-From:   "tip-bot2 for Babu Moger" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Remove arch_has_empty_bitmaps
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        Babu Moger <babu.moger@amd.com>, Borislav Petkov <bp@suse.de>,
-        Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+        Mon, 24 Oct 2022 04:57:05 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1062704
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666601824; x=1698137824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=QMN9/Q2iqFoCUnVFfnXeADLtay2zchM31nc4c91Fb94=;
+  b=eoT3cNri/sULiJa/92IGzO2NJGlQHfJmvzXsk30zQ7S60VwUNlPMHiVQ
+   yHjF26DTuFdmwx1coQRnTI+GQLPGz2MwiuSnJ16MjODfIIoQOPknJnxZv
+   sQRYZOh36Pf6ZEIynj+A0UGaxwvr77F84hN4sB8QGdEhwphLHhVN+FDCM
+   n6wwLbuwhhl+VHwTyrf/q1vfmekRmpPC2FhquI6KIYQSxqd0KyZECD2+f
+   cw4mkW+kAargiCTZUsqu0g1iM2x2KQluFb/Fl2gOxraeLuffugFygtpbu
+   cVEB9pYokvfrB9IY077hKdP/VYlBvvf1EY7NUIhymgI5c0FsADLfjxp7D
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="306102329"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="306102329"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 01:57:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="736337867"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="736337867"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 24 Oct 2022 01:57:03 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1omtGX-001MGV-2j;
+        Mon, 24 Oct 2022 11:57:01 +0300
+Date:   Mon, 24 Oct 2022 11:57:01 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Chen, Rong A" <rong.a.chen@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>,
         linux-kernel@vger.kernel.org
-In-Reply-To: <166430979654.372014.615622285687642644.stgit@bmoger-ubuntu>
-References: <166430979654.372014.615622285687642644.stgit@bmoger-ubuntu>
+Subject: Re: [driver-core:driver-core-testing] BUILD SUCCESS
+ 59789f3418dd3c0a187490d49e900a59a5c8d732
+Message-ID: <Y1ZTXa0VZrl9jvUU@smile.fi.intel.com>
+References: <635484ed.ADi+2sBza+UlAhjj%lkp@intel.com>
+ <Y1U0pINWo5yjUdc2@kroah.com>
+ <Y1WZSysScBH0/6kd@smile.fi.intel.com>
+ <Y1WbY903LjRATVwh@smile.fi.intel.com>
+ <a762dca8-2458-c40b-7a35-80971c46ac84@intel.com>
 MIME-Version: 1.0
-Message-ID: <166660155398.401.9624938541778955549.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a762dca8-2458-c40b-7a35-80971c46ac84@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cache branch of tip:
+On Mon, Oct 24, 2022 at 09:10:53AM +0800, Chen, Rong A wrote:
+> On 10/24/2022 3:52 AM, Andy Shevchenko wrote:
+> > On Sun, Oct 23, 2022 at 10:43:07PM +0300, Andy Shevchenko wrote:
+> > > On Sun, Oct 23, 2022 at 02:33:40PM +0200, Greg Kroah-Hartman wrote:
+> > > > On Sun, Oct 23, 2022 at 08:03:57AM +0800, kernel test robot wrote:
+> > > > > tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git driver-core-testing
+> > > > > branch HEAD: 59789f3418dd3c0a187490d49e900a59a5c8d732  device property: Constify parameter in device_dma_supported() and device_get_dma_attr()
+> > > > > 
+> > > > > Unverified Warning (likely false positive, please contact us if interested):
+> > > > > 
+> > > > > drivers/hwmon/iio_hwmon.c:155 iio_hwmon_probe() warn: could not determine type of argument 4
+> > > > 
+> > > > Andy, this is due to your changes, here's the offending code:
+> > > > 
+> > > > 	sname = devm_kasprintf(dev, GFP_KERNEL, "%pfwP", dev_fwnode(dev));
+> > > > 
+> > > > Now that dev_fwnode() is an inline function, the compiler is confused as
+> > > > to what function to select?  Maybe, I don't know, it seems odd, can you
+> > > > look into it?
+> > > 
+> > > Hmm... I can't reproduce on my side.
+> > > Any (additional) information about compiler, architecture, etc?
+> > 
+> > I found the original report, but I don't see how to extract the defconfig /
+> > config it used. Can you send that file to me?
+> > 
+> 
+> Hi Andy,
+> 
+> The original report can be found at https://lists.01.org/hyperkitty/list/kbuild@lists.01.org/thread/VE7CMY7FVIPYWHL4XMOCFWCNYTGZSTKP/
+> 
+> and config file can be downloaded from https://lists.01.org/hyperkitty/list/kbuild@lists.01.org/message/VE7CMY7FVIPYWHL4XMOCFWCNYTGZSTKP/attachment/2/config.ksh
 
-Commit-ID:     2d4daa549c17b6ba4845a751c7a78d3b2419d78f
-Gitweb:        https://git.kernel.org/tip/2d4daa549c17b6ba4845a751c7a78d3b2419d78f
-Author:        Babu Moger <babu.moger@amd.com>
-AuthorDate:    Tue, 27 Sep 2022 15:16:36 -05:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 24 Oct 2022 10:30:29 +02:00
+Thanks!
 
-x86/resctrl: Remove arch_has_empty_bitmaps
+Can't reproduce on my Debian (x86_64):
 
-The field arch_has_empty_bitmaps is not required anymore. The field
-min_cbm_bits is enough to validate the CBM (capacity bit mask) if the
-architecture can support the zero CBM or not.
+gcc (Debian 12.2.0-3) 12.2.0
+Copyright (C) 2022 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Babu Moger <babu.moger@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
-Link: https://lore.kernel.org/r/166430979654.372014.615622285687642644.stgit@bmoger-ubuntu
----
- arch/x86/kernel/cpu/resctrl/core.c        | 2 --
- arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 3 +--
- include/linux/resctrl.h                   | 6 +++---
- 3 files changed, 4 insertions(+), 7 deletions(-)
+Is it GCC issue?
 
-diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
-index 3266ea3..03cfbf0 100644
---- a/arch/x86/kernel/cpu/resctrl/core.c
-+++ b/arch/x86/kernel/cpu/resctrl/core.c
-@@ -828,7 +828,6 @@ static __init void rdt_init_res_defs_intel(void)
- 		if (r->rid == RDT_RESOURCE_L3 ||
- 		    r->rid == RDT_RESOURCE_L2) {
- 			r->cache.arch_has_sparse_bitmaps = false;
--			r->cache.arch_has_empty_bitmaps = false;
- 			r->cache.arch_has_per_cpu_cfg = false;
- 			r->cache.min_cbm_bits = 1;
- 		} else if (r->rid == RDT_RESOURCE_MBA) {
-@@ -849,7 +848,6 @@ static __init void rdt_init_res_defs_amd(void)
- 		if (r->rid == RDT_RESOURCE_L3 ||
- 		    r->rid == RDT_RESOURCE_L2) {
- 			r->cache.arch_has_sparse_bitmaps = true;
--			r->cache.arch_has_empty_bitmaps = true;
- 			r->cache.arch_has_per_cpu_cfg = true;
- 			r->cache.min_cbm_bits = 0;
- 		} else if (r->rid == RDT_RESOURCE_MBA) {
-diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-index 1dafbdc..1df0e32 100644
---- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-+++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-@@ -105,8 +105,7 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
- 		return false;
- 	}
- 
--	if ((!r->cache.arch_has_empty_bitmaps && val == 0) ||
--	    val > r->default_ctrl) {
-+	if ((r->cache.min_cbm_bits > 0 && val == 0) || val > r->default_ctrl) {
- 		rdt_last_cmd_puts("Mask out of range\n");
- 		return false;
- 	}
-diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 0cf5b20..0cee154 100644
---- a/include/linux/resctrl.h
-+++ b/include/linux/resctrl.h
-@@ -89,11 +89,12 @@ struct rdt_domain {
- /**
-  * struct resctrl_cache - Cache allocation related data
-  * @cbm_len:		Length of the cache bit mask
-- * @min_cbm_bits:	Minimum number of consecutive bits to be set
-+ * @min_cbm_bits:	Minimum number of consecutive bits to be set.
-+ *			The value 0 means the architecture can support
-+ *			zero CBM.
-  * @shareable_bits:	Bitmask of shareable resource with other
-  *			executing entities
-  * @arch_has_sparse_bitmaps:	True if a bitmap like f00f is valid.
-- * @arch_has_empty_bitmaps:	True if the '0' bitmap is valid.
-  * @arch_has_per_cpu_cfg:	True if QOS_CFG register for this cache
-  *				level has CPU scope.
-  */
-@@ -102,7 +103,6 @@ struct resctrl_cache {
- 	unsigned int	min_cbm_bits;
- 	unsigned int	shareable_bits;
- 	bool		arch_has_sparse_bitmaps;
--	bool		arch_has_empty_bitmaps;
- 	bool		arch_has_per_cpu_cfg;
- };
- 
+Any pointers where I can download the compiler you are using?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
