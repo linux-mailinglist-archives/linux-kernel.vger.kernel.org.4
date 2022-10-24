@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114B060AB67
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDAF60A6BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236573AbiJXNvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34718 "EHLO
+        id S232050AbiJXMiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236503AbiJXNub (ORCPT
+        with ESMTP id S234337AbiJXMew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:50:31 -0400
+        Mon, 24 Oct 2022 08:34:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD80BA90A;
-        Mon, 24 Oct 2022 05:42:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B306F58504;
+        Mon, 24 Oct 2022 05:05:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CC7E612FE;
-        Mon, 24 Oct 2022 12:28:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535A5C43142;
-        Mon, 24 Oct 2022 12:28:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DB0161311;
+        Mon, 24 Oct 2022 12:02:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D272C433D6;
+        Mon, 24 Oct 2022 12:02:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614520;
-        bh=ZCeqhoq1YN+Prn8kkYYBW1IXUcvtUsTkx6uyw8fyukE=;
+        s=korg; t=1666612927;
+        bh=D10J9yBbVDhCPyPeEabyHA9i/KE6B7sbMw0ny/UqgeY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IMlAKJbXmvX5c7PnwMKPhy5gHkZ18eX5TnjyugCESIPt0fq2LOkEXVBLsFKBwW2/8
-         lG+mNLN2h+anj2bEjUEvw3GBm+VVZ7mSEv5/3Vsjf6uuTVH62sbD5cRikE/f4yFeAN
-         3q2d2/oy1HX2UlZhwoNvGGnnmbJHWWpJvBEgooCY=
+        b=URM9KukGNMflYMSxV4AYHJM51WBO74L1qcIc199vtWFHX/lL2X0zwMtiYW9v5jS4F
+         YR1TUTwYXF3VWxeJliqJdi+0zlqketSCGpqzkyp/fTsCP1BacNDrz6Z4Ucu0Jvzl8f
+         tITkcTZuguvK5zj5h9zzE02kN1LbtOYHR7Plc+CU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Yu <chao@kernel.org>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org, Chao Qin <chao.qin@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 293/390] f2fs: fix to account FS_CP_DATA_IO correctly
-Date:   Mon, 24 Oct 2022 13:31:30 +0200
-Message-Id: <20221024113035.474956443@linuxfoundation.org>
+Subject: [PATCH 4.19 172/229] powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
+Date:   Mon, 24 Oct 2022 13:31:31 +0200
+Message-Id: <20221024113004.659711297@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,136 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Chao Qin <chao.qin@intel.com>
 
-[ Upstream commit d80afefb17e01aa0c46a8eebc01882e0ebd8b0f6 ]
+[ Upstream commit 2d93540014387d1c73b9ccc4d7895320df66d01b ]
 
-f2fs_inode_info.cp_task was introduced for FS_CP_DATA_IO accounting
-since commit b0af6d491a6b ("f2fs: add app/fs io stat").
+When value < time_unit, the parameter of ilog2() will be zero and
+the return value is -1. u64(-1) is too large for shift exponent
+and then will trigger shift-out-of-bounds:
 
-However, cp_task usage coverage has been increased due to below
-commits:
-commit 040d2bb318d1 ("f2fs: fix to avoid deadloop if data_flush is on")
-commit 186857c5a14a ("f2fs: fix potential recursive call when enabling data_flush")
+shift exponent 18446744073709551615 is too large for 32-bit type 'int'
+Call Trace:
+ rapl_compute_time_window_core
+ rapl_write_data_raw
+ set_time_window
+ store_constraint_time_window_us
 
-So that, if data_flush mountoption is on, when data flush was
-triggered from background, the IO from data flush will be accounted
-as checkpoint IO type incorrectly.
-
-In order to fix this issue, this patch splits cp_task into two:
-a) cp_task: used for IO accounting
-b) wb_task: used to avoid deadlock
-
-Fixes: 040d2bb318d1 ("f2fs: fix to avoid deadloop if data_flush is on")
-Fixes: 186857c5a14a ("f2fs: fix potential recursive call when enabling data_flush")
-Signed-off-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Chao Qin <chao.qin@intel.com>
+Acked-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/checkpoint.c | 13 +++++++++----
- fs/f2fs/data.c       |  4 ++--
- fs/f2fs/f2fs.h       |  4 +++-
- fs/f2fs/segment.c    |  2 +-
- 4 files changed, 15 insertions(+), 8 deletions(-)
+ drivers/powercap/intel_rapl.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 0653c54873b5..cd46a64ace1b 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -1047,7 +1047,8 @@ void f2fs_remove_dirty_inode(struct inode *inode)
- 	spin_unlock(&sbi->inode_lock[type]);
- }
- 
--int f2fs_sync_dirty_inodes(struct f2fs_sb_info *sbi, enum inode_type type)
-+int f2fs_sync_dirty_inodes(struct f2fs_sb_info *sbi, enum inode_type type,
-+						bool from_cp)
- {
- 	struct list_head *head;
- 	struct inode *inode;
-@@ -1082,11 +1083,15 @@ int f2fs_sync_dirty_inodes(struct f2fs_sb_info *sbi, enum inode_type type)
- 	if (inode) {
- 		unsigned long cur_ino = inode->i_ino;
- 
--		F2FS_I(inode)->cp_task = current;
-+		if (from_cp)
-+			F2FS_I(inode)->cp_task = current;
-+		F2FS_I(inode)->wb_task = current;
- 
- 		filemap_fdatawrite(inode->i_mapping);
- 
--		F2FS_I(inode)->cp_task = NULL;
-+		F2FS_I(inode)->wb_task = NULL;
-+		if (from_cp)
-+			F2FS_I(inode)->cp_task = NULL;
- 
- 		iput(inode);
- 		/* We need to give cpu to another writers. */
-@@ -1215,7 +1220,7 @@ static int block_operations(struct f2fs_sb_info *sbi)
- 	/* write all the dirty dentry pages */
- 	if (get_pages(sbi, F2FS_DIRTY_DENTS)) {
- 		f2fs_unlock_all(sbi);
--		err = f2fs_sync_dirty_inodes(sbi, DIR_INODE);
-+		err = f2fs_sync_dirty_inodes(sbi, DIR_INODE, true);
- 		if (err)
- 			return err;
- 		cond_resched();
-diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-index b2016fd3a7ca..9270330ec5ce 100644
---- a/fs/f2fs/data.c
-+++ b/fs/f2fs/data.c
-@@ -2912,7 +2912,7 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
- 	}
- 	unlock_page(page);
- 	if (!S_ISDIR(inode->i_mode) && !IS_NOQUOTA(inode) &&
--			!F2FS_I(inode)->cp_task && allow_balance)
-+			!F2FS_I(inode)->wb_task && allow_balance)
- 		f2fs_balance_fs(sbi, need_balance_fs);
- 
- 	if (unlikely(f2fs_cp_error(sbi))) {
-@@ -3210,7 +3210,7 @@ static inline bool __should_serialize_io(struct inode *inode,
- 					struct writeback_control *wbc)
- {
- 	/* to avoid deadlock in path of data flush */
--	if (F2FS_I(inode)->cp_task)
-+	if (F2FS_I(inode)->wb_task)
- 		return false;
- 
- 	if (!S_ISREG(inode->i_mode))
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 70fec13d35b7..c03fdda1bddf 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -701,6 +701,7 @@ struct f2fs_inode_info {
- 	unsigned int clevel;		/* maximum level of given file name */
- 	struct task_struct *task;	/* lookup and create consistency */
- 	struct task_struct *cp_task;	/* separate cp/wb IO stats*/
-+	struct task_struct *wb_task;	/* indicate inode is in context of writeback */
- 	nid_t i_xattr_nid;		/* node id that contains xattrs */
- 	loff_t	last_disk_size;		/* lastly written file size */
- 	spinlock_t i_size_lock;		/* protect last_disk_size */
-@@ -3400,7 +3401,8 @@ int f2fs_recover_orphan_inodes(struct f2fs_sb_info *sbi);
- int f2fs_get_valid_checkpoint(struct f2fs_sb_info *sbi);
- void f2fs_update_dirty_page(struct inode *inode, struct page *page);
- void f2fs_remove_dirty_inode(struct inode *inode);
--int f2fs_sync_dirty_inodes(struct f2fs_sb_info *sbi, enum inode_type type);
-+int f2fs_sync_dirty_inodes(struct f2fs_sb_info *sbi, enum inode_type type,
-+								bool from_cp);
- void f2fs_wait_on_all_pages(struct f2fs_sb_info *sbi, int type);
- int f2fs_write_checkpoint(struct f2fs_sb_info *sbi, struct cp_control *cpc);
- void f2fs_init_ino_entry_info(struct f2fs_sb_info *sbi);
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 173161f1ced0..3123fd49c8ce 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -561,7 +561,7 @@ void f2fs_balance_fs_bg(struct f2fs_sb_info *sbi, bool from_bg)
- 		mutex_lock(&sbi->flush_lock);
- 
- 		blk_start_plug(&plug);
--		f2fs_sync_dirty_inodes(sbi, FILE_INODE);
-+		f2fs_sync_dirty_inodes(sbi, FILE_INODE, false);
- 		blk_finish_plug(&plug);
- 
- 		mutex_unlock(&sbi->flush_lock);
+diff --git a/drivers/powercap/intel_rapl.c b/drivers/powercap/intel_rapl.c
+index 8cbfcce57a06..ae6721333c0f 100644
+--- a/drivers/powercap/intel_rapl.c
++++ b/drivers/powercap/intel_rapl.c
+@@ -1068,6 +1068,9 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
+ 		y = value & 0x1f;
+ 		value = (1 << y) * (4 + f) * rp->time_unit / 4;
+ 	} else {
++		if (value < rp->time_unit)
++			return 0;
++
+ 		do_div(value, rp->time_unit);
+ 		y = ilog2(value);
+ 		f = div64_u64(4 * (value - (1 << y)), 1 << y);
 -- 
 2.35.1
 
