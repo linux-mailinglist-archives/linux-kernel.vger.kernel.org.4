@@ -2,109 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B74D60B30F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0588260B37D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236046AbiJXQzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S235244AbiJXRH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbiJXQuY (ORCPT
+        with ESMTP id S233533AbiJXRG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:50:24 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F9917054;
-        Mon, 24 Oct 2022 08:33:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id E9F103200312;
-        Mon, 24 Oct 2022 11:28:13 -0400 (EDT)
-Received: from imap49 ([10.202.2.99])
-  by compute5.internal (MEProxy); Mon, 24 Oct 2022 11:28:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lmb.io; h=cc:cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666625293; x=1666711693; bh=q4fzVob94O
-        +Bj0fcl99z5CvnsJigYyvI50uZH9qLdLQ=; b=gE9VoD+k5nuto7UW3tGPkjrh4Z
-        LBPp1sOCTOR+PMEVTN+amj0Su9uWbyFg0HFn9tIAW3xLKYs8AEudtbc2AYpGqt0/
-        s8s9HscR0DrTrK+WxzsBanU6MytNxDou9BHdX0I6T5XmCVO0COy87EiJ3S7vsRmb
-        Pz9g+IB1TmftSsh+UmIXDaV407JKYzlBW9AMbsrpzvBjotlNkzknPbBSF427ZXCT
-        NvAe537LeJ3Wo3AZ+xKqKeYLtoED4anUUs09Dq81AWsAylnHVpZAz+74ngmd3x8S
-        ChGRohwpIMi/Xg1PLFvPQgFOyT+7FQfRjy6f/iQl8mEYQjff90eMb2enM7zw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666625293; x=1666711693; bh=q4fzVob94O+Bj0fcl99z5CvnsJig
-        YyvI50uZH9qLdLQ=; b=VKNjPbUVy84sNof68wyF5lA3rZWmQB8RTY+iy4R4T/ct
-        gui83QOxvC/onSgZiaOds17v5HqyMqarCGkeSmbobWeaK+QH76r5ZUol9LxjKCKR
-        Btdw7m7Tv1DeZ7EXWSpr2+/ngXDwf2KHLHn97VbYhjt3hACLuXEsj56IDzOfRpmD
-        YvzDfC66h1TobFQB7xxauJE6YwKTNhW23hu7cr0TsosqfovH+SIocaZfqT0bWjrM
-        NDdRx2h9nwrcDcZt1WZGsPX05tOQO4QfXOz7Ru5ybqXy21zAEunW7066nJ3kGSft
-        yuS7eXi1mvRdZQTrr0IMNjhZOHhxrlaSu8b25bUtgA==
-X-ME-Sender: <xms:Da9WY8Si5Qwn8-KAfWStUJcj3BWClEyNbJoW2gxfaHS1FNDuaPXuXQ>
-    <xme:Da9WY5yBqBrPC2AfbkY3z_hl4HWlK1WIumMtLywhvIOjKlxEBjBht18Y3005_Qr0s
-    RQYsTC3DPjpiayKcw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedfnfho
-    rhgvnhiiuceurghuvghrfdcuoehoshhssehlmhgsrdhioheqnecuggftrfgrthhtvghrnh
-    epffdugfeggfeiheefieehffetgeektddvtdffheekffeiueeiuddvffeljedvheevnecu
-    ffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepohhssheslhhmsgdrihho
-X-ME-Proxy: <xmx:Da9WY52vYXkrFSWZU2lNPQ_VMP_x9hDLpRthaK5jAj7sjx3DY7Ci0Q>
-    <xmx:Da9WYwBA_sHQeq3E_5Tmc2su5ThPUUAFBH4x-eDJJdCbTVWQL93i7A>
-    <xmx:Da9WY1gEBUOYH4Qdqdd7jENf2P__CFKz-R7EeVHrY6XmpTA7R0XYTA>
-    <xmx:Da9WY8Xx6e36INu7jeMRtUSlftqxweUm9CLA09A1axjU745wVQgAFA>
-Feedback-ID: icd3146c6:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 09BEC15A0087; Mon, 24 Oct 2022 11:28:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <6c859203-68a4-4dd9-bd7c-e93c65c686f2@app.fastmail.com>
-In-Reply-To: <20221018122708.823792-1-jolsa@kernel.org>
-References: <20221018122708.823792-1-jolsa@kernel.org>
-Date:   Mon, 24 Oct 2022 16:26:21 +0100
-From:   "Lorenz Bauer" <oss@lmb.io>
-To:     "Jiri Olsa" <jolsa@kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Andy Lutomirski" <luto@kernel.org>
-Cc:     "Akihiro HARAI" <jharai0815@gmail.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Martin KaFai Lau" <kafai@fb.com>,
-        "Song Liu" <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        "KP Singh" <kpsingh@chromium.org>,
-        "Stanislav Fomichev" <sdf@google.com>,
-        "Hao Luo" <haoluo@google.com>
-Subject: Re: [PATCH] x86: Include asm/ptrace.h in syscall_wrapper header
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 13:06:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252F981111
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:41:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666626018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UBAegUasNa5RuqJ7q9GZwuYTzFErEwMDb+Eg1mrTrvE=;
+        b=GYNG67W+DA8GF/NETLzBpt9k4MMmo7LfXTfmJXuPE8CWlMO95uNL0xknFBE8FcZYdp3sZ0
+        KlTgUJ6T8nXQ0c2ZoqsmqhuQljjTEN3vk9yvGEo/2R6yHZlpbmZ5cviPLlRWiPR9TcG6Aa
+        TEYn2vhBBdgLAHSrCmQXcdkJuvi0z1M=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-580-yPoM1ZQVN3qBiIehV9rDaw-1; Mon, 24 Oct 2022 11:26:39 -0400
+X-MC-Unique: yPoM1ZQVN3qBiIehV9rDaw-1
+Received: by mail-wm1-f72.google.com with SMTP id h129-20020a1c2187000000b003bf635eac31so4275986wmh.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:26:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UBAegUasNa5RuqJ7q9GZwuYTzFErEwMDb+Eg1mrTrvE=;
+        b=mJJPiqgs9vraXtSSpiJKsYsGJhC3ZhPgpv9Ucr3ipOBMASyGUnGywEuVTyJa0dLvMT
+         xDgCVfQIvmRkNVHGDjW/dqYgdtzY6Vl26e7ZsxAdy1QZU50iAfPNxD8Q3PBom6iGX9MB
+         LpQxV3QrIatUI3IBLS6viFqiDoPc5bhoXXuk5KFnvkbeIMV6z3bPIlLsibtWo5AKhGxX
+         0LgRuvgiCDDmNwPZJkkW8LUbGf7DyGyQfD6fuc1Ki8vmFsMKqkjad6SgoMWvT70/AO/W
+         CJGTlSidik10UYeddY+fx+EM4oqUjncKw75wHa0I5D/jIVzXCSoEwMeRgZ/o8dJdNbXg
+         3tkA==
+X-Gm-Message-State: ACrzQf0Xz5mQi2/lDyEyN+HUKaobGZwQUAWzwxJE7wmhAJ3rYlj+lXvK
+        YhhSE2LhIBBzl0D2UzZulx5uNX0Q7gQnt1vPuPKkx600aewz3GNEvGgLMSBCRt/uyDJy+kbef+q
+        rtJ9etN5fPU0B8a72R3mYwzkx
+X-Received: by 2002:a5d:5a11:0:b0:22e:3ed1:e426 with SMTP id bq17-20020a5d5a11000000b0022e3ed1e426mr21883714wrb.642.1666625197887;
+        Mon, 24 Oct 2022 08:26:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4QYF0qpu+Yh4YQF+Y42ukyfMe46omRnCHz7TFmRMmq2+h+eVJ2IzD1faJk9A3cMFb5eNTxMw==
+X-Received: by 2002:a5d:5a11:0:b0:22e:3ed1:e426 with SMTP id bq17-20020a5d5a11000000b0022e3ed1e426mr21883650wrb.642.1666625197580;
+        Mon, 24 Oct 2022 08:26:37 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:f100:6371:a05b:e038:ac2c? (p200300cbc704f1006371a05be038ac2c.dip0.t-ipconnect.de. [2003:cb:c704:f100:6371:a05b:e038:ac2c])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05600c0b5500b003cdf141f363sm194606wmr.11.2022.10.24.08.26.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 08:26:37 -0700 (PDT)
+Message-ID: <e0371b20-0edf-0fc3-71db-e0c94bd0f290@redhat.com>
+Date:   Mon, 24 Oct 2022 17:26:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Content-Language: en-US
+To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <CAGtprH_MiCxT2xSxD2UrM4M+ghL0V=XEZzEX4Fo5wQKV4fAL4w@mail.gmail.com>
+ <20221021134711.GA3607894@chaop.bj.intel.com> <Y1LGRvVaWwHS+Zna@google.com>
+ <20221024145928.66uehsokp7bpa2st@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221024145928.66uehsokp7bpa2st@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022, at 13:27, Jiri Olsa wrote:
-> From: Jiri Olsa <olsajiri@gmail.com>
->
-> With just the forward declaration of the 'struct pt_regs' in
-> syscall_wrapper.h, the syscall stub functions:
->
->   __[x64|ia32]_sys_*(struct pt_regs *regs)
+On 24.10.22 16:59, Kirill A . Shutemov wrote:
+> On Fri, Oct 21, 2022 at 04:18:14PM +0000, Sean Christopherson wrote:
+>> On Fri, Oct 21, 2022, Chao Peng wrote:
+>>>>
+>>>> In the context of userspace inaccessible memfd, what would be a
+>>>> suggested way to enforce NUMA memory policy for physical memory
+>>>> allocation? mbind[1] won't work here in absence of virtual address
+>>>> range.
+>>>
+>>> How about set_mempolicy():
+>>> https://www.man7.org/linux/man-pages/man2/set_mempolicy.2.html
+>>
+>> Andy Lutomirski brought this up in an off-list discussion way back when the whole
+>> private-fd thing was first being proposed.
+>>
+>>    : The current Linux NUMA APIs (mbind, move_pages) work on virtual addresses.  If
+>>    : we want to support them for TDX private memory, we either need TDX private
+>>    : memory to have an HVA or we need file-based equivalents. Arguably we should add
+>>    : fmove_pages and fbind syscalls anyway, since the current API is quite awkward
+>>    : even for tools like numactl.
+> 
+> Yeah, we definitely have gaps in API wrt NUMA, but I don't think it be
+> addressed in the initial submission.
+> 
+> BTW, it is not regression comparing to old KVM slots, if the memory is
+> backed by memfd or other file:
+> 
+> MBIND(2)
+>         The  specified policy will be ignored for any MAP_SHARED mappings in the
+>         specified memory range.  Rather the pages will be allocated according to
+>         the  memory  policy  of the thread that caused the page to be allocated.
+>         Again, this may not be the thread that called mbind().
 
-I think arm64 has a similar problem: https://elixir.bootlin.com/linux/v6.1-rc2/source/arch/arm64/include/asm/syscall_wrapper.h#L11
+IIRC, that documentation is imprecise/incorrect especially when it comes 
+to memfd. Page faults in shared mappings will similarly obey the set 
+mbind() policy when allocating new pages.
 
-Best
-Lorenz
+QEMU relies on that.
+
+The "fun" begins when we have multiple mappings, and only some have a 
+policy set ... or if we already, previously allocated the pages.
+
+-- 
+Thanks,
+
+David / dhildenb
+
