@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0AB60BD0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0621E60BD2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbiJXWFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S231690AbiJXWN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbiJXWET (ORCPT
+        with ESMTP id S232565AbiJXWMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:04:19 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BBD2FBDE3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:18:25 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id h185so9581605pgc.10
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:18:24 -0700 (PDT)
+        Mon, 24 Oct 2022 18:12:52 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334E230501E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:28:42 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id m18so2112932vka.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=68E5Ha7/DS7qwEFnJjSfWPZzK2S5tKKTKIK0mHztCMQ=;
-        b=IKCTEnaYAHL4RZpwBlyQw/sXYB7OTDQkhlcWXL0C4dC/df5OC2THSFbh78WKdyi5BP
-         gYqnCJclhBI4ZspWE/iHY+USq9at9lEbPb4fa6nGCfk++KtWFBroh97X7pr68rBu23IP
-         LoCeCrSiI4c/VaHdCf/Jo/FG6gA0rbB/1XfLx5oKhcCEbYmo626mOerRSlgXexMSuilS
-         WRw0PuOzz2X/eRkbx/d4kT0GnBJrZmyw0ECy6obwQa4x45PdaV9ImnZdb6ChjtDR/etO
-         XXET59rN48cajLfRmeZj7K8705GGX3+ubggeUg2ca/V9Y4t0PoKSFAwQ2EeP6llLp6gh
-         uqAA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FtjfA87GphDJcI4Vb9iAM+chCBCFrIrn+2UzKfCSzkM=;
+        b=k4bz2u0erMG2lsu2Psoe5/usHLFPMqhFmHnRrJe0M+hB86PaLpQ7eCFfAzFmdzz1Qv
+         q7ZZnGR1H6LfaNjZ/JrHA77mttFZoADtt6TAJK0F9q6u5z66+75iRGMyo+8GHDPT9p4P
+         mFbGQjjLg/uKEg8zJpOSxyXDw2AJWwwea8IGNnaBLli3KvHu8L1bLPvbltmjMRVxTpXD
+         3y6RGGHjtq6aFJSiYUHIGPZ7cMF3d6d7RyrWfuHcH1+8p4JuWM4Pz4qzFjJo2GrtB1qm
+         5oweYcc5sy5AtXjxueMZPMQLluXjjp3PVWMS8Zp9AY9c10z2DxBq3O+uA5RJ6HvXyKOj
+         Kmnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=68E5Ha7/DS7qwEFnJjSfWPZzK2S5tKKTKIK0mHztCMQ=;
-        b=P7QirY+eA/14omVX2x8NikVCJI50P58OAL/oPBoyI+kDTevM3n5cnWzVSdgtwm4yap
-         6vrhB1zRQHcv6l0U0PQRDlw455oisHIiG+3jJqIvCpE2qOyHdVo5n6tCXfVwDSUvlvfl
-         xpkQ/UUkofirXskU3kC7YqyZyMA0K2ZXTX+Nsr8Jh0q42odAfvYCfe7TediAaqcc+YzY
-         1W/IhGPuhXNg+l88v37FI7NHnmmLBXPyUus0fgET/0JFWcs3+61n4XBN++7/eKDHkHLg
-         qcJC5XHvP4AlSV3Q6rP2t+9M/38ePM1qOn3EAz0ffjBgzz5UcQTUHQWvPHw/AGDcr6+a
-         HcNw==
-X-Gm-Message-State: ACrzQf0sH/UfVCn+f1xUeVix/rX51FG7AZRDnK0v/tCZW8AI+spZKIgp
-        z+YwUQYtauSDt9M8bd3nrQ4=
-X-Google-Smtp-Source: AMsMyM5S+IGQLtSOvb+c2AGI5lcOKOn4ZtqaDUqUl0LF4sxJtC2mZjhf1JeomV7qjiWFyZC9+xn4zw==
-X-Received: by 2002:a05:6a00:4396:b0:563:6fd7:9c98 with SMTP id bt22-20020a056a00439600b005636fd79c98mr35750833pfb.13.1666642607816;
-        Mon, 24 Oct 2022 13:16:47 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FtjfA87GphDJcI4Vb9iAM+chCBCFrIrn+2UzKfCSzkM=;
+        b=dFRjmZ0+Yyq7Zcir/HvAC7lcTlEBfAvyeUdcQKk3BjfdEncYnq3QbG/abegoIi8R0L
+         QEU+hOuwiL8BlvCEA6JWC5cRCpBMed6SWitBh9wQG2KoNIsW1y6iwZNZClLC+Q11c4jV
+         8cJfpFYWCshbcdBcDMJJFTbxAUGEduirz9+tx/9mq83mI8xEY7ACKmWBrZ0xQ/yR77ml
+         zVCP4uK486vOkhK0nErX/GR9p2vzwWCQQ3zNIeXTa/p6hrBBqztFbXmhYuEiWsPvbWWa
+         Wz1wxSnmarU3q+uQ/kScqVbyL56SxjgOlI33OrtnqJYYHk5Xjzf7HidcnXF5DYdDT55O
+         SMpQ==
+X-Gm-Message-State: ACrzQf2uJqxV6LC9eU7sPerx3iXnqoJdVm9l4k0gdpoqBQHyp5qKVTvb
+        1oq+Axs1Qyu+Q8UXlEVL7UYtSm+dp7Q=
+X-Google-Smtp-Source: AMsMyM5LGD+kKoUy+UyXdcaHRMuZb+H9htNgOT9oSVdgZ1XZ1DqfomlJfGo6OT3w8iAWsBX5oQp0ww==
+X-Received: by 2002:a17:902:ce0e:b0:17d:a730:3835 with SMTP id k14-20020a170902ce0e00b0017da7303835mr36674422plg.131.1666642613053;
+        Mon, 24 Oct 2022 13:16:53 -0700 (PDT)
 Received: from localhost.localdomain (c-98-35-160-214.hsd1.ca.comcast.net. [98.35.160.214])
-        by smtp.gmail.com with ESMTPSA id k14-20020aa7972e000000b0056bb4dc8164sm173518pfg.193.2022.10.24.13.16.46
+        by smtp.gmail.com with ESMTPSA id k14-20020aa7972e000000b0056bb4dc8164sm173518pfg.193.2022.10.24.13.16.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 13:16:47 -0700 (PDT)
+        Mon, 24 Oct 2022 13:16:52 -0700 (PDT)
 From:   Nick Terrell <nickrterrell@gmail.com>
 To:     Nick Terrell <terrelln@fb.com>
 Cc:     linux-kernel@vger.kernel.org,
@@ -57,10 +58,12 @@ Cc:     linux-kernel@vger.kernel.org,
         David Sterba <dsterba@suse.com>,
         Sam Hardeman <natrox@outlook.com>,
         Kernel Team <Kernel-team@fb.com>
-Subject: [PATCH 0/2] zstd: Update to upstream v1.5.2
-Date:   Mon, 24 Oct 2022 13:26:04 -0700
-Message-Id: <20221024202606.404049-1-nickrterrell@gmail.com>
+Subject: [PATCH 1/2] zstd: Move zstd-common module exports to zstd_common_module.c
+Date:   Mon, 24 Oct 2022 13:26:05 -0700
+Message-Id: <20221024202606.404049-2-nickrterrell@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221024202606.404049-1-nickrterrell@gmail.com>
+References: <20221024202606.404049-1-nickrterrell@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,74 +78,160 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Nick Terrell <terrelln@fb.com>
 
-This series first prepares the kernel's zstd for the update and then updates to
-upstream zstd v1.5.2. I've separated the first patch out because it is a change
-for the kernel build system, and I want to make sure it can be separately
-reviewed.
+The zstd codebase is imported from the upstream zstd repo, and is over-written on
+every update. Upstream keeps the kernel specific code separate from the main
+library. So the module definition is moved into the zstd_common_module.c file.
+This matches the pattern followed by the zstd-compress and zstd-decompress files.
 
-The latest upstream release is v1.5.2, and I am targeting this patch for the v6.2
-kernel. We will be working on a new upstream release later this year. If it is
-ready by the team the v6.2 merge window rolls around, I will add another update
-patch to this series.
+I've done build and boot testing on x86-64, i386, and aarch64. I've
+verified that zstd built both as modules and built-in build and boot.
 
-I will be merging this into my `zstd-next` branch [0] which gets pulled into
-`linux-next` for testing. So this patch series will also be available here:
-
-  https://github.com/terrelln/linux.git tags/zstd-v1.5.2-v1
-
-Best,
-Nick Terrell
-
-[0] https://github.com/terrelln/linux/tree/zstd-next
-
-Nick Terrell (2):
-  zstd: Move zstd-common module exports to zstd_common_module.c
-  zstd: import usptream v1.5.2
-
- include/linux/zstd_lib.h                      |  479 ++--
- lib/zstd/Makefile                             |    1 +
- lib/zstd/common/bitstream.h                   |    9 +
- lib/zstd/common/compiler.h                    |   67 +-
- lib/zstd/common/entropy_common.c              |   11 +-
- lib/zstd/common/error_private.h               |   81 +-
- lib/zstd/common/fse.h                         |    3 +-
- lib/zstd/common/fse_decompress.c              |    2 +-
- lib/zstd/common/huf.h                         |   46 +-
- lib/zstd/common/mem.h                         |    2 +
- lib/zstd/common/portability_macros.h          |   93 +
- lib/zstd/common/zstd_common.c                 |   10 -
- lib/zstd/common/zstd_internal.h               |  175 +-
- lib/zstd/compress/clevels.h                   |  132 ++
- lib/zstd/compress/fse_compress.c              |   83 +-
- lib/zstd/compress/huf_compress.c              |  644 +++++-
- lib/zstd/compress/zstd_compress.c             | 2000 +++++++++++++----
- lib/zstd/compress/zstd_compress_internal.h    |  375 +++-
- lib/zstd/compress/zstd_compress_literals.c    |    9 +-
- lib/zstd/compress/zstd_compress_literals.h    |    4 +-
- lib/zstd/compress/zstd_compress_sequences.c   |   31 +-
- lib/zstd/compress/zstd_compress_superblock.c  |  295 +--
- lib/zstd/compress/zstd_cwksp.h                |  225 +-
- lib/zstd/compress/zstd_double_fast.c          |  413 +++-
- lib/zstd/compress/zstd_fast.c                 |  441 ++--
- lib/zstd/compress/zstd_lazy.c                 | 1352 ++++++++---
- lib/zstd/compress/zstd_lazy.h                 |   38 +
- lib/zstd/compress/zstd_ldm.c                  |   76 +-
- lib/zstd/compress/zstd_ldm.h                  |    1 +
- lib/zstd/compress/zstd_ldm_geartab.h          |    5 +-
- lib/zstd/compress/zstd_opt.c                  |  402 ++--
- lib/zstd/decompress/huf_decompress.c          |  912 ++++++--
- lib/zstd/decompress/zstd_decompress.c         |   80 +-
- lib/zstd/decompress/zstd_decompress_block.c   | 1022 +++++++--
- lib/zstd/decompress/zstd_decompress_block.h   |   10 +-
- .../decompress/zstd_decompress_internal.h     |   38 +-
- lib/zstd/decompress_sources.h                 |    6 +
- lib/zstd/zstd_common_module.c                 |   32 +
- lib/zstd/zstd_compress_module.c               |    6 +-
- 39 files changed, 6988 insertions(+), 2623 deletions(-)
- create mode 100644 lib/zstd/common/portability_macros.h
- create mode 100644 lib/zstd/compress/clevels.h
+Signed-off-by: Nick Terrell <terrelln@fb.com>
+---
+ lib/zstd/Makefile                |  1 +
+ lib/zstd/common/entropy_common.c |  4 ----
+ lib/zstd/common/zstd_common.c    | 10 ----------
+ lib/zstd/zstd_common_module.c    | 32 ++++++++++++++++++++++++++++++++
+ 4 files changed, 33 insertions(+), 14 deletions(-)
  create mode 100644 lib/zstd/zstd_common_module.c
 
---
+diff --git a/lib/zstd/Makefile b/lib/zstd/Makefile
+index 440bd0007ae2..20f08c644b71 100644
+--- a/lib/zstd/Makefile
++++ b/lib/zstd/Makefile
+@@ -35,6 +35,7 @@ zstd_decompress-y := \
+ 		decompress/zstd_decompress_block.o \
+ 
+ zstd_common-y := \
++		zstd_common_module.o \
+ 		common/debug.o \
+ 		common/entropy_common.o \
+ 		common/error_private.o \
+diff --git a/lib/zstd/common/entropy_common.c b/lib/zstd/common/entropy_common.c
+index a311808c0d56..6353249de614 100644
+--- a/lib/zstd/common/entropy_common.c
++++ b/lib/zstd/common/entropy_common.c
+@@ -15,7 +15,6 @@
+ /* *************************************
+ *  Dependencies
+ ***************************************/
+-#include <linux/module.h>
+ #include "mem.h"
+ #include "error_private.h"       /* ERR_*, ERROR */
+ #define FSE_STATIC_LINKING_ONLY  /* FSE_MIN_TABLELOG */
+@@ -240,7 +239,6 @@ size_t FSE_readNCount(
+ {
+     return FSE_readNCount_bmi2(normalizedCounter, maxSVPtr, tableLogPtr, headerBuffer, hbSize, /* bmi2 */ 0);
+ }
+-EXPORT_SYMBOL_GPL(FSE_readNCount);
+ 
+ /*! HUF_readStats() :
+     Read compact Huffman tree, saved by HUF_writeCTable().
+@@ -256,7 +254,6 @@ size_t HUF_readStats(BYTE* huffWeight, size_t hwSize, U32* rankStats,
+     U32 wksp[HUF_READ_STATS_WORKSPACE_SIZE_U32];
+     return HUF_readStats_wksp(huffWeight, hwSize, rankStats, nbSymbolsPtr, tableLogPtr, src, srcSize, wksp, sizeof(wksp), /* bmi2 */ 0);
+ }
+-EXPORT_SYMBOL_GPL(HUF_readStats);
+ 
+ FORCE_INLINE_TEMPLATE size_t
+ HUF_readStats_body(BYTE* huffWeight, size_t hwSize, U32* rankStats,
+@@ -357,4 +354,3 @@ size_t HUF_readStats_wksp(BYTE* huffWeight, size_t hwSize, U32* rankStats,
+     (void)bmi2;
+     return HUF_readStats_body_default(huffWeight, hwSize, rankStats, nbSymbolsPtr, tableLogPtr, src, srcSize, workSpace, wkspSize);
+ }
+-EXPORT_SYMBOL_GPL(HUF_readStats_wksp);
+diff --git a/lib/zstd/common/zstd_common.c b/lib/zstd/common/zstd_common.c
+index 0f1f63be25d9..3d7e35b309b5 100644
+--- a/lib/zstd/common/zstd_common.c
++++ b/lib/zstd/common/zstd_common.c
+@@ -13,7 +13,6 @@
+ /*-*************************************
+ *  Dependencies
+ ***************************************/
+-#include <linux/module.h>
+ #define ZSTD_DEPS_NEED_MALLOC
+ #include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
+ #include "error_private.h"
+@@ -36,17 +35,14 @@ const char* ZSTD_versionString(void) { return ZSTD_VERSION_STRING; }
+  *  tells if a return value is an error code
+  *  symbol is required for external callers */
+ unsigned ZSTD_isError(size_t code) { return ERR_isError(code); }
+-EXPORT_SYMBOL_GPL(ZSTD_isError);
+ 
+ /*! ZSTD_getErrorName() :
+  *  provides error code string from function result (useful for debugging) */
+ const char* ZSTD_getErrorName(size_t code) { return ERR_getErrorName(code); }
+-EXPORT_SYMBOL_GPL(ZSTD_getErrorName);
+ 
+ /*! ZSTD_getError() :
+  *  convert a `size_t` function result into a proper ZSTD_errorCode enum */
+ ZSTD_ErrorCode ZSTD_getErrorCode(size_t code) { return ERR_getErrorCode(code); }
+-EXPORT_SYMBOL_GPL(ZSTD_getErrorCode);
+ 
+ /*! ZSTD_getErrorString() :
+  *  provides error code string from enum */
+@@ -63,7 +59,6 @@ void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
+         return customMem.customAlloc(customMem.opaque, size);
+     return ZSTD_malloc(size);
+ }
+-EXPORT_SYMBOL_GPL(ZSTD_customMalloc);
+ 
+ void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
+ {
+@@ -76,7 +71,6 @@ void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
+     }
+     return ZSTD_calloc(1, size);
+ }
+-EXPORT_SYMBOL_GPL(ZSTD_customCalloc);
+ 
+ void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
+ {
+@@ -87,7 +81,3 @@ void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
+             ZSTD_free(ptr);
+     }
+ }
+-EXPORT_SYMBOL_GPL(ZSTD_customFree);
+-
+-MODULE_LICENSE("Dual BSD/GPL");
+-MODULE_DESCRIPTION("Zstd Common");
+diff --git a/lib/zstd/zstd_common_module.c b/lib/zstd/zstd_common_module.c
+new file mode 100644
+index 000000000000..22686e367e6f
+--- /dev/null
++++ b/lib/zstd/zstd_common_module.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
++/*
++ * Copyright (c) Facebook, Inc.
++ * All rights reserved.
++ *
++ * This source code is licensed under both the BSD-style license (found in the
++ * LICENSE file in the root directory of this source tree) and the GPLv2 (found
++ * in the COPYING file in the root directory of this source tree).
++ * You may select, at your option, one of the above-listed licenses.
++ */
++
++#include <linux/module.h>
++
++#include "common/huf.h"
++#include "common/fse.h"
++#include "common/zstd_internal.h"
++
++// Export symbols shared by compress and decompress into a common module
++
++#undef ZSTD_isError   /* defined within zstd_internal.h */
++EXPORT_SYMBOL_GPL(FSE_readNCount);
++EXPORT_SYMBOL_GPL(HUF_readStats);
++EXPORT_SYMBOL_GPL(HUF_readStats_wksp);
++EXPORT_SYMBOL_GPL(ZSTD_isError);
++EXPORT_SYMBOL_GPL(ZSTD_getErrorName);
++EXPORT_SYMBOL_GPL(ZSTD_getErrorCode);
++EXPORT_SYMBOL_GPL(ZSTD_customMalloc);
++EXPORT_SYMBOL_GPL(ZSTD_customCalloc);
++EXPORT_SYMBOL_GPL(ZSTD_customFree);
++
++MODULE_LICENSE("Dual BSD/GPL");
++MODULE_DESCRIPTION("Zstd Common");
+-- 
 2.38.1
 
