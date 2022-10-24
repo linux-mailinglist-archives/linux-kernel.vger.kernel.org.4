@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD11160BEC6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5E760BDF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiJXXmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S231878AbiJXWzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiJXXlf (ORCPT
+        with ESMTP id S232023AbiJXWyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:41:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EE5B1B9F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:00:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666648809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aS4yi1vMu6K7Mzb0dwDEe+zwP7hRRYhJ4HxVAVJl5ro=;
-        b=A0h3L+3OFO2hZeJ50KNvTH8BKCDW6NSZl5q30DEi2ouT0a8/nj9Q1eTAJcfnuLjqqQNm8t
-        KhInuEA/g+VOF12nWxUr3U67vXAnJD4x43lngcWWmAtpJxz7L4UEnf17c/mZobCMCYOjh1
-        eUl4WdSopd983/pZttCrdoxuTWdzrcA=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-167-Ms8xgqHYPg29FvkGKzDYAg-1; Mon, 24 Oct 2022 15:43:02 -0400
-X-MC-Unique: Ms8xgqHYPg29FvkGKzDYAg-1
-Received: by mail-qv1-f69.google.com with SMTP id q17-20020a056214019100b004b1d3c9f3acso5818556qvr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:43:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aS4yi1vMu6K7Mzb0dwDEe+zwP7hRRYhJ4HxVAVJl5ro=;
-        b=QtBWzCfWOrPCOaWK5RLEuf3c/tverQg9SOZQuuNrRX43BW62tFA5dX8ln9xV0iz1r5
-         TR2396w/KTO/mWsQf+IME3DarIt5rfbteQFXl/KXlDsrjHVjwGZMX8J5ejCLrtxSXKsP
-         hi0OlOLpR0SUV8MnwF2O3UFAS/+RZh5QE2I+VEHeOiD3iFQVNndsvM1hMUXf7PhQTNKT
-         8Cg6l6XcjAADUyR1Uxm9Xg1NIJaYgtJ4BkxbBCPqOnPKbgLsT3L9ALnApJ8je2AK5mN9
-         MyGlu/GBBWfq0XZgAyKLjnwc3IACso2OQvfmV6wubBhPpKAZOe5W0/iZp5u7hvaIqk5M
-         5n1w==
-X-Gm-Message-State: ACrzQf28BAQaOEO57khnlfBHHT69dmma72nf1qB1tuwy5qZBXJSD94Hc
-        IPQE6rtbOz0vDgtnmmibjiiM4blNJdzAfUiAsvryeatf7CnRs+jdlIHTv4RBtrucxucPUZePAZW
-        wPT06L9LBOmm4gmut0XhwFw8n
-X-Received: by 2002:a37:64d0:0:b0:6ec:534b:d20e with SMTP id y199-20020a3764d0000000b006ec534bd20emr24544536qkb.491.1666640581833;
-        Mon, 24 Oct 2022 12:43:01 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5HG4hPuNw+OrKVY7aj1+sC0sBSEP1h08iDsLmFF9r5v1x56LUQQ3QNpwRFzoTNCyuX90ew0A==
-X-Received: by 2002:a37:64d0:0:b0:6ec:534b:d20e with SMTP id y199-20020a3764d0000000b006ec534bd20emr24544518qkb.491.1666640581591;
-        Mon, 24 Oct 2022 12:43:01 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id bn1-20020a05620a2ac100b006ce3cffa2c8sm521364qkb.43.2022.10.24.12.43.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 12:43:01 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 15:42:59 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH 1/2] mm/uffd: Fix vma check on userfault for wp
-Message-ID: <Y1bqw7M36Gyya3eD@x1n>
-References: <20221024193336.1233616-1-peterx@redhat.com>
- <20221024193336.1233616-2-peterx@redhat.com>
+        Mon, 24 Oct 2022 18:54:49 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F381F812E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:16:40 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4E7435C0134;
+        Mon, 24 Oct 2022 15:52:10 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 24 Oct 2022 15:52:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tyhicks.com; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1666641130; x=1666727530; bh=twRoZ2KpBnvB6wrQLeM2uyyTg
+        jNvfcSP6xQ7nW7TV8Q=; b=AZtaBxHoaQ3HD2AgvGP+yfeYyN4z2M7Fs8qrjTikC
+        5jUoIcMCYsCmYraTxoMFVGiYIJSVaktBNY+rI/FlTF/AQ+EedWEoi3kyJ7FruGMO
+        a0N1Et/Va9Oy6t8hbUrD+lJk7+AeMddcolgiE+DVSzuutFbg7c0riO6aTKyJmdj1
+        s1B5n2zwm3U/jfwcwZQUrrx1KRSGIRwzbr2oYlqixf1MiI6U9kn6HZieXwkkVypb
+        i/zWJ3N9aOCEpvV4peUDRSN9qNwp6wAFzepgGyWs2ApIYt12IDdiWOwx4ZgyIXi8
+        W0F4YEjLjrbtG8YSQtOLEzkTEuiuv8cwEKcekIllYxnpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1666641130; x=1666727530; bh=twRoZ2KpBnvB6wrQLeM2uyyTgjNvfcSP6xQ
+        7nW7TV8Q=; b=XgMjUmcxiVD/upZDJ/21JxmEuTeUcKmLNaieVDS7D6l26yL/6VQ
+        bXgnHhcGwiCu+XWVPAjXozAI+RS+dN7WVy/duPjbBbmVNbzU+ehHnAAOF5SzoLtg
+        5+5enBl/5LK6ja5QAvCdsw2G3ZCERtpv2r2GFl7WO9H47bhgfBCBVdJh/KXsRStA
+        UzAJVItzjVpf2xQJUdu6HTdCxOAm6KMNYUWEr1PecwkkgVquDTS7u2tOxxKSmWr9
+        cewvGK1RykzeBd0ziHQPW0ZwPnWZDk5GQP1iUdGSxAMO+mHpuhWWMyLeZLxrWFUK
+        NA6QrCUA9W0tdT3ehH1o3ybTJ7Fpk5Z591A==
+X-ME-Sender: <xms:6exWY7Rcj2FZcZPmtHEZK-CiTn3GwJqeMT_J9b49lJSHAQ3AZZx17A>
+    <xme:6exWY8xMOi3ueJHI5qWBLyBvrFisrFUsJESb0NiWdqJh6IdzxgxmdMYPHImSQ1hEz
+    wciIQyVSpDYdkC_I9k>
+X-ME-Received: <xmr:6exWYw1TQk54hi-z-7_c9YdxBtUCdXxPmr6iQp2eN_5v5lC-IFt2_dK-_w5IIbM94PszTiUOPBv5nla_VJ4N>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgudefjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhihlvghr
+    ucfjihgtkhhsuceotghouggvsehthihhihgtkhhsrdgtohhmqeenucggtffrrghtthgvrh
+    hnpeejteetjedvfeelkedutdfgleegjedufeeigeefkeejheetvdeggfefffdvgedukeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegtohguvg
+    esthihhhhitghkshdrtghomh
+X-ME-Proxy: <xmx:6exWY7B2ugMUNfPaMD62N01CmHBxTvxmejzpgd-xuj34WH8_k3h3vg>
+    <xmx:6exWY0htimNCu-YVzHoyh0CLLkYqsa4Hk4Th6kT5wgHaifxOKxVHMQ>
+    <xmx:6exWY_rTZW8uEdVb76-Ogh_yvuxLFvRK86HyzryYVZ5RP-_F9-3DSA>
+    <xmx:6uxWYwiiQC9sNadlJ2OMYqS042aD96O2oq1TuDEWkub-Cnl_a1GJLA>
+Feedback-ID: i78e14604:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Oct 2022 15:52:09 -0400 (EDT)
+From:   Tyler Hicks <code@tyhicks.com>
+To:     Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Vijay Balakrishna <vijayb@linux.microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clocksource/drivers/arm_arch_timer: Fix event stream param in Kconfig
+Date:   Mon, 24 Oct 2022 14:51:18 -0500
+Message-Id: <20221024195118.871907-1-code@tyhicks.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221024193336.1233616-2-peterx@redhat.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 03:33:35PM -0400, Peter Xu wrote:
-> We used to have a report that pte-marker code can be reached even when
-> uffd-wp is not compiled in for file memories, here:
-> 
-> https://lore.kernel.org/all/YzeR+R6b4bwBlBHh@x1n/T/#u
-> 
-> I just got time to revisit this and found that the root cause is we simply
-> messed up with the vma check, so that for !PTE_MARKER_UFFD_WP system, we
-> will allow UFFDIO_REGISTER of MINOR & WP upon shmem as the check was wrong:
-> 
->     if (vm_flags & VM_UFFD_MINOR)
->         return is_vm_hugetlb_page(vma) || vma_is_shmem(vma);
-> 
-> Where we'll allow anything to pass on shmem as long as minor mode is
-> requested.
-> 
-> Axel did it right when introducing minor mode but I messed it up in
-> b1f9e876862d when moving code around.  Fix it.
-> 
-> Cc: Axel Rasmussen <axelrasmussen@google.com>
-> Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
+From: "Tyler Hicks (Microsoft)" <code@tyhicks.com>
 
-Should also have had:
+Fix the event stream timer command line parameter name that's documented
+in the Kconfig description for CONFIG_ARM_ARCH_TIMER_EVTSTREAM. It
+didn't match the command line parameter name that's actually honored in
+the source code.
 
+Reported-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+Fixes: 46fd5c6b3059 ("clocksource/drivers/arm_arch_timer: Control the evtstrm via the cmdline")
 Cc: stable@vger.kernel.org
+Signed-off-by: Tyler Hicks (Microsoft) <code@tyhicks.com>
+---
+ drivers/clocksource/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 4469e7f555e9..dcc274460973 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -315,7 +315,7 @@ config ARM_ARCH_TIMER_EVTSTREAM
+ 	  executing the wfe instruction at a frequency represented as a
+ 	  power-of-2 divisor of the clock rate. The behaviour can also be
+ 	  overridden on the command line using the
+-	  clocksource.arm_arch_timer.evtstream parameter.
++	  clocksource.arm_arch_timer.evtstrm parameter.
+ 	  The main use of the event stream is wfe-based timeouts of userspace
+ 	  locking implementations. It might also be useful for imposing timeout
+ 	  on wfe to safeguard against any programming errors in case an expected
 -- 
-Peter Xu
+2.34.1
 
