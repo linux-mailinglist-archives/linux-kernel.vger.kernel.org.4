@@ -2,139 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F3360B550
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766A560B71C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiJXSUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
+        id S231208AbiJXTTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbiJXSUa (ORCPT
+        with ESMTP id S233247AbiJXTTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:20:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D9A2859B1;
-        Mon, 24 Oct 2022 10:01:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 304AD614D3;
-        Mon, 24 Oct 2022 16:48:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 949EDC4347C;
-        Mon, 24 Oct 2022 16:48:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666630099;
-        bh=PTO2U+W+8LvK8H7hoQD+K070I4bHccVBlA094LizY3E=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Nkr5gJKfXg9qVCIo0VMHgiMK39zinbI+9n4wlVE/vqC8B2D7t40aO+UybeebRAnTF
-         p748BVWKd8KGLV8IflkCAQP0l9o8ky2/VVFrzMlw/PgbzOgjfTVXExLd2MxrheqJaJ
-         83TpmGV8sQ+LzR3okSGiSmAGLbkiNYf75wUEjmGbUPy/B/Dx6lPGCbpjdXKOa8ttU1
-         4wRGSS/x5Ptxdw4ZnU1nuOrtyxC3LWwveGAPPW64wyNHFKOgRUllIqpjDkT3L1MwbL
-         MtbHeGfdVcG7QF2CAq9cSb6/5ASGQZwKfRY53dH4vi8Q+i3dWUGAFOLI8pog/EPt8H
-         TMX3CblXsq1iQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3EE135C05FB; Mon, 24 Oct 2022 09:48:19 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 09:48:19 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org
-Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use
- call_rcu_flush()
-Message-ID: <20221024164819.GA5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1>
- <20221019225144.2500095-13-paulmck@kernel.org>
- <CAEXW_YQgSwMYisZVctXkjFu6_5YhFCpL_E5o5H4oJooS5Syp+g@mail.gmail.com>
- <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1ZtyjxKCcV0Hfjn@pc636>
- <Y1aDy3maaO39ClSU@pc636>
- <Y1ahs83258Lok9+O@google.com>
- <20221024153958.GY5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1a8ei1h7SzyYZx9@pc636>
+        Mon, 24 Oct 2022 15:19:14 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8653615A8EA
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:55:28 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id i65so8408367ioa.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:55:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IUL2O9wbBAu6ztSDG3ElgZvx99nzcRnOeYgEYBuGPRA=;
+        b=EEmIXtqXupNZGMQusrGu9cSwDxciaaGSv2LhhL0tX6byMmK28IsBk8c6ClWRq6lYkA
+         5+dolwExw1XyN7N2ZUnUo6goPkhL7uOXaTIp+47CzWhPnD5qROzOOFZav4k7YHRwqMEH
+         FUMPtqxOPxGTW4BVMVkUU5EW2Xr8k2N+TpV67Fm2aVZNsQK2YGa5ARYpVK2ZvjpFSstW
+         5LGsb9+H93HpawF9AoNVTC4rjX5VhkPFm7zaO/rvKQjhCs45phjNvhnsoAZmagQcq/C/
+         HnRdp7bCxBKgaIB0yVFB18J5KwAXnMljceuUkDgw1IMXcatnvOp8r7QAReZIeerM+SnW
+         dxVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IUL2O9wbBAu6ztSDG3ElgZvx99nzcRnOeYgEYBuGPRA=;
+        b=bJoMsU++EgoGjb4NUIcq08fUA0crAY0jIlc1r+ZstcWLxML8m6NNRZO/w0kMOQ10dm
+         9K9gjdUvUa1n9dLsIb1unNtPOSzMZGJ4uGwDX65N56B9+QBjuBdzPBSsD+ERUiWZLjLh
+         yT2xkccxVEPnKrEYKegBCs3yry7hyCTDxJWSqL8FOkzrH6jMPE4SSMXEN5QzWLkRETJK
+         9g3jD0taTSP/6THgVkETS5K83EhsAlkp9Sxop1E8hJw2yR/RKIyQmsSBn3MjWMzkZQPl
+         gncI3lf0JHFzlDudEe/6mVLmYtsbF50UsU921/Vd0TKp378zujjj6LmHtwIJPrJTfTvz
+         oB7w==
+X-Gm-Message-State: ACrzQf2eBE+6YxMbB9nVm/wgfLl7msxYN4ng4izj0pcVRWqNir1AKn5o
+        whUzVRmgwslCzVOtw6QlsSHgert2yj9jhg==
+X-Google-Smtp-Source: AMsMyM57TE1ja12+inLNwlTcq5BSzAd/+4nM91OaJJGzUPwVHrd3YNRlGWdmd5z78YjGbtZPGpbilw==
+X-Received: by 2002:ac8:5c11:0:b0:39c:fd77:336d with SMTP id i17-20020ac85c11000000b0039cfd77336dmr24199445qti.479.1666630114992;
+        Mon, 24 Oct 2022 09:48:34 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id q8-20020a37f708000000b006ce0733caebsm279848qkj.14.2022.10.24.09.48.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 09:48:34 -0700 (PDT)
+Message-ID: <0b9d7768-3f30-c084-9a14-f439cd49d643@linaro.org>
+Date:   Mon, 24 Oct 2022 12:48:32 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1a8ei1h7SzyYZx9@pc636>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: Aw: Re: [PATCH v3 3/7] dt-bindings: mmc: mtk-sd: add mt7986
+Content-Language: en-US
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221023091247.70586-1-linux@fw-web.de>
+ <20221023091247.70586-4-linux@fw-web.de>
+ <a0121e0a-9f62-8630-45c5-d32eaa91d46f@linaro.org>
+ <trinity-95441a68-0025-49de-8c73-9730fb9cec42-1666623320110@3c-app-gmx-bap55>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <trinity-95441a68-0025-49de-8c73-9730fb9cec42-1666623320110@3c-app-gmx-bap55>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 06:25:30PM +0200, Uladzislau Rezki wrote:
-> >
-> > You guys might need to agree on the definition of "good" here.  Or maybe
-> > understand the differences in your respective platforms' definitions of
-> > "good".  ;-)
-> >
-> Indeed. Bad is when once per-millisecond infinitely :) At least in such use
-> workload a can detect a power delta and power gain. Anyway, below is a new
-> trace where i do not use "flush" variant for the kvfree_rcu():
+On 24/10/2022 10:55, Frank Wunderlich wrote:
+> Hi
 > 
-> <snip>
-> 1. Home screen swipe:
->          rcuop/0-15      [003] d..1  1792.767750: rcu_batch_start: rcu_preempt CBs=1003 bl=10
->          rcuop/2-33      [002] d..1  1792.771717: rcu_batch_start: rcu_preempt CBs=934 bl=10
->          rcuop/3-40      [001] d..1  1794.811816: rcu_batch_start: rcu_preempt CBs=1508 bl=11
->          rcuop/1-26      [003] d..1  1797.116382: rcu_batch_start: rcu_preempt CBs=2127 bl=16
->          rcuop/4-48      [001] d..1  1797.124422: rcu_batch_start: rcu_preempt CBs=95 bl=10
->          rcuop/5-55      [002] d..1  1797.124731: rcu_batch_start: rcu_preempt CBs=143 bl=10
->          rcuop/6-62      [005] d..1  1798.911719: rcu_batch_start: rcu_preempt CBs=132 bl=10
->          rcuop/2-33      [002] d..1  1803.003966: rcu_batch_start: rcu_preempt CBs=3797 bl=29
->          rcuop/0-15      [003] d..1  1803.004707: rcu_batch_start: rcu_preempt CBs=2969 bl=23
-> 2. App launches:
->          rcuop/4-48      [005] d..1  1831.087612: rcu_batch_start: rcu_preempt CBs=6141 bl=47
->          rcuop/7-69      [007] d..1  1831.095578: rcu_batch_start: rcu_preempt CBs=5464 bl=42
->          rcuop/5-55      [004] d..1  1832.703571: rcu_batch_start: rcu_preempt CBs=8461 bl=66
->          rcuop/0-15      [004] d..1  1833.731603: rcu_batch_start: rcu_preempt CBs=2548 bl=19
->          rcuop/1-26      [006] d..1  1833.743691: rcu_batch_start: rcu_preempt CBs=2567 bl=20
->          rcuop/2-33      [006] d..1  1833.744005: rcu_batch_start: rcu_preempt CBs=2359 bl=18
->          rcuop/3-40      [006] d..1  1833.744286: rcu_batch_start: rcu_preempt CBs=3681 bl=28
->          rcuop/4-48      [002] d..1  1838.079777: rcu_batch_start: rcu_preempt CBs=10444 bl=81
->          rcuop/7-69      [001] d..1  1838.080375: rcu_batch_start: rcu_preempt CBs=12572 bl=98
->            <...>-62      [002] d..1  1838.080646: rcu_batch_start: rcu_preempt CBs=14135 bl=110
->          rcuop/6-62      [000] d..1  1838.087722: rcu_batch_start: rcu_preempt CBs=10839 bl=84
->            <...>-62      [003] d..1  1839.227022: rcu_batch_start: rcu_preempt CBs=1834 bl=14
->            <...>-26      [001] d..1  1839.963315: rcu_batch_start: rcu_preempt CBs=5769 bl=45
->          rcuop/2-33      [001] d..1  1839.966485: rcu_batch_start: rcu_preempt CBs=3789 bl=29
->            <...>-40      [001] d..1  1839.966596: rcu_batch_start: rcu_preempt CBs=6425 bl=50
->          rcuop/2-33      [005] d..1  1840.541272: rcu_batch_start: rcu_preempt CBs=825 bl=10
->          rcuop/2-33      [005] d..1  1840.547724: rcu_batch_start: rcu_preempt CBs=44 bl=10
->          rcuop/2-33      [005] d..1  1841.075759: rcu_batch_start: rcu_preempt CBs=516 bl=10
->          rcuop/0-15      [002] d..1  1841.695716: rcu_batch_start: rcu_preempt CBs=6312 bl=49
->          rcuop/0-15      [003] d..1  1841.709714: rcu_batch_start: rcu_preempt CBs=39 bl=10
->          rcuop/5-55      [004] d..1  1843.112442: rcu_batch_start: rcu_preempt CBs=16007 bl=125
->          rcuop/5-55      [004] d..1  1843.115444: rcu_batch_start: rcu_preempt CBs=7901 bl=61
->          rcuop/6-62      [001] dn.1  1843.123983: rcu_batch_start: rcu_preempt CBs=8427 bl=65
->          rcuop/6-62      [006] d..1  1843.412383: rcu_batch_start: rcu_preempt CBs=981 bl=10
->          rcuop/0-15      [003] d..1  1844.659812: rcu_batch_start: rcu_preempt CBs=1851 bl=14
->          rcuop/0-15      [003] d..1  1844.667790: rcu_batch_start: rcu_preempt CBs=135 bl=10
-> <snip>
+>> Gesendet: Sonntag, 23. Oktober 2022 um 14:56 Uhr
+>> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+>> An: "Frank Wunderlich" <linux@fw-web.de>, linux-mediatek@lists.infradead.org
+>> Cc: "Frank Wunderlich" <frank-w@public-files.de>, "Chaotian Jing" <chaotian.jing@mediatek.com>, "Ulf Hansson" <ulf.hansson@linaro.org>, "Rob Herring" <robh+dt@kernel.org>, "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>, "Matthias Brugger" <matthias.bgg@gmail.com>, "Wenbin Mei" <wenbin.mei@mediatek.com>, linux-mmc@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+>> Betreff: Re: [PATCH v3 3/7] dt-bindings: mmc: mtk-sd: add mt7986
+>>
+>> On 23/10/2022 05:12, Frank Wunderlich wrote:
+>>> From: Frank Wunderlich <frank-w@public-files.de>
+>>>
+>>> Add SoC specific section for defining clock configuration.
+>>>
+>>> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+>>
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> it is much more better. But. As i wrote earlier there is a patch that i have submitted
-> some time ago improving kvfree_rcu() batching:
+> Hi,
 > 
-> <snip>
-> commit 51824b780b719c53113dc39e027fbf670dc66028
-> Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> Date:   Thu Jun 30 18:33:35 2022 +0200
+> got another config from mtk which requires changing binding a bit
 > 
->     rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
+>                        clocks = <&topckgen CLK_TOP_EMMC_416M_SEL>,
+>                                 <&infracfg CLK_INFRA_MSDC_HCK_CK>,
+>                                 <&infracfg CLK_INFRA_MSDC_CK>,
+>                                 <&infracfg CLK_INFRA_MSDC_133M_CK>,
+>                                  <&infracfg CLK_INFRA_MSDC_66M_CK>;
+>                        clock-names = "source", "hclk", "source_cg", "bus_clk",
+>                                      "sys_cg";
+> in binding:
 > 
->     Currently the monitor work is scheduled with a fixed interval of HZ/20,
->     which is roughly 50 milliseconds. The drawback of this approach is
->     low utilization of the 512 page slots in scenarios with infrequence
->     kvfree_rcu() calls.  For example on an Android system:
-> <snip>
+> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
+> @@ -241,15 +241,17 @@ allOf:
+>            items:
+>              - description: source clock
+>              - description: HCLK which used for host
+> -            - description: AXI bus clock gate
+> -            - description: AHB bus clock gate
+> +            - description: independent source clock gate
+> +            - description: bus clock used for internal register access (required for MSDC0/3).
+> +            - description: msdc subsys clock gate
+>          clock-names:
+>            minItems: 3
+>            items:
+>              - const: source
+>              - const: hclk
+> -            - const: axi_cg
+> -            - const: ahb_cg
+> +            - const: "source_cg"
+> +            - const: "bus_clk"
+> +            - const: "sys_cg"
 > 
-> The trace that i posted was taken without it.
+> will send an updated v4...old version was working but i should use the new one.
+> 
+> @Krzysztof can i take your RB here or should i leave it as Patch was changed?
 
-And if I am not getting too confused, that patch is now in mainline.
-So it does make sense to rely on it, then.  ;-)
+Please drop my tag, so I will re-review it.
 
-							Thanx, Paul
+Thanks!
+
+Best regards,
+Krzysztof
+
