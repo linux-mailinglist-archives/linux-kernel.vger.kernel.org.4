@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D5760BA79
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F93F60BB44
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiJXUho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
+        id S234009AbiJXUxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:53:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234391AbiJXUgg (ORCPT
+        with ESMTP id S235126AbiJXUxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:36:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F3D1D346A;
-        Mon, 24 Oct 2022 11:48:30 -0700 (PDT)
+        Mon, 24 Oct 2022 16:53:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37C64C01C;
+        Mon, 24 Oct 2022 11:59:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70C77B81219;
-        Mon, 24 Oct 2022 12:07:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF06EC433C1;
-        Mon, 24 Oct 2022 12:07:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CFC4A612D3;
+        Mon, 24 Oct 2022 11:56:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E66EBC433D6;
+        Mon, 24 Oct 2022 11:56:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613235;
-        bh=YzygpU2lqHazfot/AtqlQuUcuIafh1+pkMPgAoMjJ4Q=;
+        s=korg; t=1666612614;
+        bh=UOXF6r60LZMSfW1hV/2thug7CAKN/lJDdqAzbNeAB/c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qqtLZBOrSu3dPOxOhHisPPgHgXh28kLdl62TP49XdqMud2qfA1ThcYFr/W+jOqJvk
-         FObH/x6UodmZyej2eRrdQ/D0614sQ+MthJmcnEIf544rDjU1bfftOlEgwyytUBuNn4
-         D9bS+NF72MJsVKJi7Vh8GV7EYCRxqdkzo0DM/R30=
+        b=mUhlY4kh7jK3ctKy85nI9Sbx5s5mB5v1y4BArFu5siUY0TZk6WDJ+Kqw93xaxUp9C
+         ckSFkbi07a903EkY6b/XWzWncEm1OFSqeBtlqD5UcC7WTeysqy/qNLHjvv38kWRA4w
+         TTAe47oatNUZVtdpwdYujQpx3Jy8yK2JUT6iY0Gg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.4 030/255] riscv: Pass -mno-relax only on lld < 15.0.0
-Date:   Mon, 24 Oct 2022 13:29:00 +0200
-Message-Id: <20221024113003.450495044@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [PATCH 4.19 023/229] ALSA: hda: Fix position reporting on Poulsbo
+Date:   Mon, 24 Oct 2022 13:29:02 +0200
+Message-Id: <20221024112959.895135654@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fangrui Song <maskray@google.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 3cebf80e9a0d3adcb174053be32c88a640b3344b upstream.
+commit 56e696c0f0c71b77fff921fc94b58a02f0445b2c upstream.
 
-lld since llvm:6611d58f5bbc ("[ELF] Relax R_RISCV_ALIGN"), which will be
-included in the 15.0.0 release, has implemented some RISC-V linker
-relaxation.  -mno-relax is no longer needed in
-KBUILD_CFLAGS/KBUILD_AFLAGS to suppress R_RISCV_ALIGN which older lld
-can not handle:
+Hans reported that his Sony VAIO VPX11S1E showed the broken sound
+behavior at the start of the stream for a couple of seconds, and it
+turned out that the position_fix=1 option fixes the issue.  It implies
+that the position reporting is inaccurate, and very likely hitting on
+all Poulsbo devices.
 
-    ld.lld: error: capability.c:(.fixup+0x0): relocation R_RISCV_ALIGN
-    requires unimplemented linker relaxation; recompile with -mno-relax
-    but the .o is already compiled with -mno-relax
+The patch applies the workaround for Poulsbo generically to switch to
+LPIB mode instead of the default position buffer.
 
-Signed-off-by: Fangrui Song <maskray@google.com>
-Link: https://lore.kernel.org/r/20220710071117.446112-1-maskray@google.com/
-Link: https://lore.kernel.org/r/20220918092933.19943-1-palmer@rivosinc.com
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Reported-and-tested-by: Hans de Goede <hdegoede@redhat.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/3e8697e1-87c6-7a7b-d2e8-b21f1d2f181b@redhat.com
+Link: https://lore.kernel.org/r/20221001142124.7241-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/Makefile |    2 ++
- 1 file changed, 2 insertions(+)
+ sound/pci/hda/hda_intel.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -35,6 +35,7 @@ else
- endif
- 
- ifeq ($(CONFIG_LD_IS_LLD),y)
-+ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
- 	KBUILD_CFLAGS += -mno-relax
- 	KBUILD_AFLAGS += -mno-relax
- ifneq ($(LLVM_IAS),1)
-@@ -42,6 +43,7 @@ ifneq ($(LLVM_IAS),1)
- 	KBUILD_AFLAGS += -Wa,-mno-relax
- endif
- endif
-+endif
- 
- # ISA string setting
- riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
+--- a/sound/pci/hda/hda_intel.c
++++ b/sound/pci/hda/hda_intel.c
+@@ -2638,7 +2638,8 @@ static const struct pci_device_id azx_id
+ 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_NOPM },
+ 	/* Poulsbo */
+ 	{ PCI_DEVICE(0x8086, 0x811b),
+-	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
++	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE |
++	  AZX_DCAPS_POSFIX_LPIB },
+ 	/* Oaktrail */
+ 	{ PCI_DEVICE(0x8086, 0x080a),
+ 	  .driver_data = AZX_DRIVER_SCH | AZX_DCAPS_INTEL_PCH_BASE },
 
 
