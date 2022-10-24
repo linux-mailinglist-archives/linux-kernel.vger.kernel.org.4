@@ -2,218 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D96D60BE26
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8938160BE41
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiJXXFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S231258AbiJXXL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiJXXFQ (ORCPT
+        with ESMTP id S231309AbiJXXLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:05:16 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177BB8B2E5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:26:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c032ZbrJbcAm/40O5j182wsCqvB5ujL3qpzezPt+6k6JxXJgSmOMdaituwS4w8DbsVkpGgZ2ipgShW1pH3jIua1SYLuE+6MAitmeLOrUKOE9hGlicpYi2xy+eab2BTXQVWFOuk0qeSNk2oh48eSWIjRLPoSOGu13G/0wd4ekJJQc2cW2yMLiViEzyi6j1wJxLfFPnfYUQzF8jUu0vN0m/TolGd3Mot/Vvggl2GYa2zvu4SvNLa05DGf+wqkPGL933ssAnJAE2OvuGB4pgcjW7VTSwYpt5ePQjy8zHV4El5GCLyBA5hTnU29K1psSrLz40H3oIWSQ+vHtTmWyXxT/fw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aKLI9t59nWGEXVCakOqqAeZb8XgnUTLQV7s+exihwxo=;
- b=n+pYkdxyE2UqHq0XCulfvqHfRMy41SeZ3sErEomQjHSSqocOkfOJbBWc0a7r0FJAe+WUBtKndKcxSuKmKsnws0iqx4r5ND4cLieV52AcHk5qJyHNARIPMwO3IgVBlnjy0UtSOOKp7RNVh33ADwrjZVEtjyHcCXEYk8E2u/0/z+OJ1FVuqB/QoyKnpPhGoa36YnbkphimfJYo8I+5I008d/qlR6uF2XeYvdgPGvBSC8O4XdpDMjM89c2WZxdgIw1WkAN7SZqYNtfwOSR7j2sVtDExDeObi9xxfDftEejwU/w6cHrfOw/kTrui0AUsNzvIqrVt0CmJIq0wCnQzdPqB4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aKLI9t59nWGEXVCakOqqAeZb8XgnUTLQV7s+exihwxo=;
- b=druCWTl939K2PvchFOrU7w/XcVexoZzePd4pHEPATb0bJy8n+RNJkAF+Jgrqa9SSe/6ApeHBGRBrPpmxlFZEAcfd9kjIXdACYUK6EQPsUeXmh09WuHPqdeLcQG8/HUB3qQgvSW8Pej3gD1vBcs+kcyc5R3XnRMmc8VbuQ4BDK98=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
- IA1PR12MB6187.namprd12.prod.outlook.com (2603:10b6:208:3e5::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26; Mon, 24 Oct
- 2022 21:25:29 +0000
-Received: from DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::d309:77d2:93d8:2425]) by DM6PR12MB3370.namprd12.prod.outlook.com
- ([fe80::d309:77d2:93d8:2425%7]) with mapi id 15.20.5746.026; Mon, 24 Oct 2022
- 21:25:29 +0000
-Message-ID: <dcb8b35a-7d0d-cc00-41e3-6e66837c506f@amd.com>
-Date:   Mon, 24 Oct 2022 17:25:26 -0400
+        Mon, 24 Oct 2022 19:11:24 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E141C50528
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:32:31 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id l9so4380427qkk.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HqdAlNyWzpxEkU/MFO8G8dv0LNUlhwviuS7EnguHLSg=;
+        b=DV83/4RnyXOVWlrN68XexIY4HJUJsx1VFHmnrSIXpzkwAoNgxFZc/9r9OfOw9BB2py
+         2CjVIxNBrWWH3qPaszABQ+IlPxg2PKtfcBeZ0uQqnyckndHV8F9NmiGchqb/h3VVTVW7
+         8USKDCjsbwz5Oyk4XYlSnDiLwQmtRdAzEumeDCkjbMg2fOph5tHQAkBAaTSlUU7z5Hm0
+         iuRGFveOXHssNeg332k32nsiGGCjCurvBqqM3LYWy86iy/VXHghi2xsJVSpAXNKHC3Qt
+         8hQ11yI6Q8OW6D25RxIs/svV6XxQQSOLuDO+AC9zeEIgVYkNK64iyGsI4O9UMyvObGkb
+         KCCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HqdAlNyWzpxEkU/MFO8G8dv0LNUlhwviuS7EnguHLSg=;
+        b=N0w8mQrt3cpN4ayw8lqntOha8SrLjRZFMQ6d0aoCrE0StwmC7MWFGmNjGzO8DRhN3g
+         +XYxo/w9dE0ZsODbbnwyfs5Y1JUVJSOUDlgqmQCyFCNHJHZn+faRmB7+NI7bOcuJxhVQ
+         4r3JOYN2Xy6VHHuQYBpzMyqAq+CRvRiwb7XzoO/n8RpS+qwmIblT1f+w4LVyJsF6+pTa
+         BHh2iVpK98gWwSr5xhC7jUEqokbntb7AAKsbGnyza/APeyCpOUCYrghfg0ESQZdM4w1j
+         aWkAtkjAtStGG9QMWL3KRHzEABO/U5EPhLmeupnIhCsausnTBBnPp8iTEiUwqT7d+jFj
+         M0Hw==
+X-Gm-Message-State: ACrzQf0RI3B5VYucYl8XfFleWHpL4NSLXjiWAkMjRhQ96essAw1dXvcg
+        pCcxX1Qz5cWJr+q/u7WN/pa7Fg==
+X-Google-Smtp-Source: AMsMyM5wlxnsR49L7btHoocprCyOk/ulL2WAi00lcwgUckP7xMzBPmdYJSTAFZizSbGUi/0SFuvUtg==
+X-Received: by 2002:a05:620a:19a0:b0:6f6:cb1d:a5e1 with SMTP id bm32-20020a05620a19a000b006f6cb1da5e1mr2163722qkb.382.1666647111074;
+        Mon, 24 Oct 2022 14:31:51 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id c6-20020ae9e206000000b006bb29d932e1sm649360qkc.105.2022.10.24.14.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 14:31:50 -0700 (PDT)
+Message-ID: <ae7c86fd-5bc9-4cdb-857c-e686225f5966@linaro.org>
+Date:   Mon, 24 Oct 2022 17:31:48 -0400
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH v2] kset: fix memory leak when kset_register() returns
- error
-Content-Language: en-CA
-From:   Luben Tuikov <luben.tuikov@amd.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
-        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org, somlo@cmu.edu,
-        mst@redhat.com, jaegeuk@kernel.org, chao@kernel.org,
-        hsiangkao@linux.alibaba.com, huangjianan@oppo.com, mark@fasheh.com,
-        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        akpm@linux-foundation.org, alexander.deucher@amd.com,
-        richard@nod.at, liushixin2@huawei.com
-References: <20221024121910.1169801-1-yangyingliang@huawei.com>
- <176ae1a1-9240-eef8-04e9-000d47646f4a@amd.com>
-In-Reply-To: <176ae1a1-9240-eef8-04e9-000d47646f4a@amd.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT
+ scheme
+Content-Language: en-US
+To:     Vadym Kochan <vadym.kochan@plvision.eu>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+References: <20221024210153.28852-1-vadym.kochan@plvision.eu>
+ <20221024210153.28852-2-vadym.kochan@plvision.eu>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221024210153.28852-2-vadym.kochan@plvision.eu>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT4PR01CA0001.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d1::11) To DM6PR12MB3370.namprd12.prod.outlook.com
- (2603:10b6:5:38::25)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|IA1PR12MB6187:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0efaccf6-f9a0-4d8d-e4af-08dab6064684
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CzcHZS8vBg6TeA4dbFTkeAn7o3CJ71KDQ5duLSRBDtlcQ3pAFchZDw30qT3a4Llp4Rbxy4r4X4Ir21GM/RFa8AWkQvFHSwdbYgnuXQ0DxoOy9TDKe1nGZWk9nw9vl6xzRkT3VbYdLLq3JXDJH8jHbF4CV17H4v3blVGwJFv96K7bdYx2ZEvYbXgspFIvzpy5EvhvVUGbikqVyaLb2E7zcE17zLkyKAszzPMWrk/fo012uQapx/pYhLooIEOydRVTWReM2vI2DrWuGlD+RvnMwqxkHXgItxtmb5uXVnHk5DQhavwGW3PpaFhyF6Hqy/Z3vU+VeZ+2EWG/9PhSxQVrXilHuRJDG5DBAvq+nbKnOU0Ail2uy5CLvsyLlj7ZEJZdsnEm7dMZtq963fjNoH7l1jHcwchsCvF1ZGaZOXpIa53F9vqWxz95+eWpvaXGerNpQuWzTq6tAL5cCS1Iy5sUZarV9Vtpn5gfzOhqXEzY4qqcRLjJ7+ZmP8zy6O3aEY+zg0UCAYg+/kAaIsXsM1qbp+1GGYurmDkVmB/JDtEWZHpTuJ6W89bPk1nQjNOp5ruZN66BxawHx3Gpnz8poR/9lGvtlgmUTsbUnppQG7TlQLsFDkkZUodwihH2z+OxdSFhhbq6yF9xpUz4KMAmKCxzK/mUQERUYbc1wraRNnUi650tC2yIpTI9WMneCOr7wAtwpDxeXOYq6yG5fHaD9/+w4e05TWHa1/+KqtKenQvo+QfgOfjRN+ciz2hFYKy5Eyr8+1xFwHD18KvIxWfwq0BGo0R0KZfDC7Fnbgy7pt4mgjc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(396003)(136003)(366004)(451199015)(316002)(478600001)(53546011)(6666004)(66946007)(4326008)(66556008)(66476007)(6506007)(8676002)(31686004)(6486002)(186003)(41300700001)(8936002)(5660300002)(7416002)(44832011)(2616005)(4001150100001)(2906002)(26005)(6512007)(36756003)(38100700002)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YU03eU9sLzdxdFVYM3FuRW1pTTZYTUYxRmJpNEFFQkc4S1Brandqd0RxMm9Z?=
- =?utf-8?B?Tk1LZ0dFZ1RVbXdHUUowMGZ3WVg5UVpjRGpXYjFLYjM3WkVCOWMyTnlWMkpa?=
- =?utf-8?B?S3dmaWFWYjRLUUZCUXBudWE0azQwaXFydkQvYXA2VHVpd1pFT1VKakd4TElL?=
- =?utf-8?B?OFpOa1ZlRFRvNDhZRUNnRCtOTWNQUkVUejN0YzQ5cVVOUXdVSXJmUVJZcDhY?=
- =?utf-8?B?OUtqNFUxZS9PSlpsakNKYWNPaldkY3lFZ3QvbW5iS0VOOXBDUElaY0tmQk52?=
- =?utf-8?B?RzJHN1VQTXFrdWluRHF0YkdId0tMWnQzcHZKMUluYXlpcFF5S0JnMVhpcEt1?=
- =?utf-8?B?UndpMmlKL0pwK3BZL2I1VGJ1ZXF4ODZyczZ5OUFsaGtCaUVDbkFwNUdXOFZH?=
- =?utf-8?B?YXZ0Z0xyNkgzZXpjZFh2bFNvdDFNM3pVTXRZV2JPZjExNmNpaERiN2hmRVIr?=
- =?utf-8?B?Zk1BVFVNeVNnbWxpQ3ZZb2llM2tBdmtwWVVLS3l6VVZhUEY1UlVFdEU4WHU2?=
- =?utf-8?B?YXY2ZVBjb2JGcW0zM1pDR2hpR1lYTERqWW1LZko2ZHJlT21vNm9MeGxneFU1?=
- =?utf-8?B?ZElpTnVJaUxRSU5HaU9DaUswNjhFWm0wTzQ4RWtHZ1NyQUowTGZBTjhKYnUw?=
- =?utf-8?B?aCs3dklIVXNCY3dGMCtFazF2d3VtVTg4MmFjbFpUUWplb1NVbC95K2pyS0N0?=
- =?utf-8?B?bEtUU1h2eHpmSXJCTmxGYTlYdmcvM0tJVXpKdXVldEN3WTRDSzl6NjJ1cXJu?=
- =?utf-8?B?S2lSUkw4TWdFemdtS0JyRlUzOGJaN2s3RHgvRGVSM1pXaUh3d0xRd3B3eVo3?=
- =?utf-8?B?YmRENGIzUnpIeTBIbEVIOTRrUlFqeVk0OGl3aVBaZ3VETUI5Tk8weEw0Q2VN?=
- =?utf-8?B?Z1dwYUlpQTZIUXdud0svVnEyMFhsV0lvOUIxVVlLQ3NzK1ZSYnRDVzF2YzFC?=
- =?utf-8?B?NEs1M1lYVkdMZEcyYVZRQlYvMjVhcUR1bDA3aTN5UDEyRWVrUEM1cEYzUjRX?=
- =?utf-8?B?MStBaUV1bHZnUTM4dHJYUlFteVlTS1RUM0hRRTA5WmxDSWZEL1J6R3c2dHBs?=
- =?utf-8?B?UDNXR2xUdjBxRS93S25GY3VNeEYxdXNhcUsxYml2ZElQUFh2Qmd1d0FLb3lC?=
- =?utf-8?B?L1ljTHNFWmgzQm5sQi81aXlzemlXMWZ3Nkx5dTFsWWJpNExsazV5Z3lNSnRk?=
- =?utf-8?B?bnJlZXJQNUxnSFkzY042NkhxZmlvTGNuR3RCMnUyekFCUDg0MjgyRXdUUGhq?=
- =?utf-8?B?TTdoWHQ2emhyb1hqTWR5dTdabHBySUlvSVkvZGJkSkdqZUVlZjA0ZERCczZE?=
- =?utf-8?B?TlhZOFhWV2ZhbmRuc2VLaFBRYXI1SC9SV0gxWEU1aWMxSDRmREtSRXJ2bmpW?=
- =?utf-8?B?VFBvS0tndVBpcEtIMjE0eXBKeWtQZTh0Nno5bzE3cmlJK2hScGRBamdzK21M?=
- =?utf-8?B?eHYrZW43UlJvRHp0R1hpZzMyVmVTUUxFVy9FMUs5SHdVUWdxek0zSnZLb3Z6?=
- =?utf-8?B?eWptcGN2N3hrUWdQZmZaVlN1bnk4ZTE2a01BamVkd2RwMXpBTVpUaU1jRURl?=
- =?utf-8?B?ZVNrY09WWHU0NU9pQmMyM0xFeXNiU3EvMjdlRk1oWndHTE41NDZ4bVhOQ3Ri?=
- =?utf-8?B?TUx4Ym5EblpGcmQrVWpFSkk5NWlCb2RtanRwNUZwQ3Q4aWZnU0lONHhpckJ4?=
- =?utf-8?B?MGpHejZ5N3BNWWs0dTQxZTk2czlteGdGRkphRkMwcEFrZWhGc3ErV3JiR1BO?=
- =?utf-8?B?WW94QXg5SHQ2c1l4eHQxSlNZaUtDdmdBS295V2hoclRuYmtKOEtacGxwSS9h?=
- =?utf-8?B?ZFVBaTFyVjMwbEJ2OEd4SHRWZDN1ZmJPVEZMVXdCRlVZM1owaGVQSUJwTkhx?=
- =?utf-8?B?ZEE1SzJWcWx1YWkwVmRzYUFjc1hhVWMyMW90YThPeE1OdTU4OUUwWkFHR3BV?=
- =?utf-8?B?eWlHZzk1TXpGODdzam5HbzA5RXlWZ08xM3F3YmdlZFlIdFl5TG1WemdxaHNw?=
- =?utf-8?B?VkFRakJkZy91RXFGR2ZGMHF6YnJaeGhZTnExT1RLaVVUWmNGQzdaQmpjY0gw?=
- =?utf-8?B?N1JJVVRhZ01kcjgrYXIvUUNheFFWb2V0Q2txcy8yLzBOcXM4RHROSENoZDFO?=
- =?utf-8?Q?Y7E7Sp6Bx6mqzxMYPoUtbkARC?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0efaccf6-f9a0-4d8d-e4af-08dab6064684
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 21:25:29.7707
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zk+gt6mxWiTKdVHkUE/yuWTTNy/nX/+eaE2y/7veK7NVnXIw0WTaJuS5EAODxD4A
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6187
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-24 17:06, Luben Tuikov wrote:
-> On 2022-10-24 08:19, Yang Yingliang wrote:
->> Inject fault while loading module, kset_register() may fail.
->> If it fails, the name allocated by kobject_set_name() which
->> is called before kset_register() is leaked, because refcount
->> of kobject is hold in kset_init().
+On 24/10/2022 17:01, Vadym Kochan wrote:
+> Switch the DT binding to a YAML schema to enable the DT validation.
 > 
-> "is hold" --> "was set".
+> Dropped deprecated compatibles and properties described in txt file.
 > 
-> Also, I'd say "which must be called" instead of "is", since
-> we cannot register kobj/kset without a name--the kobj code crashes,
-> and we want to make this clear. IOW, a novice user may wonder
-> where "is" it called, as opposed to learning that they "must"
-> call it to allocate/set a name, before calling kset_register().
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> ---
 > 
-> So, I'd say this:
+> v3:
+>   1) Remove txt version from the MAINTAINERS list
 > 
-> "If it fails, the name allocated by kobject_set_name() which must
->  be called before a call to kset_regsiter() is leaked, since
->  refcount of kobj was set in kset_init()."
+>   2) Use enum for some of compatible strings
+> 
+>   3) Drop:
+>         #address-cells
+>         #size-cells:
+> 
+>      as they are inherited from the nand-controller.yaml
+> 
+>   4) Add restriction to use 2 clocks for A8K SoC
+> 
+>   5) Dropped description for clock-names and extend it with 
+>      minItems: 1
+> 
+>   6) Drop description for "dmas"
+> 
+>   7) Use "unevalautedProperties: false"
 
-Actually, to be a bit more clear:
-
-"If kset_register() fails, the name allocated by kobject_set_name(),
- namely kset.kobj.name, which must be called before a call to kset_register(),
- may be leaked, if the caller doesn't explicitly free it, say by calling kset_put().
-
- To mitigate this, we free the name in kset_register() when an error is encountered,
- i.e. when kset_register() returns an error."
+Hmm... In one place it makes sense. In "nand@" not really.
 
 > 
->>
->> As a kset may be embedded in a larger structure which needs
->> be freed in release() function or error path in callers, we
+>   8) Drop quites from yaml refs.
 > 
-> Drop "As", start with "A kset". "which needs _to_ be".
-> Also please specify that the release is part of the ktype,
-> like this:
+>   9) Use 4-space indentation for the example section
 > 
-> "A kset may be embedded in a larger structure which needs to be
->  freed in ktype.release() or error path in callers, we ..."
+> v2:
+>   1) Fixed warning by yamllint with incorrect indentation for compatible list
 > 
->> can not call kset_put() in kset_register(), or it will cause
->> double free, so just call kfree_const() to free the name and
->> set it to NULL.
->>
->> With this fix, the callers don't need to care about the name
->> freeing and call an extra kset_put() if kset_register() fails.
+>  .../bindings/mtd/marvell,nand-controller.yaml | 189 ++++++++++++++++++
+>  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ------------
+>  MAINTAINERS                                   |   1 -
+>  3 files changed, 189 insertions(+), 127 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
 > 
-> This is unclear because you're *missing* a verb:
-> "and call an extra kset_put()".
-> Please add the proper verb _between_ "and call", something like,
-> 
-> "With this fix, the callers don't need to care about freeing
->  the name of the kset, and _can_ call kset_put() if kset_register() fails."
-> 
-> Choose a proper verb here: can, should, cannot, should not, etc.
-> 
-> We can do this because you set "kset.kobj.name to NULL, and this
-> is checked for in kobject_cleanup(). We just need to stipulate
-> whether they should/shouldn't have to call kset_put(), or can free the kset
-> and/or the embedding object themselves. This really depends
-> on how we want kset_register() to behave in the future, and on
-> user's own ktype.release implementation...
+> diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> new file mode 100644
+> index 000000000000..cb20f14d4aea
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> @@ -0,0 +1,189 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Marvell NAND Flash Controller (NFC)
+> +
+> +maintainers:
+> +  - Miquel Raynal <miquel.raynal@bootlin.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: marvell,armada-8k-nand-controller
+> +          - const: marvell,armada370-nand-controller
+> +      - enum:
+> +          - marvell,armada370-nand-controller
+> +          - marvell,pxa3xx-nand-controller
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description:
+> +      Shall reference the NAND controller clocks, the second one is
+> +      is only needed for the Armada 7K/8K SoCs
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - const: core
+> +      - const: reg
+> +
+> +  dmas:
+> +    maxItems: 1
+> +
+> +  dma-names:
+> +    items:
+> +      - const: rxtx
+> +
+> +  marvell,system-controller:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Syscon node that handles NAND controller related registers
+> +
+> +patternProperties:
+> +  "^nand@[0-3]$":
+> +    type: object
+> +    properties:
+> +      reg:
+> +        minimum: 0
+> +        maximum: 3
+> +
+> +      nand-rb:
+> +        minimum: 0
+> +        maximum: 1
+> +
+> +      nand-ecc-strength:
+> +        enum: [1, 4, 8]
+> +
+> +      nand-on-flash-bbt: true
+> +
+> +      nand-ecc-mode: true
+> +
+> +      nand-ecc-algo:
+> +        description: |
+> +          This property is essentially useful when not using hardware ECC.
+> +          Howerver, it may be added when using hardware ECC for clarification
+> +          but will be ignored by the driver because ECC mode is chosen depending
+> +          on the page size and the strength required by the NAND chip.
+> +          This value may be overwritten with nand-ecc-strength property.
+> +
+> +      nand-ecc-step-size:
+> +        description: |
+> +          Marvell's NAND flash controller does use fixed strength
+> +          (1-bit for Hamming, 16-bit for BCH), so the actual step size
+> +          will shrink or grow in order to fit the required strength.
+> +          Step sizes are not completely random for all and follow certain
+> +          patterns described in AN-379, "Marvell SoC NFC ECC".
+> +
+> +      label:
+> +        $ref: /schemas/types.yaml#/definitions/string
+> +
+> +      partitions:
+> +        type: object
+> +        $ref: /schemas/mtd/partitions/partition.yaml
 
-Forgot "may", "may not".
+This is a friendly reminder during the review process.
 
-So, do we want to say "may call kset_put()", like:
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
 
-"With this fix, the callers need not care about freeing
- the name of the kset, and _may_ call kset_put() if kset_register() fails."
+Thank you.
 
-Or do we want to say "should" or even "must"--it really depends on
-what else is (would be) going on in kobj registration.
+> +
+> +      marvell,nand-keep-config:
+> +        description: |
+> +          Orders the driver not to take the timings from the core and
+> +          leaving them completely untouched. Bootloader timings will then
+> +          be used.
+> +        $ref: /schemas/types.yaml#/definitions/flag
+> +
+> +      marvell,nand-enable-arbiter:
+> +        description: |
+> +          To enable the arbiter, all boards blindly used it,
+> +          this bit was set by the bootloader for many boards and even if
+> +          it is marked reserved in several datasheets, it might be needed to set
+> +          it (otherwise it is harmless) so whether or not this property is set,
+> +          the bit is selected by the driver.
+> +        $ref: /schemas/types.yaml#/definitions/flag
+> +        deprecated: true
+> +
+> +    unevaluatedProperties: false
 
-Although, the user may have additional work to be done in the ktype.release()
-callback for the embedding object. It would be good to give them the freedom,
-i.e. "may", to call kset_put(). If that's not the case, this must be explicitly
-stipulated with the proper verb.
+This looks wrong. I do not see referencing schema here and I did not ask
+to change it.
 
-Regards,
-Luben
+> +
+> +    required:
+> +      - reg
+> +      - nand-rb
+> +
+> +unevaluatedProperties: false
+
+This one is ok.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +
+> +allOf:
+> +  - $ref: nand-controller.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: marvell,pxa3xx-nand-controller
+> +    then:
+> +      required:
+> +        - dmas
+> +        - dma-names
+> +    else:
+> +      properties:
+> +        dmas: false
+> +        dma-names: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: marvell,armada-8k-nand-controller
+> +    then:
+> +      required:
+> +        - marvell,system-controller
+> +      properties:
+> +        clocks:
+> +          minItems: 2
+
+Also for clock-names "minItems: 2"
+
+> +    else:
+> +      properties:
+> +        marvell,system-controller: false
+
+    clocks:
+      maxItems: 1
+
+and the same for clock-names... unless these variants also have two clocks?
+
+
+Best regards,
+Krzysztof
 
