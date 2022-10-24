@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE5560B0FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B692F60B0ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbiJXQN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S232093AbiJXQMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234803AbiJXQKZ (ORCPT
+        with ESMTP id S232949AbiJXQFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:10:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044C416F40B;
-        Mon, 24 Oct 2022 08:01:25 -0700 (PDT)
+        Mon, 24 Oct 2022 12:05:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759FBA3F60;
+        Mon, 24 Oct 2022 07:58:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F73AB81637;
-        Mon, 24 Oct 2022 12:22:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C97C433C1;
-        Mon, 24 Oct 2022 12:22:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 006F4B81664;
+        Mon, 24 Oct 2022 12:21:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C722C433D6;
+        Mon, 24 Oct 2022 12:21:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614155;
-        bh=pUGT69ifJ5OVidgnRzAuPxhCCoewVWUlq0pJhRaVMMQ=;
+        s=korg; t=1666614071;
+        bh=t3dMiH4XJXVQqT24zBIQwudtQaBoBJjPnA3eH7aaObo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CDcR1cIYnboUtXB9Mbar58OXagDf3Cl8O8hFg+errX8vIa5bJB4YpmS7AeQOoqzWU
-         WP1Z6h/hPvdQk+pLwkjSlipiYzpRL7TFeIl/z0P1+0+0nyXSBP7733vOhRVZonE6Ql
-         6lm94L5lHc/7efOuADPkJIrWoKSM2OuOIYW1XuQM=
+        b=jekqU6ZDNYENkNp8xIw5ls/ARKPbAlMOpGAGlxBjplkMqxhg6UZQd37+11HF1KsLO
+         H+BhRPY74zgIm/wwjGOg8CVchWyRcr8t8uYEYFAHsLrGiDAgpu5F/CAMYa89bIdxMh
+         l5vNJs14GlLSIieMAU/HVKxPPpOXcOMZBnO2rrcw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 113/390] wifi: rtl8xxxu: Fix skb misuse in TX queue selection
-Date:   Mon, 24 Oct 2022 13:28:30 +0200
-Message-Id: <20221024113027.513208767@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 114/390] spi: meson-spicc: do not rely on busy flag in pow2 clk ops
+Date:   Mon, 24 Oct 2022 13:28:31 +0200
+Message-Id: <20221024113027.553271176@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -53,45 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+From: Neil Armstrong <narmstrong@baylibre.com>
 
-[ Upstream commit edd5747aa12ed61a5ecbfa58d3908623fddbf1e8 ]
+[ Upstream commit 36acf80fc0c4b5ebe6fa010b524d442ee7f08fd3 ]
 
-rtl8xxxu_queue_select() selects the wrong TX queues because it's
-reading memory from the wrong address. It expects to find ieee80211_hdr
-at skb->data, but that's not the case after skb_push(). Move the call
-to rtl8xxxu_queue_select() before the call to skb_push().
+Since [1], controller's busy flag isn't set anymore when the
+__spi_transfer_message_noqueue() is used instead of the
+__spi_pump_transfer_message() logic for spi_sync transfers.
 
-Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
-Signed-off-by: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/7fa4819a-4f20-b2af-b7a6-8ee01ac49295@gmail.com
+Since the pow2 clock ops were limited to only be available when a
+transfer is ongoing (between prepare_transfer_hardware and
+unprepare_transfer_hardware callbacks), the only way to track this
+down is to check for the controller cur_msg.
+
+[1] ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
+
+Fixes: 09992025dacd ("spi: meson-spicc: add local pow2 clock ops to preserve rate between messages")
+Fixes: ae7d2346dc89 ("spi: Don't use the message queue if possible in spi_sync")
+Reported-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Tested-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Link: https://lore.kernel.org/r/20220908121803.919943-1-narmstrong@baylibre.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/spi/spi-meson-spicc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index 9f646964055d..e8b4544b5b15 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -4984,6 +4984,8 @@ static void rtl8xxxu_tx(struct ieee80211_hw *hw,
- 	if (control && control->sta)
- 		sta = control->sta;
+diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
+index e4cb52e1fe26..6974a1c947aa 100644
+--- a/drivers/spi/spi-meson-spicc.c
++++ b/drivers/spi/spi-meson-spicc.c
+@@ -537,7 +537,7 @@ static unsigned long meson_spicc_pow2_recalc_rate(struct clk_hw *hw,
+ 	struct clk_divider *divider = to_clk_divider(hw);
+ 	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
  
-+	queue = rtl8xxxu_queue_select(hw, skb);
-+
- 	tx_desc = skb_push(skb, tx_desc_size);
+-	if (!spicc->master->cur_msg || !spicc->master->busy)
++	if (!spicc->master->cur_msg)
+ 		return 0;
  
- 	memset(tx_desc, 0, tx_desc_size);
-@@ -4996,7 +4998,6 @@ static void rtl8xxxu_tx(struct ieee80211_hw *hw,
- 	    is_broadcast_ether_addr(ieee80211_get_DA(hdr)))
- 		tx_desc->txdw0 |= TXDESC_BROADMULTICAST;
+ 	return clk_divider_ops.recalc_rate(hw, parent_rate);
+@@ -549,7 +549,7 @@ static int meson_spicc_pow2_determine_rate(struct clk_hw *hw,
+ 	struct clk_divider *divider = to_clk_divider(hw);
+ 	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
  
--	queue = rtl8xxxu_queue_select(hw, skb);
- 	tx_desc->txdw1 = cpu_to_le32(queue << TXDESC_QUEUE_SHIFT);
+-	if (!spicc->master->cur_msg || !spicc->master->busy)
++	if (!spicc->master->cur_msg)
+ 		return -EINVAL;
  
- 	if (tx_info->control.hw_key) {
+ 	return clk_divider_ops.determine_rate(hw, req);
+@@ -561,7 +561,7 @@ static int meson_spicc_pow2_set_rate(struct clk_hw *hw, unsigned long rate,
+ 	struct clk_divider *divider = to_clk_divider(hw);
+ 	struct meson_spicc_device *spicc = pow2_clk_to_spicc(divider);
+ 
+-	if (!spicc->master->cur_msg || !spicc->master->busy)
++	if (!spicc->master->cur_msg)
+ 		return -EINVAL;
+ 
+ 	return clk_divider_ops.set_rate(hw, rate, parent_rate);
 -- 
 2.35.1
 
