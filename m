@@ -2,84 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975E760C01D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D1E60C023
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJYAui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S231305AbiJYAvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiJYAuI (ORCPT
+        with ESMTP id S230361AbiJYAvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:50:08 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B2DF615A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:29:12 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id z30so7050306qkz.13
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sDEiOO2OxUQEqcJLQZ7kBsOvRFZBqkT37nDYaev+ddU=;
-        b=TwfP4qZqh4BiLDQV8bKcN09HTJJB3GwPlAFBoCOIaBVjuUKx835RqDrfXzzU0I+ATj
-         3z9IxlU39VJ/0T02QQc0PW7mT6gt2vaVNpAO0NjZuUv/skIp+iHZ0oA36GcU/Sul4PRj
-         5vSlCegDDJxYot192NhL05+XWH3q4iAKh6mtBNdlaRbIDwPetrJDYZ5hWXjd3AHeG5rY
-         SDTNF449Tsmg/z0kkgdWdUW83n4ZNeomfkPZHZKp2Vyvk+QjRUKHSi+2v2/kPfkou6Wc
-         1l32r/V5jg8XUnPFCvrjg+PwtGc62cG2rvO6NGeyAUTqhkjq2HJ6Dso/Q0j0+L/Up4Wn
-         qI5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sDEiOO2OxUQEqcJLQZ7kBsOvRFZBqkT37nDYaev+ddU=;
-        b=gf0aUcrYU2Ihh8/9UA3XjieJT/QjAmQ/pXMZbenXt0swxMsIHSTbcO2qSjP8y7aBH4
-         7SVUyYPKZM9NX360za9jQ9mAWQ/ovGhI7o4pwGi6Gb1mQulwzj43bv9BGT8y9hcpP/M+
-         oZqLpXUCkPKCrqdf+KhMbGuG5COXuDh660q5HVWvZM3vVfrf+KYf2nW7lLjWuh7X9efQ
-         U4aaTlG5Js0u/S1nKdSlmg1c6hvtq4jdKCA+4BUSvTjPXqzMnCwVlJBHxwcLYjc2eLr+
-         dNyXlVnProMaSPtP3ONfH2ACvVzDcVJhH1unSzJSSVFQ+BzuNfrwalfgvu9Kle5C58Mk
-         nTSA==
-X-Gm-Message-State: ACrzQf1zrypvAMm5ax4uNTdCUKBUaR6Wb2SQPdM9wM6VP7PwCa1Ft4f9
-        qi44Z2PWoeoxoBqbCT5JccIMPQ==
-X-Google-Smtp-Source: AMsMyM4ZQwkLHu6v8w+ZHyWFThFAVPZOqYX9ByMlpVhRAn8QqQIOhDADr3uBRhpmvP4in84UZwkutA==
-X-Received: by 2002:a05:620a:2f5:b0:6ee:82ea:b531 with SMTP id a21-20020a05620a02f500b006ee82eab531mr24796730qko.324.1666654151315;
-        Mon, 24 Oct 2022 16:29:11 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id h6-20020a375306000000b006f3a20dccaesm805379qkb.136.2022.10.24.16.29.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 16:29:10 -0700 (PDT)
-Message-ID: <3aa78c08-6d19-8480-cf31-2de41642b100@linaro.org>
-Date:   Mon, 24 Oct 2022 19:29:09 -0400
+        Mon, 24 Oct 2022 20:51:15 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E542A18E723;
+        Mon, 24 Oct 2022 16:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666654260;
+        bh=sbM3L7q2j0MNanFbpvlk4CSjJOidE5xvJJaI4BLiy+Q=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+        b=Q32yPIeNsxZAbRf2+2Y2ggTxewbnqwxIr4zMBwuFTiJu+iqddxNFdyv00M6InbyHS
+         c7/6pjXHU4In8aJ9ZXpYi7PVXv0p18xDKzN2wBXyNOsINLbJgzBXSyA1aqScplZLo3
+         WNSq2nHp6IS5zwxfieSW8UpQvjc6dQb2e2TebkTg=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.33.170]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MG9kM-1osbbk3LjQ-00GczX; Tue, 25
+ Oct 2022 01:31:00 +0200
+Message-ID: <d44dad3d-33ad-7e4c-28d5-42d9d1372c73@gmx.de>
+Date:   Tue, 25 Oct 2022 01:31:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/1] dt-bindings: net: snps,dwmac: Document queue config
- subnodes
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20221021171055.85888-1-sebastian.reichel@collabora.com>
- <761d6ae2-e779-2a4b-a735-960c716c3024@linaro.org>
- <20221024222850.5zq426cnn75twmvn@mercury.elektranox.org>
- <aa146042-2130-9fc3-adcd-c6d701084b4a@linaro.org>
-In-Reply-To: <aa146042-2130-9fc3-adcd-c6d701084b4a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.3.1
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE
+Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Provags-ID: V03:K1:R8vYBbUooOSi7MshoH5Y5qxCav3WBy1NlUQ0z1lVhrrXwGRaHQO
+ 0pR8+RXiZ8CMIiX6PihSopgc8kfPH/NWS/hzPiRXnszO+/tMX5h8afBD58vJyMnbHTqxpti
+ UyYrMIvpsZKxxCuQjjxhHKuqLsj4/xnzJwt7HbNB8VRGgNV571c9ardTJCAq0Z7lfhJO9nI
+ N3wy7UVFTHjgl13j5TOtQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/5xtx47EcM8=:2HXPT76FgnSzFLXhC+ca+B
+ CcWDh0Xwl97uQp8njSaa5IuGOcMiFw8izG8nA0BFO4Qe2iIBlyWEnWMA/OgYw+0rf6kmH/1eb
+ e4IvNkBzvgs3uXNErxJfvOZxjTpv4+WYsFHPXAu5MpgqGXGhyOCg/balI9HGj5ayYIGKrSkAn
+ CJdbFOOROkGK+6K6po6pbHlIrdZnxAQbvSTeenkJ657ZkzgGE1vskg1CHrnQ/PmB6XZJDE1Hy
+ x7G4AnM60Z/dnsbtIPePVNxqY/8RLJ0x0DMUmLBnUx8UqUjfxYnpysNuUkz3dhv00ElXS+1+w
+ zTwOXxudtJhn55RHai76ze/SoUXLKXl2lrZF2UPts+D8+LfAUo3DZg48Fgjz3w3mUUMhEn5om
+ 7z3FxSKC2IgriD3xBFuiI2NT6LUU020jWQD5uim1VIr1zU8+rCqPOLMRlT8ouUNSO+KJlrLq1
+ rs8fdGMFfJLPMinXdMZR72J7cyeWnXvcXhZW9o+A2LKK0KX7S3bam2KqKvfFpfq2F/vXuuMzt
+ fVeZINmwdg+yQAMFCWtgmXvkLIu1j3mHJgYcKHtLMtkqn5BQIYss/T/9UJ8/Z4Hz3yjW0PXMv
+ OLuAMle2i6Z1ovwPq4AYPZbD6La2mhclu0WQfceMX79LvE7wF1r2RFEAs4WpllPf7A9GLOB1+
+ 1OhFZepk/XKKUa1tAWWMvwei+ByO8huAuDPXMffO0drdQjlTK2vmWmKXosPV52c5wv4MaYiZi
+ zfcJmghnQjD0sA+594XhdPUzzvbXhtG5qtSCRF3Xwq7t5lmzatJ2NGvviRirjwsIeyaD4a/1W
+ +JXhvq0m9YCU05dvTLqA7OaTzwRRooQk6zUA2h4pS4wZKo3g7xybSdES+NaB9RsBic3vvnrOh
+ 0QyaorrOOQ70VO0f0aoCVW+835cE0JK9ewxfN8K5TEFZtiu0xl/Nq3OMAwp6VcLmdCMOy8Bau
+ huj94f4gFdt/g9dU/kNdm44xlyutsQUZPYZ23wj4tWimgOu+lZPpUJqq+h9sDiEPZ7Y/CgajG
+ LGG2LirbfN53kFH+oztCLbzHGd44nmMRhyzpwWwxVOfc49o0poDul/OCzlcTsZkaUwAMHkOoN
+ efHPL6NJiodOmrhW4+BU3Wf0maNuPxGKWq+czudJ+rRVKvuJ57Hc3UI99DB8blrnFnevq7pAD
+ L++eSgVxiRRHMZ66KiqlbRcUNe/Cgc1gmfkK5zW4M/Gz5v0KOkHwqGqLavIzQJrNOefz1YNGO
+ 9dRkg7UWBLPBKn7GZAnlO/7kd2SCvSMy3j+h1tPF+ewbzLmRolYgKSTWq5lMfWdR3S2PIlgH4
+ JpYDYMR4bW5nf7iEjimcOQMd18ETSrcw98Zoa73eeKaJF6znJDtCLSifM7JtD1jQAnbXWZ15R
+ xyM7ISg5j9R8VteJxJBzjngop4B3UVdKm8XxiV+JyMy8L4wf1v8jxKP9x+xAQuzr22ZEejN06
+ IGSaSZBnozCiM84pAA1H+GqA44n5eEUyKOJqEwUpiluJ5zcXYfsD9RODSEU0ACsZcdnnpKpdU
+ 4JEzCzm2n/9CBKUu/xNpRt5cqozSFcnpabsZRzdB7wzvA
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,136 +74,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 19:28, Krzysztof Kozlowski wrote:
-> On 24/10/2022 18:28, Sebastian Reichel wrote:
->> Hi,
->>
->> On Sat, Oct 22, 2022 at 12:05:15PM -0400, Krzysztof Kozlowski wrote:
->>> On 21/10/2022 13:10, Sebastian Reichel wrote:
->>>> The queue configuration is referenced by snps,mtl-rx-config and
->>>> snps,mtl-tx-config. Most in-tree DTs put the referenced object
->>>> as child node of the dwmac node.
->>>>
->>>> This adds proper description for this setup, which has the
->>>> advantage of properly making sure only known properties are
->>>> used.
->>>>
->>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->>>> ---
->>>> [...]
->>>
->>> Please update the DTS example with all this.
->>
->> ok
-> 
-> BTW, I also found:
-> 
-> https://lore.kernel.org/linux-devicetree/20201214091616.13545-5-Sergey.Semin@baikalelectronics.ru/
->>
->>>
->>>>  
->>>>    snps,mtl-tx-config:
->>>>      $ref: /schemas/types.yaml#/definitions/phandle
->>>>      description:
->>>> -      Multiple TX Queues parameters. Phandle to a node that can
->>>> -      contain the following properties
->>>> -        * snps,tx-queues-to-use, number of TX queues to be used in the
->>>> -          driver
->>>> -        * Choose one of these TX scheduling algorithms
->>>> -          * snps,tx-sched-wrr, Weighted Round Robin
->>>> -          * snps,tx-sched-wfq, Weighted Fair Queuing
->>>> -          * snps,tx-sched-dwrr, Deficit Weighted Round Robin
->>>> -          * snps,tx-sched-sp, Strict priority
->>>> -        * For each TX queue
->>>> -          * snps,weight, TX queue weight (if using a DCB weight
->>>> -            algorithm)
->>>> -          * Choose one of these modes
->>>> -            * snps,dcb-algorithm, TX queue will be working in DCB
->>>> -            * snps,avb-algorithm, TX queue will be working in AVB
->>>> -              [Attention] Queue 0 is reserved for legacy traffic
->>>> -                          and so no AVB is available in this queue.
->>>> -          * Configure Credit Base Shaper (if AVB Mode selected)
->>>> -            * snps,send_slope, enable Low Power Interface
->>>> -            * snps,idle_slope, unlock on WoL
->>>> -            * snps,high_credit, max write outstanding req. limit
->>>> -            * snps,low_credit, max read outstanding req. limit
->>>> -          * snps,priority, bitmask of the priorities assigned to the queue.
->>>> -            When a PFC frame is received with priorities matching the bitmask,
->>>> -            the queue is blocked from transmitting for the pause time specified
->>>> -            in the PFC frame.
->>>> +      Multiple TX Queues parameters. Phandle to a node that
->>>> +      implements the 'tx-queues-config' object described in
->>>> +      this binding.
->>>> +
->>>> +  tx-queues-config:
->>>> +    type: object
->>>> +    properties:
->>>> +      snps,tx-queues-to-use:
->>>> +        $ref: /schemas/types.yaml#/definitions/uint32
->>>> +        description: number of TX queues to be used in the driver
->>>> +      snps,tx-sched-wrr:
->>>> +        type: boolean
->>>> +        description: Weighted Round Robin
->>>> +      snps,tx-sched-wfq:
->>>> +        type: boolean
->>>> +        description: Weighted Fair Queuing
->>>> +      snps,tx-sched-dwrr:
->>>> +        type: boolean
->>>> +        description: Deficit Weighted Round Robin
->>>> +      snps,tx-sched-sp:
->>>> +        type: boolean
->>>> +        description: Strict priority
->>>> +    patternProperties:
->>>> +      "^queue[0-9]$":
->>>> +        description: Each subnode represents a queue.
->>>> +        type: object
->>>> +        properties:
->>>> +          snps,weight:
->>>> +            $ref: /schemas/types.yaml#/definitions/uint32
->>>> +            description: TX queue weight (if using a DCB weight algorithm)
->>>> +          snps,dcb-algorithm:
->>>> +            type: boolean
->>>> +            description: TX queue will be working in DCB
->>>> +          snps,avb-algorithm:
->>>
->>> Is DCB and AVB compatible with each other? If not, then this should be
->>> rather enum (with a string for algorithm name).
->>>
->>> This applies also to other fields which are mutually exclusive.
->>
->> Yes and I agree it is ugly. But this is not a new binding, but just
->> properly describing the existing binding. It's not my fault :)
-> 
-> I understand (and did not think it's your fault), but you are
-> redesigning them. Existing DTS will have to be updated. If this is
-> already implemented by some other DTS, then well... they did not follow
-> bindings, so it's their fault. :)
-> 
-> What I want to say, why refactoring it if the new format is still poor?
->>
->>>> +            type: boolean
->>>> +            description:
->>>> +              TX queue will be working in AVB.
->>>> +              Queue 0 is reserved for legacy traffic and so no AVB is
->>>> +              available in this queue.
->>>> +          snps,send_slope:
->>>
->>> Use hyphens, no underscores.
->>> (This is already an incompatible change in bindings, so we can fix up
->>> the naming)
->>
->> No, this is not an incompatible change in the bindings. It's 100%
->> compatible. What this patch does is removing the text description
->> for 'snps,mtl-tx-config' and instead documenting the node in YAML
->> syntax. 'snps,mtl-tx-config' does not specify where this node should
->> be, so many DTS files do this:
-> 
-> Old binding did not document "tx-queues-config". Old binding had
-> "snps,mtl-tx-config" which was a phandle, so this is an ABI break of
-> bindings.
+Hi Greg
 
-Bah, not ABI break, just change in bindings, of course :)
+6.0.4-rc1
 
-Best regards,
-Krzysztof
+compiles, boots and runs here on x86_64
+(Intel i5-11400, Fedora 37 Beta)
+
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
