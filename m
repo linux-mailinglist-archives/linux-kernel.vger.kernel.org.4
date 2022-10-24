@@ -2,142 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A456609AF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731E9609ADE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiJXHFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S229501AbiJXHBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiJXHFk (ORCPT
+        with ESMTP id S229874AbiJXHBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:05:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D76F481C0;
-        Mon, 24 Oct 2022 00:05:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61AB961018;
-        Mon, 24 Oct 2022 07:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74943C433D6;
-        Mon, 24 Oct 2022 07:05:28 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V13 4/4] LoongArch: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-Date:   Mon, 24 Oct 2022 15:01:05 +0800
-Message-Id: <20221024070105.306280-5-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221024070105.306280-1-chenhuacai@loongson.cn>
-References: <20221024070105.306280-1-chenhuacai@loongson.cn>
+        Mon, 24 Oct 2022 03:01:19 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FF84B986;
+        Mon, 24 Oct 2022 00:01:17 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id l14so7461674wrw.2;
+        Mon, 24 Oct 2022 00:01:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qf30fYZResxam67c9aMaLSjwho0a6HRO04f+jUNDyZ8=;
+        b=iptHmJ3rI6G3ek/d9anqxtRcDGzTB9pEPgdn3tMNrY5Wywyham1lx2RcAEDdjzg0Y1
+         SWwuPwa8G8CAf/DwS0GGUF1N40r24Z9yvWTMnUGYdBKJSE3pujwVCp9Mj416DY0Lbo0h
+         fgXxxir+JHdff5nwNVl5BR7/q1GQ8pBJW+RJxKZJZLJ0F4KcvkeCEv/XAWriXAfzfcAq
+         fV0+nxtwTrC6GcUj2ADU0PIp+7htiMfB2ab7xjsZZtTGAoPLMA9UVU82uvTQdmdWCtQ8
+         R3bEUem3VZbTMJojnYyl/HoM3KZcPxijpTU4TDqsSYLjyQ01rVAJvb3eJ++LW7uAyMDJ
+         8jYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qf30fYZResxam67c9aMaLSjwho0a6HRO04f+jUNDyZ8=;
+        b=ChWKYZyZBckBMv2FMNo4gWC8xhGZdE1tx/PTHvN4WDnNdIZkyygv4RlNO2oWE6+rdE
+         cYVNjKq7C/OlVtRjJtmBgKXzzjvrNRLClF22Ue7HUkd6vcLBeGHLwKnqpzjS6jIoRIbl
+         zqyWqEyIDTa0MQa5g2wIpKtgoJ1GwDByBWyU8hFV0CTb/ra0mtV9RM7cWgk/m/3dXTW6
+         iThGIRwlwSQ3XHSqF/6VlbqtN7Uxzse9UcGrnLAObN0Rijk5xxeUEqQC/MvUXQ25K+bD
+         TAPPJh/JOUoTNIegO/q+KK1ADXpU64Vb8UbkUwvt6exbDXY/hIJ8hM05wyiBZ7L431dS
+         uJ+g==
+X-Gm-Message-State: ACrzQf3XcsvfNg8VR6AiQpzkO1QTKzBw7iWKYUkPzEYOXI4G1njdljWp
+        a/d5eIIpcBl99Dk8ZKyDiIVPnCaNdRo=
+X-Google-Smtp-Source: AMsMyM6uWrGzh1aJJti931dbc+eHQI+dWaI7zmjrEQl++CpXAvXRkCdbG4rXL/N1m9AP+jQe3OPOmA==
+X-Received: by 2002:a05:6000:1143:b0:236:5ede:cdad with SMTP id d3-20020a056000114300b002365edecdadmr6892673wrx.410.1666594876145;
+        Mon, 24 Oct 2022 00:01:16 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-8b88-53b7-c55c-8535.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:8b88:53b7:c55c:8535])
+        by smtp.gmail.com with ESMTPSA id h16-20020adffd50000000b0022da3977ec5sm4157129wrs.113.2022.10.24.00.01.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 00:01:15 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 24 Oct 2022 09:01:13 +0200
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] tracing/fprobe: Fix to check whether fprobe is
+ registered correctly
+Message-ID: <Y1Y4OYrPl8E3rN8J@krava>
+References: <166653477373.988423.13256491425983587550.stgit@mhiramat.roam.corp.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <166653477373.988423.13256491425983587550.stgit@mhiramat.roam.corp.google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feiyang Chen <chenfeiyang@loongson.cn>
+On Sun, Oct 23, 2022 at 11:19:33PM +0900, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Since commit ab51e15d535e ("fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag
+> for fprobe") introduced fprobe_kprobe_handler() for fprobe::f_op::func,
+> unregister_fprobe() fails to unregister the registered if user specifies
+> FPROBE_FL_KPROBE_SHARED flag.
+> To check it correctly, it should confirm the fprobe::f_op::func is either
+> fprobe_handler() or fprobe_kprobe_handler().
+> 
+> Fixes: ab51e15d535e ("fprobe: Introduce FPROBE_FL_KPROBE_SHARED flag for fprobe")
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-The feature of minimizing overhead of struct page associated with each
-HugeTLB page is implemented on x86_64. However, the infrastructure of
-this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-To avoid the following build error on LoongArch we should include linux/
-static_key.h in page-flags.h. This is straightforward but the build
-error is implicitly a LoongArch-specific problem, because ARM64 and X86
-have already include static_key.h from their arch-specific core headers.
+jirka
 
-In file included from ./include/linux/mmzone.h:22,
-from ./include/linux/gfp.h:6,
-from ./include/linux/mm.h:7,
-from arch/loongarch/kernel/asm-offsets.c:9:
-./include/linux/page-flags.h:208:1: warning: data definition has no
-type or storage class
-208 | DECLARE_STATIC_KEY_MAYBE(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:208:1: error: type defaults to 'int' in
-declaration of 'DECLARE_STATIC_KEY_MAYBE' [-Werror=implicit-int]
-./include/linux/page-flags.h:209:26: warning: parameter names (without
-types) in function declaration
-209 | hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h: In function 'hugetlb_optimize_vmemmap_enabled':
-./include/linux/page-flags.h:213:16: error: implicit declaration of
-function 'static_branch_maybe' [-Werror=implicit-function-declaration]
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~
-./include/linux/page-flags.h:213:36: error:
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON' undeclared (first
-use in this function); did you mean
-'CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP'?
-213 | return static_branch_maybe(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON,
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-./include/linux/page-flags.h:213:36: note: each undeclared identifier
-is reported only once for each function it appears in
-./include/linux/page-flags.h:214:37: error:
-'hugetlb_optimize_vmemmap_key' undeclared (first use in this
-function); did you mean 'hugetlb_optimize_vmemmap_enabled'?
-214 | &hugetlb_optimize_vmemmap_key);
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-| hugetlb_optimize_vmemmap_enabled
-
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig     | 1 +
- include/linux/page-flags.h | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 6f7fa0c0ca08..0a6ef613124c 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -52,6 +52,7 @@ config LOONGARCH
- 	select ARCH_USE_QUEUED_RWLOCKS
- 	select ARCH_USE_QUEUED_SPINLOCKS
- 	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
-+	select ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select ARCH_WANTS_NO_INSTR
- 	select BUILDTIME_TABLE_SORT
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 0b0ae5084e60..1aafdc73e399 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -9,6 +9,7 @@
- #include <linux/types.h>
- #include <linux/bug.h>
- #include <linux/mmdebug.h>
-+#include <linux/static_key.h>
- #ifndef __GENERATING_BOUNDS_H
- #include <linux/mm_types.h>
- #include <generated/bounds.h>
--- 
-2.31.1
-
+> ---
+>  kernel/trace/fprobe.c |    3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> index aac63ca9c3d1..9000d8ea6274 100644
+> --- a/kernel/trace/fprobe.c
+> +++ b/kernel/trace/fprobe.c
+> @@ -301,7 +301,8 @@ int unregister_fprobe(struct fprobe *fp)
+>  {
+>  	int ret;
+>  
+> -	if (!fp || fp->ops.func != fprobe_handler)
+> +	if (!fp || (fp->ops.func != fprobe_handler &&
+> +		    fp->ops.func != fprobe_kprobe_handler))
+>  		return -EINVAL;
+>  
+>  	/*
+> 
