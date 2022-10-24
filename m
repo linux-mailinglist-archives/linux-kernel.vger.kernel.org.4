@@ -2,187 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6631060B1B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7428460B388
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbiJXQc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S231970AbiJXRI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiJXQcg (ORCPT
+        with ESMTP id S234769AbiJXRIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:32:36 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA4049B49
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:19:13 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OF0fcr031720;
-        Mon, 24 Oct 2022 15:09:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pqq6g8ciTR5QW5YOUa+7JCIfpE1AbJcmclYuS620PKk=;
- b=DB1IYbwWR8Bjur2BBEqkToNs4cXx5yvr7qmatPZIHdmIRdzyUnWKlyJ842lbXC91jjmO
- OvmneaDGc8hdHt05YXjohtUEsjmSPt71W0smFUTuFNwzM03mdSr/HD8iYwFP5c8w/qF6
- 4XIy0JUHpnjLxFk25oXuI3pI7QeBmsjGHrVa8+MCsLX2RH88QdUjw3Fpl87c63aMxnwa
- T3L/xqzq4s19q6FxvYpS1DLwAJJ2V8u2POZyxM5DjE50QbyEWqZI8e/8eRoI/LS+6NJL
- Qj4iM/uEoCK5c45wXchcNmztb/OIaCxPBf76Mz3VEoC1pEZq76+kNqRQQyQ9YGGRiIK3 QA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kc67pmhq4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 15:08:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29OF8tY4002803
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 15:08:55 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 24 Oct
- 2022 08:08:54 -0700
-Message-ID: <8b0dca0f-8444-92d7-38c9-06bc7503d874@quicinc.com>
-Date:   Mon, 24 Oct 2022 09:08:53 -0600
+        Mon, 24 Oct 2022 13:08:31 -0400
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1A811C29
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:43:29 -0700 (PDT)
+Received: by mail-qv1-f43.google.com with SMTP id mx8so6728843qvb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:43:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w3y2AMrHeVKvlfYZQ2uRso4bzDxf1Jp6u6RB+7N/ROg=;
+        b=Z6H0V/KnDIDr+iK4ALSarBPwH632T1G5oGp3SDUHnpEebz/CWdkx0Gvj0KeApZZV3q
+         AgHV6H8pEWsE40nitz3o1frKYCUTvj3RTqVdJJYVfnXm/5bJ4dogQGkY2S8qVGs7AvCL
+         qETHwAUVgPYzH3IMvvT3dBa2P7A8kqZnXhaw2fThf1utMAagGpq1usWh+XnSsoK3v63A
+         sU+udcfxpHzXfiVcDgNooXDgKANYya1kkT1T6FE036JoEBW8L9/sgA7YdGl9T0nn5Vlk
+         PIOl9MXz4YAzQ9aEDVgZaUnzalov/jk+EuZNnrFKPKccPwJONed+fmhtzZHVr7Sjjq9D
+         8ldg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w3y2AMrHeVKvlfYZQ2uRso4bzDxf1Jp6u6RB+7N/ROg=;
+        b=uDeAABSY2QPtRWgiPwFfYm/8DCgxCsJxRmK/ydqWnMzifdmVGmHHmsB8Sua/wZUKgE
+         c+6InRjMFvRhR6KB8EfDmyWTnkiifSvQXmtHuhQdocltvDTSyT7A/Q10lPxkodVGr4Pj
+         cwhPuOMRmCQgJUJsWaTiGrNeBXc8Ebnw3xBtsmuXyigDXcJPr9SkDZzE8gLJb5aGJWb9
+         WCqGrnq69DL81d1uUemrNa2y5BVCR+UEUWGSSyiDEdbQxx61XXBfkLL6Sc5pnhz9qFcy
+         9+77eEResschkN6IS7k69PVknzk7UauB2tokE72RVDodfcH6GRFLTWV/2TCe3bplOlaN
+         +5oA==
+X-Gm-Message-State: ACrzQf2vW49QXnWasGnFFB1QdiudejstKB62YEJDLeInVT5vKIHMvBbB
+        y50QgxLYPOkKNT64lzDm4Ap4Xn6TAMZJuQ==
+X-Google-Smtp-Source: AMsMyM6N/9jO7DpbdtNliGJjhCPCNxfkUwy6g54IEy3I0K1xF7p1W5slfSfQGbwcdb3YEz80xd5Fpw==
+X-Received: by 2002:a17:903:11cd:b0:170:cde8:18b7 with SMTP id q13-20020a17090311cd00b00170cde818b7mr34053534plh.165.1666624171540;
+        Mon, 24 Oct 2022 08:09:31 -0700 (PDT)
+Received: from biggie.. ([103.230.148.187])
+        by smtp.gmail.com with ESMTPSA id w65-20020a628244000000b0056b802b8845sm4300138pfd.43.2022.10.24.08.09.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 08:09:30 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     akpm@linux-foundation.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, zokeefe@google.com, shy828301@gmail.com,
+        vbabka@suse.cz, david@redhat.com
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/khugepaged: add tracepoint to collapse_file()
+Date:   Mon, 24 Oct 2022 20:39:22 +0530
+Message-Id: <20221024150922.129814-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH 2/3] drm: define new accel major and register it
-Content-Language: en-US
-To:     Dave Airlie <airlied@gmail.com>, Oded Gabbay <ogabbay@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-References: <20221022214622.18042-1-ogabbay@kernel.org>
- <20221022214622.18042-3-ogabbay@kernel.org> <Y1U2K+fAnGbYug/+@kroah.com>
- <CAFCwf11PxtcRZegVBxYfJQFpYO0AipobJXWWp4ch+7mMKRLuKg@mail.gmail.com>
- <CAPM=9txP8N2kzeDHEbSbiO-oAy5cemJ_Ag4WqeCNzdx6b3quBA@mail.gmail.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <CAPM=9txP8N2kzeDHEbSbiO-oAy5cemJ_Ag4WqeCNzdx6b3quBA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wYnH4maOaRyiYeLY0MmKIxjF-hAHq86o
-X-Proofpoint-ORIG-GUID: wYnH4maOaRyiYeLY0MmKIxjF-hAHq86o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_04,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- adultscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
- impostorscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210240093
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/2022 1:52 AM, Dave Airlie wrote:
-> On Mon, 24 Oct 2022 at 17:23, Oded Gabbay <ogabbay@kernel.org> wrote:
->>
->> On Sun, Oct 23, 2022 at 3:40 PM Greg Kroah-Hartman
->> <gregkh@linuxfoundation.org> wrote:
->>>
->>> On Sun, Oct 23, 2022 at 12:46:21AM +0300, Oded Gabbay wrote:
->>>> The accelerator devices will be exposed to the user space with a new,
->>>> dedicated major number - 261.
->>>>
->>>> The drm core registers the new major number as a char device and create
->>>> corresponding sysfs and debugfs root entries, same as for the drm major.
->>>>
->>>> In case CONFIG_ACCEL is not selected, this code is not compiled in.
->>>>
->>>> Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
->>>> ---
->>>>   Documentation/admin-guide/devices.txt |  5 +++
->>>>   drivers/gpu/drm/drm_drv.c             | 45 +++++++++++++++++++++++
->>>>   drivers/gpu/drm/drm_internal.h        |  3 ++
->>>>   drivers/gpu/drm/drm_sysfs.c           | 52 +++++++++++++++++++++++++++
->>>>   include/drm/drm_ioctl.h               |  1 +
->>>>   5 files changed, 106 insertions(+)
->>>>
->>>> diff --git a/Documentation/admin-guide/devices.txt b/Documentation/admin-guide/devices.txt
->>>> index 9764d6edb189..06c525e01ea5 100644
->>>> --- a/Documentation/admin-guide/devices.txt
->>>> +++ b/Documentation/admin-guide/devices.txt
->>>> @@ -3080,6 +3080,11 @@
->>>>                  ...
->>>>                  255 = /dev/osd255     256th OSD Device
->>>>
->>>> + 261 char    Compute Acceleration Devices
->>>> +               0 = /dev/accel/accel0 First acceleration device
->>>> +               1 = /dev/accel/accel1 Second acceleration device
->>>> +                 ...
->>>> +
->>>>    384-511 char        RESERVED FOR DYNAMIC ASSIGNMENT
->>>>                Character devices that request a dynamic allocation of major
->>>>                number will take numbers starting from 511 and downward,
->>>> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
->>>> index 8214a0b1ab7f..b58ffb1433d6 100644
->>>> --- a/drivers/gpu/drm/drm_drv.c
->>>> +++ b/drivers/gpu/drm/drm_drv.c
->>>> @@ -67,6 +67,10 @@ static bool drm_core_init_complete;
->>>>
->>>>   static struct dentry *drm_debugfs_root;
->>>>
->>>> +#ifdef CONFIG_ACCEL
->>>> +static struct dentry *accel_debugfs_root;
->>>> +#endif
->>>> +
->>>>   DEFINE_STATIC_SRCU(drm_unplug_srcu);
->>>>
->>>>   /*
->>>> @@ -1031,9 +1035,19 @@ static const struct file_operations drm_stub_fops = {
->>>>        .llseek = noop_llseek,
->>>>   };
->>>>
->>>> +static void accel_core_exit(void)
->>>> +{
->>>> +#ifdef CONFIG_ACCEL
->>>> +     unregister_chrdev(ACCEL_MAJOR, "accel");
->>>> +     debugfs_remove(accel_debugfs_root);
->>>> +     accel_sysfs_destroy();
->>>> +#endif
->>>> +}
->>>
->>> Why is all of this in drm_drv.c?
->>>
->>> Why not put it in drm/accel/accel.c or something like that?  Then put
->>> the proper stuff into a .h file and then you have no #ifdef in the .c
->>> files.
->> I thought about that, adding an accel.c in drivers/accel/ and putting
->> this code there.
->> Eventually I thought that for two functions it's not worth it, but I
->> guess that in addition to the reason you gave, one can argue that
->> there will probably be more code in that file anyway, so why not open
->> it now.
->> I'll change this if no one else thinks otherwise.
-> 
-> Seems like a good idea to start doing it now, might make things easier
-> to keep separated.
+In the file mm/khugepaged.c, a TODO in the function collapse_file() asks
+to add tracepoints. Add the tracepoint named "mm_khugepaged_scan_file".
 
-I agree.  I was a bit confused going through this patch, and envisioning 
-how an accel driver would use the interface.  I think an 
-accel_internal.h would be clearer.
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+ include/trace/events/huge_memory.h | 32 ++++++++++++++++++++++++++++++
+ mm/khugepaged.c                    |  4 +++-
+ 2 files changed, 35 insertions(+), 1 deletion(-)
 
--Jeff
+diff --git a/include/trace/events/huge_memory.h b/include/trace/events/huge_memory.h
+index 935af4947917..b2f3157d2ff6 100644
+--- a/include/trace/events/huge_memory.h
++++ b/include/trace/events/huge_memory.h
+@@ -203,5 +203,37 @@ TRACE_EVENT(mm_khugepaged_scan_file,
+ 		__print_symbolic(__entry->result, SCAN_STATUS))
+ );
+ 
++TRACE_EVENT(mm_khugepaged_collapse_file,
++	TP_PROTO(struct mm_struct *mm, struct page *hpage,
++			unsigned long addr, const char *filename, int nr,
++			int result),
++	TP_ARGS(mm, hpage, addr, filename, nr, result),
++	TP_STRUCT__entry(
++		__field(struct mm_struct *, mm)
++		__field(unsigned long, hpfn)
++		__field(unsigned long, addr)
++		__string(filename, filename)
++		__field(int, nr)
++		__field(int, result)
++	),
++
++	TP_fast_assign(
++		__entry->mm = mm;
++		__entry->hpfn = hpage ? page_to_pfn(hpage) : -1;
++		__entry->addr = addr;
++		__assign_str(filename, filename);
++		__entry->nr = nr;
++		__entry->result = result;
++	),
++
++	TP_printk("mm=%p, hpage_pfn=0x%lx, addr=%ld, filename=%s, nr=%d, result=%s",
++		__entry->mm,
++		__entry->hpfn,
++		__entry->addr,
++		__get_str(filename),
++		__entry->nr,
++		__print_symbolic(__entry->result, SCAN_STATUS))
++);
++
+ #endif /* __HUGE_MEMORY_H */
+ #include <trace/define_trace.h>
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 4734315f7940..14db90e2f2ec 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -2059,7 +2059,9 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 		mem_cgroup_uncharge(page_folio(hpage));
+ 		put_page(hpage);
+ 	}
+-	/* TODO: tracepoints */
++
++	trace_mm_khugepaged_collapse_file(mm, hpage, addr, file->f_path.dentry->d_iname,
++				      nr, result);
+ 	return result;
+ }
+ 
+-- 
+2.34.1
+
