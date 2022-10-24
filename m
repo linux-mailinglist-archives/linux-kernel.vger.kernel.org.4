@@ -2,132 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C25609DB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6FF609DC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiJXJQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
+        id S230071AbiJXJRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbiJXJQD (ORCPT
+        with ESMTP id S230355AbiJXJQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:16:03 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F97546238;
-        Mon, 24 Oct 2022 02:15:41 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29O6ogAs020583;
-        Mon, 24 Oct 2022 11:15:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=z+1JCm1pKs2pubgyamSKK+Q6QSmrDxZrpGoChFw5Hls=;
- b=UZATB/6EVJaHP+kheMoZbkdycFbxldtahGwBzhpxjYAcjpuEPD0sA1D9XwalMRuhsC5q
- wOWttOFXaS6PvbJqRk0M41AZInYX2uW0oZVpZE2hMRrgIgCqEX79GUMyrH9B5Yn01bFH
- ao4Jxsc0OZSJcZkEe+hpCMoRhF0nitIDPMaVpGNiSwq9z3oc8F99dqn4JN22Hex0/l1+
- b2iVvuc3y9O+0xNrDaQHV+Er/WNHF4p9FtyoLlGJI1DLAVHI4z6FkhrRWrz7uvSUL5Lm
- O6P9rn6lvscZF6swMPPhDCX9LIxqYMFEzS78uXjKhIjlHzI3tlsDEJKAvxvtlMMARXqq rA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kc7v29rdd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 11:15:19 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BCF0610002A;
-        Mon, 24 Oct 2022 11:15:14 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B7CC1217B88;
-        Mon, 24 Oct 2022 11:15:14 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
- 2022 11:15:13 +0200
-Message-ID: <19d20435-ad5d-dc61-7b54-36b7bac72266@foss.st.com>
-Date:   Mon, 24 Oct 2022 11:15:13 +0200
+        Mon, 24 Oct 2022 05:16:51 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE7F6BD5B;
+        Mon, 24 Oct 2022 02:16:32 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id 4so2047277pli.0;
+        Mon, 24 Oct 2022 02:16:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h/yVDeHDr6plsnqVZvkYJdff2G0m4diaoqxuNVZA5+c=;
+        b=eTEnkDQFquLaewz9opAXVByCnvraNIOH6pchFMfkKEeqQuchnJpVHxznarX776cTCI
+         6ICUW/7rETyp1to8sUH5UjmHpjR99daPR79eL7tsKOcZbiHG6f2KBloyIXqg1cHCYQwt
+         DT2HNM6Uq6MO91QSGvaVdTqDgj+MjqB8d3XGEXpKe93KUreJXJabE9ufDFR9unXG+R/W
+         CvV0YhizY3KavfwDnGGr+FaWcevpd1S8X29nWG2cak5C2lDgPAkopvcqr2o6JdGoek94
+         s9d2ZUgXMJzNGCWcURJKXbqqbI2PNNOZ8cQ2lZtS3IoAdgHKUZm3BiOJBSD8rSt8NBXG
+         RFnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h/yVDeHDr6plsnqVZvkYJdff2G0m4diaoqxuNVZA5+c=;
+        b=fUQQ+37I69drqtrJ6ln1Zwxo+Urdd5ECCeVVk/DHrRG8TzviIyGT/L8TgprFufTV5Z
+         aUkM3ovp6naMWPDpENqEr8WKxLgy0YmR8Iv8r7T0cnxMA8D0j/Qx4c+SCcvgZHYIBV54
+         RbhaIsDy/aHpqkbIb9HCYQrzjGifG7hgNvcHt3peuzz6jZhAXyPlWPrDlTCHlOuHyJA5
+         4K4C40KZh1Xq01U3nZfm/cP4Eh2ZER+DVvcOu4Pz5vIznHfnNTkProJgwJlCApvg3XVg
+         IC0aMZNCNJvYilT9IuLZGwEAbtfnbkbn/74pHfqaKmVryYHDJ44f3qd1+b33RhN5nF1m
+         Qc/w==
+X-Gm-Message-State: ACrzQf0Ot689lzatOvdL8ONIc111qtShQ7cOhncBQresVXWRW73eQ+yv
+        lESR9t9fKImX0Ra7FIcBGVy13Aw39is=
+X-Google-Smtp-Source: AMsMyM4Nw7S+Rp9uPLWUSmzcTizdNVIle6xOqPE1jyLiydS2NRGHPzaBh5wmmM4OBfwDXwMCMExC+Q==
+X-Received: by 2002:a17:902:a611:b0:186:9ba2:148b with SMTP id u17-20020a170902a61100b001869ba2148bmr7503932plq.164.1666602991392;
+        Mon, 24 Oct 2022 02:16:31 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-6.three.co.id. [116.206.28.6])
+        by smtp.gmail.com with ESMTPSA id p29-20020a631e5d000000b00461b85e5ad6sm16803504pgm.19.2022.10.24.02.16.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 02:16:31 -0700 (PDT)
+Message-ID: <2edcbc94-e29a-b8ab-e320-ee52788471c8@gmail.com>
+Date:   Mon, 24 Oct 2022 16:16:25 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 0/8] iio: stm32-adc: add support of adc for stm32mp13
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/2] unicode: mkutf8data: Add compound malloc function
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     krisman@collabora.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <Y1ZFLO98zNoAgniW@debian.me>
+ <20221024082619.178940-1-kunyu@nfschina.com>
 Content-Language: en-US
-To:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <devicetree@vger.kernel.org>
-References: <20221012142205.13041-1-olivier.moysan@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20221012142205.13041-1-olivier.moysan@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221024082619.178940-1-kunyu@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_02,2022-10-21_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olivier
-
-On 10/12/22 16:21, Olivier Moysan wrote:
-> On STM32MP13 SoCs, each ADC peripheral has a single ADC block.
-> These ADC peripherals, ADC1 and ADC2, are fully independent.
-> The STM32MP131 SoC provides only ADC2, while other STM32MP13x
-> SoCs provide both ADC1 and ADC2.
+On 10/24/22 15:26, Li kunyu wrote:
 > 
-> The STM32MP13 ADC features and characteristics are slightly
-> different from STM32MP15 ADC ones, requiring a specific support
-> in the driver.
-> 
-> This patchset enables the ADC peripheral on STM32MP135F-DK board.
-> 
-> On STM32MP135F-DK board the ADC is connected to VDDA voltage
-> provided by the PMIC LOD1 supply, which has to be enabled through
-> SCMI regulator framework.
-> This serie introduces a fixed regulator to allow ADC probing,
-> while SCMI regulators support is not available. This does
-> not ensure ADC regulator enabling however.
-> 
-> Changes in v4:
-> - reformat patch 1 commit message
-> - reorder adc1 node
-> 
-> v3:
-> - Remove blank line in tag block
-> - Use HZ_PER_MHZ unit for max frequency definition
-> - Coding style updates
-> 
-> v2:
-> - Rework commit message length
-> - Add missing spaces
-> - Remove useless defines
-> 
-> Olivier Moysan (8):
->    iio: adc: stm32-adc: fix channel sampling time init
->    dt-bindings: iio: adc: stm32-adc: add stm32mp13 compatibles
->    iio: adc: stm32-adc: add stm32mp13 support
->    iio: adc: stm32: manage min sampling time on all internal channels
->    ARM: dts: stm32: add adc support to stm32mp13
->    ARM: dts: stm32: add adc pins muxing on stm32mp135f-dk
->    ARM: dts: stm32: add dummy vdd_adc regulator on stm32mp135f-dk
->    ARM: dts: stm32: add adc support on stm32mp135f-dk
+> I send the 1/2 and 2/2 patches separately, and divide the two functions and related modifications in the 2/2 patch into two patches.
 > 
 
-DT patches [5 to 8] applied on stm32-next.
+No, not that way.
 
-Thanks
-Alex
+Here's the recipe for submitting patch series (a set of two or more patches),
+assuming that you do the work on a branch which is based on mainline (master):
 
+1. First, create directory which to store the patches.
+2. Determine the base commit for your branch. Most of the times `git merge-base
+   master <your branch>` can be used, but sometimes you need to determine that
+   manually by seeing the commit log with `git log`.
+3. Generate the patch series (preferably with cover letter) by `git format-patch
+   -o <directory> --cover-letter --base=<base commit> <base commit>`. You can
+   now write the description about the series in the cover letter (which will
+   be 0000-cover-letter.patch).
+4. Find the maintainers which will review your series with
+   `scripts/get_maintainer.pl /path/to/directory/*.patch`. Ignore your email
+   address if it exists.
+5. Send the series with `git send-email <--to and/or --cc maintainers>
+   /path/to/directory/*.patch`. All patches will be sent as reply to the
+   cover letter.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
 
