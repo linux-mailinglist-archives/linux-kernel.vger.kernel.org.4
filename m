@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3098060A530
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B6860A93D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbiJXMVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S230525AbiJXNRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbiJXMTn (ORCPT
+        with ESMTP id S235817AbiJXNPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B058982D02;
-        Mon, 24 Oct 2022 04:58:23 -0700 (PDT)
+        Mon, 24 Oct 2022 09:15:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFC3A23DE;
+        Mon, 24 Oct 2022 05:25:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E58E661280;
-        Mon, 24 Oct 2022 11:49:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01680C433D6;
-        Mon, 24 Oct 2022 11:49:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D9E7612CF;
+        Mon, 24 Oct 2022 12:24:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D698C433C1;
+        Mon, 24 Oct 2022 12:24:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612144;
-        bh=1dNVR3X2IySjniVZceBtGxiJ2W3mMOjlJ9Z7yNLlviY=;
+        s=korg; t=1666614297;
+        bh=oTg7CPOJxYAvFd77/5cg9hTGZkS8zJbP5ZCy7OrxxK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LNVavv5WrR7OeYuLXPbo6uypjWfDIxZvKbTBq/6ik0/cX6Ex2Vx8ukiaaYECcKKUV
-         ZUBfLTCOnd/mkirCHLEHZ+9h5ypg7hZAKb6mGIRfNaON6oE4GQ/IPtR/wTzkLUF/5w
-         Hfy2PlbweD/FyzDzlrHoTyuWTit0Q1JoZhWYKFjA=
+        b=fbCS+pPX8872H4U0SM8UT/O+kDGDKEyIpd/mPngzp4dtZyHhh75GBo0tIJsUJOGkS
+         s76bp7BVCs8ITVLt60sCz5th/UKcMLiu9Va1dw3zweN0O7s9NOhrrmaIwErwC8Z34D
+         QEbNNsUgVczmkgSrWyHog/ExF1EzXy7YL4Defg+8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xu Qiang <xuqiang36@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 086/210] spi: qup: add missing clk_disable_unprepare on error in spi_qup_pm_resume_runtime()
-Date:   Mon, 24 Oct 2022 13:30:03 +0200
-Message-Id: <20221024112959.840946811@linuxfoundation.org>
+Subject: [PATCH 5.10 207/390] tty: xilinx_uartps: Fix the ignore_status
+Date:   Mon, 24 Oct 2022 13:30:04 +0200
+Message-Id: <20221024113031.592085925@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Qiang <xuqiang36@huawei.com>
+From: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
 
-[ Upstream commit 494a22765ce479c9f8ad181c5d24cffda9f534bb ]
+[ Upstream commit b8a6c3b3d4654fba19881cc77da61eac29f57cae ]
 
-Add the missing clk_disable_unprepare() before return
-from spi_qup_pm_resume_runtime() in the error handling case.
+Currently the ignore_status is not considered in the isr.
+Add a check to add the ignore_status.
 
-Fixes: dae1a7700b34 (“spi: qup: Handle clocks in pm_runtime suspend and resume”)
-Signed-off-by: Xu Qiang <xuqiang36@huawei.com>
-Link: https://lore.kernel.org/r/20220825065324.68446-2-xuqiang36@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 61ec9016988f ("tty/serial: add support for Xilinx PS UART")
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Link: https://lore.kernel.org/r/20220729114748.18332-5-shubhrajyoti.datta@xilinx.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-qup.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/tty/serial/xilinx_uartps.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-qup.c b/drivers/spi/spi-qup.c
-index c5c727274814..1ca678bcb527 100644
---- a/drivers/spi/spi-qup.c
-+++ b/drivers/spi/spi-qup.c
-@@ -1172,8 +1172,10 @@ static int spi_qup_pm_resume_runtime(struct device *device)
- 		return ret;
+diff --git a/drivers/tty/serial/xilinx_uartps.c b/drivers/tty/serial/xilinx_uartps.c
+index b5a8afbc452b..f7dfa123907a 100644
+--- a/drivers/tty/serial/xilinx_uartps.c
++++ b/drivers/tty/serial/xilinx_uartps.c
+@@ -375,6 +375,8 @@ static irqreturn_t cdns_uart_isr(int irq, void *dev_id)
+ 		isrstatus &= ~CDNS_UART_IXR_TXEMPTY;
+ 	}
  
- 	ret = clk_prepare_enable(controller->cclk);
--	if (ret)
-+	if (ret) {
-+		clk_disable_unprepare(controller->iclk);
- 		return ret;
-+	}
- 
- 	/* Disable clocks auto gaiting */
- 	config = readl_relaxed(controller->base + QUP_CONFIG);
++	isrstatus &= port->read_status_mask;
++	isrstatus &= ~port->ignore_status_mask;
+ 	/*
+ 	 * Skip RX processing if RX is disabled as RXEMPTY will never be set
+ 	 * as read bytes will not be removed from the FIFO.
 -- 
 2.35.1
 
