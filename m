@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB22B6097DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 03:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8334B6097DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 03:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiJXBeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 21:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
+        id S229970AbiJXBe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 21:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiJXBel (ORCPT
+        with ESMTP id S229958AbiJXBen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 21:34:41 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2071.outbound.protection.outlook.com [40.107.100.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60E2EE31;
-        Sun, 23 Oct 2022 18:34:36 -0700 (PDT)
+        Sun, 23 Oct 2022 21:34:43 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2051.outbound.protection.outlook.com [40.107.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FD711A10;
+        Sun, 23 Oct 2022 18:34:40 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TzseDokNbiKSGhyaWwikbRaoyPRMfRqQYMlfsuIhWa9mTvXcJFB6D4UdYs+BpgQjv8sXauRe20RZNYoC2IVF0rzzPefHAyxIdD5vbwGti9+V9H5z1ibeLLjjRY6z1tXLi2b4l5EtQ31GbT3szout1L81ofINczMyla05Qfs1siziRtI9m6q/buXeaLDVkK6eXS2ShenaiN4IvO/gY3p7L+Y+zdqsseSVRJ0yruJ7Sg2+2P/KKr1xQOnaKs7qVQH7sne5FbH/FCkOytsUBV39mFLYvpsZBQ3CuV/MNAL3o9/UIULRfxC6DbQgftw0PYRRWHNsv8nBQcZ/jep5SH8t8Q==
+ b=mZpdLuZczxX/fKNsHvj5Tr9f6rCdG9OxWZzqkjjs/gwg3HyAKrrDW2cRMoBlMd51GFKnxlmw2aGjkDWMRWPpWJCAvlEcJmFhC7Mng4L53DIf2QE9wr2VIkW2ogffIXqNlcogdKDkV27RO/hNV6ARqy360waLD/8NVkoqll1sH6Ro9uy8ryeQya928THNwMNo7+qYHjB5BYlH/53eWSzLDf04FMzNtlDzFmGo63zwVI07mPdazDfpEFjNqr19xeC2FcdjtrkVDJrmMFmQxYYqEvP8X0vUxzeIODGVuuqDFpI+wtbsywa9fpmGc2uI3IED+ldY0Yy2BQ/y1YgM6Eg/mw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NzQhU7QHySWI+DZQHMexSUsmVyV583iJPXxcLttvxFo=;
- b=A72zUS3ZKQKjjRBROVRQYpjGOjMuR4R23ZSbi5jdlwGW6VFhLBUjZtxDp1PRijuTfv2VgU3b8l25L7C01V2SsCU5RpvBXJRgO0GfFp1beJime0bxB/HdankZeC+g0vx8dVuEp3ar9ehvvJ+SzVpX9EUZEU98IWFi0EWeLDk5a2MP32hKnQhhSPlwlkifrKP3u3NmPdw6N3C09tb9Knz7HuSKg2yuHxwsgBPNz1+aLK2xxBa4GWfnEpXxtAdKpe0E/H7QRAnp49dqEao8X6bttb4dYcp/LCYSXXPupywwmBTH4/DzSHT7fzr5c0ok8LDXtmRrik1psx2sbSQ2VyswhQ==
+ bh=7zhbKf2YdCyhli7vfraDFgh/unNOGAzUxWffwuvKGg8=;
+ b=BhydbU4JLg48KxiHOJ+NeK59G6Dfw1QgnOsqix9R19W5y4E9X4oKBX1uTyjP0OoT2AldM65rhDQkz6mY8tee0BXoarYzyQFoZnxWclZVI419HPZ0LJZacLk9iyKEweu2pCAlw3FKe6o7Q8/9XyF8B09Lg1X6U/4jutGhkf0YKItmRfQ81Zl+0mbzv5I0yXQX7Pn4pfWUlp30tbYoImb5yuMcDeDCN/Py1qe2GNrdFhtShI0I1N8knRVqIRGPBoPfMc2eiH3cCVouedzEHqBS04Ty4jbbebMQZg6fWwECC6D+Rg8DuD2WGesYrpJw1iVF5bRYalJBuTeiekRksbNXbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NzQhU7QHySWI+DZQHMexSUsmVyV583iJPXxcLttvxFo=;
- b=V1PFPjfLUObvQH5YZdHYGWmt3ThC78xjX4ZZ2/qU1L4ayDx2WPmpdkeSjgNcEcaIddHstXU0mXmjzyHQZWx7Oi0MoxKN8sUbUwvFesSsrOXhDDKSxuMo1jvi/kH15Jzr+cHM0VUTl2UyZ07cWdBrNoHRZF5hpKKY3MszS5hwpgo=
-Received: from MW4PR04CA0267.namprd04.prod.outlook.com (2603:10b6:303:88::32)
- by BL0PR12MB4867.namprd12.prod.outlook.com (2603:10b6:208:17e::13) with
+ bh=7zhbKf2YdCyhli7vfraDFgh/unNOGAzUxWffwuvKGg8=;
+ b=yAlqxBFt61k06FoSbHXon0mujwim3Q19Jj154G5GWQmi+SHrdrV2OszPGXCfFoTcwMJWk464pMG0+1nX4lDXhXwTYHOMGaSZ1U+l7nFa4OxZ4xIuSosOFY3cdcOPYGLE8VyxTgHi5go4qaI5Qwt/2zrx80Z/dVT5GvSnW5hMZLE=
+Received: from MW2PR2101CA0005.namprd21.prod.outlook.com (2603:10b6:302:1::18)
+ by BL3PR12MB6571.namprd12.prod.outlook.com (2603:10b6:208:38e::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
- 2022 01:34:31 +0000
-Received: from CO1NAM11FT048.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:88:cafe::a7) by MW4PR04CA0267.outlook.office365.com
- (2603:10b6:303:88::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26 via Frontend
- Transport; Mon, 24 Oct 2022 01:34:31 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.20; Mon, 24 Oct
+ 2022 01:34:35 +0000
+Received: from CO1NAM11FT088.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:302:1:cafe::b8) by MW2PR2101CA0005.outlook.office365.com
+ (2603:10b6:302:1::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.0 via Frontend
+ Transport; Mon, 24 Oct 2022 01:34:35 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT048.mail.protection.outlook.com (10.13.175.148) with Microsoft SMTP
+ CO1NAM11FT088.mail.protection.outlook.com (10.13.175.131) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Mon, 24 Oct 2022 01:34:30 +0000
+ 15.20.5746.16 via Frontend Transport; Mon, 24 Oct 2022 01:34:34 +0000
 Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 23 Oct
- 2022 20:34:26 -0500
+ 2022 20:34:30 -0500
 From:   Meng Li <li.meng@amd.com>
 To:     Shuah Khan <skhan@linuxfoundation.org>,
         Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
@@ -68,9 +68,9 @@ CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
         Meng Li <li.meng@amd.com>
-Subject: [PATCH V4 3/4] selftests: amd-pstate: Trigger gitsource benchmark and test cpus
-Date:   Mon, 24 Oct 2022 09:33:55 +0800
-Message-ID: <20221024013356.1639489-4-li.meng@amd.com>
+Subject: [PATCH V4 4/4] Documentation: amd-pstate: Add tbench and gitsource test introduction
+Date:   Mon, 24 Oct 2022 09:33:56 +0800
+Message-ID: <20221024013356.1639489-5-li.meng@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221024013356.1639489-1-li.meng@amd.com>
 References: <20221024013356.1639489-1-li.meng@amd.com>
@@ -82,23 +82,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT048:EE_|BL0PR12MB4867:EE_
-X-MS-Office365-Filtering-Correlation-Id: c9c6c4ee-4d90-4dc7-3475-08dab55fe5f9
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT088:EE_|BL3PR12MB6571:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a5a9f9f-4a41-44be-b9df-08dab55fe842
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9KWuNowWJ1S7i4idsmZh+p5fTUcIzeRHHj3K6FmW0Uj3edBieoGe0cn4RilxM8oovtq6C66xCh2AVlOWYribDDoHo73AjFGB0OXHKNWCoTtCLzRoqiI7BQ9VLxTEc3zpC71d1KvSI7nWngH5rPZ9x4tqNo9PqxW4c4AvxqnB9D1iiXQK4p3jcKqzg6Pb3+U5XlDOoTXErcC7eoHz+IrIc2dAES3IfSQuuM5vDT2H0ZQZFM4MQWxfcLtZ/2kkXhkdVf8BfAWVS89dkdOvQXjGIX/SbumJJI0TVx59mRccPIv5fYvNc6dSS0OUWkgO+pBTzxQeN0904ZfM4IXE0t79oeBX1cmeHxHyFtZtydc+QIVhHdMtgeniCmZaD3HOLiUqbr6YmsoU/BXgzxz5BVxkZVE7YyXC9FTQQ3M6dI9Xniwj1ETYaSIGcZKy/d1pHLmsi9IW+8eA8QR1G7y4PUVT6mDRlRUead6joXjfZBFwaej4PR4Nia1gBxiM/D2MQlDi38J8Da9TLZH4tTM0kV2ZFyxcNP56W1nVAVDQRnLUaSzryi8n8gAvN92nFaWsnLHa0O1RYl8gNAZ2wwlpW4MZAgz3bOBKcFXqJN47PR1wjVf8igFllqtnMRp682UcY5Ut2/hX+Pt0KSLiKUSmUMy9LHnFEkzA/kXgQaalBsv7mwEvNhMfQdDPtX+Gi2a2ndpCtukWpib/yZ5OCqe1vkS3LM5nFy6aCPfrY+g7D0UTQIy2h91xGQ1BJ3i7m4mAY5dazpyadhPstEih3YJjyrzgx5P+kTgmudtNtNIOBI6CO0k+6lPoLLVZ4mMf9/A3j3zqgR/CrvZvAQmNRjgAErQNwQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39850400004)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(5660300002)(30864003)(81166007)(356005)(41300700001)(8936002)(70206006)(86362001)(2906002)(426003)(83380400001)(336012)(2616005)(1076003)(16526019)(186003)(47076005)(6666004)(478600001)(7696005)(40460700003)(26005)(82740400003)(4326008)(70586007)(8676002)(82310400005)(40480700001)(110136005)(36860700001)(316002)(54906003)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 5dr6HuLFz5H2cQKJPdaSgF3KK4u7t+hN/sZxArhUY/KPeOtZKAsPfW8RygLxwrRM/p7ZO85V1pWaqQleA9h2KuzxqQsUsC6xqMuwvjpnwkv22juJijH2GP50GlfVijE4wYqoFeqFg/1hHycpfQSrzE5XoolxhZsYX0AHXGG8AuZczJmui2Kj1UclLkbTcwZlL6E5SDk9PaPO3M8pNnDzCiNfQrDS6FtcXiyPI80JDQt+6cRMnFtUkqg0x25ddG0f4P6o3zGyA4Wm5J/hrdsrgtbgEkrksO65USyXYXacFcui4mcCJaDRgMVvWY+kQqDJlxnjfLocBzsuMBBjcZMaHDEZjthmrZ3svJesNUqypzVMj3fAX4b9AtdcmE1jYOXM86H9/yiLA2KupwD7VWBLMv2AXrOJaIl0z1h1doDKPZtr1fqvsGEfiNtPJbrfJJVnqeLpWFCcgJbNOnC6XvQEeuapvW+GZ0BNChNzcmpJNl8yWPwPfeFkQwK8vhpTR+eeudcQe5BGKX0C53pM2bLEX566GsxzcKoEdaYzoSPPryktNgNO/B1itSOaKzrjN8SVdVAmRFSTXNRF4IQTOHT0mSqbxolVf1tGYuSJ0XpMUo3yDjyW+mFaZlErJHjKVXCtkppFgY3ov0oOpJ4RQ0cwcqEy+oWKiAgC+BVpIi5cJyDiTtZhgxDnr20PGby5/XWfJ77SYNpIfOV985ZR0+HBCVIICNUOvMHapB2C1yAY19ESob11/Xv/C7gpvtrAZZycGb38eLQvX/JAPlVrzBM5axfbICA2s++SESIaz0YqHRqD/0dRY4/TzrnF0e5L485y
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199015)(36840700001)(46966006)(40470700004)(336012)(83380400001)(41300700001)(16526019)(356005)(81166007)(426003)(8676002)(82740400003)(30864003)(478600001)(2906002)(36860700001)(82310400005)(1076003)(2616005)(86362001)(47076005)(186003)(8936002)(40480700001)(70586007)(40460700003)(7696005)(6666004)(70206006)(4326008)(5660300002)(316002)(26005)(110136005)(36756003)(54906003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 01:34:30.9462
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 01:34:34.7991
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9c6c4ee-4d90-4dc7-3475-08dab55fe5f9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a5a9f9f-4a41-44be-b9df-08dab55fe842
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT048.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT088.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4867
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6571
 X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLACK autolearn=no
@@ -109,502 +109,254 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add gitsource.sh trigger the gitsource testing and monitor the cpu desire
-performance, frequency, load, power consumption and throughput etc.
-1) Download and tar gitsource codes.
-2) Run gitsource benchmark on specific governors, ondemand or schedutil.
-3) Run tbench benchmark comparative test on acpi-cpufreq kernel driver.
-4) Get desire performance, frequency, load by perf.
-5) Get power consumption and throughput by amd_pstate_trace.py.
-6) Get run time by /usr/bin/time.
-7) Analyse test results and save it in file selftest.gitsource.csv.
-8) Plot png images about time, energy and performance per watt
-for each test.
+Introduce tbench and gitsource test cases design and implementation.
+Monitor cpus changes about performance and power consumption etc.
 
 Signed-off-by: Meng Li <li.meng@amd.com>
 ---
- tools/testing/selftests/amd-pstate/Makefile   |   2 +-
- .../testing/selftests/amd-pstate/gitsource.sh | 345 ++++++++++++++++++
- tools/testing/selftests/amd-pstate/run.sh     |  32 +-
- 3 files changed, 372 insertions(+), 7 deletions(-)
- create mode 100755 tools/testing/selftests/amd-pstate/gitsource.sh
+ Documentation/admin-guide/pm/amd-pstate.rst | 194 ++++++++++++++++++--
+ 1 file changed, 174 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-index cac8dedb7226..5f195ee756d6 100644
---- a/tools/testing/selftests/amd-pstate/Makefile
-+++ b/tools/testing/selftests/amd-pstate/Makefile
-@@ -13,6 +13,6 @@ TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
- endif
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index 8f3d30c5a0d8..4f0d5169ff86 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -409,37 +409,55 @@ Unit Tests for amd-pstate
  
- TEST_PROGS := run.sh
--TEST_FILES := basic.sh tbench.sh
-+TEST_FILES := basic.sh tbench.sh gitsource.sh
+ 1. Test case decriptions
  
- include ../lib.mk
-diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
-new file mode 100755
-index 000000000000..a9ad9388eb7b
---- /dev/null
-+++ b/tools/testing/selftests/amd-pstate/gitsource.sh
-@@ -0,0 +1,345 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
++    1). Basic tests
 +
-+# Testing and monitor the cpu frequency and performance when
-+# this script trigger gitsource test.
++        Test prerequisite and basic functions for the ``amd-pstate`` driver.
 +
-+# protect against multiple inclusion
-+if [ $FILE_GITSOURCE ]; then
-+	return 0
-+else
-+	FILE_GITSOURCE=DONE
-+fi
-+
-+git_name="git-2.15.1"
-+git_tar="$git_name.tar.gz"
-+gitsource_url="https://github.com/git/git/archive/refs/tags/v2.15.1.tar.gz"
-+gitsource_governors=("ondemand" "schedutil")
-+
-+# $1: governor, $2: round, $3: des-perf, $4: freq, $5: load, $6: time $7: energy, $8: PPW
-+store_csv_gitsource()
-+{
-+	echo "$1, $2, $3, $4, $5, $6, $7, $8" | tee -a $OUTFILE_GIT.csv > /dev/null 2>&1
-+}
-+
-+# clear some special lines
-+clear_csv_gitsource()
-+{
-+	if [ -f $OUTFILE_GIT.csv ]; then
-+		sed -i '/Comprison(%)/d' $OUTFILE_GIT.csv
-+		sed -i "/$(scaling_name)/d" $OUTFILE_GIT.csv
-+	fi
-+}
-+
-+# find string $1 in file csv and get the number of lines
-+get_lines_csv_gitsource()
-+{
-+	if [ -f $OUTFILE_GIT.csv ]; then
-+		return `grep -c "$1" $OUTFILE_GIT.csv`
-+	else
-+		return 0
-+	fi
-+}
-+
-+pre_clear_gitsource()
-+{
-+	post_clear_gitsource
-+	rm -rf gitsource_*.png
-+	clear_csv_gitsource
-+}
-+
-+post_clear_gitsource()
-+{
-+	rm -rf results/tracer-gitsource*
-+	rm -rf $OUTFILE_GIT*.log
-+	rm -rf $OUTFILE_GIT*.result
-+}
-+
-+install_gitsource()
-+{
-+	if [ ! -d $git_name ]; then
-+		printf "Download gitsource, please wait a moment ...\n\n"
-+		wget -O $git_tar $gitsource_url > /dev/null 2>&1
-+
-+		printf "Tar gitsource ...\n\n"
-+		tar -xzf $git_tar
-+	fi
-+}
-+
-+# $1: governor, $2: loop
-+run_gitsource()
-+{
-+	echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
-+	./amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
-+
-+	printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
-+	cd $git_name
-+	perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o ../$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > ../$OUTFILE_GIT-perf-$1-$2.log 2>&1
-+	cd ..
-+
-+	for job in `jobs -p`
-+	do
-+		echo "Waiting for job id $job"
-+		wait $job
-+	done
-+}
-+
-+# $1: governor, $2: loop
-+parse_gitsource()
-+{
-+	awk '{print $5}' results/tracer-gitsource-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_GIT-des-perf-$1-$2.log
-+	avg_des_perf=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_GIT-des-perf-$1-$2.log)
-+	printf "Gitsource-$1-#$2 avg des perf: $avg_des_perf\n" | tee -a $OUTFILE_GIT.result
-+
-+	awk '{print $7}' results/tracer-gitsource-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_GIT-freq-$1-$2.log
-+	avg_freq=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_GIT-freq-$1-$2.log)
-+	printf "Gitsource-$1-#$2 avg freq: $avg_freq\n" | tee -a $OUTFILE_GIT.result
-+
-+	awk '{print $11}' results/tracer-gitsource-$1-$2/cpu.csv | sed -e '1d' | sed s/,// > $OUTFILE_GIT-load-$1-$2.log
-+	avg_load=$(awk 'BEGIN {i=0; sum=0};{i++; sum += $1};END {print sum/i}' $OUTFILE_GIT-load-$1-$2.log)
-+	printf "Gitsource-$1-#$2 avg load: $avg_load\n" | tee -a $OUTFILE_GIT.result
-+
-+	grep user $OUTFILE_GIT.time-gitsource-$1-$2.log | awk '{print $1}' | sed -e 's/user//' > $OUTFILE_GIT-time-$1-$2.log
-+	time_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_GIT-time-$1-$2.log)
-+	printf "Gitsource-$1-#$2 user time(s): $time_sum\n" | tee -a $OUTFILE_GIT.result
-+
-+	grep Joules $OUTFILE_GIT-perf-$1-$2.log | awk '{print $4}' > $OUTFILE_GIT-energy-$1-$2.log
-+	en_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_GIT-energy-$1-$2.log)
-+	printf "Gitsource-$1-#$2 power consumption(J): $en_sum\n" | tee -a $OUTFILE_GIT.result
-+
-+	# Permance is the number of run gitsource per second, denoted 1/t, where 1 is the number of run gitsource in t
-+	# senconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
-+	# and t is time measured in seconds(s). This means that performance per watt becomes
-+	#        1/t     1/t     1
-+	#       ----- = ----- = ---
-+	#         P      E/t     E
-+	# with unit given by 1 per joule.
-+	ppw=`echo "scale=9;1/$en_sum" | bc | awk '{printf "%.9f", $0}'`
-+	printf "Gitsource-$1-#$2 performance per watt(1/J): $ppw\n" | tee -a $OUTFILE_GIT.result
-+	printf "\n" | tee -a $OUTFILE_GIT.result
-+
-+	driver_name=`echo $(scaling_name)`
-+	store_csv_gitsource "$driver_name-$1" $2 $avg_des_perf $avg_freq $avg_load $time_sum $en_sum $ppw
-+}
-+
-+# $1: governor
-+loop_gitsource()
-+{
-+	printf "\nGitsource total test times is $LOOP_TIMES for $1\n\n"
-+	for i in `seq 1 $LOOP_TIMES`
-+	do
-+		run_gitsource $1 $i
-+		parse_gitsource $1 $i
-+	done
-+}
-+
-+# $1: governor
-+gather_gitsource()
-+{
-+	printf "Gitsource test result for $1 (loops:$LOOP_TIMES)" | tee -a $OUTFILE_GIT.result
-+	printf "\n--------------------------------------------------\n" | tee -a $OUTFILE_GIT.result
-+
-+	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "avg des perf:" | awk '{print $NF}' > $OUTFILE_GIT-des-perf-$1.log
-+	avg_des_perf=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-des-perf-$1.log)
-+	printf "Gitsource-$1 avg des perf: $avg_des_perf\n" | tee -a $OUTFILE_GIT.result
-+
-+	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "avg freq:" | awk '{print $NF}' > $OUTFILE_GIT-freq-$1.log
-+	avg_freq=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-freq-$1.log)
-+	printf "Gitsource-$1 avg freq: $avg_freq\n" | tee -a $OUTFILE_GIT.result
-+
-+	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "avg load:" | awk '{print $NF}' > $OUTFILE_GIT-load-$1.log
-+	avg_load=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-load-$1.log)
-+	printf "Gitsource-$1 avg load: $avg_load\n" | tee -a $OUTFILE_GIT.result
-+
-+	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "user time(s):" | awk '{print $NF}' > $OUTFILE_GIT-time-$1.log
-+	time_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_GIT-time-$1.log)
-+	printf "Gitsource-$1 total user time(s): $time_sum\n" | tee -a $OUTFILE_GIT.result
-+
-+	avg_time=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-time-$1.log)
-+	printf "Gitsource-$1 avg user times(s): $avg_time\n" | tee -a $OUTFILE_GIT.result
-+
-+	grep "Gitsource-$1-#" $OUTFILE_GIT.result | grep "power consumption(J):" | awk '{print $NF}' > $OUTFILE_GIT-energy-$1.log
-+	en_sum=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum}' $OUTFILE_GIT-energy-$1.log)
-+	printf "Gitsource-$1 total power consumption(J): $en_sum\n" | tee -a $OUTFILE_GIT.result
-+
-+	avg_en=$(awk 'BEGIN {sum=0};{sum += $1};END {print sum/'$LOOP_TIMES'}' $OUTFILE_GIT-energy-$1.log)
-+	printf "Gitsource-$1 avg power consumption(J): $avg_en\n" | tee -a $OUTFILE_GIT.result
-+
-+	# Permance is the number of run gitsource per second, denoted 1/t, where 1 is the number of run gitsource in t
-+	# senconds. It is well known that P=E/t, where P is power measured in watts(W), E is energy measured in joules(J),
-+	# and t is time measured in seconds(s). This means that performance per watt becomes
-+	#        1/t     1/t     1
-+	#       ----- = ----- = ---
-+	#         P      E/t     E
-+	# with unit given by 1 per joule.
-+	ppw=`echo "scale=9;1/$avg_en" | bc | awk '{printf "%.9f", $0}'`
-+	printf "Gitsource-$1 performance per watt(1/J): $ppw\n" | tee -a $OUTFILE_GIT.result
-+	printf "\n" | tee -a $OUTFILE_GIT.result
-+
-+	driver_name=`echo $(scaling_name)`
-+	store_csv_gitsource "$driver_name-$1" "Average" $avg_des_perf $avg_freq $avg_load $avg_time $avg_en $ppw
-+}
-+
-+# $1: base scaling_driver $2: base governor $3: comparison scaling_driver $4: comparison governor
-+__calc_comp_gitsource()
-+{
-+	base=`grep "$1-$2" $OUTFILE_GIT.csv | grep "Average"`
-+	comp=`grep "$3-$4" $OUTFILE_GIT.csv | grep "Average"`
-+
-+	if [ -n "$base" -a -n "$comp" ]; then
-+		printf "\n==================================================\n" | tee -a $OUTFILE_GIT.result
-+		printf "Gitsource comparison $1-$2 VS $3-$4" | tee -a $OUTFILE_GIT.result
-+		printf "\n==================================================\n" | tee -a $OUTFILE_GIT.result
-+
-+		# get the base values
-+		des_perf_base=`echo "$base" | awk '{print $3}' | sed s/,//`
-+		freq_base=`echo "$base" | awk '{print $4}' | sed s/,//`
-+		load_base=`echo "$base" | awk '{print $5}' | sed s/,//`
-+		time_base=`echo "$base" | awk '{print $6}' | sed s/,//`
-+		energy_base=`echo "$base" | awk '{print $7}' | sed s/,//`
-+		ppw_base=`echo "$base" | awk '{print $8}' | sed s/,//`
-+
-+		# get the comparison values
-+		des_perf_comp=`echo "$comp" | awk '{print $3}' | sed s/,//`
-+		freq_comp=`echo "$comp" | awk '{print $4}' | sed s/,//`
-+		load_comp=`echo "$comp" | awk '{print $5}' | sed s/,//`
-+		time_comp=`echo "$comp" | awk '{print $6}' | sed s/,//`
-+		energy_comp=`echo "$comp" | awk '{print $7}' | sed s/,//`
-+		ppw_comp=`echo "$comp" | awk '{print $8}' | sed s/,//`
-+
-+		# compare the base and comp values
-+		des_perf_drop=`echo "scale=4;($des_perf_comp-$des_perf_base)*100/$des_perf_base" | bc | awk '{printf "%.4f", $0}'`
-+		printf "Gitsource-$1 des perf base: $des_perf_base comprison: $des_perf_comp percent: $des_perf_drop\n" | tee -a $OUTFILE_GIT.result
-+
-+		freq_drop=`echo "scale=4;($freq_comp-$freq_base)*100/$freq_base" | bc | awk '{printf "%.4f", $0}'`
-+		printf "Gitsource-$1 freq base: $freq_base comprison: $freq_comp percent: $freq_drop\n" | tee -a $OUTFILE_GIT.result
-+
-+		load_drop=`echo "scale=4;($load_comp-$load_base)*100/$load_base" | bc | awk '{printf "%.4f", $0}'`
-+		printf "Gitsource-$1 load base: $load_base comprison: $load_comp percent: $load_drop\n" | tee -a $OUTFILE_GIT.result
-+
-+		time_drop=`echo "scale=4;($time_comp-$time_base)*100/$time_base" | bc | awk '{printf "%.4f", $0}'`
-+		printf "Gitsource-$1 perf base: $time_base comprison: $time_comp percent: $time_drop\n" | tee -a $OUTFILE_GIT.result
-+
-+		energy_drop=`echo "scale=4;($energy_comp-$energy_base)*100/$energy_base" | bc | awk '{printf "%.4f", $0}'`
-+		printf "Gitsource-$1 energy base: $energy_base comprison: $energy_comp percent: $energy_drop\n" | tee -a $OUTFILE_GIT.result
-+
-+		ppw_drop=`echo "scale=4;($ppw_comp-$ppw_base)*100/$ppw_base" | bc | awk '{printf "%.4f", $0}'`
-+		printf "Gitsource-$1 performance per watt base: $ppw_base comprison: $ppw_comp percent: $ppw_drop\n" | tee -a $OUTFILE_GIT.result
-+		printf "\n" | tee -a $OUTFILE_GIT.result
-+
-+		store_csv_gitsource "$1-$2 VS $3-$4" "Comprison(%)" "$des_perf_drop" "$freq_drop" "$load_drop" "$time_drop" "$energy_drop" "$ppw_drop"
-+	fi
-+}
-+
-+# calculate the comparison(%)
-+calc_comp_gitsource()
-+{
-+	# acpi-cpufreq-ondemand VS acpi-cpufreq-schedutil
-+	__calc_comp_gitsource ${all_scaling_names[0]} ${gitsource_governors[0]} ${all_scaling_names[0]} ${gitsource_governors[1]}
-+
-+	# amd-pstate-ondemand VS amd-pstate-schedutil
-+	__calc_comp_gitsource ${all_scaling_names[1]} ${gitsource_governors[0]} ${all_scaling_names[1]} ${gitsource_governors[1]}
-+
-+	# acpi-cpufreq-ondemand VS amd-pstate-ondemand
-+	__calc_comp_gitsource ${all_scaling_names[0]} ${gitsource_governors[0]} ${all_scaling_names[1]} ${gitsource_governors[0]}
-+
-+	# acpi-cpufreq-schedutil VS amd-pstate-schedutil
-+	__calc_comp_gitsource ${all_scaling_names[0]} ${gitsource_governors[1]} ${all_scaling_names[1]} ${gitsource_governors[1]}
-+}
-+
-+# $1: file_name, $2: title, $3: ylable, $4: column
-+plot_png_gitsource()
-+{
-+	# all_scaling_names[1] all_scaling_names[0] flag
-+	#    amd-pstate           acpi-cpufreq
-+	#         N                   N             0
-+	#         N                   Y             1
-+	#         Y                   N             2
-+	#         Y                   Y             3
-+	ret=`grep -c "${all_scaling_names[1]}" $OUTFILE_GIT.csv`
-+	if [ $ret -eq 0 ]; then
-+		ret=`grep -c "${all_scaling_names[0]}" $OUTFILE_GIT.csv`
-+		if [ $ret -eq 0 ]; then
-+			flag=0
-+		else
-+			flag=1
-+		fi
-+	else
-+		ret=`grep -c "${all_scaling_names[0]}" $OUTFILE_GIT.csv`
-+		if [ $ret -eq 0 ]; then
-+			flag=2
-+		else
-+			flag=3
-+		fi
-+	fi
-+
-+	gnuplot << EOF
-+		set term png
-+		set output "$1"
-+
-+		set title "$2"
-+		set xlabel "Test Cycles (round)"
-+		set ylabel "$3"
-+
-+		set grid
-+		set style data histogram
-+		set style fill solid 0.5 border
-+		set boxwidth 0.8
-+
-+		if ($flag == 1) {
-+			plot \
-+			"<(sed -n -e 's/,//g' -e '/${all_scaling_names[0]}-${gitsource_governors[0]}/p' $OUTFILE_GIT.csv)" using $4:xtic(2) title "${all_scaling_names[0]}-${gitsource_governors[0]}", \
-+			"<(sed -n -e 's/,//g' -e '/${all_scaling_names[0]}-${gitsource_governors[1]}/p' $OUTFILE_GIT.csv)" using $4:xtic(2) title "${all_scaling_names[0]}-${gitsource_governors[1]}"
-+		} else {
-+			if ($flag == 2) {
-+				plot \
-+				"<(sed -n -e 's/,//g' -e '/${all_scaling_names[1]}-${gitsource_governors[0]}/p' $OUTFILE_GIT.csv)" using $4:xtic(2) title "${all_scaling_names[1]}-${gitsource_governors[0]}", \
-+				"<(sed -n -e 's/,//g' -e '/${all_scaling_names[1]}-${gitsource_governors[1]}/p' $OUTFILE_GIT.csv)" using $4:xtic(2) title "${all_scaling_names[1]}-${gitsource_governors[1]}"
-+			} else {
-+				if ($flag == 3 ) {
-+					plot \
-+					"<(sed -n -e 's/,//g' -e '/${all_scaling_names[0]}-${gitsource_governors[0]}/p' $OUTFILE_GIT.csv)" using $4:xtic(2) title "${all_scaling_names[0]}-${gitsource_governors[0]}", \
-+					"<(sed -n -e 's/,//g' -e '/${all_scaling_names[0]}-${gitsource_governors[1]}/p' $OUTFILE_GIT.csv)" using $4:xtic(2) title "${all_scaling_names[0]}-${gitsource_governors[1]}", \
-+					"<(sed -n -e 's/,//g' -e '/${all_scaling_names[1]}-${gitsource_governors[0]}/p' $OUTFILE_GIT.csv)" using $4:xtic(2) title "${all_scaling_names[1]}-${gitsource_governors[0]}", \
-+					"<(sed -n -e 's/,//g' -e '/${all_scaling_names[1]}-${gitsource_governors[1]}/p' $OUTFILE_GIT.csv)" using $4:xtic(2) title "${all_scaling_names[1]}-${gitsource_governors[1]}"
-+				}
-+			}
-+		}
-+		quit
-+EOF
-+}
-+
-+amd_pstate_gitsource()
-+{
-+	printf "\n---------------------------------------------\n"
-+	printf "*** Running gitsource                     ***"
-+	printf "\n---------------------------------------------\n"
-+
-+	pre_clear_gitsource
-+
-+	install_gitsource
-+
-+	get_lines_csv_gitsource "Governor"
-+	if [ $? -eq 0 ]; then
-+		# add titles and unit for csv file
-+		store_csv_gitsource "Governor" "Round" "Des-perf" "Freq" "Load" "Time" "Energy" "Performance Per Watt"
-+		store_csv_gitsource "Unit" "" "" "GHz" "" "s" "J" "1/J"
-+	fi
-+
-+	backup_governor
-+	for governor in ${gitsource_governors[*]} ; do
-+		printf "\nSpecified governor is $governor\n\n"
-+		switch_governor $governor
-+		loop_gitsource $governor
-+		gather_gitsource $governor
-+	done
-+	restore_governor
-+
-+	plot_png_gitsource "gitsouce_time.png" "Gitsource Benchmark Time" "Time (s)" 6
-+	plot_png_gitsource "gitsource_energy.png" "Gitsource Benchmark Energy" "Energy (J)" 7
-+	plot_png_gitsource "gitsource_ppw.png" "Gitsource Benchmark Performance Per Watt" "Performance Per Watt (1/J)" 8
-+
-+	calc_comp_gitsource
-+
-+	post_clear_gitsource
-+}
-diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
-index dea61e4443fc..9ef6eff347d3 100755
---- a/tools/testing/selftests/amd-pstate/run.sh
-+++ b/tools/testing/selftests/amd-pstate/run.sh
-@@ -10,6 +10,7 @@ fi
+         +---------+--------------------------------+------------------------------------------------------------------------------------+
+         | Index   | Functions                      | Description                                                                        |
+         +=========+================================+====================================================================================+
+-        | 0       | amd_pstate_ut_acpi_cpc_valid   || Check whether the _CPC object is present in SBIOS.                                |
++        | 1       | amd_pstate_ut_acpi_cpc_valid   || Check whether the _CPC object is present in SBIOS.                                |
+         |         |                                ||                                                                                   |
+         |         |                                || The detail refer to `Processor Support <processor_support_>`_.                    |
+         +---------+--------------------------------+------------------------------------------------------------------------------------+
+-        | 1       | amd_pstate_ut_check_enabled    || Check whether AMD P-State is enabled.                                             |
++        | 2       | amd_pstate_ut_check_enabled    || Check whether AMD P-State is enabled.                                             |
+         |         |                                ||                                                                                   |
+         |         |                                || AMD P-States and ACPI hardware P-States always can be supported in one processor. |
+         |         |                                | But AMD P-States has the higher priority and if it is enabled with                 |
+         |         |                                | :c:macro:`MSR_AMD_CPPC_ENABLE` or ``cppc_set_enable``, it will respond to the      |
+         |         |                                | request from AMD P-States.                                                         |
+         +---------+--------------------------------+------------------------------------------------------------------------------------+
+-        | 2       | amd_pstate_ut_check_perf       || Check if the each performance values are reasonable.                              |
++        | 3       | amd_pstate_ut_check_perf       || Check if the each performance values are reasonable.                              |
+         |         |                                || highest_perf >= nominal_perf > lowest_nonlinear_perf > lowest_perf > 0.           |
+         +---------+--------------------------------+------------------------------------------------------------------------------------+
+-        | 3       | amd_pstate_ut_check_freq       || Check if the each frequency values and max freq when set support boost mode       |
++        | 4       | amd_pstate_ut_check_freq       || Check if the each frequency values and max freq when set support boost mode       |
+         |         |                                | are reasonable.                                                                    |
+         |         |                                || max_freq >= nominal_freq > lowest_nonlinear_freq > min_freq > 0                   |
+         |         |                                || If boost is not active but supported, this maximum frequency will be larger than  |
+         |         |                                | the one in ``cpuinfo``.                                                            |
+         +---------+--------------------------------+------------------------------------------------------------------------------------+
  
- source basic.sh
- source tbench.sh
-+source gitsource.sh
- 
- # amd-pstate-ut only run on x86/x86_64 AMD systems.
- ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
-@@ -18,6 +19,7 @@ VENDOR=$(cat /proc/cpuinfo | grep -m 1 'vendor_id' | awk '{print $NF}')
- FUNC=all
- OUTFILE=selftest
- OUTFILE_TBENCH="$OUTFILE.tbench"
-+OUTFILE_GIT="$OUTFILE.gitsource"
- 
- SYSFS=
- CPUROOT=
-@@ -130,6 +132,9 @@ amd_pstate_all()
- 
- 	# tbench
- 	amd_pstate_tbench
++    2). Tbench test
 +
-+	# gitsource
-+	amd_pstate_gitsource
- }
- 
- helpme()
-@@ -139,7 +144,8 @@ helpme()
- 	[-o <output-file-for-dump>]
- 	[-c <all: All testing,
- 	     basic: Basic testing,
--	     tbench: Tbench testing.>]
-+	     tbench: Tbench testing,
-+	     gitsource: Gitsource testing.>]
- 	[-t <tbench time limit>]
- 	[-p <tbench process number>]
- 	[-l <loop times for tbench>]
-@@ -158,7 +164,7 @@ parse_arguments()
- 				helpme
- 				;;
- 
--			c) # --func_type (Function to perform: basic, tbench (default: all))
-+			c) # --func_type (Function to perform: basic, tbench, gitsource (default: all))
- 				FUNC=$OPTARG
- 				;;
- 
-@@ -174,7 +180,7 @@ parse_arguments()
- 				PROCESS_NUM=$OPTARG
- 				;;
- 
--			l) # --tbench-loop-times
-+			l) # --tbench/gitsource-loop-times
- 				LOOP_TIMES=$OPTARG
- 				;;
- 
-@@ -242,16 +248,16 @@ prerequisite()
- 		fi
- 	else
- 		case "$FUNC" in
--			"tbench")
-+			"tbench" | "gitsource")
- 				if [ "$scaling_driver" != "$COMPARATIVE_TEST" ]; then
--					echo "$0 # Skipped: Comparison test can only run on $COMPARATIVE_TEST driver."
-+					echo "$0 # Skipped: Comparison test can only run on $COMPARISON_TEST driver."
- 					echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
- 					exit $ksft_skip
- 				fi
- 				;;
- 
- 			*)
--				echo "$0 # Skipped: Comparison test are only for tbench."
-+				echo "$0 # Skipped: Comparison test are only for tbench or gitsource."
- 				echo "$0 # Current comparative test is for $FUNC."
- 				exit $ksft_skip
- 				;;
-@@ -274,6 +280,10 @@ prerequisite()
- 			command_perf
- 			command_tbench
- 			;;
++        Test and monitor the cpu changes when running tbench benchmark under the specified governor.
++        These changes include desire performance, frequency, load, performance, energy etc.
++        The specified governor is ondemand or schedutil.
++        Tbench can also be tested on the ``acpi-cpufreq`` kernel driver for comparison.
 +
-+		"gitsource")
-+			command_perf
-+			;;
- 	esac
- 
- 	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
-@@ -321,6 +331,10 @@ do_test()
- 			amd_pstate_tbench
- 			;;
- 
-+		"gitsource")
-+			amd_pstate_gitsource
-+			;;
++    3). Gitsource test
 +
- 		*)
- 			echo "Invalid [-f] function type"
- 			helpme
-@@ -344,6 +358,12 @@ pre_clear_dumps()
- 			rm -rf tbench_*.png
- 			;;
- 
-+		"gitsource")
-+			rm -rf $OUTFILE.log
-+			rm -rf $OUTFILE.backup_governor.log
-+			rm -rf gitsource_*.png
-+			;;
++        Test and monitor the cpu changes when running gitsource benchmark under the specified governor.
++        These changes include desire performance, frequency, load, time, energy etc.
++        The specified governor is ondemand or schedutil.
++        Gitsource can also be tested on the ``acpi-cpufreq`` kernel driver for comparison.
 +
- 		*)
- 			;;
- 	esac
+ #. How to execute the tests
+ 
+    We use test module in the kselftest frameworks to implement it.
+-   We create amd-pstate-ut module and tie it into kselftest.(for
++   We create ``amd-pstate-ut`` module and tie it into kselftest.(for
+    details refer to Linux Kernel Selftests [4]_).
+ 
+-    1. Build
++    1). Build
+ 
+         + open the :c:macro:`CONFIG_X86_AMD_PSTATE` configuration option.
+         + set the :c:macro:`CONFIG_X86_AMD_PSTATE_UT` configuration option to M.
+@@ -449,23 +467,159 @@ Unit Tests for amd-pstate
+             $ cd linux
+             $ make -C tools/testing/selftests
+ 
+-    #. Installation & Steps ::
++        + make perf ::
++
++            $ cd tools/perf/
++            $ make
++
++
++    2). Installation & Steps ::
+ 
+         $ make -C tools/testing/selftests install INSTALL_PATH=~/kselftest
++        $ cp tools/perf/perf /user/bin/perf
+         $ sudo ./kselftest/run_kselftest.sh -c amd-pstate
+-        TAP version 13
+-        1..1
+-        # selftests: amd-pstate: amd-pstate-ut.sh
+-        # amd-pstate-ut: ok
+-        ok 1 selftests: amd-pstate: amd-pstate-ut.sh
+-
+-    #. Results ::
+-
+-         $ dmesg | grep "amd_pstate_ut" | tee log.txt
+-         [12977.570663] amd_pstate_ut: 1    amd_pstate_ut_acpi_cpc_valid  success!
+-         [12977.570673] amd_pstate_ut: 2    amd_pstate_ut_check_enabled   success!
+-         [12977.571207] amd_pstate_ut: 3    amd_pstate_ut_check_perf      success!
+-         [12977.571212] amd_pstate_ut: 4    amd_pstate_ut_check_freq      success!
++
++    3). Specified test case ::
++
++        $ cd ~/kselftest/amd-pstate
++        $ sudo ./run.sh -t basic
++        $ sudo ./run.sh -t tbench
++        $ sudo ./run.sh -t tbench -m acpi-cpufreq
++        $ sudo ./run.sh -t gitsource
++        $ sudo ./run.sh -t gitsource -m acpi-cpufreq
++        $ ./run.sh --help
++        ./run.sh: illegal option -- -
++        Usage: ./run.sh [OPTION...]
++                [-h <help>]
++                [-o <output-file-for-dump>]
++                [-c <all: All testing,
++                     basic: Basic testing,
++                     tbench: Tbench testing,
++                     gitsource: Gitsource testing.>]
++                [-t <tbench time limit>]
++                [-p <tbench process number>]
++                [-l <loop times for tbench>]
++                [-i <amd tracer interval>]
++                [-m <comparative test: acpi-cpufreq>]
++
++
++    4). Results
++
++        + basic
++
++         When you finish test, you will get the following log info ::
++
++          $ dmesg | grep "amd_pstate_ut" | tee log.txt
++          [12977.570663] amd_pstate_ut: 1    amd_pstate_ut_acpi_cpc_valid  success!
++          [12977.570673] amd_pstate_ut: 2    amd_pstate_ut_check_enabled   success!
++          [12977.571207] amd_pstate_ut: 3    amd_pstate_ut_check_perf      success!
++          [12977.571212] amd_pstate_ut: 4    amd_pstate_ut_check_freq      success!
++
++        + tbench
++
++         When you finish test, you will get selftest.tbench.csv and png images.
++         The selftest.tbench.csv file contains the raw data and the drop of the comparative test.
++         The png images shows the performance, energy and performan per watt of each test.
++         Open selftest.tbench.csv :
++
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + Governor                                        | Round        | Des-perf | Freq    | Load     | Performance | Energy  | Performance Per Watt |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + Unit                                            |              |          | GHz     |          | MB/s        | J       | MB/J                 |
++         +=================================================+==============+==========+=========+==========+=============+=========+======================+
++         + amd-pstate-ondemand                             | 1            |          |         |          | 2504.05     | 1563.67 | 158.5378             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + amd-pstate-ondemand                             | 2            |          |         |          | 2243.64     | 1430.32 | 155.2941             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + amd-pstate-ondemand                             | 3            |          |         |          | 2183.88     | 1401.32 | 154.2860             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + amd-pstate-ondemand                             | Average      |          |         |          | 2310.52     | 1465.1  | 156.1268             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + amd-pstate-schedutil                            | 1            | 165.329  | 1.62257 | 99.798   | 2136.54     | 1395.26 | 151.5971             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + amd-pstate-schedutil                            | 2            | 166      | 1.49761 | 99.9993  | 2100.56     | 1380.5  | 150.6377             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + amd-pstate-schedutil                            | 3            | 166      | 1.47806 | 99.9993  | 2084.12     | 1375.76 | 149.9737             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + amd-pstate-schedutil                            | Average      | 165.776  | 1.53275 | 99.9322  | 2107.07     | 1383.84 | 150.7399             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand                           | 1            |          |         |          | 2529.9      | 1564.4  | 160.0997             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand                           | 2            |          |         |          | 2249.76     | 1432.97 | 155.4297             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand                           | 3            |          |         |          | 2181.46     | 1406.88 | 153.5060             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand                           | Average      |          |         |          | 2320.37     | 1468.08 | 156.4741             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil                          | 1            |          |         |          | 2137.64     | 1385.24 | 152.7723             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil                          | 2            |          |         |          | 2107.05     | 1372.23 | 152.0138             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil                          | 3            |          |         |          | 2085.86     | 1365.35 | 151.2433             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil                          | Average      |          |         |          | 2110.18     | 1374.27 | 152.0136             |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand VS acpi-cpufreq-schedutil | Comprison(%) |          |         |          | -9.0584     | -6.3899 | -2.8506              |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + amd-pstate-ondemand VS amd-pstate-schedutil     | Comprison(%) |          |         |          | 8.8053      | -5.5463 | -3.4503              |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand VS amd-pstate-ondemand    | Comprison(%) |          |         |          | -0.4245     | -0.2029 | -0.2219              |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil VS amd-pstate-schedutil  | Comprison(%) |          |         |          | -0.1473     | 0.6963  | -0.8378              |
++         +-------------------------------------------------+--------------+----------+---------+----------+-------------+---------+----------------------+
++
++        + gitsource
++
++         When you finish test, you will get selftest.gitsource.csv and png images.
++         The selftest.gitsource.csv file contains the raw data and the drop of the comparative test.
++         The png images shows the performance, energy and performan per watt of each test.
++         Open selftest.gitsource.csv :
++
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + Governor                                        | Round        | Des-perf | Freq     | Load     | Time        | Energy  | Performance Per Watt |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + Unit                                            |              |          | GHz      |          | s           | J       | 1/J                  |
++         +=================================================+==============+==========+==========+==========+=============+=========+======================+
++         + amd-pstate-ondemand                             | 1            | 50.119   | 2.10509  | 23.3076  | 475.69      | 865.78  | 0.001155027          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + amd-pstate-ondemand                             | 2            | 94.8006  | 1.98771  | 56.6533  | 467.1       | 839.67  | 0.001190944          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + amd-pstate-ondemand                             | 3            | 76.6091  | 2.53251  | 43.7791  | 467.69      | 855.85  | 0.001168429          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + amd-pstate-ondemand                             | Average      | 73.8429  | 2.20844  | 41.2467  | 470.16      | 853.767 | 0.001171279          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + amd-pstate-schedutil                            | 1            | 165.919  | 1.62319  | 98.3868  | 464.17      | 866.8   | 0.001153668          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + amd-pstate-schedutil                            | 2            | 165.97   | 1.31309  | 99.5712  | 480.15      | 880.4   | 0.001135847          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + amd-pstate-schedutil                            | 3            | 165.973  | 1.28448  | 99.9252  | 481.79      | 867.02  | 0.001153375          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + amd-pstate-schedutil                            | Average      | 165.954  | 1.40692  | 99.2944  | 475.37      | 871.407 | 0.001147569          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand                           | 1            |          |          |          | 2379.62     | 742.96  | 0.001345967          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand                           | 2            |          |          |          | 441.74      | 817.49  | 0.001223256          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand                           | 3            |          |          |          | 455.48      | 820.01  | 0.001219497          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand                           | Average      |          |          |          | 425.613     | 793.487 | 0.001260260          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil                          | 1            |          |          |          | 459.69      | 838.54  | 0.001192548          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil                          | 2            |          |          |          | 466.55      | 830.89  | 0.001203528          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil                          | 3            |          |          |          | 470.38      | 837.32  | 0.001194286          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil                          | Average      |          |          |          | 465.54      | 835.583 | 0.001196769          |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand VS acpi-cpufreq-schedutil | Comprison(%) |          |          |          | 9.3810      | 5.3051  | -5.0379              |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + amd-pstate-ondemand VS amd-pstate-schedutil     | Comprison(%) | 124.7392 | -36.2934 | 140.7329 | 1.1081      | 2.0661  | -2.0242              |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-ondemand VS amd-pstate-ondemand    | Comprison(%) |          |          |          | 10.4665     | 7.5968  | -7.0605              |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
++         + acpi-cpufreq-schedutil VS amd-pstate-schedutil  | Comprison(%) |          |          |          | 2.1115      | 4.2873  | -4.1110              |
++         +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
+ 
+ Reference
+ ===========
 -- 
 2.34.1
 
