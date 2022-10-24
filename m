@@ -2,111 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2BE60C05A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D97160C05B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiJYBDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S229756AbiJYBDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230026AbiJYBCs (ORCPT
+        with ESMTP id S230232AbiJYBCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:02:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECDE459AE;
-        Mon, 24 Oct 2022 16:59:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666655991; x=1698191991;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=hdZaNs5iMO5JH6LtUCsAkiAuMuGiiXGD8WqtALn07oE=;
-  b=JchifkzTYgeQcrxlxtKgNUQrif/YHJ1AEQksVNF9WMMfjQ/XvbtulXmF
-   oumyvuPUx7/nQPjdnIAMyB+fUo2pDOc8UQlskX6wp3lhrBUkHOFDbezhl
-   VwrepPVwH5953R5XVc/aJbeTNUiU0fbix22nZtjSaEhrcDm2C96h9nlp9
-   KmN6byn3xkFRck3qOomN0S1ce7bSLtXDdcOgetEJMgzri4Sx9FLVRl0Sg
-   bQ2WloY3usRvcMFhGq/ubWHZol6/Xw2CvEDx9dYYr+vg75q5Yi5yZ40pr
-   flcP+uxXBphUlSUh7XC0wncl1h96ocqAKWsmiremRC7r1IFwNRGZykn1O
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="305160854"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="305160854"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 16:59:50 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="694746317"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="694746317"
-Received: from bmahadev-mobl.amr.corp.intel.com (HELO [10.212.216.245]) ([10.212.216.245])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 16:59:49 -0700
-Message-ID: <91db431a-36ab-c833-1068-536695981d45@linux.intel.com>
-Date:   Mon, 24 Oct 2022 16:59:48 -0700
+        Mon, 24 Oct 2022 21:02:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25176426
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:00:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 532C7CE13CE
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:00:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74BB1C43470
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:00:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pWW9K8vh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666656002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e6ouPlU6BGs4kPFwrmXeWjPLmjyMG2MThW4WJxW1s7s=;
+        b=pWW9K8vhmx6hLrKIXvek8LsHCDkuswwo10zuOMeGTRGrWVUzvBTZFfdqJt9q4uX6gpGm6O
+        w08+t/qymWPsTJYHo60ToERIBwjsXbDDGyqmOAKfAQvG7NEBx6p//dadLs/rg0Jzbjj113
+        gRs8RsQki54FTm0Csnarmxo4VAk9V1Y=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 81e92919 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 25 Oct 2022 00:00:02 +0000 (UTC)
+Received: by mail-vs1-f43.google.com with SMTP id k67so9432139vsk.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:00:02 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3AxKarIoqyH3zbAWZmtCPpxXeyBI747otupe/cfqdQRZW4KIpM
+        29YD2harVZr4s0npxP8fwpnr9zKrpOzWHTdFDhk=
+X-Google-Smtp-Source: AMsMyM4uJtrhUNYc7Adm4TVrz9Gz+yFl4Ma2o6YtJnG1sietFGIpDFqeO4WLPFF0JwDGBtUuGk9vZZzh1HHJCZPQS+M=
+X-Received: by 2002:a05:6102:411:b0:3aa:329e:18c8 with SMTP id
+ d17-20020a056102041100b003aa329e18c8mr1060016vsq.70.1666656000860; Mon, 24
+ Oct 2022 17:00:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wander Lairson Costa <wander@redhat.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com>
- <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
- <Y1Iimg0WItgIGq6/@kroah.com>
- <c09184e3-ac15-b230-6dea-d6718f6f0ab0@linux.intel.com>
- <CAAq0SU=w-upGGstmQgTh63zGqLZnEy1OpF+9FwAjSWMuyYyXTg@mail.gmail.com>
- <Y1aY/4SWwuDENigJ@kroah.com>
-Content-Language: en-US
-In-Reply-To: <Y1aY/4SWwuDENigJ@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221024162929.536004-1-Jason@zx2c4.com> <Y1b/iNMncyKI/W5c@ZenIV>
+In-Reply-To: <Y1b/iNMncyKI/W5c@ZenIV>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 25 Oct 2022 01:59:50 +0200
+X-Gmail-Original-Message-ID: <CAHmME9q2JOGMKNrXqK7q=xfZdciy89P+GT0eGHVmVqOvKDYA8g@mail.gmail.com>
+Message-ID: <CAHmME9q2JOGMKNrXqK7q=xfZdciy89P+GT0eGHVmVqOvKDYA8g@mail.gmail.com>
+Subject: Re: [PATCH] ALSA: au88x0: use explicitly signed char
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Al,
 
+On Mon, Oct 24, 2022 at 11:11 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Mon, Oct 24, 2022 at 06:29:29PM +0200, Jason A. Donenfeld wrote:
+> > With char becoming unsigned by default, and with `char` alone being
+> > ambiguous and based on architecture, signed chars need to be marked
+> > explicitly as such. This fixes warnings like:
+>
+> It might make sparse to STFU, but it does *not* resolve the underlying
+> issue:
+>
+> vortex_adb_checkinout() returns a number in range of 0..31 on success
+> and -ENOMEM on failure.  Quite a few callers don't bother to check...
 
-On 10/24/22 6:54 AM, Greg Kroah-Hartman wrote:
->>>>>> You are allowing userspace to spam the kernel logs, please do not do
->>>>>> that.
->>>>> Added it to help userspace understand the reason for the failure (only for
->>>>> the cases like request param issues and TDCALL failure). Boris recommended
->>>>> adding it in the previous review.
->>>> Again, you just created a vector for userspace to spam the kernel log.
->>>> No kernel driver should ever do that.
->>>>
->>> Brois, any comments? Do you also agree?
->>>
->> Maybe dev_err_once() does the job?
-> That does not make any sense when the userspace input can be different
-> each time.
-> 
-> This is just yet-another-ioctl, there's nothing special about it.
-> Return an error for invalid input and don't log anything.  Worst case,
-> make it a dev_dbg() call if you really really really want to see it.
+Yea, I saw that. I assume that the places that don't check don't
+*need* to check. But maybe this driver is junk and other bugs lurk.
+I'm not sure. Either way, I think this change is certainly an
+improvement on the status quo. I don't intend to develop further on
+it, but feel free to send patches atop once this lands.
 
-It is a nice to have debug info, but not very important. So I will remove it.
-
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Jason
