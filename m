@@ -2,95 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC96F609B54
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:31:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEC7609B58
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiJXHbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37166 "EHLO
+        id S229501AbiJXHcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJXHbb (ORCPT
+        with ESMTP id S229455AbiJXHcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:31:31 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DED4CA2E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:31:12 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id B175D32007F0;
-        Mon, 24 Oct 2022 03:31:10 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 24 Oct 2022 03:31:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1666596670; x=
-        1666683070; bh=OwF0mv2AJHzrKoKJS1vLjaS10D0Sn6RA5rvBvSUlk3E=; b=z
-        DcEKTXs086tYnYJ+RvH38kQMLSdHewwI1epb7MxHj/11/ws3pXLbbyyBBK4Pvfvl
-        oRneo/u9irBMzzyUlC+CEDve7I6yg4gOvc9hWDSAYKL8RaC+/XYPXwZm5kzvY1GM
-        w+4Cuxq/7owMQlJwWWvoeOXr0YvBkSocHki34jyM2ZlXTfAOzMy0G9XvBvkYjJOy
-        CJId0gX+AklxtQIlyIvFKZ5JL72aM3jVB2qVgMZN7uj/r9ZAL20qQtItpi2D8OyI
-        VYH8btBD19XMz2h4Au98M8Vb54wTbZQpAtgWzBrVvqmpOyH3twLPxHlP/T7DJLD5
-        RvNBM99/CUbEdNn/MlowA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666596670; x=
-        1666683070; bh=OwF0mv2AJHzrKoKJS1vLjaS10D0Sn6RA5rvBvSUlk3E=; b=s
-        8gN7zioIGP7+tpwRouZU0TcgC1h2PWBHdNswUaXYJF6VuNeUZYAe//UPWabPrD92
-        fuKHGsjLvDUgBe2MqNtt0C44dPHoUyvBCrSO1cdUaG72WvDw8M8ULOE/wD7h2ynx
-        t0K4gqQ5u/0Rg3sH/cF9gdpahGD7HWxwZ+4vhmyNxzyirVRTxwyUyQhjEGn9UDvi
-        8DL1phJ1w+gOX/f96deKP675lWgUPhhHeR+h2phxMeWvWbugjAkR1rXuIMYv3dFN
-        TCdX8y3pTIZojaRgtObpQxGu5fOFV6w010+Nv47TJeTJAjnKhPxrnNkJZ+9sNcwn
-        SsKSEIWZBUADQ4fGSedXA==
-X-ME-Sender: <xms:PT9WY6aR24B5IH8-NJRLnV2SLDrrl9xCbCBW-He9guHi0ervp7YMIA>
-    <xme:PT9WY9ZDVqODl1qz0QXtWipM8D9NdqRvFo_GR8Jd3b1-m15gkRDw3nAMFa2cIP0t1
-    7nUgiYxdK71RXpnnEQ>
-X-ME-Received: <xmr:PT9WY09-VSELldVgnbrmUhusqJz5X-WyN7Jgn6ClJLALCsSwPPFDufDByKViCXN81iBvxQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtfedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvegjfhfukfffgggtgffose
-    htkeertdertdejnecuhfhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghhnecuggft
-    rfgrthhtvghrnhepteefheefgfeujeduhfeugeffleetueeuvdfhlefhfeejteejhfdtff
-    dtgfdvjeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
-    mhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:PT9WY8otmThm3F_QGhx_4FFUZCnNGONKjuaORlyRZKvwS7FHncSUDQ>
-    <xmx:PT9WY1q_11ZCMEZhWi2oEx3fWesbAIMC4d0hT2cjRngGmVEFemSAtA>
-    <xmx:PT9WY6TxpcOBLU_tDxFfKzCnXnNbq17i5fwMU4ne9wNHaMuY21YDbw>
-    <xmx:Pj9WYwAaiH-pTf-mFXxuri60ZwIqcWc-mWlGK4Mm4z8hJ0puJsotMg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 24 Oct 2022 03:31:08 -0400 (EDT)
-From:   maxime@cerno.tech
-To:     airlied@linux.ie, maarten.lankhorst@linux.intel.com,
-        tzimmermann@suse.de, wangjianli <wangjianli@cdjrlc.com>,
-        daniel@ffwll.ch, mripard@kernel.org
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-In-Reply-To: <20221022060701.58280-1-wangjianli@cdjrlc.com>
-References: <20221022060701.58280-1-wangjianli@cdjrlc.com>
-Subject: Re: (subset) [PATCH] gpu/drm: fix repeated words in comments
-Message-Id: <166659663443.12501.5477862749061418647.b4-ty@cerno.tech>
-Date:   Mon, 24 Oct 2022 09:30:34 +0200
+        Mon, 24 Oct 2022 03:32:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9814057E;
+        Mon, 24 Oct 2022 00:32:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5D92B80E23;
+        Mon, 24 Oct 2022 07:32:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9436FC433D6;
+        Mon, 24 Oct 2022 07:32:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666596758;
+        bh=LNfOmd5fjQMNDmFl34cnDjiEjUDBRW5BfBCBVQ1IiRs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SFgjZ9VYu0O/YdKXe3xMsLgHaGxqUiUOtE2PLSBESBm2S1buGPyM09i2CLXtoCN0j
+         lQHj/exwWn0Vs1ISnKzhKI9Uxb5KQjJj2ynk3n4WOBEyCpRmwG+/i7dGU+HDk/fWFj
+         SzdFW9jcaxTTIoa7518X8huS55KF5L6wEade0DBCiRMWX3QMF7T+N6Izl/vo8EnZGd
+         HJwe2vgju3MjYMckMWjH5BypFAh5lDMRkombuITKUiZThoNFRAYeC5EBZy9xLEhuLA
+         J1PuiBYjx+/4Kkgzi2i+Ivw1CffpyIKgRh4ctsi6sg+ZlqQ47XBqAmSVbg7J9xhprd
+         SYk+Yn5io7ypw==
+Date:   Mon, 24 Oct 2022 08:32:33 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH 1/5] mfd: mc13xxx: stop including of_gpio.h
+Message-ID: <Y1Y/kZxPTGrWH5wH@google.com>
+References: <20220926054421.1546436-1-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220926054421.1546436-1-dmitry.torokhov@gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 22 Oct 2022 14:07:01 +0800, wangjianli wrote:
-> Delete the redundant word 'the'.
-> 
-> 
+On Sun, 25 Sep 2022, Dmitry Torokhov wrote:
 
-Applied to drm/drm-misc (drm-misc-next).
+> Neither SPI nor I2C variant uses any APIs from of_gpio.h so let's stop
+> including it.
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>  drivers/mfd/mc13xxx-i2c.c | 1 -
+>  drivers/mfd/mc13xxx-spi.c | 1 -
+>  2 files changed, 2 deletions(-)
 
-Thanks!
-Maxime
+Applied, thanks.
+
+-- 
+Lee Jones [李琼斯]
