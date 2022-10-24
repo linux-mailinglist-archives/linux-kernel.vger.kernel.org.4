@@ -2,77 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD71D609D0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8410609D07
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:44:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiJXIpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
+        id S230368AbiJXIoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiJXIpt (ORCPT
+        with ESMTP id S230200AbiJXIn7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:45:49 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EE445076;
-        Mon, 24 Oct 2022 01:45:46 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id b12so28549078edd.6;
-        Mon, 24 Oct 2022 01:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1PI6YXl38ZK2V0beNEuf7h7mikagmruTjea1nZRYjm8=;
-        b=CiDYLQrhxuOQwlWa5h3fy+Gmyh8KwbyHZLnSQ8U1Rh8NwgBSfwCytGQ8ZoGLf7Ir4M
-         PAm63EIWVAcBBFIZoOhRi1XwY+NePgWbXLuuAgQDTfCX2OGtzOi7YtqwnaD7Osg1EFLe
-         D/lmQx54SaJLsthbTv7o4NbNoQZD8spZ4pBg1KwnTgjDMx8iY6TMTc+p1uVbM58WcLAD
-         pTYi8soLgxMgz8nWtFvA+G71mYiZJm2lnWSGNDNJp9f1WA0g6DLL1sG/Zy3IyO/vQRi1
-         5a+8vVivrQUH8Bleo87r3EibsvjTgTUV8mOdD7+HF7Kx+oXywgQkJVDkXeZVuQwv3cum
-         cvwg==
+        Mon, 24 Oct 2022 04:43:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AD96053A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666601037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=37cunLzz/xjWAuAYxixh7mVEDXes8SvYGmLQAkvvjj8=;
+        b=JCOto4lTuJ8CkFHSilVg2wFGmPXGI6QAb7QO4OZAG6pZLFgE3wYellPUklTSQfFjiHTGEK
+        F7BUd4Po/1UdnKPW4RkaBblzT+8+OTAg6OI3vWIrZ5au9a6s93c3AUOw0dxp3hHBt/WXma
+        t/tjvH12KUG4NsI0+drWC77zceyLswI=
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
+ [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-294-SSj8EZxFN9q5a-6E6Fo7MA-1; Mon, 24 Oct 2022 04:43:55 -0400
+X-MC-Unique: SSj8EZxFN9q5a-6E6Fo7MA-1
+Received: by mail-ot1-f69.google.com with SMTP id c8-20020a9d6c88000000b00660efaeb7d6so5203884otr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:43:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1PI6YXl38ZK2V0beNEuf7h7mikagmruTjea1nZRYjm8=;
-        b=SHgKdjv5d4Noy+kwIj5/ZwZuORfTMvYLU1XwhYrIqsVe1Fsr+3Tb1//SoFiup+9xtB
-         ZsHWfHsxhO2zK2Oi2rsx9m/BlbYfeqo8Q52Ps714dV9pq4KeJcp7MFItdokNq00q/sqR
-         FicesipkzNvU2Piq7ruZ9Mxp1uBBsYH+1BLm/IF3EZhfawBUcG+vzOmTebjiMKrjFrVx
-         uzvHett/l8XGUA9t8TnmG3gDqhLtzvlTztsmDfrzCz1+38kM8oE2NscGjXo8e0/qHrqw
-         beJkW+02GKrSfN2m+OYoiBcWmoPDMk/Vt2W/h2vf5f9ikRJ2moNmOXF73uDaDvaeyxAR
-         JI7Q==
-X-Gm-Message-State: ACrzQf0egTnDUoLLw5smKGrRj0Z9Bd6OaoC0PK37Mj9WZMu8RFH7hcKn
-        mj3eBJdmn/28vwYAAxFhJnYLocwITw0g3pYnaUo=
-X-Google-Smtp-Source: AMsMyM4lQxPO5NaPH2GmuBPZCAvfIjfJoWedY6F6nBTib6CcAtkKQcVwkQogg3KrVqF+jyfQ5OKDK4dQWdm7o9ejUP0=
-X-Received: by 2002:a17:906:fd8d:b0:780:997:8b7b with SMTP id
- xa13-20020a170906fd8d00b0078009978b7bmr27005280ejb.635.1666601144530; Mon, 24
- Oct 2022 01:45:44 -0700 (PDT)
+        bh=37cunLzz/xjWAuAYxixh7mVEDXes8SvYGmLQAkvvjj8=;
+        b=T0Tqs1EEARKuTZiHnVj0juQ8GuJSHlyHIjGhmxUN53zYPHxbDGkg40pKe01ARq3vDS
+         A808nm1B3/mUJgBDKu28G+cD7cxRI+sNc8c1KVKn/d9DLgXaPuYwm9FPmi6wet/gf4xn
+         gQwIKpoUuKmFiKtYDxHuIWF96zNYO64Jo6Lkf0tY5SxlAzTalcJKY5hfzJdFH4/trNSO
+         hogdyfsXX4oUnyTY+jvE6/CKq/kyWKGz2cU3arMJ+4BDHu0NoytSkznXvlt8qFyMgFHz
+         dArcwoB4WNXccPEswQyrxoO5JMfLpylpx15goYzWl5eKZJFXOm8ggdlPeHRm5mx58ifo
+         b00Q==
+X-Gm-Message-State: ACrzQf2jEqDlibZkAm1IlVnyqBBe/6Z5PI9LpzHK8jIZ9zd6T4d+yjhf
+        ycoXUopKEne+3jQVv2E3bAKbwtDRu/0fpNER0EE+kYfKB7pE5RWaK31QhjiCqEPV4nUOFsSfuDK
+        IYUXsyke9WGFMRBhSsKzp6meAkQHae6zuj7JFwtpx
+X-Received: by 2002:a05:6808:1483:b0:354:a36e:5b with SMTP id e3-20020a056808148300b00354a36e005bmr29381412oiw.35.1666601033714;
+        Mon, 24 Oct 2022 01:43:53 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6QOmcnUd5hsVuCK9YTa0H35I4j6OIckxitomGIVwkIozvSpd6Oxb10S0EmlqXL99JCxWV7DfRYCqWBwZ+iStY=
+X-Received: by 2002:a05:6808:1483:b0:354:a36e:5b with SMTP id
+ e3-20020a056808148300b00354a36e005bmr29381408oiw.35.1666601033493; Mon, 24
+ Oct 2022 01:43:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221024053711.696124-1-dzm91@hust.edu.cn> <Y1ZIc51hxE4iV70a@smile.fi.intel.com>
-In-Reply-To: <Y1ZIc51hxE4iV70a@smile.fi.intel.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Mon, 24 Oct 2022 16:43:37 +0800
-Message-ID: <CAD-N9QWhXWNjuzf+f+bOup2GF_HRzSvRDiajdsHDKu1yke+qgg@mail.gmail.com>
-Subject: Re: [PATCH] can: mcp251x: fix error handling code in mcp251x_can_probe
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        =?UTF-8?Q?Sebastian_W=C3=BCrl?= <sebastian.wuerl@ororatech.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1666392237-4042-1-git-send-email-si-wei.liu@oracle.com> <1666392237-4042-2-git-send-email-si-wei.liu@oracle.com>
+In-Reply-To: <1666392237-4042-2-git-send-email-si-wei.liu@oracle.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Mon, 24 Oct 2022 16:43:40 +0800
+Message-ID: <CACGkMEt-TiJ6LQczo4fY_eY9jWdDGVt_ZNXM8Eq3qkbNvLJmUA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] vdpa: save vdpa_dev_set_config in struct vdpa_device
+To:     Si-Wei Liu <si-wei.liu@oracle.com>
+Cc:     mst@redhat.com, parav@nvidia.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,24 +74,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 4:16 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Sat, Oct 22, 2022 at 7:49 AM Si-Wei Liu <si-wei.liu@oracle.com> wrote:
 >
-> On Mon, Oct 24, 2022 at 01:37:07PM +0800, Dongliang Mu wrote:
-> > In mcp251x_can_probe, if mcp251x_gpio_setup fails, it forgets to
-> > unregister the can device.
-> >
-> > Fix this by unregistering can device in mcp251x_can_probe.
+> In order to allow live migration orchestration software to export the
+> initial set of vdpa attributes with which the device was created, it
+> will be useful if the vdpa tool can report the config on demand with
+> simple query. This will ease the orchestration software implementation
+> so that it doesn't have to keep track of vdpa config change, or have
+> to persist vdpa attributes across failure and recovery, in fear of
+> being killed due to accidental software error.
 >
-> Fixes tag?
-
-Fixes: 2d52dabbef60 ("can: mcp251x: add GPIO support")
-
-This commit adds the mcp251x_gpio_setup function, but with an incorrect label.
-
+> This commit attempts to make struct vdpa_device contain the struct
+> vdpa_dev_set_config, where all config attributes upon vdpa creation
+> are carried over. Which will be used in subsequent commits.
 >
+> Signed-off-by: Si-Wei Liu <si-wei.liu@oracle.com>
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+
+> ---
+>  include/linux/vdpa.h | 23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
+>
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index 6d0f5e4..9f519a3 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -58,6 +58,16 @@ struct vdpa_vq_state {
+>         };
+>  };
+>
+> +struct vdpa_dev_set_config {
+> +       u64 device_features;
+> +       struct {
+> +               u8 mac[ETH_ALEN];
+> +               u16 mtu;
+> +               u16 max_vq_pairs;
+> +       } net;
+> +       u64 mask;
+> +};
+> +
+>  struct vdpa_mgmt_dev;
+>
+>  /**
+> @@ -77,6 +87,8 @@ struct vdpa_vq_state {
+>   * @nvqs: maximum number of supported virtqueues
+>   * @mdev: management device pointer; caller must setup when registering device as part
+>   *       of dev_add() mgmtdev ops callback before invoking _vdpa_register_device().
+> + * @init_cfg: initial device config on vdpa creation; useful when instantiating
+> + *            device with identical config is needed, e.g. migration.
+>   */
+>  struct vdpa_device {
+>         struct device dev;
+> @@ -91,6 +103,7 @@ struct vdpa_device {
+>         struct vdpa_mgmt_dev *mdev;
+>         unsigned int ngroups;
+>         unsigned int nas;
+> +       struct vdpa_dev_set_config init_cfg;
+>  };
+>
+>  /**
+> @@ -103,16 +116,6 @@ struct vdpa_iova_range {
+>         u64 last;
+>  };
+>
+> -struct vdpa_dev_set_config {
+> -       u64 device_features;
+> -       struct {
+> -               u8 mac[ETH_ALEN];
+> -               u16 mtu;
+> -               u16 max_vq_pairs;
+> -       } net;
+> -       u64 mask;
+> -};
+> -
+>  /**
+>   * Corresponding file area for device memory mapping
+>   * @file: vma->vm_file for the mapping
 > --
-> With Best Regards,
-> Andy Shevchenko
+> 1.8.3.1
 >
->
+
