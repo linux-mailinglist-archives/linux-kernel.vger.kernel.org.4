@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ED2060A41D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA73B60A75A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbiJXMFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S234672AbiJXMtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbiJXMDD (ORCPT
+        with ESMTP id S234419AbiJXMos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:03:03 -0400
+        Mon, 24 Oct 2022 08:44:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E14423EB6;
-        Mon, 24 Oct 2022 04:49:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671A712611;
+        Mon, 24 Oct 2022 05:09:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4A8061290;
-        Mon, 24 Oct 2022 11:49:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C878BC433D7;
-        Mon, 24 Oct 2022 11:49:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46FB261252;
+        Mon, 24 Oct 2022 12:08:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A2B6C433D6;
+        Mon, 24 Oct 2022 12:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612184;
-        bh=6r7DvksVj6Eagna1spU2oiIU7PrPMrYurWR9NshWROo=;
+        s=korg; t=1666613284;
+        bh=OdCrpPWWG4nWQffHV/hJadngSemBaAi8ZG/iIGDQHl4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TyhXCPTahdQh4sVAiPDWXGzYoC7/8xYBLWAUVp+e/5zy1bZtvDI65kDxOn0kwt2KD
-         ok6vhaC72UMQiWFvmnghf/SP9qcJTcmn4JknYmtt5E8fB+6J1Taww1a/i5zaf+RusX
-         IBS1XZUgyeJ/FR7d4pNyWPxjRL8wevOPg05aqMp0=
+        b=GujPXOXYgF/Dc8eWSCCG95k2N4Ps3NKmaR+xwa/zPv2rJt221OzPYWlYSOkOdcjn0
+         zY7YgvO4Dz3oZPI27ZOlGHbBHXg6ntMqwVbL4DIJveCLIk7/zS8Z6HAcHue8PGPu9O
+         0WfVf6ootn3/+U0iG0+PZs/oOLa+/RMgc1UiQ91g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Lalith Rajendran <lalithkraj@google.com>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.14 070/210] ext4: make ext4_lazyinit_thread freezable
-Date:   Mon, 24 Oct 2022 13:29:47 +0200
-Message-Id: <20221024112959.332977521@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 078/255] spi: s3c64xx: Fix large transfers with DMA
+Date:   Mon, 24 Oct 2022 13:29:48 +0200
+Message-Id: <20221024113005.102682231@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lalith Rajendran <lalithkraj@google.com>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-commit 3b575495ab8dbb4dbe85b4ac7f991693c3668ff5 upstream.
+[ Upstream commit 1224e29572f655facfcd850cf0f0a4784f36a903 ]
 
-ext4_lazyinit_thread is not set freezable. Hence when the thread calls
-try_to_freeze it doesn't freeze during suspend and continues to send
-requests to the storage during suspend, resulting in suspend failures.
+The COUNT_VALUE in the PACKET_CNT register is 16-bit so the maximum
+value is 65535.  Asking the driver to transfer a larger size currently
+leads to the DMA transfer timing out.  Implement ->max_transfer_size()
+and have the core split the transfer as needed.
 
-Cc: stable@kernel.org
-Signed-off-by: Lalith Rajendran <lalithkraj@google.com>
-Link: https://lore.kernel.org/r/20220818214049.1519544-1-lalithkraj@google.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 230d42d422e7 ("spi: Add s3c64xx SPI Controller driver")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Link: https://lore.kernel.org/r/20220927112117.77599-5-vincent.whitchurch@axis.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/super.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/spi/spi-s3c64xx.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3037,6 +3037,7 @@ static int ext4_lazyinit_thread(void *ar
- 	unsigned long next_wakeup, cur;
+diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
+index 1d948fee1a03..d9420561236c 100644
+--- a/drivers/spi/spi-s3c64xx.c
++++ b/drivers/spi/spi-s3c64xx.c
+@@ -84,6 +84,7 @@
+ #define S3C64XX_SPI_ST_TX_FIFORDY		(1<<0)
  
- 	BUG_ON(NULL == eli);
-+	set_freezable();
+ #define S3C64XX_SPI_PACKET_CNT_EN		(1<<16)
++#define S3C64XX_SPI_PACKET_CNT_MASK		GENMASK(15, 0)
  
- cont_thread:
- 	while (true) {
+ #define S3C64XX_SPI_PND_TX_UNDERRUN_CLR		(1<<4)
+ #define S3C64XX_SPI_PND_TX_OVERRUN_CLR		(1<<3)
+@@ -654,6 +655,13 @@ static int s3c64xx_spi_prepare_message(struct spi_master *master,
+ 	return 0;
+ }
+ 
++static size_t s3c64xx_spi_max_transfer_size(struct spi_device *spi)
++{
++	struct spi_controller *ctlr = spi->controller;
++
++	return ctlr->can_dma ? S3C64XX_SPI_PACKET_CNT_MASK : SIZE_MAX;
++}
++
+ static int s3c64xx_spi_transfer_one(struct spi_master *master,
+ 				    struct spi_device *spi,
+ 				    struct spi_transfer *xfer)
+@@ -1118,6 +1126,7 @@ static int s3c64xx_spi_probe(struct platform_device *pdev)
+ 	master->prepare_transfer_hardware = s3c64xx_spi_prepare_transfer;
+ 	master->prepare_message = s3c64xx_spi_prepare_message;
+ 	master->transfer_one = s3c64xx_spi_transfer_one;
++	master->max_transfer_size = s3c64xx_spi_max_transfer_size;
+ 	master->num_chipselect = sci->num_cs;
+ 	master->dma_alignment = 8;
+ 	master->bits_per_word_mask = SPI_BPW_MASK(32) | SPI_BPW_MASK(16) |
+-- 
+2.35.1
+
 
 
