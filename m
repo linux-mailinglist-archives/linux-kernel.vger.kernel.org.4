@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8C660A581
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A31260A680
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233633AbiJXMX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S234433AbiJXMfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233233AbiJXMWn (ORCPT
+        with ESMTP id S234231AbiJXM3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:22:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DACA63E7;
-        Mon, 24 Oct 2022 04:59:23 -0700 (PDT)
+        Mon, 24 Oct 2022 08:29:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FC023BEC;
+        Mon, 24 Oct 2022 05:03:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D8FA61280;
-        Mon, 24 Oct 2022 11:58:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F296C433D7;
-        Mon, 24 Oct 2022 11:58:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FEBDB811A3;
+        Mon, 24 Oct 2022 11:49:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB4AC433D6;
+        Mon, 24 Oct 2022 11:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612719;
-        bh=KqhLPw44/U/3UiBEYNT1QjNxtDA8eRK5sbZocUnIHaw=;
+        s=korg; t=1666612176;
+        bh=IT+ZuMJ69P+nAjLoBJUvmEOjP20rG6UnYzu9ZDnddCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rCHAcMRHctbUPZQgVpIlNhrRvQATvyIZ3ubqyD47m2vaNfLJ+cScZIMYFqVj9q3Jg
-         I/45KplujBZIcJbS07n0TSd3PVrafZc2mPUzZVSsoC3pDirbZEOTCm3YCrUsi6GEVH
-         VionEYxRL9zM4+4k9JHE+8c7O/2xfe4TDAhHxJZ4=
+        b=dMA79c2tYlg2QaDwQm9Pi+Vmwsf8UOaKZoYsNfkDqopQKBNeeHWPTXgb7fry00Yft
+         trAbNCBZBmwlTkio3aO4faqnAvArWa1BCExzUEwSMB3l1K3GXtf5IqYlnsNe1TZdz+
+         z1SpOrln1S+gCYJlfBHhXknVOymbm0io2zLQlAUM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Robert Foss <robert.foss@linaro.org>,
+        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 094/229] drm: bridge: adv7511: fix CEC power down control register offset
-Date:   Mon, 24 Oct 2022 13:30:13 +0200
-Message-Id: <20221024113002.087392095@linuxfoundation.org>
+Subject: [PATCH 4.14 097/210] bnx2x: fix potential memory leak in bnx2x_tpa_stop()
+Date:   Mon, 24 Oct 2022 13:30:14 +0200
+Message-Id: <20221024113000.171390852@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-[ Upstream commit 1d22b6033ea113a4c3850dfa2c0770885c81aec8 ]
+[ Upstream commit b43f9acbb8942b05252be83ac25a81cec70cc192 ]
 
-The ADV7511_REG_CEC_CTRL = 0xE2 register is part of the main register
-map - not the CEC register map. As such, we shouldn't apply an offset to
-the register address. Doing so will cause us to address a bogus register
-for chips with a CEC register map offset (e.g. ADV7533).
+bnx2x_tpa_stop() allocates a memory chunk from new_data with
+bnx2x_frag_alloc(). The new_data should be freed when gets some error.
+But when "pad + len > fp->rx_buf_size" is true, bnx2x_tpa_stop() returns
+without releasing the new_data, which will lead to a memory leak.
 
-Fixes: 3b1b975003e4 ("drm: adv7511/33: add HDMI CEC support")
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Signed-off-by: Robert Foss <robert.foss@linaro.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220612144854.2223873-2-alvin@pqrs.dk
+We should free the new_data with bnx2x_frag_free() when "pad + len >
+fp->rx_buf_size" is true.
+
+Fixes: 07b0f00964def8af9321cfd6c4a7e84f6362f728 ("bnx2x: fix possible panic under memory stress")
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/adv7511/adv7511.h     | 5 +----
- drivers/gpu/drm/bridge/adv7511/adv7511_cec.c | 4 ++--
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511.h b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-index 73d8ccb97742..d214865c2459 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511.h
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511.h
-@@ -383,10 +383,7 @@ void adv7511_cec_irq_process(struct adv7511 *adv7511, unsigned int irq1);
- #else
- static inline int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- {
--	unsigned int offset = adv7511->type == ADV7533 ?
--						ADV7533_REG_CEC_OFFSET : 0;
--
--	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset,
-+	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL,
- 		     ADV7511_CEC_CTRL_POWER_DOWN);
- 	return 0;
- }
-diff --git a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-index a20a45c0b353..ddd1305b82b2 100644
---- a/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-+++ b/drivers/gpu/drm/bridge/adv7511/adv7511_cec.c
-@@ -316,7 +316,7 @@ int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- 		goto err_cec_alloc;
- 	}
- 
--	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset, 0);
-+	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL, 0);
- 	/* cec soft reset */
- 	regmap_write(adv7511->regmap_cec,
- 		     ADV7511_REG_CEC_SOFT_RESET + offset, 0x01);
-@@ -343,7 +343,7 @@ int adv7511_cec_init(struct device *dev, struct adv7511 *adv7511)
- 	dev_info(dev, "Initializing CEC failed with error %d, disabling CEC\n",
- 		 ret);
- err_cec_parse_dt:
--	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL + offset,
-+	regmap_write(adv7511->regmap, ADV7511_REG_CEC_CTRL,
- 		     ADV7511_CEC_CTRL_POWER_DOWN);
- 	return ret == -EPROBE_DEFER ? ret : 0;
- }
+diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+index 8c111def8185..96478d79243d 100644
+--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
++++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+@@ -787,6 +787,7 @@ static void bnx2x_tpa_stop(struct bnx2x *bp, struct bnx2x_fastpath *fp,
+ 			BNX2X_ERR("skb_put is about to fail...  pad %d  len %d  rx_buf_size %d\n",
+ 				  pad, len, fp->rx_buf_size);
+ 			bnx2x_panic();
++			bnx2x_frag_free(fp, new_data);
+ 			return;
+ 		}
+ #endif
 -- 
 2.35.1
 
