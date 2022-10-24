@@ -2,143 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D39160B5E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC58C60B5D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiJXSn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
+        id S232321AbiJXSmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiJXSnf (ORCPT
+        with ESMTP id S232336AbiJXSll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:43:35 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2061.outbound.protection.outlook.com [40.107.243.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0926926AFF;
-        Mon, 24 Oct 2022 10:25:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NE2eKC9/0ZMOQkhY2dTQ3Nv6uphZiecuIrWiFiJXMzlXuzaiIYYppmV4TnJQqaAuZ+wgfqETkwLtbvQaXFW/CoFHUFa3cLYf/3mk8g7s9YFvh1A/7N5pCapOaEt58WJY7oiu6w96yPqUProLIaKkoSR3Q3b7mGawzUYH1gJ3UfCzc1FyoCDjU6Uu9krG4EjYmMV4d50YFsvSk5Rvh6C8+XeLA7Fc0FqLsg3zNvv537X97EvwYAZL4s1UvFhlxu5UiZkQbj+B0z8vxLGmpZUqndf5kz406Wd7FSf1GTGCyPq/2OH55uHEXKePKf0zfawJIiiqhtqof1JDji/rHanswg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k1LA5Ww0XoL4QFb5VmE+dXPqbtG1fVpXKTpVLS9AHFo=;
- b=IcJfhs5Vlj90NYXtkkQK+xKIBesOXM8Z+eI733T+rz6F59UznPyW/YFuDnbni75JCKEJlqut9Gghm0tr0cyF0SvWqI+EnF9Er6YaBYADHMI6WdsVynsuv3Mqk/hf4cyxRlAPsNkhrpgJf3iidj9un4HeSDJTQ52OY+NaWIcOjSAS+x9CJ+7A5gXKSgP/rSEJMk4Of/Y2Sa8lqg3Ef7ggQy6L2MwywiMjNBePDJbYi/S0zm7fikxr3ahYuLn2ZDd+QtyeBkthmIbmIOIlbJsS+Wb/OnD9LoeVdEo5AuU3wQIhP+UhMl6idp7c4nhOWwsmNmuE7WB+zwH+dqcWs21csw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k1LA5Ww0XoL4QFb5VmE+dXPqbtG1fVpXKTpVLS9AHFo=;
- b=WPFZ8YdGlQdlhRNCzNK9eWcVT9uCgeKUljhhfdQu3MfFpDwbF8L9mb9xWydWpeZBy7NF0YW+X0TFIxlZfsg5N9+EWrBK3PhS3gb95bv5oqiKkAwjKAk4t9rz56StzYEqdaLa2JV/vrb/Yz9NjbFxewdRndDXxHmEGLN1KZ1uv8AGzC0cGx4zff053AI7x3Ac9S7DbvZIrYLKlqA22FLw69U4A36fJs3SKTXdLpnhE4z4vEL1jjO0erBJtiTFT/JsxYBO/PO71VVRmO6MNeriRhMar5pPDVOysUS00wN9ayf7M4FRGyiUTQVVyPLgcYenlYDn4IM5NbaUoZaZlnt2Vw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM6PR12MB4513.namprd12.prod.outlook.com (2603:10b6:5:2ad::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26; Mon, 24 Oct
- 2022 16:52:52 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Mon, 24 Oct 2022
- 16:52:52 +0000
-Date:   Mon, 24 Oct 2022 13:52:50 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/6] iommu/s390: Get rid of s390_domain_device
-Message-ID: <Y1bC4tzKOIHhrYE8@nvidia.com>
-References: <20221017124558.1386337-1-schnelle@linux.ibm.com>
- <20221017124558.1386337-3-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221017124558.1386337-3-schnelle@linux.ibm.com>
-X-ClientProxiedBy: BLAP220CA0001.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:32c::6) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 24 Oct 2022 14:41:41 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDDCEEAA4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:23:37 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id 192so2363819pfx.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qmRRnyqrCvwVZ4E+oJVYPxgBWe3Nt02//jegX+ZgfXw=;
+        b=kdHeBtjq4ZnpqOIg+37lgXyiiaV3XXQxNaZGixyhH4yGbriDik/YMamv1PIALwJB3S
+         PIhDMnY/vm/pkGypr1P6W3mkZZj/2eaXU6mzGOoZcdl15PA9lATbTdansjVERGg0m6er
+         TtwGBd743y163YzlUIa8+YRjEtr6k89CN001APSknZuojX58QHVySFt9nd7/w+vnOv9f
+         9MUTXHe9sVFD7VrygaScnu1jgprdX2Aqdui4C5n0KQ+bWEAFClJIABGxkMxysD581Jg/
+         YVGY7Nfdl3L+cCNFnRl2ww+khw7cJYfuDEfYxVJxuXDmnJj8xurh9sOI6++yZTCfq+pa
+         VTQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qmRRnyqrCvwVZ4E+oJVYPxgBWe3Nt02//jegX+ZgfXw=;
+        b=KSdqTEpfZYn4pCmtecp6M8Py4s4eTuRfkGdhJtK7PgUlmF+aNDqsd6hL2wUh7T1f/n
+         f/tVGayPFQ3Lt2EaSFWGdVYaYNQBVt7xS8EbHULMbO1oLb7qcuZhiLyqla2Z8Fpfi/UQ
+         MLZhuzMd7F85HQRaep31ABhDSK8ok+EPFka1oOnlPyIgXSh7xRnA6f6uOYstFIF/ji1X
+         4dOi0Zx/eMJr8+B7flX6sDOVUAujWK3VD07xRTp0F52bK9SVUSreAy9RHCMYLv6ARO6y
+         C2vGXrDUlg0s4EDavyFTayxDycXtBD9A36K3uikf9516vhvOCXAfqWm1lW0ehRKvDQ0y
+         EVVw==
+X-Gm-Message-State: ACrzQf0yuDx7vC1AYqPr7CidzYq6HjniWJKJbV9eBDTeCt3bXZVda6VG
+        4NHJ6aOnEagusIIVbVid8N8nKLTD0dBIT1FCzDJaoPRYX1Y=
+X-Google-Smtp-Source: AMsMyM6z4NWUjsrgFdg2kbiI+O6qCein5eD6LUCQUgk6TnK5ysp32+5l+WsLYktaQ1Vb3USEOGT8E2HIVczRn7CUhKw=
+X-Received: by 2002:a63:464d:0:b0:441:5968:cd0e with SMTP id
+ v13-20020a63464d000000b004415968cd0emr29972204pgk.595.1666630413870; Mon, 24
+ Oct 2022 09:53:33 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM6PR12MB4513:EE_
-X-MS-Office365-Filtering-Correlation-Id: b7d67c85-a002-4274-b949-08dab5e03063
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XyCNU2Frtr1IoHQykSEeZ8K60iU6gFOC4PyEivwsxAq+4jRvnmnitrDFKKrPhvQaL22OCHdPTWW88SHHQ9GToMUBBs7/q5Vm/7CWEofqqdGc+NISr9MMoGB+WQlhjcTUi4rTTbggMCe8MXz5JqY9ZfBNsmh8GsvCCz9SydXyxJl6arOebKCHg6lBRYABtXyIAJsWrbpa5wmxn0bFfyKXsUulzBA7tYi+8D9iD0rZtRYwudgtyu7OktvL9QRX0NGYzVSHlAE05LxSoRvWrHOepocNr9x12XUtidZZ1Q9oyARXk0mPb0a8/29MQMGoW9YuW34Bh86uV6jxRqPS6DNMjJEbiM+AF/fiB6oeSUqXfMQLepJ9S3ilIXgiGyHHruj+E/FXFFcF++rMLt6y65Naen+E8UrO7k+fBIB18rNuOXIxtMJ5Kcwb/eQy/QtbAaPvsVg3Dw019bnAls5mWsFaqpdA+4y8USBLsS/lxiVLgb2uEezQMXvYT6XxRIkFNRay5vUnCIoI4O6rCG6qUa8PYr4JM3CnlyCmfUyWwTywdQWCdzF8ps7xKPhFqU0hUCnzY5NL0vpvnTdbKS1sYYlyXEiM9SURk6x7VjQMaevi3BSOzjeuibogqJA6OU//lO4CecHXTAVJYWwv9+K1lFbjmEfEV1EyVEQv6K9/GKKBLTYaZSOHhVZof5Zj5BCGHMIg3sNWJ28EMw3kHQ5uN0YChP0wDz4tqofYasFfWlGGMq3n+8pGbn3tnAseazddgmYP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(346002)(376002)(39860400002)(451199015)(36756003)(4744005)(5660300002)(66476007)(66556008)(66946007)(7416002)(38100700002)(8936002)(83380400001)(86362001)(6916009)(54906003)(2616005)(26005)(186003)(6512007)(6486002)(316002)(478600001)(2906002)(8676002)(41300700001)(4326008)(6506007)(26583001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8xIXMKbYRDHyjBLiLcOm+BsU/BnN6rO44/r8c30xAp1rKbHiYLZQG9Pr07OZ?=
- =?us-ascii?Q?J5EfTOV9DtRRUkIEzj8t75Bn37IYWdebfIeZjdyeMADwUr37/AWEQBTGvDED?=
- =?us-ascii?Q?/0VrVOhD/6OKvhBq74J3K/BrnZihWJzwPNuAj2zW9WQpXSOazn92F5odoq2e?=
- =?us-ascii?Q?cOvfue3Pc/q88+M3SinoimF3aOLBUTpGNy/ndikUXzz6NvYO4+Z0qmuo+tBq?=
- =?us-ascii?Q?0dONKqYXLuROVQslxaDbvyPuRW7H3V6mSi4R8CFrfILzj6R/62wpQwTquWwz?=
- =?us-ascii?Q?xMfJBNEf+q2rmpUIqbtMeKhADligDBR8Eu5a38s/CnLcXXLtTsKV2cGjqWHF?=
- =?us-ascii?Q?YdKes02PWceVZ5Yj7FjQCxjdq2TGnbXhqTJd77HJzlpd/KTBGRVA/Io3q7Bi?=
- =?us-ascii?Q?dXKlU29FZrEyMYGaGU+6kLOGbQtJjQUVJK61D0a9mi8irg91rXBPVKB7N5Vs?=
- =?us-ascii?Q?/h/FFgDjySPPdGkIAWiuXIVKqzljoujo3yH/fKtgXk5q3oTRyH2Gyrc0+Tx3?=
- =?us-ascii?Q?jERxGwRTqpyCxGFR2tzSi7d/dV3q4ktfGd4fxrbDH2ZBU3ULOzLgE3RHo2F1?=
- =?us-ascii?Q?NyVrWXuWQa4xCengw6B5IxY52r6mF4cdHtd7AgJl4yjx5v5w1F8LTDtVuPsb?=
- =?us-ascii?Q?cauhhaIpCFT++pCAhst+AaNzTWCM0Ra603sPpG0ntiqFXuEuC4Zg3umwNLZG?=
- =?us-ascii?Q?j1Pv1dhv1Oasg5PRfmxGuqncJ8DXJdu1jby6/+MKLrIHRR/o/k5YORCjBd2+?=
- =?us-ascii?Q?amAmWx/RkJZa9y/+y8pBvfazZXvXzvIRMScxHWzlNGnKVTCIUw3oJAzKvrLm?=
- =?us-ascii?Q?s7KxS6ccFcB2Nx0ioGvBdCKA9qmvC9L8vRSEeLyeHNJh6BME/u3SgAhS4XOR?=
- =?us-ascii?Q?3DZsHgF8z59RJRhi6+FugOXtqMQYjjWbg7RwYoDk/Qyezocp53cheWbpuyY/?=
- =?us-ascii?Q?Ozcd7VXk1KbjgwqfaJite0FaEW+Exg1bJVh3C0H1xbMTLGk8DtAhL+RZ5Aqj?=
- =?us-ascii?Q?uMxecSdkdLq55od0y+UDVYaD0SjnuY52/3dnHJ8GWMmOgeYskD6iqZRlyO4g?=
- =?us-ascii?Q?9MfyVHhySDKNtywxdwdcUMDU0NRJCgImtQGov9d78waTy/zVeFo/BhB1P3Nw?=
- =?us-ascii?Q?7QGRSAqlBBHiKIF03j7dkDqdvtNE4B4bCcmrkYnpifO2zSpfB3aZGGK2ABfh?=
- =?us-ascii?Q?x3rhsNRkQODs7Bowapb/C6n7DbAuj8yDW2eeMBCrjjjld7Fi/0MT7P1XRoOK?=
- =?us-ascii?Q?nozMqsNpD2YnxLtpGRiXwB6W9z0U4Hnf5i51e1NzAbEMK2rGHeLL3OiMAx+g?=
- =?us-ascii?Q?lT00nCE8Kx1FfnjQao/XT4UyEqp5TKqAPY+yUz/Dr8Z6isXi+h/rsPY1/DOW?=
- =?us-ascii?Q?5N2S5cb3AzUZJOw9J1qmdtx7DuR1e2yMeRfIL0yjKQlOXp5zJJ539yw+2hFo?=
- =?us-ascii?Q?hpavXqKC1qk4mTcWO8+lMZL+iDTRP+QdhoNN9mwzrM8/SWQnWO/4+Ltp+heh?=
- =?us-ascii?Q?XkayRv/WARZ8BZ3phRnlvlvAK22pRrnsiHYumRwicHjWXC0qU8NgKoD8Bc1j?=
- =?us-ascii?Q?EGxywOceVlUnhXtRyTw=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7d67c85-a002-4274-b949-08dab5e03063
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 16:52:52.1438
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rvzna8tKH96P5wJkx4ZSPTx4ZyGNXwrNRQBX9CwF9dasAbQOKeoHGfJgqOBs/l25
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4513
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221021202254.4142411-1-arnd@kernel.org> <20221021203329.4143397-10-arnd@kernel.org>
+In-Reply-To: <20221021203329.4143397-10-arnd@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 24 Oct 2022 18:52:55 +0200
+Message-ID: <CAPDyKFpUzDD7X0GhP4ahqF=AyCGCMfSXjPW0qZ5vUnJMc=iT6Q@mail.gmail.com>
+Subject: Re: [PATCH 10/21] mmc: remove s3cmci driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-mmc@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 02:45:54PM +0200, Niklas Schnelle wrote:
-> The struct s390_domain_device serves the sole purpose as list entry for
-> the devices list of a struct s390_domain. As it contains no additional
-> information besides a list_head and a pointer to the struct zpci_dev we
-> can simplify things and just thread the device list through struct
-> zpci_dev directly. This removes the need to allocate during domain
-> attach and gets rid of one level of indirection during mapping
-> operations.
-> 
-> Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+On Fri, 21 Oct 2022 at 22:45, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The s3c24xx platform is gone, so this driver can be removed as well.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+
 > ---
-> v5->v6:
-> - On attach failure make sure the IOAT is not registered
->   and zdev->dma_table == NULL
-> - Dropped Jason's R-b
-
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Jason
+>  MAINTAINERS                              |    6 -
+>  drivers/mmc/host/Kconfig                 |   43 -
+>  drivers/mmc/host/Makefile                |    1 -
+>  drivers/mmc/host/s3cmci.c                | 1777 ----------------------
+>  drivers/mmc/host/s3cmci.h                |   75 -
+>  include/linux/platform_data/mmc-s3cmci.h |   51 -
+>  6 files changed, 1953 deletions(-)
+>  delete mode 100644 drivers/mmc/host/s3cmci.c
+>  delete mode 100644 drivers/mmc/host/s3cmci.h
+>  delete mode 100644 include/linux/platform_data/mmc-s3cmci.h
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2caf42b0328a..503ebd9800db 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17920,12 +17920,6 @@ S:     Supported
+>  W:     http://www.ibm.com/developerworks/linux/linux390/
+>  F:     drivers/s390/scsi/zfcp_*
+>
+> -S3C24XX SD/MMC Driver
+> -M:     Ben Dooks <ben-linux@fluff.org>
+> -L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+> -S:     Supported
+> -F:     drivers/mmc/host/s3cmci.*
+> -
+>  SAA6588 RDS RECEIVER DRIVER
+>  M:     Hans Verkuil <hverkuil@xs4all.nl>
+>  L:     linux-media@vger.kernel.org
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index 79d8ddf1f616..75e8c364243d 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -619,49 +619,6 @@ config MMC_SPI
+>
+>           If unsure, or if your system has no SPI master driver, say N.
+>
+> -config MMC_S3C
+> -       tristate "Samsung S3C SD/MMC Card Interface support"
+> -       depends on ARCH_S3C24XX || COMPILE_TEST
+> -       depends on S3C24XX_DMAC || COMPILE_TEST
+> -       help
+> -         This selects a driver for the MCI interface found in
+> -         Samsung's S3C2410, S3C2412, S3C2440, S3C2442 CPUs.
+> -         If you have a board based on one of those and a MMC/SD
+> -         slot, say Y or M here.
+> -
+> -         If unsure, say N.
+> -
+> -config MMC_S3C_HW_SDIO_IRQ
+> -       bool "Hardware support for SDIO IRQ"
+> -       depends on MMC_S3C
+> -       help
+> -         Enable the hardware support for SDIO interrupts instead of using
+> -         the generic polling code.
+> -
+> -choice
+> -       prompt "Samsung S3C SD/MMC transfer code"
+> -       depends on MMC_S3C
+> -
+> -config MMC_S3C_PIO
+> -       bool "Use PIO transfers only"
+> -       help
+> -         Use PIO to transfer data between memory and the hardware.
+> -
+> -         PIO is slower than DMA as it requires CPU instructions to
+> -         move the data. This has been the traditional default for
+> -         the S3C MCI driver.
+> -
+> -config MMC_S3C_DMA
+> -       bool "Use DMA transfers only"
+> -       help
+> -         Use DMA to transfer data between memory and the hardware.
+> -
+> -         Currently, the DMA support in this driver seems to not be
+> -         working properly and needs to be debugged before this
+> -         option is useful.
+> -
+> -endchoice
+> -
+>  config MMC_SDRICOH_CS
+>         tristate "MMC/SD driver for Ricoh Bay1Controllers"
+>         depends on PCI && PCMCIA
+> diff --git a/drivers/mmc/host/Makefile b/drivers/mmc/host/Makefile
+> index 0baeb0b004f7..885e19e21e75 100644
+> --- a/drivers/mmc/host/Makefile
+> +++ b/drivers/mmc/host/Makefile
+> @@ -34,7 +34,6 @@ obj-$(CONFIG_MMC_MVSDIO)      += mvsdio.o
+>  obj-$(CONFIG_MMC_DAVINCI)       += davinci_mmc.o
+>  obj-$(CONFIG_MMC_SPI)          += mmc_spi.o
+>  obj-$(CONFIG_MMC_SPI)          += of_mmc_spi.o
+> -obj-$(CONFIG_MMC_S3C)          += s3cmci.o
+>  obj-$(CONFIG_MMC_SDRICOH_CS)   += sdricoh_cs.o
+>  obj-$(CONFIG_MMC_TMIO_CORE)    += tmio_mmc_core.o
+>  obj-$(CONFIG_MMC_SDHI)         += renesas_sdhi_core.o
+> diff --git a/drivers/mmc/host/s3cmci.c b/drivers/mmc/host/s3cmci.c
+> deleted file mode 100644
+> index 8d5929a32d34..000000000000
+> diff --git a/drivers/mmc/host/s3cmci.h b/drivers/mmc/host/s3cmci.h
+> deleted file mode 100644
+> index 8b65d7ad9f97..000000000000
+> diff --git a/include/linux/platform_data/mmc-s3cmci.h b/include/linux/platform_data/mmc-s3cmci.h
+> deleted file mode 100644
+> index bacb86db3112..000000000000
+> --
+> 2.29.2
+>
