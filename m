@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542F760AD36
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264A460AC1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236988AbiJXOTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S234616AbiJXOCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234687AbiJXOOH (ORCPT
+        with ESMTP id S236816AbiJXOBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:14:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6B8C26;
-        Mon, 24 Oct 2022 05:54:08 -0700 (PDT)
+        Mon, 24 Oct 2022 10:01:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1058F951;
+        Mon, 24 Oct 2022 05:47:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C23A0612B9;
-        Mon, 24 Oct 2022 12:45:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D64D2C433D6;
-        Mon, 24 Oct 2022 12:45:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A6466130D;
+        Mon, 24 Oct 2022 12:45:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA86C433D6;
+        Mon, 24 Oct 2022 12:45:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615507;
-        bh=I0US6l38rqGsDxa7m8QNmS8D7lDmiOG+/urZP2mhyxI=;
+        s=korg; t=1666615525;
+        bh=sSGyQ5ChQR+5JdVd+lNovto4yF1BogXgi4+YQTvCf5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kR0AqP8hrwJ8xKwzGfCgQcSC63/P3NRSNNFJrcsqtqfuivH1WD8HqfwktkJ5m/p2l
-         UEf1B/iacr1sHJR1faRNnz5Ugw5/h2857oxK+ttEpC1di8QGUK1f72AKHnqFJGsTaZ
-         gm9haqB0qHoPxq/JtDR7BP708yELkjlXHBFRqCtI=
+        b=lYrutTXQKG+s4EoTIMZsFRgyHcxQEOP7xgDmAT1PYIzM7H5ArLlBB9inDcBiiGEXw
+         o04d3U4yGJOavzCIqChvMCkDeTRQmbRwBM09tYFiB06WdHewpl0xUU6hiYImInVi+7
+         Ne46EICpf5ZaQYL+g+PM0iv8e5esu35k1H4+VBHc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 278/530] clk: sprd: Hold reference returned by of_get_parent()
-Date:   Mon, 24 Oct 2022 13:30:22 +0200
-Message-Id: <20221024113057.661699425@linuxfoundation.org>
+Subject: [PATCH 5.15 284/530] media: exynos4-is: fimc-is: Add of_node_put() when breaking out of loop
+Date:   Mon, 24 Oct 2022 13:30:28 +0200
+Message-Id: <20221024113057.909808520@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
 References: <20221024113044.976326639@linuxfoundation.org>
@@ -57,48 +57,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Liang He <windhl@126.com>
 
-[ Upstream commit 91e6455bf715fb1558a0bf8f645ec1c131254a3c ]
+[ Upstream commit 211f8304fa21aaedc2c247f0c9d6c7f1aaa61ad7 ]
 
-We should hold the reference returned by of_get_parent() and use it
-to call of_node_put() for refcount balance.
+In fimc_is_register_subdevs(), we need to call of_node_put() for
+the reference 'i2c_bus' when breaking out of the
+for_each_compatible_node() which has increased the refcount.
 
-Fixes: f95e8c7923d1 ("clk: sprd: support to get regmap from parent node")
+Fixes: 9a761e436843 ("[media] exynos4-is: Add Exynos4x12 FIMC-IS driver")
 Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220704004729.272481-1-windhl@126.com
-Reviewed-by: Orson Zhai <orsonzhai@gmail.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/sprd/common.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/media/platform/exynos4-is/fimc-is.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/clk/sprd/common.c b/drivers/clk/sprd/common.c
-index d620bbbcdfc8..ce81e4087a8f 100644
---- a/drivers/clk/sprd/common.c
-+++ b/drivers/clk/sprd/common.c
-@@ -41,7 +41,7 @@ int sprd_clk_regmap_init(struct platform_device *pdev,
- {
- 	void __iomem *base;
- 	struct device *dev = &pdev->dev;
--	struct device_node *node = dev->of_node;
-+	struct device_node *node = dev->of_node, *np;
- 	struct regmap *regmap;
+diff --git a/drivers/media/platform/exynos4-is/fimc-is.c b/drivers/media/platform/exynos4-is/fimc-is.c
+index e3072d69c49f..a7704ff069d6 100644
+--- a/drivers/media/platform/exynos4-is/fimc-is.c
++++ b/drivers/media/platform/exynos4-is/fimc-is.c
+@@ -213,6 +213,7 @@ static int fimc_is_register_subdevs(struct fimc_is *is)
  
- 	if (of_find_property(node, "sprd,syscon", NULL)) {
-@@ -50,9 +50,10 @@ int sprd_clk_regmap_init(struct platform_device *pdev,
- 			pr_err("%s: failed to get syscon regmap\n", __func__);
- 			return PTR_ERR(regmap);
- 		}
--	} else if (of_device_is_compatible(of_get_parent(dev->of_node),
--			   "syscon")) {
--		regmap = device_node_to_regmap(of_get_parent(dev->of_node));
-+	} else if (of_device_is_compatible(np =	of_get_parent(node), "syscon") ||
-+		   (of_node_put(np), 0)) {
-+		regmap = device_node_to_regmap(np);
-+		of_node_put(np);
- 		if (IS_ERR(regmap)) {
- 			dev_err(dev, "failed to get regmap from its parent.\n");
- 			return PTR_ERR(regmap);
+ 			if (ret < 0 || index >= FIMC_IS_SENSORS_NUM) {
+ 				of_node_put(child);
++				of_node_put(i2c_bus);
+ 				return ret;
+ 			}
+ 			index++;
 -- 
 2.35.1
 
