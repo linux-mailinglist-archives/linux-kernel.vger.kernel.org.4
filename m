@@ -2,282 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C927760BCEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC91D60BB19
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiJXWBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S235046AbiJXUqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiJXWAu (ORCPT
+        with ESMTP id S235053AbiJXUq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:00:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3902E13D07
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666642404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=boXDPcxpUocdHWEdF4boM/MTFdSB/GctSLK4grdDmW0=;
-        b=TIg7QuL467vYziuYUOo+xepZ7GADwL0SG7Mf5jipjw7tmgijheAscHTjjq6SsLXy2BOU+0
-        CvlxU4/b9bhsm7EEMgKCpxI4AeHdOw7sDKzOegsbBuXNjXwBT7zSQrs+Bt7tOBlbUPWfdR
-        4SFM4xmqY9Og6CPBseGt8fjP2s7SEpY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-9-TD1FTsIWPWqHNxBLI2wa1g-1; Mon, 24 Oct 2022 08:32:49 -0400
-X-MC-Unique: TD1FTsIWPWqHNxBLI2wa1g-1
-Received: by mail-qk1-f199.google.com with SMTP id bk21-20020a05620a1a1500b006be9f844c59so8833138qkb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:32:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=boXDPcxpUocdHWEdF4boM/MTFdSB/GctSLK4grdDmW0=;
-        b=2dkljnLZCUEHHoQegVC7FRl496ZgQj3XEE1U4bZUO+dnR7k/Vpi94+E53j66lbiVhb
-         m6k55MM7oMZXTofOAUuiChTFExZXWHLn6Vc0vamEgqSrOC+cmy5546TDeNwUFGqfCnPj
-         rIq86cyxeXY7qzNlJTcb4z9tGKn5Jbl+ShzJEpDCo0D7znzW8SS0KRJdvyKc9D2uJa4w
-         /3Bg+TwYtdzD2SYMDBNBTe2Y9k5i+WLMu+d58mEh7H2s2ZZSkEzavEhMkUa4keda8ikQ
-         Zr4O0fPS696eq8IgLQfQNKswpISZmU5deOF1MJERLQb7OL2n+jEyYECTEpTT5J5iVX45
-         XvDw==
-X-Gm-Message-State: ACrzQf0+4RZr/Jeq3KGWNRDzXBEhyEJoE0n0IuF4M8W/bQWrIBv0L/Q5
-        rXD60a6DrLRK09Nv/6Y1zON+avqd4tTSU5fC75N34bRTnxw7TzNzfnCzb6ZLiKGh/ZHUnoJ+ib/
-        naZykAW2Z6BSfXce/Mr3XTxBv
-X-Received: by 2002:a05:620a:204d:b0:6ec:7d7:c267 with SMTP id d13-20020a05620a204d00b006ec07d7c267mr22249339qka.590.1666614769170;
-        Mon, 24 Oct 2022 05:32:49 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6UhB1DniE1v1NE2j7D6eQgJNHQkTjY/tKi8q+Ug9EaM9F0d6gOFPBNF3Bze0Eb+whBF2gc6w==
-X-Received: by 2002:a05:620a:204d:b0:6ec:7d7:c267 with SMTP id d13-20020a05620a204d00b006ec07d7c267mr22249321qka.590.1666614768907;
-        Mon, 24 Oct 2022 05:32:48 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id r28-20020ae9d61c000000b006ed30a8fb21sm14882555qkk.76.2022.10.24.05.32.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 05:32:48 -0700 (PDT)
-Message-ID: <7bc85cd1e54300169ee287537fd794712ce93ea8.camel@redhat.com>
-Subject: Re: [PATCH v2 5/8] KVM: allow compiling out SMM support
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, maciej.szmigiero@oracle.com
-Date:   Mon, 24 Oct 2022 15:32:45 +0300
-In-Reply-To: <20220929172016.319443-6-pbonzini@redhat.com>
-References: <20220929172016.319443-1-pbonzini@redhat.com>
-         <20220929172016.319443-6-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Mon, 24 Oct 2022 16:46:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDE5BEAFD
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:54:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D7E7B819BA
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:44:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30650C43149
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:44:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666615462;
+        bh=Ruagwt0yc5BirBvqVLC/ClrMrdT1LhW7pInoMnUa4gk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Mhatf8ycnzeGmxDSWLV8/lKNqCO5vyLIZhA/0HW9rTCbVwnlgwwdbrrv3E0l3SuFU
+         h6+tcFRDbPO/3tLp2P/HBh/mJk6dKzTr8ETHne8XGH8k67nmUmEdPwOyq7A7dJyIXQ
+         2BpzFQ295mQu6VJQOemQ2M6seNV0Z6B6mp4JAUPN42aohNW7VbafogE8GViemGNmI4
+         F4nmeEdpyeaXJfZbP7QujEP/nupobs9HJ+BM6bWSldGTDocqQ/YOTxO87HX373k78l
+         Z59cBDO2a+nW9yhRlwj6Dk5DQQz3frwze5nXcyYzSQvEA/X0/qiW1JqeQjl9bGMrv6
+         BPoMq8gxF8gVw==
+Received: by mail-ed1-f45.google.com with SMTP id a13so30845889edj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:44:22 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1syjUgmHyU7/pwGmajKSCfLVMWK10ipdX5YU7nh5l2lvxBQqFt
+        Ge70IliTrmDDzmeYyIstNv7qUKUQ5Rfv78FU4us=
+X-Google-Smtp-Source: AMsMyM4rt3Qq7d0FZm6/isWTqW2zbQWwSePM/s9LXTDQcxB4ZdmsdmOGifvZ6w7o3/hF/bM5BnC3zMa5haK/f1n0esY=
+X-Received: by 2002:a05:6402:5291:b0:45c:3f6a:d4bc with SMTP id
+ en17-20020a056402529100b0045c3f6ad4bcmr30210375edb.285.1666615460146; Mon, 24
+ Oct 2022 05:44:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221022214622.18042-1-ogabbay@kernel.org> <af4c71cb-be60-e354-ca4f-23e834aca6e1@suse.de>
+In-Reply-To: <af4c71cb-be60-e354-ca4f-23e834aca6e1@suse.de>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Mon, 24 Oct 2022 15:43:53 +0300
+X-Gmail-Original-Message-ID: <CAFCwf12HDZvsr1TrRFQH9Vi26S-Xf9ULgxtBazme90Sj5AzhQQ@mail.gmail.com>
+Message-ID: <CAFCwf12HDZvsr1TrRFQH9Vi26S-Xf9ULgxtBazme90Sj5AzhQQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-29 at 13:20 -0400, Paolo Bonzini wrote:
-> Some users of KVM implement the UEFI variable store through a paravirtual device
-> that does not require the "SMM lockbox" component of edk2; allow them to
-> compile out system management mode, which is not a full implementation
-> especially in how it interacts with nested virtualization.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/Kconfig                          | 11 ++++++++++
->  arch/x86/kvm/Makefile                         |  2 +-
->  arch/x86/kvm/smm.h                            | 13 ++++++++++++
->  arch/x86/kvm/svm/svm.c                        |  2 ++
->  arch/x86/kvm/vmx/vmx.c                        |  2 ++
->  arch/x86/kvm/x86.c                            | 21 +++++++++++++++++--
->  tools/testing/selftests/kvm/x86_64/smm_test.c |  2 ++
->  7 files changed, 50 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index a107df22ffee..1679f9b4e96d 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -88,6 +88,17 @@ config KVM_INTEL
->  	  To compile this as a module, choose M here: the module
->  	  will be called kvm-intel.
->  
-> +config KVM_SMM
-> +	bool "System Management Mode emulation"
-> +	default y
-> +	depends on KVM
-> +	help
-> +	  Provides support for KVM to emulate System Management Mode (SMM)
-> +	  in virtual machines.  This can be used by the virtual machine
-> +	  firmware to implement UEFI secure boot.
-> +
-> +	  If unsure, say Y.
-> +
->  config X86_SGX_KVM
->  	bool "Software Guard eXtensions (SGX) Virtualization"
->  	depends on X86_SGX && KVM_INTEL
-> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-> index ec6f7656254b..6cf40f668277 100644
-> --- a/arch/x86/kvm/Makefile
-> +++ b/arch/x86/kvm/Makefile
-> @@ -20,7 +20,7 @@ endif
->  
->  kvm-$(CONFIG_X86_64) += mmu/tdp_iter.o mmu/tdp_mmu.o
->  kvm-$(CONFIG_KVM_XEN)	+= xen.o
-> -kvm-y			+= smm.o
-> +kvm-$(CONFIG_KVM_SMM)	+= smm.o
->  
->  kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
->  			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o
-> diff --git a/arch/x86/kvm/smm.h b/arch/x86/kvm/smm.h
-> index b0602a92e511..4c699fee4492 100644
-> --- a/arch/x86/kvm/smm.h
-> +++ b/arch/x86/kvm/smm.h
-> @@ -8,6 +8,7 @@
->  #define PUT_SMSTATE(type, buf, offset, val)                      \
->  	*(type *)((buf) + (offset) - 0x7e00) = val
->  
-> +#ifdef CONFIG_KVM_SMM
->  static inline int kvm_inject_smi(struct kvm_vcpu *vcpu)
->  {
->  	kvm_make_request(KVM_REQ_SMI, vcpu);
-> @@ -23,5 +24,17 @@ void kvm_smm_changed(struct kvm_vcpu *vcpu, bool in_smm);
->  void enter_smm(struct kvm_vcpu *vcpu);
->  int emulator_leave_smm(struct x86_emulate_ctxt *ctxt);
->  void process_smi(struct kvm_vcpu *vcpu);
-> +#else
-> +static inline int kvm_inject_smi(struct kvm_vcpu *vcpu) { return -ENOTTY; }
-> +static inline bool is_smm(struct kvm_vcpu *vcpu) { return false; }
-> +static inline void kvm_smm_changed(struct kvm_vcpu *vcpu, bool in_smm) { WARN_ON_ONCE(1); }
-> +static inline void enter_smm(struct kvm_vcpu *vcpu) { WARN_ON_ONCE(1); }
-> +static inline void process_smi(struct kvm_vcpu *vcpu) { WARN_ON_ONCE(1); }
-> +
-> +/*
-> + * emulator_leave_smm is used as a function pointer, so the
-> + * stub is defined in x86.c.
+On Mon, Oct 24, 2022 at 2:56 PM Thomas Zimmermann <tzimmermann@suse.de> wro=
+te:
+>
+> Hi
+>
+> Am 22.10.22 um 23:46 schrieb Oded Gabbay:
+> > In the last couple of months we had a discussion [1] about creating a n=
+ew
+> > subsystem for compute accelerator devices in the kernel.
+> >
+> > After an analysis that was done by DRM maintainers and myself, and foll=
+owing
+> > a BOF session at the Linux Plumbers conference a few weeks ago [2], we
+> > decided to create a new subsystem that will use the DRM subsystem's cod=
+e and
+> > functionality. i.e. the accel core code will be part of the DRM subsyst=
+em.
+> >
+> > This will allow us to leverage the extensive DRM code-base and
+> > collaborate with DRM developers that have experience with this type of
+> > devices. In addition, new features that will be added for the accelerat=
+or
+> > drivers can be of use to GPU drivers as well (e.g. RAS).
+> >
+> > As agreed in the BOF session, the accelerator devices will be exposed t=
+o
+> > user-space with a new, dedicated device char files and a dedicated majo=
+r
+> > number (261), to clearly separate them from graphic cards and the graph=
+ic
+> > user-space s/w stack. Furthermore, the drivers will be located in a sep=
+arate
+> > place in the kernel tree (drivers/accel/).
+> >
+> > This series of patches is the first step in this direction as it adds t=
+he
+> > necessary infrastructure for accelerator devices to DRM. The new device=
+s will
+> > be exposed with the following convention:
+> >
+> > device char files - /dev/accel/accel*
+> > sysfs             - /sys/class/accel/accel*/
+> > debugfs           - /sys/kernel/debug/accel/accel*/
+>
+> I know I'm really late to this discussion, but wouldn't 'compute' be a
+> better name?
+I also thought like you :)
+But I consulted with Dave while writing these patches and he suggested
+accel/accel.
+I'm fine either way...
 
-Took me a while to figure out this comment.
-I think it might be worth it to remove it, I don't think it helps much.
+>
+> (I agree that skynet would also be nice :)
+>
+> >
+> > I tried to reuse the existing DRM code as much as possible, while keepi=
+ng it
+> > readable and maintainable.
+> >
+> > One thing that is missing from this series is defining a namespace for =
+the
+> > new accel subsystem, while I'll add in the next iteration of this patch=
+-set,
+> > after I will receive feedback from the community.
+> >
+> > As for drivers, once this series will be accepted (after adding the nam=
+espace),
+> > I will start working on migrating the habanalabs driver to the new acce=
+l
+> > subsystem. I have talked about it with Dave and we agreed that it will =
+be
+> > a good start to simply move the driver as-is with minimal changes, and =
+then
+> > start working on the driver's individual features that will be either a=
+dded
+> > to the accel core code (with or without changes), or will be removed an=
+d
+> > instead the driver will use existing DRM code.
+>
+> What's your opinion on the long-term prospect of DRM vs accel? I assume
+> that over time, DRM helpers will move into accel and some DRM drivers
+> will start depending on accel?
+I don't think that is what I had in mind.
+What I had in mind is that accel helpers are only relevant for accel
+drivers, and any code that might also be relevant for DRM drivers will
+be placed in DRM core code. e.g. GEM enhancements, RAS netlink
+support. btw, I suspect this will be the majority of the code.
+In addition, DRM drivers should never set the new DRIVER_COMPUTE_ACCEL
+driver feature in their structure so they should have zero dependency
+on the accel core code.
 
-Or maybe even #ifdef the .leave_smm out of emulate_ops and check for NULL pointer,
-in em_rsm (which should just #UD at the very start of it anyway.
+>
+> After reading the provided links, I wondered if we shouldn't rename
+> drivers/gpu to drivers/accel and put the new subsystem into
+> drivers/accel/compute. We'd have DRM and compute devices next to each
+> other and shared helpers could be located in other subdirectories within
+> accel/
+I think this idea was brought up at the BOF session and Dave and
+others said it will be too big of a burden (due to backports) to do
+it.
+From Dave's blogpost:
+"Moving things around now for current drivers is too hard to deal with
+for backports etc. Adding a new directory for accel drivers would be a
+good plan, even if they used the drm framework."
 
-Besides this:
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-
-Best regards,
-	Maxim Levitsky
-
-
-
-> + */
-> +#endif
->  
->  #endif
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 496ee7d1ae2f..6f7ceb35d2ff 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4150,6 +4150,8 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
->  	case MSR_IA32_VMX_BASIC ... MSR_IA32_VMX_VMFUNC:
->  		return false;
->  	case MSR_IA32_SMBASE:
-> +		if (!IS_ENABLED(CONFIG_KVM_SMM))
-> +			return false;
->  		/* SEV-ES guests do not support SMM, so report false */
->  		if (kvm && sev_es_guest(kvm))
->  			return false;
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 038809c68006..b22330a15adb 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -6841,6 +6841,8 @@ static bool vmx_has_emulated_msr(struct kvm *kvm, u32 index)
->  {
->  	switch (index) {
->  	case MSR_IA32_SMBASE:
-> +		if (!IS_ENABLED(CONFIG_KVM_SMM))
-> +			return false;
->  		/*
->  		 * We cannot do SMM unless we can run the guest in big
->  		 * real mode.
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 97a871635986..a9e050aefea6 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -3636,7 +3636,7 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		break;
->  	}
->  	case MSR_IA32_SMBASE:
-> -		if (!msr_info->host_initiated)
-> +		if (!IS_ENABLED(CONFIG_KVM_SMM) || !msr_info->host_initiated)
->  			return 1;
->  		vcpu->arch.smbase = data;
->  		break;
-> @@ -4052,7 +4052,7 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
->  		msr_info->data = vcpu->arch.ia32_misc_enable_msr;
->  		break;
->  	case MSR_IA32_SMBASE:
-> -		if (!msr_info->host_initiated)
-> +		if (!IS_ENABLED(CONFIG_KVM_SMM) || !msr_info->host_initiated)
->  			return 1;
->  		msr_info->data = vcpu->arch.smbase;
->  		break;
-> @@ -4426,6 +4426,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  			r |= KVM_X86_DISABLE_EXITS_MWAIT;
->  		break;
->  	case KVM_CAP_X86_SMM:
-> +		if (!IS_ENABLED(CONFIG_KVM_SMM))
-> +			break;
-> +
->  		/* SMBASE is usually relocated above 1M on modern chipsets,
->  		 * and SMM handlers might indeed rely on 4G segment limits,
->  		 * so do not report SMM to be available if real mode is
-> @@ -5176,6 +5179,12 @@ static int kvm_vcpu_ioctl_x86_set_vcpu_events(struct kvm_vcpu *vcpu,
->  		vcpu->arch.apic->sipi_vector = events->sipi_vector;
->  
->  	if (events->flags & KVM_VCPUEVENT_VALID_SMM) {
-> +		if (!IS_ENABLED(CONFIG_KVM_SMM) &&
-> +		    (events->smi.smm ||
-> +		     events->smi.pending ||
-> +		     events->smi.smm_inside_nmi))
-> +			return -EINVAL;
-> +
->  		if (!!(vcpu->arch.hflags & HF_SMM_MASK) != events->smi.smm) {
->  			kvm_x86_ops.nested_ops->leave_nested(vcpu);
->  			kvm_smm_changed(vcpu, events->smi.smm);
-> @@ -8066,6 +8075,14 @@ static unsigned emulator_get_hflags(struct x86_emulate_ctxt *ctxt)
->  	return emul_to_vcpu(ctxt)->arch.hflags;
->  }
->  
-> +#ifndef CONFIG_KVM_SMM
-> +static int emulator_leave_smm(struct x86_emulate_ctxt *ctxt)
-> +{
-> +	WARN_ON_ONCE(1);
-> +	return X86EMUL_UNHANDLEABLE;
-> +}
-> +#endif
-> +
->  static void emulator_triple_fault(struct x86_emulate_ctxt *ctxt)
->  {
->  	kvm_make_request(KVM_REQ_TRIPLE_FAULT, emul_to_vcpu(ctxt));
-> diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
-> index 1f136a81858e..cb38a478e1f6 100644
-> --- a/tools/testing/selftests/kvm/x86_64/smm_test.c
-> +++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
-> @@ -137,6 +137,8 @@ int main(int argc, char *argv[])
->  	struct kvm_x86_state *state;
->  	int stage, stage_reported;
->  
-> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_X86_SMM));
-> +
->  	/* Create VM */
->  	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
->  
-
-
+Thanks,
+Oded
+>
+> Best regards
+> Thomas
+>
+> >
+> > In addition, I know of at least 3 or 4 drivers that were submitted for =
+review
+> > and are good candidates to be included in this new subsystem, instead o=
+f being
+> > a drm render node driver or a misc driver.
+> >
+> > [1] https://lkml.org/lkml/2022/7/31/83
+> > [2] https://airlied.blogspot.com/2022/09/accelerators-bof-outcomes-summ=
+ary.html
+> >
+> > Thanks,
+> > Oded
+> >
+> > Oded Gabbay (3):
+> >    drivers/accel: add new kconfig and update MAINTAINERS
+> >    drm: define new accel major and register it
+> >    drm: add dedicated minor for accelerator devices
+> >
+> >   Documentation/admin-guide/devices.txt |   5 +
+> >   MAINTAINERS                           |   8 +
+> >   drivers/Kconfig                       |   2 +
+> >   drivers/accel/Kconfig                 |  24 +++
+> >   drivers/gpu/drm/drm_drv.c             | 214 +++++++++++++++++++++----=
+-
+> >   drivers/gpu/drm/drm_file.c            |  69 ++++++---
+> >   drivers/gpu/drm/drm_internal.h        |   5 +-
+> >   drivers/gpu/drm/drm_sysfs.c           |  81 +++++++++-
+> >   include/drm/drm_device.h              |   3 +
+> >   include/drm/drm_drv.h                 |   8 +
+> >   include/drm/drm_file.h                |  21 ++-
+> >   include/drm/drm_ioctl.h               |   1 +
+> >   12 files changed, 374 insertions(+), 67 deletions(-)
+> >   create mode 100644 drivers/accel/Kconfig
+> >
+> > --
+> > 2.34.1
+> >
+>
+> --
+> Thomas Zimmermann
+> Graphics Driver Developer
+> SUSE Software Solutions Germany GmbH
+> Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+> (HRB 36809, AG N=C3=BCrnberg)
+> Gesch=C3=A4ftsf=C3=BChrer: Ivo Totev
