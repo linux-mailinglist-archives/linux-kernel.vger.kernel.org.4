@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C34760BAB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8553060BB4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234731AbiJXUk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
+        id S235144AbiJXUyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234783AbiJXUjL (ORCPT
+        with ESMTP id S235272AbiJXUxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:39:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211352CDCF;
-        Mon, 24 Oct 2022 11:50:05 -0700 (PDT)
+        Mon, 24 Oct 2022 16:53:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D8E168E56;
+        Mon, 24 Oct 2022 12:00:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C1AE8B818C9;
-        Mon, 24 Oct 2022 12:47:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB3EC433D6;
-        Mon, 24 Oct 2022 12:47:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8BD4612C5;
+        Mon, 24 Oct 2022 12:01:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F5EC433C1;
+        Mon, 24 Oct 2022 12:01:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615644;
-        bh=g6JX/FbexTg6S5fdJfWEIODX30EZwBje8Fl6FaF8REw=;
+        s=korg; t=1666612883;
+        bh=8ggShBhGOJwKpgRbOmOgbcjHdyJf4iISNtbQntcg8Nk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JUYwV+SeTyyZp35HQ/9tiOLVAtGv9PmX1zdU4nu+Cx29RrAZPnQy1NOGEiSevxkV1
-         UkAsegJnboAAllqotXsAmRal45zwkdNRxEpifL0tNaObTvMT0ybyh7mB2G4DlJ0sSz
-         InXRuB85KgSmVkpF8/TiIGehnXn4P4n+oVaGNgCs=
+        b=AV8cy3V1Hs9cGE1JEJGidht2aydcztQ4VlriWhXA0Cf86PFJlUJ+JRqyyYvL+cYCs
+         WrJE4KA/ewg88X3KSan6jdIxhTB5QJuCsWeH72mPb4ZkxJFR9KsPUsXPqELjf4vhnz
+         fMJ30HMmjQXlW0Hxsl5epxiBKAwM9yOJYi8geLKE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jason Baron <jbaron@akamai.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jim Cromie <jim.cromie@gmail.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 299/530] dyndbg: let query-modname override actual module name
+Subject: [PATCH 4.19 124/229] clk: tegra: Fix refcount leak in tegra114_clock_init
 Date:   Mon, 24 Oct 2022 13:30:43 +0200
-Message-Id: <20221024113058.599805134@linuxfoundation.org>
+Message-Id: <20221024113003.018607937@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jim Cromie <jim.cromie@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit e75ef56f74965f426dd819a41336b640ffdd8fbc ]
+[ Upstream commit db16a80c76ea395766913082b1e3f939dde29b2c ]
 
-dyndbg's control-parser: ddebug_parse_query(), requires that search
-terms: module, func, file, lineno, are used only once in a query; a
-thing cannot be named both foo and bar.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-The cited commit added an overriding module modname, taken from the
-module loader, which is authoritative.  So it set query.module 1st,
-which disallowed its use in the query-string.
-
-But now, its useful to allow a module-load to enable classes across a
-whole (or part of) a subsystem at once.
-
-  # enable (dynamic-debug in) drm only
-  modprobe drm dyndbg="class DRM_UT_CORE +p"
-
-  # get drm_helper too
-  modprobe drm dyndbg="class DRM_UT_CORE module drm* +p"
-
-  # get everything that knows DRM_UT_CORE
-  modprobe drm dyndbg="class DRM_UT_CORE module * +p"
-
-  # also for boot-args:
-  drm.dyndbg="class DRM_UT_CORE module * +p"
-
-So convert the override into a default, by filling it only when/after
-the query-string omitted the module.
-
-NB: the query class FOO handling is forthcoming.
-
-Fixes: 8e59b5cfb9a6 dynamic_debug: add modname arg to exec_query callchain
-Acked-by: Jason Baron <jbaron@akamai.com>
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
-Link: https://lore.kernel.org/r/20220904214134.408619-8-jim.cromie@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 2cb5efefd6f7 ("clk: tegra: Implement clocks for Tegra114")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220523143834.7587-1-linmq006@gmail.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/dynamic_debug.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/clk/tegra/clk-tegra114.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 00e6507972d8..60d453974155 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -380,10 +380,6 @@ static int ddebug_parse_query(char *words[], int nwords,
- 		return -EINVAL;
+diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-tegra114.c
+index 625d11091330..1e5025c127bd 100644
+--- a/drivers/clk/tegra/clk-tegra114.c
++++ b/drivers/clk/tegra/clk-tegra114.c
+@@ -1348,6 +1348,7 @@ static void __init tegra114_clock_init(struct device_node *np)
  	}
  
--	if (modname)
--		/* support $modname.dyndbg=<multiple queries> */
--		query->module = modname;
--
- 	for (i = 0; i < nwords; i += 2) {
- 		char *keyword = words[i];
- 		char *arg = words[i+1];
-@@ -424,6 +420,13 @@ static int ddebug_parse_query(char *words[], int nwords,
- 		if (rc)
- 			return rc;
- 	}
-+	if (!query->module && modname)
-+		/*
-+		 * support $modname.dyndbg=<multiple queries>, when
-+		 * not given in the query itself
-+		 */
-+		query->module = modname;
-+
- 	vpr_info_dq(query, "parsed");
- 	return 0;
- }
+ 	pmc_base = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!pmc_base) {
+ 		pr_err("Can't map pmc registers\n");
+ 		WARN_ON(1);
 -- 
 2.35.1
 
