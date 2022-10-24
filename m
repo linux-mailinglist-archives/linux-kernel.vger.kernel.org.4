@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6142960A343
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE1960A3BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbiJXLxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S232229AbiJXMAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbiJXLwj (ORCPT
+        with ESMTP id S232396AbiJXL60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:52:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2117628E03;
-        Mon, 24 Oct 2022 04:44:49 -0700 (PDT)
+        Mon, 24 Oct 2022 07:58:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2571760CA;
+        Mon, 24 Oct 2022 04:47:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B0B1B81132;
-        Mon, 24 Oct 2022 11:38:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4874CC433C1;
-        Mon, 24 Oct 2022 11:38:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F90361291;
+        Mon, 24 Oct 2022 11:47:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3243CC433C1;
+        Mon, 24 Oct 2022 11:47:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611526;
-        bh=HzWNp5YyPkS2fPfnmk/Ug6wOXveeiRA34eO/DWm4nXw=;
+        s=korg; t=1666612051;
+        bh=sM65ncKA0Fp2DSYemjydTSKTheS9f7SXxpox3tYAn2Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sCKE+p5kr8h9mlKhHk2Q2iFStyE8ZUPFNMqZgLbvRLBi3e85PbIviP/fH0a+E4CZ5
-         tqrrKSMj8bDkK4MvXdcNrbaoIFhtqTmeX9PuSVZBnI5csCKJ/uoJEKxUl6fUeQ2m8x
-         /5uqRrEhLs/YuEEb15fiqD5UpDALmOXewv8daghc=
+        b=jNqBN8ku60M9m9AqrE/vJ1Yo2Rr9q30ZqB++9ynbZORSWK/cGzyqvCEpZsq08yUb9
+         /48hb3t3FKRLKLCrpNBUw/VLxQ8F75k3C2bbwk6hOysiNWmLXNAyHphcduDzInkBuK
+         GBu1WMWbA0dt+F3qi0QtZgXA5poMp8iHAtYpZWtU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Yufen <wangyufen@huawei.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 013/159] selftests: Fix the if conditions of in test_extra_filter()
-Date:   Mon, 24 Oct 2022 13:29:27 +0200
-Message-Id: <20221024112949.837857514@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.14 051/210] ALSA: rawmidi: Drop register_mutex in snd_rawmidi_free()
+Date:   Mon, 24 Oct 2022 13:29:28 +0200
+Message-Id: <20221024112958.649197190@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +52,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Yufen <wangyufen@huawei.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit bc7a319844891746135dc1f34ab9df78d636a3ac ]
+commit a70aef7982b012e86dfd39fbb235e76a21ae778a upstream.
 
-The socket 2 bind the addr in use, bind should fail with EADDRINUSE. So
-if bind success or errno != EADDRINUSE, testcase should be failed.
+The register_mutex taken around the dev_unregister callback call in
+snd_rawmidi_free() may potentially lead to a mutex deadlock, when OSS
+emulation and a hot unplug are involved.
 
-Fixes: 3ca8e4029969 ("soreuseport: BPF selection functional test")
-Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-Link: https://lore.kernel.org/r/1663916557-10730-1-git-send-email-wangyufen@huawei.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Since the mutex doesn't protect the actual race (as the registration
+itself is already protected by another means), let's drop it.
+
+Link: https://lore.kernel.org/r/CAB7eexJP7w1B0mVgDF0dQ+gWor7UdkiwPczmL7pn91xx8xpzOA@mail.gmail.com
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20221011070147.7611-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/net/reuseport_bpf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/core/rawmidi.c |    2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/selftests/net/reuseport_bpf.c
-index b5277106df1f..b0cc082fbb84 100644
---- a/tools/testing/selftests/net/reuseport_bpf.c
-+++ b/tools/testing/selftests/net/reuseport_bpf.c
-@@ -330,7 +330,7 @@ static void test_extra_filter(const struct test_params p)
- 	if (bind(fd1, addr, sockaddr_size()))
- 		error(1, errno, "failed to bind recv socket 1");
+--- a/sound/core/rawmidi.c
++++ b/sound/core/rawmidi.c
+@@ -1633,10 +1633,8 @@ static int snd_rawmidi_free(struct snd_r
  
--	if (!bind(fd2, addr, sockaddr_size()) && errno != EADDRINUSE)
-+	if (!bind(fd2, addr, sockaddr_size()) || errno != EADDRINUSE)
- 		error(1, errno, "bind socket 2 should fail with EADDRINUSE");
+ 	snd_info_free_entry(rmidi->proc_entry);
+ 	rmidi->proc_entry = NULL;
+-	mutex_lock(&register_mutex);
+ 	if (rmidi->ops && rmidi->ops->dev_unregister)
+ 		rmidi->ops->dev_unregister(rmidi);
+-	mutex_unlock(&register_mutex);
  
- 	free(addr);
--- 
-2.35.1
-
+ 	snd_rawmidi_free_substreams(&rmidi->streams[SNDRV_RAWMIDI_STREAM_INPUT]);
+ 	snd_rawmidi_free_substreams(&rmidi->streams[SNDRV_RAWMIDI_STREAM_OUTPUT]);
 
 
