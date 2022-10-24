@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6FF609DC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8D0609DC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiJXJRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:17:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S230434AbiJXJR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiJXJQv (ORCPT
+        with ESMTP id S229952AbiJXJRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:16:51 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE7F6BD5B;
-        Mon, 24 Oct 2022 02:16:32 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id 4so2047277pli.0;
-        Mon, 24 Oct 2022 02:16:32 -0700 (PDT)
+        Mon, 24 Oct 2022 05:17:34 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D566C121
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:17:06 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id r18so8164449pgr.12
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h/yVDeHDr6plsnqVZvkYJdff2G0m4diaoqxuNVZA5+c=;
-        b=eTEnkDQFquLaewz9opAXVByCnvraNIOH6pchFMfkKEeqQuchnJpVHxznarX776cTCI
-         6ICUW/7rETyp1to8sUH5UjmHpjR99daPR79eL7tsKOcZbiHG6f2KBloyIXqg1cHCYQwt
-         DT2HNM6Uq6MO91QSGvaVdTqDgj+MjqB8d3XGEXpKe93KUreJXJabE9ufDFR9unXG+R/W
-         CvV0YhizY3KavfwDnGGr+FaWcevpd1S8X29nWG2cak5C2lDgPAkopvcqr2o6JdGoek94
-         s9d2ZUgXMJzNGCWcURJKXbqqbI2PNNOZ8cQ2lZtS3IoAdgHKUZm3BiOJBSD8rSt8NBXG
-         RFnw==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E90yK8wonsHofoZqda9QGC2Kinjyxdvs/JNsLBuhZMI=;
+        b=MuoVAmKPz2IxYaB6nczSI3E/Y78v4f7sUKyAPkUGTb+M0iiZq8IbgRw2u3QZBpnPRT
+         gY0MPc0a/UMRoBuLKRtHRuZXNgLEOBivRI5jA/qFOuHnnjpOOl/b8/letmaAkKnbvAEX
+         hhR4hrNkB5RcVMqnU+t8LraIPg3UQIPhrINtWSqpzp+Y7BbBAkyAq/zaJuGsYquGFeiH
+         6CohnitTxgTfgOBtQdYzjmh09lu/FfcARO7EeNEn9NggZhWu+vs32ny0P2F9LgsxJHBu
+         LhkYfrWzV4+NgLH+MVob7G6gocLimybd5usm7JFM98WY3aPSp6sx49AF3URCGqGvOweG
+         Qh5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h/yVDeHDr6plsnqVZvkYJdff2G0m4diaoqxuNVZA5+c=;
-        b=fUQQ+37I69drqtrJ6ln1Zwxo+Urdd5ECCeVVk/DHrRG8TzviIyGT/L8TgprFufTV5Z
-         aUkM3ovp6naMWPDpENqEr8WKxLgy0YmR8Iv8r7T0cnxMA8D0j/Qx4c+SCcvgZHYIBV54
-         RbhaIsDy/aHpqkbIb9HCYQrzjGifG7hgNvcHt3peuzz6jZhAXyPlWPrDlTCHlOuHyJA5
-         4K4C40KZh1Xq01U3nZfm/cP4Eh2ZER+DVvcOu4Pz5vIznHfnNTkProJgwJlCApvg3XVg
-         IC0aMZNCNJvYilT9IuLZGwEAbtfnbkbn/74pHfqaKmVryYHDJ44f3qd1+b33RhN5nF1m
-         Qc/w==
-X-Gm-Message-State: ACrzQf0Ot689lzatOvdL8ONIc111qtShQ7cOhncBQresVXWRW73eQ+yv
-        lESR9t9fKImX0Ra7FIcBGVy13Aw39is=
-X-Google-Smtp-Source: AMsMyM4Nw7S+Rp9uPLWUSmzcTizdNVIle6xOqPE1jyLiydS2NRGHPzaBh5wmmM4OBfwDXwMCMExC+Q==
-X-Received: by 2002:a17:902:a611:b0:186:9ba2:148b with SMTP id u17-20020a170902a61100b001869ba2148bmr7503932plq.164.1666602991392;
-        Mon, 24 Oct 2022 02:16:31 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-6.three.co.id. [116.206.28.6])
-        by smtp.gmail.com with ESMTPSA id p29-20020a631e5d000000b00461b85e5ad6sm16803504pgm.19.2022.10.24.02.16.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 02:16:31 -0700 (PDT)
-Message-ID: <2edcbc94-e29a-b8ab-e320-ee52788471c8@gmail.com>
-Date:   Mon, 24 Oct 2022 16:16:25 +0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E90yK8wonsHofoZqda9QGC2Kinjyxdvs/JNsLBuhZMI=;
+        b=H3z80n9GSEw+KhnvFEpgfNTow0idd8r7zj7JKR2spCgpanzrG+1bLdzdXvDlcRZhgj
+         ZvM5o99gGGpvSwkaeBhmwTkvY0cgVnLxVxpX5auXw57bjOUWEmOs2GFqsrk4PHAHFfbW
+         9LAI5JFH4nUlgzJdN7eWRtS0DnvIT8EGYRX90eLeNm9yU4bqsal6HvtOM7D5WL7Nnmy9
+         jBpDZd4NmxcB2GSV7I+qIO0/5SqylqEI8rdmPFa8eO/qMhS+R1zdoQVTRpFkFOgWxZ+4
+         ZRDYZkNbDQFdz4u9N9nckFXa3OBG6nod3CKMR3XI83nXAy/4sGLf7mOBzuxiyTJbPJd/
+         cwaA==
+X-Gm-Message-State: ACrzQf3lLfd2z0APLGPU0KCfI9QEubjeEruduV+aNUt46Xl+OuVfK5kZ
+        Ub8ZNrdrxptQ+0D+iF9whnHVwA==
+X-Google-Smtp-Source: AMsMyM6+5BaNoVlMbXOb9WhEsuyIraEFR5wrdMYEtNDGK09RXK2gptzkDetXYlPoHQqDgdHXzcybXw==
+X-Received: by 2002:a63:1f0d:0:b0:464:69f8:1cbc with SMTP id f13-20020a631f0d000000b0046469f81cbcmr28015852pgf.574.1666603025252;
+        Mon, 24 Oct 2022 02:17:05 -0700 (PDT)
+Received: from leoy-huanghe.lan (211-75-219-199.hinet-ip.hinet.net. [211.75.219.199])
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902a3cc00b0018693643504sm3269727plb.40.2022.10.24.02.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 02:17:04 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 17:16:56 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Greg Thelen <gthelen@google.com>,
+        Anand K Mistry <amistry@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1] perf record: Fix event fd races
+Message-ID: <Y1ZYCD1LjC5OhWsq@leoy-huanghe.lan>
+References: <20221024011024.462518-1-irogers@google.com>
+ <Y1X+7FCemionnepj@leoy-huanghe.lan>
+ <CAP-5=fWUrwQ187O7d0incvRFQ7RT+1viG30k+F1ZEEU3BEFeFA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 1/2] unicode: mkutf8data: Add compound malloc function
-To:     Li kunyu <kunyu@nfschina.com>
-Cc:     krisman@collabora.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <Y1ZFLO98zNoAgniW@debian.me>
- <20221024082619.178940-1-kunyu@nfschina.com>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221024082619.178940-1-kunyu@nfschina.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fWUrwQ187O7d0incvRFQ7RT+1viG30k+F1ZEEU3BEFeFA@mail.gmail.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 15:26, Li kunyu wrote:
+On Sun, Oct 23, 2022 at 10:33:30PM -0700, Ian Rogers wrote:
+
+[...]
+
+> > > +static volatile int done_fd = -1;
+> >
+> > Here is a bit suspecious for adding volatile qualifier.  See the
+> > document: process/volatile-considered-harmful.rst.
+> >
+> > I know the document is mainly for kernel programming, but seems to me
+> > it's also valid for C programming in userspace.
+> >
+> > I not sure what's the purpose for adding volatile for done_fd, if we
+> > really have concern for reading any stale value for done_fd, should we
+> > use WRITE_ONCE/READ_ONCE?
 > 
-> I send the 1/2 and 2/2 patches separately, and divide the two functions and related modifications in the 2/2 patch into two patches.
-> 
+> We could just switch to C11 and stdatomic. The volatile is consistent
+> with the code above and more consistent with the expectation of
+> writing to a variable that is read in a signal handler.
 
-No, not that way.
+Thanks for the info for C11 and stdatomic.h.  The documentation [1] says
+the safe way is for accessing shared data in signal handler is:
 
-Here's the recipe for submitting patch series (a set of two or more patches),
-assuming that you do the work on a branch which is based on mainline (master):
+  static volatile sig_atomic_t done_fd = -1;
 
-1. First, create directory which to store the patches.
-2. Determine the base commit for your branch. Most of the times `git merge-base
-   master <your branch>` can be used, but sometimes you need to determine that
-   manually by seeing the commit log with `git log`.
-3. Generate the patch series (preferably with cover letter) by `git format-patch
-   -o <directory> --cover-letter --base=<base commit> <base commit>`. You can
-   now write the description about the series in the cover letter (which will
-   be 0000-cover-letter.patch).
-4. Find the maintainers which will review your series with
-   `scripts/get_maintainer.pl /path/to/directory/*.patch`. Ignore your email
-   address if it exists.
-5. Send the series with `git send-email <--to and/or --cc maintainers>
-   /path/to/directory/*.patch`. All patches will be sent as reply to the
-   cover letter.
+It's fine if you want to use another patch to address this issue, this
+patch for fixing errno is fine for me:
 
-Thanks.
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
 
--- 
-An old man doll... just what I always wanted! - Clara
-
+[1] https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+objects+in+signal+handlers
