@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945F260A59D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CD160A84B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbiJXM1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S235270AbiJXNED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233735AbiJXM0y (ORCPT
+        with ESMTP id S235378AbiJXNAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:26:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BF38558A;
-        Mon, 24 Oct 2022 05:01:15 -0700 (PDT)
+        Mon, 24 Oct 2022 09:00:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E75811834;
+        Mon, 24 Oct 2022 05:19:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C106961254;
-        Mon, 24 Oct 2022 12:00:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4497C433C1;
-        Mon, 24 Oct 2022 12:00:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06E9A61290;
+        Mon, 24 Oct 2022 12:10:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155EEC433C1;
+        Mon, 24 Oct 2022 12:10:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612801;
-        bh=jGqOotVL1qkAVg5bb58qeCDE4j9sfDYzqT21ZmSUues=;
+        s=korg; t=1666613432;
+        bh=erp1Dq2cXRI9kYCT9NdeySqx+z3DNa6n189hM0YEwPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LuEH9TizCIAz57LFEi0xaButqh4jV92FDDt8NQ9k/mK1taWmeVwfHhMj/oLlL/YVQ
-         G6sW5FSoLB7kZLdMEursGAJZn9xldyuubRigpzpAraD/IynY4pEd/4/aBdUte3xTMj
-         l98ySm5dMAeRbdA0mSFAl1N1JZtutz9dDvsclHzo=
+        b=kQPqNYtSN4hxLetGoU/ZDrEaJP0lCglc7dFh6l5rY2nYskAwRYDgiGLL4FmYKRgB2
+         CaaZbWZfhrSHVwVZRVqDxXbHFO4L1sbXVNVoukltnmZur6ostGbRTT+eN0/7JUr1pC
+         NJn0s51qa8dNdqUTggVfZ3wMPxyBzL7XDULhPhVU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Zhu Yanjun <yanjun.zhu@linux.dev>,
+        Li Zhijian <lizhijian@fujitsu.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 125/229] clk: tegra20: Fix refcount leak in tegra20_clock_init
-Date:   Mon, 24 Oct 2022 13:30:44 +0200
-Message-Id: <20221024113003.050579336@linuxfoundation.org>
+Subject: [PATCH 5.4 135/255] RDMA/rxe: Fix the error caused by qp->sk
+Date:   Mon, 24 Oct 2022 13:30:45 +0200
+Message-Id: <20221024113007.067610368@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
 
-[ Upstream commit 4e343bafe03ff68a62f48f8235cf98f2c685468b ]
+[ Upstream commit 548ce2e66725dcba4e27d1e8ac468d5dd17fd509 ]
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+When sock_create_kern in the function rxe_qp_init_req fails,
+qp->sk is set to NULL.
 
-Fixes: 37c26a906527 ("clk: tegra: add clock support for Tegra20")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220523152811.19692-1-linmq006@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Then the function rxe_create_qp will call rxe_qp_do_cleanup
+to handle allocated resource.
+
+Before handling qp->sk, this variable should be checked.
+
+Fixes: 8700e3e7c485 ("Soft RoCE driver")
+Link: https://lore.kernel.org/r/20220822011615.805603-3-yanjun.zhu@linux.dev
+Signed-off-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+Reviewed-by: Li Zhijian <lizhijian@fujitsu.com>
+Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+Signed-off-by: Leon Romanovsky <leon@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/tegra/clk-tegra20.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/infiniband/sw/rxe/rxe_qp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-tegra20.c b/drivers/clk/tegra/clk-tegra20.c
-index 68551effb5ca..5859b8ee1478 100644
---- a/drivers/clk/tegra/clk-tegra20.c
-+++ b/drivers/clk/tegra/clk-tegra20.c
-@@ -1152,6 +1152,7 @@ static void __init tegra20_clock_init(struct device_node *np)
- 	}
+diff --git a/drivers/infiniband/sw/rxe/rxe_qp.c b/drivers/infiniband/sw/rxe/rxe_qp.c
+index be3eff792864..89f6d54a4312 100644
+--- a/drivers/infiniband/sw/rxe/rxe_qp.c
++++ b/drivers/infiniband/sw/rxe/rxe_qp.c
+@@ -847,8 +847,10 @@ static void rxe_qp_do_cleanup(struct work_struct *work)
  
- 	pmc_base = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!pmc_base) {
- 		pr_err("Can't map pmc registers\n");
- 		BUG();
+ 	free_rd_atomic_resources(qp);
+ 
+-	kernel_sock_shutdown(qp->sk, SHUT_RDWR);
+-	sock_release(qp->sk);
++	if (qp->sk) {
++		kernel_sock_shutdown(qp->sk, SHUT_RDWR);
++		sock_release(qp->sk);
++	}
+ }
+ 
+ /* called when the last reference to the qp is dropped */
 -- 
 2.35.1
 
