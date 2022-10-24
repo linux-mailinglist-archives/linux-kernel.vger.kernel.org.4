@@ -2,42 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF833609DE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEC1609E53
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiJXJXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54008 "EHLO
+        id S230002AbiJXJuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJXJXm (ORCPT
+        with ESMTP id S229874AbiJXJuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:23:42 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C0D61706;
-        Mon, 24 Oct 2022 02:23:39 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MwqJ748CfzmVLG;
-        Mon, 24 Oct 2022 17:18:47 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 17:23:37 +0800
-From:   Yuanzheng Song <songyuanzheng@huawei.com>
-To:     <akpm@linux-foundation.org>, <peterx@redhat.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-Subject: [PATCH STABLE 5.10] mm/memory: add non-anonymous page check in the copy_present_page()
-Date:   Mon, 24 Oct 2022 09:49:11 +0000
-Message-ID: <20221024094911.3054769-1-songyuanzheng@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 24 Oct 2022 05:50:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2E3356FB;
+        Mon, 24 Oct 2022 02:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECB4661162;
+        Mon, 24 Oct 2022 09:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 533B0C433C1;
+        Mon, 24 Oct 2022 09:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666605016;
+        bh=KkJv9pQMuI9y/XwLw6a+6h5/sOiz+GihvArdXW93g4g=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=V2Q+SvhXTUHpbdvPu8VO0g0ggFJQjQolsabqSNj0Pd7Both88nVwxYR5CnbH86S4C
+         FHuuQcwegCIeuWylbmDE7RFxAlNd+p/hLckQBCyPiRz6jrCmhYLr9PmpHH9zPi7Ta1
+         CFGXiGgEbXsz/GkfVNrMsdSSPpI0eukQk+4ojC2n0n4jKf3O2l9ECYwppbTtnNhe9N
+         0CwbPNW7KuY5mHGX+8zkx0yaLVAYzKq71SZehfNeMdylBLLkZRJ+fGxqeKnBLno4LF
+         iqBSuqPohDup0DKUTKK9khoqkPjVm5uaoWdFKDXfbIbiCOqMs9WkcOPwO3IULVzwiV
+         kby0Sq2kwrRUg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36168E270DE;
+        Mon, 24 Oct 2022 09:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] net: fman: Use physical address for userspace
+ interfaces
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166660501621.28227.3493718376720166675.git-patchwork-notify@kernel.org>
+Date:   Mon, 24 Oct 2022 09:50:16 +0000
+References: <20221020155041.2448668-1-sean.anderson@seco.com>
+In-Reply-To: <20221020155041.2448668-1-sean.anderson@seco.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org, geert@linux-m68k.org,
+        madalin.bucur@nxp.com, edumazet@google.com, camelia.groza@nxp.com,
+        kuba@kernel.org, andrew@lunn.ch, afd@ti.com,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com,
+        madalin.bucur@oss.nxp.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,99 +60,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vma->anon_vma of the child process may be NULL because
-the entire vma does not contain anonymous pages. In this
-case, a BUG will occur when the copy_present_page() passes
-a copy of a non-anonymous page of that vma to the
-page_add_new_anon_rmap() to set up new anonymous rmap.
+Hello:
 
-------------[ cut here ]------------
-kernel BUG at mm/rmap.c:1044!
-Internal error: Oops - BUG: 0 [#1] SMP
-Modules linked in:
-CPU: 2 PID: 3617 Comm: test Not tainted 5.10.149 #1
-Hardware name: linux,dummy-virt (DT)
-pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
-pc : __page_set_anon_rmap+0xbc/0xf8
-lr : __page_set_anon_rmap+0xbc/0xf8
-sp : ffff800014c1b870
-x29: ffff800014c1b870 x28: 0000000000000001
-x27: 0000000010100073 x26: ffff1d65c517baa8
-x25: ffff1d65cab0f000 x24: ffff1d65c416d800
-x23: ffff1d65cab5f248 x22: 0000000020000000
-x21: 0000000000000001 x20: 0000000000000000
-x19: fffffe75970023c0 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000
-x15: 0000000000000000 x14: 0000000000000000
-x13: 0000000000000000 x12: 0000000000000000
-x11: 0000000000000000 x10: 0000000000000000
-x9 : ffffc3096d5fb858 x8 : 0000000000000000
-x7 : 0000000000000011 x6 : ffff5a5c9089c000
-x5 : 0000000000020000 x4 : ffff5a5c9089c000
-x3 : ffffc3096d200000 x2 : ffffc3096e8d0000
-x1 : ffff1d65ca3da740 x0 : 0000000000000000
-Call trace:
- __page_set_anon_rmap+0xbc/0xf8
- page_add_new_anon_rmap+0x1e0/0x390
- copy_pte_range+0xd00/0x1248
- copy_page_range+0x39c/0x620
- dup_mmap+0x2e0/0x5a8
- dup_mm+0x78/0x140
- copy_process+0x918/0x1a20
- kernel_clone+0xac/0x638
- __do_sys_clone+0x78/0xb0
- __arm64_sys_clone+0x30/0x40
- el0_svc_common.constprop.0+0xb0/0x308
- do_el0_svc+0x48/0xb8
- el0_svc+0x24/0x38
- el0_sync_handler+0x160/0x168
- el0_sync+0x180/0x1c0
-Code: 97f8ff85 f9400294 17ffffeb 97f8ff82 (d4210000)
----[ end trace a972347688dc9bd4 ]---
-Kernel panic - not syncing: Oops - BUG: Fatal exception
-SMP: stopping secondary CPUs
-Kernel Offset: 0x43095d200000 from 0xffff800010000000
-PHYS_OFFSET: 0xffffe29a80000000
-CPU features: 0x08200022,61806082
-Memory Limit: none
----[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-This problem has been fixed by the fb3d824d1a46
-("mm/rmap: split page_dup_rmap() into page_dup_file_rmap() and page_try_dup_anon_rmap()"),
-but still exists in the linux-5.10.y branch.
+On Thu, 20 Oct 2022 11:50:41 -0400 you wrote:
+> Before 262f2b782e25 ("net: fman: Map the base address once"), the
+> physical address of the MAC was exposed to userspace in two places: via
+> sysfs and via SIOCGIFMAP. While this is not best practice, it is an
+> external ABI which is in use by userspace software.
+> 
+> The aforementioned commit inadvertently modified these addresses and
+> made them virtual. This constitutes and ABI break.  Additionally, it
+> leaks the kernel's memory layout to userspace. Partially revert that
+> commit, reintroducing the resource back into struct mac_device, while
+> keeping the intended changes (the rework of the address mapping).
+> 
+> [...]
 
-This patch is not applicable to this version because
-of the large version differences. Therefore, fix it by
-adding non-anonymous page check in the copy_present_page().
+Here is the summary with links:
+  - [net,v2] net: fman: Use physical address for userspace interfaces
+    https://git.kernel.org/netdev/net/c/c99f0f7e6837
 
-Fixes: 70e806e4e645 ("mm: Do early cow for pinned pages during fork() for ptes")
-Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
----
- mm/memory.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/mm/memory.c b/mm/memory.c
-index cc50fa0f4590..45973fd97be8 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -823,6 +823,17 @@ copy_present_page(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma
- 	if (likely(!page_maybe_dma_pinned(page)))
- 		return 1;
- 
-+	/*
-+	 * The vma->anon_vma of the child process may be NULL
-+	 * because the entire vma does not contain anonymous pages.
-+	 * A BUG will occur when the copy_present_page() passes
-+	 * a copy of a non-anonymous page of that vma to the
-+	 * page_add_new_anon_rmap() to set up new anonymous rmap.
-+	 * Return 1 if the page is not an anonymous page.
-+	*/
-+	if (!PageAnon(page))
-+		return 1;
-+
- 	new_page = *prealloc;
- 	if (!new_page)
- 		return -EAGAIN;
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
