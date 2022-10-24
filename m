@@ -2,75 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFF960BA26
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539D860BB52
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbiJXU0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S232111AbiJXUzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234463AbiJXUYl (ORCPT
+        with ESMTP id S233306AbiJXUzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:24:41 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60ACEDB6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:39:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=akJ2W+uE7OGa4ZjTNkn21zAS2A7n6Qf/s+7yzWK/Cqc=; b=IMAKJAcGYm9qO1MftwLm71XddX
-        ynVKoU6ZdvsDiCLJIgAR3b2t9GHdJs5on/p85YDgKL28b6tx7iF9pBpV6TnXq59IyT2RO6dB+IQbO
-        3uy4JlTKNUFyI8JcNucHyPYGCEyXJXDOHFOru0wnrnt+cKseE3fLJTsqs306WaYyig8Cf+OlA/bIx
-        FH2mwjvAVUth7rs2qLqszsJeehR1aVE0BweyogPMNW1zGxjuXhaYwkwM0v9xdeBLSJxQY97tlga36
-        4Y8Gu48r4haiCh4D5o38p8BRYREXpO2qlAaQ2eGM2OZGn0TIWA9QM03LVYaJjF3kE1l+AWLBpzet6
-        WwM8LY9g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1omxXz-0064Oq-ML; Mon, 24 Oct 2022 13:31:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 321AC3000DD;
-        Mon, 24 Oct 2022 15:31:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1174F2018F17F; Mon, 24 Oct 2022 15:31:18 +0200 (CEST)
-Date:   Mon, 24 Oct 2022 15:31:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        Hillf Danton <hdanton@sina.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Ting11 Wang =?utf-8?B?546L5am3?= <wangting11@xiaomi.com>
-Subject: Re: [PATCH v3 2/5] locking/rwsem: Limit # of null owner retries for
- handoff writer
-Message-ID: <Y1aTpYba1Wwly48+@hirez.programming.kicks-ass.net>
-References: <20221017211356.333862-1-longman@redhat.com>
- <20221017211356.333862-3-longman@redhat.com>
+        Mon, 24 Oct 2022 16:55:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B95254353
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:01:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666638039;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Co+mZwrA6BtWICFuluqHpcYHUEFY3CVy1+yDBlYoNG0=;
+        b=Q479hDStkpcI9RDfyNllK/cMRaOjc3NUIFuDF+FAc0TSFCnxT0SwsaaTNKg2B5/V7/QtJo
+        8PD35LxGPLkbqE3xUsuRWwVE4SBcSpVbmmzSmRi4mYyu49DX8AP1C8OBMSLds3/LQvInE4
+        OiL0d6a3L518ERDTeZRjn3vWboedjCE=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-148-RTQ_oMKVP72m1fEpNNDXFA-1; Mon, 24 Oct 2022 09:33:53 -0400
+X-MC-Unique: RTQ_oMKVP72m1fEpNNDXFA-1
+Received: by mail-qv1-f70.google.com with SMTP id q17-20020a056214019100b004b1d3c9f3acso5241157qvr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:33:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Co+mZwrA6BtWICFuluqHpcYHUEFY3CVy1+yDBlYoNG0=;
+        b=mY8D+SO3+MUniwpVPNNkfv3RYhWZxLk6VGee1Uh4fm+LfgB7cUqQvFMhf9j/G1TBpx
+         1O/Xrv4oxJWKpX1SZC2azToPVMNyhLQYko8LSGmmiSb597bObs72WXClrfouS9Ahvhfk
+         zjf8kKT5d4qmqHtdbbFHIEFP8kJXwzDO7BJZ8USi/vJXcUwJeufv4LRL9Sg7lGWf9oOK
+         g2q73/N66VvlEr9XsmfArNu6OUwqsYQBN7aM8FtgdORTIk1+oVqtZCtKZxBwWhUExaSb
+         RXzk3eBs1TJgftJP8LXLYPaWJdm+d3JOkGafMeKBJxU1oxSBRbmh/+FcUVi6ZXzvL+Cw
+         WCfA==
+X-Gm-Message-State: ACrzQf2faRdaLyV6bkZopy7gzM92aoUymQzUkmx54TZpIxDTG0TNI9Vz
+        KzNriWI8UKHLahH5AFG9LebGALJAPYnazIdPPLmkwqNOcESb0GflpKq7wxSbdMXf1ru8lUSk2SA
+        dO3rbcfV+h6Kfj5CnQzA+X6pJ
+X-Received: by 2002:a05:620a:2991:b0:6ee:92ee:5165 with SMTP id r17-20020a05620a299100b006ee92ee5165mr23277314qkp.177.1666618432976;
+        Mon, 24 Oct 2022 06:33:52 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6Yg9OJr5t+PzjIlFe7DyeWZYWlKJigBrJ2zA777WAfcBRrHdX5Mzg+wwVEGTHNrqihr8BU8g==
+X-Received: by 2002:a05:620a:2991:b0:6ee:92ee:5165 with SMTP id r17-20020a05620a299100b006ee92ee5165mr23277283qkp.177.1666618432728;
+        Mon, 24 Oct 2022 06:33:52 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-11-6-34.retail.telecomitalia.it. [87.11.6.34])
+        by smtp.gmail.com with ESMTPSA id ay11-20020a05620a178b00b006ee96d82188sm13005230qkb.1.2022.10.24.06.33.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 06:33:52 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 15:33:46 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Suwan Kim <suwan.kim027@gmail.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] virtio_blk: Fix signedness bug in virtblk_prep_rq()
+Message-ID: <20221024133346.whuejusy333o3vqd@sgarzare-redhat>
+References: <20221021204126.927603-1-rafaelmendsr@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221017211356.333862-3-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221021204126.927603-1-rafaelmendsr@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 05:13:53PM -0400, Waiman Long wrote:
-> Commit 91d2a812dfb9 ("locking/rwsem: Make handoff writer optimistically
-> spin on owner") assumes that when the owner field is changed to NULL,
-> the lock will become free soon.  That assumption may not be correct
-> especially if the handoff writer doing the spinning is a RT task which
-> may preempt another task from completing its action of either freeing
-> the rwsem or properly setting up owner.
+On Fri, Oct 21, 2022 at 05:41:26PM -0300, Rafael Mendonca wrote:
+>The virtblk_map_data() function returns negative error codes, however, the
+>'nents' field of vbr->sg_table is an unsigned int, which causes the error
+>handling not to work correctly.
+>
+>Fixes: 0e9911fa768f ("virtio-blk: support mq_ops->queue_rqs()")
+>Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+>---
+> drivers/block/virtio_blk.c | 6 ++++--
+> 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I'm confused again -- rwsem_*_owner() has
-lockdep_assert_preemption_disabled(). But more specifically; why can the
-RT task preempt a lock-op like that?
+Good catch!
+
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+
+>
+>diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
+>index 19da5defd734..291f705e61a8 100644
+>--- a/drivers/block/virtio_blk.c
+>+++ b/drivers/block/virtio_blk.c
+>@@ -321,16 +321,18 @@ static blk_status_t virtblk_prep_rq(struct blk_mq_hw_ctx *hctx,
+> 					struct virtblk_req *vbr)
+> {
+> 	blk_status_t status;
+>+	int num;
+>
+> 	status = virtblk_setup_cmd(vblk->vdev, req, vbr);
+> 	if (unlikely(status))
+> 		return status;
+>
+>-	vbr->sg_table.nents = virtblk_map_data(hctx, req, vbr);
+>-	if (unlikely(vbr->sg_table.nents < 0)) {
+>+	num = virtblk_map_data(hctx, req, vbr);
+>+	if (unlikely(num < 0)) {
+> 		virtblk_cleanup_cmd(req);
+> 		return BLK_STS_RESOURCE;
+> 	}
+>+	vbr->sg_table.nents = num;
+>
+> 	blk_mq_start_request(req);
+>
+>-- 
+>2.34.1
+>
+
