@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7060560BC21
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C202160BC26
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234425AbiJXV0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42102 "EHLO
+        id S234294AbiJXV2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbiJXV00 (ORCPT
+        with ESMTP id S233617AbiJXV2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:26:26 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954228F24E;
-        Mon, 24 Oct 2022 12:32:56 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id i127so12110617ybc.11;
-        Mon, 24 Oct 2022 12:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ewURVtEZDzlu0i+gVIVlIwdo2AKdKjYywGZcJK82PeY=;
-        b=pvb2n989P4g452NhPl3a7ovLcs0nrAlug6GLmwQOWVXp8sZf4hJMVc75J+1AdeaR5B
-         jTPfEsL3DxRnXGA7sUdDXsbNz9yiIRbkdJnpbTPKyuqZjCtxmSrHQ8G13WCC1Iuw5z+o
-         sb4RzMo24wxwjit5EZW/pEDJsdJvyK01K/zuT64THd3AukYqfUeJn+21U43e4WOGV7AE
-         TRjlBL3V1r6EQNYSf744jlDgboUSn44k7FA4sUf3fJvYekNs22FOZgtNlymJimDJwZ6+
-         t25uP2Y+j8/iUSZasJ8p1q+kJXQcLGIToESALHyDssHFEsfrxGDSk2to5cSEMGM1zWKn
-         AmIA==
+        Mon, 24 Oct 2022 17:28:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B91132248
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:35:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666640023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sZ8v+EwY2bNX8aSl1hAi5ZLb9PPb9KwOp7fvuUkZC2g=;
+        b=XfRf4UmJmSNh4Xrfh1qQrn7WP5b7ZAiIjSyiDWpIP2u4k83eyi5cE/Bk3sA6jErLTcZljz
+        VvwCFPUhts6OplzTubrMUA+jy0GjkOZ/Ho1emUv4HAX1gQ5U8KsF7d0h3ply8/RW9/ytzi
+        uScTBpz7DJpxW+YuQ2PMsK8pVu8v6Vg=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-348-B-dJxrEsNzKYDqn1yCJL5A-1; Mon, 24 Oct 2022 15:33:41 -0400
+X-MC-Unique: B-dJxrEsNzKYDqn1yCJL5A-1
+Received: by mail-qt1-f199.google.com with SMTP id f19-20020ac84713000000b00397692bdaecso7723500qtp.22
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:33:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ewURVtEZDzlu0i+gVIVlIwdo2AKdKjYywGZcJK82PeY=;
-        b=eCMf2kHbPew0J4JQHk0FNS0l3Xf9pT7J317HUfEnhJMz1et8O7Z0QTMDkeI+vLCyqz
-         Yjm7SzyQ2y3/vfCPz9tb8TwNQKj7aH1zNalPlWnfOScbuSbYVRDoJA8kXISGV1A97SOe
-         C71EHI4zOgBaJm32IjlUu6PX2pkVqSZMUr/tmcbWGqY/s7NtNclGtMpB3BEJhgcQj0HB
-         0lKEE5PlT3e7vBaGFQJDUsV4UCD1k33QYXGjUqud2bSjVq8mckojopkngwt0aV/gbBrB
-         UNe/DAgSazjkuX2YCz1TNmfIln+kenG9hg/moAkFklHYQDJcASMtve7E2hl2FgSEO5zb
-         tQtw==
-X-Gm-Message-State: ACrzQf1KmBzM+U2k3zn2O6OrcDMHDjAi5jXIlIG4zA8ZawHc8/oztVu8
-        aW8acizlaQ/N/94wkvaXNaWMs2ZuvbB3L0Gr7aK7FdfqHVeI6Q==
-X-Google-Smtp-Source: AMsMyM6B6fNnp2prURoNrQAhN6Lbp6rH2u1B/iqqAEW6OHySGJ/tzUiCXpuF8+v7sMB52Tmf+g8Xaw+7Yytz7WdTgT4=
-X-Received: by 2002:a25:3bd0:0:b0:6ca:6428:ac94 with SMTP id
- i199-20020a253bd0000000b006ca6428ac94mr16397507yba.462.1666639881517; Mon, 24
- Oct 2022 12:31:21 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sZ8v+EwY2bNX8aSl1hAi5ZLb9PPb9KwOp7fvuUkZC2g=;
+        b=6KpigDMYt6s9qpd7QcM4tMAkjbCo9EhsO+8/MoiRRZ+jtF0L207QKKUQUWpxe4fAcw
+         C102M86DSVaVSEftD1eiNzdE94eV5jBwsAuPBhtV9Zx9UsGpM3bN9rqNTIgdf/RTRFYB
+         e1T0uRh4j8u5yaA7tr8dRKzkF1m4Nqt2uWzG3YN7QgovrS9ihn3eaTlzion+j2pQiWUr
+         FR2JJ8Zr2FFOgU8hA8lcf1WKDqVfA+RCtIDUDS9gXEVbnHwPkONmaXJaoLaKmUYdVf8x
+         KQpKnh0cE2qvRQWWN0wlkXsJ9YPtlH3YYmYxU8Ilset/W09hg55MSfkxTA5n+3mErKsY
+         JUHA==
+X-Gm-Message-State: ACrzQf2V/+OCm1AooDTRnUd77KJmk1eE7o+y5+UIYnwXQZu4DLmkskit
+        euedzl8CQEOijkkkA0dF1QhjlBtf9FG6WmtRltuvICdjUCEZlVG7gDxIuuRB5gnsOMxqWZ2KbYU
+        WgWznj8ac4G6QTmerOCGPaxeN
+X-Received: by 2002:ac8:5dd3:0:b0:39d:1847:872a with SMTP id e19-20020ac85dd3000000b0039d1847872amr18544501qtx.645.1666640020369;
+        Mon, 24 Oct 2022 12:33:40 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6yZixs/k9ipGQk+YxOWJ1akEpX25bTl/zf3AiVYxllzKHCwgi54KXtb6GwKtr88nUataLr5Q==
+X-Received: by 2002:ac8:5dd3:0:b0:39d:1847:872a with SMTP id e19-20020ac85dd3000000b0039d1847872amr18544482qtx.645.1666640020135;
+        Mon, 24 Oct 2022 12:33:40 -0700 (PDT)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id t15-20020a05620a450f00b006cddf59a600sm545164qkp.34.2022.10.24.12.33.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 12:33:39 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Axel Rasmussen <axelrasmussen@google.com>, peterx@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: [PATCH 1/2] mm/uffd: Fix vma check on userfault for wp
+Date:   Mon, 24 Oct 2022 15:33:35 -0400
+Message-Id: <20221024193336.1233616-2-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221024193336.1233616-1-peterx@redhat.com>
+References: <20221024193336.1233616-1-peterx@redhat.com>
 MIME-Version: 1.0
-References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-12-vishal.moola@gmail.com>
-In-Reply-To: <20221017202451.4951-12-vishal.moola@gmail.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Mon, 24 Oct 2022 12:31:10 -0700
-Message-ID: <CAOzc2pwKoyy4i4zBKhvoKmN8cezUxjDhjYZnK9GLcJniQVPoGA@mail.gmail.com>
-Subject: Re: [PATCH v3 11/23] f2fs: Convert f2fs_fsync_node_pages() to use filemap_get_folios_tag()
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
-        jaegeuk@kernel.org, chao@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,76 +81,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 17, 2022 at 1:25 PM Vishal Moola (Oracle)
-<vishal.moola@gmail.com> wrote:
->
-> Convert function to use a folio_batch instead of pagevec. This is in
-> preparation for the removal of find_get_pages_range_tag().
->
-> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> ---
->  fs/f2fs/node.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
->
-> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-> index 983572f23896..e8b72336c096 100644
-> --- a/fs/f2fs/node.c
-> +++ b/fs/f2fs/node.c
-> @@ -1728,12 +1728,12 @@ int f2fs_fsync_node_pages(struct f2fs_sb_info *sbi, struct inode *inode,
->                         unsigned int *seq_id)
->  {
->         pgoff_t index;
-> -       struct pagevec pvec;
-> +       struct folio_batch fbatch;
->         int ret = 0;
->         struct page *last_page = NULL;
->         bool marked = false;
->         nid_t ino = inode->i_ino;
-> -       int nr_pages;
-> +       int nr_folios;
->         int nwritten = 0;
->
->         if (atomic) {
-> @@ -1742,20 +1742,21 @@ int f2fs_fsync_node_pages(struct f2fs_sb_info *sbi, struct inode *inode,
->                         return PTR_ERR_OR_ZERO(last_page);
->         }
->  retry:
-> -       pagevec_init(&pvec);
-> +       folio_batch_init(&fbatch);
->         index = 0;
->
-> -       while ((nr_pages = pagevec_lookup_tag(&pvec, NODE_MAPPING(sbi), &index,
-> -                               PAGECACHE_TAG_DIRTY))) {
-> +       while ((nr_folios = filemap_get_folios_tag(NODE_MAPPING(sbi), &index,
-> +                                       (pgoff_t)-1, PAGECACHE_TAG_DIRTY,
-> +                                       &fbatch))) {
->                 int i;
->
-> -               for (i = 0; i < nr_pages; i++) {
-> -                       struct page *page = pvec.pages[i];
-> +               for (i = 0; i < nr_folios; i++) {
-> +                       struct page *page = &fbatch.folios[i]->page;
->                         bool submitted = false;
->
->                         if (unlikely(f2fs_cp_error(sbi))) {
->                                 f2fs_put_page(last_page, 0);
-> -                               pagevec_release(&pvec);
-> +                               folio_batch_release(&fbatch);
->                                 ret = -EIO;
->                                 goto out;
->                         }
-> @@ -1821,7 +1822,7 @@ int f2fs_fsync_node_pages(struct f2fs_sb_info *sbi, struct inode *inode,
->                                 break;
->                         }
->                 }
-> -               pagevec_release(&pvec);
-> +               folio_batch_release(&fbatch);
->                 cond_resched();
->
->                 if (ret || marked)
-> --
-> 2.36.1
->
+We used to have a report that pte-marker code can be reached even when
+uffd-wp is not compiled in for file memories, here:
 
-Following up on these f2fs patches (11/23, 12/23, 13/23, 14/23, 15/23,
-16/23). Does anyone have time to review them this week?
+https://lore.kernel.org/all/YzeR+R6b4bwBlBHh@x1n/T/#u
+
+I just got time to revisit this and found that the root cause is we simply
+messed up with the vma check, so that for !PTE_MARKER_UFFD_WP system, we
+will allow UFFDIO_REGISTER of MINOR & WP upon shmem as the check was wrong:
+
+    if (vm_flags & VM_UFFD_MINOR)
+        return is_vm_hugetlb_page(vma) || vma_is_shmem(vma);
+
+Where we'll allow anything to pass on shmem as long as minor mode is
+requested.
+
+Axel did it right when introducing minor mode but I messed it up in
+b1f9e876862d when moving code around.  Fix it.
+
+Cc: Axel Rasmussen <axelrasmussen@google.com>
+Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ include/linux/userfaultfd_k.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+index f07e6998bb68..9df0b9a762cc 100644
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -146,9 +146,9 @@ static inline bool userfaultfd_armed(struct vm_area_struct *vma)
+ static inline bool vma_can_userfault(struct vm_area_struct *vma,
+ 				     unsigned long vm_flags)
+ {
+-	if (vm_flags & VM_UFFD_MINOR)
+-		return is_vm_hugetlb_page(vma) || vma_is_shmem(vma);
+-
++	if ((vm_flags & VM_UFFD_MINOR) &&
++	    (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma)))
++		return false;
+ #ifndef CONFIG_PTE_MARKER_UFFD_WP
+ 	/*
+ 	 * If user requested uffd-wp but not enabled pte markers for
+-- 
+2.37.3
+
