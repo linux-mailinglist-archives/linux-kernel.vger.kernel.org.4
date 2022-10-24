@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0BE60A716
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF6260A526
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbiJXMry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33976 "EHLO
+        id S233294AbiJXMVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbiJXMmo (ORCPT
+        with ESMTP id S233409AbiJXMTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:42:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFDD8A7EE;
-        Mon, 24 Oct 2022 05:08:49 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F4882D29;
+        Mon, 24 Oct 2022 04:58:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F7FD612D4;
-        Mon, 24 Oct 2022 12:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13C5C433C1;
-        Mon, 24 Oct 2022 12:06:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA24161252;
+        Mon, 24 Oct 2022 11:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C24C433D7;
+        Mon, 24 Oct 2022 11:56:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613193;
-        bh=9lSZ8aRNqxUmK/4jyig8irUcUZqPBRulXTjpjA2nuaU=;
+        s=korg; t=1666612561;
+        bh=alxBghWNnhholB3VzlLrbDxYywOEImlsaWDNbu24k10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WTNzZ5uFc+dTmt9k2csTbehDzNldzFNj/hHot+GdrOTAq+SCm8UXG0EYA/CEHlB5h
-         BFNYnkAafylPL5kMCE9uITe267zWPDOyampLZZPojKyWyEyKuf+MtJNilH3mKPyhaj
-         vUWHO0EKOoaxmqFKxN4E5u87fv1eIOJgg55l2c/0=
+        b=UYTyzqvKbAppaqqepP5BwAh2zDAx82l6o7DbzWgtrrz/7cGvEMs0eqmbvtxCeZzkN
+         KAOVP5Fbn7rX5phAJXcKmX/AY7HaI0BvXfEohFYoVWg+t9+E1dGHr16x2B+I5Svl+A
+         PnvmOpzrS9ytw/HGavb8tn9w8vvELSUMknfmjsrk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Lalith Rajendran <lalithkraj@google.com>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.4 043/255] ext4: make ext4_lazyinit_thread freezable
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.19 034/229] ALSA: usb-audio: Fix potential memory leaks
 Date:   Mon, 24 Oct 2022 13:29:13 +0200
-Message-Id: <20221024113003.863221366@linuxfoundation.org>
+Message-Id: <20221024113000.217616844@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +52,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lalith Rajendran <lalithkraj@google.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit 3b575495ab8dbb4dbe85b4ac7f991693c3668ff5 upstream.
+commit 6382da0828995af87aa8b8bef28cc61aceb4aff3 upstream.
 
-ext4_lazyinit_thread is not set freezable. Hence when the thread calls
-try_to_freeze it doesn't freeze during suspend and continues to send
-requests to the storage during suspend, resulting in suspend failures.
+When the driver hits -ENOMEM at allocating a URB or a buffer, it
+aborts and goes to the error path that releases the all previously
+allocated resources.  However, when -ENOMEM hits at the middle of the
+sync EP URB allocation loop, the partially allocated URBs might be
+left without released, because ep->nurbs is still zero at that point.
 
-Cc: stable@kernel.org
-Signed-off-by: Lalith Rajendran <lalithkraj@google.com>
-Link: https://lore.kernel.org/r/20220818214049.1519544-1-lalithkraj@google.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fix it by setting ep->nurbs at first, so that the error handler loops
+over the full URB list.
+
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220930100151.19461-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ext4/super.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/usb/endpoint.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -3157,6 +3157,7 @@ static int ext4_lazyinit_thread(void *ar
- 	unsigned long next_wakeup, cur;
+--- a/sound/usb/endpoint.c
++++ b/sound/usb/endpoint.c
+@@ -816,6 +816,7 @@ static int sync_ep_set_params(struct snd
+ 	if (!ep->syncbuf)
+ 		return -ENOMEM;
  
- 	BUG_ON(NULL == eli);
-+	set_freezable();
++	ep->nurbs = SYNC_URBS;
+ 	for (i = 0; i < SYNC_URBS; i++) {
+ 		struct snd_urb_ctx *u = &ep->urb[i];
+ 		u->index = i;
+@@ -835,8 +836,6 @@ static int sync_ep_set_params(struct snd
+ 		u->urb->complete = snd_complete_urb;
+ 	}
  
- cont_thread:
- 	while (true) {
+-	ep->nurbs = SYNC_URBS;
+-
+ 	return 0;
+ 
+ out_of_memory:
 
 
