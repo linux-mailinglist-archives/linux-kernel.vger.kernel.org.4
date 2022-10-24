@@ -2,135 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522DF60A4C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8A160A4EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbiJXMPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S233194AbiJXMSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbiJXMOU (ORCPT
+        with ESMTP id S233002AbiJXMRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:14:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BB931DD0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:55:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20E04612E4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:54:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DBDBC433C1;
-        Mon, 24 Oct 2022 11:54:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666612469;
-        bh=/o+mi3lqLRFkJ7ON565vkXhmtzUNxmeBz98aaAWoL/o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SFgncGQwAjO9MyLrbGxP8Pz9fziukwMyBVefnpDoyTRqHqE4ETly6+FvTKZZZXs5j
-         lwOxgMLfvEjZfa+j1jd+8KXTsXOO0s/kqU/LQvPorh0IqKn0YkrFZ6+v/xKIwBdhch
-         NEXwbbBR4JZG+5Y1Q6xsesdqkbyvlGDL7HGTVYejKmFP1vB3inLU6U79LfFAlL5grr
-         8UFLCbzjzgXZJRillYBJzoZ3MlQJ3ktTIo6eDi68ev3lWlYVhb/vaZDybclLzl06Hu
-         dam8tzXpjgshwgI7ecZzEomgH0H71zjcFUS10wL+bPabaNgXI6wVo8yZ5Fr59zcfNO
-         3pNKk+k4gWTBw==
-Date:   Mon, 24 Oct 2022 13:54:26 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Aaron Tomlin <atomlin@redhat.com>
-Cc:     mtosatti@redhat.com, cl@linux.com, tglx@linutronix.de,
-        mingo@kernel.org, peterz@infradead.org, pauld@redhat.com,
-        neelx@redhat.com, oleksandr@natalenko.name, atomlin@atomlin.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v8 3/5] mm/vmstat: Do not queue vmstat_update if tick is
- stopped
-Message-ID: <20221024115426.GA1287228@lothringen>
-References: <20220924152227.819815-1-atomlin@redhat.com>
- <20220924152227.819815-4-atomlin@redhat.com>
+        Mon, 24 Oct 2022 08:17:39 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AD681689;
+        Mon, 24 Oct 2022 04:56:40 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id bh7-20020a05600c3d0700b003c6fb3b2052so6448945wmb.2;
+        Mon, 24 Oct 2022 04:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=axn3aaHBRF7DrwO9saARJ14Bo7kXLQznomx3jTXdStk=;
+        b=PE8V9kp4GRfFmpdgzcTNucrSZO+RuGeyG6fjbleBbN2wJO78dFFNVo2Hi+PEme81j+
+         ub8R2aNIn6TNimRhD6oR1OvHWvh/KFrpuq7lTwtrVC3vaJWyS+JktzRuGqvZ9Wuzhi+G
+         vrI7EJ2Y36LebfU4jr2GTPSCvakZry8uULHKSZB1DCZBKTdNFWDQrBuNQfqZRzP4BwfL
+         jNCZwLDEgWGV/yDps2ssHF7OD9mhJ6bocRob2zsKYwp8rauluXUpvox7FIdOZbYp0Mlq
+         JJmg2Eej4pbejCcKErL0GCGAqtm+U1E1u7tN0prhs7Fz+nwlaoZjG8nNt1aySi2p7rFc
+         sXPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=axn3aaHBRF7DrwO9saARJ14Bo7kXLQznomx3jTXdStk=;
+        b=7t7F8LWgSOjARfTgfV8AQ5dIiwNQhoBtbHN/GgqOcASon82NFCTSC21iPXZtVt/5y7
+         A0U1YR6aFf2Jt0hRONhgQAbTnUOrsMnqcyhvopgld2cX6U7mC5IjRlLE1c01w7d83cuy
+         UtYV2oI/6dgqMJ/dVjxoiG4V3KdZWXium13GIiD/WVODE+goZrKuJrFxR2ObDRosxFgO
+         rbYWhcphJCQGVQJBPAKdqJVZCz7h+UQ2GRZl/KXCEvYWYiq17u+bsWOFdsFQqeIc1HVt
+         sU/alUn0Q9SRO/ond/DnTu1K7r/Dva7Rl+ZnQ+Dyze3LIc841XMTnQ8rpfAe0o4Arz1/
+         V5Rg==
+X-Gm-Message-State: ACrzQf01uVPEYXJUsq59Z5KyGyOvXnIAngtuL8og7dA4VDZwqEp3oW2d
+        wTW9hORdJKe2fMBSiTm8fHVQ/mi6oGM=
+X-Google-Smtp-Source: AMsMyM5HFklmeyYv6QSh8a0HERpkOwctcpnTPGXOReiJCofIUhPFcGm9dv3UDFvMDErEsK3dBD0MkA==
+X-Received: by 2002:a05:600c:502c:b0:3c6:f5ff:e089 with SMTP id n44-20020a05600c502c00b003c6f5ffe089mr21918323wmr.108.1666612485200;
+        Mon, 24 Oct 2022 04:54:45 -0700 (PDT)
+Received: from hthiery.kontron.local ([213.135.10.150])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b003c6f27d275dsm8484971wmq.33.2022.10.24.04.54.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 04:54:44 -0700 (PDT)
+From:   Heiko Thiery <heiko.thiery@gmail.com>
+To:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Heiko Thiery <heiko.thiery@gmail.com>
+Subject: [PATCH v3] arm64: dts: imx8mq-kontron-pitx-imx8m: remove off-on-delay-us for regulator-usdhc2-vmmc
+Date:   Mon, 24 Oct 2022 13:54:30 +0200
+Message-Id: <20221024115429.1343257-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220924152227.819815-4-atomlin@redhat.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Sep 24, 2022 at 04:22:25PM +0100, Aaron Tomlin wrote:
-> From: Marcelo Tosatti <mtosatti@redhat.com>
-> 
-> From the vmstat shepherd, for CPUs that have the tick stopped, do not
-> queue local work to flush the per-CPU vmstats, since in that case the
-> flush is performed on return to userspace or when entering idle. Also
-> cancel any delayed work on the local CPU, when entering idle on nohz
-> full CPUs. Per-CPU pages can be freed remotely from housekeeping CPUs.
-> 
-> Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> ---
->  mm/vmstat.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/vmstat.c b/mm/vmstat.c
-> index 472175642bd9..3b9a497965b4 100644
-> --- a/mm/vmstat.c
-> +++ b/mm/vmstat.c
-> @@ -29,6 +29,7 @@
->  #include <linux/page_ext.h>
->  #include <linux/page_owner.h>
->  #include <linux/migrate.h>
-> +#include <linux/tick.h>
->  
->  #include "internal.h"
->  
-> @@ -1990,19 +1991,23 @@ static void vmstat_update(struct work_struct *w)
->   */
->  void quiet_vmstat(void)
->  {
-> +	struct delayed_work *dw;
-> +
->  	if (system_state != SYSTEM_RUNNING)
->  		return;
->  
->  	if (!is_vmstat_dirty())
->  		return;
->  
-> +	refresh_cpu_vm_stats(false);
-> +
->  	/*
-> -	 * Just refresh counters and do not care about the pending delayed
-> -	 * vmstat_update. It doesn't fire that often to matter and canceling
-> -	 * it would be too expensive from this path.
-> -	 * vmstat_shepherd will take care about that for us.
-> +	 * If the tick is stopped, cancel any delayed work to avoid
-> +	 * interruptions to this CPU in the future.
->  	 */
-> -	refresh_cpu_vm_stats(false);
-> +	dw = &per_cpu(vmstat_work, smp_processor_id());
-> +	if (delayed_work_pending(dw) && tick_nohz_tick_stopped())
-> +		cancel_delayed_work(dw);
+With that delay U-Boot is not able to store the environment variables in
+the SD card. Since the delay is not required it can be remove.
 
-This is doing the costly cancel_delayed_work() which is only necessary
-right before entering entering in user.
+Fixes: 5dbadc848259 (arm64: dts: fsl: add support for Kontron pitx-imx8m board)
 
-There are places where the tick is stopped but it's not necessary to
-cancel the work:
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+v3:
+ - Improve commit message and explain why it is a fix (thanks to Fabio)
 
-* nohz_full enter idle
-* idle IRQs
-* nohz_full exit idle
-* nohz_full IRQ exit
+v2:
+ - add Fixes tag
 
-I suggest having quiet_vmstat_enter_user() which does:
+ arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts | 1 -
+ 1 file changed, 1 deletion(-)
 
-void quiet_vmstat_enter_user(void)
-{
-	quiet_vmstat();
-	if (delayed_work_pending(dw) && tick_nohz_tick_stopped())
-	   cancel_delayed_work(dw);
-}
+diff --git a/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts b/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
+index a91c136797f6..21442e04a632 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
+@@ -51,7 +51,6 @@ reg_usdhc2_vmmc: regulator-usdhc2-vmmc {
+ 		regulator-min-microvolt = <3300000>;
+ 		regulator-max-microvolt = <3300000>;
+ 		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
+-		off-on-delay-us = <20000>;
+ 		enable-active-high;
+ 	};
+ };
+-- 
+2.30.2
 
-And call this one only before leaving the kernel. The rest can use quiet_vmstat().
-
-Thanks.
