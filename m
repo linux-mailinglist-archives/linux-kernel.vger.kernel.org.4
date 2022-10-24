@@ -2,145 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437BC60B4FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC4A560B57A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbiJXSLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S231991AbiJXS2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiJXSLB (ORCPT
+        with ESMTP id S230280AbiJXS2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:11:01 -0400
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2583B159D40
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:52:35 -0700 (PDT)
-Received: by mail-il1-f178.google.com with SMTP id 7so2545303ilg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/KDE+ZSByxuwvp2Mh5tqtliS1mJsjNthfkvCjtjqWOc=;
-        b=VR70NOdmonY9xti+I2mftN/fO5MSCOEqOMQdyXu9zkTVzTpBpjogLNZx8Fpy1CX3WG
-         Xof1GvwLdr9TOIwoFww+uPjBElVHHdeQ5J0KVEFNHf6ieSOglmrnNMK8gRzC1vnES/ki
-         WH8UChPriwQx6YjdhH0x4iNga1Qh55tCl5u1k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/KDE+ZSByxuwvp2Mh5tqtliS1mJsjNthfkvCjtjqWOc=;
-        b=PCiemYcQVWM3Fi0HJGDIQlq3wQGzT5gJdEtP0T3i0rc75VdY/ReiX0UBrU6reVC/es
-         y8G42Ql1qnyKgOMmGorqIzyacprXq8FVCICdFHT7+bWev0wsqnfVI76ncd4WUK4sV+4a
-         xXuLALvhhopexITTDBCrMvmMuGuf6nT0vkcPIIuhkEy7t52sgBYAaCDTJCFCKaetwKAm
-         HkrYtBCuMR9k0uWh0qJQNRFkJVAFTutqgDxvbBqtt0uKM1lGtBYWS6E7gHdj0Z7yKORz
-         jJF2b3yMDs6YxlDyywDHSb0ZOD8gIskCKkU4jEk44qR1hTZ6+O4X7fV60VGK8Xa8UUGD
-         xERw==
-X-Gm-Message-State: ACrzQf1Csz7mLtlYDGAJ+uEq4Dmw0GMIgMMM3LdG8AaGgXMuNupYeWF/
-        jwDUhfTLf89jqBrsg3JWhpJW5cjPIlaSMg==
-X-Google-Smtp-Source: AMsMyM4s91x+KgOQrSOXBLmvilHsV0EQlDIBoGj6O1GMTz1aa1gRlmyEPkx1kemaKziqOIyLVtlSbg==
-X-Received: by 2002:a05:6e02:1aab:b0:2fa:80c2:8375 with SMTP id l11-20020a056e021aab00b002fa80c28375mr21505543ilv.72.1666630149909;
-        Mon, 24 Oct 2022 09:49:09 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056602155200b006bbddd49984sm109429iow.9.2022.10.24.09.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 09:49:09 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------RcXPsDbTzYcGigJSsyMdly3r"
-Message-ID: <f2934916-9b69-9603-9ae3-580b0c3eb97d@linuxfoundation.org>
-Date:   Mon, 24 Oct 2022 10:49:08 -0600
+        Mon, 24 Oct 2022 14:28:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2A696200;
+        Mon, 24 Oct 2022 10:09:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BEF5C22060;
+        Mon, 24 Oct 2022 16:49:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666630156; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4tbaQSlGeYJavYSi+3bPYagpChRAyG3trqPixSnTsnA=;
+        b=EMwGDgTzLVJP3OIAz4qPm5nvY43h+mNraINUllgKEPSo1gH3bR8F/r0omRqeLmEL1DtWVS
+        CrKOLdkzNC/wnFJr3849YVAtmfq81ada5Q1rbTW0JEyuQ5S+cGVPkoYMKwb/NFv6eRDtEH
+        mBD+ixDLM5pJMtJlHAbxO2CyENyovew=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666630156;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4tbaQSlGeYJavYSi+3bPYagpChRAyG3trqPixSnTsnA=;
+        b=rgrHfqVMHQVzvF/LnK2bROvC940RkMuLs7S6bnnXRFVy046CDyebeQ9fsJ+EtB3ysDb6BD
+        QOz86NIRtxxUwnAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 99BCC13A79;
+        Mon, 24 Oct 2022 16:49:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9TSqJAzCVmODbwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 24 Oct 2022 16:49:16 +0000
+Message-ID: <46b5f4eb-76ac-718e-3b52-333bc55d0a3a@suse.cz>
+Date:   Mon, 24 Oct 2022 18:49:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
+ Thunderbird/102.3.3
+Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
 Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] KUnit fixes update for Linux 6.1-rc3
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        David Laight <David.Laight@aculab.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        rcu@vger.kernel.org
+References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
+ <YzPgTtFzpKEfwPbK@hyeyoo> <YzRQvoVsnJzsauwb@google.com>
+ <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
+ <ff905c1e-5eb3-eaf8-46de-38f189c0b7a5@google.com>
+ <de71b83a-c82c-4785-ef5a-3db4f17bbc8d@suse.cz>
+ <bcecece-f7ce-221d-1674-da3d5ab3fef@google.com> <YzkmErHFyYW3awRn@hyeyoo>
+ <YzsVM8eToHUeTP75@casper.infradead.org>
+ <7dddca4c-bc36-2cf0-de1c-a770bef9e1b7@suse.cz>
+In-Reply-To: <7dddca4c-bc36-2cf0-de1c-a770bef9e1b7@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------RcXPsDbTzYcGigJSsyMdly3r
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On 10/24/22 16:35, Vlastimil Babka wrote:
+> On 10/3/22 19:00, Matthew Wilcox wrote:
+>> On Sun, Oct 02, 2022 at 02:48:02PM +0900, Hyeonggon Yoo wrote:
+>>> Just one more thing, rcu_leak_callback too. RCU seem to use it
+>>> internally to catch double call_rcu().
+>>> 
+>>> And some suggestions:
+>>> - what about adding runtime WARN() on slab init code to catch
+>>>   unexpected arch/toolchain issues?
+>>> - instead of 4, we may use macro definition? like (PAGE_MAPPING_FLAGS + 1)?
+>> 
+>> I think the real problem here is that isolate_movable_page() is
+>> insufficiently paranoid.  Looking at the gyrations that GUP and the
+>> page cache do to convince themselves that the page they got really is
+>> the page they wanted, there are a few missing pieces (eg checking that
+>> you actually got a refcount on _this_ page and not some random other
+>> page you were temporarily part of a compound page with).
+>> 
+>> This patch does three things:
+>> 
+>>  - Turns one of the comments into English.  There are some others
+>>    which I'm still scratching my head over.
+>>  - Uses a folio to help distinguish which operations are being done
+>>    to the head vs the specific page (this is somewhat an abuse of the
+>>    folio concept, but it's acceptable)
+>>  - Add the aforementioned check that we're actually operating on the
+>>    page that we think we want to be.
+>>  - Add a check that the folio isn't secretly a slab.
+>> 
+>> We could put the slab check in PageMapping and call it after taking
+>> the folio lock, but that seems pointless.  It's the acquisition of
+>> the refcount which stabilises the slab flag, not holding the lock.
+>> 
+> 
+> I would like to have a working safe version in -next, even if we are able
+> simplify it later thanks to frozen refcounts. I've made a formal patch of
+> yours, but I'm still convinced the slab check needs to be more paranoid so
+> it can't observe a false positive __folio_test_movable() while missing the
+> folio_test_slab(), hence I added the barriers as in my previous attempt [1].
+> Does that work for you and can I add your S-o-b?
 
-Hi Linus,
+Tentatively the series is here for anyone interested, will send it for
+proper review after the S-o-b is clarified.
 
-Please pull the following KUnit fixes update for Linux 6.1-rc3.
+https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab.git/log/?h=slab/for-6.2/fit_rcu_head
 
-This KUnit fixes update for Linux 6.1-rc3 consists of one single fix
-to update alloc_string_stream() callers to check for IS_ERR() instead
-of NULL to be in sync with alloc_string_stream() returning IS_ERR().
+> [1] https://lore.kernel.org/all/aec59f53-0e53-1736-5932-25407125d4d4@suse.cz/
 
-diff for this pull request is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-   Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-6.1-rc3
-
-for you to fetch changes up to 618887768bb71f0a475334fa5a4fba7dc98d7ab5:
-
-   kunit: update NULL vs IS_ERR() tests (2022-10-18 15:08:42 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-kunit-fixes-6.1-rc3
-
-This KUnit fixes update for Linux 6.1-rc3 consists of one single fix
-to update alloc_string_stream() callers to check for IS_ERR() instead
-of NULL to be in sync with alloc_string_stream() returning IS_ERR().
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-       kunit: update NULL vs IS_ERR() tests
-
-  lib/kunit/string-stream.c | 4 ++--
-  lib/kunit/test.c          | 2 +-
-  2 files changed, 3 insertions(+), 3 deletions(-)
-----------------------------------------------------------------
---------------RcXPsDbTzYcGigJSsyMdly3r
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-kunit-fixes-6.1-rc3.diff"
-Content-Disposition: attachment;
- filename="linux-kselftest-kunit-fixes-6.1-rc3.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC9zdHJpbmctc3RyZWFtLmMgYi9saWIva3VuaXQvc3Ry
-aW5nLXN0cmVhbS5jCmluZGV4IGY1YWU3OWMzNzQwMC4uYTYwODc0NjAyMGE5IDEwMDY0NAot
-LS0gYS9saWIva3VuaXQvc3RyaW5nLXN0cmVhbS5jCisrKyBiL2xpYi9rdW5pdC9zdHJpbmct
-c3RyZWFtLmMKQEAgLTU2LDggKzU2LDggQEAgaW50IHN0cmluZ19zdHJlYW1fdmFkZChzdHJ1
-Y3Qgc3RyaW5nX3N0cmVhbSAqc3RyZWFtLAogCWZyYWdfY29udGFpbmVyID0gYWxsb2Nfc3Ry
-aW5nX3N0cmVhbV9mcmFnbWVudChzdHJlYW0tPnRlc3QsCiAJCQkJCQkgICAgICBsZW4sCiAJ
-CQkJCQkgICAgICBzdHJlYW0tPmdmcCk7Ci0JaWYgKCFmcmFnX2NvbnRhaW5lcikKLQkJcmV0
-dXJuIC1FTk9NRU07CisJaWYgKElTX0VSUihmcmFnX2NvbnRhaW5lcikpCisJCXJldHVybiBQ
-VFJfRVJSKGZyYWdfY29udGFpbmVyKTsKIAogCWxlbiA9IHZzbnByaW50ZihmcmFnX2NvbnRh
-aW5lci0+ZnJhZ21lbnQsIGxlbiwgZm10LCBhcmdzKTsKIAlzcGluX2xvY2soJnN0cmVhbS0+
-bG9jayk7CmRpZmYgLS1naXQgYS9saWIva3VuaXQvdGVzdC5jIGIvbGliL2t1bml0L3Rlc3Qu
-YwppbmRleCA5MDY0MGE0M2NmNjIuLjJhNjk5MmZlN2MzZSAxMDA2NDQKLS0tIGEvbGliL2t1
-bml0L3Rlc3QuYworKysgYi9saWIva3VuaXQvdGVzdC5jCkBAIC0yNjUsNyArMjY1LDcgQEAg
-c3RhdGljIHZvaWQga3VuaXRfZmFpbChzdHJ1Y3Qga3VuaXQgKnRlc3QsIGNvbnN0IHN0cnVj
-dCBrdW5pdF9sb2MgKmxvYywKIAlrdW5pdF9zZXRfZmFpbHVyZSh0ZXN0KTsKIAogCXN0cmVh
-bSA9IGFsbG9jX3N0cmluZ19zdHJlYW0odGVzdCwgR0ZQX0tFUk5FTCk7Ci0JaWYgKCFzdHJl
-YW0pIHsKKwlpZiAoSVNfRVJSKHN0cmVhbSkpIHsKIAkJV0FSTih0cnVlLAogCQkgICAgICJD
-b3VsZCBub3QgYWxsb2NhdGUgc3RyZWFtIHRvIHByaW50IGZhaWxlZCBhc3NlcnRpb24gaW4g
-JXM6JWRcbiIsCiAJCSAgICAgbG9jLT5maWxlLAo=
-
---------------RcXPsDbTzYcGigJSsyMdly3r--
