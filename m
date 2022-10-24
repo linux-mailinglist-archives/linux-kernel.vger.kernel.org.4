@@ -2,287 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB59860BDAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 837EB60BE0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbiJXWnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        id S230093AbiJXW70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiJXWnW (ORCPT
+        with ESMTP id S231627AbiJXW6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:43:22 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::601])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1A4B5FD3;
-        Mon, 24 Oct 2022 14:06:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QdOV3AsM/nTbvhiPmBywfZMLEKEMqafvVgcz3RbM9Ev+Ttu8nGxM2x8ZKSoTw680kgkQaAipx0torlLUBHN7FMLkOm9w0+kIkQkIo0RFx1znnMj+12AGVNCu+7LZ1tVAcHdrV3HRT+HIukd2XQKed/4P98Ib3XVIU2rKeBO35WE1jlBZocgVr7LcMBoiRi8dXHSUsYpSRDXOneAk9mY1JFXs3GTfk94OlNnuz3IZCbNSslF+GTRgjF0Evbw9wpSkB42q5R6U6Hg87VgL7MvfDTLA8o8b3X7JeqD7zYMzC1/1KVS+biAMi/3sVksaeZO43uKNuf5MKAsvpQWtxnwIGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CcBksUrEDbt98zAkV7BZQkw2tz6NaOzRF2+CfN641Fc=;
- b=g882jRs6trGpVxPMRT/xCzHYr41ChPMdgrr1/aVYXGf8MXwy8lHasTVpsMb25RVcSMekezi8V3rVrSWmijDcLRq+81sE81OwrifJ8NyMjhSIm4u0dZrBT/pN3yVPiAs41RoOlOyegCowpUDNTx6X4MnIUZbflZAf73Y2R5rky9T0wYH0A1B3FZWAfc4ulTSXCtcCWzOGQkQbdZlXdM0OKVCpz8+8Jyy5I85RGU3HOFqi5UScPt2xXUQOH4RGAG5YXdCu7nsZjg6aSEOkEHAyrRVxZPlC2GqqBvcUq50wY1cFxDh3opBtA77pV5iLt9QpwTgJ27L0VXRDiRpzFh9gGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CcBksUrEDbt98zAkV7BZQkw2tz6NaOzRF2+CfN641Fc=;
- b=dllk8+R9lz5ZJ9BXLuMkPeJwhekQ9VVI/Hnn2UswJoo6kI0eP/qAKQP8fIYO9bPj+WFX6TjVN8/WZqyviqpoSNzBGfGb5O+ueRn4n/lwgT8e43I4M3QoRgcqvgPhVufJuHXzqAmiirHj4jU5jtozD/32+AlnfHZppXILLIpfcOg=
-Received: from DM6PR07CA0075.namprd07.prod.outlook.com (2603:10b6:5:337::8) by
- MN2PR12MB4256.namprd12.prod.outlook.com (2603:10b6:208:1d2::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
- 2022 21:04:30 +0000
-Received: from DM6NAM11FT017.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:337:cafe::fe) by DM6PR07CA0075.outlook.office365.com
- (2603:10b6:5:337::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.27 via Frontend
- Transport; Mon, 24 Oct 2022 21:04:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT017.mail.protection.outlook.com (10.13.172.145) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Mon, 24 Oct 2022 21:04:30 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
- 2022 16:04:27 -0500
-Date:   Mon, 24 Oct 2022 23:04:24 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Terry Bowman <terry.bowman@amd.com>
-Subject: Re: [PATCH v2 06/12] cxl/acpi: Extract component registers of
- restricted hosts from RCRB
-Message-ID: <Y1b92DF0c36/QDbo@rric.localdomain>
-References: <20221018132341.76259-1-rrichter@amd.com>
- <20221018132341.76259-7-rrichter@amd.com>
- <63522b53321e1_24ac29467@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+        Mon, 24 Oct 2022 18:58:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D0C63286B9;
+        Mon, 24 Oct 2022 14:20:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9513AD6E;
+        Mon, 24 Oct 2022 14:05:03 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8260E3F7B4;
+        Mon, 24 Oct 2022 14:04:56 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 22:04:46 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     daniel.lezcano@linaro.org, sudeep.holla@arm.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: (bug report) HWMON & Thermal interactions
+Message-ID: <Y1b97mhilWF8C99d@e120937-lin>
+References: <Y1WHnJ6h1RSOipV4@e120937-lin>
+ <8005acfe-da2d-8d38-0e87-a96c438eeab1@roeck-us.net>
+ <93e24737-29e4-6e03-7b47-cd730989047f@roeck-us.net>
+ <Y1aJTxVdOS6BIVTV@e120937-lin>
+ <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <63522b53321e1_24ac29467@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT017:EE_|MN2PR12MB4256:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4f584453-a3a8-4d1a-f22e-08dab6035821
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dCsgRSsZ2XtHD1xOQP8+u8U29nOcgU1M76ZYWmBNzcJxETqD2OvEP8BdYwia40DtEyBicvQaOMxX2Tk8ItqNguhLzXftSDaBNlDOMJP3zQKTxEf0+QEJaql4rABIHuv8x9XOfRNcoZn64i2vSinSyC9YOWhkepABY1QY6frlZbCBebX9pdYyEVMi24jK8jQnh6XJ8Dsisc7j+7Yu4zsII4KzbqkP7K+syuZx9qGOzwzHio3+RSydoRBkuQ6z6kFi334RE68lZl+LUGXo9qX558BRqEreEWbXx7XfwWrfcrT11Jrf1PASjFF8pPMMs13v+k+3wQ03hdJip9M5OJpkwRTp6RGm5pSXcpdkrW/5lHwlbF2VLawuimMf4XNWqY2Il23Mu/8VDj8WcFnxQyBiN5IS9+k0Qrlkssi5fuEFZbjJrEny33nA9M3WL/JlwtyW3TR+0SgG1DczvqZPfUJqUrZqVN5nDvn7x2X22os00Bmag2AmCgLYmps0q+v6vOkQV4O70xn16ROTuQwxgsYtD8Y9HU4d0O9ESIJByey2JbNVKYQRmBvAVdq7p1CwlRkjoyplP17KTr2cD4+Vw0GE0vA9f9nhlL6gJngqRO2kF0/VQlR7bbPWdlHUCcDm41iykxPxqZrXtGeCem240RTBz7XbKHulHljEtUM9CHeHFqhiAp4LIbrqnrERbYm3W7TEQResgCbGHADmrYLrbXuj6ADOI/CvGlvjSPYCH0c4YPZmgjxWWfR/GNr+FeCxoAQ37SguWfgU03hZj9QOJIyA2vS6B76K7WAXTRtPuVXY63XzOWvHOLvp26C4+FB6VAarAgG4LaeRw8rhQp5D6HI6oA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(136003)(376002)(451199015)(46966006)(40470700004)(36840700001)(966005)(83380400001)(426003)(478600001)(53546011)(5660300002)(54906003)(6666004)(9686003)(4326008)(70586007)(7696005)(7416002)(26005)(41300700001)(8936002)(6916009)(8676002)(55016003)(336012)(47076005)(82310400005)(70206006)(40460700003)(186003)(16526019)(2906002)(36860700001)(81166007)(316002)(40480700001)(356005)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 21:04:30.5342
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f584453-a3a8-4d1a-f22e-08dab6035821
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT017.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <24b7c1b4-c690-408b-7ebf-a4e4a4cf919e@roeck-us.net>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.10.22 22:17:07, Dan Williams wrote:
-> Robert Richter wrote:
-> > A downstream port must be connected to a component register block.
-> > For restricted hosts the base address is determined from the RCRB. The
-> > RCRB is provided by the host's CEDT CHBS entry. Rework CEDT parser to
-> > get the RCRB and add code to extract the component register block from
-> > it.
+On Mon, Oct 24, 2022 at 07:51:09AM -0700, Guenter Roeck wrote:
+> On 10/24/22 05:47, Cristian Marussi wrote:
+> > On Mon, Oct 24, 2022 at 04:56:43AM -0700, Guenter Roeck wrote:
+> > > On 10/23/22 14:23, Guenter Roeck wrote:
+> > > > On 10/23/22 11:27, Cristian Marussi wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > Starting with v6.1-rc1 the SCMI HWMON driver failed probing on my JUNO due
+> > > > > to the fact that no trip points were (ever !) defined in the DT; bisecting it
+> > > > > looks like that after:
+> > > > > 
+> > > > > https://lore.kernel.org/all/20220804224349.1926752-28-daniel.lezcano@linexp.org/
+> > > > > 
+> > > > > the presence of the mandatory trips node within thermal zones is now
+> > > > > enforced.
+> > > > > 
+> > > > > So, this is NOT what this bug report is about (I'll post soon patches for
+> > > > > the JUNO DT missing trips) BUT once this problem was solved in the DT,
+> > > > > another issue appeared:
+> > > > > 
+> > > > > [    1.921929] hwmon hwmon0: temp2_input not attached to any thermal zone
+> > > > > 
+> > > > > that despite having now a goodi/valid DT describing 2 sensors and 2 thermal zones
+> > > > > embedding that sensors, only the first one is found as belonging to one ThermZ.
+> > > > > (this happens ALSO with v6.0 once I added the trips...)
+> > > > > 
+> > > > > Digging deep into this, it turned out that inside the call chain
+> > > > > 
+> > > > > devm_hwmon_device_register_with_info
+> > > > >     hwmon_device_register_with_info
+> > > > >       __hwmon_device_register
+> > > > >      hwmon_thermal_register_sensors(dev)
+> > > > >          --> hwmon_thermal_add_sensor(dev, j)
+> > > > >              --> devm_thermal_of_zone_register(dev, sensor_id, tdata, )
+> > > > > 
+> > > > > the HWMON channel index j is passed to the Thermal framework in order to
+> > > > > search and bind sensors with defined thermal zone, but this lead to the
+> > > > > assumption that sequential HWMON channel indexes corresponds one-to-one to the
+> > > > > underlying real sensor IDs that the ThermalFramework uses for matching
+> > > > > within the DT.
+> > > > > 
+> > > > > On a system like my SCMI-based DT where I have 2 temp-sensors bound to 2
+> > > > > thermal zones like:
+> > > > > 
+> > > > > thernal_zones {
+> > > > >      pmic {
+> > > > >          ...
+> > > > >          thermal-sensors = <&scmi_sensors0 0>;
+> > > > >          ...
+> > > > >          trips {
+> > > > >              ...
+> > > > >          }
+> > > > >      soc {
+> > > > >          ...
+> > > > >          thermal-sensors = <&scmi_sensors0 3>;
+> > > > >          ...
+> > > > >          trips {
+> > > > >              ...
+> > > > >          }
+> > > > >      }
+> > > > > }
+> > > > > 
+> > > > > This works fine by chance for the pmic (j=0, sensor_id=0) BUT cannot work for
+> > > > > the soc where J=1 BUT the real sensor ID is 3.
+> > > > > 
+> > > > > Note that there can be a number of sensors, not all of them of a type handled
+> > > > > by HWMON, and enumerated by SCMI in different ways depending on the
+> > > > > platform.
+> > > > > 
+> > > > > I suppose this is not an SCMI-only related issue, but maybe in non-SCMI
+> > > > > context, where sensors are purely defined in the DT, the solution can be
+> > > > > more easily attained (i.e. renumber the sensors).
+> > > > > 
+> > > > > At first I tried to solve this inside scmi-hwmon.c BUT I could not find
+> > > > > a way to present to the HWMON subsystem the list of sensors preserving
+> > > > > the above index/sensor_id matching (not even with a hack like passing
+> > > > > down dummy sensors to the HWMON subsystem to fill the 'holes' in the
+> > > > > numbering)
+> > > > > 
+> > > > > My tentative solution, which works fine for me in my context, was to add
+> > > > > an optional HWMON hwops, so that the core hwmon can retrieve if needed the
+> > > > > real sensor ID if different from the channel index (using an optional hwops
+> > > > > instead of some static hwinfo var let me avoid to have to patch all the
+> > > > > existent hwmon drivers that happens to just work fine as of today...but
+> > > > > maybe it is not necessarily the proper final solution...)
+> > > > > 
+> > > > > i.e.
+> > > > > 
+> > > > > ----8<----
+> > > > > 
+> > > > > Author: Cristian Marussi <cristian.marussi@arm.com>
+> > > > > Date:   Fri Oct 21 17:24:04 2022 +0100
+> > > > > 
+> > > > >       hwmon: Add new .get_sensor_id hwops
+> > > > >       Add a new optional helper which can be defined to allow an hwmon chip to
+> > > > >       provide the logic to map hwmon indexes to the real underlying sensor IDs.
+> > > > 
+> > > > Maybe I am missing something, but ...
+> > > > 
+> > > > The driver isn't supposed to know anything about thermal devices and
+> > > > thermal zones. If that no longer works, and drivers have to know about
+> > > > thermal zones and thermal zone device index values anyway, we might
+> > > > as well pull thermal device support from the hwmon core and implement
+> > > > it in drivers.
+> > > > 
+> > > 
+> > > No, wait: The question is really: Why does the scmi driver present the sensor
+> > > with index 3 to the hwmon subsystem as sensor with index 1 ?
+> > > 
+> > > If the sensor has index 3, and is presented to other entities as sensor
+> > > with index 3, it should be presented to the hwmon subsystem as sensor with
+> > > index 3, not with index 1. If sensors with index 1..2 do not exist,
+> > > the is_visible function should return 0 for those sensors.
+> > > 
 > > 
-> > RCRB's BAR[0..1] point to the component block containing CXL subsystem
-> > component registers. MEMBAR extraction follows the PCI base spec here,
-> > esp. 64 bit extraction and memory range alignment (6.0, 7.5.1.2.1).
+> > My understanding was that the hwmon index is the index of the channel
+> > and hwmon_channel_info struct groups channels by type while the index is
+> > really used as a pointer in the hwmon_channel_info.config field, so in
+> > this case you're saying I should present 4 temp sensors placing a 'hole'
+> > at sensor 1,2 making is_visible return 0 for those channels ?
 > > 
-> > Note: Right now the component register block is used for HDM decoder
-> > capability only which is optional for RCDs. If unsupported by the RCD,
-> > the HDM init will fail. It is future work to bypass it in this case.
+> > Basically keeping the channel indexes in sync with the real sensor ID by
+> > the means of some dummy sensor entries in the config field: this could result
+> > potentially in a lot of holes given in SCMI the sensor_id is 16 bits and
+> > I thought that was too hackish but I can try.
 > > 
-> > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> > Signed-off-by: Robert Richter <rrichter@amd.com>
-> > ---
-> >  drivers/cxl/acpi.c | 79 ++++++++++++++++++++++++++++++++++++++++------
-> >  1 file changed, 69 insertions(+), 10 deletions(-)
+> 
+> The underlying idea with the hwmon -> thermal bridge is that index values
+> used by thermal and by the hwmon subsystem match and, yes, that there would
+> if necessary be holes in hwmon index values (normally this is not a 16-bit
+> number space). If that doesn't work for scmi, and if there could indeed be
+> something like
+> 
+>         thermal-sensors = <&scmi_sensors0 12345>;
+> 
+> then I think the solution is indeed to not rely on the hwmon->thermal bridge
+> in the hwmon core for this driver.
+
+Even though implausible it could be possible to have an SCMI fw platform
+advertising such high sensor IDs.
+
+> 
+> > In the meantime, I gave it a go at what you suggested early (if I got it
+> > right...) by removing from the scmi-hwmon driver the HWMON_C_REGISTER_TZ
+> > attribute and adding a few explicit calls to devm_thermal_of_zone_register() at
+> > the end of the probe to specifically register the needed temp sensors (and
+> > associated real sensor IDs) with the ThermalFramework without relying on the
+> > HWMON core for Thermal and it works fine indeed.
 > > 
-> > diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-> > index fb9f72813067..a92d5d7b7a92 100644
-> > --- a/drivers/cxl/acpi.c
-> > +++ b/drivers/cxl/acpi.c
-> > @@ -9,6 +9,8 @@
-> >  #include "cxlpci.h"
-> >  #include "cxl.h"
-> >  
-> > +#define CXL_RCRB_SIZE	SZ_8K
-> > +
-> >  static unsigned long cfmws_to_decoder_flags(int restrictions)
-> >  {
-> >  	unsigned long flags = CXL_DECODER_F_ENABLE;
-> > @@ -229,27 +231,82 @@ static int add_host_bridge_uport(struct device *match, void *arg)
-> >  struct cxl_chbs_context {
-> >  	struct device *dev;
-> >  	unsigned long long uid;
-> > -	resource_size_t chbcr;
-> > +	struct acpi_cedt_chbs chbs;
-> >  };
-> >  
-> > -static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
-> > -			 const unsigned long end)
-> > +static int cxl_get_chbs(union acpi_subtable_headers *header, void *arg,
-> > +			const unsigned long end)
-> >  {
-> >  	struct cxl_chbs_context *ctx = arg;
-> >  	struct acpi_cedt_chbs *chbs;
-> >  
-> > -	if (ctx->chbcr)
-> > +	if (ctx->chbs.base)
-> >  		return 0;
-> >  
-> >  	chbs = (struct acpi_cedt_chbs *) header;
-> >  
-> >  	if (ctx->uid != chbs->uid)
-> >  		return 0;
-> > -	ctx->chbcr = chbs->base;
-> > +	ctx->chbs = *chbs;
-> >  
-> >  	return 0;
-> >  }
-> >  
-> > +static resource_size_t cxl_get_chbcr(struct cxl_chbs_context *ctx)
-> > +{
 > 
-> The core logic of this looks good, but this wants to be shared with the
-> upstream port component register discovery.
+> Excellent.
 > 
-> Full disclosure I am reconciling these patches with an attempt that Dave
-> Jiang made at this topic. Since your series hit the list first I will
-> let it take the lead, but then fill it in with comments and learnings
-> from Dave's effort.
-> 
-> So in this case Dave moved this into the drivers/cxl/core/regs.c with a
-> function signature like:
-> 
-> enum cxl_rcrb {
->        CXL_RCRB_DOWNSTREAM,
->        CXL_RCRB_UPSTREAM,
-> };
-> 
-> resource_size_t cxl_rcrb_to_component(struct device *dev,
->                                       resource_size_t rcrb_base, int len,
->                                       enum cxl_rcrb which);
-> 
-> ...where @which alternates when called by cxl_acpi for the downstream
-> case, or cxl_mem for the upstream case.
 
-Ok, I see where to go here. Could you point me to Dave's postings you
-are referring to? I checked linux-cxl and could not find anything
-related to RCRB or that changes regs.c.
+I'll follow this path.
 
-> 
-> 
-> > +	struct acpi_cedt_chbs *chbs = &ctx->chbs;
-> > +	resource_size_t component_reg_phys, rcrb;
-> > +	u32 bar0, bar1;
-> > +	void *addr;
-> > +
-> > +	if (!chbs->base)
-> > +		return CXL_RESOURCE_NONE;
-> > +
-> > +	if (chbs->cxl_version != ACPI_CEDT_CHBS_VERSION_CXL11)
-> > +		return chbs->base;
-> > +
-> > +	/* Extract RCRB */
-> > +
-> > +	if (chbs->length != CXL_RCRB_SIZE)
-> > +		return CXL_RESOURCE_NONE;
-> > +
-> > +	rcrb = chbs->base;
-> > +
-> > +	dev_dbg(ctx->dev, "RCRB found for UID %lld: 0x%08llx\n",
-> > +		ctx->uid, (u64)rcrb);
-> > +
-> > +	/*
-> > +	 * RCRB's BAR[0..1] point to component block containing CXL
-> > +	 * subsystem component registers. MEMBAR extraction follows
-> > +	 * the PCI Base spec here, esp. 64 bit extraction and memory
-> > +	 * ranges alignment (6.0, 7.5.1.2.1).
-> > +	 */
-> > +	addr = ioremap(rcrb, PCI_BASE_ADDRESS_0 + SZ_8);
-> 
-> No failure check? This also only needs to map 4K at a time.
+Thanks for your help & feedback.
+Cristian
 
-Right, will add that.
-
-> 
-> > +	bar0 = readl(addr + PCI_BASE_ADDRESS_0);
-> > +	bar1 = readl(addr + PCI_BASE_ADDRESS_1);
-> > +	iounmap(addr);
-> > +
-> > +	/* sanity check */
-> > +	if (bar0 & (PCI_BASE_ADDRESS_MEM_TYPE_1M | PCI_BASE_ADDRESS_SPACE_IO))
-> > +		return CXL_RESOURCE_NONE;
-> > +
-> > +	component_reg_phys = bar0 & PCI_BASE_ADDRESS_MEM_MASK;
-> > +	if (bar0 & PCI_BASE_ADDRESS_MEM_TYPE_64)
-> > +		component_reg_phys |= ((u64)bar1) << 32;
-> > +
-> > +	if (!component_reg_phys)
-> > +		return CXL_RESOURCE_NONE;
-> > +
-> > +	/*
-> > +	 * Must be 8k aligned (size of combined CXL 1.1 Downstream and
-> > +	 * Upstream Port RCRBs).
-> > +	 */
-> > +	if (component_reg_phys & (CXL_RCRB_SIZE - 1))
-> > +		return CXL_RESOURCE_NONE;
-> 
-> This is open-coding the IS_ALIGNED() macro. More importantly, why is it
-> using RCRB size for the component register block alignment? The
-> component lock is 64K, and at least for CXL 2.0 devices it is 64K
-> aligned (8.1.9.1 Register Block Offset Low), so I am not sure what this
-> check is for?
-
-True, this is a mistake and needs to be corrected. It is the component
-reg range which is 64k. Will also use IS_ALIGNED().
-
-> 
-> ---
-> 
-> Given that there are actual CXL RCH platforms in the wild I want this
-> topic branch to be the first thing queued for v6.2. To help us
-> coordinate I pushed:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/log/?h=rch
-> 
-> ...with the patches from this set accepted so far. You can use that as
-> the baseline for the next spin.
-
-Yes, thanks for that branch and applying the first part.
-
--Robert
