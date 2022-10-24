@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD68B60B272
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C33A60B0E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbiJXQrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42996 "EHLO
+        id S233754AbiJXQLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234911AbiJXQpf (ORCPT
+        with ESMTP id S233794AbiJXQFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:45:35 -0400
+        Mon, 24 Oct 2022 12:05:00 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4858919609A;
-        Mon, 24 Oct 2022 08:31:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D8B22510;
+        Mon, 24 Oct 2022 07:57:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38B6FB81916;
-        Mon, 24 Oct 2022 12:40:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B09C4314B;
-        Mon, 24 Oct 2022 12:40:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 942A9B8162B;
+        Mon, 24 Oct 2022 12:22:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA29EC433D6;
+        Mon, 24 Oct 2022 12:22:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615229;
-        bh=EYIqJscOmZjxGOv8e3LQX5jCVCOB3o69li2tCiav0a4=;
+        s=korg; t=1666614145;
+        bh=dcsN3cYuMFF+AYHBJhPzQlBwMzkk1P7+S/W9/R6kMy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hPd5O8YTJAw7A0nxLsQBuGqzuXjeeKIUkLbw6SiCeDz3SsRimsgUPn/qPS87yxzYy
-         1P24dymrYBDDFBkBI7vFL/r03Gnbi5fn0Xzv6TQ0nPJdaokHYRBa/xMc+QPfXS3bb7
-         3/ePJDmLZ4jmKUIpi8gxMrrrmpog+E3pxdNyEs3k=
+        b=xO6vO4kavbJyacTK9+bE3XtZ0PZT06ha5V2WGrhmFTVnoOlqoSkye7jMwaiB/WDBF
+         06f9xz9WoANGMH8KVSiNMTitN8OswJ0uSjnhioIZDVW2c/maL9Yihnes7mGNJFl7Bj
+         GPrZlTmAV/LNYjXL61WAMrWk1kbVyQQV1hSazMf8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 172/530] wifi: rtl8xxxu: gen2: Fix mistake in path B IQ calibration
+        stable@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 119/390] bpf: Ensure correct locking around vulnerable function find_vpid()
 Date:   Mon, 24 Oct 2022 13:28:36 +0200
-Message-Id: <20221024113052.805878329@linuxfoundation.org>
+Message-Id: <20221024113027.745111211@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,44 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+From: Lee Jones <lee@kernel.org>
 
-[ Upstream commit e963a19c64ac0d2f8785d36a27391abd91ac77aa ]
+[ Upstream commit 83c10cc362d91c0d8d25e60779ee52fdbbf3894d ]
 
-Found by comparing with the vendor driver. Currently this affects
-only the RTL8192EU, which is the only gen2 chip with 2 TX paths
-supported by this driver. It's unclear what kind of effect the
-mistake had in practice, since I don't have any RTL8192EU devices
-to test it.
+The documentation for find_vpid() clearly states:
 
-Fixes: e1547c535ede ("rtl8xxxu: First stab at adding IQK calibration for 8723bu parts")
-Signed-off-by: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/30a59f3a-cfa9-8379-7af0-78a8f4c77cfd@gmail.com
+  "Must be called with the tasklist_lock or rcu_read_lock() held."
+
+Presently we do neither for find_vpid() instance in bpf_task_fd_query().
+Add proper rcu_read_lock/unlock() to fix the issue.
+
+Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+Signed-off-by: Lee Jones <lee@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220912133855.1218900-1-lee@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/syscall.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index 395c31060950..a74ded84c2ac 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -2925,12 +2925,12 @@ bool rtl8xxxu_gen2_simularity_compare(struct rtl8xxxu_priv *priv,
- 		}
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 419dbc3d060e..aaad2dce2be6 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3915,7 +3915,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+ 	if (attr->task_fd_query.flags != 0)
+ 		return -EINVAL;
  
- 		if (!(simubitmap & 0x30) && priv->tx_paths > 1) {
--			/* path B RX OK */
-+			/* path B TX OK */
- 			for (i = 4; i < 6; i++)
- 				result[3][i] = result[c1][i];
- 		}
++	rcu_read_lock();
+ 	task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
++	rcu_read_unlock();
+ 	if (!task)
+ 		return -ENOENT;
  
--		if (!(simubitmap & 0x30) && priv->tx_paths > 1) {
-+		if (!(simubitmap & 0xc0) && priv->tx_paths > 1) {
- 			/* path B RX OK */
- 			for (i = 6; i < 8; i++)
- 				result[3][i] = result[c1][i];
 -- 
 2.35.1
 
