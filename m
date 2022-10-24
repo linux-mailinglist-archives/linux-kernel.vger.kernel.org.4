@@ -2,98 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60BF60B4B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B35360B4BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232418AbiJXSAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S232234AbiJXSCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbiJXSAL (ORCPT
+        with ESMTP id S231337AbiJXSBg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:00:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2429ADBE69;
-        Mon, 24 Oct 2022 09:40:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666629647; x=1698165647;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1fK2T1O5gksLCoeEx0nqKMvdwGeInG+0UhfTFUkDIo4=;
-  b=m1K926g8fZlEHlePvBySSZyP3ZAUwSh91elvBCA1imS8uzIV6kquQTiy
-   pfIzG5m1wodNi0yBsxrpVxMavMBq1440zRmQ+B1pzuzvB6uDxriFISz/o
-   arHKdcCeo7vTf5d17X/s2i7u3v+0G3iRtR2YckdRiFBwgNh3nQevLZGyP
-   qHxwHxDAH84NT9MaezfHv0+k4M4ym9hvZ90IBJ35D+WCvjIcRUCZAIrMU
-   wi7NYRPKTBJ4ciTgg1mXVOS47o0vyxXoRIP1dx6lM+o0TqvgoSTJ5xiwA
-   R1dCZ7QC8sQHlRd4EDowLK2AzTa4JQBFIR0N1qIhThER4FzsmvXaydLqr
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287864703"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="287864703"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 09:38:46 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="700223900"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="700223900"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 09:38:46 -0700
-Date:   Mon, 24 Oct 2022 09:38:44 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH 1/3] x86/MCE, EDAC/mce_amd: Add support for new
- MCA_SYND{1,2} registers
-Message-ID: <Y1a/lCVnlTMk8p75@agluck-desk3.sc.intel.com>
-References: <20220418174440.334336-1-yazen.ghannam@amd.com>
- <20220418174440.334336-2-yazen.ghannam@amd.com>
- <Yr2CpuL+JHWblJMD@zn.tnic>
- <YsxefXQDCiJ1zxLG@yaz-fattaah>
- <YtUgb2Y/H/Wq9yIn@zn.tnic>
- <YtVlNrW58cFmksln@zn.tnic>
- <YukW/IltcCRwvSM4@yaz-fattaah>
- <Y1a4prRIYNw8GIkm@zn.tnic>
+        Mon, 24 Oct 2022 14:01:36 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE6F256D3A;
+        Mon, 24 Oct 2022 09:41:56 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id l14so9896467wrw.2;
+        Mon, 24 Oct 2022 09:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OA/Z9xCdVitKa7txwUGEIh39zKNcVwd7tmN/SLXpQyA=;
+        b=Kr2odBPfaREIMS89TUOgxkHuPnSExeykas2gFXBgZOStedVK12KnyzY1LPGBRl6X00
+         IPrTasbyQy63eICFRMKdpyJfLHxam+vEK5vgp3yvkUb4YpVdy+KAmWky4IEboFRkx1lC
+         Oz/L5atsAH8NTlZh4DUgFCdW75bH7V11F0mj77yB8jSsS0fFdACjaIOKqpLlHGP7tSXm
+         5LJA2MSZXoA4j/6EtgCvbUyKNDQ/P6BOBdWxJec3BYFsjJpeN7OOmCdxMTz3Ip+um/5u
+         viVBqKZXgAnvH+Dqp83aKuYe37IdhUDvzpWglB4/bWSKro1JJzgHuwBJRINcFJutHqXv
+         qmKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OA/Z9xCdVitKa7txwUGEIh39zKNcVwd7tmN/SLXpQyA=;
+        b=0eWx+8N7ky3B7/K839MdV8FWCxaHA6lsiWu20rxlGtLcBwT470mHifA3kt7GblOsWz
+         w/Iuc1rRnCpWlUTNv1lmeRtZykrrhMbJvPHn9qdBEBZvOv+JDgmA5zue78YLeEOL1+sn
+         nlYo7GzcQ64zg65mzG8wd++vtRvGFyHLPi21T/mWXzU9VxOzXPJXbNicSnJseAieZ7vx
+         B1nThBWasa8QZ/jNISavCXVVtiUTnF906ZQWDh8gzlu/WAGPLBN/Jv5vWT6ahq3LsLXv
+         xkpmJ3mQKZXFL0rz/xuVywqhW3RMjacmMNI3VypEHk6WXbW4MfxS9iTokNMxUsfw75iK
+         G7Xg==
+X-Gm-Message-State: ACrzQf1h9WbNxsuXLEsGELqGzzQbEL3n0GQuMZf932al2M/DIPH4mQ1S
+        a5fKLtn7FNIraP1VSBauoKA=
+X-Google-Smtp-Source: AMsMyM4A3e0RORb79M5v8LbwGkHK/i0MGxreVgtquUzRG4Tj6y6bxhMLYNifPu1ZmfsthLtnSe1g+g==
+X-Received: by 2002:adf:ed41:0:b0:225:3fde:46ea with SMTP id u1-20020adfed41000000b002253fde46eamr22223742wro.345.1666629613139;
+        Mon, 24 Oct 2022 09:40:13 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p5-20020adfaa05000000b002366f9bd717sm145161wrd.45.2022.10.24.09.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 09:40:12 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>, linux-fsdevel@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] vboxsf: Remove variable out_len
+Date:   Mon, 24 Oct 2022 17:40:11 +0100
+Message-Id: <20221024164011.2173877-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1a4prRIYNw8GIkm@zn.tnic>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 06:09:10PM +0200, Borislav Petkov wrote:
-> On Tue, Aug 02, 2022 at 12:22:20PM +0000, Yazen Ghannam wrote:
-> > I ask because struct mce is UAPI. But I think this is just for /dev/mcelog,
-> > and this has been deprecated for a while. So on a related note, should
-> > /dev/mcelog be removed and struct mce moved out of UAPI? Then changes to
-> > struct mce won't affect user space, and we can just consider the mce trace
-> > event when reporting to user space.
-> 
-> Question is, do you want those error records to be fed into mcelog on
-> AMD too?
-> 
-> And I remember you guys supporting it at some point.
-> 
-> The answer to that question will tell you how exactly to build your
-> structure of data you shuffle to luserspace.
+Variable out_len is just being incremented by nb and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it.
 
-There are still a fair number of users of mcelog, so I think it needs
-to remain in its half-undead state a while longer.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/vboxsf/utils.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Changes to "struct mce" have always been supported. Several have
-been made over the years. The rules are quite simple:
+diff --git a/fs/vboxsf/utils.c b/fs/vboxsf/utils.c
+index e1db0f3f7e5e..7f2838c42dcc 100644
+--- a/fs/vboxsf/utils.c
++++ b/fs/vboxsf/utils.c
+@@ -439,7 +439,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+ {
+ 	const char *in;
+ 	char *out;
+-	size_t out_len;
+ 	size_t out_bound_len;
+ 	size_t in_bound_len;
+ 
+@@ -447,7 +446,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+ 	in_bound_len = utf8_len;
+ 
+ 	out = name;
+-	out_len = 0;
+ 	/* Reserve space for terminating 0 */
+ 	out_bound_len = name_bound_len - 1;
+ 
+@@ -468,7 +466,6 @@ int vboxsf_nlscpy(struct vboxsf_sbi *sbi, char *name, size_t name_bound_len,
+ 
+ 		out += nb;
+ 		out_bound_len -= nb;
+-		out_len += nb;
+ 	}
+ 
+ 	*out = 0;
+-- 
+2.37.3
 
-1) Do not remove any existing fields
-2) Legacy fields that are no longer used should have value 0.
-3) Kernel internal values (currently just "kflags") should be
-   zeroed in the structures passed out to user space.
-3) New fields must be added at the end.
-
--Tony
