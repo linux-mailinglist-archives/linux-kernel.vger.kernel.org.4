@@ -2,56 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7869C60A93A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B1B60AAC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiJXNRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S236136AbiJXNie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235728AbiJXNPM (ORCPT
+        with ESMTP id S236213AbiJXNfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:15:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD7A344D;
-        Mon, 24 Oct 2022 05:25:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2430612D6;
-        Mon, 24 Oct 2022 12:25:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DC87C433C1;
-        Mon, 24 Oct 2022 12:25:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666614319;
-        bh=xQsj25frPuzp2UXKNOOdiLHbPoJbQxou33hkO4Gj17k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hq4tdd54P/Ecc2x9mjCdYe73PjRRjy8OuW4POQxqDOr6oXlc8S9d8qNHcApF4vAPJ
-         pOE3sYvYu+cgJVMiYUg3+4l9N8hjmCfkM3SWelypt5QYCVk1IJlG+3SNQUGWAeVMwP
-         5M/zuDiHAnCCdQbMgL3KbYbWa2aMQa9dgnVbS+L3Df+wAqAIilBZT0FQKnQcppRXdI
-         84XkPx1eGLOob4zjw8lZCXbRMqZGDBa8W7XfJLwwsrDZThEHvhzm0mqFriOXS1hs0U
-         4w28pdW//HGU52knC5kYuqcS9Kf1fMTFbmwg3EZghWAzn5S85lLq2SQpd6wZVRZ1oZ
-         V0IRiqMErG4fQ==
-Date:   Mon, 24 Oct 2022 13:25:13 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, sergiu.moga@microchip.com
-Subject: Re: [PATCH v9 3/3] mfd: atmel-flexcom: Add support for lan966x
- flexcom chip-select configuration
-Message-ID: <Y1aEKa1KZU0h/Vz5@google.com>
-References: <20220916075744.1879428-1-kavyasree.kotagiri@microchip.com>
- <20220916075744.1879428-4-kavyasree.kotagiri@microchip.com>
+        Mon, 24 Oct 2022 09:35:04 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436495FC03
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:35:27 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id t25so5944849qkm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kVYj3QCBceIQ1q0wupJzLP0eSYUUbr2KRyu/kK2/7zc=;
+        b=G0DWAFKOqyqQFdFIXlj6kLBpRnL5JYzlLp0E6WVy4pls3/6j1AeLtxzxBZ+jhLV++/
+         PxHwC8uWse4I21Ym1lUCctWJicItZ9iEVOYX8Zcr9KIfD34MRXA+/Po28atn5QAX6ZNy
+         k0v0iZYVXFg+8BTYHuXTpqhOYFcbX2bEFUF5ZlIPXjXBnibhTJnVqr8Xf0zyHHEoUwMk
+         BuPuwWFDZdb7LxzX9D/z4tHwdMqfwK8ojwOnJJ9APk1xpHu9coKLCb2z+3XGXdrbx4gD
+         6cS65pGdMJEyUJ+/nb33LGpxrL9SaqhVoD30uprXtaUUNXFTopDYnugtpAsxcLkQNqcU
+         qAuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kVYj3QCBceIQ1q0wupJzLP0eSYUUbr2KRyu/kK2/7zc=;
+        b=jsISHQhbyyGMSW9Hl38HvHPBpdZenhBqPfeRdSh3L3I+XdulOwBT4hJBri/A0MJApM
+         ANG1rkGqk8iQbY80xjDki7vA0WiTQdqPj5rlUBKYL9LodeyfN5GIEcgqqW/oKgadrOZ6
+         wkgDzZftr90SQ1U6T2Tc2v1a9CIe7e2wtkGlhL7T+4GrYZA3a+IjMLZoasPEn19v/P3l
+         hIKqzN6b7rOnAO1v3XTdF0Pzok/1LwkmejcbGL+9fvXE1yAeyH32MBmtGfp5lIsVKufV
+         drw6d2Txr7LdxVhSeNM0pmQuQoPjE0nO8KurkkcpOBnATlbbvKmuuuPZj2QZfHTR7t2p
+         wllA==
+X-Gm-Message-State: ACrzQf2FnLOfXeWK13dsDRAGrMlPXKJC7urKphf1MN5TJaPwXm3gl2X8
+        +XoVxOQcMwTLzRL6jHjRBwLSUlUTNlo+7A==
+X-Google-Smtp-Source: AMsMyM6WG2RrPBdlHGOnuUF5Zn/OxURzRJxpLn8hbsfkyCG52+3lz7p0PbPJNXd2mLDYhFv1n98JaA==
+X-Received: by 2002:a05:620a:22cc:b0:6ee:3e43:ac40 with SMTP id o12-20020a05620a22cc00b006ee3e43ac40mr22841775qki.454.1666614323567;
+        Mon, 24 Oct 2022 05:25:23 -0700 (PDT)
+Received: from [192.168.1.8] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id f4-20020ac84984000000b00398426e706fsm12571885qtq.65.2022.10.24.05.25.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 05:25:23 -0700 (PDT)
+Message-ID: <41060ee4-0103-3c09-632b-81af396c0a06@linaro.org>
+Date:   Mon, 24 Oct 2022 08:25:20 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220916075744.1879428-4-kavyasree.kotagiri@microchip.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 01/21] ARM: s3c: remove all s3c24xx support
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Arnaud Patard <arnaud.patard@rtp-net.org>,
+        Christer Weinigel <christer@weinigel.se>,
+        Guillaume GOURAT <guillaume.gourat@nexvision.tv>,
+        Heiko Stuebner <heiko@sntech.de>,
+        openmoko-kernel@lists.openmoko.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Olof Johansson <olof@lixom.net>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-doc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-clk@vger.kernel.org
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-1-arnd@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221021203329.4143397-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,210 +93,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Sep 2022, Kavyasree Kotagiri wrote:
-
-> LAN966x SoC have 5 flexcoms. Each flexcom has 2 chip-selects
-> which are optional I/O lines. For each chip select of each
-> flexcom there is a configuration register FLEXCOM_SHARED[0-4]:SS_MASK[0-1].
-> The width of configuration register is 21 because there are
-> 21 shared pins on each of which the chip select can be mapped.
-> Each bit of the register represents a different FLEXCOM_SHARED pin.
+On 21/10/2022 16:27, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-> Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> The platform was deprecated in commit 6a5e69c7ddea ("ARM: s3c: mark
+> as deprecated and schedule removal") and can be removed. This includes
+> all files that are exclusively for s3c24xx and not shared with s3c64xx,
+> as well as the glue logic in Kconfig and the maintainer file entries.
+> 
+> Cc: Arnaud Patard <arnaud.patard@rtp-net.org>
+> Cc: Ben Dooks <ben-linux@fluff.org>
+> Cc: Christer Weinigel <christer@weinigel.se>
+> Cc: Guillaume GOURAT <guillaume.gourat@nexvision.tv>
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: Simtec Linux Team <linux@simtec.co.uk>
+> Cc: openmoko-kernel@lists.openmoko.org
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-> v8 -> v9:
->  - No changes.
-> 
-> v7 -> v8:
->  - Changed compatible string to microchip,lan9668-flexcom.
-> 
-> v6 -> v7:
->  - No changes.
-> 
-> v5 -> v6:
->  - No changes.
-> 
-> v4 -> v5:
->  - No changes.
-> 
-> v3 -> v4:
->  - Add condition for a flexcom whether to configure chip-select lines
->    or not, based on "microchip,flx-shrd-pins" property existence because
->    chip-select lines are optional.
-> 
-> v2 -> v3:
->  - used goto label for clk_disable in error cases.
-> 
-> v1 -> v2:
->  - use GENMASK for mask, macros for maximum allowed values.
->  - use u32 values for flexcom chipselects instead of strings.
->  - disable clock in case of errors.
-> 
->  drivers/mfd/atmel-flexcom.c | 94 ++++++++++++++++++++++++++++++++++++-
->  1 file changed, 93 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mfd/atmel-flexcom.c b/drivers/mfd/atmel-flexcom.c
-> index 33caa4fba6af..92ea15d5fd72 100644
-> --- a/drivers/mfd/atmel-flexcom.c
-> +++ b/drivers/mfd/atmel-flexcom.c
-> @@ -28,15 +28,68 @@
->  #define FLEX_MR_OPMODE(opmode)	(((opmode) << FLEX_MR_OPMODE_OFFSET) &	\
->  				 FLEX_MR_OPMODE_MASK)
->  
-> +/* LAN966x flexcom shared register offsets */
-> +#define FLEX_SHRD_SS_MASK_0	0x0
-
-MASK_0 isn't very forthcoming.  What *is* MASK_0 the mask of?
-
-> +#define FLEX_SHRD_SS_MASK_1	0x4
-
-What is SS?
-
-> +#define FLEX_SHRD_PIN_MAX	20
-> +#define FLEX_CS_MAX		1
-> +#define FLEX_SHRD_MASK		GENMASK(20, 0)
-> +
->  struct atmel_flexcom {
->  	void __iomem *base;
-> +	void __iomem *flexcom_shared_base;
->  	u32 opmode;
->  	struct clk *clk;
->  };
->  
-> +static int atmel_flexcom_lan966x_cs_config(struct platform_device *pdev)
-> +{
-> +	struct atmel_flexcom *ddata = dev_get_drvdata(&pdev->dev);
-> +	struct device_node *np = pdev->dev.of_node;
-> +	u32 flx_shrd_pins[2], flx_cs[2], val;
-> +	int err, i, count;
-> +
-> +	count = of_property_count_u32_elems(np, "microchip,flx-shrd-pins");
-> +	if (count <= 0 || count > 2) {
-> +		dev_err(&pdev->dev, "Invalid %s property (%d)\n", "flx-shrd-pins",
-
-Sure, but how about telling the user why it's invalid.
-
-> +				count);
-
-Why the '\n' here?  It's not consistent with the rest of the code.
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	err = of_property_read_u32_array(np, "microchip,flx-shrd-pins", flx_shrd_pins, count);
-> +	if (err)
-> +		return err;
-> +
-> +	err = of_property_read_u32_array(np, "microchip,flx-cs", flx_cs, count);
-> +	if (err)
-> +		return err;
-> +
-> +	for (i = 0; i < count; i++) {
-> +		if (flx_shrd_pins[i] > FLEX_SHRD_PIN_MAX)
-> +			return -EINVAL;
-> +
-> +		if (flx_cs[i] > FLEX_CS_MAX)
-> +			return -EINVAL;
-> +
-> +		val = ~(1 << flx_shrd_pins[i]) & FLEX_SHRD_MASK;
-
-BIT()?
-
-> +		if (flx_cs[i] == 0)
-
-Please define the magic '0'.
-
-> +			writel(val, ddata->flexcom_shared_base + FLEX_SHRD_SS_MASK_0);
-> +		else
-> +			writel(val, ddata->flexcom_shared_base + FLEX_SHRD_SS_MASK_1);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int atmel_flexcom_probe(struct platform_device *pdev)
->  {
->  	struct device_node *np = pdev->dev.of_node;
-> +	const struct atmel_flex_caps *caps;
->  	struct resource *res;
->  	struct atmel_flexcom *ddata;
->  	int err;
-> @@ -76,13 +129,52 @@ static int atmel_flexcom_probe(struct platform_device *pdev)
->  	 */
->  	writel(FLEX_MR_OPMODE(ddata->opmode), ddata->base + FLEX_MR);
->  
-> +	caps = of_device_get_match_data(&pdev->dev);
-> +	if (!caps) {
-> +		dev_err(&pdev->dev, "Could not retrieve flexcom caps\n");
-> +		err = -EINVAL;
-> +		goto clk_disable;
-> +	}
-> +
-> +	if (caps->has_flx_cs && of_property_read_bool(np, "microchip,flx-shrd-pins")) {
-
-Is using an array of ints as a bool valid / good practise?
-
-> +		ddata->flexcom_shared_base = devm_platform_get_and_ioremap_resource(pdev, 1, NULL);
-
-Can the magic '1' be defined?
-
-> +		if (IS_ERR(ddata->flexcom_shared_base)) {
-> +			err = dev_err_probe(&pdev->dev,
-> +					PTR_ERR(ddata->flexcom_shared_base),
-> +					"failed to get flexcom shared base address\n");
-> +			goto clk_disable;
-> +		}
-> +
-> +		err = atmel_flexcom_lan966x_cs_config(pdev);
-> +		if (err)
-> +			goto clk_disable;
-> +	}
-
-All of this new code looks like it's related to the CS logic.
-
-If that's the case, why not encapsulate it all into
-atmel_flexcom_lan966x_cs_config()?
-
-> +clk_disable:
->  	clk_disable_unprepare(ddata->clk);
-> +	if (err)
-> +		return err;
->  
->  	return devm_of_platform_populate(&pdev->dev);
->  }
 
 
-> +struct atmel_flex_caps {
-> +	bool has_flx_cs;
-> +};
-> +
-> +static const struct atmel_flex_caps atmel_flexcom_caps = {};
-> +
-> +static const struct atmel_flex_caps lan966x_flexcom_caps = {
-> +	.has_flx_cs = true,
-> +};
-> +
->  static const struct of_device_id atmel_flexcom_of_match[] = {
-> -	{ .compatible = "atmel,sama5d2-flexcom" },
-> +	{
-> +		.compatible = "atmel,sama5d2-flexcom",
-> +		.data = &atmel_flexcom_caps,
-> +	},
-> +
-> +	{
-> +		.compatible = "microchip,lan9668-flexcom",
-> +		.data = &lan966x_flexcom_caps,
-> +	},
-> +
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This a lot of infrastructure for no clear gain.  Why can't we use the
-caps if they are present and ignore them if they're not?  That would
-simplify a great deal of this.
+Best regards,
+Krzysztof
 
->  	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, atmel_flexcom_of_match);
-
--- 
-Lee Jones [李琼斯]
