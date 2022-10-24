@@ -2,135 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D6860B3E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED7F60B402
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbiJXRUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S230523AbiJXRY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiJXRUW (ORCPT
+        with ESMTP id S231478AbiJXRXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:20:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61775B488B;
-        Mon, 24 Oct 2022 08:55:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 24 Oct 2022 13:23:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA94ABD4D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666626958;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DePSS/k3251fhpetLo0djO6EgK928r04EW3rQUElRSQ=;
+        b=JBQ6bDNI1shnIZpTp+oqYCr5pR5cE60qoZpJpdSAplZlCiHkQUlMXrlLcRgNU5K+bve66N
+        0ds7BDypr0605D5wJwiG51C6OnBDqpjoOZNr3ORgtWrXuYOcTYnInYWq5sRszTN5P97R7a
+        u5NoIDt8ki9s/UoZvyugl/SyCbiP/+g=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-137-wmdK6Nh6MfiJDIUnwq4YQw-1; Mon, 24 Oct 2022 11:55:55 -0400
+X-MC-Unique: wmdK6Nh6MfiJDIUnwq4YQw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A6DFC6147E;
-        Mon, 24 Oct 2022 15:53:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 067D6C433D6;
-        Mon, 24 Oct 2022 15:53:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666626838;
-        bh=xl7mmNiO+KxU9FEr9SMbHT7CAElv66IlG802OmzTKPE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=pMRB0LGkQxnFaxDpwo1v3IlmbV0LH16sYA2TjYzugCN6v9vJotr4/dBhOpAZ5+cyZ
-         1NwWMBR3MjLGMIB5kTrK4QeH8O/x8A6LWSJzpctvpd+b9cdHbYUYmPJjmgsCd/mkso
-         f/b9jEdU172T6uCv1rhv6mJ0bDqy2HhToMf6d6VV+OkXLxaQMlIRJZ+0+/baTBGzJ+
-         crHuND076LW/0gU7mwx/62q+NNoqG7eE9SuUKfdde7vBWsmt5pfla7HOL9hQZSDDqt
-         w3l5K7Ox9uqxgB/qJUuObnKZa3fnJPjlgiBIHELiNAkQDihpxj12AVa0tHv5QAtl5F
-         rAAprsrcNMHhw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 932C95C06CD; Mon, 24 Oct 2022 08:53:57 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 08:53:57 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
-Message-ID: <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221021060340.7515-1-w@1wt.eu>
- <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021170134.GB8420@1wt.eu>
- <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021172026.GC8420@1wt.eu>
- <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221022112228.GB30596@1wt.eu>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CCB7F811E84;
+        Mon, 24 Oct 2022 15:55:53 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4AB511121315;
+        Mon, 24 Oct 2022 15:55:53 +0000 (UTC)
+Message-ID: <980d882c-01b8-2ce1-663f-41a8a337f350@redhat.com>
+Date:   Mon, 24 Oct 2022 11:55:53 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221022112228.GB30596@1wt.eu>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 2/5] locking/rwsem: Limit # of null owner retries for
+ handoff writer
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
+References: <20221017211356.333862-1-longman@redhat.com>
+ <20221017211356.333862-3-longman@redhat.com>
+ <Y1aTpYba1Wwly48+@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y1aTpYba1Wwly48+@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 01:22:28PM +0200, Willy Tarreau wrote:
-> On Fri, Oct 21, 2022 at 11:00:40AM -0700, Paul E. McKenney wrote:
-> > > It's even easier, you don't even need the clean phase in include/nolibc.
-> > > I'm doing this and it's sufficient:
-> > > 
-> > >   make -C tools/testing/selftests/nolibc clean
-> > >   make -C tools/testing/selftests/nolibc nolibc-test
-> > >   tools/testing/selftests/nolibc/nolibc-test
-> > > 
-> > > Or for the test under QEMU, which involves a kernel build:
-> > > 
-> > >   make -C tools/testing/selftests/nolibc clean
-> > >   make -C tools/testing/selftests/nolibc -j $(nproc) run
-> > > 
-> > > Where would you first look for such a hint ? Maybe the help output of
-> > > the default "make" command could send as a hint that a clean is needed
-> > > after patching nolibc and that could be sufficient ? I just want to make
-> > > sure users don't waste their time trying to find what they could be doing
-> > > wrong.
-> > 
-> > Maybe it suffices for the near term for me to put this information in
-> > the signed tag for the pull request?
-> 
-> It can be sufficient for short term indeed, but it can be easy as well
-> for me to mention it in the make output.
+On 10/24/22 09:31, Peter Zijlstra wrote:
+> On Mon, Oct 17, 2022 at 05:13:53PM -0400, Waiman Long wrote:
+>> Commit 91d2a812dfb9 ("locking/rwsem: Make handoff writer optimistically
+>> spin on owner") assumes that when the owner field is changed to NULL,
+>> the lock will become free soon.  That assumption may not be correct
+>> especially if the handoff writer doing the spinning is a RT task which
+>> may preempt another task from completing its action of either freeing
+>> the rwsem or properly setting up owner.
+> I'm confused again -- rwsem_*_owner() has
+> lockdep_assert_preemption_disabled(). But more specifically; why can the
+> RT task preempt a lock-op like that?
 
-Why not both?  ;-)
+There is a special case raised by Mukesh that can happen. I quoted his 
+text here:
 
-> > Another approach would be to remind about "make clean" in the case of
-> > a test failure.  Or make test failure combined with a detected change
-> > trigger an automatic "make clean" and a retry.
-> 
-> In fact failures are not the only case. For me it was the opposite. I
-> applied Rasmus' fix, then I developed the test, verified that it worked,
-> then reverted Rasmus' fix... to find that the test didn't catch the
-> failure. I had a second look at the original patch and figured that
-> the -192..+192 values were really not possible with a char so I
-> concluded that a clean was needed. But leaving something in a claimed
-> working state while it's not can be sufficiently misleading and make
-> one waste significant time, because in such cases we rarely search why
-> it works.
+---------------------------
 
-Fair point!  False negatives can be quite annoying as well.
+Looks like, There is still a window for a race.
 
-> > Or other schemes of increasing complexity and fragility.  ;-)
-> 
-> That's exactly what I'd like to avoid with such a lightweight component.
-> If it takes more time to figure why something is going wrong than to
-> write a test, we'll all give up. I think that a clean for QEMU is worth
-> it because the kernel is rebuilt and its dependencies are quite robust,
-> so that one would be a surprise. For other tests, probably leaving it
-> explicit with a hint that it's needed should suffice. I'll recheck what
-> conditions the installation of uapi headers because that's really what
-> I don't want to see happening all the time. The rest is discrete, it's
-> just a few files being copied, maybe it can be done every time.
-> 
-> Will keep thinking about it and hopefully propose a patch to make the
-> tests easier to use before we're too far in the 6.1 release.
+There is a chance when a reader who came first added it's BIAS and goes 
+to slowpath and before it gets added to wait list it got preempted by RT 
+task which  goes to slowpath as well and being the first waiter gets its 
+hand-off bit set and not able to get the lock due to following condition 
+in rwsem_try_write_lock()
 
-Another possibility is to have a separate developers' and maintainers'
-option.  Linus and I do "make whatever" for some value of "whatever"
-that builds from scratch, doing whatever cleaning that might be required.
-Developers use targets that are faster but have the possibility of false
-positives and false negatives.
+  630                 if (count & RWSEM_LOCK_MASK) {  ==> reader has 
+sets its bias
+..
+...
 
-But maybe you have something better in mind.
+  634
+  635                         new |= RWSEM_FLAG_HANDOFF;
+  636                 } else {
+  637                         new |= RWSEM_WRITER_LOCKED;
 
-> Thanks for keeping the conversation flowing, that helps me!
 
-Looking forward to seeing what you come up with!
+---------------------->----------------------->-------------------------
 
-							Thanx, Paul
+First reader (1)          writer(2) RT task             Lock holder(3)
+
+It sets
+RWSEM_READER_BIAS.
+while it is going to
+slowpath(as the lock
+was held by (3)) and
+before it got added
+to the waiters list
+it got preempted
+by (2).
+                         RT task also takes
+                         the slowpath and add              release the
+                         itself into waiting list          rwsem lock
+             and since it is the first         clear the
+                         it is the next one to get         owner.
+                         the lock but it can not
+                         get the lock as (count &
+                         RWSEM_LOCK_MASK) is set
+                         as (1) has added it but
+                         not able to remove its
+             adjustment.
+
+----------------------
+
+To fix that we either has to disable preemption in down_read() and 
+reenable it in rwsem_down_read_slowpath after decrementing the 
+RWSEM_READER_BIAS or to limit the number of trylock-spinning attempt 
+like this patch. The latter approach seems a bit less messy and I am 
+going to take it back out anyway in patch 4. I will put a summary of 
+that special case in the patch description.
+
+Cheers,
+Longman
+
