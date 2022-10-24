@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26A4760A3F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1174D60AA7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232533AbiJXMCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S236094AbiJXNeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiJXL7c (ORCPT
+        with ESMTP id S236223AbiJXNaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:59:32 -0400
+        Mon, 24 Oct 2022 09:30:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A46A7C324;
-        Mon, 24 Oct 2022 04:48:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B01AC499;
+        Mon, 24 Oct 2022 05:33:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E963061290;
-        Mon, 24 Oct 2022 11:48:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CB8C433D6;
-        Mon, 24 Oct 2022 11:48:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7871612A8;
+        Mon, 24 Oct 2022 12:22:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7500C433D6;
+        Mon, 24 Oct 2022 12:22:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612091;
-        bh=31mqhKt9Gn0j2CERCn74MGBZCFxUFX+32ob2F+G9/y8=;
+        s=korg; t=1666614161;
+        bh=L56yfIyCXPpMNDYD538abftjPp7bHPmQP8DEim/UyWM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rWdKEX8mYUfeGOn7NAjKix1fuqrEvaD4+kLZePuehEeCLEmFrCrQPW56l60TNzJst
-         ikt2ZFTdbKzYURhhLGBxdNklbKOlahhoR6CAinsVtRcA09jp9xi1RJSXXq/4W6/5Wb
-         X1N/Vbyqky9sAblxYXc7r+HQfE4L4qByhyzdmbGA=
+        b=lN/s2xdUTqYvZdHZCy85j6XUuEyRJzAECS5l93bd8eggy3rshlgsjKGYM/rPar3Mk
+         3j29i3BVtJjh03+us1HhE5x5X8tXZXd9drx5i7AM2CfgjThQcu8Bbjkx+rsL0Ebesj
+         qMtQREeVgG6PaQQeoXk1uVR3hqtd4tcuqgptgt9s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "fw@strlen.de, avimalin@gmail.com, Vimal Agrawal" 
-        <vimal.agrawal@sophos.com>, Florian Westphal <fw@strlen.de>,
-        Vimal Agrawal <vimal.agrawal@sophos.com>
-Subject: [PATCH 4.14 035/210] netfilter: nf_queue: fix socket leak
-Date:   Mon, 24 Oct 2022 13:29:12 +0200
-Message-Id: <20221024112958.115275475@linuxfoundation.org>
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 156/390] ASoC: rsnd: Add check for rsnd_mod_power_on
+Date:   Mon, 24 Oct 2022 13:29:13 +0200
+Message-Id: <20221024113029.337552738@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,31 +55,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vimal Agrawal <avimalin@gmail.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-Removal of the sock_hold got lost when backporting commit 4d05239203fa
-("netfilter: nf_queue: fix possible use-after-free") to 4.14
+[ Upstream commit 376be51caf8871419bbcbb755e1e615d30dc3153 ]
 
-This was causing a socket leak and was caught by kmemleak.
-Tested by running kmemleak again with this fix.
+As rsnd_mod_power_on() can return negative numbers,
+it should be better to check the return value and
+deal with the exception.
 
-Fixes: ef97921ccdc2 ("netfilter: nf_queue: fix possible use-after-free") in 4.14
-Signed-off-by: Vimal Agrawal <vimal.agrawal@sophos.com>
-Reviewed-by: Florian Westphal <fw@strlen.de>
+Fixes: e7d850dd10f4 ("ASoC: rsnd: use mod base common method on SSI-parent")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Link: https://lore.kernel.org/r/20220902013030.3691266-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_queue.c |    2 --
- 1 file changed, 2 deletions(-)
+ sound/soc/sh/rcar/ctu.c | 6 +++++-
+ sound/soc/sh/rcar/dvc.c | 6 +++++-
+ sound/soc/sh/rcar/mix.c | 6 +++++-
+ sound/soc/sh/rcar/src.c | 5 ++++-
+ sound/soc/sh/rcar/ssi.c | 4 +++-
+ 5 files changed, 22 insertions(+), 5 deletions(-)
 
---- a/net/netfilter/nf_queue.c
-+++ b/net/netfilter/nf_queue.c
-@@ -91,8 +91,6 @@ bool nf_queue_entry_get_refs(struct nf_q
- 		dev_hold(state->in);
- 	if (state->out)
- 		dev_hold(state->out);
--	if (state->sk)
--		sock_hold(state->sk);
- #if IS_ENABLED(CONFIG_BRIDGE_NETFILTER)
- 	if (entry->skb->nf_bridge) {
- 		struct net_device *physdev;
+diff --git a/sound/soc/sh/rcar/ctu.c b/sound/soc/sh/rcar/ctu.c
+index 7647b3d4c0ba..25a8cfc27433 100644
+--- a/sound/soc/sh/rcar/ctu.c
++++ b/sound/soc/sh/rcar/ctu.c
+@@ -171,7 +171,11 @@ static int rsnd_ctu_init(struct rsnd_mod *mod,
+ 			 struct rsnd_dai_stream *io,
+ 			 struct rsnd_priv *priv)
+ {
+-	rsnd_mod_power_on(mod);
++	int ret;
++
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_ctu_activation(mod);
+ 
+diff --git a/sound/soc/sh/rcar/dvc.c b/sound/soc/sh/rcar/dvc.c
+index 8d91c0eb0880..53b2ad01222b 100644
+--- a/sound/soc/sh/rcar/dvc.c
++++ b/sound/soc/sh/rcar/dvc.c
+@@ -186,7 +186,11 @@ static int rsnd_dvc_init(struct rsnd_mod *mod,
+ 			 struct rsnd_dai_stream *io,
+ 			 struct rsnd_priv *priv)
+ {
+-	rsnd_mod_power_on(mod);
++	int ret;
++
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_dvc_activation(mod);
+ 
+diff --git a/sound/soc/sh/rcar/mix.c b/sound/soc/sh/rcar/mix.c
+index a3e0370f5704..c6fe2595c373 100644
+--- a/sound/soc/sh/rcar/mix.c
++++ b/sound/soc/sh/rcar/mix.c
+@@ -146,7 +146,11 @@ static int rsnd_mix_init(struct rsnd_mod *mod,
+ 			 struct rsnd_dai_stream *io,
+ 			 struct rsnd_priv *priv)
+ {
+-	rsnd_mod_power_on(mod);
++	int ret;
++
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_mix_activation(mod);
+ 
+diff --git a/sound/soc/sh/rcar/src.c b/sound/soc/sh/rcar/src.c
+index 585ffba0244b..fd52e26a3808 100644
+--- a/sound/soc/sh/rcar/src.c
++++ b/sound/soc/sh/rcar/src.c
+@@ -454,11 +454,14 @@ static int rsnd_src_init(struct rsnd_mod *mod,
+ 			 struct rsnd_priv *priv)
+ {
+ 	struct rsnd_src *src = rsnd_mod_to_src(mod);
++	int ret;
+ 
+ 	/* reset sync convert_rate */
+ 	src->sync.val = 0;
+ 
+-	rsnd_mod_power_on(mod);
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_src_activation(mod);
+ 
+diff --git a/sound/soc/sh/rcar/ssi.c b/sound/soc/sh/rcar/ssi.c
+index 042207c11651..2ead44779d46 100644
+--- a/sound/soc/sh/rcar/ssi.c
++++ b/sound/soc/sh/rcar/ssi.c
+@@ -518,7 +518,9 @@ static int rsnd_ssi_init(struct rsnd_mod *mod,
+ 
+ 	ssi->usrcnt++;
+ 
+-	rsnd_mod_power_on(mod);
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_ssi_config_init(mod, io);
+ 
+-- 
+2.35.1
+
 
 
