@@ -2,100 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E139760B1AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9100560B1CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiJXQbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S234309AbiJXQhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbiJXQau (ORCPT
+        with ESMTP id S234306AbiJXQhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:30:50 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECBA796A7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:17:04 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id x13so5196736qvn.6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:17:04 -0700 (PDT)
+        Mon, 24 Oct 2022 12:37:11 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A50636879;
+        Mon, 24 Oct 2022 08:24:55 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bs21so922108wrb.4;
+        Mon, 24 Oct 2022 08:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=J1gk2ep4Ye/CjOaUbmreqC0qY89txiP3E/LghUXF5LA=;
-        b=akGSaltVfsVhRbxG28WOW2X8gO+wU+EznxNMhIIAuSXlPw266pmcqTSPvphoFig+GK
-         6AkDGxqzK1FJuKj+gGU8trve6h7F9gHybwYtN75fdc3LfBH7MtfTgz8qxq8CwCYlUKal
-         qB0wtDVINyoNPBAV7ld9nZCkIhvnRXn7C3L1qTuA5XRKM2DxzDG/oeeQnzEj+6QNCTQd
-         vNLfsqXPGOM4aOHEVG5gnpMP0+cf59pB02DgvrSrhyyfGzlSYzh7CVf3kW35Vm5Ogkv1
-         SK6c+++qFxQAwPO234SxMhd1pNZ7S9ZL1CmXsT/zlHHQCq6UIhy7FTARmx1QlC57pCeM
-         0thg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OLgc4/4C8v2jDtY+kMWIa5ZzBrBS7jfMBU2/F5ZQ5SM=;
+        b=B71lktSNCiRFQJrKXCWCN4QxfX/TYZNdY8OxVIsKF7q3E08na25TFcl1p34nsMRMan
+         Us3Vg9+DeUik8y0zahnES1/+u2RtqhicAQ9uLYs6A7VS1Rflhq2tGs+V39ktJag6tmix
+         Hjl/dRwIcr6w1puXUndLfmDKFOsAXmQktEt9f/NRegSFnkwFg69NMaHO82yG2EBRllXn
+         Q9biOxW3QzoHrH7EvxtZGl1wfEukyYRxVvDSsYcmXf1NE13LajLCgYTIyZSC9R5mDCws
+         CrtL6pJ5wdUDD14R6XJMfcKF4dmKAZQHbX6BPyJgtbT3T45fk5A7li5ALLXhkaadIX5+
+         vpHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J1gk2ep4Ye/CjOaUbmreqC0qY89txiP3E/LghUXF5LA=;
-        b=CZV3YMGxlCz+M4Cfv0dj0QyYRJfIQ/6Hj01TfhQ3o2rElS6kOlDKOgyD0x4gyuUUFF
-         rXIVPcu28UdDPFn9NMSxZQuoR0M/sUBI9nfhrwdeJeRch7DBk9QiSs4+V77T9VrvmrPC
-         kGt+JvV9zAfc1v4/dE0Dw7Z1U6/tLUIbDXz5q3eG+7H5aTENMHbPncqB+1YIjBVzzkR3
-         iI3Um0WrYdy4ViRuM1iNZ+nHs+RNOtqM0Loh7P73l6jvlxuTIByLV15lUSFOFhR9nczR
-         Xrwq7NZSyKidYRxfRLLZar8tEjNhKaf1oegCbdXKUcWqTKu0IlKfYC5iUor1ytwTHyNg
-         oUfw==
-X-Gm-Message-State: ACrzQf3V3JtBFOta0v0h4QD3Y0erydFPbaSr0mdZFfKDUbXmKvGR5wRT
-        Z44mfAgqfzFmbYb0Fu9E2dFNrfuMYPCXlxv+4QoAmvDD
-X-Google-Smtp-Source: AMsMyM4fNurfiqwrnpgoMx2P1f9YHXMbFRfipOkR+eGaYvPpVD3TyOfVsYBQuM/D/H05sOmqp3j6d2uvYxO3EKWY1CI=
-X-Received: by 2002:a67:b046:0:b0:3a7:965c:65f1 with SMTP id
- q6-20020a67b046000000b003a7965c65f1mr15621937vsh.40.1666624420991; Mon, 24
- Oct 2022 08:13:40 -0700 (PDT)
+        bh=OLgc4/4C8v2jDtY+kMWIa5ZzBrBS7jfMBU2/F5ZQ5SM=;
+        b=AiXSEmtumLyTjFmGYKNAS3d98/fR7cxbzk4L1Cw9hooP5ivwNzUiB5Qdv+Uku7xgBQ
+         e8Ho6OOW2vBC2QrIXGcquJ3OlyO/QQqWUjX7AEvGwApJ2jCSPo3oqp8GAZU9gLwiRQw3
+         SBFkhtaptRX8UFWTQ0xnxyesdS517qG+JGQZRjYg42vpolGp1lAqAOSyw/MOZnjDc7hx
+         Yc1X1adjZ8HAAz+h1txmBdWi++sG5RlPpz6fgcUXSD5q0HfNscbzsVOgl5ibWcZPK/JA
+         DBFtwN7KI9fJSHZhvNFjYX2sWmJwzI1iXvCErqDSsgWLDKBIq7Gss8hKNbr6ei5rn2od
+         n4iQ==
+X-Gm-Message-State: ACrzQf2b6fJQHsCWVkGCVI0Odf6/RErU14WProTOmiEVMhrQs1COfB5D
+        OYIUR/09V0+HYNFUwy0V60eR3bVUuQnlr1ZU
+X-Google-Smtp-Source: AMsMyM74x8Xq7pcPJv3wMuHY0rzfdbCS1si0suzLihSkp26iytP0gSH5VGVeWMKinACC1WYjKtXVKA==
+X-Received: by 2002:adf:dc8a:0:b0:236:6372:551e with SMTP id r10-20020adfdc8a000000b002366372551emr7300862wrj.41.1666624436138;
+        Mon, 24 Oct 2022 08:13:56 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id az27-20020a05600c601b00b003c6c2ff7f25sm181093wmb.15.2022.10.24.08.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 08:13:55 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Slark Xiao <slark_xiao@163.com>, linux-media@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: saa7164: remove variable cnt
+Date:   Mon, 24 Oct 2022 16:13:54 +0100
+Message-Id: <20221024151354.2166343-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <20221022060155.52548-1-wangjianli@cdjrlc.com>
-In-Reply-To: <20221022060155.52548-1-wangjianli@cdjrlc.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 24 Oct 2022 11:13:29 -0400
-Message-ID: <CADnq5_OjwUOMa6RAfqT6B50wHQARtdL7uARcDzc+iMCthSsLgA@mail.gmail.com>
-Subject: Re: [PATCH] amd/amdgpu: fix repeated words in comments
-To:     wangjianli <wangjianli@cdjrlc.com>
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 2:02 AM wangjianli <wangjianli@cdjrlc.com> wrote:
->
-> Delete the redundant word 'the'.
->
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
+Variable cnt is just being incremented and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it.
 
-Applied.  Thanks!
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/media/pci/saa7164/saa7164-core.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Alex
+diff --git a/drivers/media/pci/saa7164/saa7164-core.c b/drivers/media/pci/saa7164/saa7164-core.c
+index d5f32e3ff544..01d75ef2342d 100644
+--- a/drivers/media/pci/saa7164/saa7164-core.c
++++ b/drivers/media/pci/saa7164/saa7164-core.c
+@@ -352,7 +352,7 @@ static void saa7164_work_enchandler(struct work_struct *w)
+ 		container_of(w, struct saa7164_port, workenc);
+ 	struct saa7164_dev *dev = port->dev;
+ 
+-	u32 wp, mcb, rp, cnt = 0;
++	u32 wp, mcb, rp;
+ 
+ 	port->last_svc_msecs_diff = port->last_svc_msecs;
+ 	port->last_svc_msecs = jiffies_to_msecs(jiffies);
+@@ -405,7 +405,6 @@ static void saa7164_work_enchandler(struct work_struct *w)
+ 
+ 		saa7164_work_enchandler_helper(port, rp);
+ 		port->last_svc_rp = rp;
+-		cnt++;
+ 
+ 		if (rp == mcb)
+ 			break;
+@@ -429,7 +428,7 @@ static void saa7164_work_vbihandler(struct work_struct *w)
+ 		container_of(w, struct saa7164_port, workenc);
+ 	struct saa7164_dev *dev = port->dev;
+ 
+-	u32 wp, mcb, rp, cnt = 0;
++	u32 wp, mcb, rp;
+ 
+ 	port->last_svc_msecs_diff = port->last_svc_msecs;
+ 	port->last_svc_msecs = jiffies_to_msecs(jiffies);
+@@ -481,7 +480,6 @@ static void saa7164_work_vbihandler(struct work_struct *w)
+ 
+ 		saa7164_work_enchandler_helper(port, rp);
+ 		port->last_svc_rp = rp;
+-		cnt++;
+ 
+ 		if (rp == mcb)
+ 			break;
+-- 
+2.37.3
 
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> index e9155dc1c30c..3de990bbbf2f 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> @@ -1565,7 +1565,7 @@ static int amdgpu_device_check_arguments(struct amdgpu_device *adev)
->   * @pdev: pci dev pointer
->   * @state: vga_switcheroo state
->   *
-> - * Callback for the switcheroo driver.  Suspends or resumes the
-> + * Callback for the switcheroo driver.  Suspends or resumes
->   * the asics before or after it is powered up using ACPI methods.
->   */
->  static void amdgpu_switcheroo_set_state(struct pci_dev *pdev,
-> --
-> 2.36.1
->
