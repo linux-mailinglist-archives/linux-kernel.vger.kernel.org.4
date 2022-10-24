@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C48960A5A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D503760A58A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbiJXM2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:28:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S233626AbiJXMZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233200AbiJXM1F (ORCPT
+        with ESMTP id S233786AbiJXMYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:27:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B087C308;
-        Mon, 24 Oct 2022 05:01:33 -0700 (PDT)
+        Mon, 24 Oct 2022 08:24:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2F85FA8;
+        Mon, 24 Oct 2022 05:00:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 759B7B811DA;
-        Mon, 24 Oct 2022 11:56:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD01DC433D6;
-        Mon, 24 Oct 2022 11:56:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A048B811E6;
+        Mon, 24 Oct 2022 11:56:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B084C433B5;
+        Mon, 24 Oct 2022 11:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612569;
-        bh=Z3gWvSE3fw+Ff54MumYb9CCVjoFOZxUJC1XFP/tVtqs=;
+        s=korg; t=1666612571;
+        bh=MPx8MYZaOpRhJircYdIbMtxUIK98qNQOL2IsJCYo8Pk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G36qwIvBX2a18myutdbA8J0fsC2lgryl8RQylS5jvy5g0zbLD92rvssWcZo+JjKZM
-         5P/5P9jEJidVCOSyanlaIY1d20DOOVZEXI8cjp+33GG3xBmMvXyvlXXso99XIVYoUG
-         jsScRMN+BndTQYYEj1hX648V4FZqeUcxELIjf14c=
+        b=sz6U8loaYMgwSKHqpZ71LGpQcWIP+nMdiOXq1Oh7amVNN/XtX8Smpx3c/dXlB/TIk
+         8MfxGBMxfnm241msD4iiE9w54yPoG6UNCZ8ptDjDS6DZwP6BO8HlmynWa1NzHUJVpo
+         EoPLInAtPDH1Ki4yxmR+YD62Eh0iJu8MOsciyb60=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Callum Osmotherly <callum.osmotherly@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.19 036/229] ALSA: hda/realtek: remove ALC289_FIXUP_DUAL_SPK for Dell 5530
-Date:   Mon, 24 Oct 2022 13:29:15 +0200
-Message-Id: <20221024113000.275548420@linuxfoundation.org>
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Alexander Dahl <ada@thorsis.com>,
+        Peter Rosin <peda@axentia.se>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH 4.19 037/229] mtd: rawnand: atmel: Unmap streaming DMA mappings
+Date:   Mon, 24 Oct 2022 13:29:16 +0200
+Message-Id: <20221024113000.304537542@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
 References: <20221024112959.085534368@linuxfoundation.org>
@@ -54,34 +57,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Callum Osmotherly <callum.osmotherly@gmail.com>
+From: Tudor Ambarus <tudor.ambarus@microchip.com>
 
-commit 417b9c51f59734d852e47252476fadc293ad994a upstream.
+commit 1161703c9bd664da5e3b2eb1a3bb40c210e026ea upstream.
 
-After some feedback from users with Dell Precision 5530 machines, this
-patch reverts the previous change to add ALC289_FIXUP_DUAL_SPK.
-While it improved the speaker output quality, it caused the headphone
-jack to have an audible "pop" sound when power saving was toggled.
+Every dma_map_single() call should have its dma_unmap_single() counterpart,
+because the DMA address space is a shared resource and one could render the
+machine unusable by consuming all DMA addresses.
 
-Fixes: 1885ff13d4c4 ("ALSA: hda/realtek: Enable 4-speaker output Dell Precision 5530 laptop")
-Signed-off-by: Callum Osmotherly <callum.osmotherly@gmail.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/Yz0uyN1zwZhnyRD6@piranha
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/lkml/13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se/
+Cc: stable@vger.kernel.org
+Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
+Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Acked-by: Alexander Dahl <ada@thorsis.com>
+Reported-by: Peter Rosin <peda@axentia.se>
+Tested-by: Alexander Dahl <ada@thorsis.com>
+Reviewed-by: Boris Brezillon <boris.brezillon@collabora.com>
+Tested-by: Peter Rosin <peda@axentia.se>
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Link: https://lore.kernel.org/linux-mtd/20220728074014.145406-1-tudor.ambarus@microchip.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/mtd/nand/raw/atmel/nand-controller.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -7081,7 +7081,6 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x1028, 0x0871, "Dell Precision 3630", ALC255_FIXUP_DELL_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1028, 0x0872, "Dell Precision 3630", ALC255_FIXUP_DELL_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1028, 0x0873, "Dell Precision 3930", ALC255_FIXUP_DUMMY_LINEOUT_VERB),
--	SND_PCI_QUIRK(0x1028, 0x087d, "Dell Precision 5530", ALC289_FIXUP_DUAL_SPK),
- 	SND_PCI_QUIRK(0x1028, 0x08ad, "Dell WYSE AIO", ALC225_FIXUP_DELL_WYSE_AIO_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x08ae, "Dell WYSE NB", ALC225_FIXUP_DELL1_MIC_NO_PRESENCE),
- 	SND_PCI_QUIRK(0x1028, 0x0935, "Dell", ALC274_FIXUP_DELL_AIO_LINEOUT_VERB),
+--- a/drivers/mtd/nand/raw/atmel/nand-controller.c
++++ b/drivers/mtd/nand/raw/atmel/nand-controller.c
+@@ -398,6 +398,7 @@ static int atmel_nand_dma_transfer(struc
+ 
+ 	dma_async_issue_pending(nc->dmac);
+ 	wait_for_completion(&finished);
++	dma_unmap_single(nc->dev, buf_dma, len, dir);
+ 
+ 	return 0;
+ 
 
 
