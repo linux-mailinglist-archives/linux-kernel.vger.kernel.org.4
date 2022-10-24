@@ -2,88 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B4BD60AAB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E70960A618
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbiJXNgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S231373AbiJXMcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236464AbiJXNbL (ORCPT
+        with ESMTP id S233957AbiJXM3F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:31:11 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469B75FE3;
-        Mon, 24 Oct 2022 05:34:24 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-13b23e29e36so10914254fac.8;
-        Mon, 24 Oct 2022 05:34:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mcGmlCRK6WN6ZG/jGCj5N7yle6pB40XVPW0Ha2mB7cY=;
-        b=DTyl13zwGNI2L2P0eMGz201o5eswiW6LlwdR60hIrSy/znAIVU1lUBxbGenC4PNpGf
-         pbyBoWWKkUt67+Ny7ETdFAG+Ds3tVPWZM33rJHvrjEBntMpi8IsvJ0NdFEWuOoTlhqGi
-         YPWL0ArMWnF/3RD1g64XvWXSK4w1xZa2GTvX39dqWw6AxT9Acyx5fX/POelQ3MDOMnXv
-         7CXUKY0j0nLQtqVE+JnEdmV/mzwa6LnCrQi4Th+h817ifxACqR7mDpRl1X2hFYO/hoJp
-         hiJm5/5gDjV2zDZpxIZZHKHWsHr0fODP7aKd8bYD22N9aJ9+a5SMfnKpMIWIHRo2RQEz
-         42Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mcGmlCRK6WN6ZG/jGCj5N7yle6pB40XVPW0Ha2mB7cY=;
-        b=O/BxyEqg8R10D3BX5YqIsqZWP4qfZ7ipLatO7BMUUy97+QU+K4F1VsRYqtrKAuzcgG
-         ajOr736tcXVL/s33ZX/RKVLTTrceP63NhUZ9NAsD0p10PXvzjjwPHNAyLDfOcMvTIDzv
-         lVsEFfXmXDEFHFrIMDeZcyRpkCegKTLT4bExUXbetx9RF+2W5ioOZTw2bvUkQLrkHVzv
-         ILrJg5/8DZMeA1VlqdUm8GMa5V+YKmZzkCu2dQuFb2OvdLplfk1LjErceO++a8vE6A5k
-         fAlg7paWAdhc9ZDXgWWV15hZZEkoRdXQG7FQOunp/JE1tRnr0WLwKublVjgacqUwin+9
-         yLxA==
-X-Gm-Message-State: ACrzQf0Y0dxSe8vqmMEusOXxeYiadzzuI4T1oxv7bMyK4dnWGzZy49wF
-        9bexbWqFjzifYr1qXUIU4m+atCbopqWVFWEszulSmkUA
-X-Google-Smtp-Source: AMsMyM5Wbatd2b2pPEV9BD4wN0+HBaMvhyEYRz3gNUPz+1LXWj2fimEF21KkWd8k2azbwYnuNj3bLbqg/JRTVhk8W+U=
-X-Received: by 2002:a17:90b:190f:b0:211:5d2a:ade9 with SMTP id
- mp15-20020a17090b190f00b002115d2aade9mr28048950pjb.76.1666612643319; Mon, 24
- Oct 2022 04:57:23 -0700 (PDT)
+        Mon, 24 Oct 2022 08:29:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CE574E39;
+        Mon, 24 Oct 2022 05:02:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7157B811FE;
+        Mon, 24 Oct 2022 12:00:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE42C433D6;
+        Mon, 24 Oct 2022 12:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666612802;
+        bh=GAvKdiCXmJ3TdTl3w2z3oNTgZyAdY9zlwgO7MDYfPBo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TBBVIAZXuUScDHsS+KRrh0jcvp9hHeCkLkbVYjYmOLyIfM0/bqyGPMF9rjWKMyD13
+         gUm53ljsPboY0W5728rR7CqUuBdnDpahlwKe4RXGzGQBWp/y/mEL92gmfVAxCvdKNd
+         lPmiV2CLMW8vTzWh2gMp+5aOLRimiuQbi+cdawNw3OEz60UQZwQi86YQJrGgefBHi5
+         RI850tdyP0ZeqRH0Z+vmteCLhPT/HTwOoYS74C8Eqg1J0ykYSCzEO6i9nHN0J+nx7w
+         +zEmiAOxsxUyRaj03uof/iaDCChxaZ30zkip1/QTJ95ujHNI3fPs05YF9Lodf6jxRU
+         3ua5CvfFIRkjA==
+Date:   Mon, 24 Oct 2022 14:59:58 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Li Zhijian <lizhijian@fujitsu.com>
+Cc:     zyjzyj2000@gmail.com, jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bob Pearson <rpearsonhpe@gmail.com>
+Subject: Re: [PATCH for-next v3 2/2] RDMA/rxe: Fix mr leak in RESPST_ERR_RNR
+Message-ID: <Y1Z+PnTk0Tr7sxcb@unreal>
+References: <1666582315-2-1-git-send-email-lizhijian@fujitsu.com>
+ <20221024052049.20577-1-lizhijian@fujitsu.com>
 MIME-Version: 1.0
-References: <20221024115429.1343257-1-heiko.thiery@gmail.com>
-In-Reply-To: <20221024115429.1343257-1-heiko.thiery@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 24 Oct 2022 08:57:11 -0300
-Message-ID: <CAOMZO5B11Jbnr-3_86QA7Vec-YLGu6+Rv8TxBsMcn7bSG9ZhDw@mail.gmail.com>
-Subject: Re: [PATCH v3] arm64: dts: imx8mq-kontron-pitx-imx8m: remove
- off-on-delay-us for regulator-usdhc2-vmmc
-To:     Heiko Thiery <heiko.thiery@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024052049.20577-1-lizhijian@fujitsu.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heiko,
+On Mon, Oct 24, 2022 at 01:20:49PM +0800, Li Zhijian wrote:
+> rxe_recheck_mr() will increase mr's ref_cnt, so we should call rxe_put(mr)
+> to drop mr's ref_cnt in RESPST_ERR_RNR to avoid below warning:
+> [  633.447883] WARNING: CPU: 0 PID: 4156 at drivers/infiniband/sw/rxe/rxe_pool.c:259 __rxe_cleanup+0x1df/0x240 [rdma_rxe]
+> ...
+> [  633.509482] Call Trace:
+> [  633.510246]  <TASK>
+> [  633.510962]  rxe_dereg_mr+0x4c/0x60 [rdma_rxe]
+> [  633.512123]  ib_dereg_mr_user+0xa8/0x200 [ib_core]
+> [  633.513444]  ib_mr_pool_destroy+0x77/0xb0 [ib_core]
+> [  633.514763]  nvme_rdma_destroy_queue_ib+0x89/0x240 [nvme_rdma]
+> [  633.516230]  nvme_rdma_free_queue+0x40/0x50 [nvme_rdma]
+> [  633.517577]  nvme_rdma_teardown_io_queues.part.0+0xc3/0x120 [nvme_rdma]
+> [  633.519204]  nvme_rdma_error_recovery_work+0x4d/0xf0 [nvme_rdma]
+> [  633.520695]  process_one_work+0x582/0xa40
+> [  633.522987]  ? pwq_dec_nr_in_flight+0x100/0x100
+> [  633.524227]  ? rwlock_bug.part.0+0x60/0x60
+> [  633.525372]  worker_thread+0x2a9/0x700
+> [  633.526437]  ? process_one_work+0xa40/0xa40
+> [  633.527589]  kthread+0x168/0x1a0
+> [  633.528518]  ? kthread_complete_and_exit+0x20/0x20
+> [  633.529792]  ret_from_fork+0x22/0x30
+> 
+> CC: Bob Pearson <rpearsonhpe@gmail.com>
+> Fixes: 8a1a0be894da ("RDMA/rxe: Replace mr by rkey in responder resources")
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> V2: remove mr testing
 
-On Mon, Oct 24, 2022 at 8:54 AM Heiko Thiery <heiko.thiery@gmail.com> wrote:
->
-> With that delay U-Boot is not able to store the environment variables in
-> the SD card. Since the delay is not required it can be remove.
->
-> Fixes: 5dbadc848259 (arm64: dts: fsl: add support for Kontron pitx-imx8m board)
->
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+This should be after ---
+
 > ---
-> v3:
->  - Improve commit message and explain why it is a fix (thanks to Fabio)
-
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>  drivers/infiniband/sw/rxe/rxe_resp.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+> index b02639cf8cba..41250154a478 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+> @@ -806,8 +806,10 @@ static enum resp_states read_reply(struct rxe_qp *qp,
+>  
+>  	skb = prepare_ack_packet(qp, &ack_pkt, opcode, payload,
+>  				 res->cur_psn, AETH_ACK_UNLIMITED);
+> -	if (!skb)
+> +	if (!skb) {
+> +		rxe_put(mr);
+>  		return RESPST_ERR_RNR;
+> +	}
+>  
+>  	rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
+>  		    payload, RXE_FROM_MR_OBJ);
+> -- 
+> 2.31.1
+> 
