@@ -2,213 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B010360B5ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8D560B52D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231916AbiJXSo2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:44:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
+        id S231305AbiJXSNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbiJXSnh (ORCPT
+        with ESMTP id S231936AbiJXSMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:43:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E02E6144089;
-        Mon, 24 Oct 2022 10:25:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBAC4D6E;
-        Mon, 24 Oct 2022 07:56:49 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B75B83F792;
-        Mon, 24 Oct 2022 07:56:41 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 15:56:39 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        soc@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 10/10] ARM: dts: suniv: add device tree for PopStick
- v1.1
-Message-ID: <20221024155639.5e97d205@donnerap.cambridge.arm.com>
-In-Reply-To: <20221012055602.1544944-11-uwu@icenowy.me>
-References: <20221012055602.1544944-1-uwu@icenowy.me>
-        <20221012055602.1544944-11-uwu@icenowy.me>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        Mon, 24 Oct 2022 14:12:22 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461B757E17;
+        Mon, 24 Oct 2022 09:54:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666630459; x=1698166459;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f12+hDSs2xhh9+cgFUHAQwPz5EdOX4nrGTxSpB9xto8=;
+  b=Lx4O7B4HXPSw6eCOX6fxKVKroy/kLcxL2hy81b68CBxeeJRyLCmgMCfL
+   +GmcUQtQfNoaO0aKDUWtL30YejrZoBatDCS3PeFJE4DrVZy75n4meLb3V
+   lTd9rYHhJuaupDbeWYGNYIRyNXZj3pq47viEZfMgcU99FnPK0/qZgfmIi
+   gspbcVr59orDB9o72YPvLlrDzWGOkCq17RmNQJRAMNg2/pBM0j0LNOMfA
+   bj+i/Q+CUyf8nP7jn5Mf5krunxQliQkthbAZqVw/QMtNgTnCY5KYq20Fa
+   rnUMOQajJskrGGHNEtBU+aDreoW/sfo7JqEpyO72zuy8iUIvlJ76mj0/t
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="290739879"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="290739879"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 07:59:41 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="631284461"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="631284461"
+Received: from unisar-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.38.228])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 07:59:30 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 381A7104D5C; Mon, 24 Oct 2022 17:59:28 +0300 (+03)
+Date:   Mon, 24 Oct 2022 17:59:28 +0300
+From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
+        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
+        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
+Message-ID: <20221024145928.66uehsokp7bpa2st@box.shutemov.name>
+References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
+ <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
+ <CAGtprH_MiCxT2xSxD2UrM4M+ghL0V=XEZzEX4Fo5wQKV4fAL4w@mail.gmail.com>
+ <20221021134711.GA3607894@chaop.bj.intel.com>
+ <Y1LGRvVaWwHS+Zna@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1LGRvVaWwHS+Zna@google.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 12 Oct 2022 13:56:02 +0800
-Icenowy Zheng <uwu@icenowy.me> wrote:
-
-Hi,
-
-> PopStick is a minimal Allwinner F1C200s dongle, with its USB controller
-> wired to a USB Type-A port, a SD slot and a SPI NAND flash on board, and
-> an on-board CH340 USB-UART converted connected to F1C200s's UART0.
+On Fri, Oct 21, 2022 at 04:18:14PM +0000, Sean Christopherson wrote:
+> On Fri, Oct 21, 2022, Chao Peng wrote:
+> > > 
+> > > In the context of userspace inaccessible memfd, what would be a
+> > > suggested way to enforce NUMA memory policy for physical memory
+> > > allocation? mbind[1] won't work here in absence of virtual address
+> > > range.
+> > 
+> > How about set_mempolicy():
+> > https://www.man7.org/linux/man-pages/man2/set_mempolicy.2.html
 > 
-> Add a device tree for it. As F1C200s is just F1C100s with a different
-> DRAM chip co-packaged, directly use F1C100s DTSI here.
+> Andy Lutomirski brought this up in an off-list discussion way back when the whole
+> private-fd thing was first being proposed.
 > 
-> This commit covers the v1.1 version of this board, which is now shipped.
-> v1.0 is some internal sample that have not been shipped at all.
+>   : The current Linux NUMA APIs (mbind, move_pages) work on virtual addresses.  If
+>   : we want to support them for TDX private memory, we either need TDX private
+>   : memory to have an HVA or we need file-based equivalents. Arguably we should add
+>   : fmove_pages and fbind syscalls anyway, since the current API is quite awkward
+>   : even for tools like numactl.
 
-As mentioned in the other patch, if that is the case, I don't think we
-need to bother about the version number in the filename and compatible
-strings, especially if a v1.0 will never be upstreamed. If there are users
-of the internal version still, they can use an explicit "v1.0" in their
-downstream versions.
+Yeah, we definitely have gaps in API wrt NUMA, but I don't think it be
+addressed in the initial submission.
 
-So apart from what Krzysztof and Clement already mentioned, the DT itself
-looks fine to me otherwise. I also ran dt-validate on it, and used it as a
-base for another F1C200s board.
+BTW, it is not regression comparing to old KVM slots, if the memory is
+backed by memfd or other file:
 
-Cheers,
-Andre
+MBIND(2)
+       The  specified policy will be ignored for any MAP_SHARED mappings in the
+       specified memory range.  Rather the pages will be allocated according to
+       the  memory  policy  of the thread that caused the page to be allocated.
+       Again, this may not be the thread that called mbind().
 
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
-> ---
-> New patch introduced in v2.
-> 
->  arch/arm/boot/dts/Makefile                    |   3 +-
->  .../boot/dts/suniv-f1c200s-popstick-v1.1.dts  | 101 ++++++++++++++++++
->  2 files changed, 103 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 6aa7dc4db2fc..0249c07bd8a6 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -1391,7 +1391,8 @@ dtb-$(CONFIG_MACH_SUN9I) += \
->  	sun9i-a80-optimus.dtb \
->  	sun9i-a80-cubieboard4.dtb
->  dtb-$(CONFIG_MACH_SUNIV) += \
-> -	suniv-f1c100s-licheepi-nano.dtb
-> +	suniv-f1c100s-licheepi-nano.dtb \
-> +	suniv-f1c200s-popstick-v1.1.dtb
->  dtb-$(CONFIG_ARCH_TEGRA_2x_SOC) += \
->  	tegra20-acer-a500-picasso.dtb \
->  	tegra20-asus-tf101.dtb \
-> diff --git a/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> new file mode 100644
-> index 000000000000..121dfc6f609d
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/suniv-f1c200s-popstick-v1.1.dts
-> @@ -0,0 +1,101 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright 2022 Icenowy Zheng <uwu@icenowy.me>
-> + */
-> +
-> +/dts-v1/;
-> +#include "suniv-f1c100s.dtsi"
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/leds/common.h>
-> +
-> +/ {
-> +	model = "Popcorn Computer PopStick v1.1";
-> +	compatible = "sourceparts,popstick-v1.1", "sourceparts,popstick",
-> +		     "allwinner,suniv-f1c200s", "allwinner,suniv-f1c100s";
-> +
-> +	aliases {
-> +		mmc0 = &mmc0;
-> +		serial0 = &uart0;
-> +		spi0 = &spi0;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +
-> +		led {
-> +			function = LED_FUNCTION_STATUS;
-> +			color = <LED_COLOR_ID_GREEN>;
-> +			gpios = <&pio 4 6 GPIO_ACTIVE_HIGH>; /* PE6 */
-> +			linux,default-trigger = "heartbeat";
-> +		};
-> +	};
-> +
-> +	reg_vcc3v3: vcc3v3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "vcc3v3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +	};
-> +};
-> +
-> +&mmc0 {
-> +	cd-gpios = <&pio 4 3 GPIO_ACTIVE_LOW>; /* PE3 */
-> +	bus-width = <4>;
-> +	disable-wp;
-> +	status = "okay";
-> +	vmmc-supply = <&reg_vcc3v3>;
-> +};
-> +
-> +&spi0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&spi0_pc_pins>;
-> +	status = "okay";
-> +
-> +	flash@0 {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		compatible = "spi-nand";
-> +		reg = <0>;
-> +		spi-max-frequency = <40000000>;
-> +
-> +		partitions {
-> +			compatible = "fixed-partitions";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +
-> +			partition@0 {
-> +				label = "u-boot-with-spl";
-> +				reg = <0x0 0x100000>;
-> +			};
-> +
-> +			ubi@100000 {
-> +				label = "ubi";
-> +				reg = <0x100000 0x7f00000>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&otg_sram {
-> +	status = "okay";
-> +};
-> +
-> +&uart0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&uart0_pe_pins>;
-> +	status = "okay";
-> +};
-> +
-> +&usb_otg {
-> +	dr_mode = "peripheral";
-> +	status = "okay";
-> +};
-> +
-> +&usbphy {
-> +	status = "okay";
-> +};
+It is not clear how to define fbind(2) semantics, considering that multiple
+processes may compete for the same region of page cache.
 
+Should it be per-inode or per-fd? Or maybe per-range in inode/fd?
+
+fmove_pages(2) should be relatively straight forward, since it is
+best-effort and does not guarantee that the page will note be moved
+somewhare else just after return from the syscall.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
