@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0366E60A9E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:26:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B454460AA7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbiJXN0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
+        id S236152AbiJXNey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbiJXNXb (ORCPT
+        with ESMTP id S236234AbiJXNaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:23:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238095FF5D;
-        Mon, 24 Oct 2022 05:30:14 -0700 (PDT)
+        Mon, 24 Oct 2022 09:30:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F750ACA33;
+        Mon, 24 Oct 2022 05:33:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EE45612FD;
-        Mon, 24 Oct 2022 12:28:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E9DEC433D6;
-        Mon, 24 Oct 2022 12:28:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12EA36125D;
+        Mon, 24 Oct 2022 12:13:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2408DC433D6;
+        Mon, 24 Oct 2022 12:13:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614536;
-        bh=GkeTiV1jLGPSKAFxenl8FDBEIWxxDohqsgMKG+3O+rU=;
+        s=korg; t=1666613589;
+        bh=ftzICmIaYa6X+2Y3LTRSb2ARZqMPbOVnX0qX51ONXuM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s9vHXgRqDGbfWiqHs65y3LPodk1MWLaS7dB9vvJ3pyaa+2TgAi7W0WVsAmOHkuLM2
-         dTnEfI469rdllQM3D/67oQTldyKCCIUqS95Ul0RSQ2NYk3UJ13mZujyGBw1Er8PlBW
-         V5SN1lnXgBBN7LtDFUyzhvb2uvMH0gOPyEH2g44Q=
+        b=GoOQgGqpYAACXTO33lAzdSfdfxeBvbAfyXjTG0+3PccdsSkN0gIL5u6WNRxO4cdl3
+         etsV3lxNey1AJjxcNU/qT968uBUnqm9ClDd288JG8HYWSY5rBlkZHQM/BThYzJxJcm
+         SnrMCS8yOjn5drHk85T9KGb766nyEgc1BfhhevKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,12 +36,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Zhang Rui <rui.zhang@intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 299/390] powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
-Date:   Mon, 24 Oct 2022 13:31:36 +0200
-Message-Id: <20221024113035.746902883@linuxfoundation.org>
+Subject: [PATCH 5.4 187/255] powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
+Date:   Mon, 24 Oct 2022 13:31:37 +0200
+Message-Id: <20221024113009.157135825@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index a13a07f475d2..285420c1eb7c 100644
+index 925b0004a0ed..d5a505f32260 100644
 --- a/drivers/powercap/intel_rapl_common.c
 +++ b/drivers/powercap/intel_rapl_common.c
-@@ -938,6 +938,9 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
+@@ -885,6 +885,9 @@ static u64 rapl_compute_time_window_core(struct rapl_package *rp, u64 value,
  		y = value & 0x1f;
  		value = (1 << y) * (4 + f) * rp->time_unit / 4;
  	} else {
