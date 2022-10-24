@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F99960A4D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D7660A75E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233140AbiJXMQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S234798AbiJXMt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233314AbiJXMOs (ORCPT
+        with ESMTP id S234462AbiJXMox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:14:48 -0400
+        Mon, 24 Oct 2022 08:44:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC2DBF44;
-        Mon, 24 Oct 2022 04:55:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA848D0F8;
+        Mon, 24 Oct 2022 05:09:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CD686129E;
-        Mon, 24 Oct 2022 11:55:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5219C433C1;
-        Mon, 24 Oct 2022 11:55:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3489D612B7;
+        Mon, 24 Oct 2022 11:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4994AC433C1;
+        Mon, 24 Oct 2022 11:45:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612502;
-        bh=H6SVqnoMJtqjUi9uRgeMH0tCUlsjckGSZG/7dl6Ssrk=;
+        s=korg; t=1666611951;
+        bh=Pn7N0lDbqubT2jqOC+Riwc4YjEZ/kjT5mCm8lUm7QKI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ayFnQDQmhBpqWgNGpgoUyhzD+ywSIQTd8SLlGcQ8MguSV5C5gObw6+NwJRu4TD500
-         NJEflaYTTWyxwpxM2i1ROWh2UDVa3GLRi3pGMbbtmgiK1pV9lIBHmMwdJRTPAjchdu
-         hN4K62B4JXr0dbZcU0sjGH30JmVaOns5HN+DvJxA=
+        b=Fo5yRuJZHWAGbrfDmRTtu7chlxQx86upJ4bfEt0YIvvZNnSZ6Ft07R5U5Yv9fcU15
+         CllOm85aTVxSskXPyCfYCsy5BIb5Qsz4AMuAfqp+rXbd5m4KcXmPXAa2Q4vHsW8l2A
+         OKqCRog0ukusQFUoCrtaUeTT1WpLOexx1pJCjk1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Straub <lukasstraub2@web.de>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org, Peilin Ye <peilin.ye@bytedance.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 4.19 012/229] um: Cleanup compiler warning in arch/x86/um/tls_32.c
+        syzbot+dcd3e13cf4472f2e0ba1@syzkaller.appspotmail.com
+Subject: [PATCH 4.14 014/210] usbnet: Fix memory leak in usbnet_disconnect()
 Date:   Mon, 24 Oct 2022 13:28:51 +0200
-Message-Id: <20221024112959.535925369@linuxfoundation.org>
+Message-Id: <20221024112957.386708469@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Straub <lukasstraub2@web.de>
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-[ Upstream commit d27fff3499671dc23a08efd01cdb8b3764a391c4 ]
+[ Upstream commit a43206156263fbaf1f2b7f96257441f331e91bb7 ]
 
-arch.tls_array is statically allocated so checking for NULL doesn't
-make sense. This causes the compiler warning below.
+Currently usbnet_disconnect() unanchors and frees all deferred URBs
+using usb_scuttle_anchored_urbs(), which does not free urb->context,
+causing a memory leak as reported by syzbot.
 
-Remove the checks to silence these warnings.
+Use a usb_get_from_anchor() while loop instead, similar to what we did
+in commit 19cfe912c37b ("Bluetooth: btusb: Fix memory leak in
+play_deferred").  Also free urb->sg.
 
-../arch/x86/um/tls_32.c: In function 'get_free_idx':
-../arch/x86/um/tls_32.c:68:13: warning: the comparison will always evaluate as 'true' for the address of 'tls_array' will never be NULL [-Waddress]
-   68 |         if (!t->arch.tls_array)
-      |             ^
-In file included from ../arch/x86/um/asm/processor.h:10,
-                 from ../include/linux/rcupdate.h:30,
-                 from ../include/linux/rculist.h:11,
-                 from ../include/linux/pid.h:5,
-                 from ../include/linux/sched.h:14,
-                 from ../arch/x86/um/tls_32.c:7:
-../arch/x86/um/asm/processor_32.h:22:31: note: 'tls_array' declared here
-   22 |         struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-      |                               ^~~~~~~~~
-../arch/x86/um/tls_32.c: In function 'get_tls_entry':
-../arch/x86/um/tls_32.c:243:13: warning: the comparison will always evaluate as 'true' for the address of 'tls_array' will never be NULL [-Waddress]
-  243 |         if (!t->arch.tls_array)
-      |             ^
-../arch/x86/um/asm/processor_32.h:22:31: note: 'tls_array' declared here
-   22 |         struct uml_tls_struct tls_array[GDT_ENTRY_TLS_ENTRIES];
-      |                               ^~~~~~~~~
-
-Signed-off-by: Lukas Straub <lukasstraub2@web.de>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Reported-and-tested-by: syzbot+dcd3e13cf4472f2e0ba1@syzkaller.appspotmail.com
+Fixes: 69ee472f2706 ("usbnet & cdc-ether: Autosuspend for online devices")
+Fixes: 638c5115a794 ("USBNET: support DMA SG")
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Link: https://lore.kernel.org/r/20220923042551.2745-1-yepeilin.cs@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/um/tls_32.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/net/usb/usbnet.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/um/tls_32.c b/arch/x86/um/tls_32.c
-index 5bd949da7a4a..b69ab2409430 100644
---- a/arch/x86/um/tls_32.c
-+++ b/arch/x86/um/tls_32.c
-@@ -65,9 +65,6 @@ static int get_free_idx(struct task_struct* task)
- 	struct thread_struct *t = &task->thread;
- 	int idx;
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 69be3593bc0e..71b026277b30 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1598,6 +1598,7 @@ void usbnet_disconnect (struct usb_interface *intf)
+ 	struct usbnet		*dev;
+ 	struct usb_device	*xdev;
+ 	struct net_device	*net;
++	struct urb		*urb;
  
--	if (!t->arch.tls_array)
--		return GDT_ENTRY_TLS_MIN;
--
- 	for (idx = 0; idx < GDT_ENTRY_TLS_ENTRIES; idx++)
- 		if (!t->arch.tls_array[idx].present)
- 			return idx + GDT_ENTRY_TLS_MIN;
-@@ -242,9 +239,6 @@ static int get_tls_entry(struct task_struct *task, struct user_desc *info,
- {
- 	struct thread_struct *t = &task->thread;
+ 	dev = usb_get_intfdata(intf);
+ 	usb_set_intfdata(intf, NULL);
+@@ -1614,7 +1615,11 @@ void usbnet_disconnect (struct usb_interface *intf)
+ 	net = dev->net;
+ 	unregister_netdev (net);
  
--	if (!t->arch.tls_array)
--		goto clear;
--
- 	if (idx < GDT_ENTRY_TLS_MIN || idx > GDT_ENTRY_TLS_MAX)
- 		return -EINVAL;
+-	usb_scuttle_anchored_urbs(&dev->deferred);
++	while ((urb = usb_get_from_anchor(&dev->deferred))) {
++		dev_kfree_skb(urb->context);
++		kfree(urb->sg);
++		usb_free_urb(urb);
++	}
  
+ 	if (dev->driver_info->unbind)
+ 		dev->driver_info->unbind (dev, intf);
 -- 
 2.35.1
 
