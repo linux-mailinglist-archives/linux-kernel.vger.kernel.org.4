@@ -2,85 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A28D6099CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 07:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A7C6099CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 07:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbiJXF1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 01:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
+        id S229867AbiJXF2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 01:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJXF1K (ORCPT
+        with ESMTP id S229562AbiJXF2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 01:27:10 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59C5792F6
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 22:27:09 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h9so3279745wrt.0
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 22:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w5Oed4FLXZSHIXrhxz7E5m4+ZCPArxpCCi/TgMyIPwo=;
-        b=QRYyx+qb2r46G5UaaAn13RjXzEyBlk3VtKG/cfiEgxjyPM5J5SPoEYqPIE7eO8vWTi
-         tSZoA5AYyjTD1sknUYSCDg2nP8I/3M5CGf6qFJM4imJZqQVYYZpeBqvvTYXzrwqq1fUI
-         eTbO8Fipp6N/HopSd3aZyhXXZkuaerpSdmzta0w8h+1s9iNg8e+VvGXg9LTv40GdKojC
-         qGZhfGwxqrf6hTprlMOZ2WOX7juKtnLP2XUhzwpVfL2eO7uSj4lChMgn5JlPa/7RLMxG
-         54vEvKr7twK7v8qZ/B9yhL0NPwX2H3S1G4Z8+i/stlI9jDQe01O6fck1C3i3VbAy9FPg
-         zFbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w5Oed4FLXZSHIXrhxz7E5m4+ZCPArxpCCi/TgMyIPwo=;
-        b=O4YzM+3LPb2tgD/5jUpPGps7bWfD0FBuiuPTHoEFR/KqZKguGIwgqXElszCXPlyvgp
-         gq+3bcv/UdO4P/K14hv2tdlaJreXgWUDfpu2eHv7/WMC/FomYQl/3ZlmjpTnpiKu3rt+
-         8GzWuGNUmJZw7ZMySSfD7n+yJgB9jnSJRLgyUbQ/OWn57rq+eDOtl9Au9mRR3c2juS7E
-         jF3nAhNwYoMcBm7/52WPmumiiPGV1A8i3IhgDrHQ04PUKPGrIh0CZCojgEhuCxvB15WW
-         hkHsNDfj4WR0Pz+zsN5Ksv2daf80Jl3yID+HJvMiqPnKlw2NapRbEMowwKLFpNMYSKT0
-         BGBw==
-X-Gm-Message-State: ACrzQf1HIGgvRPdUscSY/Hh1SwPfptPzR1qmj3n3ChmnM36PaaN8i1t3
-        0lJ6Bt2ZUJ6X2VadKLGAyeYEvg==
-X-Google-Smtp-Source: AMsMyM4KljTG8mMrDvY9fJihFWxdpLDCnX/Z0O4o+TtWrzj/KPbWefswclqhtu5vKtVXacd8QYv1yQ==
-X-Received: by 2002:a05:6000:1a41:b0:22e:3667:d306 with SMTP id t1-20020a0560001a4100b0022e3667d306mr19786350wry.21.1666589228553;
-        Sun, 23 Oct 2022 22:27:08 -0700 (PDT)
-Received: from [10.50.0.10] (ec2-54-194-108-71.eu-west-1.compute.amazonaws.com. [54.194.108.71])
-        by smtp.gmail.com with ESMTPSA id i9-20020a1c5409000000b003b4868eb71bsm6995337wmb.25.2022.10.23.22.27.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Oct 2022 22:27:08 -0700 (PDT)
-Message-ID: <a962a5c6-50f1-55e5-c865-47a417ea22b6@linaro.org>
-Date:   Mon, 24 Oct 2022 07:27:06 +0200
+        Mon, 24 Oct 2022 01:28:36 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7DEC7B29E;
+        Sun, 23 Oct 2022 22:28:34 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id F082D822A;
+        Mon, 24 Oct 2022 05:19:19 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 08:28:32 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH] serial: 8250_omap: remove wait loop from Errata i202
+ workaround
+Message-ID: <Y1YigD1lEWRbT8eH@atomide.com>
+References: <20221013112339.2540767-1-matthias.schiffer@ew.tq-group.com>
+ <ea90b0ba-61bf-e56e-5120-9771122838cf@linux.intel.com>
+ <Y00bmec4hvWxtnB5@linutronix.de>
+ <c91216ec-c7e7-df7b-463-ec17c76b7bc2@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-Subject: Re: [PATCH] drivers/irqchip: fix repeated words in comments
-Content-Language: en-US
-To:     wangjianli <wangjianli@cdjrlc.com>, tsbogend@alpha.franken.de,
-        fancer.lancer@gmail.com, tglx@linutronix.de, maz@kernel.org
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221022054655.36496-1-wangjianli@cdjrlc.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221022054655.36496-1-wangjianli@cdjrlc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c91216ec-c7e7-df7b-463-ec17c76b7bc2@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/10/22 07:46, wangjianli wrote:
-> Delete the redundant word 'the'.
+Hi,
+
+Adding Nishanth to Cc also.
+
+* Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> [221017 12:06]:
+> On Mon, 17 Oct 2022, Sebastian Andrzej Siewior wrote:
 > 
-> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
-> ---
->   drivers/irqchip/irq-mips-gic.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> > On 2022-10-17 11:12:41 [+0300], Ilpo Järvinen wrote:
+> > > On Thu, 13 Oct 2022, Matthias Schiffer wrote:
+> > > 
+> > > > We were occasionally seeing the "Errata i202: timedout" on an AM335x
+> > > > board when repeatedly opening and closing a UART connected to an active
+> > > > sender. As new input may arrive at any time, it is possible to miss the
+> > > > "RX FIFO empty" condition, forcing the loop to wait until it times out.
+> > > 
+> > > I can see this problem could occur and why your patch fixes it.
+> > > 
+> > > > Nothing in the i202 Advisory states that such a wait is even necessary;
+> > > > other FIFO clear functions like serial8250_clear_fifos() do not wait
+> > > > either. For this reason, it seems safe to remove the wait, fixing the
+> > > > mentioned issue.
+> > > 
+> > > Checking the commit that added this driver and the loop along with it, 
+> > > there was no information why it would be needed there either.
+> > 
+> > I don't remember all the details but I do remember that I never hit it.
+> > The idea back then was to document what appears the problem and then
+> > once there is a reproducer address it _or_ when there is another problem
+> > check if it aligns with the output here (so that _this_ problem's origin
+> > could be this). This was part of address all known chip erratas and
+> > copied from omap-serial at the time so that the 8250 does not miss
+> > anything.
+> > Looking closer, this is still part of the omap-serial driver and it was
+> > introduced in commit
+> >    0003450964357 ("omap2/3/4: serial: errata i202: fix for MDR1 access")
+> 
+> I found that one too but it doesn't give any explanation for it either.
+> In fact, the wait for empty is mysteriously missing from the itemized
+> description of the workaround in the commit message.
+> 
+> > If someone found a way to trigger this output which is unrelated to the
+> > expected cause then this is clearly not helping nor intended.
+> > 
+> > I would prefer to keep the loop and replace the disturbing output with a
+> > comment describing _why_ the FIFO might remain non-empty after a flush.
+> > 
+> > In worst cases that loop causes a delay of less than 0.5ms while setting
+> > a baud rate so I doubt that this is causing a real problem.
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+This sounds like a safe solution for me if it's needed.
 
+> > Either way I would like to see Tony's ACK before this is getting removed
+> > as suggested in this patch.
+> 
+> Thanks for chimming in.
+> 
+> I went to do some lore searching and came across this thread (it should 
+> be added with Link: tag the patch regardless of its final form):
+>   https://lore.kernel.org/linux-omap/4BBF61FE.3060807@ti.com/
+
+Nishanth, do you have any more info on checking for fifo empty here?
+
+Regards,
+
+Tony
