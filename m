@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4508E60A8EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ACA460AB68
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235742AbiJXNMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        id S236604AbiJXNvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbiJXNJH (ORCPT
+        with ESMTP id S236575AbiJXNvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:09:07 -0400
+        Mon, 24 Oct 2022 09:51:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661269E6A4;
-        Mon, 24 Oct 2022 05:22:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE88AB8C07;
+        Mon, 24 Oct 2022 05:41:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78DEB612A8;
-        Mon, 24 Oct 2022 12:21:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86202C433C1;
-        Mon, 24 Oct 2022 12:21:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DF64612B2;
+        Mon, 24 Oct 2022 12:41:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA59C433C1;
+        Mon, 24 Oct 2022 12:41:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614092;
-        bh=mmJf2WmHjYvNc14I4worNIpdJc0e+5xAMFPez2Swz+o=;
+        s=korg; t=1666615261;
+        bh=TWFTvW4p2Dpztexkc4b7jVTIaJVik71BVBhYgVSQ+ls=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YoebTVL3mwfN/JVgxnzwG2dNVKyb7WL0gfxjxVWcHNvehJMzWyqrMHdxekbterUYT
-         EvEa7dExeS3LDM3LkRqJ+7kJsqmxR6xHrBqzppI0R8kfwqc2UVuxvFglrl4hs7yWAV
-         GxQI0qP3EME1X+Ql8aw6SZh2scNo1StVtx+CupAs=
+        b=WTxV9dj8KIMcsV+AlyY4ogaypRSDPRiCGn8SHVrTEyNg5Natb+x91ExZmreQXROIv
+         UjU31MMTJvB4PVcmmkLPz394ZhgzuaDRa4YkIBfZQb4JrY+dXd7eKcLinXkkQkCCpD
+         1L6kpl52rwdm51klfU/LMSyA7fXQupAXOAa+ykps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-        Jes Sorensen <jes@trained-monkey.org>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 130/390] wifi: rtl8xxxu: Fix AIFS written to REG_EDCA_*_PARAM
+        stable@vger.kernel.org,
+        Jesus Fernandez Manzano <jesus.manzano@galgus.net>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 183/530] wifi: ath11k: fix number of VHT beamformee spatial streams
 Date:   Mon, 24 Oct 2022 13:28:47 +0200
-Message-Id: <20221024113028.213257065@linuxfoundation.org>
+Message-Id: <20221024113053.314122890@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,96 +55,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+From: Jesus Fernandez Manzano <jesus.manzano@galgus.net>
 
-[ Upstream commit 5574d3290449916397f3092dcd2bac92415498e1 ]
+[ Upstream commit 55b5ee3357d7bb98ee578cf9b84a652e7a1bc199 ]
 
-ieee80211_tx_queue_params.aifs is not supposed to be written directly
-to the REG_EDCA_*_PARAM registers. Instead process it like the vendor
-drivers do. It's kinda hacky but it works.
+The number of spatial streams used when acting as a beamformee in VHT
+mode are reported by the firmware as 7 (8 sts - 1) both in IPQ6018 and
+IPQ8074 which respectively have 2 and 4 sts each. So the firmware should
+report 1 (2 - 1) and 3 (4 - 1).
 
-This change boosts the download speed and makes it more stable.
+Fix this by checking that the number of VHT beamformee sts reported by
+the firmware is not greater than the number of receiving antennas - 1.
+The fix is based on the same approach used in this same function for
+sanitizing the number of sounding dimensions reported by the firmware.
 
-Tested with RTL8188FU but all the other supported chips should also
-benefit.
+Without this change, acting as a beamformee in VHT mode is not working
+properly.
 
-Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
-Signed-off-by: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-Acked-by: Jes Sorensen <jes@trained-monkey.org>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/038cc03f-3567-77ba-a7bd-c4930e3b2fad@gmail.com
+Tested-on: IPQ6018 hw1.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
+Tested-on: IPQ8074 hw2.0 AHB WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
+
+Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
+Signed-off-by: Jesus Fernandez Manzano <jesus.manzano@galgus.net>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220616173947.21901-1-jesus.manzano@galgus.net
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ drivers/net/wireless/ath/ath11k/mac.c | 25 ++++++++++++++++++++-----
+ 1 file changed, 20 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index 7818a7ea0498..e34cd6fed7e8 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -4507,6 +4507,53 @@ rtl8xxxu_wireless_mode(struct ieee80211_hw *hw, struct ieee80211_sta *sta)
- 	return network_type;
- }
- 
-+static void rtl8xxxu_set_aifs(struct rtl8xxxu_priv *priv, u8 slot_time)
-+{
-+	u32 reg_edca_param[IEEE80211_NUM_ACS] = {
-+		[IEEE80211_AC_VO] = REG_EDCA_VO_PARAM,
-+		[IEEE80211_AC_VI] = REG_EDCA_VI_PARAM,
-+		[IEEE80211_AC_BE] = REG_EDCA_BE_PARAM,
-+		[IEEE80211_AC_BK] = REG_EDCA_BK_PARAM,
-+	};
-+	u32 val32;
-+	u16 wireless_mode = 0;
-+	u8 aifs, aifsn, sifs;
-+	int i;
-+
-+	if (priv->vif) {
-+		struct ieee80211_sta *sta;
-+
-+		rcu_read_lock();
-+		sta = ieee80211_find_sta(priv->vif, priv->vif->bss_conf.bssid);
-+		if (sta)
-+			wireless_mode = rtl8xxxu_wireless_mode(priv->hw, sta);
-+		rcu_read_unlock();
-+	}
-+
-+	if (priv->hw->conf.chandef.chan->band == NL80211_BAND_5GHZ ||
-+	    (wireless_mode & WIRELESS_MODE_N_24G))
-+		sifs = 16;
-+	else
-+		sifs = 10;
-+
-+	for (i = 0; i < IEEE80211_NUM_ACS; i++) {
-+		val32 = rtl8xxxu_read32(priv, reg_edca_param[i]);
-+
-+		/* It was set in conf_tx. */
-+		aifsn = val32 & 0xff;
-+
-+		/* aifsn not set yet or already fixed */
-+		if (aifsn < 2 || aifsn > 15)
-+			continue;
-+
-+		aifs = aifsn * slot_time + sifs;
-+
-+		val32 &= ~0xff;
-+		val32 |= aifs;
-+		rtl8xxxu_write32(priv, reg_edca_param[i], val32);
-+	}
-+}
-+
- static void
- rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
- 			  struct ieee80211_bss_conf *bss_conf, u32 changed)
-@@ -4592,6 +4639,8 @@ rtl8xxxu_bss_info_changed(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
- 		else
- 			val8 = 20;
- 		rtl8xxxu_write8(priv, REG_SLOT, val8);
-+
-+		rtl8xxxu_set_aifs(priv, val8);
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index c7ee373a9d2c..ae6e14fe03c7 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -3684,6 +3684,8 @@ static int ath11k_mac_set_txbf_conf(struct ath11k_vif *arvif)
+ 	if (vht_cap & (IEEE80211_VHT_CAP_SU_BEAMFORMEE_CAPABLE)) {
+ 		nsts = vht_cap & IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK;
+ 		nsts >>= IEEE80211_VHT_CAP_BEAMFORMEE_STS_SHIFT;
++		if (nsts > (ar->num_rx_chains - 1))
++			nsts = ar->num_rx_chains - 1;
+ 		value |= SM(nsts, WMI_TXBF_STS_CAP_OFFSET);
  	}
  
- 	if (changed & BSS_CHANGED_BSSID) {
+@@ -3724,7 +3726,7 @@ static int ath11k_mac_set_txbf_conf(struct ath11k_vif *arvif)
+ static void ath11k_set_vht_txbf_cap(struct ath11k *ar, u32 *vht_cap)
+ {
+ 	bool subfer, subfee;
+-	int sound_dim = 0;
++	int sound_dim = 0, nsts = 0;
+ 
+ 	subfer = !!(*vht_cap & (IEEE80211_VHT_CAP_SU_BEAMFORMER_CAPABLE));
+ 	subfee = !!(*vht_cap & (IEEE80211_VHT_CAP_SU_BEAMFORMEE_CAPABLE));
+@@ -3734,6 +3736,11 @@ static void ath11k_set_vht_txbf_cap(struct ath11k *ar, u32 *vht_cap)
+ 		subfer = false;
+ 	}
+ 
++	if (ar->num_rx_chains < 2) {
++		*vht_cap &= ~(IEEE80211_VHT_CAP_SU_BEAMFORMEE_CAPABLE);
++		subfee = false;
++	}
++
+ 	/* If SU Beaformer is not set, then disable MU Beamformer Capability */
+ 	if (!subfer)
+ 		*vht_cap &= ~(IEEE80211_VHT_CAP_MU_BEAMFORMER_CAPABLE);
+@@ -3746,7 +3753,9 @@ static void ath11k_set_vht_txbf_cap(struct ath11k *ar, u32 *vht_cap)
+ 	sound_dim >>= IEEE80211_VHT_CAP_SOUNDING_DIMENSIONS_SHIFT;
+ 	*vht_cap &= ~IEEE80211_VHT_CAP_SOUNDING_DIMENSIONS_MASK;
+ 
+-	/* TODO: Need to check invalid STS and Sound_dim values set by FW? */
++	nsts = (*vht_cap & IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK);
++	nsts >>= IEEE80211_VHT_CAP_BEAMFORMEE_STS_SHIFT;
++	*vht_cap &= ~IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK;
+ 
+ 	/* Enable Sounding Dimension Field only if SU BF is enabled */
+ 	if (subfer) {
+@@ -3758,9 +3767,15 @@ static void ath11k_set_vht_txbf_cap(struct ath11k *ar, u32 *vht_cap)
+ 		*vht_cap |= sound_dim;
+ 	}
+ 
+-	/* Use the STS advertised by FW unless SU Beamformee is not supported*/
+-	if (!subfee)
+-		*vht_cap &= ~(IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK);
++	/* Enable Beamformee STS Field only if SU BF is enabled */
++	if (subfee) {
++		if (nsts > (ar->num_rx_chains - 1))
++			nsts = ar->num_rx_chains - 1;
++
++		nsts <<= IEEE80211_VHT_CAP_BEAMFORMEE_STS_SHIFT;
++		nsts &=  IEEE80211_VHT_CAP_BEAMFORMEE_STS_MASK;
++		*vht_cap |= nsts;
++	}
+ }
+ 
+ static struct ieee80211_sta_vht_cap
 -- 
 2.35.1
 
