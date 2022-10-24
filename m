@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5363660B227
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D09A60B1EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbiJXQnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S231356AbiJXQkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234635AbiJXQmP (ORCPT
+        with ESMTP id S234406AbiJXQkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:42:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E11814D2;
-        Mon, 24 Oct 2022 08:29:18 -0700 (PDT)
+        Mon, 24 Oct 2022 12:40:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDC47FE45;
+        Mon, 24 Oct 2022 08:27:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DCB7B811B2;
-        Mon, 24 Oct 2022 12:08:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE3FC433D6;
-        Mon, 24 Oct 2022 12:08:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9C47B81283;
+        Mon, 24 Oct 2022 12:08:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 067E1C433D6;
+        Mon, 24 Oct 2022 12:08:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613282;
-        bh=L3nu73DTIBY+iOWWvmkHwnjOgqxSoPaiZ7zV+CQG90w=;
+        s=korg; t=1666613287;
+        bh=TfChbMCsTu4vpxNOhnTfgPYTaYOSftYhqzKHw1VLQlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QBgRQyzUjefCjRL85fqAXrbKxLI9lzjwQ7PJ61d2l+zgVFKsvKTx8Kt7T3ze4W6Rt
-         OmuLMQ2q+GwYP1/OrsCjJes8e/ZNJxP4FyoP1blslKlYHcR5it/yShhiKeN5dPblWP
-         wn2VEl6dTc3rcij6sYrwMYa1uXushT4dYfN0Manw=
+        b=K8mKVWlC24HmN4AAuEnTUf6aivEinycRgYJDcanmRxW4+eUH+5o5ApqNX43nF/dmH
+         eiDH4XLLC7axx67QHXyq37tEWB9CSnXH+aCKPHAb2aKxBUxI3SSzHeXdYbU8r+6Y0I
+         kZAgPqpsssUwfCbL/G9aQ9KTXX1oT5dmdIm56nbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Phil Sutter <phil@nwl.cc>,
-        Florian Westphal <fw@strlen.de>,
+        stable@vger.kernel.org, Junichi Uekawa <uekawa@chromium.org>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 077/255] netfilter: nft_fib: Fix for rpath check with VRF devices
-Date:   Mon, 24 Oct 2022 13:29:47 +0200
-Message-Id: <20221024113005.068677117@linuxfoundation.org>
+Subject: [PATCH 5.4 079/255] vhost/vsock: Use kvmalloc/kvfree for larger packets.
+Date:   Mon, 24 Oct 2022 13:29:49 +0200
+Message-Id: <20221024113005.139831763@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
 References: <20221024113002.471093005@linuxfoundation.org>
@@ -54,62 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Phil Sutter <phil@nwl.cc>
+From: Junichi Uekawa <uekawa@chromium.org>
 
-[ Upstream commit 2a8a7c0eaa8747c16aa4a48d573aa920d5c00a5c ]
+[ Upstream commit 0e3f72931fc47bb81686020cc643cde5d9cd0bb8 ]
 
-Analogous to commit b575b24b8eee3 ("netfilter: Fix rpfilter
-dropping vrf packets by mistake") but for nftables fib expression:
-Add special treatment of VRF devices so that typical reverse path
-filtering via 'fib saddr . iif oif' expression works as expected.
+When copying a large file over sftp over vsock, data size is usually 32kB,
+and kmalloc seems to fail to try to allocate 32 32kB regions.
 
-Fixes: f6d0cbcf09c50 ("netfilter: nf_tables: add fib expression")
-Signed-off-by: Phil Sutter <phil@nwl.cc>
-Signed-off-by: Florian Westphal <fw@strlen.de>
+ vhost-5837: page allocation failure: order:4, mode:0x24040c0
+ Call Trace:
+  [<ffffffffb6a0df64>] dump_stack+0x97/0xdb
+  [<ffffffffb68d6aed>] warn_alloc_failed+0x10f/0x138
+  [<ffffffffb68d868a>] ? __alloc_pages_direct_compact+0x38/0xc8
+  [<ffffffffb664619f>] __alloc_pages_nodemask+0x84c/0x90d
+  [<ffffffffb6646e56>] alloc_kmem_pages+0x17/0x19
+  [<ffffffffb6653a26>] kmalloc_order_trace+0x2b/0xdb
+  [<ffffffffb66682f3>] __kmalloc+0x177/0x1f7
+  [<ffffffffb66e0d94>] ? copy_from_iter+0x8d/0x31d
+  [<ffffffffc0689ab7>] vhost_vsock_handle_tx_kick+0x1fa/0x301 [vhost_vsock]
+  [<ffffffffc06828d9>] vhost_worker+0xf7/0x157 [vhost]
+  [<ffffffffb683ddce>] kthread+0xfd/0x105
+  [<ffffffffc06827e2>] ? vhost_dev_set_owner+0x22e/0x22e [vhost]
+  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+  [<ffffffffb6eb332e>] ret_from_fork+0x4e/0x80
+  [<ffffffffb683dcd1>] ? flush_kthread_worker+0xf3/0xf3
+
+Work around by doing kvmalloc instead.
+
+Fixes: 433fc58e6bf2 ("VSOCK: Introduce vhost_vsock.ko")
+Signed-off-by: Junichi Uekawa <uekawa@chromium.org>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Link: https://lore.kernel.org/r/20220928064538.667678-1-uekawa@chromium.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/netfilter/nft_fib_ipv4.c | 3 +++
- net/ipv6/netfilter/nft_fib_ipv6.c | 6 +++++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ drivers/vhost/vsock.c                   | 2 +-
+ net/vmw_vsock/virtio_transport_common.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/ipv4/netfilter/nft_fib_ipv4.c b/net/ipv4/netfilter/nft_fib_ipv4.c
-index ce294113dbcd..85eac5aa5204 100644
---- a/net/ipv4/netfilter/nft_fib_ipv4.c
-+++ b/net/ipv4/netfilter/nft_fib_ipv4.c
-@@ -83,6 +83,9 @@ void nft_fib4_eval(const struct nft_expr *expr, struct nft_regs *regs,
- 	else
- 		oif = NULL;
- 
-+	if (priv->flags & NFTA_FIB_F_IIF)
-+		fl4.flowi4_oif = l3mdev_master_ifindex_rcu(oif);
-+
- 	if (nft_hook(pkt) == NF_INET_PRE_ROUTING &&
- 	    nft_fib_is_loopback(pkt->skb, nft_in(pkt))) {
- 		nft_fib_store_result(dest, priv, nft_in(pkt));
-diff --git a/net/ipv6/netfilter/nft_fib_ipv6.c b/net/ipv6/netfilter/nft_fib_ipv6.c
-index 7ece86afd079..03dbd16f9ad5 100644
---- a/net/ipv6/netfilter/nft_fib_ipv6.c
-+++ b/net/ipv6/netfilter/nft_fib_ipv6.c
-@@ -37,6 +37,9 @@ static int nft_fib6_flowi_init(struct flowi6 *fl6, const struct nft_fib *priv,
- 	if (ipv6_addr_type(&fl6->daddr) & IPV6_ADDR_LINKLOCAL) {
- 		lookup_flags |= RT6_LOOKUP_F_IFACE;
- 		fl6->flowi6_oif = get_ifindex(dev ? dev : pkt->skb->dev);
-+	} else if ((priv->flags & NFTA_FIB_F_IIF) &&
-+		   (netif_is_l3_master(dev) || netif_is_l3_slave(dev))) {
-+		fl6->flowi6_oif = dev->ifindex;
+diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+index 308df62655dd..64806e562bf6 100644
+--- a/drivers/vhost/vsock.c
++++ b/drivers/vhost/vsock.c
+@@ -353,7 +353,7 @@ vhost_vsock_alloc_pkt(struct vhost_virtqueue *vq,
+ 		return NULL;
  	}
  
- 	if (ipv6_addr_type(&fl6->saddr) & IPV6_ADDR_UNICAST)
-@@ -179,7 +182,8 @@ void nft_fib6_eval(const struct nft_expr *expr, struct nft_regs *regs,
- 	if (rt->rt6i_flags & (RTF_REJECT | RTF_ANYCAST | RTF_LOCAL))
- 		goto put_rt_err;
+-	pkt->buf = kmalloc(pkt->len, GFP_KERNEL);
++	pkt->buf = kvmalloc(pkt->len, GFP_KERNEL);
+ 	if (!pkt->buf) {
+ 		kfree(pkt);
+ 		return NULL;
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index dde16a033a09..93c11ffae92b 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -1146,7 +1146,7 @@ EXPORT_SYMBOL_GPL(virtio_transport_recv_pkt);
  
--	if (oif && oif != rt->rt6i_idev->dev)
-+	if (oif && oif != rt->rt6i_idev->dev &&
-+	    l3mdev_master_ifindex_rcu(rt->rt6i_idev->dev) != oif->ifindex)
- 		goto put_rt_err;
- 
- 	nft_fib_store_result(dest, priv, rt->rt6i_idev->dev);
+ void virtio_transport_free_pkt(struct virtio_vsock_pkt *pkt)
+ {
+-	kfree(pkt->buf);
++	kvfree(pkt->buf);
+ 	kfree(pkt);
+ }
+ EXPORT_SYMBOL_GPL(virtio_transport_free_pkt);
 -- 
 2.35.1
 
