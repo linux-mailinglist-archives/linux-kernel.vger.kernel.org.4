@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C6960BD1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB2A60BD38
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbiJXWJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S232294AbiJXWPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232252AbiJXWIa (ORCPT
+        with ESMTP id S232088AbiJXWPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:08:30 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714A8FAEC
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:21:57 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id y14so7624817ejd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:21:57 -0700 (PDT)
+        Mon, 24 Oct 2022 18:15:10 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84170309E2D
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:31:17 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id d26so7646483eje.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dERpXoQaj0B3/niiPTXBcW7nIYbTTJdlrNL1pNOuhbA=;
-        b=JaJC+7DKRq+4NBzdEOFNn1U5rl9hxBTI+AX453mXolF8xgj+HHN+E4tUb9m+9/ePwe
-         41E9wefx3R6UqxIkbY8mVi/LzCOKt4OOC5uh52m2UDqr9qDVo832N4o4lBGaSNLAvlQc
-         Ng4w3nCkvBsWIRutfPKjhIou4fZrTmHdfp2oI=
+        bh=4VHkG0IaVo65yuk+uBu9L48M8KsiGI72vU5AUm+F3qo=;
+        b=MurGtccy8HeHUSP3yRBzRa/4yl9OYQcsOhSzQEcVo2fSgZf4wFkkpYY/gXct5OWiMD
+         8I2Qp3i7WHcE4orPkBCVWfTkzn+y9E0PvfL5VYuW2onTDXV/r6Eln4ZGHOHCsoSxfO4m
+         YiVlPVOxTckIFKNans0JCIiZvVyiCQGSCO2V8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dERpXoQaj0B3/niiPTXBcW7nIYbTTJdlrNL1pNOuhbA=;
-        b=PxnnwcT1a45h7+q6nNhQ/st+GFphWOPX1pDdCd2akiY2fXB33Z3M9bJsu15xUlOmq2
-         cvn3rJrYaPiuGQUjDCiGap7CnkuCFBNStE+lv/S4YvZQMq4RLmLC1Sht+pVN9scQTtG+
-         y21TT8jG58JdJAZsq/J+3CDkrD8rwf2feGy7/vebDtWsBKVSHw+x+EolMGpOi0UOV8zz
-         OIG9SduunavjtTKlv1INDrNufN0RA5JYRN6TOHctKY3jvO/hU3SI8AE59SUtGULwTqW6
-         7PxsD65eTV87SMyi3J7iQm57YSDrlygeSlQAkBq6AM+MufBb9JFKMwywCh5bwqRplRxg
-         JzRQ==
-X-Gm-Message-State: ACrzQf1SRDf7zf28gchhQGh5b+jetFnN1gO1Yk5KLk4PH+zuUXRRMK5E
-        XCqg4B3tqcPHVu+UHzOav7SEJO7U9GSwJR5dqYJL2rHEURk=
-X-Google-Smtp-Source: AMsMyM6zgHzftfXgAJWzJydsRQHFR+KbBSbeaLnXm3nQkFJ5jn6auE82G3JQsFVB8UJBKtamZ6WrxH/Hi428/VW/VFs=
-X-Received: by 2002:a05:6402:3806:b0:450:bad8:8cd5 with SMTP id
- es6-20020a056402380600b00450bad88cd5mr33236599edb.305.1666642108991; Mon, 24
- Oct 2022 13:08:28 -0700 (PDT)
+        bh=4VHkG0IaVo65yuk+uBu9L48M8KsiGI72vU5AUm+F3qo=;
+        b=ryrAARARC5X7BdX4Wlr3kpmcNgiD5kmSfvGHBe2TEEFfaZ4RhbsJDCHB8IUSdf/3tz
+         9d/ngECZd4MSYSxT3YlY9GYga1tui+zqZIAX8x7ZcR1koKsmzPz/9NDs4DlHS0NFiIao
+         OdL/uQiTPRdlUfQzIP9CLhlNLxmpZxGl/wqXAwauvHdsSauyp/YmfgiCrASOaBdk4ORL
+         gjkfSZymUzNb0coydEhHhRq9lOkFz8Y3QI8O2ESTteQpA/uT3tJhftSHtaRBa9BY1Y4N
+         rv3iVx7andiMI+JzfoAULce8d2qD3iscoitzYTK/88AmItFCigLpfJO6WNQcuKm53k7n
+         E6ZQ==
+X-Gm-Message-State: ACrzQf2mUeE5XdO+78cJohlDxaSyCs1x4afAquqxGg8saXH5MdLUjF9s
+        LgxDTTZNfaa4S6OphECMwo+zk3H0LPLeDWs8/6S0/61NFzs=
+X-Google-Smtp-Source: AMsMyM4oRs4Ctsa8x3GgduqC9+zTstCXwvFp007mVWsaEmYY935B04d5ObwJn9HJFo6pWafyOWnLpQs5XixovrVGLZs=
+X-Received: by 2002:a17:907:3f19:b0:7a3:2317:4221 with SMTP id
+ hq25-20020a1709073f1900b007a323174221mr9593961ejc.562.1666642390915; Mon, 24
+ Oct 2022 13:13:10 -0700 (PDT)
 MIME-Version: 1.0
 References: <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
  <Y1ZtyjxKCcV0Hfjn@pc636> <Y1aDy3maaO39ClSU@pc636> <Y1ahs83258Lok9+O@google.com>
  <20221024153958.GY5600@paulmck-ThinkPad-P17-Gen-1> <Y1a8ei1h7SzyYZx9@pc636>
  <20221024164819.GA5600@paulmck-ThinkPad-P17-Gen-1> <Y1bDdP3iHoa4xqZL@pc636>
  <Y1bGcQ7RPleYp3ge@pc636> <CAEXW_YQqiD1GU7HGrv9UU6vL_MqbxVt14=rxZAKqUpK+pkPDPw@mail.gmail.com>
- <Y1bODlfqVMQivzJU@pc636>
-In-Reply-To: <Y1bODlfqVMQivzJU@pc636>
+ <20221024173558.GC5600@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20221024173558.GC5600@paulmck-ThinkPad-P17-Gen-1>
 From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 24 Oct 2022 16:08:17 -0400
-Message-ID: <CAEXW_YSRkNDhJu591S3GGQyJnCxCDJy6u_+-1Q_8z5_cQHb1Qg@mail.gmail.com>
+Date:   Mon, 24 Oct 2022 16:12:59 -0400
+Message-ID: <CAEXW_YQFNd8evWMxv=sWwZ0q28wxAwStCMgaJnDu6QM6YqqjMA@mail.gmail.com>
 Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use call_rcu_flush()
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+To:     paulmck@kernel.org
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
         linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 1:40 PM Uladzislau Rezki <urezki@gmail.com> wrote:
+On Mon, Oct 24, 2022 at 1:36 PM Paul E. McKenney <paulmck@kernel.org> wrote:
 >
 > On Mon, Oct 24, 2022 at 01:20:26PM -0400, Joel Fernandes wrote:
 > > On Mon, Oct 24, 2022 at 1:08 PM Uladzislau Rezki <urezki@gmail.com> wrote:
@@ -133,39 +132,25 @@ On Mon, Oct 24, 2022 at 1:40 PM Uladzislau Rezki <urezki@gmail.com> wrote:
 > > disturb the lazy-RCU batching by queuing these "free memory" CBs; and
 > > instead keep your improved kvfree_rcu() batching only for
 > > !CONFIG_RCU_LAZY.
-> >
 >
-> 1. Double-batching?
->
-> The kvfree_rcu() interface itself keeps track of when to reclaim:
->   a) when a page is full;
->   b) when i high storm of freeing over rcu;
->   c) when a low memory condition.
->
-> such control stays inside the kvfree_rcu(). Converting it to lazy
-> variant:
->   a) lose the control, what will become as a problem;
->   b) nothing is improved.
+> Given that making the kvfree_rcu()-level batching conditional on
+> CONFIG_RCU_LAZY would complicate the code, what bad thing happens when
+> keeping the kvfree_rcu-level batching unconditionally?
 
-AFAICS, the only thing being changed is when you are giving memory
-back to the system. So you will be holding on to memory a bit longer.
-And there's shrinkers that are already flushing those. I don't think
-the users of kvfree_rcu() want to free memory instantly. If there is
-such usecase, please share it.
+The bad thing happening is power impact. There is a noticeable impact
+in our testing, and when we dropped this particular patch, it got much
+better results.
 
-> 2. Converting the queue_rcu_work() to lazy variant breaks a humanity
-> interpretation when a queued work is supposed to be run. People do not
-> expect seconds when they queue the work.
+I also run rcutop and I see without the patch that I have several
+seconds of laziness at a time, unlike with the patch.
 
-Which people? ;)
+Even in the beginning when I came up with an implementation for
+call_rcu_lazy(), I had to mark queue_rcu_work() as lazy as well since
+it was quite frequent (on ChromeOS). But when we introduced the
+flush() API, I forgot to not use flush() on it.  But unfortunately
+this patch slipped into my last series when Vlad and I were debugging
+the SCSI issue, and did not really help for the SCSI issue itself.
 
-> Same as in the kvfree_rcu()
-> we do not expect it we even used a high_prio queue in the beginning.
-> There are ~10 users who queue the work and they did not expect it to
-> be run in 10 seconds when they wrote the code.
+Thanks,
 
-That's a bit of a misinterpretation of what I'm saying. A variant
-queue_rcu_work_flush() can be added for those users (such as ones that
-are not freeing memory).
-
-Thanks.
+ - Joel
