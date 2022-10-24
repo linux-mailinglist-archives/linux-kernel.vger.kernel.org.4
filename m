@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C8D60AE91
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB9360AE48
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiJXPIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 11:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S230100AbiJXO4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiJXPHg (ORCPT
+        with ESMTP id S233100AbiJXOzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:07:36 -0400
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D917ED88
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:44:23 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id x2so4160463edd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:44:23 -0700 (PDT)
+        Mon, 24 Oct 2022 10:55:41 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5025C114DDE;
+        Mon, 24 Oct 2022 06:32:48 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id t4so6569506wmj.5;
+        Mon, 24 Oct 2022 06:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A+qylRBb+786Bz6Lsf44iUr8vCugFrzyG1XuwwRkv70=;
-        b=ex6Admfwk08htep+kUJAdnWdkI5euGZhrzT1ekLxemWWEWsH62HE6MUgzbnQGy1377
-         KD6EJkf2yWkO81S2nRzJvhEMbhiPVzJcRuu1KCqP6y9zskCP3MaYU10G8WpG/bcP2mEX
-         VBJWdZlTZEHxJTbi5MYz53b+q3W1fcxPBTw83DpGpLyiAEwLcLJSD773cx4GKwopSaZN
-         3r9YNIGuDD8m+t6KjY+Pa8ID/2cH0xKvXJn12c6Ebbeok4/E+1eGP1uoG9kZX1PzcVij
-         U8u0wF59K1Dn8pfkaD3a/je8ge+NsWt72luAVNYYtpoukoazx0zC8NyimphUUjDrMLbg
-         oa2Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sLYkpvVCOOtRmeROPQWGaXprs16SuKoBjgdo1TzDYBw=;
+        b=OidfekMQ+wgqg2Jyz1BrARw3IJY3Ql0Yv9rP1UqPRTfXq3UAP9XIu5iE9dDpR6Hgni
+         0S4Z9lf9mU81W0QdXfo56RvHtmwbC+fEtiRDAXwLor+FrTk41upfkcfBDCWzgsJav+wb
+         GYStwBKnPk16tOtkMSuPx4QYNVyaED7NIxjI9D+j8zYnxs4NhEsa0GDzYiRC0MeglRrr
+         KAW4uxcSA7kPjpZGL6SdC9/YaZ4BB2zl5sGRhPvM7Sm6ZzntNiwyYGXX0zdWWeyR8RIX
+         Pva6eh9Cdx0iykZAiubnD6erR450whWtNg8b7fuxHAbBuqDjNxDJ1+SiKOah4c+QgwXH
+         yvbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A+qylRBb+786Bz6Lsf44iUr8vCugFrzyG1XuwwRkv70=;
-        b=HQCe8Lv8TFOJooY0in7kpoOS5//+X/upoV54kzrnxwaB9debXbchToAGrs0rZPmMvE
-         MAe8UjblXgdegfnkM5+ey2FARYNuQQzrrZTvl4oPT4EYHT/OQpekgGQDoD39bBzZEX3I
-         +4ucUhhzuRIyJdkUYeGAb2XKWI15HUr1ywgjCEL8s3n4P5b0st64efKVIDOcbtirzmxE
-         GUSk/1yZRL8RwgSYa9zGf7WgXyrBjG8OTN+EQQK+4Mz703a/l7YnqCuu5borHwUfQYqQ
-         0OCL5gxOshd59uJEvGcUjp7rjc0LXmU7pBqEYtHKrcB/Zr6wsxtflH8ht1G/cvh0OKOt
-         d8dA==
-X-Gm-Message-State: ACrzQf26z19MGalDc3S5Vu48KPT+q2RBHFu4H8Ws55AQXtYT+8GUMseG
-        gZ0RVisr8hLpXaHnJAsgMrCyiQUHT+ds2HJo
-X-Google-Smtp-Source: AMsMyM6UGKnU0sZ8INReNWkER2ORq1CKTMEL/WaIMd3224QU8/TiWVXWNUzhb0IUKZhjeoDSzddTRg==
-X-Received: by 2002:a2e:bd86:0:b0:277:b58:7d1a with SMTP id o6-20020a2ebd86000000b002770b587d1amr1745894ljq.229.1666618171166;
-        Mon, 24 Oct 2022 06:29:31 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id v12-20020a056512048c00b004aac3944314sm759217lfq.249.2022.10.24.06.29.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 06:29:30 -0700 (PDT)
-Message-ID: <7dfc5001-9899-5778-f445-5508019608e3@linaro.org>
-Date:   Mon, 24 Oct 2022 16:29:29 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sLYkpvVCOOtRmeROPQWGaXprs16SuKoBjgdo1TzDYBw=;
+        b=sb2UNscYibAC5yLssJ9lKRJHU32T7D0SpjvchS1MBoGpmrZ95EOgO+OSumPnSUCTRV
+         rpvX+G92fbPQziX9SVYpSphVG8fTYU6BQHYodX3lGGjYIEMHJSv/6d7ylz0d6YBGbInu
+         6Nf6oUzSkWZbe+EdHJmz2AeALF5Uun/1bRINbsyccbWucHJpF+CjB6qCX+/+bWpJsJVT
+         D4okkMRp0sW8FuYsnS38NkuGkFPJy8sy97r5huQTh8pMUFSwjQXVogPkLkB+cwH63eRF
+         F/wwoY69i1r2M/RwH79gAoaFih5k7r0hF1lFuZuQU52sO1Gbn5Z5x/YD6Ty3YWulQjOR
+         Rblg==
+X-Gm-Message-State: ACrzQf0yxHyyk9J991D5Eoo7XyAQqc0eHSmDTXvt/pxmX7eGjysVX7s0
+        Ppoz61yxra7GKv1/TyiE+w0=
+X-Google-Smtp-Source: AMsMyM7EVVv6tLq9HYHCC0JhHbl4xrIrrfI7Mqkf7iAbNX3F9V1/zF38tt5rpXYdtcWuRgcdX3tgCA==
+X-Received: by 2002:a05:600c:5011:b0:3c6:cd93:cf24 with SMTP id n17-20020a05600c501100b003c6cd93cf24mr21905457wmr.16.1666618180452;
+        Mon, 24 Oct 2022 06:29:40 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id o10-20020a1c750a000000b003b4868eb6bbsm13581511wmc.23.2022.10.24.06.29.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 06:29:40 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mike Marshall <hubcap@omnibond.com>,
+        Martin Brandenburg <martin@omnibond.com>,
+        devel@lists.orangefs.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] orangefs: remove variable i
+Date:   Mon, 24 Oct 2022 14:29:39 +0100
+Message-Id: <20221024132939.2157707-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 01/10] phy: qcom-qmp-ufs: move device-id table
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221024090041.19574-1-johan+linaro@kernel.org>
- <20221024090041.19574-2-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221024090041.19574-2-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,18 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 12:00, Johan Hovold wrote:
-> Move the device-id table below probe() and next to the driver structure
-> to keep the driver callback functions grouped together.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-ufs.c | 78 ++++++++++++-------------
->   1 file changed, 39 insertions(+), 39 deletions(-)
+Variable i is just being incremented and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/orangefs/inode.c | 2 --
+ 1 file changed, 2 deletions(-)
 
+diff --git a/fs/orangefs/inode.c b/fs/orangefs/inode.c
+index 7a8c0c6e698d..eaa35a966115 100644
+--- a/fs/orangefs/inode.c
++++ b/fs/orangefs/inode.c
+@@ -530,7 +530,6 @@ static ssize_t orangefs_direct_IO(struct kiocb *iocb,
+ 	size_t count = iov_iter_count(iter);
+ 	ssize_t total_count = 0;
+ 	ssize_t ret = -EINVAL;
+-	int i = 0;
+ 
+ 	gossip_debug(GOSSIP_FILE_DEBUG,
+ 		"%s-BEGIN(%pU): count(%d) after estimate_max_iovecs.\n",
+@@ -556,7 +555,6 @@ static ssize_t orangefs_direct_IO(struct kiocb *iocb,
+ 	while (iov_iter_count(iter)) {
+ 		size_t each_count = iov_iter_count(iter);
+ 		size_t amt_complete;
+-		i++;
+ 
+ 		/* how much to transfer in this loop iteration */
+ 		if (each_count > orangefs_bufmap_size_query())
 -- 
-With best wishes
-Dmitry
+2.37.3
 
