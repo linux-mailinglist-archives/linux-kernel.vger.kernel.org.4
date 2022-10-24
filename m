@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D921060A842
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0A860A860
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235216AbiJXNDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S235288AbiJXNEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235306AbiJXM7x (ORCPT
+        with ESMTP id S235384AbiJXNAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:59:53 -0400
+        Mon, 24 Oct 2022 09:00:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0E182743;
-        Mon, 24 Oct 2022 05:19:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544681144;
+        Mon, 24 Oct 2022 05:19:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B7C9612A4;
-        Mon, 24 Oct 2022 12:10:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BFD1C433D6;
-        Mon, 24 Oct 2022 12:10:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAB0061278;
+        Mon, 24 Oct 2022 12:10:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD60C433C1;
+        Mon, 24 Oct 2022 12:10:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613450;
-        bh=xGYjKcOLlvZoNqj94TrqhJyt9N8mS9hRdIcXcQIs8x4=;
+        s=korg; t=1666613453;
+        bh=MAndz8nMfGWumzgeumXtIyvQC0YhR+/u+DyUw+CVihY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KAzKQ/Sj+vlY1yhy58dljbM0Vjs1L0rg0Ucuu+i9JSJHd5wx5+nxsffkv5AKC5zjv
-         TrfT7tkCO/4723MG6nIFh78Nax3cAIt+9hxtN7+lqYLb0oaitOe3uKngnCwB+89ORR
-         RYUH3wWsX097Yj75CN9JHtPeo3Tb1EN1RSxAB7d8=
+        b=uQWxKS8n1+Wdr2zTYwZkCDkXSVCCpKErzGADoctbWtkmSVWB+HbJqE+D95F4WKmYC
+         76MAXkqXHfpJ/RhK3OqgJP46SrwpKuCGTM9YmeJiYbXHw4axyULF2xzIDg6yVHyaVe
+         FycBnh3+dOTvoKReGKCPCyI87HEd/50S9DPqO42Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
         Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 141/255] ata: fix ata_id_sense_reporting_enabled() and ata_id_has_sense_reporting()
-Date:   Mon, 24 Oct 2022 13:30:51 +0200
-Message-Id: <20221024113007.283128570@linuxfoundation.org>
+Subject: [PATCH 5.4 142/255] ata: fix ata_id_has_devslp()
+Date:   Mon, 24 Oct 2022 13:30:52 +0200
+Message-Id: <20221024113007.321825699@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
 References: <20221024113002.471093005@linuxfoundation.org>
@@ -56,67 +56,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Niklas Cassel <niklas.cassel@wdc.com>
 
-[ Upstream commit 690aa8c3ae308bc696ec8b1b357b995193927083 ]
+[ Upstream commit 9c6e09a434e1317e09b78b3b69cd384022ec9a03 ]
 
 ACS-5 section
-7.13.6.41 Words 85..87, 120: Commands and feature sets supported or enabled
+7.13.6.36 Word 78: Serial ATA features supported
 states that:
 
-If bit 15 of word 86 is set to one, bit 14 of word 119 is set to one,
-and bit 15 of word 119 is cleared to zero, then word 119 is valid.
-
-If bit 15 of word 86 is set to one, bit 14 of word 120 is set to one,
-and bit 15 of word 120 is cleared to zero, then word 120 is valid.
+If word 76 is not 0000h or FFFFh, word 78 reports the features supported
+by the device. If this word is not supported, the word shall be cleared
+to zero.
 
 (This text also exists in really old ACS standards, e.g. ACS-3.)
 
-Currently, ata_id_sense_reporting_enabled() and
-ata_id_has_sense_reporting() both check bit 15 of word 86,
-but neither of them check that bit 14 of word 119 is set to one,
-or that bit 15 of word 119 is cleared to zero.
+Additionally, move the macro to the other ATA_ID_FEATURE_SUPP macros
+(which already have this check), thus making it more likely that the
+next ATA_ID_FEATURE_SUPP macro that is added will include this check.
 
-Additionally, make ata_id_sense_reporting_enabled() return false
-if !ata_id_has_sense_reporting(), similar to how e.g.
-ata_id_flush_ext_enabled() returns false if !ata_id_has_flush_ext().
-
-Fixes: e87fd28cf9a2 ("libata: Implement support for sense data reporting")
+Fixes: 65fe1f0f66a5 ("ahci: implement aggressive SATA device sleep support")
 Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/ata.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ include/linux/ata.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/ata.h b/include/linux/ata.h
-index 6e67aded28f8..734cc646ce35 100644
+index 734cc646ce35..8b884cd3a232 100644
 --- a/include/linux/ata.h
 +++ b/include/linux/ata.h
-@@ -770,16 +770,21 @@ static inline bool ata_id_has_read_log_dma_ext(const u16 *id)
+@@ -565,6 +565,10 @@ struct ata_bmdma_prd {
+ 	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
+ 	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
+ 	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 2)))
++#define ata_id_has_devslp(id)	\
++	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
++	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
++	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 8)))
+ #define ata_id_iordy_disable(id) ((id)[ATA_ID_CAPABILITY] & (1 << 10))
+ #define ata_id_has_iordy(id) ((id)[ATA_ID_CAPABILITY] & (1 << 11))
+ #define ata_id_u32(id,n)	\
+@@ -577,7 +581,6 @@ struct ata_bmdma_prd {
  
- static inline bool ata_id_has_sense_reporting(const u16 *id)
- {
--	if (!(id[ATA_ID_CFS_ENABLE_2] & (1 << 15)))
-+	if (!(id[ATA_ID_CFS_ENABLE_2] & BIT(15)))
-+		return false;
-+	if ((id[ATA_ID_COMMAND_SET_3] & (BIT(15) | BIT(14))) != BIT(14))
- 		return false;
--	return id[ATA_ID_COMMAND_SET_3] & (1 << 6);
-+	return id[ATA_ID_COMMAND_SET_3] & BIT(6);
- }
+ #define ata_id_cdb_intr(id)	(((id)[ATA_ID_CONFIG] & 0x60) == 0x20)
+ #define ata_id_has_da(id)	((id)[ATA_ID_SATA_CAPABILITY_2] & (1 << 4))
+-#define ata_id_has_devslp(id)	((id)[ATA_ID_FEATURE_SUPP] & (1 << 8))
+ #define ata_id_has_ncq_autosense(id) \
+ 				((id)[ATA_ID_FEATURE_SUPP] & (1 << 7))
  
- static inline bool ata_id_sense_reporting_enabled(const u16 *id)
- {
--	if (!(id[ATA_ID_CFS_ENABLE_2] & (1 << 15)))
-+	if (!ata_id_has_sense_reporting(id))
-+		return false;
-+	/* ata_id_has_sense_reporting() == true, word 86 must have bit 15 set */
-+	if ((id[ATA_ID_COMMAND_SET_4] & (BIT(15) | BIT(14))) != BIT(14))
- 		return false;
--	return id[ATA_ID_COMMAND_SET_4] & (1 << 6);
-+	return id[ATA_ID_COMMAND_SET_4] & BIT(6);
- }
- 
- /**
 -- 
 2.35.1
 
