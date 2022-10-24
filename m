@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7983060AC19
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7122260AC45
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234310AbiJXOCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60960 "EHLO
+        id S232327AbiJXOFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235830AbiJXOBs (ORCPT
+        with ESMTP id S233506AbiJXOCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:01:48 -0400
+        Mon, 24 Oct 2022 10:02:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984BDBECC1;
-        Mon, 24 Oct 2022 05:47:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41E0BEF88;
+        Mon, 24 Oct 2022 05:48:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8948A61325;
-        Mon, 24 Oct 2022 12:46:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D91BC433C1;
-        Mon, 24 Oct 2022 12:46:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75929612FC;
+        Mon, 24 Oct 2022 12:47:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B96C433C1;
+        Mon, 24 Oct 2022 12:47:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615568;
-        bh=1i8zogkR9T6NCoZU+5CHCQYY7T+Jg21kj+WmzzdA27o=;
+        s=korg; t=1666615625;
+        bh=VnMGrswUD1VUWwq/IDbfRvOf4uZCiO6hHd8wQ9skVW8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zf9qic1hMXJn58boWXkiebvNZpnxqzgGqh3sRfCoE1u6XZd4E4G+XNSd3GyzM3Ljt
-         okTxBZ/M+LaBK4rgtvvXJYNyPc50+iIddn9iCQalfXDCC4/h1OLduXYA+l1SPXgq1O
-         IjF87lvNbyf4idv9FwG2gHf7SW9Isyvu4h+HvUHA=
+        b=Qis/FL/ejF4WFkV4Zk9Y+lXZulK8Kjf4ofbSRv3JlzzicCBtI7CkbsmBJS/4rsz0b
+         s2Qk8lpf6QpJSiu2EkVDbdO3CzX6muJIKmktXrcVAvZzcCNjDiQd21F1+0snazsw6N
+         CPN66NO+BMbaWP6DVWsdgehTj1Lgfs8L+CIQifXY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Xu Yilun <yilun.xu@intel.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 293/530] fpga: prevent integer overflow in dfl_feature_ioctl_set_irq()
-Date:   Mon, 24 Oct 2022 13:30:37 +0200
-Message-Id: <20221024113058.328763973@linuxfoundation.org>
+        stable@vger.kernel.org, Jie Hai <haijie1@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 295/530] dmaengine: hisilicon: Fix CQ head update
+Date:   Mon, 24 Oct 2022 13:30:39 +0200
+Message-Id: <20221024113058.417176174@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
 References: <20221024113044.976326639@linuxfoundation.org>
@@ -53,36 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Jie Hai <haijie1@huawei.com>
 
-[ Upstream commit 939bc5453b8cbdde9f1e5110ce8309aedb1b501a ]
+[ Upstream commit 94477a79cf80e8ab55b68f14bc579a12ddea1e0b ]
 
-The "hdr.count * sizeof(s32)" multiplication can overflow on 32 bit
-systems leading to memory corruption.  Use array_size() to fix that.
+After completion of data transfer of one or multiple descriptors,
+the completion status and the current head pointer to submission
+queue are written into the CQ and interrupt can be generated to
+inform the software. In interrupt process CQ is read and cq_head
+is updated.
 
-Fixes: 322b598be4d9 ("fpga: dfl: introduce interrupt trigger setting API")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-Link: https://lore.kernel.org/r/YxBAtYCM38dM7yzI@kili
-Signed-off-by: Xu Yilun <yilun.xu@intel.com>
+hisi_dma_irq updates cq_head only when the completion status is
+success. When an abnormal interrupt reports, cq_head will not update
+which will cause subsequent interrupt processes read the error CQ
+and never report the correct status.
+
+This patch updates cq_head whenever CQ is accessed.
+
+Fixes: e9f08b65250d ("dmaengine: hisilicon: Add Kunpeng DMA engine support")
+Signed-off-by: Jie Hai <haijie1@huawei.com>
+Acked-by: Zhou Wang <wangzhou1@hisilicon.com>
+Link: https://lore.kernel.org/r/20220830062251.52993-3-haijie1@huawei.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/fpga/dfl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma/hisi_dma.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/fpga/dfl.c b/drivers/fpga/dfl.c
-index f86666cf2c6a..c38143ef23c6 100644
---- a/drivers/fpga/dfl.c
-+++ b/drivers/fpga/dfl.c
-@@ -1864,7 +1864,7 @@ long dfl_feature_ioctl_set_irq(struct platform_device *pdev,
- 		return -EINVAL;
- 
- 	fds = memdup_user((void __user *)(arg + sizeof(hdr)),
--			  hdr.count * sizeof(s32));
-+			  array_size(hdr.count, sizeof(s32)));
- 	if (IS_ERR(fds))
- 		return PTR_ERR(fds);
- 
+diff --git a/drivers/dma/hisi_dma.c b/drivers/dma/hisi_dma.c
+index 70a0d784a6a3..9e6ce3731ca5 100644
+--- a/drivers/dma/hisi_dma.c
++++ b/drivers/dma/hisi_dma.c
+@@ -436,12 +436,10 @@ static irqreturn_t hisi_dma_irq(int irq, void *data)
+ 	desc = chan->desc;
+ 	cqe = chan->cq + chan->cq_head;
+ 	if (desc) {
++		chan->cq_head = (chan->cq_head + 1) % hdma_dev->chan_depth;
++		hisi_dma_chan_write(hdma_dev->base, HISI_DMA_CQ_HEAD_PTR,
++				    chan->qp_num, chan->cq_head);
+ 		if (FIELD_GET(STATUS_MASK, cqe->w0) == STATUS_SUCC) {
+-			chan->cq_head = (chan->cq_head + 1) %
+-					hdma_dev->chan_depth;
+-			hisi_dma_chan_write(hdma_dev->base,
+-					    HISI_DMA_CQ_HEAD_PTR, chan->qp_num,
+-					    chan->cq_head);
+ 			vchan_cookie_complete(&desc->vd);
+ 		} else {
+ 			dev_err(&hdma_dev->pdev->dev, "task error!\n");
 -- 
 2.35.1
 
