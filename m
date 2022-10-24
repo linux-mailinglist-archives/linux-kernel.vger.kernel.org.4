@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A57A60BEB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCDF60BEE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJXXg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47118 "EHLO
+        id S230289AbiJXXqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiJXXgU (ORCPT
+        with ESMTP id S230038AbiJXXqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:36:20 -0400
-X-Greylist: delayed 12570 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 14:56:58 PDT
-Received: from smtp126.iad3a.emailsrvr.com (smtp126.iad3a.emailsrvr.com [173.203.187.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDF02D450B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:56:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openvpn.net;
-        s=20170822-45nk5nwl; t=1666627158;
-        bh=btRk7swX7GdyOa27zjsvyKxH9I1WQ7w6KviW39ZTEjM=;
-        h=Date:Subject:To:From:From;
-        b=blXWXCXqvCfG2PGic4/7VMl3LwZfUC8IQYpr+XpvxgmdKQs0B45TKBoz5VnLiq7sz
-         CWVCpj8G4h/KWDWnw8Kt/NygCmhEXmPQtb4XkwR6R4aI4A+V+ujXxXDTixzb6c1r6s
-         Eqvxrr9WgHmu+1iG1wnMPfGxi9TwwJzx4y/Oe8Io=
-X-Auth-ID: antonio@openvpn.net
-Received: by smtp16.relay.iad3a.emailsrvr.com (Authenticated sender: antonio-AT-openvpn.net) with ESMTPSA id 8EF0B5C85;
-        Mon, 24 Oct 2022 11:59:16 -0400 (EDT)
-Message-ID: <cd51cf56-c729-87da-5e2e-03447c9a3d42@openvpn.net>
-Date:   Mon, 24 Oct 2022 17:59:14 +0200
+        Mon, 24 Oct 2022 19:46:09 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1F02FBDC0;
+        Mon, 24 Oct 2022 15:04:10 -0700 (PDT)
+Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mx1390JN2z6H6jV;
+        Tue, 25 Oct 2022 00:38:13 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 18:41:41 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
+ 2022 17:41:40 +0100
+Date:   Mon, 24 Oct 2022 17:41:39 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+CC:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jagath Jog J <jagathjog1996@gmail.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v2 4/5] iio: accel: Support Kionix/ROHM KX022A
+ accelerometer
+Message-ID: <20221024174139.000070c8@huawei.com>
+In-Reply-To: <e34d8586-a471-81d6-d09c-f2e0d9884628@gmail.com>
+References: <cover.1665066397.git.mazziesaccount@gmail.com>
+        <88e24b01da9f44ebf5fcd8344ded0b75ff742fbf.1665066397.git.mazziesaccount@gmail.com>
+        <Yz8fK7j8pxlU76xt@smile.fi.intel.com>
+        <98b59ad5-8c29-be41-4da1-a961db67827c@gmail.com>
+        <Y0QIzf2cAH9ehSeO@smile.fi.intel.com>
+        <19a6db0f-40a8-dacf-4583-cdb9d74e1243@fi.rohmeurope.com>
+        <b1700ea7-4a7a-263c-595c-0f7a56763c10@gmail.com>
+        <20221014144247.00001eb1@huawei.com>
+        <e34d8586-a471-81d6-d09c-f2e0d9884628@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RFE net-next] net: tun: 1000x speed up
-To:     nicolas.dichtel@6wind.com, Ilya Maximets <i.maximets@ovn.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-References: <20221021114921.3705550-1-i.maximets@ovn.org>
- <20221021090756.0ffa65ee@kernel.org>
- <eb6903b7-c0d9-cc70-246e-8dbde0412433@6wind.com>
- <ded477ea-08fa-b96d-c192-9640977b42e6@ovn.org>
- <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
-Content-Language: en-US
-From:   Antonio Quartulli <antonio@openvpn.net>
-In-Reply-To: <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Classification-ID: 0a266811-a982-4e0c-a42b-2cb7488dbf9b-1-1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,90 +71,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 18 Oct 2022 14:10:59 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-On 24/10/2022 14:27, Nicolas Dichtel wrote:
-> Le 24/10/2022 à 13:56, Ilya Maximets a écrit :
->> On 10/24/22 11:44, Nicolas Dichtel wrote:
->>> Le 21/10/2022 à 18:07, Jakub Kicinski a écrit :
->>>> On Fri, 21 Oct 2022 13:49:21 +0200 Ilya Maximets wrote:
->>>>> Bump the advertised speed to at least match the veth.  10Gbps also
->>>>> seems like a more or less fair assumption these days, even though
->>>>> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
->>>>> and let the application/user decide on a right value for them.
->>>>
->>>> UNKOWN would seem more appropriate but at this point someone may depend
->>>> on the speed being populated so it could cause regressions, I fear :S
->>> If it is put in a bonding, it may cause some trouble. Maybe worth than
->>> advertising 10M.
->>
->> My thoughts were that changing the number should have a minimal impact
->> while changing it to not report any number may cause some issues in
->> applications that doesn't expect that for some reason (not having a
->> fallback in case reported speed is unknown isn't great, and the argument
->> can be made that applications should check that, but it's hard to tell
->> for every application if they actually do that today).
->>
->> Bonding is also a good point indeed, since it's even in-kernel user.
->>
->>
->> The speed bump doesn't solve the problem per se.  It kind of postpones
->> the decision, since we will run into the same issue eventually again.
->> That's why I wanted to discuss that first.
->>
->> Though I think that at least unification across virtual devices (tun and
->> veth) should be a step in a right direction.
-> Just to make it clear, I'm not against aligning speed with veth, I'm only
-> against reporting UNKNOWN.
+> On 10/14/22 16:42, Jonathan Cameron wrote:
+> > On Wed, 12 Oct 2022 10:40:38 +0300
+> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> >   
+> >> On 10/10/22 16:20, Vaittinen, Matti wrote:  
+> >>> On 10/10/22 14:58, Andy Shevchenko wrote:  
+> >>>> On Mon, Oct 10, 2022 at 12:12:34PM +0300, Matti Vaittinen wrote:
+> >>>> ...
+> >>>>     
+> >>>>>>> +	ret = regmap_bulk_read(data->regmap, chan->address, &data->buffer,
+> >>>>>>> +			       sizeof(s16));  
+> >>>>     
+> >>>>>> No endianess awareness (sizeof __le16 / __be16)  
+> >>>>     
+> >>>>>>> +	if (ret)
+> >>>>>>> +		return ret;
+> >>>>>>> +
+> >>>>>>> +	*val = data->buffer[0];  
+> >>>>>>
+> >>>>>> Ditto (get_unaligned_be16/le16 / le16/be16_to_cpup()).  
+> >>>>>
+> >>>>> I have probably misunderstood something but I don't see why we should use
+> >>>>> 'endianess awareness' in drivers? I thought the IIO framework code takes
+> >>>>> care of the endianes conversions based on scan_type so each individual
+> >>>>> driver does not need to do that. That however has been just my assumption. I
+> >>>>> will need to check this. Thanks for pointing it out.  
+> >>>>
+> >>>> The IIO core uses endianness field only once in iio_show_fixed_type() AFAICS.  
+> >>
+> >> Following is some hand waving and speculation after my quick code read.
+> >> So, I may be utterly wrong in which case please do correct me...
+> >>
+> >> Anyways, it seems to me that you're correct. The endianness field is
+> >> only used by the IIO to build the channel information for user-space so
+> >> that applications reading data can parse it. As far as I understand, the
+> >> driver does not need to do the conversions for user-space, but the
+> >> user-space tools should inspect the type information and do the
+> >> conversion. I think it makes sense as user-space applications may be
+> >> better equipped to do some maths. It also may be some applications do
+> >> not want to spend cycles doing the conversion but the conversions can be
+> >> done later "offline" for the captured raw data. So omitting conversion
+> >> in the IIO driver kind of makes sense to me.  
+> > 
+> > That was indeed the original reasonining for buffered data path
+> > (note the endian marker is for scans only which only apply in buffered
+> >   / chardev case).  
 > 
->>
->>>
->>> Note that this value could be configured with ethtool:
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e24f2dd516ed
->>
->> This is interesting, but it's a bit hard to manage, because in order
->> to make a decision to bump the speed, application should already know
->> that this is a tun/tap device.  So, there has to be a special case
-> But this should be done by the application which creates this tun interface. Not
-> by the application that uses this information.
+> So, in a case where we "push_to_buffers" the data, we can leave the data 
+> to use the endianess we advertise via endianess info field?
+
+Exactly.
+
 > 
->> implemented in the code that detects the driver and changes the speed
->> (this is about application that is using the interface, but didn't
->> create it), but if we already know the driver, then it doesn't make
->> sense to actually change the speed in many cases as application can
->> already act accordingly.
->>
->> Also, the application may not have permissions to do that (I didn't
->> check the requirements, but my guess would be at least CAP_NET_ADMIN?).
-> Sure, but the one who creates it, has the right to configure it correctly. It's
-> part of the configuration of the interface.
+> > It's less obvious for the sysfs path as that's inherently slow.
+> > We could have made this a problem for the IIO core, but we didn't :)  
 > 
-> Setting an higher default speed seems to be a workaround to fix an incorrect
-> configuration. And as you said, it will probably be wrong again in a few years ;-)
+> But again, as far as I understood, the user-space is still expected to 
+> read the sysfs field for "scan_elements/in_accel_<channel>_type"? I 
+> guess it would be confusing to say "le:s16/16>>0" there while returning 
+> CPU native endianess values from sysfs files?
+
+Agreed that it is probably less than ideal but that's what the interface
+is.  scan_elements refers to the "scan elements"  channels read via sysfs
+files are not scan elements - scan's are only relevant to buffered readback.
+
+> 
+> >> I haven't thoroughly looked (and I have never used) the in-kernel IIO
+> >> APIs for getting the data. A quick look at the
+> >> include/linux/iio/consumer.h allows me to assume the iio_chan_spec can
+> >> be obtained by the consumer drivers. This should make the endianess
+> >> information available for the consumer drivers as well. So, again,
+> >> consumer drivers can parse the raw-format data themself.  
+> > 
+> > yes consumers should be be endian aware if they are using the
+> > callback buffer route to get the data.  Now you mention it, we
+> > may well have cases where that isn't handled correctly.
+> > There are few enough users of that interface that it might well work
+> > by coincidence rather than design. oops.
+> >   
+> >>
+> >> I have this far only used the sysfs and iio_generic_buffer on a
+> >> little-endian machine so I have had no issues with the little-endian
+> >> data and I have only observed the code. Hence I can not really say if my
+> >> reasoning is correct - or if it is how IIO has been designed to operate.
+> >> But based on my quick study I don't see a need for the IIO driver to do
+> >> endianess conversion to any other format but what is indicated by
+> >> scan_type. Specifically for KX022A, the data is already 16B LE when read
+> >> from the sensor. This is also advertised by scan_type so no conversion
+> >> should be needed (unless, of course, I am mistaken :]).  
+> > 
+> > Ah. I'd missed that. Data storage should reflect the read back endianness
+> > and for the read_raw path you need to perform the conversion in driver
+> > (but not the high perf push to buffers path).  
+> 
+> Oh, really? I think it might be confusing to say "le:s16/16>>0" in 
+> "scan_elements/in_accel_<channel>_type" but return something else from 
+> the in_accel_<channel>_raw. Especially the "raw" word at the end of the 
+> file signals the data is in non converted raw format.
+> 
+> I take your word for that if you say this is what the user-space 
+> expects, it just is not what I did expect. Well, I do very little work 
+> on the user-space these days ;) Still just to be on safe side - do you 
+> mean I should convert the data returned from read_raw to the CPU endianess?
+
+yes.
+
+> 
+> > Sure we could probably have handled read_raw in tree as well but we didn't
+> > and probably too late to sensibly fix that now.  One of many things we'd
+> > probably do differently if we were starting again.  
+> 
+> Well, this is pretty usual story :) Predicting the future is hard. My 
+> crystal ball ran out of batteries a long ago ;)
+
+:)
+
+> 
+> Best Regards
+> 	-- Matti
 > 
 
-What if the real throughput is in the order of 10Mbps?
-
-The tun driver can be used for many purposes and the throughput will 
-depend on the specific case.
-
-Imagine an application using the reported speed for computing some kind 
-of metric: having 10Gbps will corrupt the result entirely.
-
-OTOH it is true that 10Mbps may corrupt the metric as well, but the 
-latter is closer to reality IMHO (when using tun to process and send 
-traffic over the network).
-
-At the end I also agree that the speed should be set by whoever creates 
-the interface. As they are the only one who knows what to expect for real.
-
-(Note: tun is used also to implement userspace VPNs, with throughput 
-ranging from 10Mbps to 1Gbps).
-
-my 2 cents.
-
-Cheers,
-
--- 
-Antonio Quartulli
-OpenVPN Inc.
