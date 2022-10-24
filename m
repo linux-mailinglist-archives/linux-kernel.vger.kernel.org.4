@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61137609C1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08A3609C2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiJXIL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S230188AbiJXIM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiJXILY (ORCPT
+        with ESMTP id S230179AbiJXIMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:11:24 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301394E1A9;
-        Mon, 24 Oct 2022 01:11:23 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id i3-20020a17090a3d8300b00212cf2e2af9so7329175pjc.1;
-        Mon, 24 Oct 2022 01:11:23 -0700 (PDT)
+        Mon, 24 Oct 2022 04:12:50 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0570862ABF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:12:46 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id a5so15159730edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:12:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h0aI8dF+cHsEz/mkJBx1RzZJvaS62lxNWRBzoLBBROo=;
-        b=a9CxCtIE91rL3S0HlKDZgWjEnDIdcbakTsxuHhMfYJuLFCG50P5KsFvQM0j7MO29Mc
-         W6+/kCwJ3NPQ8jVtAxU5ba8tmIANpkFCcy0jr8gIjQ8GU9bpMTuzNea12Ww8vABTirUV
-         wNGU37szhz6IhnWQrXNdF39m9dyC8ba8oq8ZEubChpL07TSlB0sVPn90I4DdinpQNxor
-         OXUjZUTMLS3SxNkXYdtt6NhiRZAxsrFFRVOIxCn4WOt2+KMV/ALBfBVb8ylULSkI53ZC
-         AMCHLiCEF9UK3dcdMkQLellxx7ysTKclLxpn219QNgugj1eqKH/ArCVmEK8U+YLc9UnW
-         6Y2A==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QSxvFzOFCLmcptkg3wr863k62dNqq04eMd3Fa7R2F2k=;
+        b=O+JWdsPBF1w2HOtUvgOkPasKcpF5j0l09ByjY6bvcTQCHnTlqZvWE3I2LovYgU9SMd
+         TM4mj08R9g220p33OTG3qhlZbCJQcYfg16kzEvN1oDE99kd7CzFLtN2NPlfYHzH6vuBd
+         SHTkAMSPGeGGMwmdwMGgU6N0nz3RcbAcUzuVhFX8GemfJ5USURweA0GFm7YqOii1PuKJ
+         GOU3aUxGWb8lKxK07tu95Aup+jrWTS+7pfSO5oQg2F4mpXQ1D0eT0jxJnhJxNfwDyKeI
+         ZCw/pxxSY7Cz0RZi6lwSnMP9THSEhZozWk9S1t+GatIp3xo1emRC72O2/OE0s+Cal0By
+         +cVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h0aI8dF+cHsEz/mkJBx1RzZJvaS62lxNWRBzoLBBROo=;
-        b=6YAjsA14k/92+FvQpCMAW3CX/PHI8Ej1Z4ZOZ1Tdg6asVS41rAuNnPAEATzogpUFEz
-         WDX4jlGzIzaZq2O25hs0jNy2tOboysZgXG+dWGWBRZkd5Z5QQ6UL9H1MMOdB5UIIm2Qw
-         7eHydwQXFDmgSpI0OhIUoCOOleUDYCMlhL7D3sSegSK8Oyhc7vDYXSBB4eb/b4RqjqK+
-         mD3ocU+0IKFPyqeH39In9mEgBwwYX1vWxvaO7fra0HdcmmXsZA0srDDyCsfA1nkXQH3S
-         wbRKunIGc+YQuzLnnanxQ9R4MDW/yDhtOe+EZGQuwRW20W8of7G+VxU1tZOeLM5qlCWL
-         kFBg==
-X-Gm-Message-State: ACrzQf22CfEPozO7dhraxlIsAyonJZBqBqbjTcDchgpK98NmpPQpWOQe
-        TMDHyMHqh3+X649eZUrdZXXMSc0FBatZ8Q==
-X-Google-Smtp-Source: AMsMyM56+iKoFH47BE7ZmiMyH5SfvqhKKrjunRaxIqpsdw2uc3F60IVQJLZzpxuReAmO7F/FFB7+Pw==
-X-Received: by 2002:a17:902:ecd2:b0:186:907a:a008 with SMTP id a18-20020a170902ecd200b00186907aa008mr9990077plh.112.1666599082670;
-        Mon, 24 Oct 2022 01:11:22 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-77.three.co.id. [180.214.233.77])
-        by smtp.gmail.com with ESMTPSA id 64-20020a620543000000b005632c49693asm19250823pff.202.2022.10.24.01.11.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 01:11:22 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 3DC14103F1E; Mon, 24 Oct 2022 15:11:19 +0700 (WIB)
-Date:   Mon, 24 Oct 2022 15:11:19 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Li zeming <zeming@nfschina.com>
-Cc:     masahiroy@kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] lxdialog: menubox: Add malloc allocation judgment
-Message-ID: <Y1ZIp1ZAu0VzQ9Wf@debian.me>
-References: <20221024055629.178198-1-zeming@nfschina.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QSxvFzOFCLmcptkg3wr863k62dNqq04eMd3Fa7R2F2k=;
+        b=HkfDAVrVUNDTQJ1lp4SoztxFdo84HFlbTin5MGfpdSXx0EHOm1Qg2pegDYNIjrU4MR
+         sfsqrFxecdGFOppuADcKsbVIw+7nGfLPSegnjUVehfhMofxs0vj55iMoIgb/YjB2zDQc
+         Khioygl++EjBLhN28vI+OH7Yi74061KB+JbsgttIp4XrGrKJarvUzx/TuDAvusshO5rc
+         2CoOxTTp6YBofYgh0FHICw0ZFOyeOIK3tLxVuPRJAHXdmUwvp9AsbSPd1lRQ7eHz7EzJ
+         fIUF0W9FoIGuhciJWkxW+YAD3jwaagKPIqEwAmlz+WBxZD6BQ1Wy72oajJSG24vgDyDI
+         O/hA==
+X-Gm-Message-State: ACrzQf0MDqi+1kFBle3X7v+dpV9KbTDOq4XyQzo/NSroek6/KSpGs2N9
+        nCS35f4xxYr5KTqSsOhpHtFNHu3oh4jWGF12ml+IKw==
+X-Google-Smtp-Source: AMsMyM7yzlJ2pG0fMAkHGDkB0Atzc8h78rHcoaG1puqRvymzarDQxeihvLf9f+xLcTOOO53VUi9KB35gvD1Ak7QbceA=
+X-Received: by 2002:a17:907:16aa:b0:6fe:91d5:18d2 with SMTP id
+ hc42-20020a17090716aa00b006fe91d518d2mr27007120ejc.190.1666599163952; Mon, 24
+ Oct 2022 01:12:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Jqf5YcVbJ9H+Bg3q"
-Content-Disposition: inline
-In-Reply-To: <20221024055629.178198-1-zeming@nfschina.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20221024003747.36021-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221024003747.36021-1-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 24 Oct 2022 10:12:32 +0200
+Message-ID: <CACRpkdaO4=TxT+UzcrWrvbA63wcJF-=LPmTeY3U=QKbucuTehw@mail.gmail.com>
+Subject: Re: [GIT PULL] pinctrl: dt-bindings: qcom: Improvements for v6.2
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 24, 2022 at 2:37 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
---Jqf5YcVbJ9H+Bg3q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> All my existing Qualcomm pinctrl bindings combined, plus one Neil's.
 
-On Mon, Oct 24, 2022 at 01:56:29PM +0800, Li zeming wrote:
-> Add menu_item Only when the pointer judges that the pointer is valid
-> can function code be executed.
->=20
+Excellent Krzysztof, pulled into my devel branch for v6.2 and merged
+cleanly!
 
-The if block isn't "judgement", but conditional.
-
-What if menu_item fails to be allocated?
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---Jqf5YcVbJ9H+Bg3q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1ZIogAKCRD2uYlJVVFO
-o0G7AQC+JNmvgd7Xtavhg1fIdqeBIRUmO5VQgsGYeJuzy31GuQD/dxyjt1FHNdlH
-d/Ywux2565vF+dIYBI9ql9phYyVoiAw=
-=+AEF
------END PGP SIGNATURE-----
-
---Jqf5YcVbJ9H+Bg3q--
+Yours.
+Linus Walleij
