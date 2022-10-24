@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CF160A53F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEB660A76C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiJXMWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
+        id S234210AbiJXMt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233017AbiJXMUB (ORCPT
+        with ESMTP id S234574AbiJXMpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:20:01 -0400
+        Mon, 24 Oct 2022 08:45:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143E77B2BA;
-        Mon, 24 Oct 2022 04:58:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2504A18B3F;
+        Mon, 24 Oct 2022 05:09:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C73C3612D1;
-        Mon, 24 Oct 2022 11:47:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9221C433D7;
-        Mon, 24 Oct 2022 11:47:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E32061280;
+        Mon, 24 Oct 2022 12:08:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A026BC433D6;
+        Mon, 24 Oct 2022 12:08:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612062;
-        bh=Awcd/0SSmDN83dUDpNoaIq8lTcT014AjU8Qvxm5qHes=;
+        s=korg; t=1666613319;
+        bh=f5/ry2w4/EIE/Rvgacwxb1aOJVW3QyhE+7Q0rNa4NA4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MLjjHABWdhtW9WAWyU+HSDBLufPEEfEv9GZf6A5Wd9Ir5bT0TsVda5caUKDz53cm7
-         kUv7ra1VrYqq5YF+1ClkPJrOnLawctV1PYofcof9dTE7uQmuJ5qxCBj6QuPOK3iAlR
-         h6Z0K0EAmA1Mzu1RYwtY+cWN0Gm2iHwoJrxxcTxE=
+        b=lQvg/zAqOna8+ABd2AeW/3rjf6CsKXJpHtPVUypMK87vd4WD7wlxwEH071NNOFCco
+         JvuLP5sdDdF/C84R1nXuLlfiBTHj0L5tyxd7LyaLcNDoYzm3IbiBEZNkg67505CKoh
+         cuYcfyAERM6QeuMgFLfTJmMIFpNk1+V2JGTRPmOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
-        David Teigland <teigland@redhat.com>
-Subject: [PATCH 4.14 055/210] fs: dlm: fix race between test_bit() and queue_work()
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 062/255] nfsd: Fix a memory leak in an error handling path
 Date:   Mon, 24 Oct 2022 13:29:32 +0200
-Message-Id: <20221024112958.796344237@linuxfoundation.org>
+Message-Id: <20221024113004.576442802@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,53 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Aring <aahringo@redhat.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit eef6ec9bf390e836a6c4029f3620fe49528aa1fe upstream.
+[ Upstream commit fd1ef88049de09bc70d60b549992524cfc0e66ff ]
 
-This patch fixes a race by using ls_cb_mutex around the bit
-operations and conditional code blocks for LSFL_CB_DELAY.
+If this memdup_user() call fails, the memory allocated in a previous call
+a few lines above should be freed. Otherwise it leaks.
 
-The function dlm_callback_stop() expects to stop all callbacks and
-flush all currently queued onces. The set_bit() is not enough because
-there can still be queue_work() after the workqueue was flushed.
-To avoid queue_work() after set_bit(), surround both by ls_cb_mutex.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: David Teigland <teigland@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 6ee95d1c8991 ("nfsd: add support for upcall version 2")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/dlm/ast.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/nfsd/nfs4recover.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/fs/dlm/ast.c
-+++ b/fs/dlm/ast.c
-@@ -198,13 +198,13 @@ void dlm_add_cb(struct dlm_lkb *lkb, uin
- 	if (!prev_seq) {
- 		kref_get(&lkb->lkb_ref);
- 
-+		mutex_lock(&ls->ls_cb_mutex);
- 		if (test_bit(LSFL_CB_DELAY, &ls->ls_flags)) {
--			mutex_lock(&ls->ls_cb_mutex);
- 			list_add(&lkb->lkb_cb_list, &ls->ls_cb_delay);
--			mutex_unlock(&ls->ls_cb_mutex);
- 		} else {
- 			queue_work(ls->ls_callback_wq, &lkb->lkb_cb_work);
- 		}
-+		mutex_unlock(&ls->ls_cb_mutex);
- 	}
-  out:
- 	mutex_unlock(&lkb->lkb_cb_mutex);
-@@ -284,7 +284,9 @@ void dlm_callback_stop(struct dlm_ls *ls
- 
- void dlm_callback_suspend(struct dlm_ls *ls)
- {
-+	mutex_lock(&ls->ls_cb_mutex);
- 	set_bit(LSFL_CB_DELAY, &ls->ls_flags);
-+	mutex_unlock(&ls->ls_cb_mutex);
- 
- 	if (ls->ls_callback_wq)
- 		flush_workqueue(ls->ls_callback_wq);
+diff --git a/fs/nfsd/nfs4recover.c b/fs/nfsd/nfs4recover.c
+index 7d408957ed62..14463e107918 100644
+--- a/fs/nfsd/nfs4recover.c
++++ b/fs/nfsd/nfs4recover.c
+@@ -825,8 +825,10 @@ __cld_pipe_inprogress_downcall(const struct cld_msg_v2 __user *cmsg,
+ 				princhash.data = memdup_user(
+ 						&ci->cc_princhash.cp_data,
+ 						princhashlen);
+-				if (IS_ERR_OR_NULL(princhash.data))
++				if (IS_ERR_OR_NULL(princhash.data)) {
++					kfree(name.data);
+ 					return -EFAULT;
++				}
+ 				princhash.len = princhashlen;
+ 			} else
+ 				princhash.len = 0;
+-- 
+2.35.1
+
 
 
