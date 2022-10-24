@@ -2,87 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BD7609BBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E3A609BB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiJXHnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S229588AbiJXHnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbiJXHnI (ORCPT
+        with ESMTP id S230113AbiJXHnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:43:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEF261D69
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+551nFdjjNaKRc+YIKdcJO5CC2i49qM0eCgIvtnclt4=; b=vXs4iumQwL9vOvLZ8n4ahUE/gE
-        EKbIJp2yUJD/zPchHVRDlqTebA5NXnpDa1G0EM+HrHCG0dhbuqar3EzxY2+YPVGGuef1PXLziHFch
-        cNtEC0yEti2lp0rUXo6vC2efmfzwj8asQQ/hhAJEoCwJqzS2BkZESzPjfjXLJTkeczcneWiTjXCxz
-        u7MeQ6hrQafOrNFpmPkpqhNdZe73lUsDDfU6z5BM6ysSnmKkTgumNJ4+Gpm7h21PzGgUTchfTwkMh
-        gvm5IyBRMes9RGXRFhgpIg5nNiPSllTZsNNjuoeJuDrCi21f3kTtxYBZ/IuoXs71aFjTL7nD6dYfk
-        s5Ppn7hQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oms6Z-00FG4i-Si; Mon, 24 Oct 2022 07:42:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 81579300445;
-        Mon, 24 Oct 2022 09:42:33 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 6219D2C2328BB; Mon, 24 Oct 2022 09:42:33 +0200 (CEST)
-Date:   Mon, 24 Oct 2022 09:42:33 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Will Deacon <will@kernel.org>, x86@kernel.org, willy@infradead.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        aarcange@redhat.com, kirill.shutemov@linux.intel.com,
-        jroedel@suse.de, ubizjak@gmail.com
-Subject: Re: [PATCH 07/13] mm/gup: Fix the lockless PMD access
-Message-ID: <Y1ZB6QeuzIk0W9m6@hirez.programming.kicks-ass.net>
-References: <20221022111403.531902164@infradead.org>
- <20221022114424.906110403@infradead.org>
- <796cff9b-8eb8-8c53-9127-318d30618952@google.com>
+        Mon, 24 Oct 2022 03:43:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD346175E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:42:47 -0700 (PDT)
+Received: from ginster.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::45])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <jbe@pengutronix.de>)
+        id 1oms6f-0005nn-99; Mon, 24 Oct 2022 09:42:45 +0200
+Message-ID: <caaf147aeb71d69d767cc8509809a2770d297cb9.camel@pengutronix.de>
+Subject: Re: [PATCH] net: fec: limit register access on i.MX6UL
+From:   Juergen Borleis <jbe@pengutronix.de>
+Reply-To: jbe@pengutronix.de
+To:     Marco Felsch <m.felsch@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+Date:   Mon, 24 Oct 2022 09:42:44 +0200
+In-Reply-To: <20220920125011.em66q7t7buywvr4m@pengutronix.de>
+References: <20220920095106.66924-1-jbe@pengutronix.de>
+         <Yym2I8SYMW7HRWLD@lunn.ch> <20220920125011.em66q7t7buywvr4m@pengutronix.de>
+Organization: Pengutronix e.K.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <796cff9b-8eb8-8c53-9127-318d30618952@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::45
+X-SA-Exim-Mail-From: jbe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 05:42:18PM -0700, Hugh Dickins wrote:
-> On Sat, 22 Oct 2022, Peter Zijlstra wrote:
+Am Dienstag, dem 20.09.2022 um 14:50 +0200 schrieb Marco Felsch:
+> On 22-09-20, Andrew Lunn wrote:
+> > > +/* for i.MX6ul */
+> > > +static u32 fec_enet_register_offset_6ul[] = {
+> > > +       FEC_IEVENT, FEC_IMASK, FEC_R_DES_ACTIVE_0, FEC_X_DES_ACTIVE_0,
+> > > +       FEC_ECNTRL, FEC_MII_DATA, FEC_MII_SPEED, FEC_MIB_CTRLSTAT,
+> > > FEC_R_CNTRL,
+> > > +       FEC_X_CNTRL, FEC_ADDR_LOW, FEC_ADDR_HIGH, FEC_OPD, FEC_TXIC0,
+> > > FEC_RXIC0,
+> > > +       FEC_HASH_TABLE_HIGH, FEC_HASH_TABLE_LOW, FEC_GRP_HASH_TABLE_HIGH,
+> > > +       FEC_GRP_HASH_TABLE_LOW, FEC_X_WMRK, FEC_R_DES_START_0,
+> > > +       FEC_X_DES_START_0, FEC_R_BUFF_SIZE_0, FEC_R_FIFO_RSFL,
+> > > FEC_R_FIFO_RSEM,
+> > > +       FEC_R_FIFO_RAEM, FEC_R_FIFO_RAFL, FEC_RACC,
+> > > +       RMON_T_DROP, RMON_T_PACKETS, RMON_T_BC_PKT, RMON_T_MC_PKT,
+> > > +       RMON_T_CRC_ALIGN, RMON_T_UNDERSIZE, RMON_T_OVERSIZE, RMON_T_FRAG,
+> > > +       RMON_T_JAB, RMON_T_COL, RMON_T_P64, RMON_T_P65TO127,
+> > > RMON_T_P128TO255,
+> > > +       RMON_T_P256TO511, RMON_T_P512TO1023, RMON_T_P1024TO2047,
+> > > +       RMON_T_P_GTE2048, RMON_T_OCTETS,
+> > > +       IEEE_T_DROP, IEEE_T_FRAME_OK, IEEE_T_1COL, IEEE_T_MCOL,
+> > > IEEE_T_DEF,
+> > > +       IEEE_T_LCOL, IEEE_T_EXCOL, IEEE_T_MACERR, IEEE_T_CSERR,
+> > > IEEE_T_SQE,
+> > > +       IEEE_T_FDXFC, IEEE_T_OCTETS_OK,
+> > > +       RMON_R_PACKETS, RMON_R_BC_PKT, RMON_R_MC_PKT, RMON_R_CRC_ALIGN,
+> > > +       RMON_R_UNDERSIZE, RMON_R_OVERSIZE, RMON_R_FRAG, RMON_R_JAB,
+> > > +       RMON_R_RESVD_O, RMON_R_P64, RMON_R_P65TO127, RMON_R_P128TO255,
+> > > +       RMON_R_P256TO511, RMON_R_P512TO1023, RMON_R_P1024TO2047,
+> > > +       RMON_R_P_GTE2048, RMON_R_OCTETS,
+> > > +       IEEE_R_DROP, IEEE_R_FRAME_OK, IEEE_R_CRC, IEEE_R_ALIGN,
+> > > IEEE_R_MACERR,
+> > > +       IEEE_R_FDXFC, IEEE_R_OCTETS_OK
+> > > +};
+> > >  #else
+> > >  static __u32 fec_enet_register_version = 1;
+> > 
+> > Seeing this, i wonder if the i.MX6ul needs its own register version,
+> > so that ethtool(1) knows what registers are valid?
 > 
-> > On architectures where the PTE/PMD is larger than the native word size
-> > (i386-PAE for example), READ_ONCE() can do the wrong thing. Use
-> > pmdp_get_lockless() just like we use ptep_get_lockless().
-> 
-> I thought that was something Will Deacon put a lot of effort
-> into handling around 5.8 and 5.9: see "strong prevailing wind" in
-> include/asm-generic/rwonce.h, formerly in include/linux/compiler.h.
-> 
-> Was it too optimistic?  Did the wind drop?
-> 
-> I'm interested in the answer, but I've certainly no objection
-> to making this all more obviously robust - thanks.
+> Regarding the uAPI (uapi/linux/ethtool.h):
+> 8<-------------------------------------------------
+>  * @version: Dump format version.  This is driver-specific and may
+>  *      distinguish different chips/revisions.  Drivers must use new
+>  *      version numbers whenever the dump format changes in an
+>  *      incompatible way.
+> 8<-------------------------------------------------
+> I would say yes.
 
-READ_ONCE() can't do what the hardware can't do. There is absolutely no
-way i386 can do an atomic 64bit load without resorting to cmpxchg8b.
+But there is no format change. Only a value change. Where the i.MX6 may report a
+value, the i.MX6UL just reports a zero.
 
-Also see the comment that goes with compiletime_assert_rwonce_type(). It
-explicitly allows 64bit because there's just too much stuff that does
-that (and there's actually 32bit hardware that *can* do it).
+jb
 
-But it's still very wrong.
+-- 
+Pengutronix e.K.                       | Juergen Borleis             |
+Steuerwalder Str. 21                   | https://www.pengutronix.de/ |
+31137 Hildesheim, Germany              | Phone: +49-5121-206917-128  |
+Amtsgericht Hildesheim, HRA 2686       | Fax:   +49-5121-206917-9    |
+
+
