@@ -2,178 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CA2609AD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 08:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D780E609ADC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiJXGzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 02:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
+        id S229872AbiJXHAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiJXGzk (ORCPT
+        with ESMTP id S229501AbiJXHAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 02:55:40 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0F750066
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 23:55:39 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id u2-20020a056e021a4200b002f9ecfa353cso8317305ilv.20
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 23:55:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yuHNia7p7N3sqvLTsp09LHkZ63PUJaGMh6REVrvmcmU=;
-        b=D1sMd3ptJsSj/3diWguven/8W3KWCC+DloCmadQDi6tvEeKzRafu7A8Ag6o6WFAcev
-         rjB+Moqah34ItQIbT7f5vCZgWy2KbmONK4b6t66MXU7NvIUzekex1s5cDd8ALipWohxo
-         jimk3JYJqO6U3aV5dj5E5l5VuokcwWeak7o14ISgnleis7uk/fQKDEkuyeAeFuMYg/7x
-         AQEEyC7rOeAs+dnpWIMctXqHwbxostGDfkR4Jw8o3BnLkKr5pLb/xIeDgXWqMGVVB4wr
-         gDSJHw47/4N09vkc6EWLHesmUdNYbEee+v8Fd+BpbM50MID1fhSdI6S1USncxGQ01zzP
-         WPVQ==
-X-Gm-Message-State: ACrzQf3cH1l3umUa9gqTsyYRiCZu9CNjIGAelOvaO8beLpJZgTdHcVeP
-        J6e44h/2ugk1S5zT2a3IyjzrZiqPjH9yFNwZPIr2tbYMWp3D
-X-Google-Smtp-Source: AMsMyM40Nt77JAlX8tx8pDq5dh92Vk07e/yfq/X3M4fg1AvlWbsq5hN4XQ4NoiqzG9e/vUMvhoIpMjw1mlwcF+jeDYdRGcWUXa0p
+        Mon, 24 Oct 2022 03:00:30 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C742BB35;
+        Mon, 24 Oct 2022 00:00:20 -0700 (PDT)
+X-UUID: 8bbf94c61458406ebc1e2683938f1fb0-20221024
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=j7rpdpDxukLQykFxVx9uWvBd2Oi6MhJtBN5ZZYflQgs=;
+        b=hc1ZECvLUVMblUKT58qysNGQ97Gai1XfYCTn8ybgjwk/lQEF8jgPT9aUYluqTbOzDwT4wIW51wX3FTELq+u8ylgaNSyYR/X/K2V8wL7/TNf4pqDfOQdOJIuS38qLwXGFbfIpaEy3mBc3RH13KktuR5yzezTstKDglGcocf/VXjo=;
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:efdb091b-3789-4238-b420-43d90d38ba83,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:100
+X-CID-INFO: VERSION:1.1.12,REQID:efdb091b-3789-4238-b420-43d90d38ba83,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:100
+X-CID-META: VersionHash:62cd327,CLOUDID:447f79c8-03ab-4171-989e-341ab5339257,B
+        ulkID:221024150017OMBNL3KB,BulkQuantity:0,Recheck:0,SF:38|28|16|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 8bbf94c61458406ebc1e2683938f1fb0-20221024
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <mingjia.zhang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1964739988; Mon, 24 Oct 2022 15:00:14 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Mon, 24 Oct 2022 15:00:12 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Mon, 24 Oct 2022 15:00:11 +0800
+From:   Mingjia Zhang <mingjia.zhang@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        "Hans Verkuil" <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+CC:     George Sun <george.sun@mediatek.com>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v4] media: mediatek: vcodec: Add to support VP9 inner racing mode
+Date:   Mon, 24 Oct 2022 15:00:09 +0800
+Message-ID: <20221024070009.4488-1-mingjia.zhang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2e0d:b0:6a3:74ab:f114 with SMTP id
- o13-20020a0566022e0d00b006a374abf114mr18690237iow.200.1666594538788; Sun, 23
- Oct 2022 23:55:38 -0700 (PDT)
-Date:   Sun, 23 Oct 2022 23:55:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007820af05ebc2477a@google.com>
-Subject: [syzbot] inconsistent lock state in try_to_wake_up
-From:   syzbot <syzbot+9d232b8025fff95ea41e@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+In order to reduce decoder latency, enable VP9 inner racing mode.
+Send lat trans buffer information to core when trigger lat to work,
+need not to wait until lat decode done.
 
-syzbot found the following issue on:
-
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=127ad626880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=9d232b8025fff95ea41e
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9d232b8025fff95ea41e@syzkaller.appspotmail.com
-
-================================
-WARNING: inconsistent lock state
-6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0 Not tainted
---------------------------------
-inconsistent {SOFTIRQ-ON-W} -> {IN-SOFTIRQ-W} usage.
-swapper/1/0 [HC0[0]:SC1[1]:HE0:SE0] takes:
-ffff00011a938948 (kn->active#5){+.?.}-{0:0}, at: try_to_wake_up+0x5c/0x514 kernel/sched/core.c:4082
-{SOFTIRQ-ON-W} state was registered at:
-  lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
-  kernfs_drain fs/kernfs/dir.c:478 [inline]
-  __kernfs_remove+0x514/0x7d8 fs/kernfs/dir.c:1386
-  kernfs_remove_by_name_ns+0x68/0xb8 fs/kernfs/dir.c:1589
-  kernfs_remove_by_name include/linux/kernfs.h:615 [inline]
-  remove_files fs/sysfs/group.c:28 [inline]
-  sysfs_remove_group+0x68/0x160 fs/sysfs/group.c:288
-  sysfs_remove_groups+0x3c/0x78 fs/sysfs/group.c:312
-  driver_remove_groups+0x28/0x38 drivers/base/driver.c:211
-  bus_remove_driver+0x7c/0x110 drivers/base/bus.c:673
-  driver_unregister+0x3c/0x6c drivers/base/driver.c:274
-  pci_unregister_driver+0x28/0xc4 drivers/pci/pci-driver.c:1452
-  ipmi_si_pci_shutdown+0x2c/0x40 drivers/char/ipmi/ipmi_si_pci.c:159
-  cleanup_ipmi_si+0x2c/0x10c drivers/char/ipmi/ipmi_si_intf.c:2272
-  init_ipmi_si+0x2bc/0x2d0 drivers/char/ipmi/ipmi_si_intf.c:2146
-  do_one_initcall+0x118/0x22c init/main.c:1296
-  do_initcall_level+0xac/0xe4 init/main.c:1369
-  do_initcalls+0x58/0xa8 init/main.c:1385
-  do_basic_setup+0x20/0x2c init/main.c:1404
-  kernel_init_freeable+0xb8/0x148 init/main.c:1623
-  kernel_init+0x24/0x290 init/main.c:1512
-  ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:860
-irq event stamp: 2262087
-hardirqs last  enabled at (2262086): [<ffff80000bfc8a34>] __raw_spin_unlock_irq include/linux/spinlock_api_smp.h:159 [inline]
-hardirqs last  enabled at (2262086): [<ffff80000bfc8a34>] _raw_spin_unlock_irq+0x3c/0x70 kernel/locking/spinlock.c:202
-hardirqs last disabled at (2262087): [<ffff80000bfc87f0>] __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:108 [inline]
-hardirqs last disabled at (2262087): [<ffff80000bfc87f0>] _raw_spin_lock_irqsave+0xa4/0xb4 kernel/locking/spinlock.c:162
-softirqs last  enabled at (2262028): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (2262083): [<ffff800008017c14>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
-
-other info that might help us debug this:
- Possible unsafe locking scenario:
-
-       CPU0
-       ----
-  lock(kn->active#5);
-  <Interrupt>
-    lock(kn->active#5);
-
- *** DEADLOCK ***
-
-1 lock held by swapper/1/0:
- #0: ffff80000800be20 ((&sci->sc_timer)){+.-.}-{0:0}, at: lockdep_copy_map include/linux/lockdep.h:31 [inline]
- #0: ffff80000800be20 ((&sci->sc_timer)){+.-.}-{0:0}, at: call_timer_fn+0x54/0x144 kernel/time/timer.c:1464
-
-stack backtrace:
-CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_usage_bug+0x39c/0x3cc kernel/locking/lockdep.c:3961
- mark_lock_irq+0x4a8/0x4b4
- mark_lock+0x154/0x1b4 kernel/locking/lockdep.c:4632
- __lock_acquire+0x5a0/0x30a4 kernel/locking/lockdep.c:5007
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
- _raw_spin_lock_irqsave+0x6c/0xb4 kernel/locking/spinlock.c:162
- try_to_wake_up+0x5c/0x514 kernel/sched/core.c:4082
- wake_up_process+0x18/0x24 kernel/sched/core.c:4314
- nilfs_construction_timeout+0x20/0x30 fs/nilfs2/segment.c:2403
- call_timer_fn+0x90/0x144 kernel/time/timer.c:1474
- expire_timers kernel/time/timer.c:1519 [inline]
- __run_timers+0x280/0x374 kernel/time/timer.c:1790
- run_timer_softirq+0x34/0x5c kernel/time/timer.c:1803
- _stext+0x168/0x37c
- ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:79
- call_on_irq_stack+0x2c/0x54 arch/arm64/kernel/entry.S:889
- do_softirq_own_stack+0x20/0x2c arch/arm64/kernel/irq.c:84
- invoke_softirq+0x70/0xbc kernel/softirq.c:452
- __irq_exit_rcu+0xf0/0x140 kernel/softirq.c:650
- irq_exit_rcu+0x10/0x40 kernel/softirq.c:662
- __el1_irq arch/arm64/kernel/entry-common.c:471 [inline]
- el1_interrupt+0x38/0x68 arch/arm64/kernel/entry-common.c:485
- el1h_64_irq_handler+0x18/0x24 arch/arm64/kernel/entry-common.c:490
- el1h_64_irq+0x64/0x68 arch/arm64/kernel/entry.S:577
- arch_local_irq_enable+0xc/0x18 arch/arm64/include/asm/irqflags.h:35
- default_idle_call+0x48/0xb8 kernel/sched/idle.c:109
- cpuidle_idle_call kernel/sched/idle.c:191 [inline]
- do_idle+0x108/0x2d8 kernel/sched/idle.c:303
- cpu_startup_entry+0x24/0x28 kernel/sched/idle.c:400
- secondary_start_kernel+0x154/0x17c arch/arm64/kernel/smp.c:265
- __secondary_switched+0xb0/0xb4 arch/arm64/kernel/head.S:618
-
-
+Signed-off-by: Mingjia Zhang <mingjia.zhang@mediatek.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes from v3:
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+- CTS/GTS test pass
+- Fluster result: Ran 275/303 tests successfully
+
+Changes from v2:
+
+- CTS/GTS test pass
+- Fluster result: Ran 240/303 tests successfully
+
+Changes from v1:
+
+- CTS/GTS test pass
+---
+ .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 87 ++++++++++---------
+ 1 file changed, 48 insertions(+), 39 deletions(-)
+
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+index 81de876d51267..baf7ecd54eda3 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+@@ -436,6 +436,7 @@ struct vdec_vp9_slice_ref {
+  * @frame_ctx:		4 frame context according to VP9 Spec
+  * @frame_ctx_helper:	4 frame context according to newest kernel spec
+  * @dirty:		state of each frame context
++ * @local_vsi:		local instance vsi information
+  * @init_vsi:		vsi used for initialized VP9 instance
+  * @vsi:		vsi used for decoding/flush ...
+  * @core_vsi:		vsi used for Core stage
+@@ -482,6 +483,8 @@ struct vdec_vp9_slice_instance {
+ 	struct v4l2_vp9_frame_context frame_ctx_helper;
+ 	unsigned char dirty[4];
+ 
++	struct vdec_vp9_slice_vsi local_vsi;
++
+ 	/* MicroP vsi */
+ 	union {
+ 		struct vdec_vp9_slice_init_vsi *init_vsi;
+@@ -1616,16 +1619,10 @@ static int vdec_vp9_slice_update_single(struct vdec_vp9_slice_instance *instance
+ }
+ 
+ static int vdec_vp9_slice_update_lat(struct vdec_vp9_slice_instance *instance,
+-				     struct vdec_lat_buf *lat_buf,
+-				     struct vdec_vp9_slice_pfc *pfc)
++				     struct vdec_vp9_slice_vsi *vsi)
+ {
+-	struct vdec_vp9_slice_vsi *vsi;
+-
+-	vsi = &pfc->vsi;
+-	memcpy(&pfc->state[0], &vsi->state, sizeof(vsi->state));
+-
+ 	mtk_vcodec_debug(instance, "Frame %u LAT CRC 0x%08x %lx %lx\n",
+-			 pfc->seq, vsi->state.crc[0],
++			 (instance->seq - 1), vsi->state.crc[0],
+ 			 (unsigned long)vsi->trans.dma_addr,
+ 			 (unsigned long)vsi->trans.dma_addr_end);
+ 
+@@ -2090,6 +2087,13 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 		return ret;
+ 	}
+ 
++	if (IS_VDEC_INNER_RACING(ctx->dev->dec_capability)) {
++		vdec_vp9_slice_vsi_from_remote(vsi, instance->vsi, 0);
++		memcpy(&instance->local_vsi, vsi, sizeof(*vsi));
++		vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
++		vsi = &instance->local_vsi;
++	}
++
+ 	if (instance->irq) {
+ 		ret = mtk_vcodec_wait_for_done_ctx(ctx,	MTK_INST_IRQ_RECEIVED,
+ 						   WAIT_INTR_TIMEOUT_MS, MTK_VDEC_LAT0);
+@@ -2102,22 +2106,25 @@ static int vdec_vp9_slice_lat_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ 	}
+ 
+ 	vdec_vp9_slice_vsi_from_remote(vsi, instance->vsi, 0);
+-	ret = vdec_vp9_slice_update_lat(instance, lat_buf, pfc);
++	ret = vdec_vp9_slice_update_lat(instance, vsi);
+ 
+-	/* LAT trans full, no more UBE or decode timeout */
+-	if (ret) {
+-		mtk_vcodec_err(instance, "VP9 decode error: %d\n", ret);
+-		return ret;
+-	}
++	if (!IS_VDEC_INNER_RACING(ctx->dev->dec_capability))
++		/* LAT trans full, no more UBE or decode timeout */
++		if (ret) {
++			mtk_vcodec_err(instance, "frame[%d] decode error: %d\n",
++				       ret, (instance->seq - 1));
++			return ret;
++		}
+ 
+-	mtk_vcodec_debug(instance, "lat dma addr: 0x%lx 0x%lx\n",
+-			 (unsigned long)pfc->vsi.trans.dma_addr,
+-			 (unsigned long)pfc->vsi.trans.dma_addr_end);
+ 
+-	vdec_msg_queue_update_ube_wptr(&ctx->msg_queue,
+-				       vsi->trans.dma_addr_end +
+-				       ctx->msg_queue.wdma_addr.dma_addr);
+-	vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
++	vsi->trans.dma_addr_end += ctx->msg_queue.wdma_addr.dma_addr;
++	vdec_msg_queue_update_ube_wptr(&ctx->msg_queue, vsi->trans.dma_addr_end);
++	if (!IS_VDEC_INNER_RACING(ctx->dev->dec_capability))
++		vdec_msg_queue_qbuf(&ctx->dev->msg_queue_core_ctx, lat_buf);
++
++	mtk_vcodec_debug(instance, "lat trans end addr(0x%lx), ube start addr(0x%lx)\n",
++			 (unsigned long)vsi->trans.dma_addr_end,
++			 (unsigned long)ctx->msg_queue.wdma_addr.dma_addr);
+ 
+ 	return 0;
+ }
+@@ -2139,40 +2146,40 @@ static int vdec_vp9_slice_decode(void *h_vdec, struct mtk_vcodec_mem *bs,
+ static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
+ {
+ 	struct vdec_vp9_slice_instance *instance;
+-	struct vdec_vp9_slice_pfc *pfc;
++	struct vdec_vp9_slice_pfc *pfc = NULL;
+ 	struct mtk_vcodec_ctx *ctx = NULL;
+ 	struct vdec_fb *fb = NULL;
+ 	int ret = -EINVAL;
+ 
+ 	if (!lat_buf)
+-		goto err;
++		return -EINVAL;
+ 
+ 	pfc = lat_buf->private_data;
+ 	ctx = lat_buf->ctx;
+ 	if (!pfc || !ctx)
+-		goto err;
++		return -EINVAL;
+ 
+ 	instance = ctx->drv_handle;
+ 	if (!instance)
+-		goto err;
++		return -EINVAL;
+ 
+ 	fb = ctx->dev->vdec_pdata->get_cap_buffer(ctx);
+ 	if (!fb) {
+ 		ret = -EBUSY;
+-		goto err;
++		goto vdec_dec_end;
+ 	}
+ 
+ 	ret = vdec_vp9_slice_setup_core(instance, fb, lat_buf, pfc);
+ 	if (ret) {
+ 		mtk_vcodec_err(instance, "vdec_vp9_slice_setup_core\n");
+-		goto err;
++		goto vdec_dec_end;
+ 	}
+ 	vdec_vp9_slice_vsi_to_remote(&pfc->vsi, instance->core_vsi);
+ 
+ 	ret = vpu_dec_core(&instance->vpu);
+ 	if (ret) {
+ 		mtk_vcodec_err(instance, "vpu_dec_core\n");
+-		goto err;
++		goto vdec_dec_end;
+ 	}
+ 
+ 	if (instance->irq) {
+@@ -2190,25 +2197,27 @@ static int vdec_vp9_slice_core_decode(struct vdec_lat_buf *lat_buf)
+ 	ret = vdec_vp9_slice_update_core(instance, lat_buf, pfc);
+ 	if (ret) {
+ 		mtk_vcodec_err(instance, "vdec_vp9_slice_update_core\n");
+-		goto err;
++		goto vdec_dec_end;
+ 	}
+ 
+-	pfc->vsi.trans.dma_addr_end += ctx->msg_queue.wdma_addr.dma_addr;
+ 	mtk_vcodec_debug(instance, "core dma_addr_end 0x%lx\n",
+ 			 (unsigned long)pfc->vsi.trans.dma_addr_end);
+-	vdec_msg_queue_update_ube_rptr(&ctx->msg_queue, pfc->vsi.trans.dma_addr_end);
+-	ctx->dev->vdec_pdata->cap_to_disp(ctx, 0, lat_buf->src_buf_req);
+-
+-	return 0;
+ 
+-err:
+-	if (ctx && pfc) {
+-		/* always update read pointer */
+-		vdec_msg_queue_update_ube_rptr(&ctx->msg_queue, pfc->vsi.trans.dma_addr_end);
++vdec_dec_end:
++	/* always update read pointer */
++	if (IS_VDEC_INNER_RACING(ctx->dev->dec_capability))
++		vdec_msg_queue_update_ube_rptr(&ctx->msg_queue,
++					       pfc->vsi.trans.dma_addr);
++	else
++		vdec_msg_queue_update_ube_rptr(&ctx->msg_queue,
++					       pfc->vsi.trans.dma_addr_end);
+ 
++	if (ret)
+ 		if (fb)
+ 			ctx->dev->vdec_pdata->cap_to_disp(ctx, 1, lat_buf->src_buf_req);
+-	}
++	else
++		ctx->dev->vdec_pdata->cap_to_disp(ctx, 0, lat_buf->src_buf_req);
++
+ 	return ret;
+ }
+ 
+-- 
+2.18.0
+
