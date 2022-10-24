@@ -2,242 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEAD60BB33
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615A160BB36
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbiJXUvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45038 "EHLO
+        id S234059AbiJXUvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235126AbiJXUuy (ORCPT
+        with ESMTP id S235061AbiJXUvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:50:54 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695E4F6152;
-        Mon, 24 Oct 2022 11:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666637865; x=1698173865;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=4HNDXePTRP0Chmi/v+wAZzBHpzS2igY2kTkVJK06Gb0=;
-  b=eEFRJgFsm6o1qChnfnzRu5u5v2HvJowPEeOw1pjahw77GfQua1XXxIpX
-   tvQRNZ6+46x6VxFQQ/M82va+JlxzQkfNvJsihTwYOK7gsHWUbgvwwSCSJ
-   rd63uMuTtJl+jHvXbe8NzMk5ktRMvk8itQY/oMRrNqf2nzzdw0xOjtZgq
-   xzV4hEF0qnGsU+t5Krp9gCCVuidFe0nWrq3p9DVepaDA2brTidoDD4It8
-   bUT8Mz39myZmCbRSKfIRHokWAzvpt+FSb5IAwOXcsM+qVgRPx1QiASbZc
-   zunyLegCawA0w5YFoU38btcoQvFKLQNCaRRb00P19IyTPL04rPJLDMZ0N
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="308589999"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="308589999"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 11:56:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="582510031"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="582510031"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 24 Oct 2022 11:56:53 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 11:56:53 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 24 Oct 2022 11:56:53 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 24 Oct 2022 11:56:51 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KosY/MC1rpQYmhtqF1hP6rp5TxG+EgOuswvPZkZGmSzOjy8saH4YKjyTfURaOb6ImaZHrq7jzoZIs6pjT/ck1amxhZPs0ju2FJZzeFde9hVqdb/zxa06hc7nej+M+F0N/8BDoLWc8wruHHqNh/CD0dLrcGu5Fxc1GHMSpIPIhvzmR5TXUczzWBUs781z/11jnvVc3qzHw+8F8lXe8cMHBGf1O3ZSp2G98p+yhKQNUcMv5riSWpo87S9ijpR2vxs81vbhCZNrmkf1JnlEnBUg2SazzQRnwtmcQUWHJzlf8UbgaspVOr0se0qO/gc+rmP3KE8aJ7z1XnplUsvoLrnceg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sRJSUrmwEn0oW1/f/lHliKiPhiUvut15U+14ShuJQWo=;
- b=jnHkWNE9d4xIT6RaaRz3OdbsPql8PWB+k57MHCl6CRkdSg6fD1wl7Myaw9AhLjnLoZTN1vojV3mlTKyYyDTX6n4tmH7YYDn1hhbk8oWL5flUX4rTq/BVN2RxHbDsbepWNOXJnZAxGD1YMs40zo8BDsHfOtC++p4HgdowgT+CD4IJyCfcO6x6m5E58OUlS/+zsJFFHVFeGZLsgAFZT3182T6a87VHN/C7PUH6Dp2MTdATXHikMmtg+wQqJTShWyIxmOLrHl5XGQHNazyTMAfuIse8enNXuRULRm801f5aoGkwMryBvtseglVzvCV07uDjkEl+dmfB5zen52B7pTioXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by SJ0PR11MB5815.namprd11.prod.outlook.com (2603:10b6:a03:426::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
- 2022 18:56:42 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::207e:ab0b:9e29:6a4b]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::207e:ab0b:9e29:6a4b%12]) with mapi id 15.20.5746.023; Mon, 24 Oct
- 2022 18:56:42 +0000
-Message-ID: <77943714-b988-bf14-8795-c72ff0424418@intel.com>
-Date:   Mon, 24 Oct 2022 11:56:39 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.0
-Subject: Re: [PATCH] x86/sgx: Reduce delay and interference of enclave release
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     <dave.hansen@linux.intel.com>, <md.iqbal.hossain@intel.com>,
-        <haitao.huang@intel.com>, <linux-sgx@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <06a5f478d3bfaa57954954c82dd5d4040450171d.1666130846.git.reinette.chatre@intel.com>
- <Y1WemizNZgFOVxja@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <Y1WemizNZgFOVxja@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR05CA0017.namprd05.prod.outlook.com
- (2603:10b6:a03:254::22) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Mon, 24 Oct 2022 16:51:13 -0400
+Received: from domac.alu.hr (domac.alu.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C262316EA37;
+        Mon, 24 Oct 2022 11:58:12 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 09A4B604EC;
+        Mon, 24 Oct 2022 20:56:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1666637806; bh=AcIPielNLpKnVsat7zTkYDaUsFursqeUBqR3yoMf+yY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SvcBgndn8By+L8BsTjBXX7m489jLfQvIRcHzu3poikSXMNzikPgyN9+T7fxlL6jIM
+         abzbhIdeEeHM02fh3lvL/PSMB04G2WQ99WkHbok+xwHDkqDtbLafWgmoKFw13unLW8
+         TATzi13Kw2QhHZvqokU/Z6PNd1gIsyLD4aGfTMVjnt9Msw3XYpyxkgP1Xv+GSPF9Yg
+         WPnIP9HIz0XmN3rHYIhL721b0Zlo/zgm9u9Bxqe8La1jkdI7v+r9G8htDk392aOCKa
+         6s+wJlQmWFGuGYT+hLWHjdmHib5I624TVidcUXBCRO9uZ9KYC1QIq5vxrWXMjisp9I
+         OMKLRU3tgEemg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id YXZMkYR2gjQc; Mon, 24 Oct 2022 20:56:43 +0200 (CEST)
+Received: from [192.168.0.12] (unknown [188.252.198.219])
+        by domac.alu.hr (Postfix) with ESMTPSA id ECDB2604E7;
+        Mon, 24 Oct 2022 20:56:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1666637803; bh=AcIPielNLpKnVsat7zTkYDaUsFursqeUBqR3yoMf+yY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XooIBdtTnlx9z9vJ8CT1afYzEDuRfLThvIt/k+FiqYM7WOz4Vj8cmySI8hPH2I3vw
+         JB9i1Wigpx56jz8yVfG150mnjt16O/JCRJhH1X27ch+Qaifg4SA3Ad84cJWAG/lp5E
+         6RvLXFiX2utVSvV9k2lOi1Ioek5DJTcOcw017SrE/7Ly39oBz4gz/kjtv331R4yrwp
+         t+09kabuQl336fLx/KQRC4Q4P+4ugR2UC7Vffu9d710cM/EPsFAWZ8MIipQ3mqRksG
+         I5Iw47OMqIT7IOJdCJ780JVBmzrkGrbHX52CGEPU1cw8WDI/0TJzYkVQ/w7Jl/oy/A
+         veL6Ly+DUP7IA==
+Message-ID: <d034dbbc-613c-1a5e-df64-d0251453c8eb@alu.unizg.hr>
+Date:   Mon, 24 Oct 2022 20:56:42 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|SJ0PR11MB5815:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c787644-1bfa-43d3-8b4d-08dab5f17d3d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wrIG8fDpX8qd1HSJmtYLdYhbySTdXXOWpBfY3lgIE1jH8dpxEEsAJAu/v68Bf5COyDAwKpQo2T7i5sT4w5Et3jGSwdw2kGWfU8KRFdTLDYtxuS2jfZOVAAWPvzILcWKHbS908WU9lwwAa1O+wyq/sSCRrk8scGbKURiC53UsiHfGreAxQI2Xwrp8ebwJqS/l0d9/qxBFzdQLTuNQOme9SMk7aq0IQ9tqZv+sJuRANKLBxH9H2h8cKTyl4xXyTFnKZ3WOxd/gNqSWBW/wW5f3R3IbeyiX3qx3JcmkBGjXflP/nDmk3b2z6+AP+NerwgQystmbEJtCqsT8h9p7g7HibvsIwKAZpFwd0RtGIfzLiy1+Fdg/eiTy7R1SBCoa3YjtDFig6ulVG+dKRzV5ws0WcfIz5Q/UcY4scZxPNfanZ6CzbaP0h1BhVaSzaUziJsIxJcrIYdReqOUL7uhTKeUSYWRWnvibFmpoKZhu2EMmfmigeSOvmlGBXP0GfI6bYoPUjG43P2OD0qkYop9+yA/fnetvgqQLUQAjf1p1+V7CeDJb69VmpFEiOQCLdgjm8zKv4eAnr6/FeT5fUdMuJkWw16sIX6oc1SrGa+3pvRlalnfIO5W2gHHrQ+JMccQB/N+JmHlvtNR+7yM1NNLAjIiEEDPqMn97zgOozqYI9qEZCwtgGQep2NAMWDvX+ITZsT+E6hBWdacAVv9SXzu6vYoIKVv/XOFPp9CWVuLA6k0UGrKk5/bglu2l4BrnIobB/vwr/RXJijW3nwHo/XfgJLkv28rwWS5Z0itXsCYTjZItrMY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(39860400002)(396003)(346002)(376002)(451199015)(31686004)(36756003)(38100700002)(31696002)(41300700001)(82960400001)(83380400001)(86362001)(186003)(66556008)(26005)(6512007)(6506007)(53546011)(2906002)(6666004)(2616005)(8936002)(44832011)(4326008)(8676002)(5660300002)(478600001)(6486002)(6916009)(66946007)(316002)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c0NQRkJXZ3N3L1l0QVFqQ2NsaUd3b3hTZFE2Q0R0Z1pWKzF5bFB0dEJHeWRM?=
- =?utf-8?B?VEo2d1QvaU5lOUdRMS93Zy93K1g5ZG5iYlRmRndoS3RuOWYyaUh0aGJ6L1dk?=
- =?utf-8?B?WEpqTkF4aGY3Z04zRUt6YW5JVisyU1pDdmtFWnRqWTd6NTF0TjVsa1FSUXRI?=
- =?utf-8?B?ZHRscHBVRFJJVUpkYmYyQzhyNGFjTmo3UEJrUjZ2eTNqYTJuY2NhYkRnM1Rn?=
- =?utf-8?B?ZXlUclVvQXdNbWVkeGtPWUpWM2RMdnVsT2Z6cjMzVTZzMFZIY1lsRjNaRlhS?=
- =?utf-8?B?RTNKRzlFbGY4SzY0anlNNnZ0eFFZWnVzOVNPcDJZWUJ5UWhMbVY0S2ZDeUJz?=
- =?utf-8?B?NEhoTmdVT1hpY0luZk1hWWwyT0lTVW9KUkx0S3N3MVFnZDNzTnBDMmErVlRC?=
- =?utf-8?B?MU00ZjE4YTlOSFBOckJCY0l0eGdweW5NYzJvdjZhWG5PbGJWNDZWdENBTVpy?=
- =?utf-8?B?K0RXbjNaNHcwRnRPZzh6akw2ZlVwZFVZMTN0VERNVHM0elo2QitLOHhPelFD?=
- =?utf-8?B?K2diQ1lXZXdLVzVXR2RrK2Z0TlBMajlhaDYxVzgraFgzK0ZxNXZjZjhkaU03?=
- =?utf-8?B?YklKcDluemcyWkF3anFPUUgxVW42VU43Qlk1eDd5eTZaRi9FUXRITVl5aDVk?=
- =?utf-8?B?VDBxUTk5T05FdXd5QldQTjVPWjZBdGRTdFIxZVZVSnlJdlFZejJBemRwTGRN?=
- =?utf-8?B?cEk4TE8waE1wNkkrN1JOamhBZ1QveUQxVWRPZjBReE1wZ1FyRDV5NHJYSzRy?=
- =?utf-8?B?NFJRUkxHdndQSDlpUnRhODB3dlhMeWk0UE1FTmJYWWQ5TzI3U0t4S3I4SzE4?=
- =?utf-8?B?NFlNYWc1WUFlcndPTE1OaDZpNUpPNThSdDkxQmVDMEFPSFRoc1EvZXZ4M0xZ?=
- =?utf-8?B?aVcyeDNHMXlWaXJkdi9Fb0ZRMjd0YVY2anNxamhlZXFYNHFQbEh5S1ovM0pH?=
- =?utf-8?B?OUhjV3pueUdkTCtESW5FQVo3SDEvanNEU2dqRVNjWms4OUJQeG5QcmZDQnRV?=
- =?utf-8?B?RGJTdGRBc2tVOG50QzdXck02ODM3ZGxNSHF2dlIzL0pyNlpBd1dlK3p5c2E2?=
- =?utf-8?B?SXh5YUR0cEJ6ZVArUTh4NklMYXA0QlIvWHRZY0JVL0pNL0tyZlFPdjhPajZ3?=
- =?utf-8?B?ZEJYQWdZcjJMYlBWM3hJWldUVFBoVzZOU3QxQWZzZ25oZ0YwQm9yN1FiNkdv?=
- =?utf-8?B?ZjVaTUdaYVllbTU4Vmw3NUFXTDBIeW9vS2ZuVU5PbGRYWTdoOWdKOXByZWp0?=
- =?utf-8?B?Um1Jd0dHczhUejlUQXc2SDBjZXYyS2N3UlpZaFNmL2RWNnNvVGpNY25iTVR0?=
- =?utf-8?B?WEV0NGJTSDcvT1BBVUl0Z2M1eVllaGRjSloyM2dDMlhuN0JJYTdkZkN5M3RP?=
- =?utf-8?B?M1AwMWRRdExLMHEvVDR0ak1hckk1alpwa2Frd2hGeW4xWGdiellsUnYyZnZH?=
- =?utf-8?B?bDUrejNIVC8xbWtrNjc3eE1RWnYwak1mY1RpMkZWMk1LVE5ZNzJUeEtPaEo5?=
- =?utf-8?B?YVloQ2EyNCsxVGQvZXFmTHRCcHIrNk9Vc2JweDFkdUdLMTJsbEtxS2dFaWZm?=
- =?utf-8?B?Y1kvL1hLVTV6N1JjTW5qbndJZTR5TVJ4TGJEWlhaT3JKOE5wUVU3TnpTQ0JL?=
- =?utf-8?B?czlhTmE2QVpGVFIvc0tQMWJaK3FhNW0yRzJ0Njh2bWdqVWU0RlptUDZRZ1p0?=
- =?utf-8?B?NU9HSmg4SlNyak9uaUJ2aHROZk1XZlUvT21KcWozT2IyOXlzTnlMSjA2VmtM?=
- =?utf-8?B?UUVMVGxtTEp5Mk8wUVRnK1l2ZVpXUndkaVYvdFNkL3BGbmYyc1llZ21tSzRr?=
- =?utf-8?B?UTV1dmYrdnl4RFZ1Nzl1NXdrK3BrTFFXYVg1RFFtaUJEdVluVm5KTGROOE5X?=
- =?utf-8?B?VGdyRklCTUtPNDZYMzk5NFNEL2t2dmh5SGVUeFd6d1d4UnYvTUlOMGRlUzht?=
- =?utf-8?B?bDNhYy9UVE1jQitLbHg5MDV1WFpUSlgvcFZEQytybDFFblk2d0g4b3RVR3Ix?=
- =?utf-8?B?TzVqTE8ycEhlVkl0SWYyeVBTZlhZSDdVS0ZnTmhPVkJqclpjT1dUa25yR0Fs?=
- =?utf-8?B?anYvOGlkUE1UUlVGSnVKMHJlVXU1V2krMTk5ZGFtVGc3c2pKME43WlU1VXBQ?=
- =?utf-8?B?MkdxR0Jvdmo4UjdvUUNRUFh3ZHJCN3l2ZnhhTFpjai8vZVFMaWlGVm44bEx4?=
- =?utf-8?B?MEE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c787644-1bfa-43d3-8b4d-08dab5f17d3d
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 18:56:42.1151
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9S6mTnSJRwYjYKUDdleqtXBrzUWiVa4bo/tH6sUoZ9rVsyssKUbXE69fuRrJYUOAEwhp+kGOatRI5YKXqLoZApJV1lG2zX/i6hlmkM8PHUQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5815
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: BUG: bisected: thermald regression (MEMLEAK) in commit
+ c7ff29763989bd09c433f73fae3c1e1c15d9cda4
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, rjw@rjwysocki.net
+Cc:     regressions@lists.linux.dev, regressions@leemhuis.info,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Robert Moore <robert.moore@intel.com>, devel@acpica.org
+References: <e0f06714-5a49-a4e6-24e6-c4103c820819@alu.unizg.hr>
+ <9ef3674afd370050b86a68e44c97e4f0257f1adf.camel@linux.intel.com>
+ <bd1f0d2a-d456-92cc-ecca-23e480aea4b1@alu.unizg.hr>
+ <e5d3d561bb3a9c68bc903cfc35c27629a4a9225c.camel@linux.intel.com>
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <e5d3d561bb3a9c68bc903cfc35c27629a4a9225c.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+On 24. 10. 2022. 20:39, srinivas pandruvada wrote:
 
-On 10/23/2022 1:06 PM, Jarkko Sakkinen wrote:
-> On Tue, Oct 18, 2022 at 03:42:47PM -0700, Reinette Chatre wrote:
+>> Thank you for the patch. Unfortunately, when applied to v6.0.3 it
+>> didn't
+>> fix the issue.
+> Thanks for the test. I copied to acpi and acpica mailing list. Someone
+> can tell us what is this call doing wrong here.
+Seems like a prudent thing to do. It must be heavy to provide support 
+for all of the
+hardware on the market ...
 
-...
+Maybe this will help (however, this dmesg -l err was the same in "git 
+bisect good" and "git bisect bad" kernels!):
 
->> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
->> index 1ec20807de1e..f7365c278525 100644
->> --- a/arch/x86/kernel/cpu/sgx/encl.c
->> +++ b/arch/x86/kernel/cpu/sgx/encl.c
->> @@ -682,9 +682,12 @@ void sgx_encl_release(struct kref *ref)
->>  	struct sgx_encl *encl = container_of(ref, struct sgx_encl, refcount);
->>  	struct sgx_va_page *va_page;
->>  	struct sgx_encl_page *entry;
->> -	unsigned long index;
->> +	unsigned long count = 0;
->> +
->> +	XA_STATE(xas, &encl->page_array, PFN_DOWN(encl->base));
->>  
->> -	xa_for_each(&encl->page_array, index, entry) {
->> +	xas_lock(&xas);
->> +	xas_for_each(&xas, entry, PFN_DOWN(encl->base + encl->size  - 1)) {
-> 
-> I would add to declarations:
-> 
-> unsigned long nr_pages = PFN_DOWN(encl->base + encl->size  - 1);
-> 
-> Makes this more readable.
+root@marvin-IdeaPad-3-15ITL6:~# dmesg -l err
+[    0.121673] ACPI BIOS Error (bug): Could not resolve symbol 
+[\_SB.PCI0], AE_NOT_FOUND (20220331/dswload2-163)
+[    0.121688] ACPI Error: AE_NOT_FOUND, During name lookup/catalog 
+(20220331/psobject-221)
+[    0.142742] ACPI BIOS Error (bug): Could not resolve symbol 
+[\_SB.PC00.DGPV], AE_NOT_FOUND (20220331/psargs-330)
+[    0.142751] ACPI Error: Aborting method \_SB.PC00.PEG0.PCRP._ON due 
+to previous error (AE_NOT_FOUND) (20220331/psparse-531)
+[    0.308625] integrity: Problem loading X.509 certificate -65
+[    2.731846] mtd device must be supplied (device name is empty)
+[    3.226997] i801_smbus 0000:00:1f.4: Transaction timeout
+[    3.229085] i801_smbus 0000:00:1f.4: Failed terminating the transaction
+[    3.229194] i801_smbus 0000:00:1f.4: SMBus is busy, can't use it!
+[    3.515909] mtd device must be supplied (device name is empty)
+[    4.600624] ACPI BIOS Error (bug): Could not resolve symbol 
+[\_TZ.ETMD], AE_NOT_FOUND (20220331/psargs-330)
+[    4.600741] ACPI Error: Aborting method \_SB.IETM._OSC due to 
+previous error (AE_NOT_FOUND) (20220331/psparse-531)
+[    5.110999] Bluetooth: hci0: Malformed MSFT vendor event: 0x02
+[    5.173006] Bluetooth: hci0: HCI_REQ-0xfc1e
+root@marvin-IdeaPad-3-15ITL6:~# dmesg | grep _OSC
+[    0.131652] ACPI: \_SB_.PR00: _OSC native thermal LVT Acked
+[    0.167416] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM 
+ClockPM Segments MSI EDR HPX-Type3]
+[    0.169119] acpi PNP0A08:00: _OSC: platform does not support [AER]
+[    0.172500] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug 
+SHPCHotplug PME PCIeCapability LTR DPC]
+[    4.600655] No Local Variables are initialized for Method [_OSC]
+[    4.600660] Initialized Arguments for Method [_OSC]:  (4 arguments 
+defined for method invocation)
+[    4.600741] ACPI Error: Aborting method \_SB.IETM._OSC due to 
+previous error (AE_NOT_FOUND) (20220331/psparse-531)
+root@marvin-IdeaPad-3-15ITL6:~#
 
-Will do, but I prefer to name it "max_page_index" or something related instead.
-"nr_pages" implies "number of pages" to me, which is not what
-PFN_DOWN(encl->base + encl->size - 1) represents. What is represented is the
-highest possible index of a page in page_array, where an index is the
-pfn of a page.
-
-> 
->>  		if (entry->epc_page) {
->>  			/*
->>  			 * The page and its radix tree entry cannot be freed
->> @@ -699,9 +702,20 @@ void sgx_encl_release(struct kref *ref)
->>  		}
->>  
->>  		kfree(entry);
->> -		/* Invoke scheduler to prevent soft lockups. */
->> -		cond_resched();
->> +		/*
->> +		 * Invoke scheduler on every XA_CHECK_SCHED iteration
->> +		 * to prevent soft lockups.
->> +		 */
->> +		if (!(++count % XA_CHECK_SCHED)) {
->> +			xas_pause(&xas);
->> +			xas_unlock(&xas);
->> +
->> +			cond_resched();
->> +
->> +			xas_lock(&xas);
->> +		}
->>  	}
-> 
->         WARN_ON(count != nr_pages);
-> 
-
-nr_pages as assigned in your example does not represent a count of the
-enclave pages but instead a pfn index into the page_array. Comparing it
-to count, the number of removed enclave pages that are not being held
-by reclaimer, is not appropriate.
-
-This check would be problematic even if we create a "nr_pages" from
-the range of possible indices. This is because of how enclave sizes are
-required to be power-of-two that makes it likely for there to be indices
-without pages associated with it.
-
->> +	xas_unlock(&xas);
->>  
->>  	xa_destroy(&encl->page_array);
->>  
->> -- 
->> 2.34.1
+>> marvin@marvin-IdeaPad-3-15ITL6:~$ uname -rms
+>> Linux 6.0.3-18-fix01-mlk+ x86_64
+>> marvin@marvin-IdeaPad-3-15ITL6:~$ sudo bash
+>> [sudo] password for marvin:
+>> root@marvin-IdeaPad-3-15ITL6:/home/marvin# cat
+>> /sys/kernel/debug/kmemleak
+>> root@marvin-IdeaPad-3-15ITL6:/home/marvin# echo scan >
+>> /sys/kernel/debug/kmemleak
+>> root@marvin-IdeaPad-3-15ITL6:/home/marvin# cat
+>> /sys/kernel/debug/kmemleak
+>> unreferenced object 0xffff998b030c3370 (size 80):
+>>     comm "thermald", pid 824, jiffies 4294893654 (age 67.080s)
+>>     hex dump (first 32 bytes):
+>>       00 00 00 00 00 00 00 00 0d 01 2d 00 00 00 00 00 ..........-.....
+>>       af 07 01 c0 6f bc ff ff 00 00 00 00 00 00 00 00 ....o...........
+>>     backtrace:
+>>       [<00000000490225c2>] slab_post_alloc_hook+0x80/0x2e0
+>>       [<00000000dc142b33>] kmem_cache_alloc+0x166/0x2e0
+>>       [<00000000168f1071>] acpi_os_acquire_object+0x2c/0x32
+>>       [<00000000fcc615e1>] acpi_ps_alloc_op+0x4a/0x99
+>>       [<00000000fb475bb4>] acpi_ps_get_next_arg+0x611/0x761
+>>       [<000000009048d529>] acpi_ps_parse_loop+0x494/0x8d7
+>>       [<000000005b0bf086>] acpi_ps_parse_aml+0x1bb/0x561
+>>       [<000000007ab7e288>] acpi_ps_execute_method+0x20f/0x2d5
+>>       [<00000000c12fa6b7>] acpi_ns_evaluate+0x34d/0x4f3
+>>       [<000000001be94719>] acpi_evaluate_object+0x180/0x3ae
+>>       [<00000000423a7ad5>] acpi_run_osc+0x128/0x250
+>>       [<0000000040a72af8>] int3400_thermal_run_osc+0x6f/0xc0
+>> [int3400_thermal]
+>>       [<00000000f8d59987>] current_uuid_store+0xe3/0x120
+>> [int3400_thermal]
+>>       [<000000007e2e2d17>] dev_attr_store+0x14/0x30
+>>       [<00000000b824b589>] sysfs_kf_write+0x38/0x50
+>>       [<00000000beae69c1>] kernfs_fop_write_iter+0x146/0x1d0
+>> root@marvin-IdeaPad-3-15ITL6:/home/marvin#
 >>
+>> The build process was as follows:
+>>
+>>    1573  10/24/2022 06:41:53 PM  cd linux_stable
+>>    1574  10/24/2022 06:42:03 PM  git checkout v6.0.3
+>>    1575  10/24/2022 06:42:44 PM  cd ..
+>>    1576  10/24/2022 06:42:50 PM  time rm -rf linux_stable_build; time
+>> cp
+>> -rp linux_stable linux_stable_build; \
+>>                       time diff -ur linux_stable linux_stable_build;
+>> cd
+>> linux_stable_build
+>>    1577  10/24/2022 06:46:19 PM  git apply ../thermald-20221024-
+>> 01.diff
+>>    1578  10/24/2022 06:46:28 PM  vi ../config-5.15.0-50-memleak
+>>    1579  10/24/2022 06:47:08 PM  cp ../config-5.15.0-50-memleak
+>> .config
+>>    1580  10/24/2022 06:47:16 PM  make olddefconfig
+>>    1581  10/24/2022 06:48:42 PM  time nice make CC="ccache gcc"
+>> KBUILD_BUILD_TIMESTAMP="" -j10 deb-pkg; date
+>>
+>> I think your patch definitively makes sense, but there's more to this
+>> than meets the eye :-/
+>>
+>> Hope this helps.
+>>
+>> Thanks
+>> Mirsad
+>>
+>> --
+>> Mirsad Goran Todorovac
+>> Sistem inženjer
+>> Grafički fakultet | Akademija likovnih umjetnosti
+>> Sveučilište u Zagrebu
 
-Reinette
+--
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+-- 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
