@@ -2,308 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD4260B1AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6252060B32C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbiJXQbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        id S231691AbiJXQ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234112AbiJXQbE (ORCPT
+        with ESMTP id S235845AbiJXQzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:31:04 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51524BE2C5
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:17:32 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-13ba9a4430cso3486431fac.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:17:31 -0700 (PDT)
+        Mon, 24 Oct 2022 12:55:13 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C561AE290;
+        Mon, 24 Oct 2022 08:36:03 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id j130so11415944ybj.9;
+        Mon, 24 Oct 2022 08:36:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oUQJnoiVcjmiMscuWttpHv+zHGY2MfyL7+ONIPh7x0c=;
-        b=ZOVjhMxzWHLNLunugrJ+SECAAXLWsf7AdLqkh+K7UNjlaUGQ9T2vB5C1CqvSyz5voW
-         bguPwKRzm/d8Nc2tvHEhPSDIQzvuWtsgD76Q/qYilldT8A9N6UkUnxvuSJDxx+vTvE5o
-         2wEHu1Ri6xBOStR4aLMOYkidCez0B+QKB5Gjb1/7yy9AVQO65fUF1zxcv/Y3e5YiV1+W
-         poVwgnoe6oH0RiJlDMLgz9IaGKxX8b/8Q8eYaqr1/wtwkiyiEjjVSRhacLaxo5ldxl3i
-         VwCVp598YWRBTePj+MBn0nF3yxfpV30BK9THLsARcWwXtz5SWeF5ah3JcJvdPHFdxBai
-         s3Yw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WrYoOZbKFCccOrtXPnngnmJRm0Dj9ejvdDDgWvdIOc4=;
+        b=j2U/GyYCVlBhA/+vasoTYYyganc6QSHUuLmYGE461nM2B2j7L8BHyYJbCAxBhVG1XX
+         acQEn8DfB15lQQ3cUHrYLqtiRlayPkTmfzIFDmBmW5dcYFdLQND9nnxZTdvKCr6uWVWP
+         lQ/YxKxb8xTwyqrUVGSy4HmT9X8ii3nCf4v54hhleQEB63NKf+9vkZs57xlDOQZ3auCn
+         ShBrinqTkg3S34wjdreAKCRKmFJec1d+fPErUSGV0Dis+Q+dbROR4jlIeogJ8DkVUOal
+         yrAtF7Ri5T52VTE5VHwBXhGCANjLxUew9ZeBxt+lQ/waEnuFDltPYahUmXVQ3BlssTh+
+         nQrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oUQJnoiVcjmiMscuWttpHv+zHGY2MfyL7+ONIPh7x0c=;
-        b=SucnDti3rNcTfYrvv09FnzJDGUckyPeGi8hImsTFW7SKJDad5gWkOPQYBY7+dISrZx
-         4TsQLFBY+KT8hfTwQU+fopmpxMuO1gAVT+p/WnWvJQwHUkGRWIvNIN7vLh5abBlO/TWq
-         95TRUaeWX9VcpVMaFJNshMiRhwjJgD+7orihbbIINg9oJbDiVID9MxMzFcy/Xq2JXHeT
-         ddjukheSwJLm0AQrkBEJAF3rbnWD3Lz8ziFAS/3fMVcdeGnavck0goIum7GO+RqaG0kH
-         cPs3w/XsNl5anO4xxrQxL/bIQD4Ju5LpgEvp411eGZZ9GgVBHZfbSBwnOOkUYReVglff
-         wa6A==
-X-Gm-Message-State: ACrzQf3Ot2yMr0U9L65yXe69xMpho+JgOgffeDdI44xVwsU5aI9/AdPV
-        I1HRKOi1DcMYEGObklqf/OVZL2HJAX5BcFU2
-X-Google-Smtp-Source: AMsMyM7lilCtHTTMSwA5VWVUapmiwGzvoSOUrpXDvYfOl0lDSGsKoMB/yl+OOPDcRF0udOxMB24knQ==
-X-Received: by 2002:a17:90b:1e46:b0:20a:f9d8:1ff7 with SMTP id pi6-20020a17090b1e4600b0020af9d81ff7mr76442318pjb.34.1666623666090;
-        Mon, 24 Oct 2022 08:01:06 -0700 (PDT)
-Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id i19-20020a63e453000000b00434760ee36asm17045962pgk.16.2022.10.24.08.00.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 08:01:05 -0700 (PDT)
-Message-ID: <78ad5d7b-4078-0b8e-f4aa-6c8113631359@daynix.com>
-Date:   Tue, 25 Oct 2022 00:00:56 +0900
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WrYoOZbKFCccOrtXPnngnmJRm0Dj9ejvdDDgWvdIOc4=;
+        b=Ki97YgnAKB9oYIxqBm8AShP4AaV1ZOoYo54Ofuk6aAssCesp4QZT9ijd4Ykxbf7pJC
+         akBINcoFmqxL04GpGdsehkMrsXSCWw7WTuFDFnen9SzftYl2U1OKMxOrguBCMR65FdYv
+         SuHtoFCIT/eSP52CJx9ayEeEp7w0OvSN47hICZ28ethJDyPsM93hjXR/eOx9zGgfElYc
+         USpGu1zjoCOHcLyKITnQVNRQcp9S6rBSGaAqXYPnfiVzl1VVXWaqjvjI69x9mCTCymw1
+         7fRgZUvztZXF+uBfGia69s9TQ5q0wvRXDNGGYuYhco2qbmw1v4h5dvWux0owzxTRvq8j
+         NbeA==
+X-Gm-Message-State: ACrzQf0shYZWjlkTDWvvxREwx7ADzEatUo9RY6Hsl65wCd1Y0+zjpjfE
+        S+FiBtZhVJHN+TSbZ4n3+E7CUkI9nx7kHQbQFeXZxmRf
+X-Google-Smtp-Source: AMsMyM6EvysaHiUabvYs4baVZTymhfLHCC/g/dii9bVMJWWAuOyZVdmdE7eqTdRMvsDXi3jbZf8C43NqJDJvCUeug1s=
+X-Received: by 2002:a9d:7859:0:b0:661:b842:80d2 with SMTP id
+ c25-20020a9d7859000000b00661b84280d2mr16537790otm.328.1666623706022; Mon, 24
+ Oct 2022 08:01:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 00/22] Fallback to native backlight
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "Lee, Chun-Yi" <jlee@suse.com>, Mark Gross <markgross@kernel.org>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Cezary Jackiewicz <cezary.jackiewicz@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Jonathan Woithe <jwoithe@just42.net>,
-        Ike Panhc <ike.pan@canonical.com>,
-        Daniel Dadap <ddadap@nvidia.com>,
-        Kenneth Chan <kenneth.t.chan@gmail.com>,
-        Mattia Dongili <malattia@linux.it>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Azael Avalos <coproscefalo@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Robert Moore <robert.moore@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        ibm-acpi-devel@lists.sourceforge.net, linux-fbdev@vger.kernel.org,
-        devel@acpica.org
-References: <20221024113513.5205-1-akihiko.odaki@daynix.com>
- <746e5cc6-516f-8f69-9d4b-8fe237de8fd6@redhat.com>
- <edec5950-cec8-b647-ccb1-ba48f9b3bbb0@daynix.com>
- <60672af8-05d2-113c-12b9-d635608be0dd@redhat.com>
- <ea69242c-0bc8-c7bb-9602-c7489bb69684@daynix.com>
- <7373e258-f7cc-4416-9b1c-c8c9dab59ada@daynix.com>
- <ae3497ed-b68d-c36a-6b6f-f7b9771d9238@redhat.com>
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <ae3497ed-b68d-c36a-6b6f-f7b9771d9238@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220913085320.8577-1-johan+linaro@kernel.org>
+ <YymCll02tRIMb+9Z@hovoldconsulting.com> <Y1I77HYeOkx1fz1E@hovoldconsulting.com>
+ <139426b9-0e5b-e4c3-27c6-584ab48517c2@quicinc.com> <Y1Z4HrEcLDhe6gQr@hovoldconsulting.com>
+In-Reply-To: <Y1Z4HrEcLDhe6gQr@hovoldconsulting.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 24 Oct 2022 08:01:55 -0700
+Message-ID: <CAF6AEGuMFCSN2YtXiPmzL_4t82PPp_-K6DB+UHtScygD8PCQHw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] drm/msm: probe deferral fixes
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Steev Klimaszewski <steev@kali.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 24, 2022 at 4:34 AM Johan Hovold <johan@kernel.org> wrote:
+>
+> On Fri, Oct 21, 2022 at 09:05:52AM -0700, Abhinav Kumar wrote:
+> > Hi Johan
+> >
+> > On 10/20/2022 11:27 PM, Johan Hovold wrote:
+> > > On Tue, Sep 20, 2022 at 11:06:30AM +0200, Johan Hovold wrote:
+> > >> On Tue, Sep 13, 2022 at 10:53:10AM +0200, Johan Hovold wrote:
+> > >>> The MSM DRM driver is currently broken in multiple ways with respect to
+> > >>> probe deferral. Not only does the driver currently fail to probe again
+> > >>> after a late deferral, but due to a related use-after-free bug this also
+> > >>> triggers NULL-pointer dereferences.
+> > >>>
+> > >>> These bugs are not new but have become critical with the release of
+> > >>> 5.19 where probe is deferred in case the aux-bus EP panel driver has not
+> > >>> yet been loaded.
+> > >>>
+> > >>> The underlying problem is lifetime issues due to careless use of
+> > >>> device-managed resources.
+> > >>
+> > >> Any chance of getting this merged for 6.1?
+> > >
+> > > Is anyone picking these up as fixes for 6.1-rc as we discussed?
+> > >
+> > > Johan
+> >
+> > All of these except the last two ( as discussed ) have landed in the
+> > -fixes tree
+> >
+> > https://gitlab.freedesktop.org/drm/msm/-/commit/6808abdb33bf90330e70a687d29f038507e06ebb
+>
+> Ah, perfect, thanks.
+>
+> When do you expect to send these on so that they end up in linux-next
+> and eventually Linus's tree?
 
+I'll send a -fixes PR this week
 
-On 2022/10/24 23:37, Hans de Goede wrote:
-> Hi,
-> 
-> On 10/24/22 16:31, Akihiko Odaki wrote:
->> On 2022/10/24 23:06, Akihiko Odaki wrote:
->>> On 2022/10/24 22:21, Hans de Goede wrote:
->>>> Hi,
->>>>
->>>> On 10/24/22 14:58, Akihiko Odaki wrote:
->>>>> On 2022/10/24 20:53, Hans de Goede wrote:
->>>>>> Hi Akihiko,
->>>>>>
->>>>>> On 10/24/22 13:34, Akihiko Odaki wrote:
->>>>>>> Commit 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native()
->>>>>>> helper") and following commits made native backlight unavailable if
->>>>>>> CONFIG_ACPI_VIDEO is set and the backlight feature of ACPI video is
->>>>>>> unavailable, which broke the backlight functionality on Lenovo ThinkPad
->>>>>>> C13 Yoga Chromebook. Allow to fall back to native backlight in such
->>>>>>> cases.
->>>>>>
->>>>>> I appreciate your work on this, but what this in essence does is
->>>>>> it allows 2 backlight drivers (vendor + native) to get registered
->>>>>> for the same panel again. While the whole goal of the backlight refactor
->>>>>> series landing in 6.1 was to make it so that there always is only
->>>>>> *1* backlight device registered instead of (possibly) registering
->>>>>> multiple and letting userspace figure it out. It is also important
->>>>>> to only always have 1 backlight device per panel for further
->>>>>> upcoming changes.
->>>>>>
->>>>>> So nack for this solution, sorry.
->>>>>>
->>>>>> I am aware that this breaks backlight control on some Chromebooks,
->>>>>> this was already reported and I wrote a long reply explaining why
->>>>>> things are done the way they are done now and also suggesting
->>>>>> 2 possible (much simpler) fixes, see:
->>>>>> https://lore.kernel.org/linux-acpi/42a5f2c9-a1dc-8fc0-7334-fe6c390ecfbb@redhat.com/
->>>>>>
->>>>>> Unfortunately the reported has not followed-up on this and
->>>>>> I don't have the hardware to test this myself.
->>>>>>
->>>>>> Can you please try implementing 1 of the fixes suggested there
->>>>>> and then submit that upstream ?
->>>>>>
->>>>>> Regards,
->>>>>>
->>>>>> Hans
->>>>>>
->>>>>
->>>>> Hi Hans,
->>>>>
->>>>> Thanks for reviewing and letting me know the prior attempt.
->>>>>
->>>>> In this case, there is only a native backlight device and no vendor backlight device so the duplication of backlight devices does not happen. I think it is better to handle such a case without quirks.
->>>>
->>>> Adding a single heuristic for all chromebooks is something completely different
->>>> then adding per model quirks which indeed ideally should be avoided (but this
->>>> is not always possible).
->>>>
->>>>> I understand it is still questionable to cover the case by allowing duplication when both of a vendor backlight device and native one. To explain my understanding and reasoning for *not* trying to apply the de-duplication rule to the vendor/native combination, let me first describe that the de-duplication which happens in acpi_video_get_backlight_type() is a heuristics and limited.
->>>>>
->>>>> As the background of acpi_video_get_backlight_type(), there is an assumption that it should be common that both of the firmware, implementing ACPI, and the kernel have code to drive backlight. In the case, the more reliable one should be picked instead of using both, and that is what the statements in `if (video_caps & ACPI_VIDEO_BACKLIGHT)` does.
->>>>>
->>>>> However, the method has two limitations:
->>>>> 1. It does not cover the case where two backlight devices with the same type exist.
->>>>
->>>> This only happens when there are 2 panels; or 2 gpus driving a single panel
->>>> which are both special cases where we actually want 2 backlight devices.
->>>>
->>>>> 2. The underlying assumption does not apply to vendor/native combination.
->>>>>
->>>>> Regarding the second limitation, I don't even understand the difference between vendor and native. My guess is that a vendor backlight device uses vendor-specific ACPI interface, and a native one directly uses hardware registers. If my guess is correct, the difference between vendor and native does not imply that both of them are likely to exist at the same time. As the conclusion, there is no more motivation to try to de-duplicate the vendor/native combination than to try to de-duplicate combination of devices with a single type.
->>>>>
->>>>> Of course, it is better if we could also avoid registering two devices with one type for one physical device. Possibly we can do so by providing a parameter to indicate that it is for the same "internal" backlight to devm_backlight_device_register(), and let the function check for the duplication. However, this rule may be too restrict, or may have problems I missed.
->>>>>
->>>>> Based on the discussion above, we can deduce three possibilities:
->>>>> a. There is no reason to distinguish vendor and native in this case, and we can stick to my current proposal.
->>>>> b. There is a valid reason to distinguish vendor and native, and we can adopt the same strategy that already adopted for ACPI video/vendor combination.
->>>>> c. We can implement de-duplication in devm_backlight_device_register().
->>>>> d. The other possible options are not worth, and we can just implement quirks specific to Chromebook/coreboot.
->>>>>
->>>>> In case b, it should be noted that vendor and native backlight device do not require ACPI video, and CONFIG_ACPI_VIDEO may not be enabled. In the case, the de-duplication needs to be implemented in backlight class device.
->>>>
->>>> I have been working on the ACPI/x86 backlight detection code since 2015, please trust
->>>> me when I say that allowing both vendor + native backlight devices at the same time
->>>> is a bad idea.
->>>>
->>>> I'm currently in direct contact with the ChromeOS team about fixing the Chromebook
->>>> backlight issue introduced in 6.1-rc1.
->>>>
->>>> If you wan to help, please read:
->>>>
->>>> https://lore.kernel.org/linux-acpi/42a5f2c9-a1dc-8fc0-7334-fe6c390ecfbb@redhat.com/
->>>>
->>>> And try implementing 1 if the 2 solutions suggested there.
->>>>
->>>> Regards,
->>>>
->>>> Hans
->>>
->>> Hi,
->>>
->>> I just wanted to confirm your intention that we should distinguish vendor and native. In the case I think it is better to modify __acpi_video_get_backlight_type() and add "native_available" check in case of no ACPI video as already done for the ACPI video/native combination.
->>>
->>> Unfortunately this has one pitfall though: it does not work if CONFIG_ACPI_VIDEO is disabled. If it is, acpi_video_get_backlight_type() always return acpi_backlight_vendor, and acpi_video_backlight_use_native() always returns true. It is not a regression but the current behavior. Fixing it requires also refactoring touching both of ACPI video and backlight class driver so I guess I'm not an appropriate person to do that, and I should just add "native_available" check to __acpi_video_get_backlight_type().
->>>
->>> Does that sound good?
->>
->> Well, it would not be that easy since just adding native_available cannot handle the case where the vendor driver gets registered first. Checking with "native_available" was possible for ACPI video/vendor combination because ACPI video registers its backlight after some delay. I still think it does not overcomplicate things to modify __acpi_video_get_backlight_type() so that it can use both of vendor and native as fallback while preventing duplicate registration.
-> 
-> In the mean time this has already been fixed by a single patch of just a few
-> lines, rather then requiring 22 patches, see:
-> 
-> https://lore.kernel.org/dri-devel/20221024141210.67784-1-dmitry.osipenko@collabora.com/
-> 
-> Regards,
-> 
-> Hans
+> Note that it looks like something happened with the commit messages when
+> you applied these. Specifically, the Fixes tags appears to now have a
+> line break in them and there's also some random whitespace before your
+> SoB:
+>
+>         Fixes: c3bf8e21
+>
+>          ("drm/msm/dp: Add eDP support via aux_bus")
 
-It should be the smaller indeed. Modifying 
-__acpi_video_get_backlight_type() so that it can fall back to either of 
-vendor and native requires all of the vendor drivers to use something 
-like acpi_video_backlight_use_native() but for vendor. It certainly 
-requires 22 patches.
+naw, that is just some problem with gitlab's html generation, the
+actual patch is fine ;-)
 
-That aside, the first patch in this series can be applied without the 
-later patches so you may have a look at it. It's fine if you don't merge 
-it though since it does not fix really a pragmatic bug as its message says.
+BR,
+-R
 
-Regards,
-Akihiko Odaki
-
-> 
-> 
-> 
-> 
->>>>>>> Akihiko Odaki (22):
->>>>>>>      drm/i915/opregion: Improve backlight request condition
->>>>>>>      ACPI: video: Introduce acpi_video_get_backlight_types()
->>>>>>>      LoongArch: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: acer-wmi: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: asus-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: asus-wmi: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: compal-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: eeepc-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: fujitsu-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: ideapad-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: msi-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: msi-wmi: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: nvidia-wmi-ec-backlight: Use
->>>>>>>        acpi_video_get_backlight_types()
->>>>>>>      platform/x86: panasonic-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: samsung-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: sony-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: thinkpad_acpi: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: toshiba_acpi: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: dell-laptop: Use acpi_video_get_backlight_types()
->>>>>>>      platform/x86: intel_oaktrail: Use acpi_video_get_backlight_types()
->>>>>>>      ACPI: video: Remove acpi_video_get_backlight_type()
->>>>>>>      ACPI: video: Fallback to native backlight
->>>>>>>
->>>>>>>     Documentation/gpu/todo.rst                    |  8 +--
->>>>>>>     drivers/acpi/acpi_video.c                     |  2 +-
->>>>>>>     drivers/acpi/video_detect.c                   | 54 ++++++++++---------
->>>>>>>     drivers/gpu/drm/i915/display/intel_opregion.c |  3 +-
->>>>>>>     drivers/platform/loongarch/loongson-laptop.c  |  4 +-
->>>>>>>     drivers/platform/x86/acer-wmi.c               |  2 +-
->>>>>>>     drivers/platform/x86/asus-laptop.c            |  2 +-
->>>>>>>     drivers/platform/x86/asus-wmi.c               |  4 +-
->>>>>>>     drivers/platform/x86/compal-laptop.c          |  2 +-
->>>>>>>     drivers/platform/x86/dell/dell-laptop.c       |  2 +-
->>>>>>>     drivers/platform/x86/eeepc-laptop.c           |  2 +-
->>>>>>>     drivers/platform/x86/fujitsu-laptop.c         |  4 +-
->>>>>>>     drivers/platform/x86/ideapad-laptop.c         |  2 +-
->>>>>>>     drivers/platform/x86/intel/oaktrail.c         |  2 +-
->>>>>>>     drivers/platform/x86/msi-laptop.c             |  2 +-
->>>>>>>     drivers/platform/x86/msi-wmi.c                |  2 +-
->>>>>>>     .../platform/x86/nvidia-wmi-ec-backlight.c    |  2 +-
->>>>>>>     drivers/platform/x86/panasonic-laptop.c       |  2 +-
->>>>>>>     drivers/platform/x86/samsung-laptop.c         |  2 +-
->>>>>>>     drivers/platform/x86/sony-laptop.c            |  2 +-
->>>>>>>     drivers/platform/x86/thinkpad_acpi.c          |  4 +-
->>>>>>>     drivers/platform/x86/toshiba_acpi.c           |  2 +-
->>>>>>>     drivers/video/backlight/backlight.c           | 18 +++++++
->>>>>>>     include/acpi/video.h                          | 21 ++++----
->>>>>>>     include/linux/backlight.h                     |  1 +
->>>>>>>     25 files changed, 85 insertions(+), 66 deletions(-)
->>>>>>>
->>>>>>
->>>>>
->>>>
->>
-> 
+>         Cc: stable@vger.kernel.org      # 5.19
+>         Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>         Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+>         Tested-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>         Reviewed-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>         Patchwork: https://patchwork.freedesktop.org/patch/502667/
+>         Link: https://lore.kernel.org/r/20220913085320.8577-8-johan+linaro@kernel.org
+>
+>
+>         Signed-off-by: Abhinav Kumar's avatarAbhinav Kumar <quic_abhinavk@quicinc.com>
+>
+> It's possible just the gitlab UI that's messed up, but perhaps you can
+> double check before they hit linux-next, which should complain about
+> this otherwise.
+>
+> Johan
