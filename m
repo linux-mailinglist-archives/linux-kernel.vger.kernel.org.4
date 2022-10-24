@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CBE60A75F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AEE60A726
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbiJXMtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S234225AbiJXMsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234476AbiJXMo4 (ORCPT
+        with ESMTP id S231810AbiJXMnL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:44:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E731F201BD;
-        Mon, 24 Oct 2022 05:09:39 -0700 (PDT)
+        Mon, 24 Oct 2022 08:43:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656907F0AC;
+        Mon, 24 Oct 2022 05:09:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 92A51612BE;
-        Mon, 24 Oct 2022 12:08:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2FCFC433D6;
-        Mon, 24 Oct 2022 12:08:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 179CC6128E;
+        Mon, 24 Oct 2022 12:07:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6C1C433D7;
+        Mon, 24 Oct 2022 12:07:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613327;
-        bh=QHolA/OG9b0aq0+4xFDwS22hchZVMgKudTulwkkkeH8=;
+        s=korg; t=1666613245;
+        bh=yT4I2SIf6prmOQ5TA2r4Sm95rU2zqmrlMEcsNxaDwgM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNPn1cCLK7QzJz0Jp2xpnjUj/S1v4vvYFl6nU8YEI1t7Q8Y4yc1cNRH5m2vCXDRCo
-         iZD5Dl2t35TNbeqUeTKMkUD0fEtt4yyGn9rgosRAipk0qQIRQHpwmFSs6l8tOLF3IM
-         +a5SWCZRmxLAysntQEz8gL6ud5Y38piwnBssJ6EY=
+        b=r3RrXqRPzlxM9pdJHzgbzcDs3K1eK22R6nWAREfmOF/nrQxoBbYsuqGwdNfGNI7LO
+         UFKqKTH3te7j57yDYZcwALeke/hPFsi1XfUa4tjea0yo1CMiklguYb1JMCiFRaX/ZX
+         cF8tWkebIImraliiPEEyKitYB0p5cKogUggNac7s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.4 055/255] gcov: support GCC 12.1 and newer compilers
-Date:   Mon, 24 Oct 2022 13:29:25 +0200
-Message-Id: <20221024113004.332068147@linuxfoundation.org>
+        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH 5.4 056/255] drm/nouveau: fix a use-after-free in nouveau_gem_prime_import_sg_table()
+Date:   Mon, 24 Oct 2022 13:29:26 +0200
+Message-Id: <20221024113004.362252810@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
 References: <20221024113002.471093005@linuxfoundation.org>
@@ -54,80 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Liska <mliska@suse.cz>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-commit 977ef30a7d888eeb52fb6908f99080f33e5309a8 upstream.
+commit 540dfd188ea2940582841c1c220bd035a7db0e51 upstream.
 
-Starting with GCC 12.1, the created .gcda format can't be read by gcov
-tool.  There are 2 significant changes to the .gcda file format that
-need to be supported:
+nouveau_bo_init() is backed by ttm_bo_init() and ferries its return code
+back to the caller. On failures, ttm will call nouveau_bo_del_ttm() and
+free the memory.Thus, when nouveau_bo_init() returns an error, the gem
+object has already been released. Then the call to nouveau_bo_ref() will
+use the freed "nvbo->bo" and lead to a use-after-free bug.
 
-a) [gcov: Use system IO buffering]
-   (23eb66d1d46a34cb28c4acbdf8a1deb80a7c5a05) changed that all sizes in
-   the format are in bytes and not in words (4B)
+We should delete the call to nouveau_bo_ref() to avoid the use-after-free.
 
-b) [gcov: make profile merging smarter]
-   (72e0c742bd01f8e7e6dcca64042b9ad7e75979de) add a new checksum to the
-   file header.
-
-Tested with GCC 7.5, 10.4, 12.2 and the current master.
-
-Link: https://lkml.kernel.org/r/624bda92-f307-30e9-9aaa-8cc678b2dfb2@suse.cz
-Signed-off-by: Martin Liska <mliska@suse.cz>
-Tested-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+Signed-off-by: Lyude Paul <lyude@redhat.com>
+Fixes: 019cbd4a4feb ("drm/nouveau: Initialize GEM object before TTM object")
+Cc: Thierry Reding <treding@nvidia.com>
+Cc: <stable@vger.kernel.org> # v5.4+
+Link: https://patchwork.freedesktop.org/patch/msgid/20220705132546.2247677-1-niejianglei2021@163.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/gcov/gcc_4_7.c |   18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/nouveau/nouveau_prime.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/kernel/gcov/gcc_4_7.c
-+++ b/kernel/gcov/gcc_4_7.c
-@@ -33,6 +33,13 @@
+--- a/drivers/gpu/drm/nouveau/nouveau_prime.c
++++ b/drivers/gpu/drm/nouveau/nouveau_prime.c
+@@ -90,7 +90,6 @@ struct drm_gem_object *nouveau_gem_prime
  
- #define GCOV_TAG_FUNCTION_LENGTH	3
- 
-+/* Since GCC 12.1 sizes are in BYTES and not in WORDS (4B). */
-+#if (__GNUC__ >= 12)
-+#define GCOV_UNIT_SIZE				4
-+#else
-+#define GCOV_UNIT_SIZE				1
-+#endif
-+
- static struct gcov_info *gcov_info_head;
- 
- /**
-@@ -451,12 +458,18 @@ static size_t convert_to_gcda(char *buff
- 	pos += store_gcov_u32(buffer, pos, info->version);
- 	pos += store_gcov_u32(buffer, pos, info->stamp);
- 
-+#if (__GNUC__ >= 12)
-+	/* Use zero as checksum of the compilation unit. */
-+	pos += store_gcov_u32(buffer, pos, 0);
-+#endif
-+
- 	for (fi_idx = 0; fi_idx < info->n_functions; fi_idx++) {
- 		fi_ptr = info->functions[fi_idx];
- 
- 		/* Function record. */
- 		pos += store_gcov_u32(buffer, pos, GCOV_TAG_FUNCTION);
--		pos += store_gcov_u32(buffer, pos, GCOV_TAG_FUNCTION_LENGTH);
-+		pos += store_gcov_u32(buffer, pos,
-+			GCOV_TAG_FUNCTION_LENGTH * GCOV_UNIT_SIZE);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->ident);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->lineno_checksum);
- 		pos += store_gcov_u32(buffer, pos, fi_ptr->cfg_checksum);
-@@ -470,7 +483,8 @@ static size_t convert_to_gcda(char *buff
- 			/* Counter record. */
- 			pos += store_gcov_u32(buffer, pos,
- 					      GCOV_TAG_FOR_COUNTER(ct_idx));
--			pos += store_gcov_u32(buffer, pos, ci_ptr->num * 2);
-+			pos += store_gcov_u32(buffer, pos,
-+				ci_ptr->num * 2 * GCOV_UNIT_SIZE);
- 
- 			for (cv_idx = 0; cv_idx < ci_ptr->num; cv_idx++) {
- 				pos += store_gcov_u64(buffer, pos,
+ 	ret = nouveau_bo_init(nvbo, size, align, flags, sg, robj);
+ 	if (ret) {
+-		nouveau_bo_ref(NULL, &nvbo);
+ 		obj = ERR_PTR(ret);
+ 		goto unlock;
+ 	}
 
 
