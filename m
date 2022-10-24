@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C40560AC3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5624F60AD5E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbiJXOEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
+        id S235921AbiJXOWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbiJXOCb (ORCPT
+        with ESMTP id S235284AbiJXOS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:02:31 -0400
+        Mon, 24 Oct 2022 10:18:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A68C0690;
-        Mon, 24 Oct 2022 05:48:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA529591;
+        Mon, 24 Oct 2022 05:56:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5195B6132A;
-        Mon, 24 Oct 2022 12:47:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FD9DC433C1;
-        Mon, 24 Oct 2022 12:47:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A354612BE;
+        Mon, 24 Oct 2022 12:12:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF9D2C433D6;
+        Mon, 24 Oct 2022 12:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615665;
-        bh=ugBjsepRYvYP6ewZJtg3S2+9ioUPke2+iMbvqyO+qVE=;
+        s=korg; t=1666613537;
+        bh=jiBE9ldZ95s6Eq+IwVdkpKMHD+c7DRPI0PUQXSs9z2A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nXhC89j0OUW/n7Yg6HO0dYfflrTUZbksQM2B8JhyceB60ueJeBiVIqmxidMh2UcnD
-         htFnycVRDTNksWaM3kLdCCLq4TfJK0jY18tQTKZdpXJXn3JixCW0ICWM7IDqB/EQjo
-         Yh63j84LNOewKALg3HiW839DHIpISrtoxskGRYd0=
+        b=YWqtFfOiHxgC6MXJunjMBSFbJRYE+ZD4aRy6wetm4/VahkNYepenAZk52u/dFLAT1
+         reUY/On5lKN60qPFk5K2jAXqV9V4yKJko0DbiNNgK4OUTCdx1rBGtu9VULTJWdMKLG
+         NVHrZfU1O/Z4QycJABrG6OYhhq/x3BpAdgHfDUpo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adam Skladowski <a_skl39@protonmail.com>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
+        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 338/530] clk: qcom: gcc-sm6115: Override default Alpha PLL regs
-Date:   Mon, 24 Oct 2022 13:31:22 +0200
-Message-Id: <20221024113100.306329571@linuxfoundation.org>
+Subject: [PATCH 5.4 174/255] x86/hyperv: Fix struct hv_enlightened_vmcs definition
+Date:   Mon, 24 Oct 2022 13:31:24 +0200
+Message-Id: <20221024113008.599077327@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,191 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adam Skladowski <a_skl39@protonmail.com>
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
 
-[ Upstream commit 068a0605ef5a6b430e7278c169bfcd25b680b28f ]
+[ Upstream commit ea9da788a61e47e7ab9cbad397453e51cd82ac0d ]
 
-The DEFAULT and BRAMMO PLL offsets are non-standard in downstream, but
-currently only BRAMMO ones are overridden. Override DEFAULT ones too.
+Section 1.9 of TLFS v6.0b says:
 
-A very similar thing is happening in gcc-qcm2290 driver.
+"All structures are padded in such a way that fields are aligned
+naturally (that is, an 8-byte field is aligned to an offset of 8 bytes
+and so on)".
 
-Fixes: cbe63bfdc54f ("clk: qcom: Add Global Clock controller (GCC) driver for SM6115")
-Signed-off-by: Adam Skladowski <a_skl39@protonmail.com>
-Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-Signed-off-by: Bjorn Andersson <andersson@kernel.org>
-Link: https://lore.kernel.org/r/20220830075620.974009-2-iskren.chernev@gmail.com
+'struct enlightened_vmcs' has a glitch:
+
+...
+        struct {
+                u32                nested_flush_hypercall:1; /*   836: 0  4 */
+                u32                msr_bitmap:1;         /*   836: 1  4 */
+                u32                reserved:30;          /*   836: 2  4 */
+        } hv_enlightenments_control;                     /*   836     4 */
+        u32                        hv_vp_id;             /*   840     4 */
+        u64                        hv_vm_id;             /*   844     8 */
+        u64                        partition_assist_page; /*   852     8 */
+...
+
+And the observed values in 'partition_assist_page' make no sense at
+all. Fix the layout by padding the structure properly.
+
+Fixes: 68d1eb72ee99 ("x86/hyper-v: define struct hv_enlightened_vmcs and clean field bits")
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Link: https://lore.kernel.org/r/20220830133737.1539624-2-vkuznets@redhat.com
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/qcom/gcc-sm6115.c | 46 +++++++++++++++++++++++------------
- 1 file changed, 30 insertions(+), 16 deletions(-)
+ arch/x86/include/asm/hyperv-tlfs.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/qcom/gcc-sm6115.c b/drivers/clk/qcom/gcc-sm6115.c
-index 68fe9f6f0d2f..e24a977c2580 100644
---- a/drivers/clk/qcom/gcc-sm6115.c
-+++ b/drivers/clk/qcom/gcc-sm6115.c
-@@ -53,11 +53,25 @@ static struct pll_vco gpll10_vco[] = {
- 	{ 750000000, 1500000000, 1 },
- };
+diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+index 7741e211f7f5..333e61e6dbe7 100644
+--- a/arch/x86/include/asm/hyperv-tlfs.h
++++ b/arch/x86/include/asm/hyperv-tlfs.h
+@@ -721,7 +721,7 @@ struct hv_enlightened_vmcs {
+ 	u64 guest_rip;
  
-+static const u8 clk_alpha_pll_regs_offset[][PLL_OFF_MAX_REGS] = {
-+	[CLK_ALPHA_PLL_TYPE_DEFAULT] =  {
-+		[PLL_OFF_L_VAL] = 0x04,
-+		[PLL_OFF_ALPHA_VAL] = 0x08,
-+		[PLL_OFF_ALPHA_VAL_U] = 0x0c,
-+		[PLL_OFF_TEST_CTL] = 0x10,
-+		[PLL_OFF_TEST_CTL_U] = 0x14,
-+		[PLL_OFF_USER_CTL] = 0x18,
-+		[PLL_OFF_USER_CTL_U] = 0x1c,
-+		[PLL_OFF_CONFIG_CTL] = 0x20,
-+		[PLL_OFF_STATUS] = 0x24,
-+	},
-+};
-+
- static struct clk_alpha_pll gpll0 = {
- 	.offset = 0x0,
- 	.vco_table = default_vco,
- 	.num_vco = ARRAY_SIZE(default_vco),
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr = {
- 		.enable_reg = 0x79000,
- 		.enable_mask = BIT(0),
-@@ -83,7 +97,7 @@ static struct clk_alpha_pll_postdiv gpll0_out_aux2 = {
- 	.post_div_table = post_div_table_gpll0_out_aux2,
- 	.num_post_div = ARRAY_SIZE(post_div_table_gpll0_out_aux2),
- 	.width = 4,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll0_out_aux2",
- 		.parent_hws = (const struct clk_hw *[]){ &gpll0.clkr.hw },
-@@ -115,7 +129,7 @@ static struct clk_alpha_pll_postdiv gpll0_out_main = {
- 	.post_div_table = post_div_table_gpll0_out_main,
- 	.num_post_div = ARRAY_SIZE(post_div_table_gpll0_out_main),
- 	.width = 4,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll0_out_main",
- 		.parent_hws = (const struct clk_hw *[]){ &gpll0.clkr.hw },
-@@ -137,7 +151,7 @@ static struct clk_alpha_pll gpll10 = {
- 	.offset = 0xa000,
- 	.vco_table = gpll10_vco,
- 	.num_vco = ARRAY_SIZE(gpll10_vco),
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr = {
- 		.enable_reg = 0x79000,
- 		.enable_mask = BIT(10),
-@@ -163,7 +177,7 @@ static struct clk_alpha_pll_postdiv gpll10_out_main = {
- 	.post_div_table = post_div_table_gpll10_out_main,
- 	.num_post_div = ARRAY_SIZE(post_div_table_gpll10_out_main),
- 	.width = 4,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll10_out_main",
- 		.parent_hws = (const struct clk_hw *[]){ &gpll10.clkr.hw },
-@@ -189,7 +203,7 @@ static struct clk_alpha_pll gpll11 = {
- 	.vco_table = default_vco,
- 	.num_vco = ARRAY_SIZE(default_vco),
- 	.flags = SUPPORTS_DYNAMIC_UPDATE,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr = {
- 		.enable_reg = 0x79000,
- 		.enable_mask = BIT(11),
-@@ -215,7 +229,7 @@ static struct clk_alpha_pll_postdiv gpll11_out_main = {
- 	.post_div_table = post_div_table_gpll11_out_main,
- 	.num_post_div = ARRAY_SIZE(post_div_table_gpll11_out_main),
- 	.width = 4,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll11_out_main",
- 		.parent_hws = (const struct clk_hw *[]){ &gpll11.clkr.hw },
-@@ -229,7 +243,7 @@ static struct clk_alpha_pll gpll3 = {
- 	.offset = 0x3000,
- 	.vco_table = default_vco,
- 	.num_vco = ARRAY_SIZE(default_vco),
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr = {
- 		.enable_reg = 0x79000,
- 		.enable_mask = BIT(3),
-@@ -248,7 +262,7 @@ static struct clk_alpha_pll gpll4 = {
- 	.offset = 0x4000,
- 	.vco_table = default_vco,
- 	.num_vco = ARRAY_SIZE(default_vco),
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr = {
- 		.enable_reg = 0x79000,
- 		.enable_mask = BIT(4),
-@@ -274,7 +288,7 @@ static struct clk_alpha_pll_postdiv gpll4_out_main = {
- 	.post_div_table = post_div_table_gpll4_out_main,
- 	.num_post_div = ARRAY_SIZE(post_div_table_gpll4_out_main),
- 	.width = 4,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll4_out_main",
- 		.parent_hws = (const struct clk_hw *[]){ &gpll4.clkr.hw },
-@@ -287,7 +301,7 @@ static struct clk_alpha_pll gpll6 = {
- 	.offset = 0x6000,
- 	.vco_table = default_vco,
- 	.num_vco = ARRAY_SIZE(default_vco),
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr = {
- 		.enable_reg = 0x79000,
- 		.enable_mask = BIT(6),
-@@ -313,7 +327,7 @@ static struct clk_alpha_pll_postdiv gpll6_out_main = {
- 	.post_div_table = post_div_table_gpll6_out_main,
- 	.num_post_div = ARRAY_SIZE(post_div_table_gpll6_out_main),
- 	.width = 4,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll6_out_main",
- 		.parent_hws = (const struct clk_hw *[]){ &gpll6.clkr.hw },
-@@ -326,7 +340,7 @@ static struct clk_alpha_pll gpll7 = {
- 	.offset = 0x7000,
- 	.vco_table = default_vco,
- 	.num_vco = ARRAY_SIZE(default_vco),
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr = {
- 		.enable_reg = 0x79000,
- 		.enable_mask = BIT(7),
-@@ -352,7 +366,7 @@ static struct clk_alpha_pll_postdiv gpll7_out_main = {
- 	.post_div_table = post_div_table_gpll7_out_main,
- 	.num_post_div = ARRAY_SIZE(post_div_table_gpll7_out_main),
- 	.width = 4,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll7_out_main",
- 		.parent_hws = (const struct clk_hw *[]){ &gpll7.clkr.hw },
-@@ -380,7 +394,7 @@ static struct clk_alpha_pll gpll8 = {
- 	.offset = 0x8000,
- 	.vco_table = default_vco,
- 	.num_vco = ARRAY_SIZE(default_vco),
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.flags = SUPPORTS_DYNAMIC_UPDATE,
- 	.clkr = {
- 		.enable_reg = 0x79000,
-@@ -407,7 +421,7 @@ static struct clk_alpha_pll_postdiv gpll8_out_main = {
- 	.post_div_table = post_div_table_gpll8_out_main,
- 	.num_post_div = ARRAY_SIZE(post_div_table_gpll8_out_main),
- 	.width = 4,
--	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_DEFAULT],
-+	.regs = clk_alpha_pll_regs_offset[CLK_ALPHA_PLL_TYPE_DEFAULT],
- 	.clkr.hw.init = &(struct clk_init_data){
- 		.name = "gpll8_out_main",
- 		.parent_hws = (const struct clk_hw *[]){ &gpll8.clkr.hw },
+ 	u32 hv_clean_fields;
+-	u32 hv_padding_32;
++	u32 padding32_1;
+ 	u32 hv_synthetic_controls;
+ 	struct {
+ 		u32 nested_flush_hypercall:1;
+@@ -729,7 +729,7 @@ struct hv_enlightened_vmcs {
+ 		u32 reserved:30;
+ 	}  __packed hv_enlightenments_control;
+ 	u32 hv_vp_id;
+-
++	u32 padding32_2;
+ 	u64 hv_vm_id;
+ 	u64 partition_assist_page;
+ 	u64 padding64_4[4];
 -- 
 2.35.1
 
