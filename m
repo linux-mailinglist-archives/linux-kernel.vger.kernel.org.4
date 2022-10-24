@@ -2,150 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF6260BC14
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D1D60BBFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234338AbiJXVZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S233927AbiJXVUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiJXVZH (ORCPT
+        with ESMTP id S235423AbiJXVTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:25:07 -0400
-X-Greylist: delayed 5379 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 12:31:32 PDT
-Received: from sternum.kriegisch.at (orion.kriegisch.at [83.215.238.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E342D9E7C;
-        Mon, 24 Oct 2022 12:31:28 -0700 (PDT)
-Received: from stargate.ley23.wien.funkfeuer.at ([78.41.113.217] helo=kriegisch.at)
-        by sternum.kriegisch.at with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <adi@kriegisch.at>)
-        id 1omyu0-0002ld-2B; Mon, 24 Oct 2022 16:58:08 +0200
-Date:   Mon, 24 Oct 2022 16:58:05 +0200
-From:   Adi Kriegisch <adi@kriegisch.at>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        adi@kriegisch.at
-Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
- update to 5.10.149 in 5.10.y.
-Message-ID: <20221024145805.GF23159@kriegisch.at>
-References: <Y1JkuKTjVYrOWbvm@eldamar.lan>
- <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
- <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
+        Mon, 24 Oct 2022 17:19:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38BA2764F5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666639482;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iFzj8nzx4mTmz0Y3cxobVCxkf6lqhopWzXipdhBzytA=;
+        b=h7Sz5FFPWvucaLxGF9nWSPucNdwMBfvzT3odZSI7E4WD2Vex+j8batynDQMZEJGuGvEl5V
+        GsAWwGq7y6IJc6yIOhhpnxd3VGcQbCnpwGyqA9VpX844wQeD1nMO8eCEwy5gHIVACkLsSc
+        mwn0UEmzRDO6dfO+WnVhUZzMiejVZXg=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-499-aJt1dOPeM5KJBmvarHPVmg-1; Mon, 24 Oct 2022 10:59:26 -0400
+X-MC-Unique: aJt1dOPeM5KJBmvarHPVmg-1
+Received: by mail-ej1-f71.google.com with SMTP id sb13-20020a1709076d8d00b0078d8e1f6f7aso1140939ejc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:59:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iFzj8nzx4mTmz0Y3cxobVCxkf6lqhopWzXipdhBzytA=;
+        b=qAYGMm2DscrKHPrLt7uUQ+Bo4hzGko9XR4VHMnP7MpL0zWlLSPXG3OTM+HL7CFl7Gz
+         j5CNjxoXLofnEdpWgJDecczuQQDsZ5iIV19NYimW0mwPrPM4GCVtfejY0NjeKLH5E7+o
+         gh51jUej5QRLS/7q5HYA7SSy5HBQFUzqpBjgaPFbQrVamLOwQZuYhAouW01fpZmu/7Tg
+         K/8H6LE60CKL3HkXsKOMizj/wLoiaNiOeXHrQee2UC/3z9JDRkYEphLFqFdNJjQMbJ9X
+         KUMuzXHotVyST/FcdDFZImWM9ek1HSExGrF/Nv5roN2E4J0t5u1BUMyj6iiaIHkBsQQi
+         ypjQ==
+X-Gm-Message-State: ACrzQf1Yc46azNvLw15vjLKSHTBaYW/4yIVMtGWRTPt+FKnaVfyJvdPk
+        19R/40V8hOmPtoL/+xErl/zSFA2fBMJ/bcdktKG7CofGcS/vQYvpXgMUWIHMxE7LH/k7jb+jghq
+        jJ888X1rzXM8X6nWJeCYq5/OA
+X-Received: by 2002:a17:907:7f0b:b0:78d:c16e:e5fc with SMTP id qf11-20020a1709077f0b00b0078dc16ee5fcmr28530507ejc.713.1666623565636;
+        Mon, 24 Oct 2022 07:59:25 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM69bJEQQwKngd5TdTH6bub92gbhuYs2zsoHIkPxYVrqbL3E1umD+fdI6rLXDyn6eS9NZQ41YA==
+X-Received: by 2002:a17:907:7f0b:b0:78d:c16e:e5fc with SMTP id qf11-20020a1709077f0b00b0078dc16ee5fcmr28530490ejc.713.1666623565451;
+        Mon, 24 Oct 2022 07:59:25 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id n16-20020a170906379000b007a6c25819f1sm2043335ejc.145.2022.10.24.07.59.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 07:59:24 -0700 (PDT)
+Message-ID: <a75c2439-415c-a132-754c-7676029f792b@redhat.com>
+Date:   Mon, 24 Oct 2022 16:59:23 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8GpibOaaTibBMecb"
-Content-Disposition: inline
-In-Reply-To: <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2] ACPI: video: Fix missing native backlight on
+ Chromebooks
+Content-Language: en-US
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>
+Cc:     kernel@collabora.com, linux-acpi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221024141210.67784-1-dmitry.osipenko@collabora.com>
+ <37ec64ac-9e08-dd41-4b20-8701bf9413fb@daynix.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <37ec64ac-9e08-dd41-4b20-8701bf9413fb@daynix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---8GpibOaaTibBMecb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 Hi,
 
+On 10/24/22 16:52, Akihiko Odaki wrote:
+> On 2022/10/24 23:12, Dmitry Osipenko wrote:
+>> Chromebooks don't have backlight in ACPI table, they suppose to use
+>> native backlight in this case. Check presence of the CrOS embedded
+>> controller ACPI device and prefer the native backlight if EC found.
+>>
+>> Suggested-by: Hans de Goede <hdegoede@redhat.com>
+>> Fixes: 2600bfa3df99 ("ACPI: video: Add acpi_video_backlight_use_native() helper")
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> ---
+>>
+>> Changelog:
+>>
+>> v2: - Added explanatory comment to the code and added check for the
+>>        native backlight presence, like was requested by Hans de Goede.
+>>
+>>   drivers/acpi/video_detect.c | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/drivers/acpi/video_detect.c b/drivers/acpi/video_detect.c
+>> index 0d9064a9804c..9cd8797d12bb 100644
+>> --- a/drivers/acpi/video_detect.c
+>> +++ b/drivers/acpi/video_detect.c
+>> @@ -668,6 +668,11 @@ static const struct dmi_system_id video_detect_dmi_table[] = {
+>>       { },
+>>   };
+>>   +static bool google_cros_ec_present(void)
+>> +{
+>> +    return acpi_dev_found("GOOG0004");
+>> +}
+>> +
+>>   /*
+>>    * Determine which type of backlight interface to use on this system,
+>>    * First check cmdline, then dmi quirks, then do autodetect.
+>> @@ -730,6 +735,13 @@ static enum acpi_backlight_type __acpi_video_get_backlight_type(bool native)
+>>               return acpi_backlight_video;
+>>       }
+>>   +    /*
+>> +     * Chromebooks that don't have backlight handle in ACPI table
+>> +     * are supposed to use native backlight if it's available.
+>> +     */
+>> +    if (google_cros_ec_present() && native_available)
+>> +        return acpi_backlight_native;
+>> +
+>>       /* No ACPI video (old hw), use vendor specific fw methods. */
+>>       return acpi_backlight_vendor;
+>>   }
+> 
+> Hi,
+> 
+> The native_available check does not prevent duplicate registration if vendor backlight registers first. It was enough for the combination of ACPI video and native because ACPI video delays its registration, but it is not the case for vendor/native combination.
 
-On Mon, Oct 24, 2022 at 05:26:44PM +0530, Sreekanth Reddy wrote:
-> On Sun, Oct 23, 2022 at 6:57 AM Bart Van Assche <bvanassche@acm.org> wrot=
-e:
-> >
-> > On 10/21/22 02:22, Salvatore Bonaccorso wrote:
-> > > We got the following report in Debian after an update from 5.10.140 to
-> > > the current 5.10.149. Full quoting below (from
-> > > https://bugs.debian.org/1022126). Does this ring some bell about known
-> > > regressions?
-> >
-> > Only three mpt3sas changes are new in v5.10.149 compared to v5.10.140:
-> > $ git log --format=3Doneline v5.10.140..v5.10.149
-> > 2b9aba0c5d58e141e32bb1bb4c7cd91d19f075b8 scsi: mpt3sas: Fix return valu=
-e check of dma_get_required_mask()
-> > e7fafef9830c4a01e60f76e3860a9bef0262378d scsi: mpt3sas: Force PCIe scat=
-terlist allocations to be within same 4 GB region
-> > ea10a652ad2ae2cf3eced6f632a5c98f26727057 scsi: mpt3sas: Fix use-after-f=
-ree warning
-> >
-> > Sreekanth and Suganath, can you help with bisecting this issue? For the
-> > full report, see also https://lore.kernel.org/linux-scsi/Y1JkuKTjVYrOWb=
-vm@eldamar.lan/.
->=20
-> This issue is getting observed after having the below patch changes,
-> 2b9aba0c5d58e141e32bb1bb4c7cd91d19f075b8 scsi: mpt3sas: Fix return
-> value check of dma_get_required_mask()
-reverting this patch fixed the issue for us.
-=20
-> What is happening is that on Xen hypervisor, this
-> dma_get_required_mask() API always returns a 32 bit DMA mask. I.e. It
-> says that the minimum DMA mask required to access the host memory is
-> 32 bit and hence mpt3sas driver is setting the DMA mask to 32bit. So,
-> on a 64 bit machine, if the driver set's the DMA mask to 32 bit then
-> SWIOTLB's bounce buffer comes into picture during IOs. Since these
-> bounce buffers are limited in size and hence we observe the IO hang if
-> the large IOs are issued.
-I am not sure about what is going on here but while reverting the above
-patch, I added a printk right above the if:
-  | printk("dma_get_required_mask =3D%lld\n",dma_get_required_mask(&pdev->d=
-ev));
-which always (as in booting dom0 with 2GB, 4GB, 16GB and booting bare metal
-with 256GB) returns 4294967295 (DMA_BIT_MASK(32)).
+There are no drivers providing acpi_backlight_vendor functionality on chromebooks.
 
-> I am not sure whether this API's return value is correct or not in the
-> Xen environment. If it is correct then I have to modify the driver to
-> not use this API and directly set the DMA mask to 64 bit if the system
-> is a 64bit machine.
-Obviously, our server always reports a 32bit mask which works just fine in
-the bare metal case but does not in the xen dom0 case. Is there anything I
-can do to help tracking the issue down?
+All the drivers providing acpi_backlight_vendor functionality use vendor (Dell, Acer, Asus, etc.)
+specific firmware (smbios, EC bitbanging or ACPI) backlight control method which are not available
+on CoreBoot based ChromeBooks.
 
-thanks and all the best,
-    Adi
-=20
-> Thanks,
-> Sreekanth
->=20
->=20
->=20
-> >
-> > Thanks,
-> >
-> > Bart.
+Also notice that the theoretical problem of a vendor driver loading first was already present
+before the backlight refactor which landed in 6.1 and this has never been an issue.
 
+Regards,
 
+Hans
 
---8GpibOaaTibBMecb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEENxTTbbOruRNI5poKdER8DqmFXL8FAmNWp/UACgkQdER8DqmF
-XL8X7g/+IOpyoxnAR8DTvE8i6qUMGJWtskT+9h3q1NddPIpQapOKF/zSDg0W5uYf
-pi00CcwXueCfZXPhgp+AjLFdPI5FRYlH6Nq8kMCoaDJ2Q8KVmogUgu7q5SQqLhAc
-M0GBTLiwhdyAKXDuo0EqSGzycGzvf8QWL3gtTQnOrxSI/ChOoQGV4IMVpGi/r6Nr
-yLL/58H6E5bODj+hDBbFx5dLoiXJAOoCJZsVv9p3Y76RDbIok+HU9u6dbhg/eXrS
-2uGd7nciFlSOVSwmUoOtUaaqhCh78QmL3ZxAK0fCJ1/4yBsllMOP22ATD+Xnz5zl
-B5RSCNpT5n4i4eJfQWQzBz7uaSS+IHquryboncg1Fa4URORPg+SjZuPiJarZbq6+
-b9g3e7d7FjKcMTuUrxv0fjPyBV8IlGHZ8DSuykmwZ7p5RQ97tkuhjAH/3GBsb3Lz
-DY7vhpUwvTM5D/G3S7tQoBfL+EjlwC5XmH55olbrA2h3Ete+0SUTeqmUjw676Ak4
-NHmwzmDXmVR+YQeFNEnWNtzBzUQEYJHi1TslzWmWPDiQ+mX4LlsFy3KhUET1482O
-0HHdbtycrMZQJWW9yGuocWCavQOAoOJMfxf8WNRER1H+YJGdbh850wR7/rRUFPWz
-rX9Whv1jnnr8R5ztyiVCNUmSvLyVFwRT26K6VRxjaqg04p8Stys=
-=AvSb
------END PGP SIGNATURE-----
-
---8GpibOaaTibBMecb--
