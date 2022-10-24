@@ -2,265 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA15D60BE24
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D96D60BE26
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiJXXFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
+        id S231452AbiJXXFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiJXXE7 (ORCPT
+        with ESMTP id S229999AbiJXXFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:04:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F566E8AC;
-        Mon, 24 Oct 2022 14:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666646778; x=1698182778;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=RnL4UhgP1Iv3aA2lwc+M4ukFlyqBrBXbvDmeGjYc9R8=;
-  b=KLv2/IPNb4xlmQus0v/y/z9SZ+xPLGxP4Qul1uF3MQBTTKUE0we5wvY/
-   JWUZyVMUmtE7J8Pu8SBpeTbWuWnQqX+tgpoAwLsh8v2//Aj49npZw9JFi
-   bEgkT0/3ztXX685FfOTHl8oy0UZnoQDYTdmSRI/hqv6nwYo8dKlDuofqs
-   nik09M7yRXzAcIa+p8Dwq8JnoiFqnZ7xNyo2JqWGzzkB4cbbntgwZPQyT
-   reR6wEcmHP+b8if/mv5eKzhd7Kl0bz/lFjPTr7QEGrSKbTLVrkyvy7F1q
-   +uFEqHNA0ZQtZKmafguzo0KCpFIKG84lvpTvGiaIE9ykZeujsPbfqasyI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="306257080"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="306257080"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 14:25:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="700304692"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="700304692"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga004.fm.intel.com with ESMTP; 24 Oct 2022 14:25:00 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 14:25:00 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 14:24:59 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 24 Oct 2022 14:24:59 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 24 Oct 2022 14:24:59 -0700
+        Mon, 24 Oct 2022 19:05:16 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177BB8B2E5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:26:43 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rf0k8zru2agVFIUt+Xs+pvM5y8ECADpPw1ZNsMvvzGK1lT14YNevPfts0c6Cq15yc5iWswIm+xkTU+9WeNaOkAWu1tv2AhyE2JoE2QUvLxRADrZqgvUefamW8DI+EicMVj0C3IOEuSy1a6Kd7HOE/sfyTtvEC4I40SOu/mZZuPYzLtbMm/m+3KdZkAEL+inE2RKpGKetjj+L+/l9/P77ZjhHIzbDD9kBVLwtmLNj31b2AUQpUY50Ui/01wlacX731LclPvx56JstbAee2XqtoolNsY10nirup/JAXAyoN56blEUUT20YlESygIsMrczxq0pECCBHXm6gooMwT/Mmig==
+ b=c032ZbrJbcAm/40O5j182wsCqvB5ujL3qpzezPt+6k6JxXJgSmOMdaituwS4w8DbsVkpGgZ2ipgShW1pH3jIua1SYLuE+6MAitmeLOrUKOE9hGlicpYi2xy+eab2BTXQVWFOuk0qeSNk2oh48eSWIjRLPoSOGu13G/0wd4ekJJQc2cW2yMLiViEzyi6j1wJxLfFPnfYUQzF8jUu0vN0m/TolGd3Mot/Vvggl2GYa2zvu4SvNLa05DGf+wqkPGL933ssAnJAE2OvuGB4pgcjW7VTSwYpt5ePQjy8zHV4El5GCLyBA5hTnU29K1psSrLz40H3oIWSQ+vHtTmWyXxT/fw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mMQGMO3mwP6GYG6SyzIK3eVf+IBRcQ9pWzn51FwGTKs=;
- b=aZCVe7Lwi+HBslZyDOBYoMU9cZ0dZAx/cQxGqNtwM+B9hFG0mkDpWirQgy87/1O8Mqu+pt61mcDT/i1ZD7kfJiAf9swi5R3vn64gaGNwsYYIBJem5w5lZDyoz0j9NGppVk02l6roFDU2VST02vfBOq3N+CYIj9HYoDFrDo7kWe9a32AmOgrGdNYZ1Ciak1cuNKdTqR7nI/h0G04CbI87MqP4vlB1FlhejqRo2wTbfSKgJ5UGB6v9jdMgFjJ76XjjXl9ECeSpasI7dwP4LtfAC48n2Q/CCkz/b5c0eRIM8ZC6ASXNHSV3xgrP/BZR7xAg0FxUEaisPUv5Bv84aOqj9w==
+ bh=aKLI9t59nWGEXVCakOqqAeZb8XgnUTLQV7s+exihwxo=;
+ b=n+pYkdxyE2UqHq0XCulfvqHfRMy41SeZ3sErEomQjHSSqocOkfOJbBWc0a7r0FJAe+WUBtKndKcxSuKmKsnws0iqx4r5ND4cLieV52AcHk5qJyHNARIPMwO3IgVBlnjy0UtSOOKp7RNVh33ADwrjZVEtjyHcCXEYk8E2u/0/z+OJ1FVuqB/QoyKnpPhGoa36YnbkphimfJYo8I+5I008d/qlR6uF2XeYvdgPGvBSC8O4XdpDMjM89c2WZxdgIw1WkAN7SZqYNtfwOSR7j2sVtDExDeObi9xxfDftEejwU/w6cHrfOw/kTrui0AUsNzvIqrVt0CmJIq0wCnQzdPqB4w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aKLI9t59nWGEXVCakOqqAeZb8XgnUTLQV7s+exihwxo=;
+ b=druCWTl939K2PvchFOrU7w/XcVexoZzePd4pHEPATb0bJy8n+RNJkAF+Jgrqa9SSe/6ApeHBGRBrPpmxlFZEAcfd9kjIXdACYUK6EQPsUeXmh09WuHPqdeLcQG8/HUB3qQgvSW8Pej3gD1vBcs+kcyc5R3XnRMmc8VbuQ4BDK98=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by PH7PR11MB6452.namprd11.prod.outlook.com
- (2603:10b6:510:1f3::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Mon, 24 Oct
- 2022 21:24:57 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::7d5a:684d:99f7:4e83]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::7d5a:684d:99f7:4e83%12]) with mapi id 15.20.5746.023; Mon, 24 Oct
- 2022 21:24:57 +0000
-Date:   Mon, 24 Oct 2022 14:24:54 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Robert Richter <rrichter@amd.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        "Jonathan Cameron" <Jonathan.Cameron@huawei.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Terry Bowman <terry.bowman@amd.com>
-Subject: Re: [PATCH v2 06/12] cxl/acpi: Extract component registers of
- restricted hosts from RCRB
-Message-ID: <635702a652637_4da32941a@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20221018132341.76259-1-rrichter@amd.com>
- <20221018132341.76259-7-rrichter@amd.com>
- <63522b53321e1_24ac29467@dwillia2-mobl3.amr.corp.intel.com.notmuch>
- <Y1b92DF0c36/QDbo@rric.localdomain>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y1b92DF0c36/QDbo@rric.localdomain>
-X-ClientProxiedBy: MW4PR02CA0017.namprd02.prod.outlook.com
- (2603:10b6:303:16d::24) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ IA1PR12MB6187.namprd12.prod.outlook.com (2603:10b6:208:3e5::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26; Mon, 24 Oct
+ 2022 21:25:29 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::d309:77d2:93d8:2425]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::d309:77d2:93d8:2425%7]) with mapi id 15.20.5746.026; Mon, 24 Oct 2022
+ 21:25:29 +0000
+Message-ID: <dcb8b35a-7d0d-cc00-41e3-6e66837c506f@amd.com>
+Date:   Mon, 24 Oct 2022 17:25:26 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2] kset: fix memory leak when kset_register() returns
+ error
+Content-Language: en-CA
+From:   Luben Tuikov <luben.tuikov@amd.com>
+To:     Yang Yingliang <yangyingliang@huawei.com>,
+        linux-kernel@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-erofs@lists.ozlabs.org, ocfs2-devel@oss.oracle.com,
+        linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org, somlo@cmu.edu,
+        mst@redhat.com, jaegeuk@kernel.org, chao@kernel.org,
+        hsiangkao@linux.alibaba.com, huangjianan@oppo.com, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        akpm@linux-foundation.org, alexander.deucher@amd.com,
+        richard@nod.at, liushixin2@huawei.com
+References: <20221024121910.1169801-1-yangyingliang@huawei.com>
+ <176ae1a1-9240-eef8-04e9-000d47646f4a@amd.com>
+In-Reply-To: <176ae1a1-9240-eef8-04e9-000d47646f4a@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT4PR01CA0001.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d1::11) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|PH7PR11MB6452:EE_
-X-MS-Office365-Filtering-Correlation-Id: f806e1b6-f9f3-45f7-5d90-08dab606330a
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|IA1PR12MB6187:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0efaccf6-f9a0-4d8d-e4af-08dab6064684
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: huWgU6BW6GMGf/blWmgjMlKKoZkNWSceLSrErlpWUz0Yts7/M7/75UgehYzAFBWA+/B1U60bWwbTHsRrlqIU6d+4ZcXsGtrDU7cm3e9oG8VOM1NExVopyFhdYlflieLs1WYOZiPFEIMg5elp9QhZOZpH0G7J82AcZnVAzrh23xgVtfkIQ0+F/T62zqeXOab4CTqxMgMfZAi1OYuS1dF+gG62ewum2+lScOmOcC5QChX7Xoo6Q8aRVNIlukKcfiK5NlF+S6LJXHyl+9IFk0G5qXiWIzfOl9htwCg199LOmLpF9aX+3juTgn7ggZJ4clnqG/SOZ0/dS33CWoghFN0Tc1mYsqAUmwcTveTNgCKF4TyLH9jwWG2WE3IUgJi+FLTBLvWy0KT+V7fxRRa8rKgZovaqoP3b20InR4hEJqoHYqf2aLswcjmyXUKrMzsyv1uTV36/rnvQFWxa2nr9AWOdrsqIPVYo/Yn05ZsysReFIUwQGDu7E2ElRaWVr9xLdU6nWUb0k137D3w8zv1p2ESAyoiPqOeLfMvd4zlAvmqDrItcQJ8NVnLYH5vax7gKAbsWqZFveFhbweRPabiJ8WNVYcfLnHu39XTCuTOVbLJF7Bp+wxDs1co0XcpYjRFrOsOyWFxbTYd6RsKse3qDPhSLqhflyLXAV72eeN2he/aL7mGVA+avJLjWdyoATrRkwZWMQOV4w8XdZHqaZHzQtXceTw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(366004)(39860400002)(136003)(376002)(451199015)(66946007)(9686003)(6486002)(26005)(53546011)(6512007)(38100700002)(8676002)(41300700001)(8936002)(82960400001)(5660300002)(83380400001)(66476007)(86362001)(478600001)(7416002)(110136005)(54906003)(186003)(6506007)(316002)(6666004)(2906002)(4326008)(66556008);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: CzcHZS8vBg6TeA4dbFTkeAn7o3CJ71KDQ5duLSRBDtlcQ3pAFchZDw30qT3a4Llp4Rbxy4r4X4Ir21GM/RFa8AWkQvFHSwdbYgnuXQ0DxoOy9TDKe1nGZWk9nw9vl6xzRkT3VbYdLLq3JXDJH8jHbF4CV17H4v3blVGwJFv96K7bdYx2ZEvYbXgspFIvzpy5EvhvVUGbikqVyaLb2E7zcE17zLkyKAszzPMWrk/fo012uQapx/pYhLooIEOydRVTWReM2vI2DrWuGlD+RvnMwqxkHXgItxtmb5uXVnHk5DQhavwGW3PpaFhyF6Hqy/Z3vU+VeZ+2EWG/9PhSxQVrXilHuRJDG5DBAvq+nbKnOU0Ail2uy5CLvsyLlj7ZEJZdsnEm7dMZtq963fjNoH7l1jHcwchsCvF1ZGaZOXpIa53F9vqWxz95+eWpvaXGerNpQuWzTq6tAL5cCS1Iy5sUZarV9Vtpn5gfzOhqXEzY4qqcRLjJ7+ZmP8zy6O3aEY+zg0UCAYg+/kAaIsXsM1qbp+1GGYurmDkVmB/JDtEWZHpTuJ6W89bPk1nQjNOp5ruZN66BxawHx3Gpnz8poR/9lGvtlgmUTsbUnppQG7TlQLsFDkkZUodwihH2z+OxdSFhhbq6yF9xpUz4KMAmKCxzK/mUQERUYbc1wraRNnUi650tC2yIpTI9WMneCOr7wAtwpDxeXOYq6yG5fHaD9/+w4e05TWHa1/+KqtKenQvo+QfgOfjRN+ciz2hFYKy5Eyr8+1xFwHD18KvIxWfwq0BGo0R0KZfDC7Fnbgy7pt4mgjc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(396003)(136003)(366004)(451199015)(316002)(478600001)(53546011)(6666004)(66946007)(4326008)(66556008)(66476007)(6506007)(8676002)(31686004)(6486002)(186003)(41300700001)(8936002)(5660300002)(7416002)(44832011)(2616005)(4001150100001)(2906002)(26005)(6512007)(36756003)(38100700002)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3FBwceKGxgSuXS2/vTGwyiUOOaHn6k6lnrTy/OMS46/VrXcY09OHhE8qlx/e?=
- =?us-ascii?Q?/v1sepCUijcB7bEpYXj3NEq3aQIlY9IsgD9PfG5aT+eWu4iLyqicTZd4vdiM?=
- =?us-ascii?Q?fYEFDrIiccSikKTrw67/22vMNHlCd2y5dR56QYdI4T6r6nueB1oaZiy6ZjRl?=
- =?us-ascii?Q?/HvDmObXzfWauYcvovKpCq7KjATj9IRXyRt+bm+7MkZ0Lp1uwQQmhljx1T83?=
- =?us-ascii?Q?O9gkSKJFhehrOUU2KnhrDWR9gMHXJDLQGuYl0Cq+zqLyoJdRbe+wnClEOVts?=
- =?us-ascii?Q?wawqXCjTOJG57bAqC6GVqyUYptZWTHUYKlPalUmdkszk5+HKvyXpSX3x56Ou?=
- =?us-ascii?Q?UaBVVrOcYOuksV69nfGY3nJ95H7fpKr0c4iivsPe39HX6U/rgNCQ5IO84q8m?=
- =?us-ascii?Q?oOGHvKv8hhFuflgDlN3b3CifoSEmYWnG4t0jCdf8tSEY07cl4uAnjqpUpaJn?=
- =?us-ascii?Q?wo57olWjUpq9gVnf4YemfQgCjt/H3zqPxMkvPwIV/9/6sbzP7Bi9MT4OXDXC?=
- =?us-ascii?Q?x8XiaSnGuC1VEPJX/WyZKj4JaHXf6nsnTHvALSrdGtD0HTAgOgYlOCQGRuRe?=
- =?us-ascii?Q?0g1+FSX+iYzQrQJQ5+NYRI6MyYN2ceC27el8yrOR0avQVVkNWsmbbJdQlRNM?=
- =?us-ascii?Q?BkYBGNvDahPWAyJ4aJNi/D/CmJRN7G5nIUSmlYb5qdnRtvgvaTEUNPSAPK27?=
- =?us-ascii?Q?l+xrY0v9Sq2VFE5TUSguAM1PNAeLsH6Y4oo6fTccmbAEmLGEHby2D0EZI/N7?=
- =?us-ascii?Q?faV/rhObleWj2qEFH8w62PknLA5ddm8Zu6CHuz1P3EUZjEEMrlMnFQqqRxR9?=
- =?us-ascii?Q?QT2UPzuzZNTKOM4JtD+IHuFdbb6jhKDhFFlYhfo7Qs/jUkuXucs6ngBbdTAT?=
- =?us-ascii?Q?lWX3nSylkJg2hCmVTXDMQYWKJAcFlfIW6RhmIhsoIe5mKduJrqps2s8Vf5iE?=
- =?us-ascii?Q?yFwqbcpSP3Vaz4hevlI1AOCAMM4bw6tESrqEiExTRN8SwRq5S/g2EEFIL/Jg?=
- =?us-ascii?Q?D2XaZFjCSnusnAQpdv7HL5nL4PJqTZhCberSEBbC29znqH06HbYPWLEMqShL?=
- =?us-ascii?Q?SBuoqiyt7k5VrEEoe9S74FcJJr3AvgtrHNgXB62Y1XqfavGpishKdfqIhUSv?=
- =?us-ascii?Q?HIh25Sbi2L/J8Y4Q7FYOrhDlA118q2pMeACdV5nb+t+vXlaugpOmINrGxTYt?=
- =?us-ascii?Q?5HcSP7xz4GxAO8cR9ql4H0dzSdN/GdXDuR7PnkIAJBgN03PeIxO6VDLBEbOr?=
- =?us-ascii?Q?NZDenFFzzOnJ/MPW4m5Ak1ZqApfTM7t/PVow1q+lGAKDBmkBaZ8eTzdRwvM7?=
- =?us-ascii?Q?wN+jic/58+S9C0jpg2Uff1Egw3lQQKob962zzrtpmd1FLuBtUFJF36ndeLM+?=
- =?us-ascii?Q?u6HBYbKmp8j/aLcGWvYi8V1w2ChurZbgCId4bqXIWHPaGFT/ty9FvJD99uz7?=
- =?us-ascii?Q?1zKMa5wbCI6fiU6lbf6PkDSHw+vi3egz34U4ZqPZMcOzi/pgQL3Ta0bf39za?=
- =?us-ascii?Q?Hn3ttSJqz8n8+IQiahzQJ5nHB7CLcOyqzFOWDlVClerIf9JB3xvnICQIJjed?=
- =?us-ascii?Q?Lxd5AKMAHUCxjVJU8FYLysFf/Xmm+IwLqjvyjADY63Tk+Q6DbZZ0vvv21U5q?=
- =?us-ascii?Q?yQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f806e1b6-f9f3-45f7-5d90-08dab606330a
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YU03eU9sLzdxdFVYM3FuRW1pTTZYTUYxRmJpNEFFQkc4S1Brandqd0RxMm9Z?=
+ =?utf-8?B?Tk1LZ0dFZ1RVbXdHUUowMGZ3WVg5UVpjRGpXYjFLYjM3WkVCOWMyTnlWMkpa?=
+ =?utf-8?B?S3dmaWFWYjRLUUZCUXBudWE0azQwaXFydkQvYXA2VHVpd1pFT1VKakd4TElL?=
+ =?utf-8?B?OFpOa1ZlRFRvNDhZRUNnRCtOTWNQUkVUejN0YzQ5cVVOUXdVSXJmUVJZcDhY?=
+ =?utf-8?B?OUtqNFUxZS9PSlpsakNKYWNPaldkY3lFZ3QvbW5iS0VOOXBDUElaY0tmQk52?=
+ =?utf-8?B?RzJHN1VQTXFrdWluRHF0YkdId0tMWnQzcHZKMUluYXlpcFF5S0JnMVhpcEt1?=
+ =?utf-8?B?UndpMmlKL0pwK3BZL2I1VGJ1ZXF4ODZyczZ5OUFsaGtCaUVDbkFwNUdXOFZH?=
+ =?utf-8?B?YXZ0Z0xyNkgzZXpjZFh2bFNvdDFNM3pVTXRZV2JPZjExNmNpaERiN2hmRVIr?=
+ =?utf-8?B?Zk1BVFVNeVNnbWxpQ3ZZb2llM2tBdmtwWVVLS3l6VVZhUEY1UlVFdEU4WHU2?=
+ =?utf-8?B?YXY2ZVBjb2JGcW0zM1pDR2hpR1lYTERqWW1LZko2ZHJlT21vNm9MeGxneFU1?=
+ =?utf-8?B?ZElpTnVJaUxRSU5HaU9DaUswNjhFWm0wTzQ4RWtHZ1NyQUowTGZBTjhKYnUw?=
+ =?utf-8?B?aCs3dklIVXNCY3dGMCtFazF2d3VtVTg4MmFjbFpUUWplb1NVbC95K2pyS0N0?=
+ =?utf-8?B?bEtUU1h2eHpmSXJCTmxGYTlYdmcvM0tJVXpKdXVldEN3WTRDSzl6NjJ1cXJu?=
+ =?utf-8?B?S2lSUkw4TWdFemdtS0JyRlUzOGJaN2s3RHgvRGVSM1pXaUh3d0xRd3B3eVo3?=
+ =?utf-8?B?YmRENGIzUnpIeTBIbEVIOTRrUlFqeVk0OGl3aVBaZ3VETUI5Tk8weEw0Q2VN?=
+ =?utf-8?B?Z1dwYUlpQTZIUXdud0svVnEyMFhsV0lvOUIxVVlLQ3NzK1ZSYnRDVzF2YzFC?=
+ =?utf-8?B?NEs1M1lYVkdMZEcyYVZRQlYvMjVhcUR1bDA3aTN5UDEyRWVrUEM1cEYzUjRX?=
+ =?utf-8?B?MStBaUV1bHZnUTM4dHJYUlFteVlTS1RUM0hRRTA5WmxDSWZEL1J6R3c2dHBs?=
+ =?utf-8?B?UDNXR2xUdjBxRS93S25GY3VNeEYxdXNhcUsxYml2ZElQUFh2Qmd1d0FLb3lC?=
+ =?utf-8?B?L1ljTHNFWmgzQm5sQi81aXlzemlXMWZ3Nkx5dTFsWWJpNExsazV5Z3lNSnRk?=
+ =?utf-8?B?bnJlZXJQNUxnSFkzY042NkhxZmlvTGNuR3RCMnUyekFCUDg0MjgyRXdUUGhq?=
+ =?utf-8?B?TTdoWHQ2emhyb1hqTWR5dTdabHBySUlvSVkvZGJkSkdqZUVlZjA0ZERCczZE?=
+ =?utf-8?B?TlhZOFhWV2ZhbmRuc2VLaFBRYXI1SC9SV0gxWEU1aWMxSDRmREtSRXJ2bmpW?=
+ =?utf-8?B?VFBvS0tndVBpcEtIMjE0eXBKeWtQZTh0Nno5bzE3cmlJK2hScGRBamdzK21M?=
+ =?utf-8?B?eHYrZW43UlJvRHp0R1hpZzMyVmVTUUxFVy9FMUs5SHdVUWdxek0zSnZLb3Z6?=
+ =?utf-8?B?eWptcGN2N3hrUWdQZmZaVlN1bnk4ZTE2a01BamVkd2RwMXpBTVpUaU1jRURl?=
+ =?utf-8?B?ZVNrY09WWHU0NU9pQmMyM0xFeXNiU3EvMjdlRk1oWndHTE41NDZ4bVhOQ3Ri?=
+ =?utf-8?B?TUx4Ym5EblpGcmQrVWpFSkk5NWlCb2RtanRwNUZwQ3Q4aWZnU0lONHhpckJ4?=
+ =?utf-8?B?MGpHejZ5N3BNWWs0dTQxZTk2czlteGdGRkphRkMwcEFrZWhGc3ErV3JiR1BO?=
+ =?utf-8?B?WW94QXg5SHQ2c1l4eHQxSlNZaUtDdmdBS295V2hoclRuYmtKOEtacGxwSS9h?=
+ =?utf-8?B?ZFVBaTFyVjMwbEJ2OEd4SHRWZDN1ZmJPVEZMVXdCRlVZM1owaGVQSUJwTkhx?=
+ =?utf-8?B?ZEE1SzJWcWx1YWkwVmRzYUFjc1hhVWMyMW90YThPeE1OdTU4OUUwWkFHR3BV?=
+ =?utf-8?B?eWlHZzk1TXpGODdzam5HbzA5RXlWZ08xM3F3YmdlZFlIdFl5TG1WemdxaHNw?=
+ =?utf-8?B?VkFRakJkZy91RXFGR2ZGMHF6YnJaeGhZTnExT1RLaVVUWmNGQzdaQmpjY0gw?=
+ =?utf-8?B?N1JJVVRhZ01kcjgrYXIvUUNheFFWb2V0Q2txcy8yLzBOcXM4RHROSENoZDFO?=
+ =?utf-8?Q?Y7E7Sp6Bx6mqzxMYPoUtbkARC?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0efaccf6-f9a0-4d8d-e4af-08dab6064684
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 21:24:57.0128
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 21:25:29.7707
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RFLjSz+QAi9cvf4w3XPqTULAKfL89fSsTDmQFjmj6Yo4k8Om1bgEQafjktOXkI72VGmvDNbEORmf+7ndDP/e58yV/+05oQqUTcLGaC//HSg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6452
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zk+gt6mxWiTKdVHkUE/yuWTTNy/nX/+eaE2y/7veK7NVnXIw0WTaJuS5EAODxD4A
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6187
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Richter wrote:
-> On 20.10.22 22:17:07, Dan Williams wrote:
-> > Robert Richter wrote:
-> > > A downstream port must be connected to a component register block.
-> > > For restricted hosts the base address is determined from the RCRB. The
-> > > RCRB is provided by the host's CEDT CHBS entry. Rework CEDT parser to
-> > > get the RCRB and add code to extract the component register block from
-> > > it.
-> > > 
-> > > RCRB's BAR[0..1] point to the component block containing CXL subsystem
-> > > component registers. MEMBAR extraction follows the PCI base spec here,
-> > > esp. 64 bit extraction and memory range alignment (6.0, 7.5.1.2.1).
-> > > 
-> > > Note: Right now the component register block is used for HDM decoder
-> > > capability only which is optional for RCDs. If unsupported by the RCD,
-> > > the HDM init will fail. It is future work to bypass it in this case.
-> > > 
-> > > Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> > > Signed-off-by: Robert Richter <rrichter@amd.com>
-> > > ---
-> > >  drivers/cxl/acpi.c | 79 ++++++++++++++++++++++++++++++++++++++++------
-> > >  1 file changed, 69 insertions(+), 10 deletions(-)
-> > > 
-> > > diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
-> > > index fb9f72813067..a92d5d7b7a92 100644
-> > > --- a/drivers/cxl/acpi.c
-> > > +++ b/drivers/cxl/acpi.c
-> > > @@ -9,6 +9,8 @@
-> > >  #include "cxlpci.h"
-> > >  #include "cxl.h"
-> > >  
-> > > +#define CXL_RCRB_SIZE	SZ_8K
-> > > +
-> > >  static unsigned long cfmws_to_decoder_flags(int restrictions)
-> > >  {
-> > >  	unsigned long flags = CXL_DECODER_F_ENABLE;
-> > > @@ -229,27 +231,82 @@ static int add_host_bridge_uport(struct device *match, void *arg)
-> > >  struct cxl_chbs_context {
-> > >  	struct device *dev;
-> > >  	unsigned long long uid;
-> > > -	resource_size_t chbcr;
-> > > +	struct acpi_cedt_chbs chbs;
-> > >  };
-> > >  
-> > > -static int cxl_get_chbcr(union acpi_subtable_headers *header, void *arg,
-> > > -			 const unsigned long end)
-> > > +static int cxl_get_chbs(union acpi_subtable_headers *header, void *arg,
-> > > +			const unsigned long end)
-> > >  {
-> > >  	struct cxl_chbs_context *ctx = arg;
-> > >  	struct acpi_cedt_chbs *chbs;
-> > >  
-> > > -	if (ctx->chbcr)
-> > > +	if (ctx->chbs.base)
-> > >  		return 0;
-> > >  
-> > >  	chbs = (struct acpi_cedt_chbs *) header;
-> > >  
-> > >  	if (ctx->uid != chbs->uid)
-> > >  		return 0;
-> > > -	ctx->chbcr = chbs->base;
-> > > +	ctx->chbs = *chbs;
-> > >  
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +static resource_size_t cxl_get_chbcr(struct cxl_chbs_context *ctx)
-> > > +{
-> > 
-> > The core logic of this looks good, but this wants to be shared with the
-> > upstream port component register discovery.
-> > 
-> > Full disclosure I am reconciling these patches with an attempt that Dave
-> > Jiang made at this topic. Since your series hit the list first I will
-> > let it take the lead, but then fill it in with comments and learnings
-> > from Dave's effort.
-> > 
-> > So in this case Dave moved this into the drivers/cxl/core/regs.c with a
-> > function signature like:
-> > 
-> > enum cxl_rcrb {
-> >        CXL_RCRB_DOWNSTREAM,
-> >        CXL_RCRB_UPSTREAM,
-> > };
-> > 
-> > resource_size_t cxl_rcrb_to_component(struct device *dev,
-> >                                       resource_size_t rcrb_base, int len,
-> >                                       enum cxl_rcrb which);
-> > 
-> > ...where @which alternates when called by cxl_acpi for the downstream
-> > case, or cxl_mem for the upstream case.
+On 2022-10-24 17:06, Luben Tuikov wrote:
+> On 2022-10-24 08:19, Yang Yingliang wrote:
+>> Inject fault while loading module, kset_register() may fail.
+>> If it fails, the name allocated by kobject_set_name() which
+>> is called before kset_register() is leaked, because refcount
+>> of kobject is hold in kset_init().
 > 
-> Ok, I see where to go here. Could you point me to Dave's postings you
-> are referring to? I checked linux-cxl and could not find anything
-> related to RCRB or that changes regs.c.
+> "is hold" --> "was set".
+> 
+> Also, I'd say "which must be called" instead of "is", since
+> we cannot register kobj/kset without a name--the kobj code crashes,
+> and we want to make this clear. IOW, a novice user may wonder
+> where "is" it called, as opposed to learning that they "must"
+> call it to allocate/set a name, before calling kset_register().
+> 
+> So, I'd say this:
+> 
+> "If it fails, the name allocated by kobject_set_name() which must
+>  be called before a call to kset_regsiter() is leaked, since
+>  refcount of kobj was set in kset_init()."
 
-He was in the middle of tidying them when you posted your series, but I
-think it would not hurt to push them to a git tree so you can grab the
-bits and pieces you want.
+Actually, to be a bit more clear:
 
-Dave?
+"If kset_register() fails, the name allocated by kobject_set_name(),
+ namely kset.kobj.name, which must be called before a call to kset_register(),
+ may be leaked, if the caller doesn't explicitly free it, say by calling kset_put().
+
+ To mitigate this, we free the name in kset_register() when an error is encountered,
+ i.e. when kset_register() returns an error."
+
+> 
+>>
+>> As a kset may be embedded in a larger structure which needs
+>> be freed in release() function or error path in callers, we
+> 
+> Drop "As", start with "A kset". "which needs _to_ be".
+> Also please specify that the release is part of the ktype,
+> like this:
+> 
+> "A kset may be embedded in a larger structure which needs to be
+>  freed in ktype.release() or error path in callers, we ..."
+> 
+>> can not call kset_put() in kset_register(), or it will cause
+>> double free, so just call kfree_const() to free the name and
+>> set it to NULL.
+>>
+>> With this fix, the callers don't need to care about the name
+>> freeing and call an extra kset_put() if kset_register() fails.
+> 
+> This is unclear because you're *missing* a verb:
+> "and call an extra kset_put()".
+> Please add the proper verb _between_ "and call", something like,
+> 
+> "With this fix, the callers don't need to care about freeing
+>  the name of the kset, and _can_ call kset_put() if kset_register() fails."
+> 
+> Choose a proper verb here: can, should, cannot, should not, etc.
+> 
+> We can do this because you set "kset.kobj.name to NULL, and this
+> is checked for in kobject_cleanup(). We just need to stipulate
+> whether they should/shouldn't have to call kset_put(), or can free the kset
+> and/or the embedding object themselves. This really depends
+> on how we want kset_register() to behave in the future, and on
+> user's own ktype.release implementation...
+
+Forgot "may", "may not".
+
+So, do we want to say "may call kset_put()", like:
+
+"With this fix, the callers need not care about freeing
+ the name of the kset, and _may_ call kset_put() if kset_register() fails."
+
+Or do we want to say "should" or even "must"--it really depends on
+what else is (would be) going on in kobj registration.
+
+Although, the user may have additional work to be done in the ktype.release()
+callback for the embedding object. It would be good to give them the freedom,
+i.e. "may", to call kset_put(). If that's not the case, this must be explicitly
+stipulated with the proper verb.
+
+Regards,
+Luben
+
