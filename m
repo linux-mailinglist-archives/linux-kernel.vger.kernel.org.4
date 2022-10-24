@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D3160A8E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4931E60AA9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbiJXNMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S229981AbiJXNf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235919AbiJXNKL (ORCPT
+        with ESMTP id S236327AbiJXNat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:10:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB02A47B;
-        Mon, 24 Oct 2022 05:23:31 -0700 (PDT)
+        Mon, 24 Oct 2022 09:30:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E9BAC2A7;
+        Mon, 24 Oct 2022 05:33:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09187B8161F;
-        Mon, 24 Oct 2022 12:15:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63EEBC433D6;
-        Mon, 24 Oct 2022 12:15:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B481612FF;
+        Mon, 24 Oct 2022 12:32:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A5EC433C1;
+        Mon, 24 Oct 2022 12:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613718;
-        bh=j+67didnIPF+xzyve6MvUXmjz4nmKeBUiydpiwCnhUs=;
+        s=korg; t=1666614770;
+        bh=N/ic3nvsn6gbap9xn1FFJo7xJmazvDTuIdIeuNaNTDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t3NEMBF57gAnl8lTkIIuLnagX7B+NrVvvzb6f/Jtn50jpCVRsu6KsYCxSFCcBSlZE
-         TOEJPRMR6X458sRJwr2az39/r/YLePwraEdizw51kUoQQHRgh1hti1VryqsSdTSBMc
-         1/qUVRYcmK6/BCXkLKa1q7392Wyg0++/Urt25BnM=
+        b=dk6WjIp6h0Lp3thwlTeuiCM89mC+g1X1wTpzxsvSMZay1MrW9b5eZ4YdzaeL2GSKB
+         jxOfx9ZbEtgteQqEt3dqhatGYHfKsPHn7XwW9sqIh8G/XpVrzUvRfvVOrPRc1shLWB
+         vEDwewK1CH6QCU09QzYIhDNukhTiNY3ZpzSpzUC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Varun Prakash <varun@chelsio.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 243/255] nvmet-tcp: add bounds check on Transfer Tag
-Date:   Mon, 24 Oct 2022 13:32:33 +0200
-Message-Id: <20221024113011.330767504@linuxfoundation.org>
+        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
+        Letu Ren <fantasquex@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 357/390] scsi: 3w-9xxx: Avoid disabling device if failing to enable it
+Date:   Mon, 24 Oct 2022 13:32:34 +0200
+Message-Id: <20221024113038.202753438@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,45 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Varun Prakash <varun@chelsio.com>
+From: Letu Ren <fantasquex@gmail.com>
 
-[ Upstream commit b6a545ffa2c192b1e6da4a7924edac5ba9f4ea2b ]
+[ Upstream commit 7eff437b5ee1309b34667844361c6bbb5c97df05 ]
 
-ttag is used as an index to get cmd in nvmet_tcp_handle_h2c_data_pdu(),
-add a bounds check to avoid out-of-bounds access.
+The original code will "goto out_disable_device" and call
+pci_disable_device() if pci_enable_device() fails. The kernel will generate
+a warning message like "3w-9xxx 0000:00:05.0: disabling already-disabled
+device".
 
-Signed-off-by: Varun Prakash <varun@chelsio.com>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+We shouldn't disable a device that failed to be enabled. A simple return is
+fine.
+
+Link: https://lore.kernel.org/r/20220829110115.38789-1-fantasquex@gmail.com
+Reported-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Letu Ren <fantasquex@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/nvme/target/tcp.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/scsi/3w-9xxx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
-index eb5b39c2bba8..df7a911d303f 100644
---- a/drivers/nvme/target/tcp.c
-+++ b/drivers/nvme/target/tcp.c
-@@ -858,10 +858,17 @@ static int nvmet_tcp_handle_h2c_data_pdu(struct nvmet_tcp_queue *queue)
- 	struct nvme_tcp_data_pdu *data = &queue->pdu.data;
- 	struct nvmet_tcp_cmd *cmd;
+diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
+index 3337b1e80412..f6f92033132a 100644
+--- a/drivers/scsi/3w-9xxx.c
++++ b/drivers/scsi/3w-9xxx.c
+@@ -2014,7 +2014,7 @@ static int twa_probe(struct pci_dev *pdev, const struct pci_device_id *dev_id)
+ 	retval = pci_enable_device(pdev);
+ 	if (retval) {
+ 		TW_PRINTK(host, TW_DRIVER, 0x34, "Failed to enable pci device");
+-		goto out_disable_device;
++		return -ENODEV;
+ 	}
  
--	if (likely(queue->nr_cmds))
-+	if (likely(queue->nr_cmds)) {
-+		if (unlikely(data->ttag >= queue->nr_cmds)) {
-+			pr_err("queue %d: received out of bound ttag %u, nr_cmds %u\n",
-+				queue->idx, data->ttag, queue->nr_cmds);
-+			nvmet_tcp_fatal_error(queue);
-+			return -EPROTO;
-+		}
- 		cmd = &queue->cmds[data->ttag];
--	else
-+	} else {
- 		cmd = &queue->connect;
-+	}
- 
- 	if (le32_to_cpu(data->data_offset) != cmd->rbytes_done) {
- 		pr_err("ttag %u unexpected data offset %u (expected %u)\n",
+ 	pci_set_master(pdev);
 -- 
 2.35.1
 
