@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8A760B0BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00DD960B26C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiJXQJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40792 "EHLO
+        id S233272AbiJXQqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233646AbiJXQEv (ORCPT
+        with ESMTP id S233809AbiJXQpe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:04:51 -0400
+        Mon, 24 Oct 2022 12:45:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8EA2CE04;
-        Mon, 24 Oct 2022 07:57:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BC218B48E;
+        Mon, 24 Oct 2022 08:31:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B160AB8162A;
-        Mon, 24 Oct 2022 12:21:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CE4AC433D7;
-        Mon, 24 Oct 2022 12:21:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38D1AB818E5;
+        Mon, 24 Oct 2022 12:39:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91AC9C433C1;
+        Mon, 24 Oct 2022 12:39:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614066;
-        bh=r5FDIp291EgvdDjpw1Sd2GAdYsqzp0QZFybu9zO3DO4=;
+        s=korg; t=1666615153;
+        bh=KLXaFQT2JlFqTccYwn76fcGTCiyc8m5psLPMQV9qgJ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gJFjr5/GRbIxFIY5+NJZtgCAk7fxvNOPYrf0QsMoXEJSy3RT3NgWOncHEZUs2zu8V
-         Q0oluqB/JjX1BH+0fKYYz3tD59RqMAoaK/y9BIb1pa0/BcOTGblsL8ztotu/wkCFQj
-         EuRCCKH0ov1Dox+kUHRUASKItA7hI2NUoWE0//Co=
+        b=uSFLJ3sONUy4pydNE5MZzHF+oIvIn9bjLEVjgtroaVWRtVimnSB7LZXiDkYXBNWya
+         CbxAcKmFGnftGwImL3Cwz4BxbnZuI97SRWKZVGJe7Xo26bfZNeW5HMI0X6dIajeFU8
+         5LoJYbeTYm9MoLFuRViiSZvcdt8aQSljmjSk0SqI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [PATCH 5.10 089/390] drm/i915: Fix watermark calculations for gen12+ MC CCS modifier
-Date:   Mon, 24 Oct 2022 13:28:06 +0200
-Message-Id: <20221024113026.417641197@linuxfoundation.org>
+        stable@vger.kernel.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 143/530] ARM: 9244/1: dump: Fix wrong pg_level in walk_pmd()
+Date:   Mon, 24 Oct 2022 13:28:07 +0200
+Message-Id: <20221024113051.549719948@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Wang Kefeng <wangkefeng.wang@huawei.com>
 
-commit 484b2b9281000274ef7c5cb0a9ebc5da6f5c281c upstream.
+[ Upstream commit 2ccd19b3ffac07cc7e75a2bd1ed779728bb67197 ]
 
-Take the gen12+ MC CCS modifier into account when calculating the
-watermarks. Othwerwise we'll calculate the watermarks thinking this
-Y-tiled modifier is linear.
+After ARM supports p4d page tables, the pg_level for note_page()
+in walk_pmd() should be 4, not 3, fix it.
 
-The rc_surface part is actually a nop since that is not used
-for any glk+ platform.
-
-v2: Split RC CCS vs. MC CCS to separate patches
-
-Cc: stable@vger.kernel.org
-Fixes: 2dfbf9d2873a ("drm/i915/tgl: Gen-12 display can decompress surfaces compressed by the media engine")
-Reviewed-by: Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20221003111544.8007-3-ville.syrjala@linux.intel.com
-(cherry picked from commit 91c9651425fe955b1387f3637607dda005f3f710)
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 84e6ffb2c49c ("arm: add support for folded p4d page tables")
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/i915/intel_pm.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/arm/mm/dump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/i915/intel_pm.c
-+++ b/drivers/gpu/drm/i915/intel_pm.c
-@@ -5146,11 +5146,13 @@ skl_compute_wm_params(const struct intel
- 		      modifier == I915_FORMAT_MOD_Yf_TILED ||
- 		      modifier == I915_FORMAT_MOD_Y_TILED_CCS ||
- 		      modifier == I915_FORMAT_MOD_Yf_TILED_CCS ||
--		      modifier == I915_FORMAT_MOD_Y_TILED_GEN12_RC_CCS;
-+		      modifier == I915_FORMAT_MOD_Y_TILED_GEN12_RC_CCS ||
-+		      modifier == I915_FORMAT_MOD_Y_TILED_GEN12_MC_CCS;
- 	wp->x_tiled = modifier == I915_FORMAT_MOD_X_TILED;
- 	wp->rc_surface = modifier == I915_FORMAT_MOD_Y_TILED_CCS ||
- 			 modifier == I915_FORMAT_MOD_Yf_TILED_CCS ||
--			 modifier == I915_FORMAT_MOD_Y_TILED_GEN12_RC_CCS;
-+			 modifier == I915_FORMAT_MOD_Y_TILED_GEN12_RC_CCS ||
-+			 modifier == I915_FORMAT_MOD_Y_TILED_GEN12_MC_CCS;
- 	wp->is_planar = intel_format_info_is_yuv_semiplanar(format, modifier);
+diff --git a/arch/arm/mm/dump.c b/arch/arm/mm/dump.c
+index fb688003d156..712da6a81b23 100644
+--- a/arch/arm/mm/dump.c
++++ b/arch/arm/mm/dump.c
+@@ -346,7 +346,7 @@ static void walk_pmd(struct pg_state *st, pud_t *pud, unsigned long start)
+ 		addr = start + i * PMD_SIZE;
+ 		domain = get_domain_name(pmd);
+ 		if (pmd_none(*pmd) || pmd_large(*pmd) || !pmd_present(*pmd))
+-			note_page(st, addr, 3, pmd_val(*pmd), domain);
++			note_page(st, addr, 4, pmd_val(*pmd), domain);
+ 		else
+ 			walk_pte(st, pmd, addr, domain);
  
- 	wp->width = width;
+-- 
+2.35.1
+
 
 
