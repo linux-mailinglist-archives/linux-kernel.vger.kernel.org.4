@@ -2,120 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8553460BF77
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F156B60BF7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiJYAWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
+        id S229971AbiJYAXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230343AbiJYAVz (ORCPT
+        with ESMTP id S229832AbiJYAWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:21:55 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC9118E04
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:45:21 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id b11so3085632pjp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:45:21 -0700 (PDT)
+        Mon, 24 Oct 2022 20:22:54 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC6B7F084
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:46:38 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z97so33739624ede.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:46:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IzIdWqwFLj5fY1F/cHydtWFars9saIw7viA8DOZalt0=;
-        b=id/Shf2px0nm0w6YpRtcH83oau8NFtXtpVpRJhfStEnVAySUuwckkepCJhHxm++jTJ
-         n023l4Kup9Ljld4UuM5WL2dtHuTMGMBIQcRhICrBPeiW8uWieqlZ49z5CXVorvviXfsN
-         41OD4ajvLuE1MSbu4oW+LpZy7fXOPyiv9ZX8VqSFyKAztuuvotjpOn2qLfFfaDr8a2GN
-         C6QDkzneR4VR34BC4gtwwb3rjnofH04ROA7i7f6gz05ofysJWeGFodBQyxb0rw/dmxCI
-         I0JfWdevDb7YvoFs0KBEUzbm0IAEA1dXJH3ZyPgLikcbGAY3zmKMVBNnWk+hGhdkOb3v
-         0KRg==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oIHl2iCS5umkUQOttHMwOxT4DU4dTXsnDaz+mZRAMKc=;
+        b=oZyDNuZZ8bs6Dd/+bmcm0ORHJLVHkh6oX/lOWkQd7odI9UAqCD7O/wCA/hDvorihH3
+         N9+QLewwBtMtqshKTjtsp9e5sf8Q8V9IMkMUcxglNK13SVPGIcxHiUROeBAQPe//FtdZ
+         MC3KWgqs6B/AegdXOlxhnQfyBH4y0fiqdEFFQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IzIdWqwFLj5fY1F/cHydtWFars9saIw7viA8DOZalt0=;
-        b=hlAAeaYhIrWn/MDJwsEyfhc6/p2zeBdnbecGurRph93WE8m3DR/wRlV9T1QKhhsMCq
-         9ISI7DSO7Wg+h4JP6K/JrKb5/eLL0X6EPjMcorxQHF7kyOKURU5qCRxG3QCjdU+6j8Y5
-         TOKSP7mSiUuppb7/MbTgxGuyfyCPVdfLt5jnabXxYUuoGujNF3cG0zFhtwWCMQ1EEsdJ
-         YU6521nuGtehy2Rud9ABTf9jjHiMuonOxWQUcQSQkFiOcEyclnGsjreey2r2qro1zNbT
-         L+N4vqH85lw0mgcKXJiQAmKC1Sdq9k54a91JUIoz8rgJu4HNOGkSxoVuAEdTcauVD7oB
-         nXZA==
-X-Gm-Message-State: ACrzQf19vkcBfKdLzg4m7vc0ayttcVYTdMGKo6mMsNH7P51VSS7cFQiG
-        z7nE5VWcCQTOrnQ/sIH+QpGMtg==
-X-Google-Smtp-Source: AMsMyM4l/bCd7Zveoo+hni1dgz3W5uY9VEgosW/pOypYo8SEZWHh9AHRhyLQfyGd681OtJHgps7ddQ==
-X-Received: by 2002:a17:902:b907:b0:178:2898:8084 with SMTP id bf7-20020a170902b90700b0017828988084mr34970711plb.140.1666651520768;
-        Mon, 24 Oct 2022 15:45:20 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u14-20020a170903124e00b00177ff4019d9sm192701plh.274.2022.10.24.15.45.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 15:45:20 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 22:45:16 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] KVM: API to block and resume all running vcpus in a
- vm
-Message-ID: <Y1cVfECAAfmp5XqA@google.com>
-References: <20221022154819.1823133-1-eesposit@redhat.com>
- <a2e16531-5522-a334-40a1-2b0e17663800@linux.ibm.com>
- <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
- <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oIHl2iCS5umkUQOttHMwOxT4DU4dTXsnDaz+mZRAMKc=;
+        b=41MESTygh9QYaEls21oAt+w236OQHBA6zvbPEUST5mXubMcEfkfePsYgp1dTrMLzS/
+         b5qrv1OV3LIFEQxjOTPq4CniQIpQXulsxhBKwhIALjkQa8GUl4Ly9A7vKptWANyQnx3x
+         aTgew9F2wo1tirlLjpX9sVSEWo84vDgVzQhbs4+t4itUjOPPbdxrWxs6tGCizEddQikM
+         7qy5R1T1Ndl7soO2nw/YbVuSZCJzAJoaE38iUz83CLU41e8rU85gpxfT91Yol7u9PUaA
+         Rv0ElaIA7rc9x2aTQQNl5BzWv9c4AZB4R+hpwf1ai61640BvhW2Se+VDXatE8H3nXWm3
+         RF2g==
+X-Gm-Message-State: ACrzQf0C0UixciOvELMTO3y1mhN6xv7wPsqVvaRFMcxS6Ti5vTNQp/RN
+        XfkH8xMmWTQMVEqQzB18wcarPhbCIcRXU6AQ
+X-Google-Smtp-Source: AMsMyM7lhR2fNp4T+AplBhVaRtmUMJrMnufSq2JaVWXPoYKZ7DQAus+SN3YxKR2FW743tbhmknE2dw==
+X-Received: by 2002:a05:6402:370c:b0:453:9fab:1b53 with SMTP id ek12-20020a056402370c00b004539fab1b53mr33631530edb.28.1666651596721;
+        Mon, 24 Oct 2022 15:46:36 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id ks23-20020a170906f85700b0078d175d6dc5sm440044ejb.201.2022.10.24.15.46.35
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 15:46:35 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id g12so5448307wrs.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:46:35 -0700 (PDT)
+X-Received: by 2002:a5d:6488:0:b0:22b:3b0b:5e72 with SMTP id
+ o8-20020a5d6488000000b0022b3b0b5e72mr23635683wri.138.1666651584545; Mon, 24
+ Oct 2022 15:46:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221019145600.1282823-1-john.ogness@linutronix.de> <20221019145600.1282823-13-john.ogness@linutronix.de>
+In-Reply-To: <20221019145600.1282823-13-john.ogness@linutronix.de>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 24 Oct 2022 15:46:12 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VFxKL=sOMdhyHrgy2JOtzKJdOe4euwZRRAK7P-rNVjuQ@mail.gmail.com>
+Message-ID: <CAD=FV=VFxKL=sOMdhyHrgy2JOtzKJdOe4euwZRRAK7P-rNVjuQ@mail.gmail.com>
+Subject: Re: [PATCH printk v2 12/38] tty: serial: kgdboc: use console_is_enabled()
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022, Christian Borntraeger wrote:
-> Am 24.10.22 um 10:33 schrieb Emanuele Giuseppe Esposito:
-> > Am 24/10/2022 um 09:56 schrieb Christian Borntraeger:
-> > > > Therefore the simplest solution is to pause all vcpus in the kvm
-> > > > side, so that:
+Hi,
 
-Simplest for QEMU maybe, most definitely not simplest for KVM.
+On Wed, Oct 19, 2022 at 7:56 AM John Ogness <john.ogness@linutronix.de> wrote:
+>
+> Replace (console->flags & CON_ENABLED) usage with console_is_enabled().
+>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> ---
+>  drivers/tty/serial/kgdboc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+> index e76f0186c335..b17aa7e49894 100644
+> --- a/drivers/tty/serial/kgdboc.c
+> +++ b/drivers/tty/serial/kgdboc.c
+> @@ -533,7 +533,7 @@ static int __init kgdboc_earlycon_init(char *opt)
+>         console_lock();
+>         for_each_console(con) {
+>                 if (con->write && con->read &&
+> -                   (con->flags & (CON_BOOT | CON_ENABLED)) &&
+> +                   (console_is_enabled(con) || (con->flags & CON_BOOT)) &&
 
-> > > > - userspace just needs to call the new API before making memslots
-> > > > changes, keeping modifications to the minimum
-> > > > - dirty page updates are also performed when vcpus are blocked, so
-> > > > there is no time window between the dirty page ioctl and memslots
-> > > > modifications, since vcpus are all stopped.
-> > > > - no need to modify the existing memslots API
-> > > Isnt QEMU able to achieve the same goal today by forcing all vCPUs
-> > > into userspace with a signal? Can you provide some rationale why this
-> > > is better in the cover letter or patch description?
-> > > 
-> > David Hildenbrand tried to propose something similar here:
-> > https://github.com/davidhildenbrand/qemu/commit/86b1bf546a8d00908e33f7362b0b61e2be8dbb7a
-> > 
-> > While it is not optimized, I think it's more complex that the current
-> > serie, since qemu should also make sure all running ioctls finish and
-> > prevent the new ones from getting executed.
-> > 
-> > Also we can't use pause_all_vcpus()/resume_all_vcpus() because they drop
-> > the BQL.
-> > 
-> > Would that be ok as rationale?
-> 
-> Yes that helps and should be part of the cover letter for the next iterations.
+<shrug>. I guess this is OK, but it feels a little pointless. If we're
+still directly looking at the CON_BOOT bit in con->flags it seems
+weird to be accessing CON_ENABLED through a special wrapper that's
+marked as a `data_race`. In our case it's _not_ a data race, right,
+since this function continues to hold the console_lock() even at the
+end of the series? I personally would drop this patch but if you
+really want it I won't object.
 
-But that doesn't explain why KVM needs to get involved, it only explains why QEMU
-can't use its existing pause_all_vcpus().  I do not understand why this is a
-problem QEMU needs KVM's help to solve.
+-Doug
