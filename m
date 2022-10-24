@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B0260AA82
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3DC60AA02
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236257AbiJXNfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S234184AbiJXN1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236269AbiJXNaS (ORCPT
+        with ESMTP id S236308AbiJXNZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:30:18 -0400
+        Mon, 24 Oct 2022 09:25:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9F6ACA1D;
-        Mon, 24 Oct 2022 05:33:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EDDA8CEC;
+        Mon, 24 Oct 2022 05:30:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3C2361253;
-        Mon, 24 Oct 2022 12:29:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00613C433C1;
-        Mon, 24 Oct 2022 12:29:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A97DA612B2;
+        Mon, 24 Oct 2022 12:29:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2236C433C1;
+        Mon, 24 Oct 2022 12:29:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614573;
-        bh=KwHi/Yz77vH5JpUvmQEm94H2dp2DiOF5mtJWc1mS1c4=;
+        s=korg; t=1666614581;
+        bh=aB5UaX4PEnngZ+QuGyOLg8annvuPF1tnFpPw2lzRz5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MZNhZ3Iv9UOVknSDqrSkz1BqGsfCIp8aHDmcMom18AX7FcPo1/DHOM5sguaavMoXY
-         WZJspw0Vw5rcou1mpUXHwMTa1ijv/cUrj1vqBwLxkucjpPjC11oEynyFivCsJE4n1Z
-         eN5XHY60BNmJXH4kUw8L3FpO/wwoAGNSAa+sBlLA=
+        b=KdyKJpLJgmFKoUktqz0ixUuE5OMWJ9LJa0akki710FoIwQRPUc4Ts18jHOs0ttuAZ
+         P1czPUGSnqWFAbY7f9sI8Hzd7nhqYd0pPcPoTrjr2QClbrF+/PFMBUiUCc4oZg9T38
+         N3NYEnEKDWH232SmA/PvMXUK+fTMHKuJf2aTPXVQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Rob Herring <robh@kernel.org>,
+        stable@vger.kernel.org,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 285/390] kbuild: remove the target in signal traps when interrupted
-Date:   Mon, 24 Oct 2022 13:31:22 +0200
-Message-Id: <20221024113035.087700162@linuxfoundation.org>
+Subject: [PATCH 5.10 286/390] kbuild: rpm-pkg: fix breakage when V=1 is used
+Date:   Mon, 24 Oct 2022 13:31:23 +0200
+Message-Id: <20221024113035.135868289@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -56,170 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 
-[ Upstream commit a7f3257da8a86b96fb9bf1bba40ae0bbd7f1885a ]
+[ Upstream commit 2e07005f4813a9ff6e895787e0c2d1fea859b033 ]
 
-When receiving some signal, GNU Make automatically deletes the target if
-it has already been changed by the interrupted recipe.
+Doing make V=1 binrpm-pkg results in:
 
-If the target is possibly incomplete due to interruption, it must be
-deleted so that it will be remade from scratch on the next run of make.
-Otherwise, the target would remain corrupted permanently because its
-timestamp had already been updated.
+ Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.EgV6qJ
+ + umask 022
+ + cd .
+ + /bin/rm -rf /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x
+ + /bin/mkdir -p /home/scgl/rpmbuild/BUILDROOT
+ + /bin/mkdir /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x
+ + mkdir -p /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x/boot
+ + make -f ./Makefile image_name
+ + cp test -e include/generated/autoconf.h -a -e include/config/auto.conf || ( \ echo >&2; \ echo >&2 " ERROR: Kernel configuration is invalid."; \ echo >&2 " include/generated/autoconf.h or include/config/auto.conf are missing.";\ echo >&2 " Run 'make oldconfig && make prepare' on kernel src to fix it."; \ echo >&2 ; \ /bin/false) arch/s390/boot/bzImage /home/scgl/rpmbuild/BUILDROOT/kernel-6.0.0_rc5+-1.s390x/boot/vmlinuz-6.0.0-rc5+
+ cp: invalid option -- 'e'
+ Try 'cp --help' for more information.
+ error: Bad exit status from /var/tmp/rpm-tmp.EgV6qJ (%install)
 
-Thanks to this behavior of Make, you can stop the build any time by
-pressing Ctrl-C, and just run 'make' to resume it.
+Because the make call to get the image name is verbose and prints
+additional information.
 
-Kbuild also relies on this feature, but it is equivalently important
-for any build systems that make decisions based on timestamps (if you
-want to support Ctrl-C reliably).
-
-However, this does not always work as claimed; Make immediately dies
-with Ctrl-C if its stderr goes into a pipe.
-
-  [Test Makefile]
-
-    foo:
-            echo hello > $@
-            sleep 3
-            echo world >> $@
-
-  [Test Result]
-
-    $ make                         # hit Ctrl-C
-    echo hello > foo
-    sleep 3
-    ^Cmake: *** Deleting file 'foo'
-    make: *** [Makefile:3: foo] Interrupt
-
-    $ make 2>&1 | cat              # hit Ctrl-C
-    echo hello > foo
-    sleep 3
-    ^C$                            # 'foo' is often left-over
-
-The reason is because SIGINT is sent to the entire process group.
-In this example, SIGINT kills 'cat', and 'make' writes the message to
-the closed pipe, then dies with SIGPIPE before cleaning the target.
-
-A typical bad scenario (as reported by [1], [2]) is to save build log
-by using the 'tee' command:
-
-    $ make 2>&1 | tee log
-
-This can be problematic for any build systems based on Make, so I hope
-it will be fixed in GNU Make. The maintainer of GNU Make stated this is
-a long-standing issue and difficult to fix [3]. It has not been fixed
-yet as of writing.
-
-So, we cannot rely on Make cleaning the target. We can do it by
-ourselves, in signal traps.
-
-As far as I understand, Make takes care of SIGHUP, SIGINT, SIGQUIT, and
-SITERM for the target removal. I added the traps for them, and also for
-SIGPIPE just in case cmd_* rule prints something to stdout or stderr
-(but I did not observe an actual case where SIGPIPE was triggered).
-
-[Note 1]
-
-The trap handler might be worth explaining.
-
-    rm -f $@; trap - $(sig); kill -s $(sig) $$
-
-This lets the shell kill itself by the signal it caught, so the parent
-process can tell the child has exited on the signal. Generally, this is
-a proper manner for handling signals, in case the calling program (like
-Bash) may monitor WIFSIGNALED() and WTERMSIG() for WCE although this may
-not be a big deal here because GNU Make handles SIGHUP, SIGINT, SIGQUIT
-in WUE and SIGTERM in IUE.
-
-  IUE - Immediate Unconditional Exit
-  WUE - Wait and Unconditional Exit
-  WCE - Wait and Cooperative Exit
-
-For details, see "Proper handling of SIGINT/SIGQUIT" [4].
-
-[Note 2]
-
-Reverting 392885ee82d3 ("kbuild: let fixdep directly write to .*.cmd
-files") would directly address [1], but it only saves if_changed_dep.
-As reported in [2], all commands that use redirection can potentially
-leave an empty (i.e. broken) target.
-
-[Note 3]
-
-Another (even safer) approach might be to always write to a temporary
-file, and rename it to $@ at the end of the recipe.
-
-   <command>  > $(tmp-target)
-   mv $(tmp-target) $@
-
-It would require a lot of Makefile changes, and result in ugly code,
-so I did not take it.
-
-[Note 4]
-
-A little more thoughts about a pattern rule with multiple targets (or
-a grouped target).
-
-    %.x %.y: %.z
-            <recipe>
-
-When interrupted, GNU Make deletes both %.x and %.y, while this solution
-only deletes $@. Probably, this is not a big deal. The next run of make
-will execute the rule again to create $@ along with the other files.
-
-[1]: https://lore.kernel.org/all/YLeot94yAaM4xbMY@gmail.com/
-[2]: https://lore.kernel.org/all/20220510221333.2770571-1-robh@kernel.org/
-[3]: https://lists.gnu.org/archive/html/help-make/2021-06/msg00001.html
-[4]: https://www.cons.org/cracauer/sigint.html
-
-Fixes: 392885ee82d3 ("kbuild: let fixdep directly write to .*.cmd files")
-Reported-by: Ingo Molnar <mingo@kernel.org>
-Reported-by: Rob Herring <robh@kernel.org>
+Fixes: 993bdde94547 ("kbuild: add image_name to no-sync-config-targets")
+Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-Tested-by: Ingo Molnar <mingo@kernel.org>
-Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/Kbuild.include | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+ scripts/package/mkspec | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-index 0d6e11820791..25696de8114a 100644
---- a/scripts/Kbuild.include
-+++ b/scripts/Kbuild.include
-@@ -179,8 +179,29 @@ echo-cmd = $(if $($(quiet)cmd_$(1)),\
-  quiet_redirect :=
- silent_redirect := exec >/dev/null;
- 
-+# Delete the target on interruption
-+#
-+# GNU Make automatically deletes the target if it has already been changed by
-+# the interrupted recipe. So, you can safely stop the build by Ctrl-C (Make
-+# will delete incomplete targets), and resume it later.
-+#
-+# However, this does not work when the stderr is piped to another program, like
-+#  $ make >&2 | tee log
-+# Make dies with SIGPIPE before cleaning the targets.
-+#
-+# To address it, we clean the target in signal traps.
-+#
-+# Make deletes the target when it catches SIGHUP, SIGINT, SIGQUIT, SIGTERM.
-+# So, we cover them, and also SIGPIPE just in case.
-+#
-+# Of course, this is unneeded for phony targets.
-+delete-on-interrupt = \
-+	$(if $(filter-out $(PHONY), $@), \
-+		$(foreach sig, HUP INT QUIT TERM PIPE, \
-+			trap 'rm -f $@; trap - $(sig); kill -s $(sig) $$$$' $(sig);))
-+
- # printing commands
--cmd = @set -e; $(echo-cmd) $($(quiet)redirect) $(cmd_$(1))
-+cmd = @set -e; $(echo-cmd) $($(quiet)redirect) $(delete-on-interrupt) $(cmd_$(1))
- 
- ###
- # if_changed      - execute command if any prerequisite is newer than
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index 7c477ca7dc98..951cc60e5a90 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -85,10 +85,10 @@ $S
+ 	mkdir -p %{buildroot}/boot
+ 	%ifarch ia64
+ 	mkdir -p %{buildroot}/boot/efi
+-	cp \$($MAKE image_name) %{buildroot}/boot/efi/vmlinuz-$KERNELRELEASE
++	cp \$($MAKE -s image_name) %{buildroot}/boot/efi/vmlinuz-$KERNELRELEASE
+ 	ln -s efi/vmlinuz-$KERNELRELEASE %{buildroot}/boot/
+ 	%else
+-	cp \$($MAKE image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEASE
++	cp \$($MAKE -s image_name) %{buildroot}/boot/vmlinuz-$KERNELRELEASE
+ 	%endif
+ $M	$MAKE %{?_smp_mflags} INSTALL_MOD_PATH=%{buildroot} modules_install
+ 	$MAKE %{?_smp_mflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
 -- 
 2.35.1
 
