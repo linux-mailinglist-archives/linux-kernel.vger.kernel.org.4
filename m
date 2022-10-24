@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E2C60BA28
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE0460B9D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbiJXU06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S231167AbiJXUVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234590AbiJXUYx (ORCPT
+        with ESMTP id S232593AbiJXUVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:24:53 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ACC2E6BE;
-        Mon, 24 Oct 2022 11:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PQNqs6IdtT9gCZUPfrGepUfUTCnXjYqE6ZtxOOCZbuY=; b=bZUxoZ3o+SOLm2CQBy+VttoP2B
-        OUQg3xIogy0yBtLBjNHhw1AD98RCzB0kPet/YEkeMNmVR/Jmhxl2GbO9TFg6nk3qeBdntj9dcE/v/
-        nQts5mvftu6i0IDZtQ3YnguK28E+WnrwyIOrUDc2x63UPAzQ2pixygVcHRlZTrLavNxyFHLVHL2uS
-        k14/UwfFI3DWikDyw/rSul/fVBClCA0zMSCYm8I+/lV1m1y334PA5s+FYIfGEhpNvPf/n04//nkZ8
-        1QoLyLZHGM65OVUTIkaIUyY+clnTYDxYiZgdNLCVFW2kkrWV6IfNI1VNDdOMV6HcwySTaqQIE5mqt
-        xqXw/k8w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1omwDX-0063bj-GO; Mon, 24 Oct 2022 12:06:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7AEE33000DD;
-        Mon, 24 Oct 2022 14:06:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5BAEE2018F17F; Mon, 24 Oct 2022 14:06:04 +0200 (CEST)
-Date:   Mon, 24 Oct 2022 14:06:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Guo Ren <guoren@kernel.org>,
-        Lai Jiangshan <laijs@linux.alibaba.com>, arnd@arndb.de,
-        palmer@rivosinc.com, tglx@linutronix.de, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, zouyipeng@huawei.com,
-        bigeasy@linutronix.de, David.Laight@aculab.com,
-        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Borislav Petkov <bp@alien8.de>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH V6 04/11] compiler_types.h: Add __noinstr_section() for
- noinstr
-Message-ID: <Y1Z/rLaaUp7e9xoy@hirez.programming.kicks-ass.net>
-References: <20221002012451.2351127-1-guoren@kernel.org>
- <20221002012451.2351127-5-guoren@kernel.org>
- <YzrJ0wQxWfjWCxhQ@FVFF77S0Q05N>
- <CAJF2gTRBEGx3qncpk_C8rCsFN+kqxjgeAcPvZU5m7kDnpwytoA@mail.gmail.com>
- <Y1ERsP0YYVNulWnw@FVFF77S0Q05N>
- <CAJF2gTTurEaFjbKvj1tUptq_TLpXeBAE1UstNYxriC-7r5MHpQ@mail.gmail.com>
- <Y1Z9U7XN4nlGg8yb@FVFF77S0Q05N>
+        Mon, 24 Oct 2022 16:21:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7A238A2E;
+        Mon, 24 Oct 2022 11:37:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56B48B815A2;
+        Mon, 24 Oct 2022 12:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 08845C433C1;
+        Mon, 24 Oct 2022 12:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666613416;
+        bh=9ESBzX52CjK6XxD8MdXK9r+A7vj8YD1Vc9itBxgSk54=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=d3wA6bjcf5xb7vFZ3l0+Hy9cmk+lm7cYwe0l7Q0kTgGmS88pf8w12D4Id0Q8tg8PU
+         DA+iKviAIuco1CXwxvSNiJgSVKdQTbcHF/5Cl/HbU51aIq637Hr/fmWHFirOXXSR4I
+         SEmU1ooIHuCKMmHEZmeNyhOvBHzQa3RgCBa6oRDzxO3+ZjgGwA4F6UC8zvQFR0wnLh
+         kjBx+i3QBoXcYBdfXG5o8ZBGxl5I/OEP9jstPkByr9LIjgDW+D7hMWexXUmx1QLV7s
+         98e6cOJTpLyfywpK4Az7dD2qBwJqTYLgwIfrBvUXP0yvpP7/iIwuC40L6zqViyTiG6
+         HfgaFe4M2DWYw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D7515E270DE;
+        Mon, 24 Oct 2022 12:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1Z9U7XN4nlGg8yb@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: lantiq_etop: don't free skb when returning
+ NETDEV_TX_BUSY
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166661341587.16761.10357700348677404057.git-patchwork-notify@kernel.org>
+Date:   Mon, 24 Oct 2022 12:10:15 +0000
+References: <1666315944-30898-1-git-send-email-zhangchangzhong@huawei.com>
+In-Reply-To: <1666315944-30898-1-git-send-email-zhangchangzhong@huawei.com>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, blogic@openwrt.org, ralph.hempel@lantiq.com,
+        ralf@linux-mips.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 12:56:03PM +0100, Mark Rutland wrote:
+Hello:
 
-> How about we split this like:
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Fri, 21 Oct 2022 09:32:24 +0800 you wrote:
+> The ndo_start_xmit() method must not free skb when returning
+> NETDEV_TX_BUSY, since caller is going to requeue freed skb.
 > 
-> | /*
-> |  * Prevent the compiler from instrumenting this code in any way
-> |  * This does not prevent instrumentation via KPROBES, which must be
-> |  * prevented through other means if necessary.
+> Fixes: 504d4721ee8e ("MIPS: Lantiq: Add ethernet driver")
+> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> ---
+>  drivers/net/ethernet/lantiq_etop.c | 1 -
+>  1 file changed, 1 deletion(-)
 
-Perhaps point to NOINSTR_TEXT in vmlinux.lds.h
+Here is the summary with links:
+  - [net] net: lantiq_etop: don't free skb when returning NETDEV_TX_BUSY
+    https://git.kernel.org/netdev/net/c/9c1eaa27ec59
 
-> |  */
-> | #define __no_compiler_instrument				\
-> | 	noinline notrace noinline notrace __no_kcsan		\
-> | 	__no_sanitize_address __no_sanitize_coverage
-> | 
-> | /* 
-> |  * Section for code which can't be instrumented at all.
-> |  * Any code in this section cannot be instrumented with KPROBES.
-> |  */
-> | #define noinstr __no_compiler_instrument section(".noinstr.text")
-> 
-> ... then we don't need __noinstr_section(), and IMO the split is
-> clearer.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Yeah, perhaps, no strong feelings. Note I have this in the sched-idle
-series as well (which I still need to rebase and repost :/).
+
