@@ -2,125 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E476098A3
+	by mail.lfdr.de (Postfix) with ESMTP id 8D23D6098A4
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 05:19:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbiJXDTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 23:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
+        id S230381AbiJXDTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 23:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiJXDSW (ORCPT
+        with ESMTP id S230189AbiJXDSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 23:18:22 -0400
-Received: from esa8.hc1455-7.c3s2.iphmx.com (esa8.hc1455-7.c3s2.iphmx.com [139.138.61.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CADA7993D;
-        Sun, 23 Oct 2022 20:15:45 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="81414405"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661785200"; 
-   d="scan'208";a="81414405"
-Received: from unknown (HELO yto-r1.gw.nic.fujitsu.com) ([218.44.52.217])
-  by esa8.hc1455-7.c3s2.iphmx.com with ESMTP; 24 Oct 2022 12:15:30 +0900
-Received: from yto-m1.gw.nic.fujitsu.com (yto-nat-yto-m1.gw.nic.fujitsu.com [192.168.83.64])
-        by yto-r1.gw.nic.fujitsu.com (Postfix) with ESMTP id 964F5D66A2;
-        Mon, 24 Oct 2022 12:15:29 +0900 (JST)
-Received: from kws-ab1.gw.nic.fujitsu.com (kws-ab1.gw.nic.fujitsu.com [192.51.206.11])
-        by yto-m1.gw.nic.fujitsu.com (Postfix) with ESMTP id DCB11CFAC8;
-        Mon, 24 Oct 2022 12:15:28 +0900 (JST)
-Received: from [10.167.226.45] (unknown [10.167.226.45])
-        by kws-ab1.gw.nic.fujitsu.com (Postfix) with ESMTP id 737B51147173;
-        Mon, 24 Oct 2022 12:15:23 +0900 (JST)
-Message-ID: <1dd7e09f-e22d-0c32-e084-21cac2489d10@fujitsu.com>
-Date:   Mon, 24 Oct 2022 11:15:22 +0800
+        Sun, 23 Oct 2022 23:18:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9103796BE;
+        Sun, 23 Oct 2022 20:15:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C045D60FD4;
+        Mon, 24 Oct 2022 03:15:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B75EC433D6;
+        Mon, 24 Oct 2022 03:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666581341;
+        bh=4Xvm6jK59KSpB6qK0TAqSA8L9T7SwXigqw4yDjifrb0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dAU+g7aX4ijcHi134G1LjCXS+JYLIJ3l18+vr7o3AqaqjQaYYs3+MDxJRTqLzHEoe
+         jpRSLwUdhCiXeaBsIz4p7dwAcu76iQey/tLVZi1lCaHptTtCrcRxhlktTLYTw8kVWc
+         eQ4sbAs7AnlTndMKuMdQz/jm1V3loxNs1BLX8zkaZULumXds19FZH+vgkP1IDuctvm
+         JrA1XvJjs+fOqkWSkO2FCv/O6fBNXOFAZPIB8HaasWWsvEQu3Z4l35eQ+d/A7yBeHC
+         OUUrIL3c450VgpaOI1LaYHJ1zmtCTkZO9kBG/uxuJ0DcMErpQ6nD+bkBEMflaoyGkS
+         vw+5IUP4EDhTA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BFB565C0A11; Sun, 23 Oct 2022 20:15:40 -0700 (PDT)
+Date:   Sun, 23 Oct 2022 20:15:40 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Uladzislau Rezki <urezki@gmail.com>
+Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use
+ call_rcu_flush()
+Message-ID: <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1>
+ <20221019225144.2500095-13-paulmck@kernel.org>
+ <CAEXW_YQgSwMYisZVctXkjFu6_5YhFCpL_E5o5H4oJooS5Syp+g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [for-next PATCH v2 1/2] RDMA/rxe: Remove unnecessary mr testing
-Content-Language: en-US
-To:     Zhu Yanjun <zyjzyj2000@gmail.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>
-Cc:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1666338764-2-1-git-send-email-lizhijian@fujitsu.com>
- <1666338764-2-2-git-send-email-lizhijian@fujitsu.com>
- <CAD=hENeGMKri0nYMtcu98K2j3D+ZBkxO6fFX5cvvyJsEghrrmQ@mail.gmail.com>
- <1846f2e1-ff13-5fa2-240f-fd7749921ce2@fujitsu.com>
- <30ff25c4-ce66-eac4-eaa2-64c0db203a19@gmail.com>
- <CAD=hENeTnLGN5KKi_Cwni6FDb77prijHVjCjfdvhrjXdp7bdjQ@mail.gmail.com>
-From:   Li Zhijian <lizhijian@fujitsu.com>
-In-Reply-To: <CAD=hENeTnLGN5KKi_Cwni6FDb77prijHVjCjfdvhrjXdp7bdjQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27220.004
-X-TM-AS-User-Approved-Sender: Yes
-X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27220.004
-X-TMASE-Result: 10--13.135600-10.000000
-X-TMASE-MatchedRID: U43YD7H1LvyPvrMjLFD6eK5i3jK3KDOoC/ExpXrHizz2apmI5+Nrz7/E
-        Sxz77lNODzcc9hL6UiDwHaxbrlr+4VJVOThx4FfxbMGKOuLn5FV67Qg632Xv9Jnwlv7Cw6NQuVE
-        MmUBpYss7GaZ377N7sIdoMqZEd4BXWViv3bGKIdVIcJTn2HkqsW6Pap1MPdtH5n20seAUtXpMMJ
-        z48nnCV/rEqD3S8QO1aNJIgyTLPUxeUmqJNf32Qp4CIKY/Hg3AnCGS1WQEGtD8V77yhJRgo/sf6
-        FkrLr8rC24oEZ6SpSkj80Za3RRg8CWXa9UzJWOcgJXsBvOOBJACMVyASlE/Kh8KP6yOHJd0hjCk
-        DqIMOGg=
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YQgSwMYisZVctXkjFu6_5YhFCpL_E5o5H4oJooS5Syp+g@mail.gmail.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Oct 23, 2022 at 08:36:00PM -0400, Joel Fernandes wrote:
+> Hello,
+> 
+> On Wed, Oct 19, 2022 at 6:51 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > From: Uladzislau Rezki <urezki@gmail.com>
+> >
+> > call_rcu() changes to save power will slow down RCU workqueue items
+> > queued via queue_rcu_work(). This may not be an issue, however we cannot
+> > assume that workqueue users are OK with long delays. Use
+> > call_rcu_flush() API instead which reverts to the old behavio
+> 
+> On ChromeOS, I can see that queue_rcu_work() is pretty noisy and the
+> batching is much better if we can just keep it as call_rcu() instead
+> of call_rcu_flush().
+> 
+> Is there really any reason to keep it as call_rcu_flush() ?  If I
+> recall, the real reason Vlad's system was slowing down was because of
+> scsi and the queue_rcu_work() conversion was really a red herring.
 
+There are less than 20 invocations of queue_rcu_work(), so it should
+be possible look through each.  The low-risk approach is of course to
+have queue_rcu_work() use call_rcu_flush().
 
-On 24/10/2022 10:25, Zhu Yanjun wrote:
->>>>> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
->>>>> @@ -778,6 +778,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
->>>>>           if (res->state == rdatm_res_state_new) {
->>>>>                   if (!res->replay) {
->>>>>                           mr = qp->resp.mr;
->>>>> +                       WARN_ON(!mr);
->>>>>                           qp->resp.mr = NULL;
->>>>>                   } else {
->>>>>                           mr = rxe_recheck_mr(qp, res->read.rkey);
->>>>> @@ -811,8 +812,7 @@ static enum resp_states read_reply(struct rxe_qp *qp,
->>>>>
->>>>>           rxe_mr_copy(mr, res->read.va, payload_addr(&ack_pkt),
->>>>>                       payload, RXE_FROM_MR_OBJ);
->>>>> -       if (mr)
->>>>> -               rxe_put(mr);
->>>>> +       rxe_put(mr);
->>>>>
->>>>>           if (bth_pad(&ack_pkt)) {
->>>>>                   u8 *pad = payload_addr(&ack_pkt) + payload
->>>>> --
->>>>> 2.31.1
->>>>>
->> Li is correct that the only way mr could be NULL is if qp->resp.mr == NULL. So the
-> What I am concerned about is if "WARN_ON(!mr);" should be added or not.
-> IMO, if the root cause remains unclear, this should be a problem.
-> Currently this problem is not fixed. It is useless to send a debug
-> statement to the maillist.
+The next approach might be to have a Kconfig option and/or kernel
+boot parameter that allowed a per-system choice.
 
-As per Bob's explanation,  no 'WARN_ON(!mr)' is needed.
-I will update the patch soon.
+But it would not hurt to double-check on Android.
 
-> Zhu Yanjun
->
->> 'if (mr)' is not needed if that is the case. The read_reply subroutine is reached
->> from a new rdma read operation after going through check_rkey or from a previous
->> rdma read operations from get_req if qp->resp.res != NULL or from a duplicate request
->> where the previous responder resource is found. In all these cases the mr is set.
->> Initially in check_rkey where if it can't find the mr it causes an RKEY_VIOLATION.
->> Thereafter the rkey is stored in the responder resources and looked up for each
->> packet to get an mr or cause an RKEY_VIOLATION. So the mr can't be NULL. I think
->> you can leave out the WARN and just drop the if (mr).
-Very thanks for your explanation
+							Thanx, Paul
 
-Thanks
-Zhijian
-
->>
->> Bob
->>
-
+> Vlad, any thoughts?
+> 
+> thanks,
+> 
+>  - Joel
+> 
+> .
+> >
+> > Signed-off-by: Uladzislau Rezki <urezki@gmail.com>
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > ---
+> >  kernel/workqueue.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > index 7cd5f5e7e0a1b..b4b0e828b529e 100644
+> > --- a/kernel/workqueue.c
+> > +++ b/kernel/workqueue.c
+> > @@ -1771,7 +1771,7 @@ bool queue_rcu_work(struct workqueue_struct *wq, struct rcu_work *rwork)
+> >
+> >         if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
+> >                 rwork->wq = wq;
+> > -               call_rcu(&rwork->rcu, rcu_work_rcufn);
+> > +               call_rcu_flush(&rwork->rcu, rcu_work_rcufn);
+> >                 return true;
+> >         }
+> >
+> > --
+> > 2.31.1.189.g2e36527f23
+> >
