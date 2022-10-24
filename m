@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD26060A7FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 262F560A88F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234891AbiJXNAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S235483AbiJXNHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234896AbiJXM6d (ORCPT
+        with ESMTP id S235305AbiJXNFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:58:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A50B98357;
-        Mon, 24 Oct 2022 05:17:44 -0700 (PDT)
+        Mon, 24 Oct 2022 09:05:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61CE29C2C9;
+        Mon, 24 Oct 2022 05:20:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA5E261329;
-        Mon, 24 Oct 2022 12:15:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03D4DC4314A;
-        Mon, 24 Oct 2022 12:15:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4488AB8162A;
+        Mon, 24 Oct 2022 12:15:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE50C433D6;
+        Mon, 24 Oct 2022 12:15:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613721;
-        bh=9IwWBpBPAy1XPz+qmN4K1594agSedGaY6AGFztpHjGA=;
+        s=korg; t=1666613723;
+        bh=SbXe2nwOwKhBNsRxVbxJGpSzOkMliiXFJoOEnTh8kDY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nZ20VDmgQlUxxj9jkCxBactClz8KR2e6oztdtkgvDV269uK1+6MRivDrr4/Vu8+m9
-         B50CUla8NIALk8ahdGJSRrmtUW8/4Cbv3pvuf4bkK5jmma/AAhwvUgWCDzVBVzpp5d
-         KegnoHj1z/yj3NugtTu5KsPkb65mlAJaIGx+/GKs=
+        b=xooVAMl05lQZmGmwVkyB/Y68xsmofZ3BJxSMPxO+IwHf+UCV9HDYWPMaYWtntAkqf
+         RsEeg1qMNAhCdJh6OXg2TV6RtC74e9hNtaRfgKfrkGqetJ1oEc8Ql13vzXff+/OQYv
+         Q7nAZRup9mmbLl7NCQN59IPB83+j6ohvpOn1JuhQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
+        =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 244/255] usb: idmouse: fix an uninit-value in idmouse_open
-Date:   Mon, 24 Oct 2022 13:32:34 +0200
-Message-Id: <20221024113011.373443793@linuxfoundation.org>
+Subject: [PATCH 5.4 245/255] clk: bcm2835: Make peripheral PLLC critical
+Date:   Mon, 24 Oct 2022 13:32:35 +0200
+Message-Id: <20221024113011.414855682@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
 References: <20221024113002.471093005@linuxfoundation.org>
@@ -55,57 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit bce2b0539933e485d22d6f6f076c0fcd6f185c4c ]
+[ Upstream commit 6c5422851d8be8c7451e968fd2e6da41b6109e17 ]
 
-In idmouse_create_image, if any ftip_command fails, it will
-go to the reset label. However, this leads to the data in
-bulk_in_buffer[HEADER..IMGSIZE] uninitialized. And the check
-for valid image incurs an uninitialized dereference.
+When testing for a series affecting the VEC, it was discovered that
+turning off and on the VEC clock is crashing the system.
 
-Fix this by moving the check before reset label since this
-check only be valid if the data after bulk_in_buffer[HEADER]
-has concrete data.
+It turns out that, when disabling the VEC clock, it's the only child of
+the PLLC-per clock which will also get disabled. The source of the crash
+is PLLC-per being disabled.
 
-Note that this is found by KMSAN, so only kernel compilation
-is tested.
+It's likely that some other device might not take a clock reference that
+it actually needs, but it's unclear which at this point. Let's make
+PLLC-per critical so that we don't have that crash.
 
-Reported-by: syzbot+79832d33eb89fb3cd092@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Link: https://lore.kernel.org/r/20220922134847.1101921-1-dzm91@hust.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Noralf Trønnes <noralf@tronnes.org>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://lore.kernel.org/r/20220926084509.12233-1-maxime@cerno.tech
+Reviewed-by: Stefan Wahren <stefan.wahren@i2se.com>
+Acked-by: Noralf Trønnes <noralf@tronnes.org>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/misc/idmouse.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/clk/bcm/clk-bcm2835.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/misc/idmouse.c b/drivers/usb/misc/idmouse.c
-index bb24527f3c70..ba2b6fbab9b8 100644
---- a/drivers/usb/misc/idmouse.c
-+++ b/drivers/usb/misc/idmouse.c
-@@ -178,10 +178,6 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 		bytes_read += bulk_read;
- 	}
+diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
+index e650379b3230..b4e6a7923233 100644
+--- a/drivers/clk/bcm/clk-bcm2835.c
++++ b/drivers/clk/bcm/clk-bcm2835.c
+@@ -1756,7 +1756,7 @@ static const struct bcm2835_clk_desc clk_desc_array[] = {
+ 		.load_mask = CM_PLLC_LOADPER,
+ 		.hold_mask = CM_PLLC_HOLDPER,
+ 		.fixed_divider = 1,
+-		.flags = CLK_SET_RATE_PARENT),
++		.flags = CLK_IS_CRITICAL | CLK_SET_RATE_PARENT),
  
--	/* reset the device */
--reset:
--	ftip_command(dev, FTIP_RELEASE, 0, 0);
--
- 	/* check for valid image */
- 	/* right border should be black (0x00) */
- 	for (bytes_read = sizeof(HEADER)-1 + WIDTH-1; bytes_read < IMGSIZE; bytes_read += WIDTH)
-@@ -193,6 +189,10 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 		if (dev->bulk_in_buffer[bytes_read] != 0xFF)
- 			return -EAGAIN;
- 
-+	/* reset the device */
-+reset:
-+	ftip_command(dev, FTIP_RELEASE, 0, 0);
-+
- 	/* should be IMGSIZE == 65040 */
- 	dev_dbg(&dev->interface->dev, "read %d bytes fingerprint data\n",
- 		bytes_read);
+ 	/*
+ 	 * PLLD is the display PLL, used to drive DSI display panels.
 -- 
 2.35.1
 
