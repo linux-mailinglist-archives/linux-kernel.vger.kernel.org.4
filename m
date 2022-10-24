@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7293260A3F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0448460A971
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiJXMCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:02:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S232409AbiJXNU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232679AbiJXL7f (ORCPT
+        with ESMTP id S236022AbiJXNTC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:59:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4D3760DD;
-        Mon, 24 Oct 2022 04:48:41 -0700 (PDT)
+        Mon, 24 Oct 2022 09:19:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4A1A5722;
+        Mon, 24 Oct 2022 05:27:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F27CF61254;
-        Mon, 24 Oct 2022 11:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11C62C433D6;
-        Mon, 24 Oct 2022 11:45:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 539C4B811BE;
+        Mon, 24 Oct 2022 12:05:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8EA6C433D6;
+        Mon, 24 Oct 2022 12:05:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611946;
-        bh=0r9yXMGtHSXuCCuQ4goaoaQXrHdS/+jB9HWLemhsNQo=;
+        s=korg; t=1666613127;
+        bh=tuRrGyRDE5pfd9u7YgYcnNL8Vy+H8he/V121FPx+c8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GGwfbzzB0TYTNBqzWyEEV5t3EzbDhPhr321M/yIUDYd3Sf70uEef8f3nq3TyIDl8w
-         XpfS7bzDClVwN0R6hzD57fdUnodeozWHaNYm5QjWNKLL90HjJwV85TvdEMsqczSrWn
-         uCrWZ/vlhiWTsNplpEI+ZMkEossAAJ6uWnlWKygw=
+        b=WMIaN0oDx1KSUEeScdOwn3kXgJYgYLyEMgh0lljyU5pvTmyQtztpvO2evEAM4bLKL
+         /AMI34kxHKnRzxd91rXks5lwch8GM8RR6J67pcqhlT3R97ecHOT2Inpq0T70gLUcuG
+         cJxOGJPgrAU7B+KFJMjf7ERCF4NBjUSLE04DC/zU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 012/210] Revert "drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time"
+        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.4 019/255] can: kvaser_usb_leaf: Fix CAN state after restart
 Date:   Mon, 24 Oct 2022 13:28:49 +0200
-Message-Id: <20221024112957.299670862@linuxfoundation.org>
+Message-Id: <20221024113003.075321750@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,87 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Norris <briannorris@chromium.org>
+From: Anssi Hannula <anssi.hannula@bitwise.fi>
 
-[ Upstream commit cc62d98bd56d45de4531844ca23913a15136c05b ]
+commit 0be1a655fe68c8e6dcadbcbddb69cf2fb29881f5 upstream.
 
-This reverts commit 211f276ed3d96e964d2d1106a198c7f4a4b3f4c0.
+can_restart() expects CMD_START_CHIP to set the error state to
+ERROR_ACTIVE as it calls netif_carrier_on() immediately afterwards.
 
-For quite some time, core DRM helpers already ensure that any relevant
-connectors/CRTCs/etc. are disabled, as well as their associated
-components (e.g., bridges) when suspending the system. Thus,
-analogix_dp_bridge_{enable,disable}() already get called, which in turn
-call drm_panel_{prepare,unprepare}(). This makes these drm_panel_*()
-calls redundant.
+Otherwise the user may immediately trigger restart again and hit a
+BUG_ON() in can_restart().
 
-Besides redundancy, there are a few problems with this handling:
+Fix kvaser_usb_leaf set_mode(CMD_START_CHIP) to set the expected state.
 
-(1) drm_panel_{prepare,unprepare}() are *not* reference-counted APIs and
-are not in general designed to be handled by multiple callers --
-although some panel drivers have a coarse 'prepared' flag that mitigates
-some damage, at least. So at a minimum this is redundant and confusing,
-but in some cases, this could be actively harmful.
-
-(2) The error-handling is a bit non-standard. We ignored errors in
-suspend(), but handled errors in resume(). And recently, people noticed
-that the clk handling is unbalanced in error paths, and getting *that*
-right is not actually trivial, given the current way errors are mostly
-ignored.
-
-(3) In the particular way analogix_dp_{suspend,resume}() get used (e.g.,
-in rockchip_dp_*(), as a late/early callback), we don't necessarily have
-a proper PM relationship between the DP/bridge device and the panel
-device. So while the DP bridge gets resumed, the panel's parent device
-(e.g., platform_device) may still be suspended, and so any prepare()
-calls may fail.
-
-So remove the superfluous, possibly-harmful suspend()/resume() handling
-of panel state.
-
-Fixes: 211f276ed3d9 ("drm: bridge: analogix/dp: add panel prepare/unprepare in suspend/resume time")
-Link: https://lore.kernel.org/all/Yv2CPBD3Picg%2FgVe@google.com/
-Signed-off-by: Brian Norris <briannorris@chromium.org>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220822180729.1.I8ac5abe3a4c1c6fd5c061686c6e883c22f69022c@changeid
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 080f40a6fa28 ("can: kvaser_usb: Add support for Kvaser CAN/USB devices")
+Tested-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Link: https://lore.kernel.org/all/20221010150829.199676-5-extja@kvaser.com
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/bridge/analogix/analogix_dp_core.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-index 5855f17caf16..3a462240198a 100644
---- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-+++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
-@@ -1473,12 +1473,6 @@ int analogix_dp_suspend(struct device *dev)
- 	struct analogix_dp_device *dp = dev_get_drvdata(dev);
- 
- 	clk_disable_unprepare(dp->clock);
--
--	if (dp->plat_data->panel) {
--		if (drm_panel_unprepare(dp->plat_data->panel))
--			DRM_ERROR("failed to turnoff the panel\n");
--	}
--
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(analogix_dp_suspend);
-@@ -1494,13 +1488,6 @@ int analogix_dp_resume(struct device *dev)
- 		return ret;
- 	}
- 
--	if (dp->plat_data->panel) {
--		if (drm_panel_prepare(dp->plat_data->panel)) {
--			DRM_ERROR("failed to setup the panel\n");
--			return -EBUSY;
--		}
--	}
--
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(analogix_dp_resume);
--- 
-2.35.1
-
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c
+@@ -1435,6 +1435,8 @@ static int kvaser_usb_leaf_set_mode(stru
+ 		err = kvaser_usb_leaf_simple_cmd_async(priv, CMD_START_CHIP);
+ 		if (err)
+ 			return err;
++
++		priv->can.state = CAN_STATE_ERROR_ACTIVE;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
 
 
