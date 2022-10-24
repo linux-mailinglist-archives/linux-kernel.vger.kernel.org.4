@@ -2,107 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFEF609C00
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5CB1609C02
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiJXICA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
+        id S230020AbiJXIDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbiJXIBz (ORCPT
+        with ESMTP id S229506AbiJXIDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:01:55 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A115D729;
-        Mon, 24 Oct 2022 01:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666598513; x=1698134513;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PscHU1ZUOYvLbYdHmHk85RNII8BoOIqBa+IXJPv7aY4=;
-  b=iH1j9wYgOdIVa6tFJDE7F8LJ0kJOXm/TW7PfjMEKyuC6F2Fby+4pOEv+
-   T6bjO94H1LTKeUABRkDN2edsC07rMmokVUZ/36aDLQXDR1kFpk3LC/sWR
-   pfHHtT2nx4VCQeFkwzR5J/WBln2JCSFPYCmXUsSSmoez2Iv3UODknOxHG
-   iEs24yRZuo5j7oBAgR3kEudzoa17YZVIGBQo0OQiMt4pwaJIIreaCpg5E
-   Y4sWroTOQVPsaCUrEsZYBkoD7hF2IyjMO+cKNCeyB1GCOjC6M6nxEb6tO
-   AkptQj0meClYejj8oNeEuKWWoKjOl1DEMCm52GiBzdeavQiDxRe3RFo5e
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="290663906"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="290663906"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 01:01:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="773736785"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="773736785"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Oct 2022 01:01:44 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Oct 2022 11:01:43 +0300
-Date:   Mon, 24 Oct 2022 11:01:43 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Wayne Chang <waynec@nvidia.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
-        jonathanh@nvidia.com, thierry.reding@gmail.com, ajayg@nvidia.com,
-        kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
-        balbi@kernel.org, mathias.nyman@intel.com, jckuo@nvidia.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
-        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 06/11] usb: typec: ucsi_ccg: Replace ccgx to well-known
- regex
-Message-ID: <Y1ZGZ2H0/ug3se6j@kuha.fi.intel.com>
-References: <20221024074128.1113554-1-waynec@nvidia.com>
- <20221024074128.1113554-7-waynec@nvidia.com>
+        Mon, 24 Oct 2022 04:03:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464AA5805C;
+        Mon, 24 Oct 2022 01:03:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE33A61073;
+        Mon, 24 Oct 2022 08:03:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A585C43145;
+        Mon, 24 Oct 2022 08:03:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666598584;
+        bh=CXws4eLr0gl3odZwqTEuuhZZp1WDhaclsxdDRXlhMQQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YIj6ATKSLfUvngOWKyQpxY0uDpchrCF9EfJF3NhblMSs0sZd1UQFhe3JsKjQx1JOg
+         aEuKTT4mup0cKdPRcGDGVUjf4cpVK14Lz5PXYVL4gAgSMXAxOYefSV7nfIfeCmZPEA
+         0iyRrEbnZ/av/766ux6DZTpYX0aF1r+Iuspd/stry1Stle/WBLw9aZB14gbjaZIPyI
+         8UY4zsjz/drcQgifIw/F/8YYbEjLdNkTJr/0aBcEidr81pJ0zfrWC9rgwjxglsKFaL
+         SrVRRRAExIAkiHYqi11Kf66WHK9dnD/ONhh12JEfcVcH5BmSd/q4I0+s34qKwMgc3W
+         7dtdnWAcYBNqw==
+Received: by mail-oi1-f176.google.com with SMTP id r204so7294519oie.5;
+        Mon, 24 Oct 2022 01:03:04 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2uWM4k5sT0QRntcbeO5iaiVl+m9id4o50LGwqVz8l4M6672iUN
+        zW8ZnIAadhjTxDYWioLpVRwGq9KExkvyD4FVUKI=
+X-Google-Smtp-Source: AMsMyM4opuf9ZlLlQKT18CpSvfe9XotBrtNnzZrG6O6GBcHpNVvd4QnPrdeLYevOyANG4WDlsZD5B1GA8zDQRLU5blc=
+X-Received: by 2002:a05:6808:14cf:b0:355:5204:dd81 with SMTP id
+ f15-20020a05680814cf00b003555204dd81mr15684588oiw.112.1666598583325; Mon, 24
+ Oct 2022 01:03:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024074128.1113554-7-waynec@nvidia.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221023133205.3493564-1-guoren@kernel.org> <20221023133205.3493564-3-guoren@kernel.org>
+ <1F5AF29D-708A-483B-A29F-CAEE6F554866@linux.dev>
+In-Reply-To: <1F5AF29D-708A-483B-A29F-CAEE6F554866@linux.dev>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 24 Oct 2022 16:02:51 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSmSR7uKrCGZ24+NSa31FAecOBpUh8G0SMAEV-5oFGJyQ@mail.gmail.com>
+Message-ID: <CAJF2gTSmSR7uKrCGZ24+NSa31FAecOBpUh8G0SMAEV-5oFGJyQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: Enable ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+To:     Muchun Song <muchun.song@linux.dev>
+Cc:     palmer@dabbelt.com, palmer@rivosinc.com, heiko@sntech.de,
+        arnd@arndb.de, Muchun Song <songmuchun@bytedance.com>,
+        catalin.marinas@arm.com, chenhuacai@loongson.cn,
+        Conor.Dooley@microchip.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-mm@kvack.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 03:41:23PM +0800, Wayne Chang wrote:
-> ccgx is refer to the cypress cypd4226 typec controller.
-> Replace ccgx to well-known regex "cypress".
-> 
-> Signed-off-by: Wayne Chang <waynec@nvidia.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index 139707a2f3d6..5d3099e6eb77 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -1358,7 +1358,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
->  	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
->  
->  	/* Only fail FW flashing when FW build information is not provided */
-> -	status = device_property_read_u16(dev, "ccgx,firmware-build",
-> +	status = device_property_read_u16(dev, "cypress,firmware-build",
->  					  &uc->fw_build);
->  	if (status)
->  		dev_err(uc->dev, "failed to get FW build information\n");
+On Mon, Oct 24, 2022 at 3:07 PM Muchun Song <muchun.song@linux.dev> wrote:
+>
+>
+>
+> > On Oct 23, 2022, at 21:32, guoren@kernel.org wrote:
+> >
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > This patch enable the feature of "free some vmemmap pages of HugeTLB
+>
+> We have a new name =E2=80=9CHVO" to refer to this feature. So I=E2=80=99d=
+ like to rewrite
+> The changelog to something like =E2=80=9CEnable HVO [1] for RISCV=E2=80=
+=9D.
+Okay.
 
-This will break bisectability. You need to first add that
-"cyppress,firmware-build" identifier without removing the old
-"ccgx,firmware-build" identifier, and then introduce a separate
-clean-up patch where you remove it when it's safe to remove:
+>
+> > page" [1]. To make it work correct, we also need fixup PG_dcache_clean
+> > setting for huge page [2].
+> >
+> > [1] https://lore.kernel.org/linux-doc/20210510030027.56044-1-songmuchun=
+@bytedance.com/
+> > [2] https://lore.kernel.org/linux-mm/20220302084624.33340-1-songmuchun@=
+bytedance.com/
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Muchun Song <songmuchun@bytedance.com>
+> > Cc: Huacai Chen <chenhuacai@loongson.cn>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+>
+> I=E2=80=99am really glad to see more and more arches for support HVO.
+>
+> Acked-by: Muchun Song <songmuchun@bytedance.com>
+Thx
 
-1. Add new - This patch.
-2. Modify users - PATCH 7/11.
-3. Remove old - *missing*.
+>
+> Thanks.
+>
 
-thanks,
 
--- 
-heikki
+--=20
+Best Regards
+ Guo Ren
