@@ -2,112 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37CD609E47
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A968B609E4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiJXJrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
+        id S230156AbiJXJsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiJXJri (ORCPT
+        with ESMTP id S230293AbiJXJsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:47:38 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754C55B073
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:47:33 -0700 (PDT)
-X-UUID: fec5816848d74cd3a8a40a36e9502003-20221024
-X-CPASD-INFO: faf0c7718845401c9e0518b31dcce1b7@r7GgUJBqZWFkWHaBg3N8nVmWYGVhZIK
-        Cc56Dk5NhjleVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3taOgUJNlZw==
-X-CLOUD-ID: faf0c7718845401c9e0518b31dcce1b7
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:196.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:195.0,IP:-3.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:-5.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-5,
-        AUF:12,DUF:6784,ACD:120,DCD:120,SL:0,EISP:0,AG:0,CFC:0.279,CFSR:0.19,UAT:0,RA
-        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-5,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF
-        :0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: fec5816848d74cd3a8a40a36e9502003-20221024
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: fec5816848d74cd3a8a40a36e9502003-20221024
-X-User: chenzhang@kylinos.cn
-Received: from localhost.localdomain [(111.48.58.12)] by mailgw
-        (envelope-from <chenzhang@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 2063343512; Mon, 24 Oct 2022 17:47:26 +0800
-From:   chen zhang <chenzhang@kylinos.cn>
-To:     oleg@redhat.com
-Cc:     chenzhang_0901@163.com, linux-kernel@vger.kernel.org,
-        chen zhang <chenzhang@kylinos.cn>
-Subject: [PATCH] ptrace: disable single step in __ptrace_unlink for protecting init task
-Date:   Mon, 24 Oct 2022 17:47:59 +0800
-Message-Id: <20221024094759.11434-1-chenzhang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 24 Oct 2022 05:48:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AFD2E691
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:48:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC7AD6114F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:48:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9491EC433D6;
+        Mon, 24 Oct 2022 09:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666604915;
+        bh=zsSgP6O6PMReNmIT7HnjsUjfYy70VyQ1SSf+r1MAStY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XakPhmMEFKa1uaAqTpxO3pwM2lhYISY5KdvvbLy8RckypSErDZpgGwG6dtLqXuUpM
+         cFCy2NUc6bhBAz4iVcr5Ud82GTz6G2J/wNNcFIFOPuf0hIgYFRaxES6+qQWdNumS4o
+         X6B8fBL09OfDlSiAU4ZyjezmidAmEVpOIYwhZ1mw=
+Date:   Mon, 24 Oct 2022 11:48:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
+Message-ID: <Y1ZfcOxnAzIO5gKc@kroah.com>
+References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
+ <Y1ZQSEMLkybFCadS@kroah.com>
+ <Y1ZQpcdK4sdy+5QZ@kroah.com>
+ <Y1ZW2WYli7Bfioxr@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1ZW2WYli7Bfioxr@paasikivi.fi.intel.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I got below panic when doing fuzz test:
+On Mon, Oct 24, 2022 at 09:11:53AM +0000, Sakari Ailus wrote:
+> Hi Greg,
+> 
+> Thanks for the comments.
+> 
+> On Mon, Oct 24, 2022 at 10:45:25AM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Oct 24, 2022 at 10:43:52AM +0200, Greg Kroah-Hartman wrote:
+> > > On Mon, Oct 24, 2022 at 11:26:10AM +0300, Sakari Ailus wrote:
+> > > > container_of() casts the original type to another which leads to the loss
+> > > > of the const qualifier if it is not specified in the caller-provided type.
+> > > > This easily leads to container_of() returning a non-const pointer to a
+> > > > const struct which the C compiler does not warn about.
+> > > > 
+> > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > ---
+> > > >  include/linux/container_of.h | 9 +++++++++
+> > > >  1 file changed, 9 insertions(+)
+> > > > 
+> > > > diff --git a/include/linux/container_of.h b/include/linux/container_of.h
+> > > > index 2f4944b791b81..c7c21d0f41a87 100644
+> > > > --- a/include/linux/container_of.h
+> > > > +++ b/include/linux/container_of.h
+> > > > @@ -13,6 +13,10 @@
+> > > >   * @type:	the type of the container struct this is embedded in.
+> > > >   * @member:	the name of the member within the struct.
+> > > >   *
+> > > > + * WARNING: as container_of() casts the given struct to another, also the
+> > > 
+> > > No need for "also" here (sorry for the grammar nit.)
+> > > 
+> > > > + * possible const qualifier of @ptr is lost unless it is also specified in
+> > > > + * @type. This is not a problem if the containing object is not const. Use with
+> > > > + * care.
+> > > 
+> > > I do not think these last two sentences you added here are needed
+> > > either.
+> > > 
+> > > 
+> > > >   */
+> > > >  #define container_of(ptr, type, member) ({				\
+> > > >  	void *__mptr = (void *)(ptr);					\
+> > > > @@ -27,6 +31,11 @@
+> > > >   * @type:	the type of the container struct this is embedded in.
+> > > >   * @member:	the name of the member within the struct.
+> > > >   *
+> > > > + * WARNING: as container_of() casts the given struct to another, also the
+> > 
+> > Wrong function name here.
+> 
+> I'll address this and the other two issues above in v2.
+> 
+> > 
+> > > > + * possible const qualifier of @ptr is lost unless it is also specified in
+> > > > + * @type. This is not a problem if the containing object is not const. Use with
+> > > > + * care.
+> > > 
+> > > Same comments here.
+> > 
+> > Wait, no one uses this macro, so why not just remove it entirely?
+> 
+> Good question. It appears to be a (relatively) common pattern to look up
+> something and the return its containing object if the lookup was
+> successful. Doing a quick
+> 
+> 	$ git grep 'container_of.*:' drivers include
 
-Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000005
-CPU: 2 PID: 1 Comm: systemd Kdump: loaded Not tainted 6.1.0-rc1 #1
-Hardware name: LENOVO 20L5A07XCD/20L5A07XCD, BIOS N24ET56W (1.31 ) 02/19/2020
-Call Trace:
-[  157.210356]  dump_stack_lvl+0x49/0x63
-[  157.210364]  dump_stack+0x10/0x16
-[  157.210368]  panic+0x10c/0x299
-[  157.210375]  do_exit.cold+0x15/0x15
-[  157.210381]  do_group_exit+0x35/0x90
-[  157.210386]  get_signal+0x910/0x960
-[  157.210390]  ? signal_wake_up_state+0x2e/0x40
-[  157.210396]  ? complete_signal+0xd0/0x2c0
-[  157.210402]  arch_do_signal_or_restart+0x37/0x7c0
-[  157.210408]  ? send_signal_locked+0xf5/0x140
-[  157.210416]  exit_to_user_mode_prepare+0x133/0x180
-[  157.210423]  irqentry_exit_to_user_mode+0x9/0x20
-[  157.210428]  noist_exc_debug+0xea/0x150
-[  157.210433]  asm_exc_debug+0x34/0x40
-[  157.210438] RIP: 0033:0x7fcf2a8e51c9
-[  157.210442] Code: ff ff 73 01 c3 48 8b 0d c5 7c 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 ba 00 00 00 <0f> 05 c3 0f 1f 40 00 f3 0f 1e fa b8 ea 00 00 00 0f 05 48 3d 01 f0
-[  157.210446] RSP: 002b:00007ffd7dc44678 EFLAGS: 00000302
-[  157.210451] RAX: 00000000000000ba RBX: 000055f7c0363170 RCX: 000055f7c04d2820
-[  157.210454] RDX: 00000000ffffffff RSI: ffffffffffffffff RDI: 000055f7c0363170
-[  157.210457] RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000001dd0
-[  157.210460] R10: 00007ffd7ddc9090 R11: 000000000000d7da R12: 0000000000000001
-[  157.210463] R13: ffffffffffffffff R14: 000055f7bf3557c1 R15: 0000000000000000
+And odds are, they all are wrong.
 
-If a task attaches init task and is single stepping it, when this task
-exits, ptrace value will be cleaned. It causes SIGNAL_UNKILLABLE flag
-cleaned, and init task will lose the protection. Init task maybe be killed
-by SIGTRAP signal because of stepping enabled. So syscall tracing and
-stepping should be turned off for protecting init task before ptrace value
-is cleaned.
+Any function that has a pointer sent to it that it wants to then cast
+out to the outer size of the structure has to implicitly know that this
+is a valid pointer.  There's no way to check so you have to trust the
+fact that the caller sent you the right thing.
 
-Signed-off-by: chen zhang <chenzhang@kylinos.cn>
----
- kernel/ptrace.c | 3 +++
- 1 file changed, 3 insertions(+)
+Trying to check is almost always someone trying to be "over eager" in
+testing things that can never happen.  Just like all of the checks for
+the result of a container_of() call, that's always wrong as well.
+thanks,
 
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 54482193e1ed..e7c41154b31e 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -130,6 +130,9 @@ void __ptrace_unlink(struct task_struct *child)
- 	put_cred(old_cred);
- 
- 	spin_lock(&child->sighand->siglock);
-+	if (unlikely(child->signal->flags & SIGNAL_UNKILLABLE) &&
-+	    unlikely(task_thread_info(child)->flags & _TIF_SINGLESTEP))
-+		user_disable_single_step(child);
- 	child->ptrace = 0;
- 	/*
- 	 * Clear all pending traps and TRAPPING.  TRAPPING should be
--- 
-2.25.1
+> reveals more than 20 instances of the pattern. There are probably more
+> those that use if for testing for NULL. I guess people don't know about
+> this macro, apart from the developers of the staging driver it was added
+> for (commit 05e6557b8ed833546ee2b66ce6b58fecf09f439e).
 
+Ah, lustre is long-gone, so I'll just add a patch to my tree to remove
+this macro.
+
+thanks,
+
+greg k-h
