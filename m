@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2990F60B033
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A28060B28E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232734AbiJXQCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
+        id S235028AbiJXQs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbiJXQB1 (ORCPT
+        with ESMTP id S234936AbiJXQrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:01:27 -0400
+        Mon, 24 Oct 2022 12:47:12 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6686EE8A8E;
-        Mon, 24 Oct 2022 07:55:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9E2202727;
+        Mon, 24 Oct 2022 08:31:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77659B81201;
-        Mon, 24 Oct 2022 12:25:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC7B2C433C1;
-        Mon, 24 Oct 2022 12:25:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 600EEB815A1;
+        Mon, 24 Oct 2022 12:09:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A927EC433C1;
+        Mon, 24 Oct 2022 12:09:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614350;
-        bh=nE7ypUANDIJpipcxO0dxAb6r1ge/slva74N+RfEwMgI=;
+        s=korg; t=1666613385;
+        bh=Ja7lCy50tCJE6mYG1SdXngoINi65jyCg6+IPCRVXcOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vm+mzXeE4OwSWmiwsN+MQ/EaJc0dzMVmq2mE6GTp1fs+ShUK+c1pd1ODjYE2UdY3p
-         MdUhPVlJqEPo3Cflk4fyNYkt8l3R3ZZAF+6gdJoHxH7kiQVlivyodzVKAM74jgqcPY
-         cBiNTzTHeFJjrBrRvhKpVkByEEduPaeEEKgEItQ4=
+        b=NPV8zVtNYSN7Ed+nN3rW3pJoRvC6QVPHAYJy4mCj7SOuM1jYfGBe/3hxia9FPjA+p
+         mgZiVU+8MBuxQx8f/+u3kBs6fayP3/20goORHKT6aSfnvD/4QA4/D/J9dCaZQ5ccfg
+         jJbFOrxDZWDeh8BcudzY2SXnZICdovzAald5T2ug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 228/390] mtd: rawnand: meson: fix bit map use in meson_nfc_ecc_correct()
-Date:   Mon, 24 Oct 2022 13:30:25 +0200
-Message-Id: <20221024113032.487816756@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 116/255] ARM: Drop CMDLINE_* dependency on ATAGS
+Date:   Mon, 24 Oct 2022 13:30:26 +0200
+Message-Id: <20221024113006.370145986@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Geert Uytterhoeven <geert+renesas@glider.be>
 
-[ Upstream commit 3e4ad3212cf22687410b1e8f4e68feec50646113 ]
+[ Upstream commit 136f4b1ec7c962ee37a787e095fd37b058d72bd3 ]
 
-The meson_nfc_ecc_correct() function accidentally does a right shift
-instead of a left shift so it only works for BIT(0).  Also use
-BIT_ULL() because "correct_bitmap" is a u64 and we want to avoid
-shift wrapping bugs.
+On arm32, the configuration options to specify the kernel command line
+type depend on ATAGS.  However, the actual CMDLINE cofiguration option
+does not depend on ATAGS, and the code that handles this is not specific
+to ATAGS (see drivers/of/fdt.c:early_init_dt_scan_chosen()).
 
-Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND flash controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Liang Yang <liang.yang@amlogic.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/YuI2zF1hP65+LE7r@kili
+Hence users who desire to override the kernel command line on arm32 must
+enable support for ATAGS, even on a pure-DT system.  Other architectures
+(arm64, loongarch, microblaze, nios2, powerpc, and riscv) do not impose
+such a restriction.
+
+Hence drop the dependency on ATAGS.
+
+Fixes: bd51e2f595580fb6 ("ARM: 7506/1: allow for ATAGS to be configured out when DT support is selected")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/raw/meson_nand.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index 327a2257ec26..38f490088d76 100644
---- a/drivers/mtd/nand/raw/meson_nand.c
-+++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -454,7 +454,7 @@ static int meson_nfc_ecc_correct(struct nand_chip *nand, u32 *bitflips,
- 		if (ECC_ERR_CNT(*info) != ECC_UNCORRECTABLE) {
- 			mtd->ecc_stats.corrected += ECC_ERR_CNT(*info);
- 			*bitflips = max_t(u32, *bitflips, ECC_ERR_CNT(*info));
--			*correct_bitmap |= 1 >> i;
-+			*correct_bitmap |= BIT_ULL(i);
- 			continue;
- 		}
- 		if ((nand->options & NAND_NEED_SCRAMBLING) &&
-@@ -800,7 +800,7 @@ static int meson_nfc_read_page_hwecc(struct nand_chip *nand, u8 *buf,
- 			u8 *data = buf + i * ecc->size;
- 			u8 *oob = nand->oob_poi + i * (ecc->bytes + 2);
+diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+index a4364cce85f8..a70696a95b79 100644
+--- a/arch/arm/Kconfig
++++ b/arch/arm/Kconfig
+@@ -1837,7 +1837,6 @@ config CMDLINE
+ choice
+ 	prompt "Kernel command line type" if CMDLINE != ""
+ 	default CMDLINE_FROM_BOOTLOADER
+-	depends on ATAGS
  
--			if (correct_bitmap & (1 << i))
-+			if (correct_bitmap & BIT_ULL(i))
- 				continue;
- 			ret = nand_check_erased_ecc_chunk(data,	ecc->size,
- 							  oob, ecc->bytes + 2,
+ config CMDLINE_FROM_BOOTLOADER
+ 	bool "Use bootloader kernel arguments if available"
 -- 
 2.35.1
 
