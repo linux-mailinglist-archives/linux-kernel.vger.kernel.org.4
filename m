@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA1360B0EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D4260B0C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiJXQMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
+        id S233621AbiJXQJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbiJXQGn (ORCPT
+        with ESMTP id S233609AbiJXQEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:06:43 -0400
+        Mon, 24 Oct 2022 12:04:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37AC9411C;
-        Mon, 24 Oct 2022 07:58:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6173F11E47D;
+        Mon, 24 Oct 2022 07:57:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06EC3B8164C;
-        Mon, 24 Oct 2022 12:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA08C433D6;
-        Mon, 24 Oct 2022 12:20:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B423B8149C;
+        Mon, 24 Oct 2022 12:20:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5389C4347C;
+        Mon, 24 Oct 2022 12:20:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614042;
-        bh=oQk4boIzQr0mKRH6Myy62e23A9F+E219r+zhxeCBOcM=;
+        s=korg; t=1666614053;
+        bh=BCxFshy9jgZajd0Dv3BRZtJX69rjxlktrDgUo09c0OU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ENj87vOChg0wLIQUf8t8qM9lr/LvNOuqmoWmmu0b4YLOLDjF6DcyF8jCMdMcFEYz8
-         lXXNNgnNhQDJk5RK2u64kvhYMHYoPePH56bFCOrD2vqPA3P5LtVAzOdH1AaPuaRbVF
-         a2hhKq4BAUR9301ZgnGAmYD+BBtl3Wl64XpMs7SY=
+        b=Pan2IMChyz0l5MhOmQQ365N7lMvMSX1jUW7fpbi6NhYmmyPGehrLoREHi6E4bOlFQ
+         WAu6CYhvJclahEUMDYwwL9qGWmKGc02iMIKsW9jSJ4WT/dU4B7WqcC+8a+CEFiJDnH
+         F1N/phjsvrbGDozutcYPp8/BvFGBi8GPa/++y5LM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,9 +36,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jim Mattson <jmattson@google.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.10 083/390] KVM: nVMX: Unconditionally purge queued/injected events on nested "exit"
-Date:   Mon, 24 Oct 2022 13:28:00 +0200
-Message-Id: <20221024113026.150551408@linuxfoundation.org>
+Subject: [PATCH 5.10 084/390] KVM: VMX: Drop bits 31:16 when shoving exception error code into VMCS
+Date:   Mon, 24 Oct 2022 13:28:01 +0200
+Message-Id: <20221024113026.186431777@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -57,70 +57,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sean Christopherson <seanjc@google.com>
 
-commit d953540430c5af57f5de97ea9e36253908204027 upstream.
+commit eba9799b5a6efe2993cf92529608e4aa8163d73b upstream.
 
-Drop pending exceptions and events queued for re-injection when leaving
-nested guest mode, even if the "exit" is due to VM-Fail, SMI, or forced
-by host userspace.  Failure to purge events could result in an event
-belonging to L2 being injected into L1.
+Deliberately truncate the exception error code when shoving it into the
+VMCS (VM-Entry field for vmcs01 and vmcs02, VM-Exit field for vmcs12).
+Intel CPUs are incapable of handling 32-bit error codes and will never
+generate an error code with bits 31:16, but userspace can provide an
+arbitrary error code via KVM_SET_VCPU_EVENTS.  Failure to drop the bits
+on exception injection results in failed VM-Entry, as VMX disallows
+setting bits 31:16.  Setting the bits on VM-Exit would at best confuse
+L1, and at worse induce a nested VM-Entry failure, e.g. if L1 decided to
+reinject the exception back into L2.
 
-This _should_ never happen for VM-Fail as all events should be blocked by
-nested_run_pending, but it's possible if KVM, not the L1 hypervisor, is
-the source of VM-Fail when running vmcs02.
-
-SMI is a nop (barring unknown bugs) as recognition of SMI and thus entry
-to SMM is blocked by pending exceptions and re-injected events.
-
-Forced exit is definitely buggy, but has likely gone unnoticed because
-userspace probably follows the forced exit with KVM_SET_VCPU_EVENTS (or
-some other ioctl() that purges the queue).
-
-Fixes: 4f350c6dbcb9 ("kvm: nVMX: Handle deferred early VMLAUNCH/VMRESUME failure properly")
 Cc: stable@vger.kernel.org
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Jim Mattson <jmattson@google.com>
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Link: https://lore.kernel.org/r/20220830231614.3580124-2-seanjc@google.com
+Link: https://lore.kernel.org/r/20220830231614.3580124-3-seanjc@google.com
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/vmx/nested.c |   19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ arch/x86/kvm/vmx/nested.c |   11 ++++++++++-
+ arch/x86/kvm/vmx/vmx.c    |   12 +++++++++++-
+ 2 files changed, 21 insertions(+), 2 deletions(-)
 
 --- a/arch/x86/kvm/vmx/nested.c
 +++ b/arch/x86/kvm/vmx/nested.c
-@@ -4183,14 +4183,6 @@ static void prepare_vmcs12(struct kvm_vc
- 			nested_vmx_abort(vcpu,
- 					 VMX_ABORT_SAVE_GUEST_MSR_FAIL);
+@@ -3776,7 +3776,16 @@ static void nested_vmx_inject_exception_
+ 	u32 intr_info = nr | INTR_INFO_VALID_MASK;
+ 
+ 	if (vcpu->arch.exception.has_error_code) {
+-		vmcs12->vm_exit_intr_error_code = vcpu->arch.exception.error_code;
++		/*
++		 * Intel CPUs do not generate error codes with bits 31:16 set,
++		 * and more importantly VMX disallows setting bits 31:16 in the
++		 * injected error code for VM-Entry.  Drop the bits to mimic
++		 * hardware and avoid inducing failure on nested VM-Entry if L1
++		 * chooses to inject the exception back to L2.  AMD CPUs _do_
++		 * generate "full" 32-bit error codes, so KVM allows userspace
++		 * to inject exception error codes with bits 31:16 set.
++		 */
++		vmcs12->vm_exit_intr_error_code = (u16)vcpu->arch.exception.error_code;
+ 		intr_info |= INTR_INFO_DELIVER_CODE_MASK;
  	}
--
--	/*
--	 * Drop what we picked up for L2 via vmx_complete_interrupts. It is
--	 * preserved above and would only end up incorrectly in L1.
--	 */
--	vcpu->arch.nmi_injected = false;
--	kvm_clear_exception_queue(vcpu);
--	kvm_clear_interrupt_queue(vcpu);
- }
  
- /*
-@@ -4530,6 +4522,17 @@ void nested_vmx_vmexit(struct kvm_vcpu *
- 		WARN_ON_ONCE(nested_early_check);
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1737,7 +1737,17 @@ static void vmx_queue_exception(struct k
+ 	kvm_deliver_exception_payload(vcpu);
+ 
+ 	if (has_error_code) {
+-		vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, error_code);
++		/*
++		 * Despite the error code being architecturally defined as 32
++		 * bits, and the VMCS field being 32 bits, Intel CPUs and thus
++		 * VMX don't actually supporting setting bits 31:16.  Hardware
++		 * will (should) never provide a bogus error code, but AMD CPUs
++		 * do generate error codes with bits 31:16 set, and so KVM's
++		 * ABI lets userspace shove in arbitrary 32-bit values.  Drop
++		 * the upper bits to avoid VM-Fail, losing information that
++		 * does't really exist is preferable to killing the VM.
++		 */
++		vmcs_write32(VM_ENTRY_EXCEPTION_ERROR_CODE, (u16)error_code);
+ 		intr_info |= INTR_INFO_DELIVER_CODE_MASK;
  	}
  
-+	/*
-+	 * Drop events/exceptions that were queued for re-injection to L2
-+	 * (picked up via vmx_complete_interrupts()), as well as exceptions
-+	 * that were pending for L2.  Note, this must NOT be hoisted above
-+	 * prepare_vmcs12(), events/exceptions queued for re-injection need to
-+	 * be captured in vmcs12 (see vmcs12_save_pending_event()).
-+	 */
-+	vcpu->arch.nmi_injected = false;
-+	kvm_clear_exception_queue(vcpu);
-+	kvm_clear_interrupt_queue(vcpu);
-+
- 	vmx_switch_vmcs(vcpu, &vmx->vmcs01);
- 
- 	/* Update any VMCS fields that might have changed while L2 ran */
 
 
