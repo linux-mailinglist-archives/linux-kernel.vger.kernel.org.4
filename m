@@ -2,252 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA4160B4D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED2E60B4EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbiJXSFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S230491AbiJXSHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbiJXSFD (ORCPT
+        with ESMTP id S232109AbiJXSHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:05:03 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95652196B7E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666629952; x=1698165952;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Xn1TOqw7IhBUho1yRhZeDMBe5NzP0KIkvACmVcMyRzw=;
-  b=XN2Oj4FIwLjsZ+Scc4FEzfuk+Xkx5OyXBloDkOAwkBqIMpUJqG68ZY1z
-   QHS6H1AB413jfhYuX2irgLaZcomvx3VU1AsHE0F8LitVanCcp2x4ApZ7a
-   bpXc6MWMoO5La934KHDsWZV0CjpODsW2cvnhOLdXaSJbcVBhdN8fzVNDi
-   hioLz7PGbNK8eeuCne9TEWRZdj1vZocNz2Ngx0GTxl5AZqkCkYjZmNrHC
-   bF1EREpMftFwAWvM/6NZxmys0GJpXf4mjZ6Aiq4xYzNvinfa0GHuXFjUm
-   5En7LnrePuyRB8QxH90GFdZ6dr3Lm4C1sfPKLqDyDTuLrjYMcZj0iIThu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="393784909"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="393784909"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 09:45:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="756633884"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="756633884"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga004.jf.intel.com with ESMTP; 24 Oct 2022 09:45:20 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 09:45:19 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 09:45:19 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 24 Oct 2022 09:45:19 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.176)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 24 Oct 2022 09:45:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DWM16TUhCsB2S5i/pzLWG/GFhuiNcGBGR9wq8y1QyURZDJy17CNl9elXSffYYX7tF7Fh94i7By5NakabGJV6NDupl5nE5KZjPnGT90afBR21luQouuX6yxXL8fKMtJbch5kfOcM83t9GdIp2riqHQbIW/CjU5u6gCG5OyJU9lqq6JTxn7EGaf47VBYdb/UQi6vEhmzInrifHsZMIzIYh1hkPL4qJYEnk6dwOZH+ydmqSjohaQMP3WQaOI1xWfd7kVU5MxLe/DoMLskbdgeSIr0RECPV0F33yxD15UGgl6yr7XAaBuhH4HGL/wTR0DxVrlXz9GtlTg8jYZ/5lPiBfRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E+Ro++tJl4/lHFYwsNwY/R84kgXEfwppF17S9pFcw4I=;
- b=gFIXx8n9jQwRn6lmWVVfE/A4og7gEC/lTu3iluonkUExrFYvuTzDp/dQhJ2PUAZqJjy39i1tejvlY2BKyVAsXIbSfiAoyRRj5XwbUmeSCc2f2O2a3Oudk/J3TV9hCs0koH58D8x67a+7DI+yt2856HbefUzanaBRss5U3HImIFdva0J1Njuae91NVCuMgI2aS05ByeZbDnDqnjqeg7ppJODZVbTQtuALOL/AUYeFvylPw9/J/f7QRcvmK7os39ayX4WU1QCq0kT/dRHUnBo2nqcfTTjEgV+TrWOT2zxR3Mlx7fpavx/o30JmUeygTGhh/XtNgMtvBBkNvSeLOzsd/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by DS7PR11MB6245.namprd11.prod.outlook.com (2603:10b6:8:9a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Mon, 24 Oct
- 2022 16:45:17 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::207e:ab0b:9e29:6a4b]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::207e:ab0b:9e29:6a4b%12]) with mapi id 15.20.5746.023; Mon, 24 Oct
- 2022 16:45:17 +0000
-Message-ID: <bbc21b48-58b5-6356-0248-656e22d95281@intel.com>
-Date:   Mon, 24 Oct 2022 09:45:14 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.0
-Subject: Re: [PATCH v2] x86/resctrl: Clear the stale staged config after the
- configuration is completed
-To:     Shawn Wang <shawnwang@linux.alibaba.com>, <fenghua.yu@intel.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        James Morse <james.morse@arm.com>, <jamie@nuviainc.com>,
-        <linux-kernel@vger.kernel.org>
-References: <1665304608-120466-1-git-send-email-shawnwang@linux.alibaba.com>
- <7fa6ed4e-abae-85fb-4e95-8c73755a4263@intel.com>
- <ad08eee6-cfea-3858-0def-e2e3fef315fb@linux.alibaba.com>
- <ff44b0ff-6adb-3bae-d17e-4c341c09df5d@intel.com>
- <86fc22a2-e779-b7ab-67d6-a3aff975ae56@linux.alibaba.com>
- <30637459-7419-6497-6230-b13c73a947de@intel.com>
- <2cdfbe28-01cc-926d-2f6d-2a974a4c5a74@linux.alibaba.com>
-Content-Language: en-US
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <2cdfbe28-01cc-926d-2f6d-2a974a4c5a74@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BY5PR17CA0019.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::32) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Mon, 24 Oct 2022 14:07:15 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBCD1735B9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:47:55 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id r14so17740880lfm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:47:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=idp4JnfOyED40+ywErCfhlkpwF2VRaHFDjwu98Br8YY=;
+        b=skwmlPhXe+NZ4ZKB1fmEvkCHjl/xRuGDW4A1tfNIs0mxctA7wMYOuYYMVRsVDV+C9i
+         EgQN2q/uswzmI/N+K3+3nX0eDe/h17vgxHYTpsEZiC5PzEMGzRLh5rIlikmuRsIBg6N4
+         M1JYth0GwGWVZ6/GJlVGQLiVfIRH8Q6CY6qcZZ1a6cGJubRSDah73ol/FxqDT63r+yqV
+         rIjfC8fZoGSSMOVRqlY0vJ+xls7YRU7dwiRnRl8V8AM/Eoa0f9977GZqWvXlVURuPXFO
+         dx8uykfpkXS13nwOVmCaSqWeuC9Wmkajq3vUh48ugiVC1Fso0HCSviAgqnB5rZ+gUvib
+         A2WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=idp4JnfOyED40+ywErCfhlkpwF2VRaHFDjwu98Br8YY=;
+        b=S4uOvJ0yAUCyn6+v1EIBTNCeV6Gs3ubCyrjbxt9Etub7jk/6yMAKdYjvj2K/IBg8Rf
+         Sh4i5zvJ9p/KsTevgQd2RkAVl+c+oLUPYziQkLzmCjObIxf1EujlI5vlBFYvaZ1OWNa2
+         3gbc1mRzWUMFPxJlPQQcTWUgdx3x0oMFpIXdkyXssm7hwf5RS5KsyDKo/ibDJPK0RTkh
+         cVbJgwAd1tCdyPoJkhB+GGYFHAmQINWVNzo+7hWrg2kznPlBihtcuJKpLM5KjFk7Xl7k
+         TR5F/YxWLf//+gHpNiqie/RSHKBw47lq0NyMxw2b6OtYMIsJyffqAwo0FfR+3PzfHmOI
+         HPKA==
+X-Gm-Message-State: ACrzQf3e2uDYSys6aVnr5QewfWQV3QaYtn+anKZkpH41oIVnVABzNZi3
+        eMOcCLfj9z/yMJHbhhDpE8DkJA==
+X-Google-Smtp-Source: AMsMyM6AzX4UKf6q6iEGaYfg+wfLzycQ2rFGHEbZ7ghzT39PtEuDc+eFeNv8Z0fudncjDNKQyU5Vtw==
+X-Received: by 2002:a05:6512:20d3:b0:4ac:5217:4c6b with SMTP id u19-20020a05651220d300b004ac52174c6bmr1458509lfr.512.1666629927808;
+        Mon, 24 Oct 2022 09:45:27 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id k15-20020ac24f0f000000b00498fc3d4d15sm4593326lfr.190.2022.10.24.09.45.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 09:45:27 -0700 (PDT)
+Message-ID: <9f696023-f2b4-ccd0-34a0-6f4d5848e862@linaro.org>
+Date:   Mon, 24 Oct 2022 19:45:26 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PR11MB1862:EE_|DS7PR11MB6245:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f67b7c9-d717-4578-09f6-08dab5df21cf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +lYOKoQYQLHdo20gWiNZWA7aE++ExoPCHi0KURViYCWd176WTzR5ap2mOL9vhmX/zcMUZkxNFuRgoqKxtkr2GO/JVTQYhIoG+NTDlHGOClucii0xOVOCC92E97vD8siaqOYHHys3ON6NERcWheFs4RMB/o0eN2uV6ExKxl4lblEOlOXJCCKbjMMI3b/wl/4vYbYal7pvctNay2sEZl+VFU4DZ6eg0hqcrrhZhbPpYkABJUCh7WNwpdyhoADabkqq6HQowlBA/hfm8gzNY8YPwWmKKw93tEv9c6xL7PABwNR5RKfMsXFFIHdXfbzU3a3cQCnLbOQ5xIO/Vbqt262r7P5cgggJQ2TC3SZXlhtefbndV71hCeawZenjgs+qNETemncaOOR5wvO1pcqoFn7fuhzXb1BDZxxEjhk44enF+3LGsFA6PhKZcM3zcBFYxRuwPzTsbh9kwEIcRRXUS0b7z7sPh4EaZMRgpwK2VFiA3TFmzVNTO4OhTg4LMj+khoK2rqzmqKtbzYl1gns558I5GKFJb7/Ugcto9xOIGmS/998gdnnOHKiCIpJvbpyAumFa/JqtMYa2RejmF1paoc3TtIRApvpvjx+NO8b5U7M+Xpeh10qFaflHa/Po8FKB6jTpNuTVJmTlLa4CQjJU+4bsmVhNlKmYBCIZdoF99YfYnLyhbCt6Z97nFA2gvuuogRXRbMM2iZfjQ4kLZVchv3bEF/KRiOP2Ra4HRzpKIfAMla+3jTsMd/pqVAQPhYdV3I9NIWGShOO83j7EJx4WkLNsjjy5upU3AW0aXaGKLbhy/Ss=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199015)(6636002)(31686004)(41300700001)(66476007)(4326008)(8676002)(66556008)(8936002)(44832011)(66946007)(7416002)(86362001)(2906002)(6512007)(478600001)(31696002)(26005)(6486002)(53546011)(36756003)(6506007)(6666004)(83380400001)(186003)(316002)(82960400001)(5660300002)(2616005)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Uyt6d0oyVnQzMm9pTit5TkdSZDdKTzVSWnE1ZU9jNDREZWtGRVk4RmJWeVVX?=
- =?utf-8?B?TzZ3NTFJSjRqcmQ1UjNxTlVLL0FYcFFvSE5teThoaDUreW5rYVNuak9ZK2tO?=
- =?utf-8?B?cjZqK0ZneXdlREdvTHpXVnhOZ1Faa2RWZmVzN3RSZVpFZ09jeEhXZHZpU0Vh?=
- =?utf-8?B?Y0poVk1IdEE4TXhCcVVoMlN1a2k1TXpPYmk4aG15T2Y3TTBjNHdHWVB0cDQ4?=
- =?utf-8?B?eHdZME93NEUxNU9aNi9EQWZRdllMUW5ReG14bEdKZ2F5QXU2MmJGcjRyaXhx?=
- =?utf-8?B?TjRRWit5TklUMUcvczZyUmgzaGw3R2Q4TVVRYVg1Z2Q1Z09kbHI4RjYrcFdU?=
- =?utf-8?B?MWpmUmJEbTh6dVNqK3NURFBnUEtEaFM4UjNHK2RjTHNEVlQ5QjFPdDByQnB1?=
- =?utf-8?B?MlpFYlZ1ZWZISXgyd1pCVExWMzFZTUpodFRRMEhTaEN2a2dQR05vdU9xVDNB?=
- =?utf-8?B?U1FMWHVwNHFGY3h0WXZLejJoN3BNM0VZdFZyZ0xhNU5mUW8xVTNFYkN1OFBJ?=
- =?utf-8?B?RTd5eGREa0J0bHd6Z3l3VG9TZVhlcFpDSmI3ZXBlNkRsanE3REZlYU5ZaW1h?=
- =?utf-8?B?cENCdHROL1FoSVV0MExweWlvSi8wTWVEQXBQaFhpVUp4K1l4QVZTN0hIenky?=
- =?utf-8?B?Q0ZmeEUwZTJwRWJEcDFRM3Z2b2R0VVd5MTBFWmN2WkxuTC82NGIyVDBkaE9j?=
- =?utf-8?B?b0hvRHFDeDdXdDczTWxvZWp5c2QwODZjTWhmK1F5eHZtSXBmYmhVUXlQcmR1?=
- =?utf-8?B?clU4QmJWZ2h6VmkzeFN2YzRMS1lJYit0bjU0eG9PUkcya1pHRjhqSk8zUnhj?=
- =?utf-8?B?NENYYytsNlcwNDJZNXV3ZTVXaDFubmZ4a29xVUZJYlZycWJ6cCtMNmRKS3dG?=
- =?utf-8?B?RTcxQ3Z6TThVQ29kQ0lZN3R1OUtaQi9xUmRjNGwyajg1L2F3YlgyUGNaUGpH?=
- =?utf-8?B?dS9FK2dpUC9nRjQ0MERDajdjNWl3K0JBYnhUTStCSTZFV05pUkRVSVdhNFMw?=
- =?utf-8?B?Vi9jUnVxcG1XOUhTN2NZOFd2bWl0ZkN5V1JrNndRMEZVaWM1QWZKY2pKRjR5?=
- =?utf-8?B?MThEWFprWE1iSjdoVEQxVmlZaXVRMmd1eDNkTStzKzBlUE1TdG5Mc3BFYVA0?=
- =?utf-8?B?VlkyczBBSmhzK0JZR0t6Ly9ITnMxS053VFl1U2JIbUdqcHVWNFVkRDg5ZUZz?=
- =?utf-8?B?TmNZakhQUUVzUHplNFVGSzJJMzhvc1FWdVRpcDFnOUJzRDFFOTZyUFpwQ0JQ?=
- =?utf-8?B?dGYvVkNxNWZwQXVvSnFJMkM0VjZVVnZUc3JMcWNtcHpZTHlYMFN3WGNFdC81?=
- =?utf-8?B?S0xzVS9ZU29FZlhQeFpvVUNXSDdTa2RJT2JHRmZPbFJCdDBHZ1MzL1pKRTlq?=
- =?utf-8?B?UDg5ZGNWanh6OVdZT2huZTJjek51MEZiRFI3bnFlMzdlZFBlMTlnOTducEdD?=
- =?utf-8?B?ZmwyRkxVREo0YnZiSGNUai94Y0NlVHowbzFsZjc2eGtOVFRuckVscHg3YkR5?=
- =?utf-8?B?bW9rWEhzZ3VKUmRKaWllbmVSV01CL0h5RzlNZ2hYNG0yVTFYQjlXbXloUTFX?=
- =?utf-8?B?RWJsbm8zR2FHelNpQitnR3JUNlNnUUx6NjUyazBOQWg3aUhpbkM0aW55Z21F?=
- =?utf-8?B?TmpPbFNic292SHoyclQrUUxzUXFQWGlUTW1icWtWY0dmbFAzanpGRUhiSHd5?=
- =?utf-8?B?dDFFYmV0dzNLWmVoeVRxcTluTzQ5SjB6VktjK25zOVJDZzhEZnhtUHdxTklu?=
- =?utf-8?B?NUlNQVQxS2tnS25XRkFrcHBVQUEvOTMrR2YzQU5DWWIwaGJlTXVXMmRjVk5t?=
- =?utf-8?B?b2llajJqbWM1K1czbnBYZjVvWEg2THkvOXpQMzlEWVdvZVcvUUFrVThxMm9H?=
- =?utf-8?B?bnpWeSsvMm12OU1sVlU0M01FMjdIYVltN1AraHdSaVJpSGpTZHJ2TThoSE5Z?=
- =?utf-8?B?dHJuWXg2NW80QjMzYm5DQVNCZnVZS09RTllxc1kvQkhzQzFOR05hd2g5QU41?=
- =?utf-8?B?VmtGcmsvWkFpOGZXcG5Dc3NRMWNXS2l6b2FOMTc3T1ZEQ1JzbTR3cDZGY09h?=
- =?utf-8?B?TDlmRm5zc0lGa29BNWl1MkZjMFhoT0x3b1FoQlRwdm5nWG43YVlDUVpiODdQ?=
- =?utf-8?B?UUhyNUNRSW9QK21aTUM1Y1JPYmlaVCthakhaRE91WkRIUGNMQWlSRjErVE5i?=
- =?utf-8?B?bVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f67b7c9-d717-4578-09f6-08dab5df21cf
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 16:45:17.7616
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FJi6SznpfoZMYtI427rCI8w3GN6GHKBqllpPiQw6pc5NkSyQQ6qLWQNLVektkNf18qvQrg1hwwb8rNGkOCkfFbCcHA6P9wvEYR5lJ5pIE3c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6245
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 10/13] arm64: dts: qcom: sm8450: add spmi node
+Content-Language: en-GB
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211209103505.197453-1-vkoul@kernel.org>
+ <20211209103505.197453-11-vkoul@kernel.org>
+ <5035b6a3-164b-afa0-b714-4deb886f9f90@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <5035b6a3-164b-afa0-b714-4deb886f9f90@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shawn,
-
-On 10/23/2022 7:31 PM, Shawn Wang wrote:
-> On 10/22/2022 2:05 AM, Reinette Chatre wrote:
-> 
-> ...
-> 
->>> It may not be enough to just clear staged_config[] when
->>> resctrl_arch_update_domains() exits. I think the fix needs to make
->>> sure staged_config[] can be cleared where it is set.
->>>
->>> The modification of staged_config[] comes from two paths:
->>>
->>> Path 1:
->>> rdtgroup_schemata_write() {
->>>      ...
->>>      rdtgroup_parse_resource()     // set staged_config[]
->>>      ...
->>>      resctrl_arch_update_domains()     // clear staged_config[]
->>>      ...
->>> }
->>>
->>> Path 2:
->>> rdtgroup_init_alloc() {
->>>      ...
->>>      rdtgroup_init_mba()/rdtgroup_init_cat()    // set staged_config[]
->>>      ...
->>>      resctrl_arch_update_domains()        // clear staged_config[]
->>>      ...
->>> }
->>>
->>> If we clear staged_config[] in resctrl_arch_update_domains(), goto
->>> statement for error handling between setting staged_config[] and
->>> calling resctrl_arch_update_domains() will be ignored. This can still
->>> remain the stale staged_config[].
->> ah - indeed. Thank you for catching that.
+On 24/10/2022 17:56, Krzysztof Kozlowski wrote:
+> On 09/12/2021 05:35, Vinod Koul wrote:
+>> Add the spmi bus as found in the SM8450 SoC
 >>
->>>
->>> I think maybe it is better to put the clearing work where
->>> rdtgroup_schemata_write() and rdtgroup_init_alloc() exit.
->>>
+>> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+>> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 18 ++++++++++++++++++
+>>   1 file changed, 18 insertions(+)
 >>
->> It may be more robust to let rdtgroup_init_alloc() follow
->> how rdtgroup_schemata_write() already ensures that it is
->> working with a clean state by clearing staged_config[] before
->> placing its staged config within.
->>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> index f75de777f6ea..b80e34fd3fe1 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+>> @@ -645,6 +645,24 @@ pdc: interrupt-controller@b220000 {
+>>   			interrupt-controller;
+>>   		};
+>>   
+>> +		spmi_bus: spmi@c42d000 {
+>> +			compatible = "qcom,spmi-pmic-arb";
+>> +			reg = <0x0 0x0c400000 0x0 0x00003000>,
+>> +			      <0x0 0x0c500000 0x0 0x00400000>,
+>> +			      <0x0 0x0c440000 0x0 0x00080000>,
+>> +			      <0x0 0x0c4c0000 0x0 0x00010000>,
+>> +			      <0x0 0x0c42d000 0x0 0x00010000>;
 > 
-> I want to make sure, do you mean just ignore the stale value and
-> place the clearing work before staged_config[] is used? If so, maybe
-> the only thing the fix should do is to add memset() to
-> rdtgroup_init_alloc().> 
+> This is a patch from December 2021. Is there anything blocking it from
+> being merged?
+> 
+> The same applies to several other patches here.
 
-No, let us not leave stale data lying around.
+As far as I know, Stephen still didn't pick up the spmi-pmic-arb support 
+for the PMIC on the SM8450 platform. Thus we also can not merge the DT 
+parts.
 
-The idea is that the function calling resctrl_arch_update_domains() is
-responsible for initializing staged_config[] correctly and completely.
-To confirm, yes, the idea is to clear the staged_config[] in
-rdtgroup_init_alloc() before resctrl_arch_update_domains() is called
-to follow how it is currently done in rdtgroup_schemata_write().
-
-But, as you indicate, by itself this would leave stale data lying around.
-
-The solution that you suggested earlier, to put the clearing work where
-rdtgroup_schemata_write() and rdtgroup_init_alloc() exit, is most logical.
-That makes the code symmetrical in that staged_config[] is cleared
-where it is initialized and no stale data is left lying around. What was
-not clear to me is how this would look in the end. Were you planning to
-keep the staged_config[] clearing within rdtgroup_schemata_write() but
-not do so in rdtgroup_init_alloc()? rdtgroup_schemata_write() and
-rdtgroup_init_alloc() has to follow the same pattern to reduce confusion.
-
-So, to be more robust, how about:
-
-/* Clear staged_config[] to make sure working from a clean slate */
-resctrl_arch_update_domains()
-/* Clear staged_config[] to not leave stale data lying around */
-
-Reinette
-
+-- 
+With best wishes
+Dmitry
 
