@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7683A60A23F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FD560A24C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:40:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiJXLkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S231387AbiJXLkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiJXLi7 (ORCPT
+        with ESMTP id S231396AbiJXLjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:38:59 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338336D9D8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:38:15 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id h14so7919108pjv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:38:15 -0700 (PDT)
+        Mon, 24 Oct 2022 07:39:09 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56136D9DF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:38:31 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id h4so7562034vsr.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:38:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WXmq/hBcZYGs3Gnnq23+P2GdOlxPxnPnQ9tZiYxhvfM=;
-        b=ePYd4xhaCLyNOikvZx9ObnR59VTQkSAk7bE/21UiNNJwiT7p8qaz2wxEDyrMa76ZiO
-         iTv35XAqYOSWqXDvZUoUvgGmvOlC3hchnWKDqdc2UecEVAX9G/+zMZvtWhcPix3rL/Ze
-         /AxIzkOWAuW0TYSGen1kls5ox9wM7QN637haLeOU+iriv1s6P76gXjgwpd8lXRWr5njq
-         0kb37LvYd9ImC/Je4pwta7WQUaUhAgxFwdWYk856M8Pz+6Ha/ONDf/yTiB0LbDLwz27I
-         DYeq4gLGQYRTSFepUEIMtI9Duv1N/OsA8khwLOQvpXVWzE1RgBOE2QuDDdGxjTnuq5ox
-         ChVQ==
+        bh=XAyFJiVGXrC/KZsleNIpi2nk4bcxYAI8Wjviz1KFor4=;
+        b=ZPJNNmG2CfyinfqrhsHlV+g/2spcGsRR6OA3gQWYXOOaD6Gsxx/0ZTZ/2WSEOwyYxr
+         EDCpJh40XMtG2OTdgXJL02/X5omijLCV9JB2NHXHkDrLv9wNx5a9fXGjfKUy3F0lhTEe
+         hmnXBdrKvxVeJ2M5hNGsU2bRRaZU/yeF/d2yhPBZ/vbo5qMU7Pf/Zeu4xzQd/tILMGUf
+         9wVa7xUimRQsMhs8I2ooWhyIiW91jtGl8d73AU5DZCPbAW2aJV7S8knDGzccvSCFIAGK
+         XYYnZNcK+zvSZs4S+oTEJp9GvLNjfNv3+EpEB1BBZw+e91dYFNlfBeXNg4N+ATQRyNH9
+         j2NQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WXmq/hBcZYGs3Gnnq23+P2GdOlxPxnPnQ9tZiYxhvfM=;
-        b=O8tY9OmhYqe74YQ5UKcFORyoa/ixKSB4uIuOuF5ZHy2/LpsNCmyNELffVlALwX+9kW
-         NkoI9w13jRfpzRw4RmQQetW/Jf6vOIHzSDJvFxdQk14RwSL5LMpXjBzk6rmJOLMMFGq0
-         Y4sqFVsumKT8dMPbA0yXSWW32EaNGqZ8lhfeWQEmdIz7X4Mb1L0TkK3HiTmxwXHmlZIu
-         iC3XRfNYXfoPwC+ySEPwEZx3xYRefBPNqdOeriLNyRQSVpt4ZWvEtsy6lrdlm0tBWe0m
-         a5gAMW6804Q+0AUpuBO+TvOFyNoEoyBnb/fmCmYFdLpxoE9to0SQFS4WLqsgQohx2XxV
-         kdGw==
-X-Gm-Message-State: ACrzQf3tsUG4UZ+VqyrWiKKoUGkoInaq+yGoqiJGAKe7XoZhDBI4JljL
-        LDmXwY6LMZeXJN0ygciXEMn0PA==
-X-Google-Smtp-Source: AMsMyM7vtFWcLRmhWO6df2stQtl+qol38s2TTZF/JGQZTKP8WsWjqXQ3dgWj46xKcZZohQd3w2Vh2A==
-X-Received: by 2002:a17:90b:1e0a:b0:212:c44b:fffb with SMTP id pg10-20020a17090b1e0a00b00212c44bfffbmr22703440pjb.113.1666611433791;
-        Mon, 24 Oct 2022 04:37:13 -0700 (PDT)
+        bh=XAyFJiVGXrC/KZsleNIpi2nk4bcxYAI8Wjviz1KFor4=;
+        b=jBcH3Pj1pGgaLIAKvl4mk8TxyatqgNmBCOOjAJNLRGw2bSZxBVkb+xaS54Ia0BZpmH
+         W8H8+BRVF2uOID1eXwkEiFbDiGkemXw8gW4WQP6j0lPV64wwkPE4RgybNVh3NNAzd6m3
+         mprMVYvuYPfo0EQmNMO+5z2vrPzs8FluWZbeCeN9UY36PM4DwqXQrpjLSV9hilI+4JzG
+         vPz30Ny749RdHWjekVbV8Q0eIaAGu1AitPgW3URagXBhKsD/pi8xw/slaj3sJL3p9P6T
+         JkHB8gTCovPntneSpjuhetwqNPAlLEvv/6ZkqH3U6+F/ByMYzkzAQgQ49uTnB0P6RJyk
+         rl1A==
+X-Gm-Message-State: ACrzQf27mG4zGl099Mn/fOmP5UaBquPXeJAncpAtp1jHeIpWMtogy4xe
+        jj97b5PCKG97AkfBfqC3TbMWm8DsMLh8j1sN
+X-Google-Smtp-Source: AMsMyM7j6rudLQ3oDGLiRJvO3ouLKzXkm11wgePZ/bzYxd0/dczcHVPABhvm+nv5ewjBPX37znVsPw==
+X-Received: by 2002:a17:903:1c6:b0:185:47ce:f4f0 with SMTP id e6-20020a17090301c600b0018547cef4f0mr33699248plh.132.1666611442110;
+        Mon, 24 Oct 2022 04:37:22 -0700 (PDT)
 Received: from fedora.flets-east.jp ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b001830ed575c3sm19475075plh.117.2022.10.24.04.37.05
+        by smtp.gmail.com with ESMTPSA id b8-20020a170903228800b001830ed575c3sm19475075plh.117.2022.10.24.04.37.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 04:37:13 -0700 (PDT)
+        Mon, 24 Oct 2022 04:37:21 -0700 (PDT)
 From:   Akihiko Odaki <akihiko.odaki@daynix.com>
 Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -88,17 +88,17 @@ Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         acpi4asus-user@lists.sourceforge.net,
         ibm-acpi-devel@lists.sourceforge.net, linux-fbdev@vger.kernel.org,
         devel@acpica.org, Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH 11/22] platform/x86: msi-laptop: Use acpi_video_get_backlight_types()
-Date:   Mon, 24 Oct 2022 20:35:02 +0900
-Message-Id: <20221024113513.5205-12-akihiko.odaki@daynix.com>
+Subject: [PATCH 12/22] platform/x86: msi-wmi: Use acpi_video_get_backlight_types()
+Date:   Mon, 24 Oct 2022 20:35:03 +0900
+Message-Id: <20221024113513.5205-13-akihiko.odaki@daynix.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221024113513.5205-1-akihiko.odaki@daynix.com>
 References: <20221024113513.5205-1-akihiko.odaki@daynix.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 To:     unlisted-recipients:; (no To-header on input)
@@ -110,22 +110,22 @@ acpi_video_get_backlight_type() is now deprecated.
 
 Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 ---
- drivers/platform/x86/msi-laptop.c | 2 +-
+ drivers/platform/x86/msi-wmi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/platform/x86/msi-laptop.c b/drivers/platform/x86/msi-laptop.c
-index 6b18ec543ac3..19e2f164181f 100644
---- a/drivers/platform/x86/msi-laptop.c
-+++ b/drivers/platform/x86/msi-laptop.c
-@@ -1048,7 +1048,7 @@ static int __init msi_init(void)
+diff --git a/drivers/platform/x86/msi-wmi.c b/drivers/platform/x86/msi-wmi.c
+index fd318cdfe313..3a74f0135fae 100644
+--- a/drivers/platform/x86/msi-wmi.c
++++ b/drivers/platform/x86/msi-wmi.c
+@@ -309,7 +309,7 @@ static int __init msi_wmi_init(void)
+ 	}
  
- 	/* Register backlight stuff */
- 	if (quirks->old_ec_model &&
+ 	if (wmi_has_guid(MSIWMI_BIOS_GUID) &&
 -	    acpi_video_get_backlight_type() == acpi_backlight_vendor) {
 +	    (acpi_video_get_backlight_types() & ACPI_BACKLIGHT_VENDOR)) {
- 		struct backlight_properties props;
- 		memset(&props, 0, sizeof(struct backlight_properties));
- 		props.type = BACKLIGHT_PLATFORM;
+ 		err = msi_wmi_backlight_setup();
+ 		if (err) {
+ 			pr_err("Unable to setup backlight device\n");
 -- 
 2.37.3
 
