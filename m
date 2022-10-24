@@ -2,131 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4640609977
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 06:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C326609995
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 07:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiJXEx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 00:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
+        id S230127AbiJXFBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 01:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiJXExw (ORCPT
+        with ESMTP id S229929AbiJXFBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 00:53:52 -0400
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0DF79A5D;
-        Sun, 23 Oct 2022 21:53:51 -0700 (PDT)
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 29O4rcSG025743;
-        Mon, 24 Oct 2022 13:53:38 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 29O4rcSG025743
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1666587218;
-        bh=4NFHC4g9rnUxSNT4tQeW/Eo1yoJTtStaw/TgZqPti70=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=El85+Av3fnJHrfx+6KzDM3DWH/IhgWOFBba02gyEqjAnihk2561KpYPATK9zOdGwP
-         mbeNMtsLa/vA4sLhbiQTaDzSqzQqH52j/RfcDGSayTDjRQOU67snLVwA6IyNU9RNnH
-         xB6nWP3xX0W9Eu3T7t5SWii7lh+YlvNQIlgsse/5ZN2VzpWdjVhaj5O9/pbRgr27ws
-         RuHOHf+7xMuEvLqUjUP7jshIn1gilqi5DY7W2bGHy8/qyrACDIOyTx1tEhMX/r4g7E
-         VP1Stf5r8vNaVK21H/DRJwkZdvM3PxWmwT4QK9ya6Ufv2gIdssz4X9Aoi3WTvP71kP
-         4pXRPu8+dTqlQ==
-X-Nifty-SrcIP: [209.85.167.169]
-Received: by mail-oi1-f169.google.com with SMTP id y72so9780336oia.3;
-        Sun, 23 Oct 2022 21:53:38 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3BdkzMlKHOLsAMjRemVJ7k6juQtCcvobdQGDUpXLUYZlFhUu98
-        iUYJ0xf/uxKVYkoME3s9SRUZCH4edKKJWhXJ5rs=
-X-Google-Smtp-Source: AMsMyM4W46Xo2mvj3Q/CNtOuDxr+TYGCgSSa7E4BW9w4X5LhZcIASk5PSqG6gJQtqiZX1NjiY340gfgQDD1amawBoMg=
-X-Received: by 2002:a05:6808:1b85:b0:34d:8ce1:d5b0 with SMTP id
- cj5-20020a0568081b8500b0034d8ce1d5b0mr29062478oib.194.1666587217292; Sun, 23
- Oct 2022 21:53:37 -0700 (PDT)
+        Mon, 24 Oct 2022 01:01:32 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A242B6CD1A
+        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 22:01:28 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 529CB320014C;
+        Mon, 24 Oct 2022 01:01:27 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 24 Oct 2022 01:01:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1666587686; x=
+        1666674086; bh=TU0sobUSG9rRG4rFGAXmoEpaQSjoNpcjcGYY+UeisGA=; b=I
+        KFyVkwiDMnm5fD8JkzhUIRqX0bzc/msj7aQw9cV9dAp+PBlzG7tNE8lLHhOlm28h
+        dfmpFGT9Pudyvw04MoKxD5GT/h4/rqEcuz2kkntrHt7ZHIi+kn+wtMOzGj2RNKWs
+        1w/5jrU9zh7bQh82o2o9Ur7EjKXfbbq9k5G/z84vzr8iyoHLt1Tw7bvsPR881PLz
+        A6I1C7p3PfMNHI6VEOE1QmdyXUWQZD15Yv5rpNR0FudvsWNQ99q+0tIvto4+aYuR
+        bg55pTT6EXn8/HIwQj9hAJmj2Kee8eTI53rWIGTto9hJfXGwhHE4K1kOTwKeISXr
+        qLOQX8550rPdgUbKSlgaQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666587686; x=
+        1666674086; bh=TU0sobUSG9rRG4rFGAXmoEpaQSjoNpcjcGYY+UeisGA=; b=G
+        GCErdKlmw9GHSal8vu39rvufnoSjz4u6Sbo27P2Su+UIQI9632Yt2Mfv+oQZT0va
+        I1cHHxpr7vPgUus+boaT6BOpbuvhVhmRcVUdz7zkX7X72M2Bdyq+msBDdZTUKGVM
+        T2xFFklJ6EC8gKPwjIM4GIJCNeRfZ9lkpzgV2Caobyte2c80Q2SkO6LNEyUOCPeW
+        RNzDjJeA3d48N6TcdNne0e7SuMAG92VAopdInqMYA5b8n2FIh9z5zi10gK6KANcd
+        karVf9G+xLlgjDnrGJMgRAtIDaSUntgIc3+Q8NXzVSUWYoI5JtEvObcZT/Aa4vJ9
+        Io/bcQh0G6bW2m2X4D4IQ==
+X-ME-Sender: <xms:JhxWY_kw2IMClkccX6_70kGWCL4g7m5oSRVt2rMKByWMEH0oOxKcdQ>
+    <xme:JhxWYy2sjrrTq7APMULYFetYESiF6W2B8L7rDxxbnGxGvIM1qBotLIyyyJfrmgsDF
+    -ASKQhb-tRpJzVCgg>
+X-ME-Received: <xmr:JhxWY1oVTFTaZyYvxZIL221zueRxyFD9Ze41HBsUvxFXoWDtKId1-d46_KRhn4_4nxuSZY91gMTbbq7YdlrbRxSdZlK72-2lU3ECe29UI6PvFwiNLzuI_ci4tA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtfedgledvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtkeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeeitdetieeiffdthfegkedvtdegtdegffelgeeufeeghfffteel
+    vdeiheeitdetvdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhfrhgvvgguvghskh
+    htohhprdhorhhgpdhkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:JhxWY3lfbz-EOS48aqzyRaizVtfO2Vbt8U9wHeh4aMCT3Bx4hxumRQ>
+    <xmx:JhxWY90gAkAumWYq62cfdNtaJAGFvRVmSNTyo8G_zUTBXrcewzJikg>
+    <xmx:JhxWY2soEZ38hUszrdHEOUqtAYhnl7aw6r326Zpu8KzH6D_mIjal_w>
+    <xmx:JhxWY2II86Ob69GrByKSARZn7bCZqFbsG9lE9E8sf9MKWdwc9vjwPw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Oct 2022 01:01:25 -0400 (EDT)
+Message-ID: <a2dc76e8-406e-5f27-0dc6-846c338660c9@sholland.org>
+Date:   Mon, 24 Oct 2022 00:01:24 -0500
 MIME-Version: 1.0
-References: <20221023191055.85098-1-masahiroy@kernel.org> <Y1YAyQ4s+wxfAPAU@debian.me>
-In-Reply-To: <Y1YAyQ4s+wxfAPAU@debian.me>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 24 Oct 2022 13:53:01 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARxGhRHRAQuw7bkY79Z8tAuRdZ=Ayr1_JyS5Cwo=2ERmQ@mail.gmail.com>
-Message-ID: <CAK7LNARxGhRHRAQuw7bkY79Z8tAuRdZ=Ayr1_JyS5Cwo=2ERmQ@mail.gmail.com>
-Subject: Re: [PATCH] kconfig: fix segmentation fault in menuconfig search
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-kbuild@vger.kernel.org,
-        Johannes Zink <j.zink@pengutronix.de>,
-        Ariel Marcovitch <arielmarcovitch@gmail.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor@kernel.org>
+Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de,
+        aou@eecs.berkeley.edu, atishp@atishpatra.org, dmitriy@oss-tech.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <mhng-ea4ae670-742b-424e-9363-c66ad9ee741c@palmer-ri-x1c9>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH] clocksource/drivers/riscv: Events are stopped during CPU
+ suspend
+In-Reply-To: <mhng-ea4ae670-742b-424e-9363-c66ad9ee741c@palmer-ri-x1c9>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 12:04 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On Mon, Oct 24, 2022 at 04:10:55AM +0900, Masahiro Yamada wrote:
-> > Since commit d05377e184fc ("kconfig: Create links to main menu items
-> > in search"), menuconfig shows a jump key next to "Main menu" if the
-> > nearest visible parent is the rootmenu. If you press that jump key,
-> > menuconfig crashes with a segmentation fault.
-> >
-> > For example, do this:
-> >
-> >   $ make ARCH=arm64 allnoconfig menuconfig
-> >
-> > Press '/' to search for the string "ACPI". Press '1' to choose
-> > "(1) Main menu". Then, menuconfig crashed with a segmentation fault.
->
-> You missed the prerequisites: search EFI and press 1 to jump to
-> CONFIG_EFI.
+On 10/9/22 18:45, Palmer Dabbelt wrote:
+> On Thu, 29 Sep 2022 14:50:45 PDT (-0700), Conor Dooley wrote:
+>> On Sun, May 08, 2022 at 08:21:21PM -0500, Samuel Holland wrote:
+>>> Some implementations of the SBI time extension depend on hart-local
+>>> state (for example, CSRs) that are lost or hardware that is powered
+>>> down when a CPU is suspended. To be safe, the clockevents driver
+>>> cannot assume that timer IRQs will be received during CPU suspend.
+>>>
+>>> Fixes: 62b019436814 ("clocksource: new RISC-V SBI timer driver")
+>>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>>> ---
+>>>
+>>>  drivers/clocksource/timer-riscv.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/clocksource/timer-riscv.c
+>>> b/drivers/clocksource/timer-riscv.c
+>>> index 1767f8bf2013..593d5a957b69 100644
+>>> --- a/drivers/clocksource/timer-riscv.c
+>>> +++ b/drivers/clocksource/timer-riscv.c
+>>> @@ -34,7 +34,7 @@ static int riscv_clock_next_event(unsigned long delta,
+>>>  static unsigned int riscv_clock_event_irq;
+>>>  static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
+>>>      .name            = "riscv_timer_clockevent",
+>>> -    .features        = CLOCK_EVT_FEAT_ONESHOT,
+>>> +    .features        = CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
+> 
+> This is listed as being x86-specific in the header, but there's a hanful
+> of other ports that enable it for timers as well.  Looks like arm is
+> setting this based on DT, which seems reasonable to me: we're working
+> around a firmware bug, there should be some way to turn off that
+> workaround for firmware that doesn't have the bug. Looks like Intel already
+> turns this off when ARAT is supported, which seems to be the case for
+> anything modern, so maybe we're just tripping up on some untested behavior here? 
+> I'm not sure exactly how we should probe this, but having it only enabled
+> when we need the workaround seems like the right way to go.
 
+I opened an issue against the SBI spec about what exactly it requires,
+but I got no responses:
 
-Try the command in my commit description.
+https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98
 
-"allnoconfig" disables EFI.
+My interpretation of the SBI specification is that it does not require
+maintaining any hart-local state across a non-retentive hart suspend.
+Unless the SBI spec says the timer must fire during/after suspend, then
+there is no firmware bug.
 
+> That said, I'm not actually sure this C3STOP feature does what we want
+> given the commit description.  The timers on RISC-V are sort of in this
+> odd middle-ground between being per-CPU timers and system timers: the
+> time they produce is global (or at least close, due to the mtime
+> synchronization rules) but the actual interrupts are only one-shot and
+> only local.
 
+And if we cannot rely on the interrupt being delivered, we cannot rely
+on the SBI time extension to work across cpuidle entry.
 
+> From poking around the code I think this just tries to
+> setup a periodic broadcast timer, but since we use software fallbacks to
+> emulate those we'll still end up losing the interrupts/ticks if the CPU
+> that was asked for an interrupt has gone to sleep and lost that state.
 
+So by extension, non-retentive cpuidle states cannot be used if the SBI
+timer is the only available timer, since there is no hardware broadcast
+timer to use as a backup.
 
-> >
-> > The following code in search_conf()
-> >
-> >     conf(targets[i]->parent, targets[i]);
-> >
-> > results in NULL pointer dereference because targets[i] is the rootmenu,
-> > which does not have a parent.
-> >
-> > Commit d05377e184fc tried to fix the issue of top-level items not having
-> > a jump key, but adding the "Main menu" was not the right fix.
-> >
-> > The correct fix is to show the searched item itself. This fixes another
-> > weird behavior described in the comment block.
-> >
-> > Fixes: d05377e184fc ("kconfig: Create links to main menu items in search")
-> > Reported-by: Johannes Zink <j.zink@pengutronix.de>
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > Link: https://lore.kernel.org/r/20221023191055.85098-1-masahiroy@kernel.org
->
-> Missing Cc: stable? The segfault (IMO) appears after v5.15, so all
-> supported stable branches are affected.
+> I'm not sure if I'm just misunderstanding what's going on here, though. 
+> Is there something that describes the behavior this fixes in more detail?
 
+The motivating scenario for this patch is the C906, where the MTIMER is
+in the same reset domain as the CPU, so the timer state is lost during
+non-retentive suspend. Without this patch, if riscv_timer_clockevent is
+the current clockevent driver, then the CPU fails to wake up from
+suspend. However, this same problem would occur on any CPU where the
+timer or interrupt delivery stops working during suspend.
 
+>>>      .rating            = 100,
+>>>      .set_next_event        = riscv_clock_next_event,
+>>>  };
+>>
+>> After a bit of a painful bisection (with a misdirection into the v5.19
+>> printk reverts along the way) I have arrived at this commit for causing
+>> me some issues.
+>>
+>> If an AXI read to the PCIe controller on PolarFire SoC times out, the
+>> system will stall, with an expected:
+>>      io scheduler mq-deadline registered
+>>      io scheduler kyber registered
+>>      microchip-pcie 2000000000.pcie: host bridge /soc/pcie@2000000000
+>> ranges:
+>>      microchip-pcie 2000000000.pcie:      MEM
+>> 0x2008000000..0x2087ffffff -> 0x0008000000
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: axi read request error
+>>      microchip-pcie 2000000000.pcie: axi read timeout
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      Freeing initrd memory: 7336K
+>>      mc_event_handler: 667402 callbacks suppressed
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>      microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>      mc_event_handler: 666588 callbacks suppressed
+>> <truncated>
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     mc_event_handler: 666748 callbacks suppressed
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+>>     rcu:     0-...0: (1 GPs behind) idle=19f/1/0x4000000000000002
+>> softirq=34/36 fqs=2626
+>>         (detected by 1, t=5256 jiffies, g=-1151, q=1143 ncpus=4)
+>>     Task dump for CPU 0:
+>>     task:swapper/0       state:R  running task     stack:    0 pid:   
+>> 1 ppid:     0 flags:0x00000008
+>>     Call Trace:
+>>     mc_event_handler: 666648 callbacks suppressed
+>>
+>>  With this patch applied, the system just locks up without RCU stalling:
+>>     io scheduler mq-deadline registered
+>>     io scheduler kyber registered
+>>     microchip-pcie 2000000000.pcie: host bridge /soc/pcie@2000000000
+>> ranges:
+>>     microchip-pcie 2000000000.pcie:      MEM
+>> 0x2008000000..0x2087ffffff -> 0x0008000000
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: axi read request error
+>>     microchip-pcie 2000000000.pcie: axi read timeout
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: sec error in pcie2axi buffer
+>>     microchip-pcie 2000000000.pcie: ded error in pcie2axi buffer
+>>     Freeing initrd memory: 7332K
+>>
+>> As of yet, I have no idea if RCU stalls for other reasons would also be
+>> lost.
+> 
+> Sorry this broke stuff.  I'm not entirely sure why this would mask RCU
+> stalls, but it seems like we're hitting some pretty odd paths here and
+> I'm not sure this is expected to work at all for us.
 
-In my understanding, Fixes: is enough to automatically find which stable kernels
-to which the patch should be back-ported.
+I'm confused here. The RCU stall is itself a bug, right? Are you sure
+this patch is wrongly masking the stall, or is it possibly just avoiding
+some buggy code and not causing a stall in the first place?
 
+Regards,
+Samuel
 
+> If non-x86 architectures are meant to be able to set
+> CLOCK_EVT_FEAT_C3STOP, maybe we should document what it's supposed to do
+> in a more platform-agnostic fashion?
+> 
+>> Thanks,
+>> Conor.
+>>
+>> git bisect start
+>> # status: waiting for both good and bad commits
+>> # good: [7699f7aacf3ebfee51c670b6f796b2797f0f7487] RISC-V: Prepare
+>> dropping week attribute from arch_kexec_apply_relocations[_add]
+>> git bisect good 7699f7aacf3ebfee51c670b6f796b2797f0f7487
+>> # bad: [63d5172e148bcc174398040861d867bbd2770be4] HACK: jogness
+>> git bisect bad 63d5172e148bcc174398040861d867bbd2770be4
+>> # good: [2518f226c60d8e04d18ba4295500a5b0b8ac7659] Merge tag
+>> 'drm-next-2022-05-25' of git://anongit.freedesktop.org/drm/drm
+>> git bisect good 2518f226c60d8e04d18ba4295500a5b0b8ac7659
+>> # good: [907bb57aa7b471872aab2f2e83e9713a145673f9] Merge tag
+>> 'pinctrl-v5.19-1' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl
+>> git bisect good 907bb57aa7b471872aab2f2e83e9713a145673f9
+>> # good: [4ad680f083ec360e0991c453e18a38ed9ae500d7] Merge tag
+>> 'staging-5.19-rc1' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+>> git bisect good 4ad680f083ec360e0991c453e18a38ed9ae500d7
+>> # good: [23df9ba64bb9e26cfee6b34f5c3ece49a8a61ee1] Merge tag
+>> 'for-5.19/parisc-2' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux
+>> git bisect good 23df9ba64bb9e26cfee6b34f5c3ece49a8a61ee1
+>> # bad: [7a68065eb9cd194cf03f135c9211eeb2d5c4c0a0] Merge tag
+>> 'gpio-fixes-for-v5.19-rc2' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux
+>> git bisect bad 7a68065eb9cd194cf03f135c9211eeb2d5c4c0a0
+>> # bad: [1f192b9e8d8a5c619b33a868fb1af063af65ce5d] Merge tag
+>> 'drm-misc-fixes-2022-06-09' of
+>> git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
+>> git bisect bad 1f192b9e8d8a5c619b33a868fb1af063af65ce5d
+>> # good: [b2c9a83d262a8feb022e24e9f9aadb66cb10a7a8] Merge tag
+>> 'scsi-misc' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+>> git bisect good b2c9a83d262a8feb022e24e9f9aadb66cb10a7a8
+>> # bad: [e17fee8976c3d2ccf9add6d6c8912a37b025d840] Merge tag
+>> 'mm-nonmm-stable-2022-06-05' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>> git bisect bad e17fee8976c3d2ccf9add6d6c8912a37b025d840
+>> # bad: [c049ecc523171481accd2c83f79ffeecbf53a915] Merge tag
+>> 'timers-core-2022-06-05' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+>> git bisect bad c049ecc523171481accd2c83f79ffeecbf53a915
+>> # bad: [9c04a8ff03def4df3f81219ffbe1ec9b44ff5348]
+>> clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map() return value
+>> git bisect bad 9c04a8ff03def4df3f81219ffbe1ec9b44ff5348
+>> # bad: [7160d9c4cce94612d5f42a5db392cd606a38737a]
+>> clocksource/drivers/armada-370-xp: Convert to SPDX identifier
+>> git bisect bad 7160d9c4cce94612d5f42a5db392cd606a38737a
+>> # bad: [a98399cbc1e05f7b977419f03905501d566cf54e]
+>> clocksource/drivers/sp804: Avoid error on multiple instances
+>> git bisect bad a98399cbc1e05f7b977419f03905501d566cf54e
+>> # good: [41929c9f628b9990d33a200c54bb0c919e089aa8]
+>> clocksource/drivers/ixp4xx: Drop boardfile probe path
+>> git bisect good 41929c9f628b9990d33a200c54bb0c919e089aa8
+>> # bad: [232ccac1bd9b5bfe73895f527c08623e7fa0752d]
+>> clocksource/drivers/riscv: Events are stopped during CPU suspend
+>> git bisect bad 232ccac1bd9b5bfe73895f527c08623e7fa0752d
+>> # first bad commit: [232ccac1bd9b5bfe73895f527c08623e7fa0752d]
+>> clocksource/drivers/riscv: Events are stopped during CPU suspend
 
->
-> Anyway, the segfault gone away with this patch applied. Thanks.
->
-> Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
->
-> --
-> An old man doll... just what I always wanted! - Clara
-
-
-
--- 
-Best Regards
-Masahiro Yamada
