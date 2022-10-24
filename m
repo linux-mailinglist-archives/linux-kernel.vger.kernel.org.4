@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5734960A78E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6F460A9F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234660AbiJXMwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56434 "EHLO
+        id S233068AbiJXN1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbiJXMrs (ORCPT
+        with ESMTP id S236136AbiJXNY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:47:48 -0400
+        Mon, 24 Oct 2022 09:24:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908469184B;
-        Mon, 24 Oct 2022 05:12:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDCD9AFC2;
+        Mon, 24 Oct 2022 05:30:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3904D61252;
-        Mon, 24 Oct 2022 12:11:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D07AC433C1;
-        Mon, 24 Oct 2022 12:11:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EAE5612DD;
+        Mon, 24 Oct 2022 12:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3390DC433D6;
+        Mon, 24 Oct 2022 12:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613471;
-        bh=NwiRgoGNNgwSk51Vc6rEQuhFQM5Y9IwYt/EDlaVrrCg=;
+        s=korg; t=1666614439;
+        bh=64gELA0nUsV9N2NViMDvTXlYD/PS9XrRDXeAPBJL2d8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LBBuclyt0fxruzcZQH7fW6R0THoP7BGCDRiPn4KccOlbTW12Y0jflcyXUDdRxdOgh
-         xwV04EsaJVCvQVpAmar7TjIJ0blws+TKedyKTnKHSwSrQeL7HYZuBoSrErNpXMEFJw
-         iQ0Jw8kGU8ZIriyiYiiYMHtkS/5wYMdxRo5G9dUQ=
+        b=rpdbnwu7YXgTy+FbHOJZLPpCAPgypD9REhfjLHeW9t9x881IVcZPkg04Mzlmw/pP6
+         gSExtAygP7zr5+LU39G/QgGJVK+a7oEFmKKZlo+e7IuRNneLeEHsFOWGEOe8KONy55
+         OV6MPGZ+LUaJKDxMl5s//yvPbWCiUOWhkM9m4zWM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        stable@vger.kernel.org, Joel Stanley <joel@jms.id.au>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 149/255] drivers: serial: jsm: fix some leaks in probe
+Subject: [PATCH 5.10 262/390] clk: ast2600: BCLK comes from EPLL
 Date:   Mon, 24 Oct 2022 13:30:59 +0200
-Message-Id: <20221024113007.570051825@linuxfoundation.org>
+Message-Id: <20221024113034.040784273@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,35 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Joel Stanley <joel@jms.id.au>
 
-[ Upstream commit 1d5859ef229e381f4db38dce8ed58e4bf862006b ]
+[ Upstream commit b8c1dc9c00b252b3be853720a71b05ed451ddd9f ]
 
-This error path needs to unwind instead of just returning directly.
+This correction was made in the u-boot SDK recently. There are no
+in-tree users of this clock so the impact is minimal.
 
-Fixes: 03a8482c17dd ("drivers: serial: jsm: Enable support for Digi Classic adapters")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/YyxFh1+lOeZ9WfKO@kili
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d3d04f6c330a ("clk: Add support for AST2600 SoC")
+Link: https://github.com/AspeedTech-BMC/u-boot/commit/8ad54a5ae15f27fea5e894cc2539a20d90019717
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Link: https://lore.kernel.org/r/20220421040426.171256-1-joel@jms.id.au
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/jsm/jsm_driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/clk/clk-ast2600.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/jsm/jsm_driver.c b/drivers/tty/serial/jsm/jsm_driver.c
-index 592e51d8944e..07e9be9865c7 100644
---- a/drivers/tty/serial/jsm/jsm_driver.c
-+++ b/drivers/tty/serial/jsm/jsm_driver.c
-@@ -212,7 +212,8 @@ static int jsm_probe_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+diff --git a/drivers/clk/clk-ast2600.c b/drivers/clk/clk-ast2600.c
+index 24dab2312bc6..9c3305bcb27a 100644
+--- a/drivers/clk/clk-ast2600.c
++++ b/drivers/clk/clk-ast2600.c
+@@ -622,7 +622,7 @@ static int aspeed_g6_clk_probe(struct platform_device *pdev)
+ 	regmap_write(map, 0x308, 0x12000); /* 3x3 = 9 */
  
- 		break;
- 	default:
--		return -ENXIO;
-+		rc = -ENXIO;
-+		goto out_kfree_brd;
- 	}
- 
- 	rc = request_irq(brd->irq, brd->bd_ops->intr, IRQF_SHARED, "JSM", brd);
+ 	/* P-Bus (BCLK) clock divider */
+-	hw = clk_hw_register_divider_table(dev, "bclk", "hpll", 0,
++	hw = clk_hw_register_divider_table(dev, "bclk", "epll", 0,
+ 			scu_g6_base + ASPEED_G6_CLK_SELECTION1, 20, 3, 0,
+ 			ast2600_div_table,
+ 			&aspeed_g6_clk_lock);
 -- 
 2.35.1
 
