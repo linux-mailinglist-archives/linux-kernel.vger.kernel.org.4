@@ -2,122 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AF160B578
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C42A60B703
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231822AbiJXS2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S231985AbiJXTPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbiJXS1u (ORCPT
+        with ESMTP id S231972AbiJXTO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:27:50 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2652A5F10C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:09:58 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id cr19so6027282qtb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:09:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Tf6X2JwY5gzQNXIY/4lYcGsz+j+jvZppJXPsvhE0i5M=;
-        b=JVw98DRLXqdkcB9ycE2so6CJUYQSy3rvAi9T2R5hCemkufl620ez1/I3QAsm17Ua42
-         Mul2/usszZMWq7lqGw1nwS3wk0/u6fEFEiddRwYJFlVwlmifIouzDajTvCVlJUqC+2wa
-         Yt9Y5xYBqYqzlRUnjlqnaCGhKlBSccwRhcqmXxihthexKFqlK6LST551kS27F/nXecWk
-         Y0X6yGaF/o4D7nmP389aIQiqBuZUwjV+ObzXNXTocVHTMer893fk7EZC/bCm/W+LZ35L
-         Zr0BNs6Pbac3p4aiiyLBqf7rE4b34S0vsUMYp5ct+XFvSiXmDmNfPdefVfMpCORBXyek
-         cYyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tf6X2JwY5gzQNXIY/4lYcGsz+j+jvZppJXPsvhE0i5M=;
-        b=70yqhhbtPXuK1e6Qje4TMWOgDpRjApxBadAAXH49Ni3RIfDd3TZBnjEAtC3CW7SuK0
-         OsaIbseKjiPGe+65ksy5fOmBWyEYOti2BGThqHlXk51Q/mZFxuUpbxr+leoG2a9q3aTT
-         0e68zZVWa/vKCzEM6pnMs5irBC6gbxpK3lKXGxEgVSZOIviaeLpEGa77Ov52BdNtYA8r
-         4AlQfES7ZiHg3HacPtqzjVYhMAaPoO6qSO8bYKN5X7LeNSyyeIZ2P12E/cvhVEQazxtz
-         pZeIZlLvIIWtwme5b44YlzaSzfw6CkaTvpISI3bWxNoH837HsmrOBb3RnZpJXWPGI/bB
-         4m1A==
-X-Gm-Message-State: ACrzQf1DcitF6UIVWtXTn0tuAoYnIeBxoTc+ii+HdFBtisulXt56pJpM
-        bdIz5FbGRhEZGgtjrGqwHZIRnYpskj16QQ==
-X-Google-Smtp-Source: AMsMyM5tZQKlsTeqTkEEjEORICLwKgvKCNbuQWAHDqQNfz6hdI9JY+sGKw6NghJJJYfqo63E16h5qg==
-X-Received: by 2002:a05:620a:8016:b0:6ee:9481:9298 with SMTP id ee22-20020a05620a801600b006ee94819298mr23468257qkb.251.1666628815999;
-        Mon, 24 Oct 2022 09:26:55 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id k124-20020a37ba82000000b006ec09d7d357sm230978qkf.47.2022.10.24.09.26.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 09:26:55 -0700 (PDT)
-Message-ID: <9e51d4fd-ef55-c516-e878-87167f2a8fee@linaro.org>
-Date:   Mon, 24 Oct 2022 12:26:53 -0400
+        Mon, 24 Oct 2022 15:14:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0572A7D1CE
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:52:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBC4EB8128A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 16:28:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD71C433D7;
+        Mon, 24 Oct 2022 16:28:36 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="OuR0REi9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666628914;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SBGplGN9wXQ6YLKsKfvWr4VPlcYFhGIJKX2SJ5Tbgz0=;
+        b=OuR0REi93gSfWxI2j9p4sviZJruH4d2XvOwVipHS0AEud70IfxjbJv4Ywxb5KHJwn2D/u7
+        sAvY7pYUeLJXrKoTVt/BiPkEqt8iyonJkVCFj+aXSsmTqCeL9TfK9VYGmYwQxE6CxKYNUX
+        r917dy9emszDy6uLr7I2HUAU/DVsUV4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id aef9884c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 24 Oct 2022 16:28:33 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] misc: sgi-gru: use explicitly signed char
+Date:   Mon, 24 Oct 2022 18:28:23 +0200
+Message-Id: <20221024162823.535884-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 2/3] ASoC: dt-bindings: realtek,rt5682s: Add AVDD and
- MICVDD supplies
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Derek Fang <derek.fang@realtek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221021190908.1502026-1-nfraprado@collabora.com>
- <20221021190908.1502026-3-nfraprado@collabora.com>
- <ae460461-5c20-9180-456c-8c01a4b1a7f1@linaro.org>
- <20221024150649.wbd54lcvgrj4kxgu@notapiano>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024150649.wbd54lcvgrj4kxgu@notapiano>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 11:06, Nícolas F. R. A. Prado wrote:
-> On Sat, Oct 22, 2022 at 12:39:56PM -0400, Krzysztof Kozlowski wrote:
->> On 21/10/2022 15:09, Nícolas F. R. A. Prado wrote:
->>> The rt5682s codec can have two supplies: AVDD and MICVDD. Add properties
->>> for them.
->>>
->>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>> ---
->>>
->>>  Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml b/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
->>> index ea53a55015c4..ca1037e76f96 100644
->>> --- a/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
->>> +++ b/Documentation/devicetree/bindings/sound/realtek,rt5682s.yaml
->>> @@ -90,6 +90,10 @@ properties:
->>>    "#sound-dai-cells":
->>>      const: 0
->>>  
->>> +  AVDD-supply: true
->>> +
->>> +  MICVDD-supply: true
->>> +
->>
->> How about keeping some order in the list of properties?
-> 
-> The current properties don't seem to follow any particular order and keeping the
-> supplies grouped together seemed reasonable. What ordering do you suggest?
+With char becoming unsigned by default, and with `char` alone being
+ambiguous and based on architecture, signed chars need to be marked
+explicitly as such. This fixes warnings like:
 
-That's true...  :/
+drivers/misc/sgi-gru/grumain.c:711 gru_check_chiplet_assignment() warn: 'gts->ts_user_chiplet_id' is unsigned
 
-Best regards,
-Krzysztof
+Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ drivers/misc/sgi-gru/grumain.c   |  6 +++---
+ drivers/misc/sgi-gru/grutables.h | 10 +++++-----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/misc/sgi-gru/grumain.c b/drivers/misc/sgi-gru/grumain.c
+index 9afda47efbf2..6706ef3c5977 100644
+--- a/drivers/misc/sgi-gru/grumain.c
++++ b/drivers/misc/sgi-gru/grumain.c
+@@ -152,7 +152,7 @@ static int gru_assign_asid(struct gru_state *gru)
+  * Optionally, build an array of chars that contain the bit numbers allocated.
+  */
+ static unsigned long reserve_resources(unsigned long *p, int n, int mmax,
+-				       char *idx)
++				       signed char *idx)
+ {
+ 	unsigned long bits = 0;
+ 	int i;
+@@ -170,14 +170,14 @@ static unsigned long reserve_resources(unsigned long *p, int n, int mmax,
+ }
+ 
+ unsigned long gru_reserve_cb_resources(struct gru_state *gru, int cbr_au_count,
+-				       char *cbmap)
++				       signed char *cbmap)
+ {
+ 	return reserve_resources(&gru->gs_cbr_map, cbr_au_count, GRU_CBR_AU,
+ 				 cbmap);
+ }
+ 
+ unsigned long gru_reserve_ds_resources(struct gru_state *gru, int dsr_au_count,
+-				       char *dsmap)
++				       signed char *dsmap)
+ {
+ 	return reserve_resources(&gru->gs_dsr_map, dsr_au_count, GRU_DSR_AU,
+ 				 dsmap);
+diff --git a/drivers/misc/sgi-gru/grutables.h b/drivers/misc/sgi-gru/grutables.h
+index 5efc869fe59a..e467d78fcf64 100644
+--- a/drivers/misc/sgi-gru/grutables.h
++++ b/drivers/misc/sgi-gru/grutables.h
+@@ -351,7 +351,7 @@ struct gru_thread_state {
+ 	pid_t			ts_tgid_owner;	/* task that is using the
+ 						   context - for migration */
+ 	short			ts_user_blade_id;/* user selected blade */
+-	char			ts_user_chiplet_id;/* user selected chiplet */
++	signed char		ts_user_chiplet_id;/* user selected chiplet */
+ 	unsigned short		ts_sizeavail;	/* Pagesizes in use */
+ 	int			ts_tsid;	/* thread that owns the
+ 						   structure */
+@@ -364,11 +364,11 @@ struct gru_thread_state {
+ 						   required for contest */
+ 	unsigned char		ts_cbr_au_count;/* Number of CBR resources
+ 						   required for contest */
+-	char			ts_cch_req_slice;/* CCH packet slice */
+-	char			ts_blade;	/* If >= 0, migrate context if
++	signed char		ts_cch_req_slice;/* CCH packet slice */
++	signed char		ts_blade;	/* If >= 0, migrate context if
+ 						   ref from different blade */
+-	char			ts_force_cch_reload;
+-	char			ts_cbr_idx[GRU_CBR_AU];/* CBR numbers of each
++	signed char		ts_force_cch_reload;
++	signed char		ts_cbr_idx[GRU_CBR_AU];/* CBR numbers of each
+ 							  allocated CB */
+ 	int			ts_data_valid;	/* Indicates if ts_gdata has
+ 						   valid data */
+-- 
+2.38.1
 
