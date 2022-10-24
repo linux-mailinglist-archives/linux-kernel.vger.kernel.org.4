@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF2060AA77
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB3F60AA06
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235968AbiJXNeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42056 "EHLO
+        id S234480AbiJXN1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236190AbiJXN35 (ORCPT
+        with ESMTP id S236151AbiJXNYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:29:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF2EAC4AC;
-        Mon, 24 Oct 2022 05:33:17 -0700 (PDT)
+        Mon, 24 Oct 2022 09:24:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9E19F74D;
+        Mon, 24 Oct 2022 05:30:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F3F7B811C1;
-        Mon, 24 Oct 2022 12:04:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F145AC433D7;
-        Mon, 24 Oct 2022 12:04:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1603D61331;
+        Mon, 24 Oct 2022 12:29:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E6AC433C1;
+        Mon, 24 Oct 2022 12:29:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613056;
-        bh=QqpHLqiHJ8pQMZ2r9rm0Nz/ebpA/pgrtpSt7B2/lRsc=;
+        s=korg; t=1666614578;
+        bh=wzVrqqZRg7fswRLItuLjYSP7Zzpk6JKxUzObx4VK59E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pcQjuQ/uDiZ+SmDlzrAHufTcvWDHFv/03JNe2rS6wMhbi6OhqSnxHV8DZp5K0/vNj
-         Av9oj9WmjHb3VLmBvaHeBeuQvOOBOpRvpj+J3/yA8h+CQtF5YCRGfuUTtPQHjJL/4U
-         ImPObQ8av9NTYmcyW3XECNmJSruO6ctoT3sCm3gQ=
+        b=GKteBCsP0Zvgn7dIgWAQ8cY00GKpm4GHiukRQmtP98tqhu6Mp8XZBEVxXyShRriSc
+         JJWa6WSn6Q+W4b/TxF4KSyYi4Hte0DyKXFF3FxjfSgtHH6ocsXR5DK/KwaRBJW73Q/
+         KkJF71Yeoz9k67RzZYMGvuYOX+vLupNd0D91hlRA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Sungwoo Kim <iam@sung-woo.kim>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 191/229] Bluetooth: L2CAP: Fix user-after-free
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 313/390] regulator: core: Prevent integer underflow
 Date:   Mon, 24 Oct 2022 13:31:50 +0200
-Message-Id: <20221024113005.308616466@linuxfoundation.org>
+Message-Id: <20221024113036.294889422@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-[ Upstream commit 35fcbc4243aad7e7d020b7c1dfb14bb888b20a4f ]
+[ Upstream commit 8d8e16592022c9650df8aedfe6552ed478d7135b ]
 
-This uses l2cap_chan_hold_unless_zero() after calling
-__l2cap_get_chan_blah() to prevent the following trace:
+By using a ratio of delay to poll_enabled_time that is not integer
+time_remaining underflows and does not exit the loop as expected.
+As delay could be derived from DT and poll_enabled_time is defined
+in the driver this can easily happen.
 
-Bluetooth: l2cap_core.c:static void l2cap_chan_destroy(struct kref
-*kref)
-Bluetooth: chan 0000000023c4974d
-Bluetooth: parent 00000000ae861c08
-==================================================================
-BUG: KASAN: use-after-free in __mutex_waiter_is_first
-kernel/locking/mutex.c:191 [inline]
-BUG: KASAN: use-after-free in __mutex_lock_common
-kernel/locking/mutex.c:671 [inline]
-BUG: KASAN: use-after-free in __mutex_lock+0x278/0x400
-kernel/locking/mutex.c:729
-Read of size 8 at addr ffff888006a49b08 by task kworker/u3:2/389
+Use a signed iterator to make sure that the loop exits once
+the remaining time is negative.
 
-Link: https://lore.kernel.org/lkml/20220622082716.478486-1-lee.jones@linaro.org
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Sungwoo Kim <iam@sung-woo.kim>
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Link: https://lore.kernel.org/r/20220909125954.577669-1-patrick.rudolph@9elements.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/l2cap_core.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/regulator/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 7c280fcdcaa0..5c965f7b1709 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -4049,6 +4049,12 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
- 		}
- 	}
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index 317d701487ec..bf8ba73d6c7c 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -2544,7 +2544,7 @@ static int _regulator_do_enable(struct regulator_dev *rdev)
+ 	 * expired, return -ETIMEDOUT.
+ 	 */
+ 	if (rdev->desc->poll_enabled_time) {
+-		unsigned int time_remaining = delay;
++		int time_remaining = delay;
  
-+	chan = l2cap_chan_hold_unless_zero(chan);
-+	if (!chan) {
-+		err = -EBADSLT;
-+		goto unlock;
-+	}
-+
- 	err = 0;
- 
- 	l2cap_chan_lock(chan);
-@@ -4078,6 +4084,7 @@ static int l2cap_connect_create_rsp(struct l2cap_conn *conn,
- 	}
- 
- 	l2cap_chan_unlock(chan);
-+	l2cap_chan_put(chan);
- 
- unlock:
- 	mutex_unlock(&conn->chan_lock);
+ 		while (time_remaining > 0) {
+ 			_regulator_enable_delay(rdev->desc->poll_enabled_time);
 -- 
 2.35.1
 
