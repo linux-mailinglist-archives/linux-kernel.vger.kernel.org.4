@@ -2,145 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A968B609E4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BED1609E4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiJXJsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
+        id S229943AbiJXJtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiJXJsi (ORCPT
+        with ESMTP id S230016AbiJXJtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:48:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AFD2E691
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:48:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC7AD6114F
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 09:48:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9491EC433D6;
-        Mon, 24 Oct 2022 09:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666604915;
-        bh=zsSgP6O6PMReNmIT7HnjsUjfYy70VyQ1SSf+r1MAStY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XakPhmMEFKa1uaAqTpxO3pwM2lhYISY5KdvvbLy8RckypSErDZpgGwG6dtLqXuUpM
-         cFCy2NUc6bhBAz4iVcr5Ud82GTz6G2J/wNNcFIFOPuf0hIgYFRaxES6+qQWdNumS4o
-         X6B8fBL09OfDlSiAU4ZyjezmidAmEVpOIYwhZ1mw=
-Date:   Mon, 24 Oct 2022 11:48:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Laight <David.Laight@aculab.com>
-Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
-Message-ID: <Y1ZfcOxnAzIO5gKc@kroah.com>
-References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
- <Y1ZQSEMLkybFCadS@kroah.com>
- <Y1ZQpcdK4sdy+5QZ@kroah.com>
- <Y1ZW2WYli7Bfioxr@paasikivi.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1ZW2WYli7Bfioxr@paasikivi.fi.intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 05:49:05 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443D560495
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:48:59 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id f140so8557179pfa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XnAGFFH6hlB9GkUsVAF0QK5SQgC3hf7SewwhsiTdnHA=;
+        b=5kjelKIaoQNlKa+/O/o1rvz6jyKf6B3J8qwQv7aZhfvbh8k0GyIkH5SOcN2anjY7Ax
+         J8s4LN2F2vS0tcd/9WiqQEXXYJINxsEgNo/NSHRFHNx//7ZGecdbOc7YWviJ6LnZVRsF
+         uo+Hf5KMVgLFcFwTyyc4jAED5DvhQsI9ZDdbmGF/tg08oMiXUltHu8V73hvJ4RwSgil3
+         8eZUqK6P5QEWc2DDKGNb0UAaLu5NmK2x0DyI6kqv9d9RZbclUKwuiruh7nuUov5+/trk
+         pLWSTn4ST0wxX7/r0DeAg8KjnefevIOYTSfptQ9OZwWr3fXDhBoks9jqt8B5W+i9Fnhy
+         GO+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XnAGFFH6hlB9GkUsVAF0QK5SQgC3hf7SewwhsiTdnHA=;
+        b=Uj2YfGcPAcM+M9KxkjuymAjjQLxHHsgBCy3KJ95TpIqiQyHMNEUHSlDeCnNII6jVkp
+         6Uj26FzWZrhjhHq1A6L0hlc5bpknpbugA2OpEy+pfqasogr5O/kxllAoCi+F1ZTsDBrX
+         2Enu2qFbgYJCq4QJ4HCmerpcNBxF4xAS3l7s7/EYroktwbB4GJcT97dSGovT3K7qEGa9
+         dFePzuptJKMyqeM5UBA2sPp3asTiwZ9Kv2hqVwqq8ScOqLz59rJDHdnEQ892Y9wfk6Vj
+         cUStggyAAP8+qlxBHmWj4GxFFbUJw2O1/MPeab5024XK1KNBv1+W8GHPMc0AmVGF9jI7
+         Cb4w==
+X-Gm-Message-State: ACrzQf1KoMHcGj8Z5qswTN6LaVs/QgTb/zvPSDsqJylJAwYiRuYQhQDr
+        nWrauJPM+H2VgkKYLnHKPWPrMYCV26aYpQfZ
+X-Google-Smtp-Source: AMsMyM4HPivtKKPf5IVhM0PGh2Blshb7Bsjuf6zWDIjtnNi6dimHYXQBWA8uy3VdAxqCaibOS/yKGQ==
+X-Received: by 2002:a63:34c8:0:b0:46e:f67c:c117 with SMTP id b191-20020a6334c8000000b0046ef67cc117mr5823331pga.401.1666604938609;
+        Mon, 24 Oct 2022 02:48:58 -0700 (PDT)
+Received: from localhost ([103.136.220.142])
+        by smtp.gmail.com with ESMTPSA id p1-20020a62d001000000b0056bc742d21esm1764058pfg.176.2022.10.24.02.48.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 24 Oct 2022 02:48:58 -0700 (PDT)
+From:   Lei YU <yulei.sh@bytedance.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Lei YU <yulei.sh@bytedance.com>,
+        Henry Tian <tianxiaofeng@bytedance.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: aspeed: fix buffer overflow
+Date:   Mon, 24 Oct 2022 09:48:53 +0000
+Message-Id: <20221024094853.2877441-1-yulei.sh@bytedance.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 09:11:53AM +0000, Sakari Ailus wrote:
-> Hi Greg,
-> 
-> Thanks for the comments.
-> 
-> On Mon, Oct 24, 2022 at 10:45:25AM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Oct 24, 2022 at 10:43:52AM +0200, Greg Kroah-Hartman wrote:
-> > > On Mon, Oct 24, 2022 at 11:26:10AM +0300, Sakari Ailus wrote:
-> > > > container_of() casts the original type to another which leads to the loss
-> > > > of the const qualifier if it is not specified in the caller-provided type.
-> > > > This easily leads to container_of() returning a non-const pointer to a
-> > > > const struct which the C compiler does not warn about.
-> > > > 
-> > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > ---
-> > > >  include/linux/container_of.h | 9 +++++++++
-> > > >  1 file changed, 9 insertions(+)
-> > > > 
-> > > > diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-> > > > index 2f4944b791b81..c7c21d0f41a87 100644
-> > > > --- a/include/linux/container_of.h
-> > > > +++ b/include/linux/container_of.h
-> > > > @@ -13,6 +13,10 @@
-> > > >   * @type:	the type of the container struct this is embedded in.
-> > > >   * @member:	the name of the member within the struct.
-> > > >   *
-> > > > + * WARNING: as container_of() casts the given struct to another, also the
-> > > 
-> > > No need for "also" here (sorry for the grammar nit.)
-> > > 
-> > > > + * possible const qualifier of @ptr is lost unless it is also specified in
-> > > > + * @type. This is not a problem if the containing object is not const. Use with
-> > > > + * care.
-> > > 
-> > > I do not think these last two sentences you added here are needed
-> > > either.
-> > > 
-> > > 
-> > > >   */
-> > > >  #define container_of(ptr, type, member) ({				\
-> > > >  	void *__mptr = (void *)(ptr);					\
-> > > > @@ -27,6 +31,11 @@
-> > > >   * @type:	the type of the container struct this is embedded in.
-> > > >   * @member:	the name of the member within the struct.
-> > > >   *
-> > > > + * WARNING: as container_of() casts the given struct to another, also the
-> > 
-> > Wrong function name here.
-> 
-> I'll address this and the other two issues above in v2.
-> 
-> > 
-> > > > + * possible const qualifier of @ptr is lost unless it is also specified in
-> > > > + * @type. This is not a problem if the containing object is not const. Use with
-> > > > + * care.
-> > > 
-> > > Same comments here.
-> > 
-> > Wait, no one uses this macro, so why not just remove it entirely?
-> 
-> Good question. It appears to be a (relatively) common pattern to look up
-> something and the return its containing object if the lookup was
-> successful. Doing a quick
-> 
-> 	$ git grep 'container_of.*:' drivers include
+From: Henry Tian <tianxiaofeng@bytedance.com>
 
-And odds are, they all are wrong.
+In ast_vhub_epn_handle_ack() when the received data length exceeds the
+buffer, it does not check the case and just copies to req.buf and cause
+a buffer overflow, kernel oops on this case.
 
-Any function that has a pointer sent to it that it wants to then cast
-out to the outer size of the structure has to implicitly know that this
-is a valid pointer.  There's no way to check so you have to trust the
-fact that the caller sent you the right thing.
+This issue could be reproduced on a BMC with an OS that enables the
+lan over USB:
+1. In OS, enable the usb eth dev, verify it pings the BMC OK;
+2. In OS, set the usb dev mtu to 2000. (Default is 1500);
+3. In OS, ping the BMC with `-s 2000` argument.
 
-Trying to check is almost always someone trying to be "over eager" in
-testing things that can never happen.  Just like all of the checks for
-the result of a container_of() call, that's always wrong as well.
-thanks,
+The BMC kernel will get oops with below logs:
 
-> reveals more than 20 instances of the pattern. There are probably more
-> those that use if for testing for NULL. I guess people don't know about
-> this macro, apart from the developers of the staging driver it was added
-> for (commit 05e6557b8ed833546ee2b66ce6b58fecf09f439e).
+    skbuff: skb_over_panic: text:8058e098 len:2048 put:2048 head:84c678a0 data:84c678c2 tail:0x84c680c2 end:0x84c67f00 dev:usb0
+    ------------[ cut here ]------------
+    kernel BUG at net/core/skbuff.c:113!
+    Internal error: Oops - BUG: 0 [#1] ARM
+    CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.69-c9fb275-dirty-d1e579a #1
+    Hardware name: Generic DT based system
+    PC is at skb_panic+0x60/0x6c
+    LR is at irq_work_queue+0x6c/0x94
 
-Ah, lustre is long-gone, so I'll just add a patch to my tree to remove
-this macro.
+Fix the issue by checking the length and set `-EOVERFLOW`.
 
-thanks,
+Tested: Verify the BMC kernel does not get oops in the above case, and
+the usb ethernet gets RX packets errors instead.
 
-greg k-h
+Signed-off-by: Lei YU <yulei.sh@bytedance.com>
+Signed-off-by: Henry Tian <tianxiaofeng@bytedance.com>
+---
+ drivers/usb/gadget/udc/aspeed-vhub/core.c |  2 +-
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c  | 16 ++++++++++++----
+ 2 files changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+index 7a635c499777..ac3ca24f8b04 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+@@ -37,7 +37,7 @@ void ast_vhub_done(struct ast_vhub_ep *ep, struct ast_vhub_req *req,
+ 
+ 	list_del_init(&req->queue);
+ 
+-	if (req->req.status == -EINPROGRESS)
++	if ((req->req.status == -EINPROGRESS) ||  (status == -EOVERFLOW))
+ 		req->req.status = status;
+ 
+ 	if (req->req.dma) {
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/epn.c b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+index b5252880b389..56e55472daa1 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/epn.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+@@ -84,6 +84,7 @@ static void ast_vhub_epn_handle_ack(struct ast_vhub_ep *ep)
+ {
+ 	struct ast_vhub_req *req;
+ 	unsigned int len;
++	int status = 0;
+ 	u32 stat;
+ 
+ 	/* Read EP status */
+@@ -119,9 +120,15 @@ static void ast_vhub_epn_handle_ack(struct ast_vhub_ep *ep)
+ 	len = VHUB_EP_DMA_TX_SIZE(stat);
+ 
+ 	/* If not using DMA, copy data out if needed */
+-	if (!req->req.dma && !ep->epn.is_in && len)
+-		memcpy(req->req.buf + req->req.actual, ep->buf, len);
+-
++	if (!req->req.dma && !ep->epn.is_in && len) {
++		if (req->req.actual + len > req->req.length) {
++			req->last_desc = 1;
++			status = -EOVERFLOW;
++			goto done;
++		} else {
++			memcpy(req->req.buf + req->req.actual, ep->buf, len);
++		}
++	}
+ 	/* Adjust size */
+ 	req->req.actual += len;
+ 
+@@ -129,9 +136,10 @@ static void ast_vhub_epn_handle_ack(struct ast_vhub_ep *ep)
+ 	if (len < ep->ep.maxpacket)
+ 		req->last_desc = 1;
+ 
++done:
+ 	/* That's it ? complete the request and pick a new one */
+ 	if (req->last_desc >= 0) {
+-		ast_vhub_done(ep, req, 0);
++		ast_vhub_done(ep, req, status);
+ 		req = list_first_entry_or_null(&ep->queue, struct ast_vhub_req,
+ 					       queue);
+ 
+-- 
+2.11.0
+
