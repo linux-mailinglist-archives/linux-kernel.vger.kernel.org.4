@@ -2,122 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D2C60A9F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8409F60A6BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbiJXN0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        id S234024AbiJXMi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236019AbiJXNYG (ORCPT
+        with ESMTP id S234489AbiJXMfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:24:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017818768A;
-        Mon, 24 Oct 2022 05:30:24 -0700 (PDT)
+        Mon, 24 Oct 2022 08:35:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2DD25FF40;
+        Mon, 24 Oct 2022 05:05:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 911BE612F5;
-        Mon, 24 Oct 2022 12:29:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A5BCC433D6;
-        Mon, 24 Oct 2022 12:29:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 687F5612DB;
+        Mon, 24 Oct 2022 12:02:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA1EC433C1;
+        Mon, 24 Oct 2022 12:02:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614547;
-        bh=aW+O/Bep5E72Knf9F5KLUligbpxqba0bCHR1Uql63Oo=;
+        s=korg; t=1666612953;
+        bh=/XB4y2LpgVtKSLfj2FRGEXMsobFlbWAbbPzG5tqVxqA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cQtyDm7tvpANV4AlaDyclQKUJhPvkh6ix3TEF/Pmh/UHGFZ0K62W+PbDuPCK1TCwq
-         gLqfRAKygujAdEWgsogkoaxob480dvaiC6ZKlQCPN4bBzOSfbRwq+QAK+cF94ZrYO7
-         m2rmpZ/eLuonEkxUyNpu0DUjvi4+ZyEHPwupMz3w=
+        b=jrqRm/k1b/V6HcATXfa9l86fIiZ6IF0qWDEEhRh7Aoz5Ree4YSeYoj/qAH3GxycIB
+         x3r2AyBE3Wur04PIUccxhaIURwkSnRKKRvs/LAnWAH9CiYxvqvMcKokHeKE60+0qt6
+         3vX1IMAsVfMuNFFVSrE4pogp2RTRtiyIH7e9BAzQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
-        Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 302/390] x86/entry: Work around Clang __bdos() bug
-Date:   Mon, 24 Oct 2022 13:31:39 +0200
-Message-Id: <20221024113035.871644092@linuxfoundation.org>
+Subject: [PATCH 4.19 181/229] xfrm: Update ipcomp_scratches with NULL when freed
+Date:   Mon, 24 Oct 2022 13:31:40 +0200
+Message-Id: <20221024113004.944366721@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Khalid Masum <khalid.masum.92@gmail.com>
 
-[ Upstream commit 3e1730842f142add55dc658929221521a9ea62b6 ]
+[ Upstream commit 8a04d2fc700f717104bfb95b0f6694e448a4537f ]
 
-Clang produces a false positive when building with CONFIG_FORTIFY_SOURCE=y
-and CONFIG_UBSAN_BOUNDS=y when operating on an array with a dynamic
-offset. Work around this by using a direct assignment of an empty
-instance. Avoids this warning:
+Currently if ipcomp_alloc_scratches() fails to allocate memory
+ipcomp_scratches holds obsolete address. So when we try to free the
+percpu scratches using ipcomp_free_scratches() it tries to vfree non
+existent vm area. Described below:
 
-../include/linux/fortify-string.h:309:4: warning: call to __write_overflow_field declared with 'warn
-ing' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wat
-tribute-warning]
-                        __write_overflow_field(p_size_field, size);
-                        ^
+static void * __percpu *ipcomp_alloc_scratches(void)
+{
+        ...
+        scratches = alloc_percpu(void *);
+        if (!scratches)
+                return NULL;
+ipcomp_scratches does not know about this allocation failure.
+Therefore holding the old obsolete address.
+        ...
+}
 
-which was isolated to the memset() call in xen_load_idt().
+So when we free,
 
-Note that this looks very much like another bug that was worked around:
-https://github.com/ClangBuiltLinux/linux/issues/1592
+static void ipcomp_free_scratches(void)
+{
+        ...
+        scratches = ipcomp_scratches;
+Assigning obsolete address from ipcomp_scratches
 
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: xen-devel@lists.xenproject.org
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Link: https://lore.kernel.org/lkml/41527d69-e8ab-3f86-ff37-6b298c01d5bc@oracle.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
+        if (!scratches)
+                return;
+
+        for_each_possible_cpu(i)
+               vfree(*per_cpu_ptr(scratches, i));
+Trying to free non existent page, causing warning: trying to vfree
+existent vm area.
+        ...
+}
+
+Fix this breakage by updating ipcomp_scrtches with NULL when scratches
+is freed
+
+Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reported-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
+Tested-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/xen/enlighten_pv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/xfrm/xfrm_ipcomp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 804c65d2b95f..815030b7f6fa 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -768,6 +768,7 @@ static void xen_load_idt(const struct desc_ptr *desc)
- {
- 	static DEFINE_SPINLOCK(lock);
- 	static struct trap_info traps[257];
-+	static const struct trap_info zero = { };
- 	unsigned out;
+diff --git a/net/xfrm/xfrm_ipcomp.c b/net/xfrm/xfrm_ipcomp.c
+index a00ec715aa46..32aed1d0f6ee 100644
+--- a/net/xfrm/xfrm_ipcomp.c
++++ b/net/xfrm/xfrm_ipcomp.c
+@@ -216,6 +216,7 @@ static void ipcomp_free_scratches(void)
+ 		vfree(*per_cpu_ptr(scratches, i));
  
- 	trace_xen_cpu_load_idt(desc);
-@@ -777,7 +778,7 @@ static void xen_load_idt(const struct desc_ptr *desc)
- 	memcpy(this_cpu_ptr(&idt_desc), desc, sizeof(idt_desc));
+ 	free_percpu(scratches);
++	ipcomp_scratches = NULL;
+ }
  
- 	out = xen_convert_trap_info(desc, traps, false);
--	memset(&traps[out], 0, sizeof(traps[0]));
-+	traps[out] = zero;
- 
- 	xen_mc_flush();
- 	if (HYPERVISOR_set_trap_table(traps))
+ static void * __percpu *ipcomp_alloc_scratches(void)
 -- 
 2.35.1
 
