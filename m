@@ -2,87 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA6160BFB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273EC60BF52
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 02:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiJYAgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 20:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60442 "EHLO
+        id S231144AbiJYAP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 20:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbiJYAfq (ORCPT
+        with ESMTP id S230093AbiJYAPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 20:35:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDD4A6C33;
-        Mon, 24 Oct 2022 16:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666652524;
-        bh=sbM3L7q2j0MNanFbpvlk4CSjJOidE5xvJJaI4BLiy+Q=;
-        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
-        b=GFnH5zKPU/WBtJqAsjuJbAlvCe9pBknkGoevLpF+MTuEqG303mQ4c3hhSAjOjIO7p
-         vQDCwf8fOYhmAtWbP5paPUsZXY6MSHQvfgdJ25CvZOoRO32WYu8FuYxE0BFcX7dgVz
-         yPifcjwn/JWhwhMbrvP9rzjG9brdXVgQn1f9OUWg=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.33.170]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MiJZE-1pFxqs2dXC-00fTUr; Mon, 24
- Oct 2022 15:53:08 +0200
-Message-ID: <b45e3d38-b25b-68a2-d089-242378900312@gmx.de>
-Date:   Mon, 24 Oct 2022 15:53:08 +0200
+        Mon, 24 Oct 2022 20:15:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8138E236421
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666650867;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zfAUAmtuZAJ2/gdCGNu3yXanAGczpHvB4SK/U8ucWH4=;
+        b=aLpNY0VOp0hz8nXm7npeVCqji2vbuBibykWTS33PYPhJuEiO9SjAubn4rcmthuU8jh1zbH
+        nwXQgbq/PRh16FZSzLVr+QPIbCI/jFjNx/hs8w/BW3DZjPKvBdYJ8EBOq/mA65leRyU8kj
+        CAkTxx+oabPp18ed6Bsj0D+Tx5sLx4M=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-36-2h5LrTenN_mxYY3rj4-H6A-1; Mon, 24 Oct 2022 10:00:24 -0400
+X-MC-Unique: 2h5LrTenN_mxYY3rj4-H6A-1
+Received: by mail-qt1-f198.google.com with SMTP id cr15-20020a05622a428f00b0039cf1f8c94fso7070656qtb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:00:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zfAUAmtuZAJ2/gdCGNu3yXanAGczpHvB4SK/U8ucWH4=;
+        b=EBiHomeB/dlYjkCMMcvQHZVmZRz2qsv5AdGLckI7HL85kkR6x4zzjXCu+Ujd9FAJCI
+         NPHz4mVSvEuPUBgb7s331/TT+jEisPKuBL80Nlpu0Z4CXPSlr/SWxZ39dPWC4JLZki7v
+         lI8ALhvdXGUcTiTfAnFi+Vcbo+juaUo4SfKnjKOvIcw2qBwSHFSj4qyFAB4CFImH3u+N
+         TLr+J/TM1hlv9Ggc7+/lQv+ueTQGf5DaD+RdQs1uGmBT8iirUsrz6lh7hfMPTaHKut0L
+         ZZPyDVjkC5GvazQDEuj06E/8aBviiS6R6x3J4nukbZzjY/UpbwvrTTz2T168nQgC8WCs
+         jnwg==
+X-Gm-Message-State: ACrzQf1mKNmAVaIXwjHuKZG9fo2VpIxuzWqwkLApT+WxT2cKTEtTZI7V
+        FtbExs6jjf0EjHQ+ksuiQ8f1zAgAyOm5pQcNZH6THw4UwHT+fOA80zFTFglozOSfgRLvw5qWqDT
+        e7dqyeHpi171Tw4vmFbAp8SpP
+X-Received: by 2002:a05:620a:4111:b0:6ed:ddf9:6955 with SMTP id j17-20020a05620a411100b006edddf96955mr22791751qko.19.1666620023282;
+        Mon, 24 Oct 2022 07:00:23 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4b+bYbc6QWX6s1Eqnf4Y9AvCIRYdXACGADlzYGuUDmKZpTN1IFVNl7kD66DHjZw/UmufcYcQ==
+X-Received: by 2002:a05:620a:4111:b0:6ed:ddf9:6955 with SMTP id j17-20020a05620a411100b006edddf96955mr22791716qko.19.1666620022904;
+        Mon, 24 Oct 2022 07:00:22 -0700 (PDT)
+Received: from [10.16.222.26] (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id x4-20020a05620a258400b006ef1a8f1b81sm31248qko.5.2022.10.24.07.00.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 07:00:22 -0700 (PDT)
+Message-ID: <3ca5f15d-7d14-2ab0-db1f-1c4384894e0d@redhat.com>
+Date:   Mon, 24 Oct 2022 10:00:20 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Ronald Warsow <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+Content-Language: en-US
+To:     Petr Pavlu <petr.pavlu@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     pmladek@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220919123233.8538-1-petr.pavlu@suse.com>
+ <20220919123233.8538-3-petr.pavlu@suse.com>
+ <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
+ <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
+ <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
+ <2342ef17-f8f9-501f-0f7b-5a69e85c2cf4@redhat.com>
+ <1b747e11-d358-52aa-0dfc-e795a8949106@suse.com>
+From:   Prarit Bhargava <prarit@redhat.com>
+In-Reply-To: <1b747e11-d358-52aa-0dfc-e795a8949106@suse.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:5xr+p9elF+Zv+xv6wNcmG08vtaAc13A1l4JEihWoxs/1uElZyTg
- qqP4N0Ep1v6jkBEwlZZ37+3FzgmRZ9JX8ut7nvMqO4xyu4RJBovd5v70GlUjQTw5GRO6dAH
- A6eK99nExKCH7QdB7nAUf/JVzPpU4zVmSriwfadAhlG5rbJ1w7c2aqujFdGRXFvXxIYWkFQ
- hT1bWZysalLWla5qrQ4uA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MCEkuIUKcY8=:3xe01jFS9RjXOGwQMlLyCf
- m3LbshUOY2AepvlEVePrH9lRttQ6bGJdino6qoQ7cOuNfeRTz8MGECn9NFpm8RpFETwwn1KBR
- dCqU88TZWeUx4HyBIXo2bBAGDdnxUvrcxLl+ID6i9gqMb0fzsr6Yq1qvv5Fsx6Ga9GrNo68ld
- 5qKv0BaGyX0n2VaU6UaYpdOHWYoFGeW1MsWUJhn7toc6kbgJKyFtN/3Jw8mvD71425qTsvGDP
- CjIxrH+QPdWddKZQf40WL7w4PWpuRegJiYFGCNnzH/CNHPI+ie7RChXv4r2sPmC6gvYTyrQR+
- R1Hrl6sUPWr/tuPDYmZdfZTnQKyqJMKtBV77dzuOxtHpTkjwEScLLz7YIk/bmtBP7Fb/LRYVE
- jCmoBjrlDwIdA4nXgoqmCiIBDXiCE0ORox7aaiHIuZeneYvsB4JJA++d6HW4SxpMIR83oIhhb
- q3+Sx+VZ3twfolovKcY23JToSYXaCEWWk6wNDntTBBRV7y7wlH4tQBS/ARg4f77JPWZ8ljTQC
- wk210iEIDj+nn386KRBE/OwvLd+zsasFygn2ueqdvVNd18ErHXO6VhC9iXS2dBLp7PR8MUTyN
- L3jvI07d+bOryWH3VPSTQyHomRaOgMTT0q1y9NzKwrv0uofnidYwYZmxJeQlIKf0zrZfLhX2V
- CKTk+dTMb3/Ebi/VEKRVVWKqgezNET60I0L98We6m03jNPcfocdAtxzIazOPGd8Rhti8B7zm5
- FSP8QW0e97zyRcvTl50I8k1lQu44rKM/V3e8HV7aDfvrVs5+VHXZpPJHHrGz1y8BGHlem4ryn
- WMBsRvtspVUJHTp2jacl5kpBL9GWt1yiLT/4VlLxwWUagZ1/25BEpwxj5Ivpxqv/nmoRmz7b+
- C4eyhmaG572MWArycyCopBgOPeFyfWyjRJUCkxPHSmththHIJ1NMm2TqHWuJubWg5HIigUd22
- aRI5FdvLrzXTsBleZlRO+Nea5idq2tKvyj7EKY9oSBevKk948FMRay8QHi2KpDeOWw/+ZVdRR
- 77xWcqfwNZMb6U3UcuEEVLxUa4rV9HMrpJP8clhy9ds819xKWGGvyq4GNGyGmucACs6RsbSQ8
- 5zjyqGE+CPDvAjCIbpEy225Gkx3TzD/czX797QP7lLLaAhYmAN9RT8CXwNmC2maXcqVA0blPI
- I4ZOD+q6mhaMqTL6+aTRvoWdfW+fI3wgYg2A5Aqr5S8dK9JSaJuoPIv0vZYLf06hKMlwDmxm+
- no1l4DOYkSI4NECFpqPY+V9JZiQhM/tMAfn3I1+EnPlhdZ763aO37G7P6cv1IwQbvvDwz7gtb
- FCt4YejiaDZKoQ73LNs1rO7xFS549oxFlG3A5uHNVEagI0YgBNBRa3zC47PTEtQ42Hc30nBcS
- DhdiWGuIwYqTDME91K9G7AenLAYVkOa7y8IUYFCIOVcQaLsSqJ/gnwlorLM7VUzlvMPGQwlQC
- p1EIRNwRtrNzJnUqmaeyA06NlAW8T7WgGGOWQqGHFlSIpVoc0JFQP9LLicDzR8YuoioU61g/e
- 4Pd/iEUjfTPzQOfUOt9JAQFCwozKcW8KkAI5Nq2FN+G5e
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On 10/24/22 08:37, Petr Pavlu wrote:
+> On 10/18/22 21:53, Prarit Bhargava wrote:
+>> Quoting from the original thread,
+>>
+>>>
+>>> Motivation for this patch is to fix an issue observed on larger machines with
+>>> many CPUs where it can take a significant amount of time during boot to run
+>>> systemd-udev-trigger.service. An x86-64 system can have already intel_pstate
+>>> active but as its CPUs can match also acpi_cpufreq and pcc_cpufreq, udev will
+>>> attempt to load these modules too. The operation will eventually fail in the
+>>> init function of a respective module where it gets recognized that another
+>>> cpufreq driver is already loaded and -EEXIST is returned. However, one uevent
+>>> is triggered for each CPU and so multiple loads of these modules will be
+>>> present. The current code then processes all such loads individually and
+>>> serializes them with the barrier in add_unformed_module().
+>>>
+>>
+>> The way to solve this is not in the module loading code, but in the udev
+>> code by adding a new event or in the userspace which handles the loading
+>> events.
+>>
+>> Option 1)
+>>
+>> Write/modify a udev rule to to use a flock userspace file lock to
+>> prevent repeated loading.  The problem with this is that it is still
+>> racy and still consumes CPU time repeated load the ELF header and,
+>> depending on the system (ie a large number of cpus) would still cause a
+>> boot delay.  This would be better than what we have and is worth looking
+>> at as a simple solution.  I'd like to see boot times with this change,
+>> and I'll try to come up with a measurement on a large CPU system.
+> 
+> It is not immediately clear to me how this can be done as a udev rule. You
+> mention that you'll try to test this on a large CPU system. Does it mean that
+> you have a prototype implemented already? If yes, could you please share it?
+> 
 
-6.0.4-rc1
+Hi Petr,
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 37 Beta)
+Sorry, I haven't had a chance to actually test this out but I see this 
+problem with the acpi_cpufreq and other multiple-cpu drivers which load 
+once per logical cpu.  I was thinking of adding a udev rule like:
 
-Thanks
+ACTION!="add", GOTO="acpi_cpufreq_end"
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+# I may have to add CPU modaliases here to get this to work correctly
+ENV{MODALIAS}=="acpi:ACPI0007:", GOTO="acpi_cpufreq_start"
+
+GOTO="acpi_cpufreq_start"
+GOTO="acpi_cpufreq_end"
+
+LABEL="acpi_cpufreq_start"
+
+ENV{DELAY_MODALIAS}="$env{MODALIAS}"
+ENV{MODALIAS}=""
+PROGRAM="/bin/sh -c flock -n /tmp/delay_acpi_cpufreq sleep 2'", 
+RESULT=="", RUN{builtin}+="kmod load $env{DELAY_MODALIAS}"
+
+LABEL="acpi_cpufreq_end"
+
+
+> My reading is that one would need to update the "MODALIAS" rule in
+> 80-drivers.rules [1] to do this locking. However, that just collects
+> 'kmod load' (builtin) for udev to execute after all rules are processed. It
+> would then be required to synchronize udev workers to prevent repeated
+> loading?
+> 
+
+Yes, that would be the case.
+
+>> Option 2)
+>>
+>> Create a new udev action, "add_once" to indicate to userspace that the
+>> module only needs to be loaded one time, and to ignore further load
+>> requests.  This is a bit tricky as both kernel space and userspace would
+>> have be modified.  The udev rule would end up looking very similar to
+>> what we now.
+>>
+>> The benefit of option 2 is that driver writers themselves can choose
+>> which drivers should issue "add_once" instead of add.  Drivers that are
+>> known to run on all devices at once would call "add_once" to only issue
+>> a single load.
+> 
+> On the device event side, I more wonder if it would be possible to avoid tying
+> up cpufreq and edac modules to individual CPU devices. Maybe their loading
+> could be attached to some platform device, even if it means introducing an
+> auxiliary device for this purpose? I need to look a bit more into this idea.
+
+That's an interesting idea and something I had not considered.  Creating 
+a virtual device and loading against that device would be much better 
+(easier?) of a solution.
+
+P.
+
+> 
+> [1] https://github.com/systemd/systemd/blob/4856f63846fc794711e1b8ec970e4c56494cd320/rules.d/80-drivers.rules
+> 
+> Thanks,
+> Petr
+> 
 
