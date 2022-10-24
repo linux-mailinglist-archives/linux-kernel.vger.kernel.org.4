@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788F360A4CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF50F60A546
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbiJXMQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S233523AbiJXMWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233294AbiJXMOo (ORCPT
+        with ESMTP id S233233AbiJXMUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:14:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B11A18350;
-        Mon, 24 Oct 2022 04:55:33 -0700 (PDT)
+        Mon, 24 Oct 2022 08:20:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6847B7A8;
+        Mon, 24 Oct 2022 04:58:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42ADC612BB;
-        Mon, 24 Oct 2022 11:55:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 559A4C433C1;
-        Mon, 24 Oct 2022 11:55:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A678AB811D3;
+        Mon, 24 Oct 2022 11:55:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3FCEC433C1;
+        Mon, 24 Oct 2022 11:55:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612507;
-        bh=pKT/iQfxBxGioKBlfo90x9MW0lGwQY8QgTHrj5HQNl4=;
+        s=korg; t=1666612510;
+        bh=XGcTzqv5yDKn4JVe+5V7/VB4DHTX2abKHi6H8xwzecI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JUmQI2wKs8AyNhafoVJbp+Z4gPI1wkY59zQG/zS8icN6M3NlU8N29XU41bRs/enVX
-         xzSVJTmFD600LoPz3MXn7da6pZ56AxmfS9Pm60CXgYqdKpQtJE5iKcUS6aZUlT9qs2
-         rATxg53oQ9iV7ksEvx0t6T448BHPH/JIxdTfUs3k=
+        b=xV11g1IHhIT3I5AamcPDLg5evsH9lduKAlG8vpHTbsJ+EvtGeCwRnb82ThXt9eBsD
+         vGK22+cr1IJLfRZCYqzcPMcksIoe1DselgbSx9ELV9mJVxDjmuAFc9IRgVqnQRAKob
+         k/1Z6vZvqWCCD3hAUei7NFWOXp/eY2gBMcpKME18=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4.19 014/229] USB: serial: ftdi_sio: fix 300 bps rate for SIO
-Date:   Mon, 24 Oct 2022 13:28:53 +0200
-Message-Id: <20221024112959.601347548@linuxfoundation.org>
+        stable@vger.kernel.org, ChanWoo Lee <cw9316.lee@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH 4.19 015/229] mmc: core: Replace with already defined values for readability
+Date:   Mon, 24 Oct 2022 13:28:54 +0200
+Message-Id: <20221024112959.634831426@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
 References: <20221024112959.085534368@linuxfoundation.org>
@@ -52,31 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: ChanWoo Lee <cw9316.lee@samsung.com>
 
-commit 7bd7ad3c310cd6766f170927381eea0aa6f46c69 upstream.
+commit e427266460826bea21b70f9b2bb29decfb2c2620 upstream.
 
-The 300 bps rate of SIO devices has been mapped to 9600 bps since
-2003... Let's fix the regression.
+SD_ROCR_S18A is already defined and is used to check the rocr value, so
+let's replace with already defined values for readability.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: ChanWoo Lee <cw9316.lee@samsung.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220706004840.24812-1-cw9316.lee@samsung.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/serial/ftdi_sio.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/mmc/core/sd.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1304,8 +1304,7 @@ static u32 get_ftdi_divisor(struct tty_s
- 		case 38400: div_value = ftdi_sio_b38400; break;
- 		case 57600: div_value = ftdi_sio_b57600;  break;
- 		case 115200: div_value = ftdi_sio_b115200; break;
--		} /* baud */
--		if (div_value == 0) {
-+		default:
- 			dev_dbg(dev, "%s - Baudrate (%d) requested is not supported\n",
- 				__func__,  baud);
- 			div_value = ftdi_sio_b9600;
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -787,7 +787,7 @@ try_again:
+ 	 * the CCS bit is set as well. We deliberately deviate from the spec in
+ 	 * regards to this, which allows UHS-I to be supported for SDSC cards.
+ 	 */
+-	if (!mmc_host_is_spi(host) && rocr && (*rocr & 0x01000000)) {
++	if (!mmc_host_is_spi(host) && rocr && (*rocr & SD_ROCR_S18A)) {
+ 		err = mmc_set_uhs_voltage(host, pocr);
+ 		if (err == -EAGAIN) {
+ 			retries--;
 
 
