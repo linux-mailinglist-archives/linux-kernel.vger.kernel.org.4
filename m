@@ -2,101 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D71260B7D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853F760B83C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiJXTfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34456 "EHLO
+        id S230434AbiJXTnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233324AbiJXTdt (ORCPT
+        with ESMTP id S233524AbiJXTlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:33:49 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16CA13F51
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:04:34 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so13719671pji.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f8aY9RhMEKsObZDgKD/q+Hql9XXZRTy7bmu7NkRdyns=;
-        b=iQQmWu8syBAiJbc13i3aS6QnytKsJEaYdBF8x6Uym2shHqm8CQ2r9LEIuDpoIfqPjf
-         KrDNgvRmpt7WA8T7uwSijwEKgECbq+6jJQz2URihTNRjzroBKEVaZ3HSFO4nE4LrBgIP
-         RiiduUKMCc5lvsojnZ5q5PAHQrbw+EbbSgUd8=
+        Mon, 24 Oct 2022 15:41:36 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6074820BF2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:11:28 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id j188so11682786oih.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:11:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f8aY9RhMEKsObZDgKD/q+Hql9XXZRTy7bmu7NkRdyns=;
-        b=KiRFfbLW7pM1wLU+NuB9be42gOBc9bIHydIHEQQqYv1CrYqdA67pK+ADy44D7hgiHd
-         hkQEpWItkT5ulVCySFxhKPmzp44AgE99hvHU3q4WydI6VAC6f4Mkq2CxQeOiOxhcemum
-         qkYL6vraSlZLb8K7z2JxagUhzsuQ2P9y29bHkBkTcmL9mto6MsVn3gNt4gSuY5OpxtMr
-         j/owgVjAKtnn1VwqElxrADkGbpqmd8RTHhEnwbUrBpojkGv1FatpjoXSusl/5hmTzSsF
-         kqtRRBWEqT/djGFA0J//VoVNUw4CedXgabWAes5K7UZY5JGftSbDt+Jy76QL3SKGTonS
-         H+6Q==
-X-Gm-Message-State: ACrzQf3pVXoNb0ImDNwgTggGibE2eaZSUAps5w2Q/feNXFVfY2XheIVY
-        uAEMKazFAW3CiV2m4Tu4c5BE/g==
-X-Google-Smtp-Source: AMsMyM5c5rtHNqdOi+VIejih9i8mvW87u/6WeAxFVUvCupTrqKYzULyIM4Uo0EPKPQtq7UHBo1IcEw==
-X-Received: by 2002:a17:903:2c7:b0:186:9862:d16c with SMTP id s7-20020a17090302c700b001869862d16cmr10686729plk.133.1666634585822;
-        Mon, 24 Oct 2022 11:03:05 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:808b:e2f6:edcf:ccb0])
-        by smtp.gmail.com with UTF8SMTPSA id q14-20020a170902f78e00b0017fe9b038fdsm57986pln.14.2022.10.24.11.03.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 11:03:05 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Brian Norris <briannorris@chromium.org>
-Subject: [PATCH] mmc: sdhci_am654: 'select', not 'depends' REGMAP_MMIO
-Date:   Mon, 24 Oct 2022 11:02:59 -0700
-Message-Id: <20221024180300.2292208-1-briannorris@chromium.org>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CPf6G/73Hd0s0zh7PYg5rvhdRmvS3jQjXsc+lqFusyc=;
+        b=VqWBCIK/C1WQ90TmfBoFBitp3JjWUevS28dVi90N6+e5EQ5xP2BQeMzZMbszC+LR8n
+         i1M2zTwhKUBuiyQR2d8nC/1gInVUebU0B0kA/5kwcPWNvUGIZ+0vWMhTXQ4+Do4kFLPs
+         KqOkvYThZ3gwiMd3SC2693iUUdF22vTeDHmuUxG9bEXubLD6kSR8V7OXBr6goIyRwtck
+         O0J5wVfprSGwg4uqxvDk7Pi19d+U6QEadNigKK3afY6xRnuojcypLkMcsPoNK8sbOQ9y
+         9EH3ELhR/5a7Wp+l4lyXs6kpxfHTx0uyz4OnsNgGycZSB4iRr1WsnMyXNr9R8mjs9+xi
+         w5eg==
+X-Gm-Message-State: ACrzQf2uJI79AEaiAuOrqLW7MwYkTrCBlMm7j9OH0b0ueLKq/akUTIn7
+        VqBLEs3khbsrJt8hQEybtJa51ejVvs0oN2QDD0Leyg==
+X-Google-Smtp-Source: AMsMyM4Gm7Aig8YT5fRJeyMGddzfvxxYUrUEmpPq2PCQ/RGA1i1Qlql9jRoJlFidSVPdqq8RCQds4g==
+X-Received: by 2002:a17:90a:fe6:b0:212:bfc3:31f5 with SMTP id 93-20020a17090a0fe600b00212bfc331f5mr25482041pjz.215.1666634594766;
+        Mon, 24 Oct 2022 11:03:14 -0700 (PDT)
+Received: from localhost ([75.172.140.17])
+        by smtp.gmail.com with ESMTPSA id mj19-20020a17090b369300b002131a9f8dcbsm1291814pjb.46.2022.10.24.11.03.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 11:03:14 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Paul Walmsley <paul@pwsan.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-omap@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>, Bin Liu <b-liu@ti.com>,
+        Helge Deller <deller@gmx.de>, linux-usb@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 14/17] ARM: omap1: remove dead code
+In-Reply-To: <20221019150410.3851944-14-arnd@kernel.org>
+References: <20221019144119.3848027-1-arnd@kernel.org>
+ <20221019150410.3851944-1-arnd@kernel.org>
+ <20221019150410.3851944-14-arnd@kernel.org>
+Date:   Mon, 24 Oct 2022 11:03:13 -0700
+Message-ID: <7hbkq1hzfi.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-REGMAP_MMIO is not user-configurable, so we can only satisfy this
-dependency by enabling some other Kconfig symbol that properly 'select's
-it.
+Arnd Bergmann <arnd@kernel.org> writes:
 
-Use select like everybody else.
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> After the removal of the unused board files, I went through the
+> omap1 code to look for code that no longer has any callers
+> and remove that.
+>
+> In particular, support for the omap7xx/omap8xx family is now
+> completely unused, so I'm only leaving omap15xx/omap16xx/omap59xx.
 
-Noticed when trying to enable this driver for compile testing.
+Acked-by: Kevin Hilman <khilman@baylibre.com>
 
-Fixes: 59592cc1f593 ("mmc: sdhci_am654: Add dependency on MMC_SDHCI_AM654")
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
+with a few tears shed since omap7xx/omap8xx was the first family I
+contributed to upstream. :(
 
- drivers/mmc/host/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
-index f324daadaf70..fb1062a6394c 100644
---- a/drivers/mmc/host/Kconfig
-+++ b/drivers/mmc/host/Kconfig
-@@ -1075,9 +1075,10 @@ config MMC_SDHCI_OMAP
- 
- config MMC_SDHCI_AM654
- 	tristate "Support for the SDHCI Controller in TI's AM654 SOCs"
--	depends on MMC_SDHCI_PLTFM && OF && REGMAP_MMIO
-+	depends on MMC_SDHCI_PLTFM && OF
- 	select MMC_SDHCI_IO_ACCESSORS
- 	select MMC_CQHCI
-+	select REGMAP_MMIO
- 	help
- 	  This selects the Secure Digital Host Controller Interface (SDHCI)
- 	  support present in TI's AM654 SOCs. The controller supports
--- 
-2.38.0.135.g90850a2211-goog
-
+Kevin
