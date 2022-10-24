@@ -2,107 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E5F609E3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4930609E46
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiJXJrA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Oct 2022 05:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
+        id S230280AbiJXJrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiJXJqr (ORCPT
+        with ESMTP id S229935AbiJXJrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:46:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23A22B603
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:46:45 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-120-uHmcMPlPMjafKyj3wsslNg-1; Mon, 24 Oct 2022 10:46:42 +0100
-X-MC-Unique: uHmcMPlPMjafKyj3wsslNg-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 24 Oct
- 2022 10:46:40 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Mon, 24 Oct 2022 10:46:40 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
-CC:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: RE: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
-Thread-Topic: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
-Thread-Index: AQHY54ozH4qdMwC1Yk+S6+0KOnujn64dR6XQ///w5gCAABLzkA==
-Date:   Mon, 24 Oct 2022 09:46:40 +0000
-Message-ID: <57360b976d5944babe1e85fc51b3f6f6@AcuMS.aculab.com>
-References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
- <Y1ZQSEMLkybFCadS@kroah.com> <Y1ZQpcdK4sdy+5QZ@kroah.com>
- <Y1ZW2WYli7Bfioxr@paasikivi.fi.intel.com>
- <Y1ZZcL/Q7QJ+YYhJ@smile.fi.intel.com>
- <fbe735d131a44c2a95248cc4ad51485b@AcuMS.aculab.com>
- <Y1ZcyBd2Yjir/dNO@smile.fi.intel.com>
-In-Reply-To: <Y1ZcyBd2Yjir/dNO@smile.fi.intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 24 Oct 2022 05:47:18 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED269DFA9;
+        Mon, 24 Oct 2022 02:47:14 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29O7f2s6022974;
+        Mon, 24 Oct 2022 11:47:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=Cc+dlsXqRWR+DBkV6bGVYF5yz31PMOAUQ3bRQlb0FRQ=;
+ b=5SVEQ7b0skD2OFdK5gQdCd0+uRv62JzX3I+yp73+5xC3EQESB7+J6TJ9hJPy1O0rNKzx
+ 109mcur33FNwVEseqW3J/iK0+ufyENRQcyZwJH1RAAnXLYTvC/FkcbPnJ3PIn4HhcKeP
+ sIK+KLWYXLGdv0uNVouwiMo/gDHnGjkw/PQoIX4I6RNATGOsKCV0biShsoHQSNjm0Ytq
+ X9XTftAE8gTeMmHj2G4CsTMtnBTe96IQGGQD2JEvTPOluXdowNij/UTCwIFlKI2+TcqJ
+ DAFE7+NDxecFjtPS4K+LYsEmKq31KSyPPMrpLv1UUiGj15Y0cCW0fhpRfso7cYi1cbL8 ug== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3kc5nbanqp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 11:47:01 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0C4BD100038;
+        Mon, 24 Oct 2022 11:46:58 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 07FCD2194C9;
+        Mon, 24 Oct 2022 11:46:58 +0200 (CEST)
+Received: from localhost (10.201.20.208) by SHFDAG1NODE3.st.com (10.75.129.71)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
+ 2022 11:46:55 +0200
+From:   Amelie Delaunay <amelie.delaunay@foss.st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+CC:     Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/2] ARM: dts: stm32: add mcp23017 pinctrl entry for stm32mp13
+Date:   Mon, 24 Oct 2022 11:46:47 +0200
+Message-ID: <20221024094648.145251-2-amelie.delaunay@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.201.20.208]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_02,2022-10-21_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: 'Andy Shevchenko'
-> Sent: 24 October 2022 10:37
-> ...
-> 
-> > > > > Wait, no one uses this macro, so why not just remove it entirely?
-> > > >
-> > > > Good question. It appears to be a (relatively) common pattern to look up
-> > > > something and the return its containing object if the lookup was
-> > > > successful. Doing a quick
-> > > >
-> > > > 	$ git grep 'container_of.*:' drivers include
-> > > >
-> > > > reveals more than 20 instances of the pattern. There are probably more
-> > > > those that use if for testing for NULL. I guess people don't know about
-> > > > this macro, apart from the developers of the staging driver it was added
-> > > > for (commit 05e6557b8ed833546ee2b66ce6b58fecf09f439e).
-> > >
-> > > Maybe we can provide an example to keep this macro in the kernel, meaning
-> > > convert one of the drivers / subsystem to actually use it?
-> >
-> > Adding _safe() to a function name doesn't actually tell you anything.
-> > You still need to look up what it is 'safe' against.
-> >
-> > In this case the full code pattern is actually much clearer.
-> >
-> > It is also quite likely that it is followed by an:
-> > 	if (!ptr)
-> > 		return xxx;
-> > You that can/should really be put before the container_of() call.
-> 
-> return statements in macros are no go. Or you meant something else?
+MCP23017 interrupt line (routed on PG12) requires to be pulled-up.
 
-I meant in the function itself.
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp13-pinctrl.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-It might be interesting to check how many of the function
-can actually have a NULL pointer?
-Especially in staging code might be being 'defensive'.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
+index 50daf5509193..9889f9fe99a6 100644
+--- a/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp13-pinctrl.dtsi
+@@ -47,6 +47,13 @@ pins {
+ 		};
+ 	};
+ 
++	mcp23017_pins_a: mcp23017-0 {
++		pins {
++			pinmux = <STM32_PINMUX('G', 12, GPIO)>;
++			bias-pull-up;
++		};
++	};
++
+ 	sdmmc1_b4_pins_a: sdmmc1-b4-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('C', 8, AF12)>, /* SDMMC1_D0 */
+-- 
+2.25.1
 
