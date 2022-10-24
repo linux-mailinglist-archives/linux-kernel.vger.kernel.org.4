@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707CC60BE9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5229760BEA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231315AbiJXXbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
+        id S229635AbiJXXbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiJXXbT (ORCPT
+        with ESMTP id S230308AbiJXXbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:31:19 -0400
+        Mon, 24 Oct 2022 19:31:32 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1916FE93F;
-        Mon, 24 Oct 2022 14:52:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CC68E7AE;
+        Mon, 24 Oct 2022 14:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666644741; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1666644742; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fhJrUP+Njp6HsgAA/ZXoqJpzcRmNXj5pVHzoSisYMV4=;
-        b=X3ViSXvrs2DTVmBs1bS+Stp7Zsayi6JvxxstatJ+bXCQrKzYPB71+k+m1NyhYpgUfMubvJ
-        1dhLa4d241qWW23ro7HP2VPDT6HVtKb9MrcefjBfaOWEPUqVCF2iMd9coarbeAtB+h+dD8
-        8LWesp3qkUci38YVquaZ1QjiD5SP8lU=
+        bh=xak1hhi2ZXgbcAJgD44C+AwcAkXWEuIXNRLIGjZ6/V8=;
+        b=BT7X4ojFfsnA/z0K4xQ9xt0xKjIe+Y3K9UTqeUi22nPxgECWzdT8xZj6o3SR86Aj5EFyQp
+        mA3k4mYgDmL/0+hpBIM1GI1AEz0Bt2Trq6p/O5Z9ArFc1cHm13OatrZtQKO7Vo7rwBTckm
+        PGfl/xO9c5iQmmHRmm54wy2LFaSfIdw=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 Cc:     od@opendingux.net, linux-pwm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Paul Cercueil <paul@crapouillou.net>, stable@vger.kernel.org
-Subject: [PATCH 2/5] pwm: jz4740: Fix pin level of disabled TCU2 channels, part 2
-Date:   Mon, 24 Oct 2022 21:52:10 +0100
-Message-Id: <20221024205213.327001-3-paul@crapouillou.net>
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 3/5] pwm: jz4740: Force dependency on Device Tree
+Date:   Mon, 24 Oct 2022 21:52:11 +0100
+Message-Id: <20221024205213.327001-4-paul@crapouillou.net>
 In-Reply-To: <20221024205213.327001-1-paul@crapouillou.net>
 References: <20221024205213.327001-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -47,115 +47,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit a020f22a4ff5 ("pwm: jz4740: Make PWM start with the active part"),
-the trick to set duty > period to properly shut down TCU2 channels did
-not work anymore, because of the polarity inversion.
+Ingenic SoCs all require CONFIG_OF, so there is no case where we want to
+use this driver without CONFIG_OF.
 
-Address this issue by restoring the proper polarity before disabling the
-channels.
-
-Fixes: a020f22a4ff5 ("pwm: jz4740: Make PWM start with the active part")
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-Cc: stable@vger.kernel.org
 ---
- drivers/pwm/pwm-jz4740.c | 62 ++++++++++++++++++++++++++--------------
- 1 file changed, 40 insertions(+), 22 deletions(-)
+ drivers/pwm/Kconfig      |  2 +-
+ drivers/pwm/pwm-jz4740.c | 10 ++++------
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
+index 60d13a949bc5..1fe420a45f91 100644
+--- a/drivers/pwm/Kconfig
++++ b/drivers/pwm/Kconfig
+@@ -283,7 +283,7 @@ config PWM_IQS620A
+ config PWM_JZ4740
+ 	tristate "Ingenic JZ47xx PWM support"
+ 	depends on MIPS || COMPILE_TEST
+-	depends on COMMON_CLK
++	depends on COMMON_CLK && OF
+ 	select MFD_SYSCON
+ 	help
+ 	  Generic PWM framework driver for Ingenic JZ47xx based
 diff --git a/drivers/pwm/pwm-jz4740.c b/drivers/pwm/pwm-jz4740.c
-index 228eb104bf1e..65462a0052af 100644
+index 65462a0052af..c0afc0c316a8 100644
 --- a/drivers/pwm/pwm-jz4740.c
 +++ b/drivers/pwm/pwm-jz4740.c
-@@ -97,6 +97,19 @@ static int jz4740_pwm_enable(struct pwm_chip *chip, struct pwm_device *pwm)
- 	return 0;
+@@ -269,19 +269,18 @@ static int jz4740_pwm_probe(struct platform_device *pdev)
+ 	return devm_pwmchip_add(dev, &jz4740->chip);
  }
  
-+static void jz4740_pwm_set_polarity(struct jz4740_pwm_chip *jz,
-+				    unsigned int hwpwm,
-+				    enum pwm_polarity polarity)
-+{
-+	unsigned int value = 0;
-+
-+	if (polarity == PWM_POLARITY_INVERSED)
-+		value = TCU_TCSR_PWM_INITL_HIGH;
-+
-+	regmap_update_bits(jz->map, TCU_REG_TCSRc(hwpwm),
-+			   TCU_TCSR_PWM_INITL_HIGH, value);
-+}
-+
- static void jz4740_pwm_disable(struct pwm_chip *chip, struct pwm_device *pwm)
- {
- 	struct jz4740_pwm_chip *jz = to_jz4740(chip);
-@@ -130,6 +143,7 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 	unsigned long long tmp = 0xffffull * NSEC_PER_SEC;
- 	struct clk *clk = pwm_get_chip_data(pwm);
- 	unsigned long period, duty;
-+	enum pwm_polarity polarity;
- 	long rate;
- 	int err;
+-static const struct soc_info __maybe_unused jz4740_soc_info = {
++static const struct soc_info jz4740_soc_info = {
+ 	.num_pwms = 8,
+ };
  
-@@ -169,6 +183,9 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 	if (duty >= period)
- 		duty = period - 1;
+-static const struct soc_info __maybe_unused jz4725b_soc_info = {
++static const struct soc_info jz4725b_soc_info = {
+ 	.num_pwms = 6,
+ };
  
-+	/* Restore regular polarity before disabling the channel. */
-+	jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, state->polarity);
-+
- 	jz4740_pwm_disable(chip, pwm);
+-static const struct soc_info __maybe_unused x1000_soc_info = {
++static const struct soc_info x1000_soc_info = {
+ 	.num_pwms = 5,
+ };
  
- 	err = clk_set_rate(clk, rate);
-@@ -190,29 +207,30 @@ static int jz4740_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
- 	regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
- 			   TCU_TCSR_PWM_SD, TCU_TCSR_PWM_SD);
+-#ifdef CONFIG_OF
+ static const struct of_device_id jz4740_pwm_dt_ids[] = {
+ 	{ .compatible = "ingenic,jz4740-pwm", .data = &jz4740_soc_info },
+ 	{ .compatible = "ingenic,jz4725b-pwm", .data = &jz4725b_soc_info },
+@@ -289,12 +288,11 @@ static const struct of_device_id jz4740_pwm_dt_ids[] = {
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, jz4740_pwm_dt_ids);
+-#endif
  
--	/*
--	 * Set polarity.
--	 *
--	 * The PWM starts in inactive state until the internal timer reaches the
--	 * duty value, then becomes active until the timer reaches the period
--	 * value. In theory, we should then use (period - duty) as the real duty
--	 * value, as a high duty value would otherwise result in the PWM pin
--	 * being inactive most of the time.
--	 *
--	 * Here, we don't do that, and instead invert the polarity of the PWM
--	 * when it is active. This trick makes the PWM start with its active
--	 * state instead of its inactive state.
--	 */
--	if ((state->polarity == PWM_POLARITY_NORMAL) ^ state->enabled)
--		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
--				   TCU_TCSR_PWM_INITL_HIGH, 0);
--	else
--		regmap_update_bits(jz4740->map, TCU_REG_TCSRc(pwm->hwpwm),
--				   TCU_TCSR_PWM_INITL_HIGH,
--				   TCU_TCSR_PWM_INITL_HIGH);
--
--	if (state->enabled)
-+	if (state->enabled) {
-+		/*
-+		 * Set polarity.
-+		 *
-+		 * The PWM starts in inactive state until the internal timer
-+		 * reaches the duty value, then becomes active until the timer
-+		 * reaches the period value. In theory, we should then use
-+		 * (period - duty) as the real duty value, as a high duty value
-+		 * would otherwise result in the PWM pin being inactive most of
-+		 * the time.
-+		 *
-+		 * Here, we don't do that, and instead invert the polarity of
-+		 * the PWM when it is active. This trick makes the PWM start
-+		 * with its active state instead of its inactive state.
-+		 */
-+		if (state->polarity == PWM_POLARITY_NORMAL)
-+			polarity = PWM_POLARITY_INVERSED;
-+		else
-+			polarity = PWM_POLARITY_NORMAL;
-+
-+		jz4740_pwm_set_polarity(jz4740, pwm->hwpwm, polarity);
-+
- 		jz4740_pwm_enable(chip, pwm);
-+	}
- 
- 	return 0;
- }
+ static struct platform_driver jz4740_pwm_driver = {
+ 	.driver = {
+ 		.name = "jz4740-pwm",
+-		.of_match_table = of_match_ptr(jz4740_pwm_dt_ids),
++		.of_match_table = jz4740_pwm_dt_ids,
+ 	},
+ 	.probe = jz4740_pwm_probe,
+ };
 -- 
 2.35.1
 
