@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C591460A81C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40A060AADD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235016AbiJXNBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S235949AbiJXNmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbiJXM7K (ORCPT
+        with ESMTP id S236611AbiJXNks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:59:10 -0400
+        Mon, 24 Oct 2022 09:40:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE66E9A29A;
-        Mon, 24 Oct 2022 05:18:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C09B3B36;
+        Mon, 24 Oct 2022 05:37:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CFD1061218;
-        Mon, 24 Oct 2022 12:16:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6754C433C1;
-        Mon, 24 Oct 2022 12:16:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04A9B612B2;
+        Mon, 24 Oct 2022 12:37:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166D4C433C1;
+        Mon, 24 Oct 2022 12:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613813;
-        bh=z6BUKnQXIYEmBq/uQLvhq8qTqLB0q2qvgDL8SK8Bizo=;
+        s=korg; t=1666615041;
+        bh=A/DITSwSck9wLSemw47M+9/Xsriiy3TWOA9cLMpfPPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QZlEmxuvdTYLe6PnYRb5IECoPK/xEr+wpZBZC+xVlSBc+gfvazXoXweRWae7KR95Y
-         qSLhP05TJxvMav7+GbfjEtWi5PXCSLJc6GixkrYuSrHkuDMLsPPUcuLagEIeJti/xL
-         CZqq0pNmZLXg7ouVcA9BJYfDmpqNE9+6vQu5d3HA=
+        b=yqajkpt2ipxgjQaPmfqPAFODL+alypJ2pHm2OqtRKjyp6GzOkKVqJ2tmny6nmq9BP
+         Ohy6mv+gv5/OrSfkOZye6aPLKvv1vCdxvXZ69VSciCjYz3RwJwtpeggCCx8t8cd7dX
+         Ch7rcw6zfxAxjfq225079CcN9oI5l6V/18Zl7lMI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eddie James <eajames@linux.ibm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH 5.10 016/390] iio: pressure: dps310: Reset chip after timeout
-Date:   Mon, 24 Oct 2022 13:26:53 +0200
-Message-Id: <20221024113023.243733028@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 5.15 070/530] slimbus: qcom-ngd: cleanup in probe error path
+Date:   Mon, 24 Oct 2022 13:26:54 +0200
+Message-Id: <20221024113048.179949595@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,148 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eddie James <eajames@linux.ibm.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-commit 7b4ab4abcea4c0c10b25187bf2569e5a07e9a20c upstream.
+commit 16f14551d0df9e7cd283545d7d748829594d912f upstream.
 
-The DPS310 chip has been observed to get "stuck" such that pressure
-and temperature measurements are never indicated as "ready" in the
-MEAS_CFG register. The only solution is to reset the device and try
-again. In order to avoid continual failures, use a boolean flag to
-only try the reset after timeout once if errors persist.
+Add proper error path in probe() to cleanup resources previously
+acquired/allocated to fix warnings visible during probe deferral:
 
-Fixes: ba6ec48e76bc ("iio: Add driver for Infineon DPS310")
+  notifier callback qcom_slim_ngd_ssr_notify already registered
+  WARNING: CPU: 6 PID: 70 at kernel/notifier.c:28 notifier_chain_register+0x5c/0x90
+  Modules linked in:
+  CPU: 6 PID: 70 Comm: kworker/u16:1 Not tainted 6.0.0-rc3-next-20220830 #380
+  Call trace:
+   notifier_chain_register+0x5c/0x90
+   srcu_notifier_chain_register+0x44/0x90
+   qcom_register_ssr_notifier+0x38/0x4c
+   qcom_slim_ngd_ctrl_probe+0xd8/0x400
+   platform_probe+0x6c/0xe0
+   really_probe+0xbc/0x2d4
+   __driver_probe_device+0x78/0xe0
+   driver_probe_device+0x3c/0x12c
+   __device_attach_driver+0xb8/0x120
+   bus_for_each_drv+0x78/0xd0
+   __device_attach+0xa8/0x1c0
+   device_initial_probe+0x18/0x24
+   bus_probe_device+0xa0/0xac
+   deferred_probe_work_func+0x88/0xc0
+   process_one_work+0x1d4/0x320
+   worker_thread+0x2cc/0x44c
+   kthread+0x110/0x114
+   ret_from_fork+0x10/0x20
+
+Fixes: e1ae85e1830e ("slimbus: qcom-ngd-ctrl: add Protection Domain Restart Support")
 Cc: <stable@vger.kernel.org>
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220915195719.136812-3-eajames@linux.ibm.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220916122910.170730-3-srinivas.kandagatla@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/pressure/dps310.c |   74 ++++++++++++++++++++++++++++++++++++------
- 1 file changed, 64 insertions(+), 10 deletions(-)
+ drivers/slimbus/qcom-ngd-ctrl.c |   13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
---- a/drivers/iio/pressure/dps310.c
-+++ b/drivers/iio/pressure/dps310.c
-@@ -89,6 +89,7 @@ struct dps310_data {
- 	s32 c00, c10, c20, c30, c01, c11, c21;
- 	s32 pressure_raw;
- 	s32 temp_raw;
-+	bool timeout_recovery_failed;
- };
+--- a/drivers/slimbus/qcom-ngd-ctrl.c
++++ b/drivers/slimbus/qcom-ngd-ctrl.c
+@@ -1567,18 +1567,27 @@ static int qcom_slim_ngd_ctrl_probe(stru
+ 	ctrl->pdr = pdr_handle_alloc(slim_pd_status, ctrl);
+ 	if (IS_ERR(ctrl->pdr)) {
+ 		dev_err(dev, "Failed to init PDR handle\n");
+-		return PTR_ERR(ctrl->pdr);
++		ret = PTR_ERR(ctrl->pdr);
++		goto err_pdr_alloc;
+ 	}
  
- static const struct iio_chan_spec dps310_channels[] = {
-@@ -393,11 +394,69 @@ static int dps310_get_temp_k(struct dps3
- 	return scale_factors[ilog2(rc)];
+ 	pds = pdr_add_lookup(ctrl->pdr, "avs/audio", "msm/adsp/audio_pd");
+ 	if (IS_ERR(pds) && PTR_ERR(pds) != -EALREADY) {
+ 		ret = PTR_ERR(pds);
+ 		dev_err(dev, "pdr add lookup failed: %d\n", ret);
+-		return ret;
++		goto err_pdr_lookup;
+ 	}
+ 
+ 	platform_driver_register(&qcom_slim_ngd_driver);
+ 	return of_qcom_slim_ngd_register(dev, ctrl);
++
++err_pdr_alloc:
++	qcom_unregister_ssr_notifier(ctrl->notifier, &ctrl->nb);
++
++err_pdr_lookup:
++	pdr_handle_release(ctrl->pdr);
++
++	return ret;
  }
  
-+static int dps310_reset_wait(struct dps310_data *data)
-+{
-+	int rc;
-+
-+	rc = regmap_write(data->regmap, DPS310_RESET, DPS310_RESET_MAGIC);
-+	if (rc)
-+		return rc;
-+
-+	/* Wait for device chip access: 2.5ms in specification */
-+	usleep_range(2500, 12000);
-+	return 0;
-+}
-+
-+static int dps310_reset_reinit(struct dps310_data *data)
-+{
-+	int rc;
-+
-+	rc = dps310_reset_wait(data);
-+	if (rc)
-+		return rc;
-+
-+	return dps310_startup(data);
-+}
-+
-+static int dps310_ready_status(struct dps310_data *data, int ready_bit, int timeout)
-+{
-+	int sleep = DPS310_POLL_SLEEP_US(timeout);
-+	int ready;
-+
-+	return regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready, ready & ready_bit,
-+					sleep, timeout);
-+}
-+
-+static int dps310_ready(struct dps310_data *data, int ready_bit, int timeout)
-+{
-+	int rc;
-+
-+	rc = dps310_ready_status(data, ready_bit, timeout);
-+	if (rc) {
-+		if (rc == -ETIMEDOUT && !data->timeout_recovery_failed) {
-+			/* Reset and reinitialize the chip. */
-+			if (dps310_reset_reinit(data)) {
-+				data->timeout_recovery_failed = true;
-+			} else {
-+				/* Try again to get sensor ready status. */
-+				if (dps310_ready_status(data, ready_bit, timeout))
-+					data->timeout_recovery_failed = true;
-+				else
-+					return 0;
-+			}
-+		}
-+
-+		return rc;
-+	}
-+
-+	data->timeout_recovery_failed = false;
-+	return 0;
-+}
-+
- static int dps310_read_pres_raw(struct dps310_data *data)
- {
- 	int rc;
- 	int rate;
--	int ready;
- 	int timeout;
- 	s32 raw;
- 	u8 val[3];
-@@ -409,9 +468,7 @@ static int dps310_read_pres_raw(struct d
- 	timeout = DPS310_POLL_TIMEOUT_US(rate);
- 
- 	/* Poll for sensor readiness; base the timeout upon the sample rate. */
--	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
--				      ready & DPS310_PRS_RDY,
--				      DPS310_POLL_SLEEP_US(timeout), timeout);
-+	rc = dps310_ready(data, DPS310_PRS_RDY, timeout);
- 	if (rc)
- 		goto done;
- 
-@@ -448,7 +505,6 @@ static int dps310_read_temp_raw(struct d
- {
- 	int rc;
- 	int rate;
--	int ready;
- 	int timeout;
- 
- 	if (mutex_lock_interruptible(&data->lock))
-@@ -458,10 +514,8 @@ static int dps310_read_temp_raw(struct d
- 	timeout = DPS310_POLL_TIMEOUT_US(rate);
- 
- 	/* Poll for sensor readiness; base the timeout upon the sample rate. */
--	rc = regmap_read_poll_timeout(data->regmap, DPS310_MEAS_CFG, ready,
--				      ready & DPS310_TMP_RDY,
--				      DPS310_POLL_SLEEP_US(timeout), timeout);
--	if (rc < 0)
-+	rc = dps310_ready(data, DPS310_TMP_RDY, timeout);
-+	if (rc)
- 		goto done;
- 
- 	rc = dps310_read_temp_ready(data);
-@@ -756,7 +810,7 @@ static void dps310_reset(void *action_da
- {
- 	struct dps310_data *data = action_data;
- 
--	regmap_write(data->regmap, DPS310_RESET, DPS310_RESET_MAGIC);
-+	dps310_reset_wait(data);
- }
- 
- static const struct regmap_config dps310_regmap_config = {
+ static int qcom_slim_ngd_ctrl_remove(struct platform_device *pdev)
 
 
