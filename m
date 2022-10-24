@@ -2,76 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AE460B3B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD36E60B3B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiJXROf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52012 "EHLO
+        id S234302AbiJXROj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235261AbiJXRNa (ORCPT
+        with ESMTP id S232988AbiJXRNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:13:30 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07909E31B6;
-        Mon, 24 Oct 2022 08:48:52 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id h185so8973146pgc.10;
-        Mon, 24 Oct 2022 08:48:52 -0700 (PDT)
+        Mon, 24 Oct 2022 13:13:34 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131919C7CA
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:49:01 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bj12so5894105ejb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:49:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=01FAQUXDHWGT0pvN08Zd2Y4vQUI1Ndzq/JvwPrJDnDg=;
-        b=qohQLIGoUpc53llOnkTVnVoO1UnsHU9EVAEF3wcxjFtTDCUeUYPQtNA28CPFzV0M1B
-         Ev1Ud+7z8uSDrpcc1gXBUYHgna0/+84q59ghGiq+3kRHQOImfT8MH9EkjEj7ovh1z5zb
-         k+ulIPxh90FiS5nQT1y/1ETiUEsy8i6IegC5TrDbRI22hEt7ku+wISLkKjdd4mTzxdLr
-         D7iz9cCn7jTVqQGhuoAUuj4rZMvZ3inoisTRxog3r0KmlVprlvqnwQNWV4y8wyk2DWjR
-         c8NZV1Uc1BPDl+L0lb0lNqv52MXjX3sy2rRTceYMFRrzxYECg5HNIg1oOXVTOoexRgma
-         MV9g==
+        bh=k8cUhyF+iRbpVm7ZibvpxWN910TkG4qCMbi/DBVKQRg=;
+        b=QCCxpZW74bpelD0cNFpuKewanqSBjPB7XKJWDhBUTh84B2UhnfiEX7GS+upegiuLBN
+         GnCLEiGyh2+g1Kl3P0dDR8QNa8afxCSggYk5rMFobYArvjr6oqrzFOf9gS3aSWB4ZFda
+         Xp17BhKgvbvZPef2NqX9p2f5t6HDGFD00BTLbhbHBUEGa05KY6EZmP42uKlWCESxSQDU
+         2Kg9+7nk8CAJQD0XlnwOFeQBBR0e0NvmzklW0Yz6WsNRJ+5/iRgp2e+8v/YGH2Opus7Q
+         DrQdCkgbinCnYan3+pBpZfZw1E5RRsY1RLLRy1yybVUMPQ1b+5k/ni9Kr73H8v8XF5nd
+         2tYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=01FAQUXDHWGT0pvN08Zd2Y4vQUI1Ndzq/JvwPrJDnDg=;
-        b=WfY602gpVqtNHWfuKgGywqRVbgDnCjX42mU19aUDoNiKX2FaoWMvIZwYQ0BniR8AWs
-         QeX0LGT3mgAbsm1NMngHZwA75ubSWVqfkN5YsxDsUX/4YY65tIgq/w1B7V2MyPXSSBKN
-         qYKz6zC5y5Y34ntsVA3+g0T6qTP4whnst9gY4/cK1RbTykkZwmHmBToAe2OnMdARemaC
-         WhfCXPHSycyUxmcbojmyNkz5Rmak3Dw8rC1pc9drfTf4t5G9CwTExvMPIu6bboJ86ZlT
-         DYvHJlpz4T1+JNH32ImiRVlGmz/Qoyu9UoqxfvAYQs1GKwGpiBmD5LSebsFH2tZT6WWU
-         Htgg==
-X-Gm-Message-State: ACrzQf0vAP2TtS99HCWEGI77p/RFs7Wk4cgzBtyelzEAnRy+O/bYb+NW
-        9Ix+4FjSEWAC69zyDlu8CwqrENg1zUliruRMwdE=
-X-Google-Smtp-Source: AMsMyM7c8Nrrtt96/WRD5Tp7wlJmOuqwQRjHvonhiJU/OoYKvAzMylG2U1aj4OLKnhJvecVk81/wFr8syc9PMO6g1UA=
-X-Received: by 2002:a05:6a00:1488:b0:563:9d96:660f with SMTP id
- v8-20020a056a00148800b005639d96660fmr34312292pfu.0.1666626447083; Mon, 24 Oct
- 2022 08:47:27 -0700 (PDT)
+        bh=k8cUhyF+iRbpVm7ZibvpxWN910TkG4qCMbi/DBVKQRg=;
+        b=j97L9XyQ5GfNpsaYwzeuI+9MRQTPCxOdiMUEp7EFWZkJz3o/GXi5pldQtJVhESXLWW
+         sXhqqqECvaO8eueolXr1rgRGRYA/XNsraBZ/tqSpZbH1M3qR6CaWvhSRAhNYxfsWcv9E
+         jah9smG9C7JaeVflrY6utZiAmJL41NneqPH59oVSfg9FuikoIlwLA0k35S+jIYqTUIzh
+         HPGNPzxnR4HcgjaQxotOI+PeIFjYypK52Yg5ziDQpx6sECAxoy5Q4PuK3zkyKGYSRIcv
+         2sJ/oRsBazPInkC23p6nK0BiB8LIIWwR70XAN6d8KCQK++DCfyeyFx5VC43naPBN+Pj8
+         /BLQ==
+X-Gm-Message-State: ACrzQf3ynVxkLudWafQuEXzCe9TtCM/vISBl8cczTvK8Yci6WItuaawa
+        pnDsT5meCxE88nQmWtmrMUCZiy9rTKmSwIeJ1bF6BA==
+X-Google-Smtp-Source: AMsMyM6eSCRZlQsr3x3MX2LJ8U7dR/Lcp1uuiIC6p0cWOh1wq3htWWGbxETJTk6iSILIXgvjOp4IhCLlxGinAjrVdY0=
+X-Received: by 2002:a17:907:5c2:b0:77e:def7:65d8 with SMTP id
+ wg2-20020a17090705c200b0077edef765d8mr28634968ejb.487.1666626461004; Mon, 24
+ Oct 2022 08:47:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221024112934.415391158@linuxfoundation.org>
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-From:   Luna Jernberg <droidbittin@gmail.com>
-Date:   Mon, 24 Oct 2022 17:47:15 +0200
-Message-ID: <CADo9pHhjFRSE6tiwtFQ1ku+o4rTJaezF0f3bs_4+-2KvpuOAtQ@mail.gmail.com>
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luna Jernberg <droidbittin@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
+References: <cover.1666357434.git.mazziesaccount@gmail.com>
+ <1ed8351c2cb4911fcda21b97f7a7b089e955c301.1666357434.git.mazziesaccount@gmail.com>
+ <d1ed9ab7-6d67-fd93-6a77-86ea029eedc5@gmail.com>
+In-Reply-To: <d1ed9ab7-6d67-fd93-6a77-86ea029eedc5@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Mon, 24 Oct 2022 17:47:29 +0200
+Message-ID: <CAG3jFyvveGsO6VW1q8-aK1psabze5gAN=wCn16+Q4A_KH=WuvA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/4] gpu: drm: sii902x: Use devm_regulator_bulk_get_enable()
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Works on my Arch Linux Server with Intel(R) Core(TM) i5-6400 CPU @ 2.70GHz
+On Fri, 21 Oct 2022 at 15:24, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>
+> On 10/21/22 16:18, Matti Vaittinen wrote:
+> > Simplify using devm_regulator_bulk_get_enable()
+> >
+> > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> > Reviewed-by: Robert Foss <robert.foss@linaro.org>
+>
+> Robert, I did slightly modify the return from probe when using the
+> dev_err_probe(). I still decided to keep your RBT - please let me know
+> if you disagree.
 
-Tested-by: Luna Jernberg <droidbittin@gmail.com>
+Not a problem. In fact, feel free to upgrade it to an acked-by, to
+simplify merging this series.
+
+Acked-by: Robert Foss <robert.foss@linaro.org>
+
+>
+> Eg, this:
+> > -     if (ret < 0) {
+> > -             dev_err_probe(dev, ret, "Failed to enable supplies");
+> > -             return ret;
+> > -     }
+>
+> was converted to:
+>  >      if (ret < 0)
+> > +             return dev_err_probe(dev, ret, "Failed to enable supplies");
+>
+> Yours
+>         -- Matti
+>
+> --
+> Matti Vaittinen
+> Linux kernel developer at ROHM Semiconductors
+> Oulu Finland
+>
+> ~~ When things go utterly wrong vim users can always type :help! ~~
+>
