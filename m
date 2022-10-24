@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC10260A58D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E4F60A571
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233694AbiJXM0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
+        id S233578AbiJXMZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233442AbiJXMX0 (ORCPT
+        with ESMTP id S233572AbiJXMXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:23:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91201B9C7;
+        Mon, 24 Oct 2022 08:23:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716F71AF15;
         Mon, 24 Oct 2022 04:59:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D51F6129D;
-        Mon, 24 Oct 2022 11:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC3E9C433D6;
-        Mon, 24 Oct 2022 11:59:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B59F6129B;
+        Mon, 24 Oct 2022 11:59:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50818C433C1;
+        Mon, 24 Oct 2022 11:59:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612775;
-        bh=RLkQdPDMRCOU/IECOAC2hHaLhoeqjEyfi9vzRWGTaUE=;
+        s=korg; t=1666612777;
+        bh=PjdSAhHFsEcQmApOu7TJ6TUEWQhU3Y739C1c8IFEpF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lsmr1yYGpl6Op8WcFhTiG6k9bCteAw+l0wy3R0EA1EoqEpFOFrI8sIeklZYtO+l8g
-         zP2SVYMfuxnDtelQJMaEviF5i6KbCoQr6wxfGs0cES85ZFfvvayq5YGabBF4U/bpfM
-         SFTuIsQUQXPJv6JuBsGewieV/rJ3H7uhndJ+PMVQ=
+        b=E738jcCP2MUsQ2ew8BI6HWfUbvcv18FV4JLcKyZPo7Ucryv6nmUx4HSrTnH1q6IHC
+         9SxOWGI0KJM/wad2Xv++pV4nWV9MFvf7zXnv7iBNfmuyvugmiSuPeAz/upGYXccn0I
+         4Pb0QYtUyQMOUAInAhFsLh2P8mPUvqdMUk1vPiig=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 113/229] ARM: dts: kirkwood: lsxl: remove first ethernet port
-Date:   Mon, 24 Oct 2022 13:30:32 +0200
-Message-Id: <20221024113002.657892483@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 114/229] ARM: dts: exynos: correct s5k6a3 reset polarity on Midas family
+Date:   Mon, 24 Oct 2022 13:30:33 +0200
+Message-Id: <20221024113002.689910603@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
 References: <20221024112959.085534368@linuxfoundation.org>
@@ -55,51 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-[ Upstream commit 2d528eda7c96ce5c70f895854ecd5684bd5d80b9 ]
+[ Upstream commit 3ba2d4bb9592bf7a6a3fe3dbe711ecfc3d004bab ]
 
-Both the Linkstation LS-CHLv2 and the LS-XHL have only one ethernet
-port. This has always been wrong, i.e. the board code used to set up
-both ports, but the driver will play nice and return -ENODEV if the
-assiciated PHY is not found. Nevertheless, it is wrong. Remove it.
+According to s5k6a3 driver code, the reset line for the chip appears to
+be active low. This also matches the typical polarity of reset lines in
+general. Let's fix it up as having correct polarity in DTS is important
+when the driver will be switched over to gpiod API.
 
-Fixes: 876e23333511 ("ARM: kirkwood: add gigabit ethernet and mvmdio device tree nodes")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Fixes: b4fec64758ab ("ARM: dts: Add camera device nodes for Exynos4412 TRATS2 board")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220913164104.203957-1-dmitry.torokhov@gmail.com
+Link: https://lore.kernel.org/r/20220926104354.118578-2-krzysztof.kozlowski@linaro.org'
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/kirkwood-lsxl.dtsi | 11 -----------
- 1 file changed, 11 deletions(-)
+ arch/arm/boot/dts/exynos4412-midas.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/kirkwood-lsxl.dtsi b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
-index 321a40a98ed2..88b70ba1c8fe 100644
---- a/arch/arm/boot/dts/kirkwood-lsxl.dtsi
-+++ b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
-@@ -218,22 +218,11 @@
- &mdio {
- 	status = "okay";
+diff --git a/arch/arm/boot/dts/exynos4412-midas.dtsi b/arch/arm/boot/dts/exynos4412-midas.dtsi
+index 60fbad25b5f2..93c8918e599b 100644
+--- a/arch/arm/boot/dts/exynos4412-midas.dtsi
++++ b/arch/arm/boot/dts/exynos4412-midas.dtsi
+@@ -525,7 +525,7 @@
+ 		clocks = <&camera 1>;
+ 		clock-names = "extclk";
+ 		samsung,camclk-out = <1>;
+-		gpios = <&gpm1 6 GPIO_ACTIVE_HIGH>;
++		gpios = <&gpm1 6 GPIO_ACTIVE_LOW>;
  
--	ethphy0: ethernet-phy@0 {
--		reg = <0>;
--	};
--
- 	ethphy1: ethernet-phy@8 {
- 		reg = <8>;
- 	};
- };
- 
--&eth0 {
--	status = "okay";
--	ethernet0-port@0 {
--		phy-handle = <&ethphy0>;
--	};
--};
--
- &eth1 {
- 	status = "okay";
- 	ethernet1-port@0 {
+ 		port {
+ 			is_s5k6a3_ep: endpoint {
 -- 
 2.35.1
 
