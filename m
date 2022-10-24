@@ -2,95 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012AC60A55E
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E7960A77B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbiJXMXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S234483AbiJXMvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233517AbiJXMWh (ORCPT
+        with ESMTP id S234713AbiJXMpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:22:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28ACAA447;
-        Mon, 24 Oct 2022 04:59:24 -0700 (PDT)
+        Mon, 24 Oct 2022 08:45:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E3520BE1;
+        Mon, 24 Oct 2022 05:09:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC7686127C;
-        Mon, 24 Oct 2022 11:58:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA70C433C1;
-        Mon, 24 Oct 2022 11:58:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 062C261254;
+        Mon, 24 Oct 2022 12:09:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F1BC433D6;
+        Mon, 24 Oct 2022 12:09:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612730;
-        bh=xK4TJAnvmIYn/27eY3hx0LNJJauXMyCiuXPB+sk2Bhk=;
+        s=korg; t=1666613361;
+        bh=2Vjaw+jnNPYG7C987hDFRmh/ww6z2y9ybP/IXCozQTs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RibFMv8QUds1gkZNQv+NqisbKHgSqIrQC6zNNpEiOmNQD7zOylUaw7tMmNLCdcQxh
-         mt3GmMNw35caGhP0xgFEa3ESaemwR/ED9vEfVALCLPKfkDOyznTmIPKpwbvlr6Mn+o
-         CKzu+ywk1AhJTyTdaSDUE3P/0R3A9L8Chyj+m2+Q=
+        b=jOjUGyq0IzlmWu9kmm6mkur/pupHbEG0AB5gO9F3p8RqSfS+v4KT/QoWIRW3zRb+N
+         BCsE0mlQo/w/5KpAdEoFgQHEDOMALt7tcyYaFuLlNJWS+SnnkBQxQHTgk2SHj7nAmE
+         CEF+2ncMsbdDvHQpzu68uODC8ExOa8XzgER+SIzc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 098/229] platform/x86: msi-laptop: Fix resource cleanup
+        stable@vger.kernel.org, Brent Lu <brent.lu@intel.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 107/255] ALSA: hda/hdmi: Dont skip notification handling during PM operation
 Date:   Mon, 24 Oct 2022 13:30:17 +0200
-Message-Id: <20221024113002.205914876@linuxfoundation.org>
+Message-Id: <20221024113006.021031087@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 5523632aa10f906dfe2eb714ee748590dc7fc6b1 ]
+[ Upstream commit 5226c7b9784eee215e3914f440b3c2e1764f67a8 ]
 
-Fix the input-device not getting free-ed on probe-errors and
-fix the msi_touchpad_dwork not getting cancelled on neither
-probe-errors nor on remove.
+The HDMI driver skips the notification handling from the graphics
+driver when the codec driver is being in the PM operation.  This
+behavior was introduced by the commit eb399d3c99d8 ("ALSA: hda - Skip
+ELD notification during PM process").  This skip may cause a problem,
+as we may miss the ELD update when the connection/disconnection
+happens right at the runtime-PM operation of the audio codec.
 
-Fixes: 143a4c0284dc ("msi-laptop: send out touchpad on/off key")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220825141336.208597-3-hdegoede@redhat.com
+Although this workaround was valid at that time, it's no longer true;
+the fix was required just because the ELD update procedure needed to
+wake up the audio codec, which had lead to a runtime-resume during a
+runtime-suspend.  Meanwhile, the ELD update procedure doesn't need a
+codec wake up any longer since the commit 788d441a164c ("ALSA: hda -
+Use component ops for i915 HDMI/DP audio jack handling"); i.e. there
+is no much reason for skipping the notification.
+
+Let's drop those checks for addressing the missing notification.
+
+Fixes: 788d441a164c ("ALSA: hda - Use component ops for i915 HDMI/DP audio jack handling")
+Reported-by: Brent Lu <brent.lu@intel.com>
+Link: https://lore.kernel.org/r/20220927135807.4097052-1-brent.lu@intel.com
+Link: https://lore.kernel.org/r/20221001074809.7461-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/msi-laptop.c | 3 +++
- 1 file changed, 3 insertions(+)
+ sound/pci/hda/patch_hdmi.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/platform/x86/msi-laptop.c b/drivers/platform/x86/msi-laptop.c
-index 7279390a2d54..1ba5f4689df4 100644
---- a/drivers/platform/x86/msi-laptop.c
-+++ b/drivers/platform/x86/msi-laptop.c
-@@ -1129,6 +1129,8 @@ static int __init msi_init(void)
- fail_create_group:
- 	if (quirks->load_scm_model) {
- 		i8042_remove_filter(msi_laptop_i8042_filter);
-+		cancel_delayed_work_sync(&msi_touchpad_dwork);
-+		input_unregister_device(msi_laptop_input_dev);
- 		cancel_delayed_work_sync(&msi_rfkill_dwork);
- 		cancel_work_sync(&msi_rfkill_work);
- 		rfkill_cleanup();
-@@ -1149,6 +1151,7 @@ static void __exit msi_cleanup(void)
- {
- 	if (quirks->load_scm_model) {
- 		i8042_remove_filter(msi_laptop_i8042_filter);
-+		cancel_delayed_work_sync(&msi_touchpad_dwork);
- 		input_unregister_device(msi_laptop_input_dev);
- 		cancel_delayed_work_sync(&msi_rfkill_dwork);
- 		cancel_work_sync(&msi_rfkill_work);
+diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
+index 169e74299987..091a7fe85451 100644
+--- a/sound/pci/hda/patch_hdmi.c
++++ b/sound/pci/hda/patch_hdmi.c
+@@ -2570,9 +2570,6 @@ static void generic_acomp_pin_eld_notify(void *audio_ptr, int port, int dev_id)
+ 	 */
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+-	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
+-		return;
+ 
+ 	check_presence_and_report(codec, pin_nid, dev_id);
+ }
+@@ -2775,9 +2772,6 @@ static void intel_pin_eld_notify(void *audio_ptr, int port, int pipe)
+ 	 */
+ 	if (codec->core.dev.power.power_state.event == PM_EVENT_SUSPEND)
+ 		return;
+-	/* ditto during suspend/resume process itself */
+-	if (snd_hdac_is_in_pm(&codec->core))
+-		return;
+ 
+ 	snd_hdac_i915_set_bclk(&codec->bus->core);
+ 	check_presence_and_report(codec, pin_nid, dev_id);
 -- 
 2.35.1
 
