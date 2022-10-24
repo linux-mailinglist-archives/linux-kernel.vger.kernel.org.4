@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36BF60BDE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4E560BDF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiJXWwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S231287AbiJXWy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231655AbiJXWwV (ORCPT
+        with ESMTP id S232155AbiJXWye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:52:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99A6C4DB0;
-        Mon, 24 Oct 2022 14:14:16 -0700 (PDT)
+        Mon, 24 Oct 2022 18:54:34 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC39321FE6;
+        Mon, 24 Oct 2022 14:16:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DEAC6126B;
-        Mon, 24 Oct 2022 12:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83BCFC433D7;
-        Mon, 24 Oct 2022 12:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666616072;
-        bh=Mjn4/qIoEwvaxVE1kPrhLixrix51jKEM9yIhJiB4OnQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vBZJsdUNw2MyiE5D9TYD1JPY/8vom0rognLtEqhNXeofWK9FGqT1G56Q96YAucxiZ
-         OGEGam5lzh2I7o+SF1miVbFLwGbJqYyIhvwjSbCU5ceKlg69kbeVhyi+/FUJR0NYpW
-         mJzCIni1GsMUy9bY+AzTzPrPqgJ6O19bawJBIIQM=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 463/530] ARM: dts: imx7d-sdb: config the max pressure for tsc2046
-Date:   Mon, 24 Oct 2022 13:33:27 +0200
-Message-Id: <20221024113106.005906229@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
-User-Agent: quilt/0.67
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6B8F3CE132B;
+        Mon, 24 Oct 2022 11:39:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F69C433B5;
+        Mon, 24 Oct 2022 11:39:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666611593;
+        bh=fCEDp+PSEpDcC1ByB+UoAAPsz26Ay97tQb1BDgCAMcw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QSrakSOHsS3P5RL6IVRNLl5dfP43mYfX5r5hqT2sjPb1KXq9PkhUgrQVjF4/g82ZQ
+         mfxoyjfTbGOYo/3mWl0Q+flNELb7tHYPdD2m5FOsxMWHG24jsJTvfRZhRrDBSRDsD3
+         PeMIIbEgLURz4ntcCQYZuVkJPaQZhGHQm3wIT9FmEuEJRINx5oBrm9hwvl4KOME4Zq
+         8GS75NZ0KRDOqjMuyCmN1vutpmVilT2xGBJD2mTpBDH4qn9coOOGAv0OQcNLTGiGbU
+         ed0fRsuDR8fJMfBcJeqLt/UDgZayIC67sZiQS+zlJFXqUHXnnPW9XY3DtJ4lYUmLk/
+         5IvECQW6HEkJA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D915F404BE; Mon, 24 Oct 2022 08:39:51 -0300 (-03)
+Date:   Mon, 24 Oct 2022 08:39:51 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org, Ammy Yi <ammy.yi@intel.com>
+Subject: Re: [PATCH v2] perf test: Do not fail Intel-PT misc test w/o
+ libpython
+Message-ID: <Y1Z5h/Sy6s8AFp1P@kernel.org>
+References: <20221021181055.60183-1-namhyung@kernel.org>
+ <CAP-5=fWaqhZu0sUTgBogpeOxF1gf=V0CZjQ=2NDJEbVB-Cvjew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fWaqhZu0sUTgBogpeOxF1gf=V0CZjQ=2NDJEbVB-Cvjew@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,60 +62,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+Em Fri, Oct 21, 2022 at 03:00:04PM -0700, Ian Rogers escreveu:
+> On Fri, Oct 21, 2022 at 11:11 AM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > The virtuall LBR test uses a python script to check the max size of
+> 
+> nit: virtual
 
-[ Upstream commit e7c4ebe2f9cd68588eb24ba4ed122e696e2d5272 ]
+Thanks, fixed and applied.
 
-Use the general touchscreen method to config the max pressure for
-touch tsc2046(data sheet suggest 8 bit pressure), otherwise, for
-ABS_PRESSURE, when config the same max and min value, weston will
-meet the following issue,
+- Arnaldo
+ 
+> > branch stack in the Intel-PT generated LBR.  But it didn't check whether
+> > python scripting is available (as it's optional).
+> >
+> > Let's skip the test if the python support is not available.
+> >
+> > Fixes: f77811a0f625 ("perf test: test_intel_pt.sh: Add 9 tests")
+> > Cc: Ammy Yi <ammy.yi@intel.com>
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> Acked-by: Ian Rogers <irogers@google.com>
+> 
+> Thanks,
+> Ian
+> 
+> > ---
+> >  tools/perf/tests/shell/test_intel_pt.sh | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/tools/perf/tests/shell/test_intel_pt.sh b/tools/perf/tests/shell/test_intel_pt.sh
+> > index 4c0aabbe33bd..f5ed7b1af419 100755
+> > --- a/tools/perf/tests/shell/test_intel_pt.sh
+> > +++ b/tools/perf/tests/shell/test_intel_pt.sh
+> > @@ -526,6 +526,12 @@ test_kernel_trace()
+> >  test_virtual_lbr()
+> >  {
+> >         echo "--- Test virtual LBR ---"
+> > +       # Check if python script is supported
+> > +       libpython=$(perf version --build-options | grep python | grep -cv OFF)
+> > +       if [ "${libpython}" != "1" ] ; then
+> > +               echo "SKIP: python scripting is not supported"
+> > +               return 2
+> > +       fi
+> >
+> >         # Python script to determine the maximum size of branch stacks
+> >         cat << "_end_of_file_" > "${maxbrstack}"
+> > --
+> > 2.38.0.135.g90850a2211-goog
+> >
 
-[17:19:39.183] event1  - ADS7846 Touchscreen: is tagged by udev as: Touchscreen
-[17:19:39.183] event1  - ADS7846 Touchscreen: kernel bug: device has min == max on ABS_PRESSURE
-[17:19:39.183] event1  - ADS7846 Touchscreen: was rejected
-[17:19:39.183] event1  - not using input device '/dev/input/event1'
-
-This will then cause the APP weston-touch-calibrator can't list touch devices.
-
-root@imx6ul7d:~# weston-touch-calibrator
-could not load cursor 'dnd-move'
-could not load cursor 'dnd-copy'
-could not load cursor 'dnd-none'
-No devices listed.
-
-And accroding to binding Doc, "ti,x-max", "ti,y-max", "ti,pressure-max"
-belong to the deprecated properties, so remove them. Also for "ti,x-min",
-"ti,y-min", "ti,x-plate-ohms", the value set in dts equal to the default
-value in driver, so are redundant, also remove here.
-
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Signed-off-by: Shawn Guo <shawnguo@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/arm/boot/dts/imx7d-sdb.dts | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
-
-diff --git a/arch/arm/boot/dts/imx7d-sdb.dts b/arch/arm/boot/dts/imx7d-sdb.dts
-index e5f1bdbe7992..4e1a6cde90fe 100644
---- a/arch/arm/boot/dts/imx7d-sdb.dts
-+++ b/arch/arm/boot/dts/imx7d-sdb.dts
-@@ -206,12 +206,7 @@
- 		interrupt-parent = <&gpio2>;
- 		interrupts = <29 0>;
- 		pendown-gpio = <&gpio2 29 GPIO_ACTIVE_HIGH>;
--		ti,x-min = /bits/ 16 <0>;
--		ti,x-max = /bits/ 16 <0>;
--		ti,y-min = /bits/ 16 <0>;
--		ti,y-max = /bits/ 16 <0>;
--		ti,pressure-max = /bits/ 16 <0>;
--		ti,x-plate-ohms = /bits/ 16 <400>;
-+		touchscreen-max-pressure = <255>;
- 		wakeup-source;
- 	};
- };
 -- 
-2.35.1
 
-
-
+- Arnaldo
