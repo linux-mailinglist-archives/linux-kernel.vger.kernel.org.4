@@ -2,228 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 923C860ABD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DABF60A52A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236887AbiJXN6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S233392AbiJXMVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236713AbiJXN5v (ORCPT
+        with ESMTP id S233471AbiJXMTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:57:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601BDA02FB
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:45:38 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C272022151;
-        Mon, 24 Oct 2022 11:55:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666612557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H0/B42P//vbH9o9jU3OTgEgJkODpPdMjmF6G/UQJEZA=;
-        b=ajejL/6+gmxHWM3hJainDmqqnfgn/iKC4Uw93ajFEQ0W3T6FE4dK7CyvtO1ll48ki1fBiQ
-        pZdhLRHCZ6YVfORKtnSZV6xYPedxCRVn0sG752UG2+Fr2PtKAVEG1P1t3GQmq7AnlbE+CC
-        bSmdORPJpip0AHuO2D7yXO7HchSVdTo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666612557;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H0/B42P//vbH9o9jU3OTgEgJkODpPdMjmF6G/UQJEZA=;
-        b=Zfq/1jrlLI8aZ4KFle640M4AAlheP6PWWmzuAjDQDMrW6idvda1Ol4wylOsTZQGDNgFFZN
-        3OL4T4+XEkit9LAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F4B313A79;
-        Mon, 24 Oct 2022 11:55:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ei9aFk19VmPaRgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 24 Oct 2022 11:55:57 +0000
-Message-ID: <af4c71cb-be60-e354-ca4f-23e834aca6e1@suse.de>
-Date:   Mon, 24 Oct 2022 13:55:56 +0200
+        Mon, 24 Oct 2022 08:19:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 009D97B5AD;
+        Mon, 24 Oct 2022 04:58:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9EA95D6E;
+        Mon, 24 Oct 2022 04:56:16 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.7.186])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A90F3F7B4;
+        Mon, 24 Oct 2022 04:56:06 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 12:56:03 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Guo Ren <guoren@kernel.org>, peterz@infradead.org
+Cc:     Lai Jiangshan <laijs@linux.alibaba.com>, arnd@arndb.de,
+        palmer@rivosinc.com, tglx@linutronix.de, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, zouyipeng@huawei.com,
+        bigeasy@linutronix.de, David.Laight@aculab.com,
+        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Borislav Petkov <bp@alien8.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH V6 04/11] compiler_types.h: Add __noinstr_section() for
+ noinstr
+Message-ID: <Y1Z9U7XN4nlGg8yb@FVFF77S0Q05N>
+References: <20221002012451.2351127-1-guoren@kernel.org>
+ <20221002012451.2351127-5-guoren@kernel.org>
+ <YzrJ0wQxWfjWCxhQ@FVFF77S0Q05N>
+ <CAJF2gTRBEGx3qncpk_C8rCsFN+kqxjgeAcPvZU5m7kDnpwytoA@mail.gmail.com>
+ <Y1ERsP0YYVNulWnw@FVFF77S0Q05N>
+ <CAJF2gTTurEaFjbKvj1tUptq_TLpXeBAE1UstNYxriC-7r5MHpQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
-Content-Language: en-US
-To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-References: <20221022214622.18042-1-ogabbay@kernel.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20221022214622.18042-1-ogabbay@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------76aPfJh2VVAwv6Ip0RET7ACr"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJF2gTTurEaFjbKvj1tUptq_TLpXeBAE1UstNYxriC-7r5MHpQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------76aPfJh2VVAwv6Ip0RET7ACr
-Content-Type: multipart/mixed; boundary="------------09mWeBzGlwIlNwaqtclMmriZ";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Jason Gunthorpe <jgg@nvidia.com>, John Hubbard <jhubbard@nvidia.com>,
- Alex Deucher <alexander.deucher@amd.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>,
- Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>, Jiho Chu
- <jiho.chu@samsung.com>, Daniel Stone <daniel@fooishbar.org>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- Jeffrey Hugo <quic_jhugo@quicinc.com>, Christoph Hellwig
- <hch@infradead.org>, Kevin Hilman <khilman@baylibre.com>,
- Jagan Teki <jagan@amarulasolutions.com>,
- Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
- Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-Message-ID: <af4c71cb-be60-e354-ca4f-23e834aca6e1@suse.de>
-Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
-References: <20221022214622.18042-1-ogabbay@kernel.org>
-In-Reply-To: <20221022214622.18042-1-ogabbay@kernel.org>
+On Thu, Oct 20, 2022 at 08:29:28PM +0800, Guo Ren wrote:
+> Hi Mark and Lai,
+> 
+> On Thu, Oct 20, 2022 at 5:15 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Sat, Oct 08, 2022 at 09:54:39AM +0800, Guo Ren wrote:
+> > > On Mon, Oct 3, 2022 at 7:39 PM Mark Rutland <mark.rutland@arm.com> wrote:
+> > > >
+> > > > On Sat, Oct 01, 2022 at 09:24:44PM -0400, guoren@kernel.org wrote:
+> > > > > From: Lai Jiangshan <laijs@linux.alibaba.com>
+> > > > >
+> > > > > And it will be extended for C entry code.
+> > > > >
+> > > > > Cc: Borislav Petkov <bp@alien8.de>
+> > > > > Reviewed-by: Miguel Ojeda <ojeda@kernel.org>
+> > > > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > > > > Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+> > > > > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > > > > Signed-off-by: Lai Jiangshan <laijs@linux.alibaba.com>
+> > > > > ---
+> > > > >  include/linux/compiler_types.h | 8 +++++---
+> > > > >  1 file changed, 5 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> > > > > index 4f2a819fd60a..e9ce11ea4d8b 100644
+> > > > > --- a/include/linux/compiler_types.h
+> > > > > +++ b/include/linux/compiler_types.h
+> > > > > @@ -227,9 +227,11 @@ struct ftrace_likely_data {
+> > > > >  #endif
+> > > > >
+> > > > >  /* Section for code which can't be instrumented at all */
+> > > > > -#define noinstr                                                              \
+> > > > > -     noinline notrace __attribute((__section__(".noinstr.text")))    \
+> > > > > -     __no_kcsan __no_sanitize_address __no_profile __no_sanitize_coverage
+> > > > > +#define __noinstr_section(section)                           \
+> > > > > +     noinline notrace __section(section) __no_profile        \
+> > > > > +     __no_kcsan __no_sanitize_address __no_sanitize_coverage
+> > > > > +
+> > > > > +#define noinstr __noinstr_section(".noinstr.text")
+> > > >
+> > > > One thing proably worth noting here is that while KPROBES will avoid
+> > > > instrumenting `.noinstr.text`, that won't happen automatically for other
+> > > > __noinstr_section() sections, and that will need to be inhibited through other
+> > > > means (e.g. the kprobes blacklist, explicit NOKPROBE_SYMBOL() annotation, or
+> > > > otherwise).
+> > >
+> > > In riscv, "we select HAVE_KPROBES if !XIP_KERNEL", so don't worry
+> > > about that. I don't think we could enable kprobe for XIP_KERNEL in the
+> > > future.
+> >
+> > Sure; but someone else might use __noinstr_section() elsewhere where this could
+> > matter, and I was suggesting that we could add a comment as above.
+> Okay, how about:
+> 
+> /* Be care KPROBES will avoid instrumenting .noinstr.text, not
+> __noinstr_section(). */
+> #define __noinstr_section(section)                             \
+>        noinline notrace __section(section) __no_profile        \
+>        __no_kcsan __no_sanitize_address __no_sanitize_coverage
 
---------------09mWeBzGlwIlNwaqtclMmriZ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+How about we split this like:
 
-SGkNCg0KQW0gMjIuMTAuMjIgdW0gMjM6NDYgc2NocmllYiBPZGVkIEdhYmJheToNCj4gSW4g
-dGhlIGxhc3QgY291cGxlIG9mIG1vbnRocyB3ZSBoYWQgYSBkaXNjdXNzaW9uIFsxXSBhYm91
-dCBjcmVhdGluZyBhIG5ldw0KPiBzdWJzeXN0ZW0gZm9yIGNvbXB1dGUgYWNjZWxlcmF0b3Ig
-ZGV2aWNlcyBpbiB0aGUga2VybmVsLg0KPiANCj4gQWZ0ZXIgYW4gYW5hbHlzaXMgdGhhdCB3
-YXMgZG9uZSBieSBEUk0gbWFpbnRhaW5lcnMgYW5kIG15c2VsZiwgYW5kIGZvbGxvd2luZw0K
-PiBhIEJPRiBzZXNzaW9uIGF0IHRoZSBMaW51eCBQbHVtYmVycyBjb25mZXJlbmNlIGEgZmV3
-IHdlZWtzIGFnbyBbMl0sIHdlDQo+IGRlY2lkZWQgdG8gY3JlYXRlIGEgbmV3IHN1YnN5c3Rl
-bSB0aGF0IHdpbGwgdXNlIHRoZSBEUk0gc3Vic3lzdGVtJ3MgY29kZSBhbmQNCj4gZnVuY3Rp
-b25hbGl0eS4gaS5lLiB0aGUgYWNjZWwgY29yZSBjb2RlIHdpbGwgYmUgcGFydCBvZiB0aGUg
-RFJNIHN1YnN5c3RlbS4NCj4gDQo+IFRoaXMgd2lsbCBhbGxvdyB1cyB0byBsZXZlcmFnZSB0
-aGUgZXh0ZW5zaXZlIERSTSBjb2RlLWJhc2UgYW5kDQo+IGNvbGxhYm9yYXRlIHdpdGggRFJN
-IGRldmVsb3BlcnMgdGhhdCBoYXZlIGV4cGVyaWVuY2Ugd2l0aCB0aGlzIHR5cGUgb2YNCj4g
-ZGV2aWNlcy4gSW4gYWRkaXRpb24sIG5ldyBmZWF0dXJlcyB0aGF0IHdpbGwgYmUgYWRkZWQg
-Zm9yIHRoZSBhY2NlbGVyYXRvcg0KPiBkcml2ZXJzIGNhbiBiZSBvZiB1c2UgdG8gR1BVIGRy
-aXZlcnMgYXMgd2VsbCAoZS5nLiBSQVMpLg0KPiANCj4gQXMgYWdyZWVkIGluIHRoZSBCT0Yg
-c2Vzc2lvbiwgdGhlIGFjY2VsZXJhdG9yIGRldmljZXMgd2lsbCBiZSBleHBvc2VkIHRvDQo+
-IHVzZXItc3BhY2Ugd2l0aCBhIG5ldywgZGVkaWNhdGVkIGRldmljZSBjaGFyIGZpbGVzIGFu
-ZCBhIGRlZGljYXRlZCBtYWpvcg0KPiBudW1iZXIgKDI2MSksIHRvIGNsZWFybHkgc2VwYXJh
-dGUgdGhlbSBmcm9tIGdyYXBoaWMgY2FyZHMgYW5kIHRoZSBncmFwaGljDQo+IHVzZXItc3Bh
-Y2Ugcy93IHN0YWNrLiBGdXJ0aGVybW9yZSwgdGhlIGRyaXZlcnMgd2lsbCBiZSBsb2NhdGVk
-IGluIGEgc2VwYXJhdGUNCj4gcGxhY2UgaW4gdGhlIGtlcm5lbCB0cmVlIChkcml2ZXJzL2Fj
-Y2VsLykuDQo+IA0KPiBUaGlzIHNlcmllcyBvZiBwYXRjaGVzIGlzIHRoZSBmaXJzdCBzdGVw
-IGluIHRoaXMgZGlyZWN0aW9uIGFzIGl0IGFkZHMgdGhlDQo+IG5lY2Vzc2FyeSBpbmZyYXN0
-cnVjdHVyZSBmb3IgYWNjZWxlcmF0b3IgZGV2aWNlcyB0byBEUk0uIFRoZSBuZXcgZGV2aWNl
-cyB3aWxsDQo+IGJlIGV4cG9zZWQgd2l0aCB0aGUgZm9sbG93aW5nIGNvbnZlbnRpb246DQo+
-IA0KPiBkZXZpY2UgY2hhciBmaWxlcyAtIC9kZXYvYWNjZWwvYWNjZWwqDQo+IHN5c2ZzICAg
-ICAgICAgICAgIC0gL3N5cy9jbGFzcy9hY2NlbC9hY2NlbCovDQo+IGRlYnVnZnMgICAgICAg
-ICAgIC0gL3N5cy9rZXJuZWwvZGVidWcvYWNjZWwvYWNjZWwqLw0KDQpJIGtub3cgSSdtIHJl
-YWxseSBsYXRlIHRvIHRoaXMgZGlzY3Vzc2lvbiwgYnV0IHdvdWxkbid0ICdjb21wdXRlJyBi
-ZSBhIA0KYmV0dGVyIG5hbWU/DQoNCihJIGFncmVlIHRoYXQgc2t5bmV0IHdvdWxkIGFsc28g
-YmUgbmljZSA6KQ0KDQo+IA0KPiBJIHRyaWVkIHRvIHJldXNlIHRoZSBleGlzdGluZyBEUk0g
-Y29kZSBhcyBtdWNoIGFzIHBvc3NpYmxlLCB3aGlsZSBrZWVwaW5nIGl0DQo+IHJlYWRhYmxl
-IGFuZCBtYWludGFpbmFibGUuDQo+IA0KPiBPbmUgdGhpbmcgdGhhdCBpcyBtaXNzaW5nIGZy
-b20gdGhpcyBzZXJpZXMgaXMgZGVmaW5pbmcgYSBuYW1lc3BhY2UgZm9yIHRoZQ0KPiBuZXcg
-YWNjZWwgc3Vic3lzdGVtLCB3aGlsZSBJJ2xsIGFkZCBpbiB0aGUgbmV4dCBpdGVyYXRpb24g
-b2YgdGhpcyBwYXRjaC1zZXQsDQo+IGFmdGVyIEkgd2lsbCByZWNlaXZlIGZlZWRiYWNrIGZy
-b20gdGhlIGNvbW11bml0eS4NCj4gDQo+IEFzIGZvciBkcml2ZXJzLCBvbmNlIHRoaXMgc2Vy
-aWVzIHdpbGwgYmUgYWNjZXB0ZWQgKGFmdGVyIGFkZGluZyB0aGUgbmFtZXNwYWNlKSwNCj4g
-SSB3aWxsIHN0YXJ0IHdvcmtpbmcgb24gbWlncmF0aW5nIHRoZSBoYWJhbmFsYWJzIGRyaXZl
-ciB0byB0aGUgbmV3IGFjY2VsDQo+IHN1YnN5c3RlbS4gSSBoYXZlIHRhbGtlZCBhYm91dCBp
-dCB3aXRoIERhdmUgYW5kIHdlIGFncmVlZCB0aGF0IGl0IHdpbGwgYmUNCj4gYSBnb29kIHN0
-YXJ0IHRvIHNpbXBseSBtb3ZlIHRoZSBkcml2ZXIgYXMtaXMgd2l0aCBtaW5pbWFsIGNoYW5n
-ZXMsIGFuZCB0aGVuDQo+IHN0YXJ0IHdvcmtpbmcgb24gdGhlIGRyaXZlcidzIGluZGl2aWR1
-YWwgZmVhdHVyZXMgdGhhdCB3aWxsIGJlIGVpdGhlciBhZGRlZA0KPiB0byB0aGUgYWNjZWwg
-Y29yZSBjb2RlICh3aXRoIG9yIHdpdGhvdXQgY2hhbmdlcyksIG9yIHdpbGwgYmUgcmVtb3Zl
-ZCBhbmQNCj4gaW5zdGVhZCB0aGUgZHJpdmVyIHdpbGwgdXNlIGV4aXN0aW5nIERSTSBjb2Rl
-Lg0KDQpXaGF0J3MgeW91ciBvcGluaW9uIG9uIHRoZSBsb25nLXRlcm0gcHJvc3BlY3Qgb2Yg
-RFJNIHZzIGFjY2VsPyBJIGFzc3VtZSANCnRoYXQgb3ZlciB0aW1lLCBEUk0gaGVscGVycyB3
-aWxsIG1vdmUgaW50byBhY2NlbCBhbmQgc29tZSBEUk0gZHJpdmVycyANCndpbGwgc3RhcnQg
-ZGVwZW5kaW5nIG9uIGFjY2VsPw0KDQpBZnRlciByZWFkaW5nIHRoZSBwcm92aWRlZCBsaW5r
-cywgSSB3b25kZXJlZCBpZiB3ZSBzaG91bGRuJ3QgcmVuYW1lIA0KZHJpdmVycy9ncHUgdG8g
-ZHJpdmVycy9hY2NlbCBhbmQgcHV0IHRoZSBuZXcgc3Vic3lzdGVtIGludG8gDQpkcml2ZXJz
-L2FjY2VsL2NvbXB1dGUuIFdlJ2QgaGF2ZSBEUk0gYW5kIGNvbXB1dGUgZGV2aWNlcyBuZXh0
-IHRvIGVhY2ggDQpvdGhlciBhbmQgc2hhcmVkIGhlbHBlcnMgY291bGQgYmUgbG9jYXRlZCBp
-biBvdGhlciBzdWJkaXJlY3RvcmllcyB3aXRoaW4gDQphY2NlbC8NCg0KQmVzdCByZWdhcmRz
-DQpUaG9tYXMNCg0KPiANCj4gSW4gYWRkaXRpb24sIEkga25vdyBvZiBhdCBsZWFzdCAzIG9y
-IDQgZHJpdmVycyB0aGF0IHdlcmUgc3VibWl0dGVkIGZvciByZXZpZXcNCj4gYW5kIGFyZSBn
-b29kIGNhbmRpZGF0ZXMgdG8gYmUgaW5jbHVkZWQgaW4gdGhpcyBuZXcgc3Vic3lzdGVtLCBp
-bnN0ZWFkIG9mIGJlaW5nDQo+IGEgZHJtIHJlbmRlciBub2RlIGRyaXZlciBvciBhIG1pc2Mg
-ZHJpdmVyLg0KPiANCj4gWzFdIGh0dHBzOi8vbGttbC5vcmcvbGttbC8yMDIyLzcvMzEvODMN
-Cj4gWzJdIGh0dHBzOi8vYWlybGllZC5ibG9nc3BvdC5jb20vMjAyMi8wOS9hY2NlbGVyYXRv
-cnMtYm9mLW91dGNvbWVzLXN1bW1hcnkuaHRtbA0KPiANCj4gVGhhbmtzLA0KPiBPZGVkDQo+
-IA0KPiBPZGVkIEdhYmJheSAoMyk6DQo+ICAgIGRyaXZlcnMvYWNjZWw6IGFkZCBuZXcga2Nv
-bmZpZyBhbmQgdXBkYXRlIE1BSU5UQUlORVJTDQo+ICAgIGRybTogZGVmaW5lIG5ldyBhY2Nl
-bCBtYWpvciBhbmQgcmVnaXN0ZXIgaXQNCj4gICAgZHJtOiBhZGQgZGVkaWNhdGVkIG1pbm9y
-IGZvciBhY2NlbGVyYXRvciBkZXZpY2VzDQo+IA0KPiAgIERvY3VtZW50YXRpb24vYWRtaW4t
-Z3VpZGUvZGV2aWNlcy50eHQgfCAgIDUgKw0KPiAgIE1BSU5UQUlORVJTICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgfCAgIDggKw0KPiAgIGRyaXZlcnMvS2NvbmZpZyAgICAgICAgICAg
-ICAgICAgICAgICAgfCAgIDIgKw0KPiAgIGRyaXZlcnMvYWNjZWwvS2NvbmZpZyAgICAgICAg
-ICAgICAgICAgfCAgMjQgKysrDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9kcnYuYyAgICAg
-ICAgICAgICB8IDIxNCArKysrKysrKysrKysrKysrKysrKystLS0tLQ0KPiAgIGRyaXZlcnMv
-Z3B1L2RybS9kcm1fZmlsZS5jICAgICAgICAgICAgfCAgNjkgKysrKysrLS0tDQo+ICAgZHJp
-dmVycy9ncHUvZHJtL2RybV9pbnRlcm5hbC5oICAgICAgICB8ICAgNSArLQ0KPiAgIGRyaXZl
-cnMvZ3B1L2RybS9kcm1fc3lzZnMuYyAgICAgICAgICAgfCAgODEgKysrKysrKysrLQ0KPiAg
-IGluY2x1ZGUvZHJtL2RybV9kZXZpY2UuaCAgICAgICAgICAgICAgfCAgIDMgKw0KPiAgIGlu
-Y2x1ZGUvZHJtL2RybV9kcnYuaCAgICAgICAgICAgICAgICAgfCAgIDggKw0KPiAgIGluY2x1
-ZGUvZHJtL2RybV9maWxlLmggICAgICAgICAgICAgICAgfCAgMjEgKystDQo+ICAgaW5jbHVk
-ZS9kcm0vZHJtX2lvY3RsLmggICAgICAgICAgICAgICB8ICAgMSArDQo+ICAgMTIgZmlsZXMg
-Y2hhbmdlZCwgMzc0IGluc2VydGlvbnMoKyksIDY3IGRlbGV0aW9ucygtKQ0KPiAgIGNyZWF0
-ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2FjY2VsL0tjb25maWcNCj4gDQo+IC0tDQo+IDIuMzQu
-MQ0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVs
-b3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3Ry
-LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVy
-ZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
+| /*
+|  * Prevent the compiler from instrumenting this code in any way
+|  * This does not prevent instrumentation via KPROBES, which must be
+|  * prevented through other means if necessary.
+|  */
+| #define __no_compiler_instrument				\
+| 	noinline notrace noinline notrace __no_kcsan		\
+| 	__no_sanitize_address __no_sanitize_coverage
+| 
+| /* 
+|  * Section for code which can't be instrumented at all.
+|  * Any code in this section cannot be instrumented with KPROBES.
+|  */
+| #define noinstr __no_compiler_instrument section(".noinstr.text")
 
---------------09mWeBzGlwIlNwaqtclMmriZ--
+... then we don't need __noinstr_section(), and IMO the split is
+clearer.
 
---------------76aPfJh2VVAwv6Ip0RET7ACr
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Peter?
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNWfUwFAwAAAAAACgkQlh/E3EQov+Bd
-HxAAl/5K+GslyJ0nydGqq9cuuXwXOpe68zzie1S1JIojDbG0HuiYEe6eJW9BlhySLNl+blqtlnrY
-1k+Lm2mqzqaL/p7fOmA0JRQ5hcJyCsqpFbg4kIn54F/YeYCZAhK+YQX5639v+uTjPGvBiq4TKzNi
-5RAGWjQepEso/nwH7+CA6v0bk5ScF8VQdAYE3H/okVMBStfrQa439wigzTw9dVWQDWonpUqV9Oy/
-xCpE7KBbLPmQrC0QaAZd9oS9zWJ/zLh/7IgXATVh8WsJEf6vdeLliUp6GznPvqdrzIfcNQIBtUQd
-J6r6GfKjuNSHnKM8uV6BOX25CmBgg5ioQNPwCIw34Rr8XDgY0BTa+eex95hD6USh7QzWC19Xoksr
-x6HcD9ulpgi/H9F2FmmPdfoCRseKXKYbTimL6gvJG2u0f+4XKB4ZNPaGg7ct/JJd8a+J/0dbLK2W
-nxbjI7UcakK2biULNis+6p3y01YcaDVwQYuXgqM/o9u7jmN7/LK+V/8yW3KIq2ubFFMoBbP23gCh
-V1fVbPpV0fuOJ9u9IRHNon9wyCNDKLDOWD4eWEcpB0XqnIPy2QCzZihvk3JQGgHx8kZgk3W0mGPz
-C4bZUFDgtoyFmzS20n69SEtPv+lDZ6iUj6MdcV8ikd7wGs3CuazbVoPeydfm9bOMnmynuCLcS2Y3
-1iU=
-=Fis9
------END PGP SIGNATURE-----
-
---------------76aPfJh2VVAwv6Ip0RET7ACr--
+Thanks,
+Mark.
