@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3490B60A426
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CB260A6C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiJXMFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
+        id S234145AbiJXMjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbiJXMDn (ORCPT
+        with ESMTP id S234687AbiJXMfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:03:43 -0400
+        Mon, 24 Oct 2022 08:35:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95B82529A;
-        Mon, 24 Oct 2022 04:49:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7A2356E4;
+        Mon, 24 Oct 2022 05:05:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 160E661297;
-        Mon, 24 Oct 2022 11:46:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC2F4C433C1;
-        Mon, 24 Oct 2022 11:46:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C8A8F612D4;
+        Mon, 24 Oct 2022 12:05:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8CE8C433C1;
+        Mon, 24 Oct 2022 12:05:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612014;
-        bh=jhLDQTT4TMT/PEN5WFUx8lDz+PpXY7GMiLZ2aEmsCXc=;
+        s=korg; t=1666613119;
+        bh=BFat5BEfy41jcfjN1LQSScF9bLmYMpIuSmHtawi1W2c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wstHEplyTeePBHY9czhAmpdBhzlSqpqglyEk3AC068+HhOGl7CVt5ZfpXrwwFP1AV
-         2CGkSUrJBrT2R1sjGtJZt7m1Y7wOe0/vB2zSvgeAghGh47JbmToQg572FMWTQb9oYI
-         7PKuWKeeBLzd+It7hsYD+61Yf5ScLqOWoSDw/JWc=
+        b=Dn6lxCakEg6uASYIXyVpP/I6uq7CIElvHrQD6ODfRLKCnEklWrmQygSkIHo+VcKJZ
+         Cfnu0xrSY0IVFZS3p2uo3xzeRIlFF9R7snHY0zKI1kIbIwiyAHbnmYjKFtOKmEvXP0
+         E6ykY9wTmCaKn7Zsf4Znaazn82So4FmwCzLE8k30=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        huang ying <huang.ying.caritas@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.14 009/210] mm/migrate_device.c: flush TLB while holding PTL
+        stable@vger.kernel.org, Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 5.4 016/255] can: kvaser_usb: Fix use of uninitialized completion
 Date:   Mon, 24 Oct 2022 13:28:46 +0200
-Message-Id: <20221024112957.183720272@linuxfoundation.org>
+Message-Id: <20221024113002.973471295@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -69,74 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Popple <apopple@nvidia.com>
+From: Anssi Hannula <anssi.hannula@bitwise.fi>
 
-commit 60bae73708963de4a17231077285bd9ff2f41c44 upstream.
+commit cd7f30e174d09a02ca2afa5ef093fb0f0352e0d8 upstream.
 
-When clearing a PTE the TLB should be flushed whilst still holding the PTL
-to avoid a potential race with madvise/munmap/etc.  For example consider
-the following sequence:
+flush_comp is initialized when CMD_FLUSH_QUEUE is sent to the device and
+completed when the device sends CMD_FLUSH_QUEUE_RESP.
 
-  CPU0                          CPU1
-  ----                          ----
+This causes completion of uninitialized completion if the device sends
+CMD_FLUSH_QUEUE_RESP before CMD_FLUSH_QUEUE is ever sent (e.g. as a
+response to a flush by a previously bound driver, or a misbehaving
+device).
 
-  migrate_vma_collect_pmd()
-  pte_unmap_unlock()
-                                madvise(MADV_DONTNEED)
-                                -> zap_pte_range()
-                                pte_offset_map_lock()
-                                [ PTE not present, TLB not flushed ]
-                                pte_unmap_unlock()
-                                [ page is still accessible via stale TLB ]
-  flush_tlb_range()
+Fix that by initializing flush_comp in kvaser_usb_init_one() like the
+other completions.
 
-In this case the page may still be accessed via the stale TLB entry after
-madvise returns.  Fix this by flushing the TLB while holding the PTL.
+This issue is only triggerable after RX URBs have been set up, i.e. the
+interface has been opened at least once.
 
-Fixes: 8c3328f1f36a ("mm/migrate: migrate_vma() unmap page from vma while collecting pages")
-Link: https://lkml.kernel.org/r/9f801e9d8d830408f2ca27821f606e09aa856899.1662078528.git-series.apopple@nvidia.com
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Reported-by: Nadav Amit <nadav.amit@gmail.com>
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Peter Xu <peterx@redhat.com>
-Cc: Alex Sierra <alex.sierra@amd.com>
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-Cc: huang ying <huang.ying.caritas@gmail.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Karol Herbst <kherbst@redhat.com>
-Cc: Logan Gunthorpe <logang@deltatee.com>
-Cc: Lyude Paul <lyude@redhat.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Paul Mackerras <paulus@ozlabs.org>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: stable@vger.kernel.org
+Fixes: aec5fb2268b7 ("can: kvaser_usb: Add support for Kvaser USB hydra family")
+Tested-by: Jimmy Assarsson <extja@kvaser.com>
+Signed-off-by: Anssi Hannula <anssi.hannula@bitwise.fi>
+Signed-off-by: Jimmy Assarsson <extja@kvaser.com>
+Link: https://lore.kernel.org/all/20221010150829.199676-3-extja@kvaser.com
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/migrate.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c  |    1 +
+ drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c |    2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2349,13 +2349,14 @@ next:
- 		migrate->dst[migrate->npages] = 0;
- 		migrate->src[migrate->npages++] = mpfn;
- 	}
--	arch_leave_lazy_mmu_mode();
--	pte_unmap_unlock(ptep - 1, ptl);
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_core.c
+@@ -690,6 +690,7 @@ static int kvaser_usb_init_one(struct kv
+ 	init_usb_anchor(&priv->tx_submitted);
+ 	init_completion(&priv->start_comp);
+ 	init_completion(&priv->stop_comp);
++	init_completion(&priv->flush_comp);
+ 	priv->can.ctrlmode_supported = 0;
  
- 	/* Only flush the TLB if we actually modified any entries */
- 	if (unmapped)
- 		flush_tlb_range(walk->vma, start, end);
+ 	priv->dev = dev;
+--- a/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
++++ b/drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c
+@@ -1886,7 +1886,7 @@ static int kvaser_usb_hydra_flush_queue(
+ {
+ 	int err;
  
-+	arch_leave_lazy_mmu_mode();
-+	pte_unmap_unlock(ptep - 1, ptl);
-+
- 	return 0;
- }
+-	init_completion(&priv->flush_comp);
++	reinit_completion(&priv->flush_comp);
  
+ 	err = kvaser_usb_hydra_send_simple_cmd(priv->dev, CMD_FLUSH_QUEUE,
+ 					       priv->channel);
 
 
