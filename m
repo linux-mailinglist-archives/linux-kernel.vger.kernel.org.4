@@ -2,115 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD2C60BBFB
+	by mail.lfdr.de (Postfix) with ESMTP id 09CB060BBFA
 	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbiJXVTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
+        id S233328AbiJXVTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232578AbiJXVSp (ORCPT
+        with ESMTP id S231559AbiJXVSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:18:45 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A080E4C00
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:25:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=b2nReaG1mCRiKbCZjQgb4YgXzFQlU7/T+Rc0H2wStkOnyKACYpqX8DsKXHYnsscLx49YzCGRNR6NZIXtCpQtwKO0hsVYFXleX248XDizUdnzzuxpzDX4KAb72fFanUlWB+Yrj/LANu72ieJs1aim+jC4TSWyiSIklP7RShvmSNsz11GQ7zlMgEOMXp0jbxIKg2T7MlBR7kalbsDzpemIVN1RO3o35xPGTejuoysR4MIipwL/GVTeutAbNgnuI+mPBCGI9HDDwZBG7hoRbQhtWxojW5r7WGm8Z2TGt37XgvVdLaXjDd6Sk6IvudNMFVvcKnIxG0yfgh6HroW3/Y6aRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/FZIDUtBWWbZ/wPiPscK9ZnHx0FFs3KSQkoOu752NP0=;
- b=HEKcYgU1FlICKplRGmCY6hF87pLKGPAUPc7jBzkrlFsyVCkCJ8uZyRUsRnvqEtX9nOvOzgRG3KskYBTue2DAt2aPEQqkf81dsG9AGkrGMxnH+jNlOYgWtl78eIvnPhWe3r38anglVlrWAjAeZcqodAq3730q0PLufR2U53kL2Vp6dxIUInOa5Y4OBj2H2wEKdJYNP5ErXcIE9mYFV7eya1lTwZfpQeJhUjY0hT1G3cONLdBH6emmzwyyiO6BCQn3z2PoOIRohXqVslQG+4iWEL/YZ27ny/86cGcd7Okkfl47vnvFHnaaOLS66G5fnT6FN5GbQdDsU/hCHn7NKzC+9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/FZIDUtBWWbZ/wPiPscK9ZnHx0FFs3KSQkoOu752NP0=;
- b=mMmO6XxfxfGp5b/UPFZxaxuggkTDabq1DYUe1lNqmUDWZEW9y7oNi/tbyqvX6vgt59OOWRiLfr9wt+1z7E+yJg2LNRQguRB3q/bdqWOi4Re6EjM87EDmOYA7y7D2+p+goeL/bWYszYfwK9N1MfgrqTzSKy3XFCDnKeTv06LI/r8=
-Received: from BN9PR03CA0717.namprd03.prod.outlook.com (2603:10b6:408:ef::32)
- by BY5PR12MB4146.namprd12.prod.outlook.com (2603:10b6:a03:20d::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
- 2022 19:22:17 +0000
-Received: from BL02EPF0000C406.namprd05.prod.outlook.com
- (2603:10b6:408:ef:cafe::25) by BN9PR03CA0717.outlook.office365.com
- (2603:10b6:408:ef::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26 via Frontend
- Transport; Mon, 24 Oct 2022 19:22:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0000C406.mail.protection.outlook.com (10.167.241.8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5723.20 via Frontend Transport; Mon, 24 Oct 2022 19:22:17 +0000
-Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
- 2022 14:22:15 -0500
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Roman Li <roman.li@amd.com>, Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        "Harry Wentland" <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Wayne Lin <Wayne.Lin@amd.com>, Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Lyude Paul <lyude@redhat.com>, Ian Chen <ian.chen@amd.com>,
-        Bhawanpreet Lakha <Bhawanpreet.Lakha@amd.com>,
-        Claudio Suarez <cssk@net-c.es>,
-        Colin Ian King <colin.king@intel.com>,
-        hersen wu <hersenxs.wu@amd.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>
-Subject: [PATCH 3/3] Revert "drm/amd/display: Limit max DSC target bpp for specific monitors"
-Date:   Mon, 24 Oct 2022 15:22:23 -0400
-Message-ID: <20221024192224.180507-3-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221024192224.180507-1-hamza.mahfooz@amd.com>
-References: <20221024192224.180507-1-hamza.mahfooz@amd.com>
+        Mon, 24 Oct 2022 17:18:37 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE19D57566;
+        Mon, 24 Oct 2022 12:24:48 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-369c2f83697so86961827b3.3;
+        Mon, 24 Oct 2022 12:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YNQKfFH/J4u1O0RDYXKWFImeY+htr9CT0XG4blIptF8=;
+        b=BZ07ttqeleBSPnDK6U+YYl4PqDUBbDSEX+WjIwTCayimKOvCWQ7QJMsRTbYZsiVgqd
+         EPz3Kssuzqwb+DuV01u77FroRmxl2Oh6cZq5to1O1dgnkU1zmgohLPGe1Vnqvzt4EEfq
+         UidgeyS0Y9tA7MFOSRR/Hl408Q6977DSlBV5an5pjChLODwH4qrSLz+huTxqO2oeeugs
+         Y5lojn/s8STiv9jUlWIiLpxr1Ml7lBHDrgQGF6DCe76VDPmKxmi79ylCmm7nM5tyKHUQ
+         XKsULy6TfrVTx89x+MSxKDo6XFVnqqivPcXKUNiJ2AXL3gDfjx2EKDTvO6VMcUmcvqOP
+         zWwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YNQKfFH/J4u1O0RDYXKWFImeY+htr9CT0XG4blIptF8=;
+        b=uSaBudvZBCOVfJGC4D+t2LbZyvlAEhlwN3ldg41gLMXnoNZqGJLa7Q5+ZAN1li3wKl
+         i/BLpJg4HQLW0D71PvBb6PQaDxZfugRY0DneODCI//rcLYIr73LD2Tl/Bdy7o1mCtYcn
+         +pgIa709NnfnQvhtUAWQ2zjjpD53kwsTKi9bWSsSOX1FM5o2yncnkY2JphZJQofNjeGc
+         iZiZ8ThNnCVYInMr/hmbp2a4j490k87v7JrA2gq2sStwMy1MOEDYTkXIY3azcqJE3rhT
+         dF/WTX9oWSsX/NSGa7omRyXVW83YkSyxSOx0PmiVrwuYI7ggpP/j6Ri0SHUKcKOSkfjo
+         P2Nw==
+X-Gm-Message-State: ACrzQf1sow6xW7qEDrMWDW2ZdheyH8dL+c0ICSoWXkFXpmz06kjwfnGo
+        MtFkgkksokjWuLbPZGhq9dDaAPpNYES2uISH+eY8NC1uiRs=
+X-Google-Smtp-Source: AMsMyM4zQHncqMnc13JolI9a0bQPoGwvoozFFIXgkb0S+8TY5Wbz7IROxLSB7QZhSNOK0oJhcsH0Lm1a9opE48XevoI=
+X-Received: by 2002:a81:71c6:0:b0:36a:5682:2c44 with SMTP id
+ m189-20020a8171c6000000b0036a56822c44mr14280778ywc.308.1666639398914; Mon, 24
+ Oct 2022 12:23:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0000C406:EE_|BY5PR12MB4146:EE_
-X-MS-Office365-Filtering-Correlation-Id: 22709067-cc6e-47c9-9188-08dab5f5107d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lOoDvX2nGXwNv9SYB5BSZlI2uz3IMgJi/ZFQR3ZgEH0R8IU44rxVHhqQLAImVL/v2NzK2LjkkrDMgAxlkS8saG53BxQWDCeCjXSyrRsRTs1ACL7OxZMphtPMe+jSi8VKXXDpQboha5b2B1itEzt8/07m+SuQgwf9OPsBFDltbgLmw4SwiIaUzt4Cn6mAywQ1YADChEYsW3UbSyjpARCWTU3YuK7YRLGqHX5NTIMOpLDySWx/lQsCypJHm3uAZSxpXsrty976cZcKAej8Q6+DUS1dNZqjGDlthkWCIO6hHWtN4MzJZAheY2cUBCT4DQHEmVXXIC7Ksgp4CPJaiHe42LDIWMoJf/EH7QmOyXNR7QC6OfJJLbFIKkJBwlm7LWpadxyu5i2Df6F6+TM98CwmXRtUhhGDwd3Xh37OmTBoieevHCvG57pgMHKet7KHiTVASjU50CjokKy9yOJlXD/cqh3uTHJ9rGnMYLZF/I76lpVNTA06KTfj9w2kLrqUo7+/WGiRHK7/7+YcEnDqFnJ2RZSY3JQ5S8TQ65PWSKEKisldz7qH4Bc0aZKROtLZDCD+AvxonYCMR+6q4L9gYdsFwSp8ep+9OlnE9PxO2ZEfGcSrCb2OzF24WgOzeymov4JsyzLuSKwLOFS4xlX4MzbSDdtmTZJEfyUqoxaJ3IoZd1CuoczhocSAhyoNhf9GmrqJ0wZ7YaSpMEwFKBGklXh9JWyl141zuAqhTuUjNymjgNYy6tyTQF8b5bKsM46qg1/uiMQVjIn2xzxyonStAcNDLXt/+eVLR425rmt3NFUkUupoPzu0aHptIfcPluXuMAj3LiKgU94vi2oS/NKYVByZOg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199015)(46966006)(36840700001)(40470700004)(6666004)(316002)(36860700001)(54906003)(6916009)(426003)(47076005)(8936002)(40480700001)(40460700003)(2906002)(186003)(16526019)(2616005)(1076003)(70206006)(7416002)(8676002)(7696005)(5660300002)(44832011)(4326008)(26005)(83380400001)(336012)(70586007)(86362001)(41300700001)(478600001)(36756003)(81166007)(82310400005)(356005)(82740400003)(16060500005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 19:22:17.4157
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22709067-cc6e-47c9-9188-08dab5f5107d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C406.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4146
+References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-18-vishal.moola@gmail.com>
+In-Reply-To: <20221017202451.4951-18-vishal.moola@gmail.com>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Mon, 24 Oct 2022 12:23:07 -0700
+Message-ID: <CAOzc2pya9kuNYT3Uff3wVmrZ3JVSnFs2kwH5CK8ite6Qn67mRg@mail.gmail.com>
+Subject: Re: [PATCH v3 17/23] gfs2: Convert gfs2_write_cache_jdata() to use filemap_get_folios_tag()
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
+        rpeterso@redhat.com, agruenba@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,69 +71,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 55eea8ef98641f6e1e1c202bd3a49a57c1dd4059.
+On Mon, Oct 17, 2022 at 1:25 PM Vishal Moola (Oracle)
+<vishal.moola@gmail.com> wrote:
+>
+> Converted function to use folios throughout. This is in preparation for
+> the removal of find_get_pgaes_range_tag().
+>
+> Also had to modify and rename gfs2_write_jdata_pagevec() to take in
+> and utilize folio_batch rather than pagevec and use folios rather
+> than pages. gfs2_write_jdata_batch() now supports large folios.
+>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> ---
+>  fs/gfs2/aops.c | 64 +++++++++++++++++++++++++++-----------------------
+>  1 file changed, 35 insertions(+), 29 deletions(-)
+>
+> diff --git a/fs/gfs2/aops.c b/fs/gfs2/aops.c
+> index 05bee80ac7de..8f87c2551a3d 100644
+> --- a/fs/gfs2/aops.c
+> +++ b/fs/gfs2/aops.c
+> @@ -195,67 +195,71 @@ static int gfs2_writepages(struct address_space *mapping,
+>  }
+>
+>  /**
+> - * gfs2_write_jdata_pagevec - Write back a pagevec's worth of pages
+> + * gfs2_write_jdata_batch - Write back a folio batch's worth of folios
+>   * @mapping: The mapping
+>   * @wbc: The writeback control
+> - * @pvec: The vector of pages
+> - * @nr_pages: The number of pages to write
+> + * @fbatch: The batch of folios
+>   * @done_index: Page index
+>   *
+>   * Returns: non-zero if loop should terminate, zero otherwise
+>   */
+>
+> -static int gfs2_write_jdata_pagevec(struct address_space *mapping,
+> +static int gfs2_write_jdata_batch(struct address_space *mapping,
+>                                     struct writeback_control *wbc,
+> -                                   struct pagevec *pvec,
+> -                                   int nr_pages,
+> +                                   struct folio_batch *fbatch,
+>                                     pgoff_t *done_index)
+>  {
+>         struct inode *inode = mapping->host;
+>         struct gfs2_sbd *sdp = GFS2_SB(inode);
+> -       unsigned nrblocks = nr_pages * (PAGE_SIZE >> inode->i_blkbits);
+> +       unsigned nrblocks;
+>         int i;
+>         int ret;
+> +       int nr_pages = 0;
+> +       int nr_folios = folio_batch_count(fbatch);
+> +
+> +       for (i = 0; i < nr_folios; i++)
+> +               nr_pages += folio_nr_pages(fbatch->folios[i]);
+> +       nrblocks = nr_pages * (PAGE_SIZE >> inode->i_blkbits);
+>
+>         ret = gfs2_trans_begin(sdp, nrblocks, nrblocks);
+>         if (ret < 0)
+>                 return ret;
+>
+> -       for(i = 0; i < nr_pages; i++) {
+> -               struct page *page = pvec->pages[i];
+> +       for (i = 0; i < nr_folios; i++) {
+> +               struct folio *folio = fbatch->folios[i];
+>
+> -               *done_index = page->index;
+> +               *done_index = folio->index;
+>
+> -               lock_page(page);
+> +               folio_lock(folio);
+>
+> -               if (unlikely(page->mapping != mapping)) {
+> +               if (unlikely(folio->mapping != mapping)) {
+>  continue_unlock:
+> -                       unlock_page(page);
+> +                       folio_unlock(folio);
+>                         continue;
+>                 }
+>
+> -               if (!PageDirty(page)) {
+> +               if (!folio_test_dirty(folio)) {
+>                         /* someone wrote it for us */
+>                         goto continue_unlock;
+>                 }
+>
+> -               if (PageWriteback(page)) {
+> +               if (folio_test_writeback(folio)) {
+>                         if (wbc->sync_mode != WB_SYNC_NONE)
+> -                               wait_on_page_writeback(page);
+> +                               folio_wait_writeback(folio);
+>                         else
+>                                 goto continue_unlock;
+>                 }
+>
+> -               BUG_ON(PageWriteback(page));
+> -               if (!clear_page_dirty_for_io(page))
+> +               BUG_ON(folio_test_writeback(folio));
+> +               if (!folio_clear_dirty_for_io(folio))
+>                         goto continue_unlock;
+>
+>                 trace_wbc_writepage(wbc, inode_to_bdi(inode));
+>
+> -               ret = __gfs2_jdata_writepage(page, wbc);
+> +               ret = __gfs2_jdata_writepage(&folio->page, wbc);
+>                 if (unlikely(ret)) {
+>                         if (ret == AOP_WRITEPAGE_ACTIVATE) {
+> -                               unlock_page(page);
+> +                               folio_unlock(folio);
+>                                 ret = 0;
+>                         } else {
+>
+> @@ -268,7 +272,8 @@ static int gfs2_write_jdata_pagevec(struct address_space *mapping,
+>                                  * not be suitable for data integrity
+>                                  * writeout).
+>                                  */
+> -                               *done_index = page->index + 1;
+> +                               *done_index = folio->index +
+> +                                       folio_nr_pages(folio);
+>                                 ret = 1;
+>                                 break;
+>                         }
+> @@ -305,8 +310,8 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
+>  {
+>         int ret = 0;
+>         int done = 0;
+> -       struct pagevec pvec;
+> -       int nr_pages;
+> +       struct folio_batch fbatch;
+> +       int nr_folios;
+>         pgoff_t writeback_index;
+>         pgoff_t index;
+>         pgoff_t end;
+> @@ -315,7 +320,7 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
+>         int range_whole = 0;
+>         xa_mark_t tag;
+>
+> -       pagevec_init(&pvec);
+> +       folio_batch_init(&fbatch);
+>         if (wbc->range_cyclic) {
+>                 writeback_index = mapping->writeback_index; /* prev offset */
+>                 index = writeback_index;
+> @@ -341,17 +346,18 @@ static int gfs2_write_cache_jdata(struct address_space *mapping,
+>                 tag_pages_for_writeback(mapping, index, end);
+>         done_index = index;
+>         while (!done && (index <= end)) {
+> -               nr_pages = pagevec_lookup_range_tag(&pvec, mapping, &index, end,
+> -                               tag);
+> -               if (nr_pages == 0)
+> +               nr_folios = filemap_get_folios_tag(mapping, &index, end,
+> +                               tag, &fbatch);
+> +               if (nr_folios == 0)
+>                         break;
+>
+> -               ret = gfs2_write_jdata_pagevec(mapping, wbc, &pvec, nr_pages, &done_index);
+> +               ret = gfs2_write_jdata_batch(mapping, wbc, &fbatch,
+> +                               &done_index);
+>                 if (ret)
+>                         done = 1;
+>                 if (ret > 0)
+>                         ret = 0;
+> -               pagevec_release(&pvec);
+> +               folio_batch_release(&fbatch);
+>                 cond_resched();
+>         }
+>
+> --
+> 2.36.1
+>
 
-This quirk is now handled in the DRM core, so we can drop all of
-the internal code that was added to handle it.
-
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- .../amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 35 -------------------
- 1 file changed, 35 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-index 4956a0118215..a21e2ba77ddb 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-@@ -41,39 +41,6 @@
- #include "dm_helpers.h"
- #include "ddc_service_types.h"
- 
--struct monitor_patch_info {
--	unsigned int manufacturer_id;
--	unsigned int product_id;
--	void (*patch_func)(struct dc_edid_caps *edid_caps, unsigned int param);
--	unsigned int patch_param;
--};
--static void set_max_dsc_bpp_limit(struct dc_edid_caps *edid_caps, unsigned int param);
--
--static const struct monitor_patch_info monitor_patch_table[] = {
--{0x6D1E, 0x5BBF, set_max_dsc_bpp_limit, 15},
--{0x6D1E, 0x5B9A, set_max_dsc_bpp_limit, 15},
--};
--
--static void set_max_dsc_bpp_limit(struct dc_edid_caps *edid_caps, unsigned int param)
--{
--	if (edid_caps)
--		edid_caps->panel_patch.max_dsc_target_bpp_limit = param;
--}
--
--static int amdgpu_dm_patch_edid_caps(struct dc_edid_caps *edid_caps)
--{
--	int i, ret = 0;
--
--	for (i = 0; i < ARRAY_SIZE(monitor_patch_table); i++)
--		if ((edid_caps->manufacturer_id == monitor_patch_table[i].manufacturer_id)
--			&&  (edid_caps->product_id == monitor_patch_table[i].product_id)) {
--			monitor_patch_table[i].patch_func(edid_caps, monitor_patch_table[i].patch_param);
--			ret++;
--		}
--
--	return ret;
--}
--
- /* dm_helpers_parse_edid_caps
-  *
-  * Parse edid caps
-@@ -148,8 +115,6 @@ enum dc_edid_status dm_helpers_parse_edid_caps(
- 	kfree(sads);
- 	kfree(sadb);
- 
--	amdgpu_dm_patch_edid_caps(edid_caps);
--
- 	return result;
- }
- 
--- 
-2.38.0
-
+Would anyone familiar with gfs2 have time to look over this patch (17/23)?
+I've cc-ed the gfs2 supporters, feedback would be appreciated.
