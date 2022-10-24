@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABECC60A1AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2905460A1AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiJXLcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:32:02 -0400
+        id S230319AbiJXLcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:32:10 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiJXLb5 (ORCPT
+        with ESMTP id S230175AbiJXLcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:31:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F88955C58;
-        Mon, 24 Oct 2022 04:31:52 -0700 (PDT)
+        Mon, 24 Oct 2022 07:32:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F45756B85;
+        Mon, 24 Oct 2022 04:31:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BB6C6125D;
-        Mon, 24 Oct 2022 11:31:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F441C433C1;
-        Mon, 24 Oct 2022 11:31:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B84B61259;
+        Mon, 24 Oct 2022 11:31:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 374A7C433D6;
+        Mon, 24 Oct 2022 11:31:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611110;
-        bh=pA708DfDAlUs9/8gMiAzDR60U/q1IY8dcr1tgyu+yFQ=;
+        s=korg; t=1666611113;
+        bh=BTxUk6zOdn4AF72fGjbFRugsG+1T5LCy1r/WeFDOWhM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RBBJJXLxWGB5ZKRU7hJnDalV/cSFwKv/BvSh361z4uoYcDV2ORhZl81wlprhK6jHv
-         rTnZNPZF7Z59sis5ZJBLgrl5gkXR5/mj8sXhXLZyxJ34s9nxE9V4x/vkB84jXP1Dk3
-         WnfUqc9KxzzPyj78JHOQtSdhQY7sV/0LcpSmqyis=
+        b=Q0fs3t7ufewgnLj0weFPFfygZl7GHa46I+NpSmi56yHdNa7mMJH4x7J46Tpum5l4x
+         yS6P4i5DvnB5JnNTepo+ZQMmXXnu4PJETrmLcLMtUwUKO7Eqaz2d9iyjmtzRaX++Gt
+         qVRfwXJTjIF26ElDeWc5T/G1U3IVXS1EWQHhH6lU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tim Huang <tim.huang@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 6.0 13/20] drm/amd/pm: update SMU IP v13.0.4 driver interface version
-Date:   Mon, 24 Oct 2022 13:31:15 +0200
-Message-Id: <20221024112934.963501610@linuxfoundation.org>
+        stable@vger.kernel.org, Nikos Tsironis <ntsironis@arrikto.com>,
+        Mike Snitzer <snitzer@kernel.org>
+Subject: [PATCH 6.0 14/20] dm clone: Fix typo in block_device format specifier
+Date:   Mon, 24 Oct 2022 13:31:16 +0200
+Message-Id: <20221024112934.999774239@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
 References: <20221024112934.415391158@linuxfoundation.org>
@@ -54,62 +53,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim Huang <tim.huang@amd.com>
+From: Nikos Tsironis <ntsironis@arrikto.com>
 
-commit 853fdb49160e9c30674fd8e4a2eabc06bf70b13a upstream.
+commit 5434ee8d28575b2e784bd5b4dbfc912e5da90759 upstream.
 
-Update the SMU driver interface version to V7.
+Use %pg for printing the block device name, instead of %pd.
 
-Signed-off-by: Tim Huang <tim.huang@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org # 6.0.x
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: 385411ffba0c ("dm: stop using bdevname")
+Cc: stable@vger.kernel.org # v5.18+
+Signed-off-by: Nikos Tsironis <ntsironis@arrikto.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_4.h |   17 ++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/md/dm-clone-target.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_4.h
-+++ b/drivers/gpu/drm/amd/pm/swsmu/inc/pmfw_if/smu13_driver_if_v13_0_4.h
-@@ -27,7 +27,7 @@
- // *** IMPORTANT ***
- // SMU TEAM: Always increment the interface version if
- // any structure is changed in this file
--#define PMFW_DRIVER_IF_VERSION 5
-+#define PMFW_DRIVER_IF_VERSION 7
+diff --git a/drivers/md/dm-clone-target.c b/drivers/md/dm-clone-target.c
+index 811b0a5379d0..2f1cc66d2641 100644
+--- a/drivers/md/dm-clone-target.c
++++ b/drivers/md/dm-clone-target.c
+@@ -2035,7 +2035,7 @@ static void disable_passdown_if_not_supported(struct clone *clone)
+ 		reason = "max discard sectors smaller than a region";
  
- typedef struct {
-   int32_t value;
-@@ -163,8 +163,8 @@ typedef struct {
-   uint16_t DclkFrequency;               //[MHz]
-   uint16_t MemclkFrequency;             //[MHz]
-   uint16_t spare;                       //[centi]
--  uint16_t UvdActivity;                 //[centi]
-   uint16_t GfxActivity;                 //[centi]
-+  uint16_t UvdActivity;                 //[centi]
- 
-   uint16_t Voltage[2];                  //[mV] indices: VDDCR_VDD, VDDCR_SOC
-   uint16_t Current[2];                  //[mA] indices: VDDCR_VDD, VDDCR_SOC
-@@ -199,6 +199,19 @@ typedef struct {
-   uint16_t DeviceState;
-   uint16_t CurTemp;                     //[centi-Celsius]
-   uint16_t spare2;
-+
-+  uint16_t AverageGfxclkFrequency;
-+  uint16_t AverageFclkFrequency;
-+  uint16_t AverageGfxActivity;
-+  uint16_t AverageSocclkFrequency;
-+  uint16_t AverageVclkFrequency;
-+  uint16_t AverageVcnActivity;
-+  uint16_t AverageDRAMReads;          //Filtered DF Bandwidth::DRAM Reads
-+  uint16_t AverageDRAMWrites;         //Filtered DF Bandwidth::DRAM Writes
-+  uint16_t AverageSocketPower;        //Filtered value of CurrentSocketPower
-+  uint16_t AverageCorePower;          //Filtered of [sum of CorePower[8]])
-+  uint16_t AverageCoreC0Residency[8]; //Filtered of [average C0 residency %  per core]
-+  uint32_t MetricsCounter;            //Counts the # of metrics table parameter reads per update to the metrics table, i.e. if the metrics table update happens every 1 second, this value could be up to 1000 if the smu collected metrics data every cycle, or as low as 0 if the smu was asleep the whole time. Reset to 0 after writing.
- } SmuMetrics_t;
- 
- typedef struct {
+ 	if (reason) {
+-		DMWARN("Destination device (%pd) %s: Disabling discard passdown.",
++		DMWARN("Destination device (%pg) %s: Disabling discard passdown.",
+ 		       dest_dev, reason);
+ 		clear_bit(DM_CLONE_DISCARD_PASSDOWN, &clone->flags);
+ 	}
+-- 
+2.38.1
+
 
 
