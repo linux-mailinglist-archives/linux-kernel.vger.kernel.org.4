@@ -2,77 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E440D60B257
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2912B60B34A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiJXQpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S229895AbiJXRCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiJXQoV (ORCPT
+        with ESMTP id S232530AbiJXRA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:44:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D0EDCAEE;
-        Mon, 24 Oct 2022 08:30:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0840B81A88;
-        Mon, 24 Oct 2022 13:47:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94CE9C433D7;
-        Mon, 24 Oct 2022 13:47:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666619247;
-        bh=AKjH4fAqi5Znmca1BghqRj1ilG31XjeKgA7s9JNN0mU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=L7ozeoSYhFF/jK8llEkKXapL+bdHTonvx1YyvAoM9OswAUsiWmxq5AQ/RRCWOPO8P
-         CNBLH0fjtfMD2DA+zNOtqoJM0kylGCy0QPOFLuPxNET2uvniaKKl4FtnTaUdMxKkYo
-         G5vxCksd4UJtufndkpybeya6hDfP+6wyMqXnz8ULgTdYRhtsiKvNiqT+xeEitDmfsP
-         VTNsBcyVeU5lQHZY52M2Dtk4XvwGCozzDEbTG6mvtUS91+Q6XlOwE/RxGwc5GeguN0
-         SaGCh52MeGYs4FPN5E6Bh79fVgrv80diEFvLw2Z9IeqNQXWdyXJbhbQstXIDFdhOIM
-         AAcicw9pOFSTQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3ED295C097E; Mon, 24 Oct 2022 06:47:27 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 06:47:27 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Frederic Weisbecker <frederic@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, tglx@linutronix.de, pmladek@suse.com
-Subject: Re: [PATCH v2 rcu 0/8] NMI-safe SRCU reader API
-Message-ID: <20221024134727.GV5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <87ilkh0y52.fsf@jogness.linutronix.de>
- <20221018185936.GX5600@paulmck-ThinkPad-P17-Gen-1>
- <20221018215721.GA1716567@paulmck-ThinkPad-P17-Gen-1>
- <87pmeoawwe.fsf@jogness.linutronix.de>
- <20221019191418.GF5600@paulmck-ThinkPad-P17-Gen-1>
- <20221019220537.GA1234896@lothringen>
- <20221020222718.GA5600@paulmck-ThinkPad-P17-Gen-1>
- <87r0z1gy51.fsf@jogness.linutronix.de>
- <20221021184152.GO5600@paulmck-ThinkPad-P17-Gen-1>
- <87y1t5zqzz.fsf@jogness.linutronix.de>
+        Mon, 24 Oct 2022 13:00:57 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE02EC51B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:38:15 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id g7so17361779lfv.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uNRDUP9ouWlmlPu6POZXr/UqktEd3BwTrOrVcJ1HXpQ=;
+        b=Zre2CJjpDPgZ3ML+5uYe3oKtSH6m3xLiU4J6QrCHDDpo5kZY8xjs2ItrKKTfLcDYht
+         TVO4nENelYErdKgDYpqW6aR729OTlE/NHjfrcLDV8Crl51KvdX2Wyl3dH2Jegc8K29VM
+         lRVPQ90tlZl8N0YSyJgTFvwLm3nRrtNjasWxI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uNRDUP9ouWlmlPu6POZXr/UqktEd3BwTrOrVcJ1HXpQ=;
+        b=sgXB0l2qgrIblvzP3bH/UXk3ypwutP6mdeYwpEGvncwI6aqeFVFWqUWALMwwnFOxuU
+         gvgdfA4gQWJ52WUhW+e8b0MxZRz4C9UiOdQ+AhEyCCGOnihr6JaAE48QpmzW5I0BTg9r
+         jU9kSTS++bI47Tzi7MUNBMrmvmUGDnSsHPM6M9i0RXwh0B528tquduLkdwBtHovPROlx
+         hAM9bFgTjvWc2YKbVTGwCFy5SWhnwq+XAd892hRLvZJtn8G7Kq7cD2FuWCtYiBfj8/WL
+         GON6/fki+fxszk3hA6Q9dK3LS1ZQgChebic/SEqELTU+B24eXlIcrxHsYSegtWjSuy7A
+         tppw==
+X-Gm-Message-State: ACrzQf1jE5dgP2T5/ZbAwpiaQhaHkrxk5YcMfQ4ov4wg7idzMCV1cs6C
+        nMqmrd/aPI3POOSm2t8Jb20zXZI5XIBgfe+QMkY=
+X-Google-Smtp-Source: AMsMyM6GLxv6YpStCWiwlAyLglFzeiLykSKUvCjuukVmFp1jXb2lI1FAJdRQEzwFTD2k7tzPsely6w==
+X-Received: by 2002:a2e:b11a:0:b0:26e:4c9:f7f7 with SMTP id p26-20020a2eb11a000000b0026e04c9f7f7mr11624761ljl.522.1666619290405;
+        Mon, 24 Oct 2022 06:48:10 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id o20-20020a2e7314000000b0025ebaef9570sm4954322ljc.40.2022.10.24.06.48.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 06:48:09 -0700 (PDT)
+Message-ID: <814496ae-4007-9a4e-0466-a0386aec6316@rasmusvillemoes.dk>
+Date:   Mon, 24 Oct 2022 15:48:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1t5zqzz.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] clk: imx8mp: register driver at arch_initcall time
+Content-Language: en-US
+To:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20220928124108.500369-1-linux@rasmusvillemoes.dk>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20220928124108.500369-1-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 08:21:44AM +0206, John Ogness wrote:
-> On 2022-10-21, "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> > And srcunmisafe.2022.10.21a diffs equal, so it hopefully also passes
-> > your C-I.
+On 28/09/2022 14.41, Rasmus Villemoes wrote:
+> We have an imx8mp-based board with an external gpio-triggered
+> watchdog. Currently, we don't get to handle that in time before it
+> resets the board.
 > 
-> It does. Thanks, Paul!
+> The probe of the watchdog device gets deferred because the SOC's GPIO
+> controller is not yet ready, and the probe of that in turn gets deferred
+> because its clock provider (namely, this driver) is not yet
+> ready. Altogether, the watchdog does not get handled until the late
+> initcall deferred_probe_initcall has made sure all leftover devices
+> have been probed, and that's way too late.
+> 
+> Aside from being necessary for our board, this also reduces total boot
+> time because fewer device probes get deferred.
 
-Whew!!!  ;-)
+ping
 
-							Thanx, Paul
+Rasmus
