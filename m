@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BFD60B674
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5462260B67D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbiJXS6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S231838AbiJXS7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbiJXS6N (ORCPT
+        with ESMTP id S233176AbiJXS7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:58:13 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55F0B8C1A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:37:54 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 204-20020a2510d5000000b006be7970889cso9905439ybq.21
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:37:54 -0700 (PDT)
+        Mon, 24 Oct 2022 14:59:06 -0400
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F5918E32
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:38:59 -0700 (PDT)
+Received: by mail-pf1-f202.google.com with SMTP id f13-20020a62380d000000b0056a7486d9a1so4572409pfa.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:38:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kzKQRTEXGqt08SGBdEhLKezf4NlN9FWNmZKirRw+wNE=;
-        b=j+74AYOxCaajozdBfiO5kv/80FZYXYndelThFiPyXfTn5d+15h0iTwKi762lYKKt3M
-         wXCC92m2LibdA4uqtYnNfy0lNPA1tSrSqmtmmO/doOPBrPkkUDb1C+6ElrbnmtRX6M5R
-         Fe4V2jfcpE6ePzNLE+3Q84vJggdtywVZ5+x9VA7CLp2obDtqoh5VLeHIPpob6Jn8w+Ql
-         10SMYYl33WZclEXBIpVktcohFEvcfz1wo01/cPGUwMJ93DIY41SmmQ9P9CV7Z9X3QhGp
-         KZqbj05kQPns4meT8vTk/c7Ym60Ec3DoHoiaqN39sC/PReynUtjWH61qFKOotqnS6Nw9
-         pgPQ==
+        bh=sJwUbAas6HwUpEbmohIDJ22IirHP0xTxc+7b+i3VB6U=;
+        b=WNe4EQeeykspT4w/Io584+kx9lh/QeoAHLehl3suvkUCe1Cp12l+MOrLPerfCGXYSl
+         tkULm4/+1vo92FIS6jrd4ShA6Wd+GOg80wHhdUNFIbzKf+CrNIIAjHCwi3oT8c+RDn7I
+         rLm16gXSUTHOzSc+IjDqbYXGp+Ssc+Z1x7rQuGXozqHAd2ZYNYN/Kv/ikwNHa7nd1L3T
+         s3B9IpBNSrLhMbYoAfN4Qscgo0OjOPVbDyLFGAVmU0arJMtRwsJa2A7QotYaDgvYOkvw
+         vgWeT/2lmLHaADWBVOZkK6uIAlE1BLHzV2/bDmUo59pB6FYxwRynWnYrLYqSpkif8lzg
+         yngg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kzKQRTEXGqt08SGBdEhLKezf4NlN9FWNmZKirRw+wNE=;
-        b=mqmM+Zo9zzVYoVFTxwUGgeRwEF0iDGDMrtQzTpb+mkhGKQsFcuFki9BUpSFHPn2yyt
-         0euEsEI7MfdbQKIYm5c6hD0Ccfb0oivATdS1lUSLeXHPqTRM14qbKkn13LyS1fC5XVZF
-         xCHgZPX+eNCaHO2G17SHBwt6IBpLBV7R90bxQUNMwHMS18xMTJDXmybPjuAlIqrWz4cg
-         RNEIMQng5D6TKafXrapSzn64qqosnQrxfyUq04r1sDC3Rusr+7W8NzlraK/RN0aEmYBd
-         SgUYA0EL4zlekJPJ8jXCHujB+v5WKyAXqf1L9AJd6mHBIFMzyjE0QwGBMI6nPYJiRRP1
-         eLzA==
-X-Gm-Message-State: ACrzQf1+aQa7/5PCKsbSd4uAeUu2WNCTs2Um9O83zyBVkr8TMNGczXxJ
-        yrweYbHYi+ymoUknR4Yj7OCvklvX/lS0
-X-Google-Smtp-Source: AMsMyM5XYqtNgXUFd1h7brKL0bHrVRyG5HrQ1WbR+O1JB2SeqeRi637dBIgo+oclvIQ4a6cQ5REYI+m+j9z8
+        bh=sJwUbAas6HwUpEbmohIDJ22IirHP0xTxc+7b+i3VB6U=;
+        b=Dk0AKvX/eZvXXck6R6Jsiobwdg/W9QN/SMkgA81icyCF0nQvQRtJwElcb/CX71JvbX
+         aG5GiOxluM8EMtP6wRf+pmCIksGheq7+/suqrg475yZYi2ip+Bo8w2m1pso0lS3XTTpi
+         OSq2LRzBBmJ3+Z+WaSld7xPMnikmA2d4vZxLY5WNJLDROtJhcN5q+lQQiCKSEm8QNHW9
+         U4nSn641lzI79sUc3X7DtHuBpzlVQZwfiHh4MsC3n7wmkuBu/n0+xF9yd56BovvnoWDK
+         W6UpB9QGTdJ73TmvEJAwqKZ6P82BtHWSHY9JbWWWzN4zlwV1MB7jY6F8ru8cPA+TYkMG
+         qnRQ==
+X-Gm-Message-State: ACrzQf2scORKVbiegnMKmygjxv3AcdPLCzM3uYtvjqmalsb7UMtWMd8i
+        rMTMlRN/g7tVBK/O0/KryBXZxmC6dtgy
+X-Google-Smtp-Source: AMsMyM5Hal+np002XCO/XJUFdXFLqN4uPHd6YA51dLU/cUcRa+TfD0iPG/3RnFU9UaBwh/lgH18ME98noPZR
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b8bc:a57d:a2a2:efdc])
- (user=irogers job=sendgmr) by 2002:a25:dd2:0:b0:6c0:7938:5b43 with SMTP id
- 201-20020a250dd2000000b006c079385b43mr30564176ybn.280.1666632998495; Mon, 24
- Oct 2022 10:36:38 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 10:35:22 -0700
+ (user=irogers job=sendgmr) by 2002:a17:90b:e90:b0:213:2708:8dc3 with SMTP id
+ fv16-20020a17090b0e9000b0021327088dc3mr233702pjb.2.1666633007051; Mon, 24 Oct
+ 2022 10:36:47 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 10:35:23 -0700
 In-Reply-To: <20221024173523.602064-1-irogers@google.com>
-Message-Id: <20221024173523.602064-8-irogers@google.com>
+Message-Id: <20221024173523.602064-9-irogers@google.com>
 Mime-Version: 1.0
 References: <20221024173523.602064-1-irogers@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Subject: [PATCH v1 7/8] perf top: Use sig_atomic_t to avoid UB
+Subject: [PATCH v1 8/8] perf trace: Use sig_atomic_t to avoid UB
 From:   Ian Rogers <irogers@google.com>
 To:     Leo Yan <leo.yan@linaro.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -71,8 +71,9 @@ Cc:     Stephane Eranian <eranian@google.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,24 +86,24 @@ https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+obje
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-top.c | 4 ++--
+ tools/perf/builtin-trace.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 4b3ff7687236..bb5bd241246b 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -87,8 +87,8 @@
- #include <linux/ctype.h>
- #include <perf/mmap.h>
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index d3c757769b96..72991528687e 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -1535,8 +1535,8 @@ static size_t trace__fprintf_tstamp(struct trace *trace, u64 tstamp, FILE *fp)
+ }
  
--static volatile int done;
--static volatile int resize;
-+static volatile sig_atomic_t done;
-+static volatile sig_atomic_t resize;
+ static pid_t workload_pid = -1;
+-static bool done = false;
+-static bool interrupted = false;
++static volatile sig_atomic_t done = false;
++static volatile sig_atomic_t interrupted = false;
  
- #define HEADER_LINE_NR  5
- 
+ static void sighandler_interrupt(int sig __maybe_unused)
+ {
 -- 
 2.38.0.135.g90850a2211-goog
 
