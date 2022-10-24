@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E74760A537
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0923860A3FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233471AbiJXMWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S232521AbiJXMDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233564AbiJXMTv (ORCPT
+        with ESMTP id S232504AbiJXMB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:19:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44C983040;
-        Mon, 24 Oct 2022 04:58:40 -0700 (PDT)
+        Mon, 24 Oct 2022 08:01:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BDD13F11;
+        Mon, 24 Oct 2022 04:49:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 768BB61218;
-        Mon, 24 Oct 2022 11:49:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2DFC433C1;
-        Mon, 24 Oct 2022 11:49:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A02B161286;
+        Mon, 24 Oct 2022 11:49:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F60C433C1;
+        Mon, 24 Oct 2022 11:49:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612165;
-        bh=ZPeymm10gGxK2SsTtk+hUrOWMe19b/6w/albuianqiM=;
+        s=korg; t=1666612171;
+        bh=HA9MCoEoC8QqmrO+2/VbuNC0X/ywxoU5lg6FjR2ETcw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hFUKehqiohfX01Z63RRYBck54PzrQdPUwgla5fiCqsCDaHw9rEeKYQYJW+kE1RELw
-         F9WR2S6MUDvuVrLo6yuLOkqCETPUCsIky3Se/d3BcrQXf/UjUGhU/bRAt6E2eaV+yk
-         ehzKqBZJhltYvB1Sx3znYmUp0hr2S12poUl+XKdc=
+        b=C+r25CL2ZORvV/2FylmmFEde6pNdTjchJBH0sXyFMH8eswrtw1lt1anMSTq8zDgPo
+         AhkK2zVfzCliyBD9PA6Ng1/fQCmEo2BY4L+/joT2VLSOrWylIseaZq8lNcE0aUziWV
+         X3Zw2IdHZLZIXLmK3jIHePj94ixjQ/FMA3cEj120=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Leon Romanovsky <leonro@nvidia.com>,
+        stable@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
+        "Kevin(Yudong) Yang" <yyd@google.com>,
+        Yuchung Cheng <ycheng@google.com>,
+        Eric Dumazet <edumazet@google.com>,
         "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 094/210] mISDN: fix use-after-free bugs in l1oip timer handlers
-Date:   Mon, 24 Oct 2022 13:30:11 +0200
-Message-Id: <20221024113000.080894670@linuxfoundation.org>
+Subject: [PATCH 4.14 095/210] tcp: fix tcp_cwnd_validate() to not forget is_cwnd_limited
+Date:   Mon, 24 Oct 2022 13:30:12 +0200
+Message-Id: <20221024113000.110431859@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
 References: <20221024112956.797777597@linuxfoundation.org>
@@ -55,95 +57,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Neal Cardwell <ncardwell@google.com>
 
-[ Upstream commit 2568a7e0832ee30b0a351016d03062ab4e0e0a3f ]
+[ Upstream commit f4ce91ce12a7c6ead19b128ffa8cff6e3ded2a14 ]
 
-The l1oip_cleanup() traverses the l1oip_ilist and calls
-release_card() to cleanup module and stack. However,
-release_card() calls del_timer() to delete the timers
-such as keep_tl and timeout_tl. If the timer handler is
-running, the del_timer() will not stop it and result in
-UAF bugs. One of the processes is shown below:
+This commit fixes a bug in the tracking of max_packets_out and
+is_cwnd_limited. This bug can cause the connection to fail to remember
+that is_cwnd_limited is true, causing the connection to fail to grow
+cwnd when it should, causing throughput to be lower than it should be.
 
-    (cleanup routine)          |        (timer handler)
-release_card()                 | l1oip_timeout()
- ...                           |
- del_timer()                   | ...
- ...                           |
- kfree(hc) //FREE              |
-                               | hc->timeout_on = 0 //USE
+The following event sequence is an example that triggers the bug:
 
-Fix by calling del_timer_sync() in release_card(), which
-makes sure the timer handlers have finished before the
-resources, such as l1oip and so on, have been deallocated.
+ (a) The connection is cwnd_limited, but packets_out is not at its
+     peak due to TSO deferral deciding not to send another skb yet.
+     In such cases the connection can advance max_packets_seq and set
+     tp->is_cwnd_limited to true and max_packets_out to a small
+     number.
 
-What's more, the hc->workq and hc->socket_thread can kick
-those timers right back in. We add a bool flag to show
-if card is released. Then, check this flag in hc->workq
-and hc->socket_thread.
+(b) Then later in the round trip the connection is pacing-limited (not
+     cwnd-limited), and packets_out is larger. In such cases the
+     connection would raise max_packets_out to a bigger number but
+     (unexpectedly) flip tp->is_cwnd_limited from true to false.
 
-Fixes: 3712b42d4b1b ("Add layer1 over IP support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+This commit fixes that bug.
+
+One straightforward fix would be to separately track (a) the next
+window after max_packets_out reaches a maximum, and (b) the next
+window after tp->is_cwnd_limited is set to true. But this would
+require consuming an extra u32 sequence number.
+
+Instead, to save space we track only the most important
+information. Specifically, we track the strongest available signal of
+the degree to which the cwnd is fully utilized:
+
+(1) If the connection is cwnd-limited then we remember that fact for
+the current window.
+
+(2) If the connection not cwnd-limited then we track the maximum
+number of outstanding packets in the current window.
+
+In particular, note that the new logic cannot trigger the buggy
+(a)/(b) sequence above because with the new logic a condition where
+tp->packets_out > tp->max_packets_out can only trigger an update of
+tp->is_cwnd_limited if tp->is_cwnd_limited is false.
+
+This first showed up in a testing of a BBRv2 dev branch, but this
+buggy behavior highlighted a general issue with the
+tcp_cwnd_validate() logic that can cause cwnd to fail to increase at
+the proper rate for any TCP congestion control, including Reno or
+CUBIC.
+
+Fixes: ca8a22634381 ("tcp: make cwnd-limited checks measurement-based, and gentler")
+Signed-off-by: Neal Cardwell <ncardwell@google.com>
+Signed-off-by: Kevin(Yudong) Yang <yyd@google.com>
+Signed-off-by: Yuchung Cheng <ycheng@google.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/isdn/mISDN/l1oip.h      |  1 +
- drivers/isdn/mISDN/l1oip_core.c | 13 +++++++------
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ include/linux/tcp.h   |  2 +-
+ include/net/tcp.h     |  5 ++++-
+ net/ipv4/tcp.c        |  2 ++
+ net/ipv4/tcp_output.c | 19 ++++++++++++-------
+ 4 files changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/isdn/mISDN/l1oip.h b/drivers/isdn/mISDN/l1oip.h
-index 7ea10db20e3a..48133d022812 100644
---- a/drivers/isdn/mISDN/l1oip.h
-+++ b/drivers/isdn/mISDN/l1oip.h
-@@ -59,6 +59,7 @@ struct l1oip {
- 	int			bundle;		/* bundle channels in one frm */
- 	int			codec;		/* codec to use for transmis. */
- 	int			limit;		/* limit number of bchannels */
-+	bool			shutdown;	/* if card is released */
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 61eb40fef759..b9bc6e3e4ef9 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -245,7 +245,7 @@ struct tcp_sock {
+ 	u32	packets_out;	/* Packets which are "in flight"	*/
+ 	u32	retrans_out;	/* Retransmitted packets out		*/
+ 	u32	max_packets_out;  /* max packets_out in last window */
+-	u32	max_packets_seq;  /* right edge of max_packets_out flight */
++	u32	cwnd_usage_seq;  /* right edge of cwnd usage tracking flight */
  
- 	/* timer */
- 	struct timer_list	keep_tl;
-diff --git a/drivers/isdn/mISDN/l1oip_core.c b/drivers/isdn/mISDN/l1oip_core.c
-index 6be2041248d3..c86f33ed9ef9 100644
---- a/drivers/isdn/mISDN/l1oip_core.c
-+++ b/drivers/isdn/mISDN/l1oip_core.c
-@@ -289,7 +289,7 @@ l1oip_socket_send(struct l1oip *hc, u8 localcodec, u8 channel, u32 chanmask,
- 	p = frame;
- 
- 	/* restart timer */
--	if (time_before(hc->keep_tl.expires, jiffies + 5 * HZ))
-+	if (time_before(hc->keep_tl.expires, jiffies + 5 * HZ) && !hc->shutdown)
- 		mod_timer(&hc->keep_tl, jiffies + L1OIP_KEEPALIVE * HZ);
- 	else
- 		hc->keep_tl.expires = jiffies + L1OIP_KEEPALIVE * HZ;
-@@ -621,7 +621,9 @@ l1oip_socket_parse(struct l1oip *hc, struct sockaddr_in *sin, u8 *buf, int len)
- 		goto multiframe;
- 
- 	/* restart timer */
--	if (time_before(hc->timeout_tl.expires, jiffies + 5 * HZ) || !hc->timeout_on) {
-+	if ((time_before(hc->timeout_tl.expires, jiffies + 5 * HZ) ||
-+	     !hc->timeout_on) &&
-+	    !hc->shutdown) {
- 		hc->timeout_on = 1;
- 		mod_timer(&hc->timeout_tl, jiffies + L1OIP_TIMEOUT * HZ);
- 	} else /* only adjust timer */
-@@ -1248,11 +1250,10 @@ release_card(struct l1oip *hc)
+ 	u16	urg_data;	/* Saved octet of OOB data and control flags */
+ 	u8	ecn_flags;	/* ECN status bits.			*/
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 5e719f9d60fd..003638f73ffa 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -1228,11 +1228,14 @@ static inline bool tcp_is_cwnd_limited(const struct sock *sk)
  {
- 	int	ch;
+ 	const struct tcp_sock *tp = tcp_sk(sk);
  
--	if (timer_pending(&hc->keep_tl))
--		del_timer(&hc->keep_tl);
-+	hc->shutdown = true;
++	if (tp->is_cwnd_limited)
++		return true;
++
+ 	/* If in slow start, ensure cwnd grows to twice what was ACKed. */
+ 	if (tcp_in_slow_start(tp))
+ 		return tp->snd_cwnd < 2 * tp->max_packets_out;
  
--	if (timer_pending(&hc->timeout_tl))
--		del_timer(&hc->timeout_tl);
-+	del_timer_sync(&hc->keep_tl);
-+	del_timer_sync(&hc->timeout_tl);
+-	return tp->is_cwnd_limited;
++	return false;
+ }
  
- 	cancel_work_sync(&hc->workq);
+ /* Something is really bad, we could not queue an additional packet,
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index a0fd9ef2d2c6..783d0cd4fcbd 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -2366,6 +2366,8 @@ int tcp_disconnect(struct sock *sk, int flags)
+ 	icsk->icsk_probes_out = 0;
+ 	tp->snd_ssthresh = TCP_INFINITE_SSTHRESH;
+ 	tp->snd_cwnd_cnt = 0;
++	tp->is_cwnd_limited = 0;
++	tp->max_packets_out = 0;
+ 	tp->window_clamp = 0;
+ 	tp->delivered = 0;
+ 	if (icsk->icsk_ca_ops->release)
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 6b6dfb08dde4..2a9e55411ac4 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -1618,15 +1618,20 @@ static void tcp_cwnd_validate(struct sock *sk, bool is_cwnd_limited)
+ 	const struct tcp_congestion_ops *ca_ops = inet_csk(sk)->icsk_ca_ops;
+ 	struct tcp_sock *tp = tcp_sk(sk);
  
+-	/* Track the maximum number of outstanding packets in each
+-	 * window, and remember whether we were cwnd-limited then.
++	/* Track the strongest available signal of the degree to which the cwnd
++	 * is fully utilized. If cwnd-limited then remember that fact for the
++	 * current window. If not cwnd-limited then track the maximum number of
++	 * outstanding packets in the current window. (If cwnd-limited then we
++	 * chose to not update tp->max_packets_out to avoid an extra else
++	 * clause with no functional impact.)
+ 	 */
+-	if (!before(tp->snd_una, tp->max_packets_seq) ||
+-	    tp->packets_out > tp->max_packets_out ||
+-	    is_cwnd_limited) {
+-		tp->max_packets_out = tp->packets_out;
+-		tp->max_packets_seq = tp->snd_nxt;
++	if (!before(tp->snd_una, tp->cwnd_usage_seq) ||
++	    is_cwnd_limited ||
++	    (!tp->is_cwnd_limited &&
++	     tp->packets_out > tp->max_packets_out)) {
+ 		tp->is_cwnd_limited = is_cwnd_limited;
++		tp->max_packets_out = tp->packets_out;
++		tp->cwnd_usage_seq = tp->snd_nxt;
+ 	}
+ 
+ 	if (tcp_is_cwnd_limited(sk)) {
 -- 
 2.35.1
 
