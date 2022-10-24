@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADF760B945
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92BA960BADC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbiJXUHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:07:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52210 "EHLO
+        id S231232AbiJXUl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233209AbiJXUGs (ORCPT
+        with ESMTP id S234818AbiJXUky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:06:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7F3FC6;
-        Mon, 24 Oct 2022 11:26:52 -0700 (PDT)
+        Mon, 24 Oct 2022 16:40:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A37465A3;
+        Mon, 24 Oct 2022 11:50:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9D6DEB8125E;
-        Mon, 24 Oct 2022 12:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02957C433D6;
-        Mon, 24 Oct 2022 12:26:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CCCFB818C4;
+        Mon, 24 Oct 2022 12:46:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3139C433C1;
+        Mon, 24 Oct 2022 12:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614405;
-        bh=vSgsDIvzzF3Mr1Kj1xaAWGv9LZXJ1IaBnh/leVDRPlw=;
+        s=korg; t=1666615576;
+        bh=g3Q8xsJXR9CmZwSj+sV5yQEZWLvWp+ydt4y05mNWtts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c8FsqwoZnOp0SmlhUFeYVaJ7qyKvMUTQ/wRRTEyNSOj9dLeGEuBffXZ6x3DmZDw+A
-         VpCjMDeLMWTYUTDGU7jPO+1mS+P5lSuDKo7L58cdilbhWEfWMCDlC0S6ivVO/pWk/p
-         ebTGRfgy3/9tPKFgEmoNVgkgTNQjvsWr9Q42JpKA=
+        b=zOoph8mKxuAzyNaCemzkwORKVPWwMctTRS/QrixRYJ/V7Mhj1Q7Z9J435nMe62FcX
+         DFAiGv3KFZUdPSE/p7DK6fbepY/KDUG4vEaVutYQJf6ZSOOqIksSkm0gPi69KjFqUf
+         EJaslLXSTwLTqKNr4RKe730BHvhlgTQtkiO93AkE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 247/390] mfd: intel_soc_pmic: Fix an error handling path in intel_soc_pmic_i2c_probe()
-Date:   Mon, 24 Oct 2022 13:30:44 +0200
-Message-Id: <20221024113033.365656870@linuxfoundation.org>
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 304/530] phy: phy-mtk-tphy: fix the phy type setting issue
+Date:   Mon, 24 Oct 2022 13:30:48 +0200
+Message-Id: <20221024113058.828032448@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 48749cabba109397b4e7dd556e85718ec0ec114d ]
+[ Upstream commit 931c05a8cb1be029ef2fbc1e4af313d4cb297c47 ]
 
-The commit in Fixes: has added a pwm_add_table() call in the probe() and
-a pwm_remove_table() call in the remove(), but forget to update the error
-handling path of the probe.
+The PHY type is not set if the index is non zero, prepare type
+value according to the index, like as mask value.
 
-Add the missing pwm_remove_table() call.
-
-Fixes: a3aa9a93df9f ("mfd: intel_soc_pmic_core: ADD PWM lookup table for CRC PMIC based PWM")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20220801114211.36267-1-andriy.shevchenko@linux.intel.com
+Fixes: 39099a443358 ("phy: phy-mtk-tphy: support type switch by pericfg")
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220914060746.10004-7-chunfeng.yun@mediatek.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/intel_soc_pmic_core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/phy/mediatek/phy-mtk-tphy.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
-index ddd64f9e3341..926653e1f603 100644
---- a/drivers/mfd/intel_soc_pmic_core.c
-+++ b/drivers/mfd/intel_soc_pmic_core.c
-@@ -95,6 +95,7 @@ static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
- 	return 0;
+diff --git a/drivers/phy/mediatek/phy-mtk-tphy.c b/drivers/phy/mediatek/phy-mtk-tphy.c
+index db39b0c4649a..0649c08fe310 100644
+--- a/drivers/phy/mediatek/phy-mtk-tphy.c
++++ b/drivers/phy/mediatek/phy-mtk-tphy.c
+@@ -1039,7 +1039,7 @@ static int phy_type_syscon_get(struct mtk_phy_instance *instance,
+ static int phy_type_set(struct mtk_phy_instance *instance)
+ {
+ 	int type;
+-	u32 mask;
++	u32 offset;
  
- err_del_irq_chip:
-+	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
- 	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
- 	return ret;
+ 	if (!instance->type_sw)
+ 		return 0;
+@@ -1062,8 +1062,9 @@ static int phy_type_set(struct mtk_phy_instance *instance)
+ 		return 0;
+ 	}
+ 
+-	mask = RG_PHY_SW_TYPE << (instance->type_sw_index * BITS_PER_BYTE);
+-	regmap_update_bits(instance->type_sw, instance->type_sw_reg, mask, type);
++	offset = instance->type_sw_index * BITS_PER_BYTE;
++	regmap_update_bits(instance->type_sw, instance->type_sw_reg,
++			   RG_PHY_SW_TYPE << offset, type << offset);
+ 
+ 	return 0;
  }
 -- 
 2.35.1
