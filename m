@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561F2609CE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3093609CF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiJXIiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
+        id S230115AbiJXIkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiJXIiV (ORCPT
+        with ESMTP id S230121AbiJXIkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:38:21 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B79604B1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:38:18 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id y12so8149001edc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=I7q4jjZ/11oP0wYx/mP/f1FCsbis6J0C3E07mdpbVVw=;
-        b=YA02PVXDKsrn9ltaGQq1rVpRNSuTE6y3ch/XBF/kmoNgtADrk+uPVI/iJH7R1txxp5
-         F0tTK9YMUuDLc6sWPMFcOq13dBSvSF3Kv+jIpzPWAWe+7ltapD+hT0p7do5PG0u8NnEr
-         pQqXFIVu6tXpa8hi8fVni1bPC4VS0mzauSS4E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I7q4jjZ/11oP0wYx/mP/f1FCsbis6J0C3E07mdpbVVw=;
-        b=x1KPtAxxrKKg1IoJU51c7wPXjMT4GFhHUtOO4V0tsWneDD3UO7nMlShHpbfc0vIwAk
-         XFIgdFhjAMRlLRYjV5UCuapqSzw8pHqf/8c4Bq1KuW6KLyebj2xu3K7tNBqftSXUtPt8
-         ER0kV7rCWByEkypRakVCkyluAjgLcR2IdEK/0DGKcrgNluAcyFByN2t9PuwahWqB4Jj1
-         RF7Af4IAUbs4p4f5kOF67Zi+yErS8QwvcJJVZ8kJbQ8k3LmttxLiH6XeYGRHHP5m8rQt
-         ui6Ah3+kbki/OuyznWlsvVNjV+B3Yi9i+JwpuBBVrqtJtnlFy2W75DHvwTP6Lf57DBs2
-         ihNA==
-X-Gm-Message-State: ACrzQf17V6C2sTtnwx//Lo8HsTxGRzm10HWnSTBBz2aU97N02AAr5HiO
-        pjW+Z40AYELjq1GsxjxNaeZs4J251mn7TFpk5lzfSA==
-X-Google-Smtp-Source: AMsMyM6cwWOYmOvAUbrctm2+2xxYfn9PiStTPWchMHlzL+E1TfVKSg06irPVtNqV4V9c2R6o5ri/Ukv7AEtCCeQzUVI=
-X-Received: by 2002:a17:907:b1c:b0:797:983a:7d97 with SMTP id
- h28-20020a1709070b1c00b00797983a7d97mr19041019ejl.267.1666600696615; Mon, 24
- Oct 2022 01:38:16 -0700 (PDT)
+        Mon, 24 Oct 2022 04:40:02 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B6A23E81;
+        Mon, 24 Oct 2022 01:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666600801; x=1698136801;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qSqf3GoAdrUKrL08IAjfyc7oJTBmbWa0J0R/wRLkH1Q=;
+  b=KKIKL1esS/wKrOQ1m1ysjcRlBwCQQm40EwvCw39s78YQhb5SPy1CujUe
+   3BCTAeR5N/i9WDVattFV5RPT5mtC7JMX7fLNH2VGZa4XmgEwNpVdkNBfk
+   Qt77Jl/cdpJRSYkYQKPYZK1A4eSYx1szgMhZQpEbZ8p8oVOpVNe/qtwfR
+   AMB0NJHjkETHGROaeQRLB3k6BtLs3p99Wg/gDsIyYjaxiWqPTtGO8K5VO
+   M/4cR4e6iyO2E+pJKOBT3229uKEp/OR2j9o0+wY4SGrF0tHvtTY8s/XC6
+   UYyDUJ2gRJYjk41Jq++Mvihu/+1be2BMKkJPsdW2fx0dsg7mV7Nj3wS9a
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="290670080"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="290670080"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 01:40:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="609121584"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="609121584"
+Received: from mylly.fi.intel.com (HELO [10.237.72.51]) ([10.237.72.51])
+  by orsmga006.jf.intel.com with ESMTP; 24 Oct 2022 01:39:57 -0700
+Message-ID: <623284c8-f4bb-1020-2f2e-a475f424c5b5@linux.intel.com>
+Date:   Mon, 24 Oct 2022 11:39:57 +0300
 MIME-Version: 1.0
-References: <166606025456.13363.3829702374064563472.stgit@donald.themaw.net> <166606036967.13363.9336408133975631967.stgit@donald.themaw.net>
-In-Reply-To: <166606036967.13363.9336408133975631967.stgit@donald.themaw.net>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 24 Oct 2022 10:38:05 +0200
-Message-ID: <CAJfpegts1pqM1Qi4sEAB22W1qBzZaAkgpY+LjBp65=Ns+KHB3w@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kernfs: dont take i_lock on revalidate
-To:     Ian Kent <raven@themaw.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>, Minchan Kim <minchan@kernel.org>,
-        Eric Sandeen <sandeen@sandeen.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Rick Lindsley <ricklind@linux.vnet.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.3.3
+Subject: Re: [PATCH v6 00/10] Designware PWM driver updates for OF
+To:     Ben Dooks <ben.dooks@sifive.com>, linux-pwm@vger.kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        u.kleine-koenig@pengutronix.de,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>
+References: <20221020151610.59443-1-ben.dooks@sifive.com>
+Content-Language: en-US
+From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
+In-Reply-To: <20221020151610.59443-1-ben.dooks@sifive.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Oct 2022 at 04:32, Ian Kent <raven@themaw.net> wrote:
->
-> In kernfs_dop_revalidate() when the passed in dentry is negative the
-> dentry directory is checked to see if it has changed and if so the
-> negative dentry is discarded so it can refreshed. During this check
-> the dentry inode i_lock is taken to mitigate against a possible
-> concurrent rename.
->
-> But if it's racing with a rename, becuase the dentry is negative, it
-> can't be the source it must be the target and it must be going to do
-> a d_move() otherwise the rename will return an error.
->
-> In this case the parent dentry of the target will not change, it will
-> be the same over the d_move(), only the source dentry parent may change
-> so the inode i_lock isn't needed.
->
-> Signed-off-by: Ian Kent <raven@themaw.net>
+Hi
 
-Reviewed-by: Miklos Szeredi <mszeredi@redhat.com>
+On 10/20/22 18:16, Ben Dooks wrote:
+> This is an updated version of the Designware PWM driver updates
+> for OF support, which now splits the driver into PCI and OF parts
+> as well as tries to sort out the review comments.
+> 
+> Hopefully this can now be queued for the next kernel version.
+> 
+> v6:
+>   - fix removal ordering of DWC_PERIOD_NS
+
+I did a quick test on our HW and PWM was counting as before.
+
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
