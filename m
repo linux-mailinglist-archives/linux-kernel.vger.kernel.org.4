@@ -2,175 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25BC60BC11
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244CC60BC01
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiJXVYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
+        id S233999AbiJXVVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235357AbiJXVYO (ORCPT
+        with ESMTP id S234575AbiJXVVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:24:14 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2042.outbound.protection.outlook.com [40.107.101.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E689F204AC9;
-        Mon, 24 Oct 2022 12:30:47 -0700 (PDT)
+        Mon, 24 Oct 2022 17:21:12 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20614.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::614])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFCE2D4461
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:27:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MtgKwmF0l/CvQiGc6jbJGzQopXSRkXL30tWGvUZerHt0WsTU1OE2F8PZ++BgVY6USFj8wMbu7PGW3ew/fQHtm2rOlLyBzomarWd+kMVbI1xELJRU5rTfHj8mdGcC/SNvEiSpz0ywEgGyLNb0qgCHFqyJVMzTcaX1nqPBhIvPY7McYY3ACLaxX+oXngz1dEmsFPZXKYjL7NpWqmfyXgY5lr2WNaOkW5r/hQH0rIHsIKINdVybwt3HC9gyAglCx1fEw8wGDc6Rm5F05O9H6+nEQwErUIiLlBE5s9d0+qhM9BYaMv7cAGULG0EBFjsm3KTsl+bbOk1NtdRL2o77a+bVtA==
+ b=hRo/0MszIt0mFuvGMv76gBjTKd52BJCyAk7Lp7PXuAjonXjERB32CIbV/TYB3DnBHh3eHEEeuUWuB1UsTAK8fw3HHJi0BT+qH2YoGE9QvV9jF83PgUB6alw2hVSgAddCHzgY+R2HXVKsMIT8EiqHk8RoTJmvImoWsaKnSr6P7N2m5aA2z55GfYIFXmKTToTcYdvr8H6zGzq7O2zhHQKBNa7MejgCPgzKBv7tqrhtu5DBlhDVDt2NaeCfJqeJqoQqi2qTYGU2GFMP2yyR+v7STr1SPOBRSDKK562Dh4ct1sy39zlAJ4cNLcOIPtUbcg1qdcaGfjXwTaT+BUUTL/sRMg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OihZybG2E9XgJgLg+2STNo+igkFycv9RLNhn28lZKKg=;
- b=ev3yDUPKkstZ58FQYJecMGrJy2ZTeu8+cFB+3fCtbKlOhj7v4wacAPCWO2GZUSzEfHqCw5TxLva1hxL/hfIk3x3RvWhf+MAXemJ5dk+5RnUtK1rx9K7jOaH8W67gx4mG1mtBkUrlCeaWPu7SVUA+AJvjFyb418fy+OgmCbjW/K1osOQM8LEDJrDfnjZ1UlIjRuPg1u+k3cU1u4G5/qlToVbeCwY0LtZfEYHwT0gGGwG0biGrmeN6ns1dPwGPaQu5yrKaiusnNQs9bScX2dIHotRoyDwNHKmHrQNHX1MdYa3bqIO9yvslSm8r0NfY+YQl7px419x6xEwIluhNX1U3QQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=GL/1Le8oCy2H3t+2uzVA+mGJeHKilVMqGe2csm2b0GI=;
+ b=TsIQaR6zEM+NIEa9/CGhYhGHaenNvO9vFQs5eqPtCbIIwiHsBGXhECtwLQOuk9iJ+3hXrAjVuNurkP75ditCNvFeDlV0wadnFHn9cVDnnAoUPLsw783Shdklo7nMfZi7xO/Z4Fl1agr0aWdOwF9WTJhbbyI70DProlxIe0sv3HJvuKeyIVdsX+lFKWtC/G0YySlV/vSIOioI0JOUeTez3+ttZr96Xosw0koNJF3/LS2+JoiAiI4RpXyeSTYVroVo2rRyDSYA89jFGUbA9bX61wVwG1p9j2t5KPcZqjCupI+G4P/PeK8WJhxmQS8rLNyqUc+AxzcRwyS5orirRxsRyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OihZybG2E9XgJgLg+2STNo+igkFycv9RLNhn28lZKKg=;
- b=b1OxNd2orNxr+lxyqHOn+Dsjqf2+8jRgRXQGqoh9uVhv6VSmHSNb18/DGji/SLbatUyqC1Emw7GZTmAqayZzj3lzO5MaPpLTO2Ph9Ab5eUbhwRn8/q8OWdtt8/rjxbXd+7T4EKXqKQ1QAJYMhSoq7RuhJENNZRSOGZe4SgziJO4JmnaqB49Xf5xZdHx9UHxq4HsQxZfFuggy7Btv4gpSxabCI/kZYcNyyw9XkgDmeEInUHI9J6g2ffPr3H2FvLrU69vYuKlbbM5x85voNmYMiljVyOI/+CmELUhfMOysrUgaFmGT3w+DtyLf2kDAwwi6S+VF+xpI/aj3m37VspHp3Q==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- BN9PR12MB5067.namprd12.prod.outlook.com (2603:10b6:408:134::16) with
+ bh=GL/1Le8oCy2H3t+2uzVA+mGJeHKilVMqGe2csm2b0GI=;
+ b=OM0n41pmuhYK0BFarv4Cqk0UTHlLDDEzXqe8pIunbcFHTk4CMZ776qdWOxcUeLT6XLljIsQdRvrwA9pCgj0dzXvVeP+69DB1hiC9RgAXat1dBNT2gVpGa0Cy7OwF2Bm02tR/jIyfJ6vo+Jq8bKIBnDuFWHngIy/lKbDH/qNK5tk=
+Received: from BN0PR04CA0112.namprd04.prod.outlook.com (2603:10b6:408:ec::27)
+ by CH0PR12MB5156.namprd12.prod.outlook.com (2603:10b6:610:bb::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Mon, 24 Oct
- 2022 19:21:33 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::c0e5:f111:3e59:7c66%6]) with mapi id 15.20.5746.023; Mon, 24 Oct 2022
- 19:21:32 +0000
-Message-ID: <f668441f-761e-7929-1e97-e48ca1150473@nvidia.com>
-Date:   Mon, 24 Oct 2022 20:21:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-References: <20221024112934.415391158@linuxfoundation.org>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO6P265CA0014.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:339::12) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Mon, 24 Oct
+ 2022 19:22:08 +0000
+Received: from BL02EPF0000C403.namprd05.prod.outlook.com
+ (2603:10b6:408:ec:cafe::48) by BN0PR04CA0112.outlook.office365.com
+ (2603:10b6:408:ec::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28 via Frontend
+ Transport; Mon, 24 Oct 2022 19:22:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0000C403.mail.protection.outlook.com (10.167.241.5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5723.20 via Frontend Transport; Mon, 24 Oct 2022 19:22:08 +0000
+Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 24 Oct
+ 2022 14:22:06 -0500
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Roman Li <roman.li@amd.com>, Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        "Harry Wentland" <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Lyude Paul <lyude@redhat.com>, Ian Chen <ian.chen@amd.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Colin Ian King <colin.king@intel.com>,
+        hersen wu <hersenxs.wu@amd.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>
+Subject: [PATCH 1/3] drm/edid: add a quirk for two LG monitors to get them to work on 10bpc
+Date:   Mon, 24 Oct 2022 15:22:21 -0400
+Message-ID: <20221024192224.180507-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|BN9PR12MB5067:EE_
-X-MS-Office365-Filtering-Correlation-Id: a9eda405-1768-4eef-2ee8-08dab5f4f5b4
+X-MS-TrafficTypeDiagnostic: BL02EPF0000C403:EE_|CH0PR12MB5156:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1c4de3bf-299e-4077-0122-08dab5f50b2e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BUpTU8MFqGaJclo7+wkgTZGd3v/vDxdbQ3epXQtdrbKDOXYy/uOVOa5vuYTm2PU2DZK2CasCRAeJnsNufpwHyvF3dSoNERa7GT0ccFGL2NZlPFWlfnl+Vn6HkhBFuMexCob2PYhwPhInGM+Yaqyu6zvA+NI9yv61OjVCYcxO1cmtErwHdIvvS6KrLEJHY1My7vu8TH+FOqAI9D/tZfoMXh501LGALXIRrd6ESqjGtR7Br4HTFN5ZfFbDUm74lXvPvvVeAZT64b8OBr3PUjA1UqVHPvF+MkM4MCxfTlAP4EqrjgekTmKOX97buQrpkhrbI1NfgDSoUPkDYL4vhBTi2tkRp2zAVmL/l3yBxPSUafx/3N8Kefix6iZF5N9VFTh1ab7/F1r55e0/cUAgIonNm6FZYGKOwovmXacY5WaHDLxejfmg2vz5wr44TsFa0mkixtqsXkCF5sVEAueMnSy0zbbnSyRMe5Z8UH0LYpyQ05kzxscfzPHGvXPNTwfDwds4IvTxaouzgTls9nxoTQcfAhfDhpfnKp2lM72O1JaPSvpZ3jm9bMePBSm7cKfk1LYM8Hh+m5qrseEhMBanhRoJ8YuuJtP/7w4hpJIFUZNIk3a8SE1L/SdOfjQGKm0E+tX4e/tUgqcQoEHX9bEeTYX4xRuGxS5nrec2PD29utOoGIRUeLfP16h+lB/unMLGdi2HHKymAF1TGi9bVrNp3vunSAzAk8VnYz6nrUQy5WDj77A07EGo3UEc3NSrgcysfj9QvKcBpvB6p8wsHj+RHryoOPMsXHWxg3qbl+L2suRRBtu0rkMkSS3vd+9JOtwwkDVTQojosNq4FOK5qJOn1diCiHRQv8DEznqicY6to92Weieww5vlvHyfzMLq9zakBuhs
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(366004)(39860400002)(396003)(136003)(451199015)(478600001)(83380400001)(66556008)(8676002)(6486002)(2616005)(31696002)(66946007)(8936002)(86362001)(186003)(5660300002)(966005)(66476007)(316002)(6506007)(36756003)(6512007)(6666004)(2906002)(41300700001)(7416002)(4326008)(53546011)(31686004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWRlc1ZMWTdWVTNwV2RUb25ONzdHcFBaMUprblNnS0ZGM29OZzI5ZmhORStM?=
- =?utf-8?B?ZmplZkNzTUtjYTFNUngzR2R4b0MwaHVnZFNSU29PY21lL0VRLzBBUW9rcnpY?=
- =?utf-8?B?Nk1HYVFqNTQ2RVRmM3dnMGZ2b09HbUMwR29YZ3hKTytQOE9NVmo4YU1qcFpR?=
- =?utf-8?B?Q09lTXR1Q3crSWZyWkpJRGg0SjIreXEvZ3QxMFJ2eXh1WVowaWN4Z0lmTHpk?=
- =?utf-8?B?RHNLMDJ3ZWtiRkRETmJlMWJ3cTNJemlIYUY1QW1DZldnaGxhZ1hRYUdVRU5I?=
- =?utf-8?B?ZzdRZ2tFVHRXam5pV09TUjlCTjl2OGc0Ukxadi8xUGNwN2tTU1huN2RNTWVN?=
- =?utf-8?B?NjUrK0wrU0FHajU1OGVzQkRxLzRScm5va1VBaXdsL1FqZTJMdTZqT0F2c1JP?=
- =?utf-8?B?SWI3QlQ1aFFXejNQWWxQNUFucnR4cG54cElHbFQ5YjJXUzRET29YTjJwVWNX?=
- =?utf-8?B?NzdiVG5rVFJncGFsbEZHQXVBYWs1Vmg3TGlTYzA2RzdOZENXTy9jcW1hVHgv?=
- =?utf-8?B?NVRFVlNKOHZJRUhtdUIwZHFBQ0Z4RTdEQ3VUa0sxSERteVBvYTJONjlzWjdB?=
- =?utf-8?B?MWRTbEZyR244WGxVZ0I2V1JZdHQ5aGpkVUN1elhUTmt3N1YxbzBuRE1UVEh4?=
- =?utf-8?B?U1VLNlFWbTNUNVRBVW16ajVFL24ycnZveDZwY0RqRmZPUHFKNDlwMEhrb2Jn?=
- =?utf-8?B?TFJiT1ptNW1YZnBnOXl2a0tEOUVTeXY4RXdaM2xQNUZHN0p2MS9wT2lCNFRO?=
- =?utf-8?B?K0UxbUtoYUlSZnN4YnNkMUlBNktRSXV6ekk2dG9KVUNheWNBU2lHMjRUMXlO?=
- =?utf-8?B?SUM3VUE5ZFY4VXNYYkxPR2xRNzRESkNZdTZXdm9wNytFRytiLzB5d1JxR2kx?=
- =?utf-8?B?UXIxa1V5ajBqR081a25YRG9WK3JzRU5xcW9BNHBwUGlMU0VlbnhZUHJzWnBP?=
- =?utf-8?B?OVNTYVVKNTg2eU9uZ1FvNHFHK2NpTE5OQWxqaVFBUHp5SDV5ZWg1eHpGNm5Y?=
- =?utf-8?B?Y1FZdnhuV3h1SSt5T3dYMGxqRlh0ZWdxWmFOTE9FN1VoZWNzeDIxdi9yUmU4?=
- =?utf-8?B?eW9uNXY2VnF6Vmh5Q2s1d1l3SURZZGcvMzdiZEhYbTFCNGYwOWxsa1F0Wk5C?=
- =?utf-8?B?V2NaS010a25sbXFmZW9IeGduRmZNUlpnOFBVdUpFeEY4aFJvZW43RDJ1Yzhh?=
- =?utf-8?B?OE9UaWxwcWVwdjRwczZ3Z0thS2ZzQ2pUczZER0JydExkRGRzSDRsVW5VM0ho?=
- =?utf-8?B?ajBLVkNoOHloZWkyNVV4TDF1R0hPR2xBYU5MWlVCcjhKcUtGZTJjd0lLalBC?=
- =?utf-8?B?M0Z5ZmxEc0YvdFVCdHFlZGI2SEVIVzRTMGwyQ3M4R253RUZRWDhXMzVZSmE3?=
- =?utf-8?B?dTZMYzA4c0V6cFlEdytMTlBweGhhSHNlOS9PYVM1d2h6WS9MN1F4SHk3RXNm?=
- =?utf-8?B?UGxtVVVsSDJMSEh1cHNBbkQzMGJwaE1Tcko2Nm0vWEhkNS91NWNmb2NEZUJF?=
- =?utf-8?B?OGtydFAvc0wybHFrUEJqaXZGdXFENndhNDFQWWEweFBQbnora0tMT3FlVXF4?=
- =?utf-8?B?OTAralYwYTN6aENOa3dHR1VPa0d5SjNGY0F4TkY2WWhjZlE3YXVpRTN0TElj?=
- =?utf-8?B?VThtY0NuZGdTTmhLZmNMamt1RXkyeUZOT1hXUy9Nb01lYXY1WjRXS2VyZGEv?=
- =?utf-8?B?NjFOanpWMDJtQzlTdUlqOTJKeGkrVGUvOEZIUDFOUlFKMW90RTFMS0RmdHBM?=
- =?utf-8?B?NE9wNVUzWERIWkVuSTkxN2sxUFc2RXZCZndPTWh3M2FUUThLM2tucFdTekhy?=
- =?utf-8?B?T3g0TjVPR1docGVGNWIwcCtWeEt3UXBqV0xVRi9mYjlxQ0FTMklHYkN6Uzk1?=
- =?utf-8?B?eGUxVWhqYnBpZHk5YndHYmN3UXBMMFhuY1pRWHNOUExQRWxYTEM0RHBGd2xB?=
- =?utf-8?B?WitGTWtsUkVWMTZxL1V5YVdFVWRMd2NGWnR2dWlXSVlaR1FtbkpTOUVKSGFa?=
- =?utf-8?B?SThIVmh2VmRFOE1ud1ZTNGRHajREejNpMFQ2ZTVraitLUWI2WTlmendrakVC?=
- =?utf-8?B?R0dNcFprb004MzJLRVMvdTI4bEVlemdDamNDeVhlUkttZGc4MUQvRUtlVWRZ?=
- =?utf-8?B?WmJocTN3YmRXSzM0QUFPeVliWEJlWWFVb0xvZTZTQlc2eUFCNUlzUHk5cFJw?=
- =?utf-8?B?bGx6WWVmQzhCb1ZWdTYwSWF5UVdUYWJyVnV1VUYzREpCT2Rwd2RsZ0tJVDhF?=
- =?utf-8?B?dUc3TFJueUN3WThQN2RCdzNHKzVBPT0=?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9eda405-1768-4eef-2ee8-08dab5f4f5b4
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 19:21:32.8200
+X-Microsoft-Antispam-Message-Info: Ea7FrIMOAWRj9FnKolmr2weZfpaX6zutlLQeepGjZGMyqcbkXQgaKjzn3mlm0pS2AyYjjccrZm89UBN7Z7QN7Ne5pHYL2u2Z8fJDwLKenD+rTBKHhHVuzwfkBPL4lO5+k4vDkSbqun1SYURCHOwHvvY1DsTjmY0AkSpT3uuBG2dE73kK9Zai5R5BicnllXebIyzLe+I4T2oeBv6Sl7zQMD4Vem/io4xYic1DjsgMweHQ8UJhYnTwPNgcObZOanw57vy9B5/4YT6KceFn4IJA0cyZKmR6lJQYFer3TkjrM90OUTvk1ap85JZS+pxlUKpMDu+hb+1Zk9/gD3DNT3vaPSXOMkhbgPChlSJlHmm+p7FHMOcB9aboMudpIGMKzD1adbSXsmobGC55+Rc6/7Xw1Zd67d0hmUwFvZn9cylJXwHZdvjRaCkIjPj8iFY94zJFfyw+TVJaT6/b3aUQlYkT4bUXnyOMxG9SSYgS/C5AKgtV2MxyWyBaW6SHonflkQn9Q/oBcSMtulYADGBVrEp+UFblS0xiTsZ5zS2u2H0LBPo8KdjhwnWP00F1Lt/8XBWrI2vxyPZtZ6rx+DPd+ZPJVdWVhLt1q0KNnQlNNELB8LDcbOOzS6U9fT72OKEcO8tn6EexSl+Cww2VVnB1k9/XeXOIssQwA8sO4EUc2QTvaE2at2HNadEOwcH06FVG5gfVl84TGrk11rNM8fy6ZNsxc15OLHDI0d0tGToktnyxIGajMBK/1i2LvxV7aHzgp04BuOVAKGW1lK7IrCst2OjrzZigTwTcdRAVDhu0Ri6p7DGTSC3KiR0WKkBIQSV8A9sZ3P95vWeE6nrSoMJYOyU8UA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(8936002)(82310400005)(426003)(40460700003)(47076005)(6916009)(54906003)(36756003)(26005)(82740400003)(45080400002)(40480700001)(86362001)(7696005)(356005)(478600001)(316002)(36860700001)(81166007)(41300700001)(7416002)(2616005)(336012)(5660300002)(8676002)(4326008)(2906002)(44832011)(16526019)(70586007)(1076003)(186003)(6666004)(70206006)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2022 19:22:08.5057
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GIZftkc2MK/wuknd1Zcbvg7g+WcRqmvfS/Ej157dkPHD3Ncy/QgsCbOrsGZAlz4S5dvHw41ChcYz9/R53L/DDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5067
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c4de3bf-299e-4077-0122-08dab5f50b2e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0000C403.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5156
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The LG 27GP950 and LG 27GN950 have visible display corruption when
+trying to use 10bpc modes. So, to fix this, cap their maximum DSC
+target bitrate to 15bpp.
 
-On 24/10/2022 12:31, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.4 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Suggested-by: Roman Li <roman.li@amd.com>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+ drivers/gpu/drm/drm_edid.c  | 12 ++++++++++++
+ include/drm/drm_connector.h |  6 ++++++
+ 2 files changed, 18 insertions(+)
 
-
-No new regressions for Tegra ...
-
-Test results for stable-v6.0:
-     11 builds:	11 pass, 0 fail
-     28 boots:	28 pass, 0 fail
-     130 tests:	128 pass, 2 fail
-
-Linux version:	6.0.4-rc1-gd4150c7b49be
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                 tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                 tegra20-ventana, tegra210-p2371-2180,
-                 tegra210-p3450-0000, tegra30-cardhu-a04
-
-Test failures:	tegra194-p2972-0000: boot.py
-                 tegra210-p3450-0000: devices
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index bc43e1b32092..f4f96115dce7 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -91,6 +91,8 @@ static int oui(u8 first, u8 second, u8 third)
+ #define EDID_QUIRK_FORCE_10BPC			(1 << 11)
+ /* Non desktop display (i.e. HMD) */
+ #define EDID_QUIRK_NON_DESKTOP			(1 << 12)
++/* Cap the DSC target bitrate to 15bpp */
++#define EDID_QUIRK_CAP_DSC_15BPP		(1 << 13)
+ 
+ #define MICROSOFT_IEEE_OUI	0xca125c
+ 
+@@ -151,6 +153,12 @@ static const struct edid_quirk {
+ 	EDID_QUIRK('F', 'C', 'M', 13600, EDID_QUIRK_PREFER_LARGE_75 |
+ 				       EDID_QUIRK_DETAILED_IN_CM),
+ 
++	/* LG 27GP950 */
++	EDID_QUIRK('G', 'S', 'M', 0x5bbf, EDID_QUIRK_CAP_DSC_15BPP),
++
++	/* LG 27GN950 */
++	EDID_QUIRK('G', 'S', 'M', 0x5b9a, EDID_QUIRK_CAP_DSC_15BPP),
++
+ 	/* LGD panel of HP zBook 17 G2, eDP 10 bpc, but reports unknown bpc */
+ 	EDID_QUIRK('L', 'G', 'D', 764, EDID_QUIRK_FORCE_10BPC),
+ 
+@@ -5511,6 +5519,7 @@ drm_reset_display_info(struct drm_connector *connector)
+ 
+ 	info->mso_stream_count = 0;
+ 	info->mso_pixel_overlap = 0;
++	info->max_dsc_bpp = 0;
+ }
+ 
+ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edid)
+@@ -5595,6 +5604,9 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
+ 		info->non_desktop = true;
+ 	}
+ 
++	if (quirks & EDID_QUIRK_CAP_DSC_15BPP)
++		info->max_dsc_bpp = 15;
++
+ 	return quirks;
+ }
+ 
+diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
+index 3ac4bf87f257..7a8fb486b6ab 100644
+--- a/include/drm/drm_connector.h
++++ b/include/drm/drm_connector.h
+@@ -634,6 +634,12 @@ struct drm_display_info {
+ 	 * @mso_pixel_overlap: eDP MSO segment pixel overlap, 0-8 pixels.
+ 	 */
+ 	u8 mso_pixel_overlap;
++
++	/**
++	 * @max_dsc_bpp: Maximum DSC target bitrate, if it is set to 0 the
++	 * monitor's default value is used instead.
++	 */
++	u32 max_dsc_bpp;
+ };
+ 
+ int drm_display_info_set_bus_formats(struct drm_display_info *info,
 -- 
-nvpublic
+2.38.0
+
