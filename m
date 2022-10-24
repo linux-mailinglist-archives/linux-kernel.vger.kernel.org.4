@@ -2,170 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4514609EB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE64609EBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiJXKIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:08:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
+        id S230408AbiJXKJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiJXKHs (ORCPT
+        with ESMTP id S231247AbiJXKIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:07:48 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382306580B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 03:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666606046; x=1698142046;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+aZ43RWKD9l9XJ1IxZm5qgIR8CoV0o/f/CkwHDYC5es=;
-  b=QEZ8K5OCgPQSsHwn1PP7MQ/cBPEk1Vtc7u/ViOJCxHMSmkeTzO4Pnftm
-   hRDay4/Tz37TzM40u3iaKkxblbJRNoiJ3yI3gSythIvyK4KGukRO41u1R
-   hG/76KAA67GemjCQJdDWCvR4SQPbgHP841Armuev3ok1LP590uwkNyGRY
-   0IEuPGdDSa2BCMGrpmnXZ3rEBvVmTOKqvlvnUAx6mOJASfrGQ0KXJJb2L
-   1WXu3qjpXEheCbqfE19cm+fJYofEI+Zb/paulfPVpFjdoi7OxtELsDKFg
-   09yno+uEgTHYxTOyzHIZdU/rBQaRXAdQkcdymCL4AesikY/IWcu9cAx/u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="306113142"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="306113142"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 03:07:24 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="626025505"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="626025505"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 03:07:22 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 7A89A2021B;
-        Mon, 24 Oct 2022 13:07:20 +0300 (EEST)
-Date:   Mon, 24 Oct 2022 10:07:20 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Laight <David.Laight@aculab.com>
-Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
-Message-ID: <Y1Zj2Eb5Tq9pRAhI@paasikivi.fi.intel.com>
-References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
- <Y1ZQSEMLkybFCadS@kroah.com>
- <Y1ZQpcdK4sdy+5QZ@kroah.com>
- <Y1ZW2WYli7Bfioxr@paasikivi.fi.intel.com>
- <Y1ZfcOxnAzIO5gKc@kroah.com>
+        Mon, 24 Oct 2022 06:08:46 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AC56A53F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 03:08:30 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id y26-20020a5d9b1a000000b006bc71505e97so6148481ion.16
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 03:08:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5/ph2+H3Trne1yiKW3qaHgPJwMgm6RCNSzQdLyP5X4c=;
+        b=Gm1gAY3PhIn0fJ8Npj/WRzbealQi35XyMfLlY4hM5MN8Z073e8zI6V1Ympk+mcflE/
+         CqnuTF3nMn2AlGu7eHW1JJ1YeA5+iAc8KM3S3/YKh2BmdUyzX3Mt+viOLgz92fvC+4TB
+         mwrmDnX7sUM3WBRI8ymjBAqfiWzhfhX2T5xXJTNe5llxCteU8kJky0V5oqSj6lYtIi9J
+         sVug0MWshY+TwXDGJtYv8RYTp9cy3V3ASWn70aKFnmQ9ZY2BH8c+OA03mzeQwr2CIX5R
+         IEiBJB42CV+97DD4kqbY9evImIAomMMTQKXYdpMrzTodmuqlI6I7nmnXPb0QBEP0LzBx
+         PezA==
+X-Gm-Message-State: ACrzQf0E6DTXgCASsGXfD6iTTH8cg/YNVJ9h8BhBiZsmbIgYWddlF+F6
+        hNbzq7YsytgmxpIXEyZ94pXFdxOHx9T1RkmWDbB9CQ2TiWFv
+X-Google-Smtp-Source: AMsMyM4QBOPAD3/t1YC3VJwY1O83zmHzq88mtWMNMBKPbU8D0Z/607i+hq6gHYwnZpmKqNNb7UYabfriW9OS++Di3ziiVO55z6QW
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1ZfcOxnAzIO5gKc@kroah.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:4190:b0:372:4b79:5d93 with SMTP id
+ az16-20020a056638419000b003724b795d93mr3954715jab.216.1666606058573; Mon, 24
+ Oct 2022 03:07:38 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 03:07:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001a167a05ebc4f62b@google.com>
+Subject: [syzbot] INFO: task hung in nilfs_detach_log_writer
+From:   syzbot <syzbot+e3973c409251e136fdd0@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, broonie@kernel.org, catalin.marinas@arm.com,
+        ebiederm@xmission.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
+        mark.rutland@arm.com, scott@os.amperecomputing.com,
+        syzkaller-bugs@googlegroups.com, will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hello,
 
-On Mon, Oct 24, 2022 at 11:48:32AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Oct 24, 2022 at 09:11:53AM +0000, Sakari Ailus wrote:
-> > Hi Greg,
-> > 
-> > Thanks for the comments.
-> > 
-> > On Mon, Oct 24, 2022 at 10:45:25AM +0200, Greg Kroah-Hartman wrote:
-> > > On Mon, Oct 24, 2022 at 10:43:52AM +0200, Greg Kroah-Hartman wrote:
-> > > > On Mon, Oct 24, 2022 at 11:26:10AM +0300, Sakari Ailus wrote:
-> > > > > container_of() casts the original type to another which leads to the loss
-> > > > > of the const qualifier if it is not specified in the caller-provided type.
-> > > > > This easily leads to container_of() returning a non-const pointer to a
-> > > > > const struct which the C compiler does not warn about.
-> > > > > 
-> > > > > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > > ---
-> > > > >  include/linux/container_of.h | 9 +++++++++
-> > > > >  1 file changed, 9 insertions(+)
-> > > > > 
-> > > > > diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-> > > > > index 2f4944b791b81..c7c21d0f41a87 100644
-> > > > > --- a/include/linux/container_of.h
-> > > > > +++ b/include/linux/container_of.h
-> > > > > @@ -13,6 +13,10 @@
-> > > > >   * @type:	the type of the container struct this is embedded in.
-> > > > >   * @member:	the name of the member within the struct.
-> > > > >   *
-> > > > > + * WARNING: as container_of() casts the given struct to another, also the
-> > > > 
-> > > > No need for "also" here (sorry for the grammar nit.)
-> > > > 
-> > > > > + * possible const qualifier of @ptr is lost unless it is also specified in
-> > > > > + * @type. This is not a problem if the containing object is not const. Use with
-> > > > > + * care.
-> > > > 
-> > > > I do not think these last two sentences you added here are needed
-> > > > either.
-> > > > 
-> > > > 
-> > > > >   */
-> > > > >  #define container_of(ptr, type, member) ({				\
-> > > > >  	void *__mptr = (void *)(ptr);					\
-> > > > > @@ -27,6 +31,11 @@
-> > > > >   * @type:	the type of the container struct this is embedded in.
-> > > > >   * @member:	the name of the member within the struct.
-> > > > >   *
-> > > > > + * WARNING: as container_of() casts the given struct to another, also the
-> > > 
-> > > Wrong function name here.
-> > 
-> > I'll address this and the other two issues above in v2.
-> > 
-> > > 
-> > > > > + * possible const qualifier of @ptr is lost unless it is also specified in
-> > > > > + * @type. This is not a problem if the containing object is not const. Use with
-> > > > > + * care.
-> > > > 
-> > > > Same comments here.
-> > > 
-> > > Wait, no one uses this macro, so why not just remove it entirely?
-> > 
-> > Good question. It appears to be a (relatively) common pattern to look up
-> > something and the return its containing object if the lookup was
-> > successful. Doing a quick
-> > 
-> > 	$ git grep 'container_of.*:' drivers include
-> 
-> And odds are, they all are wrong.
-> 
-> Any function that has a pointer sent to it that it wants to then cast
-> out to the outer size of the structure has to implicitly know that this
-> is a valid pointer.  There's no way to check so you have to trust the
-> fact that the caller sent you the right thing.
-> 
-> Trying to check is almost always someone trying to be "over eager" in
-> testing things that can never happen.  Just like all of the checks for
-> the result of a container_of() call, that's always wrong as well.
+syzbot found the following issue on:
 
-I don't see how it would be more wrong than checking for NULL (or an error)
-in other macros. The caller won't have to check for those separately and
-this tends to avoid accidental NULL pointer dereferences.
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=12c63b3c880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3973c409251e136fdd0
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13010d3c880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c58e6e880000
 
-But given that the macro was unused after four or so years suggests that we
-can probably do fine without it, too.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/ef6217a5c5b6/mount_0.gz
 
-> > reveals more than 20 instances of the pattern. There are probably more
-> > those that use if for testing for NULL. I guess people don't know about
-> > this macro, apart from the developers of the staging driver it was added
-> > for (commit 05e6557b8ed833546ee2b66ce6b58fecf09f439e).
-> 
-> Ah, lustre is long-gone, so I'll just add a patch to my tree to remove
-> this macro.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e3973c409251e136fdd0@syzkaller.appspotmail.com
 
-Ok. I'll send v2 with this in mind.
+INFO: task syz-executor217:3091 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor217 state:D stack:    0 pid: 3091 ppid:  3089 flags:0x00000008
+Call trace:
+ __switch_to+0x180/0x298 arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x5a0 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ schedule_timeout+0x64/0x1b4 kernel/time/timer.c:1911
+ do_wait_for_common+0xf4/0x184 kernel/sched/completion.c:85
+ __wait_for_common kernel/sched/completion.c:106 [inline]
+ wait_for_common kernel/sched/completion.c:117 [inline]
+ wait_for_completion+0x48/0x60 kernel/sched/completion.c:138
+ __flush_work+0xd4/0x144 kernel/workqueue.c:3073
+ flush_work+0x24/0x38 kernel/workqueue.c:3094
+ nilfs_segctor_destroy fs/nilfs2/segment.c:2726 [inline]
+ nilfs_detach_log_writer+0x1e0/0x4d0 fs/nilfs2/segment.c:2810
+ nilfs_put_super+0x28/0x9c fs/nilfs2/super.c:468
+ generic_shutdown_super+0x8c/0x190 fs/super.c:491
+ kill_block_super+0x30/0x78 fs/super.c:1427
+ deactivate_locked_super+0x70/0xe8 fs/super.c:332
+ deactivate_super+0xd0/0xd4 fs/super.c:363
+ cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
+ __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+ task_work_run+0xc4/0x14c kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+ prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+ exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+ el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
 
--- 
-Kind regards,
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/11:
+ #0: ffff80000d433568 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/12:
+ #0: ffff80000d433bb8 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
+1 lock held by khungtaskd/27:
+ #0: ffff80000d433440 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x4/0x48 include/linux/rcupdate.h:279
+2 locks held by getty/2727:
+ #0: ffff0000c7906098 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x28/0x58 drivers/tty/tty_ldisc.c:244
+ #1: ffff80000f6162f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x19c/0x89c drivers/tty/n_tty.c:2177
+1 lock held by syz-executor217/3091:
+ #0: ffff0000c90930e0 (&type->s_umount_key#41){+.+.}-{3:3}, at: deactivate_super+0xc8/0xd4 fs/super.c:362
+3 locks held by kworker/1:0/3113:
+ #0: ffff0000c0010738 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work+0x270/0x504 kernel/workqueue.c:2262
+ #1: ffff800012703d80 ((work_completion)(&sci->sc_iput_work)){+.+.}-{0:0}, at: process_one_work+0x29c/0x504 kernel/workqueue.c:2264
+ #2: ffff0000c9093650 (sb_internal#2){.+.+}-{0:0}, at: nilfs_evict_inode+0x94/0x1cc fs/nilfs2/inode.c:911
 
-Sakari Ailus
+=============================================
+
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
