@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 519DC60B3E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6AD060B2EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233152AbiJXRTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
+        id S231544AbiJXQxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235551AbiJXRTO (ORCPT
+        with ESMTP id S235335AbiJXQtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:19:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63F0558F4;
-        Mon, 24 Oct 2022 08:54:11 -0700 (PDT)
+        Mon, 24 Oct 2022 12:49:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48CD65B7;
+        Mon, 24 Oct 2022 08:32:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDAEF61315;
-        Mon, 24 Oct 2022 12:14:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB67CC433C1;
-        Mon, 24 Oct 2022 12:14:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBCA9B81203;
+        Mon, 24 Oct 2022 12:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D226C433D6;
+        Mon, 24 Oct 2022 12:03:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613656;
-        bh=lMngYpEaHn+GSZ8B6h5KSHU2ZLlH+zvHYVzQIpHhrHI=;
+        s=korg; t=1666613027;
+        bh=ksRKJY5TQUMx/Q1CSvNcnmyPvkMbckLSJ11m16BwXMg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tvLk25mr24WEVsR+QuIAaqj43TIuJrCx/IG0Yy1bU5rJFZ3AilO7ysiYfH0QyY+b+
-         voO6kgWUkgNRW+lV8ZMDp98k0bR8y+6w1fXIu7zazfCzcSG3QGSKv6J20xdAjH21oH
-         7miTMiktpmP9ztqmJl/TiZBASxfQBrH6GLpNbhYk=
+        b=R9T2TNYEwUG4oLRdtWJadhBzfUFM2bwc+RgqNV9OEH/GPRyJhJZl3nsD3CqjWL33p
+         ZVU3f93G2iY6EPSRkXPjRfFNOAvGZS5cZg0qxptXAKbVwMY9drbhSpTn0i3ha3fBKp
+         ptzXbSN5Qyd4bV3gWr46OBPCbDF967t/MZe1FRic=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Richard Acayan <mailingradian@gmail.com>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        stable@vger.kernel.org, Wei Yongjun <weiyongjun1@huawei.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 218/255] mmc: sdhci-msm: add compatible string check for sdm670
-Date:   Mon, 24 Oct 2022 13:32:08 +0200
-Message-Id: <20221024113010.317114540@linuxfoundation.org>
+Subject: [PATCH 4.19 210/229] power: supply: adp5061: fix out-of-bounds read in adp5061_get_chg_type()
+Date:   Mon, 24 Oct 2022 13:32:09 +0200
+Message-Id: <20221024113005.989970320@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Acayan <mailingradian@gmail.com>
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-[ Upstream commit 4de95950d970c71a9e82a24573bb7a44fd95baa1 ]
+[ Upstream commit 9d47e01b9d807808224347935562f7043a358054 ]
 
-The Snapdragon 670 has the same quirk as Snapdragon 845 (needing to
-restore the dll config). Add a compatible string check to detect the need
-for this.
+ADP5061_CHG_STATUS_1_CHG_STATUS is masked with 0x07, which means a length
+of 8, but adp5061_chg_type array size is 4, may end up reading 4 elements
+beyond the end of the adp5061_chg_type[] array.
 
-Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220923014322.33620-3-mailingradian@gmail.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Acked-by: Michael Hennerich <michael.hennerich@analog.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/host/sdhci-msm.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/power/supply/adp5061.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-index 8ab963055238..5e6f6c951fd4 100644
---- a/drivers/mmc/host/sdhci-msm.c
-+++ b/drivers/mmc/host/sdhci-msm.c
-@@ -1755,6 +1755,7 @@ static const struct sdhci_msm_variant_info sdm845_sdhci_var = {
- static const struct of_device_id sdhci_msm_dt_match[] = {
- 	{.compatible = "qcom,sdhci-msm-v4", .data = &sdhci_msm_mci_var},
- 	{.compatible = "qcom,sdhci-msm-v5", .data = &sdhci_msm_v5_var},
-+	{.compatible = "qcom,sdm670-sdhci", .data = &sdm845_sdhci_var},
- 	{.compatible = "qcom,sdm845-sdhci", .data = &sdm845_sdhci_var},
- 	{},
- };
+diff --git a/drivers/power/supply/adp5061.c b/drivers/power/supply/adp5061.c
+index 939fd3d8fb1a..1ad044330599 100644
+--- a/drivers/power/supply/adp5061.c
++++ b/drivers/power/supply/adp5061.c
+@@ -428,11 +428,11 @@ static int adp5061_get_chg_type(struct adp5061_state *st,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	chg_type = adp5061_chg_type[ADP5061_CHG_STATUS_1_CHG_STATUS(status1)];
+-	if (chg_type > ADP5061_CHG_FAST_CV)
++	chg_type = ADP5061_CHG_STATUS_1_CHG_STATUS(status1);
++	if (chg_type >= ARRAY_SIZE(adp5061_chg_type))
+ 		val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
+ 	else
+-		val->intval = chg_type;
++		val->intval = adp5061_chg_type[chg_type];
+ 
+ 	return ret;
+ }
 -- 
 2.35.1
 
