@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4CA609C40
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEB0609C41
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiJXIQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S230070AbiJXIQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbiJXIPM (ORCPT
+        with ESMTP id S230266AbiJXIP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:15:12 -0400
+        Mon, 24 Oct 2022 04:15:26 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BCE52E9F7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:14:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E99F3340A
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:14:51 -0700 (PDT)
 Received: from ipservice-092-217-079-032.092.217.pools.vodafone-ip.de ([92.217.79.32] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1omsbb-0000nk-Ns; Mon, 24 Oct 2022 10:14:43 +0200
+        id 1omsbc-0000nk-US; Mon, 24 Oct 2022 10:14:45 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -28,9 +28,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Pavel Skripkin <paskripkin@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 16/17] staging: r8188eu: remove an else branch
-Date:   Mon, 24 Oct 2022 10:14:16 +0200
-Message-Id: <20221024081417.66441-17-martin@kaiser.cx>
+Subject: [PATCH 17/17] staging: r8188eu: go2asoc is not needed
+Date:   Mon, 24 Oct 2022 10:14:17 +0200
+Message-Id: <20221024081417.66441-18-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221024081417.66441-1-martin@kaiser.cx>
 References: <20221024081417.66441-1-martin@kaiser.cx>
@@ -44,27 +44,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we go into this else branch, go2asoc is 0. We can continue to the end
-of the function. The final if condition will be false.
+Remove the go2asoc variable in OnAuthClient and call start_clnt_assoc
+directly. This makes the code a tiny bit shorter.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_mlme_ext.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 7120e015d1bd..77402e55f640 100644
+index 77402e55f640..ffb708f242e6 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -848,8 +848,6 @@ static void OnAuthClient(struct adapter *padapter, struct recv_frame *precv_fram
+@@ -796,7 +796,6 @@ static void OnAuthClient(struct adapter *padapter, struct recv_frame *precv_fram
+ {
+ 	unsigned int	seq, len, status, offset;
+ 	unsigned char	*p;
+-	unsigned int	go2asoc = 0;
+ 	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+ 	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+ 	u8 *pframe = precv_frame->rx_data;
+@@ -843,15 +842,12 @@ static void OnAuthClient(struct adapter *padapter, struct recv_frame *precv_fram
+ 			return;
+ 		} else {
+ 			/*  open system */
+-			go2asoc = 1;
++			start_clnt_assoc(padapter);
+ 		}
  	} else if (seq == 4) {
  		if (pmlmeinfo->auth_algo == dot11AuthAlgrthm_Shared)
- 			go2asoc = 1;
--		else
--			return;
+-			go2asoc = 1;
++			start_clnt_assoc(padapter);
  	}
+-
+-	if (go2asoc)
+-		start_clnt_assoc(padapter);
+ }
  
- 	if (go2asoc)
+ static void UpdateBrateTbl(u8 *mbrate)
 -- 
 2.30.2
 
