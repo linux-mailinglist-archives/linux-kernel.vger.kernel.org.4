@@ -2,175 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC1C60B70B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46F360B709
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiJXTQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
+        id S232960AbiJXTPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233100AbiJXTO6 (ORCPT
+        with ESMTP id S232939AbiJXTOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:14:58 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FBF15A942;
-        Mon, 24 Oct 2022 10:53:18 -0700 (PDT)
-Received: from relay3-d.mail.gandi.net (unknown [217.70.183.195])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 32703C5D48;
-        Mon, 24 Oct 2022 17:49:59 +0000 (UTC)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id DACCA6000C;
-        Mon, 24 Oct 2022 17:48:35 +0000 (UTC)
-Message-ID: <ed60523e-d94c-8a41-7322-c2da0ac6a097@ovn.org>
-Date:   Mon, 24 Oct 2022 19:48:35 +0200
+        Mon, 24 Oct 2022 15:14:49 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2A13D5BC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:53:00 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id g16so6071208qtu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:52:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ODsrsWS79TZ9u82LUQmpT+8SG3CGzlKkIICyAV1vbKE=;
+        b=JO2IMB7qZt2AnJOyN9ZFzUnOHtmqg0mKEfR7l0eOnPbHaYMcKDYa3QCEkRsBKcT4AS
+         Gkep1ZHExpU7BsIYj0IPH2I876Ns2zDING27ujVHv8tWEwIe7p3qWd92T0o4Ljkbx7Mh
+         mljhGUSj226S6VELC4+X7gPVrfFvnLkyg9izfrw4jsY2MIXy3HN+QwHOakcj8bqFgoww
+         8/OxGBag2u/5zvxQG8VE0c7ZERoCOI8UiiTreEd/p0E2N0+5o6xOMJPkrliux8wZysOx
+         KSFVio/VBcOVXP0JgqQl+PqhK2oUb0k/Tc+nBnA+ZKqO7EmmuWcziB21068HI1Pxdto6
+         Z3IA==
+X-Gm-Message-State: ACrzQf2VslPlAbHdsPkjZRKI5jjJ6kXXqx9UxBU4nhmjIZtgQ8MdIZgo
+        tZK5NT3nJLIF8TyoB69kKkEPbEtnv50Vn0nr5yU=
+X-Google-Smtp-Source: AMsMyM7YynqK6N8zgQh4XrvsCLd/RTTaZ1KTeCNfFXdMnXjRVJ3DDgYjYsVjkuh3YA41BP+sXu41EaPrRc76pEEkLhc=
+X-Received: by 2002:a05:622a:13c6:b0:39c:c34f:29ec with SMTP id
+ p6-20020a05622a13c600b0039cc34f29ecmr28604577qtk.153.1666633884490; Mon, 24
+ Oct 2022 10:51:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Cc:     i.maximets@ovn.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Content-Language: en-US
-To:     Antonio Quartulli <antonio@openvpn.net>, nicolas.dichtel@6wind.com,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20221021114921.3705550-1-i.maximets@ovn.org>
- <20221021090756.0ffa65ee@kernel.org>
- <eb6903b7-c0d9-cc70-246e-8dbde0412433@6wind.com>
- <ded477ea-08fa-b96d-c192-9640977b42e6@ovn.org>
- <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
- <cd51cf56-c729-87da-5e2e-03447c9a3d42@openvpn.net>
-From:   Ilya Maximets <i.maximets@ovn.org>
-Subject: Re: [RFE net-next] net: tun: 1000x speed up
-In-Reply-To: <cd51cf56-c729-87da-5e2e-03447c9a3d42@openvpn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
+ <Y1ZQSEMLkybFCadS@kroah.com> <Y1ZQpcdK4sdy+5QZ@kroah.com> <Y1ZUIEYcjQZMdSfp@smile.fi.intel.com>
+ <202210241035.1487F523@keescook>
+In-Reply-To: <202210241035.1487F523@keescook>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 24 Oct 2022 19:51:11 +0200
+Message-ID: <CAJZ5v0jczp8J89EdywFDbzPmmeKmoQ3wNFUmKxH_1xS7LPNzkA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        David Laight <David.Laight@aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 17:59, Antonio Quartulli wrote:
-> Hi,
-> 
-> On 24/10/2022 14:27, Nicolas Dichtel wrote:
->> Le 24/10/2022 à 13:56, Ilya Maximets a écrit :
->>> On 10/24/22 11:44, Nicolas Dichtel wrote:
->>>> Le 21/10/2022 à 18:07, Jakub Kicinski a écrit :
->>>>> On Fri, 21 Oct 2022 13:49:21 +0200 Ilya Maximets wrote:
->>>>>> Bump the advertised speed to at least match the veth.  10Gbps also
->>>>>> seems like a more or less fair assumption these days, even though
->>>>>> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
->>>>>> and let the application/user decide on a right value for them.
->>>>>
->>>>> UNKOWN would seem more appropriate but at this point someone may depend
->>>>> on the speed being populated so it could cause regressions, I fear :S
->>>> If it is put in a bonding, it may cause some trouble. Maybe worth than
->>>> advertising 10M.
->>>
->>> My thoughts were that changing the number should have a minimal impact
->>> while changing it to not report any number may cause some issues in
->>> applications that doesn't expect that for some reason (not having a
->>> fallback in case reported speed is unknown isn't great, and the argument
->>> can be made that applications should check that, but it's hard to tell
->>> for every application if they actually do that today).
->>>
->>> Bonding is also a good point indeed, since it's even in-kernel user.
->>>
->>>
->>> The speed bump doesn't solve the problem per se.  It kind of postpones
->>> the decision, since we will run into the same issue eventually again.
->>> That's why I wanted to discuss that first.
->>>
->>> Though I think that at least unification across virtual devices (tun and
->>> veth) should be a step in a right direction.
->> Just to make it clear, I'm not against aligning speed with veth, I'm only
->> against reporting UNKNOWN.
->>
->>>
->>>>
->>>> Note that this value could be configured with ethtool:
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e24f2dd516ed
->>>
->>> This is interesting, but it's a bit hard to manage, because in order
->>> to make a decision to bump the speed, application should already know
->>> that this is a tun/tap device.  So, there has to be a special case
->> But this should be done by the application which creates this tun interface. Not
->> by the application that uses this information.
->>
->>> implemented in the code that detects the driver and changes the speed
->>> (this is about application that is using the interface, but didn't
->>> create it), but if we already know the driver, then it doesn't make
->>> sense to actually change the speed in many cases as application can
->>> already act accordingly.
->>>
->>> Also, the application may not have permissions to do that (I didn't
->>> check the requirements, but my guess would be at least CAP_NET_ADMIN?).
->> Sure, but the one who creates it, has the right to configure it correctly. It's
->> part of the configuration of the interface.
->>
->> Setting an higher default speed seems to be a workaround to fix an incorrect
->> configuration. And as you said, it will probably be wrong again in a few years ;-)
->>
-> 
-> What if the real throughput is in the order of 10Mbps?
-> 
-> The tun driver can be used for many purposes and the throughput will depend on the specific case.
-> 
-> Imagine an application using the reported speed for computing some kind of metric: having 10Gbps will corrupt the result entirely.
-> 
-> OTOH it is true that 10Mbps may corrupt the metric as well, but the latter is closer to reality IMHO (when using tun to process and send traffic over the network).
-> 
-> At the end I also agree that the speed should be set by whoever creates the interface. As they are the only one who knows what to expect for real.
-> 
-> (Note: tun is used also to implement userspace VPNs, with throughput ranging from 10Mbps to 1Gbps).
+On Mon, Oct 24, 2022 at 7:39 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Oct 24, 2022 at 12:00:16PM +0300, Andy Shevchenko wrote:
+> > + Kees
+> >
+> > On Mon, Oct 24, 2022 at 10:45:25AM +0200, Greg Kroah-Hartman wrote:
+> > > On Mon, Oct 24, 2022 at 10:43:52AM +0200, Greg Kroah-Hartman wrote:
+> > > > On Mon, Oct 24, 2022 at 11:26:10AM +0300, Sakari Ailus wrote:
+> > > > > container_of() casts the original type to another which leads to the loss
+> > > > > of the const qualifier if it is not specified in the caller-provided type.
+> > > > > This easily leads to container_of() returning a non-const pointer to a
+> > > > > const struct which the C compiler does not warn about.
+> >
+> > ...
+> >
+> > > > >   * @type:      the type of the container struct this is embedded in.
+> > > > >   * @member:    the name of the member within the struct.
+> > > > >   *
+> > > > > + * WARNING: as container_of() casts the given struct to another, also the
+> > >
+> > > Wrong function name here.
+> > >
+> > > > > + * possible const qualifier of @ptr is lost unless it is also specified in
+> > > > > + * @type. This is not a problem if the containing object is not const. Use with
+> > > > > + * care.
+> > > >
+> > > > Same comments here.
+> > >
+> > > Wait, no one uses this macro, so why not just remove it entirely?
+> >
+> > Kees, do you know why and what for we have container_of_safe()?
+>
+> It looks like it was designed to handle the cases where the pointer was
+> ERR_OR_NULL:
+>
+>        IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) : \
+>                ((type *)(__mptr - offsetof(type, member))); })
+>
+> i.e. just pass through the NULL/ERR instead of attempting the cast,
+> which would fail spectacularly. :)
+>
+> It seems like this version should actually be used everywhere instead of
+> nowhere... (i.e. just drop container_of() and rename container_of_safe()
+> to container_of())
 
-That's an interesting perspective, Antonio.  Thanks!
+As a rule, though, users of container_of() don't check the pointer
+returned by it against NULL, so I'm not sure how much of an
+improvement that would be.
 
-However, before we can answer your questions, I think we need to define
-what the link speed of a tun/tap interface actually is.
-
-IMHO, we should not mix up the link speed and the application performance.
-
-I'm thinking about the link speed as a speed at which kernel driver can
-make packets available to the userpsace application or the speed at which
-kernel driver is able to send out packets received from the application.
-
-The performance of the application itself is a bit orthogonal to
-parameters of the device.
-
-I think, as we do not blame a physical network card or the veth interface
-for the processing speed of the application on the other side of the
-network, the same way we should not blame the tun driver/interface for
-the processing speed in the application that opened it.
-
-In that sense the link speed of a tap interface is the speed at which
-kernel can enqueue/dequeue packets to/from userspace.
-On a modern CPU that speed will be relatively high.  If it's actually
-10 Mbps, than it means that you're likely running on a very slow CPU and
-will probably not be able to generate more traffic for it anyway.
-
-For the calculation of some kind of metric based on the reported link
-speed, I'm not sure I understand how that may corrupt the result.  The
-reported 10 Mbps is not correct either way, so calculations make no
-practical sense.  If the application expects the link speed to be 10 Mbps,
-than I'm not sure why it is checking the link speed in the first place.
-
-Do you have some examples of such metrics?
-
-
-All in all, TUN/TAP is a transport, not an end user of the packets it
-handles.  And it seems to be a work for transport layer protocols to
-handle the mismatch between the wire speed and the application speed on
-the other end.
-
-
-Saying that, I agree that it makes sense to set the link speed in the
-application that creates the interface if that application does actually
-know what it is capable of.  But not all applications know what speed
-they can handle, so it's not always easy, and will also depend on the
-CPU speed in many cases.
-
-Best regards, Ilya Maximets.
+If NULL is passed to container_of(), there will be a spectacular
+failure, sooner or later ...
