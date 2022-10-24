@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEB360A1BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C6D60A1BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbiJXLcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57702 "EHLO
+        id S229802AbiJXLcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJXLc2 (ORCPT
+        with ESMTP id S230318AbiJXLcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:32:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59EA05726D;
-        Mon, 24 Oct 2022 04:32:12 -0700 (PDT)
+        Mon, 24 Oct 2022 07:32:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11C26550B9;
+        Mon, 24 Oct 2022 04:32:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFCA161257;
-        Mon, 24 Oct 2022 11:32:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02CFBC433C1;
-        Mon, 24 Oct 2022 11:32:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C9347B81133;
+        Mon, 24 Oct 2022 11:32:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37FBFC433D6;
+        Mon, 24 Oct 2022 11:32:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611129;
-        bh=3OvWPyMcLqjL4YA7kf1WwcIcmYqLuyCFPIa5p8Kn9iM=;
+        s=korg; t=1666611134;
+        bh=UjehT5YJLDsyySDHKVN1z6J5noOu+leeNjyGkzg8UE8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WbIK7KWOhP4H7BkXLbME059EM+iCt4VnSeqNe2YJFeeX7a4LzS8pFm/zL7/1hINFF
-         7pARmez+bCllusFy8RqMX0jSooL4vtEiP/5b9fLRBDMs/v16/isqRkCbfuV8Bssrg6
-         wCKFeMB2efSgFid6BR92O3QuDy+8yGg6Mi4hZjgo=
+        b=JlUlJ7UPfvgfLqVVexmtPUuaIA0/S2Psnd0rSzsOPPxM6A8uQaVOEWUiaRf9ApOZR
+         t1Q8HDzIUJFKNSysJdZFfovYFG+27C04NkbDBiG3OknEKJqVFg2uDNFBorOzgnawGD
+         rxiz3LoGeeU+gl/62705xAMrFReLuK2+PYyPifdY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>
-Subject: [PATCH 6.0 02/20] drm/i915/bios: Use hardcoded fp_timing size for generating LFP data pointers
-Date:   Mon, 24 Oct 2022 13:31:04 +0200
-Message-Id: <20221024112934.517947061@linuxfoundation.org>
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH 6.0 03/20] pinctrl: amd: change dev_warn to dev_dbg for additional feature support
+Date:   Mon, 24 Oct 2022 13:31:05 +0200
+Message-Id: <20221024112934.560703191@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
 References: <20221024112934.415391158@linuxfoundation.org>
@@ -55,132 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ville Syrjälä <ville.syrjala@linux.intel.com>
+From: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
 
-commit d3a7051841f0a4bcb1ee26a1b721c6150cc4c2b1 upstream.
+commit 3160b37e5cb695e866e06c3fdbc385846b569294 upstream.
 
-The current scheme for generating the LFP data table pointers
-(when the block including them is missing from the VBT) expects
-the 0xffff sequence to only appear in the fp_timing terminator
-entries. However some VBTs also have extra 0xffff sequences
-elsewhere in the LFP data. When looking for the terminators
-we may end up finding those extra sequeneces insted, which means
-we deduce the wrong size for the fp_timing table. The code
-then notices the inconsistent looking values and gives up on
-the generated data table pointers, preventing us from parsing
-the LFP data table entirely.
+Use dev_dbg instead of dev_warn for additional support of pinmux
+feature.
 
-Let's give up on the "search for the terminators" approach
-and instead just hardcode the expected size for the fp_timing
-table.
-
-We have enough sanity checks in place to make sure we
-shouldn't end up parsing total garbage even if that size
-should change in the future (although that seems unlikely
-as the fp_timing and dvo_timing tables have been declared
-obsolete as of VBT version 229).
-
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/6592
-Signed-off-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220818192223.29881-3-ville.syrjala@linux.intel.com
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Link: https://lore.kernel.org/r/20220830110525.1933198-1-Basavaraj.Natikar@amd.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Cc: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
 ---
- drivers/gpu/drm/i915/display/intel_bios.c |   46 +++++++++++-------------------
- 1 file changed, 18 insertions(+), 28 deletions(-)
+ drivers/pinctrl/pinctrl-amd.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/i915/display/intel_bios.c
-+++ b/drivers/gpu/drm/i915/display/intel_bios.c
-@@ -337,18 +337,6 @@ static bool fixup_lfp_data_ptrs(const vo
- 	return validate_lfp_data_ptrs(bdb, ptrs);
- }
+--- a/drivers/pinctrl/pinctrl-amd.c
++++ b/drivers/pinctrl/pinctrl-amd.c
+@@ -1051,13 +1051,13 @@ static void amd_get_iomux_res(struct amd
  
--static const void *find_fp_timing_terminator(const u8 *data, int size)
--{
--	int i;
--
--	for (i = 0; i < size - 1; i++) {
--		if (data[i] == 0xff && data[i+1] == 0xff)
--			return &data[i];
--	}
--
--	return NULL;
--}
--
- static int make_lfp_data_ptr(struct lvds_lfp_data_ptr_table *table,
- 			     int table_size, int total_size)
- {
-@@ -372,11 +360,22 @@ static void next_lfp_data_ptr(struct lvd
- static void *generate_lfp_data_ptrs(struct drm_i915_private *i915,
- 				    const void *bdb)
- {
--	int i, size, table_size, block_size, offset;
--	const void *t0, *t1, *block;
-+	int i, size, table_size, block_size, offset, fp_timing_size;
- 	struct bdb_lvds_lfp_data_ptrs *ptrs;
-+	const void *block;
- 	void *ptrs_block;
- 
-+	/*
-+	 * The hardcoded fp_timing_size is only valid for
-+	 * modernish VBTs. All older VBTs definitely should
-+	 * include block 41 and thus we don't need to
-+	 * generate one.
-+	 */
-+	if (i915->vbt.version < 155)
-+		return NULL;
-+
-+	fp_timing_size = 38;
-+
- 	block = find_raw_section(bdb, BDB_LVDS_LFP_DATA);
- 	if (!block)
- 		return NULL;
-@@ -385,17 +384,8 @@ static void *generate_lfp_data_ptrs(stru
- 
- 	block_size = get_blocksize(block);
- 
--	size = block_size;
--	t0 = find_fp_timing_terminator(block, size);
--	if (!t0)
--		return NULL;
--
--	size -= t0 - block - 2;
--	t1 = find_fp_timing_terminator(t0 + 2, size);
--	if (!t1)
--		return NULL;
--
--	size = t1 - t0;
-+	size = fp_timing_size + sizeof(struct lvds_dvo_timing) +
-+		sizeof(struct lvds_pnp_id);
- 	if (size * 16 > block_size)
- 		return NULL;
- 
-@@ -413,7 +403,7 @@ static void *generate_lfp_data_ptrs(stru
- 	table_size = sizeof(struct lvds_dvo_timing);
- 	size = make_lfp_data_ptr(&ptrs->ptr[0].dvo_timing, table_size, size);
- 
--	table_size = t0 - block + 2;
-+	table_size = fp_timing_size;
- 	size = make_lfp_data_ptr(&ptrs->ptr[0].fp_timing, table_size, size);
- 
- 	if (ptrs->ptr[0].fp_timing.table_size)
-@@ -428,14 +418,14 @@ static void *generate_lfp_data_ptrs(stru
- 		return NULL;
+ 	index = device_property_match_string(dev, "pinctrl-resource-names",  "iomux");
+ 	if (index < 0) {
+-		dev_warn(dev, "failed to get iomux index\n");
++		dev_dbg(dev, "iomux not supported\n");
+ 		goto out_no_pinmux;
  	}
  
--	size = t1 - t0;
-+	size = fp_timing_size + sizeof(struct lvds_dvo_timing) +
-+		sizeof(struct lvds_pnp_id);
- 	for (i = 1; i < 16; i++) {
- 		next_lfp_data_ptr(&ptrs->ptr[i].fp_timing, &ptrs->ptr[i-1].fp_timing, size);
- 		next_lfp_data_ptr(&ptrs->ptr[i].dvo_timing, &ptrs->ptr[i-1].dvo_timing, size);
- 		next_lfp_data_ptr(&ptrs->ptr[i].panel_pnp_id, &ptrs->ptr[i-1].panel_pnp_id, size);
+ 	gpio_dev->iomux_base = devm_platform_ioremap_resource(gpio_dev->pdev, index);
+ 	if (IS_ERR(gpio_dev->iomux_base)) {
+-		dev_warn(dev, "Failed to get iomux %d io resource\n", index);
++		dev_dbg(dev, "iomux not supported %d io resource\n", index);
+ 		goto out_no_pinmux;
  	}
  
--	size = t1 - t0;
- 	table_size = sizeof(struct lvds_lfp_panel_name);
- 
- 	if (16 * (size + table_size) <= block_size) {
 
 
