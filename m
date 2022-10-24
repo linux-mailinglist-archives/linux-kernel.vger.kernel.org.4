@@ -2,79 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947E960AE25
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E6760ADB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbiJXOuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S237081AbiJXOav (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235272AbiJXOtx (ORCPT
+        with ESMTP id S237341AbiJXO3u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:49:53 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891FD106E0A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:27:25 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id 1so7840447vsx.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:27:25 -0700 (PDT)
+        Mon, 24 Oct 2022 10:29:50 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFA3D994F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:03:34 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id z17so3321067qkj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:03:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XWc/OUEN2es9kqnp/4qvx+BKaSgxt+n/QrUsiA3J9n8=;
-        b=RV+PNeif1pUPdEtV/l0kimvzLD38P+NGFDI7R2MB0zn7FLBqrR0kjFR/pzGrn56OoD
-         RnMr7FVEiW1VNggUCcqHMa4DoaopHTLcN96XRAOJfRYt8OrMKCb/at6NxnFhjHrPz6w/
-         VnmWJ4xN7t5zIVvdNUJgT2yEIcK1wLAt4TDBcq9sFDUZL2DC6tHEp9KYpdj9cbr7aXUU
-         rVnkr2cNc13BMjGYBFtGTeSgCKWqBpSRuKf3k765eCEFudM0GXPT0M/hiWCgFL6/LWrW
-         zvp0y7Xos5BG6t07kKsC+RiuP5CBibTdRJoN0zBMmEQQi7n1QUW3mvAlHAZu+rSjGZ4z
-         tGRQ==
+        bh=1ygEQgsnk9+cnssDub4433kT8dBZoeCOzc672ndoDWg=;
+        b=SlDLfdUy7FfM/j7QiG7iu7R5ehXsgixPiskiqiZz8ANCZNMKNvKMN4SQ8xHCCFTfh0
+         IL9CWmBAGeMmmEhW1d9oE6p6DFgtMh0RXGsgVR3d6OLaAjQofCUGiB+XtXIU2f46Hl2/
+         LuG9p0eGO6BbiKnZeiD2PYnKGGMclmWBEo6u105MtfIoEGadCFMzniCqoEV3Oy70ODxa
+         Xq5jzlXxHvetS3Bp4+eXdsAzg9rowI9ErRzPnmfM9Ydv+iFtqk4FJrClAKNnwQt5rsAj
+         ZmcAHumpppe5TWyd9EA8LNrAYdlMYKcWdsQVbktKJHLK1zoZOpP9s3sjseMO+YsfMkc3
+         7ZIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XWc/OUEN2es9kqnp/4qvx+BKaSgxt+n/QrUsiA3J9n8=;
-        b=FlxWxu4oME6NCKFz2in5aK77KD8oS01J8Rk/hG5PHspkuFbmpdVdt82GkogLCKrgqS
-         unpbNnS9Bosld8xfMZ5tAlpGB7r1KHuNgWK5XP4z4kTOgJWoY4FeK6DPKNECV92ZA6OF
-         5xiHmYpwkce1ZTAnXAmy1mD9OuNG/cHk2xFXUWqfkpNdP9+Wko8feoa6nCygIuTBnV5n
-         5VGYapdCpW1Z33ABB/RkBOKyxGrmYfAe19ws8k8N50nVbdERVJEXWVyzUl9J9NRo2oCI
-         kfdTkfRwgk4T1nM7EVnBbjUMQny4NVNxV4JtzVO1BoxslVrZLHn+nhLeprfE1Yipy80W
-         +X3g==
-X-Gm-Message-State: ACrzQf0r5oN4bPwFuFBjzFWL9kSZb4+18iFHVnY9bsNQ2s5FAf9U0/s6
-        7raRBfEoC2gQ5LlRgBV1XnzzjS+E96w00g==
-X-Google-Smtp-Source: AMsMyM4j1KAp2dle7rqk1PkzslURb4vmAjiBwNbic/cyGPwWxZnDMQA+TWzMLStfV5PG/wERtTOiXQ==
-X-Received: by 2002:ad4:5f4c:0:b0:4b8:ec94:68e with SMTP id p12-20020ad45f4c000000b004b8ec94068emr17972070qvg.38.1666615852853;
-        Mon, 24 Oct 2022 05:50:52 -0700 (PDT)
+        bh=1ygEQgsnk9+cnssDub4433kT8dBZoeCOzc672ndoDWg=;
+        b=I033q6y5ymaBAg5KnC56eorI3CcaWT6zx2z6j55O4jW7e+urxFGsaKyNXEI8ZoHPei
+         JKiorQ2sen0Vyxb3t7PpXdBbkuDqmlaDaWZgkbddqRsPLhv4RXOzIAiYH1s9mjNru+/D
+         JeCzI3KdX8CUolZfzn+JP6JZmFhk7QyFlkMi7yTOjpZSvV68fNbKPRr2HZ2tECDrqAFl
+         OKDTV7M1ILX02BbV3Dzimum2yotQvdGNSkNXlWuNB5kCZkBAuUzU3Ic3bqaLD/dn9d6+
+         OuLvyuJtR44kenzTodRNKYzCBvANbzFbFmbxZmnXojIoV8uHajlGUfnkhrFx5CzCiyu9
+         xHTA==
+X-Gm-Message-State: ACrzQf0ZOQJBeecMgtp7fSI7ntsZZLcQ3l2+rXJhbT9gcvrt4QbhQoQn
+        MtNGsJz22zKuB/kveyOdSstsuPFD14EzIw==
+X-Google-Smtp-Source: AMsMyM4VcQFVy//DqykW/4nb9YZadw+5ViBgauM82Dcnz44iWfoB2+pR/piEsUdOm+S967/Rk7Hf/g==
+X-Received: by 2002:ae9:e8ce:0:b0:6ed:22ee:305e with SMTP id a197-20020ae9e8ce000000b006ed22ee305emr22141460qkg.255.1666615864646;
+        Mon, 24 Oct 2022 05:51:04 -0700 (PDT)
 Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id fb20-20020a05622a481400b0039442ee69c5sm12725487qtb.91.2022.10.24.05.50.51
+        by smtp.gmail.com with ESMTPSA id x18-20020a05620a259200b006eeb3165565sm14833626qko.80.2022.10.24.05.51.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 05:50:52 -0700 (PDT)
-Message-ID: <ce7c18ef-8619-1719-59e8-7983e4b0bdc1@linaro.org>
-Date:   Mon, 24 Oct 2022 08:50:50 -0400
+        Mon, 24 Oct 2022 05:51:04 -0700 (PDT)
+Message-ID: <ed79cf58-17bd-5542-db9d-e6a9ea3a1bc2@linaro.org>
+Date:   Mon, 24 Oct 2022 08:51:02 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH 17/21] input: remove s3c24xx touchscreen driver
+Subject: Re: [PATCH 18/21] pinctrl: remove s3c24xx driver
 Content-Language: en-US
 To:     Arnd Bergmann <arnd@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
         Arnd Bergmann <arnd@arndb.de>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-input@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org
 References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-17-arnd@kernel.org>
+ <20221021203329.4143397-18-arnd@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221021203329.4143397-17-arnd@kernel.org>
+In-Reply-To: <20221021203329.4143397-18-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,18 +87,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 21/10/2022 16:27, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The s3c24xx SoC support and its adc driver was removed, so this driver
-> has no remaining users.
+> The s3c24xx platform was removed, so this driver has no
+> remaining users.
 > 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/input/touchscreen/Kconfig      |  12 -
->  drivers/input/touchscreen/Makefile     |   1 -
->  drivers/input/touchscreen/s3c2410_ts.c | 464 -------------------------
->  3 files changed, 477 deletions(-)
 
-This also could be usable on S3C64xx, but it seems no one added any DT
-nodes, so:
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
