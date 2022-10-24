@@ -2,138 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E0B609E30
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13F46609E33
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiJXJnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
+        id S230107AbiJXJo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:44:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiJXJnF (ORCPT
+        with ESMTP id S230294AbiJXJog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:43:05 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD8E63F11;
-        Mon, 24 Oct 2022 02:43:04 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id v27so6740854eda.1;
-        Mon, 24 Oct 2022 02:43:04 -0700 (PDT)
+        Mon, 24 Oct 2022 05:44:36 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1DFE60
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:44:24 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id t4so6183612wmj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:44:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvTCug/WGu2tB0i/Ce81Igi5v0dyO+fR3fhU50OBOLc=;
-        b=HGY9o0eP+6q5QlQ/V5gHWdcwzG3/+7IiLYRbIZDG8ivyto0icbJB/L4llkm6/u6dB5
-         pEzNIXI1F6ZmyEsuxDbZeaUQfQ3wEst6h/JTGhWspJIIEHX/b4M39E6GhwiNmJNi9RPS
-         DNO1X32e92qFIYV4fJEQZWASm02uJ2ZVq06R/hiIJVtAR8t0ousahUtFgZ4V+9rkV/d4
-         SdS8V/YzuBKge9lJbeRIaGl9r9WljxHNNWmvmsMfMny2sX8dwfrsD6kJSjn22kK9oh/r
-         hIbNpvUPkVDrO5WrKLirQUnYUrteNuOxyNe77ul5jiMNM5w3jPQMZnqGJHArevh85g2e
-         pBHg==
+        d=6wind.com; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cKbucU/IUZcAQQsLiS3DB2W32TroQ7AAyD9l71dyaUk=;
+        b=huZqcV008xcZTVY0FnuelzG2dzHHno9WF9RMNMdC0D8AJE/++TQ3MX5IUzjp2z8JbL
+         hpxDaIBgnXXVDQsx7PuAbW0rhQqBv5yghJyxnf73YMtStjU2kQi0G/2/bBsnhoPJIG/M
+         h0h9ttBY+nsVf7/3O72KSqU2rrnTcY2Qmu9A97ponOswP+uR5uksz3m714zy+raEWC7l
+         SWAzJT7E47h8L7bF2zbgnu/J00TO6xVnEWiXGy5P27Db9fHFnr4EtHIjQKiySu35K/kG
+         D/kQzuub4PwCQQMETnaG89xrmdZ3dPqEXTNzUsHKALJ45JYFC4nkhj8I3VErwmIuI0do
+         r+yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lvTCug/WGu2tB0i/Ce81Igi5v0dyO+fR3fhU50OBOLc=;
-        b=Kx3SD/MDcIIWc9r61bKYDOBq+pn/GLtCbZ94WZYFvos8c2We7yPoe1w3sZwDtU2Cqc
-         iGBXmpN2hHSpeXQ2GDvLaMAADcAxOnjSIiiqtdsyY1JskWn6JOkcmp3ewwhqHySlW6Xp
-         se0iwyKQA9EiBsO12gauO9kT+W489sdZ+5xYDfD4cOWDTuzbWJLmmbtnUAuK8HvktTB7
-         Qd3J5y1a8cXrmiYBgWPE7EpHBgPRrDK+O+PT8B77t4jj0+029yYr9q+/y6pCYVZxpqER
-         PrTNyypV/rAzi+l6UbXAUDZOP3kUjRzdJUYpOpUc4LUn/3jFV1G1Q5esXblNETGsUlsD
-         gdFQ==
-X-Gm-Message-State: ACrzQf3YQpuWetIdh2I2zt2XB2bm5USJf6BBEfTiPtAdLJytXO6v6RZq
-        LpO643REjJtNPZm3nWQIzfJUPOUDU9tPx9l/0z0=
-X-Google-Smtp-Source: AMsMyM6YCPqmGHU4Yv+WgY3/mBRU+k1PehOBWkGLUn/NSsQx0nMbwe7NvuaZO7bNuImAmiKOzxyNnT5+8WgQudOE70k=
-X-Received: by 2002:a05:6402:2949:b0:451:fabf:d88a with SMTP id
- ed9-20020a056402294900b00451fabfd88amr29383306edb.324.1666604583226; Mon, 24
- Oct 2022 02:43:03 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cKbucU/IUZcAQQsLiS3DB2W32TroQ7AAyD9l71dyaUk=;
+        b=Kihhxjp+bIsrYkElrzb39Lo0wSWIwvy05CB4pULNUoSHXOSNj+FeU6BB4kCEuYMVSa
+         SWLe3XIo8xi8wSoqCwtfoIG8lXyf2periJQON6XlHulc3E2LOIXxIx24PZ7HlBZIsLOo
+         3Eiy3iDJ0dDCYyIuhCKwyI+GdUf4+9e2ekEGQLnOeCz+k3OG7GWZTwiYxi8ITaIjIRoA
+         7azfqD0IKUWVR5RPg7MEt62Xvw/4hyvlKkChLUlqTQfl2QN79UJH8hmtIB1C8w7Ap70D
+         f9nWqBw2KA4SxZc9ixTHCvI6qc7fFPBTaJktvnso1Kei5t04gCmRhl3O5jSTm1FZeLSX
+         fC5Q==
+X-Gm-Message-State: ACrzQf20SLs04FreOhz4VU9KE6y+nt2t29nOm4vI6glzvtZYOXqF8eRp
+        9yZOe0Xe18jXHodSbA5hmrpRNA==
+X-Google-Smtp-Source: AMsMyM4umPILC1oEtMSJ51plHHUqHIatWc/lkDMmjO66/KRtV6dWncNmZ+KPEAcVH8ZNk8eOViOkfQ==
+X-Received: by 2002:a05:600c:548a:b0:3c6:dd03:2d31 with SMTP id iv10-20020a05600c548a00b003c6dd032d31mr21549695wmb.95.1666604663357;
+        Mon, 24 Oct 2022 02:44:23 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:416:9ea1:405b:86ea? ([2a01:e0a:b41:c160:416:9ea1:405b:86ea])
+        by smtp.gmail.com with ESMTPSA id d4-20020a05600c3ac400b003c64c186206sm10390857wms.16.2022.10.24.02.44.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 02:44:22 -0700 (PDT)
+Message-ID: <eb6903b7-c0d9-cc70-246e-8dbde0412433@6wind.com>
+Date:   Mon, 24 Oct 2022 11:44:22 +0200
 MIME-Version: 1.0
-References: <20221023163945.39920-1-yin31149@gmail.com> <20221023163945.39920-5-yin31149@gmail.com>
-In-Reply-To: <20221023163945.39920-5-yin31149@gmail.com>
-From:   =?UTF-8?Q?Andreas_Gr=C3=BCnbacher?= <andreas.gruenbacher@gmail.com>
-Date:   Mon, 24 Oct 2022 11:42:49 +0200
-Message-ID: <CAHpGcMK0C6uxuNwhOouHLz7fyCcu=JH63COX_0J72koZk_CS7w@mail.gmail.com>
-Subject: Re: [PATCH -next 4/5] gfs2: fix possible null-ptr-deref when parsing param
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>, 18801353760@163.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        syzbot+da97a57c5b742d05db51@syzkaller.appspotmail.com,
-        cluster-devel@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [RFE net-next] net: tun: 1000x speed up
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Ilya Maximets <i.maximets@ovn.org>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+References: <20221021114921.3705550-1-i.maximets@ovn.org>
+ <20221021090756.0ffa65ee@kernel.org>
+From:   Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Organization: 6WIND
+In-Reply-To: <20221021090756.0ffa65ee@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am So., 23. Okt. 2022 um 18:46 Uhr schrieb Hawkins Jiawei <yin31149@gmail.com>:
-> According to commit "vfs: parse: deal with zero length string value",
-> kernel will set the param->string to null pointer in vfs_parse_fs_string()
-> if fs string has zero length.
->
-> Yet the problem is that, gfs2_parse_param() will dereferences the
-> param->string, without checking whether it is a null pointer, which may
-> trigger a null-ptr-deref bug.
->
-> This patch solves it by adding sanity check on param->string
-> in gfs2_parse_param().
+Le 21/10/2022 à 18:07, Jakub Kicinski a écrit :
+> On Fri, 21 Oct 2022 13:49:21 +0200 Ilya Maximets wrote:
+>> Bump the advertised speed to at least match the veth.  10Gbps also
+>> seems like a more or less fair assumption these days, even though
+>> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
+>> and let the application/user decide on a right value for them.
+> 
+> UNKOWN would seem more appropriate but at this point someone may depend
+> on the speed being populated so it could cause regressions, I fear :S
+If it is put in a bonding, it may cause some trouble. Maybe worth than
+advertising 10M.
 
-Yes, but then it dereferences param->string in the error message. That
-won't help.
+Note that this value could be configured with ethtool:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e24f2dd516ed
 
-> Reported-by: syzbot+da97a57c5b742d05db51@syzkaller.appspotmail.com
-> Tested-by: syzbot+da97a57c5b742d05db51@syzkaller.appspotmail.com
-> Cc: agruenba@redhat.com
-> Cc: cluster-devel@redhat.com
-> Cc: linux-kernel@vger.kernel.org
-> Cc: rpeterso@redhat.com
-> Cc: syzkaller-bugs@googlegroups.com
-> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
-> ---
->  fs/gfs2/ops_fstype.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/fs/gfs2/ops_fstype.c b/fs/gfs2/ops_fstype.c
-> index c0cf1d2d0ef5..934746f18c25 100644
-> --- a/fs/gfs2/ops_fstype.c
-> +++ b/fs/gfs2/ops_fstype.c
-> @@ -1446,12 +1446,18 @@ static int gfs2_parse_param(struct fs_context *fc, struct fs_parameter *param)
->
->         switch (o) {
->         case Opt_lockproto:
-> +               if (!param->string)
-> +                       goto bad_val;
->                 strscpy(args->ar_lockproto, param->string, GFS2_LOCKNAME_LEN);
->                 break;
->         case Opt_locktable:
-> +               if (!param->string)
-> +                       goto bad_val;
->                 strscpy(args->ar_locktable, param->string, GFS2_LOCKNAME_LEN);
->                 break;
->         case Opt_hostdata:
-> +               if (!param->string)
-> +                       goto bad_val;
->                 strscpy(args->ar_hostdata, param->string, GFS2_LOCKNAME_LEN);
->                 break;
->         case Opt_spectator:
-> @@ -1535,6 +1541,10 @@ static int gfs2_parse_param(struct fs_context *fc, struct fs_parameter *param)
->                 return invalfc(fc, "invalid mount option: %s", param->key);
->         }
->         return 0;
-> +
-> +bad_val:
-> +       return invalfc(fc, "Bad value '%s' for mount option '%s'\n",
-> +                      param->string, param->key);
->  }
->
->  static int gfs2_reconfigure(struct fs_context *fc)
-> --
-> 2.25.1
->
-
-Thanks,
-Andreas
+> 
+>> Sorry for the clickbait subject line.
+> 
+> Nicely done, worked on me :)
+Works for me also :D
