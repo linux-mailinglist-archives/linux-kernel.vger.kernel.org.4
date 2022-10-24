@@ -2,125 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A892609BD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46D4609BE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiJXHyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S230076AbiJXHzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJXHyQ (ORCPT
+        with ESMTP id S229536AbiJXHzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:54:16 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09658558C4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:54:12 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id x2so816157edd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=np2MboBXPdpCjk4yE/v8jv8Cr7DEE4vCXR9aVi6NMuQ=;
-        b=CMfk1o4OzpbnoEvbhSyBTJsc/lrFji4JSwldqbnj0/xw470NWf7R+wmCYUepa+ANkJ
-         5CeKo+mBrV14/fFMP8oBwYEsPOFmx0WtYZpdB4J3MFuHO2oyRtloK7Z7tkh/cC1UdlpZ
-         c7a6zfTprLyLbJmyuI5W0tu6AGhJtfxkY6J3ihr1hhZq4NUoHfG0jKZPbqLU2/mFLCog
-         c8nfgJncBPWcxcmDo0iowNsBIaBfTau0X7FrfJ/uM8g0rNHwu5NxkETe2Hj/euYNdwaU
-         t7iXge1x2pLZqxc29oeANjgRIAa7iPWvIBDoRUqShLblruOgKxIodgqvYcacLKeIg/hN
-         0wmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=np2MboBXPdpCjk4yE/v8jv8Cr7DEE4vCXR9aVi6NMuQ=;
-        b=NmwoKIwP4xH1cs+t2jymv/jtpighyiJII8Lz5bpdHE+FeHsmO6VyegjLAvJyC3K653
-         dVj/QzL0kP0sz26rbIPvlzxvUwLlq99ZCMRjnjr15/ap+/caYgeiJNGOuuljAWh4InEv
-         dZCv1/a7VhL8xsUKqLDQl6N/osvrJqTrKgAl268r2Cj5j5zvlW8QyEP6bcT0lD50VG1q
-         nE5rfsfyspmKpYMLN4dEZKjUWAZoHNwI9abRyrv3MCk9XWGHji0vkoH8XVtmTjSroNAa
-         DXusEUdMfLPFYDEG3uc3orKJNOH5K0mA4UC+5toPk7GMGghPGokgNTZykWK1zzuin0AB
-         QC8A==
-X-Gm-Message-State: ACrzQf2jLM2wWC7ZTgmbUD03DZZFCiYatPt/Q67vsxDTYDbdOORdQv5x
-        1qvyaw4Km4Iro7TT2A9TPVTQgQiTB9vc4uwgu22CUQ==
-X-Google-Smtp-Source: AMsMyM5RUZsUyR2VAgEGNQhyqaYgUWUOzkKTKiVhONd3/DbV5cnoVhbDHvfQmdSFYJzw5VqN16sbZw1Hkcd5ncPmz8k=
-X-Received: by 2002:aa7:c792:0:b0:453:98b7:213c with SMTP id
- n18-20020aa7c792000000b0045398b7213cmr29135252eds.159.1666598050510; Mon, 24
- Oct 2022 00:54:10 -0700 (PDT)
+        Mon, 24 Oct 2022 03:55:20 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9C93B735;
+        Mon, 24 Oct 2022 00:55:14 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id BC1EF1C000E;
+        Mon, 24 Oct 2022 07:55:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666598113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v+DtEIbWCTrMoEhxqNZp5xO+0p2o8LDxYvX/bSafQhA=;
+        b=EKvNS6u8jnjegmr7GDNhG+HxpDM+Wj8+KWSwkrOzg4G/WtiE/ROOrbblmt3pAjrvfgueMZ
+        jNTxNy9LBLmzrpAyINZWgaV33dHQsxd2oSo/1LGCIw3PJwc8S4Gp1tPDIZwDQizaBcpvvY
+        S3ztUWTpqBY/bKIMXiZzkz2tMvCnNm3MdwXcvuQA9cOxsDUOftYKyK5T8gE5BZQRipHKSD
+        MEoTEyocU8KUQ2bKMtZt6sK6di8sKvOZGKxCEN0+nn2aWJyMv0pJI2PBN9TXXCi3sZ5UiY
+        Jci8bOiL/oSTvMdSx5T2vTxAVT3MDnq5GdNYYMuKfU1RrQ0HaA8QlN4H7V8uHw==
+Date:   Mon, 24 Oct 2022 09:55:07 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Sylwester Nawrocki <sylvester.nawrocki@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH 02/21] ARM: s3c: remove s3c24xx specific hacks
+Message-ID: <20221024095507.302687f8@xps-13>
+In-Reply-To: <20221021203329.4143397-2-arnd@kernel.org>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+        <20221021203329.4143397-2-arnd@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20221013110411.1674359-1-treapking@chromium.org> <20221013110411.1674359-2-treapking@chromium.org>
-In-Reply-To: <20221013110411.1674359-2-treapking@chromium.org>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Mon, 24 Oct 2022 09:53:59 +0200
-Message-ID: <CAG3jFyusEzjGN5qmXXfQSpYoPudOGTXHsOpucqbVhN0Zr9nBbw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] drm/bridge: it6505: Initialize AUX channel in it6505_i2c_probe
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Allen Chen <allen.chen@ite.com.tw>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hermes Wu <hermes.wu@ite.com.tw>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 13 Oct 2022 at 13:04, Pin-yen Lin <treapking@chromium.org> wrote:
->
-> During device boot, the HPD interrupt could be triggered before the DRM
-> subsystem registers it6505 as a DRM bridge. In such cases, the driver
-> tries to access AUX channel and causes NULL pointer dereference.
-> Initializing the AUX channel earlier to prevent such error.
->
-> Fixes: b5c84a9edcd4 ("drm/bridge: add it6505 driver")
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> ---
->
-> (no changes since v1)
->
->  drivers/gpu/drm/bridge/ite-it6505.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-> index a4302492cf8d..f7f6c3e20fae 100644
-> --- a/drivers/gpu/drm/bridge/ite-it6505.c
-> +++ b/drivers/gpu/drm/bridge/ite-it6505.c
-> @@ -2871,10 +2871,7 @@ static int it6505_bridge_attach(struct drm_bridge *bridge,
->         }
->
->         /* Register aux channel */
-> -       it6505->aux.name = "DP-AUX";
-> -       it6505->aux.dev = dev;
->         it6505->aux.drm_dev = bridge->dev;
-> -       it6505->aux.transfer = it6505_aux_transfer;
->
->         ret = drm_dp_aux_register(&it6505->aux);
->
-> @@ -3354,6 +3351,11 @@ static int it6505_i2c_probe(struct i2c_client *client,
->         debugfs_init(it6505);
->         pm_runtime_enable(dev);
->
-> +       it6505->aux.name = "DP-AUX";
-> +       it6505->aux.dev = dev;
-> +       it6505->aux.transfer = it6505_aux_transfer;
-> +       drm_dp_aux_init(&it6505->aux);
-> +
->         it6505->bridge.funcs = &it6505_bridge_funcs;
->         it6505->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
->         it6505->bridge.ops = DRM_BRIDGE_OP_DETECT | DRM_BRIDGE_OP_EDID |
-> --
-> 2.38.0.rc1.362.ged0d419d3c-goog
->
+Hi Arnd,
 
-Reviewed-by: Robert Foss <robert.foss@linaro.org>
+arnd@kernel.org wrote on Fri, 21 Oct 2022 22:27:35 +0200:
+
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> A number of device drivers reference CONFIG_ARM_S3C24XX_CPUFREQ or
+> similar symbols that are no longer available with the platform gone,
+> though the drivers themselves are still used on newer platforms,
+> so remove these hacks.
+>=20
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+Thanks,
+Miqu=C3=A8l
