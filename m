@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE3360A760
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5D360A50F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234874AbiJXMtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40292 "EHLO
+        id S233280AbiJXMU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234473AbiJXMo4 (ORCPT
+        with ESMTP id S233299AbiJXMTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:44:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8594F5BB;
-        Mon, 24 Oct 2022 05:09:31 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5087B29B;
+        Mon, 24 Oct 2022 04:57:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 746F8612DA;
-        Mon, 24 Oct 2022 12:07:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8671FC433C1;
-        Mon, 24 Oct 2022 12:07:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A26F61300;
+        Mon, 24 Oct 2022 11:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D26BC433C1;
+        Mon, 24 Oct 2022 11:57:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613276;
-        bh=UdSoqEBkBwPElrlxMo5agw7TJXBjNCUSgmXNmvuEWhk=;
+        s=korg; t=1666612648;
+        bh=jUROC4zzUDnOqA3R2EJJIUBUUCj8PuAErpT09V3rKDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AQr1ZJd9gmy8Qlc82hkkenXE+Uzp4wIpNHL5GEZ0V6vG/8Hpu19M5OFac9pxcr7i9
-         tDJAFWN/ggkocJc9kEytCrunxWYc1wTs8cTaT41bjTA76SZ4LRMQxZqBZj4iox76WP
-         eXLNSE6eHeyFet8Jqpqp2t2d7ih6HsVA1h2nCpwE=
+        b=bDsBFMNf5nfDP8KIxRmsB7cvRYQVnPabDPN/+6IbL0k/SCFR1EB6KPMrg1NgNuRhB
+         58iLy30bEwNbXavpZ0z/4aq/i1xp/r2mzKWtGen62WAZ3sGux6qx84CP1V5iJFz8Mq
+         t2cIQnyBi/j8laYW5LoQuvkZ84m3eUxW7EIG16oA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daniel Micay <danielmicay@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 075/255] x86/microcode/AMD: Track patch allocation size explicitly
-Date:   Mon, 24 Oct 2022 13:29:45 +0200
-Message-Id: <20221024113005.010028078@linuxfoundation.org>
+        stable@vger.kernel.org, Michal Luczaj <mhal@rbox.co>,
+        Sean Christopherson <seanjc@google.com>
+Subject: [PATCH 4.19 067/229] KVM: x86/emulator: Fix handing of POP SS to correctly set interruptibility
+Date:   Mon, 24 Oct 2022 13:29:46 +0200
+Message-Id: <20221024113001.252481650@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,64 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Michal Luczaj <mhal@rbox.co>
 
-[ Upstream commit 712f210a457d9c32414df246a72781550bc23ef6 ]
+commit 6aa5c47c351b22c21205c87977c84809cd015fcf upstream.
 
-In preparation for reducing the use of ksize(), record the actual
-allocation size for later memcpy(). This avoids copying extra
-(uninitialized!) bytes into the patch buffer when the requested
-allocation size isn't exactly the size of a kmalloc bucket.
-Additionally, fix potential future issues where runtime bounds checking
-will notice that the buffer was allocated to a smaller value than
-returned by ksize().
+The emulator checks the wrong variable while setting the CPU
+interruptibility state, the target segment is embedded in the instruction
+opcode, not the ModR/M register.  Fix the condition.
 
-Fixes: 757885e94a22 ("x86, microcode, amd: Early microcode patch loading support for AMD")
-Suggested-by: Daniel Micay <danielmicay@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/lkml/CA+DvKQ+bp7Y7gmaVhacjv9uF6Ar-o4tet872h4Q8RPYPJjcJQA@mail.gmail.com/
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+Fixes: a5457e7bcf9a ("KVM: emulate: POP SS triggers a MOV SS shadow too")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/all/20220821215900.1419215-1-mhal@rbox.co
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/microcode.h    | 1 +
- arch/x86/kernel/cpu/microcode/amd.c | 3 ++-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/kvm/emulate.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
-index 91a06cef50c1..f73327397b89 100644
---- a/arch/x86/include/asm/microcode.h
-+++ b/arch/x86/include/asm/microcode.h
-@@ -9,6 +9,7 @@
- struct ucode_patch {
- 	struct list_head plist;
- 	void *data;		/* Intel uses only this one */
-+	unsigned int size;
- 	u32 patch_id;
- 	u16 equiv_cpu;
- };
-diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
-index a0e52bd00ecc..3b82d022dcd4 100644
---- a/arch/x86/kernel/cpu/microcode/amd.c
-+++ b/arch/x86/kernel/cpu/microcode/amd.c
-@@ -783,6 +783,7 @@ static int verify_and_add_patch(u8 family, u8 *fw, unsigned int leftover,
- 		kfree(patch);
- 		return -EINVAL;
- 	}
-+	patch->size = *patch_size;
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -1975,7 +1975,7 @@ static int em_pop_sreg(struct x86_emulat
+ 	if (rc != X86EMUL_CONTINUE)
+ 		return rc;
  
- 	mc_hdr      = (struct microcode_header_amd *)(fw + SECTION_HDR_SIZE);
- 	proc_id     = mc_hdr->processor_rev_id;
-@@ -864,7 +865,7 @@ load_microcode_amd(bool save, u8 family, const u8 *data, size_t size)
- 		return ret;
- 
- 	memset(amd_ucode_patch, 0, PATCH_MAX_SIZE);
--	memcpy(amd_ucode_patch, p->data, min_t(u32, ksize(p->data), PATCH_MAX_SIZE));
-+	memcpy(amd_ucode_patch, p->data, min_t(u32, p->size, PATCH_MAX_SIZE));
- 
- 	return ret;
- }
--- 
-2.35.1
-
+-	if (ctxt->modrm_reg == VCPU_SREG_SS)
++	if (seg == VCPU_SREG_SS)
+ 		ctxt->interruptibility = KVM_X86_SHADOW_INT_MOV_SS;
+ 	if (ctxt->op_bytes > 2)
+ 		rsp_increment(ctxt, ctxt->op_bytes - 2);
 
 
