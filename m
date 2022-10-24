@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D7660BD56
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898ED60BEB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiJXW0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        id S230255AbiJXXhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:37:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiJXWZv (ORCPT
+        with ESMTP id S230193AbiJXXhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:25:51 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35F131B82E;
-        Mon, 24 Oct 2022 13:47:35 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e790329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e790:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 52FF51EC06A9;
-        Mon, 24 Oct 2022 22:30:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666643435;
+        Mon, 24 Oct 2022 19:37:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D5E2EA0FF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666648632;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=eEJBB2pOfMf6Hy19YXgdsDPwAyP0Qr2tsBoSRTkUpSo=;
-        b=aZz5DmwqGGtpnxWDR3/HMWl0RE7XJ5Fv2OSZisZz+t73or0y7/xWNetABFf/COAFgtne3S
-        fPmGb/FV/nVBO10IUN4oEF9PI4K4Gsf/QBSuX7w4Mfecqgm1vWdxRcdb5wH4KICxEkjcRH
-        OweYocTHPhPMYE4+qAKe/cTS/HO8Mak=
-Date:   Mon, 24 Oct 2022 22:30:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: [PATCH 1/3] x86/MCE, EDAC/mce_amd: Add support for new
- MCA_SYND{1,2} registers
-Message-ID: <Y1b15vnE/Pd1U4r8@zn.tnic>
-References: <20220418174440.334336-1-yazen.ghannam@amd.com>
- <20220418174440.334336-2-yazen.ghannam@amd.com>
- <Yr2CpuL+JHWblJMD@zn.tnic>
- <YsxefXQDCiJ1zxLG@yaz-fattaah>
- <YtUgb2Y/H/Wq9yIn@zn.tnic>
- <YtVlNrW58cFmksln@zn.tnic>
- <YukW/IltcCRwvSM4@yaz-fattaah>
- <Y1a4prRIYNw8GIkm@zn.tnic>
- <Y1a/lCVnlTMk8p75@agluck-desk3.sc.intel.com>
+         in-reply-to:in-reply-to:references:references;
+        bh=jS77JQI+Wqma8EkspvaV6jJPvhgOIi/g9VzirTrOEUM=;
+        b=S3mbuX4gLmENddLmfDXDA4oQzIVUkMFqBvmweMxC3t2D+U6e9BB8wWOyeQIROQd9+Tf5my
+        QfJXpQ6d3xREk9PLNeBdegvlSfIfqNbdRqYDp+Utzx+/vDnjensg1YN8uSwAObbd3XB5uz
+        h6P94eH+zTlrK7wn/29RSVTOcQhBBZk=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-586-40_GtGsrNpWBPLOJEWdK9g-1; Mon, 24 Oct 2022 16:33:45 -0400
+X-MC-Unique: 40_GtGsrNpWBPLOJEWdK9g-1
+Received: by mail-qt1-f199.google.com with SMTP id c11-20020ac87dcb000000b0039cdb815f3bso7741925qte.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:33:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jS77JQI+Wqma8EkspvaV6jJPvhgOIi/g9VzirTrOEUM=;
+        b=grFA2uohqLPOeMpS2ZMYk0GcesjsiLVqHj3ciAn+zQTDRGlpOsRLp4BLs1MbzVGFkP
+         VA/vS530hRdr6qsNAIwEPrfjvAoea0u3+tnpG2iqt8vRb81PROjqmrsorkNNBYRNCxgh
+         lMplkbp6DOF+zefWchC/JDPPEjaZobaWGVE/jxryIB/m/HnV3NJaic4Tkp4+KnSEfybf
+         YjWKAG/t13XMvCUAsbUaUuMb8ENzplCMBZBGk9Geky1Vtqxrys7e/D9ymeWSpSYp7DHz
+         DLnYp760TO53HKVh74HGBO1IQTFgCLkCNSPpQ4wMvxb9WTIlJ3cErHUgpbXaBcjz3iai
+         VLJw==
+X-Gm-Message-State: ACrzQf07iIX8ZsFSQSIlRlLGP+S+nlH20dhFTcZKu6wO9uFq41Ilc5rv
+        7WOXFe6Br/N9dRoPyJTPOaRc0XxpH2ZKeyFbiKA+lGoRPQdWKrCOXCc618J59vr8/2ewjjJ/Wpw
+        s88IUxuUCqIPdecoKneMHfst6
+X-Received: by 2002:a05:620a:4155:b0:6ee:e6b5:efa7 with SMTP id k21-20020a05620a415500b006eee6b5efa7mr24649752qko.54.1666643624566;
+        Mon, 24 Oct 2022 13:33:44 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6fuJ7umxduSwho5wT/1DHDzI+eD1fRK9Z2IMS9esLQ5xAyDielh1+K8ovaXy8gI3DuPHXL2w==
+X-Received: by 2002:a05:620a:4155:b0:6ee:e6b5:efa7 with SMTP id k21-20020a05620a415500b006eee6b5efa7mr24649730qko.54.1666643624349;
+        Mon, 24 Oct 2022 13:33:44 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id y21-20020a05620a44d500b006eed75805a2sm616099qkp.126.2022.10.24.13.33.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 13:33:43 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 13:33:42 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu: remove variable cnt
+Message-ID: <20221024203342.nbmqphmfbrqqtr4n@cantor>
+References: <20221024134301.2158939-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1a/lCVnlTMk8p75@agluck-desk3.sc.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221024134301.2158939-1-colin.i.king@gmail.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 09:38:44AM -0700, Tony Luck wrote:
-> There are still a fair number of users of mcelog, so I think it needs
-> to remain in its half-undead state a while longer.
+On Mon, Oct 24, 2022 at 02:43:01PM +0100, Colin Ian King wrote:
+> Variable cnt is just being incremented and it's never used
+> anywhere else. The variable and the increment are redundant so
+> remove it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/iommu/amd/iommu.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+> index d3b39d0416fa..3847f3bdc568 100644
+> --- a/drivers/iommu/amd/iommu.c
+> +++ b/drivers/iommu/amd/iommu.c
+> @@ -767,7 +767,7 @@ EXPORT_SYMBOL(amd_iommu_register_ga_log_notifier);
+>  
+>  static void iommu_poll_ga_log(struct amd_iommu *iommu)
+>  {
+> -	u32 head, tail, cnt = 0;
+> +	u32 head, tail;
+>  
+>  	if (iommu->ga_log == NULL)
+>  		return;
+> @@ -780,7 +780,6 @@ static void iommu_poll_ga_log(struct amd_iommu *iommu)
+>  		u64 log_entry;
+>  
+>  		raw = (u64 *)(iommu->ga_log + head);
+> -		cnt++;
+>  
+>  		/* Avoid memcpy function-call overhead */
+>  		log_entry = *raw;
+> -- 
+> 2.37.3
+> 
 
-That's not the question - the question is how should vendor-specific
-info should be logged so that the struct mce record doesn't get blown
-up or ends up containing unused fields on the other vendor.
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-I.e., how to keep it as small as possible and to share the space there
-in the most compact way.
-
-That vendor-specific "space" in there could be used by each vendor
-differently. As in this case, Intel doesn't have MCA_SYND{1,2} u64
-values. So they could be part of a vendor_info which gets interpreted
-based on vendor.
-
-When Intel wants to carry more info through struct mce to userspace,
-it can reuse those 2 u64s which are vendor_info but interpret them
-differently.
-
-Which then begs the question, how should those get logged etc.
-
-I guess a u8 vendor_info[VENDOR_INFO_SIZE] or so which we can extend
-later if needed.
-
-Perhaps prepend it with its length too:
-
-	error_record {
-		struct mce;
-		unsigned int vendor_info_len;
-		u8 vendor_info[vendor_info_len];
-	};
-
-For example.
-
-Not saying this is how it should be done - this is just what is swirling
-around in my head right now.
-
-Hmm.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
