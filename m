@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD43060A6C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D2F60AB0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbiJXMip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
+        id S236244AbiJXNnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbiJXM26 (ORCPT
+        with ESMTP id S236750AbiJXNlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:28:58 -0400
+        Mon, 24 Oct 2022 09:41:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5176F87689;
-        Mon, 24 Oct 2022 05:02:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8210B449D;
+        Mon, 24 Oct 2022 05:38:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A538612CC;
-        Mon, 24 Oct 2022 12:02:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D13C433D6;
-        Mon, 24 Oct 2022 12:02:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6237C612FB;
+        Mon, 24 Oct 2022 12:12:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749F8C433D6;
+        Mon, 24 Oct 2022 12:12:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612932;
-        bh=HDBZX01FN2W9c75Sd8NoXHb1ZhN7yyXXynCHY/64+/k=;
+        s=korg; t=1666613565;
+        bh=2AM3Eiz+r0aH+ko3xrd6rXYRvTAlxBHpaH2e5ElP4F8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pND0li9PULhAZ5WGWsVwxg82gs5hly/Vnn/CKFpKa2LRY7bOsjDtEpcmCVbQwj/O2
-         gn1YSu/K3jWSnXc47NgdgmPwB9t620DY8KGXQCWZFjktH23fUfjmrYlggGyGdSzy1g
-         5UskNI2UYgsHLyuQGVhQKGGGC6UFXCP8xlpcR/RA=
+        b=fiV66G3LgKCTNwT6KE7Dxkydsv16fhPatOD6JFCDtEIm1ODLlcHpvbR02LyOzSAzz
+         9AfxQvhb9igSVWGvs1WmLpD+uRDbjEk/WiYYBxKjFFsagHQH1Gqs/wJ0clsqBdGjX2
+         pJOh7j57OfXeW5ElDPJ4yteenSUcWrHU2qy9J28o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
-        Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 174/229] x86/entry: Work around Clang __bdos() bug
-Date:   Mon, 24 Oct 2022 13:31:33 +0200
-Message-Id: <20221024113004.718917343@linuxfoundation.org>
+Subject: [PATCH 5.4 184/255] f2fs: fix race condition on setting FI_NO_EXTENT flag
+Date:   Mon, 24 Oct 2022 13:31:34 +0200
+Message-Id: <20221024113009.030107508@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,64 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit 3e1730842f142add55dc658929221521a9ea62b6 ]
+[ Upstream commit 07725adc55c0a414c10acb5c8c86cea34b95ddef ]
 
-Clang produces a false positive when building with CONFIG_FORTIFY_SOURCE=y
-and CONFIG_UBSAN_BOUNDS=y when operating on an array with a dynamic
-offset. Work around this by using a direct assignment of an empty
-instance. Avoids this warning:
+The following scenarios exist.
+process A:               process B:
+->f2fs_drop_extent_tree  ->f2fs_update_extent_cache_range
+                          ->f2fs_update_extent_tree_range
+                           ->write_lock
+ ->set_inode_flag
+                           ->is_inode_flag_set
+                           ->__free_extent_tree // Shouldn't
+                                                // have been
+                                                // cleaned up
+                                                // here
+  ->write_lock
 
-../include/linux/fortify-string.h:309:4: warning: call to __write_overflow_field declared with 'warn
-ing' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wat
-tribute-warning]
-                        __write_overflow_field(p_size_field, size);
-                        ^
+In this case, the "FI_NO_EXTENT" flag is set between
+f2fs_update_extent_tree_range and is_inode_flag_set
+by other process. it leads to clearing the whole exten
+tree which should not have happened. And we fix it by
+move the setting it to the range of write_lock.
 
-which was isolated to the memset() call in xen_load_idt().
-
-Note that this looks very much like another bug that was worked around:
-https://github.com/ClangBuiltLinux/linux/issues/1592
-
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: xen-devel@lists.xenproject.org
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Link: https://lore.kernel.org/lkml/41527d69-e8ab-3f86-ff37-6b298c01d5bc@oracle.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Fixes:5f281fab9b9a3 ("f2fs: disable extent_cache for fcollapse/finsert inodes")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/xen/enlighten_pv.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/f2fs/extent_cache.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 8f1ff8dad2ce..04bfd9c3987b 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -752,6 +752,7 @@ static void xen_load_idt(const struct desc_ptr *desc)
- {
- 	static DEFINE_SPINLOCK(lock);
- 	static struct trap_info traps[257];
-+	static const struct trap_info zero = { };
- 	unsigned out;
+diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+index e60078460ad1..05b17a741ccc 100644
+--- a/fs/f2fs/extent_cache.c
++++ b/fs/f2fs/extent_cache.c
+@@ -729,9 +729,8 @@ void f2fs_drop_extent_tree(struct inode *inode)
+ 	if (!f2fs_may_extent_tree(inode))
+ 		return;
  
- 	trace_xen_cpu_load_idt(desc);
-@@ -761,7 +762,7 @@ static void xen_load_idt(const struct desc_ptr *desc)
- 	memcpy(this_cpu_ptr(&idt_desc), desc, sizeof(idt_desc));
- 
- 	out = xen_convert_trap_info(desc, traps, false);
--	memset(&traps[out], 0, sizeof(traps[0]));
-+	traps[out] = zero;
- 
- 	xen_mc_flush();
- 	if (HYPERVISOR_set_trap_table(traps))
+-	set_inode_flag(inode, FI_NO_EXTENT);
+-
+ 	write_lock(&et->lock);
++	set_inode_flag(inode, FI_NO_EXTENT);
+ 	__free_extent_tree(sbi, et);
+ 	if (et->largest.len) {
+ 		et->largest.len = 0;
 -- 
 2.35.1
 
