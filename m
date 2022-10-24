@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC7A60B915
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EFB60BAF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbiJXUCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
+        id S234940AbiJXUn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232257AbiJXUBS (ORCPT
+        with ESMTP id S234983AbiJXUm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:01:18 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B772324E410
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:22:51 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id bs21so1613822wrb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:22:51 -0700 (PDT)
+        Mon, 24 Oct 2022 16:42:59 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462A03C8D1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:51:13 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id jb18so3659482wmb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4cTRya7BWPcqsR7OtszqL7KchFavr9g3TQZiRi/8988=;
-        b=bGBaY2g3DIx/8hN0JHcD0TSN7Cpg0DthUSR9UhTbI2bCgNeTHiMw6mcP0Y+qmezrXx
-         oVhpnBDu7LPbNPgQDkEoau1+okRNRNBSvdRInQrBleUZ/rlVAEBAxMeuwIMsA2WiyooH
-         c+jwwWtZTdq/Z6kh2GP5lPoNiRku3hx1+gkKo5vkQgUSwhtzNIwCq3fRecW3BvfG4v3V
-         ui5JcfOo0f3c9au75ma9f2rZqthRhTqUaVI8ca6ODWd0sMgYbvsJ2wej/aaf0oxQSOgs
-         BYJDEIqoUcI/e3t4dgxdCC9Yumymc2Dw7VHTaqMEfn/13Axv/+dHEWogGDaV0MN/nbwd
-         +Jdw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uwj1DPzl1odsJlApuZOPGYBkSNPIOpgVa3JvpwwYAMw=;
+        b=UjbOaV+r/c734tGQK4hx2shR9ybClfpKrs4Dr8qfMJnBYnoycYTzZYETW8xofElXXy
+         ycM3hPwOXs92nckDftUxqEB+cdKH/OaF4wsme8oW9th9XxTRM5GoVKZ9b85+CSCKiFZc
+         nELDTp+jumoNsBZk5+aoEbPRLYeNSP6In2Kf7O2UKE+YldENAGYLCh00c4LVLeLa9UAj
+         x+rkDngUhAeP3kcfnvKXUFDHmIduCdIiHwA/7DKZyTjAjcPWfrzyQyRC+vTppY2KNAIc
+         4OQIRQsWN0ota+QRouWGxOVeb+3wlFV8AlbzxTNsophwsXxPkNtcnKCDSpa15JkNnksF
+         nPMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cTRya7BWPcqsR7OtszqL7KchFavr9g3TQZiRi/8988=;
-        b=N9K+Dx4EqS9RV2HeH+p4cUtC863I60ElFZR927UMJQvo3p+h8S+PVRFLDWEzaizona
-         FgkHJHw1v2ew4abnXsdZ0APqj4mlmxJh95k4fpra4/7cilHPLf6KmT1GR0HU2Im+8DJa
-         hIPmdsj74sOtHDf8NbBlPr8XbuFV7DvrrMzmgtvfISxzw47IFiv3Naaq1IOPxN6KLwhW
-         nUF2oI8vxTzJZOD+to1fIm8rJbIALvbzj5QDN1y1CIH1C1Sq296GVtzWk0fttM3/I5iR
-         TfIFfuhaHv30cpwG+QTl9wl59MTEcFi/qk+JKhldEk0TAt3gG8jgBbpE9PYSyAXPrZ1d
-         6vyQ==
-X-Gm-Message-State: ACrzQf2fS4CWAiJtjyladljxTE45Kgcg1/pOFW8O6THPos3qxVvkXVrI
-        iX0QLgrd4UFXm5BHcnp64VnwbLhiMA==
-X-Google-Smtp-Source: AMsMyM7phEjSOHENdC39JCV36gTWfESdUZdOrwSSNunj4EMVMPrhsvQC9432ZKEasvXqxFOKlgFmgQ==
-X-Received: by 2002:adf:f4ce:0:b0:236:6578:48b2 with SMTP id h14-20020adff4ce000000b00236657848b2mr7343482wrp.181.1666634891401;
-        Mon, 24 Oct 2022 11:08:11 -0700 (PDT)
-Received: from p183 ([46.53.250.110])
-        by smtp.gmail.com with ESMTPSA id h6-20020adfa4c6000000b002206203ed3dsm330262wrb.29.2022.10.24.11.08.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:08:10 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 21:08:09 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] proc: fixup uptime test
-Message-ID: <Y1bUiT7VRXlXPQa1@p183>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uwj1DPzl1odsJlApuZOPGYBkSNPIOpgVa3JvpwwYAMw=;
+        b=NA/c6szVxZrHD5PpKmEuA9hMHwi6OXM3/702YxJ4Kj2YscN6+Q1I/7vr9ObDfK7ZL6
+         nyOkCvEL8WDqIDhcbPhe1U6unGwY7yHEK4REHtNh/9/LcgKdaZl6ajLnl0LfnkMb9JfE
+         42qFktaCGtnj3T+nAjMZP2wDZfj7p4MB+kEL/DFQqi4Co+RB2y+WS+22xlurHCJUhL14
+         +PUQYpAi3eahePHWn7d4bzkTRcDi8WAHXL76So8Ju221OnxP92Sry2WcM3OerFPxOjUL
+         HMhVM8DHOtz7ruz8RzCA2aWuuIEnjkSKY3qQo1L22BeTutvZngXzzxwjN0UQnN34osku
+         uYcg==
+X-Gm-Message-State: ACrzQf0Fjj0mdKaBjgricqvN1gRGbcbfSaao6RUkWN4Ysc8jpfA2K1F7
+        rbq8eYK/kpwQgvtewh0RbP9OAEXrSco5iabyKiBj4fMeHMU=
+X-Google-Smtp-Source: AMsMyM7U1YfFNa49/chsFH/FKd8m9CIfG2Lhpd1Dl+MJtDv93pw79KseAnjpzubx3aogD8sq+8NCFFHA5HRpzBVLv8E=
+X-Received: by 2002:a05:600c:88a:b0:3c5:c9e3:15cc with SMTP id
+ l10-20020a05600c088a00b003c5c9e315ccmr23430090wmp.67.1666635121309; Mon, 24
+ Oct 2022 11:12:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221024173523.602064-1-irogers@google.com> <Y1bQlxxABicj4k3+@kernel.org>
+ <CAP-5=fWPdmHPXc9D2LP6TVmhuNf93gZCnogWXCVGytkhuqi2uQ@mail.gmail.com>
+In-Reply-To: <CAP-5=fWPdmHPXc9D2LP6TVmhuNf93gZCnogWXCVGytkhuqi2uQ@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 24 Oct 2022 11:11:49 -0700
+Message-ID: <CAP-5=fVGicObnifnUzDXjbkGOVtmNaLKcfqpGeTwnFw2zsOuDQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/8] Update to C11, fix signal undefined behavior
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URI_DOTEDU,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,35 +79,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syscall(3) returns -1 and sets errno on error, unlike "syscall"
-instruction.
+On Mon, Oct 24, 2022 at 10:59 AM Ian Rogers <irogers@google.com> wrote:
+>
+> On Mon, Oct 24, 2022 at 10:51 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Mon, Oct 24, 2022 at 10:35:15AM -0700, Ian Rogers escreveu:
+> > > The use of C11 is mainstream in the kernel [1]. There was some
+> > > confusion on volatile and signal handlers in [2]. Switch to using
+> > > stdatomic.h (requires C11) and sig_atomic_t as per [3]. Thanks to Leo
+> > > Yan <leo.yan@linaro.org> for the suggestions.
+> > >
+> > > [1] https://lore.kernel.org/lkml/CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com/
+> > > [2] https://lore.kernel.org/lkml/20221024011024.462518-1-irogers@google.com/
+> > > [3] https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+objects+in+signal+handlers
+> >
+> > I think I'll apply this to perf/core, i.e. for 6.3, ok?
+>
+> Sounds good to me. 6.3 or 6.2? I suspect there is more cleanup like
+> this and to the iterators (from C11) that can be done.
+>
+> Thanks,
+> Ian
 
-Systems which have <= 32/64 CPUs are unaffected. Test won't bounce
-to all CPUs before completing if there are more of them.
+So I noticed a few changes missing #include-ing stdatomic.h and
+sig_atomic_t is actually in signal.h. I'm not sure we need the C11
+change then, but it seems like the right thing to do anyway. I'll do a
+v2 to drop the unneeded (currently) include of stdatomic.h.
 
-Fixes: 1f5bd0547654 ("proc: selftests: test /proc/uptime")
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
+Thanks,
+Ian
 
- tools/testing/selftests/proc/proc-uptime-002.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
---- a/tools/testing/selftests/proc/proc-uptime-002.c
-+++ b/tools/testing/selftests/proc/proc-uptime-002.c
-@@ -17,6 +17,7 @@
- // while shifting across CPUs.
- #undef NDEBUG
- #include <assert.h>
-+#include <errno.h>
- #include <unistd.h>
- #include <sys/syscall.h>
- #include <stdlib.h>
-@@ -54,7 +55,7 @@ int main(void)
- 		len += sizeof(unsigned long);
- 		free(m);
- 		m = malloc(len);
--	} while (sys_sched_getaffinity(0, len, m) == -EINVAL);
-+	} while (sys_sched_getaffinity(0, len, m) == -1 && errno == EINVAL);
- 
- 	fd = open("/proc/uptime", O_RDONLY);
- 	assert(fd >= 0);
+> > - Arnaldo
+> >
+> > >
+> > > Ian Rogers (8):
+> > >   perf build: Update to C standard to gnu11
+> > >   perf record: Use sig_atomic_t for signal handlers
+> > >   perf daemon: Use sig_atomic_t to avoid UB
+> > >   perf ftrace: Use sig_atomic_t to avoid UB
+> > >   perf session: Change type to avoid UB
+> > >   perf stat: Use sig_atomic_t to avoid UB
+> > >   perf top: Use sig_atomic_t to avoid UB
+> > >   perf trace: Use sig_atomic_t to avoid UB
+> > >
+> > >  tools/perf/Makefile.config  | 2 +-
+> > >  tools/perf/builtin-daemon.c | 3 ++-
+> > >  tools/perf/builtin-ftrace.c | 4 ++--
+> > >  tools/perf/builtin-record.c | 9 +++++----
+> > >  tools/perf/builtin-stat.c   | 9 +++++----
+> > >  tools/perf/builtin-top.c    | 4 ++--
+> > >  tools/perf/builtin-trace.c  | 4 ++--
+> > >  tools/perf/util/session.c   | 3 ++-
+> > >  8 files changed, 21 insertions(+), 17 deletions(-)
+> > >
+> > > --
+> > > 2.38.0.135.g90850a2211-goog
+> >
+> > --
+> >
+> > - Arnaldo
