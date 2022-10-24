@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F208B60B92C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51FC060BAFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiJXUFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44046 "EHLO
+        id S235032AbiJXUp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbiJXUE5 (ORCPT
+        with ESMTP id S234885AbiJXUnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:04:57 -0400
+        Mon, 24 Oct 2022 16:43:40 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EC0220FAF;
-        Mon, 24 Oct 2022 11:26:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF102A1FF8;
+        Mon, 24 Oct 2022 11:51:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2B3C1CE1322;
-        Mon, 24 Oct 2022 12:28:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA81C433C1;
-        Mon, 24 Oct 2022 12:28:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9CC14CE16D0;
+        Mon, 24 Oct 2022 12:47:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78417C433D6;
+        Mon, 24 Oct 2022 12:47:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614494;
-        bh=K6gjyBoTvmkgn/KUrwOSZN1zLh0dTQkQIO3cap4BIT0=;
+        s=korg; t=1666615657;
+        bh=Jc7h3JUL9c+lPpAPLvQB/oauRcrXP168vAOoGYlcZDk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gJuFj7DF93KDU/UIKzn+tAzkAVr/5YwnkaBgHGtXwUesRcBOvIv5vaZJfdZGUNAx0
-         83SLYbDuqcmmw3D85+EximncPsWBOGlU8DyfvYQDr5wLtcyEAgeqqFlmTW4pKJJtN5
-         cS04hgT4woQmTKbMDrc+8nq8YNg5QFCR/YRF0nGM=
+        b=yRTnHBOHOZQ1/25RsRjBFAbSIinl5JfZWq0HfFiXiuhMzmSQvbXmI8R4ZwV4MNLK+
+         8Nd0ijMNNSecEGMpOQ7z3jagfLtIyoWo9eTAERvH7hNB/CWCTpngXgBfP+c/StclQy
+         kHz+KQdY8n5XlkRunqQW9enimRyVwqBtPsaVb8Fk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damian Muszynski <damian.muszynski@intel.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 281/390] crypto: qat - fix DMA transfer direction
-Date:   Mon, 24 Oct 2022 13:31:18 +0200
-Message-Id: <20221024113034.918728355@linuxfoundation.org>
+Subject: [PATCH 5.15 335/530] scsi: iscsi: Run recv path from workqueue
+Date:   Mon, 24 Oct 2022 13:31:19 +0200
+Message-Id: <20221024113100.168459404@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,154 +55,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damian Muszynski <damian.muszynski@intel.com>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit cf5bb835b7c8a5fee7f26455099cca7feb57f5e9 ]
+[ Upstream commit f1d269765ee29da56b32818b7a08054484ed89f2 ]
 
-When CONFIG_DMA_API_DEBUG is selected, while running the crypto self
-test on the QAT crypto algorithms, the function add_dma_entry() reports
-a warning similar to the one below, saying that overlapping mappings
-are not supported. This occurs in tests where the input and the output
-scatter list point to the same buffers (i.e. two different scatter lists
-which point to the same chunks of memory).
+We don't always want to run the recv path from the network softirq because
+when we have to have multiple sessions sharing the same CPUs, some sessions
+can eat up the NAPI softirq budget and affect other sessions or users.
 
-The logic that implements the mapping uses the flag DMA_BIDIRECTIONAL
-for both the input and the output scatter lists which leads to
-overlapped write mappings. These are not supported by the DMA layer.
+Allow us to queue the recv handling to the iscsi workqueue so we can have
+the scheduler/wq code try to balance the work and CPU use across all
+sessions' worker threads.
 
-Fix by specifying the correct DMA transfer directions when mapping
-buffers. For in-place operations where the input scatter list
-matches the output scatter list, buffers are mapped once with
-DMA_BIDIRECTIONAL, otherwise input buffers are mapped using the flag
-DMA_TO_DEVICE and output buffers are mapped with DMA_FROM_DEVICE.
-Overlapping a read mapping with a write mapping is a valid case in
-dma-coherent devices like QAT.
-The function that frees and unmaps the buffers, qat_alg_free_bufl()
-has been changed accordingly to the changes to the mapping function.
+Note: It wasn't the original intent of the change but a nice side effect is
+that for some workloads/configs we get a nice performance boost. For a
+simple read heavy test:
 
-   DMA-API: 4xxx 0000:06:00.0: cacheline tracking EEXIST, overlapping mappings aren't supported
-   WARNING: CPU: 53 PID: 4362 at kernel/dma/debug.c:570 add_dma_entry+0x1e9/0x270
-   ...
-   Call Trace:
-   dma_map_page_attrs+0x82/0x2d0
-   ? preempt_count_add+0x6a/0xa0
-   qat_alg_sgl_to_bufl+0x45b/0x990 [intel_qat]
-   qat_alg_aead_dec+0x71/0x250 [intel_qat]
-   crypto_aead_decrypt+0x3d/0x70
-   test_aead_vec_cfg+0x649/0x810
-   ? number+0x310/0x3a0
-   ? vsnprintf+0x2a3/0x550
-   ? scnprintf+0x42/0x70
-   ? valid_sg_divisions.constprop.0+0x86/0xa0
-   ? test_aead_vec+0xdf/0x120
-   test_aead_vec+0xdf/0x120
-   alg_test_aead+0x185/0x400
-   alg_test+0x3d8/0x500
-   ? crypto_acomp_scomp_free_ctx+0x30/0x30
-   ? __schedule+0x32a/0x12a0
-   ? ttwu_queue_wakelist+0xbf/0x110
-   ? _raw_spin_unlock_irqrestore+0x23/0x40
-   ? try_to_wake_up+0x83/0x570
-   ? _raw_spin_unlock_irqrestore+0x23/0x40
-   ? __set_cpus_allowed_ptr_locked+0xea/0x1b0
-   ? crypto_acomp_scomp_free_ctx+0x30/0x30
-   cryptomgr_test+0x27/0x50
-   kthread+0xe6/0x110
-   ? kthread_complete_and_exit+0x20/0x20
-   ret_from_fork+0x1f/0x30
+  fio --direct=1 --filename=/dev/dm-0  --rw=randread --bs=256K
+    --ioengine=libaio --iodepth=128 --numjobs=4
 
-Fixes: d370cec ("crypto: qat - Intel(R) QAT crypto interface")
-Link: https://lore.kernel.org/linux-crypto/20220223080400.139367-1-gilad@benyossef.com/
-Signed-off-by: Damian Muszynski <damian.muszynski@intel.com>
-Signed-off-by: Giovanni Cabiddu <giovanni.cabiddu@intel.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+where the iscsi threads, fio jobs, and rps_cpus share CPUs we see a 32%
+throughput boost. We also see increases for small I/O IOPs tests but it's
+not as high.
+
+Link: https://lore.kernel.org/r/20220616224557.115234-4-michael.christie@oracle.com
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Stable-dep-of: 57569c37f0ad ("scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling getpeername()")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/qat/qat_common/qat_algs.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/scsi/iscsi_tcp.c | 65 ++++++++++++++++++++++++++++++++--------
+ drivers/scsi/iscsi_tcp.h |  2 ++
+ 2 files changed, 54 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
-index 2e2c2ac53609..5b71768fc0c7 100644
---- a/drivers/crypto/qat/qat_common/qat_algs.c
-+++ b/drivers/crypto/qat/qat_common/qat_algs.c
-@@ -624,11 +624,14 @@ static void qat_alg_free_bufl(struct qat_crypto_instance *inst,
- 	dma_addr_t blpout = qat_req->buf.bloutp;
- 	size_t sz = qat_req->buf.sz;
- 	size_t sz_out = qat_req->buf.sz_out;
-+	int bl_dma_dir;
- 	int i;
+diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+index e7976785dae6..20b4394d560b 100644
+--- a/drivers/scsi/iscsi_tcp.c
++++ b/drivers/scsi/iscsi_tcp.c
+@@ -52,6 +52,10 @@ static struct iscsi_transport iscsi_sw_tcp_transport;
+ static unsigned int iscsi_max_lun = ~0;
+ module_param_named(max_lun, iscsi_max_lun, uint, S_IRUGO);
  
-+	bl_dma_dir = blp != blpout ? DMA_TO_DEVICE : DMA_BIDIRECTIONAL;
++static bool iscsi_recv_from_iscsi_q;
++module_param_named(recv_from_iscsi_q, iscsi_recv_from_iscsi_q, bool, 0644);
++MODULE_PARM_DESC(recv_from_iscsi_q, "Set to true to read iSCSI data/headers from the iscsi_q workqueue. The default is false which will perform reads from the network softirq context.");
 +
- 	for (i = 0; i < bl->num_bufs; i++)
- 		dma_unmap_single(dev, bl->bufers[i].addr,
--				 bl->bufers[i].len, DMA_BIDIRECTIONAL);
-+				 bl->bufers[i].len, bl_dma_dir);
+ static int iscsi_sw_tcp_dbg;
+ module_param_named(debug_iscsi_tcp, iscsi_sw_tcp_dbg, int,
+ 		   S_IRUGO | S_IWUSR);
+@@ -122,20 +126,13 @@ static inline int iscsi_sw_sk_state_check(struct sock *sk)
+ 	return 0;
+ }
  
- 	dma_unmap_single(dev, blp, sz, DMA_TO_DEVICE);
+-static void iscsi_sw_tcp_data_ready(struct sock *sk)
++static void iscsi_sw_tcp_recv_data(struct iscsi_conn *conn)
+ {
+-	struct iscsi_conn *conn;
+-	struct iscsi_tcp_conn *tcp_conn;
++	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
++	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
++	struct sock *sk = tcp_sw_conn->sock->sk;
+ 	read_descriptor_t rd_desc;
  
-@@ -642,7 +645,7 @@ static void qat_alg_free_bufl(struct qat_crypto_instance *inst,
- 		for (i = bufless; i < blout->num_bufs; i++) {
- 			dma_unmap_single(dev, blout->bufers[i].addr,
- 					 blout->bufers[i].len,
--					 DMA_BIDIRECTIONAL);
-+					 DMA_FROM_DEVICE);
- 		}
- 		dma_unmap_single(dev, blpout, sz_out, DMA_TO_DEVICE);
+-	read_lock_bh(&sk->sk_callback_lock);
+-	conn = sk->sk_user_data;
+-	if (!conn) {
+-		read_unlock_bh(&sk->sk_callback_lock);
+-		return;
+-	}
+-	tcp_conn = conn->dd_data;
+-
+ 	/*
+ 	 * Use rd_desc to pass 'conn' to iscsi_tcp_recv.
+ 	 * We set count to 1 because we want the network layer to
+@@ -144,13 +141,48 @@ static void iscsi_sw_tcp_data_ready(struct sock *sk)
+ 	 */
+ 	rd_desc.arg.data = conn;
+ 	rd_desc.count = 1;
+-	tcp_read_sock(sk, &rd_desc, iscsi_sw_tcp_recv);
  
-@@ -666,6 +669,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
- 	struct scatterlist *sg;
- 	size_t sz_out, sz = struct_size(bufl, bufers, n);
- 	int node = dev_to_node(&GET_DEV(inst->accel_dev));
-+	int bufl_dma_dir;
+-	iscsi_sw_sk_state_check(sk);
++	tcp_read_sock(sk, &rd_desc, iscsi_sw_tcp_recv);
  
- 	if (unlikely(!n))
- 		return -EINVAL;
-@@ -683,6 +687,8 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
- 		qat_req->buf.sgl_src_valid = true;
- 	}
- 
-+	bufl_dma_dir = sgl != sglout ? DMA_TO_DEVICE : DMA_BIDIRECTIONAL;
+ 	/* If we had to (atomically) map a highmem page,
+ 	 * unmap it now. */
+ 	iscsi_tcp_segment_unmap(&tcp_conn->in.segment);
 +
- 	for_each_sg(sgl, sg, n, i)
- 		bufl->bufers[i].addr = DMA_MAPPING_ERROR;
++	iscsi_sw_sk_state_check(sk);
++}
++
++static void iscsi_sw_tcp_recv_data_work(struct work_struct *work)
++{
++	struct iscsi_conn *conn = container_of(work, struct iscsi_conn,
++					       recvwork);
++	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
++	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
++	struct sock *sk = tcp_sw_conn->sock->sk;
++
++	lock_sock(sk);
++	iscsi_sw_tcp_recv_data(conn);
++	release_sock(sk);
++}
++
++static void iscsi_sw_tcp_data_ready(struct sock *sk)
++{
++	struct iscsi_sw_tcp_conn *tcp_sw_conn;
++	struct iscsi_tcp_conn *tcp_conn;
++	struct iscsi_conn *conn;
++
++	read_lock_bh(&sk->sk_callback_lock);
++	conn = sk->sk_user_data;
++	if (!conn) {
++		read_unlock_bh(&sk->sk_callback_lock);
++		return;
++	}
++	tcp_conn = conn->dd_data;
++	tcp_sw_conn = tcp_conn->dd_data;
++
++	if (tcp_sw_conn->queue_recv)
++		iscsi_conn_queue_recv(conn);
++	else
++		iscsi_sw_tcp_recv_data(conn);
+ 	read_unlock_bh(&sk->sk_callback_lock);
+ }
  
-@@ -694,7 +700,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+@@ -276,6 +308,9 @@ static int iscsi_sw_tcp_xmit_segment(struct iscsi_tcp_conn *tcp_conn,
+ 		if (segment->total_copied + segment->size < segment->total_size)
+ 			flags |= MSG_MORE;
  
- 		bufl->bufers[y].addr = dma_map_single(dev, sg_virt(sg),
- 						      sg->length,
--						      DMA_BIDIRECTIONAL);
-+						      bufl_dma_dir);
- 		bufl->bufers[y].len = sg->length;
- 		if (unlikely(dma_mapping_error(dev, bufl->bufers[y].addr)))
- 			goto err_in;
-@@ -737,7 +743,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
++		if (tcp_sw_conn->queue_recv)
++			flags |= MSG_DONTWAIT;
++
+ 		/* Use sendpage if we can; else fall back to sendmsg */
+ 		if (!segment->data) {
+ 			sg = segment->sg;
+@@ -557,6 +592,8 @@ iscsi_sw_tcp_conn_create(struct iscsi_cls_session *cls_session,
+ 	conn = cls_conn->dd_data;
+ 	tcp_conn = conn->dd_data;
+ 	tcp_sw_conn = tcp_conn->dd_data;
++	INIT_WORK(&conn->recvwork, iscsi_sw_tcp_recv_data_work);
++	tcp_sw_conn->queue_recv = iscsi_recv_from_iscsi_q;
  
- 			bufers[y].addr = dma_map_single(dev, sg_virt(sg),
- 							sg->length,
--							DMA_BIDIRECTIONAL);
-+							DMA_FROM_DEVICE);
- 			if (unlikely(dma_mapping_error(dev, bufers[y].addr)))
- 				goto err_out;
- 			bufers[y].len = sg->length;
-@@ -767,7 +773,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
- 		if (!dma_mapping_error(dev, buflout->bufers[i].addr))
- 			dma_unmap_single(dev, buflout->bufers[i].addr,
- 					 buflout->bufers[i].len,
--					 DMA_BIDIRECTIONAL);
-+					 DMA_FROM_DEVICE);
+ 	tfm = crypto_alloc_ahash("crc32c", 0, CRYPTO_ALG_ASYNC);
+ 	if (IS_ERR(tfm))
+@@ -610,6 +647,8 @@ static void iscsi_sw_tcp_release_conn(struct iscsi_conn *conn)
+ 	iscsi_sw_tcp_conn_restore_callbacks(conn);
+ 	sock_put(sock->sk);
  
- 	if (!qat_req->buf.sgl_dst_valid)
- 		kfree(buflout);
-@@ -781,7 +787,7 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
- 		if (!dma_mapping_error(dev, bufl->bufers[i].addr))
- 			dma_unmap_single(dev, bufl->bufers[i].addr,
- 					 bufl->bufers[i].len,
--					 DMA_BIDIRECTIONAL);
-+					 bufl_dma_dir);
++	iscsi_suspend_rx(conn);
++
+ 	spin_lock_bh(&session->frwd_lock);
+ 	tcp_sw_conn->sock = NULL;
+ 	spin_unlock_bh(&session->frwd_lock);
+diff --git a/drivers/scsi/iscsi_tcp.h b/drivers/scsi/iscsi_tcp.h
+index 791453195099..850a018aefb9 100644
+--- a/drivers/scsi/iscsi_tcp.h
++++ b/drivers/scsi/iscsi_tcp.h
+@@ -28,6 +28,8 @@ struct iscsi_sw_tcp_send {
  
- 	if (!qat_req->buf.sgl_src_valid)
- 		kfree(bufl);
+ struct iscsi_sw_tcp_conn {
+ 	struct socket		*sock;
++	struct work_struct	recvwork;
++	bool			queue_recv;
+ 
+ 	struct iscsi_sw_tcp_send out;
+ 	/* old values for socket callbacks */
 -- 
 2.35.1
 
