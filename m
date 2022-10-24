@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACEF60AB5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F84A60A6B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236498AbiJXNua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
+        id S232199AbiJXMiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236583AbiJXNtP (ORCPT
+        with ESMTP id S234431AbiJXMfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:49:15 -0400
+        Mon, 24 Oct 2022 08:35:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA120B601C;
-        Mon, 24 Oct 2022 05:41:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA235DF31;
+        Mon, 24 Oct 2022 05:05:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DEA161325;
-        Mon, 24 Oct 2022 12:40:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F21BC433D7;
-        Mon, 24 Oct 2022 12:40:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 20443612D5;
+        Mon, 24 Oct 2022 12:05:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA41C433D6;
+        Mon, 24 Oct 2022 12:05:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615240;
-        bh=Y8i6qm5VeunCheqmpXC5AquJIRvQ8kPAhWHotNHrpjY=;
+        s=korg; t=1666613103;
+        bh=sD+JhGplpPIp1k8OWFkADJvxtCDejQrhYkusRmjNOOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YzkNpK2Uy+XTjAM4tcuT0KR62sXfQG+vQo12XJYSXDD9/SwkqvnBJm5NLurMw/vvg
-         mgnYE+fHOQzrnNPxnhUkJ+3j3euvwvJsWvI5Bh80TiX3vfRqZsrhNJH2bQbYNFsA/q
-         mf7ZgS4USb84llRXHYoPQs1T9dYeXY8jK81CwL5k=
+        b=Ab0K6WPwqh9orSjyhPLGF62ot9+RqmqUkHU5quzn6s2VX7YiETv5JxigryfvzZPVr
+         PVxSNEbLaI5+GK/epkAW+F4nZibbclXv3dEuRY7ivHG+/Gf/dViF+0VZ+gjVJ3ANRV
+         tsJwR7xMKfidydaluSare2qhRSLqy+AhLTZESX38=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Howard Hsu <howard-yh.hsu@mediatek.com>,
-        Felix Fietkau <nbd@nbd.name>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 176/530] wifi: mt76: mt7915: do not check state before configuring implicit beamform
+        stable@vger.kernel.org, "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.4 010/255] cifs: destage dirty pages before re-reading them for cache=none
 Date:   Mon, 24 Oct 2022 13:28:40 +0200
-Message-Id: <20221024113052.983268479@linuxfoundation.org>
+Message-Id: <20221024113002.788972179@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,42 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Howard Hsu <howard-yh.hsu@mediatek.com>
+From: Ronnie Sahlberg <lsahlber@redhat.com>
 
-[ Upstream commit d2b5bb6dfab29fe32bedefaade88dcd182c03a00 ]
+commit bb44c31cdcac107344dd2fcc3bd0504a53575c51 upstream.
 
-Do not need to check running state before configuring implicit Tx
-beamform. It is okay to configure implicit Tx beamform in run time.
-Noted that the existing connected stations will be applied for new
-configuration only if they reconnected to the interface.
+This is the opposite case of kernel bugzilla 216301.
+If we mmap a file using cache=none and then proceed to update the mmapped
+area these updates are not reflected in a later pread() of that part of the
+file.
+To fix this we must first destage any dirty pages in the range before
+we allow the pread() to proceed.
 
-Fixes: 6d6dc980e07d ("mt76: mt7915: add implicit Tx beamforming support")
-Signed-off-by: Howard Hsu <howard-yh.hsu@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt7915/debugfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/cifs/file.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7915/debugfs.c b/drivers/net/wireless/mediatek/mt76/mt7915/debugfs.c
-index 64048243e34b..31c1d4bc78dd 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7915/debugfs.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7915/debugfs.c
-@@ -12,9 +12,9 @@ mt7915_implicit_txbf_set(void *data, u64 val)
- {
- 	struct mt7915_dev *dev = data;
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -3877,6 +3877,15 @@ static ssize_t __cifs_readv(
+ 		len = ctx->len;
+ 	}
  
--	if (test_bit(MT76_STATE_RUNNING, &dev->mphy.state))
--		return -EBUSY;
--
-+	/* The existing connected stations shall reconnect to apply
-+	 * new implicit txbf configuration.
-+	 */
- 	dev->ibf = !!val;
++	if (direct) {
++		rc = filemap_write_and_wait_range(file->f_inode->i_mapping,
++						  offset, offset + len - 1);
++		if (rc) {
++			kref_put(&ctx->refcount, cifs_aio_ctx_release);
++			return -EAGAIN;
++		}
++	}
++
+ 	/* grab a lock here due to read response handlers can access ctx */
+ 	mutex_lock(&ctx->aio_mutex);
  
- 	return mt7915_mcu_set_txbf(dev, MT_BF_TYPE_UPDATE);
--- 
-2.35.1
-
 
 
