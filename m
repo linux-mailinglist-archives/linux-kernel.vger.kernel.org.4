@@ -2,121 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068CF60BD21
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A403460BD7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbiJXWJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S231688AbiJXWfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbiJXWI7 (ORCPT
+        with ESMTP id S231645AbiJXWen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:08:59 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13F62FF684;
-        Mon, 24 Oct 2022 13:22:51 -0700 (PDT)
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MwvrX1QKbz6HJRR;
-        Mon, 24 Oct 2022 20:43:40 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 14:44:58 +0200
-Received: from [10.48.145.243] (10.48.145.243) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 24 Oct 2022 13:44:58 +0100
-Message-ID: <dc61408d-8fc7-ca29-d284-0c92c2e1828c@huawei.com>
-Date:   Mon, 24 Oct 2022 13:44:56 +0100
+        Mon, 24 Oct 2022 18:34:43 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EE031DC0B
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:58:18 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id m16so33317703edc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:58:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wN9xp9CGfEXcy9ZUhAlzmgVvoo8fo5U8S26wHVxg2ig=;
+        b=Z5tPB/MLR2TafhpF8u9gg6+4mUEDrIbM8/l6b6PiwDt3kSPDjK4P1YfOkRWdqs/Qro
+         NO+r494H7+BeLvSuWYI0eiFg/RNo5UqvlWDanVQy6GkQoQ+1qPzUH1EyQvrr8NQIuZwP
+         uzDWKbFyWEfV4n8RiggEt8C+vNFMCUTMsIXef70J7aALkIrLqCdHE6v0xB1pNyRqV4/v
+         6V/ouoyqCvtHGeMb19VDYwWQouegiA1xURYKCLZUEx8C/HcUaRToJmuDClKhD7rssocD
+         tLyDYVxO7zBjxZhtFsnNSvXUhwhGHU/bK88B+szoy/ZOxCaegqPpzjvkP/YcNnhusk/b
+         YizQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wN9xp9CGfEXcy9ZUhAlzmgVvoo8fo5U8S26wHVxg2ig=;
+        b=jbxoq2WUqUBpSB5msjLOE+obWKXn44sjwy9i3cNpt70sxtFuPVKHfV9qB5tIR9T7dJ
+         HHYchCez7f7ECn3VQjb41Uc/VcpwQt8qlzcEZQS2qq25DdYDcIELKEw4De43b7YT3uwG
+         Dlyt17M42SDory2QgG+2H+Ov/ys69v+Fx7XPJkncuQxbNFeVKUAJdGeyg8ElXpBzg6Ke
+         tpvRSPB0jQ2N4Wk2cvST2PMF2bqulKkSTwXbgY+M8e9/S8SuPSiG+9ce0HVABtOvxDR2
+         FFFK6pVGzYKNPkWAodD9lh0ljF26lquVhEOkqASaRRxxrN4lmNtql0Qf+0PgsGn8i3YH
+         12qg==
+X-Gm-Message-State: ACrzQf2NYD3CxaMYcC8S20GHrSVqtNV+da5pnaee6Y085ktf8EQbQpkP
+        +JTmt3I7D5WVnk8p1YpqJEeMQgnF+sc=
+X-Google-Smtp-Source: AMsMyM60LdtUisTIW1qhUz5mAJHOCvIif9J9TxhIcbQetcBWikOkzFUshJxeZZ3uFv4Yc2lXPC2HEA==
+X-Received: by 2002:aa7:d1c3:0:b0:461:c627:2a7b with SMTP id g3-20020aa7d1c3000000b00461c6272a7bmr4653238edp.231.1666615741855;
+        Mon, 24 Oct 2022 05:49:01 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170906854b00b00782fbb7f5f7sm6029329ejy.113.2022.10.24.05.49.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 05:49:01 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
+Date:   Mon, 24 Oct 2022 14:48:59 +0200
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH v2 5/7] mm: vmalloc: Use trace_purge_vmap_area_lazy event
+Message-ID: <Y1aJuzlLVGHPYyX4@pc638.lan>
+References: <20221018181053.434508-6-urezki@gmail.com>
+ <202210240651.gHRa2Tys-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
-To:     Niklas Cassel <Niklas.Cassel@wdc.com>
-CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>,
-        yangxingui <yangxingui@huawei.com>,
-        yanaijie <yanaijie@huawei.com>
-References: <YzwvpUUftX6Ziurt@x1-carbon>
- <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
- <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
- <Yz33FGwd3YvQUAqT@x1-carbon>
- <5db6a7bc-dfeb-76e1-6899-7041daa934cf@opensource.wdc.com>
- <Yz4BLTPkXqyjW4a4@x1-carbon>
- <64ab35a7-f1ff-92ee-890e-89a5aee935a4@opensource.wdc.com>
- <f190f19e-34b2-611c-1cf4-f8f34d12fe74@huawei.com>
- <Yz7qD+gpmI1bdw16@x1-carbon>
- <bc7d74dc-5aaa-1ad3-626f-df89955b1380@huawei.com>
- <Y1aEGW2BtdIRJy7s@x1-carbon>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <Y1aEGW2BtdIRJy7s@x1-carbon>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.145.243]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210240651.gHRa2Tys-lkp@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Niklas,
+Hello, Andrew.
 
+> Hi Uladzislau,
 > 
-> For the record, I tested the pm80xx driver on a HoneyComb LX2 board
-> (an arm64 board using ACPI).
+> Thank you for the patch! Perhaps something to improve:
 > 
-> I tried v6.1-rc1 both with and without your series in $subject.
+> [auto build test WARNING on akpm-mm/mm-everything]
+> [also build test WARNING on linus/master v6.1-rc1]
+> [cannot apply to next-20221021]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
-> I couldn't see any issues.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Uladzislau-Rezki-Sony/Add-basic-trace-events-for-vmap-vmalloc-v2/20221019-021918
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20221018181053.434508-6-urezki%40gmail.com
+> patch subject: [PATCH v2 5/7] mm: vmalloc: Use trace_purge_vmap_area_lazy event
+> config: sparc-randconfig-c031-20221023
+> compiler: sparc64-linux-gcc (GCC) 12.1.0
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> cocci warnings: (new ones prefixed by >>)
+> >> mm/vmalloc.c:1789:36-41: WARNING: conversion to bool not needed here
+> 
+I think it should be fixed by the:
 
-ok, thanks for the effort.
+https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-vmalloc-use-trace_purge_vmap_area_lazy-event-fix.patch
 
-> 
-> 
-> What I tried:
-> -Running fio:
-> fio --name=test --filename=/dev/sdc --ioengine=io_uring --rw=randrw --direct=1 --iodepth=32 --bs=1M
-> on three different HDDs simultaneously for 15+ minutes,
-> without any errors in fio or dmesg.
-> 
-> -Creating and mounting a btrfs volume, doing a huge dd to the filesystem
-> without issues.
-> 
-> -sg_sat_read_gplog -d --log=0x10 /dev/sda
-> which successfully returned the log.
-> 
-> 
-> It is worth mentioning that this arm64 board has reserved memory regions,
-> but does not yet have a firmware that supplies a IORT RMR (reserved memory
-> regions) revision E.d node, which means that in order to get this board to
-> boot successfully, we need to supply:
-> "arm-smmu.disable_bypass=0 iommu.passthrough=1"
-> on the kernel command line.
+Thanks!
 
-hmmm... that's interesting. I can try again with the IOMMU turned off, 
-but, as I recall, it did not make a difference before. I think that 
-requiring reserved memory regions would totally bust the driver (if not 
-present) with IOMMU enabled. As I recall, sas 3008 card would not work 
-without RMR for us.
-
-It's also interesting that this LX2 board has A72 cores. For my system, 
-we have newer custom arm v8 cores with quite weak memory ordering 
-implementation. With that same system, I have detected a couple of other 
-driver memory ordering bugs which we did not see on our A72-based platforms.
-
-I always suspected that this issue was a memory ordering issue, but 
-since the hang so reliably occurs I ruled it out. Maybe it is...
-
-thanks,
-John
+--
+Uladzislau Rezki
