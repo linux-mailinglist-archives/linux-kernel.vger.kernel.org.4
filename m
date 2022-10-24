@@ -2,126 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C67060B6AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A4CE60B7A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbiJXTHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S233267AbiJXT2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:28:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbiJXTHR (ORCPT
+        with ESMTP id S232408AbiJXT2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:07:17 -0400
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA971DD8B4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:46:23 -0700 (PDT)
-Received: by mail-pg1-f171.google.com with SMTP id q1so9245063pgl.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:46:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dnac3jXX+DqSJpyd7IS9wnKftHu0DkEkt46zBI0n+Aw=;
-        b=bJVaxrjh52Jj/A1DMgeGWw1oKPweEw9UOXvf8EFTwvA8D8ugu6rBHlnGtm1bIlw5PQ
-         l5OqDfGhvvEFh9Re8EPN7e71ep9rcuQhp61yWM5VLIpY/WrRP4Ffc7AI3lz72h+brjlK
-         sJ5WzwCMqPn9AgRwnQB7v+5zG8eJd8kzuwXkBqJ4WLUKYZ4bEot4vmqMLBysqNVxA8OG
-         Xar7QdDpDvl5I9eci8QDGnt1xqpgDZXaZlZt/jFHkTJclTFbwpwSXDQQBlQWZcf1U3Cz
-         o52ckA0VQDgR01zMqQo72Me9QmKCfQMHbrcLVRwo6iYzvA9EJ3a5OInY9nHPaP0zolVh
-         JnAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dnac3jXX+DqSJpyd7IS9wnKftHu0DkEkt46zBI0n+Aw=;
-        b=kf+NI7rncN93pimq0M0/mlY5Kfq5ki2VjflIPpjc9pGPeNgNiHdaNJMt/78TI7PIMm
-         7gywhjxB5BjiCCvOIVCdKyRpQoppZwI8eEHPz6e5tOnxYd4GUQorjWnf4EgRp2I7lFzA
-         Uxpx5qOOfGgtSq8fmY8orUK4Rh3lD262b4UKlyySfEjNHZSK1XUtx1+dTyzlLNxpkwib
-         Zt1LavULK2dvyYMWbcZ6bCA01LRniMuXSZ5t5FTdh6i3TLZUJnkjPMGZIx/TM+qOknlD
-         38JvSJOnBTYwEMhbVfRZEFz1VxHX0WneJ3f9X/pSZQ2aVfXOggSPwyFBjLXxcCM3BBtG
-         zsRw==
-X-Gm-Message-State: ACrzQf1FkempzjYBnuCenathSRfsrjHJoY8BlhMAVKwgofVyYmf2ajXT
-        NDKJanGTgTuLDJfd7atEKZgOX2uo+2YTxxiultzuzA==
-X-Google-Smtp-Source: AMsMyM5OmVKaEIX2SFRXTaxdaKI2h3ZroD0njIyHv9e6KBWKaKXFjsqz3VOQNkRnNC6MsqlhX0Ip2prNgANFiIHRh3I=
-X-Received: by 2002:a63:689:0:b0:46e:be81:566c with SMTP id
- 131-20020a630689000000b0046ebe81566cmr15181143pgg.403.1666633465524; Mon, 24
- Oct 2022 10:44:25 -0700 (PDT)
+        Mon, 24 Oct 2022 15:28:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33997D1CB
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666634289;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BKsIeHeTa8oYpszhjqyCKaOjh+pr8dDdDzbYGV4SIoQ=;
+        b=SsPZQ7g8UDWrwxssM/GZHB2PjI/LmpN2Q9PeG8JRkvzOBCZa1JKj7kjwXmKbyf679Nmwpl
+        QmMrNt5B39Ql1rzBtNxtqebU08aPjXo2nWSquWX0pg29T9alvenpXEYOlbD3c9jrgW61pm
+        hf9CicA8FNCzEThre2IwI4hdo6KCaUs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-270-6U8GaSwEOh6tl65uRXdbHw-1; Mon, 24 Oct 2022 13:44:50 -0400
+X-MC-Unique: 6U8GaSwEOh6tl65uRXdbHw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 38EB63C32C44;
+        Mon, 24 Oct 2022 17:44:50 +0000 (UTC)
+Received: from llong.com (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 90A1E492B0A;
+        Mon, 24 Oct 2022 17:44:49 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        =?UTF-8?q?Ting11=20Wang=20=E7=8E=8B=E5=A9=B7?= 
+        <wangting11@xiaomi.com>, Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 0/5] lockinig/rwsem: Fix rwsem bugs & enable true lock handoff
+Date:   Mon, 24 Oct 2022 13:44:13 -0400
+Message-Id: <20221024174418.796468-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20221020175655.1660864-1-ndesaulniers@google.com>
- <Y1GV9sHyODVmBbFW@dev-arch.thelio-3990X> <CA+icZUW2tFR=xjJEXJDNARW1yd_vjOOA1etF6aMN3Cx5ReFgmg@mail.gmail.com>
-In-Reply-To: <CA+icZUW2tFR=xjJEXJDNARW1yd_vjOOA1etF6aMN3Cx5ReFgmg@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 24 Oct 2022 10:44:13 -0700
-Message-ID: <CAKwvOdn_mP8kVn5Bhe7bbC8R+VZxr8h02yWwKhvaTHW40ZJ_Uw@mail.gmail.com>
-Subject: Re: [PATCH] Makefile.debug: support for -gz=zstd
-To:     sedat.dilek@gmail.com, Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Sedat Dilek <sedat.dilek@dhl.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Terrell <terrelln@fb.com>, Tom Rix <trix@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        David Gow <davidgow@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 23, 2022 at 8:46 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
->
-> On Thu, Oct 20, 2022 at 8:43 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Thu, Oct 20, 2022 at 10:56:49AM -0700, Nick Desaulniers wrote:
-> > > +config DEBUG_INFO_UNCOMPRESSED
-> > > +     bool "Don't compress debug information"
-> > > +     help
-> > > +       Don't compress debug info sections.
-> > > +
-> > >  config DEBUG_INFO_COMPRESSED
->
-> Also, I prefer...
->
-> DEBUG_INFO_COMPRESSED_NONE
-> DEBUG_INFO_COMPRESSED_ZLIB
-> DEBUG_INFO_COMPRESSED_ZSTD
->
-> Following...
->
-> $ ld.lld-16 -v
-> Debian LLD 16.0.0 (compatible with GNU linkers)
->
-> $ ld.lld-16 --help | grep compress-debug-sections
->  --compress-debug-sections=[none,zlib,zstd]
+v4:
+ - Update patch descriptions in patches 1 & 2 to make clear the live
+   lock conditions that are being fixed by these patches. There is no code
+   change from v3.
 
-It's a good suggestion, though I deliberately did not modify the
-identifier used for the existing DEBUG_INFO_COMPRESSED.  No defconfigs
-set DEBUG_INFO_COMPRESSED explicitly, but I think one issue with
-changing the identifier of existing kconfigs is that upon upgrading to
-newer kernel sources, if you run `make oldmodconfig` if you previously
-had DEBUG_INFO_COMPRESSED=y, kconfig doesn't know that that option has
-been renamed to DEBUG_INFO_COMPRESSED_ZLIB so it would be silently
-disabled, and image sizes would increase due to uncompressed debug
-info. That seems developer hostile.
+v3:
+ - Make a minor cleanup to patch 1.
+ - Add 3 more patches to implement true lock handoff.
 
-Masahiro, what are your thoughts on how to proceed? Should I change
-the pre-existing Kconfig identifier, or "let sleeping dogs lie?"
+It turns out the current waiter optimistic spinning code does not work
+that well if we have RT tasks in the mix. This patch series include two
+different fixes to resolve those issues. The last 3 patches modify the
+handoff code to implement true lock handoff similar to that of mutex.
+
+Waiman Long (5):
+  locking/rwsem: Prevent non-first waiter from spinning in down_write()
+    slowpath
+  locking/rwsem: Limit # of null owner retries for handoff writer
+  locking/rwsem: Change waiter->hanodff_set to a handoff_state enum
+  locking/rwsem: Enable direct rwsem lock handoff
+  locking/rwsem: Update handoff lock events tracking
+
+ kernel/locking/lock_events_list.h |   6 +-
+ kernel/locking/rwsem.c            | 172 +++++++++++++++++++++++-------
+ 2 files changed, 138 insertions(+), 40 deletions(-)
+
 -- 
-Thanks,
-~Nick Desaulniers
+2.31.1
+
