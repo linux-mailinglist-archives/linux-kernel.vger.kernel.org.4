@@ -2,248 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F219160A1E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB3060A1EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbiJXLfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
+        id S229915AbiJXLgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiJXLfC (ORCPT
+        with ESMTP id S230426AbiJXLf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:35:02 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA15664D9;
-        Mon, 24 Oct 2022 04:34:18 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Mon, 24 Oct
- 2022 19:33:53 +0800
-Message-ID: <a53dcf50-760c-cb63-7768-efd5d7a381a9@amlogic.com>
-Date:   Mon, 24 Oct 2022 19:33:52 +0800
+        Mon, 24 Oct 2022 07:35:57 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF2E48EA2;
+        Mon, 24 Oct 2022 04:35:01 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-13b6c1c89bdso5605137fac.13;
+        Mon, 24 Oct 2022 04:35:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M5UZCFr57jSJwSGj5ycrkruVZLCd8UXEKFZXMqgDVks=;
+        b=Psp+OumkznpHgLnHiwYw1sf7aYrjPL/PaHFRiGICufnccSw4s/W0nDvOmlyKc62du7
+         YXWX5R/gNmEIxXhnywOAB37LcLDhGS0vTvsnSRcHiBXpqLg6p61frKpXRT65cqPqMViU
+         KiYrs77nldrzFFyh8s0gPXh7e7AMOGyabsPE3NasIY8F14cVLczp60Ttfveo5WBxxpZw
+         1oKr3NDgOfVJx8M/N+meVaUihFfwhMXZLT0/sS8MxDyTH/3bZjNPlyO74DIDk8TGjvdT
+         CpbJQwEVgdW911yK/ZqlHW3zujwxb3GEL/73kSEd4d2OJAxnXuOOkvoqRIK67s2WSWvZ
+         Ya0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M5UZCFr57jSJwSGj5ycrkruVZLCd8UXEKFZXMqgDVks=;
+        b=RsYsGrn83yW9vLDjrnL14Kn0hTJAs7l0Iuoe17IgEcTxafjk8tqrlVZh827JirS2D/
+         +F8jpxTTR/76k1pjBDxHs+vkWYlIT5k2HCXymIDcKH1oVhmiil32m7AJy8S/hif+dnCX
+         x/NepulphZGt7bxsC7Nuf3bX4xgn0Aiz/oleIkt2hpWxair3L1clcwATcacXJbRqmfXn
+         C4ZomYlWUurehy4JFFvA2qfbLqkVJn1rArMxoCZlFyLMVENidaH2G9Q5VN5wgp6sFCIH
+         Eg1lE+XcqToVxtFzR8nyR90QF97hzynAPWi81H870wdRyH43fTjgm7DTYxzCSWdtLFuj
+         YgTg==
+X-Gm-Message-State: ACrzQf0I4p8CA470cMIYKGjnrqNi/YnkVB6Q7bh+u00gRPz7bBHj8C8m
+        OnWL4fQffl/U+mcR9st926w=
+X-Google-Smtp-Source: AMsMyM4HCOsEjlNPhwJeL0z0TQZEZazmrwv7DoO6SLiYtb/47ToNb4OWYAXijKmn6cFMZUl/a+Pq4g==
+X-Received: by 2002:a05:6870:5804:b0:12a:f192:27de with SMTP id r4-20020a056870580400b0012af19227demr20359146oap.224.1666611246967;
+        Mon, 24 Oct 2022 04:34:06 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id a12-20020a056870618c00b0013b92b3ac64sm1996787oah.3.2022.10.24.04.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 04:34:06 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     bas@basnieuwenhuizen.nl
+Cc:     Xinhui.Pan@amd.com, alexander.deucher@amd.com,
+        amd-gfx@lists.freedesktop.org, christian.koenig@amd.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        rodrigo.siqueira@amd.com, samsagax@gmail.com, sunpeng.li@amd.com,
+        stable@vger.kernel.org
+Subject: [PATCH v2] drm/amd/display: Revert logic for plane modifiers
+Date:   Mon, 24 Oct 2022 08:33:59 -0300
+Message-Id: <20221024113359.5575-1-samsagax@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <CAP+8YyFUoFhh1+CEKrs48JV5CiorSSfe6qg90TyUrDoBtzcPhA@mail.gmail.com>
+References: <CAP+8YyFUoFhh1+CEKrs48JV5CiorSSfe6qg90TyUrDoBtzcPhA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH V3 3/6] clk: meson: S4: add support for Amlogic S4 SoC PLL
- clock driver
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220805085716.5635-1-yu.tu@amlogic.com>
- <20220805085716.5635-4-yu.tu@amlogic.com>
- <1jiln0yzgj.fsf@starbuckisacylon.baylibre.com>
- <ed4038fb-c230-fc27-800c-c99bd1770a1c@amlogic.com>
- <4e3cdd6b-5861-8a4f-1df7-af763f77bad5@amlogic.com>
- <1jsflftm1y.fsf@starbuckisacylon.baylibre.com>
- <0c7e6d90-2ce3-25ab-84b6-026ce8a238a8@amlogic.com>
- <1jtu5uz0ry.fsf@starbuckisacylon.baylibre.com>
- <9f9cf980-c0c6-d5c3-ced8-8ab50e392470@amlogic.com>
- <21e14cc1-6b34-e6b0-8da2-ad4b34dac149@amlogic.com>
- <1jy1u3zfas.fsf@starbuckisacylon.baylibre.com>
- <095f1bd9-c390-196f-cccc-700d75c70cb0@amlogic.com>
- <1j4jvwavoe.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1j4jvwavoe.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jerome,
-	Thank you for your reply.
+This file was split in commit 5d945cbcd4b16a29d6470a80dfb19738f9a4319f
+("drm/amd/display: Create a file dedicated to planes") and the logic in
+dm_plane_format_mod_supported() function got changed by a switch logic.
+That change broke drm_plane modifiers setting on series 5000 APUs
+(tested on OXP mini AMD 5800U and HP Dev One 5850U PRO)
+leading to Gamescope not working as reported on GitHub[1]
 
-On 2022/10/22 20:22, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Thu 29 Sep 2022 at 15:07, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Hi Jerome,
->> 	Thank you for your reply.
->>
->> On 2022/9/28 23:27, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>> On Wed 21 Sep 2022 at 16:40, Yu Tu <yu.tu@amlogic.com> wrote:
->>>
->>>> Hi Jerome，
->>>>
->>>> On 2022/8/30 15:37, Yu Tu wrote:
->>>>> On 2022/8/30 14:44, Jerome Brunet wrote:
->>>>>> [ EXTERNAL EMAIL ]
->>>>>>
->>>>>>
->>>>>> On Tue 30 Aug 2022 at 14:13, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>>>
->>>>>>> On 2022/8/29 17:48, Jerome Brunet wrote:
->>>>>>>> [ EXTERNAL EMAIL ]
->>>>>>>> On Mon 15 Aug 2022 at 21:20, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>>>>>
->>>>>>>>>>>> +
->>>>>>>>>>>> +static struct clk_regmap s4_hdmi_pll_dco = {
->>>>>>>>>>>> +    .data = &(struct meson_clk_pll_data){
->>>>>>>>>>>> +        .en = {
->>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
->>>>>>>>>>>> +            .shift   = 28,
->>>>>>>>>>>> +            .width   = 1,
->>>>>>>>>>>> +        },
->>>>>>>>>>>> +        .m = {
->>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
->>>>>>>>>>>> +            .shift   = 0,
->>>>>>>>>>>> +            .width   = 8,
->>>>>>>>>>>> +        },
->>>>>>>>>>>> +        .n = {
->>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
->>>>>>>>>>>> +            .shift   = 10,
->>>>>>>>>>>> +            .width   = 5,
->>>>>>>>>>>> +        },
->>>>>>>>>>>> +        .frac = {
->>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL1,
->>>>>>>>>>>> +            .shift   = 0,
->>>>>>>>>>>> +            .width   = 17,
->>>>>>>>>>>> +        },
->>>>>>>>>>>> +        .l = {
->>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
->>>>>>>>>>>> +            .shift   = 31,
->>>>>>>>>>>> +            .width   = 1,
->>>>>>>>>>>> +        },
->>>>>>>>>>>> +        .rst = {
->>>>>>>>>>>> +            .reg_off = ANACTRL_HDMIPLL_CTRL0,
->>>>>>>>>>>> +            .shift   = 29,
->>>>>>>>>>>> +            .width   = 1,
->>>>>>>>>>>> +        },
->>>>>>>>>>>> +    },
->>>>>>>>>>>> +    .hw.init = &(struct clk_init_data){
->>>>>>>>>>>> +        .name = "hdmi_pll_dco",
->>>>>>>>>>>> +        .ops = &meson_clk_pll_ro_ops,
->>>>>>>>>>>> +        .parent_data = (const struct clk_parent_data []) {
->>>>>>>>>>>> +            { .fw_name = "xtal", }
->>>>>>>>>>>> +        },
->>>>>>>>>>>> +        .num_parents = 1,
->>>>>>>>>>>> +        /*
->>>>>>>>>>>> +         * Display directly handle hdmi pll registers ATM, we need
->>>>>>>>>>>> +         * NOCACHE to keep our view of the clock as accurate as
->>>>>>>>>>>> +         * possible
->>>>>>>>>>>> +         */
->>>>>>>>>>>
->>>>>>>>>>> Is it really ?
->>>>>>>>>>>
->>>>>>>>>>> Given that HDMI support for the s4 is there yet, the
->>>>>>>>>>> addresses have changes and the region is no longer a syscon, it is
->>>>>>>>>>> time
->>>>>>>>>>> for the HDMI driver to get fixed.
->>>>>>>>> The HDMI PLL is configured in the Uboot phase and does not change the
->>>>>>>>> frequency in the kernel phase. So we use the NOCACHE flag and
->>>>>>>>> "ro_ops".
->>>>>>>> That's no reason to put NOCACHE or ro-ops
->>>>>>>> If you want the frequencies to be statically assinged, the correct way
->>>>>>>> would be through assigned-rate in DT I guess.
->>>>>>>
->>>>>>> Okay. You're right. However, when registering with OPS, HDMI PLL will be
->>>>>>> reset. It takes time for PLL to stabilize the output frequency, which
->>>>>>> will
->>>>>>> lead to the startup screen flashing.
->>>>>>>
->>>>>>> I would like to know how to solve this problem if not using ro_ops.
->>>>>>>
->>>>>>>>
->>>>>>
->>>>>> You can add new ops or tweak the current init function.
->>>>> HDMI PLL is not different from other PLLS, so I think adding OPS is
->>>>> weird.
->>>>>
->>>>>>
->>>>>> Safest would be to do the following :
->>>>>>     * Check if the PLLs is already on.
->>>>>>     * Check if the 'pll->init_regs' matches what is already set
->>>>>>       - if so, you can skip the reset
->>>>>>       - if not, you need to reset as usual
->>>>> static int meson_clk_pll_init(struct clk_hw *hw)
->>>>> {
->>>>>            struct clk_regmap *clk = to_clk_regmap(hw);
->>>>>            struct meson_clk_pll_data *pll = meson_clk_pll_data(clk);
->>>>>            if (pll->init_count) {
->>>>>                    meson_parm_write(clk->map, &pll->rst, 1);
->>>>>                    regmap_multi_reg_write(clk->map, pll->init_regs,
->>>>>                                    |      pll->init_count);
->>>>>                    meson_parm_write(clk->map, &pll->rst, 0);
->>>>>            }
->>>>>            return 0;
->>>>> }
->>>>> Because the init function looks like this. Therefore, HDMI PLL init_count
->>>>> is not given.
->>> I don't get the remark. You've got pll->init_count right there.
->>>
->>>>> Can I change it like this?
->>> What change ? The function above looks a lot like  meson_clk_pll_init()
->>> in the actual source
->>>
->>>>
->>>> I don't know if this change meets your requirements? Please give us your
->>>> valuable advice.
->>> What change ?
->>
->> static struct clk_regmap s4_hdmi_pll_dco = {          .data = &(struct
->> meson_clk_pll_data){                  .en = {
->> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 28,
->> .width   = 1,                  },                  .m = {
->> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 0,
->> .width   = 8,                  },                  .n = {
->> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 10,
->> .width   = 5,                  },                  .frac = {
->> .reg_off = ANACTRL_HDMIPLL_CTRL1,                          .shift   = 0,
->> .width   = 17,                  },                  .l = {
->> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 31,
->> .width   = 1,                  },                  .rst = {
->> .reg_off = ANACTRL_HDMIPLL_CTRL0,                          .shift   = 29,
->> .width   = 1,                  },                  .range =
->> &s4_gp0_pll_mult_range,          },          .hw.init = &(struct
->> clk_init_data){                  .name = "hdmi_pll_dco",
->> .ops = &meson_clk_pll_ops,                  .parent_data = (const struct
->> clk_parent_data []) {                          { .fw_name = "xtal", }
->> },                  .num_parents = 1,          }, };
-> 
-> I'm sorry but I can't read this
-> 
->>
->> This is my code right now. Because init_count and init_regs are not
->> defined, HDMI PLL is not reset. In this way, the kernel will not blink when
->> the Uboot starts. Then in the kernel stage, if we want to change the HDMI
->> PLL frequency value, we can directly change M, N and OD. In fact, we will
->> not change the HDMI PLL frequency value later.
->>
->> I wonder if you accept this change?
+To reproduce the issue, enter a TTY and run:
 
-Sorry, the code is not formatted properly.
+$ gamescope -- vkcube
 
-> 
-> I think it would be better to separate this topic from your new SoC support
-> 
-> I think you can make another version of the clock controller for the new
-> SoC, keeping the pll_ops as it is now.
-> 
-> With another series, you may submit something to avoid reseting the PLL if
-> is already correctly initialized. This can be useful to all the SoC, not
-> just the last one. It will be easier to discuss on properly formatted
-> patches
+With said commit applied it will abort. This one restores the old logic,
+fixing the issue that affects Gamescope.
 
-Do you mean that hdmi_pll, I will submit the next version of code 
-according to pll_ro_ops first, and then we will discuss how to reject 
-the patch of reset pll in another topic?
+[1](https://github.com/Plagman/gamescope/issues/624)
+
+Cc: <stable@vger.kernel.org> # 6.0.x
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+Reviewed-by: Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+---
+Removed asic_id and excess newlines. Resend with correct Cc line.
+---
+ .../amd/display/amdgpu_dm/amdgpu_dm_plane.c   | 50 +++----------------
+ 1 file changed, 7 insertions(+), 43 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
+index dfd3be49eac8..e6854f7270a6 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_plane.c
+@@ -1369,7 +1369,7 @@ static bool dm_plane_format_mod_supported(struct drm_plane *plane,
+ {
+ 	struct amdgpu_device *adev = drm_to_adev(plane->dev);
+ 	const struct drm_format_info *info = drm_format_info(format);
+-	struct hw_asic_id asic_id = adev->dm.dc->ctx->asic_id;
++	int i;
+
+ 	enum dm_micro_swizzle microtile = modifier_gfx9_swizzle_mode(modifier) & 3;
+
+@@ -1386,49 +1386,13 @@ static bool dm_plane_format_mod_supported(struct drm_plane *plane,
+ 		return true;
+ 	}
+
+-	/* check if swizzle mode is supported by this version of DCN */
+-	switch (asic_id.chip_family) {
+-	case FAMILY_SI:
+-	case FAMILY_CI:
+-	case FAMILY_KV:
+-	case FAMILY_CZ:
+-	case FAMILY_VI:
+-		/* asics before AI does not have modifier support */
+-		return false;
+-	case FAMILY_AI:
+-	case FAMILY_RV:
+-	case FAMILY_NV:
+-	case FAMILY_VGH:
+-	case FAMILY_YELLOW_CARP:
+-	case AMDGPU_FAMILY_GC_10_3_6:
+-	case AMDGPU_FAMILY_GC_10_3_7:
+-		switch (AMD_FMT_MOD_GET(TILE, modifier)) {
+-		case AMD_FMT_MOD_TILE_GFX9_64K_R_X:
+-		case AMD_FMT_MOD_TILE_GFX9_64K_D_X:
+-		case AMD_FMT_MOD_TILE_GFX9_64K_S_X:
+-		case AMD_FMT_MOD_TILE_GFX9_64K_D:
+-			return true;
+-		default:
+-			return false;
+-		}
+-		break;
+-	case AMDGPU_FAMILY_GC_11_0_0:
+-	case AMDGPU_FAMILY_GC_11_0_1:
+-		switch (AMD_FMT_MOD_GET(TILE, modifier)) {
+-		case AMD_FMT_MOD_TILE_GFX11_256K_R_X:
+-		case AMD_FMT_MOD_TILE_GFX9_64K_R_X:
+-		case AMD_FMT_MOD_TILE_GFX9_64K_D_X:
+-		case AMD_FMT_MOD_TILE_GFX9_64K_S_X:
+-		case AMD_FMT_MOD_TILE_GFX9_64K_D:
+-			return true;
+-		default:
+-			return false;
+-		}
+-		break;
+-	default:
+-		ASSERT(0); /* Unknown asic */
+-		break;
++	/* Check that the modifier is on the list of the plane's supported modifiers. */
++	for (i = 0; i < plane->modifier_count; i++) {
++		if (modifier == plane->modifiers[i])
++			break;
+ 	}
++	if (i == plane->modifier_count)
++		return false;
+
+ 	/*
+ 	 * For D swizzle the canonical modifier depends on the bpp, so check
+--
+2.38.1
 
