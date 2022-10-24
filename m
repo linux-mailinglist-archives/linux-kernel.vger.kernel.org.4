@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 463E360A674
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C0A60A96F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234157AbiJXMeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        id S231971AbiJXNUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234165AbiJXM3b (ORCPT
+        with ESMTP id S231362AbiJXNSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:31 -0400
+        Mon, 24 Oct 2022 09:18:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2737588DD2;
-        Mon, 24 Oct 2022 05:03:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D295F2FFFE;
+        Mon, 24 Oct 2022 05:26:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59D42612B4;
-        Mon, 24 Oct 2022 11:47:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B60AC43143;
-        Mon, 24 Oct 2022 11:47:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F25061268;
+        Mon, 24 Oct 2022 12:23:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D68C433C1;
+        Mon, 24 Oct 2022 12:23:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612056;
-        bh=FSdbiPueVjPIiHHnV4K5YK5PYMbHBcrAoHkWO81VVtQ=;
+        s=korg; t=1666614210;
+        bh=Uhl66iM0KuPXimYo3oJQbWlMZPTK9qOjxrbDCHLHOMs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YBudlojfPoBf11VHpn0Nknvsr7rKigpT16OpFOoZF9Ig4UrKmGKQcorCDQO3RIqF5
-         uKlH6g/aczNVlekbHJ60ZfKJjZrPTj5q9dVsQZ8bBiiPH7cVpwYSMRe9+nxiVVbV08
-         abcBNTnlQRped95J+SsvMvLGVbcZ4NhRHP0a7qC0=
+        b=0pmMUtfwt8v8Riu+/xzP00baZEyhAxcCRBYVdJk3I5zQqGc1Zu7ay0zV9fyu/ikxY
+         sz9FtMctD5Jv6yyj7xgGJZlxx9e4enPFlmi08H7iu9hFwhNXHBPs1qtXfcouQBIokx
+         wacVbHq9SNqiK8NDLz6hyhr/7LCeMaLbhWXkLUzE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Sabri N. Ferreiro" <snferreiro1@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 4.14 053/210] ALSA: usb-audio: Fix NULL dererence at error path
-Date:   Mon, 24 Oct 2022 13:29:30 +0200
-Message-Id: <20221024112958.720040159@linuxfoundation.org>
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 174/390] soc: qcom: smsm: Fix refcount leak bugs in qcom_smsm_probe()
+Date:   Mon, 24 Oct 2022 13:29:31 +0200
+Message-Id: <20221024113030.123651577@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +54,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Liang He <windhl@126.com>
 
-commit 568be8aaf8a535f79c4db76cabe17b035aa2584d upstream.
+[ Upstream commit af8f6f39b8afd772fda4f8e61823ef8c021bf382 ]
 
-At an error path to release URB buffers and contexts, the driver might
-hit a NULL dererence for u->urb pointer, when u->buffer_size has been
-already set but the actual URB allocation failed.
+There are two refcount leak bugs in qcom_smsm_probe():
 
-Fix it by adding the NULL check of urb.  Also, make sure that
-buffer_size is cleared after the error path or the close.
+(1) The 'local_node' is escaped out from for_each_child_of_node() as
+the break of iteration, we should call of_node_put() for it in error
+path or when it is not used anymore.
+(2) The 'node' is escaped out from for_each_available_child_of_node()
+as the 'goto', we should call of_node_put() for it in goto target.
 
-Cc: <stable@vger.kernel.org>
-Reported-by: Sabri N. Ferreiro <snferreiro1@gmail.com>
-Link: https://lore.kernel.org/r/CAKG+3NRjTey+fFfUEGwuxL-pi_=T4cUskYG9OzpzHytF+tzYng@mail.gmail.com
-Link: https://lore.kernel.org/r/20220930100129.19445-1-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220721135217.1301039-1-windhl@126.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/usb/endpoint.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/soc/qcom/smsm.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
---- a/sound/usb/endpoint.c
-+++ b/sound/usb/endpoint.c
-@@ -86,12 +86,13 @@ static inline unsigned get_usb_high_spee
-  */
- static void release_urb_ctx(struct snd_urb_ctx *u)
- {
--	if (u->buffer_size)
-+	if (u->urb && u->buffer_size)
- 		usb_free_coherent(u->ep->chip->dev, u->buffer_size,
- 				  u->urb->transfer_buffer,
- 				  u->urb->transfer_dma);
- 	usb_free_urb(u->urb);
- 	u->urb = NULL;
-+	u->buffer_size = 0;
+diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
+index 6564f15c5319..acba67dfbc85 100644
+--- a/drivers/soc/qcom/smsm.c
++++ b/drivers/soc/qcom/smsm.c
+@@ -511,7 +511,7 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 	for (id = 0; id < smsm->num_hosts; id++) {
+ 		ret = smsm_parse_ipc(smsm, id);
+ 		if (ret < 0)
+-			return ret;
++			goto out_put;
+ 	}
+ 
+ 	/* Acquire the main SMSM state vector */
+@@ -519,13 +519,14 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 			      smsm->num_entries * sizeof(u32));
+ 	if (ret < 0 && ret != -EEXIST) {
+ 		dev_err(&pdev->dev, "unable to allocate shared state entry\n");
+-		return ret;
++		goto out_put;
+ 	}
+ 
+ 	states = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_SMSM_SHARED_STATE, NULL);
+ 	if (IS_ERR(states)) {
+ 		dev_err(&pdev->dev, "Unable to acquire shared state entry\n");
+-		return PTR_ERR(states);
++		ret = PTR_ERR(states);
++		goto out_put;
+ 	}
+ 
+ 	/* Acquire the list of interrupt mask vectors */
+@@ -533,13 +534,14 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 	ret = qcom_smem_alloc(QCOM_SMEM_HOST_ANY, SMEM_SMSM_CPU_INTR_MASK, size);
+ 	if (ret < 0 && ret != -EEXIST) {
+ 		dev_err(&pdev->dev, "unable to allocate smsm interrupt mask\n");
+-		return ret;
++		goto out_put;
+ 	}
+ 
+ 	intr_mask = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_SMSM_CPU_INTR_MASK, NULL);
+ 	if (IS_ERR(intr_mask)) {
+ 		dev_err(&pdev->dev, "unable to acquire shared memory interrupt mask\n");
+-		return PTR_ERR(intr_mask);
++		ret = PTR_ERR(intr_mask);
++		goto out_put;
+ 	}
+ 
+ 	/* Setup the reference to the local state bits */
+@@ -550,7 +552,8 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 	smsm->state = qcom_smem_state_register(local_node, &smsm_state_ops, smsm);
+ 	if (IS_ERR(smsm->state)) {
+ 		dev_err(smsm->dev, "failed to register qcom_smem_state\n");
+-		return PTR_ERR(smsm->state);
++		ret = PTR_ERR(smsm->state);
++		goto out_put;
+ 	}
+ 
+ 	/* Register handlers for remote processor entries of interest. */
+@@ -580,16 +583,19 @@ static int qcom_smsm_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	platform_set_drvdata(pdev, smsm);
++	of_node_put(local_node);
+ 
+ 	return 0;
+ 
+ unwind_interfaces:
++	of_node_put(node);
+ 	for (id = 0; id < smsm->num_entries; id++)
+ 		if (smsm->entries[id].domain)
+ 			irq_domain_remove(smsm->entries[id].domain);
+ 
+ 	qcom_smem_state_unregister(smsm->state);
+-
++out_put:
++	of_node_put(local_node);
+ 	return ret;
  }
  
- static const char *usb_error_string(int err)
+-- 
+2.35.1
+
 
 
