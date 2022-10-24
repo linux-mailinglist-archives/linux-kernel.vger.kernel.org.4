@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3512760B270
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1C360B0CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234962AbiJXQq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35420 "EHLO
+        id S233120AbiJXQI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234906AbiJXQpf (ORCPT
+        with ESMTP id S233400AbiJXQEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:45:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBE918B481;
-        Mon, 24 Oct 2022 08:31:04 -0700 (PDT)
+        Mon, 24 Oct 2022 12:04:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BE325E8B;
+        Mon, 24 Oct 2022 07:57:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3976DB818EC;
-        Mon, 24 Oct 2022 12:39:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F2E1C433C1;
-        Mon, 24 Oct 2022 12:39:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB583B81645;
+        Mon, 24 Oct 2022 12:20:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35566C433D7;
+        Mon, 24 Oct 2022 12:20:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615174;
-        bh=9D6oYxqmQLqMHamIaErDVclQNFwCzmUAUcFqvVoS5hY=;
+        s=korg; t=1666614008;
+        bh=CuwPXSO5nQD6+tQbPlDUkxV3DhhtWO58vcsfSI7QTA0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q8axxJRV4lZmqsKT61UAwy01QtUfWB/hn7zhKfURacCHeZDh5d7E35lddMNTQN4bW
-         UcjyzIDB1Jj7sqdv+pL4cHOY9jMIn+zDOzOgSGoQbIwa4iDT8dlBQrfZgm+cUC5uxz
-         F+0AtVT82GFceCSVosHCMTLI6HO/rABpwJ6dx8J0=
+        b=eL3NQIodQmRch5yYYddPDcm9q0FuiuAiJuPZI1Fu416+6r6/qa8azaBHRpfEXnsVZ
+         RtA86RjVaQDVCpr6b6EX6LleWeX2th/p1ZXotzmI8xQgtW23mhJeu67HFVjxj/CYHM
+         12pJAvS2dq+XdzBDQsapRCVMP8GU7H8w29GTWx8M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bruce Fields <bfields@fieldses.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
+        stable@vger.kernel.org, Sami Tolvanen <samitolvanen@google.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 150/530] NFSD: Fix handling of oversized NFSv4 COMPOUND requests
-Date:   Mon, 24 Oct 2022 13:28:14 +0200
-Message-Id: <20221024113051.852882899@linuxfoundation.org>
+Subject: [PATCH 5.10 098/390] objtool: Preserve special st_shndx indexes in elf_update_symbol
+Date:   Mon, 24 Oct 2022 13:28:15 +0200
+Message-Id: <20221024113026.825316947@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,116 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Sami Tolvanen <samitolvanen@google.com>
 
-[ Upstream commit 7518a3dc5ea249d4112156ce71b8b184eb786151 ]
+[ Upstream commit 5141d3a06b2da1731ac82091298b766a1f95d3d8 ]
 
-If an NFS server returns NFS4ERR_RESOURCE on the first operation in
-an NFSv4 COMPOUND, there's no way for a client to know where the
-problem is and then simplify the compound to make forward progress.
+elf_update_symbol fails to preserve the special st_shndx values
+between [SHN_LORESERVE, SHN_HIRESERVE], which results in it
+converting SHN_ABS entries into SHN_UNDEF, for example. Explicitly
+check for the special indexes and ensure these symbols are not
+marked undefined.
 
-So instead, make NFSD process as many operations in an oversized
-COMPOUND as it can and then return NFS4ERR_RESOURCE on the first
-operation it did not process.
-
-pynfs NFSv4.0 COMP6 exercises this case, but checks only for the
-COMPOUND status code, not whether the server has processed any
-of the operations.
-
-pynfs NFSv4.1 SEQ6 and SEQ7 exercise the NFSv4.1 case, which detects
-too many operations per COMPOUND by checking against the limits
-negotiated when the session was created.
-
-Suggested-by: Bruce Fields <bfields@fieldses.org>
-Fixes: 0078117c6d91 ("nfsd: return RESOURCE not GARBAGE_ARGS on too many ops")
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Fixes: ead165fa1042 ("objtool: Fix symbol creation")
+Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220908215504.3686827-17-samitolvanen@google.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfsd/nfs4proc.c |   19 +++++++++++++------
- fs/nfsd/nfs4xdr.c  |   11 +++--------
- fs/nfsd/xdr4.h     |    3 ++-
- 3 files changed, 18 insertions(+), 15 deletions(-)
+ tools/objtool/elf.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/fs/nfsd/nfs4proc.c
-+++ b/fs/nfsd/nfs4proc.c
-@@ -2493,9 +2493,6 @@ nfsd4_proc_compound(struct svc_rqst *rqs
- 	status = nfserr_minor_vers_mismatch;
- 	if (nfsd_minorversion(nn, args->minorversion, NFSD_TEST) <= 0)
- 		goto out;
--	status = nfserr_resource;
--	if (args->opcnt > NFSD_MAX_OPS_PER_COMPOUND)
--		goto out;
- 
- 	status = nfs41_check_op_ordering(args);
- 	if (status) {
-@@ -2508,10 +2505,20 @@ nfsd4_proc_compound(struct svc_rqst *rqs
- 
- 	rqstp->rq_lease_breaker = (void **)&cstate->clp;
- 
--	trace_nfsd_compound(rqstp, args->opcnt);
-+	trace_nfsd_compound(rqstp, args->client_opcnt);
- 	while (!status && resp->opcnt < args->opcnt) {
- 		op = &args->ops[resp->opcnt++];
- 
-+		if (unlikely(resp->opcnt == NFSD_MAX_OPS_PER_COMPOUND)) {
-+			/* If there are still more operations to process,
-+			 * stop here and report NFS4ERR_RESOURCE. */
-+			if (cstate->minorversion == 0 &&
-+			    args->client_opcnt > resp->opcnt) {
-+				op->status = nfserr_resource;
-+				goto encode_op;
-+			}
-+		}
+diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+index 5aa3b4e76479..a2ea3931e01d 100644
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -578,6 +578,11 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+ 	Elf64_Xword entsize = symtab->sh.sh_entsize;
+ 	int max_idx, idx = sym->idx;
+ 	Elf_Scn *s, *t = NULL;
++	bool is_special_shndx = sym->sym.st_shndx >= SHN_LORESERVE &&
++				sym->sym.st_shndx != SHN_XINDEX;
 +
- 		/*
- 		 * The XDR decode routines may have pre-set op->status;
- 		 * for example, if there is a miscellaneous XDR error
-@@ -2587,8 +2594,8 @@ encode_op:
- 			status = op->status;
- 		}
++	if (is_special_shndx)
++		shndx = sym->sym.st_shndx;
  
--		trace_nfsd_compound_status(args->opcnt, resp->opcnt, status,
--					   nfsd4_op_name(op->opnum));
-+		trace_nfsd_compound_status(args->client_opcnt, resp->opcnt,
-+					   status, nfsd4_op_name(op->opnum));
+ 	s = elf_getscn(elf->elf, symtab->idx);
+ 	if (!s) {
+@@ -663,7 +668,7 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+ 	}
  
- 		nfsd4_cstate_clear_replay(cstate);
- 		nfsd4_increment_op_stats(op->opnum);
---- a/fs/nfsd/nfs4xdr.c
-+++ b/fs/nfsd/nfs4xdr.c
-@@ -2349,16 +2349,11 @@ nfsd4_decode_compound(struct nfsd4_compo
- 
- 	if (xdr_stream_decode_u32(argp->xdr, &argp->minorversion) < 0)
- 		return 0;
--	if (xdr_stream_decode_u32(argp->xdr, &argp->opcnt) < 0)
-+	if (xdr_stream_decode_u32(argp->xdr, &argp->client_opcnt) < 0)
- 		return 0;
- 
--	/*
--	 * NFS4ERR_RESOURCE is a more helpful error than GARBAGE_ARGS
--	 * here, so we return success at the xdr level so that
--	 * nfsd4_proc can handle this is an NFS-level error.
--	 */
--	if (argp->opcnt > NFSD_MAX_OPS_PER_COMPOUND)
--		return 1;
-+	argp->opcnt = min_t(u32, argp->client_opcnt,
-+			    NFSD_MAX_OPS_PER_COMPOUND);
- 
- 	if (argp->opcnt > ARRAY_SIZE(argp->iops)) {
- 		argp->ops = kzalloc(argp->opcnt * sizeof(*argp->ops), GFP_KERNEL);
---- a/fs/nfsd/xdr4.h
-+++ b/fs/nfsd/xdr4.h
-@@ -688,9 +688,10 @@ struct nfsd4_compoundargs {
- 	struct svcxdr_tmpbuf		*to_free;
- 	struct svc_rqst			*rqstp;
- 
--	u32				taglen;
- 	char *				tag;
-+	u32				taglen;
- 	u32				minorversion;
-+	u32				client_opcnt;
- 	u32				opcnt;
- 	struct nfsd4_op			*ops;
- 	struct nfsd4_op			iops[8];
+ 	/* setup extended section index magic and write the symbol */
+-	if (shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) {
++	if ((shndx >= SHN_UNDEF && shndx < SHN_LORESERVE) || is_special_shndx) {
+ 		sym->sym.st_shndx = shndx;
+ 		if (!shndx_data)
+ 			shndx = 0;
+-- 
+2.35.1
+
 
 
