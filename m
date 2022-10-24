@@ -2,149 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF8160BC40
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:33:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D566560BC34
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231994AbiJXVdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36960 "EHLO
+        id S229882AbiJXVcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiJXVcc (ORCPT
+        with ESMTP id S232415AbiJXVbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:32:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCA2186DD;
-        Mon, 24 Oct 2022 12:39:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 24 Oct 2022 17:31:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B09C7C19F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:38:19 -0700 (PDT)
+Received: from [192.168.2.31] (109-252-112-196.nat.spd-mgts.ru [109.252.112.196])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5E8661575;
-        Mon, 24 Oct 2022 19:37:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB923C433C1;
-        Mon, 24 Oct 2022 19:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666640271;
-        bh=GTzGyK5ICOdcW3TRbCJOV0+yXyHnU9QoAMm0ZKS8v1c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ALITZss1pRbrMLdGnnQCScYQIAox+NcvETAU1maabpqGSPYDt06K5VvFXuzFOtgAT
-         jnUpj/4Kf8pzKh4YkR7sbKknASD6DgQJlDKWscUF7ErS2PwmolbpJ9NUFUdmUwPueA
-         IgF7ZhjNzcHl46dHOByqrTfML814kg079KcqiHjuFhr0eCyyMuHY88XK1LI1SosyT8
-         RmlTXj2E59MkGAh/Mzcf3gbOXYexxeuJM6dfHGmjSxYb//EvbyHfzjWvSzb+x1fBhP
-         b7wI7EEXjwuDvwVeQRYKT5m20PvJ5Knq12gE3A7rfbPy826UEx4gyTJI5LksnTxp+5
-         h0pKCrJ70TL/g==
-From:   Conor Dooley <conor@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Padmarao Begari <padmarao.begari@microchip.com>
-Subject: [RFC] riscv: dts: microchip: add OPPs to mpfs
-Date:   Mon, 24 Oct 2022 20:36:48 +0100
-Message-Id: <20221024193647.1089769-1-conor@kernel.org>
-X-Mailer: git-send-email 2.38.0
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9D7DF6602820;
+        Mon, 24 Oct 2022 20:36:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666640218;
+        bh=9YlOiiJFFn/lRLlSj5J0a6w6dJtCCcMej435SmulU3Q=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=CFcmZ8C6BB2A8CM2A0b7Wfltf1yPbbEtg6pjnWc0MwNzZ6ghV0qhGpzg30o4KQG1n
+         Oi3hLsCSWwJWf0Q5Afgij5SRvAwoSLlsxO7pLUTohqkh8xX+ABtO+NOf5TZx38g1M6
+         H4XjZ7Y2YNOG059jANmN9lvo8Sm4OWKy+VQL1jVaFmkDea2ZdEMTwYYA0Lco3SF/fA
+         1bb9pk0jYP5Q3vUx5xLippRhU271U1TEvV2cy8EVXOOmH2jrZBmtwtEOZ2QqUXkxKS
+         QzUbQhZEA11BinyEh3DNFMXeS5N4Wyrrlhy+gE2+Igo+FKsB2Xt4eqPWbiDktVnJ3B
+         5BkaVKDy5InxQ==
+Message-ID: <47c5b64e-b765-41be-b58b-cdc83edeca49@collabora.com>
+Date:   Mon, 24 Oct 2022 22:36:54 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1] drm: Switch drm_client_buffer_delete() to unlocked
+ drm_gem_vunmap
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20221020213335.309092-1-dmitry.osipenko@collabora.com>
+In-Reply-To: <20221020213335.309092-1-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On 10/21/22 00:33, Dmitry Osipenko wrote:
+> The drm_client_buffer_delete() wasn't switched to unlocked GEM vunmapping
+> by accident when rest of drm_client code transitioned to the unlocked
+> variants of the vmapping functions. Make drm_client_buffer_delete() use
+> the unlocked variant. This fixes lockdep warning splat about missing
+> reservation lock when framebuffer is released.
+> 
+> Reported-by: kernel test robot <yujie.liu@intel.com>
+> Link: https://lore.kernel.org/dri-devel/890f70db-68b0-8456-ca3c-c5496ef90517@collabora.com/T/
+> Fixes: 79e2cf2e7a19 ("drm/gem: Take reservation lock for vmap/vunmap operations")
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+>  drivers/gpu/drm/drm_client.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_client.c b/drivers/gpu/drm/drm_client.c
+> index fbcb1e995384..38e1be991caa 100644
+> --- a/drivers/gpu/drm/drm_client.c
+> +++ b/drivers/gpu/drm/drm_client.c
+> @@ -235,7 +235,7 @@ static void drm_client_buffer_delete(struct drm_client_buffer *buffer)
+>  {
+>  	struct drm_device *dev = buffer->client->dev;
+>  
+> -	drm_gem_vunmap(buffer->gem, &buffer->map);
+> +	drm_gem_vunmap_unlocked(buffer->gem, &buffer->map);
+>  
+>  	if (buffer->gem)
+>  		drm_gem_object_put(buffer->gem);
 
-The U-Boot dts for mpfs defines three OPPs which are missing from the
-Linux dts. For ease of synchronisation of the two, add the missing OPPs
-to the Linux dt too.
+Applied to misc-next
 
-CC: Padmarao Begari <padmarao.begari@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-
-Hey Padmarao,
-I've been trying to pick off the bits that're different between the Linux
-& U-Boot dts. Do you remember why we added OPPs to the U-Boot dts but
-didn't propagate them elsewhere?
-
- arch/riscv/boot/dts/microchip/mpfs.dtsi | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-index 0a9bb84af438..9d9ff7174341 100644
---- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-@@ -23,6 +23,7 @@ cpu0: cpu@0 {
- 			reg = <0>;
- 			riscv,isa = "rv64imac";
- 			clocks = <&clkcfg CLK_CPU>;
-+			operating-points-v2 = <&cluster0_opps>;
- 			status = "disabled";
- 
- 			cpu0_intc: interrupt-controller {
-@@ -51,6 +52,7 @@ cpu1: cpu@1 {
- 			clocks = <&clkcfg CLK_CPU>;
- 			tlb-split;
- 			next-level-cache = <&cctrllr>;
-+			operating-points-v2 = <&cluster0_opps>;
- 			status = "okay";
- 
- 			cpu1_intc: interrupt-controller {
-@@ -79,6 +81,7 @@ cpu2: cpu@2 {
- 			clocks = <&clkcfg CLK_CPU>;
- 			tlb-split;
- 			next-level-cache = <&cctrllr>;
-+			operating-points-v2 = <&cluster0_opps>;
- 			status = "okay";
- 
- 			cpu2_intc: interrupt-controller {
-@@ -107,6 +110,7 @@ cpu3: cpu@3 {
- 			clocks = <&clkcfg CLK_CPU>;
- 			tlb-split;
- 			next-level-cache = <&cctrllr>;
-+			operating-points-v2 = <&cluster0_opps>;
- 			status = "okay";
- 
- 			cpu3_intc: interrupt-controller {
-@@ -136,6 +140,7 @@ cpu4: cpu@4 {
- 			tlb-split;
- 			next-level-cache = <&cctrllr>;
- 			status = "okay";
-+			operating-points-v2 = <&cluster0_opps>;
- 			cpu4_intc: interrupt-controller {
- 				#interrupt-cells = <1>;
- 				compatible = "riscv,cpu-intc";
-@@ -166,6 +171,24 @@ core4 {
- 				};
- 			};
- 		};
-+
-+		cluster0_opps: opp-table {
-+			compatible = "operating-points-v2";
-+			opp-shared;
-+
-+			opp-600000000 {
-+			    opp-hz = /bits/ 64 <600000000>;
-+			    opp-microvolt = <1100000>;
-+			};
-+			opp-300000000 {
-+			    opp-hz = /bits/ 64 <300000000>;
-+			    opp-microvolt = <950000>;
-+			};
-+			opp-150000000 {
-+			    opp-hz = /bits/ 64 <150000000>;
-+			    opp-microvolt = <750000>;
-+			};
-+		};
- 	};
- 
- 	refclk: mssrefclk {
 -- 
-2.38.0
+Best regards,
+Dmitry
 
