@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E0160A3FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076DA60A8FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232575AbiJXMDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S235820AbiJXNN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbiJXMBk (ORCPT
+        with ESMTP id S235448AbiJXNKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:01:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBDCFE3;
-        Mon, 24 Oct 2022 04:49:23 -0700 (PDT)
+        Mon, 24 Oct 2022 09:10:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F8B2528F;
+        Mon, 24 Oct 2022 05:24:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAE3A61257;
-        Mon, 24 Oct 2022 11:47:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7FCC433D7;
-        Mon, 24 Oct 2022 11:47:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F00B612CF;
+        Mon, 24 Oct 2022 12:23:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AB7BC433D6;
+        Mon, 24 Oct 2022 12:23:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612038;
-        bh=M+kMlfAoQikrPHbtIag+tmDBlxG1n/qkIVokq8i/99U=;
+        s=korg; t=1666614192;
+        bh=U0blMcKFnjiZUPbpOFKpialXxKENKP4nNGEyBSB7tUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NnKxOXLUq4zvAkfEnTp1Xu9tqEUfNk+M0+YDeSTFaQzEdLKwYWsZVkQSrMpdHl6fJ
-         TziVv0yuKMEYnvr5bsfcNrW4FjIjhixaAafIgTHWpXRBTXRgl9wnAVlB730B9eQ5T2
-         Qs6XqQhcD7qGhyWjFi5ak7XX9MbnzjpHfglGj5pc=
+        b=zvpuxbPlWnajIMrQrpVUHtSqhV+RM6S+Asy0nyjj9YqpzKxzCQJJLSyZ2Hvu72rP+
+         OeAKCAwQ/9sKKuhKZIhKCNGKuqg+3sv+tkLE/rtD+YiB/bBu/IWC680ACdY+gCtWV0
+         6s8VFlB3zG+3akfH+Q+TkDsfS25mGUHTLmhtp/Ok=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jasper Poppe <jgpoppe@gmail.com>,
-        Jeremy Palmer <jpalmer@linz.govt.nz>,
-        Ruineka <ruinairas1992@gmail.com>,
-        Cleber de Mattos Casali <clebercasali@gmail.com>,
-        Kyle Gospodnetich <me@kylegospodneti.ch>,
-        Pavel Rojtberg <rojtberg@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 4.14 047/210] Input: xpad - add supported devices as contributed on github
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 167/390] ASoC: wm5110: Fix PM disable depth imbalance in wm5110_probe
 Date:   Mon, 24 Oct 2022 13:29:24 +0200
-Message-Id: <20221024112958.515939361@linuxfoundation.org>
+Message-Id: <20221024113029.822627514@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,104 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Rojtberg <rojtberg@gmail.com>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-commit b382c5e37344883dc97525d05f1f6b788f549985 upstream.
+[ Upstream commit 86b46bf1feb83898d89a2b4a8d08d21e9ea277a7 ]
 
-This is based on multiple commits at https://github.com/paroj/xpad
+The pm_runtime_enable will increase power disable depth. Thus
+a pairing decrement is needed on the error handling path to
+keep it balanced according to context. We fix it by moving
+pm_runtime_enable to the endding of wm5110_probe.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jasper Poppe <jgpoppe@gmail.com>
-Signed-off-by: Jeremy Palmer <jpalmer@linz.govt.nz>
-Signed-off-by: Ruineka <ruinairas1992@gmail.com>
-Signed-off-by: Cleber de Mattos Casali <clebercasali@gmail.com>
-Signed-off-by: Kyle Gospodnetich <me@kylegospodneti.ch>
-Signed-off-by: Pavel Rojtberg <rojtberg@gmail.com>
-Link: https://lore.kernel.org/r/20220818154411.510308-2-rojtberg@gmail.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes:5c6af635fd772 ("ASoC: wm5110: Add audio CODEC driver")
+
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Link: https://lore.kernel.org/r/20220928160116.125020-3-zhangqilong3@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/joystick/xpad.c |   19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ sound/soc/codecs/wm5110.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/input/joystick/xpad.c
-+++ b/drivers/input/joystick/xpad.c
-@@ -129,6 +129,8 @@ static const struct xpad_device {
- 	u8 xtype;
- } xpad_device[] = {
- 	{ 0x0079, 0x18d4, "GPD Win 2 X-Box Controller", 0, XTYPE_XBOX360 },
-+	{ 0x03eb, 0xff01, "Wooting One (Legacy)", 0, XTYPE_XBOX360 },
-+	{ 0x03eb, 0xff02, "Wooting Two (Legacy)", 0, XTYPE_XBOX360 },
- 	{ 0x044f, 0x0f00, "Thrustmaster Wheel", 0, XTYPE_XBOX },
- 	{ 0x044f, 0x0f03, "Thrustmaster Wheel", 0, XTYPE_XBOX },
- 	{ 0x044f, 0x0f07, "Thrustmaster, Inc. Controller", 0, XTYPE_XBOX },
-@@ -259,6 +261,7 @@ static const struct xpad_device {
- 	{ 0x0f0d, 0x0063, "Hori Real Arcade Pro Hayabusa (USA) Xbox One", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOXONE },
- 	{ 0x0f0d, 0x0067, "HORIPAD ONE", 0, XTYPE_XBOXONE },
- 	{ 0x0f0d, 0x0078, "Hori Real Arcade Pro V Kai Xbox One", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOXONE },
-+	{ 0x0f0d, 0x00c5, "Hori Fighting Commander ONE", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOXONE },
- 	{ 0x0f30, 0x010b, "Philips Recoil", 0, XTYPE_XBOX },
- 	{ 0x0f30, 0x0202, "Joytech Advanced Controller", 0, XTYPE_XBOX },
- 	{ 0x0f30, 0x8888, "BigBen XBMiniPad Controller", 0, XTYPE_XBOX },
-@@ -275,6 +278,7 @@ static const struct xpad_device {
- 	{ 0x1430, 0x8888, "TX6500+ Dance Pad (first generation)", MAP_DPAD_TO_BUTTONS, XTYPE_XBOX },
- 	{ 0x1430, 0xf801, "RedOctane Controller", 0, XTYPE_XBOX360 },
- 	{ 0x146b, 0x0601, "BigBen Interactive XBOX 360 Controller", 0, XTYPE_XBOX360 },
-+	{ 0x146b, 0x0604, "Bigben Interactive DAIJA Arcade Stick", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOX360 },
- 	{ 0x1532, 0x0037, "Razer Sabertooth", 0, XTYPE_XBOX360 },
- 	{ 0x1532, 0x0a00, "Razer Atrox Arcade Stick", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOXONE },
- 	{ 0x1532, 0x0a03, "Razer Wildcat", 0, XTYPE_XBOXONE },
-@@ -339,6 +343,7 @@ static const struct xpad_device {
- 	{ 0x24c6, 0x5502, "Hori Fighting Stick VX Alt", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOX360 },
- 	{ 0x24c6, 0x5503, "Hori Fighting Edge", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOX360 },
- 	{ 0x24c6, 0x5506, "Hori SOULCALIBUR V Stick", 0, XTYPE_XBOX360 },
-+	{ 0x24c6, 0x5510, "Hori Fighting Commander ONE (Xbox 360/PC Mode)", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOX360 },
- 	{ 0x24c6, 0x550d, "Hori GEM Xbox controller", 0, XTYPE_XBOX360 },
- 	{ 0x24c6, 0x550e, "Hori Real Arcade Pro V Kai 360", MAP_TRIGGERS_TO_BUTTONS, XTYPE_XBOX360 },
- 	{ 0x24c6, 0x551a, "PowerA FUSION Pro Controller", 0, XTYPE_XBOXONE },
-@@ -348,6 +353,14 @@ static const struct xpad_device {
- 	{ 0x24c6, 0x5b03, "Thrustmaster Ferrari 458 Racing Wheel", 0, XTYPE_XBOX360 },
- 	{ 0x24c6, 0x5d04, "Razer Sabertooth", 0, XTYPE_XBOX360 },
- 	{ 0x24c6, 0xfafe, "Rock Candy Gamepad for Xbox 360", 0, XTYPE_XBOX360 },
-+	{ 0x2563, 0x058d, "OneXPlayer Gamepad", 0, XTYPE_XBOX360 },
-+	{ 0x2dc8, 0x2000, "8BitDo Pro 2 Wired Controller fox Xbox", 0, XTYPE_XBOXONE },
-+	{ 0x31e3, 0x1100, "Wooting One", 0, XTYPE_XBOX360 },
-+	{ 0x31e3, 0x1200, "Wooting Two", 0, XTYPE_XBOX360 },
-+	{ 0x31e3, 0x1210, "Wooting Lekker", 0, XTYPE_XBOX360 },
-+	{ 0x31e3, 0x1220, "Wooting Two HE", 0, XTYPE_XBOX360 },
-+	{ 0x31e3, 0x1300, "Wooting 60HE (AVR)", 0, XTYPE_XBOX360 },
-+	{ 0x31e3, 0x1310, "Wooting 60HE (ARM)", 0, XTYPE_XBOX360 },
- 	{ 0x3285, 0x0607, "Nacon GC-100", 0, XTYPE_XBOX360 },
- 	{ 0x3767, 0x0101, "Fanatec Speedster 3 Forceshock Wheel", 0, XTYPE_XBOX },
- 	{ 0xffff, 0xffff, "Chinese-made Xbox Controller", 0, XTYPE_XBOX },
-@@ -433,6 +446,7 @@ static const signed short xpad_abs_trigg
- static const struct usb_device_id xpad_table[] = {
- 	{ USB_INTERFACE_INFO('X', 'B', 0) },	/* X-Box USB-IF not approved class */
- 	XPAD_XBOX360_VENDOR(0x0079),		/* GPD Win 2 Controller */
-+	XPAD_XBOX360_VENDOR(0x03eb),		/* Wooting Keyboards (Legacy) */
- 	XPAD_XBOX360_VENDOR(0x044f),		/* Thrustmaster X-Box 360 controllers */
- 	XPAD_XBOX360_VENDOR(0x045e),		/* Microsoft X-Box 360 controllers */
- 	XPAD_XBOXONE_VENDOR(0x045e),		/* Microsoft X-Box One controllers */
-@@ -443,6 +457,7 @@ static const struct usb_device_id xpad_t
- 	{ USB_DEVICE(0x0738, 0x4540) },		/* Mad Catz Beat Pad */
- 	XPAD_XBOXONE_VENDOR(0x0738),		/* Mad Catz FightStick TE 2 */
- 	XPAD_XBOX360_VENDOR(0x07ff),		/* Mad Catz GamePad */
-+	XPAD_XBOX360_VENDOR(0x0c12),		/* Zeroplus X-Box 360 controllers */
- 	XPAD_XBOX360_VENDOR(0x0e6f),		/* 0x0e6f X-Box 360 controllers */
- 	XPAD_XBOXONE_VENDOR(0x0e6f),		/* 0x0e6f X-Box One controllers */
- 	XPAD_XBOX360_VENDOR(0x0f0d),		/* Hori Controllers */
-@@ -463,8 +478,12 @@ static const struct usb_device_id xpad_t
- 	XPAD_XBOXONE_VENDOR(0x20d6),		/* PowerA Controllers */
- 	XPAD_XBOX360_VENDOR(0x24c6),		/* PowerA Controllers */
- 	XPAD_XBOXONE_VENDOR(0x24c6),		/* PowerA Controllers */
-+	XPAD_XBOX360_VENDOR(0x2563),		/* OneXPlayer Gamepad */
-+	XPAD_XBOX360_VENDOR(0x260d),		/* Dareu H101 */
-+	XPAD_XBOXONE_VENDOR(0x2dc8),		/* 8BitDo Pro 2 Wired Controller for Xbox */
- 	XPAD_XBOXONE_VENDOR(0x2e24),		/* Hyperkin Duke X-Box One pad */
- 	XPAD_XBOX360_VENDOR(0x2f24),		/* GameSir Controllers */
-+	XPAD_XBOX360_VENDOR(0x31e3),		/* Wooting Keyboards */
- 	XPAD_XBOX360_VENDOR(0x3285),		/* Nacon GC-100 */
- 	{ }
- };
+diff --git a/sound/soc/codecs/wm5110.c b/sound/soc/codecs/wm5110.c
+index d0cef982215d..c158f8b1e8e4 100644
+--- a/sound/soc/codecs/wm5110.c
++++ b/sound/soc/codecs/wm5110.c
+@@ -2452,9 +2452,6 @@ static int wm5110_probe(struct platform_device *pdev)
+ 		regmap_update_bits(arizona->regmap, wm5110_digital_vu[i],
+ 				   WM5110_DIG_VU, WM5110_DIG_VU);
+ 
+-	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_idle(&pdev->dev);
+-
+ 	ret = arizona_request_irq(arizona, ARIZONA_IRQ_DSP_IRQ1,
+ 				  "ADSP2 Compressed IRQ", wm5110_adsp2_irq,
+ 				  wm5110);
+@@ -2487,6 +2484,9 @@ static int wm5110_probe(struct platform_device *pdev)
+ 		goto err_spk_irqs;
+ 	}
+ 
++	pm_runtime_enable(&pdev->dev);
++	pm_runtime_idle(&pdev->dev);
++
+ 	return ret;
+ 
+ err_spk_irqs:
+-- 
+2.35.1
+
 
 
