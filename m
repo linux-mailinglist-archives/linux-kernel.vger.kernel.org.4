@@ -2,141 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0479660BBFD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0F660BAAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbiJXVT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S234657AbiJXUj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235412AbiJXVTe (ORCPT
+        with ESMTP id S234670AbiJXUi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:19:34 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D121C96CD;
-        Mon, 24 Oct 2022 12:25:46 -0700 (PDT)
-Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 08002C16B0;
-        Mon, 24 Oct 2022 15:40:51 +0000 (UTC)
-Received: (Authenticated sender: i.maximets@ovn.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9001540008;
-        Mon, 24 Oct 2022 15:39:14 +0000 (UTC)
-Message-ID: <1ac55929-4399-484c-e3ee-1a04f8e90046@ovn.org>
-Date:   Mon, 24 Oct 2022 17:39:13 +0200
+        Mon, 24 Oct 2022 16:38:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9012CE07;
+        Mon, 24 Oct 2022 11:49:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C82D6B81217;
+        Mon, 24 Oct 2022 15:44:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32611C433B5;
+        Mon, 24 Oct 2022 15:44:17 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lyQUYKNL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666626254;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fWvLZVRYvZmjhg91idBo+8bsezBsd/7oKi65yYsjjjI=;
+        b=lyQUYKNLZmfHXqbLgJhp2zs5CgYl/THxLkwKN8y76FZMui/YKgF3Fu9tmZ9SD2R0nxC2LG
+        cJVcvEkJGelF/HxUtoAlXbtkWLJ5LCHlYmpvFjE9qMsrBoxze15kcO0xo+aaHDWHsvXIVh
+        4Xp5IcJoSad4gf1xt8ZHW55faDVCWKw=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 659a5d2e (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 24 Oct 2022 15:44:14 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 17:44:09 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        masahiroy@kernel.org, keescook@chromium.org,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct
+ p4_event_bind::cntr signed array
+Message-ID: <Y1ayyS/7b5qnySi3@zx2c4.com>
+References: <20221020000356.177CDC433C1@smtp.kernel.org>
+ <Y1EZuQcO8UoN91cX@localhost.localdomain>
+ <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
+ <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
+ <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Cc:     i.maximets@ovn.org, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Content-Language: en-US
-To:     nicolas.dichtel@6wind.com, Jakub Kicinski <kuba@kernel.org>
-References: <20221021114921.3705550-1-i.maximets@ovn.org>
- <20221021090756.0ffa65ee@kernel.org>
- <eb6903b7-c0d9-cc70-246e-8dbde0412433@6wind.com>
- <ded477ea-08fa-b96d-c192-9640977b42e6@ovn.org>
- <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
-From:   Ilya Maximets <i.maximets@ovn.org>
-Subject: Re: [RFE net-next] net: tun: 1000x speed up
-In-Reply-To: <5af190a8-ac35-82a6-b099-e9a817757676@6wind.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 14:27, Nicolas Dichtel wrote:
-> Le 24/10/2022 à 13:56, Ilya Maximets a écrit :
->> On 10/24/22 11:44, Nicolas Dichtel wrote:
->>> Le 21/10/2022 à 18:07, Jakub Kicinski a écrit :
->>>> On Fri, 21 Oct 2022 13:49:21 +0200 Ilya Maximets wrote:
->>>>> Bump the advertised speed to at least match the veth.  10Gbps also
->>>>> seems like a more or less fair assumption these days, even though
->>>>> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
->>>>> and let the application/user decide on a right value for them.
->>>>
->>>> UNKOWN would seem more appropriate but at this point someone may depend
->>>> on the speed being populated so it could cause regressions, I fear :S
->>> If it is put in a bonding, it may cause some trouble. Maybe worth than
->>> advertising 10M.
->>
->> My thoughts were that changing the number should have a minimal impact
->> while changing it to not report any number may cause some issues in
->> applications that doesn't expect that for some reason (not having a
->> fallback in case reported speed is unknown isn't great, and the argument
->> can be made that applications should check that, but it's hard to tell
->> for every application if they actually do that today).
->>
->> Bonding is also a good point indeed, since it's even in-kernel user.
->>
->>
->> The speed bump doesn't solve the problem per se.  It kind of postpones
->> the decision, since we will run into the same issue eventually again.
->> That's why I wanted to discuss that first.
->>
->> Though I think that at least unification across virtual devices (tun and
->> veth) should be a step in a right direction.
-> Just to make it clear, I'm not against aligning speed with veth, I'm only
-> against reporting UNKNOWN.
-
-Ack.  Thanks for the clarification!
-
+On Thu, Oct 20, 2022 at 11:33:39AM -0600, Jason A. Donenfeld wrote:
+> Hi Linus,
 > 
->>
->>>
->>> Note that this value could be configured with ethtool:
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e24f2dd516ed
->>
->> This is interesting, but it's a bit hard to manage, because in order
->> to make a decision to bump the speed, application should already know
->> that this is a tun/tap device.  So, there has to be a special case
-> But this should be done by the application which creates this tun interface. Not
-> by the application that uses this information.
+> On Thu, Oct 20, 2022 at 11:15 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> > Can we please try to collect these all in one place?
+> >
+> > I see that Andrew picked up the original one for -mm, but I think it
+> > would be better if we had one specific place for all of this (one
+> > branch) to collect it all.
 > 
->> implemented in the code that detects the driver and changes the speed
->> (this is about application that is using the interface, but didn't
->> create it), but if we already know the driver, then it doesn't make
->> sense to actually change the speed in many cases as application can
->> already act accordingly.
->>
->> Also, the application may not have permissions to do that (I didn't
->> check the requirements, but my guess would be at least CAP_NET_ADMIN?).
-> Sure, but the one who creates it, has the right to configure it correctly. It's
-> part of the configuration of the interface.
-I mostly agree with that, but that still means changing userspace
-applications.  I'm pretty sure very little number of applications,
-if any at all, do that today.
-
+> Sure. Andrew can drop it from -mm, and I'll collect everything in:
 > 
-> Setting an higher default speed seems to be a workaround to fix an incorrect
-> configuration. And as you said, it will probably be wrong again in a few years ;-)
-
-Yep.
-
-Workarounds do exist today.  For example, if you specify max-rate
-in QoS configuration for OVS, it will not use the link speed as a
-reference at all.  I'm just not sure if replacing one workaround
-with another workaround is a good option.  Especially because that
-will require changing userspace applications and the problem itself
-is kind of artificial.
-
+> https://git.kernel.org/pub/scm/linux/kernel/git/zx2c4/linux.git/log/?h=unsigned-char&r
 > 
->>
->> For the human user it's still one extra configuration step that they
->> need to remember to perform.
-> I don't buy this argument. There are already several steps: creating and
-> configuring an interface requires more than one command.
+> And I'll ask Stephen to add that branch to -next.
 
-Muscle memory, I guess. :)
-But yes, might not be a huge deal for human users, I agree.
+So, as discussed, I'm doing this, and it's in -next now. And as a
+result, we're getting warnings and such that I am fixing one by one.
+Progress, good.
 
-It's more of a concern for multi-layer systems where actual interfaces
-are created somewhere deep inside the software stack and actual humans
-don't really perform these commands by hands.
+But it occurs to me that most of these bugs are not in
+architecture-specific code like the x86 p4_event_bind one from last
+week. That means I'll be submitting these as *fixes* during 6.1, since
+they're broken on some architecture already, rather than waiting to
+submit them to you via my unsigned-char tree in 6.2.
 
-Best regards, Ilya Maximets.
+Just FYI.
+
+Jason
