@@ -2,85 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1528560AC7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B648D60ADBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbiJXOHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
+        id S236962AbiJXOcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234199AbiJXOD3 (ORCPT
+        with ESMTP id S235272AbiJXOcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:03:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43A8C09A8;
-        Mon, 24 Oct 2022 05:48:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 24 Oct 2022 10:32:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18107CBFF4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:05:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666616589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=kJsLl4LmziKHBgnDcaNe3l0TTFQxVoF0LS9oUPYIa6g=;
+        b=aSNROS5ZRzSYuyn1dsvlFkIEVotHi1FyS/Kf7J69rK5B1HjZteNByN2h1N/b1jD8mrMbc/
+        LA8sGQBXeXqDFOIarim/+XrLMPA0C1ntT56AtBjEteX2VWfd3FZa78QivBJIsSYDbcCmSU
+        mG9x7RDTdmPkHUrFfJWm2lu9IWWudLE=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-636-dKeT6KaQMvKsjQq2qmeFTQ-1; Mon, 24 Oct 2022 08:48:49 -0400
+X-MC-Unique: dKeT6KaQMvKsjQq2qmeFTQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 340A1612DD;
-        Mon, 24 Oct 2022 12:47:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C2F1C433B5;
-        Mon, 24 Oct 2022 12:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666615668;
-        bh=v5qe3uxJO58rT7qyMYbn1rAOhlOqSyCHdyiQEytIs1o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pbf+h2HD2OPvi/J4NIiAXtIkWkGhgWB1KexNyN4aDwuzzc7mDGcdkiyBDaTdk8J4P
-         E6v9Sejx/uYJWNG9CQNrmsFbZEgLfN95kMODeBeeBs/3Z6HF90oCkGhlIHKbdDXKIv
-         oJDmPlKjH7WYSwXbND74E4/4eDbA2lt4LDjFd/JzzXT+GlXPpJV7oIJtee6d8lTg5B
-         HVx5k6Bl1Gmyj1jYgm5wU5qwG+C2S1Cm8I3CyfHcKtYHQLCl2x0q0KAd/6LLMfopaU
-         P+O64rDkMda35VUnieG+PjuoUKm4+kUXl9mBd9kZRswt/N30gU8Dw9LWiobl2RS133
-         YSmPaWPuZpMoQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1omwrb-0003wv-SH; Mon, 24 Oct 2022 14:47:31 +0200
-Date:   Mon, 24 Oct 2022 14:47:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: mfd: qcom,tcsr: add sc8280xp binding
-Message-ID: <Y1aJY9CJLYD2thah@hovoldconsulting.com>
-References: <20221007121110.5432-1-johan+linaro@kernel.org>
- <Y1aIeeazaDVPfDSc@google.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C18B3804064;
+        Mon, 24 Oct 2022 12:48:48 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 02DCE1415114;
+        Mon, 24 Oct 2022 12:48:47 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Bandan Das <bsd@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>
+Subject: [PATCH] KVM: vmx/nested: avoid blindly setting SECONDARY_EXEC_ENCLS_EXITING when sgx is enabled
+Date:   Mon, 24 Oct 2022 08:48:45 -0400
+Message-Id: <20221024124845.1927035-1-eesposit@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1aIeeazaDVPfDSc@google.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 01:43:37PM +0100, Lee Jones wrote:
-> On Fri, 07 Oct 2022, Johan Hovold wrote:
-> 
-> > Add a binding for the SC8280XP TCSR.
-> > 
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> 
-> Applied, thanks.
-> 
-> NB: Didn't apply cleanly, so ensure you review my fix-up.
+Currently vmx enables SECONDARY_EXEC_ENCLS_EXITING even when sgx
+is not set in the host MSR.
+This was probably introduced when sgx was not yet fully supported, and
+we wanted to trap guests trying to use the feature.
 
-I noticed that when rebasing and sent a v2 here:
+When booting a guest, KVM checks that the cpuid bit is actually set
+in vmx.c, and if not, it does not enable the feature.
 
-	https://lore.kernel.org/lkml/20221019122253.19669-1-johan+linaro@kernel.org/
+However, in nesting this control bit is blindly copied, and will be
+propagated to VMCS12 and VMCS02. Therefore, when L1 tries to boot
+the guest, the host will try to execute VMLOAD with VMCS02 containing
+a feature that the hardware does not support, making it fail with
+hardware error 0x7.
 
-Your fix-up looks equivalent. Thanks!
+According with section A.3.3 of Intel System Programming Guide,
+we should *always* check the value in the actual
+MSR_IA32_VMX_PROCBASED_CTLS2 before enabling this bit.
 
-Johan
+RHBZ: https://bugzilla.redhat.com/show_bug.cgi?id=2127128
+
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ arch/x86/kvm/vmx/nested.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 8f67a9c4a287..f651084010cc 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -6678,6 +6678,25 @@ static u64 nested_vmx_calc_vmcs_enum_msr(void)
+ 	return (u64)max_idx << VMCS_FIELD_INDEX_SHIFT;
+ }
+ 
++/*
++ * According with section A.3.3 of Intel System Programming Guide,
++ * we *can* set the guest MSR control X (in our case
++ * SECONDARY_EXEC_ENCLS_EXITING) *iff* bit 32+X of
++ * MSR_IA32_VMX_PROCBASED_CTLS2 is set to 1.
++ * Otherwise it must remain zero.
++ */
++static void nested_vmx_setup_encls_exiting(struct nested_vmx_msrs *msrs)
++{
++	u32 vmx_msr_procb_low, vmx_msr_procb_high;
++
++	rdmsr(MSR_IA32_VMX_PROCBASED_CTLS2, vmx_msr_procb_low, vmx_msr_procb_high);
++
++	WARN_ON(vmx_msr_procb_low & SECONDARY_EXEC_ENCLS_EXITING);
++
++	if (enable_sgx && (vmx_msr_procb_high & SECONDARY_EXEC_ENCLS_EXITING))
++		msrs->secondary_ctls_high |= SECONDARY_EXEC_ENCLS_EXITING;
++}
++
+ /*
+  * nested_vmx_setup_ctls_msrs() sets up variables containing the values to be
+  * returned for the various VMX controls MSRs when nested VMX is enabled.
+@@ -6874,8 +6893,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
+ 		msrs->secondary_ctls_high |=
+ 			SECONDARY_EXEC_VIRTUALIZE_APIC_ACCESSES;
+ 
+-	if (enable_sgx)
+-		msrs->secondary_ctls_high |= SECONDARY_EXEC_ENCLS_EXITING;
++	nested_vmx_setup_encls_exiting(msrs);
+ 
+ 	/* miscellaneous data */
+ 	msrs->misc_low = (u32)vmcs_conf->misc & VMX_MISC_SAVE_EFER_LMA;
+-- 
+2.31.1
+
