@@ -2,114 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46F360B709
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D9E60B790
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbiJXTPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
+        id S232950AbiJXT0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbiJXTOt (ORCPT
+        with ESMTP id S233405AbiJXTYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:14:49 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2A13D5BC
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:53:00 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id g16so6071208qtu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:52:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ODsrsWS79TZ9u82LUQmpT+8SG3CGzlKkIICyAV1vbKE=;
-        b=JO2IMB7qZt2AnJOyN9ZFzUnOHtmqg0mKEfR7l0eOnPbHaYMcKDYa3QCEkRsBKcT4AS
-         Gkep1ZHExpU7BsIYj0IPH2I876Ns2zDING27ujVHv8tWEwIe7p3qWd92T0o4Ljkbx7Mh
-         mljhGUSj226S6VELC4+X7gPVrfFvnLkyg9izfrw4jsY2MIXy3HN+QwHOakcj8bqFgoww
-         8/OxGBag2u/5zvxQG8VE0c7ZERoCOI8UiiTreEd/p0E2N0+5o6xOMJPkrliux8wZysOx
-         KSFVio/VBcOVXP0JgqQl+PqhK2oUb0k/Tc+nBnA+ZKqO7EmmuWcziB21068HI1Pxdto6
-         Z3IA==
-X-Gm-Message-State: ACrzQf2VslPlAbHdsPkjZRKI5jjJ6kXXqx9UxBU4nhmjIZtgQ8MdIZgo
-        tZK5NT3nJLIF8TyoB69kKkEPbEtnv50Vn0nr5yU=
-X-Google-Smtp-Source: AMsMyM7YynqK6N8zgQh4XrvsCLd/RTTaZ1KTeCNfFXdMnXjRVJ3DDgYjYsVjkuh3YA41BP+sXu41EaPrRc76pEEkLhc=
-X-Received: by 2002:a05:622a:13c6:b0:39c:c34f:29ec with SMTP id
- p6-20020a05622a13c600b0039cc34f29ecmr28604577qtk.153.1666633884490; Mon, 24
- Oct 2022 10:51:24 -0700 (PDT)
+        Mon, 24 Oct 2022 15:24:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FD55DF2E;
+        Mon, 24 Oct 2022 10:58:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6F2E61522;
+        Mon, 24 Oct 2022 17:51:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E1CC433D6;
+        Mon, 24 Oct 2022 17:51:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666633882;
+        bh=d3v3Gs9NL/24zvJCQfTzBZA+yqhawF/U1WV5qiof1bo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hT9lB0u/Ddumj+USy4E8oWLC87dHHEplypeXSe5/N1S3ER9T54d+UBkVmqb2gxiPz
+         vY3RzhkXExsQzrHNVmv7IB1mrE6Nb0NvWeIUYNrAX2sLgSXOylKpt1Pw0CTOT/EvFM
+         5wj6JsqsAmlkNM26k7J/4OsCteeaMUEbDpuGQpnVjrSv54ezymWQnDKSc6pXerP8Wn
+         iw/hl5BmZFGpKzLVEaY3tmfMRa+QxAHSQeCCxxR38VIOHiH+9ZgeN/YfKRVbHdf1Rc
+         KfT0KZnrRruJ0vWYc9UbWEc0KuWELb5oyiaUcK182AOaC4g0KHR7oO8U6MSxv6EYu2
+         9xiYrQskFhVyw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 84E61404BE; Mon, 24 Oct 2022 14:51:19 -0300 (-03)
+Date:   Mon, 24 Oct 2022 14:51:19 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 0/8] Update to C11, fix signal undefined behavior
+Message-ID: <Y1bQlxxABicj4k3+@kernel.org>
+References: <20221024173523.602064-1-irogers@google.com>
 MIME-Version: 1.0
-References: <20221024082610.74990-1-sakari.ailus@linux.intel.com>
- <Y1ZQSEMLkybFCadS@kroah.com> <Y1ZQpcdK4sdy+5QZ@kroah.com> <Y1ZUIEYcjQZMdSfp@smile.fi.intel.com>
- <202210241035.1487F523@keescook>
-In-Reply-To: <202210241035.1487F523@keescook>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 24 Oct 2022 19:51:11 +0200
-Message-ID: <CAJZ5v0jczp8J89EdywFDbzPmmeKmoQ3wNFUmKxH_1xS7LPNzkA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] linux/container_of.h: Warn about loss of constness
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Laight <David.Laight@aculab.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024173523.602064-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URI_DOTEDU autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 7:39 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Oct 24, 2022 at 12:00:16PM +0300, Andy Shevchenko wrote:
-> > + Kees
-> >
-> > On Mon, Oct 24, 2022 at 10:45:25AM +0200, Greg Kroah-Hartman wrote:
-> > > On Mon, Oct 24, 2022 at 10:43:52AM +0200, Greg Kroah-Hartman wrote:
-> > > > On Mon, Oct 24, 2022 at 11:26:10AM +0300, Sakari Ailus wrote:
-> > > > > container_of() casts the original type to another which leads to the loss
-> > > > > of the const qualifier if it is not specified in the caller-provided type.
-> > > > > This easily leads to container_of() returning a non-const pointer to a
-> > > > > const struct which the C compiler does not warn about.
-> >
-> > ...
-> >
-> > > > >   * @type:      the type of the container struct this is embedded in.
-> > > > >   * @member:    the name of the member within the struct.
-> > > > >   *
-> > > > > + * WARNING: as container_of() casts the given struct to another, also the
-> > >
-> > > Wrong function name here.
-> > >
-> > > > > + * possible const qualifier of @ptr is lost unless it is also specified in
-> > > > > + * @type. This is not a problem if the containing object is not const. Use with
-> > > > > + * care.
-> > > >
-> > > > Same comments here.
-> > >
-> > > Wait, no one uses this macro, so why not just remove it entirely?
-> >
-> > Kees, do you know why and what for we have container_of_safe()?
->
-> It looks like it was designed to handle the cases where the pointer was
-> ERR_OR_NULL:
->
->        IS_ERR_OR_NULL(__mptr) ? ERR_CAST(__mptr) : \
->                ((type *)(__mptr - offsetof(type, member))); })
->
-> i.e. just pass through the NULL/ERR instead of attempting the cast,
-> which would fail spectacularly. :)
->
-> It seems like this version should actually be used everywhere instead of
-> nowhere... (i.e. just drop container_of() and rename container_of_safe()
-> to container_of())
+Em Mon, Oct 24, 2022 at 10:35:15AM -0700, Ian Rogers escreveu:
+> The use of C11 is mainstream in the kernel [1]. There was some
+> confusion on volatile and signal handlers in [2]. Switch to using
+> stdatomic.h (requires C11) and sig_atomic_t as per [3]. Thanks to Leo
+> Yan <leo.yan@linaro.org> for the suggestions.
+> 
+> [1] https://lore.kernel.org/lkml/CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com/
+> [2] https://lore.kernel.org/lkml/20221024011024.462518-1-irogers@google.com/
+> [3] https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+objects+in+signal+handlers
 
-As a rule, though, users of container_of() don't check the pointer
-returned by it against NULL, so I'm not sure how much of an
-improvement that would be.
+I think I'll apply this to perf/core, i.e. for 6.3, ok?
 
-If NULL is passed to container_of(), there will be a spectacular
-failure, sooner or later ...
+- Arnaldo
+ 
+> 
+> Ian Rogers (8):
+>   perf build: Update to C standard to gnu11
+>   perf record: Use sig_atomic_t for signal handlers
+>   perf daemon: Use sig_atomic_t to avoid UB
+>   perf ftrace: Use sig_atomic_t to avoid UB
+>   perf session: Change type to avoid UB
+>   perf stat: Use sig_atomic_t to avoid UB
+>   perf top: Use sig_atomic_t to avoid UB
+>   perf trace: Use sig_atomic_t to avoid UB
+> 
+>  tools/perf/Makefile.config  | 2 +-
+>  tools/perf/builtin-daemon.c | 3 ++-
+>  tools/perf/builtin-ftrace.c | 4 ++--
+>  tools/perf/builtin-record.c | 9 +++++----
+>  tools/perf/builtin-stat.c   | 9 +++++----
+>  tools/perf/builtin-top.c    | 4 ++--
+>  tools/perf/builtin-trace.c  | 4 ++--
+>  tools/perf/util/session.c   | 3 ++-
+>  8 files changed, 21 insertions(+), 17 deletions(-)
+> 
+> -- 
+> 2.38.0.135.g90850a2211-goog
+
+-- 
+
+- Arnaldo
