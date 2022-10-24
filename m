@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB4860B43D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F3F60B07C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233450AbiJXRdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
+        id S233001AbiJXQGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231709AbiJXRcJ (ORCPT
+        with ESMTP id S232790AbiJXQDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:32:09 -0400
+        Mon, 24 Oct 2022 12:03:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3E412AFB;
-        Mon, 24 Oct 2022 09:07:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CA21E099B;
+        Mon, 24 Oct 2022 07:56:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F0B8B81687;
-        Mon, 24 Oct 2022 12:28:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB7CC433D6;
-        Mon, 24 Oct 2022 12:27:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4F68B8168A;
+        Mon, 24 Oct 2022 12:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6C7C433C1;
+        Mon, 24 Oct 2022 12:28:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614478;
-        bh=NI1fBXPVYlDZ4B6j6GMBIhhEi5k4CLiLesxDmWTMZN8=;
+        s=korg; t=1666614481;
+        bh=LFrupX4v25cr6gY6G5bOu9JuHOtT4txHADScSlAhRDE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QPYW0c3NgrtsaZFLCqMr93Vr4BPK5MGD5LW4MlgcxowgJ+8TC2gNOZyEwFFByg+1p
-         BvemKqfuf3ztEpPs8AOeZXyAxc+PfXe+xpJ3GDVZ3z68wrSChk62vCUrMYIyl3tJkq
-         V3a9SnT6jewY4jiz7njhQeJNkVUQ+J40TEflAqTw=
+        b=NaMT7sFmGDIflHR+w2TU4YowiFiYEFqWHYAO7hwlyyzWfoN640UdXcn8SQoHH3zkP
+         zcMyeqZtQ0WxDptQEVE2UK9wIcVISn3ay5eGVvTMIz7Nb7hz019xc6LbglbW5A2cCx
+         AHogY7Os8lmymaURdKocsHA+7gH2hwHneacWfyi0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ignat Korchagin <ignat@cloudflare.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Koba Ko <koba.ko@canonical.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 276/390] crypto: akcipher - default implementation for setting a private key
-Date:   Mon, 24 Oct 2022 13:31:13 +0200
-Message-Id: <20221024113034.686505466@linuxfoundation.org>
+Subject: [PATCH 5.10 277/390] crypto: ccp - Release dma channels before dmaengine unrgister
+Date:   Mon, 24 Oct 2022 13:31:14 +0200
+Message-Id: <20221024113034.731136500@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
 References: <20221024113022.510008560@linuxfoundation.org>
@@ -54,68 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ignat Korchagin <ignat@cloudflare.com>
+From: Koba Ko <koba.ko@canonical.com>
 
-[ Upstream commit bc155c6c188c2f0c5749993b1405673d25a80389 ]
+[ Upstream commit 68dbe80f5b510c66c800b9e8055235c5b07e37d1 ]
 
-Changes from v1:
-  * removed the default implementation from set_pub_key: it is assumed that
-    an implementation must always have this callback defined as there are
-    no use case for an algorithm, which doesn't need a public key
+A warning is shown during shutdown,
 
-Many akcipher implementations (like ECDSA) support only signature
-verifications, so they don't have all callbacks defined.
+__dma_async_device_channel_unregister called while 2 clients hold a reference
+WARNING: CPU: 15 PID: 1 at drivers/dma/dmaengine.c:1110 __dma_async_device_channel_unregister+0xb7/0xc0
 
-Commit 78a0324f4a53 ("crypto: akcipher - default implementations for
-request callbacks") introduced default callbacks for sign/verify
-operations, which just return an error code.
+Call dma_release_channel for occupied channles before dma_async_device_unregister.
 
-However, these are not enough, because before calling sign the caller would
-likely call set_priv_key first on the instantiated transform (as the
-in-kernel testmgr does). This function does not have a default stub, so the
-kernel crashes, when trying to set a private key on an akcipher, which
-doesn't support signature generation.
-
-I've noticed this, when trying to add a KAT vector for ECDSA signature to
-the testmgr.
-
-With this patch the testmgr returns an error in dmesg (as it should)
-instead of crashing the kernel NULL ptr dereference.
-
-Fixes: 78a0324f4a53 ("crypto: akcipher - default implementations for request callbacks")
-Signed-off-by: Ignat Korchagin <ignat@cloudflare.com>
+Fixes: 54cce8ecb925 ("crypto: ccp - ccp_dmaengine_unregister release dma channels")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Koba Ko <koba.ko@canonical.com>
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- crypto/akcipher.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/crypto/ccp/ccp-dmaengine.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/crypto/akcipher.c b/crypto/akcipher.c
-index f866085c8a4a..ab975a420e1e 100644
---- a/crypto/akcipher.c
-+++ b/crypto/akcipher.c
-@@ -120,6 +120,12 @@ static int akcipher_default_op(struct akcipher_request *req)
- 	return -ENOSYS;
- }
- 
-+static int akcipher_default_set_key(struct crypto_akcipher *tfm,
-+				     const void *key, unsigned int keylen)
-+{
-+	return -ENOSYS;
-+}
+diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
+index b3eea329f840..b9299defb431 100644
+--- a/drivers/crypto/ccp/ccp-dmaengine.c
++++ b/drivers/crypto/ccp/ccp-dmaengine.c
+@@ -642,6 +642,10 @@ static void ccp_dma_release(struct ccp_device *ccp)
+ 	for (i = 0; i < ccp->cmd_q_count; i++) {
+ 		chan = ccp->ccp_dma_chan + i;
+ 		dma_chan = &chan->dma_chan;
 +
- int crypto_register_akcipher(struct akcipher_alg *alg)
- {
- 	struct crypto_alg *base = &alg->base;
-@@ -132,6 +138,8 @@ int crypto_register_akcipher(struct akcipher_alg *alg)
- 		alg->encrypt = akcipher_default_op;
- 	if (!alg->decrypt)
- 		alg->decrypt = akcipher_default_op;
-+	if (!alg->set_priv_key)
-+		alg->set_priv_key = akcipher_default_set_key;
++		if (dma_chan->client_count)
++			dma_release_channel(dma_chan);
++
+ 		tasklet_kill(&chan->cleanup_tasklet);
+ 		list_del_rcu(&dma_chan->device_node);
+ 	}
+@@ -767,8 +771,8 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
+ 	if (!dmaengine)
+ 		return;
  
- 	akcipher_prepare_alg(alg);
- 	return crypto_register_alg(base);
+-	dma_async_device_unregister(dma_dev);
+ 	ccp_dma_release(ccp);
++	dma_async_device_unregister(dma_dev);
+ 
+ 	kmem_cache_destroy(ccp->dma_desc_cache);
+ 	kmem_cache_destroy(ccp->dma_cmd_cache);
 -- 
 2.35.1
 
