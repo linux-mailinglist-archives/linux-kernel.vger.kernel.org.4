@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F38760BE60
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1DB60BE62
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231445AbiJXXPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
+        id S230096AbiJXXPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbiJXXPX (ORCPT
+        with ESMTP id S230402AbiJXXPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:15:23 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937935C962
+        Mon, 24 Oct 2022 19:15:24 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D19C72ED4
         for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:36:27 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id h24so6433574qta.7
+Received: by mail-qk1-x72e.google.com with SMTP id j21so6911023qkk.9
         for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:36:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=sYcC1Hf5uFhVZuAIt3B0smLjO6ifatn3SZB/4VvO5T4=;
-        b=rRr+DJxMyoaYySbaY77FbZDsnehXzqPBB6g7fAUyCrFManLQsJi9dcUmksiCeyJm6v
-         iR3ermaH4ABvzuQFr3me4Ybom2EC6anXTnuqaOgtMu2tK9H6654Wvrr5A3R1T+bNisNF
-         2PW86qqOcN5uYVI0yAIILthWpmeabUshuRBl76feXkxrJYow/VGqs8R/NHT8KjIl4vz9
-         AZyTmUrockNpyzs8LYIo4obPqfZb2C96U1NmFX0LLHzjmtnjxJTsOmWLzwrBWmPOBMJ6
-         ktNZ2bsUHBalb6xhRI5uQwiw8+O+mDfcxVSQf7jajvkmIBlSNiS89z8uyCkPDYqKgFnU
-         4NNw==
+        bh=gk7TlUCe82Khl4QlorbqbbPFStHIH3+Iv/P2rNwZu0o=;
+        b=uCMsBsZsyNSicwFLc5eBQIDw9d/ijN5Z1RGIP8Hel2XXUFnaIsSFU+Z43X/zkM+5P/
+         0qJThUC3pXejzgWcgINJoBNZzyUPoZNft8DNnebXE7WGxlFNJMyY/oAetcvt/19J+JsX
+         e80ham7Ou9Ldkp3IxUmVFxMymo3CY/yDlJInbbTgFDYkfT3QeZPN5QKrBh8u3dur+CLy
+         n1sNufly3U3//6xQ7I6snoo0dYCblPXViF9RBM2BraKoPxi4FP5Z3psUlQ1Isc5nXeDP
+         loRP1blly4913PyruuJXHmkEHR4kcQsge82dROPhH30DdgouOYYxwfYPAcF1v6brRu9p
+         Mb/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sYcC1Hf5uFhVZuAIt3B0smLjO6ifatn3SZB/4VvO5T4=;
-        b=pVxqdalYeROPBQVrBZXZ9ngd6E50E4lAMPwxNro7goJ3HZFyV+VD/BUoAjWpJkzBDc
-         3q/NNvPnjBV+tDcCE1oRE6HI1PlYQpzRm5QvdKVUTtYuo9OSOgHNjWqFL4PAy0ppSzOi
-         7CBpvrCZr9ppYDV5yywhYeqiJuihrXWQP5AR5Bhe5N1KznLBsIv0Bfd6etKCkFsIDP0u
-         yCMCu+jp8HMQnKy1Md6XFPWXpZRh4EDJXKs9P9i2ya6frlM3uX7B5wXs+OX/rEDXU7ls
-         Dbm9LCE7867vCXt8820iiM2ZZDGgoY6g8sT17qDBp/vuR0mlrELbOn3BPfV/QAfBsmJn
-         6yLA==
-X-Gm-Message-State: ACrzQf3kPSNzLOUqqY1tbXYvyJB0WUn3dH+k5WqjH4mw9ZE9en3ZAFa7
-        cEg4/q4526kfrAsHWJsAalIGXQ==
-X-Google-Smtp-Source: AMsMyM7fVNhyVmRM8Eylp+Nkyta7pkixfdw2cOfncLdYG6iHIMyt8zpYrUEU6a7GJoGQWbp5v1H9PQ==
-X-Received: by 2002:a05:622a:2cc:b0:398:22c2:7e81 with SMTP id a12-20020a05622a02cc00b0039822c27e81mr28617007qtx.633.1666647363353;
-        Mon, 24 Oct 2022 14:36:03 -0700 (PDT)
+        bh=gk7TlUCe82Khl4QlorbqbbPFStHIH3+Iv/P2rNwZu0o=;
+        b=GTeTE5G7KauUycuP/LdYchX9TRDKIiaSCV3ElMsJQ/tmEeoI2wzwMHPcVmotIiFC9M
+         895hN6qgXBjQxa+UKWXGVN/g4rS7ow0imhA/n8JpKayGkLWJeNEyED+htAT6oLfgHbOI
+         EyLbE2YlLXS49AxskMjrFQgOq0QryJHZwX4jPtOySfmCNpg+LMF+rwxPCbJXdEpjnDVY
+         I1I3DMq+30VCUy/OdtfutYVv+GVNl5H4bUrbS1QoFKIeysbj28EQWBil9MnXwQNfnQNA
+         EBQK4ifMOGOIvRnYEP5RFgXfIqtwmkRYhDr3fKP7TSQ/vgPr5ZEjKFKQcZd6aZsuF/x9
+         NRYA==
+X-Gm-Message-State: ACrzQf0qBj09y0JxlqPJcjGRWeC/yYIDbqK0bS8Y8hCbe11/TYn9FFdJ
+        FzLv9J+HfCeKBLbP7K/uv9TtflyXuIKDIA==
+X-Google-Smtp-Source: AMsMyM4f9hVL4a3tNfN6IvxxUpWbGQp6ot77O39v+uSqC3ly1x4ypzOlqA7Y3l1Oq77QqnWVtHcg3Q==
+X-Received: by 2002:a05:620a:40cb:b0:6ee:79ce:e985 with SMTP id g11-20020a05620a40cb00b006ee79cee985mr24019893qko.219.1666647368612;
+        Mon, 24 Oct 2022 14:36:08 -0700 (PDT)
 Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id j6-20020a37c246000000b006eed47a1a1esm623867qkm.134.2022.10.24.14.36.01
+        by smtp.googlemail.com with ESMTPSA id bm33-20020a05620a19a100b006e42a8e9f9bsm650239qkb.121.2022.10.24.14.36.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 14:36:02 -0700 (PDT)
-Message-ID: <5bcc3207-8c3a-1759-ee65-35e5efd77702@linaro.org>
-Date:   Mon, 24 Oct 2022 16:36:00 -0500
+        Mon, 24 Oct 2022 14:36:07 -0700 (PDT)
+Message-ID: <5424b68c-1192-455e-8c0f-f47d0bf0122f@linaro.org>
+Date:   Mon, 24 Oct 2022 16:36:06 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/2] net: ipa: fix v3.5.1 resource limit max values
+Subject: Re: [PATCH v2 2/2] net: ipa: fix v3.1 resource limit masks
 Content-Language: en-US
 To:     Caleb Connolly <caleb.connolly@linaro.org>,
         "David S . Miller" <davem@davemloft.net>,
@@ -66,8 +66,9 @@ To:     Caleb Connolly <caleb.connolly@linaro.org>,
 Cc:     Alex Elder <elder@kernel.org>, linux-kernel@vger.kernel.org,
         netdev@vger.kernel.org
 References: <20221024210336.4014983-1-caleb.connolly@linaro.org>
+ <20221024210336.4014983-2-caleb.connolly@linaro.org>
 From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20221024210336.4014983-1-caleb.connolly@linaro.org>
+In-Reply-To: <20221024210336.4014983-2-caleb.connolly@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,46 +81,174 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 10/24/22 4:03 PM, Caleb Connolly wrote:
-> Some resource limits on IPA v3.5.1 have their max values set to
-> 255, this causes a few splats in ipa_reg_encode and prevents the
-> IPA from booting properly. The limits are all 6 bits wide so
-> adjust the max values to 63.
+> The resource group limits for IPA v3.1 mistakenly used 6 bit wide mask
+> values, when the hardware actually uses 8. Out of range values were
+> silently ignored before, so the IPA worked as expected. However the
+> new generalised register definitions introduce stricter checking here,
+> they now cause some splats and result in the value 0 being written
+> instead. Fix the limit bitmask widths so that the correct values can be
+> written.
 > 
 > Fixes: 1c418c4a929c ("net: ipa: define resource group/type IPA register fields")
 > Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
 
-Thanks Caleb, this looks good.
+Looks good to me, thanks for fixing this.
 
-David et al, in case it isn't obvious, this is for net/master,
-for back-port (only to 6.0.y).
+Note: this is for net/master, to be back-ported to v6.0.y.
 
 Reviewed-by: Alex Elder <elder@linaro.org>
 
 > ---
-> V1: https://lore.kernel.org/netdev/20221024165636.3979249-1-caleb.connolly@linaro.org/
-> Changes since v1:
->   * Apply the correct fix for v3.1 which has the opposite issue where the masks
->     are wrong rather than the values.
->   * Split into two patches
-> ---
->   drivers/net/ipa/data/ipa_data-v3.5.1.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/net/ipa/reg/ipa_reg-v3.1.c | 96 ++++++++++--------------------
+>   1 file changed, 32 insertions(+), 64 deletions(-)
 > 
-> diff --git a/drivers/net/ipa/data/ipa_data-v3.5.1.c b/drivers/net/ipa/data/ipa_data-v3.5.1.c
-> index 383ef1890065..42f2c88a92d4 100644
-> --- a/drivers/net/ipa/data/ipa_data-v3.5.1.c
-> +++ b/drivers/net/ipa/data/ipa_data-v3.5.1.c
-> @@ -179,10 +179,10 @@ static const struct ipa_gsi_endpoint_data ipa_gsi_endpoint_data[] = {
->   static const struct ipa_resource ipa_resource_src[] = {
->   	[IPA_RESOURCE_TYPE_SRC_PKT_CONTEXTS] = {
->   		.limits[IPA_RSRC_GROUP_SRC_LWA_DL] = {
-> -			.min = 1,	.max = 255,
-> +			.min = 1,	.max = 63,
->   		},
->   		.limits[IPA_RSRC_GROUP_SRC_UL_DL] = {
-> -			.min = 1,	.max = 255,
-> +			.min = 1,	.max = 63,
->   		},
->   		.limits[IPA_RSRC_GROUP_SRC_UC_RX_Q] = {
->   			.min = 1,	.max = 63,
+> diff --git a/drivers/net/ipa/reg/ipa_reg-v3.1.c b/drivers/net/ipa/reg/ipa_reg-v3.1.c
+> index 116b27717e3d..0d002c3c38a2 100644
+> --- a/drivers/net/ipa/reg/ipa_reg-v3.1.c
+> +++ b/drivers/net/ipa/reg/ipa_reg-v3.1.c
+> @@ -127,112 +127,80 @@ static const u32 ipa_reg_counter_cfg_fmask[] = {
+>   IPA_REG_FIELDS(COUNTER_CFG, counter_cfg, 0x000001f0);
+>   
+>   static const u32 ipa_reg_src_rsrc_grp_01_rsrc_type_fmask[] = {
+> -	[X_MIN_LIM]					= GENMASK(5, 0),
+> -						/* Bits 6-7 reserved */
+> -	[X_MAX_LIM]					= GENMASK(13, 8),
+> -						/* Bits 14-15 reserved */
+> -	[Y_MIN_LIM]					= GENMASK(21, 16),
+> -						/* Bits 22-23 reserved */
+> -	[Y_MAX_LIM]					= GENMASK(29, 24),
+> -						/* Bits 30-31 reserved */
+> +	[X_MIN_LIM]					= GENMASK(7, 0),
+> +	[X_MAX_LIM]					= GENMASK(15, 8),
+> +	[Y_MIN_LIM]					= GENMASK(23, 16),
+> +	[Y_MAX_LIM]					= GENMASK(31, 24),
+>   };
+>   
+>   IPA_REG_STRIDE_FIELDS(SRC_RSRC_GRP_01_RSRC_TYPE, src_rsrc_grp_01_rsrc_type,
+>   		      0x00000400, 0x0020);
+>   
+>   static const u32 ipa_reg_src_rsrc_grp_23_rsrc_type_fmask[] = {
+> -	[X_MIN_LIM]					= GENMASK(5, 0),
+> -						/* Bits 6-7 reserved */
+> -	[X_MAX_LIM]					= GENMASK(13, 8),
+> -						/* Bits 14-15 reserved */
+> -	[Y_MIN_LIM]					= GENMASK(21, 16),
+> -						/* Bits 22-23 reserved */
+> -	[Y_MAX_LIM]					= GENMASK(29, 24),
+> -						/* Bits 30-31 reserved */
+> +	[X_MIN_LIM]					= GENMASK(7, 0),
+> +	[X_MAX_LIM]					= GENMASK(15, 8),
+> +	[Y_MIN_LIM]					= GENMASK(23, 16),
+> +	[Y_MAX_LIM]					= GENMASK(31, 24),
+>   };
+>   
+>   IPA_REG_STRIDE_FIELDS(SRC_RSRC_GRP_23_RSRC_TYPE, src_rsrc_grp_23_rsrc_type,
+>   		      0x00000404, 0x0020);
+>   
+>   static const u32 ipa_reg_src_rsrc_grp_45_rsrc_type_fmask[] = {
+> -	[X_MIN_LIM]					= GENMASK(5, 0),
+> -						/* Bits 6-7 reserved */
+> -	[X_MAX_LIM]					= GENMASK(13, 8),
+> -						/* Bits 14-15 reserved */
+> -	[Y_MIN_LIM]					= GENMASK(21, 16),
+> -						/* Bits 22-23 reserved */
+> -	[Y_MAX_LIM]					= GENMASK(29, 24),
+> -						/* Bits 30-31 reserved */
+> +	[X_MIN_LIM]					= GENMASK(7, 0),
+> +	[X_MAX_LIM]					= GENMASK(15, 8),
+> +	[Y_MIN_LIM]					= GENMASK(23, 16),
+> +	[Y_MAX_LIM]					= GENMASK(31, 24),
+>   };
+>   
+>   IPA_REG_STRIDE_FIELDS(SRC_RSRC_GRP_45_RSRC_TYPE, src_rsrc_grp_45_rsrc_type,
+>   		      0x00000408, 0x0020);
+>   
+>   static const u32 ipa_reg_src_rsrc_grp_67_rsrc_type_fmask[] = {
+> -	[X_MIN_LIM]					= GENMASK(5, 0),
+> -						/* Bits 6-7 reserved */
+> -	[X_MAX_LIM]					= GENMASK(13, 8),
+> -						/* Bits 14-15 reserved */
+> -	[Y_MIN_LIM]					= GENMASK(21, 16),
+> -						/* Bits 22-23 reserved */
+> -	[Y_MAX_LIM]					= GENMASK(29, 24),
+> -						/* Bits 30-31 reserved */
+> +	[X_MIN_LIM]					= GENMASK(7, 0),
+> +	[X_MAX_LIM]					= GENMASK(15, 8),
+> +	[Y_MIN_LIM]					= GENMASK(23, 16),
+> +	[Y_MAX_LIM]					= GENMASK(31, 24),
+>   };
+>   
+>   IPA_REG_STRIDE_FIELDS(SRC_RSRC_GRP_67_RSRC_TYPE, src_rsrc_grp_67_rsrc_type,
+>   		      0x0000040c, 0x0020);
+>   
+>   static const u32 ipa_reg_dst_rsrc_grp_01_rsrc_type_fmask[] = {
+> -	[X_MIN_LIM]					= GENMASK(5, 0),
+> -						/* Bits 6-7 reserved */
+> -	[X_MAX_LIM]					= GENMASK(13, 8),
+> -						/* Bits 14-15 reserved */
+> -	[Y_MIN_LIM]					= GENMASK(21, 16),
+> -						/* Bits 22-23 reserved */
+> -	[Y_MAX_LIM]					= GENMASK(29, 24),
+> -						/* Bits 30-31 reserved */
+> +	[X_MIN_LIM]					= GENMASK(7, 0),
+> +	[X_MAX_LIM]					= GENMASK(15, 8),
+> +	[Y_MIN_LIM]					= GENMASK(23, 16),
+> +	[Y_MAX_LIM]					= GENMASK(31, 24),
+>   };
+>   
+>   IPA_REG_STRIDE_FIELDS(DST_RSRC_GRP_01_RSRC_TYPE, dst_rsrc_grp_01_rsrc_type,
+>   		      0x00000500, 0x0020);
+>   
+>   static const u32 ipa_reg_dst_rsrc_grp_23_rsrc_type_fmask[] = {
+> -	[X_MIN_LIM]					= GENMASK(5, 0),
+> -						/* Bits 6-7 reserved */
+> -	[X_MAX_LIM]					= GENMASK(13, 8),
+> -						/* Bits 14-15 reserved */
+> -	[Y_MIN_LIM]					= GENMASK(21, 16),
+> -						/* Bits 22-23 reserved */
+> -	[Y_MAX_LIM]					= GENMASK(29, 24),
+> -						/* Bits 30-31 reserved */
+> +	[X_MIN_LIM]					= GENMASK(7, 0),
+> +	[X_MAX_LIM]					= GENMASK(15, 8),
+> +	[Y_MIN_LIM]					= GENMASK(23, 16),
+> +	[Y_MAX_LIM]					= GENMASK(31, 24),
+>   };
+>   
+>   IPA_REG_STRIDE_FIELDS(DST_RSRC_GRP_23_RSRC_TYPE, dst_rsrc_grp_23_rsrc_type,
+>   		      0x00000504, 0x0020);
+>   
+>   static const u32 ipa_reg_dst_rsrc_grp_45_rsrc_type_fmask[] = {
+> -	[X_MIN_LIM]					= GENMASK(5, 0),
+> -						/* Bits 6-7 reserved */
+> -	[X_MAX_LIM]					= GENMASK(13, 8),
+> -						/* Bits 14-15 reserved */
+> -	[Y_MIN_LIM]					= GENMASK(21, 16),
+> -						/* Bits 22-23 reserved */
+> -	[Y_MAX_LIM]					= GENMASK(29, 24),
+> -						/* Bits 30-31 reserved */
+> +	[X_MIN_LIM]					= GENMASK(7, 0),
+> +	[X_MAX_LIM]					= GENMASK(15, 8),
+> +	[Y_MIN_LIM]					= GENMASK(23, 16),
+> +	[Y_MAX_LIM]					= GENMASK(31, 24),
+>   };
+>   
+>   IPA_REG_STRIDE_FIELDS(DST_RSRC_GRP_45_RSRC_TYPE, dst_rsrc_grp_45_rsrc_type,
+>   		      0x00000508, 0x0020);
+>   
+>   static const u32 ipa_reg_dst_rsrc_grp_67_rsrc_type_fmask[] = {
+> -	[X_MIN_LIM]					= GENMASK(5, 0),
+> -						/* Bits 6-7 reserved */
+> -	[X_MAX_LIM]					= GENMASK(13, 8),
+> -						/* Bits 14-15 reserved */
+> -	[Y_MIN_LIM]					= GENMASK(21, 16),
+> -						/* Bits 22-23 reserved */
+> -	[Y_MAX_LIM]					= GENMASK(29, 24),
+> -						/* Bits 30-31 reserved */
+> +	[X_MIN_LIM]					= GENMASK(7, 0),
+> +	[X_MAX_LIM]					= GENMASK(15, 8),
+> +	[Y_MIN_LIM]					= GENMASK(23, 16),
+> +	[Y_MAX_LIM]					= GENMASK(31, 24),
+>   };
+>   
+>   IPA_REG_STRIDE_FIELDS(DST_RSRC_GRP_67_RSRC_TYPE, dst_rsrc_grp_67_rsrc_type,
 
