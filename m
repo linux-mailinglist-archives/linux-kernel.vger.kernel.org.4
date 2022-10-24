@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F04960A1CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FFC760A1D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiJXLdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
+        id S230229AbiJXLe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiJXLcx (ORCPT
+        with ESMTP id S230426AbiJXLeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:32:53 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B6961D4D;
-        Mon, 24 Oct 2022 04:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666611153; x=1698147153;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=J//vhD4MqQrSeKUj+KUsipHKrzYYM8OFew0w8HAgIXg=;
-  b=ZbMMeY+SAqNctRFuAQVVyUldSf4gpstGVpSqqXsWskSQ77H/zy0OCCRi
-   kn96m9LP0e25JDpl+6BApxDdgEfj1l3Jyg1aQpYgYEMMtERf9p9W5H6aM
-   j99HxeBUyKcpe/6FRzdtRhY8mXw8k6W0Ek2SnZTOY6jO/RHhQVCPsQ5Kx
-   /mrNWgRSt/2wNnchBJbR212sRJByQDgugAn6hzLQovqk1myIlGRfSZzdQ
-   65Vh+KadXVkpF/I1esvsxXL8QhmFGs00wrEH6nRzlcmOxe0u2mnnCS95O
-   kgWBE617Yv3RN4FGb8EQh+hc+IlFoxQ3Z1hpfFmBJItVYWzzweiMFk0DA
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="287790568"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="287790568"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 04:32:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="756541972"
-X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
-   d="scan'208";a="756541972"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 24 Oct 2022 04:32:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1omvgf-001Pmz-1z;
-        Mon, 24 Oct 2022 14:32:09 +0300
-Date:   Mon, 24 Oct 2022 14:32:09 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     ChiaEn Wu <peterwu.pub@gmail.com>
-Cc:     pavel@ucw.cz, matthias.bgg@gmail.com, chiaen_wu@richtek.com,
-        alice_chen@richtek.com, cy_huang@richtek.com,
-        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        szunichen@gmail.com
-Subject: Re: [PATCH v15 0/2] Add MediaTek MT6370 PMIC support
-Message-ID: <Y1Z3uWt0dnWjqzTB@smile.fi.intel.com>
-References: <cover.1666636223.git.chiaen_wu@richtek.com>
+        Mon, 24 Oct 2022 07:34:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619326706F;
+        Mon, 24 Oct 2022 04:33:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B79061253;
+        Mon, 24 Oct 2022 11:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD4CC433D6;
+        Mon, 24 Oct 2022 11:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666611170;
+        bh=EkBkVpQtB/kZdOQ1nJKGX43C3dc/bTxKkYkyohDcZ/o=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=tvbIDxdrn8HHp4/NQKMkiQWJ0IP3+CcRVfuWNxVXU4+jowZPkGZDxi2824j5JhnwQ
+         jgSH5ji30+thUimi8QhgUsVv2RA+gNU1rfdcb4SKpcNRJ9D1+VyypCXU11XpSDWGnB
+         wpIcKjqHeoy4TKG++cJhVOsJzFUTi29PSyaG/S70iW0+fFK24nKmfjSm2ETHA/zKQr
+         0IiJT5oJUb6wlqnG7GOhcsHE5hj9qI6dSDH2291Cz/w68FHHGSai+z25wdyyoalpI7
+         UkO+KkmKvH+A2LQv5Ks76DUcgLC0XRJGlubZrSgXmmoQu/THsW0+XhEj01SpvPk9ly
+         CnpPXhN8NAyLg==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     linux-rdma@vger.kernel.org,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Colin Ian King <colin.i.king@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+In-Reply-To: <20221021172611.26763-1-colin.i.king@gmail.com>
+References: <20221021172611.26763-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH] RDMA/hw/qib/qib_tx: Remove variable n
+Message-Id: <166661116602.858492.5242965082224048261.b4-ty@kernel.org>
+Date:   Mon, 24 Oct 2022 14:32:46 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1666636223.git.chiaen_wu@richtek.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-87e0e
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 06:59:34PM +0800, ChiaEn Wu wrote:
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
+On Fri, 21 Oct 2022 18:26:11 +0100, Colin Ian King wrote:
+> The variable n being incremented but it is never referenced,
+> it is redundant and can be removed.
 > 
-> This patch series add MediaTek MT6370 PMIC support and add a index macro
-> to <linear_range.h>.
+> 
 
-Is it? Please, align the cover letter and actual code series.
+Applied, thanks!
 
+[1/1] RDMA/hw/qib/qib_tx: Remove variable n
+      https://git.kernel.org/rdma/rdma/c/d0b9f28f0da280
 
+Best regards,
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Leon Romanovsky <leon@kernel.org>
