@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFE560A97A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C1060A46D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:10:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbiJXNVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S229895AbiJXMK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236306AbiJXNTw (ORCPT
+        with ESMTP id S232844AbiJXMJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:19:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081C22BE04;
-        Mon, 24 Oct 2022 05:28:18 -0700 (PDT)
+        Mon, 24 Oct 2022 08:09:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F3F7F0AF;
+        Mon, 24 Oct 2022 04:52:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE7D76126B;
-        Mon, 24 Oct 2022 12:24:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2747C433D6;
-        Mon, 24 Oct 2022 12:24:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C659DB81158;
+        Mon, 24 Oct 2022 11:40:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 217F2C433B5;
+        Mon, 24 Oct 2022 11:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614263;
-        bh=7AuFi6EBGKuPcwP8T4Kg4oFE8Bg46RXanDC8ZkVyVKw=;
+        s=korg; t=1666611599;
+        bh=zZ6aCnvvIvMD/DtvvB7qbtS2ts7lyXMgsQSGtvWJf1E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yYqNnsrcwKyMKrvDOKOhTuJn8ky485f6OBV4Ys71Nz3m2mIIyYUqKZYNVESh/bR5S
-         tV5pYwKV5fZ15+XSvRjRGiGGQbHYC3N64ZOgtdGeGtjQPYFWgN3F5ODtD/QGFv7vBq
-         nPeDeEGzAQuGS/oEwBxewwMQ9EZfKwwPQKzLrRxY=
+        b=gmWnYtn0ST9o0YnFnkXzaZkOExg/nW9Tkkzkv0Njy4gCwcKGrcji0oUAQRlcBYfCw
+         WhVhf65pAnYPSO7sdx9/vY+vIISZGYTX2Ot0RclNpbnfMRSD6O0qvgJWCnf1F2Kwom
+         JgpyqqaHPLnouoMsXa4YfQKJ+/HJNKt4iEkyFFvY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 195/390] usb: common: debug: Check non-standard control requests
-Date:   Mon, 24 Oct 2022 13:29:52 +0200
-Message-Id: <20221024113031.092416629@linuxfoundation.org>
+        stable@vger.kernel.org, Cameron Gutman <aicommander@gmail.com>,
+        Pavel Rojtberg <rojtberg@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 4.9 039/159] Input: xpad - fix wireless 360 controller breaking after suspend
+Date:   Mon, 24 Oct 2022 13:29:53 +0200
+Message-Id: <20221024112950.808880388@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,139 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Cameron Gutman <aicommander@gmail.com>
 
-[ Upstream commit b6155eaf6b05e558218b44b88a6cad03f15a586c ]
+commit a17b9841152e7f4621619902b347e2cc39c32996 upstream.
 
-Previously usb_decode_ctrl() only decodes standard control requests, but
-it was used for non-standard requests also. If it's non-standard or
-unknown standard bRequest, print the Setup data values.
+Suspending and resuming the system can sometimes cause the out
+URB to get hung after a reset_resume. This causes LED setting
+and force feedback to break on resume. To avoid this, just drop
+the reset_resume callback so the USB core rebinds xpad to the
+wireless pads on resume if a reset happened.
 
-Fixes: af32423a2d86 ("usb: dwc3: trace: decode ctrl request")
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/8d6a30f2f2f953eff833a5bc5aac640a4cc2fc9f.1658971571.git.Thinh.Nguyen@synopsys.com
+A nice side effect of this change is the LED ring on wireless
+controllers is now set correctly on system resume.
+
+Cc: stable@vger.kernel.org
+Fixes: 4220f7db1e42 ("Input: xpad - workaround dead irq_out after suspend/ resume")
+Signed-off-by: Cameron Gutman <aicommander@gmail.com>
+Signed-off-by: Pavel Rojtberg <rojtberg@gmail.com>
+Link: https://lore.kernel.org/r/20220818154411.510308-3-rojtberg@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/common/debug.c | 96 +++++++++++++++++++++++++-------------
- 1 file changed, 64 insertions(+), 32 deletions(-)
+ drivers/input/joystick/xpad.c |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/common/debug.c b/drivers/usb/common/debug.c
-index a76a086b9c54..f0c0e8db7038 100644
---- a/drivers/usb/common/debug.c
-+++ b/drivers/usb/common/debug.c
-@@ -207,30 +207,28 @@ static void usb_decode_set_isoch_delay(__u8 wValue, char *str, size_t size)
- 	snprintf(str, size, "Set Isochronous Delay(Delay = %d ns)", wValue);
- }
+--- a/drivers/input/joystick/xpad.c
++++ b/drivers/input/joystick/xpad.c
+@@ -2000,7 +2000,6 @@ static struct usb_driver xpad_driver = {
+ 	.disconnect	= xpad_disconnect,
+ 	.suspend	= xpad_suspend,
+ 	.resume		= xpad_resume,
+-	.reset_resume	= xpad_resume,
+ 	.id_table	= xpad_table,
+ };
  
--/**
-- * usb_decode_ctrl - Returns human readable representation of control request.
-- * @str: buffer to return a human-readable representation of control request.
-- *       This buffer should have about 200 bytes.
-- * @size: size of str buffer.
-- * @bRequestType: matches the USB bmRequestType field
-- * @bRequest: matches the USB bRequest field
-- * @wValue: matches the USB wValue field (CPU byte order)
-- * @wIndex: matches the USB wIndex field (CPU byte order)
-- * @wLength: matches the USB wLength field (CPU byte order)
-- *
-- * Function returns decoded, formatted and human-readable description of
-- * control request packet.
-- *
-- * The usage scenario for this is for tracepoints, so function as a return
-- * use the same value as in parameters. This approach allows to use this
-- * function in TP_printk
-- *
-- * Important: wValue, wIndex, wLength parameters before invoking this function
-- * should be processed by le16_to_cpu macro.
-- */
--const char *usb_decode_ctrl(char *str, size_t size, __u8 bRequestType,
--			    __u8 bRequest, __u16 wValue, __u16 wIndex,
--			    __u16 wLength)
-+static void usb_decode_ctrl_generic(char *str, size_t size, __u8 bRequestType,
-+				    __u8 bRequest, __u16 wValue, __u16 wIndex,
-+				    __u16 wLength)
-+{
-+	u8 recip = bRequestType & USB_RECIP_MASK;
-+	u8 type = bRequestType & USB_TYPE_MASK;
-+
-+	snprintf(str, size,
-+		 "Type=%s Recipient=%s Dir=%s bRequest=%u wValue=%u wIndex=%u wLength=%u",
-+		 (type == USB_TYPE_STANDARD)    ? "Standard" :
-+		 (type == USB_TYPE_VENDOR)      ? "Vendor" :
-+		 (type == USB_TYPE_CLASS)       ? "Class" : "Unknown",
-+		 (recip == USB_RECIP_DEVICE)    ? "Device" :
-+		 (recip == USB_RECIP_INTERFACE) ? "Interface" :
-+		 (recip == USB_RECIP_ENDPOINT)  ? "Endpoint" : "Unknown",
-+		 (bRequestType & USB_DIR_IN)    ? "IN" : "OUT",
-+		 bRequest, wValue, wIndex, wLength);
-+}
-+
-+static void usb_decode_ctrl_standard(char *str, size_t size, __u8 bRequestType,
-+				     __u8 bRequest, __u16 wValue, __u16 wIndex,
-+				     __u16 wLength)
- {
- 	switch (bRequest) {
- 	case USB_REQ_GET_STATUS:
-@@ -271,14 +269,48 @@ const char *usb_decode_ctrl(char *str, size_t size, __u8 bRequestType,
- 		usb_decode_set_isoch_delay(wValue, str, size);
- 		break;
- 	default:
--		snprintf(str, size, "%02x %02x %02x %02x %02x %02x %02x %02x",
--			 bRequestType, bRequest,
--			 (u8)(cpu_to_le16(wValue) & 0xff),
--			 (u8)(cpu_to_le16(wValue) >> 8),
--			 (u8)(cpu_to_le16(wIndex) & 0xff),
--			 (u8)(cpu_to_le16(wIndex) >> 8),
--			 (u8)(cpu_to_le16(wLength) & 0xff),
--			 (u8)(cpu_to_le16(wLength) >> 8));
-+		usb_decode_ctrl_generic(str, size, bRequestType, bRequest,
-+					wValue, wIndex, wLength);
-+		break;
-+	}
-+}
-+
-+/**
-+ * usb_decode_ctrl - Returns human readable representation of control request.
-+ * @str: buffer to return a human-readable representation of control request.
-+ *       This buffer should have about 200 bytes.
-+ * @size: size of str buffer.
-+ * @bRequestType: matches the USB bmRequestType field
-+ * @bRequest: matches the USB bRequest field
-+ * @wValue: matches the USB wValue field (CPU byte order)
-+ * @wIndex: matches the USB wIndex field (CPU byte order)
-+ * @wLength: matches the USB wLength field (CPU byte order)
-+ *
-+ * Function returns decoded, formatted and human-readable description of
-+ * control request packet.
-+ *
-+ * The usage scenario for this is for tracepoints, so function as a return
-+ * use the same value as in parameters. This approach allows to use this
-+ * function in TP_printk
-+ *
-+ * Important: wValue, wIndex, wLength parameters before invoking this function
-+ * should be processed by le16_to_cpu macro.
-+ */
-+const char *usb_decode_ctrl(char *str, size_t size, __u8 bRequestType,
-+			    __u8 bRequest, __u16 wValue, __u16 wIndex,
-+			    __u16 wLength)
-+{
-+	switch (bRequestType & USB_TYPE_MASK) {
-+	case USB_TYPE_STANDARD:
-+		usb_decode_ctrl_standard(str, size, bRequestType, bRequest,
-+					 wValue, wIndex, wLength);
-+		break;
-+	case USB_TYPE_VENDOR:
-+	case USB_TYPE_CLASS:
-+	default:
-+		usb_decode_ctrl_generic(str, size, bRequestType, bRequest,
-+					wValue, wIndex, wLength);
-+		break;
- 	}
- 
- 	return str;
--- 
-2.35.1
-
 
 
