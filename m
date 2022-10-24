@@ -2,135 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FC760BB5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0985D60BB62
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbiJXU45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S230180AbiJXU55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235141AbiJXU4Y (ORCPT
+        with ESMTP id S235201AbiJXU5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:56:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F7FB3B0A;
-        Mon, 24 Oct 2022 12:03:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 1217921E70;
-        Mon, 24 Oct 2022 19:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666638117; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oIWrFVCTFI0P8Gt8DB2CKcLBPuXOX6c8HwKwpujStPs=;
-        b=usXYqPefh4eEIKMYACSLS5A/8NdFsaITAJCgUzvwEPid3GH+TQTOI23v3ll5y+QNooeUZr
-        3ze7SirTSyiludyKt5GZz6rSOZ4tTwb4/lM5MDT4xrVqbSLeSQ4fcXWMk6rLmlp1uQzghA
-        S91SJQQGa1p2ZsLepX1DcrVHc9wRUhs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666638117;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oIWrFVCTFI0P8Gt8DB2CKcLBPuXOX6c8HwKwpujStPs=;
-        b=autQ68W9Wcb4TmHypUYFSXRRxqC0YVTZoahysFvUonU38+sDLf5TP/WJB83BWUqQQktFKV
-        qo006gi3pzYwxRCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E11FC13A79;
-        Mon, 24 Oct 2022 19:01:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id juQiNSThVmMpLwAAMHmgww
-        (envelope-from <mliska@suse.cz>); Mon, 24 Oct 2022 19:01:56 +0000
-Message-ID: <f70c7a11-e81e-f6b9-a403-315117f4aa3a@suse.cz>
-Date:   Mon, 24 Oct 2022 21:01:56 +0200
+        Mon, 24 Oct 2022 16:57:07 -0400
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1AE81C2EB6;
+        Mon, 24 Oct 2022 12:03:37 -0700 (PDT)
+Received: by mail-pj1-f45.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so13888620pji.1;
+        Mon, 24 Oct 2022 12:03:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KpthEP7YXPpISJ6CGPHYOqUT6IOWvKcBQOAkgoQ0ELw=;
+        b=n+/PUfdkNtRN6FsSyZnOuG2MGe6OwkXQ0etPDDKP0hjvui5n1+crE6l/t4YAS/hLdB
+         hnYItTcEVr0LPjRQ/qxv2Gza3D4roOr0TkK+JhkQ5c5/bFGmK6QiLG9PXwtBTpW+Li3/
+         vgIxPICaaJafC/tv8W5dxSWvuqdEHEG1/uQlJxaJB6hnSCvo/H/77PU46NgI7Z+vzCag
+         N8ctFPw5ftvGptCDGk/DkAp975pL+W1VdBxMhwu9hxHBaZy9pJzvYN56g5Bae2XwWpwG
+         FAqU3V0V8eRg1gMS6uXv11lkMN7yUxPDjJ7QR4JhEK6XDISOWwr0+/GHk9XxomwS5WGd
+         qMmg==
+X-Gm-Message-State: ACrzQf1Q8y4k94tDXbz6g/Zx9SJ86lk+11McZ6cY2CrnnBSjXsq86UIr
+        pUBtuHKSETO00t/IGnA+UmE=
+X-Google-Smtp-Source: AMsMyM41hqd/uZatx/NIZkdddex4IQIsPyvThfppQJMTcjKSxixD9lMXD6LAtqRvj3T+q4RUKykUsQ==
+X-Received: by 2002:a17:903:18b:b0:185:43e6:20df with SMTP id z11-20020a170903018b00b0018543e620dfmr34041445plg.4.1666638167863;
+        Mon, 24 Oct 2022 12:02:47 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id i27-20020a056a00005b00b0056203db46ffsm135961pfk.172.2022.10.24.12.02.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 12:02:47 -0700 (PDT)
+Message-ID: <dc89c70e-4931-baaf-c450-6801c200c1d7@acm.org>
+Date:   Mon, 24 Oct 2022 12:02:44 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
-Subject: [PATCH] block: fix Werror=format with GCC 13
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-block@vger.kernel.org, axboe@kernel.dk
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v15 00/13] support zoned block devices with non-power-of-2
+ zone sizes
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Jens Axboe <axboe@kernel.dk>, Pankaj Raghav <p.raghav@samsung.com>,
+        hch@lst.de, Keith Busch <kbusch@kernel.org>
+Cc:     jaegeuk@kernel.org, agk@redhat.com, gost.dev@samsung.com,
+        snitzer@kernel.org, damien.lemoal@opensource.wdc.com,
+        linux-kernel@vger.kernel.org, hare@suse.de,
+        matias.bjorling@wdc.com, Johannes.Thumshirn@wdc.com,
+        linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
+        pankydev8@gmail.com, dm-devel@redhat.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <CGME20220923173619eucas1p13e645adbe1c8eb62fb48b52c0248ed65@eucas1p1.samsung.com>
+ <20220923173618.6899-1-p.raghav@samsung.com>
+ <5e9d678f-ffea-e015-53d8-7e80f3deda1e@samsung.com>
+ <bd9479f4-ff87-6e5d-296e-e31e669fb148@kernel.dk>
+ <0e5088a5-5408-c5bd-bf97-00803cb5faed@acm.org>
+ <90b6d45e-61a5-3eb3-7525-8467f1a67587@kernel.dk>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <90b6d45e-61a5-3eb3-7525-8467f1a67587@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Starting with GCC 13, since
-[g3b3083a598ca3f4b] c: C2x enums wider than int [PR36113]
+On 9/30/22 14:24, Jens Axboe wrote:
+> Noted. I'll find some time to review this as well separately, once we're
+> on the other side of the merge window.
 
-GCC promotes enum values with larger than integer types to a wider type.
-In case of the anonymous enum type in blk-iocost.c it is:
+Hi Jens,
 
-enum {
-	MILLION			= 1000000,
-...
+Now that we are on the other side of the merge window: do you perhaps 
+want Pankaj to repost this patch series? From what I have heard in 
+several fora (JEDEC, SNIA) all flash storage vendors except one (WDC) 
+are in favor of a contiguous LBA space and hence are in favor of 
+supporting zone sizes that are not a power of two.
 
-	WEIGHT_ONE		= 1 << 16,
-...
-	VTIME_PER_SEC_SHIFT	= 37,
-	VTIME_PER_SEC		= 1LLU << VTIME_PER_SEC_SHIFT,
-...
+As you may know in JEDEC we are working on standardizing zoned storage 
+for UFS devices. We (JEDEC JC-64.1 committee members) would like to know 
+whether or not we should require that the UFS zone size should be a 
+power of two.
 
-as seen VTIME_PER_SEC cannot fit into 32-bits (int type), thus one needs
-to use 'long unsigned int' in the format string.
+Thank you,
 
-It fixes then the following 2 warnings:
+Bart.
 
-block/blk-iocost.c: In function ‘ioc_weight_prfill’:
-block/blk-iocost.c:3035:37: error: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Werror=format=]
- 3035 |                 seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
-      |                                    ~^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                     |                             |
-      |                                     unsigned int                  long unsigned int
-      |                                    %lu
-block/blk-iocost.c: In function ‘ioc_weight_show’:
-block/blk-iocost.c:3045:34: error: format ‘%u’ expects argument of type ‘unsigned int’, but argument 3 has type ‘long unsigned int’ [-Werror=format=]
- 3045 |         seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
-      |                                 ~^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                  |                      |
-      |                                  unsigned int           long unsigned int
-      |                                 %lu
-
-Signed-off-by: Martin Liska <mliska@suse.cz>
----
- block/blk-iocost.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index 495396425bad..f165bac9bffb 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -3032,7 +3032,7 @@ static u64 ioc_weight_prfill(struct seq_file *sf, struct blkg_policy_data *pd,
- 	struct ioc_gq *iocg = pd_to_iocg(pd);
- 
- 	if (dname && iocg->cfg_weight)
--		seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
-+		seq_printf(sf, "%s %lu\n", dname, iocg->cfg_weight / WEIGHT_ONE);
- 	return 0;
- }
- 
-@@ -3042,7 +3042,7 @@ static int ioc_weight_show(struct seq_file *sf, void *v)
- 	struct blkcg *blkcg = css_to_blkcg(seq_css(sf));
- 	struct ioc_cgrp *iocc = blkcg_to_iocc(blkcg);
- 
--	seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
-+	seq_printf(sf, "default %lu\n", iocc->dfl_weight / WEIGHT_ONE);
- 	blkcg_print_blkgs(sf, blkcg, ioc_weight_prfill,
- 			  &blkcg_policy_iocost, seq_cft(sf)->private, false);
- 	return 0;
--- 
-2.38.0
 
