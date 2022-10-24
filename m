@@ -2,171 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7A7B60B529
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE0960B6D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbiJXSM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S233070AbiJXTL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiJXSMU (ORCPT
+        with ESMTP id S232957AbiJXTLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:12:20 -0400
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C56126C452;
-        Mon, 24 Oct 2022 09:53:44 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.west.internal (Postfix) with ESMTP id 011D42B066F0;
-        Mon, 24 Oct 2022 09:19:09 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Mon, 24 Oct 2022 09:19:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666617549; x=1666624749; bh=dNk4I7ELz1
-        Q72dRob/8j+4seSTYFKAZT/RUPASjRJ5c=; b=q+NqZuUcR73y8BnZPPG5dx1Zsk
-        6km9xLqa6tEkJrornmVIrbgVsoTaG0EQRj//U3P/qs5FFUR0kQj3xsDpIMDiHNAP
-        KHymuWr00P67rJl6tNZNMaSvfwBvDXs8mjOeO+DtIb91LFvy9u7IqPZlLBHzDqVY
-        OqQ+UV/5sGJOiUEzmGUI9NOmwTaSDzu4RgOGbpc9QTg1ReluTq9aBn60FamJs6vN
-        DKIJe0X1BrhoAYInvyHnNd5GZdOejs+w4Suvb5ImKHNqRwAYBvpipR0/HvaVLckd
-        CHTLMlrLH5H5bEpdNq1ZJ2ZVvg8gjN0DzzHIiqNjzW420ViiiKKJHNZdB8zg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666617549; x=1666624749; bh=dNk4I7ELz1Q72dRob/8j+4seSTYF
-        KAZT/RUPASjRJ5c=; b=uYEImk9/JaoBLZkHmS4JMUN51UUW3Adz4NZ33zTXfhfn
-        X2zc+bMCIXUEr4nNHo354GqKRASijikTpJx4FFU+epgcfr8J1IPlgZPNpNiYVB9M
-        w8ihE4tr46Zh/a1sL2xOLJxavoW+rkvJ5mUtViAoLX1JGrLBO17yVcJcaCCL+4DZ
-        U79zEm+ybsbN3XMbJe7XZH2qegoAJbChw5mNkbbe1D33ukaTT9FYQuJEpTpQ+3Cm
-        dcgc9DJADBfxr4sonBlprzuNuFtddjyQxgp5OFhdXtZwXkncp0R9eBa1XvUUpv5H
-        Fai3j/IlJ8ZfnHiUrjBdKzUP8vcWG93GWsi2JgpEew==
-X-ME-Sender: <xms:zZBWY4d6hZdrWDWBmQnXOunjtmGBLNtVOGtYlcpUAkqGnIq3nQ_ULg>
-    <xme:zZBWY6ORVL4inZtEZ347UGYnYKlOyas-DedRgWZhgJSTlHghoiUBMTH5Vdl7j2SlB
-    orGRM2A45E3sznwkiE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:zZBWY5jMfpgYOekZ5Xiy1zZWPWGF2N1SaGbKcsqvIIsAoksVTelYew>
-    <xmx:zZBWY98Y0Yr03VdtjC58Vfn64oQoe8znN7FH4bLecym0d8-7ie150w>
-    <xmx:zZBWY0u1N4N4cR6ZhhO6MwuQK8N3p7TbkgEiIMvu0C2hnaFTg0G-QA>
-    <xmx:zZBWY2px7fOBs4XObZs9jNKaCaM5g4TthCLLA4wr0bUEo7pzc_VBCiqJhiU>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3DDB5B60086; Mon, 24 Oct 2022 09:19:09 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <e5aa233d-526b-45ab-9acb-ab792b8686bc@app.fastmail.com>
-In-Reply-To: <20221024130035.GA1645003-robh@kernel.org>
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221024130035.GA1645003-robh@kernel.org>
-Date:   Mon, 24 Oct 2022 15:18:41 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Rob Herring" <robh@kernel.org>, "Arnd Bergmann" <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
-        "Simtec Linux Team" <linux@simtec.co.uk>,
-        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-mtd@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 15:11:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D45631216
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666633741;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4yFzP+SUyhmoWsUm8wlibl5IGQr01hdntFp1qHSNIyk=;
+        b=FkujRSp0VsWACBhGjHH6+Jm0ckyWwvoHpyYdBetxezDEu8UvZ/GUKtnUT4purniBi5UY1L
+        bB7wJg9qqoKfkZBZqaug7ERReTjnxtmYOXeCsOTF822o8WRoej+2y8QUg8OrqEcYltG+SF
+        7QRP7WRu3zOC5uD3+rnMA3VGN0vzcPY=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-261-MtszxrZqNNy2BwAbEvI78A-1; Mon, 24 Oct 2022 09:22:38 -0400
+X-MC-Unique: MtszxrZqNNy2BwAbEvI78A-1
+Received: by mail-qv1-f69.google.com with SMTP id x2-20020a0cff22000000b004bb07bf7557so4460023qvt.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:22:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4yFzP+SUyhmoWsUm8wlibl5IGQr01hdntFp1qHSNIyk=;
+        b=IdUfH3mBZ/AjlOQrhQUGfq/uMTQyIWxbwkI++O/wPo7MBDJ+6lGGpWRQ7AqcKUESub
+         J0afl50yC512DqoGgWqjHXtc8gZuFXN/haDmQYmr/Rhhu7wZDu6YCBZtwb7nRALQDKOH
+         FHNsOEysh0mBH+zTOXqVguaz810wE+cHHI8SLGI0K8PzyJBoLrIJRRJ3+L/j5l0U4UKv
+         TnDEptPvwrYf40DU75nqvTNzSfx6WByPQB+xgiF8UTlNLZeagoKvtCXsoVdORkqzDtHd
+         cVtKuWZrXh3JnEUfVntUrBBSyeRsaqicyH9C+PuoQ/j4KO3gjB8/lavfrFj1b0GnxQYK
+         GaNQ==
+X-Gm-Message-State: ACrzQf0te27dM0nUbdXmD4c4CrpNEzBxwmI3nwuC0Q2owsMzSoAoCljk
+        Bh0MiZVS95N7dJJqkERL4Ad5J7vO/0YCIURi4GPh3whIjQZUM43tSy6DGtQl5kRniXH6CPgrX7A
+        R/Pjqwl5+RS73EaJUb/STDWUU
+X-Received: by 2002:a05:620a:13e1:b0:6ee:9408:1f90 with SMTP id h1-20020a05620a13e100b006ee94081f90mr23038350qkl.502.1666617758388;
+        Mon, 24 Oct 2022 06:22:38 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5/mEYrDkNwyLxqg2VNkiHN2kXMv4D8ir4idxS6UCSaxtUMTT//i1ZNYxV2Fp4BYylrhhi+6w==
+X-Received: by 2002:a05:620a:13e1:b0:6ee:9408:1f90 with SMTP id h1-20020a05620a13e100b006ee94081f90mr23038322qkl.502.1666617757993;
+        Mon, 24 Oct 2022 06:22:37 -0700 (PDT)
+Received: from [10.16.222.26] (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id k11-20020a05620a414b00b006e99290e83fsm15183842qko.107.2022.10.24.06.22.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 06:22:37 -0700 (PDT)
+Message-ID: <848276b0-f038-565a-cad1-30a0531cc851@redhat.com>
+Date:   Mon, 24 Oct 2022 09:22:35 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v2 2/2] module: Merge same-name module load requests
+Content-Language: en-US
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220919123233.8538-1-petr.pavlu@suse.com>
+ <20220919123233.8538-3-petr.pavlu@suse.com>
+ <YzdR0gRNQI2BGnJ9@bombadil.infradead.org>
+ <aa8d9456-b260-d999-0296-8e6ab876af7a@suse.com>
+ <Y07xX2ejlg0oFoEy@bombadil.infradead.org>
+ <2342ef17-f8f9-501f-0f7b-5a69e85c2cf4@redhat.com> <Y1D2kFy+I8dgDkll@alley>
+From:   Prarit Bhargava <prarit@redhat.com>
+In-Reply-To: <Y1D2kFy+I8dgDkll@alley>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022, at 15:00, Rob Herring wrote:
-> On Fri, Oct 21, 2022 at 10:22:28PM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The s3c24xx platform was marked as deprecated a while ago,
->> and for the s3c64xx platform, we marked all except one legacy
->> board file as unused.
->> 
->> This series removes all of those, leaving only s3c64xx support
->> for DT based boots as well as the cragg6410 board file.
->> 
->> About half of the s3c specific drivers were only used on
->> the now removed machines, so these drivers can be retired
->> as well. I can either merge the driver removal patches through
->> the soc tree along with the board file patches, or subsystem
->> maintainers can pick them up into their own trees, whichever
->> they prefer.
->
-> [...]
->
->>  Documentation/arm/index.rst                   |    1 -
->>  Documentation/arm/samsung-s3c24xx/cpufreq.rst |   77 -
->>  .../arm/samsung-s3c24xx/eb2410itx.rst         |   59 -
->>  Documentation/arm/samsung-s3c24xx/gpio.rst    |  172 --
->>  Documentation/arm/samsung-s3c24xx/h1940.rst   |   41 -
->>  Documentation/arm/samsung-s3c24xx/index.rst   |   20 -
->>  Documentation/arm/samsung-s3c24xx/nand.rst    |   30 -
->>  .../arm/samsung-s3c24xx/overview.rst          |  311 ---
->>  Documentation/arm/samsung-s3c24xx/s3c2412.rst |  121 -
->>  Documentation/arm/samsung-s3c24xx/s3c2413.rst |   22 -
->>  .../arm/samsung-s3c24xx/smdk2440.rst          |   57 -
->>  Documentation/arm/samsung-s3c24xx/suspend.rst |  137 --
->>  .../arm/samsung-s3c24xx/usb-host.rst          |   91 -
->>  Documentation/arm/samsung/overview.rst        |   13 -
->
-> What about?:
->
-> Documentation/devicetree/bindings/clock/samsung,s3c2410-clock.txt
-> Documentation/devicetree/bindings/interrupt-controller/samsung,s3c24xx-irq.txt
-> Documentation/devicetree/bindings/mmc/samsung,s3cmci.txt
+On 10/20/22 03:19, Petr Mladek wrote:
+> On Tue 2022-10-18 15:53:03, Prarit Bhargava wrote:
+>> On 10/18/22 14:33, Luis Chamberlain wrote:
+>>> On Sat, Oct 15, 2022 at 11:27:10AM +0200, Petr Pavlu wrote:
+>>>> The patch does address a regression observed after commit 6e6de3dee51a
+>>>> ("kernel/module.c: Only return -EEXIST for modules that have finished
+>>>> loading"). I guess it can have a Fixes tag added to the patch.
+>>>>
+>>>> I think it is hard to split this patch into parts because the implemented
+>>>> "optimization" is the fix.
+>>>
+>>> git describe --contains 6e6de3dee51a
+>>> v5.3-rc1~38^2~6
+>>>
+>>> I'm a bit torn about this situation. Reverting 6e6de3dee51a would be the
+>>> right thing to do, but without it, it still leaves the issue reported
+>>> by Prarit Bhargava. We need a way to resolve the issue on stable and
+>>> then your optimizations can be applied on top.
+>>>
+>>> Prarit Bhargava, please review Petry's work and see if you can come up
+>>> with a sensible way to address this for stable.
+>>
+>> I found the original thread surrounding these changes and I do not think
+>> this solution should have been committed to the kernel.  It is not a good
+>> solution to the problem being solved and adds complexity where none is
+>> needed IMO.
+>>
+>> Quoting from the original thread,
+>>
+>>>
+>>> Motivation for this patch is to fix an issue observed on larger machines with
+>>> many CPUs where it can take a significant amount of time during boot to run
+>>> systemd-udev-trigger.service. An x86-64 system can have already intel_pstate
+>>> active but as its CPUs can match also acpi_cpufreq and pcc_cpufreq, udev will
+>>> attempt to load these modules too. The operation will eventually fail in the
+>>> init function of a respective module where it gets recognized that another
+>>> cpufreq driver is already loaded and -EEXIST is returned. However, one uevent
+>>> is triggered for each CPU and so multiple loads of these modules will be
+>>> present. The current code then processes all such loads individually and
+>>> serializes them with the barrier in add_unformed_module().
+>>>
+>>
+>> The way to solve this is not in the module loading code, but in the udev
+>> code by adding a new event or in the userspace which handles the loading
+>> events.
+>>
+>> Option 1)
+>>
+>> Write/modify a udev rule to to use a flock userspace file lock to prevent
+>> repeated loading.  The problem with this is that it is still racy and still
+>> consumes CPU time repeated load the ELF header and, depending on the system
+>> (ie a large number of cpus) would still cause a boot delay.  This would be
+>> better than what we have and is worth looking at as a simple solution.  I'd
+>> like to see boot times with this change, and I'll try to come up with a
+>> measurement on a large CPU system.
+> 
+> This sounds like a ping-pong between projects where to put the
+> complexity. Honestly, I think that it would be more reliable if
+> we serialized/squashed parallel loads on the kernel side.
+> 
 
-Good catch!
+Well, that's the world we live in.  Module loading ping pongs between 
+udev and the kernel.
 
-I've removed these three now and and will add the removal to
-the same patch, also the related
-samsung,s3c2412-clock.txt and samsung,s3c2443-clock.txt
-files.
+> 
+>> Option 2)
+>>
+>> Create a new udev action, "add_once" to indicate to userspace that the
+>> module only needs to be loaded one time, and to ignore further load
+>> requests.  This is a bit tricky as both kernel space and userspace would
+>> have be modified.  The udev rule would end up looking very similar to what
+>> we now.
+>>
+>> The benefit of option 2 is that driver writers themselves can choose which
+>> drivers should issue "add_once" instead of add.  Drivers that are known to
+>> run on all devices at once would call "add_once" to only issue a single
+>> load.
+> 
+> My concern is how to distinguish first attempts and later (fixed)
+> attempts.
+> 
+> I mean that the module load might fail at boot. But the user might
+> fix the root of the problem and try to load the module once again
+> without reboot. The other load need not be direct. It might be part
+> of another more complex operation. Reload of another module.
+> Restart of a service.
+> 
 
-> Documentation/devicetree/bindings/mtd/samsung-s3c2410.txt
+This is an interesting complication, and something to think about.
 
-samsung,s3c2412-nand is apparently still used on s3c6400,
-and the driver is selectable on that platform, so I think
-that should remain in there until we remove s3c64xx in 2024,
-even if it is not referenced by the dts files in the kernel.
+P.
 
-> Documentation/devicetree/bindings/usb/s3c2410-usb.txt
 
-Similarly, the driver is used on the crag6410 board
-(without DT), and probably just works with the DT based
-boards if one adds a node to s3c64xx.dtsi.
+> It might be problematic to do this an user-friendly way.
+> And it might be much more complicated in the end.
 
-I've also checked if any of the other removed drivers
-matches of_device_id[] strings to see if there are more
-bindings to kill off, but I don't see any that have
-now become obsolete. It did point me to pxa2xx_ac97_dt_ids,
-which Robert already complained about, this apparently
-is still used with dts files outside of mainline.
 
-      Arnd
+> 
+> Best Regards,
+> Petr
+> 
+
