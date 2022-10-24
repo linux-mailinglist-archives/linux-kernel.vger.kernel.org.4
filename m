@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05CA960A446
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CE760ABC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbiJXMH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S236825AbiJXN41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232975AbiJXMEr (ORCPT
+        with ESMTP id S236838AbiJXNyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:04:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8427CB7C;
-        Mon, 24 Oct 2022 04:51:05 -0700 (PDT)
+        Mon, 24 Oct 2022 09:54:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC49CBC623;
+        Mon, 24 Oct 2022 05:43:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3F01EB811B2;
-        Mon, 24 Oct 2022 11:49:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965FFC433C1;
-        Mon, 24 Oct 2022 11:49:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8266E612B3;
+        Mon, 24 Oct 2022 12:43:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EFEEC433C1;
+        Mon, 24 Oct 2022 12:43:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612192;
-        bh=mXfUfUMNJxS2BzRQ6KR9PDjAr0TpVUooJu+qILoXLsU=;
+        s=korg; t=1666615423;
+        bh=Vq582+ZZfZeJ50akCNDAGdJDlR6WOX/d4TZ2XfKNEBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d/DOJJBulW+YwMo1/gNd6Bp1hDW8qU2enm70MJm18OA6dV6HQnQs4Kjm5eP7s3r0m
-         ZZ0Pf1FAb29cXga1BPD4EV3i/nIvU5a5utnG9gkv1z5qajwyYaGdJbCeLU6JCa7YR7
-         bNudLTnGaohvSPwVlCAeAs1FLN0tEt2NdFmU+/ZY=
+        b=kt2ebN/4Gp7qbg3wEQa3VtReCz0qaDfDf+mwjX+vpZqgYqGpWw3xI6oQRgr7qLQII
+         ld4rhNG3qDVbHrNeXUDOJSzOM7AMSEgXWordGbnumV60jW8sqMefwKbyDkKFmJkznb
+         X06/d4dqn5AAwi7+usbmazA5+OTn6rrJeS8Ol8ss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, mingo@redhat.com,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH 4.14 073/210] ftrace: Properly unset FTRACE_HASH_FL_MOD
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 246/530] memory: pl353-smc: Fix refcount leak bug in pl353_smc_probe()
 Date:   Mon, 24 Oct 2022 13:29:50 +0200
-Message-Id: <20221024112959.430185592@linuxfoundation.org>
+Message-Id: <20221024113056.247388215@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,51 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yejian <zhengyejian1@huawei.com>
+From: Liang He <windhl@126.com>
 
-commit 0ce0638edf5ec83343302b884fa208179580700a upstream.
+[ Upstream commit 61b3c876c1cbdb1efd1f52a1f348580e6e14efb6 ]
 
-When executing following commands like what document said, but the log
-"#### all functions enabled ####" was not shown as expect:
-  1. Set a 'mod' filter:
-    $ echo 'write*:mod:ext3' > /sys/kernel/tracing/set_ftrace_filter
-  2. Invert above filter:
-    $ echo '!write*:mod:ext3' >> /sys/kernel/tracing/set_ftrace_filter
-  3. Read the file:
-    $ cat /sys/kernel/tracing/set_ftrace_filter
+The break of for_each_available_child_of_node() needs a
+corresponding of_node_put() when the reference 'child' is not
+used anymore. Here we do not need to call of_node_put() in
+fail path as '!match' means no break.
 
-By some debugging, I found that flag FTRACE_HASH_FL_MOD was not unset
-after inversion like above step 2 and then result of ftrace_hash_empty()
-is incorrect.
+While the of_platform_device_create() will created a new
+reference by 'child' but it has considered the refcounting.
 
-Link: https://lkml.kernel.org/r/20220926152008.2239274-1-zhengyejian1@huawei.com
-
-Cc: <mingo@redhat.com>
-Cc: stable@vger.kernel.org
-Fixes: 8c08f0d5c6fb ("ftrace: Have cached module filters be an active filter")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fee10bd22678 ("memory: pl353: Add driver for arm pl353 static memory controller")
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220716031324.447680-1-windhl@126.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/ftrace.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/memory/pl353-smc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5128,8 +5128,12 @@ int ftrace_regex_release(struct inode *i
+diff --git a/drivers/memory/pl353-smc.c b/drivers/memory/pl353-smc.c
+index f84b98278745..d39ee7d06665 100644
+--- a/drivers/memory/pl353-smc.c
++++ b/drivers/memory/pl353-smc.c
+@@ -122,6 +122,7 @@ static int pl353_smc_probe(struct amba_device *adev, const struct amba_id *id)
+ 	}
  
- 		if (filter_hash) {
- 			orig_hash = &iter->ops->func_hash->filter_hash;
--			if (iter->tr && !list_empty(&iter->tr->mod_trace))
--				iter->hash->flags |= FTRACE_HASH_FL_MOD;
-+			if (iter->tr) {
-+				if (list_empty(&iter->tr->mod_trace))
-+					iter->hash->flags &= ~FTRACE_HASH_FL_MOD;
-+				else
-+					iter->hash->flags |= FTRACE_HASH_FL_MOD;
-+			}
- 		} else
- 			orig_hash = &iter->ops->func_hash->notrace_hash;
+ 	of_platform_device_create(child, NULL, &adev->dev);
++	of_node_put(child);
  
+ 	return 0;
+ 
+-- 
+2.35.1
+
 
 
