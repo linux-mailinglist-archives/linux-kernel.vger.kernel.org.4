@@ -2,111 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0588260B37D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 098B760B2A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235244AbiJXRH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S234562AbiJXQu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbiJXRG7 (ORCPT
+        with ESMTP id S231161AbiJXQrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:06:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252F981111
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:41:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666626018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UBAegUasNa5RuqJ7q9GZwuYTzFErEwMDb+Eg1mrTrvE=;
-        b=GYNG67W+DA8GF/NETLzBpt9k4MMmo7LfXTfmJXuPE8CWlMO95uNL0xknFBE8FcZYdp3sZ0
-        KlTgUJ6T8nXQ0c2ZoqsmqhuQljjTEN3vk9yvGEo/2R6yHZlpbmZ5cviPLlRWiPR9TcG6Aa
-        TEYn2vhBBdgLAHSrCmQXcdkJuvi0z1M=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-580-yPoM1ZQVN3qBiIehV9rDaw-1; Mon, 24 Oct 2022 11:26:39 -0400
-X-MC-Unique: yPoM1ZQVN3qBiIehV9rDaw-1
-Received: by mail-wm1-f72.google.com with SMTP id h129-20020a1c2187000000b003bf635eac31so4275986wmh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:26:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UBAegUasNa5RuqJ7q9GZwuYTzFErEwMDb+Eg1mrTrvE=;
-        b=mJJPiqgs9vraXtSSpiJKsYsGJhC3ZhPgpv9Ucr3ipOBMASyGUnGywEuVTyJa0dLvMT
-         xDgCVfQIvmRkNVHGDjW/dqYgdtzY6Vl26e7ZsxAdy1QZU50iAfPNxD8Q3PBom6iGX9MB
-         LpQxV3QrIatUI3IBLS6viFqiDoPc5bhoXXuk5KFnvkbeIMV6z3bPIlLsibtWo5AKhGxX
-         0LgRuvgiCDDmNwPZJkkW8LUbGf7DyGyQfD6fuc1Ki8vmFsMKqkjad6SgoMWvT70/AO/W
-         CJGTlSidik10UYeddY+fx+EM4oqUjncKw75wHa0I5D/jIVzXCSoEwMeRgZ/o8dJdNbXg
-         3tkA==
-X-Gm-Message-State: ACrzQf0Xz5mQi2/lDyEyN+HUKaobGZwQUAWzwxJE7wmhAJ3rYlj+lXvK
-        YhhSE2LhIBBzl0D2UzZulx5uNX0Q7gQnt1vPuPKkx600aewz3GNEvGgLMSBCRt/uyDJy+kbef+q
-        rtJ9etN5fPU0B8a72R3mYwzkx
-X-Received: by 2002:a5d:5a11:0:b0:22e:3ed1:e426 with SMTP id bq17-20020a5d5a11000000b0022e3ed1e426mr21883714wrb.642.1666625197887;
-        Mon, 24 Oct 2022 08:26:37 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4QYF0qpu+Yh4YQF+Y42ukyfMe46omRnCHz7TFmRMmq2+h+eVJ2IzD1faJk9A3cMFb5eNTxMw==
-X-Received: by 2002:a5d:5a11:0:b0:22e:3ed1:e426 with SMTP id bq17-20020a5d5a11000000b0022e3ed1e426mr21883650wrb.642.1666625197580;
-        Mon, 24 Oct 2022 08:26:37 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:f100:6371:a05b:e038:ac2c? (p200300cbc704f1006371a05be038ac2c.dip0.t-ipconnect.de. [2003:cb:c704:f100:6371:a05b:e038:ac2c])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05600c0b5500b003cdf141f363sm194606wmr.11.2022.10.24.08.26.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 08:26:37 -0700 (PDT)
-Message-ID: <e0371b20-0edf-0fc3-71db-e0c94bd0f290@redhat.com>
-Date:   Mon, 24 Oct 2022 17:26:34 +0200
+        Mon, 24 Oct 2022 12:47:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D0EF1BF876;
+        Mon, 24 Oct 2022 08:31:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27E30B815EB;
+        Mon, 24 Oct 2022 15:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA4BFC433D6;
+        Mon, 24 Oct 2022 15:27:20 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 11:27:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        keescook@chromium.org, Sean Christopherson <seanjc@google.com>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] x86/mm: Refuse W^X violations
+Message-ID: <20221024112730.180916b3@gandalf.local.home>
+In-Reply-To: <YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net>
+References: <YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-Content-Language: en-US
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        aarcange@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com>
- <CAGtprH_MiCxT2xSxD2UrM4M+ghL0V=XEZzEX4Fo5wQKV4fAL4w@mail.gmail.com>
- <20221021134711.GA3607894@chaop.bj.intel.com> <Y1LGRvVaWwHS+Zna@google.com>
- <20221024145928.66uehsokp7bpa2st@box.shutemov.name>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221024145928.66uehsokp7bpa2st@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,50 +46,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.10.22 16:59, Kirill A . Shutemov wrote:
-> On Fri, Oct 21, 2022 at 04:18:14PM +0000, Sean Christopherson wrote:
->> On Fri, Oct 21, 2022, Chao Peng wrote:
->>>>
->>>> In the context of userspace inaccessible memfd, what would be a
->>>> suggested way to enforce NUMA memory policy for physical memory
->>>> allocation? mbind[1] won't work here in absence of virtual address
->>>> range.
->>>
->>> How about set_mempolicy():
->>> https://www.man7.org/linux/man-pages/man2/set_mempolicy.2.html
->>
->> Andy Lutomirski brought this up in an off-list discussion way back when the whole
->> private-fd thing was first being proposed.
->>
->>    : The current Linux NUMA APIs (mbind, move_pages) work on virtual addresses.  If
->>    : we want to support them for TDX private memory, we either need TDX private
->>    : memory to have an HVA or we need file-based equivalents. Arguably we should add
->>    : fmove_pages and fbind syscalls anyway, since the current API is quite awkward
->>    : even for tools like numactl.
+On Mon, 29 Aug 2022 12:18:03 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> x86 has STRICT_*_RWX, but not even a warning when someone violates it.
 > 
-> Yeah, we definitely have gaps in API wrt NUMA, but I don't think it be
-> addressed in the initial submission.
+> Add this warning and fully refuse the transition.
 > 
-> BTW, it is not regression comparing to old KVM slots, if the memory is
-> backed by memfd or other file:
-> 
-> MBIND(2)
->         The  specified policy will be ignored for any MAP_SHARED mappings in the
->         specified memory range.  Rather the pages will be allocated according to
->         the  memory  policy  of the thread that caused the page to be allocated.
->         Again, this may not be the thread that called mbind().
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-IIRC, that documentation is imprecise/incorrect especially when it comes 
-to memfd. Page faults in shared mappings will similarly obey the set 
-mbind() policy when allocating new pages.
+So, this now triggers on enabling function tracing at boot up:
 
-QEMU relies on that.
+  "ftrace=function"
 
-The "fun" begins when we have multiple mappings, and only some have a 
-policy set ... or if we already, previously allocated the pages.
+This:
 
--- 
-Thanks,
+SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+Kernel/User page tables isolation: enabled
+ftrace: allocating 68738 entries in 269 pages
+ftrace: allocated 269 pages with 4 groups
+Starting tracer 'function'
+------------[ cut here ]------------
+CPA detected W^X violation: 8000000000000063 -> 0000000000000063 range: 0xffffffffc0013000 - 0xffffffffc0013fff PFN 10031b
+WARNING: CPU: 0 PID: 0 at arch/x86/mm/pat/set_memory.c:609 verify_rwx+0x61/0x6d
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc1-test+ #3
+Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
+RIP: 0010:verify_rwx+0x61/0x6d
+Code: e5 01 00 75 27 49 c1 e0 0c 48 89 d1 48 89 fe 48 c7 c7 5b b3 92 84 4e 8d 44 02 ff 48 89 da c6 05 71 29 e5 01 01 e8 35 90 e2 00 <0f> 0b 48 89 d8 5b 5d e9 6f 95 1a 01 0f 1f 44 00 00 55 48 89 e5 53
+RSP: 0000:ffffffff84c03b08 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: 0000000000000063 RCX: 0000000000000003
+RDX: 0000000000000003 RSI: ffffffff84c039b0 RDI: 0000000000000001
+RBP: ffffffff84c03b10 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000025 R12: ffff8e730031c098
+R13: 000000000010031b R14: 800000010031b063 R15: 8000000000000063
+FS:  0000000000000000(0000) GS:ffff8e7416a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff8e73fd801000 CR3: 00000001fcc22001 CR4: 00000000000606f0
+Call Trace:
+ <TASK>
+ __change_page_attr_set_clr+0x146/0x8a6
+ ? __mutex_unlock_slowpath+0x41/0x213
+ ? mutex_unlock+0x12/0x18
+ ? _vm_unmap_aliases+0x126/0x136
+ change_page_attr_set_clr+0x135/0x268
+ ? find_vmap_area+0x32/0x3e
+ ? __fentry__+0x10/0x10
+ change_page_attr_clear.constprop.0+0x16/0x1c
+ set_memory_x+0x2c/0x32
+ arch_ftrace_update_trampoline+0x218/0x2db
+ ? ftrace_caller_op_ptr+0x17/0x17
+ ftrace_update_trampoline+0x16/0xa1
+ ? tracing_gen_ctx+0x1c/0x1c
+ __register_ftrace_function+0x93/0xb2
+ ftrace_startup+0x21/0xf0
+ ? tracing_gen_ctx+0x1c/0x1c
+ register_ftrace_function_nolock+0x26/0x40
+ register_ftrace_function+0x4e/0x143
+ ? mutex_unlock+0x12/0x18
+ ? tracing_gen_ctx+0x1c/0x1c
+ function_trace_init+0x7d/0xc3
+ tracer_init+0x23/0x2c
+ tracing_set_tracer+0x1d5/0x206
+ register_tracer+0x1c0/0x1e4
+ init_function_trace+0x90/0x96
+ early_trace_init+0x25c/0x352
+ start_kernel+0x424/0x6e4
+ x86_64_start_reservations+0x24/0x2a
+ x86_64_start_kernel+0x8c/0x95
+ secondary_startup_64_no_verify+0xe0/0xeb
+ </TASK>
+---[ end trace 0000000000000000 ]---
 
-David / dhildenb
 
+-- Steve
