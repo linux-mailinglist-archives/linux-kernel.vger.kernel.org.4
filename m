@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C813960B3D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C246760B3BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiJXRRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S234494AbiJXROr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbiJXRRM (ORCPT
+        with ESMTP id S235091AbiJXRNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:17:12 -0400
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF14C36DE0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:52:04 -0700 (PDT)
-Received: by mail-lf1-f45.google.com with SMTP id b1so17415255lfs.7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:52:04 -0700 (PDT)
+        Mon, 24 Oct 2022 13:13:50 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30BE3EE081;
+        Mon, 24 Oct 2022 08:49:09 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id b20-20020a05600c4e1400b003cc28585e2fso3601535wmq.1;
+        Mon, 24 Oct 2022 08:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OccXvrVFPSdcIBEbMx4c26n9Pf99eO9A16XUUuZhuS8=;
-        b=xGHR8U9ExEcHmssSxgKskB3JbHr72wsekwdOEpuYkrGjwe8nSuiiK9vogyhh/KENCz
-         VAnaFMf2/Tw1UmRC8T7XZ7uOqx4lw9CPLRqfhaF/21tt1A8MkMmMmoySSaL0LhVEqcyb
-         NWFkEqPhInWC+gQIZ7xBFGfiqALA+cVLSKjCHwPmqVRSy0QvgN5w2UbtAFSTcHwgvvgK
-         nHsF0b6kE9abbC1FfwKAICbAHA9JQTqNZhTYhD8X8GhJX7I/T+d90GQIMnw+YlOTDzni
-         nM7Z/014IT9o9FzUrjOvPNbh3hnvzHHtuVWwCSXfCSMBKStw/0sNBirM3jhEPYwNuLx7
-         0Gwg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ox3NT4sRh3PO3jRJO5A/eUaL5QHz/K5YDeTmJQezQYg=;
+        b=A6ALW2gSnQz5ctwrGGBb43+A8L9eqSGELjLcrR+vSbiP1J7PsxpCVyUwnggecwGGxB
+         FoQf7b2c2P4D5OHW9CgvwXspQyt4OJfzhVlR+oyH8ifRK6XhGwIRdkxBbA+k674T8Sei
+         jjV1Js5/AE0AAVdIjkDx2XflBe/FT4LhqJzgRaNXbg5Qv44EcxSdNBLLPsUxOhiRRCAA
+         S7daIKGusCqHPlogxehNqcyA8/CTEP7AszhxzolT9aRLqDwT93AqdO93Tx3x2S7y0yCJ
+         WmSbFHHN2VYh3225iUU52XWvCaJ9iAZSXAVlXt1mMpnC59gA8e4jJ7pBHwfcIfksS8Bf
+         8p2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OccXvrVFPSdcIBEbMx4c26n9Pf99eO9A16XUUuZhuS8=;
-        b=ab9WPJWCIPsWZsaskUpdr17AmkKIthOX2B9mWa3qHKGWIec5An9ReRLduzA/axJ850
-         PFcxKgjrcPw6CtloR4dsVnyx6D+cSdjtJtIpBD1NJVoh/7at2iZNEEX5J98Y2xQSr42u
-         btVpkVaNt078vxCSMSBMp7nj8RPVgt5049/Pb9qs5p+zsYLpPdxEh3/SlRsj7Vs9CEE8
-         z6Tg9YnCB6KvY5065vaSNKv3fLbV23RLnp+uYTN7TY0ADu1AcxyCY980XrYWS7m+JmUW
-         JjgsP8Dgqa7dlHAq/zO8ASWiABbLF/MjJhI4+HgcTJE8Y61xvR5SbvLEolN+xqcX8YFG
-         ZHrQ==
-X-Gm-Message-State: ACrzQf3cCGRkguS8j1CFg5UFGjrsbwbezxdDWfzJc0XuOttkgdcY2lkr
-        WwzLQy45WhJe3xIvFfHjYSdJ0NeHpDVItOmo
-X-Google-Smtp-Source: AMsMyM4GVB2gyMzEwr7DXV7QkBWicvLrN8nkwr0PZVkKWxNJmxv36lEuSDbONmjQQTcTuRUaEwvdww==
-X-Received: by 2002:a2e:9181:0:b0:26e:91d8:5796 with SMTP id f1-20020a2e9181000000b0026e91d85796mr12231780ljg.398.1666618490966;
-        Mon, 24 Oct 2022 06:34:50 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id k11-20020a05651210cb00b0048b003c4bf7sm4544630lfg.169.2022.10.24.06.34.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 06:34:50 -0700 (PDT)
-Message-ID: <7ede9df3-f333-96a4-5b88-aa157d4b8847@linaro.org>
-Date:   Mon, 24 Oct 2022 16:34:50 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ox3NT4sRh3PO3jRJO5A/eUaL5QHz/K5YDeTmJQezQYg=;
+        b=KuC79cJuI1xKinCY20ll2JH9JhCnInPmoTQSQXU4GkPv2v69c+G/q8Pdh4843+/U3u
+         9VtZa990NwEpWBmI3WfQ1WLmMJ2ti5mO5bFsGRtxT4wct6dK/6nlTPwVYdIBGyaQ/25v
+         jwNy6GcWsC9yr0cgoX6qc3fCPP4AQjCg4kPa/IkTEHfmMG90ZjPa767hBSqCgFdo/20P
+         VMZt/zR6HbziWJXex2y3TQXIUTSOJT5xoy6kNEWF+dRcXD6KyZRqfULzHKk4dT22LRTZ
+         WDqynCHrLIc4SmKXd/r8lr+qTnG6HyusA5RChdwGY9AN1yigX1DCk3av5U3kn1T4UVZb
+         Ae4g==
+X-Gm-Message-State: ACrzQf1iqDgCQ161e4KnKsbXqM8as0Wik+KpDYdEOEJbFiYuiZjb0Q/+
+        aFcargWN5qs/0KR0SNzbdFASlYgDIqpUu5TS
+X-Google-Smtp-Source: AMsMyM4J8Vmm+xY0Kv0RrQjrv7s8nj0ZZwoe43nagROBzOgWMr9GPGYXOWd762abhi0dCSaI9MO4jw==
+X-Received: by 2002:a05:600c:4f55:b0:3ce:ec0c:2a60 with SMTP id m21-20020a05600c4f5500b003ceec0c2a60mr3225555wmq.159.1666618677072;
+        Mon, 24 Oct 2022 06:37:57 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id h16-20020a05600c315000b003b4cba4ef71sm8458353wmo.41.2022.10.24.06.37.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 06:37:56 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] RDMA/mlx5: remove variable i
+Date:   Mon, 24 Oct 2022 14:37:56 +0100
+Message-Id: <20221024133756.2158497-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 09/13] phy: qcom-qmp-usb: clean up PHY init
-Content-Language: en-GB
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221024100632.20549-1-johan+linaro@kernel.org>
- <20221024100632.20549-10-johan+linaro@kernel.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221024100632.20549-10-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,18 +71,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 13:06, Johan Hovold wrote:
-> Clean up the PHY initialisation somewhat by programming both tx and rx
-> for the second lane after the first lane.
-> 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->   drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 8 +++-----
->   1 file changed, 3 insertions(+), 5 deletions(-)
+Variable i is just being incremented and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/vdpa/mlx5/core/mr.c | 2 --
+ 1 file changed, 2 deletions(-)
 
+diff --git a/drivers/vdpa/mlx5/core/mr.c b/drivers/vdpa/mlx5/core/mr.c
+index a639b9208d41..60e0f51d9c92 100644
+--- a/drivers/vdpa/mlx5/core/mr.c
++++ b/drivers/vdpa/mlx5/core/mr.c
+@@ -311,7 +311,6 @@ static int add_direct_chain(struct mlx5_vdpa_dev *mvdev, u64 start, u64 size, u8
+ 	u64 st;
+ 	u64 sz;
+ 	int err;
+-	int i = 0;
+ 
+ 	st = start;
+ 	while (size) {
+@@ -336,7 +335,6 @@ static int add_direct_chain(struct mlx5_vdpa_dev *mvdev, u64 start, u64 size, u8
+ 		mr->num_directs++;
+ 		mr->num_klms++;
+ 		st += sz;
+-		i++;
+ 	}
+ 	list_splice_tail(&tmp, &mr->head);
+ 	return 0;
 -- 
-With best wishes
-Dmitry
+2.37.3
 
