@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B957260AA7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E758860A7B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiJXNel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S234795AbiJXMzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236227AbiJXNaH (ORCPT
+        with ESMTP id S234788AbiJXMzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:30:07 -0400
+        Mon, 24 Oct 2022 08:55:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9F51742A;
-        Mon, 24 Oct 2022 05:33:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0622DA88;
+        Mon, 24 Oct 2022 05:15:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9812C612F4;
-        Mon, 24 Oct 2022 12:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91CDC433C1;
-        Mon, 24 Oct 2022 12:11:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EB92612A0;
+        Mon, 24 Oct 2022 12:00:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B472BC433C1;
+        Mon, 24 Oct 2022 12:00:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613469;
-        bh=ZFD043lCmEwcZ86aV03p+0CQjj0aQci3UHQTAIeDJbo=;
+        s=korg; t=1666612841;
+        bh=0p4oaz3Q4XCXQAKF7VEiqqlMGv8Mr3Qg+CRmh0XHpks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sP64IM20DXQUyhSwZtH4CkCOd0WzgaZ1hvGiLIL4izfOtHPYm8mnIIE1nEOA6UF0w
-         NnMl3DNmri7VeBRRXt+TA//3hwDYkL60oRP/zGiejwZoa+cwbio0dC30+hlwwv4j5P
-         lWmC8dz0d3150y4azGT+PoOaXilgLqLpkPkqi3JI=
+        b=uECIHQfmZDA09uL7oxOugupt1tK3T2d/w+L/77/FPJkNJ8QNXtLLMP7EUJGDGv1hv
+         GUW2AOTWYx+6dx7R1Cm14nlQzR+77+vEf0DcckxR22mf1o3rwMnpddcb4dgoPlynNu
+         Se6M2UlM9ZHb99x23FmaniV8/h9cmTzpX6Jqlf3Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Albert Briscoe <albertsbriscoe@gmail.com>,
+        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 148/255] usb: gadget: function: fix dangling pnp_string in f_printer.c
+Subject: [PATCH 4.19 139/229] ata: fix ata_id_has_dipm()
 Date:   Mon, 24 Oct 2022 13:30:58 +0200
-Message-Id: <20221024113007.539350666@linuxfoundation.org>
+Message-Id: <20221024113003.511671935@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,74 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Albert Briscoe <albertsbriscoe@gmail.com>
+From: Niklas Cassel <niklas.cassel@wdc.com>
 
-[ Upstream commit 24b7ba2f88e04800b54d462f376512e8c41b8a3c ]
+[ Upstream commit 630624cb1b5826d753ac8e01a0e42de43d66dedf ]
 
-When opts->pnp_string is changed with configfs, new memory is allocated for
-the string. It does not, however, update dev->pnp_string, even though the
-memory is freed. When rquesting the string, the host then gets old or
-corrupted data rather than the new string. The ieee 1284 id string should
-be allowed to change while the device is connected.
+ACS-5 section
+7.13.6.36 Word 78: Serial ATA features supported
+states that:
 
-The bug was introduced in commit fdc01cc286be ("usb: gadget: printer:
-Remove pnp_string static buffer"), which changed opts->pnp_string from a
-char[] to a char*.
-This patch changes dev->pnp_string from a char* to a char** pointing to
-opts->pnp_string.
+If word 76 is not 0000h or FFFFh, word 78 reports the features supported
+by the device. If this word is not supported, the word shall be cleared
+to zero.
 
-Fixes: fdc01cc286be ("usb: gadget: printer: Remove pnp_string static buffer")
-Signed-off-by: Albert Briscoe <albertsbriscoe@gmail.com>
-Link: https://lore.kernel.org/r/20220911223753.20417-1-albertsbriscoe@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+(This text also exists in really old ACS standards, e.g. ACS-3.)
+
+The problem with ata_id_has_dipm() is that the while it performs a
+check against 0 and 0xffff, it performs the check against
+ATA_ID_FEATURE_SUPP (word 78), the same word where the feature bit
+is stored.
+
+Fix this by performing the check against ATA_ID_SATA_CAPABILITY
+(word 76), like required by the spec. The feature bit check itself
+is of course still performed against ATA_ID_FEATURE_SUPP (word 78).
+
+Additionally, move the macro to the other ATA_ID_FEATURE_SUPP macros
+(which already have this check), thus making it more likely that the
+next ATA_ID_FEATURE_SUPP macro that is added will include this check.
+
+Fixes: ca77329fb713 ("[libata] Link power management infrastructure")
+Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_printer.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ include/linux/ata.h | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
-index 2a1868b2d24c..dd5eb6202fe1 100644
---- a/drivers/usb/gadget/function/f_printer.c
-+++ b/drivers/usb/gadget/function/f_printer.c
-@@ -87,7 +87,7 @@ struct printer_dev {
- 	u8			printer_cdev_open;
- 	wait_queue_head_t	wait;
- 	unsigned		q_len;
--	char			*pnp_string;	/* We don't own memory! */
-+	char			**pnp_string;	/* We don't own memory! */
- 	struct usb_function	function;
- };
+diff --git a/include/linux/ata.h b/include/linux/ata.h
+index cfdaa08c45c9..981eb1cb7e49 100644
+--- a/include/linux/ata.h
++++ b/include/linux/ata.h
+@@ -589,6 +589,10 @@ struct ata_bmdma_prd {
+ 	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
+ 	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
+ 	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 7)))
++#define ata_id_has_dipm(id)	\
++	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
++	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
++	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 3)))
+ #define ata_id_iordy_disable(id) ((id)[ATA_ID_CAPABILITY] & (1 << 10))
+ #define ata_id_has_iordy(id) ((id)[ATA_ID_CAPABILITY] & (1 << 11))
+ #define ata_id_u32(id,n)	\
+@@ -612,17 +616,6 @@ static inline bool ata_id_has_hipm(const u16 *id)
+ 	return val & (1 << 9);
+ }
  
-@@ -963,16 +963,16 @@ static int printer_func_setup(struct usb_function *f,
- 			if ((wIndex>>8) != dev->interface)
- 				break;
- 
--			if (!dev->pnp_string) {
-+			if (!*dev->pnp_string) {
- 				value = 0;
- 				break;
- 			}
--			value = strlen(dev->pnp_string);
-+			value = strlen(*dev->pnp_string);
- 			buf[0] = (value >> 8) & 0xFF;
- 			buf[1] = value & 0xFF;
--			memcpy(buf + 2, dev->pnp_string, value);
-+			memcpy(buf + 2, *dev->pnp_string, value);
- 			DBG(dev, "1284 PNP String: %x %s\n", value,
--			    dev->pnp_string);
-+			    *dev->pnp_string);
- 			break;
- 
- 		case GET_PORT_STATUS: /* Get Port Status */
-@@ -1435,7 +1435,7 @@ static struct usb_function *gprinter_alloc(struct usb_function_instance *fi)
- 	kref_init(&dev->kref);
- 	++opts->refcnt;
- 	dev->minor = opts->minor;
--	dev->pnp_string = opts->pnp_string;
-+	dev->pnp_string = &opts->pnp_string;
- 	dev->q_len = opts->q_len;
- 	mutex_unlock(&opts->lock);
- 
+-static inline bool ata_id_has_dipm(const u16 *id)
+-{
+-	u16 val = id[ATA_ID_FEATURE_SUPP];
+-
+-	if (val == 0 || val == 0xffff)
+-		return false;
+-
+-	return val & (1 << 3);
+-}
+-
+-
+ static inline bool ata_id_has_fua(const u16 *id)
+ {
+ 	if ((id[ATA_ID_CFSSE] & 0xC000) != 0x4000)
 -- 
 2.35.1
 
