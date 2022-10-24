@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A2460A925
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210B560A542
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbiJXNPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S233299AbiJXMWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235975AbiJXNOR (ORCPT
+        with ESMTP id S233608AbiJXMT4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:14:17 -0400
+        Mon, 24 Oct 2022 08:19:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4D97AB1B;
-        Mon, 24 Oct 2022 05:25:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2B583234;
+        Mon, 24 Oct 2022 04:58:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F318612BC;
-        Mon, 24 Oct 2022 12:24:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 709C9C433C1;
-        Mon, 24 Oct 2022 12:24:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE1746128E;
+        Mon, 24 Oct 2022 11:49:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2775C433C1;
+        Mon, 24 Oct 2022 11:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614281;
-        bh=MXrEhhsTFOLm8+h3IlgHPhePRebQau9ZYKXn4VVTL/Y=;
+        s=korg; t=1666612197;
+        bh=62cxHPxacIeJObyCUvpGDXSutCGffzA9SR9xi6Ab0Pw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MH4Pzop2o+POvk801Vbm/qKk+NUcTAhL1oyndEFOzcgN23aK4iehSVJvSJNcU056e
-         y405mYYR5KNZf7NLNSBMYxVNZsyXD6wzty80vUsfrWpoEaIDNC57wzExT3cwDhi25S
-         VV8cNshKW/Frlsa/a75yhZc0u4ekPZ1yseQbwI5M=
+        b=AvNa7M+45r94/B8gJ/AJk2db0EjEySjTY59BaWfkC4mp2RQRguRq62IMwPNK4vp9y
+         jJogRK6fM4+myxMEPMv+ilR7+AmFAz5tPbgwJ6OhLKeNAtNgzRm3NpfCD7smdef85D
+         wBawKM+P6fCocKAACk24ieBXWG2u7b8o9SGs54lw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 184/390] ARM: dts: exynos: fix polarity of VBUS GPIO of Origen
-Date:   Mon, 24 Oct 2022 13:29:41 +0200
-Message-Id: <20221024113030.606259701@linuxfoundation.org>
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        syzbot+b8c672b0e22615c80fe0@syzkaller.appspotmail.com,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.14 065/210] nilfs2: fix use-after-free bug of struct nilfs_root
+Date:   Mon, 24 Oct 2022 13:29:42 +0200
+Message-Id: <20221024112959.153644357@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+From: Ryusuke Konishi <konishi.ryusuke@gmail.com>
 
-[ Upstream commit a08137bd1e0a7ce951dce9ce4a83e39d379b6e1b ]
+commit d325dc6eb763c10f591c239550b8c7e5466a5d09 upstream.
 
-EHCI Oxynos (drivers/usb/host/ehci-exynos.c) drives VBUS GPIO high when
-trying to power up the bus, therefore the GPIO in DTS must be marked as
-"active high". This will be important when EHCI driver is converted to
-gpiod API that respects declared polarities.
+If the beginning of the inode bitmap area is corrupted on disk, an inode
+with the same inode number as the root inode can be allocated and fail
+soon after.  In this case, the subsequent call to nilfs_clear_inode() on
+that bogus root inode will wrongly decrement the reference counter of
+struct nilfs_root, and this will erroneously free struct nilfs_root,
+causing kernel oopses.
 
-Fixes: 4e8991def565 ("ARM: dts: exynos: Enable AX88760 USB hub on Origen board")
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Link: https://lore.kernel.org/r/20220927220504.3744878-1-dmitry.torokhov@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This fixes the problem by changing nilfs_new_inode() to skip reserved
+inode numbers while repairing the inode bitmap.
+
+Link: https://lkml.kernel.org/r/20221003150519.39789-1-konishi.ryusuke@gmail.com
+Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Reported-by: syzbot+b8c672b0e22615c80fe0@syzkaller.appspotmail.com
+Reported-by: Khalid Masum <khalid.masum.92@gmail.com>
+Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/exynos4412-origen.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/nilfs2/inode.c |   18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/exynos4412-origen.dts b/arch/arm/boot/dts/exynos4412-origen.dts
-index c2e793b69e7d..e2d76ea4404e 100644
---- a/arch/arm/boot/dts/exynos4412-origen.dts
-+++ b/arch/arm/boot/dts/exynos4412-origen.dts
-@@ -95,7 +95,7 @@
- };
+--- a/fs/nilfs2/inode.c
++++ b/fs/nilfs2/inode.c
+@@ -344,6 +344,7 @@ struct inode *nilfs_new_inode(struct ino
+ 	struct inode *inode;
+ 	struct nilfs_inode_info *ii;
+ 	struct nilfs_root *root;
++	struct buffer_head *bh;
+ 	int err = -ENOMEM;
+ 	ino_t ino;
  
- &ehci {
--	samsung,vbus-gpio = <&gpx3 5 1>;
-+	samsung,vbus-gpio = <&gpx3 5 GPIO_ACTIVE_HIGH>;
- 	status = "okay";
- 	phys = <&exynos_usbphy 2>, <&exynos_usbphy 3>;
- 	phy-names = "hsic0", "hsic1";
--- 
-2.35.1
-
+@@ -359,11 +360,26 @@ struct inode *nilfs_new_inode(struct ino
+ 	ii->i_state = BIT(NILFS_I_NEW);
+ 	ii->i_root = root;
+ 
+-	err = nilfs_ifile_create_inode(root->ifile, &ino, &ii->i_bh);
++	err = nilfs_ifile_create_inode(root->ifile, &ino, &bh);
+ 	if (unlikely(err))
+ 		goto failed_ifile_create_inode;
+ 	/* reference count of i_bh inherits from nilfs_mdt_read_block() */
+ 
++	if (unlikely(ino < NILFS_USER_INO)) {
++		nilfs_msg(sb, KERN_WARNING,
++			  "inode bitmap is inconsistent for reserved inodes");
++		do {
++			brelse(bh);
++			err = nilfs_ifile_create_inode(root->ifile, &ino, &bh);
++			if (unlikely(err))
++				goto failed_ifile_create_inode;
++		} while (ino < NILFS_USER_INO);
++
++		nilfs_msg(sb, KERN_INFO,
++			  "repaired inode bitmap for reserved inodes");
++	}
++	ii->i_bh = bh;
++
+ 	atomic64_inc(&root->inodes_count);
+ 	inode_init_owner(inode, dir, mode);
+ 	inode->i_ino = ino;
 
 
