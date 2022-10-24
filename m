@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4FC60AEB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC45E60AFB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 17:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiJXPNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 11:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
+        id S231386AbiJXPzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 11:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbiJXPNJ (ORCPT
+        with ESMTP id S229663AbiJXPyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 11:13:09 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3353D8B2CB
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:50:32 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id x15so6530300qvp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 06:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NXoecYdGJC2+HYOwpiaqnVwgAvwqsGUF9D69/wSkRhI=;
-        b=NyZbVP20rPDepGnbV4uu3v6EY8m6TGiQ6owV05m+b7aGpSMSKydOIRIenlYnKDcMtN
-         92nqgn3EfAG3rvUW2nKJDgjqap4Ph6+UVA3Rb4ouirWkfeWybax0GYTN7teugD4g2RsE
-         OZyIglRWI1Lo57i02HkqyJLjAz0aMvSLZMwx+KjcVQEHuyYWXbeB7NzoIExp9JBKZk5Y
-         YrRbm/syzdFgCJKAK1+Dv+eRhnhCBn0T/imisPeV+IvvKzgjzzBeW8gZ0wzWHTXvzfkE
-         v7ePwrOkM2wiELe0ZJVn0vRRtCSkLyIU20+qfUStwClTv5o9vuuw1LMPSEe9Fq+nj+Es
-         a58w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NXoecYdGJC2+HYOwpiaqnVwgAvwqsGUF9D69/wSkRhI=;
-        b=nXIelBNDp/1uROcuGFx4PnCGFPcPtS4vpDPOEthWg0/uB0bKm6dxYlekus/Mxa9iJ+
-         t0dvkiEeafrLk8n0FMIvhb8tNxOW/wMTo2kL/7ZOchH3k+TDZX3hEci/QW5LAeSfwOSr
-         QZTtzkkPLlEfZvWe9P9UyrcO/5+kUWhLPYGXSn31otewXBeN+L4xIB8BLTZIivcpouYO
-         EW7FWL90Q6AG8lRbOqK7JDL9bYfVuybMBlGNBDm9yN33j3yh5eAG2QXXNkfmcN2cf/oP
-         i9tqyli7uIX3PmEviM/saFIu6TIJfDmWK9YCMDU5vGTZO9idIPc+190XXeomCjNjK8wF
-         ptLQ==
-X-Gm-Message-State: ACrzQf1NHpHL5+67IYZzxpGMoULaDOORYofg9GcVRjri+V7kmvf8hCPr
-        qExe82XPBeN9aIPs+CZQloEauGbipw9Srg==
-X-Google-Smtp-Source: AMsMyM4y39uLjjaZ3gT918SpmBGdDRV0vI6kOQrzttG9MnzBiUJO3QTYH6cfUlxXpAT4n9ebBvALdg==
-X-Received: by 2002:a05:6214:769:b0:4bb:77d5:bb53 with SMTP id f9-20020a056214076900b004bb77d5bb53mr2697128qvz.118.1666618464634;
-        Mon, 24 Oct 2022 06:34:24 -0700 (PDT)
-Received: from [192.168.1.8] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id bl9-20020a05620a1a8900b006cf38fd659asm14557889qkb.103.2022.10.24.06.34.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 06:34:24 -0700 (PDT)
-Message-ID: <94e05a63-e7f3-a78f-d0a6-8efcae619726@linaro.org>
-Date:   Mon, 24 Oct 2022 09:34:22 -0400
+        Mon, 24 Oct 2022 11:54:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7605ABD58
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 07:50:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 310CA21C84;
+        Mon, 24 Oct 2022 13:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666618478; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ImreeuArvuFlzuXHlMGqiwaDyxSqf0XmqLxafPgkXAg=;
+        b=uuLF3WCH/7NgC82P+tGqqqYyZyJzBU9MMM821fTNsndm3pAlHRmvdiB2Pa+VO2dtyht2xQ
+        tZjJEkY0QkQAPLUNFd1tfg9NcV6o/HmJxz+C/xpFZ2occ+Hzutwxp7WFioUC76WTO9lfmN
+        712eA/coY7yiVCM8/d0Ui+5sGFKQ6kc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666618478;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ImreeuArvuFlzuXHlMGqiwaDyxSqf0XmqLxafPgkXAg=;
+        b=3/aBhi5XysuU7FCdVTiUZF4Opn5ocgshYqh0nk3ssWSNMKR4YLzlMTok8QLjGQDXrZw7EJ
+        AwMkCirBOdjTP4AA==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id DEA932C141;
+        Mon, 24 Oct 2022 13:34:36 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 14:34:35 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Hao Jia <jiahao.os@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] sched/numa: Stop an exhastive search if an idle core
+ is found
+Message-ID: <20221024133435.e2kajx5k7jzznp25@suse.de>
+References: <20221021061558.34767-1-jiahao.os@bytedance.com>
+ <20221021061558.34767-2-jiahao.os@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: add TCSR node
-Content-Language: en-US
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221024125843.25261-1-johan+linaro@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024125843.25261-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <20221021061558.34767-2-jiahao.os@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 08:58, Johan Hovold wrote:
-> Add the TCSR node which is needed for PCIe configuration.
+On Fri, Oct 21, 2022 at 02:15:57PM +0800, Hao Jia wrote:
+> In update_numa_stats() we try to find an idle cpu on the NUMA node,
+> preferably an idle core. When we find an idle core,
+> we can stop searching.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
 > ---
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 5 +++++
+>  kernel/sched/fair.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index e4a0b8bd941c..b7cbec539c77 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -1792,7 +1792,7 @@ static void update_numa_stats(struct task_numa_env *env,
+>  		ns->nr_running += rq->cfs.h_nr_running;
+>  		ns->compute_capacity += capacity_of(cpu);
+>  
+> -		if (find_idle && !rq->nr_running && idle_cpu(cpu)) {
+> +		if (find_idle && idle_core < 0 && !rq->nr_running && idle_cpu(cpu)) {
+>  			if (READ_ONCE(rq->numa_migrate_on) ||
+>  			    !cpumask_test_cpu(cpu, env->p->cpus_ptr))
+>  				continue;
+> @@ -1801,6 +1801,9 @@ static void update_numa_stats(struct task_numa_env *env,
+>  				ns->idle_cpu = cpu;
+>  
+>  			idle_core = numa_idle_core(idle_core, cpu);
+> +			/* If we find an idle core, stop searching. */
+> +			if (idle_core >= 0)
+> +				ns->idle_cpu = idle_core;
+>  		}
+>  	}
+>  	rcu_read_unlock();
+> @@ -1808,9 +1811,6 @@ static void update_numa_stats(struct task_numa_env *env,
+>  	ns->weight = cpumask_weight(cpumask_of_node(nid));
+>  
+>  	ns->node_type = numa_classify(env->imbalance_pct, ns);
+> -
+> -	if (idle_core >= 0)
+> -		ns->idle_cpu = idle_core;
+>  }
+>  
 
-Please send the patches together with the binding. There is no need to
-have this split and it causes additional effort during review - lookup
-of the binding.
+Remove the change in the first hunk and call break in the second hunk
+after updating ns->idle_cpu.
 
-Also additional effort during binding review - lack of usage of bindings.
-
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+-- 
+Mel Gorman
+SUSE Labs
