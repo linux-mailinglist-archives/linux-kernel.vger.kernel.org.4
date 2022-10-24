@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453C8609DBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 428B4609DBE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230405AbiJXJQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
+        id S230225AbiJXJQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiJXJQE (ORCPT
+        with ESMTP id S231261AbiJXJQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Oct 2022 05:16:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C7D6A49A;
-        Mon, 24 Oct 2022 02:15:44 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBA94D162;
+        Mon, 24 Oct 2022 02:15:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A0A3B81014;
-        Mon, 24 Oct 2022 09:15:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D866DC4347C;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 924666108B;
+        Mon, 24 Oct 2022 09:15:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D434BC433D7;
         Mon, 24 Oct 2022 09:15:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666602940;
-        bh=FdN33m7qh8wPHoMj/+tmhrdjUqB83uz8MCt9pB9Y6yE=;
+        bh=/59S997d8HJo0WppUTEKLowxRoQ4GCM2JDP0Y998Dq0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZKddshhGR/n5UkBSMiVK4AsktNDI6RoGqfKd9I+8VH8sCv1vToZIThg5odY6rPQbE
-         VhfP61SdjcVlF2Cw5yZO7RrSp+da1OcrboTlXMHZrZlp30nGdKZ4qFa1lCsfiqtw7P
-         lrViBLvnohMoJJkRebuUgQRwAU3ld+OXEouh1OfUwo+fcUAh6WDxBpfjlrYC0JrxiY
-         4rMJcSajwXRzoSJhRr0LHpGJ8FIAP5egAl4iIGMkO/NnfXN/Qt/Mh5cRZW9BJrBIX/
-         LV9d3qFwMBO6jiIcc8GqqoWXkR1bStxo7Q+teZHSX9xat+runc5nB425KiVoVms6Jk
-         tTW4i+u8LWkAQ==
+        b=LV0WQ8I27+oCDDOeeB8dTlnh2+56dc9iq1ssU4q6pmXt7dlxZcE0yix/IlXBlsAEv
+         HkdaSwbSaugB+uM6/2eMSs1Ws620zoMCBrZmP7XY0grc4yfJRemxlEskdCGkGbWSmC
+         KT5Ft2+GWpunOssq+TD8/36HJ/HwgG4V951GeDDwJsUYHo+The0+A/ytN6cHtgp5xe
+         VfSiGQRDsrUDpxTLA6qwrNnYW4ojZjSDiFMkPIHE97mnlNS7U2AwzgHHKpHTtvzlRR
+         iwPJYyKR17hKAPDvHLy7i3HoW0QNF5GXAw0nWuEhzmhLhfFEJI9hwNWEGyRxaNyZGF
+         5A7lLRHqRdlpQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1omtYK-0005J2-GL; Mon, 24 Oct 2022 11:15:24 +0200
+        id 1omtYK-0005J4-JD; Mon, 24 Oct 2022 11:15:24 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 3/4] arm64: dts: qcom: sm8350: fix UFS PHY registers
-Date:   Mon, 24 Oct 2022 11:15:06 +0200
-Message-Id: <20221024091507.20342-4-johan+linaro@kernel.org>
+Subject: [PATCH 4/4] arm64: dts: qcom: sm8450: fix UFS PHY registers
+Date:   Mon, 24 Oct 2022 11:15:07 +0200
+Message-Id: <20221024091507.20342-5-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221024091507.20342-1-johan+linaro@kernel.org>
 References: <20221024091507.20342-1-johan+linaro@kernel.org>
@@ -69,17 +69,17 @@ specifically not cover all registers used by the Linux driver.
 As Linux maps these regions as full pages this is currently not an issue
 on Linux, but let's update the sizes to match the vendor driver.
 
-Fixes: 59c7cf814783 ("arm64: dts: qcom: sm8350: Add UFS nodes")
+Fixes: 07fa917a335e ("arm64: dts: qcom: sm8450: add ufs nodes")
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 10 +++++-----
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 10 +++++-----
  1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index a86d9ea93b9d..a6270d97a319 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -2142,11 +2142,11 @@ ufs_mem_phy: phy@1d87000 {
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index d32f08df743d..dfc799244180 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -3161,11 +3161,11 @@ ufs_mem_phy: phy@1d87000 {
  			status = "disabled";
  
  			ufs_mem_phy_lanes: phy@1d87400 {
