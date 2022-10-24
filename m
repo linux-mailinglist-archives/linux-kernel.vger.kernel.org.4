@@ -2,115 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FDE60BA40
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A2060B975
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbiJXUak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
+        id S233816AbiJXUMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234691AbiJXU3m (ORCPT
+        with ESMTP id S233704AbiJXUMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:29:42 -0400
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F19310B7BC;
-        Mon, 24 Oct 2022 11:42:29 -0700 (PDT)
-Received: by mail-ed1-f48.google.com with SMTP id v27so10753927eda.1;
-        Mon, 24 Oct 2022 11:42:28 -0700 (PDT)
+        Mon, 24 Oct 2022 16:12:14 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D4CAC28E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:30:25 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id o4so9292084wrq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:30:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cB2FYQ6zz4yJrapqJDJTE5DptWCfldmXwjxtDOt/B0s=;
-        b=JN7uxoITIaVl18LJEZQ0ufGu4PrZM3yonCdBdmDjIjeRttqLXldyazzyxeWnrSn5ql
-         RywZjtQ1k/Psr56DQf50jQ4Tv+k3koil8KMUizZtO9ZA8sHX+hyrLHky/M3cWW6MvWbB
-         7C25I7hB8OmkzdYvEVOj2qlgyLDyrCZXMiI6GkQMG/hB6k2Y2YYvhLzlBt6iSJtkAvKj
-         9p11+6+OG6VqO8tfk+di6COkBQIsDtPZAW8cAMhf6tV+Z1fHXkyowQWMi7N3v25BegqT
-         TLohY7NCKyR/R+j1lzxI3N58giI9sjf6Yycyc3Rxz9BB2oNL5bioL4jWGI3RENL/icWL
-         lJXA==
+        bh=vslfN7+uZdJ5X5LoIB1UDDE0PItPz9PS/+QD4kaZ9Qc=;
+        b=sQHI4JEZQZRcG1YAKpcLMOrgp3BGFePT69g1fQfuFp4lMzejFyljCox4KuGpsHebVg
+         Syf5ly39Ji9gx/1aBQXhfBgssUi2AUiLeIjmf8hLUZeywkfQjTxTfwXCcvos+alAGptm
+         Ov6UMSeOebKrid8lml5POLoPid4FwvedY1A8FislDw6H7lKBTGGYwJAx0NE0VQQKQ259
+         6Bq9nTXjIc/qbq29nbGYAmpbK7R8a5NtJMJ1JlmeY9Kp67jZyNasRBSwJm7a1CAIMVJA
+         6yH35ALuqLNhzOzwhbOvWthDWaoqnDCPm5C8UhG7RXftthbvYUGkfU3+HpHODSJglEkD
+         I4rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cB2FYQ6zz4yJrapqJDJTE5DptWCfldmXwjxtDOt/B0s=;
-        b=B+LUFbzvGkq0dyeFDcKBqXbrIMMH4Y+iy3N+G01e8PFKJOIUS0XVoW5wdjcsOgVa2e
-         GQ9kVWO3MZDq0eAxRYsRwDdbCONKq+VNHG4L7DA9s+VKc+tq1M+winVODTRsiH48X1X8
-         ysADIU6QmDwoRpHq0JzAcLW8+xZqKuhnjKwvFL2YThCy+NA6SS7sEkO6/QLYK/E4LyAi
-         kiHAf7BOSigdhDV9B6Y/L1OTn6OT64junDQAvBrqHBZZtSyDA0JZjkGAu+hETsJjA9QN
-         NfkgbdeeLFsjrQm/yAZqx5mAFl0CSv9uzvinN0c3P9S4wdH8ZXypMXLP1a+1S6DuPE8r
-         mpmA==
-X-Gm-Message-State: ACrzQf1bQmvZahEVv9Mi/UAAYzw0HDxQ9/LS57XnJ2qsZfH5etixt3Oz
-        JxAthx5xJ0fWijelD4j0ixmq3jQgcNP/396EKrQz0Yhp
-X-Google-Smtp-Source: AMsMyM75RA19jCY4FY6bMQuqjKdIyJBP2VW+qVB6WUTfI9OfCrlw3k8Y27szZCYA0BCsUzUe2wY3pE6zfHB/ytHRURY=
-X-Received: by 2002:a17:907:75e6:b0:7a1:848:20cb with SMTP id
- jz6-20020a17090775e600b007a1084820cbmr11452017ejc.745.1666636083384; Mon, 24
- Oct 2022 11:28:03 -0700 (PDT)
+        bh=vslfN7+uZdJ5X5LoIB1UDDE0PItPz9PS/+QD4kaZ9Qc=;
+        b=Px1RmJiFBWL6k09L7M5c20E4QlXKTUd4oKbUGtrVsp3hutXcmE39nxasZss1SNyHom
+         m9/xJc8YhIH+69XjaLa9vdzoF0cprxC3HTidEhbuoGknpQFtfwKpzB3opSpucJMAsbAs
+         uJHd1tDYzQvXfl4Wljr0elU13XS8Y1yOtJLV25IY/lnYVk8qNPjcBXdArL9RjDVqlqj+
+         4iGG0Kde/YDKQc6XIBGGbgWgbWB5nMPMpxJmla/K+nttHHYVfI0rQtQ/gW5wwfIX5AsL
+         4M7s+RTN4d9vytgZh0Mu6UlAk2ZVhAZCNPogH9eWWcL8wOof2CS4kwrd21RLruYvJJUX
+         rFFQ==
+X-Gm-Message-State: ACrzQf2NMTB0kkJawIFuZt8e6PFRrk/Vo1qXyvkBaxA+vbsLMO7BkAdM
+        tw8R9xkkqZq3UdvcTn37RHqX0NedJvTHVwzxUbVgCQ==
+X-Google-Smtp-Source: AMsMyM6SqKo1n8w/PerIEwv9gPQ7SmsgnzzgS5665pJKdC2WyaS51oC6+PxtlNaaxyHjuFp2Eb33GMhDlZ3ZRNZyky4=
+X-Received: by 2002:adf:e94a:0:b0:236:6f5a:e89b with SMTP id
+ m10-20020adfe94a000000b002366f5ae89bmr5032284wrn.451.1666636182803; Mon, 24
+ Oct 2022 11:29:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221022110529.51857-1-liuxin350@huawei.com>
-In-Reply-To: <20221022110529.51857-1-liuxin350@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 24 Oct 2022 11:27:51 -0700
-Message-ID: <CAEf4BzbhhcvAn4yCdHUZZSLCLotywRM5e_-12sYSjg7h8nbdmQ@mail.gmail.com>
-Subject: Re: [PATCH] libbpf: glob_sym may be a NULL pointer and cause the
- program crash
-To:     Xin Liu <liuxin350@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com, zhudi2@huawei.com,
-        kongweibin2@huawei.com
+References: <20221021185916.1494314-1-vipinsh@google.com> <Y1L9Z8RgIs8yrU6o@google.com>
+ <CAHVum0eoA5j7EPmmuuUb2y7XOU1jRpFwJO90tc+QBy0JNUtBsQ@mail.gmail.com>
+ <Y1MXgjtPT9U6Cukk@google.com> <87k04pbfqd.fsf@ovpn-193-3.brq.redhat.com> <Y1atxgq2SDkHbP9I@google.com>
+In-Reply-To: <Y1atxgq2SDkHbP9I@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Mon, 24 Oct 2022 11:29:06 -0700
+Message-ID: <CAHVum0f=gRgrP=rTySn1zwPz65g6jm_3f-=qusmS7jOkKyUMSw@mail.gmail.com>
+Subject: Re: [RFC PATCH] Add Hyperv extended hypercall support in KVM
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, pbonzini@redhat.com,
+        dmatlack@google.com, kvm@vger.kernel.org, shujunxue@google.com,
+        terrytaehyun@google.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 4:05 AM Xin Liu <liuxin350@huawei.com> wrote:
+On Mon, Oct 24, 2022 at 8:22 AM Sean Christopherson <seanjc@google.com> wrote:
 >
-> I found that `glob_sym` does not check whether it is NULL when reading the
-> code. `glob_sym` obtains the pointer of btf information in the linker from
-> `find_glob_sym`, which may be return NULL pointer. However, the code then
-> references `glob_sym->sec_id`. This may cause program to crash.
+> On Mon, Oct 24, 2022, Vitaly Kuznetsov wrote:
+> > While some 'extended' hypercalls may indeed need to be handled in KVM,
+> > there's no harm done in forwarding all unknown-to-KVM hypercalls to
+> > userspace. The only issue I envision is how would userspace discover
+> > which extended hypercalls are supported by KVM in case it (userspace) is
+> > responsible for handling HvExtCallQueryCapabilities call which returns
+> > the list of supported hypercalls. E.g. in case we decide to implement
+> > HvExtCallMemoryHeatHint in KVM, how are we going to communicate this to
+> > userspace?
+> >
+> > Normally, VMM discovers the availability of Hyper-V features through
+> > KVM_GET_SUPPORTED_HV_CPUID but extended hypercalls are not listed in
+> > CPUID. This can be always be solved by adding new KVM CAPs of
+> > course. Alternatively, we can add a single
+> > "KVM_CAP_HYPERV_EXT_CALL_QUERY" which will just return the list of
+> > extended hypercalls supported by KVM (which Vipin's patch adds anyway to
+> > *set* the list instead).
 >
-
-May cause a crash or did you actually see an example of such a crash?
-
-As far as I can see from the code, such global_sym is guaranteed to
-exist, see how btf_type_map is filled in linker_append_btf(), slightly
-above the code you are trying to fix
-
-
-> Fixes: a46349227cd8 ("libbpf: Add linker extern resolution support for functions and global variables")
-> Signed-off-by: Xin Liu <liuxin350@huawei.com>
-> Signed-off-by: Weibin Kong <kongweibin2@huawei.com>
-> ---
->  tools/lib/bpf/linker.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> AIUI, the TLFS uses a 64-bit mask to enumerate which extended hypercalls are
+> supported, so a single CAP should be a perfect fit.  And KVM can use the capability
+> to enumerate support for _and_ to allow userspace to enable in-kernel handling.  E.g.
 >
-> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-> index 4ac02c28e152..d02d2754910f 100644
-> --- a/tools/lib/bpf/linker.c
-> +++ b/tools/lib/bpf/linker.c
-> @@ -2355,6 +2355,11 @@ static int linker_append_btf(struct bpf_linker *linker, struct src_obj *obj)
->                         if (btf_is_non_static(t)) {
->                                 name = btf__str_by_offset(linker->btf, t->name_off);
->                                 glob_sym = find_glob_sym(linker, name);
-> +                               if (!glob_sym) {
-> +                                       pr_warn("global '%s': section mismatch %d\n", name,
-> +                                               dst_sec->id);
-> +                                       return -EINVAL;
-> +                               }
->                                 if (glob_sym->sec_id != dst_sec->id) {
->                                         pr_warn("global '%s': section mismatch %d vs %d\n",
->                                                 name, glob_sym->sec_id, dst_sec->id);
-> --
-> 2.33.0
+> check():
+>         case KVM_CAP_HYPERV_EXT_CALL:
+>                 return KVM_SUPPORTED_HYPERV_EXT_CALL;
 >
+>
+> enable():
+>
+>         case KVM_CAP_HYPERV_EXT_CALL:
+>                 r = -EINVAL;
+>                 if (mask & ~KVM_SUPPORTED_HYPERV_EXT_CALL)
+>                         break;
+>
+>                 mutex_lock(&kvm->lock);
+>                 if (!kvm->created_vcpus) {
+
+Any reason for setting capability only after vcpus are created?
+Also, in my patch I wrote the ioctl at kvm_vcpu_ioctl_enable_cap() as
+all of the hyperv related code was there but since this capability is
+a vm setting not a per vcpu setting, should this be at  kvm_vm_ioctl()
+as a better choice?
+
+>                         to_kvm_hv(kvm)->ext_call = cap->args[0];
+>                         r = 0;
+>                 }
+>                 mutex_unlock(&kvm->lock);
+>
+> kvm_hv_hypercall()
+>
+>
+>         case HV_EXT_CALL_QUERY_CAPABILITIES ... HV_EXT_CALL_MAX:
+>                 if (unlikely(hc.fast)) {
+>                         ret = HV_STATUS_INVALID_PARAMETER;
+>                         break;
+>                 }
+>                 if (!(hc.code & to_kvm_hv(vcpu->kvm)->ext_call))
+
+It won't be directly this. There will be a mapping of hc.code to the
+corresponding bit and then "&" with ext_call.
+
+
+>                         goto hypercall_userspace_exit;
+>
+>                 ret = kvm_hv_ext_hypercall(...)
+>                 break;
+>
+>
+> That maintains backwards compatibility with "exit on everything" as userspace
+> still needs to opt-in to having KVM handle specific hypercalls in-kernel, and it
+> provides the necessary knob for userspace to tell KVM which hypercalls should be
+> allowed, i.e. ensures KVM doesn't violate HV_EXT_CALL_QUERY_CAPABILITIES.
+
+So, should I send a version with KVM capability similar to above or
+for now just send the version which by default exit to userspace and
+later whenever the need arises KVM capability can be added then?
