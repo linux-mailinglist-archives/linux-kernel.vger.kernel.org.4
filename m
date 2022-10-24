@@ -2,135 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CC3609F36
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:40:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73DB609F65
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiJXKkV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 24 Oct 2022 06:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        id S229810AbiJXKy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiJXKkQ (ORCPT
+        with ESMTP id S229866AbiJXKyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:40:16 -0400
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE033B463;
-        Mon, 24 Oct 2022 03:40:11 -0700 (PDT)
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay06.hostedemail.com (Postfix) with ESMTP id 51226AB064;
-        Mon, 24 Oct 2022 10:40:09 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf03.hostedemail.com (Postfix) with ESMTPA id E2CF96000A;
-        Mon, 24 Oct 2022 10:40:03 +0000 (UTC)
-Message-ID: <6b9b7f9d835a271312bd5955d96b83bd14c9e6fa.camel@perches.com>
-Subject: Re: [PATCH v4 3/3] MAINTAINERS: Add KX022A maintainer entry
-From:   Joe Perches <joe@perches.com>
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Jagath Jog J <jagathjog1996@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Mon, 24 Oct 2022 03:40:01 -0700
-In-Reply-To: <0c1471c0-b6b0-7b2b-62af-d3221edeeac4@fi.rohmeurope.com>
-References: <cover.1666350457.git.mazziesaccount@gmail.com>
-         <db45c0ee76c3205b9253cb2200a79119c2f2b946.1666350457.git.mazziesaccount@gmail.com>
-         <92c3f72e60bc99bf4a21da259b4d78c1bdca447d.camel@perches.com>
-         <0c1471c0-b6b0-7b2b-62af-d3221edeeac4@fi.rohmeurope.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 24 Oct 2022 06:54:40 -0400
+Received: from mail.nearlyone.de (mail.nearlyone.de [46.163.114.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393DA109E;
+        Mon, 24 Oct 2022 03:54:31 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5F33D618F7;
+        Mon, 24 Oct 2022 12:44:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
+        t=1666608268; h=from:subject:date:message-id:to:cc:mime-version:
+         content-transfer-encoding; bh=PwVx9GHMb7vRQqqXAMgZial/VEPJ+6ZVGwTJNOi99aE=;
+        b=K3hRJnqCu5P0Pd2UQLF4AxnIOnQot3DaXl5SULmhTFM8Z7z3T92QOLD7SPyGuCyXyoZ4f5
+        5pzQM/vurHFiUS0SWZ3uYUgvRERZitwJocG93sfTVeaiZ2XXWGbRNZTzdq1tksMfA0ry7H
+        xmm6In77LM5211h1yBYOupqEz5jHghxRBkkgWHl/w3n1xjEKzFkGWHHgmtPnOoPd0W7of5
+        ddmTf/wJtfnsbrv9RZL6IYr1GalSO3sIS0qK7rSvegH4RUEe90IVosvFc/XVd78dkixGWv
+        mdDhOvuSd47tGiwY5sCY+dIpQXDAXQ3ds976SUzCPMY8kxfbhKJcaQS46OeqBg==
+From:   Daniel Wagner <wagi@monom.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+Cc:     Daniel Wagner <wagi@monom.org>
+Subject: [PATCH RT 0/9] Linux v4.19.255-rt114-rc1
+Date:   Mon, 24 Oct 2022 12:44:16 +0200
+Message-Id: <20221024104425.16423-1-wagi@monom.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Stat-Signature: r4mtm9zbjpfjaacgghcjpwpq8aruqopy
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: E2CF96000A
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+NCoWF+QkD4EYH2wNG31bmSVo7//aomnU=
-X-HE-Tag: 1666608003-170265
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-10-24 at 07:24 +0000, Vaittinen, Matti wrote:
-> Hi Joe,
-> 
-> On 10/24/22 09:52, Joe Perches wrote:
-> > On Fri, 2022-10-21 at 14:23 +0300, Matti Vaittinen wrote:
-> > > Add maintainer entry for ROHM/Kionix KX022A accelerometer sensor driver.
-> > > 
-> > > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> > > ---
-> > >   MAINTAINERS | 5 +++++
-> > >   1 file changed, 5 insertions(+)
-> > > 
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index cf0f18502372..3ab9c5f97dfe 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -11435,6 +11435,11 @@ F:	drivers/mfd/khadas-mcu.c
-> > >   F:	include/linux/mfd/khadas-mcu.h
-> > >   F:	drivers/thermal/khadas_mcu_fan.c
-> > >   
-> > > +KIONIX/ROHM KX022A ACCELEROMETER
-> > > +R:	Matti Vaittinen <mazziesaccount@gmail.com>
-> > > +S:	Supported
-> > > +F:	drivers/iio/accel/kionix-kx022a*
-> > 
-> > How is this "S: Supported" without an M: maintainer?
-> 
-> I am currently paid to work with the Kionix/ROHM upstream drivers. Hence 
-> I add 'S:' to ones I am looking after.
-> 
-> The ideology why I have 'R' and not 'M' is summarized by my earlier patch:
-> 
->  >> I can also add myself as a maintainer instead of a reviewer if it better
->  >> suits iio maintainer. I however don't plan setting up my own public
->  >> repository and hope the further patches will be merged via IIO tree.
->  >>
->  >> So, as Geert once explained to me - In that case the difference between
->  >> me as a maintainer vs. a reviewer would be only really relevant to the
->  >> subsystem (in this case IIO) maintainer. The subsystem maintainer who
->  >> merges patches is allowed to take in changes acked by downstream
->  >> maintainer w/o obligation to do thorough review. (Downstream 
-> maintainer is
->  >> to be blamed if things explode :]). If ack is given by a reviewer, then
->  >> the subsystem maintainer has the full responsibility and should always
->  >> do the review. Or - this is how I remember our discussion went - feel
->  >> free to correct me if I am wrong :] In any case - please let me know if
->  >> you'd rather see M: not R: in front of my name for the kx022a.
-> 
-> This seemed to be fine with Jonathan:
-> 
-> https://lore.kernel.org/all/87ac9a5e-b5ba-82f3-c00c-75d5e6f01597@gmail.com/
-> 
-> I've also written a longer version of this in an LinkedIn article:
-> https://www.linkedin.com/pulse/should-you-linux-kernel-maintainer-matti-vaittinen/
-> 
-> (I enjoy writing small stories. So doing an occasional small LinkedIn 
-> articles on working with the upstream is kind of an hobby for me.)
-> 
-> Anyways, I don't see a contradiction with 'S + R' compared to 'S + M'. 
-> Well, please educate me if I am wrong :]
+Dear RT Folks,
 
-The subsystem is one thing, someone outside of KIONIX/ROHM may be
-supporting the subsystem.  If this _particular_ driver is "supported"
-there should be an individual listed as its actual maintainer, not
-just a person that might review submitted patches.
+This is the RT stable review cycle of patch 4.19.255-rt114-rc1.
 
-	S: *Status*, one of the following:
-	   Supported:	Someone is actually paid to look after this.
-	   Maintained:	Someone actually looks after it.
+Please scream at me if I messed something up. Please test the patches
+too.
 
-"this" is this particular driver, not any subsystem "above" it.
+The -rc release will be uploaded to kernel.org and will be deleted
+when the final release is out. This is just a review release (or
+release candidate).
+
+The pre-releases will not be pushed to the git repository, only the
+final release is.
+
+If all goes well, this patch will be converted to the next main
+release on 2022-10-31.
+
+To build 4.19.255-rt114-rc1 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.255.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/older/patch-4.19.255-rt114-rc1.patch.xz
+
+Signing key fingerprint:
+
+  5BF6 7BC5 0826 72CA BB45  ACAE 587C 5ECA 5D0A 306C
+
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Daniel
+
+Changes from v4.19.255-rt113:
+
+
+Daniel Wagner (3):
+  Revert "random: Use local locks for crng context access"
+  rcu: Update rcuwait
+  Linux 4.19.255-rt114-rc1
+
+Sebastian Andrzej Siewior (6):
+  random: Bring back the local_locks
+  local_lock: Provide INIT_LOCAL_LOCK().
+  Revert "workqueue: Use local irq lock instead of irq disable regions"
+  timers: Keep interrupts disabled for TIMER_IRQSAFE timer.
+  timers: Don't block on ->expiry_lock for TIMER_IRQSAFE timers
+  workqueue: Use rcuwait for wq_manager_wait
+
+ drivers/char/random.c         | 16 +++++++------
+ include/linux/locallock.h     |  5 +++++
+ include/linux/rcuwait.h       | 42 +++++++++++++++++++++++++++--------
+ kernel/exit.c                 |  7 ++++--
+ kernel/locking/percpu-rwsem.c |  2 +-
+ kernel/rcu/update.c           |  8 +++++++
+ kernel/time/timer.c           | 12 ++++++++--
+ kernel/workqueue.c            | 28 +++++++++++++++++------
+ localversion-rt               |  2 +-
+ 9 files changed, 93 insertions(+), 29 deletions(-)
+
+-- 
+2.38.0
+
