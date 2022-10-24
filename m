@@ -2,83 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAC760ACB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EE160AD56
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbiJXOMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
+        id S235782AbiJXOWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235131AbiJXOJE (ORCPT
+        with ESMTP id S237199AbiJXOQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:09:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B5B2C4D90;
-        Mon, 24 Oct 2022 05:51:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C6D3ED1;
-        Mon, 24 Oct 2022 05:21:07 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.7.186])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D2D8A3F7B4;
-        Mon, 24 Oct 2022 05:20:59 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 13:20:57 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Yu Liao <liaoyu15@huawei.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        "liwei (GF)" <liwei391@huawei.com>, linux-kernel@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [BUG] possible deadlock in __rcu_irq_enter_check_tick
-Message-ID: <Y1aDKeFzYNrpt7ww@FVFF77S0Q05N>
-References: <e015e32d-d068-2d17-1ca5-c584c30ffebb@huawei.com>
- <20221012064911.GN4221@paulmck-ThinkPad-P17-Gen-1>
- <Y063MGk3oVg6ney0@lakrids>
- <Y1AGWuwZsq/NW1U3@FVFF77S0Q05N>
- <97cfec0d-a24b-9917-2bd1-404e344eaa36@huawei.com>
+        Mon, 24 Oct 2022 10:16:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0808CBFFB;
+        Mon, 24 Oct 2022 05:55:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B495921CA5;
+        Mon, 24 Oct 2022 12:26:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666614374; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OYm3JNBPLIG7FhjiMAka/JpluIH9z/kEqZ0pIlPgYlI=;
+        b=jxzWprjDUUKAk9keVNNy2jFGSdSqeqyuNd009xVi1/jr/acc7r3yJ1+ria0uQPXkT1wWKp
+        DzV+x45SzXYfgROo0MNa2HOnSFXvL5YY+QwuGPEBWCAFbBa4ClUGv39w4VqaMJfTv1bn/A
+        w767PWrY7DekL1WATPlLQ46R23tUwVw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666614374;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OYm3JNBPLIG7FhjiMAka/JpluIH9z/kEqZ0pIlPgYlI=;
+        b=mdlCD5hNg+7mFUa/h3lrk0BIQg4QI19HWgyAHvf6/HtOjja+90kDd/rP5rBOYAl9jxY3Yd
+        tIN53t5XsqJP/xDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A20BA13A79;
+        Mon, 24 Oct 2022 12:26:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7ByJJ2aEVmODWQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 24 Oct 2022 12:26:14 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 10164A06F6; Mon, 24 Oct 2022 14:26:14 +0200 (CEST)
+Date:   Mon, 24 Oct 2022 14:26:14 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, Thomas Schmitt <scdbackup@gmx.net>,
+        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>,
+        Deepa Dinamani <deepa.kernel@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] isofs: prevent file time rollover after year 2038
+Message-ID: <20221024122614.bkcehqr7gi3f23ca@quack3>
+References: <20221020160037.4002270-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <97cfec0d-a24b-9917-2bd1-404e344eaa36@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221020160037.4002270-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 09:32:35PM +0800, Yu Liao wrote:
-> On 2022/10/19 22:14, Mark Rutland wrote:
-> > On Tue, Oct 18, 2022 at 03:24:48PM +0100, Mark Rutland wrote:
+On Thu 20-10-22 18:00:29, Arnd Bergmann wrote:
+> From: Thomas Schmitt <scdbackup@gmx.net>
+> 
+> Change the return type of function iso_date() from int to time64_t,
+> to avoid truncating to the 1902..2038 date range.
+> 
+> After this patch, the reported timestamps should fall into the
+> range reported in the s_time_min/s_time_max fields.
+> 
+> Signed-off-by: Thomas Schmitt <scdbackup@gmx.net>
+> Cc: stable@vger.kernel.org
+> Link: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=800627
+> Fixes: 34be4dbf87fc ("isofs: fix timestamps beyond 2027")
+> Fixes: 5ad32b3acded ("isofs: Initialize filesystem timestamp ranges")
+> [arnd: expand changelog text slightly]
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-> > Having a go with v6.1-rc1, placing a kprobe on __rcu_irq_enter_check_tick()
-> > causes a recursive exception which triggers the stack overflow detection, so
-> > there are bigger problems here, and we'll need to do some further rework of the
-> > arm64 entry code. FWIW, x86-64 seems fine.
-> > 
-> > I have a vague recollection that that there was something (some part kprobes,
-> > perhaps) that didn't like being called in NMI context, which is why debug
-> > exceptions aren't accounted as true NMIs (but get most of the same treatment).
-> > 
-> > I'll have to dig into this a bit more; there are a bunch of subtle interactions
-> > in this area, and I don't want to put a band-aid over this without fully
-> > understanding the implications.
-> > 
-> > Once we've figured that out for mainline, we can figure out what needs to go to
-> > stable.
-> > 
-> > Yu, were you particularly interested in tracing __rcu_irq_enter_check_tick(),
-> > or did you stumble upon this by other means?
+Thanks! I've added the patch to my tree and will push it to Linus.
 
-> Oh，This was found with the help of the kernel fuzzer syzkaller.
+								Honza
 
-Thanks for confirming!
-
-I've also been testing with Syzkaller, but it looks like I haven't had KPROBES
-enabled due to deselecting MODULE support, which explains how I've missed this
-until now. :/
-
-I'll go fiddle with moy configs.
-
-Thanks,
-Mark.
+> ---
+>  fs/isofs/isofs.h | 2 +-
+>  fs/isofs/util.c  | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/isofs/isofs.h b/fs/isofs/isofs.h
+> index dcdc191ed183..c3473ca3f686 100644
+> --- a/fs/isofs/isofs.h
+> +++ b/fs/isofs/isofs.h
+> @@ -106,7 +106,7 @@ static inline unsigned int isonum_733(u8 *p)
+>  	/* Ignore bigendian datum due to broken mastering programs */
+>  	return get_unaligned_le32(p);
+>  }
+> -extern int iso_date(u8 *, int);
+> +extern time64_t iso_date(u8 *, int);
+>  
+>  struct inode;		/* To make gcc happy */
+>  
+> diff --git a/fs/isofs/util.c b/fs/isofs/util.c
+> index e88dba721661..348af786a8a4 100644
+> --- a/fs/isofs/util.c
+> +++ b/fs/isofs/util.c
+> @@ -16,10 +16,10 @@
+>   * to GMT.  Thus  we should always be correct.
+>   */
+>  
+> -int iso_date(u8 *p, int flag)
+> +time64_t iso_date(u8 *p, int flag)
+>  {
+>  	int year, month, day, hour, minute, second, tz;
+> -	int crtime;
+> +	time64_t crtime;
+>  
+>  	year = p[0];
+>  	month = p[1];
+> -- 
+> 2.29.2
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
