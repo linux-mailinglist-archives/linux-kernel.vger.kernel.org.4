@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECEA60A76F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E74760A537
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbiJXMuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S233471AbiJXMWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234612AbiJXMpU (ORCPT
+        with ESMTP id S233564AbiJXMTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:20 -0400
+        Mon, 24 Oct 2022 08:19:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455D02E691;
-        Mon, 24 Oct 2022 05:09:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44C983040;
+        Mon, 24 Oct 2022 04:58:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AF6961281;
-        Mon, 24 Oct 2022 12:09:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E89C433C1;
-        Mon, 24 Oct 2022 12:09:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 768BB61218;
+        Mon, 24 Oct 2022 11:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2DFC433C1;
+        Mon, 24 Oct 2022 11:49:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613342;
-        bh=/DnBlGEHmDsKGRdYo7vtlx+6+pve0D4reGzgxgMkpRs=;
+        s=korg; t=1666612165;
+        bh=ZPeymm10gGxK2SsTtk+hUrOWMe19b/6w/albuianqiM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kkmgqS6vrXuNc4EyLhVgDcj9NN5/KwxnvnNRVXUuvD+lcPPzeIy3YdSuYhhdWle67
-         KblEpOCNJz1jYGcbaNfaiEVhFNyVWWcyPqSEQeVmwe3Qv5T/DQWvUni6YKu6nMwPwE
-         iW9Mqr1V+w+TY7tYd6SStVxt57C1WVXZSIzZzyA0=
+        b=hFUKehqiohfX01Z63RRYBck54PzrQdPUwgla5fiCqsCDaHw9rEeKYQYJW+kE1RELw
+         F9WR2S6MUDvuVrLo6yuLOkqCETPUCsIky3Se/d3BcrQXf/UjUGhU/bRAt6E2eaV+yk
+         ehzKqBZJhltYvB1Sx3znYmUp0hr2S12poUl+XKdc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 101/255] drm/msm/dpu: index dpu_kms->hw_vbif using vbif_idx
+Subject: [PATCH 4.14 094/210] mISDN: fix use-after-free bugs in l1oip timer handlers
 Date:   Mon, 24 Oct 2022 13:30:11 +0200
-Message-Id: <20221024113005.834791195@linuxfoundation.org>
+Message-Id: <20221024113000.080894670@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,129 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 7538f80ae0d98bf51eb89eee5344aec219902d42 ]
+[ Upstream commit 2568a7e0832ee30b0a351016d03062ab4e0e0a3f ]
 
-Remove loops over hw_vbif. Instead always VBIF's idx as an index in the
-array. This fixes an error in dpu_kms_hw_init(), where we fill
-dpu_kms->hw_vbif[i], but check for an error pointer at
-dpu_kms->hw_vbif[vbif_idx].
+The l1oip_cleanup() traverses the l1oip_ilist and calls
+release_card() to cleanup module and stack. However,
+release_card() calls del_timer() to delete the timers
+such as keep_tl and timeout_tl. If the timer handler is
+running, the del_timer() will not stop it and result in
+UAF bugs. One of the processes is shown below:
 
-Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Patchwork: https://patchwork.freedesktop.org/patch/489569/
-Link: https://lore.kernel.org/r/20220615125703.24647-1-dmitry.baryshkov@linaro.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+    (cleanup routine)          |        (timer handler)
+release_card()                 | l1oip_timeout()
+ ...                           |
+ del_timer()                   | ...
+ ...                           |
+ kfree(hc) //FREE              |
+                               | hc->timeout_on = 0 //USE
+
+Fix by calling del_timer_sync() in release_card(), which
+makes sure the timer handlers have finished before the
+resources, such as l1oip and so on, have been deallocated.
+
+What's more, the hc->workq and hc->socket_thread can kick
+those timers right back in. We add a bool flag to show
+if card is released. Then, check this flag in hc->workq
+and hc->socket_thread.
+
+Fixes: 3712b42d4b1b ("Add layer1 over IP support")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c  | 12 ++++------
- drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c | 29 +++++++++++-------------
- 2 files changed, 18 insertions(+), 23 deletions(-)
+ drivers/isdn/mISDN/l1oip.h      |  1 +
+ drivers/isdn/mISDN/l1oip_core.c | 13 +++++++------
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-index c08c67338d73..a74f8ae1a894 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-@@ -596,12 +596,10 @@ static void _dpu_kms_hw_destroy(struct dpu_kms *dpu_kms)
- 	_dpu_kms_mmu_destroy(dpu_kms);
+diff --git a/drivers/isdn/mISDN/l1oip.h b/drivers/isdn/mISDN/l1oip.h
+index 7ea10db20e3a..48133d022812 100644
+--- a/drivers/isdn/mISDN/l1oip.h
++++ b/drivers/isdn/mISDN/l1oip.h
+@@ -59,6 +59,7 @@ struct l1oip {
+ 	int			bundle;		/* bundle channels in one frm */
+ 	int			codec;		/* codec to use for transmis. */
+ 	int			limit;		/* limit number of bchannels */
++	bool			shutdown;	/* if card is released */
  
- 	if (dpu_kms->catalog) {
--		for (i = 0; i < dpu_kms->catalog->vbif_count; i++) {
--			u32 vbif_idx = dpu_kms->catalog->vbif[i].id;
--
--			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx]) {
--				dpu_hw_vbif_destroy(dpu_kms->hw_vbif[vbif_idx]);
--				dpu_kms->hw_vbif[vbif_idx] = NULL;
-+		for (i = 0; i < ARRAY_SIZE(dpu_kms->hw_vbif); i++) {
-+			if (dpu_kms->hw_vbif[i]) {
-+				dpu_hw_vbif_destroy(dpu_kms->hw_vbif[i]);
-+				dpu_kms->hw_vbif[i] = NULL;
- 			}
- 		}
- 	}
-@@ -899,7 +897,7 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
- 	for (i = 0; i < dpu_kms->catalog->vbif_count; i++) {
- 		u32 vbif_idx = dpu_kms->catalog->vbif[i].id;
+ 	/* timer */
+ 	struct timer_list	keep_tl;
+diff --git a/drivers/isdn/mISDN/l1oip_core.c b/drivers/isdn/mISDN/l1oip_core.c
+index 6be2041248d3..c86f33ed9ef9 100644
+--- a/drivers/isdn/mISDN/l1oip_core.c
++++ b/drivers/isdn/mISDN/l1oip_core.c
+@@ -289,7 +289,7 @@ l1oip_socket_send(struct l1oip *hc, u8 localcodec, u8 channel, u32 chanmask,
+ 	p = frame;
  
--		dpu_kms->hw_vbif[i] = dpu_hw_vbif_init(vbif_idx,
-+		dpu_kms->hw_vbif[vbif_idx] = dpu_hw_vbif_init(vbif_idx,
- 				dpu_kms->vbif[vbif_idx], dpu_kms->catalog);
- 		if (IS_ERR_OR_NULL(dpu_kms->hw_vbif[vbif_idx])) {
- 			rc = PTR_ERR(dpu_kms->hw_vbif[vbif_idx]);
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c
-index 8d24b79fd400..5e6bb2f306be 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c
-@@ -11,6 +11,14 @@
- #include "dpu_hw_vbif.h"
- #include "dpu_trace.h"
+ 	/* restart timer */
+-	if (time_before(hc->keep_tl.expires, jiffies + 5 * HZ))
++	if (time_before(hc->keep_tl.expires, jiffies + 5 * HZ) && !hc->shutdown)
+ 		mod_timer(&hc->keep_tl, jiffies + L1OIP_KEEPALIVE * HZ);
+ 	else
+ 		hc->keep_tl.expires = jiffies + L1OIP_KEEPALIVE * HZ;
+@@ -621,7 +621,9 @@ l1oip_socket_parse(struct l1oip *hc, struct sockaddr_in *sin, u8 *buf, int len)
+ 		goto multiframe;
  
-+static struct dpu_hw_vbif *dpu_get_vbif(struct dpu_kms *dpu_kms, enum dpu_vbif vbif_idx)
-+{
-+	if (vbif_idx < ARRAY_SIZE(dpu_kms->hw_vbif))
-+		return dpu_kms->hw_vbif[vbif_idx];
-+
-+	return NULL;
-+}
-+
- /**
-  * _dpu_vbif_wait_for_xin_halt - wait for the xin to halt
-  * @vbif:	Pointer to hardware vbif driver
-@@ -148,11 +156,11 @@ static u32 _dpu_vbif_get_ot_limit(struct dpu_hw_vbif *vbif,
- void dpu_vbif_set_ot_limit(struct dpu_kms *dpu_kms,
- 		struct dpu_vbif_set_ot_params *params)
+ 	/* restart timer */
+-	if (time_before(hc->timeout_tl.expires, jiffies + 5 * HZ) || !hc->timeout_on) {
++	if ((time_before(hc->timeout_tl.expires, jiffies + 5 * HZ) ||
++	     !hc->timeout_on) &&
++	    !hc->shutdown) {
+ 		hc->timeout_on = 1;
+ 		mod_timer(&hc->timeout_tl, jiffies + L1OIP_TIMEOUT * HZ);
+ 	} else /* only adjust timer */
+@@ -1248,11 +1250,10 @@ release_card(struct l1oip *hc)
  {
--	struct dpu_hw_vbif *vbif = NULL;
-+	struct dpu_hw_vbif *vbif;
- 	struct dpu_hw_mdp *mdp;
- 	bool forced_on = false;
- 	u32 ot_lim;
--	int ret, i;
-+	int ret;
+ 	int	ch;
  
- 	if (!dpu_kms) {
- 		DPU_ERROR("invalid arguments\n");
-@@ -160,12 +168,7 @@ void dpu_vbif_set_ot_limit(struct dpu_kms *dpu_kms,
- 	}
- 	mdp = dpu_kms->hw_mdp;
+-	if (timer_pending(&hc->keep_tl))
+-		del_timer(&hc->keep_tl);
++	hc->shutdown = true;
  
--	for (i = 0; i < ARRAY_SIZE(dpu_kms->hw_vbif); i++) {
--		if (dpu_kms->hw_vbif[i] &&
--				dpu_kms->hw_vbif[i]->idx == params->vbif_idx)
--			vbif = dpu_kms->hw_vbif[i];
--	}
--
-+	vbif = dpu_get_vbif(dpu_kms, params->vbif_idx);
- 	if (!vbif || !mdp) {
- 		DPU_DEBUG("invalid arguments vbif %d mdp %d\n",
- 				vbif != 0, mdp != 0);
-@@ -208,7 +211,7 @@ void dpu_vbif_set_ot_limit(struct dpu_kms *dpu_kms,
- void dpu_vbif_set_qos_remap(struct dpu_kms *dpu_kms,
- 		struct dpu_vbif_set_qos_params *params)
- {
--	struct dpu_hw_vbif *vbif = NULL;
-+	struct dpu_hw_vbif *vbif;
- 	struct dpu_hw_mdp *mdp;
- 	bool forced_on = false;
- 	const struct dpu_vbif_qos_tbl *qos_tbl;
-@@ -220,13 +223,7 @@ void dpu_vbif_set_qos_remap(struct dpu_kms *dpu_kms,
- 	}
- 	mdp = dpu_kms->hw_mdp;
+-	if (timer_pending(&hc->timeout_tl))
+-		del_timer(&hc->timeout_tl);
++	del_timer_sync(&hc->keep_tl);
++	del_timer_sync(&hc->timeout_tl);
  
--	for (i = 0; i < ARRAY_SIZE(dpu_kms->hw_vbif); i++) {
--		if (dpu_kms->hw_vbif[i] &&
--				dpu_kms->hw_vbif[i]->idx == params->vbif_idx) {
--			vbif = dpu_kms->hw_vbif[i];
--			break;
--		}
--	}
-+	vbif = dpu_get_vbif(dpu_kms, params->vbif_idx);
+ 	cancel_work_sync(&hc->workq);
  
- 	if (!vbif || !vbif->cap) {
- 		DPU_ERROR("invalid vbif %d\n", params->vbif_idx);
 -- 
 2.35.1
 
