@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9651560A6ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B687760AABE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbiJXMl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S236090AbiJXNhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234127AbiJXMjF (ORCPT
+        with ESMTP id S233541AbiJXNdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:39:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD98889922;
-        Mon, 24 Oct 2022 05:06:54 -0700 (PDT)
+        Mon, 24 Oct 2022 09:33:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEC1209A6;
+        Mon, 24 Oct 2022 05:34:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E163612D2;
-        Mon, 24 Oct 2022 12:06:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A316CC433C1;
-        Mon, 24 Oct 2022 12:06:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B51BD612BB;
+        Mon, 24 Oct 2022 12:23:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0B8AC433C1;
+        Mon, 24 Oct 2022 12:23:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613214;
-        bh=G5rFMnbphdFlimTTrBxf0GATpB6Qn3yV8DwLPrEA5UM=;
+        s=korg; t=1666614182;
+        bh=oei25bppX7opojlLxFImrhg7rgEMZXfr7N6+E7cS4gc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V92o0Cvu9UeaO8MRSVUoeVYxRGi3mlgRWRcvPnuAH2Sg+S86gG+A9Qz/F2NnGUvaA
-         CZITvtIi+oUqdWEPLlvWTI1r7fux1tZLNxluAluI4E8x8/iJjMbW3VGkLVHkQKNU+7
-         9SmeFLmQ5xRC6ii7I1tlYYmbA3uUf4Y13UGiP0LU=
+        b=2YFp3Mi064UJA5WDeV7Jv224y+a5llOy7Mf2heA991TD8i6ZEiDx8F1gTO+dTnqVS
+         YcxTP4jjugZd2q4g2N6/3AcKnURfb4jlJgz40FcON8Vmz3wyMv9r8IP2hwTly4m9p+
+         WpLuMz7ykoz9NXm6UI9wOmPfB8JK7xTCw/rUP8tM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: [PATCH 5.4 051/255] media: cedrus: Set the platform driver data earlier
+        stable@vger.kernel.org, Andreas Pape <apape@de.adit-jv.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 164/390] ALSA: dmaengine: increment buffer pointer atomically
 Date:   Mon, 24 Oct 2022 13:29:21 +0200
-Message-Id: <20221024113004.124428205@linuxfoundation.org>
+Message-Id: <20221024113029.693302618@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,46 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+From: Andreas Pape <apape@de.adit-jv.com>
 
-commit 708938f8495147fe2e77a9a3e1015d8e6899323e upstream.
+[ Upstream commit d1c442019594692c64a70a86ad88eb5b6db92216 ]
 
-The cedrus_hw_resume() crashes with NULL deference on driver probe if
-runtime PM is disabled because it uses platform data that hasn't been
-set up yet. Fix this by setting the platform data earlier during probe.
+Setting pointer and afterwards checking for wraparound leads
+to the possibility of returning the inconsistent pointer position.
 
-Cc: stable@vger.kernel.org
-Fixes: 50e761516f2b (media: platform: Add Cedrus VPU decoder driver)
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Reviewed-by: Samuel Holland <samuel@sholland.org>
-Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This patch increments buffer pointer atomically to avoid this issue.
+
+Fixes: e7f73a1613567a ("ASoC: Add dmaengine PCM helper functions")
+Signed-off-by: Andreas Pape <apape@de.adit-jv.com>
+Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Link: https://lore.kernel.org/r/1664211493-11789-1-git-send-email-erosca@de.adit-jv.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/core/pcm_dmaengine.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -323,6 +323,8 @@ static int cedrus_probe(struct platform_
- 	if (!dev)
- 		return -ENOMEM;
+diff --git a/sound/core/pcm_dmaengine.c b/sound/core/pcm_dmaengine.c
+index 4d0e8fe535a1..be58505889a3 100644
+--- a/sound/core/pcm_dmaengine.c
++++ b/sound/core/pcm_dmaengine.c
+@@ -130,12 +130,14 @@ EXPORT_SYMBOL_GPL(snd_dmaengine_pcm_set_config_from_dai_data);
  
-+	platform_set_drvdata(pdev, dev);
-+
- 	dev->vfd = cedrus_video_device;
- 	dev->dev = &pdev->dev;
- 	dev->pdev = pdev;
-@@ -392,8 +394,6 @@ static int cedrus_probe(struct platform_
- 		goto err_m2m_mc;
- 	}
+ static void dmaengine_pcm_dma_complete(void *arg)
+ {
++	unsigned int new_pos;
+ 	struct snd_pcm_substream *substream = arg;
+ 	struct dmaengine_pcm_runtime_data *prtd = substream_to_prtd(substream);
  
--	platform_set_drvdata(pdev, dev);
--
- 	return 0;
+-	prtd->pos += snd_pcm_lib_period_bytes(substream);
+-	if (prtd->pos >= snd_pcm_lib_buffer_bytes(substream))
+-		prtd->pos = 0;
++	new_pos = prtd->pos + snd_pcm_lib_period_bytes(substream);
++	if (new_pos >= snd_pcm_lib_buffer_bytes(substream))
++		new_pos = 0;
++	prtd->pos = new_pos;
  
- err_m2m_mc:
+ 	snd_pcm_period_elapsed(substream);
+ }
+-- 
+2.35.1
+
 
 
