@@ -2,116 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A403460BD7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC8060BECF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbiJXWfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S229887AbiJXXmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiJXWen (ORCPT
+        with ESMTP id S229822AbiJXXmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:34:43 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EE031DC0B
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:58:18 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id m16so33317703edc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:58:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wN9xp9CGfEXcy9ZUhAlzmgVvoo8fo5U8S26wHVxg2ig=;
-        b=Z5tPB/MLR2TafhpF8u9gg6+4mUEDrIbM8/l6b6PiwDt3kSPDjK4P1YfOkRWdqs/Qro
-         NO+r494H7+BeLvSuWYI0eiFg/RNo5UqvlWDanVQy6GkQoQ+1qPzUH1EyQvrr8NQIuZwP
-         uzDWKbFyWEfV4n8RiggEt8C+vNFMCUTMsIXef70J7aALkIrLqCdHE6v0xB1pNyRqV4/v
-         6V/ouoyqCvtHGeMb19VDYwWQouegiA1xURYKCLZUEx8C/HcUaRToJmuDClKhD7rssocD
-         tLyDYVxO7zBjxZhtFsnNSvXUhwhGHU/bK88B+szoy/ZOxCaegqPpzjvkP/YcNnhusk/b
-         YizQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wN9xp9CGfEXcy9ZUhAlzmgVvoo8fo5U8S26wHVxg2ig=;
-        b=jbxoq2WUqUBpSB5msjLOE+obWKXn44sjwy9i3cNpt70sxtFuPVKHfV9qB5tIR9T7dJ
-         HHYchCez7f7ECn3VQjb41Uc/VcpwQt8qlzcEZQS2qq25DdYDcIELKEw4De43b7YT3uwG
-         Dlyt17M42SDory2QgG+2H+Ov/ys69v+Fx7XPJkncuQxbNFeVKUAJdGeyg8ElXpBzg6Ke
-         tpvRSPB0jQ2N4Wk2cvST2PMF2bqulKkSTwXbgY+M8e9/S8SuPSiG+9ce0HVABtOvxDR2
-         FFFK6pVGzYKNPkWAodD9lh0ljF26lquVhEOkqASaRRxxrN4lmNtql0Qf+0PgsGn8i3YH
-         12qg==
-X-Gm-Message-State: ACrzQf2NYD3CxaMYcC8S20GHrSVqtNV+da5pnaee6Y085ktf8EQbQpkP
-        +JTmt3I7D5WVnk8p1YpqJEeMQgnF+sc=
-X-Google-Smtp-Source: AMsMyM60LdtUisTIW1qhUz5mAJHOCvIif9J9TxhIcbQetcBWikOkzFUshJxeZZ3uFv4Yc2lXPC2HEA==
-X-Received: by 2002:aa7:d1c3:0:b0:461:c627:2a7b with SMTP id g3-20020aa7d1c3000000b00461c6272a7bmr4653238edp.231.1666615741855;
-        Mon, 24 Oct 2022 05:49:01 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170906854b00b00782fbb7f5f7sm6029329ejy.113.2022.10.24.05.49.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 05:49:01 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Mon, 24 Oct 2022 14:48:59 +0200
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH v2 5/7] mm: vmalloc: Use trace_purge_vmap_area_lazy event
-Message-ID: <Y1aJuzlLVGHPYyX4@pc638.lan>
-References: <20221018181053.434508-6-urezki@gmail.com>
- <202210240651.gHRa2Tys-lkp@intel.com>
+        Mon, 24 Oct 2022 19:42:24 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF4A1D73FB;
+        Mon, 24 Oct 2022 15:01:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666615860; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6dhnHc0bAedKhrMgs9Dk+4I6+5jfqv63sCgiUYVWOcI=;
+        b=tn1ZvOhDMsL2gp6C/3Ym9t7tzU8xZKvHqGrY4PYZXRWhTkGcKydZ7EkM1OPd+MtYhJbqEU
+        gaeSSUu5ewEavK1O9aX2hgvviFqghRqzkRmSVnUBoMURUYz5BkO4yWfO/2k3UF6FZOwmlk
+        eYlYk1D+4AEN4Q6V/cyZPE1MQ5gYaoA=
+Date:   Mon, 24 Oct 2022 13:50:50 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v2 2/2] serial: 8250/ingenic: Add support for the
+ JZ4750/JZ4755
+To:     Siarhei Volkau <lis8215@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Message-Id: <Q0D9KR.U3D9MHHH52AZ@crapouillou.net>
+In-Reply-To: <20221022151224.4000238-3-lis8215@gmail.com>
+References: <20221022151224.4000238-1-lis8215@gmail.com>
+        <20221022151224.4000238-3-lis8215@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202210240651.gHRa2Tys-lkp@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Andrew.
+Hi Siarhei,
 
-> Hi Uladzislau,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on akpm-mm/mm-everything]
-> [also build test WARNING on linus/master v6.1-rc1]
-> [cannot apply to next-20221021]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Uladzislau-Rezki-Sony/Add-basic-trace-events-for-vmap-vmalloc-v2/20221019-021918
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20221018181053.434508-6-urezki%40gmail.com
-> patch subject: [PATCH v2 5/7] mm: vmalloc: Use trace_purge_vmap_area_lazy event
-> config: sparc-randconfig-c031-20221023
-> compiler: sparc64-linux-gcc (GCC) 12.1.0
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> 
-> cocci warnings: (new ones prefixed by >>)
-> >> mm/vmalloc.c:1789:36-41: WARNING: conversion to bool not needed here
-> 
-I think it should be fixed by the:
+Le sam. 22 oct. 2022 =E0 18:12:24 +0300, Siarhei Volkau=20
+<lis8215@gmail.com> a =E9crit :
+> JZ4750/55/60 (but not JZ4760b) have an extra divisor in between extclk
+> and peripheral clock, called CPCCR.ECS, the driver can't figure out=20
+> the
+> real state of the divisor without dirty hack - peek CGU CPCCR=20
+> register.
+> However, we can rely on a vendor's bootloader (u-boot 1.1.6) behavior:
+> if (extclk > 16MHz)
+>     the divisor is enabled, so the UART driving clock is extclk/2.
+>=20
+> This behavior relies on hardware differences: most boards (if not all)
+> with those SoCs have 12 or 24 MHz oscillators but many peripherals=20
+> want
+> 12Mhz to operate properly (AIC and USB-PHY at least).
+>=20
+> The patch doesn't affect JZ4760's behavior as it is subject for=20
+> another
+> patchset with re-classification of all supported ingenic UARTs.
+>=20
+> Link:=20
+> https://github.com/carlos-wong/uboot_jz4755/blob/master/cpu/mips/jz_seria=
+l.c#L158
+> Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> ---
+>  drivers/tty/serial/8250/8250_ingenic.c | 50=20
+> ++++++++++++++++++++++----
+>  1 file changed, 43 insertions(+), 7 deletions(-)
+>=20
+> diff --git a/drivers/tty/serial/8250/8250_ingenic.c=20
+> b/drivers/tty/serial/8250/8250_ingenic.c
+> index 2b2f5d8d2..3ffa6b722 100644
+> --- a/drivers/tty/serial/8250/8250_ingenic.c
+> +++ b/drivers/tty/serial/8250/8250_ingenic.c
+> @@ -87,24 +87,19 @@ static void __init=20
+> ingenic_early_console_setup_clock(struct earlycon_device *dev
+>  	dev->port.uartclk =3D be32_to_cpup(prop);
+>  }
+>=20
+> -static int __init ingenic_early_console_setup(struct earlycon_device=20
+> *dev,
+> -					      const char *opt)
+> +static int __init ingenic_earlycon_setup_tail(struct earlycon_device=20
+> *dev,
+> +					      const char *opt)
+>  {
+>  	struct uart_port *port =3D &dev->port;
+>  	unsigned int divisor;
+>  	int baud =3D 115200;
+>=20
+> -	if (!dev->port.membase)
+> -		return -ENODEV;
 
-https://git.kernel.org/pub/scm/linux/kernel/git/akpm/25-new.git/tree/patches/mm-vmalloc-use-trace_purge_vmap_area_lazy-event-fix.patch
+You can keep this here - no need to move it (and it'd avoid duplicating=20
+code).
 
-Thanks!
+> -
+>  	if (opt) {
+>  		unsigned int parity, bits, flow; /* unused for now */
+>=20
+>  		uart_parse_options(opt, &baud, &parity, &bits, &flow);
+>  	}
+>=20
+> -	ingenic_early_console_setup_clock(dev);
+> -
+>  	if (dev->baud)
+>  		baud =3D dev->baud;
+>  	divisor =3D DIV_ROUND_CLOSEST(port->uartclk, 16 * baud);
+> @@ -129,9 +124,49 @@ static int __init=20
+> ingenic_early_console_setup(struct earlycon_device *dev,
+>  	return 0;
+>  }
+>=20
+> +static int __init ingenic_early_console_setup(struct earlycon_device=20
+> *dev,
+> +					      const char *opt)
+> +{
+> +	if (!dev->port.membase)
+> +		return -ENODEV;
+> +
+> +	ingenic_early_console_setup_clock(dev);
+> +
+> +	ingenic_earlycon_setup_tail(dev, opt);
+> +}
+> +
+> +static int __init jz4750_early_console_setup(struct earlycon_device=20
+> *dev,
+> +					     const char *opt)
+> +{
+> +	if (!dev->port.membase)
+> +		return -ENODEV;
+> +
+> +	/*
+> +	 * JZ4750/55/60 (not JZ4760b) have an extra divisor
+> +	 * between extclk and peripheral clock, the
+> +	 * driver can't figure out the real state of the
+> +	 * divisor without dirty hacks (peek CGU register).
+> +	 * However, we can rely on a vendor's behavior:
+> +	 * if (extclk > 16MHz)
+> +	 *   the divisor is enabled.
+> +	 * This behavior relies on hardware differences:
+> +	 * most boards with those SoCs have 12 or 24 MHz
+> +	 * oscillators but many peripherals want 12Mhz
+> +	 * to operate properly (AIC and USB-phy at least).
+> +	 */
+> +	ingenic_early_console_setup_clock(dev);
+> +	if (dev->port.uartclk > 16000000)
+> +		dev->port.uartclk /=3D 2;
 
---
-Uladzislau Rezki
+I would assume you could just do:
+dev->port.uartclk =3D 12000000;
+
+Since you'd always get a 12 MHz clock (either with a 12 MHz oscillator=20
+or a 24 MHz oscillator with a /2 divider).
+
+With that said - I am fine with that code, it would allow to fine-tune=20
+the oscillator value (although I hightly doubt anybody is going to do=20
+that).
+
+The 16 MHz value sounds very arbitrary, but I'll give it a pass.
+
+Cheers,
+-Paul
+
+> +
+> +	ingenic_earlycon_setup_tail(dev, opt);
+> +}
+> +
+>  OF_EARLYCON_DECLARE(jz4740_uart, "ingenic,jz4740-uart",
+>  		    ingenic_early_console_setup);
+>=20
+> +OF_EARLYCON_DECLARE(jz4750_uart, "ingenic,jz4750-uart",
+> +		    jz4750_early_console_setup);
+> +
+>  OF_EARLYCON_DECLARE(jz4770_uart, "ingenic,jz4770-uart",
+>  		    ingenic_early_console_setup);
+>=20
+> @@ -328,6 +363,7 @@ static const struct ingenic_uart_config=20
+> x1000_uart_config =3D {
+>=20
+>  static const struct of_device_id of_match[] =3D {
+>  	{ .compatible =3D "ingenic,jz4740-uart", .data =3D &jz4740_uart_config=20
+> },
+> +	{ .compatible =3D "ingenic,jz4750-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4760-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4770-uart", .data =3D &jz4760_uart_config=20
+> },
+>  	{ .compatible =3D "ingenic,jz4775-uart", .data =3D &jz4760_uart_config=20
+> },
+> --
+> 2.36.1
+>=20
+
+
