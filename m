@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FC060BAFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4DA60BA88
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235032AbiJXUp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S234568AbiJXUiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:38:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234885AbiJXUnk (ORCPT
+        with ESMTP id S234572AbiJXUhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:43:40 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF102A1FF8;
-        Mon, 24 Oct 2022 11:51:44 -0700 (PDT)
+        Mon, 24 Oct 2022 16:37:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF985B9F6;
+        Mon, 24 Oct 2022 11:49:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9CC14CE16D0;
-        Mon, 24 Oct 2022 12:47:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78417C433D6;
-        Mon, 24 Oct 2022 12:47:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 941E5B815E0;
+        Mon, 24 Oct 2022 12:12:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E563BC433C1;
+        Mon, 24 Oct 2022 12:12:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615657;
-        bh=Jc7h3JUL9c+lPpAPLvQB/oauRcrXP168vAOoGYlcZDk=;
+        s=korg; t=1666613521;
+        bh=mpW9LaTnpHes5AevAZkGKgrZliGsNsmKn5pSYANPHqc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yRTnHBOHOZQ1/25RsRjBFAbSIinl5JfZWq0HfFiXiuhMzmSQvbXmI8R4ZwV4MNLK+
-         8Nd0ijMNNSecEGMpOQ7z3jagfLtIyoWo9eTAERvH7hNB/CWCTpngXgBfP+c/StclQy
-         kHz+KQdY8n5XlkRunqQW9enimRyVwqBtPsaVb8Fk=
+        b=yOTPdr/vtz5heIWqE7AZgh5p6k2iMvWRyvA9KOrciS+Gzissuk0Jtt1PgpAXV9z2F
+         WvLL82iKHYSVmMSOtOzOGaULCAHbj0oyOlprx2I13tJIjo1r1C+T/S0ba9FZdjcVAP
+         Dk+/4xzhVJq1sELvf9Ra1aFXn5RG2EvbkI4PFMpA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 335/530] scsi: iscsi: Run recv path from workqueue
+Subject: [PATCH 5.4 169/255] mailbox: bcm-ferxrm-mailbox: Fix error check for dma_map_sg
 Date:   Mon, 24 Oct 2022 13:31:19 +0200
-Message-Id: <20221024113100.168459404@linuxfoundation.org>
+Message-Id: <20221024113008.383353567@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,172 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Jack Wang <jinpu.wang@ionos.com>
 
-[ Upstream commit f1d269765ee29da56b32818b7a08054484ed89f2 ]
+[ Upstream commit 6b207ce8a96a71e966831e3a13c38143ba9a73c1 ]
 
-We don't always want to run the recv path from the network softirq because
-when we have to have multiple sessions sharing the same CPUs, some sessions
-can eat up the NAPI softirq budget and affect other sessions or users.
+dma_map_sg return 0 on error, fix the error check, and return -EIO
+to caller.
 
-Allow us to queue the recv handling to the iscsi workqueue so we can have
-the scheduler/wq code try to balance the work and CPU use across all
-sessions' worker threads.
-
-Note: It wasn't the original intent of the change but a nice side effect is
-that for some workloads/configs we get a nice performance boost. For a
-simple read heavy test:
-
-  fio --direct=1 --filename=/dev/dm-0  --rw=randread --bs=256K
-    --ioengine=libaio --iodepth=128 --numjobs=4
-
-where the iscsi threads, fio jobs, and rps_cpus share CPUs we see a 32%
-throughput boost. We also see increases for small I/O IOPs tests but it's
-not as high.
-
-Link: https://lore.kernel.org/r/20220616224557.115234-4-michael.christie@oracle.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Stable-dep-of: 57569c37f0ad ("scsi: iscsi: iscsi_tcp: Fix null-ptr-deref while calling getpeername()")
+Fixes: dbc049eee730 ("mailbox: Add driver for Broadcom FlexRM ring manager")
+Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/iscsi_tcp.c | 65 ++++++++++++++++++++++++++++++++--------
- drivers/scsi/iscsi_tcp.h |  2 ++
- 2 files changed, 54 insertions(+), 13 deletions(-)
+ drivers/mailbox/bcm-flexrm-mailbox.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index e7976785dae6..20b4394d560b 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -52,6 +52,10 @@ static struct iscsi_transport iscsi_sw_tcp_transport;
- static unsigned int iscsi_max_lun = ~0;
- module_param_named(max_lun, iscsi_max_lun, uint, S_IRUGO);
+diff --git a/drivers/mailbox/bcm-flexrm-mailbox.c b/drivers/mailbox/bcm-flexrm-mailbox.c
+index 8ee9db274802..f7191dbef6fa 100644
+--- a/drivers/mailbox/bcm-flexrm-mailbox.c
++++ b/drivers/mailbox/bcm-flexrm-mailbox.c
+@@ -632,15 +632,15 @@ static int flexrm_spu_dma_map(struct device *dev, struct brcm_message *msg)
  
-+static bool iscsi_recv_from_iscsi_q;
-+module_param_named(recv_from_iscsi_q, iscsi_recv_from_iscsi_q, bool, 0644);
-+MODULE_PARM_DESC(recv_from_iscsi_q, "Set to true to read iSCSI data/headers from the iscsi_q workqueue. The default is false which will perform reads from the network softirq context.");
-+
- static int iscsi_sw_tcp_dbg;
- module_param_named(debug_iscsi_tcp, iscsi_sw_tcp_dbg, int,
- 		   S_IRUGO | S_IWUSR);
-@@ -122,20 +126,13 @@ static inline int iscsi_sw_sk_state_check(struct sock *sk)
+ 	rc = dma_map_sg(dev, msg->spu.src, sg_nents(msg->spu.src),
+ 			DMA_TO_DEVICE);
+-	if (rc < 0)
+-		return rc;
++	if (!rc)
++		return -EIO;
+ 
+ 	rc = dma_map_sg(dev, msg->spu.dst, sg_nents(msg->spu.dst),
+ 			DMA_FROM_DEVICE);
+-	if (rc < 0) {
++	if (!rc) {
+ 		dma_unmap_sg(dev, msg->spu.src, sg_nents(msg->spu.src),
+ 			     DMA_TO_DEVICE);
+-		return rc;
++		return -EIO;
+ 	}
+ 
  	return 0;
- }
- 
--static void iscsi_sw_tcp_data_ready(struct sock *sk)
-+static void iscsi_sw_tcp_recv_data(struct iscsi_conn *conn)
- {
--	struct iscsi_conn *conn;
--	struct iscsi_tcp_conn *tcp_conn;
-+	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
-+	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
-+	struct sock *sk = tcp_sw_conn->sock->sk;
- 	read_descriptor_t rd_desc;
- 
--	read_lock_bh(&sk->sk_callback_lock);
--	conn = sk->sk_user_data;
--	if (!conn) {
--		read_unlock_bh(&sk->sk_callback_lock);
--		return;
--	}
--	tcp_conn = conn->dd_data;
--
- 	/*
- 	 * Use rd_desc to pass 'conn' to iscsi_tcp_recv.
- 	 * We set count to 1 because we want the network layer to
-@@ -144,13 +141,48 @@ static void iscsi_sw_tcp_data_ready(struct sock *sk)
- 	 */
- 	rd_desc.arg.data = conn;
- 	rd_desc.count = 1;
--	tcp_read_sock(sk, &rd_desc, iscsi_sw_tcp_recv);
- 
--	iscsi_sw_sk_state_check(sk);
-+	tcp_read_sock(sk, &rd_desc, iscsi_sw_tcp_recv);
- 
- 	/* If we had to (atomically) map a highmem page,
- 	 * unmap it now. */
- 	iscsi_tcp_segment_unmap(&tcp_conn->in.segment);
-+
-+	iscsi_sw_sk_state_check(sk);
-+}
-+
-+static void iscsi_sw_tcp_recv_data_work(struct work_struct *work)
-+{
-+	struct iscsi_conn *conn = container_of(work, struct iscsi_conn,
-+					       recvwork);
-+	struct iscsi_tcp_conn *tcp_conn = conn->dd_data;
-+	struct iscsi_sw_tcp_conn *tcp_sw_conn = tcp_conn->dd_data;
-+	struct sock *sk = tcp_sw_conn->sock->sk;
-+
-+	lock_sock(sk);
-+	iscsi_sw_tcp_recv_data(conn);
-+	release_sock(sk);
-+}
-+
-+static void iscsi_sw_tcp_data_ready(struct sock *sk)
-+{
-+	struct iscsi_sw_tcp_conn *tcp_sw_conn;
-+	struct iscsi_tcp_conn *tcp_conn;
-+	struct iscsi_conn *conn;
-+
-+	read_lock_bh(&sk->sk_callback_lock);
-+	conn = sk->sk_user_data;
-+	if (!conn) {
-+		read_unlock_bh(&sk->sk_callback_lock);
-+		return;
-+	}
-+	tcp_conn = conn->dd_data;
-+	tcp_sw_conn = tcp_conn->dd_data;
-+
-+	if (tcp_sw_conn->queue_recv)
-+		iscsi_conn_queue_recv(conn);
-+	else
-+		iscsi_sw_tcp_recv_data(conn);
- 	read_unlock_bh(&sk->sk_callback_lock);
- }
- 
-@@ -276,6 +308,9 @@ static int iscsi_sw_tcp_xmit_segment(struct iscsi_tcp_conn *tcp_conn,
- 		if (segment->total_copied + segment->size < segment->total_size)
- 			flags |= MSG_MORE;
- 
-+		if (tcp_sw_conn->queue_recv)
-+			flags |= MSG_DONTWAIT;
-+
- 		/* Use sendpage if we can; else fall back to sendmsg */
- 		if (!segment->data) {
- 			sg = segment->sg;
-@@ -557,6 +592,8 @@ iscsi_sw_tcp_conn_create(struct iscsi_cls_session *cls_session,
- 	conn = cls_conn->dd_data;
- 	tcp_conn = conn->dd_data;
- 	tcp_sw_conn = tcp_conn->dd_data;
-+	INIT_WORK(&conn->recvwork, iscsi_sw_tcp_recv_data_work);
-+	tcp_sw_conn->queue_recv = iscsi_recv_from_iscsi_q;
- 
- 	tfm = crypto_alloc_ahash("crc32c", 0, CRYPTO_ALG_ASYNC);
- 	if (IS_ERR(tfm))
-@@ -610,6 +647,8 @@ static void iscsi_sw_tcp_release_conn(struct iscsi_conn *conn)
- 	iscsi_sw_tcp_conn_restore_callbacks(conn);
- 	sock_put(sock->sk);
- 
-+	iscsi_suspend_rx(conn);
-+
- 	spin_lock_bh(&session->frwd_lock);
- 	tcp_sw_conn->sock = NULL;
- 	spin_unlock_bh(&session->frwd_lock);
-diff --git a/drivers/scsi/iscsi_tcp.h b/drivers/scsi/iscsi_tcp.h
-index 791453195099..850a018aefb9 100644
---- a/drivers/scsi/iscsi_tcp.h
-+++ b/drivers/scsi/iscsi_tcp.h
-@@ -28,6 +28,8 @@ struct iscsi_sw_tcp_send {
- 
- struct iscsi_sw_tcp_conn {
- 	struct socket		*sock;
-+	struct work_struct	recvwork;
-+	bool			queue_recv;
- 
- 	struct iscsi_sw_tcp_send out;
- 	/* old values for socket callbacks */
 -- 
 2.35.1
 
