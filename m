@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438EF60B76A
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FDA60B72B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbiJXTXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S230474AbiJXTVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiJXTVy (ORCPT
+        with ESMTP id S232471AbiJXTUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:21:54 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99591E718
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:57:24 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y1so9613490pfr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:57:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kBU82kTAb6ejCzCPdRzJommk6OJkr5XyNm4aFLMb1Lo=;
-        b=RnX9z/EyXFWaUQ4+NHwDXdpAWxW+FR9R8nm39w0AaYU9kdznNu4IHmM6GSKF4cRcV4
-         aRfuhZxa9CM2GIlk54VdFm5ss32J0pIw9JiN4zYfVZ12g2Llv4W2LoC94v4PMZ40bAzx
-         3kA73t9lBnjmWm9QMfq36+K1fqNixXiAfEkTE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kBU82kTAb6ejCzCPdRzJommk6OJkr5XyNm4aFLMb1Lo=;
-        b=7kWrDHkwhHmSBPGfoefn4wAhTWtRaolAg+CY4uHrkdIUAuXL2VU+aUULLktzmL9jqS
-         rmn2oT9U3WgeTrH4XaUJizoAHDlL4HxNCKMFJuq4PPMOmjyaQwVXckfTo2OCQxP5W3ZQ
-         cAnwXZ/29h84K/99JXNaZmafK+VTIgLO3dIAPL2U1BiqsQl1P4DuEQ0WFkTt5mIBLPYW
-         zIiCO62y3E1iZAdMgQmvUbdj1CrVic9u1KAPLBdB2XBuGH7rLY84b9uLVanWDWkfhnFB
-         lgpEUDj5wUl6YaUgLJmpmgd8gM5dFcDKkbeszNDQcuJUfw37miSmLYaaWuuhDYWnYDAO
-         KWDA==
-X-Gm-Message-State: ACrzQf3yLn7EcyYOq5hPtRJ623Vs1vPKfIwydNjkQnoNFvmPJbcygmqn
-        fP7ixJ4dTWobX8D3VSTdeSM65g==
-X-Google-Smtp-Source: AMsMyM6Hp0vgunlSJu4/TCH07DNhzYhxDd1XyT5BfXLbDyfeI3MU6gI+gnXmu+1SQyl1XKUTxmYmYQ==
-X-Received: by 2002:a62:1a97:0:b0:562:5587:12d6 with SMTP id a145-20020a621a97000000b00562558712d6mr34124134pfa.37.1666634192416;
-        Mon, 24 Oct 2022 10:56:32 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:808b:e2f6:edcf:ccb0])
-        by smtp.gmail.com with UTF8SMTPSA id b1-20020a1709027e0100b00176a6ba5969sm39531plm.98.2022.10.24.10.56.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 10:56:32 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Shawn Lin <shawn.lin@rock-chips.com>, linux-mmc@vger.kernel.org,
-        Al Cooper <alcooperx@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v3 7/7] mmc: sdhci-*: Convert drivers to new sdhci_and_cqhci_reset()
-Date:   Mon, 24 Oct 2022 10:55:01 -0700
-Message-Id: <20221024105229.v3.7.Ia91f031f5f770af7bd2ff3e28b398f277606d970@changeid>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-In-Reply-To: <20221024175501.2265400-1-briannorris@chromium.org>
-References: <20221024175501.2265400-1-briannorris@chromium.org>
+        Mon, 24 Oct 2022 15:20:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4924FDAC71;
+        Mon, 24 Oct 2022 10:56:29 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29OFYa94016047;
+        Mon, 24 Oct 2022 17:55:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=LnvzKq7dpO44VMtAlkmSvW4YqURDoxvDFoPsNbIvK3o=;
+ b=OWc56O+nt5NWqIstIV0GUvWqXYnL9DAnm7//S2vci0Gnzffno/2kxfHlpCLaNNoZptUG
+ jUiLKQp3O8sD1TAXXjvA7Kh/FCkch6FUvg9/WbBL+XObLkH0cGFWl4CzJuMqKDcrQYEL
+ DmgxrHAwz6m/PsmdKsE3xfHfFLbn4sSwj8HJCYb9upTFErTMqn/YBlPmC41sODmRW27F
+ 7XPrYOixXKpFgmmGV/TZpBgfxDKp6/bkOLFUCKM6iuM4BJ+xVd/xUlKd8wuVbaDqNvs9
+ Ccg8NclE1CSUfHoNxoFI9BgOaxGR3zjGpYKfI/3NpPO+KNjtY3FRW3o9kdPVy2fQvljf rg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kc5vwmc93-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 17:55:28 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29OHtRHq006850
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Oct 2022 17:55:27 GMT
+Received: from [10.110.127.91] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 24 Oct
+ 2022 10:55:27 -0700
+Message-ID: <99c79c5f-bb6a-13ae-0f83-e4c176c9c94f@quicinc.com>
+Date:   Mon, 24 Oct 2022 10:55:26 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/4] dt-bindings: firmware: scm: Add QDU1000/QRU1000
+ compatibles
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Robert Marko <robimarko@gmail.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221014221121.7497-1-quic_molvera@quicinc.com>
+ <20221014221121.7497-2-quic_molvera@quicinc.com>
+ <55d026c0-9c54-f5d6-bf5e-da71856f0698@linaro.org>
+ <4d680e5a-16eb-f68b-ac6a-e11580104c23@quicinc.com>
+ <a8d38406-6294-581a-9677-ff2e686eca50@linaro.org>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <a8d38406-6294-581a-9677-ff2e686eca50@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JnMiWI9bgplNBF7IMximrDRMx1E2harW
+X-Proofpoint-ORIG-GUID: JnMiWI9bgplNBF7IMximrDRMx1E2harW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_05,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ malwarescore=0 adultscore=0 bulkscore=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 phishscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210240108
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,134 +89,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An earlier patch ("mmc: cqhci: Provide helper for resetting both SDHCI
-and CQHCI") does these operations for us.
 
-I keep these as a separate patch, since the earlier patch is a
-prerequisite to some important bugfixes that need to be backported via
-linux-stable.
 
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
+On 10/20/2022 5:35 AM, Krzysztof Kozlowski wrote:
+> On 19/10/2022 14:08, Melody Olvera wrote:
+>>
+>> On 10/15/2022 6:34 AM, Krzysztof Kozlowski wrote:
+>>> On 14/10/2022 18:11, Melody Olvera wrote:
+>>>> Add compatibles for scm driver for QDU1000 and QRU1000 platforms.
+>>>>
+>>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>>>> ---
+>>>>  .../devicetree/bindings/firmware/qcom,scm.yaml   | 16 ++++++++++++++++
+>>>>  1 file changed, 16 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>> index c5b76c9f7ad0..47083f47f109 100644
+>>>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>> @@ -38,6 +38,8 @@ properties:
+>>>>            - qcom,scm-msm8994
+>>>>            - qcom,scm-msm8996
+>>>>            - qcom,scm-msm8998
+>>>> +          - qcom,scm-qdu1000
+>>>> +          - qcom,scm-qru1000
+>>> Why exactly we are no using qdu1000 as fallback? That was the
+>>> recommendation in previous discussion.
+>> Will use only qdu; I think I misunderstood the outcome of that discussion.
+> Actually, I think I commented about this in wrong patch. I think the
+> outcome was to use two compatibles for most of the cases, but as a
+> fallback, so:
+>
+> QDU: "qcom,qdu1000-rpmhpd"
+> QRU: "qcom,qru1000-rpmhpd", "qcom,qdu1000-rpmhpd"
+> (or skip entirely second if you do not customize QRU in DTSI)
+>
+> However here we already have a fallback, so these are fine:
+>
+> "qcom,scm-qdu1000", "qcom,scm"
+> "qcom,scm-qru1000", "qcom,scm"
+>
+> Still assuming you customize them in DTSI... which does not seem the
+> case, right?
+Yeah dtsi is largely shared between RU and DU. It probably makes more sense to
+drop RU compat string all together unless there is a significant difference.
+>>> Patch is still incomplete - you still do no have proper changes in allOf
+>>> for the clocks. If you want to say that this SoC does not take any
+>>> clocks as input, then they should not be allowed.
+>> That is what I'm trying to say; it seems most of our most recent SoCs (sm8*) don't have any
+>> clocks associated with the scm. Does it make sense to remove the minItems earlier
+>> in the binding, or is there something else that would communicate this in allOf better?
+>>
+>
+> Then disallow clocks for your variant:
+>
+>   - if:
+>      ....
+>     then:
+>      ...
+>       clocks: false
+>       clock-names: false
+Got it; thanks.
 
-Changes in v3:
- - Rewrite to new helper, patch sdhci-msm too
-
-Changes in v2:
- - Factor out ->cqe_private helpers
-
- drivers/mmc/host/sdhci-msm.c      | 10 ++--------
- drivers/mmc/host/sdhci-pci-core.c | 11 ++---------
- drivers/mmc/host/sdhci-pci-gli.c  | 11 ++---------
- 3 files changed, 6 insertions(+), 26 deletions(-)
-
-diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-index 3a091a387ecb..03f76384ab3f 100644
---- a/drivers/mmc/host/sdhci-msm.c
-+++ b/drivers/mmc/host/sdhci-msm.c
-@@ -19,6 +19,7 @@
- #include <linux/pinctrl/consumer.h>
- #include <linux/reset.h>
- 
-+#include "sdhci-cqhci.h"
- #include "sdhci-pltfm.h"
- #include "cqhci.h"
- 
-@@ -2304,13 +2305,6 @@ static void sdhci_msm_set_regulator_caps(struct sdhci_msm_host *msm_host)
- 	pr_debug("%s: supported caps: 0x%08x\n", mmc_hostname(mmc), caps);
- }
- 
--static void sdhci_msm_reset(struct sdhci_host *host, u8 mask)
--{
--	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL))
--		cqhci_deactivate(host->mmc);
--	sdhci_reset(host, mask);
--}
--
- static int sdhci_msm_register_vreg(struct sdhci_msm_host *msm_host)
- {
- 	int ret;
-@@ -2450,7 +2444,7 @@ static const struct of_device_id sdhci_msm_dt_match[] = {
- MODULE_DEVICE_TABLE(of, sdhci_msm_dt_match);
- 
- static const struct sdhci_ops sdhci_msm_ops = {
--	.reset = sdhci_msm_reset,
-+	.reset = sdhci_and_cqhci_reset,
- 	.set_clock = sdhci_msm_set_clock,
- 	.get_min_clock = sdhci_msm_get_min_clock,
- 	.get_max_clock = sdhci_msm_get_max_clock,
-diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
-index 169b84761041..cc039155b5c7 100644
---- a/drivers/mmc/host/sdhci-pci-core.c
-+++ b/drivers/mmc/host/sdhci-pci-core.c
-@@ -38,6 +38,7 @@
- #include "cqhci.h"
- 
- #include "sdhci.h"
-+#include "sdhci-cqhci.h"
- #include "sdhci-pci.h"
- 
- static void sdhci_pci_hw_reset(struct sdhci_host *host);
-@@ -234,14 +235,6 @@ static void sdhci_pci_dumpregs(struct mmc_host *mmc)
- 	sdhci_dumpregs(mmc_priv(mmc));
- }
- 
--static void sdhci_cqhci_reset(struct sdhci_host *host, u8 mask)
--{
--	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL) &&
--	    host->mmc->cqe_private)
--		cqhci_deactivate(host->mmc);
--	sdhci_reset(host, mask);
--}
--
- /*****************************************************************************\
-  *                                                                           *
-  * Hardware specific quirk handling                                          *
-@@ -703,7 +696,7 @@ static const struct sdhci_ops sdhci_intel_glk_ops = {
- 	.set_power		= sdhci_intel_set_power,
- 	.enable_dma		= sdhci_pci_enable_dma,
- 	.set_bus_width		= sdhci_set_bus_width,
--	.reset			= sdhci_cqhci_reset,
-+	.reset			= sdhci_and_cqhci_reset,
- 	.set_uhs_signaling	= sdhci_intel_set_uhs_signaling,
- 	.hw_reset		= sdhci_pci_hw_reset,
- 	.irq			= sdhci_cqhci_irq,
-diff --git a/drivers/mmc/host/sdhci-pci-gli.c b/drivers/mmc/host/sdhci-pci-gli.c
-index 4d509f656188..633a8ee8f8c5 100644
---- a/drivers/mmc/host/sdhci-pci-gli.c
-+++ b/drivers/mmc/host/sdhci-pci-gli.c
-@@ -15,6 +15,7 @@
- #include <linux/of.h>
- #include <linux/iopoll.h>
- #include "sdhci.h"
-+#include "sdhci-cqhci.h"
- #include "sdhci-pci.h"
- #include "cqhci.h"
- 
-@@ -922,14 +923,6 @@ static int gl9763e_add_host(struct sdhci_pci_slot *slot)
- 	return ret;
- }
- 
--static void sdhci_gl9763e_reset(struct sdhci_host *host, u8 mask)
--{
--	if ((host->mmc->caps2 & MMC_CAP2_CQE) && (mask & SDHCI_RESET_ALL) &&
--	    host->mmc->cqe_private)
--		cqhci_deactivate(host->mmc);
--	sdhci_reset(host, mask);
--}
--
- static void gli_set_gl9763e(struct sdhci_pci_slot *slot)
- {
- 	struct pci_dev *pdev = slot->chip->pdev;
-@@ -1136,7 +1129,7 @@ static const struct sdhci_ops sdhci_gl9763e_ops = {
- 	.set_clock		= sdhci_set_clock,
- 	.enable_dma		= sdhci_pci_enable_dma,
- 	.set_bus_width		= sdhci_set_bus_width,
--	.reset			= sdhci_gl9763e_reset,
-+	.reset			= sdhci_and_cqhci_reset,
- 	.set_uhs_signaling	= sdhci_set_gl9763e_signaling,
- 	.voltage_switch		= sdhci_gli_voltage_switch,
- 	.irq                    = sdhci_gl9763e_cqhci_irq,
--- 
-2.38.0.135.g90850a2211-goog
-
+Thanks,
+Melody
