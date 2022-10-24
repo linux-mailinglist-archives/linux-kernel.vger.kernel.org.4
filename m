@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F4560B1FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF0760B087
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 18:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbiJXQlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 12:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S233067AbiJXQGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 12:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234375AbiJXQlE (ORCPT
+        with ESMTP id S232682AbiJXQD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 12:41:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABE4CA884;
-        Mon, 24 Oct 2022 08:28:24 -0700 (PDT)
+        Mon, 24 Oct 2022 12:03:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4E31E393E;
+        Mon, 24 Oct 2022 07:56:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6577B81255;
-        Mon, 24 Oct 2022 12:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27CDFC433C1;
-        Mon, 24 Oct 2022 12:07:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C25E5B8166D;
+        Mon, 24 Oct 2022 12:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26764C433C1;
+        Mon, 24 Oct 2022 12:25:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613279;
-        bh=n6hSCr/yUwW8mNV3+JAkqCanWy4S3tIwyEl58OYzcR0=;
+        s=korg; t=1666614334;
+        bh=uoeFd3MyW7Ujm+9BgZ79uuyLasaqd+zLWJbzadSXaxI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dw1cR1hMQ9CrXFHkZCkGB5Gj8PqZTEKLkwzwexzVY/sJA13QcVr5CDfzirmFzeMYM
-         +LkTWCIC2KwzhggmtNS9HsuD03fh/7Yy12kJT53CZMcKzaKEdYXZpIAQ2PHuL0XEwo
-         vz9vcMIeERaYVcpm/0YEAld9KnAJ/FoLcO2zOldM=
+        b=T7QlpgP7uDZhmG2a2xRnbtAxGc/MRd4lFW/FhqpsSFxhNo1KVe0bn4pAkMNTuRpFF
+         gmpmhoAQhgVO6NclLOEH5OSv9rG55tVSPEhQK02p1k/N0RB+gQVtUHW9bUCpIFo04q
+         CqD064w5j+UrT9/HnHq1g60aXaZk5kHaYb3Cl+BA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 076/255] spi/omap100k:Fix PM disable depth imbalance in omap1_spi100k_probe
+Subject: [PATCH 5.10 189/390] iio: inkern: only release the device node when done with it
 Date:   Mon, 24 Oct 2022 13:29:46 +0200
-Message-Id: <20221024113005.039415667@linuxfoundation.org>
+Message-Id: <20221024113030.806122436@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhang Qilong <zhangqilong3@huawei.com>
+From: Nuno Sá <nuno.sa@analog.com>
 
-[ Upstream commit 29f65f2171c85a9633daa380df14009a365f42f2 ]
+[ Upstream commit 79c3e84874c7d14f04ad58313b64955a0d2e9437 ]
 
-The pm_runtime_enable will increase power disable depth. Thus
-a pairing decrement is needed on the error handling path to
-keep it balanced according to context.
+'of_node_put()' can potentially release the memory pointed to by
+'iiospec.np' which would leave us with an invalid pointer (and we would
+still pass it in 'of_xlate()'). Note that it is not guaranteed for the
+of_node lifespan to be attached to the device (to which is attached)
+lifespan so that there is (even though very unlikely) the possibility
+for the node to be freed while the device is still around. Thus, as there
+are indeed some of_xlate users which do access the node, a race is indeed
+possible.
 
-Fixes:db91841b58f9a ("spi/omap100k: Convert to runtime PM")
+As such, we can only release the node after we are done with it.
 
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
-Link: https://lore.kernel.org/r/20220924121310.78331-4-zhangqilong3@huawei.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 17d82b47a215d ("iio: Add OF support")
+Signed-off-by: Nuno Sá <nuno.sa@analog.com>
+Link: https://lore.kernel.org/r/20220715122903.332535-2-nuno.sa@analog.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-omap-100k.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/inkern.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-omap-100k.c b/drivers/spi/spi-omap-100k.c
-index f64d030c760a..89d89ad1064d 100644
---- a/drivers/spi/spi-omap-100k.c
-+++ b/drivers/spi/spi-omap-100k.c
-@@ -416,6 +416,7 @@ static int omap1_spi100k_probe(struct platform_device *pdev)
- 	return status;
+diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+index 8c3faa797284..c32b2577dd99 100644
+--- a/drivers/iio/inkern.c
++++ b/drivers/iio/inkern.c
+@@ -136,9 +136,10 @@ static int __of_iio_channel_get(struct iio_channel *channel,
  
- err_fck:
-+	pm_runtime_disable(&pdev->dev);
- 	clk_disable_unprepare(spi100k->fck);
- err_ick:
- 	clk_disable_unprepare(spi100k->ick);
+ 	idev = bus_find_device(&iio_bus_type, NULL, iiospec.np,
+ 			       iio_dev_node_match);
+-	of_node_put(iiospec.np);
+-	if (idev == NULL)
++	if (idev == NULL) {
++		of_node_put(iiospec.np);
+ 		return -EPROBE_DEFER;
++	}
+ 
+ 	indio_dev = dev_to_iio_dev(idev);
+ 	channel->indio_dev = indio_dev;
+@@ -146,6 +147,7 @@ static int __of_iio_channel_get(struct iio_channel *channel,
+ 		index = indio_dev->info->of_xlate(indio_dev, &iiospec);
+ 	else
+ 		index = __of_iio_simple_xlate(indio_dev, &iiospec);
++	of_node_put(iiospec.np);
+ 	if (index < 0)
+ 		goto err_put;
+ 	channel->channel = &indio_dev->channels[index];
 -- 
 2.35.1
 
