@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E1C60A5E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9214560A4F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbiJXMbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S233257AbiJXMTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiJXM2b (ORCPT
+        with ESMTP id S233095AbiJXMSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:28:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AF386F9D;
-        Mon, 24 Oct 2022 05:02:12 -0700 (PDT)
+        Mon, 24 Oct 2022 08:18:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF8277542;
+        Mon, 24 Oct 2022 04:57:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 117EA612BF;
-        Mon, 24 Oct 2022 12:01:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B474C433C1;
-        Mon, 24 Oct 2022 12:01:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 567A0B811A1;
+        Mon, 24 Oct 2022 11:53:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B50C433D6;
+        Mon, 24 Oct 2022 11:53:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612909;
-        bh=ntOrOjNGLafpbrPL0IZcl4RkV1kMjXDeWbs/qhFGiXg=;
+        s=korg; t=1666612405;
+        bh=m6NQJ5EmDqzyBSscFVL9+7RWcSwAfWV9TMWJzvPm/kc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wyTZDyH62gFc1Vda9kVD4hWKSCQy+IroJvSy77meEoAfHNHPGjk72Vqfg2DugOQVq
-         cXbN+z/sl57KXMbcLStkgQj7PE5hloheZ1FKtY9m5t6RNcns9U2OpxHenIwZxSuh+c
-         vv/WOWA39QxVxjeEZLsFW+Zsed3ARxN77K6ILXAM=
+        b=hiKIzA1zAInlGpBMMoB4C7wlWOL7Re7MhfZhge68XSw0yH5MPoZLt64PDKVzpzdgL
+         IsNf8RTfinOds2pjawK8p0oW+ZTEy6QGukwW3wI01kPnFbv44Wf1TL+Z2polw2J+w6
+         Hhw7fpx08hEbVvdfMm9Yf+jr7q0jODgRGsG/DCKc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 166/229] iommu/omap: Fix buffer overflow in debugfs
+        stable@vger.kernel.org, Mike Pattrick <mkp@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 168/210] openvswitch: Fix double reporting of drops in dropwatch
 Date:   Mon, 24 Oct 2022 13:31:25 +0200
-Message-Id: <20221024113004.450933795@linuxfoundation.org>
+Message-Id: <20221024113002.413948464@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Mike Pattrick <mkp@redhat.com>
 
-[ Upstream commit 184233a5202786b20220acd2d04ddf909ef18f29 ]
+[ Upstream commit 1100248a5c5ccd57059eb8d02ec077e839a23826 ]
 
-There are two issues here:
+Frames sent to userspace can be reported as dropped in
+ovs_dp_process_packet, however, if they are dropped in the netlink code
+then netlink_attachskb will report the same frame as dropped.
 
-1) The "len" variable needs to be checked before the very first write.
-   Otherwise if omap2_iommu_dump_ctx() with "bytes" less than 32 it is a
-   buffer overflow.
-2) The snprintf() function returns the number of bytes that *would* have
-   been copied if there were enough space.  But we want to know the
-   number of bytes which were *actually* copied so use scnprintf()
-   instead.
+This patch checks for error codes which indicate that the frame has
+already been freed.
 
-Fixes: bd4396f09a4a ("iommu/omap: Consolidate OMAP IOMMU modules")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Link: https://lore.kernel.org/r/YuvYh1JbE3v+abd5@kili
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Mike Pattrick <mkp@redhat.com>
+Link: https://bugzilla.redhat.com/show_bug.cgi?id=2109946
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/omap-iommu-debug.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ net/openvswitch/datapath.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iommu/omap-iommu-debug.c b/drivers/iommu/omap-iommu-debug.c
-index 5ce55fabc9d8..726702d01522 100644
---- a/drivers/iommu/omap-iommu-debug.c
-+++ b/drivers/iommu/omap-iommu-debug.c
-@@ -35,12 +35,12 @@ static inline bool is_omap_iommu_detached(struct omap_iommu *obj)
- 		ssize_t bytes;						\
- 		const char *str = "%20s: %08x\n";			\
- 		const int maxcol = 32;					\
--		bytes = snprintf(p, maxcol, str, __stringify(name),	\
-+		if (len < maxcol)					\
-+			goto out;					\
-+		bytes = scnprintf(p, maxcol, str, __stringify(name),	\
- 				 iommu_read_reg(obj, MMU_##name));	\
- 		p += bytes;						\
- 		len -= bytes;						\
--		if (len < maxcol)					\
--			goto out;					\
- 	} while (0)
- 
- static ssize_t
+diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+index 3248cf04d0b3..42616aca0ce4 100644
+--- a/net/openvswitch/datapath.c
++++ b/net/openvswitch/datapath.c
+@@ -276,10 +276,17 @@ void ovs_dp_process_packet(struct sk_buff *skb, struct sw_flow_key *key)
+ 		upcall.portid = ovs_vport_find_upcall_portid(p, skb);
+ 		upcall.mru = OVS_CB(skb)->mru;
+ 		error = ovs_dp_upcall(dp, skb, key, &upcall, 0);
+-		if (unlikely(error))
+-			kfree_skb(skb);
+-		else
++		switch (error) {
++		case 0:
++		case -EAGAIN:
++		case -ERESTARTSYS:
++		case -EINTR:
+ 			consume_skb(skb);
++			break;
++		default:
++			kfree_skb(skb);
++			break;
++		}
+ 		stats_counter = &stats->n_missed;
+ 		goto out;
+ 	}
 -- 
 2.35.1
 
