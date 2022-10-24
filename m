@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770BD60B8E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0E060B8E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 21:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233628AbiJXT51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 15:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        id S233381AbiJXT5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 15:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233646AbiJXT4k (ORCPT
+        with ESMTP id S233896AbiJXT5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 15:56:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226687969A
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666635546;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N8Yvakt3MK7rD0y3RReVeclZNu+K0N6huBCXY+hLsjg=;
-        b=fK1idjXupkoHfdM/hucvoFt8+SE0VrW0vbweirwFNHHtXt4T+S2BaDjIClnAcYPDrMQI19
-        TQ/6r3GNUihTTp4hhVq9N3JOwAnDYsElgW+C0xaRdrPeWGZgr531eUPMflYPa5BLBsMYNW
-        2kFUbxE+x10ckb5Fr1sf1yz8l3J2tqg=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-636-CGEqN4wVPsCye0RomuW2jg-1; Mon, 24 Oct 2022 14:19:04 -0400
-X-MC-Unique: CGEqN4wVPsCye0RomuW2jg-1
-Received: by mail-qt1-f198.google.com with SMTP id d12-20020a05622a100c00b0039ce6373d2cso7516836qte.9
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:19:04 -0700 (PDT)
+        Mon, 24 Oct 2022 15:57:18 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78ACBED9BA
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:20:24 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id c91-20020a17090a496400b00212eb50e75cso1903552pjh.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=OdPpZnwd5jRn69z8VmyRRXOs+WnLWZPFgd+7/iBzwHk=;
+        b=NfrgsUTi4AApD9BZxfhAegOIzfnADBYbmqWCGsTBOOc7z6DCGVA6S5DGI56c3/0HTK
+         3BuxuXx7aAY92LOmjN8o6+cd2dWG2ItvAJs2cNSk/KXbYeoUybsaEXziRA1t0YN6Io53
+         Vg1GCS1dJ4xCUUxB6HolGFsWwaXlY9IllaWJonUcug574p7flVeJc9EgvgLtCaV/DXb5
+         rNPH89aOcXb8wQjOZuw7PvPeSOKL3r61V8Em7fupmdz6/IberQWfB3vrQgONNxqTBR5a
+         XVYq31YpR56iR0tRAxHK9QXbEYG+HLkoRNnoCIcdT4wTqMABZL528o45hcEMERtSsoqC
+         iF4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N8Yvakt3MK7rD0y3RReVeclZNu+K0N6huBCXY+hLsjg=;
-        b=IZZpG/WUfKUe9B4+8qt7kvP1ouIAnzC94THNTaIGKxq7exMfXlwBQleV61bomSmN3R
-         W7bd3TkBkIV4Y8exRHOXG3/Jk2osTAnqJ1JiDQ+Yu0MdhLC2JuxbyHAhTkNzuM+63BOi
-         nifBl+IcXyggbzfFbfIDKfLEtstgANMUUk0uY7+jEiZ9Mw2WzGiBUvgsDl6lLOixEsvC
-         V9e2CdkAhbDOCJrlHEvqDznhLwA7ma3n95KtAEUsOvs8c455jNUvnvc21ZpwB1mwETbv
-         sD24aJBebk9cF08D+UEJsdLHAJt2e2AZARSxYcGLdHZWwb6PVc4Uv30MgU+5BzJp5ReJ
-         eSgQ==
-X-Gm-Message-State: ACrzQf0Cj4ue2DVvrs/tlTol8CN/1xCsltPVi7lpZNHueXAt+WXbIRWe
-        pbE42ilD7HEoxE1aNKAKeMRwmOhj3PS5lWWpvxFPCO8TOli9MdZpDdxVKfTulKm6IhibvL9S3zy
-        kLyteekEQKgJLlWb5ZwzZPzyb
-X-Received: by 2002:ac8:59c2:0:b0:39c:e3b4:1265 with SMTP id f2-20020ac859c2000000b0039ce3b41265mr27651376qtf.55.1666635543554;
-        Mon, 24 Oct 2022 11:19:03 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5sUMaA/yGMGt9tvsXee0XTNi9PnrHPUDHcbhB8nWX8VOHAmdnt88LQsGtRV3/c6Bhui57suA==
-X-Received: by 2002:ac8:59c2:0:b0:39c:e3b4:1265 with SMTP id f2-20020ac859c2000000b0039ce3b41265mr27651344qtf.55.1666635543265;
-        Mon, 24 Oct 2022 11:19:03 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id ff12-20020a05622a4d8c00b0039cb5c9dbacsm348931qtb.22.2022.10.24.11.19.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 11:19:02 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 14:19:01 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        kernel test robot <yujie.liu@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for rc] mm/shmem: Ensure proper fallback if page faults
-Message-ID: <Y1bXFchNMMT3M0cJ@x1n>
-References: <20221024043305.1491403-1-ira.weiny@intel.com>
- <Y1bDRpmPdYdilJzp@iweiny-mobl>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y1bDRpmPdYdilJzp@iweiny-mobl>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OdPpZnwd5jRn69z8VmyRRXOs+WnLWZPFgd+7/iBzwHk=;
+        b=xFmFdAB4H+NTzU2BlZHwHhpLriupQqaJG+Cc8v2/hNTXR2XsxyAkoRb7SyK8CBag5M
+         7M8/DdgxbKgxLXspV+D2ci1+6bfk/+KTSVxk+WeBXG3vG5TUMLUuwCwYZku36W7ImWin
+         PjWL55KuQ3zRThXxZ2xQRgJ1PdlF3fR1yOS+U9nANuwBHNNtNEMhMvl9flse1BrTNWtQ
+         dyArx4Qz88Bt0yBCK6DbcSWmwQbufifwJ3gnMoz5cQHbS63O1a+V9RYCxGNkB/MEv1HB
+         2OyJ19tW5wSsrNTpDfQJikV3HRfuvxwSCBBzvRGzclzjH4PVmKBDnzy4pIxeuh6QkGK5
+         kZ0A==
+X-Gm-Message-State: ACrzQf0jitgSqXLeDUwUwZuikBcCfugfrKRcwQIoD2/AFajhkVfJ5B28
+        +ew0JVgeeZCXW04Mu+xQfjqDUHS0crwz
+X-Google-Smtp-Source: AMsMyM7gOJ73zL6REh5JLPAg6wf0lT6uPprEpgZedLo1aYSYyI73sfxgXgK0r3WCA8xTVaZu8s4FZZYmNjnv
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b8bc:a57d:a2a2:efdc])
+ (user=irogers job=sendgmr) by 2002:a17:90b:e90:b0:213:2708:8dc3 with SMTP id
+ fv16-20020a17090b0e9000b0021327088dc3mr247684pjb.2.1666635575295; Mon, 24 Oct
+ 2022 11:19:35 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 11:19:05 -0700
+Message-Id: <20221024181913.630986-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Subject: [PATCH v2 0/8] Update to C11, fix signal undefined behavior
+From:   Ian Rogers <irogers@google.com>
+To:     Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,110 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 09:54:30AM -0700, Ira Weiny wrote:
-> On Sun, Oct 23, 2022 at 09:33:05PM -0700, Ira wrote:
-> > From: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > The kernel test robot flagged a recursive lock as a result of a
-> > conversion from kmap_atomic() to kmap_local_folio()[Link]
-> > 
-> > The cause was due to the code depending on the kmap_atomic() side effect
-> > of disabling page faults.  In that case the code expects the fault to
-> > fail and take the fallback case.
-> > 
-> > git archaeology implied that the recursion may not be an actual bug.[1]
-> > However, the mmap_lock needed in the fault may be the one held.[2]
-> > 
-> > Add an explicit pagefault_disable() and a big comment to explain this
-> > for future souls looking at this code.
-> > 
-> > [1] https://lore.kernel.org/all/Y1MymJ%2FINb45AdaY@iweiny-desk3/
-> > [2] https://lore.kernel.org/all/Y1M2p9OtBGnKwGUE@x1n/
-> > 
-> > Fixes: 7a7256d5f512 ("shmem: convert shmem_mfill_atomic_pte() to use a folio")
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Peter Xu <peterx@redhat.com>
-> > Cc: Andrea Arcangeli <aarcange@redhat.com>
-> > Reported-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > Reported-by: kernel test robot <yujie.liu@intel.com>
-> > Link: https://lore.kernel.org/r/202210211215.9dc6efb5-yujie.liu@intel.com
-> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-> > 
-> > ---
-> > Thanks to Matt and Andrew for initial diagnosis.
-> > Thanks to Randy for pointing out C code needs ';'  :-D
-> > Thanks to Andrew for suggesting an elaborate comment
-> > Thanks to Peter for pointing out that the mm's may be the same.
-> > ---
-> >  mm/shmem.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/mm/shmem.c b/mm/shmem.c
-> > index 8280a5cb48df..c1bca31cd485 100644
-> > --- a/mm/shmem.c
-> > +++ b/mm/shmem.c
-> > @@ -2424,9 +2424,16 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
-> >  
-> >  		if (!zeropage) {	/* COPY */
-> >  			page_kaddr = kmap_local_folio(folio, 0);
-> > +			/*
-> > +			 * The mmap_lock is held here.  Disable page faults to
-> > +			 * prevent deadlock should copy_from_user() fault.  The
-> > +			 * copy will be retried outside the mmap_lock.
-> > +			 */
-> 
-> Offline Dave Hansen and I were discussing this and he was concerned that this
-> comment implies that a deadlock would always occur rather than might occur.
+The use of C11 is mainstream in the kernel [1]. There was some
+confusion on volatile and signal handlers in [2] for which atomics
+(present in C11) make things clearer. Switch to using volatile
+sig_atomic_t as per [3]. Thanks to Leo Yan <leo.yan@linaro.org> for
+the suggestions.
 
-Agreed, "prevent deadlock" might be too strong in this context.
+[1] https://lore.kernel.org/lkml/CAHk-=whWbENRz-vLY6vpESDLj6kGUTKO3khGtVfipHqwewh2HQ@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/20221024011024.462518-1-irogers@google.com/
+[3] https://wiki.sei.cmu.edu/confluence/display/c/SIG31-C.+Do+not+access+shared+objects+in+signal+handlers
 
-> 
-> I was not clear on this as I was thinking the read mmap_lock was non-recursive.
-> 
-> So I think we have 3 cases only 1 of which will actually deadlock and is, as
-> Dave puts it, currently theoretical.
-> 
-> 	1) Different mm's are in play (no issue)
-> 	2) Readlock implementation is recursive and same mm is in play (no issue)
-> 	3) Readlock implementation is _not_ recursive (issue)
-> 
-> In both 1 and 2 lockdep is incorrectly flagging the issue but 3 is a problem
-> and I think this is what Andrea was thinking.
-> 
-> Is that the case?
+v2. Remove unneeded stdatomic.h includes for sig_atomic_t as it is
+    declared in signal.h.
 
-IMHO it would be good enough to just mention lockdep (as it can definitely
-trigger) or just quote similarly as Andrea's original comment somehow:
+Ian Rogers (8):
+  perf build: Update to C standard to gnu11
+  perf record: Use sig_atomic_t for signal handlers
+  perf daemon: Use sig_atomic_t to avoid UB
+  perf ftrace: Use sig_atomic_t to avoid UB
+  perf session: Change type to avoid UB
+  perf stat: Use sig_atomic_t to avoid UB
+  perf top: Use sig_atomic_t to avoid UB
+  perf trace: Use sig_atomic_t to avoid UB
 
-    If the rwsem starves writers it wasn't strictly a bug but lockdep
-    doesn't like it and this avoids depending on lowlevel implementation
-    details of the lock.
-
-IIUC no deadlock could really trigger at that time or Andrea should have
-written it in some other way.  It also has actually summarized the goal
-that then we won't rely on rwsem impl but just make it always work.
-
-Thanks,
-
-> 
-> If so the above comment is incorrectly worded and I should update it.
-> 
-> Ira
-> 
-> > +			pagefault_disable();
-> >  			ret = copy_from_user(page_kaddr,
-> >  					     (const void __user *)src_addr,
-> >  					     PAGE_SIZE);
-> > +			pagefault_enable();
-> >  			kunmap_local(page_kaddr);
-> >  
-> >  			/* fallback to copy_from_user outside mmap_lock */
-> > -- 
-> > 2.37.2
-> > 
-> 
+ tools/perf/Makefile.config  | 2 +-
+ tools/perf/builtin-daemon.c | 2 +-
+ tools/perf/builtin-ftrace.c | 4 ++--
+ tools/perf/builtin-record.c | 8 ++++----
+ tools/perf/builtin-stat.c   | 8 ++++----
+ tools/perf/builtin-top.c    | 4 ++--
+ tools/perf/builtin-trace.c  | 4 ++--
+ tools/perf/util/session.c   | 3 ++-
+ 8 files changed, 18 insertions(+), 17 deletions(-)
 
 -- 
-Peter Xu
+2.38.0.135.g90850a2211-goog
 
