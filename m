@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 039BA60A634
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1C660AA7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiJXMbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
+        id S236060AbiJXNee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbiJXM2w (ORCPT
+        with ESMTP id S236208AbiJXN36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:28:52 -0400
+        Mon, 24 Oct 2022 09:29:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E832C87088;
-        Mon, 24 Oct 2022 05:02:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EABA39BB7;
+        Mon, 24 Oct 2022 05:33:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C59F1B811C1;
-        Mon, 24 Oct 2022 11:58:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25911C433C1;
-        Mon, 24 Oct 2022 11:58:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 484F8B81334;
+        Mon, 24 Oct 2022 12:09:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A079EC433C1;
+        Mon, 24 Oct 2022 12:09:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612727;
-        bh=8veHvggDsF0H695N4ZaRHLld1XJTkiSOIyJfY6Uu+i8=;
+        s=korg; t=1666613356;
+        bh=ftqTTz4oueZLOW8B6OOpn9+6JAH7uQ2dzq2hyjs5PNs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o3ddocst3sv+7EjJg2w9vwbkBB2e6JoMl+P3iKslEPvV/G5jai9wS5zsn5qpir9ub
-         X0KwTjoylkTkYaCvJFUy3MPNds2+E5TP52w/YiOThOYcE0OgBnjDFeCBh9CBOxXF9U
-         vxTlBNlXD0ohlb/jua89yK1ivYBVe46+SaZydNF8=
+        b=qP5zeIh3arv2uXg5wLR/mtoKcyyOtJwt6k6XaqexITHj4bCPy1uUxJ3oDy/7QuVea
+         Fw1FPcRbrUOwHnxZFSZsIr/D2y8+m54G7ZF3pKs1TlOMKmPOi3/CTgUx0muAph82Ub
+         a8qW9inXAHIRaf2hKg8iCxi/291JevSn846WBKjk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 097/229] platform/x86: msi-laptop: Fix old-ec check for backlight registering
+Subject: [PATCH 5.4 106/255] ASoC: wm5102: Fix PM disable depth imbalance in wm5102_probe
 Date:   Mon, 24 Oct 2022 13:30:16 +0200
-Message-Id: <20221024113002.176828433@linuxfoundation.org>
+Message-Id: <20221024113005.981453324@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit 83ac7a1c2ed5f17caa07cbbc84bad3c05dc3bf22 ]
+[ Upstream commit fcbb60820cd3008bb44334a0395e5e57ccb77329 ]
 
-Commit 2cc6c717799f ("msi-laptop: Port to new backlight interface
-selection API") replaced this check:
+The pm_runtime_enable will increase power disable depth. Thus
+a pairing decrement is needed on the error handling path to
+keep it balanced according to context. We fix it by moving
+pm_runtime_enable to the endding of wm5102_probe.
 
-	if (!quirks->old_ec_model || acpi_video_backlight_support())
-		pr_info("Brightness ignored, ...");
-	else
-		do_register();
+Fixes:93e8791dd34ca ("ASoC: wm5102: Initial driver")
 
-With:
-
-	if (quirks->old_ec_model ||
-	    acpi_video_get_backlight_type() == acpi_backlight_vendor)
-		do_register();
-
-But since the do_register() part was part of the else branch, the entire
-condition should be inverted.  So not only the 2 statements on either
-side of the || should be inverted, but the || itself should be replaced
-with a &&.
-
-In practice this has likely not been an issue because the new-ec models
-(old_ec_model==false) likely all support ACPI video backlight control,
-making acpi_video_get_backlight_type() return acpi_backlight_video
-turning the second part of the || also false when old_ec_model == false.
-
-Fixes: 2cc6c717799f ("msi-laptop: Port to new backlight interface selection API")
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Link: https://lore.kernel.org/r/20220825141336.208597-1-hdegoede@redhat.com
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Link: https://lore.kernel.org/r/20220928160116.125020-4-zhangqilong3@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/msi-laptop.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ sound/soc/codecs/wm5102.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/platform/x86/msi-laptop.c b/drivers/platform/x86/msi-laptop.c
-index d5bfcc602090..7279390a2d54 100644
---- a/drivers/platform/x86/msi-laptop.c
-+++ b/drivers/platform/x86/msi-laptop.c
-@@ -1061,8 +1061,7 @@ static int __init msi_init(void)
- 		return -EINVAL;
+diff --git a/sound/soc/codecs/wm5102.c b/sound/soc/codecs/wm5102.c
+index d6d4b4121369..c5667b149c70 100644
+--- a/sound/soc/codecs/wm5102.c
++++ b/sound/soc/codecs/wm5102.c
+@@ -2084,9 +2084,6 @@ static int wm5102_probe(struct platform_device *pdev)
+ 		regmap_update_bits(arizona->regmap, wm5102_digital_vu[i],
+ 				   WM5102_DIG_VU, WM5102_DIG_VU);
  
- 	/* Register backlight stuff */
+-	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_idle(&pdev->dev);
 -
--	if (quirks->old_ec_model ||
-+	if (quirks->old_ec_model &&
- 	    acpi_video_get_backlight_type() == acpi_backlight_vendor) {
- 		struct backlight_properties props;
- 		memset(&props, 0, sizeof(struct backlight_properties));
+ 	ret = arizona_request_irq(arizona, ARIZONA_IRQ_DSP_IRQ1,
+ 				  "ADSP2 Compressed IRQ", wm5102_adsp2_irq,
+ 				  wm5102);
+@@ -2119,6 +2116,9 @@ static int wm5102_probe(struct platform_device *pdev)
+ 		goto err_spk_irqs;
+ 	}
+ 
++	pm_runtime_enable(&pdev->dev);
++	pm_runtime_idle(&pdev->dev);
++
+ 	return ret;
+ 
+ err_spk_irqs:
 -- 
 2.35.1
 
