@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCBC60B9DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80EFA60BA25
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbiJXUWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S233558AbiJXU0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234115AbiJXUVO (ORCPT
+        with ESMTP id S234451AbiJXUYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:21:14 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04002E9EE;
-        Mon, 24 Oct 2022 11:37:37 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id o8so7053644qvw.5;
-        Mon, 24 Oct 2022 11:37:37 -0700 (PDT)
+        Mon, 24 Oct 2022 16:24:40 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55480EB4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:39:23 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id k2so7133479ejr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 11:39:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NsOYGIUT5OQzMr3XU7j9OzU4X9Z5Q8a75HtiI04Iq+Q=;
-        b=awD+XySz2X/mFuau4ULWST9bDE26l/q8QL+HCd+70G8p8ruezYaCGkaXWEldSnSepy
-         96fOenZaVPpuPkHULkWzJPF3fLetHr3BqTTVLxiQp81kJAj2Gy1CsO/G79kpTCS8ut7S
-         T5t236O9orSW1d8Uu/qPkFIoCI7NL1j0GheqOkwResSWbPc1z3fpaBVT5dCTVG3YeOze
-         aZczS7Pw+RxExieAUFf5rsJLNU0NZibP7bEMjCsqnmYZmGsQlF+VqIESktvztuHhnuMS
-         mutqjuu9+DF9bwDUlfobdj2+JIh6XpywlP5xzFroTZbXVHw1ecO/JX9PHCz3ZTM7xdHs
-         s+dA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=doqa4EeZOoEkCz3v/Ifi0EexCSSeWFL40vnfB1aKvKE=;
+        b=AsZMAmxS03NKVEIg+HuhIyqgg6rlZtH3e/5Ee4sg8xX72fBlj+AQoF5z7j2UAbTtq8
+         yQ7feVRHBrlTtXAQ74dDtI5Ke56iuYfd4RA5JFM4oYTSUmEqqE6XLfsdM44+nVqAffZq
+         MfVKZw0Dm4aOUDQFIpiV0VncbU3fbgQMIT/j2FYqEP0rYpTF3zfS1rTAhEG/7/Jok5au
+         d2GFvsowV+1pP6YT0QH3MWsGxRs0ya+FNGU2cZnF0N73QVw7tI/5wND8F2kVWeDBiE+E
+         F5dp6hdXr/8Q1Ya3TgLI4ptsr2eEKqWLwvqye2GfT7C7G4dbPHT7dcE2GHB+IxdH84sz
+         QZcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NsOYGIUT5OQzMr3XU7j9OzU4X9Z5Q8a75HtiI04Iq+Q=;
-        b=Q0xI+uBWJZ6yMoX96B+NHVTayBIBQaKi5+9hE/1wuiwqgkHXCiRAt/XhoJNfS5wT8E
-         E9dG/J6q734irVhriN8Xth+Dn6YCQQ0kTwI9rwDDZwlRoEiTRopFVHhotp3ErvCAZc5A
-         mEBWQdJrWLikT+Ug8uOFY/i/Fh8G4ba/cc1tUiWh/kiHAvLTzy0q0wfye/gvYire8Pw1
-         9Lz8ltFFOr8pTG8105ilhIhWsFVGF3v0oeN6ufvQE68sbsDnk2lqGt7yoIMjYJB13PZL
-         db9DxVKqRv8wvIc9h+mCtwx/las8j/cE2l24D56aGAeOkcZXcsLWs+nBblFvfm8DNLUa
-         tY/w==
-X-Gm-Message-State: ACrzQf2nYfVCXhiSXuOj0As+DukSDbZzFkQEoHLTvgpd8aVaW1VMMb7v
-        e2auLPaWP3oiXq3GTTrQ0MU=
-X-Google-Smtp-Source: AMsMyM6xFkXrK9g75ZgTuSfsY1SdpMsKp8/o+06I3sn6KMELhuAgVuzB9waaOPACIOB+8hgtUzfRxA==
-X-Received: by 2002:a0c:ab53:0:b0:4b8:65c9:3ea4 with SMTP id i19-20020a0cab53000000b004b865c93ea4mr19830306qvb.5.1666636591160;
-        Mon, 24 Oct 2022 11:36:31 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id d2-20020ac80602000000b0039853b7b771sm306068qth.80.2022.10.24.11.36.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 11:36:30 -0700 (PDT)
-Message-ID: <dfc45fb1-e357-c3e4-679c-0ec4f97b50cc@gmail.com>
-Date:   Mon, 24 Oct 2022 11:36:24 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=doqa4EeZOoEkCz3v/Ifi0EexCSSeWFL40vnfB1aKvKE=;
+        b=E7Oc23+J7DJv0FYzYByMo6zjThkJSXW4v5kkww17HxtHm8YerN5KEJWXisRRCgL8u0
+         FgKCiupRqgiDZPezfnkXxsMHNSuoPv/ZoOWP9uTmvd1uJIIdwEt3KsGICQFw5U77tG9L
+         2S3gxryqSLBJqoT3e8TAtN/1HXNw0GlL3Ah4JEikQ2xyIxRLHXfMAjnHQ8m/jishLaMP
+         nke3YFj0Gm68MjKaY0U3jc0V7xmDSdZURQqy5PefzJyCtQ9pKTzhBH2q/rMWhIOD4nQ3
+         ddikFRb+CbAsLzn8xZt8tpq0LIFIzKiKkdDUovgqYEruWLfq7+dE+bny9eg8iG4OAiK6
+         AsoA==
+X-Gm-Message-State: ACrzQf0KpcggHo7sXmm8iuk/YwemwXruMMYZ1Vn4OvX637y2UOFvWTtf
+        MmNWJxRzK4no5/f0APzTQD90OQS4kBcHAAZJt709hQ==
+X-Google-Smtp-Source: AMsMyM5Cb44xF9/qC90Ybayrk8RK0+khUadnsPNGIz8OQPxvw8SCc8EsBU5ZxxSVih8sSnXTzO7fFrehicEmYwMd+kw=
+X-Received: by 2002:a17:907:843:b0:73a:5b0e:8352 with SMTP id
+ ww3-20020a170907084300b0073a5b0e8352mr29213052ejb.438.1666636683926; Mon, 24
+ Oct 2022 11:38:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5.15 000/530] 5.15.75-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221024113044.976326639@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <Y1LBGZPMfCZ8A1bl@FVFF77S0Q05N> <CABCJKuf=OB_3ZR_rwaG3H5kHKmTTDk+sihjJXYmyWgZjUX2yTQ@mail.gmail.com>
+ <CAFP8O3JuC9HL1-G23vGJO=jjN7Tsgz7c8TB1_F6UQ-MqCyGNLQ@mail.gmail.com> <Y1Z0gvscALn2br2q@FVFF77S0Q05N>
+In-Reply-To: <Y1Z0gvscALn2br2q@FVFF77S0Q05N>
+From:   Sami Tolvanen <samitolvanen@google.com>
+Date:   Mon, 24 Oct 2022 11:37:27 -0700
+Message-ID: <CABCJKucCa8VRgwiYBCm+tiAeX9Hneg3iH6bbvtt1Sk_ALXRprQ@mail.gmail.com>
+Subject: Re: kCFI && patchable-function-entry=M,N
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Fangrui Song <maskray@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Joao Moreira <joao@overdrivepizza.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +75,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 04:25, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.75 release.
-> There are 530 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.75-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, Oct 24, 2022 at 4:18 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> On Fri, Oct 21, 2022 at 09:14:41PM -0700, Fangrui Song wrote:
+> > On Fri, Oct 21, 2022 at 10:39 AM Sami Tolvanen <samitolvanen@google.com> wrote:
+> > >
+> > > On Fri, Oct 21, 2022 at 8:56 AM Mark Rutland <mark.rutland@arm.com> wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > > For arm64, I'd like to use -fatchable-function-entry=M,N (where N > 0), for our
+> > > > ftrace implementation, which instruments *some* but not all functions.
+> > > > Unfortuntately, this doesn't play nicely with -fsanitize=kcfi, as instrumented
+> > > > and non-instrumented functions don't agree on where the type hash should live
+> > > > relative to the function entry point, making them incompatible with one another.
+> > >
+> > > Yes, the current implementation assumes that if prefix nops are used,
+> > > all functions have the same number of them.
+> > >
+> > > > Is there any mechanism today that we could use to solve this, or could we
+> > > > extend clang to have some options to control this behaviour?
+> > >
+> > > I don't think there's a mechanism to work around the issue right now,
+> > > but we could just change where the hash is emitted on arm64.
+> > >
+> > > > It would also be helpful to have a symbol before both the hash and pre-function
+> > > > NOPs so that we can filter those out of probes patching (I see that x86 does
+> > > > this with the __cfi_function symbol).
+> > >
+> > > Adding a symbol before the hash isn't a problem, but if we move the
+> > > hash and want the symbol to be placed before the prefix nops as well,
+> > > we might need a flag to control this. Fangrui, what do you think?
+> > >
+> > > Sami
+> >
+> > Since the kcfi code expects the hash to appear in a specific location
+> > so that an instrumented indirect jump can reliably obtain the hash.
+> > For a translation unit `-fpatchable-function-entry=N,M` may be
+> > specified or not, and we want both to work. Therefore, I agree that a
+> > consistent hash location will help. This argument favors placing M
+> > nops before the hash. The downside is a restriction on how the M nops
+> > can be used. Previously if M>0, the runtime code needs to check
+> > whether a BTI exists to locate the N-M after-function-entry NOPs. If
+> > the hash appears after the M nops, the runtime code needs to
+> > additionally knows whether the hash exists. My question is how to
+> > reliably detect this.
+>
+> That's a fair point.
+>
+> For detecting BTI we can scan the binary for BTI/NOP at M instructions into the
+> patch-site, but a similar approach won't be reliable for the type hash since
+> the type hash itself could have the same bit pattern as an instruction.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+We could always change the compiler to ensure the hash doesn't match
+specific instructions. For example, if the hash can never be a NOP,
+you could just skip any non-NOP instructions after the initial prefix
+NOPs, right?
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> > If there is motivation using M>0, I'd like to know the concrete code
+> > sequence for `-fpatchable-function-entry=N,M` and how the runtime code
+> > detects the NOPs with optional hash and optional BTI.
+>
+> For the BTI case alone, I have code at:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/ftrace/per-callsite-ops&id=272a580fd5b7acc31747505d71530cee7cc2837d
+>
+> ... the gist being that it checks the instruction M insns after the start of
+> the patch site.
+>
+> For the type hash, I think there are a few options, e.g.
+>
+> * Restricting the type hash to a set of values that can be identified (e.g.
+>   encoding those as a permanently-undefined UDF with a 16-bit immediate).
 
+Which would be quite similar, except instead of restricting hash
+values to a specific range, we'd just have a list of unallowed hash
+values.
+
+Sami
