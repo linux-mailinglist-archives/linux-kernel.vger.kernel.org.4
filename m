@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F42060A779
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E9B60ABDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234219AbiJXMvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S236911AbiJXN6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234675AbiJXMp2 (ORCPT
+        with ESMTP id S236814AbiJXN57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:45:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AB31B799;
-        Mon, 24 Oct 2022 05:10:01 -0700 (PDT)
+        Mon, 24 Oct 2022 09:57:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354E02250F;
+        Mon, 24 Oct 2022 05:45:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51C1E61252;
-        Mon, 24 Oct 2022 12:09:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67104C433C1;
-        Mon, 24 Oct 2022 12:09:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06E3F61325;
+        Mon, 24 Oct 2022 12:45:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D0FC433D7;
+        Mon, 24 Oct 2022 12:45:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613379;
-        bh=RLkQdPDMRCOU/IECOAC2hHaLhoeqjEyfi9vzRWGTaUE=;
+        s=korg; t=1666615515;
+        bh=MYOwrjZCrWWsWxaSojRO2Wg1Ovu0P0g0HHH/slM/tnw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cBdXLzuprUjmSy2/h4z7DVI6w3/K1BFFhIV8/jcg49NL1xSI2mI/pkFrFnBc1lz23
-         Ce8pBwkFqQVd7u8PMw4bv2LPttXEmKjBvh63yin1rKhkHlgruNfUq6VTawaANHBABv
-         6f+2mWZMSBHzINJX2s6iA+C8huE2DcHqembXJ7ho=
+        b=p3zyAyw36+Ki6ptu0KceVRBaxV6r5lp286ULLPdvcXmMlpjky5Kh02zCen1JPGBLu
+         tQLK1LKz1d512dvK8ijafuSmGWynqk4lbFfB6BmHFqLzyGy0et+LCPmltKh9PlFdak
+         mq0Yn/FCpTS58OWQPj7dfCpwl2sgpFVyxzu1Mrpk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 114/255] ARM: dts: kirkwood: lsxl: remove first ethernet port
+Subject: [PATCH 5.15 280/530] clk: tegra: Fix refcount leak in tegra114_clock_init
 Date:   Mon, 24 Oct 2022 13:30:24 +0200
-Message-Id: <20221024113006.284226360@linuxfoundation.org>
+Message-Id: <20221024113057.746771802@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 2d528eda7c96ce5c70f895854ecd5684bd5d80b9 ]
+[ Upstream commit db16a80c76ea395766913082b1e3f939dde29b2c ]
 
-Both the Linkstation LS-CHLv2 and the LS-XHL have only one ethernet
-port. This has always been wrong, i.e. the board code used to set up
-both ports, but the driver will play nice and return -ENODEV if the
-assiciated PHY is not found. Nevertheless, it is wrong. Remove it.
+of_find_matching_node() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: 876e23333511 ("ARM: kirkwood: add gigabit ethernet and mvmdio device tree nodes")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Fixes: 2cb5efefd6f7 ("clk: tegra: Implement clocks for Tegra114")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220523143834.7587-1-linmq006@gmail.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/kirkwood-lsxl.dtsi | 11 -----------
- 1 file changed, 11 deletions(-)
+ drivers/clk/tegra/clk-tegra114.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/kirkwood-lsxl.dtsi b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
-index 321a40a98ed2..88b70ba1c8fe 100644
---- a/arch/arm/boot/dts/kirkwood-lsxl.dtsi
-+++ b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
-@@ -218,22 +218,11 @@
- &mdio {
- 	status = "okay";
+diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-tegra114.c
+index bc9e47a4cb60..4e2b26e3e573 100644
+--- a/drivers/clk/tegra/clk-tegra114.c
++++ b/drivers/clk/tegra/clk-tegra114.c
+@@ -1317,6 +1317,7 @@ static void __init tegra114_clock_init(struct device_node *np)
+ 	}
  
--	ethphy0: ethernet-phy@0 {
--		reg = <0>;
--	};
--
- 	ethphy1: ethernet-phy@8 {
- 		reg = <8>;
- 	};
- };
- 
--&eth0 {
--	status = "okay";
--	ethernet0-port@0 {
--		phy-handle = <&ethphy0>;
--	};
--};
--
- &eth1 {
- 	status = "okay";
- 	ethernet1-port@0 {
+ 	pmc_base = of_iomap(node, 0);
++	of_node_put(node);
+ 	if (!pmc_base) {
+ 		pr_err("Can't map pmc registers\n");
+ 		WARN_ON(1);
 -- 
 2.35.1
 
