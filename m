@@ -2,74 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F7660B675
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 344BB60B640
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiJXS6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
+        id S231129AbiJXSwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbiJXS5o (ORCPT
+        with ESMTP id S232850AbiJXSwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:57:44 -0400
-Received: from mail-io1-xd45.google.com (mail-io1-xd45.google.com [IPv6:2607:f8b0:4864:20::d45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB901EB564
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:37:44 -0700 (PDT)
-Received: by mail-io1-xd45.google.com with SMTP id q16-20020a5e9410000000b006bfe9222a2aso1164597ioj.15
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:37:44 -0700 (PDT)
+        Mon, 24 Oct 2022 14:52:11 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E4F153E1C
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:33:33 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id e4so5624799pfl.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 10:33:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uXzCZ5rm6SI2wrD2b5taRfSp+IHoN3hQXiAouJQX7ls=;
+        b=kLEQVCJXkj3W9Vy4Ri0brcVSrlyZha6CYi1LpldrkhaEQsW/bjDxnvxHPTR3qOEKJ2
+         uvinpGHK8cgooBRIChPLJkHNxi+M2BQkHewI0a0ohsmaLr/w9/92Gw4nwPkr0uxXvxRN
+         nYoWKpxXNHDKEb6GRU0+nWm17+mbOrAfQiMgI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=px1z7jXV/l5+I2kX7FaOIU8JAVr+5+wG2+rm0rbU2Aw=;
-        b=P0LkXKdK84RtTiqGqmqj6kdlHoqB/TLBGwtz28jOeZKAe7r+2CaOESMnTtm3lsACG1
-         v+8AQTbWGLOYupHw59ty2Pb2HUtVFK/h1LteVysZ/ahZs0KTc3JF7/YJWy3A6If6oU/f
-         kOzN1/R1tlAMZr1yE4fR0Rx3/8j9OtkwrKt/easXF3wtSqw0zooqg9H+hAQNR5KlFpIk
-         dlTX7ubAoZfBQ1EEvUmtic6ON09DeCWxhpoCsM3yXQuZLtlUGUrbdIZvbis48KqG+qAU
-         P76mKE0+i6pfZEZB8JqhaDoOLCi/q7nxksctbYGUq8VuMuS92inEpzceitfGTQe/Xybt
-         YcdQ==
-X-Gm-Message-State: ACrzQf0SLmvcqez7szx8UwIJzTmB0BITLEkc1WXAGGAdPI/kcIq3OuBV
-        GuvJQaFD6Rl7tUAjc1Lb+Jv17sz4lSJi0zvw3H5qgzpjZKup
-X-Google-Smtp-Source: AMsMyM4BEYz5x1dx1hVWrup+gD5wfreGDYNunKN10djrQksWDMLgcjefHvjZUj4dgve0GTvLtJUwwFtaEf4ytvwT6dyS+VsXo5X6
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uXzCZ5rm6SI2wrD2b5taRfSp+IHoN3hQXiAouJQX7ls=;
+        b=VB2IoCKLLu6ZHiCbYPKZ9dGSMf8/jWbbo7vDmEpCKsudj1iHkzGL6GTDlDTr4IIM+r
+         GJEzvyT0CEmlDLHZzi8eUlCvKl6WQr49sb9ysTtxRr139NpX+XCa3eWc8biKf0YQn1Mw
+         HqUYpq+8Ke6delCBtSlj6TIQl7N4zRD2yZsOA7rqxmlyPrVCs7sw/cNMKlySqSMr1MsX
+         NAS3c9xOzdN06TYGcCrrsrqIz2ltm0gplOm4K0S/bnZ6pOysfnnUh7iXvjEoi1AiNIZO
+         L22o2qpHSrcu4DbnjNu4Q0dKwhQQNWhRNOrrdpOVG1k0Gv1ZzV5jFQDMchr5pSFdQQE1
+         oZkA==
+X-Gm-Message-State: ACrzQf3j8NQ6epBsh/m8Gu+Dz7Jz5OzY3bq/N1ei4OEovP46moevgwHN
+        RUSE0Uh/WvqXawavHQkUxWlTMQ==
+X-Google-Smtp-Source: AMsMyM557LAedDOxn8IvNZlASjhqK4IAgEyV8ewSUdi9+UbjnPBbf5whEcxtUCIrqmds0gBw42tw6Q==
+X-Received: by 2002:aa7:9212:0:b0:562:b5f6:f7d7 with SMTP id 18-20020aa79212000000b00562b5f6f7d7mr35480509pfo.70.1666632744744;
+        Mon, 24 Oct 2022 10:32:24 -0700 (PDT)
+Received: from localhost ([2601:644:200:2b2:c54f:5b4:9653:ba01])
+        by smtp.gmail.com with ESMTPSA id x7-20020a170902ec8700b001755e4278a6sm9905plg.261.2022.10.24.10.32.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 10:32:24 -0700 (PDT)
+From:   Ivan Babrou <ivan@cloudflare.com>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@cloudflare.com,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        David Laight <David.Laight@aculab.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Christoph Anton Mitterer <mail@christoph.anton.mitterer.name>,
+        Mike Rapoport <rppt@kernel.org>,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Ivan Babrou <ivan@cloudflare.com>
+Subject: [PATCH v4] proc: report open files as size in stat() for /proc/pid/fd
+Date:   Mon, 24 Oct 2022 10:31:40 -0700
+Message-Id: <20221024173140.30673-1-ivan@cloudflare.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:160c:b0:2fc:1bc4:1811 with SMTP id
- t12-20020a056e02160c00b002fc1bc41811mr21874502ilu.306.1666632685209; Mon, 24
- Oct 2022 10:31:25 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 10:31:25 -0700
-In-Reply-To: <20221024070414.2711-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002c4dbe05ebcb295e@google.com>
-Subject: Re: [syzbot] BUG: corrupted list in p9_fd_cancel (2)
-From:   syzbot <syzbot+9b69b8d10ab4a7d88056@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Many monitoring tools include open file count as a metric. Currently
+the only way to get this number is to enumerate the files in /proc/pid/fd.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-INFO: rcu detected stall in corrupted
+The problem with the current approach is that it does many things people
+generally don't care about when they need one number for a metric.
+In our tests for cadvisor, which reports open file counts per cgroup,
+we observed that reading the number of open files is slow. Out of 35.23%
+of CPU time spent in `proc_readfd_common`, we see 29.43% spent in
+`proc_fill_cache`, which is responsible for filling dentry info.
+Some of this extra time is spinlock contention, but it's a contention
+for the lock we don't want to take to begin with.
 
-rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4081 } 2634 jiffies s: 2749 root: 0x0/T
-rcu: blocking rcu_node structures (internal RCU debug):
+We considered putting the number of open files in /proc/pid/status.
+Unfortunately, counting the number of fds involves iterating the open_files
+bitmap, which has a linear complexity in proportion with the number
+of open files (bitmap slots really, but it's close). We don't want
+to make /proc/pid/status any slower, so instead we put this info
+in /proc/pid/fd as a size member of the stat syscall result.
+Previously the reported number was zero, so there's very little
+risk of breaking anything, while still providing a somewhat logical
+way to count the open files with a fallback if it's zero.
 
+RFC for this patch included iterating open fds under RCU. Thanks
+to Frank Hofmann for the suggestion to use the bitmap instead.
 
-Tested on:
+Previously:
 
-commit:         d47136c2 Merge tag 'hwmon-for-v6.1-rc2' of git://git.k..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=15754f4a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4789759e8a6d5f57
-dashboard link: https://syzkaller.appspot.com/bug?extid=9b69b8d10ab4a7d88056
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1338856a880000
+```
+$ sudo stat /proc/1/fd | head -n2
+  File: /proc/1/fd
+  Size: 0         	Blocks: 0          IO Block: 1024   directory
+```
+
+With this patch:
+
+```
+$ sudo stat /proc/1/fd | head -n2
+  File: /proc/1/fd
+  Size: 65        	Blocks: 0          IO Block: 1024   directory
+```
+
+Correctness check:
+
+```
+$ sudo ls /proc/1/fd | wc -l
+65
+```
+
+I added the docs for /proc/<pid>/fd while I'm at it.
+
+Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+
+---
+v4: Return errno from proc_fd_getattr() instead of setting negative size.
+    Added an explicit include for linux/bitmap.h.
+v3: Made use of bitmap_weight() to count the bits.
+v2: Added missing rcu_read_lock() / rcu_read_unlock(),
+    task_lock() / task_unlock() and put_task_struct().
+---
+ Documentation/filesystems/proc.rst | 17 +++++++++++
+ fs/proc/fd.c                       | 45 ++++++++++++++++++++++++++++++
+ 2 files changed, 62 insertions(+)
+
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 898c99eae8e4..ec6cfdf1796a 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -47,6 +47,7 @@ fixes/update part 1.1  Stefani Seibold <stefani@seibold.net>    June 9 2009
+   3.10  /proc/<pid>/timerslack_ns - Task timerslack value
+   3.11	/proc/<pid>/patch_state - Livepatch patch operation state
+   3.12	/proc/<pid>/arch_status - Task architecture specific information
++  3.13  /proc/<pid>/fd - List of symlinks to open files
+ 
+   4	Configuring procfs
+   4.1	Mount options
+@@ -2149,6 +2150,22 @@ AVX512_elapsed_ms
+   the task is unlikely an AVX512 user, but depends on the workload and the
+   scheduling scenario, it also could be a false negative mentioned above.
+ 
++3.13 /proc/<pid>/fd - List of symlinks to open files
++-------------------------------------------------------
++This directory contains symbolic links which represent open files
++the process is maintaining.  Example output::
++
++  lr-x------ 1 root root 64 Sep 20 17:53 0 -> /dev/null
++  l-wx------ 1 root root 64 Sep 20 17:53 1 -> /dev/null
++  lrwx------ 1 root root 64 Sep 20 17:53 10 -> 'socket:[12539]'
++  lrwx------ 1 root root 64 Sep 20 17:53 11 -> 'socket:[12540]'
++  lrwx------ 1 root root 64 Sep 20 17:53 12 -> 'socket:[12542]'
++
++The number of open files for the process is stored in 'size' member
++of stat() output for /proc/<pid>/fd for fast access.
++-------------------------------------------------------
++
++
+ Chapter 4: Configuring procfs
+ =============================
+ 
+diff --git a/fs/proc/fd.c b/fs/proc/fd.c
+index 913bef0d2a36..fc46d6fe080c 100644
+--- a/fs/proc/fd.c
++++ b/fs/proc/fd.c
+@@ -7,6 +7,7 @@
+ #include <linux/namei.h>
+ #include <linux/pid.h>
+ #include <linux/ptrace.h>
++#include <linux/bitmap.h>
+ #include <linux/security.h>
+ #include <linux/file.h>
+ #include <linux/seq_file.h>
+@@ -279,6 +280,30 @@ static int proc_readfd_common(struct file *file, struct dir_context *ctx,
+ 	return 0;
+ }
+ 
++static int proc_readfd_count(struct inode *inode, loff_t *count)
++{
++	struct task_struct *p = get_proc_task(inode);
++	struct fdtable *fdt;
++
++	if (!p)
++		return -ENOENT;
++
++	task_lock(p);
++	if (p->files) {
++		rcu_read_lock();
++
++		fdt = files_fdtable(p->files);
++		*count = bitmap_weight(fdt->open_fds, fdt->max_fds);
++
++		rcu_read_unlock();
++	}
++	task_unlock(p);
++
++	put_task_struct(p);
++
++	return 0;
++}
++
+ static int proc_readfd(struct file *file, struct dir_context *ctx)
+ {
+ 	return proc_readfd_common(file, ctx, proc_fd_instantiate);
+@@ -319,9 +344,29 @@ int proc_fd_permission(struct user_namespace *mnt_userns,
+ 	return rv;
+ }
+ 
++static int proc_fd_getattr(struct user_namespace *mnt_userns,
++			const struct path *path, struct kstat *stat,
++			u32 request_mask, unsigned int query_flags)
++{
++	struct inode *inode = d_inode(path->dentry);
++	int rv = 0;
++
++	generic_fillattr(&init_user_ns, inode, stat);
++
++	/* If it's a directory, put the number of open fds there */
++	if (S_ISDIR(inode->i_mode)) {
++		rv = proc_readfd_count(inode, &stat->size);
++		if (rv < 0)
++			return rv;
++	}
++
++	return rv;
++}
++
+ const struct inode_operations proc_fd_inode_operations = {
+ 	.lookup		= proc_lookupfd,
+ 	.permission	= proc_fd_permission,
++	.getattr	= proc_fd_getattr,
+ 	.setattr	= proc_setattr,
+ };
+ 
+-- 
+2.37.3
 
