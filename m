@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09904609D57
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16265609D5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiJXJB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S230474AbiJXJCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJXJBk (ORCPT
+        with ESMTP id S230012AbiJXJBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:01:40 -0400
+        Mon, 24 Oct 2022 05:01:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3AE3FA10;
-        Mon, 24 Oct 2022 02:01:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E064E19D;
+        Mon, 24 Oct 2022 02:01:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 639AE61074;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08C2C61092;
+        Mon, 24 Oct 2022 09:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1145EC4FEBE;
         Mon, 24 Oct 2022 09:01:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AF2C433D6;
-        Mon, 24 Oct 2022 09:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666602097;
-        bh=1R8yc2SvpelM4g9C9noqmpA7ytRQEi/9AxHWjzgCCh4=;
+        s=k20201202; t=1666602098;
+        bh=+WkGHWoLZtDbhsbGRmzXKHjD/rB4ftzUCrvrsjeND8Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FJWz98zG/8SirD1vmMVimK6hokJbTYRDN0VAclAod/ETzOtagNFh2VhHILda7QLMs
-         oPWmQYuqk8m9PRnQmJSeEZ7bCmSWYxpDgmCBVgCSVNYzJZHBUxB/nUNqhmy/aQmBfQ
-         jmieLmOuebof374xYSluHKKyyr2QBVY1Dp9swfhilk+ApCTp53HOt0dbtkDgRTqSii
-         0I2zmSi9zXwR7zsPCcjMnWFETweIUlH8FMkzg3kXoOx0P8G5TagNHPnRqUEDuC00lv
-         LFUSaBrCGTF0ID/9gxTzsKk1Gcg2kytW1Wja1v2frAxPCGmafRntWunDKzbJZIX/5+
-         sEvm4ASJddQWg==
+        b=JEzrhd5+5POIVX4OipjaIv2tUjNV+1BnXX31ZbFe+6VVJa0QvKcDsPkGPMHXTt9kG
+         B9DmbrTIowiNObhzhPI1E2RcuXzYyzoa1j+hJ4GBDj0i3NFwgKi0qsmPgyvFOR5dyB
+         l94LVPpYUu0WFlSkLMjrKKSClrG9YWAfgDAB5RX9zTt7YDxFU1o06bwY1Z+vPW+SjX
+         Q5K4tJ/Wwcz/+6QYp0qKym6oKBFNEKy/vXEnOBc+hzIAuvbARCVhFV2OXIvbXuW/nh
+         fYx+XwYf+aLevQU/fKpn+PR++WsVuvh4CNJYcZj/67RhAdUTk/snWmfE39kfWiX8bY
+         50kIj+CvzTkaQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1omtKj-00056c-JS; Mon, 24 Oct 2022 11:01:21 +0200
+        id 1omtKj-00056g-Mj; Mon, 24 Oct 2022 11:01:21 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH 07/10] dt-bindings: phy: qcom,qmp-ufs: rename current bindings
-Date:   Mon, 24 Oct 2022 11:00:38 +0200
-Message-Id: <20221024090041.19574-8-johan+linaro@kernel.org>
+Subject: [PATCH 08/10] dt-bindings: phy: qcom,qmp-ufs: fix sc8280xp binding
+Date:   Mon, 24 Oct 2022 11:00:39 +0200
+Message-Id: <20221024090041.19574-9-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221024090041.19574-1-johan+linaro@kernel.org>
 References: <20221024090041.19574-1-johan+linaro@kernel.org>
@@ -80,46 +80,153 @@ the original mould rather than updating the binding. The bindings are
 arguable also incomplete as they only the describe register blocks used
 by the current Linux drivers.
 
-In preparation for adding new bindings for SC8280XP which further
-bindings can be based on, rename the current bindings after MSM8996 and
-add a reference to the SC8280XP bindings.
+Add a new binding for the UFS QMP PHYs found on SC8280XP which further
+bindings can be based on.
+
+Note that the current binding is simply removed instead of being
+deprecated as it was only recently merged and support for SC8280XP is
+still under development.
 
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- ...qcom,qmp-ufs-phy.yaml => qcom,msm8996-qmp-ufs-phy.yaml} | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
- rename Documentation/devicetree/bindings/phy/{qcom,qmp-ufs-phy.yaml => qcom,msm8996-qmp-ufs-phy.yaml} (95%)
+ .../phy/qcom,msm8996-qmp-ufs-phy.yaml         | 10 +--
+ .../phy/qcom,sc8280xp-qmp-ufs-phy.yaml        | 83 +++++++++++++++++++
+ 2 files changed, 87 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
 
-diff --git a/Documentation/devicetree/bindings/phy/qcom,qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml
-similarity index 95%
-rename from Documentation/devicetree/bindings/phy/qcom,qmp-ufs-phy.yaml
-rename to Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml
-index 815c375d0f7b..438f9606414a 100644
---- a/Documentation/devicetree/bindings/phy/qcom,qmp-ufs-phy.yaml
+diff --git a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml
+index 438f9606414a..be41acbd3b6c 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml
 +++ b/Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-ufs-phy.yaml
-@@ -1,10 +1,10 @@
- # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/phy/qcom,qmp-ufs-phy.yaml#
-+$id: http://devicetree.org/schemas/phy/qcom,msm8996-qmp-ufs-phy.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+@@ -22,7 +22,6 @@ properties:
+       - qcom,msm8996-qmp-ufs-phy
+       - qcom,msm8998-qmp-ufs-phy
+       - qcom,sc8180x-qmp-ufs-phy
+-      - qcom,sc8280xp-qmp-ufs-phy
+       - qcom,sdm845-qmp-ufs-phy
+       - qcom,sm6115-qmp-ufs-phy
+       - qcom,sm6350-qmp-ufs-phy
+@@ -122,7 +121,6 @@ allOf:
+             enum:
+               - qcom,msm8998-qmp-ufs-phy
+               - qcom,sc8180x-qmp-ufs-phy
+-              - qcom,sc8280xp-qmp-ufs-phy
+               - qcom,sdm845-qmp-ufs-phy
+               - qcom,sm6115-qmp-ufs-phy
+               - qcom,sm6350-qmp-ufs-phy
+@@ -159,7 +157,6 @@ allOf:
+           contains:
+             enum:
+               - qcom,msm8998-qmp-ufs-phy
+-              - qcom,sc8280xp-qmp-ufs-phy
+               - qcom,sdm845-qmp-ufs-phy
+               - qcom,sm6350-qmp-ufs-phy
+               - qcom,sm8150-qmp-ufs-phy
+@@ -214,11 +211,12 @@ allOf:
  
--title: Qualcomm QMP PHY controller (UFS)
-+title: Qualcomm QMP PHY controller (UFS, MSM8996)
- 
- maintainers:
-   - Vinod Koul <vkoul@kernel.org>
-@@ -13,6 +13,9 @@ description:
-   QMP PHY controller supports physical layer functionality for a number of
-   controllers on Qualcomm chipsets, such as, PCIe, UFS, and USB.
- 
-+  Note that these bindings are for SoCs up to SC8180X. For newer SoCs, see
-+  qcom,sc8280xp-qmp-ufs-phy.yaml.
+ examples:
+   - |
+-    #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
++    #include <dt-bindings/clock/qcom,gcc-sm8250.h>
+     #include <dt-bindings/clock/qcom,rpmh.h>
 +
- properties:
-   compatible:
-     enum:
+     phy-wrapper@1d87000 {
+-        compatible = "qcom,sc8280xp-qmp-ufs-phy";
+-        reg = <0x01d87000 0xe10>;
++        compatible = "qcom,sm8250-qmp-ufs-phy";
++        reg = <0x01d87000 0x1c0>;
+         #address-cells = <1>;
+         #size-cells = <1>;
+         ranges = <0x0 0x01d87000 0x1000>;
+diff --git a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
+new file mode 100644
+index 000000000000..dde86a19f792
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml
+@@ -0,0 +1,83 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/qcom,sc8280xp-qmp-ufs-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm QMP PHY controller (UFS, SC8280XP)
++
++maintainers:
++  - Vinod Koul <vkoul@kernel.org>
++
++description:
++  The QMP PHY controller supports physical layer functionality for a number of
++  controllers on Qualcomm chipsets, such as, PCIe, UFS, and USB.
++
++properties:
++  compatible:
++    enum:
++      - qcom,sc8280xp-qmp-ufs-phy
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: ref
++      - const: ref_aux
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    items:
++      - const: ufsphy
++
++  vdda-phy-supply: true
++
++  vdda-pll-supply: true
++
++  "#phy-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - clock-names
++  - power-domains
++  - resets
++  - reset-names
++  - vdda-phy-supply
++  - vdda-pll-supply
++  - "#phy-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
++
++    ufs_mem_phy: phy@1d87000 {
++        compatible = "qcom,sc8280xp-qmp-ufs-phy";
++        reg = <0x01d87000 0x1000>;
++
++        clocks = <&gcc GCC_UFS_REF_CLKREF_CLK>, <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
++        clock-names = "ref", "ref_aux";
++
++        power-domains = <&gcc UFS_PHY_GDSC>;
++
++        resets = <&ufs_mem_hc 0>;
++        reset-names = "ufsphy";
++
++        vdda-phy-supply = <&vreg_l6b>;
++        vdda-pll-supply = <&vreg_l3b>;
++
++        #phy-cells = <0>;
++    };
 -- 
 2.37.3
 
