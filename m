@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4864360A40F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E660660ABC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbiJXMFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S236784AbiJXN4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbiJXMCU (ORCPT
+        with ESMTP id S236769AbiJXNyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:02:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEE32495B;
-        Mon, 24 Oct 2022 04:49:47 -0700 (PDT)
+        Mon, 24 Oct 2022 09:54:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803B4BCBA2;
+        Mon, 24 Oct 2022 05:43:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D4A6612C9;
-        Mon, 24 Oct 2022 11:46:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CACCC433D7;
-        Mon, 24 Oct 2022 11:46:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6F9661252;
+        Mon, 24 Oct 2022 12:43:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE16BC433C1;
+        Mon, 24 Oct 2022 12:43:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611998;
-        bh=qRqcUUTGz48ylilhA9AgVfT7w9HHuLUTCmZjZVP6zcQ=;
+        s=korg; t=1666615395;
+        bh=FDJj57zct8g34Bx1kgQb5O2g5HvH0eUpe2PeLXP760g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MVGIaP64f15RCwlyI38wVCDZ8zr0316twfNnAnQ3wk066eDjUsWpU9yp5BiMT2bHX
-         hlUYPnvleVQc04w6sl+BlISAllTUXOt54BCJQAG4r+Fu7P4sFvV5TJMLuzQ4b/dxo9
-         oWMs46EhtthhvzfR+cebjdr0vbIpTAzcKGFjXphs=
+        b=fCF/EhKv1tA56lw9pQCnIEbqTCLWvL7DOD3DZ6lZlI/8KlPEmtHu2ZSTOytJkcpX/
+         3ddcd1IjS9TCmHIleLBD+IoAeOkI8sabjWYzLq7Mn14uZulruZwkE0URhYEF919HyV
+         jWi74y8T4s0rv9hVzZrS5Ywrhy7bm+MPbOxTttVc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Dmitry Vyukov" <dvyukov@google.com>,
-        stable <stable@kernel.org>,
-        syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com,
-        Tadeusz Struk <tadeusz.struk@linaro.org>,
-        PaX Team <pageexec@freemail.hu>
-Subject: [PATCH 4.14 030/210] usb: mon: make mmapped memory read only
+        stable@vger.kernel.org, Jianglei Nie <niejianglei2021@163.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 203/530] bnx2x: fix potential memory leak in bnx2x_tpa_stop()
 Date:   Mon, 24 Oct 2022 13:29:07 +0200
-Message-Id: <20221024112957.939635963@linuxfoundation.org>
+Message-Id: <20221024113054.252297412@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tadeusz Struk <tadeusz.struk@linaro.org>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-commit a659daf63d16aa883be42f3f34ff84235c302198 upstream.
+[ Upstream commit b43f9acbb8942b05252be83ac25a81cec70cc192 ]
 
-Syzbot found an issue in usbmon module, where the user space client can
-corrupt the monitor's internal memory, causing the usbmon module to
-crash the kernel with segfault, UAF, etc.
+bnx2x_tpa_stop() allocates a memory chunk from new_data with
+bnx2x_frag_alloc(). The new_data should be freed when gets some error.
+But when "pad + len > fp->rx_buf_size" is true, bnx2x_tpa_stop() returns
+without releasing the new_data, which will lead to a memory leak.
 
-The reproducer mmaps the /dev/usbmon memory to user space, and
-overwrites it with arbitrary data, which causes all kinds of issues.
+We should free the new_data with bnx2x_frag_free() when "pad + len >
+fp->rx_buf_size" is true.
 
-Return an -EPERM error from mon_bin_mmap() if the flag VM_WRTIE is set.
-Also clear VM_MAYWRITE to make it impossible to change it to writable
-later.
-
-Cc: "Dmitry Vyukov" <dvyukov@google.com>
-Cc: stable <stable@kernel.org>
-Fixes: 6f23ee1fefdc ("USB: add binary API to usbmon")
-Suggested-by: PaX Team <pageexec@freemail.hu>	# for the VM_MAYRITE portion
-Link: https://syzkaller.appspot.com/bug?id=2eb1f35d6525fa4a74d75b4244971e5b1411c95a
-Reported-by: syzbot+23f57c5ae902429285d7@syzkaller.appspotmail.com
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
-Link: https://lore.kernel.org/r/20220919215957.205681-1-tadeusz.struk@linaro.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 07b0f00964def8af9321cfd6c4a7e84f6362f728 ("bnx2x: fix possible panic under memory stress")
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/mon/mon_bin.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/usb/mon/mon_bin.c
-+++ b/drivers/usb/mon/mon_bin.c
-@@ -1267,6 +1267,11 @@ static int mon_bin_mmap(struct file *fil
- {
- 	/* don't do anything here: "fault" will set up page table entries */
- 	vma->vm_ops = &mon_bin_vm_ops;
-+
-+	if (vma->vm_flags & VM_WRITE)
-+		return -EPERM;
-+
-+	vma->vm_flags &= ~VM_MAYWRITE;
- 	vma->vm_flags |= VM_DONTEXPAND | VM_DONTDUMP;
- 	vma->vm_private_data = filp->private_data;
- 	mon_bin_vma_open(vma);
+diff --git a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+index 198e041d8410..4f669e7c7558 100644
+--- a/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
++++ b/drivers/net/ethernet/broadcom/bnx2x/bnx2x_cmn.c
+@@ -788,6 +788,7 @@ static void bnx2x_tpa_stop(struct bnx2x *bp, struct bnx2x_fastpath *fp,
+ 			BNX2X_ERR("skb_put is about to fail...  pad %d  len %d  rx_buf_size %d\n",
+ 				  pad, len, fp->rx_buf_size);
+ 			bnx2x_panic();
++			bnx2x_frag_free(fp, new_data);
+ 			return;
+ 		}
+ #endif
+-- 
+2.35.1
+
 
 
