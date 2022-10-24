@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD0F60AB85
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6380260AADF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236692AbiJXNx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
+        id S236154AbiJXNik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236569AbiJXNwb (ORCPT
+        with ESMTP id S236362AbiJXNf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:52:31 -0400
+        Mon, 24 Oct 2022 09:35:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86202BB07E;
-        Mon, 24 Oct 2022 05:42:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F67563FDC;
+        Mon, 24 Oct 2022 05:35:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D0106130D;
-        Mon, 24 Oct 2022 12:35:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1CD3C433C1;
-        Mon, 24 Oct 2022 12:35:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39388612B2;
+        Mon, 24 Oct 2022 12:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA19C433C1;
+        Mon, 24 Oct 2022 12:35:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614944;
-        bh=ZvsCPR12oufQrHYLoNm365mtLVcr9BbTjaxXV5rh9Ik=;
+        s=korg; t=1666614946;
+        bh=TkNEbl4rXpYuyrYqfn7l0bzdDIybOhdQxIHQuOiiLc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VUlNz6p6IaNFNE5YUeu3OwXvJLvVwXbFUz/VVRITqseLRJK+of9grtRs2jj2GoeU5
-         9wDUssDDKInDKLwMlAbBsnY3SZl/wmms4d3o6cr0FBLlkJXxz+iC4ENIr0E26HGsre
-         F49Lvbe4nJFo+zhaO/FVF4BkUsPwywBFpNmk7ie4=
+        b=XKJurgiVbEMMYtYhP19s4075Lm+/+gYAjfhzF1pKv8+3KX2PqX/I2h+IbbugbYdvq
+         lgYsSQ9JW/c2FchHyXB6rN56OlA5RDlgG1P9+J9tzBlfvqtPNuBOqNBQoL8Q7K8AOf
+         2f/MGA1xW7lFBAdTM9+XYRRL9SJ11QhAw6mfmO0M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 5.15 061/530] PCI: Sanitise firmware BAR assignments behind a PCI-PCI bridge
-Date:   Mon, 24 Oct 2022 13:26:45 +0200
-Message-Id: <20221024113047.800258013@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Anders Blomdell <anders.blomdell@control.lth.se>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>
+Subject: [PATCH 5.15 062/530] serial: 8250: Let drivers request full 16550A feature probing
+Date:   Mon, 24 Oct 2022 13:26:46 +0200
+Message-Id: <20221024113047.850200055@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
 References: <20221024113044.976326639@linuxfoundation.org>
@@ -55,100 +56,60 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-commit 0e32818397426a688f598f35d3bc762eca6d7592 upstream.
+commit 9906890c89e4dbd900ed87ad3040080339a7f411 upstream.
 
-When pci_assign_resource() is unable to assign resources to a BAR, it uses
-pci_revert_fw_address() to fall back to a firmware assignment (if any).
-Previously pci_revert_fw_address() assumed all addresses could reach the
-device, but this is not true if the device is below a bridge that only
-forwards addresses within its windows.
+A SERIAL_8250_16550A_VARIANTS configuration option has been recently
+defined that lets one request the 8250 driver not to probe for 16550A
+device features so as to reduce the driver's device startup time in
+virtual machines.
 
-This problem was observed on a Tyan Tomcat IV S1564D system where the BIOS
-did not assign valid addresses to several bridges and USB devices:
+Some actual hardware devices require these features to have been fully
+determined however for their driver to work correctly, so define a flag
+to let drivers request full 16550A feature probing on a device-by-device
+basis if required regardless of the SERIAL_8250_16550A_VARIANTS option
+setting chosen.
 
-  pci 0000:00:11.0: PCI-to-PCIe bridge to [bus 01-ff]
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
-  pci 0000:01:00.0: PCIe Upstream Port to [bus 02-ff]
-  pci 0000:01:00.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:02:02.0: PCIe Downstream Port to [bus 05-ff]
-  pci 0000:02:02.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:05:00.0: PCIe-to-PCI bridge to [bus 06-ff]
-  pci 0000:05:00.0:   bridge window [io  0x0000-0x0fff]   # unreachable
-  pci 0000:06:08.0: USB UHCI 1.1
-  pci 0000:06:08.0: BAR 4: [io  0xfce0-0xfcff]            # unreachable
-  pci 0000:06:08.1: USB UHCI 1.1
-  pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff]            # unreachable
-  pci 0000:06:08.0: can't claim BAR 4 [io  0xfce0-0xfcff]: no compatible bridge window
-  pci 0000:06:08.1: can't claim BAR 4 [io  0xfce0-0xfcff]: no compatible bridge window
-
-During the first pass of assigning unassigned resources, there was not
-enough I/O space available, so we couldn't assign the 06:08.0 BAR and
-reverted to the firmware assignment (still unreachable).  Reverting the
-06:08.1 assignment failed because it conflicted with 06:08.0:
-
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
-  pci 0000:01:00.0: no space for bridge window [io  size 0x2000]
-  pci 0000:02:02.0: no space for bridge window [io  size 0x1000]
-  pci 0000:05:00.0: no space for bridge window [io  size 0x1000]
-  pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
-  pci 0000:06:08.0: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-  pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
-  pci 0000:06:08.1: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
-  pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff] conflicts with 0000:06:08.0 [io  0xfce0-0xfcff]
-
-A subsequent pass assigned valid bridge windows and a valid 06:08.1 BAR,
-but left the 06:08.0 BAR alone, so the UHCI device was still unusable:
-
-  pci 0000:00:11.0:   bridge window [io  0xe000-0xefff] released
-  pci 0000:00:11.0:   bridge window [io  0x1000-0x2fff]   # reassigned
-  pci 0000:01:00.0:   bridge window [io  0x1000-0x2fff]   # reassigned
-  pci 0000:02:02.0:   bridge window [io  0x2000-0x2fff]   # reassigned
-  pci 0000:05:00.0:   bridge window [io  0x2000-0x2fff]   # reassigned
-  pci 0000:06:08.0: BAR 4: assigned [io  0xfce0-0xfcff]   # left alone
-  pci 0000:06:08.1: BAR 4: assigned [io  0x2000-0x201f]
-  ...
-  uhci_hcd 0000:06:08.0: host system error, PCI problems?
-  uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
-  uhci_hcd 0000:06:08.0: host controller halted, very bad!
-  uhci_hcd 0000:06:08.0: HCRESET not completed yet!
-  uhci_hcd 0000:06:08.0: HC died; cleaning up
-
-If the address assigned by firmware is not reachable because it's not
-within upstream bridge windows, fail instead of assigning the unusable
-address from firmware.
-
-[bhelgaas: commit log, use pci_upstream_bridge()]
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=16263
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203012338460.46819@angie.orcam.me.uk
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2209211921250.29493@angie.orcam.me.uk
-Fixes: 58c84eda0756 ("PCI: fall back to original BIOS BAR addresses")
+Fixes: dc56ecb81a0a ("serial: 8250: Support disabling mdelay-filled probes of 16550A variants")
+Cc: stable@vger.kernel.org # v5.6+
+Reported-by: Anders Blomdell <anders.blomdell@control.lth.se>
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: stable@vger.kernel.org # v2.6.35+
+Link: https://lore.kernel.org/r/alpine.DEB.2.21.2209202357520.41633@angie.orcam.me.uk
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/setup-res.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/tty/serial/8250/8250_port.c |    3 ++-
+ include/linux/serial_core.h         |    3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
---- a/drivers/pci/setup-res.c
-+++ b/drivers/pci/setup-res.c
-@@ -210,6 +210,17 @@ static int pci_revert_fw_address(struct
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1029,7 +1029,8 @@ static void autoconfig_16550a(struct uar
+ 	up->port.type = PORT_16550A;
+ 	up->capabilities |= UART_CAP_FIFO;
  
- 	root = pci_find_parent_resource(dev, res);
- 	if (!root) {
-+		/*
-+		 * If dev is behind a bridge, accesses will only reach it
-+		 * if res is inside the relevant bridge window.
-+		 */
-+		if (pci_upstream_bridge(dev))
-+			return -ENXIO;
-+
-+		/*
-+		 * On the root bus, assume the host bridge will forward
-+		 * everything.
-+		 */
- 		if (res->flags & IORESOURCE_IO)
- 			root = &ioport_resource;
- 		else
+-	if (!IS_ENABLED(CONFIG_SERIAL_8250_16550A_VARIANTS))
++	if (!IS_ENABLED(CONFIG_SERIAL_8250_16550A_VARIANTS) &&
++	    !(up->port.flags & UPF_FULL_PROBE))
+ 		return;
+ 
+ 	/*
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -100,7 +100,7 @@ struct uart_icount {
+ 	__u32	buf_overrun;
+ };
+ 
+-typedef unsigned int __bitwise upf_t;
++typedef u64 __bitwise upf_t;
+ typedef unsigned int __bitwise upstat_t;
+ 
+ struct uart_port {
+@@ -207,6 +207,7 @@ struct uart_port {
+ #define UPF_FIXED_PORT		((__force upf_t) (1 << 29))
+ #define UPF_DEAD		((__force upf_t) (1 << 30))
+ #define UPF_IOREMAP		((__force upf_t) (1 << 31))
++#define UPF_FULL_PROBE		((__force upf_t) (1ULL << 32))
+ 
+ #define __UPF_CHANGE_MASK	0x17fff
+ #define UPF_CHANGE_MASK		((__force upf_t) __UPF_CHANGE_MASK)
 
 
