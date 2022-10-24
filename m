@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678F660A7FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BCC60AA6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234749AbiJXNAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
+        id S232410AbiJXNdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234862AbiJXM6a (ORCPT
+        with ESMTP id S236068AbiJXN3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:58:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C4380E89;
-        Mon, 24 Oct 2022 05:17:19 -0700 (PDT)
+        Mon, 24 Oct 2022 09:29:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83816ABF30;
+        Mon, 24 Oct 2022 05:32:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E39D1612B7;
-        Mon, 24 Oct 2022 12:14:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05851C433C1;
-        Mon, 24 Oct 2022 12:14:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C609761314;
+        Mon, 24 Oct 2022 12:29:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7973C433D6;
+        Mon, 24 Oct 2022 12:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613661;
-        bh=IYCU20u2Xlc4syjuburP7Yh/EOeRGBaxDPCF296W3kw=;
+        s=korg; t=1666614552;
+        bh=8kvMFNiK8S3+BVnSHaJK1OdWmE6iurGgh/4op3yCUVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q4iKpSgBMfO3i8e69AbpVqy5vmYCvTiaYktj4aQTYGxx/RONey0BeE39MhnVs8vmb
-         iTl4dtIEFDkWzHhTmC3Hlo8rF+3NR48GpWJnzhy/AG+IhFTULQlVmp1gSUPu7sZLRw
-         eHrA4ogp8mLjbpTIbcIZIfJzJsi0ZiK0+/JYcrQM=
+        b=YfpsV6P8o9gMeO6BM/g1AVNQwR3AVDDNosf8HaduyyjCOBU8R27caUpwFZXgX7Vyj
+         IuhvKC6ItuDZ4c2mhMB7KKt2aZHyrXDC+kB64yrk7pXDbUcKfQK4BzXYs4DftUsKfA
+         1KbsxA9DIYIPtDD8SU5ypAfaywJydAefrdUjqfpg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wright Feng <wright.feng@cypress.com>,
-        Chi-hsien Lin <chi-hsien.lin@cypress.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 191/255] wifi: brcmfmac: fix invalid address access when enabling SCAN log level
+        stable@vger.kernel.org, Dai Ngo <dai.ngo@oracle.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 304/390] NFSD: fix use-after-free on source server when doing inter-server copy
 Date:   Mon, 24 Oct 2022 13:31:41 +0200
-Message-Id: <20221024113009.327787852@linuxfoundation.org>
+Message-Id: <20221024113035.948291024@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,104 +54,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wright Feng <wright.feng@cypress.com>
+From: Dai Ngo <dai.ngo@oracle.com>
 
-[ Upstream commit aa666b68e73fc06d83c070d96180b9010cf5a960 ]
+[ Upstream commit 019805fea91599b22dfa62ffb29c022f35abeb06 ]
 
-The variable i is changed when setting random MAC address and causes
-invalid address access when printing the value of pi->reqs[i]->reqid.
+Use-after-free occurred when the laundromat tried to free expired
+cpntf_state entry on the s2s_cp_stateids list after inter-server
+copy completed. The sc_cp_list that the expired copy state was
+inserted on was already freed.
 
-We replace reqs index with ri to fix the issue.
+When COPY completes, the Linux client normally sends LOCKU(lock_state x),
+FREE_STATEID(lock_state x) and CLOSE(open_state y) to the source server.
+The nfs4_put_stid call from nfsd4_free_stateid cleans up the copy state
+from the s2s_cp_stateids list before freeing the lock state's stid.
 
-[  136.726473] Unable to handle kernel access to user memory outside uaccess routines at virtual address 0000000000000000
-[  136.737365] Mem abort info:
-[  136.740172]   ESR = 0x96000004
-[  136.743359]   Exception class = DABT (current EL), IL = 32 bits
-[  136.749294]   SET = 0, FnV = 0
-[  136.752481]   EA = 0, S1PTW = 0
-[  136.755635] Data abort info:
-[  136.758514]   ISV = 0, ISS = 0x00000004
-[  136.762487]   CM = 0, WnR = 0
-[  136.765522] user pgtable: 4k pages, 48-bit VAs, pgdp = 000000005c4e2577
-[  136.772265] [0000000000000000] pgd=0000000000000000
-[  136.777160] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[  136.782732] Modules linked in: brcmfmac(O) brcmutil(O) cfg80211(O) compat(O)
-[  136.789788] Process wificond (pid: 3175, stack limit = 0x00000000053048fb)
-[  136.796664] CPU: 3 PID: 3175 Comm: wificond Tainted: G           O      4.19.42-00001-g531a5f5 #1
-[  136.805532] Hardware name: Freescale i.MX8MQ EVK (DT)
-[  136.810584] pstate: 60400005 (nZCv daif +PAN -UAO)
-[  136.815429] pc : brcmf_pno_config_sched_scans+0x6cc/0xa80 [brcmfmac]
-[  136.821811] lr : brcmf_pno_config_sched_scans+0x67c/0xa80 [brcmfmac]
-[  136.828162] sp : ffff00000e9a3880
-[  136.831475] x29: ffff00000e9a3890 x28: ffff800020543400
-[  136.836786] x27: ffff8000b1008880 x26: ffff0000012bf6a0
-[  136.842098] x25: ffff80002054345c x24: ffff800088d22400
-[  136.847409] x23: ffff0000012bf638 x22: ffff0000012bf6d8
-[  136.852721] x21: ffff8000aced8fc0 x20: ffff8000ac164400
-[  136.858032] x19: ffff00000e9a3946 x18: 0000000000000000
-[  136.863343] x17: 0000000000000000 x16: 0000000000000000
-[  136.868655] x15: ffff0000093f3b37 x14: 0000000000000050
-[  136.873966] x13: 0000000000003135 x12: 0000000000000000
-[  136.879277] x11: 0000000000000000 x10: ffff000009a61888
-[  136.884589] x9 : 000000000000000f x8 : 0000000000000008
-[  136.889900] x7 : 303a32303d726464 x6 : ffff00000a1f957d
-[  136.895211] x5 : 0000000000000000 x4 : ffff00000e9a3942
-[  136.900523] x3 : 0000000000000000 x2 : ffff0000012cead8
-[  136.905834] x1 : ffff0000012bf6d8 x0 : 0000000000000000
-[  136.911146] Call trace:
-[  136.913623]  brcmf_pno_config_sched_scans+0x6cc/0xa80 [brcmfmac]
-[  136.919658]  brcmf_pno_start_sched_scan+0xa4/0x118 [brcmfmac]
-[  136.925430]  brcmf_cfg80211_sched_scan_start+0x80/0xe0 [brcmfmac]
-[  136.931636]  nl80211_start_sched_scan+0x140/0x308 [cfg80211]
-[  136.937298]  genl_rcv_msg+0x358/0x3f4
-[  136.940960]  netlink_rcv_skb+0xb4/0x118
-[  136.944795]  genl_rcv+0x34/0x48
-[  136.947935]  netlink_unicast+0x264/0x300
-[  136.951856]  netlink_sendmsg+0x2e4/0x33c
-[  136.955781]  __sys_sendto+0x120/0x19c
+However, sometimes the CLOSE was sent before the FREE_STATEID request.
+When this happens, the nfsd4_close_open_stateid call from nfsd4_close
+frees all lock states on its st_locks list without cleaning up the copy
+state on the sc_cp_list list. When the time the FREE_STATEID arrives the
+server returns BAD_STATEID since the lock state was freed. This causes
+the use-after-free error to occur when the laundromat tries to free
+the expired cpntf_state.
 
-Signed-off-by: Wright Feng <wright.feng@cypress.com>
-Signed-off-by: Chi-hsien Lin <chi-hsien.lin@cypress.com>
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220722115632.620681-4-alvin@pqrs.dk
+This patch adds a call to nfs4_free_cpntf_statelist in
+nfsd4_close_open_stateid to clean up the copy state before calling
+free_ol_stateid_reaplist to free the lock state's stid on the reaplist.
+
+Signed-off-by: Dai Ngo <dai.ngo@oracle.com>
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/wireless/broadcom/brcm80211/brcmfmac/pno.c   | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ fs/nfsd/nfs4state.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pno.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pno.c
-index 14e530601ef3..7ec1630d9095 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pno.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/pno.c
-@@ -154,12 +154,12 @@ static int brcmf_pno_set_random(struct brcmf_if *ifp, struct brcmf_pno_info *pi)
- 	struct brcmf_pno_macaddr_le pfn_mac;
- 	u8 *mac_addr = NULL;
- 	u8 *mac_mask = NULL;
--	int err, i;
-+	int err, i, ri;
+diff --git a/fs/nfsd/nfs4state.c b/fs/nfsd/nfs4state.c
+index f1b503bec222..665d0eaeb8db 100644
+--- a/fs/nfsd/nfs4state.c
++++ b/fs/nfsd/nfs4state.c
+@@ -843,6 +843,7 @@ static struct nfs4_ol_stateid * nfs4_alloc_open_stateid(struct nfs4_client *clp)
  
--	for (i = 0; i < pi->n_reqs; i++)
--		if (pi->reqs[i]->flags & NL80211_SCAN_FLAG_RANDOM_ADDR) {
--			mac_addr = pi->reqs[i]->mac_addr;
--			mac_mask = pi->reqs[i]->mac_addr_mask;
-+	for (ri = 0; ri < pi->n_reqs; ri++)
-+		if (pi->reqs[ri]->flags & NL80211_SCAN_FLAG_RANDOM_ADDR) {
-+			mac_addr = pi->reqs[ri]->mac_addr;
-+			mac_mask = pi->reqs[ri]->mac_addr_mask;
- 			break;
- 		}
+ static void nfs4_free_deleg(struct nfs4_stid *stid)
+ {
++	WARN_ON(!list_empty(&stid->sc_cp_list));
+ 	kmem_cache_free(deleg_slab, stid);
+ 	atomic_long_dec(&num_delegations);
+ }
+@@ -1358,6 +1359,7 @@ static void nfs4_free_ol_stateid(struct nfs4_stid *stid)
+ 	release_all_access(stp);
+ 	if (stp->st_stateowner)
+ 		nfs4_put_stateowner(stp->st_stateowner);
++	WARN_ON(!list_empty(&stid->sc_cp_list));
+ 	kmem_cache_free(stateid_slab, stid);
+ }
  
-@@ -181,7 +181,7 @@ static int brcmf_pno_set_random(struct brcmf_if *ifp, struct brcmf_pno_info *pi)
- 	pfn_mac.mac[0] |= 0x02;
+@@ -6207,6 +6209,7 @@ static void nfsd4_close_open_stateid(struct nfs4_ol_stateid *s)
+ 	struct nfs4_client *clp = s->st_stid.sc_client;
+ 	bool unhashed;
+ 	LIST_HEAD(reaplist);
++	struct nfs4_ol_stateid *stp;
  
- 	brcmf_dbg(SCAN, "enabling random mac: reqid=%llu mac=%pM\n",
--		  pi->reqs[i]->reqid, pfn_mac.mac);
-+		  pi->reqs[ri]->reqid, pfn_mac.mac);
- 	err = brcmf_fil_iovar_data_set(ifp, "pfn_macaddr", &pfn_mac,
- 				       sizeof(pfn_mac));
- 	if (err)
+ 	spin_lock(&clp->cl_lock);
+ 	unhashed = unhash_open_stateid(s, &reaplist);
+@@ -6215,6 +6218,8 @@ static void nfsd4_close_open_stateid(struct nfs4_ol_stateid *s)
+ 		if (unhashed)
+ 			put_ol_stateid_locked(s, &reaplist);
+ 		spin_unlock(&clp->cl_lock);
++		list_for_each_entry(stp, &reaplist, st_locks)
++			nfs4_free_cpntf_statelist(clp->net, &stp->st_stid);
+ 		free_ol_stateid_reaplist(&reaplist);
+ 	} else {
+ 		spin_unlock(&clp->cl_lock);
 -- 
 2.35.1
 
