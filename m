@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976C960A4E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6737960A413
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbiJXMSR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:18:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S232504AbiJXMFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233108AbiJXMQS (ORCPT
+        with ESMTP id S232453AbiJXMC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:16:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6A7AC36;
-        Mon, 24 Oct 2022 04:56:38 -0700 (PDT)
+        Mon, 24 Oct 2022 08:02:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE1B23EB0;
+        Mon, 24 Oct 2022 04:49:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A802C612D3;
-        Mon, 24 Oct 2022 11:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9254C433D6;
-        Mon, 24 Oct 2022 11:56:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 47F1EB8117E;
+        Mon, 24 Oct 2022 11:47:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15C2C433C1;
+        Mon, 24 Oct 2022 11:47:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612598;
-        bh=t+BBSIhts49B2P3FN9Z48QUqlQMj20aVsD3IeoAmpEQ=;
+        s=korg; t=1666612041;
+        bh=zZ6aCnvvIvMD/DtvvB7qbtS2ts7lyXMgsQSGtvWJf1E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QGdnJzN2VxvAPRXu+cc8W7PUebo+W5L3mvQTtjvJn7qHp5a/2XiRoukl7hGmaWxEx
-         iZQfCZ3ovOdCjC6z7dy5FrPjWaPkhPhMOGTvULvz6RWJuyNlc7e7a5zTcYs6Bo+gom
-         TOLmDcLZwgeqfyNFQmNOfAMY4VxCBXfQxlI6c7AU=
+        b=cf5tnW9jl781uCuhyFZd5zBA/iLc01IIH16bwrXl164xnE4Twgm7yiLg6ot61+7w+
+         JsH2gcWtUFZ3hxpCuzY0Z25PLOw4nI7kM4SKeBXD5+JrWoEAmljyH6K1ZTBbGUUvWG
+         WqRzO740Y3HgAf2D9UQb1bJcMHyRJA3yPXkcnCG8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andri Yngvason <andri@yngvason.is>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 4.19 046/229] HID: multitouch: Add memory barriers
+        stable@vger.kernel.org, Cameron Gutman <aicommander@gmail.com>,
+        Pavel Rojtberg <rojtberg@gmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 4.14 048/210] Input: xpad - fix wireless 360 controller breaking after suspend
 Date:   Mon, 24 Oct 2022 13:29:25 +0200
-Message-Id: <20221024113000.581586783@linuxfoundation.org>
+Message-Id: <20221024112958.545652058@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,59 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andri Yngvason <andri@yngvason.is>
+From: Cameron Gutman <aicommander@gmail.com>
 
-commit be6e2b5734a425941fcdcdbd2a9337be498ce2cf upstream.
+commit a17b9841152e7f4621619902b347e2cc39c32996 upstream.
 
-This fixes broken atomic checks which cause a race between the
-release-timer and processing of hid input.
+Suspending and resuming the system can sometimes cause the out
+URB to get hung after a reset_resume. This causes LED setting
+and force feedback to break on resume. To avoid this, just drop
+the reset_resume callback so the USB core rebinds xpad to the
+wireless pads on resume if a reset happened.
 
-I noticed that contacts were sometimes sticking, even with the "sticky
-fingers" quirk enabled. This fixes that problem.
+A nice side effect of this change is the LED ring on wireless
+controllers is now set correctly on system resume.
 
 Cc: stable@vger.kernel.org
-Fixes: 9609827458c3 ("HID: multitouch: optimize the sticky fingers timer")
-Signed-off-by: Andri Yngvason <andri@yngvason.is>
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Link: https://lore.kernel.org/r/20220907150159.2285460-1-andri@yngvason.is
+Fixes: 4220f7db1e42 ("Input: xpad - workaround dead irq_out after suspend/ resume")
+Signed-off-by: Cameron Gutman <aicommander@gmail.com>
+Signed-off-by: Pavel Rojtberg <rojtberg@gmail.com>
+Link: https://lore.kernel.org/r/20220818154411.510308-3-rojtberg@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hid/hid-multitouch.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/input/joystick/xpad.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -1154,7 +1154,7 @@ static void mt_touch_report(struct hid_d
- 	int contact_count = -1;
+--- a/drivers/input/joystick/xpad.c
++++ b/drivers/input/joystick/xpad.c
+@@ -2000,7 +2000,6 @@ static struct usb_driver xpad_driver = {
+ 	.disconnect	= xpad_disconnect,
+ 	.suspend	= xpad_suspend,
+ 	.resume		= xpad_resume,
+-	.reset_resume	= xpad_resume,
+ 	.id_table	= xpad_table,
+ };
  
- 	/* sticky fingers release in progress, abort */
--	if (test_and_set_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
-+	if (test_and_set_bit_lock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
- 		return;
- 
- 	scantime = *app->scantime;
-@@ -1235,7 +1235,7 @@ static void mt_touch_report(struct hid_d
- 			del_timer(&td->release_timer);
- 	}
- 
--	clear_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
-+	clear_bit_unlock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
- }
- 
- static int mt_touch_input_configured(struct hid_device *hdev,
-@@ -1672,11 +1672,11 @@ static void mt_expired_timeout(struct ti
- 	 * An input report came in just before we release the sticky fingers,
- 	 * it will take care of the sticky fingers.
- 	 */
--	if (test_and_set_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
-+	if (test_and_set_bit_lock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags))
- 		return;
- 	if (test_bit(MT_IO_FLAGS_PENDING_SLOTS, &td->mt_io_flags))
- 		mt_release_contacts(hdev);
--	clear_bit(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
-+	clear_bit_unlock(MT_IO_FLAGS_RUNNING, &td->mt_io_flags);
- }
- 
- static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
 
 
