@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA74260A31C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B7B60A321
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiJXLvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
+        id S231651AbiJXLvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiJXLtP (ORCPT
+        with ESMTP id S231633AbiJXLts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:49:15 -0400
+        Mon, 24 Oct 2022 07:49:48 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697D439107;
-        Mon, 24 Oct 2022 04:43:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336AF6F26C;
+        Mon, 24 Oct 2022 04:44:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75BBDB8118F;
-        Mon, 24 Oct 2022 11:43:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1589C433C1;
-        Mon, 24 Oct 2022 11:43:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 97488B8117E;
+        Mon, 24 Oct 2022 11:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5723C433D6;
+        Mon, 24 Oct 2022 11:44:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611815;
-        bh=BNOQsYZF/K2e4NRppXGPLidezNtKbq+7MS1OWtou5uY=;
+        s=korg; t=1666611844;
+        bh=nKGmevzLQrtXkEM6g9KVEPyNFfuZdgp1sbhdc2Z129U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dZpVN1oUDym7o2eBDli4jCycKo4QNjhPrJAbEDxR4MoyncI5eZ34VZM4n5dKLgpCk
-         qc96e5VcMFHk6yO448N9TQwi8YyFaUyVgJFyaMCCV1sGFYmvCCc/0MzHAcjBX0K9cT
-         fPaTxg+Pnta4BdcGkOd3+VUqv2tqCoU8BBSbtox4=
+        b=scHvUF8plp3yE3SNN9RE4q9A6nEmmyyJikbU2RbGSGT1HXrb1jn4/3Nm3sU6h7TkW
+         hhHLf/rVaO5SNXzDQbzbdgdYQLOzattgjbZsromtMw5cSRXOm+AmiUJ7duTevJofFG
+         4ciJrnL65R/h99cTuARMpmJdm2HpI6eOELbSmdBY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 114/159] mfd: sm501: Add check for platform_driver_register()
-Date:   Mon, 24 Oct 2022 13:31:08 +0200
-Message-Id: <20221024112953.644066781@linuxfoundation.org>
+        stable@vger.kernel.org, Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 115/159] dmaengine: ioat: stop mod_timer from resurrecting deleted timer in __cleanup()
+Date:   Mon, 24 Oct 2022 13:31:09 +0200
+Message-Id: <20221024112953.683101678@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
 References: <20221024112949.358278806@linuxfoundation.org>
@@ -53,41 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Dave Jiang <dave.jiang@intel.com>
 
-[ Upstream commit 8325a6c24ad78b8c1acc3c42b098ee24105d68e5 ]
+[ Upstream commit 898ec89dbb55b8294695ad71694a0684e62b2a73 ]
 
-As platform_driver_register() can return error numbers,
-it should be better to check platform_driver_register()
-and deal with the exception.
+User reports observing timer event report channel halted but no error
+observed in CHANERR register. The driver finished self-test and released
+channel resources. Debug shows that __cleanup() can call
+mod_timer() after the timer has been deleted and thus resurrect the
+timer. While harmless, it causes suprious error message to be emitted.
+Use mod_timer_pending() call to prevent deleted timer from being
+resurrected.
 
-Fixes: b6d6454fdb66 ("[PATCH] mfd: SM501 core driver")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20220913091112.1739138-1-jiasheng@iscas.ac.cn
+Fixes: 3372de5813e4 ("dmaengine: ioatdma: removal of dma_v3.c and relevant ioat3 references")
+Signed-off-by: Dave Jiang <dave.jiang@intel.com>
+Link: https://lore.kernel.org/r/166360672197.3851724.17040290563764838369.stgit@djiang5-desk3.ch.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/sm501.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/dma/ioat/dma.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/sm501.c b/drivers/mfd/sm501.c
-index 4ca245518a19..d64bd28cc6b8 100644
---- a/drivers/mfd/sm501.c
-+++ b/drivers/mfd/sm501.c
-@@ -1736,7 +1736,12 @@ static struct platform_driver sm501_plat_driver = {
+diff --git a/drivers/dma/ioat/dma.c b/drivers/dma/ioat/dma.c
+index c5a45c57b8b8..36189a3337b1 100644
+--- a/drivers/dma/ioat/dma.c
++++ b/drivers/dma/ioat/dma.c
+@@ -663,7 +663,7 @@ static void __cleanup(struct ioatdma_chan *ioat_chan, dma_addr_t phys_complete)
+ 	if (active - i == 0) {
+ 		dev_dbg(to_dev(ioat_chan), "%s: cancel completion timeout\n",
+ 			__func__);
+-		mod_timer(&ioat_chan->timer, jiffies + IDLE_TIMEOUT);
++		mod_timer_pending(&ioat_chan->timer, jiffies + IDLE_TIMEOUT);
+ 	}
  
- static int __init sm501_base_init(void)
- {
--	platform_driver_register(&sm501_plat_driver);
-+	int ret;
-+
-+	ret = platform_driver_register(&sm501_plat_driver);
-+	if (ret < 0)
-+		return ret;
-+
- 	return pci_register_driver(&sm501_pci_driver);
+ 	/* 5 microsecond delay per pending descriptor */
+@@ -685,7 +685,7 @@ static void ioat_cleanup(struct ioatdma_chan *ioat_chan)
+ 
+ 		if (chanerr &
+ 		    (IOAT_CHANERR_HANDLE_MASK | IOAT_CHANERR_RECOVER_MASK)) {
+-			mod_timer(&ioat_chan->timer, jiffies + IDLE_TIMEOUT);
++			mod_timer_pending(&ioat_chan->timer, jiffies + IDLE_TIMEOUT);
+ 			ioat_eh(ioat_chan);
+ 		}
+ 	}
+@@ -877,7 +877,7 @@ static void check_active(struct ioatdma_chan *ioat_chan)
+ 	}
+ 
+ 	if (test_and_clear_bit(IOAT_CHAN_ACTIVE, &ioat_chan->state))
+-		mod_timer(&ioat_chan->timer, jiffies + IDLE_TIMEOUT);
++		mod_timer_pending(&ioat_chan->timer, jiffies + IDLE_TIMEOUT);
  }
  
+ void ioat_timer_event(unsigned long data)
 -- 
 2.35.1
 
