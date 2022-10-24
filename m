@@ -2,207 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCDC160B577
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 391EB60B5B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 20:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiJXS2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 14:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
+        id S230419AbiJXShH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 14:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbiJXS1m (ORCPT
+        with ESMTP id S230422AbiJXSgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 14:27:42 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B5E40BDF;
-        Mon, 24 Oct 2022 10:09:33 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id bs14so13626755ljb.9;
-        Mon, 24 Oct 2022 10:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VBYWVM9ODmS0VnK1FS7UvQkzqr14IDbygTiD2Kt2jNo=;
-        b=L14XkVSAc4WBdwRecryASp/ueVsdmBwQPQePAhWolmvZit0WXl4nywyQUrhmeXyiMW
-         Ejogwb/JSjeU75NrAsWcnaDz3y28PW6FU5dITtAyrugywzrlqFQ2kPohorsnco/KeRUa
-         s0qnjq5u9WSIhXhqXFXSuODcXtKBsGirVirH/kA+zNJsAn/PgflmnsqBesIIhAPzoRWN
-         XbzPzcYciTkzq7u/UsbMFirHOd0IMjR1QyKQK6hbbrJd3EOHobfINiUP9e91hbHs2KOU
-         kxOFude4E2fTeaowvaRviu0oBcUYBfjDZo97tAysKKTFsIwMVFqVuUS+2ubrZqyqU8+r
-         nvDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VBYWVM9ODmS0VnK1FS7UvQkzqr14IDbygTiD2Kt2jNo=;
-        b=ObSfbIcP/kMe2U5bPa5CFTJw1f1AgRcnRQ4wsumdK2Xew57mC4dlaw+R+kvMPhrWuY
-         fmnCJBR5OJAEzi09J+ttT+Qt9usCcmqRsX32i40c391x0WQ71sy28ZzFV0rAJUB9toQK
-         qzSzFK4KvL5gzI4Bm6TJ3DEctvCIa5FJgEWqcrFcoBtE1vaUIvj/2lUBrGVoSi+hCQjl
-         t0Mht9HloyV6YSjh7pNlrhe6BgMqHKScQSXZEQ3LViYMekoVvOTQu8AMHUsqPN30uXlo
-         SOHHKFyrW5kf02N/FBm+k7/6w46AvrAZ+kHKwKyH81qgqqxl4tuamguO+9mXbAieYUVs
-         wzPw==
-X-Gm-Message-State: ACrzQf3DP6lyYtEZZE8tObC3rq592ZPECLzPoUoZZIf8XR0ncne78wPb
-        0uAMIMd2pC7vv6vkJQTc6MM=
-X-Google-Smtp-Source: AMsMyM7ODeeFAmpnQDDH3HERObjY1vW7Iec4Qdx4UQVAzbcfokntL0Jbc9mXmee9bgtSmBhxtOvzIA==
-X-Received: by 2002:a05:651c:1104:b0:26f:e0ad:fd2e with SMTP id e4-20020a05651c110400b0026fe0adfd2emr11727240ljo.67.1666631284320;
-        Mon, 24 Oct 2022 10:08:04 -0700 (PDT)
-Received: from pc636 (host-217-213-69-138.mobileonline.telia.com. [217.213.69.138])
-        by smtp.gmail.com with ESMTPSA id d11-20020ac2544b000000b004979ec19380sm643994lfn.285.2022.10.24.10.08.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 10:08:03 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 24 Oct 2022 19:08:01 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org
-Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use
- call_rcu_flush()
-Message-ID: <Y1bGcQ7RPleYp3ge@pc636>
-References: <20221019225144.2500095-13-paulmck@kernel.org>
- <CAEXW_YQgSwMYisZVctXkjFu6_5YhFCpL_E5o5H4oJooS5Syp+g@mail.gmail.com>
- <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1ZtyjxKCcV0Hfjn@pc636>
- <Y1aDy3maaO39ClSU@pc636>
- <Y1ahs83258Lok9+O@google.com>
- <20221024153958.GY5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1a8ei1h7SzyYZx9@pc636>
- <20221024164819.GA5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1bDdP3iHoa4xqZL@pc636>
+        Mon, 24 Oct 2022 14:36:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27E8201AC;
+        Mon, 24 Oct 2022 10:18:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62B00B81888;
+        Mon, 24 Oct 2022 17:08:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0086C433C1;
+        Mon, 24 Oct 2022 17:08:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666631284;
+        bh=qWgfUtE4UN4/iCrWAyctAyzwt74lHMnUej7miAfWozs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Zu+kqShRcjC8nRPj+ZPavRcjYG48rUxYr/xtUKVxq/tVD3qP4BQ8938gc4JRHh+sQ
+         wUEoCQstYbywkycJbXo1Gx9NudXpA31ePGv1ymKF7AziAkUafYLdFNwgeHV1QImOEK
+         JFwJgG3tBQ+MqnkxeUpIBTBFzGPMlWiBuQYZJPplfyUZSfiekZhXplF9BCf4TEz5cR
+         BoSuO18xOEhTlK5W4tnJUnjIc+5268Ad/+OGpyLVWX/qO+ewTt1u6BRu/hvzFkn3Kl
+         CbW0He1dZ/toR97u7dANoXILUr18MDMSTzT2iOWvvh3xihpjn8Gr15icEr7MzFt17l
+         NwXsJuVW8BO6Q==
+Date:   Mon, 24 Oct 2022 10:08:01 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     netdev@kapio-technology.com
+Cc:     Ido Schimmel <idosch@nvidia.com>, davem@davemloft.net,
+        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Yuwei Wang <wangyuweihx@gmail.com>,
+        Petr Machata <petrm@nvidia.com>,
+        Florent Fourcot <florent.fourcot@wifirst.fr>,
+        Hans Schultz <schultz.hans@gmail.com>,
+        Joachim Wiberg <troglobit@gmail.com>,
+        Amit Cohen <amcohen@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        bridge@lists.linux-foundation.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v8 net-next 02/12] net: bridge: add blackhole fdb entry
+ flag
+Message-ID: <20221024100801.6c391ff9@kernel.org>
+In-Reply-To: <7690b7f836b144b60f60b3b68d3bf784@kapio-technology.com>
+References: <20221018165619.134535-1-netdev@kapio-technology.com>
+        <20221018165619.134535-3-netdev@kapio-technology.com>
+        <Y1FHuXE+X/V9aRvh@shredder>
+        <7690b7f836b144b60f60b3b68d3bf784@kapio-technology.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1bDdP3iHoa4xqZL@pc636>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 06:55:16PM +0200, Uladzislau Rezki wrote:
-> On Mon, Oct 24, 2022 at 09:48:19AM -0700, Paul E. McKenney wrote:
-> > On Mon, Oct 24, 2022 at 06:25:30PM +0200, Uladzislau Rezki wrote:
-> > > >
-> > > > You guys might need to agree on the definition of "good" here.  Or maybe
-> > > > understand the differences in your respective platforms' definitions of
-> > > > "good".  ;-)
-> > > >
-> > > Indeed. Bad is when once per-millisecond infinitely :) At least in such use
-> > > workload a can detect a power delta and power gain. Anyway, below is a new
-> > > trace where i do not use "flush" variant for the kvfree_rcu():
-> > > 
-> > > <snip>
-> > > 1. Home screen swipe:
-> > >          rcuop/0-15      [003] d..1  1792.767750: rcu_batch_start: rcu_preempt CBs=1003 bl=10
-> > >          rcuop/2-33      [002] d..1  1792.771717: rcu_batch_start: rcu_preempt CBs=934 bl=10
-> > >          rcuop/3-40      [001] d..1  1794.811816: rcu_batch_start: rcu_preempt CBs=1508 bl=11
-> > >          rcuop/1-26      [003] d..1  1797.116382: rcu_batch_start: rcu_preempt CBs=2127 bl=16
-> > >          rcuop/4-48      [001] d..1  1797.124422: rcu_batch_start: rcu_preempt CBs=95 bl=10
-> > >          rcuop/5-55      [002] d..1  1797.124731: rcu_batch_start: rcu_preempt CBs=143 bl=10
-> > >          rcuop/6-62      [005] d..1  1798.911719: rcu_batch_start: rcu_preempt CBs=132 bl=10
-> > >          rcuop/2-33      [002] d..1  1803.003966: rcu_batch_start: rcu_preempt CBs=3797 bl=29
-> > >          rcuop/0-15      [003] d..1  1803.004707: rcu_batch_start: rcu_preempt CBs=2969 bl=23
-> > > 2. App launches:
-> > >          rcuop/4-48      [005] d..1  1831.087612: rcu_batch_start: rcu_preempt CBs=6141 bl=47
-> > >          rcuop/7-69      [007] d..1  1831.095578: rcu_batch_start: rcu_preempt CBs=5464 bl=42
-> > >          rcuop/5-55      [004] d..1  1832.703571: rcu_batch_start: rcu_preempt CBs=8461 bl=66
-> > >          rcuop/0-15      [004] d..1  1833.731603: rcu_batch_start: rcu_preempt CBs=2548 bl=19
-> > >          rcuop/1-26      [006] d..1  1833.743691: rcu_batch_start: rcu_preempt CBs=2567 bl=20
-> > >          rcuop/2-33      [006] d..1  1833.744005: rcu_batch_start: rcu_preempt CBs=2359 bl=18
-> > >          rcuop/3-40      [006] d..1  1833.744286: rcu_batch_start: rcu_preempt CBs=3681 bl=28
-> > >          rcuop/4-48      [002] d..1  1838.079777: rcu_batch_start: rcu_preempt CBs=10444 bl=81
-> > >          rcuop/7-69      [001] d..1  1838.080375: rcu_batch_start: rcu_preempt CBs=12572 bl=98
-> > >            <...>-62      [002] d..1  1838.080646: rcu_batch_start: rcu_preempt CBs=14135 bl=110
-> > >          rcuop/6-62      [000] d..1  1838.087722: rcu_batch_start: rcu_preempt CBs=10839 bl=84
-> > >            <...>-62      [003] d..1  1839.227022: rcu_batch_start: rcu_preempt CBs=1834 bl=14
-> > >            <...>-26      [001] d..1  1839.963315: rcu_batch_start: rcu_preempt CBs=5769 bl=45
-> > >          rcuop/2-33      [001] d..1  1839.966485: rcu_batch_start: rcu_preempt CBs=3789 bl=29
-> > >            <...>-40      [001] d..1  1839.966596: rcu_batch_start: rcu_preempt CBs=6425 bl=50
-> > >          rcuop/2-33      [005] d..1  1840.541272: rcu_batch_start: rcu_preempt CBs=825 bl=10
-> > >          rcuop/2-33      [005] d..1  1840.547724: rcu_batch_start: rcu_preempt CBs=44 bl=10
-> > >          rcuop/2-33      [005] d..1  1841.075759: rcu_batch_start: rcu_preempt CBs=516 bl=10
-> > >          rcuop/0-15      [002] d..1  1841.695716: rcu_batch_start: rcu_preempt CBs=6312 bl=49
-> > >          rcuop/0-15      [003] d..1  1841.709714: rcu_batch_start: rcu_preempt CBs=39 bl=10
-> > >          rcuop/5-55      [004] d..1  1843.112442: rcu_batch_start: rcu_preempt CBs=16007 bl=125
-> > >          rcuop/5-55      [004] d..1  1843.115444: rcu_batch_start: rcu_preempt CBs=7901 bl=61
-> > >          rcuop/6-62      [001] dn.1  1843.123983: rcu_batch_start: rcu_preempt CBs=8427 bl=65
-> > >          rcuop/6-62      [006] d..1  1843.412383: rcu_batch_start: rcu_preempt CBs=981 bl=10
-> > >          rcuop/0-15      [003] d..1  1844.659812: rcu_batch_start: rcu_preempt CBs=1851 bl=14
-> > >          rcuop/0-15      [003] d..1  1844.667790: rcu_batch_start: rcu_preempt CBs=135 bl=10
-> > > <snip>
-> > > 
-> > > it is much more better. But. As i wrote earlier there is a patch that i have submitted
-> > > some time ago improving kvfree_rcu() batching:
-> > > 
-> > > <snip>
-> > > commit 51824b780b719c53113dc39e027fbf670dc66028
-> > > Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > Date:   Thu Jun 30 18:33:35 2022 +0200
-> > > 
-> > >     rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
-> > > 
-> > >     Currently the monitor work is scheduled with a fixed interval of HZ/20,
-> > >     which is roughly 50 milliseconds. The drawback of this approach is
-> > >     low utilization of the 512 page slots in scenarios with infrequence
-> > >     kvfree_rcu() calls.  For example on an Android system:
-> > > <snip>
-> > > 
-> > > The trace that i posted was taken without it.
+On Sun, 23 Oct 2022 07:32:02 +0200 netdev@kapio-technology.com wrote:
+> >> @@ -1140,7 +1148,7 @@ static int __br_fdb_add(struct ndmsg *ndm, 
+> >> struct net_bridge *br,
+> >>  		err = br_fdb_external_learn_add(br, p, addr, vid, true);
+> >>  	} else {
+> >>  		spin_lock_bh(&br->hash_lock);
+> >> -		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, nfea_tb);
+> >> +		err = fdb_add_entry(br, p, addr, ndm, nlh_flags, vid, ext_flags, 
+> >> nfea_tb);  
 > > 
-> > And if I am not getting too confused, that patch is now in mainline.
-> > So it does make sense to rely on it, then.  ;-)
-> > 
-> Right.
+> > I believe the preference is to wrap to 80 columns when possible.  
 > 
-> urezki@pc638:~/data/raid0/coding/linux.git$ git tag --contains
-> 51824b780b719c53113dc39e027fbf670dc66028
-> v6.1-rc1
-> v6.1-rc2
-> urezki@pc638:~/data/raid0/coding/linux.git$
+> Very strange... since I ran checkpatch.pl from the net-next kernel 
+> itself and it did not
+> give me any warnings about 80 columns, but rather said 'patch is ready 
+> for submission'.
 > 
-Just in case: 5.10 + "rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval":
+> As this is silent, could it be some missing python plugins or something 
+> to do with perl?
 
-<snip>
-1. Home screen swipe:
-         rcuop/3-40      [003] d..1    94.202849: rcu_batch_start: rcu_preempt CBs=664 bl=10
-         rcuop/4-48      [001] d..1    95.999352: rcu_batch_start: rcu_preempt CBs=252 bl=10
-         rcuop/6-62      [002] d..1    97.534875: rcu_batch_start: rcu_preempt CBs=152 bl=10
-         rcuop/5-55      [003] d..1    98.042912: rcu_batch_start: rcu_preempt CBs=189 bl=10
-         rcuop/0-15      [002] d..1    98.306769: rcu_batch_start: rcu_preempt CBs=1457 bl=11
-         rcuop/1-26      [000] d..1    99.582931: rcu_batch_start: rcu_preempt CBs=2115 bl=16
-         rcuop/2-33      [003] d..1    99.582935: rcu_batch_start: rcu_preempt CBs=2019 bl=15
-         rcuop/3-40      [001] d..1    99.838885: rcu_batch_start: rcu_preempt CBs=1168 bl=10
-         rcuop/1-26      [000] d..1   100.603496: rcu_batch_start: rcu_preempt CBs=168 bl=10
-2. Apps launches:
-         rcuop/4-48      [007] d..1   102.910580: rcu_batch_start: rcu_preempt CBs=1150 bl=10
-         rcuop/6-62      [007] d..1   102.910682: rcu_batch_start: rcu_preempt CBs=1001 bl=10
-         rcuop/5-55      [007] d..1   103.166607: rcu_batch_start: rcu_preempt CBs=939 bl=10
-         rcuop/0-15      [007] d..1   104.450598: rcu_batch_start: rcu_preempt CBs=1694 bl=13
-         rcuop/5-55      [006] d..1   104.478640: rcu_batch_start: rcu_preempt CBs=3125 bl=24
-         rcuop/3-40      [007] d..1   104.958565: rcu_batch_start: rcu_preempt CBs=1108 bl=10
-         rcuop/7-69      [007] d..1   106.238634: rcu_batch_start: rcu_preempt CBs=10275 bl=80
-         rcuop/4-48      [007] d..1   107.258586: rcu_batch_start: rcu_preempt CBs=8142 bl=63
-         rcuop/7-69      [007] d..1   107.260769: rcu_batch_start: rcu_preempt CBs=1880 bl=14
-         rcuop/2-33      [007] d..1   107.526638: rcu_batch_start: rcu_preempt CBs=1968 bl=15
-         rcuop/1-26      [007] d..1   107.542612: rcu_batch_start: rcu_preempt CBs=1796 bl=14
-         rcuop/5-55      [007] d..1   108.286588: rcu_batch_start: rcu_preempt CBs=3547 bl=27
-         rcuop/6-62      [007] d..1   108.287639: rcu_batch_start: rcu_preempt CBs=5820 bl=45
-         rcuop/7-69      [007] d..1   108.290548: rcu_batch_start: rcu_preempt CBs=2430 bl=18
-         rcuop/0-15      [000] d..1   109.826843: rcu_batch_start: rcu_preempt CBs=2282 bl=17
-         rcuop/3-40      [002] d..1   110.595455: rcu_batch_start: rcu_preempt CBs=1960 bl=15
-           <...>-48      [005] d..1   112.390702: rcu_batch_start: rcu_preempt CBs=5143 bl=40
-         rcuop/7-69      [004] d..1   112.402607: rcu_batch_start: rcu_preempt CBs=3379 bl=26
-         rcuop/2-33      [005] d..1   112.638614: rcu_batch_start: rcu_preempt CBs=3223 bl=25
-         rcuop/1-26      [004] d..1   112.638617: rcu_batch_start: rcu_preempt CBs=3026 bl=23
-         rcuop/5-55      [007] d..1   113.402581: rcu_batch_start: rcu_preempt CBs=7251 bl=56
-         rcuop/6-62      [007] d..1   113.658582: rcu_batch_start: rcu_preempt CBs=7035 bl=54
-<snip>
+I run:
 
---
-Uladzislau Rezki
+./scripts/checkpatch.pl --strict --max-line-length=80
+
