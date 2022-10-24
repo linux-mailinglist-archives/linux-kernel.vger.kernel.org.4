@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A7A60B9EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D47CC60BB11
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbiJXUXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38002 "EHLO
+        id S235101AbiJXUp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234272AbiJXUW3 (ORCPT
+        with ESMTP id S235389AbiJXUom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:22:29 -0400
+        Mon, 24 Oct 2022 16:44:42 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD603C169;
-        Mon, 24 Oct 2022 11:38:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E6B6BD7B;
+        Mon, 24 Oct 2022 11:52:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8B0AB81601;
-        Mon, 24 Oct 2022 12:13:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44693C433C1;
-        Mon, 24 Oct 2022 12:13:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 836C8B81979;
+        Mon, 24 Oct 2022 12:48:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2681C433D7;
+        Mon, 24 Oct 2022 12:48:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613581;
-        bh=hc8c3MQUf/iJKjMeBQ8BrGrAjXnopkSr+laGHJAs9m0=;
+        s=korg; t=1666615684;
+        bh=npCRfkXpyD3oFS/RTYI4IZ26DGEUxTCME7Uv6lz4OjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l/pJl072FBIJfng1DYeWtYSiXJHq5vbyItMe0bkOwcNGzpgNWAU0lVedMz4I5IX5e
-         KswZYSS3o1taMEm8eAr/FOPbDm6Kd1/GJw4HHM7qvFwX5wIA8jo212s3vSq5GpTlUT
-         vxikNmEWjTiLTXPZdMzFlfnrK2xv/B8lJbiCWQDc=
+        b=rcx9iWtWMDRm+Y2UEs0Ku60LD3YTFBwgdyXFd/phP6d5WDNxuBfCDTT5tkGUm5jJh
+         EIt34oZOYWMXG9fk074EYDuY7KSz5zk6vI7emjn29QZuHdFr6GD9dhBqdDQgKFTajO
+         v9qduGTqcOcCLscygksro3vqsDicE5uG7lJzYWZo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Martin Kaiser <martin@kaiser.cx>, Lee Jones <lee@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 161/255] mfd: fsl-imx25: Fix check for platform_get_irq() errors
+        stable@vger.kernel.org, Dongliang Mu <mudongliangabcd@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 327/530] phy: qualcomm: call clk_disable_unprepare in the error handling
 Date:   Mon, 24 Oct 2022 13:31:11 +0200
-Message-Id: <20221024113008.040133654@linuxfoundation.org>
+Message-Id: <20221024113059.813985514@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+References: <20221024113044.976326639@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit 75db7907355ca5e2ff606e9dd3e86b6c3a455fe2 ]
+[ Upstream commit c3966ced8eb8dc53b6c8d7f97d32cc8a2107d83e ]
 
-The mx25_tsadc_remove() function assumes all non-zero returns are success
-but the platform_get_irq() function returns negative on error and
-positive non-zero values on success.  It never returns zero, but if it
-did then treat that as a success.
+Smatch reports the following error:
 
-Fixes: 18f773937968 ("mfd: fsl-imx25: Clean up irq settings during removal")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Martin Kaiser <martin@kaiser.cx>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/YvTfkbVQWYKMKS/t@kili
+drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
+warn: 'uphy->cal_clk' from clk_prepare_enable() not released on lines:
+58.
+drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
+warn: 'uphy->cal_sleep_clk' from clk_prepare_enable() not released on
+lines: 58.
+drivers/phy/qualcomm/phy-qcom-usb-hsic.c:82 qcom_usb_hsic_phy_power_on()
+warn: 'uphy->phy_clk' from clk_prepare_enable() not released on lines:
+58.
+
+Fix this by calling proper clk_disable_unprepare calls.
+
+Fixes: 0b56e9a7e835 ("phy: Group vendor specific phy drivers")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Link: https://lore.kernel.org/r/20220914051334.69282-1-dzm91@hust.edu.cn
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/fsl-imx25-tsadc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-usb-hsic.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/fsl-imx25-tsadc.c b/drivers/mfd/fsl-imx25-tsadc.c
-index 95103b2cc471..5f1f6f3a0696 100644
---- a/drivers/mfd/fsl-imx25-tsadc.c
-+++ b/drivers/mfd/fsl-imx25-tsadc.c
-@@ -69,7 +69,7 @@ static int mx25_tsadc_setup_irq(struct platform_device *pdev,
- 	int irq;
+diff --git a/drivers/phy/qualcomm/phy-qcom-usb-hsic.c b/drivers/phy/qualcomm/phy-qcom-usb-hsic.c
+index 04d18d52f700..d4741c2dbbb5 100644
+--- a/drivers/phy/qualcomm/phy-qcom-usb-hsic.c
++++ b/drivers/phy/qualcomm/phy-qcom-usb-hsic.c
+@@ -54,8 +54,10 @@ static int qcom_usb_hsic_phy_power_on(struct phy *phy)
  
- 	irq = platform_get_irq(pdev, 0);
--	if (irq <= 0)
-+	if (irq < 0)
- 		return irq;
+ 	/* Configure pins for HSIC functionality */
+ 	pins_default = pinctrl_lookup_state(uphy->pctl, PINCTRL_STATE_DEFAULT);
+-	if (IS_ERR(pins_default))
+-		return PTR_ERR(pins_default);
++	if (IS_ERR(pins_default)) {
++		ret = PTR_ERR(pins_default);
++		goto err_ulpi;
++	}
  
- 	tsadc->domain = irq_domain_add_simple(np, 2, 0, &mx25_tsadc_domain_ops,
-@@ -89,7 +89,7 @@ static int mx25_tsadc_unset_irq(struct platform_device *pdev)
- 	struct mx25_tsadc *tsadc = platform_get_drvdata(pdev);
- 	int irq = platform_get_irq(pdev, 0);
- 
--	if (irq) {
-+	if (irq >= 0) {
- 		irq_set_chained_handler_and_data(irq, NULL, NULL);
- 		irq_domain_remove(tsadc->domain);
- 	}
+ 	ret = pinctrl_select_state(uphy->pctl, pins_default);
+ 	if (ret)
 -- 
 2.35.1
 
