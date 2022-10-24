@@ -2,116 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FB960BBB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8CA60B94E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbiJXVKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 17:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S231244AbiJXUIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233248AbiJXVJF (ORCPT
+        with ESMTP id S232408AbiJXUH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 17:09:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE857DEF10;
-        Mon, 24 Oct 2022 12:15:43 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-096-059-109.ewe-ip-backbone.de [91.96.59.109])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7C741660283E;
-        Mon, 24 Oct 2022 17:55:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666630558;
-        bh=chfXMCDPsmDqagwc2SR6hcO4fr/H4GKIvfjgdqIxziY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SsYQPD7SBP6A2Kx+ofThUVlNZV4RDtQtLXAv63n605hpL87pXE0d1S9oxDg5G/S8R
-         SXBp1rkBM2CZs/0lZBSzmrMLXCOjjM+XLqD3wqQy/7uOhUaJwaJsBwJn4EcWvtSdyJ
-         L4oMDBclhrOwc+6xj5c92wMHh9vRRPiAru6F8wdUkgWbv0M2DqOpGYK8M6pPSQ685g
-         MX2Gnn9WFBOQFewWQdieYFc5QgLF4Ht79gxxi7Qkq9NSrDYhzRIvzGAcHFaKdSV1f4
-         9UzJqbrLej7FU+HBEhEKHCPhDuo4v4jJRFmdVS3NeobDXg65UxdPOdhfcQWDBruItP
-         ulwfTNosIOp5A==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 07982480AF1; Mon, 24 Oct 2022 18:55:54 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCHv2 5/6] arm64: dts: meson: remove clock-frequency from rtc
-Date:   Mon, 24 Oct 2022 18:55:48 +0200
-Message-Id: <20221024165549.74574-6-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221024165549.74574-1-sebastian.reichel@collabora.com>
-References: <20221024165549.74574-1-sebastian.reichel@collabora.com>
+        Mon, 24 Oct 2022 16:07:57 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE04082875;
+        Mon, 24 Oct 2022 11:27:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=sD1/9KUepwxnnbZHmOxcQ0nb2LDnGCi+U3tMVxTFuSE=; b=ShSp2+NTgj4NbO//OTI9ybjHre
+        /+4idaGTfOP2cZZepFuVzG6VTj106A725AmvchWCyGPhWW0ULuEu9DESP6S6HnDAZcwb/1eiFs/Ci
+        j5KU9irR0d90+K8+3LNua77wdl1V/SNAlKyMa/t7P4h2siKyDhWQ6pyEHXHIrybXYLUutHjNs+QHK
+        nhFt5+e0jO/84nYFbMU3YyCT27pYCUZFLRZuUQcj1KLM9OcabmPUK6f8sQY93XZBo642wxbKfXltd
+        aw1qFRMAKxER3crTMWbM10pDCoXSJKAtbHaxOXAIv1nUG8KRZtBNUY3iMbLLUKak3RZjS0oBe4a1r
+        AWDX7Z2g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1on0me-002PNe-1e; Mon, 24 Oct 2022 16:58:40 +0000
+Date:   Mon, 24 Oct 2022 09:58:40 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     jejb@linux.ibm.com, Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        adi@kriegisch.at
+Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
+ update to 5.10.149 in 5.10.y.
+Message-ID: <Y1bEQMS5SNTbZO/3@infradead.org>
+References: <Y1JkuKTjVYrOWbvm@eldamar.lan>
+ <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
+ <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
+ <2fd505a07bd26d76f1166761fa50905414edb7ef.camel@linux.ibm.com>
+ <30a056c8-071f-4259-3253-75e718af619d@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30a056c8-071f-4259-3253-75e718af619d@suse.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'clock-frequency' is not part of the DT binding and not supported by the
-Linux driver.
+On Mon, Oct 24, 2022 at 03:20:43PM +0200, Juergen Gross wrote:
+> Dom0 is (normally) a PV domain, so the physical memory can be still above
+> 4 GB even with dom0_mem set to 4GB.
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts | 1 -
- arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts      | 1 -
- arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts    | 1 -
- 3 files changed, 3 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts
-index 6ab1cc125b96..202deb4e2d63 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905x-khadas-vim.dts
-@@ -140,7 +140,6 @@ rtc: rtc@51 {
- 		compatible = "haoyu,hym8563";
- 		reg = <0x51>;
- 		#clock-cells = <0>;
--		clock-frequency = <32768>;
- 		clock-output-names = "xin32k";
- 	};
- };
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts b/arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts
-index f43c45daf7eb..b21172ece1fa 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxm-khadas-vim2.dts
-@@ -270,7 +270,6 @@ rtc: rtc@51 {
- 		compatible = "haoyu,hym8563";
- 		reg = <0x51>;
- 		#clock-cells = <0>;
--		clock-frequency = <32768>;
- 		clock-output-names = "xin32k";
- 	};
- };
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts b/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
-index b8ef3bd8b840..1703da3235ea 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-gxm-minix-neo-u9h.dts
-@@ -89,7 +89,6 @@ rtc: rtc@51 {
- 		compatible = "haoyu,hym8563";
- 		reg = <0x51>;
- 		#clock-cells = <0>;
--		clock-frequency = <32768>;
- 		clock-output-names = "xin32k";
- 		wakeup-source;
- 	};
--- 
-2.35.1
-
+Which means that we need to ensure the DMA ops for Xen-PV (which is
+always xen-swiotlb I think?) need to return DMA_BIT_MASK(64) or whatever
+is the highest possible address.
