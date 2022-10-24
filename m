@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F51E60A471
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B60660A4E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbiJXMKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S230527AbiJXMSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiJXMJM (ORCPT
+        with ESMTP id S233167AbiJXMQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:09:12 -0400
+        Mon, 24 Oct 2022 08:16:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B73D7F103;
-        Mon, 24 Oct 2022 04:52:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FA7814FD;
+        Mon, 24 Oct 2022 04:56:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CD44B81189;
-        Mon, 24 Oct 2022 11:42:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60902C433D6;
-        Mon, 24 Oct 2022 11:42:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3F193B81186;
+        Mon, 24 Oct 2022 11:52:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B025C433D6;
+        Mon, 24 Oct 2022 11:52:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611770;
-        bh=8H+uTc4E0K4J/eQoDSzzdT79Tzi3OZ89S9QhamJF0WY=;
+        s=korg; t=1666612371;
+        bh=e/KEj574MmNa/M0sn4QvklxgLeOlAyMdJQf52uy5n4c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nG4Qrm3bMwubZvW7CIGhm8j+ViS5IEg4ts2wTkUNNZsPQl7yK3j4Q87phVHGMZETy
-         5hgYpnjb31nA2CmOxwh7mYPD52R2kOgbm2VKrUTiMWPmH3/bljH+M2T5bDw8q3OuPM
-         Z3yL34fCF96ep8B9xuUalFSlHVkitipGPFRunl+E=
+        b=ZY3Sw3xgXggeSkY96fjQfH5yJOQ8eWrsUaC/Mb5SZ78YGxmVBRnYEKIHzX5ByJqR1
+         CIoKVdKGcAYdxak56Z/P7uYHP8h2VRKSw33ug9R8JXy1s150JdWoIfYXBEAEkn+Jiv
+         xUqU/vkMr80VDONQ/dsEtkGZkuE0ctBz/cIipjhk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 104/159] ata: fix ata_id_sense_reporting_enabled() and ata_id_has_sense_reporting()
-Date:   Mon, 24 Oct 2022 13:30:58 +0200
-Message-Id: <20221024112953.236608165@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 142/210] mfd: intel_soc_pmic: Fix an error handling path in intel_soc_pmic_i2c_probe()
+Date:   Mon, 24 Oct 2022 13:30:59 +0200
+Message-Id: <20221024113001.588033162@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,69 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Cassel <niklas.cassel@wdc.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 690aa8c3ae308bc696ec8b1b357b995193927083 ]
+[ Upstream commit 48749cabba109397b4e7dd556e85718ec0ec114d ]
 
-ACS-5 section
-7.13.6.41 Words 85..87, 120: Commands and feature sets supported or enabled
-states that:
+The commit in Fixes: has added a pwm_add_table() call in the probe() and
+a pwm_remove_table() call in the remove(), but forget to update the error
+handling path of the probe.
 
-If bit 15 of word 86 is set to one, bit 14 of word 119 is set to one,
-and bit 15 of word 119 is cleared to zero, then word 119 is valid.
+Add the missing pwm_remove_table() call.
 
-If bit 15 of word 86 is set to one, bit 14 of word 120 is set to one,
-and bit 15 of word 120 is cleared to zero, then word 120 is valid.
-
-(This text also exists in really old ACS standards, e.g. ACS-3.)
-
-Currently, ata_id_sense_reporting_enabled() and
-ata_id_has_sense_reporting() both check bit 15 of word 86,
-but neither of them check that bit 14 of word 119 is set to one,
-or that bit 15 of word 119 is cleared to zero.
-
-Additionally, make ata_id_sense_reporting_enabled() return false
-if !ata_id_has_sense_reporting(), similar to how e.g.
-ata_id_flush_ext_enabled() returns false if !ata_id_has_flush_ext().
-
-Fixes: e87fd28cf9a2 ("libata: Implement support for sense data reporting")
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: a3aa9a93df9f ("mfd: intel_soc_pmic_core: ADD PWM lookup table for CRC PMIC based PWM")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Lee Jones <lee@kernel.org>
+Link: https://lore.kernel.org/r/20220801114211.36267-1-andriy.shevchenko@linux.intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/ata.h | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ drivers/mfd/intel_soc_pmic_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/ata.h b/include/linux/ata.h
-index fdb180367ba1..8e5e7bf4a37f 100644
---- a/include/linux/ata.h
-+++ b/include/linux/ata.h
-@@ -777,16 +777,21 @@ static inline bool ata_id_has_read_log_dma_ext(const u16 *id)
+diff --git a/drivers/mfd/intel_soc_pmic_core.c b/drivers/mfd/intel_soc_pmic_core.c
+index 36adf9e8153e..eb9ff34294e6 100644
+--- a/drivers/mfd/intel_soc_pmic_core.c
++++ b/drivers/mfd/intel_soc_pmic_core.c
+@@ -119,6 +119,7 @@ static int intel_soc_pmic_i2c_probe(struct i2c_client *i2c,
+ 	return 0;
  
- static inline bool ata_id_has_sense_reporting(const u16 *id)
- {
--	if (!(id[ATA_ID_CFS_ENABLE_2] & (1 << 15)))
-+	if (!(id[ATA_ID_CFS_ENABLE_2] & BIT(15)))
-+		return false;
-+	if ((id[ATA_ID_COMMAND_SET_3] & (BIT(15) | BIT(14))) != BIT(14))
- 		return false;
--	return id[ATA_ID_COMMAND_SET_3] & (1 << 6);
-+	return id[ATA_ID_COMMAND_SET_3] & BIT(6);
+ err_del_irq_chip:
++	pwm_remove_table(crc_pwm_lookup, ARRAY_SIZE(crc_pwm_lookup));
+ 	regmap_del_irq_chip(pmic->irq, pmic->irq_chip_data);
+ 	return ret;
  }
- 
- static inline bool ata_id_sense_reporting_enabled(const u16 *id)
- {
--	if (!(id[ATA_ID_CFS_ENABLE_2] & (1 << 15)))
-+	if (!ata_id_has_sense_reporting(id))
-+		return false;
-+	/* ata_id_has_sense_reporting() == true, word 86 must have bit 15 set */
-+	if ((id[ATA_ID_COMMAND_SET_4] & (BIT(15) | BIT(14))) != BIT(14))
- 		return false;
--	return id[ATA_ID_COMMAND_SET_4] & (1 << 6);
-+	return id[ATA_ID_COMMAND_SET_4] & BIT(6);
- }
- 
- /**
 -- 
 2.35.1
 
