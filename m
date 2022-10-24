@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A34A860A38D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5454560A39F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbiJXL5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S232391AbiJXL6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiJXLz0 (ORCPT
+        with ESMTP id S232111AbiJXL4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:55:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D607AC36;
-        Mon, 24 Oct 2022 04:46:42 -0700 (PDT)
+        Mon, 24 Oct 2022 07:56:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89D17A50C;
+        Mon, 24 Oct 2022 04:47:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23C06B8119E;
-        Mon, 24 Oct 2022 11:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80BB3C433D7;
-        Mon, 24 Oct 2022 11:46:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C682B8117E;
+        Mon, 24 Oct 2022 11:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82563C433D6;
+        Mon, 24 Oct 2022 11:46:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611990;
-        bh=Oo5dzfgUvi7RFuvhID2RTEtBjZh0y9xtz/tZcCFnyi8=;
+        s=korg; t=1666612019;
+        bh=TkptbBExfBRLdyiwMro7nVDIibC8wLql2SnkRMFzZd0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FnxPxRZQ/doYAU4WVl8X8OylTTxJzXpQdcXt970sbOaBiO4qCZLJAo2sawo2Vh4cl
-         B7Y+4TQ0kew2WQ5GdWH+iTbGw65WakXLaLpd9cP1vKUM1iPA2LoX2M7voqlmJzZ6GJ
-         lJCaqg4578vnFVbFYIBTjsGb91QGBWNJEhiG4oSI=
+        b=v+0AVUKXTSAKZG8g/VA9MCwQTS03py3EGuPd5LZD2PM5RGJZEGJMqaWIHvx8EXuNu
+         BK9haJqvM1MRpG8oOhoVDzYtCEar4xIFoR/VjNXsi3xbrh0DuRotVmA0iCCwOoLxS1
+         TAnj2b4Uo00DHqflL6Pv3vMK2G7laYrMheN4/r/g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Straub <lukasstraub2@web.de>,
-        Richard Weinberger <richard@nod.at>,
-        Sasha Levin <sashal@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH 4.14 028/210] um: Cleanup syscall_handler_t cast in syscalls_32.h
-Date:   Mon, 24 Oct 2022 13:29:05 +0200
-Message-Id: <20221024112957.875836331@linuxfoundation.org>
+        stable@vger.kernel.org, ChanWoo Lee <cw9316.lee@samsung.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH 4.14 032/210] mmc: core: Replace with already defined values for readability
+Date:   Mon, 24 Oct 2022 13:29:09 +0200
+Message-Id: <20221024112958.007222166@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
 References: <20221024112956.797777597@linuxfoundation.org>
@@ -55,41 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Straub <lukasstraub2@web.de>
+From: ChanWoo Lee <cw9316.lee@samsung.com>
 
-[ Upstream commit 61670b4d270c71219def1fbc9441debc2ac2e6e9 ]
+commit e427266460826bea21b70f9b2bb29decfb2c2620 upstream.
 
-Like in f4f03f299a56ce4d73c5431e0327b3b6cb55ebb9
-"um: Cleanup syscall_handler_t definition/cast, fix warning",
-remove the cast to to fix the compiler warning.
+SD_ROCR_S18A is already defined and is used to check the rocr value, so
+let's replace with already defined values for readability.
 
-Signed-off-by: Lukas Straub <lukasstraub2@web.de>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: ChanWoo Lee <cw9316.lee@samsung.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Link: https://lore.kernel.org/r/20220706004840.24812-1-cw9316.lee@samsung.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/um/shared/sysdep/syscalls_32.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/mmc/core/sd.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/um/shared/sysdep/syscalls_32.h b/arch/x86/um/shared/sysdep/syscalls_32.h
-index 68fd2cf526fd..f6e9f84397e7 100644
---- a/arch/x86/um/shared/sysdep/syscalls_32.h
-+++ b/arch/x86/um/shared/sysdep/syscalls_32.h
-@@ -6,10 +6,9 @@
- #include <asm/unistd.h>
- #include <sysdep/ptrace.h>
- 
--typedef long syscall_handler_t(struct pt_regs);
-+typedef long syscall_handler_t(struct syscall_args);
- 
- extern syscall_handler_t *sys_call_table[];
- 
- #define EXECUTE_SYSCALL(syscall, regs) \
--	((long (*)(struct syscall_args)) \
--	 (*sys_call_table[syscall]))(SYSCALL_ARGS(&regs->regs))
-+	((*sys_call_table[syscall]))(SYSCALL_ARGS(&regs->regs))
--- 
-2.35.1
-
+--- a/drivers/mmc/core/sd.c
++++ b/drivers/mmc/core/sd.c
+@@ -793,7 +793,7 @@ try_again:
+ 	 * the CCS bit is set as well. We deliberately deviate from the spec in
+ 	 * regards to this, which allows UHS-I to be supported for SDSC cards.
+ 	 */
+-	if (!mmc_host_is_spi(host) && rocr && (*rocr & 0x01000000)) {
++	if (!mmc_host_is_spi(host) && rocr && (*rocr & SD_ROCR_S18A)) {
+ 		err = mmc_set_uhs_voltage(host, pocr);
+ 		if (err == -EAGAIN) {
+ 			retries--;
 
 
