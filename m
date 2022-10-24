@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 831DE60A5C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A2460A925
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233757AbiJXM2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
+        id S229987AbiJXNPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233719AbiJXM1t (ORCPT
+        with ESMTP id S235975AbiJXNOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:27:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C3886803;
-        Mon, 24 Oct 2022 05:01:40 -0700 (PDT)
+        Mon, 24 Oct 2022 09:14:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4D97AB1B;
+        Mon, 24 Oct 2022 05:25:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B81E1B811EF;
-        Mon, 24 Oct 2022 11:57:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EA7C433C1;
-        Mon, 24 Oct 2022 11:57:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F318612BC;
+        Mon, 24 Oct 2022 12:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 709C9C433C1;
+        Mon, 24 Oct 2022 12:24:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612635;
-        bh=Krt+Xlxa8gyzGMZVPSaqFF395LKyxhWwJdymKAbkvjA=;
+        s=korg; t=1666614281;
+        bh=MXrEhhsTFOLm8+h3IlgHPhePRebQau9ZYKXn4VVTL/Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Evv2zQ/knYl47KuNTrqnJ44UiLUQjTGUtEhjJfDcEV/5D2mHFDMOw+xcLKxfjKSkS
-         qYF/3Bdk88cWpiTmNeCjJrdBNMzWWEZOFvBlNyD+rLVdRBJvpax+6jNTVAMnMbDX1w
-         hfM36JsuzCXUKxTgvcAsPqjq82bSOn1oLJKSZ6s4=
+        b=MH4Pzop2o+POvk801Vbm/qKk+NUcTAhL1oyndEFOzcgN23aK4iehSVJvSJNcU056e
+         y405mYYR5KNZf7NLNSBMYxVNZsyXD6wzty80vUsfrWpoEaIDNC57wzExT3cwDhi25S
+         VV8cNshKW/Frlsa/a75yhZc0u4ekPZ1yseQbwI5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rik van Riel <riel@surriel.com>,
-        Breno Leitao <leitao@debian.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, stable@kernel.org
-Subject: [PATCH 4.19 062/229] livepatch: fix race between fork and KLP transition
+        stable@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 184/390] ARM: dts: exynos: fix polarity of VBUS GPIO of Origen
 Date:   Mon, 24 Oct 2022 13:29:41 +0200
-Message-Id: <20221024113001.087187890@linuxfoundation.org>
+Message-Id: <20221024113030.606259701@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,91 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rik van Riel <riel@surriel.com>
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-commit 747f7a2901174c9afa805dddfb7b24db6f65e985 upstream.
+[ Upstream commit a08137bd1e0a7ce951dce9ce4a83e39d379b6e1b ]
 
-The KLP transition code depends on the TIF_PATCH_PENDING and
-the task->patch_state to stay in sync. On a normal (forward)
-transition, TIF_PATCH_PENDING will be set on every task in
-the system, while on a reverse transition (after a failed
-forward one) first TIF_PATCH_PENDING will be cleared from
-every task, followed by it being set on tasks that need to
-be transitioned back to the original code.
+EHCI Oxynos (drivers/usb/host/ehci-exynos.c) drives VBUS GPIO high when
+trying to power up the bus, therefore the GPIO in DTS must be marked as
+"active high". This will be important when EHCI driver is converted to
+gpiod API that respects declared polarities.
 
-However, the fork code copies over the TIF_PATCH_PENDING flag
-from the parent to the child early on, in dup_task_struct and
-setup_thread_stack. Much later, klp_copy_process will set
-child->patch_state to match that of the parent.
-
-However, the parent's patch_state may have been changed by KLP loading
-or unloading since it was initially copied over into the child.
-
-This results in the KLP code occasionally hitting this warning in
-klp_complete_transition:
-
-        for_each_process_thread(g, task) {
-                WARN_ON_ONCE(test_tsk_thread_flag(task, TIF_PATCH_PENDING));
-                task->patch_state = KLP_UNDEFINED;
-        }
-
-Set, or clear, the TIF_PATCH_PENDING flag in the child task
-depending on whether or not it is needed at the time
-klp_copy_process is called, at a point in copy_process where the
-tasklist_lock is held exclusively, preventing races with the KLP
-code.
-
-The KLP code does have a few places where the state is changed
-without the tasklist_lock held, but those should not cause
-problems because klp_update_patch_state(current) cannot be
-called while the current task is in the middle of fork,
-klp_check_and_switch_task() which is called under the pi_lock,
-which prevents rescheduling, and manipulation of the patch
-state of idle tasks, which do not fork.
-
-This should prevent this warning from triggering again in the
-future, and close the race for both normal and reverse transitions.
-
-Signed-off-by: Rik van Riel <riel@surriel.com>
-Reported-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Fixes: d83a7cb375ee ("livepatch: change to a per-task consistency model")
-Cc: stable@kernel.org
-Signed-off-by: Petr Mladek <pmladek@suse.com>
-Link: https://lore.kernel.org/r/20220808150019.03d6a67b@imladris.surriel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 4e8991def565 ("ARM: dts: exynos: Enable AX88760 USB hub on Origen board")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Link: https://lore.kernel.org/r/20220927220504.3744878-1-dmitry.torokhov@gmail.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/livepatch/transition.c |   18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/exynos4412-origen.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -563,9 +563,23 @@ void klp_reverse_transition(void)
- /* Called from copy_process() during fork */
- void klp_copy_process(struct task_struct *child)
- {
--	child->patch_state = current->patch_state;
+diff --git a/arch/arm/boot/dts/exynos4412-origen.dts b/arch/arm/boot/dts/exynos4412-origen.dts
+index c2e793b69e7d..e2d76ea4404e 100644
+--- a/arch/arm/boot/dts/exynos4412-origen.dts
++++ b/arch/arm/boot/dts/exynos4412-origen.dts
+@@ -95,7 +95,7 @@
+ };
  
--	/* TIF_PATCH_PENDING gets copied in setup_thread_stack() */
-+	/*
-+	 * The parent process may have gone through a KLP transition since
-+	 * the thread flag was copied in setup_thread_stack earlier. Bring
-+	 * the task flag up to date with the parent here.
-+	 *
-+	 * The operation is serialized against all klp_*_transition()
-+	 * operations by the tasklist_lock. The only exception is
-+	 * klp_update_patch_state(current), but we cannot race with
-+	 * that because we are current.
-+	 */
-+	if (test_tsk_thread_flag(current, TIF_PATCH_PENDING))
-+		set_tsk_thread_flag(child, TIF_PATCH_PENDING);
-+	else
-+		clear_tsk_thread_flag(child, TIF_PATCH_PENDING);
-+
-+	child->patch_state = current->patch_state;
- }
- 
- /*
+ &ehci {
+-	samsung,vbus-gpio = <&gpx3 5 1>;
++	samsung,vbus-gpio = <&gpx3 5 GPIO_ACTIVE_HIGH>;
+ 	status = "okay";
+ 	phys = <&exynos_usbphy 2>, <&exynos_usbphy 3>;
+ 	phy-names = "hsic0", "hsic1";
+-- 
+2.35.1
+
 
 
