@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DF960AB28
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2FB360A473
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236331AbiJXNnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
+        id S229681AbiJXMK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236812AbiJXNlT (ORCPT
+        with ESMTP id S233045AbiJXMJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:41:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DD78993B;
-        Mon, 24 Oct 2022 05:38:46 -0700 (PDT)
+        Mon, 24 Oct 2022 08:09:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA8E2618;
+        Mon, 24 Oct 2022 04:52:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B03A611B0;
-        Mon, 24 Oct 2022 12:27:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A5DC433D6;
-        Mon, 24 Oct 2022 12:27:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F11BB81190;
+        Mon, 24 Oct 2022 11:51:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD835C433D6;
+        Mon, 24 Oct 2022 11:51:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614423;
-        bh=MAndz8nMfGWumzgeumXtIyvQC0YhR+/u+DyUw+CVihY=;
+        s=korg; t=1666612279;
+        bh=EEFNLSb8iNcOZyiCRkJW9dNUJ383IzbjdI0YY57GVjc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e/oCg/2kcUpRUG4+TwFTAsel+PG1ON5mrSxp82dqNh7p4g1vVkTbS0vgrxgRVKOmL
-         IqHnqtD1dyIyASM4muJQaFGKuFS6dI0VWtZIb7KPLbskEBCIZedAph4giWCv3RpYNz
-         SyvM6/fg8we/EhRea0fj36YyOj1mDZ0EbsSxgyog=
+        b=N4g1N5QMsT0AoD7bZmRr6Cu7rVPLRfBrKljr5LdHhYuAXf9ARYYe1xR6A0A/cYzkg
+         Qnj2N7PROoOuXGLtdpiOSiFmRknHYFq1zuXWLveR5elm0pqX/ZQ45xCJev3NgIs/la
+         PkhjpedwP7tx27tY4+n61gE4soBDrc28tEd+gY2A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@vger.kernel.org, Liang He <windhl@126.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 225/390] ata: fix ata_id_has_devslp()
-Date:   Mon, 24 Oct 2022 13:30:22 +0200
-Message-Id: <20221024113032.360887382@linuxfoundation.org>
+Subject: [PATCH 4.14 106/210] memory: of: Fix refcount leak bug in of_get_ddr_timings()
+Date:   Mon, 24 Oct 2022 13:30:23 +0200
+Message-Id: <20221024113000.455445590@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Cassel <niklas.cassel@wdc.com>
+From: Liang He <windhl@126.com>
 
-[ Upstream commit 9c6e09a434e1317e09b78b3b69cd384022ec9a03 ]
+[ Upstream commit 05215fb32010d4afb68fbdbb4d237df6e2d4567b ]
 
-ACS-5 section
-7.13.6.36 Word 78: Serial ATA features supported
-states that:
+We should add the of_node_put() when breaking out of
+for_each_child_of_node() as it will automatically increase
+and decrease the refcount.
 
-If word 76 is not 0000h or FFFFh, word 78 reports the features supported
-by the device. If this word is not supported, the word shall be cleared
-to zero.
-
-(This text also exists in really old ACS standards, e.g. ACS-3.)
-
-Additionally, move the macro to the other ATA_ID_FEATURE_SUPP macros
-(which already have this check), thus making it more likely that the
-next ATA_ID_FEATURE_SUPP macro that is added will include this check.
-
-Fixes: 65fe1f0f66a5 ("ahci: implement aggressive SATA device sleep support")
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: e6b42eb6a66c ("memory: emif: add device tree support to emif driver")
+Signed-off-by: Liang He <windhl@126.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220719085640.1210583-1-windhl@126.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/ata.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/memory/of_memory.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/ata.h b/include/linux/ata.h
-index 734cc646ce35..8b884cd3a232 100644
---- a/include/linux/ata.h
-+++ b/include/linux/ata.h
-@@ -565,6 +565,10 @@ struct ata_bmdma_prd {
- 	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
- 	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
- 	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 2)))
-+#define ata_id_has_devslp(id)	\
-+	((((id)[ATA_ID_SATA_CAPABILITY] != 0x0000) && \
-+	  ((id)[ATA_ID_SATA_CAPABILITY] != 0xffff)) && \
-+	 ((id)[ATA_ID_FEATURE_SUPP] & (1 << 8)))
- #define ata_id_iordy_disable(id) ((id)[ATA_ID_CAPABILITY] & (1 << 10))
- #define ata_id_has_iordy(id) ((id)[ATA_ID_CAPABILITY] & (1 << 11))
- #define ata_id_u32(id,n)	\
-@@ -577,7 +581,6 @@ struct ata_bmdma_prd {
- 
- #define ata_id_cdb_intr(id)	(((id)[ATA_ID_CONFIG] & 0x60) == 0x20)
- #define ata_id_has_da(id)	((id)[ATA_ID_SATA_CAPABILITY_2] & (1 << 4))
--#define ata_id_has_devslp(id)	((id)[ATA_ID_FEATURE_SUPP] & (1 << 8))
- #define ata_id_has_ncq_autosense(id) \
- 				((id)[ATA_ID_FEATURE_SUPP] & (1 << 7))
- 
+diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
+index 568f05ed961a..36517b7d093e 100644
+--- a/drivers/memory/of_memory.c
++++ b/drivers/memory/of_memory.c
+@@ -135,6 +135,7 @@ const struct lpddr2_timings *of_get_ddr_timings(struct device_node *np_ddr,
+ 	for_each_child_of_node(np_ddr, np_tim) {
+ 		if (of_device_is_compatible(np_tim, tim_compat)) {
+ 			if (of_do_get_timings(np_tim, &timings[i])) {
++				of_node_put(np_tim);
+ 				devm_kfree(dev, timings);
+ 				goto default_timings;
+ 			}
 -- 
 2.35.1
 
