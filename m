@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BBAF60BD5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4966260BD69
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiJXW2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43618 "EHLO
+        id S231351AbiJXWbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiJXW2M (ORCPT
+        with ESMTP id S231612AbiJXWad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:28:12 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B6D14FD37
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:49:49 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id q5so3189308ilt.13
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L7LHbcvZIY8r47g2KsyoVCnt3cTEDb/n81/RnCjdJ7Q=;
-        b=dPue2clgRdYd4AS5JGvWhb+3qRAE5rY9oPc1ac5IJ9qh541g+KjAhAokThvCSYQ85i
-         Dt6pI56c/EZr5s5CB0wHhG7FPoMegrU4Mqipew+jdp3Cz4rU3/v1XmrfrkcVhw8DVM9X
-         RuuL4tHn0y9LUbqticD45uHEgj6vMPBv0x+F8=
+        Mon, 24 Oct 2022 18:30:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D602B9B8F
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666644721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JQGL1jLTE4eRZpodNbuy8I66zGQdLeMOjp5jA6UyMm8=;
+        b=SMLj+kTJpCfkbLX4kUjhidTC9ZIompgDBf30IkHuYN+JPBeazurVDNHm8WZuivCqOjlsgg
+        xDY/PTU5udWOR2DQsgzwrGoQyv18ZfnDPjb7IaZZmuiwwjBx4gDaEZ5SaAA1r5mNziU9Jr
+        H2kNyzRx0CyyCXsa0SBRzIs0KRe2Qqg=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-528-wjrmJy9PN0CopY0F2Db78g-1; Mon, 24 Oct 2022 16:48:34 -0400
+X-MC-Unique: wjrmJy9PN0CopY0F2Db78g-1
+Received: by mail-qk1-f200.google.com with SMTP id i11-20020a05620a404b00b006eeb0791c1aso9958692qko.10
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:48:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L7LHbcvZIY8r47g2KsyoVCnt3cTEDb/n81/RnCjdJ7Q=;
-        b=6cI9ymDu//LcyyTQcqvdOKisTQM8s4/uytukNuFvKBugZRoMYb6UGwInQiV5kxKZGh
-         o0Bvg5QrJW5LQKYFwDtNfvs019fUqFrCx5pK38cFcDHbkabvjC3Cj9P7GM6vVqf1xhCC
-         9rHW23qZTD0viewdenzoNnw7t8CEvIwXClw6ZC2oMZwBJEV1cfog0Qmv/8Jsi+w2vgAb
-         vhFf0VJvYW3RSIDG4u/UZ3yH0w0+fXwhyD9tR4jmpb+KpGDgg0LARCXIeeBn4pGrR2u0
-         KLQDopKnpndYzXJl8gqBWit+3Mzs0OrhYwLk2IxEDXs6piGmH9Uj1uTHGITSjTsKAViI
-         x9pA==
-X-Gm-Message-State: ACrzQf3H/CBLgN3jW4xOjrip/MUSOYB5m9wpn9lS+VDXoWLevZfcCAob
-        0K5mWKUB/lp8fARIhA1medpezw==
-X-Google-Smtp-Source: AMsMyM4c1uW72CLag7R26KKH7E/esxMYN8j8ZTuhh+8/vqorNM8zozH7TLP1jcG6hAN6CvzhZEjD2A==
-X-Received: by 2002:a05:6e02:158a:b0:2d3:f198:9f39 with SMTP id m10-20020a056e02158a00b002d3f1989f39mr23231166ilu.206.1666644493727;
-        Mon, 24 Oct 2022 13:48:13 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z13-20020a92bf0d000000b002fa9a1fc421sm317236ilh.45.2022.10.24.13.48.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 13:48:12 -0700 (PDT)
-Message-ID: <1f6eed06-dc00-c3ec-7298-05de2c4955de@linuxfoundation.org>
-Date:   Mon, 24 Oct 2022 14:48:11 -0600
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JQGL1jLTE4eRZpodNbuy8I66zGQdLeMOjp5jA6UyMm8=;
+        b=lFos9yJD0ewLmnwNQraGNnKBDFjvnwvqTX3mcycZgBQoTJ/eL6dL40HsrsfZifQqrw
+         qt9vvRiWs/ty7x2FNOXOTLjlZh1nWRf2C/EHl2qW/YGYMfVsDRuC01vXSbnCFh2Ddlcr
+         XNUXwx4DCqfwFjQarID2+Z7N/s1Rr3swpxdZkvNLeTs9TlNINEEgnYZ6G5sG31nUUkA6
+         TJPrifyNUNtYwY206lIf4UEDRWvWHOeGtrI6BjtmuMW6NTZsq2vh2+DLxAkT+NVfVoTu
+         f2t7Jt3nfRKRFbRmZ2yAiAT03zpFRIlSKoHmDtfK5P0Nvo5fvXcU+fws3T4O61cJ1BPX
+         N8Jw==
+X-Gm-Message-State: ACrzQf0h45Bjiq7lbdQi3YRJY49/Y9lSWq80HgZ9mvT+xDCGSKKZoMq/
+        HYh5IVqEXeeLWW1qzUfvTDTKN60ZGlfS5ZJSJoxE06e6Fglwjygu9cGeJHLeyJWeQ3cEKrcmZUu
+        hrWpe1cab/nDmv/ahao3TUxPXC4O2Iykqd2Fm2XV/noteEqiU/gX9at2m5Fhekyr7LgvL06JBmA
+        ==
+X-Received: by 2002:ac8:5809:0:b0:39d:db1:895 with SMTP id g9-20020ac85809000000b0039d0db10895mr19877751qtg.440.1666644513240;
+        Mon, 24 Oct 2022 13:48:33 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5kiaYHseH4qUmhdGwaMcoIvbNsE6lTLOG+iD7P8kRX5rpK3l1TOhSQyMDRCMFRdnSqlNtFFQ==
+X-Received: by 2002:ac8:5809:0:b0:39d:db1:895 with SMTP id g9-20020ac85809000000b0039d0db10895mr19877721qtg.440.1666644512931;
+        Mon, 24 Oct 2022 13:48:32 -0700 (PDT)
+Received: from x1n.redhat.com (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id d13-20020ac8544d000000b0038d9555b580sm498531qtq.44.2022.10.24.13.48.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 13:48:32 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     Huang Ying <ying.huang@intel.com>, peterx@redhat.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        HORIGUCHI NAOYA <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: [PATCH RFC 0/2] mm: Use pte marker for swapin errors
+Date:   Mon, 24 Oct 2022 16:48:28 -0400
+Message-Id: <20221024204830.1342169-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221024112934.415391158@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,29 +81,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 05:31, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.4 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Hi,
 
-Compiled and booted on my test system. No dmesg regressions.
+This series uses the pte marker to replace the swapin error swap entry,
+then we safe one more swap entry.  A new pte marker bit is defined.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+One thing worth mentioning: we need the pte marker to be always built to
+make sure it works like before, so I made an attempt in patch 1 to drop
+CONFIG_PTE_MARKER and always compile pte marker in.  Since pte markers are
+enabled in many distributions by default already, meanwhile the codeset is
+really small I assume it's fine.  But still I'm tagging with RFC for this
+initial version.
 
-thanks,
--- Shuah
+Smoke tested on anonymous mem on a fake swap failure.  Please have a look,
+thanks.
+
+Peter Xu (2):
+  mm: Always compile in pte markers
+  mm: Use pte markers for swap errors
+
+ include/linux/swap.h    | 16 ++++----------
+ include/linux/swapops.h | 49 +++++++++--------------------------------
+ mm/Kconfig              |  7 ------
+ mm/memory.c             | 13 ++++++-----
+ mm/shmem.c              |  2 +-
+ mm/swapfile.c           |  2 +-
+ 6 files changed, 23 insertions(+), 66 deletions(-)
+
+-- 
+2.37.3
+
