@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0EA60A555
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECEA60A76F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbiJXMXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
+        id S234308AbiJXMuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiJXMVk (ORCPT
+        with ESMTP id S234612AbiJXMpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:21:40 -0400
+        Mon, 24 Oct 2022 08:45:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A62D7C1EA;
-        Mon, 24 Oct 2022 04:59:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455D02E691;
+        Mon, 24 Oct 2022 05:09:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDD8F612A4;
-        Mon, 24 Oct 2022 11:58:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A428C433C1;
-        Mon, 24 Oct 2022 11:58:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AF6961281;
+        Mon, 24 Oct 2022 12:09:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E89C433C1;
+        Mon, 24 Oct 2022 12:09:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612714;
-        bh=/11Bn+/w1g2+97iqpB5rxj+jzSQ00chxTdkDUSp8RO0=;
+        s=korg; t=1666613342;
+        bh=/DnBlGEHmDsKGRdYo7vtlx+6+pve0D4reGzgxgMkpRs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jBB9Ov2sq6oBnmzRTiHBf99SlXGClNsrtwm1O9jjfQDxnPc7B/99lMtZVhdziRy5N
-         w3jC7UJXAoutGM3g1xzFcCdvBdti0FueP4c4wl9B7MzSCiu5NGne6yDrA+yHnmvhPh
-         sTPsGaiXKwgyjNGvvTlrsbDQNqkjELn29+a8VIS8=
+        b=kkmgqS6vrXuNc4EyLhVgDcj9NN5/KwxnvnNRVXUuvD+lcPPzeIy3YdSuYhhdWle67
+         KblEpOCNJz1jYGcbaNfaiEVhFNyVWWcyPqSEQeVmwe3Qv5T/DQWvUni6YKu6nMwPwE
+         iW9Mqr1V+w+TY7tYd6SStVxt57C1WVXZSIzZzyA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 092/229] once: add DO_ONCE_SLOW() for sleepable contexts
+Subject: [PATCH 5.4 101/255] drm/msm/dpu: index dpu_kms->hw_vbif using vbif_idx
 Date:   Mon, 24 Oct 2022 13:30:11 +0200
-Message-Id: <20221024113002.025977656@linuxfoundation.org>
+Message-Id: <20221024113005.834791195@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+References: <20221024113002.471093005@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,147 +56,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric Dumazet <edumazet@google.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit 62c07983bef9d3e78e71189441e1a470f0d1e653 ]
+[ Upstream commit 7538f80ae0d98bf51eb89eee5344aec219902d42 ]
 
-Christophe Leroy reported a ~80ms latency spike
-happening at first TCP connect() time.
+Remove loops over hw_vbif. Instead always VBIF's idx as an index in the
+array. This fixes an error in dpu_kms_hw_init(), where we fill
+dpu_kms->hw_vbif[i], but check for an error pointer at
+dpu_kms->hw_vbif[vbif_idx].
 
-This is because __inet_hash_connect() uses get_random_once()
-to populate a perturbation table which became quite big
-after commit 4c2c8f03a5ab ("tcp: increase source port perturb table to 2^16")
-
-get_random_once() uses DO_ONCE(), which block hard irqs for the duration
-of the operation.
-
-This patch adds DO_ONCE_SLOW() which uses a mutex instead of a spinlock
-for operations where we prefer to stay in process context.
-
-Then __inet_hash_connect() can use get_random_slow_once()
-to populate its perturbation table.
-
-Fixes: 4c2c8f03a5ab ("tcp: increase source port perturb table to 2^16")
-Fixes: 190cc82489f4 ("tcp: change source port randomizarion at connect() time")
-Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Link: https://lore.kernel.org/netdev/CANn89iLAEYBaoYajy0Y9UmGFff5GPxDUoG-ErVB2jDdRNQ5Tug@mail.gmail.com/T/#t
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: Willy Tarreau <w@1wt.eu>
-Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+Patchwork: https://patchwork.freedesktop.org/patch/489569/
+Link: https://lore.kernel.org/r/20220615125703.24647-1-dmitry.baryshkov@linaro.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/once.h       | 28 ++++++++++++++++++++++++++++
- lib/once.c                 | 30 ++++++++++++++++++++++++++++++
- net/ipv4/inet_hashtables.c |  4 ++--
- 3 files changed, 60 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c  | 12 ++++------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c | 29 +++++++++++-------------
+ 2 files changed, 18 insertions(+), 23 deletions(-)
 
-diff --git a/include/linux/once.h b/include/linux/once.h
-index ae6f4eb41cbe..bb58e1c3aa03 100644
---- a/include/linux/once.h
-+++ b/include/linux/once.h
-@@ -5,10 +5,18 @@
- #include <linux/types.h>
- #include <linux/jump_label.h>
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+index c08c67338d73..a74f8ae1a894 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+@@ -596,12 +596,10 @@ static void _dpu_kms_hw_destroy(struct dpu_kms *dpu_kms)
+ 	_dpu_kms_mmu_destroy(dpu_kms);
  
-+/* Helpers used from arbitrary contexts.
-+ * Hard irqs are blocked, be cautious.
-+ */
- bool __do_once_start(bool *done, unsigned long *flags);
- void __do_once_done(bool *done, struct static_key_true *once_key,
- 		    unsigned long *flags, struct module *mod);
+ 	if (dpu_kms->catalog) {
+-		for (i = 0; i < dpu_kms->catalog->vbif_count; i++) {
+-			u32 vbif_idx = dpu_kms->catalog->vbif[i].id;
+-
+-			if ((vbif_idx < VBIF_MAX) && dpu_kms->hw_vbif[vbif_idx]) {
+-				dpu_hw_vbif_destroy(dpu_kms->hw_vbif[vbif_idx]);
+-				dpu_kms->hw_vbif[vbif_idx] = NULL;
++		for (i = 0; i < ARRAY_SIZE(dpu_kms->hw_vbif); i++) {
++			if (dpu_kms->hw_vbif[i]) {
++				dpu_hw_vbif_destroy(dpu_kms->hw_vbif[i]);
++				dpu_kms->hw_vbif[i] = NULL;
+ 			}
+ 		}
+ 	}
+@@ -899,7 +897,7 @@ static int dpu_kms_hw_init(struct msm_kms *kms)
+ 	for (i = 0; i < dpu_kms->catalog->vbif_count; i++) {
+ 		u32 vbif_idx = dpu_kms->catalog->vbif[i].id;
  
-+/* Variant for process contexts only. */
-+bool __do_once_slow_start(bool *done);
-+void __do_once_slow_done(bool *done, struct static_key_true *once_key,
-+			 struct module *mod);
-+
- /* Call a function exactly once. The idea of DO_ONCE() is to perform
-  * a function call such as initialization of random seeds, etc, only
-  * once, where DO_ONCE() can live in the fast-path. After @func has
-@@ -52,9 +60,29 @@ void __do_once_done(bool *done, struct static_key_true *once_key,
- 		___ret;							     \
- 	})
+-		dpu_kms->hw_vbif[i] = dpu_hw_vbif_init(vbif_idx,
++		dpu_kms->hw_vbif[vbif_idx] = dpu_hw_vbif_init(vbif_idx,
+ 				dpu_kms->vbif[vbif_idx], dpu_kms->catalog);
+ 		if (IS_ERR_OR_NULL(dpu_kms->hw_vbif[vbif_idx])) {
+ 			rc = PTR_ERR(dpu_kms->hw_vbif[vbif_idx]);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c
+index 8d24b79fd400..5e6bb2f306be 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_vbif.c
+@@ -11,6 +11,14 @@
+ #include "dpu_hw_vbif.h"
+ #include "dpu_trace.h"
  
-+/* Variant of DO_ONCE() for process/sleepable contexts. */
-+#define DO_ONCE_SLOW(func, ...)						     \
-+	({								     \
-+		bool ___ret = false;					     \
-+		static bool __section(".data.once") ___done = false;	     \
-+		static DEFINE_STATIC_KEY_TRUE(___once_key);		     \
-+		if (static_branch_unlikely(&___once_key)) {		     \
-+			___ret = __do_once_slow_start(&___done);	     \
-+			if (unlikely(___ret)) {				     \
-+				func(__VA_ARGS__);			     \
-+				__do_once_slow_done(&___done, &___once_key,  \
-+						    THIS_MODULE);	     \
-+			}						     \
-+		}							     \
-+		___ret;							     \
-+	})
-+
- #define get_random_once(buf, nbytes)					     \
- 	DO_ONCE(get_random_bytes, (buf), (nbytes))
- #define get_random_once_wait(buf, nbytes)                                    \
- 	DO_ONCE(get_random_bytes_wait, (buf), (nbytes))                      \
- 
-+#define get_random_slow_once(buf, nbytes)				     \
-+	DO_ONCE_SLOW(get_random_bytes, (buf), (nbytes))
-+
- #endif /* _LINUX_ONCE_H */
-diff --git a/lib/once.c b/lib/once.c
-index 59149bf3bfb4..351f66aad310 100644
---- a/lib/once.c
-+++ b/lib/once.c
-@@ -66,3 +66,33 @@ void __do_once_done(bool *done, struct static_key_true *once_key,
- 	once_disable_jump(once_key, mod);
- }
- EXPORT_SYMBOL(__do_once_done);
-+
-+static DEFINE_MUTEX(once_mutex);
-+
-+bool __do_once_slow_start(bool *done)
-+	__acquires(once_mutex)
++static struct dpu_hw_vbif *dpu_get_vbif(struct dpu_kms *dpu_kms, enum dpu_vbif vbif_idx)
 +{
-+	mutex_lock(&once_mutex);
-+	if (*done) {
-+		mutex_unlock(&once_mutex);
-+		/* Keep sparse happy by restoring an even lock count on
-+		 * this mutex. In case we return here, we don't call into
-+		 * __do_once_done but return early in the DO_ONCE_SLOW() macro.
-+		 */
-+		__acquire(once_mutex);
-+		return false;
-+	}
++	if (vbif_idx < ARRAY_SIZE(dpu_kms->hw_vbif))
++		return dpu_kms->hw_vbif[vbif_idx];
 +
-+	return true;
++	return NULL;
 +}
-+EXPORT_SYMBOL(__do_once_slow_start);
 +
-+void __do_once_slow_done(bool *done, struct static_key_true *once_key,
-+			 struct module *mod)
-+	__releases(once_mutex)
-+{
-+	*done = true;
-+	mutex_unlock(&once_mutex);
-+	once_disable_jump(once_key, mod);
-+}
-+EXPORT_SYMBOL(__do_once_slow_done);
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 5295a579ec82..70070f1003a0 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -765,8 +765,8 @@ int __inet_hash_connect(struct inet_timewait_death_row *death_row,
- 	if (likely(remaining > 1))
- 		remaining &= ~1U;
+ /**
+  * _dpu_vbif_wait_for_xin_halt - wait for the xin to halt
+  * @vbif:	Pointer to hardware vbif driver
+@@ -148,11 +156,11 @@ static u32 _dpu_vbif_get_ot_limit(struct dpu_hw_vbif *vbif,
+ void dpu_vbif_set_ot_limit(struct dpu_kms *dpu_kms,
+ 		struct dpu_vbif_set_ot_params *params)
+ {
+-	struct dpu_hw_vbif *vbif = NULL;
++	struct dpu_hw_vbif *vbif;
+ 	struct dpu_hw_mdp *mdp;
+ 	bool forced_on = false;
+ 	u32 ot_lim;
+-	int ret, i;
++	int ret;
  
--	net_get_random_once(table_perturb,
--			    INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
-+	get_random_slow_once(table_perturb,
-+			     INET_TABLE_PERTURB_SIZE * sizeof(*table_perturb));
- 	index = port_offset & (INET_TABLE_PERTURB_SIZE - 1);
+ 	if (!dpu_kms) {
+ 		DPU_ERROR("invalid arguments\n");
+@@ -160,12 +168,7 @@ void dpu_vbif_set_ot_limit(struct dpu_kms *dpu_kms,
+ 	}
+ 	mdp = dpu_kms->hw_mdp;
  
- 	offset = READ_ONCE(table_perturb[index]) + (port_offset >> 32);
+-	for (i = 0; i < ARRAY_SIZE(dpu_kms->hw_vbif); i++) {
+-		if (dpu_kms->hw_vbif[i] &&
+-				dpu_kms->hw_vbif[i]->idx == params->vbif_idx)
+-			vbif = dpu_kms->hw_vbif[i];
+-	}
+-
++	vbif = dpu_get_vbif(dpu_kms, params->vbif_idx);
+ 	if (!vbif || !mdp) {
+ 		DPU_DEBUG("invalid arguments vbif %d mdp %d\n",
+ 				vbif != 0, mdp != 0);
+@@ -208,7 +211,7 @@ void dpu_vbif_set_ot_limit(struct dpu_kms *dpu_kms,
+ void dpu_vbif_set_qos_remap(struct dpu_kms *dpu_kms,
+ 		struct dpu_vbif_set_qos_params *params)
+ {
+-	struct dpu_hw_vbif *vbif = NULL;
++	struct dpu_hw_vbif *vbif;
+ 	struct dpu_hw_mdp *mdp;
+ 	bool forced_on = false;
+ 	const struct dpu_vbif_qos_tbl *qos_tbl;
+@@ -220,13 +223,7 @@ void dpu_vbif_set_qos_remap(struct dpu_kms *dpu_kms,
+ 	}
+ 	mdp = dpu_kms->hw_mdp;
+ 
+-	for (i = 0; i < ARRAY_SIZE(dpu_kms->hw_vbif); i++) {
+-		if (dpu_kms->hw_vbif[i] &&
+-				dpu_kms->hw_vbif[i]->idx == params->vbif_idx) {
+-			vbif = dpu_kms->hw_vbif[i];
+-			break;
+-		}
+-	}
++	vbif = dpu_get_vbif(dpu_kms, params->vbif_idx);
+ 
+ 	if (!vbif || !vbif->cap) {
+ 		DPU_ERROR("invalid vbif %d\n", params->vbif_idx);
 -- 
 2.35.1
 
