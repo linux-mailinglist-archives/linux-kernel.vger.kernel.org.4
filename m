@@ -2,325 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA53260B384
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE16560B38C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 19:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233892AbiJXRIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 13:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S233924AbiJXRJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 13:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233669AbiJXRH6 (ORCPT
+        with ESMTP id S231265AbiJXRIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 13:07:58 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A97991848
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:42:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8C1B01FA95;
-        Mon, 24 Oct 2022 15:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666626058; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=D1WQ/DuYllfDxdlq0UnvLA6w0csqxNxmfZVGmG6EkuU=;
-        b=Jg75W9uLxtuFaMCUbFNh0LNcyfAPONvG+3a8S8eRf4uPYSmz6lEaonBses31n6awVTSRaE
-        mJCE3qWc4vRilk9qAI4RBOTbvVIOryy1QBEocrK691udel1cG+gsd4Pi+Ub812mZR2S3bG
-        aX9UlAFxEri6ylVpSLec5Ic+oeVt82A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666626058;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=D1WQ/DuYllfDxdlq0UnvLA6w0csqxNxmfZVGmG6EkuU=;
-        b=MYDYDFrIgfjZHwT1V3cTPVm24MobRm3QSL3uYzCmzif78NBbjkV3WeVaemlNAjFkAVxNhI
-        RXzjCKye514jjKAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5142C13357;
-        Mon, 24 Oct 2022 15:40:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id DazVEQqyVmPYTAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Mon, 24 Oct 2022 15:40:58 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Alex Deucher <alexander.deucher@amd.com>, Jim Qu <Jim.Qu@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/radeon: Add HD-audio component notifier support (v4)
-Date:   Mon, 24 Oct 2022 17:40:54 +0200
-Message-Id: <20221024154055.21473-1-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
+        Mon, 24 Oct 2022 13:08:55 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748A11EEFA
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 08:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666626247; x=1698162247;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=scPGQVBLMaQrG09DIbO3cleczY2v35W9feMZEkD75Ak=;
+  b=bMOZLLlVv+yD50YxnWchp55MIQiW3Asf09PyHnMNLFcIt7WBfLCG4HxL
+   UlCgDdb8XJ+RYwSERT88Q3rWS1z+Dk8c44zqVdYcwVLhT0CYXY432HMVi
+   nG+MrFBXQe8fhPve3an51+SVbku/UrguFuIozNwSvz70tB4hFEZgxpaSm
+   bpd9dYJyV3wqjh7bQV7CmWtmvIOSq9t4oZJOiye6vuD/BXXTwfdnzr8tS
+   LylVREQOPSqvWyiFj/HT/kRHWVeGA9CA5qBjvjby80b/7s9BYIJxblj3s
+   avdTNb38/1xMV7e/PW+xaUNRWW9iMScFnYQkG+hqDVl4xlJY5dQEj9vQ4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="371669524"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="371669524"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:42:31 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="609238440"
+X-IronPort-AV: E=Sophos;i="5.95,209,1661842800"; 
+   d="scan'208";a="609238440"
+Received: from csun9-mobl.amr.corp.intel.com (HELO [10.209.104.152]) ([10.209.104.152])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 08:42:30 -0700
+Message-ID: <dfd2fb43-2a19-545a-fea8-f793a685ef30@intel.com>
+Date:   Mon, 24 Oct 2022 08:42:30 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v1 1/2] x86/tsc: use logical_package as a better
+ estimation of socket numbers
+Content-Language: en-US
+To:     Zhang Rui <rui.zhang@intel.com>, Feng Tang <feng.tang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     tim.c.chen@intel.com, Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        liaoyu15@huawei.com
+References: <20221021062131.1826810-1-feng.tang@intel.com>
+ <f27e4b3f858890c657df9a7d6f34dc2d60b89757.camel@intel.com>
+ <63dca468-c94d-844a-5b19-09c03cf84911@intel.com>
+ <6636557f617ea5a1a1ab6f30f7aea0ececdd2a36.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <6636557f617ea5a1a1ab6f30f7aea0ececdd2a36.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds the support for the notification of HD-audio hotplug
-via the already existing drm_audio_component framework to radeon
-driver.  This allows us more reliable hotplug notification and ELD
-transfer without accessing HD-audio bus; it's more efficient, and more
-importantly, it works without waking up the runtime PM.
+On 10/22/22 09:12, Zhang Rui wrote:
+>>> I'm not sure if we have a perfect solution here.
+>> Are the implementations fixable?
+> currently, I don't have any idea.
+> 
+>>   Or, at least tolerable?
 
-The implementation is rather simplistic: radeon driver provides the
-get_eld ops for HD-audio, and it notifies the audio hotplug via
-pin_eld_notify callback upon each radeon_audio_enable() call.
-The pin->id is referred as the port number passed to the notifier
-callback, and the corresponding connector is looked through the
-encoder list in the get_eld callback in turn.
+That would be great to figure out before we start throwing more patches
+around.
 
-The bind and unbind callbacks handle the device-link so that it
-assures the PM call order.
+>> For instance, I can live with the implementation being a bit goofy
+>> when
+>> kernel commandlines are in play.  We can pr_info() about those cases.
+> My understanding is that the cpus in the last package may still have
+> small cpu id value. This means that the 'logical_packages' is hard to
+> break unless we boot with very small CPU count and happened to disable
+> all cpus in one/more packages. Feng is experiencing with this and may
+> have some update later.
+> 
+> If this is the case, is this a valid case that we need to take care of?
 
-Also, as a gratis bonus, this patch "fixes" the regression by the
-recent change in HD-audio to be more strict for the HDMI/DP
-connection, too.  Since the HD-audio HDMI/DP codec requires both the
-connection bit and the valid ELD to be provided, it started failing on
-some RADEON gfx boards where the ELD update performed instably.  As
-this change switches the communication to a direct way between the
-audio and the graphics drivers, now the system receives the proper
-ELD, and the HDMI/DP hotplug starts working again.
+Well, let's talk through it a bit.
 
-[ v2: fix the logic in radeon_audio_component_get_eld to walk the
-  connector list since that is where the EDID lives and we can
-  derive the encoder from the connector because the encoder has
-  not been assigned at this point (i.e., during monitor probe).
+What is the triggering event and what's the fallout?
 
-  v3: the component binding is moved outside radeon_audio_init() and
-  _fini(), as those are called from suspend/resume, too.
-  Drop modeset lock calls that caused Oops.
-  Moved Kconfig change so that it can be applied on older kernels.
+Is the user on a truly TSC stable system or not?
 
-  v4: revive drm_modeset_lock*() again, add the missing
-  device_link_remove() call at unbinding ]
+What kind of maxcpus= argument do they need to specify?  Is it something
+that's likely to get used in production or is it most likely just for
+debugging?
 
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1569
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- drivers/gpu/drm/Kconfig                |   1 +
- drivers/gpu/drm/radeon/radeon.h        |   7 ++
- drivers/gpu/drm/radeon/radeon_audio.c  | 113 +++++++++++++++++++++++++
- drivers/gpu/drm/radeon/radeon_device.c |   3 +
- 4 files changed, 124 insertions(+)
+What is the maxcpus= fallout?  Does it over estimate or under estimate
+the number of logical packages?
 
-diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-index 34f5a092c99e..fa986075e8fb 100644
---- a/drivers/gpu/drm/Kconfig
-+++ b/drivers/gpu/drm/Kconfig
-@@ -243,6 +243,7 @@ config DRM_RADEON
-         select DRM_KMS_HELPER
-         select DRM_TTM
- 	select DRM_TTM_HELPER
-+	select SND_HDA_COMPONENT if SND_HDA_CORE
- 	select POWER_SUPPLY
- 	select HWMON
- 	select BACKLIGHT_CLASS_DEVICE
-diff --git a/drivers/gpu/drm/radeon/radeon.h b/drivers/gpu/drm/radeon/radeon.h
-index 166c18d62f6d..d82424525f5a 100644
---- a/drivers/gpu/drm/radeon/radeon.h
-+++ b/drivers/gpu/drm/radeon/radeon.h
-@@ -79,6 +79,7 @@
- #include <drm/ttm/ttm_execbuf_util.h>
- 
- #include <drm/drm_gem.h>
-+#include <drm/drm_audio_component.h>
- 
- #include "radeon_family.h"
- #include "radeon_mode.h"
-@@ -1796,6 +1797,8 @@ struct r600_audio {
- 	struct radeon_audio_funcs *hdmi_funcs;
- 	struct radeon_audio_funcs *dp_funcs;
- 	struct radeon_audio_basic_funcs *funcs;
-+	struct drm_audio_component *component;
-+	bool component_registered;
- };
- 
- /*
-@@ -2994,6 +2997,10 @@ void radeon_irq_kms_set_irq_n_enabled(struct radeon_device *rdev,
- 				      bool enable, const char *name,
- 				      unsigned n);
- 
-+/* Audio component binding */
-+void radeon_audio_component_init(struct radeon_device *rdev);
-+void radeon_audio_component_fini(struct radeon_device *rdev);
-+
- #include "radeon_object.h"
- 
- #endif
-diff --git a/drivers/gpu/drm/radeon/radeon_audio.c b/drivers/gpu/drm/radeon/radeon_audio.c
-index 7c5e80d03fc9..4ceb90556127 100644
---- a/drivers/gpu/drm/radeon/radeon_audio.c
-+++ b/drivers/gpu/drm/radeon/radeon_audio.c
-@@ -23,6 +23,7 @@
-  */
- 
- #include <linux/gcd.h>
-+#include <linux/component.h>
- 
- #include <drm/drm_crtc.h>
- #include "dce6_afmt.h"
-@@ -180,6 +181,9 @@ static struct radeon_audio_funcs dce6_dp_funcs = {
- 	.dpms = evergreen_dp_enable,
- };
- 
-+static void radeon_audio_component_notify(struct drm_audio_component *acomp,
-+					  int port);
-+
- static void radeon_audio_enable(struct radeon_device *rdev,
- 				struct r600_audio_pin *pin, u8 enable_mask)
- {
-@@ -207,6 +211,8 @@ static void radeon_audio_enable(struct radeon_device *rdev,
- 
- 	if (rdev->audio.funcs->enable)
- 		rdev->audio.funcs->enable(rdev, pin, enable_mask);
-+
-+	radeon_audio_component_notify(rdev->audio.component, pin->id);
- }
- 
- static void radeon_audio_interface_init(struct radeon_device *rdev)
-@@ -721,3 +727,110 @@ unsigned int radeon_audio_decode_dfs_div(unsigned int div)
- 	else
- 		return 0;
- }
-+
-+/*
-+ * Audio component support
-+ */
-+static void radeon_audio_component_notify(struct drm_audio_component *acomp,
-+					  int port)
-+{
-+	if (acomp && acomp->audio_ops && acomp->audio_ops->pin_eld_notify)
-+		acomp->audio_ops->pin_eld_notify(acomp->audio_ops->audio_ptr,
-+						 port, -1);
-+}
-+
-+static int radeon_audio_component_get_eld(struct device *kdev, int port,
-+					  int pipe, bool *enabled,
-+					  unsigned char *buf, int max_bytes)
-+{
-+	struct drm_device *dev = dev_get_drvdata(kdev);
-+	struct drm_encoder *encoder;
-+	struct radeon_encoder *radeon_encoder;
-+	struct radeon_encoder_atom_dig *dig;
-+	struct drm_connector *connector;
-+	int ret = 0;
-+
-+	*enabled = false;
-+	list_for_each_entry(connector, &dev->mode_config.connector_list, head) {
-+		const struct drm_connector_helper_funcs *connector_funcs =
-+			connector->helper_private;
-+		encoder = connector_funcs->best_encoder(connector);
-+
-+		if (!encoder)
-+			continue;
-+		if (!radeon_encoder_is_digital(encoder))
-+			continue;
-+		radeon_encoder = to_radeon_encoder(encoder);
-+		dig = radeon_encoder->enc_priv;
-+		if (!dig->pin || dig->pin->id != port)
-+			continue;
-+		*enabled = true;
-+		ret = drm_eld_size(connector->eld);
-+		memcpy(buf, connector->eld, min(max_bytes, ret));
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+static const struct drm_audio_component_ops radeon_audio_component_ops = {
-+	.get_eld = radeon_audio_component_get_eld,
-+};
-+
-+static int radeon_audio_component_bind(struct device *kdev,
-+				       struct device *hda_kdev, void *data)
-+{
-+	struct drm_device *dev = dev_get_drvdata(kdev);
-+	struct radeon_device *rdev = dev->dev_private;
-+	struct drm_audio_component *acomp = data;
-+
-+	if (WARN_ON(!device_link_add(hda_kdev, kdev, DL_FLAG_STATELESS)))
-+		return -ENOMEM;
-+
-+	drm_modeset_lock_all(dev);
-+	acomp->ops = &radeon_audio_component_ops;
-+	acomp->dev = kdev;
-+	rdev->audio.component = acomp;
-+	drm_modeset_unlock_all(dev);
-+
-+	return 0;
-+}
-+
-+static void radeon_audio_component_unbind(struct device *kdev,
-+					  struct device *hda_kdev, void *data)
-+{
-+	struct drm_device *dev = dev_get_drvdata(kdev);
-+	struct radeon_device *rdev = dev->dev_private;
-+	struct drm_audio_component *acomp = data;
-+
-+	device_link_remove(hda_kdev, kdev);
-+
-+	drm_modeset_lock_all(dev);
-+	rdev->audio.component = NULL;
-+	acomp->ops = NULL;
-+	acomp->dev = NULL;
-+	drm_modeset_unlock_all(dev);
-+}
-+
-+static const struct component_ops radeon_audio_component_bind_ops = {
-+	.bind	= radeon_audio_component_bind,
-+	.unbind	= radeon_audio_component_unbind,
-+};
-+
-+void radeon_audio_component_init(struct radeon_device *rdev)
-+{
-+	if (rdev->audio.component_registered ||
-+	    !radeon_audio || !radeon_audio_chipset_supported(rdev))
-+		return;
-+
-+	if (!component_add(rdev->dev, &radeon_audio_component_bind_ops))
-+		rdev->audio.component_registered = true;
-+}
-+
-+void radeon_audio_component_fini(struct radeon_device *rdev)
-+{
-+	if (rdev->audio.component_registered) {
-+		component_del(rdev->dev, &radeon_audio_component_bind_ops);
-+		rdev->audio.component_registered = false;
-+	}
-+}
-diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
-index a556b6be1137..17bfbbe906c8 100644
---- a/drivers/gpu/drm/radeon/radeon_device.c
-+++ b/drivers/gpu/drm/radeon/radeon_device.c
-@@ -1451,6 +1451,8 @@ int radeon_device_init(struct radeon_device *rdev,
- 			goto failed;
- 	}
- 
-+	radeon_audio_component_init(rdev);
-+
- 	r = radeon_ib_ring_tests(rdev);
- 	if (r)
- 		DRM_ERROR("ib ring test failed (%d).\n", r);
-@@ -1513,6 +1515,7 @@ void radeon_device_fini(struct radeon_device *rdev)
- 	rdev->shutdown = true;
- 	/* evict vram memory */
- 	radeon_bo_evict_vram(rdev);
-+	radeon_audio_component_fini(rdev);
- 	radeon_fini(rdev);
- 	if (!pci_is_thunderbolt_attached(rdev->pdev))
- 		vga_switcheroo_unregister_client(rdev->pdev);
--- 
-2.35.3
+How many cases outside of maxcpus= do we know of that lead to an
+imprecise "logical packages" calculation?
 
+Does this lead to the TSC being mistakenly marked stable when it is not,
+or *not* being marked stable when it is?
+
+Let's get all of that info in one place and make sure we are all agreed
+on the *problem* before we got to the solution space.
