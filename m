@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CE760ABC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4E660A523
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236825AbiJXN41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        id S233357AbiJXMVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236838AbiJXNyT (ORCPT
+        with ESMTP id S233392AbiJXMTV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:54:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC49CBC623;
-        Mon, 24 Oct 2022 05:43:54 -0700 (PDT)
+        Mon, 24 Oct 2022 08:19:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F6682D36;
+        Mon, 24 Oct 2022 04:58:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8266E612B3;
-        Mon, 24 Oct 2022 12:43:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EFEEC433C1;
-        Mon, 24 Oct 2022 12:43:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E025FB811BB;
+        Mon, 24 Oct 2022 11:49:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D59C433C1;
+        Mon, 24 Oct 2022 11:49:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615423;
-        bh=Vq582+ZZfZeJ50akCNDAGdJDlR6WOX/d4TZ2XfKNEBA=;
+        s=korg; t=1666612194;
+        bh=YpURN54bP3lO0GSk/IShWNXb2+lp0qTSkE0YhNm2eEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kt2ebN/4Gp7qbg3wEQa3VtReCz0qaDfDf+mwjX+vpZqgYqGpWw3xI6oQRgr7qLQII
-         ld4rhNG3qDVbHrNeXUDOJSzOM7AMSEgXWordGbnumV60jW8sqMefwKbyDkKFmJkznb
-         X06/d4dqn5AAwi7+usbmazA5+OTn6rrJeS8Ol8ss=
+        b=DHk/5euKyDhMNbphkCF25eVXj0M0B93EdbhGD6Yk9ZL4ThA3FXH8oww5xDKbFWmTm
+         Q2J6V5fNBxHPSgmK8XvWwrY0+ImIAdy/7xqMGRhQnsgwHGPiHBFl3lNfPJqweDdvuT
+         ODoHZZhceB8gtIomNa1HNS+MhnsgfoBF1HUidRWc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 246/530] memory: pl353-smc: Fix refcount leak bug in pl353_smc_probe()
-Date:   Mon, 24 Oct 2022 13:29:50 +0200
-Message-Id: <20221024113056.247388215@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 4.14 074/210] ring-buffer: Allow splice to read previous partially read pages
+Date:   Mon, 24 Oct 2022 13:29:51 +0200
+Message-Id: <20221024112959.465611437@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +53,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[ Upstream commit 61b3c876c1cbdb1efd1f52a1f348580e6e14efb6 ]
+commit fa8f4a89736b654125fb254b0db753ac68a5fced upstream.
 
-The break of for_each_available_child_of_node() needs a
-corresponding of_node_put() when the reference 'child' is not
-used anymore. Here we do not need to call of_node_put() in
-fail path as '!match' means no break.
+If a page is partially read, and then the splice system call is run
+against the ring buffer, it will always fail to read, no matter how much
+is in the ring buffer. That's because the code path for a partial read of
+the page does will fail if the "full" flag is set.
 
-While the of_platform_device_create() will created a new
-reference by 'child' but it has considered the refcounting.
+The splice system call wants full pages, so if the read of the ring buffer
+is not yet full, it should return zero, and the splice will block. But if
+a previous read was done, where the beginning has been consumed, it should
+still be given to the splice caller if the rest of the page has been
+written to.
 
-Fixes: fee10bd22678 ("memory: pl353: Add driver for arm pl353 static memory controller")
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220716031324.447680-1-windhl@126.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This caused the splice command to never consume data in this scenario, and
+let the ring buffer just fill up and lose events.
+
+Link: https://lkml.kernel.org/r/20220927144317.46be6b80@gandalf.local.home
+
+Cc: stable@vger.kernel.org
+Fixes: 8789a9e7df6bf ("ring-buffer: read page interface")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/memory/pl353-smc.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/trace/ring_buffer.c |   10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/memory/pl353-smc.c b/drivers/memory/pl353-smc.c
-index f84b98278745..d39ee7d06665 100644
---- a/drivers/memory/pl353-smc.c
-+++ b/drivers/memory/pl353-smc.c
-@@ -122,6 +122,7 @@ static int pl353_smc_probe(struct amba_device *adev, const struct amba_id *id)
- 	}
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -4639,7 +4639,15 @@ int ring_buffer_read_page(struct ring_bu
+ 		unsigned int pos = 0;
+ 		unsigned int size;
  
- 	of_platform_device_create(child, NULL, &adev->dev);
-+	of_node_put(child);
+-		if (full)
++		/*
++		 * If a full page is expected, this can still be returned
++		 * if there's been a previous partial read and the
++		 * rest of the page can be read and the commit page is off
++		 * the reader page.
++		 */
++		if (full &&
++		    (!read || (len < (commit - read)) ||
++		     cpu_buffer->reader_page == cpu_buffer->commit_page))
+ 			goto out_unlock;
  
- 	return 0;
- 
--- 
-2.35.1
-
+ 		if (len > (commit - read))
 
 
