@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FB360A473
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8117960A601
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiJXMK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        id S233875AbiJXMbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233045AbiJXMJ2 (ORCPT
+        with ESMTP id S233898AbiJXM2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:09:28 -0400
+        Mon, 24 Oct 2022 08:28:36 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA8E2618;
-        Mon, 24 Oct 2022 04:52:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6A86FB6;
+        Mon, 24 Oct 2022 05:02:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F11BB81190;
-        Mon, 24 Oct 2022 11:51:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD835C433D6;
-        Mon, 24 Oct 2022 11:51:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8B69B811F9;
+        Mon, 24 Oct 2022 11:59:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51B85C433C1;
+        Mon, 24 Oct 2022 11:59:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612279;
-        bh=EEFNLSb8iNcOZyiCRkJW9dNUJ383IzbjdI0YY57GVjc=;
+        s=korg; t=1666612748;
+        bh=/Q6pzcrZjDpFolWBJ1EYpKlo1jaPwZnnnU4E+ObCcyk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N4g1N5QMsT0AoD7bZmRr6Cu7rVPLRfBrKljr5LdHhYuAXf9ARYYe1xR6A0A/cYzkg
-         Qnj2N7PROoOuXGLtdpiOSiFmRknHYFq1zuXWLveR5elm0pqX/ZQ45xCJev3NgIs/la
-         PkhjpedwP7tx27tY4+n61gE4soBDrc28tEd+gY2A=
+        b=iVWT1Ja01s3mP/O0VjBUjiEQ6ddoskRzJ051ziBcGSxWlBcI8+BU8v+wNQBPopK7g
+         o+68xzEEWI+Ix5peVX6OS4t4U6bZxIGMlu72NprpwOzLC6c3GboWVz7cOemyhNha/9
+         DVFv6F2NaD3rMOOxTdpdcPZK7qxryDW8R6IUi/gE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 106/210] memory: of: Fix refcount leak bug in of_get_ddr_timings()
+Subject: [PATCH 4.19 104/229] mmc: wmt-sdmmc: Fix an error handling path in wmt_mci_probe()
 Date:   Mon, 24 Oct 2022 13:30:23 +0200
-Message-Id: <20221024113000.455445590@linuxfoundation.org>
+Message-Id: <20221024113002.382124113@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
-References: <20221024112956.797777597@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 05215fb32010d4afb68fbdbb4d237df6e2d4567b ]
+[ Upstream commit cb58188ad90a61784a56a64f5107faaf2ad323e7 ]
 
-We should add the of_node_put() when breaking out of
-for_each_child_of_node() as it will automatically increase
-and decrease the refcount.
+A dma_free_coherent() call is missing in the error handling path of the
+probe, as already done in the remove function.
 
-Fixes: e6b42eb6a66c ("memory: emif: add device tree support to emif driver")
-Signed-off-by: Liang He <windhl@126.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Link: https://lore.kernel.org/r/20220719085640.1210583-1-windhl@126.com
+Fixes: 3a96dff0f828 ("mmc: SD/MMC Host Controller for Wondermedia WM8505/WM8650")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/53fc6ffa5d1c428fefeae7d313cf4a669c3a1e98.1663873255.git.christophe.jaillet@wanadoo.fr
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/of_memory.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/wmt-sdmmc.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
-index 568f05ed961a..36517b7d093e 100644
---- a/drivers/memory/of_memory.c
-+++ b/drivers/memory/of_memory.c
-@@ -135,6 +135,7 @@ const struct lpddr2_timings *of_get_ddr_timings(struct device_node *np_ddr,
- 	for_each_child_of_node(np_ddr, np_tim) {
- 		if (of_device_is_compatible(np_tim, tim_compat)) {
- 			if (of_do_get_timings(np_tim, &timings[i])) {
-+				of_node_put(np_tim);
- 				devm_kfree(dev, timings);
- 				goto default_timings;
- 			}
+diff --git a/drivers/mmc/host/wmt-sdmmc.c b/drivers/mmc/host/wmt-sdmmc.c
+index 3ba42f508014..f8b169684693 100644
+--- a/drivers/mmc/host/wmt-sdmmc.c
++++ b/drivers/mmc/host/wmt-sdmmc.c
+@@ -853,7 +853,7 @@ static int wmt_mci_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->clk_sdmmc)) {
+ 		dev_err(&pdev->dev, "Error getting clock\n");
+ 		ret = PTR_ERR(priv->clk_sdmmc);
+-		goto fail5;
++		goto fail5_and_a_half;
+ 	}
+ 
+ 	ret = clk_prepare_enable(priv->clk_sdmmc);
+@@ -870,6 +870,9 @@ static int wmt_mci_probe(struct platform_device *pdev)
+ 	return 0;
+ fail6:
+ 	clk_put(priv->clk_sdmmc);
++fail5_and_a_half:
++	dma_free_coherent(&pdev->dev, mmc->max_blk_count * 16,
++			  priv->dma_desc_buffer, priv->dma_desc_device_addr);
+ fail5:
+ 	free_irq(dma_irq, priv);
+ fail4:
 -- 
 2.35.1
 
