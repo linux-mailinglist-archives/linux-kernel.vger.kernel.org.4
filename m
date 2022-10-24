@@ -2,245 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E464060AB16
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923C860ABD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234075AbiJXNpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S236887AbiJXN6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236991AbiJXNlv (ORCPT
+        with ESMTP id S236713AbiJXN5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:41:51 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E540E4A;
-        Mon, 24 Oct 2022 05:39:24 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id a5so17592015edb.11;
-        Mon, 24 Oct 2022 05:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=enjnXrgGXbcMA3WfYBZgSaGKWy2h+iyPV27PBQ4hdWc=;
-        b=KC2YHNNGgHbDpcjCTc8b/64NkOLCT6enxbKTggnBuyGYKjX1r4Lb89UIovAfcq8szT
-         SXzuNrbsg6hy/S/XhQ0lBBSsoPnz8ehoqV/ekPn6zzar44GirdS2BzmO9nVzUR8DaoH2
-         43/PkmzYZ/l5XdBIXMoGd/iMWYbeKpGHAtz+Lkqc8ISNEOC4jzurU4AWFHI3gW58e+N0
-         mJ+GY9gxsWwqLzyQr05gdZx/Rs/FOYEV1F82wbRLILoy/9FbqwB5wrzCEk7qb1ZjdyyR
-         Y0hdtroTV7qzACzaZrly2EJYLXJWRsxJVgRZFNLw09e+0ikv6KyGk5vhLbf/BsDLLdkN
-         9VeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=enjnXrgGXbcMA3WfYBZgSaGKWy2h+iyPV27PBQ4hdWc=;
-        b=eindhv+zn8EfWw/yPphiJ7EPWREd0AkY6VZqSqeemrIeXUUd1K2zLWF6bNLjvjBq97
-         6mbEtC4+CCTI7RPRM9YJJiXKhgyc1k0cfJVd3g2uAL7B/gZumMSgSt85ZhRTavyP9btS
-         /vJI34RyFfUvy2i7lubULR90xTdW+ENq+82O9QLPDJOP30dF8GoXEf0Bz0eze9gndaJg
-         j+G2bHxWIGhipvhLMdlR84jzB6m7HS8ED4ZhvEpkkJAAAmijI+50n72PC+fSVQaG+t9U
-         bdvsBU7KXKC32z8h2lB0C3BrGkRVccNCP2DFkhUMEXjGzAzvV6nEtdnKdTud+ZLuiLFT
-         utiQ==
-X-Gm-Message-State: ACrzQf2jj6jp3JgMJMqtS0soCUxfesiBLUgdOMPmhjPf03FZF3cdtzlU
-        7iFSbJTB+iNcyc4U+yOKEkjw5ayieMynvxYj8uPTdo1PrWFAkw==
-X-Google-Smtp-Source: AMsMyM7deTXtRwpYvDqPrr3fK/XqqrwUfarVHeEYLqcrae05P5E0XMCvdSJokNKD1li9Edwp+DOc+pEq3RSuDoh5jgk=
-X-Received: by 2002:a05:6402:3217:b0:461:d6d7:7f19 with SMTP id
- g23-20020a056402321700b00461d6d77f19mr2926691eda.109.1666612527159; Mon, 24
- Oct 2022 04:55:27 -0700 (PDT)
+        Mon, 24 Oct 2022 09:57:51 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601BDA02FB
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:45:38 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C272022151;
+        Mon, 24 Oct 2022 11:55:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666612557; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H0/B42P//vbH9o9jU3OTgEgJkODpPdMjmF6G/UQJEZA=;
+        b=ajejL/6+gmxHWM3hJainDmqqnfgn/iKC4Uw93ajFEQ0W3T6FE4dK7CyvtO1ll48ki1fBiQ
+        pZdhLRHCZ6YVfORKtnSZV6xYPedxCRVn0sG752UG2+Fr2PtKAVEG1P1t3GQmq7AnlbE+CC
+        bSmdORPJpip0AHuO2D7yXO7HchSVdTo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666612557;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=H0/B42P//vbH9o9jU3OTgEgJkODpPdMjmF6G/UQJEZA=;
+        b=Zfq/1jrlLI8aZ4KFle640M4AAlheP6PWWmzuAjDQDMrW6idvda1Ol4wylOsTZQGDNgFFZN
+        3OL4T4+XEkit9LAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F4B313A79;
+        Mon, 24 Oct 2022 11:55:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ei9aFk19VmPaRgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 24 Oct 2022 11:55:57 +0000
+Message-ID: <af4c71cb-be60-e354-ca4f-23e834aca6e1@suse.de>
+Date:   Mon, 24 Oct 2022 13:55:56 +0200
 MIME-Version: 1.0
-References: <20221019220242.4746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221019220242.4746-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221021020500.GA2157489-robh@kernel.org> <CA+V-a8v0jEFj+XKAtyAaTBFmX3bObBZgGd6n1LB3OnTU_W002w@mail.gmail.com>
- <Y1Md4bMYJHI34HuJ@spud>
-In-Reply-To: <Y1Md4bMYJHI34HuJ@spud>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 24 Oct 2022 12:55:00 +0100
-Message-ID: <CA+V-a8vA_ZbV+SEy8Ch8ZuYAb+U37CtC8Ys=svMv7fjy79mR=A@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/2] soc: renesas: Add L2 cache management for
- RZ/Five SoC
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
+Content-Language: en-US
+To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+References: <20221022214622.18042-1-ogabbay@kernel.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221022214622.18042-1-ogabbay@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------76aPfJh2VVAwv6Ip0RET7ACr"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------76aPfJh2VVAwv6Ip0RET7ACr
+Content-Type: multipart/mixed; boundary="------------09mWeBzGlwIlNwaqtclMmriZ";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Jason Gunthorpe <jgg@nvidia.com>, John Hubbard <jhubbard@nvidia.com>,
+ Alex Deucher <alexander.deucher@amd.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>,
+ Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>, Jiho Chu
+ <jiho.chu@samsung.com>, Daniel Stone <daniel@fooishbar.org>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ Jeffrey Hugo <quic_jhugo@quicinc.com>, Christoph Hellwig
+ <hch@infradead.org>, Kevin Hilman <khilman@baylibre.com>,
+ Jagan Teki <jagan@amarulasolutions.com>,
+ Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+ Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+Message-ID: <af4c71cb-be60-e354-ca4f-23e834aca6e1@suse.de>
+Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
+References: <20221022214622.18042-1-ogabbay@kernel.org>
+In-Reply-To: <20221022214622.18042-1-ogabbay@kernel.org>
 
-On Fri, Oct 21, 2022 at 11:32 PM Conor Dooley <conor@kernel.org> wrote:
->
-> On Fri, Oct 21, 2022 at 11:05:40PM +0100, Lad, Prabhakar wrote:
-> > Hi Rob,
-> >
-> > Thank you for the review.
-> >
-> > On Fri, Oct 21, 2022 at 3:05 AM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Wed, Oct 19, 2022 at 11:02:42PM +0100, Prabhakar wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > On the AX45MP core, cache coherency is a specification option so it may
-> > > > not be supported. In this case DMA will fail. As a workaround, firstly we
-> > > > allocate a global dma coherent pool from which DMA allocations are taken
-> > > > and marked as non-cacheable + bufferable using the PMA region as specified
-> > > > in the device tree. Synchronization callbacks are implemented to
-> > > > synchronize when doing DMA transactions.
-> > > >
-> > > > The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
-> > > > block that allows dynamic adjustment of memory attributes in the runtime.
-> > > > It contains a configurable amount of PMA entries implemented as CSR
-> > > > registers to control the attributes of memory locations in interest.
-> > > >
-> > > > Below are the memory attributes supported:
-> > > > * Device, Non-bufferable
-> > > > * Device, bufferable
-> > > > * Memory, Non-cacheable, Non-bufferable
-> > > > * Memory, Non-cacheable, Bufferable
-> > > > * Memory, Write-back, No-allocate
-> > > > * Memory, Write-back, Read-allocate
-> > > > * Memory, Write-back, Write-allocate
-> > > > * Memory, Write-back, Read and Write-allocate
-> > > >
-> > > > This patch adds support to configure the memory attributes of the memory
-> > > > regions as passed from the l2 cache node and exposes the cache management
-> > > > ops.
-> > > >
-> > > > More info about PMA (section 10.3):
-> > > > http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
-> > > >
-> > > > This feature is based on the work posted [0] by Vincent Chen
-> > > > <vincentc@andestech.com> for the Andes AndeStart RISC-V CPU.
-> > > >
-> > > > [0] https://lore.kernel.org/lkml/1540982130-28248-1-git-send-email-vincentc@andestech.com/
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > ---
-> > > >  arch/riscv/include/asm/cacheflush.h    |   8 +
-> > > >  arch/riscv/include/asm/errata_list.h   |   2 +
-> > > >  arch/riscv/mm/dma-noncoherent.c        |  20 ++
-> > > >  drivers/soc/renesas/Kconfig            |   5 +
-> > > >  drivers/soc/renesas/Makefile           |   4 +
-> > > >  drivers/soc/renesas/rzf/Kconfig        |   6 +
-> > > >  drivers/soc/renesas/rzf/Makefile       |   3 +
-> > > >  drivers/soc/renesas/rzf/ax45mp_cache.c | 431 +++++++++++++++++++++++++
-> > >
-> > > How many cache drivers do we have around now? I've seen a few bindings
-> > > go by. I'm guessing it is time to stop putting the drivers in the
-> > > drivers/soc/ dumping ground.
-> > >
-> > The main reason this driver is not in arch/riscv is that it has vendor
-> > specific extensions. Due to this reason it was agreed during the LPC
-> > that vendor specific extension should be maintained by SoC vendors and
-> > was agreed that this can go into drivers/soc/renesas folder instead.
->
-> Does not in drivers/soc mean they need to go into arch/riscv?
-I was under the impression Rob wanted them arch/riscv, sorry for the confusion.
+--------------09mWeBzGlwIlNwaqtclMmriZ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> The outcome of the chat at the LPC BoF was more that the cache drivers
-> themselves should not be be routed via the arch maintainers, no?
->
-Indeed.
+SGkNCg0KQW0gMjIuMTAuMjIgdW0gMjM6NDYgc2NocmllYiBPZGVkIEdhYmJheToNCj4gSW4g
+dGhlIGxhc3QgY291cGxlIG9mIG1vbnRocyB3ZSBoYWQgYSBkaXNjdXNzaW9uIFsxXSBhYm91
+dCBjcmVhdGluZyBhIG5ldw0KPiBzdWJzeXN0ZW0gZm9yIGNvbXB1dGUgYWNjZWxlcmF0b3Ig
+ZGV2aWNlcyBpbiB0aGUga2VybmVsLg0KPiANCj4gQWZ0ZXIgYW4gYW5hbHlzaXMgdGhhdCB3
+YXMgZG9uZSBieSBEUk0gbWFpbnRhaW5lcnMgYW5kIG15c2VsZiwgYW5kIGZvbGxvd2luZw0K
+PiBhIEJPRiBzZXNzaW9uIGF0IHRoZSBMaW51eCBQbHVtYmVycyBjb25mZXJlbmNlIGEgZmV3
+IHdlZWtzIGFnbyBbMl0sIHdlDQo+IGRlY2lkZWQgdG8gY3JlYXRlIGEgbmV3IHN1YnN5c3Rl
+bSB0aGF0IHdpbGwgdXNlIHRoZSBEUk0gc3Vic3lzdGVtJ3MgY29kZSBhbmQNCj4gZnVuY3Rp
+b25hbGl0eS4gaS5lLiB0aGUgYWNjZWwgY29yZSBjb2RlIHdpbGwgYmUgcGFydCBvZiB0aGUg
+RFJNIHN1YnN5c3RlbS4NCj4gDQo+IFRoaXMgd2lsbCBhbGxvdyB1cyB0byBsZXZlcmFnZSB0
+aGUgZXh0ZW5zaXZlIERSTSBjb2RlLWJhc2UgYW5kDQo+IGNvbGxhYm9yYXRlIHdpdGggRFJN
+IGRldmVsb3BlcnMgdGhhdCBoYXZlIGV4cGVyaWVuY2Ugd2l0aCB0aGlzIHR5cGUgb2YNCj4g
+ZGV2aWNlcy4gSW4gYWRkaXRpb24sIG5ldyBmZWF0dXJlcyB0aGF0IHdpbGwgYmUgYWRkZWQg
+Zm9yIHRoZSBhY2NlbGVyYXRvcg0KPiBkcml2ZXJzIGNhbiBiZSBvZiB1c2UgdG8gR1BVIGRy
+aXZlcnMgYXMgd2VsbCAoZS5nLiBSQVMpLg0KPiANCj4gQXMgYWdyZWVkIGluIHRoZSBCT0Yg
+c2Vzc2lvbiwgdGhlIGFjY2VsZXJhdG9yIGRldmljZXMgd2lsbCBiZSBleHBvc2VkIHRvDQo+
+IHVzZXItc3BhY2Ugd2l0aCBhIG5ldywgZGVkaWNhdGVkIGRldmljZSBjaGFyIGZpbGVzIGFu
+ZCBhIGRlZGljYXRlZCBtYWpvcg0KPiBudW1iZXIgKDI2MSksIHRvIGNsZWFybHkgc2VwYXJh
+dGUgdGhlbSBmcm9tIGdyYXBoaWMgY2FyZHMgYW5kIHRoZSBncmFwaGljDQo+IHVzZXItc3Bh
+Y2Ugcy93IHN0YWNrLiBGdXJ0aGVybW9yZSwgdGhlIGRyaXZlcnMgd2lsbCBiZSBsb2NhdGVk
+IGluIGEgc2VwYXJhdGUNCj4gcGxhY2UgaW4gdGhlIGtlcm5lbCB0cmVlIChkcml2ZXJzL2Fj
+Y2VsLykuDQo+IA0KPiBUaGlzIHNlcmllcyBvZiBwYXRjaGVzIGlzIHRoZSBmaXJzdCBzdGVw
+IGluIHRoaXMgZGlyZWN0aW9uIGFzIGl0IGFkZHMgdGhlDQo+IG5lY2Vzc2FyeSBpbmZyYXN0
+cnVjdHVyZSBmb3IgYWNjZWxlcmF0b3IgZGV2aWNlcyB0byBEUk0uIFRoZSBuZXcgZGV2aWNl
+cyB3aWxsDQo+IGJlIGV4cG9zZWQgd2l0aCB0aGUgZm9sbG93aW5nIGNvbnZlbnRpb246DQo+
+IA0KPiBkZXZpY2UgY2hhciBmaWxlcyAtIC9kZXYvYWNjZWwvYWNjZWwqDQo+IHN5c2ZzICAg
+ICAgICAgICAgIC0gL3N5cy9jbGFzcy9hY2NlbC9hY2NlbCovDQo+IGRlYnVnZnMgICAgICAg
+ICAgIC0gL3N5cy9rZXJuZWwvZGVidWcvYWNjZWwvYWNjZWwqLw0KDQpJIGtub3cgSSdtIHJl
+YWxseSBsYXRlIHRvIHRoaXMgZGlzY3Vzc2lvbiwgYnV0IHdvdWxkbid0ICdjb21wdXRlJyBi
+ZSBhIA0KYmV0dGVyIG5hbWU/DQoNCihJIGFncmVlIHRoYXQgc2t5bmV0IHdvdWxkIGFsc28g
+YmUgbmljZSA6KQ0KDQo+IA0KPiBJIHRyaWVkIHRvIHJldXNlIHRoZSBleGlzdGluZyBEUk0g
+Y29kZSBhcyBtdWNoIGFzIHBvc3NpYmxlLCB3aGlsZSBrZWVwaW5nIGl0DQo+IHJlYWRhYmxl
+IGFuZCBtYWludGFpbmFibGUuDQo+IA0KPiBPbmUgdGhpbmcgdGhhdCBpcyBtaXNzaW5nIGZy
+b20gdGhpcyBzZXJpZXMgaXMgZGVmaW5pbmcgYSBuYW1lc3BhY2UgZm9yIHRoZQ0KPiBuZXcg
+YWNjZWwgc3Vic3lzdGVtLCB3aGlsZSBJJ2xsIGFkZCBpbiB0aGUgbmV4dCBpdGVyYXRpb24g
+b2YgdGhpcyBwYXRjaC1zZXQsDQo+IGFmdGVyIEkgd2lsbCByZWNlaXZlIGZlZWRiYWNrIGZy
+b20gdGhlIGNvbW11bml0eS4NCj4gDQo+IEFzIGZvciBkcml2ZXJzLCBvbmNlIHRoaXMgc2Vy
+aWVzIHdpbGwgYmUgYWNjZXB0ZWQgKGFmdGVyIGFkZGluZyB0aGUgbmFtZXNwYWNlKSwNCj4g
+SSB3aWxsIHN0YXJ0IHdvcmtpbmcgb24gbWlncmF0aW5nIHRoZSBoYWJhbmFsYWJzIGRyaXZl
+ciB0byB0aGUgbmV3IGFjY2VsDQo+IHN1YnN5c3RlbS4gSSBoYXZlIHRhbGtlZCBhYm91dCBp
+dCB3aXRoIERhdmUgYW5kIHdlIGFncmVlZCB0aGF0IGl0IHdpbGwgYmUNCj4gYSBnb29kIHN0
+YXJ0IHRvIHNpbXBseSBtb3ZlIHRoZSBkcml2ZXIgYXMtaXMgd2l0aCBtaW5pbWFsIGNoYW5n
+ZXMsIGFuZCB0aGVuDQo+IHN0YXJ0IHdvcmtpbmcgb24gdGhlIGRyaXZlcidzIGluZGl2aWR1
+YWwgZmVhdHVyZXMgdGhhdCB3aWxsIGJlIGVpdGhlciBhZGRlZA0KPiB0byB0aGUgYWNjZWwg
+Y29yZSBjb2RlICh3aXRoIG9yIHdpdGhvdXQgY2hhbmdlcyksIG9yIHdpbGwgYmUgcmVtb3Zl
+ZCBhbmQNCj4gaW5zdGVhZCB0aGUgZHJpdmVyIHdpbGwgdXNlIGV4aXN0aW5nIERSTSBjb2Rl
+Lg0KDQpXaGF0J3MgeW91ciBvcGluaW9uIG9uIHRoZSBsb25nLXRlcm0gcHJvc3BlY3Qgb2Yg
+RFJNIHZzIGFjY2VsPyBJIGFzc3VtZSANCnRoYXQgb3ZlciB0aW1lLCBEUk0gaGVscGVycyB3
+aWxsIG1vdmUgaW50byBhY2NlbCBhbmQgc29tZSBEUk0gZHJpdmVycyANCndpbGwgc3RhcnQg
+ZGVwZW5kaW5nIG9uIGFjY2VsPw0KDQpBZnRlciByZWFkaW5nIHRoZSBwcm92aWRlZCBsaW5r
+cywgSSB3b25kZXJlZCBpZiB3ZSBzaG91bGRuJ3QgcmVuYW1lIA0KZHJpdmVycy9ncHUgdG8g
+ZHJpdmVycy9hY2NlbCBhbmQgcHV0IHRoZSBuZXcgc3Vic3lzdGVtIGludG8gDQpkcml2ZXJz
+L2FjY2VsL2NvbXB1dGUuIFdlJ2QgaGF2ZSBEUk0gYW5kIGNvbXB1dGUgZGV2aWNlcyBuZXh0
+IHRvIGVhY2ggDQpvdGhlciBhbmQgc2hhcmVkIGhlbHBlcnMgY291bGQgYmUgbG9jYXRlZCBp
+biBvdGhlciBzdWJkaXJlY3RvcmllcyB3aXRoaW4gDQphY2NlbC8NCg0KQmVzdCByZWdhcmRz
+DQpUaG9tYXMNCg0KPiANCj4gSW4gYWRkaXRpb24sIEkga25vdyBvZiBhdCBsZWFzdCAzIG9y
+IDQgZHJpdmVycyB0aGF0IHdlcmUgc3VibWl0dGVkIGZvciByZXZpZXcNCj4gYW5kIGFyZSBn
+b29kIGNhbmRpZGF0ZXMgdG8gYmUgaW5jbHVkZWQgaW4gdGhpcyBuZXcgc3Vic3lzdGVtLCBp
+bnN0ZWFkIG9mIGJlaW5nDQo+IGEgZHJtIHJlbmRlciBub2RlIGRyaXZlciBvciBhIG1pc2Mg
+ZHJpdmVyLg0KPiANCj4gWzFdIGh0dHBzOi8vbGttbC5vcmcvbGttbC8yMDIyLzcvMzEvODMN
+Cj4gWzJdIGh0dHBzOi8vYWlybGllZC5ibG9nc3BvdC5jb20vMjAyMi8wOS9hY2NlbGVyYXRv
+cnMtYm9mLW91dGNvbWVzLXN1bW1hcnkuaHRtbA0KPiANCj4gVGhhbmtzLA0KPiBPZGVkDQo+
+IA0KPiBPZGVkIEdhYmJheSAoMyk6DQo+ICAgIGRyaXZlcnMvYWNjZWw6IGFkZCBuZXcga2Nv
+bmZpZyBhbmQgdXBkYXRlIE1BSU5UQUlORVJTDQo+ICAgIGRybTogZGVmaW5lIG5ldyBhY2Nl
+bCBtYWpvciBhbmQgcmVnaXN0ZXIgaXQNCj4gICAgZHJtOiBhZGQgZGVkaWNhdGVkIG1pbm9y
+IGZvciBhY2NlbGVyYXRvciBkZXZpY2VzDQo+IA0KPiAgIERvY3VtZW50YXRpb24vYWRtaW4t
+Z3VpZGUvZGV2aWNlcy50eHQgfCAgIDUgKw0KPiAgIE1BSU5UQUlORVJTICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgIDggKw0KPiAgIGRyaXZlcnMvS2NvbmZpZyAgICAgICAgICAg
+ICAgICAgICAgICAgfCAgIDIgKw0KPiAgIGRyaXZlcnMvYWNjZWwvS2NvbmZpZyAgICAgICAg
+ICAgICAgICAgfCAgMjQgKysrDQo+ICAgZHJpdmVycy9ncHUvZHJtL2RybV9kcnYuYyAgICAg
+ICAgICAgICB8IDIxNCArKysrKysrKysrKysrKysrKysrKystLS0tLQ0KPiAgIGRyaXZlcnMv
+Z3B1L2RybS9kcm1fZmlsZS5jICAgICAgICAgICAgfCAgNjkgKysrKysrLS0tDQo+ICAgZHJp
+dmVycy9ncHUvZHJtL2RybV9pbnRlcm5hbC5oICAgICAgICB8ICAgNSArLQ0KPiAgIGRyaXZl
+cnMvZ3B1L2RybS9kcm1fc3lzZnMuYyAgICAgICAgICAgfCAgODEgKysrKysrKysrLQ0KPiAg
+IGluY2x1ZGUvZHJtL2RybV9kZXZpY2UuaCAgICAgICAgICAgICAgfCAgIDMgKw0KPiAgIGlu
+Y2x1ZGUvZHJtL2RybV9kcnYuaCAgICAgICAgICAgICAgICAgfCAgIDggKw0KPiAgIGluY2x1
+ZGUvZHJtL2RybV9maWxlLmggICAgICAgICAgICAgICAgfCAgMjEgKystDQo+ICAgaW5jbHVk
+ZS9kcm0vZHJtX2lvY3RsLmggICAgICAgICAgICAgICB8ICAgMSArDQo+ICAgMTIgZmlsZXMg
+Y2hhbmdlZCwgMzc0IGluc2VydGlvbnMoKyksIDY3IGRlbGV0aW9ucygtKQ0KPiAgIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2FjY2VsL0tjb25maWcNCj4gDQo+IC0tDQo+IDIuMzQu
+MQ0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVs
+b3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3Ry
+LiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVy
+ZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-> >
-> > > >  drivers/soc/renesas/rzf/ax45mp_sbi.h   |  29 ++
-> > > >  9 files changed, 508 insertions(+)
-> > > >  create mode 100644 drivers/soc/renesas/rzf/Kconfig
-> > > >  create mode 100644 drivers/soc/renesas/rzf/Makefile
-> > > >  create mode 100644 drivers/soc/renesas/rzf/ax45mp_cache.c
-> > > >  create mode 100644 drivers/soc/renesas/rzf/ax45mp_sbi.h
-> > > >
-> > > > diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> > > > index 8a5c246b0a21..40aa790be9a3 100644
-> > > > --- a/arch/riscv/include/asm/cacheflush.h
-> > > > +++ b/arch/riscv/include/asm/cacheflush.h
-> > > > @@ -65,6 +65,14 @@ static inline void riscv_noncoherent_supported(void) {}
-> > > >  #define SYS_RISCV_FLUSH_ICACHE_LOCAL 1UL
-> > > >  #define SYS_RISCV_FLUSH_ICACHE_ALL   (SYS_RISCV_FLUSH_ICACHE_LOCAL)
-> > > >
-> > > > +#ifdef CONFIG_AX45MP_L2_CACHE
-> > > > +void ax45mp_cpu_dma_inval_range(void *vaddr, size_t end);
-> > > > +void ax45mp_cpu_dma_wb_range(void *vaddr, size_t end);
-> > > > +
-> > > > +#define ALT_CMO_OP(_op, _start, _size, _cachesize)   \
-> > > > +                _op(_start, _size)
-> > > > +#endif
-> > > > +
-> > > >  #include <asm-generic/cacheflush.h>
-> > > >
-> > > >  #endif /* _ASM_RISCV_CACHEFLUSH_H */
-> > > > diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
-> > > > index 19a771085781..d9cbf60c3b65 100644
-> > > > --- a/arch/riscv/include/asm/errata_list.h
-> > > > +++ b/arch/riscv/include/asm/errata_list.h
-> > > > @@ -89,6 +89,7 @@ asm volatile(ALTERNATIVE(                                           \
-> > > >  #define ALT_THEAD_PMA(_val)
-> > > >  #endif
-> > > >
-> > > > +#ifdef CONFIG_ERRATA_THEAD_CMO
-> > > >  /*
-> > > >   * dcache.ipa rs1 (invalidate, physical address)
-> > > >   * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > > > @@ -143,5 +144,6 @@ asm volatile(ALTERNATIVE_2(                                               \
-> > > >       : "a0")
-> > > >
-> > > >  #endif /* __ASSEMBLY__ */
-> > > > +#endif
-> > > >
-> > > >  #endif
-> > > > diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-> > > > index b0add983530a..5270acca6766 100644
-> > > > --- a/arch/riscv/mm/dma-noncoherent.c
-> > > > +++ b/arch/riscv/mm/dma-noncoherent.c
-> > > > @@ -24,13 +24,25 @@ void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-> > > >
-> > > >       switch (dir) {
-> > > >       case DMA_TO_DEVICE:
-> > > > +#ifdef CONFIG_ERRATA_THEAD_CMO
-> > > >               ALT_CMO_OP(clean, vaddr, size, riscv_cbom_block_size);
-> > > > +#elif CONFIG_AX45MP_L2_CACHE
-> > > > +             ALT_CMO_OP(ax45mp_cpu_dma_wb_range, vaddr, size, 0x0);
-> > > > +#endif
-> > >
-> > > How do you support more than one platform in a build?
-> > >
-> > Yes, that's one concern which I have mentioned in the cover letter too
-> > (At that moment it's just a single platform). Suggestions welcome!
->
-> I think I said it on one of the earlier version, but it needs to be
-> implemented w/ runtime patching via alternatives just like the thead
-> stuff patches in their functions.
->
-I'm a bit stumped with alternatives() usage.
+--------------09mWeBzGlwIlNwaqtclMmriZ--
 
-Currently I am just replacing the ALT_CMO_OP() macro if
-CONFIG_AX45MP_L2_CACHE is enabled. For AX45MP currently we have two
-exported functions ax45mp_cpu_dma_inval_range/ax45mp_cpu_dma_wb_range.
-If I switch to
-ALTERNATIVE() macro usage then I'll have to use the assembly version
-of the above two mentioned functions?
+--------------76aPfJh2VVAwv6Ip0RET7ACr
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Cheers,
-Prabhakar
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNWfUwFAwAAAAAACgkQlh/E3EQov+Bd
+HxAAl/5K+GslyJ0nydGqq9cuuXwXOpe68zzie1S1JIojDbG0HuiYEe6eJW9BlhySLNl+blqtlnrY
+1k+Lm2mqzqaL/p7fOmA0JRQ5hcJyCsqpFbg4kIn54F/YeYCZAhK+YQX5639v+uTjPGvBiq4TKzNi
+5RAGWjQepEso/nwH7+CA6v0bk5ScF8VQdAYE3H/okVMBStfrQa439wigzTw9dVWQDWonpUqV9Oy/
+xCpE7KBbLPmQrC0QaAZd9oS9zWJ/zLh/7IgXATVh8WsJEf6vdeLliUp6GznPvqdrzIfcNQIBtUQd
+J6r6GfKjuNSHnKM8uV6BOX25CmBgg5ioQNPwCIw34Rr8XDgY0BTa+eex95hD6USh7QzWC19Xoksr
+x6HcD9ulpgi/H9F2FmmPdfoCRseKXKYbTimL6gvJG2u0f+4XKB4ZNPaGg7ct/JJd8a+J/0dbLK2W
+nxbjI7UcakK2biULNis+6p3y01YcaDVwQYuXgqM/o9u7jmN7/LK+V/8yW3KIq2ubFFMoBbP23gCh
+V1fVbPpV0fuOJ9u9IRHNon9wyCNDKLDOWD4eWEcpB0XqnIPy2QCzZihvk3JQGgHx8kZgk3W0mGPz
+C4bZUFDgtoyFmzS20n69SEtPv+lDZ6iUj6MdcV8ikd7wGs3CuazbVoPeydfm9bOMnmynuCLcS2Y3
+1iU=
+=Fis9
+-----END PGP SIGNATURE-----
+
+--------------76aPfJh2VVAwv6Ip0RET7ACr--
