@@ -2,373 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63248609949
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 06:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE73560994B
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 06:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJXEku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 00:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S230126AbiJXEk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 00:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiJXEk1 (ORCPT
+        with ESMTP id S230119AbiJXEkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 00:40:27 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6713AB20;
-        Sun, 23 Oct 2022 21:40:06 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id B2621424B9;
-        Mon, 24 Oct 2022 04:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1666586405; bh=E4VzSpZFeNA5d/uDXozYlW93u8ZNKpH+5o1ytjh8lo0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=k4/9da3phZ0pUF289YlBI/t1+9dfx4Po4asOkUORSBhIji4r1DW587XmBYCBe72VE
-         fHrBAkPKMeOON8WjZd/mAT3ZpRMRiOhOraEapjOE/pBex9yjaRLHvAV9oWYQ8o2JB0
-         T3G0eQXekJ15UfpFyQ+Z+E0USw7lfbpujhvzHDW59/WpX3oFI+qYI4lsMlkWz16/tE
-         rAF7njHB2iMe2wWpvq8W7P72fodL79NmUNZQ/SLGJGgMGea8h14hd4LvcLxcA8JRtQ
-         Ds1N9kVVtJ56AyaCaDP75s8LKxFbWHzix1wOmyuWMX6eWMIolfP1sO46ZPNHQmAM4A
-         ev3s1cjPfNv6w==
-From:   Hector Martin <marcan@marcan.st>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] arm64: dts: apple: Add CPU topology & cpufreq nodes for t8103
-Date:   Mon, 24 Oct 2022 13:39:25 +0900
-Message-Id: <20221024043925.25379-6-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221024043925.25379-1-marcan@marcan.st>
-References: <20221024043925.25379-1-marcan@marcan.st>
+        Mon, 24 Oct 2022 00:40:40 -0400
+Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2134.outbound.protection.outlook.com [40.107.135.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845264C018;
+        Sun, 23 Oct 2022 21:40:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SyUdFMwjcp9TYuo7cd5Vk85C4UtpkhPhKrmQ/ipdIpXisGrtHF50FmFawcP9Qy0s1pEfNqsT5GPjZ+weETm9ne2tYYNFz+y44qsASR59zXw7FUhC/oSo8ESusgaSPy62MoOn5eCatxatSSe+iwGixG9RPtfoPgcl4DbkorHcGCXD0zc1pa5ZYg0opWkWkKdI6zJv6UXlfIK4R9tWvNhlO86oh6VU3scb4Wub/hw6CgN7pkBUy5pkCEIwcQgT+iWjkY19zO39coM0b7PEreN1zE0aQZaBPd73Qz+sDsYifwdF29n3fB+DfrnCkljNB24MHGiiKvIkl1ll+4wcdWUPtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=t0PoV6jKiO3XJdvnSEjjiWYcPFGiRO5b7Pl0hdmSr1M=;
+ b=cBnIrYkp/SBWf+3MPFV54tAnsCucsYb4/ctNU/Ae5kDK3/+ztUoju7fhbQq1e7ddgeZerf97Xhjs5qgap4J/BLj/FWxlVm3blQCqKPHD2fH9NrawSHUKiEWLsbbnG+SeCTAdhbs2zCXJAKzN6WvfbX0Y6eyzdUN8u4e3elQ9wEQWGZrFZ9Ps/v0ga+BfS0UCte9eOCz/uCxOIR/b2Ez9lyk12hOEepUhpH/ILOTW/SIKfRDWPzNhKi89Ao8Uplu9eIUpMMZwJ4/tkG7Kg5+zbVKay1QuJp2J4sVW5h/M44LcmkGn5jDCubf8URpsV6vm4NbYpJdsPnBntVIWfjOQ9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fi.rohmeurope.com; dmarc=pass action=none
+ header.from=fi.rohmeurope.com; dkim=pass header.d=fi.rohmeurope.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rohmsemiconductor.onmicrosoft.com;
+ s=selector2-rohmsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t0PoV6jKiO3XJdvnSEjjiWYcPFGiRO5b7Pl0hdmSr1M=;
+ b=uXTsagmk+6+7+SqUDETJkAa767xbTE6vZcadDGqr7dLkOtogcyzcywk2XHOPBo8pjS4OXQmNchF1sFoAm1ytuu2MKGDRJkfBdPekp8sYSCvuKBN4cXw+NQxPFLzDKxZreohwIWDGxm77CGuKBiSRKh3KvfVUHHctWqmkG17MazY=
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:59::10)
+ by FR0P281MB2848.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:4c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Mon, 24 Oct
+ 2022 04:40:19 +0000
+Received: from BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::adc3:ee78:7f30:722]) by BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::adc3:ee78:7f30:722%4]) with mapi id 15.20.5746.023; Mon, 24 Oct 2022
+ 04:40:19 +0000
+From:   "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>
+To:     "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+CC:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
+Subject: Re: [PATCH v4 1/4] gpu: drm: meson: Use devm_regulator_*get_enable*()
+Thread-Topic: [PATCH v4 1/4] gpu: drm: meson: Use
+ devm_regulator_*get_enable*()
+Thread-Index: AQHY5U+UZr58xfb6e0C1JLs5PfsDA64Y8amAgAAHegCABAGugA==
+Date:   Mon, 24 Oct 2022 04:40:19 +0000
+Message-ID: <a7b8c10a-9789-1b7d-da42-9f2138a675b1@fi.rohmeurope.com>
+References: <cover.1666357434.git.mazziesaccount@gmail.com>
+ <c14058c4b7018556a78455ffef484a7ebe4d8ea2.1666357434.git.mazziesaccount@gmail.com>
+ <Y1K0h4De8UsZJE7W@pendragon.ideasonboard.com>
+ <00d90039-c38a-ad8a-80a1-5a654a528756@linaro.org>
+In-Reply-To: <00d90039-c38a-ad8a-80a1-5a654a528756@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fi.rohmeurope.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BEZP281MB2454:EE_|FR0P281MB2848:EE_
+x-ms-office365-filtering-correlation-id: f320998d-7094-4dc7-0ad4-08dab579dae5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3sRZ0fgdSgqUWSswOEmH6o4P/sch/MCippgZvCyEzusYUugSZSnZgoGifIjfBBZfdayBhXPV1Kz2GlRQDIGXJI+LLlXmLyAp3ZbX1QuXar7ajavQlIdUsHLBk4WOpoHN2tGIhiM15socYY4CStl6ASbhwNGzrN0E07KPeytL6UrXrhjOyRHx3d4fOKW3e5hhg+hUmRJgsoPSjRBbhcjdS1zLkKdOYyrHPO4LETuuszjslttWA9zgG5hNY03xzKCdiHL8HSmieduLo9MW9DlrJPbo7eVQa4cP7PIjDWr4w1f73bleq3yiam2obXuBiu0IxoSgpW3LLwp1DKvz+mdwo7QuQkCHf4ferGmZrGsDEyDAcV4nsnVgo2pliCfKF/7RifpxhmxqSt1Q2/sk+DLI1kCVJmsGWCJaBK8op/3sZgvkODCRbpqe52qtApyfblKyEfO9KAbOE5gqdMhwIBB/+IejUdB/ziwVPcN3Nan/RL8B7ETvpXUVashLkYr3EH2q8zGnBZ/LCORmLxhFII8TQ570sx7l8+hb3WtNb/vSD6W6dWnX/aAD13cduvE6jUCisFqrkLGUm3ndoRpYKMdNe7ltMJaN7OSdbC0gB7rF3Nsq0lc44e9pLwl8zy+94F3XQ56TMvfgSc/KhRfRkhxa/PbYanApMvjX/YQYG+0yV38yikJxkKWASrgSPYJZHiXKxC6vkbyPuguCtzcuoapfLayjgLOBv/qGpKZXdxSGBrymeu9vbG+brYSVssS+d4bln5FKu2QpC6IHT70kF14LYd/nZMr6Y7jabItmNdM3d60UVE9v5++J3ZMijIMUq0iKpVBt596Vchb14FqelLvc+g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39830400003)(396003)(376002)(366004)(136003)(346002)(451199015)(6486002)(478600001)(86362001)(31696002)(83380400001)(71200400001)(31686004)(76116006)(64756008)(66446008)(66476007)(66556008)(53546011)(110136005)(8676002)(66946007)(91956017)(54906003)(4326008)(6506007)(8936002)(6512007)(41300700001)(7416002)(5660300002)(38100700002)(122000001)(2616005)(186003)(2906002)(316002)(38070700005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WHptdFNGMEwvS21lMEpDczNwSFU0Tm5XKzZHN1BrSVBBWXdMeGdCRzhlTVFU?=
+ =?utf-8?B?TWhTOTFDSFlVTitQSmpNWENrZ1J0TWVwRkc3ZHl0Q0x3YmdKcjE5b1UzNHNv?=
+ =?utf-8?B?WVBLcmRCcDQzR05NWUR2UmhhN3pUVzR6a3ZNdDVhYWJpMWk0OGNLMi9kZUJ3?=
+ =?utf-8?B?ZGp2Z01CdFBMQ1hpa0U0WmU0QUpRalh5d002UmVzZFVzNHlCcFB5NHVTRHFC?=
+ =?utf-8?B?MWJYUDN4MUFJQUZDdjNZS3NPQkFEY3VHWXFHNEs3TFRPSEZZNk5KalhaeFhu?=
+ =?utf-8?B?TGZwM1AydzdYaDdjb2twd2t4WTJkUStGUUlibEZrM1ZEdzE2d2J2ZEtIdWFq?=
+ =?utf-8?B?S3V2WXBsTTNsQ09oTngzTGg4QVFYbm0zQlRlZGRZUGRKaEFHdWRUaGxXbnNU?=
+ =?utf-8?B?bEo2ZVlXS25SaVlCUjhhV2IxWHEyMmNocTBCZitsSC9UdzBKSmMxL1ZJYnor?=
+ =?utf-8?B?bFdaM1dmbGk3M29MNm1PTlNub1lxOTF0NXgyVVhXbkcyZ2d6M3NSYmJodGZE?=
+ =?utf-8?B?M1Zrb0FEVmt3bnZ0a21qUG1NN1d1aXhPZXpWZTRHTjNNM1NxN2Z3TDJwSTRa?=
+ =?utf-8?B?eDhEODdHbGxFMjRtdzJhTHRSUll6TytoNGI2eGMxSzMwNFJsZ3ZYcEg1amxT?=
+ =?utf-8?B?WGRyZXpkNHVuTGpUTExOTXZ0bnpENmpEV2dnQXJWRDR6TzZwaTlCbks4WUlw?=
+ =?utf-8?B?aFdEVUxObE5BSkxiZ3paazJWd1N5RWtoTHlvUk4xVzlDbnRycytvd2JiQlZi?=
+ =?utf-8?B?TVkxbDFxU0dEa2JCWi9WVHN5dkRsakE2SEFYcjZRUkY3V2pSWHV1TnBNaWJM?=
+ =?utf-8?B?dzV6Qy83alU5ZHhEQmRROU9rcVpFWjkxbkVWK1hpZW8xOEJSeUNvNkM2ZlZN?=
+ =?utf-8?B?WWw3QnNMblZCcEd1akVOaXNBR2ZhV0p2VmVZeWppa0pHTzNFbVYvMnUwWXFN?=
+ =?utf-8?B?ZklKVUd5aHU4eENtZWdlK3ZYcmVuTkdBcjQ3TXJhanhKS1BKZXluK2lxd09Z?=
+ =?utf-8?B?Sm5BZDd4VitSQXdqK3FVTno5OFdBUUk3aTY1MHBZSFk1N3dZbHU4cEdNVXZO?=
+ =?utf-8?B?QWpCS1YzWjVzQmVIWFJLVmhiY2RmcjRUcnFKRWVyNHdjY3Q1K0RKVTdvSEZY?=
+ =?utf-8?B?TnZsRm9ldlBXeE85eEt1bU1NbGNlUUNmUTVWNUtEMnR6b05SR3FBaW13VEpK?=
+ =?utf-8?B?T2JrUGF6a2w5TUlJZEdpRVdMU2k2L0F5bnp1dWYwcTRkRURFSTVLNDNzV3lI?=
+ =?utf-8?B?Yjlremxqb01TZ1lXWDkvUmFmbzJGNE1KTnBVY0pabFNVRjQzUDhKOVc4WWhE?=
+ =?utf-8?B?MUY4OUlxd2pZTW5Xa3lRUms1NmRVdFBldXRkdGlqclFKYW1ZSGFnTkgwb0I1?=
+ =?utf-8?B?aUZYY3g3cmZnZHBxd01mOUcyc04zVnJTeWtlRnRSWHVxckhhNTR1ZXpxM2o4?=
+ =?utf-8?B?S3hqL0RRRlo0QTBTWkE1b0ZJYnJyZnRBL08yZjVnbHpsNVc2Vmpka2JTQXMv?=
+ =?utf-8?B?dzFGRVZxUkovSm43NU9CUW52enRtRmUxTGNjMDN1dzFJUThjdzNZRCt4Tm5L?=
+ =?utf-8?B?dUdheWZiekQxN21EOFdlQzFhcnYrUTMvNXJ5czRmdDlQQkQ2OFhia3JvSzBR?=
+ =?utf-8?B?RmNpNmxPRmNMYVQyR2lrS283QjZKZHNqS1NVallWR01lR282TUR2dkNKNmxs?=
+ =?utf-8?B?MTJNMlFyRmVEQ1p6OVJVRlJncG1wTHQwUzZOblB0bzArMGpzUGZMTlMyc2lq?=
+ =?utf-8?B?dWkzTVFhZzgrQm5YZ0ZwaXNrRmE3V3cyb21kaS9pNGs2UEk1UlVaZTZLOFJq?=
+ =?utf-8?B?MXZlNUEzaTlRc1h6aXRvNnJ2VVlTZGN2WUdkSE40dkxUTnNKTE5JeFBLdUY0?=
+ =?utf-8?B?M29ieVM3c084dFNKRzVxblM1NXhpZzNCMVZ4ZEJtdEJYbi9UWnIwYzNaVGY5?=
+ =?utf-8?B?S0pIa1hiTVF2Z2V1eUdtN1lrSEZaVHJnQU5meTIzNEtCallzYXBCeFFQM3kw?=
+ =?utf-8?B?SmJDTWtiVk9ueWFYN3ZTaTRGenVzU3lGYXB1R25TOWhpN1FOaUk0QVFSenM2?=
+ =?utf-8?B?Uk56enBmVVQyMXpPd1VlMlQvb0x5eEZ1OS9LbUVkVGluaHNMU2dCazcyMURP?=
+ =?utf-8?B?VzQ1a2FjclozTUY0cnZFWlVFV3FsSStDOVg2NEJkU1ZBaWZOTlNxSU1BZld4?=
+ =?utf-8?Q?rmmsUwRyH92YYrgQPBqhJIc=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F77AE48AE4F76A42AD1E12B494156B48@DEUP281.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: fi.rohmeurope.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BEZP281MB2454.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: f320998d-7094-4dc7-0ad4-08dab579dae5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2022 04:40:19.3835
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b24d4f96-5b40-44b1-ac2e-2ed7fdbde1c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zsLZUprmMPEJo6HAt9BTKGY5YhYJrQy7tcvcGPlmDvDVeVKXLZ/eF44TplyIoxav7SaeghG3qJRuwLh4pcS1+akBOMrM/eJag/tRiVkGmCNhOBU8RkxSjnMscUJuDOri
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR0P281MB2848
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing CPU topology/capacity information and the cpufreq nodes,
-so we can have CPU frequency scaling and the scheduler has the
-information it needs to make the correct decisions.
-
-Boost states are commented out, as they are not yet available (that
-requires CPU deep sleep support, to be eventually done via PSCI).
-The driver supports them fine; the hardware will just refuse to ever
-go into them at this time, so don't expose them to users until that's
-done.
-
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- arch/arm64/boot/dts/apple/t8103.dtsi | 206 +++++++++++++++++++++++++--
- 1 file changed, 196 insertions(+), 10 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 51a63b29d404..055e395ee88d 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -22,71 +22,245 @@ cpus {
- 		#address-cells = <2>;
- 		#size-cells = <0>;
- 
--		cpu0: cpu@0 {
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu_e0>;
-+				};
-+				core1 {
-+					cpu = <&cpu_e1>;
-+				};
-+				core2 {
-+					cpu = <&cpu_e2>;
-+				};
-+				core3 {
-+					cpu = <&cpu_e3>;
-+				};
-+			};
-+
-+			cluster1 {
-+				core0 {
-+					cpu = <&cpu_p0>;
-+				};
-+				core1 {
-+					cpu = <&cpu_p1>;
-+				};
-+				core2 {
-+					cpu = <&cpu_p2>;
-+				};
-+				core3 {
-+					cpu = <&cpu_p3>;
-+				};
-+			};
-+		};
-+
-+		cpu_e0: cpu@0 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x0>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu1: cpu@1 {
-+		cpu_e1: cpu@1 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x1>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu2: cpu@2 {
-+		cpu_e2: cpu@2 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x2>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu3: cpu@3 {
-+		cpu_e3: cpu@3 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x3>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu4: cpu@10100 {
-+		cpu_p0: cpu@10100 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10100>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu5: cpu@10101 {
-+		cpu_p1: cpu@10101 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10101>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu6: cpu@10102 {
-+		cpu_p2: cpu@10102 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10102>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu7: cpu@10103 {
-+		cpu_p3: cpu@10103 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10103>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 	};
- 
-+	ecluster_opp: opp-table-0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp01 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-level = <1>;
-+			clock-latency-ns = <7500>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <972000000>;
-+			opp-level = <2>;
-+			clock-latency-ns = <22000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1332000000>;
-+			opp-level = <3>;
-+			clock-latency-ns = <27000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1704000000>;
-+			opp-level = <4>;
-+			clock-latency-ns = <33000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <2064000000>;
-+			opp-level = <5>;
-+			clock-latency-ns = <50000>;
-+		};
-+	};
-+
-+	pcluster_opp: opp-table-1 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp01 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-level = <1>;
-+			clock-latency-ns = <8000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <828000000>;
-+			opp-level = <2>;
-+			clock-latency-ns = <19000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1056000000>;
-+			opp-level = <3>;
-+			clock-latency-ns = <21000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1284000000>;
-+			opp-level = <4>;
-+			clock-latency-ns = <23000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <1500000000>;
-+			opp-level = <5>;
-+			clock-latency-ns = <24000>;
-+		};
-+		opp06 {
-+			opp-hz = /bits/ 64 <1728000000>;
-+			opp-level = <6>;
-+			clock-latency-ns = <29000>;
-+		};
-+		opp07 {
-+			opp-hz = /bits/ 64 <1956000000>;
-+			opp-level = <7>;
-+			clock-latency-ns = <31000>;
-+		};
-+		opp08 {
-+			opp-hz = /bits/ 64 <2184000000>;
-+			opp-level = <8>;
-+			clock-latency-ns = <34000>;
-+		};
-+		opp09 {
-+			opp-hz = /bits/ 64 <2388000000>;
-+			opp-level = <9>;
-+			clock-latency-ns = <36000>;
-+		};
-+		opp10 {
-+			opp-hz = /bits/ 64 <2592000000>;
-+			opp-level = <10>;
-+			clock-latency-ns = <51000>;
-+		};
-+		opp11 {
-+			opp-hz = /bits/ 64 <2772000000>;
-+			opp-level = <11>;
-+			clock-latency-ns = <54000>;
-+		};
-+		opp12 {
-+			opp-hz = /bits/ 64 <2988000000>;
-+			opp-level = <12>;
-+			clock-latency-ns = <55000>;
-+		};
-+#if 0
-+		/* Not available until CPU deep sleep is implemented */
-+		opp13 {
-+			opp-hz = /bits/ 64 <3096000000>;
-+			opp-level = <13>;
-+			clock-latency-ns = <55000>;
-+			turbo-mode;
-+		};
-+		opp14 {
-+			opp-hz = /bits/ 64 <3144000000>;
-+			opp-level = <14>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+		opp15 {
-+			opp-hz = /bits/ 64 <3204000000>;
-+			opp-level = <15>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+#endif
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupt-parent = <&aic>;
-@@ -124,6 +298,18 @@ soc {
- 		ranges;
- 		nonposted-mmio;
- 
-+		cpufreq_e: cpufreq@210e20000 {
-+			compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+			reg = <0x2 0x10e20000 0 0x1000>;
-+			#performance-domain-cells = <0>;
-+		};
-+
-+		cpufreq_p: cpufreq@211e20000 {
-+			compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+			reg = <0x2 0x11e20000 0 0x1000>;
-+			#performance-domain-cells = <0>;
-+		};
-+
- 		i2c0: i2c@235010000 {
- 			compatible = "apple,t8103-i2c", "apple,i2c";
- 			reg = <0x2 0x35010000 0x0 0x4000>;
-@@ -229,12 +415,12 @@ aic: interrupt-controller@23b100000 {
- 			affinities {
- 				e-core-pmu-affinity {
- 					apple,fiq-index = <AIC_CPU_PMU_E>;
--					cpus = <&cpu0 &cpu1 &cpu2 &cpu3>;
-+					cpus = <&cpu_e0 &cpu_e1 &cpu_e2 &cpu_e3>;
- 				};
- 
- 				p-core-pmu-affinity {
- 					apple,fiq-index = <AIC_CPU_PMU_P>;
--					cpus = <&cpu4 &cpu5 &cpu6 &cpu7>;
-+					cpus = <&cpu_p0 &cpu_p1 &cpu_p2 &cpu_p3>;
- 				};
- 			};
- 		};
--- 
-2.35.1
-
+T24gMTAvMjEvMjIgMTg6MjksIE5laWwgQXJtc3Ryb25nIHdyb3RlOg0KPiBIaSwNCj4gDQo+IE9u
+IDIxLzEwLzIwMjIgMTc6MDIsIExhdXJlbnQgUGluY2hhcnQgd3JvdGU6DQo+PiBIaSBNYXR0aSwN
+Cj4+DQo+PiBPbiBGcmksIE9jdCAyMSwgMjAyMiBhdCAwNDoxODowMVBNICswMzAwLCBNYXR0aSBW
+YWl0dGluZW4gd3JvdGU6DQo+Pj4gU2ltcGxpZnkgdXNpbmcgdGhlIGRldm1fcmVndWxhdG9yX2dl
+dF9lbmFibGVfb3B0aW9uYWwoKS4gQWxzbyBkcm9wIHRoZQ0KPj4+IHNlZW1pbmdseSB1bnVzZWQg
+c3RydWN0IG1lbWJlciAnaGRtaV9zdXBwbHknLg0KPj4+DQo+Pj4gU2lnbmVkLW9mZi1ieTogTWF0
+dGkgVmFpdHRpbmVuIDxtYXp6aWVzYWNjb3VudEBnbWFpbC5jb20+DQo+Pj4NCj4+PiAtLS0NCj4+
+PiB2MyA9PiB2NDoNCj4+PiAtIHNwbGl0IG1lc29uIHBhcnQgdG8gb3duIHBhdGNoDQo+Pj4NCj4+
+PiBSRkN2MSA9PiB2MjoNCj4+PiAtIENoYW5nZSBhbHNvIHNpaTkwMnggdG8gdXNlIGRldm1fcmVn
+dWxhdG9yX2J1bGtfZ2V0X2VuYWJsZSgpDQo+Pj4NCj4+PiBQbGVhc2Ugbm90ZSAtIHRoaXMgaXMg
+b25seSBjb21waWxlLXRlc3RlZCBkdWUgdG8gdGhlIGxhY2sgb2YgSFcuIENhcmVmdWwNCj4+PiBy
+ZXZpZXcgYW5kIHRlc3RpbmcgaXMgX2hpZ2hseV8gYXBwcmVjaWF0ZWQuDQo+Pj4gLS0tDQoNCi8v
+U25pcA0KDQo+Pg0KPj4gQXMgbm90ZWQgaW4gdGhlIHJldmlldyBvZiB0aGUgc2VyaWVzIHRoYXQg
+aW50cm9kdWNlZA0KPj4gZGV2bV9yZWd1bGF0b3JfZ2V0X2VuYWJsZV9vcHRpb25hbCgpLCB0aGUg
+cmlnaHQgdGhpbmcgdG8gZG8gaXMgdG8NCj4+IGltcGxlbWVudCBydW50aW1lIFBNIGluIHRoaXMg
+ZHJpdmVyIHRvIGF2b2lkIHdhc3RpbmcgcG93ZXIuDQo+IA0KPiBXaGlsZSBJIGFncmVlLCBpdCdz
+IG5vdCByZWFsbHkgdGhlIHNhbWUgbGV2ZWwgb2YgZWZmb3J0IGFzIHRoaXMgcGF0Y2gNCj4gc2hv
+dWxkIGJlIGZ1bmN0aW9uYWxseSBlcXVpdmFsZW50Lg0KPiANCg0KRXhhY3RseS4gQXMgSSB3cm90
+ZSwgSSBkbyBub3QgaGF2ZSB0aGUgSFcgdG8gdGVzdCB0aGlzIGNoYW5nZS4gVGhpcyANCmludGVu
+ZHMgdG8gYnJpbmcgbm8gZnVuY3Rpb25hbCBjaGFuZ2VzLiBJdCBpcyBqdXN0IGEgbWlub3IgDQpz
+aW1wbGlmaWNhdGlvbiB3aGlsZSBhbHNvIG1ha2luZyBpdCBoYXJkZXIgdG8gY3JlYXRlIGEgYnVn
+IHdpdGggdGhlIA0KcmVndWxhdG9yIGNvbnRyb2wuIChSZWdpc3RlcmluZyB0aGUgZGV2bV9hY3Rp
+b24gYW5kIGxlYXZpbmcgdGhlIGhhbmRsZSANCnRvIHRoZSByZWd1bGF0b3IgaXMgbW9yZSBmcmFn
+aWxlIHRoYW4gdXNpbmcgdGhpcyBuZXcgQVBJIHdoaWNoIGRvZXMgbm90IA0KZ2l2ZSB1c2VyIHRo
+ZSBoYW5kbGUpLg0KDQpJIGFtIGluIG5vIHdheSBhZ2FpbnN0IHNvbWVvbmUgZnVydGhlciBpbXBy
+b3ZpbmcgdGhlIGZ1bmN0aW9uYWxpdHkgaGVyZSANCihieSBhZGRpbmcgcnVudGltZSBQTSkgYnV0
+IHRoaXMgc29tZW9uZSBpcyBub3QgbWUuIFlldCwgSSBkb24ndCBzZWUgaG93IA0KdGhpcyBwYXRj
+aCBwcmV2ZW50cyBydW50aW1lIFBNIGJlaW5nIGltcGxlbWVudGVkPyBUaGUgZmlyc3QgdGhpbmcg
+dGhhdCANCm5lZWRzIHRvIGJlIGRvbmUgaXMgcmVtb3ZpbmcgdGhlIGRldm0tYWN0aW9uIGFzc3Vt
+aW5nIHNvbWVvbmUgZGlkIA0KaW1wbGVtZW50IHBvd2VyLXNhdmluZyBieSBkaXNhYmxpbmcgdGhl
+IHJlZ3VsYXRvcihzKSBhdCBydW50aW1lLiBBZnRlciANCnRoaXMgcGF0Y2ggaXMgYXBwbGllZCwg
+dGhlIGFjdGlvbiByZW1vdmFsIGlzIGF1dG9tYXRpY2FsbHkgYSBuZWNlc3NpdHkgDQppbiBvcmRl
+ciB0byBnZXQgdGhlIGhhbmRsZSBmb3IgcmVndWxhdG9yIGNvbnRyb2wuDQoNCkkga25vdyB0aGlz
+IGhlbHBlciBpcyBub3QgcHJlZmVycmVkIGJ5IGFsbCBidXQgaXQgaXMgc3RpbGwgc2FmZXIgdGhh
+biANCnRoZSBjdXJyZW50IGNvZGUgd2hpY2ggcmVnaXN0ZXJzIHRoZSBhY3Rpb24gd2hpbGUgYWxs
+b3dpbmcgdGhlIHJlZ3VsYXRvciANCmNvbnRyb2wuDQoNCllvdXJzDQoJLS0gTWF0dGkNCg0KLS0g
+DQpNYXR0aSBWYWl0dGluZW4NCkxpbnV4IGtlcm5lbCBkZXZlbG9wZXIgYXQgUk9ITSBTZW1pY29u
+ZHVjdG9ycw0KT3VsdSBGaW5sYW5kDQoNCn5+IFdoZW4gdGhpbmdzIGdvIHV0dGVybHkgd3Jvbmcg
+dmltIHVzZXJzIGNhbiBhbHdheXMgdHlwZSA6aGVscCEgfn4NCg0K
