@@ -2,160 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425D6609D86
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B825F609D87
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 11:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbiJXJKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 05:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S230465AbiJXJK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 05:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbiJXJKI (ORCPT
+        with ESMTP id S230085AbiJXJKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 05:10:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F330419014;
-        Mon, 24 Oct 2022 02:10:00 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29O8vpjJ018829;
-        Mon, 24 Oct 2022 09:09:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=IjkjfLi1XU14Xlz7ukGA2xp5khABYjaF7J/TnLMZGQc=;
- b=DL1CzEcTE6MqbEDiLVYF6sYwJSgd7BQtk0N07w7Lerk0lGb0g1W5Q51tmBe1cITmWR7t
- uyGKQxWeuTHU+dqfUTNRT3b2ROIgkMQPMh+4UtdS2VpFcfMxUB3kvk3R79hWj7M9f5in
- Q/xDpPxqq+vMqyZ+k3IrgVJL97E/PVYwLar3Q7enxx4sS2rKeXFbQcpdCcZLSLDMEyN1
- F75fnhvIMelJPGxZ+OOD43weNiVB+j7gw5KMoF/TlnwhXoz8k8HzJRJHt584Yv36vq5/
- QTqMbvAGVM30e/9Dl6ojngX2/4UYnXSA6Fmjs4aHxiAGWxwXg6ZSmkDH+SHHPtLSdr3F 9w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kdqnb8dh3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 09:09:29 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29O8xrQg029669;
-        Mon, 24 Oct 2022 09:09:29 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kdqnb8df6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 09:09:28 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29O965sL021292;
-        Mon, 24 Oct 2022 09:09:25 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06fra.de.ibm.com with ESMTP id 3kc7sj28qr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Oct 2022 09:09:25 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29O99N8N58851746
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Oct 2022 09:09:23 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0EED1A405C;
-        Mon, 24 Oct 2022 09:09:23 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53BBAA405B;
-        Mon, 24 Oct 2022 09:09:22 +0000 (GMT)
-Received: from [9.171.39.85] (unknown [9.171.39.85])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 24 Oct 2022 09:09:22 +0000 (GMT)
-Message-ID: <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
-Date:   Mon, 24 Oct 2022 11:09:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 0/4] KVM: API to block and resume all running vcpus in a
- vm
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221022154819.1823133-1-eesposit@redhat.com>
- <a2e16531-5522-a334-40a1-2b0e17663800@linux.ibm.com>
- <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
-Content-Language: en-US
-From:   Christian Borntraeger <borntraeger@linux.ibm.com>
-In-Reply-To: <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ifE-bU5jBEt83JkRu0uesAMslef9b9oi
-X-Proofpoint-ORIG-GUID: 8qje8qsHJmLZ8XtgxrR_ejCtINonS09l
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 24 Oct 2022 05:10:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326A917AAC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 02:10:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666602613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sTEDRcmXXQS08afZGdLf2piCdEuBNuck5VCmgs8GBz4=;
+        b=HgDX15gLPZDHiJNnj33D+eYh87UMJlS+9Lls+I4b6ixZQl+JL7j99sT810j2memkb1swYN
+        Lg6iwOBNruevV1S67sCNNmpvxDNt3g6Hpf2OKlPOu9nsYXDCr2FXmjJ2X75KAusvGvVa2N
+        7ImqQOvW6MSXAMdjWr/xwp1yt2340iY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-518-baUEGjhoO-Cqkt_GTX5PwQ-1; Mon, 24 Oct 2022 05:10:06 -0400
+X-MC-Unique: baUEGjhoO-Cqkt_GTX5PwQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D876D3810D2B;
+        Mon, 24 Oct 2022 09:10:05 +0000 (UTC)
+Received: from localhost (ovpn-12-35.pek2.redhat.com [10.72.12.35])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A463E39DB3;
+        Mon, 24 Oct 2022 09:10:04 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 17:10:01 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        Sourabh Jain <sourabhjain@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v12 3/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <Y1ZWaSeGk53QqZHX@MiWiFi-R3L-srv>
+References: <20220909210509.6286-1-eric.devolder@oracle.com>
+ <20220909210509.6286-4-eric.devolder@oracle.com>
+ <8cc31b22-a061-d07c-77dc-c555b8b35af3@linux.ibm.com>
+ <97f2daae-f34a-86bb-6d28-8aa8314321bc@oracle.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-24_02,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- priorityscore=1501 clxscore=1015 bulkscore=0 malwarescore=0 spamscore=0
- adultscore=0 impostorscore=0 mlxlogscore=850 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210240057
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <97f2daae-f34a-86bb-6d28-8aa8314321bc@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Eric, Sourabh,
 
+On 10/07/22 at 02:14pm, Eric DeVolder wrote:
+> 
+> 
+> On 10/3/22 12:51, Sourabh Jain wrote:
+> > Hello Eric,
+> > 
+> > On 10/09/22 02:35, Eric DeVolder wrote:
+......
+> > > +static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+> > > +{
+> > > +    /* Obtain lock while changing crash information */
+> > > +    mutex_lock(&kexec_mutex);
+> > > +
+> > > +    /* Check kdump is loaded */
+> > > +    if (kexec_crash_image) {
+> > > +        struct kimage *image = kexec_crash_image;
+> > > +
+> > > +        if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
+> > > +            hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+> > > +            pr_debug("crash hp: hp_action %u, cpu %u\n", hp_action, cpu);
+> > > +        else
+> > > +            pr_debug("crash hp: hp_action %u\n", hp_action);
+> > > +
+> > > +        /*
+> > > +         * When the struct kimage is allocated, it is wiped to zero, so
+> > > +         * the elfcorehdr_index_valid defaults to false. Find the
+> > > +         * segment containing the elfcorehdr, if not already found.
+> > > +         * This works for both the kexec_load and kexec_file_load paths.
+> > > +         */
+> > > +        if (!image->elfcorehdr_index_valid) {
+> > > +            unsigned char *ptr;
+> > > +            unsigned long mem, memsz;
+> > > +            unsigned int n;
+> > > +
+> > > +            for (n = 0; n < image->nr_segments; n++) {
+> > > +                mem = image->segment[n].mem;
+> > > +                memsz = image->segment[n].memsz;
+> > > +                ptr = arch_map_crash_pages(mem, memsz);
+> > > +                if (ptr) {
+> > > +                    /* The segment containing elfcorehdr */
+> > > +                    if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
+> > > +                        image->elfcorehdr_index = (int)n;
+> > > +                        image->elfcorehdr_index_valid = true;
+> > > +                    }
+> > > +                }
+> > > +                arch_unmap_crash_pages((void **)&ptr);
+> > > +            }
+> > > +        }
+> > > +
+> > > +        if (!image->elfcorehdr_index_valid) {
+> > > +            pr_err("crash hp: unable to locate elfcorehdr segment");
+> > > +            goto out;
+> > > +        }
+> > > +
+> > > +        /* Needed in order for the segments to be updated */
+> > > +        arch_kexec_unprotect_crashkres();
+> > > +
+> > > +        /* Flag to differentiate between normal load and hotplug */
+> > > +        image->hotplug_event = true;
+> > > +
+> > > +        /* Now invoke arch-specific update handler */
+> > > +        arch_crash_handle_hotplug_event(image, hp_action);
+> > > +
+> > > +        /* No longer handling a hotplug event */
+> > > +        image->hotplug_event = false;
+> > > +
+> > > +        /* Change back to read-only */
+> > > +        arch_kexec_protect_crashkres();
+> > > +    }
+> > > +
+> > > +out:
+> > > +    /* Release lock now that update complete */
+> > > +    mutex_unlock(&kexec_mutex);
+> > > +}
+> > > +
+> > > +static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
+> > > +{
+> > > +    switch (val) {
+> > > +    case MEM_ONLINE:
+> > > +        handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY, 0);
+> > > +        break;
+> > > +
+> > > +    case MEM_OFFLINE:
+> > > +        handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY, 0);
+> > > +        break;
+> > > +    }
+> > > +    return NOTIFY_OK;
+> > 
+> > Can we pass v (memory_notify) argument to arch_crash_handle_hotplug_event function
+> > via handle_hotplug_event?
+> > 
+> > Because the way memory hotplug is handled on PowerPC, it is hard to update the elfcorehdr
+> > without memory_notify args.
+> > 
+> > On PowePC memblock data structure is used to prepare elfcorehdr for kdump. Since the notifier
+> > used for memory hotplug crash handler get initiated before the memblock data structure update
+> > happens (as depicted below), the newly prepared elfcorehdr still holds the old memory regions.
+> > So if the system crash with obsolete elfcorehdr, makedumpfile failed to collect vmcore.
+> > 
+> > Sequence of actions done on PowerPC to server the memory hotplug:
+> > 
+> >   Initiate memory hot remove
+> >            |
+> >            v
+> >   offline pages
+> >            |
+> >            v
+> >   initiate memory notify call chain
+> >   for MEM_OFFLINE event.
+> >   (same is used for crash update)
+> >            |
+> >            v
+> >   prepare new elfcorehdr for kdump using
+> >   memblock data structure
+> >            |
+> >            v
+> >   update memblock data structure
+> > 
+> > How passing memory_notify to arch crash hotplug handler will help?
+> > 
+> > memory_notify holds the start PFN and page count, with that we can get
+> > the base address and size of hot unplugged memory and can use the same
+> > to avoid hot unplugged memeory region to get added in the elfcorehdr..
+> > 
+> > Thanks,
+> > Sourabh Jain
+> > 
+> 
+> Sourabh, let's see what Baoquan thinks.
+> 
+> Baoquan, are you OK with this request? I once had these parameters to the
+> crash hotplug handler and since they were unused at the time, you asked
+> that I remove them, which I did.
 
-Am 24.10.22 um 10:33 schrieb Emanuele Giuseppe Esposito:
-> 
-> 
-> Am 24/10/2022 um 09:56 schrieb Christian Borntraeger:
->> Am 22.10.22 um 17:48 schrieb Emanuele Giuseppe Esposito:
->>> This new API allows the userspace to stop all running
->>> vcpus using KVM_KICK_ALL_RUNNING_VCPUS ioctl, and resume them with
->>> KVM_RESUME_ALL_KICKED_VCPUS.
->>> A "running" vcpu is a vcpu that is executing the KVM_RUN ioctl.
->>>
->>> This serie is especially helpful to userspace hypervisors like
->>> QEMU when they need to perform operations on memslots without the
->>> risk of having a vcpu reading them in the meanwhile.
->>> With "memslots operations" we mean grow, shrink, merge and split
->>> memslots, which are not "atomic" because there is a time window
->>> between the DELETE memslot operation and the CREATE one.
->>> Currently, each memslot operation is performed with one or more
->>> ioctls.
->>> For example, merging two memslots into one would imply:
->>> DELETE(m1)
->>> DELETE(m2)
->>> CREATE(m1+m2)
->>>
->>> And a vcpu could attempt to read m2 right after it is deleted, but
->>> before the new one is created.
->>>
->>> Therefore the simplest solution is to pause all vcpus in the kvm
->>> side, so that:
->>> - userspace just needs to call the new API before making memslots
->>> changes, keeping modifications to the minimum
->>> - dirty page updates are also performed when vcpus are blocked, so
->>> there is no time window between the dirty page ioctl and memslots
->>> modifications, since vcpus are all stopped.
->>> - no need to modify the existing memslots API
->> Isnt QEMU able to achieve the same goal today by forcing all vCPUs
->> into userspace with a signal? Can you provide some rationale why this
->> is better in the cover letter or patch description?
->>
-> David Hildenbrand tried to propose something similar here:
-> https://github.com/davidhildenbrand/qemu/commit/86b1bf546a8d00908e33f7362b0b61e2be8dbb7a
-> 
-> While it is not optimized, I think it's more complex that the current
-> serie, since qemu should also make sure all running ioctls finish and
-> prevent the new ones from getting executed.
-> 
-> Also we can't use pause_all_vcpus()/resume_all_vcpus() because they drop
-> the BQL.
-> 
-> Would that be ok as rationale?
+Sorry to miss this mail. I thought both of you were talking about
+somthing, and didn't notice this question to me.
 
-Yes that helps and should be part of the cover letter for the next iterations.
+I think there are two ways to solve the issue Sourabh raised:
+1) make handle_hotplug_event() get and pass down the memory_notify as
+Sourabh said, or the hp_action, mem_start|size as Eric suggested. I
+have to admit I haven't carefully checked which one is better.
+
+2) let the current code as is since it's aiming at x86 only. Later
+Sourabh can modify code according to his need on ppc. This can give
+satisfying why on code change each time.
+
+I personally like the 2nd way, while also like seeing 1st one if the
+code change and log is convincing to any reviewer.
+
+> 
+> To accommodate this, how about this:
+> 
+> static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu,
+>      unsigned long mem_start, unsigned long mem_size)
+> 
+> For CPU events, I would just pass zeros for mem_start/size. For memory events,
+> I would pass KEXEC_CRASH_HP_INVALID_CPU.
+> 
+> Thanks,
+> eric
+
