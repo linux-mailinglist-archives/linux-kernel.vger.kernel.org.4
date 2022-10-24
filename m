@@ -2,150 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F1460BE33
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3AFC60BEEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbiJXXH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
+        id S230013AbiJXXsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiJXXHU (ORCPT
+        with ESMTP id S229866AbiJXXrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:07:20 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A21412B358
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:28:51 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id B59195FD16;
-        Mon, 24 Oct 2022 15:09:56 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1666613396;
-        bh=nc6jhUQNsZdri2+Q1s+EIKAfnFCelaJvCH3sqTAEXGY=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=Iv4g2AL99+N/fY4E0QQ+qSvkSe/nM1P7XxD3e29zAJBA+K6CdlMdtXSf+dUAs0WEU
-         U4mzdAYVxlqWFg4JNDQMlVJQvSVa0CP9ALDCZpOzd8AcJDpCgqUEZpDhgce9KEiAlA
-         28wWnyNgiwbJ4xX6NZtVrnQDa8e4yxoPkjGAbT5aqoYOXP241eoNxGX7b7l3kjBh6K
-         OrCoMfxgrndrc48Y+k4ECcx24HJA8Fo+49Ro6et6DFYaOPdYFPU2wsLt21ILNlY8p+
-         5+QfB6LJeO1/5hEHEs/QJL31qkq1MBd7/samW3WYr6dqoZbh9EjriYNW97QqelXE6n
-         9vaEIfmJybFYw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 24 Oct 2022 15:09:54 +0300 (MSK)
-From:   Alexey Romanov <avromanov@sberdevices.ru>
-To:     <minchan@kernel.org>, <senozhatsky@chromium.org>,
-        <ngupta@vflare.org>, <akpm@linux-foundation.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, Alexey Romanov <avromanov@sberdevices.ru>
-Subject: [PATCH v1] zram: add size class equals check into recompression
-Date:   Mon, 24 Oct 2022 15:09:42 +0300
-Message-ID: <20221024120942.13885-1-avromanov@sberdevices.ru>
-X-Mailer: git-send-email 2.33.0
+        Mon, 24 Oct 2022 19:47:53 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E8C2FC5A3;
+        Mon, 24 Oct 2022 15:06:05 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Mwtxh3dNszKFN2;
+        Mon, 24 Oct 2022 20:03:04 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP4 (Coremail) with SMTP id gCh0CgC3xuiJf1ZjjtV9AA--.11645S4;
+        Mon, 24 Oct 2022 20:05:31 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH RFC] ext4:record error information when insert extent failed in 'ext4_split_extent_at'
+Date:   Mon, 24 Oct 2022 20:27:25 +0800
+Message-Id: <20221024122725.3083432-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/10/24 07:24:00 #20510762
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgC3xuiJf1ZjjtV9AA--.11645S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZFWfWr13Jr1UKr4UGr4DArb_yoWrWrWrpr
+        Z3Cr1xGr15J3WUCrZ7AFs2gryI9a17Gw1UJFyfGr1fJFyUZrWUWFn8KF1FvFy8WrW8Ga45
+        XFW8trW5WF1DCa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zV
+        AF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4l
+        IxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s
+        0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
+        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It makes no sense for us to recompress the object if it will
-be in the same size class. We anyway don't get any memory gain.
-But, at the same time, we get a CPU time overhead when inserting
-this object into zspage and decompressing it afterwards.
+From: Ye Bin <yebin10@huawei.com>
 
-Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+There's issue as follows when do test with memory fault injection:
+[localhost]# fsck.ext4 -a image
+image: clean, 45595/655360 files, 466841/2621440 blocks
+[localhost]# fsck.ext4 -fn image
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+Block bitmap differences:  -(1457230--1457256)
+Fix? no
+
+image: ********** WARNING: Filesystem still has errors **********
+
+image: 45595/655360 files (12.4% non-contiguous), 466841/2621440 blocks
+
+Inject context:
+ -----------------------------------------------------------
+ Inject function:kmem_cache_alloc (pid:177858) (return: 0)
+ Calltrace Context:
+ mem_cache_allock+0x73/0xcc
+ ext4_mb_new_blocks+0x32e/0x540 [ext4]
+ ext4_new_meta_blocks+0xc4/0x110 [ext4]
+ ext4_ext_grow_indepth+0x68/0x250 [ext4]
+ ext4_ext_create_new_leaf+0xc5/0x120 [ext4]
+ ext4_ext_insert_extent+0x1bf/0x670 [ext4]
+ ext4_split_extent_at+0x212/0x530 [ext4]
+ ext4_split_extent+0x13a/0x1a0 [ext4]
+ ext4_ext_handle_unwritten_extents+0x13d/0x240 [ext4]
+ ext4_ext_map_blocks+0x459/0x8f0 [ext4]
+ ext4_map_blocks+0x18e/0x5a0 [ext4]
+ ext4_iomap_alloc+0xb0/0x1b0 [ext4]
+ ext4_iomap_begin+0xb0/0x130 [ext4]
+ iomap_apply+0x95/0x2e0
+ __iomap_dio_rw+0x1cc/0x4b0
+ iomap_dio_rw+0xe/0x40
+ ext4_dio_write_iter+0x1a9/0x390 [ext4]
+ new_sync_write+0x113/0x1b0
+ vfs_write+0x1b7/0x250
+ ksys_write+0x5f/0xe0
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x61/0xc6
+
+Compare extent change in journal:
+Start:
+ee_block      ee_len        ee_start
+75            32798         1457227  -> unwritten len=30
+308           12            434489
+355           5             442492
+=>
+ee_block      ee_len        ee_start
+11            2             951584
+74            32769         951647   -> unwritten  len=1
+75            32771         1457227  -> unwritten  len=3, length decreased 27
+211           15            960906
+308           12            434489
+355           5             442492
+
+Acctually, above issue can repaired by 'fsck -fa'. But file system is 'clean',
+'fsck' will not do deep repair.
+Obviously, final lost 27 blocks. Above issue may happens as follows:
+ext4_split_extent_at
+...
+err = ext4_ext_insert_extent(handle, inode, ppath, &newex, flags); -> return -ENOMEM
+if (err != -ENOSPC && err != -EDQUOT）
+	goto out; -> goto 'out' will not fix extent length, will
+...
+fix_extent_len:
+        ex->ee_len = orig_ex.ee_len;
+        /*
+         * Ignore ext4_ext_dirty return value since we are already in error path
+         * and err is a non-zero error code.
+         */
+        ext4_ext_dirty(handle, inode, path + path->p_depth);
+        return err;
+out:
+        ext4_ext_show_leaf(inode, path);
+        return err;
+If 'ext4_ext_insert_extent' return '-ENOMEM' which will not fix 'ex->ee_len' by
+old length. 'ext4_ext_insert_extent' will trigger extent tree merge, fix like
+'ex->ee_len = orig_ex.ee_len' may lead to new issues.
+To solve above issue, record error messages when 'ext4_ext_insert_extent' return
+'err' not equal '(-ENOSPC && -EDQUOT)'. If filesysten is mounted with 'errors=continue'
+as filesystem is not clean 'fsck' will repair issue. If filesystem is mounted with
+'errors=remount-ro' filesystem will be remounted by read-only.
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
 ---
- drivers/block/zram/zram_drv.c |  5 +++++
- include/linux/zsmalloc.h      |  2 ++
- mm/zsmalloc.c                 | 20 ++++++++++++++++++++
- 3 files changed, 27 insertions(+)
+ fs/ext4/extents.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 364323713393..bf610cf6a09c 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1632,6 +1632,8 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
- 	unsigned long handle_next;
- 	unsigned int comp_len_next;
- 	unsigned int comp_len_prev;
-+	unsigned int class_size_next;
-+	unsigned int class_size_prev;
- 	struct zcomp_strm *zstrm;
- 	void *src, *dst;
- 	int ret;
-@@ -1656,6 +1658,8 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
- 	ret = zcomp_compress(zstrm, src, &comp_len_next);
- 	kunmap_atomic(src);
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index f1956288307f..582a7d59d6e3 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -3252,8 +3252,13 @@ static int ext4_split_extent_at(handle_t *handle,
+ 		ext4_ext_mark_unwritten(ex2);
  
-+	class_size_prev = zs_get_class_size(zram->mem_pool, comp_len_prev);
-+	class_size_next = zs_get_class_size(zram->mem_pool, comp_len_next);
- 	/*
- 	 * Either a compression error or we failed to compressed the object
- 	 * in a way that will save us memory. Mark the object so that we
-@@ -1663,6 +1667,7 @@ static int zram_recompress(struct zram *zram, u32 index, struct page *page,
- 	 */
- 	if (comp_len_next >= huge_class_size ||
- 	    comp_len_next >= comp_len_prev ||
-+	    class_size_next == class_size_prev ||
- 	    ret) {
- 		zram_set_flag(zram, index, ZRAM_RECOMP_SKIP);
- 		zram_clear_flag(zram, index, ZRAM_IDLE);
-diff --git a/include/linux/zsmalloc.h b/include/linux/zsmalloc.h
-index 2a430e713ce5..75dcbafd5f36 100644
---- a/include/linux/zsmalloc.h
-+++ b/include/linux/zsmalloc.h
-@@ -56,4 +56,6 @@ unsigned long zs_get_total_pages(struct zs_pool *pool);
- unsigned long zs_compact(struct zs_pool *pool);
+ 	err = ext4_ext_insert_extent(handle, inode, ppath, &newex, flags);
+-	if (err != -ENOSPC && err != -EDQUOT)
++	if (err != -ENOSPC && err != -EDQUOT) {
++		if (err)
++			EXT4_ERROR_INODE_ERR(inode, -err,
++			"insert extent failed block = %d len = %d",
++			ex2->ee_block, ex2->ee_len);
+ 		goto out;
++	}
  
- void zs_pool_stats(struct zs_pool *pool, struct zs_pool_stats *stats);
-+
-+unsigned int zs_get_class_size(struct zs_pool *pool, unsigned int size);
- #endif
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index d03941cace2c..148451385445 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1205,6 +1205,26 @@ static bool zspage_full(struct size_class *class, struct zspage *zspage)
- 	return get_zspage_inuse(zspage) == class->objs_per_zspage;
- }
- 
-+/**
-+ * zs_get_class_size() - Returns the size (in bytes) of the
-+ * zsmalloc &size_class into which the object with specified
-+ * size will be inserted or already inserted.
-+ *
-+ * @pool: zsmalloc pool to use
-+ *
-+ * Context: Any context.
-+ *
-+ * Return: the size (in bytes) of the zsmalloc &size_class into which
-+ * the object with specified size will be inserted.
-+ */
-+unsigned int zs_get_class_size(struct zs_pool *pool, unsigned int size)
-+{
-+	struct size_class *class = pool->size_class[get_size_class_index(size)];
-+
-+	return class->size;
-+}
-+EXPORT_SYMBOL_GPL(zs_get_class_size);
-+
- unsigned long zs_get_total_pages(struct zs_pool *pool)
- {
- 	return atomic_long_read(&pool->pages_allocated);
+ 	if (EXT4_EXT_MAY_ZEROOUT & split_flag) {
+ 		if (split_flag & (EXT4_EXT_DATA_VALID1|EXT4_EXT_DATA_VALID2)) {
 -- 
-2.25.1
+2.31.1
 
