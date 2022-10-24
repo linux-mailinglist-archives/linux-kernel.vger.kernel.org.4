@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD1B60A5A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283BD60A49D
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbiJXM15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S232934AbiJXMNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbiJXM1D (ORCPT
+        with ESMTP id S232440AbiJXMMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:27:03 -0400
+        Mon, 24 Oct 2022 08:12:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF434855BE;
-        Mon, 24 Oct 2022 05:01:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF113A1BD;
+        Mon, 24 Oct 2022 04:54:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF486B81185;
-        Mon, 24 Oct 2022 11:44:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4920BC433C1;
-        Mon, 24 Oct 2022 11:44:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D93D6B81144;
+        Mon, 24 Oct 2022 11:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2FBC433C1;
+        Mon, 24 Oct 2022 11:52:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611896;
-        bh=fV9OYAn4uPLUfTAI0RPNnM65cKXMaGX+Gz+hE0+4RBw=;
+        s=korg; t=1666612339;
+        bh=ryw8RjTm44Jgi9Xgr6nzwugNpPMq9/+jR2HPtMHVXao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IcCFF40UpsWCeCK2pI5q8vYzvaeyAPefVLGOyjzTTgjcVQeUVNAhlS7LephTFKRtA
-         o3DfM+zck4RalD0DycPE7Lp5CHcsOusOsMTQ7SpfRNojxJVCMFBqRxF7GbLx71neV2
-         pxJy4zFgTAoreUaMIx+qivcnVB4Uwzk5tjMLS0xE=
+        b=0CzFl04hFuQMJ/3bGv4fKJzzNc5Pe0doX5k3XPTwObe+Pprijxm8+IQNi2ypFIO26
+         9JznBNRLPa6j6+y16UJtCi3o2boLnMAm86eW7nF+KJ0B2otk8dxOOChNpKDclmGGgn
+         1IMKYbCsstQI7jIQ8bp2lt9xvUlegv9FiEQIRKCA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
         Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 122/159] f2fs: fix race condition on setting FI_NO_EXTENT flag
-Date:   Mon, 24 Oct 2022 13:31:16 +0200
-Message-Id: <20221024112953.958322926@linuxfoundation.org>
+Subject: [PATCH 4.14 160/210] f2fs: fix race condition on setting FI_NO_EXTENT flag
+Date:   Mon, 24 Oct 2022 13:31:17 +0200
+Message-Id: <20221024113002.169798376@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -87,10 +87,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
-index d7b8c8b5fc39..3f872145a988 100644
+index aff6c2ed1c02..042c9d4f73cf 100644
 --- a/fs/f2fs/extent_cache.c
 +++ b/fs/f2fs/extent_cache.c
-@@ -650,9 +650,8 @@ void f2fs_drop_extent_tree(struct inode *inode)
+@@ -709,9 +709,8 @@ void f2fs_drop_extent_tree(struct inode *inode)
  	if (!f2fs_may_extent_tree(inode))
  		return;
  
