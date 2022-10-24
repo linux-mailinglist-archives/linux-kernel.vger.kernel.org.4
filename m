@@ -2,58 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB4F60BAD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8A460BBEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 23:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234915AbiJXUlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S234184AbiJXVR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 17:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234780AbiJXUkk (ORCPT
+        with ESMTP id S230453AbiJXVRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:40:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 421B7132EAA;
-        Mon, 24 Oct 2022 11:50:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70ACA612A5;
-        Mon, 24 Oct 2022 12:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7864FC433C1;
-        Mon, 24 Oct 2022 12:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666616078;
-        bh=/k2eE8MbO1a7k6bMlbjRIuZ6b34XkvcZI55kUD9GP6Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eoCneCrDg+R/0/0w8aLO/o/2gYavPmzWPyQ3jh8PQ0o/daXA9pyAyunQNf3LO5hhf
-         GQILRcBfNPgIlDVeGMLYQHDC/BTBk8ioQLlI7l/OYkaolM5RYyBy5poQqYpHflwLls
-         nqJkJ1AjwCWVTy0IfrJvUYvlN1H6+Z6MrdVfWbqqvxCQiNI3OU2VHFYCHxnXIeofSV
-         r1WepEnR8oGUr4n+rbYqFynGXLFsAdjkKl3lNejixImkFFHGYVcFrRIrNELQC36I3i
-         SgallQfqUZ1lj2dwB1sGR0O9kQkTZ3FaMb7sIXUIWfd97pXEqsDmzGpJSuHHUPPOcz
-         9qnV8mYJF3ZwQ==
-Date:   Mon, 24 Oct 2022 13:54:33 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] dt-bindings: mfd: qcom,spmi-pmic: use generic node
- name "gpio"
-Message-ID: <Y1aLCdi7+UVNNBp1@google.com>
-References: <20220908080938.29199-1-krzysztof.kozlowski@linaro.org>
- <20220908080938.29199-3-krzysztof.kozlowski@linaro.org>
+        Mon, 24 Oct 2022 17:17:17 -0400
+X-Greylist: delayed 1889 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 12:23:18 PDT
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567852D2D5E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 12:23:18 -0700 (PDT)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20221024130239ff05e52880d9cf551f
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 24 Oct 2022 15:02:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=K2kGQ1uzzqA0xWymbFltF9V6/W7ChuSY3sWXqrXX9m8=;
+ b=iCo9+oytoKkqsi8D6FE1CqIrKRjRBDp0s+x9g85W4BMGVfZAjDlMJCk0M8NCG3YgAXHg1Y
+ UknYlfcxZN7zk9hKtLB/4hNCrwX4cPP/EiBlR3VHPSwIfGqZhCVy1Gh1lXj2/FAVOAvfCHVy
+ ej/gR5+Z+wXC/8GDp9yPdAd/ojYU0=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v2 1/3] tty: n_gsm: introduce macro for minimal unit size
+Date:   Mon, 24 Oct 2022 15:01:12 +0200
+Message-Id: <20221024130114.2070-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220908080938.29199-3-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,16 +47,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 08 Sep 2022, Krzysztof Kozlowski wrote:
+From: Daniel Starke <daniel.starke@siemens.com>
 
-> GPIO controller nodes are named by convention just "gpio", not "gpios".
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+n_gsm has a minimal protocol overhead of 7 bytes. The current code already
+checks whether the configured MRU/MTU size is at least one byte more than
+this.
 
-Applied, thanks.
+Introduce the macro MIN_MTU to make this value more obvious.
 
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+v1 -> v2:
+Incorporated review comments.
+
+Link: https://lore.kernel.org/all/fe537e8-7b2-61e2-767d-787b923c7456@linux.intel.com/
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 5e516f5cac5a..570c40a3d78f 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -89,6 +89,7 @@ module_param(debug, int, 0600);
+  */
+ #define MAX_MRU 1500
+ #define MAX_MTU 1500
++#define MIN_MTU (PROT_OVERHEAD + 1)
+ /* SOF, ADDR, CTRL, LEN1, LEN2, ..., FCS, EOF */
+ #define PROT_OVERHEAD 7
+ #define	GSM_NET_TX_TIMEOUT (HZ*10)
+@@ -2712,7 +2713,9 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
+ 	if ((c->adaption != 1 && c->adaption != 2) || c->k)
+ 		return -EOPNOTSUPP;
+ 	/* Check the MRU/MTU range looks sane */
+-	if (c->mru > MAX_MRU || c->mtu > MAX_MTU || c->mru < 8 || c->mtu < 8)
++	if (c->mru < MIN_MTU || c->mtu < MIN_MTU)
++		return -EINVAL;
++	if (c->mru > MAX_MRU || c->mtu > MAX_MTU)
+ 		return -EINVAL;
+ 	if (c->n2 > 255)
+ 		return -EINVAL;
+@@ -3296,7 +3299,7 @@ static int gsm_create_network(struct gsm_dlci *dlci, struct gsm_netconfig *nc)
+ 		return -ENOMEM;
+ 	}
+ 	net->mtu = dlci->gsm->mtu;
+-	net->min_mtu = 8;
++	net->min_mtu = MIN_MTU;
+ 	net->max_mtu = dlci->gsm->mtu;
+ 	mux_net = netdev_priv(net);
+ 	mux_net->dlci = dlci;
 -- 
-Lee Jones [李琼斯]
+2.34.1
+
