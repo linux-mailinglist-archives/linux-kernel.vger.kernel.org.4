@@ -2,86 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19206099EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 07:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBBF6099ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 07:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbiJXFmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 01:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S230052AbiJXFms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 01:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiJXFmP (ORCPT
+        with ESMTP id S230045AbiJXFml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 01:42:15 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C26748E9;
-        Sun, 23 Oct 2022 22:42:13 -0700 (PDT)
-Received: from localhost.localdomain ([172.16.0.254])
-        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 29O5ctoA012184-29O5ctoD012184
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 24 Oct 2022 13:38:59 +0800
-From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        =?UTF-8?q?Sebastian=20W=C3=BCrl?= <sebastian.wuerl@ororatech.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] can: mcp251x: fix error handling code in mcp251x_can_probe
-Date:   Mon, 24 Oct 2022 13:37:07 +0800
-Message-Id: <20221024053711.696124-1-dzm91@hust.edu.cn>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-FEAS-AUTH-USER: dzm91@hust.edu.cn
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 01:42:41 -0400
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2603A74E0A;
+        Sun, 23 Oct 2022 22:42:40 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 302A51E80D74;
+        Mon, 24 Oct 2022 13:41:11 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yJ82tyFT3FOp; Mon, 24 Oct 2022 13:41:08 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 7CE4B1E80CA5;
+        Mon, 24 Oct 2022 13:41:08 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     masahiroy@kernel.org
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Li zeming <zeming@nfschina.com>
+Subject: [PATCH] lxdialog: checklist: Add malloc allocation judgment
+Date:   Mon, 24 Oct 2022 13:42:22 +0800
+Message-Id: <20221024054222.177899-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mcp251x_can_probe, if mcp251x_gpio_setup fails, it forgets to
-unregister the can device.
+Add  list_item Only when the pointer judges that the pointer is valid
+can function code be executed.
 
-Fix this by unregistering can device in mcp251x_can_probe.
-
-Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+Signed-off-by: Li zeming <zeming@nfschina.com>
 ---
- drivers/net/can/spi/mcp251x.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ scripts/kconfig/lxdialog/checklist.c | 45 ++++++++++++++--------------
+ 1 file changed, 23 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/net/can/spi/mcp251x.c b/drivers/net/can/spi/mcp251x.c
-index c320de474f40..b4b280c0699d 100644
---- a/drivers/net/can/spi/mcp251x.c
-+++ b/drivers/net/can/spi/mcp251x.c
-@@ -1415,11 +1415,14 @@ static int mcp251x_can_probe(struct spi_device *spi)
+diff --git a/scripts/kconfig/lxdialog/checklist.c b/scripts/kconfig/lxdialog/checklist.c
+index fd161cfff121..61a8f86fe467 100644
+--- a/scripts/kconfig/lxdialog/checklist.c
++++ b/scripts/kconfig/lxdialog/checklist.c
+@@ -19,29 +19,30 @@ static void print_item(WINDOW * win, int choice, int selected)
+ {
+ 	int i;
+ 	char *list_item = malloc(list_width + 1);
++	if (list_item) {
++		strncpy(list_item, item_str(), list_width - item_x);
++		list_item[list_width - item_x] = '\0';
  
- 	ret = mcp251x_gpio_setup(priv);
- 	if (ret)
--		goto error_probe;
-+		goto err_reg_candev;
- 
- 	netdev_info(net, "MCP%x successfully initialized.\n", priv->model);
- 	return 0;
- 
-+err_reg_candev:
-+	unregister_candev(net);
+-	strncpy(list_item, item_str(), list_width - item_x);
+-	list_item[list_width - item_x] = '\0';
+-
+-	/* Clear 'residue' of last item */
+-	wattrset(win, dlg.menubox.atr);
+-	wmove(win, choice, 0);
+-	for (i = 0; i < list_width; i++)
+-		waddch(win, ' ');
+-
+-	wmove(win, choice, check_x);
+-	wattrset(win, selected ? dlg.check_selected.atr
+-		 : dlg.check.atr);
+-	if (!item_is_tag(':'))
+-		wprintw(win, "(%c)", item_is_tag('X') ? 'X' : ' ');
+-
+-	wattrset(win, selected ? dlg.tag_selected.atr : dlg.tag.atr);
+-	mvwaddch(win, choice, item_x, list_item[0]);
+-	wattrset(win, selected ? dlg.item_selected.atr : dlg.item.atr);
+-	waddstr(win, list_item + 1);
+-	if (selected) {
+-		wmove(win, choice, check_x + 1);
+-		wrefresh(win);
++		/* Clear 'residue' of last item */
++		wattrset(win, dlg.menubox.atr);
++		wmove(win, choice, 0);
++		for (i = 0; i < list_width; i++)
++			waddch(win, ' ');
 +
- error_probe:
- 	destroy_workqueue(priv->wq);
- 	priv->wq = NULL;
++		wmove(win, choice, check_x);
++		wattrset(win, selected ? dlg.check_selected.atr
++			 : dlg.check.atr);
++		if (!item_is_tag(':'))
++			wprintw(win, "(%c)", item_is_tag('X') ? 'X' : ' ');
++
++		wattrset(win, selected ? dlg.tag_selected.atr : dlg.tag.atr);
++		mvwaddch(win, choice, item_x, list_item[0]);
++		wattrset(win, selected ? dlg.item_selected.atr : dlg.item.atr);
++		waddstr(win, list_item + 1);
++		if (selected) {
++			wmove(win, choice, check_x + 1);
++			wrefresh(win);
++		}
+ 	}
+ 	free(list_item);
+ }
 -- 
-2.35.1
+2.18.2
 
