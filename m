@@ -2,130 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C4660ADD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C330E60AD3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 16:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237088AbiJXOfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 10:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54688 "EHLO
+        id S235425AbiJXOTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 10:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237124AbiJXOfI (ORCPT
+        with ESMTP id S236997AbiJXOP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 10:35:08 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7013B564C0;
-        Mon, 24 Oct 2022 06:10:14 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-13ae8117023so11732257fac.9;
-        Mon, 24 Oct 2022 06:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dXA1ZaTzhF9A48V2DvR6P0p5UW5fQVlupW68wj5G1MI=;
-        b=cmjA5XnbIZmjCLLpzw2uLxvN6yyWZdQ3gUF5+aEJ0HnEct0V0KrFIKJQbXLnUwhXXl
-         75mGViDWJgiCOFS0BsjoEmGSjzYy9s3zGvkuW+m6WsbRRp+xMrDIPIL7neXDV8SAWchr
-         Jm/pgZOhBrMNiIhS6FZMgkZJsN0YHeoI77Q9r4HOU9b7p+cXJwmVxpMf9X/KEqjOqQlN
-         sFPMY1Ivo/4JCNY+yDoxneFiG1x0W3Dda3E7IAoT27d4kl+G7Qw1dL+cMqU8fE3RQUKs
-         M6lIT8yyLjnP8Z7TynGSt7BNrxbb3Jk4nmEMJ85MsV9aMUxYZx0XBZowcCtEJzFoM3Id
-         fwZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dXA1ZaTzhF9A48V2DvR6P0p5UW5fQVlupW68wj5G1MI=;
-        b=RbJTpMWzSPwRCIJhzwy5b975foslN99Y+wiaB5vNPj0UHOxKN6ARHno6e8ChsKUppW
-         vmi6ATgitQ+yQjbx5k4Xm6xqZl2bK6vbuOo67Mdw6KjhMDeDexUBcZvDteKLdGuSn9zB
-         Rw7QDv0tzeWr59xBx1YE30rWva4WJpQ1GIoeTp5aXnkLFXaO7U8vdDhks6CJ8t0PCAm+
-         DwPDIXHwbDnXa3tnX4iUL/b0Z0mjoRa03jeB8lnoVDBEZe3zfn4BuQUhzjQ0Tw7XyVc/
-         VYKO0frogvzlBX92U38+QRICp2CvZHpnhz6bWZrx3vwgu41OX5nYhANfPAFjQ+BNWkk4
-         jWYw==
-X-Gm-Message-State: ACrzQf1ZL3l6Mhm7iM2DvVpPR4W8L+Trcn9YA1Q65Tb8ChcKfOroUus4
-        tYU7svZmdeDTgK55ODfTaH3xmMrwdgKPZXdj+Zq6jO5oedo=
-X-Google-Smtp-Source: AMsMyM7yyIWgHW6YqouKnOCQoG2M3VPIGNp4xQkEK4cKTeKr8AjH/0n4zv0ybPgxUFr35JkKl300YT893PORX+UssX0=
-X-Received: by 2002:a17:90b:3ec1:b0:213:2f34:29ef with SMTP id
- rm1-20020a17090b3ec100b002132f3429efmr951603pjb.123.1666615978184; Mon, 24
- Oct 2022 05:52:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221024115429.1343257-1-heiko.thiery@gmail.com> <20221024122659.2krt2hh2sdvxuurn@pengutronix.de>
-In-Reply-To: <20221024122659.2krt2hh2sdvxuurn@pengutronix.de>
-From:   Heiko Thiery <heiko.thiery@gmail.com>
-Date:   Mon, 24 Oct 2022 14:52:46 +0200
-Message-ID: <CAEyMn7Y9uxeFLM7-6jR=bonusdwjX=ukRotZm=7x_3QyxVW-DQ@mail.gmail.com>
-Subject: Re: [PATCH v3] arm64: dts: imx8mq-kontron-pitx-imx8m: remove
- off-on-delay-us for regulator-usdhc2-vmmc
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mon, 24 Oct 2022 10:15:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CABF50BAB;
+        Mon, 24 Oct 2022 05:55:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BFDF61346;
+        Mon, 24 Oct 2022 12:54:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45FAAC433C1;
+        Mon, 24 Oct 2022 12:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666616073;
+        bh=R1hLjeE/13RmZT9ufBz7rWLCq9H/tdDCnbvNc5MNSl8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=S7KytBzrEgUtUvhGpSBPw7Ci7Dxyb9OFPQEbkKVNQlekdg+ZQ4mJD3y8aEOzncjew
+         raradZC55KujNvnu2t3Wkr/opFo1x5/QrOcSlOD8p5SmKKiBZKiEK8ainnHCkV7Vam
+         cc//z2BK+Sj83zqcBD74KQGINKt9CztkjbKXhm0OSmmu1z9avL875s4v8UTegY4LDu
+         VzG8SFuGv3N55n3iVRXsQgxIv6sHe5cPPLv/Zr1LlnDau04jbbR483flnOBHVK47hD
+         OUTWxy+IJwIobFo/Qk3bZuy21AXjptm2Z5gCKLHj5/h5AvSUUkzVsFXkmls4YqSosP
+         DhWPGoEo8Zmgw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org
+In-Reply-To: <20221021175721.4005601-1-robh@kernel.org>
+References: <20221021175721.4005601-1-robh@kernel.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: Convert dmic-codec to DT schema
+Message-Id: <166661607199.206380.14009012211378211408.b4-ty@kernel.org>
+Date:   Mon, 24 Oct 2022 13:54:31 +0100
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marco,
+On Fri, 21 Oct 2022 12:57:21 -0500, Rob Herring wrote:
+> Convert the dmic-codec binding to DT schema format.
+> 
+> The '#sound-dai-cells' and 'sound-name-prefix' properties were not
+> documented, but are in use, so add them.
+> 
+> 
 
-Am Mo., 24. Okt. 2022 um 14:34 Uhr schrieb Marco Felsch
-<m.felsch@pengutronix.de>:
->
-> Hi Heiko,
->
-> On 22-10-24, Heiko Thiery wrote:
-> > With that delay U-Boot is not able to store the environment variables in
-> > the SD card. Since the delay is not required it can be remove.
->
-> Now I'm curious, since this doesn't tell us the why, it just tell us
-> about the end result. I'm asking because the NXP EVKs have an issue with
-> the sd-card power line capacity and we need this delay to reach a level
-> which is marked as low within the sd-spec.
+Applied to
 
-I must admit that I do not know at all why this entry was made. I have
-now looked at the dtbs of the imx8 EVKs and except for imx8dxl-evk.dts
-I see no delay here.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
--- 
-Heiko
+Thanks!
 
-> Regards,
->   Marco
->
->
-> > Fixes: 5dbadc848259 (arm64: dts: fsl: add support for Kontron pitx-imx8m board)
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > ---
-> > v3:
-> >  - Improve commit message and explain why it is a fix (thanks to Fabio)
-> >
-> > v2:
-> >  - add Fixes tag
-> >
-> >  arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts b/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
-> > index a91c136797f6..21442e04a632 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mq-kontron-pitx-imx8m.dts
-> > @@ -51,7 +51,6 @@ reg_usdhc2_vmmc: regulator-usdhc2-vmmc {
-> >               regulator-min-microvolt = <3300000>;
-> >               regulator-max-microvolt = <3300000>;
-> >               gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-> > -             off-on-delay-us = <20000>;
-> >               enable-active-high;
-> >       };
-> >  };
-> > --
-> > 2.30.2
-> >
-> >
+[1/1] ASoC: dt-bindings: Convert dmic-codec to DT schema
+      commit: 8da313ad1bd020859e2ee8a3e8e97e52425e539c
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
