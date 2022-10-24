@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4F160A926
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDF960A7CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbiJXNQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S234790AbiJXM6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235971AbiJXNOP (ORCPT
+        with ESMTP id S234855AbiJXM53 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:14:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C474DF0C;
-        Mon, 24 Oct 2022 05:25:16 -0700 (PDT)
+        Mon, 24 Oct 2022 08:57:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AEA97D4D;
+        Mon, 24 Oct 2022 05:16:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3507A612A3;
-        Mon, 24 Oct 2022 12:24:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 485A4C433B5;
-        Mon, 24 Oct 2022 12:24:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EF0E612B2;
+        Mon, 24 Oct 2022 11:57:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B371BC433D6;
+        Mon, 24 Oct 2022 11:57:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614268;
-        bh=X38VWH2et6l8j7ErF92H2f0hZx1DchmzPhdw98JHFCs=;
+        s=korg; t=1666612672;
+        bh=z6WHpchUL7v1QNUs+Lx3TStTDhBohf0Lipf4W3Q1V8s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dk/yO7XNLdXdk3Q6+gn0IYdQcVtPKKocsAgjD+ZbiIVapUztDSsDEFhSrkzj92dBD
-         u2A12sHrZw9zNURwb19ht1BEYkrerspdOm9UU6ImPvt0hKxd5eEcAs5ZPOwKhpRsnv
-         sN00X6kGOhGnsEUPTv8Fk50ckrxDGDs+lU+vO73Q=
+        b=Qu8mdS//86KlM4pK8BT8KoF5XXS6+TB2UBnaVpdTTzuKrlkvJ2XDR929Y+fNVcgNs
+         bmcsDDRTLaNkPSnSR6G2JYjPrrvr0o4zKkHxTZVopxw3zp2KY/3vzbZzfLLXyxY0A2
+         ogPRZR5ZJCnRDN37WJ4S7Aq3W7uQbzCYEz7wExXc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 197/390] clk: oxnas: Hold reference returned by of_get_parent()
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Jes Sorensen <Jes.Sorensen@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 075/229] wifi: rtl8xxxu: tighten bounds checking in rtl8xxxu_read_efuse()
 Date:   Mon, 24 Oct 2022 13:29:54 +0200
-Message-Id: <20221024113031.181032661@linuxfoundation.org>
+Message-Id: <20221024113001.502996260@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-References: <20221024113022.510008560@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 1d6aa08c54cd0e005210ab8e3b1e92ede70f8a4f ]
+[ Upstream commit 620d5eaeb9059636864bda83ca1c68c20ede34a5 ]
 
-In oxnas_stdclk_probe(), we need to hold the reference returned by
-of_get_parent() and use it to call of_node_put() for refcount
-balance.
+There some bounds checking to ensure that "map_addr" is not out of
+bounds before the start of the loop.  But the checking needs to be
+done as we iterate through the loop because "map_addr" gets larger as
+we iterate.
 
-Fixes: 0bbd72b4c64f ("clk: Add Oxford Semiconductor OXNAS Standard Clocks")
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220628143155.170550-1-windhl@126.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: 26f1fad29ad9 ("New driver: rtl8xxxu (mac80211)")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Jes Sorensen <Jes.Sorensen@gmail.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/Yv8eGLdBslLAk3Ct@kili
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/clk-oxnas.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ .../net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c  | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/clk-oxnas.c b/drivers/clk/clk-oxnas.c
-index 78d5ea669fea..2fe36f579ac5 100644
---- a/drivers/clk/clk-oxnas.c
-+++ b/drivers/clk/clk-oxnas.c
-@@ -207,7 +207,7 @@ static const struct of_device_id oxnas_stdclk_dt_ids[] = {
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+index b80cff96dea1..dd345ed1a717 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
++++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+@@ -1879,13 +1879,6 @@ static int rtl8xxxu_read_efuse(struct rtl8xxxu_priv *priv)
  
- static int oxnas_stdclk_probe(struct platform_device *pdev)
- {
--	struct device_node *np = pdev->dev.of_node;
-+	struct device_node *np = pdev->dev.of_node, *parent_np;
- 	const struct oxnas_stdclk_data *data;
- 	const struct of_device_id *id;
- 	struct regmap *regmap;
-@@ -219,7 +219,9 @@ static int oxnas_stdclk_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 	data = id->data;
+ 		/* We have 8 bits to indicate validity */
+ 		map_addr = offset * 8;
+-		if (map_addr >= EFUSE_MAP_LEN) {
+-			dev_warn(dev, "%s: Illegal map_addr (%04x), "
+-				 "efuse corrupt!\n",
+-				 __func__, map_addr);
+-			ret = -EINVAL;
+-			goto exit;
+-		}
+ 		for (i = 0; i < EFUSE_MAX_WORD_UNIT; i++) {
+ 			/* Check word enable condition in the section */
+ 			if (word_mask & BIT(i)) {
+@@ -1896,6 +1889,13 @@ static int rtl8xxxu_read_efuse(struct rtl8xxxu_priv *priv)
+ 			ret = rtl8xxxu_read_efuse8(priv, efuse_addr++, &val8);
+ 			if (ret)
+ 				goto exit;
++			if (map_addr >= EFUSE_MAP_LEN - 1) {
++				dev_warn(dev, "%s: Illegal map_addr (%04x), "
++					 "efuse corrupt!\n",
++					 __func__, map_addr);
++				ret = -EINVAL;
++				goto exit;
++			}
+ 			priv->efuse_wifi.raw[map_addr++] = val8;
  
--	regmap = syscon_node_to_regmap(of_get_parent(np));
-+	parent_np = of_get_parent(np);
-+	regmap = syscon_node_to_regmap(parent_np);
-+	of_node_put(parent_np);
- 	if (IS_ERR(regmap)) {
- 		dev_err(&pdev->dev, "failed to have parent regmap\n");
- 		return PTR_ERR(regmap);
+ 			ret = rtl8xxxu_read_efuse8(priv, efuse_addr++, &val8);
 -- 
 2.35.1
 
