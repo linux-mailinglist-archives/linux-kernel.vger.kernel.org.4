@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB3C60AB13
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FE560A9F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbiJXNnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57122 "EHLO
+        id S231431AbiJXN1B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236826AbiJXNlV (ORCPT
+        with ESMTP id S236127AbiJXNY3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:41:21 -0400
+        Mon, 24 Oct 2022 09:24:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE4EB48B6;
-        Mon, 24 Oct 2022 05:38:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA67918383;
+        Mon, 24 Oct 2022 05:30:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41EAE61299;
-        Mon, 24 Oct 2022 11:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57170C433C1;
-        Mon, 24 Oct 2022 11:45:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26F9E612FF;
+        Mon, 24 Oct 2022 12:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39700C433D6;
+        Mon, 24 Oct 2022 12:29:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611930;
-        bh=nU5shlmlTDL+WA15wXTBEMZOu70bg3gompzMDfGsWu8=;
+        s=korg; t=1666614570;
+        bh=Jad87ZPGbOMCQZjFg6peU5RSSRiKnGTlnlSYbcbi8sA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wBBMmZAClAvStybg8EWqZr3VQXhudbj0/92XzjkvqVJRNsiuT35wmzbwYv2BQWsm2
-         oxMCv1UOS/dtmx1MqcsPYndQPodqC0tO29Re/ZIJXPIGComaOgAfqgZxY+g+X9rn/q
-         rFNNtcwO+8ZvifOx6pRTmCDoXSGTlHBafn/QceZI=
+        b=hzI1oSKMH4D6t8Ir7PW6yB4NxGgIDPrz4eNrwDgEhNOsRq6JXQcNet8c+FG34iyEk
+         kRJ4RoP2V7fyFP6rIJXngxA1RljWgpoRibWtClUqUYTxIUXXj1V0hrGVjcmw+2pRw0
+         cHU6iv+5f/U8Mh1qwjbOxPjhcqniyWVtMHpujPmA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 4.9 154/159] net: ieee802154: return -EINVAL for unknown addr type
+        stable@vger.kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com,
+        Khalid Masum <khalid.masum.92@gmail.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 311/390] xfrm: Update ipcomp_scratches with NULL when freed
 Date:   Mon, 24 Oct 2022 13:31:48 +0200
-Message-Id: <20221024112955.046094901@linuxfoundation.org>
+Message-Id: <20221024113036.218746726@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
-References: <20221024112949.358278806@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,54 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Aring <aahringo@redhat.com>
+From: Khalid Masum <khalid.masum.92@gmail.com>
 
-commit 30393181fdbc1608cc683b4ee99dcce05ffcc8c7 upstream.
+[ Upstream commit 8a04d2fc700f717104bfb95b0f6694e448a4537f ]
 
-This patch adds handling to return -EINVAL for an unknown addr type. The
-current behaviour is to return 0 as successful but the size of an
-unknown addr type is not defined and should return an error like -EINVAL.
+Currently if ipcomp_alloc_scratches() fails to allocate memory
+ipcomp_scratches holds obsolete address. So when we try to free the
+percpu scratches using ipcomp_free_scratches() it tries to vfree non
+existent vm area. Described below:
 
-Fixes: 94160108a70c ("net/ieee802154: fix uninit value bug in dgram_sendmsg")
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+static void * __percpu *ipcomp_alloc_scratches(void)
+{
+        ...
+        scratches = alloc_percpu(void *);
+        if (!scratches)
+                return NULL;
+ipcomp_scratches does not know about this allocation failure.
+Therefore holding the old obsolete address.
+        ...
+}
+
+So when we free,
+
+static void ipcomp_free_scratches(void)
+{
+        ...
+        scratches = ipcomp_scratches;
+Assigning obsolete address from ipcomp_scratches
+
+        if (!scratches)
+                return;
+
+        for_each_possible_cpu(i)
+               vfree(*per_cpu_ptr(scratches, i));
+Trying to free non existent page, causing warning: trying to vfree
+existent vm area.
+        ...
+}
+
+Fix this breakage by updating ipcomp_scrtches with NULL when scratches
+is freed
+
+Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
+Reported-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
+Tested-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/ieee802154_netdev.h |   12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ net/xfrm/xfrm_ipcomp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/include/net/ieee802154_netdev.h
-+++ b/include/net/ieee802154_netdev.h
-@@ -193,21 +193,27 @@ static inline int
- ieee802154_sockaddr_check_size(struct sockaddr_ieee802154 *daddr, int len)
- {
- 	struct ieee802154_addr_sa *sa;
-+	int ret = 0;
+diff --git a/net/xfrm/xfrm_ipcomp.c b/net/xfrm/xfrm_ipcomp.c
+index 0814320472f1..24ac6805275e 100644
+--- a/net/xfrm/xfrm_ipcomp.c
++++ b/net/xfrm/xfrm_ipcomp.c
+@@ -212,6 +212,7 @@ static void ipcomp_free_scratches(void)
+ 		vfree(*per_cpu_ptr(scratches, i));
  
- 	sa = &daddr->addr;
- 	if (len < IEEE802154_MIN_NAMELEN)
- 		return -EINVAL;
- 	switch (sa->addr_type) {
-+	case IEEE802154_ADDR_NONE:
-+		break;
- 	case IEEE802154_ADDR_SHORT:
- 		if (len < IEEE802154_NAMELEN_SHORT)
--			return -EINVAL;
-+			ret = -EINVAL;
- 		break;
- 	case IEEE802154_ADDR_LONG:
- 		if (len < IEEE802154_NAMELEN_LONG)
--			return -EINVAL;
-+			ret = -EINVAL;
-+		break;
-+	default:
-+		ret = -EINVAL;
- 		break;
- 	}
--	return 0;
-+	return ret;
+ 	free_percpu(scratches);
++	ipcomp_scratches = NULL;
  }
  
- static inline void ieee802154_addr_from_sa(struct ieee802154_addr *a,
+ static void * __percpu *ipcomp_alloc_scratches(void)
+-- 
+2.35.1
+
 
 
