@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D384560A554
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009C460A919
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiJXMXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
+        id S232056AbiJXNPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:15:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233397AbiJXMVd (ORCPT
+        with ESMTP id S235448AbiJXNNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:21:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1366A7C1B8;
-        Mon, 24 Oct 2022 04:59:09 -0700 (PDT)
+        Mon, 24 Oct 2022 09:13:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519662CC87;
+        Mon, 24 Oct 2022 05:24:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F132B612F0;
-        Mon, 24 Oct 2022 11:58:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10B6AC433D7;
-        Mon, 24 Oct 2022 11:58:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AA4961017;
+        Mon, 24 Oct 2022 12:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1FD7C433D6;
+        Mon, 24 Oct 2022 12:23:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612698;
-        bh=TLs3SwpJp5/ZQA5gaztA1mbGtWqcY3sdRIs2FWng1VI=;
+        s=korg; t=1666614224;
+        bh=RLkQdPDMRCOU/IECOAC2hHaLhoeqjEyfi9vzRWGTaUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tg6pVeBZ4O/wQPFhs+oZKKfR1PPmiueyahwLXWO4deDOeCYdTPneAjQsu12YjnaZi
-         CHNTP62DCnqs2qyPBOGxPZTBeVSIlZQESZvm7zKpJDjbGLN1RtKVVq5qDfa3vjjFZ3
-         8VnzhtHPcu4Yj+xDoXnhGj6EIz9foUBYReFmrF/A=
+        b=u11dmuJrTqz5oNAZ6Q/kdRRx8573hF8+qe+JfZ/jv1OlcmihNgYoaNI3GC7iUkEjV
+         PJ639SGNmzDjrHn+tkGHdlGIq7Ve3ROprJMvcTkddaZzFRDLvs/hKzFrDkdOqoAN50
+         /P/kHU+u9/5AKnfWSy7B18OUFvrbkboPeW2WoOcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aurelien Jarno <aurelien@aurel32.net>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH 4.19 056/229] riscv: fix build with binutils 2.38
+        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 178/390] ARM: dts: kirkwood: lsxl: remove first ethernet port
 Date:   Mon, 24 Oct 2022 13:29:35 +0200
-Message-Id: <20221024113000.891820486@linuxfoundation.org>
+Message-Id: <20221024113030.320621123@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aurelien Jarno <aurelien@aurel32.net>
+From: Michael Walle <michael@walle.cc>
 
-commit 6df2a016c0c8a3d0933ef33dd192ea6606b115e3 upstream.
+[ Upstream commit 2d528eda7c96ce5c70f895854ecd5684bd5d80b9 ]
 
->From version 2.38, binutils default to ISA spec version 20191213. This
-means that the csr read/write (csrr*/csrw*) instructions and fence.i
-instruction has separated from the `I` extension, become two standalone
-extensions: Zicsr and Zifencei. As the kernel uses those instruction,
-this causes the following build failure:
+Both the Linkstation LS-CHLv2 and the LS-XHL have only one ethernet
+port. This has always been wrong, i.e. the board code used to set up
+both ports, but the driver will play nice and return -ENODEV if the
+assiciated PHY is not found. Nevertheless, it is wrong. Remove it.
 
-  CC      arch/riscv/kernel/vdso/vgettimeofday.o
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h: Assembler messages:
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-  <<BUILDDIR>>/arch/riscv/include/asm/vdso/gettimeofday.h:71: Error: unrecognized opcode `csrr a5,0xc01'
-
-The fix is to specify those extensions explicitely in -march. However as
-older binutils version do not support this, we first need to detect
-that.
-
-Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
-Tested-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-[Conor: converted to the 4.19 style of march string generation]
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Fixes: 876e23333511 ("ARM: kirkwood: add gigabit ethernet and mvmdio device tree nodes")
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/Makefile |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/kirkwood-lsxl.dtsi | 11 -----------
+ 1 file changed, 11 deletions(-)
 
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -49,9 +49,16 @@ ifeq ($(CONFIG_RISCV_ISA_C),y)
- 	KBUILD_ARCH_C = c
- endif
+diff --git a/arch/arm/boot/dts/kirkwood-lsxl.dtsi b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
+index 321a40a98ed2..88b70ba1c8fe 100644
+--- a/arch/arm/boot/dts/kirkwood-lsxl.dtsi
++++ b/arch/arm/boot/dts/kirkwood-lsxl.dtsi
+@@ -218,22 +218,11 @@
+ &mdio {
+ 	status = "okay";
  
--KBUILD_AFLAGS += -march=$(KBUILD_MARCH)$(KBUILD_ARCH_A)fd$(KBUILD_ARCH_C)
-+# Newer binutils versions default to ISA spec version 20191213 which moves some
-+# instructions from the I extension to the Zicsr and Zifencei extensions.
-+toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
-+ifeq ($(toolchain-need-zicsr-zifencei),y)
-+	KBUILD_ARCH_ZISCR_ZIFENCEI = _zicsr_zifencei
-+endif
-+
-+KBUILD_AFLAGS += -march=$(KBUILD_MARCH)$(KBUILD_ARCH_A)fd$(KBUILD_ARCH_C)$(KBUILD_ARCH_ZISCR_ZIFENCEI)
+-	ethphy0: ethernet-phy@0 {
+-		reg = <0>;
+-	};
+-
+ 	ethphy1: ethernet-phy@8 {
+ 		reg = <8>;
+ 	};
+ };
  
--KBUILD_CFLAGS += -march=$(KBUILD_MARCH)$(KBUILD_ARCH_A)$(KBUILD_ARCH_C)
-+KBUILD_CFLAGS += -march=$(KBUILD_MARCH)$(KBUILD_ARCH_A)$(KBUILD_ARCH_C)$(KBUILD_ARCH_ZISCR_ZIFENCEI)
- KBUILD_CFLAGS += -mno-save-restore
- KBUILD_CFLAGS += -DCONFIG_PAGE_OFFSET=$(CONFIG_PAGE_OFFSET)
- 
+-&eth0 {
+-	status = "okay";
+-	ethernet0-port@0 {
+-		phy-handle = <&ethphy0>;
+-	};
+-};
+-
+ &eth1 {
+ 	status = "okay";
+ 	ethernet1-port@0 {
+-- 
+2.35.1
+
 
 
