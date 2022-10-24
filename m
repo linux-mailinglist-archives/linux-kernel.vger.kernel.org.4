@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B99360BE7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C1760BE7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbiJXXYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S230489AbiJXXXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbiJXXXh (ORCPT
+        with ESMTP id S230429AbiJXXXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:23:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0119B17F2A8;
-        Mon, 24 Oct 2022 14:44:40 -0700 (PDT)
-Received: from notapiano (unknown [194.36.25.51])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7737B6602392;
-        Mon, 24 Oct 2022 17:43:58 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666629840;
-        bh=4kWtLxHplFOS10HqVPq+7P3+dYq5PouJzYToXkZX4Kw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RxnUpi1bDW82nmb44+goLMrowb5Wd9tioPQl7b/kkrgLASz3MA/H6Mfcrk1OWg9p0
-         kfT8CZT2IAaA5LedmtnGE+nyDEFDU9GMgEWulgV6pIC5lxMp8S63ZLYECm16UV3Vtl
-         nmLjvBik0WwkbtjEKwi76XMOYyUlFA6ToQyYFUkrlAnhl3B+7dRnMg/uoTO/8+tPtG
-         ueksg4mems9ce5/g7amf9L164rpyDn32FV4nTDlaf2rB1rdxE8SRYh1PpvbtovXUdP
-         0SXlzUsXOMhX+5Pbbfufsxf0NrisgDUYMQmSL0nog1TSoBOmBHnV7ANsQ9bvHiY72g
-         s9ZX7RViGNyLQ==
-Date:   Mon, 24 Oct 2022 12:43:53 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-mediatek@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Wenbin Mei <wenbin.mei@mediatek.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/7] dt-bindings: mmc: mtk-sd: Set clocks based on
- compatible
-Message-ID: <20221024164353.jzvx4ea442e4vahj@notapiano>
-References: <20221023091247.70586-1-linux@fw-web.de>
- <20221023091247.70586-3-linux@fw-web.de>
+        Mon, 24 Oct 2022 19:23:05 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED0C1A0C21;
+        Mon, 24 Oct 2022 14:44:04 -0700 (PDT)
+Received: from fraeml739-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Mx1N208yvz67btf;
+        Tue, 25 Oct 2022 00:52:50 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml739-chm.china.huawei.com (10.206.15.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 18:56:18 +0200
+Received: from [10.48.145.243] (10.48.145.243) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 17:56:17 +0100
+Message-ID: <360c78dc-65ce-362f-389d-075f2259ce5b@huawei.com>
+Date:   Mon, 24 Oct 2022 17:56:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221023091247.70586-3-linux@fw-web.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] blk-mq: Properly init bios from
+ blk_mq_alloc_request_hctx()
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <linux-kernel@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>
+References: <1666454846-11749-1-git-send-email-john.garry@huawei.com>
+ <Y1U9zNZtZjRHQBww@T590> <99c6ca81-746d-85f4-04d3-49d7a3de611b@huawei.com>
+ <Y1aS3vIbuQTNGWJL@T590>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <Y1aS3vIbuQTNGWJL@T590>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.145.243]
+X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,99 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 24/10/2022 14:27, Ming Lei wrote:
+>>>> -	rq->bio = rq->biotail = NULL;
+>>> This patch looks not good, why do you switch to initialize the three fields
+>>> twice in fast path?
+>> Can you please show me how these are initialized twice?
+> blk_mq_bio_to_request() is one which setup these fields, then you add
+> another one in blk_mq_rq_ctx_init().
 
-thank you for picking this up.
+ok, understood.
 
-On Sun, Oct 23, 2022 at 11:12:42AM +0200, Frank Wunderlich wrote:
-> From: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > 
-> The binding was describing a single clock list for all platforms, but
-> that's not really suitable:
-> 
-> Most platforms using at least 2 clocks (source, hclk), some of them
-> a third "source_cg". Mt2712 requires an extra 'bus_clk' on some of
-> its controllers, while mt8192 requires 8 clocks.
-> 
-> Move the clock definitions inside if blocks that match on the
-> compatibles.
-> 
-> I used Patch from Nícolas F. R. A. Prado and modified it to not using
-> "not" statement.
-> 
-> Fixes: 59a23395d8aa ("dt-bindings: mmc: Add support for MT8192 SoC")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> 
-> ---
-> v2:
-> - add this patch
-> v3:
-> - add blank lines and change "not" to matchlist
-> - reorder entries - make generic first then order alphanumeric
-> - rewrite commit description
-> - drop soc-specific mt8183 - constraints were also set for it above
+>> If there is a real concern with this then we go with my original idea, which
+>> was to copy the init method of blk_mq_alloc_request() (in
+>> blk_mq_alloc_request_hctx())
+>>
+>>> BTW, we know blk_mq_alloc_request_hctx() has big trouble, so please
+>>> avoid to extend it to other use cases.
+>> Yeah, I know this,
+> Did you know the exact issue on nvme-tcp, nvme-rdma or nvme-fc maybe
+> with blk_mq_alloc_request_hctx()?
 
-This is wrong, see below.
+I thought that the original issue was an OoO bounds issue, fixed in 
+14dc7a18. Now there is still some issue in the following link, which is 
+still unresolved as I understand:
+https://lore.kernel.org/linux-block/5bd886f1-a7c6-b765-da29-777be0328bc2@grimberg.me/#t
 
-> ---
->  .../devicetree/bindings/mmc/mtk-sd.yaml       | 113 +++++++++++++-----
->  1 file changed, 83 insertions(+), 30 deletions(-)
+But I think that 14dc7a18 may still leave undesirable scenario:
+- all cpus in HW queue cpumask may go offline after cpu_online_mask read 
+in blk_mq_alloc_request_hctx() and before we get the driver tag and set 
+rq->hctx
+
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> index 3cbf0208f1b4..31bb6dc329d2 100644
-> --- a/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/mtk-sd.yaml
-[..]
->  
-> -if:
-> -  properties:
-> -    compatible:
-> -      contains:
-> -        const: mediatek,mt8183-mmc
-> -then:
-> -  properties:
-> -    reg:
-> -      minItems: 2
+>> but sometimes we just need to allocate for a specific HW
+>> queue...
+>>
+>> For my usecase of interest, it should not impact if the cpumask of the HW
+>> queue goes offline after selecting the cpu in blk_mq_alloc_request_hctx(),
+>> so any race is ok ... I think.
+>>
+>> However it should be still possible to make blk_mq_alloc_request_hctx() more
+>> robust. How about using something like work_on_cpu_safe() to allocate and
+>> execute the request with blk_mq_alloc_request() on a cpu associated with the
+>> HW queue, such that we know the cpu is online and stays online until we
+>> execute it? Or also extent to work_on_cpumask_safe() variant, so that we
+>> don't need to try all cpus in the mask (to see if online)?
+> But all cpus on this hctx->cpumask could become offline.
 
-You can't drop this. Nodes with the mt8183 compatible should keep requiring two
-reg values. It's not covered by the branch below.
+If all hctx->cpumask are offline then we should not allocate a request 
+and this is acceptable. Maybe I am missing your point.
 
 Thanks,
-Nícolas
-
-> +allOf:
-> +  - $ref: mmc-controller.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - mediatek,mt2701-mmc
-> +            - mediatek,mt6779-mmc
-> +            - mediatek,mt6795-mmc
-> +            - mediatek,mt7620-mmc
-> +            - mediatek,mt7622-mmc
-> +            - mediatek,mt7623-mmc
-> +            - mediatek,mt8135-mmc
-> +            - mediatek,mt8173-mmc
-> +            - mediatek,mt8183-mmc
-> +            - mediatek,mt8186-mmc
-> +            - mediatek,mt8188-mmc
-> +            - mediatek,mt8195-mmc
-> +            - mediatek,mt8516-mmc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 2
-> +          items:
-> +            - description: source clock
-> +            - description: HCLK which used for host
-> +            - description: independent source clock gate
-> +        clock-names:
-> +          minItems: 2
-> +          items:
-> +            - const: source
-> +            - const: hclk
-> +            - const: source_cg
-> +
-[..]
+John
