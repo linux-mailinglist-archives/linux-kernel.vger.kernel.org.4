@@ -2,103 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2086D609F0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B65C609F1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 12:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiJXKa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 06:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
+        id S229907AbiJXKcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 06:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiJXKaX (ORCPT
+        with ESMTP id S229634AbiJXKct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 06:30:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D554431367;
-        Mon, 24 Oct 2022 03:30:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A53C611D9;
-        Mon, 24 Oct 2022 10:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BECFAC433C1;
-        Mon, 24 Oct 2022 10:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666607419;
-        bh=bJAYpL6ce+IfdfREACRzSrJJjiBAuy0B/CsUL+WRwpE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=KLAjnlcH9YW9aQ2HxHT+t4zfMOkDtH+nGqEXC3Ve26vHNvBLGjJP1uYlFCJJdsgMq
-         uR0Tg1xhiZbnc/UOe6Xg/SL4CY61Arh6hX/F5o9RExi1xmtIbPwmYGc2KLr532W8qB
-         4E0P3WtTaeIJTnTerW+tQ/ANm2uQOrmFMkg5yMBzVfSBGTBO0iq19jg/A5zUKEE25I
-         FiNIFR0o/qKLinA40r+c3m+Ozi1Y2TMZr1SvCl/nohH9K3dwhbM2o/9KAv/P/86K7q
-         EaKgIXdV3kPUzJkvoFH/QeoLkQ95N8TxQEYRefI7h58HUfGA33E0NtuTk17+5RZZiz
-         WdLpHXhF0+zYw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99AD4E270DE;
-        Mon, 24 Oct 2022 10:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 24 Oct 2022 06:32:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A599457212;
+        Mon, 24 Oct 2022 03:32:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1EE022B;
+        Mon, 24 Oct 2022 03:32:51 -0700 (PDT)
+Received: from [10.57.68.77] (unknown [10.57.68.77])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5CEC13F7B4;
+        Mon, 24 Oct 2022 03:32:42 -0700 (PDT)
+Message-ID: <a9b090ac-b154-eef7-7872-78f7fe388f61@arm.com>
+Date:   Mon, 24 Oct 2022 11:32:40 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/9] Add support for Sparx5 IS2 VCAP
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166660741961.18313.1095799162478409748.git-patchwork-notify@kernel.org>
-Date:   Mon, 24 Oct 2022 10:30:19 +0000
-References: <20221020130904.1215072-1-steen.hegelund@microchip.com>
-In-Reply-To: <20221020130904.1215072-1-steen.hegelund@microchip.com>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, UNGLinuxDriver@microchip.com,
-        rdunlap@infradead.org, casper.casan@gmail.com,
-        rmk+kernel@armlinux.org.uk, wanjiabing@vivo.com, nhuck@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH 5/9] coresight-tpdm: Add nodes to set trigger timestamp
+ and type
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
+References: <1662626705-13097-1-git-send-email-quic_taozha@quicinc.com>
+ <1662626705-13097-6-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1662626705-13097-6-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 20 Oct 2022 15:08:55 +0200 you wrote:
-> This provides initial support for the Sparx5 VCAP functionality via the
-> 'tc' traffic control userspace tool and its flower filter.
+On 08/09/2022 09:45, Tao Zhang wrote:
+> The nodes are needed to set or show the trigger timestamp and
+> trigger type. This change is to add these nodes to achieve these
+> function.
 > 
-> Overview:
-> =========
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-tpdm.c | 90 ++++++++++++++++++++++++++++
+>   1 file changed, 90 insertions(+)
 > 
-> The supported flower filter keys and actions are:
-> 
-> [...]
+> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c b/drivers/hwtracing/coresight/coresight-tpdm.c
+> index 74cc653..fae9963 100644
+> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
+> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
+> @@ -232,8 +232,98 @@ static struct attribute_group tpdm_attr_grp = {
+>   	.attrs = tpdm_attrs,
+>   };
+>   
+> +static ssize_t dsb_trig_type_show(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	if (!(drvdata->datasets & TPDM_PIDR0_DS_DSB))
+> +		return -EPERM;
+> +
+> +	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> +			 (unsigned int)drvdata->dsb->trig_type);
+> +}
+> +
+> +/*
+> + * value 0: set trigger type as enablement
+> + * value 1: set trigger type as disablement
+> + */
+> +static ssize_t dsb_trig_type_store(struct device *dev,
+> +				      struct device_attribute *attr,
+> +				      const char *buf,
+> +				      size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long val;
+> +
+> +	if ((kstrtoul(buf, 16, &val)) || val < 0 || val > 1)
+> +		return -EINVAL;
+> +	if (!(drvdata->datasets & TPDM_PIDR0_DS_DSB))
+> +		return -EPERM;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	if (val)
+> +		drvdata->dsb->trig_type = true;
+> +	else
+> +		drvdata->dsb->trig_type = false;
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_trig_type);
+> +
+> +static ssize_t dsb_trig_ts_show(struct device *dev,
+> +				     struct device_attribute *attr,
+> +				     char *buf)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +
+> +	if (!(drvdata->datasets & TPDM_PIDR0_DS_DSB))
+> +		return -EPERM;
+> +
+> +	return scnprintf(buf, PAGE_SIZE, "%u\n",
+> +			 (unsigned int)drvdata->dsb->trig_ts);
+> +}
+> +
+> +/*
+> + * value 0: set trigger timestamp as enablement
+> + * value 1: set trigger timestamp as disablement
+> + */
+> +static ssize_t dsb_trig_ts_store(struct device *dev,
+> +				      struct device_attribute *attr,
+> +				      const char *buf,
+> +				      size_t size)
+> +{
+> +	struct tpdm_drvdata *drvdata = dev_get_drvdata(dev->parent);
+> +	unsigned long val;
+> +
+> +	if ((kstrtoul(buf, 16, &val)) || val < 0 || val > 1)
+> +		return -EINVAL;
+> +	if (!(drvdata->datasets & TPDM_PIDR0_DS_DSB))
+> +		return -EPERM;
+> +
+> +	spin_lock(&drvdata->spinlock);
+> +	if (val)
+> +		drvdata->dsb->trig_ts = true;
+> +	else
+> +		drvdata->dsb->trig_ts = false;
+> +	spin_unlock(&drvdata->spinlock);
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(dsb_trig_ts);
+> +static struct attribute *tpdm_dsb_attrs[] = {
+> +	&dev_attr_dsb_trig_ts.attr,
+> +	&dev_attr_dsb_trig_type.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group tpdm_dsb_attr_grp = {
+> +	.attrs = tpdm_dsb_attrs,
+> +};
+> +
 
-Here is the summary with links:
-  - [net-next,v3,1/9] net: microchip: sparx5: Adding initial VCAP API support
-    https://git.kernel.org/netdev/net-next/c/8beef08f4618
-  - [net-next,v3,2/9] net: microchip: sparx5: Adding IS2 VCAP model to VCAP API
-    https://git.kernel.org/netdev/net-next/c/e8145e0685be
-  - [net-next,v3,3/9] net: microchip: sparx5: Adding IS2 VCAP register interface
-    https://git.kernel.org/netdev/net-next/c/45c00ad0030c
-  - [net-next,v3,4/9] net: microchip: sparx5: Adding initial tc flower support for VCAP API
-    https://git.kernel.org/netdev/net-next/c/c9da1ac1c212
-  - [net-next,v3,5/9] net: microchip: sparx5: Adding port keyset config and callback interface
-    https://git.kernel.org/netdev/net-next/c/46be056ee0fc
-  - [net-next,v3,6/9] net: microchip: sparx5: Adding basic rule management in VCAP API
-    https://git.kernel.org/netdev/net-next/c/8e10490b0064
-  - [net-next,v3,7/9] net: microchip: sparx5: Writing rules to the IS2 VCAP
-    https://git.kernel.org/netdev/net-next/c/683e05c03275
-  - [net-next,v3,8/9] net: microchip: sparx5: Adding KUNIT test VCAP model
-    https://git.kernel.org/netdev/net-next/c/5d7e5b0401d7
-  - [net-next,v3,9/9] net: microchip: sparx5: Adding KUNIT test for the VCAP API
-    https://git.kernel.org/netdev/net-next/c/67d637516fa9
+Please could we hide the "DSB" related knobs, if the
+the Data sets are missing using is_visible() hook ?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Suzuki
 
