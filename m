@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A43609BFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EFEF609C00
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiJXIBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
+        id S230076AbiJXICA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbiJXIBl (ORCPT
+        with ESMTP id S229973AbiJXIBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:01:41 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E22058073
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 01:01:35 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VSulATT_1666598491;
-Received: from 30.97.48.50(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VSulATT_1666598491)
-          by smtp.aliyun-inc.com;
-          Mon, 24 Oct 2022 16:01:32 +0800
-Message-ID: <f2cc7bb4-f296-766e-16b5-0d70498669eb@linux.alibaba.com>
-Date:   Mon, 24 Oct 2022 16:01:32 +0800
+        Mon, 24 Oct 2022 04:01:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A115D729;
+        Mon, 24 Oct 2022 01:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666598513; x=1698134513;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PscHU1ZUOYvLbYdHmHk85RNII8BoOIqBa+IXJPv7aY4=;
+  b=iH1j9wYgOdIVa6tFJDE7F8LJ0kJOXm/TW7PfjMEKyuC6F2Fby+4pOEv+
+   T6bjO94H1LTKeUABRkDN2edsC07rMmokVUZ/36aDLQXDR1kFpk3LC/sWR
+   pfHHtT2nx4VCQeFkwzR5J/WBln2JCSFPYCmXUsSSmoez2Iv3UODknOxHG
+   iEs24yRZuo5j7oBAgR3kEudzoa17YZVIGBQo0OQiMt4pwaJIIreaCpg5E
+   Y4sWroTOQVPsaCUrEsZYBkoD7hF2IyjMO+cKNCeyB1GCOjC6M6nxEb6tO
+   AkptQj0meClYejj8oNeEuKWWoKjOl1DEMCm52GiBzdeavQiDxRe3RFo5e
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="290663906"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="290663906"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 01:01:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="773736785"
+X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
+   d="scan'208";a="773736785"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 24 Oct 2022 01:01:44 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 Oct 2022 11:01:43 +0300
+Date:   Mon, 24 Oct 2022 11:01:43 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Wayne Chang <waynec@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, treding@nvidia.com,
+        jonathanh@nvidia.com, thierry.reding@gmail.com, ajayg@nvidia.com,
+        kishon@ti.com, vkoul@kernel.org, p.zabel@pengutronix.de,
+        balbi@kernel.org, mathias.nyman@intel.com, jckuo@nvidia.com,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, singhanc@nvidia.com,
+        linux-i2c@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 06/11] usb: typec: ucsi_ccg: Replace ccgx to well-known
+ regex
+Message-ID: <Y1ZGZ2H0/ug3se6j@kuha.fi.intel.com>
+References: <20221024074128.1113554-1-waynec@nvidia.com>
+ <20221024074128.1113554-7-waynec@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v2 1/2] mm: migrate: Fix return value if all subpages of
- THPs are migrated successfully
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     akpm@linux-foundation.org, david@redhat.com, ying.huang@intel.com,
-        ziy@nvidia.com, shy828301@gmail.com, jingshan@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <fca6bb0bd48a0292a0ace2fadd0f44579a060cbb.1666335603.git.baolin.wang@linux.alibaba.com>
- <87pmeiq6qc.fsf@nvidia.com>
- <4fcb9065-0d0c-7bd3-d4f9-5830792cce60@linux.alibaba.com>
- <87lep5r7t9.fsf@nvidia.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <87lep5r7t9.fsf@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024074128.1113554-7-waynec@nvidia.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 24, 2022 at 03:41:23PM +0800, Wayne Chang wrote:
+> ccgx is refer to the cypress cypd4226 typec controller.
+> Replace ccgx to well-known regex "cypress".
+> 
+> Signed-off-by: Wayne Chang <waynec@nvidia.com>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index 139707a2f3d6..5d3099e6eb77 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -1358,7 +1358,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
+>  	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
+>  
+>  	/* Only fail FW flashing when FW build information is not provided */
+> -	status = device_property_read_u16(dev, "ccgx,firmware-build",
+> +	status = device_property_read_u16(dev, "cypress,firmware-build",
+>  					  &uc->fw_build);
+>  	if (status)
+>  		dev_err(uc->dev, "failed to get FW build information\n");
 
+This will break bisectability. You need to first add that
+"cyppress,firmware-build" identifier without removing the old
+"ccgx,firmware-build" identifier, and then introduce a separate
+clean-up patch where you remove it when it's safe to remove:
 
-On 10/24/2022 3:24 PM, Alistair Popple wrote:
-> 
-> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
-> 
->> On 10/24/2022 10:36 AM, Alistair Popple wrote:
->>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
->>>
->>>> When THP migration, if THPs are split and all subpages are migrated successfully
->>>> , the migrate_pages() will still return the number of THP that were not migrated.
->>>> That will confuse the callers of migrate_pages(), for example, which will make
->>>> the longterm pinning failed though all pages are migrated successfully.
->>>>
->>>> Thus we should return 0 to indicate all pages are migrated in this case.
->>>>
->>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>> ---
->>>> Changes from v1:
->>>> - Fix the return value of migrate_pages() instead of fixing the
->>>>     callers' validation.
->>>> ---
->>>>    mm/migrate.c | 7 +++++++
->>>>    1 file changed, 7 insertions(+)
->>>>
->>>> diff --git a/mm/migrate.c b/mm/migrate.c
->>>> index 8e5eb6e..1da0dbc 100644
->>>> --- a/mm/migrate.c
->>>> +++ b/mm/migrate.c
->>>> @@ -1582,6 +1582,13 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->>>>    	 */
->>>>    	list_splice(&ret_pages, from);
->>>>
->>>> +	/*
->>>> +	 * Return 0 in case all subpages of fail-to-migrate THPs are
->>>> +	 * migrated successfully.
->>>> +	 */
->>>> +	if (nr_thp_split && list_empty(from))
->>>> +		rc = 0;
->>> Why do you need to check nr_thp_split? Wouldn't list_empty(from) == True
->>
->> Only in the case of THP split, we can meet this abnormal case. So if no THP
->> split, just return the original 'rc' instead of validating the list, since the
->> 'nr_thp_split' validation is cheaper than the list_empty() validation IMHO.
-> 
-> Is it really that much cheaper? We're already retrying migrations
-> multiple times, etc. so surely the difference here would be marginal at
-> best, and IMHO the code would be much clearer if we always set rc = 0
-> when list_empty(from) = True.
+1. Add new - This patch.
+2. Modify users - PATCH 7/11.
+3. Remove old - *missing*.
 
-Yeah, the difference is marginal and I have no strong preference. OK, 
-will drop the 'nr_thp_split' in next version. Thanks.
+thanks,
 
->>> imply success? And if it doesn't imply success wouldn't it be possible
->>> to end up with nr_thp_split && list_empty(from) whilst still having
->>> pages that failed to migrate?
->>> The list management and return code logic from unmap_and_move() has
->>> gotten pretty difficult to follow and could do with some rework IMHO.
->>
->> Yes, Huang Ying has sent a RFC patchset[1] doing some code refactor, which seems
->> a good start.
-> 
-> Thanks for pointing that out, I looked at it a while back but missed the
-> clean ups. I was kind of waiting for the non-RFC version before taking
-> another closer look.
-> 
->> [1] https://lore.kernel.org/all/20220921060616.73086-1-ying.huang@intel.com/
+-- 
+heikki
