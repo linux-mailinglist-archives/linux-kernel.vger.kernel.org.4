@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951A960B9CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EF460B914
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 22:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232820AbiJXUVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 16:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S232532AbiJXUC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 16:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiJXUVA (ORCPT
+        with ESMTP id S230273AbiJXUBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 16:21:00 -0400
+        Mon, 24 Oct 2022 16:01:31 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0596EE52CB;
-        Mon, 24 Oct 2022 11:37:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A58F1187AB;
+        Mon, 24 Oct 2022 11:23:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 845D7B81190;
-        Mon, 24 Oct 2022 12:34:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1DC4C433D6;
-        Mon, 24 Oct 2022 12:34:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3B77B815BA;
+        Mon, 24 Oct 2022 12:35:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D091C433D7;
+        Mon, 24 Oct 2022 12:35:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614896;
-        bh=j/LOpBXDmZRJQVdeQyAT0GuWFgo4jVHD9tLtPcE6Lm4=;
+        s=korg; t=1666614901;
+        bh=veLomsfAFL54LcEqYU53ULi2HJ+QMvvQ3Z6rw0DYcFs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NBNS/TxYFaY8+l2DaxrT+4Lr5WAtejh1/znENrX5f05mYqoEHhJtUEIdaysuPEYt9
-         oY0uNdtZsrwxsEKZSuSsTJEZn7oPW3azSjAOaOnbEqQDuj/hj6VA1c1e4tWlfRkcnV
-         LSaWce9lkLuXF57Zl+ubhZyR0hVklb5cwmRHMKNE=
+        b=e46cXWPwMYuFE6u/T33EoRS26kobO2MpEUOJioR228PgIVOx1+kjVaj2MQ4Pgznjm
+         sZQTCBWSDHqfxXRzguhIpcBgsmyTvuAF8VOcgeX7ziY+Pu5CbTXVUEWJNf34NxzsU+
+         ldp13yLkZpeMJg5Q+autetEg73a5jVV3jP5A1Bd0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH 5.15 045/530] riscv: Pass -mno-relax only on lld < 15.0.0
-Date:   Mon, 24 Oct 2022 13:26:29 +0200
-Message-Id: <20221024113047.055726393@linuxfoundation.org>
+        stable@vger.kernel.org, Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 5.15 047/530] nvmem: core: Fix memleak in nvmem_register()
+Date:   Mon, 24 Oct 2022 13:26:31 +0200
+Message-Id: <20221024113047.142601737@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
 References: <20221024113044.976326639@linuxfoundation.org>
@@ -56,51 +53,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fangrui Song <maskray@google.com>
+From: Gaosheng Cui <cuigaosheng1@huawei.com>
 
-commit 3cebf80e9a0d3adcb174053be32c88a640b3344b upstream.
+commit bd1244561fa2a4531ded40dbf09c9599084f8b29 upstream.
 
-lld since llvm:6611d58f5bbc ("[ELF] Relax R_RISCV_ALIGN"), which will be
-included in the 15.0.0 release, has implemented some RISC-V linker
-relaxation.  -mno-relax is no longer needed in
-KBUILD_CFLAGS/KBUILD_AFLAGS to suppress R_RISCV_ALIGN which older lld
-can not handle:
+dev_set_name will alloc memory for nvmem->dev.kobj.name in
+nvmem_register, when nvmem_validate_keepouts failed, nvmem's
+memory will be freed and return, but nobody will free memory
+for nvmem->dev.kobj.name, there will be memleak, so moving
+nvmem_validate_keepouts() after device_register() and let
+the device core deal with cleaning name in error cases.
 
-    ld.lld: error: capability.c:(.fixup+0x0): relocation R_RISCV_ALIGN
-    requires unimplemented linker relaxation; recompile with -mno-relax
-    but the .o is already compiled with -mno-relax
-
-Signed-off-by: Fangrui Song <maskray@google.com>
-Link: https://lore.kernel.org/r/20220710071117.446112-1-maskray@google.com/
-Link: https://lore.kernel.org/r/20220918092933.19943-1-palmer@rivosinc.com
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Fixes: de0534df9347 ("nvmem: core: fix error handling while validating keepout regions")
 Cc: stable@vger.kernel.org
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220916120402.38753-1-srinivas.kandagatla@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/Makefile |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/nvmem/core.c |   15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
---- a/arch/riscv/Makefile
-+++ b/arch/riscv/Makefile
-@@ -39,6 +39,7 @@ else
- endif
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -824,21 +824,18 @@ struct nvmem_device *nvmem_register(cons
+ 	nvmem->dev.groups = nvmem_dev_groups;
+ #endif
  
- ifeq ($(CONFIG_LD_IS_LLD),y)
-+ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
- 	KBUILD_CFLAGS += -mno-relax
- 	KBUILD_AFLAGS += -mno-relax
- ifndef CONFIG_AS_IS_LLVM
-@@ -46,6 +47,7 @@ ifndef CONFIG_AS_IS_LLVM
- 	KBUILD_AFLAGS += -Wa,-mno-relax
- endif
- endif
-+endif
+-	if (nvmem->nkeepout) {
+-		rval = nvmem_validate_keepouts(nvmem);
+-		if (rval) {
+-			ida_free(&nvmem_ida, nvmem->id);
+-			kfree(nvmem);
+-			return ERR_PTR(rval);
+-		}
+-	}
+-
+ 	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
  
- # ISA string setting
- riscv-march-$(CONFIG_ARCH_RV32I)	:= rv32ima
+ 	rval = device_register(&nvmem->dev);
+ 	if (rval)
+ 		goto err_put_device;
+ 
++	if (nvmem->nkeepout) {
++		rval = nvmem_validate_keepouts(nvmem);
++		if (rval)
++			goto err_device_del;
++	}
++
+ 	if (config->compat) {
+ 		rval = nvmem_sysfs_setup_compat(nvmem, config);
+ 		if (rval)
 
 
