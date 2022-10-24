@@ -2,83 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF84609FFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86CB60A001
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiJXLOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:14:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
+        id S229995AbiJXLPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiJXLNs (ORCPT
+        with ESMTP id S229936AbiJXLPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:13:48 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E9652FFE
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 04:13:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=cBDkBr7vYUB7A8Ost1DKjjkaKnH15tbd8dYfxDJQD38=; b=NQ7/5E2VdPz3hqSrREq13WOsYw
-        7OjbQIhMab1CWMDTYpWIjExQ/7gUPIaEpzsf/d0899RZAiNH8t1OnS+CIfiBCuBixwibhgkePjhab
-        mAhPmzKO2cS5tHi8WUc7IlibUadOJYQeFUXsUe5FEge8mZGnQRZuQit/U1BjKULuvwlUpGnGaH6I/
-        Cm8tjd/+xsa8C//w99oE4liaPNF3RgYEIfinD29AKjXdGpl92JIUrxIk0iM6EbrqtV8DPAJmEUS5w
-        bSXu6Ac/eDZHWbnwCNMOjoh2sfyj/yMdxk+mrf3f0IO8XzLBz+XHdAPUEr4Q7qDh9htaBvWNsUJAs
-        Au9qgPBg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1omvOR-00632M-O4; Mon, 24 Oct 2022 11:13:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AB0BC300445;
-        Mon, 24 Oct 2022 13:13:18 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 875D02C35E216; Mon, 24 Oct 2022 13:13:18 +0200 (CEST)
-Date:   Mon, 24 Oct 2022 13:13:18 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     x86@kernel.org, willy@infradead.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        aarcange@redhat.com, kirill.shutemov@linux.intel.com,
-        jroedel@suse.de, ubizjak@gmail.com
-Subject: Re: [PATCH 10/13] x86/mm/pae: Be consistent with pXXp_get_and_clear()
-Message-ID: <Y1ZzTvJAm8SCbZY/@hirez.programming.kicks-ass.net>
-References: <20221022111403.531902164@infradead.org>
- <20221022114425.103392961@infradead.org>
- <CAHk-=wh6ip4AVqGx6kB9aHN07pR3M4htTTq1n=M7skPaudpM-Q@mail.gmail.com>
+        Mon, 24 Oct 2022 07:15:06 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D24D2FC0D;
+        Mon, 24 Oct 2022 04:15:01 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id D76A510000E;
+        Mon, 24 Oct 2022 11:14:57 +0000 (UTC)
+Message-ID: <9d30928d-d839-20bc-d101-91845ddfa871@ovn.org>
+Date:   Mon, 24 Oct 2022 13:14:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh6ip4AVqGx6kB9aHN07pR3M4htTTq1n=M7skPaudpM-Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Cc:     i.maximets@ovn.org, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [RFE net-next] net: tun: 1000x speed up
+Content-Language: en-US
+To:     Pavel Machek <pavel@ucw.cz>
+References: <20221021114921.3705550-1-i.maximets@ovn.org>
+ <20221024110847.GA527@duo.ucw.cz>
+From:   Ilya Maximets <i.maximets@ovn.org>
+In-Reply-To: <20221024110847.GA527@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 10:53:42AM -0700, Linus Torvalds wrote:
-> On Sat, Oct 22, 2022 at 4:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > +
-> > +#define pxx_xchg64(_pxx, _ptr, _val) ({                                        \
-> > +       _pxx##val_t *_p = (_pxx##val_t *)_ptr;                          \
-> > +       _pxx##val_t _o = *_p;                                           \
-> > +       do { } while (!try_cmpxchg64(_p, &_o, (_val)));                 \
-> > +       native_make_##_pxx(_o);                                         \
-> > +})
+On 10/24/22 13:08, Pavel Machek wrote:
+> Hi!
 > 
-> I think this could just be a "xchp64()", but if the pte/pmd code is
-> the only thing that actually wants this on 32-bit architectures, I'm
-> certainly ok with making it be specific to just this code, and calling
-> it "pxx_xchg()".
+>> Bump the advertised speed to at least match the veth.  10Gbps also
+>> seems like a more or less fair assumption these days, even though
+>> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
+>> and let the application/user decide on a right value for them.
+>>
+>> Link: https://mail.openvswitch.org/pipermail/ovs-discuss/2022-July/051958.html
+>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>> ---
+>>
+>> Sorry for the clickbait subject line.  Can change it to something more
+>> sensible while posting non-RFE patch.  Something like:
+>>
+>>   'net: tun: bump the link speed from 10Mbps to 10Gbps'
+>>
+>> This patch is RFE just to start a conversation.
+> 
+> Yeah, well, it seems that internet already fallen for your clickbait
+> :-(.
+> 
+> https://www.phoronix.com/news/Linux-TUN-Driver-1000x
+> 										Pavel
+> 										
 
-Regular xchg64() didn't work, the casting crud there is required because
-of how pxx_t is a struct.
+Oh, Wow...  Sorry about that. :/
 
-Now I could obviously do a xchg64(), but then we'd still need this
-wrapper -- and yeah, I don't know how many other users there are.
+Best regards, Ilya Maximets.
