@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466BD60BDA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9DF60BD67
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiJXWld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51448 "EHLO
+        id S229613AbiJXWan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiJXWkQ (ORCPT
+        with ESMTP id S231535AbiJXWaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:40:16 -0400
+        Mon, 24 Oct 2022 18:30:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A422B65E8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:04:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7CB6E2EC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 13:52:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAB4B615B9
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFA8C615B3
         for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 20:49:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5339C433B5;
-        Mon, 24 Oct 2022 20:49:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E0F5C433C1;
+        Mon, 24 Oct 2022 20:49:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666644569;
-        bh=ToGxVn5DgkZtjVMi4IGaA+ZXlJgYyh7RCq47o6e6Bdo=;
+        bh=zkSKxd+aFM4wLLzA3DhfvQt2mZE0FdxT9KFkAovv2q0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HSzy9SJ0dwZ69SDES5dYIVzSTUayn4yv8SDwn3IaJf/ABaUHGdh4f4jGjqv8cVWzD
-         Yk1PyK4+OE9EJR8TcwLDAy5+nqT82hdT9S+/vCMlHuorkE+Y1Ns7qRd/qBDpGujUDI
-         F4m5W5o4vy96+Q5vmBGLGAfpXnhWVfm+0CJBW3T1cuvf+PqqJEkNTUlgTj+FqjObDN
-         2GXiHaGWExkIdPnsJMCeyD6rEWMdOzlwdbs7G3neaoWXRWxUe/1ysjGra8pf1JbCl5
-         aRs/0AOYQpQSLSZHjsnUo/UYIkO/S5rSW4D0ELTlfXd2xzLORWwAqUEbhLfm8/jbPQ
-         tUx0sed/3Olqw==
+        b=G6WZBASYLD6LklC/+lqeZoDfG3dGQIzRLumccHTMO4T7Q5mINGCI4MIgGb2B0XqhT
+         1NFEYa+1n12cb74Dg3VHsDmrhWsQPW2QOb8aIS/NQ9qxx+vLNRqeyDN2xi75Omjov1
+         oToMe521lNjikNFXIh0rt82zJXngxjovF3SSWwZDJ8UzVuc8yIBdlOt8tgk3BiVeB9
+         ZCt2PNnfHBZqzAxrxHxb2bIa7JRuZA4O8gVk3m4FyTSyi7rH0uLhiLIu/+aN4igQlr
+         Orb4Ju7MGgTATAU84n36nZY4tv4zqMrn8Rs76A+rg7UpvX7X2Wq2vKi93zy0khlsY+
+         1m7BXfV5hTJzA==
 From:   SeongJae Park <sj@kernel.org>
 To:     SeongJae Park <sj@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, damon@lists.linux.dev,
-        linux-mm@kvack.org
-Subject: [PATCH 07/11] mm/damon/sysfs: move sysfs_lock to common module
-Date:   Mon, 24 Oct 2022 20:49:15 +0000
-Message-Id: <20221024204919.18524-8-sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 08/11] mm/damon/sysfs: move unsigned long range directory to common module
+Date:   Mon, 24 Oct 2022 20:49:16 +0000
+Message-Id: <20221024204919.18524-9-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221024204919.18524-1-sj@kernel.org>
 References: <20221024204919.18524-1-sj@kernel.org>
@@ -54,90 +54,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DAMON sysfs interface is implemented in a single file, sysfs.c, which
-has about 2,800 lines of code.  As the interface is hierarchical and
-some of the code can be reused by different hierarchies, it would make
-more sense to split out the implementation into common parts and
-different parts in multiple files.  As the beginning of the work, create
-files for common code and move the global mutex for directories
-modifications protection into the new file.
+The implementation of unsigned long type range directories can be reused
+by multiple DAMON sysfs directories including those for DAMON-based
+Operation Schemes and the range of number of monitoring regions.  Move
+the code into the files for DAMON sysfs common logics.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/Makefile       |  2 +-
- mm/damon/sysfs-common.c | 11 +++++++++++
- mm/damon/sysfs-common.h | 11 +++++++++++
- mm/damon/sysfs.c        |  4 +---
- 4 files changed, 24 insertions(+), 4 deletions(-)
- create mode 100644 mm/damon/sysfs-common.c
- create mode 100644 mm/damon/sysfs-common.h
+ mm/damon/sysfs-common.c |  96 ++++++++++++++++++++++++++++++++++++++
+ mm/damon/sysfs-common.h |  13 ++++++
+ mm/damon/sysfs.c        | 100 ----------------------------------------
+ 3 files changed, 109 insertions(+), 100 deletions(-)
 
-diff --git a/mm/damon/Makefile b/mm/damon/Makefile
-index 3e6b8ad73858..f8d535a6253b 100644
---- a/mm/damon/Makefile
-+++ b/mm/damon/Makefile
-@@ -3,7 +3,7 @@
- obj-y				:= core.o
- obj-$(CONFIG_DAMON_VADDR)	+= ops-common.o vaddr.o
- obj-$(CONFIG_DAMON_PADDR)	+= ops-common.o paddr.o
--obj-$(CONFIG_DAMON_SYSFS)	+= sysfs.o
-+obj-$(CONFIG_DAMON_SYSFS)	+= sysfs-common.o sysfs.o
- obj-$(CONFIG_DAMON_DBGFS)	+= dbgfs.o
- obj-$(CONFIG_DAMON_RECLAIM)	+= reclaim.o
- obj-$(CONFIG_DAMON_LRU_SORT)	+= lru_sort.o
 diff --git a/mm/damon/sysfs-common.c b/mm/damon/sysfs-common.c
-new file mode 100644
-index 000000000000..9dc743868d5b
---- /dev/null
+index 9dc743868d5b..52bebf242f74 100644
+--- a/mm/damon/sysfs-common.c
 +++ b/mm/damon/sysfs-common.c
-@@ -0,0 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Common Primitives for DAMON Sysfs Interface
-+ *
-+ * Author: SeongJae Park <sj@kernel.org>
-+ */
-+
-+#include "sysfs-common.h"
-+
-+DEFINE_MUTEX(damon_sysfs_lock);
-+
-diff --git a/mm/damon/sysfs-common.h b/mm/damon/sysfs-common.h
-new file mode 100644
-index 000000000000..745a918b94f5
---- /dev/null
-+++ b/mm/damon/sysfs-common.h
-@@ -0,0 +1,11 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Common Primitives for DAMON Sysfs Interface
-+ *
-+ * Author: SeongJae Park <sj@kernel.org>
-+ */
-+
-+#include <linux/damon.h>
-+#include <linux/kobject.h>
-+
-+extern struct mutex damon_sysfs_lock;
-diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
-index e8bd7367d15b..0f3f06d8dae7 100644
---- a/mm/damon/sysfs.c
-+++ b/mm/damon/sysfs.c
-@@ -5,13 +5,11 @@
-  * Copyright (c) 2022 SeongJae Park <sj@kernel.org>
+@@ -5,7 +5,103 @@
+  * Author: SeongJae Park <sj@kernel.org>
   */
  
--#include <linux/damon.h>
--#include <linux/kobject.h>
- #include <linux/pid.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
++#include <linux/slab.h>
++
+ #include "sysfs-common.h"
  
--static DEFINE_MUTEX(damon_sysfs_lock);
-+#include "sysfs-common.h"
+ DEFINE_MUTEX(damon_sysfs_lock);
  
++/*
++ * unsigned long range directory
++ */
++
++struct damon_sysfs_ul_range *damon_sysfs_ul_range_alloc(
++		unsigned long min,
++		unsigned long max)
++{
++	struct damon_sysfs_ul_range *range = kmalloc(sizeof(*range),
++			GFP_KERNEL);
++
++	if (!range)
++		return NULL;
++	range->kobj = (struct kobject){};
++	range->min = min;
++	range->max = max;
++
++	return range;
++}
++
++static ssize_t min_show(struct kobject *kobj, struct kobj_attribute *attr,
++		char *buf)
++{
++	struct damon_sysfs_ul_range *range = container_of(kobj,
++			struct damon_sysfs_ul_range, kobj);
++
++	return sysfs_emit(buf, "%lu\n", range->min);
++}
++
++static ssize_t min_store(struct kobject *kobj, struct kobj_attribute *attr,
++		const char *buf, size_t count)
++{
++	struct damon_sysfs_ul_range *range = container_of(kobj,
++			struct damon_sysfs_ul_range, kobj);
++	unsigned long min;
++	int err;
++
++	err = kstrtoul(buf, 0, &min);
++	if (err)
++		return err;
++
++	range->min = min;
++	return count;
++}
++
++static ssize_t max_show(struct kobject *kobj, struct kobj_attribute *attr,
++		char *buf)
++{
++	struct damon_sysfs_ul_range *range = container_of(kobj,
++			struct damon_sysfs_ul_range, kobj);
++
++	return sysfs_emit(buf, "%lu\n", range->max);
++}
++
++static ssize_t max_store(struct kobject *kobj, struct kobj_attribute *attr,
++		const char *buf, size_t count)
++{
++	struct damon_sysfs_ul_range *range = container_of(kobj,
++			struct damon_sysfs_ul_range, kobj);
++	unsigned long max;
++	int err;
++
++	err = kstrtoul(buf, 0, &max);
++	if (err)
++		return err;
++
++	range->max = max;
++	return count;
++}
++
++void damon_sysfs_ul_range_release(struct kobject *kobj)
++{
++	kfree(container_of(kobj, struct damon_sysfs_ul_range, kobj));
++}
++
++static struct kobj_attribute damon_sysfs_ul_range_min_attr =
++		__ATTR_RW_MODE(min, 0600);
++
++static struct kobj_attribute damon_sysfs_ul_range_max_attr =
++		__ATTR_RW_MODE(max, 0600);
++
++static struct attribute *damon_sysfs_ul_range_attrs[] = {
++	&damon_sysfs_ul_range_min_attr.attr,
++	&damon_sysfs_ul_range_max_attr.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(damon_sysfs_ul_range);
++
++struct kobj_type damon_sysfs_ul_range_ktype = {
++	.release = damon_sysfs_ul_range_release,
++	.sysfs_ops = &kobj_sysfs_ops,
++	.default_groups = damon_sysfs_ul_range_groups,
++};
++
+diff --git a/mm/damon/sysfs-common.h b/mm/damon/sysfs-common.h
+index 745a918b94f5..56e6a99e353b 100644
+--- a/mm/damon/sysfs-common.h
++++ b/mm/damon/sysfs-common.h
+@@ -9,3 +9,16 @@
+ #include <linux/kobject.h>
+ 
+ extern struct mutex damon_sysfs_lock;
++
++struct damon_sysfs_ul_range {
++	struct kobject kobj;
++	unsigned long min;
++	unsigned long max;
++};
++
++struct damon_sysfs_ul_range *damon_sysfs_ul_range_alloc(
++		unsigned long min,
++		unsigned long max);
++void damon_sysfs_ul_range_release(struct kobject *kobj);
++
++extern struct kobj_type damon_sysfs_ul_range_ktype;
+diff --git a/mm/damon/sysfs.c b/mm/damon/sysfs.c
+index 0f3f06d8dae7..129743292e17 100644
+--- a/mm/damon/sysfs.c
++++ b/mm/damon/sysfs.c
+@@ -11,106 +11,6 @@
+ 
+ #include "sysfs-common.h"
+ 
+-/*
+- * unsigned long range directory
+- */
+-
+-struct damon_sysfs_ul_range {
+-	struct kobject kobj;
+-	unsigned long min;
+-	unsigned long max;
+-};
+-
+-static struct damon_sysfs_ul_range *damon_sysfs_ul_range_alloc(
+-		unsigned long min,
+-		unsigned long max)
+-{
+-	struct damon_sysfs_ul_range *range = kmalloc(sizeof(*range),
+-			GFP_KERNEL);
+-
+-	if (!range)
+-		return NULL;
+-	range->kobj = (struct kobject){};
+-	range->min = min;
+-	range->max = max;
+-
+-	return range;
+-}
+-
+-static ssize_t min_show(struct kobject *kobj, struct kobj_attribute *attr,
+-		char *buf)
+-{
+-	struct damon_sysfs_ul_range *range = container_of(kobj,
+-			struct damon_sysfs_ul_range, kobj);
+-
+-	return sysfs_emit(buf, "%lu\n", range->min);
+-}
+-
+-static ssize_t min_store(struct kobject *kobj, struct kobj_attribute *attr,
+-		const char *buf, size_t count)
+-{
+-	struct damon_sysfs_ul_range *range = container_of(kobj,
+-			struct damon_sysfs_ul_range, kobj);
+-	unsigned long min;
+-	int err;
+-
+-	err = kstrtoul(buf, 0, &min);
+-	if (err)
+-		return err;
+-
+-	range->min = min;
+-	return count;
+-}
+-
+-static ssize_t max_show(struct kobject *kobj, struct kobj_attribute *attr,
+-		char *buf)
+-{
+-	struct damon_sysfs_ul_range *range = container_of(kobj,
+-			struct damon_sysfs_ul_range, kobj);
+-
+-	return sysfs_emit(buf, "%lu\n", range->max);
+-}
+-
+-static ssize_t max_store(struct kobject *kobj, struct kobj_attribute *attr,
+-		const char *buf, size_t count)
+-{
+-	struct damon_sysfs_ul_range *range = container_of(kobj,
+-			struct damon_sysfs_ul_range, kobj);
+-	unsigned long max;
+-	int err;
+-
+-	err = kstrtoul(buf, 0, &max);
+-	if (err)
+-		return err;
+-
+-	range->max = max;
+-	return count;
+-}
+-
+-static void damon_sysfs_ul_range_release(struct kobject *kobj)
+-{
+-	kfree(container_of(kobj, struct damon_sysfs_ul_range, kobj));
+-}
+-
+-static struct kobj_attribute damon_sysfs_ul_range_min_attr =
+-		__ATTR_RW_MODE(min, 0600);
+-
+-static struct kobj_attribute damon_sysfs_ul_range_max_attr =
+-		__ATTR_RW_MODE(max, 0600);
+-
+-static struct attribute *damon_sysfs_ul_range_attrs[] = {
+-	&damon_sysfs_ul_range_min_attr.attr,
+-	&damon_sysfs_ul_range_max_attr.attr,
+-	NULL,
+-};
+-ATTRIBUTE_GROUPS(damon_sysfs_ul_range);
+-
+-static struct kobj_type damon_sysfs_ul_range_ktype = {
+-	.release = damon_sysfs_ul_range_release,
+-	.sysfs_ops = &kobj_sysfs_ops,
+-	.default_groups = damon_sysfs_ul_range_groups,
+-};
+-
  /*
-  * unsigned long range directory
+  * schemes/stats directory
+  */
 -- 
 2.25.1
 
