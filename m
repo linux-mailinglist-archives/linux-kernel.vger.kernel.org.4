@@ -2,56 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A9F60BE5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9BE060BF15
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiJXXOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S230453AbiJXXzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231861AbiJXXOQ (ORCPT
+        with ESMTP id S231147AbiJXXyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:14:16 -0400
-X-Greylist: delayed 3580 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 14:35:24 PDT
-Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5125C1DF23
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:35:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
-        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=RF5v6sbc/BgP4DAy64XP5vEHKb5eLyVOJZSiY2mcVFQ=; b=q2vKX0iVl6xstCbWD8tFqDVTaY
-        7Wu08EpPd0dhYq2LDGPkm3Xxk3hfzOBoQjY8XJYq4waPjgz/NzlVGrrIl+oieZUgrlNUU/KhfYnDq
-        Ggk46jc5GbAaOIRpagZZ4I29/kRcjn8uVBYbqX89CSh+v46QCDKASN8gsAe4bZ4dFKEoSnavM358x
-        IKAkS7OlzbkEYoi0IqBujvSbMKbGsFTNejtNJxC4anlU1etzLVOt9kfgF67X8Dml0kk4VwyCrIhG4
-        dh7bv/HeYouaQpsvL72fs9T/RmFQldMPSWiKo72eGoTsGPMAiBlKoTMJ124iA7ne72cELr9ImhPvQ
-        6vXgVjAA==;
-Received: from dg by mx.treblig.org with local (Exim 4.94.2)
-        (envelope-from <dg@treblig.org>)
-        id 1on2Vh-007RkM-Tl; Mon, 24 Oct 2022 19:49:17 +0100
-Date:   Mon, 24 Oct 2022 19:49:17 +0100
-From:   "Dr. David Alan Gilbert" <linux@treblig.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     shaggy@kernel.org, jfs-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org,
-        syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
-Subject: Re: [PATCH] jfs: Fix fortify moan in symlink
-Message-ID: <Y1beLWto/J2W1Stu@gallifrey>
-References: <20221022203913.264855-1-linux@treblig.org>
- <202210241021.6E9E1EF65@keescook>
+        Mon, 24 Oct 2022 19:54:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68306302BD5
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 15:11:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79905B80EDF
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 18:52:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47B8EC433C1;
+        Mon, 24 Oct 2022 18:52:40 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 14:52:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH] x86/mm: Do not verify W^X at boot up
+Message-ID: <20221024145250.08cfc147@gandalf.local.home>
+In-Reply-To: <CAHk-=wj9xBsbeoiFCBLrr3y_CdMOzNh=fD3rr_kcxYwL6vV0Jw@mail.gmail.com>
+References: <20221024114536.44686c83@gandalf.local.home>
+        <CAHk-=wj9xBsbeoiFCBLrr3y_CdMOzNh=fD3rr_kcxYwL6vV0Jw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <202210241021.6E9E1EF65@keescook>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/5.10.0-12-amd64 (x86_64)
-X-Uptime: 19:47:20 up 227 days,  5:13,  1 user,  load average: 0.07, 0.04,
- 0.00
-User-Agent: Mutt/2.0.5 (2021-01-21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,83 +48,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Kees Cook (keescook@chromium.org) wrote:
-> On Sat, Oct 22, 2022 at 09:39:14PM +0100, linux@treblig.org wrote:
-> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
-> > 
-> > JFS has in jfs_incore.h:
-> > 
-> >       /* _inline may overflow into _inline_ea when needed */
-> >       /* _inline_ea may overlay the last part of
-> >        * file._xtroot if maxentry = XTROOTINITSLOT
-> >        */
-> >       union {
-> >         struct {
-> >           /* 128: inline symlink */
-> >           unchar _inline[128];
-> >           /* 128: inline extended attr */
-> >           unchar _inline_ea[128];
-> >         };
-> >         unchar _inline_all[256];
-> > 
-> > and currently the symlink code copies into _inline;
-> > if this is larger than 128 bytes it triggers a fortify warning of the
-> > form:
-> > 
-> >   memcpy: detected field-spanning write (size 132) of single field
-> >      "ip->i_link" at fs/jfs/namei.c:950 (size 18446744073709551615)
+On Mon, 24 Oct 2022 11:19:31 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+
+> in text_poke_bp(). And that, in turn, is because PeterZ ended up
+> special-casing this all in commit 768ae4406a5c ("x86/ftrace: Use
+> text_poke()")
 > 
-> Which compiler are you using for this build?
-
-I think that report was the same on gcc on Fedora 37 and whatever
-syzkaller was running.
-
-> This size report (SIZE_MAX)
-> should be impossible to reach. But also, the size is just wrong --
-> i_inline is 128 bytes, not SIZE_MAX. So, the detection is working
-> (132 > 128), but the report is broken, and I can't see how...
-
-Yeh, and led me down a blind alley for a while thinking something had
-really managed to screwup the strlen somehow.
-
+> Maybe we should just strive to get rid of all these SYSTEM_BOOTING
+> special cases, instead of adding yet another a new one.
 > 
-> > 
-> > when it's actually OK.
-> > 
-> > Copy it into _inline_all instead.
-> > 
-> > Reported-by: syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
-> > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> > ---
-> >  fs/jfs/namei.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/jfs/namei.c b/fs/jfs/namei.c
-> > index 9db4f5789c0ec..4fbbf88435e69 100644
-> > --- a/fs/jfs/namei.c
-> > +++ b/fs/jfs/namei.c
-> > @@ -946,7 +946,7 @@ static int jfs_symlink(struct user_namespace *mnt_userns, struct inode *dip,
-> >  	if (ssize <= IDATASIZE) {
-> >  		ip->i_op = &jfs_fast_symlink_inode_operations;
-> >  
-> > -		ip->i_link = JFS_IP(ip)->i_inline;
-> > +		ip->i_link = JFS_IP(ip)->i_inline_all;
-> >  		memcpy(ip->i_link, name, ssize);
-> >  		ip->i_size = ssize - 1;
-> >  
+> There's presumably "it slows down boot" reason to avoid the full
+> text_poke_bp() dance, but do we really care for the "ftrace=function"
+> case?
 > 
-> Regardless, the fix looks correct to me!
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thanks!
+It's not just speed up at boot up. It's because text_poke doesn't work at
+early boot up when function tracing is enabled. If I remove the
+SYSTEM_BOOTING checks in text_poke() this happens:
 
-Dave
+[    0.963966] ftrace: allocating 47021 entries in 184 pages
+[    0.969376] ftrace section at ffffffff89ef54c0 sorted properly
+[    0.982126] ftrace: allocated 184 pages with 4 groups
+[    1.009779] Starting tracer 'function'
+[    1.013753] BUG: kernel NULL pointer dereference, address: 0000000000000048
+[    1.020516] #PF: supervisor read access in kernel mode
+[    1.025616] #PF: error_code(0x0000) - not-present page
+[    1.030718] PGD 0 P4D 0 
+[    1.033224] Oops: 0000 [#1] PREEMPT SMP PTI
+[    1.037373] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc1-test+ #496
+[    1.044031] Hardware name: Hewlett-Packard HP Compaq Pro 6300 SFF/339A, BIOS K01 v03.03 07/14/2016
+[    1.052934] RIP: 0010:walk_to_pmd+0x17/0x130
+[    1.057172] Code: 1f ff ff ff 0f 0b e9 ed fe ff ff 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f0 41 55 48 c1 e8 24 41 54 25 f8 0f 00 00 55 53 <48> 03 47 48 0f 84 c4 00 00 00 49 89 fc 48 8b 38 48 89 f3 48 89 c5
+[    1.075846] RSP: 0000:ffffffff89603cd8 EFLAGS: 00010046
+[    1.081033] RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffffd0f980000000
+[    1.088121] RDX: ffffffff89603d68 RSI: 0000000000000000 RDI: 0000000000000000
+[    1.095213] RBP: 0000000000000000 R08: ffffffff8a017cf0 R09: ffffffff8a017cf1
+[    1.102302] R10: 0000000000000000 R11: 0000000000000000 R12: ffffffff89603d68
+[    1.109389] R13: 000000000000031e R14: 000000000000031f R15: 8000000000000063
+[    1.116479] FS:  0000000000000000(0000) GS:ffffa068daa00000(0000) knlGS:0000000000000000
+[    1.124516] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    1.130220] CR2: 0000000000000048 CR3: 000000000760a001 CR4: 00000000000606f0
+[    1.137309] Call Trace:
+[    1.139732]  <TASK>
+[    1.141805]  __get_locked_pte+0x1b/0x120
+[    1.145694]  ? ftrace_caller_op_ptr+0x17/0x17
+[    1.150016]  __text_poke+0xf8/0x540
+[    1.153474]  ? patch_retpoline+0x170/0x170
+[    1.157536]  ? text_poke_loc_init+0x5b/0x170
+[    1.161773]  text_poke_bp_batch+0x86/0x290
+[    1.165835]  ? cache_mod+0x280/0x280
+[    1.169378]  text_poke_bp+0x3a/0x60
+[    1.172836]  ftrace_update_ftrace_func+0x3e/0x80
+[    1.177416]  ftrace_modify_all_code+0x79/0x160
+[    1.181827]  ftrace_startup+0xbd/0x150
+[    1.185544]  ? ftrace_stacktrace_count+0xc0/0xc0
+[    1.190128]  register_ftrace_function_nolock+0x20/0x60
+[    1.195227]  register_ftrace_function+0xc7/0x130
+[    1.199807]  ? ftrace_stacktrace_count+0xc0/0xc0
+[    1.204390]  function_trace_init+0x71/0xd0
+[    1.208454]  tracing_set_tracer+0x172/0x280
+[    1.212603]  register_tracer+0x1e0/0x205
+[    1.216495]  tracer_alloc_buffers.isra.0+0x1f8/0x2fe
+[    1.221421]  start_kernel+0x21f/0x4e8
+[    1.225051]  ? x86_64_start_kernel+0x60/0x78
+[    1.229288]  secondary_startup_64_no_verify+0xd3/0xdb
+[    1.234301]  </TASK>
+[    1.236459] Modules linked in:
+[    1.239484] CR2: 0000000000000048
+[    1.242769] ---[ end trace 0000000000000000 ]---
 
-> -- 
-> Kees Cook
--- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+Interrupts haven't been enabled yet, so things are still rather fragile at
+this point of start up.
+
+-- Steve
