@@ -2,643 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7DDB60BDFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 068CF60BD21
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiJXW4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S232083AbiJXWJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 18:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbiJXWzv (ORCPT
+        with ESMTP id S232158AbiJXWI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:55:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55203322BC7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666646162;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ieTyXB3Wk4ysuTlFs3hGpkhCUtY97hDINM8B6qgxDJI=;
-        b=DF9AVexide3t5cOpJMkUoThSFhLpmqaNj4SvaDbqhNoOteQFxyHoXFyIn3cnObfPCVEkKT
-        XO/mNRj19V7Uktm5RthvLQSomuO48vfM85K8SukV79GWgCjFeTze5dpmDlaP5K+3+qUcuS
-        TGUWJc3NeYc2Qmj5xQhetWDbWfZQl7U=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-281-ru_2NCPmMWWqetgvQa-L3w-1; Mon, 24 Oct 2022 08:32:10 -0400
-X-MC-Unique: ru_2NCPmMWWqetgvQa-L3w-1
-Received: by mail-qv1-f72.google.com with SMTP id q5-20020ad44025000000b004bb76ca694bso679203qvp.18
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 05:32:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ieTyXB3Wk4ysuTlFs3hGpkhCUtY97hDINM8B6qgxDJI=;
-        b=E03qYaseYUoItx3zsTDefGeelgT84VK4NiKcee5Hd+BaR8vZ+ceQc6/HceYa9XEENH
-         kfiazbI3Qw+5QOvSfM54Z0RYnheGm04FVhgVq/FFirnGHU0xndpZPsb8jwY93MK37nUu
-         rSotZHQZC28pUGhf+ytByWTRtjIclN0la0PC+22lnrPbd0oG80c0Su01TSboLIXGpCnb
-         FIx9HPM/m/7eb3Ov6Fay2HLsJv/YxfvWut5WKO5mjyJPJtIJj6ooN1wfCI9c51oXyqIw
-         5ljm/ff73A28MT3B0he3skx806a7/1tGkb31cfOvp6voMk8Cmxm+kC8OVpipOhVo6NSw
-         E4DQ==
-X-Gm-Message-State: ACrzQf1VbQK7xS/ohHdK0kLonMN9Nj8+fXppKKvMdqng57ZqoF4Z8RmW
-        6ICCJcHb9d+odzQ0m5OHInki0vXLQVyTVdrgVBlsgslZk0AOLIV9tG6CJk4m5AOVNE4aX4lEvFY
-        18Rt/3XjS2eaWDnCYbNbEAg9f
-X-Received: by 2002:a05:620a:a9c:b0:6ec:f03:9e5b with SMTP id v28-20020a05620a0a9c00b006ec0f039e5bmr22622021qkg.628.1666614729562;
-        Mon, 24 Oct 2022 05:32:09 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4hemp6XZA3dKTAgiwlmesx3yiar8xYsgXHgBCBE91nH2ytcG9QIQqbAXpatND0WMizGv3QmA==
-X-Received: by 2002:a05:620a:a9c:b0:6ec:f03:9e5b with SMTP id v28-20020a05620a0a9c00b006ec0f039e5bmr22621995qkg.628.1666614729197;
-        Mon, 24 Oct 2022 05:32:09 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id p6-20020a05620a132600b006ee7923c187sm14632028qkj.42.2022.10.24.05.32.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 05:32:08 -0700 (PDT)
-Message-ID: <61243068e25a8d8cdf539c6e640ed9e57d89ca5b.camel@redhat.com>
-Subject: Re: [PATCH v2 2/8] KVM: x86: move SMM entry to a new file
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, maciej.szmigiero@oracle.com
-Date:   Mon, 24 Oct 2022 15:32:06 +0300
-In-Reply-To: <20220929172016.319443-3-pbonzini@redhat.com>
-References: <20220929172016.319443-1-pbonzini@redhat.com>
-         <20220929172016.319443-3-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        Mon, 24 Oct 2022 18:08:59 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13F62FF684;
+        Mon, 24 Oct 2022 13:22:51 -0700 (PDT)
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MwvrX1QKbz6HJRR;
+        Mon, 24 Oct 2022 20:43:40 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 14:44:58 +0200
+Received: from [10.48.145.243] (10.48.145.243) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 24 Oct 2022 13:44:58 +0100
+Message-ID: <dc61408d-8fc7-ca29-d284-0c92c2e1828c@huawei.com>
+Date:   Mon, 24 Oct 2022 13:44:56 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v5 0/7] libsas and drivers: NCQ error handling
+To:     Niklas Cassel <Niklas.Cassel@wdc.com>
+CC:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "jinpu.wang@cloud.ionos.com" <jinpu.wang@cloud.ionos.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linuxarm <linuxarm@huawei.com>,
+        yangxingui <yangxingui@huawei.com>,
+        yanaijie <yanaijie@huawei.com>
+References: <YzwvpUUftX6Ziurt@x1-carbon>
+ <cfa52b91-db81-a179-76c2-8a61266c099d@huawei.com>
+ <27148ec5-d1ae-d9a2-1b00-a4c34d2da198@huawei.com>
+ <Yz33FGwd3YvQUAqT@x1-carbon>
+ <5db6a7bc-dfeb-76e1-6899-7041daa934cf@opensource.wdc.com>
+ <Yz4BLTPkXqyjW4a4@x1-carbon>
+ <64ab35a7-f1ff-92ee-890e-89a5aee935a4@opensource.wdc.com>
+ <f190f19e-34b2-611c-1cf4-f8f34d12fe74@huawei.com>
+ <Yz7qD+gpmI1bdw16@x1-carbon>
+ <bc7d74dc-5aaa-1ad3-626f-df89955b1380@huawei.com>
+ <Y1aEGW2BtdIRJy7s@x1-carbon>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <Y1aEGW2BtdIRJy7s@x1-carbon>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.48.145.243]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-29 at 13:20 -0400, Paolo Bonzini wrote:
-> Some users of KVM implement the UEFI variable store through a paravirtual
-> device that does not require the "SMM lockbox" component of edk2, and
-> would like to compile out system management mode.  In preparation for
-> that, move the SMM entry code out of x86.c and into a new file.
+Hi Niklas,
+
 > 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h |   1 +
->  arch/x86/kvm/smm.c              | 235 +++++++++++++++++++++++++++++++
->  arch/x86/kvm/smm.h              |   1 +
->  arch/x86/kvm/x86.c              | 239 +-------------------------------
->  4 files changed, 239 insertions(+), 237 deletions(-)
+> For the record, I tested the pm80xx driver on a HoneyComb LX2 board
+> (an arm64 board using ACPI).
 > 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 0ca8f28854ab..b7d078cd768d 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1838,6 +1838,7 @@ int kvm_emulate_ap_reset_hold(struct kvm_vcpu *vcpu);
->  int kvm_emulate_wbinvd(struct kvm_vcpu *vcpu);
->  
->  void kvm_get_segment(struct kvm_vcpu *vcpu, struct kvm_segment *var, int seg);
-> +void kvm_set_segment(struct kvm_vcpu *vcpu, struct kvm_segment *var, int seg);
->  int kvm_load_segment_descriptor(struct kvm_vcpu *vcpu, u16 selector, int seg);
->  void kvm_vcpu_deliver_sipi_vector(struct kvm_vcpu *vcpu, u8 vector);
->  
-> diff --git a/arch/x86/kvm/smm.c b/arch/x86/kvm/smm.c
-> index b91c48d91f6e..26a6859e421f 100644
-> --- a/arch/x86/kvm/smm.c
-> +++ b/arch/x86/kvm/smm.c
-> @@ -5,6 +5,7 @@
->  #include "kvm_cache_regs.h"
->  #include "kvm_emulate.h"
->  #include "smm.h"
-> +#include "cpuid.h"
->  #include "trace.h"
->  
->  void kvm_smm_changed(struct kvm_vcpu *vcpu, bool entering_smm)
-> @@ -35,3 +36,237 @@ void process_smi(struct kvm_vcpu *vcpu)
->  	vcpu->arch.smi_pending = true;
->  	kvm_make_request(KVM_REQ_EVENT, vcpu);
->  }
-> +
-> +static u32 enter_smm_get_segment_flags(struct kvm_segment *seg)
-> +{
-> +	u32 flags = 0;
-> +	flags |= seg->g       << 23;
-> +	flags |= seg->db      << 22;
-> +	flags |= seg->l       << 21;
-> +	flags |= seg->avl     << 20;
-> +	flags |= seg->present << 15;
-> +	flags |= seg->dpl     << 13;
-> +	flags |= seg->s       << 12;
-> +	flags |= seg->type    << 8;
-> +	return flags;
-> +}
-> +
-> +static void enter_smm_save_seg_32(struct kvm_vcpu *vcpu, char *buf, int n)
-> +{
-> +	struct kvm_segment seg;
-> +	int offset;
-> +
-> +	kvm_get_segment(vcpu, &seg, n);
-> +	PUT_SMSTATE(u32, buf, 0x7fa8 + n * 4, seg.selector);
-> +
-> +	if (n < 3)
-> +		offset = 0x7f84 + n * 12;
-> +	else
-> +		offset = 0x7f2c + (n - 3) * 12;
-> +
-> +	PUT_SMSTATE(u32, buf, offset + 8, seg.base);
-> +	PUT_SMSTATE(u32, buf, offset + 4, seg.limit);
-> +	PUT_SMSTATE(u32, buf, offset, enter_smm_get_segment_flags(&seg));
-> +}
-> +
-> +#ifdef CONFIG_X86_64
-> +static void enter_smm_save_seg_64(struct kvm_vcpu *vcpu, char *buf, int n)
-> +{
-> +	struct kvm_segment seg;
-> +	int offset;
-> +	u16 flags;
-> +
-> +	kvm_get_segment(vcpu, &seg, n);
-> +	offset = 0x7e00 + n * 16;
-> +
-> +	flags = enter_smm_get_segment_flags(&seg) >> 8;
-> +	PUT_SMSTATE(u16, buf, offset, seg.selector);
-> +	PUT_SMSTATE(u16, buf, offset + 2, flags);
-> +	PUT_SMSTATE(u32, buf, offset + 4, seg.limit);
-> +	PUT_SMSTATE(u64, buf, offset + 8, seg.base);
-> +}
-> +#endif
-> +
-> +static void enter_smm_save_state_32(struct kvm_vcpu *vcpu, char *buf)
-> +{
-> +	struct desc_ptr dt;
-> +	struct kvm_segment seg;
-> +	unsigned long val;
-> +	int i;
-> +
-> +	PUT_SMSTATE(u32, buf, 0x7ffc, kvm_read_cr0(vcpu));
-> +	PUT_SMSTATE(u32, buf, 0x7ff8, kvm_read_cr3(vcpu));
-> +	PUT_SMSTATE(u32, buf, 0x7ff4, kvm_get_rflags(vcpu));
-> +	PUT_SMSTATE(u32, buf, 0x7ff0, kvm_rip_read(vcpu));
-> +
-> +	for (i = 0; i < 8; i++)
-> +		PUT_SMSTATE(u32, buf, 0x7fd0 + i * 4, kvm_register_read_raw(vcpu, i));
-> +
-> +	kvm_get_dr(vcpu, 6, &val);
-> +	PUT_SMSTATE(u32, buf, 0x7fcc, (u32)val);
-> +	kvm_get_dr(vcpu, 7, &val);
-> +	PUT_SMSTATE(u32, buf, 0x7fc8, (u32)val);
-> +
-> +	kvm_get_segment(vcpu, &seg, VCPU_SREG_TR);
-> +	PUT_SMSTATE(u32, buf, 0x7fc4, seg.selector);
-> +	PUT_SMSTATE(u32, buf, 0x7f64, seg.base);
-> +	PUT_SMSTATE(u32, buf, 0x7f60, seg.limit);
-> +	PUT_SMSTATE(u32, buf, 0x7f5c, enter_smm_get_segment_flags(&seg));
-> +
-> +	kvm_get_segment(vcpu, &seg, VCPU_SREG_LDTR);
-> +	PUT_SMSTATE(u32, buf, 0x7fc0, seg.selector);
-> +	PUT_SMSTATE(u32, buf, 0x7f80, seg.base);
-> +	PUT_SMSTATE(u32, buf, 0x7f7c, seg.limit);
-> +	PUT_SMSTATE(u32, buf, 0x7f78, enter_smm_get_segment_flags(&seg));
-> +
-> +	static_call(kvm_x86_get_gdt)(vcpu, &dt);
-> +	PUT_SMSTATE(u32, buf, 0x7f74, dt.address);
-> +	PUT_SMSTATE(u32, buf, 0x7f70, dt.size);
-> +
-> +	static_call(kvm_x86_get_idt)(vcpu, &dt);
-> +	PUT_SMSTATE(u32, buf, 0x7f58, dt.address);
-> +	PUT_SMSTATE(u32, buf, 0x7f54, dt.size);
-> +
-> +	for (i = 0; i < 6; i++)
-> +		enter_smm_save_seg_32(vcpu, buf, i);
-> +
-> +	PUT_SMSTATE(u32, buf, 0x7f14, kvm_read_cr4(vcpu));
-> +
-> +	/* revision id */
-> +	PUT_SMSTATE(u32, buf, 0x7efc, 0x00020000);
-> +	PUT_SMSTATE(u32, buf, 0x7ef8, vcpu->arch.smbase);
-> +}
-> +
-> +#ifdef CONFIG_X86_64
-> +static void enter_smm_save_state_64(struct kvm_vcpu *vcpu, char *buf)
-> +{
-> +	struct desc_ptr dt;
-> +	struct kvm_segment seg;
-> +	unsigned long val;
-> +	int i;
-> +
-> +	for (i = 0; i < 16; i++)
-> +		PUT_SMSTATE(u64, buf, 0x7ff8 - i * 8, kvm_register_read_raw(vcpu, i));
-> +
-> +	PUT_SMSTATE(u64, buf, 0x7f78, kvm_rip_read(vcpu));
-> +	PUT_SMSTATE(u32, buf, 0x7f70, kvm_get_rflags(vcpu));
-> +
-> +	kvm_get_dr(vcpu, 6, &val);
-> +	PUT_SMSTATE(u64, buf, 0x7f68, val);
-> +	kvm_get_dr(vcpu, 7, &val);
-> +	PUT_SMSTATE(u64, buf, 0x7f60, val);
-> +
-> +	PUT_SMSTATE(u64, buf, 0x7f58, kvm_read_cr0(vcpu));
-> +	PUT_SMSTATE(u64, buf, 0x7f50, kvm_read_cr3(vcpu));
-> +	PUT_SMSTATE(u64, buf, 0x7f48, kvm_read_cr4(vcpu));
-> +
-> +	PUT_SMSTATE(u32, buf, 0x7f00, vcpu->arch.smbase);
-> +
-> +	/* revision id */
-> +	PUT_SMSTATE(u32, buf, 0x7efc, 0x00020064);
-> +
-> +	PUT_SMSTATE(u64, buf, 0x7ed0, vcpu->arch.efer);
-> +
-> +	kvm_get_segment(vcpu, &seg, VCPU_SREG_TR);
-> +	PUT_SMSTATE(u16, buf, 0x7e90, seg.selector);
-> +	PUT_SMSTATE(u16, buf, 0x7e92, enter_smm_get_segment_flags(&seg) >> 8);
-> +	PUT_SMSTATE(u32, buf, 0x7e94, seg.limit);
-> +	PUT_SMSTATE(u64, buf, 0x7e98, seg.base);
-> +
-> +	static_call(kvm_x86_get_idt)(vcpu, &dt);
-> +	PUT_SMSTATE(u32, buf, 0x7e84, dt.size);
-> +	PUT_SMSTATE(u64, buf, 0x7e88, dt.address);
-> +
-> +	kvm_get_segment(vcpu, &seg, VCPU_SREG_LDTR);
-> +	PUT_SMSTATE(u16, buf, 0x7e70, seg.selector);
-> +	PUT_SMSTATE(u16, buf, 0x7e72, enter_smm_get_segment_flags(&seg) >> 8);
-> +	PUT_SMSTATE(u32, buf, 0x7e74, seg.limit);
-> +	PUT_SMSTATE(u64, buf, 0x7e78, seg.base);
-> +
-> +	static_call(kvm_x86_get_gdt)(vcpu, &dt);
-> +	PUT_SMSTATE(u32, buf, 0x7e64, dt.size);
-> +	PUT_SMSTATE(u64, buf, 0x7e68, dt.address);
-> +
-> +	for (i = 0; i < 6; i++)
-> +		enter_smm_save_seg_64(vcpu, buf, i);
-> +}
-> +#endif
-> +
-> +void enter_smm(struct kvm_vcpu *vcpu)
-> +{
-> +	struct kvm_segment cs, ds;
-> +	struct desc_ptr dt;
-> +	unsigned long cr0;
-> +	char buf[512];
-> +
-> +	memset(buf, 0, 512);
-> +#ifdef CONFIG_X86_64
-> +	if (guest_cpuid_has(vcpu, X86_FEATURE_LM))
-> +		enter_smm_save_state_64(vcpu, buf);
-> +	else
-> +#endif
-> +		enter_smm_save_state_32(vcpu, buf);
-> +
-> +	/*
-> +	 * Give enter_smm() a chance to make ISA-specific changes to the vCPU
-> +	 * state (e.g. leave guest mode) after we've saved the state into the
-> +	 * SMM state-save area.
-> +	 */
-> +	static_call(kvm_x86_enter_smm)(vcpu, buf);
-> +
-> +	kvm_smm_changed(vcpu, true);
-> +	kvm_vcpu_write_guest(vcpu, vcpu->arch.smbase + 0xfe00, buf, sizeof(buf));
-> +
-> +	if (static_call(kvm_x86_get_nmi_mask)(vcpu))
-> +		vcpu->arch.hflags |= HF_SMM_INSIDE_NMI_MASK;
-> +	else
-> +		static_call(kvm_x86_set_nmi_mask)(vcpu, true);
-> +
-> +	kvm_set_rflags(vcpu, X86_EFLAGS_FIXED);
-> +	kvm_rip_write(vcpu, 0x8000);
-> +
-> +	cr0 = vcpu->arch.cr0 & ~(X86_CR0_PE | X86_CR0_EM | X86_CR0_TS | X86_CR0_PG);
-> +	static_call(kvm_x86_set_cr0)(vcpu, cr0);
-> +	vcpu->arch.cr0 = cr0;
-> +
-> +	static_call(kvm_x86_set_cr4)(vcpu, 0);
-> +
-> +	/* Undocumented: IDT limit is set to zero on entry to SMM.  */
-> +	dt.address = dt.size = 0;
-> +	static_call(kvm_x86_set_idt)(vcpu, &dt);
-> +
-> +	kvm_set_dr(vcpu, 7, DR7_FIXED_1);
-> +
-> +	cs.selector = (vcpu->arch.smbase >> 4) & 0xffff;
-> +	cs.base = vcpu->arch.smbase;
-> +
-> +	ds.selector = 0;
-> +	ds.base = 0;
-> +
-> +	cs.limit    = ds.limit = 0xffffffff;
-> +	cs.type     = ds.type = 0x3;
-> +	cs.dpl      = ds.dpl = 0;
-> +	cs.db       = ds.db = 0;
-> +	cs.s        = ds.s = 1;
-> +	cs.l        = ds.l = 0;
-> +	cs.g        = ds.g = 1;
-> +	cs.avl      = ds.avl = 0;
-> +	cs.present  = ds.present = 1;
-> +	cs.unusable = ds.unusable = 0;
-> +	cs.padding  = ds.padding = 0;
-> +
-> +	kvm_set_segment(vcpu, &cs, VCPU_SREG_CS);
-> +	kvm_set_segment(vcpu, &ds, VCPU_SREG_DS);
-> +	kvm_set_segment(vcpu, &ds, VCPU_SREG_ES);
-> +	kvm_set_segment(vcpu, &ds, VCPU_SREG_FS);
-> +	kvm_set_segment(vcpu, &ds, VCPU_SREG_GS);
-> +	kvm_set_segment(vcpu, &ds, VCPU_SREG_SS);
-> +
-> +#ifdef CONFIG_X86_64
-> +	if (guest_cpuid_has(vcpu, X86_FEATURE_LM))
-> +		static_call(kvm_x86_set_efer)(vcpu, 0);
-> +#endif
-> +
-> +	kvm_update_cpuid_runtime(vcpu);
-> +	kvm_mmu_reset_context(vcpu);
-> +}
-> diff --git a/arch/x86/kvm/smm.h b/arch/x86/kvm/smm.h
-> index d85d4ccd32dd..aacc6dac2c99 100644
-> --- a/arch/x86/kvm/smm.h
-> +++ b/arch/x86/kvm/smm.h
-> @@ -20,6 +20,7 @@ static inline bool is_smm(struct kvm_vcpu *vcpu)
->  }
->  
->  void kvm_smm_changed(struct kvm_vcpu *vcpu, bool in_smm);
-> +void enter_smm(struct kvm_vcpu *vcpu);
->  void process_smi(struct kvm_vcpu *vcpu);
->  
->  #endif
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index e0e461958c81..476b4a6e81ab 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -120,7 +120,6 @@ static u64 __read_mostly cr4_reserved_bits = CR4_RESERVED_BITS;
->  
->  static void update_cr8_intercept(struct kvm_vcpu *vcpu);
->  static void process_nmi(struct kvm_vcpu *vcpu);
-> -static void enter_smm(struct kvm_vcpu *vcpu);
->  static void __kvm_set_rflags(struct kvm_vcpu *vcpu, unsigned long rflags);
->  static void store_regs(struct kvm_vcpu *vcpu);
->  static int sync_regs(struct kvm_vcpu *vcpu);
-> @@ -7043,8 +7042,8 @@ static int vcpu_mmio_read(struct kvm_vcpu *vcpu, gpa_t addr, int len, void *v)
->  	return handled;
->  }
->  
-> -static void kvm_set_segment(struct kvm_vcpu *vcpu,
-> -			struct kvm_segment *var, int seg)
-> +void kvm_set_segment(struct kvm_vcpu *vcpu,
-> +		     struct kvm_segment *var, int seg)
->  {
->  	static_call(kvm_x86_set_segment)(vcpu, var, seg);
->  }
-> @@ -9968,240 +9967,6 @@ static void process_nmi(struct kvm_vcpu *vcpu)
->  	kvm_make_request(KVM_REQ_EVENT, vcpu);
->  }
->  
-> -static u32 enter_smm_get_segment_flags(struct kvm_segment *seg)
-> -{
-> -	u32 flags = 0;
-> -	flags |= seg->g       << 23;
-> -	flags |= seg->db      << 22;
-> -	flags |= seg->l       << 21;
-> -	flags |= seg->avl     << 20;
-> -	flags |= seg->present << 15;
-> -	flags |= seg->dpl     << 13;
-> -	flags |= seg->s       << 12;
-> -	flags |= seg->type    << 8;
-> -	return flags;
-> -}
-> -
-> -static void enter_smm_save_seg_32(struct kvm_vcpu *vcpu, char *buf, int n)
-> -{
-> -	struct kvm_segment seg;
-> -	int offset;
-> -
-> -	kvm_get_segment(vcpu, &seg, n);
-> -	PUT_SMSTATE(u32, buf, 0x7fa8 + n * 4, seg.selector);
-> -
-> -	if (n < 3)
-> -		offset = 0x7f84 + n * 12;
-> -	else
-> -		offset = 0x7f2c + (n - 3) * 12;
-> -
-> -	PUT_SMSTATE(u32, buf, offset + 8, seg.base);
-> -	PUT_SMSTATE(u32, buf, offset + 4, seg.limit);
-> -	PUT_SMSTATE(u32, buf, offset, enter_smm_get_segment_flags(&seg));
-> -}
-> -
-> -#ifdef CONFIG_X86_64
-> -static void enter_smm_save_seg_64(struct kvm_vcpu *vcpu, char *buf, int n)
-> -{
-> -	struct kvm_segment seg;
-> -	int offset;
-> -	u16 flags;
-> -
-> -	kvm_get_segment(vcpu, &seg, n);
-> -	offset = 0x7e00 + n * 16;
-> -
-> -	flags = enter_smm_get_segment_flags(&seg) >> 8;
-> -	PUT_SMSTATE(u16, buf, offset, seg.selector);
-> -	PUT_SMSTATE(u16, buf, offset + 2, flags);
-> -	PUT_SMSTATE(u32, buf, offset + 4, seg.limit);
-> -	PUT_SMSTATE(u64, buf, offset + 8, seg.base);
-> -}
-> -#endif
-> -
-> -static void enter_smm_save_state_32(struct kvm_vcpu *vcpu, char *buf)
-> -{
-> -	struct desc_ptr dt;
-> -	struct kvm_segment seg;
-> -	unsigned long val;
-> -	int i;
-> -
-> -	PUT_SMSTATE(u32, buf, 0x7ffc, kvm_read_cr0(vcpu));
-> -	PUT_SMSTATE(u32, buf, 0x7ff8, kvm_read_cr3(vcpu));
-> -	PUT_SMSTATE(u32, buf, 0x7ff4, kvm_get_rflags(vcpu));
-> -	PUT_SMSTATE(u32, buf, 0x7ff0, kvm_rip_read(vcpu));
-> -
-> -	for (i = 0; i < 8; i++)
-> -		PUT_SMSTATE(u32, buf, 0x7fd0 + i * 4, kvm_register_read_raw(vcpu, i));
-> -
-> -	kvm_get_dr(vcpu, 6, &val);
-> -	PUT_SMSTATE(u32, buf, 0x7fcc, (u32)val);
-> -	kvm_get_dr(vcpu, 7, &val);
-> -	PUT_SMSTATE(u32, buf, 0x7fc8, (u32)val);
-> -
-> -	kvm_get_segment(vcpu, &seg, VCPU_SREG_TR);
-> -	PUT_SMSTATE(u32, buf, 0x7fc4, seg.selector);
-> -	PUT_SMSTATE(u32, buf, 0x7f64, seg.base);
-> -	PUT_SMSTATE(u32, buf, 0x7f60, seg.limit);
-> -	PUT_SMSTATE(u32, buf, 0x7f5c, enter_smm_get_segment_flags(&seg));
-> -
-> -	kvm_get_segment(vcpu, &seg, VCPU_SREG_LDTR);
-> -	PUT_SMSTATE(u32, buf, 0x7fc0, seg.selector);
-> -	PUT_SMSTATE(u32, buf, 0x7f80, seg.base);
-> -	PUT_SMSTATE(u32, buf, 0x7f7c, seg.limit);
-> -	PUT_SMSTATE(u32, buf, 0x7f78, enter_smm_get_segment_flags(&seg));
-> -
-> -	static_call(kvm_x86_get_gdt)(vcpu, &dt);
-> -	PUT_SMSTATE(u32, buf, 0x7f74, dt.address);
-> -	PUT_SMSTATE(u32, buf, 0x7f70, dt.size);
-> -
-> -	static_call(kvm_x86_get_idt)(vcpu, &dt);
-> -	PUT_SMSTATE(u32, buf, 0x7f58, dt.address);
-> -	PUT_SMSTATE(u32, buf, 0x7f54, dt.size);
-> -
-> -	for (i = 0; i < 6; i++)
-> -		enter_smm_save_seg_32(vcpu, buf, i);
-> -
-> -	PUT_SMSTATE(u32, buf, 0x7f14, kvm_read_cr4(vcpu));
-> -
-> -	/* revision id */
-> -	PUT_SMSTATE(u32, buf, 0x7efc, 0x00020000);
-> -	PUT_SMSTATE(u32, buf, 0x7ef8, vcpu->arch.smbase);
-> -}
-> -
-> -#ifdef CONFIG_X86_64
-> -static void enter_smm_save_state_64(struct kvm_vcpu *vcpu, char *buf)
-> -{
-> -	struct desc_ptr dt;
-> -	struct kvm_segment seg;
-> -	unsigned long val;
-> -	int i;
-> -
-> -	for (i = 0; i < 16; i++)
-> -		PUT_SMSTATE(u64, buf, 0x7ff8 - i * 8, kvm_register_read_raw(vcpu, i));
-> -
-> -	PUT_SMSTATE(u64, buf, 0x7f78, kvm_rip_read(vcpu));
-> -	PUT_SMSTATE(u32, buf, 0x7f70, kvm_get_rflags(vcpu));
-> -
-> -	kvm_get_dr(vcpu, 6, &val);
-> -	PUT_SMSTATE(u64, buf, 0x7f68, val);
-> -	kvm_get_dr(vcpu, 7, &val);
-> -	PUT_SMSTATE(u64, buf, 0x7f60, val);
-> -
-> -	PUT_SMSTATE(u64, buf, 0x7f58, kvm_read_cr0(vcpu));
-> -	PUT_SMSTATE(u64, buf, 0x7f50, kvm_read_cr3(vcpu));
-> -	PUT_SMSTATE(u64, buf, 0x7f48, kvm_read_cr4(vcpu));
-> -
-> -	PUT_SMSTATE(u32, buf, 0x7f00, vcpu->arch.smbase);
-> -
-> -	/* revision id */
-> -	PUT_SMSTATE(u32, buf, 0x7efc, 0x00020064);
-> -
-> -	PUT_SMSTATE(u64, buf, 0x7ed0, vcpu->arch.efer);
-> -
-> -	kvm_get_segment(vcpu, &seg, VCPU_SREG_TR);
-> -	PUT_SMSTATE(u16, buf, 0x7e90, seg.selector);
-> -	PUT_SMSTATE(u16, buf, 0x7e92, enter_smm_get_segment_flags(&seg) >> 8);
-> -	PUT_SMSTATE(u32, buf, 0x7e94, seg.limit);
-> -	PUT_SMSTATE(u64, buf, 0x7e98, seg.base);
-> -
-> -	static_call(kvm_x86_get_idt)(vcpu, &dt);
-> -	PUT_SMSTATE(u32, buf, 0x7e84, dt.size);
-> -	PUT_SMSTATE(u64, buf, 0x7e88, dt.address);
-> -
-> -	kvm_get_segment(vcpu, &seg, VCPU_SREG_LDTR);
-> -	PUT_SMSTATE(u16, buf, 0x7e70, seg.selector);
-> -	PUT_SMSTATE(u16, buf, 0x7e72, enter_smm_get_segment_flags(&seg) >> 8);
-> -	PUT_SMSTATE(u32, buf, 0x7e74, seg.limit);
-> -	PUT_SMSTATE(u64, buf, 0x7e78, seg.base);
-> -
-> -	static_call(kvm_x86_get_gdt)(vcpu, &dt);
-> -	PUT_SMSTATE(u32, buf, 0x7e64, dt.size);
-> -	PUT_SMSTATE(u64, buf, 0x7e68, dt.address);
-> -
-> -	for (i = 0; i < 6; i++)
-> -		enter_smm_save_seg_64(vcpu, buf, i);
-> -}
-> -#endif
-> -
-> -static void enter_smm(struct kvm_vcpu *vcpu)
-> -{
-> -	struct kvm_segment cs, ds;
-> -	struct desc_ptr dt;
-> -	unsigned long cr0;
-> -	char buf[512];
-> -
-> -	memset(buf, 0, 512);
-> -#ifdef CONFIG_X86_64
-> -	if (guest_cpuid_has(vcpu, X86_FEATURE_LM))
-> -		enter_smm_save_state_64(vcpu, buf);
-> -	else
-> -#endif
-> -		enter_smm_save_state_32(vcpu, buf);
-> -
-> -	/*
-> -	 * Give enter_smm() a chance to make ISA-specific changes to the vCPU
-> -	 * state (e.g. leave guest mode) after we've saved the state into the
-> -	 * SMM state-save area.
-> -	 */
-> -	static_call(kvm_x86_enter_smm)(vcpu, buf);
-> -
-> -	kvm_smm_changed(vcpu, true);
-> -	kvm_vcpu_write_guest(vcpu, vcpu->arch.smbase + 0xfe00, buf, sizeof(buf));
-> -
-> -	if (static_call(kvm_x86_get_nmi_mask)(vcpu))
-> -		vcpu->arch.hflags |= HF_SMM_INSIDE_NMI_MASK;
-> -	else
-> -		static_call(kvm_x86_set_nmi_mask)(vcpu, true);
-> -
-> -	kvm_set_rflags(vcpu, X86_EFLAGS_FIXED);
-> -	kvm_rip_write(vcpu, 0x8000);
-> -
-> -	cr0 = vcpu->arch.cr0 & ~(X86_CR0_PE | X86_CR0_EM | X86_CR0_TS | X86_CR0_PG);
-> -	static_call(kvm_x86_set_cr0)(vcpu, cr0);
-> -	vcpu->arch.cr0 = cr0;
-> -
-> -	static_call(kvm_x86_set_cr4)(vcpu, 0);
-> -
-> -	/* Undocumented: IDT limit is set to zero on entry to SMM.  */
-> -	dt.address = dt.size = 0;
-> -	static_call(kvm_x86_set_idt)(vcpu, &dt);
-> -
-> -	kvm_set_dr(vcpu, 7, DR7_FIXED_1);
-> -
-> -	cs.selector = (vcpu->arch.smbase >> 4) & 0xffff;
-> -	cs.base = vcpu->arch.smbase;
-> -
-> -	ds.selector = 0;
-> -	ds.base = 0;
-> -
-> -	cs.limit    = ds.limit = 0xffffffff;
-> -	cs.type     = ds.type = 0x3;
-> -	cs.dpl      = ds.dpl = 0;
-> -	cs.db       = ds.db = 0;
-> -	cs.s        = ds.s = 1;
-> -	cs.l        = ds.l = 0;
-> -	cs.g        = ds.g = 1;
-> -	cs.avl      = ds.avl = 0;
-> -	cs.present  = ds.present = 1;
-> -	cs.unusable = ds.unusable = 0;
-> -	cs.padding  = ds.padding = 0;
-> -
-> -	kvm_set_segment(vcpu, &cs, VCPU_SREG_CS);
-> -	kvm_set_segment(vcpu, &ds, VCPU_SREG_DS);
-> -	kvm_set_segment(vcpu, &ds, VCPU_SREG_ES);
-> -	kvm_set_segment(vcpu, &ds, VCPU_SREG_FS);
-> -	kvm_set_segment(vcpu, &ds, VCPU_SREG_GS);
-> -	kvm_set_segment(vcpu, &ds, VCPU_SREG_SS);
-> -
-> -#ifdef CONFIG_X86_64
-> -	if (guest_cpuid_has(vcpu, X86_FEATURE_LM))
-> -		static_call(kvm_x86_set_efer)(vcpu, 0);
-> -#endif
-> -
-> -	kvm_update_cpuid_runtime(vcpu);
-> -	kvm_mmu_reset_context(vcpu);
-> -}
-> -
->  void kvm_make_scan_ioapic_request_mask(struct kvm *kvm,
->  				       unsigned long *vcpu_bitmap)
->  {
+> I tried v6.1-rc1 both with and without your series in $subject.
+> 
+> I couldn't see any issues.
 
+ok, thanks for the effort.
 
-Looks OK to me, but I might have missed something.
+> 
+> 
+> What I tried:
+> -Running fio:
+> fio --name=test --filename=/dev/sdc --ioengine=io_uring --rw=randrw --direct=1 --iodepth=32 --bs=1M
+> on three different HDDs simultaneously for 15+ minutes,
+> without any errors in fio or dmesg.
+> 
+> -Creating and mounting a btrfs volume, doing a huge dd to the filesystem
+> without issues.
+> 
+> -sg_sat_read_gplog -d --log=0x10 /dev/sda
+> which successfully returned the log.
+> 
+> 
+> It is worth mentioning that this arm64 board has reserved memory regions,
+> but does not yet have a firmware that supplies a IORT RMR (reserved memory
+> regions) revision E.d node, which means that in order to get this board to
+> boot successfully, we need to supply:
+> "arm-smmu.disable_bypass=0 iommu.passthrough=1"
+> on the kernel command line.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+hmmm... that's interesting. I can try again with the IOMMU turned off, 
+but, as I recall, it did not make a difference before. I think that 
+requiring reserved memory regions would totally bust the driver (if not 
+present) with IOMMU enabled. As I recall, sas 3008 card would not work 
+without RMR for us.
 
-Best regards,
-	Maxim Levitsky
+It's also interesting that this LX2 board has A72 cores. For my system, 
+we have newer custom arm v8 cores with quite weak memory ordering 
+implementation. With that same system, I have detected a couple of other 
+driver memory ordering bugs which we did not see on our A72-based platforms.
 
+I always suspected that this issue was a memory ordering issue, but 
+since the hang so reliably occurs I ruled it out. Maybe it is...
 
+thanks,
+John
