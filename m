@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD25860A6B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5701960AA71
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbiJXMiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
+        id S232604AbiJXNdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbiJXMdp (ORCPT
+        with ESMTP id S236087AbiJXN3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:33:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E262476FD;
-        Mon, 24 Oct 2022 05:05:00 -0700 (PDT)
+        Mon, 24 Oct 2022 09:29:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E324AC284;
+        Mon, 24 Oct 2022 05:32:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03310B811F5;
-        Mon, 24 Oct 2022 12:02:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58533C433C1;
-        Mon, 24 Oct 2022 12:02:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CBE4612EA;
+        Mon, 24 Oct 2022 12:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE4FC433C1;
+        Mon, 24 Oct 2022 12:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612969;
-        bh=rJmvJX1Yd+VCFEKraff9jIv/6wTZs/svtd+hRJMqLjc=;
+        s=korg; t=1666614486;
+        bh=rOZy5jmHipFrh/N8gaOxnhHAc/Cy3p/sYUSneBQ699w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gSF+UaIhCJ4S1+Q66DjdfdWYwK6EU6zTAX+PT9KrKeVuqeRpY2oQmkwJ6M0OtNqKg
-         uewdZISQ032FND2t8qmGCvlVZX8L2BgCQoO/Y/se8S0K1tF460UI8AXA1Ri6LS4Rnt
-         hP7CM5wyMuwxgtea/1f4dPv8Wr/x7Qgbj5owhhxQ=
+        b=A3Gk6v6H8Dy3idm1DU5qyn20PdnWM1EvN/GYXvmFAf5dsaoJxJJ2uyrX+pwteSEsm
+         r136orKZXkPrZEWlRQm11IFdZalV/try7mAKzZojdU83RqXRM8S6pS+Sf/ytXD/GUh
+         8OQiP2V31H6pBb94/Udvfe0aa3CoOEd81f+gVE8U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Hui Tang <tanghui20@huawei.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 157/229] clk: ti: dra7-atl: Fix reference leak in of_dra7_atl_clk_probe
+Subject: [PATCH 5.10 279/390] crypto: qat - fix use of dma_map_single
 Date:   Mon, 24 Oct 2022 13:31:16 +0200
-Message-Id: <20221024113004.085012351@linuxfoundation.org>
+Message-Id: <20221024113034.829454728@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +56,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Hui Tang <tanghui20@huawei.com>
 
-[ Upstream commit 9c59a01caba26ec06fefd6ca1f22d5fd1de57d63 ]
+[ Upstream commit 7cc05071f930a631040fea16a41f9d78771edc49 ]
 
-pm_runtime_get_sync() will increment pm usage counter.
-Forgetting to putting operation will result in reference leak.
-Add missing pm_runtime_put_sync in some error paths.
+DMA_TO_DEVICE synchronisation must be done after the last modification
+of the memory region by the software and before it is handed off to
+the device.
 
-Fixes: 9ac33b0ce81f ("CLK: TI: Driver for DRA7 ATL (Audio Tracking Logic)")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220602030838.52057-1-linmq006@gmail.com
-Reviewed-by: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Hui Tang <tanghui20@huawei.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Stable-dep-of: cf5bb835b7c8 ("crypto: qat - fix DMA transfer direction")
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/ti/clk-dra7-atl.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/crypto/qat/qat_common/qat_algs.c | 27 ++++++++++++------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/clk/ti/clk-dra7-atl.c b/drivers/clk/ti/clk-dra7-atl.c
-index beb672a215b6..a4b6f3ac2d34 100644
---- a/drivers/clk/ti/clk-dra7-atl.c
-+++ b/drivers/clk/ti/clk-dra7-atl.c
-@@ -252,14 +252,16 @@ static int of_dra7_atl_clk_probe(struct platform_device *pdev)
- 		if (rc) {
- 			pr_err("%s: failed to lookup atl clock %d\n", __func__,
- 			       i);
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto pm_put;
- 		}
+diff --git a/drivers/crypto/qat/qat_common/qat_algs.c b/drivers/crypto/qat/qat_common/qat_algs.c
+index 06abe1e2074e..8625e299d445 100644
+--- a/drivers/crypto/qat/qat_common/qat_algs.c
++++ b/drivers/crypto/qat/qat_common/qat_algs.c
+@@ -669,8 +669,8 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 	int n = sg_nents(sgl);
+ 	struct qat_alg_buf_list *bufl;
+ 	struct qat_alg_buf_list *buflout = NULL;
+-	dma_addr_t blp;
+-	dma_addr_t bloutp;
++	dma_addr_t blp = DMA_MAPPING_ERROR;
++	dma_addr_t bloutp = DMA_MAPPING_ERROR;
+ 	struct scatterlist *sg;
+ 	size_t sz_out, sz = struct_size(bufl, bufers, n + 1);
  
- 		clk = of_clk_get_from_provider(&clkspec);
- 		if (IS_ERR(clk)) {
- 			pr_err("%s: failed to get atl clock %d from provider\n",
- 			       __func__, i);
--			return PTR_ERR(clk);
-+			ret = PTR_ERR(clk);
-+			goto pm_put;
- 		}
+@@ -685,10 +685,6 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 	for_each_sg(sgl, sg, n, i)
+ 		bufl->bufers[i].addr = DMA_MAPPING_ERROR;
  
- 		cdesc = to_atl_desc(__clk_get_hw(clk));
-@@ -292,8 +294,9 @@ static int of_dra7_atl_clk_probe(struct platform_device *pdev)
- 		if (cdesc->enabled)
- 			atl_clk_enable(__clk_get_hw(clk));
+-	blp = dma_map_single(dev, bufl, sz, DMA_TO_DEVICE);
+-	if (unlikely(dma_mapping_error(dev, blp)))
+-		goto err_in;
+-
+ 	for_each_sg(sgl, sg, n, i) {
+ 		int y = sg_nctr;
+ 
+@@ -704,6 +700,9 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 		sg_nctr++;
  	}
--	pm_runtime_put_sync(cinfo->dev);
+ 	bufl->num_bufs = sg_nctr;
++	blp = dma_map_single(dev, bufl, sz, DMA_TO_DEVICE);
++	if (unlikely(dma_mapping_error(dev, blp)))
++		goto err_in;
+ 	qat_req->buf.bl = bufl;
+ 	qat_req->buf.blp = blp;
+ 	qat_req->buf.sz = sz;
+@@ -723,9 +722,6 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 		for_each_sg(sglout, sg, n, i)
+ 			bufers[i].addr = DMA_MAPPING_ERROR;
  
-+pm_put:
-+	pm_runtime_put_sync(cinfo->dev);
- 	return ret;
- }
+-		bloutp = dma_map_single(dev, buflout, sz_out, DMA_TO_DEVICE);
+-		if (unlikely(dma_mapping_error(dev, bloutp)))
+-			goto err_out;
+ 		for_each_sg(sglout, sg, n, i) {
+ 			int y = sg_nctr;
  
+@@ -742,6 +738,9 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 		}
+ 		buflout->num_bufs = sg_nctr;
+ 		buflout->num_mapped_bufs = sg_nctr;
++		bloutp = dma_map_single(dev, buflout, sz_out, DMA_TO_DEVICE);
++		if (unlikely(dma_mapping_error(dev, bloutp)))
++			goto err_out;
+ 		qat_req->buf.blout = buflout;
+ 		qat_req->buf.bloutp = bloutp;
+ 		qat_req->buf.sz_out = sz_out;
+@@ -753,17 +752,21 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 	return 0;
+ 
+ err_out:
++	if (!dma_mapping_error(dev, bloutp))
++		dma_unmap_single(dev, bloutp, sz_out, DMA_TO_DEVICE);
++
+ 	n = sg_nents(sglout);
+ 	for (i = 0; i < n; i++)
+ 		if (!dma_mapping_error(dev, buflout->bufers[i].addr))
+ 			dma_unmap_single(dev, buflout->bufers[i].addr,
+ 					 buflout->bufers[i].len,
+ 					 DMA_BIDIRECTIONAL);
+-	if (!dma_mapping_error(dev, bloutp))
+-		dma_unmap_single(dev, bloutp, sz_out, DMA_TO_DEVICE);
+ 	kfree(buflout);
+ 
+ err_in:
++	if (!dma_mapping_error(dev, blp))
++		dma_unmap_single(dev, blp, sz, DMA_TO_DEVICE);
++
+ 	n = sg_nents(sgl);
+ 	for (i = 0; i < n; i++)
+ 		if (!dma_mapping_error(dev, bufl->bufers[i].addr))
+@@ -771,8 +774,6 @@ static int qat_alg_sgl_to_bufl(struct qat_crypto_instance *inst,
+ 					 bufl->bufers[i].len,
+ 					 DMA_BIDIRECTIONAL);
+ 
+-	if (!dma_mapping_error(dev, blp))
+-		dma_unmap_single(dev, blp, sz, DMA_TO_DEVICE);
+ 	kfree(bufl);
+ 
+ 	dev_err(dev, "Failed to map buf for dma\n");
 -- 
 2.35.1
 
