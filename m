@@ -2,166 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E5E609D29
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FC2609D2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 10:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbiJXIwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 04:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S230429AbiJXIwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 04:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiJXIwf (ORCPT
+        with ESMTP id S229720AbiJXIwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 04:52:35 -0400
-Received: from mail.nfschina.com (unknown [124.16.136.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F37156BA3;
-        Mon, 24 Oct 2022 01:52:33 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 40B871E80D74;
-        Mon, 24 Oct 2022 16:51:16 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id z6o2LBHNephC; Mon, 24 Oct 2022 16:51:13 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 5B6531E80CA5;
-        Mon, 24 Oct 2022 16:51:13 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     krisman@collabora.com
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH] unicode: mkutf8data: Add unicode_data_malloc function
-Date:   Mon, 24 Oct 2022 16:52:22 +0800
-Message-Id: <20221024085222.179528-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 24 Oct 2022 04:52:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF26744D;
+        Mon, 24 Oct 2022 01:52:38 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 08:52:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1666601555;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fe5cUYaOyO4LInB2yVSxDGWGWGSQEQAqVZoCd+lv1ck=;
+        b=LolFnQFULv1Fw63R4S38bY84k68Fc5cR1/22CXCKBZdOohfKm+Sd5w8T+WtcOxuAR8M8hZ
+        9GxUOIhio6g0CSpYIuN6xBnu4DFLDJuw/aAaA4MF/II3BNQrRtVK/UElCrMnJ8yZ0+/Hh8
+        djq2c1IWuFmc7ZkgJGU7SiBTATJP9as+4ewRlHjmh+GjhVlFDI2oanmld6LQHkwXZe4dmz
+        NOXrA68IiS8LeNZ5LBfi8DgYL5ThwJHUjdlteHxhWORcrEC3wv8DZg72MroWTNaNFSwnrN
+        Skrv01/vjW1aiQOMU/Dr+3rLiHodrVWvQ3bvTzZ0qOtMedf/9GWqxbFo+TBZIg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1666601555;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fe5cUYaOyO4LInB2yVSxDGWGWGSQEQAqVZoCd+lv1ck=;
+        b=f61ehkCpqmMwSZ3HulY48DC//dtlwp5xpmO8LseA3vZyAYcX/qB/vIW9yqCC/JpYFj/5UU
+        qoDdCzvlO37EVrCw==
+From:   "tip-bot2 for Babu Moger" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cache] x86/resctrl: Remove arch_has_empty_bitmaps
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Babu Moger <babu.moger@amd.com>, Borislav Petkov <bp@suse.de>,
+        Fenghua Yu <fenghua.yu@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <166430979654.372014.615622285687642644.stgit@bmoger-ubuntu>
+References: <166430979654.372014.615622285687642644.stgit@bmoger-ubuntu>
+MIME-Version: 1.0
+Message-ID: <166660155398.401.9624938541778955549.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add unicode_data_malloc function, used to simplify unicode_data member
-assignment use.
+The following commit has been merged into the x86/cache branch of tip:
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
+Commit-ID:     2d4daa549c17b6ba4845a751c7a78d3b2419d78f
+Gitweb:        https://git.kernel.org/tip/2d4daa549c17b6ba4845a751c7a78d3b2419d78f
+Author:        Babu Moger <babu.moger@amd.com>
+AuthorDate:    Tue, 27 Sep 2022 15:16:36 -05:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 24 Oct 2022 10:30:29 +02:00
+
+x86/resctrl: Remove arch_has_empty_bitmaps
+
+The field arch_has_empty_bitmaps is not required anymore. The field
+min_cbm_bits is enough to validate the CBM (capacity bit mask) if the
+architecture can support the zero CBM or not.
+
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Babu Moger <babu.moger@amd.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
+Link: https://lore.kernel.org/r/166430979654.372014.615622285687642644.stgit@bmoger-ubuntu
 ---
- fs/unicode/mkutf8data.c | 43 +++++++++++++++++++----------------------
- 1 file changed, 20 insertions(+), 23 deletions(-)
+ arch/x86/kernel/cpu/resctrl/core.c        | 2 --
+ arch/x86/kernel/cpu/resctrl/ctrlmondata.c | 3 +--
+ include/linux/resctrl.h                   | 6 +++---
+ 3 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/fs/unicode/mkutf8data.c b/fs/unicode/mkutf8data.c
-index bc1a7c8b5c8d..f86fa700f7dc 100644
---- a/fs/unicode/mkutf8data.c
-+++ b/fs/unicode/mkutf8data.c
-@@ -2113,6 +2113,16 @@ static int ignore_compatibility_form(char *type)
- 	return 0;
- }
+diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
+index 3266ea3..03cfbf0 100644
+--- a/arch/x86/kernel/cpu/resctrl/core.c
++++ b/arch/x86/kernel/cpu/resctrl/core.c
+@@ -828,7 +828,6 @@ static __init void rdt_init_res_defs_intel(void)
+ 		if (r->rid == RDT_RESOURCE_L3 ||
+ 		    r->rid == RDT_RESOURCE_L2) {
+ 			r->cache.arch_has_sparse_bitmaps = false;
+-			r->cache.arch_has_empty_bitmaps = false;
+ 			r->cache.arch_has_per_cpu_cfg = false;
+ 			r->cache.min_cbm_bits = 1;
+ 		} else if (r->rid == RDT_RESOURCE_MBA) {
+@@ -849,7 +848,6 @@ static __init void rdt_init_res_defs_amd(void)
+ 		if (r->rid == RDT_RESOURCE_L3 ||
+ 		    r->rid == RDT_RESOURCE_L2) {
+ 			r->cache.arch_has_sparse_bitmaps = true;
+-			r->cache.arch_has_empty_bitmaps = true;
+ 			r->cache.arch_has_per_cpu_cfg = true;
+ 			r->cache.min_cbm_bits = 0;
+ 		} else if (r->rid == RDT_RESOURCE_MBA) {
+diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+index 1dafbdc..1df0e32 100644
+--- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
++++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
+@@ -105,8 +105,7 @@ static bool cbm_validate(char *buf, u32 *data, struct rdt_resource *r)
+ 		return false;
+ 	}
  
-+static void unicode_data_malloc(void *src, void **dst, size_t len)
-+{
-+	unsigned int *um = malloc(len);
-+
-+	if (um)
-+		memcpy(um, src, len);
-+
-+	*dst = um;
-+}
-+
- static void nfdi_init(void)
- {
- 	FILE *file;
-@@ -2120,7 +2130,6 @@ static void nfdi_init(void)
- 	unsigned int mapping[19]; /* Magic - guaranteed not to be exceeded. */
- 	char *s;
- 	char *type;
--	unsigned int *um;
- 	int count;
- 	int i;
- 	int ret;
-@@ -2159,10 +2168,8 @@ static void nfdi_init(void)
- 		}
- 		mapping[i++] = 0;
+-	if ((!r->cache.arch_has_empty_bitmaps && val == 0) ||
+-	    val > r->default_ctrl) {
++	if ((r->cache.min_cbm_bits > 0 && val == 0) || val > r->default_ctrl) {
+ 		rdt_last_cmd_puts("Mask out of range\n");
+ 		return false;
+ 	}
+diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
+index 0cf5b20..0cee154 100644
+--- a/include/linux/resctrl.h
++++ b/include/linux/resctrl.h
+@@ -89,11 +89,12 @@ struct rdt_domain {
+ /**
+  * struct resctrl_cache - Cache allocation related data
+  * @cbm_len:		Length of the cache bit mask
+- * @min_cbm_bits:	Minimum number of consecutive bits to be set
++ * @min_cbm_bits:	Minimum number of consecutive bits to be set.
++ *			The value 0 means the architecture can support
++ *			zero CBM.
+  * @shareable_bits:	Bitmask of shareable resource with other
+  *			executing entities
+  * @arch_has_sparse_bitmaps:	True if a bitmap like f00f is valid.
+- * @arch_has_empty_bitmaps:	True if the '0' bitmap is valid.
+  * @arch_has_per_cpu_cfg:	True if QOS_CFG register for this cache
+  *				level has CPU scope.
+  */
+@@ -102,7 +103,6 @@ struct resctrl_cache {
+ 	unsigned int	min_cbm_bits;
+ 	unsigned int	shareable_bits;
+ 	bool		arch_has_sparse_bitmaps;
+-	bool		arch_has_empty_bitmaps;
+ 	bool		arch_has_per_cpu_cfg;
+ };
  
--		um = malloc(i * sizeof(unsigned int));
--		memcpy(um, mapping, i * sizeof(unsigned int));
--		unicode_data[unichar].utf32nfdi = um;
--
-+		unicode_data_malloc(mapping, &unicode_data[unichar].utf32nfdi,
-+				i * sizeof(unsigned int));
- 		if (verbose > 1)
- 			print_utf32nfdi(unichar);
- 		count++;
-@@ -2181,7 +2188,6 @@ static void nfdicf_init(void)
- 	unsigned int mapping[19]; /* Magic - guaranteed not to be exceeded. */
- 	char status;
- 	char *s;
--	unsigned int *um;
- 	int i;
- 	int count;
- 	int ret;
-@@ -2215,10 +2221,8 @@ static void nfdicf_init(void)
- 		}
- 		mapping[i++] = 0;
- 
--		um = malloc(i * sizeof(unsigned int));
--		memcpy(um, mapping, i * sizeof(unsigned int));
--		unicode_data[unichar].utf32nfdicf = um;
--
-+		unicode_data_malloc(mapping, &unicode_data[unichar].utf32nfdicf,
-+				i * sizeof(unsigned int));
- 		if (verbose > 1)
- 			print_utf32nfdicf(unichar);
- 		count++;
-@@ -2307,7 +2311,6 @@ static void corrections_init(void)
- 	unsigned int minor;
- 	unsigned int revision;
- 	unsigned int age;
--	unsigned int *um;
- 	unsigned int mapping[19]; /* Magic - guaranteed not to be exceeded. */
- 	char *s;
- 	int i;
-@@ -2359,10 +2362,8 @@ static void corrections_init(void)
- 		}
- 		mapping[i++] = 0;
- 
--		um = malloc(i * sizeof(unsigned int));
--		memcpy(um, mapping, i * sizeof(unsigned int));
--		corrections[count].utf32nfdi = um;
--
-+		unicode_data_malloc(mapping, &corrections[count].utf32nfdi,
-+				i * sizeof(unsigned int));
- 		if (verbose > 1)
- 			printf(" %X -> %s -> %s V%d_%d_%d\n",
- 				unichar, buf0, buf1, major, minor, revision);
-@@ -2437,7 +2438,6 @@ static void hangul_decompose(void)
- 	/* unsigned int sc = (lc * nc); */
- 	unsigned int unichar;
- 	unsigned int mapping[4];
--	unsigned int *um;
-         int count;
- 	int i;
- 
-@@ -2458,15 +2458,12 @@ static void hangul_decompose(void)
- 			mapping[i++] = tb + ti;
- 		mapping[i++] = 0;
- 
--		assert(!unicode_data[unichar].utf32nfdi);
--		um = malloc(i * sizeof(unsigned int));
--		memcpy(um, mapping, i * sizeof(unsigned int));
--		unicode_data[unichar].utf32nfdi = um;
-+		unicode_data_malloc(mapping, &unicode_data[unichar].utf32nfdi,
-+				i * sizeof(unsigned int));
- 
- 		assert(!unicode_data[unichar].utf32nfdicf);
--		um = malloc(i * sizeof(unsigned int));
--		memcpy(um, mapping, i * sizeof(unsigned int));
--		unicode_data[unichar].utf32nfdicf = um;
-+		unicode_data_malloc(mapping, &unicode_data[unichar].utf32nfdicf,
-+				i * sizeof(unsigned int));
- 
- 		/*
- 		 * Add a cookie as a reminder that the hangul syllable
--- 
-2.18.2
-
