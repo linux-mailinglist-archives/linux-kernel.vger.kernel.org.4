@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7F960A671
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DF860AA68
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234110AbiJXMd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51190 "EHLO
+        id S231305AbiJXNdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234142AbiJXM3Y (ORCPT
+        with ESMTP id S236027AbiJXN3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:29:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E1C88A0D;
-        Mon, 24 Oct 2022 05:03:14 -0700 (PDT)
+        Mon, 24 Oct 2022 09:29:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082F4A46E;
+        Mon, 24 Oct 2022 05:32:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4AB3B81200;
-        Mon, 24 Oct 2022 12:00:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42895C433C1;
-        Mon, 24 Oct 2022 12:00:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9403B61311;
+        Mon, 24 Oct 2022 12:28:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3FE4C433D6;
+        Mon, 24 Oct 2022 12:28:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666612830;
-        bh=4/5oQa4SXwqMtAcGf0F3+o2IZAhzz6PX17NqEpDjG/M=;
+        s=korg; t=1666614505;
+        bh=hDIWTXnFPYaCL2NW+LTf3CWQC5jgrfHnhKhZtQhXzUs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dBUqyZfSgKekWNwR+0O0nbePo7jjdY6hsCxUVurVHoB78roTA9xrKKHp4X+0Zugeg
-         e8V0nIs0M+oILFC/0aSsyXpGTb4/f/5b7OG/2Ty/Ahzwe22cl3g/AwAPoTfSQZgGBF
-         HWo1YFNJv7tMPiSVxXmsY/ny8urEuHhtqoJPmdZY=
+        b=PglcMG0eDalz41gy9UovxkjYMW2kqdzwDxQf0pI8fjfsfWQjQPXfrR2RYjukZWNJf
+         Dv0VRSfVVDJJuSIago3V+xHUmKROjembmL3UD3QJrJs2SjgbIGwN/TZgN0RgW+qh9g
+         AqbEs1YIUtIFT5Ml9Q9zipAjviNwYGtw5JDQzA/o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hacash Robot <hacashRobot@santino.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 135/229] mtd: devices: docg3: check the return value of devm_ioremap() in the probe
+Subject: [PATCH 5.10 257/390] clk: baikal-t1: Fix invalid xGMAC PTP clock divider
 Date:   Mon, 24 Oct 2022 13:30:54 +0200
-Message-Id: <20221024113003.372004673@linuxfoundation.org>
+Message-Id: <20221024113033.829094938@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
-References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: William Dean <williamsukatube@gmail.com>
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-[ Upstream commit 26e784433e6c65735cd6d93a8db52531970d9a60 ]
+[ Upstream commit 3c742088686ce922704aec5b11d09bcc5a396589 ]
 
-The function devm_ioremap() in docg3_probe() can fail, so
-its return value should be checked.
+Most likely due to copy-paste mistake the divider has been set to 10 while
+according to the SoC reference manual it's supposed to be 8 thus having
+PTP clock frequency of 156.25 MHz.
 
-Fixes: 82402aeb8c81e ("mtd: docg3: Use devm_*() functions")
-Reported-by: Hacash Robot <hacashRobot@santino.com>
-Signed-off-by: William Dean <williamsukatube@gmail.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220722091644.2937953-1-williamsukatube@163.com
+Fixes: 353afa3a8d2e ("clk: Add Baikal-T1 CCU Dividers driver")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Link: https://lore.kernel.org/r/20220929225402.9696-3-Sergey.Semin@baikalelectronics.ru
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/devices/docg3.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/clk/baikal-t1/clk-ccu-div.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/mtd/devices/docg3.c b/drivers/mtd/devices/docg3.c
-index 512bd4c2eec0..740a09c9f67a 100644
---- a/drivers/mtd/devices/docg3.c
-+++ b/drivers/mtd/devices/docg3.c
-@@ -1990,9 +1990,14 @@ static int __init docg3_probe(struct platform_device *pdev)
- 		dev_err(dev, "No I/O memory resource defined\n");
- 		return ret;
- 	}
--	base = devm_ioremap(dev, ress->start, DOC_IOSPACE_SIZE);
- 
- 	ret = -ENOMEM;
-+	base = devm_ioremap(dev, ress->start, DOC_IOSPACE_SIZE);
-+	if (!base) {
-+		dev_err(dev, "devm_ioremap dev failed\n");
-+		return ret;
-+	}
-+
- 	cascade = devm_kcalloc(dev, DOC_MAX_NBFLOORS, sizeof(*cascade),
- 			       GFP_KERNEL);
- 	if (!cascade)
+diff --git a/drivers/clk/baikal-t1/clk-ccu-div.c b/drivers/clk/baikal-t1/clk-ccu-div.c
+index f141fda12b09..ea77eec40ddd 100644
+--- a/drivers/clk/baikal-t1/clk-ccu-div.c
++++ b/drivers/clk/baikal-t1/clk-ccu-div.c
+@@ -207,7 +207,7 @@ static const struct ccu_div_info sys_info[] = {
+ 	CCU_DIV_GATE_INFO(CCU_SYS_XGMAC_REF_CLK, "sys_xgmac_ref_clk",
+ 			  "eth_clk", CCU_SYS_XGMAC_BASE, 8),
+ 	CCU_DIV_FIXED_INFO(CCU_SYS_XGMAC_PTP_CLK, "sys_xgmac_ptp_clk",
+-			   "eth_clk", 10),
++			   "eth_clk", 8),
+ 	CCU_DIV_GATE_INFO(CCU_SYS_USB_CLK, "sys_usb_clk",
+ 			  "eth_clk", CCU_SYS_USB_BASE, 10),
+ 	CCU_DIV_VAR_INFO(CCU_SYS_PVT_CLK, "sys_pvt_clk",
 -- 
 2.35.1
 
