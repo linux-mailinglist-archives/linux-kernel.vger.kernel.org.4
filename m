@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB2960A1A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1065360A345
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbiJXLb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56604 "EHLO
+        id S232101AbiJXLxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiJXLbw (ORCPT
+        with ESMTP id S231983AbiJXLwi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:31:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691775603D;
-        Mon, 24 Oct 2022 04:31:51 -0700 (PDT)
+        Mon, 24 Oct 2022 07:52:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DBE317FF;
+        Mon, 24 Oct 2022 04:44:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A30CCB81133;
-        Mon, 24 Oct 2022 11:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19B4C43141;
-        Mon, 24 Oct 2022 11:31:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9533D61254;
+        Mon, 24 Oct 2022 11:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8801C433D7;
+        Mon, 24 Oct 2022 11:44:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611108;
-        bh=/VSGSHF0sdxC4vEXEymNZSjiWrDALm65vLVmrVSJcNo=;
+        s=korg; t=1666611894;
+        bh=oyLbuAvGHpzGiRHM5PDQER02O7OkAB/aDBnlGorzYC8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UzqUfRRfKxXKGe7f+JguNlHAxyaM/YCmW9bhZnFgz+tXgLvLC6vi3f17WPIY9Jnel
-         kir0x7klAv5JE8I/QZ0dv1icCu/SUMbMZD6ZULUJDDIOgbx87tt0swz9IkOsOv2gA0
-         oZASLvGaZ1/YgYkoXTneQxVXpJXzA9RytQhX67io=
+        b=jZeVMXD8XRxbi/RBUKpplb+0/fo89KLU060cu/45Ly77tNLyLdo00oB55ZNs2kyou
+         yOflB4flZSBBGNvcGf0Dsybk3m20zHT3b1VgKZiIm1PYKfluK+pGyOkhzU7gY18ug4
+         Ny7M2WyUPDKwD+vc+pvKKNyPorajuee+ZvMYYYEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 6.0 12/20] drm/amd/pm: fulfill SMU13.0.0 cstate control interface
-Date:   Mon, 24 Oct 2022 13:31:14 +0200
-Message-Id: <20221024112934.932218124@linuxfoundation.org>
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Joerg Roedel <jroedel@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 121/159] iommu/omap: Fix buffer overflow in debugfs
+Date:   Mon, 24 Oct 2022 13:31:15 +0200
+Message-Id: <20221024112953.918265596@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-References: <20221024112934.415391158@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Quan <evan.quan@amd.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-commit 528c0e66e0c01a8c078d2d94431db80f9c75d2a0 upstream.
+[ Upstream commit 184233a5202786b20220acd2d04ddf909ef18f29 ]
 
-Fulfill the functionality for cstate control.
+There are two issues here:
 
-Signed-off-by: Evan Quan <evan.quan@amd.com>
-Reviewed-by: Hawking Zhang <Hawking.Zhang@amd.com>
-Reviewed-by: Lijo Lazar <lijo.lazar@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org # 6.0.x
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+1) The "len" variable needs to be checked before the very first write.
+   Otherwise if omap2_iommu_dump_ctx() with "bytes" less than 32 it is a
+   buffer overflow.
+2) The snprintf() function returns the number of bytes that *would* have
+   been copied if there were enough space.  But we want to know the
+   number of bytes which were *actually* copied so use scnprintf()
+   instead.
+
+Fixes: bd4396f09a4a ("iommu/omap: Consolidate OMAP IOMMU modules")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Link: https://lore.kernel.org/r/YuvYh1JbE3v+abd5@kili
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/iommu/omap-iommu-debug.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c
-@@ -119,6 +119,7 @@ static struct cmn2asic_msg_mapping smu_v
- 	MSG_MAP(NotifyPowerSource,		PPSMC_MSG_NotifyPowerSource,           0),
- 	MSG_MAP(Mode1Reset,			PPSMC_MSG_Mode1Reset,                  0),
- 	MSG_MAP(PrepareMp1ForUnload,		PPSMC_MSG_PrepareMp1ForUnload,         0),
-+	MSG_MAP(DFCstateControl,		PPSMC_MSG_SetExternalClientDfCstateAllow, 0),
- };
+diff --git a/drivers/iommu/omap-iommu-debug.c b/drivers/iommu/omap-iommu-debug.c
+index cec33e90e399..a15c4d99b888 100644
+--- a/drivers/iommu/omap-iommu-debug.c
++++ b/drivers/iommu/omap-iommu-debug.c
+@@ -35,12 +35,12 @@ static inline bool is_omap_iommu_detached(struct omap_iommu *obj)
+ 		ssize_t bytes;						\
+ 		const char *str = "%20s: %08x\n";			\
+ 		const int maxcol = 32;					\
+-		bytes = snprintf(p, maxcol, str, __stringify(name),	\
++		if (len < maxcol)					\
++			goto out;					\
++		bytes = scnprintf(p, maxcol, str, __stringify(name),	\
+ 				 iommu_read_reg(obj, MMU_##name));	\
+ 		p += bytes;						\
+ 		len -= bytes;						\
+-		if (len < maxcol)					\
+-			goto out;					\
+ 	} while (0)
  
- static struct cmn2asic_mapping smu_v13_0_0_clk_map[SMU_CLK_COUNT] = {
-@@ -1753,6 +1754,15 @@ static int smu_v13_0_0_set_mp1_state(str
- 	return ret;
- }
- 
-+static int smu_v13_0_0_set_df_cstate(struct smu_context *smu,
-+				     enum pp_df_cstate state)
-+{
-+	return smu_cmn_send_smc_msg_with_param(smu,
-+					       SMU_MSG_DFCstateControl,
-+					       state,
-+					       NULL);
-+}
-+
- static const struct pptable_funcs smu_v13_0_0_ppt_funcs = {
- 	.get_allowed_feature_mask = smu_v13_0_0_get_allowed_feature_mask,
- 	.set_default_dpm_table = smu_v13_0_0_set_default_dpm_table,
-@@ -1822,6 +1832,7 @@ static const struct pptable_funcs smu_v1
- 	.mode1_reset_is_support = smu_v13_0_0_is_mode1_reset_supported,
- 	.mode1_reset = smu_v13_0_mode1_reset,
- 	.set_mp1_state = smu_v13_0_0_set_mp1_state,
-+	.set_df_cstate = smu_v13_0_0_set_df_cstate,
- };
- 
- void smu_v13_0_0_set_ppt_funcs(struct smu_context *smu)
+ static ssize_t
+-- 
+2.35.1
+
 
 
