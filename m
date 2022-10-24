@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6155960A1CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4532F60A379
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 13:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbiJXLdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 07:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S232262AbiJXL4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 07:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbiJXLco (ORCPT
+        with ESMTP id S232526AbiJXLy4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 07:32:44 -0400
+        Mon, 24 Oct 2022 07:54:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B9257566;
-        Mon, 24 Oct 2022 04:32:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC56C77397;
+        Mon, 24 Oct 2022 04:45:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D64AB81141;
-        Mon, 24 Oct 2022 11:32:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A953AC433C1;
-        Mon, 24 Oct 2022 11:32:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49D9FB8117E;
+        Mon, 24 Oct 2022 11:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EF1C433D6;
+        Mon, 24 Oct 2022 11:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666611145;
-        bh=KewVzdkDE/IMXnwzEyL8hV5FTZmJHOyqSi6AKVE3M4Y=;
+        s=korg; t=1666611872;
+        bh=y1wRZcbuvsbN8CUT6eBVlfuApor1uiSqqouwpoaDWTc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xGD64d6961VldCdS6WSxQTSM0NXCtLHKyNTjmQ0B+ACAsTAmuNiEWkQZme1Ruq0Na
-         zxFEnZskvTLKNvgrf7P+I/8eSAhgJeyBlMzzw0nG+cOcwFrcHQ1QPBjnk65DAfHMFT
-         ta/SJhnrTZ5+CnsIT2oO4uWQC7iZVnNEPvC7/J0w=
+        b=dM8j2llwR1gmiIDe2nBLjb2wYwq1x1O0s/z+SKoyh2NKILHwNZUR5N7OxlCfdd3RX
+         KmdW66MBBtkIm8PYm/Y2JnN4zNJPbHsgqxFl6A9mxbwS32VzmDJ7Q2puIeY2ySjsm5
+         qA71d4KWOjyWkblZGHt3ZxGHLX5Ly2w/SB+EQXOc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 6.0 07/20] HID: playstation: add initial DualSense Edge controller support
-Date:   Mon, 24 Oct 2022 13:31:09 +0200
-Message-Id: <20221024112934.735209336@linuxfoundation.org>
+        stable@vger.kernel.org, Stefan Wahren <stefan.wahren@i2se.com>,
+        "Ivan T. Ivanov" <iivanov@suse.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 116/159] clk: bcm2835: fix bcm2835_clock_rate_from_divisor declaration
+Date:   Mon, 24 Oct 2022 13:31:10 +0200
+Message-Id: <20221024112953.723975632@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-References: <20221024112934.415391158@linuxfoundation.org>
+In-Reply-To: <20221024112949.358278806@linuxfoundation.org>
+References: <20221024112949.358278806@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,54 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roderick Colenbrander <roderick@gaikai.com>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-commit b8a968efab301743fd659b5649c5d7d3e30e63a6 upstream.
+[ Upstream commit 0b919a3728691c172312dee99ba654055ccd8c84 ]
 
-Provide initial support for the DualSense Edge controller. The brings
-support up to the level of the original DualSense, but won't yet provide
-support for new features (e.g. reprogrammable buttons).
+The return value of bcm2835_clock_rate_from_divisor is always unsigned
+and also all caller expect this. So fix the declaration accordingly.
 
-Signed-off-by: Roderick Colenbrander <roderick.colenbrander@sony.com>
-CC: stable@vger.kernel.org
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Link: https://lore.kernel.org/r/20221010212313.78275-3-roderick.colenbrander@sony.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 41691b8862e2 ("clk: bcm2835: Add support for programming the audio domain clocks")
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Link: https://lore.kernel.org/r/20220904141037.38816-1-stefan.wahren@i2se.com
+Reviewed-by: Ivan T. Ivanov <iivanov@suse.de>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-ids.h         |    1 +
- drivers/hid/hid-playstation.c |    5 ++++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/clk/bcm/clk-bcm2835.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1142,6 +1142,7 @@
- #define USB_DEVICE_ID_SONY_PS4_CONTROLLER_2	0x09cc
- #define USB_DEVICE_ID_SONY_PS4_CONTROLLER_DONGLE	0x0ba0
- #define USB_DEVICE_ID_SONY_PS5_CONTROLLER	0x0ce6
-+#define USB_DEVICE_ID_SONY_PS5_CONTROLLER_2	0x0df2
- #define USB_DEVICE_ID_SONY_MOTION_CONTROLLER	0x03d5
- #define USB_DEVICE_ID_SONY_NAVIGATION_CONTROLLER	0x042f
- #define USB_DEVICE_ID_SONY_BUZZ_CONTROLLER		0x0002
---- a/drivers/hid/hid-playstation.c
-+++ b/drivers/hid/hid-playstation.c
-@@ -1467,7 +1467,8 @@ static int ps_probe(struct hid_device *h
- 		goto err_stop;
- 	}
+diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
+index 3f16b553982d..87cd8fde3a02 100644
+--- a/drivers/clk/bcm/clk-bcm2835.c
++++ b/drivers/clk/bcm/clk-bcm2835.c
+@@ -902,9 +902,9 @@ static u32 bcm2835_clock_choose_div(struct clk_hw *hw,
+ 	return div;
+ }
  
--	if (hdev->product == USB_DEVICE_ID_SONY_PS5_CONTROLLER) {
-+	if (hdev->product == USB_DEVICE_ID_SONY_PS5_CONTROLLER ||
-+		hdev->product == USB_DEVICE_ID_SONY_PS5_CONTROLLER_2) {
- 		dev = dualsense_create(hdev);
- 		if (IS_ERR(dev)) {
- 			hid_err(hdev, "Failed to create dualsense.\n");
-@@ -1508,6 +1509,8 @@ static void ps_remove(struct hid_device
- static const struct hid_device_id ps_devices[] = {
- 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS5_CONTROLLER) },
- 	{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS5_CONTROLLER) },
-+	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS5_CONTROLLER_2) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_SONY, USB_DEVICE_ID_SONY_PS5_CONTROLLER_2) },
- 	{ }
- };
- MODULE_DEVICE_TABLE(hid, ps_devices);
+-static long bcm2835_clock_rate_from_divisor(struct bcm2835_clock *clock,
+-					    unsigned long parent_rate,
+-					    u32 div)
++static unsigned long bcm2835_clock_rate_from_divisor(struct bcm2835_clock *clock,
++						     unsigned long parent_rate,
++						     u32 div)
+ {
+ 	const struct bcm2835_clock_data *data = clock->data;
+ 	u64 temp;
+-- 
+2.35.1
+
 
 
