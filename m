@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5142E60ABBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4990060A6A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236744AbiJXNzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
+        id S231514AbiJXMgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236711AbiJXNxn (ORCPT
+        with ESMTP id S234344AbiJXMaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:53:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA66BC617;
-        Mon, 24 Oct 2022 05:43:28 -0700 (PDT)
+        Mon, 24 Oct 2022 08:30:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CB631EF6;
+        Mon, 24 Oct 2022 05:03:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AD9E61328;
-        Mon, 24 Oct 2022 12:42:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6710C433D6;
-        Mon, 24 Oct 2022 12:42:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4CDB6B81147;
+        Mon, 24 Oct 2022 11:46:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA6F3C433C1;
+        Mon, 24 Oct 2022 11:46:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615369;
-        bh=1vk9cCfPuQn9h6X3LRfdcgmD8iNffBsmLEgziE8/sDQ=;
+        s=korg; t=1666611983;
+        bh=MLYHlpHej6WatiXz/o2H6bBtG1Sl1y9g5508EWQT3AE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s26we/TZ68fLeNi74lWh4grXRu6eyHY1jSIbCXBfddPk0cbFbloddizDfMF9YsUic
-         JmcBoAG/xkBBt9trnTHh0WXr7JXUAmEirjsdExOMHEY7SUXByIhyLskaf7EltykeEX
-         jGvUnFvrzbYtHw8vOK4tUFoZB9Pi23SUrKAd5m9o=
+        b=tSJ3IOrtDzEZvQBbwx9rJcNxfYfjGlV9H95S64Ja0Qv2MJEZtYon4y/qAV7NTTVAC
+         PueHDq44VSt57bhukZiy2QgzqBO9bhRSzhNI/QG/kLjjVR8aXcDUwUW+f6UlkHVVZv
+         jnimvtUmhwY9ukAgETvfbaEruOK4JtLS/MoCsmQw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 197/530] mISDN: fix use-after-free bugs in l1oip timer handlers
-Date:   Mon, 24 Oct 2022 13:29:01 +0200
-Message-Id: <20221024113053.966947418@linuxfoundation.org>
+        stable@vger.kernel.org, Swati Agarwal <swati.agarwal@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 025/210] dmaengine: xilinx_dma: Report error in case of dma_set_mask_and_coherent API failure
+Date:   Mon, 24 Oct 2022 13:29:02 +0200
+Message-Id: <20221024112957.780094879@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,95 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Swati Agarwal <swati.agarwal@xilinx.com>
 
-[ Upstream commit 2568a7e0832ee30b0a351016d03062ab4e0e0a3f ]
+[ Upstream commit 8f2b6bc79c32f0fa60df000ae387a790ec80eae9 ]
 
-The l1oip_cleanup() traverses the l1oip_ilist and calls
-release_card() to cleanup module and stack. However,
-release_card() calls del_timer() to delete the timers
-such as keep_tl and timeout_tl. If the timer handler is
-running, the del_timer() will not stop it and result in
-UAF bugs. One of the processes is shown below:
+The driver does not handle the failure case while calling
+dma_set_mask_and_coherent API.
 
-    (cleanup routine)          |        (timer handler)
-release_card()                 | l1oip_timeout()
- ...                           |
- del_timer()                   | ...
- ...                           |
- kfree(hc) //FREE              |
-                               | hc->timeout_on = 0 //USE
+In case of failure, capture the return value of API and then report an
+error.
 
-Fix by calling del_timer_sync() in release_card(), which
-makes sure the timer handlers have finished before the
-resources, such as l1oip and so on, have been deallocated.
+Addresses-coverity: Unchecked return value (CHECKED_RETURN)
 
-What's more, the hc->workq and hc->socket_thread can kick
-those timers right back in. We add a bool flag to show
-if card is released. Then, check this flag in hc->workq
-and hc->socket_thread.
-
-Fixes: 3712b42d4b1b ("Add layer1 over IP support")
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Swati Agarwal <swati.agarwal@xilinx.com>
+Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Link: https://lore.kernel.org/r/20220817061125.4720-4-swati.agarwal@xilinx.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/isdn/mISDN/l1oip.h      |  1 +
- drivers/isdn/mISDN/l1oip_core.c | 13 +++++++------
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ drivers/dma/xilinx/xilinx_dma.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/isdn/mISDN/l1oip.h b/drivers/isdn/mISDN/l1oip.h
-index 7ea10db20e3a..48133d022812 100644
---- a/drivers/isdn/mISDN/l1oip.h
-+++ b/drivers/isdn/mISDN/l1oip.h
-@@ -59,6 +59,7 @@ struct l1oip {
- 	int			bundle;		/* bundle channels in one frm */
- 	int			codec;		/* codec to use for transmis. */
- 	int			limit;		/* limit number of bchannels */
-+	bool			shutdown;	/* if card is released */
+diff --git a/drivers/dma/xilinx/xilinx_dma.c b/drivers/dma/xilinx/xilinx_dma.c
+index 9319349e69d2..b4d00bc461db 100644
+--- a/drivers/dma/xilinx/xilinx_dma.c
++++ b/drivers/dma/xilinx/xilinx_dma.c
+@@ -2585,7 +2585,11 @@ static int xilinx_dma_probe(struct platform_device *pdev)
+ 		xdev->ext_addr = false;
  
- 	/* timer */
- 	struct timer_list	keep_tl;
-diff --git a/drivers/isdn/mISDN/l1oip_core.c b/drivers/isdn/mISDN/l1oip_core.c
-index 2c40412466e6..a77195e378b7 100644
---- a/drivers/isdn/mISDN/l1oip_core.c
-+++ b/drivers/isdn/mISDN/l1oip_core.c
-@@ -275,7 +275,7 @@ l1oip_socket_send(struct l1oip *hc, u8 localcodec, u8 channel, u32 chanmask,
- 	p = frame;
+ 	/* Set the dma mask bits */
+-	dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
++	err = dma_set_mask_and_coherent(xdev->dev, DMA_BIT_MASK(addr_width));
++	if (err < 0) {
++		dev_err(xdev->dev, "DMA mask error %d\n", err);
++		goto disable_clks;
++	}
  
- 	/* restart timer */
--	if (time_before(hc->keep_tl.expires, jiffies + 5 * HZ))
-+	if (time_before(hc->keep_tl.expires, jiffies + 5 * HZ) && !hc->shutdown)
- 		mod_timer(&hc->keep_tl, jiffies + L1OIP_KEEPALIVE * HZ);
- 	else
- 		hc->keep_tl.expires = jiffies + L1OIP_KEEPALIVE * HZ;
-@@ -601,7 +601,9 @@ l1oip_socket_parse(struct l1oip *hc, struct sockaddr_in *sin, u8 *buf, int len)
- 		goto multiframe;
- 
- 	/* restart timer */
--	if (time_before(hc->timeout_tl.expires, jiffies + 5 * HZ) || !hc->timeout_on) {
-+	if ((time_before(hc->timeout_tl.expires, jiffies + 5 * HZ) ||
-+	     !hc->timeout_on) &&
-+	    !hc->shutdown) {
- 		hc->timeout_on = 1;
- 		mod_timer(&hc->timeout_tl, jiffies + L1OIP_TIMEOUT * HZ);
- 	} else /* only adjust timer */
-@@ -1232,11 +1234,10 @@ release_card(struct l1oip *hc)
- {
- 	int	ch;
- 
--	if (timer_pending(&hc->keep_tl))
--		del_timer(&hc->keep_tl);
-+	hc->shutdown = true;
- 
--	if (timer_pending(&hc->timeout_tl))
--		del_timer(&hc->timeout_tl);
-+	del_timer_sync(&hc->keep_tl);
-+	del_timer_sync(&hc->timeout_tl);
- 
- 	cancel_work_sync(&hc->workq);
- 
+ 	/* Initialize the DMA engine */
+ 	xdev->common.dev = &pdev->dev;
 -- 
 2.35.1
 
