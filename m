@@ -2,59 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5493560BE10
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669E760BE11
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbiJXXA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 19:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S231146AbiJXXBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbiJXXAU (ORCPT
+        with ESMTP id S230343AbiJXXA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 19:00:20 -0400
-Received: from mail-lj1-x249.google.com (mail-lj1-x249.google.com [IPv6:2a00:1450:4864:20::249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9262D7814
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:22:36 -0700 (PDT)
-Received: by mail-lj1-x249.google.com with SMTP id e9-20020a2ea549000000b0026fd9ba87acso4523196ljn.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:22:35 -0700 (PDT)
+        Mon, 24 Oct 2022 19:00:29 -0400
+Received: from mail-lf1-x149.google.com (mail-lf1-x149.google.com [IPv6:2a00:1450:4864:20::149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10844816A0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:22:40 -0700 (PDT)
+Received: by mail-lf1-x149.google.com with SMTP id w2-20020ac24422000000b004a299d12364so3126639lfl.13
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:22:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=G4yBv7Ojnp7UF/vJeQGCUBcD6F1oQa7UXx9ZrIQaMAU=;
-        b=aSgkiacZ+5LH66/OSoz3MSDqz3zMIfvjCb/vyfftyLM0xQDT8v/cV4qgWN9uIWbM2D
-         5OZHLV9CdDaSYabYM5oDhFl/9ZFZxBB7UVaE+TCMSdHJ4OzpgUiYTbbaREJDJ5M7BdKw
-         7Yp611r8+sMWV+GwAvNDb5hW2BH9LuS76Frg8V4l+RxJ4pp10FD3oo1s5NeIbhGUhz0w
-         0i1mgmg0nYSCbbb5eW6qpKn9lWSlUKvjLWMU81zY+MVDWxf5KApWMkH3yS1m1A1Ci/5R
-         956P5mfY7HvBAFj+8gGanEIbLdPqM2iOq+oUYtxU3AimbVdcembaQ3RioMtPFtX9O6iC
-         4i9Q==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h1brEJBipb7gPKmBCB4iwvDw2G6SbkIMFGPFK60cCqY=;
+        b=QrB2Fv9LJDXRdkYo1W6sAUZYFUSBeG66/qzzdNhF4QszBRYGVKofytU+Xl1qy6Rz4I
+         I8Yiy0O6Aibk99xbAG3sK5grh6C8aHbcfosiscsjIQNfEklGhC3c96zp/HDNoYLx9+KJ
+         hPMWl1sJhW2LUnPXauuud99OpqjZJBiwQMEQL9D2FwX4DgKLGzq9iGY0t0D9opbdb5+D
+         zWvcc8t93kpL3shnq/n4C9Q8SmbywVo6gn4tT2ZCdtPTJK9UyQd08jpWSQ/e2t74qO1G
+         KyFnztlBqXN3ZwWi/fNbkJaHHAQkZtBZZXoMgXzgEHtGas2KrLoVoiZza/P/b5smYnEl
+         soPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G4yBv7Ojnp7UF/vJeQGCUBcD6F1oQa7UXx9ZrIQaMAU=;
-        b=trZdlrhrSvzQHvlSJAcvPL8nIE708iKGjGX3qHy8aDxzTVrhD6mT59RDGOL7AGZge5
-         VBiU31z/YxZzLAm5o9qnqOmXxP6C2tZ617Kr3c7wbNNeozOxDtvVbtMP+S8EE7G9Uk8W
-         BNBlgZ9MraU3fsIHOF441ObJTyJcECA1a1HGZtZG8z57PJaoTGZCcz/nZ70Ptadn9qHY
-         UHJRBfF+urvV/bNfs0l1UOPNMoCNSwbUdsq1nxJx+swFBxYkb+HNbUFQzkfnK+AIrzZ/
-         HXLvzN9krxWnFjvED6b7gPfIu+f8eEGBAf+62C5FgJDG3Pfb2faBf3zixV+FrDBLcNCq
-         rvlA==
-X-Gm-Message-State: ACrzQf3K8Ogkw0AH0zIbXCdFKNF7Ll7GOChrt5WeMd4z/1rBn9eu4C1O
-        qXZK4I92pCitFN3j+vNZRojB/M5GCcc=
-X-Google-Smtp-Source: AMsMyM48tMgyNJTcQaeP49oPDEv9IHgkDLnPXKM/jKBNnXEO6qCwgCXK+Fopa0pPG4zOuEJQI1VErzmH0jI=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h1brEJBipb7gPKmBCB4iwvDw2G6SbkIMFGPFK60cCqY=;
+        b=Q8dnk/Dr3lcSA//1dHuzLN04YPUl54QRQUQCvogQBVjVYzzRd+YulIPIGN+Rb+voTB
+         z5e/H5sieX8dU/jmRDU9o3YsThKaRVo0id8bZUzygkyrporLCIFGdFXZAqHD5E7xE/0c
+         uT2AjZmef7WGqs5MW+4Lu5qwZGn17Itb+bkLPtRzUm4+R4XxytW6Hr4DHkhh0Q+bJ8SF
+         1meie1tttHM9Sn3ewwkfgwtFT3TwKCbHwJgAo7HSljeMMon8vEUlZ+Cz4EmLaBHoymmO
+         99C9P/cAHynreOS1ph9jS1xdduXIYegpSShaudNAxIgtDEiOpiBsWnUPFWTqsdfGwmqY
+         8Utg==
+X-Gm-Message-State: ACrzQf1QbN+OMVL/s6RQfXZwKEvCKE5Ru81FKisYWooE+BiQlI6VGn2D
+        Q/N9CE4A3eK2813HajFwL20Z5ymPLQ8=
+X-Google-Smtp-Source: AMsMyM71innvLamIkBMpwiwhUw/yYthw7zM8NGpJq9LhH+G7pZpYkhGY54RKQfT1VYVKSQ9sih3hlGce8Og=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:8695:7c88:66ed:f9d1])
- (user=glider job=sendgmr) by 2002:a05:6512:104c:b0:4a2:6b99:c8f3 with SMTP id
- c12-20020a056512104c00b004a26b99c8f3mr13590896lfb.519.1666646508884; Mon, 24
- Oct 2022 14:21:48 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 23:21:40 +0200
+ (user=glider job=sendgmr) by 2002:a05:6512:3c8b:b0:4a2:6e64:7049 with SMTP id
+ h11-20020a0565123c8b00b004a26e647049mr13241229lfv.196.1666646517702; Mon, 24
+ Oct 2022 14:21:57 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 23:21:41 +0200
+In-Reply-To: <20221024212144.2852069-1-glider@google.com>
 Mime-Version: 1.0
+References: <20221024212144.2852069-1-glider@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221024212144.2852069-1-glider@google.com>
-Subject: [PATCH 1/5] mm: kmsan: export kmsan_copy_page_meta()
+Message-ID: <20221024212144.2852069-2-glider@google.com>
+Subject: [PATCH 2/5] x86/purgatory: disable KMSAN instrumentation
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -66,29 +70,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Certain modules call copy_user_highpage(), which calls
-kmsan_copy_page_meta() under KMSAN, so we need to export the latter.
+The stand-alone purgatory.ro does not contain the KMSAN runtime,
+therefore it can't be built with KMSAN compiler instrumentation.
 
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Fixes: b073d7f8aee4 ("mm: kmsan: maintain KMSAN metadata for page operations")
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: x86@kernel.org
 Link: https://github.com/google/kmsan/issues/89
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
- mm/kmsan/shadow.c | 1 +
+ arch/x86/purgatory/Makefile | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/mm/kmsan/shadow.c b/mm/kmsan/shadow.c
-index 21e3e196ec3cf..a787c04e9583c 100644
---- a/mm/kmsan/shadow.c
-+++ b/mm/kmsan/shadow.c
-@@ -167,6 +167,7 @@ void kmsan_copy_page_meta(struct page *dst, struct page *src)
- 	__memcpy(origin_ptr_for(dst), origin_ptr_for(src), PAGE_SIZE);
- 	kmsan_leave_runtime();
- }
-+EXPORT_SYMBOL(kmsan_copy_page_meta);
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index 58a200dc762d6..17f09dc263811 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -26,6 +26,7 @@ GCOV_PROFILE	:= n
+ KASAN_SANITIZE	:= n
+ UBSAN_SANITIZE	:= n
+ KCSAN_SANITIZE	:= n
++KMSAN_SANITIZE	:= n
+ KCOV_INSTRUMENT := n
  
- void kmsan_alloc_page(struct page *page, unsigned int order, gfp_t flags)
- {
+ # These are adjustments to the compiler flags used for objects that
 -- 
 2.38.0.135.g90850a2211-goog
 
