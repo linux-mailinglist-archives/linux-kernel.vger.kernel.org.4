@@ -2,175 +2,468 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793066097E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 03:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B669B6097E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 03:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbiJXBmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 23 Oct 2022 21:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
+        id S229658AbiJXBmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 23 Oct 2022 21:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbiJXBmC (ORCPT
+        with ESMTP id S229717AbiJXBmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 23 Oct 2022 21:42:02 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610486D9C7
-        for <linux-kernel@vger.kernel.org>; Sun, 23 Oct 2022 18:42:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666575720; x=1698111720;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=zP+QvtF6/dvJCPBCVPE+qDCgefA5nlCatvsEozgumH4=;
-  b=ja+qskXK72Y+JshuHE2T28FpGI2BtM+Hsr1Pm+Ko6NcJf+nWssBR6DdC
-   Cou2zUs2JpsJwEaELwY4pB7ew4Doxlp3jBywsJdxJRPCyymXuVnlxRHvU
-   8BevGsp1NuArMdI/ZhQtR885hqCa2BgY7/WksHz5ctoCMv7tM6oToCz+j
-   IwISs4Db+7w12fqIoVfeEAwyxy/r9ek0mMRZcmqP42LZERD7tfbJezNM1
-   9EojDHJ+RQlWGcp5pIlnu/9J30ekPJ50ONP0wvXIeGzSAjmfHt9SDjAOu
-   DdL7EMXF/Undyh56TysJpRhgfse98MxP76Kzg/j6xb79yhxaJDeyGCzRN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="333901958"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="333901958"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 18:41:59 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10509"; a="773664338"
-X-IronPort-AV: E=Sophos;i="5.95,207,1661842800"; 
-   d="scan'208";a="773664338"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2022 18:41:57 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc:     <akpm@linux-foundation.org>, <david@redhat.com>, <ziy@nvidia.com>,
-        <shy828301@gmail.com>, <apopple@nvidia.com>,
-        <jingshan@linux.alibaba.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] mm: migrate: Try again if THP split is failed
- due to page refcnt
-References: <fca6bb0bd48a0292a0ace2fadd0f44579a060cbb.1666335603.git.baolin.wang@linux.alibaba.com>
-        <88831f1764c8fbd5b5fdad27cd5ae3d2ca796e44.1666335603.git.baolin.wang@linux.alibaba.com>
-Date:   Mon, 24 Oct 2022 09:41:12 +0800
-In-Reply-To: <88831f1764c8fbd5b5fdad27cd5ae3d2ca796e44.1666335603.git.baolin.wang@linux.alibaba.com>
-        (Baolin Wang's message of "Fri, 21 Oct 2022 18:16:24 +0800")
-Message-ID: <875ygam213.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 23 Oct 2022 21:42:20 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E566B48CB6;
+        Sun, 23 Oct 2022 18:42:17 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8CxLdl47VVjBPEBAA--.7878S3;
+        Mon, 24 Oct 2022 09:42:16 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeBz7VVjoAgEAA--.15617S2;
+        Mon, 24 Oct 2022 09:42:15 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v3 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver support
+Date:   Mon, 24 Oct 2022 09:42:08 +0800
+Message-Id: <20221024014209.5327-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxLeBz7VVjoAgEAA--.15617S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvAXoW3Zr13JFyrArWDJry3Kry3Jwb_yoW8Gr48Ao
+        WS9Fn8Xw4fJr18XFZ8Zrn8GrW7ZFs7Cr1DA393Zrs8u3y2vrnFgr9rtr4xGFy8tr4rtF17
+        ZasagFWrJF4Iqrn5n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUyE1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFV
+        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
+        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
+        UvcSsGvfC2KfnxnUUI43ZEXa7IU1iL0UUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baolin Wang <baolin.wang@linux.alibaba.com> writes:
+The loongson2 SoC has a few pins that can be used as GPIOs or take
+multiple other functions. Add a driver for the pinmuxing.
 
-> When creating a virtual machine, we will use memfd_create() to get
-> a file descriptor which can be used to create share memory mappings
-> using the mmap function, meanwhile the mmap() will set the MAP_POPULATE
-> flag to allocate physical pages for the virtual machine.
->
-> When allocating physical pages for the guest, the host can fallback to
-> allocate some CMA pages for the guest when over half of the zone's free
-> memory is in the CMA area.
->
-> In guest os, when the application wants to do some data transaction with
-> DMA, our QEMU will call VFIO_IOMMU_MAP_DMA ioctl to do longterm-pin and
-> create IOMMU mappings for the DMA pages. However, when calling
-> VFIO_IOMMU_MAP_DMA ioctl to pin the physical pages, we found it will be
-> failed to longterm-pin sometimes.
->
-> After some invetigation, we found the pages used to do DMA mapping can
-> contain some CMA pages, and these CMA pages will cause a possible
-> failure of the longterm-pin, due to failed to migrate the CMA pages.
-> The reason of migration failure may be temporary reference count or
-> memory allocation failure. So that will cause the VFIO_IOMMU_MAP_DMA
-> ioctl returns error, which makes the application failed to start.
->
-> I observed one migration failure case (which is not easy to reproduce) is
-> that, the 'thp_migration_fail' count is 1 and the 'thp_split_page_failed'
-> count is also 1.
->
-> That means when migrating a THP which is in CMA area, but can not allocate
-> a new THP due to memory fragmentation, so it will split the THP. However
-> THP split is also failed, probably the reason is temporary reference count
-> of this THP. And the temporary reference count can be caused by dropping
-> page caches (I observed the drop caches operation in the system), but we
-> can not drop the shmem page caches due to they are already dirty at that time.
->
-> Especially for THP split failure, which is caused by temporary reference
-> count, we can try again to mitigate the failure of migration in this case
-> according to previous discussion [1].
->
-> [1] https://lore.kernel.org/all/470dc638-a300-f261-94b4-e27250e42f96@redhat.com/
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+There is currently no support for GPIO pin pull-up and pull-down.
 
-Thanks!
+Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ MAINTAINERS                         |   7 +
+ drivers/pinctrl/Kconfig             |  11 +
+ drivers/pinctrl/Makefile            |   1 +
+ drivers/pinctrl/pinctrl-loongson2.c | 330 ++++++++++++++++++++++++++++
+ 4 files changed, 349 insertions(+)
+ create mode 100644 drivers/pinctrl/pinctrl-loongson2.c
 
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8cc541ce89b8..c9883f145acb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11922,6 +11922,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+ F:	drivers/clocksource/loongson2_hpet.c
+ 
++LOONGSON2 SOC SERIES PINCTRL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-gpio@vger.kernel.org
++S:	Maintained
++F:	drivers/pinctrl/pinctrl-loongson2.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index 1cf74b0c42e5..c1499d180cbd 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -507,6 +507,17 @@ config PINCTRL_ZYNQMP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called pinctrl-zynqmp.
+ 
++config PINCTRL_LOONGSON2
++	tristate "Pinctrl driver for the Loongson2 SoC"
++	depends on LOONGARCH || COMPILE_TEST
++	select PINMUX
++	select GENERIC_PINCONF
++	help
++	  This selects pin control driver for the Loongson2 SoC. It
++	  provides pin config functions multiplexing.  GPIO pin pull-up,
++	  pull-down functions are not supported. Say yes to enable
++	  pinctrl for Loongson2 SoC.
++
+ source "drivers/pinctrl/actions/Kconfig"
+ source "drivers/pinctrl/aspeed/Kconfig"
+ source "drivers/pinctrl/bcm/Kconfig"
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index e76f5cdc64b0..bad6a760c141 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -28,6 +28,7 @@ obj-$(CONFIG_PINCTRL_KEEMBAY)	+= pinctrl-keembay.o
+ obj-$(CONFIG_PINCTRL_LANTIQ)	+= pinctrl-lantiq.o
+ obj-$(CONFIG_PINCTRL_FALCON)	+= pinctrl-falcon.o
+ obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
++obj-$(CONFIG_PINCTRL_LOONGSON2) += pinctrl-loongson2.o
+ obj-$(CONFIG_PINCTRL_LPC18XX)	+= pinctrl-lpc18xx.o
+ obj-$(CONFIG_PINCTRL_MAX77620)	+= pinctrl-max77620.o
+ obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
+diff --git a/drivers/pinctrl/pinctrl-loongson2.c b/drivers/pinctrl/pinctrl-loongson2.c
+new file mode 100644
+index 000000000000..763a8169b538
+--- /dev/null
++++ b/drivers/pinctrl/pinctrl-loongson2.c
+@@ -0,0 +1,330 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: zhanghongchen <zhanghongchen@loongson.cn>
++ *         Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/of.h>
++#include <linux/pinctrl/pinmux.h>
++#include <linux/pinctrl/pinconf-generic.h>
++#include "core.h"
++#include "pinctrl-utils.h"
++
++#define PMX_GROUP(grp, offset, bitv)					\
++	{								\
++		.name = #grp,						\
++		.pins = grp ## _pins,					\
++		.num_pins = ARRAY_SIZE(grp ## _pins),			\
++		.reg = offset,						\
++		.bit = bitv,						\
++	}
++
++#define SPECIFIC_GROUP(group)						\
++	static const char * const group##_groups[] = {			\
++		#group							\
++	}
++
++#define FUNCTION(fn)							\
++	{								\
++		.name = #fn,						\
++		.groups = fn ## _groups,				\
++		.num_groups = ARRAY_SIZE(fn ## _groups),		\
++	}
++
++struct loongson2_pinctrl {
++	struct device *dev;
++	struct pinctrl_dev *pcdev;
++	struct pinctrl_desc desc;
++	struct device_node *of_node;
++	spinlock_t lock;
++	void * __iomem reg_base;
++};
++
++struct loongson2_pmx_group {
++	const char *name;
++	const unsigned int *pins;
++	unsigned int num_pins;
++	unsigned int reg;
++	unsigned int bit;
++};
++
++struct loongson2_pmx_func {
++	const char *name;
++	const char * const *groups;
++	unsigned int num_groups;
++};
++
++#define LOONGSON2_PIN(x) PINCTRL_PIN(x, "gpio"#x)
++static const struct pinctrl_pin_desc loongson2_pctrl_pins[] = {
++	LOONGSON2_PIN(0),  LOONGSON2_PIN(1),  LOONGSON2_PIN(2),  LOONGSON2_PIN(3),
++	LOONGSON2_PIN(4),  LOONGSON2_PIN(5),  LOONGSON2_PIN(6),  LOONGSON2_PIN(7),
++	LOONGSON2_PIN(8),  LOONGSON2_PIN(9),  LOONGSON2_PIN(10), LOONGSON2_PIN(11),
++	LOONGSON2_PIN(12), LOONGSON2_PIN(13), LOONGSON2_PIN(14),
++	LOONGSON2_PIN(16), LOONGSON2_PIN(17), LOONGSON2_PIN(18), LOONGSON2_PIN(19),
++	LOONGSON2_PIN(20), LOONGSON2_PIN(21), LOONGSON2_PIN(22), LOONGSON2_PIN(23),
++	LOONGSON2_PIN(24), LOONGSON2_PIN(25), LOONGSON2_PIN(26), LOONGSON2_PIN(27),
++	LOONGSON2_PIN(28), LOONGSON2_PIN(29), LOONGSON2_PIN(30),
++	LOONGSON2_PIN(32), LOONGSON2_PIN(33), LOONGSON2_PIN(34), LOONGSON2_PIN(35),
++	LOONGSON2_PIN(36), LOONGSON2_PIN(37), LOONGSON2_PIN(38), LOONGSON2_PIN(39),
++	LOONGSON2_PIN(40), LOONGSON2_PIN(41),
++	LOONGSON2_PIN(44), LOONGSON2_PIN(45), LOONGSON2_PIN(46), LOONGSON2_PIN(47),
++	LOONGSON2_PIN(48), LOONGSON2_PIN(49), LOONGSON2_PIN(50), LOONGSON2_PIN(51),
++	LOONGSON2_PIN(52), LOONGSON2_PIN(53), LOONGSON2_PIN(54), LOONGSON2_PIN(55),
++	LOONGSON2_PIN(56), LOONGSON2_PIN(57), LOONGSON2_PIN(58), LOONGSON2_PIN(59),
++	LOONGSON2_PIN(60), LOONGSON2_PIN(61), LOONGSON2_PIN(62), LOONGSON2_PIN(63),
++};
++
++static const unsigned int gpio_pins[] = {0, 1, 2, 3, 4, 5, 6, 7,
++					 8, 9, 10, 11, 12, 13, 14,
++					 16, 17, 18, 19, 20, 21, 22, 23,
++					 24, 25, 26, 27, 28, 29, 30,
++					 32, 33, 34, 35, 36, 37, 38, 39,
++					 40,         43, 44, 45, 46, 47,
++					 48, 49, 50, 51, 52, 53, 46, 55,
++					 56, 57, 58, 59, 60, 61, 62, 63};
++static const unsigned int sdio_pins[] = {36, 37, 38, 39, 40, 41};
++static const unsigned int can1_pins[] = {34, 35};
++static const unsigned int can0_pins[] = {32, 33};
++static const unsigned int pwm3_pins[] = {23};
++static const unsigned int pwm2_pins[] = {22};
++static const unsigned int pwm1_pins[] = {21};
++static const unsigned int pwm0_pins[] = {20};
++static const unsigned int i2c1_pins[] = {18, 19};
++static const unsigned int i2c0_pins[] = {16, 17};
++static const unsigned int nand_pins[] = {44, 45, 46, 47, 48, 49, 50, 51,
++					 52, 53, 54, 55, 56, 57, 58, 59, 60,
++					 61, 62, 63};
++static const unsigned int sata_led_pins[] = {14};
++static const unsigned int lio_pins[]    = {};
++static const unsigned int i2s_pins[]    = {24, 25, 26, 27, 28};
++static const unsigned int hda_pins[]    = {24, 25, 26, 27, 28, 29, 30};
++static const unsigned int uart2_pins[]  = {};
++static const unsigned int uart1_pins[]  = {};
++static const unsigned int camera_pins[] = {};
++static const unsigned int dvo1_pins[]   = {};
++static const unsigned int dvo0_pins[]   = {};
++
++static struct loongson2_pmx_group loongson2_pmx_groups[] = {
++	PMX_GROUP(gpio, 0x0, 64),
++	PMX_GROUP(sdio, 0x0, 20),
++	PMX_GROUP(can1, 0x0, 17),
++	PMX_GROUP(can0, 0x0, 16),
++	PMX_GROUP(pwm3, 0x0, 15),
++	PMX_GROUP(pwm2, 0x0, 14),
++	PMX_GROUP(pwm1, 0x0, 13),
++	PMX_GROUP(pwm0, 0x0, 12),
++	PMX_GROUP(i2c1, 0x0, 11),
++	PMX_GROUP(i2c0, 0x0, 10),
++	PMX_GROUP(nand, 0x0, 9),
++	PMX_GROUP(sata_led, 0x0, 8),
++	PMX_GROUP(lio, 0x0, 7),
++	PMX_GROUP(i2s, 0x0, 6),
++	PMX_GROUP(hda, 0x0, 4),
++	PMX_GROUP(uart2, 0x8, 13),
++	PMX_GROUP(uart1, 0x8, 12),
++	PMX_GROUP(camera, 0x10, 5),
++	PMX_GROUP(dvo1, 0x10, 4),
++	PMX_GROUP(dvo0, 0x10, 1),
++
++};
++
++SPECIFIC_GROUP(sdio);
++SPECIFIC_GROUP(can1);
++SPECIFIC_GROUP(can0);
++SPECIFIC_GROUP(pwm3);
++SPECIFIC_GROUP(pwm2);
++SPECIFIC_GROUP(pwm1);
++SPECIFIC_GROUP(pwm0);
++SPECIFIC_GROUP(i2c1);
++SPECIFIC_GROUP(i2c0);
++SPECIFIC_GROUP(nand);
++SPECIFIC_GROUP(sata_led);
++SPECIFIC_GROUP(lio);
++SPECIFIC_GROUP(i2s);
++SPECIFIC_GROUP(hda);
++SPECIFIC_GROUP(uart2);
++SPECIFIC_GROUP(uart1);
++SPECIFIC_GROUP(camera);
++SPECIFIC_GROUP(dvo1);
++SPECIFIC_GROUP(dvo0);
++
++static const char * const gpio_groups[] = {
++	"sdio", "can1", "can0", "pwm3", "pwm2", "pwm1", "pwm0", "i2c1",
++	"i2c0", "nand", "sata_led", "lio", "i2s", "hda", "uart2", "uart1",
++	"camera", "dvo1", "dvo0"
++};
++
++static const struct loongson2_pmx_func loongson2_pmx_functions[] = {
++	FUNCTION(gpio),
++	FUNCTION(sdio),
++	FUNCTION(can1),
++	FUNCTION(can0),
++	FUNCTION(pwm3),
++	FUNCTION(pwm2),
++	FUNCTION(pwm1),
++	FUNCTION(pwm0),
++	FUNCTION(i2c1),
++	FUNCTION(i2c0),
++	FUNCTION(nand),
++	FUNCTION(sata_led),
++	FUNCTION(lio),
++	FUNCTION(i2s),
++	FUNCTION(hda),
++	FUNCTION(uart2),
++	FUNCTION(uart1),
++	FUNCTION(camera),
++	FUNCTION(dvo1),
++	FUNCTION(dvo0),
++};
++
++static int loongson2_get_groups_count(struct pinctrl_dev *pcdev)
++{
++	return ARRAY_SIZE(loongson2_pmx_groups);
++}
++
++static const char *loongson2_get_group_name(struct pinctrl_dev *pcdev,
++					unsigned int selector)
++{
++	return loongson2_pmx_groups[selector].name;
++}
++
++static int loongson2_get_group_pins(struct pinctrl_dev *pcdev, unsigned int selector,
++			const unsigned int **pins, unsigned int *num_pins)
++{
++	*pins = loongson2_pmx_groups[selector].pins;
++	*num_pins = loongson2_pmx_groups[selector].num_pins;
++
++	return 0;
++}
++
++static void loongson2_pin_dbg_show(struct pinctrl_dev *pcdev, struct seq_file *s,
++			       unsigned int offset)
++{
++	seq_printf(s, " %s", dev_name(pcdev->dev));
++}
++
++static const struct pinctrl_ops loongson2_pctrl_ops = {
++	.get_groups_count	= loongson2_get_groups_count,
++	.get_group_name		= loongson2_get_group_name,
++	.get_group_pins		= loongson2_get_group_pins,
++	.dt_node_to_map		= pinconf_generic_dt_node_to_map_all,
++	.dt_free_map		= pinctrl_utils_free_map,
++	.pin_dbg_show		= loongson2_pin_dbg_show,
++};
++
++static int loongson2_pmx_set_mux(struct pinctrl_dev *pcdev, unsigned int func_num,
++			      unsigned int group_num)
++{
++	struct loongson2_pinctrl *pctrl = pinctrl_dev_get_drvdata(pcdev);
++	unsigned long reg = (unsigned long)pctrl->reg_base +
++				loongson2_pmx_groups[group_num].reg;
++	unsigned int mux_bit = loongson2_pmx_groups[group_num].bit;
++	unsigned int val;
++	unsigned long flags;
++
++	spin_lock_irqsave(&pctrl->lock, flags);
++	val = readl((void *)reg);
++	if (func_num == 0)
++		val &= ~(1<<mux_bit);
++	else
++		val |= (1<<mux_bit);
++	writel(val, (void *)reg);
++	spin_unlock_irqrestore(&pctrl->lock, flags);
++
++	return 0;
++}
++
++static int loongson2_pmx_get_funcs_count(struct pinctrl_dev *pcdev)
++{
++	return ARRAY_SIZE(loongson2_pmx_functions);
++}
++
++static const char *loongson2_pmx_get_func_name(struct pinctrl_dev *pcdev,
++				    unsigned int selector)
++{
++	return loongson2_pmx_functions[selector].name;
++}
++
++static int loongson2_pmx_get_groups(struct pinctrl_dev *pcdev,
++			 unsigned int selector,
++			 const char * const **groups,
++			 unsigned int * const num_groups)
++{
++	*groups = loongson2_pmx_functions[selector].groups;
++	*num_groups = loongson2_pmx_functions[selector].num_groups;
++
++	return 0;
++}
++
++static const struct pinmux_ops loongson2_pmx_ops = {
++	.set_mux = loongson2_pmx_set_mux,
++	.get_functions_count = loongson2_pmx_get_funcs_count,
++	.get_function_name = loongson2_pmx_get_func_name,
++	.get_function_groups = loongson2_pmx_get_groups,
++};
++
++static int loongson2_pinctrl_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct loongson2_pinctrl *pctrl;
++	struct resource *res;
++
++	pctrl = devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
++	if (!pctrl)
++		return -ENOMEM;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	pctrl->reg_base = devm_ioremap_resource(dev, res);
++	if (IS_ERR(pctrl->reg_base))
++		return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->reg_base),
++				     "unable to map I/O memory");
++
++	spin_lock_init(&pctrl->lock);
++
++	pctrl->dev = dev;
++	pctrl->desc.name	= "pinctrl-loongson2";
++	pctrl->desc.owner	= THIS_MODULE;
++	pctrl->desc.pctlops	= &loongson2_pctrl_ops;
++	pctrl->desc.pmxops	= &loongson2_pmx_ops;
++	pctrl->desc.confops	= NULL;
++	pctrl->desc.pins	= loongson2_pctrl_pins;
++	pctrl->desc.npins	= ARRAY_SIZE(loongson2_pctrl_pins);
++
++	pctrl->pcdev = devm_pinctrl_register(pctrl->dev, &pctrl->desc, pctrl);
++	if (IS_ERR(pctrl->pcdev))
++		return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->pcdev),
++				     "can't register pinctrl device");
++
++	return 0;
++}
++
++static const struct of_device_id loongson2_pinctrl_dt_match[] = {
++	{
++		.compatible = "loongson,ls2k-pinctrl",
++	},
++	{ },
++};
++
++static struct platform_driver loongson2_pinctrl_driver = {
++	.probe		= loongson2_pinctrl_probe,
++	.driver = {
++		.name	= "loongson2-pinctrl",
++		.of_match_table = loongson2_pinctrl_dt_match,
++	},
++};
++
++static int __init loongson2_pinctrl_init(void)
++{
++	return platform_driver_register(&loongson2_pinctrl_driver);
++}
++arch_initcall(loongson2_pinctrl_init);
++
++static void __exit loongson2_pinctrl_exit(void)
++{
++	platform_driver_unregister(&loongson2_pinctrl_driver);
++}
++module_exit(loongson2_pinctrl_exit);
+-- 
+2.20.1
 
-Best Regards,
-Huang, Ying
-
-> ---
-> Changes from v1:
-> - Use another variable to save the return value of THP split.
-> ---
->  mm/huge_memory.c |  4 ++--
->  mm/migrate.c     | 19 ++++++++++++++++---
->  2 files changed, 18 insertions(+), 5 deletions(-)
->
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index ad17c8d..a79f03b 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -2666,7 +2666,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
->  	 * split PMDs
->  	 */
->  	if (!can_split_folio(folio, &extra_pins)) {
-> -		ret = -EBUSY;
-> +		ret = -EAGAIN;
->  		goto out_unlock;
->  	}
->  
-> @@ -2716,7 +2716,7 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
->  			xas_unlock(&xas);
->  		local_irq_enable();
->  		remap_page(folio, folio_nr_pages(folio));
-> -		ret = -EBUSY;
-> +		ret = -EAGAIN;
->  	}
->  
->  out_unlock:
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 1da0dbc..6d49a3e 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1506,9 +1506,22 @@ int migrate_pages(struct list_head *from, new_page_t get_new_page,
->  				if (is_thp) {
->  					nr_thp_failed++;
->  					/* THP NUMA faulting doesn't split THP to retry. */
-> -					if (!nosplit && !try_split_thp(page, &thp_split_pages)) {
-> -						nr_thp_split++;
-> -						break;
-> +					if (!nosplit) {
-> +						int ret = try_split_thp(page, &thp_split_pages);
-> +
-> +						if (!ret) {
-> +							nr_thp_split++;
-> +							break;
-> +						} else if (reason == MR_LONGTERM_PIN &&
-> +							   ret == -EAGAIN) {
-> +							/*
-> +							 * Try again to split THP to mitigate
-> +							 * the failure of longterm pinning.
-> +							 */
-> +							thp_retry++;
-> +							nr_retry_pages += nr_subpages;
-> +							break;
-> +						}
->  					}
->  				} else if (!no_subpage_counting) {
->  					nr_failed++;
