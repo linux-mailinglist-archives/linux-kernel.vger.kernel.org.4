@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87CE760A75C
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4956460A5B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234736AbiJXMtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 08:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
+        id S233708AbiJXM2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234449AbiJXMow (ORCPT
+        with ESMTP id S233711AbiJXM1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 08:44:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CB72665;
-        Mon, 24 Oct 2022 05:09:26 -0700 (PDT)
+        Mon, 24 Oct 2022 08:27:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F45B844C1;
+        Mon, 24 Oct 2022 05:01:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99110612A4;
-        Mon, 24 Oct 2022 12:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC17CC433D6;
-        Mon, 24 Oct 2022 12:07:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EA24B8117E;
+        Mon, 24 Oct 2022 11:57:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED70CC433D6;
+        Mon, 24 Oct 2022 11:57:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613269;
-        bh=deb/+f+bTm4Ytyvf8OL7N3yZQGGpLOBi7QxH7ZECr8U=;
+        s=korg; t=1666612643;
+        bh=+a+45iTcgmJaN1eXRX6U24G2mAi3/f9sIfWs6mR2zE0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=taZFGTrXUfQgmbxN62EfzcStndxifyxZyaz+A+34iDfy8LYwgb8AyOrVGhwomPSUu
-         7B1kf686Q18xJnsmE+t5YEb+W55ZLPFeyt+YEui5VDylRv4ZYrUKLp8w/JJN9uE+2k
-         g7xnaWJeYkvxk7sUXfyqFUp2xshbGPfKkFWiS37k=
+        b=jRYTy8liFQ9MfygCRJUEvvR0yr6DRx7413ygGV60SLXXJiD8evsSlxR61K5SALCvY
+         zEHNCrp/2e16iua5BK3Tk3GVcVFG8FUtlkCHkW/9eYGgGcOGw55Bza1agx6MkQ3U1x
+         He3aD0TVx5R+L4Uv3NsLjwYdbyRY0Y25nkcCoyuE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 073/255] net: fs_enet: Fix wrong check in do_pd_setup
-Date:   Mon, 24 Oct 2022 13:29:43 +0200
-Message-Id: <20221024113004.933567582@linuxfoundation.org>
+        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: [PATCH 4.19 065/229] ring-buffer: Check pending waiters when doing wake ups as well
+Date:   Mon, 24 Oct 2022 13:29:44 +0200
+Message-Id: <20221024113001.192948457@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yongjun <zhengyongjun3@huawei.com>
+From: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[ Upstream commit ec3f06b542a960806a81345042e4eee3f8c5dec4 ]
+commit ec0bbc5ec5664dcee344f79373852117dc672c86 upstream.
 
-Should check of_iomap return value 'fep->fec.fecp' instead of 'fep->fcc.fccp'
+The wake up waiters only checks the "wakeup_full" variable and not the
+"full_waiters_pending". The full_waiters_pending is set when a waiter is
+added to the wait queue. The wakeup_full is only set when an event is
+triggered, and it clears the full_waiters_pending to avoid multiple calls
+to irq_work_queue().
 
-Fixes: 976de6a8c304 ("fs_enet: Be an of_platform device when CONFIG_PPC_CPM_NEW_BINDING is set.")
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The irq_work callback really needs to check both wakeup_full as well as
+full_waiters_pending such that this code can be used to wake up waiters
+when a file is closed that represents the ring buffer and the waiters need
+to be woken up.
+
+Link: https://lkml.kernel.org/r/20220927231824.209460321@goodmis.org
+
+Cc: stable@vger.kernel.org
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 15693458c4bc0 ("tracing/ring-buffer: Move poll wake ups into ring buffer code")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/freescale/fs_enet/mac-fec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/trace/ring_buffer.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/freescale/fs_enet/mac-fec.c b/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
-index 99fe2c210d0f..61f4b6e50d29 100644
---- a/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
-+++ b/drivers/net/ethernet/freescale/fs_enet/mac-fec.c
-@@ -98,7 +98,7 @@ static int do_pd_setup(struct fs_enet_private *fep)
- 		return -EINVAL;
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -542,8 +542,9 @@ static void rb_wake_up_waiters(struct ir
+ 	struct rb_irq_work *rbwork = container_of(work, struct rb_irq_work, work);
  
- 	fep->fec.fecp = of_iomap(ofdev->dev.of_node, 0);
--	if (!fep->fcc.fccp)
-+	if (!fep->fec.fecp)
- 		return -EINVAL;
- 
- 	return 0;
--- 
-2.35.1
-
+ 	wake_up_all(&rbwork->waiters);
+-	if (rbwork->wakeup_full) {
++	if (rbwork->full_waiters_pending || rbwork->wakeup_full) {
+ 		rbwork->wakeup_full = false;
++		rbwork->full_waiters_pending = false;
+ 		wake_up_all(&rbwork->full_waiters);
+ 	}
+ }
 
 
