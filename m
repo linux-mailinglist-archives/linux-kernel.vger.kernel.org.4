@@ -2,118 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5E860BDF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 00:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A9F60BE5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 01:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiJXWyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 18:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
+        id S230015AbiJXXOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 19:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbiJXWyc (ORCPT
+        with ESMTP id S231861AbiJXXOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 18:54:32 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD962D20DA;
-        Mon, 24 Oct 2022 14:16:11 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29OHYf43047071;
-        Mon, 24 Oct 2022 12:34:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666632881;
-        bh=URuwxbNYEGUMSbDDyc2DIB/HUev400go/YHiS1qkjHI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Z2Iupi4zP7ORMhwyHM3iv6CL6CmYDsLb5yo9OHCAYFxdYPZXc4/YBXL6pPiBnfMI6
-         Co2iNGgUHilVjoFxCK+Gd1dpA/Dqlj3axccaaZtIDoQeQkhmGstGmfWne43AgSavv5
-         KlvyiYvtT6XQcLYS+QfrNDTWYquINdAo38wOy1XM=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29OHYfFf002389
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 24 Oct 2022 12:34:41 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 24
- Oct 2022 12:34:41 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 24 Oct 2022 12:34:41 -0500
-Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29OHYYJ5039154;
-        Mon, 24 Oct 2022 12:34:40 -0500
-From:   Andrew Davis <afd@ti.com>
-To:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Rowand <frowand.list@gmail.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH v2 7/7] staging: pi433: overlay: Rename overlay source file from .dts to .dtso
-Date:   Mon, 24 Oct 2022 12:34:34 -0500
-Message-ID: <20221024173434.32518-8-afd@ti.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221024173434.32518-1-afd@ti.com>
-References: <20221024173434.32518-1-afd@ti.com>
+        Mon, 24 Oct 2022 19:14:16 -0400
+X-Greylist: delayed 3580 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 14:35:24 PDT
+Received: from mx.treblig.org (mx.treblig.org [46.43.15.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5125C1DF23
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 14:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+        ; s=bytemarkmx; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID
+        :Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
+        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
+        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
+        :List-Post:List-Owner:List-Archive;
+        bh=RF5v6sbc/BgP4DAy64XP5vEHKb5eLyVOJZSiY2mcVFQ=; b=q2vKX0iVl6xstCbWD8tFqDVTaY
+        7Wu08EpPd0dhYq2LDGPkm3Xxk3hfzOBoQjY8XJYq4waPjgz/NzlVGrrIl+oieZUgrlNUU/KhfYnDq
+        Ggk46jc5GbAaOIRpagZZ4I29/kRcjn8uVBYbqX89CSh+v46QCDKASN8gsAe4bZ4dFKEoSnavM358x
+        IKAkS7OlzbkEYoi0IqBujvSbMKbGsFTNejtNJxC4anlU1etzLVOt9kfgF67X8Dml0kk4VwyCrIhG4
+        dh7bv/HeYouaQpsvL72fs9T/RmFQldMPSWiKo72eGoTsGPMAiBlKoTMJ124iA7ne72cELr9ImhPvQ
+        6vXgVjAA==;
+Received: from dg by mx.treblig.org with local (Exim 4.94.2)
+        (envelope-from <dg@treblig.org>)
+        id 1on2Vh-007RkM-Tl; Mon, 24 Oct 2022 19:49:17 +0100
+Date:   Mon, 24 Oct 2022 19:49:17 +0100
+From:   "Dr. David Alan Gilbert" <linux@treblig.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     shaggy@kernel.org, jfs-discussion@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org,
+        syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
+Subject: Re: [PATCH] jfs: Fix fortify moan in symlink
+Message-ID: <Y1beLWto/J2W1Stu@gallifrey>
+References: <20221022203913.264855-1-linux@treblig.org>
+ <202210241021.6E9E1EF65@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <202210241021.6E9E1EF65@keescook>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/5.10.0-12-amd64 (x86_64)
+X-Uptime: 19:47:20 up 227 days,  5:13,  1 user,  load average: 0.07, 0.04,
+ 0.00
+User-Agent: Mutt/2.0.5 (2021-01-21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DTB Overlays (.dtbo) can now be built from source files with the
-extension (.dtso). This makes it clear what is the content of the files
-and differentiates them from base DTB source files.
+* Kees Cook (keescook@chromium.org) wrote:
+> On Sat, Oct 22, 2022 at 09:39:14PM +0100, linux@treblig.org wrote:
+> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> > 
+> > JFS has in jfs_incore.h:
+> > 
+> >       /* _inline may overflow into _inline_ea when needed */
+> >       /* _inline_ea may overlay the last part of
+> >        * file._xtroot if maxentry = XTROOTINITSLOT
+> >        */
+> >       union {
+> >         struct {
+> >           /* 128: inline symlink */
+> >           unchar _inline[128];
+> >           /* 128: inline extended attr */
+> >           unchar _inline_ea[128];
+> >         };
+> >         unchar _inline_all[256];
+> > 
+> > and currently the symlink code copies into _inline;
+> > if this is larger than 128 bytes it triggers a fortify warning of the
+> > form:
+> > 
+> >   memcpy: detected field-spanning write (size 132) of single field
+> >      "ip->i_link" at fs/jfs/namei.c:950 (size 18446744073709551615)
+> 
+> Which compiler are you using for this build?
 
-Rename the pi433-overlay.dts file to pi433-overlay.dtso and update
-the information file pi433.txt for the same.
+I think that report was the same on gcc on Fedora 37 and whatever
+syzkaller was running.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- .../devicetree/{pi433-overlay.dts => pi433-overlay.dtso}    | 0
- drivers/staging/pi433/Documentation/devicetree/pi433.txt    | 6 +++---
- 2 files changed, 3 insertions(+), 3 deletions(-)
- rename drivers/staging/pi433/Documentation/devicetree/{pi433-overlay.dts => pi433-overlay.dtso} (100%)
+> This size report (SIZE_MAX)
+> should be impossible to reach. But also, the size is just wrong --
+> i_inline is 128 bytes, not SIZE_MAX. So, the detection is working
+> (132 > 128), but the report is broken, and I can't see how...
 
-diff --git a/drivers/staging/pi433/Documentation/devicetree/pi433-overlay.dts b/drivers/staging/pi433/Documentation/devicetree/pi433-overlay.dtso
-similarity index 100%
-rename from drivers/staging/pi433/Documentation/devicetree/pi433-overlay.dts
-rename to drivers/staging/pi433/Documentation/devicetree/pi433-overlay.dtso
-diff --git a/drivers/staging/pi433/Documentation/devicetree/pi433.txt b/drivers/staging/pi433/Documentation/devicetree/pi433.txt
-index a810548c58572..d317c0ec3419e 100644
---- a/drivers/staging/pi433/Documentation/devicetree/pi433.txt
-+++ b/drivers/staging/pi433/Documentation/devicetree/pi433.txt
-@@ -48,13 +48,13 @@ For Raspbian users only
- =======================
- Since Raspbian supports device tree overlays, you may use an overlay instead
- of editing your boards device tree.
--To use the overlay, you need to compile the file pi433-overlay.dts which can
-+To use the overlay, you need to compile the file pi433-overlay.dtso which can
- be found alongside this documentation.
- The file needs to be compiled - either manually or by integration in your kernel
- source tree. For a manual compile, you may use a command line like the following:
--'linux/scripts/dtc/dtc -@ -I dts -O dtb -o pi433.dtbo pi433-overlay.dts'
-+'linux/scripts/dtc/dtc -@ -I dts -O dtb -o pi433.dtbo pi433-overlay.dtso'
- 
--For compiling inside of the kernel tree, you need to copy pi433-overlay.dts to
-+For compiling inside of the kernel tree, you need to copy pi433-overlay.dtso to
- arch/arm/boot/dts/overlays and you need to add the file to the list of files
- in the Makefile over there. Execute 'make dtbs' in kernel tree root to make the
- kernel make files compile the device tree overlay for you.
+Yeh, and led me down a blind alley for a while thinking something had
+really managed to screwup the strlen somehow.
+
+> 
+> > 
+> > when it's actually OK.
+> > 
+> > Copy it into _inline_all instead.
+> > 
+> > Reported-by: syzbot+5fc38b2ddbbca7f5c680@syzkaller.appspotmail.com
+> > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+> > ---
+> >  fs/jfs/namei.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/jfs/namei.c b/fs/jfs/namei.c
+> > index 9db4f5789c0ec..4fbbf88435e69 100644
+> > --- a/fs/jfs/namei.c
+> > +++ b/fs/jfs/namei.c
+> > @@ -946,7 +946,7 @@ static int jfs_symlink(struct user_namespace *mnt_userns, struct inode *dip,
+> >  	if (ssize <= IDATASIZE) {
+> >  		ip->i_op = &jfs_fast_symlink_inode_operations;
+> >  
+> > -		ip->i_link = JFS_IP(ip)->i_inline;
+> > +		ip->i_link = JFS_IP(ip)->i_inline_all;
+> >  		memcpy(ip->i_link, name, ssize);
+> >  		ip->i_size = ssize - 1;
+> >  
+> 
+> Regardless, the fix looks correct to me!
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+
+Thanks!
+
+Dave
+
+> -- 
+> Kees Cook
 -- 
-2.37.3
-
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
