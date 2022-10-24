@@ -2,126 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CA5609BCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37560609BCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 09:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiJXHtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 03:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S229970AbiJXHtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 03:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiJXHtT (ORCPT
+        with ESMTP id S229948AbiJXHtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 03:49:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA54F7C;
-        Mon, 24 Oct 2022 00:49:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0455B80E23;
-        Mon, 24 Oct 2022 07:49:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3673CC433C1;
-        Mon, 24 Oct 2022 07:49:13 +0000 (UTC)
-Message-ID: <b645f983-447b-7b4b-6dd6-d5f10da08e96@xs4all.nl>
-Date:   Mon, 24 Oct 2022 09:49:11 +0200
+        Mon, 24 Oct 2022 03:49:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A28010B51
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666597781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hTXcuxXaRWJo+QWiUsGFLWlPsijUBF5y61S7CoQKJ+g=;
+        b=KpfkA0ERVSr/cSaQJQsWWBWYMLS76bOSYxXaVCfpbnmuMPLUkcPnNe4u9N62lguLofIPH+
+        Sgf8L0mA9fO11Khik81RjOW5FbIgXlO95GHC2Q+GMxO3CcE8qzc6H2c/BG+kxxaaKw3GkN
+        /8zyWBMUjXYOeSbcYoBO/K3oWDd1zI0=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-169-Fs50fhWLPSSmuzl3GOuooQ-1; Mon, 24 Oct 2022 03:49:38 -0400
+X-MC-Unique: Fs50fhWLPSSmuzl3GOuooQ-1
+Received: by mail-qt1-f200.google.com with SMTP id k9-20020ac85fc9000000b00399e6517f9fso6616662qta.18
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 00:49:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hTXcuxXaRWJo+QWiUsGFLWlPsijUBF5y61S7CoQKJ+g=;
+        b=G28KPqewyvH2FOgVoh5KCNSF9TDEv8kHGkQ2zvojSwXh8YX2MPXZCErVXtYKTn8FCq
+         k7O9jDKhqNnjVDpiVBEV8bYnZip1hZWgbqTEsmNSUyf+Yw11pyM5IvPLLjbmesQ7YIoZ
+         Euo09iBNTjRLu7l+2jOO3TCHhHd3qC41rGWwIhv2n3xgmSpPxrN6XKrVdgcvVXJ5jix+
+         DYsD+HStIf326nc4upmj0P5QGQKnzJ2LXNcvIWCUb3/D9MLun7NS+tLbp2NgVLMVem4K
+         /Zyqfc0Bz0w2444fZ+/fqAlS2o+RxPgI+QmhqhyVERwcoUWaHIW9lXzxP4ZrFJubkrPw
+         IijA==
+X-Gm-Message-State: ACrzQf0Os+0IjCfgEi7MHDg4azLJ6KNV/v/7sOhCATMvubyjrJael7NX
+        ifRmNCqffK/e2KbkI7nbq5fcnT1a0XdTam/uh5lCPRvLRaicexVeVd1c11N+GOnxZ89mz8Dz5te
+        s2Lfxu0zYL7C5vR0bgFEPc6Kz
+X-Received: by 2002:a05:622a:4cc:b0:39c:bfb1:8a45 with SMTP id q12-20020a05622a04cc00b0039cbfb18a45mr26104983qtx.647.1666597777847;
+        Mon, 24 Oct 2022 00:49:37 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM42uYz07Bby0ZO6+SEobL92Tz9k1kX6G3Tj2qNlGA0BZtOZOgF7K5QRbwlEvLDlM/ObENXC/A==
+X-Received: by 2002:a05:622a:4cc:b0:39c:bfb1:8a45 with SMTP id q12-20020a05622a04cc00b0039cbfb18a45mr26104970qtx.647.1666597777593;
+        Mon, 24 Oct 2022 00:49:37 -0700 (PDT)
+Received: from [192.168.149.123] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
+        by smtp.gmail.com with ESMTPSA id bm2-20020a05620a198200b006ce7d9dea7asm14815613qkb.13.2022.10.24.00.49.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 00:49:36 -0700 (PDT)
+Message-ID: <2bd40960-e65e-db2b-ae8f-1109cb9f3fa0@redhat.com>
+Date:   Mon, 24 Oct 2022 09:49:33 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: Question for an accepted patch: use of DMA-BUF based videobuf2
- capture buffer with no-HW-cache-coherent HW
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 4/4] KVM: use signals to abort enter_guest/blocking and
+ retry
 Content-Language: en-US
-To:     yuji2.ishikawa@toshiba.co.jp, posciak@chromium.org,
-        paul.kocialkowski@bootlin.com, mchehab+samsung@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <TYAPR01MB6201561D2644EE783BA8B196922E9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <TYAPR01MB6201561D2644EE783BA8B196922E9@TYAPR01MB6201.jpnprd01.prod.outlook.com>
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221022154819.1823133-1-eesposit@redhat.com>
+ <20221022154819.1823133-5-eesposit@redhat.com>
+ <5ee4eeb8-4d61-06fc-f80d-06efeeffe902@redhat.com>
+ <4ef882c2-1535-d7df-d474-e5fab2975f53@redhat.com>
+In-Reply-To: <4ef882c2-1535-d7df-d474-e5fab2975f53@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yuji,
 
-On 10/24/22 06:02, yuji2.ishikawa@toshiba.co.jp wrote:
-> Hi,
-> 
-> I'm porting a V4L2 capture driver from 4.19.y to 5.10.y [1].
-> 
-> When I test the ported driver, I sometimes find a corruption on a captured image.
-> 
-> Because the corruption is exactly aligned with cacheline, I started investigation from map/unmap of DMA-BUF.
-> 
->  
-> 
-> The capture driver uses DMA-BUF for videobuf2.
-> 
-> The capture hardware does not have HW-mantained cache coherency with CPU, that is, explicit map/unmap is essential on QBUF/DQBUF.
-> 
-> After some hours of struggle, I found a patch removing cache synchronizations on QBUF/DQBUF.
-> 
->  
-> 
-> https://patchwork.kernel.org/project/linux-media/patch/20190124095156.21898-1-paul.kocialkowski@bootlin.com/ <https://patchwork.kernel.org/project/linux-media/patch/20190124095156.21898-1-paul.kocialkowski@bootlin.com/>
-> 
->  
-> 
-> When I removed this patch from my 5.10.y working-tree, the driver yielded images without any defects.v
-> 
->  
-> 
-> ***************
-> 
-> Sorry for a mention to a patch released 4 years ago.
-> 
-> The patch removes map/unmap on QBUF/DQBUF to improve the performance of V4L2 decoder device, by reusing previously decoded frames.
-> 
-> However, there seems no cares nor compensations for modifying lifecycle of DMA-BUF, especially on video capture devices.
 
-I'm not entirely sure what you mean exactly.
+Am 24/10/2022 um 09:43 schrieb Emanuele Giuseppe Esposito:
+> 
+> 
+> Am 23/10/2022 um 19:48 schrieb Paolo Bonzini:
+>> On 10/22/22 17:48, Emanuele Giuseppe Esposito wrote:
+>>> Once a vcpu exectues KVM_RUN, it could enter two states:
+>>> enter guest mode, or block/halt.
+>>> Use a signal to allow a vcpu to exit the guest state or unblock,
+>>> so that it can exit KVM_RUN and release the read semaphore,
+>>> allowing a pending KVM_KICK_ALL_RUNNING_VCPUS to continue.
+>>>
+>>> Note that the signal is not deleted and used to propagate the
+>>> exit reason till vcpu_run(). It will be clearead only by
+>>> KVM_RESUME_ALL_KICKED_VCPUS. This allows the vcpu to keep try
+>>> entering KVM_RUN and perform again all checks done in
+>>> kvm_arch_vcpu_ioctl_run() before entering the guest state,
+>>> where it will return again if the request is still set.
+>>>
+>>> However, the userspace hypervisor should also try to avoid
+>>> continuously calling KVM_RUN after invoking KVM_KICK_ALL_RUNNING_VCPUS,
+>>> because such call will just translate in a back-to-back down_read()
+>>> and up_read() (thanks to the signal).
+>>
+>> Since the userspace should anyway avoid going into this effectively-busy
+>> wait, what about clearing the request after the first exit?  The
+>> cancellation ioctl can be kept for vCPUs that are never entered after
+>> KVM_KICK_ALL_RUNNING_VCPUS.  Alternatively, kvm_clear_all_cpus_request
+>> could be done right before up_write().
+> 
+> Clearing makes sense, but should we "trust" the userspace not to go into
+> busy wait?
 
-> 
->  
-> 
-> Would you tell me some idea on this patch:
-> 
-> * Do well-implemented capture drivers work well even if this patch is applied?
+Actually since this change is just a s/test/check, I would rather keep
+test. If userspace does things wrong, this mechanism would still work
+properly.
 
-Yes, dmabuf is used extensively and I have not had any reports of issues.
+> What's the typical "contract" between KVM and the userspace? Meaning,
+> should we cover the basic usage mistakes like forgetting to busy wait on
+> KVM_RUN?
+> 
+> If we don't, I can add a comment when clearing and of course also
+> mention it in the API documentation (that I forgot to update, sorry :D)
+> 
+> Emanuele
+> 
+>>
+>> Paolo
+>>
+>>> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+>>> ---
+>>>   arch/x86/include/asm/kvm_host.h |  2 ++
+>>>   arch/x86/kvm/x86.c              |  8 ++++++++
+>>>   virt/kvm/kvm_main.c             | 21 +++++++++++++++++++++
+>>>   3 files changed, 31 insertions(+)
+>>>
+>>> diff --git a/arch/x86/include/asm/kvm_host.h
+>>> b/arch/x86/include/asm/kvm_host.h
+>>> index aa381ab69a19..d5c37f344d65 100644
+>>> --- a/arch/x86/include/asm/kvm_host.h
+>>> +++ b/arch/x86/include/asm/kvm_host.h
+>>> @@ -108,6 +108,8 @@
+>>>       KVM_ARCH_REQ_FLAGS(30, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>>>   #define KVM_REQ_MMU_FREE_OBSOLETE_ROOTS \
+>>>       KVM_ARCH_REQ_FLAGS(31, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+>>> +#define KVM_REQ_USERSPACE_KICK        \
+>>> +    KVM_ARCH_REQ_FLAGS(32, KVM_REQUEST_WAIT)
+>>>     #define
+>>> CR0_RESERVED_BITS                                               \
+>>>       (~(unsigned long)(X86_CR0_PE | X86_CR0_MP | X86_CR0_EM |
+>>> X86_CR0_TS \
+>>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>>> index b0c47b41c264..2af5f427b4e9 100644
+>>> --- a/arch/x86/kvm/x86.c
+>>> +++ b/arch/x86/kvm/x86.c
+>>> @@ -10270,6 +10270,10 @@ static int vcpu_enter_guest(struct kvm_vcpu
+>>> *vcpu)
+>>>       }
+>>>         if (kvm_request_pending(vcpu)) {
+>>> +        if (kvm_test_request(KVM_REQ_USERSPACE_KICK, vcpu)) {
+>>> +            r = -EINTR;
+>>> +            goto out;
+>>> +        }
+>>>           if (kvm_check_request(KVM_REQ_VM_DEAD, vcpu)) {
+>>>               r = -EIO;
+>>>               goto out;
+>>> @@ -10701,6 +10705,10 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+>>>               r = vcpu_block(vcpu);
+>>>           }
+>>>   +        /* vcpu exited guest/unblocked because of this request */
+>>> +        if (kvm_test_request(KVM_REQ_USERSPACE_KICK, vcpu))
+>>> +            return -EINTR;
+>>> +
+>>>           if (r <= 0)
+>>>               break;
+>>>   diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+>>> index ae0240928a4a..13fa7229b85d 100644
+>>> --- a/virt/kvm/kvm_main.c
+>>> +++ b/virt/kvm/kvm_main.c
+>>> @@ -3431,6 +3431,8 @@ static int kvm_vcpu_check_block(struct kvm_vcpu
+>>> *vcpu)
+>>>           goto out;
+>>>       if (kvm_check_request(KVM_REQ_UNBLOCK, vcpu))
+>>>           goto out;
+>>> +    if (kvm_test_request(KVM_REQ_USERSPACE_KICK, vcpu))
+>>> +        goto out;
+>>>         ret = 0;
+>>>   out:
+>>> @@ -4668,6 +4670,25 @@ static long kvm_vm_ioctl(struct file *filp,
+>>>           r = kvm_vm_ioctl_enable_cap_generic(kvm, &cap);
+>>>           break;
+>>>       }
+>>> +    case KVM_KICK_ALL_RUNNING_VCPUS: {
+>>> +        /*
+>>> +         * Notify all running vcpus that they have to stop.
+>>> +         * Caught in kvm_arch_vcpu_ioctl_run()
+>>> +         */
+>>> +        kvm_make_all_cpus_request(kvm, KVM_REQ_USERSPACE_KICK);
+>>> +
+>>> +        /*
+>>> +         * Use wr semaphore to wait for all vcpus to exit from KVM_RUN.
+>>> +         */
+>>> +        down_write(&memory_transaction);
+>>> +        up_write(&memory_transaction);
+>>> +        break;
+>>> +    }
+>>> +    case KVM_RESUME_ALL_KICKED_VCPUS: {
+>>> +        /* Remove all requests sent with KVM_KICK_ALL_RUNNING_VCPUS */
+>>> +        kvm_clear_all_cpus_request(kvm, KVM_REQ_USERSPACE_KICK);
+>>> +        break;
+>>> +    }
+>>>       case KVM_SET_USER_MEMORY_REGION: {
+>>>           struct kvm_userspace_memory_region kvm_userspace_mem;
+>>>   
+>>
 
-> 
-> * How should a video capture driver call V4L2/videobuf2 APIs, especially when the hardware does not support cache coherency?
-
-It should all be handled correctly by the core frameworks.
-
-I think you need to debug more inside videobuf2-core.c. Some printk's that show the
-dmabuf fd when the buffer is mapped and when it is unmapped + the length it is
-mapping should hopefully help a bit.
-
-Regards,
-
-	Hans
-
-> 
->  
-> 
-> ***************
-> 
-> [1] FYI: the capture driver is not on mainline yet; the candidate is,
-> 
-> https://lore.kernel.org/all/20220810132822.32534-1-yuji2.ishikawa@toshiba.co.jp/ <https://lore.kernel.org/all/20220810132822.32534-1-yuji2.ishikawa@toshiba.co.jp/>
-> 
->  
-> 
->  
-> 
-> Regards,
-> 
->               Yuji Ishikawa
-> 
