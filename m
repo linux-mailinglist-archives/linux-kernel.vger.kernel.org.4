@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E9B60ABDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5685360A632
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236911AbiJXN6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
+        id S233965AbiJXMcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbiJXN57 (ORCPT
+        with ESMTP id S233931AbiJXM3D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:57:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354E02250F;
-        Mon, 24 Oct 2022 05:45:35 -0700 (PDT)
+        Mon, 24 Oct 2022 08:29:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB7B87080;
+        Mon, 24 Oct 2022 05:02:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 06E3F61325;
-        Mon, 24 Oct 2022 12:45:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D0FC433D7;
-        Mon, 24 Oct 2022 12:45:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92941B811B9;
+        Mon, 24 Oct 2022 11:59:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDF58C433C1;
+        Mon, 24 Oct 2022 11:59:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666615515;
-        bh=MYOwrjZCrWWsWxaSojRO2Wg1Ovu0P0g0HHH/slM/tnw=;
+        s=korg; t=1666612751;
+        bh=wr6A67nBo76UCUyXA2Jm2lacyvdaLQ+4zs5bCcZUDIk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p3zyAyw36+Ki6ptu0KceVRBaxV6r5lp286ULLPdvcXmMlpjky5Kh02zCen1JPGBLu
-         tQLK1LKz1d512dvK8ijafuSmGWynqk4lbFfB6BmHFqLzyGy0et+LCPmltKh9PlFdak
-         mq0Yn/FCpTS58OWQPj7dfCpwl2sgpFVyxzu1Mrpk=
+        b=b++DrnSx88yKl479TLQqDNsZsGP8lHXSG8etW3agxYb5bC+vbtZtNhiXLTbhDsdMP
+         hH28LsI3CXyxzlpp17DvRN/RWZgeAlUZcZuYIpv1IVxlePskfUDPcevIzd/noM2cA1
+         xoN8kzfWyrHqKaX7MIRCSDKT0e8zlh76bLfxq5nQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Zhang Qilong <zhangqilong3@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 280/530] clk: tegra: Fix refcount leak in tegra114_clock_init
+Subject: [PATCH 4.19 105/229] ASoC: wm8997: Fix PM disable depth imbalance in wm8997_probe
 Date:   Mon, 24 Oct 2022 13:30:24 +0200
-Message-Id: <20221024113057.746771802@linuxfoundation.org>
+Message-Id: <20221024113002.415388124@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+References: <20221024112959.085534368@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Zhang Qilong <zhangqilong3@huawei.com>
 
-[ Upstream commit db16a80c76ea395766913082b1e3f939dde29b2c ]
+[ Upstream commit 41a736ac20602f64773e80f0f5b32cde1830a44a ]
 
-of_find_matching_node() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+The pm_runtime_enable will increase power disable depth. Thus
+a pairing decrement is needed on the error handling path to
+keep it balanced according to context. We fix it by moving
+pm_runtime_enable to the endding of wm8997_probe
 
-Fixes: 2cb5efefd6f7 ("clk: tegra: Implement clocks for Tegra114")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220523143834.7587-1-linmq006@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes:40843aea5a9bd ("ASoC: wm8997: Initial CODEC driver")
+
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+Link: https://lore.kernel.org/r/20220928160116.125020-2-zhangqilong3@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/tegra/clk-tegra114.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/codecs/wm8997.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-tegra114.c
-index bc9e47a4cb60..4e2b26e3e573 100644
---- a/drivers/clk/tegra/clk-tegra114.c
-+++ b/drivers/clk/tegra/clk-tegra114.c
-@@ -1317,6 +1317,7 @@ static void __init tegra114_clock_init(struct device_node *np)
+diff --git a/sound/soc/codecs/wm8997.c b/sound/soc/codecs/wm8997.c
+index bb6a95be8726..9f819113af1e 100644
+--- a/sound/soc/codecs/wm8997.c
++++ b/sound/soc/codecs/wm8997.c
+@@ -1159,9 +1159,6 @@ static int wm8997_probe(struct platform_device *pdev)
+ 		regmap_update_bits(arizona->regmap, wm8997_digital_vu[i],
+ 				   WM8997_DIG_VU, WM8997_DIG_VU);
+ 
+-	pm_runtime_enable(&pdev->dev);
+-	pm_runtime_idle(&pdev->dev);
+-
+ 	arizona_init_common(arizona);
+ 
+ 	ret = arizona_init_vol_limit(arizona);
+@@ -1180,6 +1177,9 @@ static int wm8997_probe(struct platform_device *pdev)
+ 		goto err_spk_irqs;
  	}
  
- 	pmc_base = of_iomap(node, 0);
-+	of_node_put(node);
- 	if (!pmc_base) {
- 		pr_err("Can't map pmc registers\n");
- 		WARN_ON(1);
++	pm_runtime_enable(&pdev->dev);
++	pm_runtime_idle(&pdev->dev);
++
+ 	return ret;
+ 
+ err_spk_irqs:
 -- 
 2.35.1
 
