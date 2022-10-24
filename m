@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CB060A99D
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:23:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CF160A53F
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbiJXNXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S233497AbiJXMWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233097AbiJXNWK (ORCPT
+        with ESMTP id S233017AbiJXMUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:22:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D3A2D1F3;
-        Mon, 24 Oct 2022 05:29:39 -0700 (PDT)
+        Mon, 24 Oct 2022 08:20:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143E77B2BA;
+        Mon, 24 Oct 2022 04:58:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB765B81331;
-        Mon, 24 Oct 2022 12:08:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB2BC433D6;
-        Mon, 24 Oct 2022 12:08:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C73C3612D1;
+        Mon, 24 Oct 2022 11:47:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9221C433D7;
+        Mon, 24 Oct 2022 11:47:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613316;
-        bh=y839G3eWhqbFg+CH70M0j3cZIXcSKYZtss7cD99g68g=;
+        s=korg; t=1666612062;
+        bh=Awcd/0SSmDN83dUDpNoaIq8lTcT014AjU8Qvxm5qHes=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r+gL/QiFhnEa0b16YIqf+yT5+u8scvHb4hrp17GJrm+Gjunb+P/upyJQH2FvQ8Jtf
-         603K9FGwVgtKMusU8Cf6luTQlaDoRFYPOe7rTfxQ9x0MQQkQQM9qjeaTtideIpnlbN
-         SeSEPNy9c4jm08u2j33VFRZJ3AvVJVpOF33NBmXk=
+        b=MLjjHABWdhtW9WAWyU+HSDBLufPEEfEv9GZf6A5Wd9Ir5bT0TsVda5caUKDz53cm7
+         kUv7ra1VrYqq5YF+1ClkPJrOnLawctV1PYofcof9dTE7uQmuJ5qxCBj6QuPOK3iAlR
+         h6Z0K0EAmA1Mzu1RYwtY+cWN0Gm2iHwoJrxxcTxE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 061/255] ARM: 9247/1: mm: set readonly for MT_MEMORY_RO with ARM_LPAE
-Date:   Mon, 24 Oct 2022 13:29:31 +0200
-Message-Id: <20221024113004.533977981@linuxfoundation.org>
+        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
+        David Teigland <teigland@redhat.com>
+Subject: [PATCH 4.14 055/210] fs: dlm: fix race between test_bit() and queue_work()
+Date:   Mon, 24 Oct 2022 13:29:32 +0200
+Message-Id: <20221024112958.796344237@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,46 +53,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Kefeng <wangkefeng.wang@huawei.com>
+From: Alexander Aring <aahringo@redhat.com>
 
-[ Upstream commit 14ca1a4690750bb54e1049e49f3140ef48958a6e ]
+commit eef6ec9bf390e836a6c4029f3620fe49528aa1fe upstream.
 
-MT_MEMORY_RO is introduced by commit 598f0a99fa8a ("ARM: 9210/1:
-Mark the FDT_FIXED sections as shareable"), which is a readonly
-memory type for FDT area, but there are some different between
-ARM_LPAE and non-ARM_LPAE, we need to setup PMD_SECT_AP2 and
-L_PMD_SECT_RDONLY for MT_MEMORY_RO when ARM_LAPE enabled.
+This patch fixes a race by using ls_cb_mutex around the bit
+operations and conditional code blocks for LSFL_CB_DELAY.
 
-non-ARM_LPAE	0xff800000-0xffa00000           2M PGD KERNEL      ro NX SHD
-ARM_LPAE	0xff800000-0xffc00000           4M PMD RW NX SHD
-ARM_LPAE+fix	0xff800000-0xffc00000           4M PMD ro NX SHD
+The function dlm_callback_stop() expects to stop all callbacks and
+flush all currently queued onces. The set_bit() is not enough because
+there can still be queue_work() after the workqueue was flushed.
+To avoid queue_work() after set_bit(), surround both by ls_cb_mutex.
 
-Fixes: 598f0a99fa8a ("ARM: 9210/1: Mark the FDT_FIXED sections as shareable")
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Signed-off-by: David Teigland <teigland@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mm/mmu.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/dlm/ast.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
-index 463cbb0631be..5becec790379 100644
---- a/arch/arm/mm/mmu.c
-+++ b/arch/arm/mm/mmu.c
-@@ -320,7 +320,11 @@ static struct mem_type mem_types[] __ro_after_init = {
- 		.prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
- 			     L_PTE_XN | L_PTE_RDONLY,
- 		.prot_l1   = PMD_TYPE_TABLE,
-+#ifdef CONFIG_ARM_LPAE
-+		.prot_sect = PMD_TYPE_SECT | L_PMD_SECT_RDONLY | PMD_SECT_AP2,
-+#else
- 		.prot_sect = PMD_TYPE_SECT,
-+#endif
- 		.domain    = DOMAIN_KERNEL,
- 	},
- 	[MT_ROM] = {
--- 
-2.35.1
-
+--- a/fs/dlm/ast.c
++++ b/fs/dlm/ast.c
+@@ -198,13 +198,13 @@ void dlm_add_cb(struct dlm_lkb *lkb, uin
+ 	if (!prev_seq) {
+ 		kref_get(&lkb->lkb_ref);
+ 
++		mutex_lock(&ls->ls_cb_mutex);
+ 		if (test_bit(LSFL_CB_DELAY, &ls->ls_flags)) {
+-			mutex_lock(&ls->ls_cb_mutex);
+ 			list_add(&lkb->lkb_cb_list, &ls->ls_cb_delay);
+-			mutex_unlock(&ls->ls_cb_mutex);
+ 		} else {
+ 			queue_work(ls->ls_callback_wq, &lkb->lkb_cb_work);
+ 		}
++		mutex_unlock(&ls->ls_cb_mutex);
+ 	}
+  out:
+ 	mutex_unlock(&lkb->lkb_cb_mutex);
+@@ -284,7 +284,9 @@ void dlm_callback_stop(struct dlm_ls *ls
+ 
+ void dlm_callback_suspend(struct dlm_ls *ls)
+ {
++	mutex_lock(&ls->ls_cb_mutex);
+ 	set_bit(LSFL_CB_DELAY, &ls->ls_flags);
++	mutex_unlock(&ls->ls_cb_mutex);
+ 
+ 	if (ls->ls_callback_wq)
+ 		flush_workqueue(ls->ls_callback_wq);
 
 
