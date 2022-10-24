@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA82960AB0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122E660A893
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236289AbiJXNn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S235339AbiJXNIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 09:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiJXNim (ORCPT
+        with ESMTP id S235394AbiJXNGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:38:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00DADB03D5;
-        Mon, 24 Oct 2022 05:36:26 -0700 (PDT)
+        Mon, 24 Oct 2022 09:06:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A6682D2B;
+        Mon, 24 Oct 2022 05:21:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 929E661297;
-        Mon, 24 Oct 2022 12:36:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D55C433C1;
-        Mon, 24 Oct 2022 12:36:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1591A612BB;
+        Mon, 24 Oct 2022 12:16:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C5C4C433C1;
+        Mon, 24 Oct 2022 12:16:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666614984;
-        bh=wNyFHM2p/6dzf+FMI40mFTip7NEogrKvFAWKGDqg7as=;
+        s=korg; t=1666613818;
+        bh=N37XKcVxYB4/HmKAQKuDmdp2IcQE9xotdgysPiZ17zo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WnoMSnEGVXX37UsB8sPj/3ksziGWYTrsb45kNrvsiybP5LYAgpwejI46oK6P3lHdS
-         mHtG46Ku2rCzG9loLmMTkmW5fYeArt2XlLH+JZaG/Td1vbfVkht1o9GfGmVJDuM32j
-         n8Ozr4O/LXmuvRKUDlYcPkuNcTrXZ0A35yWdwAP0=
+        b=uee/msPy/AAFfNBt1TeJfyWZnLF2PNDKMHFk5DRf2M1Ee9Cv+iDvFk1Nf8G4/KMOF
+         waqlvFWUq2itZh8VhJKdyakvHQ9P3E1y4lZaTiI/xy3yjLbMo9CBc1kthWG9ENJ3Ls
+         bwKpI1tDa59wp8CgRwcNbCdwuTDdZoW9D9eiRDBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dave Chinner <david@fromorbit.com>,
-        Christoph Hellwig <hch@infradead.org>, stable@kernel.org,
-        Lukas Czerner <lczerner@redhat.com>, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 5.15 078/530] fs: record I_DIRTY_TIME even if inode already has I_DIRTY_INODE
-Date:   Mon, 24 Oct 2022 13:27:02 +0200
-Message-Id: <20221024113048.542721677@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Jan Kara <jack@suse.cz>
+Subject: [PATCH 5.10 026/390] quota: Check next/prev free block number after reading from quota file
+Date:   Mon, 24 Oct 2022 13:27:03 +0200
+Message-Id: <20221024113023.677892461@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
+References: <20221024113022.510008560@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,185 +53,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Czerner <lczerner@redhat.com>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-commit cbfecb927f429a6fa613d74b998496bd71e4438a upstream.
+commit 6c8ea8b8cd4722efd419f91ca46a2dc81b7d89a3 upstream.
 
-Currently the I_DIRTY_TIME will never get set if the inode already has
-I_DIRTY_INODE with assumption that it supersedes I_DIRTY_TIME.  That's
-true, however ext4 will only update the on-disk inode in
-->dirty_inode(), not on actual writeback. As a result if the inode
-already has I_DIRTY_INODE state by the time we get to
-__mark_inode_dirty() only with I_DIRTY_TIME, the time was already filled
-into on-disk inode and will not get updated until the next I_DIRTY_INODE
-update, which might never come if we crash or get a power failure.
+Following process:
+ Init: v2_read_file_info: <3> dqi_free_blk 0 dqi_free_entry 5 dqi_blks 6
 
-The problem can be reproduced on ext4 by running xfstest generic/622
-with -o iversion mount option.
+ Step 1. chown bin f_a -> dquot_acquire -> v2_write_dquot:
+  qtree_write_dquot
+   do_insert_tree
+    find_free_dqentry
+     get_free_dqblk
+      write_blk(info->dqi_blocks) // info->dqi_blocks = 6, failure. The
+	   content in physical block (corresponding to blk 6) is random.
 
-Fix it by allowing I_DIRTY_TIME to be set even if the inode already has
-I_DIRTY_INODE. Also make sure that the case is properly handled in
-writeback_single_inode() as well. Additionally changes in
-xfs_fs_dirty_inode() was made to accommodate for I_DIRTY_TIME in flag.
+ Step 2. chown root f_a -> dquot_transfer -> dqput_all -> dqput ->
+         ext4_release_dquot -> v2_release_dquot -> qtree_delete_dquot:
+  dquot_release
+   remove_tree
+    free_dqentry
+     put_free_dqblk(6)
+      info->dqi_free_blk = blk    // info->dqi_free_blk = 6
 
-Thanks Jan Kara for suggestions on how to make this work properly.
+ Step 3. drop cache (buffer head for block 6 is released)
 
-Cc: Dave Chinner <david@fromorbit.com>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: stable@kernel.org
-Signed-off-by: Lukas Czerner <lczerner@redhat.com>
-Suggested-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220825100657.44217-1-lczerner@redhat.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+ Step 4. chown bin f_b -> dquot_acquire -> commit_dqblk -> v2_write_dquot:
+  qtree_write_dquot
+   do_insert_tree
+    find_free_dqentry
+     get_free_dqblk
+      dh = (struct qt_disk_dqdbheader *)buf
+      blk = info->dqi_free_blk     // 6
+      ret = read_blk(info, blk, buf)  // The content of buf is random
+      info->dqi_free_blk = le32_to_cpu(dh->dqdh_next_free)  // random blk
+
+ Step 5. chown bin f_c -> notify_change -> ext4_setattr -> dquot_transfer:
+  dquot = dqget -> acquire_dquot -> ext4_acquire_dquot -> dquot_acquire ->
+          commit_dqblk -> v2_write_dquot -> dq_insert_tree:
+   do_insert_tree
+    find_free_dqentry
+     get_free_dqblk
+      blk = info->dqi_free_blk    // If blk < 0 and blk is not an error
+				     code, it will be returned as dquot
+
+  transfer_to[USRQUOTA] = dquot  // A random negative value
+  __dquot_transfer(transfer_to)
+   dquot_add_inodes(transfer_to[cnt])
+    spin_lock(&dquot->dq_dqb_lock)  // page fault
+
+, which will lead to kernel page fault:
+ Quota error (device sda): qtree_write_dquot: Error -8000 occurred
+ while creating quota
+ BUG: unable to handle page fault for address: ffffffffffffe120
+ #PF: supervisor write access in kernel mode
+ #PF: error_code(0x0002) - not-present page
+ Oops: 0002 [#1] PREEMPT SMP
+ CPU: 0 PID: 5974 Comm: chown Not tainted 6.0.0-rc1-00004
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+ RIP: 0010:_raw_spin_lock+0x3a/0x90
+ Call Trace:
+  dquot_add_inodes+0x28/0x270
+  __dquot_transfer+0x377/0x840
+  dquot_transfer+0xde/0x540
+  ext4_setattr+0x405/0x14d0
+  notify_change+0x68e/0x9f0
+  chown_common+0x300/0x430
+  __x64_sys_fchownat+0x29/0x40
+
+In order to avoid accessing invalid quota memory address, this patch adds
+block number checking of next/prev free block read from quota file.
+
+Fetch a reproducer in [Link].
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=216372
+Fixes: 1da177e4c3f4152 ("Linux-2.6.12-rc2")
+CC: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220923134555.2623931-2-chengzhihao1@huawei.com
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/filesystems/vfs.rst |    3 +++
- fs/fs-writeback.c                 |   37 +++++++++++++++++++++++++------------
- fs/xfs/xfs_super.c                |   10 ++++++++--
- include/linux/fs.h                |    9 +++++----
- 4 files changed, 41 insertions(+), 18 deletions(-)
+ fs/quota/quota_tree.c |   38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
---- a/Documentation/filesystems/vfs.rst
-+++ b/Documentation/filesystems/vfs.rst
-@@ -274,6 +274,9 @@ or bottom half).
- 	This is specifically for the inode itself being marked dirty,
- 	not its data.  If the update needs to be persisted by fdatasync(),
- 	then I_DIRTY_DATASYNC will be set in the flags argument.
-+	I_DIRTY_TIME will be set in the flags in case lazytime is enabled
-+	and struct inode has times updated since the last ->dirty_inode
-+	call.
- 
- ``write_inode``
- 	this method is called when the VFS needs to write an inode to
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -1745,9 +1745,14 @@ static int writeback_single_inode(struct
- 	 */
- 	if (!(inode->i_state & I_DIRTY_ALL))
- 		inode_cgwb_move_to_attached(inode, wb);
--	else if (!(inode->i_state & I_SYNC_QUEUED) &&
--		 (inode->i_state & I_DIRTY))
--		redirty_tail_locked(inode, wb);
-+	else if (!(inode->i_state & I_SYNC_QUEUED)) {
-+		if ((inode->i_state & I_DIRTY))
-+			redirty_tail_locked(inode, wb);
-+		else if (inode->i_state & I_DIRTY_TIME) {
-+			inode->dirtied_when = jiffies;
-+			inode_io_list_move_locked(inode, wb, &wb->b_dirty_time);
-+		}
-+	}
- 
- 	spin_unlock(&wb->list_lock);
- 	inode_sync_complete(inode);
-@@ -2401,6 +2406,20 @@ void __mark_inode_dirty(struct inode *in
- 
- 	if (flags & I_DIRTY_INODE) {
- 		/*
-+		 * Inode timestamp update will piggback on this dirtying.
-+		 * We tell ->dirty_inode callback that timestamps need to
-+		 * be updated by setting I_DIRTY_TIME in flags.
-+		 */
-+		if (inode->i_state & I_DIRTY_TIME) {
-+			spin_lock(&inode->i_lock);
-+			if (inode->i_state & I_DIRTY_TIME) {
-+				inode->i_state &= ~I_DIRTY_TIME;
-+				flags |= I_DIRTY_TIME;
-+			}
-+			spin_unlock(&inode->i_lock);
-+		}
-+
-+		/*
- 		 * Notify the filesystem about the inode being dirtied, so that
- 		 * (if needed) it can update on-disk fields and journal the
- 		 * inode.  This is only needed when the inode itself is being
-@@ -2409,7 +2428,8 @@ void __mark_inode_dirty(struct inode *in
- 		 */
- 		trace_writeback_dirty_inode_start(inode, flags);
- 		if (sb->s_op->dirty_inode)
--			sb->s_op->dirty_inode(inode, flags & I_DIRTY_INODE);
-+			sb->s_op->dirty_inode(inode,
-+				flags & (I_DIRTY_INODE | I_DIRTY_TIME));
- 		trace_writeback_dirty_inode(inode, flags);
- 
- 		/* I_DIRTY_INODE supersedes I_DIRTY_TIME. */
-@@ -2430,21 +2450,15 @@ void __mark_inode_dirty(struct inode *in
- 	 */
- 	smp_mb();
- 
--	if (((inode->i_state & flags) == flags) ||
--	    (dirtytime && (inode->i_state & I_DIRTY_INODE)))
-+	if ((inode->i_state & flags) == flags)
- 		return;
- 
- 	spin_lock(&inode->i_lock);
--	if (dirtytime && (inode->i_state & I_DIRTY_INODE))
--		goto out_unlock_inode;
- 	if ((inode->i_state & flags) != flags) {
- 		const int was_dirty = inode->i_state & I_DIRTY;
- 
- 		inode_attach_wb(inode, NULL);
- 
--		/* I_DIRTY_INODE supersedes I_DIRTY_TIME. */
--		if (flags & I_DIRTY_INODE)
--			inode->i_state &= ~I_DIRTY_TIME;
- 		inode->i_state |= flags;
- 
- 		/*
-@@ -2517,7 +2531,6 @@ void __mark_inode_dirty(struct inode *in
- out_unlock:
- 	if (wb)
- 		spin_unlock(&wb->list_lock);
--out_unlock_inode:
- 	spin_unlock(&inode->i_lock);
+--- a/fs/quota/quota_tree.c
++++ b/fs/quota/quota_tree.c
+@@ -80,6 +80,35 @@ static ssize_t write_blk(struct qtree_me
+ 	return ret;
  }
- EXPORT_SYMBOL(__mark_inode_dirty);
---- a/fs/xfs/xfs_super.c
-+++ b/fs/xfs/xfs_super.c
-@@ -642,7 +642,7 @@ xfs_fs_destroy_inode(
- static void
- xfs_fs_dirty_inode(
- 	struct inode			*inode,
--	int				flag)
-+	int				flags)
- {
- 	struct xfs_inode		*ip = XFS_I(inode);
- 	struct xfs_mount		*mp = ip->i_mount;
-@@ -650,7 +650,13 @@ xfs_fs_dirty_inode(
  
- 	if (!(inode->i_sb->s_flags & SB_LAZYTIME))
- 		return;
--	if (flag != I_DIRTY_SYNC || !(inode->i_state & I_DIRTY_TIME))
++static inline int do_check_range(struct super_block *sb, const char *val_name,
++				 uint val, uint min_val, uint max_val)
++{
++	if (val < min_val || val > max_val) {
++		quota_error(sb, "Getting %s %u out of range %u-%u",
++			    val_name, val, min_val, max_val);
++		return -EUCLEAN;
++	}
 +
-+	/*
-+	 * Only do the timestamp update if the inode is dirty (I_DIRTY_SYNC)
-+	 * and has dirty timestamp (I_DIRTY_TIME). I_DIRTY_TIME can be passed
-+	 * in flags possibly together with I_DIRTY_SYNC.
-+	 */
-+	if ((flags & ~I_DIRTY_TIME) != I_DIRTY_SYNC || !(flags & I_DIRTY_TIME))
- 		return;
- 
- 	if (xfs_trans_alloc(mp, &M_RES(mp)->tr_fsyncts, 0, 0, 0, &tp))
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2288,13 +2288,14 @@ static inline void kiocb_clone(struct ki
-  *			don't have to write inode on fdatasync() when only
-  *			e.g. the timestamps have changed.
-  * I_DIRTY_PAGES	Inode has dirty pages.  Inode itself may be clean.
-- * I_DIRTY_TIME		The inode itself only has dirty timestamps, and the
-+ * I_DIRTY_TIME		The inode itself has dirty timestamps, and the
-  *			lazytime mount option is enabled.  We keep track of this
-  *			separately from I_DIRTY_SYNC in order to implement
-  *			lazytime.  This gets cleared if I_DIRTY_INODE
-- *			(I_DIRTY_SYNC and/or I_DIRTY_DATASYNC) gets set.  I.e.
-- *			either I_DIRTY_TIME *or* I_DIRTY_INODE can be set in
-- *			i_state, but not both.  I_DIRTY_PAGES may still be set.
-+ *			(I_DIRTY_SYNC and/or I_DIRTY_DATASYNC) gets set. But
-+ *			I_DIRTY_TIME can still be set if I_DIRTY_SYNC is already
-+ *			in place because writeback might already be in progress
-+ *			and we don't want to lose the time update
-  * I_NEW		Serves as both a mutex and completion notification.
-  *			New inodes set I_NEW.  If two processes both create
-  *			the same inode, one of them will release its inode and
++	return 0;
++}
++
++static int check_dquot_block_header(struct qtree_mem_dqinfo *info,
++				    struct qt_disk_dqdbheader *dh)
++{
++	int err = 0;
++
++	err = do_check_range(info->dqi_sb, "dqdh_next_free",
++			     le32_to_cpu(dh->dqdh_next_free), 0,
++			     info->dqi_blocks - 1);
++	if (err)
++		return err;
++	err = do_check_range(info->dqi_sb, "dqdh_prev_free",
++			     le32_to_cpu(dh->dqdh_prev_free), 0,
++			     info->dqi_blocks - 1);
++
++	return err;
++}
++
+ /* Remove empty block from list and return it */
+ static int get_free_dqblk(struct qtree_mem_dqinfo *info)
+ {
+@@ -94,6 +123,9 @@ static int get_free_dqblk(struct qtree_m
+ 		ret = read_blk(info, blk, buf);
+ 		if (ret < 0)
+ 			goto out_buf;
++		ret = check_dquot_block_header(info, dh);
++		if (ret)
++			goto out_buf;
+ 		info->dqi_free_blk = le32_to_cpu(dh->dqdh_next_free);
+ 	}
+ 	else {
+@@ -241,6 +273,9 @@ static uint find_free_dqentry(struct qtr
+ 		*err = read_blk(info, blk, buf);
+ 		if (*err < 0)
+ 			goto out_buf;
++		*err = check_dquot_block_header(info, dh);
++		if (*err)
++			goto out_buf;
+ 	} else {
+ 		blk = get_free_dqblk(info);
+ 		if ((int)blk < 0) {
+@@ -433,6 +468,9 @@ static int free_dqentry(struct qtree_mem
+ 		goto out_buf;
+ 	}
+ 	dh = (struct qt_disk_dqdbheader *)buf;
++	ret = check_dquot_block_header(info, dh);
++	if (ret)
++		goto out_buf;
+ 	le16_add_cpu(&dh->dqdh_entries, -1);
+ 	if (!le16_to_cpu(dh->dqdh_entries)) {	/* Block got free? */
+ 		ret = remove_free_dqentry(info, buf, blk);
 
 
