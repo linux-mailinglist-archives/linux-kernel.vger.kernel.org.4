@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306E360A8DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 15:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C0E60A434
+	for <lists+linux-kernel@lfdr.de>; Mon, 24 Oct 2022 14:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235657AbiJXNMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 09:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
+        id S232656AbiJXMG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 08:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235822AbiJXNJo (ORCPT
+        with ESMTP id S232770AbiJXMEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 09:09:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3D69F754;
-        Mon, 24 Oct 2022 05:23:18 -0700 (PDT)
+        Mon, 24 Oct 2022 08:04:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F40B638EF;
+        Mon, 24 Oct 2022 04:50:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D576E61268;
-        Mon, 24 Oct 2022 12:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E781AC433C1;
-        Mon, 24 Oct 2022 12:11:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F82561257;
+        Mon, 24 Oct 2022 11:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50F1C433C1;
+        Mon, 24 Oct 2022 11:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666613474;
-        bh=ZV8yv8pgRgm0gpnXZ2O17bX3RzXcFDMTAtvPX2IT8zU=;
+        s=korg; t=1666612221;
+        bh=gpxEK+/vB6oxf9o8QTiRM6M4RrtZn3Orj865Dz+D9bI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xc2v6H3VrRmkLmWOUw6ZLuhBgdDIgugJBUbIu8ncNIX7J4aY3easectCkPZisfVG3
-         ruVkPmHBU9msoemwBWb3A/jBnmzBTL09vmRaA7hlyBT3CBxL55S+XUKxh7UGVA4qeQ
-         H5tvi9ZXhiUVIjmABNID5h6aqkYNPLfazTNk8mqE=
+        b=RoF4x5x8EwTLSAWggp8PbjUnNCa3Fr02fZWnucgfmyeEwzImMB/Z274kJtq4txfDQ
+         rc48QO1WE8m7zdxrw2H3X8E1K6CnhwovYAwz2A/It1uujXuxhWKDcX39fY4+znYB90
+         U3xy9IjVmfwtxyMuBWE/Q54fYQknxmDiqaj1qX7o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Liang He <windhl@126.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 123/255] clk: meson: Hold reference returned by of_get_parent()
+Subject: [PATCH 4.14 116/210] iio: ABI: Fix wrong format of differential capacitance channel ABI.
 Date:   Mon, 24 Oct 2022 13:30:33 +0200
-Message-Id: <20221024113006.638350032@linuxfoundation.org>
+Message-Id: <20221024113000.755261631@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
-References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024112956.797777597@linuxfoundation.org>
+References: <20221024112956.797777597@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,97 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liang He <windhl@126.com>
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-[ Upstream commit 89ab396d712f7c91fe94f55cff23460426f5fc81 ]
+[ Upstream commit 1efc41035f1841acf0af2bab153158e27ce94f10 ]
 
-We should hold the reference returned by of_get_parent() and use it
-to call of_node_put() for refcount balance.
+in_ only occurs once in these attributes.
 
-Fixes: 88e2da81241e ("clk: meson: aoclk: refactor common code into dedicated file")
-Fixes: 6682bd4d443f ("clk: meson: factorise meson64 peripheral clock controller drivers")
-Fixes: bb6eddd1d28c ("clk: meson: meson8b: use the HHI syscon if available")
-
-Signed-off-by: Liang He <windhl@126.com>
-Link: https://lore.kernel.org/r/20220628141038.168383-1-windhl@126.com
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: 0baf29d658c7 ("staging:iio:documentation Add abi docs for capacitance adcs.")
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Link: https://lore.kernel.org/r/20220626122938.582107-3-jic23@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/meson/meson-aoclk.c | 5 ++++-
- drivers/clk/meson/meson-eeclk.c | 5 ++++-
- drivers/clk/meson/meson8b.c     | 5 ++++-
- 3 files changed, 12 insertions(+), 3 deletions(-)
+ Documentation/ABI/testing/sysfs-bus-iio | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/clk/meson/meson-aoclk.c b/drivers/clk/meson/meson-aoclk.c
-index bf8bea675d24..6c7110a96194 100644
---- a/drivers/clk/meson/meson-aoclk.c
-+++ b/drivers/clk/meson/meson-aoclk.c
-@@ -36,6 +36,7 @@ int meson_aoclkc_probe(struct platform_device *pdev)
- 	struct meson_aoclk_reset_controller *rstc;
- 	struct meson_aoclk_data *data;
- 	struct device *dev = &pdev->dev;
-+	struct device_node *np;
- 	struct regmap *regmap;
- 	int ret, clkid;
+diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
+index e21e2ca3e4f9..c6573a733a68 100644
+--- a/Documentation/ABI/testing/sysfs-bus-iio
++++ b/Documentation/ABI/testing/sysfs-bus-iio
+@@ -135,7 +135,7 @@ Description:
+ 		Raw capacitance measurement from channel Y. Units after
+ 		application of scale and offset are nanofarads.
  
-@@ -47,7 +48,9 @@ int meson_aoclkc_probe(struct platform_device *pdev)
- 	if (!rstc)
- 		return -ENOMEM;
- 
--	regmap = syscon_node_to_regmap(of_get_parent(dev->of_node));
-+	np = of_get_parent(dev->of_node);
-+	regmap = syscon_node_to_regmap(np);
-+	of_node_put(np);
- 	if (IS_ERR(regmap)) {
- 		dev_err(dev, "failed to get regmap\n");
- 		return PTR_ERR(regmap);
-diff --git a/drivers/clk/meson/meson-eeclk.c b/drivers/clk/meson/meson-eeclk.c
-index a7cb1e7aedc4..18ae38787268 100644
---- a/drivers/clk/meson/meson-eeclk.c
-+++ b/drivers/clk/meson/meson-eeclk.c
-@@ -17,6 +17,7 @@ int meson_eeclkc_probe(struct platform_device *pdev)
- {
- 	const struct meson_eeclkc_data *data;
- 	struct device *dev = &pdev->dev;
-+	struct device_node *np;
- 	struct regmap *map;
- 	int ret, i;
- 
-@@ -25,7 +26,9 @@ int meson_eeclkc_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 
- 	/* Get the hhi system controller node */
--	map = syscon_node_to_regmap(of_get_parent(dev->of_node));
-+	np = of_get_parent(dev->of_node);
-+	map = syscon_node_to_regmap(np);
-+	of_node_put(np);
- 	if (IS_ERR(map)) {
- 		dev_err(dev,
- 			"failed to get HHI regmap\n");
-diff --git a/drivers/clk/meson/meson8b.c b/drivers/clk/meson/meson8b.c
-index 082178a0f41a..efddf0d152a4 100644
---- a/drivers/clk/meson/meson8b.c
-+++ b/drivers/clk/meson/meson8b.c
-@@ -3684,13 +3684,16 @@ static void __init meson8b_clkc_init_common(struct device_node *np,
- 			struct clk_hw_onecell_data *clk_hw_onecell_data)
- {
- 	struct meson8b_clk_reset *rstc;
-+	struct device_node *parent_np;
- 	const char *notifier_clk_name;
- 	struct clk *notifier_clk;
- 	void __iomem *clk_base;
- 	struct regmap *map;
- 	int i, ret;
- 
--	map = syscon_node_to_regmap(of_get_parent(np));
-+	parent_np = of_get_parent(np);
-+	map = syscon_node_to_regmap(parent_np);
-+	of_node_put(parent_np);
- 	if (IS_ERR(map)) {
- 		pr_info("failed to get HHI regmap - Trying obsolete regs\n");
- 
+-What:		/sys/.../iio:deviceX/in_capacitanceY-in_capacitanceZ_raw
++What:		/sys/.../iio:deviceX/in_capacitanceY-capacitanceZ_raw
+ KernelVersion:	3.2
+ Contact:	linux-iio@vger.kernel.org
+ Description:
 -- 
 2.35.1
 
