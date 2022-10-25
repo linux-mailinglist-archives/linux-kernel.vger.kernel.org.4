@@ -2,111 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F2C60D59E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5845C60D5AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiJYUh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 16:37:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S232881AbiJYUjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 16:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiJYUh5 (ORCPT
+        with ESMTP id S231482AbiJYUjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 16:37:57 -0400
-Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7035B61DBB
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:37:56 -0700 (PDT)
-Received: from imladris.surriel.com ([96.67.55.152])
-        by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <riel@shelob.surriel.com>)
-        id 1onQgK-0001bw-04;
-        Tue, 25 Oct 2022 16:37:52 -0400
-Message-ID: <215d225585ff3c5ea90c64e6c9bdff04ab548156.camel@surriel.com>
-Subject: [BUG] hugetlbfs_no_page vs MADV_DONTNEED race leading to SIGBUS
-From:   Rik van Riel <riel@surriel.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Chris Mason <clm@meta.com>, David Hildenbrand <david@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Andrew Morton <akpm@linux-foundation.org>
-Date:   Tue, 25 Oct 2022 16:37:51 -0400
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-JdsCtim/hl2EscNS8G/m"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Tue, 25 Oct 2022 16:39:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8412AC4B9;
+        Tue, 25 Oct 2022 13:39:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 532D6CE1C10;
+        Tue, 25 Oct 2022 20:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1190BC433C1;
+        Tue, 25 Oct 2022 20:38:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666730339;
+        bh=pNxIekC28wfpOc5Ypgdt8TBFN8v88QrFVDS9wqoB4fk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RqSfv94sp39rY9R6dfnKNtA2yzyyL+taF+AKAbt1StMoVeHrtOmoZ8ZmMBXJ3krGy
+         M280K4bsUBIoOIHOGnsOcYDpHG4zzHCwDB2UlH1lj9XqKQQ/c59IeIWCxRi/So+So1
+         9YdUIZBVduYEZ2X9LjSbAmi+lV5q17+kcrwyC8SYNJdPS5iw4NwroUyds1T3C6z0Cj
+         8dGKvrKF3RoP70esMxj9xNR3mEfVfRJFsKoSZ2eei4mESQfW7/WTW8UllreUfuXm2l
+         n3F06FCCOIHuqCd4/nW8IrlGIyY/pdfabLlj4WNAyoXrpyK0r8S/p+trjChtqiu1fm
+         Dar8mob5nL9SA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     David Airlie <airlied@redhat.com>
+Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v2 0/8] agp: Convert to generic power management
+Date:   Tue, 25 Oct 2022 15:38:44 -0500
+Message-Id: <20221025203852.681822-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Sender: riel@shelob.surriel.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Bjorn Helgaas <bhelgaas@google.com>
 
---=-JdsCtim/hl2EscNS8G/m
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Vaibhav converted several AGP drivers from legacy PCI power management to
+generic power management [1].  This series converts the rest of them.
 
-Hi Mike,
+v1 posted at [2].
 
-After getting promising results initially, we discovered there
-is yet another bug left with hugetlbfs MADV_DONTNEED.
+Changes from v1 to v2:
+  - Convert from SIMPLE_DEV_PM_OPS() (which is deprecated) to
+    DEFINE_SIMPLE_DEV_PM_OPS() and remove __maybe_unused annotations.
 
-This one involves a page fault on a hugetlbfs address, while
-another thread in the same process is in the middle of MADV_DONTNEED
-on that same memory address.
+[1] https://lore.kernel.org/all/20210112080924.1038907-1-vaibhavgupta40@gmail.com/#t
+[2] https://lore.kernel.org/all/20220607034340.307318-1-helgaas@kernel.org/
 
-The code in __unmap_hugepage_range() will clear the page table
-entry, and then at some point later the lazy TLB code will=20
-actually free the huge page back into the hugetlbfs free page
-pool.
+Bjorn Helgaas (8):
+  agp/efficeon: Convert to generic power management
+  agp/intel: Convert to generic power management
+  agp/amd-k7: Convert to generic power management
+  agp/ati: Convert to generic power management
+  agp/nvidia: Convert to generic power management
+  agp/amd64: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+  agp/sis: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+  agp/via: Update to DEFINE_SIMPLE_DEV_PM_OPS()
 
-Meanwhile, hugetlb_no_page will call alloc_huge_page, and that
-will fail because the code calling __unmap_hugepage_range() has
-not actually returned the page to the free list yet.
+ drivers/char/agp/amd-k7-agp.c   | 24 ++++--------------------
+ drivers/char/agp/amd64-agp.c    |  6 ++----
+ drivers/char/agp/ati-agp.c      | 22 ++++------------------
+ drivers/char/agp/efficeon-agp.c | 16 ++++------------
+ drivers/char/agp/intel-agp.c    | 11 +++++------
+ drivers/char/agp/nvidia-agp.c   | 24 ++++--------------------
+ drivers/char/agp/sis-agp.c      |  7 ++-----
+ drivers/char/agp/via-agp.c      |  6 ++----
+ 8 files changed, 27 insertions(+), 89 deletions(-)
 
-The result is that the process gets killed with SIGBUS.
+-- 
+2.25.1
 
-I have thought of a few different solutions to this problem, but
-none of them look good:
-- Make MADV_DONTNEED take a write lock on mmap_sem, to exclude
-  page faults. This could make MADV_DONTNEED on VMAs with 4kB
-  pages unacceptably slow.
-- Some sort of atomic counter kept by __unmap_hugepage_range()
-  that huge pages may be getting placed in the tlb gather, and
-  freed later by tlb_finish_mmu().  This would involve changes
-  to the MMU gather code, outside of hugetlbfs.
-- Some sort of generation counter that tracks tlb_gather_mmu
-  cycles in progress, with the alloc_huge_page failure path
-  waiting until all mmu gather operations that started before
-  it to finish, before retrying the allocation. This requires
-  changes to the generic code, outside of hugetlbfs.
-
-What are the reasonable alternatives here?
-
-Should we see if anybody can come up with a simple solution
-to the problem, or would it be better to just disable
-MADV_DONTNEED on hugetlbfs for now?
-
---=20
-All Rights Reversed.
-
---=-JdsCtim/hl2EscNS8G/m
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEKR73pCCtJ5Xj3yADznnekoTE3oMFAmNYSR8ACgkQznnekoTE
-3oPphgf9Gzrh965pMbAxa+/exyZoh+bwvS54y3Ro9Djptt2/v8zJFdLaiHdlr1YC
-MV5acp8sIWgrjz/Qxa9WOIl4XBQ0eVRdf1HHFEKKKmDls5iBHqvNSSZWs0CGi3+0
-jyJydcxTyfXs/yyXDI7b5DdnwTtQlF0mcm3raIOvz8dubl6gslxW22Tec4Joyejf
-6V465UKgV/ZBj5sjkoVOBns+0ilmAV7XvqHxIMU1DgTX7P5LwadqvZJe9hqPmVIb
-XsKiwl/Dk3L861Rmr+63e/z+U85NG77SsVFCkFQ6IGJJbetbuFUOEx5GPSFyHp5x
-DzV8ldRCqbbpcVZHr/qa1lRcCwg4zg==
-=nKVs
------END PGP SIGNATURE-----
-
---=-JdsCtim/hl2EscNS8G/m--
