@@ -2,150 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB98160CAE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2B160CAE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiJYLZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S232224AbiJYLZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiJYLZ1 (ORCPT
+        with ESMTP id S232274AbiJYLZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:25:27 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D955F161FD7;
-        Tue, 25 Oct 2022 04:25:12 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MxTxv11M5zmVFj;
-        Tue, 25 Oct 2022 19:20:19 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 19:25:10 +0800
-Message-ID: <0d691d8a-6d79-f04b-43cb-15c4fe391b31@huawei.com>
-Date:   Tue, 25 Oct 2022 19:25:10 +0800
+        Tue, 25 Oct 2022 07:25:31 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075EB155DB0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:25:28 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id s22-20020a17090a075600b002130d2ad62aso4889218pje.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:25:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9LdRMTI4zyOld++9qNZFyci0X/oHYWTr7T2AnMFOeaA=;
+        b=MzpqAJNC7tdBtUPVyiYQR8VsXjr9wKoggMijFHf4ZoBu9uj1C7xwtfrLqdwUqi5rLJ
+         b/qv5WITMz2UfmiTsQ6SV3WHl8tnnf3mFlDGrkpMQaH1ZDZTEM4BqXEFYf/uJRiV/SUw
+         LPJfnwRDIwUTOk1I8mR+GAPPVYw0hUvif1EE9UpZWjUlAE+ixiFyOaH1o88yKVzeabas
+         nkLfPVcY/V3cqBN9gyXdaaRhORzmmHA0X0MzSNkAh98VNMYt5Aa6P50HD9BYOK5WKHJ5
+         vF7klx8cFcVTzZklRxvked14hgcgIfNMIjcKCj+hTHN3vCWAia5uZIRj+ltrb/J4zS2k
+         vZJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9LdRMTI4zyOld++9qNZFyci0X/oHYWTr7T2AnMFOeaA=;
+        b=kX0KX6FtwowPfPXbAYcjuG7UiKlwHI1iC0fN7Msl+5ozGF9zuB7NiPZYEGUGD133fV
+         /JkbR3hDQCALTXUlNWlAqDOOPD9lOdGWXLdYv8qWcAxc28RI06tqJYZ1eBe9NohgiUJ1
+         deHkhnWE3ZDFUpAx5C9yX7VJgVhD+Ytufl1+crJdROvT7E0amd/VBrB3zrNaFSCqjnZk
+         3OqQ7fm7axjXadzp324CvcHMCVIGMUYiYQWUsJyVjzibowN5L+i6FKfQ0g3IjWU+4yBY
+         4hYHKdPrKLnYqQfqqfVKMKAH5YyCuMm6+GoYl7qor46eKbLXKkA51tOUBpyT0sEwb6eB
+         8Wxw==
+X-Gm-Message-State: ACrzQf2n0iKqqU5k1i0MtzA8NoehyLI+XNSLcfkhjQstJeC/61LZycBh
+        NF6JNT6RBuSnFMNwtf+XBW8x/w2W+15+N+N8l7spNg==
+X-Google-Smtp-Source: AMsMyM5XQpmnIQ1KeJdniJme/sn/fhdr1NXq7i0leDU5y+9gKGrNDjlwBDOGqT3Atj6Nz585DKiYgw==
+X-Received: by 2002:a17:902:e545:b0:182:6c84:7fc0 with SMTP id n5-20020a170902e54500b001826c847fc0mr38047150plf.144.1666697127301;
+        Tue, 25 Oct 2022 04:25:27 -0700 (PDT)
+Received: from leoy-huanghe.lan ([156.59.103.41])
+        by smtp.gmail.com with ESMTPSA id je20-20020a170903265400b001785fa792f4sm1056792plb.243.2022.10.25.04.25.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 04:25:26 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 19:25:19 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Ian Rogers' <irogers@google.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 0/8] Update to C11, fix signal undefined behavior
+Message-ID: <Y1fHn1mFeVPn7O3+@leoy-huanghe.lan>
+References: <20221024173523.602064-1-irogers@google.com>
+ <Y1bQlxxABicj4k3+@kernel.org>
+ <CAP-5=fWPdmHPXc9D2LP6TVmhuNf93gZCnogWXCVGytkhuqi2uQ@mail.gmail.com>
+ <CAP-5=fVGicObnifnUzDXjbkGOVtmNaLKcfqpGeTwnFw2zsOuDQ@mail.gmail.com>
+ <7b0769b35f124869b4e30ddcc20a5985@AcuMS.aculab.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 2/2] ext4: fix bug_on in __es_tree_search caused by
- wrong boot loader inode
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
-References: <20221021040731.4180649-1-libaokun1@huawei.com>
- <20221021040731.4180649-3-libaokun1@huawei.com>
- <20221024142527.avwgiztqvzmeo4se@quack3>
- <c29e93a7-d4c8-6126-2046-830f43d9adc6@huawei.com>
- <20221025091813.oo27uhwybvkd7mzc@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20221025091813.oo27uhwybvkd7mzc@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7b0769b35f124869b4e30ddcc20a5985@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/25 17:18, Jan Kara wrote:
-> On Tue 25-10-22 10:26:14, Baokun Li wrote:
->> On 2022/10/24 22:25, Jan Kara wrote:
->>> On Fri 21-10-22 12:07:31, Baokun Li wrote:
->>>> We got a issue as fllows:
->>>> ...
->>>>
->>>> In the above issue, ioctl invokes the swap_inode_boot_loader function to
->>>> swap inode<5> and inode<12>. However, inode<5> contain incorrect imode and
->>>> disordered extents, and i_nlink is set to 1. The extents check for inode in
->>>> the ext4_iget function can be bypassed bacause 5 is EXT4_BOOT_LOADER_INO.
->>>> While links_count is set to 1, the extents are not initialized in
->>>> swap_inode_boot_loader. After the ioctl command is executed successfully,
->>>> the extents are swapped to inode<12>, in this case, run the `cat` command
->>>> to view inode<12>. And Bug_ON is triggered due to the incorrect extents.
->>>>
->>>> When the boot loader inode is not initialized, its imode can be one of the
->>>> following:
->>>> 1) the imode is a bad type, which is marked as bad_inode in ext4_iget and
->>>>      set to S_IFREG.
->>>> 2) the imode is good type but not S_IFREG.
->>>> 3) the imode is S_IFREG.
->>>>
->>>> The BUG_ON may be triggered by bypassing the check in cases 1 and 2.
->>>> Therefore, when the boot loader inode is bad_inode or its imode is not
->>>> S_IFREG, initialize the inode to avoid triggering the BUG.
->>>>
->>>> Signed-off-by: Baokun Li <libaokun1@huawei.com>
->>> Grepping for calls to ext4_iget() in the ext4 code shows there are many
->>> more places that will get unhappy (and crash) when ext4_iget() returns a
->>> bad inode. In fact, I didn't find a place when returning bad inode would be
->>> useful for anything. So why don't we just return EFSCORRUPTED instead of
->>> returning a bad inode?
->>>
->>> 								Honza
->> Hello Honza,
->>
->> In ext4_iget(), the inode is marked as bad and returned only when ino is
->> equal to
->> EXT4_BOOT_LOADER_INO. In the error branch bad_inode, although the inode is
->> marked as bad, the returned value is the corresponding error number.
->> The boot loader inode is not initialized during mkfs. Therefore, when
->> ext4_iget() is
->> entered for the first time, imode of the inode is bad type. However, the
->> swap_inode_boot_loader() needs to obtain the inode for initialization and
->> swap.
->> Therefore, a bad_inode is returned in ext4_iget.
->>
->> Generally, ext4_iget() does not get the boot loader inode. Therefore, we
->> only need
->> to pay attention to the special inodes that can be specified.
->> The following figure shows the check result:
->>
->> 1) usr_quota_inum/grp_quota_inum/prj_quota_inum
->> These inodes may be faulty. In the first patch, this situation is
->> intercepted.
->> At the beginning, FUZZ found that the quota inode was faulty. Later, we
->> found that
->> the operation function swap_inode_boot_loader() related to inode 5 was also
->> faulty.
->>
->> 2) journal_inum
->> In ext4_get_journal_inode(), the system checks whether the imode is S_IFREG.
->> Then,
->> the bmap in jbd2_journal_init_inode() checks whether the inode has
->> a_ops->bmap
->> operation. The bad inode does not set the bmap operation, so there is no
->> problem.
->>
->> 3) last_orphan
->> In ext4_orphan_get(), it checks if the imode is normal and if the inode is
->> bad inode,
->> so there is no problem.
->>
->> 4) snapshot_inum
->> No place to use snapshot_inum was found in the kernel, so there is no kernel
->> issue.
-> Thanks for detailed explanation! Now I agree you have actually covered all
-> the cases. But since EXT4_BOOT_LOADER_INO has this special behavior maybe
-> it would be more robust to create a special iget flag for it? Like
-> EXT4_IGET_BAD? And only with this flag we'd be returning bad inode from
-> ext4_iget(), otherwise we always return the error code?
->
-> 								Honza
-Adding a special iget tag sounds great！
-Thank you very much for your review！
-I will send a patch V2 with the changes suggested by you.
+On Tue, Oct 25, 2022 at 10:36:16AM +0000, David Laight wrote:
 
--- 
-With Best Regards,
-Baokun Li
-.
+[...]
+
+> > So I noticed a few changes missing #include-ing stdatomic.h and
+> > sig_atomic_t is actually in signal.h. I'm not sure we need the C11
+> > change then, but it seems like the right thing to do anyway. I'll do a
+> > v2 to drop the unneeded (currently) include of stdatomic.h.
+> 
+> While the C standard requires you use sig_atomic_t (to avoid
+> wider RMW being done for writes) the kernel very much requires
+> that volatiles accesses are atomic.
+> So the compilers used will do that even when the C standard
+> would allow them to do otherwise.
+> 
+> Pretty much the last mainstream cpu that couldn't do atomic
+> byte writes was an old alpha.
+
+One case that it might break atomicity for the data with int type,
+I.e. on Arm CPU when CPU access data without alignment, then it
+cannot promise atomicity.  I am not sure if the data with int type
+will be always compiled with 4-byte alignment, if it's packed
+without alignment then sig_atomic_t is still required.
+
+Clarify that I don't have deep understanding for compiler, so sorry
+if I introduce any noise.
+
+Thanks,
+Leo
+
+> So for anything that Linux is going to run on these changes
+> aren't really needed.
+
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
