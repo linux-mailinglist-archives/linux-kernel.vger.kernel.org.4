@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F2560C231
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 05:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC14E60C233
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 05:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbiJYDV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 23:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
+        id S231213AbiJYDVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 23:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbiJYDVY (ORCPT
+        with ESMTP id S230342AbiJYDVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 23:21:24 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0354D48E9E;
-        Mon, 24 Oct 2022 20:21:24 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id b29so6266881pfp.13;
-        Mon, 24 Oct 2022 20:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Saad1VjrLJJL1LCehZ/TBtzn4EaztroRijG8WoCeQ9A=;
-        b=ol0sHz7nMuqHFSby3FCnHCnQjENY3wKm6wi4zM2ZZVkElhNDD/iGsUbLH1rJSA2Ou+
-         8rvndA+vl5JI3nGCKH0cDOHoBgAKdO18ck6vYkT3Tnrs4A0qGz5qkFPhD+2PhHexpstS
-         Pe710Ua0r7ojFspKVtnI10c4xEdZ2T7iTm9exeYLZZhcVFYh/6m75RCuxhjGY+n9OE2q
-         FvUyEZt/8aFQz857++JfGd8KN5wFlA0wXjeuYcsy6e072aMksUJe9UF0eowo7kmy6KZE
-         a/FZ0wriyC+Kn3EPUCIMsC/+eydAR1uBK3riWh9HJuR4LMJTsUPWpk68WNZmlQY6Kyrd
-         vtEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Saad1VjrLJJL1LCehZ/TBtzn4EaztroRijG8WoCeQ9A=;
-        b=dO1WXuZfmebtdcImyKrWcps+f3HsuwwZruymwa5zDfXnwnPQggW0zJ5Uc/sTFgUP6G
-         E0nusMz0MnmNdb3LruF4viGtilsot70ph2rjTg7VmpLjqzdL1nc7RTEsTKvNFVphCrVO
-         JSHqhLt78DoxzpQOJ2nAjRUJnisNyCg09thnzaOrcMOAo/T06yyw2LkOuOTs/bH67qEy
-         ypu5xUhA2p9pQU0JhCcAnuN6HifvtirlN4uFi29IVQVsi2Cg4m2JyCbVEd84NyBdvwCb
-         cLlKU0P79snR6qaC8HMaMMhXyeVLS50Y1IYbvuUO7xrlthH/DgrYiKUFquTNEALh5vsP
-         tEyg==
-X-Gm-Message-State: ACrzQf09Q86S5t3b67HGz70uWk+PUeOeIOsEQVE8TI+5n0i4gEoyt/ru
-        F56IB/NIjQSTARlgOnvC09g=
-X-Google-Smtp-Source: AMsMyM5pAZNaiWZrUBklX7+jX1N4m1Eel9ABmXtXCdL8xiJSqdUOToEX59zveNnEjfbbYyznb4BHVQ==
-X-Received: by 2002:a05:6a00:849:b0:56b:a2d5:8019 with SMTP id q9-20020a056a00084900b0056ba2d58019mr12659788pfk.47.1666668083473;
-        Mon, 24 Oct 2022 20:21:23 -0700 (PDT)
-Received: from [10.10.4.41] (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id m8-20020a1709026bc800b00179c9219195sm410826plt.16.2022.10.24.20.21.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 20:21:22 -0700 (PDT)
-Message-ID: <75b4faa2-d1af-17ee-6a2c-a39b59adca6c@gmail.com>
-Date:   Tue, 25 Oct 2022 11:19:09 +0800
+        Mon, 24 Oct 2022 23:21:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77BC48A16
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 20:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2YhJiurh3yeqLAY7/HFpg3fq1seSTJqbsUcJnHEJrjo=; b=FAxLsAyIHFrQpx9r+joBCrVs5x
+        CNiXnOy8QwPnLgfHFTn7fUAU/HuLeneBCnASS0XmIpblKGn9GFaViAhQf98i95OtmscUry5Ugi168
+        hJku8DlWqsby24PS/6iYJSsU+E1lvtnVhilzbDXpmW6ZhbfUf2t9V35r1nvc5zxXzxwQyQucVfq5V
+        BXKo4JXccKH4MQ9jWphalnX7IVHdwH2QnVyZa4EslliANXYAQknYyvEpNu3Jiq1H56/zDSf6y1Kdl
+        f0Pd0VvvvClevk+knHycWRlUbdvSZBuQxCKil6J5qtEKRrWVRpCS291PXzgSBQT/aT2tC9LfFuy7C
+        OVMHO4JA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onAVX-00Fxrc-9n; Tue, 25 Oct 2022 03:21:39 +0000
+Date:   Tue, 25 Oct 2022 04:21:39 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Hubbard <jhubbard@nvidia.com>, x86@kernel.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, aarcange@redhat.com,
+        kirill.shutemov@linux.intel.com, jroedel@suse.de, ubizjak@gmail.com
+Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
+Message-ID: <Y1dWQ+YQyiz3V9Sp@casper.infradead.org>
+References: <20221022111403.531902164@infradead.org>
+ <20221022114424.515572025@infradead.org>
+ <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com>
+ <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net>
+ <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
+ <CAHk-=wjoGnHVVp5pcb69C6HtnJ_avqQo_b5NK-X9bgoDDw_XbA@mail.gmail.com>
+ <CAG48ez3KMuM2aLpc8SvGiqZvv1KFc7E2DBZ4CLzxQeFhrMN_-w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/1] ARM: dts: aspeed: bletchley: add aliases for mdio0
- and mdio3
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>
-References: <20221025024145.1561047-1-potin.lai.pt@gmail.com>
- <CACPK8XdpeKVaxFki3GRyo30bWYNF6Q5wL706j5deaqi8P=ssdA@mail.gmail.com>
-Content-Language: en-US
-From:   Potin Lai <potin.lai.pt@gmail.com>
-In-Reply-To: <CACPK8XdpeKVaxFki3GRyo30bWYNF6Q5wL706j5deaqi8P=ssdA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez3KMuM2aLpc8SvGiqZvv1KFc7E2DBZ4CLzxQeFhrMN_-w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 24, 2022 at 10:23:51PM +0200, Jann Horn wrote:
+> """
+> This guarantees that the page tables that are being walked
+> aren't freed concurrently, but at the end of the walk, we
+> have to grab a stable reference to the referenced page.
+> For this we use the grab-reference-and-revalidate trick
+> from above again:
+> First we (locklessly) load the page
+> table entry, then we grab a reference to the page that it
+> points to (which can fail if the refcount is zero, in that
+> case we bail), then we recheck that the page table entry
+> is still the same, and if it changed in between, we drop the
+> page reference and bail.
+> This can, again, grab a reference to a page after it has
+> already been freed and reallocated. The reason why this is
+> fine is that the metadata structure that holds this refcount,
+> `struct folio` (or `struct page`, depending on which kernel
+> version you're looking at; in current kernels it's `folio`
+> but `struct page` and `struct folio` are actually aliases for
+> the same memory, basically, though that is supposed to maybe
+> change at some point) is never freed; even when a page is
+> freed and reallocated, the corresponding `struct folio`
+> stays. This does have the fun consequence that whenever a
+> page/folio has a non-zero refcount, the refcount can
+> spuriously go up and then back down for a little bit.
+> (Also it's technically not as simple as I just described it,
+> because the `struct page` that the PTE points to might be
+> a "tail page" of a `struct folio`.
+> So actually we first read the PTE, the PTE gives us the
+> `page*`, then from that we go to the `folio*`, then we
+> try to grab a reference to the `folio`, then if that worked
+> we check that the `page` still points to the same `folio`,
+> and then we recheck that the PTE is still the same.)
+> """
 
-On 10/25/22 11:05, Joel Stanley wrote:
-> On Tue, 25 Oct 2022 at 02:43, Potin Lai <potin.lai.pt@gmail.com> wrote:
->> Add aliases for mdio0 and mdio3 so that we can use name to lookup the
->> address of Aspeed SOC.
->>
->> For example:
->> root@bletchley:~# cat /sys/firmware/devicetree/base/aliases/mdio0
->> /ahb/mdio@1e650000
->> root@bletchley:~# cat /sys/firmware/devicetree/base/aliases/mdio3
->> /ahb/mdio@1e650018
->>
->> Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
->> ---
->>  arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
->> index c02c15f15465..2825d5f3f78b 100644
->> --- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
->> +++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
->> @@ -15,6 +15,8 @@ / {
->>
->>         aliases {
->>                 serial4 = &uart5;
->> +               mdio0 = &mdio0;
->> +               mdio3 = &mdio3;
-> Should this go into the dtsi instead?
-Thanks for suggestion, I will move this to aspeed-g6.dtsi in next version.
->>         };
->>
->>         chosen {
->> --
->> 2.31.1
->>
+Nngh.  In trying to make this description fit all kernels (with
+both pages and folios), you've complicated it maximally.  Let's
+try a more simple explanation:
+
+First we (locklessly) load the page table entry, then we grab a
+reference to the folio that contains it (which can fail if the
+refcount is zero, in that case we bail), then we recheck that the
+page table entry is still the same, and if it changed in between,
+we drop the folio reference and bail.
+This can, again, grab a reference to a folio after it has
+already been freed and reallocated. The reason why this is
+fine is that the metadata structure that holds this refcount,
+`struct folio` is never freed; even when a folio is
+freed and reallocated, the corresponding `struct folio`
+stays. This does have the fun consequence that whenever a
+folio has a non-zero refcount, the refcount can
+spuriously go up and then back down for a little bit.
+(Also it's slightly more complex than I just described,
+because the PTE that we just loaded might be in the middle of
+being reallocated into a different folio.
+So actually we first read the PTE, translate the PTE into the
+`page*`, then from that we go to the `folio*`, then we
+try to grab a reference to the `folio`, then if that worked
+we check that the `page` is still in the same `folio`,
+and then we recheck that the PTE is still the same.  Older kernels
+did not make a clear distinction between pages and folios, so
+it was even more confusing.)
+
+
+Better?
