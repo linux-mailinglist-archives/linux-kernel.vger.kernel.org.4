@@ -2,259 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A9A60D7DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 495C560D7E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbiJYXZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 19:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
+        id S232403AbiJYX2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 19:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJYXZk (ORCPT
+        with ESMTP id S232182AbiJYX16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 19:25:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23767CB5C;
-        Tue, 25 Oct 2022 16:25:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3ECA361BE6;
-        Tue, 25 Oct 2022 23:25:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E2FC433C1;
-        Tue, 25 Oct 2022 23:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666740337;
-        bh=JI9+G0utVnDISU3eKZ+IFSXABRRbK+KjVSsQJwwU+Lo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=URH91g8mS5F8lgKSVJTZwdFSqTsaEirhrMyXpLE/1JjH0I7JiaE01p5jDLPLhbMCm
-         Q6ubwSSAHOqaVtMS8RlD0bJoC5Vie9m7Ptokieonj+zdltycmoVosY+Cff9VjWkM8a
-         ul6Xy2vFGmfunP2ytWGsHxmvGl4NDyAbqIUqD2anu5N0JJ8xA5F4a0BjBX26+SKMCs
-         W1jSxoqhsZxYAmKo/YDBVKEHp0VGnVnhtfqSl88X5UHoO2iAYbYpFPYhBjaRW03oNj
-         ehbK3nsoNDLb7Mepg0K5IAt6yqpUlYeEik7K60k9ABN2f+KiYgOWZRjkc+HzjX1sG+
-         kee7PK3CqBO1A==
-Date:   Tue, 25 Oct 2022 18:25:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>, dave.jiang@intel.com,
-        alison.schofield@intel.com, bwidawsk@kernel.org,
-        vishal.l.verma@intel.com, a.manzanares@samsung.com,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <20221025232535.GA579167@bhelgaas>
+        Tue, 25 Oct 2022 19:27:58 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2131.outbound.protection.outlook.com [40.107.94.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68305CF84D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:27:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZhlUspSkXIRRw3Ww1WeDimAW2qo3RujE8kDr+hrnSBeubvLLHFuUIIpfB3XU1CP5GmzsaMDaItziA5YGbiEAPWxAA9RV8w+Z03waVB6XdhUJQgApNpO/0wKFLfgxSE+vlzJAc5UOCIT/txN7Euvh9riojbaEqctwSEwm2sD0oGI1UN7kHCvTDLCh7HluI8zBmO8HpA6W1DXsvUtvpEfEwxH9WVcY4LjuUA/IYuWlOGXG1+R1ezrohRJbgxJd62l9eS5H2x2/DvyJqXXLes39bd4oRMFAQ8xbj/s3I7NWN7bvB7FV81eGI2niXjNRKyqGT32dfttnVIchpppORxwcZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qGXNv4TRIl9ky4UA/ofPnIrsVPEiD28INUmIJPChI1A=;
+ b=epJLMl8p0VNBGvTLVUWF8fkZeJW2lu+5vOPC8SaT+lTpFc7eL2nlwih6IpQrWobrKoWtPd5TqMIaC+0cIF+Ia1f7Uy4v82G2KqEabz+PJjz9IdwQ2g7Kd8ROP37RtoNhH/pokThYhUXGH9h3pqyUGq2Qr8oUnZ5DsAwMnyQIdFwNG13l3jyDPeSgPO7JMrX+9h1Z+g9xdJe65DWR2YyntTHmSLl0y2Km5noW5LHjdhmzgwpF5i5B2gE/lH9Kp5+TLcgrineyxoj2MEvxis/eH27pbTfNiYlVrghqvH9WGldZz9effRolQE0FJxwj0vLr/7TzqMw8t63jyev526W0fA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nathanm.com; dmarc=pass action=none header.from=nathanm.com;
+ dkim=pass header.d=nathanm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=nathanm.onmicrosoft.com; s=selector2-nathanm-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qGXNv4TRIl9ky4UA/ofPnIrsVPEiD28INUmIJPChI1A=;
+ b=ldEKR8CBzTlMbPymQdiDy9ZXYTxrOCLz95Ol9QNwlQRAb6oCPtI4Wev5jmpZIIncb6ZHmbw1ijgh2FSUfLF0Sg/2fNGTAP+nJZyUlB1akWsil1weZJH/D8RclUHBo+KjIFswEU5Per8o8YLBNqgmarGDAKgLEsp6tvXuHMWzyFk=
+Received: from BYAPR06MB5573.namprd06.prod.outlook.com (2603:10b6:a03:a8::18)
+ by CO1PR06MB8187.namprd06.prod.outlook.com (2603:10b6:303:ee::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Tue, 25 Oct
+ 2022 23:27:55 +0000
+Received: from BYAPR06MB5573.namprd06.prod.outlook.com
+ ([fe80::8680:24cb:c1f9:6497]) by BYAPR06MB5573.namprd06.prod.outlook.com
+ ([fe80::8680:24cb:c1f9:6497%5]) with mapi id 15.20.5746.021; Tue, 25 Oct 2022
+ 23:27:55 +0000
+From:   Nathan Moinvaziri <nathan@nathanm.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH] lib/string.c: Improve strcasecmp speed by not lowering if
+ chars match
+Thread-Topic: [PATCH] lib/string.c: Improve strcasecmp speed by not lowering
+ if chars match
+Thread-Index: AQHY6MloFgm8mLQmeEe/yASKS6uSYw==
+Date:   Tue, 25 Oct 2022 23:27:55 +0000
+Message-ID: <4eb86647-488e-4976-1580-d03d49a65f2c@nathanm.com>
+References: <BYAPR06MB557347406F22FBA1E400A5BFD8319@BYAPR06MB5573.namprd06.prod.outlook.com>
+ <CAHp75Vd4Vk0v-T3kfxApGHb-H26KTHgH59DGP3Wm4qBgunDt6A@mail.gmail.com>
+ <Y1embP5sEp/NPxK0@smile.fi.intel.com>
+ <BYAPR06MB557390C5F741300BDE2BAA8BD8319@BYAPR06MB5573.namprd06.prod.outlook.com>
+ <bad224c0-98a3-37db-99c3-b44687cc396e@wanadoo.fr>
+In-Reply-To: <bad224c0-98a3-37db-99c3-b44687cc396e@wanadoo.fr>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nathanm.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR06MB5573:EE_|CO1PR06MB8187:EE_
+x-ms-office365-filtering-correlation-id: e94aad8f-9429-48e8-a3d2-08dab6e08b66
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZlhS8cug+bb0qBu2xeRs0muGrJ433uZuTcy84f1vc0A7bNQpKT3eRfxk1W4b2HGUDmgP54n1oDvRreDr7tGgKqkofCE1QWfeK2WXLEM3inob8qoh5ij7tdS26EAF6G3N71P4i/dlIeVu+/8OHV4ZFcmqtAl6kRUWwB+x0s3RPiZi27kV44ujkeup4HRWqqjFyIZXSdibnXfS9B+XqoXT92VaGl70KnAwaJE/U4Y26Xg4bVJCpjmx+dmB9Pco5nHzTKOnq+/LlzRPK/E0oLL9jmD3nghLWlLSlpVogX+iQUYQY7d7A6fGE3rjblZc03QlQBFIpMNlewrwiHFZvZrOm864qUB9SSBEme185HQ8Tthpmfn9G1BfSn1oyjq8FCE9M+vS1U8xfDLoxTsEPewYApLuKJ2P18P8sxn15L7Bs00Rg8euFFpG5RIGkCNc+VGDXeFEabm8ECrsC6dM10kdYelfH463gckDIA7iQkUE8uasnfZqd6ykkEj2JhViKri/jq2R0J99KmFggR3L+xozPgCBFNMgWamorjkToofvpJ1UFIs+VrJeh4m0Zv/VLWnT4tGsvK0rrrADdKchQFBeccihDuytPPP/2bmDKuwx4V5niRBI88fPpxGzeUe4tODtaKEX8qct5NgxD+xqybVqSb9cPv6YEpwziXzAlnfitN3Dx+r08TI+QGwmwdxgCvipOcSsgBuc9xP9Xo8dplBmHiqyne9vEEsTPHJ73aJY9ThurhK8GGnbcM6BRVDSsbeuNp9EwVV2Ebu+TWXWYFWrD/rq/wyN5E6WSUWCd6bLjo5Aw9NdfoKjM10d+LHN9q4jcu9I0rusnVUXFX7iNwrVog==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR06MB5573.namprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(39830400003)(136003)(396003)(346002)(451199015)(31686004)(36756003)(4744005)(83380400001)(38100700002)(122000001)(66446008)(186003)(8936002)(4326008)(76116006)(2906002)(66556008)(31696002)(66476007)(64756008)(8676002)(66946007)(54906003)(5660300002)(6916009)(316002)(86362001)(2616005)(53546011)(71200400001)(38070700005)(6512007)(6506007)(26005)(41300700001)(478600001)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Zi9tbVYzaFNzVnV5L2F2R01mcW91WjdzR3Z5N2FCT0l2V3E5SXY3bnBnZlhO?=
+ =?utf-8?B?TkZDRThMOHNRMk5vN0RGYVNwb3YrNFJJU0F0UVd0L0ZoTHUwd0k0RnoxMXVy?=
+ =?utf-8?B?TTB2dFR0ZGlWd0ZUcmV3RW9wQ1J0Qk1WOHVXaDVIc2lrTHJINFV5SUlNLytn?=
+ =?utf-8?B?YWJDRlFRQjd3R3hmQUl1dVRTSWhMZ1d1bWU3eUZlNzlKUG9NQXIxZmdUWDd2?=
+ =?utf-8?B?cWFuaSs2NVFjc3IxRVMxbnUyUDlKV3pUVUdJMVZRZ2ZXTUZjTDQxa0VVTUNu?=
+ =?utf-8?B?S3haRDNER0FYOWhhR04rUUs5am9VVU5QK2F4RFdBV1ZBaFZIaVJNK1BKZEgz?=
+ =?utf-8?B?QVk3cW5RRHVhU1RoQ1ZWN2p3S3ZUdTAzY3JhUnNrVUJrZ0JnNWtQcVBWRVM2?=
+ =?utf-8?B?blBxajBUbWhtM3JkNjFSZkFlei9VTHd3dVZ2Nk5pSWthQUVlMXNHVWlaZ21T?=
+ =?utf-8?B?aklEMFp0ZW1rUkVXdlJkU1FGTzgybXJwaTlCdlpuTnFOOURjcEpKZHdsS1dH?=
+ =?utf-8?B?MnY3LzlDRytoTEpQaFZQUDRCSnB1U0xzSkxyQUVuQjA2dXJDMHE4c1VXblhi?=
+ =?utf-8?B?L2V2TmpSbzlMMzdaaW1HaWs5bkJaZ1FrdnhjOHMxaGtBTWNiTGNzUnNFOEFM?=
+ =?utf-8?B?Q0wvMFlLSi9lODRoeGVoa3hkMjZPbXJBNkYvME9ibTdWZkxtVkNGQ3hGN0lG?=
+ =?utf-8?B?cGdtRklEUGxwNkwrU01uWisvUmlOeWwxOHRYNXFTVkkxMTdMK0twT2lHYkNj?=
+ =?utf-8?B?QjVQQXMyczNhZ3U3MkFIaXZTSXRUNG9NN2VwOWJGTU9FRkl4Yk1oMUt3Ukxh?=
+ =?utf-8?B?ZzVyUXhsUEFNRXB4RVpCZXJzblpOTnNaUGt4bXIvZFFTUzBOekVrOFplSXB0?=
+ =?utf-8?B?ZFVGZlhzUGdBa080Q0UyeEUzS1Znem00WUlEMDRlU0pOYzJhZ3poSThwWUFF?=
+ =?utf-8?B?S1lsK0FkWnJGYVhHVFpONlk5OW1HYTdSR0lzTTY4TURZNk5Nb2UwZ1VBM1Ar?=
+ =?utf-8?B?NHRmelVQMUlqRGdCM2NDdGdWaXEzVDcrcUdVMlJVaXZab2dwdnp4WUhVUUtv?=
+ =?utf-8?B?MEo2MGdkVjB4ZU1yLzFGLzB0dEhWRWU3d20zT2E5NFhCVzZLNU1sTTNlVUdK?=
+ =?utf-8?B?RFNBZk5wdVFLdlhneGZuRWhUMjBLbkQ0ZVd3K0wzOUtUakRRcDFUWU1pMzdn?=
+ =?utf-8?B?eWlvSU1BMVAwMitlbThTYWEwd1RkT3RGS09HZFFaMlF4WVNrNW5NQXpYTDE0?=
+ =?utf-8?B?TXc2UldHY1hoV3A1T0hBTFJ4QWlVR1hmWnIrS0hreTlVUGo1bGxrODBhbXNP?=
+ =?utf-8?B?eFJHTDNFMjBtRjZzRjZacnFMK2I1czVMSndVUldLcnYyT0dtbjJLQmtZVHV1?=
+ =?utf-8?B?bVR4NHJQaHNKOGd5bURaS0M3c0pIY09Zd3kvbm9oZ3RYYlNoQXE5WlVmcHFs?=
+ =?utf-8?B?dXUyWXZveitSTjJjWUNwNVZZeDhqL3dWZ2VNMDF0SE5nNVY3Ull0aTYwdmdZ?=
+ =?utf-8?B?djU1UEdxTWtHTDJzM25qWjBuTzhpQWNHZ1h3cEVwZENNNEluKzVZU21NZVZI?=
+ =?utf-8?B?NVhCb1FSV1FKS1BlRTlTMGg3Z3BtMTJ4QlByVlgyYit1aXNnUUh2d1JpYTV4?=
+ =?utf-8?B?ditQbkRvVHZBNFlaQ3JReXpZRjlvTkRWNUFpRk00S1o1K3V5V0VLV1N6L2pP?=
+ =?utf-8?B?YkxWUE5Ic24yUGZPeGJRaHAxS2IrU1RJV3Z3TTd1SmpDWmk1TXRGaDZFaWxY?=
+ =?utf-8?B?MmlyNSs4c2diL0h4d1p2VWh0WWJWOXc1VktmNzVxM0JzRnVUUG1Tb3lsbTdw?=
+ =?utf-8?B?aVlHYkNiYlFlengxbDBDaklubUcremsxWDNKRzA0ZDZwaVdwUFlteGVwSE5o?=
+ =?utf-8?B?V2RkZUlrVW9qNWU3M0hSZk5ic2huK0tpSVU5RFNQTVFhQWlxQUFzZ2htS2Fv?=
+ =?utf-8?B?c0ZpMkNuOVZLdFpTK0xYNHFUdXpGbDhWb2cxSG9ZYnozcjRSdzVYY1ZwR0Vz?=
+ =?utf-8?B?alk2NDRtOUtaU3VFTTI3cnBnUVBTOFNyV3dIbkJlcXU5NkEzVXB0NnhrQkVU?=
+ =?utf-8?B?eXgzbWNZREsvZVpEZjdpVDVSWEd4d3B6TWVFNlZHWHk0SUhHcWpITFl6Sitm?=
+ =?utf-8?Q?c/n0=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <5FB98E7578565B4998211047A7B77627@namprd06.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024133633.00000467@huawei.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: nathanm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR06MB5573.namprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e94aad8f-9429-48e8-a3d2-08dab6e08b66
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 23:27:55.3410
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3e74266a-92ff-414a-9879-2149aecc5932
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HdhTMEhkfYfbqy4g78PebJixg4ndNN9sJFpsxEmEQ8kdLus4oqR+rR7tcliAXA3CENaAiDA9WjcUUAJOOJznCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR06MB8187
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Christoph, beginning of thread https://lore.kernel.org/r/20221018030010.20913-2-dave@stgolabs.net]
-
-On Mon, Oct 24, 2022 at 01:36:33PM +0100, Jonathan Cameron wrote:
-> On Sun, 23 Oct 2022 19:08:57 -0700
-> Dan Williams <dan.j.williams@intel.com> wrote:
-> > Ira Weiny wrote:
-> > > On Sat, Oct 22, 2022 at 03:05:45PM -0700, Dan Williams wrote:  
-> > > > Davidlohr Bueso wrote:  
-> > > > > Introduce a generic irq table for CXL components/features that can have
-> > > > > standard irq support - DOE requires dynamic vector sizing and is not
-> > > > > considered here. For now the table is empty.
-> > > > > 
-> > > > > Create an infrastructure to query the max vectors required for the CXL
-> > > > > device. Upon successful allocation, users can plug in their respective isr
-> > > > > at any point thereafter, which is supported by a new cxlds->has_irq flag,
-> > > > > for example, if the irq setup is not done in the PCI driver, such as
-> > > > > the case of the CXL-PMU.
-> > > > > 
-> > > > > Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> > > > > Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
-> > > > > ---
-> > > > >  drivers/cxl/cxlmem.h |  3 ++
-> > > > >  drivers/cxl/pci.c    | 72 ++++++++++++++++++++++++++++++++++++++++++++
-> > > > >  2 files changed, 75 insertions(+)
-> > > > > 
-> > > > > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> > > > > index 88e3a8e54b6a..72b69b003302 100644
-> > > > > --- a/drivers/cxl/cxlmem.h
-> > > > > +++ b/drivers/cxl/cxlmem.h
-> > > > > @@ -211,6 +211,7 @@ struct cxl_endpoint_dvsec_info {
-> > > > >   * @info: Cached DVSEC information about the device.
-> > > > >   * @serial: PCIe Device Serial Number
-> > > > >   * @doe_mbs: PCI DOE mailbox array
-> > > > > + * @has_irq: PCIe MSI-X/MSI support
-> > > > >   * @mbox_send: @dev specific transport for transmitting mailbox commands
-> > > > >   *
-> > > > >   * See section 8.2.9.5.2 Capacity Configuration and Label Storage for
-> > > > > @@ -247,6 +248,8 @@ struct cxl_dev_state {
-> > > > >  
-> > > > >  	struct xarray doe_mbs;
-> > > > >  
-> > > > > +	bool has_irq;
-> > > > > +
-> > > > >  	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
-> > > > >  };
-> > > > >  
-> > > > > diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> > > > > index faeb5d9d7a7a..9c3e95ebaa26 100644
-> > > > > --- a/drivers/cxl/pci.c
-> > > > > +++ b/drivers/cxl/pci.c
-> > > > > @@ -428,6 +428,73 @@ static void devm_cxl_pci_create_doe(struct cxl_dev_state *cxlds)
-> > > > >  	}
-> > > > >  }
-> > > > >  
-> > > > > +/**
-> > > > > + * struct cxl_irq_cap - CXL feature that is capable of receiving MSI-X/MSI irqs.
-> > > > > + *
-> > > > > + * @name: Name of the device/component generating this interrupt.
-> > > > > + * @get_max_msgnum: Get the feature's largest interrupt message number.  If the
-> > > > > + *		    feature does not have the Interrupt Supported bit set, then
-> > > > > + *		    return -1.
-> > > > > + */
-> > > > > +struct cxl_irq_cap {
-> > > > > +	const char *name;
-> > > > > +	int (*get_max_msgnum)(struct cxl_dev_state *cxlds);  
-> > > > 
-> > > > Why is this a callback, why not just have the features populate their
-> > > > irq numbers?  
-> > > 
-> > > I think we have decided to forgo the callback but I'm not sure what you mean by
-> > > 'populate their irq numbers'?
-> > >   
-> > > >   
-> > > > > +};
-> > > > > +
-> > > > > +static const struct cxl_irq_cap cxl_irq_cap_table[] = {
-> > > > > +	NULL
-> > > > > +};
-> > > > > +
-> > > > > +static void cxl_pci_free_irq_vectors(void *data)
-> > > > > +{
-> > > > > +	pci_free_irq_vectors(data);
-> > > > > +}
-> > > > > +
-> > > > > +/*
-> > > > > + * Attempt to allocate the largest amount of necessary vectors.
-> > > > > + *
-> > > > > + * Returns 0 upon a successful allocation of *all* vectors, or a
-> > > > > + * negative value otherwise.
-> > > > > + */
-> > > > > +static int cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
-> > > > > +{
-> > > > > +	struct device *dev = cxlds->dev;
-> > > > > +	struct pci_dev *pdev = to_pci_dev(dev);
-> > > > > +	int rc, i, vectors = -1;
-> > > > > +
-> > > > > +	for (i = 0; i < ARRAY_SIZE(cxl_irq_cap_table); i++) {
-> > > > > +		int irq;
-> > > > > +
-> > > > > +		if (!cxl_irq_cap_table[i].get_max_msgnum)
-> > > > > +			continue;
-> > > > > +
-> > > > > +		irq = cxl_irq_cap_table[i].get_max_msgnum(cxlds);
-> > > > > +		vectors = max_t(int, irq, vectors);
-> > > > > +	}  
-> > > > 
-> > > > Forgive me if I have missed something, I only look at interrupt enable
-> > > > code once every few years, and the APIs are always a bit different, but
-> > > > is this not too early to read the message number? The number is not
-> > > > stable until either MSI or MSI-X has been selected below at
-> > > > pci_alloc_irq_vectors() time?  
-> > >  
-> > > Well I keep getting wrapped around the axle on this one too.
-> > > 
-> > > This all started back when Jonathan originally attempted to
-> > > allocate the maximum number of vectors a device _could_
-> > > allocate.  But it was recommended that we determine the max
-> > > number first then allocate that number.
-> > > 
-> > > This seems like a chicken and egg issue.  How is the number not
-> > > stable before calling pci_alloc_irq_vectors() when you need the
-> > > max msg number in that call?  
-> > 
-> > Are we talking about the same thing? I am talking about the value in the
-> > "Interrupt Message Number" field. That depends on whether MSI or MSI-X
-> > gets enabled. The number of vectors the device can support is static.
-> > 
-> > Since CXL is such an a la carte spec I think this is situation to just
-> > specify a large number of amx vectors to pci_alloc_irq_vectors() and
-> > then find out after the fact if all of the interrupt generators that
-> > today's cxl_pci knows about in the device each got their own vector.
-> 
-> I'd misunderstood how this worked and not read the spec :( I wrongly
-> thought portdrv did the query first and allocated the vectors after,
-> but that's not the case.  It first allocates max entries, then frees
-> them all and then allocates the ones that we find present.  We
-> should probably look to do something similar to that though I'm not
-> sure even that code is always optimal.
-> 
-> https://elixir.bootlin.com/linux/v6.1-rc2/source/drivers/pci/pcie/portdrv_core.c#L101
-> 
-> In short that calls:
-> /* Allocate the maximum possible number of MSI/MSI-X vectors */
-> nr_entries = pci_alloc_irq_vectors(dev, 1, PCIE_PORT_MAX_MSI_ENTRIES,
-> 			PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> 
-> /* See how many and which Interrupt Message Numbers we actually use */
-> nvec = pcie_message_numbers(dev, mask, &pme, &aer, &dpc);
-> 
-> if (nvec != nr_entries) {
-> 	pci_free_irq_vectors(dev);
-> 
-> 	nr_entries = pci_alloc_irq_vectors(dev, nvec, nvec,
-> 			PCI_IRQ_MSIX | PCI_IRQ_MSI);
-> }
-> 
-> My worry here is that the implicit assumption is that the vectors
-> won't move if we reduce the overall number of vectors we are asking
-> for...
-> 
-> However, imagine the case that we have a feature the driver doesn't
-> know about that was previously at a higher vector.  After reducing
-> the vectors allocated the hardware might decide that feature needs
-> its own vector whereas some others can be combined.  Hence we'd end
-> up with a less than ideal packing for the features we actually
-> support.
-> 
-> Could do something iterative to solve this if it actually matters
-> (increase number of vectors until the layout matches what we get
-> with max possible vectors).
-
-Is this cxl code allocating vectors for devices that might also be
-claimed by portdrv?  I assume not because that sounds like a problem.
-
-Ugh.  I always feel like the portdrv design must be sub-optimal
-because this seems so hard to do cleanly.
-
-pci_alloc_irq_vectors() has a lot of magic inside it and is great for
-most drivers, but the PCIe service IRQs are definitely unusual and
-maybe it's not the best fit for this situation.
-
-If I understand correctly, Interrupt Message Numbers for all these
-PCIe services (hotplug, AER, DPC, etc) are restricted to 0-31 for both
-MSI and MSI-X, and the reason we don't just allocate 32 vectors all
-the time is to avoid consuming too many IRQs.
-
-The MSI case is ugly because the Interrupt Message Number can change
-when we set Multiple Message Enable.  Maybe we can separate it out and
-have a less than optimal solution for this case, like allocating one
-or two vectors and polling if that's not enough.  I expect most
-devices will support MSI-X.
-
-For MSI-X, the vector table is in a BAR, so IIUC there's no resource
-pressure until we actually assign an IRQ to a vector.  Would it be
-feasible to always allocate vectors 0-31 of the MSI-X Table, and then
-selectively allocate IRQs for the services we need, so we might
-consume 32 MSI-X vectors but only a handful of IRQs?
-
-Bjorn
+T24gMTAvMjUvMjAyMiAxMjozMiBQTSwgQ2hyaXN0b3BoZSBKQUlMTEVUIHdyb3RlOg0KPiBIaSwN
+Cj4gdGhlIGFsZ29yaXRobSBvbiBnaXRodWIgaXMgbm90IHRoZSBzYW1lIGFzIHRoZSBvbmUgcG9z
+dGVkIGhlcmUuDQo+DQo+IElJVUMsIHRoZSBvbmUgb24gZ2l0aHViIGlzIHdyb25nLiBJZiB5b3Ug
+Y29tcGFyZSAyIHN0cmluZ3MgdGhhdCBhcmUgDQo+IHRoZSBzYW1lLCB0aGV5IHdpbGwgaGF2ZSB0
+aGUgc2FtZSBsZW5ndGgsIGFuZCAiaWYgKGMxID09IGMyKSANCj4gY29udGludWU7IiB3aWxsIGdv
+IG9uZSBwYXN0IHRoZSBlbmQgb2YgdGhlIHN0cmluZ3MuIEFuZCB0aGUgcmVzdWx0IA0KPiB3aWxs
+IGJlIDwwIG9yIDAgb3IgPjAgZGVwZW5kaW5nIHRoZSB0aGUgY2hhciAqYWZ0ZXIqIHRoZSB0cmFp
+bGluZyBcMC4NCj4NCj4gT24gdGhlIG90aGVyIHNpZGUsIHRoZSByZXN1bHRzIG9mIHRoZSBiZW5j
+aG1hcmsgb24gZ2l0aHViIGFyZSBsaWtlbHkgDQo+IG5vdCBhY2N1cmF0ZSB3aXRoIHRoZSBhbGdv
+cml0aG0gcG9zdGVkIGhlcmUsIGJlY2F1c2UgdGhlcmUgaXMgb25lIG1vcmUgDQo+IHRlc3QgaW4g
+ZWFjaCBsb29wICgid2hpbGUgKGMxICE9IDApIikgYXMgbG9uZyBhcyB0aGUgMiBzdHJpbmdzIGFy
+ZSB0aGUgDQo+IHNhbWUuDQo+IE9uIGdpdGh1YiB0aGlzIHRlc3QgaXMgc2tpcHBlZCBiZWNhdXNl
+IHlvdSB3aWxsIGdvIHRocm91Z2ggdGhlICJjb250aW51ZSINCj4NCj4gQ0ogDQoNCkhpIENKLA0K
+DQpUaGFua3MgZm9yIGNhdGNoaW5nIHRoYXQsIEkgaGFkIGNoYW5nZWQgaXQgYXQgdGhlIGxhc3Qg
+c2Vjb25kLiBJIGhhdmUgDQp1cGRhdGVkIHRoZSBjb2RlIGFuZCB0aGUgYmVuY2htYXJrcyB0byB3
+aGF0IEkgaW5pdGlhbGx5IHByb3Bvc2VkIGluIHRoZSANCnBhdGNoLiBSZXN1bHRzIGFyZSBhYm91
+dCArLy0xJSBmcm9tIHByZXZpb3VzbHkuDQoNCk5hdGhhbg0KDQo=
