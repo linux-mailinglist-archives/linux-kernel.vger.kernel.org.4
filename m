@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAADE60D7A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:07:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8257260D7A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbiJYXHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 19:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
+        id S232654AbiJYXHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 19:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232187AbiJYXHQ (ORCPT
+        with ESMTP id S232187AbiJYXHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 19:07:16 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765D3E985F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:07:15 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y13so8928360pfp.7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:07:15 -0700 (PDT)
+        Tue, 25 Oct 2022 19:07:45 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C626EE984C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:07:44 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id o8so10018999qvw.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:07:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=A7kKcrW8+Rtrlgds+v4H23IM/wohgMjvlalkGtkGE48=;
-        b=i9+bLN5FonRCnXyaeAZ/jEHxOllBLcuLRG6g7djDO2ymq1eoILB4dhajH6DdkL9Ypw
-         dWBExwNgYe7L3rF6XlQLTuNRvlRhUlKYjHp/L1iVjmBzSGExzuACU05FIwWhOkZaZxhW
-         SlFEj6y2aedc8tdZPGfzSyQiWabdMrxN8vyn13231CbpBxAP9sT5+IQhyoFu0+oYUWQp
-         PhX+L5oqnTXUtVtqktZxw/YivgWoFURGH7AMjlXoM6O1hKn1gn0MTGBodUdfBHCYYrk0
-         knLwhuacFx5zJW48cTVCrNO9wqrHItHkkxk/aDLvtlYfLl6DtxNw1JoLy41IaidlmKLW
-         zOMQ==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I1ZCWeMRw9t6L46uJ0bGfjVwbep7LBM2Gsx21FAuoFQ=;
+        b=TJMX12Es9a2VtcXhg0BL5lI6ZietlM2O6e+Bd5nYvFWg414Q/iqaNORhdD4kuSzW1t
+         Ggx3c9XyPFt4N4nWTTvtqddGD8Sb2O8FoKejpTj+G1SbfHCaIiroJhbPGYxK7pHVxAUO
+         BPV+MBeqkawQpT8YqTX/qJpLPaKckLvSnu+N4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A7kKcrW8+Rtrlgds+v4H23IM/wohgMjvlalkGtkGE48=;
-        b=LyDa1pqOdxmfAaZ798CfUc0YszKarvjGhMMxhLxq3woAOTKcs1ZMLKOTb4cPalt1qo
-         Otv9QKotnicEb7UILX7TSx/tWGxU8V6OcsVG137CyyetX9nUqHiYkiLyMR16G/iCl1Dj
-         uoFr6ddoOwpCHvOGZKeJG0z36gglHK0o9mp98eecd47wPTsmkS1LV5JXszQWG4gLO7sO
-         YrGLSJkcRDAek+Hcy6pATiwh2HPk+yyHBn9PJy6iOKlpE+ih6yXJm3hS01LmWfLZ94W/
-         /JmqNINrlMMYipzDbMRPx/K0kTdN5fFs1dvmdqBujWJZXdHok8zCHRCFwZdVjNm5ib8H
-         d5Eg==
-X-Gm-Message-State: ACrzQf3p+D7eMg+6XyDHEZmKh/eBg44jNZOoGYIs8f23H8rjqzwvgfwI
-        ef/QLJ0h345FniC6W9YkCvR3Eg==
-X-Google-Smtp-Source: AMsMyM6XTCEyWvCDFpHQ+LBlReUY4pzPnEC3X0btKX861SIHcsajyGNCB7SZ3Rkpde+LhaSv6L5iPg==
-X-Received: by 2002:a63:85c6:0:b0:46e:ffdb:2e77 with SMTP id u189-20020a6385c6000000b0046effdb2e77mr11866913pgd.439.1666739234843;
-        Tue, 25 Oct 2022 16:07:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x1-20020aa79a41000000b0056c32be99dcsm1164090pfj.117.2022.10.25.16.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 16:07:14 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 23:07:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] KVM: API to block and resume all running vcpus in a
- vm
-Message-ID: <Y1hsHjPuZfrREulV@google.com>
-References: <20221022154819.1823133-1-eesposit@redhat.com>
- <a2e16531-5522-a334-40a1-2b0e17663800@linux.ibm.com>
- <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
- <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
- <Y1cVfECAAfmp5XqA@google.com>
- <5a26c107-9ab5-60ee-0e9c-a9955dfe313d@redhat.com>
- <Y1gG/W/q/VIydpMu@google.com>
- <02c910bb-3ea0-fa84-7a1c-92fb9e8b03de@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I1ZCWeMRw9t6L46uJ0bGfjVwbep7LBM2Gsx21FAuoFQ=;
+        b=kvI5ifYHcJhSr9YfRzGu4DViJPCbKMqupuJDzdbdnR5w9fO5b84TfW4+HcbhhuiVKD
+         sq+Wc6mNurHNml2ktTwftukNorZGKKXwdMJqyN2A3IWQbKOh10EVzwdnBNeIMt7GwpE0
+         zCn+yiWQQrMn21LYUSI28inT7zHpC4GvkNvfF/4L/wDgZ916YY3C9YvBHyd2WfeUBxHT
+         Hf5kSdoaG8t2VcAQUWzMLx4Xjs9HcVMZwMgqqbU8gC58ksy7zh2/mPeheBerK4WKVEqy
+         hE5dHJ64/AlVqc144LYCZqhleG2rz5lNpKP/F5BynUESb/HipZ74jLPfJLCpIBQannZ8
+         4h0g==
+X-Gm-Message-State: ACrzQf3kMj+Rc7S+3WMNO2zspyMNpKTDdCKDX4qfzduNBy8fX2deEtFG
+        wG001irQvwsgtpDu68+tfQmVBUgHk0YzkA==
+X-Google-Smtp-Source: AMsMyM7ManmYHnuDYinISEo0Y4SH9Zbi9eU9JdNwAYdLF0tkcG9nUJH4Oe99oLfJWCdtTLYh4UV1Wg==
+X-Received: by 2002:a05:6214:c6f:b0:4b2:b0e2:2122 with SMTP id t15-20020a0562140c6f00b004b2b0e22122mr34484478qvj.55.1666739263668;
+        Tue, 25 Oct 2022 16:07:43 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id k11-20020ac85fcb000000b0039953dcc480sm2311735qta.88.2022.10.25.16.07.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 16:07:42 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 185so6172453ybc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:07:42 -0700 (PDT)
+X-Received: by 2002:a05:6902:702:b0:6ca:a588:2904 with SMTP id
+ k2-20020a056902070200b006caa5882904mr16964027ybt.571.1666739261697; Tue, 25
+ Oct 2022 16:07:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02c910bb-3ea0-fa84-7a1c-92fb9e8b03de@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+References: <20221025200656.951281799@infradead.org>
+In-Reply-To: <20221025200656.951281799@infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 25 Oct 2022 16:07:25 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjBn=jThQ4drqgorDQFR3i2QUi9PeOG1tH2uWVkN8+6mQ@mail.gmail.com>
+Message-ID: <CAHk-=wjBn=jThQ4drqgorDQFR3i2QUi9PeOG1tH2uWVkN8+6mQ@mail.gmail.com>
+Subject: Re: [PATCH 0/5] x86/ftrace: Cure boot time W+X mapping
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rostedt@goodmis.org, dave.hansen@intel.com,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        keescook@chromium.org, seanjc@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,70 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022, Paolo Bonzini wrote:
-> On 10/25/22 17:55, Sean Christopherson wrote:
-> > On Tue, Oct 25, 2022, Paolo Bonzini wrote:
-> >    - to prevent _all_ ioctls() because it's not just KVM_RUN that consumes memslots
-> 
-> This is perhaps an occasion to solve another disagreement: I still think
-> that accessing memory outside KVM_RUN (for example KVM_SET_NESTED_STATE
-> loading the APICv pages from VMCS12) is a bug, on the other hand we
-> disagreed on that and you wanted to kill KVM_REQ_GET_NESTED_STATE_PAGES.
+On Tue, Oct 25, 2022 at 1:11 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> These few patches re-work and re-order boot things enough to avoid ftrace
+> creating boot time W+X maps.
 
-I don't think it's realistic to make accesses outside of KVM_RUN go away, e.g.
-see the ARM ITS discussion in the dirty ring thread.  kvm_xen_set_evtchn() also
-explicitly depends on writing guest memory without going through KVM_RUN (and
-apparently can be invoked from a kernel thread?!?).
+Thanks, looks fine.
 
-In theory, I do actually like the idea of restricting memory access to KVM_RUN,
-but in reality I just think that forcing everything into KVM_RUN creates far more
-problems than it solves.  E.g. my complaint with KVM_REQ_GET_NESTED_STATE_PAGES
-is that instead of syncrhonously telling userspace it has a problem, KVM chugs
-along as if everything is fine and only fails at later point in time.  I doubt
-userspace would actually do anything differently, i.e. the VM is likely hosed no
-matter what, but deferring work adds complexity in KVM and makes it more difficult
-to debug problems when they occur.
+> The patches compile and boot for the one config I tested things on (with
+> ftrace=function enabled; *slooooow*).
 
-> >    - to stop anything else in the system that consumes KVM memslots, e.g. KVM GT
-> 
-> Is this true if you only look at the KVM_GET_DIRTY_LOG case and consider it
-> a guest bug to access the memory (i.e. ignore the strange read-only changes
-> which only happen at boot, and which I agree are QEMU-specific)?
+So this might be just tracing overhead, but it might also be that you
+slowed down text_poke() at bootup a _lot_.
 
-Yes?  I don't know exactly what "the KVM_GET_DIRTY_LOG case" is. 
- 
-> >    - to signal vCPU tasks so that the system doesn't livelock if a vCPU is stuck
-> >      outside of KVM, e.g. in get_user_pages_unlocked() (Peter Xu's series)
-> 
-> This is the more important one but why would it livelock?
+The only part that the NX^W checking cared about was that
 
-Livelock may not be the right word.  Peter's series is addressing a scenario where
-a vCPU gets stuck faulting in a page because the page never arrives over the
-network.  The solution is to recognize non-fatal signals while trying to fault in
-the page.
+-       if (likely(system_state != SYSTEM_BOOTING))
+-               set_memory_ro((unsigned long)trampoline, npages);
++       set_memory_ro((unsigned long)trampoline, npages);
+        set_memory_x((unsigned long)trampoline, npages);
 
-KVM_KICK_ALL_RUNNING_VCPUS doesn't handle that case because it's obviously not
-realistic to check for pending KVM requests while buried deep in mm/ code.  I.e.
-userspace also needs to send SIGUSR1 or whatever to ensure all vCPUs get kicked
-out of non-KVM code.
+for the create_trampoline(), because without the 'set_memory_ro()',
+the 'set_memory_x()' will complain.
 
-That's not the end of the world, and they probably end up being orthogonal things
-in userspace code, but it yields a weird API because KVM_KICK_ALL_RUNNING_VCPUS
-ends up with the caveat of "oh, by the way, userspace also needs to signal all
-vCPU tasks too, otherwise KVM_KICK_ALL_RUNNING_VCPUS might hang".
+It does strike me that it's stupid to make those be two calls that do
+exactly the same thing, and we should have a combined "set it
+read-only and executable" function, but that's a separate issue.
 
-> > And because of the nature of KVM, to support this API on all architectures, KVM
-> > needs to make change on all architectures, whereas userspace should be able to
-> > implement a generic solution.
-> 
-> Yes, I agree that this is essentially just a more efficient kill().
-> Emanuele, perhaps you can put together a patch to x86/vmexit.c in
-> kvm-unit-tests, where CPU0 keeps changing memslots and the other CPUs are in
-> a for(;;) busy wait, to measure the various ways to do it?
+The slowness is probably not the trampilines, but just the regular
+"text_poke of kernel text" that we probably want to keep special just
+because otherwise it's _so_ slow to do for every alternative etc.
 
-I'm a bit confused.  Is the goal of this to simplify QEMU, dedup VMM code, provide
-a more performant solution, something else entirely?  I.e. why measure the
-performance of x86/vmexit.c?  I have a hard time believing the overhead of pausing
-vCPUs is going to be the long pole when it comes to memslot changes.  I assume
-rebuilding KVM's page tables because of the "zap all" behavior seems like would
-completely dwarf any overhead from pausing vCPUs.
+                Linus
