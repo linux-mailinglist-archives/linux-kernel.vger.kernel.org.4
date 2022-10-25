@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2388260CE19
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AAF960CE2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiJYN7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S232369AbiJYN7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiJYN7Y (ORCPT
+        with ESMTP id S231492AbiJYN7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:59:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC1917EF36;
+        Tue, 25 Oct 2022 09:59:25 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17AD18A03B;
         Tue, 25 Oct 2022 06:59:23 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666706361;
+        s=2020; t=1666706362;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Qg194zTnM1JYpSXcqxwvHVSZ+y39iQ+5387UWMyWJM0=;
-        b=i74phoyzJ529cxBcKmjz7fM1pp+F2ytguqNCUXKngOtOhAl5ikabmbj0G2xsBlh+oMOx7d
-        yZT1v59aOeghY/7nlmWWXhWmxf/CxeZwhAeAzIf7uMtePetZ0wvpUl2UQXIGluFq4PiMoa
-        h/3WVY41ZuhxuacCiTr5dpASf/0BCLRW7xldXsJwqApek8jYwtqCoNhHUSYTbL1XK7fXyj
-        V63XrkfcsCp/s5dwzrDUMwrAGi2uD1def+NDKWvDM/d/2OCme+2uW0JLBlwxHi0V7d+SL2
-        GssFArUyQNGg3cWKl9NZu4xROF7UlTYGF9Bo43zwvgr0yXUsYCfEpyu4qlgXSA==
+        bh=l3DckWoO10WRg2UnQ17gmGvcP+Cj39tE06wtS471Li8=;
+        b=em6zftEaoVI3HcNeSkFX3GvNS7Mq87YKqxPi6jzPuNuMnsd9hOpgXqU7YxHKnOnE0H2Ufu
+        sMMiJ3fP/8URs7IkpEbXMveDREe9Xgh6xeGoiBBECWHhoneW8CwhTfZ7ZfxLHfNyhDZlj2
+        byidkY6FCvMadm7QpHIlKqV+AjY7oxRV3K72azJSsMGdosRYL5uomyDcy9PeuyAJ93ZXZs
+        SetjXxk2RaAkHdrysvgQd+ms+lQVxFnRIzqoCkh6xwgcvMsyEVqML/rFdUokeLBy2A9x1J
+        uahbz5O8/T4v4H3Ipi+mvXlTfVD0H6r+Gp17i4lkUIKiC2blUUr0Q5p3xhGKtg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666706361;
+        s=2020e; t=1666706362;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Qg194zTnM1JYpSXcqxwvHVSZ+y39iQ+5387UWMyWJM0=;
-        b=dms6+CSWDUlibiggCdS5Fp5rB/0PriZtqDiV/BUtimWZoMauPplPbqXMjtu3bHU8hadOy7
-        vP4cY8PJNSmuXnDg==
+        bh=l3DckWoO10WRg2UnQ17gmGvcP+Cj39tE06wtS471Li8=;
+        b=vp4yKAYpyd4o5LxaF5jjMGHvfVD89NYnRkiFrZ1e/WQoU6DXiDUEbm31y9dPKO9NE6TBLM
+        vFUfK3nSHkMMU3Dw==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <john.stultz@linaro.org>,
@@ -48,9 +48,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Frederic Weisbecker <fweisbec@gmail.com>,
         Rik van Riel <riel@redhat.com>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: [PATCH v3 02/17] tick-sched: Warn when next tick seems to be in the past
-Date:   Tue, 25 Oct 2022 15:58:35 +0200
-Message-Id: <20221025135850.51044-3-anna-maria@linutronix.de>
+Subject: [PATCH v3 03/17] timer: Move store of next event into __next_timer_interrupt()
+Date:   Tue, 25 Oct 2022 15:58:36 +0200
+Message-Id: <20221025135850.51044-4-anna-maria@linutronix.de>
 In-Reply-To: <20221025135850.51044-1-anna-maria@linutronix.de>
 References: <20221025135850.51044-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -64,33 +64,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the next tick is in the past, the delta between basemono and the next
-tick gets negativ. But the next tick should never be in the past. The
-negative effect of a wrong next tick might be a stop of the tick and timers
-might expire late.
+Both call sides of __next_timer_interrupt() store the return value directly
+in base->next_expiry. Move the store into __next_timer_interrupt().
 
-To prevent expensive debugging when changing underlying code, add a
-WARN_ON_ONCE into this code path.
+No functional change.
 
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- kernel/time/tick-sched.c | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/time/timer.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index b0e3c9205946..7ffdc7ba19b4 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -826,6 +826,8 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
- 	 * If the tick is due in the next period, keep it ticking or
- 	 * force prod the timer.
- 	 */
-+	WARN_ON_ONCE(basemono > next_tick);
-+
- 	delta = next_tick - basemono;
- 	if (delta <= (u64)TICK_NSEC) {
- 		/*
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 717fcb9fb14a..7695c733dfa5 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1571,8 +1571,10 @@ static int next_pending_bucket(struct timer_base *base, unsigned offset,
+ /*
+  * Search the first expiring timer in the various clock levels. Caller must
+  * hold base->lock.
++ *
++ * Store next expiry time in base->next_expiry.
+  */
+-static unsigned long __next_timer_interrupt(struct timer_base *base)
++static void __next_timer_interrupt(struct timer_base *base)
+ {
+ 	unsigned long clk, next, adj;
+ 	unsigned lvl, offset = 0;
+@@ -1638,10 +1640,11 @@ static unsigned long __next_timer_interrupt(struct timer_base *base)
+ 		clk += adj;
+ 	}
+ 
++	base->next_expiry = next;
+ 	base->next_expiry_recalc = false;
+ 	base->timers_pending = !(next == base->clk + NEXT_TIMER_MAX_DELTA);
+ 
+-	return next;
++	return;
+ }
+ 
+ #ifdef CONFIG_NO_HZ_COMMON
+@@ -1701,7 +1704,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+ 
+ 	raw_spin_lock(&base->lock);
+ 	if (base->next_expiry_recalc)
+-		base->next_expiry = __next_timer_interrupt(base);
++		__next_timer_interrupt(base);
+ 	nextevt = base->next_expiry;
+ 
+ 	/*
+@@ -1784,7 +1787,7 @@ static inline void __run_timers(struct timer_base *base)
+ 		WARN_ON_ONCE(!levels && !base->next_expiry_recalc
+ 			     && base->timers_pending);
+ 		base->clk++;
+-		base->next_expiry = __next_timer_interrupt(base);
++		__next_timer_interrupt(base);
+ 
+ 		while (levels--)
+ 			expire_timers(base, heads + levels);
 -- 
 2.30.2
 
