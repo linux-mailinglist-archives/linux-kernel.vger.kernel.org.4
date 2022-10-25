@@ -2,125 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D9360CAF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED5860CB02
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbiJYLeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S231783AbiJYLgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbiJYLeD (ORCPT
+        with ESMTP id S229744AbiJYLgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:34:03 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D804E127BD5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:34:01 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id B5ECE20191;
-        Tue, 25 Oct 2022 14:33:55 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1666697635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pIy5CC4MQIyCvYcEm0XYoddACRXHkrXTjOrrA/K9QYE=;
-        b=pTmZrhSnj58/dr2jl521atuCBRCfAnKAxSis6SF0Kge3DDdCwZUwoacZ1C3h6+XztPvIHf
-        eLywiBn6q4HPE+8V8gJFc2SVFR7blhUE5342zkMRMLTMqNtKp3CjTvzDkm8mxo/VoFkwM+
-        u3+pedgC2Y1LDuNd5EiHBLg4vgE8x/s=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 028C2634DB0;
-        Tue, 25 Oct 2022 14:33:54 +0300 (EEST)
-Date:   Tue, 25 Oct 2022 14:33:54 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Hidenori Kobayashi <hidenorik@chromium.org>
-Cc:     Dongchun Zhu <dongchun.zhu@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] media: ov8856: Add runtime PM callbacks
-Message-ID: <Y1fJokE9mfZJ8fad@valkosipuli.retiisi.eu>
-References: <20220921092417.2579126-1-hidenorik@chromium.org>
- <20221006095846.pvhmis44z777fnsl@google.com>
+        Tue, 25 Oct 2022 07:36:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3046CD10;
+        Tue, 25 Oct 2022 04:36:14 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxVD96hy0z686Kq;
+        Tue, 25 Oct 2022 19:32:41 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 13:36:12 +0200
+Received: from [10.48.144.83] (10.48.144.83) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
+ 2022 12:36:11 +0100
+Message-ID: <05ae5abd-9b96-3ffe-6bd9-e996d28a8897@huawei.com>
+Date:   Tue, 25 Oct 2022 12:36:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221006095846.pvhmis44z777fnsl@google.com>
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1666697635; a=rsa-sha256; cv=none;
-        b=YXSQkgaqyTOgx3io6Wq1NwIHki44WyZYYqNgZpb/ktbvs8hq3zEmDJN0WzxSzVANEIENMt
-        Tc/gKaRmu3E2JyZ+nndrHdH/mFsFGk9NeDX5bDzaZQrs18ru2vZ43/N+R6F8K2/5fozC4h
-        QEL77Mlsqk926dkU26YF9wPmfpVBK5U=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1666697635;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pIy5CC4MQIyCvYcEm0XYoddACRXHkrXTjOrrA/K9QYE=;
-        b=Y8K93OWP+gxqN7YeeRGg/5auGyciLdKRBaIFwaO+S8oO8U2gZG35cxDvU3AicPVeAUkHXg
-        8+daG4MSDJfQv+Mog3hhXsK363OfztURyznT2pu4rAnbtrIf2BI7irVRwE7iL38jOtwOvv
-        ErL29Wnv1JP9tgejCmph7XAoIDohJP8=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] blk-mq: Properly init bios from
+ blk_mq_alloc_request_hctx()
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <linux-kernel@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>
+References: <Y1U9zNZtZjRHQBww@T590>
+ <99c6ca81-746d-85f4-04d3-49d7a3de611b@huawei.com> <Y1aS3vIbuQTNGWJL@T590>
+ <360c78dc-65ce-362f-389d-075f2259ce5b@huawei.com> <Y1cvJ4/uwUScAQq4@T590>
+ <3513b14c-14e0-b865-628e-a83521090de9@huawei.com>
+ <CAFj5m9JnSBBVGrp5CqeH99-+VOGRuroUAi3c-3=6XKa891Sfmw@mail.gmail.com>
+ <cf7f8f88-7d3e-8818-8584-e2276e7a1f30@huawei.com> <Y1epeuwonmjQhrXW@T590>
+ <399a2c2d-0b56-e4e7-c309-a6b9537d8939@huawei.com> <Y1fGrfHqbha6l+hz@T590>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <Y1fGrfHqbha6l+hz@T590>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.144.83]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hidenori,
+On 25/10/2022 12:21, Ming Lei wrote:
+>> Actually if final cpu in hctx->cpumask is going offline, then hctx won't
+>> queue any more requests, right? In this case I don't think we can queue on
+>> that hctx anyway. I need to think about this more.
+> It can be queued actually, but interrupt may not be delivered if managed
+> irq is used.
 
-On Thu, Oct 06, 2022 at 06:58:46PM +0900, Hidenori Kobayashi wrote:
-> > @@ -2148,17 +2149,20 @@ static int __ov8856_power_on(struct ov8856 *ov8856)
-> >  	return ret;
-> >  }
-> >  
-> > -static void __ov8856_power_off(struct ov8856 *ov8856)
-> > +static int ov8856_power_off(struct device *dev)
-> >  {
-> > -	struct i2c_client *client = v4l2_get_subdevdata(&ov8856->sd);
-> > +	struct v4l2_subdev *sd = dev_get_drvdata(dev);
-> > +	struct ov8856 *ov8856 = to_ov8856(sd);
-> >  
-> > -	if (is_acpi_node(dev_fwnode(&client->dev)))
-> > -		return;
-> > +	if (is_acpi_node(dev_fwnode(dev)))
-> > +		return 0;
-> >  
-> >  	gpiod_set_value_cansleep(ov8856->reset_gpio, 1);
-> >  	regulator_bulk_disable(ARRAY_SIZE(ov8856_supply_names),
-> >  			       ov8856->supplies);
-> >  	clk_disable_unprepare(ov8856->xvclk);
-> > +
-> > +	return 0;
-> >  }
-> >  
-> >  static int __maybe_unused ov8856_suspend(struct device *dev)
+Yes, I think it will be queued elsewhere. I would need to check the code 
+again.
 
-Applied with the following diff as the remove function's return type is now
-void.
+> 
+>>> If you just make it one driver private command, there can't be such
+>>> issue.
+>> Well we're trying to use reserved requests for EH commands, which that goes
+>> against.
+>>
+>>> Block layer is supposed for handling common case(normal io and pt io),
+>>> I'd suggest to not put such special cases into block layer.
+>> It also supports reserved commands, which I would assume would be suitable
+>> for EH scenarios.
+> Then you have to be careful, as I mentioned, EH has to provide forward
+> progress, if you let blk-mq allocate & submit EH request, the implied
+> dependency from blk-mq has to be payed attention.
 
-diff --git a/drivers/media/i2c/ov8856.c b/drivers/media/i2c/ov8856.c
-index 9e1361eed91f0..cf8384e09413b 100644
---- a/drivers/media/i2c/ov8856.c
-+++ b/drivers/media/i2c/ov8856.c
-@@ -2456,8 +2456,6 @@ static void ov8856_remove(struct i2c_client *client)
- 	mutex_destroy(&ov8856->mutex);
- 
- 	ov8856_power_off(&client->dev);
--
--	return 0;
- }
- 
- static int ov8856_probe(struct i2c_client *client)
+OK, thanks, I know that this carries risk, but it seems right approach.
 
--- 
-Sakari Ailus
+I have been thinking about my HW queue allocation requirement and maybe 
+we can solve in low-level driver instead.
+
+The requirement is to send this abort command on same queue as erroneous 
+command to ensure that they do not race in HW submission, even though 
+chance of this is really tiny. Maybe we can make low-level driver wait 
+until erroneous command is really submitted to HW by checking HW 
+register, etc. before issuing abort on any HW queue (and so would not 
+need blk_mq_alloc_request_hctx() or similar).
+
+BTW, I would still like to fix blk_mq_alloc_request_hctx() to properly 
+init ->bio and other fields - ok?
+
+Thanks,
+John
+
