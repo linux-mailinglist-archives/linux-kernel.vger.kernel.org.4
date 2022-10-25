@@ -2,230 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DCB60C7D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E635B60C7D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbiJYJUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S232395AbiJYJUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbiJYJTQ (ORCPT
+        with ESMTP id S231829AbiJYJTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:19:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546DD16D895;
-        Tue, 25 Oct 2022 02:13:30 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29P8jQm1011200;
-        Tue, 25 Oct 2022 09:13:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=C0968ZWBFOazVrjsAN8FV+ygdlEqrbRRvFakZwWPuxQ=;
- b=QQkJ+mWh0KB8c6FPuFg+IMZj2WKtEAXzGBPHH83avUBcwclFhfH4XuST5Z6S4psoQDtR
- +R6fElzaN0cFixqFdgxObIqZpBx/q2pwBymLEscQdkpSj96+QaV7APm84lbk1JTFHfb8
- QihaUsks6XrZ6IgqQdgGO7d6oZCsw1jRkKi0fU1eo4BDBZWmyYFM3aMo/3vGxOikMBQy
- DcUV7rl8uU9VtfNy77qPrZvje7xRgoi86vxsQHNs1IX5ymVei1wOUOodcQCrBM5wHnaI
- eZLdvHywyhkVUkSVDdD53pJgaxCxpPe9TJRUhNK+7whr6RF+DR7pJQoXmUBzOPQ02zC+ JQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3keaxbvha8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 09:13:29 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29P8s67M001398;
-        Tue, 25 Oct 2022 09:13:29 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3keaxbvh98-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 09:13:29 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29P96ZYr030525;
-        Tue, 25 Oct 2022 09:13:26 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3kdugasxtn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 09:13:26 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29P9DwMQ39453098
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Oct 2022 09:13:58 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B20A0A405C;
-        Tue, 25 Oct 2022 09:13:23 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1E0E6A405F;
-        Tue, 25 Oct 2022 09:13:23 +0000 (GMT)
-Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.30.119])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Oct 2022 09:13:23 +0000 (GMT)
-From:   Pierre Morel <pmorel@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        david@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com, svens@linux.ibm.com
-Subject: [PATCH v2 1/1] KVM: s390: vsie: clarifications on setting the APCB
-Date:   Tue, 25 Oct 2022 11:13:19 +0200
-Message-Id: <20221025091319.37110-2-pmorel@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221025091319.37110-1-pmorel@linux.ibm.com>
-References: <20221025091319.37110-1-pmorel@linux.ibm.com>
+        Tue, 25 Oct 2022 05:19:17 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64198160859
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666689221; x=1698225221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4W/ovsSPupI5rLSaIdoBpNhRPZ/toECDmp5MStaycPo=;
+  b=MpisSNdDjfx74LolcdGq352JLH2fmTwkQylrJamh9Doqqc5kz5BhtaTk
+   QkhNe6OYj3G4sz6+sTSuWoyDe4Ru21m9fNeE6haE50CVwB51BDk1tffZy
+   0PLiIZWIqNdvxtpNBz68r2Ygm5LO0PSaosd1DuKpiMLA7COCZT8f4K8VW
+   yebBv9S5d3jAspJuln6+kuv7eKI5aOICELrhIATXuHKrXAp14TxcKm23W
+   t8S1921xs9hPBwL8AezyTpjZxYWy9Du7QcBrOuVfDLxEVlMqYNoY0X2wi
+   TLUT1qVJdtHuBNw3JT2NlXEcicCJuH4sYmhoyvTIrhSvEzOh2dcaEd5Ki
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="334224402"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="334224402"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 02:13:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="876738255"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="876738255"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga006.fm.intel.com with ESMTP; 25 Oct 2022 02:13:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1onG08-001uxm-1K;
+        Tue, 25 Oct 2022 12:13:36 +0300
+Date:   Tue, 25 Oct 2022 12:13:36 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Jane Chu <jane.chu@oracle.com>, rostedt@goodmis.org,
+        senozhatsky@chromium.org, linux@rasmusvillemoes.dk,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        wangkefeng.wang@huawei.com, haakon.bugge@oracle.com,
+        john.haxby@oracle.com
+Subject: Re: [PATCH v3 1/1] vsprintf: protect kernel from panic due to
+ non-canonical pointer dereference
+Message-ID: <Y1eowLuE8cgCnEfq@smile.fi.intel.com>
+References: <20221019194159.2923873-1-jane.chu@oracle.com>
+ <Y1BfK6LpDJDlUYKp@smile.fi.intel.com>
+ <Y1Fgk1iDnhL7VtAl@char.us.oracle.com>
+ <Y1FxS30zVENd/1Ap@smile.fi.intel.com>
+ <Y1ehBZOuF3AXeesh@alley>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: aOgpyQooVVThW98wDdjjs3QBYBYX4XBi
-X-Proofpoint-ORIG-GUID: qq6We6T3Yp6DnOux9guixK9lK1g_kdML
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-25_03,2022-10-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 adultscore=0 mlxscore=0 mlxlogscore=878 bulkscore=0
- suspectscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501
- phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210250052
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1ehBZOuF3AXeesh@alley>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The APCB is part of the CRYCB.
-The calculation of the APCB origin can be done by adding
-the APCB offset to the CRYCB origin.
+On Tue, Oct 25, 2022 at 10:40:37AM +0200, Petr Mladek wrote:
+> On Thu 2022-10-20 19:03:23, Andy Shevchenko wrote:
+> > On Thu, Oct 20, 2022 at 10:52:03AM -0400, Konrad Rzeszutek Wilk wrote:
 
-Current code makes confusing transformations, converting
-the CRYCB origin to a pointer to calculate the APCB origin.
+...
 
-Let's make things simpler and keep the CRYCB origin to make
-these calculations.
+> > OK, let's assume user recognizes this as a bug, what should they do in order
+> > to provide a better description of the bug, so developer can easily debug
+> > and fix it?
+> 
+> WARN() would provide similar information as panic() without actually
+> crashing the kernel.
 
-Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
----
- arch/s390/kvm/vsie.c | 37 ++++++++++++++++++++++---------------
- 1 file changed, 22 insertions(+), 15 deletions(-)
+Unless one provides panic_on_warn (or how is it called?).
 
-diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-index 94138f8f0c1c..f37851c9b1ab 100644
---- a/arch/s390/kvm/vsie.c
-+++ b/arch/s390/kvm/vsie.c
-@@ -138,9 +138,12 @@ static int prepare_cpuflags(struct kvm_vcpu *vcpu, struct vsie_page *vsie_page)
- }
- /* Copy to APCB FORMAT1 from APCB FORMAT0 */
- static int setup_apcb10(struct kvm_vcpu *vcpu, struct kvm_s390_apcb1 *apcb_s,
--			unsigned long apcb_o, struct kvm_s390_apcb1 *apcb_h)
-+			unsigned long crycb_o, struct kvm_s390_apcb1 *apcb_h)
- {
- 	struct kvm_s390_apcb0 tmp;
-+	unsigned long apcb_o;
-+
-+	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb0);
- 
- 	if (read_guest_real(vcpu, apcb_o, &tmp, sizeof(struct kvm_s390_apcb0)))
- 		return -EFAULT;
-@@ -157,14 +160,18 @@ static int setup_apcb10(struct kvm_vcpu *vcpu, struct kvm_s390_apcb1 *apcb_s,
-  * setup_apcb00 - Copy to APCB FORMAT0 from APCB FORMAT0
-  * @vcpu: pointer to the virtual CPU
-  * @apcb_s: pointer to start of apcb in the shadow crycb
-- * @apcb_o: pointer to start of original apcb in the guest2
-+ * @crycb_o: real guest address to start of original guest crycb
-  * @apcb_h: pointer to start of apcb in the guest1
-  *
-  * Returns 0 and -EFAULT on error reading guest apcb
-  */
- static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
--			unsigned long apcb_o, unsigned long *apcb_h)
-+			unsigned long crycb_o, unsigned long *apcb_h)
- {
-+	unsigned long apcb_o;
-+
-+	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb0);
-+
- 	if (read_guest_real(vcpu, apcb_o, apcb_s,
- 			    sizeof(struct kvm_s390_apcb0)))
- 		return -EFAULT;
-@@ -178,15 +185,19 @@ static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
-  * setup_apcb11 - Copy the FORMAT1 APCB from the guest to the shadow CRYCB
-  * @vcpu: pointer to the virtual CPU
-  * @apcb_s: pointer to start of apcb in the shadow crycb
-- * @apcb_o: pointer to start of original guest apcb
-+ * @crycb_o: real guest address to start of original guest crycb
-  * @apcb_h: pointer to start of apcb in the host
-  *
-  * Returns 0 and -EFAULT on error reading guest apcb
-  */
- static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
--			unsigned long apcb_o,
-+			unsigned long crycb_o,
- 			unsigned long *apcb_h)
- {
-+	unsigned long apcb_o;
-+
-+	apcb_o = crycb_o + offsetof(struct kvm_s390_crypto_cb, apcb1);
-+
- 	if (read_guest_real(vcpu, apcb_o, apcb_s,
- 			    sizeof(struct kvm_s390_apcb1)))
- 		return -EFAULT;
-@@ -200,7 +211,7 @@ static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
-  * setup_apcb - Create a shadow copy of the apcb.
-  * @vcpu: pointer to the virtual CPU
-  * @crycb_s: pointer to shadow crycb
-- * @crycb_o: pointer to original guest crycb
-+ * @crycb_o: real address of original guest crycb
-  * @crycb_h: pointer to the host crycb
-  * @fmt_o: format of the original guest crycb.
-  * @fmt_h: format of the host crycb.
-@@ -215,10 +226,6 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
- 	       struct kvm_s390_crypto_cb *crycb_h,
- 	       int fmt_o, int fmt_h)
- {
--	struct kvm_s390_crypto_cb *crycb;
--
--	crycb = (struct kvm_s390_crypto_cb *) (unsigned long)crycb_o;
--
- 	switch (fmt_o) {
- 	case CRYCB_FORMAT2:
- 		if ((crycb_o & PAGE_MASK) != ((crycb_o + 256) & PAGE_MASK))
-@@ -226,18 +233,18 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
- 		if (fmt_h != CRYCB_FORMAT2)
- 			return -EINVAL;
- 		return setup_apcb11(vcpu, (unsigned long *)&crycb_s->apcb1,
--				    (unsigned long) &crycb->apcb1,
-+				    crycb_o,
- 				    (unsigned long *)&crycb_h->apcb1);
- 	case CRYCB_FORMAT1:
- 		switch (fmt_h) {
- 		case CRYCB_FORMAT2:
- 			return setup_apcb10(vcpu, &crycb_s->apcb1,
--					    (unsigned long) &crycb->apcb0,
-+					    crycb_o,
- 					    &crycb_h->apcb1);
- 		case CRYCB_FORMAT1:
- 			return setup_apcb00(vcpu,
- 					    (unsigned long *) &crycb_s->apcb0,
--					    (unsigned long) &crycb->apcb0,
-+					    crycb_o,
- 					    (unsigned long *) &crycb_h->apcb0);
- 		}
- 		break;
-@@ -248,13 +255,13 @@ static int setup_apcb(struct kvm_vcpu *vcpu, struct kvm_s390_crypto_cb *crycb_s,
- 		switch (fmt_h) {
- 		case CRYCB_FORMAT2:
- 			return setup_apcb10(vcpu, &crycb_s->apcb1,
--					    (unsigned long) &crycb->apcb0,
-+					    crycb_o,
- 					    &crycb_h->apcb1);
- 		case CRYCB_FORMAT1:
- 		case CRYCB_FORMAT0:
- 			return setup_apcb00(vcpu,
- 					    (unsigned long *) &crycb_s->apcb0,
--					    (unsigned long) &crycb->apcb0,
-+					    crycb_o,
- 					    (unsigned long *) &crycb_h->apcb0);
- 		}
- 	}
+> > > Would we not want that experience for users ?
+> > 
+> > Yes, if it is a bug in the kernel we want to know it with all possible details.
+> > Hiding bugs is a way to nowhere.
+> 
+> I agree but we should always distinguish between fatal problems where
+> the system could hardly continue working and unexpected behavior that
+> is not critical.
+> 
+> Many error code paths handle unexpected situations. Some problems are
+> caused by users and some by bugs in the code. The kernel could always
+> refuse doing some operation rather than crash. People will report
+> it because it does not work. And there are non-destructive ways how
+> to show useful debugging information.
+
+Initially, if I understand correctly, the idea of that check was exactly to
+guard against special pointers (NULL and error). Now this is getting wider
+and I'm not sure hiding a crash is good thing to go.
+
+Hypothetical situation: the "invalid" pointer is just one that gets LSB
+shuffled a bit (some of the frameworks use lower bits to keep some information
+there). That said, kernel is not going to crash elsewhere. How user will know
+that unmasked pointer went to the printf()?
+
+I honestly think that this or similar change will bring more harm than help.
+
 -- 
-2.31.1
+With Best Regards,
+Andy Shevchenko
+
 
