@@ -2,125 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F9C60D187
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 18:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C02F60D18B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 18:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiJYQVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 12:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46732 "EHLO
+        id S232097AbiJYQWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 12:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbiJYQUx (ORCPT
+        with ESMTP id S231693AbiJYQV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 12:20:53 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83AF165C92;
-        Tue, 25 Oct 2022 09:20:49 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29PF4D3k002076;
-        Tue, 25 Oct 2022 16:20:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=Iulm6ID2VpcNdrVzNPzJPmmwv9Rv9yKhaHWBitwW0jg=;
- b=WeMDiMAka/EuTBDF6cRdmbDEnl8nANTEBF4CBOdXX7Dhg1oregkLIJ2hpajEetNuQm1P
- 4Su+xwXVKveBBUwlwThRogv2hpKpCnaWQJyfoxgECIPxXqzl0DktlMflzfod+Uy8L85g
- RnQ8hTAacT7pJAaHUrTiXcWsCvMfIjQ9awDX0QmMnFOIE/NSfXmjA4yv0qtMmLhnTgHc
- D4j4qzJ6ZZyl3Ch6IJdWoGG+pRe9ZijqN/Q3WJMKWglm6QupbQAS7rQ2hLSTgzu/Gszt
- RR0+CYleQNbWi2P6we6pgyNrHnwwN+53qRb3lg3ut0UTmHzo/sy0DR1lYLOE+9vTwdJh Mw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3keddv5pd7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 16:20:48 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29PFx6vU001445;
-        Tue, 25 Oct 2022 16:20:47 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3keddv5pbv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 16:20:47 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29PG6Aj3001554;
-        Tue, 25 Oct 2022 16:20:45 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3kc8594tdw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 16:20:44 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29PGLGHI52756874
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Oct 2022 16:21:16 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB30352050;
-        Tue, 25 Oct 2022 16:20:41 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.171.13.249])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with SMTP id 1DCCB5204E;
-        Tue, 25 Oct 2022 16:20:41 +0000 (GMT)
-Date:   Tue, 25 Oct 2022 18:20:39 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Pierre Morel <pmorel@linux.ibm.com>
-Cc:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, frankja@linux.ibm.com, cohuck@redhat.com,
-        thuth@redhat.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        svens@linux.ibm.com
-Subject: Re: [PATCH v2 1/1] KVM: s390: vsie: clarifications on setting the
- APCB
-Message-ID: <20221025182039.6dc82fbf@p-imbrenda>
-In-Reply-To: <0117e263-2856-b2fd-1e61-59b21e5da2e5@linux.ibm.com>
-References: <20221025091319.37110-1-pmorel@linux.ibm.com>
-        <20221025091319.37110-2-pmorel@linux.ibm.com>
-        <e9a237d7-3a34-11c8-1c5b-1a3c14e8cfb0@redhat.com>
-        <0117e263-2856-b2fd-1e61-59b21e5da2e5@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Tue, 25 Oct 2022 12:21:58 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4513780EA5;
+        Tue, 25 Oct 2022 09:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666714917; x=1698250917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JIY/0KwS4tqdqoinWPwzk3zy7GThTftpHV5/elSMquw=;
+  b=Bn08f7uxVp4J8F+sc0CO4Uppw6gp1HkYW6f6L/Bl52+17aZXfCyaJPwR
+   a9nTfA9jNoMDH8XdIM7kiS/edrvxDXaGEv1O0YpZWGS4NpOXC+cYKPtxM
+   +tSmaxDq2zcZi7s9oaQVurddRI4HgYQPNq8PlIn8Gd5ohcInI7k8UzkPL
+   e011CTtyR4bumPcSQEH2OxEbOngs86yWh6EUcsjl3HtcMtK6M56JM+8x4
+   hpp0qFk0KFeSneNWDYhEVgr+eQRvDCKvXKIbO2JgSOEnGFx2BOEZJd5uR
+   DEkgYKvd2RazvqAHESPQ5Qg6S3oHnsJ5afVpap7ymsLWlIBkDAsH6wIU0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="371937328"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="371937328"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 09:21:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="609628147"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="609628147"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 25 Oct 2022 09:21:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1onMgI-00267N-32;
+        Tue, 25 Oct 2022 19:21:34 +0300
+Date:   Tue, 25 Oct 2022 19:21:34 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] drivers: fwnode: fix fwnode_irq_get_byname()
+Message-ID: <Y1gNDtE4dRC4WuP/@smile.fi.intel.com>
+References: <cover.1666710197.git.mazziesaccount@gmail.com>
+ <a3bf7094a9f9ebf114736dc7944553dcc701fe73.1666710197.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: geMPvLIUK-Kykafa3OpyFm8j2gpYD8kT
-X-Proofpoint-ORIG-GUID: NGSjiZc1l7YdYnPCUOSZXJzNwHooY1mr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-25_09,2022-10-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 malwarescore=0 bulkscore=0 mlxlogscore=687 phishscore=0
- clxscore=1015 priorityscore=1501 impostorscore=0 adultscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210250091
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3bf7094a9f9ebf114736dc7944553dcc701fe73.1666710197.git.mazziesaccount@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 15:17:36 +0200
-Pierre Morel <pmorel@linux.ibm.com> wrote:
-
-> On 10/25/22 11:30, David Hildenbrand wrote:
-> > On 25.10.22 11:13, Pierre Morel wrote:  
-> >> The APCB is part of the CRYCB.
-> >> The calculation of the APCB origin can be done by adding
-> >> the APCB offset to the CRYCB origin.
-> >>
-> >> Current code makes confusing transformations, converting
-> >> the CRYCB origin to a pointer to calculate the APCB origin.
-> >>  
-> > 
-> > 
-> > While at it, can we rename "crycb_o" to "crycb_gpa" and "apcb_o" to 
-> > "apcb_gpa".
-> > 
-> > These are not pointers but guest physical addresses.
-> >   
+On Tue, Oct 25, 2022 at 06:11:49PM +0300, Matti Vaittinen wrote:
+> The fwnode_irq_get_byname() does return 0 upon device-tree IRQ mapping
+> failure. This is contradicting the function documentation and can
+> potentially be a source of errors like:
 > 
-> I can do that.
-> the _o came from the name in the documentation "origin"
-> but gpa is more obvious.
+> int probe(...) {
+> 	...
 > 
+> 	irq = fwnode_irq_get_byname();
+> 	if (irq <= 0)
+> 		return irq;
+> 
+> 	...
+> }
+> 
+> Here we do correctly check the return value from fwnode_irq_get_byname()
+> but the driver probe will now return success. (There was already one
+> such user in-tree).
+> 
+> Change the fwnode_irq_get_byname() to work as documented and according to
+> the common convention and abd always return a negative errno upon failure.
 
-with that fixed: 
+and abd ?
 
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+...
+
+> +	ret = fwnode_irq_get(fwnode, index);
+> +	/* We treat mapping errors as invalid case */
+> +	if (ret == 0)
+> +		return -EINVAL;
+> +
+> +	return ret;
+
+This looks good.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
