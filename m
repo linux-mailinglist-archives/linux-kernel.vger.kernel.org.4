@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A421260C894
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B64260C895
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiJYJl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
+        id S231918AbiJYJle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbiJYJlE (ORCPT
+        with ESMTP id S231704AbiJYJlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:41:04 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FAE95265
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:39:52 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id 189so9096509vsi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fvzvFrxkZV5P4Rxxxs1xdYcVHP1vUjFiEqvZB3LuHYc=;
-        b=EWFYiPtiuAwxNryPnRCRdIyflpxGealCpHT6V1v1VS5B2nqrufxbLRVuz9HSoqUktX
-         PqmO3m4pEjHTLdGWfP5h0AAyyU5sdckU9Tg5iUoYD5Qx4fTa9/rs8qR+qd5hWt+PBudZ
-         3ByNvJ4UWNaldAsahYhisDbIJPzvtUbzLc4ZLg45uu3tZqAO8TABAvjqCp7I6okC133S
-         95EuZFviywanN+sDyivhu50+b+WsacxCtHhxnkgQaGSPz0wDrJ0/QedjGfvIG3nqyt8M
-         BBmFxpQcsZJdUl4SMzO8ZMVTqZNk173vIZhRKJIWqKNvANZIhQAS9lHwuDx0Du9PhKlU
-         YO+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fvzvFrxkZV5P4Rxxxs1xdYcVHP1vUjFiEqvZB3LuHYc=;
-        b=dX/rrQTU+mqtvRzRRo5LboMWCwCB4sn2HnV2m/mydGLVermsPzPjnnBbVXzUSW+Jyf
-         mFv49lWBygbNoz1vRa1+QzGHF4YTiTz48O1itTlKXRAu1Dh7bS2V9KuncsIw14brhjSZ
-         TFlm1aeU1TZoIPqXojOo2EvXZkvvR8N2OA7rJ6PxCRkfKLiEFJD5DOExNYu28OW8jDtE
-         AuDhjV7wbRzRtO3lbHIJaiYaqvy0n6UDMwP454Xltsu80ZeKOOxFSJt/RYyABSksv6XZ
-         FtWW0zxSUmCfQlwGe6o/Bm1/RiIIvfz1d2DdNfbWTP/RxSN1w2m1UQKXXi4GoyVPyS+2
-         9AGA==
-X-Gm-Message-State: ACrzQf2vJwU9pNxMz2FCnsqj+mrAw1dKIYjcdqlLhUg6XTr7U3KNswfq
-        KiyFHig8TzuPh5bpGUEmNtTOgNECssmVnjw3gWqT332u+PvJ5A==
-X-Google-Smtp-Source: AMsMyM4L+MECpm34SLXLViLyxzAqpAQKmvDH+EK7kDBSeMqrsQMfJ06efXpTiInyduawbLa3Usu+nUlNEKJAlo4Oh8Y=
-X-Received: by 2002:a05:6102:5788:b0:3a6:764d:1382 with SMTP id
- dh8-20020a056102578800b003a6764d1382mr21135112vsb.13.1666690791574; Tue, 25
- Oct 2022 02:39:51 -0700 (PDT)
+        Tue, 25 Oct 2022 05:41:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C6112751;
+        Tue, 25 Oct 2022 02:40:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 992BB61862;
+        Tue, 25 Oct 2022 09:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9C98C433D7;
+        Tue, 25 Oct 2022 09:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666690817;
+        bh=LRA27RkuI+pQtw9QEZ9eFS+Prw+Y3GfxxqHqaNMByEk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=EAbEVQMxfYj3F5fzRPfJ6CSoV3EsNZfkP7oiWxpmY1BmUoE5b/Eo3JfohEwyRDltb
+         lfr+zhKxAdtFytw/YQK6l/WW4zsb1pqzoYcFwlQcuLRnUZjIhdHSRx15dxoOZwkbjB
+         aa2dHOtFLwHqdgwco+GXshj7gQ/RPVny+7gBdUDSWuQRiiWoEv8FS/mKCp4qHvCjSr
+         SgdWfSBDbUQ9BlFiG4WdGJPapNxEkCsgqSmoKsrCx8SBwDYbGvpy2nNU3N/qW96Rbx
+         pZb0v5EXaI4ExJedmWuQAqOEKbBz0eUeR0zTi9zWEvZ0rkjW0f3vHNt9EGVvqj2v8R
+         e/LAFOuIYRMSg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B705AE29F32;
+        Tue, 25 Oct 2022 09:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221007114647.2723457-1-s.hauer@pengutronix.de>
-In-Reply-To: <20221007114647.2723457-1-s.hauer@pengutronix.de>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 25 Oct 2022 11:39:40 +0200
-Message-ID: <CAMRc=MfqvNvq7RLbWivZj7Q4fBBLEAWFHU0Wq+u-086ehK-jLA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] gpio: Add gpio-latch driver
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        kernel@pengutronix.de, Serge Semin <fancer.lancer@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/7] net: ipa: validation cleanup
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166669081774.5792.12091336300542106637.git-patchwork-notify@kernel.org>
+Date:   Tue, 25 Oct 2022 09:40:17 +0000
+References: <20221021191340.4187935-1-elder@linaro.org>
+In-Reply-To: <20221021191340.4187935-1-elder@linaro.org>
+To:     Alex Elder <elder@linaro.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 1:47 PM Sascha Hauer <s.hauer@pengutronix.de> wrote:
->
-> This series includes the changes requested by Serge Semin for v4.
->
-> Sascha
->
-> Sascha Hauer (2):
->   gpio: Add gpio latch driver
->   dt-bindings: gpio: Add gpio-latch binding document
->
->  .../devicetree/bindings/gpio/gpio-latch.yaml  |  94 ++++++++
->  drivers/gpio/Kconfig                          |   6 +
->  drivers/gpio/Makefile                         |   1 +
->  drivers/gpio/gpio-latch.c                     | 220 ++++++++++++++++++
->  4 files changed, 321 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-latch.yaml
->  create mode 100644 drivers/gpio/gpio-latch.c
->
-> --
-> 2.30.2
->
+Hello:
 
-I reversed the order of the patches, fixed the strange formatting of
-struct of_device_id and queued the series.
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Bartosz
+On Fri, 21 Oct 2022 14:13:33 -0500 you wrote:
+> This series gathers a set of IPA driver cleanups, mostly involving
+> code that ensures certain things are known to be correct *early*
+> (either at build or initializatin time), so they can be assumed good
+> during normal operation.
+> 
+> The first removes three constant symbols, by making a (reasonable)
+> assumption that a routing table consists of entries for the modem
+> followed by entries for the AP, with no unused entries between them.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/7] net: ipa: kill two constant symbols
+    https://git.kernel.org/netdev/net-next/c/fb4014ac76b8
+  - [net-next,2/7] net: ipa: remove two memory region checks
+    https://git.kernel.org/netdev/net-next/c/2554322b3199
+  - [net-next,3/7] net: ipa: validate IPA table memory earlier
+    https://git.kernel.org/netdev/net-next/c/cf13919654d5
+  - [net-next,4/7] net: ipa: verify table sizes fit in commands early
+    https://git.kernel.org/netdev/net-next/c/5444b0ea9915
+  - [net-next,5/7] net: ipa: introduce ipa_cmd_init()
+    https://git.kernel.org/netdev/net-next/c/7fd10a2aca6a
+  - [net-next,6/7] net: ipa: kill ipa_table_valid()
+    https://git.kernel.org/netdev/net-next/c/39ad815244ac
+  - [net-next,7/7] net: ipa: check table memory regions earlier
+    https://git.kernel.org/netdev/net-next/c/73da9cac517c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
