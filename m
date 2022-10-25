@@ -2,184 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1B060CEFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2476360CEF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232041AbiJYO2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
+        id S230025AbiJYO2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiJYO2t (ORCPT
+        with ESMTP id S231646AbiJYO15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:28:49 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E58FC3568;
-        Tue, 25 Oct 2022 07:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666708128; x=1698244128;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5lf9HXnuZmAIrUwqX/AP3lotJnWhdB2O4yFZG3cNmME=;
-  b=FfPo3qIWki8M/KRCoYtYxJR9EU1t0aO0hWyS4yf+XsvGLUwZMTUaoHdJ
-   A6aZzzMdepHN5ti4aEvEI5nSTOWr2VxSbVjy3DvBoA7GVE/3v8XRttDSU
-   UZXh3jvMmO/Wua73xPPb6OIBmzmCLsR6T/wnAWoYLz+srsdioirwLVdpm
-   OzyMEqdGG/+s2hBi+FHBJkgcGQM5ntCwnescCtsn3Ri3XO5QdH/I4EE4o
-   ZmGlTtkY8Ny6EcNXwG8v/XjamwJtIf/eI0Sk6WoJHYAgxD2KmVuiF6jID
-   /FHjHNpkmISFoPXOcIsyMPHPEoh0yfMkntQx9PTiZ7a9DUVFe6l71uyHs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="309376320"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="309376320"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 07:27:34 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="634116437"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="634116437"
-Received: from pperezji-mobl.amr.corp.intel.com (HELO [10.212.98.192]) ([10.212.98.192])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 07:27:32 -0700
-Message-ID: <24d084e1-700d-da77-d93e-2d330aac2f63@linux.intel.com>
-Date:   Tue, 25 Oct 2022 09:27:32 -0500
+        Tue, 25 Oct 2022 10:27:57 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04489BE52B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:27:54 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id f8so8147505qkg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:27:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MkOv4t1Tr+2m88Yj/LhSqe7IoeT5GjbtqmdRAIP6OEk=;
+        b=wz1/lM1BcJqHxJ/Koec1Kk/14Kobm8MXoSYbeA5Pwen8/OUMGUYwd+7HTX6ePq9ipA
+         8sNTEFGTkcKUMfoPiIAANQTt0VTAxX/4n8edwscf8V0xYz4kbxM4TG1BhPMJMtBH99M5
+         k0Qy7rLJBmkPODWH8+QqdtTti7QA8rfetdpk8DstzIi9JLaVLAR1iFNC7PXdSODjuyc3
+         9Q8P/A5aNuKxXZS9Li8SqQXaez0WLi+WPNbU84oIXLIu25X/5avG6x6nU9tqlRo0P3Mz
+         f9y+mJb31hxm+1M7QZyPAQuy0LrecT0K5WjPD+MpIfur5Hggn1SsjfOxkEmM1W8R5IHO
+         6jXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MkOv4t1Tr+2m88Yj/LhSqe7IoeT5GjbtqmdRAIP6OEk=;
+        b=INp4BFI+udOjL5BXPV+f7jpCCr0Gft2Lpn9uP2JRpuNUh55stCoEblsCPYfXhEbKha
+         F72zwbdLhxY5ucyJnUV5nZ3Bwn0GFJ/2I0vezK/qlQICGoRY199P0miED9fWQc/vf0Bz
+         L4wIajY/xzJTFXBSwEEA2nuJSQCHKXhoCceof95AfC+6T0VmpxS0Cn7QmlCQdPzFuHie
+         5VjWxHu2l4hHBzXD2GMIN131lsqwrfDJhMtibjwt6FP53pLigneVpxg0y2we9ocLMcAV
+         OwyUMfMYUbeq9r9vxvNR2seqHzBehbE1g3Yy5DMglt5cF3vmF+0+RgaxXkxko6ySPPwo
+         gd5w==
+X-Gm-Message-State: ACrzQf1Aj0EW6WIvHg3iUAwfi78kEr6ITJMQU+HinN2u9U7TnN8DXpD+
+        rhthuS5nVwhOdUTN15PDPW/3sA==
+X-Google-Smtp-Source: AMsMyM4ttW6oz+y+rCvmkcWe3ZBLOYUgO9lwtgxilDy1Bv7GGaqR6Qz38ugPzHeOeWZxNRrxQX7MdQ==
+X-Received: by 2002:a05:620a:c4f:b0:6cf:33cd:2bc9 with SMTP id u15-20020a05620a0c4f00b006cf33cd2bc9mr27425389qki.99.1666708073614;
+        Tue, 25 Oct 2022 07:27:53 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id o11-20020ac85a4b000000b0039cc944ebdasm1692899qta.54.2022.10.25.07.27.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 07:27:52 -0700 (PDT)
+Message-ID: <16aac887-232a-7141-cc65-eab19c532592@linaro.org>
+Date:   Tue, 25 Oct 2022 10:27:50 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH AUTOSEL 6.0 07/44] ALSA: hda: Fix page fault in
- snd_hda_codec_shutdown()
+ Thunderbird/102.4.0
+Subject: Re: [RFC net-next 1/2] dt-bindings: net: dsa: add bindings for GSW
+ Series switches
 Content-Language: en-US
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>, tiwai@suse.com,
-        alsa-devel@alsa-project.org, peter.ujfalusi@linux.intel.com,
-        mkumard@nvidia.com
-References: <20221009234932.1230196-1-sashal@kernel.org>
- <20221009234932.1230196-7-sashal@kernel.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20221009234932.1230196-7-sashal@kernel.org>
+To:     Camel Guo <camel.guo@axis.com>, Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        kernel@axis.com
+References: <20221025135243.4038706-1-camel.guo@axis.com>
+ <20221025135243.4038706-2-camel.guo@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221025135243.4038706-2-camel.guo@axis.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/9/22 18:48, Sasha Levin wrote:
-> From: Cezary Rojewski <cezary.rojewski@intel.com>
+On 25/10/2022 09:52, Camel Guo wrote:
+> Add documentation and an example for Maxlinear's GSW Series Ethernet
+> switches.
 > 
-> [ Upstream commit f2bd1c5ae2cb0cf9525c9bffc0038c12dd7e1338 ]
-
-This commit on linux-stable seems to have broken a number of platforms.
-
-6.0.2 worked fine.
-6.0.3 does not
-
-reverting this commit solves the problem, see
-https://github.com/thesofproject/linux/issues/3960 for details.
-
-Are we missing a prerequisite patch for this commit?
-
-
-> If early probe of HDAudio bus driver fails e.g.: due to missing
-> firmware file, snd_hda_codec_shutdown() ends in manipulating
-> uninitialized codec->pcm_list_head causing page fault.
-> 
-> Initialization of HDAudio codec in ASoC is split in two:
-> - snd_hda_codec_device_init()
-> - snd_hda_codec_device_new()
-> 
-> snd_hda_codec_device_init() is called during probe_codecs() by HDAudio
-> bus driver while snd_hda_codec_device_new() is called by
-> codec-component's ->probe(). The second call will not happen until all
-> components required by related sound card are present within the ASoC
-> framework. With firmware failing to load during the PCI's deferred
-> initialization i.e.: probe_work(), no platform components are ever
-> registered. HDAudio codec enumeration is done at that point though, so
-> the codec components became registered to ASoC framework, calling
-> snd_hda_codec_device_init() in the process.
-> 
-> Now, during platform reboot snd_hda_codec_shutdown() is called for every
-> codec found on the HDAudio bus causing oops if any of them has not
-> completed both of their initialization steps. Relocating field
-> initialization fixes the issue.
-> 
-> Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
-> Link: https://lore.kernel.org/r/20220816111727.3218543-7-cezary.rojewski@intel.com
-> Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> Signed-off-by: Camel Guo <camel.guo@axis.com>
 > ---
->  sound/pci/hda/hda_codec.c | 41 +++++++++++++++++++--------------------
->  1 file changed, 20 insertions(+), 21 deletions(-)
+>  .../devicetree/bindings/net/dsa/mxl,gsw.yaml  | 140 ++++++++++++++++++
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  MAINTAINERS                                   |   6 +
+>  3 files changed, 148 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/dsa/mxl,gsw.yaml
 > 
-> diff --git a/sound/pci/hda/hda_codec.c b/sound/pci/hda/hda_codec.c
-> index 384426d7e9dd..4ae8b9574778 100644
-> --- a/sound/pci/hda/hda_codec.c
-> +++ b/sound/pci/hda/hda_codec.c
-> @@ -931,8 +931,28 @@ snd_hda_codec_device_init(struct hda_bus *bus, unsigned int codec_addr,
->  	}
->  
->  	codec->bus = bus;
-> +	codec->depop_delay = -1;
-> +	codec->fixup_id = HDA_FIXUP_ID_NOT_SET;
-> +	codec->core.dev.release = snd_hda_codec_dev_release;
-> +	codec->core.exec_verb = codec_exec_verb;
->  	codec->core.type = HDA_DEV_LEGACY;
->  
-> +	mutex_init(&codec->spdif_mutex);
-> +	mutex_init(&codec->control_mutex);
-> +	snd_array_init(&codec->mixers, sizeof(struct hda_nid_item), 32);
-> +	snd_array_init(&codec->nids, sizeof(struct hda_nid_item), 32);
-> +	snd_array_init(&codec->init_pins, sizeof(struct hda_pincfg), 16);
-> +	snd_array_init(&codec->driver_pins, sizeof(struct hda_pincfg), 16);
-> +	snd_array_init(&codec->cvt_setups, sizeof(struct hda_cvt_setup), 8);
-> +	snd_array_init(&codec->spdif_out, sizeof(struct hda_spdif_out), 16);
-> +	snd_array_init(&codec->jacktbl, sizeof(struct hda_jack_tbl), 16);
-> +	snd_array_init(&codec->verbs, sizeof(struct hda_verb *), 8);
-> +	INIT_LIST_HEAD(&codec->conn_list);
-> +	INIT_LIST_HEAD(&codec->pcm_list_head);
-> +	INIT_DELAYED_WORK(&codec->jackpoll_work, hda_jackpoll_work);
-> +	refcount_set(&codec->pcm_ref, 1);
-> +	init_waitqueue_head(&codec->remove_sleep);
+> diff --git a/Documentation/devicetree/bindings/net/dsa/mxl,gsw.yaml b/Documentation/devicetree/bindings/net/dsa/mxl,gsw.yaml
+> new file mode 100644
+> index 000000000000..8e124b7ec58c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/dsa/mxl,gsw.yaml
+
+Filename based on compatible, so mxl,gsw145-mdio.yaml. But see below.
+
+> @@ -0,0 +1,140 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/dsa/mxl,gsw.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  	return codec;
->  }
->  EXPORT_SYMBOL_GPL(snd_hda_codec_device_init);
-> @@ -985,29 +1005,8 @@ int snd_hda_codec_device_new(struct hda_bus *bus, struct snd_card *card,
->  	if (snd_BUG_ON(codec_addr > HDA_MAX_CODEC_ADDRESS))
->  		return -EINVAL;
->  
-> -	codec->core.dev.release = snd_hda_codec_dev_release;
-> -	codec->core.exec_verb = codec_exec_verb;
-> -
->  	codec->card = card;
->  	codec->addr = codec_addr;
-> -	mutex_init(&codec->spdif_mutex);
-> -	mutex_init(&codec->control_mutex);
-> -	snd_array_init(&codec->mixers, sizeof(struct hda_nid_item), 32);
-> -	snd_array_init(&codec->nids, sizeof(struct hda_nid_item), 32);
-> -	snd_array_init(&codec->init_pins, sizeof(struct hda_pincfg), 16);
-> -	snd_array_init(&codec->driver_pins, sizeof(struct hda_pincfg), 16);
-> -	snd_array_init(&codec->cvt_setups, sizeof(struct hda_cvt_setup), 8);
-> -	snd_array_init(&codec->spdif_out, sizeof(struct hda_spdif_out), 16);
-> -	snd_array_init(&codec->jacktbl, sizeof(struct hda_jack_tbl), 16);
-> -	snd_array_init(&codec->verbs, sizeof(struct hda_verb *), 8);
-> -	INIT_LIST_HEAD(&codec->conn_list);
-> -	INIT_LIST_HEAD(&codec->pcm_list_head);
-> -	refcount_set(&codec->pcm_ref, 1);
-> -	init_waitqueue_head(&codec->remove_sleep);
-> -
-> -	INIT_DELAYED_WORK(&codec->jackpoll_work, hda_jackpoll_work);
-> -	codec->depop_delay = -1;
-> -	codec->fixup_id = HDA_FIXUP_ID_NOT_SET;
->  
->  #ifdef CONFIG_PM
->  	codec->power_jiffies = jiffies;
+> +title: Maxlinear GSW Series Switch Device Tree Bindings
+
+Drop "Device Tree Bindings"
+
+> +
+> +allOf:
+> +  - $ref: dsa.yaml#
+> +
+> +maintainers:
+> +  - Camel Guo <camel.guo@axis.com>
+> +
+> +description:
+> +  The Maxlinear's GSW Series Ethernet Switch is a highly integrated, low-power,
+> +  non-blocking Gigabit Ethernet Switch.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+
+You do not have multiple choices, so no need for oneOf
+
+> +      - enum:
+> +          - mxl,gsw145-mdio
+
+Why "mdio" suffix?
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  mdio:
+> +    type: object
+> +
+> +    description:
+> +      Container of ethernet phy devices on the MDIO bus of GSW switch
+> +
+> +    properties:
+> +      '#address-cells':
+> +        const: 1
+> +      '#size-cells':
+> +        const: 0
+> +
+> +    allOf:
+
+No need for allOf
+
+> +      - $ref: "http://devicetree.org/schemas/net/ethernet-phy.yaml#"
+
+That's not an URL. Open other schemas using ethernet-phy and check how
+they are doing.
+
+You miss:
+
+    unevaluatedProperties: false
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - mdio
+> +
+> +additionalProperties: true
+
+This cannot be true. Again - open existing bindings and do like they are
+doing, not differently.
+
+You wanted here unevaluatedProperties: false.
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    mdio {
+
+Hmmm... switch with MDIO is part of MDIO?
+
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        switch@0 {
+> +            compatible = "mxl,gsw145-mdio";
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +            reg = <0x0>;
+
+reg is a second property
+
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+
+Best regards,
+Krzysztof
+
