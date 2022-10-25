@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FF160C318
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 07:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007C260C31A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 07:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiJYFIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 01:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S230414AbiJYFIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 01:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiJYFHz (ORCPT
+        with ESMTP id S230274AbiJYFH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 01:07:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8C6137389;
-        Mon, 24 Oct 2022 22:06:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52501B81260;
-        Tue, 25 Oct 2022 05:06:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91FD0C433D7;
-        Tue, 25 Oct 2022 05:06:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666674412;
-        bh=PhAvkA+YfdXpkTGuM4QF1TubeX/M39i3zMfp0nDwnNI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gdzVXZnDZXkvLcl2UrckpkcK20KG0qUGhbBB3VlMtrQerDXWv1t8ywEzJANQEfpN8
-         64p3rplQZqwKexR8wnQfuMIkjLkrlg6couk7pIBthi11VCYMx5eouCFO5qotQRDxIP
-         r6fSjbaBtj2lGdUOxlJGDEcj6FqjdvpJtZ0AxE9Od52wGi4tdIK4OBcXcq3NNCng+M
-         mm+t6L0dyb3SyRVsCicJq/cd4M24LOCdpl4Mn6tDRnQHAMA9uiGsFdYOXV6lRXx1xc
-         yN6wH5ZU5PHgiUS24KiwjjrlQ7hXNnKt+Fdyhg7Dj/5FDQ21Bf7QA+dPIdd/xUPjgV
-         V3jWt1ggvUS4Q==
-Date:   Mon, 24 Oct 2022 22:06:50 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Adam Langley <agl@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: Should Linux set the new constant-time mode CPU flags?
-Message-ID: <Y1du6kdk/6L0O56a@sol.localdomain>
-References: <YwgCrqutxmX0W72r@gmail.com>
- <Ywzr2d52ixYXUDWR@zx2c4.com>
- <6ec9cdab-db5b-ab28-c92d-79c3812dd369@intel.com>
- <YxCQzZqLZ49gLlrH@hirez.programming.kicks-ass.net>
+        Tue, 25 Oct 2022 01:07:56 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311C0144E19
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:07:04 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id h2so4405428pgp.4
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:07:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=b0wunblmCvoNzFQ+Ax4TKZ+hqx1Bra2g+X5BnPCtjKo=;
+        b=jFE6Hyrm+Lpe5udXJpySAIwraZa4iNCeSxsMwbiR3bPbgfHIJPH/lve2TrBnc+E4FU
+         LtdFeGTgkaXgPerN3IywVP/HEEntwVO88rSgCxOnhi+WBaQYK0FDZG471nn4pFKByfGX
+         gyxZd9tnTcC2K0fxAw4bG4Mz6edA+CWsNhNPMwiLXpgmS8BGsPB+ZU4Rx9zWBhHsq1PZ
+         CE6HbEs/jt6Tq26FMWZb+MTX9CxQ7TzNKDIRxp+eG4dYELo+2Aiq5tB2lltb80+zYV66
+         qCMv87gcoTavBPMSu+YFwyYZKcfj7L+CCCiAhAfSAs43CyxPzxKlhoqw6+Mm6TN4SaTs
+         jJPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b0wunblmCvoNzFQ+Ax4TKZ+hqx1Bra2g+X5BnPCtjKo=;
+        b=Nyk7tuydml3T8Ig7cweQGnTJZl3LJ8onhjHL+Rz/QqcinKHPiWe6kNe8gziGgd9pQD
+         QaNp4T7bAatSrjMy2LsmrYkc/qkQBwKimpeul+f45flH3C7b9Ocn995nVn+0xueXWnsz
+         CLy9ZNtmLdbuYq7GrTBOIK/xiZMTYM0uutSsmljbWiKcR6Rf738GpI9VfvDk5uHSiu2x
+         JBzgpT0cTq189/rMs7jnvqARSG3XCBX9wFmJiydfnrU/k8BtWHKK8e85K6NcLC25agUM
+         OmpRTRjNFIWNa3dvam+O2yF3cuNwKxuUubGzimi9hAyzhhwsXXpiRWP4ThhhyEb1/w24
+         Ehig==
+X-Gm-Message-State: ACrzQf1xufDQMbAjUBApvHi7SiG3DYsRfUZ9w7D4netZv9onYRW/yJ9p
+        9kxVwnis6pzQ8zLTFGgcWzKmAQ==
+X-Google-Smtp-Source: AMsMyM7hqviQBY3OSfS0lzYvRThyk6R7SGD7bS0FtbO5in9b0W3ENrdpYNpDzlCdWNdj/96voNr19Q==
+X-Received: by 2002:a63:6742:0:b0:452:59b9:22e with SMTP id b63-20020a636742000000b0045259b9022emr30639524pgc.205.1666674423624;
+        Mon, 24 Oct 2022 22:07:03 -0700 (PDT)
+Received: from localhost ([122.172.87.26])
+        by smtp.gmail.com with ESMTPSA id n13-20020a170902d2cd00b00176ae5c0f38sm512817plc.178.2022.10.24.22.07.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 22:07:02 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 10:37:00 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 04/11] ARM: sa1100: make cpufreq driver build standalone
+Message-ID: <20221025050700.3dzdgicrx3hcdhqa@vireshk-i7>
+References: <20221021155000.4108406-1-arnd@kernel.org>
+ <20221021155000.4108406-5-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YxCQzZqLZ49gLlrH@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20221021155000.4108406-5-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,106 +77,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 01:00:29PM +0200, Peter Zijlstra wrote:
-> Since I'm not feeling too well I figured I'd do something trivial and
-> whipped up the below patch.
-> 
-> 
-> ---
->  arch/x86/include/asm/cpufeatures.h |  3 ++
->  arch/x86/include/asm/msr-index.h   |  4 +++
->  arch/x86/kernel/cpu/common.c       | 69 ++++++++++++++++++++++++++++++--------
->  arch/x86/kernel/cpu/scattered.c    |  1 +
->  4 files changed, 63 insertions(+), 14 deletions(-)
-
-We still need to do something about this.  As this thread died out, I'll revive
-it by reviewing this patch.  (I'm not an expert in arch/x86/ stuff, though!)
-
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index 333d94394516..9b92f4e5e80a 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -305,6 +305,7 @@
->  #define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
->  #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
->  #define X86_FEATURE_CALL_DEPTH		(11*32+18) /* "" Call depth tracking for RSB stuffing */
-> +#define X86_FEATURE_MCDT_NO		(11*32+19) /* Not affected by MCDT */
-
-Some of the other CPU feature flags have comments beginning with "", which
-apparently results in the feature not being listed in /proc/cpuinfo.  (This
-header file is run through a shell script that looks at these comments and
-generates C code...)  Should this "feature" be listed in /proc/cpuinfo?
-
-Looking for examples of other "feature" flags that mean that a CPU is not
-vulnerable to something, I found X86_FEATURE_AMD_SSB_NO and X86_FEATURE_BTC_NO.
-Those aren't listed in /proc/cpuinfo.  Maybe this should be the same?
-
-Side note: maybe the comment should spell out "MXCSR Configuration Dependent
-Timing"?  Acronyms can be hard to read.
-
-> +#define X86_BUG_DOIT			X86_BUG(28)
-
-Maybe it should be X86_BUG_DODT?  The bug is data operand *dependent* timing.
-Data operand *independent* timing is the desired behavior and the fix.
-
-> +#define X86_BUG_MCDT			X86_BUG(29)
-
-According to Intel's documentation
-(https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/best-practices/data-operand-independent-timing-isa-guidance.html),
-MCDT is a separate bug which requires a separate mitigation.  So I think any
-MCDT related stuff should be in a separate patch from DOITM.
-
-But more importantly, this patch doesn't actually implement any mitigation for
-MCDT.  Should we be doing that?  Intel recommends writing a certain value to
-MXCSR to mitigate MCDT.  Is that feasible?
-
+On 21-10-22, 17:49, Arnd Bergmann wrote:
+> --- a/drivers/cpufreq/sa1110-cpufreq.c
+> +++ b/drivers/cpufreq/sa1110-cpufreq.c
+> @@ -29,6 +29,38 @@
 >  
->  #endif /* _ASM_X86_CPUFEATURES_H */
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 6674bdb096f3..08b4e0c2f7d3 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -119,6 +119,7 @@
->  						 * Not susceptible to
->  						 * TSX Async Abort (TAA) vulnerabilities.
->  						 */
-> +#define ARCH_CAP_DOIT			BIT(12) /* Data Operand Independent Timing */
->  #define ARCH_CAP_SBDR_SSDP_NO		BIT(13)	/*
->  						 * Not susceptible to SBDR and SSDP
->  						 * variants of Processor MMIO stale data
-> @@ -155,6 +156,9 @@
->  						 * Return Stack Buffer Predictions.
->  						 */
+>  #undef DEBUG
 >  
-> +#define MSR_IA32_UARCH_MISC_CTL		0x00001b01
-> +#define UARCH_MISC_DOIT			BIT(0)	/* Enable DOIT */
-
-The Intel documentation calls this bit "DOITM"
-(Data Operand Independent Timing Mode), not "DOIT".
-
-> +static __always_inline void setup_doit(struct cpuinfo_x86 *c)
+> +#define NR_FREQS	16
+> +
+> +/*
+> + * This table is setup for a 3.6864MHz Crystal.
+> + */
+> +static struct cpufreq_frequency_table sa11x0_freq_table[NR_FREQS+1] = {
+> +	{ .frequency = 59000,	/*  59.0 MHz */},
+> +	{ .frequency = 73700,	/*  73.7 MHz */},
+> +	{ .frequency = 88500,	/*  88.5 MHz */},
+> +	{ .frequency = 103200,	/* 103.2 MHz */},
+> +	{ .frequency = 118000,	/* 118.0 MHz */},
+> +	{ .frequency = 132700,	/* 132.7 MHz */},
+> +	{ .frequency = 147500,	/* 147.5 MHz */},
+> +	{ .frequency = 162200,	/* 162.2 MHz */},
+> +	{ .frequency = 176900,	/* 176.9 MHz */},
+> +	{ .frequency = 191700,	/* 191.7 MHz */},
+> +	{ .frequency = 206400,	/* 206.4 MHz */},
+> +	{ .frequency = 221200,	/* 221.2 MHz */},
+> +	{ .frequency = 235900,	/* 235.9 MHz */},
+> +	{ .frequency = 250700,	/* 250.7 MHz */},
+> +	{ .frequency = 265400,	/* 265.4 MHz */},
+> +	{ .frequency = 280200,	/* 280.2 MHz */},
+> +	{ .frequency = CPUFREQ_TABLE_END, },
+> +};
+> +
+> +static unsigned int sa11x0_getspeed(unsigned int cpu)
 > +{
-> +	u64 msr = 0;
+> +	if (cpu)
+> +		return 0;
+> +	return sa11x0_freq_table[PPCR & 0xf].frequency;
+> +}
 > +
-> +	if (!cpu_has(c, X86_BUG_DOIT))
-> +		return;
-> +
-> +	if (!doit_disabled)
-> +		return;
+>  struct sdram_params {
+>  	const char name[20];
+>  	u_char  rows;		/* bits				 */
 
-This is backwards; it needs to be 'if (doit_disabled)'.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-> diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-> index fd44b54c90d5..5063f8046554 100644
-> --- a/arch/x86/kernel/cpu/scattered.c
-> +++ b/arch/x86/kernel/cpu/scattered.c
-> @@ -27,6 +27,7 @@ static const struct cpuid_bit cpuid_bits[] = {
->  	{ X86_FEATURE_APERFMPERF,       CPUID_ECX,  0, 0x00000006, 0 },
->  	{ X86_FEATURE_EPB,		CPUID_ECX,  3, 0x00000006, 0 },
->  	{ X86_FEATURE_INTEL_PPIN,	CPUID_EBX,  0, 0x00000007, 1 },
-> +	{ X86_FEATURE_MCDT_NO,		CPUID_ECX,  5, 0x00000007, 2 },
-
-The Intel documentation says this bit is CPUID.(EAX=7H,ECX=2):EDX[5]=1.
-So CPUID_ECX is wrong; it needs to be CPUID_EDX.
-
-- Eric
+-- 
+viresh
