@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B0260C278
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 06:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E270060C27C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 06:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbiJYEFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 00:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S229692AbiJYEK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 00:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiJYEFf (ORCPT
+        with ESMTP id S229491AbiJYEKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 00:05:35 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99084DFF7;
-        Mon, 24 Oct 2022 21:05:32 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 78so10405768pgb.13;
-        Mon, 24 Oct 2022 21:05:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQa6ftKOheF7CVATYu6FGbp0ocnWZwF8PVY64lyLhoM=;
-        b=hnMBzTT/cC+QpgngwxCnviZIQzjKtd72bF1nCGbpL4eaVNjJWPfojj18zD4tT3jko2
-         nMN558xxJQwpU/Wx2G+QBMijIE7n28uWV15+9SuXz8V8qcmTrZ0fDcF+0RZrb4DVoPPu
-         PwGgIxn+UrrKfpEVhNVGu4ToOw0chE6cCsur7vgskqfWIDL5+sLpFINkhfe2TeaYyAkg
-         PdY82lCWAuSQo0udCArLMVBOo3mivsMlnItfR2fAddePHWCIy60/RMeRc1eAztnFZ2s/
-         6oKDX8dKnZa5KjYNGqFyQX+m4CTpDLRt0hfES+KoCHsrIRT7z9QiMpxSOeJ8aybUC9q4
-         stEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZQa6ftKOheF7CVATYu6FGbp0ocnWZwF8PVY64lyLhoM=;
-        b=JZdvTtqZozl8U7VbfiqOPikwgyF3u+NOq5OxGRqbxzojc86H9TPr4cfAb6PxaDYEQo
-         cQVlkGkZXxvuXN/JHgZtH0oSwQ75jhO80GvbBnLaxHkwpYFEp7p9Wbnn6IrzLJPnlJQx
-         MRBJznyW0l28ugH5PPwAmaXrmXZbfw5sHglfNEHhXXHnKr4BDP7d5jU1hsowj531oBr0
-         mLtIFast1+QEdDz4BZSdH/4Ptu/r4/U0sVvMWn7dJmW+bZEJhnX6nOrFKmsTQp9BiUqI
-         aJ/w4MScdgMdKdZxbx4P/XEQ8nZt7bTdlEYMRRowqy+hDAAuORUQJgePj701V0bQh7mg
-         BH1Q==
-X-Gm-Message-State: ACrzQf2643y77N6FN/0n9GBctdnaXkUGwPvFmmSZEx1v8MUb2PigdfId
-        YiamAu9mU/ZVGSAub2VSz43VGWWktWRvMw==
-X-Google-Smtp-Source: AMsMyM5aLirzYvsaFJweXIINNc5ABMyu6YOfTm73ZNmGEVGPvNk11aavIDjtVqLOyv17TwASEHRaSA==
-X-Received: by 2002:a63:4384:0:b0:43a:18ce:f98a with SMTP id q126-20020a634384000000b0043a18cef98amr30641470pga.273.1666670732126;
-        Mon, 24 Oct 2022 21:05:32 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-7.three.co.id. [180.214.232.7])
-        by smtp.gmail.com with ESMTPSA id d197-20020a621dce000000b0056c231d80bdsm243778pfd.157.2022.10.24.21.05.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 21:05:31 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E3E53103F53; Tue, 25 Oct 2022 11:05:28 +0700 (WIB)
-Date:   Tue, 25 Oct 2022 11:05:28 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 5.15 000/530] 5.15.75-rc1 review
-Message-ID: <Y1dgiM1at60Wcm6a@debian.me>
-References: <20221024113044.976326639@linuxfoundation.org>
+        Tue, 25 Oct 2022 00:10:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957FE1211C7;
+        Mon, 24 Oct 2022 21:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D9CCB819EE;
+        Tue, 25 Oct 2022 04:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E75D5C433B5;
+        Tue, 25 Oct 2022 04:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666671016;
+        bh=1kc/oco0AWq8/8y4+ZileiMvxdlcuOi0ziZDWhTNb0I=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=vJQmCQul8LkGiU2yJJ9rIiobCqn8ALOE7iLthDt2xTYHLewfl5Hx9v/wUfg3QzA1Y
+         vC8BOXfvsL7pLTtH+ERuMAFpRS3klQs0WiJWlDKxTzDyWLZC5H8cDK5efHUYbfNmO9
+         unJ3u2GJ+/3l639a3P4FaLD23Hq1uwclyPL1JuK2spdEBhEm2CWBA7wS8pR89R6o6P
+         QF5YSflCrcwxevQUPAYVVsuf3+mhM8572xC7DGade5wTyqtBqQ6/3maitALOS0blGv
+         9tTJyVfasmXbykUfKHSczfwc6Mafc7jdXaOwfPxg24IWeFlO0J6oT7ejNHovR7Fdg+
+         XH4ANnP8zEMVw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C4280E270DD;
+        Tue, 25 Oct 2022 04:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="CPDhycYeX2u+Ftac"
-Content-Disposition: inline
-In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: lan966x: Stop replacing tx dcbs and dcbs_buf when
+ changing MTU
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166667101579.1819.16740602296394570819.git-patchwork-notify@kernel.org>
+Date:   Tue, 25 Oct 2022 04:10:15 +0000
+References: <20221021090711.3749009-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20221021090711.3749009-1-horatiu.vultur@microchip.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, UNGLinuxDriver@microchip.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---CPDhycYeX2u+Ftac
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, Oct 24, 2022 at 01:25:44PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.75 release.
-> There are 530 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+On Fri, 21 Oct 2022 11:07:11 +0200 you wrote:
+> When a frame is sent using FDMA, the skb is mapped and then the mapped
+> address is given to an tx dcb that is different than the last used tx
+> dcb. Once the HW finish with this frame, it would generate an interrupt
+> and then the dcb can be reused and memory can be freed. For each dcb
+> there is an dcb buf that contains some meta-data(is used by PTP, is
+> it free). There is 1 to 1 relationship between dcb and dcb_buf.
+> The following issue was observed. That sometimes after changing the MTU
+> to allocate new tx dcbs and dcbs_buf, two frames were not
+> transmitted. The frames were not transmitted because when reloading the
+> tx dcbs, it was always presuming to use the first dcb but that was not
+> always happening. Because it could be that the last tx dcb used before
+> changing MTU was first dcb and then when it tried to get the next dcb it
+> would take dcb 1 instead of 0. Because it is supposed to take a
+> different dcb than the last used one. This can be fixed simply by
+> changing tx->last_in_use to -1 when the fdma is disabled to reload the
+> new dcb and dcbs_buff.
+> But there could be a different issue. For example, right after the frame
+> is sent, the MTU is changed. Now all the dcbs and dcbs_buf will be
+> cleared. And now get the interrupt from HW that it finished with the
+> frame. So when we try to clear the skb, it is not possible because we
+> lost all the dcbs_buf.
+> The solution here is to stop replacing the tx dcbs and dcbs_buf when
+> changing MTU because the TX doesn't care what is the MTU size, it is
+> only the RX that needs this information.
+> 
+> [...]
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+Here is the summary with links:
+  - [net] net: lan966x: Stop replacing tx dcbs and dcbs_buf when changing MTU
+    https://git.kernel.org/netdev/net/c/4a4b6848d1e9
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---=20
-An old man doll... just what I always wanted! - Clara
 
---CPDhycYeX2u+Ftac
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1dghAAKCRD2uYlJVVFO
-o28sAQCIDUU53Pc0rdKeJy2JyG9rwTLfnnnVxWqlB/OdqTal5gEAp1TyJRpB61yL
-Jx8ayi8DSfTgWlePXWc32DGZD+Wl9w8=
-=mgsc
------END PGP SIGNATURE-----
-
---CPDhycYeX2u+Ftac--
