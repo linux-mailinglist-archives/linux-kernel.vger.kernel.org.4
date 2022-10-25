@@ -2,75 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEA360D762
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5350A60D76A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbiJYWw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
+        id S232662AbiJYWxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbiJYWwY (ORCPT
+        with ESMTP id S231646AbiJYWxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:52:24 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6A4237F6;
-        Tue, 25 Oct 2022 15:52:23 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 192so6277108pfx.5;
-        Tue, 25 Oct 2022 15:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dscgs+ydXpa+zSr9O18VpmGVPw+9ObsVjtPwWI+z0tQ=;
-        b=YpEuvcynWg6m4SNXhwiG02g9kX1rwoHcG5XAO5DXI5N1CjhuOjLvY2ZDo2dBun5MYl
-         DpQkxtb+C4v0TiMyk3xrsZKr94rK6c1LoKqDTURSIOzNw1JwLhfvQMyQwaUQlZfZyKqL
-         eqayQ8KDxmUAqbZxoAYiu7dZQCcPmiX1IX1jbFtOcbcpMIO202acV54izcEUekE0Th5b
-         PFXfqYsIThxQcVU6KgoooAr7KoXWR2cA6IhxGupbPZTRogPhNcVsLLDS0ReUN65sqPDF
-         ls9rufg6MPOe2epBvJMi0I5IZkvvW/hXL6EJ4B4/Q5jB1Pf7ldQqH0sU2jyCUaW4ao7U
-         +pJw==
+        Tue, 25 Oct 2022 18:53:44 -0400
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB06A3A93;
+        Tue, 25 Oct 2022 15:53:44 -0700 (PDT)
+Received: by mail-ot1-f48.google.com with SMTP id t4-20020a9d7f84000000b00661c3d864f9so8790076otp.10;
+        Tue, 25 Oct 2022 15:53:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dscgs+ydXpa+zSr9O18VpmGVPw+9ObsVjtPwWI+z0tQ=;
-        b=oOT0CeH6AZvHoylZL7WUR9Lr37K5Hu6hYb4yc9IiFOdWBCa9QI8vf8ByRRxoize5Yd
-         YAtVg5iriwmjJLDmxv5UJ1vBhUCZ7JEQLkN66qOUX81igzUu7xhl1rP37nSk1D6mh0Kx
-         Pex/kWHPZdRFRXcJm5mzHig+uLZOYct9/C0FdKj4G4UXKZLup8/rVkXz8gurtON5PvQg
-         V8z4oxkaM9KjEMeTR2CTfWq0FodWde3Gyqrd/6DzTdjzE9+UQ4v7vE+mwePKI/mQZSKQ
-         IlSuz8yJd3iSjOranFjwiHySDpT7K/p9BGKclgm2GKOZUEodn8GvJ29FYo4PXD9bin4N
-         9q/A==
-X-Gm-Message-State: ACrzQf1uCK4gq3rymIfXd2zj7n7ZTkN723S7wDdaLy9+TSOyJBb8dMFr
-        wEqGlLpiLS9s6/E7jehQ9oI=
-X-Google-Smtp-Source: AMsMyM7p6gWAuxiYfm8U+Y/0FXoYG7KaQBMzcSl5jlvs7QKCqfk4eaNintgPpBQGcNis1bmNDJ/VsQ==
-X-Received: by 2002:a05:6a00:234d:b0:561:f0c3:cde1 with SMTP id j13-20020a056a00234d00b00561f0c3cde1mr41159268pfj.34.1666738342857;
-        Tue, 25 Oct 2022 15:52:22 -0700 (PDT)
-Received: from macbook-pro-4.dhcp.thefacebook.com ([2620:10d:c090:500::5:9233])
-        by smtp.gmail.com with ESMTPSA id 131-20020a621989000000b00561cf757749sm1834754pfz.183.2022.10.25.15.52.20
+        bh=+XqqarhGQrvSY3ksT1wW8eAEuSiXyprpezwh4x6/R8Q=;
+        b=2SaiPj3yNGLqd9c2lL4T8kVWe06m4Tn1juo8xBxDR9Hmliu88/i3as9qitXIdGftgi
+         iTni9YMYJOfjsa1lvJhaac6dd1Y/jMvxi33VLDhQdnGu/ZPLiu/JKZ3hrgSXLrkRDy4q
+         pLIz27LmeHqjmiwSv8qSeIGCl1yJXVnEeTn5bqxdcw5NeV3UxWlGeFMWTAxsdGReHUGt
+         DJjRFsebKzvdgBpeD6YXYrQdPs4xLfxssMRRdsRYSSs1Mw0p2UtZ3xyJxqZ9l2Ia6j/O
+         0+nFvSrPEe84d6emKuX6udYqDm95pbBvvkiZNtOod/u0hG9DeLDwwErs63KvUAFvSviR
+         y/Xg==
+X-Gm-Message-State: ACrzQf3SKJuAY8Dp7uXKTGbDeoKLcvdzIECuzscnnSLioUqso6W4Thtn
+        3DNK3w164ESL2WSzjeg/CA==
+X-Google-Smtp-Source: AMsMyM46PL5sWdLU1Da2yyhtJgysr7PoxsTCx9ff5dPxVPbxpkOT68+zG4LnQDCW+OBIcFy1xd2iwQ==
+X-Received: by 2002:a9d:61d6:0:b0:661:c1ad:848f with SMTP id h22-20020a9d61d6000000b00661c1ad848fmr20590325otk.111.1666738423326;
+        Tue, 25 Oct 2022 15:53:43 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w110-20020a9d3677000000b0066227572ee3sm1561200otb.52.2022.10.25.15.53.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 15:52:22 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 15:52:19 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH hid v11 02/14] HID: initial BPF implementation
-Message-ID: <20221025225219.i3pi7ewue6xqeig4@macbook-pro-4.dhcp.thefacebook.com>
-References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
- <20221025093458.457089-3-benjamin.tissoires@redhat.com>
+        Tue, 25 Oct 2022 15:53:42 -0700 (PDT)
+Received: (nullmailer pid 3413843 invoked by uid 1000);
+        Tue, 25 Oct 2022 22:53:44 -0000
+Date:   Tue, 25 Oct 2022 17:53:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom,msm8916: convert to
+ dtschema
+Message-ID: <166673842371.3413786.3565382304303920817.robh@kernel.org>
+References: <20221024002356.28261-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025093458.457089-3-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221024002356.28261-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,85 +70,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:34:46AM +0200, Benjamin Tissoires wrote:
->  include/linux/hid.h                           |   5 +
->  include/linux/hid_bpf.h                       | 102 +++
->  include/uapi/linux/hid_bpf.h                  |  25 +
->  tools/include/uapi/linux/hid.h                |  62 ++
->  tools/include/uapi/linux/hid_bpf.h            |  25 +
+On Sun, 23 Oct 2022 20:23:55 -0400, Krzysztof Kozlowski wrote:
+> Convert Qualcomm MSM8916 pin controller bindings to DT schema.  Keep the
+> parsing of pin configuration subnodes consistent with other Qualcomm
+> schemas (children named with '-state' suffix, their children with
+> '-pins').
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/pinctrl/qcom,msm8916-pinctrl.txt | 195 ------------------
+>  .../pinctrl/qcom,msm8916-pinctrl.yaml         | 166 +++++++++++++++
+>  2 files changed, 166 insertions(+), 195 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.txt
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,msm8916-pinctrl.yaml
+> 
 
-...
-
-> +++ b/include/linux/hid_bpf.h
-> @@ -0,0 +1,102 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +
-> +#ifndef __HID_BPF_H
-> +#define __HID_BPF_H
-> +
-> +#include <linux/spinlock.h>
-> +#include <uapi/linux/hid.h>
-> +#include <uapi/linux/hid_bpf.h>
-> +
-> +struct hid_device;
-> +
-> +/*
-> + * The following is the HID BPF API.
-> + *
-> + * It should be treated as UAPI, so extra care is required
-> + * when making change to this file.
-> + */
-
-I thought at the maintainer summit we discussed that it shouldn't be
-treated as uapi. There is no need to draw this line right now.
-If the whole concept turns out to be useful and api is stable
-then promote it.
-
-> +++ b/include/uapi/linux/hid_bpf.h
-> @@ -0,0 +1,25 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +
-> +#ifndef _UAPI_HID_BPF_H
-> +#define _UAPI_HID_BPF_H
-> +
-> +#include <linux/const.h>
-> +#include <linux/hid.h>
-> +
-> +/**
-> + * enum hid_bpf_attach_flags - flags used when attaching a HIF-BPF program
-> + *
-> + * @HID_BPF_FLAG_NONE: no specific flag is used, the kernel choses where to
-> + *                     insert the program
-> + * @HID_BPF_FLAG_INSERT_HEAD: insert the given program before any other program
-> + *                            currently attached to the device. This doesn't
-> + *                            guarantee that this program will always be first
-> + * @HID_BPF_FLAG_MAX: sentinel value, not to be used by the callers
-> + */
-> +enum hid_bpf_attach_flags {
-> +	HID_BPF_FLAG_NONE = 0,
-> +	HID_BPF_FLAG_INSERT_HEAD = _BITUL(0),
-> +	HID_BPF_FLAG_MAX,
-> +};
-> +
-> +#endif /* _UAPI_HID_BPF_H */
-
-Not sure what is the purpose of this uapi file.
-Since it's enum the progs can get it from vmlinux.h.
-
-> diff --git a/tools/include/uapi/linux/hid.h b/tools/include/uapi/linux/hid.h
-> new file mode 100644
-> index 000000000000..3e63bea3b3e2
-> --- /dev/null
-> +++ b/tools/include/uapi/linux/hid.h
-> @@ -0,0 +1,62 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
-> +/*
-> + *  Copyright (c) 1999 Andreas Gal
-> + *  Copyright (c) 2000-2001 Vojtech Pavlik
-> + *  Copyright (c) 2006-2007 Jiri Kosina
-> + */
-> +#ifndef _UAPI__HID_H
-> +#define _UAPI__HID_H
-
-This is a copy of include/uapi/linux/hid.h ?
-Probably should be a separate commit to make it obvious.
+Reviewed-by: Rob Herring <robh@kernel.org>
