@@ -2,400 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DAF60D467
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3B260D477
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbiJYTOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S232042AbiJYTPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbiJYTNv (ORCPT
+        with ESMTP id S231751AbiJYTPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:13:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D607AD57E7;
-        Tue, 25 Oct 2022 12:13:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66CD861AF3;
-        Tue, 25 Oct 2022 19:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996EEC433D7;
-        Tue, 25 Oct 2022 19:13:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666725229;
-        bh=lDtjHINXdOVHEiGbtJUekTFRV0t1UZw87SjDZ44Dw3k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nl5xCBURWErm2YeL3mfdtFQ5GmYWVyYuTIb/iFs660W4NbySMubUyMAQ3egDXzHV/
-         +oHf1yYuBeZre+kkVXgEMXbPZdn1UErRWrLehTlNdeZjtmoYYwkSm0nA3nsRcXXkcA
-         2mlfio9bx92E00QoqNZOygjOs7TNMPBPF6fRlAbJ2F1TJ8r08FueA3elJf1xVV664K
-         yoBIp1SuWTbHSpGpL+gonFrbsj+5M9VXtClCiX8WJb/cDmGx2fRV2YiI8j46fJR3Ox
-         +nx2tFPeEZHNTJiXNBTdXSnMdFUoDvthX1+T6P6qigL2ynb03/AeeJYQVFBC8Zx7qo
-         fSWSr1gS3YXYg==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH 2/2] PCI: Drop controller CONFIG_OF dependencies
-Date:   Tue, 25 Oct 2022 14:13:39 -0500
-Message-Id: <20221025191339.667614-3-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221025191339.667614-1-helgaas@kernel.org>
-References: <20221025191339.667614-1-helgaas@kernel.org>
+        Tue, 25 Oct 2022 15:15:31 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B4D7E018;
+        Tue, 25 Oct 2022 12:15:30 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29PJFJmJ096764;
+        Tue, 25 Oct 2022 14:15:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666725319;
+        bh=hg7ZEAuCPP4IUgifrwlR+W9vs9ouPnFxVaoin0/vvoI=;
+        h=From:To:CC:Subject:Date;
+        b=fayku1QzORZvI9ZA2SE7XxcDxca9+uekQfEMVkXi8B+Z8RlGAZdiu11jve2WndgNN
+         /iuak+LVphT55WHA1sfbA0ESLlEVHnFg/RSP0hShUwXiJ0Q68v4hTZcIUwlJkzDAYH
+         837VYPKvPXex63y4RwDAvoQ1oCXxhx/ciECLdTjY=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29PJFJTm058276
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Oct 2022 14:15:19 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 25
+ Oct 2022 14:15:19 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 25 Oct 2022 14:15:19 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29PJFJIm056990;
+        Tue, 25 Oct 2022 14:15:19 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+CC:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
+        Device Trees <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LKML ARM <linux-arm-kernel@lists.infradead.org>,
+        Bryan Brattlof <bb@ti.com>
+Subject: [PATCH v2 00/11] enable VTM node for all TI's K3 SoCs
+Date:   Tue, 25 Oct 2022 14:15:04 -0500
+Message-ID: <20221025191515.9151-1-bb@ti.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3044; h=from:subject; bh=5IGQUfa5WkW1F5uf6fTrPTCINIM+ArcMQX8aqPbUe9o=; b=owNCWmg5MUFZJlNZ+HR/kwAAZX/////tiz3tz7fuw/v73Yc3Pua/+97D6v8/323vm9nN9/8wARms EPU0aAaAAaBo9QD0gANAaAA0ZADQABoABoAAPUaGmgAaGj1PKaBo9R5M1RBo0DQGgaaAMhoBpoDCaB pkyA0ABgjJpgAjEwgNDRo00GmjJo0BkyaBoADKaND1HqD1GagANNA0MgGjRoAaGjQBp6j1AAAPU9QM 1ABkGgDQAHlDT1ABpoGg2bWhJ6VwGBFtX4E4qDESVaJYfBUBmEsWCkPZfHYBrmywJY1KF4emrbxlyB l3NDOSRJ4Fs8DghfWkF1/yNVYgxRA/UhWAiy5B4qigGB/xR8aYzAAu2a7OnUR1BQzWx6aitikYlLmB abI7sjJsBun+jraQGHd55Z/89iWFBfHMl6hrDS0NeyU6I9IRqpn/dy55i+qeb47ysEK2Qk76876o71 zPKGS+FOmokcxBxLaDn1lYQj39E/ZVBte6Dn4dJ/EHoQ9wlamvfXKVn92KrUxJY42yp/k6vrPozAhg aiK2SHEpgrV4+TewhDjzjLj1cQuYvzIoLshFHBSrcQYqaB5nk7AmZIo0h3fKCFBj6K8LpQqnJeYdSl kxxiAJFxLFPYj48/81XqzZxwywYSEWdotABpQDTWKopYFJ5JBgcMIaDojf8XckU4UJD4dH+TA=
+X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+Hello again everyone!
 
-Many drivers depend on OF interfaces, so they won't be functional if
-CONFIG_OF is not set.  But OF provides stub functions in that case, so drop
-the OF dependencies so we can at least compile-test the drivers.
+This series enabled the VTM nodes for all of Texas Instruments K3 SoCs
 
-This means we can compile-test the following drivers even without CONFIG_OF
-enabled (many still require either CONFIG_COMPILE_TEST or the relevant
-arch):
+Most of this series updates the k3_j72xx_bandgap driver to conditionally 
+map an eFuse region used by the j721e to work around an issue in its VTM 
+implementation and allows us to save the SPARE_FUSE region on other SoCs
 
-  aardvark
-  al
-  apple
-  brcmstb
-  cadence-host
-  cadence-platform-host
-  cadence-ep
-  dra7xx-host
-  dra7xx-ep
-  dw-rockchip
-  ftpci100
-  hisi
-  intel-gw
-  ixp4xx
-  j721e-host
-  j721e-ep
-  kirin
-  layerscape-host
-  layerscape-ep
-  mediatek
-  microchip-host
-  mobiveil
-  mvebu
-  qcom-host
-  qcom-ep
-  rockchip-host
-  rockchip-ep
-  rockchip-dwc
-  pci-host-generic
-  uniphier-host
-  uniphier-ep
-  v3-semi
-  xilinx
+We can then update the device tree bindings for the driver and finally 
+define the VTM nodes for each device
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- drivers/pci/controller/Kconfig          | 15 ++-------------
- drivers/pci/controller/cadence/Kconfig  |  6 ------
- drivers/pci/controller/dwc/Kconfig      | 25 ++++++++++++-------------
- drivers/pci/controller/mobiveil/Kconfig |  1 -
- 4 files changed, 14 insertions(+), 33 deletions(-)
+Thanks for reviewing!
+~Bryan
 
-diff --git a/drivers/pci/controller/Kconfig b/drivers/pci/controller/Kconfig
-index bfd9bac37e24..76806dc52d1b 100644
---- a/drivers/pci/controller/Kconfig
-+++ b/drivers/pci/controller/Kconfig
-@@ -8,7 +8,6 @@ config PCI_MVEBU
- 	depends on ARCH_MVEBU || ARCH_DOVE || COMPILE_TEST
- 	depends on MVEBU_MBUS
- 	depends on ARM
--	depends on OF
- 	select PCI_BRIDGE_EMUL
- 	help
- 	 Add support for Marvell EBU PCIe controller. This PCIe controller
-@@ -18,7 +17,6 @@ config PCI_MVEBU
- config PCI_AARDVARK
- 	tristate "Aardvark PCIe controller"
- 	depends on (ARCH_MVEBU && ARM64) || COMPILE_TEST
--	depends on OF
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCI_BRIDGE_EMUL
- 	help
-@@ -38,13 +36,12 @@ config PCIE_XILINX_NWL
- 
- config PCI_FTPCI100
- 	bool "Faraday Technology FTPCI100 PCI controller"
--	depends on OF
- 	default ARCH_GEMINI
- 
- config PCI_IXP4XX
- 	bool "Intel IXP4xx PCI controller"
--	depends on ARM && OF
- 	depends on ARCH_IXP4XX || COMPILE_TEST
-+	depends on ARM
- 	default ARCH_IXP4XX
- 	help
- 	  Say Y here if you want support for the PCI host controller found
-@@ -89,7 +86,6 @@ config PCI_HOST_COMMON
- 
- config PCI_HOST_GENERIC
- 	tristate "Generic PCI host controller"
--	depends on OF
- 	select PCI_HOST_COMMON
- 	select IRQ_DOMAIN
- 	help
-@@ -98,7 +94,6 @@ config PCI_HOST_GENERIC
- 
- config PCIE_XILINX
- 	bool "Xilinx AXI PCIe host bridge support"
--	depends on OF || COMPILE_TEST
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	help
- 	  Say 'Y' here if you want kernel to support the Xilinx AXI PCIe
-@@ -132,7 +127,6 @@ config PCI_XGENE_MSI
- 
- config PCI_V3_SEMI
- 	bool "V3 Semiconductor PCI controller"
--	depends on OF
- 	depends on ARM || COMPILE_TEST
- 	default ARCH_INTEGRATOR_AP
- 
-@@ -214,7 +208,6 @@ config PCIE_ROCKCHIP
- config PCIE_ROCKCHIP_HOST
- 	tristate "Rockchip PCIe host controller"
- 	depends on ARCH_ROCKCHIP || COMPILE_TEST
--	depends on OF
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select MFD_SYSCON
- 	select PCIE_ROCKCHIP
-@@ -226,7 +219,6 @@ config PCIE_ROCKCHIP_HOST
- config PCIE_ROCKCHIP_EP
- 	bool "Rockchip PCIe endpoint controller"
- 	depends on ARCH_ROCKCHIP || COMPILE_TEST
--	depends on OF
- 	depends on PCI_ENDPOINT
- 	select MFD_SYSCON
- 	select PCIE_ROCKCHIP
-@@ -238,7 +230,6 @@ config PCIE_ROCKCHIP_EP
- config PCIE_MEDIATEK
- 	tristate "MediaTek PCIe controller"
- 	depends on ARCH_AIROHA || ARCH_MEDIATEK || COMPILE_TEST
--	depends on OF
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	help
- 	  Say Y here if you want to enable PCIe controller support on
-@@ -276,7 +267,6 @@ config PCIE_BRCMSTB
- 	tristate "Broadcom Brcmstb PCIe host controller"
- 	depends on ARCH_BRCMSTB || ARCH_BCM2835 || ARCH_BCMBCA || \
- 		   BMIPS_GENERIC || COMPILE_TEST
--	depends on OF
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	default ARCH_BRCMSTB || BMIPS_GENERIC
- 	help
-@@ -302,7 +292,7 @@ config PCI_LOONGSON
- 
- config PCIE_MICROCHIP_HOST
- 	bool "Microchip AXI PCIe host bridge support"
--	depends on PCI_MSI && OF
-+	depends on PCI_MSI
- 	select PCI_MSI_IRQ_DOMAIN
- 	select GENERIC_MSI_IRQ_DOMAIN
- 	select PCI_HOST_COMMON
-@@ -325,7 +315,6 @@ config PCIE_APPLE_MSI_DOORBELL_ADDR
- config PCIE_APPLE
- 	tristate "Apple PCIe controller"
- 	depends on ARCH_APPLE || COMPILE_TEST
--	depends on OF
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCI_HOST_COMMON
- 	help
-diff --git a/drivers/pci/controller/cadence/Kconfig b/drivers/pci/controller/cadence/Kconfig
-index 5d30564190e1..cb3b19f801a2 100644
---- a/drivers/pci/controller/cadence/Kconfig
-+++ b/drivers/pci/controller/cadence/Kconfig
-@@ -8,13 +8,11 @@ config PCIE_CADENCE
- 
- config PCIE_CADENCE_HOST
- 	bool
--	depends on OF
- 	select IRQ_DOMAIN
- 	select PCIE_CADENCE
- 
- config PCIE_CADENCE_EP
- 	bool
--	depends on OF
- 	depends on PCI_ENDPOINT
- 	select PCIE_CADENCE
- 
-@@ -23,7 +21,6 @@ config PCIE_CADENCE_PLAT
- 
- config PCIE_CADENCE_PLAT_HOST
- 	bool "Cadence PCIe platform host controller"
--	depends on OF
- 	select PCIE_CADENCE_HOST
- 	select PCIE_CADENCE_PLAT
- 	help
-@@ -33,7 +30,6 @@ config PCIE_CADENCE_PLAT_HOST
- 
- config PCIE_CADENCE_PLAT_EP
- 	bool "Cadence PCIe platform endpoint controller"
--	depends on OF
- 	depends on PCI_ENDPOINT
- 	select PCIE_CADENCE_EP
- 	select PCIE_CADENCE_PLAT
-@@ -47,7 +43,6 @@ config PCI_J721E
- 
- config PCI_J721E_HOST
- 	bool "TI J721E PCIe platform host controller"
--	depends on OF
- 	select PCIE_CADENCE_HOST
- 	select PCI_J721E
- 	help
-@@ -57,7 +52,6 @@ config PCI_J721E_HOST
- 
- config PCI_J721E_EP
- 	bool "TI J721E PCIe platform endpoint controller"
--	depends on OF
- 	depends on PCI_ENDPOINT
- 	select PCIE_CADENCE_EP
- 	select PCI_J721E
-diff --git a/drivers/pci/controller/dwc/Kconfig b/drivers/pci/controller/dwc/Kconfig
-index 62ce3abf0f19..627006ac2cc0 100644
---- a/drivers/pci/controller/dwc/Kconfig
-+++ b/drivers/pci/controller/dwc/Kconfig
-@@ -20,7 +20,7 @@ config PCI_DRA7XX
- config PCI_DRA7XX_HOST
- 	tristate "TI DRA7xx PCIe controller Host Mode"
- 	depends on SOC_DRA7XX || COMPILE_TEST
--	depends on OF && HAS_IOMEM && TI_PIPE3
-+	depends on HAS_IOMEM && TI_PIPE3
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_DW_HOST
- 	select PCI_DRA7XX
-@@ -36,7 +36,7 @@ config PCI_DRA7XX_HOST
- config PCI_DRA7XX_EP
- 	tristate "TI DRA7xx PCIe controller Endpoint Mode"
- 	depends on SOC_DRA7XX || COMPILE_TEST
--	depends on OF && HAS_IOMEM && TI_PIPE3
-+	depends on HAS_IOMEM && TI_PIPE3
- 	depends on PCI_ENDPOINT
- 	select PCIE_DW_EP
- 	select PCI_DRA7XX
-@@ -134,7 +134,7 @@ config PCI_KEYSTONE_EP
- 
- config PCI_LAYERSCAPE
- 	bool "Freescale Layerscape PCIe controller - Host mode"
--	depends on OF && (ARM || ARCH_LAYERSCAPE || COMPILE_TEST)
-+	depends on ARM || ARCH_LAYERSCAPE || COMPILE_TEST
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_DW_HOST
- 	select MFD_SYSCON
-@@ -147,7 +147,7 @@ config PCI_LAYERSCAPE
- 
- config PCI_LAYERSCAPE_EP
- 	bool "Freescale Layerscape PCIe controller - Endpoint mode"
--	depends on OF && (ARM || ARCH_LAYERSCAPE || COMPILE_TEST)
-+	depends on ARM || ARCH_LAYERSCAPE || COMPILE_TEST
- 	depends on PCI_ENDPOINT
- 	select PCIE_DW_EP
- 	help
-@@ -158,7 +158,7 @@ config PCI_LAYERSCAPE_EP
- 	  controller works in RC mode.
- 
- config PCI_HISI
--	depends on OF && (ARM64 || COMPILE_TEST)
-+	depends on ARM64 || COMPILE_TEST
- 	bool "HiSilicon Hip05 and Hip06 SoCs PCIe controllers"
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_DW_HOST
-@@ -169,7 +169,7 @@ config PCI_HISI
- 
- config PCIE_QCOM
- 	bool "Qualcomm PCIe controller"
--	depends on OF && (ARCH_QCOM || COMPILE_TEST)
-+	depends on ARCH_QCOM || COMPILE_TEST
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_DW_HOST
- 	select CRC8
-@@ -180,7 +180,7 @@ config PCIE_QCOM
- 
- config PCIE_QCOM_EP
- 	tristate "Qualcomm PCIe controller - Endpoint mode"
--	depends on OF && (ARCH_QCOM || COMPILE_TEST)
-+	depends on ARCH_QCOM || COMPILE_TEST
- 	depends on PCI_ENDPOINT
- 	select PCIE_DW_EP
- 	help
-@@ -228,14 +228,13 @@ config PCIE_ROCKCHIP_DW_HOST
- 	select PCIE_DW_HOST
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	depends on ARCH_ROCKCHIP || COMPILE_TEST
--	depends on OF
- 	help
- 	  Enables support for the DesignWare PCIe controller in the
- 	  Rockchip SoC except RK3399.
- 
- config PCIE_INTEL_GW
- 	bool "Intel Gateway PCIe host controller support"
--	depends on OF && (X86 || COMPILE_TEST)
-+	depends on X86 || COMPILE_TEST
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_DW_HOST
- 	help
-@@ -273,7 +272,7 @@ config PCIE_KEEMBAY_EP
- 	  DesignWare core functions.
- 
- config PCIE_KIRIN
--	depends on OF && (ARM64 || COMPILE_TEST)
-+	depends on ARM64 || COMPILE_TEST
- 	tristate "HiSilicon Kirin series SoCs PCIe controllers"
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_DW_HOST
-@@ -345,7 +344,7 @@ config PCIE_VISCONTI_HOST
- config PCIE_UNIPHIER
- 	bool "Socionext UniPhier PCIe host controllers"
- 	depends on ARCH_UNIPHIER || COMPILE_TEST
--	depends on OF && HAS_IOMEM
-+	depends on HAS_IOMEM
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_DW_HOST
- 	help
-@@ -355,7 +354,7 @@ config PCIE_UNIPHIER
- config PCIE_UNIPHIER_EP
- 	bool "Socionext UniPhier PCIe endpoint controllers"
- 	depends on ARCH_UNIPHIER || COMPILE_TEST
--	depends on OF && HAS_IOMEM
-+	depends on HAS_IOMEM
- 	depends on PCI_ENDPOINT
- 	select PCIE_DW_EP
- 	help
-@@ -364,7 +363,7 @@ config PCIE_UNIPHIER_EP
- 
- config PCIE_AL
- 	bool "Amazon Annapurna Labs PCIe controller"
--	depends on OF && (ARM64 || COMPILE_TEST)
-+	depends on ARM64 || COMPILE_TEST
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_DW_HOST
- 	select PCI_ECAM
-diff --git a/drivers/pci/controller/mobiveil/Kconfig b/drivers/pci/controller/mobiveil/Kconfig
-index e4643fb94e78..10f32dd123f6 100644
---- a/drivers/pci/controller/mobiveil/Kconfig
-+++ b/drivers/pci/controller/mobiveil/Kconfig
-@@ -14,7 +14,6 @@ config PCIE_MOBIVEIL_HOST
- config PCIE_MOBIVEIL_PLAT
- 	bool "Mobiveil AXI PCIe controller"
- 	depends on ARCH_ZYNQMP || COMPILE_TEST
--	depends on OF
- 	depends on PCI_MSI_IRQ_DOMAIN
- 	select PCIE_MOBIVEIL_HOST
- 	help
+****
+
+v1 -> v2 changes[0]:
+
+- when removing 'fuse_base' from the 'k3_j72xx_bandgap' structure, I 
+  forgot to pass 'fuse_base' to get_efuse_values() 
+
+- removed the descriptions to the generic 'power-domains' property
+
+- incorporated Krzysztof's suggestions to the binding description
+
+- refactored binding to use allOf: if: {min,max}Items over what I was 
+  doing :) Thanks Krzysztof
+
+[0] https://lore.kernel.org/lkml/20221011231727.8090-1-bb@ti.com/
+
+Bryan Brattlof (11):
+  thermal: k3_j72xx_bandgap: simplify k3_thermal_get_temp() function
+  thermal: k3_j72xx_bandgap: use bool for i2128 erratum flag
+  thermal: k3_j72xx_bandgap: remove fuse_base from structure
+  thermal: k3_j72xx_bandgap: map fuse_base only for erratum workaround
+  dt-bindings: thermal: k3-j72xx: elaborate on binding description
+  dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
+  arm64: dts: ti: k3-am64-main: add VTM node
+  arm64: dts: ti: k3-am62-wakeup: add VTM node
+  arm64: dts: ti: k3-j721e-mcu-wakeup: add VTM node
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: add VTM node
+  arm64: dts: ti: k3-j7200-mcu-wakeup: add VTM node
+
+ .../bindings/thermal/ti,j72xx-thermal.yaml    |  35 +++++-
+ arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi   |  33 ++++++
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi    |   8 ++
+ arch/arm64/boot/dts/ti/k3-am62.dtsi           |   7 +-
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi      |   8 ++
+ arch/arm64/boot/dts/ti/k3-am64-thermal.dtsi   |  33 ++++++
+ arch/arm64/boot/dts/ti/k3-am64.dtsi           |   4 +
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   8 ++
+ arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  |  47 ++++++++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi          |   3 +
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   9 ++
+ arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  |  75 +++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   3 +
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |   8 ++
+ arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi | 103 ++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2.dtsi         |   3 +
+ drivers/thermal/k3_j72xx_bandgap.c            |  67 ++++++------
+ 17 files changed, 420 insertions(+), 34 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am64-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi
+
 -- 
-2.25.1
+2.38.1
 
