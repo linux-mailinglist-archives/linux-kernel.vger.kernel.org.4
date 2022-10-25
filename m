@@ -2,134 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAA360C614
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C2D60C61A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbiJYIIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S231470AbiJYIIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiJYIIR (ORCPT
+        with ESMTP id S229864AbiJYII1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:08:17 -0400
-Received: from mail.wantstofly.org (hmm.wantstofly.org [213.239.204.108])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2B27C1D7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:08:16 -0700 (PDT)
-Received: by mail.wantstofly.org (Postfix, from userid 1000)
-        id A83C97F527; Tue, 25 Oct 2022 11:08:13 +0300 (EEST)
-Date:   Tue, 25 Oct 2022 11:08:13 +0300
-From:   Lennert Buytenhek <buytenh@wantstofly.org>
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH,RFC] iommu/vt-d: Convert dmar_fault IRQ to a threaded IRQ
-Message-ID: <Y1eZbXKdJDoS8loC@wantstofly.org>
+        Tue, 25 Oct 2022 04:08:27 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E52D4159A03;
+        Tue, 25 Oct 2022 01:08:26 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 4E1ED80B0;
+        Tue, 25 Oct 2022 07:59:10 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 11:08:25 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-i2c@vger.kernel.org,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 13/17] ARM: omap1: remove unused board files
+Message-ID: <Y1eZebwZTrPx+j5l@atomide.com>
+References: <20221019144119.3848027-1-arnd@kernel.org>
+ <20221019150410.3851944-1-arnd@kernel.org>
+ <20221019150410.3851944-13-arnd@kernel.org>
+ <20221019171541.GA41568@darkstar.musicnaut.iki.fi>
+ <1b632df1-7e3c-456d-8629-dc36efd9fe15@app.fastmail.com>
+ <20221020193511.GB3019@t60.musicnaut.iki.fi>
+ <de36ec6b-2e7c-48eb-9682-f60d8e4011da@app.fastmail.com>
+ <20221021111101.GC3019@t60.musicnaut.iki.fi>
+ <Y1YnT+/ZdoglcdS4@atomide.com>
+ <aa4195a9-f6be-4600-82df-8b5d1035ebd5@app.fastmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aa4195a9-f6be-4600-82df-8b5d1035ebd5@app.fastmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under a high enough I/O page fault load, the dmar_fault hardirq handler
-can end up starving other tasks that wanted to run on the CPU that the
-IRQ is being routed to.  On an i7-6700 CPU this seems to happen at
-around 2.5 million I/O page faults per second, and at a fraction of
-that rate on some of the lower-end CPUs that we use.
+* Arnd Bergmann <arnd@arndb.de> [221024 15:53]:
+> On Mon, Oct 24, 2022, at 07:49, Tony Lindgren wrote:
+> > * Aaro Koskinen <aaro.koskinen@iki.fi> [221021 11:02]:
+> >> I was only referring to this Mistral add-on board and related display
+> >> drivers.
+> >> 
+> >> The main OSK board support is still needed and used.
+> 
+> Ok, got it.
+> 
+> > I'm pretty sure I have that display, but I was booting my OSK in a
+> > rack anyways so I rarely saw the LCD in use. No objections from me
+> > for removing the LCD support for OSK if nobody is using it.
+> 
+> I was going to leave Mistral in, thinking it's just a device definition,
+> but upon closer look I found that this is a somewhat annoyingly
+> written part that hardcodes GPIO numbers in unusual ways, so I'm
+> adding a patch to remove it now.
 
-An I/O page fault rate of 2.5 million per second may seem like a very
-high number, but when we get an I/O page fault for every cache line
-touched by a DMA operation, this I/O page fault rate can be the result
-of a confused PCIe device DMAing to RAM at 2.5 * 64 = 160 MB/sec, which
-is not an unlikely rate to be DMAing things to RAM at.  And, in fact,
-when we do see PCIe devices getting confused like this, this sort of
-I/O page fault rate is not uncommon.
+OK sounds good to me.
 
-A peripheral device continuously DMAing to RAM at 160 MB/s is
-inarguably a bug, either in the kernel driver for the device or in the
-firmware for the device, and should be fixed there, but it's the sort
-of bug that iommu/vt-d could be handling better than it currently does,
-and there is a fairly simple way to achieve that.
+Thanks,
 
-This patch changes the dmar_fault IRQ handler to be a threaded IRQ
-handler.  This is a pretty minimal code change, and comes with the
-advantage that Intel IOMMU I/O page fault handling work is now subject
-to RT throttling, which allows it to be kept under control using the
-sched_rt_period_us / sched_rt_runtime_us parameters.
-
-iommu/amd already uses a threaded IRQ handler for its I/O page fault
-reporting, and so it already has this advantage.
-
-When IRQ remapping is enabled, iommu/vt-d will try to set up its
-dmar_fault IRQ handler from start_kernel() -> x86_late_time_init()
--> apic_intr_mode_init() -> apic_bsp_setup() ->
-irq_remap_enable_fault_handling() -> enable_drhd_fault_handling(),
-which happens before kthreadd is started, and trying to set up a
-threaded IRQ handler this early on will oops.  However, there
-doesn't seem to be a reason why iommu/vt-d needs to set up its fault
-reporting IRQ handler this early, and if we remove the IRQ setup code
-from enable_drhd_fault_handling(), the IRQ will be registered instead
-from pci_iommu_init() -> intel_iommu_init() -> init_dmars(), which
-seems to work just fine.
-
-Suggested-by: Scarlett Gourley <scarlett@arista.com>
-Suggested-by: James Sewart <jamessewart@arista.com>
-Suggested-by: Jack O'Sullivan <jack@arista.com>
-Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
----
- drivers/iommu/intel/dmar.c | 27 ++-------------------------
- 1 file changed, 2 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index 5a8f780e7ffd..d0871fe9d04d 100644
---- a/drivers/iommu/intel/dmar.c
-+++ b/drivers/iommu/intel/dmar.c
-@@ -2043,7 +2043,8 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
- 		return -EINVAL;
- 	}
- 
--	ret = request_irq(irq, dmar_fault, IRQF_NO_THREAD, iommu->name, iommu);
-+	ret = request_threaded_irq(irq, NULL, dmar_fault, IRQF_ONESHOT,
-+				   iommu->name, iommu);
- 	if (ret)
- 		pr_err("Can't request irq\n");
- 	return ret;
-@@ -2051,30 +2052,6 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
- 
- int __init enable_drhd_fault_handling(void)
- {
--	struct dmar_drhd_unit *drhd;
--	struct intel_iommu *iommu;
--
--	/*
--	 * Enable fault control interrupt.
--	 */
--	for_each_iommu(iommu, drhd) {
--		u32 fault_status;
--		int ret = dmar_set_interrupt(iommu);
--
--		if (ret) {
--			pr_err("DRHD %Lx: failed to enable fault, interrupt, ret %d\n",
--			       (unsigned long long)drhd->reg_base_addr, ret);
--			return -1;
--		}
--
--		/*
--		 * Clear any previous faults.
--		 */
--		dmar_fault(iommu->irq, iommu);
--		fault_status = readl(iommu->reg + DMAR_FSTS_REG);
--		writel(fault_status, iommu->reg + DMAR_FSTS_REG);
--	}
--
- 	return 0;
- }
- 
--- 
-2.37.3
+Tony
