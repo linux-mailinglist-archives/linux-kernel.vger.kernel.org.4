@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC57D60CE39
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3858560CE38
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiJYOBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
+        id S232728AbiJYOBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232169AbiJYN7h (ORCPT
+        with ESMTP id S232161AbiJYN7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Oct 2022 09:59:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C446FAC9;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B5417AAB;
         Tue, 25 Oct 2022 06:59:31 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,21 +22,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t38ZOSk7RADUS9yQPx+jhxDPVyx+Ww7vTN6ZsN90lKg=;
-        b=bEwlhGzpXpX8hMG8IqtPZmhlQRTQikKxqNs+gbQgfv3WFD96OO3tUpQT4EGa3g/BzQnubQ
-        YJSxR22rP/7t7RYGTs+tiAigsONu+jLzODJiGTM/3aFyR1hciqB+lBSGwaCnd2Th7JbGQq
-        uwSOnET8vkJWh2fJdQx7Pue1BuPsppC5/Vnq2Kf4G1QWNwkR7MP7bc6yZ3yGh4vYfD9AGW
-        NcMkYkdYIzu/1fLOmu4BzSl8JZJExpqx06XXG7SZsxGs6MycZ4DWUgN6eLrtxp1JzRVe61
-        FhrUh86UP3a4VJCA0facxuPBjkZB5p26oaplpC/jxnH/cB37pSiJfUs6KLYmgQ==
+        bh=oP0fWluRaqq+tZG2dJILM23sro1m5U/XHwLQFeRCl3o=;
+        b=0Eg6ZbxmuMXbfIgn0sAXp3ULCCXFyqQQtHzl2xH5jlgUOd8RjrvMvZPngiSqQ/uBF1PlvC
+        9C0tbJW+sVdS+DAjMs9HDPuEHChU1u8mwIhVatnjiFurN8cB6b1ONTjDgf6PYEJ11KhDWm
+        0cPWMzqqFpUPBjMGMZW7dh5kVzEHrBNTua/xN61Djdnunb72Q5WJlBah36fwTd6QL5OrTZ
+        uJlJWIj5makdOkBQ9ydWs+dfO5xprJa7l2oNflXamBNY66R8DL+fC5gAcKXpnjwgTiSLA+
+        jsfaS9bMQsglAe/04br6zM+/zkNYHqSoF7gKXy9x0hB1rgx+baiz5OH82C1jMg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1666706370;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t38ZOSk7RADUS9yQPx+jhxDPVyx+Ww7vTN6ZsN90lKg=;
-        b=WydopO46wwu45sP+yRfKw5ZwrGNEVisF1hJAUAO3vVDu9Yj/PohrKCIGU8fAEgVTpFn5D9
-        G2QbL4hSwWjxuBDg==
+        bh=oP0fWluRaqq+tZG2dJILM23sro1m5U/XHwLQFeRCl3o=;
+        b=8lpLCKUTS76ShpC/dXVU5vgSp553OSmhz+hNadGKfYlzIIqj55OD6ImpPLdzbexTWiCEpO
+        7i4ia9DdR8hIqNDQ==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <john.stultz@linaro.org>,
@@ -47,10 +47,11 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
         Frederic Weisbecker <fweisbec@gmail.com>,
         Rik van Riel <riel@redhat.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: [PATCH v3 16/17] add_timer_on(): Make sure callers have TIMER_PINNED flag
-Date:   Tue, 25 Oct 2022 15:58:49 +0200
-Message-Id: <20221025135850.51044-17-anna-maria@linutronix.de>
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: [PATCH v3 17/17] timer: Always queue timers on the local CPU
+Date:   Tue, 25 Oct 2022 15:58:50 +0200
+Message-Id: <20221025135850.51044-18-anna-maria@linutronix.de>
 In-Reply-To: <20221025135850.51044-1-anna-maria@linutronix.de>
 References: <20221025135850.51044-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -64,69 +65,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hierachical timer pull model at expiry time is now in place. Timers
-which should expire on a dedicated CPU needs the TIMER_PINNED
-flag. Otherwise they will be queued on the dedicated CPU but in global
-timer base and those timers could also expire on other CPUs. Only timers
-with TIMER_PINNED flag will end up in local timer base
+The timer pull model is in place so we can remove the heuristics which try
+to guess the best target CPU at enqueue/modification time.
 
-Therefore add the missing TIMER_PINNED flag for those who use
-add_timer_on() without the flag.
+All non pinned timers are queued on the local CPU in the seperate storage
+and eventually pulled at expiry time to a remote CPU.
 
+When a timer is added via add_timer_on(), TIMER_PINNED flag is required to
+ensure it expires on the specified CPU. Otherwise it will be enqueued in
+the global timer base which could be expired by a remote CPU. WARN_ONCE()
+is added to prevent misuse.
+
+Originally-by: Richard Cochran (linutronix GmbH) <richardcochran@gmail.com>
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 ---
- arch/x86/kernel/tsc_sync.c | 3 ++-
- kernel/time/clocksource.c  | 2 +-
- kernel/workqueue.c         | 7 +++++--
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ kernel/time/timer.c | 17 +++++------------
+ 1 file changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/arch/x86/kernel/tsc_sync.c b/arch/x86/kernel/tsc_sync.c
-index 9452dc9664b5..eab827288e0f 100644
---- a/arch/x86/kernel/tsc_sync.c
-+++ b/arch/x86/kernel/tsc_sync.c
-@@ -110,7 +110,8 @@ static int __init start_sync_check_timer(void)
- 	if (!cpu_feature_enabled(X86_FEATURE_TSC_ADJUST) || tsc_clocksource_reliable)
- 		return 0;
- 
--	timer_setup(&tsc_sync_check_timer, tsc_sync_check_timer_fn, 0);
-+	timer_setup(&tsc_sync_check_timer, tsc_sync_check_timer_fn,
-+		    TIMER_PINNED);
- 	tsc_sync_check_timer.expires = jiffies + SYNC_CHECK_INTERVAL;
- 	add_timer(&tsc_sync_check_timer);
- 
-diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
-index 8058bec87ace..f8c310e62758 100644
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -523,7 +523,7 @@ static inline void clocksource_start_watchdog(void)
- {
- 	if (watchdog_running || !watchdog || list_empty(&watchdog_list))
- 		return;
--	timer_setup(&watchdog_timer, clocksource_watchdog, 0);
-+	timer_setup(&watchdog_timer, clocksource_watchdog, TIMER_PINNED);
- 	watchdog_timer.expires = jiffies + WATCHDOG_INTERVAL;
- 	add_timer_on(&watchdog_timer, cpumask_first(cpu_online_mask));
- 	watchdog_running = 1;
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 7cd5f5e7e0a1..a0f7bf7be6f2 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1670,10 +1670,13 @@ static void __queue_delayed_work(int cpu, struct workqueue_struct *wq,
- 	dwork->cpu = cpu;
- 	timer->expires = jiffies + delay;
- 
--	if (unlikely(cpu != WORK_CPU_UNBOUND))
-+	if (unlikely(cpu != WORK_CPU_UNBOUND)) {
-+		timer->flags |= TIMER_PINNED;
- 		add_timer_on(timer, cpu);
--	else
-+	} else {
-+		timer->flags &= ~TIMER_PINNED;
- 		add_timer(timer);
-+	}
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 67f9cc077ff7..f05e547e0c6c 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -947,17 +947,6 @@ static inline struct timer_base *get_timer_base(u32 tflags)
+ 	return get_timer_cpu_base(tflags, tflags & TIMER_CPUMASK);
  }
  
- /**
+-static inline struct timer_base *
+-get_target_base(struct timer_base *base, unsigned tflags)
+-{
+-#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
+-	if (static_branch_likely(&timers_migration_enabled) &&
+-	    !(tflags & TIMER_PINNED))
+-		return get_timer_cpu_base(tflags, get_nohz_timer_target());
+-#endif
+-	return get_timer_this_cpu_base(tflags);
+-}
+-
+ static inline void forward_timer_base(struct timer_base *base)
+ {
+ 	unsigned long jnow = READ_ONCE(jiffies);
+@@ -1093,7 +1082,7 @@ __mod_timer(struct timer_list *timer, unsigned long expires, unsigned int option
+ 	if (!ret && (options & MOD_TIMER_PENDING_ONLY))
+ 		goto out_unlock;
+ 
+-	new_base = get_target_base(base, timer->flags);
++	new_base = get_timer_this_cpu_base(timer->flags);
+ 
+ 	if (base != new_base) {
+ 		/*
+@@ -1228,6 +1217,10 @@ void add_timer_on(struct timer_list *timer, int cpu)
+ 
+ 	BUG_ON(timer_pending(timer) || !timer->function);
+ 
++	WARN_ONCE(!(timer->flags & TIMER_PINNED), "TIMER_PINNED flag for "
++		  "add_timer_on() is missing: timer=%p function=%ps",
++		  timer, timer->function);
++
+ 	new_base = get_timer_cpu_base(timer->flags, cpu);
+ 
+ 	/*
 -- 
 2.30.2
 
