@@ -2,453 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD86460C07E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F0360C082
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiJYBIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S230428AbiJYBI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiJYBHm (ORCPT
+        with ESMTP id S231184AbiJYBIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:07:42 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6116CA2A8C;
-        Mon, 24 Oct 2022 17:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666656953;
-        bh=PKvMgtvNQQBZF3hpZU9U4m1Jli3g3rGmsQm6YiKfM9Y=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=SiK4ykHSf35EkByRTX1pXma+HCGaPRAiWwRvNqDRi4svhoCK80xvm8wbUBhCr13CC
-         FvGmGSEKST8Jad5Z/FJ/K+JhFLsL3dTDx/GnQ/iS38dzrdzm4ryY9IoeOEmTyWoUxV
-         ITCNYoP9ZsSmvryy1/YRnImZttAS2RTIJ5uPt1HM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.2.83] ([84.162.5.241]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McH9Y-1pNYHs3XCu-00cgxJ; Tue, 25
- Oct 2022 02:15:52 +0200
-Message-ID: <fcf53b02-a505-46ac-006e-0e317f00bbe3@gmx.de>
-Date:   Tue, 25 Oct 2022 02:15:51 +0200
+        Mon, 24 Oct 2022 21:08:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EB4AC2B1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666657054; x=1698193054;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hi4qQRN6zFkYX1oAEPlh4B3iPIs3o+NTjqvVprYo9bg=;
+  b=Id8FTNAZjDTL+ojkGVUqHUI38H0MaxsLYyXdoN+kdqVtA6yfhEJYz0Fm
+   OrAZmJSAX4xGJltgNC1/kV21EHtjGQH6qBqdrndeSnTdX7hzVaeobxBG0
+   iF2lhpXNpFqwd7QScqzbCBN2Q0YAC7k3vVImyK7Cpx6mEU2hbzQN6+foY
+   0EunKMCE6GgT4qA+7TtxRuaZbdgpu6sOcm1t0t1MpAhry46d7ZijOZzjD
+   gJN/++u8Zs14I4pcgJdHuO0maxLnae9f61imtzclO7VVhoVv9hTLbyhhP
+   iQtDUm9kLeteVesIwCUhYzMjFqhocxyFmUYA5zkS/yAKiHukqTrqLsd1P
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287949133"
+X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
+   d="scan'208";a="287949133"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 17:17:34 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="631447724"
+X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
+   d="scan'208";a="631447724"
+Received: from ghoyler-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.39.118])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 17:17:28 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id A336A106583; Tue, 25 Oct 2022 03:17:25 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv11 00/16] Linear Address Masking enabling
+Date:   Tue, 25 Oct 2022 03:17:06 +0300
+Message-Id: <20221025001722.17466-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v8 08/11] tpm, tpm: Implement usage counter for locality
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jandryuk@gmail.com,
-        pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com, lukas@wunner.de,
-        p.rosenberger@kunbus.com
-References: <20221017235732.10145-1-LinoSanfilippo@gmx.de>
- <20221017235732.10145-9-LinoSanfilippo@gmx.de> <Y1TFzO1CBY8d4rfa@kernel.org>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-In-Reply-To: <Y1TFzO1CBY8d4rfa@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:s8LxJ2tFfYfU0VZDiHXBMX4ln3S3UJ7Xuw58rF2hZnyX40bRCLn
- 5nD1KtIoBv4ZFHq4hzbHtd5xKI93GWZHOoLzBuoh5ubKaN7ykZEf+1LePoEAsG1x+SDjOaT
- bnGH2186u5AGy+ZoafygFPVqVOmLkXqU9iGFMi1xdroLbdQXuEKURmy1fUMus7gwxQiCY84
- XK2QhteyLlVVDltusy4vQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Tq/UCOIPMRM=:sjqKxkc7HNegWwKGjGGvUt
- byMk+g7/3bu0pikM8ydR28oOFkXkp7RyU+u1Wzvs1UYOcthK+yJRO/cXqSNP6gwi6UKNh7Oh8
- y/WUqqS9IVy8hezYlew1zzh6tygZvC2+qVI9brirmi5Lk8Ylry/gIeMXua4992rDx8ZZWmsXE
- Vvstrcu5wkJloxO6va+jDuH7LL2AnGwtanwcyyyUY3foLRPCFnizFczrTDUiPZjE/tM906gbV
- V/iU3nmb3JjNTP1KK1K3NShHOt0xAjeQJNRXBysjJ6HDMzPX25TnZ4y+45yQRRvVR468BaaoH
- dVMhWliHpBDlPxd+Iqi6tHDYAIqlxJxQAmPqxP8RMZxtFz6+PaniqzZm3aFdnIcb3SAwlgm4J
- lUTgFGeLReT2w0nSYc1QCLxaUqV0H21Ikjvf3K3j3VDPKgCGv1Jfd4vplZz26tNf9s5/hdBMk
- wjV0V1gIUvPVkp1zHcD+USZCCys8L319qU2XgkOVbEaDaZCiWXJ07VXJkLpz3EQlriyMto8FB
- FBzSi7daKKKJkilI09b9Jaij2f86Olcc4geNYTRJ3PifrswgVqE12/5Hq//CSh1k5pGpJqjRW
- LpIiaFfP7i9OVmmWORGlrR9L9ywRotBM9nQgXi5NnrIhw2vbJlfCIOq3A5SeNdhKYxn2XhLMW
- GrJChZjdK1YF1AmWtmmfCGwNiIiTfSm+M6FVLxZZi4kR4Csifm47IPd5ZOr2iqxB/pvRgUXQb
- TNbYaD+DIVWmcUpG6TEwNm+a79vtF9BybWscPwcjK0Qz7KLMfzxzti2IBbPreSrWCwAp2XVI2
- xNkpyYU+zS4w+/n6OeVRf3jtM91plFoKh3djmfUCAi7v0iJ251FyBNqM2S521jCK5ucE0qXGg
- RvUXmEunNQLtUY7zx9qKuS/iGVK1T4fg1EbGcW5idWH+9/r2IyZx7/stTx3ZyKv8XvHdlKQHq
- ZhmVYN89XcnRqnCUiLMutQ36ReHeziDLp+nxcy8KM4wjdVD+W3rgkQVpymWCge4EXnG1aESkx
- 7M0biXwSPWrd5T2aA9fEU7izCOJj8+VhrogSByiBijxyv+PdewT07u0zHHFrOuYRjPY4uVEOm
- bPVTV8W9bczIspe+o0aef5YvcLvtvSDCr+XBWYFmUMS8cp4XvisefYxezUS7obxrkytCHtRC/
- 7z9qnEbxCKrKvQ7mKCQs2dhUCtXheE9+s2H6C2T2HAZtP3iewUREoIjzsa3mBrtI5XsyjgzSP
- QGnh1N5FRE6T6ahXdtXBbCln8NVcgl8hrXNyRVujwjwmxnv1mwPFZyRhVYGhyyDC3GIziq8ma
- TXVI3nA8y2LOxe2oKdXNGqvnS40cJqqFZkXIHilDfq6+AsrZ6EkqpVq/n0MzATe0z/CX/f1mv
- QV0fZqv3TBH2+8BXHslBBwlUeMQq9Py/4NbdpsCEX3h1ijp9QBn0mAXTRvJMveYgpYhZwLM2t
- vDfvsbTeg8hxSxY1tjnbqV/3YB5e70v2eppW34xPOz/W6Z3nTtLRToXppd12OUlbcD631/ZoN
- R/yp/wPkQLWeEpdB77MLNh8ef8ekRUJmTQXJu66x1Z0Lm
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Linear Address Masking[1] (LAM) modifies the checking that is applied to
+64-bit linear addresses, allowing software to use of the untranslated
+address bits for metadata.
 
-On 23.10.22 06:40, Jarkko Sakkinen wrote:
-> On Tue, Oct 18, 2022 at 01:57:29AM +0200, Lino Sanfilippo wrote:
->> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->>
->> Implement a usage counter for the (default) locality used by the TPM TI=
-S
->> driver:
->> Request the locality from the TPM if it has not been claimed yet, other=
-wise
->> only increment the counter. Also release the locality if the counter is=
- 0
->> otherwise only decrement the counter. Ensure thread-safety by protectin=
-g
->> the counter with a mutex.
->>
->> This allows to request and release the locality from a thread and the
->> interrupt handler at the same time without the danger to interfere with
->> each other.
->>
->> By doing this refactor the names of the amended functions to use the pr=
-oper
->> prefix.
->>
->> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->> Tested-by: Michael Niew=C3=B6hner <linux@mniewoehner.de>
->> ---
->>  drivers/char/tpm/tpm_tis_core.c | 75 ++++++++++++++++++++++-----------
->>  drivers/char/tpm/tpm_tis_core.h |  2 +
->>  2 files changed, 53 insertions(+), 24 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
-_core.c
->> index 4336f7ea8c2b..79dfab65976f 100644
->> --- a/drivers/char/tpm/tpm_tis_core.c
->> +++ b/drivers/char/tpm/tpm_tis_core.c
->> @@ -165,16 +165,27 @@ static bool check_locality(struct tpm_chip *chip,=
- int l)
->>  	return false;
->>  }
->>
->> -static int release_locality(struct tpm_chip *chip, int l)
->> +static int tpm_tis_release_locality_locked(struct tpm_tis_data *priv, =
-int l)
->
-> Nit: usually you would actually use "unlocked" here, not locked.
->
-> Probably best name would be __tpm_tis_release_locality().
+The capability can be used for efficient address sanitizers (ASAN)
+implementation and for optimizations in JITs and virtual machines.
 
+The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
+this time.
 
-Agreed. This is also consistent with the naming scheme used for many other
-kernel functions.
+Please review and consider applying.
 
->
->> +{
->> +	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
->> +
->> +	return 0;
->> +}
->> +
->> +static int tpm_tis_release_locality(struct tpm_chip *chip, int l)
->>  {
->>  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->>
->> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
->> +	mutex_lock(&priv->locality_count_mutex);
->> +	priv->locality_count--;
->> +	if (priv->locality_count =3D=3D 0)
->> +		tpm_tis_release_locality_locked(priv, l);
->> +	mutex_unlock(&priv->locality_count_mutex);
->>
->>  	return 0;
->>  }
->
-> Since the function pointer has the word "relinquish" and not "release",
-> perhaps these should also use that word for consistency.
->
->>
->> -static int request_locality(struct tpm_chip *chip, int l)
->> +static int tpm_tis_request_locality_locked(struct tpm_chip *chip, int =
-l)
->>  {
->>  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->>  	unsigned long stop, timeout;
->> @@ -215,6 +226,20 @@ static int request_locality(struct tpm_chip *chip,=
- int l)
->>  	return -1;
->>  }
->>
->> +static int tpm_tis_request_locality(struct tpm_chip *chip, int l)
->> +{
->> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->> +	int ret =3D 0;
->> +
->> +	mutex_lock(&priv->locality_count_mutex);
->> +	if (priv->locality_count =3D=3D 0)
->> +		ret =3D tpm_tis_request_locality_locked(chip, l);
->> +	if (!ret)
->> +		priv->locality_count++;
->> +	mutex_unlock(&priv->locality_count_mutex);
->> +	return ret;
->> +}
->> +
->>  static u8 tpm_tis_status(struct tpm_chip *chip)
->>  {
->>  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
->> @@ -682,7 +707,7 @@ static int probe_itpm(struct tpm_chip *chip)
->>  	if (vendor !=3D TPM_VID_INTEL)
->>  		return 0;
->>
->> -	if (request_locality(chip, 0) !=3D 0)
->> +	if (tpm_tis_request_locality(chip, 0) !=3D 0)
->>  		return -EBUSY;
->>
->>  	rc =3D tpm_tis_send_data(chip, cmd_getticks, len);
->> @@ -703,7 +728,7 @@ static int probe_itpm(struct tpm_chip *chip)
->>
->>  out:
->>  	tpm_tis_ready(chip);
->> -	release_locality(chip, priv->locality);
->> +	tpm_tis_release_locality(chip, priv->locality);
->>
->>  	return rc;
->>  }
->> @@ -762,7 +787,7 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *c=
-hip)
->>  	cap_t cap;
->>  	int ret;
->>
->> -	ret =3D request_locality(chip, 0);
->> +	ret =3D tpm_tis_request_locality(chip, 0);
->>  	if (ret < 0)
->>  		return ret;
->>
->> @@ -771,7 +796,7 @@ static int tpm_tis_gen_interrupt(struct tpm_chip *c=
-hip)
->>  	else
->>  		ret =3D tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap, desc, 0);
->>
->> -	release_locality(chip, 0);
->> +	tpm_tis_release_locality(chip, 0);
->>
->>  	return ret;
->>  }
->> @@ -796,33 +821,33 @@ static int tpm_tis_probe_irq_single(struct tpm_ch=
-ip *chip, u32 intmask,
->>  	}
->>  	priv->irq =3D irq;
->>
->> -	rc =3D request_locality(chip, 0);
->> +	rc =3D tpm_tis_request_locality(chip, 0);
->>  	if (rc < 0)
->>  		return rc;
->>
->>  	rc =3D tpm_tis_read8(priv, TPM_INT_VECTOR(priv->locality),
->>  			   &original_int_vec);
->>  	if (rc < 0) {
->> -		release_locality(chip, priv->locality);
->> +		tpm_tis_release_locality(chip, priv->locality);
->>  		return rc;
->>  	}
->>
->>  	rc =3D tpm_tis_write8(priv, TPM_INT_VECTOR(priv->locality), irq);
->>  	if (rc < 0) {
->> -		release_locality(chip, priv->locality);
->> +		tpm_tis_release_locality(chip, priv->locality);
->>  		return rc;
->>  	}
->>
->>  	rc =3D tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &int_stat=
-us);
->>  	if (rc < 0) {
->> -		release_locality(chip, priv->locality);
->> +		tpm_tis_release_locality(chip, priv->locality);
->>  		return rc;
->>  	}
->>
->>  	/* Clear all existing */
->>  	rc =3D tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), int_stat=
-us);
->>  	if (rc < 0) {
->> -		release_locality(chip, priv->locality);
->> +		tpm_tis_release_locality(chip, priv->locality);
->>  		return rc;
->>  	}
->>
->> @@ -830,11 +855,11 @@ static int tpm_tis_probe_irq_single(struct tpm_ch=
-ip *chip, u32 intmask,
->>  	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality),
->>  			     intmask | TPM_GLOBAL_INT_ENABLE);
->>  	if (rc < 0) {
->> -		release_locality(chip, priv->locality);
->> +		tpm_tis_release_locality(chip, priv->locality);
->>  		return rc;
->>  	}
->>
->> -	release_locality(chip, priv->locality);
->> +	tpm_tis_release_locality(chip, priv->locality);
->>  	clear_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->>
->>  	/* Generate an interrupt by having the core call through to
->> @@ -970,8 +995,8 @@ static const struct tpm_class_ops tpm_tis =3D {
->>  	.req_complete_mask =3D TPM_STS_DATA_AVAIL | TPM_STS_VALID,
->>  	.req_complete_val =3D TPM_STS_DATA_AVAIL | TPM_STS_VALID,
->>  	.req_canceled =3D tpm_tis_req_canceled,
->> -	.request_locality =3D request_locality,
->> -	.relinquish_locality =3D release_locality,
->> +	.request_locality =3D tpm_tis_request_locality,
->> +	.relinquish_locality =3D tpm_tis_release_locality,
->>  	.clk_enable =3D tpm_tis_clkrun_enable,
->>  };
->>
->> @@ -1005,6 +1030,8 @@ int tpm_tis_core_init(struct device *dev, struct =
-tpm_tis_data *priv, int irq,
->>  	priv->timeout_min =3D TPM_TIMEOUT_USECS_MIN;
->>  	priv->timeout_max =3D TPM_TIMEOUT_USECS_MAX;
->>  	priv->phy_ops =3D phy_ops;
->> +	priv->locality_count =3D 0;
->> +	mutex_init(&priv->locality_count_mutex);
->>
->>  	dev_set_drvdata(&chip->dev, priv);
->>
->> @@ -1083,14 +1110,14 @@ int tpm_tis_core_init(struct device *dev, struc=
-t tpm_tis_data *priv, int irq,
->>
->>  	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
->>
->> -	rc =3D request_locality(chip, 0);
->> +	rc =3D tpm_tis_request_locality(chip, 0);
->>  	if (rc < 0) {
->>  		rc =3D -ENODEV;
->>  		goto out_err;
->>  	}
->>
->>  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
->> -	release_locality(chip, 0);
->> +	tpm_tis_release_locality(chip, 0);
->>
->>  	rc =3D tpm_chip_start(chip);
->>  	if (rc)
->> @@ -1124,13 +1151,13 @@ int tpm_tis_core_init(struct device *dev, struc=
-t tpm_tis_data *priv, int irq,
->>  		 * proper timeouts for the driver.
->>  		 */
->>
->> -		rc =3D request_locality(chip, 0);
->> +		rc =3D tpm_tis_request_locality(chip, 0);
->>  		if (rc < 0)
->>  			goto out_err;
->>
->>  		rc =3D tpm_get_timeouts(chip);
->>
->> -		release_locality(chip, 0);
->> +		tpm_tis_release_locality(chip, 0);
->>
->>  		if (rc) {
->>  			dev_err(dev, "Could not get TPM timeouts and durations\n");
->> @@ -1150,11 +1177,11 @@ int tpm_tis_core_init(struct device *dev, struc=
-t tpm_tis_data *priv, int irq,
->>  			dev_err(&chip->dev, FW_BUG
->>  					"TPM interrupt not working, polling instead\n");
->>
->> -			rc =3D request_locality(chip, 0);
->> +			rc =3D tpm_tis_request_locality(chip, 0);
->>  			if (rc < 0)
->>  				goto out_err;
->>  			disable_interrupts(chip);
->> -			release_locality(chip, 0);
->> +			tpm_tis_release_locality(chip, 0);
->>  		}
->>  	}
->>
->> @@ -1221,13 +1248,13 @@ int tpm_tis_resume(struct device *dev)
->>  	 * an error code but for unknown reason it isn't handled.
->>  	 */
->>  	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
->> -		ret =3D request_locality(chip, 0);
->> +		ret =3D tpm_tis_request_locality(chip, 0);
->>  		if (ret < 0)
->>  			return ret;
->>
->>  		tpm1_do_selftest(chip);
->>
->> -		release_locality(chip, 0);
->> +		tpm_tis_release_locality(chip, 0);
->>  	}
->>
->>  	return 0;
->> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis=
-_core.h
->> index 2deef11c88db..13bdcf38e56f 100644
->> --- a/drivers/char/tpm/tpm_tis_core.h
->> +++ b/drivers/char/tpm/tpm_tis_core.h
->> @@ -91,6 +91,8 @@ enum tpm_tis_flags {
->>
->>  struct tpm_tis_data {
->>  	u16 manufacturer_id;
->> +	struct mutex locality_count_mutex;
->
-> BTW, why mutex and not spinlock?
->
-> Hmm.. also I think you might have given feedback already on this
-> but could the lock cover the whole struct instead of a counter?
-> I tried to dig lore for earlier response but could not find. I'm
-> sorry if I'm asking the same question again.
->
+Results for the self-tests:
 
-Actually thats on me, since it took me much too long to send the v8 after =
-the v7 review.
+   ok 1 MALLOC: LAM_U57. Dereferencing pointer with metadata
+   # Get segmentation fault(11).ok 2 MALLOC:[Negative] Disable LAM. Dereferencing pointer with metadata.
+   ok 3 BITS: Check default tag bits
+   ok 4 # SKIP MMAP: First mmap high address, then set LAM_U57.
+   ok 5 # SKIP MMAP: First LAM_U57, then High address.
+   ok 6 MMAP: First LAM_U57, then Low address.
+   ok 7 SYSCALL: LAM_U57. syscall with metadata
+   ok 8 SYSCALL:[Negative] Disable LAM. Dereferencing pointer with metadata.
+   ok 9 URING: LAM_U57. Dereferencing pointer with metadata
+   ok 10 URING:[Negative] Disable LAM. Dereferencing pointer with metadata.
+   ok 11 FORK: LAM_U57, child process should get LAM mode same as parent
+   ok 12 EXECVE: LAM_U57, child process should get disabled LAM mode
+   open: Device or resource busy
+   ok 13 PASID: [Negative] Execute LAM, PASID, SVA in sequence
+   ok 14 PASID: Execute LAM, SVA, PASID in sequence
+   ok 15 PASID: [Negative] Execute PASID, LAM, SVA in sequence
+   ok 16 PASID: Execute PASID, SVA, LAM in sequence
+   ok 17 PASID: Execute SVA, LAM, PASID in sequence
+   ok 18 PASID: Execute SVA, PASID, LAM in sequence
+   1..18
 
-However the reason that we need a mutex here is that we not only increase =
-or decrease
-the locality_counter under the mutex, but also do the locality request and=
- release by
-writing to the ACCESS register. Since in the SPI case each communication o=
-ver the spi bus
-is protected by the bus_lock_mutex of the SPI device we must not hold a sp=
-inlock when doing
-the register accesses.
+git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
 
-Concerning covering the whole tpm_tis_data struct:
-Most structure elements are set once at driver startup but never changed a=
-t driver
-runtime. So no locking needed for these. The only exception is "flags" and=
- "locality_count"
-whereby "flags" is accessed by atomic bit manipulating functions and thus
-does not need extra locking. So "locality_count" is AFAICS the only elemen=
-t that needs to be
-protected by the mutex.
+v11:
+  - Move untag_mask to /proc/$PID/status;
+  - s/SVM/SVA/g;
+  - static inline arch_pgtable_dma_compat() instead of macros;
+  - Replace pasid_valid() with mm_valid_pasid();
+  - Acks from Ashok and Jacob (forgot to apply from v9);
+v10:
+  - Rebased to v6.1-rc1;
+  - Add selftest for SVM vs LAM;
+v9:
+  - Fix race between LAM enabling and check that KVM memslot address doesn't
+    have any tags;
+  - Reduce untagged_addr() overhead until the first LAM user;
+  - Clarify SVM vs. LAM semantics;
+  - Use mmap_lock to serialize LAM enabling;
+v8:
+  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
+  - Cleanup code around build_cr3();
+  - Fix commit messages;
+  - Selftests updates;
+  - Acked/Reviewed/Tested-bys from Alexander and Peter;
+v7:
+  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
+  - Cleanup code around build_cr3();
+  - Fix commit message;
+  - Fix indentation;
+v6:
+  - Rebased onto v6.0-rc1
+  - LAM_U48 excluded from the patchet. Still available in the git tree;
+  - add ARCH_GET_MAX_TAG_BITS;
+  - Fix build without CONFIG_DEBUG_VM;
+  - Update comments;
+  - Reviewed/Tested-by from Alexander;
+v5:
+  - Do not use switch_mm() in enable_lam_func()
+  - Use mb()/READ_ONCE() pair on LAM enabling;
+  - Add self-test by Weihong Zhang;
+  - Add comments;
+v4:
+  - Fix untagged_addr() for LAM_U48;
+  - Remove no-threads restriction on LAM enabling;
+  - Fix mm_struct access from /proc/$PID/arch_status
+  - Fix LAM handling in initialize_tlbstate_and_flush()
+  - Pack tlb_state better;
+  - Comments and commit messages;
+v3:
+  - Rebased onto v5.19-rc1
+  - Per-process enabling;
+  - API overhaul (again);
+  - Avoid branches and costly computations in the fast path;
+  - LAM_U48 is in optional patch.
+v2:
+  - Rebased onto v5.18-rc1
+  - New arch_prctl(2)-based API
+  - Expose status of LAM (or other thread features) in
+    /proc/$PID/arch_status
 
+[1] ISE, Chapter 10. https://cdrdv2.intel.com/v1/dl/getContent/671368
+Kirill A. Shutemov (11):
+  x86/mm: Fix CR3_ADDR_MASK
+  x86: CPUID and CR3/CR4 flags for Linear Address Masking
+  mm: Pass down mm_struct to untagged_addr()
+  x86/mm: Handle LAM on context switch
+  x86/uaccess: Provide untagged_addr() and remove tags before address
+    check
+  KVM: Serialize tagged address check against tagging enabling
+  x86/mm: Provide arch_prctl() interface for LAM
+  x86/mm: Reduce untagged_addr() overhead until the first LAM user
+  mm: Expose untagging mask in /proc/$PID/status
+  iommu/sva: Replace pasid_valid() helper with mm_valid_pasid()
+  x86/mm, iommu/sva: Make LAM and SVA mutually exclusive
 
-> You could probably use rcu for that.
->
->> +	unsigned int locality_count;
+Weihong Zhang (5):
+  selftests/x86/lam: Add malloc and tag-bits test cases for
+    linear-address masking
+  selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address
+    masking
+  selftests/x86/lam: Add io_uring test cases for linear-address masking
+  selftests/x86/lam: Add inherit test cases for linear-address masking
+  selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for
+    linear-address masking
 
-Note that we do not only have to increase or decrease the counter atomical=
-ly, but the first
-increment (when the counter goes from 1 to 0) AND requesting the locality =
-by writing to the
-ACCESS register has to be atomic.
-Likewise the last decrement (when the counter goes from 1 to 0) AND releas=
-ing the locality
-has to be done atomically:
+ arch/arm64/include/asm/memory.h               |    4 +-
+ arch/arm64/include/asm/mmu_context.h          |    6 +
+ arch/arm64/include/asm/signal.h               |    2 +-
+ arch/arm64/include/asm/uaccess.h              |    2 +-
+ arch/arm64/kernel/hw_breakpoint.c             |    2 +-
+ arch/arm64/kernel/traps.c                     |    4 +-
+ arch/arm64/mm/fault.c                         |   10 +-
+ arch/sparc/include/asm/mmu_context_64.h       |    6 +
+ arch/sparc/include/asm/pgtable_64.h           |    2 +-
+ arch/sparc/include/asm/uaccess_64.h           |    2 +
+ arch/x86/include/asm/cpufeatures.h            |    1 +
+ arch/x86/include/asm/mmu.h                    |   12 +-
+ arch/x86/include/asm/mmu_context.h            |   47 +
+ arch/x86/include/asm/processor-flags.h        |    4 +-
+ arch/x86/include/asm/tlbflush.h               |   34 +
+ arch/x86/include/asm/uaccess.h                |   46 +-
+ arch/x86/include/uapi/asm/prctl.h             |    5 +
+ arch/x86/include/uapi/asm/processor-flags.h   |    6 +
+ arch/x86/kernel/process.c                     |    3 +
+ arch/x86/kernel/process_64.c                  |   81 +-
+ arch/x86/kernel/traps.c                       |    6 +-
+ arch/x86/mm/tlb.c                             |   48 +-
+ .../gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c  |    2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c       |    2 +-
+ drivers/gpu/drm/radeon/radeon_gem.c           |    2 +-
+ drivers/infiniband/hw/mlx4/mr.c               |    2 +-
+ drivers/iommu/iommu-sva-lib.c                 |   16 +-
+ drivers/media/common/videobuf2/frame_vector.c |    2 +-
+ drivers/media/v4l2-core/videobuf-dma-contig.c |    2 +-
+ .../staging/media/atomisp/pci/hmm/hmm_bo.c    |    2 +-
+ drivers/tee/tee_shm.c                         |    2 +-
+ drivers/vfio/vfio_iommu_type1.c               |    2 +-
+ fs/proc/array.c                               |    6 +
+ fs/proc/task_mmu.c                            |    2 +-
+ include/linux/ioasid.h                        |    9 -
+ include/linux/mm.h                            |   11 -
+ include/linux/mmu_context.h                   |   14 +
+ include/linux/sched/mm.h                      |    8 +-
+ include/linux/uaccess.h                       |   15 +
+ lib/strncpy_from_user.c                       |    2 +-
+ lib/strnlen_user.c                            |    2 +-
+ mm/gup.c                                      |    6 +-
+ mm/madvise.c                                  |    2 +-
+ mm/mempolicy.c                                |    6 +-
+ mm/migrate.c                                  |    2 +-
+ mm/mincore.c                                  |    2 +-
+ mm/mlock.c                                    |    4 +-
+ mm/mmap.c                                     |    2 +-
+ mm/mprotect.c                                 |    2 +-
+ mm/mremap.c                                   |    2 +-
+ mm/msync.c                                    |    2 +-
+ tools/testing/selftests/x86/Makefile          |    2 +-
+ tools/testing/selftests/x86/lam.c             | 1149 +++++++++++++++++
+ virt/kvm/kvm_main.c                           |   14 +-
+ 54 files changed, 1539 insertions(+), 92 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/lam.c
 
-	mutex_lock(&priv->locality_count_mutex);
-	priv->locality_count--;
-	if (priv->locality_count =3D=3D 0)
-		tpm_tis_release_locality_locked(priv, l);
-	mutex_unlock(&priv->locality_count_mutex);
+-- 
+2.38.0
 
-I dont know if this is possible with RCU, especially since AFAIK RCU works=
- with pointers instead of
-integral data types.
-
-
-Regards,
-Lino
-
-
-
-
-
->>  	int locality;
->>  	int irq;
->>  	unsigned int int_mask;
->> --
->> 2.36.1
->>
->
-> BR, Jarkko
