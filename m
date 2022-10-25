@@ -2,97 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8C160CFB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:56:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A3F60CFB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232577AbiJYO4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:56:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S233036AbiJYO5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiJYO4j (ORCPT
+        with ESMTP id S232896AbiJYO4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:56:39 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D8B19C075
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:56:37 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id z17so5554818qkj.8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uUiubakIlF1DpxdqyZ7Sj+SDXQ/dw5Cd208ltlbQ02A=;
-        b=m6Ls5iooVS3Fnkf/3NW2w8jTlWMzIYAuv5F4dmXAkmLpai7RaFRizUY3fHggCFdwl5
-         wNKIh8SJ1QFKkm16gP3LAOZv1jhIFM8VOthJwtKYUj7u+hfiqqacrmyK3J3nv7WWy67n
-         nk6SDPJT+ZuvjH/PZNgh4RiUElV6wa2daF+/6EZ1QRgvBMlRUDER9PjT4b0cF+DQ5Cn2
-         h5/CsJRP/W42czQnDTXMBNCxCYztGtpidL+0kI1HLoBjopI6atnNBovzKnl73RsthZSq
-         /ERMjBDo3+OcPDjN+jNYe3P8+tJ362nDh0TLjkUGsQAYRvN+ulX0V1R4C+8hEGXJ2Fdy
-         +ynw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uUiubakIlF1DpxdqyZ7Sj+SDXQ/dw5Cd208ltlbQ02A=;
-        b=sVp2Notg7mjtdKPtvT8wlj+9Etf2+RTrMEVk19IJ3VlCYglJO2ynfNqh8EAg569eeI
-         ehvxLPaqZX/Q0bHSg6XCly7IwAY83LdnXcYBl1JjnubsylgFD5ASmvMHYn972XziQ47M
-         jEX/SNIKm2ixGOYe8eyW4iuo1WqbJug1OOrT9LxhH6d+L9mtWTn5FWI6fPNeC0UFR0Ly
-         pdazuJWavwNUKUafEVQDZmFUFXIu4u+Mpo5O5Z1oq64VKvU5zOOR5b+5wv/rzAmTwgNX
-         YfW2ahHRGtI7bUciBoEWVaFln4svRtkRMRHeot5COaUU1d/BAXyS0jOaKwCvNUqL8pSl
-         XgZw==
-X-Gm-Message-State: ACrzQf1dn07w7TxdIKvMXWxznxO8OJFo6OSRMFgUUkU/fDHo3M5zcnO2
-        VMOWtyOw60X2bZu//fEh6kMbdA==
-X-Google-Smtp-Source: AMsMyM40J8qEW/jyC6caiIqv2XzBMoKkNM1NJBwLdGrCnRdc8istSwcNfzTfcYq3K9r0J522tKA3dg==
-X-Received: by 2002:a05:620a:4514:b0:6ef:e65:bc77 with SMTP id t20-20020a05620a451400b006ef0e65bc77mr18909789qkp.644.1666709796970;
-        Tue, 25 Oct 2022 07:56:36 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id r11-20020a05620a298b00b006bba46e5eeasm2304609qkp.37.2022.10.25.07.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 07:56:35 -0700 (PDT)
-Message-ID: <cd2e3ae3-6a30-f6cd-fbbb-9c5c6071fb9b@linaro.org>
-Date:   Tue, 25 Oct 2022 10:56:33 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] dt-bindings: pinctrl: update pcie/pwm/spi bindings for
- MT7986 SoC
-Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tue, 25 Oct 2022 10:56:54 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9131AC1DB;
+        Tue, 25 Oct 2022 07:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=1CzXyO7CuyV1gfLMYeF/4X2psNc4MKQOgtdQ6REO1y4=; b=lKoDj+GeEsAug+rqoIuL9PqhJY
+        b5q2rJlxS5PuA/caZ5KttMzESQUvGjLzm2VvbPy0fukAhe4+lHrJCmAtl8g88nzxoymx+F0E7In6z
+        h6aD7R1rtjW9xYX46HntGnT8r4pVkRn/I0Zc5PY4qb6+xDZ1HtBIlavsXORYNmgWQNJR6Rr48TZzI
+        OG3JrFRhj1X04DOxCCH8gy3pyp6vGieeS5F6ocdyW/dFRHgefV5VtHplbOU5cvo6YVXi+e3y5B+hd
+        gxQusoLF83GFG6PP1KUyvb7BpMzDsDmV1uBx9h1RZH9NVFAKkP+b3lLnDvqkisO/AjyQRY6lPfCxA
+        RpqGJB3g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onLMB-005w4x-Ja; Tue, 25 Oct 2022 14:56:43 +0000
+Date:   Tue, 25 Oct 2022 07:56:43 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Dawei Li <set_pte_at@outlook.com>, viro@zeniv.linux.org.uk,
+        neilb@suse.de, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221024074349.7777-1-linux@fw-web.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024074349.7777-1-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH] vfs: Make vfs_get_super() internal
+Message-ID: <Y1f5K6LKgD3hpkU/@infradead.org>
+References: <TYCP286MB2323D37F4F6400FD07D7C7F7CA319@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+ <20221025143607.frmf3qg7j4kwezll@wittgenstein>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025143607.frmf3qg7j4kwezll@wittgenstein>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 03:43, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> Allow multiple items for pcie, pwm and spi function.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+On Tue, Oct 25, 2022 at 04:36:07PM +0200, Christian Brauner wrote:
+> If you want to make it static that you should probably also make enum
+> vfs_get_super_keying static by moving it into super.c. It's not used
+> anywhere but for vfs_get_super() afaict.
 
+I'd just remove the enum entirely, as it really obsfucates the code:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+diff --git a/Documentation/filesystems/mount_api.rst b/Documentation/filesystems/mount_api.rst
+index eb358a00be279..b0f7fd4f64bc8 100644
+--- a/Documentation/filesystems/mount_api.rst
++++ b/Documentation/filesystems/mount_api.rst
+@@ -560,37 +560,6 @@ or looking up of superblocks.
+      to sb->s_fs_info - and fc->s_fs_info will be cleared if set returns
+      success (ie. 0).
+ 
+-The following helpers all wrap sget_fc():
+-
+-   * ::
+-
+-       int vfs_get_super(struct fs_context *fc,
+-		         enum vfs_get_super_keying keying,
+-		         int (*fill_super)(struct super_block *sb,
+-					   struct fs_context *fc))
+-
+-     This creates/looks up a deviceless superblock.  The keying indicates how
+-     many superblocks of this type may exist and in what manner they may be
+-     shared:
+-
+-	(1) vfs_get_single_super
+-
+-	    Only one such superblock may exist in the system.  Any further
+-	    attempt to get a new superblock gets this one (and any parameter
+-	    differences are ignored).
+-
+-	(2) vfs_get_keyed_super
+-
+-	    Multiple superblocks of this type may exist and they're keyed on
+-	    their s_fs_info pointer (for example this may refer to a
+-	    namespace).
+-
+-	(3) vfs_get_independent_super
+-
+-	    Multiple independent superblocks of this type may exist.  This
+-	    function never matches an existing one and always creates a new
+-	    one.
+-
+ 
+ Parameter Description
+ =====================
+diff --git a/fs/super.c b/fs/super.c
+index 6a82660e1adba..76f477c24c3d5 100644
+--- a/fs/super.c
++++ b/fs/super.c
+@@ -1111,55 +1111,14 @@ static int test_single_super(struct super_block *s, struct fs_context *fc)
+ 	return 1;
+ }
+ 
+-/**
+- * vfs_get_super - Get a superblock with a search key set in s_fs_info.
+- * @fc: The filesystem context holding the parameters
+- * @keying: How to distinguish superblocks
+- * @fill_super: Helper to initialise a new superblock
+- *
+- * Search for a superblock and create a new one if not found.  The search
+- * criterion is controlled by @keying.  If the search fails, a new superblock
+- * is created and @fill_super() is called to initialise it.
+- *
+- * @keying can take one of a number of values:
+- *
+- * (1) vfs_get_single_super - Only one superblock of this type may exist on the
+- *     system.  This is typically used for special system filesystems.
+- *
+- * (2) vfs_get_keyed_super - Multiple superblocks may exist, but they must have
+- *     distinct keys (where the key is in s_fs_info).  Searching for the same
+- *     key again will turn up the superblock for that key.
+- *
+- * (3) vfs_get_independent_super - Multiple superblocks may exist and are
+- *     unkeyed.  Each call will get a new superblock.
+- *
+- * A permissions check is made by sget_fc() unless we're getting a superblock
+- * for a kernel-internal mount or a submount.
+- */
+-int vfs_get_super(struct fs_context *fc,
+-		  enum vfs_get_super_keying keying,
+-		  int (*fill_super)(struct super_block *sb,
+-				    struct fs_context *fc))
++static int vfs_get_super(struct fs_context *fc, bool reconf,
++		int (*test)(struct super_block *, struct fs_context *),
++		int (*fill_super)(struct super_block *sb,
++				  struct fs_context *fc))
+ {
+-	int (*test)(struct super_block *, struct fs_context *);
+ 	struct super_block *sb;
+ 	int err;
+ 
+-	switch (keying) {
+-	case vfs_get_single_super:
+-	case vfs_get_single_reconf_super:
+-		test = test_single_super;
+-		break;
+-	case vfs_get_keyed_super:
+-		test = test_keyed_super;
+-		break;
+-	case vfs_get_independent_super:
+-		test = NULL;
+-		break;
+-	default:
+-		BUG();
+-	}
+-
+ 	sb = sget_fc(fc, test, set_anon_super_fc);
+ 	if (IS_ERR(sb))
+ 		return PTR_ERR(sb);
+@@ -1173,7 +1132,7 @@ int vfs_get_super(struct fs_context *fc,
+ 		fc->root = dget(sb->s_root);
+ 	} else {
+ 		fc->root = dget(sb->s_root);
+-		if (keying == vfs_get_single_reconf_super) {
++		if (reconf) {
+ 			err = reconfigure_super(fc);
+ 			if (err < 0) {
+ 				dput(fc->root);
+@@ -1189,13 +1148,12 @@ int vfs_get_super(struct fs_context *fc,
+ 	deactivate_locked_super(sb);
+ 	return err;
+ }
+-EXPORT_SYMBOL(vfs_get_super);
+ 
+ int get_tree_nodev(struct fs_context *fc,
+ 		  int (*fill_super)(struct super_block *sb,
+ 				    struct fs_context *fc))
+ {
+-	return vfs_get_super(fc, vfs_get_independent_super, fill_super);
++	return vfs_get_super(fc, false, NULL, fill_super);
+ }
+ EXPORT_SYMBOL(get_tree_nodev);
+ 
+@@ -1203,7 +1161,7 @@ int get_tree_single(struct fs_context *fc,
+ 		  int (*fill_super)(struct super_block *sb,
+ 				    struct fs_context *fc))
+ {
+-	return vfs_get_super(fc, vfs_get_single_super, fill_super);
++	return vfs_get_super(fc, false, test_single_super, fill_super);
+ }
+ EXPORT_SYMBOL(get_tree_single);
+ 
+@@ -1211,7 +1169,7 @@ int get_tree_single_reconf(struct fs_context *fc,
+ 		  int (*fill_super)(struct super_block *sb,
+ 				    struct fs_context *fc))
+ {
+-	return vfs_get_super(fc, vfs_get_single_reconf_super, fill_super);
++	return vfs_get_super(fc, true, test_single_super, fill_super);
+ }
+ EXPORT_SYMBOL(get_tree_single_reconf);
+ 
+@@ -1221,7 +1179,7 @@ int get_tree_keyed(struct fs_context *fc,
+ 		void *key)
+ {
+ 	fc->s_fs_info = key;
+-	return vfs_get_super(fc, vfs_get_keyed_super, fill_super);
++	return vfs_get_super(fc, false, test_keyed_super, fill_super);
+ }
+ EXPORT_SYMBOL(get_tree_keyed);
+ 
+diff --git a/include/linux/fs_context.h b/include/linux/fs_context.h
+index 13fa6f3df8e46..87a34f2fa68de 100644
+--- a/include/linux/fs_context.h
++++ b/include/linux/fs_context.h
+@@ -145,20 +145,6 @@ extern void fc_drop_locked(struct fs_context *fc);
+ int reconfigure_single(struct super_block *s,
+ 		       int flags, void *data);
+ 
+-/*
+- * sget() wrappers to be called from the ->get_tree() op.
+- */
+-enum vfs_get_super_keying {
+-	vfs_get_single_super,	/* Only one such superblock may exist */
+-	vfs_get_single_reconf_super, /* As above, but reconfigure if it exists */
+-	vfs_get_keyed_super,	/* Superblocks with different s_fs_info keys may exist */
+-	vfs_get_independent_super, /* Multiple independent superblocks may exist */
+-};
+-extern int vfs_get_super(struct fs_context *fc,
+-			 enum vfs_get_super_keying keying,
+-			 int (*fill_super)(struct super_block *sb,
+-					   struct fs_context *fc));
+-
+ extern int get_tree_nodev(struct fs_context *fc,
+ 			 int (*fill_super)(struct super_block *sb,
+ 					   struct fs_context *fc));
