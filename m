@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1138660C129
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C0E60C12D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJYBkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S230156AbiJYBlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbiJYBk1 (ORCPT
+        with ESMTP id S230300AbiJYBk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:40:27 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A78AA3DC;
-        Mon, 24 Oct 2022 18:20:23 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MxDZR6vvJzJn1m;
-        Tue, 25 Oct 2022 09:17:35 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 09:20:20 +0800
-Message-ID: <f0785930-8f2a-9d09-4dbf-545d11994cbe@huawei.com>
-Date:   Tue, 25 Oct 2022 09:20:19 +0800
+        Mon, 24 Oct 2022 21:40:56 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9543A15B336
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 18:21:07 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so14717324pji.1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 18:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LRvrfdB7zmhZ+11/1OF+yZjQrE3psIebH4Rs6IW8U5U=;
+        b=jFEZOkqzQnXAvOLt1aoDE8WoO3aWaZ4sdpyKagS/dw0grBXvpDiViiyPWeRLwBGJPz
+         4PfjdpD0cVEcMJUKBISct1RLX2bjNyUUWo3v8Hh+eHyW2VNnekLWMZYFX0cpAzu28WDc
+         Omv+PtHH4WkZmUeBzDgDTToD8/vFV4LOgJW8A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LRvrfdB7zmhZ+11/1OF+yZjQrE3psIebH4Rs6IW8U5U=;
+        b=l/hMYLqe9UbLmIZksRc4K5Olm9gIZl0zToFR57vJdIKsmFLYki7Dm/VuocCdMx6t0C
+         LB1aQF4WPoIOu31maxNfJgrikAYOOJuoMpx5RsaoluhcnG6rPkjVDftPFNxQIq63Mmck
+         wpysKfEh0hl918Ke7RLJP0lsITFiqYxepf4SSIsqsuSXq+o7XUrG50T9/TCtlFKUnJk+
+         fDDGaZhDoi1ay6CqtjVhXt4hZlgFBYQ045VlqWw17GISTwc6fd13Mc252H9NNiRerftv
+         7mm1Ugg9Y2ggdF6bLL1LsqAbjYZukM5CGdWwp596TfPR3dcco2KtcQkMY3xCnUjk2Kt1
+         gr9g==
+X-Gm-Message-State: ACrzQf3Fq5cGZ3+RIyFCeUBKx1uAJkEMaCZBvKZ+HzYvj/DRRBKB030q
+        dy4awoi/OOQ0GRY1XHuhmFVQVQ==
+X-Google-Smtp-Source: AMsMyM6JQUizHWRy50ZyNimKExpyj0NoIRw2W9lNzxDo9u+rGLsI9p85efdKHeqLWFeCuourO3+kjw==
+X-Received: by 2002:a17:902:ccc4:b0:186:6fcb:3fcf with SMTP id z4-20020a170902ccc400b001866fcb3fcfmr23036976ple.100.1666660867062;
+        Mon, 24 Oct 2022 18:21:07 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:c493:65a6:2d64:1325])
+        by smtp.gmail.com with ESMTPSA id s1-20020a17090a508100b0020a9af6bb1asm444071pjh.32.2022.10.24.18.21.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 18:21:06 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 10:21:02 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexey Romanov <avromanov@sberdevices.ru>, minchan@kernel.org,
+        senozhatsky@chromium.org, ngupta@vflare.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel@sberdevices.ru
+Subject: Re: [PATCH v1] zram: add size class equals check into recompression
+Message-ID: <Y1c5/mSBc+ctWH6v@google.com>
+References: <20221024120942.13885-1-avromanov@sberdevices.ru>
+ <20221024135909.e351a2dde4eea521f359a04b@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: [PATCH V6 01/11] riscv: elf_kexec: Fixup compile warning
-To:     <guoren@kernel.org>, <arnd@arndb.de>, <palmer@rivosinc.com>,
-        <tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
-        <conor.dooley@microchip.com>, <heiko@sntech.de>,
-        <jszhang@kernel.org>, <lazyparser@gmail.com>, <falcon@tinylab.org>,
-        <chenhuacai@kernel.org>, <apatel@ventanamicro.com>,
-        <atishp@atishpatra.org>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <mark.rutland@arm.com>,
-        <zouyipeng@huawei.com>, <bigeasy@linutronix.de>,
-        <David.Laight@aculab.com>, <chenzhongjin@huawei.com>
-CC:     <linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        kernel test robot <lkp@intel.com>
-References: <20221002012451.2351127-1-guoren@kernel.org>
- <20221002012451.2351127-2-guoren@kernel.org>
-From:   "liaochang (A)" <liaochang1@huawei.com>
-In-Reply-To: <20221002012451.2351127-2-guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024135909.e351a2dde4eea521f359a04b@linux-foundation.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/10/2 9:24, guoren@kernel.org 写道:
-> From: Guo Ren <guoren@linux.alibaba.com>
+On (22/10/24 13:59), Andrew Morton wrote:
+> > It makes no sense for us to recompress the object if it will
+> > be in the same size class. We anyway don't get any memory gain.
+> > But, at the same time, we get a CPU time overhead when inserting
+> > this object into zspage and decompressing it afterwards.
+> > 
 > 
-> If CRYTPO or CRYPTO_SHA256 or KEXE_FILE is not enabled, then:
-> 
-> COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1
-> O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/
-> 
-> ../arch/riscv/kernel/elf_kexec.c: In function 'elf_kexec_load':
-> ../arch/riscv/kernel/elf_kexec.c:185:23: warning: variable
-> 'kernel_start' set but not used [-Wunused-but-set-variable]
->   185 |         unsigned long kernel_start;
->       |                       ^~~~~~~~~~~~
-> 
-> Fixes: 838b3e28488f ("RISC-V: Load purgatory in kexec_file")
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  arch/riscv/kernel/elf_kexec.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-> index 0cb94992c15b..4b9264340b78 100644
-> --- a/arch/riscv/kernel/elf_kexec.c
-> +++ b/arch/riscv/kernel/elf_kexec.c
-> @@ -198,7 +198,7 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
->  	if (ret)
->  		goto out;
->  	kernel_start = image->start;
-> -	pr_notice("The entry point of kernel at 0x%lx\n", image->start);
-> +	pr_notice("The entry point of kernel at 0x%lx\n", kernel_start);
->  
->  	/* Add the kernel binary to the image */
->  	ret = riscv_kexec_elf_load(image, &ehdr, &elf_info,
+> Dumb question: is it ever possible for compression to result in an
+> increase in size?
 
-LGTM
+That's a good question. Re-compressed object can be bigger than the
+original compressed one, but this should already be taken care of.
+We do
+        if (comp_len_next >= huge_class_size ||
+            comp_len_next >= comp_len_prev ||
 
-Reviewed-by: Liao Chang <liaochang1@huawei.com>
-
--- 
-BR,
-Liao, Chang
+This checks whether recompressed object is above huge-size watermark and
+whether recompressed size is larger than the original size.
