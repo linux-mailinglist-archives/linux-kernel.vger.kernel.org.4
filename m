@@ -2,104 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD9F60CCD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CABA60CCD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiJYNAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S230025AbiJYNBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbiJYM7n (ORCPT
+        with ESMTP id S232266AbiJYNAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:59:43 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DCA814C0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:56:18 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E9A215FD03;
-        Tue, 25 Oct 2022 15:56:15 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1666702576;
-        bh=FDJLYQVfAPEsI0KUWAF0tnbcOsSG/a/B7l7gy81zlRw=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=kMEA9K2eETrHcb7Da6vTw6wVBOBB4pY05MByklWuZiBAUiUZBe1zUZh22BtTR3Ofv
-         w50FKjcyMJg329cOBpdaL/o0DCkpCecw52Hk93cDGlumMt3X79VeYmRg8gkZfttoJX
-         kgO1LeX1itpA/g58WLW19+tTuELNF1tNqYmACuv6d1Qea9kpEiBQTw2ynX2HdHhLWy
-         +lSulN6Ii3xNNswe4KGRnH25i+r/sQeBuS7g2tkrVmpqNQ8h3p5cCxfCWBAn/E22BH
-         zU9eaqZheqIuVis1ECUda/9JZKTFHn0cxTJGHdNystPpXaGKL6UZW3BWW6OwqbUrsk
-         rPzCbT2aiFFpQ==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 25 Oct 2022 15:56:14 +0300 (MSK)
-From:   Aleksey Romanov <AVRomanov@sberdevices.ru>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        "minchan@kernel.org" <minchan@kernel.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [PATCH v1] zram: add size class equals check into recompression
-Thread-Topic: [PATCH v1] zram: add size class equals check into recompression
-Thread-Index: AQHY56FoneIKBPF3rEq28K0jaPH8QK4eJ6gAgAADEgCAAIHKAIAABYEAgAAd1wCAAAvXAIAABQuA
-Date:   Tue, 25 Oct 2022 12:56:08 +0000
-Message-ID: <20221025125542.wenx6m624wu4vuxf@cab-wsm-0029881.lan>
-References: <20221024120942.13885-1-avromanov@sberdevices.ru>
- <Y1dBpLDf+mRH6cLf@google.com> <Y1dEOLjD+kpdz0Vo@google.com>
- <20221025094859.7kbcqknlkmo4hj2y@cab-wsm-0029881.lan>
- <Y1e1tvMMXU5+8JQP@google.com>
- <20221025115542.5o4igroslirn6cxy@cab-wsm-0029881.lan>
- <Y1fYrM3o2ZudjZ/7@google.com>
-In-Reply-To: <Y1fYrM3o2ZudjZ/7@google.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <C30060D7AD67DC41BC57008DEC2AC97D@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 25 Oct 2022 09:00:50 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 288A1192A6;
+        Tue, 25 Oct 2022 05:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4upcEUNCFEu3hk4JtYzdLpibVWwDGGjBVwHjdTMXMTk=; b=ZOZzbBhTSmMZDGiPnG6DUV06bL
+        l5GBrzGw8a9xBkvd5Vox2vP8B9UYG+YNE1oYr5Rpey2BmS9rPnr1rNPScQIwd5g/8wPo6JvY+5c/B
+        hIZwB0og4hI1qUvg/uKsK7DGbJ4Ya4ayRuCgKzs4Ho2BMZPQZMIDv3J/ZNr10M3wkpGXUlQAdmAIE
+        uKAs+9pKGwzAH22oDcBxzRoFPwOXem7D6I3WMo2Wk/DtMRwFDEqSL+W5gapk4wWhID92qFB+bjKen
+        JprE/SjPB30EjBM6fFXDg8OeUGxlpp/+EL/Bn4mcnYK5YBVPwLqJmy/4ewMierOfdPfEMgjkydMbZ
+        FeVsohEw==;
+Received: from [177.95.16.195] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1onJVB-005DXf-RJ; Tue, 25 Oct 2022 14:57:54 +0200
+Message-ID: <db3183ee-df61-a9fd-abdf-92df6d578ec6@igalia.com>
+Date:   Tue, 25 Oct 2022 09:57:42 -0300
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/10/25 10:18:00 #20514748
-X-KSMG-AntiVirus-Status: Clean, skipped
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3] x86/split_lock: Add sysctl to control the misery mode
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, luto@kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, Fenghua Yu <fenghua.yu@intel.com>,
+        Joshua Ashton <joshua@froggi.es>,
+        Melissa Wen <mwen@igalia.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Pavel Machek <pavel@denx.de>,
+        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Zebediah Figura <zfigura@codeweavers.com>,
+        Andre Almeida <andrealmeid@igalia.com>
+References: <20221024200254.635256-1-gpiccoli@igalia.com>
+ <Y1dcDmmIu8gSX4Rb@debian.me> <7db9c3a5-2120-5ede-eb4e-077e3ed6c1f7@intel.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <7db9c3a5-2120-5ede-eb4e-077e3ed6c1f7@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,T_SPF_TEMPERROR,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 09:38:04PM +0900, Sergey Senozhatsky wrote:
-> On (22/10/25 11:55), Aleksey Romanov wrote:
-> > >   Return: the index of the zsmalloc &size_class that hold objects of =
-the
-> > >   provided size.
-> > >=20
-> > > unsigned int zs_lookup_class_index(struct zs_pool *pool, unsigned int=
- size)
-> > > {
-> > >         struct size_class *class =3D pool->size_class[get_size_class_=
-index(size)];
-> > >=20
-> > >         return class->index;
-> > > }
-> >=20
-> > Sure. I think it would be more logical, and perhaps such a function
-> > would be more applicable in other cases, in the future.
-> >=20
-> > Will you fix it in your cherry-pick?
->=20
-> For that I probably will ask you to send out v2, if possible.
+Other than that, is this version good enough in your opinion Dave?
 
-Okay, I will send v2 soon.
+Personally I think Bagas could submit a patch later and propose the
+changes to the docs as well.
 
---=20
-Thank you,
-Alexey=
+Cheers,
+
+
+Guilherme
