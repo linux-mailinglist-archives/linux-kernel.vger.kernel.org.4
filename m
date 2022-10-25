@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF5C60C8EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDCA60C8F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbiJYJwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        id S232117AbiJYJw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbiJYJu5 (ORCPT
+        with ESMTP id S230259AbiJYJvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:50:57 -0400
+        Tue, 25 Oct 2022 05:51:20 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78AA16021D;
-        Tue, 25 Oct 2022 02:49:03 -0700 (PDT)
-Received: from frapeml100003.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxRtP2LpNz688Kc;
-        Tue, 25 Oct 2022 17:47:09 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3C9164BC2;
+        Tue, 25 Oct 2022 02:49:08 -0700 (PDT)
+Received: from frapeml100002.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxRv53SC3z67yhg;
+        Tue, 25 Oct 2022 17:47:45 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- frapeml100003.china.huawei.com (7.182.85.60) with Microsoft SMTP Server
+ frapeml100002.china.huawei.com (7.182.85.26) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 11:49:02 +0200
+ 15.1.2375.31; Tue, 25 Oct 2022 11:49:06 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 10:48:57 +0100
+ 15.1.2375.31; Tue, 25 Oct 2022 10:49:02 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
         <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
@@ -34,9 +34,9 @@ To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH RFC v3 16/22] ata: libata-scsi: Allocate sdev early in port probe
-Date:   Tue, 25 Oct 2022 18:18:10 +0800
-Message-ID: <1666693096-180008-17-git-send-email-john.garry@huawei.com>
+Subject: [PATCH RFC v3 17/22] scsi: libsas drivers: Reserve tags
+Date:   Tue, 25 Oct 2022 18:18:11 +0800
+Message-ID: <1666693096-180008-18-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
 References: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
@@ -55,98 +55,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the per-ata device sdev is allocated as part of the scsi target
-scan, which is after the ata port probe.
+Reserve 2x tags for libsas reserved tag handling, which should be
+enough.
 
-However it is useful to have the sdev available in the port probe. As an
-example of an advantage, if the request queue is available in the probe
-(which it would be if the sdev is available), then it is possible to use
-a SCSI cmnd for ATA internal commands. The benefit of this is then we can
-put the ATA qc structure in the SCSI cmnd private data. It will also be
-useful if we want to send ATA internal commands as requests.
-
-Export scsi_target_reap() so that it can be used to put the extra
-reference we get when allocating the sdev.
+Continue to carve out a region of tags for driver internal management
+until each sas_task always has a request.
 
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/ata/libata-eh.c   |  1 +
- drivers/ata/libata-scsi.c | 23 +++++++++--------------
- drivers/scsi/scsi_scan.c  |  1 +
- 3 files changed, 11 insertions(+), 14 deletions(-)
+ drivers/scsi/aic94xx/aic94xx_init.c    | 1 +
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 4 ++++
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 1 +
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 1 +
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 5 +++++
+ drivers/scsi/isci/init.c               | 1 +
+ drivers/scsi/mvsas/mv_init.c           | 5 +++++
+ drivers/scsi/pm8001/pm8001_init.c      | 6 +++++-
+ 8 files changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-index 08e11bc312c2..1ed5b1b64792 100644
---- a/drivers/ata/libata-eh.c
-+++ b/drivers/ata/libata-eh.c
-@@ -3446,6 +3446,7 @@ static int ata_eh_schedule_probe(struct ata_device *dev)
+diff --git a/drivers/scsi/aic94xx/aic94xx_init.c b/drivers/scsi/aic94xx/aic94xx_init.c
+index 06c86d7a777a..70b735cedeb3 100644
+--- a/drivers/scsi/aic94xx/aic94xx_init.c
++++ b/drivers/scsi/aic94xx/aic94xx_init.c
+@@ -62,6 +62,7 @@ static struct scsi_host_template aic94xx_sht = {
+ 	.track_queue_depth	= 1,
+ 	.reserved_queuecommand = sas_queuecommand_internal,
+ 	.reserved_timedout = sas_internal_timeout,
++	.nr_reserved_cmds = 2,
+ };
  
- 	ata_eh_detach_dev(dev);
- 	ata_dev_init(dev);
-+	ata_scsi_setup_sdev(dev);
- 	ehc->did_probe_mask |= (1 << dev->devno);
- 	ehc->i.action |= ATA_EH_RESET;
- 	ehc->saved_xfer_mode[dev->devno] = 0;
-diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index efdba852e363..476e0ef4bd29 100644
---- a/drivers/ata/libata-scsi.c
-+++ b/drivers/ata/libata-scsi.c
-@@ -1109,7 +1109,12 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
- 	if (dev->flags & ATA_DFLAG_TRUSTED)
- 		sdev->security_supported = 1;
- 
--	dev->sdev = sdev;
-+	/*
-+	 * Put extra reference which we get when allocating the starget
-+	 * initially
-+	 */
-+	scsi_target_reap(scsi_target(sdev));
-+
- 	return 0;
- }
- 
-@@ -4289,26 +4294,16 @@ void ata_scsi_scan_host(struct ata_port *ap, int sync)
-  repeat:
- 	ata_for_each_link(link, ap, EDGE) {
- 		ata_for_each_dev(dev, link, ENABLED) {
--			struct scsi_device *sdev;
-+			struct Scsi_Host *shost = ap->scsi_host;
- 			int channel = 0, id = 0;
- 
--			if (dev->sdev)
--				continue;
--
- 			if (ata_is_host_link(link))
- 				id = dev->devno;
- 			else
- 				channel = link->pmp;
- 
--			sdev = __scsi_add_device(ap->scsi_host, channel, id, 0,
--						 NULL);
--			if (!IS_ERR(sdev)) {
--				dev->sdev = sdev;
--				ata_scsi_assign_ofnode(dev, ap);
--				scsi_device_put(sdev);
--			} else {
--				dev->sdev = NULL;
--			}
-+			scsi_scan_target(&shost->shost_gendev, channel, id,
-+					 0, SCSI_SCAN_INITIAL);
- 		}
+ static int asd_map_memio(struct asd_ha_struct *asd_ha)
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 54860d252466..fe2752d24fe8 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -2442,6 +2442,10 @@ int hisi_sas_probe(struct platform_device *pdev,
+ 		shost->can_queue = HISI_SAS_MAX_COMMANDS;
+ 		shost->cmd_per_lun = HISI_SAS_MAX_COMMANDS;
+ 	} else {
++		/*
++		 * Intentionally use HISI_SAS_UNRESERVED_IPTT for .can_queue until
++		 * every sas_task we're sent has a request associated.
++		 */
+ 		shost->can_queue = HISI_SAS_UNRESERVED_IPTT;
+ 		shost->cmd_per_lun = HISI_SAS_UNRESERVED_IPTT;
  	}
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
+index 9f71cc72cd80..438e8a963782 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
+@@ -1762,6 +1762,7 @@ static struct scsi_host_template sht_v1_hw = {
+ 	.host_reset             = hisi_sas_host_reset,
+ 	.reserved_queuecommand = sas_queuecommand_internal,
+ 	.reserved_timedout = sas_internal_timeout,
++	.nr_reserved_cmds = 2,
+ };
  
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index b795c138f2c1..da7bc14b030c 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -598,6 +598,7 @@ void scsi_target_reap(struct scsi_target *starget)
- 	BUG_ON(starget->state == STARGET_DEL);
- 	scsi_target_reap_ref_put(starget);
- }
-+EXPORT_SYMBOL_GPL(scsi_target_reap);
+ static const struct hisi_sas_hw hisi_sas_v1_hw = {
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+index 483a03ed6253..b733eb18864c 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+@@ -3580,6 +3580,7 @@ static struct scsi_host_template sht_v2_hw = {
+ 	.host_tagset		= 1,
+ 	.reserved_queuecommand = sas_queuecommand_internal,
+ 	.reserved_timedout = sas_internal_timeout,
++	.nr_reserved_cmds = 2,
+ };
  
- /**
-  * scsi_sanitize_inquiry_string - remove non-graphical chars from an
+ static const struct hisi_sas_hw hisi_sas_v2_hw = {
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 02d96fba510f..d703af7985b0 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -3247,6 +3247,7 @@ static struct scsi_host_template sht_v3_hw = {
+ 	.host_tagset		= 1,
+ 	.reserved_queuecommand = sas_queuecommand_internal,
+ 	.reserved_timedout = sas_internal_timeout,
++	.nr_reserved_cmds = 2,
+ };
+ 
+ static const struct hisi_sas_hw hisi_sas_v3_hw = {
+@@ -4859,6 +4860,10 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	shost->max_lun = ~0;
+ 	shost->max_channel = 1;
+ 	shost->max_cmd_len = 16;
++	/*
++	 * Intentionally use HISI_SAS_UNRESERVED_IPTT for .can_queue until
++	 * every sas_task we're sent has a request associated.
++	 */
+ 	shost->can_queue = HISI_SAS_UNRESERVED_IPTT;
+ 	shost->cmd_per_lun = HISI_SAS_UNRESERVED_IPTT;
+ 
+diff --git a/drivers/scsi/isci/init.c b/drivers/scsi/isci/init.c
+index 9c7869bf6cde..c07d89451bb6 100644
+--- a/drivers/scsi/isci/init.c
++++ b/drivers/scsi/isci/init.c
+@@ -179,6 +179,7 @@ static struct scsi_host_template isci_sht = {
+ 	.track_queue_depth		= 1,
+ 	.reserved_queuecommand = sas_queuecommand_internal,
+ 	.reserved_timedout = sas_internal_timeout,
++	.nr_reserved_cmds	= 2,
+ };
+ 
+ static struct sas_domain_function_template isci_transport_ops  = {
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index 7fed0259e1f5..07e6c5d6c46d 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -56,6 +56,7 @@ static struct scsi_host_template mvs_sht = {
+ 	.track_queue_depth	= 1,
+ 	.reserved_queuecommand = sas_queuecommand_internal,
+ 	.reserved_timedout = sas_internal_timeout,
++	.nr_reserved_cmds = 2,
+ };
+ 
+ static struct sas_domain_function_template mvs_transport_ops = {
+@@ -470,6 +471,10 @@ static void  mvs_post_sas_ha_init(struct Scsi_Host *shost,
+ 	else
+ 		can_queue = MVS_CHIP_SLOT_SZ;
+ 
++	/*
++	 * Carve out MVS_RSVD_SLOTS slots internally until every sas_task we're sent
++	 * has a request associated.
++	 */
+ 	can_queue -= MVS_RSVD_SLOTS;
+ 
+ 	shost->sg_tablesize = min_t(u16, SG_ALL, MVS_MAX_SG);
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index ce9509792bc0..e37e8898afaa 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -125,6 +125,7 @@ static struct scsi_host_template pm8001_sht = {
+ 	.map_queues		= pm8001_map_queues,
+ 	.reserved_queuecommand = sas_queuecommand_internal,
+ 	.reserved_timedout = sas_internal_timeout,
++	.nr_reserved_cmds = 2,
+ };
+ 
+ /*
+@@ -1214,7 +1215,10 @@ static int pm8001_init_ccb_tag(struct pm8001_hba_info *pm8001_ha)
+ 
+ 	max_out_io = pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_out_io;
+ 	ccb_count = min_t(int, PM8001_MAX_CCB, max_out_io);
+-
++	/*
++	 * Intentionally use ccb_count - PM8001_RESERVE_SLOT for .can_queue
++	 * until every sas_task we're sent has a request associated.
++	 */
+ 	shost->can_queue = ccb_count - PM8001_RESERVE_SLOT;
+ 
+ 	pm8001_ha->rsvd_tags = bitmap_zalloc(PM8001_RESERVE_SLOT, GFP_KERNEL);
 -- 
 2.35.3
 
