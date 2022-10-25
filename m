@@ -2,91 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204CA60C4C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B6460C4C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbiJYHJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
+        id S231570AbiJYHKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiJYHJW (ORCPT
+        with ESMTP id S230271AbiJYHKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:09:22 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1433CC90F2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:09:22 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id g16so5588785pfr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:content-id:mime-version:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KZFcIJPP7hP36ArInBNW8n2j0uX5C3njSQrmI4vsBk8=;
-        b=kUSm5ZCSBJgk8oteDOQJnkf3uZTQm9x0gut/1rlTmEEvwP1LEcZErJ2U5WTh3Uplrv
-         pRSyTWsIU4D+rVWyIByZ94fQgcgtcUAg81oLQHb9dE1V2Gc1lBCnxZ9CygD3ypvoBVJF
-         qs/R/oN7x30Jv5ghBN7hO6Gx1GBQeNkiQ56wy80F6G2+uWK0MolWzKSPkoRsoNgNQx2k
-         DbTkkVDsrgn02q4YuhUKvYBgxm3Masub/EV7oWXYSUWB6GK2OTeH8bALif6MLFSWou3J
-         dmrBMFd2AVVU1LAiUdpXakqsfcIfHT9oDtC3oIo2uIcfXF6y+AGvpofsz6VsAHWER0Ew
-         8u8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:content-id:mime-version:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZFcIJPP7hP36ArInBNW8n2j0uX5C3njSQrmI4vsBk8=;
-        b=fAu+PyzCRNLKXy+7ioTx/k+s/0jbLbGTb9uBdPpSJ6XtNREhD6KAvS5EmcPAn7Q0es
-         6cvsXELqihM67SiLv/IX/ayTI0Q9U4cEpapUqahPKVIihoUcxtG+5/87JwUn9ntjwclA
-         APqMqt75JQsc51v4tB9+yzMhYdOjkWzDWJgP90DkrezZl5ZDIk4wrlAOtfYMzZResY+t
-         shsQYzP1HsHHOh47scj+lIBoLOOMZllJ2RQyckz6Fw8dYhVmhvWSyA4YtPLzyEHQEAbo
-         VF2O/OGJdVbHuobRR+QE5c0SmfNhf2vumi0O4IC/Y7EEcFkQb0gClqdpw0pPilE0LU9r
-         waZA==
-X-Gm-Message-State: ACrzQf2YSz2sdKZOUGZ0I6Gqv3LTAkJdf64N6FNtDT5Nr2ydKGLWU8K8
-        Gn5TLuzYP7I2JzZNIW6uqGUQQQ82RkA=
-X-Google-Smtp-Source: AMsMyM4iQkuOwvB0gAo8SC7YJLmwm9CIkazDhlY/LocDJ2iH4YeSmL+ZGR91wDRUwQGmGoqUTJu4Xw==
-X-Received: by 2002:a05:6a00:b50:b0:566:917:e588 with SMTP id p16-20020a056a000b5000b005660917e588mr37976093pfo.2.1666681761552;
-        Tue, 25 Oct 2022 00:09:21 -0700 (PDT)
-Received: from jromail.nowhere (h219-110-108-104.catv02.itscom.jp. [219.110.108.104])
-        by smtp.gmail.com with ESMTPSA id l14-20020a17090a384e00b00212c27abcaesm4972919pjf.17.2022.10.25.00.09.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 00:09:21 -0700 (PDT)
-Received: from localhost ([127.0.0.1] helo=jrobl) by jrobl id 1onE3r-0007dJ-C3 ; Tue, 25 Oct 2022 16:09:19 +0900
-From:   "J. R. Okajima" <hooanon05g@gmail.com>
-To:     Liam.Howlett@Oracle.com, yang.lee@linux.alibaba.com,
-        yuzhao@google.com
-Cc:     catalin.marinas@arm.com, david@redhat.com, dhowells@redhat.com,
-        dave@stgolabs.net, willy@infradead.org, sj@kernel.org,
-        svens@linux.ibm.com, vbabka@suse.cz, will@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: v6.1-rc1, remap_file_pages() and vma linked list?
+        Tue, 25 Oct 2022 03:10:19 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F90BD6BB7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:10:17 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666681815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L4lUHvQEMKR3V8SAeCBrP3BHLGEPzUD0h8eSeuTa0g0=;
+        b=LKrUuJiSreMoY+tKEMbwSI72RM12OFTZdm7IK6q3O7G5z3rPQdSMTGautGCkdWY2TepW9+
+        +mIWwfiClSQEivjImn8gq/nXc38pTqRp+xZrmM+BDk91g8L1AOUvFfvCkN/C4WNNVc+zhC
+        1JCn47nCwuWbirLRgB/L9dCA3vpaCOs=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     rppt@kernel.org, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH v2] memblock: don't run loop in memblock_add_range() twice
+Date:   Tue, 25 Oct 2022 15:09:43 +0800
+Message-Id: <20221025070943.363578-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <29343.1666681759.1@jrobl>
-Date:   Tue, 25 Oct 2022 16:09:19 +0900
-Message-ID: <29344.1666681759@jrobl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+There is no need round twice in memblock_add_range().
 
-Linux-v4.10 has a commit
-	48f7df329474 2016-02-18 mm: fix regression in remap_file_pages() emulation
-and it contains a small test program where remap_file_pages() will split
-a region into two VMAs.
+We can call memblock_double_array() to extend the size if type->cnt
+greater or equal to type->max before memblock_insert_region(); otherwise,
+we can insert the new region directly.
 
-Linux-v6.1-rc1 remap_file_pages() doesn't pass that old test.
-I tried investigation, but I am not good in this tech field. I could
-only find there may be related to the commit
-	763ecb035029 2022-09-26 mm: remove the vma linked list
-but I am not sure.
-How can we make the old test pass?
-"Don't use remap_file_pages()" or "Ignore such old test" is not an
-option.
+v2:
+ - Add a comment when the allocation is required.
 
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ mm/memblock.c | 69 ++++++++++++++++++---------------------------------
+ 1 file changed, 24 insertions(+), 45 deletions(-)
 
-J. R. Okajima
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 511d4783dcf1..602fa8ee9b71 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -578,10 +578,10 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+ 				phys_addr_t base, phys_addr_t size,
+ 				int nid, enum memblock_flags flags)
+ {
+-	bool insert = false;
+ 	phys_addr_t obase = base;
+ 	phys_addr_t end = base + memblock_cap_size(base, &size);
+-	int idx, nr_new;
++	unsigned long ocnt = type->cnt;
++	int idx;
+ 	struct memblock_region *rgn;
+ 
+ 	if (!size)
+@@ -598,25 +598,6 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+ 		return 0;
+ 	}
+ 
+-	/*
+-	 * The worst case is when new range overlaps all existing regions,
+-	 * then we'll need type->cnt + 1 empty regions in @type. So if
+-	 * type->cnt * 2 + 1 is less than type->max, we know
+-	 * that there is enough empty regions in @type, and we can insert
+-	 * regions directly.
+-	 */
+-	if (type->cnt * 2 + 1 < type->max)
+-		insert = true;
+-
+-repeat:
+-	/*
+-	 * The following is executed twice.  Once with %false @insert and
+-	 * then with %true.  The first counts the number of regions needed
+-	 * to accommodate the new area.  The second actually inserts them.
+-	 */
+-	base = obase;
+-	nr_new = 0;
+-
+ 	for_each_memblock_type(idx, type, rgn) {
+ 		phys_addr_t rbase = rgn->base;
+ 		phys_addr_t rend = rbase + rgn->size;
+@@ -634,11 +615,18 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+ 			WARN_ON(nid != memblock_get_region_node(rgn));
+ #endif
+ 			WARN_ON(flags != rgn->flags);
+-			nr_new++;
+-			if (insert)
+-				memblock_insert_region(type, idx++, base,
+-						       rbase - base, nid,
+-						       flags);
++
++			/*
++			 * if type->cnt greater or equal to type->max,
++			 * resize array; otherwise, insert directly.
++			 */
++			if ((type->cnt >= type->max) &&
++			    memblock_double_array(type, obase, size))
++				return -ENOMEM;
++
++			memblock_insert_region(type, idx++, base,
++					       rbase - base, nid,
++					       flags);
+ 		}
+ 		/* area below @rend is dealt with, forget about it */
+ 		base = min(rend, end);
+@@ -646,29 +634,20 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+ 
+ 	/* insert the remaining portion */
+ 	if (base < end) {
+-		nr_new++;
+-		if (insert)
+-			memblock_insert_region(type, idx, base, end - base,
+-					       nid, flags);
++		if ((type->cnt >= type->max) &&
++		    memblock_double_array(type, obase, size))
++			return -ENOMEM;
++
++		memblock_insert_region(type, idx, base, end - base,
++				       nid, flags);
+ 	}
+ 
+-	if (!nr_new)
++	if (ocnt == type->cnt)
+ 		return 0;
+ 
+-	/*
+-	 * If this was the first round, resize array and repeat for actual
+-	 * insertions; otherwise, merge and return.
+-	 */
+-	if (!insert) {
+-		while (type->cnt + nr_new > type->max)
+-			if (memblock_double_array(type, obase, size) < 0)
+-				return -ENOMEM;
+-		insert = true;
+-		goto repeat;
+-	} else {
+-		memblock_merge_regions(type);
+-		return 0;
+-	}
++	memblock_merge_regions(type);
++
++	return 0;
+ }
+ 
+ /**
+-- 
+2.25.1
+
