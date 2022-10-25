@@ -2,152 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8040B60D7BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E79760D7BD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiJYXMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 19:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S232330AbiJYXMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 19:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJYXLz (ORCPT
+        with ESMTP id S231381AbiJYXMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 19:11:55 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6B6E985F;
-        Tue, 25 Oct 2022 16:11:53 -0700 (PDT)
-Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4Mxnkx15wmz9t3J;
-        Tue, 25 Oct 2022 23:11:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1666739513; bh=+uZCa63O28kS1jVgRuq7nLZc+fW3SMcazZAt75fp3EA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HRPysWCdA3I7eZ3MnwlRxQtWgSLk16cNCP8d30YFcE0KMJmdMSPlYUllThfY/+dXB
-         8+BgxQ0YHmzsFB4blQwf3xIvNONeAPfAL/C1bm6vBpIrLI8eKVJo5u8IqZoo00uexY
-         PADu8WS3uh0xjaxhgyMrDvYzwWoU8xLEIJFC3VXo=
-X-Riseup-User-ID: 359DA98AD13B92FE6E2A6E2B8ED50878333852437894BD89367A896A3B81C974
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews2.riseup.net (Postfix) with ESMTPSA id 4Mxnkq6Wb2z1yPb;
-        Tue, 25 Oct 2022 23:11:47 +0000 (UTC)
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-To:     Brendan Higgins <brendanhiggins@google.com>, davidgow@google.com,
-        Daniel Latypov <dlatypov@google.com>, airlied@gmail.com,
-        daniel@ffwll.ch, davem@davemloft.net, kuba@kernel.org,
-        jose.exposito89@gmail.com, javierm@redhat.com
-Cc:     andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>
-Subject: [PATCH v7 3/3] kunit: Use KUNIT_EXPECT_MEMEQ macro
-Date:   Tue, 25 Oct 2022 20:10:43 -0300
-Message-Id: <20221025231043.115295-4-mairacanal@riseup.net>
-In-Reply-To: <20221025231043.115295-1-mairacanal@riseup.net>
-References: <20221025231043.115295-1-mairacanal@riseup.net>
+        Tue, 25 Oct 2022 19:12:40 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AF7FAA6C;
+        Tue, 25 Oct 2022 16:12:37 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so8840098otq.5;
+        Tue, 25 Oct 2022 16:12:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RRrEEf9YiRUt4v0hkZPiB4Bxt9hmfog8mLXW/+6+K/E=;
+        b=010If6/wr8nizeXfw2Q1V914bXQugjPQR6x/vDwOTUwhsgOCaCgKvH3DJ1uA6ZhTX5
+         JekVZAhR+LC29KNfe22qQfEeCNpm+GJtyJjZbTcPJEbZkkUpjG7iMhTcrVOfilufrTgV
+         35EYTYTxSKxVQ5+sBHpOGk6ULd5JT8at2dvcXpBEshqPcFgogxqblSazr85mnHaWLwpI
+         Z47UviThQq4y29D3/n5n50cAL/E5pLj+Fa5rJcEBvZgaFEjswtYKOxww/a9HoAnl6O1c
+         jEkRuqvB+/cgSx9O8++iZnXiGNOnbSFNxlx5cJSy0cdTSKobSrSM37NoPK129LuPmNFf
+         wz9Q==
+X-Gm-Message-State: ACrzQf1R+ZlYb0AZ8J1NCmQ7Oufygb2oJfZyYRBOuffnJBPb47IyFMIR
+        3fpg002FxGVmeL8Fuxma/Q==
+X-Google-Smtp-Source: AMsMyM5n2yXaqLQhmHmFtxDIVMg/fe7mrUK1FKIQs9kPsJaabo0UCR9ubpWxzWKxK/TfoFcL1ifXvg==
+X-Received: by 2002:a05:6830:4487:b0:661:dba8:cc61 with SMTP id r7-20020a056830448700b00661dba8cc61mr20275561otv.256.1666739556607;
+        Tue, 25 Oct 2022 16:12:36 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id 187-20020a4a06c4000000b00480e77f90f9sm1613263ooj.41.2022.10.25.16.12.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 16:12:35 -0700 (PDT)
+Received: (nullmailer pid 3429121 invoked by uid 1000);
+        Tue, 25 Oct 2022 23:12:36 -0000
+Date:   Tue, 25 Oct 2022 18:12:36 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+Message-ID: <20221025231236.GA3416036-robh@kernel.org>
+References: <20221024043925.25379-1-marcan@marcan.st>
+ <20221024043925.25379-3-marcan@marcan.st>
+ <5c3126fb-8fdb-5163-95a8-136a4a7ee2ce@linaro.org>
+ <97d3d6d4-b19c-a194-de41-f17e65bf3eb6@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97d3d6d4-b19c-a194-de41-f17e65bf3eb6@marcan.st>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use KUNIT_EXPECT_MEMEQ to compare memory blocks in replacement of the
-KUNIT_EXPECT_EQ macro. Therefor, the statement
+On Wed, Oct 26, 2022 at 02:22:40AM +0900, Hector Martin wrote:
+> On 26/10/2022 01.01, Krzysztof Kozlowski wrote:
+> > On 24/10/2022 00:39, Hector Martin wrote:
+> >> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
+> >> The hardware has an independent controller per CPU cluster, and we
+> >> represent them as unique nodes in order to accurately describe the
+> >> hardware. The driver is responsible for binding them as a single cpufreq
+> >> device (in the Linux cpufreq model).
+> >>
+> >> Signed-off-by: Hector Martin <marcan@marcan.st>
+> >> ---
+> >>  .../cpufreq/apple,cluster-cpufreq.yaml        | 119 ++++++++++++++++++
+> >>  1 file changed, 119 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> >> new file mode 100644
+> >> index 000000000000..b11452f91468
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> >> @@ -0,0 +1,119 @@
+> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/cpufreq/apple,cluster-cpufreq.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Apple SoC cluster cpufreq device
+> > 
+> > Few nits, in general looks fine to me.
+> > 
+> >> +
+> >> +maintainers:
+> >> +  - Hector Martin <marcan@marcan.st>
+> >> +
+> >> +description: |
+> >> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
+> >> +  the cluster management register block. This binding uses the standard
+> >> +  operating-points-v2 table to define the CPU performance states, with the
+> >> +  opp-level property specifying the hardware p-state index for that level.
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    oneOf:
+> >> +      - items:
+> >> +          - const: apple,t8103-cluster-cpufreq
+> >> +          - const: apple,cluster-cpufreq
+> >> +      - items:
+> >> +          - const: apple,t6000-cluster-cpufreq
+> >> +          - const: apple,t8103-cluster-cpufreq
+> >> +          - const: apple,cluster-cpufreq
+> >> +      - items:
+> >> +          - const: apple,t8112-cluster-cpufreq
+> > 
+> > With the first one (t8103) - it's an enum.
+> 
+> This is deliberate. t6000 is compatible with t8103, but t8112 is not
+> (though all are compatible with what the generic apple,cluster-cpufreq
+> compatible implies).
 
-    KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+What does compatible mean here? IOW, what can a client do with 
+'apple,cluster-cpufreq' alone? It's one thing for self-contained blocks 
+to remain unchanged from chip to chip, but things like this tend to 
+change frequently. It looks like for 4 chips we have 3 different 
+versions.
 
-is replaced by:
-
-    KUNIT_EXPECT_MEMEQ(test, foo, bar, size);
-
-Signed-off-by: Maíra Canal <mairacanal@riseup.net>
-Acked-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
- drivers/gpu/drm/tests/drm_format_helper_test.c | 12 ++++++------
- net/core/dev_addr_lists_test.c                 |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-index 2191e57f2297..567c71f95edc 100644
---- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-+++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-@@ -315,7 +315,7 @@ static void drm_test_fb_xrgb8888_to_gray8(struct kunit *test)
- 	iosys_map_set_vaddr(&src, xrgb8888);
- 
- 	drm_fb_xrgb8888_to_gray8(&dst, &result->dst_pitch, &src, &fb, &params->clip);
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
- }
- 
- static void drm_test_fb_xrgb8888_to_rgb332(struct kunit *test)
-@@ -345,7 +345,7 @@ static void drm_test_fb_xrgb8888_to_rgb332(struct kunit *test)
- 	iosys_map_set_vaddr(&src, xrgb8888);
- 
- 	drm_fb_xrgb8888_to_rgb332(&dst, &result->dst_pitch, &src, &fb, &params->clip);
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
- }
- 
- static void drm_test_fb_xrgb8888_to_rgb565(struct kunit *test)
-@@ -375,10 +375,10 @@ static void drm_test_fb_xrgb8888_to_rgb565(struct kunit *test)
- 	iosys_map_set_vaddr(&src, xrgb8888);
- 
- 	drm_fb_xrgb8888_to_rgb565(&dst, &result->dst_pitch, &src, &fb, &params->clip, false);
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
- 
- 	drm_fb_xrgb8888_to_rgb565(&dst, &result->dst_pitch, &src, &fb, &params->clip, true);
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected_swab, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected_swab, dst_size);
- }
- 
- static void drm_test_fb_xrgb8888_to_rgb888(struct kunit *test)
-@@ -408,7 +408,7 @@ static void drm_test_fb_xrgb8888_to_rgb888(struct kunit *test)
- 	iosys_map_set_vaddr(&src, xrgb8888);
- 
- 	drm_fb_xrgb8888_to_rgb888(&dst, &result->dst_pitch, &src, &fb, &params->clip);
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
- }
- 
- static void drm_test_fb_xrgb8888_to_xrgb2101010(struct kunit *test)
-@@ -439,7 +439,7 @@ static void drm_test_fb_xrgb8888_to_xrgb2101010(struct kunit *test)
- 
- 	drm_fb_xrgb8888_to_xrgb2101010(&dst, &result->dst_pitch, &src, &fb, &params->clip);
- 	buf = le32buf_to_cpu(test, buf, dst_size / sizeof(u32));
--	KUNIT_EXPECT_EQ(test, memcmp(buf, result->expected, dst_size), 0);
-+	KUNIT_EXPECT_MEMEQ(test, buf, result->expected, dst_size);
- }
- 
- static struct kunit_case drm_format_helper_test_cases[] = {
-diff --git a/net/core/dev_addr_lists_test.c b/net/core/dev_addr_lists_test.c
-index 049cfbc58aa9..90e7e3811ae7 100644
---- a/net/core/dev_addr_lists_test.c
-+++ b/net/core/dev_addr_lists_test.c
-@@ -71,11 +71,11 @@ static void dev_addr_test_basic(struct kunit *test)
- 
- 	memset(addr, 2, sizeof(addr));
- 	eth_hw_addr_set(netdev, addr);
--	KUNIT_EXPECT_EQ(test, 0, memcmp(netdev->dev_addr, addr, sizeof(addr)));
-+	KUNIT_EXPECT_MEMEQ(test, netdev->dev_addr, addr, sizeof(addr));
- 
- 	memset(addr, 3, sizeof(addr));
- 	dev_addr_set(netdev, addr);
--	KUNIT_EXPECT_EQ(test, 0, memcmp(netdev->dev_addr, addr, sizeof(addr)));
-+	KUNIT_EXPECT_MEMEQ(test, netdev->dev_addr, addr, sizeof(addr));
- }
- 
- static void dev_addr_test_sync_one(struct kunit *test)
--- 
-2.37.3
-
+Rob
