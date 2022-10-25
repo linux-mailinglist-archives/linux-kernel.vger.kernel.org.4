@@ -2,109 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CFAA60CD46
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF14E60CD48
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232782AbiJYNUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37948 "EHLO
+        id S232793AbiJYNUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiJYNUG (ORCPT
+        with ESMTP id S232494AbiJYNUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:20:06 -0400
-Received: from outbound-smtp35.blacknight.com (outbound-smtp35.blacknight.com [46.22.139.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EF7844D4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:20:03 -0700 (PDT)
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp35.blacknight.com (Postfix) with ESMTPS id A15EC23D5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 14:20:01 +0100 (IST)
-Received: (qmail 976 invoked from network); 25 Oct 2022 13:20:01 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 25 Oct 2022 13:20:01 -0000
-Date:   Tue, 25 Oct 2022 14:19:59 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Chen Wandun <chenwandun@huawei.com>
-Cc:     akpm@linux-foundation.org, vbabka@suse.cz, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com
-Subject: Re: [PATCH] mm: fix pcp count beyond pcp high in pcplist allocation
-Message-ID: <20221025131959.sd47fipimhehf76i@techsingularity.net>
-References: <20221024134146.3442393-1-chenwandun@huawei.com>
- <20221024145555.oaoisy6m723h4axc@techsingularity.net>
- <f189c530-1576-21fa-4c12-caa62739bbd0@huawei.com>
+        Tue, 25 Oct 2022 09:20:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F65E09EF;
+        Tue, 25 Oct 2022 06:20:14 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MxXc10mGSzHty9;
+        Tue, 25 Oct 2022 21:20:01 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 21:20:13 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 21:20:12 +0800
+Subject: Re: [PATCH v2] chardev: fix error handling in cdev_device_add()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <logang@deltatee.com>, <dan.j.williams@intel.com>,
+        <hans.verkuil@cisco.com>, <alexandre.belloni@free-electrons.com>,
+        <viro@zeniv.linux.org.uk>
+References: <20221025113957.693723-1-yangyingliang@huawei.com>
+ <Y1fNnwLlY079xGVY@kroah.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <ae7cbce0-3506-e21b-fa9b-37a13fe00b77@huawei.com>
+Date:   Tue, 25 Oct 2022 21:20:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f189c530-1576-21fa-4c12-caa62739bbd0@huawei.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1fNnwLlY079xGVY@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 07:49:59PM +0800, Chen Wandun wrote:
-> 
-> 
-> On 2022/10/24 22:55, Mel Gorman wrote:
-> > On Mon, Oct 24, 2022 at 09:41:46PM +0800, Chen Wandun wrote:
-> > > Nowadays there are several orders in pcplist, Function __rmqueue_pcplist
-> > > would alloc pcp batch pages to refill pcplist, when list of target order
-> > > if empty meanwhile other lists is not all empty, that result in pcp count
-> > > beyond pcp high after allocation. This behaviour can be easily observed by
-> > > adding debugging information in __rmqueue_pcplist.
-> > > 
-> > > Fix this by recalculate the batch pages to be allocated.
-> > Are any problems observed other than the PCP lists temporarily exceed
-> > pcp->high?
+Hi, Greg
+
+On 2022/10/25 19:50, Greg KH wrote:
+> On Tue, Oct 25, 2022 at 07:39:57PM +0800, Yang Yingliang wrote:
+>> While doing fault injection test, I got the following report:
+>>
+>> ------------[ cut here ]------------
+>> kobject: '(null)' (0000000039956980): is not initialized, yet kobject_put() is being called.
+>> WARNING: CPU: 3 PID: 6306 at kobject_put+0x23d/0x4e0
+>> CPU: 3 PID: 6306 Comm: 283 Tainted: G        W          6.1.0-rc2-00005-g307c1086d7c9 #1253
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+>> RIP: 0010:kobject_put+0x23d/0x4e0
+>> Call Trace:
+>>   <TASK>
+>>   cdev_device_add+0x15e/0x1b0
+>>   __iio_device_register+0x13b4/0x1af0 [industrialio]
+>>   __devm_iio_device_register+0x22/0x90 [industrialio]
+>>   max517_probe+0x3d8/0x6b4 [max517]
+>>   i2c_device_probe+0xa81/0xc00
+>>
+>> When device_add() is injected fault and returns error, if dev->devt is not set,
+>> cdev_add() is not called, cdev_del() is not needed. Fix this by checking dev->devt
+>> in error path.
+> Nit, please wrap your changelog text at 72 columns.
 >
-> It will result frequently refill pcp page from buddy and release pcp page to
-> buddy.
+>> Fixes: 233ed09d7fda ("chardev: add helper function to register char devs with a struct device")
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>> v1 -> v2:
+>>    Add information to update commit message.
+>>    v1 link: https://lore.kernel.org/lkml/1959fa74-b06c-b8bc-d14f-b71e5c4290ee@huawei.com/T/
+>> ---
+>>   fs/char_dev.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/fs/char_dev.c b/fs/char_dev.c
+>> index ba0ded7842a7..3f667292608c 100644
+>> --- a/fs/char_dev.c
+>> +++ b/fs/char_dev.c
+>> @@ -547,7 +547,7 @@ int cdev_device_add(struct cdev *cdev, struct device *dev)
+>>   	}
+>>   
+>>   	rc = device_add(dev);
+>> -	if (rc)
+>> +	if (rc && dev->devt)
+> No, this is a layering violation and one that you do not know is really
+> going to be true or not.  the devt being present, or not, should not be
+> an issue of if the device_add failed or not.  This isn't correct, sorry.
+Do you mean it's not a bug or the warn can be ignored or it's bug in 
+driver ?
+I see devt is checked before calling cdev_del() in cdev_device_del().
 
-Under what circumstances does this causes a problem? I 100% accept that it
-could happen but one downside of the patch is that it simply changes the
-shape of the problem. If the batch refill is clamped then potentially the
-PCP list is depleted quicker and needs to be refilled sooner and so zone
-lock acquisitions are still required potentially higher frequency due to
-clamped refill sizes. All that changes is the timing.
-
-> >   As is, the patch could result in a batch request of 0 and
+Thanks,
+Yang
 >
->  I foget this, the patch need some improve, thanks.
+> thanks,
 >
-> > fall through to allocating from the zone list anyway defeating the
-> > purpose of the PCP allocator and probably regressing performance in some
-> > csaes.
->
-> Same as I understand???how about set high/batch for each order in pcplist???
-
-Using anything would than (X >> order) consumes storage. Even if storage
-was to be used, selecting a value per-order would be impossible because
-the correct value would depend on frequency of requests for each order.
-That can only be determined at runtime and the cost of determining the
-value would likely exceed the benefit.
-
-At most, you could state that the batch refill should at least be 1 but
-otherwise not exceed high. The downside is that zone->lock contention will
-increase for a stream of THP pages which is a common allocation size.
-The intent behind batch-2 was to reduce contention by 50% when multiple
-processes are faulting large anonymous regions at the same time. THP
-allocations are ones most likely to exceed pcp->high by a noticeable amount.
-
-> or just share pcp batch value only set high for each order? It looks like
-> strange for pcp count beyond pcp high in common case.
-> 
-> If each order has it's own pcp high value, that behaviour is same as pcplist
-> which
-> only contains order 0.
-> 
-
-Specify in the changelog how a workload is improved. That may be in terms
-of memory usage, performance, zone lock contention or cases where pcp->high
-being exceeded causes a functional problem on a particular class of
-system.
-
--- 
-Mel Gorman
-SUSE Labs
+> greg k-h
+> .
