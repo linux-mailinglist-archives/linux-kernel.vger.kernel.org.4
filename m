@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A028660D112
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DFF60D113
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232433AbiJYP4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
+        id S232380AbiJYP4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232649AbiJYP4R (ORCPT
+        with ESMTP id S232280AbiJYP4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:56:17 -0400
+        Tue, 25 Oct 2022 11:56:23 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9882E17F283
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:56:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB62217A94A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:56:21 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41E7CD6E;
-        Tue, 25 Oct 2022 08:56:15 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81F6DD6E;
+        Tue, 25 Oct 2022 08:56:27 -0700 (PDT)
 Received: from [10.1.197.78] (unknown [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67D7D3F71A;
-        Tue, 25 Oct 2022 08:56:07 -0700 (PDT)
-Message-ID: <384cd4c1-8b8f-93f8-1756-6e5ccf1752f5@arm.com>
-Date:   Tue, 25 Oct 2022 16:56:01 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5C0F3F71A;
+        Tue, 25 Oct 2022 08:56:19 -0700 (PDT)
+Message-ID: <c1ed6c5d-c3fa-fa76-686a-033fe803a74d@arm.com>
+Date:   Tue, 25 Oct 2022 16:56:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
 Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
 Content-Language: en-GB
-To:     Peter Newman <peternewman@google.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
+To:     Peter Newman <peternewman@google.com>,
+        Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>,
         "Yu, Fenghua" <fenghua.yu@intel.com>,
         "Eranian, Stephane" <eranian@google.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -43,14 +43,16 @@ References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
  <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com>
  <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
  <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
- <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com>
- <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
- <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com>
- <CALPaoCgiwtvxZMJ6f-BOTNMPXDbMB8QM42HyCAvYRi4grPiphQ@mail.gmail.com>
+ <7b09fb62-e61a-65b9-a71e-ab725f527ded@intel.com>
+ <CALPaoCg4zrODVoXF2y2b+LRYq_+jnV8yv5qB+T_3Z264cV82GQ@mail.gmail.com>
+ <b931062a-1a70-2331-03cc-6bfa69a51bee@intel.com>
+ <CALPaoCj8ps2YRH5T1eCRY-8MLwGi25cfbd0KNtjYXTq5baAXOQ@mail.gmail.com>
+ <da89ea90-8453-f848-38d1-a14195faa95e@intel.com>
+ <CALPaoChgi9Z8J7sca_YRHveBW9NzB=PPC1Yp01S=TGiJLBxkQw@mail.gmail.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <CALPaoCgiwtvxZMJ6f-BOTNMPXDbMB8QM42HyCAvYRi4grPiphQ@mail.gmail.com>
+In-Reply-To: <CALPaoChgi9Z8J7sca_YRHveBW9NzB=PPC1Yp01S=TGiJLBxkQw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -62,83 +64,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Peter,
 
-On 20/10/2022 11:39, Peter Newman wrote:
-> On Wed, Oct 19, 2022 at 3:58 PM James Morse <james.morse@arm.com> wrote:
->> This isn't how MPAM is designed to be used. You'll hit nasty corners.
->> The big one is the Cache Storage Utilisation counters.
+On 21/10/2022 11:09, Peter Newman wrote:
+> On Thu, Oct 20, 2022 at 9:08 PM Reinette Chatre
+> <reinette.chatre@intel.com> wrote:
 >>
->> See 11.5.2 of the MPAM spec, "MSMON_CFG_CSU_CTL, MPAM Memory System Monitor Configure
->> Cache Storage Usage Monitor Control Register". Not setting the MATCH_PARTID bit has this
->> warning:
->> | If MATCH_PMG is 1 and MATCH_PARTID is 0, it is CONSTRAINED UNPREDICTABLE whether the
->> | monitor instance:
->> | • Measures the storage used with matching PMG and with any PARTID.
->> | • Measures no storage usage, that is, MSMON_CSU.VALUE is zero.
->> | • Measures the storage used with matching PMG and PARTID, that is, treats
->> | MATCH_PARTID as = 1
->>
->> 'constrained unpredictable' is arm's term for "portable software can't rely on this".
->> The folk that designed MPAM don't believe "monitors would only match on PMGs" makes any
->> sense. A PMG is not an RMID. A case in point is the system with only 1 PMG bit.
->>
->> I'm afraid this approach would preclude support for the llc_occupancy counter, and would
->> artificially reduce the number of control groups that can be created as each control group
->> needs an 'RMID'. On the machine with 1 PMG bit - you get 2 control groups, even though it
->> has many more PARTID.
+>> If the expectation is that PARTID counts are very high then how about
+>> a solution where multiple PARTIDs are associated with the same CTRL_MON group?
+>> A CTRL_MON group presents a resource allocation to user space, CLOSIDs/PARTIDs
+>> are not exposed. So using multiple PARTIDs for a resource group (all with the
+>> same allocation) seems conceptually ok to me. (Please note, I did not do an
+>> audit to see if there are any hidden assumption or look into lifting required
+>> to support his.)
+
+> I did propose using PARTIDs to back additional mon_groups a few days ago
+> on the other sub-thread with James. My understanding was that it would
+> be less trouble if the user opted to do this on their own rather than
+> the kernel somehow doing this automatically.
 > 
-> The first sentence of the Resource Monitoring chapter is also quite an
-> obstacle to my challenging to the PARTID-PMG hierarchy:
+> https://lore.kernel.org/all/835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com/
+
+> So perhaps we can just arrive at some way to inform the user of the
+> difference in resources. We may not even need to be able to precisely
+> calculate the number of groups we can create, as the logic for us could
+> be a simple as:
 > 
-> | Software environments may be labeled as belonging to a Performance
-> | Monitoring Group (PMG) within a partition.
-> 
-> It seems like the only real issue is that the user is responsible for
-> figuring out how best to make use of the available resources. But I seem
-> to recall that was the expectation with resctrl, so I should probably
-> stop trying to argue for expecting MPAM configurations which resemble
-> RDT.
-> 
-> 
->> On 17/10/2022 11:15, Peter Newman wrote:
->>> Provided that there are sufficient monitor
->>> instances, there would never be any need to reprogram a monitor's
->>> PMG.
->>
->> It sounds like this moves the problem to "make everything a monitor group because only
->> monitor groups can be batch moved".
->>
->> If the tasks file could be moved between control and monitor groups, causing resctrl to
->> relabel the tasks - would that solve more of the problem? (it eliminates the need to make
->> everything a monitor group)
-> 
-> This was about preserving the RMID and memory bandwidth counts across a
-> CLOSID change. If the user is forced to conserve CTRL_MON groups due to
-> a limited number of CLOSIDs, keeping the various containers' tasks
-> separate is also a concern.
+> 1) If num_closids >= desired job count, just use CTRL_MON groups
 
-Ah, of course.
+> 2) Otherwise, fall back to the proposed mon_group-move approach if
+> num_rmids is large enough for the desired job count
 
+> To address the glitchy behavior of moving a PMG to a new PARTID, I found
+> that the MPAM spec says explicitly that a PMG is subordinate to a
+> PARTID, so I would be fine with James finding a way for the MPAM driver
+> to block the rename operation, because it's unable to mix and match
+> RMIDs and CLOSIDs the way that RDT can.
 
-> But if there's no need to conserve CTRL_MON groups, then there's no real
-> issue.
+I'd like to support moving groups of tasks in a sensible way on MPAM too.
 
-Yup. I think part of this is exposing the information user-space needs to make the right
-decision.
-
-I don't think we should merge 'task group moving' and 'old monitors keep counting', they
-each make sense independently.
-
-
->> The devil is in the detail, I'm not sure how it serialises with a fork()ing process, I'd
->> hope to do better than relying on the kernel walking the list of processes a lot quicker
->> than user-space can.
-> 
-> I wasn't planning to do it any more optimally than the rmdir
-> implementation today when looking for all tasks impacted by a
-> CLOSID/RMID deletion.
-
-Aha - that is the use of for_each_process_thread() which takes the read-lock, instead of
-relying on RCU, so it should be safe for processes fork()ing and exit()ing.
+I don't think we should conflate it with 'old counters keep counting' - that should be
+exposed as a separate property that influences how user-space sets this stuff up.
 
 
 Thanks,
