@@ -2,155 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE72660D0A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44F360D0A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiJYPbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S231374AbiJYPbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbiJYPbJ (ORCPT
+        with ESMTP id S233325AbiJYPbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:31:09 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3086E5F10A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:31:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=shawnwang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VT3XzXp_1666711854;
-Received: from 30.32.74.15(mailfrom:shawnwang@linux.alibaba.com fp:SMTPD_---0VT3XzXp_1666711854)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 23:31:02 +0800
-Message-ID: <140177ee-da8f-c6eb-caf6-af0775a3de0e@linux.alibaba.com>
-Date:   Tue, 25 Oct 2022 23:30:53 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.2
-From:   Shawn Wang <shawnwang@linux.alibaba.com>
-Subject: Re: [PATCH v2] x86/resctrl: Clear the stale staged config after the
- configuration is completed
-To:     Reinette Chatre <reinette.chatre@intel.com>, fenghua.yu@intel.com
-References: <1665304608-120466-1-git-send-email-shawnwang@linux.alibaba.com>
- <7fa6ed4e-abae-85fb-4e95-8c73755a4263@intel.com>
- <ad08eee6-cfea-3858-0def-e2e3fef315fb@linux.alibaba.com>
- <ff44b0ff-6adb-3bae-d17e-4c341c09df5d@intel.com>
- <86fc22a2-e779-b7ab-67d6-a3aff975ae56@linux.alibaba.com>
- <30637459-7419-6497-6230-b13c73a947de@intel.com>
- <2cdfbe28-01cc-926d-2f6d-2a974a4c5a74@linux.alibaba.com>
- <bbc21b48-58b5-6356-0248-656e22d95281@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        James Morse <james.morse@arm.com>, jamie@nuviainc.com,
+        Tue, 25 Oct 2022 11:31:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1F269F4B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:31:13 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 88F7B1F895;
+        Tue, 25 Oct 2022 15:31:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666711872; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=p8SUahdc0lYyVzH/S+FsE+UAIyfRvKDaROjO6r4ralk=;
+        b=TQ8pceOFHgmXaWcCa9Qk4oAElB9HN65rZgVfB4qsBhwRU+776lIujyrqYdEzlMXCmKhX3w
+        3UZpJMH9b8w47SqyJs6LGepUnVwMuG6i2e9P1yXVENG/vTB1W3JEnbU98VR4EpXiHLWfrx
+        1buuXx5kESqkydniNsY0eznr5ANO27k=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 65B1C2C141;
+        Tue, 25 Oct 2022 15:31:12 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 17:31:11 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
         linux-kernel@vger.kernel.org
-In-Reply-To: <bbc21b48-58b5-6356-0248-656e22d95281@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH printk v2 28/38] printk: console_unblank: use srcu
+ console list iterator
+Message-ID: <Y1gBPxUHh8Vba29h@alley>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-29-john.ogness@linutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019145600.1282823-29-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+On Wed 2022-10-19 17:01:50, John Ogness wrote:
+> Use srcu console list iteration for console list traversal.
+> 
+> Document why the console_lock is still necessary.
+> 
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-On 10/25/2022 12:45 AM, Reinette Chatre wrote:
-> Hi Shawn,
-> 
-> On 10/23/2022 7:31 PM, Shawn Wang wrote:
->> On 10/22/2022 2:05 AM, Reinette Chatre wrote:
->>
->> ...
->>
->>>> It may not be enough to just clear staged_config[] when
->>>> resctrl_arch_update_domains() exits. I think the fix needs to make
->>>> sure staged_config[] can be cleared where it is set.
->>>>
->>>> The modification of staged_config[] comes from two paths:
->>>>
->>>> Path 1:
->>>> rdtgroup_schemata_write() {
->>>>       ...
->>>>       rdtgroup_parse_resource()     // set staged_config[]
->>>>       ...
->>>>       resctrl_arch_update_domains()     // clear staged_config[]
->>>>       ...
->>>> }
->>>>
->>>> Path 2:
->>>> rdtgroup_init_alloc() {
->>>>       ...
->>>>       rdtgroup_init_mba()/rdtgroup_init_cat()    // set staged_config[]
->>>>       ...
->>>>       resctrl_arch_update_domains()        // clear staged_config[]
->>>>       ...
->>>> }
->>>>
->>>> If we clear staged_config[] in resctrl_arch_update_domains(), goto
->>>> statement for error handling between setting staged_config[] and
->>>> calling resctrl_arch_update_domains() will be ignored. This can still
->>>> remain the stale staged_config[].
->>> ah - indeed. Thank you for catching that.
->>>
->>>>
->>>> I think maybe it is better to put the clearing work where
->>>> rdtgroup_schemata_write() and rdtgroup_init_alloc() exit.
->>>>
->>>
->>> It may be more robust to let rdtgroup_init_alloc() follow
->>> how rdtgroup_schemata_write() already ensures that it is
->>> working with a clean state by clearing staged_config[] before
->>> placing its staged config within.
->>>
->>
->> I want to make sure, do you mean just ignore the stale value and
->> place the clearing work before staged_config[] is used? If so, maybe
->> the only thing the fix should do is to add memset() to
->> rdtgroup_init_alloc().>
-> 
-> No, let us not leave stale data lying around.
-> 
-> The idea is that the function calling resctrl_arch_update_domains() is
-> responsible for initializing staged_config[] correctly and completely.
-> To confirm, yes, the idea is to clear the staged_config[] in
-> rdtgroup_init_alloc() before resctrl_arch_update_domains() is called
-> to follow how it is currently done in rdtgroup_schemata_write().
-> 
-> But, as you indicate, by itself this would leave stale data lying around.
-> 
-> The solution that you suggested earlier, to put the clearing work where
-> rdtgroup_schemata_write() and rdtgroup_init_alloc() exit, is most logical.
-> That makes the code symmetrical in that staged_config[] is cleared
-> where it is initialized and no stale data is left lying around. What was
-> not clear to me is how this would look in the end. Were you planning to
-> keep the staged_config[] clearing within rdtgroup_schemata_write() but
-> not do so in rdtgroup_init_alloc()? rdtgroup_schemata_write() and
-> rdtgroup_init_alloc() has to follow the same pattern to reduce confusion.
-> 
-> So, to be more robust, how about:
-> 
-> /* Clear staged_config[] to make sure working from a clean slate */
-> resctrl_arch_update_domains()
-> /* Clear staged_config[] to not leave stale data lying around */
-> 
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Thank you for your explanation, and it makes sense to me. But this will
-require 4 memset() loops, how about putting the clearing work in
-a separate function in rdtgroup.c, like rdt_last_cmd_clear():
-
-void staged_configs_clear(void) {
-	struct resctrl_schema *s;
-	struct rdt_domain *dom;
-
-	lockdep_assert_held(&rdtgroup_mutex);
-
-	list_for_each_entry(s, &resctrl_schema_all, list) {
-		list_for_each_entry(dom, &s->res->domains, list)
-			memset(dom->staged_config, 0, sizeof(dom->staged_config));
-	}
-}
-
-Thanks,
-
-Shawn
+Best Regards,
+Petr
