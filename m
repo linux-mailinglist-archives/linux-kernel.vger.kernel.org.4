@@ -2,222 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8226B60C678
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555AF60C680
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbiJYIcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S232288AbiJYIdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbiJYIcm (ORCPT
+        with ESMTP id S232198AbiJYIc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:32:42 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2090.outbound.protection.outlook.com [40.107.117.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A91AA3B82
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:32:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QBZoSqpVkEBXhSjqG5iM7U7rV8OYUAI3zBtWDqXL05g2RmqD/ftdz4o8ih+1aZuG+tMRbybRK5zTnIHJlX40lc2yRm8PTkmg3HiVnYD33YopjRkkw2KBBRSC4oxGwUfyy7NQQBhu6BWHWFDEdpVzHGFe53U8xPI7/ITP6kkImO/x8GwcBSQiwsbmYiVdvwYZDaOqZ9ZJgcCBiLVL3zUQYWQjMd+ft7nU/M7SKYvU+NCxIHLhqS6nz41eG+nO2TC+PMcvtDEHUAB5SSbX8z0XCy4slG6gKY4FMqP567PikJURU3Ntogk3DxUD4L6mFh52CZdrxFB7F37HfeNLomMflw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c4wUQSWYqwHXl8TOWG3GD3cLpAWLy2gQPFOmX+dQ+Rs=;
- b=Zv2A+rFWwp/ILlhwttLeSSyuuKsMRq+sM2zrSTbc/mcHVL4ooxdTNvsLXjCorEEOJyd7po9Ly+6/HV4y848gPf0qGQfErOG4rCYZM9zkPDM4Yvb7dIs7dFDi40rcyNBiFJlQbwc/yjj2PG2sJ6Ao9vVYEODwwrVSWuOkmN9e4RtX1f3TAv6zySrEPPMczM/RXkMOqEXvaZRSex4PRgAt5TTL982eQCI6Vl9mFuIP/8yAzGySnbScAQolYDsd1k1pp9DfHENuiQqitU+dZB0HFgGp1SmkTjDg2g3ckGgPUYwbuWoTXfwQrDJNoze0eBN4z1Decx3N4ztOjHjFm/0hFA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c4wUQSWYqwHXl8TOWG3GD3cLpAWLy2gQPFOmX+dQ+Rs=;
- b=aY4azNx4qP24mbt22+9hflWmWM9cC2BfzwvTRGUdG/88MqE1OIyCbl2p5R8Cfoh8nKWzxf4hxZuddgRV83kBXq9+scAzbFqzjO/x9l6dLPn3koiNiZhnEGLNmPJQEb0QYnlJ6S4NAa2H+ECTHwj/GiJGgddkwA6uwiWV8TzwQuGlr1adxh4U5hZpPKGqCURdxYR08H/3FQ+/tRvw0bNE9++TWo30XAElAGdx0XkY9/iyzqb03HpKYJZ4x+2OSe9FhqrYrdtjnPOJ+jlOx5ZdwbeMWOI6YN6I8GEX2ByqJ3Qlj4gteRLcj0LblutXlKTkxYK7p8VxkZqvFeUpRdONMw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB4034.apcprd06.prod.outlook.com (2603:1096:820:22::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Tue, 25 Oct
- 2022 08:32:35 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::c84b:5a6c:d66f:c0fd]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::c84b:5a6c:d66f:c0fd%3]) with mapi id 15.20.5746.023; Tue, 25 Oct 2022
- 08:32:35 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH v3] f2fs: introduce max_ordered_discard sysfs node
-Date:   Tue, 25 Oct 2022 16:32:26 +0800
-Message-Id: <20221025083226.24858-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0219.apcprd06.prod.outlook.com
- (2603:1096:4:68::27) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        Tue, 25 Oct 2022 04:32:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68E8A4B8A;
+        Tue, 25 Oct 2022 01:32:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DFF9617E7;
+        Tue, 25 Oct 2022 08:32:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A35C433C1;
+        Tue, 25 Oct 2022 08:32:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666686777;
+        bh=P9otne2bGV5OzhI0QZtc8zRICsJTxdIfBvbZ+x2AHD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DmuJBtrRLQRjMfi8fNmmrNYXtQG2e0SbTjhslLVQRZpDxwBOarHUGsOyb6atqoxu5
+         30wsWp6tK1WlcHgb8/TqU3BvN8ekb1rjBmYQuK5poeSWYKbbJe8yWUBUzt+eK/rW00
+         IJSFKAQxIjcMmKHmFY1E/TbPcckFxz7ZQMP8o4WY06UJZwyb6HZucpo4xXoLdjcxn0
+         wqRfeGi5aC9W2q2EQ1IJyqeubzLaJmRLU/aw/yh+k4Klyhrfu60XHNJXVMUpgjlngM
+         nG7RB4BfcsZNqI97S9Bdg4U0q3Crc6wld0c+IL3YwL5xELTtcXXbp/Uy3R2vLWhvu1
+         UzRpL7GQOtW0w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1onFMU-00015B-MI; Tue, 25 Oct 2022 10:32:39 +0200
+Date:   Tue, 25 Oct 2022 10:32:38 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/4] soc: qcom: pmic_glink: Introduce altmode support
+Message-ID: <Y1efJh11B5UQZ0Tz@hovoldconsulting.com>
+References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
+ <20220818031512.319310-4-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB4034:EE_
-X-MS-Office365-Filtering-Correlation-Id: 21aeeb01-5a95-4d7a-1483-08dab66377d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nCMKpO6ZZJ3zc1dTFKneauG8vdqJ7+PwM+ItV2eVsfhB0mOkkZEdWUwygfY2/ckGWQ2DOHY8RgxxsohaTcaVb6p4h1xt+tig++5pPLNHChrcJNOXaI5SQVUEpgn1LDJ8wKwSeVJ67ZWOOBvW8zbWjXzQhd7G547lCMgiNBFs2rLB6zy4/QuFJxd4qVr3dVvQ0jIo/wT2wgEuxuAe+KbeuU/6z1VUQPSTROmpWvRoTIwRibHu9CuedbdWYGYEown3os5nJxoyRkJqzI5RXj0boqIjEjYT7vd5ZuZXqMaN9MQy0z5Vt6jdnteYIZ2L90YLzHY5fJ+DnFrpUiON5Ei5NJVNeJtPPDrfd8F6U7i1ePR9cMvPEnoCopBt6g/BWcjleKG8sXpIH2wFgZFwl6RAM1yR8+VhA3aioSs6LAarzqFzZg99+NByrVocxsOjT8JFmAOsBzZ7Lgvk7yFfRae4fmrw7LEvzkhvn4nbHNtmdRnNstqfkEL1Dw4l9p6sobaPZCSq5I5G8e577DzbPQH7P4Ry7MGSnbL+Yk0i7Zm3I1jWiYK7bNQcQcaTfNiBMA2+brZ/ivrH0N8KJnSdcIJobeAaYNO2/kjZP3PUwHoBfahK1DbyCSu1Jut1NFvGf9tTu6WwArThTnUteW/spJzs2qcjZFhRMIGL2yCSjb5sc0eAjFXq5juLvySpSX93+qJKuP5LgDutddccjcdTE2NBCNMb2DWWQyd8E/jKwAN0fYA5w3yqtpiXVVjMkgYnykdrQQtf8j2GvBtNFig1v6ENGQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(396003)(39860400002)(366004)(136003)(451199015)(83380400001)(86362001)(8936002)(38350700002)(38100700002)(66946007)(66556008)(66476007)(5660300002)(4326008)(52116002)(6666004)(6506007)(6486002)(186003)(26005)(2616005)(36756003)(19627235002)(1076003)(478600001)(316002)(2906002)(107886003)(8676002)(41300700001)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a69w4+tfViK/M+3qDDfEfUBWYHiOMedcSMEGhrcUi1i1H4rHVUa/jliDrnoC?=
- =?us-ascii?Q?TRk3upiHloFlnjUrcSyDPuHin3X2rSIUdIjkvnxEK+56JDJQfZ70+5ZVN/i5?=
- =?us-ascii?Q?1dVDyubcOMS61t5Q5OGXz9Wvj8Ryc4IJ/x9Vvsf8kvhUstzncOhcLnRxQ/CD?=
- =?us-ascii?Q?D1ZvYATGJ5T3K77bsRH0v1fQWBI6Zx8YyN2fqEj+Rrv7Fhdw9ClczLJCMFqJ?=
- =?us-ascii?Q?kNf4Owx87h7Lq1ibGOfnkVtV0Soqlxh5eQ6s3hs/tcWHzyHXOMlvS9CKrhGq?=
- =?us-ascii?Q?7bP2dU8A781fc7LpBYwHXDVJpzgehic7s+CsyQq6xhgxKQg8TSTyw8VLYjrZ?=
- =?us-ascii?Q?QXAE53wXSN6d+LKCoU+U4VE2Wg2zaT3ao1boqBDh61T6Eu7uHhjOAGoD/df/?=
- =?us-ascii?Q?BRWNmNP7S9aVDIvpUdzEUAZ517n6P9Qa/aHXffHu6bpZEZM9hCBdvYpYHxdG?=
- =?us-ascii?Q?Q0iUQK8qLa90EiMLOJJ81i6mHMjgr9V/U8yvNa9BlKGNeriPCZAd+o9fbM4Z?=
- =?us-ascii?Q?0uMhxlgvhNmy6JTcRY7WBXZn0CzumDawwzkxl87feAKMP5xoq8e7HrCNw+kw?=
- =?us-ascii?Q?fm5T67hZ/yp6S7Q/vc2LN5MIZmS4+XvOVYgYItlpPwe2QwOcQrwIfVTxcIpZ?=
- =?us-ascii?Q?V5iEsjLnFDe2+KI8MWf69Vi9jzr7UyTuRaFNp0cq+UH45RJkD1EWoeoKyjDh?=
- =?us-ascii?Q?F/6epkyqZclIcWOQMEbtM2MSrPFLHCuQbIZbYdhbszZ4JtfMODWl/vU0Z129?=
- =?us-ascii?Q?WiZUTjpmYigBY0zrfHzg+rZK8J4Vkv93gHAwVy1FULnM8IaiR9vUgL5exw5H?=
- =?us-ascii?Q?L6eNMBq7KLlKo/fGYZm8DpF2oP4BMcN7yG4FpXtGvf9CyQjcH1VDjzWkAFm/?=
- =?us-ascii?Q?No+ttNRwrg73bm0mCeTN8K3zWVTeG72P5M9msKf9bekvccnCGPQElxEqhHkz?=
- =?us-ascii?Q?V9HSBJQOJufTheISpjF+8ygwo8LXg4O2k2eKPnQ3uYwQxJqagtM10XGTRlwV?=
- =?us-ascii?Q?/ElzHn6mzaxoLo0gWq9azB+PnvhktRZ4rlePkLxMi2yuZ7ke8w3FygivW8jg?=
- =?us-ascii?Q?NVgck72owgcoTmL1A4hRHztg2u2zyDV2dzrSrIZGh7FAz3msAxi2hVdOMgW9?=
- =?us-ascii?Q?K73pEAP34ccRlzn3fLczvtsQjBkWDyHVdQ/LIRkhJ5aiDXb1lbr1DHb4P1Xw?=
- =?us-ascii?Q?IL4CS6qvitG9xDuEZr7EIMp014GTCDv2Ilbjrih7bIM5eUc1FRDrbPV5gmc2?=
- =?us-ascii?Q?HIOFBqiC427UGWUsOB0dfJh2U3Mss7pG15Qd4JKNJAfNKWfEsnS7zL2DOA1I?=
- =?us-ascii?Q?Fnoza8PJMitRdR4Qu6tWZgeK59/hKfxdvPU1uDncU8VdlgSM0OGZun1ve2bI?=
- =?us-ascii?Q?ryYjCUxhHCznfzUfNkxhLxqOrPEZ+j/qex4EORiSej/IQgAIigrkmG1yOBNz?=
- =?us-ascii?Q?tHjlLVJ1z8nph7JFzEIA7CMbueoZcqEsk3wE40xkISvBJ9ifsd6Fu1fDhb5E?=
- =?us-ascii?Q?eG91pJhKHankBE+/mKrhvA7+kB04qwWJdXYIqjw2p0Xw8ZlB2F681s/6PpnQ?=
- =?us-ascii?Q?qV4vdXHN5SYSA05A4SZ+kbdfXajky+wF6LcNThD2?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21aeeb01-5a95-4d7a-1483-08dab66377d5
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 08:32:35.6212
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: t49HUJl1TZjN8Y57KY/aaGFvr6C8oo/lzF2NmaF/A6SKIvGrE8ZkYsZBgbwRLmt2693BBZm5kADbZkQ0O/YzCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4034
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818031512.319310-4-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current max_ordered_discard is a fixed value, change it to be
-configurable through the sys node.
+[ Resending to Bjorn's current address. ]
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
----
- Documentation/ABI/testing/sysfs-fs-f2fs |  6 ++++++
- fs/f2fs/f2fs.h                          |  3 +++
- fs/f2fs/segment.c                       |  3 ++-
- fs/f2fs/sysfs.c                         | 11 +++++++++++
- 4 files changed, 22 insertions(+), 1 deletion(-)
+On Wed, Aug 17, 2022 at 08:15:11PM -0700, Bjorn Andersson wrote:
+> With the PMIC GLINK service, the host OS subscribes to USB-C altmode
+> messages, which are sent by the firmware to notify the host OS about
+> state updates and HPD interrupts.
+> 
+> The pmic_glink_altmode driver registers for these notifications and
+> propagates the notifications as typec_mux, typec_switch and DRM OOB
+> notifications as necessary to implement DisplayPort altmode support.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/soc/qcom/Makefile             |   1 +
+>  drivers/soc/qcom/pmic_glink_altmode.c | 477 ++++++++++++++++++++++++++
+>  2 files changed, 478 insertions(+)
+>  create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
 
-diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-index 483639fb727b..53f70eadec96 100644
---- a/Documentation/ABI/testing/sysfs-fs-f2fs
-+++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-@@ -99,6 +99,12 @@ Description:	Controls the issue rate of discard commands that consist of small
- 		checkpoint is triggered, and issued during the checkpoint.
- 		By default, it is disabled with 0.
- 
-+What:		/sys/fs/f2fs/<disk>/max_ordered_discard
-+Date:		October 2022
-+Contact:	"Yangtao Li" <frank.li@vivo.com>
-+Description:	Controls the maximum ordered discard, the unit size is one block(4KB).
-+		Set it to 16 by default.
+> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
+> new file mode 100644
+> index 000000000000..8d2d563cb756
+> --- /dev/null
+> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
+
+> +static void pmic_glink_altmode_worker(struct work_struct *work)
+> +{
+> +	struct pmic_glink_altmode_port *alt_port = work_to_altmode_port(work);
+> +	struct pmic_glink_altmode *altmode = alt_port->altmode;
+> +
+> +	typec_switch_set(alt_port->typec_switch, alt_port->orientation);
+> +
+> +	if (alt_port->svid == USB_TYPEC_DP_SID)
+> +		pmic_glink_altmode_enable_dp(altmode, alt_port, alt_port->mode,
+> +					     alt_port->hpd_state, alt_port->hpd_irq);
+> +	else
+> +		pmic_glink_altmode_enable_usb(altmode, alt_port);
+> +
+> +	if (alt_port->hpd_state)
+> +		drm_bridge_hpd_notify(&alt_port->bridge, connector_status_connected);
+> +	else
+> +		drm_bridge_hpd_notify(&alt_port->bridge, connector_status_disconnected);
+> +
+> +	pmic_glink_altmode_request(altmode, ALTMODE_PAN_ACK, alt_port->index);
+> +};
+
+I'm seeing fairly frequent crashes during boot of the X13s due to these
+notifications being propagated before things have been fully set up:
+
+[   16.591910] panel-simple-dp-aux aux-aea0000.displayport-controller: Detected SHP LQ140M1JW48 (0x1511)
+[   16.592142] qcom,fastrpc-cb 1b300000.remoteproc:glink-edge:fastrpc:compute-cb@12: Adding to iommu group 17
+[   16.597644] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+[   16.597653] Mem abort info:
+[   16.597657]   ESR = 0x0000000096000004
+[   16.597663]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   16.597670]   SET = 0, FnV = 0
+[   16.597675]   EA = 0, S1PTW = 0
+[   16.597680]   FSC = 0x04: level 0 translation fault
+[   16.597686] Data abort info:
+[   16.597689]   ISV = 0, ISS = 0x00000004
+[   16.597694]   CM = 0, WnR = 0
+[   16.597698] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000106b93000
+[   16.597706] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+[   16.597722] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[   16.597731] Dumping ftrace buffer:
+[   16.597742]    (ftrace buffer empty)
+[   16.597744] Modules linked in: fastrpc(+) rpmsg_ctrl qrtr_smd rpmsg_char qcom_battmgr pmic_glink_altmode rtc_pm8xxxr
+[   16.597831] CPU: 0 PID: 389 Comm: kworker/0:3 Not tainted 6.1.0-rc2 #195
+[   16.597838] Hardware name: Qualcomm QRD, BIOS 6.0.220110.BOOT.MXF.1.1-00470-MAKENA-1 01/10/2022
+[   16.597842] Workqueue: events pmic_glink_altmode_worker [pmic_glink_altmode]
+[   16.597864] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   16.597870] pc : drm_kms_helper_hotplug_event+0x1c/0x50
+[   16.597882] lr : drm_kms_helper_hotplug_event+0x18/0x50
+[   16.597887] sp : ffff80000c20bca0
+[   16.597889] x29: ffff80000c20bca0 x28: ffffdba5eadbb000 x27: ffff22a9f6f2dc05
+[   16.597898] x26: ffffdba5eadc0b20 x25: ffffdba5eadd8ca0 x24: 0000000000000000
+[   16.597906] x23: 0000000000000003 x22: ffff22a888526000 x21: 0000000000000002
+[   16.597914] x20: ffff22a88ceed000 x19: ffff22a888526000 x18: 0000000000000020
+[   16.597921] x17: 4d003632323d524f x16: 4a414d00313d4755 x15: 4c50544f48006d72
+[   16.597929] x14: 0000000000000001 x13: 0000000000000040 x12: 0000000000000000
+[   16.597936] x11: 0000000000000000 x10: 0000000000000228 x9 : 0000000000000000
+[   16.597944] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000062e00
+[   16.597951] x5 : 0000000000000000 x4 : ffff22a9f6f2d290 x3 : 0000000000062f00
+[   16.597959] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+[   16.597965] Call trace:
+[   16.597968]  drm_kms_helper_hotplug_event+0x1c/0x50
+[   16.597973]  drm_bridge_connector_hpd_cb+0xa0/0xc0
+[   16.597983]  drm_bridge_hpd_notify+0x40/0x60
+[   16.597990]  pmic_glink_altmode_worker+0xc0/0x150 [pmic_glink_altmode]
+[   16.598006]  process_one_work+0x288/0x6c0
+[   16.598014]  worker_thread+0x74/0x450
+[   16.598019]  kthread+0x118/0x120
+[   16.598028]  ret_from_fork+0x10/0x20
+[   16.598039] Code: f9000bf3 aa0003f3 97ff22af f9445e60 (f9400801) 
+[   16.598043] ---[ end trace 0000000000000000 ]---
+[   16.603424] [drm] Initialized msm 1.9.0 20130625 for ae01000.mdp on minor 0
+
+I've verified that it is the funcs pointer in
+drm_kms_helper_hotplug_event() which is NULL and a hack like the below
+prevents the crash:
+
+diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+index 69b0b2b9cc1c..d515f5b6f3d5 100644
+--- a/drivers/gpu/drm/drm_probe_helper.c
++++ b/drivers/gpu/drm/drm_probe_helper.c
+@@ -661,7 +661,9 @@ void drm_kms_helper_hotplug_event(struct drm_device *dev)
+ {
+        /* send a uevent + call fbdev */
+        drm_sysfs_hotplug_event(dev);
+-       if (dev->mode_config.funcs->output_poll_changed)
 +
- What:		/sys/fs/f2fs/<disk>/max_discard_request
- Date:		December 2021
- Contact:	"Konstantin Vyshetsky" <vkon@google.com>
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index e6355a5683b7..f04a031bc827 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -330,6 +330,8 @@ struct discard_entry {
++       WARN_ON(!dev->mode_config.funcs);
++       if (dev->mode_config.funcs && dev->mode_config.funcs->output_poll_changed)
+                dev->mode_config.funcs->output_poll_changed(dev);
  
- /* default discard granularity of inner discard thread, unit: block count */
- #define DEFAULT_DISCARD_GRANULARITY		16
-+/* default maximum discard granularity of ordered discard, unit: block count */
-+#define DEFAULT_MAX_ORDERED_DISCARD_GRANULARITY	16
- 
- /* max discard pend list number */
- #define MAX_PLIST_NUM		512
-@@ -409,6 +411,7 @@ struct discard_cmd_control {
- 	unsigned int mid_discard_issue_time;	/* mid. interval between discard issue */
- 	unsigned int max_discard_issue_time;	/* max. interval between discard issue */
- 	unsigned int discard_granularity;	/* discard granularity */
-+	unsigned int max_ordered_discard;	/* maximum discard granularity issued by lba order */
- 	unsigned int undiscard_blks;		/* # of undiscard blocks */
- 	unsigned int next_pos;			/* next discard position */
- 	atomic_t issued_discard;		/* # of issued discard */
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index acf3d3fa4363..dfa9dc3a1bc3 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -1448,7 +1448,7 @@ static int __issue_discard_cmd(struct f2fs_sb_info *sbi,
- 		if (i + 1 < dpolicy->granularity)
- 			break;
- 
--		if (i < DEFAULT_DISCARD_GRANULARITY && dpolicy->ordered)
-+		if (i < dcc->max_ordered_discard && dpolicy->ordered)
- 			return __issue_discard_cmd_orderly(sbi, dpolicy);
- 
- 		pend_list = &dcc->pend_list[i];
-@@ -2046,6 +2046,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
- 		return -ENOMEM;
- 
- 	dcc->discard_granularity = DEFAULT_DISCARD_GRANULARITY;
-+	dcc->max_ordered_discard = DEFAULT_MAX_ORDERED_DISCARD_GRANULARITY;
- 	if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SEGMENT)
- 		dcc->discard_granularity = sbi->blocks_per_seg;
- 	else if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SECTION)
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index df27afd71ef4..eb8924602afe 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -483,6 +483,15 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
- 		return count;
- 	}
- 
-+	if (!strcmp(a->attr.name, "max_ordered_discard")) {
-+		if (t == 0 || t > MAX_PLIST_NUM)
-+			return -EINVAL;
-+		if (!f2fs_block_unit_discard(sbi))
-+			return -EINVAL;
-+		*ui = t;
-+		return count;
-+	}
-+
- 	if (!strcmp(a->attr.name, "migration_granularity")) {
- 		if (t == 0 || t > sbi->segs_per_sec)
- 			return -EINVAL;
-@@ -789,6 +798,7 @@ F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, min_discard_issue_time, min_discard_
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, mid_discard_issue_time, mid_discard_issue_time);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_issue_time, max_discard_issue_time);
- F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_granularity, discard_granularity);
-+F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_ordered_discard, max_ordered_discard);
- F2FS_RW_ATTR(RESERVED_BLOCKS, f2fs_sb_info, reserved_blocks, reserved_blocks);
- F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, batched_trim_sections, trim_sections);
- F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, ipu_policy, ipu_policy);
-@@ -918,6 +928,7 @@ static struct attribute *f2fs_attrs[] = {
- 	ATTR_LIST(mid_discard_issue_time),
- 	ATTR_LIST(max_discard_issue_time),
- 	ATTR_LIST(discard_granularity),
-+	ATTR_LIST(max_ordered_discard),
- 	ATTR_LIST(pending_discard),
- 	ATTR_LIST(batched_trim_sections),
- 	ATTR_LIST(ipu_policy),
--- 
-2.25.1
+        drm_client_dev_hotplug(dev);
 
+It appears that pointer is set in msm_drm_init(), which suggests events
+are being forwarded before the driver is ready.
+
+Johan
