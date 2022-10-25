@@ -2,139 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A417660C267
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 05:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B111E60C26B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 05:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiJYDvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 23:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39112 "EHLO
+        id S230460AbiJYD6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 23:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbiJYDvm (ORCPT
+        with ESMTP id S229714AbiJYD6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 23:51:42 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3870F7C76A;
-        Mon, 24 Oct 2022 20:51:38 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8BxnrdJXVdjak8CAA--.4174S3;
-        Tue, 25 Oct 2022 11:51:37 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxDuJBXVdj2rMEAA--.18366S3;
-        Tue, 25 Oct 2022 11:51:35 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hector Martin <marcan@marcan.st>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v2 2/2] dt-bindings: soc: add loongson2 guts
-Date:   Tue, 25 Oct 2022 11:51:28 +0800
-Message-Id: <20221025035128.21068-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221025035128.21068-1-zhuyinbo@loongson.cn>
-References: <20221025035128.21068-1-zhuyinbo@loongson.cn>
+        Mon, 24 Oct 2022 23:58:30 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC282648E
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 20:58:26 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id w3so6848789qtv.9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 20:58:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lF0FOzyra0GLG3l8w3os7D3TSDroC4u5G5xxnWbgASY=;
+        b=MPuWEKHz6RTBfkMCR68F8G3+sfyRyn18Un82bYIsDwgRhug5tJdkscZyv3TvWdsy/K
+         OSi+QtnYb10GgRsbsT4eHWWdp154o1jJ2CDYpjVyovvb1DrnBGV7f2OgG/sG9PIINPIn
+         yED8rnUu2bEIG7hsA9fH/QTICnGfIyUFuHmpIsk4zviyWDlRgQQNI+NDqXfC6cgIVKOD
+         VOYkIzU7BkVermeg0wkHxmmX5mRRF+QKpwkGqtHicul4KKBAlj3KvDziGDuZ+Lbgu4xT
+         ckRHLJYnETb4aPRH3sAoARLlbQnZQ68sA4luYR24U8gM9GLZMdpayBJllElybOmz0Ds9
+         tE5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lF0FOzyra0GLG3l8w3os7D3TSDroC4u5G5xxnWbgASY=;
+        b=YrAIS+ImjU2+IGWN68PnJasKluS4BMB/6yBttXAJD68Xc7GV7fTuBEGxZ43LoYW0W5
+         ojDYjHy40l4mLaHSeutwncGc3wjwtX0NIvTuCFWCMVIRN5Vzt2z7GXc0hTxF9OUR1t7B
+         QfCZh0Ibc6kViOp203zJbfNLYLIuDI/xIEG1ZaqNRpVQc1iqgG0r2vVyqA/3bhJEwKJf
+         BDrOldiCM1I0VzFSTNBRBNORni97BdKi47JXqP9ru2Fyt3IxmEXi0z1ey+YYrcIWT+ON
+         MAr2aYZtUk9Hrjiw9k0Yt3wseINbio4X4+g2fjix2E3WOWltofk5vCDY6JfbcwoAD3HM
+         2R3A==
+X-Gm-Message-State: ACrzQf3V1x1VfAbcg76DKymz8XVfEWzY7Cd2DY/QvsQrzDMDpKk1vybU
+        s8uGUVf0tNqmQC1YfhOoiANRMQ==
+X-Google-Smtp-Source: AMsMyM6PNYY/66fWp7yFfKQr/jYhKwwRE8zhOICbNGDutEYNvGqd0rRSff+W4AR9eR9SjpJvLajwGQ==
+X-Received: by 2002:ac8:5cc9:0:b0:399:98dc:2c6b with SMTP id s9-20020ac85cc9000000b0039998dc2c6bmr30225835qta.549.1666670305584;
+        Mon, 24 Oct 2022 20:58:25 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id br20-20020a05620a461400b006bbb07ebd83sm1247877qkb.108.2022.10.24.20.58.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 20:58:24 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 20:58:14 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     Hugh Dickins <hughd@google.com>, Will Deacon <will@kernel.org>,
+        x86@kernel.org, willy@infradead.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, aarcange@redhat.com,
+        kirill.shutemov@linux.intel.com, jroedel@suse.de, ubizjak@gmail.com
+Subject: Re: [PATCH 07/13] mm/gup: Fix the lockless PMD access
+In-Reply-To: <Y1ZB6QeuzIk0W9m6@hirez.programming.kicks-ass.net>
+Message-ID: <b8f7bbd3-e8e2-8bcf-5188-52415aa4925@google.com>
+References: <20221022111403.531902164@infradead.org> <20221022114424.906110403@infradead.org> <796cff9b-8eb8-8c53-9127-318d30618952@google.com> <Y1ZB6QeuzIk0W9m6@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxDuJBXVdj2rMEAA--.18366S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uF15Xw4UCw17Xw1fKr4UArb_yoW8ZrW7pr
-        nxC34rGrW0vF17uws3GFyIk3W5Cr97CasFgFZrtw1UKF9rA3W3Zw13KF1DZa13Ary8GFW2
-        9F97WrWUKF48CaUanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUAVWUZwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_
-        Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxUIbyCDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the loongson2 soc guts driver binding with DT schema format
-using json-schema.
+On Mon, 24 Oct 2022, Peter Zijlstra wrote:
+> On Sat, Oct 22, 2022 at 05:42:18PM -0700, Hugh Dickins wrote:
+> > On Sat, 22 Oct 2022, Peter Zijlstra wrote:
+> > 
+> > > On architectures where the PTE/PMD is larger than the native word size
+> > > (i386-PAE for example), READ_ONCE() can do the wrong thing. Use
+> > > pmdp_get_lockless() just like we use ptep_get_lockless().
+> > 
+> > I thought that was something Will Deacon put a lot of effort
+> > into handling around 5.8 and 5.9: see "strong prevailing wind" in
+> > include/asm-generic/rwonce.h, formerly in include/linux/compiler.h.
+> > 
+> > Was it too optimistic?  Did the wind drop?
+> > 
+> > I'm interested in the answer, but I've certainly no objection
+> > to making this all more obviously robust - thanks.
+> 
+> READ_ONCE() can't do what the hardware can't do. There is absolutely no
+> way i386 can do an atomic 64bit load without resorting to cmpxchg8b.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- .../soc/loongson/loongson,ls2k-guts.yaml      | 37 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 38 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+Right.
 
-diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
-new file mode 100644
-index 000000000000..2502f8aeb74d
---- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
-@@ -0,0 +1,37 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-guts.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson2 GUTS driver.
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+description: |
-+  GUTS driver was to manage and access global utilities block. Initially
-+  only reading SVR and registering soc device are supported.
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-guts
-+
-+  reg:
-+    maxItems: 1
-+
-+  little-endian: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    guts: guts@1fe00000 {
-+        compatible = "loongson,ls2k-guts";
-+        reg = <0x1fe00000 0x3ffc>;
-+        little-endian;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0f06dc83f7c6..b23474a5d8c1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11934,6 +11934,7 @@ LOONGSON2 SOC SERIES GUTS DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	loongarch@lists.linux.dev
- S:	Maintained
-+F:	Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
- F:	drivers/soc/loongson/loongson2_guts.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
--- 
-2.31.1
+> 
+> Also see the comment that goes with compiletime_assert_rwonce_type(). It
+> explicitly allows 64bit because there's just too much stuff that does
+> that (and there's actually 32bit hardware that *can* do it).
 
+Yes, the "strong prevailing wind" comment. I think I've never read that
+carefully enough, until you redirected me back there: it is in fact
+quite clear, that it's only *atomic* in the Armv7 + LPAE case; but
+READ_ONCEy (READ_EACH_HALF_ONCE I guess) for other 64-on-32 cases.
+
+> 
+> But it's still very wrong.
+
+Somewhat clearer to me now, thanks.
+
+Hugh
