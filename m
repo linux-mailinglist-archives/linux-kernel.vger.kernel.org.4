@@ -2,89 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E685060C9DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2BF60C9DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiJYKVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
+        id S232306AbiJYKVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbiJYKUz (ORCPT
+        with ESMTP id S231286AbiJYKVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:20:55 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FAC171CF1;
-        Tue, 25 Oct 2022 03:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666693056; x=1698229056;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=U1KoYFF/icq9KjKxIKGx99Qx9TPUDJo/UOlkG3I0mNg=;
-  b=SW1ufyga0AqrhIULz0ypBeiqAv0SL6d9jDQl1iDnJxSif0t4L+/cSx9R
-   ZanR2h5CC9I/3YeKq1yoZwLUwnNumB/vMW3O59rKBlIXXvWTxPYJtc5Ou
-   yWkREmvPBIrRHV7n5rrQrYt/8mHMiU3mBGx+bjRu4fyBPb0JEzjjZ5S4S
-   lUSmpcftMRw67lf31buqk19JpBTk5n9YHsbX1PFiHsFM8e4/9iG5IJIwu
-   qHB4vZzgCW/Lr0/ipVfJJ0xhjwYxKMLO5+03OWDyoK2rutgjgIWZ1Oxrq
-   kjjQp34ZaWvEnn+V2Bp+ZAOP9albUKKpSLdX4RbiOSAT0RXg7emwgWe/g
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="334234736"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="334234736"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 03:17:36 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="626377430"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="626377430"
-Received: from pweidel-mobl.ger.corp.intel.com ([10.252.44.62])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 03:17:34 -0700
-Date:   Tue, 25 Oct 2022 13:17:29 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "D. Starke" <daniel.starke@siemens.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] tty: n_gsm: introduce macro for minimal unit
- size
-In-Reply-To: <20221024130114.2070-1-daniel.starke@siemens.com>
-Message-ID: <fa9b8796-b0cd-d6e4-12d3-e0acd570d633@linux.intel.com>
-References: <20221024130114.2070-1-daniel.starke@siemens.com>
+        Tue, 25 Oct 2022 06:21:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9C0188A9D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:17:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF67661876
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:17:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC4FC433C1;
+        Tue, 25 Oct 2022 10:17:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666693067;
+        bh=loBjWPuoKTGF/gO56VzkKo6krQdgRby7JIrG/EzZOSQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d6ZDNCAcK4F26u54xQf8kDBp/8b3DW5BfO6g1lzeUvpUqST0Kw+Ohe0820AGWKYi+
+         /7Iqw8NZ0p6eQ/pqwMi1Gu67j2R14VHUyxddgBClTRfmn7+eiBCfjsq3GSF79nNNGz
+         0X7g+J7DfNAmhkRl2i3xi1iShD/jLXV9iOD0Aj/KAyEV5IbzhVMFLMbIuW+YD0HX3T
+         B8i2fs2s6CKT9WlZ6lTFZXa/hnB4DlVRnIIZi1IMECfFVAoF+8Q0qD/kHO/VT7rrxh
+         ahRkwDT3WUrOsLHpVfVQd0i2lzMAzWlJ4qQ4wL0BQod1CCuVzaQiHLp5VsXHdnMHQK
+         2bogCqmt8gCvw==
+Message-ID: <f36153fe-214c-2904-e155-ab9cee8a2a2c@kernel.org>
+Date:   Tue, 25 Oct 2022 12:17:43 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-170580793-1666693056=:1638"
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 0/8] Fix several device private page reference counting
+ issues
+Content-Language: en-US
+To:     Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Lyude Paul <lyude@redhat.com>
+References: <cover.60659b549d8509ddecafad4f498ee7f03bb23c69.1664366292.git-series.apopple@nvidia.com>
+From:   "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+In-Reply-To: <cover.60659b549d8509ddecafad4f498ee7f03bb23c69.1664366292.git-series.apopple@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-170580793-1666693056=:1638
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-
-On Mon, 24 Oct 2022, D. Starke wrote:
-
-> From: Daniel Starke <daniel.starke@siemens.com>
+On 9/28/22 14:01, Alistair Popple wrote:
+> This series aims to fix a number of page reference counting issues in
+> drivers dealing with device private ZONE_DEVICE pages. These result in
+> use-after-free type bugs, either from accessing a struct page which no
+> longer exists because it has been removed or accessing fields within the
+> struct page which are no longer valid because the page has been freed.
 > 
-> n_gsm has a minimal protocol overhead of 7 bytes. The current code already
-> checks whether the configured MRU/MTU size is at least one byte more than
-> this.
+> During normal usage it is unlikely these will cause any problems. However
+> without these fixes it is possible to crash the kernel from userspace.
+> These crashes can be triggered either by unloading the kernel module or
+> unbinding the device from the driver prior to a userspace task exiting. In
+> modules such as Nouveau it is also possible to trigger some of these issues
+> by explicitly closing the device file-descriptor prior to the task exiting
+> and then accessing device private memory.
+
+Hi, as this series was noticed to create a CVE [1], do you think a stable
+backport is warranted? I think the "It is possible to launch the attack
+remotely." in [1] is incorrect though, right?
+
+It looks to me that patch 1 would be needed since the CONFIG_DEVICE_PRIVATE
+introduction, while the following few only to kernels with 27674ef6c73f
+(probably not so critical as that includes no LTS)?
+
+Thanks,
+Vlastimil
+
+[1] https://nvd.nist.gov/vuln/detail/CVE-2022-3523
+
+> This involves some minor changes to both PowerPC and AMD GPU code.
+> Unfortunately I lack hardware to test either of those so any help there
+> would be appreciated. The changes mimic what is done in for both Nouveau
+> and hmm-tests though so I doubt they will cause problems.
 > 
-> Introduce the macro MIN_MTU to make this value more obvious.
+> To: Andrew Morton <akpm@linux-foundation.org>
+> To: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: amd-gfx@lists.freedesktop.org
+> Cc: nouveau@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
 > 
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> Alistair Popple (8):
+>   mm/memory.c: Fix race when faulting a device private page
+>   mm: Free device private pages have zero refcount
+>   mm/memremap.c: Take a pgmap reference on page allocation
+>   mm/migrate_device.c: Refactor migrate_vma and migrate_deivce_coherent_page()
+>   mm/migrate_device.c: Add migrate_device_range()
+>   nouveau/dmem: Refactor nouveau_dmem_fault_copy_one()
+>   nouveau/dmem: Evict device private memory during release
+>   hmm-tests: Add test for migrate_device_range()
+> 
+>  arch/powerpc/kvm/book3s_hv_uvmem.c       |  17 +-
+>  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c |  19 +-
+>  drivers/gpu/drm/amd/amdkfd/kfd_migrate.h |   2 +-
+>  drivers/gpu/drm/amd/amdkfd/kfd_svm.c     |  11 +-
+>  drivers/gpu/drm/nouveau/nouveau_dmem.c   | 108 +++++++----
+>  include/linux/memremap.h                 |   1 +-
+>  include/linux/migrate.h                  |  15 ++-
+>  lib/test_hmm.c                           | 129 ++++++++++---
+>  lib/test_hmm_uapi.h                      |   1 +-
+>  mm/memory.c                              |  16 +-
+>  mm/memremap.c                            |  30 ++-
+>  mm/migrate.c                             |  34 +--
+>  mm/migrate_device.c                      | 239 +++++++++++++++++-------
+>  mm/page_alloc.c                          |   8 +-
+>  tools/testing/selftests/vm/hmm-tests.c   |  49 +++++-
+>  15 files changed, 516 insertions(+), 163 deletions(-)
+> 
+> base-commit: 088b8aa537c2c767765f1c19b555f21ffe555786
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-
-
--- 
- i.
-
---8323329-170580793-1666693056=:1638--
