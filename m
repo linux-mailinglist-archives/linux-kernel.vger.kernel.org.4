@@ -2,183 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7C460C4EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F213B60C4EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbiJYHVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S231656AbiJYHWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiJYHV1 (ORCPT
+        with ESMTP id S231628AbiJYHWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:21:27 -0400
-Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CA875481;
-        Tue, 25 Oct 2022 00:21:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07441602|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00302366-0.00215713-0.994819;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.PpTooo6_1666682480;
-Received: from SunxiBot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.PpTooo6_1666682480)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 15:21:21 +0800
-From:   Kant Fan <kant@allwinnertech.com>
-To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, mturquette@ti.com, rjw@rjwysocki.net,
-        khilman@ti.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v4] PM/devfreq: governor: Add a private governor_data for governor
-Date:   Tue, 25 Oct 2022 15:21:09 +0800
-Message-Id: <20221025072109.64025-1-kant@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        Tue, 25 Oct 2022 03:22:14 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3539C2E2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:22:13 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 21so931333edv.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0YW33z+5sedFd6ykp+dEMDyxDxlZxC4lhugdd/BGTRU=;
+        b=vyxS4CY75IATziN/PhHdYVqT++bTwiQRXDL7wsyzFQhRR+3H6L9EebJNxg4cN7am0C
+         3IIy00jinrYgXKW+ovL+9/P4rCFOpY0QOmiVIoSBTWU25qyv5pf1lAvMTKtd+2YmUaU2
+         k717+5J0OOAtLoQE2eMSqBV1Gm+kyJCgTNq0o2Ti5PzQ1V0JDI5AcXoEjCpS0PG5kRhD
+         TZHHdkwv+6SAGF57ChPsA2EI0/v0H1TtwEnPvCUXuc8waXZS5tjbr0cvQc05yPX4RWrL
+         SCsJP5oNjl+sjLj7SwWgMNwLyXbX2J9D0yOTLRQ7anpj62+Qpd0ztDF8PPD41UjrJi94
+         sJMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0YW33z+5sedFd6ykp+dEMDyxDxlZxC4lhugdd/BGTRU=;
+        b=ncV1JhwjWJEiBS3QQ8ss/m8NkO4+4j01Mo+ijGBwrQ7dHmTudQNnIUC4BX3UND2cQN
+         xB5e0pgHzYXhINImjUa3CjJ0CSsQepU8DoGrx/U7aCHISd6jmFnQ8tABCSmgZx0mRROn
+         d88hiK99y56y6MrX5tfke7U/bNRPMiCF/pSb08mhHQpf88xPbuoqsSnTvQnPJPdECZtZ
+         LGgL8Vwsb8VEHAXYtGGftKpCRSSokre9bYOBPldR1NZaIc+xu4KpCbZ2UAQGCQg3bJvT
+         wKx3kf+vo7tff6GoOpPZ6cmMFOqbMeKWE+paVhxlpUuD3/iB7iFLs+R28wJcTW4WNPkv
+         jIWw==
+X-Gm-Message-State: ACrzQf1vYrpPiIWse/fuPqey0xWmTGUVoqhIaCDV4YoYYM3wvuC5c6xW
+        UAZ6ZWvHTxamijB1WruqSnjmXNf70AJl0g==
+X-Google-Smtp-Source: AMsMyM4iRLDXopCBe81cYXT+oZ/9Gj5EeyPKPZApZMgNAooqIRSb0uZnK8gR20R2QlMRT/BkA721QQ==
+X-Received: by 2002:a05:6402:4411:b0:437:b723:72 with SMTP id y17-20020a056402441100b00437b7230072mr34992483eda.38.1666682531897;
+        Tue, 25 Oct 2022 00:22:11 -0700 (PDT)
+Received: from localhost.localdomain (hst-221-6.medicom.bg. [84.238.221.6])
+        by smtp.gmail.com with ESMTPSA id e8-20020a50d4c8000000b004588ef795easm1091522edj.34.2022.10.25.00.22.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 00:22:07 -0700 (PDT)
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Subject: [PATCH] MAINTAINERS: Change email for Venus driver
+Date:   Tue, 25 Oct 2022 10:21:55 +0300
+Message-Id: <20221025072155.2823985-1-stanimir.varbanov@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The member void *data in the structure devfreq can be overwrite
-by governor_userspace. For example:
-1. The device driver assigned the devfreq governor to simple_ondemand
-by the function devfreq_add_device() and init the devfreq member
-void *data to a pointer of a static structure devfreq_simple_ondemand_data
-by the function devfreq_add_device().
-2. The user changed the devfreq governor to userspace by the command
-"echo userspace > /sys/class/devfreq/.../governor".
-3. The governor userspace alloced a dynamic memory for the struct
-userspace_data and assigend the member void *data of devfreq to
-this memory by the function userspace_init().
-4. The user changed the devfreq governor back to simple_ondemand
-by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
-5. The governor userspace exited and assigned the member void *data
-in the structure devfreq to NULL by the function userspace_exit().
-6. The governor simple_ondemand fetched the static information of
-devfreq_simple_ondemand_data in the function
-devfreq_simple_ondemand_func() but the member void *data of devfreq was
-assigned to NULL by the function userspace_exit().
-7. The information of upthreshold and downdifferential is lost
-and the governor simple_ondemand can't work correctly.
+My email at linaro.org will be deactivated, change it with
+my private email.
 
-The member void *data in the structure devfreq is designed for
-a static pointer used in a governor and inited by the function
-devfreq_add_device(). This patch add an element named governor_data
-in the devfreq structure which can be used by a governor(E.g userspace)
-who want to assign a private data to do some private things.
-
-Fixes: ce26c5bb9569 ("PM / devfreq: Add basic governors")
-Cc: stable@vger.kernel.org # 5.10+
-Reviewed-by: Chanwoo Choi <cwchoi00@gmail.com>
-Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-Signed-off-by: Kant Fan <kant@allwinnertech.com>
+Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
 ---
- drivers/devfreq/devfreq.c            |  6 ++----
- drivers/devfreq/governor_userspace.c | 12 ++++++------
- include/linux/devfreq.h              |  7 ++++---
- 3 files changed, 12 insertions(+), 13 deletions(-)
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 63347a5ae599..8c5f6f7fca11 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -776,8 +776,7 @@ static void remove_sysfs_files(struct devfreq *devfreq,
-  * @dev:	the device to add devfreq feature.
-  * @profile:	device-specific profile to run devfreq.
-  * @governor_name:	name of the policy to choose frequency.
-- * @data:	private data for the governor. The devfreq framework does not
-- *		touch this value.
-+ * @data:	devfreq driver pass to governors, governor should not change it.
-  */
- struct devfreq *devfreq_add_device(struct device *dev,
- 				   struct devfreq_dev_profile *profile,
-@@ -1011,8 +1010,7 @@ static void devm_devfreq_dev_release(struct device *dev, void *res)
-  * @dev:	the device to add devfreq feature.
-  * @profile:	device-specific profile to run devfreq.
-  * @governor_name:	name of the policy to choose frequency.
-- * @data:	private data for the governor. The devfreq framework does not
-- *		touch this value.
-+ * @data:	 devfreq driver pass to governors, governor should not change it.
-  *
-  * This function manages automatically the memory of devfreq device using device
-  * resource management and simplify the free operation for memory of devfreq
-diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
-index ab9db7adb3ad..d69672ccacc4 100644
---- a/drivers/devfreq/governor_userspace.c
-+++ b/drivers/devfreq/governor_userspace.c
-@@ -21,7 +21,7 @@ struct userspace_data {
+diff --git a/MAINTAINERS b/MAINTAINERS
+index df5969d88707..516b2dc69db1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17153,7 +17153,7 @@ F:	Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+ F:	drivers/thermal/qcom/
  
- static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
- {
--	struct userspace_data *data = df->data;
-+	struct userspace_data *data = df->governor_data;
- 
- 	if (data->valid)
- 		*freq = data->user_frequency;
-@@ -40,7 +40,7 @@ static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
- 	int err = 0;
- 
- 	mutex_lock(&devfreq->lock);
--	data = devfreq->data;
-+	data = devfreq->governor_data;
- 
- 	sscanf(buf, "%lu", &wanted);
- 	data->user_frequency = wanted;
-@@ -60,7 +60,7 @@ static ssize_t set_freq_show(struct device *dev,
- 	int err = 0;
- 
- 	mutex_lock(&devfreq->lock);
--	data = devfreq->data;
-+	data = devfreq->governor_data;
- 
- 	if (data->valid)
- 		err = sprintf(buf, "%lu\n", data->user_frequency);
-@@ -91,7 +91,7 @@ static int userspace_init(struct devfreq *devfreq)
- 		goto out;
- 	}
- 	data->valid = false;
--	devfreq->data = data;
-+	devfreq->governor_data = data;
- 
- 	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
- out:
-@@ -107,8 +107,8 @@ static void userspace_exit(struct devfreq *devfreq)
- 	if (devfreq->dev.kobj.sd)
- 		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
- 
--	kfree(devfreq->data);
--	devfreq->data = NULL;
-+	kfree(devfreq->governor_data);
-+	devfreq->governor_data = NULL;
- }
- 
- static int devfreq_userspace_handler(struct devfreq *devfreq,
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 34aab4dd336c..4dc7cda4fd46 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -152,8 +152,8 @@ struct devfreq_stats {
-  * @max_state:		count of entry present in the frequency table.
-  * @previous_freq:	previously configured frequency value.
-  * @last_status:	devfreq user device info, performance statistics
-- * @data:	Private data of the governor. The devfreq framework does not
-- *		touch this.
-+ * @data:	devfreq driver pass to governors, governor should not change it.
-+ * @governor_data:	private data for governors, devfreq core doesn't touch it.
-  * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
-  * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
-  * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
-@@ -193,7 +193,8 @@ struct devfreq {
- 	unsigned long previous_freq;
- 	struct devfreq_dev_status last_status;
- 
--	void *data; /* private data for governors */
-+	void *data;
-+	void *governor_data;
- 
- 	struct dev_pm_qos_request user_min_freq_req;
- 	struct dev_pm_qos_request user_max_freq_req;
+ QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
+-M:	Stanimir Varbanov <stanimir.varbanov@linaro.org>
++M:	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+ M:	Vikash Garodia <quic_vgarodia@quicinc.com>
+ L:	linux-media@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
 -- 
-2.29.0
+2.25.1
 
