@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2505360CD1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4C760CD24
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232742AbiJYNMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S232031AbiJYNOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232764AbiJYNLt (ORCPT
+        with ESMTP id S229574AbiJYNOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:11:49 -0400
+        Tue, 25 Oct 2022 09:14:12 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC88B7B287
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:11:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0DE14DF3A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:14:11 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 645A022005;
-        Tue, 25 Oct 2022 13:11:40 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3BA2221FD9;
+        Tue, 25 Oct 2022 13:14:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666703500; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1666703650; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=GPCeDr3zN77GUXlOPmWIRm9sfVL8tVALNBUEaIMcJ+k=;
-        b=Anj73dL4o0B4PyIteq8IJ/7PMqO4Gl8bUVIAUELGJoOjZ97ppFzHBAiob+ABgFLhUv0Lat
-        TcC4wNTiCb7ZhisiXF8HGYUXFcR2YbMEIDhYgvVedYJtSCRY1JRp5QKNC7xKot/RcUSJC0
-        TpnlYKvhtL7CjTQhPcw7egLN5y+7rGo=
+        bh=I89ZYsz5EVeFhVBn2Y6TA4wWyu6K+IzSxYus/5qLa+4=;
+        b=prAQuulk6JTdcTqlG/SWci2IThYxK+wXyGs7epkHip2DNrJ9sYwC9ZBkcX3+J0ka45oW2O
+        53CLDaIE1qvgnl8dRMgtZq9AHo33htsz1tbQujjgLYSlQpoBtu7FRd/NOK5o/JItdz2BuV
+        1mUAurbpGqULVnd20418hH5hXgNCmPk=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666703500;
+        s=susede2_ed25519; t=1666703650;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=GPCeDr3zN77GUXlOPmWIRm9sfVL8tVALNBUEaIMcJ+k=;
-        b=8XVBImK+1R5pRsTfqYRHrMr8qjA3k9FKbp3VA+gKAlMfgHwb1dNMvQnDZIXoMOjVg6qGzN
-        Bu/heJglm8eIZTDw==
+        bh=I89ZYsz5EVeFhVBn2Y6TA4wWyu6K+IzSxYus/5qLa+4=;
+        b=Hl25gK6OivZlCIyHf4PgYrF9UgXliIeZnUuEOM85LkPs9tH/2xUxP4UM22I95jT+j/0vUN
+        6A9FydFtXdArcUAA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 42A90134CA;
-        Tue, 25 Oct 2022 13:11:40 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 17A9A134CA;
+        Tue, 25 Oct 2022 13:14:10 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 5K6TD4zgV2OkMwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 25 Oct 2022 13:11:40 +0000
-Date:   Tue, 25 Oct 2022 15:11:39 +0200
-Message-ID: <87czagqc8k.wl-tiwai@suse.de>
+        id P3gOBSLhV2MXNQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 25 Oct 2022 13:14:10 +0000
+Date:   Tue, 25 Oct 2022 15:14:09 +0200
+Message-ID: <87a65kqc4e.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
 Cc:     linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
 Subject: Re: [PATCH v2] ALSA: rme9652: use explicitly signed char
-In-Reply-To: <CAHmME9qkJk0vH2n7gz1XFyo-W5EMffGA6Hd4Fd8twKSRWz12nA@mail.gmail.com>
+In-Reply-To: <87czagqc8k.wl-tiwai@suse.de>
 References: <202210250456.vKv5zoLb-lkp@intel.com>
         <20221025000313.546261-1-Jason@zx2c4.com>
         <87bkq0s9rw.wl-tiwai@suse.de>
         <Y1fRvWfcU4NT1HTU@zx2c4.com>
         <87fsfcqdbx.wl-tiwai@suse.de>
         <CAHmME9qkJk0vH2n7gz1XFyo-W5EMffGA6Hd4Fd8twKSRWz12nA@mail.gmail.com>
+        <87czagqc8k.wl-tiwai@suse.de>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -73,43 +74,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 14:54:54 +0200,
-Jason A. Donenfeld wrote:
+On Tue, 25 Oct 2022 15:11:39 +0200,
+Takashi Iwai wrote:
 > 
-> On Tue, Oct 25, 2022 at 2:48 PM Takashi Iwai <tiwai@suse.de> wrote:
-> >
-> > On Tue, 25 Oct 2022 14:08:29 +0200,
-> > Jason A. Donenfeld wrote:
+> On Tue, 25 Oct 2022 14:54:54 +0200,
+> Jason A. Donenfeld wrote:
+> > 
+> > On Tue, Oct 25, 2022 at 2:48 PM Takashi Iwai <tiwai@suse.de> wrote:
 > > >
-> > > On Tue, Oct 25, 2022 at 08:21:55AM +0200, Takashi Iwai wrote:
-> > > > On Tue, 25 Oct 2022 02:03:13 +0200,
-> > > > Jason A. Donenfeld wrote:
-> > > > >
-> > > > > With char becoming unsigned by default, and with `char` alone being
-> > > > > ambiguous and based on architecture, signed chars need to be marked
-> > > > > explicitly as such. This fixes warnings like:
-> > > > >
-> > > > > sound/pci/rme9652/hdsp.c:3953 hdsp_channel_buffer_location() warn: 'hdsp->channel_map[channel]' is unsigned
-> > > > > sound/pci/rme9652/hdsp.c:4153 snd_hdsp_channel_info() warn: impossible condition '(hdsp->channel_map[channel] < 0) => (0-255 < 0)'
-> > > > > sound/pci/rme9652/rme9652.c:1833 rme9652_channel_buffer_location() warn: 'rme9652->channel_map[channel]' is unsigned
-> > > > >
-> > > > > Cc: Jaroslav Kysela <perex@perex.cz>
-> > > > > Cc: Takashi Iwai <tiwai@suse.com>
-> > > > > Cc: alsa-devel@alsa-project.org
-> > > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > > On Tue, 25 Oct 2022 14:08:29 +0200,
+> > > Jason A. Donenfeld wrote:
 > > > >
-> > > > Applied now.  Thanks!
+> > > > On Tue, Oct 25, 2022 at 08:21:55AM +0200, Takashi Iwai wrote:
+> > > > > On Tue, 25 Oct 2022 02:03:13 +0200,
+> > > > > Jason A. Donenfeld wrote:
+> > > > > >
+> > > > > > With char becoming unsigned by default, and with `char` alone being
+> > > > > > ambiguous and based on architecture, signed chars need to be marked
+> > > > > > explicitly as such. This fixes warnings like:
+> > > > > >
+> > > > > > sound/pci/rme9652/hdsp.c:3953 hdsp_channel_buffer_location() warn: 'hdsp->channel_map[channel]' is unsigned
+> > > > > > sound/pci/rme9652/hdsp.c:4153 snd_hdsp_channel_info() warn: impossible condition '(hdsp->channel_map[channel] < 0) => (0-255 < 0)'
+> > > > > > sound/pci/rme9652/rme9652.c:1833 rme9652_channel_buffer_location() warn: 'rme9652->channel_map[channel]' is unsigned
+> > > > > >
+> > > > > > Cc: Jaroslav Kysela <perex@perex.cz>
+> > > > > > Cc: Takashi Iwai <tiwai@suse.com>
+> > > > > > Cc: alsa-devel@alsa-project.org
+> > > > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > > > >
+> > > > > Applied now.  Thanks!
+> > > >
+> > > > Thanks. For this and the other patch, applied for 6.1 or 6.2?
 > > >
-> > > Thanks. For this and the other patch, applied for 6.1 or 6.2?
-> >
-> > I applied for 6.2.  Was it an action that has to be fixed for 6.1?
-> > If so, I still can shuffle.
+> > > I applied for 6.2.  Was it an action that has to be fixed for 6.1?
+> > > If so, I still can shuffle.
+> > 
+> > Well, this is code that's broken currently on ARM platforms, for
+> > example, where char is already unsigned. So it's arguably a fix for
+> > 6.1.
 > 
-> Well, this is code that's broken currently on ARM platforms, for
-> example, where char is already unsigned. So it's arguably a fix for
-> 6.1.
+> Fair enough, I'll apply for 6.1, then.
 
-Fair enough, I'll apply for 6.1, then.
+... and in that case, it deserves for Cc-to-stable, IMO, as it's a fix
+to be done for older kernels, too.  Then it'd be clearly a 6.1
+material.
 
 
 Takashi
