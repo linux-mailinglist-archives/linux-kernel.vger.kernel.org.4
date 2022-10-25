@@ -2,252 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F6660CBE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A516E60CBE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbiJYMdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
+        id S231742AbiJYMdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbiJYMdp (ORCPT
+        with ESMTP id S230090AbiJYMdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:33:45 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E37918499C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:33:44 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id 13so12098942ejn.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=r+aV+XBd2ibXuwsHHzI0medh1k+MCtx1/0dodUbeKOk=;
-        b=Lckt6jfPzMHBW1PLunbUYp84UCGAOYmxu3gE0MJbwuGhAzt4Vbav3H66oT+JPZEFza
-         u+BIVHJkXtrmcv4e8MJoRfBDeLNtu54Gt4b78/yJkUrwisx/9iSkzGzL3R+lFnOkSjNI
-         Gulx/1k9+aQTJLnNLzsFRgluzOaLyXspGUA4Htkebp8SJRNqeFwDmBpmy/W7j9PviTOT
-         sm682No1D6RVgpcPPl5RzZDflGkDqpyrBP8h/FQsxppCu5uOKgleqPjTiBIYP8/Kr/Z7
-         wvaYq+slCxEEyVrPIBRW8+UTy6654L8QVSdemKCyZUDm1mieWQx+Vzt6J5MhexGU+5O4
-         Gdtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r+aV+XBd2ibXuwsHHzI0medh1k+MCtx1/0dodUbeKOk=;
-        b=YzZLZrpJ+v1JGf5JhsX/RpX+aiVhljIrTeE1opUY5sLoLbRS16A4bq+KbynlK+U9/Z
-         hWi2mtqGH0iPSfXRetA0L58Ip6IjDh+weqmnwnhIa98Lc7gSvllMKP4/ocXhocymNFcl
-         jDln3vqKa9pHvM/ehYz+AKthyVTcRPBES1OsDAKj5Yy8JjQ4CeonlI95lnk58S7+1TSC
-         flO9aqWzRetA+MlNHt63PqkYD3yDGyC3WuuwJmkE50vgnBvYvS01obp0FyQtS82HnZ+/
-         8TOYjNurgh0zNnuw7bUWfzFjCnzkZZLJJ+Jfv0Sw2ZDZpH/Bi1eMTi31bnMsecIVsTLS
-         pldg==
-X-Gm-Message-State: ACrzQf1Bvz07gjH97VcJzSVIvEFhmMDSl5eBZuQHf5yy9fJzSqoivFM/
-        1Q/qypzNqFE9HFCOSl324VZhIw8Hks5ffZgro8h0GA==
-X-Google-Smtp-Source: AMsMyM6F538BVTn7WQ09QOrHs6r9EgO0Ja7WVMtf29SSBuZCPMFTTYKEzvR2C+4L/Myu4Nadq7aDDrOEVlZvGtiVgqI=
-X-Received: by 2002:a17:907:80b:b0:77a:86a1:db52 with SMTP id
- wv11-20020a170907080b00b0077a86a1db52mr33486871ejb.294.1666701222341; Tue, 25
- Oct 2022 05:33:42 -0700 (PDT)
+        Tue, 25 Oct 2022 08:33:35 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00CC183E35;
+        Tue, 25 Oct 2022 05:33:34 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id E6C8A68B05; Tue, 25 Oct 2022 14:33:30 +0200 (CEST)
+Date:   Tue, 25 Oct 2022 14:33:30 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Ming Lei <ming.lei@redhat.com>, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        hch@lst.de, Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH] blk-mq: Properly init bios from
+ blk_mq_alloc_request_hctx()
+Message-ID: <20221025123330.GB10715@lst.de>
+References: <Y1aS3vIbuQTNGWJL@T590> <360c78dc-65ce-362f-389d-075f2259ce5b@huawei.com> <Y1cvJ4/uwUScAQq4@T590> <3513b14c-14e0-b865-628e-a83521090de9@huawei.com> <CAFj5m9JnSBBVGrp5CqeH99-+VOGRuroUAi3c-3=6XKa891Sfmw@mail.gmail.com> <cf7f8f88-7d3e-8818-8584-e2276e7a1f30@huawei.com> <Y1epeuwonmjQhrXW@T590> <399a2c2d-0b56-e4e7-c309-a6b9537d8939@huawei.com> <Y1fGrfHqbha6l+hz@T590> <05ae5abd-9b96-3ffe-6bd9-e996d28a8897@huawei.com>
 MIME-Version: 1.0
-References: <20221024112934.415391158@linuxfoundation.org>
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 25 Oct 2022 18:03:29 +0530
-Message-ID: <CA+G9fYsjwO4F7bQkFX+BWxVVX4rgdb=U_Qr-1Y5GLjdhyUkimQ@mail.gmail.com>
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05ae5abd-9b96-3ffe-6bd9-e996d28a8897@huawei.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 at 17:02, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Oct 25, 2022 at 12:36:10PM +0100, John Garry wrote:
+> The requirement is to send this abort command on same queue as erroneous 
+> command to ensure that they do not race in HW submission, even though 
+> chance of this is really tiny. Maybe we can make low-level driver wait 
+> until erroneous command is really submitted to HW by checking HW register, 
+> etc. before issuing abort on any HW queue (and so would not need 
+> blk_mq_alloc_request_hctx() or similar).
+
+I'm not sure this is a good idea.  I can think of all kinds of interfaces
+that could have similar requirements that absolutely do make sense from
+the hardware / firmware side.  So despite Ming not liking
+blk_mq_alloc_request_hctx there is very little chance of it going away
+and thus also very little need to avoid users as more will eventually
+pop up if we want it or not.
+
+> BTW, I would still like to fix blk_mq_alloc_request_hctx() to properly init 
+> ->bio and other fields - ok?
+
+Yes, it should behave the same blk_mq_alloc_request in that respect,
+and we should just copy the assignments to bio, biotail, __sector
+and __data_len from it as you did in your RFC patch.
+
 >
-> This is the start of the stable review cycle for the 6.0.4 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.4-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 6.0.4-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.0.y
-* git commit: [None, 'd4150c7b49be8290e2a00c80f2bb2a534a627ad6']
-* git describe: v6.0.3-22-gd4150c7b49be
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.3-22-gd4150c7b49be
-
-## No sTest Regressions (compared to v6.0.3)
-
-## No Metric Regressions (compared to v6.0.3)
-
-## No Test Fixes (compared to v6.0.3)
-
-## No Metric Fixes (compared to v6.0.3)
-
-
-## Test result summary
-total: 144226, pass: 123359, fail: 5726, skip: 14716, xfail: 425
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 329 total, 325 passed, 4 failed
-* arm64: 61 total, 61 passed, 0 failed
-* i386: 53 total, 53 passed, 0 failed
-* mips: 54 total, 53 passed, 1 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 67 total, 61 passed, 6 failed
-* riscv: 26 total, 26 passed, 0 failed
-* s390: 14 total, 14 passed, 0 failed
-* sh: 23 total, 23 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 58 total, 58 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-at
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> Thanks,
+> John
+---end quoted text---
