@@ -2,87 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C8260C572
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF4860C576
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbiJYHhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
+        id S231805AbiJYHic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiJYHhu (ORCPT
+        with ESMTP id S231829AbiJYHi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:37:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D209EC2C87;
-        Tue, 25 Oct 2022 00:37:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92684B81BB6;
-        Tue, 25 Oct 2022 07:37:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A15C433C1;
-        Tue, 25 Oct 2022 07:37:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666683465;
-        bh=1yX3XLwCIhZx3uwra6UtSiNAmlaJnOcsv2QPETxZ664=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=K1rSMc7GcLUQDeO+5XxekX7xVKwvnjKfu9tgSuK5olqF9l8nkCZ9H1WtdD68cd056
-         LDImUXXHHNXee0P6/mkk59g+8lozGFObp4EiioJN8Ctm5hJjskhKyE2UsaK+fzrBOS
-         M766NzPdjJ15Zq4sXNik7gkYMEgUIr91M7lNHXxrJCerElfYPnjohbYmARV2zIBRKN
-         foCIlet/wryE4Mp7LyZi5IkS4a0STzGRRgh0XF1suIfetpIAjHtheudgt7tCKmvJif
-         98FgSODnbFdrG5Kq9bNpPeLM6ZlXNGmXHGeYhTaGkja8uxqdHUVAehaqJyGjaSRbYV
-         QlC7rAx/dNVEA==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-rdma@vger.kernel.org
-Cc:     wsa+renesas@sang-engineering.com, dledford@redhat.com,
-        matanb@mellanox.com, avihaih@nvidia.com,
-        penguin-kernel@I-love.SAKURA.ne.jp, jgg@ziepe.ca, raeds@nvidia.com
-In-Reply-To: <20221025024146.109137-1-chenzhongjin@huawei.com>
-References: <20221025024146.109137-1-chenzhongjin@huawei.com>
-Subject: Re: [PATCH] RDMA/core: Fix null-ptr-deref in ib_core_cleanup()
-Message-Id: <166668346207.75287.12802762328335692637.b4-ty@kernel.org>
-Date:   Tue, 25 Oct 2022 10:37:42 +0300
+        Tue, 25 Oct 2022 03:38:27 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF891108DD1;
+        Tue, 25 Oct 2022 00:38:25 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29P60oKf023635;
+        Tue, 25 Oct 2022 07:38:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=9IHtBBoBCr1wy02xATl9irCHhrYR7PEBOH+fszoPzdE=;
+ b=pVvz7W2lcOsTdqu4NdDByV4s34XP79TWldaA4dqbzNS5HbWGDDGN5GoqsLwFSswwMCsQ
+ g88syQRestmIq3yF6Z7d33URKizcqn9riz2KVDy/eEhNywSM/4bbUgVwnn8c8q/hqN2B
+ KX88tG6NK5oDy0IHbwVZpBDI09OnMMUp5nPjF1LN7cvMoEZvZ3gZ58n2LAKq7CP0ucNX
+ YzCZQ3X9ThPe8BiEY2t+DcJZqwbukRNgwflB6k/7ihnpuqP7Rvni2b1um1hL+anXia+x
+ 49gH6AY8Gg1wX1p6PTxLok+DFd1YvCs57IGE/Rpwyuqi3XapLMRWTfla4iKdpLF+0mOJ fw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kea5588dr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Oct 2022 07:38:24 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29P7cNRD008928
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Oct 2022 07:38:23 GMT
+Received: from fenglinw2-gv.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Tue, 25 Oct 2022 00:38:21 -0700
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>
+CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
+        <quic_fenglinw@quicinc.com>
+Subject: [PATCH v4 0/2] Add LED driver for flash module in QCOM PMICs
+Date:   Tue, 25 Oct 2022 15:38:00 +0800
+Message-ID: <20221025073802.2662564-1-quic_fenglinw@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-87e0e
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Ht_qJP7CVgMaA5n9cvi2scnXGrUiLf-a
+X-Proofpoint-GUID: Ht_qJP7CVgMaA5n9cvi2scnXGrUiLf-a
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-25_03,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 spamscore=0
+ mlxscore=0 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=680 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210250043
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 10:41:46 +0800, Chen Zhongjin wrote:
-> KASAN reported a null-ptr-deref error:
-> 
-> KASAN: null-ptr-deref in range [0x0000000000000118-0x000000000000011f]
-> CPU: 1 PID: 379
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-> RIP: 0010:destroy_workqueue+0x2f/0x740
-> RSP: 0018:ffff888016137df8 EFLAGS: 00000202
-> ...
-> Call Trace:
->  <TASK>
->  ib_core_cleanup+0xa/0xa1 [ib_core]
->  __do_sys_delete_module.constprop.0+0x34f/0x5b0
->  do_syscall_64+0x3a/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fa1a0d221b7
-> ...
->  </TASK>
-> 
-> [...]
+Initial driver and binding document changes for supporting flash LED
+module in Qualcomm Technologies, Inc. PMICs.
 
-Applied, thanks!
+Changes in V4:
+  1. Added Tested-By tag.
+  2. Addressed review comments in the binding change and added
+     Reviewed-by tag.
 
-[1/1] RDMA/core: Fix null-ptr-deref in ib_core_cleanup()
-      https://git.kernel.org/rdma/rdma/c/ad9394a3da3399
+Changes in V3:
+  1. Updated the driver to use regmap_field for register access.
+  2. Adressed the review comments in binding document change.
 
-Best regards,
+Changes in V2:
+  1. Addressed review comments in binding change, thanks Krzysztof!
+  2. Updated driver to address the compilation issue reported by
+     kernel test robot.
+
+Fenglin Wu (2):
+  leds: flash: add driver to support flash LED module in QCOM PMICs
+  dt-bindings: leds: add QCOM flash LED controller
+
+ .../bindings/leds/qcom,spmi-flash-led.yaml    | 116 +++
+ drivers/leds/flash/Kconfig                    |  15 +
+ drivers/leds/flash/Makefile                   |   1 +
+ drivers/leds/flash/leds-qcom-flash.c          | 700 ++++++++++++++++++
+ 4 files changed, 832 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/leds/qcom,spmi-flash-led.yaml
+ create mode 100644 drivers/leds/flash/leds-qcom-flash.c
+
 -- 
-Leon Romanovsky <leon@kernel.org>
+2.25.1
+
