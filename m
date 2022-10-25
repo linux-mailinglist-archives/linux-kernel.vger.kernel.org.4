@@ -2,140 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9FB60CAB8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 832D160CABE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiJYLQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S230193AbiJYLRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbiJYLQR (ORCPT
+        with ESMTP id S231828AbiJYLRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:16:17 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70077.outbound.protection.outlook.com [40.107.7.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A6B10EA1B;
-        Tue, 25 Oct 2022 04:16:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jFrS1hqxJII26pzDm7fidQseKbB1jAvkMXexvMXket/gEeA0yX39w5SDfo48yGbnm+dqlrJlIYpzW7OCM559xhdI18QJ2BLHg/krRovgUg+JgEQH/nyuBa/IiequmnjBRVRW6Cf08NdV3HaIhTg5oA5Mb2frdRIR1QrkPslFwX+i29AVEhEmkDkMTkLCk+1mQzDmf9imLqHqZ17XjQ5JRQ9ST+tn0e3thOb1N8qoRWtnynJEZ5F9TmSzUT6kLKvpH8s3lJN7LwZ9Y8pLE4t5PCphe2EeoWMK/nLHmGS1HqgLPXuZjkirjVUxiaBOQ8r565ev+XQU6gVTrDs1dl1AEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hxr7xin/t1MYqiU319vA4KAi0h5f8BKzwPg3k2WV9dA=;
- b=USdmSfntxzFOuapb0eLIt0BohB2IEdBSz5f9G2UX8XssRjK4a+tayt2tFDt5mbURmjA0rE4vdlqevuH4ahpZrnVvOgGgtTMzTf9xcyQUhu4dqkimuZC2Lw437+ZzkyUWkT4k6g9epDAI5MDEcUVV3PJ9oOhNVRUiPA6ECZZf3N2htopHRKzsI5Oeziq2E0dWZ2dyCEcoHe+uIHUosz2c5bReAtNVJ49vMi31ZSmp17bX8blNKZ7rQclbAO3GSjctXTnROBgzdcZWMRRL1ZSfp1eika+LZOnCRYu18y4ffoit3DchsJezTn5cUKrtEPCRljz+E5WKg4HwLX0PPpNQvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hxr7xin/t1MYqiU319vA4KAi0h5f8BKzwPg3k2WV9dA=;
- b=Psc/hcPhUXMFtxuWBDaM8LPMuDyYDouFehl64Bhq3mHXf89b3skRhgeGjac1nF0T9c+46CuEk9bmntm9DmQ53oXyRoM2ByXWwXOsc/GZ4Tjmw+5sdiqvjfrkMlK/KCshx/TEjrlyVXj2uFLkvDUes+rGE3a5wpo8oGM3I+g3w7t0J3b+45RbXCki5cE1eh2N8FhMOVu7xmRmcJsg7pEQv0vEwaV1hZ1xJRZvGvBjjtwEYTzkNICDmltdw1cUvcc5rcdvr7GtiQgi7HCoh7TPfDMpzixe/D3dspjikOS3L75PTTPra25k1kUUmBy1uN6coWo4zNXTkIHbC7bRICamZg==
-Received: from GV1PR10MB5892.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:58::7)
- by PAXPR10MB5613.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:243::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Tue, 25 Oct
- 2022 11:16:13 +0000
-Received: from GV1PR10MB5892.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b8f8:a9de:ae69:21b2]) by GV1PR10MB5892.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::b8f8:a9de:ae69:21b2%9]) with mapi id 15.20.5746.021; Tue, 25 Oct 2022
- 11:16:13 +0000
-From:   "Starke, Daniel" <daniel.starke@siemens.com>
-To:     =?iso-8859-1?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-CC:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] tty: n_gsm: add parameter negotiation support
-Thread-Topic: [PATCH v2 3/3] tty: n_gsm: add parameter negotiation support
-Thread-Index: AQHY6GI/fI/RQHsoj0KTBIsRrsLIca4e9ZyA
-Date:   Tue, 25 Oct 2022 11:16:13 +0000
-Message-ID: <GV1PR10MB5892040CAC0FED4857BB771AE0319@GV1PR10MB5892.EURPRD10.PROD.OUTLOOK.COM>
-References: <20221024130114.2070-1-daniel.starke@siemens.com>
- <20221024130114.2070-3-daniel.starke@siemens.com>
- <403445fd-fc99-290-2a5d-cd7c18fb715c@linux.intel.com>
-In-Reply-To: <403445fd-fc99-290-2a5d-cd7c18fb715c@linux.intel.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Enabled=true;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SetDate=2022-10-25T11:16:12Z;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Method=Standard;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_Name=restricted;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_SiteId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ActionId=1f1c3cfb-a6ef-4725-b988-4584ba22d20e;
- MSIP_Label_9d258917-277f-42cd-a3cd-14c4e9ee58bc_ContentBits=0
-document_confidentiality: Restricted
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: GV1PR10MB5892:EE_|PAXPR10MB5613:EE_
-x-ms-office365-filtering-correlation-id: 9f4dde39-6e7a-4d19-207f-08dab67a53fc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rWabRvu4xvgScOlJ+FWJh3eQavgDUjnBpw86cayQlp3aIaAuBVKWO4HjhPOIl8ScN9l/urGtOh76aYzkfJ8UzD2EqsJ8iSks9aHQyqZ9AwsjCs/OgZtD6N7UwI3jkC7JO95goX9Y2wkxS4SMypuoNAkvf70IlbwLq/jX0D4IikbzAszJoyAqI34DMcgsu2hLy4Vy154lA9AWTlAv/erVKGJXPH2qC18wwZYWpBnRh8JIUWbV/gU7KjbvFTjg3QybceXGdRHUBK3T0Cr2c4/XGaBAlTicQH9Y8ITSljL61HFug5x0kqIYLVrow3OA5ruEDJKr/WonE5oGOQVc6fPH706sPasabAQzLqkHzt+RNY5amftqoJ8y1McVWl8srHclwBYo77Zw5f5ocy0oxYnn83N0onVXoS80u3Ax7znfGdPmfizV4YkfI/XwntsXA1y4GEf6G2AyyyhdIvWUV9DPTlOlFktW5Rs8lxDlU4kknjawMop3eoZ5fX4x5qtrrqYRSuWihoF8S6pF0opGSaIlwSA3op1tNvIIdz9bEgr97zFJ19SMKipuP4wUjl+p94UFEDIaXvpzNkMbCjPf8vroM7KfQCiuLqfzHnIg4EMBK1Y59dCaN9+rJRvBWe+2Ri42Pg8aoTk49yJWO019vwwFFuOvzzSLoTv/Iryv3dO4I6ZtM1BYTM/KMXjvsaoIy/nphBaUzykxfDL58ZEPsmqAQlHfn5mAoR0dRDl28WSEzOzpkirgpjCwiH2I9ObCoHEKlG2v/X6neJ9bHKtWP3986A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR10MB5892.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(39860400002)(396003)(136003)(451199015)(54906003)(8936002)(55016003)(478600001)(5660300002)(558084003)(6916009)(33656002)(38070700005)(38100700002)(83380400001)(66476007)(2906002)(122000001)(4326008)(64756008)(71200400001)(66556008)(76116006)(8676002)(41300700001)(66446008)(66946007)(316002)(52536014)(9686003)(186003)(86362001)(26005)(82960400001)(6506007)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?CDVJICdOqHN1dhHQNeXM4/3gtO89iehMXWHJKdr+iKRhYtnipF9wpxVnJL?=
- =?iso-8859-1?Q?J/89eXkVuC/lEUIeMEDMqgBW/GQZA2+NkbBJrDuvy9kGEcWWgwbBwByUwk?=
- =?iso-8859-1?Q?Y35x0joJlQgxSjhkeagj1pPxiQsMVNjXhKfkXJcW5m7Cw0UrfOmSYEzVZd?=
- =?iso-8859-1?Q?XXKjc9cvLNOgVR1c87z5oeqLGcwLNNtYeLUNLtVNfYjB1MtcbkyszPq7j0?=
- =?iso-8859-1?Q?9mqwNq7PUUuenTxK2BU4/lGXaYGRZS6OsJC5QXJM0uCppK5Qm2mY0M6TaP?=
- =?iso-8859-1?Q?NNHWm7yyXVchSyslcm/Zw+iRupe6st5+I4QJ4A6KKkqdN/WsIU9JwBjGbj?=
- =?iso-8859-1?Q?8tQ0pY+duueX1ykk56tHDHmErh+9ajpEyuutkUFgQ89UfyAGw5vrEEApjx?=
- =?iso-8859-1?Q?8z00+gE74NQB3J/ZmRsB4jZ6e+zqrOZqCPnZkmNKEJ0LIs0pYKQdmqHvqB?=
- =?iso-8859-1?Q?pCRin+tBl44bv6Be7ERV5LiqWqL3EWnXG2yOHUKc7nXleDbJJYcBROQNOY?=
- =?iso-8859-1?Q?kL5smJiUIQ3sK2y/qjRoBcPK8nzF9vSLoCDa8hz9vX9b0Pyl8G10XbAuWx?=
- =?iso-8859-1?Q?jDeJCwGYBd8v3/sASJW0X4OL0jZm36p0NJemqWayZoBCpx6nrWwlVXnMg/?=
- =?iso-8859-1?Q?X2QKT/uGrepCcVh2h0Rz6cLrCc6X1aIg/ir/E4DkVS2Py6o30dERj+RTd1?=
- =?iso-8859-1?Q?0dswEamzyD18uIU4pCBTuk9wo3ujml1Y58qtS3jd6dMUjzm8rXiK0a9Wxn?=
- =?iso-8859-1?Q?brwdjZ4UmCYshjVL7C9RtkKiCGt/yq8INewipbWvYcMP8VLUuwdMZOGmLZ?=
- =?iso-8859-1?Q?UaqGOPGJN4XZvD9BJviS1yF8IKUCNTlWsru35SgaFA44Hf4mTdJX8Th+qG?=
- =?iso-8859-1?Q?x1II2dzvXfQQBVxJz6fNbnzOO1eDac7ovrqgBqh7gxa8TLpjmOxnYXvTIV?=
- =?iso-8859-1?Q?irOXBmNDk1W1T4Bq46+jtRbyhSx1D2r2nKOVPLhETzfp3NEbPqS5kEiNZ4?=
- =?iso-8859-1?Q?E2Phk+7KAxABY7zNnTzEFUz3Dx1JWdr4lMUJG1eu/RFxOuaIL7L01QCko3?=
- =?iso-8859-1?Q?TxF7UUnCp6Kg3SU2o3bMLYW9Fl416x4QNxm6Ry77IRbBFzgT0hTNepaSaQ?=
- =?iso-8859-1?Q?ZB8FVq44QoSYdPY/BkzE4MvbWt3kCE/unxrHEESOiX93kwI/0s0vD5xhI3?=
- =?iso-8859-1?Q?hCo1sDqRNTlFuzd7fXddH840RlpIOHqhJiWiB6FjhHPQ7CZFf0mkqR4PPr?=
- =?iso-8859-1?Q?WpfQuwNksQj0d9nt+o7XCPWR486saoHRCBBTFl60ykPFqR4+afx7OYok3A?=
- =?iso-8859-1?Q?5CXte7tDMl1RUbcuyEVQYcq8F63fm5Z+WFKD4pjm5sgjtyQ4XFJ3YfDRR+?=
- =?iso-8859-1?Q?ISiFGiSzjvcvfIvCZDxG2wETJC8xWSz5BDvOPuwVBqlXKUd+E3OjLIiCz1?=
- =?iso-8859-1?Q?wb8rRATTU4RScDkAw3vUmLYRTd1l2lsze9zRGQVpTju5o/8xqwZz+qUc2G?=
- =?iso-8859-1?Q?Zm1Q0IQWh1FSVJNq/CQGs6nSH6bhjD/8L54AvAfT5+JrHKCzU2kJ55cJhg?=
- =?iso-8859-1?Q?RsDqzPb83o/Ct6QTqtJERLPyKuvChgwHLiicbr5pwDrCumKdozUgVWnUj1?=
- =?iso-8859-1?Q?uljtmn83bWnX/GA13baxoUaDXObkpj/LnBMq11kq7Uz01TMLXAkRA8+w?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 25 Oct 2022 07:17:30 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C7D1AD9E;
+        Tue, 25 Oct 2022 04:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666696636;
+        bh=7AL7EYlm4Xr7IAbvlSQol7iSCIjAwmR3cBHLfZ9D5GQ=;
+        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
+        b=FfExlaxnQnOI94ltIE3h72Cpw8lUYk84E+G6GfM9y5/yZ+lx+Z9J4cLwxYW0bqaEX
+         VqqI33mKdHJ4iVkuzQytrUGdyTZaaqc/H5adh5qWWWi+a7yON/LwfvJwfNrZb8lt6D
+         U3N/hm4/I/CGPvplWg10bEq0JjAiMOcPsLCKgR+c=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
+ [212.227.17.174]) with ESMTPSA (Nemesis) id 1MHoRK-1oq5TJ3Zuo-00EqxQ; Tue, 25
+ Oct 2022 13:17:16 +0200
+Message-ID: <9b69ccd1-2fa2-512f-a3ab-d9a8cf723350@gmx.com>
+Date:   Tue, 25 Oct 2022 19:17:10 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: GV1PR10MB5892.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f4dde39-6e7a-4d19-207f-08dab67a53fc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 11:16:13.7487
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BZuYOtJsYkYLRnzLs3u2DEbyBY+7bcg1UV9SUpSCKpLUclCogAog9IzKhEBkNYOgljCjmrUERtqeBlzZpzdRiQ6j1s02mwpmnhTUL3arG+4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB5613
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2] btrfs: volumes: Increase bioc pointer check
+Content-Language: en-US
+To:     Li zeming <zeming@nfschina.com>, clm@fb.com, josef@toxicpanda.com,
+        dsterba@suse.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221025105244.5212-1-zeming@nfschina.com>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20221025105244.5212-1-zeming@nfschina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:HXX7PEnJTPRb4W6VEufn5O1yC0dgUcCDYmJIzLkhwV0NgRbwGNt
+ JFxrQ/p/fme3e1ulziZGWdCxW5nrnjkB2OXS1aQ1lYRAi/2d+hBGnpd80gzQZpHvJJIQ8vt
+ KNRrrIzLx+kB1dvnluQqDgK5j43qvbm4c/Ghn1dED6EavIUZpsPEyQY+I2FWFKGfpVTAQs/
+ UZJDZBGM4LLJTJMlEYirA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WiWYavo94iU=:fZVxCs0prbKJvXqcadGHdQ
+ oM4Ra+AV72/FwH8fOb0jywi4tO4F0EmPhCLXFzXpaXo5yUoAAAbeVsmWGpFrUgHotgYZ7UHUh
+ CZ3sdAQbgS+6geoSVQJRo74b4OJnvoEO8hdpLnTxPNEy43yPMLESnRHfiGIcxvNoG56+PzSKO
+ uMoY5rb3RZusQ8xzEZxXfqPwjcN7+TIIzrzA5ROxPnAkamPu0VZOZphztbG/uqIVvwjiiUlrU
+ 1x8BHAq/4sc8S8rCwdHpLJHd0qd2SrtPBQ2viPi3B5cw19WXDHPAgW4bQodFDuatdU/bqlRz/
+ U1PsnEDcqvoa5NVjEEAofHSEC/xZYZm2qyL/gYQcK2DGF6lDbHoxIt2nYqA/vT+s1oi9KaO9U
+ Ey5tPxyaJw6+9XNz6/VmEIZoGBRJRqTl+pz5YBQKASZOxkOf3Jph1QbdPXaU9OD91u0nJHDJ3
+ cgnREAi/LS+icFKoEPw6mJLyQD9wxytwJwZwbRrhjCLSgItm5z6s+qHf4mbaFD7IwQy0jcULc
+ tewocIvoBigfZPKwk04AuGhwXIPj5ApOLalEBMXO4TcE3fwoqY3oP/IXzY4AAjHLthBkz1wui
+ 6olVcc3jtFe8+JHc43Tt4/JqbVAv22FmfqX+5A/KCfC2fssy57qCaaoo+7kUbKHcmZ6eFMVL4
+ TCdS9yEeGMdyizPNddnlCplvYjqOjMTWVpNvt8UpgM/3zCiuQ+lhdaTWBWg68jDFNTnW2ESxe
+ c2dSLWcLBUY3i+IVgdIFDhQeshREcPWch/d4fdfoDFooSqx4z2Yh9E/xV8GkXukrm0mDEieYZ
+ Ubt2iJAk0F5+R2lxivB9ZyvfkxEgMOPyskGZwPYBrgc8LYlGsnZEwowHqIBf4CsaiJPSDTYyC
+ o0QJRHzXlipcAQYyE8g6IXytlLFUKLEZQiOiZ4riftfpm9SekyIiFsfij/oGhe7EwP1DX94fw
+ A37JLezkUk0/YHy3nBwK2aTO1iMkR8PEZ2P1h2gXAVVcMZOgOWosj7Bd86sO5y6Q6oMpqY+qJ
+ sTK+uHf9uQ+uskEdisAhHF+e7Gpb6cbzwBXMWso2V6dbv0pLWSmA1SAm9OV+8PR86kwfC5ud5
+ o3Lrd3a1sOepyrGmPyFr9hPQ3wmVzIXcfEBJPXoplbMia8QEXpPEZsv0brpQgpalS6vGIasvA
+ VMqww7sJ1Nxj7Dp0YBMVN7GIsXVTU+z6ydACsMIrX74MqQJlLceWy5+VfXsI52/ZgEv6qGLZz
+ O5B154HItOBnKzvjXbaWlgxoisNvK49o3rOBlyiyjzvS+PVKMhJXraqKFzg2wRZqjr1EoGYCF
+ jt8H7gNfqbzPhalRum0axiivPmGXVSEvucWif8J3Hu1psAH9tthQ/Mxu0dKKwNsW4sxh5TvXr
+ MX2hYQEjuByjOY407epri9q9Gf9UWOrGuZ29cO3RwIaXMumAGf+SMOhwKHqwryIgSUJ9EaCWK
+ +kMUrut1sTo9xZmygUAmw8SwOKR0HGED62YvasKxCoYaMwctb59pePI/BUEZPDMCxLpQ5GLtU
+ xuvNrvpWiCUSy76Zwwtda/Wx8Q2D7rytsgZuUri5+67n9
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +	n1 =3D FIELD_GET(PN_N_FIELD_N1, le16_to_cpu(params->n_bits));
->=20
-> Should this be using get_unaligned...()?
 
-Is this really necessary if the structure is already __packed? I did not
-receive any warning by the compiler.
 
-Best regards,
-Daniel Starke
+On 2022/10/25 18:52, Li zeming wrote:
+> This patch has the following changes:
+> 1. Modify "is returned" in the comments to "should be returned".
+> 2. Remove the __GFP_NOFAIL flag from the kzalloc function, which returns
+> NULL if kzalloc fails to allocate memory for bioc.
+
+Firstly this part should be in change log, not commit message.
+
+You can just do a search in the mail list and see how we handle patches
+with newer versions.
+
+Secondly, you didn't mention why we can remove the __GFP_NOFAIL flag at al=
+l.
+
+The commit message should look like this instead:
+
+```
+Currently we allocate memory for btrfs_io_context using
+(GFP_NOFS|__GFP_NOFAIL) in alloc_btrfs_io_context().
+
+But there is nothing special for that function to require NOFAIL flag.
+
+Furthermore the only caller of alloc_btrfs_io_context() is already
+handling the ENOMEM error properly.
+
+Thus we can safely remove the __GFP_NOFAIL flag, and handle allocation
+failure properly.
+```
+>
+> Reviewed-by: Qu Wenruo <wqu@suse.com>
+
+I'd say, please don't add my tag until everything is fine.
+I did a wrong expectation.
+
+Thanks,
+Qu
+
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+> ---
+>   v2: Add annotation vocabulary modify, remove __GFP_NOFAIL flag.
+>
+>   fs/btrfs/volumes.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+> index 064ab2a79c80..b8d901f58995 100644
+> --- a/fs/btrfs/volumes.c
+> +++ b/fs/btrfs/volumes.c
+> @@ -5891,7 +5891,9 @@ static struct btrfs_io_context *alloc_btrfs_io_con=
+text(struct btrfs_fs_info *fs_
+>   		 * and the stripes.
+>   		 */
+>   		sizeof(u64) * (total_stripes),
+> -		GFP_NOFS|__GFP_NOFAIL);
+> +		GFP_NOFS);
+> +	if (!bioc)
+> +		return NULL;
+>
+>   	atomic_set(&bioc->error, 0);
+>   	refcount_set(&bioc->refs, 1);
+> @@ -6071,7 +6073,7 @@ struct btrfs_discard_stripe *btrfs_map_discard(str=
+uct btrfs_fs_info *fs_info,
+>    * array of stripes.
+>    * For READ, it also needs to be supported using the same mirror numbe=
+r.
+>    *
+> - * If the requested block is not left of the left cursor, EIO is return=
+ed. This
+> + * If the requested block is not left of the left cursor, EIO should be=
+ returned. This
+>    * can happen because btrfs_num_copies() returns one more in the dev-r=
+eplace
+>    * case.
+>    */
