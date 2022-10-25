@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12BB60C539
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BCC60C53E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiJYHdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
+        id S231765AbiJYHdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbiJYHc4 (ORCPT
+        with ESMTP id S231801AbiJYHdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:32:56 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC1DB7EE8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:32:49 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1onEQL-0008Px-7X; Tue, 25 Oct 2022 09:32:33 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 2951D1092C7;
-        Tue, 25 Oct 2022 07:32:32 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 09:32:30 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        alim.akhtar@samsung.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] can: mcan: Add MCAN support for FSD SoC
-Message-ID: <20221025073230.3dzu7wli3goeuvre@pengutronix.de>
-References: <CGME20221021102614epcas5p18bcb932e697a378a8244bd91065c5496@epcas5p1.samsung.com>
- <20221021095833.62406-1-vivek.2311@samsung.com>
+        Tue, 25 Oct 2022 03:33:12 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529C815200C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:33:09 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id h185so10721823pgc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bQgCaWbgbYow1rgq+ZxN/4mds+e7cc6gBHNrup7NClQ=;
+        b=Rma508W6fqDHDy8X+To2mg/1uAtZ5IaQzmUr+YHjGOFAm4K11fJ25xDB9x97fQxp/3
+         pAKuwa1y4LTFa8ZDVIeGc19yNb7KXcCb+0AOl/V3heAVwMucficS7vVofz3MjMfyBIrg
+         q2snNTbRNOGZZHmSCdmCsxRXmoPl2il6PecioXpJjR3hpNMVYC5QsBqovcnNEEaaISjg
+         3xze1FffCERBHcsduLW2v6CbzBJhCgU6sBtADSoqt+uSNbsh2lekpDISmVou0xgQDKyU
+         uNBfwCinnyjyrretyJKoOpQt+rtCZr4OvQ/S3WnEjDRoWOx2HKV7moWlSfKVAaOcALwZ
+         NuUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bQgCaWbgbYow1rgq+ZxN/4mds+e7cc6gBHNrup7NClQ=;
+        b=1vxbEdnUemPc5rYY9VOn57cTkAMVb9ojxxDDfQZ0rrxNEflnXTRmn4Fu3A7YOL/Ly6
+         eBdtSNsKDDjvX9v1ZWlM6lO9cJpGVd/WSkMwYm+2R0sQTDoZf3dCrci8c+p+eRlSRlPW
+         f5Ne+UTX+C61qdwFbU/ZkEMrEmHQbronXvSJNG+3It8lSvS2Qux4dR8hPLsTbumx5h/m
+         m1Zug9OEiQP34MgonbmnRBzeuyNaH2NLrGT7uErBfdETWzr7YSjDnxMZYsulTOn33MsK
+         Js53J8SQu7wD+gGQjAcM9q/TxB0ty0kalVJOB1OgtUT2jz1uFJ6AUAByd8ujnQgPDw+C
+         Fxjg==
+X-Gm-Message-State: ACrzQf021lYJVyvP3e4QypbLhrYiwXac6lufFjqpMqCizQGF9tSMgefy
+        9E1FlVjN0cgJ82RiSMWe9ea2
+X-Google-Smtp-Source: AMsMyM4DsarYjZkBTgiETVgHPPe5/NCMxK4F2rPLgYezcHMrAG64Jaa7kPSXcD3GLtirzsSbLhqGzg==
+X-Received: by 2002:a05:6a00:1a47:b0:52e:6a8c:5430 with SMTP id h7-20020a056a001a4700b0052e6a8c5430mr36915826pfv.48.1666683189162;
+        Tue, 25 Oct 2022 00:33:09 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.211.146])
+        by smtp.gmail.com with ESMTPSA id c1-20020a17090a4d0100b0020dda7efe61sm5048369pjg.5.2022.10.25.00.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 00:33:06 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org
+Cc:     johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 0/7] qcom-cpufreq-hw: Add CPU clock provider support
+Date:   Tue, 25 Oct 2022 13:02:47 +0530
+Message-Id: <20221025073254.1564622-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f4xb25bwerpzf74j"
-Content-Disposition: inline
-In-Reply-To: <20221021095833.62406-1-vivek.2311@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,41 +73,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---f4xb25bwerpzf74j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series adds clock provider support to the Qcom CPUFreq driver for
+supplying the clocks to the CPU cores in Qcom SoCs.
 
-On 21.10.2022 15:28:26, Vivek Yadav wrote:
-> Add support for MCAN instances present on the FSD platform.
-> Also add support for handling error correction code (ECC) for MCAN
-> message RAM.
+The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+clocks to the CPU cores. But this is not represented clearly in devicetree.
+There is no clock coming out of the CPUFreq HW node to the CPU. This created
+an issue [1] with the OPP core when a recent enhancement series was submitted.
+Eventhough the issue got fixed in the OPP framework in the meantime, that's
+not a proper solution and this series aims to fix it properly.
 
-Some patches are missing your S-o-b.
+There was also an attempt made by Viresh [2] to fix the issue by moving the
+clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+since those clocks belong to the CPUFreq HW node only.
 
-regards,
-Marc
+The proposal here is to add clock provider support to the Qcom CPUFreq HW
+driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+This correctly reflects the hardware implementation.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+The clock provider is a simple one that just provides the frequency of the
+clocks supplied to each frequency domain in the SoC using .recalc_rate()
+callback. The frequency supplied by the driver will be the actual frequency
+that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+is not same as what the CPUFreq framework has set but it is the one that gets
+supplied to the CPUs after throttling by LMh.
 
---f4xb25bwerpzf74j
-Content-Type: application/pgp-signature; name="signature.asc"
+This series has been tested on SM8450 based dev board with the OPP hack removed
+and hence there is a DTS change only for that platform. Once this series gets
+accepted, rest of the platform DTS can also be modified and finally the hack on
+the OPP core can be dropped.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Mani
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNXkQwACgkQrX5LkNig
-012U6wf+LubB/UbltyFk3Jc5tRVxlcW90iChBlCK1rGgRdINoau8vkZNB5s47iv0
-yebP6ckgXvRd/fOIqFucB550dBb4RdpLasicWPLmVrHRoQh18yeI0CJWeONZu1Ej
-dtP+XbGFc/0iP2OAh0tyu9OLLc+ms5SSZ6YVRBpsALfpDqXn5TlJJN3utzLHAWvn
-pLQOAu8msuY0xSUEVayVy3vhwYM2pgmeH/tSPaLAZgMb0IgYkZwAyZiFPClHa1ob
-uoZssAxQTpSDFOWPSTVqMDDgZTaWkskdPYf0zcAvK/VVuCZ/x74nDa9nqG79mUOQ
-dvIZ7Y5OSWsps7u6ujPaimmBEPCvig==
-=NwLN
------END PGP SIGNATURE-----
+[1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+[2] https://lore.kernel.org/lkml/20220801054255.GA12039@thinkpad/t/
 
---f4xb25bwerpzf74j--
+Changes in v2:
+
+* Moved the qcom_cpufreq_data allocation to probe
+* Added single clock provider with multiple clks for each freq domain
+* Moved soc_data to qcom_cpufreq struct
+* Added Rob's review for binding
+
+Manivannan Sadhasivam (7):
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+  arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
+  cpufreq: qcom-hw: Remove un-necessary cpumask_empty() check
+  cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe
+  cpufreq: qcom-hw: Use cached dev pointer in probe()
+  cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq
+  cpufreq: qcom-hw: Add CPU clock provider support
+
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     |  12 ++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |   9 +
+ drivers/cpufreq/qcom-cpufreq-hw.c             | 166 ++++++++++--------
+ 3 files changed, 118 insertions(+), 69 deletions(-)
+
+-- 
+2.25.1
+
