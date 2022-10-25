@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C619160C928
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD54B60C929
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbiJYJ7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S231945AbiJYJ7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbiJYJ6m (ORCPT
+        with ESMTP id S232086AbiJYJ6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:58:42 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A717916F743;
-        Tue, 25 Oct 2022 02:53:42 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VT2irFY_1666691619;
-Received: from localhost(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VT2irFY_1666691619)
+        Tue, 25 Oct 2022 05:58:46 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1851188128;
+        Tue, 25 Oct 2022 02:53:43 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=guanjun@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VT2U93L_1666691620;
+Received: from localhost(mailfrom:guanjun@linux.alibaba.com fp:SMTPD_---0VT2U93L_1666691620)
           by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 17:53:40 +0800
+          Tue, 25 Oct 2022 17:53:41 +0800
 From:   'Guanjun' <guanjun@linux.alibaba.com>
 To:     herbert@gondor.apana.org.au, elliott@hpe.com
 Cc:     zelin.deng@linux.alibaba.com, artie.ding@linux.alibaba.com,
         guanjun@linux.alibaba.com, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org, xuchun.shang@linux.alibaba.com
-Subject: [PATCH v3 3/9] crypto/ycc: Add irq support for ycc kernel rings
-Date:   Tue, 25 Oct 2022 17:53:30 +0800
-Message-Id: <1666691616-69983-4-git-send-email-guanjun@linux.alibaba.com>
+Subject: [PATCH v3 4/9] crypto/ycc: Add device error handling support for ycc hw errors
+Date:   Tue, 25 Oct 2022 17:53:31 +0800
+Message-Id: <1666691616-69983-5-git-send-email-guanjun@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1666691616-69983-1-git-send-email-guanjun@linux.alibaba.com>
 References: <1666691616-69983-1-git-send-email-guanjun@linux.alibaba.com>
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -42,152 +42,257 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zelin Deng <zelin.deng@linux.alibaba.com>
 
-Each kernel ring has its own command done irq. Temporarily user rings
-will not enable irq.
+Due to ycc hardware limitations, in REE ycc device cannot be reset to
+recover from fatal error (reset register is only valid in TEE and
+PCIE FLR only reset queue pointers but not ycc hw), regard all hw errors
+except queue error as fatal error.
 
 Signed-off-by: Zelin Deng <zelin.deng@linux.alibaba.com>
 ---
- drivers/crypto/ycc/ycc_isr.c | 92 ++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 80 insertions(+), 12 deletions(-)
+ drivers/crypto/ycc/ycc_isr.c  | 93 +++++++++++++++++++++++++++++++++++++++++--
+ drivers/crypto/ycc/ycc_ring.c | 90 +++++++++++++++++++++++++++++++++++++++++
+ drivers/crypto/ycc/ycc_ring.h |  3 ++
+ 3 files changed, 183 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/crypto/ycc/ycc_isr.c b/drivers/crypto/ycc/ycc_isr.c
-index cd2a2d7..a86c8d7 100644
+index a86c8d7..28f8918 100644
 --- a/drivers/crypto/ycc/ycc_isr.c
 +++ b/drivers/crypto/ycc/ycc_isr.c
-@@ -12,6 +12,17 @@
- #include <linux/interrupt.h>
+@@ -15,6 +15,8 @@
+ #include "ycc_dev.h"
+ #include "ycc_ring.h"
  
- #include "ycc_isr.h"
-+#include "ycc_dev.h"
-+#include "ycc_ring.h"
-+
-+
-+static irqreturn_t ycc_resp_isr(int irq, void *data)
-+{
-+	struct ycc_ring *ring = (struct ycc_ring *)data;
-+
-+	tasklet_hi_schedule(&ring->resp_handler);
-+	return IRQ_HANDLED;
-+}
++extern void ycc_clear_cmd_ring(struct ycc_ring *ring);
++extern void ycc_clear_resp_ring(struct ycc_ring *ring);
  
- /*
-  * TODO: will implement when ycc ring actually work.
-@@ -38,11 +49,13 @@ static irqreturn_t ycc_g_err_isr(int irq, void *data)
+ static irqreturn_t ycc_resp_isr(int irq, void *data)
+ {
+@@ -24,11 +26,93 @@ static irqreturn_t ycc_resp_isr(int irq, void *data)
  	return IRQ_HANDLED;
  }
  
 -/*
 - * TODO: will implement when ycc ring actually work.
 - */
- void ycc_resp_process(uintptr_t ring_addr)
- {
-+	struct ycc_ring *ring = (struct ycc_ring *)ring_addr;
++static void ycc_fatal_error(struct ycc_dev *ydev)
++{
++	struct ycc_ring *ring;
++	int i;
 +
-+	ycc_dequeue(ring);
-+	if (ring->ydev->is_polling)
-+		tasklet_hi_schedule(&ring->resp_handler);
- }
- 
- int ycc_enable_msix(struct ycc_dev *ydev)
-@@ -83,34 +96,89 @@ static void ycc_cleanup_global_err_workqueue(struct ycc_dev *ydev)
- 		destroy_workqueue(ydev->dev_err_q);
- }
- 
--/*
-- * TODO: Just request irq for global err. Irq for each ring
-- * will be requested when ring actually work.
-- */
- int ycc_alloc_irqs(struct ycc_dev *ydev)
- {
- 	struct pci_dev *rcec_pdev = ydev->assoc_dev->pdev;
- 	int num = ydev->is_vf ? 1 : YCC_RINGPAIR_NUM;
--	int ret;
-+	int cpu, cpus = num_online_cpus();
-+	int ret, i, j;
- 
-+	/* The 0 - (YCC_RINGPAIR_NUM-1) are rings irqs, the last one is dev error irq */
- 	sprintf(ydev->err_irq_name, "ycc_dev_%d_global_err", ydev->id);
- 	ret = request_irq(pci_irq_vector(rcec_pdev, num),
- 			  ycc_g_err_isr, 0, ydev->err_irq_name, ydev);
--	if (ret)
-+	if (ret) {
- 		pr_err("Failed to alloc global irq interrupt for dev: %d\n", ydev->id);
-+		goto out;
-+	}
++	for (i = 0; i < YCC_RINGPAIR_NUM; i++) {
++		ring = ydev->rings + i;
 +
-+	if (ydev->is_polling)
-+		goto out;
-+
-+	for (i = 0; i < num; i++) {
-+		if (ydev->rings[i].type != KERN_RING)
++		if (ring->type != KERN_RING)
 +			continue;
 +
-+		ydev->msi_name[i] = kzalloc(16, GFP_KERNEL);
-+		if (!ydev->msi_name[i])
-+			goto free_irq;
-+		snprintf(ydev->msi_name[i], 16, "ycc_ring_%d", i);
-+		ret = request_irq(pci_irq_vector(rcec_pdev, i), ycc_resp_isr,
-+				  0, ydev->msi_name[i], &ydev->rings[i]);
-+		if (ret) {
-+			kfree(ydev->msi_name[i]);
-+			goto free_irq;
-+		}
-+		if (!ydev->is_vf)
-+			cpu = (i % YCC_RINGPAIR_NUM) % cpus;
-+		else
-+			cpu = smp_processor_id() % cpus;
++		spin_lock_bh(&ring->lock);
++		ycc_clear_cmd_ring(ring);
++		spin_unlock_bh(&ring->lock);
 +
-+		ret = irq_set_affinity_hint(pci_irq_vector(rcec_pdev, i),
-+					    get_cpu_mask(cpu));
-+		if (ret) {
-+			free_irq(pci_irq_vector(rcec_pdev, i), &ydev->rings[i]);
-+			kfree(ydev->msi_name[i]);
-+			goto free_irq;
-+		}
++		ycc_clear_resp_ring(ring);
++	}
++}
++
+ static void ycc_process_global_err(struct work_struct *work)
+ {
++	struct ycc_dev *ydev = container_of(work, struct ycc_dev, work);
++	struct ycc_bar *cfg_bar = &ydev->ycc_bars[YCC_SEC_CFG_BAR];
++	struct ycc_ring *ring;
++	u32 hclk_err, xclk_err;
++	u32 xclk_ecc_uncor_err_0, xclk_ecc_uncor_err_1;
++	u32 hclk_ecc_uncor_err;
++	int i;
++
++	if (pci_wait_for_pending_transaction(ydev->pdev))
++		pr_warn("Failed to pending transaction\n");
++
++	hclk_err = YCC_CSR_RD(cfg_bar->vaddr, REG_YCC_HCLK_INT_STATUS);
++	xclk_err = YCC_CSR_RD(cfg_bar->vaddr, REG_YCC_XCLK_INT_STATUS);
++	xclk_ecc_uncor_err_0 = YCC_CSR_RD(cfg_bar->vaddr, REG_YCC_XCLK_MEM_ECC_UNCOR_0);
++	xclk_ecc_uncor_err_1 = YCC_CSR_RD(cfg_bar->vaddr, REG_YCC_XCLK_MEM_ECC_UNCOR_1);
++	hclk_ecc_uncor_err = YCC_CSR_RD(cfg_bar->vaddr, REG_YCC_HCLK_MEM_ECC_UNCOR);
++
++	if ((hclk_err & ~(YCC_HCLK_TRNG_ERR)) || xclk_err || hclk_ecc_uncor_err) {
++		pr_err("Got uncorrected error, must be reset\n");
++		/*
++		 * Fatal error, as ycc cannot be reset in REE, clear ring data.
++		 */
++		return ycc_fatal_error(ydev);
 +	}
 +
-+	return 0;
++	if (xclk_ecc_uncor_err_0 || xclk_ecc_uncor_err_1) {
++		pr_err("Got algorithm ECC error: %x, %x\n",
++			xclk_ecc_uncor_err_0, xclk_ecc_uncor_err_1);
++		return ycc_fatal_error(ydev);
++	}
 +
-+free_irq:
-+	for (j = 0; j < i; j++) {
-+		if (ydev->rings[i].type != KERN_RING)
++	/* This has to be queue error. Handling command rings. */
++	for (i = 0; i < YCC_RINGPAIR_NUM; i++) {
++		ring = ydev->rings + i;
++
++		if (ring->type != KERN_RING)
 +			continue;
 +
-+		free_irq(pci_irq_vector(rcec_pdev, j), &ydev->rings[j]);
-+		kfree(ydev->msi_name[j]);
++		ring->status = YCC_CSR_RD(ring->csr_vaddr, REG_RING_STATUS);
++		if (ring->status) {
++			pr_err("YCC: Dev: %d, Ring: %d got ring err: %x\n",
++				ydev->id, ring->ring_id, ring->status);
++			spin_lock_bh(&ring->lock);
++			ycc_clear_cmd_ring(ring);
++			spin_unlock_bh(&ring->lock);
++		}
 +	}
-+	free_irq(pci_irq_vector(rcec_pdev, num), ydev);
-+out:
++
++	/*
++	 * Give HW a chance to process all pending_cmds
++	 * through recovering transactions.
++	 */
++	pci_set_master(ydev->pdev);
++
++	for (i = 0; i < YCC_RINGPAIR_NUM; i++) {
++		ring = ydev->rings + i;
++
++		if (ring->type != KERN_RING || !ring->status)
++			continue;
++
++		ycc_clear_resp_ring(ring);
++	}
++
++	ycc_g_err_unmask(cfg_bar->vaddr);
++	clear_bit(YDEV_STATUS_ERR, &ydev->status);
++	set_bit(YDEV_STATUS_READY, &ydev->status);
+ }
  
+ static irqreturn_t ycc_g_err_isr(int irq, void *data)
+@@ -45,6 +129,9 @@ static irqreturn_t ycc_g_err_isr(int irq, void *data)
+ 
+ 	clear_bit(YDEV_STATUS_READY, &ydev->status);
+ 
++	/* Disable YCC mastering, no new transactions */
++	pci_clear_master(ydev->pdev);
++
+ 	schedule_work(&ydev->work);
+ 	return IRQ_HANDLED;
+ }
+diff --git a/drivers/crypto/ycc/ycc_ring.c b/drivers/crypto/ycc/ycc_ring.c
+index d808054..f6f6e40 100644
+--- a/drivers/crypto/ycc/ycc_ring.c
++++ b/drivers/crypto/ycc/ycc_ring.c
+@@ -483,6 +483,24 @@ int ycc_enqueue(struct ycc_ring *ring, void *cmd)
  	return ret;
  }
  
--/*
-- * TODO: Same as the allocate action.
-- */
- void ycc_free_irqs(struct ycc_dev *ydev)
- {
- 	struct pci_dev *rcec_pdev = ydev->assoc_dev->pdev;
- 	int num = ydev->is_vf ? 1 : YCC_RINGPAIR_NUM;
-+	int i;
- 
-+	/* Free device err irq */
- 	free_irq(pci_irq_vector(rcec_pdev, num), ydev);
++static void ycc_cancel_cmd(struct ycc_ring *ring, struct ycc_cmd_desc *desc)
++{
++	struct ycc_flags *aflag;
 +
-+	if (ydev->is_polling)
++	dma_rmb();
++
++	aflag = (struct ycc_flags *)desc->private_ptr;
++	if (!aflag || (u64)aflag == CMD_INVALID_CONTENT_U64) {
++		pr_debug("YCC: Invalid aflag\n");
 +		return;
-+
-+	for (i = 0; i < num; i++) {
-+		if (ydev->rings[i].type != KERN_RING)
-+			continue;
-+
-+		irq_set_affinity_hint(pci_irq_vector(rcec_pdev, i), NULL);
-+		free_irq(pci_irq_vector(rcec_pdev, i), &ydev->rings[i]);
-+		kfree(ydev->msi_name[i]);
 +	}
++
++	aflag->ycc_done_callback(aflag->ptr, CMD_CANCELLED);
++
++	memset(desc, CMD_INVALID_CONTENT_U8, sizeof(*desc));
++	kfree(aflag);
++}
++
+ static inline void ycc_check_cmd_state(u16 state)
+ {
+ 	switch (state) {
+@@ -560,3 +578,75 @@ void ycc_dequeue(struct ycc_ring *ring)
+ 	if (cnt)
+ 		YCC_CSR_WR(ring->csr_vaddr, REG_RING_RSP_RD_PTR, ring->resp_rd_ptr);
  }
++
++/*
++ * Clear incompletion cmds in command queue while rollback cmd_wr_ptr.
++ *
++ * Note: Make sure been invoked when error occurs in YCC internal and
++ * YCC status is not ready.
++ */
++void ycc_clear_cmd_ring(struct ycc_ring *ring)
++{
++	struct ycc_cmd_desc *desc = NULL;
++
++	ring->cmd_rd_ptr = YCC_CSR_RD(ring->csr_vaddr, REG_RING_CMD_RD_PTR);
++	ring->cmd_wr_ptr = YCC_CSR_RD(ring->csr_vaddr, REG_RING_CMD_WR_PTR);
++
++	while (ring->cmd_rd_ptr != ring->cmd_wr_ptr) {
++		desc = (struct ycc_cmd_desc *)ring->cmd_base_vaddr +
++			ring->cmd_rd_ptr;
++		ycc_cancel_cmd(ring, desc);
++
++		if (--ring->cmd_wr_ptr == 0)
++			ring->cmd_wr_ptr = ring->max_desc;
++	}
++
++	YCC_CSR_WR(ring->csr_vaddr, REG_RING_CMD_WR_PTR, ring->cmd_wr_ptr);
++}
++
++/*
++ * Clear response queue
++ *
++ * Note: Make sure been invoked when error occurs in YCC internal and
++ * YCC status is not ready.
++ */
++void ycc_clear_resp_ring(struct ycc_ring *ring)
++{
++	struct ycc_resp_desc *resp;
++	int retry;
++	u32 pending_cmd;
++
++	/*
++	 * Check if the ring has been stopped. *stop* means no
++	 * new transactions, No need to wait for pending_cmds
++	 * been processed under this condition.
++	 */
++	retry = ycc_ring_stopped(ring) ? 0 : MAX_ERROR_RETRY;
++	pending_cmd = YCC_CSR_RD(ring->csr_vaddr, REG_RING_PENDING_CMD);
++
++	ring->resp_wr_ptr = YCC_CSR_RD(ring->csr_vaddr, REG_RING_RSP_WR_PTR);
++	while (!ycc_ring_empty(ring) || (retry && pending_cmd)) {
++		if (!ycc_ring_empty(ring)) {
++			resp = (struct ycc_resp_desc *)ring->resp_base_vaddr +
++				ring->resp_rd_ptr;
++			resp->state = CMD_CANCELLED;
++			ycc_handle_resp(ring, resp);
++
++			if (++ring->resp_rd_ptr == ring->max_desc)
++				ring->resp_rd_ptr = 0;
++
++			YCC_CSR_WR(ring->csr_vaddr, REG_RING_RSP_RD_PTR, ring->resp_rd_ptr);
++		} else {
++			udelay(MAX_SLEEP_US_PER_CHECK);
++			retry--;
++		}
++
++		pending_cmd = YCC_CSR_RD(ring->csr_vaddr, REG_RING_PENDING_CMD);
++		ring->resp_wr_ptr = YCC_CSR_RD(ring->csr_vaddr, REG_RING_RSP_WR_PTR);
++	}
++
++	if (!retry && pending_cmd)
++		ring->type = INVAL_RING;
++
++	ring->status = 0;
++}
+diff --git a/drivers/crypto/ycc/ycc_ring.h b/drivers/crypto/ycc/ycc_ring.h
+index eb3e6f9..c3e7cbf 100644
+--- a/drivers/crypto/ycc/ycc_ring.h
++++ b/drivers/crypto/ycc/ycc_ring.h
+@@ -20,6 +20,9 @@
+ #define CMD_INVALID_CONTENT_U8		0x7f
+ #define CMD_INVALID_CONTENT_U64		0x7f7f7f7f7f7f7f7fULL
  
- int ycc_init_global_err(struct ycc_dev *ydev)
++#define MAX_SLEEP_US_PER_CHECK		100   /* every 100us to check register */
++#define MAX_ERROR_RETRY			10000 /* 1s in total */
++
+ enum ring_type {
+ 	FREE_RING,
+ 	USER_RING,
 -- 
 1.8.3.1
 
