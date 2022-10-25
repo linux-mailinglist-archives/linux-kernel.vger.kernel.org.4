@@ -2,181 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9BD60C65E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1C160C663
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbiJYIZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
+        id S232229AbiJYI0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiJYIZJ (ORCPT
+        with ESMTP id S231955AbiJYI0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:25:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D1660FF;
-        Tue, 25 Oct 2022 01:25:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 49825CE1C03;
-        Tue, 25 Oct 2022 08:25:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7934DC433C1;
-        Tue, 25 Oct 2022 08:25:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666686302;
-        bh=95Bw03v1d7DpNovUuUhhDHWGN1eDfLvag7c8d/BfT3c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BpgBnumk2WY6jmeSGjyimBupg2i/Gz6Fj2jYBdav4GuS3vZI/mAXM1HF8jxL7DUXp
-         vktLYfItFNox/TbNJ489U1YqgjlZEOVxIRB5bS5ImslUiWGhPR9HuUcR27uK2zb94n
-         oQlfJCv7PnTb43Ue5MKcOUWFWcvK8OI1OgChi5EmM1XsYrPqOH9BundJPug0e0u1Ni
-         KCgwlpmLY4g8wOF/AJeQyb25VuU9ckJzdWMQ5OX/9FAVVu3atq1GxrDHge0QNTZNYe
-         yAlAy8azCC5yH3WxWFduwVngJI9TYFKe19LHy0WEfr4XSlkv/3kKzfw1FmKc+QQzcR
-         KGSLN0I3aEnow==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1onFEq-0000ud-7S; Tue, 25 Oct 2022 10:24:44 +0200
-Date:   Tue, 25 Oct 2022 10:24:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/4] soc: qcom: pmic_glink: Introduce altmode support
-Message-ID: <Y1edTHlbaPlhxIuB@hovoldconsulting.com>
-References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
- <20220818031512.319310-4-bjorn.andersson@linaro.org>
+        Tue, 25 Oct 2022 04:26:12 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2084.outbound.protection.outlook.com [40.107.102.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF699193D2;
+        Tue, 25 Oct 2022 01:26:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lgmzV5IfVmnHP6RrcFHEVWLbX/r0K43dNjF6RjNUbZE24qPOOZLu5FKtsf17vZFM0cjRKafpW1hnZZoM8xT9nhARjqCURE8aPeDBfNne2zJot0zWfxmYNDTnoXEGUQvqDKLzgUIAdPCK/KWP+FAdTlVG+frLxSaUtRsmQD9HhGA/yRbd6I+DTFgqNnLLtakcNJQJwlWOL5furs4WVZrHk47bsKXkKuwMn5qT1MYfhxmAD9FM7pHHu2cjVtyZ30NMM0Uj2e0K2RDZKgh2MpumDbAisrrwfMM0dC0Ze6Mq8ZPh8j5wxbsTOwUlULnklIWplko24naRcxNqfUZhkt2RKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3gZmiwWXvw3/Ihd87OLrI7f8ERXgC2g3Msy0Ms2oS7g=;
+ b=KLval1iMm/574kEzxP1lF5MbuXSgo4BBHiYyBp70kvNtb54gbtf+HyBq7LTHtcy+35+TOaT+qnpGzLDJMBGsxZcZXcIW2LY8yVXd6i2/1GcYCUUZFLS5hv0SXZGMZIChJXzw0tObqquo+bSSsySQAMfeXzY3pJIumBERNawP5S8map+AFOf5LdK/zKee9ODOsVQCnJl68jwqdEuEM7ZnlEiecFZ0Wn5SAGYO4g5fnlBs2VPViAYHDoF7rAPtD04pXhgoPpkzfPGFyo/QIswGzFxd0k1x3u30VEGxRNCkeVaCWQM8KkybAn9s46bkSJzqMJxLaCzazuAZVYj/QyW9mA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3gZmiwWXvw3/Ihd87OLrI7f8ERXgC2g3Msy0Ms2oS7g=;
+ b=m2Ap8xk6Ri2ttE54puMTC/RbF4CVXbHAYKAFE6lJtcuEXAomj1Qq0gmGgAxJc20C2fPDaLkBPrEsC/ENyShAHR0Hc/Wqdeb62SvG4ncaKPkBd54PU2YAyPr0H7rjAuUKiihOzEoR63qzSmQrjJQklF/yHBes4X2uSaIjuYFrXR4=
+Received: from CY4PR1201MB0135.namprd12.prod.outlook.com (2603:10b6:910:17::8)
+ by DM6PR12MB4513.namprd12.prod.outlook.com (2603:10b6:5:2ad::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26; Tue, 25 Oct
+ 2022 08:26:03 +0000
+Received: from CY4PR1201MB0135.namprd12.prod.outlook.com
+ ([fe80::4b4:ce67:45a5:8578]) by CY4PR1201MB0135.namprd12.prod.outlook.com
+ ([fe80::4b4:ce67:45a5:8578%11]) with mapi id 15.20.5746.023; Tue, 25 Oct 2022
+ 08:26:03 +0000
+From:   "Havalige, Thippeswamy" <thippeswamy.havalige@amd.com>
+To:     "Simek, Michal" <michal.simek@amd.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>
+CC:     "bhelgaas@google.com" <bhelgaas@google.com>,
+        "michals@xilinx.com" <michals@xilinx.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "Gogada, Bharat Kumar" <bharat.kumar.gogada@amd.com>
+Subject: RE: [PATCH 00/13] Remove unused microblaze PCIe bus architecture
+Thread-Topic: [PATCH 00/13] Remove unused microblaze PCIe bus architecture
+Thread-Index: AQHY6D5oC3eE/p73a0+tHEBmmYl2uq4etySAgAAO1SA=
+Date:   Tue, 25 Oct 2022 08:26:03 +0000
+Message-ID: <CY4PR1201MB0135792D5D8E7CBA417C2DBE8B319@CY4PR1201MB0135.namprd12.prod.outlook.com>
+References: <20221025065214.4663-1-thippeswamy.havalige@amd.com>
+ <06718d29-f3e1-db07-d537-b78290213b10@amd.com>
+In-Reply-To: <06718d29-f3e1-db07-d537-b78290213b10@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY4PR1201MB0135:EE_|DM6PR12MB4513:EE_
+x-ms-office365-filtering-correlation-id: 16ed8d0e-9af7-40b3-9b6e-08dab6628e21
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xTKuZ37Ay8oQ9tjm5mQ63nvnnn5u0fcOKCZB+6tgB5Lbe6GqIqnqpgwmua4cs0747u0GYadbxy5k2nbnGUuGL/yruuqLNHdh0BaqJ5mnBKmJoTd+BC+VNnsHue26/0/Xd+AOm5JmfBg141IXc9/H1JFxqUWFVxcBANbEglSSlhxvYE6Fa1maUeL4BT/4cbawpExGRdUYOx3JbXd+JYF9XGsFpp/vXvBkYyt4xpZStQQAtCLz1uLEGw3i2HKh1X+u2zhBRy1r1cFI2ahx68f0C+IHAkW7bAv5EWQ3NrvZccq5SzsPc93CAGq43dVRCFZD6YG2Ap48jX6cujdVZboLFDKNrgEaiWcZJc2aUsVcRRN0T5XJk1dbuV7DmygBryOF+uipd5dNj0UDMcpeVlLm2fchb5SAnj/+L++TEpR0Itd8bkdQ7aRJ6yU4no0ybcPN4yKTlFjvyLfj73uI+2jz/mN0CSXoFyabnw/pV3X27JNEx6DVtvfCscE3d0TmieHLDstXCeRN+J83qn5Kz6kJB+wn87smFpGhZY+/MMvnFXcb3SnuCpFgJa0R2aBZJXqmO6/FxMMgl4+ve6456strhwSTNFTAE7hDWTUBK4XSW4VSjW3V67lKqj7nZ7GfZXbZOIQ0+0Z5wF8D7lKWacN36Zt5DYmQ0iUTvQN1YkkeWl+rAjWH4GLgru6ew2s83k+VN5Rw6yu5Nw8hZzlhJo+5D/dtW6314i0NF5Ul7Px0ySc1zR3TBYFxRFsFstCS/Yf3DbipsUFn1bPN2Rc0g1Od6A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR1201MB0135.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(366004)(346002)(376002)(451199015)(9686003)(5660300002)(52536014)(66946007)(76116006)(66476007)(8936002)(122000001)(38100700002)(66556008)(38070700005)(83380400001)(33656002)(86362001)(54906003)(110136005)(26005)(186003)(71200400001)(316002)(55016003)(478600001)(66446008)(8676002)(41300700001)(64756008)(4326008)(2906002)(6506007)(7696005)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YjdoK1VQK3dKdnhHenZYdGMrMldPUU5VcVc3WHVJekc1K2l4UTZtL3NFaWJE?=
+ =?utf-8?B?V3Ayd1dnMzFlTm9nN2lib3VRbS9ERWJEbzU0NitRNzBuZFM5Y0lJSjExV2d1?=
+ =?utf-8?B?S2pPVVJ0cmdjTGh0WHlEMVB6MlExakF3c0xsa2dDNnNzVnZZUWZXK2hsKzJ1?=
+ =?utf-8?B?aFlpMUZNYnVobGREN3czT0R4MUU1TVBKZFpSZ0ZyeDZuMWNaZVJ1TlZZckNZ?=
+ =?utf-8?B?RExDdkJuMmYyRC9vd3BzV1YwY3VyeEl2dzc1ZEtIY2N2VEdpczVtYk9KNXhi?=
+ =?utf-8?B?Tm1XNEw3VDlqcHhqWjNKM3ZHYVNPY0llYzB1cHQ3R3FFdHo2RmMvdm1EYTVO?=
+ =?utf-8?B?aVFWQmxoelFTcFEvd0tETm15QW1GWUtHQ2RJMHZra0xHeUg3dk9lemJVcUYy?=
+ =?utf-8?B?ckp1WVFKc3IwYlVwc1l2cWptMHc3L290a0x6UWVRc1FDSFh3RXFSVHJFYUY1?=
+ =?utf-8?B?UHlHS0NSMlRmc0JUZGkxQUxuK1RyanZmM00rZkszbkdYN2pLbFhreVVac1pS?=
+ =?utf-8?B?UmFyWGlCL2xSdnMwUnNjNVhVSFRQd2l2VGVzYkdyaHMvS1BXeE1kSVR4ZC9v?=
+ =?utf-8?B?UTNLWmhsdDdXSnVJeloxRHNxdDZSc3NOUGJDc2V3ckwrbGhjcm9ORXFIUEhw?=
+ =?utf-8?B?Q2g5OEJYNWtxN3lCWU1mQUFUOUNwcGd3L2FIa0dFUEEvb21IMS9RemJGZlpN?=
+ =?utf-8?B?QUdwT1BQVklZQ1U0bHQrekk5b1ZvaVhyK2pJNFdmUkR1aDlhNFA5RXlvam9z?=
+ =?utf-8?B?bUhPL2p5eFM0S2E4NWVFL1cxcmV3d0FJdWQ1QnRUbzRaQ2dFS3lkUUM4d0tP?=
+ =?utf-8?B?Y1pPK3c2RkMxRlFaYzh6M2I3dWRQZS9yZ083Mkk5ZE5DV3NTVzcyR3dHb1Ja?=
+ =?utf-8?B?ZTNHd3I5RVYzR2FsN1ZNT1NnWkhLVU5SK0UzMEZpOHM1NllKVDZzcjVkbUJy?=
+ =?utf-8?B?d2l6TUdVcWRLUFdNOU9ua2FDcDNmWUtEWUxlNVhwK1hIdWxRR1hHKzNWR0w1?=
+ =?utf-8?B?eEE2ZXMzcGlocFFYL2huZmwvK2lBN1VnSkUybWdNa25zUjRCVlNnaWRLeWZT?=
+ =?utf-8?B?UXlSNUY5bE00akM4bmdiMGtzRlR3Qko3eENwVFphaU1INmZ3bVdCdEhzNlpB?=
+ =?utf-8?B?K1RqeXdrKzdNMTNnenhac29PTTJ6bXlyUHpMY1ZTcXJlRFEyWW40Z1FUT3Ba?=
+ =?utf-8?B?NHZWcEJYWkVlWWRXRWtnSmhZMGs1UHhGcUdSd2c3YS9zTmNSRHZRbG5RVVNO?=
+ =?utf-8?B?ZFlwVW5uMTJiRzVaOU9IcGlZS2hGRXRBYkNIWXByOFppa0Z5UnB3V1BLRHEw?=
+ =?utf-8?B?ZllveERkdzMvRjZmVjZVd2JSd1BJVkFLcEFMMjJRNis0bGQxZFVYRnNjRXQz?=
+ =?utf-8?B?RHcwdzJiMklWNlFLcHpUdm52U2Nyb3N0SjhzVW9nZlFMSERHSVp0L0tORUla?=
+ =?utf-8?B?b01IWm5CblZ3bVU3MWhFVno5cURUbktkejJqL0sxSVppckFTcE5NZXowbGhv?=
+ =?utf-8?B?WE90WkUrOXRLNGxPN2c1UUFoV3hvS2NlaUt0L3R4OXJWY3VvSGZQK1VjWlpa?=
+ =?utf-8?B?Wi96d1JrbGp4eC9HKy9aSUlJbHQ5YlJNaFpoR0lCTWl5NFBDUHh1ZjNtUEoz?=
+ =?utf-8?B?d1F0cXc1UmE5amI0cldJd1FqMmZBMzNNWFA3OGdLNlRsQ1VMSnRMc2ZhRWR4?=
+ =?utf-8?B?dUx3bElqQy92UWtISlJVTHEvQWZKUVBtSEp6aFQwY3BVaTJ4M2pESzA4M3Y5?=
+ =?utf-8?B?bTBSRlpYckZ6UnAxY2RZODNHZjNlb2t1eWxuS25EQXRqTnBGaHUyM1BFQmFW?=
+ =?utf-8?B?UDV4aHMvNTU0WEdFZVExZkxQSkpRRFV4MnJpdHNFUCs1VUpJblY5SXNvRCs0?=
+ =?utf-8?B?SHpkcGtRYnQrMStUeitweTBkeHBocDJ1cml4ZUxDaHNtbW1zU1J6Z1dtZHhy?=
+ =?utf-8?B?S0I3c040dGJQeUw0UW9KdW4yRisvL3ZNM1p3VHFuZ1IxQStwSm9LM1p6RWdu?=
+ =?utf-8?B?WWxmTERwbUNVNUhpUUlwZ2dWNXp3UHkwWDVmQ0d0Nnpaa09rKzN1NEVTYk5w?=
+ =?utf-8?B?V1F3ZlErWXRucGJ4WU9mNGNERmFLbW1HVWNnVDQ4bkt5YnVMWkxmNWZaamJ0?=
+ =?utf-8?Q?F3a8=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818031512.319310-4-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR1201MB0135.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16ed8d0e-9af7-40b3-9b6e-08dab6628e21
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 08:26:03.3651
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jna4VemJi/oAgimHb8HQ2sb1SFUfvi2jPpyilBcYL4qEduMbh44ecmn0cyLp7cf/uUgEOW4ZmYdVb2IrTE5bPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4513
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 08:15:11PM -0700, Bjorn Andersson wrote:
-> With the PMIC GLINK service, the host OS subscribes to USB-C altmode
-> messages, which are sent by the firmware to notify the host OS about
-> state updates and HPD interrupts.
-> 
-> The pmic_glink_altmode driver registers for these notifications and
-> propagates the notifications as typec_mux, typec_switch and DRM OOB
-> notifications as necessary to implement DisplayPort altmode support.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/soc/qcom/Makefile             |   1 +
->  drivers/soc/qcom/pmic_glink_altmode.c | 477 ++++++++++++++++++++++++++
->  2 files changed, 478 insertions(+)
->  create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
-
-> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
-> new file mode 100644
-> index 000000000000..8d2d563cb756
-> --- /dev/null
-> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
-
-> +static void pmic_glink_altmode_worker(struct work_struct *work)
-> +{
-> +	struct pmic_glink_altmode_port *alt_port = work_to_altmode_port(work);
-> +	struct pmic_glink_altmode *altmode = alt_port->altmode;
-> +
-> +	typec_switch_set(alt_port->typec_switch, alt_port->orientation);
-> +
-> +	if (alt_port->svid == USB_TYPEC_DP_SID)
-> +		pmic_glink_altmode_enable_dp(altmode, alt_port, alt_port->mode,
-> +					     alt_port->hpd_state, alt_port->hpd_irq);
-> +	else
-> +		pmic_glink_altmode_enable_usb(altmode, alt_port);
-> +
-> +	if (alt_port->hpd_state)
-> +		drm_bridge_hpd_notify(&alt_port->bridge, connector_status_connected);
-> +	else
-> +		drm_bridge_hpd_notify(&alt_port->bridge, connector_status_disconnected);
-> +
-> +	pmic_glink_altmode_request(altmode, ALTMODE_PAN_ACK, alt_port->index);
-> +};
-
-I'm seeing fairly frequent crashes during boot of the X13s due to these
-notifications being propagated before things have been fully set up:
-
-[   16.591910] panel-simple-dp-aux aux-aea0000.displayport-controller: Detected SHP LQ140M1JW48 (0x1511)
-[   16.592142] qcom,fastrpc-cb 1b300000.remoteproc:glink-edge:fastrpc:compute-cb@12: Adding to iommu group 17
-[   16.597644] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-[   16.597653] Mem abort info:
-[   16.597657]   ESR = 0x0000000096000004
-[   16.597663]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   16.597670]   SET = 0, FnV = 0
-[   16.597675]   EA = 0, S1PTW = 0
-[   16.597680]   FSC = 0x04: level 0 translation fault
-[   16.597686] Data abort info:
-[   16.597689]   ISV = 0, ISS = 0x00000004
-[   16.597694]   CM = 0, WnR = 0
-[   16.597698] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000106b93000
-[   16.597706] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
-[   16.597722] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-[   16.597731] Dumping ftrace buffer:
-[   16.597742]    (ftrace buffer empty)
-[   16.597744] Modules linked in: fastrpc(+) rpmsg_ctrl qrtr_smd rpmsg_char qcom_battmgr pmic_glink_altmode rtc_pm8xxxr
-[   16.597831] CPU: 0 PID: 389 Comm: kworker/0:3 Not tainted 6.1.0-rc2 #195
-[   16.597838] Hardware name: Qualcomm QRD, BIOS 6.0.220110.BOOT.MXF.1.1-00470-MAKENA-1 01/10/2022
-[   16.597842] Workqueue: events pmic_glink_altmode_worker [pmic_glink_altmode]
-[   16.597864] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   16.597870] pc : drm_kms_helper_hotplug_event+0x1c/0x50
-[   16.597882] lr : drm_kms_helper_hotplug_event+0x18/0x50
-[   16.597887] sp : ffff80000c20bca0
-[   16.597889] x29: ffff80000c20bca0 x28: ffffdba5eadbb000 x27: ffff22a9f6f2dc05
-[   16.597898] x26: ffffdba5eadc0b20 x25: ffffdba5eadd8ca0 x24: 0000000000000000
-[   16.597906] x23: 0000000000000003 x22: ffff22a888526000 x21: 0000000000000002
-[   16.597914] x20: ffff22a88ceed000 x19: ffff22a888526000 x18: 0000000000000020
-[   16.597921] x17: 4d003632323d524f x16: 4a414d00313d4755 x15: 4c50544f48006d72
-[   16.597929] x14: 0000000000000001 x13: 0000000000000040 x12: 0000000000000000
-[   16.597936] x11: 0000000000000000 x10: 0000000000000228 x9 : 0000000000000000
-[   16.597944] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000062e00
-[   16.597951] x5 : 0000000000000000 x4 : ffff22a9f6f2d290 x3 : 0000000000062f00
-[   16.597959] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-[   16.597965] Call trace:
-[   16.597968]  drm_kms_helper_hotplug_event+0x1c/0x50
-[   16.597973]  drm_bridge_connector_hpd_cb+0xa0/0xc0
-[   16.597983]  drm_bridge_hpd_notify+0x40/0x60
-[   16.597990]  pmic_glink_altmode_worker+0xc0/0x150 [pmic_glink_altmode]
-[   16.598006]  process_one_work+0x288/0x6c0
-[   16.598014]  worker_thread+0x74/0x450
-[   16.598019]  kthread+0x118/0x120
-[   16.598028]  ret_from_fork+0x10/0x20
-[   16.598039] Code: f9000bf3 aa0003f3 97ff22af f9445e60 (f9400801) 
-[   16.598043] ---[ end trace 0000000000000000 ]---
-[   16.603424] [drm] Initialized msm 1.9.0 20130625 for ae01000.mdp on minor 0
-
-I've verified that it is the funcs pointer in
-drm_kms_helper_hotplug_event() which is NULL and a hack like the below
-prevents the crash:
-
-diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-index 69b0b2b9cc1c..d515f5b6f3d5 100644
---- a/drivers/gpu/drm/drm_probe_helper.c
-+++ b/drivers/gpu/drm/drm_probe_helper.c
-@@ -661,7 +661,9 @@ void drm_kms_helper_hotplug_event(struct drm_device *dev)
- {
-        /* send a uevent + call fbdev */
-        drm_sysfs_hotplug_event(dev);
--       if (dev->mode_config.funcs->output_poll_changed)
-+
-+       WARN_ON(!dev->mode_config.funcs);
-+       if (dev->mode_config.funcs && dev->mode_config.funcs->output_poll_changed)
-                dev->mode_config.funcs->output_poll_changed(dev);
- 
-        drm_client_dev_hotplug(dev);
-
-It appears that pointer is set in msm_drm_init(), which suggests events
-are being forwarded before the driver is ready.
-
-Johan
+SGksDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFNpbWVrLCBNaWNoYWwg
+PG1pY2hhbC5zaW1la0BhbWQuY29tPg0KPiBTZW50OiBUdWVzZGF5LCBPY3RvYmVyIDI1LCAyMDIy
+IDE6MDIgUE0NCj4gVG86IEhhdmFsaWdlLCBUaGlwcGVzd2FteSA8dGhpcHBlc3dhbXkuaGF2YWxp
+Z2VAYW1kLmNvbT47IGxpbnV4LQ0KPiBwY2lAdmdlci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxA
+dmdlci5rZXJuZWwub3JnOw0KPiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsga3J6eXN6dG9m
+Lmtvemxvd3NraUBsaW5hcm8ub3JnDQo+IENjOiBiaGVsZ2Fhc0Bnb29nbGUuY29tOyBtaWNoYWxz
+QHhpbGlueC5jb207IHJvYmgrZHRAa2VybmVsLm9yZzsNCj4gbG9yZW56by5waWVyYWxpc2lAYXJt
+LmNvbTsgR29nYWRhLCBCaGFyYXQgS3VtYXINCj4gPGJoYXJhdC5rdW1hci5nb2dhZGFAYW1kLmNv
+bT4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCAwMC8xM10gUmVtb3ZlIHVudXNlZCBtaWNyb2JsYXpl
+IFBDSWUgYnVzIGFyY2hpdGVjdHVyZQ0KPiANCj4gSGksDQo+IA0KPiBPbiAxMC8yNS8yMiAwODo1
+MiwgVGhpcHBlc3dhbXkgSGF2YWxpZ2Ugd3JvdGU6DQo+ID4gVGhlIGN1cnJlbnQgWGlsaW54IEFY
+SSBQQ0llIEhvc3QgQnJpZGdlIGRyaXZlciB1c2VzIGdlbmVyaWMgUENJZQ0KPiA+IHN1YnN5c3Rl
+bSBmcmFtZXdvcmsuIFRoaXMgZHJpdmVyIHdvcmtzIG9uIGJvdGggTWljcm9ibGF6ZSBhbmQgWnlu
+cQ0KPiA+IGFyY2hpdGVjdHVyZSBiYXNlZCBwbGF0Zm9ybXMuDQo+ID4NCj4gPiBUaGUgbWljcm9i
+bGF6ZSBhcmNoaXRlY3R1cmUgc3BlY2lmaWMgY29kZSBoYXMgdW51c2VkIFBDSWUgaG9zdCBicmlk
+Z2UNCj4gPiBzdXBwb3J0ZWQgQVBJJ3Mgd2hpY2ggYXJlIG5vIGxvbmdlciBuZWVkZWQuDQo+ID4N
+Cj4gPiBUaGlzIHNlcmllcyBvZiBwYXRjaCByZW1vdmVzIHVudXNlZCBhcmNoaXRlY3R1cmUgc3Bl
+Y2lmaWMgbWljcm9ibGF6ZQ0KPiA+IFBDSWUgY29kZS4NCj4gPg0KPiA+IFRoaXBwZXN3YW15IEhh
+dmFsaWdlICgxMyk6DQo+ID4gICAgbWljcm9ibGF6ZS9QQ0k6IFJlbW92ZSB1bnVzZWQgZWFybHlf
+cmVhZF9jb25maWdfYnl0ZSgpIGV0IGFsDQo+ID4gICAgICBkZWNsYXJhdGlvbnMNCj4gPiAgICBt
+aWNyb2JsYXplL1BDSTogUmVtb3ZlIE51bGwgUENJIGNvbmZpZyBhY2Nlc3MgdW51c2VkIGZ1bmN0
+aW9ucw0KPiA+ICAgIG1pY3JvYmxhemUvUENJOiBSZW1vdmUgdW51c2VkIFBDSSBidXMgc2NhbiBp
+ZiBjb25maWd1cmVkIGFzIGEgaG9zdA0KPiA+ICAgIG1pY3JvYmxhemUvUENJOiBSZW1vdmUgdW51
+c2VkIFBDSSBsZWdhY3kgSU8ncyBhY2Nlc3Mgb24gYSBidXMNCj4gPiAgICBtaWNyb2JsYXplL1BD
+STogUmVtb3ZlIHVudXNlZCBkZXZpY2UgdHJlZSBwYXJzaW5nIGZvciBhIGhvc3QgYnJpZGdlDQo+
+ID4gICAgICByZXNvdXJjZXMNCj4gPiAgICBtaWNyb2JsYXplL1BDSTogUmVtb3ZlIHVudXNlZCBh
+bGxvY2F0aW9uICYgZnJlZSBvZiBQQ0kgaG9zdCBicmlkZ2UNCj4gPiAgICAgIHN0cnVjdHVyZQ0K
+PiA+ICAgIG1pY3JvYmxhemUvUENJOiBSZW1vdmUgdW51c2VkIFBDSSBCSU9TIHJlc291cmNlIGFs
+bG9jYXRpb24NCj4gPiAgICBtaWNyb2JsYXplL1BDSTogUmVtb3ZlIHVudXNlZCBQQ0kgSW5kaXJl
+Y3Qgb3BzDQo+ID4gICAgbWljcm9ibGF6ZS9QQ0k6IFJlbW92ZSB1bnVzZWQgcGNpX2FkZHJlc3Nf
+dG9fcGlvKCkgY29udmVyc2lvbiBvZiBDUFUNCj4gPiAgICAgIGFkZHJlc3MgdG8gSS9PIHBvcnQN
+Cj4gPiAgICBtaWNyb2JsYXplL1BDSTogUmVtb3ZlIHVudXNlZCBzeXNfcGNpY29uZmlnX2lvYmFz
+ZSgpIGFuZCBldCBhbA0KPiA+ICAgICAgZGVjbGFyYXRpb24NCj4gPiAgICBtaWNyb2JsYXplL1BD
+STogUmVtb3ZlIHVudXNlZCBwY2lfaW9iYXJfcGZuKCkgYW5kIGV0IGFsIGRlY2xhcmF0aW9ucw0K
+PiA+ICAgIG1pY3JvYmxhemUvUENJOiBSZW1vdmUgc3VwcG9ydCBmb3IgWGlsaW54IFBDSSBob3N0
+IGJyaWRnZQ0KPiA+ICAgIG1pY3JvYmxhemUvUENJOiBNb3ZpbmcgUENJIGlvdW5tYXAgYW5kIGRl
+cGVuZGVudCBjb2RlDQo+ID4NCj4gPiAgIGFyY2gvbWljcm9ibGF6ZS9LY29uZmlnICAgICAgICAg
+ICAgICAgICAgfCAgICA4IC0NCj4gPiAgIGFyY2gvbWljcm9ibGF6ZS9pbmNsdWRlL2FzbS9wY2kt
+YnJpZGdlLmggfCAgIDkyIC0tLQ0KPiA+ICAgYXJjaC9taWNyb2JsYXplL2luY2x1ZGUvYXNtL3Bj
+aS5oICAgICAgICB8ICAgMjkgLQ0KPiA+ICAgYXJjaC9taWNyb2JsYXplL3BjaS9NYWtlZmlsZSAg
+ICAgICAgICAgICB8ICAgIDMgKy0NCj4gPiAgIGFyY2gvbWljcm9ibGF6ZS9wY2kvaW5kaXJlY3Rf
+cGNpLmMgICAgICAgfCAgMTU4IC0tLS0tDQo+ID4gICBhcmNoL21pY3JvYmxhemUvcGNpL2lvbWFw
+LmMgICAgICAgICAgICAgIHwgICAzNiArDQo+ID4gICBhcmNoL21pY3JvYmxhemUvcGNpL3BjaS1j
+b21tb24uYyAgICAgICAgIHwgMTA2NyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4g
+PiAgIGFyY2gvbWljcm9ibGF6ZS9wY2kveGlsaW54X3BjaS5jICAgICAgICAgfCAgMTcwIC0tLS0t
+DQo+ID4gICA4IGZpbGVzIGNoYW5nZWQsIDM3IGluc2VydGlvbnMoKyksIDE1MjYgZGVsZXRpb25z
+KC0pDQo+ID4gICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9taWNyb2JsYXplL3BjaS9pbmRpcmVj
+dF9wY2kuYw0KPiA+ICAgZGVsZXRlIG1vZGUgMTAwNjQ0IGFyY2gvbWljcm9ibGF6ZS9wY2kvcGNp
+LWNvbW1vbi5jDQo+ID4gICBkZWxldGUgbW9kZSAxMDA2NDQgYXJjaC9taWNyb2JsYXplL3BjaS94
+aWxpbnhfcGNpLmMNCj4gPg0KPiANCj4gV2h5IGFyZSB5b3Ugc2VuZGluZyBpdCBhZ2Fpbj8NCj4g
+DQo+IE0NCg0KDQpMYXN0IHRpbWUgbWFpbHMgd2VyZSBub3QgZGVsaXZlcmVkIHRvIG9wZW5zb3Vy
+Y2UgbWFpbnRhaW5lcnMgZHVlIHRvIHNvbWUgYWNjZXNzIHBlcm1pc3Npb25zLg0KDQpSZWdhcmRz
+LA0KVGhpcHBlc3dhbXkgSCANCg==
