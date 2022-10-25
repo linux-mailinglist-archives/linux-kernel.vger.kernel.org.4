@@ -2,121 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E6D60C4D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68FE60C4D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiJYHQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
+        id S231308AbiJYHQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJYHQo (ORCPT
+        with ESMTP id S231469AbiJYHQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:16:44 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FA227CC8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:16:42 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MxNR81GpYzmVK5;
-        Tue, 25 Oct 2022 15:11:48 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 15:16:39 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
- 2022 15:16:38 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <qemu-devel@nongnu.org>,
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        <linux-erofs@lists.ozlabs.org>, <ocfs2-devel@oss.oracle.com>,
-        <linux-mtd@lists.infradead.org>, <amd-gfx@lists.freedesktop.org>
-CC:     <gregkh@linuxfoundation.org>, <rafael@kernel.org>, <somlo@cmu.edu>,
-        <mst@redhat.com>, <jaegeuk@kernel.org>, <chao@kernel.org>,
-        <hsiangkao@linux.alibaba.com>, <huangjianan@oppo.com>,
-        <mark@fasheh.com>, <jlbec@evilplan.org>,
-        <joseph.qi@linux.alibaba.com>, <akpm@linux-foundation.org>,
-        <alexander.deucher@amd.com>, <luben.tuikov@amd.com>,
-        <richard@nod.at>, <liushixin2@huawei.com>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH v3] kset: fix memory leak when kset_register() returns error
-Date:   Tue, 25 Oct 2022 15:15:49 +0800
-Message-ID: <20221025071549.1280528-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 25 Oct 2022 03:16:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4ACA8CFF
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:16:15 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1onEAH-0005xX-AG; Tue, 25 Oct 2022 09:15:57 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 7214C109279;
+        Tue, 25 Oct 2022 07:15:55 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 09:15:51 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Sebastian =?utf-8?B?V8O8cmw=?= <sebastian.wuerl@ororatech.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Timo =?utf-8?B?U2NobMO8w59sZXI=?= <schluessler@krause.de>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] can: mcp251x: fix error handling code in
+ mcp251x_can_probe
+Message-ID: <20221025071551.ghj2hhcxxdfcjbcp@pengutronix.de>
+References: <20221024090256.717236-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qfguc5tuuzqidvwz"
+Content-Disposition: inline
+In-Reply-To: <20221024090256.717236-1-dzm91@hust.edu.cn>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inject fault while loading module, kset_register() may fail.
-If it fails, the kset.kobj.name allocated by kobject_set_name()
-which must be called before a call to kset_register() may be
-leaked, since refcount of kobj was set in kset_init().
 
-To mitigate this, we free the name in kset_register() when an
-error is encountered, i.e. when kset_register() returns an error.
+--qfguc5tuuzqidvwz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-A kset may be embedded in a larger structure which may be dynamically
-allocated in callers, it needs to be freed in ktype.release() or error
-path in callers, in this case, we can not call kset_put() in kset_register(),
-or it will cause double free, so just call kfree_const() to free the
-name and set it to NULL to avoid accessing bad pointer in callers.
+On 24.10.2022 17:02:52, Dongliang Mu wrote:
+> In mcp251x_can_probe, if mcp251x_gpio_setup fails, it forgets to
+> unregister the can device.
+>=20
+> Fix this by unregistering can device in mcp251x_can_probe.
+>=20
+> Fixes: 2d52dabbef60 ("can: mcp251x: add GPIO support")
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
 
-With this fix, the callers don't need care about freeing the name
-and may call kset_put() if kset_register() fails.
+Applied to can/main.
 
-Suggested-by: Luben Tuikov <luben.tuikov@amd.com>
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v2 -> v3:
-  Update commit message and comment of kset_register().
+Thanks,
+Marc
 
-v1 -> v2:
-  Free name inside of kset_register() instead of calling kset_put()
-  in drivers.
----
- lib/kobject.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-diff --git a/lib/kobject.c b/lib/kobject.c
-index a0b2dbfcfa23..3cd19b9ca5ab 100644
---- a/lib/kobject.c
-+++ b/lib/kobject.c
-@@ -834,6 +834,9 @@ EXPORT_SYMBOL_GPL(kobj_sysfs_ops);
- /**
-  * kset_register() - Initialize and add a kset.
-  * @k: kset.
-+ *
-+ * NOTE: On error, the kset.kobj.name allocated by() kobj_set_name()
-+ * is freed, it can not be used any more.
-  */
- int kset_register(struct kset *k)
- {
-@@ -844,8 +847,12 @@ int kset_register(struct kset *k)
- 
- 	kset_init(k);
- 	err = kobject_add_internal(&k->kobj);
--	if (err)
-+	if (err) {
-+		kfree_const(k->kobj.name);
-+		/* Set it to NULL to avoid accessing bad pointer in callers. */
-+		k->kobj.name = NULL;
- 		return err;
-+	}
- 	kobject_uevent(&k->kobj, KOBJ_ADD);
- 	return 0;
- }
--- 
-2.25.1
+--qfguc5tuuzqidvwz
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNXjSUACgkQrX5LkNig
+013iJAf/TNNi8uXYP3ngYHUtPflKn8hjFygxbAR+D3nv23s1rExgBG84Wcw3y05f
+J7B9UcOa7xU5wmU7Yqcf3sin1+FBVqMIRbHnHhnq12lj3BTtpN1qVLdPBHPe24uV
+EjbPHEoxd5QsGXhN+/byiKIUQ7gIwYCZtvp/KDU3s7hzqct4c4mAk/lvKVwd4zwL
+4FTZnA5bkJ7MeupPvKe3IXIfyuexfftIeP5Zlku2CKxYNr/fFoCiGvXm2G1F+RXT
+oUmqWTPs0SLQi+5kl/7CL2B2KHFc/DuwLtJdbXI4MA/+OC+L09YRWrkHKqvXeZjE
+K/UmturqbBZov7tBrAMTSzZFg/tEEg==
+=32pt
+-----END PGP SIGNATURE-----
+
+--qfguc5tuuzqidvwz--
