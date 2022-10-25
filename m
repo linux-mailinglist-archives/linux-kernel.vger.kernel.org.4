@@ -2,82 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A762260D2FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1E660D303
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbiJYSG6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 25 Oct 2022 14:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42018 "EHLO
+        id S232468AbiJYSH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 14:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbiJYSGy (ORCPT
+        with ESMTP id S232683AbiJYSHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:06:54 -0400
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56DD20194
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:06:50 -0700 (PDT)
-Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 38ECE160525;
-        Tue, 25 Oct 2022 18:06:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 0DFE160009;
-        Tue, 25 Oct 2022 18:06:45 +0000 (UTC)
-Message-ID: <8d8a291b5237750827d6847b29efde5b750a28f7.camel@perches.com>
-Subject: Re: [PATCH] maple_tree: Update copyright dates for test code
-From:   Joe Perches <joe@perches.com>
-To:     Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Date:   Tue, 25 Oct 2022 11:06:45 -0700
-In-Reply-To: <20221025173709.2718725-1-Liam.Howlett@oracle.com>
-References: <20221025173709.2718725-1-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 25 Oct 2022 14:07:19 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430C3D2F3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:07:06 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id p3so10698653pld.10
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UaHvsuBeqGUDHNJwrHZu7I7KXYW+zqfgTqUGn6DC/xo=;
+        b=BrZrLWVB5VSJpkzOeZqV2YWZUWJDEwqbeQ1Nve9BZ4AAyOSYp43pwQEn1bBPMP1PUV
+         xFiQdrcQEowdrnFBqYSxGvy8VpMmBzyE2atFCIS/8/rs65U/DPt7ezxoUwSB7kqZU/LH
+         rZ4F/tlv0HbrYah5/V8rNIThPb6tiWOQcfTEg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UaHvsuBeqGUDHNJwrHZu7I7KXYW+zqfgTqUGn6DC/xo=;
+        b=AdjdWR06uN0h94SDhQVIhODdGKlvTnffoIvpXv2+UD6ZL9nZm7u16ttWMNd9k3zvhD
+         u2sUI2M1L41M65e6CLnINsiiCnxOJqfkiqYqstpfmczQHCTv1I7RDHQLWdHEe+zko+QH
+         QKBlyyuPmMdoGxmEYaW/7gQSbXxRSePMKtsJie60nNuWI9IIA+6oRJDl4qijdjS1Eufr
+         7je7sQwAuavSC5AppuVdicwL5mCQMyHIo3+2EG0XMTk8it9DWGBYav9wQc4NpTZd9/EZ
+         PUliAqCW4l0MUYT1/+BFxpc9FV2tfc8PRBlp+1k1SgY1swnRkJD7r47sKanbQTNKWutY
+         3aXA==
+X-Gm-Message-State: ACrzQf14TAllygOhs1YFKr6xS0p2sK3kOdnsDypVcU7u5SuMOg9l8fZb
+        I3uKAB84VaJodQ6L1TgpIIgZTg==
+X-Google-Smtp-Source: AMsMyM6KD70FiLQ2NY7/KT4ZdCgreGIg8amZ286q1tYd4ft48X6ah9dtxyQ5N7DjKGkH08gBYBnE6w==
+X-Received: by 2002:a17:902:d483:b0:182:cb98:26e8 with SMTP id c3-20020a170902d48300b00182cb9826e8mr39797221plg.73.1666721225601;
+        Tue, 25 Oct 2022 11:07:05 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:11a:201:97a:f22a:beab:58])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170902654800b001788ccecbf5sm1493786pln.31.2022.10.25.11.07.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 11:07:05 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH] arm64: dts: qcom: Remove fingerprint node from herobrine-r1
+Date:   Tue, 25 Oct 2022 11:07:03 -0700
+Message-Id: <20221025180703.1806234-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-X-Stat-Signature: x3pqfrpkuzudiqryg8eh7b1frk4fojid
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 0DFE160009
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+LuUULebX2o5f9vPkA9HALl8S6jKtRFPk=
-X-HE-Tag: 1666721205-604664
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-10-25 at 17:37 +0000, Liam Howlett wrote:
-> Add the span to the year of the development.
-> 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->  tools/testing/radix-tree/maple.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/radix-tree/maple.c b/tools/testing/radix-tree/maple.c
-> index 35082671928a..3620c9e5f7c5 100644
-> --- a/tools/testing/radix-tree/maple.c
-> +++ b/tools/testing/radix-tree/maple.c
-> @@ -1,7 +1,8 @@
->  // SPDX-License-Identifier: GPL-2.0+
->  /*
-> - * maple_tree.c: Userspace shim for maple tree test-suite
-> - * Copyright (c) 2018 Liam R. Howlett <Liam.Howlett@Oracle.com>
-> + * maple_tree.c: Userspace testing for maple tree test-suite
-> + * Copyright (c) 2018-2022 Oracle Corporation
-> + * Author: Liam R. Howlett <Liam.Howlett@Oracle.com>
+It turns out that only a few people have the fingerprint sensor hooked
+up on their board. Leaving this enabled is slowing down boot for
+everyone else because the driver slowly fails to probe while trying to
+communicate with a sensor that isn't there. Remove the node to speed up
+boot, developers with the board can manually enable it themselves.
 
-Confused here.  Who owns the copyright from 2018?
+Reported-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts | 4 ----
+ 1 file changed, 4 deletions(-)
 
-And what happened from 2019 through 2021 ?
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+index c1a671968725..8d07401d852d 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
+@@ -47,10 +47,6 @@ &pp1200_wf_cam {
+ 
+ /* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
+ 
+-&ap_spi_fp {
+-	status = "okay";
+-};
+-
+ /*
+  * Although the trackpad is really part of the herobrine baseboard, we'll
+  * put the actual definition in the board device tree since different boards
 
-$ git log --stat -p -1 54a611b605901c7d5d05b6b8f5d04a6ceb0962aa | grep -i copyright
-+ * Copyright (c) 2018-2022 Oracle
-+ * Copyright (c) 2018-2022 Oracle Corporation
-+ * Copyright (c) 2018 Liam R. Howlett <Liam.Howlett@Oracle.com>
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+https://chromeos.dev
 
