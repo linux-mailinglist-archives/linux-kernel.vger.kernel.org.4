@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627F660D23C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:07:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD15360D23E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbiJYRG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 13:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S230447AbiJYRHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 13:07:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbiJYRGm (ORCPT
+        with ESMTP id S232185AbiJYRHK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 13:06:42 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47649111B81
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:06:42 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id k22so755277pfd.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:06:42 -0700 (PDT)
+        Tue, 25 Oct 2022 13:07:10 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00633152015
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:07:01 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id g62so8417565pfb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:07:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1C3nf306oEfMsyZ7A/6P43aOoOgNlqhI8zKR7LmGgzA=;
-        b=YH5a7Qf7bHqiUjamMDYDR4fYo3/lUlFVkLQzAby/DSDXbs61FsJcGUTuYr0CsEeAQl
-         nribGEDcxzKJjIrLikwWrkn3XFPKHeTq9WhZMLwGKUl3gTpvEZcvSD6YeX12pKiPOsBN
-         Te1Nt9UwnpYWqqPngotKBzn4EJ7KngORvCr6iOGvXuZJ4cJ+7PD2HbdUvCyxn8/uM0V4
-         ml9fHAYBG/rsQy3GeMz90vj1FV/Xg6YqLtSdJRqedYKsA1YqqtV6oY270UKORZfjGkiy
-         FPpfMtiVTjI/JlF8NfhzI/S0QrHNETwDjh9ybJYOTcz7lWBT1gJlI3DW+LrIZ2rJOy6c
-         Fwcw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=napLP0njighkCcO4W1DZOY6rgUMs4xcUsx9lyU2OHdk=;
+        b=gPOSE8m2CJTzYky/bqt3bvTv2GqxLf0g5LzYFNecRaGofPocb4j5dbAh/8jSFL4e/A
+         aJoAGa7c2trrl3i19O3tj/5uDwjfXF6vplhXyO0+nUuSIY01QD0yBp3J+cQDxrK+Zgzo
+         w//NsicbvHJrxIdq+dAP9smd2hZHaWyKmf1Ht6/Diga2rt3N3LgOSU4q4u5bir1jCZQB
+         SYQn9KKKIMAVXyCmeQp0TAe02+PBOQkjpldxpW4D6Wn7LRkCgFOIBZcYoYkKbjPguy8B
+         Q9h3Yg2e9Hbgatqg7PAG66+F3/V04tKE9v/oIf8MLPlNTYV5P7h8L957K6kQLRFswCGa
+         1NtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1C3nf306oEfMsyZ7A/6P43aOoOgNlqhI8zKR7LmGgzA=;
-        b=x8H1HcgeDWqXfdDVXUY3G4aIpcxJHLrGc9xu7w0pjCoZ5pq/8SCxtTUJkyf0wmO/Yu
-         n1GcHt20u83SdTqg3yVkaHD/Lo2HrjEVxKbX4j6PJ/UpNw5lTHOJRwXgxtQV8yGTZrh8
-         AiJF2KgTHtUL9luA9k++p3IuOKu6F1tUsP3aE44a/BYw3/F+ecMiNOq0pX1RXPAcZf9N
-         4ZhzkvxVIUyvyvEb0KJ2ELRLpX4qcBoX3z3eSTVnIooUfkHi4pnnuMD5VUPDj6VyUrZ3
-         hPLU6S0k2A5d4HV0IRV7fXlBfrhPkrHvAAuM+LKRNma1vucmQQf2sO7dk4bnRckKKDkW
-         kwsg==
-X-Gm-Message-State: ACrzQf2Lv2C3pfBEJarX/OHttn4km7jgbjGiIxwy7v6jVSMaPEZdWAC1
-        tXiinJg1uT60QaQ3sj5ubQ4=
-X-Google-Smtp-Source: AMsMyM7aQOD7s+fLCpENRTkVTAulDiw35iTwSviEl9Z5P1iLESwlJg0vQLxrFvdNJk2Oxz5SyEDd0A==
-X-Received: by 2002:aa7:8299:0:b0:562:4c48:a0cb with SMTP id s25-20020aa78299000000b005624c48a0cbmr40291105pfm.66.1666717601709;
-        Tue, 25 Oct 2022 10:06:41 -0700 (PDT)
-Received: from uftrace.. ([14.5.161.231])
-        by smtp.gmail.com with ESMTPSA id a1-20020aa794a1000000b0056bcf0dd175sm1592373pfl.215.2022.10.25.10.06.39
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=napLP0njighkCcO4W1DZOY6rgUMs4xcUsx9lyU2OHdk=;
+        b=j0GdowF1UBtw9GHwgwlgeqVIxe3Wk0uN2WK8nAEAZ3cUbtp3naAvjdtKdJFNfujaAG
+         aowNE5+aqPcHDQ6O1sRdyrhs2BjGs4eJlRc0LItCXKYNsXxdGSN5988aeli7sSyYAyMX
+         sXVCDKWkrihhMYRKlFeEhNvyaRv4m77cO9qzYe5Sn1DexyvuYF7iuywDEZRX6RhBWhZS
+         Dpc7QPwLnsdRJe27/MkVPLD3IivTynUiCJffDbf10amntwjPa7wClRj9mSOKhHeb9HtY
+         TMuAgxwxgzVApqIGx/eIz6bg24KAbOKlD126IaobqZ9k68+8NaGn3mJ1Lecz1EaJzA3g
+         JUrA==
+X-Gm-Message-State: ACrzQf2STu2PL5tPBRLnX+XGjqEztyysedMXdPgw8D5xYbulYUn14XRj
+        AVmzKpzqicCT+OL45AeI6XRGGaW1jg4bAQ==
+X-Google-Smtp-Source: AMsMyM6I6vLBD3d3/4wDmQWDD3rOE2C/HNRN5WzdWxYdwhclsUQhL1e+6B6e+wGDNL2Or2lbcChJcQ==
+X-Received: by 2002:a63:b59:0:b0:434:2374:6d12 with SMTP id a25-20020a630b59000000b0043423746d12mr33575235pgl.311.1666717621393;
+        Tue, 25 Oct 2022 10:07:01 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id jc20-20020a17090325d400b001830ed575c3sm1437993plb.117.2022.10.25.10.07.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 10:06:41 -0700 (PDT)
-From:   Kang Minchul <tegongkang@gmail.com>
-To:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Kang Minchul <tegongkang@gmail.com>
-Subject: [PATCH v3 4/4] staging: r8188eu: make rtw_sta_flush to void
-Date:   Wed, 26 Oct 2022 02:06:21 +0900
-Message-Id: <20221025170621.271903-5-tegongkang@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221025170621.271903-1-tegongkang@gmail.com>
-References: <20221025170621.271903-1-tegongkang@gmail.com>
+        Tue, 25 Oct 2022 10:07:00 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 17:06:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Mi, Dapeng1" <dapeng1.mi@intel.com>
+Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>
+Subject: Re: [PATCH] KVM: x86: disable halt polling when powersave governor
+ is used
+Message-ID: <Y1gXseyl0f3IUnDh@google.com>
+References: <20220915073121.1038840-1-dapeng1.mi@intel.com>
+ <Y0BnKIW+7sqJbTyY@google.com>
+ <PH0PR11MB48240C29F1DEBC79EA933285CD5E9@PH0PR11MB4824.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB48240C29F1DEBC79EA933285CD5E9@PH0PR11MB4824.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,66 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make function rtw_sta_flush to void in order to
-prevent cocci warning as follows:
+On Sat, Oct 08, 2022, Mi, Dapeng1 wrote:
+> > > +				!strncmp(policy->governor->name,
+> > "powersave",
+> > 
+> > KVM should not be comparing magic strings.  If the cpufreq subsystem can't get
+> > policy->policy right, then that needs to be fixed.
+> 
+> Yeah, using magic strings looks a little bit strange, but this is what is
+> cpufreq doing.  Currently cpufreq mechanism supports two kinds of drivers,
+> one is the driver which has the built-in governor, like intel_pstate driver.
+> For this kind of driver, the cpufreq governor is saved in the policy->policy
+> field. The other is the traditional driver which is independent with cpufreq
+> governor and the cpufreq governor type is saved in the governor->name field.
+> For the second kind of cpufreq driver, the policy->policy field is
+> meaningless and we have to read the governor name. 
 
-  Unneeded variable: "ret". Return "0" on line 1031
+That doesn't mean it's ok to bleed those internal details into KVM.  I would much
+rather cpufreq provide a helper to get the effective policy, e.g.
 
-Signed-off-by: Kang Minchul <tegongkang@gmail.com>
----
-v2 -> v3: made rtw_sta_flush into void function
+  unsigned int cpufreq_cpu_get_policy(unsigned int cpu)
+  {
+	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+	unsigned int pol;
 
- drivers/staging/r8188eu/core/rtw_ap.c    | 7 ++-----
- drivers/staging/r8188eu/include/rtw_ap.h | 2 +-
- 2 files changed, 3 insertions(+), 6 deletions(-)
+	if (!policy)
+		return CPUFREQ_POLICY_UNKNOWN;
 
-diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
-index 24eb8dce9bfe..e0ca4b6e17cc 100644
---- a/drivers/staging/r8188eu/core/rtw_ap.c
-+++ b/drivers/staging/r8188eu/core/rtw_ap.c
-@@ -1017,10 +1017,9 @@ u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
- 	return beacon_updated;
- }
- 
--int rtw_sta_flush(struct adapter *padapter)
-+void rtw_sta_flush(struct adapter *padapter)
- {
- 	struct list_head *phead, *plist;
--	int ret = 0;
- 	struct sta_info *psta = NULL;
- 	struct sta_priv *pstapriv = &padapter->stapriv;
- 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-@@ -1028,7 +1027,7 @@ int rtw_sta_flush(struct adapter *padapter)
- 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
- 
- 	if ((pmlmeinfo->state & 0x03) != WIFI_FW_AP_STATE)
--		return ret;
-+		return;
- 
- 	spin_lock_bh(&pstapriv->asoc_list_lock);
- 	phead = &pstapriv->asoc_list;
-@@ -1050,8 +1049,6 @@ int rtw_sta_flush(struct adapter *padapter)
- 	issue_deauth(padapter, bc_addr, WLAN_REASON_DEAUTH_LEAVING);
- 
- 	associated_clients_update(padapter, true);
--
--	return ret;
- }
- 
- /* called > TSR LEVEL for USB or SDIO Interface*/
-diff --git a/drivers/staging/r8188eu/include/rtw_ap.h b/drivers/staging/r8188eu/include/rtw_ap.h
-index 8b4134eb3095..89b02c97e041 100644
---- a/drivers/staging/r8188eu/include/rtw_ap.h
-+++ b/drivers/staging/r8188eu/include/rtw_ap.h
-@@ -26,7 +26,7 @@ u8 bss_cap_update_on_sta_leave(struct adapter *padapter, struct sta_info *psta);
- void sta_info_update(struct adapter *padapter, struct sta_info *psta);
- u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
- 	       bool active, u16 reason);
--int rtw_sta_flush(struct adapter *padapter);
-+void rtw_sta_flush(struct adapter *padapter);
- void start_ap_mode(struct adapter *padapter);
- void stop_ap_mode(struct adapter *padapter);
- void update_bmc_sta(struct adapter *padapter);
--- 
-2.34.1
+	pol = policy->policy
+	if (pol == CPUFREQ_POLICY_UNKNOWN && policy->governor)
+		pol = cpufreq_parse_policy(policy->governor->name);
 
+	cpufreq_cpu_put(policy);
+  }
