@@ -2,107 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB8B60C3A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A6760C3A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbiJYGJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S231136AbiJYGJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiJYGJS (ORCPT
+        with ESMTP id S229910AbiJYGJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:09:18 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F7F53D7;
-        Mon, 24 Oct 2022 23:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666678157; x=1698214157;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4M4RG7e6KbnVlnMZy0nJZCHUEfnJaV+ADRTY0rAYgCc=;
-  b=Yp5CeQUupmfzwAf2koxjzZAAdaWvhQs9Q99bG+iMofAWUuFcvgoRQrqA
-   ag55nxFALiBqurw34LBE4R2gW+Ad2dnfY8T0FrsEHp4wbupu1dS4FTRqX
-   wY8DDZU9zqo5xXP+zjNc1VYqCZOOmfMEo7BpqocVcakXPRNTFZdpclqDV
-   qGPKfG/enGbGIOqMYREocv/E0zd8Slp4Nq090+phCiy15N78+aqVk3h5s
-   T6skQ09Im+dA9AUkHQ7nI+0PTu8dWuqd4zJ3JqDyE1iIt+sraxWsF9IK5
-   F1nxuuN49yxP4EIY1fuwAb5xdWiAj4EWIpY6sd68vPixBI+HlQO2O2Y8O
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287993687"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="287993687"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 23:08:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="806552299"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="806552299"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 24 Oct 2022 23:08:44 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id B4D20107; Tue, 25 Oct 2022 09:09:06 +0300 (EEST)
-Date:   Tue, 25 Oct 2022 09:09:06 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mauro Lima <mauro.lima@eclypsium.com>
-Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] intel-spi: Split hardware and software sequencing
-Message-ID: <Y1d9glOgHsQlZe2L@black.fi.intel.com>
-References: <20221020164508.29182-1-mauro.lima@eclypsium.com>
+        Tue, 25 Oct 2022 02:09:52 -0400
+Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884C91CB16
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:09:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VT1bVx1_1666678185;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VT1bVx1_1666678185)
+          by smtp.aliyun-inc.com;
+          Tue, 25 Oct 2022 14:09:46 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     alexander.deucher@amd.com
+Cc:     Felix.Kuehling@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] drm/amdkfd: clean up some inconsistent indentings
+Date:   Tue, 25 Oct 2022 14:09:44 +0800
+Message-Id: <20221025060944.31705-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020164508.29182-1-mauro.lima@eclypsium.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_migrate.c:331 svm_migrate_copy_to_vram() warn: inconsistent indenting
 
-On Thu, Oct 20, 2022 at 01:45:06PM -0300, Mauro Lima wrote:
-> Right now the only driver for Intel's spi has a DANGEROUS tag for
-> a bug in the past on certain Lenovo platforms. It was cleared out
-> that the bug was caused for the spi software sequencing mechanism
-> and if we only use the driver with the hardware sequencing
-> capabilities will be much safer[1].
-> 
-> This changes will remove all the software sequencing bits from
-> the driver and left only the hardware sequencing functionality.
-> If the software sequencing capabilities are needed, the old driver
-> can be build using the DANGEROUS option from the menu.
-> 
-> [1] https://lkml.org/lkml/2021/11/11/468
-> 
-> Mauro Lima (2):
->   spi: intel-spi: Move software sequencing logic outside the core
->   spi: intel-spi: build the driver with hardware sequencing by default
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2537
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I'be been thinking about this and I believe we can do something simpler
-instead.
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+index 20d6b2578927..cddf259875c0 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
+@@ -328,8 +328,7 @@ svm_migrate_copy_to_vram(struct amdgpu_device *adev, struct svm_range *prange,
+ 
+ 		dst[i] = cursor.start + (j << PAGE_SHIFT);
+ 		migrate->dst[i] = svm_migrate_addr_to_pfn(adev, dst[i]);
+-			svm_migrate_get_vram_page(&kfddev->pgmap, prange,
+-						  migrate->dst[i]);
++		svm_migrate_get_vram_page(&kfddev->pgmap, prange, migrate->dst[i]);
+ 		migrate->dst[i] = migrate_pfn(migrate->dst[i]);
+ 
+ 		spage = migrate_pfn_to_page(migrate->src[i]);
+-- 
+2.20.1.7.g153144c
 
-All the modern "Core" CPUs expose this as PCI device and that only
-supports hardware sequencer which should be safe so I think we can do
-something like this:
-
-1. Make spi-intel-pci.c to set the type to INTEL_SPI_CNL for all the
-   controllers it supports (and double check that this is the case for
-   all these controllers).
-
-As a side effect the ispi->sregs will be set to NULL so the core driver
-does not even try to use the software seguencer.
-
-2. Update Kconfig of SPI_INTEL_PCI to remove "DANGEROUS" and mention in
-   the help text that this only supports the hardware sequencer and only
-   the modern core hardware.
-
-3. Update Kconfig of SPI_INTEL_PLATFORM help text to mention that most
-   of these are using software sequencer, leave "DANGEROUS" there.
-
-Does this make sense? Let me know what you think. I can do this myself
-as well (might take some while though since busy with other things
-usual).
