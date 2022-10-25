@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2A660C49B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E6C60C4A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiJYHB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
+        id S230259AbiJYHC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbiJYHBY (ORCPT
+        with ESMTP id S231303AbiJYHCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:01:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AA07539E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:01:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 412016178A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:01:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A9AC433B5;
-        Tue, 25 Oct 2022 07:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666681278;
-        bh=4PYxQh+Qd9S4hsYLOGM4p4PEH3DXxAlrzkcdULK3UMw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nMBzcXK5kpUmQ++BIkuyPzhy7M0Y6Fm1bzkMfrg5/vyXtGaO3R4nFAAotqXbjb/B4
-         nHySbdd/PlFrOMcWL9CGFKxYNWxVLLKr1Pwvg1eGzmn+aOfkMZGFJcj4Pkf03NxD4x
-         DBIKnbSy/8z0o0Ld1NogDKfDveYK078HCALP9ptKYeXWzLbxW1Tz4Y4zLrAy46tAKi
-         l0H3+jUqqf/nwA8ITqc4GYgdjYBuqAxlpqA8EvAU7NrDBEY/EnF3q4YZGqIH1BWqfV
-         SDYI2xfF3W63SRcT3grIK9J6LF6ylokCAtdNp70p8H02C2PjuFex7qFQ+9iQKycGcS
-         UL3RX03iBjuHA==
-Message-ID: <bfae3198-7557-f984-200c-2c677881f462@kernel.org>
-Date:   Tue, 25 Oct 2022 15:01:14 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] f2fs: remove redundant return in
- f2fs_create_flush_cmd_control()
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        Tue, 25 Oct 2022 03:02:53 -0400
+Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF28B3B3B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:02:52 -0700 (PDT)
+Received: from gproxy2-pub.mail.unifiedlayer.com (gproxy2-pub.mail.unifiedlayer.com [69.89.18.3])
+        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 26CC08034F17
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:02:42 +0000 (UTC)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id 7FA2E100485D6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:02:09 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id nDwuoNj9BMknunDwuoFE8v; Tue, 25 Oct 2022 07:02:09 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=OLniYQWB c=1 sm=1 tr=0 ts=635789f1
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=Qawa6l4ZSaYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ShoamZmhgQcuyea+OuheEWNvaJ+lzV1Cfd1AKQmEBLo=; b=vZ5Kq88TwoT1WHPsWXmWl58/cZ
+        7tNQeYK1KrwneeJ4+yCYO0WYbd09kSzar/4ZP2qMQMSePOrUN86S6/udNZF96NvEFKINJinuouPJW
+        HFfM/4ePcnDfbmwPlZVR5vow5OufTa74Uph+vFHg78m3fimNunXBYXF7LUD5UJWT9WB7q9VP9rwqi
+        UQuU/8DtBKJU1qA+URN4RUg8A8kOWbtsUQzYzwqLlNo9O+TGGjSyKNlo4HQ2eCRLHFjjtpZAQ+Ov6
+        XF0PPV6uhVFj+RLZZfJ/l4ocE3XX8rVzJ/vxQvDOVbPN6fQfJojl6F0jNDhBy8vIbzEmAJ+ufft7d
+        1H7uxOMA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:55194 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1onDwr-001Uzm-Lj;
+        Tue, 25 Oct 2022 01:02:05 -0600
+Subject: Re: [PATCH 5.15 000/530] 5.15.75-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-References: <20221024135943.76120-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221024135943.76120-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <abceba1e-cd54-1cca-ecc4-b6fbb12a69ea@w6rz.net>
+Date:   Tue, 25 Oct 2022 00:02:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1onDwr-001Uzm-Lj
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:55194
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/24 21:59, Yangtao Li wrote:
-> Replace
-> 	if (A) {
-> 		......
-> 		return err;
-> 	}
-> 	return err;
-> with
-> 	if (A) {
-> 		......
-> 	}
-> 	return err;
-> 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->   fs/f2fs/segment.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index acf3d3fa4363..f6f16d691226 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -647,7 +647,6 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
->   		err = PTR_ERR(fcc->f2fs_issue_flush);
->   		kfree(fcc);
->   		SM_I(sbi)->fcc_info = NULL;
-> -		return err;
->   	}
->   
->   	return err;
+On 10/24/22 4:25 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.75 release.
+> There are 530 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.75-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-It may looks more clean if it return 0 here?
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Thanks,
+Tested-by: Ron Economos <re@w6rz.net>
 
