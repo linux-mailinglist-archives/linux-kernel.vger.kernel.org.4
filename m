@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD4160D796
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EB160D799
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbiJYW7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S232553AbiJYXAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 19:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232289AbiJYW7Q (ORCPT
+        with ESMTP id S231511AbiJYXAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:59:16 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B537CA899;
-        Tue, 25 Oct 2022 15:59:15 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id z97so38676265ede.8;
-        Tue, 25 Oct 2022 15:59:15 -0700 (PDT)
+        Tue, 25 Oct 2022 19:00:34 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069A5CBFD6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:00:33 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id m2so8320528pjr.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:00:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=udy479ObjWYY5CFX9ZP0gGul3ib61HsEaOXglQsZUR8=;
-        b=kRiPEyk2E7S0EkCO/J07RPKhy/NhdmvHvaLaff/l5T/RAR1qGg59zpFrXUDOU/m0DR
-         BSXuRAzPYAw49Pg4UBKrS50JHKHe2GrUwXFH4LWAa9HhLPtCkatZdMXA0eVwaZujnCNW
-         J+Q92e1VnvtpKgkItdw1G1zOcyskidwZccW/lQhhwwFKef35yL6BnWEUm7Q4oLjtxStg
-         NKft7Vm8Gedm1bSS72iIRJSaLReOdpt3RGtE4tTBaofRTFTfusTdE5spkdWAJYTy64zy
-         eDftWn/qWifn7P5a+uvUuOi/LNqLyH+x0t31WApUmVZxSc7Q6iLJd5o7lbkrKjq9Og2N
-         GIEA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=s6LZP8hvZm1H8c+TGDoLOM2VTr5Lxnor/nw5sFV/2mY=;
+        b=eBUosIjwxzoCivbiFw947tiAH5Kc5Zjv1vE5XKCjauANrPGnJZaAjWvYUDGuc2p3ra
+         D0o1CDbvF+anvekmPVnVtDC7TRRKwRsL6DsbvrN33f10kJRVrqHzLepIxWOfr8YWUHdG
+         5iP/4geENpl6p+WCcY5oEeLfXkWqGUaRijJpE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=udy479ObjWYY5CFX9ZP0gGul3ib61HsEaOXglQsZUR8=;
-        b=CHJypcTbgoMGt6GTBdy8n3vK0VwwMf++3wf8bcufm0L6GYFUDlFz/lvqL6G1e//azB
-         p9F/nOyS+unOm1emw4HwLevp51mnZ4us8jMnmzRCNSI/sqyd5z1V9w79ikctz8LwF8aQ
-         baZYhXygfBQadD12CX9tJJLBxMNBgMYHYoqzbTkLKTb06TLZpWLbbJZh/dpiy8DV8k+v
-         iuuHQsrTavBm6SZdT/ZFj3qIxQW1ImSWcGozLdwfsops1yS5y/m2lo1Us5qZbksagn5b
-         3gg5ekqL1/nxvjuo+zHxSZB+RyH6lFM5cU3lAS3zV4xHULC1DaVQYdyLmeOmrfwg7/cB
-         a7Jg==
-X-Gm-Message-State: ACrzQf2sLSuX8s4lQJurshoeCSW/AMZH+eAda/3URAQKukSavAGhjZ/I
-        zCnU99SkSNkacbU+CftMv4Y/i4dw6fPG3yYZv7M=
-X-Google-Smtp-Source: AMsMyM6qiQz41DTYKHnjjT5v9wPef/t11I6GH1qwMNjA79NgdVe3Lov+5CqFbMmrBeZBknHbcrg0WSUcZOo9RqPZSNw=
-X-Received: by 2002:a05:6402:5485:b0:459:147a:d902 with SMTP id
- fg5-20020a056402548500b00459147ad902mr39292630edb.263.1666738753824; Tue, 25
- Oct 2022 15:59:13 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s6LZP8hvZm1H8c+TGDoLOM2VTr5Lxnor/nw5sFV/2mY=;
+        b=ZXE1lq2Zbpis+k4Z/EIAKsIeIWm+APVWjUmeVkJ8poqCG0pF6wnoYYfg5pzYOCc1CI
+         wyBa6CorB8BTR1O/D+aBsZuVbKF5QZ9JgPFRVyw4R2XqKIMyxQd0CtHrDEgPxpjBOQDH
+         W9vPF0GlXFGxZrbr4IgJKw+QG4mxck2PtAkr34UkxxA3gJt+IB+Lv4jDG/RoSti0hyPC
+         HgiBcPeuE7UztJ9WP7kE3IKLA2TxRrkl5F/HlfHFSgijxiTkjrgKVPNoYiY4U6jdQYZk
+         QbvKCJchensSI84pgLAhZj2bOmvUHQ5IXwNX1cr8QNkb2H28BGzrgCcuHhQmoCmAh6N8
+         SpCw==
+X-Gm-Message-State: ACrzQf1rcwUjrWO8QZRK5hzeZg0wx1UVELMu83Y43oHP4fgsNnRgX9as
+        KJY9RN+WPVpNj+5ZyEk6suqf2Q==
+X-Google-Smtp-Source: AMsMyM54nuuM6c/UCbGYg0BC7n31Zk4wLqgiVvdCYEO4DeWdRrGI+Ggys2dZfI4gYVoed9ITHFD2RA==
+X-Received: by 2002:a17:902:ec8a:b0:185:5462:261a with SMTP id x10-20020a170902ec8a00b001855462261amr40802031plg.160.1666738832501;
+        Tue, 25 Oct 2022 16:00:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id cc21-20020a17090af11500b002086ac07041sm90501pjb.44.2022.10.25.16.00.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 16:00:31 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 16:00:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Gabriel Paubert <paubert@iram.es>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] kbuild: treat char as always signed
+Message-ID: <202210251555.88933A57F@keescook>
+References: <20221019162648.3557490-1-Jason@zx2c4.com>
+ <20221019165455.GL25951@gate.crashing.org>
+ <CAHk-=wiMWk2t8FHn0iqVVe1mn62OTAD6ffL5rn9Eeu021H9d1Q@mail.gmail.com>
+ <20221019174345.GM25951@gate.crashing.org>
+ <CAHk-=wiNNKLFfa0d+Hk=Wm5caiKjLY4V9wwu9DhcSSwPuMbxrg@mail.gmail.com>
+ <Y1Elx+e5VLCTfyXi@lt-gp.iram.es>
+ <CAHk-=wiYtSvjyz5xz2Sbnmxgzg_=AL2OyTiRueUem3xzCzM8VA@mail.gmail.com>
+ <Y1OIXdh3vWOMUlQK@lt-gp.iram.es>
+ <CAHk-=wgaeTa9nAeJ8DP1cBWrs8fZvJ7k1-L8-kjxEOxpLf+XNA@mail.gmail.com>
+ <Y1Wi29MuYlCRTKfH@lt-gp.iram.es>
 MIME-Version: 1.0
-References: <20221019220242.4746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221019220242.4746-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVVzUN1ScY4vh3d8=XvshOjc0C4G2duFRHSPms3S+2yeA@mail.gmail.com>
-In-Reply-To: <CAMuHMdVVzUN1ScY4vh3d8=XvshOjc0C4G2duFRHSPms3S+2yeA@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 25 Oct 2022 23:58:46 +0100
-Message-ID: <CA+V-a8vAf93uyD6o7vEKjb1ghrWh9iY+LDGkgz=e149MdoSZnQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 1/2] dt-bindings: cache: r9a07g043f-l2-cache: Add
- DT binding documentation for L2 cache controller
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.co>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1Wi29MuYlCRTKfH@lt-gp.iram.es>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,163 +84,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Sun, Oct 23, 2022 at 10:23:56PM +0200, Gabriel Paubert wrote:
+> On Sat, Oct 22, 2022 at 11:16:33AM -0700, Linus Torvalds wrote:
+> > Practically speaking this might be a bit painful, because we've got
+> > several different variations of this all due to all the things like
+> > our debugging versions (see <linux/fortify-string.h> for example), so
+> > some of our code is this crazy jungle of "with this config, use this
+> > wrapper".
+> 
+> I've just had a look at that code, and I don't want to touch it with a
+> 10 foot pole. If someone else to get his hands dirty... 
 
-Thank you for the review.
+Heh. Yes, fortify-string.h is a twisty maze. I've tried to keep it as
+regular as possible, but I admit it is weird. On my list is to split
+compile-time from run-time logic (as suggested by Linus a while back),
+but I've worried it would end up spilling some of the ugly back into
+string.h, which should probably not happen. As such, I've tried to keep
+it all contained in fortify-string.h.
 
-On Mon, Oct 24, 2022 at 2:47 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Thu, Oct 20, 2022 at 12:02 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > Add DT binding documentation for L2 cache controller found on RZ/Five SoC.
-> >
-> > The Renesas RZ/Five microprocessor includes a RISC-V CPU Core (AX45MP
-> > Single) from Andes. The AX45MP core has an L2 cache controller, this patch
-> > describes the L2 cache block.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/cache/andestech,ax45mp-cache.yaml
-> > @@ -0,0 +1,125 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright (C) 2022 Renesas Electronics Corp.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/cache/andestech,ax45mp-cache.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Andestech AX45MP L2 Cache Controller
-> > +
-> > +maintainers:
-> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > +
-> > +description:
-> > +  A level-2 cache (L2C) is used to improve the system performance by providing
-> > +  a larger amount of cache line entries and reasonable access delays. The L2C
->
-> large
->
-OK.
+Regardless, I think I'd rather avoid yet more special cases in the
+fortify code, so I'd like to avoid using transparent union if we can. It
+seems like -funsigned-char and associated fixes will be sufficient,
+though, yes?
 
-> > +  is shared between cores, and a non-inclusive non-exclusive policy is used.
-> > +
-> > +select:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        enum:
-> > +          - andestech,ax45mp-cache
-> > +
-> > +  required:
-> > +    - compatible
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - const: andestech,ax45mp-cache
-> > +      - const: cache
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  cache-line-size:
-> > +    const: 64
->
-> This is fixed here, but the driver accepts (and uses) whatever value specified?
->
-Right, I'll add a check in the driver.
-
-> > +
-> > +  cache-level:
-> > +    const: 2
-> > +
-> > +  cache-sets:
-> > +    const: 1024
-> > +
-> > +  cache-size:
-> > +    enum: [131072, 262144, 524288, 1048576, 2097152]
-> > +
-> > +  cache-unified: true
-> > +
-> > +  next-level-cache: true
-> > +
-> > +  andestech,pma-regions:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > +    minItems: 1
-> > +    maxItems: 16
-> > +    description: Optional array of memory regions to be set as non-cacheable
-> > +                 bufferable regions which will be setup in the PMA.
-> > +
-> > +  andestech,inst-prefetch:
-> > +    description: Instruction prefetch depth
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [ 0, 1, 2, 3 ]
-> > +
-> > +  andestech,data-prefetch:
-> > +    description: Data prefetch depth
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [ 0, 1, 2, 3 ]
->
-> According to Section 8.1.2 ("L2-Cache Prefetch"), this should be
-> [ 0, 2, 4, 8 ].
->
-I was directly fetching the value, but as you pointed out I'll switch
-to the request count and convert the value accordingly in the driver.
-
-> > +  andestech,tag-ram-ctl:
-> > +    description: Tag RAM output cycle. First tuple indicates output cycle and the
-> > +      second tuple indicates setup cycle.
->
-> Nit: to me it sounds more logical to have the setup cycle first.
-> See also the order in the comment in the driver code:
->
->      /* tag RAM and data RAM setup and output cycle */
->
-> > +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> > +    items:
-> > +      - minimum: 0
-> > +        maximum: 2
-> > +      - minimum: 0
-> > +        maximum: 2
-> > +
-> > +  andestech,data-ram-ctl:
-> > +    description: Data RAM output cycle. First tuple indicates output cycle and the
-> > +      second tuple indicates setup cycle.
->
-> Likewise.
->
-> > +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> > +    items:
-> > +      - minimum: 0
-> > +        maximum: 2
-> > +      - minimum: 0
-> > +        maximum: 2
->
-> Do we really need these andestech-specific properties?
-> If yes, how much (if any) of this do we want to be handled by the boot
-> loader, and how much (if any) by Linux?
-> If Linux is responsible, we might have to boot with L2 disabled, right?
->
-> For ARM Cortex A15/A7, we also have arm,{data,tag}-latency properties
-> defined, but no DTS specifies them (my patches to add them on R-Car
-> Gen2 were rejected).  Note that this is different for e.g. older PL310.
->
-OK, I think we can get rid of the below properties completely from
-here and have them configured earlier (ie in u-boot).
-
-       -   andestech,inst-prefetch
-       -   andestech,data-prefetch
-       -   andestech,tag-ram-ctl
-       -   andestech,data-ram-ctl
-
-Cheers,
-Prabhakar
+-- 
+Kees Cook
