@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86AF60D56A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E5C60D56C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbiJYUSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 16:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S232830AbiJYUSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 16:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232782AbiJYUSH (ORCPT
+        with ESMTP id S232806AbiJYUS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 16:18:07 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F699D6B9D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:18:06 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id pa16-20020a17090b265000b0020a71040b4cso4876217pjb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:18:06 -0700 (PDT)
+        Tue, 25 Oct 2022 16:18:28 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D748FE924
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:18:27 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-36fde8f2cdcso4356057b3.23
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:18:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C7CkfUfWzwXgtTSIoah0XnkQ0qFYc1jCCWhpHDWDR/w=;
-        b=fJTsmos5rey7JYMoKY6ndFZ4d6icJ82KMqv/nHDL04N6WZkkkMtVyQQ1nqF0Y0KtUH
-         OfISz2ZVCDmkeGuYQVLesYBbEDIWR5JRL6NrcGUZkIZQpqDWZwDfON/75kyD/V2UU39Z
-         t30JBhaaeGTXXf92GzykGiILyMOVl+eFiBMbOZObKdlDwhl5cmrAPv3agCtXNF8Qd1w5
-         s7zVfdQ1sV8EMuKTHonj2b3YRWqJdyV87VQ7aMYGrzsb15Rrc37qg92PcxIbOcfbZOfW
-         iGodEWSW391ayu/mPqRU18EFXQyWnbHBJnOiXk0IkkcF8Sz+FDJKjzWR05UFg1cnwbLX
-         n17w==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cjSL7d6TtpGHmS+/EyDxUUIq3/+lnTJkqEF2MfLcH/s=;
+        b=aIaYbfghFSe8N4yXxxFNzUL+xWwNokvsoELgDNAQMUXgY/g1agaV1eCR6JZ4QSiJ2c
+         fiiQlwjHjzRb+gzyNHBxTE/KPhIbMP4RdRDQr2/eJgcWhRfapPqAT4I9CbZpSPjDnR1J
+         AnG/VnL9LP7PGvN43LXn1Wj8/dROhHSoYd8q7UqojhwMbhFth3f7sFKeQQhPEzVZpBMe
+         iPh8g95LvHpDVqXboFbg20lUGQPnj1yEEAt1s4hyWU5G+g/NBJFjJmvM/CoSkd2sQEc6
+         PbQOLgCQyRq9YoOzSUExGa7cFkZuZKh1yOe1aO3lHgiD03QcwnqqIHMSZXJuXP4t4DNi
+         7PTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C7CkfUfWzwXgtTSIoah0XnkQ0qFYc1jCCWhpHDWDR/w=;
-        b=e7G8+fgfcDDM6OrA1KoL63CwdwjkHAmWBNyyijuj+l4TYjk/iLnrD0n1VL6axuJOga
-         zu5nV3G3f6jRH7kfY52vxerHHZS/WRdju4kNgXwrRp1gaV+glYwQTPvWV9P7UN4xSV5Y
-         IHP9Xi2JYojpoN+dU4CqxfSgvwX34k/to/0q9oCYeRkpRk0+XxBX1EOaZDCD6LZEXNgw
-         ydv/tpvsfgTxWAMdqKqzGtyYste5DWRl4HMmG2alKFi4S61mal1g8gwgjN8mG8pZiuQs
-         lTsf3YBS4j561GmUqIAEh8Iw5kR47CtqeIi4jVk4fRnffPk23l0RHD8WYu85f6U94GlR
-         aYkA==
-X-Gm-Message-State: ACrzQf05ZfqcdcjSCDY/DqOkgHsZYLEIjW1b7fhiHggEgr2S6a5mM9cs
-        n8BlTBZdgKer4puXOKviUt9NGqxjkuh+agUXIfk=
-X-Google-Smtp-Source: AMsMyM5gXj+rNt9GYNmjhHqxrpnXLvG7Pt3sQ6ETQMq57QUvneQuGAvf1bWado5LSH5olUhXQ0TZBgxb1sQAOHrRrz0=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cjSL7d6TtpGHmS+/EyDxUUIq3/+lnTJkqEF2MfLcH/s=;
+        b=xRVf5dkZHv4g9lRGwBoldDN6qkjwcD3RkoMuJnCzHwjUDsrJamNRkyIptdAk0LpjSq
+         Z13DlneynbbNISjrfHsu6wyhorlvfJpfds+q0awogOHaHoIrFyrryfuVkOZ0W7JHsCj4
+         c4Tr5/FUxR+4Cna1LqMIQKZbg8IyoJTwmOWt1M0FED5glVr9MAzyufKAJuvdhHRGbthe
+         PTOKgrC7TQLxW4ca0FcvS8gJEcar1nVKKVHnXJBw3yWD9Yq9Do4r++lKagshwX1Zqm9H
+         TmwbIrCYRybhW3sN08vyQ9m8ZltouoIA9G062+woVe4Vg4dhy5aPbKt1I9oz6/AgkmEX
+         QDRQ==
+X-Gm-Message-State: ACrzQf1M79beJqzUMYIbscCDzMptcmnH1fkucjLdeuBXIIdLGnkss41U
+        S+k71u6qXX6x9outhxXNWCzBbLxLYShZ5oOeH70=
+X-Google-Smtp-Source: AMsMyM7j92hs0G7IiS9a+MWShNvsGrduR8iIkc9hL78fR0z5tR6biWraKtiR41Njoab5/bqWIhccvlPPZF9XR9BemBQ=
 X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
- (user=willmcvicker job=sendgmr) by 2002:a05:6a00:acb:b0:555:ac02:433e with
- SMTP id c11-20020a056a000acb00b00555ac02433emr40750199pfl.3.1666729086159;
- Tue, 25 Oct 2022 13:18:06 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 13:17:43 -0700
+ (user=willmcvicker job=sendgmr) by 2002:a25:3757:0:b0:6b0:3ec1:3db3 with SMTP
+ id e84-20020a253757000000b006b03ec13db3mr0yba.203.1666729105790; Tue, 25 Oct
+ 2022 13:18:25 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 13:17:44 -0700
+In-Reply-To: <20221025201744.1155260-1-willmcvicker@google.com>
 Mime-Version: 1.0
+References: <20221025201744.1155260-1-willmcvicker@google.com>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-Message-ID: <20221025201744.1155260-1-willmcvicker@google.com>
-Subject: [PATCH v1] kbuild: Use '-f' instead of '--file=' for grep
+Message-ID: <20221025201744.1155260-2-willmcvicker@google.com>
+Subject: [PATCH v1] kbuild: fix typo in modpost
 From:   Will McVicker <willmcvicker@google.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
@@ -68,34 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The posix grep utility doesn't support the longer '--file=pattern_file'
-command line option which was introduced in commit ce697ccee1a8
-("kbuild: remove head-y syntax"). Let's update Makefile to use '-f
-pattern_file' to fix the compiling error:
-
-  grep: Unknown option 'file=.../scripts/head-object-list.txt'
-  (see "grep --help")
+Commit f73edc8951b2 ("kbuild: unify two modpost invocations") introduced
+a typo (moudle.symvers-if-present) which results in the kernel's
+Module.symvers to not be included as a prerequisite for
+$(KBUILD_EXTMOD)/Module.symvers. Fix the typo to restore the intended
+functionality.
 
 Signed-off-by: Will McVicker <willmcvicker@google.com>
 ---
- Makefile | 2 +-
+ scripts/Makefile.modpost | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 base-commit: 1a2dcbdde82e3a5f1db9b2f4c48aa1aeba534fb2
 
-diff --git a/Makefile b/Makefile
-index d148a55bfd0f..e90bb2b38607 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1218,7 +1218,7 @@ quiet_cmd_ar_vmlinux.a = AR      $@
-       cmd_ar_vmlinux.a = \
- 	rm -f $@; \
- 	$(AR) cDPrST $@ $(KBUILD_VMLINUX_OBJS); \
--	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F --file=$(srctree)/scripts/head-object-list.txt)
-+	$(AR) mPiT $$($(AR) t $@ | head -n1) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
+diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+index 8489a3402eb8..e41dee64d429 100644
+--- a/scripts/Makefile.modpost
++++ b/scripts/Makefile.modpost
+@@ -122,7 +122,7 @@ quiet_cmd_modpost = MODPOST $@
+ 	sed 's/ko$$/o/' $(or $(modorder-if-needed), /dev/null) | $(MODPOST) $(modpost-args) -T - $(vmlinux.o-if-present)
  
- targets += vmlinux.a
- vmlinux.a: $(KBUILD_VMLINUX_OBJS) scripts/head-object-list.txt autoksyms_recursive FORCE
+ targets += $(output-symdump)
+-$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(moudle.symvers-if-present) $(MODPOST) FORCE
++$(output-symdump): $(modorder-if-needed) $(vmlinux.o-if-present) $(module.symvers-if-present) $(MODPOST) FORCE
+ 	$(call if_changed,modpost)
+ 
+ __modpost: $(output-symdump)
 -- 
 2.38.0.135.g90850a2211-goog
 
