@@ -2,102 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AE860CCFB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:07:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DAF60CCFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiJYNHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        id S229629AbiJYNHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232749AbiJYNGb (ORCPT
+        with ESMTP id S232732AbiJYNHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:06:31 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2081.outbound.protection.outlook.com [40.107.94.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DD05FEA;
-        Tue, 25 Oct 2022 06:06:08 -0700 (PDT)
+        Tue, 25 Oct 2022 09:07:13 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259CA26AFA;
+        Tue, 25 Oct 2022 06:07:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g/AH34G2iqw0w9vODejG5crij3+SEXqFxpRMnR/j9J2MapvmqO8K1aJfFnQvkRiHCUkUV41InVVVYaZ5aqx5nnVNYbIs5rrTZaiGJvhLao1k/FM5Grkn+2e4shgJKkgo+TWCwduC+xIWAJmpaDIyApgv5Q5XMU0zDVgUf3fnM54nhZ080u5nVhUPPKQIRKgvYW5vUPbztZFEFnE+phGi+MhInabP4IB7M46moxB6/2ier1IwHvwjyxtVmy+2CAT6MjDX2UjTwap26orApNL9+ejyI7o/F7Ih/5XgLXYqBD6W2FNOMaQkBmTmhVszUrGqhuF14W/FAdkxqMiCpAcxcA==
+ b=juIQ+3YUVxwJ92wr7EA/RA6ifXZjs/o+ZS9knbZtalx8usupwYZzPgu6TaVva0DZIeDuBdKhdACE0EeIYpDfxQHOrMwI0Ey/U08nC3lyXczHfl8AnIDkU3O0IcXgzBKD+APZgMyhii36FWy3+OtrizZL1Mw/E4L7hW9gqUfHHWZKPh9a59EpiMchGZYrgZDl1l1xwyuQndodD/xwPyax2meURMW6KLsERlFuPt+ufVjr61Wsr9JR1e56poyCoktiZj9M6au7MONqAEGKnYi0TYXOhk16Lzr06vrbIz0ZZQS4W9/8Orz5U0h6eylSlf7AE7pMZOeL+h0KwV63ZZJBRg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jNbwIxNZBjvht3rwEQEUe+MsnVRL3Y75Mm4mCkT1HxA=;
- b=EaqVG+DS9MzuWgNoZeli0ddENP2/Qx31TcfpFsxGTYzJLYg6yURxNVWNqTUWYJPiMVnF2EdKQo5S9n/5at0G8Kt6WMqgDKOnxYgIEXqAcZ1JiSFC5x9TsoDg/BMESWfnbjBs/dx12RFS7rxAptx1WMJMBhpOx2Usx5Yo/HmPCrymRbK5g00yoyrjzOWHLrwVNwPQStCWcb2UUte70XZ6yXssGEz7NsNW6gqLtRB/hi9RmngDTZEPx0+tvAumkcnBatwx/TjwAnawKDihJZatNhnG0limQMsPDsguSbV2Okm4D7o7nX7jDVQayrwhN6+lsSeI3LI6BkyHJJUPKIgpEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linaro.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
+ bh=IeZEfp6i9AIFm3Et71jHn9SScpNXSRc09vv1TiS4fJs=;
+ b=og/lnRFmC1L87L7L3EE3t+cWqHUaepWkF32YwRQCI5vhRbiKn3qYuSbhE/2Y7kbBv3vSjuHSPGpQxdDdtaLaiRPoleKB8OhQfOOeu2ipFAndDD5rD4I8Fk4ojpi++fIjXfhuUn5DxgFW3BPKrmT010fUOEzbsYzSCZsVon1Koy0Pmh4gwpM5ZjqLspNXLvNQPWupR/JjadCjnyQ+W5dulO+ET8rpXD1hXVzTCr8xrSi2Z7HzS4bY+qNTTXjqQTDG4N9YYHVMYdWWJh+d0by7h9xH7ufXl6sxqvAjwJxLLxTDB5T2tsXs/EdihcjWm8/h8ixC5+ULcyqTyR8FCarTFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jNbwIxNZBjvht3rwEQEUe+MsnVRL3Y75Mm4mCkT1HxA=;
- b=sfBECLwENAXGFhNKVS4R10zvNIF+lmoDtcheeFiolkVyPp09aJoDYPRXqf1lX7i0sJADe2+Vq6R9PO79Tq6cxg59Gn0csOu7+T1CQSppg5XZH/k1dD9NDfX8lh/dq6PbSVDHeCZWC23gxRIfa0BQdThl8rSlqQ//21pyONf50yQ=
-Received: from BN0PR04CA0096.namprd04.prod.outlook.com (2603:10b6:408:ec::11)
- by CH0PR12MB5332.namprd12.prod.outlook.com (2603:10b6:610:d7::24) with
+ bh=IeZEfp6i9AIFm3Et71jHn9SScpNXSRc09vv1TiS4fJs=;
+ b=pDT6DoxW8VWuWtH97ht31nlHfoEbGNNWSggoZA0y5iC9kijzbCmDboNnE9hUXE73PBtVw3Uxd5FermDnbrvqEZqFYNbSr8I2TBiVtt8xjC5XVniyMKVwN4J1yd5CBYCVUS/C+AzZfDsfTeeD0MAQJ7vQnhUQ7UXgMGZQ3sLiVWg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by PH0PR12MB5484.namprd12.prod.outlook.com (2603:10b6:510:eb::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Tue, 25 Oct
- 2022 13:06:04 +0000
-Received: from BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:ec:cafe::7d) by BN0PR04CA0096.outlook.office365.com
- (2603:10b6:408:ec::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.27 via Frontend
- Transport; Tue, 25 Oct 2022 13:06:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT093.mail.protection.outlook.com (10.13.177.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Tue, 25 Oct 2022 13:06:04 +0000
-Received: from [10.254.241.52] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
- 2022 08:05:59 -0500
-Message-ID: <61eeb4fb-b746-7b51-df7c-ddd9c709e200@amd.com>
-Date:   Tue, 25 Oct 2022 15:05:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v10 5/6] firmware: xilinx: Add RPU configuration APIs
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.26; Tue, 25 Oct
+ 2022 13:07:04 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::fa1e:a29e:2f2c:43d1]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::fa1e:a29e:2f2c:43d1%9]) with mapi id 15.20.5746.028; Tue, 25 Oct 2022
+ 13:07:04 +0000
+Message-ID: <d577887d-b86b-82be-8081-f7bebacd8067@amd.com>
+Date:   Tue, 25 Oct 2022 18:36:46 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: Perf: BUG: kernel NULL pointer dereference, address:
+ 0000000000000198
 Content-Language: en-US
-To:     Tanmay Shah <tanmay.shah@amd.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Ben Levinsky" <ben.levinsky@amd.com>
-References: <20221011212501.2661003-1-tanmay.shah@amd.com>
- <20221011212501.2661003-6-tanmay.shah@amd.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20221011212501.2661003-6-tanmay.shah@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org
+References: <CA+G9fYtOP-spGS7gYyBB-8wpUDiKxd5e_Nk05J9gzWR_DLBeFA@mail.gmail.com>
+ <4429582f-155a-04d2-d139-a834bb325612@amd.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <4429582f-155a-04d2-d139-a834bb325612@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: PN2PR01CA0025.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::30) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT093:EE_|CH0PR12MB5332:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f066a10-62bf-4d3b-4e96-08dab689ac6d
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|PH0PR12MB5484:EE_
+X-MS-Office365-Filtering-Correlation-Id: 87945682-e052-45a2-84b9-08dab689cffd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 01gAtTko3XL2jMR1uuScZ7C0a/WoRvNOaGS4ex7YBbZFyl0tBDLhJzAAKk11zj1h/zeq5q1A1QODjaUFW2z+AjuOA4XKgQBWvJK3yogayTWSZ7i4fSbYxkftTBR84U9gg0G5z7VN37vwXPVQ8KFebA2Pkv/870uWl/qM5kHBtdtuiPrsy0Cz0w3LyIZUYnQcaNM99uVbcZwQkxdPzxqcjFesEi30th6YGcXa9F6IijeSeaibnnxJgsz4748G3e51RCqu1hTbR8tnxDFu4s9o7hW2w7HUv2ViWuNMzTdAYrO/m1Fc6DC2J3iFRNMkIvCGF39jSYMPB/PDmRvEW39EUzylMehRHv5XGLIoQEoLk5sx/0M7WVYJ1zQQ+XFXIPle8lj4w2ysr3Mrcch82TIuAnuCKpV72hV83HLxpKsrdp5Z01iDTOl7e/OmZeNuHzpaVVnEZfyZYTevLWGiE1bnwS4FIeR+cP4oWS9OX0bX6N+/fXPWtSL+cDXRxehJe1HkEWUValax6e922jPFYCDprNzf9593RtXIQNFxtsxOmhGyeN8RBpHfGbZr33a/yjIvRUVPLQuXw0CJomBfIOnNv7XudxJcDAegbhzU+JKBVrr7NE6QAOkUTIRBnEUAKisLAgutiyzbSO+XDB7ouE4aGorQ44pi7IVl6N+K2xeNT94jcLTx753Kkw93heNzf8a5un3zPSx/UaRV6brYdA0Sn3/z5OLKC2KFYWysZvJIyyl8un2NRQU1+/vnVWJ0Y330SCZzMLnUiF6YGTcIYMF08RPaIdTNCHy/eeXeCx3iy+0207lp0fwFQoDuRjXbHwmsRxZLplYfok6PvXlbURXjaw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199015)(36840700001)(46966006)(40470700004)(40460700003)(186003)(336012)(47076005)(53546011)(426003)(44832011)(36860700001)(2906002)(83380400001)(26005)(5660300002)(16526019)(40480700001)(2616005)(110136005)(70206006)(16576012)(478600001)(8676002)(82310400005)(70586007)(4326008)(41300700001)(8936002)(316002)(54906003)(31686004)(81166007)(31696002)(36756003)(86362001)(356005)(82740400003)(43740500002)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: X/xWd/E/4J6nS/JqoRTVN2tBLdI4XdL8DDFSFg2pERQJD/a5CxLQFj9bqrADq7ZT4CAF6oCcHzDmLYEgEavFDH9e6HpcxYQWTSuI7mbAdtErasw520T8mX/+nwt7btL0UTCqKud8KzKQ5SYFOEBrMgvWW4vEG10SwlI+h64PdgiHrAkOQGEbjXXJeIXDr9JjQAOhprCZ3ZtESkFIxXSiZ/6DvFdEQ2uedhp9a6hUVo53ma/W5JLaWjVcu9tH4ue9ThqWkfDAzQLuij43eGSRZ7EJMV6I26M88jQ3LGgNhhvQsvx5xtFXKy7/x0KZak6Z3RvrfnzbnNg2d5P3MUeq5LDYQz9PHE5M9OmY79tXDQ8y5v3T7/KLkgKlosIPyAa3+94odCEH9SrXMgwfGFQtlNTzp46FjOH1voGnMExggFhx/XqUXScNRB+Mr6wHV/CIejvLdM7F1NC4iRVXB/ueNDCv17tZIOno7UQzmWmP70EJ/DnJZ7uvum49jGILXoVFXlbgUxT9GPuMdczs2lDHHxh0sZzpQgTtJvQebP/95y97MeqZL2GDFVqkgu/0SDq1zoU8iLznYEjeOmihsnOb0CdIEUU9W83bbiA6i4bsjgZrH4i8H1ZyM5Tyl+4y+fvGKKftl6XgpXQT7NpSLjVGih+pxXGTs46czozi2YwfxaZLxbvVkl/tkg0wUVS8GwcbsNthuEHw3FcCQDZ8DXUpZQDGrCGxTg1mvD5lEAH5zHgaT9dWwwht7tP7cff1PXPtn03ZAp2kBHEWYr4VAJ+zIFowc661AjHhJtVFk+l1bpZtumU3NuaayGDItQyKR+DKfO2DawS1kseMRazQGbplSA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(136003)(376002)(451199015)(6486002)(31686004)(6916009)(6512007)(316002)(53546011)(26005)(36756003)(54906003)(44832011)(4744005)(66556008)(4326008)(41300700001)(86362001)(66946007)(66476007)(8676002)(8936002)(2906002)(31696002)(5660300002)(6666004)(478600001)(83380400001)(966005)(6506007)(38100700002)(186003)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TWo3OXJaVXBrVGdHTFAzcG56d0syTGQ3Q1p4cktmbE1MYm9qbkNxVkpudEU2?=
+ =?utf-8?B?LzFwbmRoMEtKWjI3em03WlJ3UklnUEliSE5ZMlM0YUVjNVhCRC9XQVo3Qmtu?=
+ =?utf-8?B?cHg5cVFtMy9lNEZocmgxK2tSaFQvS0ViblIwNVdPcDF3OVdNck94YmVOZjNG?=
+ =?utf-8?B?am53VmZtUWF0VStyZXpkZXEzZTBSUU5uTjd5WVVIeEJWNUpaVitlN0NjY1lX?=
+ =?utf-8?B?ZlRoMHY1VG9BcnMrYVI0OEFhWWhoMXhSUGd0UXk2QWZOZURsU0YzRmZVTW5t?=
+ =?utf-8?B?WHp2WU9nb2J5MSsrZ3R0cTFTanV3OHhKcUZIdHVoRmlNU2U0c2NUMUtUMU1j?=
+ =?utf-8?B?Q3ZkMEZPcWJMNlYxL3JrR1lnSDhOUTdOeUZuZ2IyQ3IwVDhnSDJjYmkxaFhv?=
+ =?utf-8?B?R2ZSeUUyZXhIMFVqSFY0aUZyQy9Wa1l6QnpyV2VOLzFBaytTRndsOUpoVkZn?=
+ =?utf-8?B?VndpL0N3alhpNWQvSTBHT3psZmtQUndQNElpWGlvMThZQWg4UHpUNndKMzR2?=
+ =?utf-8?B?b0hsWlhzZ2ZQNVJDTjJPMDE5ZmV0cTAyRG9PcUswSHpxalNjSFNnUlU1SmRv?=
+ =?utf-8?B?SlFIbGlFMXFta2JKcU5KRkJPYXJxTXJHbjdCcDVzRFJra2VLcWVtT210amNF?=
+ =?utf-8?B?SHhseTZLeWRacVpmMjd0YkJFUEJ3dkJETFc2K0lTcHkyM3UxOVZVMFFrbURT?=
+ =?utf-8?B?VGFBSkU4a0N0MkF6T1VaMVJIWGVRaHd2eEZFZWNmd3Bqa1hPRlZPVU9mNHpT?=
+ =?utf-8?B?RUNVOWZoZW9VM0dIc3dxRnV6MTIxTHRHTmpKeEFIby9QYXdqWVZHM1h4TGpY?=
+ =?utf-8?B?Mk1VRUUxSzFMRTFoRXlIZjlmVTMxbldHZTZrazNoOGVnRUxwSkpqNFhYNWI4?=
+ =?utf-8?B?RHgyRTRkSG5qMXBObERqZUMvdmFzVmxwUGRkYkM3RGRMbUJOWG42c2ZCd3Uz?=
+ =?utf-8?B?WGJueHhOUSt1WkZod0IrZUN2ZnVwYXJYaEhLQWJKa3dERzdLT3EzWGlWNnJ4?=
+ =?utf-8?B?T0FjVVRoWjRkNDkrOWNnMTBrTU5WMkp3a0NxR1pKMENXYzhiMWVHOG9ocEdh?=
+ =?utf-8?B?bm9tYVBTSXZUV3BJZE9NdFlWeDVnQlRXY2Q2RmdZV2lOdm9zSytqeWhUSzU2?=
+ =?utf-8?B?SXp1ejRvbE1tTktKNmhxNmxoWlpyVUFVMTZmcG9YRTZhRTZrT0lnd0d4MHAz?=
+ =?utf-8?B?dXprcWxQR3VuRnUvYzNBcisxTnVGUVFEd1laT0RqM3NQSXZZSVB6ekU2WENS?=
+ =?utf-8?B?WDZPU01QcDFiMDNYcUZKZS9sUTBMdHM1V3ljUGtnZTFpampWV3h2akpNa0lG?=
+ =?utf-8?B?VXlDa2o1YlZlQnJqVkdXdExxYlFLcFJYZFplTENVdDZTTlB5eDBYM3craTB1?=
+ =?utf-8?B?dVJhTjdoRVcvMm90UVpuRXB2YjZwMEc4bGlMVDQ1NVZ4TWZLdmxWSHlsZmtT?=
+ =?utf-8?B?Z1ZmTnBmSjFodDZnRnY1RkhXbTBkd044dnNuRGJiNk15WVhjZ3dkWXF4aWQ2?=
+ =?utf-8?B?L0tqbDZkNFNiWlJmYjV1WEdMVk1kZFM2NkFzRGc3bG9XUFRyK3hUdWVLdU55?=
+ =?utf-8?B?cmlrbkdwRUhpUXI5RDAwRVVUelEzUTl5REloeUFGZ2xiV1FmVzk3SXdQREpt?=
+ =?utf-8?B?eVJycE5rQmt6bEd5dWMzNkl3L3d0dTZJZTFFemdKRlJ2Z1NWWXorV3ZqanVz?=
+ =?utf-8?B?QzNhMVhJVEs3TzZSSTNsNDY4MEhibkoxczBaWVppY3VwZExRZEVtbTd3U0k1?=
+ =?utf-8?B?TXZkREtXa01uTE9lbnU3Y2dyNEZUUmI3RkttY1Q1T0pPL2pldjFBS0hxaDQ2?=
+ =?utf-8?B?d2twYzlud0tZVi95RlRUdkVUMklKM1JQT0tNeDJxRDRiN0w1NERSWWlrQTh2?=
+ =?utf-8?B?WU1rWmpIditvaTN2UTVaNUsxZGNrY2NONW5sZXJRaEFUVTRoTUNzQ2tHdE9x?=
+ =?utf-8?B?K2kxY0kzei9hSmp4bzVEMHBuNGtTSUd6RXpXS2hPTDhibHQwYzBad2UwSVpZ?=
+ =?utf-8?B?Z0dNRGRRWnhLMDg2R0EzaUNxdDdKQnRTZnluT1hEY2Z3QUpOTXo5T3pFYjdZ?=
+ =?utf-8?B?c2JyYlJLRENSUlMyVFV6L2g4c0E4b1hQbzhUc2ZCS2E1RndaL3F0OFE2Nmxq?=
+ =?utf-8?Q?Slw3ZOmj0t+4djgLTvWLd4mHg?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 13:06:04.5497
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87945682-e052-45a2-84b9-08dab689cffd
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 13:07:04.5913
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f066a10-62bf-4d3b-4e96-08dab689ac6d
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT093.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5332
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 40J6DNhyxrRl62xJuNo+zUlzXOlhUzPNdUdDvd+blRt0oQJeHLPjUYUab0b/F9chbJjn/5ox74+mEIVLAooa+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5484
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
@@ -108,161 +131,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 25-Oct-22 9:59 AM, Ravi Bangoria wrote:
+> On 20-Oct-22 12:24 PM, Naresh Kamboju wrote:
+>> Following kernel BUG noticed while running perf testing on qemu-x86-64.
+> 
+> Thanks Naresh. I'm aware of the crash[1] but haven't got a chance to
+> root cause it. Let me try to spend some time on it.
 
+I tried to mimic https://lkft.validation.linaro.org/scheduler/job/5708609.
+However, I don't see a way to download lava-guest.qcow2. So I just used
+rootfs and kernel:
 
-On 10/11/22 23:25, Tanmay Shah wrote:
-> From: Ben Levinsky <ben.levinsky@amd.com>
-> 
-> This patch adds APIs to access to configure RPU and its
-> processor-specific memory.
-> 
-> That is query the run-time mode of RPU as either split or lockstep as well
-> as API to set this mode. In addition add APIs to access configuration of
-> the RPUs' tightly coupled memory (TCM).
-> 
-> Signed-off-by: Ben Levinsky <ben.levinsky@amd.com>
-> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
-> ---
-> 
-> Changes in v10:
->    - None
-> 
-> Changes in v9:
->    - None
-> 
-> Changes in v8:
->    - None
-> 
-> Changes in v7:
->    - None
-> 
-> Changes in v6:
->    - None
-> 
-> Changes in v5:
->    - None
-> 
-> Changes in v4:
->    - None
-> 
-> Changes in v3:
->    - Add missing function argument documentation
-> 
->   drivers/firmware/xilinx/zynqmp.c     | 62 ++++++++++++++++++++++++++++
->   include/linux/firmware/xlnx-zynqmp.h | 18 ++++++++
->   2 files changed, 80 insertions(+)
-> 
-> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-> index edb13167170f..eba359e66414 100644
-> --- a/drivers/firmware/xilinx/zynqmp.c
-> +++ b/drivers/firmware/xilinx/zynqmp.c
-> @@ -1159,6 +1159,68 @@ int zynqmp_pm_release_node(const u32 node)
->   }
->   EXPORT_SYMBOL_GPL(zynqmp_pm_release_node);
->   
-> +/**
-> + * zynqmp_pm_get_rpu_mode() - Get RPU mode
-> + * @node_id:	Node ID of the device
-> + * @rpu_mode:	return by reference value
-> + *		either split or lockstep
-> + *
-> + * Return:	return 0 on success or error+reason.
-> + *		if success, then  rpu_mode will be set
-> + *		to current rpu mode.
-> + */
-> +int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mode)
-> +{
-> +	u32 ret_payload[PAYLOAD_ARG_CNT];
-> +	int ret;
-> +
-> +	ret = zynqmp_pm_invoke_fn(PM_IOCTL, node_id,
-> +				  IOCTL_GET_RPU_OPER_MODE, 0, 0, ret_payload);
-> +
-> +	/* only set rpu_mode if no error */
-> +	if (ret == XST_PM_SUCCESS)
-> +		*rpu_mode = ret_payload[0];
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_get_rpu_mode);
-> +
-> +/**
-> + * zynqmp_pm_set_rpu_mode() - Set RPU mode
-> + * @node_id:	Node ID of the device
-> + * @rpu_mode:	Argument 1 to requested IOCTL call. either split or lockstep
-> + *
-> + *		This function is used to set RPU mode to split or
-> + *		lockstep
-> + *
-> + * Return:	Returns status, either success or error+reason
-> + */
-> +int zynqmp_pm_set_rpu_mode(u32 node_id, enum rpu_oper_mode rpu_mode)
-> +{
-> +	return zynqmp_pm_invoke_fn(PM_IOCTL, node_id,
-> +				   IOCTL_SET_RPU_OPER_MODE, (u32)rpu_mode,
-> +				   0, NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_set_rpu_mode);
-> +
-> +/**
-> + * zynqmp_pm_set_tcm_config - configure TCM
-> + * @node_id:	Firmware specific TCM subsystem ID
-> + * @tcm_mode:	Argument 1 to requested IOCTL call
-> + *              either PM_RPU_TCM_COMB or PM_RPU_TCM_SPLIT
-> + *
-> + * This function is used to set RPU mode to split or combined
-> + *
-> + * Return: status: 0 for success, else failure
-> + */
-> +int zynqmp_pm_set_tcm_config(u32 node_id, enum rpu_tcm_comb tcm_mode)
-> +{
-> +	return zynqmp_pm_invoke_fn(PM_IOCTL, node_id,
-> +				   IOCTL_TCM_COMB_CONFIG, (u32)tcm_mode, 0,
-> +				   NULL);
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_set_tcm_config);
-> +
->   /**
->    * zynqmp_pm_force_pwrdwn - PM call to request for another PU or subsystem to
->    *             be powered down forcefully
-> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-> index d52f8413b892..83c69c968e32 100644
-> --- a/include/linux/firmware/xlnx-zynqmp.h
-> +++ b/include/linux/firmware/xlnx-zynqmp.h
-> @@ -503,6 +503,9 @@ int zynqmp_pm_request_wake(const u32 node,
->   			   const bool set_addr,
->   			   const u64 address,
->   			   const enum zynqmp_pm_request_ack ack);
-> +int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mode);
-> +int zynqmp_pm_set_rpu_mode(u32 node_id, u32 arg1);
-> +int zynqmp_pm_set_tcm_config(u32 node_id, u32 arg1);
->   #else
->   static inline int zynqmp_pm_get_api_version(u32 *version)
->   {
-> @@ -787,6 +790,21 @@ static inline int zynqmp_pm_request_wake(const u32 node,
->   {
->   	return -ENODEV;
->   }
-> +
-> +static inline int zynqmp_pm_get_rpu_mode(u32 node_id, enum rpu_oper_mode *rpu_mode)
-> +{
-> +	return -ENODEV;
-> +}
-> +
-> +static inline int zynqmp_pm_set_rpu_mode(u32 node_id, u32 arg1)
-> +{
-> +	return -ENODEV;
-> +}
-> +
-> +static inline int zynqmp_pm_set_tcm_config(u32 node_id, u32 arg1)
-> +{
-> +	return -ENODEV;
-> +}
->   #endif
->   
->   #endif /* __FIRMWARE_ZYNQMP_H__ */
+  /usr/bin/qemu-system-x86_64 -cpu host -enable-kvm -nographic -net nic,model=virtio,macaddr=DE:AD:BE:EF:66:20 -net user -m 1024 -monitor none -kernel bzImage --append "root=/dev/sda  rootwait console=ttyS0,115200" -hda lkft-console-image-intel-corei7-64-20221019172733.rootfs.ext4 -m 4096 -smp 4 -nographic
 
+And I ran perf test inside the guest, which ran fine.
 
-Acked-by: Michal Simek <michal.simek@amd.com>
+Would it be possible for you to redo the experiment and see if you are able
+to reproduce it consistently.
 
-M
+Thanks,
+Ravi
