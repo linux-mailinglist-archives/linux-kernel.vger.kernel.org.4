@@ -2,156 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B434560CCE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFA160CCDE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbiJYNDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S231248AbiJYNDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232600AbiJYNCX (ORCPT
+        with ESMTP id S232701AbiJYNCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:02:23 -0400
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 757FBA8356;
-        Tue, 25 Oct 2022 06:00:45 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 15:00:40 +0200
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Michael Lilja <michael.lilja@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Subject: Re: [PATCH] Periodically flow expire from flow offload tables
-Message-ID: <Y1fd+DEPZ8xM2x5B@salvia>
-References: <20221023171658.69761-1-michael.lilja@gmail.com>
- <Y1fC5K0EalIYuB7Y@salvia>
- <381FF5B6-4FEF-45E9-92D6-6FE927A5CC2D@gmail.com>
+        Tue, 25 Oct 2022 09:02:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEA7AD990
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:00:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 528B66191A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:00:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C03C433C1;
+        Tue, 25 Oct 2022 13:00:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666702845;
+        bh=KhfkP0xR84/dzf2NvhTWcPkuAMJo1cX8z0qcwE+FPKs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CInZzUJizUhh6Avxm6bdTnRT1902/4MgQKPtPaQkFEVAWQgKlhJ7CX16KSQZEWd/c
+         716wL/jn2mlnjrg2Wqoc0x4JOn3C7vV7tl5ia/8bqJI9Y2OlNe55JwwH+PeRiPNLUD
+         4xmadpbs9RprOppjDcrg0Zrju9h200jUDUQ9vPAU=
+Date:   Tue, 25 Oct 2022 15:00:43 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kai Ye <yekai13@huawei.com>
+Cc:     linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, zhangfei.gao@linaro.org,
+        wangzhou1@hisilicon.com
+Subject: Re: [PATCH v9 1/3] uacce: supports device isolation feature
+Message-ID: <Y1fd+1CrlCBYCoz0@kroah.com>
+References: <20221025123931.42161-1-yekai13@huawei.com>
+ <20221025123931.42161-2-yekai13@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="1rcC1yEX000eNPzk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <381FF5B6-4FEF-45E9-92D6-6FE927A5CC2D@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221025123931.42161-2-yekai13@huawei.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---1rcC1yEX000eNPzk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-
-Hi,
-
-On Tue, Oct 25, 2022 at 02:36:35PM +0200, Michael Lilja wrote:
-> Hi,
+On Tue, Oct 25, 2022 at 12:39:29PM +0000, Kai Ye wrote:
+> UACCE adds the hardware error isolation API. Users can configure
+> the isolation frequency by this sysfs node. UACCE reports the device
+> isolate state to the user space. If the AER error frequency exceeds
+> the set value in one hour, the device will be isolated.
 > 
-> No problem. Here is a snippet of the rulesets in play. I simplified it because there are a lot of devices and a lot of schedules per device. The ‘mark’ is set by userspace so not all flow types are offloaded, that is controlled by userspace:
+
+You are trying to "reach across" to different types of devices here,
+why?  That feels backwards.  Why isn't the device that needs to use this
+api just create a child class device of this type?
+
+
+
+> Signed-off-by: Kai Ye <yekai13@huawei.com>
+> ---
+>  drivers/misc/uacce/uacce.c | 145 +++++++++++++++++++++++++++++++++++++
+>  include/linux/uacce.h      |  43 ++++++++++-
+>  2 files changed, 187 insertions(+), 1 deletion(-)
 > 
-> - - - - snip start - - - - 
-> table inet fw4 {
-> 	flowtable ft {
-> 	hook ingress priority filter
-> 	devices = { lan1, lan2, wan }
-> 	flags offload
-> }
-> 
->  chain mangle_forward {
-> 	type filter hook forward priority mangle; policy
-> 	meta mark set ct mark
-> 	meta mark 0x00000000/16 queue flags bypass to 0
+> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+> index b70a013139c7..f293fcdcf44f 100644
+> --- a/drivers/misc/uacce/uacce.c
+> +++ b/drivers/misc/uacce/uacce.c
+> @@ -7,10 +7,100 @@
+>  #include <linux/slab.h>
+>  #include <linux/uacce.h>
+>  
+> +#define MAX_ERR_ISOLATE_COUNT	65535
+> +
+>  static struct class *uacce_class;
+>  static dev_t uacce_devt;
+>  static DEFINE_XARRAY_ALLOC(uacce_xa);
+>  
+> +static int cdev_get(struct device *dev, void *data)
+
+That's a very odd function, considering it does not "get" anything.
+
+And it does not work on cdev structures.
+
+> +{
+> +	struct uacce_device *uacce;
+> +	struct device **t_dev = data;
+
+Why are you having to cast this?  Why not make it a real pointer?
+
+> +
+> +	uacce = container_of(dev, struct uacce_device, dev);
+> +	if (uacce->parent == *t_dev) {
+> +		*t_dev = dev;
+> +		return 1;
+
+bool?
+
+And what happened to the reference count here?
+
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * dev_to_uacce - Get structure uacce device from its parent device
+> + * @dev the device
+> + */
+> +struct uacce_device *dev_to_uacce(struct device *dev)
+> +{
+> +	struct device **tdev = &dev;
+> +	int ret;
+> +
+> +	ret = class_for_each_device(uacce_class, NULL, tdev, cdev_get);
+
+Ah, you use it here.
+
+No, sorry, you can not just walk all devices in the tree and assume this
+will work.
+
+Why do you not already know the device already?
+
+> +	if (ret) {
+> +		dev = *tdev;
+> +		return container_of(dev, struct uacce_device, dev);
+> +	}
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(dev_to_uacce);
+
+Where is the reference counting here?
+
+And again, horrible global function name :(
+
+> +
+> +/**
+> + * uacce_hw_err_isolate - Try to set the isolation status of the uacce device
+> + * according to user's configuration of isolation strategy.
+> + * @uacce the uacce device
+> + */
+> +int uacce_hw_err_isolate(struct uacce_device *uacce)
+> +{
+> +	struct uacce_hw_err *err, *tmp, *hw_err;
+> +	struct uacce_err_isolate *isolate_ctx;
+> +	u32 count = 0;
+> +
+> +	if (!uacce)
+> +		return -EINVAL;
+
+How can this happen?
+
+> +
+> +	isolate_ctx = uacce->isolate_ctx;
+> +
+> +#define SECONDS_PER_HOUR	3600
+
+We don't already have this in a header file?
+
+> +
+> +	/* All the hw errs are processed by PF driver */
+> +	if (uacce->is_vf || isolate_ctx->is_isolate ||
+> +		!isolate_ctx->hw_err_isolate_hz)
+> +		return 0;
+> +
+> +	hw_err = kzalloc(sizeof(*hw_err), GFP_KERNEL);
+> +	if (!hw_err)
+> +		return -ENOMEM;
+> +
+> +	hw_err->timestamp = jiffies;
+> +	list_for_each_entry_safe(err, tmp, &isolate_ctx->hw_errs, list) {
+> +		if ((hw_err->timestamp - err->timestamp) / HZ >
+> +		    SECONDS_PER_HOUR) {
+> +			list_del(&err->list);
+> +			kfree(err);
+> +		} else {
+> +			count++;
+> +		}
+> +	}
+> +	list_add(&hw_err->list, &isolate_ctx->hw_errs);
+> +
+> +	if (count >= isolate_ctx->hw_err_isolate_hz)
+> +		isolate_ctx->is_isolate = true;
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(uacce_hw_err_isolate);
+> +
+> +static void uacce_hw_err_destroy(struct uacce_device *uacce)
+> +{
+> +	struct uacce_hw_err *err, *tmp;
+> +
+> +	list_for_each_entry_safe(err, tmp, &uacce->isolate_data.hw_errs, list) {
+> +		list_del(&err->list);
+> +		kfree(err);
+
+No reference counting at all?
+
+> +	}
+> +}
+> +
+>  /*
+>   * If the parent driver or the device disappears, the queue state is invalid and
+>   * ops are not usable anymore.
+> @@ -363,12 +453,59 @@ static ssize_t region_dus_size_show(struct device *dev,
+>  		       uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
 >  }
-> 
-> 
-> chain my_devices_rules {
-> 	ether saddr 96:68:97:a7:e8:a7 jump fw_p0_dev0 comment “Device match”
-> }
-> 
-> chain fw_p0_dev0 {
-> 	meta time >= "2022-10-09 18:46:50" meta time < "2022-10-09 19:16:50" counter packets 0 bytes 0 drop comment "!Schedule OFFLINE override"
-> 	meta day “Tuesday" meta hour >= "06:00" meta hour < "07:00" drop
-> }
-> 
-> chain forward {
-> 	 type filter hook forward priority filter; policy accept;
-> 	jump my_devices_rules
-> }
-> 
-> chain my_forward_offload {
-> 	type filter hook forward priority filter + 1; policy accept;
-> 	meta mark != 0x00000000/16 meta l4proto { tcp, udp } flow add @ft
-> }
-> 
-> chain mangle_postrouting {
-> 	type filter hook postrouting priority mangle; policy accept;
-> 	ct mark set meta mark
-> }
-> - - - - snip end - - - -
-> 
-> The use case is that I have schedules per device to control when
-> they are allowed access to the internet and if the flows are
-> offloaded they will not get dropped once the schedule kicks in.
+>  
+> +static ssize_t isolate_show(struct device *dev,
+> +			    struct device_attribute *attr, char *buf)
+> +{
+> +	struct uacce_device *uacce = to_uacce_device(dev);
+> +	int ret = UACCE_DEV_NORMAL;
+> +
+> +	if (uacce->isolate_ctx->is_isolate)
+> +		ret = UACCE_DEV_ISOLATE;
+> +
+> +	return sysfs_emit(buf, "%d\n", ret);
+> +}
+> +
+> +static ssize_t isolate_strategy_show(struct device *dev,
+> +				     struct device_attribute *attr, char *buf)
+> +{
+> +	struct uacce_device *uacce = to_uacce_device(dev);
+> +
+> +	return sysfs_emit(buf, "%u\n", uacce->isolate_ctx->hw_err_isolate_hz);
+> +}
+> +
+> +static ssize_t isolate_strategy_store(struct device *dev,
+> +				      struct device_attribute *attr,
+> +				      const char *buf, size_t count)
+> +{
+> +	struct uacce_device *uacce = to_uacce_device(dev);
+> +	unsigned long val;
+> +
+> +	/* must be set by PF */
+> +	if (uacce->is_vf)
+> +		return -EPERM;
+> +
+> +	if (kstrtoul(buf, 0, &val) < 0)
+> +		return -EINVAL;
+> +
+> +	if (val > MAX_ERR_ISOLATE_COUNT)
+> +		return -EINVAL;
+> +
+> +	uacce->isolate_ctx->hw_err_isolate_hz = val;
+> +
+> +	/* After the policy is updated, need to reset the hardware err list */
+> +	uacce_hw_err_destroy(uacce);
+> +
+> +	return count;
+> +}
+> +
+>  static DEVICE_ATTR_RO(api);
+>  static DEVICE_ATTR_RO(flags);
+>  static DEVICE_ATTR_RO(available_instances);
+>  static DEVICE_ATTR_RO(algorithms);
+>  static DEVICE_ATTR_RO(region_mmio_size);
+>  static DEVICE_ATTR_RO(region_dus_size);
+> +static DEVICE_ATTR_RO(isolate);
+> +static DEVICE_ATTR_RW(isolate_strategy);
 
-Thanks for explaining.
+No documentation for these new sysfs files?
 
-I suggest to move your 'forward' chain to netdev/ingress using priority
+thanks,
 
-      filter - 1
-
-so the time schedule evaluation is always done before the flowtable
-lookup, that is, schedules rules will be always evaluated.
-
-In your example, you are using a linear ruleset, which might defeat
-the purpose of the flowtable. So I'm attaching a new ruleset
-transformed to use maps and the ingress chain as suggested.
-
---1rcC1yEX000eNPzk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment; filename="schedules.nft"
-
-table netdev filter {
-	map ether_to_chain {
-		typeof ether saddr : verdict
-		elements = { 96:68:97:a7:e8:a7 comment "Device match" : jump fw_p0_dev0 }
-	}
-
-	map schedule_time {
-		typeof meta time : verdict
-		flags interval
-		counter
-		elements = { "2022-10-09 18:46:50" - "2022-10-09 19:16:50" comment "!Schedule OFFLINE override" : drop }
-	}
-
-	map schedule_day {
-		typeof meta day . meta hour : verdict
-		flags interval
-		counter
-		elements = { "Tuesday" . "06:00" - "07:00" : drop }
-	}
-
-	chain fw_p0_dev0 {
-		meta time vmap @schedule_time
-		meta day . meta hour vmap @schedule_day
-	}
-
-	chain my_devices_rules {
-		ether saddr vmap @ether_to_chain
-	}
-
-	chain ingress {
-		type filter hook ingress device eth0 priority filter; policy accept;
-		jump my_devices_rules
-	}
-}
-
---1rcC1yEX000eNPzk--
+greg k-h
