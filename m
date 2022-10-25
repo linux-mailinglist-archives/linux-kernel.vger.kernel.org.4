@@ -2,119 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A8660C4A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A686660C4A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiJYHCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S231430AbiJYHDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiJYHC2 (ORCPT
+        with ESMTP id S231486AbiJYHDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:02:28 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3E5B1BB0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:02:27 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id b2so10185099eja.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:02:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oTZ9XSXY51LXE4jSLx8/7Y425Go53KxTtpmQE436jms=;
-        b=Vrn50l/7KcIqk45mCOD0jXO0febPcbWtWGjEe0hfU9wx/ioohNIusCONFG1//hwvtb
-         EhyTDGnaChULuE+Q6+b0DNlqwwvx31dxnYOabBzMd4gQwDxJZXs8WqEKV7BGjVaJB9yU
-         L+cRUFr+J2JzZiigkzHUgfekEjodEdDdMtk48mYzc4ehTa8l0Xh7kSyTsOJnjWea42hE
-         yHYs37mFLnU9X+U5WhV2hQvY2KAT+DbjP2pIOqQIZcaWTkYWCKMkrqyEFKJdlV5VN0he
-         LkyEiQEadIWtKwXEW/ppUtc5svDYsTgipmeLyOrr7qjWZq1191o60l/3NFvKMhwFRkdy
-         vYtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oTZ9XSXY51LXE4jSLx8/7Y425Go53KxTtpmQE436jms=;
-        b=W0r+kpFHKNoqHiJUFAAWcjTZ3i3NVZZGPGLQKKGqT9lSLyRlcekCgmJzWw6u3piheI
-         E6aektUJAckFKCwidBrcpN6M0JJKrA25RjQyS5ADp86KyWilxcuXorMKnv96f21sQxvy
-         bWnZnHpmQ9hlcGAsrEesZahuGFIQUfBgQ1G2962jpxxht6AR/jkvDkRS0Oh+jHBsKWDZ
-         eqsWjJrNYKrjePLW6K6FNmTS6JXOLrFcOFoH8aBWwOOaxt6AOgO+dtTf5fSgnE0x1Wtm
-         QxYebNLXtv8O5jzwGEAlGjou3AujEsLyCffwisRLFA9TZRvI9pLBaLb0RvFVMhNZlhEF
-         UViw==
-X-Gm-Message-State: ACrzQf2M5wrNS9l5F/RAuUYVx+Xq23XWkA8KEr/dOjwXDXLAlhMMYHzt
-        I3fzyjXrnrEqizxa9b9I67w1nQ==
-X-Google-Smtp-Source: AMsMyM4tNlC0ScUTYnXvwt3Ls+S3XvBHssRegDia1ErDnteViPsVrAmp6mDxo/TVUt7rRc1QFOBK2w==
-X-Received: by 2002:a17:907:3f94:b0:78d:9d2f:3002 with SMTP id hr20-20020a1709073f9400b0078d9d2f3002mr30783518ejc.40.1666681346111;
-        Tue, 25 Oct 2022 00:02:26 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:8219:f4b9:b78d:7de7? ([2a05:6e02:1041:c10:8219:f4b9:b78d:7de7])
-        by smtp.googlemail.com with ESMTPSA id ca28-20020aa7cd7c000000b004618e343149sm1052055edb.19.2022.10.25.00.02.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 00:02:25 -0700 (PDT)
-Message-ID: <cb44e8f7-92f6-0756-a622-1128d830291c@linaro.org>
-Date:   Tue, 25 Oct 2022 09:02:23 +0200
+        Tue, 25 Oct 2022 03:03:07 -0400
+Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF036B517A;
+        Tue, 25 Oct 2022 00:03:03 -0700 (PDT)
+Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
+        by mxout3.routing.net (Postfix) with ESMTP id BB7D062639;
+        Tue, 25 Oct 2022 07:03:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1666681381;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jIYRiFA4WqI9vlLRtf7GZM26SSCJYVipWJkDfE5iQSY=;
+        b=CmoCacvj34Ssrs7PCs1PDzIu8ujOWIjc632MnRcroFcpU+RSxfMLbqFjnI/aYItpyKoFuA
+        HucHjd5QO6m+1gYuQu/kF6KS01XNkQ2S6JsmrLQnQC4GhqB4l5rLukLazWnB5qR9UM51UL
+        GADLSBN3ErCtnICNw3S67D6Qd7JkfnM=
+Received: from frank-G5.. (fttx-pool-217.61.152.57.bambit.de [217.61.152.57])
+        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id D8D4B360037;
+        Tue, 25 Oct 2022 07:03:00 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] dt-bindings: pinctrl: update uart/mmc bindings for MT7986 SoC
+Date:   Tue, 25 Oct 2022 09:02:55 +0200
+Message-Id: <20221025070255.14407-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/2] thermal/drivers/mellanox: Use generic
- thermal_zone_get_trip() function
-Content-Language: en-US
-To:     Ido Schimmel <idosch@nvidia.com>, vadimp@nvidia.com
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:MELLANOX ETHERNET SWITCH DRIVERS" <netdev@vger.kernel.org>
-References: <20221014073253.3719911-1-daniel.lezcano@linaro.org>
- <20221014073253.3719911-2-daniel.lezcano@linaro.org>
- <Y05Hmmz1jKzk3dfk@shredder>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <Y05Hmmz1jKzk3dfk@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mail-ID: 52361692-f7db-4a76-b884-8f2441ad5df9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Frank Wunderlich <frank-w@public-files.de>
 
-Hi Ido,
+Add new splitted uart pins and emmc_51
 
-On 18/10/2022 08:28, Ido Schimmel wrote:
-> + Vadim
-> 
-> On Fri, Oct 14, 2022 at 09:32:51AM +0200, Daniel Lezcano wrote:
->> The thermal framework gives the possibility to register the trip
->> points with the thermal zone. When that is done, no get_trip_* ops are
->> needed and they can be removed.
->>
->> Convert ops content logic into generic trip points and register them with the
->> thermal zone.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> 
-> Vadim, can you please review and test?
-> 
-> Daniel, I saw that you wrote to Kalle that you want to take it via the
-> thermal tree. Any reason not to take it via net-next? I'm asking because
-> it will be the second release in a row where we need to try to avoid
-> conflicts in this file.
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+v2:
+- wrap on col 80
+---
+ .../pinctrl/mediatek,mt7986-pinctrl.yaml         | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-Because I hope I can remove the ops->get_trip_ ops from thermal_ops 
-structure before the end of this cycle.
-
-May be you can consider moving the thermal driver into drivers/thermal?
-
-
+diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+index 75766956cfad..1fe4d2550206 100644
+--- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
+@@ -87,6 +87,8 @@ patternProperties:
+           "wifi_led"        "led"       1, 2
+           "i2c"             "i2c"       3, 4
+           "uart1_0"         "uart"      7, 8, 9, 10
++          "uart1_rx_tx"     "uart"      42, 43
++          "uart1_cts_rts"   "uart"      44, 45
+           "pcie_clk"        "pcie"      9
+           "pcie_wake"       "pcie"      10
+           "spi1_0"          "spi"       11, 12, 13, 14
+@@ -98,9 +100,11 @@ patternProperties:
+           "emmc_45"         "emmc"      22, 23, 24, 25, 26, 27, 28, 29, 30,
+                                         31, 32
+           "spi1_1"          "spi"       23, 24, 25, 26
+-          "uart1_2"         "uart"      29, 30, 31, 32
++          "uart1_2_rx_tx"   "uart"      29, 30
++          "uart1_2_cts_rts" "uart"      31, 32
+           "uart1_1"         "uart"      23, 24, 25, 26
+-          "uart2_0"         "uart"      29, 30, 31, 32
++          "uart2_0_rx_tx"   "uart"      29, 30
++          "uart2_0_cts_rts" "uart"      31, 32
+           "spi0"            "spi"       33, 34, 35, 36
+           "spi0_wp_hold"    "spi"       37, 38
+           "uart1_3_rx_tx"   "uart"      35, 36
+@@ -157,7 +161,7 @@ patternProperties:
+             then:
+               properties:
+                 groups:
+-                  enum: [emmc, emmc_rst]
++                  enum: [emmc, emmc_rst, emmc_51]
+           - if:
+               properties:
+                 function:
+@@ -227,8 +231,10 @@ patternProperties:
+             then:
+               properties:
+                 groups:
+-                  enum: [uart1_0, uart1_1, uart1_2, uart1_3_rx_tx,
+-                         uart1_3_cts_rts, uart2_0, uart2_1, uart0, uart1, uart2]
++                  enum: [uart1_0, uart1_rx_tx, uart1_cts_rts, uart1_1,
++                         uart1_2_rx_tx, uart1_2_cts_rts, uart1_3_rx_tx,
++                         uart1_3_cts_rts, uart2_0_rx_tx, uart2_0_cts_rts,
++                         uart2_1, uart0, uart1, uart2]
+           - if:
+               properties:
+                 function:
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.34.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
