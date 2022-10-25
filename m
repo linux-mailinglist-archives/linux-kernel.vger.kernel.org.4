@@ -2,130 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB2B860D0BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F209A60D0C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiJYPfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
+        id S232993AbiJYPgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbiJYPfs (ORCPT
+        with ESMTP id S232351AbiJYPgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:35:48 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22060C896D;
-        Tue, 25 Oct 2022 08:35:44 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 49DEE40005;
-        Tue, 25 Oct 2022 15:35:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1666712142;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gljpnoLdjIj8FbPBucJH+YyBjAPYhwcjGzRd/+2JJQw=;
-        b=T/k+AbuL8LIp52QrJAzo2LJ42AWkOjjNgtqUWu+ZMYuYLjkK3uHkRY6euDkBQnKVI9swFN
-        eOjXRCVBfx+yazWvnC1AOhcEucXdZPWFju49HXACZIR7D8mRxKNbKpg2QSWDYTFqQcN+sy
-        Y9dbhiVyXdoXaKIevjkUq5tefS2e1VC/T0JcLSt121Yo+11tj33qPc+MJ9qoZXqHrqlxsh
-        LaeJFQJii+k3kuHzbDgEGFsl7CBdrnzDqbo8UQiKjF+WDjbqNrpzUy/QaH5Q30BWBwLU+M
-        7IIibejt4/ltjZ2XrdJXEMLVK0j6ygPsAAzFrlKNc44EqHWs2/T30qqRGGzQzA==
-Date:   Tue, 25 Oct 2022 17:35:33 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>, mripard@kernel.org,
-        mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/11] media: cedrus: Add helper for checking capabilities
-Message-ID: <Y1gCRR8gMwy84WiT@aptenodytes>
-References: <20221024201515.34129-1-jernej.skrabec@gmail.com>
- <13124586.uLZWGnKmhe@jernej-laptop>
- <Y1f/U8NxyJo/pMAH@aptenodytes>
- <8131177.T7Z3S40VBb@jernej-laptop>
+        Tue, 25 Oct 2022 11:36:11 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF95129085
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:36:08 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id n12so8158307eja.11
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=82ef//M42q/ph0AA1cl5MXJlGqqxJmPpIAFc+0veO94=;
+        b=G+7R1w2U3ya/QxsVolU9+yjkKpPzrjhZN5qIVX+OgmyKWo59Byxv6XbQnt4T6reoFh
+         bFXA2G4TW2TJPqMykZiuF/P/8ISlXSzpmyTsP/RLycNJrIsDdRybOk6EGsshW0La2JnV
+         07PBBmO48Omr76Oznw+Fh1nuXPwOpVRfKQAowKj5RC++psnGbpC2dUq4stw10rgeKJYK
+         xvo6PscCCml4AA5Uj8fLlHq+NDKkm0jboEirGhQ7Ebb+CRe2SW3xmvZsE7xa90bqQm88
+         EqIgv+J0l3Kioeb+t4Oy80rtHigajPdPgCXO94C61R0FOh81jmZ9OLy5dSE6vxuPv+6c
+         aLBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=82ef//M42q/ph0AA1cl5MXJlGqqxJmPpIAFc+0veO94=;
+        b=URmzxQUCziUg5WFqmSm0sn0Mmvy/N4RLmy8uQiAbbk+4YsPuTEUmedJ7Vs2CM98y02
+         7nNLvLFkNd5Eof81sxu29cSTfiNADhiA9pBNL/YDrGL/8Ize+FnbDfUNgfIv+zsN0uTg
+         YuxrNuSNLzfo8XqU9DJJXn2uRU+ibnUQwrOU8fQ2YNjO1mAyyuvJm+ApufUS8bSo51Br
+         +c0DBhQwM74gewoR4RuzTljYJCeB8RL97g1niaQ8+erVKGiqYxjBE5hVSQS/mzIpu6HW
+         P66mmbDUpR5rssF/q4/sWnW1fw7uueo6Esgmn/aj+B4H1XTzZzr1SOVSlM3clKdd8SMq
+         i1uw==
+X-Gm-Message-State: ACrzQf3OZdlww8UHIZNcK+8r1be3ACfJuC8d4EGW2JNpHtubERiyETJW
+        CEgr2eD/HKIBycsTXl69ka+Vi1xkj5gTzrdZTDNIeg==
+X-Google-Smtp-Source: AMsMyM6cj8Flu0aoakrXowfyjCuC3+dWajqgDK0lTvPgx5Q6ZhB8zwKX8rm8g9k9SkIZ2HCNJOLVGfW1qdRsH5VI3Ds=
+X-Received: by 2002:a17:907:80b:b0:77a:86a1:db52 with SMTP id
+ wv11-20020a170907080b00b0077a86a1db52mr34342197ejb.294.1666712167286; Tue, 25
+ Oct 2022 08:36:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0MKLJJwphdxhPi/7"
-Content-Disposition: inline
-In-Reply-To: <8131177.T7Z3S40VBb@jernej-laptop>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221024113002.471093005@linuxfoundation.org>
+In-Reply-To: <20221024113002.471093005@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 25 Oct 2022 21:05:55 +0530
+Message-ID: <CA+G9fYte09-FmRXOfB=OhthKNKESqX_oDo9Y0raUsHCV6UHEGg@mail.gmail.com>
+Subject: Re: [PATCH 5.4 000/255] 5.4.220-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 24 Oct 2022 at 17:36, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.220 release.
+> There are 255 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.220-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---0MKLJJwphdxhPi/7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue 25 Oct 22, 17:28, Jernej =C5=A0krabec wrote:
-> Dne torek, 25. oktober 2022 ob 17:22:59 CEST je Paul Kocialkowski napisal=
-(a):
-> > Hi Jernej,
-> >=20
-> > On Tue 25 Oct 22, 17:17, Jernej =C5=A0krabec wrote:
-> > > Dne torek, 25. oktober 2022 ob 08:30:28 CEST je Dan Carpenter napisal=
-(a):
-> > > > On Mon, Oct 24, 2022 at 10:15:08PM +0200, Jernej Skrabec wrote:
-> > > > > There is several different Cedrus cores with varying capabilities=
-, so
-> > > > > some operations like listing formats depends on checks if feature=
- is
-> > > > > supported or not.
-> > > > >=20
-> > > > > Currently check for capabilities is only in format enumeration he=
-lper,
-> > > > > but it will be used also elsewhere later. Let's convert this chec=
-k to
-> > > > > helper and while at it, also simplify it. There is no need to che=
-ck if
-> > > > > capability mask is zero, condition will still work properly.
-> > > >=20
-> > > > Sure.  That's true.  Out of curiousity, can
-> > > > cedrus_formats[i].capabilities
-> > > > be zero?  Because it feels like that's what should be checked.
-> > >=20
-> > > Yes, it can be. It's the case for V4L2_PIX_FMT_NV12_32L32. All varian=
-ts
-> > > supports it, so there is no special capability needed in order to be
-> > > listed. What would you check in such case? Condition still works for =
-this
-> > > case.
-> > I think the problem is that (bits & 0) =3D=3D 0 is always true.
-> > So if the input caps are 0, we need to make sure to return false.
->=20
-> No. If format (or any other) capabilities are 0, means they are supported=
- by=20
-> all variants and it's expected from cedrus_is_capable() to return true.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Mhh, yeah. Not sure what I was thinking. Sorry for the noise.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Paul
+## Build
+* kernel: 5.4.220-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: f49f12b65484790c4e83771c36bda5027fb7483e
+* git describe: v5.4.219-256-gf49f12b65484
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.219-256-gf49f12b65484
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+## No Test Regressions (compared to v5.4.219)
 
---0MKLJJwphdxhPi/7
-Content-Type: application/pgp-signature; name="signature.asc"
+## No Metric Regressions (compared to v5.4.219)
 
------BEGIN PGP SIGNATURE-----
+## No Test Fixes (compared to v5.4.219)
 
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmNYAkUACgkQ3cLmz3+f
-v9ExOgf+JjLX4UvV2q9WgfaedsDfvk8XQ59souVqoWl11kJGfLC74ip19V7R5ttI
-wo4Vl3QiaxHTpEYnd+v2TEMNDQwJtDsiGk5q3WseMkq+43RNU2CVO7+CUHSZOx6P
-YYoAxWRCHLdXReHCGlfLsTc2UrarJpwXrHZmb/90czDBLoLJ2vmlmKPUbGq1lLyx
-EfYgbipaDMydKh5EVaQ8/1cGzDhZ37eUiISHtz/0yppi87pkLPK27AHMKtwSlThU
-GSqVolVkhfnSqDZGFoMsjQ+SiWA+4ff1WSOZeJcEfr0mNoFi0rh0ZWz0mkpZoRfd
-XzMOHG4IkTS/kHaQ9Th2p3x+9ANCXw==
-=8Pgc
------END PGP SIGNATURE-----
+## No Metric Fixes (compared to v5.4.219)
 
---0MKLJJwphdxhPi/7--
+## Test result summary
+total: 79483, pass: 68536, fail: 1061, skip: 9474, xfail: 412
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 334 total, 334 passed, 0 failed
+* arm64: 64 total, 59 passed, 5 failed
+* i386: 31 total, 29 passed, 2 failed
+* mips: 56 total, 56 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 63 total, 63 passed, 0 failed
+* riscv: 27 total, 26 passed, 1 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 57 total, 55 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
