@@ -2,71 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E9F60C5DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF72B60C5E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232090AbiJYHxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:53:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S231445AbiJYH4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:56:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbiJYHxZ (ORCPT
+        with ESMTP id S229782AbiJYH4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:53:25 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16251166992;
-        Tue, 25 Oct 2022 00:53:25 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29P6QxqP025728;
-        Tue, 25 Oct 2022 03:52:57 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kcac8kamg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 03:52:57 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 29P7quri019935
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Oct 2022 03:52:56 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 25 Oct 2022 03:52:55 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 25 Oct 2022 03:52:54 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 25 Oct 2022 03:52:54 -0400
-Received: from tachici-Precision-5530.ad.analog.com ([10.48.65.157])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 29P7qTrs022073;
-        Tue, 25 Oct 2022 03:52:49 -0400
-From:   Alexandru Tachici <alexandru.tachici@analog.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <lennart@lfdomain.com>
-Subject: [net v3 1/1] net: ethernet: adi: adin1110: Fix notifiers
-Date:   Tue, 25 Oct 2022 10:52:27 +0300
-Message-ID: <20221025075227.9276-2-alexandru.tachici@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221025075227.9276-1-alexandru.tachici@analog.com>
-References: <20221025075227.9276-1-alexandru.tachici@analog.com>
+        Tue, 25 Oct 2022 03:56:37 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2119.outbound.protection.outlook.com [40.107.215.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9F21633B3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:56:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BHYAMOINhaMnSb4bmpgROKoPYJ+66K3YrNFdAKd3Fs2VlSWKvlrN8OBunMgiwPvH2VVOu0SnKLzIZFHAJK+2cZXmCPs9Ms5FmKgww+POqH7FN/odaFYSYr355+kHbV2nDG4W45EGhdKX2JT99d1UUY+TH90UIbwJRyhfuLTxOGR4rtilx1YwY2OEfg1yHe4HrcSti4qJ8blOE83qbfs47N2dC0tloDxSg/iQZNXrP/KTa5EmYulM0JwVmJvqoBLmmu9cM89+yuC9NyRfG+wjFpSik4Jfso++EfnpfdHKkFMAnJB2kdOGmsVTFGTMZKbCd2iUkIYVx1eNRc7xbuCfRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=piKQPwu+RdRGaBq/FepwcAEu/irtK7ZeUzcxyAT0eR0=;
+ b=UrYSuoRtErQJXdwzrFNmqsk3y4zXP9vvx4CEuol7Iav7+wLTPdg1BtGVkpyNYtH518ADAdkFRbLkdvOypdfXssl+DFVHs//0XnLNd8Okx8Ki9QqV48SeSkbLN4FmeFPezqfa3qNaO2y2fXLRoiBWK1HINUkx7I387lFhj/J73Qav/hWoinhcZIDIS2hkUQCZDIo/mDSXA37RtqofH/PH4WIr/Pa7CsS9xXot0oXsJ9MrJq7ALL8QRROrTo//DGu5Ba9Yzw9SvYpwRJK9EutMnglnWVYxkmVwaTBA1MJiajJprAdN9IPn98mOjGoKKGpmxIsG1I1cFmXqWblcbHqQZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=piKQPwu+RdRGaBq/FepwcAEu/irtK7ZeUzcxyAT0eR0=;
+ b=Ofo19P3f4rp2WoNifGAUKi7Xh8blGF+4a11FBLX29OaQ+nRU4AWD+o5wxmid0viBdtHAU1L9vmd8rxcQTBEBaIhc2f+byWG6al1HMJaRN9HY3PWRp2R+S+nI4RyKoly907MSJ/BC7dSRE9BM4fdiiGMDjFAxZmXd61151VL7jlBt5MqMKQP6fMLvQENKFpZ16SbMcNgo1bySFVgmMgA2zGqjjVOqxDdgc0VsjZB3hE+OuFGEzMwlzKRzfuuhc+IjESLpnSsIlugfC+AHMNwUo5xIIeR15gKl99CgaEI0AAs2FjsGBZHsUV+nZLHL/60wD7JOzDoModqtVWIyzU/Afg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TY0PR06MB5284.apcprd06.prod.outlook.com (2603:1096:400:211::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Tue, 25 Oct
+ 2022 07:56:31 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::c84b:5a6c:d66f:c0fd]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::c84b:5a6c:d66f:c0fd%3]) with mapi id 15.20.5746.023; Tue, 25 Oct 2022
+ 07:56:31 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH v2] f2fs: cleanup in f2fs_create_flush_cmd_control()
+Date:   Tue, 25 Oct 2022 15:56:23 +0800
+Message-Id: <20221025075623.7958-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0233.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::17) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: 29d-f2udOwXqAnnRRhrKVKtJlqJM5RRl
-X-Proofpoint-GUID: 29d-f2udOwXqAnnRRhrKVKtJlqJM5RRl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-25_03,2022-10-21_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 phishscore=0 malwarescore=0 suspectscore=0 clxscore=1015
- priorityscore=1501 adultscore=0 mlxscore=0 bulkscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210250044
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TY0PR06MB5284:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ae866d2-09e8-4ebe-b3b2-08dab65e6e03
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tf2I19c9U1H/oT49INOaoDuL+TIqH9BOSoPoqx/occ0O14WhTbM6mFKaRR9Z3hZtqm7KL52n/SY2DiZ0TUcpW90OiSGLU16ajRR1tjAUSG7/dbiSFAmoOGUQnDTACR4aw118IcXCef3O4zAkI3xrybyR0hnST4wbQoNniFCCsoTBIKRrnoFyMvbfO6SwzNPb8nmQnhHTwrp94qCx9YjNz++5nvjdSQDztQ/6v0/tMlaBUijQeyvSSSnSLfd5f0OcueIRJ6H/1Ure0dOVXrs6Mwey3ies44GgUoP53gT9kinuqmr/2n/920jwB5r4xwo9iejSFBo/ok7laBW1VAYb5g7n6wDIC5032Sg6YIfBgAokIh84UZ11hUkaICVcazq3JmvfYv9PB3ITNySGcmBWe9LOzsFQzilV2/iZnUM6HjIhyGdZFEiDH2gDQOmWFhieTxA6xEZF96A0rZUI424Sd6K+ZuixWR4o6/HcRImiFTsSqCFN8qsPbv8Dc76Xcc8VrZZPtiu8QDrbGsipMa1H0+lixyIO/0d5T2/o+Vc2nJpDMtKtZ/ZyZEZrlgB1kbXPhAORJGAVrHKfG/eZXTLwWP1rPVda4ggc5UvE0ytRuqM+fWgnw1qIGP6odXHlBEAT5x92eyI7nanMNJQpmUutFoXpqlE90E5OSriDp5BIt2usLWnKzF3v5X0GbUF2y++r+4nX4wm6mOdhboeqg6vT32TmmRdeYtVvAc5fsgYkBt2J6qGjhht0BlRM6eOSeWV2FM/RUpmwFBx1XnC6QGvAGA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199015)(6486002)(478600001)(107886003)(6666004)(316002)(6506007)(2906002)(36756003)(66556008)(8676002)(4326008)(66946007)(66476007)(6512007)(186003)(26005)(41300700001)(38350700002)(86362001)(38100700002)(1076003)(52116002)(2616005)(83380400001)(8936002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kayqiZdHoYunMIJX08fPJD0B2XuAYA1laKn3ISNmJlE0vF8gKmQgwloF+IuX?=
+ =?us-ascii?Q?A9NFl2IG60hfQdVTv0ZdPyxaFz/XbyXBBKRzxPilc+wmnNgKzsDV4yYuYDNW?=
+ =?us-ascii?Q?fNqtSOcKFLfHIQumf3lRmVrH198RTcN7RN6yAokY7zRGszSCgNP05j+JGPv3?=
+ =?us-ascii?Q?SSJSOqpistkk7Uoe9gN9DYmm/JTyvxL0LGGdLfQ1xUOHfbP2RlG733FHoP/d?=
+ =?us-ascii?Q?QSA9JDcnRcHLNGeUE15MKplokhLeORqYbd7AKsUUBoQrPGabvGE6qNSCSGEr?=
+ =?us-ascii?Q?Fm3/OoWywOj9ggy3maAWHgryXBWwBYphQw9oJfj3FCJm4alXdptquozNdm+D?=
+ =?us-ascii?Q?DilDaedbVL+9j1wC8RsvzF2RrCRFD5bQ1vvR441NdAM/C929dv9dRMcTHK4d?=
+ =?us-ascii?Q?AXD+9NanhQs7WyBHgAHrGqtJRhvBe39Ate9lnj4J9OGLUP8ZhKMpSdjMKLPP?=
+ =?us-ascii?Q?+n/UVh6pf/qVmo2r5TbIHx/8QLFbMKWFU7wraxmn1TxPKlPOPceKegu7AKts?=
+ =?us-ascii?Q?2mQx3Jt8QxWeMKxXKF5FlGtDA2RzMTsEb/7ee4ObqxW9RwoQLDktR9sRizEE?=
+ =?us-ascii?Q?8lSbiRIk/rtLMxyYS2sH2vC0VNY8L5DNr1dHMffg41K488XYqzE4JCo8Ud5b?=
+ =?us-ascii?Q?Oule6y2ZHASsSQXQHWGkm0hJ56fSptN6RO016tOo0BQ5oGPFs0hHxa0DGHU8?=
+ =?us-ascii?Q?5K+wB8n51FNh63vp1sE74vPac/yaEKPF2EnXCbYaTnG0Gj4Ay3CyR5uCz4f3?=
+ =?us-ascii?Q?NZGj7narZp4RdDANKgym6CarOccflyoyB3b06bla/gJxXqI3rhjpX+afHdCe?=
+ =?us-ascii?Q?cRV7zXvpITCV7CnbgqUSF5XtJytHrQkME+4S7yltrZS7fcnRUHBCPLaXJ5+M?=
+ =?us-ascii?Q?zKKb4PhiBfIRSuqR9dGKZCQok9AbG36uGeqprRg+EE+ND6+qerJ0Vw27QFtj?=
+ =?us-ascii?Q?EQm8wcssjiKulM9VNDj+L5IB32GOjbWMfU0XzYa5yiJk8+LsLdD5nvRFF7QP?=
+ =?us-ascii?Q?h+PY0hd1aC2Rlvq5up8nw4kZUTOdNon+9MeNNP1n8yVvZufYxXapCXpG05XB?=
+ =?us-ascii?Q?/g/0utd2IMfsj6wViDXChWoXFj73n9QJ4ykam+vGMR1QacE/FsUATgIPidUC?=
+ =?us-ascii?Q?yWr6Df+TnRc6y6GA2+E9mmdHiJTP943t/VelWw3MjxFImDPszwyd9ZPZGmyc?=
+ =?us-ascii?Q?rqDsGp7enwQ1K4455E2l6fBXQPHHGaHzJ+IYzPgJp+75IfdTMp1xYS727ePC?=
+ =?us-ascii?Q?UEmX+QIeqz6wgXs3Hxb3KVIW24bxkHXa0EQoRL27fvHB9AL6oks57AyCdAFP?=
+ =?us-ascii?Q?fUISMmn1H+4VmpDKHyH21fR8gVoUg0Jj/Tv4rWPUgvC9A6o8943Pn5sEYE/o?=
+ =?us-ascii?Q?/vMppKK0DUGMZ8vi5MMS2SiZpK6xu4WnRcRLC5HGEQCtJnl3P8Ei7Tl3DT3+?=
+ =?us-ascii?Q?6kULUM5oErqiM75VgRuf27ZcgyFt9SScMjMrMaweNs5mWNc5GjvxOdWNtWDs?=
+ =?us-ascii?Q?w5nfT3eNMdZQDLkJ+Qi2QIc3ErL1Sj5LK9TXIt0ZFZ28s2nONTCCsoDPiJMr?=
+ =?us-ascii?Q?D/BJ0cnZYiMUpFs4zYu77TwA/4NU0p3R5SmPkQrb?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ae866d2-09e8-4ebe-b3b2-08dab65e6e03
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 07:56:31.7230
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3HFUeRK/LkCFnKhTeg8bIYrbzK3embcSEeWnrdVUpM4uRO7dvip8HmOqC/PMdLxDZhH7FTa1cK+89DuQE3WZDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY0PR06MB5284
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,97 +111,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ADIN1110 was registering netdev_notifiers on each device probe.
-This leads to warnings/probe failures because of double registration
-of the same notifier when to adin1110/2111 devices are connected to
-the same system.
+Remove the local 'err' variable for readable,
+no functional changes.
 
-Move the registration of netdev_notifiers in module init call,
-in this way multiple driver instances can use the same notifiers.
-
-Fixes: bc93e19d088b ("net: ethernet: adi: Add ADIN1110 support")
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
- drivers/net/ethernet/adi/adin1110.c | 32 +++++++++++++++++++++--------
- 1 file changed, 23 insertions(+), 9 deletions(-)
+ fs/f2fs/segment.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/adi/adin1110.c b/drivers/net/ethernet/adi/adin1110.c
-index 086aa9c96b31..73c08a523780 100644
---- a/drivers/net/ethernet/adi/adin1110.c
-+++ b/drivers/net/ethernet/adi/adin1110.c
-@@ -1507,16 +1507,15 @@ static struct notifier_block adin1110_switchdev_notifier = {
- 	.notifier_call = adin1110_switchdev_event,
- };
- 
--static void adin1110_unregister_notifiers(void *data)
-+static void adin1110_unregister_notifiers(void)
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index acf3d3fa4363..ed247195a20c 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -620,12 +620,11 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
  {
- 	unregister_switchdev_blocking_notifier(&adin1110_switchdev_blocking_notifier);
- 	unregister_switchdev_notifier(&adin1110_switchdev_notifier);
- 	unregister_netdevice_notifier(&adin1110_netdevice_nb);
- }
+ 	dev_t dev = sbi->sb->s_bdev->bd_dev;
+ 	struct flush_cmd_control *fcc;
+-	int err = 0;
  
--static int adin1110_setup_notifiers(struct adin1110_priv *priv)
-+static int adin1110_setup_notifiers(void)
- {
--	struct device *dev = &priv->spidev->dev;
- 	int ret;
+ 	if (SM_I(sbi)->fcc_info) {
+ 		fcc = SM_I(sbi)->fcc_info;
+ 		if (fcc->f2fs_issue_flush)
+-			return err;
++			return 0;
+ 		goto init_thread;
+ 	}
  
- 	ret = register_netdevice_notifier(&adin1110_netdevice_nb);
-@@ -1531,13 +1530,14 @@ static int adin1110_setup_notifiers(struct adin1110_priv *priv)
- 	if (ret < 0)
- 		goto err_sdev;
+@@ -638,19 +637,18 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
+ 	init_llist_head(&fcc->issue_list);
+ 	SM_I(sbi)->fcc_info = fcc;
+ 	if (!test_opt(sbi, FLUSH_MERGE))
+-		return err;
++		return 0;
  
--	return devm_add_action_or_reset(dev, adin1110_unregister_notifiers, NULL);
+ init_thread:
+ 	fcc->f2fs_issue_flush = kthread_run(issue_flush_thread, sbi,
+ 				"f2fs_flush-%u:%u", MAJOR(dev), MINOR(dev));
+ 	if (IS_ERR(fcc->f2fs_issue_flush)) {
+-		err = PTR_ERR(fcc->f2fs_issue_flush);
+ 		kfree(fcc);
+ 		SM_I(sbi)->fcc_info = NULL;
+-		return err;
++		return PTR_ERR(fcc->f2fs_issue_flush);
+ 	}
+ 
+-	return err;
 +	return 0;
- 
- err_sdev:
- 	unregister_switchdev_notifier(&adin1110_switchdev_notifier);
- 
- err_netdev:
- 	unregister_netdevice_notifier(&adin1110_netdevice_nb);
-+
- 	return ret;
  }
  
-@@ -1608,10 +1608,6 @@ static int adin1110_probe_netdevs(struct adin1110_priv *priv)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = adin1110_setup_notifiers(priv);
--	if (ret < 0)
--		return ret;
--
- 	for (i = 0; i < priv->cfg->ports_nr; i++) {
- 		ret = devm_register_netdev(dev, priv->ports[i]->netdev);
- 		if (ret < 0) {
-@@ -1688,7 +1684,25 @@ static struct spi_driver adin1110_driver = {
- 	.probe = adin1110_probe,
- 	.id_table = adin1110_spi_id,
- };
--module_spi_driver(adin1110_driver);
-+
-+static int __init adin1110_driver_init(void)
-+{
-+	int err;
-+
-+	err = adin1110_setup_notifiers();
-+	if (err)
-+		return err;
-+
-+	return spi_register_driver(&adin1110_driver);
-+}
-+
-+static void __exit adin1110_exit(void)
-+{
-+	adin1110_unregister_notifiers();
-+	spi_unregister_driver(&adin1110_driver);
-+}
-+module_init(adin1110_driver_init);
-+module_exit(adin1110_exit);
- 
- MODULE_DESCRIPTION("ADIN1110 Network driver");
- MODULE_AUTHOR("Alexandru Tachici <alexandru.tachici@analog.com>");
+ void f2fs_destroy_flush_cmd_control(struct f2fs_sb_info *sbi, bool free)
 -- 
-2.34.1
+2.25.1
 
