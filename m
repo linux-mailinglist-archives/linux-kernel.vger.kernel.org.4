@@ -2,85 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17EA60C7E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781D360C7EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiJYJW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
+        id S230480AbiJYJXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiJYJWU (ORCPT
+        with ESMTP id S231391AbiJYJW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:22:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289BDFCA;
-        Tue, 25 Oct 2022 02:17:41 -0700 (PDT)
+        Tue, 25 Oct 2022 05:22:27 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB424DA5;
+        Tue, 25 Oct 2022 02:18:14 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 01ECD1FD6C;
-        Tue, 25 Oct 2022 09:17:40 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 88C971FB3E;
+        Tue, 25 Oct 2022 09:18:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666689460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1666689493; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zD8OApJsTbBnv3iSDEQ49cotr+aBwY7HUsO9Mmm7DyI=;
-        b=tZNaBpgRS2zftFAhvMLdtVxWOpW3DR3e9FK3I5hXXbAIDvLr7G8T7UgYtxstGKE/nJRrVq
-        YkqlGUdwW1JyGmNM5dF/AEGZiKHNwqSZ/GIyJgG8RGfUcxLBb00POG5rljywVvmsQIhxbO
-        d8CgwSKzMPKy2RxSJd63ru2SkcOBq0k=
+        bh=Y7waNe3CSSPB1VR39mFd8rV02OAJbyqSaHbIrUnnVO0=;
+        b=CVU3wA+rYwqzVG8G5pEA0ZGjbmaAVkYGPNXDE8Z+67W9rmK4PIPV026Py1C3boc7oBKk5E
+        WD+BayRGfagInHs12rUb87mjg6A0VFlV9dkifvmoUXOwiLK3dRzPhnPQTo5u9GzIYqo9lj
+        p7dk+KpGgamACVs3tWVo7zBMCykFZjo=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666689460;
+        s=susede2_ed25519; t=1666689493;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zD8OApJsTbBnv3iSDEQ49cotr+aBwY7HUsO9Mmm7DyI=;
-        b=UIV++LU+F+Fv84uskaMlBHpmjO0+klcnp4ZLkqUp4JULhXo9MLl/3WPaZOU53Zf1hyW9N+
-        BsaLrSFTvaqfQ8DQ==
+        bh=Y7waNe3CSSPB1VR39mFd8rV02OAJbyqSaHbIrUnnVO0=;
+        b=Fy+Mki2AYPUwHvkfONJaYdshxqmROYtyNPzPqQz22w3WbKyEzqhOSw5T7gN7qsLgohbxcw
+        Wn/os/6FbAPkZ/BA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CAC8C134CA;
-        Tue, 25 Oct 2022 09:17:39 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B12F134CA;
+        Tue, 25 Oct 2022 09:18:13 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id FIDSMLOpV2McOwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 25 Oct 2022 09:17:39 +0000
-Message-ID: <32fe01dc-dda1-2154-af8e-7e9f64d6f811@suse.cz>
-Date:   Tue, 25 Oct 2022 11:17:39 +0200
+        id 96kCHtWpV2NeOwAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 25 Oct 2022 09:18:13 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 14311A06F5; Tue, 25 Oct 2022 11:18:13 +0200 (CEST)
+Date:   Tue, 25 Oct 2022 11:18:13 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v2 2/2] ext4: fix bug_on in __es_tree_search caused by
+ wrong boot loader inode
+Message-ID: <20221025091813.oo27uhwybvkd7mzc@quack3>
+References: <20221021040731.4180649-1-libaokun1@huawei.com>
+ <20221021040731.4180649-3-libaokun1@huawei.com>
+ <20221024142527.avwgiztqvzmeo4se@quack3>
+ <c29e93a7-d4c8-6126-2046-830f43d9adc6@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
-Content-Language: en-US
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        rcu@vger.kernel.org, David Laight <David.Laight@ACULAB.COM>,
-        Kees Cook <keescook@chromium.org>
-References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
- <YzPgTtFzpKEfwPbK@hyeyoo> <YzRQvoVsnJzsauwb@google.com>
- <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
- <ff905c1e-5eb3-eaf8-46de-38f189c0b7a5@google.com>
- <de71b83a-c82c-4785-ef5a-3db4f17bbc8d@suse.cz>
- <bcecece-f7ce-221d-1674-da3d5ab3fef@google.com> <YzkmErHFyYW3awRn@hyeyoo>
- <YzsVM8eToHUeTP75@casper.infradead.org>
- <7dddca4c-bc36-2cf0-de1c-a770bef9e1b7@suse.cz>
- <904cc831-eb16-b1e5-10e5-9e7a171ef83@google.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <904cc831-eb16-b1e5-10e5-9e7a171ef83@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c29e93a7-d4c8-6126-2046-830f43d9adc6@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,37 +77,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 06:19, Hugh Dickins wrote:
-> On Mon, 24 Oct 2022, Vlastimil Babka wrote:
-
->> 
->> [1] https://lore.kernel.org/all/aec59f53-0e53-1736-5932-25407125d4d4@suse.cz/
+On Tue 25-10-22 10:26:14, Baokun Li wrote:
+> On 2022/10/24 22:25, Jan Kara wrote:
+> > On Fri 21-10-22 12:07:31, Baokun Li wrote:
+> > > We got a issue as fllows:
+> > > ...
+> > > 
+> > > In the above issue, ioctl invokes the swap_inode_boot_loader function to
+> > > swap inode<5> and inode<12>. However, inode<5> contain incorrect imode and
+> > > disordered extents, and i_nlink is set to 1. The extents check for inode in
+> > > the ext4_iget function can be bypassed bacause 5 is EXT4_BOOT_LOADER_INO.
+> > > While links_count is set to 1, the extents are not initialized in
+> > > swap_inode_boot_loader. After the ioctl command is executed successfully,
+> > > the extents are swapped to inode<12>, in this case, run the `cat` command
+> > > to view inode<12>. And Bug_ON is triggered due to the incorrect extents.
+> > > 
+> > > When the boot loader inode is not initialized, its imode can be one of the
+> > > following:
+> > > 1) the imode is a bad type, which is marked as bad_inode in ext4_iget and
+> > >     set to S_IFREG.
+> > > 2) the imode is good type but not S_IFREG.
+> > > 3) the imode is S_IFREG.
+> > > 
+> > > The BUG_ON may be triggered by bypassing the check in cases 1 and 2.
+> > > Therefore, when the boot loader inode is bad_inode or its imode is not
+> > > S_IFREG, initialize the inode to avoid triggering the BUG.
+> > > 
+> > > Signed-off-by: Baokun Li <libaokun1@huawei.com>
+> > Grepping for calls to ext4_iget() in the ext4 code shows there are many
+> > more places that will get unhappy (and crash) when ext4_iget() returns a
+> > bad inode. In fact, I didn't find a place when returning bad inode would be
+> > useful for anything. So why don't we just return EFSCORRUPTED instead of
+> > returning a bad inode?
+> > 
+> > 								Honza
 > 
-> Ignore me, don't let me distract if you're happy with Matthew's patch
-> (I know little of PageMovable, and I haven't tried to understand it);
-> but it did look to me more like 6.2 material,
-
-Yes, it is targetted towards 6.2 now.
-
-> and I was surprised that
-> you dropped the simple align(4) approach for 6.1.
+> Hello Honza,
 > 
-> Because of Hyeonggon's rcu_leak_callback() observation?  That was a
-> good catch, but turned out to be irrelevant, because it was only for
-> an RCU debugging option, which would never be set up on a struct page
-> (well, maybe it would in a dynamically-allocated-struct-page future).
+> In ext4_iget(), the inode is marked as bad and returned only when ino is
+> equal to
+> EXT4_BOOT_LOADER_INO. In the error branch bad_inode, although the inode is
+> marked as bad, the returned value is the corresponding error number.
+> The boot loader inode is not initialized during mkfs. Therefore, when
+> ext4_iget() is
+> entered for the first time, imode of the inode is bad type. However, the
+> swap_inode_boot_loader() needs to obtain the inode for initialization and
+> swap.
+> Therefore, a bad_inode is returned in ext4_iget.
+> 
+> Generally, ext4_iget() does not get the boot loader inode. Therefore, we
+> only need
+> to pay attention to the special inodes that can be specified.
+> The following figure shows the check result:
+> 
+> 1) usr_quota_inum/grp_quota_inum/prj_quota_inum
+> These inodes may be faulty. In the first patch, this situation is
+> intercepted.
+> At the beginning, FUZZ found that the quota inode was faulty. Later, we
+> found that
+> the operation function swap_inode_boot_loader() related to inode 5 was also
+> faulty.
+> 
+> 2) journal_inum
+> In ext4_get_journal_inode(), the system checks whether the imode is S_IFREG.
+> Then,
+> the bmap in jbd2_journal_init_inode() checks whether the inode has
+> a_ops->bmap
+> operation. The bad inode does not set the bmap operation, so there is no
+> problem.
+> 
+> 3) last_orphan
+> In ext4_orphan_get(), it checks if the imode is normal and if the inode is
+> bad inode,
+> so there is no problem.
+> 
+> 4) snapshot_inum
+> No place to use snapshot_inum was found in the kernel, so there is no kernel
+> issue.
 
-It was mainly due to David's observation:
+Thanks for detailed explanation! Now I agree you have actually covered all
+the cases. But since EXT4_BOOT_LOADER_INO has this special behavior maybe
+it would be more robust to create a special iget flag for it? Like
+EXT4_IGET_BAD? And only with this flag we'd be returning bad inode from
+ext4_iget(), otherwise we always return the error code?
 
-https://lore.kernel.org/all/c1c8920a56014a179dbb82d483f2ad28@AcuMS.aculab.com/
-
-I did also conclude that align(4) indeed overrides anything set via
-CONFIG_FUNCTION_ALIGNMENT (and passed by -falign-functions) in a way that a
-globally configured larger alignment can be made smaller by this macro, and
-it was all too risky and last minute to me, while Joel's series wasn't
-targetted to 6.1 anyway so there was no urgency.
-
-And yeah it looks like a gcc bug to me.
-
-> Hugh
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
