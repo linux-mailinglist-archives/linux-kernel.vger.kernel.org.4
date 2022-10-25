@@ -2,119 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB0860C0B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B3B60C0B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiJYBNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
+        id S231355AbiJYBOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiJYBN2 (ORCPT
+        with ESMTP id S231584AbiJYBOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:13:28 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1830C1C97CE;
-        Mon, 24 Oct 2022 17:26:04 -0700 (PDT)
+        Mon, 24 Oct 2022 21:14:04 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60114.outbound.protection.outlook.com [40.107.6.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5CC491C4;
+        Mon, 24 Oct 2022 17:29:28 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c2hk9Jx/bvN4NEM1J4oXmXA4fdg54cCGBf9VpwfvUa1md04V8v/b3HOcXIXDMuTX/gsNO0bpOgwpAv6pw1L9Q6t3KUGcYY2Bs+5ucI2kiJI77eJCXGeOLpmgWtJDcXVFWd9EKrdw77DpE911Pjuj/zq5vNf4+rmAWvX6M6PKyzH3ofE8UjpkF0HcR82e5qBxJSxFEHsbfzbvLwhjzkl8L9CRo4M3S3LMeaCTmFj/EwSOPQQoui2j0I0FRb++cnvHN4DfyxQHEPHJVESypRDyQdH9RZHN+bThyurpfmScl/KBCtbM8Ip9IwhzzmBtOHX9Zk5zfiwBx4wv3GZNuGndgQ==
+ b=IkshdRpZYjJ2M8Cl+3TB3vS/TFy2otQUTsYjo5iQPq8rL9CHajgteIpHahOl78OOqnKooZitJyrlr//VZN5DBG20vW6sZ6EuU4n9J8uDQ8Coeh/OQsUcfNTsX4AwNQoWwWYZCPqxK7fjRA7XU8dK7e4p5yOS29bOXimcmgfPDPea4TZrjzKjprBw6tsSTYGQe5zzUYmJmmZy4CHHDZgdnGFJZYKw3n7ISW5uAh/0YcxrqsKFFY6XzMwr3sty+OhzD361zHx8Rlpe3ujJPm3I4kmA3dlEDOPZbYcAr3vEeEDi8r1pu2FBfhK/gL9iksh0J1GxhwrLZkV3Z4X9JCMcSw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CHe6OmOkTY9SrpwxbS/VZ4JKZbDK0asjBFnXFBShznc=;
- b=Yb4qMJB6fKV+j9+6mwx/6XbW1S6YZebNDPBUbZYvQyDF+Xihnmrp0dqOLkqfgCPSnZl+7TNOI+NSwJZxgkyC0Q5txpKG/I66PMWsII9V8Mq6CIMiBp1ypOW363inMLtnjYmK1AgtPmTRa7El5r9avPTpavjasJFR1N/svc50PPfUZ0hFFKOQYaBEMyPRibkLjIY4Oyv6xPBv+GEwG5LQNEVEHSb1rz5uFdLaLfe9bcRR8BulWTa8nF0lV9sTeUO0TBaSYZsG/GJf5phOL5UfqG4s+QVVpsWOufehAe7FjasXTvukIAlCL2wIOrgVGCUGPFYugjNra56v+Gf2QGoprA==
+ bh=8IOTa1ei1QS0V2/+xi/yXGVv97VIou+W2yjeELCkTws=;
+ b=O1vjQ5En3t9QMRZsn8lnLhsZ5H24FHh99F6d3+MdjF6ibeJmgqkGtHcOZxQ4hR/pmc+Nutr5JydVlADrUNXSbV6OPdcrNKWlwbttFwJUiEP1V+tNS8TPm1GwP9i1gHNXq8o28yGoBCIxbSal0YXpF21GiDfgcMi54JLhcH+g/zzi+O+AupZptSxJOWwaBmn0vK6c1VLg4B1TSTnBQDNk80ciAEuFbdUUcKFX7nx/BGBV8OpUH2TcUkWNvdmzBLs3/VJg9YGcUuNbMuPya5HAmsLNoJhq6zDY+ez2gfORius1Dgr/rAapcFToQ2Iq1tOnT4rlEXuQgDfC7G6uZU9lfQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
+ dkim=pass header.d=plvision.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CHe6OmOkTY9SrpwxbS/VZ4JKZbDK0asjBFnXFBShznc=;
- b=LNWHUP2X1wlGJNrMvLHCDdUVCzg0z4OGadlZ/n07SF1HnjwQAMqGR1eUfq++Zw25a2B4PXsF7zvVuPV3UZH1gOpg/53jmjLK8MKghgaBqIuH8BhtyTpPr5r/MOnU40nDb88nD00fOiPK2dsOdPNjG4OlUA+5sMNlUF5U93vna7U=
+ bh=8IOTa1ei1QS0V2/+xi/yXGVv97VIou+W2yjeELCkTws=;
+ b=lMwUEmIA9K4u7aGxZz0ioLEhBbtAjMAheF72j5e22X3IIWvYHWYGNDJsaMNYXlU5GfD9z+GCEZdIShwkj9QqRujAsmvGKhF87Jc5HvSW4iawD04tWpe8XnKkIWdLmivLZUxeZDd8rdB6uq2SKsnaQ0kmrxG9SWWcLE7Y/TF5xcE=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW2PR12MB2506.namprd12.prod.outlook.com (2603:10b6:907:7::12)
- by SA0PR12MB4431.namprd12.prod.outlook.com (2603:10b6:806:95::11) with
+ header.d=none;dmarc=none action=none header.from=plvision.eu;
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
+ by PAXP190MB1765.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:276::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.32; Tue, 25 Oct
- 2022 00:26:02 +0000
-Received: from MW2PR12MB2506.namprd12.prod.outlook.com
- ([fe80::ec3a:151e:5230:1739]) by MW2PR12MB2506.namprd12.prod.outlook.com
- ([fe80::ec3a:151e:5230:1739%2]) with mapi id 15.20.5746.028; Tue, 25 Oct 2022
- 00:26:02 +0000
-Date:   Tue, 25 Oct 2022 08:25:41 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH V2 6/9] cpufreq: amd_pstate: add AMD pstate EPP
- support for shared memory type processor
-Message-ID: <Y1ctBSNrc+2y0nSV@amd.com>
-References: <20221010162248.348141-1-Perry.Yuan@amd.com>
- <20221010162248.348141-7-Perry.Yuan@amd.com>
- <Y000eLQY/nKqiNFZ@amd.com>
- <DM4PR12MB52781C923DDA85CB93F7D3129C2A9@DM4PR12MB5278.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB52781C923DDA85CB93F7D3129C2A9@DM4PR12MB5278.namprd12.prod.outlook.com>
-X-ClientProxiedBy: TYWPR01CA0038.jpnprd01.prod.outlook.com
- (2603:1096:400:17f::8) To MW2PR12MB2506.namprd12.prod.outlook.com
- (2603:10b6:907:7::12)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Tue, 25 Oct
+ 2022 00:29:25 +0000
+Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::2b03:a6ec:3529:b969]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ ([fe80::2b03:a6ec:3529:b969%5]) with mapi id 15.20.5746.023; Tue, 25 Oct 2022
+ 00:29:25 +0000
+Date:   Tue, 25 Oct 2022 03:29:24 +0300
+From:   Vadym Kochan <vadym.kochan@plvision.eu>
+Subject: Re: [PATCH v3 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT
+ scheme
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <ae7c86fd-5bc9-4cdb-857c-e686225f5966@linaro.org>
+References: <20221024210153.28852-1-vadym.kochan@plvision.eu>
+        <20221024210153.28852-2-vadym.kochan@plvision.eu>
+        <ae7c86fd-5bc9-4cdb-857c-e686225f5966@linaro.org>
+Content-Type: text/plain
+X-ClientProxiedBy: FR3P281CA0122.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::6) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:802:38::26)
+Message-ID: <VI1P190MB03170C4FC92ED25F78EF57FC95319@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2506:EE_|SA0PR12MB4431:EE_
-X-MS-Office365-Filtering-Correlation-Id: 865232f9-a94b-4bbf-313e-08dab61f7ee9
+X-MS-TrafficTypeDiagnostic: VI1P190MB0317:EE_|PAXP190MB1765:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85dec9b5-77d0-4581-fc2a-08dab61ff827
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: J4eebJOITqVNDMJ5lWIH1V8JM23ORBJ6ZO0g5vC06HDYjY8O9CGpmjQ1GC9QZt3ZF9NbVfdPl6l9LMHCBTv+kMHi7GERfODWWCcJdWD9MPvqIE/mV+/eyjY+5PkYF8hy0OrSlovlBHBGUEYWNloSssGPmYm7SOOHMYDUGOsrTSfHhSdCLvw26kN6W1DZoVQxLEA8v5Gr/BVLU8LDoLgxD+wytepoLtd0YPq+lqQq6a1WFLZJ5Q3b5tyHTFjwzqp1ETqBqFTy7itqN9YazqZOfStJ4s2BolMA7+5Hz+cUzbl2gNOy2irsFmFIB2r7BhySo0xvQEFVZWr5HLF7LpmTkqEDdtjLnLGg4bh1pESQ7ixnFmdHIwOcA9oupLzMMoV/5K6/+6KoakxKf4MDCAxiV5RvK7Up0Er9sav5imEZkJZ5IzsZq2CvVzmAApPSjRVbV2uH5XWRFbC9SUpEJUgpfAUCUhmUifrn+jilj2l32nUsNerOuCFj9urN0mGtUZAe5+S17jU+3pxhOPfJwFoGEN9PNBmrvaN90S4EoFMr0FUCcmBGr3hHhQQ6G9zrRVIdrCa6bWcHzW83tpH5R0xhITSE8OLcsg3ffw00Q0JPFiZvc9EDlTqUiuUB71SAeBSX5JnSc5EX/d8lTpTXRQK5zz32yWhN1muMoRhj5kzqHiagM7+dytvIUCzK63laXDttAy/a50W/JK2w14Euc8NbrLvDymZiqyRWE0bCIT+GTNyCCvUDaSsG922zrdVveNWRGTaZt5WX/RGeFa2BtGfW4Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199015)(6862004)(36756003)(38100700002)(86362001)(6666004)(5660300002)(53546011)(8936002)(83380400001)(2616005)(54906003)(6512007)(37006003)(316002)(6636002)(6506007)(66946007)(478600001)(41300700001)(6486002)(66556008)(8676002)(2906002)(4326008)(66476007)(186003)(26005)(67856001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Rc1dwM7q35ymkeJv1bcYslzzVrd9m27xiViRbYgXjZwKVQDTYsKaByF+Oyr05lFPREQhUTxNA29QAIX93cTGLOH6HZt7kVk7BVz5Qd7ImDCUdc7PuwEeJ691mUao2RgIsk3tke+9JcjDRyH9C8ZKi1+wR+5LxEaOiFx6bWc/Qo1b8Tei5dUpClVuhvTO1u1Eq6yfTRlmaT9fe8qR8iIUDO+bng5RxVp9FfdhMkc4eavzsYA/PORXcoZasICYppitkS+Kyu/Dc7aa0WccwdDMPx/3ldmiFplZiW2uLKnr6837i/3rgikChxp9j2VoJ+NVDTUSbXsfkcw51IrltH8m+ySTKjo0oYTlCniK05oufH4L3GFttSybuU0fP2SvWYe6nxvyC5Ct6lJ2EActkmAZaH0fdVp9mjWmiMgOfTR24JwMqcImFlBkskMlqRRl8yFr30V54N7IcOPwNdCj0d6Q6vtA92ymT8xS7Ra4Gl0w1gTbsRrJ3CWcXL5sm8l8h3GJcD1XrDESlx+bDfII/bH1Ht8s5n3rG0+3mHcni2Q319GD22QMeovT/HN/6sJkhlNZ6yWqXWcY5GcY62U1bIiWnlYMS5rqIJES7Ti3ibsVZ/ArScZ+2WpuAHthnlFv1E6xtNsHFFFKYxZlTkisD6f/gAq1OUhsAJJFGZgQOteNb0d04aUQPBD6ZeyF8C93P0cn8KY6D7He6knapXCt/GpaGe1rH08yuQ1embWIOnOPSSIpvHUxggtJvjQBbfwLmTE9EtrKiIDMAQh/KpiV3z15igQ0MWTpIEUabx7sHZJw0EW0TBN694NkjyDuPJoMu7sBIisATfelR59lAilvuD22iKaNYk6xBkGQ6CTulhY0K5E=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39840400004)(376002)(366004)(396003)(346002)(34036004)(451199015)(41300700001)(6506007)(110136005)(7696005)(52116002)(53546011)(38350700002)(38100700002)(52536014)(7416002)(5660300002)(54906003)(8936002)(316002)(55016003)(921005)(8676002)(508600001)(966005)(44832011)(4326008)(66476007)(66946007)(86362001)(66556008)(33656002)(41320700001)(83380400001)(9686003)(26005)(2906002)(186003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GgsIsaHAhhf0Dka5mv6AjtqDhn+pvlu7Sty5dutuKlx/xeaG3/WAjbFTks4L?=
- =?us-ascii?Q?jXCOsXTyxS7YyYGzyE5Me0CockaoJUtWzU8U7QsZkslxOtXXFbGObse6Cjqj?=
- =?us-ascii?Q?I4sZX5F+prYaQcN/Mjk24FtmoIn6yKHE5TLaoecyvKIoOJNWsYbf9mmPKTf9?=
- =?us-ascii?Q?s6sKlbftCUsJYx9aC6AJq42948+M3KUJUTFcncgdlgpUABmzHSj+QbFEjost?=
- =?us-ascii?Q?po7IC4iJNIGwKYPyPvVAmRtyF9847aTPSGip9ZN/dMZgk0OT5OsxhWvqxe7f?=
- =?us-ascii?Q?Vs9AtqV0tDdNIpcjoXKh9K6aW3vDUuOe6FT8F7YnTwDlLBu6GUieAo7qfCiv?=
- =?us-ascii?Q?ccr1JwA4Hp7FmfbBhCjGOamkv6zbIpNNu0r183SDj5fZJBexg1gFjmc7Nd7X?=
- =?us-ascii?Q?9LLMg7WbfL6+NuGVYumuatOv9ZTrZB24uBV+0rfLazhVkBCU4ylYySRDXx3n?=
- =?us-ascii?Q?CbFVodwc7WwUcpsIfo91zn90JukRMrF/qHMbs8SItD9tdI8NuJ4/9M6cSi3o?=
- =?us-ascii?Q?vNPkZrsZPlawGCxB8CDOzFpjC+iV2HKSRq0jh8qrSDTzM+SQ0Jacz4/IX30z?=
- =?us-ascii?Q?WiFASS0IhOii3+TUT0uIs+duiF8x2mqsgP8AGWR1bDOw9qk8Bv3Xe0nadcO7?=
- =?us-ascii?Q?rmYTRQsLFVegDlkaFosZ3o4ZaW4rhoL989NUK/JKMBZVv+DFAJHq1Rfym4tG?=
- =?us-ascii?Q?zMiaH9uRvvZ8dSLdinnJjFwWnYx507flXYYXAhdeTQglWdfkBos3i4C/TPqb?=
- =?us-ascii?Q?NW7vUOjFUqAKa2bhQsVBRfn/RNigBsKesS910bN2ZV34G2G68tavamFscStb?=
- =?us-ascii?Q?aONLczrSUGChdrKLC0wPz9uKQhyUnXdHhs9lP2JJKA9P37r99FdfJrou4aAW?=
- =?us-ascii?Q?Sa1QUaNk+8WYDN7s22EnIpuZ3jgUlYzC3S/UqLDMCy20awUuix4+OzL00Hfh?=
- =?us-ascii?Q?aIjYFT7WAgHa6n8n/eBp1DuecobvAzH27DuH4/9HKFttDUCFPcokCYUikOHt?=
- =?us-ascii?Q?Uy+DrlQnZPcmiJ6H8+N4JtiaDFPlVhibwCNKeuYO35nkZJzU8Nywh8mBL0Kv?=
- =?us-ascii?Q?hAD050HpNqTbgON4l/knJV6yYk3emFIipOXnacFv3DBytMTwxmesaoClZkzU?=
- =?us-ascii?Q?ksCdiHya6PuWObtyxxZlNUw9IgmSd1vpi6KT8j/EWBJVwA2A+3UmvbjNvJHX?=
- =?us-ascii?Q?b/exG2A7Pro2omENzbwW80z013yqus48hhkOVW6emoglTkCSJ/+CrXr/CLsT?=
- =?us-ascii?Q?9ktSzasjVoa3HV4KtAOhCvUICgdPphDsDbHgDYdsmgng+i+nOTK7Ap2dWrQ6?=
- =?us-ascii?Q?EwKSAWxM3RAbnzQwFVD4/zoZwhDdePMgwbF6/o5gNKnXK2Ovz3v4l6ZmnDi5?=
- =?us-ascii?Q?fL3AEtD2Kj4DPmG/pUZ+hM+GFNgkDZp3bVwW+s9cT8IsZt1SXHkPlYk/746W?=
- =?us-ascii?Q?hHNqem6mHxsfmdH3ioPYNk+vSRE3Z9Pdd/YwDaEA8cGP8l9BZFcmzcqBTrAf?=
- =?us-ascii?Q?OJ+QowxB16NspY+hhcycTItbcn9B9fwC7dl321ND+LP3WINW0aVNpxjLpJtu?=
- =?us-ascii?Q?CcTAmiWbjsyMt72c8woUtjAdkvVf1dM99M4eqMzf?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 865232f9-a94b-4bbf-313e-08dab61f7ee9
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2506.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nJN0LVYnhpbBtAmqW+eALDOkUX0QvEVq7E++cmyKKfIWXuPtWdtYAPZ4TDV1?=
+ =?us-ascii?Q?IobpFOeW5R/FxmjTCWzoue3PhBfMU7bthV4AE4W+CLPZiNnkhIkEVnPsavPy?=
+ =?us-ascii?Q?8YRnNEFx1IHZjJQgTgDf68EmhU+6nxHWZpAeS1LR1Lb9o2JBddVp0yJC8Unz?=
+ =?us-ascii?Q?c1punLIFXsMfF6fdbqWCSbDAvocMsZevox4P6MKPiKgux4Wmf1bFOAVXz4QK?=
+ =?us-ascii?Q?9GWblt96V4f7h1JNJkp2yJKiGXjbpdR1b9i2VJ1llkk2AMNNHKTpw80ds0c/?=
+ =?us-ascii?Q?0ZRuppdPfMv53A0m0KmvSTU3RmnN3gErlv4BBQRNSHcwzs8zA0FW2D9i0BD0?=
+ =?us-ascii?Q?5UEHkinLRFbfz54ObH0LmZR8x9R0j64dEmS1qVKscHyNRMN/CtOLr3FU2g32?=
+ =?us-ascii?Q?tDumxXEKa1PE31n0Bhmw9VzYboWKhFpE+QKMb4vG2NSK45jr3uSIaW/sF3q8?=
+ =?us-ascii?Q?zuhqLrDssXT5svy76UpJ/AjwC8TwR+Oo8VspcPzfjIMOwyu5ScwYPBpjFDfU?=
+ =?us-ascii?Q?p6/+JY626Bho5NL+1MGMobueY8W0F/Abcz7cmDoD6E9pJbvnsdCqBOvVVdfz?=
+ =?us-ascii?Q?XthXFQEQhCHcXFWpvlvl5iaXsC9Sh6Mnnh0xvmZv9xv/IxrCXUp4lhOAUJFr?=
+ =?us-ascii?Q?QnJRInVda3O1g8V7bU7NernpptfpPUYyhZ3+/zgqLCfoPFxHRLipNjAG63rx?=
+ =?us-ascii?Q?4J7M8RGpZ3KZZ0KbHcYbG3mbRdYuE9t85Re6R/0bZHgUSvAWuHqygVmKF7Kl?=
+ =?us-ascii?Q?cda1/lBJxSdcJiWF/L5g79HePzQu77w8MugMA9X3Cmxy1DYyazxvtwr1ib6F?=
+ =?us-ascii?Q?FUhtuLyPcv9SEKfy6qt+ujHFKIKyJcX0OgTv4MG3C74lAZ08f4ANzMCRQWI1?=
+ =?us-ascii?Q?0DMw+ihlPqBWoOx6w+XRVVUTnjtiYZ9hiULCVF9+A/9nM708WqskmQ33Oe/M?=
+ =?us-ascii?Q?iJThOpy8L0QGtQUsgTSkjss063c7No44QynKmcdGPR8aP1R343aEvcQwUyqJ?=
+ =?us-ascii?Q?/NoHRLBhU15jDJnS9itEgThBN8fe2HkkQWo7JQSYxNezVDzKRDcQivOocmb+?=
+ =?us-ascii?Q?mdqe9b1P+N+tFg2iDUC0ypNVIfqOZikcSJpPI9J9EJcCf2pV/8anTgbFfmYu?=
+ =?us-ascii?Q?riuJIuB+enKpP2TJdlxcMhp+5x80Y8BRP77bT+tHIrnBqJCBS/V+ApgNHn3z?=
+ =?us-ascii?Q?4llObNehH3eGucNOtB6/Aws26mS2RfaVkBECKH/ylChiCyir3b/rwdTW4uYL?=
+ =?us-ascii?Q?bPg+rKlwxUtEczPYKfv7cyEafbPos3b01ejU+NFDOlSwDOAgq7aF13tH+cVS?=
+ =?us-ascii?Q?hcPLfUkpIHXHwwRBMzzHXsUrYzSf4XQ0dvCK/6Cywvz6N7yyPk8nYkazne4t?=
+ =?us-ascii?Q?AadklAFKwxgSRhKTjLjHPgrJggNC+zFVxzE9WpCNMs/EBdHyxubvIqTohjiJ?=
+ =?us-ascii?Q?xWOXCnLyYyPYr22OPL/SYJunPvpoWUt+C2FIo5YajlpkyiMhljMAoGju6PwC?=
+ =?us-ascii?Q?MITi80TfjcGC0zgEXzeUbH5zhSWcpBstCFwAc47JMChUYLMnXQSGspeXxuwL?=
+ =?us-ascii?Q?P8Fg0rHdILHWzufAGTSu1M8gFpRb9IU2W+xyKigLkUcoNTg4Y6jnkv7WgWl2?=
+ =?us-ascii?Q?ag=3D=3D?=
+X-OriginatorOrg: plvision.eu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85dec9b5-77d0-4581-fc2a-08dab61ff827
+X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 00:26:01.8455
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 00:29:25.1676
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cMXh4+UoXFlBxVUO9E1/CjlhGApTZUHdPl3FUNjwmkzedfvFeZ65ua20Q1D4uJQsDUZtJWrg0XnCa0o3880osA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4431
+X-MS-Exchange-CrossTenant-UserPrincipalName: gnV4+L2gZzkCRH4SvZu6I8/pzl3N5I0BJwZIJ90pP1RFZWoNNYASX328SIfb9LQaotPcY1tThg2MFXC4zmmsM5Rux7UPNYOVCnNMvM2/Hsk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXP190MB1765
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
@@ -125,77 +126,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 12:04:26AM +0800, Yuan, Perry wrote:
-> [AMD Official Use Only - General]
-> 
-> 
-> 
-> > -----Original Message-----
-> > From: Huang, Ray <Ray.Huang@amd.com>
-> > Sent: Monday, October 17, 2022 6:55 PM
-> > To: Yuan, Perry <Perry.Yuan@amd.com>
-> > Cc: rafael.j.wysocki@intel.com; viresh.kumar@linaro.org; Sharma, Deepak
-> > <Deepak.Sharma@amd.com>; Limonciello, Mario
-> > <Mario.Limonciello@amd.com>; Fontenot, Nathan
-> > <Nathan.Fontenot@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; Huang, Shimmer
-> > <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Meng,
-> > Li (Jassmine) <Li.Meng@amd.com>; linux-pm@vger.kernel.org; linux-
-> > kernel@vger.kernel.org
-> > Subject: Re: [RESEND PATCH V2 6/9] cpufreq: amd_pstate: add AMD pstate
-> > EPP support for shared memory type processor
+Hi Krzysztof,
+
+On Mon, 24 Oct 2022 17:31:48 -0400, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> On 24/10/2022 17:01, Vadym Kochan wrote:
+> > Switch the DT binding to a YAML schema to enable the DT validation.
 > > 
-> > On Tue, Oct 11, 2022 at 12:22:45AM +0800, Yuan, Perry wrote:
-> > > Add Energy Performance Preference support for AMD SOCs which do not
-> > > contain a designated MSR for CPPC support. A shared memory interface
-> > > is used for CPPC on these SOCs and the ACPI PCC channel is used to
-> > > enable EPP and reset the desired performance.
-> > >
-> > > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> > > ---
-> > >  drivers/cpufreq/amd-pstate.c | 13 +++++++++++++
-> > >  1 file changed, 13 insertions(+)
-> > >
-> > > diff --git a/drivers/cpufreq/amd-pstate.c
-> > > b/drivers/cpufreq/amd-pstate.c index 2d28f458589c..08f9e335f97c 100644
-> > > --- a/drivers/cpufreq/amd-pstate.c
-> > > +++ b/drivers/cpufreq/amd-pstate.c
-> > > @@ -135,12 +135,25 @@ static inline int pstate_enable(bool enable)
-> > >
-> > >  static int cppc_enable(bool enable)
-> > >  {
-> > > +	struct cppc_perf_ctrls perf_ctrls;
-> > >  	int cpu, ret = 0;
-> > >
-> > >  	for_each_present_cpu(cpu) {
-> > >  		ret = cppc_set_enable(cpu, enable);
-> > >  		if (ret)
-> > >  			return ret;
-> > > +		if (epp) {
-> > > +			/* Enable autonomous mode for EPP */
-> > > +			ret = cppc_set_auto_epp(cpu, enable);
-> > > +			if (ret)
-> > > +				return ret;
-> > > +
-> > > +			/* Set desired perf as zero to allow EPP firmware
-> > control */
-> > > +			perf_ctrls.desired_perf = 0;
-> > > +			ret = cppc_set_perf(cpu, &perf_ctrls);
-> > > +			if (ret)
-> > > +				return ret;
-> > > +		}
+> > Dropped deprecated compatibles and properties described in txt file.
 > > 
-> > This patch only writes the desired_perf as 0 to enable the EPP function, but it
-> > cannot be an independent function or patch without the dependency of the
-> > next one (patch 7).
+> > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> > ---
 > > 
-> > Thanks,
-> > Ray
+> > v3:
+> >   1) Remove txt version from the MAINTAINERS list
+> > 
+> >   2) Use enum for some of compatible strings
+> > 
+> >   3) Drop:
+> >         #address-cells
+> >         #size-cells:
+> > 
+> >      as they are inherited from the nand-controller.yaml
+> > 
+> >   4) Add restriction to use 2 clocks for A8K SoC
+> > 
+> >   5) Dropped description for clock-names and extend it with 
+> >      minItems: 1
+> > 
+> >   6) Drop description for "dmas"
+> > 
+> >   7) Use "unevalautedProperties: false"
 > 
-> Do you mean that I could squash this patch into Patch 7 ?
-> If so , I will get this into V3. 
+> Hmm... In one place it makes sense. In "nand@" not really.
+> 
+> > 
+> >   8) Drop quites from yaml refs.
+> > 
+> >   9) Use 4-space indentation for the example section
+> > 
+> > v2:
+> >   1) Fixed warning by yamllint with incorrect indentation for compatible list
+> > 
+> >  .../bindings/mtd/marvell,nand-controller.yaml | 189 ++++++++++++++++++
+> >  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ------------
+> >  MAINTAINERS                                   |   1 -
+> >  3 files changed, 189 insertions(+), 127 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> > new file mode 100644
+> > index 000000000000..cb20f14d4aea
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+> > @@ -0,0 +1,189 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Marvell NAND Flash Controller (NFC)
+> > +
+> > +maintainers:
+> > +  - Miquel Raynal <miquel.raynal@bootlin.com>
+> > +
+> > +
+
+[...]
+
+> > +      nand-ecc-step-size:
+> > +        description: |
+> > +          Marvell's NAND flash controller does use fixed strength
+> > +          (1-bit for Hamming, 16-bit for BCH), so the actual step size
+> > +          will shrink or grow in order to fit the required strength.
+> > +          Step sizes are not completely random for all and follow certain
+> > +          patterns described in AN-379, "Marvell SoC NFC ECC".
+> > +
+> > +      label:
+> > +        $ref: /schemas/types.yaml#/definitions/string
+> > +
+> > +      partitions:
+> > +        type: object
+> > +        $ref: /schemas/mtd/partitions/partition.yaml
+> 
+> This is a friendly reminder during the review process.
+> 
+> It seems my previous comments were not fully addressed. Maybe my
+> feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all
+> requested changes or keep discussing them.
+> 
+> Thank you.
 > 
 
-Yes, thanks.
+I see that I have to drop "label" and "partitions" properties.
 
-Ray
+> > +
+> > +      marvell,nand-keep-config:
+> > +        description: |
+> > +          Orders the driver not to take the timings from the core and
+> > +          leaving them completely untouched. Bootloader timings will then
+> > +          be used.
+> > +        $ref: /schemas/types.yaml#/definitions/flag
+> > +
+> > +      marvell,nand-enable-arbiter:
+> > +        description: |
+> > +          To enable the arbiter, all boards blindly used it,
+> > +          this bit was set by the bootloader for many boards and even if
+> > +          it is marked reserved in several datasheets, it might be needed to set
+> > +          it (otherwise it is harmless) so whether or not this property is set,
+> > +          the bit is selected by the driver.
+> > +        $ref: /schemas/types.yaml#/definitions/flag
+> > +        deprecated: true
+> > +
+> > +    unevaluatedProperties: false
+> 
+> This looks wrong. I do not see referencing schema here and I did not ask
+> to change it.
+
+Yes, I will drop it.
+
+> 
+> > +
+> > +    required:
+> > +      - reg
+> > +      - nand-rb
+> > +
+> > +unevaluatedProperties: false
+> 
+> This one is ok.
+> 
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +
+> > +allOf:
+> > +  - $ref: nand-controller.yaml#
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: marvell,pxa3xx-nand-controller
+> > +    then:
+> > +      required:
+> > +        - dmas
+> > +        - dma-names
+> > +    else:
+> > +      properties:
+> > +        dmas: false
+> > +        dma-names: false
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: marvell,armada-8k-nand-controller
+> > +    then:
+> > +      required:
+> > +        - marvell,system-controller
+> > +      properties:
+> > +        clocks:
+> > +          minItems: 2
+> 
+> Also for clock-names "minItems: 2"
+> 
+> > +    else:
+> > +      properties:
+> > +        marvell,system-controller: false
+> 
+>     clocks:
+>       maxItems: 1
+> 
+
+OK, so it goes under the "else".
+
+> and the same for clock-names... unless these variants also have two clocks?
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Thank you,
+Vadym
