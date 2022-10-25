@@ -2,99 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D7360D0A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FE860D0A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbiJYPcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S232411AbiJYPcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:32:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbiJYPcU (ORCPT
+        with ESMTP id S232616AbiJYPcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:32:20 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BD05AC44;
-        Tue, 25 Oct 2022 08:32:19 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id g10so14619634oif.10;
-        Tue, 25 Oct 2022 08:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5BZw+Ko52tSVgQGtiIuRdHioVrOpwaQYrUCrv7C2UG4=;
-        b=Cu+FA0IrmzilWjAVokAmnGBR+YYAatTUaSx87z7jqh/Heya2gUeONRmQ8d+yo9AAVz
-         9GEQU1PUSerA7uwDc0LrNg0/jZS9plWvyZin389pREChEhbcyYSJu03WEvY2LFF+vw51
-         bUW4H2WLSU5fcIp9TG/BMMtfzrOWN6xJ6nsSwxs78B1sC7tI1NSvZV7Nv9co4i9ekS9k
-         WUpy4KYND3E9DtR5zOyT+kSDFP6KNgIwyRELKBNxb/2QgJvYXwy13l7Xm1suqkh6bB2+
-         xOi4rmFD9C6pNGpwPEbBmyQgQij0Tg9UGvKhc8VqexB9PiTAUc94Bmp6wqHnWOSuuGIh
-         QLzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5BZw+Ko52tSVgQGtiIuRdHioVrOpwaQYrUCrv7C2UG4=;
-        b=2vOnaXruqv+PLkkl6hULvPUWbVaglPs5HsDmYbfWNOemswVpRWXTnc+s86FJjgbX6O
-         omy04BLj0bztiGRfAqFi8l5hMBs30Caeq3aAJibyEjLNfhKG3dTmI8OO+MJqFdzDMsWM
-         HwDXBZAbhej4Z7OG424EtiCzsOeKZdeX6yNYtzlJTSv5MhhpF9dqm3LllCKBs6UuNDWE
-         L204PNnOoWvBnQAbvBG0sdazbw6bBoHPf+mowhbj5TM+5JHclxT3uTR5gQ/3BrwlLokb
-         vqVSYaL6/klkI69F86d+nexYssNVK5bpcuMxXGg9ytIR3L71YdBGeoWiSNR264aSsFLQ
-         VJng==
-X-Gm-Message-State: ACrzQf10XnynLPzz5VQhnLsJ1QwuanBNaqSwXl2fSRZhCPkoQHbzHk3h
-        +o5vQPj+VpWFfe8OWWZuX8k=
-X-Google-Smtp-Source: AMsMyM7Z/iDiPMhP5BVVzZeV8KKgQesOBsGjBq7hsfEojthlWuccSu1Ir36jLoztbrAqyHttk9/GPQ==
-X-Received: by 2002:a05:6808:120f:b0:351:98b4:a86f with SMTP id a15-20020a056808120f00b0035198b4a86fmr32948433oil.189.1666711938512;
-        Tue, 25 Oct 2022 08:32:18 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n5-20020a9d64c5000000b0066210467fb1sm1152952otl.41.2022.10.25.08.32.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 08:32:17 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 25 Oct 2022 08:32:16 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-Message-ID: <20221025153216.GA968059@roeck-us.net>
-References: <20221024112934.415391158@linuxfoundation.org>
+        Tue, 25 Oct 2022 11:32:39 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D946A48F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:32:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 5210E2204D;
+        Tue, 25 Oct 2022 15:32:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666711956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qQCwd41rDpy0rt5Enc7XkN/e7uTo487lpbqJTkBn6Us=;
+        b=Uw2sHt28AMEp5ujwtvV2WyoEtPJWtYfLzt6uoPwagggwXKzeQJ2JhO73A58je3YJhlSEmN
+        9eLBNIphR2kCgUbj+HqeFk80Ug8qMwrzmfjeCAWOF07hq4kLkUvCisE+OoV5YqqcdPXVO8
+        YyJFnFFP4XjYcPWPb+lfEsRv8Hrlt1U=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 311112C143;
+        Tue, 25 Oct 2022 15:32:36 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 17:32:35 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v2 29/38] printk: console_flush_on_panic: use srcu
+ console list iterator
+Message-ID: <Y1gBk7jtZJ23PYkc@alley>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-30-john.ogness@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221019145600.1282823-30-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 01:31:02PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.4 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed 2022-10-19 17:01:51, John Ogness wrote:
+> With SRCU it is now safe to traverse the console list, even if
+> the console_trylock() failed. However, overwriting console->seq
+> when console_trylock() failed is still an issue.
 > 
-> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
-> Anything received after that time might be too late.
+> Switch to SRCU iteration and document remaining issue with
+> console->seq.
 > 
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Teest results are for 6.0.3-22-gd4150c7.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Build results:
-	total: 152 pass: 152 fail: 0
-Qemu test results:
-	total: 499 pass: 499 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Best Regards,
+Petr
