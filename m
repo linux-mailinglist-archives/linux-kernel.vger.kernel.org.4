@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8616960D4D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820B360D4DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiJYTkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
+        id S232284AbiJYTmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiJYTk3 (ORCPT
+        with ESMTP id S232208AbiJYTmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:40:29 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702A35AC5A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:40:28 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id w10so3244174qvr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PuJ4rqhBVW/pzXuCIr6qAp0C/9agM39YZk4Tyezi0lg=;
-        b=L2kqjdxA4/IcBXtCiww7ZIrzUkvLV+QQMxEBKsv9hiUWXaMwc/uzi0z+O/cOcRG7JV
-         /J1c8ZyXAM9gvNhXIYl7273XQr93hmQedx+ZlTHuC1B/oDk0jk4gHMrfs1OIWoZgr5Zp
-         qSyueabix5LDL24xa9eZdzp0Ojzj0lJt52J6DQ6PJuLScOOUbDKNzJ1pBeXOJQeLmYU8
-         6nF+RcwAUmuHQJ1po29cdqUOmaUBN1Jcnv5rSBY2Wabdac1z5bB4zugv2mNo94obfeAU
-         23sIqtykWF1b9ubLcGKJJwi2lMcrN/6AsruNeE2IUUdTRVoVieFZ7ZMKMJT59eqcC0Df
-         1lnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PuJ4rqhBVW/pzXuCIr6qAp0C/9agM39YZk4Tyezi0lg=;
-        b=c1rHueqedrlKND5fozylv+o3jNSXZkDwZGhIbu8nD6uRx32YFmIy5U0mg1sf8+gKa3
-         bhMo1Du8thOwI04wpvNP8DuOV4tpQmoM4oXjRkJpkQ+A66ZM5EJNIC/zkuEFRpqaSrzc
-         +TO2zu0HrXkQuAz52beTOk4OLZZ17RjcMvNKWrrKgNSs23w6RPzV5FU3I41eMHrlwuMQ
-         4E6FrxQ2GMukTxLGoVp+eRFGW/alMlxbuknFnU+hw3/mwySEwzumXA7aNG+gQxKmLSpT
-         ba0ZvVB2qa3hCkF/1TsLnHrhpPSyOg+Npn7a2V0sUL+RS+TOOYbjFrV+I8qFnFC058Db
-         wajQ==
-X-Gm-Message-State: ACrzQf29XIg2T6TbjL29i/hLN866sRQVHmK1yd+QqCREYltiLzqrarF3
-        ETTb72Z7CzsvW5V+7UNa4DBjIQ==
-X-Google-Smtp-Source: AMsMyM7+P6vDmIeHHpQ1nGvGx/DyvpypIrLH2RG7R10wpTZc9qLl/phhWX5f1YYNDk+MUG5rmd8g4g==
-X-Received: by 2002:ad4:5eca:0:b0:4ba:535a:6d45 with SMTP id jm10-20020ad45eca000000b004ba535a6d45mr21478617qvb.56.1666726827588;
-        Tue, 25 Oct 2022 12:40:27 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05620a28c200b006e8f8ca8287sm2653378qkp.120.2022.10.25.12.40.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 12:40:26 -0700 (PDT)
-Message-ID: <7c67c721-685a-fa0e-ab4b-41b7de3ea0a0@linaro.org>
-Date:   Tue, 25 Oct 2022 15:40:25 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 2/2] dt-bindings: soc: add loongson2 guts
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Tue, 25 Oct 2022 15:42:18 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586748C448;
+        Tue, 25 Oct 2022 12:42:17 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29PJg2MZ119572;
+        Tue, 25 Oct 2022 14:42:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666726922;
+        bh=H/as/1Tn9o1i2U2DwmPl0CGI3P3tgiJdJ3deInJ3bw0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Er6+biu5OoiqIuFs74X+1JBEm08eYptQuWK8UBFebRFe6bIZ1L4SDUNL13nlRFtGa
+         vBIsiDuCbkfVT3dhdCSLmg6TjWgJE2KAaJJvfRbI7t2uVOSnC/tm7H5jgux8+TuYc0
+         auGAs2disOnVah1ZKlLcyrqSJ1bF1hg4OxpHgAo8=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29PJg2PJ079385
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 25 Oct 2022 14:42:02 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 25
+ Oct 2022 14:42:01 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 25 Oct 2022 14:42:02 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29PJg1kL027737;
+        Tue, 25 Oct 2022 14:42:01 -0500
+Date:   Tue, 25 Oct 2022 14:42:01 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hector Martin <marcan@marcan.st>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221025035128.21068-1-zhuyinbo@loongson.cn>
- <20221025035128.21068-2-zhuyinbo@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221025035128.21068-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+CC:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
+        Device Trees <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LKML ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 04/11] thermal: k3_j72xx_bandgap: map fuse_base only
+ for erratum workaround
+Message-ID: <20221025194201.3iup4ionv3zhnfd5@bryanbrattlof.com>
+References: <20221025191515.9151-1-bb@ti.com>
+ <20221025191515.9151-5-bb@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20221025191515.9151-5-bb@ti.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,77 +77,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 23:51, Yinbo Zhu wrote:
-> Add the loongson2 soc guts driver binding with DT schema format
-> using json-schema.
+On October 25, 2022 thus sayeth Bryan Brattlof:
+> Some of TI's J721E SoCs require a software trimming procedure for the
+> temperature monitors to function properly. To determine if a particular
+> J721E is not affected by this erratum, both bits in the WKUP_SPARE_FUSE0
+> region must be set. Other SoCs, not affected by this erratum, will not
+> need this region.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Map the 'fuse_base' region only when the erratum fix is needed.
+> 
+> Signed-off-by: Bryan Brattlof <bb@ti.com>
 > ---
->  .../soc/loongson/loongson,ls2k-guts.yaml      | 37 +++++++++++++++++++
-
-Looks like wrong location, although difficult to judge because you did
-not describe the hardware at all. If this is chipinfo-like device, then
-Documentation/devicetree/bindings/hwinfo/.
-
-
->  MAINTAINERS                                   |  1 +
->  2 files changed, 38 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>  drivers/thermal/k3_j72xx_bandgap.c | 37 ++++++++++++++++++------------
+>  1 file changed, 22 insertions(+), 15 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
-> new file mode 100644
-> index 000000000000..2502f8aeb74d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-guts.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Loongson2 GUTS driver.
 
-Drop "driver." unless you refer to some hardware (like motor driver?).
+...
 
-> +
-> +maintainers:
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +description: |
-> +  GUTS driver was to manage and access global utilities block. Initially
+>  
+> -	if (workaround_needed)
+> -		devm_iounmap(dev, fuse_base);
+> -
 
-Drop "driver" and describe instead what is GUTS, including its acronym,
+Ugh... This is wrong. 
 
-> +  only reading SVR and registering soc device are supported.
+Of course I will catch it right after I send this out
 
-Entire sentence describe Linux driver - drop it. Instead describe the
-device, the hardware.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-guts
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  little-endian: true
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    guts: guts@1fe00000 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-
-Best regards,
-Krzysztof
-
+Sorry for the noise everyone
+~Bryan
