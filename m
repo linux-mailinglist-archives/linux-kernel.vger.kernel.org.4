@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4826860D648
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 23:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A2460D64C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 23:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232000AbiJYVpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 17:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
+        id S232182AbiJYVqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 17:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiJYVpR (ORCPT
+        with ESMTP id S231355AbiJYVqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 17:45:17 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C621C65027
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 14:45:15 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id b11so6016552pjp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 14:45:15 -0700 (PDT)
+        Tue, 25 Oct 2022 17:46:14 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D607B1FB;
+        Tue, 25 Oct 2022 14:46:13 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id kt23so10722059ejc.7;
+        Tue, 25 Oct 2022 14:46:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kK+NVAKYFB6C/U0fnuGpM8AspYJ6lf21/N2Izhrn1vU=;
-        b=i7hk6RlLYFhoNdnfaeM3c+PUUfWus8pPN2A+1zjhOq4kL2aJqpLInYimMayujafigH
-         duFb79niGCvM1qlTPhk65GW/bCUT2Y7/vEMIu0CFbR5IjBMX9+8GGZtlZMrJ9h2NJTDx
-         UjlBbu9Qksxx8OSaYnNQL0hXiQhZ0DkXC5RWc=
+        bh=ycaLfQNN3PInfkiIqW8vGIwheuToIkql0ZXT6kL83w0=;
+        b=HMzqPmg3+I/LZ4ykgnsR1UOL10k6OHyRYRve9fldSPZghKL9PFO8UXVI40qxg3El/o
+         ANe/d8U65VDSoiHMWFQCUCxLnDQoroHkgRiwACiATleADIPEI+UEcMf+7Pa9GqxCwuRw
+         eAMTPxEu/lGDOLPXvhDjJ4ldaPdFWDg4XUt3fU1o/tyh8odLbKXCUqbV7tp7wUlFFekD
+         A0gTEcKaqaoP7XKjuyuAu5VXBQ3k2qbvUu/ieTComDXeqBP0Yd9+y6u85qec02ot3UEk
+         4TvQYfz8FB/Vqm8KEt4QWcrz3zn50mkLlI9iATMA4+nOvDn6pQCS5TgCFtsacLdnmscq
+         2KYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kK+NVAKYFB6C/U0fnuGpM8AspYJ6lf21/N2Izhrn1vU=;
-        b=cp6dr7QmZXwPU+F7iY4WQZQ7QSjU103vyozPQRoh1/t4LTocpPP0cjs+IIWRsgXA+D
-         ol3azDu0O9epDgQxJNl8yRDKPNWvoyIGD53fegI/6nahDJxG5DetVFaU6cyPXeNRE8zX
-         sW5CFTn8ZBUDPgdiY5dHiMRn2vpqqbRLD+unoiuWJhW2kf5ySTH9XppqYx2vMHRS7hQp
-         FNiJFjulA4K0k18xGnFWi1tT0g6xgYXKlImiQyPF7F/pDk6eChfHlFE0CZF52sEr/719
-         2GcKkxiVALI6KPmq2WffKcXyIQv6UNukA8vZiVyQCetSaWKvri6XIfMUr1dx4tIXA9BV
-         oVNg==
-X-Gm-Message-State: ACrzQf0TUpLl1mWLUTXoKfUozaqvEd2WGFDQhb/8Xmfu7HonNjR+I09I
-        WhVw/f9leFqBAPy/pcnR4MZ5VQ==
-X-Google-Smtp-Source: AMsMyM4QXUCeTzwk/K1scOMPNYxWriXPyjOuHRCp6R/Q8za6/v8YsQcna09gxCbRuqidYLxGoQ6hyg==
-X-Received: by 2002:a17:902:cf12:b0:179:fafd:8a1c with SMTP id i18-20020a170902cf1200b00179fafd8a1cmr41527794plg.102.1666734315312;
-        Tue, 25 Oct 2022 14:45:15 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:efef:6660:5e20:5f6b])
-        by smtp.gmail.com with ESMTPSA id h29-20020a63531d000000b0046eb1d42a7fsm1686197pgb.55.2022.10.25.14.45.13
+        bh=ycaLfQNN3PInfkiIqW8vGIwheuToIkql0ZXT6kL83w0=;
+        b=wGAIl0fSF9CSe+jQusrXjYR2KPpvHoQ51G7kuzU3f07UIGSrzblynehlRcthfKpzZv
+         EQg955rKBVBn6gg+BxuhtH2BO2amq+a98FyJ9tLR294On0ec2HRo5nzEPgtGifHBoZuC
+         AN0KbWZQhl2lyaQkgIdQ0qhzUWQ6irf9YmH5zSPSQRN60M+ZUOoc1OB/zg7KPVhYtoNq
+         A0M4AVFzJ62fL3Z14CyPHj2z+WADtVakI1i55qDDnDRJNMxAiOPKrLE8wLEGTd0ggWGv
+         +W8ERPTvLvrqd1ta7H2cyxn763pJPCmuWAE8XJFuHbc+n6V3U7I/jtX4ry1uIlnNwAwr
+         tLww==
+X-Gm-Message-State: ACrzQf27WP8IzVAEFxA7GypAc0AoeM2MIXhMcbsRnqUny7NxLICic6rk
+        l6BpqxQqjoPSfu6vlt2yjsg=
+X-Google-Smtp-Source: AMsMyM5bA2tXfDp3eP42q1NHNDaYfxq4s7SDSLn65pBbpY/KnzTuOBmgeN3+hQcIi7ehV69UgjUzVA==
+X-Received: by 2002:a17:907:7e87:b0:78e:1a4:130 with SMTP id qb7-20020a1709077e8700b0078e01a40130mr35116946ejc.101.1666734372185;
+        Tue, 25 Oct 2022 14:46:12 -0700 (PDT)
+Received: from hoboy.vegasvil.org (81-223-89-254.static.upcbusiness.at. [81.223.89.254])
+        by smtp.gmail.com with ESMTPSA id fj20-20020a0564022b9400b004618f2127d2sm2277197edb.57.2022.10.25.14.46.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 14:45:14 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 14:45:11 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        linux-mmc@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Faiz Abbas <faiz_abbas@ti.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Subject: Re: [PATCH v3 6/7] mmc: sdhci_am654: Fix SDHCI_RESET_ALL for CQHCI
-Message-ID: <Y1hY57vkkOhybwE1@google.com>
-References: <20221024175501.2265400-1-briannorris@chromium.org>
- <20221024105229.v3.6.I35ca9d6220ba48304438b992a76647ca8e5b126f@changeid>
- <5b91c0eb-52aa-8431-c286-81b7feae84ce@intel.com>
+        Tue, 25 Oct 2022 14:46:11 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 14:46:08 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yangbo.lu@nxp.com,
+        radhey.shyam.pandey@amd.com, anirudha.sarangi@amd.com,
+        harini.katakam@amd.com, git@amd.com
+Subject: Re: [PATCH net-next V2] dt-bindings: net: ethernet-controller: Add
+ ptp-hardware-clock
+Message-ID: <Y1hZID8iRtg73hV3@hoboy.vegasvil.org>
+References: <20221021054111.25852-1-sarath.babu.naidu.gaddam@amd.com>
+ <20221024165723.GA1896281-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5b91c0eb-52aa-8431-c286-81b7feae84ce@intel.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221024165723.GA1896281-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 04:10:44PM +0300, Adrian Hunter wrote:
-> On 24/10/22 20:55, Brian Norris wrote:
-> > diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
-> > index 8f1023480e12..6a282c7a221e 100644
-> > --- a/drivers/mmc/host/sdhci_am654.c
-> > +++ b/drivers/mmc/host/sdhci_am654.c
-
-> > @@ -378,7 +379,7 @@ static void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
-> >  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> >  	struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
-> >  
-> > -	sdhci_reset(host, mask);
-> > +	sdhci_and_cqhci_reset(host, mask);
-> >  
-> >  	if (sdhci_am654->quirks & SDHCI_AM654_QUIRK_FORCE_CDTEST) {
-> >  		ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
+On Mon, Oct 24, 2022 at 11:57:23AM -0500, Rob Herring wrote:
+> On Thu, Oct 20, 2022 at 11:41:10PM -0600, Sarath Babu Naidu Gaddam wrote:
+> > There is currently no standard property to pass PTP device index
+> > information to ethernet driver when they are independent.
+> > 
+> > ptp-hardware-clock property will contain phandle to PTP clock node.
+> > 
+> > Freescale driver currently has this implementation but it will be
+> > good to agree on a generic (optional) property name to link to PTP
+> > phandle to Ethernet node. In future or any current ethernet driver
+> > wants to use this method of reading the PHC index,they can simply use
+> > this generic name and point their own PTP clock node, instead of
+> > creating separate property names in each ethernet driver DT node.
 > 
-> What about sdhci_reset in sdhci_am654_ops ?
+> Seems like this does the same thing as 
+> Documentation/devicetree/bindings/ptp/timestamper.txt.
 
-Oops, I think you caught a big fallacy in some of my patches: I assumed
-there was a single reset() implementation in a given driver (an unwise
-assumption, I realize). I see at least sdhci-brcmstb.c also has several
-variant ops that call sdhci_reset(), and I should probably convert them
-too.
+That is different. It goes from:
 
-I'll take another pass through the series for v4, fixing this and the
-other smaller cosmetic issues. I may retain some Acks, depending on
-whether I think the changes are substantial.
+   MAC -> time stamp generator
+
+The proposed binding goes from:
+
+  MAC (with built in time stamp generator) -> PTP Hardware Clock (with get/settime etc)
+
 
 Thanks,
-Brian
+Richard
