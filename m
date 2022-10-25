@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 832D160CABE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEDA660CAC2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiJYLRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S231911AbiJYLTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbiJYLRa (ORCPT
+        with ESMTP id S231688AbiJYLTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:17:30 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C7D1AD9E;
-        Tue, 25 Oct 2022 04:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1666696636;
-        bh=7AL7EYlm4Xr7IAbvlSQol7iSCIjAwmR3cBHLfZ9D5GQ=;
-        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
-        b=FfExlaxnQnOI94ltIE3h72Cpw8lUYk84E+G6GfM9y5/yZ+lx+Z9J4cLwxYW0bqaEX
-         VqqI33mKdHJ4iVkuzQytrUGdyTZaaqc/H5adh5qWWWi+a7yON/LwfvJwfNrZb8lt6D
-         U3N/hm4/I/CGPvplWg10bEq0JjAiMOcPsLCKgR+c=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MHoRK-1oq5TJ3Zuo-00EqxQ; Tue, 25
- Oct 2022 13:17:16 +0200
-Message-ID: <9b69ccd1-2fa2-512f-a3ab-d9a8cf723350@gmx.com>
-Date:   Tue, 25 Oct 2022 19:17:10 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2] btrfs: volumes: Increase bioc pointer check
-Content-Language: en-US
-To:     Li zeming <zeming@nfschina.com>, clm@fb.com, josef@toxicpanda.com,
-        dsterba@suse.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221025105244.5212-1-zeming@nfschina.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <20221025105244.5212-1-zeming@nfschina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 25 Oct 2022 07:19:40 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ABF1217F4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:19:38 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id l28so7242004qtv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:19:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jOEv+spg1vFxsgLP+Brkgpa4VWCFOV4NiNl/t5XRFeU=;
+        b=xbKz4RXc7hITxZLV5zki1DRdTSN0MwWgeFqRqblQ/IC4NzR9WeGwjQ+dxwhkIWTMLM
+         F0t//xKeOjFrx/CHRlLc0FHX42lVXad3vqdZiyqzL8fewRljG8p3Iz0YviTLqUha/1fg
+         dVCcGUwJ/q1Zgi5A0/TG4gkhu1o/5CSLJq7Y4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jOEv+spg1vFxsgLP+Brkgpa4VWCFOV4NiNl/t5XRFeU=;
+        b=i164hTx9Kz/BHdEqxTuja5nMy7cSiuGB7N0FeWFS9ZAifzDqrCuatHytY3aEnKMeCV
+         oJ1mpxv+jRI+0XuDhH+72ny25Y7K+sPu+L1a0grVy1zuLik2l99cKo0PWIURzB9dyTxT
+         RoTM8/w391tClkmh6N1Hm0XxNrVr7YjbnJRiqZMdCgTD9PCOERSy9NOYH4mfEnN0f85l
+         e0oOy3r+JzZtuc6WJGMMyJgr7+O6nlAXJvlGV7BxKiRZfiOioVE/oVi46SBNZC9lrJKt
+         EvGTVztgeGyQxn8vZj8CuyWPvjjqAWSDmZZUwLP5Ufge0P/fBeti0LHbvyIZ/7aRuZIb
+         AD2w==
+X-Gm-Message-State: ACrzQf1zAR6DIWc5lN5nmxSH/Q7KwCZvty+WxKysddK2d+eBjac01Y4I
+        4MgsQ7HGbio5XBfkz4tQyuSqMQ==
+X-Google-Smtp-Source: AMsMyM5/co3sXBmnQXmliFUD4AwxdbigeNhnHiGScaCaLcD6QELJZZoJHJ988ub9fN03hGD1aw6Atw==
+X-Received: by 2002:ac8:4e4d:0:b0:39c:e229:7172 with SMTP id e13-20020ac84e4d000000b0039ce2297172mr30548177qtw.129.1666696777194;
+        Tue, 25 Oct 2022 04:19:37 -0700 (PDT)
+Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id m17-20020ae9e711000000b006ed61f18651sm1855390qka.16.2022.10.25.04.19.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 04:19:36 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HXX7PEnJTPRb4W6VEufn5O1yC0dgUcCDYmJIzLkhwV0NgRbwGNt
- JFxrQ/p/fme3e1ulziZGWdCxW5nrnjkB2OXS1aQ1lYRAi/2d+hBGnpd80gzQZpHvJJIQ8vt
- KNRrrIzLx+kB1dvnluQqDgK5j43qvbm4c/Ghn1dED6EavIUZpsPEyQY+I2FWFKGfpVTAQs/
- UZJDZBGM4LLJTJMlEYirA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WiWYavo94iU=:fZVxCs0prbKJvXqcadGHdQ
- oM4Ra+AV72/FwH8fOb0jywi4tO4F0EmPhCLXFzXpaXo5yUoAAAbeVsmWGpFrUgHotgYZ7UHUh
- CZ3sdAQbgS+6geoSVQJRo74b4OJnvoEO8hdpLnTxPNEy43yPMLESnRHfiGIcxvNoG56+PzSKO
- uMoY5rb3RZusQ8xzEZxXfqPwjcN7+TIIzrzA5ROxPnAkamPu0VZOZphztbG/uqIVvwjiiUlrU
- 1x8BHAq/4sc8S8rCwdHpLJHd0qd2SrtPBQ2viPi3B5cw19WXDHPAgW4bQodFDuatdU/bqlRz/
- U1PsnEDcqvoa5NVjEEAofHSEC/xZYZm2qyL/gYQcK2DGF6lDbHoxIt2nYqA/vT+s1oi9KaO9U
- Ey5tPxyaJw6+9XNz6/VmEIZoGBRJRqTl+pz5YBQKASZOxkOf3Jph1QbdPXaU9OD91u0nJHDJ3
- cgnREAi/LS+icFKoEPw6mJLyQD9wxytwJwZwbRrhjCLSgItm5z6s+qHf4mbaFD7IwQy0jcULc
- tewocIvoBigfZPKwk04AuGhwXIPj5ApOLalEBMXO4TcE3fwoqY3oP/IXzY4AAjHLthBkz1wui
- 6olVcc3jtFe8+JHc43Tt4/JqbVAv22FmfqX+5A/KCfC2fssy57qCaaoo+7kUbKHcmZ6eFMVL4
- TCdS9yEeGMdyizPNddnlCplvYjqOjMTWVpNvt8UpgM/3zCiuQ+lhdaTWBWg68jDFNTnW2ESxe
- c2dSLWcLBUY3i+IVgdIFDhQeshREcPWch/d4fdfoDFooSqx4z2Yh9E/xV8GkXukrm0mDEieYZ
- Ubt2iJAk0F5+R2lxivB9ZyvfkxEgMOPyskGZwPYBrgc8LYlGsnZEwowHqIBf4CsaiJPSDTYyC
- o0QJRHzXlipcAQYyE8g6IXytlLFUKLEZQiOiZ4riftfpm9SekyIiFsfij/oGhe7EwP1DX94fw
- A37JLezkUk0/YHy3nBwK2aTO1iMkR8PEZ2P1h2gXAVVcMZOgOWosj7Bd86sO5y6Q6oMpqY+qJ
- sTK+uHf9uQ+uskEdisAhHF+e7Gpb6cbzwBXMWso2V6dbv0pLWSmA1SAm9OV+8PR86kwfC5ud5
- o3Lrd3a1sOepyrGmPyFr9hPQ3wmVzIXcfEBJPXoplbMia8QEXpPEZsv0brpQgpalS6vGIasvA
- VMqww7sJ1Nxj7Dp0YBMVN7GIsXVTU+z6ydACsMIrX74MqQJlLceWy5+VfXsI52/ZgEv6qGLZz
- O5B154HItOBnKzvjXbaWlgxoisNvK49o3rOBlyiyjzvS+PVKMhJXraqKFzg2wRZqjr1EoGYCF
- jt8H7gNfqbzPhalRum0axiivPmGXVSEvucWif8J3Hu1psAH9tthQ/Mxu0dKKwNsW4sxh5TvXr
- MX2hYQEjuByjOY407epri9q9Gf9UWOrGuZ29cO3RwIaXMumAGf+SMOhwKHqwryIgSUJ9EaCWK
- +kMUrut1sTo9xZmygUAmw8SwOKR0HGED62YvasKxCoYaMwctb59pePI/BUEZPDMCxLpQ5GLtU
- xuvNrvpWiCUSy76Zwwtda/Wx8Q2D7rytsgZuUri5+67n9
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC PATCH 07/11] sched: Add proxy execution
+Date:   Tue, 25 Oct 2022 07:19:35 -0400
+Message-Id: <7BBED338-D158-401B-8A6B-FDBD9FC03973@joelfernandes.org>
+References: <20221024223324.2jgwrmnqxpgw2m67@airbuntu>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Connor O'Brien <connoro@google.com>,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        John Stultz <jstultz@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>, youssefesmat@google.com
+In-Reply-To: <20221024223324.2jgwrmnqxpgw2m67@airbuntu>
+To:     Qais Yousef <qyousef@layalina.io>
+X-Mailer: iPhone Mail (19G82)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,77 +87,92 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022/10/25 18:52, Li zeming wrote:
-> This patch has the following changes:
-> 1. Modify "is returned" in the comments to "should be returned".
-> 2. Remove the __GFP_NOFAIL flag from the kzalloc function, which returns
-> NULL if kzalloc fails to allocate memory for bioc.
+> On Oct 24, 2022, at 6:33 PM, Qais Yousef <qyousef@layalina.io> wrote:
+>=20
+> =EF=BB=BFOn 10/17/22 09:26, Peter Zijlstra wrote:
+>=20
+>> Additionally, the highest priotiy waiter will get the lock next.
+>=20
+> True for RT. But for CFS, priority is share and there will be no guarantee=
+ the
+> 'highest priority' task will run as soon as the lock is released to grab i=
+t,
+> no?
 
-Firstly this part should be in change log, not commit message.
+But the mutex lock owner should have done a wake_up in the mutex unlock path=
+, which is arranged in FIFO order, if I am not mistaken. Subsequently the sc=
+heduler will at least get a chance to see if the thing that is waiting for t=
+he lock is of higher priority, at the next preemption point.
 
-You can just do a search in the mail list and see how we handle patches
-with newer versions.
+If it did not get to run, I don=E2=80=99t think that=E2=80=99s an issue =E2=80=
+=94 it was not highest priority as far as the scheduler is concerned. No?
 
-Secondly, you didn't mention why we can remove the __GFP_NOFAIL flag at al=
-l.
+Steve was teaching me some of this code recently, he could chime in :)
 
-The commit message should look like this instead:
+> For example I can envisage:
+>=20
+>    +--------+----------------+--------+--------
+>    |  p0    |       p1       |   p0   |   p1
+>    +--------+----------------+--------+--------
+>              ^  ^                 ^      ^ ^
+>          |  |                 |      | |=20
+>              |  |                 |      | Fails to hold the lock
+>      holds lock        releases lock | and proxy execs for p0 again
+>             |                        |
+>         |                        |
+>         tries to hold lock         holds lock again
+>         proxy execs for p0
+>=20
+> The notion of priority in CFS as it stands doesn't help in providing any
+> guarantees in who will be able to hold the lock next. I haven't looked at t=
+he
+> patches closely, so this might be handled already. I think the situation w=
+ill
+> be worse if there're more tasks contending for the lock. Priority will
+> influences the chances, but the end result who holds the lock next is
+> effectively random, AFAICT.
 
-```
-Currently we allocate memory for btrfs_io_context using
-(GFP_NOFS|__GFP_NOFAIL) in alloc_btrfs_io_context().
+The wake up during unlock is FIFO order of waiters though. So that=E2=80=99s=
+ deterministic.
 
-But there is nothing special for that function to require NOFAIL flag.
+> I had a conversation once with an app developer who came from iOS world an=
+d
+> they were confused why their higher priority task is not preempting the lo=
+wer
+> priority one when they ported it to Android.
+>=20
+> I wonder sometimes if we need to introduce a true notion of priority for C=
+FS.
+> I don't see why an app developer who would like to create 3 tasks and give=
+ them
+> strict priority order relative to each others can't do that. At the moment=
+ they
+> have little option in controlling execution order.
 
-Furthermore the only caller of alloc_btrfs_io_context() is already
-handling the ENOMEM error properly.
-
-Thus we can safely remove the __GFP_NOFAIL flag, and handle allocation
-failure properly.
-```
->
-> Reviewed-by: Qu Wenruo <wqu@suse.com>
-
-I'd say, please don't add my tag until everything is fine.
-I did a wrong expectation.
+I want to talk more about this with you, I am actually working on something s=
+imilar. Let=E2=80=99s talk ;)
 
 Thanks,
-Qu
 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-> ---
->   v2: Add annotation vocabulary modify, remove __GFP_NOFAIL flag.
->
->   fs/btrfs/volumes.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-> index 064ab2a79c80..b8d901f58995 100644
-> --- a/fs/btrfs/volumes.c
-> +++ b/fs/btrfs/volumes.c
-> @@ -5891,7 +5891,9 @@ static struct btrfs_io_context *alloc_btrfs_io_con=
-text(struct btrfs_fs_info *fs_
->   		 * and the stripes.
->   		 */
->   		sizeof(u64) * (total_stripes),
-> -		GFP_NOFS|__GFP_NOFAIL);
-> +		GFP_NOFS);
-> +	if (!bioc)
-> +		return NULL;
->
->   	atomic_set(&bioc->error, 0);
->   	refcount_set(&bioc->refs, 1);
-> @@ -6071,7 +6073,7 @@ struct btrfs_discard_stripe *btrfs_map_discard(str=
-uct btrfs_fs_info *fs_info,
->    * array of stripes.
->    * For READ, it also needs to be supported using the same mirror numbe=
-r.
->    *
-> - * If the requested block is not left of the left cursor, EIO is return=
-ed. This
-> + * If the requested block is not left of the left cursor, EIO should be=
- returned. This
->    * can happen because btrfs_num_copies() returns one more in the dev-r=
-eplace
->    * case.
->    */
+- Joel
+
+
+>=20
+> Actually I think we need two types of priorities:
+>=20
+>    * global priorities for a sys admin to say which apps are more
+>      important to run over other apps. Or fairly share it if
+>      equal priority.
+>    * local priorities for an app to control which of its tasks are more
+>      important to run over other tasks it owns.
+>=20
+> The concept of share doesn't allow controlling execution order - and force=
+s us
+> to look at things like latency_nice to, somewhat, overcome this limitation=
+.
+>=20
+>=20
+> Thanks
+>=20
+> --
+> Qais Yousef
