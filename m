@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF86D60C8D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011FC60C8D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbiJYJup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S231873AbiJYJvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbiJYJt5 (ORCPT
+        with ESMTP id S230463AbiJYJuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:49:57 -0400
+        Tue, 25 Oct 2022 05:50:16 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A2615746D;
-        Tue, 25 Oct 2022 02:48:33 -0700 (PDT)
-Received: from frapeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxRtQ3D83z6HJMX;
-        Tue, 25 Oct 2022 17:47:10 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D45110B0E;
+        Tue, 25 Oct 2022 02:48:37 -0700 (PDT)
+Received: from frapeml500004.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxRsv12brz67GTC;
+        Tue, 25 Oct 2022 17:46:43 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- frapeml500005.china.huawei.com (7.182.85.13) with Microsoft SMTP Server
+ frapeml500004.china.huawei.com (7.182.85.22) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 11:48:31 +0200
+ 15.1.2375.31; Tue, 25 Oct 2022 11:48:35 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 10:48:27 +0100
+ 15.1.2375.31; Tue, 25 Oct 2022 10:48:31 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
         <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
@@ -34,9 +34,9 @@ To:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH RFC v3 09/22] scsi: libsas: Add sas_alloc_slow_task_rq()
-Date:   Tue, 25 Oct 2022 18:18:03 +0800
-Message-ID: <1666693096-180008-10-git-send-email-john.garry@huawei.com>
+Subject: [PATCH RFC v3 10/22] scsi: libsas: Add sas_queuecommand_internal()
+Date:   Tue, 25 Oct 2022 18:18:04 +0800
+Message-ID: <1666693096-180008-11-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
 References: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
@@ -55,108 +55,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a function to add a slow task with a request associated.
-
-The next step will be to send tasks same as we do for other requests -
-through the block layer.
+Add a callback for scsi host template reserved_queuecommand callback, and
+plug it into libsas LLDDs.
 
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/libsas/sas_init.c     | 51 ++++++++++++++++++++++++++++++
- drivers/scsi/libsas/sas_internal.h |  1 +
- include/scsi/libsas.h              |  2 +-
- 3 files changed, 53 insertions(+), 1 deletion(-)
+ drivers/scsi/aic94xx/aic94xx_init.c    |  1 +
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c |  1 +
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  1 +
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  1 +
+ drivers/scsi/isci/init.c               |  1 +
+ drivers/scsi/libsas/sas_scsi_host.c    | 13 +++++++++++++
+ drivers/scsi/mvsas/mv_init.c           |  1 +
+ drivers/scsi/pm8001/pm8001_init.c      |  1 +
+ include/scsi/libsas.h                  |  1 +
+ 9 files changed, 21 insertions(+)
 
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index f2c05ebeb72f..90e63ff5e966 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -56,9 +56,60 @@ struct sas_task *sas_alloc_slow_task(gfp_t flags)
+diff --git a/drivers/scsi/aic94xx/aic94xx_init.c b/drivers/scsi/aic94xx/aic94xx_init.c
+index 954d0c5ae2e2..e9d2ee5434c2 100644
+--- a/drivers/scsi/aic94xx/aic94xx_init.c
++++ b/drivers/scsi/aic94xx/aic94xx_init.c
+@@ -60,6 +60,7 @@ static struct scsi_host_template aic94xx_sht = {
+ 	.compat_ioctl		= sas_ioctl,
+ #endif
+ 	.track_queue_depth	= 1,
++	.reserved_queuecommand = sas_queuecommand_internal,
+ };
+ 
+ static int asd_map_memio(struct asd_ha_struct *asd_ha)
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
+index d643c5a49aa9..6cf660b1212e 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
+@@ -1760,6 +1760,7 @@ static struct scsi_host_template sht_v1_hw = {
+ #endif
+ 	.shost_groups		= host_v1_hw_groups,
+ 	.host_reset             = hisi_sas_host_reset,
++	.reserved_queuecommand = sas_queuecommand_internal,
+ };
+ 
+ static const struct hisi_sas_hw hisi_sas_v1_hw = {
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+index cded42f4ca44..d2bf23ad0833 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
+@@ -3578,6 +3578,7 @@ static struct scsi_host_template sht_v2_hw = {
+ 	.host_reset		= hisi_sas_host_reset,
+ 	.map_queues		= map_queues_v2_hw,
+ 	.host_tagset		= 1,
++	.reserved_queuecommand = sas_queuecommand_internal,
+ };
+ 
+ static const struct hisi_sas_hw hisi_sas_v2_hw = {
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 0c3fcb807806..ff56072c7a33 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -3245,6 +3245,7 @@ static struct scsi_host_template sht_v3_hw = {
+ 	.tag_alloc_policy	= BLK_TAG_ALLOC_RR,
+ 	.host_reset             = hisi_sas_host_reset,
+ 	.host_tagset		= 1,
++	.reserved_queuecommand = sas_queuecommand_internal,
+ };
+ 
+ static const struct hisi_sas_hw hisi_sas_v3_hw = {
+diff --git a/drivers/scsi/isci/init.c b/drivers/scsi/isci/init.c
+index e294d5d961eb..e970f4b77ed3 100644
+--- a/drivers/scsi/isci/init.c
++++ b/drivers/scsi/isci/init.c
+@@ -177,6 +177,7 @@ static struct scsi_host_template isci_sht = {
+ #endif
+ 	.shost_groups			= isci_host_groups,
+ 	.track_queue_depth		= 1,
++	.reserved_queuecommand = sas_queuecommand_internal,
+ };
+ 
+ static struct sas_domain_function_template isci_transport_ops  = {
+diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
+index a36fa1c128a8..04e8c0575021 100644
+--- a/drivers/scsi/libsas/sas_scsi_host.c
++++ b/drivers/scsi/libsas/sas_scsi_host.c
+@@ -158,6 +158,19 @@ static struct sas_task *sas_create_task(struct scsi_cmnd *cmd,
  	return task;
  }
  
-+struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flags)
++int sas_queuecommand_internal(struct Scsi_Host *shost, struct scsi_cmnd *cmnd)
 +{
-+	struct sas_ha_struct *sas_ha = device->port->ha;
-+	struct Scsi_Host *shost = sas_ha->core.shost;
-+	struct scsi_device *sdev, *found_sdev = NULL;
-+	struct scsi_cmnd *scmd;
-+	struct sas_task *task;
-+	struct request *rq;
++	struct sas_ha_struct *ha = SHOST_TO_SAS_HA(shost);
++	struct sas_internal *i = to_sas_internal(ha->core.shost->transportt);
++	struct request *rq = blk_mq_rq_from_pdu(cmnd);
++	struct sas_task *task = rq->end_io_data;
 +
-+	shost_for_each_device(sdev, shost) {
-+		struct scsi_target *starget = sdev->sdev_target;
++	ASSIGN_SAS_TASK(cmnd, task);
 +
-+		if (starget->hostdata == device) {
-+			found_sdev = sdev;
-+			break;
-+		}
-+	}
-+
-+	if (!found_sdev)
-+		return NULL;
-+
-+	scsi_device_put(found_sdev);
-+
-+	task = sas_alloc_slow_task(flags);
-+	if (!task)
-+		return NULL;
-+
-+	task->dev = device;
-+
-+	rq = scsi_alloc_request(sdev->request_queue, REQ_OP_DRV_IN,
-+				BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT);
-+	if (IS_ERR(rq)) {
-+		sas_free_task(task);
-+		return NULL;
-+	}
-+
-+	scmd = blk_mq_rq_to_pdu(rq);
-+
-+	task->uldd_task = scmd;
-+	rq->end_io_data = task;
-+
-+	return task;
++	return i->dft->lldd_execute_task(task, GFP_KERNEL);
 +}
++EXPORT_SYMBOL_GPL(sas_queuecommand_internal);
 +
- void sas_free_task(struct sas_task *task)
+ int sas_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
  {
- 	if (task) {
-+		if (task->slow_task && task->uldd_task) {
-+			struct scsi_cmnd *scmd = task->uldd_task;
-+			struct request *rq = scsi_cmd_to_rq(scmd);
-+
-+			BUG_ON(!blk_mq_is_reserved_rq(rq));
-+			blk_mq_free_request(rq);
-+		}
- 		kfree(task->slow_task);
- 		kmem_cache_free(sas_task_cache, task);
- 	}
-diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
-index 6cf190ade35e..f5ae4de382f7 100644
---- a/drivers/scsi/libsas/sas_internal.h
-+++ b/drivers/scsi/libsas/sas_internal.h
-@@ -54,6 +54,7 @@ void sas_free_event(struct asd_sas_event *event);
+ 	struct sas_internal *i = to_sas_internal(host->transportt);
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index cfe84473a515..228ab00e180f 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -54,6 +54,7 @@ static struct scsi_host_template mvs_sht = {
+ #endif
+ 	.shost_groups		= mvst_host_groups,
+ 	.track_queue_depth	= 1,
++	.reserved_queuecommand = sas_queuecommand_internal,
+ };
  
- struct sas_task *sas_alloc_task(gfp_t flags);
- struct sas_task *sas_alloc_slow_task(gfp_t flags);
-+struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, gfp_t flags);
- void sas_free_task(struct sas_task *task);
+ static struct sas_domain_function_template mvs_transport_ops = {
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index a1df61205b20..1a12c3f97f53 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -123,6 +123,7 @@ static struct scsi_host_template pm8001_sht = {
+ 	.track_queue_depth	= 1,
+ 	.cmd_per_lun		= 32,
+ 	.map_queues		= pm8001_map_queues,
++	.reserved_queuecommand = sas_queuecommand_internal,
+ };
  
- int  sas_register_ports(struct sas_ha_struct *sas_ha);
+ /*
 diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index 1aee3d0ebbb2..4c4d8c91b1c1 100644
+index 4c4d8c91b1c1..64035f83c5bd 100644
 --- a/include/scsi/libsas.h
 +++ b/include/scsi/libsas.h
-@@ -648,7 +648,7 @@ static inline struct request *sas_task_find_rq(struct sas_task *task)
- {
- 	struct scsi_cmnd *scmd;
+@@ -739,6 +739,7 @@ int  sas_discover_sata(struct domain_device *);
+ int  sas_discover_end_dev(struct domain_device *);
  
--	if (task->task_proto & SAS_PROTOCOL_STP_ALL) {
-+	if (!task->slow_task && task->task_proto & SAS_PROTOCOL_STP_ALL) {
- 		struct ata_queued_cmd *qc = task->uldd_task;
+ void sas_unregister_dev(struct asd_sas_port *port, struct domain_device *);
++int sas_queuecommand_internal(struct Scsi_Host *shost, struct scsi_cmnd *cmnd);
  
- 		scmd = qc ? qc->scsicmd : NULL;
+ void sas_init_dev(struct domain_device *);
+ 
 -- 
 2.35.3
 
