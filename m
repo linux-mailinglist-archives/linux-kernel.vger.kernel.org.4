@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D31160D354
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2806060D361
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbiJYSRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 14:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S232114AbiJYSR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 14:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiJYSRK (ORCPT
+        with ESMTP id S231504AbiJYSRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:17:10 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BFBD4A2B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:17:09 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id fy4so14821117ejc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:17:09 -0700 (PDT)
+        Tue, 25 Oct 2022 14:17:25 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED65D4A0D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:17:24 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id b12so37655924edd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:17:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wiQ/FKVprfl/2j6yZVqBybauBhLs5z930z+sCk9K3nM=;
-        b=LyzJdfBL3yMDCxf4Qm0esMjRa21JjpNLc4v9SM6AJF+64S0ORaeKR5qTB/MDl+njxI
-         96a4HjyvMqBivfDIc+RS49ViPavuFAwTYBCTevrlS5cy9ZXirBRSXGthluuJUe1Ut2q3
-         J11itIc6Blxie8j5wFFFpivd7qd4cMXdPfpPeBe7FxMKiPI0k1DVeRZL2Ds9TKlYLRw4
-         SIyrE/On7pOntxu3tCHFLPTbVhHM5cDBHSUzBBNjwoFFHEZSJFJmaJzkOSb4GImwypyT
-         GZJO3lTPCc2t8pVyShvq+TZYeQS0uKBT5CGh/uOiuHdGHdEluoJmHtQxPVYOd0VG950W
-         Yaqw==
+        bh=NTST5ms0vQMpMFtPIEr66UbVA7v6kgRZj6GihvLVYic=;
+        b=QM2u96RDtK4jQWsNmQ9ECcPcRRiFiX/RvYbsYSvwdUy4szE9F3Sql8mrNF2iDqKnz/
+         nFG+hjDfh2LGNTZjm+9Q6h/fhAzt6LEPqnR8mCwpQdzE9VordmXL2oLVDhcniribdBst
+         5o68jXSWyto2ah9hSCZB/cJBNNBqURz59KRSPSfPZaPvZNXqwQ4+7b06kokUc3N1rhEa
+         JKdqNQAaus3CacMDJ12YTXFghIivgyPHou94MPY0CQOQ38DdNxB0uKeuFWSKqrz+CFd0
+         1UWQk5lMks4uzQDZ0srK1LquG3NgXa866NpB3DnyAv6VOm8BBW8uRz5BEbvhaWXFYIrl
+         DeRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wiQ/FKVprfl/2j6yZVqBybauBhLs5z930z+sCk9K3nM=;
-        b=Mgxok+rIYMb9gVEBFoRZkBrCJPSwWguHBnjyEMLonWFERky70petNedYPUedJxu4f6
-         O7NCAy0DJMVE5/2bV4n21grEi8cjIJD08qSxFCHV2On8jBtnI+wYBZcF6/zovkdmLlaG
-         F+zF7H9bZ7Lkpj68wFyDwb6fhqgwX1gnRE8Y9tsz5kAPhgi+ItaLGMCE7PX7DJ9YxDql
-         SeZlQI5g2nvfgYBqFpoVRvOi6NxaSTpjvClaKhd7Z0UVgz8tIUpDJilDeb2otAQCHkrs
-         sSTJtj1B1lCKVMz84n7bLs5x4zDX5HZ8XsFbA+gxz11MVDuMiTaeoY8oL0V427oJ8wVb
-         svXw==
-X-Gm-Message-State: ACrzQf2UFod/4EN5jXDP0UUp4ROaDJzo1sH10L910evBsmylm18ktHdy
-        Eu8OstDw+zzZuL36bWAv2RY=
-X-Google-Smtp-Source: AMsMyM5NbyC+Op50jHKNtYvL+5ipB36yuW0xS2E6j5aONwfU9fzrWIBTsu3w8xNHOJ6SAud6KYzeYw==
-X-Received: by 2002:a17:906:6a18:b0:78d:7228:7a52 with SMTP id qw24-20020a1709066a1800b0078d72287a52mr33141434ejc.363.1666721828058;
-        Tue, 25 Oct 2022 11:17:08 -0700 (PDT)
+        bh=NTST5ms0vQMpMFtPIEr66UbVA7v6kgRZj6GihvLVYic=;
+        b=Kh2t2rXTzq9NlPeT7X4ZOvzo6o+RUSDxUEJbCWUBEaH8GXtcC3edEXW8Qx43tgtL+T
+         78qDSUL/YSNX9I0tEMVMrCtc+cou+f4DB2+6WWu+DACiceaubNQMoP4dTsqlXAxFseQz
+         AKw8nM4ssnv8RMlEicrHnuGw7Wto7JTNR0CQOIjQykeNseRiBotUIgCCvGnOKmOA6/RX
+         x6vaQkVtZyBrO1Av0AkV50y0qXTUHWoD8xBWTO6CKfQds0v0lfH8xaPOtQbRT3O9lMqx
+         jANJdwWmamRNLphtypsPVzGRyHeWm4IbNcCcgBuGRfR0gAsgZHfv97Ni7r20eIJmn3rg
+         X/vA==
+X-Gm-Message-State: ACrzQf0dy3TD9nvPg12WN34kmcxbjN0X4IcSyt9c3ootG0emrFJemmdF
+        AyUUEzD0o7AubWbLrAJWDA+fjOM/7bk=
+X-Google-Smtp-Source: AMsMyM6V6QYazO0iTWrCGNSweTtpFbl59MIwaCSB8EOPm2N2s5Dbqs8/T6hm+621jPytLiJHdMNR1w==
+X-Received: by 2002:a05:6402:1e88:b0:461:a513:f543 with SMTP id f8-20020a0564021e8800b00461a513f543mr13964783edf.183.1666721842844;
+        Tue, 25 Oct 2022 11:17:22 -0700 (PDT)
 Received: from [192.168.1.102] (p57935738.dip0.t-ipconnect.de. [87.147.87.56])
-        by smtp.gmail.com with ESMTPSA id gk19-20020a17090790d300b0078b1ff41f05sm1775924ejb.43.2022.10.25.11.17.06
+        by smtp.gmail.com with ESMTPSA id i4-20020a50fd04000000b0045d59e49acbsm2102287eds.7.2022.10.25.11.17.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 11:17:07 -0700 (PDT)
-Message-ID: <4a8bbc23-9d17-c6e0-5da4-a799cf7d332d@gmail.com>
-Date:   Tue, 25 Oct 2022 20:17:06 +0200
+        Tue, 25 Oct 2022 11:17:22 -0700 (PDT)
+Message-ID: <d9909c60-e76b-c48b-ff0e-fa0b6e6322cf@gmail.com>
+Date:   Tue, 25 Oct 2022 20:17:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/4] staging: r8188eu: cleaning up unused variables
+Subject: Re: [PATCH] staging: r8188eu: remove unused macros from wifi.h
 Content-Language: en-US
-To:     Kang Minchul <tegongkang@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20221025170621.271903-1-tegongkang@gmail.com>
+References: <20221025152722.14926-1-straube.linux@gmail.com>
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221025170621.271903-1-tegongkang@gmail.com>
+In-Reply-To: <20221025152722.14926-1-straube.linux@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,25 +76,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 19:06, Kang Minchul wrote:
-> This patch series cleans up unused variables in r8188eu
-> causing coccicheck warnings.
+On 10/25/22 17:27, Michael Straube wrote:
+> There are some unused macros in wifi.h. Remove them.
 > 
-> Difference between this patch and previous patch is that this patch series
-> include making function rtw_sta_flush in r8188eu/core/rtw_ap.c
-> into void function.
+> Signed-off-by: Michael Straube <straube.linux@gmail.com>
+> ---
+>   drivers/staging/r8188eu/include/wifi.h | 27 --------------------------
+>   1 file changed, 27 deletions(-)
 > 
-> Kang Minchul (4):
->    staging: r8188eu: remove unnecessary variable in ioctl_linux
->    staging: r8188eu: remove unnecessary vaiable in rtw_recv
->    staging: r8188eu: remove unnecessary variable in rtl8188eu_xmit
->    staging: r8188eu: make rtw_sta_flush to void
-> 
->   drivers/staging/r8188eu/core/rtw_ap.c        | 7 ++-----
->   drivers/staging/r8188eu/core/rtw_recv.c      | 3 +--
->   drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
->   drivers/staging/r8188eu/include/rtw_ap.h     | 2 +-
->   drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
->   5 files changed, 6 insertions(+), 13 deletions(-)
-> 
+> diff --git a/drivers/staging/r8188eu/include/wifi.h b/drivers/staging/r8188eu/include/wifi.h
+> index 381385a7e118..05f8b7e3ecb0 100644
+> --- a/drivers/staging/r8188eu/include/wifi.h
+> +++ b/drivers/staging/r8188eu/include/wifi.h
+> @@ -140,7 +140,6 @@ enum WIFI_REG_DOMAIN {
+>   #define _PWRMGT_	BIT(12)
+>   #define _MORE_DATA_	BIT(13)
+>   #define _PRIVACY_	BIT(14)
+> -#define _ORDER_		BIT(15)
+>   
+>   #define SetToDs(pbuf)	\
+>   	*(__le16 *)(pbuf) |= cpu_to_le16(_TO_DS_)
+> @@ -187,17 +186,6 @@ enum WIFI_REG_DOMAIN {
+>   		*(__le16 *)(pbuf) |= cpu_to_le16(type); \
+>   	} while (0)
+>   
+> -#define GetTupleCache(pbuf)			\
+> -	(cpu_to_le16(*(unsigned short *)((size_t)(pbuf) + 22)))
+> -
+> -#define SetFragNum(pbuf, num) \
+> -	do {    \
+> -		*(unsigned short *)((size_t)(pbuf) + 22) = \
+> -			((*(unsigned short *)((size_t)(pbuf) + 22)) &	\
+> -			le16_to_cpu(~(0x000f))) | \
+> -			cpu_to_le16(0x0f & (num));     \
+> -	} while (0)
+> -
+>   #define SetSeqNum(pbuf, num) \
+>   	do {    \
+>   		*(__le16 *)((size_t)(pbuf) + 22) = \
+> @@ -221,13 +209,6 @@ enum WIFI_REG_DOMAIN {
+>   
+>   #define GetAMsdu(pbuf) (((le16_to_cpu(*(__le16 *)pbuf)) >> 7) & 0x1)
+>   
+> -#define SetAMsdu(pbuf, amsdu)	\
+> -	*(__le16 *)(pbuf) |= cpu_to_le16((amsdu & 1) << 7)
+> -
+> -#define GetTid(pbuf)	(le16_to_cpu(*(__le16 *)((size_t)(pbuf) +	\
+> -			(((GetToDs(pbuf)<<1) | GetFrDs(pbuf)) == 3 ?	\
+> -			30 : 24))) & 0x000f)
+> -
+>   #define GetAddr1Ptr(pbuf)	((unsigned char *)((size_t)(pbuf) + 4))
+>   
+>   #define GetAddr2Ptr(pbuf)	((unsigned char *)((size_t)(pbuf) + 10))
+> @@ -415,14 +396,6 @@ static inline unsigned char *get_hdr_bssid(unsigned char *pframe)
+>   				Below is the definition for 802.11n
+>   ------------------------------------------------------------------------------*/
+>   
+> -#define SetOrderBit(pbuf)	\
+> -	do	{	\
+> -		*(unsigned short *)(pbuf) |= cpu_to_le16(_ORDER_); \
+> -	} while (0)
+> -
+> -#define GetOrderBit(pbuf)			\
+> -	(((*(unsigned short *)(pbuf)) & le16_to_cpu(_ORDER_)) != 0)
+> -
+>   /**
+>    * struct rtw_ieee80211_bar - HT Block Ack Request
+>    *
 Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
