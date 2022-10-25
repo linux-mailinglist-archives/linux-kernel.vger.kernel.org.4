@@ -2,97 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211BC60C6AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604B360C6AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbiJYIkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60250 "EHLO
+        id S231259AbiJYIkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbiJYIks (ORCPT
+        with ESMTP id S231326AbiJYIkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:40:48 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C743F3ED42
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:40:45 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id q71so10857249pgq.8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TKgdvBwQcDmO6Tl3CpXGM8STYPUj3pHThyCnIymdUNs=;
-        b=AAVv0IU5rXyFW7Yxdp/j1h1H+DtZf8UEfpbWxxs1YHbnF0t5eRXPZBKZcwEJeoLl3i
-         hPreeukM9dnaAlrg3Sn1uKhbeLMnORXDrCQ0gi5ZIkK9zoi5nwyJqWRljjQmDkzAn4dn
-         xeQwKwYDibfxA/CMLYLVEANz0fpeh/XTYHOR0p2fwRswzbETFPf+VAo/2oIVH2a7jcWt
-         BGVhi7lsC4WDHNYkkrfkUWyfxu2VZD8nNbfIJar80RgoFu4cUudj4geKEAXyswnAh+ry
-         7tRRMhdarFjKh/CmcLAPv+EFqk+ERukAQ/7vlxm0riUQTXm0V0oykh7gFaWVqyuSZTkR
-         /zOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TKgdvBwQcDmO6Tl3CpXGM8STYPUj3pHThyCnIymdUNs=;
-        b=OjCfH5o17V+aDLeK5DJpRAcelkIlJkfEy3zFKE/Fuu6iPFqO3O367Rwc83IoyIRJOB
-         u+UknY1iW0IT4PmWP+9hRv8Hr5cOaO/nqJwnWj4seLBE9GZ9xr8TNxLUdLoudKNQIFdg
-         +xfvYr1n6aSqa2ZBvxtXI16DF6vRMUfPynq6Of5jFsLXQkkkeArwQnr8zwmjfpHqLRwY
-         dtXquodzZvHOwewNK7mtcMkEYGdcsEZ77brI1ZW5XF8esdBNngJVE3qFU6m5rUGSWjLL
-         IOb6u/UTbz/Wa1w84rUWcAPnIa6uHOm8T4WPd633FkFVVMuybpQzMlfjtkXXGxNaekp4
-         wbsA==
-X-Gm-Message-State: ACrzQf2V2vDWCxnl+GGYrS9BwqkGU1k6Vx9Lbtt7IxAXfcwmkxJlrOCT
-        9Mxgh9nMdAS9ipBQFX7CyWI=
-X-Google-Smtp-Source: AMsMyM5FuAx7BmlcTfsaY9DEFHErq9QwY7jDHuAonThmIgQuiJ+odMNjhaI3vo0sshmVNQ+ZwYy6JA==
-X-Received: by 2002:a05:6a00:1ac8:b0:563:7d18:7a15 with SMTP id f8-20020a056a001ac800b005637d187a15mr37697327pfv.59.1666687245192;
-        Tue, 25 Oct 2022 01:40:45 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-58.three.co.id. [116.206.28.58])
-        by smtp.gmail.com with ESMTPSA id y6-20020a17090ad0c600b00209a12b3879sm961655pjw.37.2022.10.25.01.40.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 01:40:44 -0700 (PDT)
-Message-ID: <f3189f3d-53b4-dd6f-625f-5572d5a416e3@gmail.com>
-Date:   Tue, 25 Oct 2022 15:40:37 +0700
+        Tue, 25 Oct 2022 04:40:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B1333E02
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:40:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 195331F74A;
+        Tue, 25 Oct 2022 08:40:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666687238; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0fvfKX4zW0ea1QU1UhyN499kdzLJCK0LcIjY28CE2+g=;
+        b=JogF0gqmtvMcCJ1EfisBNF/pR4anb/hP0BCY68OvOPdlf8p8muBqD/OvwarfT/JsqGvtVc
+        YUXs93uLYDlX0wiKzoS84UVbbwtZT2qjCNC7U+K1ExP0iWtaXQT8OP3VNEHwqiZ5OB/TGo
+        rN4QOsGK6oziPJvJVwAURB6xI1l+9n8=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 86A9F2C141;
+        Tue, 25 Oct 2022 08:40:37 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 10:40:37 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Jane Chu <jane.chu@oracle.com>, rostedt@goodmis.org,
+        senozhatsky@chromium.org, linux@rasmusvillemoes.dk,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        wangkefeng.wang@huawei.com, haakon.bugge@oracle.com,
+        john.haxby@oracle.com
+Subject: Re: [PATCH v3 1/1] vsprintf: protect kernel from panic due to
+ non-canonical pointer dereference
+Message-ID: <Y1ehBZOuF3AXeesh@alley>
+References: <20221019194159.2923873-1-jane.chu@oracle.com>
+ <Y1BfK6LpDJDlUYKp@smile.fi.intel.com>
+ <Y1Fgk1iDnhL7VtAl@char.us.oracle.com>
+ <Y1FxS30zVENd/1Ap@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 0/6] zsmalloc/zram: configurable zspage size
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20221024161213.3221725-1-senozhatsky@chromium.org>
- <Y1dXSeqwX/WfUcjt@debian.me> <Y1dbKxlwiaMx9E4u@google.com>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <Y1dbKxlwiaMx9E4u@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1FxS30zVENd/1Ap@smile.fi.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 10:42, Sergey Senozhatsky wrote:
-> On (22/10/25 10:26), Bagas Sanjaya wrote:
->>
->> Sorry, I can't cleanly apply this patch series due to conflicts in
->> patch [1/6]. On what tree and commit the series is based?
+On Thu 2022-10-20 19:03:23, Andy Shevchenko wrote:
+> On Thu, Oct 20, 2022 at 10:52:03AM -0400, Konrad Rzeszutek Wilk wrote:
+> > On Wed, Oct 19, 2022 at 11:33:47PM +0300, Andy Shevchenko wrote:
+> > > On Wed, Oct 19, 2022 at 01:41:59PM -0600, Jane Chu wrote:
+> > > > Having stepped on a local kernel bug where reading sysfs has led to
+> > > > out-of-bound pointer dereference by vsprintf() which led to GPF panic.
+> > > > And the reason for GPF is that the OOB pointer was turned to a
+> > > > non-canonical address such as 0x7665645f63616465.
+> > > > 
+> > > > vsprintf() already has this line of defense
+> > > > 	if ((unsigned long)ptr < PAGE_SIZE || IS_ERR_VALUE(ptr))
+> > > >                 return "(efault)";
+> > > > Since a non-canonical pointer can be detected by kern_addr_valid()
+> > > > on architectures that present VM holes as well as meaningful
+> > > > implementation of kern_addr_valid() that detects the non-canonical
+> > > > addresses, this patch adds a check on non-canonical string pointer by
+> > > > kern_addr_valid() and "(efault)" to alert user that something
+> > > > is wrong instead of unecessarily panic the server.
+> > > > 
+> > > > On the other hand, if the non-canonical string pointer is dereferenced
+> > > > else where in the kernel, by virtue of being non-canonical, a crash
+> > > > is expected to be immediate.
+> > > 
+> > > What if there is no other dereference except the one happened in printf()?
+> > > 
+> > > Just to point out here, that I formally NAKed this on the basis that NULL
+> > > and error pointers are special, for the bogus pointers we need crash ASAP,
+> > > no matter what the code issues it. I.o.w. printf() is not special for that
+> > > kind of pointers (i.e. bogus pointers, but not special).
+> > 
+> > Hey Andy,
+> > 
+> > Do we want to have user space programs crash the kernel?
+> > 
+> > This patch leads to making the kernel more harden so that we do
+> > not crash when there are bugs but continue on.
 > 
-> next-20221024
+> Fine, how to push a user to report a bug in the kernel if for them
+> there is no bug?
+> 
+> OK, let's assume user recognizes this as a bug, what should they do in order
+> to provide a better description of the bug, so developer can easily debug
+> and fix it?
 
-Hmm, still can't be applied (again patch [1/6] is the culprit).
-Please rebase on top of mm-everything. Don't forget to pass
---base to git-format-patch(1) so that I know the base commit
-of this series.
+WARN() would provide similar information as panic() without actually
+crashing the kernel.
 
-Thanks.
+> > Would we not want that experience for users ?
+> 
+> Yes, if it is a bug in the kernel we want to know it with all possible details.
+> Hiding bugs is a way to nowhere.
 
--- 
-An old man doll... just what I always wanted! - Clara
+I agree but we should always distinguish between fatal problems where
+the system could hardly continue working and unexpected behavior that
+is not critical.
 
+Many error code paths handle unexpected situations. Some problems are
+caused by users and some by bugs in the code. The kernel could always
+refuse doing some operation rather than crash. People will report
+it because it does not work. And there are non-destructive ways how
+to show useful debugging information.
+
+Best Regards,
+Petr
