@@ -2,75 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BEA760CDA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3990F60CDB0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbiJYNgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:36:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        id S231597AbiJYNhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiJYNgr (ORCPT
+        with ESMTP id S232956AbiJYNhP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:36:47 -0400
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A254191D60;
-        Tue, 25 Oct 2022 06:36:46 -0700 (PDT)
-Received: by mail-pg1-f169.google.com with SMTP id q1so11467444pgl.11;
-        Tue, 25 Oct 2022 06:36:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RwMLX94p14UQlTFG0MXaXfw8tgk5NXWCFsR6sl1nd1s=;
-        b=uYZX7snqHAssyqYnEpV2PMWej6dCRw0Y9YyuwhknlQDyVPAe3tguF33RqHCdPEAfap
-         LqpYL+/fmGCiYcqL8/VFy8fJ+tj5fr2qcomWYQ/gVuCG0EUEodxSpJz3Mm4rvmPZ1QAU
-         W7a6wqvRy67qk+usNFMpQhO1iTzlhdGz2MwKWmmHaJ1lu03MmWSoqaLFYed9yTRG4oTn
-         Ob2AHEr8Vf+iO0hbLQSDWUqcHVJ9WigCA3rBTQGon+s7y+G45YddYgXJZVdStIFJTDuO
-         WmtAXRNZAW8zh3dBm9u68BPwXqmcdXXHBGFmMjO/nzgJOe5cQrbWzKuHWyImPq4izM/Z
-         nBGw==
-X-Gm-Message-State: ACrzQf3U9vpwxqiZW4rYYvVdXvw3qp56zEH+VYHe63h02LuGQyF7Tauq
-        fbLhA2q0LAV7CzZexC4It30=
-X-Google-Smtp-Source: AMsMyM74SzJ9JZbZNZo3FynvYj2/T+Tn5bfZjCaWB8VMBFBglLl7REZECXeluuFdBZVVKSXE3hpGQw==
-X-Received: by 2002:a63:1917:0:b0:43c:1471:52b7 with SMTP id z23-20020a631917000000b0043c147152b7mr32406179pgl.522.1666705005893;
-        Tue, 25 Oct 2022 06:36:45 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id i6-20020a17090332c600b0017f57787a4asm1235163plr.229.2022.10.25.06.36.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 06:36:44 -0700 (PDT)
-Message-ID: <d2d9f936-72d7-1d7f-f6e9-44aba745cac6@acm.org>
-Date:   Tue, 25 Oct 2022 06:36:41 -0700
+        Tue, 25 Oct 2022 09:37:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A601958C2;
+        Tue, 25 Oct 2022 06:37:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A87A8B81D24;
+        Tue, 25 Oct 2022 13:37:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB45C433C1;
+        Tue, 25 Oct 2022 13:37:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666705027;
+        bh=KMbVGpmzkqj97RY+FCnpBNDMX1gnC9wxo2uDdIdLrr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yop2QKol5jPn/4tN311qinrDKc3r6MuwidHA7ztZ+W2CjaphWSQOfPA0oyE6jdySn
+         M3X6f8rrNSBVvXQRWc9YQS/DDkglYdn0IXTMjkrT/dn0DgEOMBsoRWyJHhliNTdJ5T
+         oUQBIkG+OQsRMLYvzB1Mubg42ToCl432JX4wH6TM=
+Date:   Tue, 25 Oct 2022 15:37:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        logang@deltatee.com, dan.j.williams@intel.com,
+        hans.verkuil@cisco.com, alexandre.belloni@free-electrons.com,
+        viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v2] chardev: fix error handling in cdev_device_add()
+Message-ID: <Y1fmgCS7fuf/LQBc@kroah.com>
+References: <20221025113957.693723-1-yangyingliang@huawei.com>
+ <Y1fNnwLlY079xGVY@kroah.com>
+ <ae7cbce0-3506-e21b-fa9b-37a13fe00b77@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v4 2/3] scsi: ufs: core: Cleanup ufshcd_slave_alloc()
-Content-Language: en-US
-To:     Bean Huo <beanhuo@iokpp.de>, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, tomas.winkler@intel.com, cang@codeaurora.org,
-        daejun7.park@samsung.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221022213650.626766-1-beanhuo@iokpp.de>
- <20221022213650.626766-3-beanhuo@iokpp.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221022213650.626766-3-beanhuo@iokpp.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae7cbce0-3506-e21b-fa9b-37a13fe00b77@huawei.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/22/22 14:36, Bean Huo wrote:
-> Combine ufshcd_get_lu_power_on_wp_status() and ufshcd_set_queue_depth()
-> into one single ufshcd_lu_init(), so that we only need to read the LUN
-> descriptor once.
+On Tue, Oct 25, 2022 at 09:20:12PM +0800, Yang Yingliang wrote:
+> Hi, Greg
+> 
+> On 2022/10/25 19:50, Greg KH wrote:
+> > On Tue, Oct 25, 2022 at 07:39:57PM +0800, Yang Yingliang wrote:
+> > > While doing fault injection test, I got the following report:
+> > > 
+> > > ------------[ cut here ]------------
+> > > kobject: '(null)' (0000000039956980): is not initialized, yet kobject_put() is being called.
+> > > WARNING: CPU: 3 PID: 6306 at kobject_put+0x23d/0x4e0
+> > > CPU: 3 PID: 6306 Comm: 283 Tainted: G        W          6.1.0-rc2-00005-g307c1086d7c9 #1253
+> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> > > RIP: 0010:kobject_put+0x23d/0x4e0
+> > > Call Trace:
+> > >   <TASK>
+> > >   cdev_device_add+0x15e/0x1b0
+> > >   __iio_device_register+0x13b4/0x1af0 [industrialio]
+> > >   __devm_iio_device_register+0x22/0x90 [industrialio]
+> > >   max517_probe+0x3d8/0x6b4 [max517]
+> > >   i2c_device_probe+0xa81/0xc00
+> > > 
+> > > When device_add() is injected fault and returns error, if dev->devt is not set,
+> > > cdev_add() is not called, cdev_del() is not needed. Fix this by checking dev->devt
+> > > in error path.
+> > Nit, please wrap your changelog text at 72 columns.
+> > 
+> > > Fixes: 233ed09d7fda ("chardev: add helper function to register char devs with a struct device")
+> > > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> > > ---
+> > > v1 -> v2:
+> > >    Add information to update commit message.
+> > >    v1 link: https://lore.kernel.org/lkml/1959fa74-b06c-b8bc-d14f-b71e5c4290ee@huawei.com/T/
+> > > ---
+> > >   fs/char_dev.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/fs/char_dev.c b/fs/char_dev.c
+> > > index ba0ded7842a7..3f667292608c 100644
+> > > --- a/fs/char_dev.c
+> > > +++ b/fs/char_dev.c
+> > > @@ -547,7 +547,7 @@ int cdev_device_add(struct cdev *cdev, struct device *dev)
+> > >   	}
+> > >   	rc = device_add(dev);
+> > > -	if (rc)
+> > > +	if (rc && dev->devt)
+> > No, this is a layering violation and one that you do not know is really
+> > going to be true or not.  the devt being present, or not, should not be
+> > an issue of if the device_add failed or not.  This isn't correct, sorry.
+> Do you mean it's not a bug or the warn can be ignored or it's bug in driver
+> ?
+> I see devt is checked before calling cdev_del() in cdev_device_del().
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Ah!  The core doesn't set devt, the caller has that set.  That makes
+more sense now, sorry for the confusion on my side.
 
+Yes, this looks correct, the diff didn't have the full context and I was
+confused.
+
+I'll go queue this up, very nice work.
+
+greg k-h
