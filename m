@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACC660C999
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE6B60C99B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiJYKL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:11:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S231853AbiJYKLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbiJYKKj (ORCPT
+        with ESMTP id S231945AbiJYKKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:10:39 -0400
+        Tue, 25 Oct 2022 06:10:41 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0CF1211C5;
-        Tue, 25 Oct 2022 03:03:27 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxSC12RFXz6H73T;
-        Tue, 25 Oct 2022 18:01:33 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D19A21213D0;
+        Tue, 25 Oct 2022 03:03:31 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxS9C4SwBz6H6m1;
+        Tue, 25 Oct 2022 17:59:59 +0800 (CST)
 Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Tue, 25 Oct 2022 12:03:26 +0200
+ 15.1.2375.31; Tue, 25 Oct 2022 12:03:29 +0200
 Received: from localhost.localdomain (10.69.192.58) by
  lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 11:03:22 +0100
+ 15.1.2375.31; Tue, 25 Oct 2022 11:03:26 +0100
 From:   John Garry <john.garry@huawei.com>
 To:     <damien.lemoal@opensource.wdc.com>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <hare@suse.de>, <bvanassche@acm.org>,
@@ -34,9 +34,9 @@ CC:     <axboe@kernel.dk>, <jinpu.wang@cloud.ionos.com>,
         <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH RFC v3 3/7] ata: libata: Make space for ATA queue command in scmd payload
-Date:   Tue, 25 Oct 2022 18:32:52 +0800
-Message-ID: <1666693976-181094-4-git-send-email-john.garry@huawei.com>
+Subject: [PATCH RFC v3 4/7] ata: libata: Add ata_internal_timeout()
+Date:   Tue, 25 Oct 2022 18:32:53 +0800
+Message-ID: <1666693976-181094-5-git-send-email-john.garry@huawei.com>
 X-Mailer: git-send-email 2.8.1
 In-Reply-To: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
 References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
@@ -55,156 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prepare to put the ATA queue command in a scmd payload by using priv
-space per driver which uses libata.
+Add a internal command timeout handler. Also hook into libsas timeout
+handler.
 
-The end goal is to remove ata_port.qcmd[].
-
-Suggested-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/ata/libata-scsi.c              | 6 ++++++
- drivers/scsi/aic94xx/aic94xx_init.c    | 2 ++
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 2 ++
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 2 ++
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 ++
- drivers/scsi/isci/init.c               | 2 ++
- drivers/scsi/mvsas/mv_init.c           | 2 ++
- drivers/scsi/pm8001/pm8001_init.c      | 2 ++
- include/linux/libata.h                 | 5 ++++-
- 9 files changed, 24 insertions(+), 1 deletion(-)
+ drivers/ata/libata-scsi.c           | 10 ++++++++++
+ drivers/scsi/libsas/sas_scsi_host.c |  5 +++++
+ include/linux/libata.h              |  2 ++
+ 3 files changed, 17 insertions(+)
 
 diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
-index 0d6f37d80137..18c60addf943 100644
+index 18c60addf943..cbf266c9d4c2 100644
 --- a/drivers/ata/libata-scsi.c
 +++ b/drivers/ata/libata-scsi.c
-@@ -1118,6 +1118,12 @@ int ata_scsi_dev_config(struct scsi_device *sdev, struct ata_device *dev)
- 	return 0;
+@@ -1138,6 +1138,16 @@ int ata_internal_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *scmd)
  }
+ EXPORT_SYMBOL_GPL(ata_internal_queuecommand);
  
-+int ata_init_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *cmd)
++enum blk_eh_timer_return ata_internal_timeout(struct scsi_cmnd *scmd)
 +{
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(ata_init_cmd_priv);
++	struct request *rq = blk_mq_rq_from_pdu(scmd);
++	struct completion *wait = rq->end_io_data;
 +
- int ata_internal_queuecommand(struct Scsi_Host *shost, struct scsi_cmnd *scmd)
++	complete(wait);
++	return BLK_EH_DONE;
++}
++EXPORT_SYMBOL_GPL(ata_internal_timeout);
++
+ /**
+  *	ata_scsi_slave_config - Set SCSI device attributes
+  *	@sdev: SCSI device to examine
+diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
+index 4fdd84868ac2..9d2122e65fba 100644
+--- a/drivers/scsi/libsas/sas_scsi_host.c
++++ b/drivers/scsi/libsas/sas_scsi_host.c
+@@ -921,10 +921,15 @@ void sas_task_complete_internal(struct sas_task *task)
+ 
+ enum blk_eh_timer_return sas_internal_timeout(struct scsi_cmnd *scmd)
  {
- 	struct ata_port *ap;
-diff --git a/drivers/scsi/aic94xx/aic94xx_init.c b/drivers/scsi/aic94xx/aic94xx_init.c
-index 70b735cedeb3..e2c99c74f73e 100644
---- a/drivers/scsi/aic94xx/aic94xx_init.c
-+++ b/drivers/scsi/aic94xx/aic94xx_init.c
-@@ -63,6 +63,8 @@ static struct scsi_host_template aic94xx_sht = {
- 	.reserved_queuecommand = sas_queuecommand_internal,
- 	.reserved_timedout = sas_internal_timeout,
- 	.nr_reserved_cmds = 2,
-+	.init_cmd_priv = ata_init_cmd_priv,
-+	.cmd_size = sizeof(struct ata_queued_cmd),
- };
++	struct domain_device *dev = cmd_to_domain_dev(scmd);
+ 	struct sas_task *task = TO_SAS_TASK(scmd);
+ 	bool is_completed = true;
+ 	unsigned long flags;
  
- static int asd_map_memio(struct asd_ha_struct *asd_ha)
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index 438e8a963782..aec13a46de6e 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -1763,6 +1763,8 @@ static struct scsi_host_template sht_v1_hw = {
- 	.reserved_queuecommand = sas_queuecommand_internal,
- 	.reserved_timedout = sas_internal_timeout,
- 	.nr_reserved_cmds = 2,
-+	.init_cmd_priv = ata_init_cmd_priv,
-+	.cmd_size = sizeof(struct ata_queued_cmd),
- };
- 
- static const struct hisi_sas_hw hisi_sas_v1_hw = {
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index b733eb18864c..cb057b3a84ac 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -3581,6 +3581,8 @@ static struct scsi_host_template sht_v2_hw = {
- 	.reserved_queuecommand = sas_queuecommand_internal,
- 	.reserved_timedout = sas_internal_timeout,
- 	.nr_reserved_cmds = 2,
-+	.init_cmd_priv = ata_init_cmd_priv,
-+	.cmd_size = sizeof(struct ata_queued_cmd),
- };
- 
- static const struct hisi_sas_hw hisi_sas_v2_hw = {
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index d703af7985b0..4caf07306b24 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -3248,6 +3248,8 @@ static struct scsi_host_template sht_v3_hw = {
- 	.reserved_queuecommand = sas_queuecommand_internal,
- 	.reserved_timedout = sas_internal_timeout,
- 	.nr_reserved_cmds = 2,
-+	.init_cmd_priv = ata_init_cmd_priv,
-+	.cmd_size = sizeof(struct ata_queued_cmd),
- };
- 
- static const struct hisi_sas_hw hisi_sas_v3_hw = {
-diff --git a/drivers/scsi/isci/init.c b/drivers/scsi/isci/init.c
-index c07d89451bb6..0d0b8ef71c65 100644
---- a/drivers/scsi/isci/init.c
-+++ b/drivers/scsi/isci/init.c
-@@ -180,6 +180,8 @@ static struct scsi_host_template isci_sht = {
- 	.reserved_queuecommand = sas_queuecommand_internal,
- 	.reserved_timedout = sas_internal_timeout,
- 	.nr_reserved_cmds	= 2,
-+	.init_cmd_priv = ata_init_cmd_priv,
-+	.cmd_size = sizeof(struct ata_queued_cmd),
- };
- 
- static struct sas_domain_function_template isci_transport_ops  = {
-diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
-index 07e6c5d6c46d..e1b6cc196cef 100644
---- a/drivers/scsi/mvsas/mv_init.c
-+++ b/drivers/scsi/mvsas/mv_init.c
-@@ -57,6 +57,8 @@ static struct scsi_host_template mvs_sht = {
- 	.reserved_queuecommand = sas_queuecommand_internal,
- 	.reserved_timedout = sas_internal_timeout,
- 	.nr_reserved_cmds = 2,
-+	.init_cmd_priv = ata_init_cmd_priv,
-+	.cmd_size = sizeof(struct ata_queued_cmd),
- };
- 
- static struct sas_domain_function_template mvs_transport_ops = {
-diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
-index e37e8898afaa..fe55cc9765ae 100644
---- a/drivers/scsi/pm8001/pm8001_init.c
-+++ b/drivers/scsi/pm8001/pm8001_init.c
-@@ -126,6 +126,8 @@ static struct scsi_host_template pm8001_sht = {
- 	.reserved_queuecommand = sas_queuecommand_internal,
- 	.reserved_timedout = sas_internal_timeout,
- 	.nr_reserved_cmds = 2,
-+	.init_cmd_priv = ata_init_cmd_priv,
-+	.cmd_size = sizeof(struct ata_queued_cmd),
- };
- 
- /*
++	/* Handle libata internal command */
++	if (dev_is_sata(dev) && !task->slow_task)
++		return ata_internal_timeout(scmd);
++
+ 	spin_lock_irqsave(&task->task_state_lock, flags);
+ 	if (!(task->task_state_flags & SAS_TASK_STATE_DONE)) {
+ 		task->task_state_flags |= SAS_TASK_STATE_ABORTED;
 diff --git a/include/linux/libata.h b/include/linux/libata.h
-index f09c5dca16ce..1a03c7fbb4e6 100644
+index 1a03c7fbb4e6..d5a15d1a5c4d 100644
 --- a/include/linux/libata.h
 +++ b/include/linux/libata.h
 @@ -1143,6 +1143,7 @@ extern void ata_scsi_unlock_native_capacity(struct scsi_device *sdev);
  extern int ata_scsi_slave_config(struct scsi_device *sdev);
  extern int ata_internal_queuecommand(struct Scsi_Host *shost,
  				struct scsi_cmnd *scmd);
-+extern int ata_init_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *cmd);
++extern enum blk_eh_timer_return ata_internal_timeout(struct scsi_cmnd *scmd);
+ extern int ata_init_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *cmd);
  extern void ata_scsi_slave_destroy(struct scsi_device *sdev);
  extern int ata_scsi_change_queue_depth(struct scsi_device *sdev,
- 				       int queue_depth);
-@@ -1394,7 +1395,9 @@ extern const struct attribute_group *ata_common_sdev_groups[];
- 	.bios_param		= ata_std_bios_param,		\
- 	.unlock_native_capacity	= ata_scsi_unlock_native_capacity,\
+@@ -1397,6 +1398,7 @@ extern const struct attribute_group *ata_common_sdev_groups[];
  	.max_sectors		= ATA_MAX_SECTORS_LBA48,\
--	.reserved_queuecommand = ata_internal_queuecommand
-+	.reserved_queuecommand = ata_internal_queuecommand,\
-+	.cmd_size = sizeof(struct ata_queued_cmd),\
-+	.init_cmd_priv = ata_init_cmd_priv
+ 	.reserved_queuecommand = ata_internal_queuecommand,\
+ 	.cmd_size = sizeof(struct ata_queued_cmd),\
++	.reserved_timedout = ata_internal_timeout,\
+ 	.init_cmd_priv = ata_init_cmd_priv
  
  #define ATA_SUBBASE_SHT(drv_name)				\
- 	__ATA_BASE_SHT(drv_name),				\
 -- 
 2.35.3
 
