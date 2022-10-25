@@ -2,101 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00B6F60D3A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A923E60D3A9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:38:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbiJYShr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 14:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S232107AbiJYSiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 14:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJYSho (ORCPT
+        with ESMTP id S229597AbiJYSiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:37:44 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D743BF01BC
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:37:43 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id a67so37655758edf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:37:43 -0700 (PDT)
+        Tue, 25 Oct 2022 14:38:10 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C1EF036E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:38:09 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id j12so11725630plj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TRWPlmQ7t2SG2rZ/LIltIDscqHAV1ve2Tx8Rm6hLXZ0=;
-        b=jJQqBwQZBWQhqSsaFer/LOszbVIEVhE1M5i4oAE83JaPqEn3bioGQGHltG/ChGAgsb
-         qZhhAALLWkhdaa2WcRddHOFt73aBj5Oa22KQlFBIyEkFwmLFi587w0dGmxGuhi7gMuc6
-         DJGzphrIp+OLJERoOjmrFr94RCVCyZL/+4o+X0TJQ06GVOVPjcUsnoqx/qfph9GMsecX
-         GhsbFcbTTQSesAltG+GPLnZpX8KZ1it8ULNLk4gpo/SjxkeOHAUG/tVwof9Z72nt5Pgn
-         duN4wsoyqUackBqyyEIMW495Tlidq/em5QjO6yF+7j5LiU29yG8l96wOrTFgDFBUtoMR
-         4RAA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j6v7OmtMJ2b16XOxoV0FAPi5R9UZMGGxZ5W+ahrXitU=;
+        b=acruGIdn9/xBNnQh1BycNFAI8FriRd/SRPwLinDXVN7o5iRN9oVVanxX4jocckw8KE
+         rrBPuGxGWZ6Cez1O8LJl8D6ply4tTfSQNhWiQMsDvh5dJmerpIlgmpxfcO7HCTqyhiz1
+         5iKemh60aO1Vx52mirB7pUeRtXXBIv5O+XBxQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TRWPlmQ7t2SG2rZ/LIltIDscqHAV1ve2Tx8Rm6hLXZ0=;
-        b=RDVuKdUm0KzSIP9lvCVzeX+1ag+jGCld2Zqw1xwE4+czZj1Qf0wvtw3OxiyjKnN4hy
-         PFPQDNVD7txofQ5BbIHuerhbEykcc6LyDUsGsG/4imEoIHbvFsBJJnCTkaiAdHkYO2vZ
-         uqQc7illHvCue51SwQhk8qiS3AEIgRL8pvDvnMDOVuwkP6c4jjA5UC6ZDO88gTA6jOFZ
-         olf8tSpNCvDHFBXQmzKzg/gQjn77g1afSzdnlPTEuEu7lXmCnoh04NWWovTkVvDiFha5
-         oFKWkVTJ5I66igVVOKYhE1lZHV47Bdhw1On+2HpDmU7FCyu1RtIpSsnReWkFePF/1fRy
-         WYwg==
-X-Gm-Message-State: ACrzQf0bTRf9af1MfT7ugxQOcQV13nddVLblO0GDKVVdFsIdgDawV0YA
-        E5g5kw5zvaZDZrULuMaNxHI=
-X-Google-Smtp-Source: AMsMyM4BwlrDQDV2BQXJwrC6zfLTydo7ifTWu5D/ffFJHsm4BEuCe4yjEYBJPzjO2+SgLzAfQe0TDA==
-X-Received: by 2002:a05:6402:ca:b0:45c:dbdd:8143 with SMTP id i10-20020a05640200ca00b0045cdbdd8143mr37296379edu.213.1666723062357;
-        Tue, 25 Oct 2022 11:37:42 -0700 (PDT)
-Received: from [192.168.1.103] (p57935738.dip0.t-ipconnect.de. [87.147.87.56])
-        by smtp.gmail.com with ESMTPSA id s14-20020a170906960e00b00780ab5a9116sm1794952ejx.211.2022.10.25.11.37.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 11:37:41 -0700 (PDT)
-Message-ID: <e72ff575-4ed3-77ca-fa76-27a0e084b1d7@gmail.com>
-Date:   Tue, 25 Oct 2022 20:37:39 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j6v7OmtMJ2b16XOxoV0FAPi5R9UZMGGxZ5W+ahrXitU=;
+        b=IT+4CtgfeGkPJRiq9JefkKFN3Diwoa7TX25vzOj1ppgUx8aYT/3ev24PO5oGdB8wmv
+         tQa84XjuhNdVD9NMUoxpSvEQtR7HeN2n2H+6jSPOSavXQ1+OaGEQC8t9K+egFGT78j5v
+         gRXtYXau2RcTtfbNEmvPGeFohOm0boL4XHtaArxR47PnqJc5oKXFPDMlGGlpdPi++SFE
+         gHgfzKu4qq7kofKcyxCynavRk6moRriflFnllQtzZo7v7Ekbv/jms8bJZS+JcQKj4+HA
+         26hLmyKhNqnrU1ixOyczzoHt6RoSpYJr8U+3cc4XzeHCqSivoH/QzWd0SlLgy0hGVKMS
+         MnWA==
+X-Gm-Message-State: ACrzQf1mZgAuA7vyyswWfF5MvoktONPtzfXVQ/v12y9k43ca+oLII0tt
+        cRFed+xU7NPHHmO5FjBlV+R3dQ==
+X-Google-Smtp-Source: AMsMyM5rGUo3WGRSfCNWAsvk0fN3/AawwDye31UvQzmNmzr7avz0RZdscsKFX344zjBDmEmPlJNpAA==
+X-Received: by 2002:a17:903:181:b0:185:5696:97c2 with SMTP id z1-20020a170903018100b00185569697c2mr39858718plg.160.1666723088910;
+        Tue, 25 Oct 2022 11:38:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m3-20020a63fd43000000b004393c5a8006sm1568091pgj.75.2022.10.25.11.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 11:38:08 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 11:38:06 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] mm: Make ksize() a reporting-only function
+Message-ID: <202210251125.BAE72214E2@keescook>
+References: <20221022180455.never.023-kees@kernel.org>
+ <fabffcfd-4e7f-a4b8-69ac-2865ead36598@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 0/4] staging: rtl8712: clean up dynamic memory
- management
-Content-Language: en-US
-To:     Nam Cao <namcaov@gmail.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <cover.1666688642.git.namcaov@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <cover.1666688642.git.namcaov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fabffcfd-4e7f-a4b8-69ac-2865ead36598@suse.cz>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 11:12, Nam Cao wrote:
-> This driver is fine if memory allocation never fails. However it does not
-> handle allocation failure well. This can either lead to memory leak, or
-> unallocated buffers being used.
+On Tue, Oct 25, 2022 at 01:53:54PM +0200, Vlastimil Babka wrote:
+> On 10/22/22 20:08, Kees Cook wrote:
+> > With all "silently resizing" callers of ksize() refactored, remove the
+> > logic in ksize() that would allow it to be used to effectively change
+> > the size of an allocation (bypassing __alloc_size hints, etc). Users
+> > wanting this feature need to either use kmalloc_size_roundup() before an
+> > allocation, or use krealloc() directly.
+> > 
+> > For kfree_sensitive(), move the unpoisoning logic inline. Replace the
+> > some of the partially open-coded ksize() in __do_krealloc with ksize()
+> > now that it doesn't perform unpoisoning.
+> > 
+> > [...]
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
 > 
-> v2: Add a missing if statement, as noticed by Dan Carpenter
-> 
-> Nam Cao (4):
->    Revert "staging: r8712u: Tracking kmemleak false positives."
->    staging: rtl8712: check for alloc fail in _r8712_init_recv_priv()
->    staging: rtl8712: check for return value of _r8712_init_xmit_priv()
->    staging: rtl8712: fix potential memory leak
-> 
->   drivers/staging/rtl8712/os_intfs.c     | 27 +++++++++++++++++++++-----
->   drivers/staging/rtl8712/recv_osdep.h   |  8 ++++----
->   drivers/staging/rtl8712/rtl8712_recv.c |  7 ++++---
->   drivers/staging/rtl8712/rtl871x_recv.c | 16 ++++++++-------
->   4 files changed, 39 insertions(+), 19 deletions(-)
-> 
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Thanks!
+
+> > ---
+> > This requires at least this be landed first:
+> > https://lore.kernel.org/lkml/20221021234713.you.031-kees@kernel.org/
+> 
+> Don't we need all parts to have landed first, even if the skbuff one is the
+> most prominent?
+
+Yes, though, I suspect there will be some cases we couldn't easily find.
+
+Here are the prerequisites I'm aware of:
+
+in -next:
+  36875a063b5e ("net: ipa: Proactively round up to kmalloc bucket size")
+  ab3f7828c979 ("openvswitch: Use kmalloc_size_roundup() to match ksize() usage")
+  d6dd508080a3 ("bnx2: Use kmalloc_size_roundup() to match ksize() usage")
+
+reviewed, waiting to land (should I take these myself?)
+  btrfs: send: Proactively round up to kmalloc bucket size
+    https://lore.kernel.org/lkml/20220923202822.2667581-8-keescook@chromium.org/
+  dma-buf: Proactively round up to kmalloc bucket size
+    https://lore.kernel.org/lkml/20221018090858.never.941-kees@kernel.org/
+
+partially reviewed:
+  igb: Proactively round up to kmalloc bucket size
+    https://lore.kernel.org/lkml/20221018092340.never.556-kees@kernel.org/
+
+unreviewed:
+  coredump: Proactively round up to kmalloc bucket size
+    https://lore.kernel.org/lkml/20221018090701.never.996-kees@kernel.org/
+  devres: Use kmalloc_size_roundup() to match ksize() usage
+    https://lore.kernel.org/lkml/20221018090406.never.856-kees@kernel.org/
+
+needs updating:
+  mempool: Use kmalloc_size_roundup() to match ksize() usage
+    https://lore.kernel.org/lkml/20221018090323.never.897-kees@kernel.org/
+  bpf: Use kmalloc_size_roundup() to match ksize() usage
+    https://lore.kernel.org/lkml/20221018090550.never.834-kees@kernel.org/
+
+-- 
+Kees Cook
