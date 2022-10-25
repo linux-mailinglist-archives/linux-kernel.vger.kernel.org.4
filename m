@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC5A60CBBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CB960CBBF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiJYM0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S231378AbiJYM0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbiJYM0e (ORCPT
+        with ESMTP id S231217AbiJYM0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:26:34 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E812C5F83
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:26:32 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id a24so7325795qto.10
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:26:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oUDb55F/wfKgAhE2ejE3CixOIq1tXHhPMaApHmafj2Q=;
-        b=mc5CW/Wy/umHxhLgQjZyDuOSj4FMWvayMAg4Fz05HyEgTOV1I3xtPDntJqN3qECuAY
-         mTWwp3gWzZUYduHK27vPviL8D9qjRYxf5bvSoe2skauZMjZMD5QSYufE+TkE79bheePI
-         BYdpYkZjF4zgHQz82nq8idhex+dcPNESXtjeoB/ZPUISjMIuN7NmmYhrAkTgpwqhr3an
-         oYkQIlBl1y5AHgMxt4md2zlTmTg0pyU2y9zLMtzuS2pD6GGaWjF/TYLqWQgOYpW3lrf/
-         ybSzcaQYmuD73eMQaTYCIInP7K9wpcqdgl0iUsTt5MBsqL9QF6HJrZre/A4FRGiiy2Dx
-         ULbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oUDb55F/wfKgAhE2ejE3CixOIq1tXHhPMaApHmafj2Q=;
-        b=ymZuN5gAKsfRPUku4LRTkRUSOsAcf+NL+xOzA1pD4WI4JSQsihqRwoxSZ2UiS45CO7
-         AN7jsQMoW8vR/wc2M2OhjKZQvzd6JNgIJP1DHZ6kT2h/7Uz+3zEfGDVJFmZc6xJU8qqz
-         j7fr9pfbHjbFXTvCsFiwiAX5xwvUmsw/eCVjxqzyC+MhxjnwnRqYTatRsHZOft2tmvLi
-         426v6NMotL8gNXpzxvOVugjRRD+/zUbqgNDjGgTD7VBKxF7YHKWzLl74uvZfr6DN+6Bk
-         W5avKZmwR+8itApNKB1Hxt1FNaz1N8/1Fx5hkVwKjwwO7czadTrxGKhg3Cd6kEiuPc0f
-         AvQQ==
-X-Gm-Message-State: ACrzQf1pGEpCCOU5remVA4vzdN9cs/SfZfBnKMo7IQYUjwZqi1DxkZBH
-        AtttAQYG4Q0n8fAVLGT7KWfZbw==
-X-Google-Smtp-Source: AMsMyM61ygt5D1dzc4qIV7FXHvxMV6ZkNXtAYZ84UiLNQnpIO0kLe8vSEVEg46x8MtbEqNw0Yxwkkw==
-X-Received: by 2002:a05:622a:11d0:b0:39d:322:7c38 with SMTP id n16-20020a05622a11d000b0039d03227c38mr25465827qtk.291.1666700792138;
-        Tue, 25 Oct 2022 05:26:32 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id f18-20020a05620a409200b006ce515196a7sm2005039qko.8.2022.10.25.05.26.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 05:26:31 -0700 (PDT)
-Message-ID: <0175808e-2cd5-8689-1a94-172d67e4eb57@linaro.org>
-Date:   Tue, 25 Oct 2022 08:26:30 -0400
+        Tue, 25 Oct 2022 08:26:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE9311A95C;
+        Tue, 25 Oct 2022 05:26:37 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E060522042;
+        Tue, 25 Oct 2022 12:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666700795; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RPt7m2ZnSnU+qoKAuwn24AcvwL7oef2WOn+bYLufeh4=;
+        b=N6LXlW9lyqmmCxP5okb4I3fCGFCnJku835czaiNTRFI5Edafm7dl3FCBGeNKKBW73gBFiK
+        rJqOulq+TDAY3QMMnFjTayIibggOoY8ix8MONCBI5fY+lWmofOISdRpqLjFVdGzf8ccHGy
+        HSLoNuUR+4UM3wCbf6YKfcrJmJeEG7M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666700795;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RPt7m2ZnSnU+qoKAuwn24AcvwL7oef2WOn+bYLufeh4=;
+        b=+BYq5nR74fQfcIAWf3bflqx3o7EU6Mp+se1/XJS8qRT/n3Wgw3WHgPM1zo1IE4fby9vxIK
+        FJR1HWflfS0KrsDA==
+Received: from wotan.suse.de (wotan.suse.de [10.160.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D46042C142;
+        Tue, 25 Oct 2022 12:26:35 +0000 (UTC)
+Received: by wotan.suse.de (Postfix, from userid 10510)
+        id C6EED6405; Tue, 25 Oct 2022 12:26:35 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by wotan.suse.de (Postfix) with ESMTP id C581063BB;
+        Tue, 25 Oct 2022 12:26:35 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 12:26:35 +0000 (UTC)
+From:   Michael Matz <matz@suse.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        =?ISO-8859-15?Q?Martin_Li=A8ka?= <mliska@suse.cz>,
+        Borislav Petkov <bpetkov@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH v3 6/7] kbuild: use obj-y instead extra-y for objects
+ placed at the head
+In-Reply-To: <ea468b86-abb7-bb2b-1e0a-4c8959d23f1c@kernel.org>
+Message-ID: <alpine.LSU.2.20.2210251210140.29399@wotan.suse.de>
+References: <20220924181915.3251186-1-masahiroy@kernel.org> <20220924181915.3251186-7-masahiroy@kernel.org> <ea468b86-abb7-bb2b-1e0a-4c8959d23f1c@kernel.org>
+User-Agent: Alpine 2.20 (LSU 67 2015-01-07)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 2/4] ASoC: dt-bindings: realtek,rt5682s: Add AVDD and
- MICVDD supplies
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Derek Fang <derek.fang@realtek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221024220015.1759428-1-nfraprado@collabora.com>
- <20221024220015.1759428-3-nfraprado@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024220015.1759428-3-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 18:00, Nícolas F. R. A. Prado wrote:
-> The rt5682s codec can have two supplies: AVDD and MICVDD. They are
-> already used by sc7180-trogdor-kingoftown.dtsi, so document them in the
-> binding.
+Hello,
+
+On Mon, 24 Oct 2022, Jiri Slaby wrote:
+
+> > Create vmlinux.a to collect all the objects that are unconditionally
+> > linked to vmlinux. The objects listed in head-y are moved to the head
+> > of vmlinux.a by using 'ar m'.
+... 
+> > --- a/scripts/Makefile.vmlinux_o
+> > +++ b/scripts/Makefile.vmlinux_o
+> > @@ -18,7 +18,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
+> >   	$(PERL) $(real-prereqs) > $@
+> >     .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
+> > -		$(KBUILD_VMLINUX_OBJS) $(KBUILD_VMLINUX_LIBS) FORCE
+> > +		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> There is a slight problem with this. The kernel built with gcc-LTO does not
+> boot. But as I understand it, it's not limited to gcc-LTO only.
 > 
-> ---
+> On x86, startup_64() is supposed to be at offset >zero< of the image (see
+> .Lrelocated()). It was ensured by putting head64.o to the beginning of vmlinux
+> (by KBUILD_VMLINUX_OBJS on the LD command-line above). The patch above instead
+> packs head64.o into vmlinux.a and then moves it using "ar -m" to the beginning
+> (it's in 7/7 of the series IIRC).
 > 
-> Changes in v2:
-> - Added mention that property is already used in a DT to the commit
->   message
+> The problem is that .o files listed on the LD command line explicitly are
+> taken as spelled. But unpacking .a inside LD gives no guarantees on the order
+> of packed objects. To quote: "that it happens to work sometimes is pure luck."
+> (Correct me guys, if I misunderstood you.)
 
-You already got an ack for it. Don't ignore it.
+To be precise: I know of no linker (outside LTO-like modes) that processes 
+archives in a different order than first-to-last-member (under 
+whole-archive), but that's not guaranteed anywhere.  So relying on 
+member-order within archives is always brittle.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+It will completely break down with LTO modes: the granularity for that is 
+functions, and they are placed in some unknown (from the outside, but 
+usually related to call-graph locality) order into several partitions, 
+with non-LTO-able parts (like asm code) being placed randomly between 
+them.  The order of these blobs can not be defined in relation to the 
+input order of object files: with cross-file dependencies such order might 
+not even exist.  Those whole sequence of blobs then takes the place of the 
+input archive (which, as there was only one, has no particular order from 
+the linker command lines perspective).
 
-Best regards,
-Krzysztof
+There are only two ways of guaranteeing an ordering: put non-LTO-.o files 
+at certain places of the link command, or, better, use a linker script to 
+specify an order.
 
+> For x86, the most ideal fix seems to be to fix it in the linker script. By
+> putting startup_64() to a different section and handle it in the ld script
+> specially -- see the attachment. It should always have been put this way, the
+> command line order is only a workaround. But this might need more fixes on
+> other archs too -- I haven't take a look.
+> 
+> Ideas, comments? I'll send the attachment as a PATCH later (if there are 
+> no better suggestions).
+
+This will work.  An alternative way would be to explicitely name the input 
+file in the section commands, without renaming the section:
+
+@@ -126,6 +126,7 @@ SECTIONS
+                _text = .;
+                _stext = .;
+                /* bootstrapping code */
++               KEEP(vmlinux.a:head64.o(.head.text))
+                HEAD_TEXT
+                TEXT_TEXT
+
+But I guess not all arch's name their must-be-first file head64.o (or even 
+have such requirement), so that's probably still arch-dependend and hence 
+not inherently better than your way.
+
+(syntax for the section selector in linkerscripts is:
+
+  {archive-glob:}filename-glob (sectionname-glob)
+
+
+Ciao,
+Michael.
