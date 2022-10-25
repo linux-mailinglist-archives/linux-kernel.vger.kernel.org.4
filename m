@@ -2,208 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41F360D7C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596E560D7C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbiJYXO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 19:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
+        id S232540AbiJYXRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 19:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiJYXOY (ORCPT
+        with ESMTP id S232296AbiJYXRB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 19:14:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605D7D0CDA
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:14:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20898B81D7A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:14:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEA0FC433C1;
-        Tue, 25 Oct 2022 23:14:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666739660;
-        bh=MzpMrjWsH19E0r9kWq1TaDGhbd1xbuNvnFOB0rRZuG0=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=tKirTCrkpCCd3YLx/m4i2cluGCr9cIfpNNUIUtlNsJ/DZNQjfoX454lPX3VSqBQ2p
-         zhdBBTCDI3Q/KNfgVzdKOcXyveQC0zAfn/yHE9NAStjzn9I32Wnc7r0HrWZTZU/gw9
-         s5NM24A32ZlFXUF1n5wbPgtTkHWYNV6saz+VHXhHEFIslvwIYGzQf3YRQlZSRkexc0
-         cnRFvzSqm/RaywfgWrwzuIJRuW1gPPW814LYsY4hj3Q/c3gTrLm2S5zQLuvH/NbnAM
-         acQ4G7Bu7ri3Vmx+Ka4TA9M/7IWQC7ZfyjOy4yqCejJjrl1zGDyVIY+UmbSTOvjB3c
-         obBl5/YTcTp6A==
-Date:   Tue, 25 Oct 2022 16:14:18 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>
-Subject: Re: [PATCH V4 2/2] xen/virtio: Handle PCI devices which Host controller
- is described in DT
-In-Reply-To: <20221025162004.8501-3-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2210251614110.1397955@ubuntu-linux-20-04-desktop>
-References: <20221025162004.8501-1-olekstysh@gmail.com> <20221025162004.8501-3-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Tue, 25 Oct 2022 19:17:01 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA3271BD3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:17:00 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso473954pjc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:17:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MsADfAFq9TK5UcRj962QpG64UBItidHRoIZXT+jjNI0=;
+        b=EadsoGPR6HyPwrBeOgAEKduevptWsfT+BfNPAxvGYrSVo10HfQDW9WWGTi15Rn+cM7
+         7uu8tgS1WGFFYvtejcBJ5izBfGlucAyHeP6/2u0y1Ffi5daX+pTRzkGAbaYVjnb2camD
+         +gF18GvsJW697oZ4CYo6fOOgiv5si2TwZoiUU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MsADfAFq9TK5UcRj962QpG64UBItidHRoIZXT+jjNI0=;
+        b=4i9qUScjg3CoQsfS9Dt3NzPffZhmBHnu/xhMqqL9x1T5GcgSR+ZAFcWxmqPZh7ViD0
+         wElf6LdeSRIbUjN2vuMVPX2VLzLj0w5l0r8PCUpPEz9gg22mWJ99reQTWd5SGEnrLDpY
+         2TVKsMtvGAfDUoRQaqQUvCKJIpj4BEIgAhdFZr491bgSrWnQ+5HOs1IHYoJM3d9bKR3+
+         3tbhu4BWKSgmAjxuDXD807GYhjo82na1W7hgJ1c5LJLNXhGzJfLmbxpTjiKkmWeZ+G/A
+         O2NQscDNnPL+raErPcDG23sni4yen3dL9QTsVAdoyrb+VgT2iKFFhUO3Fi9rmTHHoVve
+         tRwg==
+X-Gm-Message-State: ACrzQf1Zr1loS99IXYkzcAmQRImSsyiZC6JqNCF91v7zE0sGhg7nu4Fd
+        RPVzOb44D4QRYZIKRmNCjXoCdg==
+X-Google-Smtp-Source: AMsMyM5X/y2JqLN9OZsWk0fqAzQmVMhBkmDmr+xO/+YfhO25w4RdZr9/wkpQ4JkBhZmS4bFcimPcQA==
+X-Received: by 2002:a17:902:e952:b0:17c:2eee:c0ce with SMTP id b18-20020a170902e95200b0017c2eeec0cemr40672958pll.145.1666739819841;
+        Tue, 25 Oct 2022 16:16:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z1-20020aa79e41000000b0056c396f7539sm874135pfq.157.2022.10.25.16.16.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 16:16:59 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     linux-hardening@vger.kernel.org
+Cc:     Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fortify: Do not cast to "unsigned char"
+Date:   Tue, 25 Oct 2022 16:16:54 -0700
+Message-Id: <20221025231627.never.000-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1242; h=from:subject:message-id; bh=ongZMPsGsunOFE/Aw5TzydU9CY4BM9qng6Hx1S8Irz8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjWG5l+dmLqCoH6aNAlHtePjkBADhow7KrQzlCgdrQ HSi+1SmJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY1huZQAKCRCJcvTf3G3AJjJHEA CC/SsAc9o3xNnq0WhQdMGC96YHBixwqDtDjXN1hC0XFI4c6lQs5Ql0nzaSVRWwuTTzstOR+7Ui9axU YQGPgMt+ZytoL4sjQXR8PPqFLgCRUovDFxQoyOpIQjs+TOtPeW1NYyq/+2ES7eg9gkFnHVSPHGSC3+ Y3vgCZhHa7KTYYogOMb4TDewMU28GLHIXVGVGQe9Rf/M/Y0mpx4id6/OwFxp6oUq5IhfcMnASKYwDl 1QLGVPazvgNFG9QGDNXst6va9CPs+UfJEHOoZi9G+/kdjgIpXQv0aN94tBEIRMBQYhsSnnivYgaY/r aQWcu8M5nSMa3E7GLH1AajOdUTEmIq9TfasF/NVyrRCXkPoclC5SEcYvb5YR4RoWPUL/8QVWskWNIe DM352tS6CxMo2KqRYeuqXpMaPKOWbfgB6yW0uQ36d+CO95d1/8MM8P/U5YN02+Wxq5i0spGzmgiqeP juMSarxV/yko5p5qSfcIG7/VLHnFn/sEfRNtauLNTFcjYQNOczbbGvSbdznS06KEvYe7ovrlb232eG 1MTGX6+o6jRvYjpJpENRpx+nRq3vkLxW3lQ/OIOhlL8uk1rN0QyzcnevnuLc+huCIEDuqIAQDtjQsT pC6GVekHdywZjhSYToC/yprRGiusYEJzggpI8BaPGcM8Nm/chsAz2DBO6pkg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> 
-> Use the same "xen-grant-dma" device concept for the PCI devices
-> behind device-tree based PCI Host controller, but with one modification.
-> Unlike for platform devices, we cannot use generic IOMMU bindings
-> (iommus property), as we need to support more flexible configuration.
-> The problem is that PCI devices under the single PCI Host controller
-> may have the backends running in different Xen domains and thus have
-> different endpoints ID (backend domains ID).
-> 
-> Add ability to deal with generic PCI-IOMMU bindings (iommu-map/
-> iommu-map-mask properties) which allows us to describe relationship
-> between PCI devices and backend domains ID properly.
-> 
-> To avoid having to look up for the PCI Host bridge twice and reduce
-> the amount of checks pass an extra struct device_node *np to
-> xen_dt_grant_init_backend_domid().
-> 
-> So with current patch the code expects iommus property for the platform
-> devices and iommu-map/iommu-map-mask properties for PCI devices.
-> 
-> The example of generated by the toolstack iommu-map property
-> for two PCI devices 0000:00:01.0 and 0000:00:02.0 whose
-> backends are running in different Xen domains with IDs 1 and 2
-> respectively:
-> iommu-map = <0x08 0xfde9 0x01 0x08 0x10 0xfde9 0x02 0x08>;
-> 
-> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Do not cast to "unsigned char", as this needlessly creates type problems
+when attempting builds without -Wno-pointer-sign[1]. The intent of the
+cast is to drop possible "const" types.
 
-Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
+[1] https://lore.kernel.org/lkml/CAHk-=wgz3Uba8w7kdXhsqR1qvfemYL+OFQdefJnkeqXG8qZ_pA@mail.gmail.com/
 
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 3009f891bb9f ("fortify: Allow strlen() and strnlen() to pass compile-time known lengths")
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: linux-hardening@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/fortify-string.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
-> Slightly RFC. This is needed to support Xen grant mappings for virtio-pci devices
-> on Arm at some point in the future. The Xen toolstack side is not completely ready yet.
-> Here, for PCI devices we use more flexible way to pass backend domid to the guest
-> than for platform devices.
-> 
-> Changes V1 -> V2:
->    - update commit description
->    - rebase
->    - rework to use generic PCI-IOMMU bindings instead of generic IOMMU bindings
-> 
-> Changes V2 -> V3:
->    - update commit description, add an example
->    - drop xen_dt_map_id() and squash xen_dt_get_pci_host_node() with
->      xen_dt_get_node()
->    - pass struct device_node *np to xen_is_dt_grant_dma_device() and
->      xen_dt_grant_init_backend_domid()
->    - pass domid_t *backend_domid instead of struct xen_grant_dma_data *data
->      to xen_dt_grant_init_backend_domid()
-> 
-> Changes V3 -> V4:
->    - just rebase on new prereq patch
->      "xen/virtio: Optimize the setup of "xen-grant-dma" devices"
-> 
-> Previous discussion is at:
-> https://lore.kernel.org/xen-devel/20221006174804.2003029-1-olekstysh@gmail.com/
-> https://lore.kernel.org/xen-devel/20221015153409.918775-1-olekstysh@gmail.com/
-> https://lore.kernel.org/xen-devel/20221021172408.77397-1-olekstysh@gmail.com/
-> 
-> Based on:
-> https://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git/log/?h=for-linus-6.1
-> ---
-> ---
->  drivers/xen/grant-dma-ops.c | 46 +++++++++++++++++++++++++++++++------
->  1 file changed, 39 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-> index 1e797a043980..9784a77fa3c9 100644
-> --- a/drivers/xen/grant-dma-ops.c
-> +++ b/drivers/xen/grant-dma-ops.c
-> @@ -10,6 +10,7 @@
->  #include <linux/module.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/of.h>
-> +#include <linux/pci.h>
->  #include <linux/pfn.h>
->  #include <linux/xarray.h>
->  #include <linux/virtio_anchor.h>
-> @@ -292,15 +293,43 @@ static const struct dma_map_ops xen_grant_dma_ops = {
->  	.dma_supported = xen_grant_dma_supported,
->  };
->  
-> +static struct device_node *xen_dt_get_node(struct device *dev)
-> +{
-> +	if (dev_is_pci(dev)) {
-> +		struct pci_dev *pdev = to_pci_dev(dev);
-> +		struct pci_bus *bus = pdev->bus;
-> +
-> +		/* Walk up to the root bus to look for PCI Host controller */
-> +		while (!pci_is_root_bus(bus))
-> +			bus = bus->parent;
-> +
-> +		return of_node_get(bus->bridge->parent->of_node);
-> +	}
-> +
-> +	return of_node_get(dev->of_node);
-> +}
-> +
->  static int xen_dt_grant_init_backend_domid(struct device *dev,
-> +					   struct device_node *np,
->  					   domid_t *backend_domid)
->  {
-> -	struct of_phandle_args iommu_spec;
-> +	struct of_phandle_args iommu_spec = { .args_count = 1 };
->  
-> -	if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
-> -			0, &iommu_spec)) {
-> -		dev_dbg(dev, "Cannot parse iommus property\n");
-> -		return -ESRCH;
-> +	if (dev_is_pci(dev)) {
-> +		struct pci_dev *pdev = to_pci_dev(dev);
-> +		u32 rid = PCI_DEVID(pdev->bus->number, pdev->devfn);
-> +
-> +		if (of_map_id(np, rid, "iommu-map", "iommu-map-mask", &iommu_spec.np,
-> +				iommu_spec.args)) {
-> +			dev_dbg(dev, "Cannot translate ID\n");
-> +			return -ESRCH;
-> +		}
-> +	} else {
-> +		if (of_parse_phandle_with_args(np, "iommus", "#iommu-cells",
-> +				0, &iommu_spec)) {
-> +			dev_dbg(dev, "Cannot parse iommus property\n");
-> +			return -ESRCH;
-> +		}
->  	}
->  
->  	if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
-> @@ -324,10 +353,13 @@ static int xen_dt_grant_init_backend_domid(struct device *dev,
->  static int xen_grant_init_backend_domid(struct device *dev,
->  					domid_t *backend_domid)
->  {
-> +	struct device_node *np;
->  	int ret = -ENODEV;
->  
-> -	if (dev->of_node) {
-> -		ret = xen_dt_grant_init_backend_domid(dev, backend_domid);
-> +	np = xen_dt_get_node(dev);
-> +	if (np) {
-> +		ret = xen_dt_grant_init_backend_domid(dev, np, backend_domid);
-> +		of_node_put(np);
->  	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_pv_domain()) {
->  		dev_info(dev, "Using dom0 as backend\n");
->  		*backend_domid = 0;
-> -- 
-> 2.25.1
-> 
+diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+index f3dd5d1a6a25..09a032f6ce6b 100644
+--- a/include/linux/fortify-string.h
++++ b/include/linux/fortify-string.h
+@@ -18,7 +18,7 @@ void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("
+ 
+ #define __compiletime_strlen(p)					\
+ ({								\
+-	unsigned char *__p = (unsigned char *)(p);		\
++	char *__p = (char *)(p);				\
+ 	size_t __ret = SIZE_MAX;				\
+ 	size_t __p_size = __member_size(p);			\
+ 	if (__p_size != SIZE_MAX &&				\
+-- 
+2.34.1
+
