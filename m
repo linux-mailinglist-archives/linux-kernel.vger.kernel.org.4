@@ -2,91 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEE060CAE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BF160CA80
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiJYL2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        id S231184AbiJYLCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiJYL2Q (ORCPT
+        with ESMTP id S230245AbiJYLC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:28:16 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21C218D45C;
-        Tue, 25 Oct 2022 04:28:15 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666697293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j00FzWp2DyoqTFDqRk0YLSglffeF01Js6+w7bEZmwNM=;
-        b=l71XfcAhxqUMYyLb6J5362OAWgdW/zU2metRCyQUk7jOeuO+qmyxwZk/2zhBXKftgtJ9c/
-        bRHczdniYcmsyegXhM13t92O8y72FeWj8VD8myypiPI37cst1nwyc1m0zTmjxnu24/pkS6
-        bSEvn3tUTVhTEAkpk6tQUDNjG+aLUgwyF6tyy1yjWJrUnyxzr75UWrgeb3tU33jgUb9us4
-        1ClP9zuZmBDOuuNaqILy3vDM8Xm+f23jPY8yrOQrl9wAEzfc5MWHF4gShl5wbP8vz4/Yw3
-        fddhFgaYlJ6GrKyVFzci65mSr3QctPaX0hsbHzsWynLNuPjyih5X13S+Y8Bh0g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666697293;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j00FzWp2DyoqTFDqRk0YLSglffeF01Js6+w7bEZmwNM=;
-        b=5Z7hvJgeW/8IOsZH9zCVaPGCmsM2TtwRxk3HhpkgSGk1Tg9j/Fsmj079UEvOlSz4baTZa7
-        Kjm45zFlSoDy59Dg==
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org
-Subject: Re: [PATCH printk v2 12/38] tty: serial: kgdboc: use
- console_is_enabled()
-In-Reply-To: <CAD=FV=WF2S9wQ6uR+VKU4EfDTVd0JnKkuU3Wyfo6P8E_FouebQ@mail.gmail.com>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-13-john.ogness@linutronix.de>
- <CAD=FV=VFxKL=sOMdhyHrgy2JOtzKJdOe4euwZRRAK7P-rNVjuQ@mail.gmail.com>
- <CAD=FV=WF2S9wQ6uR+VKU4EfDTVd0JnKkuU3Wyfo6P8E_FouebQ@mail.gmail.com>
-Date:   Tue, 25 Oct 2022 13:34:12 +0206
-Message-ID: <87czagf8hf.fsf@jogness.linutronix.de>
+        Tue, 25 Oct 2022 07:02:28 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957F3DFB4B;
+        Tue, 25 Oct 2022 04:02:25 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MxTV22n9xzJn7j;
+        Tue, 25 Oct 2022 18:59:38 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 19:02:23 +0800
+Received: from octopus.huawei.com (10.67.174.191) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 19:02:23 +0800
+From:   Wang Weiyang <wangweiyang2@huawei.com>
+To:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <serge.hallyn@canonical.com>, <akpm@linux-foundation.org>,
+        <aris@redhat.com>
+CC:     <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] device_cgroup: Roll back to original exceptions after copy failure
+Date:   Tue, 25 Oct 2022 19:31:01 +0800
+Message-ID: <20221025113101.41132-1-wangweiyang2@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.174.191]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-24, Doug Anderson <dianders@chromium.org> wrote:
-> It actually only holds console_list_lock() even at the end of the
-> series. Still, it seems weird that we're declaring the `data_race` on
-> CON_ENABLED but not CON_BOOT ?
+When add the 'a *:* rwm' entry to devcgroup A's whitelist, at first A's
+exceptions will be cleaned and A's behavior is changed to
+DEVCG_DEFAULT_ALLOW. Then parent's exceptions will be copyed to A's
+whitelist. If copy failure occurs, just return leaving A to grant
+permissions to all devices. And A may grant more permissions than
+parent.
 
-You are correct that it is not a data race (because of the
-console_list_lock being held.) Petr has suggested adding a separate
-function for non-data-race callers. For v3 I will do this and use it
-here, probably called console_is_enabled_locked().
+Backup A's whitelist and recover original exceptions after copy
+failure.
 
-Usually CON_ENABLED is the only flag that is interesting during normal
-operation. The kgdboc case is an exception. I thought about if we should
-have console_flags() and console_flags_locked() to be able to handle
-general con->flags access. console_flags() would be marked with
-data_race(), console_flags_locked() would use lockdep to ensure the
-console_list_lock is held.
+Fixes: 4cef7299b478 ("device_cgroup: add proper checking when changing default behavior")
+Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
+---
+ security/device_cgroup.c | 33 +++++++++++++++++++++++++++++----
+ 1 file changed, 29 insertions(+), 4 deletions(-)
 
-But I would also like to have the _is_enabled special variant because
-how we check if a console is enabled will be different for the atomic
-consoles. I would like to hide those details in the _is_enabled
-implementation.
+diff --git a/security/device_cgroup.c b/security/device_cgroup.c
+index a9f8c63a96d1..bef2b9285fb3 100644
+--- a/security/device_cgroup.c
++++ b/security/device_cgroup.c
+@@ -82,6 +82,17 @@ static int dev_exceptions_copy(struct list_head *dest, struct list_head *orig)
+ 	return -ENOMEM;
+ }
+ 
++static void dev_exceptions_move(struct list_head *dest, struct list_head *orig)
++{
++	struct dev_exception_item *ex, *tmp;
++
++	lockdep_assert_held(&devcgroup_mutex);
++
++	list_for_each_entry_safe(ex, tmp, orig, list) {
++		list_move_tail(&ex->list, dest);
++	}
++}
++
+ /*
+  * called under devcgroup_mutex
+  */
+@@ -604,11 +615,13 @@ static int devcgroup_update_access(struct dev_cgroup *devcgroup,
+ 	int count, rc = 0;
+ 	struct dev_exception_item ex;
+ 	struct dev_cgroup *parent = css_to_devcgroup(devcgroup->css.parent);
++	struct dev_cgroup tmp_devcgrp;
+ 
+ 	if (!capable(CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+ 	memset(&ex, 0, sizeof(ex));
++	memset(&tmp_devcgrp, 0, sizeof(tmp_devcgrp));
+ 	b = buffer;
+ 
+ 	switch (*b) {
+@@ -620,15 +633,27 @@ static int devcgroup_update_access(struct dev_cgroup *devcgroup,
+ 
+ 			if (!may_allow_all(parent))
+ 				return -EPERM;
+-			dev_exception_clean(devcgroup);
+-			devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
+-			if (!parent)
++			if (!parent) {
++				devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
++				dev_exception_clean(devcgroup);
+ 				break;
++			}
+ 
++			INIT_LIST_HEAD(&tmp_devcgrp.exceptions);
++			rc = dev_exceptions_copy(&tmp_devcgrp.exceptions,
++						 &devcgroup->exceptions);
++			if (rc)
++				return rc;
++			dev_exception_clean(devcgroup);
+ 			rc = dev_exceptions_copy(&devcgroup->exceptions,
+ 						 &parent->exceptions);
+-			if (rc)
++			if (rc) {
++				dev_exceptions_move(&devcgroup->exceptions,
++						    &tmp_devcgrp.exceptions);
+ 				return rc;
++			}
++			devcgroup->behavior = DEVCG_DEFAULT_ALLOW;
++			dev_exception_clean(&tmp_devcgrp);
+ 			break;
+ 		case DEVCG_DENY:
+ 			if (css_has_online_children(&devcgroup->css))
+-- 
+2.17.1
 
-John Ogness
