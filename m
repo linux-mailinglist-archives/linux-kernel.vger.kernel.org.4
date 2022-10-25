@@ -2,122 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A678C60C522
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09E560C524
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiJYH3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S231719AbiJYH3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiJYH2v (ORCPT
+        with ESMTP id S231721AbiJYH3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:28:51 -0400
-Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CBD13A58D;
-        Tue, 25 Oct 2022 00:28:49 -0700 (PDT)
-Received: from mxbox2.masterlogin.de (unknown [192.168.10.89])
-        by mxout2.routing.net (Postfix) with ESMTP id 19CB56049C;
-        Tue, 25 Oct 2022 07:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1666682928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HPVeizzATY2/3fupWqlmWNMkG9wPo0ix3FxSgAWf9kk=;
-        b=h76N3baNUtUvaXUxVYss74lavlCCeF3PnHjld0LYwZZAcApw/+vTknRNDU2wL3i3sFawll
-        SICgkmhU1lrDb+20cIzTx976FJpC0ZFgupwV72xQY2FZvXgi5e2fH4+cxDOr1vtsvuyWot
-        Z/d9Vf3gFsFK9pRMI/hBzWVkWATQCdI=
-Received: from frank-G5.. (fttx-pool-217.61.152.57.bambit.de [217.61.152.57])
-        by mxbox2.masterlogin.de (Postfix) with ESMTPSA id 6AF6D1003DE;
-        Tue, 25 Oct 2022 07:28:46 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/2] dt-bindings: PCI: mediatek-gen3: add support for mt7986
-Date:   Tue, 25 Oct 2022 09:28:37 +0200
-Message-Id: <20221025072837.16591-3-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221025072837.16591-1-linux@fw-web.de>
-References: <20221025072837.16591-1-linux@fw-web.de>
+        Tue, 25 Oct 2022 03:29:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8784414EC51
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:29:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 312E4B81A99
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:29:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B00D7C433C1;
+        Tue, 25 Oct 2022 07:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666682949;
+        bh=Gv+wL2UYnkvCCSfsrxAR0k2V1PI7nMZ5YN27pTjKFDs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NkYcHkrAiFGBHaDCZbtg2xV4WxvmHEhemBJcYL1zXrnRa5GJxUW2QhIxFYaAuIjsS
+         S7sipVaLzJMCSBkGh/P0cySaBCCBWQbjCTXqmuSxUf0yHV/NPPEBYh6zdODRseQ6K/
+         JTKibZXeX6mpZCceolxI0GWSQYN0atY6CegWnpCoIdxcpwyFKRzzxBZS466AFa0z1w
+         XAsFJT34HBo+QNa0IBKz22tK13lq0ujS0zf6JnVhjY1NV9iJtnz/SPfXRFWJ0cxOMA
+         R+XG4VY7ZcqLSQWTsu5THL1NcJ1jkyV73+0xdi54KEGlmji0DmguWHpNoOAP3w8vhR
+         Hm8ddZkNAtYNA==
+Message-ID: <b19175cf-7f87-03c0-a129-716f9bb5e16d@kernel.org>
+Date:   Tue, 25 Oct 2022 15:29:06 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 5f0ade24-ef7b-4264-afe6-cd693f90c8d0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] f2fs: remove redundant return in
+ f2fs_create_flush_cmd_control()
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <bfae3198-7557-f984-200c-2c677881f462@kernel.org>
+ <20221025070817.37391-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221025070817.37391-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On 2022/10/25 15:08, Yangtao Li wrote:
+> Hi Chao,
+> 
+> In my point of view, it should not return 0. Because calling kthread_run()
+> to create a kernel thread may fails, and err is assigned a value.
 
-Add compatible string and clock-definition for mt7986. It needs 4 clocks
-for PCIe, define them in binding.
+I commented on last 'return err' rather than the one in error path...
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Maybe:
+
 ---
-v2:
-- squashed patch 2+3 (compatible and clock definition)
----
- .../bindings/pci/mediatek-pcie-gen3.yaml        | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+  fs/f2fs/segment.c | 8 ++++----
+  1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-index 98d3f0f1cd76..57d0e84253e9 100644
---- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-+++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-@@ -48,6 +48,7 @@ properties:
-     oneOf:
-       - items:
-           - enum:
-+              - mediatek,mt7986-pcie
-               - mediatek,mt8188-pcie
-               - mediatek,mt8195-pcie
-           - const: mediatek,mt8192-pcie
-@@ -78,9 +79,11 @@ properties:
-       - const: mac
- 
-   clocks:
-+    minItems: 4
-     maxItems: 6
- 
-   clock-names:
-+    minItems: 4
-     maxItems: 6
- 
-   assigned-clocks:
-@@ -161,6 +164,20 @@ allOf:
-             - const: tl_32k
-             - const: peri_26m
-             - const: peri_mem
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - mediatek,mt7986-pcie
-+    then:
-+      properties:
-+        clock-names:
-+          items:
-+            - const: pl_250m
-+            - const: tl_26m
-+            - const: peri_26m
-+            - const: top_133m
- 
- unevaluatedProperties: false
- 
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 81aadfc06c89..25ee8c8cb2cf 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -634,12 +634,12 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
+  {
+  	dev_t dev = sbi->sb->s_bdev->bd_dev;
+  	struct flush_cmd_control *fcc;
+-	int err = 0;
++	int err;
+
+  	if (SM_I(sbi)->fcc_info) {
+  		fcc = SM_I(sbi)->fcc_info;
+  		if (fcc->f2fs_issue_flush)
+-			return err;
++			return 0;
+  		goto init_thread;
+  	}
+
+@@ -652,7 +652,7 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
+  	init_llist_head(&fcc->issue_list);
+  	SM_I(sbi)->fcc_info = fcc;
+  	if (!test_opt(sbi, FLUSH_MERGE))
+-		return err;
++		return 0;
+
+  init_thread:
+  	fcc->f2fs_issue_flush = kthread_run(issue_flush_thread, sbi,
+@@ -664,7 +664,7 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
+  		return err;
+  	}
+
+-	return err;
++	return 0;
+  }
+
+  void f2fs_destroy_flush_cmd_control(struct f2fs_sb_info *sbi, bool free)
 -- 
-2.34.1
+2.25.1
 
+
+
+> 
+> Thanks,
