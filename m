@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 586BC60D3E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A22E360D3EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbiJYSrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 14:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51740 "EHLO
+        id S232969AbiJYSrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 14:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiJYSrK (ORCPT
+        with ESMTP id S233037AbiJYSrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Oct 2022 14:47:10 -0400
 Received: from sonic308-15.consmr.mail.ne1.yahoo.com (sonic308-15.consmr.mail.ne1.yahoo.com [66.163.187.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09A4AA3CF
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F277DE5ED7
         for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666723622; bh=KH1GpeT2uoLHjcAGzKdKYk33AV7vMyMYHNZNvsCxlAw=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=k8a1/iHx0h2eF0IGrvljpJ50HgIwIvSV3fS4u8W9svfGta8fFRb7PhQ7p3FJWGVLQLNv/a4Cs9nvzGXueZnSVSgKl+ajcxvPxL8e2KREHRRWzAUYvCvEIVSnn9D3ix9qJDExLWz9DPy39XD36G5DGcA95xv703NKQRXq1SjZB2D4STijy214uxq1R1QnV5Ljq4r/bEz8PLnHHdBc0TDioUrLM4p5iekByEiVH93vtvfyqcOC0WYywHU7Oau0IoD/ygHcd/NMQefWgZIpYwfhRKPuFsBLaJ3BHD72Nn1vngCbM/3xER6kz84saO+upbSm295D59WeG8SLoMDrEzraCQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666723622; bh=HVMP6nxZVtzQ4eGSt/O7itFBpLng2k80j9xiJo4Nn1t=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=tpPWoBo/wPrXvtR1A5Vj9LLl58R70fNpT+nlWDEFyRuzFmDkOwxjhj05HVm1I/Kv5MepvS/8scGpUMd2jAg+ttTfPt1JU343BVxhujfrpvILN7dADO5nkOVguICoLnlYR5Yxex24SAgCCRmEG9Qm7tdJQe9jwEJvkd5ZNGpMnQ/6ra6xDyOvRb6dnU8+Ol67NcdaK0VrtxfATsUBVRolz6Ud10EyrB1ERyqhJuHWAY6vmQsh2+TeMhyJx+D8muIyKzjoYbdoP8qJ775wNsARUKrKTys3sca4VcI+gtos4rbJMcZpanEuanlToNVQ1XJOMGzbtZEe/F9KM0Bo2o9jPg==
-X-YMail-OSG: cHlVjpwVM1mf3DhtM20mV9r7hncK6UaW6sVxlkSyThcPUFDNxBi.bz7PLhtya2C
- _T5ljnyj1Je0bhh8Fk7hyHef7293ZeUE3S170LcPtzPdNOmuTBlIO_zszyxuJ7ITOKmUa1Id1tIk
- k7xW5bXWM_SyZgGfZdnMhuHFLMu5empsWbUDLvtK3rJTAJQ.Xgzqim9tOa3OATSHLfj6gmBSge3.
- UlEW0hSvpyXBHz..WfJuB7G5It674Ax0h3ggj5hCZhyUKnzlfG51NuvHgyMdkX3y1DCMDXMT52wf
- qOWwHWYwWQrNBjF0SU3IzJjL3Z.DljmpcRvTEzQFhvGactVrMtJ91dBpzHuUzPoqdwq8SsQEam6D
- 8Axz8A3_d5s0CAHNVRjdaGiiu7i3rkYkp23QUREQvnIGjSsaPxTHuy02AnNazeAtB5fzIQwwvRLm
- .UHIrFh9.Kbj6dOeplY1fWoqwt0DdlKXD.Zm3AxJH0VXebfVyKQYNBAza6dElpdVT1aYIlSwvTL1
- nBei6mq_rHefvsIU7TVJIMMwjGJOL4J_bt_vGtrmJQwD4zZuuPTEt4JimAaLQI3sQk5Y7ic9pkPe
- SZY.m41w_.5mA4M7XrnOwflSVef7taTDB.LZvChRoW70bILNTdDpAqWI.dMgGacnwRexjk7SmTz7
- Ymt9n1z106VusMU6pgMoZ56jMlBr0V2Qw79qpzzCAOyoojAbkVW8WPGEiKH5LcBtVs31lBSa1xqB
- Fj5NOTFOIptHzjWESmZcptkCtZNDdrI0ofn48JVbb_kzol33avpnJA.ihYGUFoD7.t8Ayx4Pv4jq
- 7o653a0FMQgTfn76Ul4o.bowvs0g5QlL0nkBwC9mWWKo.hS.JejCJ5isxz49ck929W5C43FdNmVK
- IVr9fXGTqZviwNHm7FF.C9lTNhslBo_MxoHkUUvdXXmvCemPm048LqvKYy_p5gZgoixQ2eROi2BA
- PLyi0LIEerZ0qVirjQC7ppP.ig.DKkiZcdySRiFWBxTW9AatBwnjTVtn7GSdykSZWSEZ2Y70B5Sb
- DOQvYhyMEmmx3ghTpsjWDFldGeanrLHrP5DPtJ.HkZ.2WjkAUff9tPLh4uMNbYz3PuNCHEk32tVz
- 1HlW7hQXPi.8N9msTZGf67x.1NBHzG0LaZhmOB0pKnCbjFWAQApd_5xFVQkPMCPsKKaEMJ_ewO4g
- DHxnO0XboxrWMfrCFM0n2tFxmrF_0Ov.3UzL0Ky.trdOohMzjfq8nBxqeyp2aVQ9rdwDMzkY44pk
- 6U2briI9P73Kgdqyeq1cBhBCShSwyLWvZb7VeJHxgb92eL7nsF9OumbjiXQEd77T5nrjhS5quWv1
- 0luU.GB3DWyjyPIXYQHvkp2ZnP7ziXHvTOJ9zrLY1Y6J_Q1ZHqFVbUh1y4KYt78xfLTYEFN4rz7m
- acLvio_B5LF_x0V2A.saMRBIznFdeTHFkpKM0PCA8xMiiuqaOdGS3ctzpwBGaHr8Vi4dQTssHLCO
- rqEr_gXiCar3OWPuscBiUINaWMWVt72eULN2g9pSC8PjMFhvU_xsUwXrknRkJpJGlHXt6.3Z.FbB
- eklyiN2E2Q5AvXbLZnBxLQelIh8RVkAdrmbNY9qG4UMh.dBkTukUoz54P4At8jmLxOWxpcdzJo10
- rO2EyifbfyDkU6SxAhxzOSFu2KxkR8DXk1GhaeI7Iz23JAF6AqFpgFUnLT2lo2eb8lX_JFyd9eg3
- W0aVLrLsPuW.clzhnkVtBEwYKE6DfszJEf2pK4I3KVqAXPoWvYlnLVDOq_KK7uXfyw_jcLaedERL
- MVeYcwy9CbUwgsXMGVbK9XpFcaB7JVrUeRFOPF9.Zc.pq1Bw1oRhKvVydO9qHjFzn11g6obR5QJS
- KsexUCqnJI4HRVfpRkOQU7qiOShFTorRDXdsv.LBVVPhff4xk1PV2ZJTFo4wZ_Sm75D2NdjXPJv3
- QxbMClVEw.lwr8doRYkYS.HzPSazQoSLwWcJQat_A1Oqb_E_7.LtLpL6M7b.jKTmOpSEKE3IUhNi
- ktGjZM2zfZyp8fM58yNiKjkJBmt40bmsz0wjzaDJYpQGLraaDQUwBTAhudWBB_7IxaZs.u7tJIiF
- h2_3YclU3kwqm1uXVYntv72dZmjEfG4b.0uk6PzGW3JWgxC0XdUOlf48msNkVhzx3mYLiv4Tgb1j
- WHHNeWZszF4.H7HAz_mJnpit721LAPP02Cp5eHQlCDU8TydOaP_UeoVllJLSazDO6uYgqMVe4OEv
- gzhAHleRYBjx8JB.5UT5CPiEy__JJAMBucNCyf9mg1CAHml68XvygTo5pfAJiB3Tn6YTyGmg8dUK
- N_OWq_zjGmL.J6DA8.McwhRo-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666723622; bh=Df7bQuU86RtfRmA6zmLEew+17FaTUT67EczNgrIKLuU=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=Marrr2wwAhXAjdt1DKtepS/1MIuYV+fAxWJpPp+4EuyFRkTia9dWWfGWtHSvt1BRtz1AE39fS4HLFTjUwn2S8wmLQd1e8SCLm6yWwjEPBLiagWN7XziaqYr9UOt3xjb1PL7thyPNQc533305goGqB2ty4ejXxbQ7riNBfYDi0DsUr9yl/2Tr/VIq52ze0dJV8LNLgliC9fKzo0SP5gX8mSGUVaPd4cG0v8i2uHtbVD7plXmozyErq6pdtIqEPkEp4rBDhaClgMWcg9Y9CYWZEYMOSoc5uP+bqUyxh0VEcqbuX/AW+Q+zsPUZ2rxh1us+Far6bf9cAMeN2TrOaUcXLw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666723622; bh=2+qxWdlvbDrXZH4AZuQxgBlCvBcOsyXmDdIdkkqYg8T=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=RkTunHKN3ZTpKpuV9WN/0eN2p6Cjp8vfFKtr7Sjnm6XWcYZKp86jtQ2GCfkSptzb3wp7js6yEDDbd/L0tWM2Iswh8b1mN8TTk+OEIK9OSDgcFhEYAmHT/l87F+Al/eFlXykQmRvpAJSAiqVY7nkhDpeX3b2gaYUNzS1wdA4IsM7OnBp8FhcfKR95huMBpkdpWkpxvs1qiALbfVzjBUNdptXbUu4OPp7bM5OpebjHnbjy/JrXrs5xQ6G1Sqjo3pUZK8PANo/fZW1lNb+zfVGWct+s5Ni+Fl/w/11dgO6KKK2wLQOchXDPS6N/QEhAROfvRThasbknbF9bI3mW3ECYrQ==
+X-YMail-OSG: Qae11hcVM1l7mtaIMdkZNBuhFEqNOMGmC3vof1l.q25LV0RTuo0a1qzR8Ldlpzq
+ IM8oWysWCXDpXLFk7iO8ttoGqVBVOlvUFsCvwmafwywmafAB6n6Gv.BcI3S63nkaAC5u38C9THxA
+ _g.VfecuosWTs7HuDj6SThvAt_whUlGGa_zOf7N2qCJ4WP_xP2ZBWHop6MzRMSI6HWL2WkYAPjzl
+ zlhTgr0_HraNibXgmhLbCZBeljVEE7AuKJGM1fdFL9XsQI.rPgHVzncRvln.PXzRQ8J_BH7ji0mG
+ Ff8GogrV.4.rrhURevmZvOc6eb99a48iqkW.nyCQEFzl3kDUEScWaqJ..4ipc5YACZly1ORagw6I
+ CcmDCx5Oe_Iv05Ct1gGtNS9V.iwDTMhyymeffwJ.RfJ0dpzmjhXo4g_JQOatbg2UTHuFQ8XhTIY.
+ tuhzHvpCcY9udpAtbTzimu.64lU_4RQ6ddNhqGQtMBtYqtQg0ug.VIogr.RtOVhanGZ3LMMoW5RH
+ 75Y.BWwmgSH0TtwffEzF1UkMdw9Si.cs3jbLOO9S5zGNu3WmWlkhUphQZf9xg.BqYTx8M8YOETsk
+ GpGqr3FcJ.64_xEDGJn6Klom95uiZ.HdreV9MVZyHLglYAzwZaPQtPiTmzCRxMm8ITeVuqxrixs0
+ 5iUq2_wzRCngbN9F.7EJkQ6fattPkG98KQMLSUdDYtUXupgPJ3H3nRqeMzchvWnIywAT0RaPcAil
+ O7fxUCUBtax32EVQ7N21CcvPU2YeH0xf0QihD8xEttIMmeAkYN5edAa0JInELQZIhIkcA2fa2qX4
+ 720jI9V7I6ND1sOqTWDm9128qWDAYaz6vyFbv0qjNY_e9A26gDdV0tPyC52pbFPzqJOfCXrfSpeX
+ t5XRTgALq01juw7xJPJqYh39eoXWtew7t_UlkG_QDaMr0wKOWhkdSBh50ClyCmwAzgCKr.YG5aKh
+ hdndUwHF4Mk047wLcQtqRMhb0pr2Y7tntnwBnG1aojPqEG.LcsW3G2wV2aBBA611oDjW4hHAMrxK
+ tOWGUVPXdw9QlcRqK9loQt9KluqEEl2zMXFwZqvVq2FIJ6D_cPuhOmvXo_GByC2LNumZBWrB2tc6
+ 5_iabRkydANTDXzS2Q__ZIbSKNMYWWNymSCSW3w9I63sYh69W.1bm.8cq9gOjLrYFx4AKCj3iUTH
+ QEvGlh9EqariDn5e1ACIzVXbLV9DDwf3CY374U0w8Fy.o4Myz7uYeC.Vm1pwLlgTTsVfVOipCJqD
+ cH2ei1ux8Py19A5_XwUUAmuTX2I_2Cpaepw_OyGHG.6RpcUu0zSfrqQ89dm7tI3mRmNGQPlXX3fm
+ fdxcC1V8tk4MOBL0hWFVtEiSNNAsXLB7BqSG3pq1DFLbIefdPrCCIBJlfvNMDAFPI_fGhglHt8lz
+ Z99G9YYkRvNpp6cWikQkcsNSmHHZtUESZTQbbJ4jkrGtFSUGXi7bFHDzTppaKWdiQMoyt4Zp6rvw
+ 4oHL_z78rShY45WHoyElhGX0bGPygXOoRJ.w8k1mDtevayrQQEWkQobBWxSH_89sNX82JuEZiFdA
+ k10a.I.cE._qVV50dkgLv6ThPU9tCXRv9tNdyJSfPxvnk7b_tmjrT_gudh_liAZUNS25KZOYIH8i
+ c0pdh9IoCgyWpGCHrcx9dJwCynBYwNJ_mIjwPAikIdRZ2JJo70Y126C.V9K4FqDX1NFVFPOt4p74
+ xz54wG3WGRkH61WBEvLBTGdf4_DC3C5LnknueAKnMEwVnU5vdiLbwRLHbTSX2kD3hB46iaT5wseK
+ TGqpmh0AeDygIdVO5QesIDdZgUBJvLlhP2YPNTuo03WFjNqeiQYDCdZNuKjCNyif4DAVfcSnF1_5
+ Dpb7e6NAt.9UzN_Pph5IeZSVIkii2JwNxQN7z0zO.LxnDxDMhS2LueY3hvmuEh.fWBHOumVp5MY2
+ VWKnFvnIY1HkyU7bGNBMeVQrQ9XfhSw5OL07A4T8.uJQmjh_BvQxNIZJNmG0TLOrt8F12dz5czk.
+ Y4HsNWcn1cL5VX9kjGFC69ShwfPtLI0uDbpdvl2PbTBM4d06hIMG18dawFY.kL8qZjB4FfSkFOZq
+ Qn28HuBtLlZ_g5juCuG24CX9P4pwfovw6VZwMigxn.qrLnIVS1vPbfMw8sTD4HJxxvb4soDzmUUP
+ .YSVabc5TW7JanMn9KXPKGgGCmFKYdoRy.F67CtnVmHM6VXRsX4zEXeRDOBL9MgLfsUFsxbF6Y2B
+ 2kQGEEH_PavyW34hJCmX9Kagb1uefA.Ojgo463RGOKn6P
 X-Sonic-MF: <casey@schaufler-ca.com>
 Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Tue, 25 Oct 2022 18:47:02 +0000
 Received: by hermes--production-ne1-c47ffd5f5-mfswp (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 6ff43769a0d5883148e3027385165ea8;
-          Tue, 25 Oct 2022 18:46:59 +0000 (UTC)
+          Tue, 25 Oct 2022 18:47:01 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey.schaufler@intel.com, paul@paul-moore.com,
         linux-security-module@vger.kernel.org
@@ -60,9 +59,9 @@ Cc:     casey@schaufler-ca.com, jmorris@namei.org, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
         linux-api@vger.kernel.org, mic@digikod.net
-Subject: [PATCH v1 3/8] LSM: Identify the process attributes for each module
-Date:   Tue, 25 Oct 2022 11:45:14 -0700
-Message-Id: <20221025184519.13231-4-casey@schaufler-ca.com>
+Subject: [PATCH v1 4/8] LSM: Maintain a table of LSM attribute data
+Date:   Tue, 25 Oct 2022 11:45:15 -0700
+Message-Id: <20221025184519.13231-5-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221025184519.13231-1-casey@schaufler-ca.com>
 References: <20221025184519.13231-1-casey@schaufler-ca.com>
@@ -77,92 +76,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an integer member "features" to the struct lsm_id which
-identifies the API related data associated with each security
-module. The initial set of features maps to information that
-has traditionaly been available in /proc/self/attr.
+As LSMs are registered add their lsm_id pointers to a table.
+This will be used later for attribute reporting.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 ---
- include/linux/lsm_hooks.h  |  1 +
- include/uapi/linux/lsm.h   | 14 ++++++++++++++
- security/apparmor/lsm.c    |  1 +
- security/selinux/hooks.c   |  2 ++
- security/smack/smack_lsm.c |  1 +
- 5 files changed, 19 insertions(+)
+ include/linux/security.h | 17 +++++++++++++++++
+ security/security.c      | 18 ++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index dd4b4d95a172..46b2aa6a677e 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -1608,6 +1608,7 @@ struct security_hook_heads {
- struct lsm_id {
- 	const char	*lsm;		/* Name of the LSM */
- 	int		id;		/* LSM ID */
-+	int		features;	/* Set of LSM features */
- };
+diff --git a/include/linux/security.h b/include/linux/security.h
+index ca1b7109c0db..e1678594d983 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -138,6 +138,23 @@ enum lockdown_reason {
  
- /*
-diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
-index d5bcbb9375df..61e13b1b9ece 100644
---- a/include/uapi/linux/lsm.h
-+++ b/include/uapi/linux/lsm.h
-@@ -29,4 +29,18 @@
- #define LSM_ID_BPF		42
- #define LSM_ID_LANDLOCK		43
+ extern const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1];
+ 
++#define LSMID_ENTRIES ( \
++	1 + /* capabilities */ \
++	(IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_TOMOYO) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_IMA) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_APPARMOR) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_YAMA) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_LOADPIN) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_SAFESETID) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_LOCKDOWN) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
++	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0))
++
++extern int lsm_id;
++extern struct lsm_id *lsm_idlist[];
++
+ /* These functions are in security/commoncap.c */
+ extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
+ 		       int cap, unsigned int opts);
+diff --git a/security/security.c b/security/security.c
+index b2eb0ccd954b..bf206996a2af 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -28,6 +28,7 @@
+ #include <linux/backing-dev.h>
+ #include <linux/string.h>
+ #include <linux/msg.h>
++#include <uapi/linux/lsm.h>
+ #include <net/flow.h>
+ 
+ #define MAX_LSM_EVM_XATTR	2
+@@ -320,6 +321,12 @@ static void __init lsm_early_task(struct task_struct *task);
+ 
+ static int lsm_append(const char *new, char **result);
  
 +/*
-+ * LSM_ATTR_XXX values identify the /proc/.../attr entry that the
-+ * context represents. Not all security modules provide all of these
-+ * values. Some security modules provide none of them.
++ * Current index to use while initializing the lsm id list.
 + */
-+/* clang-format off */
-+#define LSM_ATTR_CURRENT	(1UL << 0)
-+#define LSM_ATTR_EXEC		(1UL << 1)
-+#define LSM_ATTR_FSCREATE	(1UL << 2)
-+#define LSM_ATTR_KEYCREATE	(1UL << 3)
-+#define LSM_ATTR_PREV		(1UL << 4)
-+#define LSM_ATTR_SOCKCREATE	(1UL << 5)
-+/* clang-format on */
++int lsm_id __lsm_ro_after_init;
++struct lsm_id *lsm_idlist[LSMID_ENTRIES] __lsm_ro_after_init;
 +
- #endif /* _UAPI_LINUX_LSM_H */
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index b859b1af6c75..77260026fda0 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1206,6 +1206,7 @@ struct lsm_blob_sizes apparmor_blob_sizes __lsm_ro_after_init = {
- static struct lsm_id apparmor_lsmid __lsm_ro_after_init = {
- 	.lsm = "apparmor",
- 	.id = LSM_ID_APPARMOR,
-+	.features = LSM_ATTR_CURRENT | LSM_ATTR_PREV | LSM_ATTR_EXEC,
- };
+ static void __init ordered_lsm_init(void)
+ {
+ 	struct lsm_info **lsm;
+@@ -364,6 +371,7 @@ static void __init ordered_lsm_init(void)
+ 	for (lsm = ordered_lsms; *lsm; lsm++)
+ 		initialize_lsm(*lsm);
  
- static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 5fcce36267bd..107b944e5d45 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -7018,6 +7018,8 @@ static int selinux_uring_cmd(struct io_uring_cmd *ioucmd)
- static struct lsm_id selinux_lsmid __lsm_ro_after_init = {
- 	.lsm = "selinux",
- 	.id = LSM_ID_SELINUX,
-+	.features = LSM_ATTR_CURRENT | LSM_ATTR_EXEC | LSM_ATTR_FSCREATE |
-+		    LSM_ATTR_KEYCREATE | LSM_ATTR_PREV | LSM_ATTR_SOCKCREATE,
- };
++	init_debug("lsm count            = %d\n", lsm_id);
+ 	kfree(ordered_lsms);
+ }
  
- /*
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index c7ba80e20b8d..12ff27c00fe6 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4791,6 +4791,7 @@ struct lsm_blob_sizes smack_blob_sizes __lsm_ro_after_init = {
- static struct lsm_id smack_lsmid __lsm_ro_after_init = {
- 	.lsm = "smack",
- 	.id = LSM_ID_SMACK,
-+	.features = LSM_ATTR_CURRENT,
- };
+@@ -485,6 +493,16 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+ {
+ 	int i;
  
- static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
++	/*
++	 * A security module may call security_add_hooks() more
++	 * than once. Landlock is one such case.
++	 */
++	if (lsm_id == 0 || lsm_idlist[lsm_id - 1] != lsmid)
++		lsm_idlist[lsm_id++] = lsmid;
++
++	if (lsm_id > LSMID_ENTRIES)
++		panic("%s Too many LSMs registered.\n", __func__);
++
+ 	for (i = 0; i < count; i++) {
+ 		hooks[i].lsmid = lsmid;
+ 		hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
 -- 
 2.37.3
 
