@@ -2,135 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51CD560CBD5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31FD060CBE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiJYM2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
+        id S231571AbiJYMbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJYM2u (ORCPT
+        with ESMTP id S231226AbiJYMbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:28:50 -0400
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8A0180ADC;
-        Tue, 25 Oct 2022 05:28:49 -0700 (PDT)
-Received: by mail-qk1-f182.google.com with SMTP id j21so7857987qkk.9;
-        Tue, 25 Oct 2022 05:28:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zk1x69BorUq5EOLXWvjLkthJmpSNSl2Oga4mvV/7nWM=;
-        b=CV/5X84xLpBtdrdzbHrJxbXKT0HSho93jBDhdAQngR/0jwUxtxvaMSt7676dfX7K6R
-         m6bBgjjRLFcVvomO6O3JUrzpQRDjB6VlLhgl5UnOODgZX60eY9NIU6ZJ4w7oj3n5bqwy
-         oARE0GXw4mHul38kK8Hl0QReY8asKLWJEXyDCG7nWJAg1IP8lIqWpft90ASzZe5tZc38
-         /LlpoK+6TelflD4jAw458OrNdfV/Iu0s4gezSkT9nvIWWCfHeV1vc2BZP2XMIRAs7ZoN
-         eYLnLmaXCCX5q06BLI0Hb35jCmw07B2OqNyH5ieD5tuodrIV/Sr+x9cc/sw+ha55D8IQ
-         aJlw==
-X-Gm-Message-State: ACrzQf1z2Kq8+JK4cH2CL1w4HaTFYWZr0LbYPiAcUBLj1BSJynGdUOlx
-        aq8spmXJ8mgmZK5O0tkOhoP+EQ1W4WZ1wQ==
-X-Google-Smtp-Source: AMsMyM6mYXpc4bKLmwIUwPrBFz8/OFbToakjxyQFAQ/8Kgcp6DIFwKS7woc8bwZrwTE8TPIHpHIrKA==
-X-Received: by 2002:a05:620a:d96:b0:6ce:bca6:9dd0 with SMTP id q22-20020a05620a0d9600b006cebca69dd0mr26604621qkl.152.1666700927585;
-        Tue, 25 Oct 2022 05:28:47 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id g10-20020ac8480a000000b0039cc9d24843sm1526666qtq.66.2022.10.25.05.28.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 05:28:46 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-3321c2a8d4cso111798507b3.5;
-        Tue, 25 Oct 2022 05:28:45 -0700 (PDT)
-X-Received: by 2002:a81:12c8:0:b0:36a:bd6b:92fb with SMTP id
- 191-20020a8112c8000000b0036abd6b92fbmr16103916yws.316.1666700925399; Tue, 25
- Oct 2022 05:28:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221017091201.199457-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221017091201.199457-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221017091201.199457-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 25 Oct 2022 14:28:34 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXiim0bDBxaGWi2GjAmKS1gKj8D8TUBPXnZtm0EphKsmQ@mail.gmail.com>
-Message-ID: <CAMuHMdXiim0bDBxaGWi2GjAmKS1gKj8D8TUBPXnZtm0EphKsmQ@mail.gmail.com>
-Subject: Re: [RFC RESEND PATCH 1/2] arm64: dts: renesas: r9a07g043: Introduce
- SOC_PERIPHERAL_IRQ() macro to specify interrupt property
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 25 Oct 2022 08:31:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF409183E0E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:31:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75707B81CF3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:31:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CF4C433C1;
+        Tue, 25 Oct 2022 12:31:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666701091;
+        bh=b1zNicorc/HJVH0BSmMidSsDFebw2PrHkiVA0QaNePk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HniQmcAdqSD66Y8GZLLlRuh6NTDDU1kC3cINJWFci86/lZp+WdfpuXxdm9d6XnWek
+         uTB2lrJ0B2Stfr2qichoVX1PiaLL3xrVHokw5BYQNBI3e8Kr83HjplC9ENXxt+Y7FE
+         CgvBnBp6dYBZSzYd4O/XkFDGY87u6By4cQIq7olJS5vzhKu4vmk891hlTNtIusXU7O
+         z5HFmRyd+5oCWjZrsMXm82jPaP3Bo3C5tMB4A/u2WqBqHq6lt08f6MRlWsIEUFsrom
+         wVBRr9CGW520c8HYaY8c/77YUgxv35h6G+EsbB+EmEFX3N8idyL122QAWF5WM2GgMJ
+         MIunwl+mqPc5Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1onJ5c-001WR2-N7;
+        Tue, 25 Oct 2022 13:31:28 +0100
+Date:   Tue, 25 Oct 2022 13:31:28 +0100
+Message-ID: <86o7u0dqzj.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Joe Korty <joe.korty@concurrent-rt.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: arch_timer: XGene-1: TVAL register math error breaks timer expiry calculation.
+In-Reply-To: <20221024165422.GA51107@zipoli.concurrent-rt.com>
+References: <20221024165422.GA51107@zipoli.concurrent-rt.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: joe.korty@concurrent-rt.com, mark.rutland@arm.com, daniel.lezcano@linaro.org, tglx@linutronix.de, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Hi Joe,
 
-On Mon, Oct 17, 2022 at 11:12 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Thanks for respinning this. Some comments below. Nothing major, but
+worth keeping in mind for your next patches.
+
+On Mon, 24 Oct 2022 17:54:22 +0100,
+Joe Korty <joe.korty@concurrent-rt.com> wrote:
+> 
+> arm64: arch_timer: XGene-1: TVAL register math error breaks timer expiry calculation.
 >
-> Introduce SOC_PERIPHERAL_IRQ() macro to specify interrupt property so
-> that we can share the common parts of the SoC DTSI with the RZ/Five
-> (RISC-V) SoC and the RZ/G2UL (ARM64) SoC.
+
+nit: this line is already in the email subject which will be captured
+when the patch is applied. No need to repeat it. Also, no final '.' at
+the end of the patch subject.
+
+> The TVAL register is 32 bit signed.  Thus only the lower 31 bits are
+> available to specify when an interrupt is to occur at some time in the
+> near future.  Attempting to specify a larger interval with TVAL results
+> in a negative time delta which means the timer fires immediately upon
+> being programmed, rather than firing at that expected future time.
+> 
+> The solution is for linux to declare that TVAL is a 31 bit register rather
+
+nit: s/linux/Linux/
+
+> than give its true size of 32 bits.  This prevents linux from programming
+> TVAL with a too-large value.  Note that, prior to 5.16, this little trick
+> was the standard way to handle TVAL in linux, so there is nothing new
+> happening here on that front.
+> 
+> Test procedure: for some reason, the lockup watchdog is sensitive to
+> this bug.
+
+My interpretation is that the softlockup detector hides the issue,
+because it keeps generating short timer deadlines that are within the
+scope of the broken timer.
+
+Disable it, and you start using NO_HZ with much longer timer
+deadlines, which turns into an interrupt flood:
+
+ 11: 1124855130  949168462  758009394   76417474  104782230   30210281     310890 1734323687     GICv2  29 Level     arch_timer
+
+And "much longer" isn't that long: it takes less than 43s to underflow
+TVAL at 50MHz (the frequency of the counter on XGene-1).
+
+> When we turn the watchdog off, then run a little 'hello world'
+> program in each of the CPUs, there will often be one that 1) hangs up
+> forever, 2) hangs up what seems like forever, but actully contines after
+> a few minutes.  In either case, the program cannot be freed by a ^C.
+> This test sequence requires CONFIG_SOFTLOCKUP_DETECTOR, and probably
+> requires that one of the NO_HZ Kconfig options be specified.
+> 
+> The sequence is, for an 8 cpu Mustang XGene-1:
+> 
+>    echo 0 >/proc/sys/kernel/watchdog
+>    for i in {0..7}; do taskset -c $i echo hi there $i; done
 >
-> This patch adds a new file r9a07g043u.dtsi to separate out RZ/G2UL
-> (ARM64) SoC specific parts. No functional changes (same DTB).
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Note that though the hangup usually happens, it does not
+> always happen.
 
-Thanks for your patch!
+The first line is enough to kill the machine here. Nice one! :D
 
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/renesas/r9a07g043u.dtsi
-> @@ -0,0 +1,12 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the RZ/G2UL SoC
-> + *
-> + * Copyright (C) 2022 Renesas Electronics Corp.
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +#define SOC_PERIPHERAL_IRQ(nr, na)     GIC_SPI nr na
+> 
+> Some comments on the v1 version of this patch by Marc Zyngier:
 
-s/na/flags/
+nit: mentioning previous versions in the commit message isn't very
+helpful, as the git tree won't carry that patch. Just saying
+"additional comment from John Doe:" is enough.
 
-Originally, when I assumed incorrectly that dtc does not support
-arithmetic, I used "nr" and "na" in the macro I proposed to mean RISC-V
-("r") resp. ARM ("a") interrupt number.  Apparently the names stuck,
-although the second parameter now has a completely different meaning ;-)
+> 
+>   XGene implements CVAL (a 64bit comparator) in terms of TVAL (a countdown
+>   register) instead of the other way around. TVAL being a 32bit register,
+>   the width of the counter should equally be 32.  However, TVAL is a
+>   *signed* value, and keeps counting down in the negative range once the
+>   timer fires.
+> 
+>   It means that any TVAL value with bit 31 set will fire immediately,
+>   as it cannot be distinguished from an already expired timer. Reducing
+>   the timer range back to a paltry 31 bits papers over the issue.
+> 
+>   Another problem cannot be fixed though, which is that the timer interrupt
+>   *must* be handled within the negative countdown period, or the interrupt
+>   will be lost (TVAL will rollover to a positive value, indicative of a
+>   new timer deadline).
+> 
+>  [ v2: Expanded CC list - jak ]
+>  [ v2: Revamped changelog - jak ] 
+>  [ v2: streamlined inlined comments - jak ]
 
-However, as the NCEPLIC does support interrupt flags, unlike the SiFive
-PLIC, there is no need to have the flags parameter in the macro.
+This information should be stashed below the '---' line so that it
+isn't captured in the commit when applying the patch.
 
-> +
-> +#include "r9a07g043.dtsi"
+> 
+> Cc: stable@vger.kernel.org # 5.16+
+> Fixes: 012f18850452 ("clocksource/drivers/arm_arch_timer: Work around broken CVAL implementations")
+> Signed-off-by: Joe Korty <joe.korty@concurrent-rt.com>
+> ---
+> base-commit: v6.0
+> Index: b/drivers/clocksource/arm_arch_timer.c
+> ===================================================================
+> --- a/drivers/clocksource/arm_arch_timer.c
+> +++ b/drivers/clocksource/arm_arch_timer.c
+> @@ -804,6 +804,9 @@ static u64 __arch_timer_check_delta(void
+>  		/*
+>  		 * XGene-1 implements CVAL in terms of TVAL, meaning
+>  		 * that the maximum timer range is 32bit. Shame on them.
+> +		 *
+> +		 * Note that TVAL is signed, thus has only 31 of its
+> +		 * 32 bits to express magnitude.
+>  		 */
+>  		MIDR_ALL_VERSIONS(MIDR_CPU_MODEL(ARM_CPU_IMP_APM,
+>  						 APM_CPU_PART_POTENZA)),
+> @@ -811,8 +814,8 @@ static u64 __arch_timer_check_delta(void
+>  	};
+>  
+>  	if (is_midr_in_range_list(read_cpuid_id(), broken_cval_midrs)) {
+> -		pr_warn_once("Broken CNTx_CVAL_EL1, limiting width to 32bits");
+> -		return CLOCKSOURCE_MASK(32);
+> +		pr_warn_once("Broken CNTx_CVAL_EL1, using 32 bit TVAL instead.\n");
 
-The rest LGTM.
+s/TVAL/CNTx_TVAL_EL1/ instead.
 
-Gr{oetje,eeting}s,
+> +		return CLOCKSOURCE_MASK(31);
+>  	}
+>  #endif
+>  	return CLOCKSOURCE_MASK(arch_counter_get_width());
+> 
 
-                        Geert
+With the commit message suitably amended:
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Reviewed-by: Marc Zyngier <maz@kernel.org>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Daniel, would you mind fixing it up when applying this patch? XGene is
+trivially broken without this fix, and it would be good if it could
+make it in one of the 6.1-rc.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
