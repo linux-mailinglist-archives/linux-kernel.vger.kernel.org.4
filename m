@@ -2,67 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CDB60C7E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2400260C7E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbiJYJWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
+        id S231691AbiJYJXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbiJYJVr (ORCPT
+        with ESMTP id S229597AbiJYJWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:21:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779FB164BE3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666689416;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oq++8R+yG1tYmGpBo5Lz36iS61FkQn11vUhbczNKyoQ=;
-        b=ZWf2NMNkgjBMyQH0YqyJpaehIznxWv6N6xYAtNxhRHB0SJhK6c/XYik3v2UMYJFZ2bO7Lq
-        FN6AcSlFZYLoDZi1m9Zx2WU7UzbvAWfw0446cgfkMBzyLwfrDh852brioP+xzS+Feh7hEy
-        TpK+xqFCIdvXFAo+Qt9cqT1V4d/6gkM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-274-VW3_SLqlNwOAqV77y8qO9w-1; Tue, 25 Oct 2022 05:16:53 -0400
-X-MC-Unique: VW3_SLqlNwOAqV77y8qO9w-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DC44F101A52A;
-        Tue, 25 Oct 2022 09:16:52 +0000 (UTC)
-Received: from T590 (ovpn-8-30.pek2.redhat.com [10.72.8.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id AB87D2028E98;
-        Tue, 25 Oct 2022 09:16:48 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 17:16:42 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     John Garry <john.garry@huawei.com>
-Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, hch@lst.de,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH] blk-mq: Properly init bios from
- blk_mq_alloc_request_hctx()
-Message-ID: <Y1epeuwonmjQhrXW@T590>
-References: <1666454846-11749-1-git-send-email-john.garry@huawei.com>
- <Y1U9zNZtZjRHQBww@T590>
- <99c6ca81-746d-85f4-04d3-49d7a3de611b@huawei.com>
- <Y1aS3vIbuQTNGWJL@T590>
- <360c78dc-65ce-362f-389d-075f2259ce5b@huawei.com>
- <Y1cvJ4/uwUScAQq4@T590>
- <3513b14c-14e0-b865-628e-a83521090de9@huawei.com>
- <CAFj5m9JnSBBVGrp5CqeH99-+VOGRuroUAi3c-3=6XKa891Sfmw@mail.gmail.com>
- <cf7f8f88-7d3e-8818-8584-e2276e7a1f30@huawei.com>
+        Tue, 25 Oct 2022 05:22:20 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29507153E24;
+        Tue, 25 Oct 2022 02:17:41 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p8so20795619lfu.11;
+        Tue, 25 Oct 2022 02:17:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=naCfwmdlp7g6rDHlSA0owQkvXaWiCJfBnagPYXKFWZM=;
+        b=JM2OP5dGKIoiPhpueJ7F5ZsAsTc/rM8qP0R5v6wi9jBJ0uuGKHVPYev2WBpNZTqs/M
+         v5ItfZId/adPWS1BHNZTfXgMQOpljLINXWG/16+1X013jMD0FuKn/bOGa+/0N4GDQjR3
+         MM3pB1EE693Blj2Ot0wqKv4szWBzv4HISqfnAKJbN3A3UP3QUDcKQB8oHPeFgDQQdaGO
+         qtGMTXBPXxkEWAilPGZbprYep5E0L3sE0d6CwWQcSoVHoGDZZuwIkuZE0K5ulkUKC7va
+         fAh2/foa9UHK8Pn0NS1BKXnXTouhfBH5HSkGhLURzRDrdF+GLWgkOh8mWWCx6ailbf1V
+         9LgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=naCfwmdlp7g6rDHlSA0owQkvXaWiCJfBnagPYXKFWZM=;
+        b=DUncOnJdM2kBAlqGU7JBiNzTPgVA5r+cqW+LBnGYgDalemz0+FipUghjGeMErJ82Ea
+         6Qn1G3P1ccSB6cZz/ccBiaGk76xgLVsd75T0QehKoYlH1gx6DQxZh4DtOXvk5A2kF4fv
+         YN42ZBmlTZ4SdjMQu0S3y8JUTG77MCSK0b/ah3Ox9n/0yqZ16oq/ZH87UJUuCiuTxKex
+         PmMPsU1wFsQOgrEqtuABoQcgOTnPfq5gbuJyEGxl36x9vftCR2ZbUWHzlzs6leMW+v43
+         zHjfUmFW2aYXcUwgLvXEMuhh2MyKt5HaZEvuP6iS7qczt2T87t5vVqVcct/VxMjjrmTW
+         S4XA==
+X-Gm-Message-State: ACrzQf00WNXnrbUE/utVmrFphZyYLXEMU8onTVc/YX8qSj+mQOY1C0MK
+        ZtwgDuoby+7J251k6hgLH7M=
+X-Google-Smtp-Source: AMsMyM5giO+B6//8TDx6oFx9rk2nhTmLTFtdmNX9iyZilZLKWQgM+5CiC2cRTTK66CJk0EwYZ/qyJg==
+X-Received: by 2002:a05:6512:2a92:b0:4a1:d2c9:c2d0 with SMTP id dt18-20020a0565122a9200b004a1d2c9c2d0mr13815425lfb.278.1666689459955;
+        Tue, 25 Oct 2022 02:17:39 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::2? (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
+        by smtp.gmail.com with ESMTPSA id d14-20020a056512368e00b004a9c6f7a776sm339464lfs.49.2022.10.25.02.17.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 02:17:39 -0700 (PDT)
+Message-ID: <57dd517f-f3c9-5818-780b-c3a8d4c29d5a@gmail.com>
+Date:   Tue, 25 Oct 2022 12:17:27 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf7f8f88-7d3e-8818-8584-e2276e7a1f30@huawei.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/2] drivers: fwnode: fix fwnode_irq_get_byname()
+Content-Language: en-US
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+References: <cover.1666687086.git.mazziesaccount@gmail.com>
+ <cc853a7e4b3533585e3641620bf4972663f22edc.1666687086.git.mazziesaccount@gmail.com>
+ <Y1ennbK6WSHT27Am@paasikivi.fi.intel.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <Y1ennbK6WSHT27Am@paasikivi.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,54 +84,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 10:08:10AM +0100, John Garry wrote:
-> On 25/10/2022 10:00, Ming Lei wrote:
-> > > My use case is in SCSI EH domain. For my HBA controller of interest, to
-> > > abort an erroneous IO we must send a controller proprietary abort
-> > > command on same HW queue as original command. So we would need to
-> > > allocate this abort request for a specific HW queue.
-> > IMO, it is one bad hw/sw interface.
-> > 
-> > First such request has to be reserved, since all inflight IOs can be in error.
-> 
-> Right
-> 
-> > 
-> > Second error handling needs to provide forward-progress, and it is supposed
-> > to not require external dependency, otherwise easy to cause deadlock, but
-> > here request from specific HW queue just depends on this queue's cpumask.
-> > 
-> > Also if it has to be reserved, it can be done as one device/driver private
-> > command, so why bother blk-mq for this special use case?
-> 
-> I have a series for reserved request support, which I will send later.
-> Please have a look. And as I mentioned, I would prob not end up using
-> blk_mq_alloc_request_hctx() anyway.
-> 
-> > 
-> > > I mentioned before that if no hctx->cpumask is online then we don't need
-> > > to allocate a request. That is because if no hctx->cpumask is online,
-> > > this means that original erroneous IO must be completed due to nature of
-> > > how blk-mq cpu hotplug handler works, i.e. drained, and then we don't
-> > > actually need to abort it any longer, so ok to not get a request.
-> > No, it is really not OK, if all cpus in hctx->cpumask are offline, you
-> > can't allocate
-> > request on the specified hw queue, then the erroneous IO can't be handled,
-> > then cpu hotplug handler may hang for ever.
-> 
-> If the erroneous IO is still in-flight from blk-mq perspective, then how can
-> hctx->cpumask still be offline? I thought that we guarantee that
-> hctx->cpumask cannot go offline until drained.
+Moro Sakari,
 
-Yeah, the draining is done before the cpu is offline. But the drain is
-simply waiting for the inflight IO to be completed. If the IO is failed
-during the waiting, you can't allocate such reserved request for error
-handling, then hang ever in blk_mq_hctx_notify_offline().
+Thanks for the review (and the suggestion)!
 
-If you just make it one driver private command, there can't be such
-issue. Block layer is supposed for handling common case(normal io and pt io),
-I'd suggest to not put such special cases into block layer.
+On 10/25/22 12:08, Sakari Ailus wrote:
+> Moi,
+> 
+> On Tue, Oct 25, 2022 at 11:50:59AM +0300, Matti Vaittinen wrote:
+>> The fwnode_irq_get_byname() does return 0 upon device-tree IRQ mapping
+>> failure. This is contradicting the function documentation and can
+>> potentially be a source of errors like:
+>>
+>> int probe(...) {
+>> 	...
+>>
+>> 	irq = fwnode_irq_get_byname();
+>> 	if (irq <= 0)
+>> 		return irq;
+>>
+>> 	...
+>> }
+>>
+>> Here we do correctly check the return value from fwnode_irq_get_byname()
+>> but the driver probe will now return success. (There was already one
+>> such user in-tree).
+>>
+>> Change the fwnode_irq_get_byname() to work as documented and according to
+>> the common convention and abd always return a negative errno upon failure.
+>>
+>> Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
+>> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>>
+>> ---
+>>
+>> I did a quick audit for the callers at v6.1-rc2:
+>> drivers/i2c/i2c-smbus.c
+>> drivers/iio/accel/adxl355_core.c
+>> drivers/iio/gyro/fxas21002c_core.c
+>> drivers/iio/imu/adis16480.c
+>> drivers/iio/imu/bmi160/bmi160_core.c
+>> drivers/iio/imu/bmi160/bmi160_core.c
+>>
+>> I did not spot any errors to be caused by this change. There will be a
+> 
+> It won't as you're decreasing the possible values the function may
+> return...
+> 
 
-thanks,
-Ming
+Unless someone had implemented special handling for the IRQ mapping 
+failure...
+
+>> functional change in i2c-smbus.c as the probe will now return -EINVAL
+>> should the IRQ dt-mapping fail. It'd be nice if this was checked to be
+>> Ok by the peeps knowing the i2c-smbus :)
+> 
+> FWIW, for both patches (but see below):
+> 
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> 
+>> ---
+>>   drivers/base/property.c | 9 +++++++--
+>>   1 file changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/base/property.c b/drivers/base/property.c
+>> index 4d6278a84868..bfc6c7286db2 100644
+>> --- a/drivers/base/property.c
+>> +++ b/drivers/base/property.c
+>> @@ -964,7 +964,7 @@ EXPORT_SYMBOL(fwnode_irq_get);
+>>    */
+>>   int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+>>   {
+>> -	int index;
+>> +	int index, ret;
+>>   
+>>   	if (!name)
+>>   		return -EINVAL;
+>> @@ -973,7 +973,12 @@ int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+>>   	if (index < 0)
+>>   		return index;
+>>   
+>> -	return fwnode_irq_get(fwnode, index);
+>> +	ret = fwnode_irq_get(fwnode, index);
+>> +
+> 
+> This newline is extra.
+> 
+> Or:
+> 
+> 	return ret ?: -EINVAL;
+> 
+> Or even:
+> 
+> 	return fwnode_irq_get(fwnode, index) ?: -EINVAL;
+> 
+> Up to you.
+> 
+
+My personal preference is to not use the ternary. I think the plain 
+clarity of if() just in many places justifies burning couple of lines 
+more :)
+
+Yours
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
