@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D21960D6ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B86EE60D6F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232576AbiJYWSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S230428AbiJYWWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiJYWSp (ORCPT
+        with ESMTP id S229949AbiJYWWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:18:45 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40A4CBEFA1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:18:44 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id n7-20020a056e02148700b002ffbfe5a9aeso7152784ilk.19
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:18:44 -0700 (PDT)
+        Tue, 25 Oct 2022 18:22:00 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E4C26483;
+        Tue, 25 Oct 2022 15:21:59 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id ud5so12946426ejc.4;
+        Tue, 25 Oct 2022 15:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8y6RcNcqeipKdBc0KcpoWpoQGRSinTxo6WlCtAHVVFw=;
+        b=lh0NRBFqQ37Pp2fRnoeAAM9cc7X8nP27UkZ1i/XKX98gMIpAuWUq5KWBlTtqlHiGeq
+         x6ZUVZyTfxE60QHtbDFf1iaEJ1JKez+YvG7mQJOpKgOrDcKPZUhocxXh9mST2A1Sl9pS
+         r0njkfhIIwycM7yO055a3feai4rOqXPvHneHE7E7dQQKKJ1EXFqRDXIC5mpU9vEwFK/a
+         0efce3mBwTUymRzty/FhP9OhD8Jf5Q3vIhkjYFsNi805ptOa3ZGf/5+yqJTBinUPmsiP
+         ZZeVmaWbMBtE5h9DRqCOxmlZWO9TEsB4eNGNeob4TWmijCb+PdiakLs0eQrr/FsCelZY
+         19Tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yAQ9i+hjvCOennHTwmfxh9I1OJJWWhIoBpgIqYjJvaM=;
-        b=G5s8EBCgMTB+aqmYi+0MvVVKsUHX9+8dpYyN1up8riGdHF3yhMWHkB14TS7xDzbAD6
-         d6XOYB46UjU46x/fqN3ptISzkqM8Phfs/qVOk1MQmflcwP1ei1D4HH8z5Kzri/vHvpJ6
-         7DrMN4j4DPGFIMm+X2CSmo+GXql65kBg6suCZ1BWTx6nZvhP+NSClUzHJfHWEPniiBAF
-         OU4S4qye7h4fH+TS3bnjnlMjilzXdH32ayNV5Fb5/olJ0IA+H0WZHasSl2S7TIS5qRWh
-         0/ZWYj/p0DpzFV1QWS2pBWeZ4X0Iau3JY3iNQsPzblF5v7Cby7T42Q1lT09RHhJ0g8UB
-         fQJg==
-X-Gm-Message-State: ACrzQf2Li9XmCpWIFMVoj8fD4gpotlMSILtrzCIBJ4gz10GlXuPYZ6qo
-        mJnJNa9052hg8PoM+vbMsRItXrHwJ9gIDh2lQ27YEu0csjEI
-X-Google-Smtp-Source: AMsMyM5AJoi387nPFTG2JPr4zhNsA32rsPhzw5H7L1TZpYpqI1TFA5g5tIV6Lcvy0GXB4EL+XaIrK5X9PCHNTK+JRG7FiCDK9oOv
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8y6RcNcqeipKdBc0KcpoWpoQGRSinTxo6WlCtAHVVFw=;
+        b=k1aGY1d4tPbVyXpIK7YIip80WC2AjP/WDb3uuNcM2gn5Vgs3WZm4n818nKuUKVgh2O
+         ERGDu5Mxke7Ug8WroYse0f52S4paLjeVUYjg6T4cN3trLnkGhUuohWLIU0W/WATdI+yt
+         mzWjASFz7fNh5MEXbf1WEgPPcMKtNo4sMhO8XmPQzlz1tsDnenx/VZPPsra4yHad7bxn
+         9ucQDZ0NJjD71BSkfOI6hnroiEYjDftIC6PUBaGJi4cWsTdPyB/UMx+Bubrpw68IuXa8
+         2r32nucMp9DGGpRHges7eEdTZWC3DLCfwXIpAGKZ/WOhPeOx8TU58k206qUMlUbeszz6
+         x4NQ==
+X-Gm-Message-State: ACrzQf19sCNw4Yn1tmwpF94hDiuNk4Du12cREwIzQanmnkYB1lnTuXsy
+        SkPTFvGTCMWQR3PSklKaB5Cm8AwKRgDVJsvd01A=
+X-Google-Smtp-Source: AMsMyM6QITyQ7lHAa6lVQOgcVckdNVw20OEmjkUIHcwCzj/lp0O4BWOPYfKxzljxsA4kVmMiP28cLm/yW8CevROpj8k=
+X-Received: by 2002:a17:906:c14f:b0:793:30e1:96be with SMTP id
+ dp15-20020a170906c14f00b0079330e196bemr29549937ejc.447.1666736518361; Tue, 25
+ Oct 2022 15:21:58 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:2691:b0:363:cc6e:76b7 with SMTP id
- o17-20020a056638269100b00363cc6e76b7mr25233405jat.18.1666736323605; Tue, 25
- Oct 2022 15:18:43 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 15:18:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000080bb5c05ebe34a4d@google.com>
-Subject: [syzbot] WARNING in cow_file_range_inline
-From:   syzbot <syzbot+858534c396b0cdd291d2@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        osandov@fb.com, sweettea-kernel@dorminy.me,
-        syzkaller-bugs@googlegroups.com
+References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-14-arnd@kernel.org>
+In-Reply-To: <20221019152947.3857217-14-arnd@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 25 Oct 2022 23:21:31 +0100
+Message-ID: <CA+V-a8vH+rD2aJWc-5sVhnhe0-VYUCQ27KfQRS2BsimqJheWqw@mail.gmail.com>
+Subject: Re: [PATCH 13/14] staging: media: remove davinci vpfe_capture driver
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,102 +72,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Oct 19, 2022 at 4:40 PM Arnd Bergmann <arnd@kernel.org> wrote:>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> This driver was for the davinci dm644x and dm3xx platforms that are
+> now removed from the kernel, so there are no more users.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  MAINTAINERS                                   |    1 -
+>  drivers/staging/media/Kconfig                 |    1 -
+>  drivers/staging/media/Makefile                |    1 -
+>  .../media/deprecated/vpfe_capture/Kconfig     |   58 -
+>  .../media/deprecated/vpfe_capture/Makefile    |    4 -
+>  .../media/deprecated/vpfe_capture/TODO        |    7 -
+>  .../deprecated/vpfe_capture/ccdc_hw_device.h  |   80 -
+>  .../deprecated/vpfe_capture/dm355_ccdc.c      |  934 --------
+>  .../deprecated/vpfe_capture/dm355_ccdc.h      |  308 ---
+>  .../deprecated/vpfe_capture/dm355_ccdc_regs.h |  297 ---
+>  .../deprecated/vpfe_capture/dm644x_ccdc.c     |  879 --------
+>  .../deprecated/vpfe_capture/dm644x_ccdc.h     |  171 --
+>  .../vpfe_capture/dm644x_ccdc_regs.h           |  140 --
+>  .../media/deprecated/vpfe_capture/isif.c      | 1127 ----------
+>  .../media/deprecated/vpfe_capture/isif.h      |  518 -----
+>  .../media/deprecated/vpfe_capture/isif_regs.h |  256 ---
+>  .../deprecated/vpfe_capture/vpfe_capture.c    | 1902 -----------------
+>  include/media/davinci/vpfe_capture.h          |  177 --
+>  18 files changed, 6861 deletions(-)
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.c
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.h
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
+>  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
+>  delete mode 100644 include/media/davinci/vpfe_capture.h
+>
+Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
 
-syzbot found the following issue on:
-
-HEAD commit:    337a0a0b63f1 Merge tag 'net-6.1-rc3-1' of git://git.kernel..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1090e822880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=858534c396b0cdd291d2
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16e5a422880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16387a16880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c011f7e4e764/disk-337a0a0b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d019c4ed2ed2/vmlinux-337a0a0b.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/be2f474580f9/mount_0.gz
-
-The issue was bisected to:
-
-commit caae78e032343df525b8d05c58b462827f10b2a3
-Author: Omar Sandoval <osandov@fb.com>
-Date:   Tue Mar 15 01:12:35 2022 +0000
-
-    btrfs: move common inode creation code into btrfs_create_new_inode()
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=165f10ee880000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=155f10ee880000
-console output: https://syzkaller.appspot.com/x/log.txt?x=115f10ee880000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+858534c396b0cdd291d2@syzkaller.appspotmail.com
-Fixes: caae78e03234 ("btrfs: move common inode creation code into btrfs_create_new_inode()")
-
-BTRFS info (device loop0): enabling ssd optimizations
-------------[ cut here ]------------
-BTRFS: Transaction aborted (error -12)
-WARNING: CPU: 0 PID: 3604 at fs/btrfs/inode.c:454 cow_file_range_inline+0x87c/0x9a0 fs/btrfs/inode.c:454
-Modules linked in:
-CPU: 0 PID: 3604 Comm: syz-executor345 Not tainted 6.1.0-rc2-syzkaller-00061-g337a0a0b63f1 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:cow_file_range_inline+0x87c/0x9a0 fs/btrfs/inode.c:454
-Code: 49 8b 3e 48 c7 c6 40 f8 da 8a 89 da 31 c0 e8 dd 97 a6 06 eb 1a e8 34 9c fc fd 48 c7 c7 40 f7 da 8a 89 de 31 c0 e8 84 3a c4 fd <0f> 0b 41 b7 01 4c 8b 64 24 08 4c 8b 2c 24 45 0f b6 c7 4c 8b 7c 24
-RSP: 0018:ffffc90003d8ed00 EFLAGS: 00010246
-RAX: c935d7c7edbb6300 RBX: 00000000fffffff4 RCX: ffff888077ebba80
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90003d8ee30 R08: ffffffff816b8d3d R09: ffffed1017344f13
-R10: ffffed1017344f13 R11: 1ffff11017344f12 R12: 1ffff1100e669a5e
-R13: ffff88801d524001 R14: ffff88807334d2f0 R15: 00000000fffffff4
-FS:  0000555555892300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020003180 CR3: 000000001d484000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- cow_file_range+0x391/0xfa0 fs/btrfs/inode.c:1219
- btrfs_run_delalloc_range+0xed4/0x11a0 fs/btrfs/inode.c:2229
- writepage_delalloc+0x25e/0x540 fs/btrfs/extent_io.c:1968
- __extent_writepage+0x5d6/0x14d0 fs/btrfs/extent_io.c:2272
- extent_write_cache_pages+0x9e7/0x12d0 fs/btrfs/extent_io.c:3186
- extent_writepages+0x228/0x550 fs/btrfs/extent_io.c:3308
- do_writepages+0x3c3/0x680 mm/page-writeback.c:2469
- filemap_fdatawrite_wbc+0x11e/0x170 mm/filemap.c:388
- __filemap_fdatawrite_range mm/filemap.c:421 [inline]
- filemap_fdatawrite_range+0x175/0x200 mm/filemap.c:439
- btrfs_fdatawrite_range fs/btrfs/file.c:4140 [inline]
- start_ordered_ops fs/btrfs/file.c:2026 [inline]
- btrfs_sync_file+0x39e/0x1140 fs/btrfs/file.c:2102
- generic_write_sync include/linux/fs.h:2883 [inline]
- btrfs_do_write_iter+0xa6f/0x1370 fs/btrfs/file.c:1975
- call_write_iter include/linux/fs.h:2191 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x7dc/0xc50 fs/read_write.c:584
- ksys_write+0x177/0x2a0 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4612b05f79
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff76769238 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f4612b05f79
-RDX: 0000000000000001 RSI: 0000000020003180 RDI: 0000000000000006
-RBP: 00007fff76769260 R08: 0000000000000002 R09: 00007fff76769270
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000007
-R13: 00007f4612b4e6b8 R14: 00007fff76769280 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Cheers,
+Prabhakar
