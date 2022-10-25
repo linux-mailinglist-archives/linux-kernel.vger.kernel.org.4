@@ -2,57 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2C360CFD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFB260CFD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbiJYPBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
+        id S232490AbiJYPCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbiJYPBe (ORCPT
+        with ESMTP id S232815AbiJYPB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:01:34 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED27619E922;
-        Tue, 25 Oct 2022 08:01:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Bz6ULN8tp1K4+/IWgirL1lGFhItLERathS4mmOhY8xM=; b=lKd1s/E81eIwpBs5oBzPoqZoaa
-        pKVnOUf5h4iemMkc1RWYkqQBkR7o06jHWjoS5ICZrDpVCknDpQLYwz5w4w+m1TbR89lAJjUel+JoC
-        tbZlv+uauE9Oddqg8iPq8g1HfX5Z1fLOWPfaHW8DzTgIiTlqq6ctZp0G/q2BuCf3bclw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1onLQU-000Xf0-5l; Tue, 25 Oct 2022 17:01:10 +0200
-Date:   Tue, 25 Oct 2022 17:01:10 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Camel Guo <camel.guo@axis.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        kernel@axis.com
-Subject: Re: [RFC net-next 1/2] dt-bindings: net: dsa: add bindings for GSW
- Series switches
-Message-ID: <Y1f6NmjrXh77DNxs@lunn.ch>
-References: <20221025135243.4038706-1-camel.guo@axis.com>
- <20221025135243.4038706-2-camel.guo@axis.com>
- <16aac887-232a-7141-cc65-eab19c532592@linaro.org>
+        Tue, 25 Oct 2022 11:01:58 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B10119E00E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1666710116; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=xRxva5kPtIk4AgmMh5Ah5qs16fLVraMoyg8JYmMcBno=;
+        b=WoGntmFizqSg7uziAiWpH5vkz4ugrgLIaFQgV7uO5zGOHCikQwdp6kdWtXJudWr29Kg2fv
+        0FOO4EOdIkiNYAuyYFzYnRntmv9oZDxReSLf5ZOI3t97XCm5YVt2MsrcJeEzu6GDYf+1u9
+        +LKdo1Xbe7TwcFSdhU/0VIPsxSh6EhY=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH] ASoC: dapm: Don't use prefix for regulator name
+Date:   Tue, 25 Oct 2022 16:01:49 +0100
+Message-Id: <20221025150149.113129-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16aac887-232a-7141-cc65-eab19c532592@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -62,25 +45,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > +      - enum:
-> > +          - mxl,gsw145-mdio
-> 
-> Why "mdio" suffix?
+When a component has a prefix, and uses a SND_SOC_DAPM_REGULATOR_SUPPLY,
+the name of the regulator should not use the prefix, otherwise it won't
+be properly matched in the DT/ACPI.
 
-I wondered about that as well. At some point in the future, there
-could be an SPI version of this driver, and a UART version. Would they
-all use the same compatible, and then context it used to determine the
-correct binding? I think the kernel would be happy to do that, but i
-don't know if the YAML tools can support that?
+Fixes: 3caac759681e ("ASoC: soc-dapm.c: fixup snd_soc_dapm_new_control_unlocked() error handling")
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ sound/soc/soc-dapm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/gpio/gpio.h>
-> > +
-> > +    mdio {
-> 
-> Hmmm... switch with MDIO is part of MDIO?
+diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
+index d515e7a78ea8..879cf1be67a9 100644
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -3645,7 +3645,7 @@ snd_soc_dapm_new_control_unlocked(struct snd_soc_dapm_context *dapm,
+ 
+ 	switch (w->id) {
+ 	case snd_soc_dapm_regulator_supply:
+-		w->regulator = devm_regulator_get(dapm->dev, w->name);
++		w->regulator = devm_regulator_get(dapm->dev, widget->name);
+ 		if (IS_ERR(w->regulator)) {
+ 			ret = PTR_ERR(w->regulator);
+ 			goto request_failed;
+-- 
+2.35.1
 
-Happens a lot. Nothing wrong with this.
-
-	Andrew
