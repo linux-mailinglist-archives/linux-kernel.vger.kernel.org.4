@@ -2,169 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3060C60CEFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67A560CF0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiJYOaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
+        id S231576AbiJYOcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiJYOaB (ORCPT
+        with ESMTP id S229904AbiJYOcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:30:01 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898936BCF5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:30:00 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id v40-20020a056830092800b00661e37421c2so7810984ott.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:30:00 -0700 (PDT)
+        Tue, 25 Oct 2022 10:32:17 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC51A6C13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:32:13 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id u6so11088392plq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:32:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cbVB8G8BEPej53HgVesEalqPYvMIzRPvJku1Cwp0Tiw=;
-        b=RnpnL/xO41rWSypjx6gXbzZwnm4JPeiWFP20bTbX/FwV/jlOgc39jRWHx15LI85E3+
-         ijSKlK+K+oENE1DDIK83isc1c1a17TQ82/j8uEy35AblLHHSY/hRRysYEMUaEB9UbNiY
-         NCBGw9lv/ZxZAgePIdAyx+qAoWeK3lnxMShk2Vu5IC3xGIxvSHG5btGS844nNiKQNFCs
-         oh4NrlhsiyYfrtwVaZmEC9QcHD4mlHchQfJ6F1J4Ool12ZP1tDTY+CX+EekmBcQDA6sg
-         YH6Mg7gk2XITrfqoDXRuXXm39fKjD7Xny+x1Gw/7UBMUoA8vRHlpk5e3490ndg/4OI6u
-         tp3A==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T9egOhbu74WPH8putvhQW41m1t/pvVQ92w9D0cQIV7I=;
+        b=NoeFrrvi5MJZHav8IeAOsmfGm0wGQGv8nBP8bhBwVHl+j6V9/1rJfn+dSZfV/1tiZx
+         an12t+Rx+G6Lndv0BfRnHFOnv0rvMo8dXfGKh5HGcYiy5mV50GqhyF/rqSVMP8/RC542
+         SFL5MAuZU80cD1SYlWVzhg31E9oeWD5gwS0FQiAzm2HcceRLN9mYIKw6GoarCPx8Fxch
+         inW/xooti9NuMUT7Fo4sOxqpW65ihILWfj5nnI0hgygvNYlrKApvPPaJOdC/0ALOKB78
+         VrkhLsx0mc7/aKGY67L0FrzjPPp2Vg20G52QMofHlyZ43ZevFcBbZu4AuGYXesWnBUFG
+         5wFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cbVB8G8BEPej53HgVesEalqPYvMIzRPvJku1Cwp0Tiw=;
-        b=qehXgbWA9+5WRLJLlKudBz4+f2odS4orE6hIrdWjI16gyFjzgrSqnctFn6FTcBUv13
-         mPO4r4Vajo+RpTrKRsiYB2nP0DTs6pI50XHZ/kdOmNsuvWqoxCc+TMbOK1DIDbJmTM4F
-         L4WAqbzxc4qqQvLm3pxana0ZWbIiklA7bqe81aova3w6O/Yx/VxhDmF3MeeQ96CCihMC
-         28Cg/8jetNQ+lOSo6uXK2YIp1S4hTI3zXpe6fG/wq6Ts1PHUKN1W3qeuvRwo1bDC5De8
-         bLK20HMKxUlHrkfdxqDd22RyMmCxkXGE6/1d2IOylLU/HLMB9szl/uKCyP5Qcx2pXw7k
-         VG5Q==
-X-Gm-Message-State: ACrzQf0SKpypGVg4z3A6xb90TU++hqdoJgF1xtylu1mEehKl0nIThURg
-        yQrUtx3OscX8F2gnOElFpk34vz/7+Y0=
-X-Google-Smtp-Source: AMsMyM45ZwnoR9mWO2jB+td8lM/a9Cq9YG5dZ5pNT5Ze92XYkBKqPyPyjL8bGVq015U4yAvEToZlsA==
-X-Received: by 2002:a05:6830:1f3d:b0:663:d47d:2482 with SMTP id e29-20020a0568301f3d00b00663d47d2482mr5527786oth.114.1666708199742;
-        Tue, 25 Oct 2022 07:29:59 -0700 (PDT)
-Received: from quaco.ghostprotocols.net ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id f8-20020a056870210800b001324315bb6asm1605722oae.29.2022.10.25.07.29.59
+        bh=T9egOhbu74WPH8putvhQW41m1t/pvVQ92w9D0cQIV7I=;
+        b=UvoSMUFNqL/12Jv4gryII8p7j+slEmMIusVuarV+TkaWnBR0GvQGwZ3V5hR90KTPB7
+         uicIwvhmS05YDNpooHRrtqecOmvQdq44Pm0YztfclggZ6x9nFQWOE87nbLrBVKndtThG
+         Cw90drHpPKJV9acXQjlB4obwJf5RqYhqGze61DJt0B4tJpTtrxGRkLA8pfwe3so8zg9u
+         JfNIWUH25Q8JqKfMoNlkcLANY4T2g1YsmG8NPlROe4EJ0JENpv/UeKJKq4goSPLJAZtU
+         xrw7PDx+eeRklbOcG75URPk2XQziLxqOvIXb6Rs3WtB9Yqw1HkEi9xjpIHbUsolyyf0x
+         yQWw==
+X-Gm-Message-State: ACrzQf29goK/ofxzlNogbz4F1mNjpThdNB+BNosIvtGNs6rwbu4Clzlj
+        a7JngqBhWjKzkHmqAZYAnX1B
+X-Google-Smtp-Source: AMsMyM6uemALfpw7U9QD0PvhW1r1pnVs3bpVCi8KkK6Z2ldfFFz061LSRaagTJtHzTJQ24uY2bCH3g==
+X-Received: by 2002:a17:902:ec8a:b0:186:8869:8b0d with SMTP id x10-20020a170902ec8a00b0018688698b0dmr19370360plg.166.1666708333162;
+        Tue, 25 Oct 2022 07:32:13 -0700 (PDT)
+Received: from thinkpad ([117.193.208.236])
+        by smtp.gmail.com with ESMTPSA id p25-20020a635b19000000b0044a4025cea1sm1301239pgb.90.2022.10.25.07.32.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 07:29:59 -0700 (PDT)
-From:   arnaldo.melo@gmail.com
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B5B97404BE; Tue, 25 Oct 2022 11:29:56 -0300 (-03)
-Date:   Tue, 25 Oct 2022 11:29:56 -0300
-To:     linux-kernel@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        D Scott Phillips <scott@os.amperecomputing.com>
-Subject: [PATCH FYI 1/1] tools headers arm64: Sync arm64's cputype.h with the
- kernel sources
-Message-ID: <Y1fy5GD7ZYvkeufv@kernel.org>
+        Tue, 25 Oct 2022 07:32:12 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 20:02:07 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, vigneshr@ti.com
+Subject: Re: [PATCH v3 2/5] PCI: tegra194: Move dw_pcie_ep_linkup() to
+ threaded IRQ handler
+Message-ID: <20221025143207.GB109941@thinkpad>
+References: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
+ <20221006134927.41437-3-manivannan.sadhasivam@linaro.org>
+ <5ec4b46f-2590-bd34-f6fa-e4e2eeb38b7b@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5ec4b46f-2590-bd34-f6fa-e4e2eeb38b7b@nvidia.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+Hi Vidya,
 
-- Arnaldo
+On Mon, Oct 10, 2022 at 07:53:52PM +0530, Vidya Sagar wrote:
+> Hi Mani,
+> Thanks for your change. One comment though.
+> 
+> On 10/6/2022 7:19 PM, Manivannan Sadhasivam wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > dw_pcie_ep_linkup() may take more time to execute depending on the EPF
+> > driver implementation. Calling this API in the hard IRQ handler is not
+> > encouraged since the hard IRQ handlers are supposed to complete quickly.
+> > 
+> > So move the dw_pcie_ep_linkup() call to threaded IRQ handler.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >   drivers/pci/controller/dwc/pcie-tegra194.c | 8 ++++++--
+> >   1 file changed, 6 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-tegra194.c b/drivers/pci/controller/dwc/pcie-tegra194.c
+> > index 1b6b437823d2..6a487f52e1fb 100644
+> > --- a/drivers/pci/controller/dwc/pcie-tegra194.c
+> > +++ b/drivers/pci/controller/dwc/pcie-tegra194.c
+> > @@ -287,6 +287,7 @@ struct tegra_pcie_dw {
+> >          struct gpio_desc *pex_refclk_sel_gpiod;
+> >          unsigned int pex_rst_irq;
+> >          int ep_state;
+> > +       long link_status;
+> >   };
+> > 
+> >   static inline struct tegra_pcie_dw *to_tegra_pcie(struct dw_pcie *pci)
+> > @@ -450,9 +451,13 @@ static void pex_ep_event_hot_rst_done(struct tegra_pcie_dw *pcie)
+> >   static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
+> >   {
+> >          struct tegra_pcie_dw *pcie = arg;
+> > +       struct dw_pcie_ep *ep = &pcie->pci.ep;
+> >          struct dw_pcie *pci = &pcie->pci;
+> >          u32 val, speed;
+> > 
+> > +       if (test_and_clear_bit(0, &pcie->link_status))
+> > +               dw_pcie_ep_linkup(ep);
+> > +
+> >          speed = dw_pcie_readw_dbi(pci, pcie->pcie_cap_base + PCI_EXP_LNKSTA) &
+> >                  PCI_EXP_LNKSTA_CLS;
+> >          clk_set_rate(pcie->core_clk, pcie_gen_freq[speed - 1]);
+> > @@ -499,7 +504,6 @@ static irqreturn_t tegra_pcie_ep_irq_thread(int irq, void *arg)
+> >   static irqreturn_t tegra_pcie_ep_hard_irq(int irq, void *arg)
+> >   {
+> >          struct tegra_pcie_dw *pcie = arg;
+> > -       struct dw_pcie_ep *ep = &pcie->pci.ep;
+> >          int spurious = 1;
+> >          u32 status_l0, status_l1, link_status;
+> > 
+> > @@ -515,7 +519,7 @@ static irqreturn_t tegra_pcie_ep_hard_irq(int irq, void *arg)
+> >                          link_status = appl_readl(pcie, APPL_LINK_STATUS);
+> >                          if (link_status & APPL_LINK_STATUS_RDLH_LINK_UP) {
+> >                                  dev_dbg(pcie->dev, "Link is up with Host\n");
+> > -                               dw_pcie_ep_linkup(ep);
+> > +                               set_bit(0, &pcie->link_status);
+> 
+> irq thread needs to be woken up at this point. So, please add
+> return IRQ_WAKE_THREAD;
+> 
 
-Full explanation:
+Ah, missed that. Will add it in next version.
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+Thanks,
+Mani
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+> Thanks,
+> Vidya Sagar
+> 
+> >                          }
+> >                  }
+> > 
+> > --
+> > 2.25.1
+> > 
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To get the changes in:
-
-  0e5d5ae837c8ce04 ("arm64: Add AMPERE1 to the Spectre-BHB affected list")
-
-That addresses this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/arch/arm64/include/asm/cputype.h' differs from latest version at 'arch/arm64/include/asm/cputype.h'
-  diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cputype.h
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: D Scott Phillips <scott@os.amperecomputing.com>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/arm64/include/asm/cputype.h | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/arch/arm64/include/asm/cputype.h b/tools/arch/arm64/include/asm/cputype.h
-index 8aa0d276a63628f5..abc418650fec04fd 100644
---- a/tools/arch/arm64/include/asm/cputype.h
-+++ b/tools/arch/arm64/include/asm/cputype.h
-@@ -60,6 +60,7 @@
- #define ARM_CPU_IMP_FUJITSU		0x46
- #define ARM_CPU_IMP_HISI		0x48
- #define ARM_CPU_IMP_APPLE		0x61
-+#define ARM_CPU_IMP_AMPERE		0xC0
- 
- #define ARM_CPU_PART_AEM_V8		0xD0F
- #define ARM_CPU_PART_FOUNDATION		0xD00
-@@ -123,6 +124,8 @@
- #define APPLE_CPU_PART_M1_ICESTORM_MAX	0x028
- #define APPLE_CPU_PART_M1_FIRESTORM_MAX	0x029
- 
-+#define AMPERE_CPU_PART_AMPERE1		0xAC3
-+
- #define MIDR_CORTEX_A53 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A53)
- #define MIDR_CORTEX_A57 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A57)
- #define MIDR_CORTEX_A72 MIDR_CPU_MODEL(ARM_CPU_IMP_ARM, ARM_CPU_PART_CORTEX_A72)
-@@ -172,6 +175,7 @@
- #define MIDR_APPLE_M1_FIRESTORM_PRO MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM_PRO)
- #define MIDR_APPLE_M1_ICESTORM_MAX MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_ICESTORM_MAX)
- #define MIDR_APPLE_M1_FIRESTORM_MAX MIDR_CPU_MODEL(ARM_CPU_IMP_APPLE, APPLE_CPU_PART_M1_FIRESTORM_MAX)
-+#define MIDR_AMPERE1 MIDR_CPU_MODEL(ARM_CPU_IMP_AMPERE, AMPERE_CPU_PART_AMPERE1)
- 
- /* Fujitsu Erratum 010001 affects A64FX 1.0 and 1.1, (v0r0 and v1r0) */
- #define MIDR_FUJITSU_ERRATUM_010001		MIDR_FUJITSU_A64FX
 -- 
-2.37.3
-
+மணிவண்ணன் சதாசிவம்
