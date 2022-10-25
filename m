@@ -2,94 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1032160D0A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE72660D0A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbiJYPbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S233294AbiJYPbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233256AbiJYPbB (ORCPT
+        with ESMTP id S231639AbiJYPbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:31:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787B15B7AB
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:30:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 326E7B81D64
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:30:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9B91C433C1;
-        Tue, 25 Oct 2022 15:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666711856;
-        bh=3YeEg2Oa90timi1XZ3PvEOat7cXoDLZyE/kx8ALR0fI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k2yihkhMF0oKJomV48MeRvLFVsSnru0KmNrFtpW16uRT6BiJY9OhgvKDH10K7CTZQ
-         xMBfgpF5/h6qwvzmOzDvlkZtpT6g53Bv0xdDRxNPfzUkP0tGGeUsKniHkUPXo6pDQl
-         pC6Hm8II/0RR1F1GXlTU/VpCV81j3ZRedzb7pRczs2cfvLLn19HL8bZ9EoFO2BoKjd
-         v7RFJ+0MzlqzfLPoXjtIz/KlHn0N1gXMBIJnl+yXygMtZE1CxqD9myABnczTMeWi+w
-         dIa3Ka3SkhxFjRqmqSyBTzQyaKv136UemXswzie2idwwq316NWsVHZqYVcxDTYrVYS
-         G3Sa9uMhWGL5Q==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1onLtG-001ZDz-L9;
-        Tue, 25 Oct 2022 16:30:54 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Alexandru Elisei <alexandru.elisei@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Quentin Perret <qperret@google.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>
-Cc:     kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] KVM: arm64: Use correct accessor to parse stage-1 PTEs
-Date:   Tue, 25 Oct 2022 16:30:50 +0100
-Message-Id: <166671184422.541929.12583367055859537857.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221025145156.855308-1-qperret@google.com>
-References: <20221025145156.855308-1-qperret@google.com>
+        Tue, 25 Oct 2022 11:31:09 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3086E5F10A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:31:05 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=shawnwang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VT3XzXp_1666711854;
+Received: from 30.32.74.15(mailfrom:shawnwang@linux.alibaba.com fp:SMTPD_---0VT3XzXp_1666711854)
+          by smtp.aliyun-inc.com;
+          Tue, 25 Oct 2022 23:31:02 +0800
+Message-ID: <140177ee-da8f-c6eb-caf6-af0775a3de0e@linux.alibaba.com>
+Date:   Tue, 25 Oct 2022 23:30:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+From:   Shawn Wang <shawnwang@linux.alibaba.com>
+Subject: Re: [PATCH v2] x86/resctrl: Clear the stale staged config after the
+ configuration is completed
+To:     Reinette Chatre <reinette.chatre@intel.com>, fenghua.yu@intel.com
+References: <1665304608-120466-1-git-send-email-shawnwang@linux.alibaba.com>
+ <7fa6ed4e-abae-85fb-4e95-8c73755a4263@intel.com>
+ <ad08eee6-cfea-3858-0def-e2e3fef315fb@linux.alibaba.com>
+ <ff44b0ff-6adb-3bae-d17e-4c341c09df5d@intel.com>
+ <86fc22a2-e779-b7ab-67d6-a3aff975ae56@linux.alibaba.com>
+ <30637459-7419-6497-6230-b13c73a947de@intel.com>
+ <2cdfbe28-01cc-926d-2f6d-2a974a4c5a74@linux.alibaba.com>
+ <bbc21b48-58b5-6356-0248-656e22d95281@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        James Morse <james.morse@arm.com>, jamie@nuviainc.com,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <bbc21b48-58b5-6356-0248-656e22d95281@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: alexandru.elisei@arm.com, oliver.upton@linux.dev, qperret@google.com, suzuki.poulose@arm.com, will@kernel.org, catalin.marinas@arm.com, james.morse@arm.com, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 14:51:56 +0000, Quentin Perret wrote:
-> hyp_get_page_state() is used with pKVM to retrieve metadata about a page
-> by parsing a hypervisor stage-1 PTE. However, it incorrectly uses a
-> helper which parses *stage-2* mappings. Ouch.
+Hi Reinette,
+
+On 10/25/2022 12:45 AM, Reinette Chatre wrote:
+> Hi Shawn,
 > 
-> Luckily, pkvm_getstate() only looks at the software bits, which happen
-> to be in the same place for stage-1 and stage-2 PTEs, and this all ends
-> up working correctly by accident. But clearly, we should do better.
+> On 10/23/2022 7:31 PM, Shawn Wang wrote:
+>> On 10/22/2022 2:05 AM, Reinette Chatre wrote:
+>>
+>> ...
+>>
+>>>> It may not be enough to just clear staged_config[] when
+>>>> resctrl_arch_update_domains() exits. I think the fix needs to make
+>>>> sure staged_config[] can be cleared where it is set.
+>>>>
+>>>> The modification of staged_config[] comes from two paths:
+>>>>
+>>>> Path 1:
+>>>> rdtgroup_schemata_write() {
+>>>>       ...
+>>>>       rdtgroup_parse_resource()     // set staged_config[]
+>>>>       ...
+>>>>       resctrl_arch_update_domains()     // clear staged_config[]
+>>>>       ...
+>>>> }
+>>>>
+>>>> Path 2:
+>>>> rdtgroup_init_alloc() {
+>>>>       ...
+>>>>       rdtgroup_init_mba()/rdtgroup_init_cat()    // set staged_config[]
+>>>>       ...
+>>>>       resctrl_arch_update_domains()        // clear staged_config[]
+>>>>       ...
+>>>> }
+>>>>
+>>>> If we clear staged_config[] in resctrl_arch_update_domains(), goto
+>>>> statement for error handling between setting staged_config[] and
+>>>> calling resctrl_arch_update_domains() will be ignored. This can still
+>>>> remain the stale staged_config[].
+>>> ah - indeed. Thank you for catching that.
+>>>
+>>>>
+>>>> I think maybe it is better to put the clearing work where
+>>>> rdtgroup_schemata_write() and rdtgroup_init_alloc() exit.
+>>>>
+>>>
+>>> It may be more robust to let rdtgroup_init_alloc() follow
+>>> how rdtgroup_schemata_write() already ensures that it is
+>>> working with a clean state by clearing staged_config[] before
+>>> placing its staged config within.
+>>>
+>>
+>> I want to make sure, do you mean just ignore the stale value and
+>> place the clearing work before staged_config[] is used? If so, maybe
+>> the only thing the fix should do is to add memset() to
+>> rdtgroup_init_alloc().>
 > 
-> [...]
+> No, let us not leave stale data lying around.
+> 
+> The idea is that the function calling resctrl_arch_update_domains() is
+> responsible for initializing staged_config[] correctly and completely.
+> To confirm, yes, the idea is to clear the staged_config[] in
+> rdtgroup_init_alloc() before resctrl_arch_update_domains() is called
+> to follow how it is currently done in rdtgroup_schemata_write().
+> 
+> But, as you indicate, by itself this would leave stale data lying around.
+> 
+> The solution that you suggested earlier, to put the clearing work where
+> rdtgroup_schemata_write() and rdtgroup_init_alloc() exit, is most logical.
+> That makes the code symmetrical in that staged_config[] is cleared
+> where it is initialized and no stale data is left lying around. What was
+> not clear to me is how this would look in the end. Were you planning to
+> keep the staged_config[] clearing within rdtgroup_schemata_write() but
+> not do so in rdtgroup_init_alloc()? rdtgroup_schemata_write() and
+> rdtgroup_init_alloc() has to follow the same pattern to reduce confusion.
+> 
+> So, to be more robust, how about:
+> 
+> /* Clear staged_config[] to make sure working from a clean slate */
+> resctrl_arch_update_domains()
+> /* Clear staged_config[] to not leave stale data lying around */
+> 
 
-Applied to fixes, thanks!
+Thank you for your explanation, and it makes sense to me. But this will
+require 4 memset() loops, how about putting the clearing work in
+a separate function in rdtgroup.c, like rdt_last_cmd_clear():
 
-[1/1] KVM: arm64: Use correct accessor to parse stage-1 PTEs
-      commit: 6853a71726b6f5930b4450889faf02e8f1cfe35c
+void staged_configs_clear(void) {
+	struct resctrl_schema *s;
+	struct rdt_domain *dom;
 
-Cheers,
+	lockdep_assert_held(&rdtgroup_mutex);
 
-	M.
--- 
-Without deviation from the norm, progress is not possible.
+	list_for_each_entry(s, &resctrl_schema_all, list) {
+		list_for_each_entry(dom, &s->res->domains, list)
+			memset(dom->staged_config, 0, sizeof(dom->staged_config));
+	}
+}
 
+Thanks,
 
+Shawn
