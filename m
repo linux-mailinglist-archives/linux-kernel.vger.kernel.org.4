@@ -2,188 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAEC60CFE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4165960CFEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiJYPEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
+        id S231436AbiJYPFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJYPEo (ORCPT
+        with ESMTP id S231496AbiJYPFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:04:44 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B8225F6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:04:42 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-36d2188004bso55502687b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GIDYBntCwcqigFWBzgzoBqb70qxdwV582Zvg4u+caGg=;
-        b=InVT3jHI/Awmc21gp+s1UqMNg4jNLqJdXF53ZHwwEyGJocKfUzqw8eInMyNhM3KAVc
-         pMk9kGm5B8U0MgnHiXstOq8ShGsgnTL6/S183GmIvc6D2Gk69bjgpRfgLW2TkNbhI4Mr
-         9ZqOfsypoV/mWl0SVvJGXmv5GY1syl1UzwCMn1y/3lpcebveIa7dpATHkHMHKPC2T2IV
-         IlxnPYyF4VQ2Qu4c7uMm6x21I1WBpsqU3xnHu3t5npP1XYEfExHnGKLKG8eVoH9bAVjz
-         s115Rs0vvuhdGfrra0nQCyKuPXt4vvRUJOaxC6Yt/0oNKfOi0WIAeoXj/gTokpIqsvPQ
-         Sa4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GIDYBntCwcqigFWBzgzoBqb70qxdwV582Zvg4u+caGg=;
-        b=QngO2wjMB/H+RiMHamTTbOaqXiOX2rRkBAiss1QBzF16Yz1VsKckuEQ44RmwCZoIUI
-         uDl7nhAW8veDNmAvgg85P7RNAU5Md7Ech0Ht7iRz4cqWHKQwuJFbrYFhfAl25v4FElC4
-         s4hW84kGVm3cMRKwb7ulwSBrJBdu8wXqP5CxiiTMfea/xqBKfnOnT4XlSmdhrt+wsIck
-         1UD0n2l2/+dFGHWPS3XF50VQMnZtvLMgM6+ngdUjelsZqpo/Y5U5rDAK1vQ/+MsgEtf+
-         41o3qQBSRSocEq3ywc+m3bsxISgjjgJDYdnqCQPhtlheriTXioh/MBPsI4oYi4GaR5Fb
-         tLdg==
-X-Gm-Message-State: ACrzQf2FVtS9vONZiBX98bt8ihvm7WK9YH/S57yUS6UAlbF8NRBd2NLh
-        fwpLUevfOjmXK1mgoBxwOe8dFWk7/YKV0iiCYiIVuw==
-X-Google-Smtp-Source: AMsMyM6CHFpp1/K+VWJa+LD9QuWxogeHwKezLlHYsMt14kD6I1ffPgi1e9y+ORltTt4NBsqrBAOGXWzTadGibxliRgc=
-X-Received: by 2002:a0d:c981:0:b0:330:dc03:7387 with SMTP id
- l123-20020a0dc981000000b00330dc037387mr34492289ywd.380.1666710281795; Tue, 25
- Oct 2022 08:04:41 -0700 (PDT)
+        Tue, 25 Oct 2022 11:05:24 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7684F1AD;
+        Tue, 25 Oct 2022 08:05:20 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 60DB16000C;
+        Tue, 25 Oct 2022 15:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666710319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pJw8Rlc47CepdpF/VUPGYP+SOmVKJurWX4ajQaE7REY=;
+        b=grWlZpU8307qXCEDcJutgnVQSJwJRRphWXN8Z3ZsFVhHmFy3DpnBYnAP+xqX9NHXFjPxmX
+        9e3XIOA4t6xPQPwJuPxYvrHZIkL70Dv71yk9Fe1FD6tcaWFAQV7DP6itcLLuMPZdofaAs9
+        S3lTb2r91dhdbTVb0UkiRTazglsOuvcx0eQGbpGzijWjmqyQ2C4EY0pyGXEUTGonEQfO25
+        gLU2QvnHtKbaXKzAS3quf1isDVI30jZOoDXKLMiTSk8N5Kwq2vjRufAMocf9TSWI5qsDm5
+        o/wtEjz80htAYOBEYgfeiry6C4zQ2QufMr/fSc1FjaYdwL9wu/zJ9GaM+s+iFg==
+Date:   Tue, 25 Oct 2022 17:05:16 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     mripard@kernel.org, mchehab@kernel.org, gregkh@linuxfoundation.org,
+        wens@csie.org, samuel@sholland.org, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/11] media: cedrus: prefer untiled capture format
+Message-ID: <Y1f7LCVwRgT9FHDe@aptenodytes>
+References: <20221024201515.34129-1-jernej.skrabec@gmail.com>
+ <20221024201515.34129-9-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-References: <20221021080231.1076-1-peter.ujfalusi@gmail.com>
-In-Reply-To: <20221021080231.1076-1-peter.ujfalusi@gmail.com>
-From:   Nicolas Frayer <nfrayer@baylibre.com>
-Date:   Tue, 25 Oct 2022 17:04:30 +0200
-Message-ID: <CANyCTtRy1noPo1NnFqJFUdFcwZEKKtg+ew6gO_up40S8KbaERA@mail.gmail.com>
-Subject: Re: [PATCH] soc: ti: k3-ringacc: Allow the driver to be built as module
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Cc:     nm@ti.com, ssantosh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, grygorii.strashko@ti.com,
-        khilman@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="w+BAvZwxLTv8gd/o"
+Content-Disposition: inline
+In-Reply-To: <20221024201515.34129-9-jernej.skrabec@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le ven. 21 oct. 2022 =C3=A0 09:53, Peter Ujfalusi
-<peter.ujfalusi@gmail.com> a =C3=A9crit :
->
-> The ring accelerator driver can be built as module since all depending
-> functions are exported.
->
-> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
 
-Reviewed-by: Nicolas Frayer <nfrayer@baylibre.com>
-Tested-by: Nicolas Frayer <nfrayer@baylibre.com>
+--w+BAvZwxLTv8gd/o
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi Jernej,
+
+On Mon 24 Oct 22, 22:15, Jernej Skrabec wrote:
+> While all generations of display engine on Allwinner SoCs support
+> untiled format, only first generation supports tiled format.  Let's
+> move untiled format up, so it can be picked before tiled one. If
+> Cedrus variant doesn't support untiled format, tiled will still be
+> picked as default format.
+
+Makes sense to me. Of course the order shouldn't matter to smart-enough
+userspace but it doesn't hurt to serve the most generic case first.
+
+Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+
+Cheers,
+
+Paul
+
+> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 > ---
->  drivers/soc/ti/Kconfig      |  2 +-
->  drivers/soc/ti/k3-ringacc.c | 29 ++++++++++++++++++++++++++---
->  2 files changed, 27 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/soc/ti/Kconfig b/drivers/soc/ti/Kconfig
-> index 7e2fb1c16af1..e009d9589af4 100644
-> --- a/drivers/soc/ti/Kconfig
-> +++ b/drivers/soc/ti/Kconfig
-> @@ -63,7 +63,7 @@ config TI_SCI_PM_DOMAINS
->           rootfs may be available.
->
->  config TI_K3_RINGACC
-> -       bool "K3 Ring accelerator Sub System"
-> +       tristate "K3 Ring accelerator Sub System"
->         depends on ARCH_K3 || COMPILE_TEST
->         depends on TI_SCI_INTA_IRQCHIP
->         help
-> diff --git a/drivers/soc/ti/k3-ringacc.c b/drivers/soc/ti/k3-ringacc.c
-> index f7bf18b8229a..e011412f2975 100644
-> --- a/drivers/soc/ti/k3-ringacc.c
-> +++ b/drivers/soc/ti/k3-ringacc.c
-> @@ -7,7 +7,7 @@
->
->  #include <linux/dma-mapping.h>
->  #include <linux/io.h>
-> -#include <linux/init.h>
-> +#include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/platform_device.h>
-> @@ -336,6 +336,11 @@ struct k3_ring *k3_ringacc_request_ring(struct k3_ri=
-ngacc *ringacc,
->
->         mutex_lock(&ringacc->req_lock);
->
-> +       if (!try_module_get(ringacc->dev->driver->owner)) {
-> +               mutex_unlock(&ringacc->req_lock);
-> +               return NULL;
-> +       }
-> +
->         if (id =3D=3D K3_RINGACC_RING_ID_ANY) {
->                 /* Request for any general purpose ring */
->                 struct ti_sci_resource_desc *gp_rings =3D
-> @@ -380,6 +385,7 @@ struct k3_ring *k3_ringacc_request_ring(struct k3_rin=
-gacc *ringacc,
->         return &ringacc->rings[id];
->
->  error:
-> +       module_put(ringacc->dev->driver->owner);
->         mutex_unlock(&ringacc->req_lock);
->         return NULL;
->  }
-> @@ -616,6 +622,8 @@ int k3_ringacc_ring_free(struct k3_ring *ring)
->  no_init:
->         clear_bit(ring->ring_id, ringacc->rings_inuse);
->
-> +       module_put(ringacc->dev->driver->owner);
-> +
->  out:
->         mutex_unlock(&ringacc->req_lock);
->         return 0;
-> @@ -1450,6 +1458,7 @@ static const struct of_device_id k3_ringacc_of_matc=
-h[] =3D {
->         { .compatible =3D "ti,am654-navss-ringacc", .data =3D &k3_ringacc=
-_data, },
->         {},
+>  drivers/staging/media/sunxi/cedrus/cedrus_video.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/=
+staging/media/sunxi/cedrus/cedrus_video.c
+> index 3591bf9d7d9c..f9f723ea3f79 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> @@ -56,13 +56,13 @@ static struct cedrus_format cedrus_formats[] =3D {
+>  		.capabilities	=3D CEDRUS_CAPABILITY_VP8_DEC,
+>  	},
+>  	{
+> -		.pixelformat	=3D V4L2_PIX_FMT_NV12_32L32,
+> +		.pixelformat	=3D V4L2_PIX_FMT_NV12,
+>  		.directions	=3D CEDRUS_DECODE_DST,
+> +		.capabilities	=3D CEDRUS_CAPABILITY_UNTILED,
+>  	},
+>  	{
+> -		.pixelformat	=3D V4L2_PIX_FMT_NV12,
+> +		.pixelformat	=3D V4L2_PIX_FMT_NV12_32L32,
+>  		.directions	=3D CEDRUS_DECODE_DST,
+> -		.capabilities	=3D CEDRUS_CAPABILITY_UNTILED,
+>  	},
 >  };
-> +MODULE_DEVICE_TABLE(of, k3_ringacc_of_match);
->
->  struct k3_ringacc *k3_ringacc_dmarings_init(struct platform_device *pdev=
-,
->                                             struct k3_ringacc_init_data *=
-data)
-> @@ -1544,12 +1553,26 @@ static int k3_ringacc_probe(struct platform_devic=
-e *pdev)
->         return 0;
->  }
->
-> +static int k3_ringacc_remove(struct platform_device *pdev)
-> +{
-> +       struct k3_ringacc *ringacc =3D dev_get_drvdata(&pdev->dev);
-> +
-> +       mutex_lock(&k3_ringacc_list_lock);
-> +       list_del(&ringacc->list);
-> +       mutex_unlock(&k3_ringacc_list_lock);
-> +       return 0;
-> +}
-> +
->  static struct platform_driver k3_ringacc_driver =3D {
->         .probe          =3D k3_ringacc_probe,
-> +       .remove         =3D k3_ringacc_remove,
->         .driver         =3D {
->                 .name   =3D "k3-ringacc",
->                 .of_match_table =3D k3_ringacc_of_match,
-> -               .suppress_bind_attrs =3D true,
->         },
->  };
-> -builtin_platform_driver(k3_ringacc_driver);
-> +module_platform_driver(k3_ringacc_driver);
-> +
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_DESCRIPTION("TI Ringacc driver for K3 SOCs");
-> +MODULE_AUTHOR("Grygorii Strashko <grygorii.strashko@ti.com>");
-> --
+> =20
+> --=20
 > 2.38.1
->
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--w+BAvZwxLTv8gd/o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmNX+ywACgkQ3cLmz3+f
+v9FCUwf/V3Ng/xfoDLZGeEjzDHQU3ZtEXX1RMo0WULubg8BMamTlPR4tbDQTBW56
+ipFZ0EtzlcdwnQHAhA+3HAu6CTfp+MwxLeeWEr4luVFSX+LuMU22Mclz9Ji7/vwh
+OMcQ5fcCJDrYZE0Lc6Y6EzQozjt9q/m7dNG2joUKQzm9Futr6RTUOjUvZ5RgrR3q
+8HMZKxxnVxgirPAIMl1h0y57hKWx+C/0L/TGrDeEzjcNxoZYcBuXCUNhdl9lXMFY
+MNQq430Jsb4LYuu3bTjtDXYRBGGHOwyjrNsyhWtM8/djejO+FiP48NLQtbL72cIK
+CT9U2hRl24cMNSB5oe2ZTZ4pmnGoqw==
+=UyBL
+-----END PGP SIGNATURE-----
+
+--w+BAvZwxLTv8gd/o--
