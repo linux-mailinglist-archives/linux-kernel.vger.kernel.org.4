@@ -2,102 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBECB60D519
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818CC60D578
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232673AbiJYUCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 16:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S232860AbiJYUYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 16:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiJYUCb (ORCPT
+        with ESMTP id S232625AbiJYUYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 16:02:31 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52F211A951
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:02:30 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id q9-20020a17090a178900b00212fe7c6bbeso7110468pja.4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sCSHnie7nbI2FMBFICWqa0omK7VXIgSVZ2dIjG4CBuc=;
-        b=aDA7BbR3Ja4cnhevsaBBMfimo/Tqn1gci6sqSUsju2slvTnC1KiNQk9xbZU3gEbdtG
-         qI9TpPQQtOxqFWJtSTb3KS8KmocPMKQxjmPQJj59Ulz12ko+3fQFa4taFNfv47qsFZtn
-         xF0RUcQ5abUG6fzu5mZ6ezoTn1NEYPmsiKvKdWsW2CRmXdryNnNbkKWd8X20GXv+tq3m
-         9IEAc7JzIJICO2ywwtKdaB5Bhw9VSiwWdG/fmlwBQIp+03eAJbpjMKgPQvQSEnnOHY+n
-         SbcittWfXdXLk8G9hBut0LT3uIaCaqJ2/Z1/3iigRuYIHx/Of5Ow5GAJVZvZeaXJdDPS
-         9klA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sCSHnie7nbI2FMBFICWqa0omK7VXIgSVZ2dIjG4CBuc=;
-        b=M37YOQbr15RITf8/URw+j1ICUxcU91d7LTsXsBUslzLUxOEK1SA1YlsxbrERnkmQ6+
-         0LD2ZMwoW3pJy0JJptaa21JHrHQIs9jFMHx5izbNFeeft50f9B3qnmAAZCNxSlUJUIXR
-         6bMfcD/Z0gIreKMedS6aLHvew3A0ka7XPNnijobkNGwn4f0FdptopzOjxIn+gnAdX/nH
-         287r2U+Gin8mozr4XnBeTxu8SsNQp8RQm7UfLYgqvQ/kZJwlfdW0eI6l5OfZCpoZWlhH
-         wOvQc/u4F6E2yCc3zxFBrK+XYG/2B/gaHX3taThXOc9g1Ctf7b5ZNZELgTVlmvxFle0D
-         Tt2g==
-X-Gm-Message-State: ACrzQf1zjv8lF7ywnrjkIdvRtHqOpiOgfaMyJVUhzWZl3dJ3eALlxLDP
-        vpYTDFa3VWNZFB7q4fLwgcqwn2b0YPIICL3g
-X-Google-Smtp-Source: AMsMyM7VHjIa+QWIXmuv84bgv56y/nQYtKVdDumpW7B1YOYtnW8N1UD6p4iJ0qgiSeDw4z4Z88LBTw==
-X-Received: by 2002:a17:902:db09:b0:184:ba4f:af28 with SMTP id m9-20020a170902db0900b00184ba4faf28mr39823489plx.145.1666728150208;
-        Tue, 25 Oct 2022 13:02:30 -0700 (PDT)
-Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
-        by smtp.gmail.com with ESMTPSA id i12-20020a056a00004c00b0056bd737fdf3sm1743129pfk.123.2022.10.25.13.02.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 13:02:29 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 09:02:22 +1300
-From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
-To:     Felix Kuehling <felix.kuehling@amd.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [next] amdkfd: remove unused kfd_pm4_headers_diq header
- file
-Message-ID: <Y1hAzn9zXhQYj1NL@mail.google.com>
-References: <Y1eoYDDZWdyLNlBc@mail.google.com>
- <f2b6f0e1-1ae0-21ec-372e-6e90827ccea6@amd.com>
+        Tue, 25 Oct 2022 16:24:05 -0400
+X-Greylist: delayed 370 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 25 Oct 2022 13:24:04 PDT
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC67CD2CE7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:24:04 -0700 (PDT)
+Received: from cp.tophost.it (vm1054.cs12.seeweb.it [217.64.195.253])
+        by m-r1.th.seeweb.it (Postfix) with ESMTPA id 9ECA420210;
+        Tue, 25 Oct 2022 22:17:52 +0200 (CEST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2b6f0e1-1ae0-21ec-372e-6e90827ccea6@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Tue, 25 Oct 2022 23:01:55 +0300
+From:   Jami Kettunen <jami.kettunen@somainline.org>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Alex Elder <elder@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alex Elder <elder@kernel.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH] net: ipa: don't configure IDLE_INDICATION on v3.1
+In-Reply-To: <20221024234850.4049778-1-caleb.connolly@linaro.org>
+References: <20221024234850.4049778-1-caleb.connolly@linaro.org>
+User-Agent: Roundcube Webmail/1.4.6
+Message-ID: <37e3f35ab495ab26e506a5619172092c@somainline.org>
+X-Sender: jami.kettunen@somainline.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 03:48:33PM -0400, Felix Kuehling wrote:
-> Am 2022-10-25 um 05:12 schrieb Paulo Miguel Almeida:
-> > kfd_pm4_headers_diq.h header is a leftover from the old H/W debugger
-> > module support added on commit <fbeb661bfa895dc>. That implementation
-> > was removed after a while and the last file that included that header
-> > was removed on commit <5bdd3eb253544b1>.
-> > 
-> > This patch removes the unused header file kfd_pm4_headers_diq.h
-> > 
-> > Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+On 25.10.2022 02:48, Caleb Connolly wrote:
+> IPA v3.1 doesn't support the IDLE_INDICATION_CFG register, this was
+> causing a harmless splat in ipa_idle_indication_cfg(), add a version
+> check to prevent trying to fetch this register on v3.1
 > 
-> Thank you for this patch and the one that removes struct cdit_header. I am
-> applying both to our amd-staging-drm-next branch.
+> Fixes: 6a244b75cfab ("net: ipa: introduce ipa_reg()")
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
 
-Thanks!
+Tested-by: Jami Kettunen <jami.kettunen@somainline.org>
 
-> <snip> I'm also fixing up the
-> prefix of the commit headline to match our usual convention: drm/amdkfd: ...
-
-Noted! (and much appreciated too). I will ensure I use the drm/amdkfd
-prefix from now onwards.
-
-Paulo A.
-
+> ---
+> This will need to wait for Jami's Tested-by as I don't have any v3.1 
+> hardware.
+> ---
+>  drivers/net/ipa/ipa_main.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
+> index 3461ad3029ab..49537fccf6ad 100644
+> --- a/drivers/net/ipa/ipa_main.c
+> +++ b/drivers/net/ipa/ipa_main.c
+> @@ -434,6 +434,9 @@ static void ipa_idle_indication_cfg(struct ipa 
+> *ipa,
+>  	const struct ipa_reg *reg;
+>  	u32 val;
+> 
+> +	if (ipa->version < IPA_VERSION_3_5_1)
+> +		return;
+> +
+>  	reg = ipa_reg(ipa, IDLE_INDICATION_CFG);
+>  	val = ipa_reg_encode(reg, ENTER_IDLE_DEBOUNCE_THRESH,
+>  			     enter_idle_debounce_thresh);
