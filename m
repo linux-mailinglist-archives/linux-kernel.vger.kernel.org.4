@@ -2,227 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D6360CA18
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BA160CA1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbiJYKam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S231390AbiJYKbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbiJYK3t (ORCPT
+        with ESMTP id S231165AbiJYKax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:29:49 -0400
+        Tue, 25 Oct 2022 06:30:53 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 82F0E90;
-        Tue, 25 Oct 2022 03:29:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 679C2135880
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:30:42 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78505D6E;
-        Tue, 25 Oct 2022 03:29:47 -0700 (PDT)
-Received: from [10.57.36.110] (unknown [10.57.36.110])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3DD43F7B4;
-        Tue, 25 Oct 2022 03:29:38 -0700 (PDT)
-Message-ID: <34c3daf3-88f8-0dc2-026b-95ca075195b4@arm.com>
-Date:   Tue, 25 Oct 2022 11:29:12 +0100
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9A02D6E;
+        Tue, 25 Oct 2022 03:30:48 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.7.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4EC7B3F7B4;
+        Tue, 25 Oct 2022 03:30:41 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 11:30:38 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, revest@chromium.org,
+        rostedt@goodmis.org, will@kernel.org
+Subject: Re: [PATCH 3/4] ftrace: abstract DYNAMIC_FTRACE_WITH_ARGS accesses
+Message-ID: <Y1e6znjOHCFGvLND@FVFF77S0Q05N>
+References: <20221024140846.3555435-1-mark.rutland@arm.com>
+ <20221024140846.3555435-4-mark.rutland@arm.com>
+ <20221025174001.cf5a189a23aaeadc2c8887a2@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
- and ranges
-Content-Language: en-GB
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Mark Kettenis <mark.kettenis@xs4all.nl>, megi@xff.cz,
-        heiko@sntech.de, linux-rockchip@lists.infradead.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michael.riesch@wolfvision.net, frattaroli.nicolas@gmail.com,
-        s.hauer@pengutronix.de, frank-w@public-files.de,
-        ezequiel@vanguardiasur.com.ar, yifeng.zhao@rock-chips.com,
-        jbx6244@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221005085439.740992-1-megi@xff.cz>
- <CAMdYzYrEXEqOmMeozGBbAAvrujZcOxLh4VYOmu5DSjPWTS-5zQ@mail.gmail.com>
- <20221005220812.4psu6kckej63yo2z@core> <4679102.Wku2Vz74k6@phil>
- <CAMdYzYq3S2rR3Kb61irpV9xHYijNiJY0mkVnJwPrpXzxg_Zh9g@mail.gmail.com>
- <20221021153913.l5ry6v4mcnzcmj2v@core>
- <CAMdYzYpYC6ME_ZYE65UWq__i+rit6_os-+do+JLmEL7y-jKr9g@mail.gmail.com>
- <20221021193248.2he6amnj7knk4biu@core>
- <87edv0sxup.fsf@bloch.sibelius.xs4all.nl>
- <CAMdYzYp6ShLqKxdiAjaRFiRF5i+wzfKiQvwPMzyQLAutWZbApg@mail.gmail.com>
- <875ygbsrf3.fsf@bloch.sibelius.xs4all.nl>
- <5a8f9934-1959-7962-d575-e3c2f5bc6ade@arm.com>
- <CAMdYzYrXp1kgdRpBmnfiFrXcdkk6_oWozpywgCYbNo_MU+8+=A@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMdYzYrXp1kgdRpBmnfiFrXcdkk6_oWozpywgCYbNo_MU+8+=A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025174001.cf5a189a23aaeadc2c8887a2@kernel.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-24 21:16, Peter Geis wrote:
-> On Mon, Oct 24, 2022 at 7:05 AM Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> On 2022-10-22 18:24, Mark Kettenis wrote:
->>>> From: Peter Geis <pgwipeout@gmail.com>
->>>> Date: Sat, 22 Oct 2022 08:19:57 -0400
->>>
->>> Hello Peter,
->>>
->>>> On Fri, Oct 21, 2022 at 4:52 PM Mark Kettenis <mark.kettenis@xs4all.nl> wrote:
->>>>>
->>>>>> Date: Fri, 21 Oct 2022 21:32:48 +0200
->>>>>> From: Ondřej Jirman <megi@xff.cz>
->>>>>>
->>>>>> On Fri, Oct 21, 2022 at 12:48:15PM -0400, Peter Geis wrote:
->>>>>>> On Fri, Oct 21, 2022 at 11:39 AM Ondřej Jirman <megi@xff.cz> wrote:
->>>>>>>>
->>>>>>>> On Fri, Oct 21, 2022 at 09:07:50AM -0400, Peter Geis wrote:
->>>>>>>>> Good Morning Heiko,
->>>>>>>>>
->>>>>>>>> Apologies for just getting to this, I'm still in the middle of moving
->>>>>>>>> and just got my lab set back up.
->>>>>>>>>
->>>>>>>>> I've tested this patch series and it leads to the same regression with
->>>>>>>>> NVMe drives. A loop of md5sum on two identical 4GB random files
->>>>>>>>> produces the following results:
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
->>>>>>>>> fad97e91da8d4fd554c895cafa89809b  test-rand2.img
->>>>>>>>> 2d56a7baa05c38535f4c19a2b371f90a  test-rand.img
->>>>>>>>> 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
->>>>>>>>> 25cfcfecf4dd529e4e9fbbe2be482053  test-rand.img
->>>>>>>>> 74e8e6f93d7c3dc3ad250e91176f5901  test-rand2.img
->>>>>>>>> b9637505bf88ed725f6d03deb7065dab  test-rand.img
->>>>>>>>> f7437e88d524ea92e097db51dce1c60d  test-rand2.img
->>>>>>>>>
->>>>>>>>> Before this patch series:
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand.img
->>>>>>>>> d11cf0caa541b72551ca22dc5bef2de0  test-rand2.img
->>>>>>>>>
->>>>>>>>> Though I do love where this patch is going and would like to see if it
->>>>>>>>> can be made to work, in its current form it does not.
->>>>>>>>
->>>>>>>> Thanks for the test. Can you please also test v1? Also please share lspci -vvv
->>>>>>>> of your nvme drive, so that we can see allocated address ranges, etc.
->>>>>>>
->>>>>>> Good catch, with your patch as is, the following issue crops up:
->>>>>>> Region 0: Memory at 300000000 (64-bit, non-prefetchable) [size=16K]
->>>>>>> Region 2: I/O ports at 1000 [disabled] [size=256]
->>>>>>>
->>>>>>> However, with a simple fix, we can get this:
->>>>>>> Region 0: Memory at 300000000 (64-bit, non-prefetchable) [virtual] [size=16K]
->>>>>>> Region 2: I/O ports at 1000 [virtual] [size=256]
->>>>>>>
->>>>>>> and with it a working NVMe drive.
->>>>>>>
->>>>>>> Change the following range:
->>>>>>> 0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x40000000>;
->>>>>>> to
->>>>>>> 0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x40000000>;
->>>>>>
->>>>>> I've already tried this, but this unfrotunately breaks the wifi cards.
->>>>>> (those only use the I/O space) Maybe because I/O and memory address spaces
->>>>>> now overlap, I don't know. That's why I used the 1GiB offset for memory
->>>>>> space.
->>>>>
->>>>> Meanwhile, I have an NVMe drive that only works if mmio is completely
->>>>> untranslated.  This is an ADATA SX8000NP drive, which uses a Silicon
->>>>> Motion SM2260 controller.
->>>>>
->>>>> So for me, a working configuration has the following "ranges":
->>>>>
->>>>> ranges = <0x01000000 0x0 0x00000000 0x3 0x3fff0000 0x0 0x00010000>,
->>>>>            <0x02000000 0x0 0xf4000000 0x0 0xf4000000 0x0 0x02000000>,
->>>>>            <0x03000000 0x3 0x10000000 0x3 0x10000000 0x0 0x2fff0000>;
->>>>>
->>>>> This also needs changes to the "reg" propery:
->>>>>
->>>>> reg = <0x3 0xc0000000 0x0 0x00400000>,
->>>>>         <0x0 0xfe260000 0x0 0x00010000>,
->>>>>         <0x3 0x00000000 0x0 0x10000000>;
->>>>
->>>> Now this is interesting. I've been reading up on PCIe ranges and what
->>>> is necessary for things to work properly, and I found this interesting
->>>> article from ARM:
->>>> https://developer.arm.com/documentation/102337/0000/Programmers-model/Memory-maps/AP-system-memory-map/PCIe-MMIO-and-ECAM-memory-regions
->>>>
->>>> TLDR: We need a low region (below 4g) and a high region.
->>>
->>> Well, that description applies to a specific ARM reference design.
->>> And it appears that the PCIe-RC used in that reference design does not
->>> support address translation.
->>
->> Indeed, that's not an "interesting article", it's just documentation for
->> some other system that isn't this one. In fact it's a system that
->> strictly doesn't even *have* PCIe; the reference designs are not
->> complete SoCs, and all that is being described there is the interconnect
->> address map for the parts which are in place ready for a customer to
->> stitch their choice of PCIe implementation to.
->>
->> The equivalent for RK3568 is that you *do* have "low" and "high" PCIe
->> windows at 0xfx000000 and 0x3xxx00000 respectively in the system
->> interconnect address map. How the PCIe controllers choose to relate
->> those system MMIO addresses to those to PCI Memory, I/O and Config space
->> addresses is another matter entirely.
+On Tue, Oct 25, 2022 at 05:40:01PM +0900, Masami Hiramatsu wrote:
+> Hi Mark,
 > 
-> Unfortunately we are working with insufficient documentation and
-> without the detailed understanding of a system integrator here. I'm
-> fully aware that the Neoverse N2 is not the rk3568, however
-> significant chunks of the rk3568 are based on ARM IP. Looking at how
-> ARM expects things to work by comparing their reference documents to
-> the hardware we have on hand is helpful in determining what we are
-> lacking.
+> On Mon, 24 Oct 2022 15:08:45 +0100
+> Mark Rutland <mark.rutland@arm.com> wrote:
 > 
-> The specific portions of the documentation that I found useful are not
-> the memory maps, but the generic descriptions of expected PCIe
-> regions. Combining those with other reference documents (unfortunately
-> most x86 based, but we have the unfortunate reality that PCIe has a
-> lot of x86isms to deal with) is quite enlightening.
+> > In subsequent patches we'll arrange for architectures to have an
+> > ftrace_regs which is entirely distinct from pt_regs. In preparation for
+> > this, we need to minimize the use of pt_regs to where strictly necessary
+> > in the core ftrace code.
+> > 
+> > This patch adds new ftrace_regs_{get,set}_*() helpers which can be used
+> > to manipulate ftrace_regs. When CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS=y,
+> > these can always be used on any ftrace_regs, and when
+> > CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS=n these can be used when regs are
+> > available. A new ftrace_regs_has_args(fregs) helper is added which code
+> > can use to check when these are usable.
+> 
+> Can you also add the ftrace_regs_query_register_offset() as a wrapper of
+> regs_query_register_offset()? I would like to use it for fprobe_events.
 
-OK, but you're looking at the wrong place for that. The only actual 
-relevant reference would be rule PCI_MM_06 in the BSA[1], which says 
-that PCI memory space should not be translated relative to the system 
-address map. It is hopefully obvious that 32-bit devices need 32-bit PCI 
-mem space to assign to their BARs, thus it falls out that if there is no 
-translation, that requires a 32-bit window in system address space too.
+Sure!
 
-That is of course speaking of a BSA-compliant system. Vendors are still 
-free to not care about BSA and do whatever the heck they want.
+Just to check, with FTRACE_WITH_REGS, does fprobe always sample the full
+pt_regs, or do callers also need to check ftrace_regs_has_args(fregs)?
+
+I ask because if neither of those are the case, with FTRACE_WITH_REGS,
+ftrace_regs_query_register_offset() would accept names of registers which might
+not have been sampled, and could give offsets to uninitialized memory.
+
+Atop that, I'm not exactly sure what to implement for powerpc/s390/x86 here. If
+those might be used without a full pt_regs, I think
+ftrace_regs_query_register_offset() should also take the fregs as a parameter
+and use that to check which registers are available.
+
+... does that make sense to you?
 
 Thanks,
-Robin.
+Mark.
 
-[1] https://developer.arm.com/documentation/den0094/latest/
-
-> I've been pinging
-> various representatives of the IP and implementation on the mailing
-> list about these issues for about a year now with no responses from
-> the Designware folk. You have been pretty one of the only individuals
-> with the level of knowledge we need to respond and I thank you for
-> that.
 > 
-> Based on what I've read I suspect that at least one of the two
-> following statements is true:
-> a. Mark is correct that translation is broken in Rockchip's
-> implementation (unknown if this is a SoC or a driver issue)
-> b. We do in fact require IO and Config to be 32 bit addressable to be
-> fully compatible.
+> Thank you,
 > 
-> These issues are compounded in rk3588 where we have much smaller
-> regions in the 32bit space for PCIe, so a definite answer on the true
-> requirements and limitations would be quite helpful.
+> > 
+> > Co-developed-by: Florent Revest <revest@chromium.org>
+> > Signed-off-by: Florent Revest <revest@chromium.org>
+> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > ---
+> >  arch/powerpc/include/asm/ftrace.h | 17 +++++++++++++++++
+> >  arch/s390/include/asm/ftrace.h    | 17 +++++++++++++++++
+> >  arch/x86/include/asm/ftrace.h     | 14 ++++++++++++++
+> >  include/linux/ftrace.h            | 27 +++++++++++++++++++++++++++
+> >  kernel/trace/Kconfig              |  6 +++---
+> >  5 files changed, 78 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/powerpc/include/asm/ftrace.h b/arch/powerpc/include/asm/ftrace.h
+> > index c3eb48f67566..faecb20d78bf 100644
+> > --- a/arch/powerpc/include/asm/ftrace.h
+> > +++ b/arch/powerpc/include/asm/ftrace.h
+> > @@ -44,6 +44,23 @@ ftrace_regs_set_instruction_pointer(struct ftrace_regs *fregs,
+> >  	regs_set_return_ip(&fregs->regs, ip);
+> >  }
+> >  
+> > +static __always_inline unsigned long
+> > +ftrace_regs_get_instruction_pointer(const struct ftrace_regs *fregs)
+> > +{
+> > +	return instruction_pointer(&fregs->regs)
+> > +}
+> > +
+> > +#define ftrace_regs_get_argument(fregs, n) \
+> > +	regs_get_kernel_argument(&(fregs)->regs, n)
+> > +#define ftrace_regs_get_stack_pointer(fregs) \
+> > +	kernel_stack_pointer(&(fregs)->regs)
+> > +#define ftrace_regs_return_value(fregs) \
+> > +	regs_return_value(&(fregs)->regs)
+> > +#define ftrace_regs_set_return_value(fregs, ret) \
+> > +	regs_set_return_value(&(fregs)->regs, ret)
+> > +#define ftrace_override_function_with_return(fregs) \
+> > +	override_function_with_return(&(fregs)->regs)
+> > +
+> >  struct ftrace_ops;
+> >  
+> >  #define ftrace_graph_func ftrace_graph_func
+> > diff --git a/arch/s390/include/asm/ftrace.h b/arch/s390/include/asm/ftrace.h
+> > index b8957882404f..5fdc806458aa 100644
+> > --- a/arch/s390/include/asm/ftrace.h
+> > +++ b/arch/s390/include/asm/ftrace.h
+> > @@ -54,6 +54,12 @@ static __always_inline struct pt_regs *arch_ftrace_get_regs(struct ftrace_regs *
+> >  	return NULL;
+> >  }
+> >  
+> > +static __always_inline unsigned long
+> > +ftrace_regs_get_instruction_pointer(const struct ftrace_regs *fregs)
+> > +{
+> > +	return fregs->regs.psw.addr;
+> > +}
+> > +
+> >  static __always_inline void
+> >  ftrace_regs_set_instruction_pointer(struct ftrace_regs *fregs,
+> >  				    unsigned long ip)
+> > @@ -61,6 +67,17 @@ ftrace_regs_set_instruction_pointer(struct ftrace_regs *fregs,
+> >  	fregs->regs.psw.addr = ip;
+> >  }
+> >  
+> > +#define ftrace_regs_get_argument(fregs, n) \
+> > +	regs_get_kernel_argument(&(fregs)->regs, n)
+> > +#define ftrace_regs_get_stack_pointer(fregs) \
+> > +	kernel_stack_pointer(&(fregs)->regs)
+> > +#define ftrace_regs_return_value(fregs) \
+> > +	regs_return_value(&(fregs)->regs)
+> > +#define ftrace_regs_set_return_value(fregs, ret) \
+> > +	regs_set_return_value(&(fregs)->regs, ret)
+> > +#define ftrace_override_function_with_return(fregs) \
+> > +	override_function_with_return(&(fregs)->regs)
+> > +
+> >  /*
+> >   * When an ftrace registered caller is tracing a function that is
+> >   * also set by a register_ftrace_direct() call, it needs to be
+> > diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
+> > index b73e858bd96f..b3737b42e8a1 100644
+> > --- a/arch/x86/include/asm/ftrace.h
+> > +++ b/arch/x86/include/asm/ftrace.h
+> > @@ -51,6 +51,20 @@ arch_ftrace_get_regs(struct ftrace_regs *fregs)
+> >  #define ftrace_regs_set_instruction_pointer(fregs, _ip)	\
+> >  	do { (fregs)->regs.ip = (_ip); } while (0)
+> >  
+> > +#define ftrace_regs_get_instruction_pointer(fregs) \
+> > +	((fregs)->regs.ip)
+> > +
+> > +#define ftrace_regs_get_argument(fregs, n) \
+> > +	regs_get_kernel_argument(&(fregs)->regs, n)
+> > +#define ftrace_regs_get_stack_pointer(fregs) \
+> > +	kernel_stack_pointer(&(fregs)->regs)
+> > +#define ftrace_regs_return_value(fregs) \
+> > +	regs_return_value(&(fregs)->regs)
+> > +#define ftrace_regs_set_return_value(fregs, ret) \
+> > +	regs_set_return_value(&(fregs)->regs, ret)
+> > +#define ftrace_override_function_with_return(fregs) \
+> > +	override_function_with_return(&(fregs)->regs)
+> > +
+> >  struct ftrace_ops;
+> >  #define ftrace_graph_func ftrace_graph_func
+> >  void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> > diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> > index e9905f741916..3b13e3c21438 100644
+> > --- a/include/linux/ftrace.h
+> > +++ b/include/linux/ftrace.h
+> > @@ -125,6 +125,33 @@ static __always_inline struct pt_regs *ftrace_get_regs(struct ftrace_regs *fregs
+> >  	return arch_ftrace_get_regs(fregs);
+> >  }
+> >  
+> > +/*
+> > + * When true, the ftrace_regs_{get,set}_*() functions may be used on fregs.
+> > + * Note: this can be true even when ftrace_get_regs() cannot provide a pt_regs.
+> > + */
+> > +static __always_inline bool ftrace_regs_has_args(struct ftrace_regs *fregs)
+> > +{
+> > +	if (IS_ENABLED(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS))
+> > +		return true;
+> > +
+> > +	return ftrace_get_regs(fregs) != NULL;
+> > +}
+> > +
+> > +#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
+> > +#define ftrace_regs_get_instruction_pointer(fregs) \
+> > +	instruction_pointer(ftrace_get_regs(fregs))
+> > +#define ftrace_regs_get_argument(fregs, n) \
+> > +	regs_get_kernel_argument(ftrace_get_regs(fregs), n)
+> > +#define ftrace_regs_get_stack_pointer(fregs) \
+> > +	kernel_stack_pointer(ftrace_get_regs(fregs))
+> > +#define ftrace_regs_return_value(fregs) \
+> > +	regs_return_value(ftrace_get_regs(fregs))
+> > +#define ftrace_regs_set_return_value(fregs, ret) \
+> > +	regs_set_return_value(ftrace_get_regs(fregs), ret)
+> > +#define ftrace_override_function_with_return(fregs) \
+> > +	override_function_with_return(ftrace_get_regs(fregs))
+> > +#endif
+> > +
+> >  typedef void (*ftrace_func_t)(unsigned long ip, unsigned long parent_ip,
+> >  			      struct ftrace_ops *op, struct ftrace_regs *fregs);
+> >  
+> > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
+> > index e9e95c790b8e..2c6611c13f99 100644
+> > --- a/kernel/trace/Kconfig
+> > +++ b/kernel/trace/Kconfig
+> > @@ -46,10 +46,10 @@ config HAVE_DYNAMIC_FTRACE_WITH_ARGS
+> >  	bool
+> >  	help
+> >  	 If this is set, then arguments and stack can be found from
+> > -	 the pt_regs passed into the function callback regs parameter
+> > +	 the ftrace_regs passed into the function callback regs parameter
+> >  	 by default, even without setting the REGS flag in the ftrace_ops.
+> > -	 This allows for use of regs_get_kernel_argument() and
+> > -	 kernel_stack_pointer().
+> > +	 This allows for use of ftrace_regs_get_argument() and
+> > +	 ftrace_regs_get_stack_pointer().
+> >  
+> >  config HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
+> >  	bool
+> > -- 
+> > 2.30.2
+> > 
 > 
-> As always, thank you for your time,
-> Peter
 > 
->>
->> Robin.
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
