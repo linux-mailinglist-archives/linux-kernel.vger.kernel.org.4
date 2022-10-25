@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D21B60CC16
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:42:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766A560CC17
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbiJYMmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
+        id S232086AbiJYMmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:42:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiJYMmD (ORCPT
+        with ESMTP id S230008AbiJYMmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:42:03 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400C118B494;
-        Tue, 25 Oct 2022 05:42:02 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id g12so7830152wrs.10;
-        Tue, 25 Oct 2022 05:42:02 -0700 (PDT)
+        Tue, 25 Oct 2022 08:42:05 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61B518BE26
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:42:04 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bp11so20074960wrb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4Ic2JEDn8iIKh6kokfWzyIvyt1AwKkoMppVSCI5C57s=;
-        b=p7sLxOhF7+RJa8UpoEmVVGga9/XxYJpHt9VYi4nB27HDInsNdVKl7A7Y7xodOhf69i
-         cH4p45wrXBpH/+j58uHRVEPx6mxh/2gQckDVhrgiGCsUh2ynjtz/IBUS9xWyK2fYpC97
-         ds2Ro5NO2Ho8uNlbpqNj6GO2mpGF4KKPfRwhoSf+FnqBq9kw4hpbqz5kplGxdOap8pvc
-         nkTIEyN5cbLojENWjdgwwecAr4ejh7T8CkVx6Cc6JRqgtS7O5SoOxMymWmJexfOrWeoK
-         Zm82tzz/g9IR2WW1Wkt62/F8UDLk7lV/5fp9xSUxnVSXRy6hoTpp6OcmSUn8vhSmBfHS
-         3CSg==
+        bh=KZM0T9VAIhDH8MlN6WTNKMHChs2UsyWeC4jS+W4xqgE=;
+        b=KKMGuE4/SZ26vZUsXFESU9bVBmQJ/U9oz2QjLdmDj6petr7Z0fUlZubuhdLhvEHci5
+         NKRFIbeUyziptVGfh3p/uVfPCIQyrHUuKO5Qlc2RR/bNaUvRQHI6pnNX9R4FEBl6PjYD
+         6mWRvQQIfpy7O/C5VnXdugs6rY/7p+VQPqmphCuqAVwJpcPGG5PqRqrPO5Zhh1yeaNJy
+         9wnklj2raQkZPW+/B0fbHfSxoPtdzucnF3Fn58vb2YsvsXViLeErmNpBsxvYCy25J9Ur
+         glBOkXDAOSNthoVwGPXzCa5jRxghjJ4x7toQbOtgT1kjjHVrzNMFVACINvHPlyhT1NOJ
+         JevQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4Ic2JEDn8iIKh6kokfWzyIvyt1AwKkoMppVSCI5C57s=;
-        b=gcayYFe6fsCxvAm+oDVmS6Nz7b8wQhHVXGk7Xzc+nxKjmZnTfwnAWsHJkwEgH6+dG3
-         /PxBIw91D9Te2c2M9RV+K5LbU9MCEIN7A1fl3MQMJxzfWyRGth01/PTY9pz5xRPZEgxh
-         b8FsCzkJ0VnwWPO1TaS1rrsZ5T5vpqj9NGjUDaXm0wMWGL+B+vQZUVQeQuDppM1+Zf9c
-         8XgONU9Xk0DYOEBeFX49JyQwoWAC4mk9CPa63p/+n7Gd5to7aM0Y94xLDYPokMaIzrIB
-         tRmI83jj9b39Sh/gl4WyRF8STaQvIVHP4Bwy+nvpVTg5TzhEBUkOo0IBMdTMxjbQRuuD
-         2GGw==
-X-Gm-Message-State: ACrzQf0H0uRBiY1/7q1ym0QrwnurOCCg233j8rwoK2xR7t2q7hE7Jxny
-        KXJyw379txh8X0ZgkMaKglk=
-X-Google-Smtp-Source: AMsMyM4PfHc5iZZPnvgw3lB96B0iv3Tf8sL+cm4ldHaMrUPmjOZBcBtMm3ogjXQBRx7LsZBd9zG5SA==
-X-Received: by 2002:a05:600c:1c1e:b0:3c6:fa3c:32a9 with SMTP id j30-20020a05600c1c1e00b003c6fa3c32a9mr15113010wms.203.1666701720859;
-        Tue, 25 Oct 2022 05:42:00 -0700 (PDT)
+        bh=KZM0T9VAIhDH8MlN6WTNKMHChs2UsyWeC4jS+W4xqgE=;
+        b=Ep1/vpeBinjC3Wd5sNB2cVsw7CMSLczNyL3KftZ5qEc+CysB8SLuanmB3mpHs22Ibc
+         bTrAfG5wmBN5dx+ZfjmujgcbpvIzDvbwnjRjwmrPqXu+0C6ano0El7Al2FB9iEz19IjR
+         tEJlnYbXeSGsHbV7sX0yRiSVDi6ory/6XD3ze8AX/1CJeKJGRWtqbziqf4s9v9DZScWr
+         MgmJJx2ubWLkOV6ZvdbDNPbvIefAm9D65sGQ5Q3neiIQFGOHWrHntHelub07NNSYZcxt
+         ObY5MqZIDI5FHK8ay/daH280ryYtKGTThCyTzqW9lGYDaKa17Q+tpwtorY28+L6OLEjx
+         L/og==
+X-Gm-Message-State: ACrzQf09xc+Dfet7tmunRyf4N/OvhExoU7dr/6TfGx5lSQPcPklZPtHi
+        r23TaJzoER1jZW0eSURdCAE=
+X-Google-Smtp-Source: AMsMyM7qGiPSr6jS0SrVQrVe6ZNaIcaZ3Pzpjqm4tGdeQk37enhjvFMn62fA5LjFriOIMhSj/XcqVA==
+X-Received: by 2002:a1c:ed0b:0:b0:3c1:d16e:a827 with SMTP id l11-20020a1ced0b000000b003c1d16ea827mr25702572wmh.127.1666701723192;
+        Tue, 25 Oct 2022 05:42:03 -0700 (PDT)
 Received: from localhost.localdomain (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id ay19-20020a05600c1e1300b003a1980d55c4sm11250664wmb.47.2022.10.25.05.41.59
+        by smtp.gmail.com with ESMTPSA id ay19-20020a05600c1e1300b003a1980d55c4sm11250664wmb.47.2022.10.25.05.42.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 05:42:00 -0700 (PDT)
+        Tue, 25 Oct 2022 05:42:02 -0700 (PDT)
 From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
 To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Heiko Stuebner <heiko@sntech.de>
 Cc:     linux-rockchip@lists.infradead.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] ASoC: dt-bindings: rockchip: i2s-tdm: Add RK3588 compatible
-Date:   Tue, 25 Oct 2022 14:41:31 +0200
-Message-Id: <20221025124132.399729-4-frattaroli.nicolas@gmail.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 4/4] ASoC: rockchip: i2s_tdm: Add support for RK3588
+Date:   Tue, 25 Oct 2022 14:41:32 +0200
+Message-Id: <20221025124132.399729-5-frattaroli.nicolas@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221025124132.399729-1-frattaroli.nicolas@gmail.com>
 References: <20221025124132.399729-1-frattaroli.nicolas@gmail.com>
@@ -78,25 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds the compatible string for the RK3588 SoC.
-
-Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+This adds support for the RK3588 SoC to the I2S/TDM driver.
 ---
- Documentation/devicetree/bindings/sound/rockchip,i2s-tdm.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/rockchip/rockchip_i2s_tdm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/sound/rockchip,i2s-tdm.yaml b/Documentation/devicetree/bindings/sound/rockchip,i2s-tdm.yaml
-index 8646cdc692d7..0503f4f3fb1a 100644
---- a/Documentation/devicetree/bindings/sound/rockchip,i2s-tdm.yaml
-+++ b/Documentation/devicetree/bindings/sound/rockchip,i2s-tdm.yaml
-@@ -21,6 +21,7 @@ properties:
-       - rockchip,rk1808-i2s-tdm
-       - rockchip,rk3308-i2s-tdm
-       - rockchip,rk3568-i2s-tdm
-+      - rockchip,rk3588-i2s-tdm
-       - rockchip,rv1126-i2s-tdm
+diff --git a/sound/soc/rockchip/rockchip_i2s_tdm.c b/sound/soc/rockchip/rockchip_i2s_tdm.c
+index 917f17107891..08b90ec5cc80 100644
+--- a/sound/soc/rockchip/rockchip_i2s_tdm.c
++++ b/sound/soc/rockchip/rockchip_i2s_tdm.c
+@@ -1318,6 +1318,7 @@ static const struct of_device_id rockchip_i2s_tdm_match[] = {
+ 	{ .compatible = "rockchip,rk1808-i2s-tdm", .data = &rk1808_i2s_soc_data },
+ 	{ .compatible = "rockchip,rk3308-i2s-tdm", .data = &rk3308_i2s_soc_data },
+ 	{ .compatible = "rockchip,rk3568-i2s-tdm", .data = &rk3568_i2s_soc_data },
++	{ .compatible = "rockchip,rk3588-i2s-tdm" },
+ 	{ .compatible = "rockchip,rv1126-i2s-tdm", .data = &rv1126_i2s_soc_data },
+ 	{},
+ };
+@@ -1556,7 +1557,7 @@ static int rockchip_i2s_tdm_probe(struct platform_device *pdev)
+ 	i2s_tdm->dev = &pdev->dev;
  
-   reg:
+ 	of_id = of_match_device(rockchip_i2s_tdm_match, &pdev->dev);
+-	if (!of_id || !of_id->data)
++	if (!of_id)
+ 		return -EINVAL;
+ 
+ 	spin_lock_init(&i2s_tdm->lock);
 -- 
 2.38.1
 
