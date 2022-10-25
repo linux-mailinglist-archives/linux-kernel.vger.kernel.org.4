@@ -2,202 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1AD360C39E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB8B60C3A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbiJYGHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S231131AbiJYGJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiJYGHG (ORCPT
+        with ESMTP id S229910AbiJYGJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:07:06 -0400
-Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A9EABD4D;
-        Mon, 24 Oct 2022 23:07:05 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1onD4l-0064BC-Tl; Tue, 25 Oct 2022 14:06:49 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 25 Oct 2022 14:06:48 +0800
-Date:   Tue, 25 Oct 2022 14:06:48 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Sabrina Dubroca <sd@queasysnail.net>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        syzbot <syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com>,
-        davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        steffen.klassert@secunet.com, syzkaller-bugs@googlegroups.com
-Subject: [v3 PATCH] af_key: Fix send_acquire race with pfkey_register
-Message-ID: <Y1d8+FdfgtVCaTDS@gondor.apana.org.au>
-References: <000000000000fd9a4005ebbeac67@google.com>
- <Y1YeSj2vwPvRAW61@gondor.apana.org.au>
- <CANn89i+41Whp=ACQo393s_wPx_MtWAZgL9DqG9aoLomN4ddwTg@mail.gmail.com>
- <Y1YrVGP+5TP7V1/R@gondor.apana.org.au>
- <Y1Y8oN5xcIoMu+SH@hog>
+        Tue, 25 Oct 2022 02:09:18 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2F7F53D7;
+        Mon, 24 Oct 2022 23:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666678157; x=1698214157;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4M4RG7e6KbnVlnMZy0nJZCHUEfnJaV+ADRTY0rAYgCc=;
+  b=Yp5CeQUupmfzwAf2koxjzZAAdaWvhQs9Q99bG+iMofAWUuFcvgoRQrqA
+   ag55nxFALiBqurw34LBE4R2gW+Ad2dnfY8T0FrsEHp4wbupu1dS4FTRqX
+   wY8DDZU9zqo5xXP+zjNc1VYqCZOOmfMEo7BpqocVcakXPRNTFZdpclqDV
+   qGPKfG/enGbGIOqMYREocv/E0zd8Slp4Nq090+phCiy15N78+aqVk3h5s
+   T6skQ09Im+dA9AUkHQ7nI+0PTu8dWuqd4zJ3JqDyE1iIt+sraxWsF9IK5
+   F1nxuuN49yxP4EIY1fuwAb5xdWiAj4EWIpY6sd68vPixBI+HlQO2O2Y8O
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287993687"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="287993687"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 23:08:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="806552299"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="806552299"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga005.jf.intel.com with ESMTP; 24 Oct 2022 23:08:44 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id B4D20107; Tue, 25 Oct 2022 09:09:06 +0300 (EEST)
+Date:   Tue, 25 Oct 2022 09:09:06 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mauro Lima <mauro.lima@eclypsium.com>
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] intel-spi: Split hardware and software sequencing
+Message-ID: <Y1d9glOgHsQlZe2L@black.fi.intel.com>
+References: <20221020164508.29182-1-mauro.lima@eclypsium.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1Y8oN5xcIoMu+SH@hog>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221020164508.29182-1-mauro.lima@eclypsium.com>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 09:20:00AM +0200, Sabrina Dubroca wrote:
-> 2022-10-24, 14:06:12 +0800, Herbert Xu wrote:
-> > @@ -1697,11 +1699,11 @@ static int pfkey_register(struct sock *sk, struct sk_buff *skb, const struct sad
-> >  		pfk->registered |= (1<<hdr->sadb_msg_satype);
-> >  	}
-> >  
-> > -	mutex_lock(&pfkey_mutex);
-> > +	spin_lock_bh(&pfkey_alg_lock);
-> >  	xfrm_probe_algs();
+Hi,
+
+On Thu, Oct 20, 2022 at 01:45:06PM -0300, Mauro Lima wrote:
+> Right now the only driver for Intel's spi has a DANGEROUS tag for
+> a bug in the past on certain Lenovo platforms. It was cleared out
+> that the bug was caused for the spi software sequencing mechanism
+> and if we only use the driver with the hardware sequencing
+> capabilities will be much safer[1].
 > 
-> I don't think we can do that:
+> This changes will remove all the software sequencing bits from
+> the driver and left only the hardware sequencing functionality.
+> If the software sequencing capabilities are needed, the old driver
+> can be build using the DANGEROUS option from the menu.
 > 
-> void xfrm_probe_algs(void)
-> {
-> 	int i, status;
+> [1] https://lkml.org/lkml/2021/11/11/468
 > 
-> 	BUG_ON(in_softirq());
+> Mauro Lima (2):
+>   spi: intel-spi: Move software sequencing logic outside the core
+>   spi: intel-spi: build the driver with hardware sequencing by default
 
-Indeed.  I was also wrong in stating that this bug was created by
-namespaces.  This race has always existed since this code was first
-added.
+I'be been thinking about this and I believe we can do something simpler
+instead.
 
----8<---
-The function pfkey_send_acquire may race with pfkey_register
-(which could even be in a different name space).  This may result
-in a buffer overrun.
+All the modern "Core" CPUs expose this as PCI device and that only
+supports hardware sequencer which should be safe so I think we can do
+something like this:
 
-Allocating the maximum amount of memory that could be used prevents
-this.
+1. Make spi-intel-pci.c to set the type to INTEL_SPI_CNL for all the
+   controllers it supports (and double check that this is the case for
+   all these controllers).
 
-Reported-by: syzbot+1e9af9185d8850e2c2fa@syzkaller.appspotmail.com
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+As a side effect the ispi->sregs will be set to NULL so the core driver
+does not even try to use the software seguencer.
 
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index c85df5b958d2..213287814328 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -2905,7 +2905,7 @@ static int count_ah_combs(const struct xfrm_tmpl *t)
- 			break;
- 		if (!aalg->pfkey_supported)
- 			continue;
--		if (aalg_tmpl_set(t, aalg) && aalg->available)
-+		if (aalg_tmpl_set(t, aalg))
- 			sz += sizeof(struct sadb_comb);
- 	}
- 	return sz + sizeof(struct sadb_prop);
-@@ -2923,7 +2923,7 @@ static int count_esp_combs(const struct xfrm_tmpl *t)
- 		if (!ealg->pfkey_supported)
- 			continue;
- 
--		if (!(ealg_tmpl_set(t, ealg) && ealg->available))
-+		if (!(ealg_tmpl_set(t, ealg)))
- 			continue;
- 
- 		for (k = 1; ; k++) {
-@@ -2934,16 +2934,17 @@ static int count_esp_combs(const struct xfrm_tmpl *t)
- 			if (!aalg->pfkey_supported)
- 				continue;
- 
--			if (aalg_tmpl_set(t, aalg) && aalg->available)
-+			if (aalg_tmpl_set(t, aalg))
- 				sz += sizeof(struct sadb_comb);
- 		}
- 	}
- 	return sz + sizeof(struct sadb_prop);
- }
- 
--static void dump_ah_combs(struct sk_buff *skb, const struct xfrm_tmpl *t)
-+static int dump_ah_combs(struct sk_buff *skb, const struct xfrm_tmpl *t)
- {
- 	struct sadb_prop *p;
-+	int sz = 0;
- 	int i;
- 
- 	p = skb_put(skb, sizeof(struct sadb_prop));
-@@ -2971,13 +2972,17 @@ static void dump_ah_combs(struct sk_buff *skb, const struct xfrm_tmpl *t)
- 			c->sadb_comb_soft_addtime = 20*60*60;
- 			c->sadb_comb_hard_usetime = 8*60*60;
- 			c->sadb_comb_soft_usetime = 7*60*60;
-+			sz += sizeof(*c);
- 		}
- 	}
-+
-+	return sz + sizeof(*p);
- }
- 
--static void dump_esp_combs(struct sk_buff *skb, const struct xfrm_tmpl *t)
-+static int dump_esp_combs(struct sk_buff *skb, const struct xfrm_tmpl *t)
- {
- 	struct sadb_prop *p;
-+	int sz = 0;
- 	int i, k;
- 
- 	p = skb_put(skb, sizeof(struct sadb_prop));
-@@ -3019,8 +3024,11 @@ static void dump_esp_combs(struct sk_buff *skb, const struct xfrm_tmpl *t)
- 			c->sadb_comb_soft_addtime = 20*60*60;
- 			c->sadb_comb_hard_usetime = 8*60*60;
- 			c->sadb_comb_soft_usetime = 7*60*60;
-+			sz += sizeof(*c);
- 		}
- 	}
-+
-+	return sz + sizeof(*p);
- }
- 
- static int key_notify_policy_expire(struct xfrm_policy *xp, const struct km_event *c)
-@@ -3150,6 +3158,7 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
- 	struct sadb_x_sec_ctx *sec_ctx;
- 	struct xfrm_sec_ctx *xfrm_ctx;
- 	int ctx_size = 0;
-+	int alg_size = 0;
- 
- 	sockaddr_size = pfkey_sockaddr_size(x->props.family);
- 	if (!sockaddr_size)
-@@ -3161,16 +3170,16 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
- 		sizeof(struct sadb_x_policy);
- 
- 	if (x->id.proto == IPPROTO_AH)
--		size += count_ah_combs(t);
-+		alg_size = count_ah_combs(t);
- 	else if (x->id.proto == IPPROTO_ESP)
--		size += count_esp_combs(t);
-+		alg_size = count_esp_combs(t);
- 
- 	if ((xfrm_ctx = x->security)) {
- 		ctx_size = PFKEY_ALIGN8(xfrm_ctx->ctx_len);
- 		size +=  sizeof(struct sadb_x_sec_ctx) + ctx_size;
- 	}
- 
--	skb =  alloc_skb(size + 16, GFP_ATOMIC);
-+	skb =  alloc_skb(size + alg_size + 16, GFP_ATOMIC);
- 	if (skb == NULL)
- 		return -ENOMEM;
- 
-@@ -3224,10 +3233,13 @@ static int pfkey_send_acquire(struct xfrm_state *x, struct xfrm_tmpl *t, struct
- 	pol->sadb_x_policy_priority = xp->priority;
- 
- 	/* Set sadb_comb's. */
-+	alg_size = 0;
- 	if (x->id.proto == IPPROTO_AH)
--		dump_ah_combs(skb, t);
-+		alg_size = dump_ah_combs(skb, t);
- 	else if (x->id.proto == IPPROTO_ESP)
--		dump_esp_combs(skb, t);
-+		alg_size = dump_esp_combs(skb, t);
-+
-+	hdr->sadb_msg_len += alg_size / 8;
- 
- 	/* security context */
- 	if (xfrm_ctx) {
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2. Update Kconfig of SPI_INTEL_PCI to remove "DANGEROUS" and mention in
+   the help text that this only supports the hardware sequencer and only
+   the modern core hardware.
+
+3. Update Kconfig of SPI_INTEL_PLATFORM help text to mention that most
+   of these are using software sequencer, leave "DANGEROUS" there.
+
+Does this make sense? Let me know what you think. I can do this myself
+as well (might take some while though since busy with other things
+usual).
