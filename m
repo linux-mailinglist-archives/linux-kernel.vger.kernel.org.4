@@ -2,114 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD15360D23E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC35760D240
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiJYRHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 13:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S232042AbiJYRIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 13:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232185AbiJYRHK (ORCPT
+        with ESMTP id S231341AbiJYRH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 13:07:10 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00633152015
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:07:01 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id g62so8417565pfb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:07:01 -0700 (PDT)
+        Tue, 25 Oct 2022 13:07:58 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8241FC1EB
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:07:56 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id ud5so10738520ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:07:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=napLP0njighkCcO4W1DZOY6rgUMs4xcUsx9lyU2OHdk=;
-        b=gPOSE8m2CJTzYky/bqt3bvTv2GqxLf0g5LzYFNecRaGofPocb4j5dbAh/8jSFL4e/A
-         aJoAGa7c2trrl3i19O3tj/5uDwjfXF6vplhXyO0+nUuSIY01QD0yBp3J+cQDxrK+Zgzo
-         w//NsicbvHJrxIdq+dAP9smd2hZHaWyKmf1Ht6/Diga2rt3N3LgOSU4q4u5bir1jCZQB
-         SYQn9KKKIMAVXyCmeQp0TAe02+PBOQkjpldxpW4D6Wn7LRkCgFOIBZcYoYkKbjPguy8B
-         Q9h3Yg2e9Hbgatqg7PAG66+F3/V04tKE9v/oIf8MLPlNTYV5P7h8L957K6kQLRFswCGa
-         1NtA==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AC1uAuVt0BevV1hXaTU1Uc4K/3bo5jaK0nilJIQDNPs=;
+        b=lYp5I8az47ZXp+iQT2xHj8wjnds3sQrp19gPb2X96V90OoHMnW299aQ6j42w1AAbNf
+         6uKKqGBUNb4U2WEzBXPLkEX11qEdhK0oDfiKQ/3uUwdyXU4SOamIcvY7Yt2EGav6525s
+         qnP8PF+yj4x/Pt+tBIeT5GkLxKUNE4ju0a3f+L0z6IdRtIpoQHWbj754g5hCbT1OXln6
+         6Zl6ATBRYh6PympCdZgI7d9wbOk8SdCSQJsBNf0BurNN7Smd2pfYmNbeFNjSsoB2vCyN
+         5n+s4+MGFft420Uozm+UwBwHBkA+qI4HYC2B1UIwlEOCUzPgOvd4jBj3VT5erloIWCsK
+         8ZXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=napLP0njighkCcO4W1DZOY6rgUMs4xcUsx9lyU2OHdk=;
-        b=j0GdowF1UBtw9GHwgwlgeqVIxe3Wk0uN2WK8nAEAZ3cUbtp3naAvjdtKdJFNfujaAG
-         aowNE5+aqPcHDQ6O1sRdyrhs2BjGs4eJlRc0LItCXKYNsXxdGSN5988aeli7sSyYAyMX
-         sXVCDKWkrihhMYRKlFeEhNvyaRv4m77cO9qzYe5Sn1DexyvuYF7iuywDEZRX6RhBWhZS
-         Dpc7QPwLnsdRJe27/MkVPLD3IivTynUiCJffDbf10amntwjPa7wClRj9mSOKhHeb9HtY
-         TMuAgxwxgzVApqIGx/eIz6bg24KAbOKlD126IaobqZ9k68+8NaGn3mJ1Lecz1EaJzA3g
-         JUrA==
-X-Gm-Message-State: ACrzQf2STu2PL5tPBRLnX+XGjqEztyysedMXdPgw8D5xYbulYUn14XRj
-        AVmzKpzqicCT+OL45AeI6XRGGaW1jg4bAQ==
-X-Google-Smtp-Source: AMsMyM6I6vLBD3d3/4wDmQWDD3rOE2C/HNRN5WzdWxYdwhclsUQhL1e+6B6e+wGDNL2Or2lbcChJcQ==
-X-Received: by 2002:a63:b59:0:b0:434:2374:6d12 with SMTP id a25-20020a630b59000000b0043423746d12mr33575235pgl.311.1666717621393;
-        Tue, 25 Oct 2022 10:07:01 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id jc20-20020a17090325d400b001830ed575c3sm1437993plb.117.2022.10.25.10.07.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 10:07:00 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 17:06:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Mi, Dapeng1" <dapeng1.mi@intel.com>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "zhenyuw@linux.intel.com" <zhenyuw@linux.intel.com>
-Subject: Re: [PATCH] KVM: x86: disable halt polling when powersave governor
- is used
-Message-ID: <Y1gXseyl0f3IUnDh@google.com>
-References: <20220915073121.1038840-1-dapeng1.mi@intel.com>
- <Y0BnKIW+7sqJbTyY@google.com>
- <PH0PR11MB48240C29F1DEBC79EA933285CD5E9@PH0PR11MB4824.namprd11.prod.outlook.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AC1uAuVt0BevV1hXaTU1Uc4K/3bo5jaK0nilJIQDNPs=;
+        b=zgoCrlz9Qs2iNyQ2bpOmZrzKFZZcHTDmfWW81nhhQrqMMT92g/J/fG8VC5aVXQIJid
+         epbQID5XqdxNf4P54wp0OqPmzbUhJfcHoQk32dBBbg31BxhqD5j5vF/P8tTxMdQR48YI
+         4xnqXklNqadJ80pkgEo1xpZx4Wew4NwIMiaQMfvOsnv4kQkqGymAf1+oYhwURmGdGzQN
+         VoulWmKOCTEklm7AzeEzNyb3ri+8HdjnxoLwosbYTZMQ8HLRKvAkZW58YHskV2OtH57G
+         HTO+7k81Fvi489GOWzgw9UvawM0tF29KnpMCTIVd3ZtESL1BneNCrWqRmhBPn3YvZZgY
+         /EHA==
+X-Gm-Message-State: ACrzQf12h2wvF9LWFWspalmgRLBpuAoCsYq7He5PNP+eJbzUVzOF6aFO
+        DLfxQCtmIMDbU1+aT/E0AiAdldXzcJxBwzzTVPeZat5cW0ZKHQ==
+X-Google-Smtp-Source: AMsMyM5+cM7THsirIfJ10IYZBSKVJbxS6df7eMLY+mACvZcOAjzxndRAS5qcMbtd7ct/wpM0jM7Pi9x2RnpZKe++EZQ=
+X-Received: by 2002:a17:906:fe45:b0:788:15a5:7495 with SMTP id
+ wz5-20020a170906fe4500b0078815a57495mr34004170ejb.633.1666717675144; Tue, 25
+ Oct 2022 10:07:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB48240C29F1DEBC79EA933285CD5E9@PH0PR11MB4824.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221024112959.085534368@linuxfoundation.org>
+In-Reply-To: <20221024112959.085534368@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 25 Oct 2022 22:37:43 +0530
+Message-ID: <CA+G9fYteLc8VuPqLtgzb1nKGbO1NChbYeLkUxhb-JbnboAEwJA@mail.gmail.com>
+Subject: Re: [PATCH 4.19 000/229] 4.19.262-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 08, 2022, Mi, Dapeng1 wrote:
-> > > +				!strncmp(policy->governor->name,
-> > "powersave",
-> > 
-> > KVM should not be comparing magic strings.  If the cpufreq subsystem can't get
-> > policy->policy right, then that needs to be fixed.
-> 
-> Yeah, using magic strings looks a little bit strange, but this is what is
-> cpufreq doing.  Currently cpufreq mechanism supports two kinds of drivers,
-> one is the driver which has the built-in governor, like intel_pstate driver.
-> For this kind of driver, the cpufreq governor is saved in the policy->policy
-> field. The other is the traditional driver which is independent with cpufreq
-> governor and the cpufreq governor type is saved in the governor->name field.
-> For the second kind of cpufreq driver, the policy->policy field is
-> meaningless and we have to read the governor name. 
+On Mon, 24 Oct 2022 at 17:25, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.262 release.
+> There are 229 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.262-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-That doesn't mean it's ok to bleed those internal details into KVM.  I would much
-rather cpufreq provide a helper to get the effective policy, e.g.
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-  unsigned int cpufreq_cpu_get_policy(unsigned int cpu)
-  {
-	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-	unsigned int pol;
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-	if (!policy)
-		return CPUFREQ_POLICY_UNKNOWN;
+## Build
+* kernel: 4.19.262-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: a838554008fbadb75c035d3c473a2d9e26080a33
+* git describe: v4.19.261-230-ga838554008fb
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.261-230-ga838554008fb
 
-	pol = policy->policy
-	if (pol == CPUFREQ_POLICY_UNKNOWN && policy->governor)
-		pol = cpufreq_parse_policy(policy->governor->name);
+## No Test Regressions (compared to v4.19.261)
 
-	cpufreq_cpu_put(policy);
-  }
+## No Metric Regressions (compared to v4.19.261)
+
+## No Test Fixes (compared to v4.19.261)
+
+## No Metric Fixes (compared to v4.19.261)
+
+
+## Test result summary
+total: 50296, pass: 43870, fail: 595, skip: 5348, xfail: 483
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 323 total, 318 passed, 5 failed
+* arm64: 61 total, 60 passed, 1 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 46 total, 46 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 63 total, 63 passed, 0 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 54 passed, 1 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-lib
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-zram
+* kunit
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
