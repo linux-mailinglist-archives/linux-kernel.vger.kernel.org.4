@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4606060D078
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BF960D089
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbiJYPYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:24:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
+        id S233206AbiJYP1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbiJYPYa (ORCPT
+        with ESMTP id S232447AbiJYP1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:24:30 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6D32BB1A;
-        Tue, 25 Oct 2022 08:23:05 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4ECFF240003;
-        Tue, 25 Oct 2022 15:23:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1666711384;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qDzusZ9A8zw1jVXS4iAKbgJV8r3mCHdkLf1MyFvx4gk=;
-        b=WyQWk65ertDntaKhrGj2iEo9HpiA+d4viIf1ns4+LTjL95FFJj5RygO21qTem71T734nMU
-        XuFdPvOe3SmnjD1hJ+Z/cEwn0j4R4PsZlGPJ8Fldbt43ScGRbt0KWzH2gPCBXrdb7pMqCt
-        tmpzhW6N+nEO+LS8MnOFxA5edif7JHq89c1iXH4YiwaCcDLCNgJsNYWgM782c1EHXKwSN/
-        vu/Q6w3dgJv/6gDN43FtD61zcadhTxBb8NZ0ZAqiQo5xICYa89ushQMdyJzT3U3yg16Dtb
-        cP1yW44UuAwQD2fUa761qEcPQnDGHLAXciStnBRnV+Rv6AG2+zVCFLqtdyyYug==
-Date:   Tue, 25 Oct 2022 17:22:59 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>, mripard@kernel.org,
-        mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/11] media: cedrus: Add helper for checking capabilities
-Message-ID: <Y1f/U8NxyJo/pMAH@aptenodytes>
-References: <20221024201515.34129-1-jernej.skrabec@gmail.com>
- <20221024201515.34129-5-jernej.skrabec@gmail.com>
- <Y1eChJS/0aEchtpH@kadam>
- <13124586.uLZWGnKmhe@jernej-laptop>
+        Tue, 25 Oct 2022 11:27:19 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45EF2B262;
+        Tue, 25 Oct 2022 08:27:18 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29PEr5a8021511;
+        Tue, 25 Oct 2022 15:27:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=GGFbsnWykh4fbfGryO7D4Cga+is61229sObN4S+/oX0=;
+ b=bcCjSX83agkBJcPPBpR37y7efTEqxZZh53yevmVNe6AMdYnJ9HPT3wME5cduJrx3BRzE
+ TBWAXw3vsvbDrxKuLzz0I5f/CytfQlW88MC1vdyFPmsquLVR/LyyRHA/1vRDCzGx2KDG
+ lGG15qyaA7sCjthcwmkyL+8/88jcHIqnTroBPLlbn3YWGh+L/FLgC6hex18lY4ldd36r
+ UsGX9NGI9rd4y3jnn8/3C7cl/9hFEfGgocVxJyHVVoP2ysstRhcaBYHZsOtoDwG6lMKc
+ u6XTUfRtoYqYA9n82UGy2yhRxvNbOfpiWT/bUK8rrwKPv6D5pj7V8ZgZwiYEcGT0IrbB dA== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kee362q41-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Oct 2022 15:27:11 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29PFPPso002042;
+        Tue, 25 Oct 2022 15:27:09 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kc7sj5utx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Oct 2022 15:27:09 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29PFR7c445482344
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Oct 2022 15:27:07 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CE9D42045;
+        Tue, 25 Oct 2022 15:27:07 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B266642041;
+        Tue, 25 Oct 2022 15:27:06 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Oct 2022 15:27:06 +0000 (GMT)
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Muchun Song <songmuchun@bytedance.com>
+Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>
+Subject: [PATCH] selftests: vm: use 1 MB hugepage size for s390
+Date:   Tue, 25 Oct 2022 17:26:10 +0200
+Message-Id: <20221025152610.3439102-1-gerald.schaefer@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="W34rlajBUncxrU/f"
-Content-Disposition: inline
-In-Reply-To: <13124586.uLZWGnKmhe@jernej-laptop>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: tCPza0spCnqBsDU9_hqvLwgFi3o8ihpQ
+X-Proofpoint-GUID: tCPza0spCnqBsDU9_hqvLwgFi3o8ihpQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-25_08,2022-10-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=664
+ suspectscore=0 adultscore=0 mlxscore=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1011 phishscore=0
+ bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210250086
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+hugepage-vmemmap test fails for s390 because it assumes a hugepagesize
+of 2 MB, while we have 1 MB on s390. This results in iterating over two
+hugepages. If they are consecutive in memory, check_page_flags() will
+stumble over the additional head page. Otherwise, it will stumble over
+non-huge pageflags, after crossing the first 1 MB hugepage.
 
---W34rlajBUncxrU/f
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by using 1 MB MAP_LENGTH for s390.
 
-Hi Jernej,
+Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+---
+ tools/testing/selftests/vm/hugepage-vmemmap.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-On Tue 25 Oct 22, 17:17, Jernej =C5=A0krabec wrote:
-> Dne torek, 25. oktober 2022 ob 08:30:28 CEST je Dan Carpenter napisal(a):
-> > On Mon, Oct 24, 2022 at 10:15:08PM +0200, Jernej Skrabec wrote:
-> > > There is several different Cedrus cores with varying capabilities, so
-> > > some operations like listing formats depends on checks if feature is
-> > > supported or not.
-> > >=20
-> > > Currently check for capabilities is only in format enumeration helper,
-> > > but it will be used also elsewhere later. Let's convert this check to
-> > > helper and while at it, also simplify it. There is no need to check if
-> > > capability mask is zero, condition will still work properly.
-> >=20
-> > Sure.  That's true.  Out of curiousity, can cedrus_formats[i].capabilit=
-ies
-> > be zero?  Because it feels like that's what should be checked.
->=20
-> Yes, it can be. It's the case for V4L2_PIX_FMT_NV12_32L32. All variants=
-=20
-> supports it, so there is no special capability needed in order to be list=
-ed.=20
-> What would you check in such case? Condition still works for this case.
+diff --git a/tools/testing/selftests/vm/hugepage-vmemmap.c b/tools/testing/selftests/vm/hugepage-vmemmap.c
+index 557bdbd4f87e..a4695f138cec 100644
+--- a/tools/testing/selftests/vm/hugepage-vmemmap.c
++++ b/tools/testing/selftests/vm/hugepage-vmemmap.c
+@@ -11,7 +11,14 @@
+ #include <sys/mman.h>
+ #include <fcntl.h>
+ 
++/*
++ * 1 MB hugepage size for s390
++ */
++#if defined(__s390x__)
++#define MAP_LENGTH		(1UL * 1024 * 1024)
++#else
+ #define MAP_LENGTH		(2UL * 1024 * 1024)
++#endif
+ 
+ #ifndef MAP_HUGETLB
+ #define MAP_HUGETLB		0x40000	/* arch specific */
+-- 
+2.34.1
 
-I think the problem is that (bits & 0) =3D=3D 0 is always true.
-So if the input caps are 0, we need to make sure to return false.
-
-Cheers,
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---W34rlajBUncxrU/f
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmNX/1MACgkQ3cLmz3+f
-v9Hflwf/W2MqmRYak1O1TUFjnU5lVd99pw1YkGwToYlc9u+6GUXrUy0MBg0vXhOB
-o0P+HJNDhO1cRPqpTWcL3B3dJ13j0RhTHOGQNFVtkedHoWsRKM3OGCYHlGgMwGQm
-FBYMx7GgV6HkB3uox/fY60RAqYG42RWkm6h+lVwdb/771kNvEBDYX1U/rrQaLSCY
-uh/6uKNqO6EtUaLYI/ox+7C35G2DZepkHz+9miOY7KDdgXBloFKA+9t8OdjYx899
-KROzq5yjNk04Jbe3xFX9B2saxt8Y6OlxcElLKyZFBJ1NhjaGss14BToEH9etGQ/8
-6gSrdpjlnmrKeVQvEFKhIhKxx56bpw==
-=0zvP
------END PGP SIGNATURE-----
-
---W34rlajBUncxrU/f--
