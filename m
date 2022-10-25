@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 717B260C775
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D03EE60C7A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbiJYJGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
+        id S232365AbiJYJMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiJYJEv (ORCPT
+        with ESMTP id S231389AbiJYJMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:04:51 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB1015A336
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:03:56 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="307621657"
+        Tue, 25 Oct 2022 05:12:16 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9187916E28C;
+        Tue, 25 Oct 2022 02:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666688769; x=1698224769;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WVVNFnPd0rsSyjJKo6UrNXzcN+sjgjFC6IOZJD87/6A=;
+  b=LAHevOjD7FP5XSDucVRDn+I9/pZ9Yx/ONngsRoNuZk6VaQsgIzJ3JnOg
+   pIUapUFgjv5P1hRS5q7EFcfQDhVi83Ww4tMDEwOCInOPmVSY6rcjsBLLd
+   VhMuLfRbioBTfhqmICpzgb30aVaKMpDrfVeCzCyuhpvIYk368Lkr+uG5L
+   pxKoLUSp2z+4CnOn4ISvFRBzdhiVgIJDhGd71qpB6ZCdFv00g11o8aC4F
+   GdDPaZybAyDUCEg3nrCm7X4YhPGnQc48MVsyq39Ix7BMIk4rD+LHvUdUM
+   pkt1H2BrZKc8LNv8bwzCHihxzGVRvEljpqHZdaktOB5Peo3mU8LBVgxop
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="393943472"
 X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="307621657"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 02:03:56 -0700
+   d="scan'208";a="393943472"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 02:06:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="700469060"
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="664843110"
 X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="700469060"
+   d="scan'208";a="664843110"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 25 Oct 2022 02:03:41 -0700
+  by orsmga001.jf.intel.com with ESMTP; 25 Oct 2022 02:06:07 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1onFqW-001ukj-1p;
-        Tue, 25 Oct 2022 12:03:40 +0300
-Date:   Tue, 25 Oct 2022 12:03:40 +0300
-From:   Andy Shevchenko <andy@kernel.org>
-To:     Nathan Moinvaziri <nathan@nathanm.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] lib/string.c: Improve strcasecmp speed by not lowering
- if chars match
-Message-ID: <Y1embP5sEp/NPxK0@smile.fi.intel.com>
-References: <BYAPR06MB557347406F22FBA1E400A5BFD8319@BYAPR06MB5573.namprd06.prod.outlook.com>
- <CAHp75Vd4Vk0v-T3kfxApGHb-H26KTHgH59DGP3Wm4qBgunDt6A@mail.gmail.com>
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1onFsr-001uny-29;
+        Tue, 25 Oct 2022 12:06:05 +0300
+Date:   Tue, 25 Oct 2022 12:06:05 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v1 1/1] device property: Fix documentation for
+ *_match_string() APIs
+Message-ID: <Y1em/YJwcvLV4J05@smile.fi.intel.com>
+References: <20221006123807.37014-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHp75Vd4Vk0v-T3kfxApGHb-H26KTHgH59DGP3Wm4qBgunDt6A@mail.gmail.com>
+In-Reply-To: <20221006123807.37014-1-andriy.shevchenko@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:00:36AM +0300, Andy Shevchenko wrote:
-> On Tue, Oct 25, 2022 at 4:46 AM Nathan Moinvaziri <nathan@nathanm.com> wrote:
+On Thu, Oct 06, 2022 at 03:38:07PM +0300, Andy Shevchenko wrote:
+> The returned value on success is an index of the matching string,
+> starting from 0. Reflect this in the documentation.
+> 
+> Fixes: 3f5c8d318785 ("device property: Add fwnode_property_match_string()")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-...
-
-> > When running tests using Quick Benchmark with two matching 256 character
-> > strings these changes result in anywhere between ~6-9x speed improvement.
-> >
-> > * We use unsigned char instead of int similar to strncasecmp.
-> > * We only subtract c1 - c2 when they are not equal.
-
-...
-
-> You tell us that this is more preformant, but have not provided the
-> numbers. Can we see those, please?
-
-So, I have read carefully and see the reference to some QuickBenchmark I have
-no idea about. What I meant here is to have numbers provided by an (open
-source) tool (maybe even in-kernel test case) that anybody can test on their
-machines. You also missed details about how you run, what the data set has been
-used, etc.
-
-> Note, that you basically trash CPU cache lines when characters are not
-> equal, and before doing that you have a branching. I'm unsure that
-> your way is more performant than the original one.
+Is this gone through the cracks?
 
 -- 
 With Best Regards,
