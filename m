@@ -2,101 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1E660D303
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C7160D307
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbiJYSH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 14:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
+        id S232623AbiJYSHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 14:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbiJYSHT (ORCPT
+        with ESMTP id S232664AbiJYSHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:07:19 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430C3D2F3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:07:06 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id p3so10698653pld.10
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UaHvsuBeqGUDHNJwrHZu7I7KXYW+zqfgTqUGn6DC/xo=;
-        b=BrZrLWVB5VSJpkzOeZqV2YWZUWJDEwqbeQ1Nve9BZ4AAyOSYp43pwQEn1bBPMP1PUV
-         xFiQdrcQEowdrnFBqYSxGvy8VpMmBzyE2atFCIS/8/rs65U/DPt7ezxoUwSB7kqZU/LH
-         rZ4F/tlv0HbrYah5/V8rNIThPb6tiWOQcfTEg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UaHvsuBeqGUDHNJwrHZu7I7KXYW+zqfgTqUGn6DC/xo=;
-        b=AdjdWR06uN0h94SDhQVIhODdGKlvTnffoIvpXv2+UD6ZL9nZm7u16ttWMNd9k3zvhD
-         u2sUI2M1L41M65e6CLnINsiiCnxOJqfkiqYqstpfmczQHCTv1I7RDHQLWdHEe+zko+QH
-         QKBlyyuPmMdoGxmEYaW/7gQSbXxRSePMKtsJie60nNuWI9IIA+6oRJDl4qijdjS1Eufr
-         7je7sQwAuavSC5AppuVdicwL5mCQMyHIo3+2EG0XMTk8it9DWGBYav9wQc4NpTZd9/EZ
-         PUliAqCW4l0MUYT1/+BFxpc9FV2tfc8PRBlp+1k1SgY1swnRkJD7r47sKanbQTNKWutY
-         3aXA==
-X-Gm-Message-State: ACrzQf14TAllygOhs1YFKr6xS0p2sK3kOdnsDypVcU7u5SuMOg9l8fZb
-        I3uKAB84VaJodQ6L1TgpIIgZTg==
-X-Google-Smtp-Source: AMsMyM6KD70FiLQ2NY7/KT4ZdCgreGIg8amZ286q1tYd4ft48X6ah9dtxyQ5N7DjKGkH08gBYBnE6w==
-X-Received: by 2002:a17:902:d483:b0:182:cb98:26e8 with SMTP id c3-20020a170902d48300b00182cb9826e8mr39797221plg.73.1666721225601;
-        Tue, 25 Oct 2022 11:07:05 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:11a:201:97a:f22a:beab:58])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170902654800b001788ccecbf5sm1493786pln.31.2022.10.25.11.07.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 11:07:05 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH] arm64: dts: qcom: Remove fingerprint node from herobrine-r1
-Date:   Tue, 25 Oct 2022 11:07:03 -0700
-Message-Id: <20221025180703.1806234-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+        Tue, 25 Oct 2022 14:07:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436B331359;
+        Tue, 25 Oct 2022 11:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666721243; x=1698257243;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=VOpBFPiXCf+5fX6cR64v+oy3Xni2HfEQZgB+4zR/DtE=;
+  b=JJiYCWUGCCggS5hAAwpTiO3sPrDml0Z3DEcgWMYSUrlQp4q2+LdLJp6M
+   qyT0nnB6sowG9rSzhj3moh8yyD+P0NemxiaSizSPM+mU/RTfrE+csKDH3
+   AW+CRqH04yA+oydcBaEQwmzvCPPd3e2ZKErWzYo5nGEN7oiHuGitzFae/
+   3DNWWaxnAgIKUoue0X+Cc8v57HJAZLhQakrE73D5UtGQN8UV7Nr+hfZG8
+   wQIbbCZQkF10NLy1yRoy6qf1H9ogiAEacmru+HfcCa7I7qCszvaGD2R/K
+   vy7J3/EHLcVMYwxyYEY2kUq1ULVCa9aOt4eWlCDTmEgM84vFDMnR15tvE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="306483283"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="306483283"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 11:07:22 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="631722499"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="631722499"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 11:07:18 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 85AFE2026C;
+        Tue, 25 Oct 2022 21:07:16 +0300 (EEST)
+Date:   Tue, 25 Oct 2022 18:07:16 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Jacopo Mondi <jacopo@jmondi.org>
+Cc:     Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Marek Vasut <marex@denx.de>, Jimmy Su <jimmy.su@intel.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] media: i2c: add support for OV4689
+Message-ID: <Y1gl1FMAjhXCfCmk@paasikivi.fi.intel.com>
+References: <20221022162042.14113-1-mike.rudenko@gmail.com>
+ <20221022162042.14113-3-mike.rudenko@gmail.com>
+ <20221025130958.bnedjlkm6kmiluoe@uno.localdomain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025130958.bnedjlkm6kmiluoe@uno.localdomain>
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It turns out that only a few people have the fingerprint sensor hooked
-up on their board. Leaving this enabled is slowing down boot for
-everyone else because the driver slowly fails to probe while trying to
-communicate with a sensor that isn't there. Remove the node to speed up
-boot, developers with the board can manually enable it themselves.
+Hi Jacopo,
 
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts | 4 ----
- 1 file changed, 4 deletions(-)
+On Tue, Oct 25, 2022 at 03:09:58PM +0200, Jacopo Mondi wrote:
+> > +static int ov4689_configure_regulators(struct ov4689 *ov4689)
+> > +{
+> > +	unsigned int supplies_count = ARRAY_SIZE(ov4689_supply_names);
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-index c1a671968725..8d07401d852d 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dts
-@@ -47,10 +47,6 @@ &pp1200_wf_cam {
- 
- /* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
- 
--&ap_spi_fp {
--	status = "okay";
--};
--
- /*
-  * Although the trackpad is really part of the herobrine baseboard, we'll
-  * put the actual definition in the board device tree since different boards
+No need for a temporary variable.
 
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+> > +	unsigned int i;
+> > +
+> > +	for (i = 0; i < supplies_count; i++)
+> > +		ov4689->supplies[i].supply = ov4689_supply_names[i];
+> > +
+> > +	return devm_regulator_bulk_get(&ov4689->client->dev, supplies_count,
+> > +				       ov4689->supplies);
+> > +}
+> > +
+> > +static u64 ov4689_check_link_frequency(struct v4l2_fwnode_endpoint *ep)
+> > +{
+> > +	unsigned int freqs_count = ARRAY_SIZE(link_freq_menu_items);
+> > +	const u64 *freqs = link_freq_menu_items;
+> > +	unsigned int i, j;
+> > +
+> > +	for (i = 0; i < freqs_count; i++) {
+
+Ditto.
+
+> > +		for (j = 0; j < ep->nr_of_link_frequencies; j++)
+> > +			if (freqs[i] == ep->link_frequencies[j])
+> > +				return freqs[i];
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int ov4689_check_hwcfg(struct device *dev)
+> > +{
+> > +	struct fwnode_handle *fwnode = dev_fwnode(dev);
+> > +	struct v4l2_fwnode_endpoint bus_cfg = {
+> > +		.bus_type = V4L2_MBUS_CSI2_DPHY,
+> > +	};
+> > +	struct fwnode_handle *endpoint;
+> > +	int ret;
+> > +
+> > +	endpoint = fwnode_graph_get_next_endpoint(fwnode, NULL);
+> > +	if (!endpoint)
+> > +		return -EINVAL;
+> > +
+> > +	ret = v4l2_fwnode_endpoint_alloc_parse(endpoint, &bus_cfg);
+> > +	fwnode_handle_put(endpoint);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (bus_cfg.bus.mipi_csi2.num_data_lanes != OV4689_LANES) {
+> > +		dev_err(dev, "Only a 4-lane CSI2 config is supported");
+> > +		ret = -EINVAL;
+> > +		goto out_free_bus_cfg;
+> > +	}
+> > +
+> > +	if (!bus_cfg.nr_of_link_frequencies) {
+> > +		dev_err(dev, "No link frequencies defined\n");
+> > +		ret = -EINVAL;
+> > +		goto out_free_bus_cfg;
+> > +	}
+> 
+> As the driver has a single supported freq I wonder if it is required
+> to have it mandatory. I got contradictory feedbacks in the past, so
+> whatever you have here I guess it's fine (same reasoning goes for dts,
+> if there's only one accepted item, does it need to be made mandatory
+> ?)
+
+This check could indeed be removed, the one below already handles the case.
+
+The driver can be amended in the future to support additional frequencies.
+It probably requires more code here, too...
+
+I've got this in my tree, feel free to send a follow-up patch.
+
+> 
+> Nits apart, the driver looks sane
+> 
+> Reviewed-by: Jacopo Mondi <jacopo@jmondi.org>
+
+Thanks!
+
 -- 
-https://chromeos.dev
+Regards,
 
+Sakari Ailus
