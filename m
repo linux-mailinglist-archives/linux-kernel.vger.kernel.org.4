@@ -2,141 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3541B60C0A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48C0560C0A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiJYBLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S231447AbiJYBLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:11:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbiJYBKs (ORCPT
+        with ESMTP id S231375AbiJYBKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:10:48 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC766554C;
-        Mon, 24 Oct 2022 17:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666657256; x=1698193256;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=/1uaQ+xco441pDsJRiEwU9iBCQ5+D+oqZxL5Lt+sTaE=;
-  b=ArS8VSBKMNyJufwQQ38yigOc7LfBwJHNRcfxKkWBoKkBecBzmzwhK4hD
-   cRAsU7CeZyybsCoTYptqsxAEpAgBnuhKDE1BC8zP9YpC1QBie5pJ/+e8U
-   qfR2vq/waV3e+C2VFVGJklm0D/9Pjf3gtqvQKTjzRaQ4G7DJSrWlrayn9
-   tAD9zUkwpV78e9VOAptcF/tNU6MxxoInZy6ATQReGiRTCrfLuOtGgpgFA
-   ZiEAROrj1LIX/kHU6zS+Q05qKkJOdWjmctgjOrgWotbceTxnTJdHP9cj7
-   JKb0SQMz0cys3LnpFUQiOQOCGEm2mMSm6NYfwZ35MEhLfmnc04Tlmxqq+
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="290854992"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="290854992"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 17:20:55 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="720664409"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="720664409"
-Received: from bmahadev-mobl.amr.corp.intel.com (HELO [10.212.216.245]) ([10.212.216.245])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 17:20:54 -0700
-Message-ID: <0f4d9817-6a8a-225e-5322-db4fd9a4aabb@linux.intel.com>
-Date:   Mon, 24 Oct 2022 17:20:53 -0700
+        Mon, 24 Oct 2022 21:10:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AB77C1F1;
+        Mon, 24 Oct 2022 17:21:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBBD1B80EDF;
+        Tue, 25 Oct 2022 00:21:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE27C433D6;
+        Tue, 25 Oct 2022 00:21:23 +0000 (UTC)
+Date:   Mon, 24 Oct 2022 20:21:33 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH] text_poke/ftrace/x86: Allow text_poke() to be
+ called in early boot
+Message-ID: <20221024202133.38e0913e@gandalf.local.home>
+In-Reply-To: <CAHk-=wji4q7rGUWDLonnEnxq0ykNCcYGpMrNnZg89rAwOgyRKg@mail.gmail.com>
+References: <20221024190311.65b89ecb@gandalf.local.home>
+        <CAHk-=wji4q7rGUWDLonnEnxq0ykNCcYGpMrNnZg89rAwOgyRKg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [PATCH v15 2/3] virt: Add TDX guest driver
-To:     Dave Hansen <dave.hansen@intel.com>, Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20221020045828.2354731-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221020045828.2354731-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1De4IyAB6n2qs4V@kroah.com>
- <34ef18d6-69f8-853a-d1ba-7023822e17ff@linux.intel.com>
- <Y1Iimg0WItgIGq6/@kroah.com>
- <c09184e3-ac15-b230-6dea-d6718f6f0ab0@linux.intel.com>
- <f03f1db3-5e55-9606-1d0d-4d51213a0b1a@intel.com>
-Content-Language: en-US
-In-Reply-To: <f03f1db3-5e55-9606-1d0d-4d51213a0b1a@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+On Mon, 24 Oct 2022 17:11:13 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-On 10/24/22 7:17 AM, Dave Hansen wrote:
-> On 10/23/22 09:13, Sathyanarayanan Kuppuswamy wrote:
->> On 10/20/22 9:39 PM, Greg Kroah-Hartman wrote:
->>>>> You are allowing userspace to spam the kernel logs, please do not do
->>>>> that.
->>>> Added it to help userspace understand the reason for the failure (only for
->>>> the cases like request param issues and TDCALL failure). Boris recommended
->>>> adding it in the previous review.
->>> Again, you just created a vector for userspace to spam the kernel log.
->>> No kernel driver should ever do that.
->>>
->> Brois, any comments? Do you also agree?
-> ...
->> +	if (req.subtype || req.rpd_len != TDX_REPORTDATA_LEN ||
->> +	    req.tdr_len != TDX_REPORT_LEN) {
->> +		pr_err("TDX_CMD_GET_REPORT: invalid req: subtype:%u rpd_len:%u tdr_len:%u\n",
->> +		       req.subtype, req.rpd_len, req.tdr_len);
+> On Mon, Oct 24, 2022 at 4:03 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > This required some updates to fork and the maple_tree code to allow it to
+> > be called with enabling interrupts in the time when interrupts must remain
+> > disabled.  
 > 
-> This is _clearly_ debugging code.  There are a billion if(foo){return
-> -EINVAL;}'s in the kernel, and very few of them have printk()'s to go
-> along with them.
+> Yeah, moving special cases from one place to another doesn't really
+> help. Particularly to something as core as dup_mm().
 > 
-> They do help figure out what happened when userspace sees an -EINVAL and
-> can't figure out what it did to cause it.  But, if the kernel spammed
-> dmesg for every time userspace does something stupid, it'd be filled up
-> with noise.
+> All of this comes from "poking_init()" being a steaming pile of bovine
+> excrement, doing random odd things, and having that special
+> "copy_init_mm()" helper that just makes things even worse. Nothing
+> else uses that, and it shouldn't have called "dup_mm()" in the first
+> place.
 > 
-> There are other ways to debug stuff like this if userspace gets confused.
+> At this point, there is no actual user VM to even copy, so 99% of
+> everything that duip_mm() does is not just pointless, but actively
+> wrong, like the mmap_write_lock_nested() when we're in early boot.
 > 
-> If folks are OK with dev_dbg(), then I'd move over to that.  But,
-> frankly, I don't think this rises to the level of needing its own error
-> message.
-> 
-> Heck, I'm not even sure why this code exits in the first place.  I guess
-> we don't want userspace making random requests to the host.  But, of
-> course, none of _that_ information about what the code is actually there
-> for made it into the patch, and it just consumes comment space
-> regurgitating the TDX spec.
-> 
-> This branch of the thread frankly isn't about a pr_err().  It's about
-> nobody really knowing (or caring) why that line of code is there, when
-> it might happen, and what precise function it serves.
+> I'm not even sure why "poking_mm" exists at all, and why it has
+> created a whole new copy of "init_mm", and why this code isn't just
+> using '&init_mm' like everything else that wants to just walk the
+> kernel page tables.
 
-It is added to ensure the user does not make random requests and the user
-input aligns with the defined IOCTL ABI. Returning -EINVAL for the input
-parameter error will help userspace better understand the reason for the
-failure than failing after making the TDCALL request.
+It's not just walking the page tables, it's creating one that nobody else
+is using. Since we want to keep all executable code read only, the way
+text_poke() works is to create a new memory mapping where the pages it has
+isn't visible by anyone else (which is why it doesn't use init_mm). And
+then makes a mapping to the executable address as non executable and
+writable. Makes the update, and then removes the mapping.
 
-I have added the spec reference mainly for the reader to understand the
-origin of the checks involved. Would you prefer a comment like "Check for
-valid user input"?
+> 
+> Yes, I see that commit 4fc19708b165 ("x86/alternatives: Initialize
+> temporary mm for patching"), and no, none of that makes any sense to
+> me. It seems just (mis-)designed to fail.
+> 
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+It's all about updating read only pages that are executable with a shadow mm.
+
+-- Steve
