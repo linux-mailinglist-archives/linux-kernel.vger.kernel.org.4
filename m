@@ -2,237 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053FE60D015
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1999560D02C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbiJYPMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52558 "EHLO
+        id S233075AbiJYPSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbiJYPMw (ORCPT
+        with ESMTP id S231769AbiJYPS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:12:52 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941B84D4CC
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:12:51 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id sc25so13263565ejc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:12:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cfTgwcPBLwbZKDDAhKxlN0uuVa2x+7yfa+Nsh5SRev0=;
-        b=e8LPGaGhf75Q2EthCG38ILMvOQTQvfmTwyeYtWlXTtv0FnapDgYXE/OszEShowrpyp
-         w/G/rYG+TVezIljsfPIyc5nVvtZ+9VWW/ywq6sGcEtVzn3PuWEEayMhSN1lHO5vQDUOO
-         fDJPg+V0JGEHeNXb6uDIpY4rTDpTgmebyjr1woJ0zuny2cqQRwxGgYgj/gstydPRVrNL
-         VeN8OZPZXUx+l97fzofL7f7pWl7ZzDxYF5SltwDrxIkf3oqp/ScZ1ip6CQ8n60rIn5/b
-         c9KBEmrLJt6wfkWRFkB2ToOr6/Uly/hpaQfVrQm50MmuMerwThygc3xkFd1ENAuUspPs
-         /vMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cfTgwcPBLwbZKDDAhKxlN0uuVa2x+7yfa+Nsh5SRev0=;
-        b=4A207AncPAPJat2ItU+cASsMz/lpMTVgpiWDbr54vz7qozzNIitZ6nk0/Ei2cDufsr
-         AEyXhI6Uz8UkNr1wafJ63083iaBp2sXVZkKlk0IhXy7dEY1NkV894M+sh1m2Uih49ZBP
-         EyzvRGtRTIehEvfD8q3Yq7VCDtpzrLH7RvGx85LOL9VTMQpOTIu1t8cNUoRyt6uIhNRb
-         AI0le6sZfa5wGv5gyWNOsghadzTVkj4B1Hr8jw6RHUB/ip8xGHPJ/NNeFLSzNMErb/UT
-         WPcvY3e03MQmHli8g/5A7RWlfLgVpq6pmVgqxRHtuqp4SPogEJy8wv0y3S9YMcX/6gEM
-         pDOQ==
-X-Gm-Message-State: ACrzQf2Dn9F+YRekBagjopHqMWMupvMvjxHDtIKee/n3CDmRcON+Cx+o
-        qtDIwyokBaCWSJqHah7qA9KJhnxpy6zF2561LQM6bQ==
-X-Google-Smtp-Source: AMsMyM7wsIg6S7EZ/iGsv2e4/4pImQKgLdeqCG6cYZQlUNCkFd1t4pPaFzbXz9huRtlfmKP8rr7XmJ9Dh9vT62EdWW0=
-X-Received: by 2002:a17:906:fe45:b0:788:15a5:7495 with SMTP id
- wz5-20020a170906fe4500b0078815a57495mr33508976ejb.633.1666710769962; Tue, 25
- Oct 2022 08:12:49 -0700 (PDT)
+        Tue, 25 Oct 2022 11:18:26 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639EA188A94;
+        Tue, 25 Oct 2022 08:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666711105; x=1698247105;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=P0zL/XB8EN7WGMoEOO2wW14TpKmf0We0vI+i9XPBaLc=;
+  b=aec9CAcXMR/eZRBGa0IFh/ohi3Z0oAmt92tIIwTBfkJkS/nS5UGaaRdU
+   uISTH4CEsXXQ5AikSbB7pvJgPSGh3xJQ6E9HHf/V3QQmJW8yFdIdFjkMN
+   Spe7q9306oHI9OQzbWsPamrO4nQ5rOcsfV07ybk/pDdfJX2W+qb/U1ca/
+   sngDhQVLw+O5j4CRN1tKjblmCgqkLKSVAczfZFw5Puz77wE4+sihPX97J
+   vhUpa+iiqMvHuNBG6y2F7alDtAAK0lcS5UOjM+cqWX2u+wmlltAI50W4c
+   lKn39Y4mlFE8zQ1DQXIZ6kn0sA7VQGWq4H80Naqcb1fEfr1EysFAmJPD0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="394018792"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="394018792"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 08:18:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="736865431"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="736865431"
+Received: from chaop.bj.intel.com ([10.240.193.75])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Oct 2022 08:18:14 -0700
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Subject: [PATCH v9 0/8] KVM: mm: fd-based approach for supporting KVM
+Date:   Tue, 25 Oct 2022 23:13:36 +0800
+Message-Id: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221024113022.510008560@linuxfoundation.org>
-In-Reply-To: <20221024113022.510008560@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 25 Oct 2022 20:42:38 +0530
-Message-ID: <CA+G9fYt=P2ex2vsTFExOj=SuimYW3N42ejbSFN1RDB6Rh4EQ6g@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/390] 5.10.150-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 at 17:46, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.150 release.
-> There are 390 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.150-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+This patch series implements KVM guest private memory for confidential
+computing scenarios like Intel TDX[1]. If a TDX host accesses
+TDX-protected guest memory, machine check can happen which can further
+crash the running host system, this is terrible for multi-tenant
+configurations. The host accesses include those from KVM userspace like
+QEMU. This series addresses KVM userspace induced crash by introducing
+new mm and KVM interfaces so KVM userspace can still manage guest memory
+via a fd-based approach, but it can never access the guest memory
+content.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+The patch series touches both core mm and KVM code. I appreciate
+Andrew/Hugh and Paolo/Sean can review and pick these patches. Any other
+reviews are always welcome.
+  - 01: mm change, target for mm tree
+  - 02-08: KVM change, target for KVM tree
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Given KVM is the only current user for the mm part, I have chatted with
+Paolo and he is OK to merge the mm change through KVM tree, but
+reviewed-by/acked-by is still expected from the mm people.
 
-## Build
-* kernel: 5.10.150-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: b4f4370de958b2655d6a93d4fc386eed8fe36cd6
-* git describe: v5.10.149-391-gb4f4370de958
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.149-391-gb4f4370de958
+The patches have been verified in Intel TDX environment, but Vishal has
+done an excellent work on the selftests[4] which are dedicated for this
+series, making it possible to test this series without innovative
+hardware and fancy steps of building a VM environment. See Test section
+below for more info.
 
-## No Test Regressions (compared to v5.10.149)
 
-## No Metric Regressions (compared to v5.10.149)
+Introduction
+============
+KVM userspace being able to crash the host is horrible. Under current
+KVM architecture, all guest memory is inherently accessible from KVM
+userspace and is exposed to the mentioned crash issue. The goal of this
+series is to provide a solution to align mm and KVM, on a userspace
+inaccessible approach of exposing guest memory. 
 
-## No Test Fixes (compared to v5.10.149)
+Normally, KVM populates secondary page table (e.g. EPT) by using a host
+virtual address (hva) from core mm page table (e.g. x86 userspace page
+table). This requires guest memory being mmaped into KVM userspace, but
+this is also the source where the mentioned crash issue can happen. In
+theory, apart from those 'shared' memory for device emulation etc, guest
+memory doesn't have to be mmaped into KVM userspace.
 
-## No Metric Fixes (compared to v5.10.149)
+This series introduces fd-based guest memory which will not be mmaped
+into KVM userspace. KVM populates secondary page table by using a
+fd/offset pair backed by a memory file system. The fd can be created
+from a supported memory filesystem like tmpfs/hugetlbfs and KVM can
+directly interact with them with newly introduced in-kernel interface,
+therefore remove the KVM userspace from the path of accessing/mmaping
+the guest memory. 
 
-## Test result summary
-total: 127551, pass: 110248, fail: 1637, skip: 15380, xfail: 286
+Kirill had a patch [2] to address the same issue in a different way. It
+tracks guest encrypted memory at the 'struct page' level and relies on
+HWPOISON to reject the userspace access. The patch has been discussed in
+several online and offline threads and resulted in a design document [3]
+which is also the original proposal for this series. Later this patch
+series evolved as more comments received in community but the major
+concepts in [3] still hold true so recommend reading.
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 333 total, 333 passed, 0 failed
-* arm64: 65 total, 63 passed, 2 failed
-* i386: 55 total, 53 passed, 2 failed
-* mips: 56 total, 56 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 55 passed, 5 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 24 total, 24 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 58 total, 56 passed, 2 failed
+The patch series may also be useful for other usages, for example, pure
+software approach may use it to harden itself against unintentional
+access to guest memory. This series is designed with these usages in
+mind but doesn't have code directly support them and extension might be
+needed.
 
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
 
---
-Linaro LKFT
-https://lkft.linaro.org
+mm change
+=========
+Introduces a new memfd_restricted system call which can create memory
+file that is restricted from userspace access via normal MMU operations
+like read(), write() or mmap() etc and the only way to use it is
+passing it to a third kernel module like KVM and relying on it to
+access the fd through the newly added restrictedmem kernel interface.
+The restrictedmem interface bridges the memory file subsystems
+(tmpfs/hugetlbfs etc) and their users (KVM in this case) and provides
+bi-directional communication between them. 
+
+
+KVM change
+==========
+Extends the KVM memslot to provide guest private (encrypted) memory from
+a fd. With this extension, a single memslot can maintain both private
+memory through private fd (restricted_fd/restricted_offset) and shared
+(unencrypted) memory through userspace mmaped host virtual address
+(userspace_addr). For a particular guest page, the corresponding page in
+KVM memslot can be only either private or shared and only one of the
+shared/private parts of the memslot is visible to guest. For how this
+new extension is used in QEMU, please refer to kvm_set_phys_mem() in
+below TDX-enabled QEMU repo.
+
+Introduces new KVM_EXIT_MEMORY_FAULT exit to allow userspace to get the
+chance on decision-making for shared <-> private memory conversion. The
+exit can be an implicit conversion in KVM page fault handler or an
+explicit conversion from guest OS.
+
+Extends existing SEV ioctls KVM_MEMORY_ENCRYPT_{UN,}REG_REGION to
+convert a guest page between private <-> shared. The data maintained in
+these ioctls tells the truth whether a guest page is private or shared
+and this information will be used in KVM page fault handler to decide
+whether the private or the shared part of the memslot is visible to
+guest.
+
+
+Test
+====
+Ran two kinds of tests:
+  - Selftests [4] from Vishal and VM boot tests in non-TDX environment
+    Code also in below repo: https://github.com/chao-p/linux/tree/privmem-v9
+
+  - Functional tests in TDX capable environment
+    Tested the new functionalities in TDX environment. Code repos:
+    Linux: https://github.com/chao-p/linux/tree/privmem-v9-tdx
+    QEMU: https://github.com/chao-p/qemu/tree/privmem-v9
+
+    An example QEMU command line for TDX test:
+    -object tdx-guest,id=tdx,debug=off,sept-ve-disable=off \
+    -machine confidential-guest-support=tdx \
+    -object memory-backend-memfd-private,id=ram1,size=${mem} \
+    -machine memory-backend=ram1
+
+
+TODO
+====
+  - Page accounting and limiting for encrypted memory
+  - hugetlbfs support
+
+
+Changelog
+=========
+v9:
+  - mm: move inaccessible memfd into separated syscall.
+  - mm: return page instead of pfn_t for inaccessible_get_pfn and remove
+    inaccessible_put_pfn.
+  - KVM: rename inaccessible/private to restricted and CONFIG change to
+    make the code friendly to pKVM.
+  - KVM: add invalidate_begin/end pair to fix race contention and revise
+    the lock protection for invalidation path.
+  - KVM: optimize setting lpage_info for > 2M level by direct accessing
+    lower level's result.
+  - KVM: avoid load xarray in kvm_mmu_max_mapping_level() and instead let
+    the caller to pass in is_private.
+  - KVM: API doc improvement.
+v8:
+  - mm: redesign mm part by introducing a shim layer(inaccessible_memfd)
+    in memfd to avoid touch the memory file systems directly.
+  - mm: exclude F_SEAL_AUTO_ALLOCATE as it is for shared memory and
+    cause confusion in this series, will send out separately.
+  - doc: exclude the man page change, it's not kernel patch and will
+    send out separately.
+  - KVM: adapt to use the new mm inaccessible_memfd interface.
+  - KVM: update lpage_info when setting mem_attr_array to support
+    large page.
+  - KVM: change from xa_store_range to xa_store for mem_attr_array due
+    to xa_store_range overrides all entries which is not intended
+    behavior for us.
+  - KVM: refine the mmu_invalidate_retry_gfn mechanism for private page.
+  - KVM: reorganize KVM_MEMORY_ENCRYPT_{UN,}REG_REGION and private page
+    handling code suggested by Sean.
+v7:
+  - mm: introduce F_SEAL_AUTO_ALLOCATE to avoid double allocation.
+  - KVM: use KVM_MEMORY_ENCRYPT_{UN,}REG_REGION to record
+    private/shared info.
+  - KVM: use similar sync mechanism between zap/page fault paths as
+    mmu_notifier for memfile_notifier based invalidation.
+v6:
+  - mm: introduce MEMFILE_F_* flags into memfile_node to allow checking
+    feature consistence among all memfile_notifier users and get rid of
+    internal flags like SHM_F_INACCESSIBLE.
+  - mm: make pfn_ops callbacks being members of memfile_backing_store
+    and then refer to it directly in memfile_notifier.
+  - mm: remove backing store unregister.
+  - mm: remove RLIMIT_MEMLOCK based memory accounting and limiting.
+  - KVM: reorganize patch sequence for page fault handling and private
+    memory enabling.
+v5:
+  - Add man page for MFD_INACCESSIBLE flag and improve KVM API do for
+    the new memslot extensions.
+  - mm: introduce memfile_{un}register_backing_store to allow memory
+    backing store to register/unregister it from memfile_notifier.
+  - mm: remove F_SEAL_INACCESSIBLE, use in-kernel flag
+    (SHM_F_INACCESSIBLE for shmem) instead. 
+  - mm: add memory accounting and limiting (RLIMIT_MEMLOCK based) for
+    MFD_INACCESSIBLE memory.
+  - KVM: remove the overlap check for mapping the same file+offset into
+    multiple gfns due to perf consideration, warned in document.
+v4:
+  - mm: rename memfd_ops to memfile_notifier and separate it from
+    memfd.c to standalone memfile-notifier.c.
+  - KVM: move pfn_ops to per-memslot scope from per-vm scope and allow
+    registering multiple memslots to the same memory backing store.
+  - KVM: add a 'kvm' reference in memslot so that we can recover kvm in
+    memfile_notifier handlers.
+  - KVM: add 'private_' prefix for the new fields in memslot.
+  - KVM: reshape the 'type' to 'flag' for kvm_memory_exit
+v3:
+  - Remove 'RFC' prefix.
+  - Fix race condition between memfile_notifier handlers and kvm destroy.
+  - mm: introduce MFD_INACCESSIBLE flag for memfd_create() to force
+    setting F_SEAL_INACCESSIBLE when the fd is created.
+  - KVM: add the shared part of the memslot back to make private/shared
+    pages live in one memslot.
+
+Reference
+=========
+[1] Intel TDX:
+https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
+[2] Kirill's implementation:
+https://lore.kernel.org/all/20210416154106.23721-1-kirill.shutemov@linux.intel.com/T/ 
+[3] Original design proposal:
+https://lore.kernel.org/all/20210824005248.200037-1-seanjc@google.com/  
+[4] Selftest:
+https://lore.kernel.org/all/20220819174659.2427983-1-vannapurve@google.com/ 
+
+
+Chao Peng (7):
+  KVM: Extend the memslot to support fd-based private memory
+  KVM: Add KVM_EXIT_MEMORY_FAULT exit
+  KVM: Use gfn instead of hva for mmu_notifier_retry
+  KVM: Register/unregister the guest private memory regions
+  KVM: Update lpage info when private/shared memory are mixed
+  KVM: Handle page fault for private memory
+  KVM: Enable and expose KVM_MEM_PRIVATE
+
+Kirill A. Shutemov (1):
+  mm: Introduce memfd_restricted system call to create restricted user
+    memory
+
+ Documentation/virt/kvm/api.rst         |  88 ++++-
+ arch/x86/entry/syscalls/syscall_32.tbl |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl |   1 +
+ arch/x86/include/asm/kvm_host.h        |   8 +
+ arch/x86/kvm/Kconfig                   |   3 +
+ arch/x86/kvm/mmu/mmu.c                 | 170 +++++++++-
+ arch/x86/kvm/mmu/mmu_internal.h        |  14 +-
+ arch/x86/kvm/mmu/mmutrace.h            |   1 +
+ arch/x86/kvm/mmu/spte.h                |   6 +
+ arch/x86/kvm/mmu/tdp_mmu.c             |   3 +-
+ arch/x86/kvm/x86.c                     |   4 +-
+ include/linux/kvm_host.h               |  89 ++++-
+ include/linux/restrictedmem.h          |  62 ++++
+ include/linux/syscalls.h               |   1 +
+ include/uapi/asm-generic/unistd.h      |   5 +-
+ include/uapi/linux/kvm.h               |  38 +++
+ include/uapi/linux/magic.h             |   1 +
+ kernel/sys_ni.c                        |   3 +
+ mm/Kconfig                             |   4 +
+ mm/Makefile                            |   1 +
+ mm/restrictedmem.c                     | 250 ++++++++++++++
+ virt/kvm/Kconfig                       |   7 +
+ virt/kvm/kvm_main.c                    | 453 +++++++++++++++++++++----
+ 23 files changed, 1121 insertions(+), 92 deletions(-)
+ create mode 100644 include/linux/restrictedmem.h
+ create mode 100644 mm/restrictedmem.c
+
+
+base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
+-- 
+2.25.1
+
