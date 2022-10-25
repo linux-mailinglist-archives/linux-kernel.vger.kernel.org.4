@@ -2,114 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C7860CBFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A2060CC01
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231868AbiJYMhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S231937AbiJYMh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231921AbiJYMhZ (ORCPT
+        with ESMTP id S230193AbiJYMhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:37:25 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6244B188A8F;
-        Tue, 25 Oct 2022 05:37:22 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id w29so263639qtv.9;
-        Tue, 25 Oct 2022 05:37:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DEjQC8UwPSpJbdU9AEdKNSZFHoUYuJmVXV6mmwXFmnE=;
-        b=kPoaRQDk7c03OxLLlwxc/8TvgirLoU8gjI0HHW2VjngQ3RG+390WQ4sqxfBZlmM1Ct
-         R9wle9KvdhO4NfemC2o9Ec0DEX3rWoVPZmM4JZoWl1oC63Kgalkn5uopv7vXQzca8XR4
-         nOLjNv4S5H0oEi3uflSndg9wet7UF0CrBx+zUIAmckCRO35KE3aCCbuk/ZhjOpt442uE
-         F2SzG6fffYfzeztkET3uTivkslDy061lir5Z5Gza/Hp305tpDn63BnFcEDgSsqMub9zB
-         0L4jzT/tk0NCivB48vSC0ZvczO99X1TDDJRJH6DJU7f8p29cd3ASqq8CbF6wX+Qb8mCV
-         yNqw==
-X-Gm-Message-State: ACrzQf14jH4zgyRTdjFTDGHBapHMfQNL1tBhgVUiehq3BRyNeLae0toV
-        n5cEuIgObrDOCSSyhBr1FuP0cVXcgWeW0Q==
-X-Google-Smtp-Source: AMsMyM6fy6Pk9aSnxvpfj4ewVzTeuNY4HOgACqJEkX2PwEBilrcbv7P5dWvPqGTVm2je/ZXnL4P5mA==
-X-Received: by 2002:a05:622a:49:b0:39c:e83e:8839 with SMTP id y9-20020a05622a004900b0039ce83e8839mr30682325qtw.424.1666701441266;
-        Tue, 25 Oct 2022 05:37:21 -0700 (PDT)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id g3-20020ac87d03000000b00342f8984348sm1570874qtb.87.2022.10.25.05.37.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 05:37:19 -0700 (PDT)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-369426664f9so111664067b3.12;
-        Tue, 25 Oct 2022 05:37:19 -0700 (PDT)
-X-Received: by 2002:a0d:de43:0:b0:349:31bd:e8d5 with SMTP id
- h64-20020a0dde43000000b0034931bde8d5mr32925900ywe.283.1666701438736; Tue, 25
- Oct 2022 05:37:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221017091201.199457-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20221017091201.199457-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20221017091201.199457-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 25 Oct 2022 14:37:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXuiCne2NvCzu8x9LeM_W8rxwLX-0w=kHnGa30bdzFaDQ@mail.gmail.com>
-Message-ID: <CAMuHMdXuiCne2NvCzu8x9LeM_W8rxwLX-0w=kHnGa30bdzFaDQ@mail.gmail.com>
-Subject: Re: [RFC RESEND PATCH 2/2] arm64: dts: renesas: r9a07g043: Split out
- RZ/G2UL SoC specific parts
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Tue, 25 Oct 2022 08:37:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51430188A89
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666701473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=boAr6JkR73ssS+S6gWh1SUDS3IyoLaLW/9nsvQotYJ4=;
+        b=Plw3PKLlokhCzxUMkKXA8sRXvMhS/3v8eXwgNySrhWb+eEPAoOm396bh0jXFU/C4W7MBln
+        4LakJJs6fBVKj8cZO3XXuzi7mJlhGzaayFPiUWN4GtIfYbRixyjzIJAPVh53H9yjY4I/p6
+        ewYQH/sqrfG97f0i1EDb8AUsy9e8sno=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-470-QTzcfl6kMFSkPo91IvFfWQ-1; Tue, 25 Oct 2022 08:37:52 -0400
+X-MC-Unique: QTzcfl6kMFSkPo91IvFfWQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE10D380671E;
+        Tue, 25 Oct 2022 12:37:51 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 737352166B2A;
+        Tue, 25 Oct 2022 12:37:51 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Bandan Das <bsd@redhat.com>,
         linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] KVM: vmx/nested: avoid blindly setting SECONDARY_EXEC_ENCLS_EXITING when sgx is enabled
+Date:   Tue, 25 Oct 2022 08:37:49 -0400
+Message-Id: <20221025123749.2201649-1-eesposit@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Currently vmx enables SECONDARY_EXEC_ENCLS_EXITING even when sgx
+is not set in the host MSR.
 
-On Mon, Oct 17, 2022 at 11:12 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Move RZ/G2UL SoC specific parts to r9a07g043u.dtsi so that r9a07g043.dtsi
-> can be shared with RZ/Five (RISC-V SoC).
->
-> Below are the changes due to which SoC specific parts are moved to
-> r9a07g043u.dtsi:
-> - RZ/G2UL has Cortex-A55 (ARM64) whereas the RZ/Five has AX45MP (RISC-V)
-> - RZ/G2UL has GICv3 as interrupt controller whereas the RZ/Five has PLIC
-> - RZ/G2UL has interrupts for SYSC block whereas interrupts are missing
->   for SYSC block on RZ/Five
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+When booting a guest, KVM checks that the cpuid bit is actually set
+in vmx.c, and if not, it does not enable the feature.
 
-Thanks for your patch!
+However, in nesting this control bit is blindly set, and will be
+propagated to VMCS12 and VMCS02. Therefore, when L1 tries to boot
+the guest, the host will try to execute VMLOAD with VMCS02 containing
+a feature that the hardware does not support, making it fail with
+hardware error 0x7.
 
-This assumes the operating points tables are the same for both variants?
-I guess that's OK.
+According to section "Secondary Processor-Based VM-Execution Controls"
+in the Intel SDM, software should *always* check the value in the
+actual MSR_IA32_VMX_PROCBASED_CTLS2 before enabling this bit.
 
-Overall, LGTM.
+Not updating enable_sgx is responsible for a second bug:
+vmx_set_cpu_caps() doesn't clear the SGX bits when hardware support is
+unavailable.  This is a much less problematic bug as it only pops up
+if SGX is soft-disabled (the case being handled by cpu_has_sgx()) or if
+SGX is supported for bare metal but not in the VMCS (will never happen
+when running on bare metal, but can theoertically happen when running in
+a VM).
 
-Gr{oetje,eeting}s,
+Last but not least, KVM should ideally have module params reflect KVM's
+actual configuration.
 
-                        Geert
+RHBZ: https://bugzilla.redhat.com/show_bug.cgi?id=2127128
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Fixes: 72add915fbd5 ("KVM: VMX: Enable SGX virtualization for SGX1, SGX2 and LC")
+Cc: stable@vger.kernel.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Suggested-by: Bandan Das <bsd@redhat.com>
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ arch/x86/kvm/vmx/vmx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 9dba04b6b019..ea0c65d3c08a 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -8263,6 +8263,11 @@ static __init int hardware_setup(void)
+ 	if (!cpu_has_virtual_nmis())
+ 		enable_vnmi = 0;
+ 
++	#ifdef CONFIG_X86_SGX_KVM
++		if (!cpu_has_vmx_encls_vmexit())
++			enable_sgx = false;
++	#endif
++
+ 	/*
+ 	 * set_apic_access_page_addr() is used to reload apic access
+ 	 * page upon invalidation.  No need to do anything if not
+-- 
+2.31.1
+
