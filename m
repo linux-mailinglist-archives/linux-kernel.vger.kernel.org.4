@@ -2,110 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AC460C9E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541C660C9E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiJYKWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S232438AbiJYKWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbiJYKVe (ORCPT
+        with ESMTP id S232435AbiJYKVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:21:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A221290AC
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:18:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666693131;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=SXA47cu2kRp4Fi4dLuQ4em2pKNdxxQ8Fg0d1TX3Qq34=;
-        b=N4T2RBJTlEZV5ZRcxVlLEidUeDMHSGjgQNL0m9LHfKuuYUGS1c3t7jvbD/oEnqo/P8mO6L
-        5Gs494d50zqX16sWt4+dWgsDl9Mek7UxTFMLZ29wx6i8s5knzJ9q9L9zpY8LYLjx8avpV+
-        asChgPBDUdroqhqh6pNjX5BRWX6N9Tk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-438-D5fbiyQzPcKxNoCBN36U-w-1; Tue, 25 Oct 2022 06:18:50 -0400
-X-MC-Unique: D5fbiyQzPcKxNoCBN36U-w-1
-Received: by mail-wm1-f72.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso437372wmb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:18:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SXA47cu2kRp4Fi4dLuQ4em2pKNdxxQ8Fg0d1TX3Qq34=;
-        b=aX42Zr/RTptHiy1Uo7XtNi1wp1KHj2aIDJZYoJZNubEnCUcuHUekxE9PVHL/fMbRt2
-         3jru85ciA7Dtcm7wfH8ZGjCsp8Q6x5X7elxgZ2+l5tXQMrkcgowTDpLXciu3YbUzU31k
-         DjtfQWzG8ddmpJD5GRe1vx3mvxcYdxQRPzjPhgw2vLhbNMiMbzc2BbunSHdyB/5+YEuP
-         Pcsgei8cbcGeoXz7H5VaGvSO10tEMMDYVYQ6KARuo32MsXZ5q7MvlE1Wg2p3pDNjHHPC
-         cVT+FAaKpMQ3dxlNNv2VTKQelIbOWoUx3yaCYrSXsbsfH4P2/SXQQftF2XFAGj0hm6yq
-         mMPQ==
-X-Gm-Message-State: ACrzQf2LMiVxGvG7v+7eIb53gVaBS7qalAy89RDqyKSKQ/7Gi1874qnX
-        yvlcXwjf3tqK8PoJJhmaFCkwhQsoQ1GQwPuwnaPeqj7aBkAes1QGuqYYkWj/UAfOiM5uHKyMC3c
-        0/6l+6HcZhWS0D5nPL2datzQI
-X-Received: by 2002:a05:600c:468a:b0:3c6:f1ae:3e95 with SMTP id p10-20020a05600c468a00b003c6f1ae3e95mr25551266wmo.152.1666693129119;
-        Tue, 25 Oct 2022 03:18:49 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6puwz/55DZ3rXyf9X2tFB3ea5/Zm1rwqyhGbqCvzGWOzYvH36S16hJRbfVGi0WMwv6B0ixsg==
-X-Received: by 2002:a05:600c:468a:b0:3c6:f1ae:3e95 with SMTP id p10-20020a05600c468a00b003c6f1ae3e95mr25551249wmo.152.1666693128920;
-        Tue, 25 Oct 2022 03:18:48 -0700 (PDT)
-Received: from p1.Home ([2001:8a0:672b:1200:af07:c9d2:aa37:4cdd])
-        by smtp.gmail.com with ESMTPSA id bo9-20020a056000068900b00228a6ce17b4sm2222525wrb.37.2022.10.25.03.18.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 03:18:48 -0700 (PDT)
-From:   Eric Curtin <ecurtin@redhat.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Eric Curtin <ecurtin@redhat.com>,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        speakup@linux-speakup.org (open list:SPEAKUP CONSOLE SPEECH DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] speakup: include types.h so u_char is a known type
-Date:   Tue, 25 Oct 2022 11:18:24 +0100
-Message-Id: <20221025101828.1626490-1-ecurtin@redhat.com>
-X-Mailer: git-send-email 2.37.3
+        Tue, 25 Oct 2022 06:21:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2558713669F;
+        Tue, 25 Oct 2022 03:18:47 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 38415660239C;
+        Tue, 25 Oct 2022 11:18:45 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666693125;
+        bh=oPF1o7oWPbryY18wvQiyqLyaSGkoOyYT6E+3DLkyLxs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=aNxRpUtzvLMgc0F9bQ4w3Pla8RcdaRHv8Cryqkg+evUgzf2jE9kuUy6pcnO1hkucl
+         Jxs+diruWGkYOA5oU2Ydei2qtQTk2zOPW8nOwQ9P6wgrPpb1tnG0ghdJUGwuzOoFA4
+         +OuqXMVALz5ew3SouzOGDkE75nmFAkIzvs5/N7157pve+pFQ72TchQWZvqYE0G2ywj
+         XP9Ek3H4XfIEHoEw6kSfPSsCX0Im0z7EL2shxzG0l9lTgD2le5qep7g43dQBdxqEse
+         4kvlwIAGfvJBU13l1Y3aXlo/y8+BThw2hlbrBHzTRyfMALtthobTNh9w44it19NZhX
+         bYp2HlOWhlALQ==
+Message-ID: <473d67ed-198f-82c6-9f32-5827c1f8c852@collabora.com>
+Date:   Tue, 25 Oct 2022 12:18:43 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 03/12] ASoC: mediatek: mt8188: support audsys clock
+Content-Language: en-US
+To:     =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "tiwai@suse.com" <tiwai@suse.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20221021082719.18325-1-trevor.wu@mediatek.com>
+ <20221021082719.18325-4-trevor.wu@mediatek.com>
+ <de66f0e3-7694-7315-c896-9211259a1a17@collabora.com>
+ <776557c0fda5a538549ee0d4f4b7f482b0d69934.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <776557c0fda5a538549ee0d4f4b7f482b0d69934.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes build of utils.h header file, occurred when building kernel on
-postmarketOS on Lenovo Duet Chromebook.
+Il 21/10/22 11:58, Trevor Wu (吳文良) ha scritto:
+> On Fri, 2022-10-21 at 10:41 +0200, AngeloGioacchino Del Regno wrote:
+>> Il 21/10/22 10:27, Trevor Wu ha scritto:
+>>> Add mt8188 audio cg clock control. Audio clock gates are registered
+>>> to CCF
+>>> for reference count and clock parent management.
+>>>
+>>> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+>>> ---
+>>>    sound/soc/mediatek/mt8188/mt8188-audsys-clk.c | 206
+>>> ++++++++++++++++++
+>>>    sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |  15 ++
+>>>    .../soc/mediatek/mt8188/mt8188-audsys-clkid.h |  83 +++++++
+>>>    3 files changed, 304 insertions(+)
+>>>    create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+>>>    create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.h
+>>>    create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-
+>>> clkid.h
+>>>
+>>> diff --git a/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+>>> b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+>>> new file mode 100644
+>>> index 000000000000..1f294231d4c2
+>>> --- /dev/null
+>>> +++ b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
+>>> @@ -0,0 +1,206 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * mt8188-audsys-clk.c  --  MediaTek 8188 audsys clock control
+>>> + *
+>>> + * Copyright (c) 2022 MediaTek Inc.
+>>> + * Author: Chun-Chia Chiu <chun-chia.chiu@mediatek.com>
+>>> + */
+>>> +
+>>> +#include <linux/clk.h>
+>>> +#include <linux/clk-provider.h>
+>>> +#include <linux/clkdev.h>
+>>> +#include "mt8188-afe-common.h"
+>>> +#include "mt8188-audsys-clk.h"
+>>> +#include "mt8188-audsys-clkid.h"
+>>> +#include "mt8188-reg.h"
+>>> +
+>>> +struct afe_gate {
+>>> +	int id;
+>>> +	const char *name;
+>>> +	const char *parent_name;
+>>> +	int reg;
+>>> +	u8 bit;
+>>> +	const struct clk_ops *ops;
+>>> +	unsigned long flags;
+>>> +	u8 cg_flags;
+>>> +};
+>>> +
+>>> +#define GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit, _flags,
+>>> _cgflags) {\
+>>> +		.id = _id,					\
+>>> +		.name = _name,					\
+>>> +		.parent_name = _parent,				\
+>>> +		.reg = _reg,					\
+>>> +		.bit = _bit,					\
+>>> +		.flags = _flags,				\
+>>> +		.cg_flags = _cgflags,				\
+>>> +	}
+>>> +
+>>> +#define GATE_AFE(_id, _name, _parent, _reg, _bit)		\
+>>> +	GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit,		\
+>>> +		       CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
+>>> CLK_GATE_SET_TO_DISABLE)
+>>
+>> Can you please explain what's the reason for CLK_IGNORE_UNUSED here?
+>> Maybe we can solve some issue that you're facing in a cleaner way.
+>>
+>> Regards,
+>> Angelo
+> 
+> Hi Angelo,
+> 
+> Because clk_disable_unused() calls clk_core_is_enabled(), register
+> access happens in is_enabled() ops.
+> At the moment, the power for register access is not enabled, so the
+> register read results in CPU hang.
+> 
+> That's why I added CLK_IGNORE_UNUSED here, but it can't resolve all
+> issues. Actually, we met same problem when "cat
+> /sys/kernel/debug/clk/clk_summary" is used. We are still suffering the
+> problem.
+> 
+> I'm not sure if I can implement clk ops by myself, and exclude the
+> registration of is_enabled() ops.
+> 
 
-  drivers/accessibility/speakup/utils.h:57:9: error: unknown type name 'u_char'; did you mean 'char'?
-     57 |         u_char *pn = (u_char *)name;
-        |         ^~~~~~
-        |         char
+Is the power for register access enabled with a power domain?
 
-Fixes: 6a5c94d92699 ("speakup: Generate speakupmap.h automatically")
-Signed-off-by: Eric Curtin <ecurtin@redhat.com>
----
- drivers/accessibility/speakup/utils.h | 1 +
- 1 file changed, 1 insertion(+)
+Check drivers/clk/clk.c, grep for core->rpm_enabled.
 
-diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
-index 4bf2ee8ac246..f6fe477ecb28 100644
---- a/drivers/accessibility/speakup/utils.h
-+++ b/drivers/accessibility/speakup/utils.h
-@@ -7,6 +7,7 @@
-  */
- 
- #include <stdio.h>
-+#include <sys/types.h>
- 
- #define MAXKEYS 512
- #define MAXKEYVAL 160
--- 
-2.37.3
+If you enable runtime PM before registering the clocks, and you register them
+with the right struct device, the clock API will enable power for you before
+trying to read the clock enable status.
+
+Regards,
+Angelo
 
