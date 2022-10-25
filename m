@@ -2,116 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9D460D75B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEA360D762
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232762AbiJYWqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
+        id S232572AbiJYWw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbiJYWqc (ORCPT
+        with ESMTP id S231646AbiJYWwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:46:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2626F645D1;
-        Tue, 25 Oct 2022 15:46:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B670961BE6;
-        Tue, 25 Oct 2022 22:46:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3603C433D7;
-        Tue, 25 Oct 2022 22:46:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666737991;
-        bh=xuwXU/xzYbZWh4izFdRc2XO711LNwKWbdij0r5R4HJk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DhCzaWwtjx9YxM+RmzWmbKX61JVVpMOldDYrol+a97KY8uhcHPvd2vAb8lO1tQ2C2
-         T4RrgSSEChiQx4R3ZkXlzrCiMDqL4YxgLes+c3UMmn6ujc66KLymKB7l0LQ6MpyPeV
-         vPG5kbuVYMXkR+bhtJaRptY0s0261tBLIYC56mZuG0Zh9Ex8+QY523ufSIgjeY3TIV
-         tMIQYs7Jo8uNlDlpdcFjPjl90WhH2p8/HpiSIJPgQSjCDRcUMM5sNDCbIsp8D/r4+M
-         D0+28IwWkgQKyxBht6UfKxENF7v/zb5f8e81SpmNnnKg1+8Wb2umNeXsSBBFWymslA
-         BwbPjITjUEeAQ==
-Date:   Tue, 25 Oct 2022 17:46:29 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     linux-pci@vger.kernel.org
-Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH] PCI/PM: Remove unused 'state' parameter to
- pci_legacy_suspend_late()
-Message-ID: <20221025224629.GA694877@bhelgaas>
+        Tue, 25 Oct 2022 18:52:24 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6A4237F6;
+        Tue, 25 Oct 2022 15:52:23 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id 192so6277108pfx.5;
+        Tue, 25 Oct 2022 15:52:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dscgs+ydXpa+zSr9O18VpmGVPw+9ObsVjtPwWI+z0tQ=;
+        b=YpEuvcynWg6m4SNXhwiG02g9kX1rwoHcG5XAO5DXI5N1CjhuOjLvY2ZDo2dBun5MYl
+         DpQkxtb+C4v0TiMyk3xrsZKr94rK6c1LoKqDTURSIOzNw1JwLhfvQMyQwaUQlZfZyKqL
+         eqayQ8KDxmUAqbZxoAYiu7dZQCcPmiX1IX1jbFtOcbcpMIO202acV54izcEUekE0Th5b
+         PFXfqYsIThxQcVU6KgoooAr7KoXWR2cA6IhxGupbPZTRogPhNcVsLLDS0ReUN65sqPDF
+         ls9rufg6MPOe2epBvJMi0I5IZkvvW/hXL6EJ4B4/Q5jB1Pf7ldQqH0sU2jyCUaW4ao7U
+         +pJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dscgs+ydXpa+zSr9O18VpmGVPw+9ObsVjtPwWI+z0tQ=;
+        b=oOT0CeH6AZvHoylZL7WUR9Lr37K5Hu6hYb4yc9IiFOdWBCa9QI8vf8ByRRxoize5Yd
+         YAtVg5iriwmjJLDmxv5UJ1vBhUCZ7JEQLkN66qOUX81igzUu7xhl1rP37nSk1D6mh0Kx
+         Pex/kWHPZdRFRXcJm5mzHig+uLZOYct9/C0FdKj4G4UXKZLup8/rVkXz8gurtON5PvQg
+         V8z4oxkaM9KjEMeTR2CTfWq0FodWde3Gyqrd/6DzTdjzE9+UQ4v7vE+mwePKI/mQZSKQ
+         IlSuz8yJd3iSjOranFjwiHySDpT7K/p9BGKclgm2GKOZUEodn8GvJ29FYo4PXD9bin4N
+         9q/A==
+X-Gm-Message-State: ACrzQf1uCK4gq3rymIfXd2zj7n7ZTkN723S7wDdaLy9+TSOyJBb8dMFr
+        wEqGlLpiLS9s6/E7jehQ9oI=
+X-Google-Smtp-Source: AMsMyM7p6gWAuxiYfm8U+Y/0FXoYG7KaQBMzcSl5jlvs7QKCqfk4eaNintgPpBQGcNis1bmNDJ/VsQ==
+X-Received: by 2002:a05:6a00:234d:b0:561:f0c3:cde1 with SMTP id j13-20020a056a00234d00b00561f0c3cde1mr41159268pfj.34.1666738342857;
+        Tue, 25 Oct 2022 15:52:22 -0700 (PDT)
+Received: from macbook-pro-4.dhcp.thefacebook.com ([2620:10d:c090:500::5:9233])
+        by smtp.gmail.com with ESMTPSA id 131-20020a621989000000b00561cf757749sm1834754pfz.183.2022.10.25.15.52.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 15:52:22 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 15:52:19 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH hid v11 02/14] HID: initial BPF implementation
+Message-ID: <20221025225219.i3pi7ewue6xqeig4@macbook-pro-4.dhcp.thefacebook.com>
+References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
+ <20221025093458.457089-3-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025193502.669091-1-helgaas@kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221025093458.457089-3-benjamin.tissoires@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 02:35:02PM -0500, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> 1a1daf097e21 ("PCI/PM: Remove unused pci_driver.suspend_late() hook")
-> removed the legacy .suspend_late() hook, which was the only user of the
-> "state" parameter to pci_legacy_suspend_late(), but it neglected to remove
-> the parameter.
-> 
-> Remove the unused "state" parameter to pci_legacy_suspend_late().
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+On Tue, Oct 25, 2022 at 11:34:46AM +0200, Benjamin Tissoires wrote:
+>  include/linux/hid.h                           |   5 +
+>  include/linux/hid_bpf.h                       | 102 +++
+>  include/uapi/linux/hid_bpf.h                  |  25 +
+>  tools/include/uapi/linux/hid.h                |  62 ++
+>  tools/include/uapi/linux/hid_bpf.h            |  25 +
 
-Applied with Rafael's ack to pci/pm for v6.2.
+...
 
-> ---
->  drivers/pci/pci-driver.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index 107d77f3c846..a2ceeacc33eb 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -646,7 +646,7 @@ static int pci_legacy_suspend(struct device *dev, pm_message_t state)
->  	return 0;
->  }
->  
-> -static int pci_legacy_suspend_late(struct device *dev, pm_message_t state)
-> +static int pci_legacy_suspend_late(struct device *dev)
->  {
->  	struct pci_dev *pci_dev = to_pci_dev(dev);
->  
-> @@ -848,7 +848,7 @@ static int pci_pm_suspend_noirq(struct device *dev)
->  		return 0;
->  
->  	if (pci_has_legacy_pm_support(pci_dev))
-> -		return pci_legacy_suspend_late(dev, PMSG_SUSPEND);
-> +		return pci_legacy_suspend_late(dev);
->  
->  	if (!pm) {
->  		pci_save_state(pci_dev);
-> @@ -1060,7 +1060,7 @@ static int pci_pm_freeze_noirq(struct device *dev)
->  	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
->  
->  	if (pci_has_legacy_pm_support(pci_dev))
-> -		return pci_legacy_suspend_late(dev, PMSG_FREEZE);
-> +		return pci_legacy_suspend_late(dev);
->  
->  	if (pm && pm->freeze_noirq) {
->  		int error;
-> @@ -1179,7 +1179,7 @@ static int pci_pm_poweroff_noirq(struct device *dev)
->  		return 0;
->  
->  	if (pci_has_legacy_pm_support(pci_dev))
-> -		return pci_legacy_suspend_late(dev, PMSG_HIBERNATE);
-> +		return pci_legacy_suspend_late(dev);
->  
->  	if (!pm) {
->  		pci_fixup_device(pci_fixup_suspend_late, pci_dev);
-> -- 
-> 2.25.1
-> 
+> +++ b/include/linux/hid_bpf.h
+> @@ -0,0 +1,102 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +
+> +#ifndef __HID_BPF_H
+> +#define __HID_BPF_H
+> +
+> +#include <linux/spinlock.h>
+> +#include <uapi/linux/hid.h>
+> +#include <uapi/linux/hid_bpf.h>
+> +
+> +struct hid_device;
+> +
+> +/*
+> + * The following is the HID BPF API.
+> + *
+> + * It should be treated as UAPI, so extra care is required
+> + * when making change to this file.
+> + */
+
+I thought at the maintainer summit we discussed that it shouldn't be
+treated as uapi. There is no need to draw this line right now.
+If the whole concept turns out to be useful and api is stable
+then promote it.
+
+> +++ b/include/uapi/linux/hid_bpf.h
+> @@ -0,0 +1,25 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +
+> +#ifndef _UAPI_HID_BPF_H
+> +#define _UAPI_HID_BPF_H
+> +
+> +#include <linux/const.h>
+> +#include <linux/hid.h>
+> +
+> +/**
+> + * enum hid_bpf_attach_flags - flags used when attaching a HIF-BPF program
+> + *
+> + * @HID_BPF_FLAG_NONE: no specific flag is used, the kernel choses where to
+> + *                     insert the program
+> + * @HID_BPF_FLAG_INSERT_HEAD: insert the given program before any other program
+> + *                            currently attached to the device. This doesn't
+> + *                            guarantee that this program will always be first
+> + * @HID_BPF_FLAG_MAX: sentinel value, not to be used by the callers
+> + */
+> +enum hid_bpf_attach_flags {
+> +	HID_BPF_FLAG_NONE = 0,
+> +	HID_BPF_FLAG_INSERT_HEAD = _BITUL(0),
+> +	HID_BPF_FLAG_MAX,
+> +};
+> +
+> +#endif /* _UAPI_HID_BPF_H */
+
+Not sure what is the purpose of this uapi file.
+Since it's enum the progs can get it from vmlinux.h.
+
+> diff --git a/tools/include/uapi/linux/hid.h b/tools/include/uapi/linux/hid.h
+> new file mode 100644
+> index 000000000000..3e63bea3b3e2
+> --- /dev/null
+> +++ b/tools/include/uapi/linux/hid.h
+> @@ -0,0 +1,62 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ WITH Linux-syscall-note */
+> +/*
+> + *  Copyright (c) 1999 Andreas Gal
+> + *  Copyright (c) 2000-2001 Vojtech Pavlik
+> + *  Copyright (c) 2006-2007 Jiri Kosina
+> + */
+> +#ifndef _UAPI__HID_H
+> +#define _UAPI__HID_H
+
+This is a copy of include/uapi/linux/hid.h ?
+Probably should be a separate commit to make it obvious.
