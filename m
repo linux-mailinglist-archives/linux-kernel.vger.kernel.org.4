@@ -2,276 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFA160CCDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FA860CCE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiJYNDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
+        id S231511AbiJYNDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiJYNCR (ORCPT
+        with ESMTP id S229995AbiJYNDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:02:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEA7AD990
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:00:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 528B66191A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 13:00:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C03C433C1;
-        Tue, 25 Oct 2022 13:00:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666702845;
-        bh=KhfkP0xR84/dzf2NvhTWcPkuAMJo1cX8z0qcwE+FPKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CInZzUJizUhh6Avxm6bdTnRT1902/4MgQKPtPaQkFEVAWQgKlhJ7CX16KSQZEWd/c
-         716wL/jn2mlnjrg2Wqoc0x4JOn3C7vV7tl5ia/8bqJI9Y2OlNe55JwwH+PeRiPNLUD
-         4xmadpbs9RprOppjDcrg0Zrju9h200jUDUQ9vPAU=
-Date:   Tue, 25 Oct 2022 15:00:43 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kai Ye <yekai13@huawei.com>
-Cc:     linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, zhangfei.gao@linaro.org,
-        wangzhou1@hisilicon.com
-Subject: Re: [PATCH v9 1/3] uacce: supports device isolation feature
-Message-ID: <Y1fd+1CrlCBYCoz0@kroah.com>
-References: <20221025123931.42161-1-yekai13@huawei.com>
- <20221025123931.42161-2-yekai13@huawei.com>
+        Tue, 25 Oct 2022 09:03:11 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFC4DBE68;
+        Tue, 25 Oct 2022 06:01:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=IevFOjm1jG20XuMQioGWhi3yG2tjhE/B9gkbzFk4dC4=; b=ZxA4KToyOCJ46HayGSwvEQULkG
+        rj7wNvfcIBjPqlENft6SrsfV2VjS91PpmLnDR3vyXxdzcBVxv81JI7OqT4MpMcQCPfCKj1BUxfDCY
+        5ZU5RRWjJG4SaHWwIeRTWd7EStXtIfU8Elxq3gm57YEeaJGVpIrpIs7J1kFbiiNjaDCDESTN1CT7l
+        OAFG/WZ30ZnK16rQ7Tqz8FmmsA55Pl8MdcAsM0EcpaSbbZrRaTWY5pefGC0OKoK678vsfZWamYE7T
+        U3sK9DILJRbHWEwUDwfxLkLzVJsKNKfilwMdUku3wPPIlG82eivEIESfkScnT0JH30c7D2caOnjL8
+        5FT+fR7A==;
+Received: from [89.212.21.243] (port=39850 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1onJYO-007IqY-Ry;
+        Tue, 25 Oct 2022 15:01:12 +0200
+Message-ID: <a4d3aa78-709a-3aca-c9ff-2a8aedeeb197@norik.com>
+Date:   Tue, 25 Oct 2022 15:01:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025123931.42161-2-yekai13@huawei.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
+Content-Language: en-GB
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        kernel@pengutronix.de, Anson.Huang@nxp.com, festevam@gmail.com,
+        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, linux-imx@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
+        shawnguo@kernel.org, linux@roeck-us.net
+References: <20221025072533.2980154-1-andrej.picej@norik.com>
+ <20221025072533.2980154-2-andrej.picej@norik.com>
+ <20221025122723.yl5vax7y33ueo2p5@pengutronix.de>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <20221025122723.yl5vax7y33ueo2p5@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 12:39:29PM +0000, Kai Ye wrote:
-> UACCE adds the hardware error isolation API. Users can configure
-> the isolation frequency by this sysfs node. UACCE reports the device
-> isolate state to the user space. If the AER error frequency exceeds
-> the set value in one hour, the device will be isolated.
+Hi Marco,
+
+On 25. 10. 22 14:27, Marco Felsch wrote:
+> On 22-10-25, Andrej Picej wrote:
+>> Putting device into the "Suspend-To-Idle" mode causes watchdog to
+>> trigger and reset the board after set watchdog timeout period elapses.
+>>
+>> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
+>> watchdog in WAIT mode. This is done by setting WDW bit in WCR
+>> (Watchdog Control Register) Watchdog operation is restored after exiting
+>> WAIT mode as expected. WAIT mode coresponds with Linux's
+>> "Suspend-To-Idle".
+>>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>> ---
+>> Changes in v2:
+>>   - validate the property with compatible string, as this functionality
+>>     is not supported by all devices.
+>> ---
+>>   drivers/watchdog/imx2_wdt.c | 37 +++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
+>>
+>> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+>> index d0c5d47ddede..dd9866c6f1e5 100644
+>> --- a/drivers/watchdog/imx2_wdt.c
+>> +++ b/drivers/watchdog/imx2_wdt.c
+>> @@ -35,6 +35,7 @@
+>>   
+>>   #define IMX2_WDT_WCR		0x00		/* Control Register */
+>>   #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* -> Watchdog Timeout Field */
+>> +#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable for WAIT */
+>>   #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset WDOG_B */
+>>   #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset Signal */
+>>   #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable */
+>> @@ -67,6 +68,27 @@ struct imx2_wdt_device {
+>>   	bool ext_reset;
+>>   	bool clk_is_on;
+>>   	bool no_ping;
+>> +	bool sleep_wait;
+>> +};
+>> +
+>> +static const char * const wdw_boards[] __initconst = {
+>> +	"fsl,imx25-wdt",
+>> +	"fsl,imx35-wdt",
+>> +	"fsl,imx50-wdt",
+>> +	"fsl,imx51-wdt",
+>> +	"fsl,imx53-wdt",
+>> +	"fsl,imx6q-wdt",
+>> +	"fsl,imx6sl-wdt",
+>> +	"fsl,imx6sll-wdt",
+>> +	"fsl,imx6sx-wdt",
+>> +	"fsl,imx6ul-wdt",
+>> +	"fsl,imx7d-wdt",
+>> +	"fsl,imx8mm-wdt",
+>> +	"fsl,imx8mn-wdt",
+>> +	"fsl,imx8mp-wdt",
+>> +	"fsl,imx8mq-wdt",
+>> +	"fsl,vf610-wdt",
+>> +	NULL
+>>   };
 > 
+> For such things we have the data pointer within the struct of_device_id.
+Ok, that might clear it up a bit. Thanks.
 
-You are trying to "reach across" to different types of devices here,
-why?  That feels backwards.  Why isn't the device that needs to use this
-api just create a child class device of this type?
-
-
-
-> Signed-off-by: Kai Ye <yekai13@huawei.com>
-> ---
->  drivers/misc/uacce/uacce.c | 145 +++++++++++++++++++++++++++++++++++++
->  include/linux/uacce.h      |  43 ++++++++++-
->  2 files changed, 187 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
-> index b70a013139c7..f293fcdcf44f 100644
-> --- a/drivers/misc/uacce/uacce.c
-> +++ b/drivers/misc/uacce/uacce.c
-> @@ -7,10 +7,100 @@
->  #include <linux/slab.h>
->  #include <linux/uacce.h>
->  
-> +#define MAX_ERR_ISOLATE_COUNT	65535
-> +
->  static struct class *uacce_class;
->  static dev_t uacce_devt;
->  static DEFINE_XARRAY_ALLOC(uacce_xa);
->  
-> +static int cdev_get(struct device *dev, void *data)
+>>   
+>>   static bool nowayout = WATCHDOG_NOWAYOUT;
+>> @@ -129,6 +151,9 @@ static inline void imx2_wdt_setup(struct watchdog_device *wdog)
+>>   
+>>   	/* Suspend timer in low power mode, write once-only */
+>>   	val |= IMX2_WDT_WCR_WDZST;
+>> +	/* Suspend timer in low power WAIT mode, write once-only */
+>> +	if (wdev->sleep_wait)
+>> +		val |= IMX2_WDT_WCR_WDW;
+>>   	/* Strip the old watchdog Time-Out value */
+>>   	val &= ~IMX2_WDT_WCR_WT;
+>>   	/* Generate internal chip-level reset if WDOG times out */
+>> @@ -313,6 +338,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+>>   
+>>   	wdev->ext_reset = of_property_read_bool(dev->of_node,
+>>   						"fsl,ext-reset-output");
+>> +
+>> +	if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait"))
+> 
+> Why do we need this special property? If the device has problems when
+> "freeze" is used as suspend mode and this is fixed by this special bit
+> then we should enable it if the device supports it.
 
-That's a very odd function, considering it does not "get" anything.
+That was our initial plan and it would be the easiest to do. But since 
+it looks like nobody experienced this problem so far, we are somehow 
+reluctant to set it by default. What if someone is relying on this 
+feature to reset the device if the device is not waken up from "freeze" 
+by some other interrupt source?
 
-And it does not work on cdev structures.
-
-> +{
-> +	struct uacce_device *uacce;
-> +	struct device **t_dev = data;
-
-Why are you having to cast this?  Why not make it a real pointer?
-
-> +
-> +	uacce = container_of(dev, struct uacce_device, dev);
-> +	if (uacce->parent == *t_dev) {
-> +		*t_dev = dev;
-> +		return 1;
-
-bool?
-
-And what happened to the reference count here?
-
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * dev_to_uacce - Get structure uacce device from its parent device
-> + * @dev the device
-> + */
-> +struct uacce_device *dev_to_uacce(struct device *dev)
-> +{
-> +	struct device **tdev = &dev;
-> +	int ret;
-> +
-> +	ret = class_for_each_device(uacce_class, NULL, tdev, cdev_get);
-
-Ah, you use it here.
-
-No, sorry, you can not just walk all devices in the tree and assume this
-will work.
-
-Why do you not already know the device already?
-
-> +	if (ret) {
-> +		dev = *tdev;
-> +		return container_of(dev, struct uacce_device, dev);
-> +	}
-> +	return NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_to_uacce);
-
-Where is the reference counting here?
-
-And again, horrible global function name :(
-
-> +
-> +/**
-> + * uacce_hw_err_isolate - Try to set the isolation status of the uacce device
-> + * according to user's configuration of isolation strategy.
-> + * @uacce the uacce device
-> + */
-> +int uacce_hw_err_isolate(struct uacce_device *uacce)
-> +{
-> +	struct uacce_hw_err *err, *tmp, *hw_err;
-> +	struct uacce_err_isolate *isolate_ctx;
-> +	u32 count = 0;
-> +
-> +	if (!uacce)
-> +		return -EINVAL;
-
-How can this happen?
-
-> +
-> +	isolate_ctx = uacce->isolate_ctx;
-> +
-> +#define SECONDS_PER_HOUR	3600
-
-We don't already have this in a header file?
-
-> +
-> +	/* All the hw errs are processed by PF driver */
-> +	if (uacce->is_vf || isolate_ctx->is_isolate ||
-> +		!isolate_ctx->hw_err_isolate_hz)
-> +		return 0;
-> +
-> +	hw_err = kzalloc(sizeof(*hw_err), GFP_KERNEL);
-> +	if (!hw_err)
-> +		return -ENOMEM;
-> +
-> +	hw_err->timestamp = jiffies;
-> +	list_for_each_entry_safe(err, tmp, &isolate_ctx->hw_errs, list) {
-> +		if ((hw_err->timestamp - err->timestamp) / HZ >
-> +		    SECONDS_PER_HOUR) {
-> +			list_del(&err->list);
-> +			kfree(err);
-> +		} else {
-> +			count++;
-> +		}
-> +	}
-> +	list_add(&hw_err->list, &isolate_ctx->hw_errs);
-> +
-> +	if (count >= isolate_ctx->hw_err_isolate_hz)
-> +		isolate_ctx->is_isolate = true;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(uacce_hw_err_isolate);
-> +
-> +static void uacce_hw_err_destroy(struct uacce_device *uacce)
-> +{
-> +	struct uacce_hw_err *err, *tmp;
-> +
-> +	list_for_each_entry_safe(err, tmp, &uacce->isolate_data.hw_errs, list) {
-> +		list_del(&err->list);
-> +		kfree(err);
-
-No reference counting at all?
-
-> +	}
-> +}
-> +
->  /*
->   * If the parent driver or the device disappears, the queue state is invalid and
->   * ops are not usable anymore.
-> @@ -363,12 +453,59 @@ static ssize_t region_dus_size_show(struct device *dev,
->  		       uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
->  }
->  
-> +static ssize_t isolate_show(struct device *dev,
-> +			    struct device_attribute *attr, char *buf)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +	int ret = UACCE_DEV_NORMAL;
-> +
-> +	if (uacce->isolate_ctx->is_isolate)
-> +		ret = UACCE_DEV_ISOLATE;
-> +
-> +	return sysfs_emit(buf, "%d\n", ret);
-> +}
-> +
-> +static ssize_t isolate_strategy_show(struct device *dev,
-> +				     struct device_attribute *attr, char *buf)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +
-> +	return sysfs_emit(buf, "%u\n", uacce->isolate_ctx->hw_err_isolate_hz);
-> +}
-> +
-> +static ssize_t isolate_strategy_store(struct device *dev,
-> +				      struct device_attribute *attr,
-> +				      const char *buf, size_t count)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +	unsigned long val;
-> +
-> +	/* must be set by PF */
-> +	if (uacce->is_vf)
-> +		return -EPERM;
-> +
-> +	if (kstrtoul(buf, 0, &val) < 0)
-> +		return -EINVAL;
-> +
-> +	if (val > MAX_ERR_ISOLATE_COUNT)
-> +		return -EINVAL;
-> +
-> +	uacce->isolate_ctx->hw_err_isolate_hz = val;
-> +
-> +	/* After the policy is updated, need to reset the hardware err list */
-> +	uacce_hw_err_destroy(uacce);
-> +
-> +	return count;
-> +}
-> +
->  static DEVICE_ATTR_RO(api);
->  static DEVICE_ATTR_RO(flags);
->  static DEVICE_ATTR_RO(available_instances);
->  static DEVICE_ATTR_RO(algorithms);
->  static DEVICE_ATTR_RO(region_mmio_size);
->  static DEVICE_ATTR_RO(region_dus_size);
-> +static DEVICE_ATTR_RO(isolate);
-> +static DEVICE_ATTR_RW(isolate_strategy);
-
-No documentation for these new sysfs files?
-
-thanks,
-
-greg k-h
+Best regards,
+Andrej
+> 
+> Regards,
+>    Marco
+> 
+> 
+>> +		if (of_device_compatible_match(dev->of_node, wdw_boards))
+>> +			wdev->sleep_wait = 1;
+>> +		else {
+>> +			dev_warn(dev, "Warning: Suspending watchdog during " \
+>> +				"WAIT mode is not supported for this device.\n");
+>> +			wdev->sleep_wait = 0;
+>> +		}
+>> +	else
+>> +		wdev->sleep_wait = 0;
+>> +
+>>   	/*
+>>   	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
+>>   	 * during suspend.
+>> -- 
+>> 2.25.1
+>>
+>>
+>>
