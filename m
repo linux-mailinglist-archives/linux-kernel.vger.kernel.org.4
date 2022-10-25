@@ -2,186 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F5160D6B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C01160D6B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbiJYWBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
+        id S231645AbiJYWDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:03:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbiJYWBk (ORCPT
+        with ESMTP id S229714AbiJYWC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:01:40 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23F266866
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666735299; x=1698271299;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XPIZHNC/KLHq2wwLZzF0y3YfGyClXuQbuFbE/PrASB8=;
-  b=hiba0HBg34cL+cSjUrsqkirFMFnBcnmethpdc/+FOUBOCspDpwoBADoM
-   amu/d0w5XVaPV08oD+4NoKSlxkigt0lBoftr7FkzNqxfOTvXbuvdzT4Hh
-   ZP8cQQgFCov51hANsSxTgceq90owcz8HrAL/60fKfFQtelq4sjS166fAU
-   Jl9G0DzM1FCtL1lUIasxxQA/CKzZFOSMkWAjKizlKche5lnxUNEGiN+TA
-   YLzW2gm0jccrxVi3JzPchoCsVqrG2so9uLBBkRpjJxz+BpqvLM3qsOA9M
-   mw4l4lCgklWCvhOdtHiXn9kgfLzDNoFEEPUe95PUrpPcB1gQCdfJaMIvi
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="305416718"
-X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="305416718"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 15:01:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="737000608"
-X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="737000608"
-Received: from cckuo-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.218.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 15:01:39 -0700
-From:   ira.weiny@intel.com
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2] mm/userfaultfd: Replace kmap/kmap_atomic() with kmap_local_page()
-Date:   Tue, 25 Oct 2022 15:01:36 -0700
-Message-Id: <20221025220136.2366143-1-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 25 Oct 2022 18:02:59 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209EC26D8;
+        Tue, 25 Oct 2022 15:02:58 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id b12so38565744edd.6;
+        Tue, 25 Oct 2022 15:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=B5TwB3HwahgA/DvlgI1SO+JR6TGYUK+JWhOPn24MHF0=;
+        b=p7YTe7u30t+3wLVC4on7U1c71rPI4CrZqHI5DQkoHELmnlDvpjydeOPWiCA8eVfhV2
+         DUXq3wOnR/TXRGLkGp/Jr6hEU6Hpv0fS2FkBpEVRR1vE62xHJZjCglHXCRGwPH0RFdJI
+         +h8qr/Z2VX+X75+ugv8x7SFtcXVhom/3Q1107MN9aSk5pczjy2ipe8LyublfYgVgvrR1
+         gEs0zQQlnwtY5eWiBDerpaZYcyLGsOG3/V9xmVorqjvWUiEfaz/G1+LkzoeOlDF365cJ
+         /gezABV4ssoMCo6gzRkE9V5xO2CAYVFlOmRS9Q4khn4VEhCTCi34X+cW4DeV0pXE78cy
+         SuSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B5TwB3HwahgA/DvlgI1SO+JR6TGYUK+JWhOPn24MHF0=;
+        b=R2IpioQU8d3n+O3okdJ3fsyDHUQP1DjLdl+nLUMJhwjcVMWkodvzxI/PAFBD/Iipm5
+         Ln2VapqdQlefEw0Meu5NjyJFbxaoRJZHfP6AIwKs2DvdVK7fbBBOn7nBjM4oAIqM9FTZ
+         PwLfcvYpz35pATXPWzC7YvyLKQM6Y+vuui78uglQPSolcDvphwIqAgYglU/6xBSxaV2L
+         xJiJMFq/mZG4WDaraeocQ9w1itJbRYGg0kNCVwqWbAYGHwHEIaZsRt3AEZuZOOM4xgOK
+         ZyB2Pnc4uzmGLEJiFC+VY7efQyNjI7l9PyZroXKF2l6ylAeHb+XAsNnC+V4PmkAgJVJE
+         lqhQ==
+X-Gm-Message-State: ACrzQf1iAMDGeNZudIaNqdeP++yN5oqzNs0CnO7icru6pwtOFex0pkwv
+        gGnkKwfiEIEeUFwmaymKTl4=
+X-Google-Smtp-Source: AMsMyM7t1sEqNP3xIjCsI9ZLSpusyMAHmRLROxmox+0BByHaB+dCyYs+tl0tjAQ9uELNr3DURzMF7Q==
+X-Received: by 2002:a50:ed03:0:b0:461:9f73:b8d9 with SMTP id j3-20020a50ed03000000b004619f73b8d9mr14573439eds.140.1666735376681;
+        Tue, 25 Oct 2022 15:02:56 -0700 (PDT)
+Received: from hoboy.vegasvil.org (81-223-89-254.static.upcbusiness.at. [81.223.89.254])
+        by smtp.gmail.com with ESMTPSA id kk20-20020a170907767400b0077d37a5d401sm2003091ejc.33.2022.10.25.15.02.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 15:02:56 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 15:02:53 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, krzysztof.kozlowski+dt@linaro.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yangbo.lu@nxp.com,
+        radhey.shyam.pandey@amd.com, anirudha.sarangi@amd.com,
+        harini.katakam@amd.com, git@amd.com
+Subject: Re: [PATCH net-next V2] dt-bindings: net: ethernet-controller: Add
+ ptp-hardware-clock
+Message-ID: <Y1hdDc2O0jJG9V+T@hoboy.vegasvil.org>
+References: <20221021054111.25852-1-sarath.babu.naidu.gaddam@amd.com>
+ <20221024165723.GA1896281-robh@kernel.org>
+ <Y1hZID8iRtg73hV3@hoboy.vegasvil.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1hZID8iRtg73hV3@hoboy.vegasvil.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+On Tue, Oct 25, 2022 at 02:46:08PM -0700, Richard Cochran wrote:
+> On Mon, Oct 24, 2022 at 11:57:23AM -0500, Rob Herring wrote:
+> > On Thu, Oct 20, 2022 at 11:41:10PM -0600, Sarath Babu Naidu Gaddam wrote:
+> > > There is currently no standard property to pass PTP device index
+> > > information to ethernet driver when they are independent.
+> > > 
+> > > ptp-hardware-clock property will contain phandle to PTP clock node.
+> > > 
+> > > Freescale driver currently has this implementation but it will be
+> > > good to agree on a generic (optional) property name to link to PTP
+> > > phandle to Ethernet node. In future or any current ethernet driver
+> > > wants to use this method of reading the PHC index,they can simply use
+> > > this generic name and point their own PTP clock node, instead of
+> > > creating separate property names in each ethernet driver DT node.
+> > 
+> > Seems like this does the same thing as 
+> > Documentation/devicetree/bindings/ptp/timestamper.txt.
+> 
+> That is different. It goes from:
+> 
+>    MAC -> time stamp generator
 
-kmap() and kmap_atomic() are being deprecated in favor of
-kmap_local_page() which is appropriate for any thread local context.[1]
+actually:
+     PHY -> time stamp generator
 
-A recent locking bug report with userfaultfd showed that the conversion
-of the kmap_atomic()'s in those code flows requires care with regard to
-the prevention of deadlock.[2]
-
-git archaeology implied that the recursion may not be an actual bug.[3]
-However, depending on the implementation of the mmap_lock and the
-condition of the call there may still be a deadlock.[4]  So this is not
-purely a lockdep issue.  Considering a single threaded call stack there
-are 3 options.
-
-	1) Different mm's are in play (no issue)
-	2) Readlock implementation is recursive and same mm is in play
-	   (no issue)
-	3) Readlock implementation is _not_ recursive (issue)
-
-The mmap_lock is recursive so with a single thread there is no issue.
-
-However, Matthew pointed out a deadlock scenario when you consider
-additional process' and threads thusly.
-
-"The readlock implementation is only recursive if nobody else has taken
-a write lock.  If you have a multithreaded process, one of the other
-threads can call mmap() and that will prevent recursion (due to
-fairness).  Even if it's a different process that you're trying to
-acquire the mmap read lock on, you can still get into a deadly embrace.
-eg:
-
-process A thread 1 takes read lock on own mmap_lock
-process A thread 2 calls mmap, blocks taking write lock
-process B thread 1 takes page fault, read lock on own mmap lock
-process B thread 2 calls mmap, blocks taking write lock
-process A thread 1 blocks taking read lock on process B
-process B thread 1 blocks taking read lock on process A
-
-Now all four threads are blocked waiting for each other."
-
-Regardless using pagefault_disable() ensures that no matter what locking
-implementation is used a deadlock will not occur.
-
-Complete kmap conversion in userfaultfd by replacing the kmap() and
-kmap_atomic() calls with kmap_local_page().  When replacing the
-kmap_atomic() call ensure page faults continue to be disabled to support
-the correct fall back behavior and add a comment to inform future souls
-of the requirement.
-
-[1] https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com/
-[2] https://lore.kernel.org/all/Y1Mh2S7fUGQ%2FiKFR@iweiny-desk3/
-[3] https://lore.kernel.org/all/Y1MymJ%2FINb45AdaY@iweiny-desk3/
-[4] https://lore.kernel.org/lkml/Y1bXBtGTCym77%2FoD@casper.infradead.org/
-
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Peter Xu <peterx@redhat.com>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-
----
-Changes from V1
-	Update the commit message and comment based on additional
-	discussion
-
-	Thanks to Matt for pointing out the deadlock potential despite
-	recursive reads.
----
- mm/userfaultfd.c | 25 +++++++++++++++++++++----
- 1 file changed, 21 insertions(+), 4 deletions(-)
-
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index e24e8a47ce8a..3d0fef3980b3 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -157,11 +157,28 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
- 		if (!page)
- 			goto out;
- 
--		page_kaddr = kmap_atomic(page);
-+		page_kaddr = kmap_local_page(page);
-+		/*
-+		 * The read mmap_lock is held here.  Despite the
-+		 * mmap_lock being read recursive a deadlock is still
-+		 * possible if a writer has taken a lock.  For example:
-+		 *
-+		 * process A thread 1 takes read lock on own mmap_lock
-+		 * process A thread 2 calls mmap, blocks taking write lock
-+		 * process B thread 1 takes page fault, read lock on own mmap lock
-+		 * process B thread 2 calls mmap, blocks taking write lock
-+		 * process A thread 1 blocks taking read lock on process B
-+		 * process B thread 1 blocks taking read lock on process A
-+		 *
-+		 * Disable page faults to prevent potential deadlock
-+		 * and retry the copy outside the mmap_lock.
-+		 */
-+		pagefault_disable();
- 		ret = copy_from_user(page_kaddr,
- 				     (const void __user *) src_addr,
- 				     PAGE_SIZE);
--		kunmap_atomic(page_kaddr);
-+		pagefault_enable();
-+		kunmap_local(page_kaddr);
- 
- 		/* fallback to copy_from_user outside mmap_lock */
- 		if (unlikely(ret)) {
-@@ -646,11 +663,11 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
- 			mmap_read_unlock(dst_mm);
- 			BUG_ON(!page);
- 
--			page_kaddr = kmap(page);
-+			page_kaddr = kmap_local_page(page);
- 			err = copy_from_user(page_kaddr,
- 					     (const void __user *) src_addr,
- 					     PAGE_SIZE);
--			kunmap(page);
-+			kunmap_local(page_kaddr);
- 			if (unlikely(err)) {
- 				err = -EFAULT;
- 				goto out;
--- 
-2.37.2
-
+> The proposed binding goes from:
+> 
+>   MAC (with built in time stamp generator) -> PTP Hardware Clock (with get/settime etc)
+> 
+> 
+> Thanks,
+> Richard
