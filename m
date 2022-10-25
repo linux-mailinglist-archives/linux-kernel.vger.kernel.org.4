@@ -2,146 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E79760D7BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0B960D7BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbiJYXMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 19:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35372 "EHLO
+        id S232465AbiJYXNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 19:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiJYXMk (ORCPT
+        with ESMTP id S229952AbiJYXNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 19:12:40 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AF7FAA6C;
-        Tue, 25 Oct 2022 16:12:37 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id z11-20020a05683020cb00b00661a95cf920so8840098otq.5;
-        Tue, 25 Oct 2022 16:12:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RRrEEf9YiRUt4v0hkZPiB4Bxt9hmfog8mLXW/+6+K/E=;
-        b=010If6/wr8nizeXfw2Q1V914bXQugjPQR6x/vDwOTUwhsgOCaCgKvH3DJ1uA6ZhTX5
-         JekVZAhR+LC29KNfe22qQfEeCNpm+GJtyJjZbTcPJEbZkkUpjG7iMhTcrVOfilufrTgV
-         35EYTYTxSKxVQ5+sBHpOGk6ULd5JT8at2dvcXpBEshqPcFgogxqblSazr85mnHaWLwpI
-         Z47UviThQq4y29D3/n5n50cAL/E5pLj+Fa5rJcEBvZgaFEjswtYKOxww/a9HoAnl6O1c
-         jEkRuqvB+/cgSx9O8++iZnXiGNOnbSFNxlx5cJSy0cdTSKobSrSM37NoPK129LuPmNFf
-         wz9Q==
-X-Gm-Message-State: ACrzQf1R+ZlYb0AZ8J1NCmQ7Oufygb2oJfZyYRBOuffnJBPb47IyFMIR
-        3fpg002FxGVmeL8Fuxma/Q==
-X-Google-Smtp-Source: AMsMyM5n2yXaqLQhmHmFtxDIVMg/fe7mrUK1FKIQs9kPsJaabo0UCR9ubpWxzWKxK/TfoFcL1ifXvg==
-X-Received: by 2002:a05:6830:4487:b0:661:dba8:cc61 with SMTP id r7-20020a056830448700b00661dba8cc61mr20275561otv.256.1666739556607;
-        Tue, 25 Oct 2022 16:12:36 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 187-20020a4a06c4000000b00480e77f90f9sm1613263ooj.41.2022.10.25.16.12.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 16:12:35 -0700 (PDT)
-Received: (nullmailer pid 3429121 invoked by uid 1000);
-        Tue, 25 Oct 2022 23:12:36 -0000
-Date:   Tue, 25 Oct 2022 18:12:36 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-Message-ID: <20221025231236.GA3416036-robh@kernel.org>
-References: <20221024043925.25379-1-marcan@marcan.st>
- <20221024043925.25379-3-marcan@marcan.st>
- <5c3126fb-8fdb-5163-95a8-136a4a7ee2ce@linaro.org>
- <97d3d6d4-b19c-a194-de41-f17e65bf3eb6@marcan.st>
+        Tue, 25 Oct 2022 19:13:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E91FF8C1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:13:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B17C661BB5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:13:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0924C433D6;
+        Tue, 25 Oct 2022 23:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666739583;
+        bh=Qd6iE4RAuy5ZRVM7OcQwoPbhETc72fMXCkxUe0ZuCWQ=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=pdOhL9Z82OdmN1CvZPWmMlpejtz5j3ucXRzmSc5aD8YBFWeSsZtgeVLpkm5gX5RS4
+         LQeDoxvyikqrg8wqReVsXoUdUFuknMyzp4/EmkA9nADPQ86WvImGaitaUY4DM5SGfK
+         NBRX7bembHn4mM6ITrE2FwYAGGsvuopaOjpxicceRPV3qLqA5c0WmLhnUfXOqx6ygJ
+         iA3aXQAUdOVNU6r7XY7Yed1i+hl28TUFTlatl6LTaM05wFL9XZbdrpwMDq4mQ44/iU
+         O4bHe+Ctb0HU5yvwUC9WaMohyE8AowKombijSaMaFnfmQCnXEHz2K4mrOZo2ueL2/Q
+         zYw77Vvb89DgA==
+Date:   Tue, 25 Oct 2022 16:12:59 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
+cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Xenia Ragiadakou <burzalodowa@gmail.com>
+Subject: Re: [PATCH V4 1/2] xen/virtio: Optimize the setup of "xen-grant-dma"
+ devices
+In-Reply-To: <20221025162004.8501-2-olekstysh@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2210251612530.1397955@ubuntu-linux-20-04-desktop>
+References: <20221025162004.8501-1-olekstysh@gmail.com> <20221025162004.8501-2-olekstysh@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <97d3d6d4-b19c-a194-de41-f17e65bf3eb6@marcan.st>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:22:40AM +0900, Hector Martin wrote:
-> On 26/10/2022 01.01, Krzysztof Kozlowski wrote:
-> > On 24/10/2022 00:39, Hector Martin wrote:
-> >> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
-> >> The hardware has an independent controller per CPU cluster, and we
-> >> represent them as unique nodes in order to accurately describe the
-> >> hardware. The driver is responsible for binding them as a single cpufreq
-> >> device (in the Linux cpufreq model).
-> >>
-> >> Signed-off-by: Hector Martin <marcan@marcan.st>
-> >> ---
-> >>  .../cpufreq/apple,cluster-cpufreq.yaml        | 119 ++++++++++++++++++
-> >>  1 file changed, 119 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> >> new file mode 100644
-> >> index 000000000000..b11452f91468
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> >> @@ -0,0 +1,119 @@
-> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/cpufreq/apple,cluster-cpufreq.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Apple SoC cluster cpufreq device
-> > 
-> > Few nits, in general looks fine to me.
-> > 
-> >> +
-> >> +maintainers:
-> >> +  - Hector Martin <marcan@marcan.st>
-> >> +
-> >> +description: |
-> >> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
-> >> +  the cluster management register block. This binding uses the standard
-> >> +  operating-points-v2 table to define the CPU performance states, with the
-> >> +  opp-level property specifying the hardware p-state index for that level.
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    oneOf:
-> >> +      - items:
-> >> +          - const: apple,t8103-cluster-cpufreq
-> >> +          - const: apple,cluster-cpufreq
-> >> +      - items:
-> >> +          - const: apple,t6000-cluster-cpufreq
-> >> +          - const: apple,t8103-cluster-cpufreq
-> >> +          - const: apple,cluster-cpufreq
-> >> +      - items:
-> >> +          - const: apple,t8112-cluster-cpufreq
-> > 
-> > With the first one (t8103) - it's an enum.
+On Tue, 25 Oct 2022, Oleksandr Tyshchenko wrote:
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 > 
-> This is deliberate. t6000 is compatible with t8103, but t8112 is not
-> (though all are compatible with what the generic apple,cluster-cpufreq
-> compatible implies).
+> This is needed to avoid having to parse the same device-tree
+> several times for a given device.
+> 
+> For this to work we need to install the xen_virtio_restricted_mem_acc
+> callback in Arm's xen_guest_init() which is same callback as x86's
+> PV and HVM modes already use and remove the manual assignment in
+> xen_setup_dma_ops(). Also we need to split the code to initialize
+> backend_domid into a separate function.
+> 
+> Prior to current patch we parsed the device-tree three times:
+> 1. xen_setup_dma_ops()->...->xen_is_dt_grant_dma_device()
+> 2. xen_setup_dma_ops()->...->xen_dt_grant_init_backend_domid()
+> 3. xen_virtio_mem_acc()->...->xen_is_dt_grant_dma_device()
+> 
+> With current patch we parse the device-tree only once in
+> xen_virtio_restricted_mem_acc()->...->xen_dt_grant_init_backend_domid()
+> 
+> Other benefits are:
+> - Not diverge from x86 when setting up Xen grant DMA ops
+> - Drop several global functions
+> 
+> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-What does compatible mean here? IOW, what can a client do with 
-'apple,cluster-cpufreq' alone? It's one thing for self-contained blocks 
-to remain unchanged from chip to chip, but things like this tend to 
-change frequently. It looks like for 4 chips we have 3 different 
-versions.
+Reviewed-by: Stefano Stabellini <sstabellini@kernel.org>
 
-Rob
+
+> ---
+> New patch
+> ---
+>  arch/arm/xen/enlighten.c    |  2 +-
+>  drivers/xen/grant-dma-ops.c | 77 ++++++++++++++-----------------------
+>  include/xen/arm/xen-ops.h   |  4 +-
+>  include/xen/xen-ops.h       | 16 --------
+>  4 files changed, 30 insertions(+), 69 deletions(-)
+> 
+> diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
+> index 93c8ccbf2982..7d59765aef22 100644
+> --- a/arch/arm/xen/enlighten.c
+> +++ b/arch/arm/xen/enlighten.c
+> @@ -445,7 +445,7 @@ static int __init xen_guest_init(void)
+>  		return 0;
+>  
+>  	if (IS_ENABLED(CONFIG_XEN_VIRTIO))
+> -		virtio_set_mem_acc_cb(xen_virtio_mem_acc);
+> +		virtio_set_mem_acc_cb(xen_virtio_restricted_mem_acc);
+>  
+>  	if (!acpi_disabled)
+>  		xen_acpi_guest_init();
+> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> index daa525df7bdc..1e797a043980 100644
+> --- a/drivers/xen/grant-dma-ops.c
+> +++ b/drivers/xen/grant-dma-ops.c
+> @@ -292,50 +292,20 @@ static const struct dma_map_ops xen_grant_dma_ops = {
+>  	.dma_supported = xen_grant_dma_supported,
+>  };
+>  
+> -static bool xen_is_dt_grant_dma_device(struct device *dev)
+> -{
+> -	struct device_node *iommu_np;
+> -	bool has_iommu;
+> -
+> -	iommu_np = of_parse_phandle(dev->of_node, "iommus", 0);
+> -	has_iommu = iommu_np &&
+> -		    of_device_is_compatible(iommu_np, "xen,grant-dma");
+> -	of_node_put(iommu_np);
+> -
+> -	return has_iommu;
+> -}
+> -
+> -bool xen_is_grant_dma_device(struct device *dev)
+> -{
+> -	/* XXX Handle only DT devices for now */
+> -	if (dev->of_node)
+> -		return xen_is_dt_grant_dma_device(dev);
+> -
+> -	return false;
+> -}
+> -
+> -bool xen_virtio_mem_acc(struct virtio_device *dev)
+> -{
+> -	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_pv_domain())
+> -		return true;
+> -
+> -	return xen_is_grant_dma_device(dev->dev.parent);
+> -}
+> -
+>  static int xen_dt_grant_init_backend_domid(struct device *dev,
+> -					   struct xen_grant_dma_data *data)
+> +					   domid_t *backend_domid)
+>  {
+>  	struct of_phandle_args iommu_spec;
+>  
+>  	if (of_parse_phandle_with_args(dev->of_node, "iommus", "#iommu-cells",
+>  			0, &iommu_spec)) {
+> -		dev_err(dev, "Cannot parse iommus property\n");
+> +		dev_dbg(dev, "Cannot parse iommus property\n");
+>  		return -ESRCH;
+>  	}
+>  
+>  	if (!of_device_is_compatible(iommu_spec.np, "xen,grant-dma") ||
+>  			iommu_spec.args_count != 1) {
+> -		dev_err(dev, "Incompatible IOMMU node\n");
+> +		dev_dbg(dev, "Incompatible IOMMU node\n");
+>  		of_node_put(iommu_spec.np);
+>  		return -ESRCH;
+>  	}
+> @@ -346,12 +316,28 @@ static int xen_dt_grant_init_backend_domid(struct device *dev,
+>  	 * The endpoint ID here means the ID of the domain where the
+>  	 * corresponding backend is running
+>  	 */
+> -	data->backend_domid = iommu_spec.args[0];
+> +	*backend_domid = iommu_spec.args[0];
+>  
+>  	return 0;
+>  }
+>  
+> -void xen_grant_setup_dma_ops(struct device *dev)
+> +static int xen_grant_init_backend_domid(struct device *dev,
+> +					domid_t *backend_domid)
+> +{
+> +	int ret = -ENODEV;
+> +
+> +	if (dev->of_node) {
+> +		ret = xen_dt_grant_init_backend_domid(dev, backend_domid);
+> +	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_pv_domain()) {
+> +		dev_info(dev, "Using dom0 as backend\n");
+> +		*backend_domid = 0;
+> +		ret = 0;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void xen_grant_setup_dma_ops(struct device *dev, domid_t backend_domid)
+>  {
+>  	struct xen_grant_dma_data *data;
+>  
+> @@ -365,16 +351,7 @@ void xen_grant_setup_dma_ops(struct device *dev)
+>  	if (!data)
+>  		goto err;
+>  
+> -	if (dev->of_node) {
+> -		if (xen_dt_grant_init_backend_domid(dev, data))
+> -			goto err;
+> -	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT)) {
+> -		dev_info(dev, "Using dom0 as backend\n");
+> -		data->backend_domid = 0;
+> -	} else {
+> -		/* XXX ACPI device unsupported for now */
+> -		goto err;
+> -	}
+> +	data->backend_domid = backend_domid;
+>  
+>  	if (store_xen_grant_dma_data(dev, data)) {
+>  		dev_err(dev, "Cannot store Xen grant DMA data\n");
+> @@ -392,12 +369,14 @@ void xen_grant_setup_dma_ops(struct device *dev)
+>  
+>  bool xen_virtio_restricted_mem_acc(struct virtio_device *dev)
+>  {
+> -	bool ret = xen_virtio_mem_acc(dev);
+> +	domid_t backend_domid;
+>  
+> -	if (ret)
+> -		xen_grant_setup_dma_ops(dev->dev.parent);
+> +	if (!xen_grant_init_backend_domid(dev->dev.parent, &backend_domid)) {
+> +		xen_grant_setup_dma_ops(dev->dev.parent, backend_domid);
+> +		return true;
+> +	}
+>  
+> -	return ret;
+> +	return false;
+>  }
+>  
+>  MODULE_DESCRIPTION("Xen grant DMA-mapping layer");
+> diff --git a/include/xen/arm/xen-ops.h b/include/xen/arm/xen-ops.h
+> index b0766a660338..70073f5a2b54 100644
+> --- a/include/xen/arm/xen-ops.h
+> +++ b/include/xen/arm/xen-ops.h
+> @@ -8,9 +8,7 @@
+>  static inline void xen_setup_dma_ops(struct device *dev)
+>  {
+>  #ifdef CONFIG_XEN
+> -	if (xen_is_grant_dma_device(dev))
+> -		xen_grant_setup_dma_ops(dev);
+> -	else if (xen_swiotlb_detect())
+> +	if (xen_swiotlb_detect())
+>  		dev->dma_ops = &xen_swiotlb_dma_ops;
+>  #endif
+>  }
+> diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
+> index a34f4271a2e9..47f11bec5e90 100644
+> --- a/include/xen/xen-ops.h
+> +++ b/include/xen/xen-ops.h
+> @@ -216,26 +216,10 @@ static inline void xen_preemptible_hcall_end(void) { }
+>  #endif /* CONFIG_XEN_PV && !CONFIG_PREEMPTION */
+>  
+>  #ifdef CONFIG_XEN_GRANT_DMA_OPS
+> -void xen_grant_setup_dma_ops(struct device *dev);
+> -bool xen_is_grant_dma_device(struct device *dev);
+> -bool xen_virtio_mem_acc(struct virtio_device *dev);
+>  bool xen_virtio_restricted_mem_acc(struct virtio_device *dev);
+>  #else
+> -static inline void xen_grant_setup_dma_ops(struct device *dev)
+> -{
+> -}
+> -static inline bool xen_is_grant_dma_device(struct device *dev)
+> -{
+> -	return false;
+> -}
+> -
+>  struct virtio_device;
+>  
+> -static inline bool xen_virtio_mem_acc(struct virtio_device *dev)
+> -{
+> -	return false;
+> -}
+> -
+>  static inline bool xen_virtio_restricted_mem_acc(struct virtio_device *dev)
+>  {
+>  	return false;
+> -- 
+> 2.25.1
+> 
