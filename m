@@ -2,101 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E189A60CD37
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49AC60CD38
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232689AbiJYNRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
+        id S232704AbiJYNRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbiJYNRJ (ORCPT
+        with ESMTP id S232638AbiJYNR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:17:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E89DCAF4;
-        Tue, 25 Oct 2022 06:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666703828; x=1698239828;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=2F7Eoa9lBQCmf/5MvcL4NAHZcvTMNySoe8rV9kJTiZQ=;
-  b=EgKuYrLTgcBzYTKWx/MyWkotI6T4BfMz/qyJ4eJUQz8RPCvW6PYWmgYX
-   f00fonDagLQrkZHhfs/EyKS73skitojJSrjCiD5vKo4m9KGHjuxvCxwWR
-   4DemFSUTnfjduQqJl207weX1vxLsRfD/194zS5dOSKNya4DLPz3U9b6xw
-   YWTjqA1v8RLqteocJ4Y2L2APLvaIwGmbU0d8pGlZSNX7EcjhmJ5dE7uCH
-   cOwcQir+dso3CL2rhExBtDfvn/fdaYMqSMGpmCPt03LhWJKDUrtmmO7pc
-   dNBZ2PxpIvw6jovGBGpc+ceLU2RJFZHCcZddWxGpdRs6yQzP/S6FvHv68
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="371882989"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="371882989"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 06:17:08 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="626417672"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="626417672"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.45.236])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 06:17:05 -0700
-Message-ID: <243d2f33-258e-4bc2-326f-e74f39c6a714@intel.com>
-Date:   Tue, 25 Oct 2022 16:17:01 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.0
-Subject: Re: [PATCH 3/8] perf test: Use a test program in perf record tests
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20221020172643.3458767-1-namhyung@kernel.org>
- <20221020172643.3458767-4-namhyung@kernel.org>
- <CAP-5=fWKCdyFzR8ZZSK_2v6vT_RKngxxnXGieUVb8PBATJ64eQ@mail.gmail.com>
- <Y1Z3/t4RtnB8r03t@kernel.org>
- <960317d2-1bf8-cc2a-8772-8d0f5a136b6b@intel.com>
- <Y1a2lmO/dmjEiZb0@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <Y1a2lmO/dmjEiZb0@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 25 Oct 2022 09:17:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE83DCAF4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:17:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E25671F38C;
+        Tue, 25 Oct 2022 13:17:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666703845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J+arnLUOjo5ZmX86eZOgv0maNE0nmXyovqICunRlfp0=;
+        b=vR/ERnDCix69JHYBVMcsqXuQoqbeG8DBXWHAIiYprRHh6q/jHk5UmcEKgUZ8psLpV7VFZm
+        nP5sM4GJ5A3n6rZ9cs8i8Xqq+tYiGCKqsaABYQZ2QouX+CHJqF6QBz+gZImla5AfZ/wNFZ
+        Vd7HbHwbeOP9rZ7AawWq2Toh1/IVz7k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666703845;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J+arnLUOjo5ZmX86eZOgv0maNE0nmXyovqICunRlfp0=;
+        b=2SkjBjps9LLNefZj3ve25lU3lGaDkoLJeEFYLDvr5ld2IYT2eWYPDj0pv77DE3FWWlPqQa
+        Rg5Vb30SRu7yyLBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B881134CA;
+        Tue, 25 Oct 2022 13:17:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id BTTmJOXhV2PoNgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 25 Oct 2022 13:17:25 +0000
+Date:   Tue, 25 Oct 2022 15:17:25 +0200
+Message-ID: <877d0oqbyy.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2] ALSA: rme9652: use explicitly signed char
+In-Reply-To: <CAHmME9p0jDLoma084T30VOiLO2ct-yh1uX5Ru=+BFD9it6CmTA@mail.gmail.com>
+References: <202210250456.vKv5zoLb-lkp@intel.com>
+        <20221025000313.546261-1-Jason@zx2c4.com>
+        <87bkq0s9rw.wl-tiwai@suse.de>
+        <Y1fRvWfcU4NT1HTU@zx2c4.com>
+        <87fsfcqdbx.wl-tiwai@suse.de>
+        <CAHmME9qkJk0vH2n7gz1XFyo-W5EMffGA6Hd4Fd8twKSRWz12nA@mail.gmail.com>
+        <87czagqc8k.wl-tiwai@suse.de>
+        <87a65kqc4e.wl-tiwai@suse.de>
+        <CAHmME9p0jDLoma084T30VOiLO2ct-yh1uX5Ru=+BFD9it6CmTA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/22 19:00, Arnaldo Carvalho de Melo wrote:
-> Em Mon, Oct 24, 2022 at 05:00:14PM +0300, Adrian Hunter escreveu:
->> On 24/10/22 14:33, Arnaldo Carvalho de Melo wrote:
->>> Em Thu, Oct 20, 2022 at 04:52:14PM -0700, Ian Rogers escreveu:
->>>> I wonder if these utilities should just be built into perf to avoid
->>>> the cc dependency. Perhaps we can have a hidden option built into
->>>> perf test.
+On Tue, 25 Oct 2022 15:14:54 +0200,
+Jason A. Donenfeld wrote:
 > 
->>> Agreed, not depending on a compiler makes 'perf test' usable in more
->>> systems, particularly production ones where we may want to check if perf
->>> is passing all tests applicable to that system.
->  
->> I haven't seen anyone package anything except the perf executable, so
->> I presume the only people running these tests install the source, and
->> so need a compiler anyway.
+> On Tue, Oct 25, 2022 at 3:14 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Tue, 25 Oct 2022 15:11:39 +0200,
+> > Takashi Iwai wrote:
+> > >
+> > > On Tue, 25 Oct 2022 14:54:54 +0200,
+> > > Jason A. Donenfeld wrote:
+> > > >
+> > > > On Tue, Oct 25, 2022 at 2:48 PM Takashi Iwai <tiwai@suse.de> wrote:
+> > > > >
+> > > > > On Tue, 25 Oct 2022 14:08:29 +0200,
+> > > > > Jason A. Donenfeld wrote:
+> > > > > >
+> > > > > > On Tue, Oct 25, 2022 at 08:21:55AM +0200, Takashi Iwai wrote:
+> > > > > > > On Tue, 25 Oct 2022 02:03:13 +0200,
+> > > > > > > Jason A. Donenfeld wrote:
+> > > > > > > >
+> > > > > > > > With char becoming unsigned by default, and with `char` alone being
+> > > > > > > > ambiguous and based on architecture, signed chars need to be marked
+> > > > > > > > explicitly as such. This fixes warnings like:
+> > > > > > > >
+> > > > > > > > sound/pci/rme9652/hdsp.c:3953 hdsp_channel_buffer_location() warn: 'hdsp->channel_map[channel]' is unsigned
+> > > > > > > > sound/pci/rme9652/hdsp.c:4153 snd_hdsp_channel_info() warn: impossible condition '(hdsp->channel_map[channel] < 0) => (0-255 < 0)'
+> > > > > > > > sound/pci/rme9652/rme9652.c:1833 rme9652_channel_buffer_location() warn: 'rme9652->channel_map[channel]' is unsigned
+> > > > > > > >
+> > > > > > > > Cc: Jaroslav Kysela <perex@perex.cz>
+> > > > > > > > Cc: Takashi Iwai <tiwai@suse.com>
+> > > > > > > > Cc: alsa-devel@alsa-project.org
+> > > > > > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > > > > > >
+> > > > > > > Applied now.  Thanks!
+> > > > > >
+> > > > > > Thanks. For this and the other patch, applied for 6.1 or 6.2?
+> > > > >
+> > > > > I applied for 6.2.  Was it an action that has to be fixed for 6.1?
+> > > > > If so, I still can shuffle.
+> > > >
+> > > > Well, this is code that's broken currently on ARM platforms, for
+> > > > example, where char is already unsigned. So it's arguably a fix for
+> > > > 6.1.
+> > >
+> > > Fair enough, I'll apply for 6.1, then.
+> >
+> > ... and in that case, it deserves for Cc-to-stable, IMO, as it's a fix
+> > to be done for older kernels, too.  Then it'd be clearly a 6.1
+> > material.
 > 
-> Humm?
-> 
-> [root@quaco ~]# head -3 /etc/os-release
-> NAME="Fedora Linux"
-> VERSION="36 (Workstation Edition)"
-> ID=fedora
-> [root@quaco ~]#G
+> Fine by me if you want to add that (for this and the other patch).
 
-I guess I got confused - it seems it is only Ubuntu that does that.
+OK, done.
 
+
+Takashi
