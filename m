@@ -2,196 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21A760CB0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4344360CB10
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbiJYLjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S231430AbiJYLlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiJYLjl (ORCPT
+        with ESMTP id S229740AbiJYLk6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:39:41 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7842FD
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:39:40 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so15997828pji.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=U2x8uoYfyy7DJtdVvgEN/JiSxJ0vUzGgcYGLfQrBvzs=;
-        b=pfPPTsmKQVVVn9N3ZVjJ40Yno8+kzJou3om0Z0b3MSmONH8x6L1WkTEbQMK1xRL4Kr
-         ndjql1TA98GugofEKiO7ByNvyIDs3tXIpgcB7AMEYFT+IpusmigkDC4jSlVJW+qb3k2g
-         26sTaoX0y68oa73OYrBiJ3WNCZRGz1+eBK3Kxrl01gHbno4/gV1i1v1TrVOHlbu9UjV8
-         crXhM8U3TAKkSaMAii/j8yWkFL4S5EK2md58xENhOjR9J+HneJuBheXjbyZ61Ye12ENS
-         RPEDZhH2tznnKFFRjvWr2ukFDZYihlphCCmj8f4hntM8IU6hGrcKJ6loYnpw1iu9Sr7z
-         TZag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U2x8uoYfyy7DJtdVvgEN/JiSxJ0vUzGgcYGLfQrBvzs=;
-        b=gtfIvmhvg4OirPmr7GzRooqyZa+98FRduANDZdvnMHdAkNOvdNegDDwmYya9thZNIg
-         jrw3E+XKsQbVVegBORsLijmRlTPN+usPyG/6RQYkBsdZDbPCEOCOmfxP8SiReWO2un1V
-         edVtDYOBh3Mabywq7nejFOSDhHGVQSYXEllLbHN/+ORTVhv5v0IbLKtu7m63FUDYDWN7
-         xdcwI6s4AYRWjn8dGmKPIT4V4DOXA6M6ZnzbCmWaTZdvVKXERnJHoPjB0Tq3R+YkY4Ny
-         jgbUNv23oCrun9F11Ll1H/yjMirmBNGxwpDXn8Hj8xVEm49HSPgrbWPsh/HuIHdZjGxc
-         6UHQ==
-X-Gm-Message-State: ACrzQf1xbVXKHQqRMWwkAXUnhnQSXpkQ+0C73VJHl6r4mcUyNo5zyqO8
-        +uijpbPBCdMzxTtwsYAGE9km
-X-Google-Smtp-Source: AMsMyM4zfNSy9w9j7XfrxLxUvzKSDx8IZZD17JEKq4H3Gk26jsy7h0VRMIaA1h0f2Nn2u2MLHd3Isg==
-X-Received: by 2002:a17:902:c40b:b0:17f:9636:9014 with SMTP id k11-20020a170902c40b00b0017f96369014mr37584551plk.150.1666697979493;
-        Tue, 25 Oct 2022 04:39:39 -0700 (PDT)
-Received: from thinkpad ([117.193.208.236])
-        by smtp.gmail.com with ESMTPSA id d16-20020a17090abf9000b0020ad26fa65dsm1239737pjs.56.2022.10.25.04.39.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 04:39:38 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 17:09:33 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com
-Subject: Re: [PATCH v3 4/5] PCI: endpoint: Use callback mechanism for passing
- events from EPC to EPF
-Message-ID: <20221025113933.GC221610@thinkpad>
-References: <20221006134927.41437-1-manivannan.sadhasivam@linaro.org>
- <20221006134927.41437-5-manivannan.sadhasivam@linaro.org>
- <b6001af6-4c41-a678-b3cb-4c1d874425bf@ti.com>
+        Tue, 25 Oct 2022 07:40:58 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1A3AEA3A;
+        Tue, 25 Oct 2022 04:40:54 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MxVJ70BnmzVhpm;
+        Tue, 25 Oct 2022 19:36:07 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 19:40:52 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
+ 2022 19:40:52 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
+CC:     <logang@deltatee.com>, <dan.j.williams@intel.com>,
+        <hans.verkuil@cisco.com>, <alexandre.belloni@free-electrons.com>,
+        <gregkh@linuxfoundation.org>, <viro@zeniv.linux.org.uk>
+Subject: [PATCH v2] chardev: fix error handling in cdev_device_add()
+Date:   Tue, 25 Oct 2022 19:39:57 +0800
+Message-ID: <20221025113957.693723-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b6001af6-4c41-a678-b3cb-4c1d874425bf@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI Kishon,
+While doing fault injection test, I got the following report:
 
-On Tue, Oct 11, 2022 at 06:27:37PM +0530, Kishon Vijay Abraham I wrote:
-> Hi Mani,
-> 
-> On 06/10/22 7:19 pm, Manivannan Sadhasivam wrote:
-> > Instead of using the notifiers for passing the events from EPC to EPF,
-> > let's introduce a callback based mechanism where the EPF drivers can
-> > populate relevant callbacks for EPC events they want to subscribe.
-> > 
-> > The use of notifiers in kernel is not recommended if there is a real link
-> > between the sender and receiver, like in this case. Also, the existing
-> > atomic notifier forces the notification functions to be in atomic context
-> > while the caller may be in non-atomic context. For instance, the two
-> > in-kernel users of the notifiers, pcie-qcom and pcie-tegra194, both are
-> > calling the notifier functions in non-atomic context (from threaded IRQ
-> > handlers). This creates a sleeping in atomic context issue with the
-> > existing EPF_TEST driver that calls the EPC APIs that may sleep.
-> > 
-> > For all these reasons, let's get rid of the notifier chains and use the
-> > simple callback mechanism for signalling the events from EPC to EPF
-> > drivers. This preserves the context of the caller and avoids the latency
-> > of going through a separate interface for triggering the notifications.
-> > 
-> > As a first step of the transition, the core_init() callback is introduced
-> > in this commit, that'll replace the existing CORE_INIT notifier used for
-> > signalling the init complete event from EPC.
-> > 
-> > During the occurrence of the event, EPC will go over the list of EPF
-> > drivers attached to it and will call the core_init() callback if available.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   drivers/pci/endpoint/functions/pci-epf-test.c | 13 ++++++-------
-> >   drivers/pci/endpoint/pci-epc-core.c           | 11 ++++++++++-
-> >   include/linux/pci-epf.h                       | 11 ++++++++++-
-> >   3 files changed, 26 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > index a6f906a96669..868de17e1ad2 100644
-> > --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> > +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > @@ -826,20 +826,17 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
-> >   	return 0;
-> >   }
-> > +static const struct pci_epc_event_ops pci_epf_test_event_ops = {
-> > +	.core_init = pci_epf_test_core_init,
-> > +};
-> > +
-> >   static int pci_epf_test_notifier(struct notifier_block *nb, unsigned long val,
-> >   				 void *data)
-> >   {
-> >   	struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
-> >   	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
-> > -	int ret;
-> >   	switch (val) {
-> > -	case CORE_INIT:
-> > -		ret = pci_epf_test_core_init(epf);
-> > -		if (ret)
-> > -			return NOTIFY_BAD;
-> > -		break;
-> > -
-> >   	case LINK_UP:
-> >   		queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
-> >   				   msecs_to_jiffies(1));
-> > @@ -1010,6 +1007,8 @@ static int pci_epf_test_probe(struct pci_epf *epf, const struct pci_epf_device_i
-> >   	INIT_DELAYED_WORK(&epf_test->cmd_handler, pci_epf_test_cmd_handler);
-> > +	epf->event_ops = &pci_epf_test_event_ops;
-> 
-> Doesn't this ignore epc_features input from the controller driver?
+------------[ cut here ]------------
+kobject: '(null)' (0000000039956980): is not initialized, yet kobject_put() is being called.
+WARNING: CPU: 3 PID: 6306 at kobject_put+0x23d/0x4e0
+CPU: 3 PID: 6306 Comm: 283 Tainted: G        W          6.1.0-rc2-00005-g307c1086d7c9 #1253
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+RIP: 0010:kobject_put+0x23d/0x4e0
+Call Trace:
+ <TASK>
+ cdev_device_add+0x15e/0x1b0
+ __iio_device_register+0x13b4/0x1af0 [industrialio]
+ __devm_iio_device_register+0x22/0x90 [industrialio]
+ max517_probe+0x3d8/0x6b4 [max517]
+ i2c_device_probe+0xa81/0xc00
 
-Sorry I don't get it! epc_features from the controller is acuquired during
-pci_epf_test_bind(). EPF probe doesn't have any visibility of the controller
-driver.
+When device_add() is injected fault and returns error, if dev->devt is not set,
+cdev_add() is not called, cdev_del() is not needed. Fix this by checking dev->devt
+in error path.
 
-> > +
-> >   	epf_set_drvdata(epf, epf_test);
-> >   	return 0;
-> >   }
-> > diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-> > index 6cce430d431b..ba54f17ae06f 100644
-> > --- a/drivers/pci/endpoint/pci-epc-core.c
-> > +++ b/drivers/pci/endpoint/pci-epc-core.c
-> > @@ -707,10 +707,19 @@ EXPORT_SYMBOL_GPL(pci_epc_linkup);
-> >    */
-> >   void pci_epc_init_notify(struct pci_epc *epc)
-> >   {
-> > +	struct pci_epf *epf;
-> > +
-> >   	if (!epc || IS_ERR(epc))
-> >   		return;
-> > -	atomic_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
-> > +	mutex_lock(&epc->list_lock);
-> > +	list_for_each_entry(epf, &epc->pci_epf, list) {
-> > +		mutex_lock(&epf->lock);
-> > +		if (epf->event_ops->core_init)
-> 
-> This would result in abort if the endpoint function driver is not bound to
-> endpoint device and the notify is called.
-> 
+Fixes: 233ed09d7fda ("chardev: add helper function to register char devs with a struct device")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+v1 -> v2:
+  Add information to update commit message.
+  v1 link: https://lore.kernel.org/lkml/1959fa74-b06c-b8bc-d14f-b71e5c4290ee@huawei.com/T/
+---
+ fs/char_dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I don't think so. We are iterating the "epc->pci_epf" list, which will only be
-populated if a EPF driver gets bind to an endpoint device.
-
-> This would also require all function drivers to have event_ops populated.
-> IOW this could break pci-epf-ntb.c.
-> 
-
-This I missed. I will add a check for the "epf->event_ops" existence first.
-
-Thanks,
-Mani
-
-> Thanks,
-> Kishon
-
+diff --git a/fs/char_dev.c b/fs/char_dev.c
+index ba0ded7842a7..3f667292608c 100644
+--- a/fs/char_dev.c
++++ b/fs/char_dev.c
+@@ -547,7 +547,7 @@ int cdev_device_add(struct cdev *cdev, struct device *dev)
+ 	}
+ 
+ 	rc = device_add(dev);
+-	if (rc)
++	if (rc && dev->devt)
+ 		cdev_del(cdev);
+ 
+ 	return rc;
 -- 
-மணிவண்ணன் சதாசிவம்
+2.25.1
+
