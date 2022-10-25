@@ -2,120 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A6060CACD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F30D60CACB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiJYLVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
+        id S232029AbiJYLV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbiJYLVs (ORCPT
+        with ESMTP id S231286AbiJYLVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:21:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DE5123465
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666696905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BaqceJ7rtioV7Hk4RXPbSv2vv4HBnmL/vQtFf809lKU=;
-        b=GDjIR4ei8BLDmU6YvcXvpnxUMxwydLlbPyJKH9QsoX8/TakwOFXpjwoB3PvRbVFPSPOk5w
-        dC5mEEQ7Tr8NOiGeK74rPCcSGo+x4xw4fAB3NDfbjFh4LwaSaO1nWlbOD1za+OlUYPv7jM
-        Yuprbt+SgDF9V/o0XmWw9HnIi70idaw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-MDje6bPONCib0KQ6WMl_Bw-1; Tue, 25 Oct 2022 07:21:31 -0400
-X-MC-Unique: MDje6bPONCib0KQ6WMl_Bw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 576E5811E75;
-        Tue, 25 Oct 2022 11:21:30 +0000 (UTC)
-Received: from T590 (ovpn-8-30.pek2.redhat.com [10.72.8.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 70E2C492B0A;
-        Tue, 25 Oct 2022 11:21:23 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 19:21:17 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     John Garry <john.garry@huawei.com>
-Cc:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, hch@lst.de,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH] blk-mq: Properly init bios from
- blk_mq_alloc_request_hctx()
-Message-ID: <Y1fGrfHqbha6l+hz@T590>
-References: <Y1U9zNZtZjRHQBww@T590>
- <99c6ca81-746d-85f4-04d3-49d7a3de611b@huawei.com>
- <Y1aS3vIbuQTNGWJL@T590>
- <360c78dc-65ce-362f-389d-075f2259ce5b@huawei.com>
- <Y1cvJ4/uwUScAQq4@T590>
- <3513b14c-14e0-b865-628e-a83521090de9@huawei.com>
- <CAFj5m9JnSBBVGrp5CqeH99-+VOGRuroUAi3c-3=6XKa891Sfmw@mail.gmail.com>
- <cf7f8f88-7d3e-8818-8584-e2276e7a1f30@huawei.com>
- <Y1epeuwonmjQhrXW@T590>
- <399a2c2d-0b56-e4e7-c309-a6b9537d8939@huawei.com>
+        Tue, 25 Oct 2022 07:21:25 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E71F63C7;
+        Tue, 25 Oct 2022 04:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+YhmmoZMLY7XrNhYbkL+EQRVhqHSiXfciFzZavrXBJg=; b=NJg02Upj0PEyhmA81VlVsjmBPH
+        8A2RCWamtgL1y372jrQ4PJrhaYtAuAfyZW4g/FC+8a8A6bdj/Dbb/RZtMcYdil9ZXq6bnZotxF2L4
+        AUOfC/Gz89HejPyjPgHjT59vYJ14vp7ZYR9uERNbQ5DdbrpgtdtY3Tgbh0wOGPr0baptndvI+PqpJ
+        mXHGpRD6Bb/ner9r/s4N+zHenQgijZQxsmqm1TqdTvEE5Ee1ibdh7gfndUqAeKb1h/WNKAX0j8/sk
+        4LxDbx7ltzbnsy0jOOe1E5nKV0QOA/AUzQ3BRoMdnDm0c3AjpacJ++bzDDsvnoK+UT5OeU4znCnFS
+        0uLZCpJg==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:38524 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1onHze-006z2X-4R;
+        Tue, 25 Oct 2022 13:21:14 +0200
+Message-ID: <56af1cc3-c10e-5694-d25f-252304732568@norik.com>
+Date:   Tue, 25 Oct 2022 13:21:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <399a2c2d-0b56-e4e7-c309-a6b9537d8939@huawei.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
+Content-Language: en-GB
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, wim@linux-watchdog.org,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221025072533.2980154-1-andrej.picej@norik.com>
+ <20221025072533.2980154-2-andrej.picej@norik.com>
+ <13126397.uLZWGnKmhe@steina-w>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <13126397.uLZWGnKmhe@steina-w>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 10:32:28AM +0100, John Garry wrote:
-> On 25/10/2022 10:16, Ming Lei wrote:
-> > > > > I mentioned before that if no hctx->cpumask is online then we don't need
-> > > > > to allocate a request. That is because if no hctx->cpumask is online,
-> > > > > this means that original erroneous IO must be completed due to nature of
-> > > > > how blk-mq cpu hotplug handler works, i.e. drained, and then we don't
-> > > > > actually need to abort it any longer, so ok to not get a request.
-> > > > No, it is really not OK, if all cpus in hctx->cpumask are offline, you
-> > > > can't allocate
-> > > > request on the specified hw queue, then the erroneous IO can't be handled,
-> > > > then cpu hotplug handler may hang for ever.
-> > > If the erroneous IO is still in-flight from blk-mq perspective, then how can
-> > > hctx->cpumask still be offline? I thought that we guarantee that
-> > > hctx->cpumask cannot go offline until drained.
-> > Yeah, the draining is done before the cpu is offline. But the drain is
-> > simply waiting for the inflight IO to be completed. If the IO is failed
-> > during the waiting, you can't allocate such reserved request for error
-> > handling, then hang ever in blk_mq_hctx_notify_offline().
+Hi Alexander,
+
+On 25. 10. 22 11:38, Alexander Stein wrote:
+> Am Dienstag, 25. Oktober 2022, 09:25:31 CEST schrieb Andrej Picej:
+>> Putting device into the "Suspend-To-Idle" mode causes watchdog to
+>> trigger and reset the board after set watchdog timeout period elapses.
+>>
+>> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
+>> watchdog in WAIT mode. This is done by setting WDW bit in WCR
+>> (Watchdog Control Register) Watchdog operation is restored after exiting
+>> WAIT mode as expected. WAIT mode coresponds with Linux's
+>> "Suspend-To-Idle".
+>>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>> ---
+>> Changes in v2:
+>>   - validate the property with compatible string, as this functionality
+>>     is not supported by all devices.
+>> ---
+>>   drivers/watchdog/imx2_wdt.c | 37 +++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
+>>
+>> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+>> index d0c5d47ddede..dd9866c6f1e5 100644
+>> --- a/drivers/watchdog/imx2_wdt.c
+>> +++ b/drivers/watchdog/imx2_wdt.c
+>> @@ -35,6 +35,7 @@
+>>
+>>   #define IMX2_WDT_WCR		0x00		/* Control
+> Register */
+>>   #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* ->
+> Watchdog Timeout Field */
+>> +#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable
+> for WAIT */
+>>   #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset
+> WDOG_B */
+>>   #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset
+> Signal */
+>>   #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable
+> */
+>> @@ -67,6 +68,27 @@ struct imx2_wdt_device {
+>>   	bool ext_reset;
+>>   	bool clk_is_on;
+>>   	bool no_ping;
+>> +	bool sleep_wait;
+>> +};
+>> +
+>> +static const char * const wdw_boards[] __initconst = {
+>> +	"fsl,imx25-wdt",
+>> +	"fsl,imx35-wdt",
+>> +	"fsl,imx50-wdt",
+>> +	"fsl,imx51-wdt",
+>> +	"fsl,imx53-wdt",
+>> +	"fsl,imx6q-wdt",
+>> +	"fsl,imx6sl-wdt",
+>> +	"fsl,imx6sll-wdt",
+>> +	"fsl,imx6sx-wdt",
+>> +	"fsl,imx6ul-wdt",
+>> +	"fsl,imx7d-wdt",
+>> +	"fsl,imx8mm-wdt",
+>> +	"fsl,imx8mn-wdt",
+>> +	"fsl,imx8mp-wdt",
+>> +	"fsl,imx8mq-wdt",
+>> +	"fsl,vf610-wdt",
+>> +	NULL
+>>   };
 > 
-> Actually if final cpu in hctx->cpumask is going offline, then hctx won't
-> queue any more requests, right? In this case I don't think we can queue on
-> that hctx anyway. I need to think about this more.
-
-It can be queued actually, but interrupt may not be delivered if managed
-irq is used.
+> So the models listed in Documentation/devicetree/bindings/watchdog/fsl-imx-
+> wdt.yaml not supporting this feature are
+> * fsl,imx21-wdt
+> * fsl,imx27-wdt
+> * fsl,imx31-wdt
+> * fsl,ls1012a-wdt
+> * fsl,ls1043a-wdt
+> ?
+yes, you are correct.
 
 > 
-> > 
-> > If you just make it one driver private command, there can't be such
-> > issue.
+> But all models are listed as compatible to fsl,imx21-wdt. So there is
+> something wrong here. IMHO this sounds like the compatible list has to be
+> split and updated. Depending on that this feature can be detected. Maintaining
+> another list seems error prone to me.
 > 
-> Well we're trying to use reserved requests for EH commands, which that goes
-> against.
+
+So basically the compatible lists would be split into two groups, one 
+for the devices which support this WDW bit and the rest which don't 
+support this?
+You got a point here, but...this means that every processors 
+device-tree, which has two compatible strings (with "fsl,imx21-wdt") 
+should be updated, right? That sounds like quite a lot of changes, which 
+I'd like to avoid if possible.
+
+Best regards,
+Andrej
+
+> Best regards,
+> Alexander
 > 
-> > Block layer is supposed for handling common case(normal io and pt io),
-> > I'd suggest to not put such special cases into block layer.
+>>   static bool nowayout = WATCHDOG_NOWAYOUT;
+>> @@ -129,6 +151,9 @@ static inline void imx2_wdt_setup(struct watchdog_device
+>> *wdog)
+>>
+>>   	/* Suspend timer in low power mode, write once-only */
+>>   	val |= IMX2_WDT_WCR_WDZST;
+>> +	/* Suspend timer in low power WAIT mode, write once-only */
+>> +	if (wdev->sleep_wait)
+>> +		val |= IMX2_WDT_WCR_WDW;
+>>   	/* Strip the old watchdog Time-Out value */
+>>   	val &= ~IMX2_WDT_WCR_WT;
+>>   	/* Generate internal chip-level reset if WDOG times out */
+>> @@ -313,6 +338,18 @@ static int __init imx2_wdt_probe(struct platform_device
+>> *pdev)
+>>
+>>   	wdev->ext_reset = of_property_read_bool(dev->of_node,
+>>   						"fsl,ext-
+> reset-output");
+>> +
+>> +	if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait"))
+>> +		if (of_device_compatible_match(dev->of_node,
+> wdw_boards))
+>> +			wdev->sleep_wait = 1;
+>> +		else {
+>> +			dev_warn(dev, "Warning: Suspending watchdog
+> during " \
+>> +				"WAIT mode is not supported for
+> this device.\n");
+>> +			wdev->sleep_wait = 0;
+>> +		}
+>> +	else
+>> +		wdev->sleep_wait = 0;
+>> +
+>>   	/*
+>>   	 * The i.MX7D doesn't support low power mode, so we need to ping
+> the
+>> watchdog * during suspend.
 > 
-> It also supports reserved commands, which I would assume would be suitable
-> for EH scenarios.
-
-Then you have to be careful, as I mentioned, EH has to provide forward
-progress, if you let blk-mq allocate & submit EH request, the implied
-dependency from blk-mq has to be payed attention.
-
-
-Thanks,
-Ming
-
+> 
+> 
+> 
