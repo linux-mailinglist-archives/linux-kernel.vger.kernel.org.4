@@ -2,149 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9C360C97D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A7D60C9AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiJYKJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S232267AbiJYKNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbiJYKIr (ORCPT
+        with ESMTP id S232251AbiJYKNV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:08:47 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810332981B;
-        Tue, 25 Oct 2022 03:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1666692130; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Tue, 25 Oct 2022 06:13:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4C714FD0F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666692314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GZQjd+Wa2neY9qwI0lk5D0hlo8qhC97lemY8oYsOL6Q=;
-        b=KRvUJyGzMOrhIRfEabCCyBxTa37MSYJfAKXwdA45KS7sRBteAz4EJUTU+XUXe472KduOQT
-        +uAAK+LaRR31+nsBVxmJ37qwXWMUdgohMjb68N0MpCf1Vq6/9aNzUSC1nOmV1G2Uq+Nvel
-        mHd7E9211bYxMKzIhB+VNQfRfgsa/Go=
-Date:   Tue, 25 Oct 2022 11:02:00 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2 channels,
- part 1
-To:     Uwe =?iso-8859-1?q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Message-Id: <CVZAKR.06MA7BGA170W3@crapouillou.net>
-In-Reply-To: <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
-        <20221024205213.327001-2-paul@crapouillou.net>
-        <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
+        bh=WkMY2q7k/FRScATXzFjfEIt8wnjgYfKsZeIIXZ3g4lg=;
+        b=Hb0BkHQ9GI+AMUEa2uZeqFKA6oGI4JX9MJ62mNiJsc6zkSJ9l8+NtF2apaZaOdAQ/713OV
+        0bOYBahz0z6YWYGYo9ZPVXZxWLJfrK/6v8sNkbAZcdbfFc+v0NAB0M+/Il1OShCJRNbCoX
+        beJl9z+5w65N2vwYQMmCDI0brlGWQlE=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-663-tCvdeM3wMFC7ORiw4fbwvA-1; Tue, 25 Oct 2022 06:05:05 -0400
+X-MC-Unique: tCvdeM3wMFC7ORiw4fbwvA-1
+Received: by mail-qk1-f200.google.com with SMTP id u6-20020a05620a430600b006e47fa02576so11156694qko.22
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:05:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WkMY2q7k/FRScATXzFjfEIt8wnjgYfKsZeIIXZ3g4lg=;
+        b=nYwcum8x5LNd2mtPDbiDnEQatmN/7sX6gUXrT7EdHWIY9Uw6ftt7/uL5a833PO28Pj
+         mo29t9baMRnggYLPnPgb+hzdU6PNo29aB1UCKajP+wVSEspaqJO0FId9lz0qRAr9R1bz
+         G/gp8ZrgFUh0loMMkJ5MXFDq+XpTDozFm3tfPlw2qVRWWbgEt2bsrvKjTHLOfWi/FqU7
+         uYRGLtmtnRjAp6BEcHzi2UhlLhbNjpbtp847EzFROZSb7R6Ug4H6SLjrSm9KsWLqoMdW
+         knGNniRYUpp0qWZ4++zvizCTeA28Ax+RVXbjJBGjrbvBCjzHKe7XblL9l1iSSVc/n20t
+         DfvA==
+X-Gm-Message-State: ACrzQf25z2GPUR2J9xdHJUAj5bMPk92lMH32l61sQrbdLepytJxTFQzb
+        im/hlpy150XUZ/kVNzFXs2Mw6EMKVzuxMf3vZ6E3xUj5Hfz4hF0aiP9/1n8Ytya9GrzOoi65bAM
+        Dqfqiyk2NrioTCQn3S7ew6LJi
+X-Received: by 2002:a05:6214:21e5:b0:4b3:f3e0:5432 with SMTP id p5-20020a05621421e500b004b3f3e05432mr30997935qvj.19.1666692305295;
+        Tue, 25 Oct 2022 03:05:05 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM693U09GZt8c3TCu0FJo9qI1g4ScuhxN9DXfAJplWl/vGo09zLnXBtWBBG2qZwZQgoHuj3OGw==
+X-Received: by 2002:a05:6214:21e5:b0:4b3:f3e0:5432 with SMTP id p5-20020a05621421e500b004b3f3e05432mr30997911qvj.19.1666692305082;
+        Tue, 25 Oct 2022 03:05:05 -0700 (PDT)
+Received: from [10.201.49.36] (nat-pool-mxp-u.redhat.com. [149.6.153.187])
+        by smtp.googlemail.com with ESMTPSA id d13-20020a05620a240d00b006bc192d277csm1807519qkn.10.2022.10.25.03.05.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 03:05:04 -0700 (PDT)
+Message-ID: <6812bb87-f355-eddb-c484-b3bb089dd630@redhat.com>
+Date:   Tue, 25 Oct 2022 12:05:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH 4/4] KVM: use signals to abort enter_guest/blocking and
+ retry
+Content-Language: en-US
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221022154819.1823133-1-eesposit@redhat.com>
+ <20221022154819.1823133-5-eesposit@redhat.com>
+ <5ee4eeb8-4d61-06fc-f80d-06efeeffe902@redhat.com>
+ <4ef882c2-1535-d7df-d474-e5fab2975f53@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <4ef882c2-1535-d7df-d474-e5fab2975f53@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/24/22 09:43, Emanuele Giuseppe Esposito wrote:
+>> Since the userspace should anyway avoid going into this effectively-busy
+>> wait, what about clearing the request after the first exit?  The
+>> cancellation ioctl can be kept for vCPUs that are never entered after
+>> KVM_KICK_ALL_RUNNING_VCPUS.  Alternatively, kvm_clear_all_cpus_request
+>> could be done right before up_write().
+>
+> Clearing makes sense, but should we "trust" the userspace not to go into
+> busy wait?
 
+I think so, there are many other ways for userspace to screw up.
 
-Le mar. 25 oct. 2022 =E0 08:21:29 +0200, Uwe Kleine-K=F6nig=20
-<u.kleine-koenig@pengutronix.de> a =E9crit :
-> Hello,
->=20
-> On Mon, Oct 24, 2022 at 09:52:09PM +0100, Paul Cercueil wrote:
->>  The "duty > cycle" trick to force the pin level of a disabled TCU2
->>  channel would only work when the channel had been enabled=20
->> previously.
->>=20
->>  Address this issue by enabling the PWM mode in jz4740_pwm_disable
->>  (I know, right) so that the "duty > cycle" trick works before=20
->> disabling
->>  the PWM channel right after.
->>=20
->>  This issue went unnoticed, as the PWM pins on the majority of the=20
->> boards
->>  tested would default to the inactive level once the corresponding=20
->> TCU
->>  clock was enabled, so the first call to jz4740_pwm_disable() would=20
->> not
->>  actually change the pin levels.
->>=20
->>  On the GCW Zero however, the PWM pin for the backlight (PWM1, which=20
->> is
->>  a TCU2 channel) goes active as soon as the timer1 clock is enabled.
->>  Since the jz4740_pwm_disable() function did not work on channels not
->>  previously enabled, the backlight would shine at full brightness=20
->> from
->>  the moment the backlight driver would probe, until the backlight=20
->> driver
->>  tried to *enable* the PWM output.
->>=20
->>  With this fix, the PWM pins will be forced inactive as soon as
->>  jz4740_pwm_apply() is called (and might be reconfigured to active if
->>  dictated by the pwm_state). This means that there is still a tiny=20
->> time
->>  frame between the .request() and .apply() callbacks where the PWM=20
->> pin
->>  might be active. Sadly, there is no way to fix this issue: it is
->>  impossible to write a PWM channel's registers if the corresponding=20
->> clock
->>  is not enabled, and enabling the clock is what causes the PWM pin=20
->> to go
->>  active.
->>=20
->>  There is a workaround, though, which complements this fix: simply
->>  starting the backlight driver (or any PWM client driver) with a=20
->> "init"
->>  pinctrl state that sets the pin as an inactive GPIO. Once the=20
->> driver is
->>  probed and the pinctrl state switches to "default", the regular PWM=20
->> pin
->>  configuration can be used as it will be properly driven.
->>=20
->>  Fixes: c2693514a0a1 ("pwm: jz4740: Obtain regmap from parent node")
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  Cc: stable@vger.kernel.org
->=20
-> OK, understood the issue. I think there is another similar issue: The
-> clk is get and enabled only in the .request() callback. The result is=20
-> (I
-> think---depends on a few further conditions) that if you have the
-> backlight driver as a module and the bootloader enables the backlight=20
-> to
-> show a splash screen, the backlight goes off because of the
-> clk_disable_unused initcall.
+> What's the typical "contract" between KVM and the userspace? Meaning,
+> should we cover the basic usage mistakes like forgetting to busy wait on
+> KVM_RUN?
 
-I will have to verify, but I'm pretty sure disabling the clock doesn't=20
-change the pin level back to inactive.
+Being able to remove the second ioctl if you do (sort-of pseudocode 
+based on this v1)
 
--Paul
+	kvm_make_all_cpus_request(kvm, KVM_REQ_USERSPACE_KICK);
+	down_write(&kvm->memory_transaction);
+	up_write(&kvm->memory_transaction);
+	kvm_clear_all_cpus_request(kvm, KVM_REQ_USERSPACE_KICK);
 
-> So the right thing to do is to get the clock in .probe(), and ensure=20
-> it
-> is kept on if the PWM is running already. Then you can also enable the
-> counter in .probe() and don't care for it in the enable and disable
-> functions.
->=20
-> The init pinctrl then has to be on the PWM then, but that's IMHO ok.
->=20
-> Best regards
-> Uwe
->=20
-> PS: While looking into the driver I noticed that .request() uses
-> dev_err_probe(). That's wrong, this function is only supposed to be=20
-> used
-> in .probe().
->=20
-> --
-> Pengutronix e.K.                           | Uwe Kleine-K=F6nig       =20
->     |
-> Industrial Linux Solutions                 |=20
-> https://www.pengutronix.de/ |
+would be worth it, I think.
 
+Paolo
 
