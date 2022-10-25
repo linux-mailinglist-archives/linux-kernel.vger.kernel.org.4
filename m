@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FE360D34F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D31160D354
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbiJYSOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 14:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
+        id S232008AbiJYSRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 14:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232758AbiJYSOl (ORCPT
+        with ESMTP id S230453AbiJYSRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:14:41 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836FCFDA
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:14:25 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id a5so8696388qkl.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:14:25 -0700 (PDT)
+        Tue, 25 Oct 2022 14:17:10 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BFBD4A2B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:17:09 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id fy4so14821117ejc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RKSf2M9cXULBGQi0KAs22w4c/g8Gdxd3T0gP82uqFls=;
-        b=VD+I9qjrgFRWQeb1dHIKMbQpZgOS8wWjuauS/e8sumhy5gkJMpVGjY0dYEYrqqLsg5
-         PZ1Vhq8h2VTuTJbxE2g3S7MN8bC2E6LAd9FAe3M0gvrmq/h7Cq4jxjkQzHG4gafiTM42
-         BdlMZB5GPmOJ0RItLLReomnUZ2o1u1/h/FTN8=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wiQ/FKVprfl/2j6yZVqBybauBhLs5z930z+sCk9K3nM=;
+        b=LyzJdfBL3yMDCxf4Qm0esMjRa21JjpNLc4v9SM6AJF+64S0ORaeKR5qTB/MDl+njxI
+         96a4HjyvMqBivfDIc+RS49ViPavuFAwTYBCTevrlS5cy9ZXirBRSXGthluuJUe1Ut2q3
+         J11itIc6Blxie8j5wFFFpivd7qd4cMXdPfpPeBe7FxMKiPI0k1DVeRZL2Ds9TKlYLRw4
+         SIyrE/On7pOntxu3tCHFLPTbVhHM5cDBHSUzBBNjwoFFHEZSJFJmaJzkOSb4GImwypyT
+         GZJO3lTPCc2t8pVyShvq+TZYeQS0uKBT5CGh/uOiuHdGHdEluoJmHtQxPVYOd0VG950W
+         Yaqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RKSf2M9cXULBGQi0KAs22w4c/g8Gdxd3T0gP82uqFls=;
-        b=s7bdjDzu2jKACiYExl+vxJd9o5s6dyo8KyyCr+CppxK+CCHAZi9kU1kz75vV6HCiKw
-         80aWCWEgZFi2zrKYQGQ365C0WA1IiD//UBkHsaxs/EMsbTv67e0yFuS4QsIslXWFctMA
-         rr6zSbi67IrUC91xLxf/ajS9AmMUoozSavcojA6rUUVxjzWrMO9n7hn4QQad/A1dpvaI
-         RNEsIb8HOpcb6tFdNsNp4Sk7SjcNgHHyauYmMM9i6AuAiBw7Mr4+ICwrbWYEW/L4z0Wk
-         ZONuXjJVqAbFLAr9NcPgjKgF46TTNRlqcJsZjboB3MmyqtdkC6sCkAoO6sR+/6GaZG8W
-         7eCw==
-X-Gm-Message-State: ACrzQf09P1413m3my1cf2F/HPIHc5yq3WiLIhYkzj2eLkOyrlNMXG0VI
-        sJ0N47zwGsI4tGa2gc1PNq1rwU5CNeMVqQ==
-X-Google-Smtp-Source: AMsMyM6fvY+WxVqLp2VrW3uuB9v9F3CVrAxaFFYOqafaln+X88VE3S2X4r5mHL4vs5RjY9qt1AkaGQ==
-X-Received: by 2002:a05:620a:343:b0:6ec:f4b3:e3c8 with SMTP id t3-20020a05620a034300b006ecf4b3e3c8mr27756066qkm.225.1666721664645;
-        Tue, 25 Oct 2022 11:14:24 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id bb20-20020a05622a1b1400b003992448029esm1941972qtb.19.2022.10.25.11.14.23
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wiQ/FKVprfl/2j6yZVqBybauBhLs5z930z+sCk9K3nM=;
+        b=Mgxok+rIYMb9gVEBFoRZkBrCJPSwWguHBnjyEMLonWFERky70petNedYPUedJxu4f6
+         O7NCAy0DJMVE5/2bV4n21grEi8cjIJD08qSxFCHV2On8jBtnI+wYBZcF6/zovkdmLlaG
+         F+zF7H9bZ7Lkpj68wFyDwb6fhqgwX1gnRE8Y9tsz5kAPhgi+ItaLGMCE7PX7DJ9YxDql
+         SeZlQI5g2nvfgYBqFpoVRvOi6NxaSTpjvClaKhd7Z0UVgz8tIUpDJilDeb2otAQCHkrs
+         sSTJtj1B1lCKVMz84n7bLs5x4zDX5HZ8XsFbA+gxz11MVDuMiTaeoY8oL0V427oJ8wVb
+         svXw==
+X-Gm-Message-State: ACrzQf2UFod/4EN5jXDP0UUp4ROaDJzo1sH10L910evBsmylm18ktHdy
+        Eu8OstDw+zzZuL36bWAv2RY=
+X-Google-Smtp-Source: AMsMyM5NbyC+Op50jHKNtYvL+5ipB36yuW0xS2E6j5aONwfU9fzrWIBTsu3w8xNHOJ6SAud6KYzeYw==
+X-Received: by 2002:a17:906:6a18:b0:78d:7228:7a52 with SMTP id qw24-20020a1709066a1800b0078d72287a52mr33141434ejc.363.1666721828058;
+        Tue, 25 Oct 2022 11:17:08 -0700 (PDT)
+Received: from [192.168.1.102] (p57935738.dip0.t-ipconnect.de. [87.147.87.56])
+        by smtp.gmail.com with ESMTPSA id gk19-20020a17090790d300b0078b1ff41f05sm1775924ejb.43.2022.10.25.11.17.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 11:14:23 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-333a4a5d495so122250067b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:14:23 -0700 (PDT)
-X-Received: by 2002:a81:1902:0:b0:36b:2578:f6e2 with SMTP id
- 2-20020a811902000000b0036b2578f6e2mr16541602ywz.352.1666721663328; Tue, 25
- Oct 2022 11:14:23 -0700 (PDT)
+        Tue, 25 Oct 2022 11:17:07 -0700 (PDT)
+Message-ID: <4a8bbc23-9d17-c6e0-5da4-a799cf7d332d@gmail.com>
+Date:   Tue, 25 Oct 2022 20:17:06 +0200
 MIME-Version: 1.0
-References: <20221024114536.44686c83@gandalf.local.home> <CAHk-=wj9xBsbeoiFCBLrr3y_CdMOzNh=fD3rr_kcxYwL6vV0Jw@mail.gmail.com>
- <20221024145250.08cfc147@gandalf.local.home> <CAHk-=wjRpCS3oAJHVfByDoaj0-tAhV5a5YKV7QssUdMOAm8bAg@mail.gmail.com>
- <Y1eu2wFVp1zcLg5b@hirez.programming.kicks-ass.net> <Y1e3i3RJRxOHTcJS@hirez.programming.kicks-ass.net>
- <CAHk-=wjwjWAhPD=C7sW7804eOTSQRnpSrrQh44PFYpVjn8SjKg@mail.gmail.com> <Y1ghRheOJeAfJvdY@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y1ghRheOJeAfJvdY@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 25 Oct 2022 11:14:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgvuanYPtndJR2iDpn60ry4FMueEg2DCRdQresvkdRgHQ@mail.gmail.com>
-Message-ID: <CAHk-=wgvuanYPtndJR2iDpn60ry4FMueEg2DCRdQresvkdRgHQ@mail.gmail.com>
-Subject: Re: [PATCH] x86/mm: Do not verify W^X at boot up
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 0/4] staging: r8188eu: cleaning up unused variables
+Content-Language: en-US
+To:     Kang Minchul <tegongkang@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221025170621.271903-1-tegongkang@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221025170621.271903-1-tegongkang@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,28 +78,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 10:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> mm_alloc() uses allocate_mm() which requires a kmem_cache to be set-up.
-
-Well, that seems to be just a strange effect of mm_cachep being set up
-by the oddly named "proc_caches_init" (I say oddly named because these
-days I associate "proc" with proc-fs, but I think it actually comes
-from "process").
-
-That would actually probably make more sense if it was part of
-mm_init(), much earlier (where we do "kmem_cache_init()")
-
-So this is another oddity in how we do "mm_init()", but we haven't
-actually initialized _that_ part of the mm setup.
-
-Extra bonus points for another strange thing: we have "fork_init()",
-but that too doesn't actually initialize the mm_cachep that fork()
-actually uses. It does initialize the process one
-(task_struct_cachep). So that kind of makes sense, but yeah, the
-mm_alloc() cachep should have been set up by mm_init.
-
-I think this is all "we just ended up randomly initializing things due
-to hysterical raisins"
-
-              Linus
+On 10/25/22 19:06, Kang Minchul wrote:
+> This patch series cleans up unused variables in r8188eu
+> causing coccicheck warnings.
+> 
+> Difference between this patch and previous patch is that this patch series
+> include making function rtw_sta_flush in r8188eu/core/rtw_ap.c
+> into void function.
+> 
+> Kang Minchul (4):
+>    staging: r8188eu: remove unnecessary variable in ioctl_linux
+>    staging: r8188eu: remove unnecessary vaiable in rtw_recv
+>    staging: r8188eu: remove unnecessary variable in rtl8188eu_xmit
+>    staging: r8188eu: make rtw_sta_flush to void
+> 
+>   drivers/staging/r8188eu/core/rtw_ap.c        | 7 ++-----
+>   drivers/staging/r8188eu/core/rtw_recv.c      | 3 +--
+>   drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
+>   drivers/staging/r8188eu/include/rtw_ap.h     | 2 +-
+>   drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
+>   5 files changed, 6 insertions(+), 13 deletions(-)
+> 
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
