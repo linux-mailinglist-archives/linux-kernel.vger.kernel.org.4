@@ -2,51 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C3460D7A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAADE60D7A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 01:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiJYXGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 19:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
+        id S230453AbiJYXHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 19:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbiJYXGv (ORCPT
+        with ESMTP id S232187AbiJYXHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 19:06:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51678E8AA8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=o/2rqPUzMMz/iftug8ES08ZnowPqk70xK/g4Ab48Ce4=; b=rB9WzZT5XjDfRufiNuQSjakJl7
-        TByRGMmaVkpBZP+O5wh18QSMPNdY3HSAaNbgr94fEEbbj6uw96NBO+MLtuvtSeg2lFtVyPHsOFC7A
-        4Q1Cq66fZUKi62xat7N89CL/NnXnMCXIx6ojbfoQKAfApuA4+soDDoGGJ/7NNKDZjO4W8NZlB8zQY
-        xqpXimmvvazw/qOxuzJnbKyi+QRHMoo/8/tqOHUzLu6fa9IizpqKb39HD4QN+qw78Y8SJRisHlwZa
-        Wi8g9PSSIpWfisrLZuc8a94FAZwKhEJgxRpWykkNkxoY+BluBLdeh+jXr6kUPN+iF4PR5abeETjQ3
-        hM4UfnDA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onT0N-007VN2-Gz; Tue, 25 Oct 2022 23:06:43 +0000
-Date:   Tue, 25 Oct 2022 16:06:43 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Miroslav Benes <mbenes@suse.cz>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tue, 25 Oct 2022 19:07:16 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765D3E985F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:07:15 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y13so8928360pfp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 16:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A7kKcrW8+Rtrlgds+v4H23IM/wohgMjvlalkGtkGE48=;
+        b=i9+bLN5FonRCnXyaeAZ/jEHxOllBLcuLRG6g7djDO2ymq1eoILB4dhajH6DdkL9Ypw
+         dWBExwNgYe7L3rF6XlQLTuNRvlRhUlKYjHp/L1iVjmBzSGExzuACU05FIwWhOkZaZxhW
+         SlFEj6y2aedc8tdZPGfzSyQiWabdMrxN8vyn13231CbpBxAP9sT5+IQhyoFu0+oYUWQp
+         PhX+L5oqnTXUtVtqktZxw/YivgWoFURGH7AMjlXoM6O1hKn1gn0MTGBodUdfBHCYYrk0
+         knLwhuacFx5zJW48cTVCrNO9wqrHItHkkxk/aDLvtlYfLl6DtxNw1JoLy41IaidlmKLW
+         zOMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A7kKcrW8+Rtrlgds+v4H23IM/wohgMjvlalkGtkGE48=;
+        b=LyDa1pqOdxmfAaZ798CfUc0YszKarvjGhMMxhLxq3woAOTKcs1ZMLKOTb4cPalt1qo
+         Otv9QKotnicEb7UILX7TSx/tWGxU8V6OcsVG137CyyetX9nUqHiYkiLyMR16G/iCl1Dj
+         uoFr6ddoOwpCHvOGZKeJG0z36gglHK0o9mp98eecd47wPTsmkS1LV5JXszQWG4gLO7sO
+         YrGLSJkcRDAek+Hcy6pATiwh2HPk+yyHBn9PJy6iOKlpE+ih6yXJm3hS01LmWfLZ94W/
+         /JmqNINrlMMYipzDbMRPx/K0kTdN5fFs1dvmdqBujWJZXdHok8zCHRCFwZdVjNm5ib8H
+         d5Eg==
+X-Gm-Message-State: ACrzQf3p+D7eMg+6XyDHEZmKh/eBg44jNZOoGYIs8f23H8rjqzwvgfwI
+        ef/QLJ0h345FniC6W9YkCvR3Eg==
+X-Google-Smtp-Source: AMsMyM6XTCEyWvCDFpHQ+LBlReUY4pzPnEC3X0btKX861SIHcsajyGNCB7SZ3Rkpde+LhaSv6L5iPg==
+X-Received: by 2002:a63:85c6:0:b0:46e:ffdb:2e77 with SMTP id u189-20020a6385c6000000b0046effdb2e77mr11866913pgd.439.1666739234843;
+        Tue, 25 Oct 2022 16:07:14 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x1-20020aa79a41000000b0056c32be99dcsm1164090pfj.117.2022.10.25.16.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 16:07:14 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 23:07:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] kernel/params.c: defer most of param_sysfs_init() to
- late_initcall time
-Message-ID: <Y1hsA1b3GwJuxxE/@bombadil.infradead.org>
-References: <20221025130003.1116366-1-linux@rasmusvillemoes.dk>
- <20221025221356.1126728-1-linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH 0/4] KVM: API to block and resume all running vcpus in a
+ vm
+Message-ID: <Y1hsHjPuZfrREulV@google.com>
+References: <20221022154819.1823133-1-eesposit@redhat.com>
+ <a2e16531-5522-a334-40a1-2b0e17663800@linux.ibm.com>
+ <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
+ <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
+ <Y1cVfECAAfmp5XqA@google.com>
+ <5a26c107-9ab5-60ee-0e9c-a9955dfe313d@redhat.com>
+ <Y1gG/W/q/VIydpMu@google.com>
+ <02c910bb-3ea0-fa84-7a1c-92fb9e8b03de@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025221356.1126728-1-linux@rasmusvillemoes.dk>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <02c910bb-3ea0-fa84-7a1c-92fb9e8b03de@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,24 +88,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 12:13:56AM +0200, Rasmus Villemoes wrote:
-> param_sysfs_init(), and in particular param_sysfs_builtin() is rather
-> time-consuming; for my board, it currently takes about 30ms.
+On Tue, Oct 25, 2022, Paolo Bonzini wrote:
+> On 10/25/22 17:55, Sean Christopherson wrote:
+> > On Tue, Oct 25, 2022, Paolo Bonzini wrote:
+> >    - to prevent _all_ ioctls() because it's not just KVM_RUN that consumes memslots
 > 
-> That amounts to about 3% of the time budget I have from U-Boot hands
-> over control to linux and linux must assume responsibility for keeping
-> the external watchdog happy.
-> 
-> We must still continue to initialize module_kset at subsys_initcall
-> time, since otherwise any request_module() would fail in
-> mod_sysfs_init(). However, the bulk of the work in
-> param_sysfs_builtin(), namely populating /sys/module/*/version and/or
-> /sys/module/*/parameters/ for builtin modules, can be deferred to
-> late_initcall time - there's no userspace yet anyway to observe
-> contents of /sys or the lack thereof.
-> 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> This is perhaps an occasion to solve another disagreement: I still think
+> that accessing memory outside KVM_RUN (for example KVM_SET_NESTED_STATE
+> loading the APICv pages from VMCS12) is a bug, on the other hand we
+> disagreed on that and you wanted to kill KVM_REQ_GET_NESTED_STATE_PAGES.
 
-Thanks, queued onto modules-next.
+I don't think it's realistic to make accesses outside of KVM_RUN go away, e.g.
+see the ARM ITS discussion in the dirty ring thread.  kvm_xen_set_evtchn() also
+explicitly depends on writing guest memory without going through KVM_RUN (and
+apparently can be invoked from a kernel thread?!?).
 
-  Luis
+In theory, I do actually like the idea of restricting memory access to KVM_RUN,
+but in reality I just think that forcing everything into KVM_RUN creates far more
+problems than it solves.  E.g. my complaint with KVM_REQ_GET_NESTED_STATE_PAGES
+is that instead of syncrhonously telling userspace it has a problem, KVM chugs
+along as if everything is fine and only fails at later point in time.  I doubt
+userspace would actually do anything differently, i.e. the VM is likely hosed no
+matter what, but deferring work adds complexity in KVM and makes it more difficult
+to debug problems when they occur.
+
+> >    - to stop anything else in the system that consumes KVM memslots, e.g. KVM GT
+> 
+> Is this true if you only look at the KVM_GET_DIRTY_LOG case and consider it
+> a guest bug to access the memory (i.e. ignore the strange read-only changes
+> which only happen at boot, and which I agree are QEMU-specific)?
+
+Yes?  I don't know exactly what "the KVM_GET_DIRTY_LOG case" is. 
+ 
+> >    - to signal vCPU tasks so that the system doesn't livelock if a vCPU is stuck
+> >      outside of KVM, e.g. in get_user_pages_unlocked() (Peter Xu's series)
+> 
+> This is the more important one but why would it livelock?
+
+Livelock may not be the right word.  Peter's series is addressing a scenario where
+a vCPU gets stuck faulting in a page because the page never arrives over the
+network.  The solution is to recognize non-fatal signals while trying to fault in
+the page.
+
+KVM_KICK_ALL_RUNNING_VCPUS doesn't handle that case because it's obviously not
+realistic to check for pending KVM requests while buried deep in mm/ code.  I.e.
+userspace also needs to send SIGUSR1 or whatever to ensure all vCPUs get kicked
+out of non-KVM code.
+
+That's not the end of the world, and they probably end up being orthogonal things
+in userspace code, but it yields a weird API because KVM_KICK_ALL_RUNNING_VCPUS
+ends up with the caveat of "oh, by the way, userspace also needs to signal all
+vCPU tasks too, otherwise KVM_KICK_ALL_RUNNING_VCPUS might hang".
+
+> > And because of the nature of KVM, to support this API on all architectures, KVM
+> > needs to make change on all architectures, whereas userspace should be able to
+> > implement a generic solution.
+> 
+> Yes, I agree that this is essentially just a more efficient kill().
+> Emanuele, perhaps you can put together a patch to x86/vmexit.c in
+> kvm-unit-tests, where CPU0 keeps changing memslots and the other CPUs are in
+> a for(;;) busy wait, to measure the various ways to do it?
+
+I'm a bit confused.  Is the goal of this to simplify QEMU, dedup VMM code, provide
+a more performant solution, something else entirely?  I.e. why measure the
+performance of x86/vmexit.c?  I have a hard time believing the overhead of pausing
+vCPUs is going to be the long pole when it comes to memslot changes.  I assume
+rebuilding KVM's page tables because of the "zap all" behavior seems like would
+completely dwarf any overhead from pausing vCPUs.
