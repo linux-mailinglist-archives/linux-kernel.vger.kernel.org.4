@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2523060C1D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 04:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F9460C1DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 04:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231392AbiJYCnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 22:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S231432AbiJYCpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 22:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiJYCnJ (ORCPT
+        with ESMTP id S231366AbiJYCpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 22:43:09 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8F13AE55;
-        Mon, 24 Oct 2022 19:43:08 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so14873324pji.1;
-        Mon, 24 Oct 2022 19:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mV+GmkM5T+Z4YGFSVgtClSbjpVnm7tENAQZ0qymGquE=;
-        b=o/rfZHK9lBRIPYU0h9n8rn/cmxibbkidswYdgOYctV33CCbkpjR45aK58E9qHNDVTZ
-         YXqKjXynSwKH81l7CyztTBx1+7b6aLnyWZJVaiSsshXznCRBK7xvKzKZpf2pTM5s0KIQ
-         OWhqsKHpTs5OU64XRIVEP6bVCHok0ZBRg0yI11+84VW9EbqQQ8BoFRXmNN8Ok3TQrpZ2
-         RuEvslDRrRcA7d+MH9qGQ5EnKEjht++ylGJxuGrpKRTiLta8e99xboE4oMWHLAeG5JOS
-         +SkC+ekpU8SqAnztMFUH4x4Ex5n0+pErx/bCLh1IAU31rE6ai4To3Wu7bsG/4ufj51Zh
-         PqVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mV+GmkM5T+Z4YGFSVgtClSbjpVnm7tENAQZ0qymGquE=;
-        b=yYmokNHSjWlmHFqMfpLwIdn6EikcAM0bWCle47p8QOi6+W323VxtXbE0K7B9hTFgOI
-         4EicYXRw44PTRRkcjN1iVJtPZXy/VXuEBBj08xGhGPOBaiEyDjm1UCNw5kJK6DRVb+4s
-         32OQGjay5jxi3BL4HF4ttqAhsw3qy+/6O0Y1u6xj80Rye1lhVfh8TOnMnyR9JST69JBk
-         BaRp6PixnlgwtBYPJWfWpn1DCLVBQVY/60fkjQOV5Z83vI09QeZIA+7ZZwMqliY6zr50
-         eYpSxZATleJOnfY56HtRQmutF2rV4XrtjRm1afAOWqrHy3YZBwhyvY//66KGwXpgcnaA
-         Bw5w==
-X-Gm-Message-State: ACrzQf0wh9Tw6ve0B3eiIMW2h6aqeIgYWIBgi1AsJAzK8388trfgOBJQ
-        1FseuB6hTmtk51rCuao6Y2Q=
-X-Google-Smtp-Source: AMsMyM6Gn9mitFHKGNaBOVjMemkrZDCwBoVXWp3zLOWC+8DpJz3H3JZkZk3J8nbXfblaGsgUI2XRww==
-X-Received: by 2002:a17:902:e742:b0:17f:6a44:ee4a with SMTP id p2-20020a170902e74200b0017f6a44ee4amr37219795plf.103.1666665788091;
-        Mon, 24 Oct 2022 19:43:08 -0700 (PDT)
-Received: from localhost.localdomain.dhcpserver.bu9bmc.local (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id p12-20020aa79e8c000000b0056befcd7958sm458516pfq.84.2022.10.24.19.43.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 19:43:07 -0700 (PDT)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai@quantatw.com>,
-        Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH 1/1] ARM: dts: aspeed: bletchley: add aliases for mdio0 and mdio3
-Date:   Tue, 25 Oct 2022 10:41:45 +0800
-Message-Id: <20221025024145.1561047-1-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 24 Oct 2022 22:45:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E9213F3C;
+        Mon, 24 Oct 2022 19:45:16 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MxGQ468rkzVj6p;
+        Tue, 25 Oct 2022 10:40:28 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 10:45:14 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 10:45:14 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-rdma@vger.kernel.org>
+CC:     <jgg@ziepe.ca>, <leon@kernel.org>,
+        <wsa+renesas@sang-engineering.com>, <avihaih@nvidia.com>,
+        <raeds@nvidia.com>, <penguin-kernel@I-love.SAKURA.ne.jp>,
+        <dledford@redhat.com>, <matanb@mellanox.com>,
+        <chenzhongjin@huawei.com>
+Subject: [PATCH] RDMA/core: Fix null-ptr-deref in ib_core_cleanup()
+Date:   Tue, 25 Oct 2022 10:41:46 +0800
+Message-ID: <20221025024146.109137-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add aliases for mdio0 and mdio3 so that we can use name to lookup the
-address of Aspeed SOC.
+KASAN reported a null-ptr-deref error:
 
-For example:
-root@bletchley:~# cat /sys/firmware/devicetree/base/aliases/mdio0
-/ahb/mdio@1e650000
-root@bletchley:~# cat /sys/firmware/devicetree/base/aliases/mdio3
-/ahb/mdio@1e650018
+KASAN: null-ptr-deref in range [0x0000000000000118-0x000000000000011f]
+CPU: 1 PID: 379
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+RIP: 0010:destroy_workqueue+0x2f/0x740
+RSP: 0018:ffff888016137df8 EFLAGS: 00000202
+...
+Call Trace:
+ <TASK>
+ ib_core_cleanup+0xa/0xa1 [ib_core]
+ __do_sys_delete_module.constprop.0+0x34f/0x5b0
+ do_syscall_64+0x3a/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa1a0d221b7
+...
+ </TASK>
 
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
+It is because the fail of roce_gid_mgmt_init() is ignored:
+
+ib_core_init()
+  roce_gid_mgmt_init()
+    gid_cache_wq = alloc_ordered_workqueue # fail
+...
+ib_core_cleanup()
+  roce_gid_mgmt_cleanup()
+    destroy_workqueue(gid_cache_wq)
+    # destroy an unallocated wq
+
+Fix this by catching the fail of roce_gid_mgmt_init() in ib_core_init().
+
+Fixes: 03db3a2d81e6 ("IB/core: Add RoCE GID table management")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/infiniband/core/device.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-index c02c15f15465..2825d5f3f78b 100644
---- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-@@ -15,6 +15,8 @@ / {
+diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
+index ae60c73babcc..b45431e6817b 100644
+--- a/drivers/infiniband/core/device.c
++++ b/drivers/infiniband/core/device.c
+@@ -2815,10 +2815,18 @@ static int __init ib_core_init(void)
  
- 	aliases {
- 		serial4 = &uart5;
-+		mdio0 = &mdio0;
-+		mdio3 = &mdio3;
- 	};
+ 	nldev_init();
+ 	rdma_nl_register(RDMA_NL_LS, ibnl_ls_cb_table);
+-	roce_gid_mgmt_init();
++	ret = roce_gid_mgmt_init();
++	if (ret) {
++		pr_warn("Couldn't init RoCE GID management\n");
++		goto err_parent;
++	}
  
- 	chosen {
+ 	return 0;
+ 
++err_parent:
++	nldev_exit();
++	rdma_nl_unregister(RDMA_NL_LS);
++	unregister_pernet_device(&rdma_dev_net_ops);
+ err_compat:
+ 	unregister_blocking_lsm_notifier(&ibdev_lsm_nb);
+ err_sa:
 -- 
-2.31.1
+2.17.1
 
