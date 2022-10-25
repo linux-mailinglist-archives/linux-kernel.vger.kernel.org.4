@@ -2,209 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEA060CD62
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3630060CD65
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbiJYN1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S232848AbiJYN1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232747AbiJYN06 (ORCPT
+        with ESMTP id S232822AbiJYN1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:26:58 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2119.outbound.protection.outlook.com [40.107.255.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A80766A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:26:53 -0700 (PDT)
+        Tue, 25 Oct 2022 09:27:05 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB64DFAA6F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666704424; x=1698240424;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=paJuRxb8cHz0iMxsHe+/vqiB6rJqoXTMBYh/netPU1g=;
+  b=Cq5ImWXg1xNkCneJg78gw7L19wi8PIOyhZsK6wfGHh38NaVooBjWR+FE
+   15NO0rb9ktXIEf5F2UytTvsTfTn1VQsPVgaBjThixQwI5ZKKBZfSEYE8Q
+   muLvQ8uJMl2lMhdR5ckSWHys8CwfF1VF6btsJoZj8GNl0N2gYnoIPEtIQ
+   FlkDw//BXM/uUAMdFlWM6JYpd4enF4FG6AsCSn7UT+dIAsIzuF11ferXM
+   yxoa7eoAKny4S8SvXR0Mjw2fZnYL8JxsysAbGEDQJg0GVqRMFIbjomHjw
+   hDr31NDmbEK6RB7hEUBIHHDyqe1RDh8uSY/2wc3kFyMwCX1t7hRclkWAt
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="307666179"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="307666179"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 06:27:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="609568786"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="609568786"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga006.jf.intel.com with ESMTP; 25 Oct 2022 06:27:03 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 06:27:02 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 06:27:02 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 25 Oct 2022 06:27:02 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.176)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 25 Oct 2022 06:26:59 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X4A+sggHdBpa6iapmofbGl8GUwm1Sy24OFz14po6pSHuGKzopMQO4HVrnbh0u3qyceCj4FGg2CRdVncicoUwQFzhaqDtidAtCKm/r/OnPXQLZ9mXTRK3jkZe8vKtyhnJM8GHrhwbWsmoYgd0Iun1VmkE0Lgwm2ldHg0MEBYe8KZ+LQNHPwNNQZZrGG2zk+Ss6xRKo+VV4UagxiYFoJtGtXhcOjVVr/mxvZn48lM1H6PHzAtMFH5/2yFyyZoBusJ8ICwrtTIyZIUbVmn1jsJZbvIpbrqGSlFUUumqeszik9mpFqlWr8dcAxwcD2pubFMJXoHzYJgJ9l17w3YCjk2PcQ==
+ b=VFuA/Va8vnbin4G0qf1rDTYhoVmyhLz/q+iuExxSpFV47Y0GbAgoGRCfLLGayMWpLYo2ognWS99AXhmTeCwRkVM0A/DywhGATCu6Mpv1PO+rXj84rvgfyW8YlNcB3RAJYEZU2wD4lNPSybUgsay3lVrTcjIxcB2Ug+FaUlsi8IBGAOZMHTb/dDFWK1+CRTpR3nxCvsnCl6H6Tu//op/dw2j4/iIsk1J5lqze2lr+WPZqn5vTy9EvjZGF8f0OFKLnDVSSzaOFQr5toD14ujET41Eal546Mjv9xhaMgQ8JJ/jYeCLbjNVbZk8NG74FAXfEcsZSOTxhulZBHsP04LL/Gg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v5iQUOl0qSFHB5FESAdrtz1h0GCJFKrchifWQ9aB7Do=;
- b=Qryv3JEXukwolVU0ashQuubuGh63a0TCgmwJ87XRkRmEmyG2Rkg+sWKvg/n3oxaawIyFMS/7ziJlm+SimTAth3QAsNjH7f9xVf2wA2s1gRl7sSvoi21srR9jYG2pleLYcGIieSp0jfMCSJAHya/f6v4xSxj2I1L/7C63JxYHsc0/suMb5Nt95fWSFQQvrRlTrOAxh3tVc23iwv0yjrUu50cyTlP4YrGjSb3lKej/iBO6ymfAqUj39biWBpsn/x/FGbfiAUYAS/q8Iz5/2Q1BNve6Iux3HF3ki/dYi+uNT4fWYtNqD4Jah9tklqY4/X18PkEDt68mtUECgN44pFH8qw==
+ bh=RrBIwgknhTUrIXVEoak0qOcYlk1vXSyCCDnl0CkGMX8=;
+ b=K7RIGfIIeCv4/DfzD0xn9Vgg66m0/+s2XJh7RH3E0ZvvkUwkmz6cJO2nKYWbaqM5INAV4P9VXXNSYyN5O0NOUMKE+Zw0E2Wf9g/Eh6Dp2+upLyImmiN8JCHhHcKd8/rNm2IwgIRzlPZfd9D/wlhm3p6fe0ui5J+VJYM8i5cDUlrAwGJM4leYC5wx9RFNQ6CMv8Czs18xDODTd9HQYqBg+oyeAmHFTgqY80ag66pAHEauTA+ESMzMZH3VOi7B02MwveCLd30C3imfG18LUoIOfILeRl5ivGo0jD35hD2ADEsW2OOKzvjhiV8/+6kLxra28v9il9i+xligNZylSlGFdw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v5iQUOl0qSFHB5FESAdrtz1h0GCJFKrchifWQ9aB7Do=;
- b=qUurqRPoJ2V6ljvOI82kOfNmhXyut1iXB4slzj/MzTDXfGm6StB4K7b/X/XtLysP2zDqW0Ek/BzcUSW15G3NRV7+iLeE0I/HnVmmasSlHhqRSpUM0yUvFIAQkGjgEY5tRJ+AM1CKg3QMMxR7pR805W/J/00GDsMfPMUnAUK87ZWkgwOvRDgi7pC9emMPxJLyK3bMn5YGd7Jz+t7ga2RLt631+TKpF9tz1w8G/aVUsCtikGBeSisALbZH4BfCAiNarecb+J79Z+N8IroZwz6P+tfF8S+jmG00O+Gszl+262koFutnIdoo0NQc6+rCd3x2Dunb3y7B3S4i9no12mhczA==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by PSAPR06MB4168.apcprd06.prod.outlook.com (2603:1096:301:35::12) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com (2603:10b6:5:394::7) by
+ SA2PR11MB5004.namprd11.prod.outlook.com (2603:10b6:806:112::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Tue, 25 Oct
- 2022 13:26:50 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::c84b:5a6c:d66f:c0fd]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::c84b:5a6c:d66f:c0fd%3]) with mapi id 15.20.5746.023; Tue, 25 Oct 2022
- 13:26:50 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH v2] f2fs: add proc entry to show discard_plist info
-Date:   Tue, 25 Oct 2022 21:26:38 +0800
-Message-Id: <20221025132638.38260-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.27; Tue, 25 Oct
+ 2022 13:26:58 +0000
+Received: from DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::f131:2364:3638:6505]) by DM4PR11MB5373.namprd11.prod.outlook.com
+ ([fe80::f131:2364:3638:6505%6]) with mapi id 15.20.5746.028; Tue, 25 Oct 2022
+ 13:26:58 +0000
+Date:   Tue, 25 Oct 2022 15:26:54 +0200
+From:   =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
+To:     Oded Gabbay <ogabbay@kernel.org>
+CC:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "John Hubbard" <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+Subject: Re: [RFC PATCH 3/3] drm: add dedicated minor for accelerator devices
+Message-ID: <20221025132654.fcbw7xvl7pu3yp6c@nostramo>
+References: <20221022214622.18042-1-ogabbay@kernel.org>
+ <20221022214622.18042-4-ogabbay@kernel.org>
+ <bf8df463-3413-3027-0f4b-3977e6860404@quicinc.com>
+ <CAFCwf12R1CWz8GdJ0sNsVL+_5b+G5Wqf5qwZ8ixtoXLOr2-obg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0013.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:140::12) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+In-Reply-To: <CAFCwf12R1CWz8GdJ0sNsVL+_5b+G5Wqf5qwZ8ixtoXLOr2-obg@mail.gmail.com>
+X-ClientProxiedBy: LO4P123CA0597.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:295::14) To DM4PR11MB5373.namprd11.prod.outlook.com
+ (2603:10b6:5:394::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|PSAPR06MB4168:EE_
-X-MS-Office365-Filtering-Correlation-Id: 46a6b698-fbab-4d62-caf3-08dab68c9279
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5373:EE_|SA2PR11MB5004:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e2ac2c3-510b-46d3-27bc-08dab68c96ff
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ziG+Ye9rqfI4o4xUXVoGGxfs53wU72cdppwrlV+XDtXPBV4jT2owUWUtugQTwfmmfFcXFCQ4t8JkJ1HMW3pBQAEO7+4hssWYTu7xDk4xMBjSUdE5fLtaL/eW7lz4aegxRtNTxZqrkUjw1jxRppkAoWVV9ejsa6ER5Qjrtbb8X8EFmqw5eMxFArFn7bJ5pwxU7nED/lfqmySeqseb6pqCX+BelD0KHIelteAJ6hZyjHtvd7CvH8LhmkrUW1ZuAQKEIS92CWhW0WbvXJCT6az0JvwTThxRZtUrTjB5w84KVxAxHEqOCg5wgTRtnLE/4xEWKqRUCcmIgHT+IFGHp16J+0e23KEx7YboP12qYSeEPG8AAJD8SdAtGD8fBaSvNMgm71FOqu8hhGZCyfzrgxwc7lgqWYNWoQszJiIeVK3sbWV9RK381K7n7k5CS5/P4nd27K64febxeaEGpQ10+YCX0ufOhBkXIXQvxCO5eAMxcD3HizxbJuPBGyFQab8bcQlHm7jSDM5zBbie6LIPFDxR61dP1CAFI2CTiuZsz/++H/xl2RR1trB7z9mLlLhrK5Jw8ZE+2lChqvJSFwh7YXov7+hNfXXZpg6FVt2cTGh8NS89MyTI7OL9I3tgXo+igS8XdrhIPuI2yLk0BLpJ4AvL4VSxd+0eaKtnyw/PSIY/ZZQTw9O9hP6y54cyaWNfWWEeptloIa7zFKe5nhlyqHBRwK79o+Wmb1deMIh4yLx/e5YPuAavm+wr68z7f0np2uc1pDtS+p96Ek8GkKiXp4ACuw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(376002)(396003)(366004)(346002)(451199015)(107886003)(6666004)(1076003)(8936002)(66946007)(2906002)(2616005)(5660300002)(6506007)(36756003)(26005)(66556008)(66476007)(4326008)(86362001)(8676002)(41300700001)(38350700002)(186003)(52116002)(83380400001)(316002)(6512007)(38100700002)(478600001)(6486002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: DyUKUG6s71VfrKWCPuRE5qa1v+Uk1CycSaxePDEqS6kAVcrq0x0T16VETIJcRnNRan8Jm0EnYI1OUkMiutrGXJY8wEGPy+ykvK6erY5i/gh0rSNo7rfp81xZLSxCt2yom9xVmZoE3Yg1oxwdn7xsyx/WxOPNyp/XtsHglbZG5EiCUbTIaxuMqh39K6kcIbrpIsWHCAI16wC6i2PB0ENDM2PPThTzNydnuALoPCHr9WSUsb+o9tZb83mI2fmPPwrdDCHKyvMOJHnYW/oWVsGlzcoHs5+LLSR0EhqHETuMyjXUSwLch4esIcLGhc+I6IiHFYSZDnbw9Fw+yIuS0VEGYtlVYekQG6WBQIIETbKkc/O5wAaHe/wII2xY6jIbxUMu2LC5GfpjqLEmSDooGuk6wO31rMZj7jfD5YHcVpdEo5QXxTrsX4AAvfvZCnAVVAVudQAUS29vAn8mzsQgLPmSAUHSzj8VguucXsAuDh3WezFzQoarpQxopx7sN19+M36suv6l+VQ7s0OQiRmiW/Q3KBowKuxveeFSLIP7TtZyQmiaJQL5hlHDXT0UAXHWIx0w7Ck0QOJKvIe30/oac5yVwU49U2Hjt9WRW/PAQ6N8+ZJS9FJc5WROCIwoe0rgXfCL74CdQJlTfFG6x4l4++1axo8T6g+SlsTNGI5aRgsi62U3t+5w2GUcSwoQ1WsffsqLtQPD5jYpr6qGXBTwXwqIqWRyzFA1dGzOmOqZPjw932Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5373.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(39860400002)(366004)(346002)(376002)(136003)(451199015)(6666004)(33716001)(41300700001)(53546011)(6506007)(38100700002)(82960400001)(7416002)(5660300002)(6916009)(316002)(54906003)(8936002)(66946007)(478600001)(8676002)(66476007)(966005)(6486002)(66556008)(4326008)(86362001)(9686003)(83380400001)(6512007)(2906002)(26005)(186003)(1076003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5eWQuif1G/vGa8SW4QmiuhdK/loxms8ef6XD/dXqkMsFLvxafMQa+aRBcczS?=
- =?us-ascii?Q?uZMOt2sGLrH8M//bQCBwgcG7X4Q15RTESzYKcxgpZSoTHajKFfxEMMqOLY3L?=
- =?us-ascii?Q?wH/VD7CaDbtpJX5gmJ/QvZiYx/9r6H2vLUfHnU6xN/haSAw+8GV7uMKRbZZr?=
- =?us-ascii?Q?HF62RQq5bulummQnYvqe/NoJy9YnjX8tP7OZLzL0WokvaduZ4TxUoYv8mDi/?=
- =?us-ascii?Q?eA2omffxHnls7MqZDBqWRNYOvCWdhHrHFcT1X45RFcl/tw8ylbWUn4luLKh5?=
- =?us-ascii?Q?fsNCNcwyIo5TpZgaUhIGdIWyNenhE1csJCy0V7EoDQ5kwGi+EBPA0sRyd3uJ?=
- =?us-ascii?Q?coh8yDQFactrq8vuJGpxsXzNL9Y8kfE1BhSdPz58zKG0jrz7BulK4PO0y6ux?=
- =?us-ascii?Q?AZakhCFtaQ2MMnWD+uwJL3fHsuQA0YZw2nIXp660bZnHpe2iSfeC5LA+eBI5?=
- =?us-ascii?Q?P2EZEinQcrRSzTHzudQYzcAunOMsDIgHwquRKX8e4VOniHqBcOjoYi8/xIZd?=
- =?us-ascii?Q?oTc10MFJz91i9wM1FUgR3urJXGVJNOyoVN+sZLuLQ/EMwdwbm83Bu76x7cRl?=
- =?us-ascii?Q?fuGvKmVx33IzAU+cb8mu3dWgiOshxx1UtHKummP8yCRoqFnCylJNKhKEoy+K?=
- =?us-ascii?Q?ZNVq2j3t/IoZF/woKqVVN6qcQloLFHW1fQkEE53VFizF7o3eV67kSkoFNaUp?=
- =?us-ascii?Q?gGF/vBHP8Sw/zigqcqVkUQoqHyR9kyS3TTmH1ooIc4o4V8OrISlfngWws4yo?=
- =?us-ascii?Q?bqJZW9RU9sdTsTBNzOrvfKmTdJaiDQOMOiVVWQsTe2NTbPFAKpYHF9843mSt?=
- =?us-ascii?Q?oRWcBqmoNSn9MicI88dNYgL3NyT44XtBFaBu7KLrRPdJb5jNgRew78WC5Moh?=
- =?us-ascii?Q?LRNc5PWMVPB75Cm0PgP+43y/6vd0lnWN8eIJjncD433Nqxpytq6l4YQinKX7?=
- =?us-ascii?Q?RqeItAv4w7BFA35GqAA6HsxNabwsuuJUVCcETNL3qfoRAaD7ZZize5ZC//Os?=
- =?us-ascii?Q?TTi852bNHjIFFvxRoBP/p3b0cp+q8oBglX90us5tUZDafr94g42w9zFsX6zK?=
- =?us-ascii?Q?Says2H/0lIaKAcP7UTbrpYYCjga0K1Vn6Uwr+gggFLUBHEc/vCsw5uwcBNnM?=
- =?us-ascii?Q?qGgcibOYmVjjZdkzpuiwvmD3t7kWIqkLeZd68WMOumjgzQZ/7CcvLGxbRHM4?=
- =?us-ascii?Q?VVxIP6gceiJ3TlpSwE4p/Ek2fRzfL5E39KKCrKDTErIx2lBHBYRpoXh2d2yv?=
- =?us-ascii?Q?IvC8YsQ4psIN/fVSFRlygOfAuTOQA/Z01Nh27ZplAVBf2tsSoeo6C6YYT0lG?=
- =?us-ascii?Q?J6TuBEA7b9yzIwPXNGV/PsWyOYTXIgS7T40VtCqQ+C5j5IdA18yZUTi5F7yz?=
- =?us-ascii?Q?nokESWspcfhCPgKxr/XPFfsXZ140buuH0qmd2e7RN6kh9ft6EbYT3UrIeG5L?=
- =?us-ascii?Q?IdSLemneq31sZZaIO4mLY0BUdOqNOhcxy1OwVk2DmRzf5+s++Jn+VG0MEEyj?=
- =?us-ascii?Q?6zSDKwsKTZANmY/QXo9UuW211nbWNF57Fe5IZ8uuwcRmZVHTIs0lTUKDzzGl?=
- =?us-ascii?Q?q5rsPn+NPY2H+5R/G3nhYuMqtmaDtrdDZKQVccBn?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46a6b698-fbab-4d62-caf3-08dab68c9279
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UlA3MTV3UUN0VEQxVk4wL2x0bUxFcm9rUERCc3FZVldRWHIwb3k4STdFNWJ4?=
+ =?utf-8?B?RWhvVDF2OXladWN3R0dOeEQ0QmhMVFhndTNuZkpKOXNwdE9paXdWRlJHWkxN?=
+ =?utf-8?B?QWpRUkd5R1ZidkFUUUlSNjdlSzNPY1J6OExZTkxKWGV0NDVwZXpjS0RZZjcv?=
+ =?utf-8?B?Sk1ZTmZSMW9tenppaWtRbGVXSlZ3QUlJV21Kcm1MK0xuMFlpdElPWksyaTZC?=
+ =?utf-8?B?TzNGdFdsTkJKdjE4TWh0NllxYWlXYVlTR1RtTlQraFNCSEwxWGRjaTBYdVRa?=
+ =?utf-8?B?SmdCZnNDeDRSQUU0bWNzc1JHaDRvTGJhTVJvc2FPcEhQb1lsbzJVb2VlTTdo?=
+ =?utf-8?B?b2c4Ri96bnNpZmxSSS9PVVAzTHNPTXJkWVRkakFYOVZjMlRZSHpaV01nYmxj?=
+ =?utf-8?B?SVBCMndDM3Q2d2todUU5WDdTZXI1VWFaMTM1ZUZtUzBjN0JMWWRPZGdkdGxR?=
+ =?utf-8?B?dWczclc1by9zWUJjRHZsK1VzOWY5U255bXdlUWdhUThSMlRZWnlqTkNQQ0Vs?=
+ =?utf-8?B?UHlRTG43dW04OEY4WE5qOGRzVm9KbjJObXIzY2M2VVB3NUxsV3FhRVRJTk90?=
+ =?utf-8?B?M1lqb0Y0K2VGYnBOS1RVS0lMbnJDOWJBRGJWREFHMmNqVnk2L2ZLeGs5dXRp?=
+ =?utf-8?B?ZUx6d2JMY284MTVZYUMxK3Zqa2JQekJnV1RVYk50ZFVLYTV4YWF5ZUhCN3FZ?=
+ =?utf-8?B?TnI5bCtwSFo4b2tNMGJweCtPb2ZWT0JIMzlsUjFuM3ZEbkl3R3dzZHdrWWlC?=
+ =?utf-8?B?SzhMZ2h3R3c1TlZ6MVJ1aVhEUG5YbU9NbWlpSk5oWjRCTWEvM25wZ21VQ2VJ?=
+ =?utf-8?B?RGcrQ0ZuWmg0RlJLZ2JjSHI5Mm02MnJONUtQZFg5UEJvaFhnM291VTZBU3pF?=
+ =?utf-8?B?by9sblBCcU9PcXJkNUhwZmlka0ZYNWZPbk1ncDFDRm50SXZwMEkvNjJHbElZ?=
+ =?utf-8?B?VFA5Tm9YbHlncHFwWEFnRkJySjBDT1lpNHB4dkpqUnJCcjZDMTB1NWNoZUVs?=
+ =?utf-8?B?SUc3clltYzlrRXNTOWYwNVhkZEJsNjZlRVh0NmhNRlNlT0l2OEQwdVlOczdw?=
+ =?utf-8?B?cTlINTdML0l6eWpzZzMxR0x4NXkxVjR3bDdZOXg5MGJIWU1xMmlDbFlRMnRS?=
+ =?utf-8?B?UFZvUGlWWnVhVjEvZWJETDdPYUhDeCtBd25sd3YwMXJQU3liRUxMY3Y5RXB5?=
+ =?utf-8?B?d0hrMUhqOUlJTlZ1WkpuOSsycEdGeGFuQUczVXJZNVJNaHNBdzMvQXBiYkJZ?=
+ =?utf-8?B?WFlYR3JNTkNHTG85VFliWDJMRHJqY3NSMTRGaVZQT2ZGZXZHREFQMUc1SmRF?=
+ =?utf-8?B?SUt1dTdHRkl0TUVuVGJrcVdHcnBPQk9vNUVoRlBhdUhUNVZSZ21makgxejI1?=
+ =?utf-8?B?SDBURkVIMXBhT080QkNNaG1uM0VOa2J3czR4L2QzZzM1NlZlaU1IMWtqaXVQ?=
+ =?utf-8?B?cERMS1VNNU5WNFpwMkxBUEd5NFNpMlUvOUkvOXRtZ0dUV3F2OFE0ZCtnUGtn?=
+ =?utf-8?B?Z1lwNmR0d0R4WFVSTzVGWnp5OEZ0dHNQcDhMVFJIRVFaQ0JlQjN3eE53REJM?=
+ =?utf-8?B?SE1uQ3ROVnJXelJtTndZR09qdVVYNVQ0ZjlrUWl3NVZVck5wM3I2bXB4NTBW?=
+ =?utf-8?B?YWFmOXNNSVpsTGJTa0xqZVRhTUNyQkExeU9pVzNWNE10YVU4Mjk5VWdDQk15?=
+ =?utf-8?B?NHlYcHROc2VMNlMzMWl5Wk9GWitIeFQyUGxSdk1lbnhPZlY5QllRWldjM0ZX?=
+ =?utf-8?B?TUh6RFBsU3NBV0hKMGJsT1JMWDBpdVlEV3BMN0N0enlUY3FlUE83bVppNk1t?=
+ =?utf-8?B?VzJ2TDQwZWxmQXdRamFKZHZTOVhnZjdlaFI4Y0JhMElqeHZ5VnkrbXNJbnFq?=
+ =?utf-8?B?cmlxTFlMS1h2UEY5U1lpekdvWmpZYy9aeTRJWjBQRFh1U1F6YlI5MGQ2STNy?=
+ =?utf-8?B?eElxNEdoQTN5cW8xRTNzL2tkUmRqWUpQeEc4QlAwOVgvWHV5ZjliR2YreW85?=
+ =?utf-8?B?TzNYT2psWHNHdWptQmVwUmlKOE5rREphTFM5TkNFdmdlTEFmbExkMzVkTDlK?=
+ =?utf-8?B?V25GVHVRUmtCMCtxb3VjVHNrZVhIZmFzTS9pSUxZK1FaZ01VTGx5dHBTZjdx?=
+ =?utf-8?B?Mmdza2g5RnJRSzhteXFESC9PRHk1UFk2Nm5ML2kvVVJhaHQ2SDNYTDdVdENn?=
+ =?utf-8?B?cXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e2ac2c3-510b-46d3-27bc-08dab68c96ff
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5373.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 13:26:49.7040
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 13:26:58.0088
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Yon9TeoF7CPUGxwwrRR6e68grFYjdhitlN8SyJi75zcT6nbc1fEXFcOcChsyGCmQBjR14y3ie4w8vuaSXKTyzw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR06MB4168
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: cZ3O/DLScKOQcN2L0TGjEXbMkT/clImYGi/gDt/atFXSg1ah/1yYoWp8q3/HguuPPnY66LTX+LAWyWqums55zAHdGDO/DzFlfJMd08qfM1Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5004
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds a new proc entry to show discard_plist
-information in more detail, which is very helpful to
-know the discard pend list count clearly.
+On Mon, Oct 24, 2022 at 08:43:58PM +0300, Oded Gabbay wrote:
+> On Mon, Oct 24, 2022 at 6:21 PM Jeffrey Hugo <quic_jhugo@quicinc.com> wrote:
+> >
+> > On 10/22/2022 3:46 PM, Oded Gabbay wrote:
+> > > The accelerator devices are exposed to user-space using a dedicated
+> > > major. In addition, they are represented in /dev with new, dedicated
+> > > device char names: /dev/accel/accel*. This is done to make sure any
+> > > user-space software that tries to open a graphic card won't open
+> > > the accelerator device by mistake.
+> > >
+> > > The above implies that the minor numbering should be separated from
+> > > the rest of the drm devices. However, to avoid code duplication, we
+> > > want the drm_minor structure to be able to represent the accelerator
+> > > device.
+> > >
+> > > To achieve this, we add a new drm_minor* to drm_device that represents
+> > > the accelerator device. This pointer is initialized for drivers that
+> > > declare they handle compute accelerator, using a new driver feature
+> > > flag called DRIVER_COMPUTE_ACCEL. It is important to note that this
+> > > driver feature is mutually exclusive with DRIVER_RENDER. Devices that
+> > > want to expose both graphics and compute device char files should be
+> > > handled by two drivers that are connected using the auxiliary bus
+> > > framework.
+> > >
+> > > In addition, we define a different idr to handle the accelerators
+> > > minors. This is done to make the minor's index be identical to the
+> > > device index in /dev/. In most places, this is hidden inside the drm
+> > > core functions except when calling drm_minor_acquire(), where I had to
+> > > add an extra parameter to specify the idr to use (because the
+> > > accelerators minors index and the drm primary minor index both begin
+> > > at 0).
+> > >
+> > > Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+> > > ---
+> > >   drivers/gpu/drm/drm_drv.c      | 171 +++++++++++++++++++++++++--------
+> > >   drivers/gpu/drm/drm_file.c     |  69 +++++++++----
+> > >   drivers/gpu/drm/drm_internal.h |   2 +-
+> > >   drivers/gpu/drm/drm_sysfs.c    |  29 ++++--
+> > >   include/drm/drm_device.h       |   3 +
+> > >   include/drm/drm_drv.h          |   8 ++
+> > >   include/drm/drm_file.h         |  21 +++-
+> > >   7 files changed, 235 insertions(+), 68 deletions(-)
+> >
+> > Can we please add something to Documentation?  I know this leverages DRM
+> > a lot, but I believe that a new subsystem should not be introduced
+> > without documentation.  A lot of the info in the commit message is very
+> > good, but should not be buried in the git log.
+> >
+> > Besides, imagine this has been in mainline for N years, and someone
+> > completely new to the kernel wants to write an accel driver.  They
+> > should be able to get started with something from Documentation that
+> > at-least gives that person some insight into what to grep the code for.
+> Agreed. The only reason I haven't done it at this stage was because I
+> wanted to get an initial reaction to the code itself, see if the
+> direction is accepted.
+> I didn't want to write documentation and then completely re-write it.
+> So I will do it for the next patch-set, once I collect everyone's
+> feedback and I see there is a majority agreement.
+> >
+> > >
+> > > diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+> > > index b58ffb1433d6..c13701a8d4be 100644
+> > > --- a/drivers/gpu/drm/drm_drv.c
+> > > +++ b/drivers/gpu/drm/drm_drv.c
+> > > @@ -56,6 +56,9 @@ MODULE_LICENSE("GPL and additional rights");
+> > >   static DEFINE_SPINLOCK(drm_minor_lock);
+> > >   static struct idr drm_minors_idr;
+> > >
+> > > +static DEFINE_SPINLOCK(accel_minor_lock);
+> > > +static struct idr accel_minors_idr;
+> >
+> > IDR is deprecated.  XArray is the preferred mechanism.
+> > Yes, there already is IDR here, but I believe we should not be adding
+> > new uses.  Maybe at some point, the current IDR will be converted.  Also
+> > with XArray, I think you don't need the spinlock since XArray has
+> > internal locking already.
+> ok, I wasn't aware. I don't have any problem replacing the idr to xarray.
 
-Such as:
+The conversion is sitting on the mailinglist for a while now
+(unfortunately, without much interest).
+Perhaps you could help with reviewing it?
+https://lore.kernel.org/dri-devel/20220911211443.581481-2-michal.winiarski@intel.com/
 
-Discard pend list(Show diacrd_cmd count on each entry, .:not exist):
-  0       390     156      85      67      46      37      26      14
-  8        17      12       9       9       6      12      11      10
-  16        5       9       2       4       8       3       4       1
-  24        3       2       2       5       2       4       5       4
-  32        3       3       2       3       .       3       3       1
-  40        .       4       1       3       2       1       2       1
-  48        1       .       1       1       .       1       1       .
-  56        .       1       1       1       .       2       .       1
-  64        1       2       .       .       .       .       .       .
-  72        .       1       .       .       .       .       .       .
-  80        3       1       .       .       1       1       .       .
-  88        1       .       .       .       1       .       .       1
-......
+-Michał
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
-v2:
--move to procfs entry
- fs/f2fs/sysfs.c | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-index df27afd71ef4..0fc17375e042 100644
---- a/fs/f2fs/sysfs.c
-+++ b/fs/f2fs/sysfs.c
-@@ -1243,6 +1243,44 @@ static int __maybe_unused victim_bits_seq_show(struct seq_file *seq,
- 	return 0;
- }
- 
-+static int __maybe_unused discard_plist_seq_show(struct seq_file *seq,
-+						void *offset)
-+{
-+	struct super_block *sb = seq->private;
-+	struct f2fs_sb_info *sbi = F2FS_SB(sb);
-+	struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
-+	int i, count;
-+
-+	seq_puts(seq, "Discard pend list(Show diacrd_cmd count on each entry, .:not exist):\n");
-+	if (!f2fs_realtime_discard_enable(sbi))
-+		return 0;
-+
-+	if (dcc) {
-+		mutex_lock(&dcc->cmd_lock);
-+		for (i = 0; i < MAX_PLIST_NUM; i++) {
-+			struct list_head *pend_list;
-+			struct discard_cmd *dc, *tmp;
-+
-+			if (i % 8 == 0)
-+				seq_printf(seq, "  %-3d", i);
-+			count = 0;
-+			pend_list = &dcc->pend_list[i];
-+			list_for_each_entry_safe(dc, tmp, pend_list, list)
-+				count++;
-+			if (count)
-+				seq_printf(seq, " %7d", count);
-+			else
-+				seq_puts(seq, "       .");
-+			if (i % 8 == 7)
-+				seq_putc(seq, '\n');
-+		}
-+		seq_putc(seq, '\n');
-+		mutex_unlock(&dcc->cmd_lock);
-+	}
-+
-+	return 0;
-+}
-+
- int __init f2fs_init_sysfs(void)
- {
- 	int ret;
-@@ -1313,6 +1351,8 @@ int f2fs_register_sysfs(struct f2fs_sb_info *sbi)
- #endif
- 		proc_create_single_data("victim_bits", 0444, sbi->s_proc,
- 				victim_bits_seq_show, sb);
-+		proc_create_single_data("discard_plist_info", 0444, sbi->s_proc,
-+				discard_plist_seq_show, sb);
- 	}
- 	return 0;
- put_feature_list_kobj:
-@@ -1336,6 +1376,7 @@ void f2fs_unregister_sysfs(struct f2fs_sb_info *sbi)
- 		remove_proc_entry("segment_info", sbi->s_proc);
- 		remove_proc_entry("segment_bits", sbi->s_proc);
- 		remove_proc_entry("victim_bits", sbi->s_proc);
-+		remove_proc_entry("discard_plist_info", sbi->s_proc);
- 		remove_proc_entry(sbi->sb->s_id, f2fs_proc_root);
- 	}
- 
--- 
-2.25.1
-
+> 
+> Thanks,
+> Oded
+> 
