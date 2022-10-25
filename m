@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BB160CF8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092FF60CF8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232799AbiJYOuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S232277AbiJYOvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbiJYOuP (ORCPT
+        with ESMTP id S230046AbiJYOvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:50:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF6F57DE3;
-        Tue, 25 Oct 2022 07:50:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD06861989;
-        Tue, 25 Oct 2022 14:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EC4C433D6;
-        Tue, 25 Oct 2022 14:50:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666709413;
-        bh=VCltjqERKRXqiEIpoMVQ9binZrINHP3djXjLUsnrY/Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sPChzJNVdFp0eS17oqBoQV6rW+/XvI85cf5PLyQwbF0TnsSuv/BhDtqoqshmAjMxN
-         SGfaZTjo+kAKd38XCblRNqbxEX3Z9mYImDfNHMXnvt3tUKjHbs+tkK04RKoqRvh4Ss
-         J1xfZiUhXXqbMlsIH4r+nyyCOKf0SvajwNt9dyso=
-Date:   Tue, 25 Oct 2022 16:50:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>, tiwai@suse.com,
-        alsa-devel@alsa-project.org, peter.ujfalusi@linux.intel.com,
-        mkumard@nvidia.com
-Subject: Re: [PATCH AUTOSEL 6.0 07/44] ALSA: hda: Fix page fault in
- snd_hda_codec_shutdown()
-Message-ID: <Y1f3opiid6pvKINq@kroah.com>
-References: <20221009234932.1230196-1-sashal@kernel.org>
- <20221009234932.1230196-7-sashal@kernel.org>
- <24d084e1-700d-da77-d93e-2d330aac2f63@linux.intel.com>
+        Tue, 25 Oct 2022 10:51:14 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7B757DE3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:51:14 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id y4so11170111plb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:51:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WGn0PbiFymHKMcNjUGWXoioOm7PfQt5MHEJvVchVE4s=;
+        b=UBypWPLGznT/DbD9AMQEGECW2iMMvloV/G2ZoYyVyVeeSOTvnpiF7h8kWMo3HCzfP4
+         864MlB+6jkvI6b4CtPov+9fqWzC+GtZhjIdb9PZQ/0bgbkk8fYE/fAfVe4CdE4a2jpWz
+         Qcqf+YBwwNwwLIlTGN+Q/A/y2y9os7ZsT+/ZV+eU/d+EGTiT6bdNEwo9tbnHgMRrlKUI
+         Upa/9ZPTicsx/N/SnhIg3P3mwfuUwQ+8te9mhGM+MJeNCHa0N+tFLVXg4xhUKnRgltTZ
+         B6t0gd4X3FA2TMEK3DKbQMM/AP+X/v5vMsDXyheolsMIaJC3Y6fPo+HKBQd8RqTl+V0r
+         exrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WGn0PbiFymHKMcNjUGWXoioOm7PfQt5MHEJvVchVE4s=;
+        b=il+YYFsnNjY2pGqr/VRT/0Igcz2sLNO7cyMAhORmbvFTemJRyJRKYLWZgce3Ro3OiX
+         5kQ9fnSW0P6H9srJDtRvRu1b0DUOO3z4f63/Ar9H+o/9Hxhc8EzddDjWhlZZcnGcA0mB
+         jDImSYVlZ+cetOFTFG2dOos+HWJsVnOrPklQ+hbOjkbuMMzoUApNwJjf90d+1ggnubE0
+         l8vOLBl3KXTZ6p1xliiZHiK8/iPhpoHAIiHTfd7hfjmTTYuPXzhuwfjeyUYHO/lyzFlB
+         XtWoOQ9RKBnEyVSxeQ244+WVgqU3h+a7Km6ddbXqb4tDthAblaQGU2A1DKa1QUpJxCqU
+         KZ/g==
+X-Gm-Message-State: ACrzQf2HWZVcZnCfwehHCyu8YAyeSMmwfpbZGGR9Lp+DTcF+00cGGRW3
+        9jDnYpPtr9viTqnA2Hcodl+Rs3dDsevZEAGUIg==
+X-Google-Smtp-Source: AMsMyM4QmJ9hENMOITCzYCmLDpzoUM/Vm/0Ns4a2Kda0pfGS+9s+6NymvzcHhs8Liv3/+kTJpgIA9A==
+X-Received: by 2002:a17:902:9048:b0:17f:93a5:4638 with SMTP id w8-20020a170902904800b0017f93a54638mr38935135plz.108.1666709473534;
+        Tue, 25 Oct 2022 07:51:13 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.208.236])
+        by smtp.gmail.com with ESMTPSA id n14-20020a170903110e00b00180cf894b67sm1318765plh.130.2022.10.25.07.51.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 07:51:12 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     kishon@kernel.org, lpieralisi@kernel.org, bhelgaas@google.com
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kw@linux.com, robh@kernel.org, vidyas@nvidia.com, vigneshr@ti.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 0/5] PCI: endpoint: Rework the EPC to EPF notification
+Date:   Tue, 25 Oct 2022 20:20:56 +0530
+Message-Id: <20221025145101.116393-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <24d084e1-700d-da77-d93e-2d330aac2f63@linux.intel.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,28 +70,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 09:27:32AM -0500, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 10/9/22 18:48, Sasha Levin wrote:
-> > From: Cezary Rojewski <cezary.rojewski@intel.com>
-> > 
-> > [ Upstream commit f2bd1c5ae2cb0cf9525c9bffc0038c12dd7e1338 ]
-> 
-> This commit on linux-stable seems to have broken a number of platforms.
-> 
-> 6.0.2 worked fine.
-> 6.0.3 does not
-> 
-> reverting this commit solves the problem, see
-> https://github.com/thesofproject/linux/issues/3960 for details.
-> 
-> Are we missing a prerequisite patch for this commit?
+Hello,
 
-Please see https://lore.kernel.org/r/20221024143931.15722-1-tiwai@suse.de
+During the review of the patch that fixes DBI access in PCI EP, Rob
+suggested [1] using a fixed interface for passing the events from EPC to
+EPF instead of the in-kernel notifiers.
 
-Does that solve it for you?
+This series introduces a simple callback based mechanism for passing the
+events from EPC to EPF. This interface is chosen for satisfying the below
+requirements:
 
-thanks,
+1. The notification has to reach the EPF drivers without any additional
+latency.
+2. The context of the caller (EPC) needs to be preserved while passing the
+notifications.
 
-greg k-h
+With the existing notifier mechanism, the 1st case can be satisfied since
+notifiers aren't adding any huge overhead. But the 2nd case is clearly not
+satisfied, because the current atomic notifiers forces the EPF
+notification context to be atomic even though the caller (EPC) may not be
+in atomic context. In the notification function, the EPF drivers are
+required to call several EPC APIs that might sleep and this triggers a
+sleeping in atomic bug during runtime.
+
+The above issue could be fixed by using a blocking notifier instead of
+atomic, but that proposal was not accepted either [2].
+
+So instead of working around the issues within the notifiers, let's get rid
+of it and use the callback mechanism.
+
+NOTE: DRA7xx and TEGRA194 drivers are only compile tested. Testing this series
+on the real platforms is greatly appreciated.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/all/20220802072426.GA2494@thinkpad/T/#mfa3a5b3a9694798a562c36b228f595b6a571477d
+[2] https://lore.kernel.org/all/20220228055240.24774-1-manivannan.sadhasivam@linaro.org
+
+Changes in v4:
+
+* Added check for the presence of event_ops before involing the callbacks (Kishon)
+* Added return with IRQ_WAKE_THREAD when link_up event is found in the hard irq
+  handler of tegra194 driver (Vidya)
+* Collected review tags
+
+Changes in v3:
+
+* As Kishon spotted, fixed the DRA7xx driver and also the TEGRA194 driver to
+  call the LINK_UP callback in threaded IRQ handler.
+
+Changes in v2:
+
+* Introduced a new "list_lock" for protecting the epc->pci_epf list and
+  used it in the callback mechanism.
+
+Manivannan Sadhasivam (5):
+  PCI: dra7xx: Use threaded IRQ handler for "dra7xx-pcie-main" IRQ
+  PCI: tegra194: Move dw_pcie_ep_linkup() to threaded IRQ handler
+  PCI: endpoint: Use a separate lock for protecting epc->pci_epf list
+  PCI: endpoint: Use callback mechanism for passing events from EPC to
+    EPF
+  PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
+
+ drivers/pci/controller/dwc/pci-dra7xx.c       |  2 +-
+ drivers/pci/controller/dwc/pcie-tegra194.c    |  9 ++++-
+ drivers/pci/endpoint/functions/pci-epf-test.c | 38 ++++++-------------
+ drivers/pci/endpoint/pci-epc-core.c           | 32 ++++++++++++----
+ include/linux/pci-epc.h                       | 10 +----
+ include/linux/pci-epf.h                       | 19 ++++++----
+ 6 files changed, 59 insertions(+), 51 deletions(-)
+
+-- 
+2.25.1
+
