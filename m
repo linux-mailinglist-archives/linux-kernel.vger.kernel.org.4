@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820B360D4DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881B860D4DA
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbiJYTmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S231511AbiJYTmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiJYTmS (ORCPT
+        with ESMTP id S232200AbiJYTmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:42:18 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586748C448;
-        Tue, 25 Oct 2022 12:42:17 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29PJg2MZ119572;
-        Tue, 25 Oct 2022 14:42:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666726922;
-        bh=H/as/1Tn9o1i2U2DwmPl0CGI3P3tgiJdJ3deInJ3bw0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Er6+biu5OoiqIuFs74X+1JBEm08eYptQuWK8UBFebRFe6bIZ1L4SDUNL13nlRFtGa
-         vBIsiDuCbkfVT3dhdCSLmg6TjWgJE2KAaJJvfRbI7t2uVOSnC/tm7H5jgux8+TuYc0
-         auGAs2disOnVah1ZKlLcyrqSJ1bF1hg4OxpHgAo8=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29PJg2PJ079385
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Oct 2022 14:42:02 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 25
- Oct 2022 14:42:01 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 25 Oct 2022 14:42:02 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29PJg1kL027737;
-        Tue, 25 Oct 2022 14:42:01 -0500
-Date:   Tue, 25 Oct 2022 14:42:01 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
-        Device Trees <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LKML ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 04/11] thermal: k3_j72xx_bandgap: map fuse_base only
- for erratum workaround
-Message-ID: <20221025194201.3iup4ionv3zhnfd5@bryanbrattlof.com>
-References: <20221025191515.9151-1-bb@ti.com>
- <20221025191515.9151-5-bb@ti.com>
+        Tue, 25 Oct 2022 15:42:15 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C9CBD640
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:42:14 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id o65so11394003iof.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:42:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wo5gCdV4HOvdCiIDRmFlmf80DqTwgnkZIIgLG7LqzFw=;
+        b=POGwl/v2rAIo0Tt8sQBMm76r7/ZH/JK2/Bf6HuuKIWp+RTvj20FhYbzdX77Nur/6Bv
+         VaYgFwBsjPzEQN6j70X43WCcut6uSzrwySJTL9c2SJWkNu5QCLte63YBL05pklfjK4Pw
+         avjIVI1XK7tlszMx5qvLCLFKLVw/cZjy1/UVZkc8RX4BLMRcehnJVpPdGIwa7R/+67u9
+         U2tnUaFc7AI8AWJn17LTsd7imwunI6K4zK97jEB44Z8yuNM9wRZAyWUCc1NDNhUn1cK8
+         3+FT8wZNLu4QfCTqhlA6Rm+auoPbYvHBhxpc3aATbmhWwVOLltX8J/mTYEglJCDMucdc
+         Ff6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wo5gCdV4HOvdCiIDRmFlmf80DqTwgnkZIIgLG7LqzFw=;
+        b=RLJ+zfKXGlM7IDqo6V2MWX/QpwAVmc8fD1+SiT0bZ8K0m6MDwUon2dmoFmLZWZBAFS
+         ChRGrvLV42zZl+sSyQB07WozqiPgobnppxuTnAJxWWu6av2JEN1ioNMhBVQzmeCvHlX4
+         8r/0G8UO/Elh7UjuqHvH2c5JgPRq94dHAR/X4MM+D7Wto7sPOPapYBukBCxOioXHqd3J
+         KW14nL6ycFUjmp0VOddv1iAiyQHQUslbpqo8jXaVoN5MhQnSLYzvCBZYbsR4p7oLXgTu
+         y0fuzaIXLjoDsy/AHNL+O+EdVc9z104eqe5RspRczvL6HaZk+5NehV1lMMjJg/vZBHpT
+         xdSA==
+X-Gm-Message-State: ACrzQf1ed99w4Fh8jo4mOLwB6s0Rr5XFxs9XdNW1G1PCTr2Fv6MeZaxc
+        DEQq22tqPY+Wl9qotlEtBEnFracpmXkCA8Go
+X-Google-Smtp-Source: AMsMyM48aBtAi9RmmmRoZZeLkaEfwha1HYWhziCKd3iVYYUja5LyHNtr3FZa1xP/yiCE6+RA1WsXTg==
+X-Received: by 2002:a05:6638:25d1:b0:374:f8c2:bf7a with SMTP id u17-20020a05663825d100b00374f8c2bf7amr5089585jat.270.1666726933999;
+        Tue, 25 Oct 2022 12:42:13 -0700 (PDT)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id n17-20020a92d9d1000000b002f9b55e7e92sm1318548ilq.0.2022.10.25.12.42.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 12:42:13 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        io-uring@vger.kernel.org
+In-Reply-To: <cover.1666347703.git.asml.silence@gmail.com>
+References: <cover.1666347703.git.asml.silence@gmail.com>
+Subject: Re: [PATCH for-next v3 0/3] implement pcpu bio caching for IRQ I/O
+Message-Id: <166672693299.6037.1642967404693492462.b4-ty@kernel.dk>
+Date:   Tue, 25 Oct 2022 13:42:12 -0600
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20221025191515.9151-5-bb@ti.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On October 25, 2022 thus sayeth Bryan Brattlof:
-> Some of TI's J721E SoCs require a software trimming procedure for the
-> temperature monitors to function properly. To determine if a particular
-> J721E is not affected by this erratum, both bits in the WKUP_SPARE_FUSE0
-> region must be set. Other SoCs, not affected by this erratum, will not
-> need this region.
+On Fri, 21 Oct 2022 11:34:04 +0100, Pavel Begunkov wrote:
+> Add bio pcpu caching for normal / IRQ-driven I/O extending REQ_ALLOC_CACHE,
+> which was limited to iopoll. t/io_uring with an Optane SSD setup showed +7%
+> for batches of 32 requests and +4.3% for batches of 8.
 > 
-> Map the 'fuse_base' region only when the erratum fix is needed.
+> IRQ, 128/32/32, cache off
+> IOPS=59.08M, BW=28.84GiB/s, IOS/call=31/31
+> IOPS=59.30M, BW=28.96GiB/s, IOS/call=32/32
+> IOPS=59.97M, BW=29.28GiB/s, IOS/call=31/31
+> IOPS=59.92M, BW=29.26GiB/s, IOS/call=32/32
+> IOPS=59.81M, BW=29.20GiB/s, IOS/call=32/31
 > 
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
-> ---
->  drivers/thermal/k3_j72xx_bandgap.c | 37 ++++++++++++++++++------------
->  1 file changed, 22 insertions(+), 15 deletions(-)
-> 
+> [...]
 
-...
+Applied, thanks!
 
->  
-> -	if (workaround_needed)
-> -		devm_iounmap(dev, fuse_base);
-> -
+[1/3] bio: split pcpu cache part of bio_put into a helper
+      commit: 0b0735a8c24f006d2d9d8b2b408b8c90f3163abd
+[2/3] block/bio: add pcpu caching for non-polling bio_put
+      commit: 13a184e269656994180e8c64ff56db03ed737902
+[3/3] io_uring/rw: enable bio caches for IRQ rw
+      commit: 93dad04746ea1340dec267f0e98ac42e8bc67160
 
-Ugh... This is wrong. 
+Best regards,
+-- 
+Jens Axboe
 
-Of course I will catch it right after I send this out
 
-Sorry for the noise everyone
-~Bryan
