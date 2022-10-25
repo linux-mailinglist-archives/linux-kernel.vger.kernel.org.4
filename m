@@ -2,42 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28F960C3F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AA360C3FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiJYGpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
+        id S230520AbiJYGsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJYGpv (ORCPT
+        with ESMTP id S230491AbiJYGsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:45:51 -0400
-Received: from out28-219.mail.aliyun.com (out28-219.mail.aliyun.com [115.124.28.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AA4B3B30;
-        Mon, 24 Oct 2022 23:45:45 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436282|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00755111-0.133634-0.858815;FP=16064881047762422907|1|1|8|0|-1|-1|-1;HT=ay29a033018047187;MF=frank.sae@motor-comm.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.PpRtd2q_1666680328;
-Received: from sunhua.motor-comm.com(mailfrom:Frank.Sae@motor-comm.com fp:SMTPD_---.PpRtd2q_1666680328)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 14:45:43 +0800
-From:   Frank <Frank.Sae@motor-comm.com>
-To:     Peter Geis <pgwipeout@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     yinghong.zhang@motor-comm.com, fei.zhang@motor-comm.com,
-        hua.sun@motor-comm.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Frank <Frank.Sae@motor-comm.com>
-Subject: [PATCH net-next v8.1] net: phy: Add driver for Motorcomm yt8521 gigabit ethernet phy
-Date:   Tue, 25 Oct 2022 14:45:32 +0800
-Message-Id: <20221025064532.1595-1-Frank.Sae@motor-comm.com>
-X-Mailer: git-send-email 2.31.0.windows.1
+        Tue, 25 Oct 2022 02:48:30 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381C014BB72
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:48:29 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-36847dfc5ccso105878477b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JPRRYLjIyOi+l0vP5hB11FlLPptXndDWR57UKLvqVFs=;
+        b=k2ppGJjX3Z9j6TEBU4XW5Pue1wIrSncGBXuSj+0p+HIhlsvg2E2i7Aavf8GtZPDOJO
+         XWL5Y/6yO+zRbbeMgDCfw1RRc5kTmn4jIdf48odLbcF9WfFYHcx4GHyrdOwMkmvtn3eM
+         GurjSDbHq8pWgVpdb1Po3ibPBL8l758BgMfWObmyH84FCyidPk7b1HpM1fvXGq/xEPuU
+         m9I0seJTlQM5nPgdAJwAEi0OtRkiCTxyUUp9IRJUnOAv4GCvbVCTw75V3A0WcKhCAgi6
+         /OaR0+ChRHCeSu9wdIX7vSj8Q+kf/t5n+MWPZuTIwVMMBR8mJiCxycYlXFokJ0t7CgHO
+         Sh3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JPRRYLjIyOi+l0vP5hB11FlLPptXndDWR57UKLvqVFs=;
+        b=u7Io8trZ6NqcJSvRTdiK4eAPeUAyJFTuHSk3mok9b5Ficy1YUjjf4JWVoVPRLqEMcx
+         cdh9l6Bn/RgeZOMV0vw7GFBEWxqm6/OJ4BntZCZrE7YQgkkGnsYk5h7FLizEUMq/kuki
+         gIa+xpOGLNaHCSXk7gqi0oCu45pE8xUuaknKMl8312OLJrPuPMTmX2w4PllzX90y8gUt
+         c7qeIwR6c8ZzxvHbtNIJyDZMU4R+86cVsjfuahQYo6SmuNnLJlxyClqPFZRDp2v4XC38
+         dGQs6KO7sikMqsCzIEas1PB7/Hk+Gwt4SXB4Basp4Y28Hi9Ub1yorH5dkX1o8Ex+CsaJ
+         3q0Q==
+X-Gm-Message-State: ACrzQf2urpclUYeGSJbpfRzuOHqbAC4iNUtNK/QM5xhAAsjMyWiCSCaJ
+        99RdUZc1z6EdGBakbY/uXaGhbnE5Yv9ZuikNtdtGbg==
+X-Google-Smtp-Source: AMsMyM4UxUNUoo9ZHmaxATl7Pl8lKSNiL5vivNDiUqywTNqfL9iXItW/z/XSLcjnJOjq1SXEOg65vMWakQK4L4iTzCc=
+X-Received: by 2002:a81:7804:0:b0:369:1074:e2b with SMTP id
+ t4-20020a817804000000b0036910740e2bmr22567329ywc.127.1666680508337; Mon, 24
+ Oct 2022 23:48:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+References: <20221025050608.2635173-1-quic_fenglinw@quicinc.com> <20221025050608.2635173-2-quic_fenglinw@quicinc.com>
+In-Reply-To: <20221025050608.2635173-2-quic_fenglinw@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 25 Oct 2022 09:48:17 +0300
+Message-ID: <CAA8EJpqQaGwsBKMqqHSqd-jcKsacuamqsd0adxCWTvQcDz9b3Q@mail.gmail.com>
+Subject: Re: [RESEND PATCH v1 1/2] spmi: pmic-arb: add support to map SPMI
+ addresses to physical addr
+To:     Fenglin Wu <quic_fenglinw@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sboyd@kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
+        David Collins <collinsd@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,1935 +72,289 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Add a driver for the motorcomm yt8521 gigabit ethernet phy. We have verified
- the driver on StarFive VisionFive development board, which is developed by
- Shanghai StarFive Technology Co., Ltd.. On the board, yt8521 gigabit ethernet
- phy works in utp mode, RGMII interface, supports 1000M/100M/10M speeds, and
- wol(magic package).
-
-Signed-off-by: Frank <Frank.Sae@motor-comm.com>
----
-patch v8.1:
- Fix: This comment starts with '/**', but isn't a kernel-doc comment warning
- (Reported-by: kernel test robot <lkp@intel.com>).
-
-patch v8:
- Hi Russell
-
-> > > As previously pointed out, dropping the MDIO bus lock in a
-> > > phy_select_page()..phy_restore_page() region unsafe. I think you need
-> > > to ensure that yt8521_fiber_config_aneg() is safe to be called under
-> > > the lock, and I suspect having a version of genphy_config_aneg() which
-> > > can be called with the lock held would be a better approach.
-> >
-> >  with your suggestion we add yt8521_set_page() which does not hold the lock.
-> 
-> And so you don't understand the locking issues...
-> 
-> If you drop the lock, it means that some other thread (e.g. userspace) can
-> come in and change the page register under you, which will completely
-> change which register(s) you are accessing.
-> 
-> Please implement locking properly, don't bodge around with it. I made my
-> suggestion above specifically after having thought about the issues and
-> what would be possible to give a correct locking implementation.
-
- with your suggestion we removed yt8521_set_page(), then add
- ytphy_utp_config_aneg() and ytphy_utp_read_abilities() which can be
- called with the lock held.
-
-
-patch v7:
- Hi Russell
-
-> As previously pointed out, dropping the MDIO bus lock in a
-> phy_select_page()..phy_restore_page() region unsafe. I think you need
-> to ensure that yt8521_fiber_config_aneg() is safe to be called under
-> the lock, and I suspect having a version of genphy_config_aneg() which
-> can be called with the lock held would be a better approach.
-
- with your suggestion we add yt8521_set_page() which does not hold the lock.
-
-
-patch v6:
- Hi Andrew
-
-> You appear to only advertise 1G speeds. Does 100M actually work, but
-> you don't advertise it?
- yes, surely 100M fibre does work and since Fiber 100M advertise
- bit(ADVERTISE_100FULL) is conflict with ADVERTISE_1000XPSE_ASYM we
- can only advertise the latter.
-
-> This is another place the two line side model falls apart. You should
-> not be modifying phydev->supported, because how do you get back the
-> bits your cleared when it swaps from one to the other? phylib has no
-> concept of phydev->supported changing at run time. It is set when the
-> PHY probes, and only changed when the MAC remove what it does not
-> support.
-> 
-> You need yt8521_fiber_config_aneg() to take a copy of
-> phydev->advertising, mask out what fibre does not support, and program
-> the hardware based on that. You need yt8521_utp_config_aneg() to take
-> a copy of phydev->advertising, mask out what copper does not support,
-> and program the hardware based on that. phydev->supported and
-> phydev->advertising should always be a superset of both copper and
-> fibre, if both are available.
-> 
-> Maybe, in a flow up patch, you can actually look at
-> phydev->advertising, see all the fibre modes have been removed, fibre
-> will never get link, and so power the fibre off. Or all the copper
-> modes have been removed, the copper will never get link, so turn it
-> off.
- We add combo_advertising which is used for case of YT8521 in combo mode,
- this means that yt8521 may work in utp or fiber mode which depends
- on which media is connected. Advertising bits will be updated before calling
- yt8521_fiber_config_aneg/genphy_config_aneg.
-
-patch v5:
- Hi Jakub,Andrew,Russell
-
-> The user could of changed the pause settings, which are going to be
-> ignored here. Also, you should not assume the MAC can actually do
-> asymmetric pause, not all can. phydev->advertising will be set to only
-> include what the MAC can actually do.
-> 
-> The whole concept of having two line sides connected to one MAC and
-> seeing which gets link first is unsupported in Linux. In theory, you
-> want to be able to configure each line side differently. Maybe you
-> want autoneg on copper, but fixed on fibre, asymmetric pause with
-> fibre, but symmetric pause on copper, etc. Since there is only one
-> instance of phydev here, you don't have anywhere to store two sets of
-> configuration, nor any sort of kAPI to deal with two phydev structures
-> etc. So the user experience is not so great.
-> 
-> With the Marvell Switches which also have this capability, i actually
-> ignore it, use the phy-mode it decide which should be used, either
-> copper or fibre, and leave the other powered off so it can never get
-> link. There is at least one Marvell PHY which does however support
-> first up wins, so this behaviour is not new. I just don't recommend
-> it.
-> 
-> And it gets even more interesting when the SFP is actually copper. But
-> not supported here.
-> since the integration with phylink is missing in this driver, that is
-
-1. we changed the codes for getting/advertising of pause and other
- capabilities, the basic mechnism is that the capabilities and
- advertising will changed based on current linkuped media,
- please review.
-2. as to the fibre/copper two lines support, this phy driver will
- handle to ensure linkup only on one media and it is transparent
- to MAC and uplayer. in practice, this do help users use the
- feature of the phy device, especially for the combo mode
- design in which customer can switch between fibre and
- copper automatically.  
-
-patch v4.4:
- Hi Jakub
- Fix "warning: variable 'changed'"
- 
-patch v4.3:
- Hi Jakub
- Kernel 6.0-rc1 is cut on 2022-08-14, we update new patch for Kernel 6.0-rc1.
-
-patch v4.2:
- fix "=0D" and "=20" which in patch v4.1.
- 
-patch v4.1:
- Hi Andrew
- Thanks very much and based on your comments we modified the patch v4.1 as below.
-
-> You have interrupt bits defined, you enable the WoL interrupt, but you
-> don't have an interrupt handler. PHY interrupts are generally level
-> interrupts, so on WoL, don't you end up with an interrupt storm,
-> because you don't have anything clearing the WoL interrupt?
-
- in the driver, only the interrupt for WOL is used according to uplayer WOL
- configuration via .set_wol. If WOL is enalbed, then the WOL interrupt is
- enabled accordingly; you know, for a system support WOL, the WOL interrupt
- will be handled by user's WOL circuit, and it will not cause interrupt storm
- to CPU core system.
-
- for WOL interrupt, by default, we configure to pulse trigger mode, that is a
- pulse from High to low change, and the low level will hold for 672ms.
- user's WOL circuit will detected such volt level change as a WOL event trigger.
-
-patch v4:
- Hi Andrew,Jakub
- Thanks very much and based on your comments we modified the patch v4 as below.
-
- We evaluated the Marvell 10G driver and at803x you suggested. The 2 drivers
- implement SFP module attach/detach functions and we think these functions do
- not help yt8521 to do UTP/Fiber register space arbitration which you may
- concern in previous patch.
-
- Yt8521 can detect utp/fiber media link status automatically. For the case of
- both media are connected, driver arbitrates the priority of the media (by
- default, driver takes fiber as higher priority) and report the media status
- to up layer(MAC).
-
-patch v3:
- Hi Andrew
- Thanks and based on your comments we modified the patch as below.
-
-> It is generally not that simple. Fibre, you probably want 1000BaseX,
-> unless the fibre module is actually copper, and then you want
-> SGMII. So you need something to talk to the fibre module and ask it
-> what it is. That something is phylink. Phylink does not support both
-> copper and fibre at the same time for one MAC.
-
- yes, you said it and for MAC, it does not support copper and Fiber at same time.
- but from Physical Layer, you know, sometimes both Copper and Fiber cables are
- connected. in this case, Phy driver should do arbitration and report to MAC
- which media should be used and Link-up.
- This is the reason that the driver has a "polling mode", and by default, also
- this driver takes fiber as first priority which matches phy chip default behavior.
-
-patch v2:
- Hi Andrew, Russell King, Peter,
- Thanks and based on your comments we modified the patch as below.
- 
-> So there's only two possible pages that can be used in the extended
->register space?
- 
- Yes,there is only two register space (utp and fiber).
- 
-> > +/* Extended Register's Data Register */
-> > +#define YTPHY_PAGE_DATA                                0x1F
+On Tue, 25 Oct 2022 at 08:08, Fenglin Wu <quic_fenglinw@quicinc.com> wrote:
 >
-> These are defined exactly the same way as below. Please reuse code
-> where possible.
- 
- Yes, code will be reuse, but "YT8511_PAGE" need to be rename like
- "YTPHY_PAGE_DATA",as it is common register for yt phys.
+> From: David Collins <collinsd@codeaurora.org>
+>
+> Add an exported function which can map an SPMI address to the
+> physical address range of the registers used to write to that
+> SPMI address.
+>
+> The feature can be used by consumer drivers that need to lock
+> down access to certain PMIC peripherals temporarily for certain
+> secure use cases.
 
-patch v1:
- Add a driver for the motorcomm yt8521 gigabit ethernet phy. We have verified
- the driver on StarFive VisionFive development board, which is developed by
- Shanghai StarFive Technology Co., Ltd.. On the board, yt8521 gigabit ethernet
- phy works in utp mode, RGMII interface, supports 1000M/100M/10M speeds, and
- wol(magic package).
+No-no-no-no. First, typically the API is only accepted together with
+the actual API user. It is bad to have an API call that has no users.
 
-Thanks and BR,
-Frank
+Next, the API you are trying to add doesn't match what you have
+described so far. Instead of locking the device from the ARB driver,
+you are providing the child devices with the wormhole, meaning that
+the child device will have know how to program the ARB. This is not
+correct. The ARB programming should happen from the ARB driver, not
+from the PMIC/etc drivers.
+
+Last, but not least. The API you have tried to add is added as the one
+specific to the spmi_pmic_arb. This is usually a very bad practice.
+Please rework this as an API that doesn't depend on the backing SPMI
+arbiter.
+
+>
+> Signed-off-by: David Collins <collinsd@codeaurora.org>
+> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+> ---
+>  drivers/spmi/spmi-pmic-arb.c           | 104 +++++++++++++++++++++++++
+>  include/linux/soc/qcom/spmi-pmic-arb.h |  23 ++++++
+>  2 files changed, 127 insertions(+)
+>  create mode 100644 include/linux/soc/qcom/spmi-pmic-arb.h
+>
+> diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
+> index 2cf3203b2397..1e7f5a9ff4bc 100644
+> --- a/drivers/spmi/spmi-pmic-arb.c
+> +++ b/drivers/spmi/spmi-pmic-arb.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+>  #include <linux/spmi.h>
+> +#include <linux/soc/qcom/spmi-pmic-arb.h>
+>
+>  /* PMIC Arbiter configuration registers */
+>  #define PMIC_ARB_VERSION               0x0000
+> @@ -124,6 +125,8 @@ struct apid_data {
+>   *
+>   * @rd_base:           on v1 "core", on v2 "observer" register base off DT.
+>   * @wr_base:           on v1 "core", on v2 "chnls"    register base off DT.
+> + * @wr_base_phys:      base physical address of the register range used for
+> + *                     SPMI write commands.
+>   * @intr:              address of the SPMI interrupt control registers.
+>   * @cnfg:              address of the PMIC Arbiter configuration registers.
+>   * @lock:              lock to synchronize accesses.
+> @@ -141,6 +144,7 @@ struct apid_data {
+>  struct spmi_pmic_arb {
+>         void __iomem            *rd_base;
+>         void __iomem            *wr_base;
+> +       phys_addr_t             wr_base_phys;
+>         void __iomem            *intr;
+>         void __iomem            *cnfg;
+>         void __iomem            *core;
+> @@ -180,6 +184,9 @@ struct spmi_pmic_arb {
+>   * @irq_clear:         on v1 address of PMIC_ARB_SPMI_PIC_IRQ_CLEARn
+>   *                     on v2 address of SPMI_PIC_IRQ_CLEARn.
+>   * @apid_map_offset:   offset of PMIC_ARB_REG_CHNLn
+> + * @wr_addr_map:       maps from an SPMI address to the physical address
+> + *                     range of the registers used to perform an SPMI write
+> + *                     command to the SPMI address.
+>   */
+>  struct pmic_arb_ver_ops {
+>         const char *ver_str;
+> @@ -196,6 +203,8 @@ struct pmic_arb_ver_ops {
+>         void __iomem *(*irq_status)(struct spmi_pmic_arb *pmic_arb, u16 n);
+>         void __iomem *(*irq_clear)(struct spmi_pmic_arb *pmic_arb, u16 n);
+>         u32 (*apid_map_offset)(u16 n);
+> +       int (*wr_addr_map)(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
+> +                          struct resource *res_out);
+>  };
+>
+>  static inline void pmic_arb_base_write(struct spmi_pmic_arb *pmic_arb,
+> @@ -972,6 +981,21 @@ static int pmic_arb_offset_v1(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
+>         return 0x800 + 0x80 * pmic_arb->channel;
+>  }
+>
+> +static int pmic_arb_wr_addr_map_v1(struct spmi_pmic_arb *pmic_arb, u8 sid,
+> +                                  u16 addr, struct resource *res_out)
+> +{
+> +       int rc;
+> +
+> +       rc = pmic_arb_offset_v1(pmic_arb, sid, addr, PMIC_ARB_CHANNEL_RW);
+> +       if (rc < 0)
+> +               return rc;
+> +
+> +       res_out->start = pmic_arb->wr_base_phys + rc;
+> +       res_out->end = res_out->start + 0x80 - 1;
+> +
+> +       return 0;
+> +}
+> +
+>  static u16 pmic_arb_find_apid(struct spmi_pmic_arb *pmic_arb, u16 ppid)
+>  {
+>         struct apid_data *apidd = &pmic_arb->apid_data[pmic_arb->last_apid];
+> @@ -1111,6 +1135,21 @@ static int pmic_arb_offset_v2(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
+>         return 0x1000 * pmic_arb->ee + 0x8000 * apid;
+>  }
+>
+> +static int pmic_arb_wr_addr_map_v2(struct spmi_pmic_arb *pmic_arb, u8 sid,
+> +                                  u16 addr, struct resource *res_out)
+> +{
+> +       int rc;
+> +
+> +       rc = pmic_arb_offset_v2(pmic_arb, sid, addr, PMIC_ARB_CHANNEL_RW);
+> +       if (rc < 0)
+> +               return rc;
+> +
+> +       res_out->start = pmic_arb->wr_base_phys + rc;
+> +       res_out->end = res_out->start + 0x1000 - 1;
+> +
+> +       return 0;
+> +}
+> +
+>  /*
+>   * v5 offset per ee and per apid for observer channels and per apid for
+>   * read/write channels.
+> @@ -1145,6 +1184,21 @@ static int pmic_arb_offset_v5(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
+>         return offset;
+>  }
+>
+> +static int pmic_arb_wr_addr_map_v5(struct spmi_pmic_arb *pmic_arb, u8 sid,
+> +                                  u16 addr, struct resource *res_out)
+> +{
+> +       int rc;
+> +
+> +       rc = pmic_arb_offset_v5(pmic_arb, sid, addr, PMIC_ARB_CHANNEL_RW);
+> +       if (rc < 0)
+> +               return rc;
+> +
+> +       res_out->start = pmic_arb->wr_base_phys + rc;
+> +       res_out->end = res_out->start + 0x10000 - 1;
+> +
+> +       return 0;
+> +}
+> +
+>  static u32 pmic_arb_fmt_cmd_v1(u8 opc, u8 sid, u16 addr, u8 bc)
+>  {
+>         return (opc << 27) | ((sid & 0xf) << 20) | (addr << 4) | (bc & 0x7);
+> @@ -1254,6 +1308,7 @@ static const struct pmic_arb_ver_ops pmic_arb_v1 = {
+>         .irq_status             = pmic_arb_irq_status_v1,
+>         .irq_clear              = pmic_arb_irq_clear_v1,
+>         .apid_map_offset        = pmic_arb_apid_map_offset_v2,
+> +       .wr_addr_map            = pmic_arb_wr_addr_map_v1,
+>  };
+>
+>  static const struct pmic_arb_ver_ops pmic_arb_v2 = {
+> @@ -1267,6 +1322,7 @@ static const struct pmic_arb_ver_ops pmic_arb_v2 = {
+>         .irq_status             = pmic_arb_irq_status_v2,
+>         .irq_clear              = pmic_arb_irq_clear_v2,
+>         .apid_map_offset        = pmic_arb_apid_map_offset_v2,
+> +       .wr_addr_map            = pmic_arb_wr_addr_map_v2,
+>  };
+>
+>  static const struct pmic_arb_ver_ops pmic_arb_v3 = {
+> @@ -1280,6 +1336,7 @@ static const struct pmic_arb_ver_ops pmic_arb_v3 = {
+>         .irq_status             = pmic_arb_irq_status_v2,
+>         .irq_clear              = pmic_arb_irq_clear_v2,
+>         .apid_map_offset        = pmic_arb_apid_map_offset_v2,
+> +       .wr_addr_map            = pmic_arb_wr_addr_map_v2,
+>  };
+>
+>  static const struct pmic_arb_ver_ops pmic_arb_v5 = {
+> @@ -1293,6 +1350,7 @@ static const struct pmic_arb_ver_ops pmic_arb_v5 = {
+>         .irq_status             = pmic_arb_irq_status_v5,
+>         .irq_clear              = pmic_arb_irq_clear_v5,
+>         .apid_map_offset        = pmic_arb_apid_map_offset_v5,
+> +       .wr_addr_map            = pmic_arb_wr_addr_map_v5,
+>  };
+>
+>  static const struct irq_domain_ops pmic_arb_irq_domain_ops = {
+> @@ -1302,6 +1360,50 @@ static const struct irq_domain_ops pmic_arb_irq_domain_ops = {
+>         .translate = qpnpint_irq_domain_translate,
+>  };
+>
+> +static int _spmi_pmic_arb_map_address(struct spmi_pmic_arb *pmic_arb,
+> +                               u32 spmi_address, struct resource *res_out)
+> +{
+> +       u32 sid, addr;
+> +
+> +       sid = (spmi_address >> 16) & 0xF;
+> +       addr = spmi_address & 0xFFFF;
+> +
+> +       return pmic_arb->ver_ops->wr_addr_map(pmic_arb, sid, addr, res_out);
+> +}
+> +
+> +/**
+> + * spmi_pmic_arb_map_address() - returns physical addresses of registers used to
+> + *             write to the PMIC peripheral at spmi_address
+> + * @ctrl:              SPMI controller device pointer
+> + * @spmi_address:      20-bit SPMI address of the form: 0xSPPPP
+> + *                     where S = global PMIC SID and
+> + *                     PPPP = SPMI address within the slave
+> + * @res_out:           Resource struct (allocated by the caller) in which
+> + *                     physical addresses for the range are passed via start
+> + *                     and end elements
+> + *
+> + * Returns: 0 on success or an errno on failure.
+> + */
+> +int spmi_pmic_arb_map_address(struct spmi_controller *ctrl, u32 spmi_address,
+> +                             struct resource *res_out)
+> +{
+> +       struct spmi_pmic_arb *pmic_arb;
+> +
+> +       if (!ctrl || !res_out) {
+> +               pr_err("%s: Invalid pointer\n", __func__);
+> +               return -EINVAL;
+> +       }
+> +
+> +       pmic_arb = spmi_controller_get_drvdata(ctrl);
+> +       if (!pmic_arb) {
+> +               pr_err("Missing PMIC arbiter device\n");
+> +               return -ENODEV;
+> +       }
+> +
+> +       return _spmi_pmic_arb_map_address(pmic_arb, spmi_address, res_out);
+> +}
+> +EXPORT_SYMBOL(spmi_pmic_arb_map_address);
+> +
+>  static int spmi_pmic_arb_probe(struct platform_device *pdev)
+>  {
+>         struct spmi_pmic_arb *pmic_arb;
+> @@ -1341,6 +1443,7 @@ static int spmi_pmic_arb_probe(struct platform_device *pdev)
+>         if (hw_ver < PMIC_ARB_VERSION_V2_MIN) {
+>                 pmic_arb->ver_ops = &pmic_arb_v1;
+>                 pmic_arb->wr_base = core;
+> +               pmic_arb->wr_base_phys = res->start;
+>                 pmic_arb->rd_base = core;
+>         } else {
+>                 pmic_arb->core = core;
+> @@ -1367,6 +1470,7 @@ static int spmi_pmic_arb_probe(struct platform_device *pdev)
+>                         err = PTR_ERR(pmic_arb->wr_base);
+>                         goto err_put_ctrl;
+>                 }
+> +               pmic_arb->wr_base_phys = res->start;
+>         }
+>
+>         dev_info(&ctrl->dev, "PMIC arbiter version %s (0x%x)\n",
+> diff --git a/include/linux/soc/qcom/spmi-pmic-arb.h b/include/linux/soc/qcom/spmi-pmic-arb.h
+> new file mode 100644
+> index 000000000000..adb999d6e246
+> --- /dev/null
+> +++ b/include/linux/soc/qcom/spmi-pmic-arb.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/* Copyright (c) 2020, The Linux Foundation. All rights reserved. */
+> +
+> +#ifndef _SPMI_PMIC_ARB_H
+> +#define _SPMI_PMIC_ARB_H
+> +
+> +#include <linux/spmi.h>
+> +#include <linux/ioport.h>
+> +#include <linux/types.h>
+> +
+> +
+> +#if IS_ENABLED(CONFIG_SPMI_MSM_PMIC_ARB)
+> +int spmi_pmic_arb_map_address(struct spmi_controller *ctrl, u32 spmi_address,
+> +                             struct resource *res_out);
+> +#else
+> +static inline int spmi_pmic_arb_map_address(struct spmi_controller *ctrl,
+> +                               u32 spmi_address, struct resource *res_out)
+> +{
+> +       return -ENODEV;
+> +}
+> +#endif
+> +
+> +#endif
+> --
+> 2.25.1
+>
 
 
- MAINTAINERS                 |    1 +
- drivers/net/phy/Kconfig     |    2 +-
- drivers/net/phy/motorcomm.c | 1637 ++++++++++++++++++++++++++++++++++-
- 3 files changed, 1637 insertions(+), 3 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a96c60c787af..922cd832eed1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13937,6 +13937,7 @@ F:	include/uapi/linux/meye.h
- 
- MOTORCOMM PHY DRIVER
- M:	Peter Geis <pgwipeout@gmail.com>
-+M:	Frank <Frank.Sae@motor-comm.com>
- L:	netdev@vger.kernel.org
- S:	Maintained
- F:	drivers/net/phy/motorcomm.c
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index c57a0262fb64..040c8bf6d05b 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -260,7 +260,7 @@ config MOTORCOMM_PHY
- 	tristate "Motorcomm PHYs"
- 	help
- 	  Enables support for Motorcomm network PHYs.
--	  Currently supports the YT8511 gigabit PHY.
-+	  Currently supports the YT8511, YT8521 Gigabit Ethernet PHYs.
- 
- config NATIONAL_PHY
- 	tristate "National Semiconductor PHYs"
-diff --git a/drivers/net/phy/motorcomm.c b/drivers/net/phy/motorcomm.c
-index 7e6ac2c5e27e..387d54117b9e 100644
---- a/drivers/net/phy/motorcomm.c
-+++ b/drivers/net/phy/motorcomm.c
-@@ -1,15 +1,106 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Driver for Motorcomm PHYs
-+ * Motorcomm 8511/8521 PHY driver.
-  *
-  * Author: Peter Geis <pgwipeout@gmail.com>
-+ * Author: Frank <Frank.Sae@motor-comm.com>
-  */
- 
-+#include <linux/etherdevice.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/phy.h>
- 
- #define PHY_ID_YT8511		0x0000010a
-+#define PHY_ID_YT8521				0x0000011A
-+
-+/* YT8521 Register Overview
-+ *	UTP Register space	|	FIBER Register space
-+ *  ------------------------------------------------------------
-+ * |	UTP MII			|	FIBER MII		|
-+ * |	UTP MMD			|				|
-+ * |	UTP Extended		|	FIBER Extended		|
-+ *  ------------------------------------------------------------
-+ * |			Common Extended				|
-+ *  ------------------------------------------------------------
-+ */
-+
-+/* 0x10 ~ 0x15 , 0x1E and 0x1F are common MII registers of yt phy */
-+
-+/* Specific Function Control Register */
-+#define YTPHY_SPECIFIC_FUNCTION_CONTROL_REG	0x10
-+
-+/* 2b00 Manual MDI configuration
-+ * 2b01 Manual MDIX configuration
-+ * 2b10 Reserved
-+ * 2b11 Enable automatic crossover for all modes  *default*
-+ */
-+#define YTPHY_SFCR_MDI_CROSSOVER_MODE_MASK	(BIT(6) | BIT(5))
-+#define YTPHY_SFCR_CROSSOVER_EN			BIT(3)
-+#define YTPHY_SFCR_SQE_TEST_EN			BIT(2)
-+#define YTPHY_SFCR_POLARITY_REVERSAL_EN		BIT(1)
-+#define YTPHY_SFCR_JABBER_DIS			BIT(0)
-+
-+/* Specific Status Register */
-+#define YTPHY_SPECIFIC_STATUS_REG		0x11
-+#define YTPHY_SSR_SPEED_MODE_OFFSET		14
-+
-+#define YTPHY_SSR_SPEED_MODE_MASK		(BIT(15) | BIT(14))
-+#define YTPHY_SSR_SPEED_10M			0x0
-+#define YTPHY_SSR_SPEED_100M			0x1
-+#define YTPHY_SSR_SPEED_1000M			0x2
-+#define YTPHY_SSR_DUPLEX_OFFSET			13
-+#define YTPHY_SSR_DUPLEX			BIT(13)
-+#define YTPHY_SSR_PAGE_RECEIVED			BIT(12)
-+#define YTPHY_SSR_SPEED_DUPLEX_RESOLVED		BIT(11)
-+#define YTPHY_SSR_LINK				BIT(10)
-+#define YTPHY_SSR_MDIX_CROSSOVER		BIT(6)
-+#define YTPHY_SSR_DOWNGRADE			BIT(5)
-+#define YTPHY_SSR_TRANSMIT_PAUSE		BIT(3)
-+#define YTPHY_SSR_RECEIVE_PAUSE			BIT(2)
-+#define YTPHY_SSR_POLARITY			BIT(1)
-+#define YTPHY_SSR_JABBER			BIT(0)
-+
-+/* Interrupt enable Register */
-+#define YTPHY_INTERRUPT_ENABLE_REG		0x12
-+#define YTPHY_IER_WOL				BIT(6)
-+
-+/* Interrupt Status Register */
-+#define YTPHY_INTERRUPT_STATUS_REG		0x13
-+#define YTPHY_ISR_AUTONEG_ERR			BIT(15)
-+#define YTPHY_ISR_SPEED_CHANGED			BIT(14)
-+#define YTPHY_ISR_DUPLEX_CHANGED		BIT(13)
-+#define YTPHY_ISR_PAGE_RECEIVED			BIT(12)
-+#define YTPHY_ISR_LINK_FAILED			BIT(11)
-+#define YTPHY_ISR_LINK_SUCCESSED		BIT(10)
-+#define YTPHY_ISR_WOL				BIT(6)
-+#define YTPHY_ISR_WIRESPEED_DOWNGRADE		BIT(5)
-+#define YTPHY_ISR_SERDES_LINK_FAILED		BIT(3)
-+#define YTPHY_ISR_SERDES_LINK_SUCCESSED		BIT(2)
-+#define YTPHY_ISR_POLARITY_CHANGED		BIT(1)
-+#define YTPHY_ISR_JABBER_HAPPENED		BIT(0)
-+
-+/* Speed Auto Downgrade Control Register */
-+#define YTPHY_SPEED_AUTO_DOWNGRADE_CONTROL_REG	0x14
-+#define YTPHY_SADCR_SPEED_DOWNGRADE_EN		BIT(5)
-+
-+/* If these bits are set to 3, the PHY attempts five times ( 3(set value) +
-+ * additional 2) before downgrading, default 0x3
-+ */
-+#define YTPHY_SADCR_SPEED_RETRY_LIMIT		(0x3 << 2)
-+
-+/* Rx Error Counter Register */
-+#define YTPHY_RX_ERROR_COUNTER_REG		0x15
-+
-+/* Extended Register's Address Offset Register */
-+#define YTPHY_PAGE_SELECT			0x1E
-+
-+/* Extended Register's Data Register */
-+#define YTPHY_PAGE_DATA				0x1F
-+
-+/* FIBER Auto-Negotiation link partner ability */
-+#define YTPHY_FLPA_PAUSE			(0x3 << 7)
-+#define YTPHY_FLPA_ASYM_PAUSE			(0x2 << 7)
- 
- #define YT8511_PAGE_SELECT	0x1e
- #define YT8511_PAGE		0x1f
-@@ -38,6 +129,352 @@
- #define YT8511_DELAY_FE_TX_EN	(0xf << 12)
- #define YT8511_DELAY_FE_TX_DIS	(0x2 << 12)
- 
-+/* Extended register is different from MMD Register and MII Register.
-+ * We can use ytphy_read_ext/ytphy_write_ext/ytphy_modify_ext function to
-+ * operate extended register.
-+ * Extended Register  start
-+ */
-+
-+/* Phy gmii clock gating Register */
-+#define YT8521_CLOCK_GATING_REG			0xC
-+#define YT8521_CGR_RX_CLK_EN			BIT(12)
-+
-+#define YT8521_EXTREG_SLEEP_CONTROL1_REG	0x27
-+#define YT8521_ESC1R_SLEEP_SW			BIT(15)
-+#define YT8521_ESC1R_PLLON_SLP			BIT(14)
-+
-+/* Phy fiber Link timer cfg2 Register */
-+#define YT8521_LINK_TIMER_CFG2_REG		0xA5
-+#define YT8521_LTCR_EN_AUTOSEN			BIT(15)
-+
-+/* 0xA000, 0xA001, 0xA003 ,and 0xA006 ~ 0xA00A  are common ext registers
-+ * of yt8521 phy. There is no need to switch reg space when operating these
-+ * registers.
-+ */
-+
-+#define YT8521_REG_SPACE_SELECT_REG		0xA000
-+#define YT8521_RSSR_SPACE_MASK			BIT(1)
-+#define YT8521_RSSR_FIBER_SPACE			(0x1 << 1)
-+#define YT8521_RSSR_UTP_SPACE			(0x0 << 1)
-+#define YT8521_RSSR_TO_BE_ARBITRATED		(0xFF)
-+
-+#define YT8521_CHIP_CONFIG_REG			0xA001
-+#define YT8521_CCR_SW_RST			BIT(15)
-+
-+#define YT8521_CCR_MODE_SEL_MASK		(BIT(2) | BIT(1) | BIT(0))
-+#define YT8521_CCR_MODE_UTP_TO_RGMII		0
-+#define YT8521_CCR_MODE_FIBER_TO_RGMII		1
-+#define YT8521_CCR_MODE_UTP_FIBER_TO_RGMII	2
-+#define YT8521_CCR_MODE_UTP_TO_SGMII		3
-+#define YT8521_CCR_MODE_SGPHY_TO_RGMAC		4
-+#define YT8521_CCR_MODE_SGMAC_TO_RGPHY		5
-+#define YT8521_CCR_MODE_UTP_TO_FIBER_AUTO	6
-+#define YT8521_CCR_MODE_UTP_TO_FIBER_FORCE	7
-+
-+/* 3 phy polling modes,poll mode combines utp and fiber mode*/
-+#define YT8521_MODE_FIBER			0x1
-+#define YT8521_MODE_UTP				0x2
-+#define YT8521_MODE_POLL			0x3
-+
-+#define YT8521_RGMII_CONFIG1_REG		0xA003
-+
-+/* TX Gig-E Delay is bits 3:0, default 0x1
-+ * TX Fast-E Delay is bits 7:4, default 0xf
-+ * RX Delay is bits 13:10, default 0x0
-+ * Delay = 150ps * N
-+ * On = 2250ps, off = 0ps
-+ */
-+#define YT8521_RC1R_RX_DELAY_MASK		(0xF << 10)
-+#define YT8521_RC1R_RX_DELAY_EN			(0xF << 10)
-+#define YT8521_RC1R_RX_DELAY_DIS		(0x0 << 10)
-+#define YT8521_RC1R_FE_TX_DELAY_MASK		(0xF << 4)
-+#define YT8521_RC1R_FE_TX_DELAY_EN		(0xF << 4)
-+#define YT8521_RC1R_FE_TX_DELAY_DIS		(0x0 << 4)
-+#define YT8521_RC1R_GE_TX_DELAY_MASK		(0xF << 0)
-+#define YT8521_RC1R_GE_TX_DELAY_EN		(0xF << 0)
-+#define YT8521_RC1R_GE_TX_DELAY_DIS		(0x0 << 0)
-+
-+#define YTPHY_MISC_CONFIG_REG			0xA006
-+#define YTPHY_MCR_FIBER_SPEED_MASK		BIT(0)
-+#define YTPHY_MCR_FIBER_1000BX			(0x1 << 0)
-+#define YTPHY_MCR_FIBER_100FX			(0x0 << 0)
-+
-+/* WOL MAC ADDR: MACADDR2(highest), MACADDR1(middle), MACADDR0(lowest) */
-+#define YTPHY_WOL_MACADDR2_REG			0xA007
-+#define YTPHY_WOL_MACADDR1_REG			0xA008
-+#define YTPHY_WOL_MACADDR0_REG			0xA009
-+
-+#define YTPHY_WOL_CONFIG_REG			0xA00A
-+#define YTPHY_WCR_INTR_SEL			BIT(6)
-+#define YTPHY_WCR_ENABLE			BIT(3)
-+
-+/* 2b00 84ms
-+ * 2b01 168ms  *default*
-+ * 2b10 336ms
-+ * 2b11 672ms
-+ */
-+#define YTPHY_WCR_PULSE_WIDTH_MASK		(BIT(2) | BIT(1))
-+#define YTPHY_WCR_PULSE_WIDTH_672MS		(BIT(2) | BIT(1))
-+
-+/* 1b0 Interrupt and WOL events is level triggered and active LOW  *default*
-+ * 1b1 Interrupt and WOL events is pulse triggered and active LOW
-+ */
-+#define YTPHY_WCR_TYPE_PULSE			BIT(0)
-+
-+/* Extended Register  end */
-+
-+struct yt8521_priv {
-+	/* combo_advertising is used for case of YT8521 in combo mode,
-+	 * this means that yt8521 may work in utp or fiber mode which depends
-+	 * on which media is connected (YT8521_RSSR_TO_BE_ARBITRATED).
-+	 */
-+	__ETHTOOL_DECLARE_LINK_MODE_MASK(combo_advertising);
-+
-+	/* YT8521_MODE_FIBER / YT8521_MODE_UTP / YT8521_MODE_POLL*/
-+	u8 polling_mode;
-+	u8 strap_mode; /* 8 working modes  */
-+	/* current reg page of yt8521 phy:
-+	 * YT8521_RSSR_UTP_SPACE
-+	 * YT8521_RSSR_FIBER_SPACE
-+	 * YT8521_RSSR_TO_BE_ARBITRATED
-+	 */
-+	u8 reg_page;
-+};
-+
-+/**
-+ * ytphy_read_ext() - read a PHY's extended register
-+ * @phydev: a pointer to a &struct phy_device
-+ * @regnum: register number to read
-+ *
-+ * NOTE:The caller must have taken the MDIO bus lock.
-+ *
-+ * returns the value of regnum reg or negative error code
-+ */
-+static int ytphy_read_ext(struct phy_device *phydev, u16 regnum)
-+{
-+	int ret;
-+
-+	ret = __phy_write(phydev, YTPHY_PAGE_SELECT, regnum);
-+	if (ret < 0)
-+		return ret;
-+
-+	return __phy_read(phydev, YTPHY_PAGE_DATA);
-+}
-+
-+/**
-+ * ytphy_read_ext_with_lock() - read a PHY's extended register
-+ * @phydev: a pointer to a &struct phy_device
-+ * @regnum: register number to read
-+ *
-+ * returns the value of regnum reg or negative error code
-+ */
-+static int ytphy_read_ext_with_lock(struct phy_device *phydev, u16 regnum)
-+{
-+	int ret;
-+
-+	phy_lock_mdio_bus(phydev);
-+	ret = ytphy_read_ext(phydev, regnum);
-+	phy_unlock_mdio_bus(phydev);
-+
-+	return ret;
-+}
-+
-+/**
-+ * ytphy_write_ext() - write a PHY's extended register
-+ * @phydev: a pointer to a &struct phy_device
-+ * @regnum: register number to write
-+ * @val: value to write to @regnum
-+ *
-+ * NOTE:The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative error code
-+ */
-+static int ytphy_write_ext(struct phy_device *phydev, u16 regnum, u16 val)
-+{
-+	int ret;
-+
-+	ret = __phy_write(phydev, YTPHY_PAGE_SELECT, regnum);
-+	if (ret < 0)
-+		return ret;
-+
-+	return __phy_write(phydev, YTPHY_PAGE_DATA, val);
-+}
-+
-+/**
-+ * ytphy_write_ext_with_lock() - write a PHY's extended register
-+ * @phydev: a pointer to a &struct phy_device
-+ * @regnum: register number to write
-+ * @val: value to write to @regnum
-+ *
-+ * returns 0 or negative error code
-+ */
-+static int ytphy_write_ext_with_lock(struct phy_device *phydev, u16 regnum,
-+				     u16 val)
-+{
-+	int ret;
-+
-+	phy_lock_mdio_bus(phydev);
-+	ret = ytphy_write_ext(phydev, regnum, val);
-+	phy_unlock_mdio_bus(phydev);
-+
-+	return ret;
-+}
-+
-+/**
-+ * ytphy_modify_ext() - bits modify a PHY's extended register
-+ * @phydev: a pointer to a &struct phy_device
-+ * @regnum: register number to write
-+ * @mask: bit mask of bits to clear
-+ * @set: bit mask of bits to set
-+ *
-+ * NOTE: Convenience function which allows a PHY's extended register to be
-+ * modified as new register value = (old register value & ~mask) | set.
-+ * The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative error code
-+ */
-+static int ytphy_modify_ext(struct phy_device *phydev, u16 regnum, u16 mask,
-+			    u16 set)
-+{
-+	int ret;
-+
-+	ret = __phy_write(phydev, YTPHY_PAGE_SELECT, regnum);
-+	if (ret < 0)
-+		return ret;
-+
-+	return __phy_modify(phydev, YTPHY_PAGE_DATA, mask, set);
-+}
-+
-+/**
-+ * ytphy_modify_ext_with_lock() - bits modify a PHY's extended register
-+ * @phydev: a pointer to a &struct phy_device
-+ * @regnum: register number to write
-+ * @mask: bit mask of bits to clear
-+ * @set: bit mask of bits to set
-+ *
-+ * NOTE: Convenience function which allows a PHY's extended register to be
-+ * modified as new register value = (old register value & ~mask) | set.
-+ *
-+ * returns 0 or negative error code
-+ */
-+static int ytphy_modify_ext_with_lock(struct phy_device *phydev, u16 regnum,
-+				      u16 mask, u16 set)
-+{
-+	int ret;
-+
-+	phy_lock_mdio_bus(phydev);
-+	ret = ytphy_modify_ext(phydev, regnum, mask, set);
-+	phy_unlock_mdio_bus(phydev);
-+
-+	return ret;
-+}
-+
-+/**
-+ * ytphy_get_wol() - report whether wake-on-lan is enabled
-+ * @phydev: a pointer to a &struct phy_device
-+ * @wol: a pointer to a &struct ethtool_wolinfo
-+ *
-+ * NOTE: YTPHY_WOL_CONFIG_REG is common ext reg.
-+ */
-+static void ytphy_get_wol(struct phy_device *phydev,
-+			  struct ethtool_wolinfo *wol)
-+{
-+	int wol_config;
-+
-+	wol->supported = WAKE_MAGIC;
-+	wol->wolopts = 0;
-+
-+	wol_config = ytphy_read_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG);
-+	if (wol_config < 0)
-+		return;
-+
-+	if (wol_config & YTPHY_WCR_ENABLE)
-+		wol->wolopts |= WAKE_MAGIC;
-+}
-+
-+/**
-+ * ytphy_set_wol() - turn wake-on-lan on or off
-+ * @phydev: a pointer to a &struct phy_device
-+ * @wol: a pointer to a &struct ethtool_wolinfo
-+ *
-+ * NOTE: YTPHY_WOL_CONFIG_REG, YTPHY_WOL_MACADDR2_REG, YTPHY_WOL_MACADDR1_REG
-+ * and YTPHY_WOL_MACADDR0_REG are common ext reg. The
-+ * YTPHY_INTERRUPT_ENABLE_REG of UTP is special, fiber also use this register.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int ytphy_set_wol(struct phy_device *phydev, struct ethtool_wolinfo *wol)
-+{
-+	struct net_device *p_attached_dev;
-+	const u16 mac_addr_reg[] = {
-+		YTPHY_WOL_MACADDR2_REG,
-+		YTPHY_WOL_MACADDR1_REG,
-+		YTPHY_WOL_MACADDR0_REG,
-+	};
-+	const u8 *mac_addr;
-+	int old_page;
-+	int ret = 0;
-+	u16 mask;
-+	u16 val;
-+	u8 i;
-+
-+	if (wol->wolopts & WAKE_MAGIC) {
-+		p_attached_dev = phydev->attached_dev;
-+		if (!p_attached_dev)
-+			return -ENODEV;
-+
-+		mac_addr = (const u8 *)p_attached_dev->dev_addr;
-+		if (!is_valid_ether_addr(mac_addr))
-+			return -EINVAL;
-+
-+		/* lock mdio bus then switch to utp reg space */
-+		old_page = phy_select_page(phydev, YT8521_RSSR_UTP_SPACE);
-+		if (old_page < 0)
-+			goto err_restore_page;
-+
-+		/* Store the device address for the magic packet */
-+		for (i = 0; i < 3; i++) {
-+			ret = ytphy_write_ext(phydev, mac_addr_reg[i],
-+					      ((mac_addr[i * 2] << 8)) |
-+						      (mac_addr[i * 2 + 1]));
-+			if (ret < 0)
-+				goto err_restore_page;
-+		}
-+
-+		/* Enable WOL feature */
-+		mask = YTPHY_WCR_PULSE_WIDTH_MASK | YTPHY_WCR_INTR_SEL;
-+		val = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-+		val |= YTPHY_WCR_TYPE_PULSE | YTPHY_WCR_PULSE_WIDTH_672MS;
-+		ret = ytphy_modify_ext(phydev, YTPHY_WOL_CONFIG_REG, mask, val);
-+		if (ret < 0)
-+			goto err_restore_page;
-+
-+		/* Enable WOL interrupt */
-+		ret = __phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG, 0,
-+				   YTPHY_IER_WOL);
-+		if (ret < 0)
-+			goto err_restore_page;
-+
-+	} else {
-+		old_page = phy_select_page(phydev, YT8521_RSSR_UTP_SPACE);
-+		if (old_page < 0)
-+			goto err_restore_page;
-+
-+		/* Disable WOL feature */
-+		mask = YTPHY_WCR_ENABLE | YTPHY_WCR_INTR_SEL;
-+		ret = ytphy_modify_ext(phydev, YTPHY_WOL_CONFIG_REG, mask, 0);
-+
-+		/* Disable WOL interrupt */
-+		ret = __phy_modify(phydev, YTPHY_INTERRUPT_ENABLE_REG,
-+				   YTPHY_IER_WOL, 0);
-+		if (ret < 0)
-+			goto err_restore_page;
-+	}
-+
-+err_restore_page:
-+	return phy_restore_page(phydev, old_page, ret);
-+}
-+
- static int yt8511_read_page(struct phy_device *phydev)
- {
- 	return __phy_read(phydev, YT8511_PAGE_SELECT);
-@@ -111,6 +548,1183 @@ static int yt8511_config_init(struct phy_device *phydev)
- 	return phy_restore_page(phydev, oldpage, ret);
- }
- 
-+/**
-+ * yt8521_read_page() - read reg page
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns current reg space of yt8521 (YT8521_RSSR_FIBER_SPACE/
-+ * YT8521_RSSR_UTP_SPACE) or negative errno code
-+ */
-+static int yt8521_read_page(struct phy_device *phydev)
-+{
-+	int old_page;
-+
-+	old_page = ytphy_read_ext(phydev, YT8521_REG_SPACE_SELECT_REG);
-+	if (old_page < 0)
-+		return old_page;
-+
-+	if ((old_page & YT8521_RSSR_SPACE_MASK) == YT8521_RSSR_FIBER_SPACE)
-+		return YT8521_RSSR_FIBER_SPACE;
-+
-+	return YT8521_RSSR_UTP_SPACE;
-+};
-+
-+/**
-+ * yt8521_write_page() - write reg page
-+ * @phydev: a pointer to a &struct phy_device
-+ * @page: The reg page(YT8521_RSSR_FIBER_SPACE/YT8521_RSSR_UTP_SPACE) to write.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_write_page(struct phy_device *phydev, int page)
-+{
-+	int mask = YT8521_RSSR_SPACE_MASK;
-+	int set;
-+
-+	if ((page & YT8521_RSSR_SPACE_MASK) == YT8521_RSSR_FIBER_SPACE)
-+		set = YT8521_RSSR_FIBER_SPACE;
-+	else
-+		set = YT8521_RSSR_UTP_SPACE;
-+
-+	return ytphy_modify_ext(phydev, YT8521_REG_SPACE_SELECT_REG, mask, set);
-+};
-+
-+/**
-+ * yt8521_probe() - read chip config then set suitable polling_mode
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_probe(struct phy_device *phydev)
-+{
-+	struct device *dev = &phydev->mdio.dev;
-+	struct yt8521_priv *priv;
-+	int chip_config;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	phydev->priv = priv;
-+
-+	chip_config = ytphy_read_ext_with_lock(phydev, YT8521_CHIP_CONFIG_REG);
-+	if (chip_config < 0)
-+		return chip_config;
-+
-+	priv->strap_mode = chip_config & YT8521_CCR_MODE_SEL_MASK;
-+	switch (priv->strap_mode) {
-+	case YT8521_CCR_MODE_FIBER_TO_RGMII:
-+	case YT8521_CCR_MODE_SGPHY_TO_RGMAC:
-+	case YT8521_CCR_MODE_SGMAC_TO_RGPHY:
-+		priv->polling_mode = YT8521_MODE_FIBER;
-+		priv->reg_page = YT8521_RSSR_FIBER_SPACE;
-+		phydev->port = PORT_FIBRE;
-+		break;
-+	case YT8521_CCR_MODE_UTP_FIBER_TO_RGMII:
-+	case YT8521_CCR_MODE_UTP_TO_FIBER_AUTO:
-+	case YT8521_CCR_MODE_UTP_TO_FIBER_FORCE:
-+		priv->polling_mode = YT8521_MODE_POLL;
-+		priv->reg_page = YT8521_RSSR_TO_BE_ARBITRATED;
-+		phydev->port = PORT_NONE;
-+		break;
-+	case YT8521_CCR_MODE_UTP_TO_SGMII:
-+	case YT8521_CCR_MODE_UTP_TO_RGMII:
-+		priv->polling_mode = YT8521_MODE_UTP;
-+		priv->reg_page = YT8521_RSSR_UTP_SPACE;
-+		phydev->port = PORT_TP;
-+		break;
-+	}
-+	/* set default reg space */
-+	if (priv->reg_page != YT8521_RSSR_TO_BE_ARBITRATED) {
-+		ret = ytphy_write_ext_with_lock(phydev,
-+						YT8521_REG_SPACE_SELECT_REG,
-+						priv->reg_page);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * ytphy_utp_read_lpa() - read LPA then setup lp_advertising for utp
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * NOTE:The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int ytphy_utp_read_lpa(struct phy_device *phydev)
-+{
-+	int lpa, lpagb;
-+
-+	if (phydev->autoneg == AUTONEG_ENABLE) {
-+		if (!phydev->autoneg_complete) {
-+			mii_stat1000_mod_linkmode_lpa_t(phydev->lp_advertising,
-+							0);
-+			mii_lpa_mod_linkmode_lpa_t(phydev->lp_advertising, 0);
-+			return 0;
-+		}
-+
-+		if (phydev->is_gigabit_capable) {
-+			lpagb = __phy_read(phydev, MII_STAT1000);
-+			if (lpagb < 0)
-+				return lpagb;
-+
-+			if (lpagb & LPA_1000MSFAIL) {
-+				int adv = __phy_read(phydev, MII_CTRL1000);
-+
-+				if (adv < 0)
-+					return adv;
-+
-+				if (adv & CTL1000_ENABLE_MASTER)
-+					phydev_err(phydev, "Master/Slave resolution failed, maybe conflicting manual settings?\n");
-+				else
-+					phydev_err(phydev, "Master/Slave resolution failed\n");
-+				return -ENOLINK;
-+			}
-+
-+			mii_stat1000_mod_linkmode_lpa_t(phydev->lp_advertising,
-+							lpagb);
-+		}
-+
-+		lpa = __phy_read(phydev, MII_LPA);
-+		if (lpa < 0)
-+			return lpa;
-+
-+		mii_lpa_mod_linkmode_lpa_t(phydev->lp_advertising, lpa);
-+	} else {
-+		linkmode_zero(phydev->lp_advertising);
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * yt8521_adjust_status() - update speed and duplex to phydev. when in fiber
-+ * mode, adjust speed and duplex.
-+ * @phydev: a pointer to a &struct phy_device
-+ * @status: yt8521 status read from YTPHY_SPECIFIC_STATUS_REG
-+ * @is_utp: false(yt8521 work in fiber mode) or true(yt8521 work in utp mode)
-+ *
-+ * NOTE:The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0
-+ */
-+static int yt8521_adjust_status(struct phy_device *phydev, int status,
-+				bool is_utp)
-+{
-+	int speed_mode, duplex;
-+	int speed;
-+	int err;
-+	int lpa;
-+
-+	if (is_utp)
-+		duplex = (status & YTPHY_SSR_DUPLEX) >> YTPHY_SSR_DUPLEX_OFFSET;
-+	else
-+		duplex = DUPLEX_FULL;	/* for fiber, it always DUPLEX_FULL */
-+
-+	speed_mode = (status & YTPHY_SSR_SPEED_MODE_MASK) >>
-+		     YTPHY_SSR_SPEED_MODE_OFFSET;
-+
-+	switch (speed_mode) {
-+	case YTPHY_SSR_SPEED_10M:
-+		if (is_utp)
-+			speed = SPEED_10;
-+		else
-+			/* for fiber, it will never run here, default to
-+			 * SPEED_UNKNOWN
-+			 */
-+			speed = SPEED_UNKNOWN;
-+		break;
-+	case YTPHY_SSR_SPEED_100M:
-+		speed = SPEED_100;
-+		break;
-+	case YTPHY_SSR_SPEED_1000M:
-+		speed = SPEED_1000;
-+		break;
-+	default:
-+		speed = SPEED_UNKNOWN;
-+		break;
-+	}
-+
-+	phydev->speed = speed;
-+	phydev->duplex = duplex;
-+
-+	if (is_utp) {
-+		err = ytphy_utp_read_lpa(phydev);
-+		if (err < 0)
-+			return err;
-+
-+		phy_resolve_aneg_pause(phydev);
-+	} else {
-+		lpa = __phy_read(phydev, MII_LPA);
-+		if (lpa < 0)
-+			return lpa;
-+
-+		/* only support 1000baseX Full */
-+		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseX_Full_BIT,
-+				 phydev->lp_advertising, lpa & LPA_1000XFULL);
-+
-+		if (!(lpa & YTPHY_FLPA_PAUSE)) {
-+			phydev->pause = 0;
-+			phydev->asym_pause = 0;
-+		} else if ((lpa & YTPHY_FLPA_ASYM_PAUSE)) {
-+			phydev->pause = 1;
-+			phydev->asym_pause = 1;
-+		} else {
-+			phydev->pause = 1;
-+			phydev->asym_pause = 0;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * yt8521_read_status_paged() -  determines the speed and duplex of one page
-+ * @phydev: a pointer to a &struct phy_device
-+ * @page: The reg page(YT8521_RSSR_FIBER_SPACE/YT8521_RSSR_UTP_SPACE) to
-+ * operate.
-+ *
-+ * returns 1 (utp or fiber link),0 (no link) or negative errno code
-+ */
-+static int yt8521_read_status_paged(struct phy_device *phydev, int page)
-+{
-+	int fiber_latch_val;
-+	int fiber_curr_val;
-+	int old_page;
-+	int ret = 0;
-+	int status;
-+	int link;
-+
-+	linkmode_zero(phydev->lp_advertising);
-+	phydev->duplex = DUPLEX_UNKNOWN;
-+	phydev->speed = SPEED_UNKNOWN;
-+	phydev->asym_pause = 0;
-+	phydev->pause = 0;
-+
-+	/* YT8521 has two reg space (utp/fiber) for linkup with utp/fiber
-+	 * respectively. but for utp/fiber combo mode, reg space should be
-+	 * arbitrated based on media priority. by default, utp takes
-+	 * priority. reg space should be properly set before read
-+	 * YTPHY_SPECIFIC_STATUS_REG.
-+	 */
-+
-+	page &= YT8521_RSSR_SPACE_MASK;
-+	old_page = phy_select_page(phydev, page);
-+	if (old_page < 0)
-+		goto err_restore_page;
-+
-+	/* Read YTPHY_SPECIFIC_STATUS_REG, which indicates the speed and duplex
-+	 * of the PHY is actually using.
-+	 */
-+	ret = __phy_read(phydev, YTPHY_SPECIFIC_STATUS_REG);
-+	if (ret < 0)
-+		goto err_restore_page;
-+
-+	status = ret;
-+	link = !!(status & YTPHY_SSR_LINK);
-+
-+	/* When PHY is in fiber mode, speed transferred from 1000Mbps to
-+	 * 100Mbps,there is not link down from YTPHY_SPECIFIC_STATUS_REG, so
-+	 * we need check MII_BMSR to identify such case.
-+	 */
-+	if (page == YT8521_RSSR_FIBER_SPACE) {
-+		ret = __phy_read(phydev, MII_BMSR);
-+		if (ret < 0)
-+			goto err_restore_page;
-+
-+		fiber_latch_val = ret;
-+		ret = __phy_read(phydev, MII_BMSR);
-+		if (ret < 0)
-+			goto err_restore_page;
-+
-+		fiber_curr_val = ret;
-+		if (link && fiber_latch_val != fiber_curr_val) {
-+			link = 0;
-+			phydev_info(phydev,
-+				    "%s, fiber link down detect, latch = %04x, curr = %04x\n",
-+				    __func__, fiber_latch_val, fiber_curr_val);
-+		}
-+	} else {
-+		/* Read autonegotiation status */
-+		ret = __phy_read(phydev, MII_BMSR);
-+		if (ret < 0)
-+			return ret;
-+
-+		phydev->autoneg_complete = ret & BMSR_ANEGCOMPLETE ? 1 : 0;
-+	}
-+
-+	if (link) {
-+		if (page == YT8521_RSSR_UTP_SPACE)
-+			yt8521_adjust_status(phydev, status, true);
-+		else
-+			yt8521_adjust_status(phydev, status, false);
-+	}
-+	return phy_restore_page(phydev, old_page, link);
-+
-+err_restore_page:
-+	return phy_restore_page(phydev, old_page, ret);
-+}
-+
-+/**
-+ * yt8521_read_status() -  determines the negotiated speed and duplex
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_read_status(struct phy_device *phydev)
-+{
-+	struct yt8521_priv *priv = phydev->priv;
-+	int link_fiber = 0;
-+	int link_utp;
-+	int link;
-+	int ret;
-+
-+	if (priv->reg_page != YT8521_RSSR_TO_BE_ARBITRATED) {
-+		link = yt8521_read_status_paged(phydev, priv->reg_page);
-+		if (link < 0)
-+			return link;
-+	} else {
-+		/* when page is YT8521_RSSR_TO_BE_ARBITRATED, arbitration is
-+		 * needed. by default, utp is higher priority.
-+		 */
-+
-+		link_utp = yt8521_read_status_paged(phydev,
-+						    YT8521_RSSR_UTP_SPACE);
-+		if (link_utp < 0)
-+			return link_utp;
-+
-+		if (!link_utp) {
-+			link_fiber = yt8521_read_status_paged(phydev,
-+							      YT8521_RSSR_FIBER_SPACE);
-+			if (link_fiber < 0)
-+				return link_fiber;
-+		}
-+
-+		link = link_utp || link_fiber;
-+	}
-+
-+	if (link) {
-+		if (phydev->link == 0) {
-+			/* arbitrate reg space based on linkup media type. */
-+			if (priv->polling_mode == YT8521_MODE_POLL &&
-+			    priv->reg_page == YT8521_RSSR_TO_BE_ARBITRATED) {
-+				if (link_fiber)
-+					priv->reg_page =
-+						YT8521_RSSR_FIBER_SPACE;
-+				else
-+					priv->reg_page = YT8521_RSSR_UTP_SPACE;
-+
-+				ret = ytphy_write_ext_with_lock(phydev,
-+								YT8521_REG_SPACE_SELECT_REG,
-+								priv->reg_page);
-+				if (ret < 0)
-+					return ret;
-+
-+				phydev->port = link_fiber ? PORT_FIBRE : PORT_TP;
-+
-+				phydev_info(phydev, "%s, link up, media: %s\n",
-+					    __func__,
-+					    (phydev->port == PORT_TP) ?
-+					    "UTP" : "Fiber");
-+			}
-+		}
-+		phydev->link = 1;
-+	} else {
-+		if (phydev->link == 1) {
-+			phydev_info(phydev, "%s, link down, media: %s\n",
-+				    __func__, (phydev->port == PORT_TP) ?
-+				    "UTP" : "Fiber");
-+
-+			/* When in YT8521_MODE_POLL mode, need prepare for next
-+			 * arbitration.
-+			 */
-+			if (priv->polling_mode == YT8521_MODE_POLL) {
-+				priv->reg_page = YT8521_RSSR_TO_BE_ARBITRATED;
-+				phydev->port = PORT_NONE;
-+			}
-+		}
-+
-+		phydev->link = 0;
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * yt8521_modify_bmcr_paged - bits modify a PHY's BMCR register of one page
-+ * @phydev: the phy_device struct
-+ * @page: The reg page(YT8521_RSSR_FIBER_SPACE/YT8521_RSSR_UTP_SPACE) to operate
-+ * @mask: bit mask of bits to clear
-+ * @set: bit mask of bits to set
-+ *
-+ * NOTE: Convenience function which allows a PHY's BMCR register to be
-+ * modified as new register value = (old register value & ~mask) | set.
-+ * YT8521 has two space (utp/fiber) and three mode (utp/fiber/poll), each space
-+ * has MII_BMCR. poll mode combines utp and faber,so need do both.
-+ * If it is reset, it will wait for completion.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_modify_bmcr_paged(struct phy_device *phydev, int page,
-+				    u16 mask, u16 set)
-+{
-+	int max_cnt = 500; /* the max wait time of reset ~ 500 ms */
-+	int old_page;
-+	int ret = 0;
-+
-+	old_page = phy_select_page(phydev, page & YT8521_RSSR_SPACE_MASK);
-+	if (old_page < 0)
-+		goto err_restore_page;
-+
-+	ret = __phy_modify(phydev, MII_BMCR, mask, set);
-+	if (ret < 0)
-+		goto err_restore_page;
-+
-+	/* If it is reset, need to wait for the reset to complete */
-+	if (set == BMCR_RESET) {
-+		while (max_cnt--) {
-+			usleep_range(1000, 1100);
-+			ret = __phy_read(phydev, MII_BMCR);
-+			if (ret < 0)
-+				goto err_restore_page;
-+
-+			if (!(ret & BMCR_RESET))
-+				return phy_restore_page(phydev, old_page, 0);
-+		}
-+		if (max_cnt <= 0)
-+			ret = -ETIMEDOUT;
-+	}
-+
-+err_restore_page:
-+	return phy_restore_page(phydev, old_page, ret);
-+}
-+
-+/**
-+ * yt8521_modify_utp_fiber_bmcr - bits modify a PHY's BMCR register
-+ * @phydev: the phy_device struct
-+ * @mask: bit mask of bits to clear
-+ * @set: bit mask of bits to set
-+ *
-+ * NOTE: Convenience function which allows a PHY's BMCR register to be
-+ * modified as new register value = (old register value & ~mask) | set.
-+ * YT8521 has two space (utp/fiber) and three mode (utp/fiber/poll), each space
-+ * has MII_BMCR. poll mode combines utp and faber,so need do both.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_modify_utp_fiber_bmcr(struct phy_device *phydev, u16 mask,
-+					u16 set)
-+{
-+	struct yt8521_priv *priv = phydev->priv;
-+	int ret;
-+
-+	if (priv->reg_page != YT8521_RSSR_TO_BE_ARBITRATED) {
-+		ret = yt8521_modify_bmcr_paged(phydev, priv->reg_page, mask,
-+					       set);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		ret = yt8521_modify_bmcr_paged(phydev, YT8521_RSSR_UTP_SPACE,
-+					       mask, set);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = yt8521_modify_bmcr_paged(phydev, YT8521_RSSR_FIBER_SPACE,
-+					       mask, set);
-+		if (ret < 0)
-+			return ret;
-+	}
-+	return 0;
-+}
-+
-+/**
-+ * yt8521_soft_reset() - called to issue a PHY software reset
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_soft_reset(struct phy_device *phydev)
-+{
-+	return yt8521_modify_utp_fiber_bmcr(phydev, 0, BMCR_RESET);
-+}
-+
-+/**
-+ * yt8521_suspend() - suspend the hardware
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_suspend(struct phy_device *phydev)
-+{
-+	int wol_config;
-+
-+	/* YTPHY_WOL_CONFIG_REG is common ext reg */
-+	wol_config = ytphy_read_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG);
-+	if (wol_config < 0)
-+		return wol_config;
-+
-+	/* if wol enable, do nothing */
-+	if (wol_config & YTPHY_WCR_ENABLE)
-+		return 0;
-+
-+	return yt8521_modify_utp_fiber_bmcr(phydev, 0, BMCR_PDOWN);
-+}
-+
-+/**
-+ * yt8521_resume() - resume the hardware
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_resume(struct phy_device *phydev)
-+{
-+	int ret;
-+	int wol_config;
-+
-+	/* disable auto sleep */
-+	ret = ytphy_modify_ext_with_lock(phydev,
-+					 YT8521_EXTREG_SLEEP_CONTROL1_REG,
-+					 YT8521_ESC1R_SLEEP_SW, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	wol_config = ytphy_read_ext_with_lock(phydev, YTPHY_WOL_CONFIG_REG);
-+	if (wol_config < 0)
-+		return wol_config;
-+
-+	/* if wol enable, do nothing */
-+	if (wol_config & YTPHY_WCR_ENABLE)
-+		return 0;
-+
-+	return yt8521_modify_utp_fiber_bmcr(phydev, BMCR_PDOWN, 0);
-+}
-+
-+/**
-+ * yt8521_config_init() - called to initialize the PHY
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_config_init(struct phy_device *phydev)
-+{
-+	int old_page;
-+	int ret = 0;
-+	u16 val;
-+
-+	old_page = phy_select_page(phydev, YT8521_RSSR_UTP_SPACE);
-+	if (old_page < 0)
-+		goto err_restore_page;
-+
-+	switch (phydev->interface) {
-+	case PHY_INTERFACE_MODE_RGMII:
-+		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_GE_TX_DELAY_DIS;
-+		val |= YT8521_RC1R_RX_DELAY_DIS;
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII_RXID:
-+		val = YT8521_RC1R_GE_TX_DELAY_DIS | YT8521_RC1R_GE_TX_DELAY_DIS;
-+		val |= YT8521_RC1R_RX_DELAY_EN;
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII_TXID:
-+		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_GE_TX_DELAY_EN;
-+		val |= YT8521_RC1R_RX_DELAY_DIS;
-+		break;
-+	case PHY_INTERFACE_MODE_RGMII_ID:
-+		val = YT8521_RC1R_GE_TX_DELAY_EN | YT8521_RC1R_GE_TX_DELAY_EN;
-+		val |= YT8521_RC1R_RX_DELAY_EN;
-+		break;
-+	case PHY_INTERFACE_MODE_SGMII:
-+		break;
-+	default: /* do not support other modes */
-+		ret = -EOPNOTSUPP;
-+		goto err_restore_page;
-+	}
-+
-+	/* set rgmii delay mode */
-+	if (phydev->interface != PHY_INTERFACE_MODE_SGMII) {
-+		ret = ytphy_modify_ext(phydev, YT8521_RGMII_CONFIG1_REG,
-+				       (YT8521_RC1R_RX_DELAY_MASK |
-+				       YT8521_RC1R_FE_TX_DELAY_MASK |
-+				       YT8521_RC1R_GE_TX_DELAY_MASK),
-+				       val);
-+		if (ret < 0)
-+			goto err_restore_page;
-+	}
-+
-+	/* disable auto sleep */
-+	ret = ytphy_modify_ext(phydev, YT8521_EXTREG_SLEEP_CONTROL1_REG,
-+			       YT8521_ESC1R_SLEEP_SW, 0);
-+	if (ret < 0)
-+		goto err_restore_page;
-+
-+	/* enable RXC clock when no wire plug */
-+	ret = ytphy_modify_ext(phydev, YT8521_CLOCK_GATING_REG,
-+			       YT8521_CGR_RX_CLK_EN, 0);
-+	if (ret < 0)
-+		goto err_restore_page;
-+
-+err_restore_page:
-+	return phy_restore_page(phydev, old_page, ret);
-+}
-+
-+/**
-+ * yt8521_prepare_fiber_features() -  A small helper function that setup
-+ * fiber's features.
-+ * @phydev: a pointer to a &struct phy_device
-+ * @dst: a pointer to store fiber's features
-+ */
-+static void yt8521_prepare_fiber_features(struct phy_device *phydev,
-+					  unsigned long *dst)
-+{
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_100baseFX_Full_BIT, dst);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_1000baseX_Full_BIT, dst);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, dst);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_FIBRE_BIT, dst);
-+}
-+
-+/**
-+ * yt8521_fiber_setup_forced - configures/forces speed from @phydev
-+ * @phydev: target phy_device struct
-+ *
-+ * NOTE:The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_fiber_setup_forced(struct phy_device *phydev)
-+{
-+	u16 val;
-+	int ret;
-+
-+	if (phydev->speed == SPEED_1000)
-+		val = YTPHY_MCR_FIBER_1000BX;
-+	else if (phydev->speed == SPEED_100)
-+		val = YTPHY_MCR_FIBER_100FX;
-+	else
-+		return -EINVAL;
-+
-+	ret =  __phy_modify(phydev, MII_BMCR, BMCR_ANENABLE, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* disable Fiber auto sensing */
-+	ret =  ytphy_modify_ext(phydev, YT8521_LINK_TIMER_CFG2_REG,
-+				YT8521_LTCR_EN_AUTOSEN, 0);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret =  ytphy_modify_ext(phydev, YTPHY_MISC_CONFIG_REG,
-+				YTPHY_MCR_FIBER_SPEED_MASK, val);
-+	if (ret < 0)
-+		return ret;
-+
-+	return ytphy_modify_ext(phydev, YT8521_CHIP_CONFIG_REG,
-+				YT8521_CCR_SW_RST, 0);
-+}
-+
-+/**
-+ * ytphy_check_and_restart_aneg - Enable and restart auto-negotiation
-+ * @phydev: target phy_device struct
-+ * @restart: whether aneg restart is requested
-+ *
-+ * NOTE:The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int ytphy_check_and_restart_aneg(struct phy_device *phydev, bool restart)
-+{
-+	int ret;
-+
-+	if (!restart) {
-+		/* Advertisement hasn't changed, but maybe aneg was never on to
-+		 * begin with?  Or maybe phy was isolated?
-+		 */
-+		ret = __phy_read(phydev, MII_BMCR);
-+		if (ret < 0)
-+			return ret;
-+
-+		if (!(ret & BMCR_ANENABLE) || (ret & BMCR_ISOLATE))
-+			restart = true;
-+	}
-+	/* Enable and Restart Autonegotiation
-+	 * Don't isolate the PHY if we're negotiating
-+	 */
-+	if (restart)
-+		return __phy_modify(phydev, MII_BMCR, BMCR_ISOLATE,
-+				    BMCR_ANENABLE | BMCR_ANRESTART);
-+
-+	return 0;
-+}
-+
-+/**
-+ * yt8521_fiber_config_aneg - restart auto-negotiation or write
-+ * YTPHY_MISC_CONFIG_REG.
-+ * @phydev: target phy_device struct
-+ *
-+ * NOTE:The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_fiber_config_aneg(struct phy_device *phydev)
-+{
-+	int err, changed = 0;
-+	int bmcr;
-+	u16 adv;
-+
-+	if (phydev->autoneg != AUTONEG_ENABLE)
-+		return yt8521_fiber_setup_forced(phydev);
-+
-+	/* enable Fiber auto sensing */
-+	err =  ytphy_modify_ext(phydev, YT8521_LINK_TIMER_CFG2_REG,
-+				0, YT8521_LTCR_EN_AUTOSEN);
-+	if (err < 0)
-+		return err;
-+
-+	err =  ytphy_modify_ext(phydev, YT8521_CHIP_CONFIG_REG,
-+				YT8521_CCR_SW_RST, 0);
-+	if (err < 0)
-+		return err;
-+
-+	bmcr = __phy_read(phydev, MII_BMCR);
-+	if (bmcr < 0)
-+		return bmcr;
-+
-+	/* When it is coming from fiber forced mode, add bmcr power down
-+	 * and power up to let aneg work fine.
-+	 */
-+	if (!(bmcr & BMCR_ANENABLE)) {
-+		__phy_modify(phydev, MII_BMCR, 0, BMCR_PDOWN);
-+		usleep_range(1000, 1100);
-+		__phy_modify(phydev, MII_BMCR, BMCR_PDOWN, 0);
-+	}
-+
-+	adv = linkmode_adv_to_mii_adv_x(phydev->advertising,
-+					ETHTOOL_LINK_MODE_1000baseX_Full_BIT);
-+
-+	/* Setup fiber advertisement */
-+	err = __phy_modify_changed(phydev, MII_ADVERTISE,
-+				   ADVERTISE_1000XHALF | ADVERTISE_1000XFULL |
-+				   ADVERTISE_1000XPAUSE |
-+				   ADVERTISE_1000XPSE_ASYM,
-+				   adv);
-+	if (err < 0)
-+		return err;
-+
-+	if (err > 0)
-+		changed = 1;
-+
-+	return ytphy_check_and_restart_aneg(phydev, changed);
-+}
-+
-+/**
-+ * ytphy_setup_master_slave
-+ * @phydev: target phy_device struct
-+ *
-+ * NOTE: The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int ytphy_setup_master_slave(struct phy_device *phydev)
-+{
-+	u16 ctl = 0;
-+
-+	if (!phydev->is_gigabit_capable)
-+		return 0;
-+
-+	switch (phydev->master_slave_set) {
-+	case MASTER_SLAVE_CFG_MASTER_PREFERRED:
-+		ctl |= CTL1000_PREFER_MASTER;
-+		break;
-+	case MASTER_SLAVE_CFG_SLAVE_PREFERRED:
-+		break;
-+	case MASTER_SLAVE_CFG_MASTER_FORCE:
-+		ctl |= CTL1000_AS_MASTER;
-+		fallthrough;
-+	case MASTER_SLAVE_CFG_SLAVE_FORCE:
-+		ctl |= CTL1000_ENABLE_MASTER;
-+		break;
-+	case MASTER_SLAVE_CFG_UNKNOWN:
-+	case MASTER_SLAVE_CFG_UNSUPPORTED:
-+		return 0;
-+	default:
-+		phydev_warn(phydev, "Unsupported Master/Slave mode\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return __phy_modify_changed(phydev, MII_CTRL1000,
-+				    (CTL1000_ENABLE_MASTER | CTL1000_AS_MASTER |
-+				    CTL1000_PREFER_MASTER), ctl);
-+}
-+
-+/**
-+ * ytphy_utp_config_advert - sanitize and advertise auto-negotiation parameters
-+ * @phydev: target phy_device struct
-+ *
-+ * NOTE: Writes MII_ADVERTISE with the appropriate values,
-+ * after sanitizing the values to make sure we only advertise
-+ * what is supported.  Returns < 0 on error, 0 if the PHY's advertisement
-+ * hasn't changed, and > 0 if it has changed.
-+ * The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int ytphy_utp_config_advert(struct phy_device *phydev)
-+{
-+	int err, bmsr, changed = 0;
-+	u32 adv;
-+
-+	/* Only allow advertising what this PHY supports */
-+	linkmode_and(phydev->advertising, phydev->advertising,
-+		     phydev->supported);
-+
-+	adv = linkmode_adv_to_mii_adv_t(phydev->advertising);
-+
-+	/* Setup standard advertisement */
-+	err = __phy_modify_changed(phydev, MII_ADVERTISE,
-+				   ADVERTISE_ALL | ADVERTISE_100BASE4 |
-+				   ADVERTISE_PAUSE_CAP | ADVERTISE_PAUSE_ASYM,
-+				   adv);
-+	if (err < 0)
-+		return err;
-+	if (err > 0)
-+		changed = 1;
-+
-+	bmsr = __phy_read(phydev, MII_BMSR);
-+	if (bmsr < 0)
-+		return bmsr;
-+
-+	/* Per 802.3-2008, Section 22.2.4.2.16 Extended status all
-+	 * 1000Mbits/sec capable PHYs shall have the BMSR_ESTATEN bit set to a
-+	 * logical 1.
-+	 */
-+	if (!(bmsr & BMSR_ESTATEN))
-+		return changed;
-+
-+	adv = linkmode_adv_to_mii_ctrl1000_t(phydev->advertising);
-+
-+	err = __phy_modify_changed(phydev, MII_CTRL1000,
-+				   ADVERTISE_1000FULL | ADVERTISE_1000HALF,
-+				   adv);
-+	if (err < 0)
-+		return err;
-+	if (err > 0)
-+		changed = 1;
-+
-+	return changed;
-+}
-+
-+/**
-+ * ytphy_utp_config_aneg - restart auto-negotiation or write BMCR
-+ * @phydev: target phy_device struct
-+ * @changed: whether autoneg is requested
-+ *
-+ * NOTE: If auto-negotiation is enabled, we configure the
-+ * advertising, and then restart auto-negotiation.  If it is not
-+ * enabled, then we write the BMCR.
-+ * The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int ytphy_utp_config_aneg(struct phy_device *phydev, bool changed)
-+{
-+	int err;
-+	u16 ctl;
-+
-+	err = ytphy_setup_master_slave(phydev);
-+	if (err < 0)
-+		return err;
-+	else if (err)
-+		changed = true;
-+
-+	if (phydev->autoneg != AUTONEG_ENABLE) {
-+		/* configures/forces speed/duplex from @phydev */
-+
-+		ctl = mii_bmcr_encode_fixed(phydev->speed, phydev->duplex);
-+
-+		return __phy_modify(phydev, MII_BMCR, ~(BMCR_LOOPBACK |
-+				    BMCR_ISOLATE | BMCR_PDOWN), ctl);
-+	}
-+
-+	err = ytphy_utp_config_advert(phydev);
-+	if (err < 0) /* error */
-+		return err;
-+	else if (err)
-+		changed = true;
-+
-+	return ytphy_check_and_restart_aneg(phydev, changed);
-+}
-+
-+/**
-+ * yt8521_config_aneg_paged() - switch reg space then call genphy_config_aneg
-+ * of one page
-+ * @phydev: a pointer to a &struct phy_device
-+ * @page: The reg page(YT8521_RSSR_FIBER_SPACE/YT8521_RSSR_UTP_SPACE) to
-+ * operate.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_config_aneg_paged(struct phy_device *phydev, int page)
-+{
-+	__ETHTOOL_DECLARE_LINK_MODE_MASK(fiber_supported);
-+	struct yt8521_priv *priv = phydev->priv;
-+	int old_page;
-+	int ret = 0;
-+
-+	page &= YT8521_RSSR_SPACE_MASK;
-+
-+	old_page = phy_select_page(phydev, page);
-+	if (old_page < 0)
-+		goto err_restore_page;
-+
-+	/* If reg_page is YT8521_RSSR_TO_BE_ARBITRATED,
-+	 * phydev->advertising should be updated.
-+	 */
-+	if (priv->reg_page == YT8521_RSSR_TO_BE_ARBITRATED) {
-+		linkmode_zero(fiber_supported);
-+		yt8521_prepare_fiber_features(phydev, fiber_supported);
-+
-+		/* prepare fiber_supported, then setup advertising. */
-+		if (page == YT8521_RSSR_FIBER_SPACE) {
-+			linkmode_set_bit(ETHTOOL_LINK_MODE_Pause_BIT,
-+					 fiber_supported);
-+			linkmode_set_bit(ETHTOOL_LINK_MODE_Asym_Pause_BIT,
-+					 fiber_supported);
-+			linkmode_and(phydev->advertising,
-+				     priv->combo_advertising, fiber_supported);
-+		} else {
-+			/* ETHTOOL_LINK_MODE_Autoneg_BIT is also used in utp */
-+			linkmode_clear_bit(ETHTOOL_LINK_MODE_Autoneg_BIT,
-+					   fiber_supported);
-+			linkmode_andnot(phydev->advertising,
-+					priv->combo_advertising,
-+					fiber_supported);
-+		}
-+	}
-+
-+	if (page == YT8521_RSSR_FIBER_SPACE)
-+		ret = yt8521_fiber_config_aneg(phydev);
-+	else
-+		ret = ytphy_utp_config_aneg(phydev, false);
-+
-+err_restore_page:
-+	return phy_restore_page(phydev, old_page, ret);
-+}
-+
-+/**
-+ * yt8521_config_aneg() - change reg space then call yt8521_config_aneg_paged
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_config_aneg(struct phy_device *phydev)
-+{
-+	struct yt8521_priv *priv = phydev->priv;
-+	int ret;
-+
-+	if (priv->reg_page != YT8521_RSSR_TO_BE_ARBITRATED) {
-+		ret = yt8521_config_aneg_paged(phydev, priv->reg_page);
-+		if (ret < 0)
-+			return ret;
-+	} else {
-+		/* If reg_page is YT8521_RSSR_TO_BE_ARBITRATED,
-+		 * phydev->advertising need to be saved at first run.
-+		 * Because it contains the advertising which supported by both
-+		 * mac and yt8521(utp and fiber).
-+		 */
-+		if (linkmode_empty(priv->combo_advertising)) {
-+			linkmode_copy(priv->combo_advertising,
-+				      phydev->advertising);
-+		}
-+
-+		ret = yt8521_config_aneg_paged(phydev, YT8521_RSSR_UTP_SPACE);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = yt8521_config_aneg_paged(phydev, YT8521_RSSR_FIBER_SPACE);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* we don't known which will be link, so restore
-+		 * phydev->advertising as default value.
-+		 */
-+		linkmode_copy(phydev->advertising, priv->combo_advertising);
-+	}
-+	return 0;
-+}
-+
-+/**
-+ * yt8521_aneg_done_paged() - determines the auto negotiation result of one
-+ * page.
-+ * @phydev: a pointer to a &struct phy_device
-+ * @page: The reg page(YT8521_RSSR_FIBER_SPACE/YT8521_RSSR_UTP_SPACE) to
-+ * operate.
-+ *
-+ * returns 0(no link)or 1(fiber or utp link) or negative errno code
-+ */
-+static int yt8521_aneg_done_paged(struct phy_device *phydev, int page)
-+{
-+	int old_page;
-+	int ret = 0;
-+	int link;
-+
-+	old_page = phy_select_page(phydev, page & YT8521_RSSR_SPACE_MASK);
-+	if (old_page < 0)
-+		goto err_restore_page;
-+
-+	ret = __phy_read(phydev, YTPHY_SPECIFIC_STATUS_REG);
-+	if (ret < 0)
-+		goto err_restore_page;
-+
-+	link = !!(ret & YTPHY_SSR_LINK);
-+	ret = link;
-+
-+err_restore_page:
-+	return phy_restore_page(phydev, old_page, ret);
-+}
-+
-+/**
-+ * yt8521_aneg_done() - determines the auto negotiation result
-+ * @phydev: a pointer to a &struct phy_device
-+ *
-+ * returns 0(no link)or 1(fiber or utp link) or negative errno code
-+ */
-+static int yt8521_aneg_done(struct phy_device *phydev)
-+{
-+	struct yt8521_priv *priv = phydev->priv;
-+	int link_fiber = 0;
-+	int link_utp;
-+	int link;
-+
-+	if (priv->reg_page != YT8521_RSSR_TO_BE_ARBITRATED) {
-+		link = yt8521_aneg_done_paged(phydev, priv->reg_page);
-+	} else {
-+		link_utp = yt8521_aneg_done_paged(phydev,
-+						  YT8521_RSSR_UTP_SPACE);
-+		if (link_utp < 0)
-+			return link_utp;
-+
-+		if (!link_utp) {
-+			link_fiber = yt8521_aneg_done_paged(phydev,
-+							    YT8521_RSSR_FIBER_SPACE);
-+			if (link_fiber < 0)
-+				return link_fiber;
-+		}
-+		link = link_fiber || link_utp;
-+		phydev_info(phydev, "%s, link_fiber: %d, link_utp: %d\n",
-+			    __func__, link_fiber, link_utp);
-+	}
-+
-+	return link;
-+}
-+
-+/**
-+ * ytphy_utp_read_abilities - read PHY abilities from Clause 22 registers
-+ * @phydev: target phy_device struct
-+ *
-+ * NOTE: Reads the PHY's abilities and populates
-+ * phydev->supported accordingly.
-+ * The caller must have taken the MDIO bus lock.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int ytphy_utp_read_abilities(struct phy_device *phydev)
-+{
-+	int val;
-+
-+	linkmode_set_bit_array(phy_basic_ports_array,
-+			       ARRAY_SIZE(phy_basic_ports_array),
-+			       phydev->supported);
-+
-+	val = __phy_read(phydev, MII_BMSR);
-+	if (val < 0)
-+		return val;
-+
-+	linkmode_mod_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, phydev->supported,
-+			 val & BMSR_ANEGCAPABLE);
-+
-+	linkmode_mod_bit(ETHTOOL_LINK_MODE_100baseT_Full_BIT, phydev->supported,
-+			 val & BMSR_100FULL);
-+	linkmode_mod_bit(ETHTOOL_LINK_MODE_100baseT_Half_BIT, phydev->supported,
-+			 val & BMSR_100HALF);
-+	linkmode_mod_bit(ETHTOOL_LINK_MODE_10baseT_Full_BIT, phydev->supported,
-+			 val & BMSR_10FULL);
-+	linkmode_mod_bit(ETHTOOL_LINK_MODE_10baseT_Half_BIT, phydev->supported,
-+			 val & BMSR_10HALF);
-+
-+	if (val & BMSR_ESTATEN) {
-+		val = __phy_read(phydev, MII_ESTATUS);
-+		if (val < 0)
-+			return val;
-+
-+		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseT_Full_BIT,
-+				 phydev->supported, val & ESTATUS_1000_TFULL);
-+		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseT_Half_BIT,
-+				 phydev->supported, val & ESTATUS_1000_THALF);
-+		linkmode_mod_bit(ETHTOOL_LINK_MODE_1000baseX_Full_BIT,
-+				 phydev->supported, val & ESTATUS_1000_XFULL);
-+	}
-+
-+	return 0;
-+}
-+
-+/**
-+ * yt8521_get_features_paged() -  read supported link modes for one page
-+ * @phydev: a pointer to a &struct phy_device
-+ * @page: The reg page(YT8521_RSSR_FIBER_SPACE/YT8521_RSSR_UTP_SPACE) to
-+ * operate.
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_get_features_paged(struct phy_device *phydev, int page)
-+{
-+	int old_page;
-+	int ret = 0;
-+
-+	page &= YT8521_RSSR_SPACE_MASK;
-+	old_page = phy_select_page(phydev, page);
-+	if (old_page < 0)
-+		goto err_restore_page;
-+
-+	if (page == YT8521_RSSR_FIBER_SPACE) {
-+		linkmode_zero(phydev->supported);
-+		yt8521_prepare_fiber_features(phydev, phydev->supported);
-+	} else {
-+		ret = ytphy_utp_read_abilities(phydev);
-+		if (ret < 0)
-+			goto err_restore_page;
-+	}
-+
-+err_restore_page:
-+	return phy_restore_page(phydev, old_page, ret);
-+}
-+
-+/**
-+ * yt8521_get_features - switch reg space then call yt8521_get_features_paged
-+ * @phydev: target phy_device struct
-+ *
-+ * returns 0 or negative errno code
-+ */
-+static int yt8521_get_features(struct phy_device *phydev)
-+{
-+	struct yt8521_priv *priv = phydev->priv;
-+	int ret;
-+
-+	if (priv->reg_page != YT8521_RSSR_TO_BE_ARBITRATED) {
-+		ret = yt8521_get_features_paged(phydev, priv->reg_page);
-+	} else {
-+		ret = yt8521_get_features_paged(phydev,
-+						YT8521_RSSR_UTP_SPACE);
-+		if (ret < 0)
-+			return ret;
-+
-+		/* add fiber's features to phydev->supported */
-+		yt8521_prepare_fiber_features(phydev, phydev->supported);
-+	}
-+	return ret;
-+}
-+
- static struct phy_driver motorcomm_phy_drvs[] = {
- 	{
- 		PHY_ID_MATCH_EXACT(PHY_ID_YT8511),
-@@ -121,16 +1735,35 @@ static struct phy_driver motorcomm_phy_drvs[] = {
- 		.read_page	= yt8511_read_page,
- 		.write_page	= yt8511_write_page,
- 	},
-+	{
-+		PHY_ID_MATCH_EXACT(PHY_ID_YT8521),
-+		.name		= "YT8521 Gigabit Ethernet",
-+		.get_features	= yt8521_get_features,
-+		.probe		= yt8521_probe,
-+		.read_page	= yt8521_read_page,
-+		.write_page	= yt8521_write_page,
-+		.get_wol	= ytphy_get_wol,
-+		.set_wol	= ytphy_set_wol,
-+		.config_aneg	= yt8521_config_aneg,
-+		.aneg_done	= yt8521_aneg_done,
-+		.config_init	= yt8521_config_init,
-+		.read_status	= yt8521_read_status,
-+		.soft_reset	= yt8521_soft_reset,
-+		.suspend	= yt8521_suspend,
-+		.resume		= yt8521_resume,
-+	},
- };
- 
- module_phy_driver(motorcomm_phy_drvs);
- 
--MODULE_DESCRIPTION("Motorcomm PHY driver");
-+MODULE_DESCRIPTION("Motorcomm 8511/8521 PHY driver");
- MODULE_AUTHOR("Peter Geis");
-+MODULE_AUTHOR("Frank");
- MODULE_LICENSE("GPL");
- 
- static const struct mdio_device_id __maybe_unused motorcomm_tbl[] = {
- 	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8511) },
-+	{ PHY_ID_MATCH_EXACT(PHY_ID_YT8521) },
- 	{ /* sentinal */ }
- };
- 
 -- 
-2.31.0.windows.1
-
+With best wishes
+Dmitry
