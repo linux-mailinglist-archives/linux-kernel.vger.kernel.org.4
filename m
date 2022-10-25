@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86EE60D6F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6337060D6F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiJYWWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
+        id S231628AbiJYWXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJYWWA (ORCPT
+        with ESMTP id S230480AbiJYWXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:22:00 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E4C26483;
-        Tue, 25 Oct 2022 15:21:59 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id ud5so12946426ejc.4;
-        Tue, 25 Oct 2022 15:21:59 -0700 (PDT)
+        Tue, 25 Oct 2022 18:23:06 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B200A558A;
+        Tue, 25 Oct 2022 15:23:05 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id v27so16308097eda.1;
+        Tue, 25 Oct 2022 15:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8y6RcNcqeipKdBc0KcpoWpoQGRSinTxo6WlCtAHVVFw=;
-        b=lh0NRBFqQ37Pp2fRnoeAAM9cc7X8nP27UkZ1i/XKX98gMIpAuWUq5KWBlTtqlHiGeq
-         x6ZUVZyTfxE60QHtbDFf1iaEJ1JKez+YvG7mQJOpKgOrDcKPZUhocxXh9mST2A1Sl9pS
-         r0njkfhIIwycM7yO055a3feai4rOqXPvHneHE7E7dQQKKJ1EXFqRDXIC5mpU9vEwFK/a
-         0efce3mBwTUymRzty/FhP9OhD8Jf5Q3vIhkjYFsNi805ptOa3ZGf/5+yqJTBinUPmsiP
-         ZZeVmaWbMBtE5h9DRqCOxmlZWO9TEsB4eNGNeob4TWmijCb+PdiakLs0eQrr/FsCelZY
-         19Tw==
+        bh=xtG9UJwQ9xCT5GcRsSIwntHKnFlFfGi1m6Y+YTQWFGY=;
+        b=ob/HF79763ku4U3fPDwMmMTsok1pWeiY8KTKwL1ptOtciBoKvRjMUkD5tnKSR59e24
+         RwxSmhP3E4aGAcSGZGSW1R+JGQMW6ts2SVRs3cFz9OYMKGuunSBeyUP4OgU3q0XzMl5X
+         spBEqC2Ft/qmKa/ijSkRYWVwVn8x19JNEr/2hUYIW9A8/4kvvdGDjQtfTmr0lb4QRuCP
+         N0s2S2+nDfC9+Ex22ZBKX9seVtMArHVQ/dC1qPmaaInJOVd1JhY88gpNUEv+sXvbZl8c
+         J6wc6kAh2k1IMOab0YzKKPoK6cm9qMsgVRsshhznyKPL6wes1FPUlysbf97kqdgAIfwD
+         ByQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8y6RcNcqeipKdBc0KcpoWpoQGRSinTxo6WlCtAHVVFw=;
-        b=k1aGY1d4tPbVyXpIK7YIip80WC2AjP/WDb3uuNcM2gn5Vgs3WZm4n818nKuUKVgh2O
-         ERGDu5Mxke7Ug8WroYse0f52S4paLjeVUYjg6T4cN3trLnkGhUuohWLIU0W/WATdI+yt
-         mzWjASFz7fNh5MEXbf1WEgPPcMKtNo4sMhO8XmPQzlz1tsDnenx/VZPPsra4yHad7bxn
-         9ucQDZ0NJjD71BSkfOI6hnroiEYjDftIC6PUBaGJi4cWsTdPyB/UMx+Bubrpw68IuXa8
-         2r32nucMp9DGGpRHges7eEdTZWC3DLCfwXIpAGKZ/WOhPeOx8TU58k206qUMlUbeszz6
-         x4NQ==
-X-Gm-Message-State: ACrzQf19sCNw4Yn1tmwpF94hDiuNk4Du12cREwIzQanmnkYB1lnTuXsy
-        SkPTFvGTCMWQR3PSklKaB5Cm8AwKRgDVJsvd01A=
-X-Google-Smtp-Source: AMsMyM6QITyQ7lHAa6lVQOgcVckdNVw20OEmjkUIHcwCzj/lp0O4BWOPYfKxzljxsA4kVmMiP28cLm/yW8CevROpj8k=
-X-Received: by 2002:a17:906:c14f:b0:793:30e1:96be with SMTP id
- dp15-20020a170906c14f00b0079330e196bemr29549937ejc.447.1666736518361; Tue, 25
- Oct 2022 15:21:58 -0700 (PDT)
+        bh=xtG9UJwQ9xCT5GcRsSIwntHKnFlFfGi1m6Y+YTQWFGY=;
+        b=J8ERpQpxIBmNFneGsRsZqxzk9l25YhnO8iezCVAfIJowBEIgpi8XJofDC4F3nawwJh
+         9iGJKpe/HZ92pLUPQnFrSSr0o6FeFvwecyjLuMXtvdIvFHe8FlaXOOhHQ7usU2Mt32Ur
+         aBNEXWOAaVAsuICj7wZ/t6KP5ltscJkqhIx+onkZp8b4un+TJ9o07Ip6XAaIC/a2nGfU
+         rUA8/9nVhb3zCZiTZAyw77QFpS+Vp0Y8K0LV79jneD0J5Ghy+RewmLZ0vWMiiIzvAOI4
+         ohtmH1MWQVaCWN7uHNPH/jceTcpZSwYeTDGEOHuUGKQeMElbneVN/z/XQIiPQPArJvvW
+         Z7Ug==
+X-Gm-Message-State: ACrzQf1gx8uB7wAEpLrX7UicNWVV7aY+g1PIVCk1Eoc98AF9O4Qb8tKf
+        ruUSJqeuWcTF+p9Z/P2QKcupaSzWxChDYsat0Z8=
+X-Google-Smtp-Source: AMsMyM7TofUOT6/SSJqJHTTX0CLwhjl052Ms41mATxijLuCl+S3e8adVj6+MXPHXLcufxZlouFkOTWadNMoUnBSB9S4=
+X-Received: by 2002:a05:6402:3217:b0:461:d6d7:7f19 with SMTP id
+ g23-20020a056402321700b00461d6d77f19mr10396610eda.109.1666736584242; Tue, 25
+ Oct 2022 15:23:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-14-arnd@kernel.org>
-In-Reply-To: <20221019152947.3857217-14-arnd@kernel.org>
+References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-15-arnd@kernel.org>
+In-Reply-To: <20221019152947.3857217-15-arnd@kernel.org>
 From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 25 Oct 2022 23:21:31 +0100
-Message-ID: <CA+V-a8vH+rD2aJWc-5sVhnhe0-VYUCQ27KfQRS2BsimqJheWqw@mail.gmail.com>
-Subject: Re: [PATCH 13/14] staging: media: remove davinci vpfe_capture driver
+Date:   Tue, 25 Oct 2022 23:22:37 +0100
+Message-ID: <CA+V-a8t7FupuGtN1YFLQJXu3aznQ_Liy71SQcKJDgLtZhm-z_g@mail.gmail.com>
+Subject: Re: [PATCH 14/14] media: davinci: remove vpbe support
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
         linux-arm-kernel@lists.infradead.org,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -72,49 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 4:40 PM Arnd Bergmann <arnd@kernel.org> wrote:>
+On Wed, Oct 19, 2022 at 4:41 PM Arnd Bergmann <arnd@kernel.org> wrote:
+>
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> This driver was for the davinci dm644x and dm3xx platforms that are
-> now removed from the kernel, so there are no more users.
+> The davinci dm3xx/dm644x platforms are gone now, and the remaining
+> da8xx platforms do not use the vpbe driver, so the driver can be
+> removed as well.
 >
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  MAINTAINERS                                   |    1 -
->  drivers/staging/media/Kconfig                 |    1 -
->  drivers/staging/media/Makefile                |    1 -
->  .../media/deprecated/vpfe_capture/Kconfig     |   58 -
->  .../media/deprecated/vpfe_capture/Makefile    |    4 -
->  .../media/deprecated/vpfe_capture/TODO        |    7 -
->  .../deprecated/vpfe_capture/ccdc_hw_device.h  |   80 -
->  .../deprecated/vpfe_capture/dm355_ccdc.c      |  934 --------
->  .../deprecated/vpfe_capture/dm355_ccdc.h      |  308 ---
->  .../deprecated/vpfe_capture/dm355_ccdc_regs.h |  297 ---
->  .../deprecated/vpfe_capture/dm644x_ccdc.c     |  879 --------
->  .../deprecated/vpfe_capture/dm644x_ccdc.h     |  171 --
->  .../vpfe_capture/dm644x_ccdc_regs.h           |  140 --
->  .../media/deprecated/vpfe_capture/isif.c      | 1127 ----------
->  .../media/deprecated/vpfe_capture/isif.h      |  518 -----
->  .../media/deprecated/vpfe_capture/isif_regs.h |  256 ---
->  .../deprecated/vpfe_capture/vpfe_capture.c    | 1902 -----------------
->  include/media/davinci/vpfe_capture.h          |  177 --
->  18 files changed, 6861 deletions(-)
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Kconfig
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/Makefile
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/TODO
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/ccdc_hw_device.h
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.c
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc.h
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm355_ccdc_regs.h
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.c
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc.h
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/dm644x_ccdc_regs.h
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.c
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif.h
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/isif_regs.h
->  delete mode 100644 drivers/staging/media/deprecated/vpfe_capture/vpfe_capture.c
->  delete mode 100644 include/media/davinci/vpfe_capture.h
->
+
 Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
 
 Cheers,
