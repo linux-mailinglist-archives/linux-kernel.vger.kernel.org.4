@@ -2,173 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7C660C724
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C4660C730
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbiJYJCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55880 "EHLO
+        id S231893AbiJYJD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbiJYJCj (ORCPT
+        with ESMTP id S231847AbiJYJDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:02:39 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA0A15788F;
-        Tue, 25 Oct 2022 02:02:38 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id o4so11467436wrq.6;
-        Tue, 25 Oct 2022 02:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jHwoErdE0BzPcZlSSCfCdE2navlz+j0aFnjeKGm+sZ4=;
-        b=oRgrckP3SjOfzoc2HUybm2IgGKg8NwVh1HXRRYnEyd9Z08DwN2ik7rJrBnLZ8pOkPS
-         eyS3v46w+3Tgaserk6QVnbha5Aj+Z3Lr5h4wN5IT09Z5exmwCdg6YIBynxNACrRBZCyP
-         Yw0Q87uMOyKq746orAfD3NdctHDLcAhZRNpCe+Zeh5PYBPG37LzPOo7eFmKE2uPoDiyd
-         8sh3LLrdMT8uAIcD2OP4Q24hNhcLI3uRNsdpa5An+v9lMG6uZwFUunu0+qDTY+0nM8/h
-         cZ+0iKCcL8EIuFT/N0DqKw+Wwk8GCtpvXH7neR/cp6fKOL0h1vtXiWg21uoL4y1YOoVn
-         NX3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jHwoErdE0BzPcZlSSCfCdE2navlz+j0aFnjeKGm+sZ4=;
-        b=cFXjXBVOOmEMv60L0nUZTBlqAMJxgURohq/qB7rL6iW/s3NKX5nAfBuJvzWV0LmKdG
-         Rhcr7XwnNrkQ5zQb5igWNXAnZwrNs8KxDeH+twaA0qpRYzmfWPVSUp46al39zKVEUgaA
-         HBcNtne7TlS0tFMNPvyef5UBITy5CBlwYY2lUa2AUFgrpGkPf9svTJx44BIFWcaJRfe1
-         qMl4nBJi+reWvdqQvYgHdu85Li0IC92AVfA6VvYgV6i/PddlRAx3ELbxhjViwwYRNr5r
-         nNFHJwX/k3cyUSspFae4m3QTvH5O/XK9eR7sTuFwj8r4HVcYignQ4Y4PdBhjSXErkT7a
-         dKqg==
-X-Gm-Message-State: ACrzQf2I3VttmPnJXUNI2zKiAGskZxo64JOx0hgrGrqHj2Xo+/WOQge4
-        d++NNIvgxRdG5NBmprSpbSU=
-X-Google-Smtp-Source: AMsMyM5rGCodm1RVK98EgVYDjzfoJiAJrrXHjY+aIwEvOUVlFPiSuPxs1YlUcmWqevdzE7tTPBQsvw==
-X-Received: by 2002:a05:6000:1f04:b0:22e:5e0b:e1fb with SMTP id bv4-20020a0560001f0400b0022e5e0be1fbmr23517847wrb.222.1666688556556;
-        Tue, 25 Oct 2022 02:02:36 -0700 (PDT)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id u14-20020a5d514e000000b00228cbac7a25sm1899182wrt.64.2022.10.25.02.02.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 02:02:34 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id 5479DBE2DE0; Tue, 25 Oct 2022 11:02:33 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 11:02:33 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Subject: Re: [PATCH 5.10 384/390] Revert "drm/amdgpu: move nbio
- sdma_doorbell_range() into sdma code for vega"
-Message-ID: <Y1emKRzhii9qK+cN@eldamar.lan>
-References: <20221024113022.510008560@linuxfoundation.org>
- <20221024113039.334437223@linuxfoundation.org>
+        Tue, 25 Oct 2022 05:03:20 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FA5158D41;
+        Tue, 25 Oct 2022 02:03:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666688598; x=1698224598;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wcNkbfUgqXT7nAfmkdFbESesrvdKH9TGwWLIWOtxlR0=;
+  b=ONh1T9tA75KwZBtSgIq3xUguW5QkJaXdInAkheFyii7uf/mHENhD+O8H
+   Pl36jvw5gCM1p5NBCl9mFoIzv6GK0qzHJnCQKHAUTFKK3IB1539BgMw0K
+   bQbMdnaz3Lin+x1I4RvbpJ9cuacmrlrg/FeuS/VJuV67xgnoJv8KjxQCv
+   bVeQWCb6wNgpv/SN/oME3STeq3d3qRF6M08V/xXrpi6pTxlH5OJQFVFUv
+   ZOnyGbvIYy04Y1ksfrD/vI4AnkB5+xiGZg4BUwJ6cKf/EwKgTQ8bMMsjn
+   +gwtXU9NLULbg/nK6y8hCxhjyecWf+A4f8tQZ+uFObxPzTsNXYsXQVHjX
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="183777233"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 25 Oct 2022 02:03:17 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 25 Oct 2022 02:03:12 -0700
+Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 25 Oct 2022 02:03:10 -0700
+From:   Tudor Ambarus <tudor.ambarus@microchip.com>
+To:     <vkoul@kernel.org>, <peda@axentia.se>, <du@axentia.se>
+CC:     <maciej.sosnowski@intel.com>, <nicolas.ferre@microchip.com>,
+        <mripard@kernel.org>, <torfl6749@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Tudor Ambarus" <tudor.ambarus@microchip.com>
+Subject: [PATCH v2 00/32] dmaengine: at_hdmac: Fix concurrency bugs and then convert to virt-dma
+Date:   Tue, 25 Oct 2022 12:02:34 +0300
+Message-ID: <20221025090306.297886-1-tudor.ambarus@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024113039.334437223@linuxfoundation.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+v2:
+- reorder patches so that fixes come first -> easier to backport to
+stable kernels.
+- drop the devm_request_irq() patch as we had to disable the irq anyway
+in remove() in order to avoid spurios IRQs. Using devm variant brings no
+palpable benefit.
+- reword pm_ptr commit message
 
-On Mon, Oct 24, 2022 at 01:33:01PM +0200, Greg Kroah-Hartman wrote:
-> From: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> This reverts commit 9f55f36f749a7608eeef57d7d72991a9bd557341 which is
-> commit e3163bc8ffdfdb405e10530b140135b2ee487f89 upstream.
-> 
-> This commit causes repeated WARN_ONs from
-> 
-> drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amd
-> gpu_dm.c:7391 amdgpu_dm_atomic_commit_tail+0x23b9/0x2430 [amdgpu]
-> 
-> dmesg fills up with the following messages and drm initialization takes
-> a very long time.
-> 
-> Cc: <stable@vger.kernel.org>    # 5.10
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c |    5 -----
->  drivers/gpu/drm/amd/amdgpu/soc15.c     |   25 +++++++++++++++++++++++++
->  2 files changed, 25 insertions(+), 5 deletions(-)
-> 
-> --- a/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-> @@ -1475,11 +1475,6 @@ static int sdma_v4_0_start(struct amdgpu
->  		WREG32_SDMA(i, mmSDMA0_CNTL, temp);
->  
->  		if (!amdgpu_sriov_vf(adev)) {
-> -			ring = &adev->sdma.instance[i].ring;
-> -			adev->nbio.funcs->sdma_doorbell_range(adev, i,
-> -				ring->use_doorbell, ring->doorbell_index,
-> -				adev->doorbell_index.sdma_doorbell_range);
-> -
->  			/* unhalt engine */
->  			temp = RREG32_SDMA(i, mmSDMA0_F32_CNTL);
->  			temp = REG_SET_FIELD(temp, SDMA0_F32_CNTL, HALT, 0);
-> --- a/drivers/gpu/drm/amd/amdgpu/soc15.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/soc15.c
-> @@ -1332,6 +1332,25 @@ static int soc15_common_sw_fini(void *ha
->  	return 0;
->  }
->  
-> +static void soc15_doorbell_range_init(struct amdgpu_device *adev)
-> +{
-> +	int i;
-> +	struct amdgpu_ring *ring;
-> +
-> +	/* sdma/ih doorbell range are programed by hypervisor */
-> +	if (!amdgpu_sriov_vf(adev)) {
-> +		for (i = 0; i < adev->sdma.num_instances; i++) {
-> +			ring = &adev->sdma.instance[i].ring;
-> +			adev->nbio.funcs->sdma_doorbell_range(adev, i,
-> +				ring->use_doorbell, ring->doorbell_index,
-> +				adev->doorbell_index.sdma_doorbell_range);
-> +		}
-> +
-> +		adev->nbio.funcs->ih_doorbell_range(adev, adev->irq.ih.use_doorbell,
-> +						adev->irq.ih.doorbell_index);
-> +	}
-> +}
-> +
->  static int soc15_common_hw_init(void *handle)
->  {
->  	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
-> @@ -1351,6 +1370,12 @@ static int soc15_common_hw_init(void *ha
->  
->  	/* enable the doorbell aperture */
->  	soc15_enable_doorbell_aperture(adev, true);
-> +	/* HW doorbell routing policy: doorbell writing not
-> +	 * in SDMA/IH/MM/ACV range will be routed to CP. So
-> +	 * we need to init SDMA/IH/MM/ACV doorbell range prior
-> +	 * to CP ip block init and ring test.
-> +	 */
-> +	soc15_doorbell_range_init(adev);
->  
->  	return 0;
->  }
 
-Can you please as well revert 7b0db849ea030a70b8fb9c9afec67c81f955482e
-on top?
+at_hdmac driver had poor list handling and concurrency bugs.
+We experienced calling of the completion call twice for the
+same descriptor. Peter Rosin encountered the same while
+reporting a different bug:
+https://lore.kernel.org/lkml/13c6c9a2-6db5-c3bf-349b-4c127ad3496a@axentia.se/
 
-See https://lore.kernel.org/stable/BL1PR12MB5144F3CC640A18DF0C36E414F72E9@BL1PR12MB5144.namprd12.prod.outlook.com/
+Two sets of tests were performed:
+1/ tested just the fixes, to make sure everything is fine and the
+concurrency bugs are squashed even without the conversion to virt-dma.
+All went fine.
+2/ tested the entire series including the conversion the virt-dma
+All went fine.
 
-Both of these reverts need to be applied to fix regressions which were
-reported in https://gitlab.freedesktop.org/drm/amd/-/issues/2216 and
-downstream in Debian (https://bugs.debian.org/1022025).
+I tested NAND (prep_dma_memcpy), MMC (prep_dma_slave_sg),
+usart (cyclic mode), dmatest (memcpy, memset).
+With the conversion to virt-dma I replaced the election of a new transfer
+in the tasklet with the election of the new transfer in the interrupt
+handler. We should have a shorter idle window as we remove the scheduling
+latency of the tasklet. Using mtd_speedtest showed similar performances
+when using NAND with DMA. That could be because of using a low timming
+mode on NAND.
 
-If it is now not anymore possible for 5.10.150 can you pick the revert
-for 5.10.151?
 
-Regards,
-Salvatore
+Tudor Ambarus (32):
+  dmaengine: at_hdmac: Fix at_lli struct definition
+  dmaengine: at_hdmac: Don't start transactions at tx_submit level
+  dmaengine: at_hdmac: Start transfer for cyclic channels in
+    issue_pending
+  dmaengine: at_hdmac: Fix premature completion of desc in issue_pending
+  dmaengine: at_hdmac: Do not call the complete callback on
+    device_terminate_all
+  dmaengine: at_hdmac: Protect atchan->status with the channel lock
+  dmaengine: at_hdmac: Fix concurrency problems by removing
+    atc_complete_all()
+  dmaengine: at_hdmac: Fix concurrency over descriptor
+  dmaengine: at_hdmac: Free the memset buf without holding the chan lock
+  dmaengine: at_hdmac: Fix concurrency over the active list
+  dmaengine: at_hdmac: Fix descriptor handling when issuing it to
+    hardware
+  dmaengine: at_hdmac: Fix completion of unissued descriptor in case of
+    errors
+  dmaengine: at_hdmac: Don't allow CPU to reorder channel enable
+  dmaengine: at_hdmac: Fix impossible condition
+  dmaengine: at_hdmac: Check return code of dma_async_device_register
+  dmaengine: at_hdmac: Do not print messages on console while holding
+    the lock
+  dmaengine: at_hdmac: Return dma_cookie_status()'s ret code when
+    txstate is NULL
+  dmaengine: at_hdmac: Remove superfluous cast
+  dmaengine: at_hdmac: Pass residue by address to avoid unnecessary
+    implicit casts
+  dmaengine: at_hdmac: s/atc_get_bytes_left/atc_get_residue
+  dmaengine: at_hdmac: Introduce atc_get_llis_residue()
+  dmaengine: at_hdmac: Use devm_kzalloc() and struct_size()
+  dmaengine: at_hdmac: Use devm_platform_ioremap_resource
+  dmaengine: at_hdmac: Use devm_clk_get()
+  dmaengine: at_hdmac: Use pm_ptr()
+  dmaengine: at_hdmac: Set include entries in alphabetic order
+  dmaengine: at_hdmac: Keep register definitions and structures private
+    to at_hdmac.c
+  dmaengine: at_hdmac: Use bitfield access macros
+  dmaengine: at_hdmac: Rename "dma_common" to "dma_device"
+  dmaengine: at_hdmac: Rename "chan_common" to "dma_chan"
+  dmaengine: at_hdmac: Remove unused member of at_dma_chan
+  dmaengine: at_hdmac: Convert driver to use virt-dma
+
+ MAINTAINERS                 |    1 -
+ drivers/dma/Kconfig         |    1 +
+ drivers/dma/at_hdmac.c      | 1899 ++++++++++++++++++-----------------
+ drivers/dma/at_hdmac_regs.h |  478 ---------
+ 4 files changed, 990 insertions(+), 1389 deletions(-)
+ delete mode 100644 drivers/dma/at_hdmac_regs.h
+
+-- 
+2.25.1
+
