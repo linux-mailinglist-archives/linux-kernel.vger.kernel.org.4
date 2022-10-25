@@ -2,100 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9E960C313
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 07:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002CC60C316
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 07:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiJYFH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 01:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
+        id S231132AbiJYFIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 01:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiJYFGz (ORCPT
+        with ESMTP id S230168AbiJYFHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 01:06:55 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1148C2C9E
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:05:23 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id m6so10894549pfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3cbUiytZCvIodwgXeI/vSOQye/5S1njVlXadTLjeUo8=;
-        b=W5kfkuG9CcA/C3m5TM2kcOpo/1KQZ4521CJIcyOyRm8zLKjwmMn+EKdbKuTMp/KzNb
-         YTJvxrJWMxFBBOzarTzWs74NjunhohwZriUnVGkcsBGpW02gRAU9DGwDeJrwsrcKj4GZ
-         wNQmlU+IvHP61vmH74uh3tXPVuI1q0cW8wq5jP9kH8KcGH1BLQP5V86k9lyEFy+IAmuv
-         9jXjmMZuJ+/eFUJoUq1OYsm9aihac/HS0rU+Ns2+TvQe81WiSzuksbPQd2Aff5fguPYZ
-         C1xm5hkeYLX0CwdxWnjdMVPOCmia+nmW3LUvbvsY4YpeVaKpaKFS82VuZ5Z8z7ByQdor
-         Utng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3cbUiytZCvIodwgXeI/vSOQye/5S1njVlXadTLjeUo8=;
-        b=iIalShVBLoxOt2R6MqtdeX6uUBv+JyfYSGhbo6IKzuFZPh3dKKLdmMfiI7N4wIQHEp
-         8+EqozLeu54oAffcLsVj0ra1Q0Db22bkXlHYmM8jzYG/v8w8lMWbchShkc6ttf2nADbz
-         qKetvJTdygMRbb0dr6aR4RX3Z77lYQJNY729eIE2PlGMx5j6Lq5GaR8FmfS5cXmtrhoE
-         lybmzI4v1HHdVQcvqkaKSSuKHONAZri20w2OUBpz+AgF1M3TGH/t2PEbAT0K2kYLJlo6
-         RJLPtJQgItKuPQ2SSBxQZEfHRfsq4Yzxb797d5BXfrLGtv+PlvVoTdlnmfurGv7dqgHo
-         neLg==
-X-Gm-Message-State: ACrzQf3ojQImDHu7fi8hWVKjL0v6htQ4+Kb8uJq/UOX/vublf3+OglU6
-        k8yQtgPaSNZTIxHLeuUcO3M=
-X-Google-Smtp-Source: AMsMyM6rDLaRMQZqopTPhy4nMyIBeX66wVCx2ReyDNNtBNisVY5Ag5pJCDcYqccfR5ODLK/vB/5eVg==
-X-Received: by 2002:a65:564d:0:b0:46b:1a7d:3b82 with SMTP id m13-20020a65564d000000b0046b1a7d3b82mr31102458pgs.459.1666674318244;
-        Mon, 24 Oct 2022 22:05:18 -0700 (PDT)
-Received: from biggie ([103.230.148.186])
-        by smtp.gmail.com with ESMTPSA id y123-20020a623281000000b0056bfd4a2702sm627463pfy.45.2022.10.24.22.05.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 22:05:17 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 10:35:11 +0530
-From:   Gautam Menghani <gautammenghani201@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, zokeefe@google.com,
-        shy828301@gmail.com, vbabka@suse.cz, david@redhat.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v2] mm/khugepaged: add tracepoint to collapse_file()
-Message-ID: <Y1duhy5kbhLoMqWO@biggie>
-References: <20221024173559.332324-1-gautammenghani201@gmail.com>
- <20221024131706.3d58bd92c332684386c7df13@linux-foundation.org>
+        Tue, 25 Oct 2022 01:07:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A46FC133311;
+        Mon, 24 Oct 2022 22:06:30 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29P4KMOB008691;
+        Tue, 25 Oct 2022 05:06:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=8xyiXvZjbxXhCBSXY+hjWgeku7qnVeQ3Jkuvo1+Tu8Q=;
+ b=hipVOKORk+Zaya0rzrvCVzikobKFBBZgqRqx/GOJbJqPCm5CPQq/UabdcQx2ZBXSgLWv
+ OMBUSa/yM+WeyNIHnEMu2nrB/1gMYbGV0w9doUIboZ9JEKFj8Y3YxoWPPN9FUC6feXut
+ gE0g73z8HdPlTaG51vhS65tes8r4nPXVpnTKbLM+3Qruc6XlALk9j6g5Vemdqz5VV762
+ 45AmfKoDMRMDjgLTGIfFzcMu13AD2/f0i2vBtas3GIkDGJ7s6nBXHG6kgp3bNONGGsAc
+ wJSzTqFycA7rhwgcUDKF4rF1TynGRGOFtGuI+rRthjR4FAHm7ZIC1Tr5PV5kUKRRxVgH VQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kc848dbty-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Oct 2022 05:06:27 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29P56Qj1018074
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Oct 2022 05:06:26 GMT
+Received: from fenglinw2-gv.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Mon, 24 Oct 2022 22:06:24 -0700
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sboyd@kernel.org>
+CC:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
+        <quic_fenglinw@quicinc.com>
+Subject: [RESEND PATCH v1 0/2] Add changes to support SPMI resource protection
+Date:   Tue, 25 Oct 2022 13:06:04 +0800
+Message-ID: <20221025050608.2635173-1-quic_fenglinw@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024131706.3d58bd92c332684386c7df13@linux-foundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: cop_2Ilyxr4SBY9V16QGSHuKszjuEZie
+X-Proofpoint-ORIG-GUID: cop_2Ilyxr4SBY9V16QGSHuKszjuEZie
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-25_01,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 mlxlogscore=650 adultscore=0 suspectscore=0 bulkscore=0
+ impostorscore=0 spamscore=0 clxscore=1011 mlxscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210250028
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 01:17:06PM -0700, Andrew Morton wrote:
-> On Mon, 24 Oct 2022 23:05:58 +0530 Gautam Menghani <gautammenghani201@gmail.com> wrote:
-> 
-> > In the file mm/khugepaged.c, a TODO in the function collapse_file() asks
-> > to add tracepoints. Add the tracepoint named "mm_khugepaged_collapse_file".
-> 
-> This isn't a very satisfying explanation for changing the kernel.  Maybe
-> the comment is stale are this tracepoint is unneeded.
-> 
-> Please explain afresh how this addition benefits kernel users?
-> 
-The function collapse_file() is called by the function hpage_collapse_scan_file(). 
-Without a tracepoint in collapse_file(), we won't know if it was called or not and as a result,
-we also won't know if it returned successfully or not. Also, as Zach mentioned earlier [1]:
+If a secure VM uses the SPMI PMIC arbiter driver to access PMIC modules
+with secure access, such as in a trust UI feature when the secure VM is
+accessing PMIC modules that supply to display power rails, the display
+driver in primary VM (no-secure) needs to translate the SPMI address of
+the PMIC modules and get the corresponding physical SoC register range
+within the SPMI PMIC arbiter that is used to initiate SPMI write transactions,
+and lend the memory range to the secure VM via a hypervisor call to prevent
+any SPMI access to these modules from the non-secure VM. Hence, an API for
+such SPMI address translation is added and exported.
 
-there are a few scan result codes that overlap between hpage_collapse_scan_file() and those
-possibly returned in collapse_file() such that, if we only have the one tracepoint in 
-hpage_collapse_scan_file(), it could be ambiguous what callsite the error path stemmed from.
+Further, the secure-VM that loads the SPMI PMIC arbiter driver can't specify
+the PMIC arbiter HLOS EE summary IRQ becuase it can't have the permission,
+also the secure VM has no needs to use the PMIC modules interrupt, hence add
+a change to make the interrupt support optional for the secure-VM to specify
+the PMIC arbiter device node without interrupt support. The driver change has
+a binding document change which has already been applied:
+https://lore.kernel.org/all/YmxnIQ9niVbyASfN@robh.at.kernel.org/
 
-[1]:https://lore.kernel.org/lkml/CAAa6QmSKtj6T2dW1tkg5_HVj2+rXj5inOLdEzr0MkJzQxxcPXQ@mail.gmail.com/
+David Collins (2):
+  spmi: pmic-arb: add support to map SPMI addresses to physical addr
+  spmi: pmic-arb: make interrupt support optional
 
-Please do let me know if a v3 is needed.
+ drivers/spmi/spmi-pmic-arb.c           | 149 ++++++++++++++++++++++---
+ include/linux/soc/qcom/spmi-pmic-arb.h |  23 ++++
+ 2 files changed, 155 insertions(+), 17 deletions(-)
+ create mode 100644 include/linux/soc/qcom/spmi-pmic-arb.h
 
-Thanks,
-Gautam
+-- 
+2.25.1
+
