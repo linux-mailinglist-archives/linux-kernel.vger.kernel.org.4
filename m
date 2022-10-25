@@ -2,142 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6886760CCCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2D960CCCF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiJYM77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:59:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S232575AbiJYNAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232620AbiJYM67 (ORCPT
+        with ESMTP id S232821AbiJYM7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:58:59 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B955B1BFB94;
-        Tue, 25 Oct 2022 05:54:11 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.109.239])
-        by gateway (Coremail) with SMTP id _____8Bx3Nhu3FdjP2UCAA--.9536S3;
-        Tue, 25 Oct 2022 20:54:06 +0800 (CST)
-Received: from [192.168.100.8] (unknown [112.20.109.239])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxn+Bq3FdjueYEAA--.19001S3;
-        Tue, 25 Oct 2022 20:54:02 +0800 (CST)
-Message-ID: <4123dfce-d5f9-80aa-cbba-d8dfbf197953@loongson.cn>
-Date:   Tue, 25 Oct 2022 20:53:34 +0800
+        Tue, 25 Oct 2022 08:59:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155C72715F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:55:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F071CB81A9C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:55:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F583C433C1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:55:09 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="mdZvmCoI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666702507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CpyH1D/2XK23AKm0sBvO8GEEBnx0Ia1hn6gpjNKkRH0=;
+        b=mdZvmCoI7sTcb6SLTN0bP54admX73iDo3rQwL6tUg1bBk9vzeE95gShW1kMLECnN9v71u0
+        qbNAvMCooQsC4n6SKuNKn7rf2TB1DtUeT52+jU8q12C235/mzydrzLBOB+gXOvlWvh0dtW
+        +FVkJCDhNLF8kgQTpcZWzgXOVcHFIJY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e9d2a8f3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 25 Oct 2022 12:55:07 +0000 (UTC)
+Received: by mail-vs1-f53.google.com with SMTP id 189so9563647vsi.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:55:06 -0700 (PDT)
+X-Gm-Message-State: ACrzQf07GSj+SZS2a1BSCiO4TmL+VWEPg62wSeEqKgJ2Es0mrLH8NxX+
+        9WsmMYpo0t7lW2biC3xPFQ+vuds+GfB1GWmuExI=
+X-Google-Smtp-Source: AMsMyM4SLcBwHpOsukHpimIDiERGrmDNG5sM1JcAcFHIpJFL2Zkg33awQqoaxph0sE5ov1sU8J1UuTE7aA2f7VdroRA=
+X-Received: by 2002:a67:c297:0:b0:3aa:3cac:97b6 with SMTP id
+ k23-20020a67c297000000b003aa3cac97b6mr535993vsj.76.1666702505606; Tue, 25 Oct
+ 2022 05:55:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 1/2] Documentation: Start translations to Spanish
-To:     Alex Shi <seakeel@gmail.com>, Jonathan Corbet <corbet@lwn.net>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        Akira Yokosawa <akiyks@gmail.com>, bilbao@vt.edu,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        miguel.ojeda.sandonis@gmail.com,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>
-References: <20221014142454.871196-2-carlos.bilbao@amd.com>
- <48b4a5a1-2a52-4159-699b-9db73a012892@gmail.com>
- <Y01pkubcT7FOwCjL@casper.infradead.org>
- <8e2a1da1-2914-b223-85b0-a769339d9c39@gmail.com>
- <9e65ba16-68d3-8d11-c6ac-c35c29026688@amd.com>
- <Y1aovvn7dAyo1nuW@casper.infradead.org> <87a65lfdqb.fsf@meer.lwn.net>
- <875yg9fdbm.fsf@meer.lwn.net>
- <CAJy-AmnskpBqTspQ-krCi66S960CowqqTfnrnbPeS_JnCoa2Vg@mail.gmail.com>
-From:   YanTeng Si <siyanteng@loongson.cn>
-In-Reply-To: <CAJy-AmnskpBqTspQ-krCi66S960CowqqTfnrnbPeS_JnCoa2Vg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cxn+Bq3FdjueYEAA--.19001S3
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tw1UXFWfJFyxKw1xtr1fWFg_yoW8tw1xpF
-        WYgas7KFyktr92kFn2vw48XrWFqw1SyryYqr1DKr1kCwnYgFyfKr45KryYkasxur4xGr1j
-        v3yYqFW3XF1qyaDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <202210250456.vKv5zoLb-lkp@intel.com> <20221025000313.546261-1-Jason@zx2c4.com>
+ <87bkq0s9rw.wl-tiwai@suse.de> <Y1fRvWfcU4NT1HTU@zx2c4.com> <87fsfcqdbx.wl-tiwai@suse.de>
+In-Reply-To: <87fsfcqdbx.wl-tiwai@suse.de>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 25 Oct 2022 14:54:54 +0200
+X-Gmail-Original-Message-ID: <CAHmME9qkJk0vH2n7gz1XFyo-W5EMffGA6Hd4Fd8twKSRWz12nA@mail.gmail.com>
+Message-ID: <CAHmME9qkJk0vH2n7gz1XFyo-W5EMffGA6Hd4Fd8twKSRWz12nA@mail.gmail.com>
+Subject: Re: [PATCH v2] ALSA: rme9652: use explicitly signed char
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-在 2022/10/25 19:05, Alex Shi 写道:
-> On Mon, Oct 24, 2022 at 11:31 PM Jonathan Corbet <corbet@lwn.net> wrote:
->>
->> Resending without the screwy address that my mailer decided to put in
->> for Alex, sorry for the noise.
-> Thanks for having me.
-> I am neutral about the change, and prefer less churn for code.
-> But if we have to, zh_hant/hans is better then CN and TW to comfort
-> other regions, like zh_SG, zh_HK etc.
-
-Same here!
-
- >_<
-
-
-Thanks,
-
-Yanteng
-
+On Tue, Oct 25, 2022 at 2:48 PM Takashi Iwai <tiwai@suse.de> wrote:
 >
-> Thanks
-> Alex
+> On Tue, 25 Oct 2022 14:08:29 +0200,
+> Jason A. Donenfeld wrote:
+> >
+> > On Tue, Oct 25, 2022 at 08:21:55AM +0200, Takashi Iwai wrote:
+> > > On Tue, 25 Oct 2022 02:03:13 +0200,
+> > > Jason A. Donenfeld wrote:
+> > > >
+> > > > With char becoming unsigned by default, and with `char` alone being
+> > > > ambiguous and based on architecture, signed chars need to be marked
+> > > > explicitly as such. This fixes warnings like:
+> > > >
+> > > > sound/pci/rme9652/hdsp.c:3953 hdsp_channel_buffer_location() warn: 'hdsp->channel_map[channel]' is unsigned
+> > > > sound/pci/rme9652/hdsp.c:4153 snd_hdsp_channel_info() warn: impossible condition '(hdsp->channel_map[channel] < 0) => (0-255 < 0)'
+> > > > sound/pci/rme9652/rme9652.c:1833 rme9652_channel_buffer_location() warn: 'rme9652->channel_map[channel]' is unsigned
+> > > >
+> > > > Cc: Jaroslav Kysela <perex@perex.cz>
+> > > > Cc: Takashi Iwai <tiwai@suse.com>
+> > > > Cc: alsa-devel@alsa-project.org
+> > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > >
+> > > Applied now.  Thanks!
+> >
+> > Thanks. For this and the other patch, applied for 6.1 or 6.2?
 >
->> Jonathan Corbet <corbet@lwn.net> writes:
->>
->>> [Adding some of the other folks interested in translations]
->>>
->>> Matthew Wilcox <willy@infradead.org> writes:
->>>
->>>> I think we're better off following BCP 47:
->>>> https://www.rfc-editor.org/info/bcp47 rather than the libc locale format.
->>>> That will imply renaming it_IT to simply "it", ja_JP to "ja" and
->>>> ko_KR to "ko".  The two Chinese translations we have might be called
->>>> "zh-Hant" and "zh-Hans", if the distinction is purely Traditional vs
->>>> Simplified script.  If they really are region based, then they'd be
->>>> zh-CN and zh-TW.
->>>>
->>>> I think you're right to conflate all dialects of Spanish together, just
->>>> as we do all dialects of English.
->>>>
->>>> Jon, this feels like policy you should be setting.  Are you on board
->>>> with this, or do you want to retain the mandatory geography tag that
->>>> we've been using up to now?
->>> I want to go hide somewhere :)
->>>
->>> I'd kind of prefer to avoid renaming the existing translations, as that
->>> is sure to create a certain amount of short-term pain.  But I guess we
->>> could do that if the benefit somehow seems worth it.
->>>
->>> Of course, if we're thrashing things, we could also just call them
->>> "Italian" (or "Italiano"), "Chinese", and so on.  I don't *think*
->>> there's a need for the names to be machine-readable.  We should stick
->>> with ASCII for these names just to help those of us who can't type in
->>> other scripts.
->>>
->>> If asked to set a policy today, my kneejerk reaction would be to leave
->>> things as they are just to avoid a bunch of churn.  But I don't have a
->>> strong opinion on how this naming should actually be done, as long as we
->>> can pick something and be happy with it thereafter.  What do the
->>> translation maintainers think?
->>>
->>> Thanks,
->>>
->>> jon
+> I applied for 6.2.  Was it an action that has to be fixed for 6.1?
+> If so, I still can shuffle.
 
+Well, this is code that's broken currently on ARM platforms, for
+example, where char is already unsigned. So it's arguably a fix for
+6.1.
+
+(And if you're in fact not going to take it for 6.1, I'm supposed to
+take it through my unsigned-char tree for 6.2.)
+
+Jason
