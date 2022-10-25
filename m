@@ -2,183 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555AF60C680
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7430C60C68C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbiJYIdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
+        id S231254AbiJYIfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbiJYIc7 (ORCPT
+        with ESMTP id S231888AbiJYIez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:32:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68E8A4B8A;
-        Tue, 25 Oct 2022 01:32:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DFF9617E7;
-        Tue, 25 Oct 2022 08:32:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8A35C433C1;
-        Tue, 25 Oct 2022 08:32:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666686777;
-        bh=P9otne2bGV5OzhI0QZtc8zRICsJTxdIfBvbZ+x2AHD4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DmuJBtrRLQRjMfi8fNmmrNYXtQG2e0SbTjhslLVQRZpDxwBOarHUGsOyb6atqoxu5
-         30wsWp6tK1WlcHgb8/TqU3BvN8ekb1rjBmYQuK5poeSWYKbbJe8yWUBUzt+eK/rW00
-         IJSFKAQxIjcMmKHmFY1E/TbPcckFxz7ZQMP8o4WY06UJZwyb6HZucpo4xXoLdjcxn0
-         wqRfeGi5aC9W2q2EQ1IJyqeubzLaJmRLU/aw/yh+k4Klyhrfu60XHNJXVMUpgjlngM
-         nG7RB4BfcsZNqI97S9Bdg4U0q3Crc6wld0c+IL3YwL5xELTtcXXbp/Uy3R2vLWhvu1
-         UzRpL7GQOtW0w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1onFMU-00015B-MI; Tue, 25 Oct 2022 10:32:39 +0200
-Date:   Tue, 25 Oct 2022 10:32:38 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/4] soc: qcom: pmic_glink: Introduce altmode support
-Message-ID: <Y1efJh11B5UQZ0Tz@hovoldconsulting.com>
-References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
- <20220818031512.319310-4-bjorn.andersson@linaro.org>
+        Tue, 25 Oct 2022 04:34:55 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2054.outbound.protection.outlook.com [40.107.20.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7349EA8CEF;
+        Tue, 25 Oct 2022 01:34:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GAVZ1DcRiRT94B0X7pfJzi2xUrdcZlx619CP9BaJ45AJwYp9cf2uhACAumbXb+ZKVOXexEn+q169ZxsfdvHkQOBLmKVbBgRmvyT3YN5yQc33+cSXlqMno7uIib6Sg4cDTUlLRN1UpbOCg9OwtV1Wh4+Ch8w9Hqdy+3Z22acreYnoHhW8UKHCF9jBe6zbKCAWprcZLVO7zXrBa7k2A6lrMn7gAenNI8FLolQHntPmgm4mPA3S0inoyifNxT06SUk2+VmXLNCXdg/JSdAs1m/t5UGrFevWPFEKEKu+/2LNu5proJ+Ox9FiqppiPqmGc8xgFIy9GLkAYI1rSzmGwbLumA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3VrjJy/viKtUTs/dRGwMV1X0W0tQdVKWwAITPA4U3ZA=;
+ b=jwdoWFWHtvJ9cCOL/OEBvHMzmqCGDkzk0cgtCySxYgvIRUIsEY2XES9qDfLTqieKnmZCstc5HgIO9ayVn+80OvUeX2olPTH2YM5ZSdUzDr0Y56/LDheFj0Yzl6Q4ZCv+hVwIF7P9qLAeN1hPaByVxJpXQAFsTsne87qJTgtenPK6/90dAhjDBy+8CsnW+kqKKsAkyXLORoWxwvunTVfE74yVqd1xcifhoF9JtPQm+8m0TLUqNc2YLk469+yXdOiXRhdRpu+dtiz/mWXgNyW6CMc1Tr9v7PMUWM62FD20LTXFWGzTPxzVJ/p8/3nAjnicekQzmN8c2jmLPjV24hLW9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3VrjJy/viKtUTs/dRGwMV1X0W0tQdVKWwAITPA4U3ZA=;
+ b=PIaWtuOq4FRfntViChhgV6Cg1zHruxNPeOTMDWaDY6OUR9n9flpBpKWOo2SLMRoNE79TpeCpTnQewA9htFwffr7OKVjhqQacHeqDQYKH6QvHof5R/QcSeflVVWoDWL9XbMxxoZA/tTqbua2DHTonfF5MR7lu0k51qKDvoEjoiOU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB5925.eurprd04.prod.outlook.com (2603:10a6:20b:ab::19)
+ by AS8PR04MB8053.eurprd04.prod.outlook.com (2603:10a6:20b:2ad::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Tue, 25 Oct
+ 2022 08:34:52 +0000
+Received: from AM6PR04MB5925.eurprd04.prod.outlook.com
+ ([fe80::7a34:469:fd53:922c]) by AM6PR04MB5925.eurprd04.prod.outlook.com
+ ([fe80::7a34:469:fd53:922c%7]) with mapi id 15.20.5746.021; Tue, 25 Oct 2022
+ 08:34:52 +0000
+From:   Joy Zou <joy.zou@nxp.com>
+To:     vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com
+Cc:     shengjiu.wang@nxp.com, martink@posteo.de, dev@lynxeye.de,
+        alexander.stein@ew.tq-group.com, peng.fan@nxp.com, david@ixit.cz,
+        aford173@gmail.com, hongxing.zhu@nxp.com, linux-imx@nxp.com,
+        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v8 0/2] dmaengine: sdma support hdmi audio
+Date:   Tue, 25 Oct 2022 16:36:07 +0800
+Message-Id: <20221025083609.2129260-1-joy.zou@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0061.apcprd02.prod.outlook.com
+ (2603:1096:4:54::25) To AM6PR04MB5925.eurprd04.prod.outlook.com
+ (2603:10a6:20b:ab::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818031512.319310-4-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB5925:EE_|AS8PR04MB8053:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9fd8c991-2ad6-47b1-298d-08dab663c910
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nX6iVzVEYkspTsYUzE5vpAenu/MjOyN+BhaVhWfjbMUSLHbUbz/0xFohIa/02JipRdyXt+WlUHPVT/pwlPHmb/lq3AT80DKiuz9IDU+rxlLXNiCrPGegq1dUnRWCYG2ueEKAGLlg4Os/cKshB1EB0WVKI8b7ZcTkyMSL5DUIH4k11V/5cuz0yzOkhwpClxK84O70gfvIK0JznulIAtAOPRBqshjsEz8LpL+djJNQgYHIoS8S7sHwzpGF+hsd3a3DwXXrSTIHxXYhBdQ7mjSnspJsqoweHAWfqkT+zsRRCazChaTu6GJbo3c21oZ7XFirK1qFcXnByHyX3E85Mj3t0W77RTGW4l5ds6xsMVABPCI04PUlo8faYLH8fnB5Ez1XBG3XyBa9S/udrX1wxCMcGaGr9+q4UUVuKlqjc0Y3QfbuC9Xw7VNXc0GI3sppBEWGO2Ul3613KTlhlAP8kKhuaq3yu1hUyM388Ff9HIT2h63kOmyZsrVfXJ96cEP7vUvLP510eGNNo11btpVuSSWhnZXk6DK++UvFgICD0/sNiDfx4tI4DcwKGYp3Wsu+KcojeZ/6VPHa6HFBUpOQ2cdfz8YLCZoXgCzJKqWHH3w252M1VddrAy/Jw1qYmexbW867ArAc+zLE4blK2HjgCag+oSZq8Zn0AXzhpGnWPyCs6vPKW8H3Mgei8t8ShEksiyQvl0KxQ8WVWqHtbhQIJ7a011fczrg9Mn/Gu8toaGFhX807RfEbNQjaSEf2DkLNm5mX
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5925.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(366004)(346002)(39860400002)(396003)(451199015)(6506007)(2906002)(316002)(52116002)(36756003)(1076003)(8936002)(5660300002)(6666004)(6512007)(41300700001)(66946007)(186003)(7416002)(66476007)(66556008)(2616005)(4326008)(44832011)(8676002)(4744005)(38350700002)(38100700002)(86362001)(26005)(83380400001)(478600001)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zPFJ6xcbiHLm4LK3Tw9XJgFE1GmiSMvBeIfvsl4WuvaLdxmvXTt8bKUljwVk?=
+ =?us-ascii?Q?7NeH4Y/rf+0r2iXqiHY2tKGgwY8uJbymeCrQL4PMZZJNKKrp72kD0XwcMRjQ?=
+ =?us-ascii?Q?V0bvyDUADdWpQ7ZfrlnFW3HtkyQDYRpMfpzovM3Ur8vrNn3/C7AzRH8fwXu0?=
+ =?us-ascii?Q?+czBHAW2KOJJzsAEbLk86WsLyUHMV0nzAncggmXvbz322LANpOqZEFNPFstl?=
+ =?us-ascii?Q?4F35MEF3xZLRnoBU69wuX6vTvUypQq6R1eKW38pQU5RDAqS2YaAIs9Ccd9EW?=
+ =?us-ascii?Q?l8nPqge+p070yBZmt2zbOPWuWCDBccQSbLLiLaMEUNOGtemT/2j9LcsTvKvz?=
+ =?us-ascii?Q?9+9LRlHQNqllTFU4ffT/8CDRjEQzGACRJUarNPAKRTRa7FOZiEvcLRmfdWmf?=
+ =?us-ascii?Q?Wt16YUgZpnF0wCVYZC79N3Ta2AYj+g0EvZHxrv9iByZQ0BVmgVrXm0FqLr+y?=
+ =?us-ascii?Q?fZ2pcBjs5xdhlIVYE/avWxvNN3RoytQQ7Gt3nnT8uK3bia+s52zoKmavW1nk?=
+ =?us-ascii?Q?jZLHuWAy+3YxJ1HNli/VMxxrJwMxKUsQOuk83i81LQ/GvioDBughgXFnWFh3?=
+ =?us-ascii?Q?hrWdjLvM2cVoegRxsVdqmIDClKnlLZeRkpO4UJ2uXkJoE5990h+j2R+LWvrp?=
+ =?us-ascii?Q?7iGsQ8zNmlS5Wp8E0MFvdKX8nuJ4Ms7p3q7KG5fZTi+npKVW+kZVcdSxZTUc?=
+ =?us-ascii?Q?ljqMCFIZpD37mvK4hIorB++Al1R4NLyFLcTWKvWhbBLsPJ0Qf/IVEUtgngze?=
+ =?us-ascii?Q?1LCf2zmYw4atgl06DdW1P71dy7uDa2aP8BcBXf07jHZDU7BRbyucuXc3ymvl?=
+ =?us-ascii?Q?XZ62PqWdlMCGJ1L2AQCRJiBkfAeU3jpYzl5CsBarMygTYR8Aw+FaDUpmClkO?=
+ =?us-ascii?Q?c1HBvfNdTgduiOiDRdrekESoHJR6PV9XHW+582x8U7JcvD6aJzJOwRczZC6W?=
+ =?us-ascii?Q?0Lr5WkU+MQrMjJtXmtnTwgnUDjPH/OzwwjW4VfiErgLcltl2Z3Rkl4JA0mbX?=
+ =?us-ascii?Q?fadtVgVt1fUaQk1+VAE3GXO7Etb5sutkbx3cIbsPS1YBl8FtvZd+TdCd0ndz?=
+ =?us-ascii?Q?oe3bMGsro7aNNQ6TEBxjXLr641bNr7V/86wY9QNkmqEmIhGlfygcDd8KwkND?=
+ =?us-ascii?Q?t5HGmrlM9b9do71SYh9+jSjlb/AiQVoZvZ6WyXbFKn2ucwGT6tuTq6Y00/EB?=
+ =?us-ascii?Q?S+KGcBFkc8MKqiKIagYwKHfmjghkMlB2i0+JQlLfvBYt0hthiVhusuQNxrWE?=
+ =?us-ascii?Q?L8uVvJpn3LjsLTKVe7hYNl3SghuNcjftzaH2axvcEp27E5sn+nK8g9RFX69d?=
+ =?us-ascii?Q?RCgj2tRICK+7MQH4iwA4zuPmBVy7RlJ6h/yTwJ/moD4UBV3x/JhapAwrBXDq?=
+ =?us-ascii?Q?vNbAyY9ZljsMjIKVqPrBuqqwyjtDEVWmd2qsaNpM86X8jspgn3dbaj/+7NXa?=
+ =?us-ascii?Q?OTCgu9qohSBUAv6TjawIY4xn7LR6eoHS+HoH5Jt9tiTA4Wz1WrSpPprbuIwe?=
+ =?us-ascii?Q?C7BZAVJzJ6a9wGcdnoBusyAH7eegdCj3OgaKmG80lGJCPDjF2Lw8IVbAqPvk?=
+ =?us-ascii?Q?2gqIe27+dsR/d9uGMvWicDSC4QOGIiKQShvzG/sY?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fd8c991-2ad6-47b1-298d-08dab663c910
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5925.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 08:34:52.0924
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 03udGjYEsUboF2JxOY/cSMQzCbHCoGMB0mceDyPFLkDw3nVNzM6Oqdx8qYG2j3lv
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8053
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Resending to Bjorn's current address. ]
+The patchset supports sdma hdmi audio.
+For the details, please check the patch commit log.
 
-On Wed, Aug 17, 2022 at 08:15:11PM -0700, Bjorn Andersson wrote:
-> With the PMIC GLINK service, the host OS subscribes to USB-C altmode
-> messages, which are sent by the firmware to notify the host OS about
-> state updates and HPD interrupts.
-> 
-> The pmic_glink_altmode driver registers for these notifications and
-> propagates the notifications as typec_mux, typec_switch and DRM OOB
-> notifications as necessary to implement DisplayPort altmode support.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/soc/qcom/Makefile             |   1 +
->  drivers/soc/qcom/pmic_glink_altmode.c | 477 ++++++++++++++++++++++++++
->  2 files changed, 478 insertions(+)
->  create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
+Joy Zou (2):
+  dt-bindings: fsl-imx-sdma: Convert imx sdma to DT schema
+  dmaengine: imx-sdma: support hdmi in sdma
 
-> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
-> new file mode 100644
-> index 000000000000..8d2d563cb756
-> --- /dev/null
-> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
+ .../devicetree/bindings/dma/fsl,imx-sdma.yaml | 149 ++++++++++++++++++
+ .../devicetree/bindings/dma/fsl-imx-sdma.txt  | 118 --------------
+ drivers/dma/imx-sdma.c                        |  38 ++++-
+ include/linux/dma/imx-dma.h                   |   1 +
+ 4 files changed, 180 insertions(+), 126 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
+ delete mode 100644 Documentation/devicetree/bindings/dma/fsl-imx-sdma.txt
 
-> +static void pmic_glink_altmode_worker(struct work_struct *work)
-> +{
-> +	struct pmic_glink_altmode_port *alt_port = work_to_altmode_port(work);
-> +	struct pmic_glink_altmode *altmode = alt_port->altmode;
-> +
-> +	typec_switch_set(alt_port->typec_switch, alt_port->orientation);
-> +
-> +	if (alt_port->svid == USB_TYPEC_DP_SID)
-> +		pmic_glink_altmode_enable_dp(altmode, alt_port, alt_port->mode,
-> +					     alt_port->hpd_state, alt_port->hpd_irq);
-> +	else
-> +		pmic_glink_altmode_enable_usb(altmode, alt_port);
-> +
-> +	if (alt_port->hpd_state)
-> +		drm_bridge_hpd_notify(&alt_port->bridge, connector_status_connected);
-> +	else
-> +		drm_bridge_hpd_notify(&alt_port->bridge, connector_status_disconnected);
-> +
-> +	pmic_glink_altmode_request(altmode, ALTMODE_PAN_ACK, alt_port->index);
-> +};
+-- 
+2.37.1
 
-I'm seeing fairly frequent crashes during boot of the X13s due to these
-notifications being propagated before things have been fully set up:
-
-[   16.591910] panel-simple-dp-aux aux-aea0000.displayport-controller: Detected SHP LQ140M1JW48 (0x1511)
-[   16.592142] qcom,fastrpc-cb 1b300000.remoteproc:glink-edge:fastrpc:compute-cb@12: Adding to iommu group 17
-[   16.597644] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-[   16.597653] Mem abort info:
-[   16.597657]   ESR = 0x0000000096000004
-[   16.597663]   EC = 0x25: DABT (current EL), IL = 32 bits
-[   16.597670]   SET = 0, FnV = 0
-[   16.597675]   EA = 0, S1PTW = 0
-[   16.597680]   FSC = 0x04: level 0 translation fault
-[   16.597686] Data abort info:
-[   16.597689]   ISV = 0, ISS = 0x00000004
-[   16.597694]   CM = 0, WnR = 0
-[   16.597698] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000106b93000
-[   16.597706] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
-[   16.597722] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-[   16.597731] Dumping ftrace buffer:
-[   16.597742]    (ftrace buffer empty)
-[   16.597744] Modules linked in: fastrpc(+) rpmsg_ctrl qrtr_smd rpmsg_char qcom_battmgr pmic_glink_altmode rtc_pm8xxxr
-[   16.597831] CPU: 0 PID: 389 Comm: kworker/0:3 Not tainted 6.1.0-rc2 #195
-[   16.597838] Hardware name: Qualcomm QRD, BIOS 6.0.220110.BOOT.MXF.1.1-00470-MAKENA-1 01/10/2022
-[   16.597842] Workqueue: events pmic_glink_altmode_worker [pmic_glink_altmode]
-[   16.597864] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   16.597870] pc : drm_kms_helper_hotplug_event+0x1c/0x50
-[   16.597882] lr : drm_kms_helper_hotplug_event+0x18/0x50
-[   16.597887] sp : ffff80000c20bca0
-[   16.597889] x29: ffff80000c20bca0 x28: ffffdba5eadbb000 x27: ffff22a9f6f2dc05
-[   16.597898] x26: ffffdba5eadc0b20 x25: ffffdba5eadd8ca0 x24: 0000000000000000
-[   16.597906] x23: 0000000000000003 x22: ffff22a888526000 x21: 0000000000000002
-[   16.597914] x20: ffff22a88ceed000 x19: ffff22a888526000 x18: 0000000000000020
-[   16.597921] x17: 4d003632323d524f x16: 4a414d00313d4755 x15: 4c50544f48006d72
-[   16.597929] x14: 0000000000000001 x13: 0000000000000040 x12: 0000000000000000
-[   16.597936] x11: 0000000000000000 x10: 0000000000000228 x9 : 0000000000000000
-[   16.597944] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000062e00
-[   16.597951] x5 : 0000000000000000 x4 : ffff22a9f6f2d290 x3 : 0000000000062f00
-[   16.597959] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
-[   16.597965] Call trace:
-[   16.597968]  drm_kms_helper_hotplug_event+0x1c/0x50
-[   16.597973]  drm_bridge_connector_hpd_cb+0xa0/0xc0
-[   16.597983]  drm_bridge_hpd_notify+0x40/0x60
-[   16.597990]  pmic_glink_altmode_worker+0xc0/0x150 [pmic_glink_altmode]
-[   16.598006]  process_one_work+0x288/0x6c0
-[   16.598014]  worker_thread+0x74/0x450
-[   16.598019]  kthread+0x118/0x120
-[   16.598028]  ret_from_fork+0x10/0x20
-[   16.598039] Code: f9000bf3 aa0003f3 97ff22af f9445e60 (f9400801) 
-[   16.598043] ---[ end trace 0000000000000000 ]---
-[   16.603424] [drm] Initialized msm 1.9.0 20130625 for ae01000.mdp on minor 0
-
-I've verified that it is the funcs pointer in
-drm_kms_helper_hotplug_event() which is NULL and a hack like the below
-prevents the crash:
-
-diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
-index 69b0b2b9cc1c..d515f5b6f3d5 100644
---- a/drivers/gpu/drm/drm_probe_helper.c
-+++ b/drivers/gpu/drm/drm_probe_helper.c
-@@ -661,7 +661,9 @@ void drm_kms_helper_hotplug_event(struct drm_device *dev)
- {
-        /* send a uevent + call fbdev */
-        drm_sysfs_hotplug_event(dev);
--       if (dev->mode_config.funcs->output_poll_changed)
-+
-+       WARN_ON(!dev->mode_config.funcs);
-+       if (dev->mode_config.funcs && dev->mode_config.funcs->output_poll_changed)
-                dev->mode_config.funcs->output_poll_changed(dev);
- 
-        drm_client_dev_hotplug(dev);
-
-It appears that pointer is set in msm_drm_init(), which suggests events
-are being forwarded before the driver is ready.
-
-Johan
