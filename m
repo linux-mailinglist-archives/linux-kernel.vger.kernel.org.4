@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF5360C696
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3E960C6CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiJYIg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S230294AbiJYIqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbiJYIgI (ORCPT
+        with ESMTP id S229777AbiJYIpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:36:08 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D24B1B97
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666686959; x=1698222959;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=06nalujSve5fq7Zr8pswHrs1yGAHFNbk4ISagSP3o7w=;
-  b=ijfPwmJOHDN9eFDM9cC4uxtbCkGfDpfdF8qpOLuE/HjS7EvprS8IpP48
-   BTmupnFeNDqT2HrxrJOeV7B8kgFV97nO8WmV3gpSNcPhG3er+Fve53R12
-   bSfuJT7tKjd/A9+9hNnjyKPs6ACxCS2oXWaeFnF1WFml89jAFaczDfRj+
-   j1JTAofwosILuP8Cx6MesRd0aJNTbMs3RTqLRsG/h7R7KWoTOVvirT5Pc
-   Vv9rK2/mYvszwyxzuKoWm9jjYGHrMyGpj+ZHYcU/8IKQFTbhKCQkt28uI
-   Lp5U4wA/nrGXtJEFniA+9LWmRdB/Qfd4aX7CFz4DbHfaNhGgW96VqPwVe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="309310189"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="309310189"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 01:35:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="774117588"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="774117588"
-Received: from louislifei-optiplex-7090.sh.intel.com ([10.239.146.218])
-  by fmsmga001.fm.intel.com with ESMTP; 25 Oct 2022 01:35:48 -0700
-From:   Fei Li <fei1.li@intel.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     dave.hansen@intel.com, gregkh@linuxfoundation.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, Yu1.Wang@intel.com,
-        conghui.chen@intel.com, fengwei.yin@intel.com
-Subject: [PATCH] x86/acrn: Set X86_FEATURE_TSC_KNOWN_FREQ
-Date:   Tue, 25 Oct 2022 16:41:47 +0800
-Message-Id: <20221025084147.4118463-1-fei1.li@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Oct 2022 04:45:55 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF2AD18D1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:45:54 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id p16so9746114iod.6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:45:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r7Y5khI94/D2ljSZhlC1O6a2PmmY16yoIwTovHKDb3o=;
+        b=a1vITaQWC9wX5kZL0LSKI6aBsiRjCc4Sv++aaVxhu7tmXDZWlAkT4hTB/LO2SU8kei
+         OpaIiKyH8rO75wdLEY76es+7cGVc6FI9hNpKUIISNQkOwERw7tYB8wCyKB0EzPYw+9ko
+         ASdRb7Pp8VU6GGx4cDhDRamITFOdGk8+vIPjI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r7Y5khI94/D2ljSZhlC1O6a2PmmY16yoIwTovHKDb3o=;
+        b=K1LmgwAkxHaJHkHGVUTogcYTCwCYC/sCtlOHcp+M+qk22ZZEq3n0I3Szp0jQQ1lmnf
+         Kfuo8RleBheAaFnJTKTpzdb7iphFFNsEBNhgnYFX5KKq/jOHtwKuLQqpmKRNTOWRvM8o
+         54BK6MH99Lps9M/ojttbW1Amf7oXMVYpDc8Vn4Ujyb+PFjVt/3sxrOJWFbLepf9Z3zng
+         ICbRlQNcp1HkfowhevoYyHKOJTwXWOZj7q2lwuzCNOtm3rMgzYgfabhbyXWxfIO7XUu7
+         tfBZhmP97Krh1K6qBscnvqVd2aTEI/kVJyPnCqsp6LigEtgfAD9cv1LTlHy3JPOwBtHI
+         EcWQ==
+X-Gm-Message-State: ACrzQf2u3NsLRi16Kr9fQcoprXgyJN3SpS1TpKH8v8EenopUTA0TIUXV
+        WJu1TbCWHVO2YkzFRxpOSd3Keu5oQoCa1s/7
+X-Google-Smtp-Source: AMsMyM7CzvIvGFcWSx+6ebHVvTIKLLDt53Qp9ih4SXZLRcyOp3JPzd5ZakbmUjvOg4NQYLNCvEhY9A==
+X-Received: by 2002:a05:6638:138c:b0:364:4c3:eafc with SMTP id w12-20020a056638138c00b0036404c3eafcmr24641282jad.163.1666687553298;
+        Tue, 25 Oct 2022 01:45:53 -0700 (PDT)
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com. [209.85.166.50])
+        by smtp.gmail.com with ESMTPSA id p17-20020a02b391000000b00374a9dbd061sm686273jan.73.2022.10.25.01.45.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 01:45:52 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id n73so9693569iod.13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:45:51 -0700 (PDT)
+X-Received: by 2002:a02:cc51:0:b0:36d:df36:fcb1 with SMTP id
+ i17-20020a02cc51000000b0036ddf36fcb1mr8743541jaq.51.1666687551449; Tue, 25
+ Oct 2022 01:45:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+References: <20221025050450.1743072-1-pedro.guilherme@espectro.eng.br> <20221025050450.1743072-2-pedro.guilherme@espectro.eng.br>
+In-Reply-To: <20221025050450.1743072-2-pedro.guilherme@espectro.eng.br>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 25 Oct 2022 10:45:40 +0200
+X-Gmail-Original-Message-ID: <CANiDSCs1pQEq73=vuNR9gymLMZFDkS3acDXRPNT=hc=eEvLzSA@mail.gmail.com>
+Message-ID: <CANiDSCs1pQEq73=vuNR9gymLMZFDkS3acDXRPNT=hc=eEvLzSA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] media: uvc_driver: fix assignment inside if condition
+To:     Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
+Cc:     laurent.pinchart@ideasonboard.com, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,52 +74,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoiding recalibration by setting X86_FEATURE_TSC_KNOWN_FREQ.
-This patch also removes `inline` for acrn_get_tsc_khz() since
-it doesn't make sense.
+On Tue, 25 Oct 2022 at 07:08, Pedro Guilherme Siqueira Moreira
+<pedro.guilherme@espectro.eng.br> wrote:
+>
+> Fixes 'do not use assignment in if condition' errors issued by
+> scripts/checkpatch.pl on drivers/media/usb/uvc/uvc_driver.c
+>
+> Signed-off-by: Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
+Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index b591ad823c66..7b6c97ad3a41 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -1174,7 +1174,8 @@ static int uvc_parse_control(struct uvc_device *dev)
+>                     buffer[1] != USB_DT_CS_INTERFACE)
+>                         goto next_descriptor;
+>
+> -               if ((ret = uvc_parse_standard_control(dev, buffer, buflen)) < 0)
+> +               ret = uvc_parse_standard_control(dev, buffer, buflen);
+> +               if (ret < 0)
+>                         return ret;
+>
+>  next_descriptor:
+> @@ -2213,7 +2214,8 @@ static int uvc_probe(struct usb_interface *intf,
+>         usb_set_intfdata(intf, dev);
+>
+>         /* Initialize the interrupt URB. */
+> -       if ((ret = uvc_status_init(dev)) < 0) {
+> +       ret = uvc_status_init(dev);
+> +       if (ret < 0) {
+>                 dev_info(&dev->udev->dev,
+>                          "Unable to initialize the status endpoint (%d), status interrupt will not be supported.\n",
+>                          ret);
+> --
+> 2.38.1
+>
 
-Signed-off-by: Fei Li <fei1.li@intel.com>
-Reviewed-by: Yin, Fengwei <fengwei.yin@intel.com>
----
- arch/x86/include/asm/acrn.h | 5 -----
- arch/x86/kernel/cpu/acrn.c  | 6 ++++++
- 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/acrn.h b/arch/x86/include/asm/acrn.h
-index 1dd14381bcb6..aa12c74ea959 100644
---- a/arch/x86/include/asm/acrn.h
-+++ b/arch/x86/include/asm/acrn.h
-@@ -30,11 +30,6 @@ static inline u32 acrn_cpuid_base(void)
- 	return 0;
- }
- 
--static inline unsigned long acrn_get_tsc_khz(void)
--{
--	return cpuid_eax(ACRN_CPUID_TIMING_INFO);
--}
--
- /*
-  * Hypercalls for ACRN
-  *
-diff --git a/arch/x86/kernel/cpu/acrn.c b/arch/x86/kernel/cpu/acrn.c
-index 485441b7f030..c5ff75b6a949 100644
---- a/arch/x86/kernel/cpu/acrn.c
-+++ b/arch/x86/kernel/cpu/acrn.c
-@@ -24,6 +24,12 @@ static u32 __init acrn_detect(void)
- 	return acrn_cpuid_base();
- }
- 
-+static unsigned long acrn_get_tsc_khz(void)
-+{
-+	setup_force_cpu_cap(X86_FEATURE_TSC_KNOWN_FREQ);
-+	return cpuid_eax(ACRN_CPUID_TIMING_INFO);
-+}
-+
- static void __init acrn_init_platform(void)
- {
- 	/* Setup the IDT for ACRN hypervisor callback */
-
-base-commit: 1a2dcbdde82e3a5f1db9b2f4c48aa1aeba534fb2
 -- 
-2.34.1
-
+Ricardo Ribalda
