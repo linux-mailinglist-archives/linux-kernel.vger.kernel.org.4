@@ -2,99 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C951F60C58D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE12D60C58F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:41:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbiJYHlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
+        id S231918AbiJYHlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:41:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbiJYHlD (ORCPT
+        with ESMTP id S231924AbiJYHlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:41:03 -0400
-Received: from out199-9.us.a.mail.aliyun.com (out199-9.us.a.mail.aliyun.com [47.90.199.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239221162C5;
-        Tue, 25 Oct 2022 00:41:01 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VT2-i3n_1666683654;
-Received: from 30.240.99.167(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VT2-i3n_1666683654)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 15:40:57 +0800
-Message-ID: <93a9e613-c4ee-e2f8-63d0-45119c031670@linux.alibaba.com>
-Date:   Tue, 25 Oct 2022 15:40:53 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.1
-Subject: Re: [PATCH v2 12/15] crypto: arm64/sm4 - add CE implementation for
- ESSIV mode
+        Tue, 25 Oct 2022 03:41:15 -0400
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2043.outbound.protection.outlook.com [40.107.103.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC3011874D;
+        Tue, 25 Oct 2022 00:41:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MDAfKQ9liCYbUhai5JWcbHDAFhDdwCqai+zHTqNyz1qxEYDeJdrokv1ZaUwa72jk29E+qwIKyg+1H1j/dW7AEynuZxuheP2orvRStb3dMk1DOsRarC+Kok2am/K4yYhMcx2tnd4ed2k2juiDxLQbJhU2qWElVcSTqvk7ld/OTtiCaJU9BP4uUQvhGpidEccRWawqAEmAFIWVmL/kCgZyALda7EgkPli9nBloyhwH6YvWwoeiX3HRlmaxlCp/GwphP17igIGXr4pVrXP96mouVf3ESt9amIi94WQo6F7CBw0nUNL+K0IU7QZ1Ra9dBpSQlLzlYlrBIW5xmN42dSmM2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WWvghMhC1NQmtB9/XIEkgL74rG3D1/81WDnWtiTDyIM=;
+ b=ifzFSJgaQmvomOof2PYnP6fq6ItvK845E4B1s3L8TR/SFVo9Q1Y1zaHVmzbDH080k0gsHGdNoE9rLoSKEv+l8ubPCgmsbwBBrulr3xWbpau+TFTgu8BP10WNMEsadUmekPsJ2vRR8E9YUck3Oi4EdxuIMPa/NVbfmva4qvc3QDtw3HipfZwslXmR4lwFX2KjQulhPPq66EkBgScZPA92yY+G4JkSMiiuia6Qymgrkec/K7VshyvO3h/GyV4DFBwri27NOz1fp1SBw+rhkZDTds4p4HR8/wo/1GL+JwK00fwCFnzaTfn/xh1P2Mc7WCCOvCSTKuLWqUckJKZXIfOSYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WWvghMhC1NQmtB9/XIEkgL74rG3D1/81WDnWtiTDyIM=;
+ b=GdrSyJdulex06q8541v7KyK57qy04F4A8N/Q1Zp2NHT+wYo8LrbxbPE5lxTe6ssW7EmUZirhIWiVC3tP4rAfJgTXBd6jwSifWOxPlg8x0rCCbsp6DWINDYpisih+wuwRPmSiwdqs2HmLPRr9hCuCDaEl15BBxU8iNpLSL/5ZpGk=
+Received: from AM9PR04MB8397.eurprd04.prod.outlook.com (2603:10a6:20b:3b5::5)
+ by PAXPR04MB9328.eurprd04.prod.outlook.com (2603:10a6:102:2b6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Tue, 25 Oct
+ 2022 07:41:09 +0000
+Received: from AM9PR04MB8397.eurprd04.prod.outlook.com
+ ([fe80::f9b1:83:c855:6c2]) by AM9PR04MB8397.eurprd04.prod.outlook.com
+ ([fe80::f9b1:83:c855:6c2%3]) with mapi id 15.20.5746.028; Tue, 25 Oct 2022
+ 07:41:09 +0000
+From:   Claudiu Manoil <claudiu.manoil@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net] net: enetc: zeroize buffer descriptors in
+ enetc_dma_alloc_bdr()
+Thread-Topic: [PATCH net] net: enetc: zeroize buffer descriptors in
+ enetc_dma_alloc_bdr()
+Thread-Index: AQHY580AN98BLZW0GEKjvNxRt3wIMa4euhNw
+Date:   Tue, 25 Oct 2022 07:41:09 +0000
+Message-ID: <AM9PR04MB8397350EF076102B411906F396319@AM9PR04MB8397.eurprd04.prod.outlook.com>
+References: <20221024172049.4187400-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20221024172049.4187400-1-vladimir.oltean@nxp.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jussi Kivilinna <jussi.kivilinna@iki.fi>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20221018071006.5717-1-tianjia.zhang@linux.alibaba.com>
- <20221018071006.5717-13-tianjia.zhang@linux.alibaba.com>
- <Y1DHb66VYPzFlTwh@sol.localdomain>
- <6d2a98f4-c50d-d05b-4a24-08fdd3ee20fa@linux.alibaba.com>
- <Y1dyNWSdCesQlWm8@sol.localdomain>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <Y1dyNWSdCesQlWm8@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM9PR04MB8397:EE_|PAXPR04MB9328:EE_
+x-ms-office365-filtering-correlation-id: d2a69654-2b3a-4920-7020-08dab65c483e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: p1qHqepRNNj7m2TbeaLeDWtLngs8J7rM3YBNYeRDWQibJbVO1CtgT+7ITBZyHRcesNXgf9WIwVEiweCKx6ONnV8aldg5C0JB+m00ORCGIfOB1MxJmAVu7JysYZV2ODslAS9H9jIdoHdoIXarRC1mbPmwQP3hHv1bIs4KoaX9Izm2uaYB8RXM+ekrMXQWYjeuxUy5+hKPGdHs37YKa+hkTag6UsH0V9IfQ+5JqbN1bhTT8X67m70D2ht3XaRAA6Ya8qlHWv3jxm5iwJtXWV87HvWnAViQocj8M+z3aJyuhsnnxZAOw2xJWOWJb+OQEFrS+U/XIrcOxWF4pSCyLJmhQuAxWF4hv7jFYmPB/DgKT4gzFR1tg0CwyloteFhpzK1iYTk9k59sEpDmDvuBNM6YevbMxP8OXfcApXPdwG0hQCtXbPm7ptThpuxhG11XcO0F5tF6JcUahB9Vj/U3NQqj7mQikCdIfS8dc8JTm2EJ52VIfuZOYqJTMK5Onf4njn5EacrG2+hPdyR2uW5KKvR6zaj7kkjP5ASUPExNYiTOq6BA9sVEMHLUzHbSkzFfiKun/HwNKG3wzEve9h32wanWRYYeLvBTdcZdzoJiKWSiao8+7rh+Ko/ociPX95CxS/GJPPGe1WxS/XqzzOaGYGaX3BTKrVQHTaC12mUkkKYKoM02eagdOwned/K0qRe7kQ9e/seJY65h9uEd5qZczSzGRr+w7t6HbkwS03VzcVl1qAJPKwZvY5zCZs9Tslkk2uDhGcKaTXeTSLDPNeNhqpOv1g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8397.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(366004)(396003)(346002)(451199015)(83380400001)(186003)(38070700005)(86362001)(122000001)(38100700002)(44832011)(2906002)(41300700001)(52536014)(5660300002)(8936002)(55016003)(26005)(478600001)(9686003)(7696005)(6506007)(53546011)(71200400001)(66946007)(64756008)(8676002)(66446008)(4326008)(66476007)(66556008)(316002)(54906003)(558084003)(110136005)(76116006)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?kCHZPl5H0r4/uPuLxBQj+e8wAcim1ke6Oxqj91axBJg/IOObbt1tB1n1peIh?=
+ =?us-ascii?Q?qzibogmjTjrKrGir6X0JhnCcXmWUJiv9Z/R8x4LSJU/1StCYia6RZLNmFWaT?=
+ =?us-ascii?Q?FDhP+so3wVrv4cp68ay4eYJvIRcb1q2Ww62yxHcdjO0fgIEjQZhCS+A3KeVZ?=
+ =?us-ascii?Q?APtcKDn9ZktCWufgICnYILacXSzzvYNWce1AmxEtzf7yiNO9VNfiihMEFivf?=
+ =?us-ascii?Q?alO08FGV4PrG5Wp0AFh5uBtV/+DhdY10Lg6VidfQ1A4/yBMRpIG9Hz2reJ6D?=
+ =?us-ascii?Q?sBrzKCQuI4NN1sZjRcC2uaZaFBOk6mdKzG5hMoUwFdRLpvaHxPg6JHHKcsP5?=
+ =?us-ascii?Q?dHoCnJ60BtXGQo9OtKw3ifjHBA4c5VwMFKdgNK83qSJ2goi42DRKlBbMPOOp?=
+ =?us-ascii?Q?J3B1kv/GO2czZInEeudk5I+e9Kt5JcoBG0w+yhMmwSSVLt6nbeXu/Z1QNSyq?=
+ =?us-ascii?Q?FMw7Pw5MT+/HEWpsp6oSebfgf8Gzwnvwx9kCKX311ebQTAuWx2SZw8S88om/?=
+ =?us-ascii?Q?dfZg0MgEa7Z5oYVwtIBV1MFzD1aeagvTt1TLrxEpBzxP18ydGA7jLZZFrnmE?=
+ =?us-ascii?Q?Ec+LH/4kdrpnfi4sP7H7GG+z9JiSJWq4Rdw0wk5BsEy9fLOTZgTxAy7F2L95?=
+ =?us-ascii?Q?mn/ycCfhViSjSUR8Y2Vy5mRB31VCc2VW15YBzkBVirl99k37eDGhUVEEst3W?=
+ =?us-ascii?Q?1nGzfDSH/Z268QU7mp9Iktjx9atflmZINzDb9vWGMYoVWSznhl13fZRCm2aQ?=
+ =?us-ascii?Q?3z900TuJPi5ClTc7VC2RScaueUShYGEYCXzHckaC1M2nW3dtwS0el7L+878q?=
+ =?us-ascii?Q?QxcHS4o759rfKqvIgasHCbVhL6v4z0nrPkPEAfifk5ZuMUwTsPBOlK0wqCjw?=
+ =?us-ascii?Q?8eghmeQ+gtIMNttg/OXosydwTfx9tBHLgRKy1bmThKs5CVugbwJKcePTdILo?=
+ =?us-ascii?Q?TE0j6bzj1XWws4C7MjIeAVLfNxL4tqfsx8tMkYXZ/cAUaUx97YajGvCdqnWJ?=
+ =?us-ascii?Q?zCUlKzYfc1gEvPtfmq1zpnxbFUeEfAF25/EZlxZp8WP5r+1ju4llj5GN9aTh?=
+ =?us-ascii?Q?zEHDH7D/cnRCe8CXLs/JccAXcGheQvQET0tNZ1w0jxCgPSeD2lZITU5lntk1?=
+ =?us-ascii?Q?DTua9vCaseya1NmOe2nfbCVoMMLuf9cWcgryAygaiglyvPJsisER7GgpBfT1?=
+ =?us-ascii?Q?/qB+4/F5B1RRhhyTagCfy2q6PRJvqK8pboEMS0amRgW1aMAHG+bA2PjaYoPO?=
+ =?us-ascii?Q?QbBrvMALYTPkPo5p98ffjLy+mS7izmv/O+iNfqpotZQmsBc3Qy5j7aK9dB03?=
+ =?us-ascii?Q?vpDLWWABg0fXga7h9GoYwLq+tBWCy39431RncANCX9ENj+I8VgtdiUYWmHLZ?=
+ =?us-ascii?Q?V/Nt7zCED0RyZJb8mQvedWUvL2utSBknr/lHttD/Hd3WKwzyywlxWDJfIrn5?=
+ =?us-ascii?Q?mxMmNJ8gH1Sq88CRKVWv4GZnBqmmiYVSfdd51JzCj2if1utzBldw/UxSuSxT?=
+ =?us-ascii?Q?fl5q9K0Fb1Zo6o35HLaEJ+fIqL81ZJ8SoOOiohGaeLfcYx1qMrDbp3utemww?=
+ =?us-ascii?Q?6isqu5SVSp74/UywGLgMjq+SnV78VfMSYJUGuqpO?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8397.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2a69654-2b3a-4920-7020-08dab65c483e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 07:41:09.1019
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rW89di6OhJUrlD2jlwkrzeeSR/fKRAXH/Ev/Hh0lsKE4xVjEPrBC3XwruuxmsD6vm59TnPZe8xuIhUBYfBYM8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9328
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
+> -----Original Message-----
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Sent: Monday, October 24, 2022 8:21 PM
+[...]
+> Subject: [PATCH net] net: enetc: zeroize buffer descriptors in
+> enetc_dma_alloc_bdr()
+>=20
 
-On 10/25/22 1:20 PM, Eric Biggers wrote:
-> On Fri, Oct 21, 2022 at 10:47:14AM +0800, Tianjia Zhang wrote:
->> Hi Eric,
->>
->> On 10/20/22 11:58 AM, Eric Biggers wrote:
->>> On Tue, Oct 18, 2022 at 03:10:03PM +0800, Tianjia Zhang wrote:
->>>> This patch is a CE-optimized assembly implementation for ESSIV mode.
->>>> The assembly part is realized by reusing the CBC mode.
->>>>
->>>> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
->>>
->>> Is there still a use case for CBC-ESSIV mode these days, now that everyone is
->>> using XTS instead?
->>>
->>> - Eric
->>
->> The mainstream is already using XTS, but CBC-ESSIV is still an optional
->> backup algorithm, especially in block crypto and fscrypto, I'm currently
->> working on supporting the SM4 algorithm for these subsystems.
->>
-> 
-> The only reason that AES-CBC-ESSIV support was added to fs/crypto/ was because
-> someone had a low-power embedded device with a hardware crypto accelerator that
-> only supported AES-CBC.
-> 
-> Nothing like that is relevant here, as this is just a software implementation.
-> 
-> Please just don't include ESSIV.  There's no need to implement random useless
-> algorithms.  It could always be added later if a use case actually arises.
-> 
-> - Eric
-
-Thanks for this information, I will remove the ESSIV code in the next
-patch.
-
-Best regards,
-Tianjia
+Reviewed-by: Claudiu Manoil <claudiu.manoil@nxp.com>
