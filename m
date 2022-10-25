@@ -2,111 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DFE60C657
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFFD60C65A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232217AbiJYIWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S232221AbiJYIX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232142AbiJYIWl (ORCPT
+        with ESMTP id S230214AbiJYIX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:22:41 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B853CEF5BD;
-        Tue, 25 Oct 2022 01:22:39 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 5DB1E1C0016; Tue, 25 Oct 2022 10:22:38 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 10:22:37 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        David Gow <davidgow@google.com>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 4.19 195/229] drm/amd/display: fix overflow on MIN_I64
- definition
-Message-ID: <20221025082237.GB9520@duo.ucw.cz>
-References: <20221024112959.085534368@linuxfoundation.org>
- <20221024113005.440623785@linuxfoundation.org>
+        Tue, 25 Oct 2022 04:23:56 -0400
+Received: from a.mx.secunet.com (a.mx.secunet.com [62.96.220.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9D1F9710;
+        Tue, 25 Oct 2022 01:23:54 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by a.mx.secunet.com (Postfix) with ESMTP id CD49720571;
+        Tue, 25 Oct 2022 10:23:51 +0200 (CEST)
+X-Virus-Scanned: by secunet
+Received: from a.mx.secunet.com ([127.0.0.1])
+        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id rumSf-F5yxFL; Tue, 25 Oct 2022 10:23:51 +0200 (CEST)
+Received: from mailout1.secunet.com (mailout1.secunet.com [62.96.220.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by a.mx.secunet.com (Postfix) with ESMTPS id 5FB562053B;
+        Tue, 25 Oct 2022 10:23:51 +0200 (CEST)
+Received: from cas-essen-01.secunet.de (unknown [10.53.40.201])
+        by mailout1.secunet.com (Postfix) with ESMTP id 4FB2B80004A;
+        Tue, 25 Oct 2022 10:23:51 +0200 (CEST)
+Received: from mbx-essen-01.secunet.de (10.53.40.197) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 10:23:51 +0200
+Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
+ (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
+ 2022 10:23:50 +0200
+Received: by gauss2.secunet.de (Postfix, from userid 1000)
+        id 5CB843180D2B; Tue, 25 Oct 2022 10:23:50 +0200 (CEST)
+Date:   Tue, 25 Oct 2022 10:23:50 +0200
+From:   Steffen Klassert <steffen.klassert@secunet.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+CC:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        "David Ahern" <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] esp6: remove redundant variable err
+Message-ID: <20221025082350.GR2602992@gauss3.secunet.de>
+References: <20221017220809.864495-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="f2QGlHpHGjS2mn6Y"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20221024113005.440623785@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221017220809.864495-1-colin.i.king@gmail.com>
+X-ClientProxiedBy: cas-essen-02.secunet.de (10.53.40.202) To
+ mbx-essen-01.secunet.de (10.53.40.197)
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Oct 17, 2022 at 11:08:09PM +0100, Colin Ian King wrote:
+> Variable err is being assigned a value that is not read, the assignment
+> is redundant and so is the variable. Remove it.
+> 
+> Cleans up clang scan warning:
+> net/ipv6/esp6_offload.c:64:7: warning: Although the value stored to 'err'
+> is used in the enclosing expression, the value is never actually read
+> from 'err' [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
---f2QGlHpHGjS2mn6Y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi!
-
-> From: David Gow <davidgow@google.com>
->=20
-> [ Upstream commit 6ae0632d17759852c07e2d1e0a31c728eb6ba246 ]
->=20
-> The definition of MIN_I64 in bw_fixed.c can cause gcc to whinge about
-> integer overflow, because it is treated as a positive value, which is
-> then negated. The temporary positive value is not necessarily
-> representable.
->=20
-> This causes the following warning:
-> ../drivers/gpu/drm/amd/amdgpu/../display/dc/dml/calcs/bw_fixed.c:30:19:
-> warning: integer overflow in expression =E2=80=98-9223372036854775808=E2=
-=80=99 of type
-> =E2=80=98long long int=E2=80=99 results in =E2=80=98-9223372036854775808=
-=E2=80=99 [-Woverflow]
->   30 |         (int64_t)(-(1LL << 63))
->      |                   ^
->=20
-> Writing out (-MAX_I64 - 1) works instead.
-
-While this probably fixes the warning, better fix would be to include
-limits.h which already has equivalent definitions.
-
-Thanks and best regards,
-								Pavel
-
-> -#define MIN_I64 \
-> -	(int64_t)(-(1LL << 63))
-> -
->  #define MAX_I64 \
->  	(int64_t)((1ULL << 63) - 1)
-> =20
-> +#define MIN_I64 \
-> +	(-MAX_I64 - 1)
-> +
->  #define FRACTIONAL_PART_MASK \
->  	((1ULL << BW_FIXED_BITS_PER_FRACTIONAL_PART) - 1)
-> =20
-> --=20
-> 2.35.1
->=20
->=20
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---f2QGlHpHGjS2mn6Y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY1eczQAKCRAw5/Bqldv6
-8pVCAJ43iW1FofsAsPLtMMAPmphPLrb+YQCgknCNaLt+z1Rby0N/lPRR3e0r9Tw=
-=H1iX
------END PGP SIGNATURE-----
-
---f2QGlHpHGjS2mn6Y--
+Applied to ipsec-next, thanks!
