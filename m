@@ -2,62 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707E860CBA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7DF60CBA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbiJYMSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S231470AbiJYMTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiJYMSk (ORCPT
+        with ESMTP id S229740AbiJYMTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:18:40 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70601181CA2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:18:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666700316; x=1698236316;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=E39ZJi+fK0k/tLrnny5MphRS3c/RTFP05Ljn5tZgGl0=;
-  b=hxU5gYVN+ci2RNLS2a9dxwfq7+Ny5LGFupn8fY7OuzFOnF8sFPq0y3B3
-   A9DMjGvCL0DESbfNYAV3Nx/csMLOPMrUzbt6cpTXgtZiiVhnahtzqI0TJ
-   f+KqDL3N4+G3mGbUENe34LywCZeoVLFTl/6FP05b4tZef8d/wGVzwU8OM
-   RM+oIY2ytrCt7LzDT7JAcugHor1j7AnVz2ZRjgCB48GZRTAN7eqeWfoZs
-   4roeRX3ClqFpQT90Da/MO5iOJTLiadfD/lhc3N2loB2YgGk+CtAOMu6w2
-   jNj/pI3NCPApLau02A6JIz0OISiVdZWY9pbaGT37/y9FxHR1p3/d0xRfN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="305270694"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="305270694"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 05:18:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="634074074"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="634074074"
-Received: from sunyi-station.sh.intel.com (HELO sunyi-station..) ([10.239.159.10])
-  by fmsmga007.fm.intel.com with ESMTP; 25 Oct 2022 05:18:33 -0700
-From:   Yi Sun <yi.sun@intel.com>
-To:     dave.hansen@intel.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     sohil.mehta@intel.com, ak@linux.intel.com,
-        ilpo.jarvinen@linux.intel.com, heng.su@intel.com,
-        tony.luck@intel.com, dave.hansen@linux.intel.com,
-        Yi Sun <yi.sun@intel.com>
-Subject: [RESEND PATCH v5 2/2] tools/testing/fpu: Add script to consume trace log of xsave latency
-Date:   Tue, 25 Oct 2022 20:17:49 +0800
-Message-Id: <20221025121749.584519-3-yi.sun@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221025121749.584519-1-yi.sun@intel.com>
-References: <20221025121749.584519-1-yi.sun@intel.com>
+        Tue, 25 Oct 2022 08:19:06 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BB9181CA2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:19:05 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id w29so231935qtv.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qKDSkNGJdreMgm3y1fnkqMMOtoJ4CwGZ1aA+ETdnP5M=;
+        b=HMcCNMgIMtRibFlfaeFOC1TUxpXIRLqgkjuYOfbW0nQP1Mg0YUKXcGkFu4ff4vS1/u
+         7hSPHlr0F3rKCnREdTn/8uLk3gQQIyo/RTeCrE5ZBndZLlc7DfJXXOZUUaq4px+0VCLa
+         Cv+smwbwojc282ovhmlzY+/caN8iDoi643eGii2QDUNTZub2jYSM0JvLAf1lTV/8BGUZ
+         g51ttsT1CZvYC7a+ckbuUN7gsaCvJYPG5seh+/HYx1gfN77Cf7SkOXtA4LohMQUQ15PV
+         jUdfp3aASg/HT7frCeDgDOYO8KF0XomYyfu8vpq2n2XGDLPdnQmD7jkMyKiBRyWACwuI
+         xfLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qKDSkNGJdreMgm3y1fnkqMMOtoJ4CwGZ1aA+ETdnP5M=;
+        b=Gc37BtvJe43WabRjthz468L0p52xBpZmTFvnzpMyubyBqijtMKH9v/Y8bOcdNRbzQE
+         e/9RKk5YrFrcsJiyj379xlzBN6zQm5vYfP1LhXFNSRc0ChQTOPQ93wefcjVwVBM5YaUn
+         U5rf+Qi42RnnqOtT34wKN7ROKgW6SAU3AHj5h47Mvjqe4qNOr0XpZwZfuuTs3lmNVUSv
+         BZsTUqygo/tQG3L8Zl7vpqplW2nEx9KWTIbGK67XyDU5/fZSNGCMdv5K3vv5NYkA3ngj
+         diJXqBKSFAiAQw1+lCMwX2LTmn0Yz2b+KeYSuP1381w+9LQ+LBIPJl64n65xSyaYUGB7
+         wmVQ==
+X-Gm-Message-State: ACrzQf1OPgdYz3v4GkOTN9/20b0+z6rEDuhoTZxjRr7DWH6B4wkqUTVY
+        E3I6nd8ZVJbRXQ+DN/INRs8MWTlOQwVNRw==
+X-Google-Smtp-Source: AMsMyM6CmOT2i+snHgfCM1wCFxDmt74cMIkOkNAQxWTW3eEk0hFvMogIjQc/QEtbABWr5V5GhkSnng==
+X-Received: by 2002:ac8:5f10:0:b0:39d:290:3f6e with SMTP id x16-20020ac85f10000000b0039d02903f6emr26321959qta.108.1666700344432;
+        Tue, 25 Oct 2022 05:19:04 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id l4-20020a05620a28c400b006ecf030ef15sm1956757qkp.65.2022.10.25.05.19.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 05:19:03 -0700 (PDT)
+Message-ID: <38205667-d36f-e7a9-21b0-2e8597a662ff@linaro.org>
+Date:   Tue, 25 Oct 2022 08:19:02 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 2/2] dt-bindings: ASoC: simple-card: Add
+ system-clock-id property
+Content-Language: en-US
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        kuninori.morimoto.gx@renesas.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
+ <20221022162742.21671-2-aidanmacdonald.0x0@gmail.com>
+ <ef6a326b-5c61-988b-2ec2-cd8e233e5d28@linaro.org>
+ <GMvEU8xVTkjIoQ518XWAaLkhldSZHlk7@localhost>
+ <4ef59d94-d045-55fc-d531-c84e7edb8333@linaro.org>
+ <hXRpArckbrXUelDdaJ3Y2SErmKiuycXt@localhost>
+ <66c1a100-922e-4a33-e80c-fc80866acf03@linaro.org>
+ <jZCUALhj8PoqVkuWdtLf8LnPAj1wDakF@localhost>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <jZCUALhj8PoqVkuWdtLf8LnPAj1wDakF@localhost>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,270 +86,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consume the trace log dumped by trace points x86_fpu_latency_xsave and
-x86_fpu_latency_xrstor, calculate latency ranges for each RFBM and
-XINUSE combination including min, max, average and 97% tail latency.
+On 25/10/2022 05:14, Aidan MacDonald wrote:
+>> Krzysztof
+> 
+> Device trees already use standardized enumerations in other areas so it
+> isn't a new idea. Look under include/dt-bindings/clock. Every header
+> there contains an arbitrary enumeration of a device's clocks. In fact
+> most of include/dt-bindings is exactly for this purpose, to define
+> standard values that are not "just numbers" but an enum, a flag, etc,
+> with a special meaning. It is not specific to clocks.
+> 
+> There is no dt-binding for system clock ID, because prior to this patch
+> they were not exposed to DT in any way. But the enumerations themselves
+> already exist, eg. the IDs for nau8821 codec:
+> 
+>     /* System Clock Source */
+>     enum {
+>         NAU8821_CLK_DIS,
+>         NAU8821_CLK_MCLK,
+>         NAU8821_CLK_INTERNAL,
+>         NAU8821_CLK_FLL_MCLK,
+>         NAU8821_CLK_FLL_BLK,
+>         NAU8821_CLK_FLL_FS,
+>     };
 
-Add the average of 97% tail latency to remove the unreasonable
-data which is introduced by interrupts or other noise. By adding the
-experimental code disabling interrupts before the calculation of
-latency, it's obvious to get the 3% tail latency has been filtered.
+OK, this looks good.
 
-Make use of sqlite3 to make the data statistics more efficient and
-concise. The output looks like following:
+> 
+> We would just be moving these into dt-bindings if somebody wants to
+> use a codec with simple-card. Future drivers would add the enum into
+> dt-bindings from the start because that's where it belongs.
 
-EVENTs                	RFBM   	XINUSE	lat_min	lat_max	lat_avg	lat_avg(97%)
-----------------------	-------	------	-------	-------	-------	------------
-x86_fpu_latency_xrstor	0x206e7	0x0   	364    	364    	364    	364
-x86_fpu_latency_xrstor	0x206e7	0x202 	112    	1152   	300    	276
-x86_fpu_latency_xsave 	0x206e7	0x202 	80     	278    	141    	137
-x86_fpu_latency_xsave 	0x206e7	0x246 	108    	234    	180    	177
+And the remaining piece I don't get is that these are not bindings for
+codec, but for sound audio card. You want to set "system-clock-id"
+property for audio card, while putting clock from codec, which will be
+used to pass back to the codec... so it is a property of the codec, not
+of the audio card. IOW, NAU8821_CLK_* does not configure here the clock
+of the system, but only, only clock of the codec.
 
-The XSAVE/XRSTOR latency trace log can be got by two ways:
-1. Generated by Kernel debugfs
-  echo 1 > /sys/kernel/debug/tracing/events/x86_fpu/enable
-  cat /sys/kernel/debug/tracing/trace_pipe > trace-log
 
-2. Generated by helper tool like 'trace-cmd'
-   trace-cmd record -e x86_fpu -F <command>
-   trace-cmd report > trace-log
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Yi Sun <yi.sun@intel.com>
-
-diff --git a/tools/testing/fpu/xsave-latency-trace.sh b/tools/testing/fpu/xsave-latency-trace.sh
-new file mode 100755
-index 000000000000..d45563984fd6
---- /dev/null
-+++ b/tools/testing/fpu/xsave-latency-trace.sh
-@@ -0,0 +1,227 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# (c) 2022 Yi Sun <yi.sun@intel.com>
-+
-+trace_log=$1
-+trace_lat_log=".trace_lat_log"
-+db_name="db_trace"
-+db_file="${db_name}.db"
-+table_raw="t_trace"
-+table_tail="t_trace_tail"
-+table_results="t_results"
-+events="x86_fpu_latency_xsave|x86_fpu_latency_xrstor"
-+
-+# The regex for the trace log. The rough pattern:
-+# (proc) (No.cpu) (flags) (timestamp): (tracepoint): latency:(123) RFBM:0x(123) XINUSE:0x(123)$
-+# Fold the regex into 3 parts making it easier to read.
-+regex1="([^\ ]*)[[:space:]]*\[([0-9]+)\][[:space:]]*(.....\ )?[[:space:]]*"
-+regex2="([0-9.]*):[[:space:]]*([^\ :]*):.*latency:([0-9]*)[[:space:]]*"
-+regex3="RFBM:(0x[0-9a-f]*)[[:space:]]*XINUSE:(0x[0-9a-f]*)$"
-+
-+function usage() {
-+	echo "This script consumes the tracepoint data, and dumps out the"
-+	echo "latency ranges for each RFBM combination."
-+	echo "Usage:"
-+	echo "$0 <trace-log>"
-+	echo "   trace-log:"
-+	echo "     Either generated by Kernel sysfs:"
-+	echo "       echo 1 > /sys/kernel/debug/tracing/events/x86_fpu/enable"
-+	echo "       cat /sys/kernel/debug/tracing/trace_pipe > trace-log"
-+	echo ""
-+	echo "     Or generate by helper tool like 'trace-cmd':"
-+	echo "       trace-cmd record -e x86_fpu"
-+	echo "       trace-cmd report > trace-log"
-+}
-+
-+# Check the dependent tools
-+# {@}: a list of third-part tools
-+function check_packages() {
-+	for pack in "$@"; do
-+		which $pack >& /dev/null
-+		if [[ $? != 0 ]]; then
-+			echo "Please install $pack before running this script."
-+			exit 1
-+		fi
-+	done
-+}
-+
-+# Run SQL command with sqlite3
-+# ${*}: SQL command fed to sqlite3
-+function SQL_CMD() {
-+	sqlite3 $db_file "$*"
-+}
-+
-+# Run SQL command with sqlite3 and format the output with headers and column.
-+# ${*}: SQL command fed to sqlite3
-+function SQL_CMD_HEADER() {
-+	sqlite3 -column -header $db_file "$*"
-+}
-+
-+# Create a table in the DB
-+# ${1}： name of the table
-+function create_table() {
-+	if [[ "$1" == "" ]]; then
-+		echo "Empty table name!"
-+		exit 1
-+	fi
-+	SQL_CMD "create table $1 (
-+		id INTEGER PRIMARY KEY AUTOINCREMENT,
-+		process TEXT,
-+		cpu INT,
-+		timestamp FLOAT,
-+		event_name TEXT,
-+		lat INT,
-+		RFBM INT,
-+		XINUSE INT);"
-+}
-+
-+# Round to the nearest whole number
-+# ${1}: a float number
-+# Output: integer
-+function round() {
-+	echo "scale=0; ($1+0.5)/1" | bc
-+}
-+
-+# Insert a record in the trace table
-+#
-+# process cpu  timestamp  event_name  lat  RFBM  XINUSE
-+# $2      $3   $4         $5          $6   $7    $8
-+
-+function insert_line() {
-+	if [[ "$1" == "" ]]; then
-+		echo "Empty table name!"
-+		exit 1
-+	fi
-+	SQL_CMD "INSERT INTO $1 (process, cpu, timestamp, event_name, lat, RFBM, XINUSE)
-+		VALUES (\"$2\", $3, $4, \"$5\", $6, $7, $8);"
-+}
-+
-+# Show the results of the trace statistics
-+function get_latency_stat() {
-+	SQL_CMD "create table $table_results (
-+		id INTEGER PRIMARY KEY AUTOINCREMENT,
-+		event_name TEXT,
-+		RFBM INT,
-+		XINUSE INT,
-+		lat_min INT,
-+		lat_max INT,
-+		lat_avg INT,
-+		lat_tail_avg INT);"
-+
-+	for((i=0; i<$cnt; i++));do
-+		event_name=`get_comb_item $table_raw $i event_name`
-+		RFBM=`get_comb_item $table_raw $i RFBM`
-+		XINUSE=`get_comb_item $table_raw $i XINUSE`
-+		lat_min=`get_comb_item $table_raw $i min\(lat\)`
-+		lat_max=`get_comb_item $table_raw $i max\(lat\)`
-+		lat_avg=`get_comb_item $table_raw $i avg\(lat\)`
-+		lat_tail_avg=`get_comb_item $table_tail $i avg\(lat\)`
-+
-+		lat_avg=`round $lat_avg`
-+		lat_tail_avg=`round $lat_tail_avg`
-+
-+		SQL_CMD "INSERT INTO $table_results
-+			(event_name, RFBM,XINUSE, lat_min, lat_max, lat_avg, lat_tail_avg)
-+			VALUES (\"$event_name\", $RFBM, $XINUSE, $lat_min, $lat_max,
-+			$lat_avg, $lat_tail_avg);"
-+	done
-+
-+	SQL_CMD_HEADER "select event_name[EVENTs],printf('0x%x',RFBM)[RFBM],
-+			printf('0x%x',XINUSE)[XINUSE],lat_min,lat_max,lat_avg,
-+			lat_tail_avg[lat_avg(97%)]
-+			from $table_results;"
-+}
-+
-+# Get the count of the combination of event_name, RFBM, XINUSE amount all lat trace records
-+function get_combs_cnt() {
-+	SQL_CMD "SELECT event_name, RFBM, XINUSE from $table_raw
-+		group by event_name,RFBM,XINUSE;" | wc -l
-+}
-+
-+# Get a specified combination from a table
-+# ${1}: name of table
-+# ${2}: the order of the combination of event_name, RFBM, XINUSE
-+# ${3}: the items which are wanted to be shown
-+function get_comb_item() {
-+	table=$1
-+	cnt=$2
-+	col=$3
-+	SQL_CMD "SELECT $col from $table group by event_name,RFBM,XINUSE limit $cnt,1;"
-+}
-+
-+# Get count of the records in a given table
-+# ${1}: name of the table
-+function get_rows_cnt() {
-+	table=$1
-+	SQL_CMD "SELECT count(*) from $table;"
-+}
-+
-+# Generate a new table from the raw trace table removing 3% tail traces.
-+function gen_tail_lat() {
-+	cnt=`get_combs_cnt`
-+	create_table $table_tail
-+
-+	for((i=0; i<$cnt; i++));do
-+		create_table t$i
-+		event_name=`get_comb_item $table_raw $i event_name`
-+		RFBM=`get_comb_item $table_raw $i RFBM`
-+		XINUSE=`get_comb_item $table_raw $i XINUSE`
-+
-+		SQL_CMD "insert into t$i(process,cpu,timestamp,event_name,lat,RFBM,XINUSE)
-+			select process,cpu,timestamp,event_name,lat,RFBM,XINUSE
-+			from $table_raw where event_name=\"$event_name\" and RFBM=$RFBM and
-+			XINUSE=$XINUSE ORDER BY lat ASC;"
-+
-+		row=`get_rows_cnt t$i`
-+		row=`echo "scale=0; ($row*0.97 + 0.5)/1" | bc`
-+
-+		SQL_CMD "insert into $table_tail
-+			(process,cpu,timestamp,event_name,lat,RFBM,XINUSE)
-+			select process,cpu,timestamp,event_name,lat,RFBM,XINUSE
-+			from t$i limit 0,$row;"
-+	done
-+
-+}
-+
-+if [[ ! -e "$trace_log" || $# != 1 ]];then
-+	usage
-+	exit 1
-+fi
-+
-+# Check dependency
-+# Make sure having following packages
-+check_packages sqlite3 bc wc cut
-+
-+# Filter trace log keeping latency related lines only
-+grep -E "$events" $trace_log > $trace_lat_log
-+cnt_lines=`wc -l $trace_lat_log | cut -d' ' -f1`
-+# Remove the old db file if it existed before creating
-+[[ -f $db_file ]] && rm -rf $db_file
-+
-+create_table $table_raw
-+
-+# Read each line from the temp file and insert into the table
-+i=0
-+while IFS= read -r line;
-+do
-+	((i = i + 1))
-+	echo -ne "(${i}/$cnt_lines) Importing trace log into database!\r"
-+	if [[ "$line" =~ ${regex1}${regex2}${regex3} ]]; then
-+		pname=${BASH_REMATCH[1]}
-+		cpu=${BASH_REMATCH[2]}
-+		ts=${BASH_REMATCH[4]}
-+		ename=${BASH_REMATCH[5]}
-+		lat=${BASH_REMATCH[6]}
-+		((rfbm=${BASH_REMATCH[7]}))
-+		((xinuse=${BASH_REMATCH[8]}))
-+
-+		insert_line $table_raw $pname $cpu $ts $ename $lat $rfbm $xinuse
-+	fi
-+done < $trace_lat_log
-+
-+gen_tail_lat
-+get_latency_stat
-+
-+# Cleanup
-+rm -rf $trace_lat_log $db_file
--- 
-2.34.1
+Best regards,
+Krzysztof
 
