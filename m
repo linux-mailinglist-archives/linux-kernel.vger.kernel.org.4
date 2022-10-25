@@ -2,55 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212FC60C62A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152C760C630
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiJYIQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S231497AbiJYIRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiJYIQe (ORCPT
+        with ESMTP id S229652AbiJYIRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:16:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1126791852
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:16:33 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1onF6e-0006vj-FP; Tue, 25 Oct 2022 10:16:16 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id B360810935C;
-        Tue, 25 Oct 2022 08:16:13 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 10:16:10 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        alim.akhtar@samsung.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] can: m_can: Add ECC functionality for message RAM
-Message-ID: <20221025081610.h6bjg6nuqdhkupvg@pengutronix.de>
-References: <20221021095833.62406-1-vivek.2311@samsung.com>
- <CGME20221021102639epcas5p2241192d3ac873d1262372eeae948b401@epcas5p2.samsung.com>
- <20221021095833.62406-7-vivek.2311@samsung.com>
+        Tue, 25 Oct 2022 04:17:49 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF9EB488A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:17:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 21so1100597edv.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:17:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uReB/Ptp2ISgZua1vja00OdAAxuE9UvI1yi/3W7gtmQ=;
+        b=zmZxcv2MRXqmhGwk5VoX9FaEB5pjRbgd480ucHf55c1ey0oqC1+ivsQ2IYL5X5LmIa
+         84yPBCLppWdqoO9leWdLQLEdspVAu09sW6UCUfCYg+uYc7WLXzsqfH9vYRveUqraIUER
+         s8xCbKHdXxg/NotjSHqmCZ6kkWfMGRljvh7mHj12gYBZS69uzrpxDkBLWUTPXE7PA7ZT
+         AfTLXG6nAQwuotphkHMs6PC/pz7NRBu7/qOgTK3j59Rr+BJ/YGhGWQsTmRH+pl8yOZok
+         E7Wwbpa4UElyY07zULsZEn+DqKgxZ5wg8VpAbCNaiUVeuh88BSP/N2IgiYrlMyuJ4X8V
+         d4QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uReB/Ptp2ISgZua1vja00OdAAxuE9UvI1yi/3W7gtmQ=;
+        b=oA1rlLghy34nyZFEq3iMXTvYCOjpYzQVs4No/W+Ear5XDsHNsuE/lBgReGUbXnyx+0
+         afxBD8b0rm1I/p562kaNLYu+hFVis1QfuxIFDpardlj3xWxXtgkBdMbUQKOtuMOAvgTm
+         rkSk70kRA1iW2L9dNjQfsCWFPi6Hlj5lcXQj28xkqIAAXhZ2PHiNtiGCLwIaUxCS4MtH
+         ttaJANwYyCJZ6cw6zZppYAgc1TzRC9N+LbIRLf8pBOIUQLitntqVQw3X4him6iWmZ6y7
+         GfAHlFfLgKT1BzQpJ07m8U9unBO0nFxLXY6+36vxixyMi12PMnlIwxuFYJPmdELRW2cB
+         NF8g==
+X-Gm-Message-State: ACrzQf0nWrxIJPQMIQVz2HVLZ+wvSaXCFEamzri66amspbBGHgPdvQQ7
+        IThPoPyx6xLZ9XDCZFI3+nnL2otwtV9/Hfr6zpkw
+X-Google-Smtp-Source: AMsMyM7k3i+5MyvD21oT5YFCSShz5blyU7LTl69jLdf0/UpWKR2ZQbsnkZCL0oBLI99FcMBYoeiXyleErl3jcmf1jwM=
+X-Received: by 2002:a05:6402:5024:b0:440:e4ad:f7b6 with SMTP id
+ p36-20020a056402502400b00440e4adf7b6mr35123998eda.358.1666685865550; Tue, 25
+ Oct 2022 01:17:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="244jhurzphrta6mf"
-Content-Disposition: inline
-In-Reply-To: <20221021095833.62406-7-vivek.2311@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <Yza1u1KfKa7ycQm0@T590> <Yzs9xQlVuW41TuNC@fedora>
+ <YzwARuAZdaoGTUfP@T590> <CAJSP0QXVK=wUy_JgJ9NmNMtKTRoRX0MwOZUuFWU-1mVWWKij8A@mail.gmail.com>
+ <Yz0FrzJVZTqlQtJ5@T590> <50827796-af93-4af5-4121-dc13c31a67fc@linux.alibaba.com>
+ <CAJSP0QXW9TmuvJpQPRF-AF01aW79jH8tnkHPEf+do5vQ1crGFA@mail.gmail.com>
+ <CACycT3ufcN+a_wtWe6ioOWZUCak-JmcMgSa=rqeEsS63_HqSog@mail.gmail.com>
+ <Y0lcmZTP5sr467z6@T590> <CACycT3u8yYUS-WnNzgHQtQFYuK-XcyffpFc35HVZzrCS7hH5Sg@mail.gmail.com>
+ <Y05OzeC7wImts4p7@T590> <CACycT3sK1AzA4RH1ZfbstV3oax-oeBVtEz+sY+8scBU0=1x46g@mail.gmail.com>
+ <CAJSP0QVevA0gvyGABAFSoMhBN9ydZqUJh4qJYgNbGeyRXL8AjA@mail.gmail.com>
+ <CACycT3udzt0nyqweGbAsZB4LDQU=a7OSWKC8ZWieoBpsSfa2FQ@mail.gmail.com> <1d051d63-ce34-1bb3-2256-4ced4be6d690@redhat.com>
+In-Reply-To: <1d051d63-ce34-1bb3-2256-4ced4be6d690@redhat.com>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Tue, 25 Oct 2022 16:17:33 +0800
+Message-ID: <CACycT3usE0QdJd50bSiLiPwTFxscg-Ur=iZyeGJJBPe7+KxOFQ@mail.gmail.com>
+Subject: Re: ublk-qcow2: ublk-qcow2 is available
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Stefan Hajnoczi <stefanha@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Ming Lei <tom.leiming@gmail.com>,
+        Ziyang Zhang <ZiyangZhang@linux.alibaba.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        io-uring@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "Denis V. Lunev" <den@openvz.org>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,275 +83,418 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---244jhurzphrta6mf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 21.10.2022 15:28:32, Vivek Yadav wrote:
-> Whenever MCAN Buffers and FIFOs are stored on message ram, there are
-                                                        RAM
-> inherent risks of corruption known as single-bit errors.
->=20
-> Enable error correction code (ECC) data intigrity check for Message RAM
-> to create valid ECC checksums.
->=20
-> ECC uses a respective number of bits, which are added to each word as a
-> parity and that will raise the error signal on the corruption in the
-> Interrupt Register(IR).
->=20
-> Message RAM bit error controlled by input signal m_can_aeim_berr[0],
-> generated by an optional external parity / ECC logic attached to the
-> Message RAM.
->=20
-> This indicates either Bit Error detected and Corrected(BEC) or No bit
-> error detected when reading from Message RAM.
-
-There is no ECC error handler added to the code.
-
-> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
-> ---
->  drivers/net/can/m_can/m_can.c | 73 +++++++++++++++++++++++++++++++++++
->  drivers/net/can/m_can/m_can.h | 24 ++++++++++++
->  2 files changed, 97 insertions(+)
->=20
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index dcb582563d5e..578146707d5b 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1535,9 +1535,62 @@ static void m_can_stop(struct net_device *dev)
->  	cdev->can.state =3D CAN_STATE_STOPPED;
->  }
-> =20
-> +int m_can_config_mram_ecc_check(struct m_can_classdev *cdev, int enable,
-static                                                          ^^^ bool
-> +				struct device_node *np)
-> +{
-> +	int val =3D 0;
-> +	int offset =3D 0, ret =3D 0;
-> +	int delay_count =3D MRAM_INIT_TIMEOUT;
-> +	struct m_can_mraminit *mraminit =3D &cdev->mraminit_sys;
-
-Please sort by reverse Christmas tree.
-
-> +
-> +	mraminit->syscon =3D syscon_regmap_lookup_by_phandle(np,
-> +							   "mram-ecc-cfg");
-
-Please check if syscon_regmap_lookup_by_phandle_args() is better suited.
-
-You probably want to do the syscon lookup once during
-m_can_class_register().
-
-> +	if (IS_ERR(mraminit->syscon)) {
-> +		/* can fail with -EPROBE_DEFER */
-
-m_can_config_mram_ecc_check() is called from m_can_open() and
-m_can_close(), returning -EPROBE_DEFER makes no sense there.
-
-> +		ret =3D PTR_ERR(mraminit->syscon);
-> +		return ret;
-> +	}
-> +
-> +	if (of_property_read_u32_index(np, "mram-ecc-cfg", 1,
-> +				       &mraminit->reg)) {
-> +		dev_err(cdev->dev, "couldn't get the mraminit reg. offset!\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	val =3D ((MRAM_ECC_ENABLE_MASK | MRAM_CFG_VALID_MASK |
-> +		MRAM_INIT_ENABLE_MASK) << offset);
-
-please make use of FIELD_PREP
-
-> +	regmap_clear_bits(mraminit->syscon, mraminit->reg, val);
-> +
-> +	if (enable) {
-> +		val =3D (MRAM_ECC_ENABLE_MASK | MRAM_INIT_ENABLE_MASK) << offset;
-
-same here
-
-> +		regmap_set_bits(mraminit->syscon, mraminit->reg, val);
-> +	}
-> +
-> +	/* after enable or disable valid flag need to be set*/
-                                                           ^^^
-                                                           missing space
-> +	val =3D (MRAM_CFG_VALID_MASK << offset);
-
-here, too
-
-> +	regmap_set_bits(mraminit->syscon, mraminit->reg, val);
-> +
-> +	if (enable) {
-> +		do {
-> +			regmap_read(mraminit->syscon, mraminit->reg, &val);
-> +
-> +			if (val & (MRAM_INIT_DONE_MASK << offset))
-> +				return 0;
-> +
-> +			udelay(1);
-> +		} while (delay_count--);
-
-please make use of regmap_read_poll_timeout().
-
-> +
-> +		return -ENODEV;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int m_can_close(struct net_device *dev)
->  {
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
-> +	struct device_node *np;
-> +	int err =3D 0;
-> =20
->  	netif_stop_queue(dev);
-> =20
-> @@ -1557,6 +1610,15 @@ static int m_can_close(struct net_device *dev)
->  	if (cdev->is_peripheral)
->  		can_rx_offload_disable(&cdev->offload);
-> =20
-> +	np =3D cdev->dev->of_node;
-> +
-> +	if (np && of_property_read_bool(np, "mram-ecc-cfg")) {
-> +		err =3D m_can_config_mram_ecc_check(cdev, ECC_DISABLE, np);
-> +		if (err < 0)
-> +			netdev_err(dev,
-> +				   "Message RAM ECC disable config failed\n");
-> +	}
-> +
->  	close_candev(dev);
-> =20
->  	phy_power_off(cdev->transceiver);
-> @@ -1754,6 +1816,7 @@ static int m_can_open(struct net_device *dev)
->  {
->  	struct m_can_classdev *cdev =3D netdev_priv(dev);
->  	int err;
-> +	struct device_node *np;
-> =20
->  	err =3D phy_power_on(cdev->transceiver);
->  	if (err)
-> @@ -1798,6 +1861,16 @@ static int m_can_open(struct net_device *dev)
->  		goto exit_irq_fail;
->  	}
-> =20
-> +	np =3D cdev->dev->of_node;
-> +
-> +	if (np && of_property_read_bool(np, "mram-ecc-cfg")) {
-> +		err =3D m_can_config_mram_ecc_check(cdev, ECC_ENABLE, np);
-> +		if (err < 0) {
-> +			netdev_err(dev,
-> +				   "Message RAM ECC enable config failed\n");
-> +		}
-> +	}
-> +
->  	/* start the m_can controller */
->  	m_can_start(dev);
-> =20
-> diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
-> index 4c0267f9f297..3cbfdc64a7db 100644
-> --- a/drivers/net/can/m_can/m_can.h
-> +++ b/drivers/net/can/m_can/m_can.h
-> @@ -28,6 +28,8 @@
->  #include <linux/can/dev.h>
->  #include <linux/pinctrl/consumer.h>
->  #include <linux/phy/phy.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/regmap.h>
-
-please make a separate patch that sorts these includes alphabetically,
-then add the new includes sorted.
-
-> =20
->  /* m_can lec values */
->  enum m_can_lec_type {
-> @@ -52,12 +54,33 @@ enum m_can_mram_cfg {
->  	MRAM_CFG_NUM,
->  };
-> =20
-> +enum m_can_ecc_cfg {
-> +	ECC_DISABLE =3D 0,
-> +	ECC_ENABLE,
-> +};
-> +
-
-unused
-
->  /* address offset and element number for each FIFO/Buffer in the Message=
- RAM */
->  struct mram_cfg {
->  	u16 off;
->  	u8  num;
->  };
-> =20
-> +/* MRAM_INIT_BITS */
-> +#define MRAM_CFG_VALID_SHIFT   5
-> +#define MRAM_CFG_VALID_MASK    BIT(MRAM_CFG_VALID_SHIFT)
-> +#define MRAM_ECC_ENABLE_SHIFT  3
-> +#define MRAM_ECC_ENABLE_MASK   BIT(MRAM_ECC_ENABLE_SHIFT)
-> +#define MRAM_INIT_ENABLE_SHIFT 1
-> +#define MRAM_INIT_ENABLE_MASK  BIT(MRAM_INIT_ENABLE_SHIFT)
-> +#define MRAM_INIT_DONE_SHIFT   0
-> +#define MRAM_INIT_DONE_MASK    BIT(MRAM_INIT_DONE_SHIFT)
-> +#define MRAM_INIT_TIMEOUT      50
-
-Please move these bits to the m_can.c file.
-
-Add a common prefix M_CAN_ to them.
-
-Remove the SHIFT values, directly define the MASK using BIT() (for
-single set bits) or GEN_MASK() (for multiple set bits).
-
-> +
-> +struct m_can_mraminit {
-
-Is this RAM init or ECC related?
-
-> +	struct regmap *syscon;  /* for mraminit ctrl. reg. access */
-> +	unsigned int reg;       /* register index within syscon */
-> +};
-> +
->  struct m_can_classdev;
->  struct m_can_ops {
->  	/* Device specific call backs */
-> @@ -92,6 +115,7 @@ struct m_can_classdev {
->  	int pm_clock_support;
->  	int is_peripheral;
-> =20
-> +	struct m_can_mraminit mraminit_sys;     /* mraminit via syscon regmap */
->  	struct mram_cfg mcfg[MRAM_CFG_NUM];
->  };
-> =20
-> --=20
-> 2.17.1
->=20
+On Fri, Oct 21, 2022 at 2:30 PM Jason Wang <jasowang@redhat.com> wrote:
+>
+>
+> =E5=9C=A8 2022/10/21 13:33, Yongji Xie =E5=86=99=E9=81=93:
+> > On Tue, Oct 18, 2022 at 10:54 PM Stefan Hajnoczi <stefanha@gmail.com> w=
+rote:
+> >> On Tue, 18 Oct 2022 at 09:17, Yongji Xie <xieyongji@bytedance.com> wro=
+te:
+> >>> On Tue, Oct 18, 2022 at 2:59 PM Ming Lei <tom.leiming@gmail.com> wrot=
+e:
+> >>>> On Mon, Oct 17, 2022 at 07:11:59PM +0800, Yongji Xie wrote:
+> >>>>> On Fri, Oct 14, 2022 at 8:57 PM Ming Lei <tom.leiming@gmail.com> wr=
+ote:
+> >>>>>> On Thu, Oct 13, 2022 at 02:48:04PM +0800, Yongji Xie wrote:
+> >>>>>>> On Wed, Oct 12, 2022 at 10:22 PM Stefan Hajnoczi <stefanha@gmail.=
+com> wrote:
+> >>>>>>>> On Sat, 8 Oct 2022 at 04:43, Ziyang Zhang <ZiyangZhang@linux.ali=
+baba.com> wrote:
+> >>>>>>>>> On 2022/10/5 12:18, Ming Lei wrote:
+> >>>>>>>>>> On Tue, Oct 04, 2022 at 09:53:32AM -0400, Stefan Hajnoczi wrot=
+e:
+> >>>>>>>>>>> On Tue, 4 Oct 2022 at 05:44, Ming Lei <tom.leiming@gmail.com>=
+ wrote:
+> >>>>>>>>>>>> On Mon, Oct 03, 2022 at 03:53:41PM -0400, Stefan Hajnoczi wr=
+ote:
+> >>>>>>>>>>>>> On Fri, Sep 30, 2022 at 05:24:11PM +0800, Ming Lei wrote:
+> >>>>>>>>>>>>>> ublk-qcow2 is available now.
+> >>>>>>>>>>>>> Cool, thanks for sharing!
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>> So far it provides basic read/write function, and compress=
+ion and snapshot
+> >>>>>>>>>>>>>> aren't supported yet. The target/backend implementation is=
+ completely
+> >>>>>>>>>>>>>> based on io_uring, and share the same io_uring with ublk I=
+O command
+> >>>>>>>>>>>>>> handler, just like what ublk-loop does.
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> Follows the main motivations of ublk-qcow2:
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> - building one complicated target from scratch helps libub=
+lksrv APIs/functions
+> >>>>>>>>>>>>>>    become mature/stable more quickly, since qcow2 is compl=
+icated and needs more
+> >>>>>>>>>>>>>>    requirement from libublksrv compared with other simple =
+ones(loop, null)
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> - there are several attempts of implementing qcow2 driver =
+in kernel, such as
+> >>>>>>>>>>>>>>    ``qloop`` [2], ``dm-qcow2`` [3] and ``in kernel qcow2(r=
+o)`` [4], so ublk-qcow2
+> >>>>>>>>>>>>>>    might useful be for covering requirement in this field
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> - performance comparison with qemu-nbd, and it was my 1st =
+thought to evaluate
+> >>>>>>>>>>>>>>    performance of ublk/io_uring backend by writing one ubl=
+k-qcow2 since ublksrv
+> >>>>>>>>>>>>>>    is started
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> - help to abstract common building block or design pattern=
+ for writing new ublk
+> >>>>>>>>>>>>>>    target/backend
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> So far it basically passes xfstest(XFS) test by using ublk=
+-qcow2 block
+> >>>>>>>>>>>>>> device as TEST_DEV, and kernel building workload is verifi=
+ed too. Also
+> >>>>>>>>>>>>>> soft update approach is applied in meta flushing, and meta=
+ data
+> >>>>>>>>>>>>>> integrity is guaranteed, 'make test T=3Dqcow2/040' covers =
+this kind of
+> >>>>>>>>>>>>>> test, and only cluster leak is reported during this test.
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> The performance data looks much better compared with qemu-=
+nbd, see
+> >>>>>>>>>>>>>> details in commit log[1], README[5] and STATUS[6]. And the=
+ test covers both
+> >>>>>>>>>>>>>> empty image and pre-allocated image, for example of pre-al=
+located qcow2
+> >>>>>>>>>>>>>> image(8GB):
+> >>>>>>>>>>>>>>
+> >>>>>>>>>>>>>> - qemu-nbd (make test T=3Dqcow2/002)
+> >>>>>>>>>>>>> Single queue?
+> >>>>>>>>>>>> Yeah.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>>>>      randwrite(4k): jobs 1, iops 24605
+> >>>>>>>>>>>>>>      randread(4k): jobs 1, iops 30938
+> >>>>>>>>>>>>>>      randrw(4k): jobs 1, iops read 13981 write 14001
+> >>>>>>>>>>>>>>      rw(512k): jobs 1, iops read 724 write 728
+> >>>>>>>>>>>>> Please try qemu-storage-daemon's VDUSE export type as well.=
+ The
+> >>>>>>>>>>>>> command-line should be similar to this:
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>    # modprobe virtio_vdpa # attaches vDPA devices to host k=
+ernel
+> >>>>>>>>>>>> Not found virtio_vdpa module even though I enabled all the f=
+ollowing
+> >>>>>>>>>>>> options:
+> >>>>>>>>>>>>
+> >>>>>>>>>>>>          --- vDPA drivers
+> >>>>>>>>>>>>            <M>   vDPA device simulator core
+> >>>>>>>>>>>>            <M>     vDPA simulator for networking device
+> >>>>>>>>>>>>            <M>     vDPA simulator for block device
+> >>>>>>>>>>>>            <M>   VDUSE (vDPA Device in Userspace) support
+> >>>>>>>>>>>>            <M>   Intel IFC VF vDPA driver
+> >>>>>>>>>>>>            <M>   Virtio PCI bridge vDPA driver
+> >>>>>>>>>>>>            <M>   vDPA driver for Alibaba ENI
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> BTW, my test environment is VM and the shared data is done i=
+n VM too, and
+> >>>>>>>>>>>> can virtio_vdpa be used inside VM?
+> >>>>>>>>>>> I hope Xie Yongji can help explain how to benchmark VDUSE.
+> >>>>>>>>>>>
+> >>>>>>>>>>> virtio_vdpa is available inside guests too. Please check that
+> >>>>>>>>>>> VIRTIO_VDPA ("vDPA driver for virtio devices") is enabled in =
+"Virtio
+> >>>>>>>>>>> drivers" menu.
+> >>>>>>>>>>>
+> >>>>>>>>>>>>>    # modprobe vduse
+> >>>>>>>>>>>>>    # qemu-storage-daemon \
+> >>>>>>>>>>>>>        --blockdev file,filename=3Dtest.qcow2,cache.direct=
+=3Dof|off,aio=3Dnative,node-name=3Dfile \
+> >>>>>>>>>>>>>        --blockdev qcow2,file=3Dfile,node-name=3Dqcow2 \
+> >>>>>>>>>>>>>        --object iothread,id=3Diothread0 \
+> >>>>>>>>>>>>>        --export vduse-blk,id=3Dvduse0,name=3Dvduse0,num-que=
+ues=3D$(nproc),node-name=3Dqcow2,writable=3Don,iothread=3Diothread0
+> >>>>>>>>>>>>>    # vdpa dev add name vduse0 mgmtdev vduse
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> A virtio-blk device should appear and xfstests can be run o=
+n it
+> >>>>>>>>>>>>> (typically /dev/vda unless you already have other virtio-bl=
+k devices).
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Afterwards you can destroy the device using:
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>    # vdpa dev del vduse0
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>>> - ublk-qcow2 (make test T=3Dqcow2/022)
+> >>>>>>>>>>>>> There are a lot of other factors not directly related to NB=
+D vs ublk. In
+> >>>>>>>>>>>>> order to get an apples-to-apples comparison with qemu-* a u=
+blk export
+> >>>>>>>>>>>>> type is needed in qemu-storage-daemon. That way only the di=
+fference is
+> >>>>>>>>>>>>> the ublk interface and the rest of the code path is identic=
+al, making it
+> >>>>>>>>>>>>> possible to compare NBD, VDUSE, ublk, etc more precisely.
+> >>>>>>>>>>>> Maybe not true.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> ublk-qcow2 uses io_uring to handle all backend IO(include me=
+ta IO) completely,
+> >>>>>>>>>>>> and so far single io_uring/pthread is for handling all qcow2=
+ IOs and IO
+> >>>>>>>>>>>> command.
+> >>>>>>>>>>> qemu-nbd doesn't use io_uring to handle the backend IO, so we=
+ don't
+> >>>>>>>>>> I tried to use it via --aio=3Dio_uring for setting up qemu-nbd=
+, but not succeed.
+> >>>>>>>>>>
+> >>>>>>>>>>> know whether the benchmark demonstrates that ublk is faster t=
+han NBD,
+> >>>>>>>>>>> that the ublk-qcow2 implementation is faster than qemu-nbd's =
+qcow2,
+> >>>>>>>>>>> whether there are miscellaneous implementation differences be=
+tween
+> >>>>>>>>>>> ublk-qcow2 and qemu-nbd (like using the same io_uring context=
+ for both
+> >>>>>>>>>>> ublk and backend IO), or something else.
+> >>>>>>>>>> The theory shouldn't be too complicated:
+> >>>>>>>>>>
+> >>>>>>>>>> 1) io uring passthough(pt) communication is fast than socket, =
+and io command
+> >>>>>>>>>> is carried over io_uring pt commands, and should be fast than =
+virio
+> >>>>>>>>>> communication too.
+> >>>>>>>>>>
+> >>>>>>>>>> 2) io uring io handling is fast than libaio which is taken in =
+the
+> >>>>>>>>>> test on qemu-nbd, and all qcow2 backend io(include meta io) is=
+ handled
+> >>>>>>>>>> by io_uring.
+> >>>>>>>>>>
+> >>>>>>>>>> https://github.com/ming1/ubdsrv/blob/master/tests/common/qcow2=
+_common
+> >>>>>>>>>>
+> >>>>>>>>>> 3) ublk uses one single io_uring to handle all io commands and=
+ qcow2
+> >>>>>>>>>> backend IOs, so batching handling is common, and it is easy to=
+ see
+> >>>>>>>>>> dozens of IOs/io commands handled in single syscall, or even m=
+ore.
+> >>>>>>>>>>
+> >>>>>>>>>>> I'm suggesting measuring changes to just 1 variable at a time=
+.
+> >>>>>>>>>>> Otherwise it's hard to reach a conclusion about the root caus=
+e of the
+> >>>>>>>>>>> performance difference. Let's learn why ublk-qcow2 performs w=
+ell.
+> >>>>>>>>>> Turns out the latest Fedora 37-beta doesn't support vdpa yet, =
+so I built
+> >>>>>>>>>> qemu from the latest github tree, and finally it starts to wor=
+k. And test kernel
+> >>>>>>>>>> is v6.0 release.
+> >>>>>>>>>>
+> >>>>>>>>>> Follows the test result, and all three devices are setup as si=
+ngle
+> >>>>>>>>>> queue, and all tests are run in single job, still done in one =
+VM, and
+> >>>>>>>>>> the test images are stored on XFS/virito-scsi backed SSD.
+> >>>>>>>>>>
+> >>>>>>>>>> The 1st group tests all three block device which is backed by =
+empty
+> >>>>>>>>>> qcow2 image.
+> >>>>>>>>>>
+> >>>>>>>>>> The 2nd group tests all the three block devices backed by pre-=
+allocated
+> >>>>>>>>>> qcow2 image.
+> >>>>>>>>>>
+> >>>>>>>>>> Except for big sequential IO(512K), there is still not small g=
+ap between
+> >>>>>>>>>> vdpa-virtio-blk and ublk.
+> >>>>>>>>>>
+> >>>>>>>>>> 1. run fio on block device over empty qcow2 image
+> >>>>>>>>>> 1) qemu-nbd
+> >>>>>>>>>> running qcow2/001
+> >>>>>>>>>> run perf test on empty qcow2 image via nbd
+> >>>>>>>>>>        fio (nbd(/mnt/data/ublk_null_8G_nYbgF.qcow2), libaio, b=
+s 4k, dio, hw queues:1)...
+> >>>>>>>>>>        randwrite: jobs 1, iops 8549
+> >>>>>>>>>>        randread: jobs 1, iops 34829
+> >>>>>>>>>>        randrw: jobs 1, iops read 11363 write 11333
+> >>>>>>>>>>        rw(512k): jobs 1, iops read 590 write 597
+> >>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>> 2) ublk-qcow2
+> >>>>>>>>>> running qcow2/021
+> >>>>>>>>>> run perf test on empty qcow2 image via ublk
+> >>>>>>>>>>        fio (ublk/qcow2( -f /mnt/data/ublk_null_8G_s761j.qcow2)=
+, libaio, bs 4k, dio, hw queues:1, uring_comp: 0, get_data: 0).
+> >>>>>>>>>>        randwrite: jobs 1, iops 16086
+> >>>>>>>>>>        randread: jobs 1, iops 172720
+> >>>>>>>>>>        randrw: jobs 1, iops read 35760 write 35702
+> >>>>>>>>>>        rw(512k): jobs 1, iops read 1140 write 1149
+> >>>>>>>>>>
+> >>>>>>>>>> 3) vdpa-virtio-blk
+> >>>>>>>>>> running debug/test_dev
+> >>>>>>>>>> run io test on specified device
+> >>>>>>>>>>        fio (vdpa(/dev/vdc), libaio, bs 4k, dio, hw queues:1)..=
+.
+> >>>>>>>>>>        randwrite: jobs 1, iops 8626
+> >>>>>>>>>>        randread: jobs 1, iops 126118
+> >>>>>>>>>>        randrw: jobs 1, iops read 17698 write 17665
+> >>>>>>>>>>        rw(512k): jobs 1, iops read 1023 write 1031
+> >>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>> 2. run fio on block device over pre-allocated qcow2 image
+> >>>>>>>>>> 1) qemu-nbd
+> >>>>>>>>>> running qcow2/002
+> >>>>>>>>>> run perf test on pre-allocated qcow2 image via nbd
+> >>>>>>>>>>        fio (nbd(/mnt/data/ublk_data_8G_sc0SB.qcow2), libaio, b=
+s 4k, dio, hw queues:1)...
+> >>>>>>>>>>        randwrite: jobs 1, iops 21439
+> >>>>>>>>>>        randread: jobs 1, iops 30336
+> >>>>>>>>>>        randrw: jobs 1, iops read 11476 write 11449
+> >>>>>>>>>>        rw(512k): jobs 1, iops read 718 write 722
+> >>>>>>>>>>
+> >>>>>>>>>> 2) ublk-qcow2
+> >>>>>>>>>> running qcow2/022
+> >>>>>>>>>> run perf test on pre-allocated qcow2 image via ublk
+> >>>>>>>>>>        fio (ublk/qcow2( -f /mnt/data/ublk_data_8G_yZiaJ.qcow2)=
+, libaio, bs 4k, dio, hw queues:1, uring_comp: 0, get_data: 0).
+> >>>>>>>>>>        randwrite: jobs 1, iops 98757
+> >>>>>>>>>>        randread: jobs 1, iops 110246
+> >>>>>>>>>>        randrw: jobs 1, iops read 47229 write 47161
+> >>>>>>>>>>        rw(512k): jobs 1, iops read 1416 write 1427
+> >>>>>>>>>>
+> >>>>>>>>>> 3) vdpa-virtio-blk
+> >>>>>>>>>> running debug/test_dev
+> >>>>>>>>>> run io test on specified device
+> >>>>>>>>>>        fio (vdpa(/dev/vdc), libaio, bs 4k, dio, hw queues:1)..=
+.
+> >>>>>>>>>>        randwrite: jobs 1, iops 47317
+> >>>>>>>>>>        randread: jobs 1, iops 74092
+> >>>>>>>>>>        randrw: jobs 1, iops read 27196 write 27234
+> >>>>>>>>>>        rw(512k): jobs 1, iops read 1447 write 1458
+> >>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>> Hi All,
+> >>>>>>>>>
+> >>>>>>>>> We are interested in VDUSE vs UBLK, too. And I have tested them=
+ with nullblk backend.
+> >>>>>>>>> Let me share some results here.
+> >>>>>>>>>
+> >>>>>>>>> I setup UBLK with:
+> >>>>>>>>>    ublk add -t loop -f /dev/nullb0 -d QUEUE_DEPTH -q NR_QUEUE
+> >>>>>>>>>
+> >>>>>>>>> I setup VDUSE with:
+> >>>>>>>>>    qemu-storage-daemon \
+> >>>>>>>>>         --chardev socket,id=3Dcharmonitor,path=3D/tmp/qmp.sock,=
+server=3Don,wait=3Doff \
+> >>>>>>>>>         --monitor chardev=3Dcharmonitor \
+> >>>>>>>>>         --blockdev driver=3Dhost_device,cache.direct=3Don,filen=
+ame=3D/dev/nullb0,node-name=3Ddisk0 \
+> >>>>>>>>>         --export vduse-blk,id=3Dtest,node-name=3Ddisk0,name=3Dv=
+duse_test,writable=3Don,num-queues=3DNR_QUEUE,queue-size=3DQUEUE_DEPTH
+> >>>>>>>>>
+> >>>>>>>>> Here QUEUE_DEPTH is 1, 32 or 128 and NR_QUEUE is 1 or 4.
+> >>>>>>>>>
+> >>>>>>>>> Note:
+> >>>>>>>>> (1) VDUSE requires QUEUE_DEPTH >=3D 2. I cannot setup QUEUE_DEP=
+TH to 1.
+> >>>>>>>>> (2) I use qemu 7.1.0-rc3. It supports vduse-blk.
+> >>>>>>>>> (3) I do not use ublk null target so that the test is fair.
+> >>>>>>>>> (4) I setup fio with direct=3D1, bs=3D4k.
+> >>>>>>>>>
+> >>>>>>>>> ------------------------------
+> >>>>>>>>> 1 job 1 iodepth, lat=EF=BC=88usec)
+> >>>>>>>>>                  vduse   ublk
+> >>>>>>>>> seq-read        22.55   11.15
+> >>>>>>>>> rand-read       22.49   11.17
+> >>>>>>>>> seq-write       25.67   10.25
+> >>>>>>>>> rand-write      24.13   10.16
+> >>>>>>>> Thanks for sharing. Any idea what the bottlenecks are for vduse =
+and ublk?
+> >>>>>>>>
+> >>>>>>> I think one reason for the latency gap of sync I/O is that vduse =
+uses
+> >>>>>>> workqueue in the I/O completion path but ublk doesn't.
+> >>>>>>>
+> >>>>>>> And one bottleneck for the async I/O in vduse is that vduse will =
+do
+> >>>>>>> memcpy inside the critical section of virtqueue's spinlock in the
+> >>>>>>> virtio-blk driver. That will hurt the performance heavily when
+> >>>>>>> virtio_queue_rq() and virtblk_done() run concurrently. And it can=
+ be
+> >>>>>>> mitigated by the advance DMA mapping feature [1] or irq binding
+> >>>>>>> support [2].
+> >>>>>> Hi Yongji,
+> >>>>>>
+> >>>>>> Yeah, that is the cost you paid for virtio. Wrt. userspace block d=
+evice
+> >>>>>> or other sort of userspace devices, cmd completion is driven by
+> >>>>>> userspace, not sure if one such 'irq' is needed.
+> >>>>> I'm not sure, it can be an optional feature in the future if needed=
+.
+> >>>>>
+> >>>>>> Even not sure if virtio
+> >>>>>> ring is one good choice for such use case, given io_uring has been=
+ proved
+> >>>>>> as very efficient(should be better than virtio ring, IMO).
+> >>>>>>
+> >>>>> Since vduse is aimed at creating a generic userspace device framewo=
+rk,
+> >>>>> virtio should be the right way IMO.
+> >>>> OK, it is the right way, but may not be the effective one.
+> >>>>
+> >>> Maybe, but I think we can try to optimize it.
+> >>>
+> >>>>> And with the vdpa framework, the
+> >>>>> userspace device can serve both virtual machines and containers.
+> >>>> virtio is good for VM, but not sure it is good enough for other
+> >>>> cases.
+> >>>>
+> >>>>> Regarding the performance issue, actually I can't measure how much =
+of
+> >>>>> the performance loss is due to the difference between virtio ring a=
+nd
+> >>>>> iouring. But I think it should be very small. The main costs come f=
+rom
+> >>>>> the two bottlenecks I mentioned before which could be mitigated in =
+the
+> >>>>> future.
+> >>>> Per my understanding, at least there are two places where virtio rin=
+g is
+> >>>> less efficient than io_uring:
+> >>>>
+> >>> I might have misunderstood what you mean by virtio ring before. My
+> >>> previous understanding of the virtio ring does not include the
+> >>> virtio-blk driver.
+> >>>
+> >>>> 1) io_uring uses standalone submission queue(SQ) and completion queu=
+e(CQ),
+> >>>> so no contention exists between submission and completion; but virti=
+o queue
+> >>>> requires per-vq lock in both submission and completion.
+> >>>>
+> >>> Yes, this is the bottleneck of the virtio-blk driver, even in the VM
+> >>> case. We are also trying to optimize this lock.
+> >>>
+> >>> One way to mitigate it is making submission and completion happen in
+> >>> the same core.
+> >> QEMU sizes virtio-blk device num-queues to match the vCPU count. The
+> >> virtio-blk driver is a blk-mq driver, so submissions and completions
+> >> for a given virtqueue should already be processed by the same vCPU.
+> >>
+> >> Unless the device is misconfigured or the guest software chooses a
+> >> custom vq:vCPU mapping, there should be no vq lock contention between
+> >> vCPUs.
+> >>
+> >> I can think of a reason why submission and completion require
+> >> coordination: descriptors are occupied until completion. The
+> >> submission logic chooses free descriptors from the table. The
+> >> completion logic returns free descriptors so they can be used in
+> >> future submissions.
+> >>
+> > Yes, we need to maintain a head pointer of the free descriptors in
+> > both submission and completion path.
+>
+>
+> Not necessarily after IN_ORDER?
 >
 
-Marc
+Sounds like a good idea.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---244jhurzphrta6mf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNXm0gACgkQrX5LkNig
-013wJgf/YRD0HA2nNrMxl28Z1hEUp7YGbykkJpHze+nWAotj/LwvbmVjPtvFkuNs
-Dxc1LSHtJn66DcIrHX7Tkcvs9q8px/Y7JpG6AMWngTCF44kISPRvDoYATl9WIcrD
-O7DHCUVxcQeVlcAVteYRQiT2g1XfgLq8eKHVyiGs3aPX7/3/QtNP2qhzQ086iHU3
-jrpcuWB5Z60qELuPLY7mNn82jxf9wRrHMMhylYFnWR1G8FZkf0lg4aS/CIaSNVKy
-f7WqbQPQhtt/FIBAIOYvAXQuuqfFkJjNd60hknRZ4J9Uxg1lJGLHFMJyUM8xb4FW
-swTTdXe30BlLGrhHPUXfDl5ZCDFqyw==
-=7EVA
------END PGP SIGNATURE-----
-
---244jhurzphrta6mf--
+Thanks,
+Yongji
