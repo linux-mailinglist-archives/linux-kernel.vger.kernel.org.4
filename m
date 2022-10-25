@@ -2,54 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6911460C956
+	by mail.lfdr.de (Postfix) with ESMTP id B128C60C957
 	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbiJYKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:04:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        id S232213AbiJYKEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbiJYKDb (ORCPT
+        with ESMTP id S231520AbiJYKDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:03:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C524C01F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:57:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF02FB81CA8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 09:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A675C433D6;
-        Tue, 25 Oct 2022 09:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666691865;
-        bh=VjDlq0AaoBymNcBx1nVzZmGo9amGo5mxHdD1e4npnZM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kRTqgiTcCvphUEJlaXiGnv8IYg/g46ExcavLmLfuOO82trBAyeUtLL8n9tHMy8gkH
-         Bd2/HxYecRMmTK6yptl7UguxMgaMi1pXMGU5P7SIIuD5iTsmIc6IFS1E88/yMuCrCa
-         9GBfKqukCn+nmyBksfQeR8FnBAQRVhmDXtVXsco3dDqeARAPjjx+bEY51MwNDWc7Go
-         tjFMxjtAHNca6pXkf2i9roQDj0kJz6hcgtoQjH99P1GsoPIJdHgIhriyNJGF7Nr+nn
-         Fg4DRL8s35i7Ew6Z1NJdTP6VEXO1ZnRmsqS8zcFHAxsx95mwQo4puKdKl8EA7BcJu7
-         vRS9NcLl9J6Ew==
-Message-ID: <9f654a98-8833-8546-5c03-9814aea86995@kernel.org>
-Date:   Tue, 25 Oct 2022 17:57:41 +0800
+        Tue, 25 Oct 2022 06:03:35 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B7896A0B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:58:12 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id t25so5585843ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oKIZ6XLNNrcediyAjLcdXx1DLwHh7OZ4VfOaL18dLfo=;
+        b=C4/K2Gv/LJoyjJkov3KuVi/VlaLlQEOp8OWpxO66frJzThdTchoi3MmoAWQNX0Sf/3
+         p5yo6IFCKapotwuxuM+QdvqOFfBgDaVJ6iw5OsIs5uFyexpXTvmqnqDSDT9vfQUD7Zk0
+         EgwVIZv8phbmIGD6Gi++YygMZvn5OHf2Z3Dv8ysW1BL+VsgrBwgwaE1Kd2nNV/hj7oN4
+         ESQu/suWBZTyfYIP3q9UblpB+v71DcFxKpi7kn2x8+ZAJDKY3bAZfKu4s2My+bYVuy+l
+         RF18z1omwNN4mFknRdpkmSDC3barO69SIyywddsODmxU8jaVtLJZT82TFOwwKCu1e8Lh
+         4tmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oKIZ6XLNNrcediyAjLcdXx1DLwHh7OZ4VfOaL18dLfo=;
+        b=nACFGsros6v8L/AnVq/FoYwI/vtelDYEYMFQAD04FB0idShpxcVS4MakGPTChvntne
+         d0auxhxCL97FphtEndzj7bPmPwYXFFlMchmv5qRXWtnC5ikEsLwkmkacv7l7NpY8k5qC
+         K/ny3RDi+rLHQhowMnYGlUxHcC5kJ0Qs7Wv/Cz1Ci5P3JX5Ns/BgPERaJm/2JsB/QCh+
+         gwVuQT1ciS2h/us5LOAUcWHFeu9cn4iqZRXCzFDXTx8A8R7DjFizCL4fqgDmZvgz3pS6
+         AxfvHJ2aFM0h0JRTgM6PvWB3XqjfuqkLGOxcW4baLzUiVpZ7BgXfALphUPyG4UUgyR62
+         BlSQ==
+X-Gm-Message-State: ACrzQf0WJScbjnd1OQfaQLMEbm9sFwipFN9VIiuFoPfrW5MyXq1IU0iO
+        xuUPDkiYIXLAmdAutRQdyjkQ6yAYOPuljoXeL5a6NA==
+X-Google-Smtp-Source: AMsMyM6Mvrp7DAcqS7eOdbD71753mmAZ5MykIIvTZQOdr2iQrdej82vku+QUBM27HIlzbIUVs0twQZu42JFb5ECZ9PM=
+X-Received: by 2002:a17:906:cc18:b0:78d:ee0f:ce02 with SMTP id
+ ml24-20020a170906cc1800b0078dee0fce02mr32019065ejb.323.1666691890969; Tue, 25
+ Oct 2022 02:58:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v3] f2fs: cleanup in f2fs_create_flush_cmd_control()
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+References: <20220927120857.639461-1-max.kellermann@ionos.com>
+ <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com> <CAKPOu+88FT1SeFDhvnD_NC7aEJBxd=-T99w67mA-s4SXQXjQNw@mail.gmail.com>
+ <75e7f676-8c85-af0a-97b2-43664f60c811@redhat.com> <CAKPOu+-rKOVsZ1T=1X-T-Y5Fe1MW2Fs9ixQh8rgq3S9shi8Thw@mail.gmail.com>
+ <baf42d14-9bc8-93e1-3d75-7248f93afbd2@redhat.com> <cd5ed50a3c760f746a43f8d68fdbc69b01b89b39.camel@kernel.org>
+ <7e28f7d1-cfd5-642a-dd4e-ab521885187c@redhat.com> <8ef79208adc82b546cc4c2ba20b5c6ddbc3a2732.camel@kernel.org>
+ <7d40fada-f5f8-4357-c559-18421266f5b4@redhat.com> <CAKPOu+_Jk0EHRDjqiNuFv8wL0kLXLLRZpx7AgWDPOWHzJn22xg@mail.gmail.com>
+ <db650fa8-8b64-5275-7390-f6b48bfd3a37@redhat.com>
+In-Reply-To: <db650fa8-8b64-5275-7390-f6b48bfd3a37@redhat.com>
+From:   Max Kellermann <max.kellermann@ionos.com>
+Date:   Tue, 25 Oct 2022 11:57:59 +0200
+Message-ID: <CAKPOu+8qd+qybZWOMoaAYzOtTWXEQ=y5q1jJZjOVxE8pwX7CkQ@mail.gmail.com>
+Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Jeff Layton <jlayton@kernel.org>, idryomov@gmail.com,
+        ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221025080526.9331-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221025080526.9331-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,12 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/25 16:05, Yangtao Li wrote:
-> Just cleanup for readable, no functional changes.
-> 
-> Suggested-by: Chao Yu <chao@kernel.org>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On Tue, Oct 25, 2022 at 11:10 AM Xiubo Li <xiubli@redhat.com> wrote:
+> $ sudo ./bin/mount.ceph privileged@.a=/ /mnt/privileged/mountpoint
+>
+> $ sudo ./bin/mount.ceph global@.a=/ /mnt/global/mountpoint
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+So you have two different mount points where different client
+permissions are used. There are various problems with that
+architecture:
 
-Thanks,
+- it complicates administration, because now every mount has to be done twice
+- it complicates applications accessing ceph (and their
+configuration), because there are now 2 mount points
+- it increases resource usage for having twice as many ceph connections
+- it interferes with fscache, doubling fscache's local disk usage,
+reducing fscache's efficiency
+- ownership of the snapdir is still the same as the parent directory,
+and I can't have non-superuser processes to manage snapshots; all
+processes mananging snapshots need to have write permission on the
+parent directory
+- this is still all-or-nothing; I can't forbid users to list (+r) or
+access (+x) snapshots
+
+All those problems don't exist with my patch.
