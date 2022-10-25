@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4196E60CA09
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FD660CA12
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231968AbiJYK1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45836 "EHLO
+        id S231664AbiJYKaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbiJYK1M (ORCPT
+        with ESMTP id S231449AbiJYK3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:27:12 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2C6160ECF;
-        Tue, 25 Oct 2022 03:25:42 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e753329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e753:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C44E21EC03B9;
-        Tue, 25 Oct 2022 12:25:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666693540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=+geCwvxqT0myxZwE/PtJNWuF3ki1qM+58+9jGmk0+NA=;
-        b=QQmmBLsxaQ8Bj0ngcqs073Mv4GhGx8R/7EvI2yQ0oTRpnmgVXmmIW5JbwdhSXX6kTn5NXf
-        YXO+eYDiY/vhREBTWCVEionVrdwyNaIdtQO9FxHa5VrfMUThQoc9PY6PFOZslR+/E5H1aT
-        zYI89obq143eoU/a5IKjcDtSKRUzWJ4=
-Date:   Tue, 25 Oct 2022 12:25:36 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>, vbabka@suse.cz
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
-Message-ID: <Y1e5oC9QyDlKpxZ9@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
- <Y0grhk1sq2tf/tUl@zn.tnic>
- <380c9748-1c86-4763-ea18-b884280a3b60@amd.com>
+        Tue, 25 Oct 2022 06:29:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AAD6DF88;
+        Tue, 25 Oct 2022 03:29:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=D/s8Mn3OZZreLwrO44Z3hxnh6P05RlWt/64fV0S8T78=; b=O7gPuYxYMhiiUSwpaMpT741mhG
+        JJ0PsBnILrhtc1Q+bqy0cFyTqDHOQjxPrvXCDO/4hySiss1hoUR/JxbubAOqny7ig3hqJifPZOFvl
+        r+pDAcJOuTQIB9wtw33Pph4PG5d/s2Rfzqq0NqcurYB6i30/iHn4UsIMIjU9Y4oUn8w7FE4ftN/4f
+        Oo9TqB32R6GGWnP1+3vu8cnsbyKyRLYJpfGC9KJ7vvEfChOxe1GQnX4gwZHtCbidqd/C+OwFnoHgu
+        n10uN35j1VePUIYesqnKrHPizQAhvLqhYv/X5tFUMNXA1pGjM2aMO0Mh81K0nMTMEovOP/2/iA2jJ
+        zHKe4Eow==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onHB7-00GBKE-Vo; Tue, 25 Oct 2022 10:29:02 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D15DD30008D;
+        Tue, 25 Oct 2022 12:28:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BB7972C431FA7; Tue, 25 Oct 2022 12:28:56 +0200 (CEST)
+Date:   Tue, 25 Oct 2022 12:28:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        linux-arch@vger.kernel.org
+Subject: Re: [RFC PATCH] text_poke/ftrace/x86: Allow text_poke() to be called
+ in early boot
+Message-ID: <Y1e6aOmOfXrSOB/u@hirez.programming.kicks-ass.net>
+References: <20221024190311.65b89ecb@gandalf.local.home>
+ <CAHk-=wji4q7rGUWDLonnEnxq0ykNCcYGpMrNnZg89rAwOgyRKg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <380c9748-1c86-4763-ea18-b884280a3b60@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHk-=wji4q7rGUWDLonnEnxq0ykNCcYGpMrNnZg89rAwOgyRKg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 03:00:09PM -0500, Kalra, Ashish wrote:
-> If it is "still" accessed/touched then it can cause RMP #PF.
-> On the other hand,
-> 
->  * PG_hwpoison... Accessing is
->  * not safe since it may cause another machine check. Don't touch!
-> 
-> That sounds exactly the state we want these page(s) to be in ?
-> 
-> Another possibility is PG_error.
+On Mon, Oct 24, 2022 at 05:11:13PM -0700, Linus Torvalds wrote:
 
-Something like this:
+> All of this comes from "poking_init()" being a steaming pile of bovine
+> excrement, doing random odd things, and having that special
+> "copy_init_mm()" helper that just makes things even worse. Nothing
+> else uses that, and it shouldn't have called "dup_mm()" in the first
+> place.
 
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index e66f7aa3191d..baffa9c0dc30 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -186,6 +186,7 @@ enum pageflags {
- 	 * THP.
- 	 */
- 	PG_has_hwpoisoned = PG_error,
-+	PG_offlimits = PG_hwpoison,
- #endif
- 
- 	/* non-lru isolated movable page */
+Agreed; dup_mm() makes no sense and it is easily removed, see my earlier
+patch. Perhaps it can be simplified further to:
 
-and SNP will have to depend on CONFIG_MEMORY_FAILURE.
+	__poking_mm = init_mm
 
-But I'd let mm folks correct me here on the details.
+omitting the mm_init() I retained, but I need to stare harder at all
+that.
 
--- 
-Regards/Gruss,
-    Boris.
+> I'm not even sure why "poking_mm" exists at all, and why it has
+> created a whole new copy of "init_mm", and why this code isn't just
+> using '&init_mm' like everything else that wants to just walk the
+> kernel page tables.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Because it instantiates user-space page-tables in it, you really don't
+want those in init_mm.
+
+The whole (and sole) purpose of poking_mm is to contain the writable
+aliases. Only the CPU that has the poking_mm active has access to them.
