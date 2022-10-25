@@ -2,236 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24B960D2D6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAA260D2DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiJYR40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 13:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S232385AbiJYR5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 13:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJYR4W (ORCPT
+        with ESMTP id S231814AbiJYR5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 13:56:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF92FDDA0D;
-        Tue, 25 Oct 2022 10:56:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8714861A5C;
-        Tue, 25 Oct 2022 17:56:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31C0C433C1;
-        Tue, 25 Oct 2022 17:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666720579;
-        bh=yoY7iLCYU7bzt4GaDkXzEUixBCzZ8DqXBG0ytNBixsU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sGOxpfrqH3n+hxbHscT2hCJAweA45hU3XDOfbyng2Rw1RSuZVYXmDxaa61Zj3IGAA
-         u+6lDQdpV+pqSJNTrTP2zasaT1c6kcJzv7idqf6tlIFZ4VFDBO8gzJ4OrGjGhTWXXQ
-         PdtJt6i0GDl0EHg9PufvzxNIQpBVY7pbNKBemqw+x0Lmff5PKKKNNMSDd1q5cKocr8
-         YvcMXrE+jVIrWppzspmVO3mD4uMbVlB496Wg36qDLu4dSRqaaBOHiEOwbS0H6GG8ro
-         /OwTkx/eMJt/MvPVJ1rZIY8i5UOn+kWGfCtJkslDIsQsvqIeVOZZHfjfnCFZn3WikR
-         c/wiJAuXKNzVA==
-Date:   Tue, 25 Oct 2022 10:56:19 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     "ruansy.fnst@fujitsu.com" <ruansy.fnst@fujitsu.com>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "Yasunori Gotou (Fujitsu)" <y-goto@fujitsu.com>,
-        Brian Foster <bfoster@redhat.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "zwisler@kernel.org" <zwisler@kernel.org>,
-        Jeff Moyer <jmoyer@redhat.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "toshi.kani@hpe.com" <toshi.kani@hpe.com>
-Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
-Message-ID: <Y1gjQ4wNZr3ve2+K@magnolia>
-References: <1444b9b5-363a-163c-0513-55d1ea951799@fujitsu.com>
- <Yzt6eWLuX/RTjmjj@magnolia>
- <f196bcab-6aa2-6313-8a7c-f8ab409621b7@fujitsu.com>
- <Yzx64zGt2kTiDYaP@magnolia>
- <6a83a56e-addc-f3c4-2357-9589a49bf582@fujitsu.com>
- <Y1NRNtToQTjs0Dbd@magnolia>
- <20221023220018.GX3600936@dread.disaster.area>
- <OSBPR01MB2920CA997DDE891C06776279F42E9@OSBPR01MB2920.jpnprd01.prod.outlook.com>
- <20221024053109.GY3600936@dread.disaster.area>
- <dd00529c-d3ef-40e3-9dea-834c5203e3df@fujitsu.com>
+        Tue, 25 Oct 2022 13:57:47 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2085.outbound.protection.outlook.com [40.107.92.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9C2F682B;
+        Tue, 25 Oct 2022 10:57:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g9Q63nDBHRZz6/JdWaVQ3slT1yzIxOShKxh8Ca9P6OVmEZ+aXtGDVIAY43JEDMMzPVvY78C/sHWGq4/HtKMLdxsLumhSId4+PEElF8NYe8jJsm2rlDqHM3zFLwIMiLYKZfI0in/D2QJD0HPBwcUslRQ5jK/+lxwkzLmOLInCFggAxNiZ4J6/rIR+nd4J9YoiO3xefSYW4f/W8gKYxL7oucDS/SaCmS/OPmyPXBGJNN/aS2Mte0Ye0MUDe+FpuvCkDBEcYplrTwgZw59mqXjHqZsN7HJzaTsR6YlFTa3oeEPyy6yhFjpNpVyJHSAAKkNSm4EruKDS6CnAQmXVU0YXQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ApwWTx3nhzVYclFq+7VTHG1+uXahEaBPAGkoiSnFhPA=;
+ b=YhH0ECDXaA+R3k2ppBaukQbfvAB2K9A2+2TFqEnvXy1oOVBtWPz62E+922/F8rt9dohVBy5JZckAX96gFWr/zrJcdMq99X+3pqE25geEV1/n45HbIheFbxoxue8w1+FhOTQ8iTkKhPAqLb3TWh/S1JO/URdMls5mjO5aPwsHbVQA8zC2PTviU+4SH04pFDP+BFXsd8g5jRAYQHCdYrB5PMlvPM3+MXCYmQqqOxvwqp4ASGvKiXKQLTQ6eDdeYvsIZd2o7F64TStBVednDBnD2RoaqQSyf1EPgwyS0jLE2U9FPGg8rKP3e8zElacZ3VcJ4qm8fqeWhNHof0YjCP0pTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ApwWTx3nhzVYclFq+7VTHG1+uXahEaBPAGkoiSnFhPA=;
+ b=saLPN5Cu6RbC+Hs6PDlaqorvvRyHSrWJ6sWkBnqg350hG/FTRKNdIPh9NdKGNf99DqinoqBJcXIk8gOPczAXs1ykfgJRDb09/F1sF/TYO9PitMfZEMQHmCAoBIxW+4ELiYWM+q38DhuiEWteR4ASFwylg48IOHbhrWAAswj080w=
+Received: from BN9PR03CA0254.namprd03.prod.outlook.com (2603:10b6:408:ff::19)
+ by PH7PR12MB7139.namprd12.prod.outlook.com (2603:10b6:510:1ef::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Tue, 25 Oct
+ 2022 17:57:44 +0000
+Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ff:cafe::50) by BN9PR03CA0254.outlook.office365.com
+ (2603:10b6:408:ff::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.27 via Frontend
+ Transport; Tue, 25 Oct 2022 17:57:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5746.16 via Frontend Transport; Tue, 25 Oct 2022 17:57:43 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
+ 2022 12:57:43 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
+ 2022 10:57:43 -0700
+Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
+ Transport; Tue, 25 Oct 2022 12:57:42 -0500
+From:   Lizhi Hou <lizhi.hou@amd.com>
+To:     <vkoul@kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <trix@redhat.com>
+CC:     Lizhi Hou <lizhi.hou@amd.com>, <tumic@gpxsee.org>,
+        <max.zhen@amd.com>, <sonal.santan@amd.com>, <larry.liu@amd.com>,
+        <brian.xu@amd.com>
+Subject: [PATCH V9 XDMA 0/2] xilinx XDMA driver
+Date:   Tue, 25 Oct 2022 10:57:16 -0700
+Message-ID: <1666720638-33496-1-git-send-email-lizhi.hou@amd.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dd00529c-d3ef-40e3-9dea-834c5203e3df@fujitsu.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT039:EE_|PH7PR12MB7139:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6feb4a5c-6063-4ec9-65f2-08dab6b26adf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Og0u5Zyf/uj/5lZgJvVwtVtgPRX0GRrHxUvy30cmi9sBs5JhyHw1T6ASxb9iWD1WE9VKlGxqAbwEvawMeTUPZYd0oPvwo/eJNUm6yDabcLAqMwh5Z9tufXKRSNn/se+hT2FpZe9X8OuKMwI9+8XLxcVOKckcVZ6g4dtrmmYEi3jI1jn0A+Tp4uNi/TsFEzBSfTpOr6Ca3YKz+4O30T18dVEQzVQIPTRTjCzvqJ1cnSYXNAzsuFOH0hIw89Z4H2mYxUmEDHtqznUio4fPgWmxEeGgAmy0WJnlQGPVJjr2azIZGdPPvy1o9iIx7XcjSAPfzA3ngoaBWJDCAFHsSYEBj+VHrVSOEF9T5ebhlqzkblegYvmGA/xFhV77LX1bo26X9DR3oGMJu6SABsfKEmAuddBicpHxg0TEfabuVtKnqFhdhiOPd4i9+RM6THsJKZq58IH6DN4zR+LJmFme4K5ZCArDq9fuU07n0FzUIhxd96RNouMRjEhVqXBAHym0qj7E2IANNX0qZn60n78NKJZ2YonWXaAIfQCZCQLWCslpsS6wqvxaGx3GsgaH/8xKx55oaBiDa9V2v8t7V6c2PWW6iEZtneI1v827V8ujZYfUKGWONwq+YnqCBCG6e5/tNRpFH813kXqKOV6nW4UwVzPc7Do+oPBdO+TOH164kg+lpQpvkEg6iImyLv8EpNdIp2ff4UZC9IxW+Jiy4jVQw4zP2DYAFOt7L+5Ic+LuwJR8k0/rL5AHB8e0t1CJv4Qx7B/zJHksX24MzoDnSWsWSgEvCejKkbyOMWpnNWXM/wdQEIKinAT8LJtwb/aPh1uwoZ/z/FQg09zfI8Ldq+Zns1CQ+Gk0e6RRqxz6S6KzK4xOICsVG7HtIRVkCaqZs128662t
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199015)(36840700001)(46966006)(40470700004)(186003)(47076005)(2906002)(5660300002)(40460700003)(6666004)(44832011)(2616005)(40480700001)(83380400001)(336012)(26005)(70586007)(426003)(966005)(110136005)(478600001)(8936002)(4326008)(316002)(82310400005)(36756003)(36860700001)(70206006)(54906003)(8676002)(41300700001)(86362001)(356005)(81166007)(82740400003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 17:57:43.9337
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6feb4a5c-6063-4ec9-65f2-08dab6b26adf
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7139
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 02:26:50PM +0000, ruansy.fnst@fujitsu.com wrote:
-> 
-> 
-> 在 2022/10/24 13:31, Dave Chinner 写道:
-> > On Mon, Oct 24, 2022 at 03:17:52AM +0000, ruansy.fnst@fujitsu.com wrote:
-> >> 在 2022/10/24 6:00, Dave Chinner 写道:
-> >>> On Fri, Oct 21, 2022 at 07:11:02PM -0700, Darrick J. Wong wrote:
-> >>>> On Thu, Oct 20, 2022 at 10:17:45PM +0800, Yang, Xiao/杨 晓 wrote:
-> >>>>> In addition, I don't like your idea about the test change because it will
-> >>>>> make generic/470 become the special test for XFS. Do you know if we can fix
-> >>>>> the issue by changing the test in another way? blkdiscard -z can fix the
-> >>>>> issue because it does zero-fill rather than discard on the block device.
-> >>>>> However, blkdiscard -z will take a lot of time when the block device is
-> >>>>> large.
-> >>>>
-> >>>> Well we /could/ just do that too, but that will suck if you have 2TB of
-> >>>> pmem. ;)
-> >>>>
-> >>>> Maybe as an alternative path we could just create a very small
-> >>>> filesystem on the pmem and then blkdiscard -z it?
-> >>>>
-> >>>> That said -- does persistent memory actually have a future?  Intel
-> >>>> scuttled the entire Optane product, cxl.mem sounds like expansion
-> >>>> chassis full of DRAM, and fsdax is horribly broken in 6.0 (weird kernel
-> >>>> asserts everywhere) and 6.1 (every time I run fstests now I see massive
-> >>>> data corruption).
-> >>>
-> >>> Yup, I see the same thing. fsdax was a train wreck in 6.0 - broken
-> >>> on both ext4 and XFS. Now that I run a quick check on 6.1-rc1, I
-> >>> don't think that has changed at all - I still see lots of kernel
-> >>> warnings, data corruption and "XFS_IOC_CLONE_RANGE: Invalid
-> >>> argument" errors.
-> >>
-> >> Firstly, I think the "XFS_IOC_CLONE_RANGE: Invalid argument" error is
-> >> caused by the restrictions which prevent reflink work together with DAX:
-> >>
-> >> a. fs/xfs/xfs_ioctl.c:1141
-> >> /* Don't allow us to set DAX mode for a reflinked file for now. */
-> >> if ((fa->fsx_xflags & FS_XFLAG_DAX) && xfs_is_reflink_inode(ip))
-> >>          return -EINVAL;
-> >>
-> >> b. fs/xfs/xfs_iops.c:1174
-> >> /* Only supported on non-reflinked files. */
-> >> if (xfs_is_reflink_inode(ip))
-> >>          return false;
-> >>
-> >> These restrictions were removed in "drop experimental warning" patch[1].
-> >>    I think they should be separated from that patch.
-> >>
-> >> [1]
-> >> https://lore.kernel.org/linux-xfs/1663234002-17-1-git-send-email-ruansy.fnst@fujitsu.com/
-> >>
-> >>
-> >> Secondly, how the data corruption happened?
-> > 
-> > No idea - i"m just reporting that lots of fsx tests failed with data
-> > corruptions. I haven't had time to look at why, I'm still trying to
-> > sort out the fix for a different data corruption...
-> > 
-> >> Or which case failed?
-> > 
-> > *lots* of them failed with kernel warnings with reflink turned off:
-> > 
-> > SECTION       -- xfs_dax_noreflink
-> > =========================
-> > Failures: generic/051 generic/068 generic/075 generic/083
-> > generic/112 generic/127 generic/198 generic/231 generic/247
-> > generic/269 generic/270 generic/340 generic/344 generic/388
-> > generic/461 generic/471 generic/476 generic/519 generic/561 xfs/011
-> > xfs/013 xfs/073 xfs/297 xfs/305 xfs/517 xfs/538
-> > Failed 26 of 1079 tests
-> > 
-> > All of those except xfs/073 and generic/471 are failures due to
-> > warnings found in dmesg.
-> > 
-> > With reflink enabled, I terminated the run after g/075, g/091, g/112
-> > and generic/127 reported fsx data corruptions and g/051, g/068,
-> > g/075 and g/083 had reported kernel warnings in dmesg.
-> > 
-> >> Could
-> >> you give me more info (such as mkfs options, xfstests configs)?
-> > 
-> > They are exactly the same as last time I reported these problems.
-> > 
-> > For the "no reflink" test issues:
-> > 
-> > mkfs options are "-m reflink=0,rmapbt=1", mount options "-o
-> > dax=always" for both filesytems.  Config output at start of test
-> > run:
-> > 
-> > SECTION       -- xfs_dax_noreflink
-> > FSTYP         -- xfs (debug)
-> > PLATFORM      -- Linux/x86_64 test3 6.1.0-rc1-dgc+ #1615 SMP PREEMPT_DYNAMIC Wed Oct 19 12:24:16 AEDT 2022
-> > MKFS_OPTIONS  -- -f -m reflink=0,rmapbt=1 /dev/pmem1
-> > MOUNT_OPTIONS -- -o dax=always -o context=system_u:object_r:root_t:s0 /dev/pmem1 /mnt/scratch
-> > 
-> > pmem devices are a pair of fake 8GB pmem regions set up by kernel
-> > CLI via "memmap=8G!15G,8G!24G". I don't have anything special set up
-> > - the kernel config is kept minimal for these VMs - and the only
-> > kernel debug option I have turned on for these specific test runs is
-> > CONFIG_XFS_DEBUG=y.
-> 
-> Thanks for the detailed info.  But, in my environment (and my 
-> colleagues', and our real server with DCPMM) these failure cases (you 
-> mentioned above, in dax+non_reflink mode, with same test options) cannot 
-> reproduce.
-> 
-> Here's our test environment info:
->   - Ruan's env: fedora 36(v6.0-rc1) on kvm,pmem 2x4G:file backended
->   - Yang's env: fedora 35(v6.1-rc1) on kvm,pmem 2x1G:memmap=1G!1G,1G!2G
->   - Server's  : Ubuntu 20.04(v6.0-rc1) real machine,pmem 2x4G:real DCPMM
-> 
-> (To quickly confirm the difference, I just ran the failed 26 cases you 
-> mentioned above.)  Except for generic/471 and generic/519, which failed 
-> even when dax is off, the rest passed.
-> 
-> 
-> We don't want fsdax to be truned off.  Right now, I think the most 
-> important thing is solving the failed cases in dax+non_reflink mode. 
-> So, firstly, I have to reproduce those failures.  Is there any thing 
-> wrong with my test environments?  I konw you are using 'memmap=XXG!YYG' to 
-> simulate pmem.  So, (to Darrick) could you show me your config of dev 
-> environment and the 'testcloud'(I am guessing it's a server with real 
-> nvdimm just like ours)?
+Hello,
 
-Nope.  Since the announcement of pmem as a product, I have had 15
-minutes of acces to one preproduction prototype server with actual
-optane DIMMs in them.
+This V9 of patch series is to provide the platform driver to support the
+Xilinx XDMA subsystem. The XDMA subsystem is used in conjunction with the
+PCI Express IP block to provide high performance data transfer between host
+memory and the card's DMA subsystem. It also provides up to 16 user
+interrupt wires to user logic that generate interrupts to the host.
 
-I have /never/ had access to real hardware to test any of this, so it's
-all configured via libvirt to simulate pmem in qemu:
-https://lore.kernel.org/linux-xfs/YzXsavOWMSuwTBEC@magnolia/
+            +-------+       +-------+       +-----------+
+   PCIe     |       |       |       |       |           |
+   Tx/Rx    |       |       |       |  AXI  |           |
+ <=======>  | PCIE  | <===> | XDMA  | <====>| User Logic|
+            |       |       |       |       |           |
+            +-------+       +-------+       +-----------+
 
-/run/mtrdisk/[gh].mem are both regular files on a tmpfs filesystem:
+The XDMA has been used for Xilinx Alveo PCIe devices.
+And it is also integrated into Versal ACAP DMA and Bridge Subsystem.
+    https://www.xilinx.com/products/boards-and-kits/alveo.html
+    https://docs.xilinx.com/r/en-US/pg344-pcie-dma-versal/Introduction-to-the-DMA-and-Bridge-Subsystems
 
-$ grep mtrdisk /proc/mounts
-none /run/mtrdisk tmpfs rw,relatime,size=82894848k,inode64 0 0
+The device driver for any FPGA based PCIe device which leverages XDMA can
+call the standard dmaengine APIs to discover and use the XDMA subsystem
+without duplicating the XDMA driver code in its own driver.
 
-$ ls -la /run/mtrdisk/[gh].mem
--rw-r--r-- 1 libvirt-qemu kvm 10739515392 Oct 24 18:09 /run/mtrdisk/g.mem
--rw-r--r-- 1 libvirt-qemu kvm 10739515392 Oct 24 19:28 /run/mtrdisk/h.mem
+Changes since v8:
+- Fixed test robot failure on s390.
 
---D
+Changes since v7:
+- Used pci device pointer for dma_pool_create().
 
-> 
-> 
-> (I just found I only tested on 4G and smaller pmem device.  I'll try the 
-> test on 8G pmem)
-> 
-> > 
-> > THe only difference between the noreflink and reflink runs is that I
-> > drop the "-m reflink=0" mkfs parameter. Otherwise they are identical
-> > and the errors I reported are from back-to-back fstests runs without
-> > rebooting the VM....
-> > 
-> > -Dave.
-> 
-> 
-> --
-> Thanks,
-> Ruan.
+Changes since v6:
+- Fixed descriptor filling bug.
+
+Changes since v5:
+- Modified user logic interrupt APIs to handle user logic IP which does not
+  have its own register to enable/disable interrupt.
+- Clean up code based on review comments.
+
+Changes since v4:
+- Modified user logic interrupt APIs.
+
+Changes since v3:
+- Added one patch to support user logic interrupt.
+
+Changes since v2:
+- Removed tasklet.
+- Fixed regression bug introduced to V2.
+- Test Robot warning.
+
+Changes since v1:
+- Moved filling hardware descriptor to xdma_prep_device_sg().
+- Changed hardware descriptor enum to "struct xdma_hw_desc".
+- Minor changes from code review comments.
+
+Lizhi Hou (2):
+  dmaengine: xilinx: xdma: Add xilinx xdma driver
+  dmaengine: xilinx: xdma: Add user logic interrupt support
+
+ MAINTAINERS                            |   11 +
+ drivers/dma/Kconfig                    |   14 +
+ drivers/dma/xilinx/Makefile            |    1 +
+ drivers/dma/xilinx/xdma-regs.h         |  171 ++++
+ drivers/dma/xilinx/xdma.c              | 1041 ++++++++++++++++++++++++
+ include/linux/dma/amd_xdma.h           |   16 +
+ include/linux/platform_data/amd_xdma.h |   34 +
+ 7 files changed, 1288 insertions(+)
+ create mode 100644 drivers/dma/xilinx/xdma-regs.h
+ create mode 100644 drivers/dma/xilinx/xdma.c
+ create mode 100644 include/linux/dma/amd_xdma.h
+ create mode 100644 include/linux/platform_data/amd_xdma.h
+
+-- 
+2.27.0
+
