@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EDE60CC5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D044360CC60
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbiJYMsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
+        id S232435AbiJYMsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbiJYMrm (ORCPT
+        with ESMTP id S232321AbiJYMrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:47:42 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0480519299B
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:45:25 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MxWkP6L7Gz15Lxv;
-        Tue, 25 Oct 2022 20:40:29 +0800 (CST)
+        Tue, 25 Oct 2022 08:47:43 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052E71958FE
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:45:26 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MxWkW4tPXzVj6j;
+        Tue, 25 Oct 2022 20:40:35 +0800 (CST)
 Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Tue, 25 Oct 2022 20:45:21 +0800
 Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
@@ -32,9 +32,9 @@ To:     <gregkh@linuxfoundation.org>,
         <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
         <zhangfei.gao@linaro.org>, <wangzhou1@hisilicon.com>,
         <yekai13@huawei.com>
-Subject: [PATCH v9 2/3] Documentation: add a isolation strategy sysfs node for uacce
-Date:   Tue, 25 Oct 2022 12:39:30 +0000
-Message-ID: <20221025123931.42161-3-yekai13@huawei.com>
+Subject: [PATCH v9 3/3] crypto: hisilicon/qm - add the device isolation feature for acc
+Date:   Tue, 25 Oct 2022 12:39:31 +0000
+Message-ID: <20221025123931.42161-4-yekai13@huawei.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221025123931.42161-1-yekai13@huawei.com>
 References: <20221025123931.42161-1-yekai13@huawei.com>
@@ -52,53 +52,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update documentation describing sysfs node that could help to
-configure isolation strategy for users in the user space. And
-describing sysfs node that could read the device isolated state.
+Record every AER error by uacce api. And isolate the device directly
+when the controller reset fail. The VF device use the PF device
+isolation strategy. Once the PF device is isolated, its VF device will
+also be isolated.
 
 Signed-off-by: Kai Ye <yekai13@huawei.com>
 ---
- Documentation/ABI/testing/sysfs-driver-uacce | 27 ++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/crypto/hisilicon/qm.c | 66 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 57 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-driver-uacce b/Documentation/ABI/testing/sysfs-driver-uacce
-index 08f2591138af..50737c897ba3 100644
---- a/Documentation/ABI/testing/sysfs-driver-uacce
-+++ b/Documentation/ABI/testing/sysfs-driver-uacce
-@@ -19,6 +19,33 @@ Contact:        linux-accelerators@lists.ozlabs.org
- Description:    Available instances left of the device
-                 Return -ENODEV if uacce_ops get_available_instances is not provided
+diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+index 363a02810a16..aa953ce86f70 100644
+--- a/drivers/crypto/hisilicon/qm.c
++++ b/drivers/crypto/hisilicon/qm.c
+@@ -3397,6 +3397,29 @@ static void qm_set_sqctype(struct uacce_queue *q, u16 type)
+ 	up_write(&qm->qps_lock);
+ }
  
-+What:           /sys/class/uacce/<dev_name>/isolate_strategy
-+Date:           Oct 2022
-+KernelVersion:  6.1
-+Contact:        linux-accelerators@lists.ozlabs.org
-+Description:    (RW) Configure the frequency size for the hardware error
-+                isolation strategy. This unit is the number of times. Number
-+                of occurrences in a period, also means threshold. If the number
-+                of device pci AER error exceeds the threshold in a time window,
-+                the device is isolated. This size is a configured integer value.
-+                The default is 0. The maximum value is 65535.
++static int qm_uacce_isolate_init(struct hisi_qm *qm)
++{
++	struct pci_dev *pdev = qm->pdev;
++	struct uacce_device *pf_uacce, *uacce;
++	struct device *pf_dev = &(pci_physfn(pdev)->dev);
 +
-+                In the hisilicon accelerator engine, first we will
-+                time-stamp every slot AER error. Then check the AER error log
-+                when the device AER error occurred. if the device slot AER error
-+                count exceeds the preset the number of times in one hour, the
-+                isolated state will be set to true. So the device will be
-+                isolated. And the AER error log that exceed one hour will be
-+                cleared.
++	uacce = qm->uacce;
++	if (uacce->is_vf) {
++		/* VF uses PF's isoalte data */
++		pf_uacce = dev_to_uacce(pf_dev);
++		if (!pf_uacce) {
++			pci_err(pdev, "fail to PF device!\n");
++			return -ENODEV;
++		}
 +
-+What:           /sys/class/uacce/<dev_name>/isolate
-+Date:           Oct 2022
-+KernelVersion:  6.1
-+Contact:        linux-accelerators@lists.ozlabs.org
-+Description:    (R) A sysfs node that read the device isolated state. The value 1
-+                means the device is unavailable. The 0 means the device is
-+                available.
++		uacce->isolate_ctx = &pf_uacce->isolate_data;
++	} else {
++		uacce->isolate_ctx = &uacce->isolate_data;
++	}
 +
- What:           /sys/class/uacce/<dev_name>/algorithms
- Date:           Feb 2020
- KernelVersion:  5.7
++	return 0;
++}
++
+ static long hisi_qm_uacce_ioctl(struct uacce_queue *q, unsigned int cmd,
+ 				unsigned long arg)
+ {
+@@ -3450,6 +3473,14 @@ static const struct uacce_ops uacce_qm_ops = {
+ 	.is_q_updated = hisi_qm_is_q_updated,
+ };
+ 
++static void qm_remove_uacce(struct hisi_qm *qm)
++{
++	if (qm->use_sva) {
++		uacce_remove(qm->uacce);
++		qm->uacce = NULL;
++	}
++}
++
+ static int qm_alloc_uacce(struct hisi_qm *qm)
+ {
+ 	struct pci_dev *pdev = qm->pdev;
+@@ -3511,7 +3542,14 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
+ 
+ 	qm->uacce = uacce;
+ 
++	ret = qm_uacce_isolate_init(qm);
++	if (ret)
++		goto err_rm_uacce;
++
+ 	return 0;
++err_rm_uacce:
++	qm_remove_uacce(qm);
++	return ret;
+ }
+ 
+ /**
+@@ -5133,6 +5171,12 @@ static int qm_controller_reset_prepare(struct hisi_qm *qm)
+ 		return ret;
+ 	}
+ 
++	if (qm->use_sva) {
++		ret = uacce_hw_err_isolate(qm->uacce);
++		if (ret)
++			pci_err(pdev, "failed to isolate hw err!\n");
++	}
++
+ 	ret = qm_wait_vf_prepare_finish(qm);
+ 	if (ret)
+ 		pci_err(pdev, "failed to stop by vfs in soft reset!\n");
+@@ -5458,21 +5502,25 @@ static int qm_controller_reset(struct hisi_qm *qm)
+ 		qm->err_ini->show_last_dfx_regs(qm);
+ 
+ 	ret = qm_soft_reset(qm);
+-	if (ret) {
+-		pci_err(pdev, "Controller reset failed (%d)\n", ret);
+-		qm_reset_bit_clear(qm);
+-		return ret;
+-	}
++	if (ret)
++		goto err_reset;
+ 
+ 	ret = qm_controller_reset_done(qm);
+-	if (ret) {
+-		qm_reset_bit_clear(qm);
+-		return ret;
+-	}
++	if (ret)
++		goto err_reset;
+ 
+ 	pci_info(pdev, "Controller reset complete\n");
+ 
+ 	return 0;
++err_reset:
++	pci_info(pdev, "Controller reset failed (%d)\n", ret);
++	qm_reset_bit_clear(qm);
++
++	/* if resetting fails, isolate the device */
++	if (qm->use_sva && !qm->uacce->is_vf)
++		qm->uacce->isolate_ctx->is_isolate = true;
++
++	return ret;
+ }
+ 
+ /**
 -- 
 2.17.1
 
