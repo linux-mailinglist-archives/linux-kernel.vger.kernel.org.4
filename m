@@ -2,120 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546BF60D4A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A91460D4A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbiJYTXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S232107AbiJYTZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJYTWt (ORCPT
+        with ESMTP id S229682AbiJYTZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:22:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB62B1B81;
-        Tue, 25 Oct 2022 12:22:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C10361AF5;
-        Tue, 25 Oct 2022 19:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD7FDC433C1;
-        Tue, 25 Oct 2022 19:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666725767;
-        bh=ftFE81qWKNF97F1+cBxFeqLoApotXUldU+KauLM18kg=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=UwqgP6us0tlufLoD0tWGWtVkoYygJXXt0/XrmsC3fpjKUm5EDIq/AkzAvEWDEpmfU
-         8YaD/C/pqjsmcpVeKkc+ywUp5xVqklZnGGgwMNP89V6tb0cJMmjy4OL8Nkl57B/xsb
-         G6oVYLvuqgDV00UyUWobFEcQX4IgNlLQ4oTShMff68u3VkYGSVwd2RrMXI7pqPfOCK
-         6JBrvkrTMM/dRgG9FRzIIxOHMNE0qe6sSZIcKGPfFWpt/Mnjgqeqm59MGqn1tBB/VT
-         Gq2yM6aH6tQNyXps4PJ0CqAXES6QhqSZcpm6aufPVJmub1it3NDXFsx0e9XOb0UN+I
-         AsskWC4Sg1ScA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-toolchains@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>, mikem@ring3k.org,
-        wlanfae@realtek.com
-Subject: Re: [PATCH v2] kbuild: treat char as always unsigned
-References: <Y1BcpXAjR4tmV6RQ@zx2c4.com>
-        <20221019203034.3795710-1-Jason@zx2c4.com> <Y1ZZyP4ZRBIbv+Kg@kili>
-        <Y1ZbI4IzAOaNwhoD@kadam> <Y1a+cHkFt54gJv54@zx2c4.com>
-        <CAHk-=wgK3Vs+7Kor-SisRHJYzV1tXD+=D4+W1XkfHOV2KN_OGw@mail.gmail.com>
-        <CAHmME9ox7JNqOOZHEHCgaS95rsn-dVr4QOnN1mfmFEn=i9_jvw@mail.gmail.com>
-Date:   Tue, 25 Oct 2022 22:22:41 +0300
-In-Reply-To: <CAHmME9ox7JNqOOZHEHCgaS95rsn-dVr4QOnN1mfmFEn=i9_jvw@mail.gmail.com>
-        (Jason A. Donenfeld's message of "Mon, 24 Oct 2022 19:17:25 +0200")
-Message-ID: <874jvrzp1a.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 25 Oct 2022 15:25:03 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7983D915E4;
+        Tue, 25 Oct 2022 12:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666725902; x=1698261902;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=y3B0Kj9Pk3p5ePYZTYgdnjn/pRmrjYtCWMmeXVW7+r8=;
+  b=HY/JtmDGfwq6oKBrJYbX8H6k1Phv52KBy6PfFO6gHQWzzEpPs0k69TtQ
+   mbtzxacWkuO0oKGBBgtxvgovs0Joyr/o9HsE1Q89dtcThK2j/a88VU/0P
+   COppMHsga2QvklZwQ6itZT6GdTncp7PAj3lC+TF1Wt2kfiS5S1Q5UKZoh
+   NEAx6HqHwRS72a65oFX54sPYruUGZdGv//dSCX652ByFTvAZoCLndHIQu
+   2S7FF5vbvnHovtcQ1zTcRSu43RnEzcbrdsF5MGaLz4RO1kIQ4YABlgY7R
+   xPd1GP7bGTDG+Ccroe+m8hUhrXxAOnTbYmUyeruZHXntZ3Ee9ugetlkMF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="288167035"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="288167035"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 12:25:02 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="695085145"
+X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
+   d="scan'208";a="695085145"
+Received: from jlluce-mobl1.amr.corp.intel.com (HELO [10.212.217.182]) ([10.212.217.182])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 12:25:01 -0700
+Message-ID: <5329dce1-5611-bc15-7b75-4070cc991284@intel.com>
+Date:   Tue, 25 Oct 2022 12:25:00 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] x86/retpoline: Fix crash printing warning
+Content-Language: en-US
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <song@kernel.org>, Nadav Amit <namit@vmware.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <Y1gBoUZrRK5N/lCB@kili>
+ <e3464bac-82cb-2180-74f5-448e70540190@gnuweeb.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <e3464bac-82cb-2180-74f5-448e70540190@gnuweeb.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+On 10/25/22 11:59, Ammar Faizi wrote:
+> When I visited that lkml link, it shows "message ID not found". The
+> problem seems to be coming from the tool used to pick up the patch.
 
-> Hi Linus,
->
-> On Mon, Oct 24, 2022 at 7:11 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->> IOW, I don't think these are 6.1 material as some kind of obvious
->> fixes, at least not without driver author acks.
->
-> Right, these are posted to the authors and maintainers to look at.
-> Maybe they punt them until 6.2 which would be fine too.
->
->> On Mon, Oct 24, 2022 at 9:34 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->> Some of those may need more thought. For example, that first one:
->>
->> > https://lore.kernel.org/all/20221024163005.536097-1-Jason@zx2c4.com
->>
->> looks just *strange*. As far as I can tell, no other wireless drivers
->> do any sign checks at all.
->>
->> Now, I didn't really look around a lot, but looking at a few other
->> SIOCSIWESSID users, most don't even seem to treat it as a string at
->> all, but as just a byte dump (so memcpy() instead of strncpy())
-
-Yes, SSID should be handled as a byte array with a specified length.
-Back in the day some badly written code treated it as string but luckily
-it's rare now.
-
->> As far as I know, there are no actual rules for SSID character sets,
->> and while using utf-8 or something else might cause interoperability
->> problems, this driver seems to be just confused. If you want to check
->> for "printable characters", that check is still wrong.
->>
->> So I don't think this is a "assume char is signed" issue. I think this
->> is a "driver is confused" issue.
->
-> Yea I had a few versions of this. In one of them, I changed `char
-> *extra` throughout the wireless stack into `s8 *extra` and in another
-> `u8 *extra`, after realizing they're mostly just bags of bits. But
-> that seemed pretty invasive when, indeed, this staging driver is just
-> a little screwy.
->
-> So perhaps the right fix is to just kill that whole snippet? Kalle - opinions?
-
-I would also remove the whole 'extra[i] < 0', seems like a pointless
-check to me. And I see that you already submitted v2, good.
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Thanks for the heads-up!  That link is indeed generated by tooling.
+I'll go fix it up.
