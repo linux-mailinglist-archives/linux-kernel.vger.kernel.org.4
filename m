@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD38A60C7D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC6960C7E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiJYJVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S231585AbiJYJWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiJYJUn (ORCPT
+        with ESMTP id S231835AbiJYJVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:20:43 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431E957E25;
-        Tue, 25 Oct 2022 02:15:01 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id bh7-20020a05600c3d0700b003c6fb3b2052so8026732wmb.2;
-        Tue, 25 Oct 2022 02:15:01 -0700 (PDT)
+        Tue, 25 Oct 2022 05:21:43 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10EFA15CB1D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:16:31 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so11317780pjl.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:16:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :references:from:to:cc:subject:date:message-id:reply-to;
-        bh=L3cL9hwVxxgYxbdvufURLKd+4fQ6tHsN/7T//5flfK4=;
-        b=ApoeYpc3MysTAdWPnaqpsoMjEaLM61adiuDH3vZ7v42DONj59KZ6P8takrH2S98ccp
-         Fcjzz4saLkRk/3y6KpSWVmyL4HnQreYHj6M8mSn8lfo59EQMhFxBiRyShW21mYb/dbDL
-         ZoLQhsvqbnkekkmsug6El//bmytnJlnE53ltFWurA2ftntoYNVLlHufKeYoq4SZ+2nCv
-         BpuCXswqUAcOB4CO5r6GPRoG26+r/O/MhhzM5UMx437Z9YNYXVzf175s/4TEkaLUCk6b
-         l/GdsD+VZGhT8wGuHoRn/qKdv9cnWyaAjr5r9II3boaXzXNGq4tA9YGCQ6DnafuIpeAQ
-         r9ng==
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FtV+tKTBeqXAnLa1ocBz79FGiw/ZEj0BMwzagYbLe8Q=;
+        b=PsKXkZXtmWnp+tVBr/p7G56gTgPHRJ7OdWYL/NcRKOCEmu8gnt7U2oXn3m5MUzQ43r
+         RUKwZRKvYvr/U1sE3qR/XG3dY/e3FXUjkf4hQMxxf/jpmAWA6aEO/X+drtk+cc98tr8Q
+         GhmZPbnlbHM1vKB0WavxMbebvvz+3m0reWopqtBRjdMVeOsNW8xonhX83EJh4gaKJyU4
+         KyQT0vZ5pk8k3sMwUpkyasSjX3QFzvjyy8vBXHogznnizUkfcNrAEA08ZoWbwRYc8g0H
+         7Q1L4rtdhMr6CtdrazUvunw9YEGjAQlutnA90wuJCO7r1/2EGMOb90EmWChE2V6u1Jwj
+         auUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :references:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L3cL9hwVxxgYxbdvufURLKd+4fQ6tHsN/7T//5flfK4=;
-        b=KqXqqQ6L3LRtO2t9znwa8RBeBT4SPxPXXaxt0+sqRchpgYrPpsmtW5XZiZkT/KeC3W
-         4qkmZgLSI7/Hbm/VqJOkQQwPtZU64wlH+dY5IZRlehnKn85mrehpfpATAVh4oCPdtNoq
-         DHOZ7TB52iCapzsbpl/6/PO4/Xk3iZcePaO0RTrrZCBCMmZ3b5SzIF76gwYJ27uoUvAO
-         MeWGtKX6VAu/RauS7uvO1QIUZNVQDH3DNFd7IIPZJML+FPs3ou1Vre/MMcMs0R0LQYKR
-         aeDLAd1bCzYJwwKEAWOWSN2Ukdto6hgok4Aovd/AnmPuQqSiLXPK5JuswODwob7gyOj+
-         PS+g==
-X-Gm-Message-State: ACrzQf1kZNA7dY2KuKE5uzhA3Lj+5kYaLXRbkdd8Tj3O9GWeSfVnVvjv
-        Wvm2+BzEmGY48LsPQtv8Lns=
-X-Google-Smtp-Source: AMsMyM6+HxgSs8qN0tuLYvmcnvB8cVpip/9nCa1nA2ZJc3CfAuicjU8aMKdwWBbMyPQeFCRdA7Ob/Q==
-X-Received: by 2002:a05:600c:4e45:b0:3cd:f141:b7d8 with SMTP id e5-20020a05600c4e4500b003cdf141b7d8mr7755802wmq.196.1666689300075;
-        Tue, 25 Oct 2022 02:15:00 -0700 (PDT)
-Received: from localhost (188.29.212.253.threembb.co.uk. [188.29.212.253])
-        by smtp.gmail.com with ESMTPSA id h8-20020a05600c314800b003c6cd82596esm10907736wmo.43.2022.10.25.02.14.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 02:14:59 -0700 (PDT)
-References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
- <20221022162742.21671-2-aidanmacdonald.0x0@gmail.com>
- <ef6a326b-5c61-988b-2ec2-cd8e233e5d28@linaro.org>
- <GMvEU8xVTkjIoQ518XWAaLkhldSZHlk7@localhost>
- <4ef59d94-d045-55fc-d531-c84e7edb8333@linaro.org>
- <hXRpArckbrXUelDdaJ3Y2SErmKiuycXt@localhost>
- <66c1a100-922e-4a33-e80c-fc80866acf03@linaro.org>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     broonie@kernel.org, lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        kuninori.morimoto.gx@renesas.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] dt-bindings: ASoC: simple-card: Add
- system-clock-id property
-In-reply-to: <66c1a100-922e-4a33-e80c-fc80866acf03@linaro.org>
-Date:   Tue, 25 Oct 2022 10:14:59 +0100
-Message-ID: <jZCUALhj8PoqVkuWdtLf8LnPAj1wDakF@localhost>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FtV+tKTBeqXAnLa1ocBz79FGiw/ZEj0BMwzagYbLe8Q=;
+        b=mowes46gJfUXUDIgQHEK5g4Dm4qyxTxMlU0/yvIVIHkbfQUscnLrgDSOUoHHpuISt7
+         /3wV3ebXIla6+wRUKsLxNRKW5TyzUHF+oOas1SvXYGV/7h2nhkcJf5KtH4m81iNNyiNC
+         eeUaJu2NcP8AE+214X8doH3jOhBcAfqtWgBe5dWQN1NRU7UgECJIPKX9KEXNdrD+IKSt
+         MExZOQsCYMEPJ6HixTXvO4HW6IB5k3Ku7tTM+x2A0H/v0GBOlkHr2p3sTsvJ4/tLFmPV
+         OlIlKIVkrAhTSERUXigNgdXE4B3+JQLOnD+445CXPzQMWIvowFp7CoaR3SBNZrMBHx4x
+         2T8Q==
+X-Gm-Message-State: ACrzQf3/mOq3USKH7cOmZLepnvrKROy9m1/evSOdC/wwj0tLpfUrMzWh
+        Y65FhsAAXVDUBO9G7opf6LD02Q==
+X-Google-Smtp-Source: AMsMyM5OvGCTXaXrqqslumYN+vWkZa2LgvDCrTrp9wj2GwTyD9qpRpOgXJlGqqSaXk9Brq7WcSCCsw==
+X-Received: by 2002:a17:90b:1651:b0:20d:5255:859 with SMTP id il17-20020a17090b165100b0020d52550859mr43501045pjb.185.1666689391302;
+        Tue, 25 Oct 2022 02:16:31 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
+        by smtp.gmail.com with ESMTPSA id p6-20020a170902780600b0016c9e5f291bsm879313pll.111.2022.10.25.02.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 02:16:30 -0700 (PDT)
+Message-ID: <dcd22f70-e51c-290e-c11f-9a5ce32748c1@9elements.com>
+Date:   Tue, 25 Oct 2022 14:46:27 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
+ <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
+ <20221024161806.GA1855651-robh@kernel.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20221024161806.GA1855651-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,126 +81,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
 
-> On 24/10/2022 19:38, Aidan MacDonald wrote:
->>
->> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
->>
->>> On 23/10/2022 09:47, Aidan MacDonald wrote:
->>>>
->>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
->>>>
->>>>> On 22/10/2022 12:27, Aidan MacDonald wrote:
->>>>>> This is a new per-DAI property used to specify the clock ID argument
->>>>>> to snd_soc_dai_set_sysclk().
->>>>>
->>>>> You did no show the use of this property and here you refer to some
->>>>> specific Linux driver implementation, so in total this does no look like
->>>>>  a hardware property.
->>>>>
->>>>> You also did not explain why do you need it (the most important piece of
->>>>> commit msg).
->>>>>
->>>>>>
->>>>>> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->>>>>> ---
->>>>>>  Documentation/devicetree/bindings/sound/simple-card.yaml | 8 ++++++++
->>>>>>  1 file changed, 8 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/sound/simple-card.yaml b/Documentation/devicetree/bindings/sound/simple-card.yaml
->>>>>> index ed19899bc94b..cb7774e235d0 100644
->>>>>> --- a/Documentation/devicetree/bindings/sound/simple-card.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/sound/simple-card.yaml
->>>>>> @@ -57,6 +57,12 @@ definitions:
->>>>>>        single fixed sampling rate.
->>>>>>      $ref: /schemas/types.yaml#/definitions/flag
->>>>>>
->>>>>> +  system-clock-id:
->>>>>> +    description: |
->>>>>> +      Specify the clock ID used for setting the DAI system clock.
->>>>>
->>>>>
->>>>> With lack of explanation above, I would say - use common clock framework
->>>>> to choose a clock...
->>>>>
->>>>>
->>>>> Best regards,
->>>>> Krzysztof
->>>>
->>>> Sorry, I didn't explain things very well. The system clock ID is indeed
->>>> a property of the DAI hardware. The ID is not specific to Linux in any
->>>> way, and really it's an enumeration that requires a dt-binding.
->>>>
->>>> A DAI may support multiple system clock inputs or outputs identified by
->>>> the clock ID. In the case of outputs, these could be distinct clocks
->>>> that have their own I/O pins, or the clock ID could select the internal
->>>> source clock used for a clock generator. For inputs, the system clock ID
->>>> may inform the DAI how or where the system clock is being provided so
->>>> hardware registers can be configured appropriately.
->>>>
->>>> Really the details do not matter, except that in a particular DAI link
->>>> configuration a specific clock ID must be used. This is determined by
->>>> the actual hardware connection between the DAIs; if the wrong clock is
->>>> used, the DAI may not function correctly.
->>>>
->>>> Currently the device tree is ambiguous as to which system clock should
->>>> be used when the DAI supports more than one, because there is no way to
->>>> specify which clock was intended. Linux just treats the ID as zero, but
->>>> that's currently a Linux-specific numbering so there's guarantee that
->>>> another OS would choose the same clock as Linux.
->>>>
->>>> The system-clock-id property is therefore necessary to fully describe
->>>> the hardware connection between DAIs in a DAI link when a DAI offers
->>>> more than one choice of system clock.
->>>>
->>>> I will resend the patch with the above in the commit message.
->>>
->>> For example if you want to define which input pin to use (so you have
->>> internal mux), it's quite unspecific to give them some indexes. What is
->>> 0? What is 1? Number of pin? Number of pin counting from where?
->>>
->>> Since this is unanswered, the IDs are also driver and implementation
->>> dependent, thus you still have the same problem - another OS can choose
->>> different clock. That's not then a hardware description, but software
->>> configuration.
->>>
->>> Best regards,
->>> Krzysztof
->>
->> I answered this already. The enumeration is arbitrary. Create some
->> dt-bindings and voila, it becomes standardized and OS-independent.
->
-> Hm, then I missed something. Can you point me to DTS and bindings
-> (patches or in-tree) which show this standardized indices of clock inputs?
->
-> Best regards,
-> Krzysztof
+On 24-10-2022 09:48 pm, Rob Herring wrote:
+> So if we unload and reload the driver module, it should go back to the
+> default?
+This is RPM to be set during probe if desired.
+> 
+> I think it is really, 'target RPM if not already configured' which could
+> be keep the setting from a register (e.g. what the bootloader set) or
+> perhaps you already have temperature information to use...
+Yes. missed it. It should be target-rpm will correct this. in next version.
+> 
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +  pwm-frequency:
+>> +    description:
+>> +      PWM frequency for fan in Hertz(Hz).
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +
+>> +  pwm-polarity-inverse:
+>> +    description:
+>> +      Inverse PWM polarity for fan.
+>> +    type: boolean
+> As I said before, the PWM binding handles these 2 settings. Use it. Yes,
+> it's a bit of an overkill when the child is the consumer of the parent.
+> Until some 'clever' h/w engineer decides to use one of the PWMs for
+> something else like a backlight.
+I would like you to consider this as something recommended by fan 
+datasheet for the given fan instance.
+This info can be used by fan controller driver to configure PWM 
+source/provider accordingly.
 
-Device trees already use standardized enumerations in other areas so it
-isn't a new idea. Look under include/dt-bindings/clock. Every header
-there contains an arbitrary enumeration of a device's clocks. In fact
-most of include/dt-bindings is exactly for this purpose, to define
-standard values that are not "just numbers" but an enum, a flag, etc,
-with a special meaning. It is not specific to clocks.
+If you still feel that may not make sense then I'll remove this property.
 
-There is no dt-binding for system clock ID, because prior to this patch
-they were not exposed to DT in any way. But the enumerations themselves
-already exist, eg. the IDs for nau8821 codec:
 
-    /* System Clock Source */
-    enum {
-        NAU8821_CLK_DIS,
-        NAU8821_CLK_MCLK,
-        NAU8821_CLK_INTERNAL,
-        NAU8821_CLK_FLL_MCLK,
-        NAU8821_CLK_FLL_BLK,
-        NAU8821_CLK_FLL_FS,
-    };
-
-We would just be moving these into dt-bindings if somebody wants to
-use a codec with simple-card. Future drivers would add the enum into
-dt-bindings from the start because that's where it belongs.
-
-Regards,
-Aidan
+Thanks,
+Naresh
