@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EC160C323
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 07:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3311560C325
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 07:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJYFK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 01:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S229756AbiJYFMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 01:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiJYFK4 (ORCPT
+        with ESMTP id S229562AbiJYFMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 01:10:56 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2896D8285C
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:10:55 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id g16so5410168pfr.12
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:10:55 -0700 (PDT)
+        Tue, 25 Oct 2022 01:12:51 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0D1264B9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:12:50 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id a5so21501822edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:12:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N7HV+2O7fdwVJwRzKmZ0rsq+s0/h80leow5C99ZjbCk=;
-        b=hkb8xybnSV2gWZ/UtkvEPpfkO9Qxb6o8Q2XSPI5eJ9LUXXPMNBhL4F2b0G9DVHZVZO
-         awtvkuVsFDXqLILkIAFxE3RVv3E5XRZR0JaeROlmKN5+6X1Lt/Jm29PdHcUMo+fQ6A3P
-         jwMXSR7no7u/SZfrAu29FdTM5sRnz1Q1ZRaf29kNy5Becp/1KFnILui60x9ufO9cBrmj
-         7mVPiaL3PHg+3wGdQcf0Cu6CN+RqNkLRAHOkLqXiYCxac13fnnz0Zoxn8YlDIsKEXoIZ
-         rqWK4XDtIKRHfxG1P87J2+Lsqt57ZUTiIHk/lqLONELr8aJxcdQ95U1NWbsUDOYCmZAb
-         1oYA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9aTHUqAheweyy4ly5f1XL+MDpqeGn6Gh3fTd+xRqqGg=;
+        b=Su5LRX20NO5m7VHBO9GKbjIzmeZNIIurDnF3KvBWymvVp1/y2NrbbxBtoeuUs9b3iD
+         n3PsRkwVWd9dpB40ElzE08bjqRBzM1EXQZxRHfABeGllH8PPvIy7CJD1ALU+qq5Jn+fD
+         vfA5RuYErAMoArBEaEOuXFCg4S8cZ2B+YBVpF1yHKQD+6cAblY70ibk+I7M1AbJqDMG1
+         Fw8tMT1omuN5az73TY9wlGEd6ay7wD5RjReMaOr/XBDLL8jpbu67DrWmb674lRoUcQyB
+         c/MxaimY3/lJhUY95/NRJC1n4Xwa1Ujul1NSBbkAd7L4MA5LM80Cu+OJnRf0k7eDdgne
+         caBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N7HV+2O7fdwVJwRzKmZ0rsq+s0/h80leow5C99ZjbCk=;
-        b=iACRWFku2tgUkRsLyw7qYXhR2qju6EnbcpSzPZce/x8QWaL8xM6iAaR+LMTQ5sP21B
-         krLRaqT7LrCgUf7jkaPCLuf0vekSl+tW0z5oCFG0zvbMXA2AJl14RoAQHHxSAY/75tkv
-         YudWEQEdTPCJeCJW9oJszh7KZkpBQ5OCDxgKAJXjIGilkpRzjgK07q3+p82UKywUeIFR
-         SklRQzHMVlsA6tfbQV6C90Bv+wJs7eSybOynmZuMBCKkR0Hg8chW2IcrJ3KO4l3V+c0x
-         owGiWaBYpnbA2KBxgR7xbp2CmpK5F0V/Hvf4bZz111iRHKWI2bzGn8fPAZVE+Iz+/hfo
-         ZpxA==
-X-Gm-Message-State: ACrzQf0pr1J314GJLHDw11XvnzFqQGygx+6h6ZHqfv5kU5/a8+uug7za
-        zPvzHB8iFNissyacDcghnmHPkg==
-X-Google-Smtp-Source: AMsMyM4dqBh79PBmEq4bNi3bKpyxWmF8pKyrddK0RgHHrwPwJ9UaGdcmUV9KpdRicCKxD5dzSxxkQw==
-X-Received: by 2002:a63:db42:0:b0:45c:9c73:d72e with SMTP id x2-20020a63db42000000b0045c9c73d72emr30514395pgi.181.1666674654641;
-        Mon, 24 Oct 2022 22:10:54 -0700 (PDT)
-Received: from localhost ([122.172.87.26])
-        by smtp.gmail.com with ESMTPSA id v6-20020a17090a00c600b001ef8ab65052sm667404pjd.11.2022.10.24.22.10.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 22:10:54 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 10:40:52 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lubomir Rintel <lkundrak@v3.sk>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Peter Chubb <peter.chubb@unsw.edu.au>,
-        Stefan Eletzhofer <stefan.eletzhofer@eletztrick.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Helge Deller <deller@gmx.de>, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 02/11] ARM: sa1100: remove unused board files
-Message-ID: <20221025051052.qn2ruyjdkawwwida@vireshk-i7>
-References: <20221021155000.4108406-1-arnd@kernel.org>
- <20221021155000.4108406-3-arnd@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9aTHUqAheweyy4ly5f1XL+MDpqeGn6Gh3fTd+xRqqGg=;
+        b=jSo67tO5jLiuPE8q+ou2zYscys3t0WLbhKwvMvJiQD7s7ujdN4e7Mf3prw5V8gGFUb
+         gEPh5fJC7Rwb3wFtn6IgQ24VEYmmy2vi0OQ3dn7m01TD5zIe03iXscLcysXH3o/ee+cV
+         O091Cssy+tmLDRaY58J/ug+N8VpoqqEVMkE2ri/4JF1NOZ8eL9BUPfuodAQGiSM/uCwc
+         N6ErWZPl6UZQUIwaUF9Kuy+WMMuASaZx5qBCJL/w4FvPdhsaccAGTgLI8Ynh1HfR9wVm
+         vsKS77x0MeVH2XOFiM/x09RVicCIQjeHF0kroSqQD0frbRQFkqehAG8gTU1/rAz8hl5D
+         lcOw==
+X-Gm-Message-State: ACrzQf0zhTGe5I0zz57ZYLBkQuuGFg7yCBD05IJQcG3g/0gI1Do53mcQ
+        CSOG5E8NdTHFYyd7tFq3AdNVXetQ2/19cLiPLttZ14NA
+X-Google-Smtp-Source: AMsMyM6RArFbp850nkgtiOqcN7VB6Bf8Ce8q8gjZVQC1pTTQD0UTubifiigV5lFZS4AvnymXd1WpZoY87T7/uU/lo7s=
+X-Received: by 2002:a05:6402:909:b0:435:a8b:5232 with SMTP id
+ g9-20020a056402090900b004350a8b5232mr33858562edz.240.1666674768924; Mon, 24
+ Oct 2022 22:12:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221021155000.4108406-3-arnd@kernel.org>
+References: <20221019093825.339991-1-wuhoipok@gmail.com> <286146b0-51bb-a1d0-fa28-50e5a792aeed@oracle.com>
+In-Reply-To: <286146b0-51bb-a1d0-fa28-50e5a792aeed@oracle.com>
+From:   Hoi Pok Wu <wuhoipok@gmail.com>
+Date:   Tue, 25 Oct 2022 13:12:43 +0800
+Message-ID: <CANyH0kDm8rMVBDNJVsXxYxDH+=S_UsKu82PgFL82WhgmtvsXig@mail.gmail.com>
+Subject: Re: [PATCH] fs: jfs: fix shift-out-of-bounds in dbDiscardAG
+To:     Dave Kleikamp <dave.kleikamp@oracle.com>
+Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,28 +68,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-10-22, 17:49, Arnd Bergmann wrote:
-> diff --git a/drivers/cpufreq/sa1110-cpufreq.c b/drivers/cpufreq/sa1110-cpufreq.c
-> index 1a83c8678a63..bb7f591a8b05 100644
-> --- a/drivers/cpufreq/sa1110-cpufreq.c
-> +++ b/drivers/cpufreq/sa1110-cpufreq.c
-> @@ -344,14 +344,8 @@ static int __init sa1110_clk_init(void)
->  	if (!name[0]) {
->  		if (machine_is_assabet())
->  			name = "TC59SM716-CL3";
-> -		if (machine_is_pt_system3())
-> -			name = "K4S641632D";
-> -		if (machine_is_h3100())
-> -			name = "KM416S4030CT";
->  		if (machine_is_jornada720() || machine_is_h3600())
->  			name = "K4S281632B-1H";
-> -		if (machine_is_nanoengine())
-> -			name = "MT48LC8M16A2TG-75";
->  	}
->  
->  	sdram = sa1110_find_sdram(name);
+Thanks for the suggestion! I will send a Patch V2 soon.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
--- 
-viresh
+On Tue, Oct 25, 2022 at 5:05 AM Dave Kleikamp <dave.kleikamp@oracle.com> wrote:
+>
+> On 10/19/22 4:38AM, Hoi Pok Wu wrote:
+> > Bug reported by syzbot, UBSAN: array-index-out-of-bounds in dbDiscardAG.
+> > Fixed by simply rearranging agno_end smaller than MAXAG. However, I wonder if it
+> > is a better idea to return -EINVAL, rejecting user input. Thank you.
+>
+> I don't think the problem is simply that the user input is bad, the
+> range is already limited:
+>
+>          if (end >= bmp->db_mapsize)
+>                  end = bmp->db_mapsize - 1;
+>
+> It seems syzbot corrupted some on-disk data structure to trigger this
+> failure. It may be best to call jfs_error() and bail out.
+>
+> Thanks,
+> Shaggy
+>
+> >
+> > Reported-by: syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com
+> > Signed-off-by: Hoi Pok Wu <wuhoipok@gmail.com>
+> > ---
+> >   fs/jfs/jfs_discard.c | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> >
+> > diff --git a/fs/jfs/jfs_discard.c b/fs/jfs/jfs_discard.c
+> > index 575cb2ba74fc..3101eaf3098a 100644
+> > --- a/fs/jfs/jfs_discard.c
+> > +++ b/fs/jfs/jfs_discard.c
+> > @@ -96,6 +96,10 @@ int jfs_ioc_trim(struct inode *ip, struct fstrim_range *range)
+> >        */
+> >       agno = BLKTOAG(start, JFS_SBI(ip->i_sb));
+> >       agno_end = BLKTOAG(end, JFS_SBI(ip->i_sb));
+> > +
+> > +     if (agno_end >= MAXAG)
+> > +             agno_end = MAXAG - 1;
+> > +
+> >       while (agno <= agno_end) {
+> >               trimmed += dbDiscardAG(ip, agno, minlen);
+> >               agno++;
