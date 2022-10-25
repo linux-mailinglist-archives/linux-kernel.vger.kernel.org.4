@@ -2,389 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FCE60C090
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E21760C095
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiJYBKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
+        id S231334AbiJYBK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiJYBIc (ORCPT
+        with ESMTP id S231288AbiJYBIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:08:32 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736C26C126
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:17:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666657068; x=1698193068;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9+J3Br8bgbOof9jfpl07GNctQC3Rvx7AQwiIVAY7w34=;
-  b=ao1OxJ04XVUWhH4bJYKok7RjXrSPWf09tNQQxAO7iHBPNzVFVDlvLN0O
-   WhMvP0W5qwBGi4i27AZhPX4Yfq0yd9CzDXMUpkkJMBqAAs3JsZ4xmPRqa
-   xyce/S+XlJuIva/ztrFSABst3F58xq7kRzEMz9PSll9sUHVbKr/9s1bEZ
-   GTaRF7qmAdRTv9pHPHCEGOmR1v/d8LSKbJjCs1/gkGs3AvWkjUaarYOmt
-   Nbc+eKjDK0FiQmkIklBuB1lMCwUJVwM4qHhoLxBPgPlDXWZ+Zlaf7eR/I
-   UPPt9F2cZV2GAEPXHwokWqkTgflWWSIpxiWvLVk7B0xSkYFBOefA6HA8N
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="308644693"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="308644693"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 17:17:48 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="582587508"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="582587508"
-Received: from ghoyler-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.39.118])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 17:17:43 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 4F36E1095C5; Tue, 25 Oct 2022 03:17:26 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Bharata B Rao <bharata@amd.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Weihong Zhang <weihong.zhang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv11 16/16] selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for linear-address masking
-Date:   Tue, 25 Oct 2022 03:17:22 +0300
-Message-Id: <20221025001722.17466-17-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221025001722.17466-1-kirill.shutemov@linux.intel.com>
-References: <20221025001722.17466-1-kirill.shutemov@linux.intel.com>
+        Mon, 24 Oct 2022 21:08:52 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FD863378
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:18:20 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id t25so7154247qkm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:18:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p9iGP14d6f9I4D+kuqf6O3+s5e5qEr4YR9xj0lL2tQg=;
+        b=OtcjS3mzg7rlOcJHjSoD4JAWkUpNIVr3uTqc4Vek0xgQC60nPy8J5iQ9eBp+2ScjNh
+         mKkfAe/bj/e1y5HJwuzOnTHJhj6CICRZOx7YVwDPcDkw+hQJzDCNoZ7v7bB+4dsHoXbu
+         WJRZjmeJumf1MwvDTeByrDcFZXKEqCU7GhdJTcAa6iNvoUAh1PILnE1ZlxLQS1Axvvm7
+         bzqO6u8S2fc68LqbJ/TIQD/3OsnKbL4HEoosLrMqxLzAqFmmfxs42GcXhUM6mKpOEekx
+         CkXUkK7+8ECU0HaUf0NJTQhbZ0OKcJcCRSvtBR3I1ALQLtAFluNsshqcPCT5vuDBzpGg
+         jedw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p9iGP14d6f9I4D+kuqf6O3+s5e5qEr4YR9xj0lL2tQg=;
+        b=0oi1DdbMKAUuavTqS+7SBklRI1w3xeq18qz3oHqKrOJWY4rDCpnQAKStvzbXkH3wDE
+         98KXzc8hxJQKNwHzrYm+KTVX3rZULyUHiPdy2dmnNqTelueManThQYQtZ/wbXlyeFvji
+         8Tfr5rzwlT6MQgQYgHg4wPlTCi9WDDiZ7oMGD4N4d04YvbZ8lQIgwsFNje4hcVRJMPgK
+         tDrhmkjTZIffb2Eu0/+kTLxN4Roapz0YZEuY3Sbgbd/zvNr1AvwpF0w4uTZ/GcQ48mE1
+         6B8Ap2w8mLb4XTynvSHl8sCMp8O9fjPhZ8ulKaEl/FusfX81ZxwZZs1IdY2pHIxR9XAV
+         VBYA==
+X-Gm-Message-State: ACrzQf14Hl5wOEbgwQTErVG5viEDmzC+xeAHqTMURdzRT0e+C0z+l/Kd
+        r2ztp7O30XSzyITl5w1Qr12BZQ==
+X-Google-Smtp-Source: AMsMyM78J92TaYTk4yJazk6RCGkFm9WubGdfdV2HbUM+i9DvZ7hX6waN9UYo9qf6oaenDl6vIy97bg==
+X-Received: by 2002:ae9:e115:0:b0:6ee:bcbb:396 with SMTP id g21-20020ae9e115000000b006eebcbb0396mr25000114qkm.668.1666657099961;
+        Mon, 24 Oct 2022 17:18:19 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id m8-20020a05620a290800b006ce40fbb8f6sm1040395qkp.21.2022.10.24.17.18.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Oct 2022 17:18:19 -0700 (PDT)
+Message-ID: <22a8f70d-a5ce-1f54-03d1-50874b7c99fa@linaro.org>
+Date:   Mon, 24 Oct 2022 20:18:17 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] dt-bindings: pinctrl: update uart/mmc bindings for MT7986
+ SoC
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221024073634.6834-1-linux@fw-web.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221024073634.6834-1-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weihong Zhang <weihong.zhang@intel.com>
+On 24/10/2022 03:36, Frank Wunderlich wrote:
+>            - if:
+>                properties:
+>                  function:
+> @@ -221,8 +225,9 @@ patternProperties:
+>              then:
+>                properties:
+>                  groups:
+> -                  enum: [uart1_0, uart1_1, uart1_2, uart1_3_rx_tx,
+> -                         uart1_3_cts_rts, uart2_0, uart2_1, uart0, uart1, uart2]
+> +                  enum: [uart1_0, uart1_rx_tx, uart1_cts_rts, uart1_1, uart1_2_rx_tx, uart1_2_cts_rts,
+> +                         uart1_3_rx_tx, uart1_3_cts_rts, uart2_0_rx_tx, uart2_0_cts_rts, uart2_1, uart0,
+> +                         uart1, uart2]
 
-By default do not allow to enable both LAM and use SVA in the same
-process.
-The new ARCH_FORCE_TAGGED_SVA arch_prctl() overrides the limitation.
+Wrap it according to Linux coding style, so 80.
 
-Add new test cases for the new arch_prctl:
-Before using ARCH_FORCE_TAGGED_SVA, should not allow to enable LAM/SVA
-coexisting. the test cases should be negative.
-
-The test depands on idxd driver and iommu. before test, need add
-"intel_iommu=on,sm_on" in kernel command line and insmod idxd driver.
-
-Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- tools/testing/selftests/x86/lam.c | 237 +++++++++++++++++++++++++++++-
- 1 file changed, 235 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index cfc9073c0262..52a876a7ccb8 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -30,6 +30,7 @@
- #define ARCH_GET_UNTAG_MASK     0x4001
- #define ARCH_ENABLE_TAGGED_ADDR 0x4002
- #define ARCH_GET_MAX_TAG_BITS   0x4003
-+#define ARCH_FORCE_TAGGED_SVA	0x4004
- 
- /* Specified test function bits */
- #define FUNC_MALLOC             0x1
-@@ -38,8 +39,9 @@
- #define FUNC_SYSCALL            0x8
- #define FUNC_URING              0x10
- #define FUNC_INHERITE           0x20
-+#define FUNC_PASID              0x40
- 
--#define TEST_MASK               0x3f
-+#define TEST_MASK               0x7f
- 
- #define LOW_ADDR                (0x1UL << 30)
- #define HIGH_ADDR               (0x3UL << 48)
-@@ -55,11 +57,19 @@
- #define URING_QUEUE_SZ 1
- #define URING_BLOCK_SZ 2048
- 
-+/* Pasid test define */
-+#define LAM_CMD_BIT 0x1
-+#define PAS_CMD_BIT 0x2
-+#define SVA_CMD_BIT 0x4
-+
-+#define PAS_CMD(cmd1, cmd2, cmd3) (((cmd3) << 8) | ((cmd2) << 4) | ((cmd1) << 0))
-+
- struct testcases {
- 	unsigned int later;
- 	int expected; /* 2: SIGSEGV Error; 1: other errors */
- 	unsigned long lam;
- 	uint64_t addr;
-+	uint64_t cmd;
- 	int (*test_func)(struct testcases *test);
- 	const char *msg;
- };
-@@ -556,7 +566,7 @@ int do_uring(unsigned long lam)
- 	struct file_io *fi;
- 	struct stat st;
- 	int ret = 1;
--	char path[PATH_MAX];
-+	char path[PATH_MAX] = {0};
- 
- 	/* get current process path */
- 	if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
-@@ -852,6 +862,226 @@ static void cmd_help(void)
- 	printf("\t-h: help\n");
- }
- 
-+/* Check for file existence */
-+uint8_t file_Exists(const char *fileName)
-+{
-+	struct stat buffer;
-+
-+	uint8_t ret = (stat(fileName, &buffer) == 0);
-+
-+	return ret;
-+}
-+
-+/* Sysfs idxd files */
-+const char *dsa_configs[] = {
-+	"echo 1 > /sys/bus/dsa/devices/dsa0/wq0.1/group_id",
-+	"echo shared > /sys/bus/dsa/devices/dsa0/wq0.1/mode",
-+	"echo 10 > /sys/bus/dsa/devices/dsa0/wq0.1/priority",
-+	"echo 16 > /sys/bus/dsa/devices/dsa0/wq0.1/size",
-+	"echo 15 > /sys/bus/dsa/devices/dsa0/wq0.1/threshold",
-+	"echo user > /sys/bus/dsa/devices/dsa0/wq0.1/type",
-+	"echo MyApp1 > /sys/bus/dsa/devices/dsa0/wq0.1/name",
-+	"echo 1 > /sys/bus/dsa/devices/dsa0/engine0.1/group_id",
-+	"echo dsa0 > /sys/bus/dsa/drivers/idxd/bind",
-+	/* bind files and devices, generated a device file in /dev */
-+	"echo wq0.1 > /sys/bus/dsa/drivers/user/bind",
-+};
-+
-+/* DSA device file */
-+const char *dsaDeviceFile = "/dev/dsa/wq0.1";
-+/* file for io*/
-+const char *dsaPasidEnable = "/sys/bus/dsa/devices/dsa0/pasid_enabled";
-+
-+/*
-+ * DSA depends on kernel cmdline "intel_iommu=on,sm_on"
-+ * return pasid_enabled (0: disable 1:enable)
-+ */
-+int Check_DSA_Kernel_Setting(void)
-+{
-+	char command[256] = "";
-+	char buf[256] = "";
-+	char *ptr;
-+	int rv = -1;
-+
-+	snprintf(command, sizeof(command) - 1, "cat %s", dsaPasidEnable);
-+
-+	FILE *cmd = popen(command, "r");
-+
-+	if (cmd) {
-+		while (fgets(buf, sizeof(buf) - 1, cmd) != NULL);
-+
-+		pclose(cmd);
-+		rv = strtol(buf, &ptr, 16);
-+	}
-+
-+	return rv;
-+}
-+
-+/*
-+ * Config DSA's sysfs files as shared DSA's WQ.
-+ * Generated a device file /dev/dsa/wq0.1
-+ * Return:  0 OK; 1 Failed; 3 Skip(SVA disabled).
-+ */
-+int Dsa_Init_Sysfs(void)
-+{
-+	uint len = ARRAY_SIZE(dsa_configs);
-+	const char **p = dsa_configs;
-+
-+	if (file_Exists(dsaDeviceFile) == 1)
-+		return 0;
-+
-+	/* check the idxd driver */
-+	if (file_Exists(dsaPasidEnable) != 1) {
-+		printf("Please make sure idxd driver was loaded\n");
-+		return 3;
-+	}
-+
-+	/* Check SVA feature */
-+	if (Check_DSA_Kernel_Setting() != 1) {
-+		printf("Please enable SVA.(Add intel_iommu=on,sm_on in kernel cmdline)\n");
-+		return 3;
-+	}
-+
-+	/* Check the idxd device file on /dev/dsa/ */
-+	for (int i = 0; i < len; i++) {
-+		if (system(p[i]))
-+			return 1;
-+	}
-+
-+	/* After config, /dev/dsa/wq0.1 should be generated */
-+	return (file_Exists(dsaDeviceFile) != 1);
-+}
-+
-+/*
-+ * Open DSA device file, triger API: iommu_sva_alloc_pasid
-+ */
-+void *allocate_dsa_pasid(void)
-+{
-+	int fd;
-+	void *wq;
-+
-+	fd = open(dsaDeviceFile, O_RDWR);
-+	if (fd < 0) {
-+		perror("open");
-+		return MAP_FAILED;
-+	}
-+
-+	wq = mmap(NULL, 0x1000, PROT_WRITE,
-+			   MAP_SHARED | MAP_POPULATE, fd, 0);
-+	if (wq == MAP_FAILED)
-+		perror("mmap");
-+
-+	return wq;
-+}
-+
-+int set_force_svm(void)
-+{
-+	int ret = 0;
-+
-+	ret = syscall(SYS_arch_prctl, ARCH_FORCE_TAGGED_SVA);
-+
-+	return ret;
-+}
-+
-+int handle_pasid(struct testcases *test)
-+{
-+	uint tmp = test->cmd;
-+	uint runed = 0x0;
-+	int ret = 0;
-+	void *wq = NULL;
-+
-+	ret = Dsa_Init_Sysfs();
-+	if (ret != 0)
-+		return ret;
-+
-+	for (int i = 0; i < 3; i++) {
-+		int err = 0;
-+
-+		if (tmp & 0x1) {
-+			/* run set lam mode*/
-+			if ((runed & 0x1) == 0)	{
-+				err = set_lam(LAM_U57_BITS);
-+				runed = runed | 0x1;
-+			} else
-+				err = 1;
-+		} else if (tmp & 0x4) {
-+			/* run force svm */
-+			if ((runed & 0x4) == 0)	{
-+				err = set_force_svm();
-+				runed = runed | 0x4;
-+			} else
-+				err = 1;
-+		} else if (tmp & 0x2) {
-+			/* run allocate pasid */
-+			if ((runed & 0x2) == 0) {
-+				runed = runed | 0x2;
-+				wq = allocate_dsa_pasid();
-+				if (wq == MAP_FAILED)
-+					err = 1;
-+			} else
-+				err = 1;
-+		}
-+
-+		ret = ret + err;
-+		if (ret > 0)
-+			break;
-+
-+		tmp = tmp >> 4;
-+	}
-+
-+	if (wq != MAP_FAILED && wq != NULL)
-+		if (munmap(wq, 0x1000))
-+			printf("munmap failed %d\n", errno);
-+
-+	if (runed != 0x7)
-+		ret = 1;
-+
-+	return (ret != 0);
-+}
-+
-+/*
-+ * Pasid test depends on idxd and SVA, kernel should enable iommu and sm.
-+ * command line(intel_iommu=on,sm_on)
-+ */
-+static struct testcases pasid_cases[] = {
-+	{
-+		.expected = 1,
-+		.cmd = PAS_CMD(LAM_CMD_BIT, PAS_CMD_BIT, SVA_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: [Negative] Execute LAM, PASID, SVA in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(LAM_CMD_BIT, SVA_CMD_BIT, PAS_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute LAM, SVA, PASID in sequence\n",
-+	},
-+	{
-+		.expected = 1,
-+		.cmd = PAS_CMD(PAS_CMD_BIT, LAM_CMD_BIT, SVA_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: [Negative] Execute PASID, LAM, SVA in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(PAS_CMD_BIT, SVA_CMD_BIT, LAM_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute PASID, SVA, LAM in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(SVA_CMD_BIT, LAM_CMD_BIT, PAS_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute SVA, LAM, PASID in sequence\n",
-+	},
-+	{
-+		.expected = 0,
-+		.cmd = PAS_CMD(SVA_CMD_BIT, PAS_CMD_BIT, LAM_CMD_BIT),
-+		.test_func = handle_pasid,
-+		.msg = "PASID: Execute SVA, PASID, LAM in sequence\n",
-+	},
-+};
-+
- int main(int argc, char **argv)
- {
- 	int c = 0;
-@@ -910,6 +1140,9 @@ int main(int argc, char **argv)
- 	if (tests & FUNC_INHERITE)
- 		run_test(inheritance_cases, ARRAY_SIZE(inheritance_cases));
- 
-+	if (tests & FUNC_PASID)
-+		run_test(pasid_cases, ARRAY_SIZE(pasid_cases));
-+
- 	ksft_set_plan(tests_cnt);
- 
- 	return ksft_exit_pass();
--- 
-2.38.0
+Best regards,
+Krzysztof
 
