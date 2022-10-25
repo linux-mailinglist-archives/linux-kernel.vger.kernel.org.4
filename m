@@ -2,751 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118FA60C35E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 07:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C158960C364
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 07:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiJYFih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 01:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        id S230502AbiJYFj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 01:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiJYFie (ORCPT
+        with ESMTP id S229682AbiJYFjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 01:38:34 -0400
-Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA67108250
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 22:38:31 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id nCdro4uViu8plnCdro78Gh; Tue, 25 Oct 2022 07:38:30 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 25 Oct 2022 07:38:30 +0200
-X-ME-IP: 86.243.100.34
-Message-ID: <2e5c12e8-8436-ddc0-ea93-0652af09c373@wanadoo.fr>
-Date:   Tue, 25 Oct 2022 07:38:22 +0200
+        Tue, 25 Oct 2022 01:39:44 -0400
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA5CD56;
+        Mon, 24 Oct 2022 22:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding;
+        bh=elLnCkQ0XgUJpT4SZGipJZOUfcDIbY1EsaG1LG2UqTY=;
+        b=ZnH1lhq7ukmz86i2tT+64YdWbjQWTE6x5LhM5HqzxqAlqRwgH6UG82EGqxOSVTLy8AF/TGEqFxWqk
+         3jsuCBPv3/MrPCZJwvVf3fmzCeDlpeg8WZ5e0eJj+IQ6jAkkr8VgTZlAW/vyQeavCxCNE1C3QGSx8t
+         laBNwUcSVkyREDHYYXSk5uAtzbNQeLrQGNvY3s67pTc14yDHguqaRosNObxHPOiwUB74iKvaP+K/z/
+         SNrpdEgkhGHCefpFKte89tR0YVZozUFj8ueW+bHufmUVIRguxHX23lF7uLw3jdbD9dDwnGgma59LNS
+         53s6hkRwOLkwCENeT0gr+w0CZS/6org==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000010,0.028680)], BW: [Enabled, t: (0.000018,0.000001)], RTDA: [Enabled, t: (0.082340), Hit: No, Details: v2.42.0; Id: 15.52k68k.1gg6qe5sj.fva; mclb], total: 0(700)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from localhost.localdomain ([92.100.86.33])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Tue, 25 Oct 2022 08:39:23 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        system@metrotek.ru
+Subject: [PATCH v20 0/2] Lattice sysCONFIG SPI FPGA manager
+Date:   Tue, 25 Oct 2022 08:39:45 +0300
+Message-Id: <20221025053947.2737-1-i.bornyakov@metrotek.ru>
+X-Mailer: git-send-email 2.37.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFCv3 PATCH 2/2] bus: add bit banged Wiegand bus driver
-To:     m.zatovic1@gmail.com
-References: <20221024162650.36587-1-m.zatovic1@gmail.com>
- <20221024162650.36587-3-m.zatovic1@gmail.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Michael.Srba@seznam.cz, andersson@kernel.org,
-        devicetree@vger.kernel.org, elder@linaro.org,
-        gregkh@linuxfoundation.org, hemantk@codeaurora.org,
-        jeffrey.l.hugo@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        linus.walleij@linaro.org, linux-kernel@vger.kernel.org,
-        mani@kernel.org, robh+dt@kernel.org
-In-Reply-To: <20221024162650.36587-3-m.zatovic1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 24/10/2022 à 18:26, Martin Zaťovič a écrit :
-> This patch adds a bit banged Wiegand bus driver. The communication
-> is realized over two GPIO lines defined in the devicetree.
-> The parameters specific for the bus such as the pulse duration
-> are also configured in the devicetree, while format and payload
-> length of messages are configured via sysfs files. The driver
-> currently supports 4 formats - 26, 36 and 37-bit and a custom
-> length format. The 26, 36 and 37-bit formats automatically
-> append the checksum as specified in the Wiegand protocol.
-> It is up to the user to append or discard the checksum bits
-> using the custom format. A user can use this driver to write
-> directly to the bus using a device file. Drivers for devices
-> communicating via Wiegand can utilize the API functions to
-> write on the bus or set a message format.
-> 
-> Signed-off-by: Martin Zaťovič <m.zatovic1-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> ---
->   Documentation/ABI/testing/sysfs-bus-wiegand |  20 +
->   MAINTAINERS                                 |   8 +
->   drivers/bus/Kconfig                         |   7 +
->   drivers/bus/Makefile                        |   1 +
->   drivers/bus/wiegand.c                       | 509 ++++++++++++++++++++
->   include/linux/wiegand.h                     |  58 +++
->   6 files changed, 603 insertions(+)
->   create mode 100644 Documentation/ABI/testing/sysfs-bus-wiegand
->   create mode 100644 drivers/bus/wiegand.c
->   create mode 100644 include/linux/wiegand.h
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-wiegand b/Documentation/ABI/testing/sysfs-bus-wiegand
-> new file mode 100644
-> index 000000000000..1f989e360d53
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-wiegand
-> @@ -0,0 +1,20 @@
-> +What:		/sys/devices/platform/.../wiegand-attributes/format
-> +Date:		October 2022
-> +Contact:	Martin Zaťovič <m.zatovic1-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> +Description:    Sets a format of Wiegand communication. Currently supported
-> +        formats are 26, 36 and 37 bits. These formats automatically add
-> +        checksums to the first and last bits of a message. To set a custom
-> +        format, 0 needs to be written here. Custom format writes an amount of
-> +        bits defined by payload_len(see below) and it does not add checksums so
-> +        the user is responsible for that.
-> +Users:		any user space application which wants to communicate using Wiegand
-> +
-> +What:		/sys/devices/platform/.../wiegand-attributes/payload_len
-> +Date:		October 2022
-> +Contact:	Martin Zaťovič <m.zatovic1-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> +Description:    Depends on format attribute - using one of the standard formats
-> +        the payload_len attribute file becomes read-only and it contains the
-> +        number of bits of a message without the checksum bits(e.g. 24 for
-> +        26-bit format). Using a custom format makes this file writable for
-> +        configuring the Wiegand message length in bits.
-> +Users:		any user space application which wants to communicate using Wiegand
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ca063a504026..30aadc8e664d 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22138,6 +22138,14 @@ L:	linux-rtc-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
->   S:	Maintained
->   F:	drivers/rtc/rtc-sd3078.c
-> 
-> +WIEGAND BUS DRIVER
-> +M:	Martin Zaťovič <m.zatovic1-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
-> +S:	Maintained
-> +F:	Documentation/ABI/testing/sysfs-bus-wiegand
-> +F:	Documentation/devicetree/bindings/bus/wiegand.yaml
-> +F:	drivers/bus/wiegand.c
-> +F:	include/linux/wiegand.h
-> +
->   WIIMOTE HID DRIVER
->   M:	David Rheinsberg <david.rheinsberg-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.org>
->   L:	linux-input-u79uwXL29TY76Z2rM5mHXA@public.gmane.org
-> diff --git a/drivers/bus/Kconfig b/drivers/bus/Kconfig
-> index 7bfe998f3514..1b7dd3dcad72 100644
-> --- a/drivers/bus/Kconfig
-> +++ b/drivers/bus/Kconfig
-> @@ -241,6 +241,13 @@ config VEXPRESS_CONFIG
->   	  Platform configuration infrastructure for the ARM Ltd.
->   	  Versatile Express.
-> 
-> +config WIEGAND
-> +      tristate "Wiegand bus via GPIOs"
-> +      depends on OF_GPIO
-> +      help
-> +        Wiegand Protocol is a low level 2-wire serial protocol. This
-> +        enables the support of the bus.
-> +
->   config DA8XX_MSTPRI
->   	bool "TI da8xx master peripheral priority driver"
->   	depends on ARCH_DAVINCI_DA8XX
-> diff --git a/drivers/bus/Makefile b/drivers/bus/Makefile
-> index d90eed189a65..ed64d1fde1b7 100644
-> --- a/drivers/bus/Makefile
-> +++ b/drivers/bus/Makefile
-> @@ -36,6 +36,7 @@ obj-$(CONFIG_TI_SYSC)		+= ti-sysc.o
->   obj-$(CONFIG_TS_NBUS)		+= ts-nbus.o
->   obj-$(CONFIG_UNIPHIER_SYSTEM_BUS)	+= uniphier-system-bus.o
->   obj-$(CONFIG_VEXPRESS_CONFIG)	+= vexpress-config.o
-> +obj-$(CONFIG_WIEGAND)		+= wiegand.o
-> 
->   obj-$(CONFIG_DA8XX_MSTPRI)	+= da8xx-mstpri.o
-> 
-> diff --git a/drivers/bus/wiegand.c b/drivers/bus/wiegand.c
-> new file mode 100644
-> index 000000000000..7de42e9f41eb
-> --- /dev/null
-> +++ b/drivers/bus/wiegand.c
-> @@ -0,0 +1,509 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Wiegand write-only bus driver
-> + *
-> + * This driver implements a GPIOs bit-banged bus following the Wiegand
-> + * protocol. It is used to communicate with various peripherals such as
-> + * card readers or fingerprint sensors.
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/module.h>
-> +#include <linux/slab.h>
-> +#include <linux/poll.h>
-> +#include <linux/miscdevice.h>
-> +#include <linux/of.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/wiegand.h>
-> +
-> +struct wiegand_device *wiegand_glob;
-> +struct wiegand_instance *wiegand_instance_glob;
-> +
-> +struct wiegand_device {
-> +	struct device *dev;
-> +	struct miscdevice *misc_dev;
-> +	struct mutex mutex;
-> +	struct gpio_desc *gpio_data_hi;
-> +	struct gpio_desc *gpio_data_lo;
-> +	struct wiegand_setup setup;
-> +	u8 data[WIEGAND_MAX_PAYLEN_BYTES];
-> +};
-> +
-> +struct wiegand_instance {
-> +	struct wiegand_device *dev;
-> +	unsigned long flags;
-> +};
-> +
-> +static const struct wiegand_setup WIEGAND_SETUP = {
-> +	.pulse_len	= 50,
-> +	.interval_len	= 2000,
-> +	.frame_gap	= 2000,
-> +	.format		= WIEGAND_V26,
-> +	.payload_len	= 24,
-> +};
-> +
-> +int wiegand_calc_parity8(u8 v)
-> +{
-> +	v = (v >> 4) ^ (v & ((1 << 4)-1));
-> +	v = (v >> 2) ^ (v & ((1 << 2)-1));
-> +	v = (v >> 1) ^ (v & ((1 << 1)-1));
-> +	return v;
-> +}
-> +
-> +void wiegand_add_parity_to_data(unsigned char *tmp, u8 *data,
-> +						enum wiegand_format fmt)
-> +{
-> +	switch (fmt) {
-> +	case WIEGAND_V26:
-> +		data[0] = (tmp[0] >> 1) | (wiegand_calc_parity8(
-> +						tmp[0] ^ (tmp[1] & 0xf0)) << 7);
-> +		data[1] = (tmp[0] << 7) | (tmp[1] >> 1);
-> +		data[2] = (tmp[1] << 7) | (tmp[2] >> 1);
-> +		data[3] = (tmp[2] << 7) | (!wiegand_calc_parity8(
-> +						(tmp[1] & 0x0f) ^ tmp[2]) << 6);
-> +		break;
-> +	case WIEGAND_V36:
-> +		tmp[4] &= 0xc0;
-> +
-> +		data[0] = (tmp[0] >> 1) | (wiegand_calc_parity8(
-> +				tmp[0] ^ tmp[1] ^ (tmp[2] & 0x80)) << 7);
-> +		data[1] = (tmp[0] << 7) | (tmp[1] >> 1);
-> +		data[2] = (tmp[1] << 7) | (tmp[2] >> 1);
-> +		data[3] = (tmp[2] << 7) | (tmp[3] >> 1);
-> +		data[4] = (tmp[3] << 7) | (tmp[4] >> 1) |
-> +			(!wiegand_calc_parity8(
-> +				(tmp[2] & 0x7f) ^ tmp[3] ^ tmp[4]) << 4);
-> +		break;
-> +	case WIEGAND_V37:
-> +		tmp[4] &= 0xe0;
-> +
-> +		data[0] = (tmp[0] >> 1) | (wiegand_calc_parity8(
-> +				tmp[0] ^ tmp[1] ^ (tmp[2] & 0xc0)) << 7);
-> +		data[1] = (tmp[0] << 7) | (tmp[1] >> 1);
-> +		data[2] = (tmp[1] << 7) | (tmp[2] >> 1);
-> +		data[3] = (tmp[2] << 7) | (tmp[3] >> 1);
-> +		data[4] = (tmp[3] << 7) | (tmp[4] >> 1) |
-> +				(!wiegand_calc_parity8(
-> +				(tmp[2] & 0x7f) ^ tmp[3] ^ tmp[4]) << 3);
-> +		break;
-> +	default:
-> +		WARN_ON(fmt != WIEGAND_V37 &&
-> +			fmt != WIEGAND_V36 &&
-> +			fmt != WIEGAND_V26);
-> +	}
-> +}
-> +
-> +/*
-> + * To send a bit of value 1 following the wiegand protocol, one must set
-> + * the wiegand_data_hi to low for the duration of pulse. Similarly to send
-> + * a bit of value 0, the wiegand_data_lo is set to low for pulse duration.
-> + * This way the two lines are never low ar the same time.
-> + */
-> +void wiegand_send_bit(struct wiegand_device *wiegand,
-> +				bool value, bool last)
-> +{
-> +	struct wiegand_setup *setup = &wiegand->setup;
-> +	struct gpio_desc *gpio = value ? wiegand->gpio_data_hi
-> +				: wiegand->gpio_data_lo;
-> +
-> +	gpiod_set_value_cansleep(gpio, 0);
-> +	udelay(setup->pulse_len);
-> +	gpiod_set_value_cansleep(gpio, 1);
-> +
-> +	if (last)
-> +		udelay(setup->frame_gap - setup->pulse_len);
-> +	else
-> +		udelay(setup->interval_len - setup->pulse_len);
-> +}
-> +
-> +/* This function is used for custom format */
-> +static int wiegand_write_by_bits(struct wiegand_device *wiegand,
-> +				size_t len)
-> +{
-> +	size_t i, bitlen;
-> +	bool bit_value, is_last_bit;
-> +	struct wiegand_setup *setup = &wiegand->setup;
-> +
-> +	bitlen = setup->format ? setup->payload_len + 2 : setup->payload_len;
-> +
-> +	for (i = 0; i < bitlen; i++) {
-> +		bit_value = ((wiegand->data[i / 8] >> (7 - (i % 8)))
-> +									& 0x01);
-> +		is_last_bit = (i + 1) == bitlen;
-> +
-> +		wiegand_send_bit(wiegand, (bool)bit_value,
-> +				is_last_bit);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static unsigned int wiegand_calc_bytes(unsigned int bits)
-> +{
-> +	if (bits % 8 != 0)
-> +		return (bits / 8) + 1;
-> +	else
-> +		return bits / 8;
-> +}
-> +
-> +static unsigned int wiegand_get_payload_size(
-> +						unsigned long payload_len_bits,
-> +						enum wiegand_format fmt)
-> +{
-> +	unsigned int ret;
-> +
-> +	if (fmt == WIEGAND_CUSTOM)
-> +		ret = wiegand_calc_bytes(payload_len_bits);
-> +	else
-> +		/* add 2 for parity bits */
-> +		ret = wiegand_calc_bytes(payload_len_bits + 2);
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t wiegand_get_user_data(
-> +				struct wiegand_device *wiegand,
-> +				char __user const *buf, size_t len)
-> +{
-> +	size_t rc;
-> +	size_t num_copy;
-> +	unsigned char tmp[WIEGAND_MAX_PAYLEN_BYTES];
-> +	struct wiegand_setup *setup = &wiegand->setup;
-> +
-> +	num_copy = wiegand_get_payload_size(setup->payload_len,
-> +								setup->format);
-> +
-> +	if (setup->format == WIEGAND_CUSTOM) {
-> +		rc = copy_from_user(&wiegand->data[0], buf, num_copy);
-> +		if (rc < 0)
-> +			return rc;
-> +	} else {
-> +		rc = copy_from_user(tmp, buf, num_copy);
-> +		if (rc < 0)
-> +			return rc;
-> +		wiegand_add_parity_to_data(tmp, wiegand->data,
-> +								setup->format);
-> +	}
-> +	return num_copy;
-> +}
-> +
-> +static int wiegand_release(struct inode *ino, struct file *filp)
-> +{
-> +	struct wiegand_instance *info = filp->private_data;
-> +	struct wiegand_device *wiegand = info->dev;
-> +
-> +	kfree(wiegand);
-> +	kfree(info);
-> +
-> +	return 0;
-> +}
-> +
-> +ssize_t wiegand_write(struct wiegand_device *wiegand, const char *buf, size_t len)
-> +{
-> +	int rc;
-> +
-> +	strcpy(wiegand->data, buf);
-> +
-> +	if (len * 8 < wiegand->setup.payload_len)
-> +		return -EBADMSG;
-> +	if (buf == NULL || len == 0)
-> +		return -EINVAL;
-> +
-> +	rc = wiegand_write_by_bits(wiegand, len);
-> +
-> +	return len;
-> +}
-> +EXPORT_SYMBOL_GPL(wiegand_write);
-> +
-> +static ssize_t wiegand_write_from_file(struct file *filp,
-> +		char __user const *buf, size_t len, loff_t *offset)
-> +{
-> +	struct wiegand_instance *info = filp->private_data;
-> +	struct wiegand_device *wiegand = info->dev;
-> +	int rc;
-> +
-> +	if (len * 8 < wiegand->setup.payload_len)
-> +		return -EBADMSG;
-> +	if (buf == NULL || len == 0)
-> +		return -EINVAL;
-> +
-> +	wiegand_get_user_data(wiegand, buf, len);
-> +	rc = wiegand_write_by_bits(wiegand, len);
-> +
-> +	return len;
-> +}
-> +
-> +static int wiegand_open(struct inode *ino, struct file *filp)
-> +{
-> +	struct wiegand_device *wiegand;
-> +	struct wiegand_instance *info;
-> +	int rc;
-> +
-> +	wiegand = wiegand_glob;
-> +
-> +	mutex_lock(&wiegand->mutex);
-> +
-> +	if ((filp->f_flags & O_ACCMODE) == O_RDONLY ||
-> +		(filp->f_flags & O_ACCMODE) == O_RDWR) {
-> +		dev_err(wiegand->dev, "Device is write only\n");
-> +		rc = -EIO;
-> +		goto err;
-> +	}
-> +
-> +	info = kzalloc(sizeof(*info), GFP_KERNEL);
-> +	if (!info) {
-> +		rc = -ENOMEM;
-> +		goto err;
-> +	}
-> +
-> +	gpiod_direction_output(wiegand->gpio_data_hi, 1);
-> +	gpiod_direction_output(wiegand->gpio_data_lo, 1);
-> +
-> +	info->dev = wiegand;
-> +	info->flags = filp->f_flags;
-> +	wiegand_instance_glob = info;
-> +
-> +	mutex_unlock(&wiegand->mutex);
-> +
-> +	filp->private_data = info;
-> +
-> +	return 0;
-> +err:
-> +	mutex_unlock(&wiegand->mutex);
-> +
-> +	return rc;
-> +}
-> +
-> +const struct file_operations wiegand_fops = {
-> +	.owner		= THIS_MODULE,
-> +	.open		= wiegand_open,
-> +	.release	= wiegand_release,
-> +	.write		= wiegand_write_from_file,
-> +};
-> +
-> +static struct miscdevice wiegand_misc_device = {
-> +	.minor = MISC_DYNAMIC_MINOR,
-> +	.name = "wiegand-bus",
-> +	.fops = &wiegand_fops,
-> +};
-> +
-> +static ssize_t store_uint(unsigned int *val, const char *buf,
-> +				size_t size, unsigned long max)
-> +{
-> +	int ret;
-> +	unsigned long new;
-> +
-> +	ret = kstrtoul(buf, 0, &new);
-> +	if (ret)
-> +		return ret;
-> +	if (max != 0 && new > max)
-> +		return -EINVAL;
-> +
-> +	*val = new;
-> +	return size;
-> +}
-> +
-> +ssize_t format_show(struct device *dev, struct device_attribute *attr,
-> +		char *buf)
-> +{
-> +	struct wiegand_device *device = dev_get_drvdata(dev);
-> +
-> +	if (!device)
-> +		return -ENODEV;
-> +
-> +	return sysfs_emit(buf, "%u\n", device->setup.format);
-> +}
-> +
-> +/*
-> + * To set a particular format, the number of bits the driver is supposed to
-> + * transmit is written to the format sysfs file. For standard formats, the
-> + * allowed inputs are 26, 36 and 37. To set a custom format, 0 is passed.
-> + */
-> +ssize_t format_store(struct device *dev, struct device_attribute *attr,
-> +		const char *buf, size_t count)
-> +{
-> +	int ret;
-> +	unsigned long new;
-> +	enum wiegand_format *val;
-> +	struct wiegand_device *device = dev_get_drvdata(dev);
-> +
-> +	if (!device)
-> +		return -ENODEV;
-> +
-> +	val = &(device->setup.format);
-> +
-> +	ret = kstrtoul(buf, 0, &new);
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (new) {
-> +	case 0:
-> +		*val = WIEGAND_CUSTOM;
-> +		break;
-> +	case 26:
-> +		*val = WIEGAND_V26;
-> +		device->setup.payload_len = WIEGAND_V26_PAYLEN;
-> +		break;
-> +	case 36:
-> +		*val = WIEGAND_V36;
-> +		device->setup.payload_len = WIEGAND_V36_PAYLEN;
-> +		break;
-> +	case 37:
-> +		*val = WIEGAND_V37;
-> +		device->setup.payload_len = WIEGAND_V37_PAYLEN;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return count;
-> +}
-> +
-> +void wiegand_set_format(struct wiegand_device *wiegand, enum wiegand_format fmt)
-> +{
-> +	wiegand->setup.format = fmt;
-> +}
-> +EXPORT_SYMBOL_GPL(wiegand_set_format);
-> +
-> +/*
-> + * Using a custom format, the payload_len sysfs file configures the size of
-> + * messages payload in bits. When one of the standard formats is used, this
-> + * file is read-only and contains the size of the message in bits without the
-> + * parity bits.
-> + */
-> +ssize_t payload_len_show(struct device *dev,
-> +		struct device_attribute *attr, char *buf)
-> +{
-> +	struct wiegand_device *device = dev_get_drvdata(dev);
-> +
-> +	if (!device)
-> +		return -ENODEV;
-> +
-> +	return sysfs_emit(buf, "%u\n", device->setup.pulse_len);
-> +}
-> +
-> +ssize_t payload_len_store(struct device *dev,
-> +		struct device_attribute *attr, const char *buf, size_t count)
-> +{
-> +	struct wiegand_device *device = dev_get_drvdata(dev);
-> +
-> +	if (!device)
-> +		return -ENODEV;
-> +
-> +	/* standard formats use fixed payload size */
-> +	if (device->setup.format != WIEGAND_CUSTOM)
-> +		return -EPERM;
-> +
-> +	return store_uint(&(device->setup.payload_len), buf, count,
-> +					WIEGAND_MAX_PAYLEN_BYTES * 8);
-> +}
-> +
-> +void wiegand_set_payload_len(struct wiegand_device *wiegand, u32 paylen)
-> +{
-> +	wiegand->setup.payload_len = paylen;
-> +}
-> +EXPORT_SYMBOL_GPL(wiegand_set_payload_len);
-> +
-> +DEVICE_ATTR_RW(format);
-> +DEVICE_ATTR_RW(payload_len);
-> +
-> +static struct attribute *wiegand_attrs[] = {
-> +	&dev_attr_format.attr,
-> +	&dev_attr_payload_len.attr,
-> +	NULL,
-> +};
-> +
-> +static struct attribute_group wiegand_group = {
-> +	.name = "wiegand-attributes",
-> +	.attrs = wiegand_attrs,
-> +};
-> +
-> +static int wiegand_dev_probe(struct platform_device *device)
-> +{
-> +	int rc;
-> +	struct wiegand_device *wiegand;
-> +
-> +	wiegand = devm_kzalloc(&device->dev, sizeof(*wiegand), GFP_KERNEL);
-> +	if (!wiegand)
-> +		return -ENOMEM;
-> +
-> +	wiegand->dev = &device->dev;
-> +	wiegand->misc_dev = &wiegand_misc_device;
-> +
-> +	wiegand_glob = wiegand;
-> +
-> +	memcpy(&wiegand->setup, &WIEGAND_SETUP,
-> +			sizeof(struct wiegand_setup));
-> +
-> +	/* Get GPIO lines using device tree bindings. */
-> +	wiegand->gpio_data_lo = devm_gpiod_get(wiegand->dev,
-> +			"data-lo", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(wiegand->gpio_data_lo)) {
-> +		dev_err(wiegand->dev,
-> +			"Failed to get data-lo pin.\n");
-> +		return PTR_ERR(wiegand->gpio_data_lo);
-> +	}
-> +	wiegand->gpio_data_hi = devm_gpiod_get(wiegand->dev,
-> +			"data-hi", GPIOD_OUT_HIGH);
-> +	if (IS_ERR(wiegand->gpio_data_hi)) {
-> +		dev_err(wiegand->dev,
-> +			"Failed to get data-hi pin.\n");
-> +		return PTR_ERR(wiegand->gpio_data_hi);
-> +	}
-> +
-> +	of_property_read_u32(wiegand->dev->of_node, "pulse-len",
-> +					&wiegand->setup.pulse_len);
-> +	of_property_read_u32(wiegand->dev->of_node, "interval-len", &wiegand->setup.interval_len);
-> +	of_property_read_u32(wiegand->dev->of_node, "frame-gap", &wiegand->setup.frame_gap);
-> +
-> +	rc = sysfs_create_group(&wiegand->dev->kobj, &wiegand_group);
-> +	if (rc < 0) {
-> +		dev_err(wiegand->dev, "Couldn't register sysfs group\n");
-> +		return rc;
-> +	}
-> +
-> +	mutex_init(&wiegand->mutex);
-> +
-> +	rc = misc_register(&wiegand_misc_device);
-> +	dev_info(wiegand->dev, "miscdevice prob registered, rc=%d\n", rc);
-> +	wiegand->misc_dev->parent = wiegand->dev;
-> +
-> +	dev_set_drvdata(&device->dev, wiegand);
-> +
-> +	return 0;
-> +}
-> +
-> +static int wiegand_dev_remove(struct platform_device *device)
-> +{
-> +	struct wiegand_device *wiegand = dev_get_drvdata(&device->dev);
-> +
-> +	sysfs_remove_group(&wiegand->dev->kobj, &wiegand_group);
-> +
-> +	misc_deregister(&wiegand_misc_device);
-> +	kfree(wiegand_instance_glob);
+Add support to the FPGA manager for programming Lattice ECP5 FPGA over
+slave SPI sysCONFIG interface.
 
-Hi,
+ChangeLog:
+  v1 -> v2:
+    * remove "spi" from compatible string
+    * reword description in dt-bindings doc
+    * add reference to spi-peripheral-props.yaml in dt-binding doc
+    * fix DTS example in dt-bindings doc: 4-spaces indentations, no
+      undersores in node names.
+  v2 -> v3:
+    * fix typo "##size-cells" -> "#size-cells" in dt-bindings example
+  v3 -> v4:
+    * dt-bindings: reword description
+    * dt-bindings: revert props order
+  v4 -> v5:
+    * dt-bindings: remove trailing dot from title
+    * dt-bindings: reword description to avoid driver reference
+    * dt-bindings: add "Reviewed-by: Krzysztof Kozlowski" tag
+  v5 -> v6:
+    * ecp5-spi: lock SPI bus for exclusive usage in
+      ecp5_ops_write_init(), release in ecp5_ops_write_complete()
+      or on error
+  v6 -> v7:
+    * ecp5-spi.c -> lattice-sysconfig-spi.c. Reworked to represent
+      generalized sysCONFIG port with implementations for ECP5 and
+      MachXO2
+    * lattice,ecp5-fpga-mgr.yaml -> lattice,sysconfig.yaml. Reworked to
+      document both ECP5 and MachXO2 sysCONFIG.
+    * dt-bindings: remove "Reviewed-by: Krzysztof Kozlowski" tag as doc
+      was rewritten by a considerable amount.
+  v7 -> v8:
+    * dt-bindings: move "program-gpios", "init-gpios" and "done-gpios"
+      to top-level properties and disallow them for MachXO2 variant.
+  v8 -> v9:
+    * dt-bindings: "program-gpios", "init-gpios" and "done-gpios" are
+      now optional for both ECP5 and MachXO2
+    * lattice-sysconfig-spi.c -> sysconfig-spi.c + sysconfig.c +
+      sysconfig.h
+        ** reworked to be one sysCONFIG FPGA Manager rather than two
+	   distinct ECP5 and MachXO2 managers
+	** splitted to port type agnostic sysconfig.c and SPI-specific
+	   sysconfig-spi.c
+	** command transfer function moved to callback for ease of
+	   adding another port type, such as I2C
+  v9 -> v10:
+    * split sysconfig_transfer() callback into separate command_write()
+      and command_write_then_read(). There are too many transfers
+      without readback.
+    * add command_write_with_data() callback which performs single
+      transfer of command + data. It's needed for better abstraction of
+      paged bitstream write routine.
+    * move sysconfig_lsc_burst_init() to bitstream_burst_write_init()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * move sysconfig_lsc_burst_complete() to bitstream_burst_write_complete()
+      callback to break dependence of sysconfig.c from sysconfig-spi.c
+    * add bitstream_burst_write() to abstract fpga_manager_ops->write()
+      from bus type
+    * remove struct spi_device from struct sysconfig_priv, use
+      to_spi_device()
+    * move fpga_manager_ops initialization to sysconfig.c
+  v10 -> v11:
+    * rename sysconfig_lsc_burst_init() to sysconfig_spi_lsc_burst_init()
+    * rename sysconfig_bitstream_burst_write() to
+      sysconfig_spi_bitstream_burst_write()
+    * rename sysconfig_lsc_burst_complete() to
+      sysconfig_spi_lsc_burst_complete()
+    * rename "ecp5-fpga-mgr" to "sysconfig-ecp5"
+    * rename "machxo2-fpga-mgr" to "sysconfig-machxo2"
+    * move spi_max_speed_hz from struct sysconfig_fpga_priv to
+      struct sysconfig_spi_fpga_priv, which is local to sysconfig-spi.c
+    * remove SPI bus unlock on write error form
+      sysconfig_spi_bitstream_burst_write(), call
+      sysconfig_burst_write_complete() on error in
+      sysconfig_bitstream_burst_write() instead.
+  v11 -> v12:
+    * build sysconfig core as separate module to prevent duplication of
+      common code segments across different binaries
+    * rename sysconfig.c to lattice-sysconfig.c
+    * rename sysconfig.h to lattice-sysconfig.h
+    * rename sysconfig-spi.c to lattice-sysconfig-spi.c
+    * rename sysconfig_spi_cmd_write_then_read() to
+      sysconfig_spi_cmd_read()
+    * rename command_write_then_read() callback to command_read()
+    * rename sysconfig_cmd_write_then_read() to sysconfig_cmd_read()
+    * rename sysconfig_spi_lsc_burst_init() to
+      sysconfig_spi_bitstream_burst_init()
+    * rename sysconfig_spi_lsc_burst_complete() to
+      sysconfig_spi_bitstream_burst_complete()
+    * remove excessive !spi check from sysconfig_spi_cmd_write(),
+      sysconfig_spi_cmd_read(), sysconfig_spi_bitstream_burst_init(),
+      sysconfig_spi_bitstream_burst_write() and
+      sysconfig_spi_bitstream_burst_complete()
+    * drop MachXO2 support
+        ** drop struct sysconfig_fpga_priv
+        ** drop paged write
+        ** drop command_write_with_data() and friends
+        ** drop ISC_PROGRAM_DONE routine
+        ** drop refresh from sysconfig_isc_finish()
+        ** sysconfig_isc_erase() only erase SRAM
+	** drop MachXO2 mentions from DT bindings doc
+  v12 -> v13:
+    * use device_get_match_data() instead of of_device_get_match_data()
+      and drop of_device.h inclusion
+    * in polling routines use time_before(jiffies, timeout) instead of
+      retries count
+    * add usleep_range() to gpio polling routine
+    * check fail status of command in more pronounced way
+    * check definition of sysconfig_priv callbacks at probe
+    * (BIT(23) | BIT(24) | BIT(25)) -> GENMASK(25, 23)
+  v13 -> v14:
+    * return -ETIMEDOUT instead of -EBUSY from sysconfig_poll_busy() to
+      align with sysconfig_poll_gpio()
+  v14 -> v15:
+    * move sysCONFIG commands from stack to heap, as spi-summary doc
+      says: "I/O buffers use the usual Linux rules, and must be
+      DMA-safe. [...] Don't use the stack, or anything that's declared
+      "static"."
+        ** add u8 cmd_tx_buf[4] and u8 cmd_rx_buf[4] to
+	   struct sysconfig_priv
+	** copy commands to cmd_tx_buf before sending to the device
+	** use cmd_rx_buf for commands readback
+	** change command_write() and command_read() signatures, as
+	   command buffers are now embedded to sysconfig_priv
+	** combine sysconfig_read_busy() with sysconfig_poll_busy() to
+	   avoid same memcpy in the loop
+  v15 -> v16:
+    * revert to v14
+    * combine command_write() and command_read() to command_transfer()
+      which uses spi_write_then_read() underhood. spi_write_then_read()
+      is dma-safe for on-stack buffers.
+    * in sysconfig_spi_bitstream_burst_init() bounce on-stack buffer
+      with LSC_BITSTREAM_BURST command to the heap. Now everything
+      should be dma-safe.
+  v16 -> v17:
+    * return dev_err_probe() from sysconfig_probe() if
+      devm_gpiod_get_optional() fails
+  v17 -> v18:
+    * use read_poll_timeout() in sysconfig_poll_busy() and
+      sysconfig_poll_gpio()
+    * combine checks for callbacks presence in sysconfig_probe() into
+      one if-statement, add missing check for command_transfer()
+  v18 -> v19:
+    * sysconfig_poll_gpio() improvements:
+        ** replace '(val && is_active) || (!val && !is_active)' with
+	   simpler expression '!!val == is_active'
+	** unfold ternary return
+  v19 -> v20:
+    * replace kmalloc() + memcpy() with kmemdup()
 
-'wiegand_instance_glob' seems to be released via 'info' in 
-wiegand_release().
+Ivan Bornyakov (2):
+  fpga: lattice-sysconfig-spi: add Lattice sysCONFIG FPGA manager
+  dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
 
-> +	kfree(wiegand);
+ .../bindings/fpga/lattice,sysconfig.yaml      |  81 ++++
+ drivers/fpga/Kconfig                          |  11 +
+ drivers/fpga/Makefile                         |   2 +
+ drivers/fpga/lattice-sysconfig-spi.c          | 153 +++++++
+ drivers/fpga/lattice-sysconfig.c              | 397 ++++++++++++++++++
+ drivers/fpga/lattice-sysconfig.h              |  39 ++
+ 6 files changed, 683 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
+ create mode 100644 drivers/fpga/lattice-sysconfig-spi.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.c
+ create mode 100644 drivers/fpga/lattice-sysconfig.h
 
-'wiegand' seems to be devm_alloc'ed in the probe.
-It also seems to be release in wiegand_release().
+-- 
+2.37.4
 
-CJ
-
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id wiegand_dt_idtable[] = {
-> +	{ .compatible = "wiegand", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, wiegand_dt_idtable);
-> +
-> +static struct platform_driver wiegand_driver = {
-> +	.probe		= wiegand_dev_probe,
-> +	.remove		= wiegand_dev_remove,
-> +	.driver		= {
-> +		.name		= "wiegand",
-> +		.of_match_table = wiegand_dt_idtable,
-> +	},
-> +};
-> +
-> +module_platform_driver(wiegand_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Wiegand write-only driver realized by GPIOs");
-> +
-> diff --git a/include/linux/wiegand.h b/include/linux/wiegand.h
-> new file mode 100644
-> index 000000000000..2b2dece48643
-> --- /dev/null
-> +++ b/include/linux/wiegand.h
-> @@ -0,0 +1,58 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#ifndef H_LINUX_INCLUDE_LINUX_WIEGAND_H
-> +#define H_LINUX_INCLUDE_LINUX_WIEGAND_H
-> +
-> +#include <linux/device.h>
-> +#include <linux/mutex.h>
-> +
-> +#define WIEGAND_MAX_PAYLEN_BYTES 256
-> +#define WIEGAND_MAX_MODULES 1
-> +
-> +struct wiegand_device;
-> +struct wiegand_instance;
-> +
-> +/* The used wiegand format; when data does not end at octet boundaries, the
-> + * lower bits of the last octet will be ignored and only the upper ones will be
-> + * used.
-> + */
-> +enum wiegand_format {
-> +	WIEGAND_V26 = 26,
-> +	WIEGAND_V36 = 36,
-> +	WIEGAND_V37 = 37,
-> +	WIEGAND_CUSTOM = 0,
-> +};
-> +
-> +enum wiegand_paylen {
-> +	WIEGAND_V26_PAYLEN = 24,
-> +	WIEGAND_V36_PAYLEN = 34,
-> +	WIEGAND_V37_PAYLEN = 35,
-> +};
-> +
-> +/**
-> + * struct wiegand_setup - Wiegand communication attributes
-> + * @pulse_len: length of the low pulse in usec; defaults to 50us, set via
-> + *	devicetree
-> + * @interval_len: length of a whole bit (both the pulse and the high phase) in
-> + *	usec; defaults to 2000us, set via devicetree
-> + * @frame_gap: length of the last bit of a frame (both the pulse and the high
-> + *	phase) in usec; defaults to interval_len, set via devicetree
-> + * @format: the used wiegand format, set via sysfs file
-> + * @payload_len: payload of wiegand message in bits, set via sysfs file
-> + */
-> +struct wiegand_setup {
-> +	u32		pulse_len;
-> +	u32		interval_len;
-> +	u32		frame_gap;
-> +	u32		payload_len;
-> +	enum wiegand_format	format;
-> +};
-> +
-> +extern ssize_t wiegand_write(struct wiegand_device *wiegand,
-> +						const char *buf, size_t len);
-> +extern void wiegand_set_format(struct wiegand_device *wiegand,
-> +						enum wiegand_format fmt);
-> +extern void wiegand_set_payload_len(
-> +		struct wiegand_device *wiegand_gpio, u32 paylen);
-> +
-> +#endif	/* H_LINUX_INCLUDE_LINUX_WIEGAND_H */
-> --
-> 2.37.3
-> 
-> 
 
