@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE8160C5CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F6E60C5D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232048AbiJYHsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
+        id S231992AbiJYHti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbiJYHr5 (ORCPT
+        with ESMTP id S231356AbiJYHtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:47:57 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21067161FCE
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:47:53 -0700 (PDT)
+        Tue, 25 Oct 2022 03:49:35 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B3A26AE5;
+        Tue, 25 Oct 2022 00:49:33 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5EF0EC0008;
-        Tue, 25 Oct 2022 07:47:49 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id B9A0A20005;
+        Tue, 25 Oct 2022 07:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1666684072;
+        t=1666684172;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tzRPPOC0dgpsRT+KNgmTDR2mgXFxU07YYnSqsUCT1kg=;
-        b=aOzwzcbMEIl5WPpnU47KzOVf51YQkKfHmSjYRCaFiuZKwrrD1ucjb8/Gn+8vp+ucmH5JeK
-        5RNC3GVxEJLr0IiNtBvs7CaKEBQxZElV2FuUety3knYmSQfGFon9ve+3P1JuBCeTpmgKth
-        S0uIHomTprmZUtQKtCyt6FM0Ctg9e6iNAtRpdQkP2xrWnhj02fLJqx6zMRPt1ASlTE9HNh
-        kmNlgKIYhhd2RcJ/xJA93fKBFwqCrvrbd4Iu+hXopKGj8RuxC3pJ+utbWJF3A45Z9LuA5j
-        yfcq7e1L19UBAIRpxWeqjaLBSjCMByzuWXcjo05LVdXpKH4qZmL0mdJ0A4lE6w==
-Date:   Tue, 25 Oct 2022 09:47:48 +0200
+        bh=AuSwOgZY8sHme8bFpEr2PZ8MbxLNuNWPW+Z3pPtGyEk=;
+        b=PUEdnLAPCSLhuoDaQISlHsB6738xXC0Wj/kHDXu2JGyYtg9rbHDE5pkj45sfbtsjHjxDz5
+        ZpyHpFWTjRGOs0Mf5/w3D5hD/8a6EGUqhq8pkQSJlLvDdD02ZgXv5tqC+cWg6a645RGW0B
+        7O/xuvUnUomJp+HpFiao61DM6lz7WmAddX9u0awkbiaTg66UuTWRdPVujgWI2y70UXY4Qt
+        aRySmhTRIrAvQ6i7LTFynGvzi9GxdUWE7jq0M/FaF52n1hBpbnW5y1YUQ4O3C4e9yY2Sri
+        8nJJ25B+xIsPl1LmSPmTvMqz8jyvhfFBBFrPPXK78FcO1WTLbMOO+2i/jIG9jw==
+Date:   Tue, 25 Oct 2022 09:49:30 +0200
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Vadym Kochan <vadym.kochan@plvision.eu>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Elad Nachman <enachman@marvell.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Aviram Dali <aviramd@marvell.com>
-Subject: Re: [PATCH] mtd: rawnand: marvell: add missing layouts
-Message-ID: <20221025094748.7dda3a57@xps-13>
-In-Reply-To: <20221024215531.32033-1-vadym.kochan@plvision.eu>
-References: <20221024215531.32033-1-vadym.kochan@plvision.eu>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Naga Sureshkumar Relli <nagasure@xilinx.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: memory-controllers: arm,pl353-smc: Extend
+ to support 'arm,pl354' SMC
+Message-ID: <20221025094930.492548e1@xps-13>
+In-Reply-To: <CAL_Jsq+C903Syo-buYvC5=jtvhtvhwerEbz9wkd6nRFs7aB8LQ@mail.gmail.com>
+References: <20221021203928.286169-1-robh@kernel.org>
+        <20221024101405.3c2e163a@xps-13>
+        <CAL_Jsq+C903Syo-buYvC5=jtvhtvhwerEbz9wkd6nRFs7aB8LQ@mail.gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -57,65 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vadym,
+Hi Rob,
 
-vadym.kochan@plvision.eu wrote on Tue, 25 Oct 2022 00:55:31 +0300:
+robh@kernel.org wrote on Mon, 24 Oct 2022 09:31:41 -0500:
 
-> From: Aviram Dali <aviramd@marvell.com>
+> On Mon, Oct 24, 2022 at 3:14 AM Miquel Raynal <miquel.raynal@bootlin.com>=
+ wrote:
+> >
+> > Hi Rob,
+> >
+> > robh@kernel.org wrote on Fri, 21 Oct 2022 15:39:28 -0500:
+> > =20
+> > > Add support for the Arm PL354 static memory controller to the existing
+> > > Arm PL353 binding. Both are different configurations of the same IP w=
+ith
+> > > support for different types of memory interfaces.
+> > >
+> > > The 'arm,pl354' binding has already been in use upstream for a long t=
+ime
+> > > in Arm development boards. The existing users have only the controller
+> > > without any child devices, so drop the required address properties
+> > > (ranges, #address-cells, #size-cells). The schema for 'ranges' is too
+> > > constrained as the order is not important and the PL354 has 8
+> > > chipselects (And the PL353 actually has up to 8 too). =20
+> >
+> > I'm not convinced the ranges constraint should be soften. For me
+> > the order was important (and the description in the yaml useful, but
+> > that's a personal opinion). What makes you think the ranges order is
+> > not relevant on PL353? =20
 >=20
-> A missing layouts were added to the driver to support NAND flashes
-> with ECC layouts of 12 or 16 with page sized of 2048, 4096 or 8192.
->=20
-> Usually theses are rare layouts, but in Marvell AC5 driver, the ECC
-> level is set according to the spare area, so we may use these layouts
-> more frequently.
+> Address translation looks for a matching entry, so order doesn't
+> matter. However, we have seen cases in PCI hosts where the driver
+> populates registers based on the order of ranges. That's a driver
+> problem IMO. For PCI, it was multiple entries of the same type. For
+> this, we have the chip select number in the entry, so we shouldn't
+> have the same sort of problem. Except there is another issue that the
+> SRAM interface chipselects are numbered 1 and 2. The PL353 can have 4
+> NAND chipselects, I don't think the host addresses are necessarily in
+> order or contiguous either, so you could need 4 entries for NAND. The
+> existing description doesn't handle that, and the chipselects for the
+> SRAM interface should have been numbered 4-7. I don't mind saying the
+> entries should be in order by chipselect, but we can't define indices
+> of the entries as was done. It's all kind of academic because we don't
+> have any h/w needing anything else though the Arm boards would if the
+> child nodes actually got defined (not likely at this point).
 
-Again, please do not carry cosmetic changes and real new additions in
-the same patch.
+Alright, thanks for the feedback.
 
->=20
-> Signed-off-by: Aviram Dali <aviramd@marvell.com>
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
->  drivers/mtd/nand/raw/marvell_nand.c | 23 +++++++++++++++--------
->  1 file changed, 15 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/marvell_nand.c b/drivers/mtd/nand/raw/m=
-arvell_nand.c
-> index b9d1e96e3334..7944787f7b9f 100644
-> --- a/drivers/mtd/nand/raw/marvell_nand.c
-> +++ b/drivers/mtd/nand/raw/marvell_nand.c
-> @@ -283,14 +283,21 @@ struct marvell_hw_ecc_layout {
-> =20
->  /* Layouts explained in AN-379_Marvell_SoC_NFC_ECC */
->  static const struct marvell_hw_ecc_layout marvell_nfc_layouts[] =3D {
-> -	MARVELL_LAYOUT(  512,   512,  1,  1,  1,  512,  8,  8,  0,  0,  0),
-> -	MARVELL_LAYOUT( 2048,   512,  1,  1,  1, 2048, 40, 24,  0,  0,  0),
-> -	MARVELL_LAYOUT( 2048,   512,  4,  1,  1, 2048, 32, 30,  0,  0,  0),
-> -	MARVELL_LAYOUT( 2048,   512,  8,  2,  1, 1024,  0, 30,1024,32, 30),
-> -	MARVELL_LAYOUT( 4096,   512,  4,  2,  2, 2048, 32, 30,  0,  0,  0),
-> -	MARVELL_LAYOUT( 4096,   512,  8,  5,  4, 1024,  0, 30,  0, 64, 30),
-> -	MARVELL_LAYOUT( 8192,   512,  4,  4,  4, 2048,  0, 30,  0,  0,  0),
-> -	MARVELL_LAYOUT( 8192,   512,  8,  9,  8, 1024,  0, 30,  0, 160, 30),
-> +	MARVELL_LAYOUT(512,   512,  1,  1,  1,  512,  8,  8,  0,   0,  0),
-> +	MARVELL_LAYOUT(2048,   512,  1,  1,  1, 2048, 40, 24,  0,   0,  0),
-> +	MARVELL_LAYOUT(2048,   512,  4,  1,  1, 2048, 32, 30,  0,   0,  0),
-> +	MARVELL_LAYOUT(2048,   512,  8,  2,  1, 1024,  0, 30,  1024, 32, 30),
-> +	MARVELL_LAYOUT(2048,   512,  8,  2,  1, 1024,  0, 30,  1024, 64, 30),
-> +	MARVELL_LAYOUT(2048,   512,  12, 3,  2, 704,   0, 30,  640, 0,  30),
-> +	MARVELL_LAYOUT(2048,   512,  16, 5,  4, 512,   0, 30,  0,   32, 30),
-> +	MARVELL_LAYOUT(4096,   512,  4,  2,  2, 2048, 32, 30,  0,   0,  0),
-> +	MARVELL_LAYOUT(4096,   512,  8,  5,  4, 1024,  0, 30,  0,   64, 30),
-> +	MARVELL_LAYOUT(4096,   512,  12, 6,  5, 704,   0, 30,  576, 32, 30),
-> +	MARVELL_LAYOUT(4096,   512,  16, 9,  8, 512,   0, 30,  0,   32, 30),
-> +	MARVELL_LAYOUT(8192,   512,  4,  4,  4, 2048,  0, 30,  0,   0,  0),
-> +	MARVELL_LAYOUT(8192,   512,  8,  9,  8, 1024,  0, 30,  0,  160, 30),
-> +	MARVELL_LAYOUT(8192,   512,  12, 12, 11, 704,  0, 30,  448, 64, 30),
-> +	MARVELL_LAYOUT(8192,   512,  16, 17, 16, 512,  0, 30,  0,   32, 30),
->  };
-> =20
->  /**
-
-
-Thanks,
+Cheers,
 Miqu=C3=A8l
