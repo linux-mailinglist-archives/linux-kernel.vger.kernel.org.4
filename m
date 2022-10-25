@@ -2,95 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF8660C4AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:03:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F0960C4B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231469AbiJYHDh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:03:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
+        id S229629AbiJYHFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231326AbiJYHDd (ORCPT
+        with ESMTP id S231408AbiJYHFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:03:33 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B73BB1BB9;
-        Tue, 25 Oct 2022 00:03:31 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Bx37dBildjpFQCAA--.4317S3;
-        Tue, 25 Oct 2022 15:03:29 +0800 (CST)
-Received: from [10.130.0.135] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx9VY_ildjwr4EAA--.97S3;
-        Tue, 25 Oct 2022 15:03:28 +0800 (CST)
-Subject: Re: [PATCH v3 0/3] perf: Add more syscalls to benchmark
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-References: <1665042130-15786-1-git-send-email-yangtiezhu@loongson.cn>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <5e72e99e-1b7e-f5a0-a088-aede07887a6d@loongson.cn>
-Date:   Tue, 25 Oct 2022 15:03:27 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Tue, 25 Oct 2022 03:05:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B3B4A806
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666681539;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fe1WZpWI0+WNHlpXUbrxZSAOPfSw/3F9thWPXoPIAVs=;
+        b=AtGwgNSDpIm6obnesW0L75VfF3/OFXAOFVlnGfOlzJwPclzWBj9C642Ii5LsyTmP4n4Dru
+        fLFmO7yAMl5rRXEYbCD7ehSCq5t8ixS+yi5LqHMWt29BWsjji6YpigbatbPur4npfOzw3S
+        qP+yE7iQTftUUtIiMVeXfNG1od7uz9c=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-542-B6uGGz2ANlqrM-3qyV8Hmw-1; Tue, 25 Oct 2022 03:05:37 -0400
+X-MC-Unique: B6uGGz2ANlqrM-3qyV8Hmw-1
+Received: by mail-wr1-f71.google.com with SMTP id h18-20020adfa4d2000000b00236584fc8c7so3642456wrb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:05:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fe1WZpWI0+WNHlpXUbrxZSAOPfSw/3F9thWPXoPIAVs=;
+        b=ff5gPjp0KxwuIIV0V2jnflhwqIeU7gMuqBcEQ7yXoku9azP6mtMAlFbkcnAu1uuHcs
+         yrOhMcVmphj309/5ZRFKfE88htJdbQ9nOooBtM9lDnjv9otKZWoXACXmZqKZULbhg7l4
+         DvzG/mYNz2zUspciRZhGuq/ZTn+OCSi9Wlqnjbvtdp0oJe65oJ3+1U81uHiyXaCazNWY
+         RnGGED6UyzqKhVAX3WRVjMIcGumV13JVk2Wp+yfI6/nowIt/mbMlfHZ4thZtyU5uoS3C
+         NWewwQgYeHl7/2y1zrg6XwM6dp3GVl6qvK8J1HDhmNWAi5aB6Y7L6dlAdX8k3GYdd6Q4
+         fOkA==
+X-Gm-Message-State: ACrzQf06ZuWnwub5007Ye7Y8DU8tlAE3iUh0SgbDRP52fbVezytpLecr
+        dMCfCPV04AvIKzoB/tU0LWhq/N1bjRrA23bojGI9RkuHXcczHtYMX8JtxtNsY8xfMHsqj9n/MgP
+        wcO5hO5t6GlnuReHS3OgvQXGQ
+X-Received: by 2002:a5d:6d8a:0:b0:236:6123:a8a5 with SMTP id l10-20020a5d6d8a000000b002366123a8a5mr9839557wrs.229.1666681536432;
+        Tue, 25 Oct 2022 00:05:36 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6vGN8RwMdOloicelrC6hCDmVpDUnXTSURyJhiGcLjlRN3taSS7ZSJOzY1mCKKolD0ZTIX/qA==
+X-Received: by 2002:a5d:6d8a:0:b0:236:6123:a8a5 with SMTP id l10-20020a5d6d8a000000b002366123a8a5mr9839535wrs.229.1666681536103;
+        Tue, 25 Oct 2022 00:05:36 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:4e00:3efc:1c60:bc60:f557? (p200300cbc70b4e003efc1c60bc60f557.dip0.t-ipconnect.de. [2003:cb:c70b:4e00:3efc:1c60:bc60:f557])
+        by smtp.gmail.com with ESMTPSA id h20-20020a1ccc14000000b003b492753826sm1686070wmb.43.2022.10.25.00.05.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 00:05:35 -0700 (PDT)
+Message-ID: <b9e88ddf-e0ac-ce81-d6b4-caf70772c455@redhat.com>
+Date:   Tue, 25 Oct 2022 09:05:34 +0200
 MIME-Version: 1.0
-In-Reply-To: <1665042130-15786-1-git-send-email-yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v1 1/7] selftests/vm: anon_cow: test COW handling of
+ anonymous memory
+To:     Rafael Mendonca <rafaelmendsr@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mike Rapoport <rppt@kernel.org>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>
+References: <20220927110120.106906-1-david@redhat.com>
+ <20220927110120.106906-2-david@redhat.com> <Y1bD+8CMzlqkbPwU@macondo>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <Y1bD+8CMzlqkbPwU@macondo>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Dx9VY_ildjwr4EAA--.97S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoWrKF48ZFyUuw1UWF4rur15Arb_yoW3AFb_Aa
-        yIk3yUGryrXF9xtFy3Jwn8Xa45AayxJrZ5JFn7Wry7Jr4DXFyUJFnY9r1kAFnYgF4kZrZ3
-        Ca98ZryrArWjkjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
-        07kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAa
-        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
-        jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcpBTUUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>> +	/* See if we still read the old values via the pipe. */
+>> +	for (total = 0; total < transferred; total += cur) {
+>> +		cur = read(fds[0], new + total, transferred - total);
+>> +		if (cur < 0)
+> 
+> Hi David,
+> I was looking at some coccinelle reports for linux-next and
+> saw the following warning for this comparison:
+> 
+>    WARNING: Unsigned expression compared with zero: cur < 0
+> 
+> I think 'cur' needs to be of type 'ssize_t' for this comparison to work.
+> 
+> The same warning is reported for the variable 'transferred' above, and
+> also for do_test_iouring() and do_test_vmsplice_in_parent() in
+> "selftests/vm: anon_cow: add liburing test cases".
+> 
 
+Thanks for reporting! Indeed, we need a signed value.
 
-On 10/06/2022 03:42 PM, Tiezhu Yang wrote:
-> v3: Add __NR_ in tools/arch/x86/include/asm/unistd_*.h
->     to fix build error about __NR_ can't be found on x86_64
->     reported by kernel test robot, sorry for that.
->
-> Tiezhu Yang (3):
->   perf bench syscall: Introduce bench_syscall_common()
->   perf bench syscall: Add close syscall benchmark
->   perf bench syscall: Add execve syscall benchmark
->
->  tools/arch/x86/include/uapi/asm/unistd_32.h |  9 ++++
->  tools/arch/x86/include/uapi/asm/unistd_64.h |  9 ++++
->  tools/perf/bench/bench.h                    |  2 +
->  tools/perf/bench/syscall.c                  | 76 +++++++++++++++++++++++++++--
->  tools/perf/builtin-bench.c                  |  2 +
->  5 files changed, 94 insertions(+), 4 deletions(-)
->
-
-Hi Arnaldo,
-
-Any comments? Are you OK with this series?
-
+-- 
 Thanks,
-Tiezhu
+
+David / dhildenb
 
