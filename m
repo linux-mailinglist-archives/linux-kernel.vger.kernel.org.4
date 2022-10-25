@@ -2,275 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E45D60CFA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC4460CFCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiJYOy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33202 "EHLO
+        id S232588AbiJYPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiJYOyx (ORCPT
+        with ESMTP id S231349AbiJYPBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:54:53 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70131211DC;
-        Tue, 25 Oct 2022 07:54:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=1SkHs2ReypL5wxS5Ayju3gfZzKWmcZLvSrMlwHZTm+8=; b=gT4vguM5XriQGCcCcxem64dKMp
-        fFH4uYwKkFujfPQi46crEFMolZa0KVoXtQIoGtc9lYyUGNdXcyCKcKQdRMNLFeDzsMn+FAVI3DPQk
-        1p+vYuoEb91DYh0cTdhksOhTUJSCg5DBCbonfuJCs8NF98FFJBzgKcMxBZMqfA+mUZds=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1onLJ6-000XcV-Dn; Tue, 25 Oct 2022 16:53:32 +0200
-Date:   Tue, 25 Oct 2022 16:53:32 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Camel Guo <camel.guo@axis.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        kernel@axis.com
-Subject: Re: [RFC net-next 2/2] net: dsa: Add driver for Maxlinear GSW1XX
- switch
-Message-ID: <Y1f4bIavgSv0OWi0@lunn.ch>
-References: <20221025135243.4038706-1-camel.guo@axis.com>
- <20221025135243.4038706-3-camel.guo@axis.com>
+        Tue, 25 Oct 2022 11:01:16 -0400
+Received: from jari.cn (unknown [218.92.28.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A050E101C5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:01:13 -0700 (PDT)
+Received: by ajax-webmail-localhost.localdomain (Coremail) ; Tue, 25 Oct
+ 2022 22:56:11 +0800 (GMT+08:00)
+X-Originating-IP: [182.148.15.254]
+Date:   Tue, 25 Oct 2022 22:56:11 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   wangkailong@jari.cn
+To:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        broonie@kernel.org, motolav@gmail.com, cezary.rojewski@intel.com,
+        mkumard@nvidia.com, pierre-louis.bossart@linux.intel.com,
+        kai.vehmanen@linux.intel.com, peter.ujfalusi@linux.intel.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ALSA/ASoC: replace ternary operator with min()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
+ Copyright (c) 2002-2022 www.mailtech.cn
+ mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025135243.4038706-3-camel.guo@axis.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <3d74bcaf.5.1840fa4d439.Coremail.wangkailong@jari.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: AQAAfwCXq+EL+VdjmgQAAA--.1W
+X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAKB2FEYx0AUgADsG
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
+        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +++ b/drivers/net/dsa/Kconfig
-> @@ -122,4 +122,20 @@ config NET_DSA_VITESSE_VSC73XX_PLATFORM
->  	  This enables support for the Vitesse VSC7385, VSC7388, VSC7395
->  	  and VSC7398 SparX integrated ethernet switches, connected over
->  	  a CPU-attached address bus and work in memory-mapped I/O mode.
-> +
-> +config NET_DSA_MXL_GSW1XX
-> +	tristate
-> +	select REGMAP
-> +	help
-> +	  This enables support for the Maxlinear GSW1XX integrated ethernet
-> +	  switch chips.
-> +
-> +config NET_DSA_MXL_GSW1XX_MDIO
-> +	tristate "MaxLinear GSW1XX ethernet switch in MDIO managed mode"
-
-Please keep this file sorted on the tristate text.
-
-In general, it is wrong to insert at the end. That causes the most
-conflicts. By keeping lists like this sorted, inserts tend to be
-separated, and so don't cause conflicts. Also, keeping it sorted helps
-users actually find the configuration option they want.
-
-> +	select NET_DSA_MXL_GSW1XX
-> +	select FIXED_PHY
-> +	help
-> +	  This enables access functions if the MaxLinear GSW1XX is configured
-> +	  for MDIO managed mode.
-> +
->  endmenu
-> diff --git a/drivers/net/dsa/Makefile b/drivers/net/dsa/Makefile
-> index 16eb879e0cb4..022fc661107b 100644
-> --- a/drivers/net/dsa/Makefile
-> +++ b/drivers/net/dsa/Makefile
-> @@ -15,6 +15,8 @@ obj-$(CONFIG_NET_DSA_SMSC_LAN9303_MDIO) += lan9303_mdio.o
->  obj-$(CONFIG_NET_DSA_VITESSE_VSC73XX) += vitesse-vsc73xx-core.o
->  obj-$(CONFIG_NET_DSA_VITESSE_VSC73XX_PLATFORM) += vitesse-vsc73xx-platform.o
->  obj-$(CONFIG_NET_DSA_VITESSE_VSC73XX_SPI) += vitesse-vsc73xx-spi.o
-> +obj-$(CONFIG_NET_DSA_MXL_GSW1XX) += gsw1xx_core.o
-> +obj-$(CONFIG_NET_DSA_MXL_GSW1XX_MDIO) += gsw1xx_mdio.o
-
-This file is sorted as well.
-
-> diff --git a/drivers/net/dsa/gsw1xx.h b/drivers/net/dsa/gsw1xx.h
-
-If you think there is going to be a gsw1xx_spi.c and gsw1xx_uart.c, i
-would suggest you move into a subdirectory.
-
-> +static u32 gsw1xx_switch_r(struct gsw1xx_priv *priv, u32 offset)
-> +{
-> +	int ret = 0;
-> +	u32 val = 0;
-> +
-> +	ret = regmap_read(priv->regmap, GSW1XX_IP_BASE_ADDR + offset, &val);
-> +
-> +	return ret < 0 ? (u32)ret : val;
-
-A negative error code becomes positive? So how do you then know it is
-an error code?
-
-The general pattern is you pass the error code and the register value
-in two separate ways. Generally, the error code as the return value,
-as an int, and the register value via a pointer. Just as regmap_read()
-does.
-
-> +}
-> +
-> +static void gsw1xx_switch_w(struct gsw1xx_priv *priv, u32 val, u32 offset)
-> +{
-> +	regmap_write(priv->regmap, GSW1XX_IP_BASE_ADDR + offset, val);
-> +}
-
-Return the error code from regmap_write().
-
-In general, don't ignore errors. Return them up the call stack.
-
-> +static u32 gsw1xx_switch_r_timeout(struct gsw1xx_priv *priv, u32 offset,
-> +				   u32 cleared)
-> +{
-> +	u32 val;
-> +
-> +	return read_poll_timeout(gsw1xx_switch_r, val, (val & cleared) == 0, 20,
-> +				 50000, true, priv, offset);
-> +}
-> +
-> +static int gsw1xx_mdio_poll(struct gsw1xx_priv *priv)
-> +{
-> +	int cnt = 100;
-> +
-> +	while (likely(cnt--)) {
-> +		u32 ctrl = gsw1xx_mdio_r(priv, GSW1XX_MDIO_CTRL);
-> +
-> +		if ((ctrl & GSW1XX_MDIO_CTRL_BUSY) == 0)
-> +			return 0;
-> +		usleep_range(20, 40);
-> +	}
-> +
-> +	return -ETIMEDOUT;
-
-It looks like this could be implemented using read_poll_timeout() as
-well?
-
-> +}
-> +
-> +static int gsw1xx_mdio_wr(struct mii_bus *bus, int addr, int reg, u16 val)
-> +{
-> +	struct gsw1xx_priv *priv = bus->priv;
-> +	int err;
-
-Please check for C45 and return -EOPNOTSUPP.
-
-> +
-> +	err = gsw1xx_mdio_poll(priv);
-> +	if (err) {
-> +		dev_err(&bus->dev, "timeout while waiting for MDIO bus\n");
-> +		return err;
-> +	}
-> +
-> +	gsw1xx_mdio_w(priv, val, GSW1XX_MDIO_WRITE);
-> +	gsw1xx_mdio_w(priv,
-> +		      GSW1XX_MDIO_CTRL_WR |
-> +			      ((addr & GSW1XX_MDIO_CTRL_PHYAD_MASK)
-> +			       << GSW1XX_MDIO_CTRL_PHYAD_SHIFT) |
-> +			      (reg & GSW1XX_MDIO_CTRL_REGAD_MASK),
-> +		      GSW1XX_MDIO_CTRL);
-> +
-> +	return 0;
-> +}
-> +
-> +static int gsw1xx_mdio_rd(struct mii_bus *bus, int addr, int reg)
-> +{
-> +	struct gsw1xx_priv *priv = bus->priv;
-> +	int err;
-
-Same here.
-
-> +static int gsw1xx_port_enable(struct dsa_switch *ds, int port,
-> +			      struct phy_device *phydev)
-> +{
-> +	struct gsw1xx_priv *priv = ds->priv;
-> +
-> +	if (!dsa_is_user_port(ds, port))
-> +		return 0;
-> +
-> +	/* RMON Counter Enable for port */
-> +	gsw1xx_switch_w(priv, GSW1XX_IP_BM_PCFG_CNTEN,
-> +			GSW1XX_IP_BM_PCFGp(port));
-> +
-> +	/* enable port fetch/store dma */
-> +	gsw1xx_switch_mask(priv, 0, GSW1XX_IP_FDMA_PCTRL_EN,
-> +			   GSW1XX_IP_FDMA_PCTRLp(port));
-> +	gsw1xx_switch_mask(priv, 0, GSW1XX_IP_SDMA_PCTRL_EN,
-> +			   GSW1XX_IP_SDMA_PCTRLp(port));
-> +
-> +	if (!dsa_is_cpu_port(ds, port)) {
-
-How can this be true given the previous check for dsa_is_user_port()?
-
-
-> +static int gsw1xx_setup(struct dsa_switch *ds)
-> +{
-> +	struct gsw1xx_priv *priv = ds->priv;
-> +	unsigned int cpu_port = priv->hw_info->cpu_port;
-> +	int i;
-> +	int err;
-
-Reverse christmass tree, which means you need to delay assigning
-cpu_port into the body of the function.
-
-> +int gsw1xx_probe(struct gsw1xx_priv *priv, struct device *dev)
-> +{
-> +	struct device_node *np, *mdio_np;
-> +	int err;
-> +	u32 version;
-
-Reverse christmass tree.
-
-> +
-> +	if (!priv->regmap || IS_ERR(priv->regmap))
-> +		return -EINVAL;
-> +
-> +	priv->hw_info = of_device_get_match_data(dev);
-> +	if (!priv->hw_info)
-> +		return -EINVAL;
-> +
-> +	priv->ds = devm_kzalloc(dev, sizeof(*priv->ds), GFP_KERNEL);
-> +	if (!priv->ds)
-> +		return -ENOMEM;
-> +
-> +	priv->ds->dev = dev;
-> +	priv->ds->num_ports = priv->hw_info->max_ports;
-> +	priv->ds->priv = priv;
-> +	priv->ds->ops = &gsw1xx_switch_ops;
-> +	priv->dev = dev;
-> +	version = gsw1xx_switch_r(priv, GSW1XX_IP_VERSION);
-> +
-> +	np = dev->of_node;
-> +	switch (version) {
-> +	case GSW1XX_IP_VERSION_2_3:
-> +		if (!of_device_is_compatible(np, "mxl,gsw145-mdio"))
-> +			return -EINVAL;
-> +		break;
-> +	default:
-> +		dev_err(dev, "unknown GSW1XX_IP version: 0x%x", version);
-> +		return -ENOENT;
-
-I think ENODEV is more appropriate.
-
-I noticed there is no tagging protocol defined. How are frames
-direction out a specific port?
-
-I've also not yet looked at the overlap with lantiq_gswip.c.
-
-     Andrew
+Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKc291bmQvc29jL3NvYy1vcHMu
+Yzo4MTc6IFdBUk5JTkcgb3Bwb3J0dW5pdHkgZm9yIG1pbigpCnNvdW5kL2NvcmUvdm1hc3Rlci5j
+OjczOiBXQVJOSU5HIG9wcG9ydHVuaXR5IGZvciBtaW4oKQpzb3VuZC9wY2kvaGRhL2hkYV9jb2Rl
+Yy5jOjMzNzogV0FSTklORyBvcHBvcnR1bml0eSBmb3IgbWluKCkKc291bmQvcGNpL2N0eGZpL2N0
+YXRjLmM6NDQ4OiBXQVJOSU5HIG9wcG9ydHVuaXR5IGZvciBtaW4oKQpzb3VuZC9wY2kvY3R4Zmkv
+Y3RhdGMuYzozODc6IFdBUk5JTkcgb3Bwb3J0dW5pdHkgZm9yIG1pbigpCgpTaWduZWQtb2ZmLWJ5
+OiBLYWlMb25nIFdhbmcgPHdhbmdrYWlsb25nQGphcmkuY24+Ci0tLQogc291bmQvY29yZS92bWFz
+dGVyLmMgICAgICB8IDIgKy0KIHNvdW5kL3BjaS9jdHhmaS9jdGF0Yy5jICAgfCA0ICsrLS0KIHNv
+dW5kL3BjaS9oZGEvaGRhX2NvZGVjLmMgfCAyICstCiBzb3VuZC9zb2Mvc29jLW9wcy5jICAgICAg
+IHwgMiArLQogNCBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0p
+CgpkaWZmIC0tZ2l0IGEvc291bmQvY29yZS92bWFzdGVyLmMgYi9zb3VuZC9jb3JlL3ZtYXN0ZXIu
+YwppbmRleCBkMGYxMWYzNzg4OWIuLjcwNGEwOWY0YmZkNiAxMDA2NDQKLS0tIGEvc291bmQvY29y
+ZS92bWFzdGVyLmMKKysrIGIvc291bmQvY29yZS92bWFzdGVyLmMKQEAgLTcwLDcgKzcwLDcgQEAg
+c3RhdGljIGludCBmb2xsb3dlcl91cGRhdGUoc3RydWN0IGxpbmtfZm9sbG93ZXIgKmZvbGxvd2Vy
+KQogCQlmb2xsb3dlci0+dmFsc1tjaF0gPSB1Y3RsLT52YWx1ZS5pbnRlZ2VyLnZhbHVlW2NoXTsK
+ICBlcnJvcjoKIAlrZnJlZSh1Y3RsKTsKLQlyZXR1cm4gZXJyIDwgMCA/IGVyciA6IDA7CisJcmV0
+dXJuIG1pbihlcnIsIDApOwogfQogCiAvKiBnZXQgdGhlIGZvbGxvd2VyIGN0bCBpbmZvIGFuZCBz
+YXZlIHRoZSBpbml0aWFsIHZhbHVlcyAqLwpkaWZmIC0tZ2l0IGEvc291bmQvcGNpL2N0eGZpL2N0
+YXRjLmMgYi9zb3VuZC9wY2kvY3R4ZmkvY3RhdGMuYwppbmRleCBmYmRiOGEzZDViOGUuLjlmZWE1
+MGI3MmNmYiAxMDA2NDQKLS0tIGEvc291bmQvcGNpL2N0eGZpL2N0YXRjLmMKKysrIGIvc291bmQv
+cGNpL2N0eGZpL2N0YXRjLmMKQEAgLTM4NCw3ICszODQsNyBAQCBzdGF0aWMgaW50IGF0Y19wY21f
+cGxheWJhY2tfc3RhcnQoc3RydWN0IGN0X2F0YyAqYXRjLCBzdHJ1Y3QgY3RfYXRjX3BjbSAqYXBj
+bSkKIAlhcGNtLT5zdGFydGVkID0gMTsKIAogCW1heF9jaXN6ID0gc3JjLT5tdWx0aSAqIHNyYy0+
+cnNjLm1zcjsKLQltYXhfY2lzeiA9IDB4ODAgKiAobWF4X2Npc3ogPCA4ID8gbWF4X2Npc3ogOiA4
+KTsKKwltYXhfY2lzeiA9IDB4ODAgKiBtaW4obWF4X2Npc3osIDgpOwogCiAJc3JjLT5vcHMtPnNl
+dF9zYShzcmMsIGFwY20tPnZtX2Jsb2NrLT5hZGRyKTsKIAlzcmMtPm9wcy0+c2V0X2xhKHNyYywg
+YXBjbS0+dm1fYmxvY2stPmFkZHIgKyBhcGNtLT52bV9ibG9jay0+c2l6ZSk7CkBAIC00NDUsNyAr
+NDQ1LDcgQEAgYXRjX3BjbV9wbGF5YmFja19wb3NpdGlvbihzdHJ1Y3QgY3RfYXRjICphdGMsIHN0
+cnVjdCBjdF9hdGNfcGNtICphcGNtKQogCiAJc2l6ZSA9IGFwY20tPnZtX2Jsb2NrLT5zaXplOwog
+CW1heF9jaXN6ID0gc3JjLT5tdWx0aSAqIHNyYy0+cnNjLm1zcjsKLQltYXhfY2lzeiA9IDEyOCAq
+IChtYXhfY2lzeiA8IDggPyBtYXhfY2lzeiA6IDgpOworCW1heF9jaXN6ID0gMTI4ICogbWluKG1h
+eF9jaXN6LCA4KTsKIAogCXJldHVybiAocG9zaXRpb24gKyBzaXplIC0gbWF4X2Npc3ogLSBhcGNt
+LT52bV9ibG9jay0+YWRkcikgJSBzaXplOwogfQpkaWZmIC0tZ2l0IGEvc291bmQvcGNpL2hkYS9o
+ZGFfY29kZWMuYyBiL3NvdW5kL3BjaS9oZGEvaGRhX2NvZGVjLmMKaW5kZXggYjRkMWU2NThjNTU2
+Li5jMTk1Zjk5YmQ4ZDUgMTAwNjQ0Ci0tLSBhL3NvdW5kL3BjaS9oZGEvaGRhX2NvZGVjLmMKKysr
+IGIvc291bmQvcGNpL2hkYS9oZGFfY29kZWMuYwpAQCAtMzM0LDcgKzMzNCw3IEBAIGludCBzbmRf
+aGRhX2dldF9kZXZpY2VzKHN0cnVjdCBoZGFfY29kZWMgKmNvZGVjLCBoZGFfbmlkX3QgbmlkLAog
+CQlyZXR1cm4gMDsKIAogCWRldl9sZW4gPSBwYXJtICsgMTsKLQlkZXZfbGVuID0gZGV2X2xlbiA8
+IG1heF9kZXZpY2VzID8gZGV2X2xlbiA6IG1heF9kZXZpY2VzOworCWRldl9sZW4gPSBtaW4oZGV2
+X2xlbiwgbWF4X2RldmljZXMpOwogCiAJZGV2aWNlcyA9IDA7CiAJd2hpbGUgKGRldmljZXMgPCBk
+ZXZfbGVuKSB7CmRpZmYgLS1naXQgYS9zb3VuZC9zb2Mvc29jLW9wcy5jIGIvc291bmQvc29jL3Nv
+Yy1vcHMuYwppbmRleCBiZDg4ZGUwNTYzNTguLmQ3MWQxMDA1NWVkNyAxMDA2NDQKLS0tIGEvc291
+bmQvc29jL3NvYy1vcHMuYworKysgYi9zb3VuZC9zb2Mvc29jLW9wcy5jCkBAIC04MTQsNyArODE0
+LDcgQEAgaW50IHNuZF9zb2NfYnl0ZXNfdGx2X2NhbGxiYWNrKHN0cnVjdCBzbmRfa2NvbnRyb2wg
+Kmtjb250cm9sLCBpbnQgb3BfZmxhZywKIAkJCQl1bnNpZ25lZCBpbnQgc2l6ZSwgdW5zaWduZWQg
+aW50IF9fdXNlciAqdGx2KQogewogCXN0cnVjdCBzb2NfYnl0ZXNfZXh0ICpwYXJhbXMgPSAodm9p
+ZCAqKWtjb250cm9sLT5wcml2YXRlX3ZhbHVlOwotCXVuc2lnbmVkIGludCBjb3VudCA9IHNpemUg
+PCBwYXJhbXMtPm1heCA/IHNpemUgOiBwYXJhbXMtPm1heDsKKwl1bnNpZ25lZCBpbnQgY291bnQg
+PSBtaW5fdCh1bnNpZ25lZCBpbnQsIHNpemUsIHBhcmFtcy0+bWF4KTsKIAlpbnQgcmV0ID0gLUVO
+WElPOwogCiAJc3dpdGNoIChvcF9mbGFnKSB7Ci0tIAoyLjI1LjEK
