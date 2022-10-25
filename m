@@ -2,140 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EDA660C821
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED1F60C823
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiJYJcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S230505AbiJYJcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiJYJcc (ORCPT
+        with ESMTP id S229763AbiJYJcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:32:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D65CF9841
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:32:31 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2AF2C220B5;
-        Tue, 25 Oct 2022 09:32:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666690350; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e/F27udNls/La0w0VVha49pBSqumOwyKvES/X6dFtqI=;
-        b=LydFanizb31PLCm4IfWPSWf2Ss+RV00mWBwc6OfCJdIIk8WZl/j13QRCedC7luLmTRqPvh
-        WXnexUXTw7k57w+Qjb/ri/Bw9RoLq4/mXFbCnXtvODoF8InRoMhQZYhrNMUriv+icPSAe4
-        ZfZscQ2vENUHMaMFORwt2soAynCj8XI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666690350;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e/F27udNls/La0w0VVha49pBSqumOwyKvES/X6dFtqI=;
-        b=rdqQZv87z9e3G4y9XA2vJv1wb1FYuYWoAvzDWKxGNghahAaUDvDrdeEDH69ZflvRgqfucj
-        4HvJkFtSSc0+bjCQ==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 002492C141;
-        Tue, 25 Oct 2022 09:32:27 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 10:32:26 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     Hao Jia <jiahao.os@bytedance.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
-Subject: Re: [External] Re: [PATCH 1/2] sched/numa: Stop an exhastive search
- if an idle core is found
-Message-ID: <20221025093226.dm4sjvdq2tofkwvc@suse.de>
-References: <20221021061558.34767-1-jiahao.os@bytedance.com>
- <20221021061558.34767-2-jiahao.os@bytedance.com>
- <20221024133435.e2kajx5k7jzznp25@suse.de>
- <ced7c05a-121b-a77d-0c57-3e60abaecacd@bytedance.com>
+        Tue, 25 Oct 2022 05:32:36 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166F4EC504;
+        Tue, 25 Oct 2022 02:32:33 -0700 (PDT)
+Received: from frapeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxRWy46CWz687w5;
+        Tue, 25 Oct 2022 17:31:10 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ frapeml500005.china.huawei.com (7.182.85.13) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 11:32:31 +0200
+Received: from [10.195.245.7] (10.195.245.7) by lhrpeml500003.china.huawei.com
+ (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
+ 2022 10:32:30 +0100
+Message-ID: <399a2c2d-0b56-e4e7-c309-a6b9537d8939@huawei.com>
+Date:   Tue, 25 Oct 2022 10:32:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <ced7c05a-121b-a77d-0c57-3e60abaecacd@bytedance.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH] blk-mq: Properly init bios from
+ blk_mq_alloc_request_hctx()
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <linux-kernel@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>
+References: <1666454846-11749-1-git-send-email-john.garry@huawei.com>
+ <Y1U9zNZtZjRHQBww@T590> <99c6ca81-746d-85f4-04d3-49d7a3de611b@huawei.com>
+ <Y1aS3vIbuQTNGWJL@T590> <360c78dc-65ce-362f-389d-075f2259ce5b@huawei.com>
+ <Y1cvJ4/uwUScAQq4@T590> <3513b14c-14e0-b865-628e-a83521090de9@huawei.com>
+ <CAFj5m9JnSBBVGrp5CqeH99-+VOGRuroUAi3c-3=6XKa891Sfmw@mail.gmail.com>
+ <cf7f8f88-7d3e-8818-8584-e2276e7a1f30@huawei.com> <Y1epeuwonmjQhrXW@T590>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <Y1epeuwonmjQhrXW@T590>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.245.7]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:16:29AM +0800, Hao Jia wrote:
-> > Remove the change in the first hunk and call break in the second hunk
-> > after updating ns->idle_cpu.
-> > 
+On 25/10/2022 10:16, Ming Lei wrote:
+>>>> I mentioned before that if no hctx->cpumask is online then we don't need
+>>>> to allocate a request. That is because if no hctx->cpumask is online,
+>>>> this means that original erroneous IO must be completed due to nature of
+>>>> how blk-mq cpu hotplug handler works, i.e. drained, and then we don't
+>>>> actually need to abort it any longer, so ok to not get a request.
+>>> No, it is really not OK, if all cpus in hctx->cpumask are offline, you
+>>> can't allocate
+>>> request on the specified hw queue, then the erroneous IO can't be handled,
+>>> then cpu hotplug handler may hang for ever.
+>> If the erroneous IO is still in-flight from blk-mq perspective, then how can
+>> hctx->cpumask still be offline? I thought that we guarantee that
+>> hctx->cpumask cannot go offline until drained.
+> Yeah, the draining is done before the cpu is offline. But the drain is
+> simply waiting for the inflight IO to be completed. If the IO is failed
+> during the waiting, you can't allocate such reserved request for error
+> handling, then hang ever in blk_mq_hctx_notify_offline().
+
+Actually if final cpu in hctx->cpumask is going offline, then hctx won't 
+queue any more requests, right? In this case I don't think we can queue 
+on that hctx anyway. I need to think about this more.
+
 > 
-> Yes, thanks for your review.
-> If I understand correctly, some things might look like this.
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index e4a0b8bd941c..dfcb620bfe50 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -1792,7 +1792,7 @@ static void update_numa_stats(struct task_numa_env
-> *env,
->                 ns->nr_running += rq->cfs.h_nr_running;
->                 ns->compute_capacity += capacity_of(cpu);
-> 
-> -               if (find_idle && !rq->nr_running && idle_cpu(cpu)) {
-> +               if (find_idle && idle_core < 0 && !rq->nr_running &&
-> idle_cpu(cpu)) {
->                         if (READ_ONCE(rq->numa_migrate_on) ||
->                             !cpumask_test_cpu(cpu, env->p->cpus_ptr))
->                                 continue;
-> 
+> If you just make it one driver private command, there can't be such
+> issue. 
 
-I meant more like the below but today I wondered why did I not do this in
-the first place? The answer is because it's wrong and broken in concept.
+Well we're trying to use reserved requests for EH commands, which that 
+goes against.
 
-The full loop is needed to calculate approximate NUMA stats at a
-point in time. For example, the src and dst nr_running is needed by
-task_numa_find_cpu. The search for an idle CPU or core in update_numa_stats
-is simply taking advantage of the fact we are scanning anyway to keep
-track of an idle CPU or core to avoid a second search as per ff7db0bf24db
-("sched/numa: Prefer using an idle CPU as a migration target instead of
-comparing tasks")
+> Block layer is supposed for handling common case(normal io and pt io),
+> I'd suggest to not put such special cases into block layer.
 
-The patch I had in mind is below but that said, for both your version and
-my initial suggestion
+It also supports reserved commands, which I would assume would be 
+suitable for EH scenarios.
 
-Naked-by: Mel Gorman <mgorman@suse.de>
-
-For the record, this is what I was suggesting initially because it's more
-efficient but it's wrong, don't do it.
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index e4a0b8bd941c..7f1f6a1736a5 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1800,7 +1800,12 @@ static void update_numa_stats(struct task_numa_env *env,
- 			if (ns->idle_cpu == -1)
- 				ns->idle_cpu = cpu;
- 
-+			/* If we find an idle core, stop searching. */
- 			idle_core = numa_idle_core(idle_core, cpu);
-+			if (idle_core >= 0) {
-+				ns->idle_cpu = idle_core;
-+				break;
-+			}
- 		}
- 	}
- 	rcu_read_unlock();
-@@ -1808,9 +1813,6 @@ static void update_numa_stats(struct task_numa_env *env,
- 	ns->weight = cpumask_weight(cpumask_of_node(nid));
- 
- 	ns->node_type = numa_classify(env->imbalance_pct, ns);
--
--	if (idle_core >= 0)
--		ns->idle_cpu = idle_core;
- }
- 
- static void task_numa_assign(struct task_numa_env *env,
+Thanks,
+John
 
