@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A5B60C7C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157BA60C7C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbiJYJRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
+        id S231449AbiJYJSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbiJYJQK (ORCPT
+        with ESMTP id S232384AbiJYJRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:16:10 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4B417FD75;
-        Tue, 25 Oct 2022 02:08:52 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c24so10631401pls.9;
-        Tue, 25 Oct 2022 02:08:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2vjxvwiD/Iws++QDV805IwGePJN8KQS4m3b8uVw7rM=;
-        b=Z/WKk4KCX2xaPsiobUot08DIBwA++fxiD6Yue+7+oKy2Q3W7mV5cfch0V+3tfUb8nt
-         D5WtXZ2FlizSqUCmWbyqJLzavcYoLFiIvWVX8XWqtebgSeWx2ZFgeDCxY+LXZh//P7zN
-         hiCzEoorBp9ExTh4pBTgvqbjVKyH5ctt5iSrYY7jXWF0lhYILv/z6MXuAIpxj2pMofgS
-         bE0XAoytsNzBh98AawBhF+8ss1RezHH+BO8UosDtSHyeUTroTK5QBXObwfgQfPpAc65l
-         3makTgGVpSkKcUZenvye6hC374MtR8TwCsFw+NbuUx9m+kA0ZtMUUDmnbPL88TQQb2hj
-         Cjlw==
+        Tue, 25 Oct 2022 05:17:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB451CB1C
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:10:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666689018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D7V3TCPoYLGECIiPNR0pPoNV1DhkNdk1bP7qY02/4Jc=;
+        b=SiI5Up5wtRC2+7UgCMyryBxDrq9Pa44KwCa0AInN3KgnhxbEz8xxiJT6FKiDdHFX/munC4
+        LVNuJSsaPKmzTiLlPv4sybkuH53hOSGoVco3gyXIEsOGKjB7V/5D3Xrmb3XIwAkn1lFTPZ
+        PxKh9u43Kz7mGm/c3xP1QYoGTOXjTwA=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-50-haoR1TPOMBCPJHK-mZjbVg-1; Tue, 25 Oct 2022 05:10:17 -0400
+X-MC-Unique: haoR1TPOMBCPJHK-mZjbVg-1
+Received: by mail-pj1-f72.google.com with SMTP id q93-20020a17090a1b6600b0021311ab9082so2484142pjq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:10:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b2vjxvwiD/Iws++QDV805IwGePJN8KQS4m3b8uVw7rM=;
-        b=uEDNpG1XAhUvCPBZucmWHZ1O0wH/rPwqSkMTKlOHH/tpvzJOfTRC0Ph3iV4QXAIbds
-         dZmdV89FKNY4nGGCau1seXeZBC12weMtRVh3+nJOuYgCb2SLp5g3TANwkSFyhVodxwTP
-         n6cmRIT6ouKl9HU6T00GgRT+9J147czjY3pLT3R+hHIQF3/Zf855PMDmIUuHudAd3mq4
-         zSSSZyGoCFUVwETS7Ec3Du7h02DEMEqAJwS2rQcWFO7Lm8/DpGUGK7SMevDrmWZ7oat1
-         ozbcthE1F9hCWj31kjJDhvFQg+w4CJ+j9swXGSjun/9wU9K04BeY/gSY84MKr6kuUYC2
-         9azw==
-X-Gm-Message-State: ACrzQf1lbxCFOajf3SffSd1Xw1M4UpJWmNWdNxEKT9uYHVrgMsaeJGl4
-        rijjjq2TtNAeRopVEpAtG4c=
-X-Google-Smtp-Source: AMsMyM5HzOecSmrHiTg46ivvnSOp/uz0h7kap3HRhFiUd9cB2zjtlf7/wtBz653JeCrloo+vWoscVw==
-X-Received: by 2002:a17:90a:e606:b0:212:f100:22e3 with SMTP id j6-20020a17090ae60600b00212f10022e3mr16182760pjy.83.1666688931961;
-        Tue, 25 Oct 2022 02:08:51 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-58.three.co.id. [116.206.28.58])
-        by smtp.gmail.com with ESMTPSA id r10-20020a170902be0a00b00178b6ccc8a0sm880844pls.51.2022.10.25.02.08.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 02:08:51 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 71EAA10402C; Tue, 25 Oct 2022 16:08:46 +0700 (WIB)
-Date:   Tue, 25 Oct 2022 16:08:46 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
-Message-ID: <Y1ennr3YiO5UuHH9@debian.me>
-References: <20221024112934.415391158@linuxfoundation.org>
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D7V3TCPoYLGECIiPNR0pPoNV1DhkNdk1bP7qY02/4Jc=;
+        b=Ytp6p2dIuF3C2fG1/u4YteRRJBDYECHzDApReKe3YuFe44fmJxUI+4vGeroGkmmEm2
+         gf1ozUAWZuTwU4HuxH4C/tyd2oPBpNPX0mAXAWmFvMn8GqfTeIROU+9rKkPhU2TegPw6
+         CfWjm2XdXBZl61mzsZjsoIC4Y1D3DntuTMGJrtsSp2SGDa8mkaUX/fdBVmOQTLmUnbtp
+         305VWwf0OVid/XY8o2PSIpA2UE7fw8fcH3n1mzGrk61yTMF8wyDsv73a/dbdzEhmHKOX
+         sE0PWgaWy7uKDN7mQn8kjmBK3/KXIRqEEYIrcIaKHFtzgHp0QPLecuVHU03Xw6JNfRHh
+         jP6g==
+X-Gm-Message-State: ACrzQf2IY3lMaBOxu30GkDBaqN0H5wHVwtZlhPkP5tOt6CqVbG47wLhM
+        JbDJz1UqUXVzQsZeYuE8jjMnTRclGxTwZh2C1xs2aZIlem+ruXJFGvvOxrsnQqwuJwLW+ezkSuH
+        hhy42Fy/QAQ3V4/Bw6bG/M+u4VSIS+wWsaI8ZaUCz7pwJbZ/Dw+X393adt3tLuyZEragJOyHing
+        ==
+X-Received: by 2002:a17:902:b70c:b0:186:8bb2:de36 with SMTP id d12-20020a170902b70c00b001868bb2de36mr16394373pls.106.1666689014793;
+        Tue, 25 Oct 2022 02:10:14 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7Uf0Aklz9O3y8UewgVP1XxC7F2FNzzxj/Xw1kWqSytxMwF6q8lWgpfjsbq4XK1+qBjE0puww==
+X-Received: by 2002:a17:902:b70c:b0:186:8bb2:de36 with SMTP id d12-20020a170902b70c00b001868bb2de36mr16394337pls.106.1666689014334;
+        Tue, 25 Oct 2022 02:10:14 -0700 (PDT)
+Received: from [10.72.12.79] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id gd2-20020a17090b0fc200b002009db534d1sm1031910pjb.24.2022.10.25.02.10.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 02:10:13 -0700 (PDT)
+Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
+To:     Max Kellermann <max.kellermann@ionos.com>
+Cc:     Jeff Layton <jlayton@kernel.org>, idryomov@gmail.com,
+        ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220927120857.639461-1-max.kellermann@ionos.com>
+ <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com>
+ <CAKPOu+88FT1SeFDhvnD_NC7aEJBxd=-T99w67mA-s4SXQXjQNw@mail.gmail.com>
+ <75e7f676-8c85-af0a-97b2-43664f60c811@redhat.com>
+ <CAKPOu+-rKOVsZ1T=1X-T-Y5Fe1MW2Fs9ixQh8rgq3S9shi8Thw@mail.gmail.com>
+ <baf42d14-9bc8-93e1-3d75-7248f93afbd2@redhat.com>
+ <cd5ed50a3c760f746a43f8d68fdbc69b01b89b39.camel@kernel.org>
+ <7e28f7d1-cfd5-642a-dd4e-ab521885187c@redhat.com>
+ <8ef79208adc82b546cc4c2ba20b5c6ddbc3a2732.camel@kernel.org>
+ <7d40fada-f5f8-4357-c559-18421266f5b4@redhat.com>
+ <CAKPOu+_Jk0EHRDjqiNuFv8wL0kLXLLRZpx7AgWDPOWHzJn22xg@mail.gmail.com>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <db650fa8-8b64-5275-7390-f6b48bfd3a37@redhat.com>
+Date:   Tue, 25 Oct 2022 17:10:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="BJ+W+aGm3rvj59Xp"
-Content-Disposition: inline
-In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAKPOu+_Jk0EHRDjqiNuFv8wL0kLXLLRZpx7AgWDPOWHzJn22xg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,35 +94,71 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---BJ+W+aGm3rvj59Xp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 25/10/2022 15:22, Max Kellermann wrote:
+> On Tue, Oct 25, 2022 at 3:36 AM Xiubo Li <xiubli@redhat.com> wrote:
+>> Currently cephx permission has already supported the 's' permission,
+>> which means you can do the snapshot create/remove. And for a privileged
+>> or specific mounts you can give them the 's' permission and then only
+>> they can do the snapshot create/remove. And all the others won't.
+> But that's a client permission, not a user permission.
+>
+> I repeat: the problem is that snapshots should only be
+> accessible/discoverable/creatable by certain users (UIDs/GIDs) on the
+> client machine, independent of their permission on the parent
+> directory.
 
-On Mon, Oct 24, 2022 at 01:31:02PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.4 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Hi Max,
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+Yeah, the cephx permission could cover this totally and there is no need 
+to worry about the user id mapping issue.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+You can allow the mount with specific client ids, "client.privileged" 
+for example, could create/remove the snapshots:
 
---=20
-An old man doll... just what I always wanted! - Clara
+[client.privileged]
+     key = AQA19uZUqIwkHxAAFuUwvq0eJD4S173oFRxe0g==
+     caps mds = "allow rws /"
+     caps mon = "allow *"
+     caps osd = "allow *"
 
---BJ+W+aGm3rvj59Xp
-Content-Type: application/pgp-signature; name="signature.asc"
+[client.global]
+     key = xE21RuZTqIuiHxFFAuEwv4TjJD3R176BFOi4Fj==
+     caps mds = "allow rw /"
+     caps mon = "allow *"
+     caps osd = "allow *"
 
------BEGIN PGP SIGNATURE-----
+Then specify the client ids when mounting:
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY1enlgAKCRD2uYlJVVFO
-o8HcAQDiUfsJ/H8PP62FdzVDvjSPUf2Y2xTgOTLG+Fh4M3nb3gD/c5NKffGP4iu0
-Nl6MDm6tg7ChnIN6gNhG1qxTuXsG9AI=
-=z4fO
------END PGP SIGNATURE-----
+$ sudo ./bin/mount.ceph privileged@.a=/ /mnt/privileged/mountpoint
 
---BJ+W+aGm3rvj59Xp--
+$ sudo ./bin/mount.ceph global@.a=/ /mnt/global/mountpoint
+
+Just to make sure only certain users, who have permission to 
+create/remove snapshots, could access to the "/mnt/privileged/" directory.
+
+I didn't read the openshift code, but when I was debugging the bugs and 
+from the logs I saw it acting similarly to this.
+
+> My patch decouples parent directory permissions from snapdir
+> permissions, and it's a simple and elegant solution to my problem.
+
+Yeah, I'm aware of the differences between these two approaches exactly. 
+This should be a common feature not only in kernel client. We also need 
+to implement this in cephfs user space client. If the above cephx 
+permission approach could work very well everywhere, I am afraid this 
+couldn't go to ceph in user space.
+
+>> And then use the container or something else to make the specific users
+>> could access to them.
+> Sorry, I don't get it at all. What is "the container or something" and
+> how does it enable me to prevent specific users from accessing
+> snapdirs in their home directories?
+>
+Please see my above example. If that still won't work well, please send 
+one mail in ceph-user to discuss this further, probably we can get more 
+feedbacks from there.
+
+Thanks!
+
+- Xiubo
+
