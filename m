@@ -2,109 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDE760C4FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6914060C50E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbiJYHZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S231771AbiJYH0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbiJYHZI (ORCPT
+        with ESMTP id S231696AbiJYH0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:25:08 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01A3BBE3E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:25:07 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1onEIr-0006qd-Cw; Tue, 25 Oct 2022 09:24:49 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 3196E10928E;
-        Tue, 25 Oct 2022 07:24:43 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 09:24:41 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, wg@grandegger.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        pankaj.dubey@samsung.com, ravi.patel@samsung.com,
-        alim.akhtar@samsung.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/7] dt-bindings: can: mcan: Add ECC functionality to
- message ram
-Message-ID: <20221025072441.2ag7lce6otf6iqgh@pengutronix.de>
-References: <20221021095833.62406-1-vivek.2311@samsung.com>
- <CGME20221021102625epcas5p4e1c5900b9425e41909e82072f2c1713d@epcas5p4.samsung.com>
- <20221021095833.62406-3-vivek.2311@samsung.com>
+        Tue, 25 Oct 2022 03:26:00 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2AD112A8D;
+        Tue, 25 Oct 2022 00:25:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=hGXhW6u7vYKwy9A2hNsUWM+US9sTwavux1Peo1AKLrY=; b=DC42333jw/J629nGM+epNrcUC9
+        AtQT/jMSsf8mKBmzf8DBmCq8VFHCh1q3p2WZLMr5PEnrXa5K3o5syY2KRxC7oheRAeQryOQ+GtMIM
+        w2tPehhGzTcHcZ/CNCMHys9GcythGf/tIihfr/7nlFxgOBwL4uxJIwK7jiLBc03g2I+DbsJ+w97GM
+        GBAk1IUdqMnRBWuZJZMuuW4sLaPhBxC9UwM6kFKclrymI7jNiM2n0UWTLVDzlEcS7kDDqbdFQpfv3
+        eJM1gAFOgPcTev/GAByNzoDdGpaoyWC0JxxgrjJiiagh0av1UchZsuKPfr6QrSYaX1ADliqlfZOYE
+        R5guxMDg==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:33544 helo=localhost.localdomain)
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1onEJZ-006HEZ-Bv;
+        Tue, 25 Oct 2022 09:25:40 +0200
+From:   Andrej Picej <andrej.picej@norik.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Suspending i.MX watchdog in WAIT mode
+Date:   Tue, 25 Oct 2022 09:25:30 +0200
+Message-Id: <20221025072533.2980154-1-andrej.picej@norik.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cqd4rpcgmhoe7alu"
-Content-Disposition: inline
-In-Reply-To: <20221021095833.62406-3-vivek.2311@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The i.MX6 watchdog can't be stopped once started. Additionally, watchdog
+hardware configuration needs to be able to handle low-power modes of the
+SoC. For low-power modes, there are two configuration bits in the TRM:
+- WDZST bit disables the watchdog timer in "deeper" low power modes and
+- WDW bit disables the watchdog timer in "WAIT" mode
 
---cqd4rpcgmhoe7alu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+WDZST bit support is already in place since 1a9c5efa576e ("watchdog: imx2_wdt: disable watchdog timer during low power mode").
+On the other hand, handling of WDZST bit was omitted so far but now
+these patch series bring support for it.
 
-On 21.10.2022 15:28:28, Vivek Yadav wrote:
-> Whenever the data is transferred or stored on message ram, there are
-> inherent risks of it being lost or corruption known as single-bit errors.
->=20
-> ECC constantly scans data as it is processed to the message ram, using a
-> method known as parity checking and raise the error signals for corruptio=
-n.
->=20
-> Add error correction code config property to enable/disable the
-> error correction code (ECC) functionality for Message RAM used to create
-> valid ECC checksums.
->=20
-> Signed-off-by: Chandrasekar R <rcsekar@samsung.com>
-> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
+SoC's "WAIT" low-power mode corresponds to Linux's freeze or
+Suspend-to-Idle (S0) mode which can be activated with:
 
-Can you please add an example to the yaml that makes use of the
-mram-ecc-cfg property?
+$ echo freeze > /sys/power/state
 
-regards,
-Marc
+Without these patches, board would be reset by the watchdog after
+timeout of 128 seconds since watchdog would not be stopped when SoC
+entered Suspend-to-Idle mode. With patches in place, boards using
+imx2-wdt are able to stay in Suspend-to-Idle mode indefinitely.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Last but not least, WDW bit is not found on all imx2-wdt supported i.MX
+devices, therefore a new device-tree property "fsl,suspend-in-wait" has
+been introduced for this.
 
---cqd4rpcgmhoe7alu
-Content-Type: application/pgp-signature; name="signature.asc"
+Here is a v1: https://lore.kernel.org/lkml/20221019111714.1953262-1-andrej.picej@norik.com/
 
------BEGIN PGP SIGNATURE-----
+Change log for v2 in the corresponding patches.
 
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNXjzYACgkQrX5LkNig
-010kgwgAsg5YMPXId/SwZXkoLXsOCA+ZmYo/8K9++Yo/BrjnTGfbBN6BhDi0PQcy
-2O7nab0pEAD1/w8pGhu3k04M1GS/Q/ytLuoqI6UUByQhtS/54ttzk8FRiz2VEImH
-UoBQ/cUeKBJYye4SfkcDvCIM98uATFmHTGSdfaS9hyLbJ4y8/02NfWk7MfyXLAIR
-aC6/N/NDeGwhSYD6dOGnFJHSm2g3+6REkGDG728qIHPCpq4apmjIqntXYzaRMYLE
-2sdfnIgMg4Opeazp95vlMJof7spsArZCJRdXeLPGfiHOx0yBt/PPToPY3p3rlxU6
-2i+iKFwIaz85GQLMhucamxjsfQFyoA==
-=h9JL
------END PGP SIGNATURE-----
+Andrej Picej (3):
+  watchdog: imx2_wdg: suspend watchdog in WAIT mode
+  dt-bindings: watchdog: fsl-imx: document suspend in wait mode
+  ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
 
---cqd4rpcgmhoe7alu--
+ .../bindings/watchdog/fsl-imx-wdt.yaml        | 22 +++++++++++
+ .../boot/dts/imx6ul-phytec-phycore-som.dtsi   |  4 ++
+ drivers/watchdog/imx2_wdt.c                   | 37 +++++++++++++++++++
+ 3 files changed, 63 insertions(+)
+
+-- 
+2.25.1
+
