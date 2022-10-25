@@ -2,90 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA3060CBEA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C259F60CBF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231777AbiJYMem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S231834AbiJYMgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiJYMek (ORCPT
+        with ESMTP id S229756AbiJYMgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:34:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4F99923D4;
-        Tue, 25 Oct 2022 05:34:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F15A0D6E;
-        Tue, 25 Oct 2022 05:34:43 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7F8683F7B4;
-        Tue, 25 Oct 2022 05:34:36 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH] PM: domains: Fix handling of unavailable/disabled idle states
-Date:   Tue, 25 Oct 2022 13:34:32 +0100
-Message-Id: <20221025123432.1227269-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 25 Oct 2022 08:36:36 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9A17F124
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:36:34 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id n12so6708643eja.11
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:36:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ol9n+qgRK/l0WRpGFyEUUPFnrxGcuYMacI9A4JuPh2g=;
+        b=SdwfwgQb6baYe64zZvlvGGRV8MfiPARW31CQ4snonbH+y8tGU0TVqjth3tP6nAUyjZ
+         0Q4JhS+9TaGxJPYAHYMqrFVFL7huT9ehCidHys3TopnW3q5sR3jxCCWlZmkAePg4LUpD
+         OHMtXgJFf0iSSjS62ZqWmIxUS7pQO54x58QGxni76QnfqvNR9X9+qUSUpABzRm2Cxt/C
+         xP7WuwrFOVNxgno/9Kk5G5HCbeSiIfoXVrREU4d+7b1UnN9ttM93JFSTJF7wnFAMsyB7
+         uCBYOgGeeRiVOy54V5xGYSi52U8Leqhxzf5aL+pAktaUEw0dxn15sqM1YDOL0BREwDru
+         wnBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ol9n+qgRK/l0WRpGFyEUUPFnrxGcuYMacI9A4JuPh2g=;
+        b=fkrtg6rnld2BIptaPbYHDQDrxUfwjsVc0+in8JP4rHgZphGZMusl4AmLwwbLl8W6wf
+         oI/zgQqhcPUL20IuHX4i/LguD0C0gE5vDFxGqR8Yp5Y4aZwJoYRECQ1JaicUJpUrKWg7
+         W9llKeLLZL8htMp38PXNuJsggXKhbILeIdUjwp/FTDztLWsP7pXyafG+Wk4F1ihpYhGj
+         2ud1xaj4duCT2Ylp6VtsYH83NGB1VGgDaz+oBZLQhsrC7gQtFcw6hs3+MBfYVXqNXtQ5
+         0TUFI6OocQG4vBFru4AXgx6ygiraYCri37DHW1ckxIXDPzIGfkuo2lgzNZgB1Rti67Qu
+         5B2w==
+X-Gm-Message-State: ACrzQf2pYv2GIIlTOnl8i6fEmOvoPlhL6c2bMI4rvMGgZZU45+ZOkjrv
+        cUu1CEc6ikZpLd3gx+4xcA52gvIEaDQH+RaWSnRK6Q==
+X-Google-Smtp-Source: AMsMyM5z9l9Itl/W2zKX9c2YSaeZPq/c9e0hcRGj9OMx043R8I2iKdGwYU6OfVN2Zlv6SutMFEHOSN2D14HrJgTdCHE=
+X-Received: by 2002:a17:907:d02:b0:7a3:de36:b67 with SMTP id
+ gn2-20020a1709070d0200b007a3de360b67mr12281609ejc.451.1666701392968; Tue, 25
+ Oct 2022 05:36:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221024113044.976326639@linuxfoundation.org>
+In-Reply-To: <20221024113044.976326639@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 25 Oct 2022 18:06:21 +0530
+Message-ID: <CA+G9fYvsn7mjXu5vxbxRB3R6JQ8W3KLto3C46FxyyMyRqThoWg@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/530] 5.15.75-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Platforms can provide the information about the availability of each
-idle states via status flag. Platforms may have to disable one or more
-idle states for various reasons like broken firmware or other unmet
-dependencies.
+On Mon, 24 Oct 2022 at 18:04, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.75 release.
+> There are 530 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.75-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Fix handling of such unavailable/disabled idle states by ignoring them
-while parsing the states.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Fixes: a3381e3a65cb ("PM / domains: Fix up domain-idle-states OF parsing")
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/base/power/domain.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Hi Ulf,
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-As you already know, this change alone doesn't fix the issue reported here[1].
-It also needs the fixes you have posted [2].
+## Build
+* kernel: 5.15.75-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.15.y
+* git commit: 98108584d3851344414a5397dcff2c6f0a6cf9dd
+* git describe: v5.15.74-531-g98108584d385
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.74-531-g98108584d385
 
-Regards,
-Sudeep
+## No Test Regressions (compared to v5.15.74)
 
-[1] https://lore.kernel.org/all/20221018145348.4051809-1-amit.pundir@linaro.org
-[2] https://lore.kernel.org/all/20221021151013.148457-1-ulf.hansson@linaro.org
+## NoMetric Regressions (compared to v5.15.74)
 
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index ead135c7044c..6471b559230e 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2952,6 +2952,10 @@ static int genpd_iterate_idle_states(struct device_node *dn,
- 		np = it.node;
- 		if (!of_match_node(idle_state_match, np))
- 			continue;
-+
-+		if (!of_device_is_available(np))
-+			continue;
-+
- 		if (states) {
- 			ret = genpd_parse_state(&states[i], np);
- 			if (ret) {
+## No Test Fixes (compared to v5.15.74)
+
+## No Metric Fixes (compared to v5.15.74)
+
+## Test result summary
+total: 141307, pass: 122086, fail: 2098, skip: 16644, xfail: 479
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 339 total, 336 passed, 3 failed
+* arm64: 72 total, 69 passed, 2 failed, 1 skipped
+* i386: 61 total, 54 passed, 6 failed, 1 skipped
+* mips: 62 total, 59 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 68 total, 65 passed, 3 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 30 total, 27 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 65 total, 63 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
 --
-2.38.1
-
+Linaro LKFT
+https://lkft.linaro.org
