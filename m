@@ -2,197 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2400260C7E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17EA60C7E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbiJYJXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S231276AbiJYJW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJYJWU (ORCPT
+        with ESMTP id S231213AbiJYJWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Oct 2022 05:22:20 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29507153E24;
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289BDFCA;
         Tue, 25 Oct 2022 02:17:41 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id p8so20795619lfu.11;
-        Tue, 25 Oct 2022 02:17:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=naCfwmdlp7g6rDHlSA0owQkvXaWiCJfBnagPYXKFWZM=;
-        b=JM2OP5dGKIoiPhpueJ7F5ZsAsTc/rM8qP0R5v6wi9jBJ0uuGKHVPYev2WBpNZTqs/M
-         v5ItfZId/adPWS1BHNZTfXgMQOpljLINXWG/16+1X013jMD0FuKn/bOGa+/0N4GDQjR3
-         MM3pB1EE693Blj2Ot0wqKv4szWBzv4HISqfnAKJbN3A3UP3QUDcKQB8oHPeFgDQQdaGO
-         qtGMTXBPXxkEWAilPGZbprYep5E0L3sE0d6CwWQcSoVHoGDZZuwIkuZE0K5ulkUKC7va
-         fAh2/foa9UHK8Pn0NS1BKXnXTouhfBH5HSkGhLURzRDrdF+GLWgkOh8mWWCx6ailbf1V
-         9LgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=naCfwmdlp7g6rDHlSA0owQkvXaWiCJfBnagPYXKFWZM=;
-        b=DUncOnJdM2kBAlqGU7JBiNzTPgVA5r+cqW+LBnGYgDalemz0+FipUghjGeMErJ82Ea
-         6Qn1G3P1ccSB6cZz/ccBiaGk76xgLVsd75T0QehKoYlH1gx6DQxZh4DtOXvk5A2kF4fv
-         YN42ZBmlTZ4SdjMQu0S3y8JUTG77MCSK0b/ah3Ox9n/0yqZ16oq/ZH87UJUuCiuTxKex
-         PmMPsU1wFsQOgrEqtuABoQcgOTnPfq5gbuJyEGxl36x9vftCR2ZbUWHzlzs6leMW+v43
-         zHjfUmFW2aYXcUwgLvXEMuhh2MyKt5HaZEvuP6iS7qczt2T87t5vVqVcct/VxMjjrmTW
-         S4XA==
-X-Gm-Message-State: ACrzQf00WNXnrbUE/utVmrFphZyYLXEMU8onTVc/YX8qSj+mQOY1C0MK
-        ZtwgDuoby+7J251k6hgLH7M=
-X-Google-Smtp-Source: AMsMyM5giO+B6//8TDx6oFx9rk2nhTmLTFtdmNX9iyZilZLKWQgM+5CiC2cRTTK66CJk0EwYZ/qyJg==
-X-Received: by 2002:a05:6512:2a92:b0:4a1:d2c9:c2d0 with SMTP id dt18-20020a0565122a9200b004a1d2c9c2d0mr13815425lfb.278.1666689459955;
-        Tue, 25 Oct 2022 02:17:39 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::2? (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id d14-20020a056512368e00b004a9c6f7a776sm339464lfs.49.2022.10.25.02.17.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 02:17:39 -0700 (PDT)
-Message-ID: <57dd517f-f3c9-5818-780b-c3a8d4c29d5a@gmail.com>
-Date:   Tue, 25 Oct 2022 12:17:27 +0300
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 01ECD1FD6C;
+        Tue, 25 Oct 2022 09:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666689460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zD8OApJsTbBnv3iSDEQ49cotr+aBwY7HUsO9Mmm7DyI=;
+        b=tZNaBpgRS2zftFAhvMLdtVxWOpW3DR3e9FK3I5hXXbAIDvLr7G8T7UgYtxstGKE/nJRrVq
+        YkqlGUdwW1JyGmNM5dF/AEGZiKHNwqSZ/GIyJgG8RGfUcxLBb00POG5rljywVvmsQIhxbO
+        d8CgwSKzMPKy2RxSJd63ru2SkcOBq0k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666689460;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zD8OApJsTbBnv3iSDEQ49cotr+aBwY7HUsO9Mmm7DyI=;
+        b=UIV++LU+F+Fv84uskaMlBHpmjO0+klcnp4ZLkqUp4JULhXo9MLl/3WPaZOU53Zf1hyW9N+
+        BsaLrSFTvaqfQ8DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CAC8C134CA;
+        Tue, 25 Oct 2022 09:17:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FIDSMLOpV2McOwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 25 Oct 2022 09:17:39 +0000
+Message-ID: <32fe01dc-dda1-2154-af8e-7e9f64d6f811@suse.cz>
+Date:   Tue, 25 Oct 2022 11:17:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH 1/2] drivers: fwnode: fix fwnode_irq_get_byname()
+ Thunderbird/102.3.3
+Subject: Re: amusing SLUB compaction bug when CC_OPTIMIZE_FOR_SIZE
 Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <cover.1666687086.git.mazziesaccount@gmail.com>
- <cc853a7e4b3533585e3641620bf4972663f22edc.1666687086.git.mazziesaccount@gmail.com>
- <Y1ennbK6WSHT27Am@paasikivi.fi.intel.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <Y1ennbK6WSHT27Am@paasikivi.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        rcu@vger.kernel.org, David Laight <David.Laight@ACULAB.COM>,
+        Kees Cook <keescook@chromium.org>
+References: <ea96c78c-e1dc-1364-e91-51909f82388b@google.com>
+ <YzPgTtFzpKEfwPbK@hyeyoo> <YzRQvoVsnJzsauwb@google.com>
+ <35502bdd-1a78-dea1-6ac3-6ff1bcc073fa@suse.cz>
+ <ff905c1e-5eb3-eaf8-46de-38f189c0b7a5@google.com>
+ <de71b83a-c82c-4785-ef5a-3db4f17bbc8d@suse.cz>
+ <bcecece-f7ce-221d-1674-da3d5ab3fef@google.com> <YzkmErHFyYW3awRn@hyeyoo>
+ <YzsVM8eToHUeTP75@casper.infradead.org>
+ <7dddca4c-bc36-2cf0-de1c-a770bef9e1b7@suse.cz>
+ <904cc831-eb16-b1e5-10e5-9e7a171ef83@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <904cc831-eb16-b1e5-10e5-9e7a171ef83@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Moro Sakari,
+On 10/25/22 06:19, Hugh Dickins wrote:
+> On Mon, 24 Oct 2022, Vlastimil Babka wrote:
 
-Thanks for the review (and the suggestion)!
+>> 
+>> [1] https://lore.kernel.org/all/aec59f53-0e53-1736-5932-25407125d4d4@suse.cz/
+> 
+> Ignore me, don't let me distract if you're happy with Matthew's patch
+> (I know little of PageMovable, and I haven't tried to understand it);
+> but it did look to me more like 6.2 material,
 
-On 10/25/22 12:08, Sakari Ailus wrote:
-> Moi,
-> 
-> On Tue, Oct 25, 2022 at 11:50:59AM +0300, Matti Vaittinen wrote:
->> The fwnode_irq_get_byname() does return 0 upon device-tree IRQ mapping
->> failure. This is contradicting the function documentation and can
->> potentially be a source of errors like:
->>
->> int probe(...) {
->> 	...
->>
->> 	irq = fwnode_irq_get_byname();
->> 	if (irq <= 0)
->> 		return irq;
->>
->> 	...
->> }
->>
->> Here we do correctly check the return value from fwnode_irq_get_byname()
->> but the driver probe will now return success. (There was already one
->> such user in-tree).
->>
->> Change the fwnode_irq_get_byname() to work as documented and according to
->> the common convention and abd always return a negative errno upon failure.
->>
->> Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
->> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
->>
->> I did a quick audit for the callers at v6.1-rc2:
->> drivers/i2c/i2c-smbus.c
->> drivers/iio/accel/adxl355_core.c
->> drivers/iio/gyro/fxas21002c_core.c
->> drivers/iio/imu/adis16480.c
->> drivers/iio/imu/bmi160/bmi160_core.c
->> drivers/iio/imu/bmi160/bmi160_core.c
->>
->> I did not spot any errors to be caused by this change. There will be a
-> 
-> It won't as you're decreasing the possible values the function may
-> return...
-> 
+Yes, it is targetted towards 6.2 now.
 
-Unless someone had implemented special handling for the IRQ mapping 
-failure...
+> and I was surprised that
+> you dropped the simple align(4) approach for 6.1.
+> 
+> Because of Hyeonggon's rcu_leak_callback() observation?  That was a
+> good catch, but turned out to be irrelevant, because it was only for
+> an RCU debugging option, which would never be set up on a struct page
+> (well, maybe it would in a dynamically-allocated-struct-page future).
 
->> functional change in i2c-smbus.c as the probe will now return -EINVAL
->> should the IRQ dt-mapping fail. It'd be nice if this was checked to be
->> Ok by the peeps knowing the i2c-smbus :)
-> 
-> FWIW, for both patches (but see below):
-> 
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
->> ---
->>   drivers/base/property.c | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/base/property.c b/drivers/base/property.c
->> index 4d6278a84868..bfc6c7286db2 100644
->> --- a/drivers/base/property.c
->> +++ b/drivers/base/property.c
->> @@ -964,7 +964,7 @@ EXPORT_SYMBOL(fwnode_irq_get);
->>    */
->>   int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
->>   {
->> -	int index;
->> +	int index, ret;
->>   
->>   	if (!name)
->>   		return -EINVAL;
->> @@ -973,7 +973,12 @@ int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
->>   	if (index < 0)
->>   		return index;
->>   
->> -	return fwnode_irq_get(fwnode, index);
->> +	ret = fwnode_irq_get(fwnode, index);
->> +
-> 
-> This newline is extra.
-> 
-> Or:
-> 
-> 	return ret ?: -EINVAL;
-> 
-> Or even:
-> 
-> 	return fwnode_irq_get(fwnode, index) ?: -EINVAL;
-> 
-> Up to you.
-> 
+It was mainly due to David's observation:
 
-My personal preference is to not use the ternary. I think the plain 
-clarity of if() just in many places justifies burning couple of lines 
-more :)
+https://lore.kernel.org/all/c1c8920a56014a179dbb82d483f2ad28@AcuMS.aculab.com/
 
-Yours
-	-- Matti
+I did also conclude that align(4) indeed overrides anything set via
+CONFIG_FUNCTION_ALIGNMENT (and passed by -falign-functions) in a way that a
+globally configured larger alignment can be made smaller by this macro, and
+it was all too risky and last minute to me, while Joel's series wasn't
+targetted to 6.1 anyway so there was no urgency.
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+And yeah it looks like a gcc bug to me.
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+> Hugh
 
