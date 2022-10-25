@@ -2,172 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4FE60C7AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD61D60C7B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiJYJN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S230307AbiJYJOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiJYJNi (ORCPT
+        with ESMTP id S230169AbiJYJNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:13:38 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B84A17650D;
-        Tue, 25 Oct 2022 02:07:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 25 Oct 2022 05:13:43 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D13176B88;
+        Tue, 25 Oct 2022 02:07:19 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e753329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e753:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id DC3A11FDAB;
-        Tue, 25 Oct 2022 09:07:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666688823; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YetzJ42X/TiFjkjg0wNAE3EFsDAzc7c8MsipxnbCcxE=;
-        b=IkqV6NNEd0j9tEUH8n8P5TVYq8QJcf2qkkSZvtymyDkC0UHOtNJyMFPc1+Nz7jmv3G2JWK
-        3Y4SbGFuVysX2qUopbLtx8JqMj7S4N8Kred7MqPi7Lalf47QOfVbpe9q7yuK97Ts76YBD3
-        0LthdTBMm+u1MkbQEQE/azZglriD4Yk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666688823;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YetzJ42X/TiFjkjg0wNAE3EFsDAzc7c8MsipxnbCcxE=;
-        b=bjHzj+RmUQN889rrCKhbHre+JjtU2MXgeAiJQesFc1MOfiqGUlqdHWmNFq1GxdPrI/zTV5
-        kzxoeEfEn3/pvFCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A4EBD134CA;
-        Tue, 25 Oct 2022 09:07:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BGB8JzenV2NbNQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 25 Oct 2022 09:07:03 +0000
-Message-ID: <9cfaed63-b72f-3fc8-bdc0-c6d7b09ca782@suse.cz>
-Date:   Tue, 25 Oct 2022 11:07:03 +0200
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 560641EC0138;
+        Tue, 25 Oct 2022 11:07:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666688828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RpZt/ekhm97/GCrxTm62WjrwmkfB+Hl6PYEoWkmLcSs=;
+        b=cJSawZk/4f1kVEpXP4DnaqZQDZCWU4J9ov+SV+016eVWeC8LfSqUNPn/mqfTwrdFMdHY41
+        NVlCjUdHw55zGKATrjh+CCmZY5qM1WeQeEJ6UX55CYy5aACwbF6dxJ+yRGmqVH6e82zKve
+        d1WhLf8YwB22RIEdI4LVqnlyjQjqDRQ=
+Date:   Tue, 25 Oct 2022 11:07:04 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org
+Subject: Re: [PATCH Part2 v6 12/49] crypto: ccp: Add support to initialize
+ the AMD-SP for SEV-SNP
+Message-ID: <Y1enOIfS3nnlcyyc@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <87a0481526e66ddd5f6192cbb43a50708aee2883.1655761627.git.ashish.kalra@amd.com>
+ <Yzh558vy+rJfsBBq@zn.tnic>
+ <f997dd38-a615-e343-44cd-a7aeb9447a1e@amd.com>
+ <d3ab29c8-8f22-28eb-dfe3-6100a8f16e4b@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 3/3] mm: slub: test: Use the kunit_get_current_test()
- function
-To:     David Gow <davidgow@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        Oliver Glitta <glittao@gmail.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20221025071907.1251820-1-davidgow@google.com>
- <20221025071907.1251820-3-davidgow@google.com>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221025071907.1251820-3-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <d3ab29c8-8f22-28eb-dfe3-6100a8f16e4b@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 09:19, David Gow wrote:
-> Use the newly-added function kunit_get_current_test() instead of
-> accessing current->kunit_test directly. This function uses a static key
-> to return more quickly when KUnit is enabled, but no tests are actively
-> running. There should therefore be a negligible performance impact to
-> enabling the slub KUnit tests.
-> 
-> Other than the performance improvement, this should be a no-op.
-> 
-> Cc: Oliver Glitta <glittao@gmail.com>
-> Cc: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> Cc: Christoph Lameter <cl@linux.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: David Rientjes <rientjes@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: David Gow <davidgow@google.com>
+On Wed, Oct 19, 2022 at 01:48:48PM -0500, Kalra, Ashish wrote:
+> I see that other drivers are also using the same convention:
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+It is only convention. Look at the .rst output:
 
-> ---
-> 
-> This is intended as an example use of the new function. Other users
-> (such as KASAN) will be updated separately, as there would otherwise be
-> conflicts.
-> 
-> Assuming there are no objections, we'll take this whole series via the
-> kselftest/kunit tree.
+0 if the SEV successfully processed the command
+-``ENODEV``    if the SEV device is not available
+-``ENOTSUPP``  if the SEV does not support SEV
+-``ETIMEDOUT`` if the SEV command timed out
+-``EIO``       if the SEV returned a non-zero return code
 
-OK, please do.
+vs
 
-Some possible improvements below:
+0 if the SEV successfully processed the command
+``-ENODEV``    if the SEV device is not available
+``-ENOTSUPP``  if the SEV does not support SEV
+``-ETIMEDOUT`` if the SEV command timed out
+``-EIO``       if the SEV returned a non-zero return code
 
-> There was no v1 of this patch. v1 of the series can be found here:
-> https://lore.kernel.org/linux-kselftest/20221021072854.333010-1-davidgow@google.com/T/#u
-> 
-> ---
->  lib/slub_kunit.c | 1 +
->  mm/slub.c        | 5 +++--
->  2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-> index 7a0564d7cb7a..8fd19c8301ad 100644
-> --- a/lib/slub_kunit.c
-> +++ b/lib/slub_kunit.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <kunit/test.h>
-> +#include <kunit/test-bug.h>
->  #include <linux/mm.h>
->  #include <linux/slab.h>
->  #include <linux/module.h>
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 157527d7101b..15d10d250ef2 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -39,6 +39,7 @@
->  #include <linux/memcontrol.h>
->  #include <linux/random.h>
->  #include <kunit/test.h>
-> +#include <kunit/test-bug.h>
->  #include <linux/sort.h>
->  
->  #include <linux/debugfs.h>
-> @@ -603,10 +604,10 @@ static bool slab_add_kunit_errors(void)
->  {
->  	struct kunit_resource *resource;
->  
-> -	if (likely(!current->kunit_test))
-> +	if (likely(!kunit_get_current_test()))
+so in the html output of this, the minus sign will be displayed either
+with text font or with monospaced font as part of the error type.
 
-Given that kunit_get_current_test() is basically an inline
-!static_branch_unlikely(), IMHO the likely() here doesn't add anything and
-could be removed?
+I wanna say the second is better as the '-' is part of the error code
+but won't waste too much time debating this. :)
 
->  		return false;
->  
-> -	resource = kunit_find_named_resource(current->kunit_test, "slab_errors");
-> +	resource = kunit_find_named_resource(kunit_get_current_test(), "slab_errors");
+Btw
 
-We just passed kunit_get_current_test() above so maybe we could just keep
-using current->kunit_test here? Seems unnecessary adding another jump label.
+$ ./scripts/kernel-doc include/linux/psp-sev.h
 
->  	if (!resource)
->  		return false;
->  
+complains a lot. Might wanna fix those up when bored or someone else
+who's reading this and feels bored too. :-)
 
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
