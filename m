@@ -2,97 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B592360CAAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BE960CAAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbiJYLNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34952 "EHLO
+        id S231756AbiJYLPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJYLNf (ORCPT
+        with ESMTP id S231144AbiJYLPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:13:35 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C5318194C;
-        Tue, 25 Oct 2022 04:13:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=BfioPz7Gh4xtsZmNJPRfyWcmTTsR07b3GsCjLfhkMoQ=;
-        b=ZLY9HSgJHv9Kqiwtu85TZyRYCzqmHRnvLXmBIxfq9VS3sEgn/SyN3yPxIlaDtgYrLVn2LBHpW7wmt
-         kRzhHo3q8LFMzm5DzETDq0HtCZ9ZgdfNBEbtHFiB7XCzTjniCc1NsYDWzY4ugKdFD9PCumBmgwvlXw
-         CItlHShz/8EVdWAH74A7OWNriYxrJLSOZIgty4fS8SlWs/7JlfJbNx7qx1PSy4CvcQabiMe9rxPfwf
-         XHUikNCgrj1k9UO6WNVH3V5LXNrZDRHSez+gx/9EdC2ZLMEkUoilrfV5EDsRPgHBaAil8Dy5BQv01H
-         hWGPHfcs/bCo2Zh8ga9E0dBlzsmKcow==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000009,0.006414)], BW: [Enabled, t: (0.000018,0.000001)], RTDA: [Enabled, t: (0.071619), Hit: No, Details: v2.42.0; Id: 15.52k1ot.1gg7dhp45.buia; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Tue, 25 Oct 2022 14:13:24 +0300
-Date:   Tue, 25 Oct 2022 14:11:54 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, dg@emlix.com,
-        j.zink@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, system@metrotek.ru
-Subject: Re: [PATCH v20 1/2] fpga: lattice-sysconfig-spi: add Lattice
- sysCONFIG FPGA manager
-Message-ID: <20221025111154.d4o6hvya2fb6hmev@h-e2.ddg>
-References: <20221025053947.2737-1-i.bornyakov@metrotek.ru>
- <20221025053947.2737-2-i.bornyakov@metrotek.ru>
- <Y1eILk6ArO5OVzwW@yilunxu-OptiPlex-7050>
-MIME-Version: 1.0
+        Tue, 25 Oct 2022 07:15:21 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2054.outbound.protection.outlook.com [40.107.244.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B203110EE47
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:15:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HzFkEX9EvDKnol5BFxyqzIagO3y1586+pJWy5I5139/kZD4d1eYLGL7HSCYLgmDZ4xENp/PijTgUar7EpVmn23tZjcpFMMXfW9bAECnSuv2fo5F9n1GrkeIX33CGv+bins5mMt8Z/btUVQdKvJ8ovNz94g2C0/U1P/cDR+n5z4DNGdTam1p/D3b8qUyhtJb/75Bic9q2L1qwc6I40HIxZbtQ4otEqDIf9Qy8dBbn9TcgYkC/nw7a3jsnOqnUSrEy5Pz0F/QNFDaiRo2/OeugeYuBrqLCckaE0gWV9pIQ2NEHKV3za/TmzcWu8qWcN7YUs4eB0a8UrEx0h25ktN3V1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6AxNLGCBw6eqRe4iZu7SFM5ub1eNn7QisVS+TiijpVs=;
+ b=JhxeZMNQgSpGK5ibIf1Pn+dJhlJJbZ0pL/7y1GV7w2SfaMqVmxh3BDtXGOb9GghVznzlfxJzlvBAiiLqQJ0lIf5wi7rEYpCOMY6iR1ekBwXxhyM5M486o6ZSiqT/XxjPfkXj3laepmE7FKfRVgsGEe5Nc3tJ94cWrxp1KDH9iD3tHLyHDYCbunApclodK9mp3JrmAKx1sbe8aeYPtv2w7TqdRsV02rn8f3XfAE5Vcjq0ZvZHd5dlk+ModYEG95ue8u6HHx36vf2dU4+BS3rO3mWY/RMkNZaHk7mF3b/ctG/Pk8xEqySXCzTgfIJ0Kz9J/kO+FqWoNmRfYDf8FkGqjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6AxNLGCBw6eqRe4iZu7SFM5ub1eNn7QisVS+TiijpVs=;
+ b=crKIDlQ6uNanB2hIjiXBe5/DzDfgNHzoWOO0IbCOuR7riJNjKL5b2mrrt9gWkzr4tAEeVtO4Q7pGMAJqmR5oUv2eRVDSDOD6Q4cPtXa9dLoa8nN5gky/dQ83KJNzKGJXcc2+zBSAvnoauAJs1Pd0O0thcwwfqTmTTMJzVgkRASUIdoSqq51dSHz1EGOIwh/rMEy/n47Knfc2p+wowoec0nXqO0Quch0vo8/J23h7qfYmgl3TDIhEyRSo++P28hYV8SZGWHQK+BW+3+vljuGVDhSC+rp/9VnBzN0SQOJNX/gZQUiM2hnnT2PETOtqqxsAk+nSsst73bN10rlChR93qw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by CH0PR12MB5345.namprd12.prod.outlook.com (2603:10b6:610:d4::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Tue, 25 Oct
+ 2022 11:15:17 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5746.021; Tue, 25 Oct 2022
+ 11:15:17 +0000
+Date:   Tue, 25 Oct 2022 08:15:16 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+Subject: Re: [RFC PATCH 0/3] new subsystem for compute accelerator devices
+Message-ID: <Y1fFRIxRq+enLWyd@nvidia.com>
+References: <20221022214622.18042-1-ogabbay@kernel.org>
+ <af4c71cb-be60-e354-ca4f-23e834aca6e1@suse.de>
+ <CAFCwf12HDZvsr1TrRFQH9Vi26S-Xf9ULgxtBazme90Sj5AzhQQ@mail.gmail.com>
+ <c22bd93e-8bd2-6865-711a-37aeadbca7f9@nvidia.com>
+ <CAPM=9tyEqzQ09WcRtE1Zd3XjOaR9a2ms-vL-O5x2ong7iPF=4w@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1eILk6ArO5OVzwW@yilunxu-OptiPlex-7050>
+In-Reply-To: <CAPM=9tyEqzQ09WcRtE1Zd3XjOaR9a2ms-vL-O5x2ong7iPF=4w@mail.gmail.com>
+X-ClientProxiedBy: BLAPR05CA0008.namprd05.prod.outlook.com
+ (2603:10b6:208:36e::11) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|CH0PR12MB5345:EE_
+X-MS-Office365-Filtering-Correlation-Id: 885835b3-9427-4f7a-cba4-08dab67a3272
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AdkhpVSLcnPdir78sK0Pv+GKs2W5f1DDZY4Aofp7HXo+NFIW7SWt9ED2JLcURPrY4rIcDfKfEpD/NueS7kaiaRaQohdbAkX12l4BZAZxxEzrs7SZPAWLJm3NbcIe10VJoO7NtUkUyVNVCGE815ljUDaBvJa9PrzmVab9ZjJCe1rYO/gfWic1aCxrg2qE8uN1ysmO9P1PtI08pb/W5PH+5ZJ8qrBrjFqpPKCpPnKt7OKkkvHeNeNHx/1PL2x5nx2jIXN+rZJoINr3w8qbDA5md5AhBN52yxp06wk8eefcmt51as8U181VTSNYjFiqwjcEZrUBkkHlEsYpoSzAP3Cvh1xpa5Ng7hv9V2vElWsW3ky6m8VShyUoO6yQjqC1krsBSRGcoqnRsqrQI1PM7dPhmjo9RNqvPr31Pg2aRhtzxMLp6/F602OLoxdyjfKI0d+PhNZuBFZqZyhygh2JQdgxA2FoVFxZEN2my5L7H8OhtCuFcY9CHa8BvsNviKNlUeZoWitDUi8aBshrUvlKSCNonu9XkoSpMOsHCPemLPNdvrwIhlsJVI5TxZWbxDqM5xodAKnnUdSiQ3UEWHIGiMZpOeXq9GGsyWU5zqM2Trpi9xOH8Do/2mbMpZLSStWB4Rux6b21WkRiUZiqJJ5N/iPvIbRDHA4ImIhbxeuQvXeB56/GB1nqKLwR2s9taSH0xS9Qk7ZeIZ3TJ2GU/H4Wo6mUwinwimkAAIuqRWlbYaEoFdIgH6KBypkTwWvzFNTztLdI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(451199015)(86362001)(54906003)(478600001)(6486002)(6916009)(316002)(38100700002)(7416002)(5660300002)(41300700001)(66556008)(8676002)(66946007)(4326008)(6512007)(26005)(36756003)(2906002)(2616005)(186003)(8936002)(6506007)(66476007)(4744005)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?nwwg54+PEtjKnU72kp5xVP5/qxNfJdm0WDCRLOnTZxLAW1dMql8scT/65jag?=
+ =?us-ascii?Q?pJ3YMyILoCMOX97H3N0q9jODgl1INB7UzASuttdvWxSr0+ONozGSF4xkUWyp?=
+ =?us-ascii?Q?81Su/kTCLR3KYcjJIQRZtoERiqRvO9qCIz+ZuyA3i8/fPY5TxgcZMWSJwHMN?=
+ =?us-ascii?Q?QWoTJa8aCTK+v7gRucdxtyG0bN1sthk1euLyGI5Px7bomYZxLspvnLGWk2rz?=
+ =?us-ascii?Q?0fGK6LKUUPfjnn0riKNtBGz1g2bx04HkHJyPNE7VZJsDrwVpUJBuBzkQEQPi?=
+ =?us-ascii?Q?tUc4kI8818Mx+KUSns98BiRkilZwvEJFJifqdKtdZTgn6iWx1YJ9Y/OIs6UF?=
+ =?us-ascii?Q?YaV+xRHvVjE+gIbprxl7VfODOBD7EOl+OZHJD6Rrag4bGAwXs9A6sETuMtwQ?=
+ =?us-ascii?Q?qlTn6slsBV/VYVJcoaP6hSJjx1GIjQbgnxdqzB59cV1fx6crMVo7YhZdwPL2?=
+ =?us-ascii?Q?0UPx2661L1fmNX5+F7LBwiMTMXjFrd0IHutDc6WFLLoflm/CjjyJo5gM4689?=
+ =?us-ascii?Q?9bRIdHETtoi6uyYAtn4NArsawVIAbxj2n8RgK94QXGE77XHhYNgCtxmd8rMY?=
+ =?us-ascii?Q?yZzq46y9Xs5GKmZmrzVFjfsRwa4KLNdFjjMZTJnXhRofK6UmRRELsPB55gi5?=
+ =?us-ascii?Q?wKrNBqh29BNcC/xfmVEQCQj36UeNP/VDO7wVJ8tfmgf05UTfDgnkInsJoJPe?=
+ =?us-ascii?Q?9keiAHlvFoqWevDuISJJQGsgCbYv81BEXshnYM4dJwbyMXL/myWpZ+mfkUtr?=
+ =?us-ascii?Q?RFEqgjNRwpx1mD329ULkCeVUtQ3bz0dxDppdaNXHA/ZcjzbrHeNtkhoW9tYC?=
+ =?us-ascii?Q?ybzyXQsf95sjINh3K8aiff3kx88M0nU3aHr0q8rkDPl/EkcOGibo94h/H+bq?=
+ =?us-ascii?Q?VbJM+3NHBecMIAFUBMyHkxQK+3MCa/dCqSUPMOwqND1iviE/Q02PMbCz4U2a?=
+ =?us-ascii?Q?3oaXsIQnTnleS1/XVLKol2g0s/wpf1QfLNvZT48E6CJ87FsKdE5hWjGYVr2Y?=
+ =?us-ascii?Q?Dtwag1/oyRyb6hVVp6EDb4FPNPxHQubLe00Y2xh2+d1n/QQDyL9Dalvn8CJN?=
+ =?us-ascii?Q?Aay7vpDxUDaA3utpNZpy5yju0pd/WPBcg40xJ9nxvvmaMs5hc/BfoLUQKBV3?=
+ =?us-ascii?Q?k0dFFrYw1GuTohoD7W52+oG4gAJUpxinuk9lCGvDxajGr8FTNajYQAYf+MMV?=
+ =?us-ascii?Q?KinVs7Sp8tc7ovpHGfYg8x8ItWHhz+PmfM4embBjCWtL/4LTFSJBFGoXvCyK?=
+ =?us-ascii?Q?samcl2rlaZ9uOEtMC2bYQY7m+aoQPWDAQie0WQMYoV17fgkTPpLO2sXC5JGF?=
+ =?us-ascii?Q?FMXUwYBJImRVwoh+ZpqrS+ey9YV/Kx0IvWFOO3pXrUsoecuzmo7jrxW2KMYJ?=
+ =?us-ascii?Q?TKXSgVh56yOPzqAN68693M1WsA2SGELfSlXoGyH5seupSEvIKzGN/zUaMw/y?=
+ =?us-ascii?Q?YiaX4dSAoiSHhal/vrwBTnP3a74cHP2ya+VkL2T7uiawAlNrFLaInJqyuajx?=
+ =?us-ascii?Q?u4l42S7dREK/tZ7QMHSsKxBNTufE6bUirhdALYFGAOWV2lLnLI0cPbHdRQmG?=
+ =?us-ascii?Q?R2Tv8j5w0UZxxQRSZQg=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 885835b3-9427-4f7a-cba4-08dab67a3272
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 11:15:17.6870
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IfCNMwBWqqxKXyIw7PFFNLWYaGW91+uomkDO9ktZ6IRWeHc4e5aP6eXpQ6tPXO1n
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5345
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 02:54:38PM +0800, Xu Yilun wrote:
-> On 2022-10-25 at 08:39:46 +0300, Ivan Bornyakov wrote:
-> > Add support to the FPGA manager for programming Lattice ECP5 FPGA over
-> > slave SPI sysCONFIG interface.
-> > 
-> > sysCONFIG interface core functionality is separate from both ECP5 and
-> > SPI specifics, so support for other FPGAs with different port types can
-> > be added in the future.
-> > 
-> > Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> 
-> [...]
-> 
-> > +static int sysconfig_spi_bitstream_burst_init(struct sysconfig_priv *priv)
-> > +{
-> > +	const u8 lsc_bitstream_burst[] = SYSCONFIG_LSC_BITSTREAM_BURST;
-> > +	struct spi_device *spi = to_spi_device(priv->dev);
-> > +	struct spi_transfer xfer = {};
-> > +	struct spi_message msg;
-> > +	size_t buf_len;
-> > +	void *buf;
-> > +	int ret;
-> > +
-> > +	buf_len = sizeof(lsc_bitstream_burst);
-> > +
-> > +	buf = kmemdup(lsc_bitstream_burst, buf_len, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > +
-> 
-> I removed the second blank line and applied this series to for-next.
-> 
+On Tue, Oct 25, 2022 at 12:27:11PM +1000, Dave Airlie wrote:
 
-Sorry for this negligence. Thanks.
+> The userspace for those is normally bespoke like ROCm, which uses
+> amdkfd, and amdkfd doesn't operate like most device files from what I
+> know, so I'm not sure we'd want it to operate as an accel device.
 
+I intensely dislike this direction that drivers will create their own
+char devs buried inside their device driver with no support or
+supervision.
+
+We've been here before with RDMA and it is just a complete mess.
+
+Whatever special non-drm stuff amdkfd need to do should be supported
+through the new subsystem, in a proper maintainable way.
+
+Jason
