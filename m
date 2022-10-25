@@ -2,170 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CE760D445
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9DB60D447
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbiJYS6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 14:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36088 "EHLO
+        id S231602AbiJYTAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbiJYS5w (ORCPT
+        with ESMTP id S231751AbiJYTAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:57:52 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA2C6B152;
-        Tue, 25 Oct 2022 11:57:50 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1onP7S-0005EO-1n; Tue, 25 Oct 2022 20:57:46 +0200
-Message-ID: <b2b109f6-48a1-031d-2f4b-d618e678f2da@leemhuis.info>
-Date:   Tue, 25 Oct 2022 20:57:45 +0200
+        Tue, 25 Oct 2022 15:00:04 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06A8286E4;
+        Tue, 25 Oct 2022 12:00:00 -0700 (PDT)
+Received: from [10.7.7.5] (unknown [182.253.183.140])
+        by gnuweeb.org (Postfix) with ESMTPSA id B519E804FD;
+        Tue, 25 Oct 2022 18:59:55 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1666724399;
+        bh=CqaYWiGYhpo0ooPSCo8Ptr71Fmqkx1RjwX744NmAy+Q=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=q0+yVgdOymkXEOQWbRij5Zui2/yBpqTRQa8U54HlQLPjwUi9Me7wPlAI/bBdsqKlE
+         5gSNo4dw0yh0+Ub6rgjowYMVQmpHqnK6kRgUiv/0OGNLgT9Ikzbz85GPSM/lj9Ig68
+         Pw2UHHbkHUTl1OKIgkr2LF3qhOC1nIY6VBwDXYLnf+av+UY4Kj7PDU5OAWHgqHKNiX
+         esqvE4S8N0Fa2bGLiz6sfRbI8pmOC0uLiYPG4KPHB5BslUaisuOfROGy18pOII9rU/
+         rushACInW7O/+j8f1A0dJ2cwamYBDr0s1ie/eUq34zo+hD4uBMmIU1EZD3oUOtuhYb
+         pPjtXoi6uDAOQ==
+Message-ID: <e3464bac-82cb-2180-74f5-448e70540190@gnuweeb.org>
+Date:   Wed, 26 Oct 2022 01:59:52 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <6e7f32f2-5397-e0cf-4271-a9826d318996@leemhuis.info>
-Content-Language: en-US, de-DE
-Subject: Re: Regression: starting powertop crashes my machine hard since
- 838d9bb62d13 ("perf: Use sample_flags for raw_data")
-In-Reply-To: <6e7f32f2-5397-e0cf-4271-a9826d318996@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <song@kernel.org>, Nadav Amit <namit@vmware.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <Y1gBoUZrRK5N/lCB@kili>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH] x86/retpoline: Fix crash printing warning
+In-Reply-To: <Y1gBoUZrRK5N/lCB@kili>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1666724270;c8aa6c7c;
-X-HE-SMSGID: 1onP7S-0005EO-1n
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.10.22 20:40, Thorsten Leemhuis wrote:
-> Hi! Since 838d9bb62d13 ("perf: Use sample_flags for raw_data") starting
-> powertop makes my machine crash hard: keyboard is dead, Sysrq does not
-> work, and most of the time there is not even a error message on the
-> screen; only once in maybe ~20 cases I got the line "kernel NULL pointer
-> dereference, address: 0000000000000010", but nothing else.
+On 10/25/22 10:32 PM, Dan Carpenter wrote:
+> The first argument of WARN() is a condition, so this will use "addr"
+> as the format string and possibly crash.
+> 
+> Fixes: 3b6c1747da48 ("x86/retpoline: Add SKL retthunk retpolines")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Boris on another channel asked me to test "perf: Fix missing raw data on
-tracepoint events" (
-https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?h=perf/urgent&id=d6e63577059a8207df764404f1c55a19ca0d8e24
-) which I somehow missed when search lore an hour ago
-(https://lore.kernel.org/all/20221012143857.48198-1-james.clark@arm.com/
-). Sorry.
+Hello x86 maintainers,
 
-That patches fixes the problem for me. Thx everyone.
+I found this patch in the tip tree with the following commit message:
 
-Ciao, Thorsten
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/core&id=98dcf58159365d753b54d07f85a89d61ee15e036
 
-> This is on a Lenovo Thinkpad T14s Gen1 (AMD Ryzen 5 PRO 4650U) running
-> Fedora 37 with a vanilla kernel. Master as of a six hours ago shows the
-> problem (IOW: 21da7472a040 didn't fix this). Reverting 838d9bb62d13 on
-> top of master makes the problem go away. Applying
-> https://lore.kernel.org/lkml/20221020070657.21571-2-atrajeev@linux.vnet.ibm.com/
-> (another fix for 838d9bb62d13) didn't help. My config file is based on
-> the one from Fedora's 6.0.3 kernel, but stripped down with localmodconfig.
-> 
-> Apparently I'm not the only one hitting this problem:
-> https://github.com/fenrus75/powertop/issues/109
-> 
-> Ciao, Thorsten.
-> 
-> P.S.: From /proc/cpuinfo
-> 
->> processor       : 0
->> vendor_id       : AuthenticAMD
->> cpu family      : 23
->> model           : 96
->> model name      : AMD Ryzen 5 PRO 4650U with Radeon Graphics
->> stepping        : 1
->> microcode       : 0x8600106
->> cpu MHz         : 1397.267
->> cache size      : 512 KB
->> physical id     : 0
->> siblings        : 12
->> core id         : 0
->> cpu cores       : 6
->> apicid          : 0
->> initial apicid  : 0
->> fpu             : yes
->> fpu_exception   : yes
->> cpuid level     : 16
->> wp              : yes
->> flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge 
->> mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext
->> fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid
->> extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1
->> sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm
->> extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit
->> wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb
->> cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1
->> avx2 smep bmi2 cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt
->> xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local
->> clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock
->> nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter
->> pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip rdpid
->> overflow_recov succor smca
->>
->> bugs            : sysret_ss_attrs spectre_v1 spectre_v2 spec_store_bypass retbleed
->> bogomips        : 4191.92
->> TLB size        : 3072 4K pages
->> clflush size    : 64
->> cache_alignment : 64
->> address sizes   : 48 bits physical, 48 bits virtual
->> power management: ts ttp tm hwpstate cpb eff_freq_ro [13] [14]
-> 
-> Bisect log:
-> 
->> git bisect start
->> # status: waiting for both good and bad commits
->> # bad: [1a2dcbdde82e3a5f1db9b2f4c48aa1aeba534fb2] scsi: mpt3sas: re-do lost mpt3sas DMA mask fix
->> git bisect bad 1a2dcbdde82e3a5f1db9b2f4c48aa1aeba534fb2
->> # status: waiting for good commit(s), bad commit known
->> # good: [4fe89d07dcc2804c8b562f6c7896a45643d34b2f] Linux 6.0
->> git bisect good 4fe89d07dcc2804c8b562f6c7896a45643d34b2f
->> # good: [76e45035348c247a70ed50eb29a9906657e4444f] Merge tag 'for-6.1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
->> git bisect good 76e45035348c247a70ed50eb29a9906657e4444f
->> # bad: [52abb27abfff8c5ddf44eef4d759f3d1e9f166c5] Merge tag 'slab-for-6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab
->> git bisect bad 52abb27abfff8c5ddf44eef4d759f3d1e9f166c5
->> # good: [e8bc52cb8df80c31c73c726ab58ea9746e9ff734] Merge tag 'driver-core-6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core
->> git bisect good e8bc52cb8df80c31c73c726ab58ea9746e9ff734
->> # good: [f01603979a4afaad7504a728918b678d572cda9e] Merge tag 'gpio-updates-for-v6.1-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux
->> git bisect good f01603979a4afaad7504a728918b678d572cda9e
->> # good: [2e64066dab157ffcd0e9ec2ff631862e6e222876] Merge tag 'riscv-for-linus-6.1-mw1' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux
->> git bisect good 2e64066dab157ffcd0e9ec2ff631862e6e222876
->> # good: [376b3275c19f83d373e841e9af2d7658693190b9] KVM: PPC: Book3S HV: Fix stack frame regs marker
->> git bisect good 376b3275c19f83d373e841e9af2d7658693190b9
->> # bad: [3871d93b82a4a6c1f4308064f046a544f16ada21] Merge tag 'perf-core-2022-10-07' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
->> git bisect bad 3871d93b82a4a6c1f4308064f046a544f16ada21
->> # bad: [7be51cc1c68dfa180ef84e71bcb4204237bb5620] perf: Fix pmu_filter_match()
->> git bisect bad 7be51cc1c68dfa180ef84e71bcb4204237bb5620
->> # good: [ee9db0e14b0575aa827579dc2471a29ec5fc6877] perf: Use sample_flags for txn
->> git bisect good ee9db0e14b0575aa827579dc2471a29ec5fc6877
->> # good: [7b084630153152239d84990ac4540c2dd360186f] perf: Use sample_flags for addr
->> git bisect good 7b084630153152239d84990ac4540c2dd360186f
->> # bad: [ee3e88dfec23153d0675b5d00522297b9adf657c] perf/mem: Introduce PERF_MEM_LVLNUM_{EXTN_MEM|IO}
->> git bisect bad ee3e88dfec23153d0675b5d00522297b9adf657c
->> # bad: [a1ebcd59430236b336428bbf8e1da16fb87d56e4] Merge branch 'v6.0-rc7'
->> git bisect bad a1ebcd59430236b336428bbf8e1da16fb87d56e4
->> # bad: [4674ffe2fcad45a9b164401cc0794115702326cf] perf, hw_breakpoint: Fix use-after-free if perf_event_open() fails
->> git bisect bad 4674ffe2fcad45a9b164401cc0794115702326cf
->> # bad: [838d9bb62d132ec3baf1b5aba2e95ef9a7a9a3cd] perf: Use sample_flags for raw_data
->> git bisect bad 838d9bb62d132ec3baf1b5aba2e95ef9a7a9a3cd
->> # first bad commit: [838d9bb62d132ec3baf1b5aba2e95ef9a7a9a3cd] perf: Use sample_flags for raw_data
-> 
-> For regzbot:
-> 
-> #regzbot introduced 838d9bb62d13
-> #regzbot title perf: starting powertop crashes machines
-> #regzbot link: https://github.com/fenrus75/powertop/issues/109
-> 
-> 
+	x86/retpoline: Fix crash printing warningx86/core
+
+	The first argument of WARN() is a condition, so this will use "addr"
+	as the format string and possibly crash.
+
+	Fixes: 3b6c1747da48 ("x86/retpoline: Add SKL retthunk retpolines")
+	Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+	Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+	Link: https://lkml.kernel.org/r/Y1gBoUZrRK5N/lCB@kili
+
+When I visited that lkml link, it shows "message ID not found". The
+problem seems to be coming from the tool used to pick up the patch.
+
+That message ID contains a URL special char '/'. Thus it should be
+URL-encoded like this:
+
+    https://lore.kernel.org/r/Y1gBoUZrRK5N%2FlCB%40kili
+
+Anyway, lkml.kernel.org doesn't work for such a message ID, even with
+URL-encoded message ID like this:
+
+    https://lkml.kernel.org/r/Y1gBoUZrRK5N%2FlCB%40kili (not found)
+
+-- 
+Ammar Faizi
