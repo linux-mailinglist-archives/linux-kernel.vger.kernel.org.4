@@ -2,269 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDCB60D5D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2073960D5E0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232473AbiJYUqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 16:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
+        id S230327AbiJYUuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 16:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiJYUp6 (ORCPT
+        with ESMTP id S232114AbiJYUuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 16:45:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8A9ED9A6;
-        Tue, 25 Oct 2022 13:45:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EAB161B97;
-        Tue, 25 Oct 2022 20:45:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD0AC433D6;
-        Tue, 25 Oct 2022 20:45:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666730757;
-        bh=Q3NnogyKq4BuOPpJIGr/iyeMSki4k6rPV8wa5IwYE9k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rxwkJzo7AcBxsXZ87ldh0qv26DsNCeLdIZZc6tR6G5o3XD5tnW4NQRG3VMAsgsOcM
-         4FgiyH0Kq7jagUoGJIJfmbJ1iQrfr29jc8wys4SVgTiYsvZAQWVw6Tj8XRI6U6Cv22
-         YVUTi1hcw4afpDfIfVZHuzOClhdQLAe9sMREe1KTks0tZ4AISOuhetj15nREEj1Lxf
-         NQ7wIMJTCf1u9XriW0RkIQ1zAxu4s40cjZnBnY0sINwt0AiMZJXlfZmcAHt+Im8Z/r
-         C/6yiMuaI3TuiOmpXZIbCqBSBUdMQIp7BitZYyGn2yH4kLJIVyDR6t+I2nGuXUZqcJ
-         F+6O2S4T8Ur5A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 82BFB404BE; Tue, 25 Oct 2022 17:45:53 -0300 (-03)
-Date:   Tue, 25 Oct 2022 17:45:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Andi Kleen <ak@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] perf scripts python: intel-pt-events.py: Add ability
- interleave output
-Message-ID: <Y1hLAT5L4ffmFhWe@kernel.org>
-References: <20221020152509.5298-1-adrian.hunter@intel.com>
+        Tue, 25 Oct 2022 16:50:11 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07862715C;
+        Tue, 25 Oct 2022 13:50:09 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d6so24480672lfs.10;
+        Tue, 25 Oct 2022 13:50:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0Zk0HPezbVSSSJ26DNMPr74Oe4/FvtGH3/8t8fHqL6A=;
+        b=jKWbAnjWBnndyv7DxomPX4MSpPatJ08V4DET/Y7ttenPs2dTjQcpNk1nJqdZ7NLVwQ
+         VA2h13zzQaQuYi8tiG6TbMJlS49Y9ndEB3IkALhIiCbKfezA3fvPyg+1/J/BFr497dmq
+         l7WzJQNSp/1fBINfQyX/UXp34ZgKZtd8wfbzlK1riOrUEXwS7vlP+ZKR9SIbk2mAHKBC
+         W08tvXsln7Rmbt8KranCE4GG/FvF/sfDJXMpQTXzN98qdn5dPhehaDKeA5x4DuYB/RZO
+         /Ycl2+yyJKdVW7xefk6fuyPzhewJQyAAOu4WvkKsqyk7zyDVqCwY973qaaX+SgLCHb2D
+         W7lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Zk0HPezbVSSSJ26DNMPr74Oe4/FvtGH3/8t8fHqL6A=;
+        b=5LbZauW66ZglVenpp3BxYNFDhVNfCC2AFg9hWSYyug2Yhv0+Nkl6mXJBouFaGFpOLR
+         7prgwL50adc4ClvulpB1oW77Rf1npbALCxLE7QIiwbkpVYk610HhFewk++RWjny6CT03
+         17oot9MZ/nKZluYoXEhsYO6Cgh0WteI6l0O35hnkSDjY519fLhzcykOUvJ2KwmLNebwK
+         2Arz7/QLDupdFfjRNuREjAhHypyEbQWuukRHh9MQ2q5fS6tPWWGuNXwVKc+gwSvrzkGr
+         72b4qWsnIkuBkol8DbCWifT9ziQXjeU1Zl1/1SFuZVcZ7DVl1iwtd3EHE1lciUbCw/oD
+         f4FQ==
+X-Gm-Message-State: ACrzQf1gQT3gfvxVn4APGeC102uAjRrzpxOT/6EHEv9mJPVZ6QXtdEde
+        p9pa/cnpgMkcuhpF8PEZGMQ=
+X-Google-Smtp-Source: AMsMyM5uYwVwDKnBqszAnU0sifEWzu2LfEC6oDJHninzUR/bA59rx7jKgADkRe+KiV+wj9tub36twA==
+X-Received: by 2002:a05:6512:2342:b0:4a4:81e4:374b with SMTP id p2-20020a056512234200b004a481e4374bmr3164754lfu.502.1666731007362;
+        Tue, 25 Oct 2022 13:50:07 -0700 (PDT)
+Received: from mobilestation ([91.193.177.120])
+        by smtp.gmail.com with ESMTPSA id e18-20020a05651236d200b004946bb30469sm572202lfs.82.2022.10.25.13.50.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 13:50:06 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 23:50:02 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH RESEND v5 00/24] dmaengine: dw-edma: Add RP/EP local DMA
+ controllers support
+Message-ID: <20221025205002.u3kznrq7hdp4shnm@mobilestation>
+References: <20220822185332.26149-1-Sergey.Semin@baikalelectronics.ru>
+ <20221025075930.GB221610@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221020152509.5298-1-adrian.hunter@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221025075930.GB221610@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Oct 20, 2022 at 06:25:09PM +0300, Adrian Hunter escreveu:
-> Intel PT timestamps are not provided for every branch, let alone every
-> instruction, so there can be many samples with the same timestamp. With
-> per-cpu contexts, decoding is done for each CPU in turn, which can make it
-> difficult to see what is happening on different CPUs at the same time.
-> Currently the interleaving from perf script --itrace=i0ns is quite coarse
-> grained. There are often long stretches executing on one CPU and nothing on
-> another.
+On Tue, Oct 25, 2022 at 01:29:30PM +0530, Manivannan Sadhasivam wrote:
+> On Mon, Aug 22, 2022 at 09:53:08PM +0300, Serge Semin wrote:
+> > This is a final patchset in the series created in the framework of
+> > my Baikal-T1 PCIe/eDMA-related work:
+> > 
+> > [1: Done v5] PCI: dwc: Various fixes and cleanups
+> > Link: https://lore.kernel.org/linux-pci/20220624143428.8334-1-Sergey.Semin@baikalelectronics.ru/
+> > Merged: kernel 6.0-rc1
+> > [2: Done v4] PCI: dwc: Add hw version and dma-ranges support
+> > Link: https://lore.kernel.org/linux-pci/20220624143947.8991-1-Sergey.Semin@baikalelectronics.ru
+> > Merged: kernel 6.0-rc1
+> > [3: In-review v5] PCI: dwc: Add generic resources and Baikal-T1 support
+> > Link: https://lore.kernel.org/linux-pci/20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru/
+> > [4: Done v5] dmaengine: dw-edma: Add RP/EP local DMA support
+> > Link: ---you are looking at it---
+> > 
+> > Note it is very recommended to merge the patchsets in the same order as
+> > they are listed in the set above in order to have them applied smoothly.
+> > Nothing prevents them from being reviewed synchronously though.
+> > 
+> > Please note originally this series was self content, but due to Frank
+> > being a bit faster in his work submission I had to rebase my patchset onto
+> > his one. So now this patchset turns to be dependent on the Frank' work:
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220524152159.2370739-1-Frank.Li@nxp.com/
+> > 
+> > Here is a short summary regarding this patchset. The series starts with
+> > fixes patches. We discovered that the dw-edma-pcie.c driver incorrectly
+> > initializes the LL/DT base addresses for the platforms with not matching
+> > CPU and PCIe memory spaces. It is fixed by using the pci_bus_address()
+> > method to get a correct base address. After that you can find a series of
+> > the interleaved xfers fixes. It turned out the interleaved transfers
+> > implementation didn't work quite correctly from the very beginning for
+> > instance missing src/dst addresses initialization, etc. In the framework
+> > of the next two patches we suggest to add a new platform-specific
+> > callback - pci_address() and use it to convert the CPU address to the PCIe
+> > space address. It is at least required for the DW eDMA remote End-point
+> > setup on the platforms with not-matching CPU/PCIe address spaces. In case
+> > of the DW eDMA local RP/EP setup the conversion will be done automatically
+> > by the outbound iATU (if no DMA-bypass flag is specified for the
+> > corresponding iATU window). Then we introduce a set of the patches to make
+> > the DebugFS part of the code supporting the multi-eDMA controllers
+> > platforms. It starts with several cleanup patches and is closed joining
+> > the Read/Write channels into a single DMA-device as they originally should
+> > have been. After that you can find the patches with adding the non-atomic
+> > io-64 methods usage, dropping DT-region descriptors allocation, replacing
+> > chip IDs with the device name. In addition to that in order to have the
+> > eDMA embedded into the DW PCIe RP/EP supported we need to bypass the
+> > dma-ranges-based memory ranges mapping since in case of the root port DT
+> > node it's applicable for the peripheral PCIe devices only. Finally at the
+> > series closure we introduce a generic DW eDMA controller support being
+> > available in the DW PCIe Root Port/Endpoint driver.
+> > 
+> 
 
-Thanks, applied.
+> Looks like this series still got stuck :( And most of the discussion is with
+> patch 22/24 and it is for the Baikal platform (at present) I believe. There is
+> also a discussion on 24/24, but that's not a big deal as 22/24.
+> 
+> Can we exclude the patch 22/24 (even 24/24 if required) and merge rest in the
+> meantime. The patch(es) can still be submitted separately and merged after
+> reaching consensus.
 
-- Arnaldo
+The discussion has come to some conclusion in the framework of another
+series:
+https://lore.kernel.org/linux-pci/20221007224515.sseyabdfa2phcsdz@mobilestation/
+It includes solutions for several problems raised by @Robin Murphy.
+Seeing no objection from @Robin received and the solutions were mainly
+suggested by @Robin himself I'll implement them in the next series
+re-spin. So to speak don't worry. The series isn't stuck. I'll
+resubmit it for review on this week.
 
- 
-> Some people are interested in seeing what happened on multiple CPUs before
-> a crash to debug races etc.
+-Sergey
+
 > 
-> To improve perf script interleaving for parallel execution, the
-> intel-pt-events.py script has been enhanced to enable interleaving the
-> output with the same timestamp from different CPUs. It is understood that
-> interleaving is not perfect or causal.
+> Thanks,
+> Mani
 > 
-> Add parameter --interleave [<n>] to interleave sample output for the same
-> timestamp so that no more than n samples for a CPU are displayed in a row.
-> 'n' defaults to 4. Note this only affects the order of output, and only
-> when the timestamp is the same.
+> > Link: https://lore.kernel.org/linux-pci/20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v2:
+> > - Drop the patches:
+> >   [PATCH 1/25] dmaengine: dw-edma: Drop dma_slave_config.direction field usage
+> >   [PATCH 2/25] dmaengine: dw-edma: Fix eDMA Rd/Wr-channels and DMA-direction semantics
+> >   since they are going to be merged in in the framework of the
+> >   Frank's patchset.
+> > - Add a new patch: "dmaengine: dw-edma: Release requested IRQs on
+> >   failure."
+> > - Drop __iomem qualifier from the struct dw_edma_debugfs_entry instance
+> >   definition in the dw_edma_debugfs_u32_get() method. (@Manivannan)
+> > - Add a new patch: "dmaengine: dw-edma: Rename DebugFS dentry variables to
+> >   'dent'." (@Manivannan)
+> > - Slightly extend the eDMA name array size. (@Manivannan)
+> > - Change the specific DMA mapping comment a bit to being
+> >   clearer. (@Manivannan)
+> > - Add a new patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
+> >   method."
+> > - Don't fail eDMA detection procedure if the DW eDMA driver couldn't probe
+> >   device. That happens if the driver is disabled. (@Manivannan)
+> > - Add "dma" registers resource mapping procedure. (@Manivannan)
+> > - Move the eDMA CSRs space detection into the dw_pcie_map_detect() method.
+> > - Remove eDMA on the dw_pcie_ep_init() internal errors. (@Manivannan)
+> > - Remove eDMA in the dw_pcie_ep_exit() method.
+> > - Move the dw_pcie_edma_detect() method execution to the tail of the
+> >   dw_pcie_ep_init() function.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220503225104.12108-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v3:
+> > - Conditionally set dchan->dev->device.dma_coherent field since it can
+> >   be missing on some platforms. (@Manivannan)
+> > - Drop the patch: "PCI: dwc: Add generic iATU/eDMA CSRs space detection
+> >   method". A similar modification has been done in another patchset.
+> > - Add more comprehensive and less regression prune eDMA block detection
+> >   procedure.
+> > - Drop the patch: "dma-direct: take dma-ranges/offsets into account in
+> >   resource mapping". It will be separately reviewed.
+> > - Remove Manivannan tb tag from the modified patches.
+> > - Rebase onto the kernel v5.18.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220610091459.17612-1-Sergey.Semin@baikalelectronics.ru
+> > Changelog v4:
+> > - Rabase onto the laters Frank Li series:
+> > Link: https://lore.kernel.org/all/20220524152159.2370739-1-Frank.Li@nxp.com/
+> > - Add Vinod' Ab-tag.
+> > - Rebase onto the kernel v5.19-rcX.
+> > 
+> > Link: https://lore.kernel.org/linux-pci/20220728142841.12305-1-Sergey.Semin@baikalelectronics.ru
+> > Changelog v5:
+> > - Just resend.
+> > - Rebase onto the kernel v6.0-rc2.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Acked-By: Vinod Koul <vkoul@kernel.org>
+> > Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+> > Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+> > Cc: "Krzysztof Wilczyński" <kw@linux.com>
+> > Cc: linux-pci@vger.kernel.org
+> > Cc: dmaengine@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > 
+> > Serge Semin (24):
+> >   dmaengine: Fix dma_slave_config.dst_addr description
+> >   dmaengine: dw-edma: Release requested IRQs on failure
+> >   dmaengine: dw-edma: Convert ll/dt phys-address to PCIe bus/DMA address
+> >   dmaengine: dw-edma: Fix missing src/dst address of the interleaved
+> >     xfers
+> >   dmaengine: dw-edma: Don't permit non-inc interleaved xfers
+> >   dmaengine: dw-edma: Fix invalid interleaved xfers semantics
+> >   dmaengine: dw-edma: Add CPU to PCIe bus address translation
+> >   dmaengine: dw-edma: Add PCIe bus address getter to the remote EP
+> >     glue-driver
+> >   dmaengine: dw-edma: Drop chancnt initialization
+> >   dmaengine: dw-edma: Fix DebugFS reg entry type
+> >   dmaengine: dw-edma: Stop checking debugfs_create_*() return value
+> >   dmaengine: dw-edma: Add dw_edma prefix to the DebugFS nodes descriptor
+> >   dmaengine: dw-edma: Convert DebugFS descs to being kz-allocated
+> >   dmaengine: dw-edma: Rename DebugFS dentry variables to 'dent'
+> >   dmaengine: dw-edma: Simplify the DebugFS context CSRs init procedure
+> >   dmaengine: dw-edma: Move eDMA data pointer to DebugFS node descriptor
+> >   dmaengine: dw-edma: Join Write/Read channels into a single device
+> >   dmaengine: dw-edma: Use DMA-engine device DebugFS subdirectory
+> >   dmaengine: dw-edma: Use non-atomic io-64 methods
+> >   dmaengine: dw-edma: Drop DT-region allocation
+> >   dmaengine: dw-edma: Replace chip ID number with device name
+> >   dmaengine: dw-edma: Bypass dma-ranges mapping for the local setup
+> >   dmaengine: dw-edma: Skip cleanup procedure if no private data found
+> >   PCI: dwc: Add DW eDMA engine support
+> > 
+> >  drivers/dma/dw-edma/dw-edma-core.c            | 216 +++++-----
+> >  drivers/dma/dw-edma/dw-edma-core.h            |  10 +-
+> >  drivers/dma/dw-edma/dw-edma-pcie.c            |  24 +-
+> >  drivers/dma/dw-edma/dw-edma-v0-core.c         |  60 +--
+> >  drivers/dma/dw-edma/dw-edma-v0-core.h         |   1 -
+> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.c      | 372 ++++++++----------
+> >  drivers/dma/dw-edma/dw-edma-v0-debugfs.h      |   5 -
+> >  .../pci/controller/dwc/pcie-designware-ep.c   |  12 +-
+> >  .../pci/controller/dwc/pcie-designware-host.c |  13 +-
+> >  drivers/pci/controller/dwc/pcie-designware.c  | 186 +++++++++
+> >  drivers/pci/controller/dwc/pcie-designware.h  |  20 +
+> >  include/linux/dma/edma.h                      |  18 +-
+> >  include/linux/dmaengine.h                     |   2 +-
+> >  13 files changed, 583 insertions(+), 356 deletions(-)
+> > 
+> > -- 
+> > 2.35.1
+> > 
 > 
-> Example:
-> 
->   $ perf script intel-pt-events.py --insn-trace --interleave 3
->   ...
->   bash  2267/2267  [004]  9323.692625625  563caa3c86f0  jz 0x563caa3c89c7        run_pending_traps+0x30 (/usr/bin/bash)   IPC: 1.52 (38/25)
->   bash  2267/2267  [004]  9323.692625625  563caa3c89c7  movq  0x118(%rsp), %rax  run_pending_traps+0x307 (/usr/bin/bash)
->   bash  2267/2267  [004]  9323.692625625  563caa3c89cf  subq  %fs:0x28, %rax     run_pending_traps+0x30f (/usr/bin/bash)
->   bash  2270/2270  [007]  9323.692625625  55dc58cabf02  jz 0x55dc58cabf48        unquoted_glob_pattern_p+0x102 (/usr/bin/bash)   IPC: 1.56 (25/16)
->   bash  2270/2270  [007]  9323.692625625  55dc58cabf04  cmp $0x5d, %al           unquoted_glob_pattern_p+0x104 (/usr/bin/bash)
->   bash  2270/2270  [007]  9323.692625625  55dc58cabf06  jnz 0x55dc58cabf10       unquoted_glob_pattern_p+0x106 (/usr/bin/bash)
->   bash  2264/2264  [001]  9323.692625625  7fd556a4376c  jbe 0x7fd556a43ac8       round_and_return+0x3fc (/usr/lib/x86_64-linux-gnu/libc.so.6)   IPC: 4.30 (43/10)
->   bash  2264/2264  [001]  9323.692625625  7fd556a43772  and $0x8, %edx           round_and_return+0x402 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->   bash  2264/2264  [001]  9323.692625625  7fd556a43775  jnz 0x7fd556a43ac8       round_and_return+0x405 (/usr/lib/x86_64-linux-gnu/libc.so.6)
->   bash  2267/2267  [004]  9323.692625625  563caa3c89d8  jnz 0x563caa3c8b11       run_pending_traps+0x318 (/usr/bin/bash)
->   bash  2267/2267  [004]  9323.692625625  563caa3c89de  add $0x128, %rsp         run_pending_traps+0x31e (/usr/bin/bash)
->   bash  2267/2267  [004]  9323.692625625  563caa3c89e5  popq  %rbx               run_pending_traps+0x325 (/usr/bin/bash)
->   ...
-> 
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/perf/Documentation/perf-intel-pt.txt   | 12 +++-
->  tools/perf/scripts/python/intel-pt-events.py | 65 +++++++++++++++++++-
->  2 files changed, 74 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/perf/Documentation/perf-intel-pt.txt b/tools/perf/Documentation/perf-intel-pt.txt
-> index 92464a5d7eaf..7b6ccd2fa3bf 100644
-> --- a/tools/perf/Documentation/perf-intel-pt.txt
-> +++ b/tools/perf/Documentation/perf-intel-pt.txt
-> @@ -189,8 +189,16 @@ There is also script intel-pt-events.py which provides an example of how to
->  unpack the raw data for power events and PTWRITE. The script also displays
->  branches, and supports 2 additional modes selected by option:
->  
-> - --insn-trace - instruction trace
-> - --src-trace - source trace
-> + - --insn-trace - instruction trace
-> + - --src-trace - source trace
-> +
-> +The intel-pt-events.py script also has options:
-> +
-> + - --all-switch-events - display all switch events, not only the last consecutive.
-> + - --interleave [<n>] - interleave sample output for the same timestamp so that
-> + no more than n samples for a CPU are displayed in a row. 'n' defaults to 4.
-> + Note this only affects the order of output, and only when the timestamp is the
-> + same.
->  
->  As mentioned above, it is easy to capture too much data.  One way to limit the
->  data captured is to use 'snapshot' mode which is explained further below.
-> diff --git a/tools/perf/scripts/python/intel-pt-events.py b/tools/perf/scripts/python/intel-pt-events.py
-> index 6be7fd8fd615..08862a2582f4 100644
-> --- a/tools/perf/scripts/python/intel-pt-events.py
-> +++ b/tools/perf/scripts/python/intel-pt-events.py
-> @@ -13,10 +13,12 @@
->  
->  from __future__ import print_function
->  
-> +import io
->  import os
->  import sys
->  import struct
->  import argparse
-> +import contextlib
->  
->  from libxed import LibXED
->  from ctypes import create_string_buffer, addressof
-> @@ -39,6 +41,11 @@ glb_src			= False
->  glb_source_file_name	= None
->  glb_line_number		= None
->  glb_dso			= None
-> +glb_stash_dict		= {}
-> +glb_output		= None
-> +glb_output_pos		= 0
-> +glb_cpu			= -1
-> +glb_time		= 0
->  
->  def get_optional_null(perf_dict, field):
->  	if field in perf_dict:
-> @@ -70,6 +77,7 @@ def trace_begin():
->  	ap.add_argument("--insn-trace", action='store_true')
->  	ap.add_argument("--src-trace", action='store_true')
->  	ap.add_argument("--all-switch-events", action='store_true')
-> +	ap.add_argument("--interleave", type=int, nargs='?', const=4, default=0)
->  	global glb_args
->  	global glb_insn
->  	global glb_src
-> @@ -94,11 +102,39 @@ def trace_begin():
->  	perf_set_itrace_options(perf_script_context, itrace)
->  
->  def trace_end():
-> +	if glb_args.interleave:
-> +		flush_stashed_output()
->  	print("End")
->  
->  def trace_unhandled(event_name, context, event_fields_dict):
->  		print(' '.join(['%s=%s'%(k,str(v))for k,v in sorted(event_fields_dict.items())]))
->  
-> +def stash_output():
-> +	global glb_stash_dict
-> +	global glb_output_pos
-> +	output_str = glb_output.getvalue()[glb_output_pos:]
-> +	n = len(output_str)
-> +	if n:
-> +		glb_output_pos += n
-> +		if glb_cpu not in glb_stash_dict:
-> +			glb_stash_dict[glb_cpu] = []
-> +		glb_stash_dict[glb_cpu].append(output_str)
-> +
-> +def flush_stashed_output():
-> +	global glb_stash_dict
-> +	while glb_stash_dict:
-> +		cpus = list(glb_stash_dict.keys())
-> +		# Output at most glb_args.interleave output strings per cpu
-> +		for cpu in cpus:
-> +			items = glb_stash_dict[cpu]
-> +			countdown = glb_args.interleave
-> +			while len(items) and countdown:
-> +				sys.stdout.write(items[0])
-> +				del items[0]
-> +				countdown -= 1
-> +			if not items:
-> +				del glb_stash_dict[cpu]
-> +
->  def print_ptwrite(raw_buf):
->  	data = struct.unpack_from("<IQ", raw_buf)
->  	flags = data[0]
-> @@ -375,15 +411,40 @@ def do_process_event(param_dict):
->  		print_common_start(comm, sample, name)
->  		print_common_ip(param_dict, sample, symbol, dso)
->  
-> +def interleave_events(param_dict):
-> +	global glb_cpu
-> +	global glb_time
-> +	global glb_output
-> +	global glb_output_pos
-> +
-> +	sample  = param_dict["sample"]
-> +	glb_cpu = sample["cpu"]
-> +	ts      = sample["time"]
-> +
-> +	if glb_time != ts:
-> +		glb_time = ts
-> +		flush_stashed_output()
-> +
-> +	glb_output_pos = 0
-> +	with contextlib.redirect_stdout(io.StringIO()) as glb_output:
-> +		do_process_event(param_dict)
-> +
-> +	stash_output()
-> +
->  def process_event(param_dict):
->  	try:
-> -		do_process_event(param_dict)
-> +		if glb_args.interleave:
-> +			interleave_events(param_dict)
-> +		else:
-> +			do_process_event(param_dict)
->  	except broken_pipe_exception:
->  		# Stop python printing broken pipe errors and traceback
->  		sys.stdout = open(os.devnull, 'w')
->  		sys.exit(1)
->  
->  def auxtrace_error(typ, code, cpu, pid, tid, ip, ts, msg, cpumode, *x):
-> +	if glb_args.interleave:
-> +		flush_stashed_output()
->  	if len(x) >= 2 and x[0]:
->  		machine_pid = x[0]
->  		vcpu = x[1]
-> @@ -403,6 +464,8 @@ def auxtrace_error(typ, code, cpu, pid, tid, ip, ts, msg, cpumode, *x):
->  		sys.exit(1)
->  
->  def context_switch(ts, cpu, pid, tid, np_pid, np_tid, machine_pid, out, out_preempt, *x):
-> +	if glb_args.interleave:
-> +		flush_stashed_output()
->  	if out:
->  		out_str = "Switch out "
->  	else:
 > -- 
-> 2.34.1
-
--- 
-
-- Arnaldo
+> மணிவண்ணன் சதாசிவம்
