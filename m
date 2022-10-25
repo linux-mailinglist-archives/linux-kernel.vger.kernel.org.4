@@ -2,112 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D984660C395
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A8960C396
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbiJYGAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:00:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S230259AbiJYGDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiJYGA3 (ORCPT
+        with ESMTP id S229785AbiJYGDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:00:29 -0400
-Received: from out199-16.us.a.mail.aliyun.com (out199-16.us.a.mail.aliyun.com [47.90.199.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0EEDBE7F;
-        Mon, 24 Oct 2022 23:00:26 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0VT1YRYf_1666677621;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VT1YRYf_1666677621)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 14:00:22 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     james.smart@broadcom.com
-Cc:     dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] scsi: lpfc: clean up some inconsistent indentings
-Date:   Tue, 25 Oct 2022 14:00:20 +0800
-Message-Id: <20221025060020.20250-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 25 Oct 2022 02:03:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412FE105CEC
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:03:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5298B81A6B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:03:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D688C433C1;
+        Tue, 25 Oct 2022 06:03:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666677798;
+        bh=VjooGWrvIG8ReDXfvIhQuOnTWhKI2n0HmhUzZot1ahw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TPktgCjJIjwm9FO3O58SW7xbMojD8GVaT9P4buRRw6wBODSV7lz/1qk2T20svq4ba
+         dMPmXnogy8w8kaCfwT5D3947reVtUT3G/Iz+qz18Eke/n9OXzZzkP6++uy6kvE9/5o
+         Day31pNOXxFiMgDKSA6fmkFqtS3nbJAoI/mCANDXcxQ1fx30sUanX59MWMKPXqroGP
+         /7BnW8SmdJmh+97U/edvN5mks0EBUDithXrXe8bP4oZL4obZBbmG889rMoIh1Iqa6H
+         7eJbFiKXSLYx1UEQEDDpPqZzbQY7TdmERgL80QK58KiwFFnvHSZepONcgNWiSJIvvC
+         XEbT8qzqG3C7Q==
+Message-ID: <eaae3f50-1859-ae9c-addd-51731ccf076a@kernel.org>
+Date:   Tue, 25 Oct 2022 14:03:13 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v2] f2fs: remove batched_trim_sections node
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20221025030831.53888-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20221025030831.53888-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/scsi/lpfc/lpfc_attr.c:1944 lpfc_xcvr_data_show() warn:
-inconsistent indenting
+On 2022/10/25 11:08, Yangtao Li wrote:
+> commit 377224c47118("f2fs: don't split checkpoint in fstrim") obsolete
+> batch mode and related sysfs entry.
+> 
+> Since this testing sysfs node has been deprecated for a long time, let's
+> remove it.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2535
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/scsi/lpfc/lpfc_attr.c | 46 +++++++++++++++--------------------
- 1 file changed, 19 insertions(+), 27 deletions(-)
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index 030ad1d59cbd..d7a3496471cd 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -1941,33 +1941,25 @@ lpfc_xcvr_data_show(struct device *dev, struct device_attribute *attr,
- 			&rdp_context->page_a0[SSF_TRANSCEIVER_CODE_B7];
- 
- 	len += scnprintf(buf + len, PAGE_SIZE - len, "Speeds: \t");
--		if (*(uint8_t *)trasn_code_byte7 == 0) {
--			len += scnprintf(buf + len, PAGE_SIZE - len,
--					 "Unknown\n");
--		} else {
--			if (trasn_code_byte7->fc_sp_100MB)
--				len += scnprintf(buf + len, PAGE_SIZE - len,
--						 "1 ");
--			if (trasn_code_byte7->fc_sp_200mb)
--				len += scnprintf(buf + len, PAGE_SIZE - len,
--						 "2 ");
--			if (trasn_code_byte7->fc_sp_400MB)
--				len += scnprintf(buf + len, PAGE_SIZE - len,
--						 "4 ");
--			if (trasn_code_byte7->fc_sp_800MB)
--				len += scnprintf(buf + len, PAGE_SIZE - len,
--						 "8 ");
--			if (trasn_code_byte7->fc_sp_1600MB)
--				len += scnprintf(buf + len, PAGE_SIZE - len,
--						 "16 ");
--			if (trasn_code_byte7->fc_sp_3200MB)
--				len += scnprintf(buf + len, PAGE_SIZE - len,
--						 "32 ");
--			if (trasn_code_byte7->speed_chk_ecc)
--				len += scnprintf(buf + len, PAGE_SIZE - len,
--						 "64 ");
--			len += scnprintf(buf + len, PAGE_SIZE - len, "GB\n");
--		}
-+	if (*(uint8_t *)trasn_code_byte7 == 0) {
-+		len += scnprintf(buf + len, PAGE_SIZE - len, "Unknown\n");
-+	} else {
-+		if (trasn_code_byte7->fc_sp_100MB)
-+			len += scnprintf(buf + len, PAGE_SIZE - len, "1 ");
-+		if (trasn_code_byte7->fc_sp_200mb)
-+			len += scnprintf(buf + len, PAGE_SIZE - len, "2 ");
-+		if (trasn_code_byte7->fc_sp_400MB)
-+			len += scnprintf(buf + len, PAGE_SIZE - len, "4 ");
-+		if (trasn_code_byte7->fc_sp_800MB)
-+			len += scnprintf(buf + len, PAGE_SIZE - len, "8 ");
-+		if (trasn_code_byte7->fc_sp_1600MB)
-+			len += scnprintf(buf + len, PAGE_SIZE - len, "16 ");
-+		if (trasn_code_byte7->fc_sp_3200MB)
-+			len += scnprintf(buf + len, PAGE_SIZE - len, "32 ");
-+		if (trasn_code_byte7->speed_chk_ecc)
-+			len += scnprintf(buf + len, PAGE_SIZE - len, "64 ");
-+		len += scnprintf(buf + len, PAGE_SIZE - len, "GB\n");
-+	}
- 	temperature = (rdp_context->page_a2[SFF_TEMPERATURE_B1] << 8 |
- 		       rdp_context->page_a2[SFF_TEMPERATURE_B0]);
- 	vcc = (rdp_context->page_a2[SFF_VCC_B1] << 8 |
--- 
-2.20.1.7.g153144c
-
+Thanks,
