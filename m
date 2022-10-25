@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4F660CE26
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7336960CE2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbiJYN7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S232364AbiJYN7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbiJYN7Z (ORCPT
+        with ESMTP id S231546AbiJYN70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:59:25 -0400
+        Tue, 25 Oct 2022 09:59:26 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371C13BB;
-        Tue, 25 Oct 2022 06:59:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3917A29C;
+        Tue, 25 Oct 2022 06:59:25 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666706362;
+        s=2020; t=1666706363;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I9KrkHTSRk9elfiy6IejGCtNRlCE++/FB5CiuBByAlk=;
-        b=Tf/9SYQHSN3IMkZcm9kCZ3W33EouF/PiE/b3UwATQokC0EG5MUmZFfaAaIw39OPEAGAF5q
-        iQr76ZtsG8TfY63OCJJ3O9/tzgpnPH07vtmiA6dFcZC+Zyz2G9+V6BNpVSUU13v2T/+fxv
-        9nM/6qUrpyyQz2Ig9L0SRTlljVnV2GkKK8t+BTNSU/awtJpdbuAC+MIpV7a/G25MbhV/QP
-        IU0hjTK/jGQbmg3rOHBUHtaK6HRgecu0ArBIpH/i01KKv4LXgf1/cyqxu2a4UyXAdPVykw
-        1ZhmDzeWXqPKo1EArrzyXdnWCBaaBnFQ/8TC5YsmdQYrIIqVEq/L4DeGGba4pg==
+        bh=vvmb4wfRRA26uf1ExR6XWWcWf4ly6fbBq4i3VJ/TCEY=;
+        b=LwzQPpX+Ny/PxpUuI5+8qcVrqQfT+WjE7/NENxhUShNmOEw/iTf37CJ4FwRBqsuzl/u5z+
+        wnhOmVBSHuvvQyowXC9m+wb5s2TtJpaDZsDxGrXBFbncS/SR0qiDtqA+1c8pv+rwlX9rfm
+        aKX3hwqW3fvLBrefg8HwPjql35faDPU5ouq3uzKL5MPAVoxJLVIEeSj2Pgi26Jjk/kIKG7
+        eEX9DHBUgsGP6QEHMDXA0SIbTKgCLNyh0PJSXLS9Q2AxQ0fmesw+KOHPOCPl+ANDsd6Tw8
+        jjKvOFiZGe8GwKADdu1P0m0wi7qVYiwGlix0MqBMBM89OEmMaLhlzh/DYDe1LQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666706362;
+        s=2020e; t=1666706363;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I9KrkHTSRk9elfiy6IejGCtNRlCE++/FB5CiuBByAlk=;
-        b=OOxPYlfB3OREmJmPIE3ZC4Fnc8ctFR4lOH9DY2WH8sgffZSKb7Qg8OSTwLzHciSDREJlBN
-        tiS+6dl2kh8Hd1Bg==
+        bh=vvmb4wfRRA26uf1ExR6XWWcWf4ly6fbBq4i3VJ/TCEY=;
+        b=8N2pUT0OaCAesECVu/HpMphD9DDy2spXcuoPHDFPo3FjS0DZYJm78WHzj9wdoRKnl4Q9t9
+        /tIBD5wqb5wMx+Cg==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <john.stultz@linaro.org>,
@@ -48,9 +48,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Frederic Weisbecker <fweisbec@gmail.com>,
         Rik van Riel <riel@redhat.com>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: [PATCH v3 04/17] timer: Split next timer interrupt logic
-Date:   Tue, 25 Oct 2022 15:58:37 +0200
-Message-Id: <20221025135850.51044-5-anna-maria@linutronix.de>
+Subject: [PATCH v3 05/17] timer: Rework idle logic
+Date:   Tue, 25 Oct 2022 15:58:38 +0200
+Message-Id: <20221025135850.51044-6-anna-maria@linutronix.de>
 In-Reply-To: <20221025135850.51044-1-anna-maria@linutronix.de>
 References: <20221025135850.51044-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -64,50 +64,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Logic for getting next timer interrupt (no matter of recalculated or
-already stored in base->next_expiry) is split into a separate function
-"next_timer_interrupt()" to make it available for new call sites.
+From: Thomas Gleixner <tglx@linutronix.de>
 
-No functional change.
+To improve readability of the code, split base->idle calculation and
+expires calculation into separate parts.
 
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- kernel/time/timer.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ kernel/time/timer.c | 29 ++++++++++++++---------------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
 
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 7695c733dfa5..f34bc75ff848 100644
+index f34bc75ff848..cb4194ecca60 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -1681,6 +1681,15 @@ static u64 cmp_next_hrtimer_event(u64 basem, u64 expires)
- 	return DIV_ROUND_UP_ULL(nextevt, TICK_NSEC) * TICK_NSEC;
- }
+@@ -1727,21 +1727,20 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+ 			base->clk = nextevt;
+ 	}
  
+-	if (time_before_eq(nextevt, basej)) {
+-		expires = basem;
+-		base->is_idle = false;
+-	} else {
+-		if (base->timers_pending)
+-			expires = basem + (u64)(nextevt - basej) * TICK_NSEC;
+-		/*
+-		 * If we expect to sleep more than a tick, mark the base idle.
+-		 * Also the tick is stopped so any added timer must forward
+-		 * the base clk itself to keep granularity small. This idle
+-		 * logic is only maintained for the BASE_STD base, deferrable
+-		 * timers may still see large granularity skew (by design).
+-		 */
+-		if ((expires - basem) > TICK_NSEC)
+-			base->is_idle = true;
++	/*
++	 * Base is idle if the next event is more than a tick away. Also
++	 * the tick is stopped so any added timer must forward the base clk
++	 * itself to keep granularity small. This idle logic is only
++	 * maintained for the BASE_STD base, deferrable timers may still
++	 * see large granularity skew (by design).
++	 */
++	base->is_idle = time_after(nextevt, basej + 1);
 +
-+static unsigned long next_timer_interrupt(struct timer_base *base)
-+{
-+	if (base->next_expiry_recalc)
-+		__next_timer_interrupt(base);
-+
-+	return base->next_expiry;
-+}
-+
- /**
-  * get_next_timer_interrupt - return the time (clock mono) of the next timer
-  * @basej:	base time jiffies
-@@ -1703,9 +1712,8 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
- 		return expires;
++	if (base->timers_pending) {
++		/* If we missed a tick already, force 0 delta */
++		if (time_before_eq(nextevt, basej))
++			nextevt = basej;
++		expires = basem + (u64)(nextevt - basej) * TICK_NSEC;
+ 	}
+ 	raw_spin_unlock(&base->lock);
  
- 	raw_spin_lock(&base->lock);
--	if (base->next_expiry_recalc)
--		__next_timer_interrupt(base);
--	nextevt = base->next_expiry;
-+
-+	nextevt = next_timer_interrupt(base);
- 
- 	/*
- 	 * We have a fresh next event. Check whether we can forward the
 -- 
 2.30.2
 
