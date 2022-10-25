@@ -2,123 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E481060D2D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24B960D2D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbiJYRyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 13:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S231991AbiJYR40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 13:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbiJYRyp (ORCPT
+        with ESMTP id S230345AbiJYR4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 13:54:45 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E63193FF
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:54:40 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id b7-20020a92c567000000b002fb9207838bso11643066ilj.23
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:54:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vwHXjbhutL7a6YaighTokFNLdwjSrZnOy4BnNjzimdM=;
-        b=TfSBAcZOgtOYSicT3hfk8MTb3pewY1lvKoKAqaAn9vy78rJLca3J1bWoZIsccXJW18
-         YbaI+cPICpr7+wjlK1liryCLe7IEui8evyN76C+T6U3aiaJX42Dz5JJjFK8c72lwYmgv
-         EKYqXWgAyZ2/f0KkYUiu5DI66nW7Y2sgN2koz23vEDiMpzCYmslHxQOX2qDFPaCJ3R2H
-         FcPyCbhUG1vPjsw8GdBvn04E87y5NcExJPRj2ioBYrlMv97t99nf3p3ty+Whe9IIRKcv
-         gJEdRVuvyFQdgwrvIrYqACXlg0lVIdsii+SjhD7hmVcDovbuz1up4BGKEQRAGlz3rYVd
-         l1zw==
-X-Gm-Message-State: ACrzQf1j+9Bz8i1pVpMPMfa9ZdF8A5Xe6LwmOGvr9ToIl7VBNYiIFdTO
-        TGtX2scbY+7bhRwjfE/UklaxgAR216FRH//YI8ovWPiKwNBx
-X-Google-Smtp-Source: AMsMyM6FiX21BrF6HEjMggVfjfXSIcSTwrZr+kHfFI/tbRjry3myG4A5pcmSLz8gqZTsPpB5ZcXK0Gd2jG8vaVU+uBbQAfDWTibO
+        Tue, 25 Oct 2022 13:56:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF92FDDA0D;
+        Tue, 25 Oct 2022 10:56:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8714861A5C;
+        Tue, 25 Oct 2022 17:56:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31C0C433C1;
+        Tue, 25 Oct 2022 17:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666720579;
+        bh=yoY7iLCYU7bzt4GaDkXzEUixBCzZ8DqXBG0ytNBixsU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sGOxpfrqH3n+hxbHscT2hCJAweA45hU3XDOfbyng2Rw1RSuZVYXmDxaa61Zj3IGAA
+         u+6lDQdpV+pqSJNTrTP2zasaT1c6kcJzv7idqf6tlIFZ4VFDBO8gzJ4OrGjGhTWXXQ
+         PdtJt6i0GDl0EHg9PufvzxNIQpBVY7pbNKBemqw+x0Lmff5PKKKNNMSDd1q5cKocr8
+         YvcMXrE+jVIrWppzspmVO3mD4uMbVlB496Wg36qDLu4dSRqaaBOHiEOwbS0H6GG8ro
+         /OwTkx/eMJt/MvPVJ1rZIY8i5UOn+kWGfCtJkslDIsQsvqIeVOZZHfjfnCFZn3WikR
+         c/wiJAuXKNzVA==
+Date:   Tue, 25 Oct 2022 10:56:19 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     "ruansy.fnst@fujitsu.com" <ruansy.fnst@fujitsu.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "Yasunori Gotou (Fujitsu)" <y-goto@fujitsu.com>,
+        Brian Foster <bfoster@redhat.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "zwisler@kernel.org" <zwisler@kernel.org>,
+        Jeff Moyer <jmoyer@redhat.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "toshi.kani@hpe.com" <toshi.kani@hpe.com>
+Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
+Message-ID: <Y1gjQ4wNZr3ve2+K@magnolia>
+References: <1444b9b5-363a-163c-0513-55d1ea951799@fujitsu.com>
+ <Yzt6eWLuX/RTjmjj@magnolia>
+ <f196bcab-6aa2-6313-8a7c-f8ab409621b7@fujitsu.com>
+ <Yzx64zGt2kTiDYaP@magnolia>
+ <6a83a56e-addc-f3c4-2357-9589a49bf582@fujitsu.com>
+ <Y1NRNtToQTjs0Dbd@magnolia>
+ <20221023220018.GX3600936@dread.disaster.area>
+ <OSBPR01MB2920CA997DDE891C06776279F42E9@OSBPR01MB2920.jpnprd01.prod.outlook.com>
+ <20221024053109.GY3600936@dread.disaster.area>
+ <dd00529c-d3ef-40e3-9dea-834c5203e3df@fujitsu.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:9e0a:0:b0:6c0:dbd0:cfac with SMTP id
- i10-20020a5e9e0a000000b006c0dbd0cfacmr1075436ioq.106.1666720479732; Tue, 25
- Oct 2022 10:54:39 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 10:54:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000226f6d05ebdf9ab7@google.com>
-Subject: [syzbot] UBSAN: shift-out-of-bounds in nilfs_load_super_block
-From:   syzbot <syzbot+e91619dd4c11c4960706@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dd00529c-d3ef-40e3-9dea-834c5203e3df@fujitsu.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Oct 25, 2022 at 02:26:50PM +0000, ruansy.fnst@fujitsu.com wrote:
+> 
+> 
+> 在 2022/10/24 13:31, Dave Chinner 写道:
+> > On Mon, Oct 24, 2022 at 03:17:52AM +0000, ruansy.fnst@fujitsu.com wrote:
+> >> 在 2022/10/24 6:00, Dave Chinner 写道:
+> >>> On Fri, Oct 21, 2022 at 07:11:02PM -0700, Darrick J. Wong wrote:
+> >>>> On Thu, Oct 20, 2022 at 10:17:45PM +0800, Yang, Xiao/杨 晓 wrote:
+> >>>>> In addition, I don't like your idea about the test change because it will
+> >>>>> make generic/470 become the special test for XFS. Do you know if we can fix
+> >>>>> the issue by changing the test in another way? blkdiscard -z can fix the
+> >>>>> issue because it does zero-fill rather than discard on the block device.
+> >>>>> However, blkdiscard -z will take a lot of time when the block device is
+> >>>>> large.
+> >>>>
+> >>>> Well we /could/ just do that too, but that will suck if you have 2TB of
+> >>>> pmem. ;)
+> >>>>
+> >>>> Maybe as an alternative path we could just create a very small
+> >>>> filesystem on the pmem and then blkdiscard -z it?
+> >>>>
+> >>>> That said -- does persistent memory actually have a future?  Intel
+> >>>> scuttled the entire Optane product, cxl.mem sounds like expansion
+> >>>> chassis full of DRAM, and fsdax is horribly broken in 6.0 (weird kernel
+> >>>> asserts everywhere) and 6.1 (every time I run fstests now I see massive
+> >>>> data corruption).
+> >>>
+> >>> Yup, I see the same thing. fsdax was a train wreck in 6.0 - broken
+> >>> on both ext4 and XFS. Now that I run a quick check on 6.1-rc1, I
+> >>> don't think that has changed at all - I still see lots of kernel
+> >>> warnings, data corruption and "XFS_IOC_CLONE_RANGE: Invalid
+> >>> argument" errors.
+> >>
+> >> Firstly, I think the "XFS_IOC_CLONE_RANGE: Invalid argument" error is
+> >> caused by the restrictions which prevent reflink work together with DAX:
+> >>
+> >> a. fs/xfs/xfs_ioctl.c:1141
+> >> /* Don't allow us to set DAX mode for a reflinked file for now. */
+> >> if ((fa->fsx_xflags & FS_XFLAG_DAX) && xfs_is_reflink_inode(ip))
+> >>          return -EINVAL;
+> >>
+> >> b. fs/xfs/xfs_iops.c:1174
+> >> /* Only supported on non-reflinked files. */
+> >> if (xfs_is_reflink_inode(ip))
+> >>          return false;
+> >>
+> >> These restrictions were removed in "drop experimental warning" patch[1].
+> >>    I think they should be separated from that patch.
+> >>
+> >> [1]
+> >> https://lore.kernel.org/linux-xfs/1663234002-17-1-git-send-email-ruansy.fnst@fujitsu.com/
+> >>
+> >>
+> >> Secondly, how the data corruption happened?
+> > 
+> > No idea - i"m just reporting that lots of fsx tests failed with data
+> > corruptions. I haven't had time to look at why, I'm still trying to
+> > sort out the fix for a different data corruption...
+> > 
+> >> Or which case failed?
+> > 
+> > *lots* of them failed with kernel warnings with reflink turned off:
+> > 
+> > SECTION       -- xfs_dax_noreflink
+> > =========================
+> > Failures: generic/051 generic/068 generic/075 generic/083
+> > generic/112 generic/127 generic/198 generic/231 generic/247
+> > generic/269 generic/270 generic/340 generic/344 generic/388
+> > generic/461 generic/471 generic/476 generic/519 generic/561 xfs/011
+> > xfs/013 xfs/073 xfs/297 xfs/305 xfs/517 xfs/538
+> > Failed 26 of 1079 tests
+> > 
+> > All of those except xfs/073 and generic/471 are failures due to
+> > warnings found in dmesg.
+> > 
+> > With reflink enabled, I terminated the run after g/075, g/091, g/112
+> > and generic/127 reported fsx data corruptions and g/051, g/068,
+> > g/075 and g/083 had reported kernel warnings in dmesg.
+> > 
+> >> Could
+> >> you give me more info (such as mkfs options, xfstests configs)?
+> > 
+> > They are exactly the same as last time I reported these problems.
+> > 
+> > For the "no reflink" test issues:
+> > 
+> > mkfs options are "-m reflink=0,rmapbt=1", mount options "-o
+> > dax=always" for both filesytems.  Config output at start of test
+> > run:
+> > 
+> > SECTION       -- xfs_dax_noreflink
+> > FSTYP         -- xfs (debug)
+> > PLATFORM      -- Linux/x86_64 test3 6.1.0-rc1-dgc+ #1615 SMP PREEMPT_DYNAMIC Wed Oct 19 12:24:16 AEDT 2022
+> > MKFS_OPTIONS  -- -f -m reflink=0,rmapbt=1 /dev/pmem1
+> > MOUNT_OPTIONS -- -o dax=always -o context=system_u:object_r:root_t:s0 /dev/pmem1 /mnt/scratch
+> > 
+> > pmem devices are a pair of fake 8GB pmem regions set up by kernel
+> > CLI via "memmap=8G!15G,8G!24G". I don't have anything special set up
+> > - the kernel config is kept minimal for these VMs - and the only
+> > kernel debug option I have turned on for these specific test runs is
+> > CONFIG_XFS_DEBUG=y.
+> 
+> Thanks for the detailed info.  But, in my environment (and my 
+> colleagues', and our real server with DCPMM) these failure cases (you 
+> mentioned above, in dax+non_reflink mode, with same test options) cannot 
+> reproduce.
+> 
+> Here's our test environment info:
+>   - Ruan's env: fedora 36(v6.0-rc1) on kvm,pmem 2x4G:file backended
+>   - Yang's env: fedora 35(v6.1-rc1) on kvm,pmem 2x1G:memmap=1G!1G,1G!2G
+>   - Server's  : Ubuntu 20.04(v6.0-rc1) real machine,pmem 2x4G:real DCPMM
+> 
+> (To quickly confirm the difference, I just ran the failed 26 cases you 
+> mentioned above.)  Except for generic/471 and generic/519, which failed 
+> even when dax is off, the rest passed.
+> 
+> 
+> We don't want fsdax to be truned off.  Right now, I think the most 
+> important thing is solving the failed cases in dax+non_reflink mode. 
+> So, firstly, I have to reproduce those failures.  Is there any thing 
+> wrong with my test environments?  I konw you are using 'memmap=XXG!YYG' to 
+> simulate pmem.  So, (to Darrick) could you show me your config of dev 
+> environment and the 'testcloud'(I am guessing it's a server with real 
+> nvdimm just like ours)?
 
-syzbot found the following issue on:
+Nope.  Since the announcement of pmem as a product, I have had 15
+minutes of acces to one preproduction prototype server with actual
+optane DIMMs in them.
 
-HEAD commit:    337a0a0b63f1 Merge tag 'net-6.1-rc3-1' of git://git.kernel..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1002c326880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=e91619dd4c11c4960706
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1141be22880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=114e6a22880000
+I have /never/ had access to real hardware to test any of this, so it's
+all configured via libvirt to simulate pmem in qemu:
+https://lore.kernel.org/linux-xfs/YzXsavOWMSuwTBEC@magnolia/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c011f7e4e764/disk-337a0a0b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d019c4ed2ed2/vmlinux-337a0a0b.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/c3f2dcdec39e/mount_0.gz
+/run/mtrdisk/[gh].mem are both regular files on a tmpfs filesystem:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e91619dd4c11c4960706@syzkaller.appspotmail.com
+$ grep mtrdisk /proc/mounts
+none /run/mtrdisk tmpfs rw,relatime,size=82894848k,inode64 0 0
 
-loop0: detected capacity change from 0 to 4192
-================================================================================
-UBSAN: shift-out-of-bounds in fs/nilfs2/the_nilfs.c:449:46
-shift exponent 38983 is too large for 64-bit type 'unsigned long long'
-CPU: 0 PID: 3611 Comm: syz-executor485 Not tainted 6.1.0-rc2-syzkaller-00061-g337a0a0b63f1 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x33d/0x3b0 lib/ubsan.c:322
- nilfs_sb2_bad_offset fs/nilfs2/the_nilfs.c:449 [inline]
- nilfs_load_super_block+0xdf5/0xe00 fs/nilfs2/the_nilfs.c:523
- init_nilfs+0xb7/0x7d0 fs/nilfs2/the_nilfs.c:577
- nilfs_fill_super+0xb1/0x5d0 fs/nilfs2/super.c:1047
- nilfs_mount+0x613/0x9b0 fs/nilfs2/super.c:1317
- legacy_get_tree+0xea/0x180 fs/fs_context.c:610
- vfs_get_tree+0x88/0x270 fs/super.c:1530
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6d8986065a
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff429054d8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f6d8986065a
-RDX: 00000000200000c0 RSI: 0000000020000100 RDI: 00007fff429054f0
-RBP: 00007fff429054f0 R08: 00007fff42905530 R09: 00005555561872c0
-R10: 0000000000010400 R11: 0000000000000286 R12: 0000000000000004
-R13: 00007fff42905530 R14: 000000000000003a R15: 0000000020000770
- </TASK>
-================================================================================
+$ ls -la /run/mtrdisk/[gh].mem
+-rw-r--r-- 1 libvirt-qemu kvm 10739515392 Oct 24 18:09 /run/mtrdisk/g.mem
+-rw-r--r-- 1 libvirt-qemu kvm 10739515392 Oct 24 19:28 /run/mtrdisk/h.mem
 
+--D
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> 
+> 
+> (I just found I only tested on 4G and smaller pmem device.  I'll try the 
+> test on 8G pmem)
+> 
+> > 
+> > THe only difference between the noreflink and reflink runs is that I
+> > drop the "-m reflink=0" mkfs parameter. Otherwise they are identical
+> > and the errors I reported are from back-to-back fstests runs without
+> > rebooting the VM....
+> > 
+> > -Dave.
+> 
+> 
+> --
+> Thanks,
+> Ruan.
