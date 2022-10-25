@@ -2,133 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B49AC60CD38
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFB860CD3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232704AbiJYNRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S232758AbiJYNRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbiJYNR2 (ORCPT
+        with ESMTP id S232749AbiJYNRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:17:28 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE83DCAF4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:17:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 25 Oct 2022 09:17:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87211E4E63
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:17:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666703869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MAsS6j5/KUgYwehdScWVOm+WWLh2WflTE+nFerqwEQQ=;
+        b=iRyHF6+3Wo5qhZvrZrOFIIJvWvxzDHHFUnIz9duFD5JxHgQVhcj5j8IrhP6kFAl9BPQ4xr
+        CodUYcMURRqLLTshL3p/0RVXsVLPAUFJAsrSfju0jJx/4dm0lWUcaTRTMHK4EDuv87UksT
+        hcmg+Kz0OCajr+MjXbHuMUTWtK+WanU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-594-3i9hSQetNHyKsM1G9Lodnw-1; Tue, 25 Oct 2022 09:17:47 -0400
+X-MC-Unique: 3i9hSQetNHyKsM1G9Lodnw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E25671F38C;
-        Tue, 25 Oct 2022 13:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666703845; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J+arnLUOjo5ZmX86eZOgv0maNE0nmXyovqICunRlfp0=;
-        b=vR/ERnDCix69JHYBVMcsqXuQoqbeG8DBXWHAIiYprRHh6q/jHk5UmcEKgUZ8psLpV7VFZm
-        nP5sM4GJ5A3n6rZ9cs8i8Xqq+tYiGCKqsaABYQZ2QouX+CHJqF6QBz+gZImla5AfZ/wNFZ
-        Vd7HbHwbeOP9rZ7AawWq2Toh1/IVz7k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666703845;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=J+arnLUOjo5ZmX86eZOgv0maNE0nmXyovqICunRlfp0=;
-        b=2SkjBjps9LLNefZj3ve25lU3lGaDkoLJeEFYLDvr5ld2IYT2eWYPDj0pv77DE3FWWlPqQa
-        Rg5Vb30SRu7yyLBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B881134CA;
-        Tue, 25 Oct 2022 13:17:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BTTmJOXhV2PoNgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 25 Oct 2022 13:17:25 +0000
-Date:   Tue, 25 Oct 2022 15:17:25 +0200
-Message-ID: <877d0oqbyy.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2] ALSA: rme9652: use explicitly signed char
-In-Reply-To: <CAHmME9p0jDLoma084T30VOiLO2ct-yh1uX5Ru=+BFD9it6CmTA@mail.gmail.com>
-References: <202210250456.vKv5zoLb-lkp@intel.com>
-        <20221025000313.546261-1-Jason@zx2c4.com>
-        <87bkq0s9rw.wl-tiwai@suse.de>
-        <Y1fRvWfcU4NT1HTU@zx2c4.com>
-        <87fsfcqdbx.wl-tiwai@suse.de>
-        <CAHmME9qkJk0vH2n7gz1XFyo-W5EMffGA6Hd4Fd8twKSRWz12nA@mail.gmail.com>
-        <87czagqc8k.wl-tiwai@suse.de>
-        <87a65kqc4e.wl-tiwai@suse.de>
-        <CAHmME9p0jDLoma084T30VOiLO2ct-yh1uX5Ru=+BFD9it6CmTA@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 270621C0878D;
+        Tue, 25 Oct 2022 13:17:47 +0000 (UTC)
+Received: from jtoppins.rdu.csb (unknown [10.22.17.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 65B19C15BAB;
+        Tue, 25 Oct 2022 13:17:46 +0000 (UTC)
+From:   Jonathan Toppins <jtoppins@redhat.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     dzickus@redhat.com, kheib@redhat.com, jtornosm@redhat.com,
+        ihuguet@redhat.com, Ivan Vecera <ivecera@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH next] kbuild: add ability to make source rpm buildable using koji
+Date:   Tue, 25 Oct 2022 09:17:30 -0400
+Message-Id: <5b59fdb7db34f5292b1d138939c6b70b2b2039dd.1666703850.git.jtoppins@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 15:14:54 +0200,
-Jason A. Donenfeld wrote:
-> 
-> On Tue, Oct 25, 2022 at 3:14 PM Takashi Iwai <tiwai@suse.de> wrote:
-> >
-> > On Tue, 25 Oct 2022 15:11:39 +0200,
-> > Takashi Iwai wrote:
-> > >
-> > > On Tue, 25 Oct 2022 14:54:54 +0200,
-> > > Jason A. Donenfeld wrote:
-> > > >
-> > > > On Tue, Oct 25, 2022 at 2:48 PM Takashi Iwai <tiwai@suse.de> wrote:
-> > > > >
-> > > > > On Tue, 25 Oct 2022 14:08:29 +0200,
-> > > > > Jason A. Donenfeld wrote:
-> > > > > >
-> > > > > > On Tue, Oct 25, 2022 at 08:21:55AM +0200, Takashi Iwai wrote:
-> > > > > > > On Tue, 25 Oct 2022 02:03:13 +0200,
-> > > > > > > Jason A. Donenfeld wrote:
-> > > > > > > >
-> > > > > > > > With char becoming unsigned by default, and with `char` alone being
-> > > > > > > > ambiguous and based on architecture, signed chars need to be marked
-> > > > > > > > explicitly as such. This fixes warnings like:
-> > > > > > > >
-> > > > > > > > sound/pci/rme9652/hdsp.c:3953 hdsp_channel_buffer_location() warn: 'hdsp->channel_map[channel]' is unsigned
-> > > > > > > > sound/pci/rme9652/hdsp.c:4153 snd_hdsp_channel_info() warn: impossible condition '(hdsp->channel_map[channel] < 0) => (0-255 < 0)'
-> > > > > > > > sound/pci/rme9652/rme9652.c:1833 rme9652_channel_buffer_location() warn: 'rme9652->channel_map[channel]' is unsigned
-> > > > > > > >
-> > > > > > > > Cc: Jaroslav Kysela <perex@perex.cz>
-> > > > > > > > Cc: Takashi Iwai <tiwai@suse.com>
-> > > > > > > > Cc: alsa-devel@alsa-project.org
-> > > > > > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > > > > >
-> > > > > > > Applied now.  Thanks!
-> > > > > >
-> > > > > > Thanks. For this and the other patch, applied for 6.1 or 6.2?
-> > > > >
-> > > > > I applied for 6.2.  Was it an action that has to be fixed for 6.1?
-> > > > > If so, I still can shuffle.
-> > > >
-> > > > Well, this is code that's broken currently on ARM platforms, for
-> > > > example, where char is already unsigned. So it's arguably a fix for
-> > > > 6.1.
-> > >
-> > > Fair enough, I'll apply for 6.1, then.
-> >
-> > ... and in that case, it deserves for Cc-to-stable, IMO, as it's a fix
-> > to be done for older kernels, too.  Then it'd be clearly a 6.1
-> > material.
-> 
-> Fine by me if you want to add that (for this and the other patch).
+From: Ivan Vecera <ivecera@redhat.com>
 
-OK, done.
+Changes:
+- added new target 'srcrpm-pkg' to generate source rpm
+- added required build tools to spec file
+- removed locally compiled host tools to force their re-compile
 
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+---
+ scripts/Makefile.package | 10 ++++++++++
+ scripts/package/mkspec   |  7 +++++++
+ 2 files changed, 17 insertions(+)
 
-Takashi
+diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+index 8bbcced67c22..e0830a870394 100644
+--- a/scripts/Makefile.package
++++ b/scripts/Makefile.package
+@@ -62,6 +62,16 @@ rpm-pkg:
+ 	+rpmbuild $(RPMOPTS) --target $(UTS_MACHINE)-linux -ta $(KERNELPATH).tar.gz \
+ 	--define='_smp_mflags %{nil}'
+ 
++# srcrpm-pkg
++# ---------------------------------------------------------------------------
++PHONY += srcrpm-pkg
++srcrpm-pkg:
++	$(MAKE) clean
++	$(CONFIG_SHELL) $(MKSPEC) >$(objtree)/kernel.spec
++	$(call cmd,src_tar,$(KERNELPATH),kernel.spec)
++	+rpmbuild $(RPMOPTS) --target $(UTS_MACHINE) -ts $(KERNELPATH).tar.gz \
++	--define='_smp_mflags %{nil}' --define='_srcrpmdir $(srctree)'
++
+ # binrpm-pkg
+ # ---------------------------------------------------------------------------
+ PHONY += binrpm-pkg
+diff --git a/scripts/package/mkspec b/scripts/package/mkspec
+index 70392fd2fd29..dda00a948a01 100755
+--- a/scripts/package/mkspec
++++ b/scripts/package/mkspec
+@@ -33,6 +33,8 @@ EXCLUDES="$RCS_TAR_IGNORE --exclude=*vmlinux* --exclude=*.mod \
+ --exclude=*.o --exclude=*.ko --exclude=*.cmd --exclude=Documentation \
+ --exclude=.config.old --exclude=.missing-syscalls.d --exclude=*.s"
+ 
++test -n "$LOCALVERSION" && MAKE="$MAKE LOCALVERSION=$LOCALVERSION"
++
+ # We can label the here-doc lines for conditional output to the spec file
+ #
+ # Labels:
+@@ -49,6 +51,9 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
+ 	URL: https://www.kernel.org
+ $S	Source: kernel-$__KERNELRELEASE.tar.gz
+ 	Provides: $PROVIDES
++$S	BuildRequires: bc binutils bison dwarves elfutils-libelf-devel flex
++$S	BuildRequires: gcc make openssl openssl-devel perl python3 rsync
++
+ 	# $UTS_MACHINE as a fallback of _arch in case
+ 	# /usr/lib/rpm/platform/*/macros was not included.
+ 	%define _arch %{?_arch:$UTS_MACHINE}
+@@ -80,6 +85,8 @@ $S$M	against the $__KERNELRELEASE kernel package.
+ $S$M
+ $S	%prep
+ $S	%setup -q
++$S	rm -f scripts/basic/fixdep scripts/kconfig/conf
++$S	rm -f tools/objtool/{fixdep,objtool}
+ $S
+ $S	%build
+ $S	$MAKE %{?_smp_mflags} KBUILD_BUILD_VERSION=%{release}
+-- 
+2.31.1
+
