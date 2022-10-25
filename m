@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25FF860D298
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F4860D29A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbiJYRhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 13:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
+        id S231967AbiJYRhO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 13:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiJYRg7 (ORCPT
+        with ESMTP id S231429AbiJYRg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Oct 2022 13:36:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB16510C1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:36:56 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EC3D64;
+        Tue, 25 Oct 2022 10:36:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63ACE61A2F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 17:36:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59972C433D7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9D7BB81E5A;
+        Tue, 25 Oct 2022 17:36:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 046A2C43141;
         Tue, 25 Oct 2022 17:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666719415;
-        bh=TdXFXcgq2EM24y0mmvXtXkdjHMEmMaCZawqMFxCOKU8=;
+        s=k20201202; t=1666719416;
+        bh=4NBEQVWjkZzG2RZ0IZhDEcaAZKCJsWQ5ei6FDrh1eE4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bKpdkSIrpvAqCeR5vix1iWp5kJrdJW19Utrml/Ra41U7LQX2zLCZqhdbJQieGIepi
-         HFNsWZm4WYDd3CYCDDOoe0suLK4DFct0N9bLT4XHzDy8tJnastMR7kQxduDavDmJ0Z
-         iX7W9T4FUObqrP/8Ah67Uo0elgleXvQzhWQjv1y7rKwhSgK3cTmAsUck/bWI4M1L2G
-         mrOSA8PWFFXUkJaPZ+y2a1WyTpJ1cAW5hXFoQ0/AMtHdNYuNax116Muy19KAgRftt5
-         0dCmyY8FBeMHh95i2iQdvHFC5TAo94VHGcO7aFZOJk9F29zCuEti4Xke78jyL30PxH
-         oNQeEqFD0KNZw==
+        b=D13bipI5+ZFOlmA3P+OZjs7yvhTB1CxtPiSEjR/7eMpoGmFaJlnmC1ahl0M6VzJ2b
+         jzRwMLGRPLeeuI1mE/u6kGnFuKsmODPXEkwnOJ2p3h7moHkT+/Is837OF5KYofdczS
+         N7NQXo1Sipv9kc4PzBgnOGGPh1ce/xZFIxI83TXJj3DSyT8+z0pkWXOHGdDXNpA7J6
+         jyYdXgaYBRg6mtgKKzq22VwxIA76VBnvpnAJEO/j2ps/61WVED1Su5fagGUzlO/mZd
+         PvCuTm5s7xP/RTRQPcjCc3+h/+7qY1/4fvqSrOpkUUHcyfFSN3HTT8MO/qpgHGY6tP
+         SQ+BW/725/C5Q==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 1/4] mm/damon/reclaim: enable and disable synchronously
-Date:   Tue, 25 Oct 2022 17:36:47 +0000
-Message-Id: <20221025173650.90624-2-sj@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH 2/4] selftests/damon: add tests for DAMON_RECLAIM's enabled parameter
+Date:   Tue, 25 Oct 2022 17:36:48 +0000
+Message-Id: <20221025173650.90624-3-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221025173650.90624-1-sj@kernel.org>
 References: <20221025173650.90624-1-sj@kernel.org>
@@ -46,114 +47,84 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Writing a value to DAMON_RECLAIM's 'enabled' parameter turns on or off
-DAMON in an ansychronous way.  This means the parameter cannot be used
-to read the current status of DAMON_RECLAIM.  'kdamond_pid' parameter
-should be used instead for the purpose.  The documentation is easy to be
-read as it works in a synchronous way, so it is a little bit confusing.
-It also makes the user space tooling dirty.
-
-There's no real reason to have the asynchronous behavior, though.
-Simply make the parameter works synchronously, rather than updating the
-document.
+Adds simple test cases for DAMON_RECLAIM's 'enabled' parameter.  Those
+tests are focusing on the synchronous behavior of DAMON_RECLAIM enabling
+and disabling.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/reclaim.c | 53 ++++++++++++++++++++--------------------------
- 1 file changed, 23 insertions(+), 30 deletions(-)
+ tools/testing/selftests/damon/Makefile   |  1 +
+ tools/testing/selftests/damon/reclaim.sh | 42 ++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
+ create mode 100755 tools/testing/selftests/damon/reclaim.sh
 
-diff --git a/mm/damon/reclaim.c b/mm/damon/reclaim.c
-index e14eb30c01f4..e57604bec06d 100644
---- a/mm/damon/reclaim.c
-+++ b/mm/damon/reclaim.c
-@@ -9,7 +9,6 @@
+diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
+index a1fa2eff8192..dbbf18cb3e6b 100644
+--- a/tools/testing/selftests/damon/Makefile
++++ b/tools/testing/selftests/damon/Makefile
+@@ -8,5 +8,6 @@ TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
+ TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
+ TEST_PROGS += debugfs_duplicate_context_creation.sh
+ TEST_PROGS += sysfs.sh
++TEST_PROGS += reclaim.sh
  
- #include <linux/damon.h>
- #include <linux/module.h>
--#include <linux/workqueue.h>
- 
- #include "modules-common.h"
- 
-@@ -181,38 +180,31 @@ static int damon_reclaim_turn(bool on)
- 	return 0;
- }
- 
--static struct delayed_work damon_reclaim_timer;
--static void damon_reclaim_timer_fn(struct work_struct *work)
--{
--	static bool last_enabled;
--	bool now_enabled;
--
--	now_enabled = enabled;
--	if (last_enabled != now_enabled) {
--		if (!damon_reclaim_turn(now_enabled))
--			last_enabled = now_enabled;
--		else
--			enabled = last_enabled;
--	}
--}
--static DECLARE_DELAYED_WORK(damon_reclaim_timer, damon_reclaim_timer_fn);
--
--static bool damon_reclaim_initialized;
--
- static int damon_reclaim_enabled_store(const char *val,
- 		const struct kernel_param *kp)
- {
--	int rc = param_set_bool(val, kp);
-+	bool is_enabled = enabled;
-+	bool enable;
-+	int err;
- 
--	if (rc < 0)
--		return rc;
-+	err = strtobool(val, &enable);
-+	if (err)
-+		return err;
- 
--	/* system_wq might not initialized yet */
--	if (!damon_reclaim_initialized)
--		return rc;
-+	if (is_enabled == enable)
-+		return 0;
- 
--	schedule_delayed_work(&damon_reclaim_timer, 0);
--	return 0;
-+	/* Called before init function.  The function will handle this. */
-+	if (!ctx)
-+		goto set_param_out;
+ include ../lib.mk
+diff --git a/tools/testing/selftests/damon/reclaim.sh b/tools/testing/selftests/damon/reclaim.sh
+new file mode 100755
+index 000000000000..78dbc2334cbe
+--- /dev/null
++++ b/tools/testing/selftests/damon/reclaim.sh
+@@ -0,0 +1,42 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +
-+	err = damon_reclaim_turn(enable);
-+	if (err)
-+		return err;
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
 +
-+set_param_out:
-+	enabled = enable;
-+	return err;
- }
- 
- static const struct kernel_param_ops enabled_param_ops = {
-@@ -262,10 +254,11 @@ static int __init damon_reclaim_init(void)
- 	ctx->callback.after_wmarks_check = damon_reclaim_after_wmarks_check;
- 	ctx->callback.after_aggregation = damon_reclaim_after_aggregation;
- 
--	schedule_delayed_work(&damon_reclaim_timer, 0);
-+	/* 'enabled' has set before this function, probably via command line */
-+	if (enabled)
-+		err = damon_reclaim_turn(true);
- 
--	damon_reclaim_initialized = true;
--	return 0;
-+	return err;
- }
- 
- module_init(damon_reclaim_init);
++if [ $EUID -ne 0 ]
++then
++	echo "Run as root"
++	exit $ksft_skip
++fi
++
++damon_reclaim_enabled="/sys/module/damon_reclaim/parameters/enabled"
++if [ ! -f "$damon_reclaim_enabled" ]
++then
++	echo "No 'enabled' file.  Maybe DAMON_RECLAIM not built"
++	exit $ksft_skip
++fi
++
++nr_kdamonds=$(pgrep kdamond | wc -l)
++if [ "$nr_kdamonds" -ne 0 ]
++then
++	echo "Another kdamond is running"
++	exit $ksft_skip
++fi
++
++echo Y > "$damon_reclaim_enabled"
++
++nr_kdamonds=$(pgrep kdamond | wc -l)
++if [ "$nr_kdamonds" -ne 1 ]
++then
++	echo "kdamond is not turned on"
++	exit 1
++fi
++
++echo N > "$damon_reclaim_enabled"
++nr_kdamonds=$(pgrep kdamond | wc -l)
++if [ "$nr_kdamonds" -ne 0 ]
++then
++	echo "kdamond is not turned off"
++	exit 1
++fi
 -- 
 2.25.1
 
