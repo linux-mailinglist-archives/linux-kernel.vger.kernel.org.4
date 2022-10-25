@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B26A60D6B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F5160D6B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbiJYWBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S230327AbiJYWBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbiJYWBN (ORCPT
+        with ESMTP id S231602AbiJYWBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:01:13 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B44284E7C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:01:12 -0700 (PDT)
+        Tue, 25 Oct 2022 18:01:40 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23F266866
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:01:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666735272; x=1698271272;
+  t=1666735299; x=1698271299;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=CI7ouPnQbhvab5W2CvjMw4Hb6IV4gsALSSktGnfsUlM=;
-  b=kyZHRruaKo4yN0foyIagKzHY0wRb/uMf8nqoAa1eO8f9G7x3nOMUNB2A
-   rnBUkB5vbFVVnfcvPVQrKAxBO5APj50mfGu8sxp2C+vMXMmDTij9bveGW
-   m0tu2ezpGMJixENqBZXFnWuxjUNZ8FCE61cT0lbrnLuexGCo7V0ceAq01
-   ZHp9OKt4RCpsKMpRHWyPqGljx5UZmSa9jt5QpRKuYsJflmyEl0fUxjrNH
-   7xzdt9TIcXOnoqNBk0zYmg0FtpmFwG/wBuZS6mmZk7omNrWl3EJi44M0l
-   4bEj2T8WCKLIxq02DcXt24nqOuyJm5YYsLiPULrqIM63X2SEcHeBRdK4k
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="369868501"
+  bh=XPIZHNC/KLHq2wwLZzF0y3YfGyClXuQbuFbE/PrASB8=;
+  b=hiba0HBg34cL+cSjUrsqkirFMFnBcnmethpdc/+FOUBOCspDpwoBADoM
+   amu/d0w5XVaPV08oD+4NoKSlxkigt0lBoftr7FkzNqxfOTvXbuvdzT4Hh
+   ZP8cQQgFCov51hANsSxTgceq90owcz8HrAL/60fKfFQtelq4sjS166fAU
+   Jl9G0DzM1FCtL1lUIasxxQA/CKzZFOSMkWAjKizlKche5lnxUNEGiN+TA
+   YLzW2gm0jccrxVi3JzPchoCsVqrG2so9uLBBkRpjJxz+BpqvLM3qsOA9M
+   mw4l4lCgklWCvhOdtHiXn9kgfLzDNoFEEPUe95PUrpPcB1gQCdfJaMIvi
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="305416718"
 X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="369868501"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 15:01:11 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="876964588"
+   d="scan'208";a="305416718"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 15:01:39 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="737000608"
 X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="876964588"
+   d="scan'208";a="737000608"
 Received: from cckuo-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.218.44])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 15:01:10 -0700
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 15:01:39 -0700
 From:   ira.weiny@intel.com
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Peter Xu <peterx@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
         Matthew Wilcox <willy@infradead.org>,
-        kernel test robot <yujie.liu@intel.com>, linux-mm@kvack.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V2] mm/shmem: Ensure proper fallback if page faults
-Date:   Tue, 25 Oct 2022 15:01:08 -0700
-Message-Id: <20221025220108.2366043-1-ira.weiny@intel.com>
+Subject: [PATCH V2] mm/userfaultfd: Replace kmap/kmap_atomic() with kmap_local_page()
+Date:   Tue, 25 Oct 2022 15:01:36 -0700
+Message-Id: <20221025220136.2366143-1-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,16 +63,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Ira Weiny <ira.weiny@intel.com>
 
-The kernel test robot flagged a recursive lock as a result of a
-conversion from kmap_atomic() to kmap_local_folio()[Link]
+kmap() and kmap_atomic() are being deprecated in favor of
+kmap_local_page() which is appropriate for any thread local context.[1]
 
-The cause was due to the code depending on the kmap_atomic() side effect
-of disabling page faults.  In that case the code expects the fault to
-fail and take the fallback case.
+A recent locking bug report with userfaultfd showed that the conversion
+of the kmap_atomic()'s in those code flows requires care with regard to
+the prevention of deadlock.[2]
 
-git archaeology implied that the recursion may not be an actual bug.[1]
+git archaeology implied that the recursion may not be an actual bug.[3]
 However, depending on the implementation of the mmap_lock and the
-condition of the call there may still be a deadlock.[2]  So this is not
+condition of the call there may still be a deadlock.[4]  So this is not
 purely a lockdep issue.  Considering a single threaded call stack there
 are 3 options.
 
@@ -105,69 +103,85 @@ process B thread 1 blocks taking read lock on process A
 Now all four threads are blocked waiting for each other."
 
 Regardless using pagefault_disable() ensures that no matter what locking
-implementation is used a deadlock will not occur.  Add an explicit
-pagefault_disable() and a big comment to explain this for future souls
-looking at this code.
+implementation is used a deadlock will not occur.
 
-[1] https://lore.kernel.org/all/Y1MymJ%2FINb45AdaY@iweiny-desk3/
-[2] https://lore.kernel.org/lkml/Y1bXBtGTCym77%2FoD@casper.infradead.org/
+Complete kmap conversion in userfaultfd by replacing the kmap() and
+kmap_atomic() calls with kmap_local_page().  When replacing the
+kmap_atomic() call ensure page faults continue to be disabled to support
+the correct fall back behavior and add a comment to inform future souls
+of the requirement.
 
-Fixes: 7a7256d5f512 ("shmem: convert shmem_mfill_atomic_pte() to use a folio")
+[1] https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com/
+[2] https://lore.kernel.org/all/Y1Mh2S7fUGQ%2FiKFR@iweiny-desk3/
+[3] https://lore.kernel.org/all/Y1MymJ%2FINb45AdaY@iweiny-desk3/
+[4] https://lore.kernel.org/lkml/Y1bXBtGTCym77%2FoD@casper.infradead.org/
+
+Cc: Matthew Wilcox <willy@infradead.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: Peter Xu <peterx@redhat.com>
 Cc: Andrea Arcangeli <aarcange@redhat.com>
-Reported-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/r/202210211215.9dc6efb5-yujie.liu@intel.com
+Cc: Peter Xu <peterx@redhat.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
 ---
 Changes from V1
 	Update the commit message and comment based on additional
-	discussion.
+	discussion
 
-Thanks to Matt for pointing out the deadlock potential despite recursive
-reads.
-Thanks to Matt and Andrew for initial diagnosis.
-Thanks to Randy for pointing out C code needs ';'  :-D
-Thanks to Andrew for suggesting an elaborate comment
-Thanks to Peter for pointing out that the mm's may be the same.
+	Thanks to Matt for pointing out the deadlock potential despite
+	recursive reads.
 ---
- mm/shmem.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ mm/userfaultfd.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 8280a5cb48df..c1d8b8a1aa3b 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2424,9 +2424,26 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index e24e8a47ce8a..3d0fef3980b3 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -157,11 +157,28 @@ static int mcopy_atomic_pte(struct mm_struct *dst_mm,
+ 		if (!page)
+ 			goto out;
  
- 		if (!zeropage) {	/* COPY */
- 			page_kaddr = kmap_local_folio(folio, 0);
-+			/*
-+			 * The read mmap_lock is held here.  Despite the
-+			 * mmap_lock being read recursive a deadlock is still
-+			 * possible if a writer has taken a lock.  For example:
-+			 *
-+			 * process A thread 1 takes read lock on own mmap_lock
-+			 * process A thread 2 calls mmap, blocks taking write lock
-+			 * process B thread 1 takes page fault, read lock on own mmap lock
-+			 * process B thread 2 calls mmap, blocks taking write lock
-+			 * process A thread 1 blocks taking read lock on process B
-+			 * process B thread 1 blocks taking read lock on process A
-+			 *
-+			 * Disable page faults to prevent potential deadlock
-+			 * and retry the copy outside the mmap_lock.
-+			 */
-+			pagefault_disable();
- 			ret = copy_from_user(page_kaddr,
- 					     (const void __user *)src_addr,
+-		page_kaddr = kmap_atomic(page);
++		page_kaddr = kmap_local_page(page);
++		/*
++		 * The read mmap_lock is held here.  Despite the
++		 * mmap_lock being read recursive a deadlock is still
++		 * possible if a writer has taken a lock.  For example:
++		 *
++		 * process A thread 1 takes read lock on own mmap_lock
++		 * process A thread 2 calls mmap, blocks taking write lock
++		 * process B thread 1 takes page fault, read lock on own mmap lock
++		 * process B thread 2 calls mmap, blocks taking write lock
++		 * process A thread 1 blocks taking read lock on process B
++		 * process B thread 1 blocks taking read lock on process A
++		 *
++		 * Disable page faults to prevent potential deadlock
++		 * and retry the copy outside the mmap_lock.
++		 */
++		pagefault_disable();
+ 		ret = copy_from_user(page_kaddr,
+ 				     (const void __user *) src_addr,
+ 				     PAGE_SIZE);
+-		kunmap_atomic(page_kaddr);
++		pagefault_enable();
++		kunmap_local(page_kaddr);
+ 
+ 		/* fallback to copy_from_user outside mmap_lock */
+ 		if (unlikely(ret)) {
+@@ -646,11 +663,11 @@ static __always_inline ssize_t __mcopy_atomic(struct mm_struct *dst_mm,
+ 			mmap_read_unlock(dst_mm);
+ 			BUG_ON(!page);
+ 
+-			page_kaddr = kmap(page);
++			page_kaddr = kmap_local_page(page);
+ 			err = copy_from_user(page_kaddr,
+ 					     (const void __user *) src_addr,
  					     PAGE_SIZE);
-+			pagefault_enable();
- 			kunmap_local(page_kaddr);
- 
- 			/* fallback to copy_from_user outside mmap_lock */
+-			kunmap(page);
++			kunmap_local(page_kaddr);
+ 			if (unlikely(err)) {
+ 				err = -EFAULT;
+ 				goto out;
 -- 
 2.37.2
 
