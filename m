@@ -2,144 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A923E60D3A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51A060D3AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiJYSiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 14:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52744 "EHLO
+        id S232489AbiJYSiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 14:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJYSiK (ORCPT
+        with ESMTP id S232073AbiJYSin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:38:10 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C1EF036E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:38:09 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id j12so11725630plj.5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j6v7OmtMJ2b16XOxoV0FAPi5R9UZMGGxZ5W+ahrXitU=;
-        b=acruGIdn9/xBNnQh1BycNFAI8FriRd/SRPwLinDXVN7o5iRN9oVVanxX4jocckw8KE
-         rrBPuGxGWZ6Cez1O8LJl8D6ply4tTfSQNhWiQMsDvh5dJmerpIlgmpxfcO7HCTqyhiz1
-         5iKemh60aO1Vx52mirB7pUeRtXXBIv5O+XBxQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j6v7OmtMJ2b16XOxoV0FAPi5R9UZMGGxZ5W+ahrXitU=;
-        b=IT+4CtgfeGkPJRiq9JefkKFN3Diwoa7TX25vzOj1ppgUx8aYT/3ev24PO5oGdB8wmv
-         tQa84XjuhNdVD9NMUoxpSvEQtR7HeN2n2H+6jSPOSavXQ1+OaGEQC8t9K+egFGT78j5v
-         gRXtYXau2RcTtfbNEmvPGeFohOm0boL4XHtaArxR47PnqJc5oKXFPDMlGGlpdPi++SFE
-         gHgfzKu4qq7kofKcyxCynavRk6moRriflFnllQtzZo7v7Ekbv/jms8bJZS+JcQKj4+HA
-         26hLmyKhNqnrU1ixOyczzoHt6RoSpYJr8U+3cc4XzeHCqSivoH/QzWd0SlLgy0hGVKMS
-         MnWA==
-X-Gm-Message-State: ACrzQf1mZgAuA7vyyswWfF5MvoktONPtzfXVQ/v12y9k43ca+oLII0tt
-        cRFed+xU7NPHHmO5FjBlV+R3dQ==
-X-Google-Smtp-Source: AMsMyM5rGUo3WGRSfCNWAsvk0fN3/AawwDye31UvQzmNmzr7avz0RZdscsKFX344zjBDmEmPlJNpAA==
-X-Received: by 2002:a17:903:181:b0:185:5696:97c2 with SMTP id z1-20020a170903018100b00185569697c2mr39858718plg.160.1666723088910;
-        Tue, 25 Oct 2022 11:38:08 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id m3-20020a63fd43000000b004393c5a8006sm1568091pgj.75.2022.10.25.11.38.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 11:38:08 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 11:38:06 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] mm: Make ksize() a reporting-only function
-Message-ID: <202210251125.BAE72214E2@keescook>
-References: <20221022180455.never.023-kees@kernel.org>
- <fabffcfd-4e7f-a4b8-69ac-2865ead36598@suse.cz>
+        Tue, 25 Oct 2022 14:38:43 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E41DF53D2;
+        Tue, 25 Oct 2022 11:38:42 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-12-207-nat.elisa-mobile.fi [85.76.12.207])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B41C58A9;
+        Tue, 25 Oct 2022 20:38:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1666723120;
+        bh=+fDemZWJ9BwDUYADwraNb69Z+e4JWb/6Gqb5xaNyzLk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oxd4zU4d21619ybOetl24mVP6I07btNjUUY4QrCXZuJKdz4z8ApF7mZa2J33vOAOS
+         YPR7eCGWe3RfktFxk2PJXSjD9oVqOCDmk027t3x4fT/m9eLXTrdbF4EooVPaQot1/b
+         xjBJ53sk9QKthu1hakbFrmKQ79SkVcaR6MLiUGp0=
+Date:   Tue, 25 Oct 2022 21:38:12 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] media: uvcvideo: Handle errors from calls to
+ usb_string
+Message-ID: <Y1gtFNPYmegewAGH@pendragon.ideasonboard.com>
+References: <20221025-usb-string-v1-0-4c351b6907bb@chromium.org>
+ <20221025-usb-string-v1-1-4c351b6907bb@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <fabffcfd-4e7f-a4b8-69ac-2865ead36598@suse.cz>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221025-usb-string-v1-1-4c351b6907bb@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 01:53:54PM +0200, Vlastimil Babka wrote:
-> On 10/22/22 20:08, Kees Cook wrote:
-> > With all "silently resizing" callers of ksize() refactored, remove the
-> > logic in ksize() that would allow it to be used to effectively change
-> > the size of an allocation (bypassing __alloc_size hints, etc). Users
-> > wanting this feature need to either use kmalloc_size_roundup() before an
-> > allocation, or use krealloc() directly.
-> > 
-> > For kfree_sensitive(), move the unpoisoning logic inline. Replace the
-> > some of the partially open-coded ksize() in __do_krealloc with ksize()
-> > now that it doesn't perform unpoisoning.
-> > 
-> > [...]
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
+Hi Ricardo and Guenter,
+
+Thank you for the patch.
+
+On Tue, Oct 25, 2022 at 04:41:01PM +0200, Ricardo Ribalda wrote:
+> From: Guenter Roeck <linux@roeck-us.net>
 > 
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-Thanks!
-
-> > ---
-> > This requires at least this be landed first:
-> > https://lore.kernel.org/lkml/20221021234713.you.031-kees@kernel.org/
+> On a Webcam from Quanta, we see the following error.
 > 
-> Don't we need all parts to have landed first, even if the skbuff one is the
-> most prominent?
+> usb 3-5: New USB device found, idVendor=0408, idProduct=30d2, bcdDevice= 0.03
+> usb 3-5: New USB device strings: Mfr=3, Product=1, SerialNumber=2
+> usb 3-5: Product: USB2.0 HD UVC WebCam
+> usb 3-5: Manufacturer: Quanta
+> usb 3-5: SerialNumber: 0x0001
+> ...
+> uvcvideo: Found UVC 1.10 device USB2.0 HD UVC WebCam (0408:30d2)
+> uvcvideo: Failed to initialize entity for entity 5
+> uvcvideo: Failed to register entities (-22).
+> 
+> The Webcam reports an entity of type UVC_VC_EXTENSION_UNIT. It reports a
+> string index of '7' associated with that entity. The attempt to read that
+> string from the camera fails with error -32 (-EPIPE). usb_string() returns
+> that error, but it is ignored. As result, the entity name is empty. This
+> later causes v4l2_device_register_subdev() to return -EINVAL, and no
+> entities are registered as result.
+> 
+> While this appears to be a firmware problem with the camera, the kernel
+> should still handle the situation gracefully. To do that, check the return
+> value from usb_string(). If it reports an error, assign the entity's
+> default name.
 
-Yes, though, I suspect there will be some cases we couldn't easily find.
+Sounds good. The perfect world in which firmwares could be fixed doesn't
+exist.
 
-Here are the prerequisites I'm aware of:
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 215fb483efb0..828c443faaa9 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -879,10 +879,8 @@ static int uvc_parse_vendor_control(struct uvc_device *dev,
+>  					       + n;
+>  		memcpy(unit->extension.bmControls, &buffer[23+p], 2*n);
+>  
+> -		if (buffer[24+p+2*n] != 0)
+> -			usb_string(udev, buffer[24+p+2*n], unit->name,
+> -				   sizeof(unit->name));
+> -		else
+> +		if (buffer[24+p+2*n] == 0 ||
+> +		    usb_string(udev, buffer[24+p+2*n], unit->name, sizeof(unit->name)) < 0)
+>  			sprintf(unit->name, "Extension %u", buffer[3]);
 
-in -next:
-  36875a063b5e ("net: ipa: Proactively round up to kmalloc bucket size")
-  ab3f7828c979 ("openvswitch: Use kmalloc_size_roundup() to match ksize() usage")
-  d6dd508080a3 ("bnx2: Use kmalloc_size_roundup() to match ksize() usage")
+There's quite a bit of common code between all the cases. I'll submit a
+patch that refactors it on top. There's thus no need for nitpicking
+here, so
 
-reviewed, waiting to land (should I take these myself?)
-  btrfs: send: Proactively round up to kmalloc bucket size
-    https://lore.kernel.org/lkml/20220923202822.2667581-8-keescook@chromium.org/
-  dma-buf: Proactively round up to kmalloc bucket size
-    https://lore.kernel.org/lkml/20221018090858.never.941-kees@kernel.org/
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-partially reviewed:
-  igb: Proactively round up to kmalloc bucket size
-    https://lore.kernel.org/lkml/20221018092340.never.556-kees@kernel.org/
-
-unreviewed:
-  coredump: Proactively round up to kmalloc bucket size
-    https://lore.kernel.org/lkml/20221018090701.never.996-kees@kernel.org/
-  devres: Use kmalloc_size_roundup() to match ksize() usage
-    https://lore.kernel.org/lkml/20221018090406.never.856-kees@kernel.org/
-
-needs updating:
-  mempool: Use kmalloc_size_roundup() to match ksize() usage
-    https://lore.kernel.org/lkml/20221018090323.never.897-kees@kernel.org/
-  bpf: Use kmalloc_size_roundup() to match ksize() usage
-    https://lore.kernel.org/lkml/20221018090550.never.834-kees@kernel.org/
+>  
+>  		list_add_tail(&unit->list, &dev->entities);
+> @@ -1006,15 +1004,15 @@ static int uvc_parse_standard_control(struct uvc_device *dev,
+>  			memcpy(term->media.bmTransportModes, &buffer[10+n], p);
+>  		}
+>  
+> -		if (buffer[7] != 0)
+> -			usb_string(udev, buffer[7], term->name,
+> -				   sizeof(term->name));
+> -		else if (UVC_ENTITY_TYPE(term) == UVC_ITT_CAMERA)
+> -			sprintf(term->name, "Camera %u", buffer[3]);
+> -		else if (UVC_ENTITY_TYPE(term) == UVC_ITT_MEDIA_TRANSPORT_INPUT)
+> -			sprintf(term->name, "Media %u", buffer[3]);
+> -		else
+> -			sprintf(term->name, "Input %u", buffer[3]);
+> +		if (buffer[7] == 0 ||
+> +		    usb_string(udev, buffer[7], term->name, sizeof(term->name)) < 0) {
+> +			if (UVC_ENTITY_TYPE(term) == UVC_ITT_CAMERA)
+> +				sprintf(term->name, "Camera %u", buffer[3]);
+> +			if (UVC_ENTITY_TYPE(term) == UVC_ITT_MEDIA_TRANSPORT_INPUT)
+> +				sprintf(term->name, "Media %u", buffer[3]);
+> +			else
+> +				sprintf(term->name, "Input %u", buffer[3]);
+> +		}
+>  
+>  		list_add_tail(&term->list, &dev->entities);
+>  		break;
+> @@ -1047,10 +1045,8 @@ static int uvc_parse_standard_control(struct uvc_device *dev,
+>  
+>  		memcpy(term->baSourceID, &buffer[7], 1);
+>  
+> -		if (buffer[8] != 0)
+> -			usb_string(udev, buffer[8], term->name,
+> -				   sizeof(term->name));
+> -		else
+> +		if (buffer[8] == 0 ||
+> +		    usb_string(udev, buffer[8], term->name, sizeof(term->name)) < 0)
+>  			sprintf(term->name, "Output %u", buffer[3]);
+>  
+>  		list_add_tail(&term->list, &dev->entities);
+> @@ -1072,10 +1068,8 @@ static int uvc_parse_standard_control(struct uvc_device *dev,
+>  
+>  		memcpy(unit->baSourceID, &buffer[5], p);
+>  
+> -		if (buffer[5+p] != 0)
+> -			usb_string(udev, buffer[5+p], unit->name,
+> -				   sizeof(unit->name));
+> -		else
+> +		if (buffer[5+p] == 0 ||
+> +		    usb_string(udev, buffer[5+p], unit->name, sizeof(unit->name)) < 0)
+>  			sprintf(unit->name, "Selector %u", buffer[3]);
+>  
+>  		list_add_tail(&unit->list, &dev->entities);
+> @@ -1105,10 +1099,8 @@ static int uvc_parse_standard_control(struct uvc_device *dev,
+>  		if (dev->uvc_version >= 0x0110)
+>  			unit->processing.bmVideoStandards = buffer[9+n];
+>  
+> -		if (buffer[8+n] != 0)
+> -			usb_string(udev, buffer[8+n], unit->name,
+> -				   sizeof(unit->name));
+> -		else
+> +		if (buffer[8+n] == 0 ||
+> +		    usb_string(udev, buffer[8+n], unit->name, sizeof(unit->name)) < 0)
+>  			sprintf(unit->name, "Processing %u", buffer[3]);
+>  
+>  		list_add_tail(&unit->list, &dev->entities);
+> @@ -1136,10 +1128,8 @@ static int uvc_parse_standard_control(struct uvc_device *dev,
+>  		unit->extension.bmControls = (u8 *)unit + sizeof(*unit);
+>  		memcpy(unit->extension.bmControls, &buffer[23+p], n);
+>  
+> -		if (buffer[23+p+n] != 0)
+> -			usb_string(udev, buffer[23+p+n], unit->name,
+> -				   sizeof(unit->name));
+> -		else
+> +		if (buffer[23+p+n] == 0 ||
+> +		    usb_string(udev, buffer[23+p+n], unit->name, sizeof(unit->name)) < 0)
+>  			sprintf(unit->name, "Extension %u", buffer[3]);
+>  
+>  		list_add_tail(&unit->list, &dev->entities);
+> 
 
 -- 
-Kees Cook
+Regards,
+
+Laurent Pinchart
