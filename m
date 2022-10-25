@@ -2,69 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A6760C3A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8C260C3A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiJYGJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
+        id S231156AbiJYGLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbiJYGJw (ORCPT
+        with ESMTP id S229649AbiJYGL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:09:52 -0400
-Received: from out30-42.freemail.mail.aliyun.com (out30-42.freemail.mail.aliyun.com [115.124.30.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884C91CB16
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:09:49 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VT1bVx1_1666678185;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VT1bVx1_1666678185)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 14:09:46 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     Felix.Kuehling@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH -next] drm/amdkfd: clean up some inconsistent indentings
-Date:   Tue, 25 Oct 2022 14:09:44 +0800
-Message-Id: <20221025060944.31705-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 25 Oct 2022 02:11:29 -0400
+X-Greylist: delayed 65 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 23:11:27 PDT
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43186D873
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:11:27 -0700 (PDT)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20221025061020ea657f904c29eba2e4
+        for <linux-kernel@vger.kernel.org>;
+        Tue, 25 Oct 2022 08:10:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=fFrmI8K5lGuSst31g/cJjHTyF5NH3SrLB7GvM1NU+xc=;
+ b=i0VJrI7xQzuVdDbAyuqhX+zWiPv9qjfAmctbxRStD5rp+d4TRYdVSCyuI5p+HLyavvaQsO
+ RR4DU4o8qqZhBn4tqviQx6SD+4ws0dG9a1qUhoyd/KwfAH649w9X0vzA2uLCf8/fqs06ocnh
+ Wn2GZla+5gJNG7poYXiGkuo3pJ34Q=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     pchelkin@ispras.ru
+Cc:     daniel.starke@siemens.com, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, khoroshilov@ispras.ru,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        pavel@ucw.cz
+Subject: Re: [PATCH 2/2] Revert "tty: n_gsm: replace kicktimer with delayed_work"
+Date:   Tue, 25 Oct 2022 08:10:06 +0200
+Message-Id: <20221025061006.2311-1-daniel.starke@siemens.com>
+In-Reply-To: <20221008110221.13645-3-pchelkin@ispras.ru>
+References: <20221008110221.13645-3-pchelkin@ispras.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_migrate.c:331 svm_migrate_copy_to_vram() warn: inconsistent indenting
+The revert looks correct from my point of view.
+I recommend to add it.
 
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2537
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Reviewed-by: Daniel Starke <daniel.starke@siemens.com>
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-index 20d6b2578927..cddf259875c0 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-@@ -328,8 +328,7 @@ svm_migrate_copy_to_vram(struct amdgpu_device *adev, struct svm_range *prange,
- 
- 		dst[i] = cursor.start + (j << PAGE_SHIFT);
- 		migrate->dst[i] = svm_migrate_addr_to_pfn(adev, dst[i]);
--			svm_migrate_get_vram_page(&kfddev->pgmap, prange,
--						  migrate->dst[i]);
-+		svm_migrate_get_vram_page(&kfddev->pgmap, prange, migrate->dst[i]);
- 		migrate->dst[i] = migrate_pfn(migrate->dst[i]);
- 
- 		spage = migrate_pfn_to_page(migrate->src[i]);
--- 
-2.20.1.7.g153144c
+Best regards,
+Daniel Starke
 
