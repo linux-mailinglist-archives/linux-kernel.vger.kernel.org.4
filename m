@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6337060D6F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A38460D6FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbiJYWXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S232671AbiJYWZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiJYWXG (ORCPT
+        with ESMTP id S232618AbiJYWZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:23:06 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B200A558A;
-        Tue, 25 Oct 2022 15:23:05 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id v27so16308097eda.1;
-        Tue, 25 Oct 2022 15:23:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xtG9UJwQ9xCT5GcRsSIwntHKnFlFfGi1m6Y+YTQWFGY=;
-        b=ob/HF79763ku4U3fPDwMmMTsok1pWeiY8KTKwL1ptOtciBoKvRjMUkD5tnKSR59e24
-         RwxSmhP3E4aGAcSGZGSW1R+JGQMW6ts2SVRs3cFz9OYMKGuunSBeyUP4OgU3q0XzMl5X
-         spBEqC2Ft/qmKa/ijSkRYWVwVn8x19JNEr/2hUYIW9A8/4kvvdGDjQtfTmr0lb4QRuCP
-         N0s2S2+nDfC9+Ex22ZBKX9seVtMArHVQ/dC1qPmaaInJOVd1JhY88gpNUEv+sXvbZl8c
-         J6wc6kAh2k1IMOab0YzKKPoK6cm9qMsgVRsshhznyKPL6wes1FPUlysbf97kqdgAIfwD
-         ByQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xtG9UJwQ9xCT5GcRsSIwntHKnFlFfGi1m6Y+YTQWFGY=;
-        b=J8ERpQpxIBmNFneGsRsZqxzk9l25YhnO8iezCVAfIJowBEIgpi8XJofDC4F3nawwJh
-         9iGJKpe/HZ92pLUPQnFrSSr0o6FeFvwecyjLuMXtvdIvFHe8FlaXOOhHQ7usU2Mt32Ur
-         aBNEXWOAaVAsuICj7wZ/t6KP5ltscJkqhIx+onkZp8b4un+TJ9o07Ip6XAaIC/a2nGfU
-         rUA8/9nVhb3zCZiTZAyw77QFpS+Vp0Y8K0LV79jneD0J5Ghy+RewmLZ0vWMiiIzvAOI4
-         ohtmH1MWQVaCWN7uHNPH/jceTcpZSwYeTDGEOHuUGKQeMElbneVN/z/XQIiPQPArJvvW
-         Z7Ug==
-X-Gm-Message-State: ACrzQf1gx8uB7wAEpLrX7UicNWVV7aY+g1PIVCk1Eoc98AF9O4Qb8tKf
-        ruUSJqeuWcTF+p9Z/P2QKcupaSzWxChDYsat0Z8=
-X-Google-Smtp-Source: AMsMyM7TofUOT6/SSJqJHTTX0CLwhjl052Ms41mATxijLuCl+S3e8adVj6+MXPHXLcufxZlouFkOTWadNMoUnBSB9S4=
-X-Received: by 2002:a05:6402:3217:b0:461:d6d7:7f19 with SMTP id
- g23-20020a056402321700b00461d6d77f19mr10396610eda.109.1666736584242; Tue, 25
- Oct 2022 15:23:04 -0700 (PDT)
+        Tue, 25 Oct 2022 18:25:06 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE6B4AD4F;
+        Tue, 25 Oct 2022 15:25:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1666736696;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=4Nxlvyuq0njEtgrR0gNydVwaHz1seLH1VE0uZGgp5b0=;
+    b=ED46xP2LxtaYKgw/KI9g4BnK9yYCBSlsnXTv6leA/karDJoDeVehNBB6sIPWfa7USH
+    TLHrNXkLkg6dE7gvsKz2SeusIRyfyO4S0FLLRdgQGHLr3SaUt7iD3kFsT+/YSV0ET/Tt
+    6sJZYtQtxr4+sYrBKCcXMhwlmdVhB731HVN129CPalsOz8XL7DhgwFZMO2I94M3q3N0B
+    EeOZb8dcuSFvUhZRu64EEYZFKKiNhkHwSYtYoRDexKeMYhzvYE1J/FK9wI4C+HOaFgkv
+    xSFJ7t9oJ4EdFuyNG7gway9FHW6dGX8SAH5kZYJjaSSA5hwBV9ULeY1DlOuO9w9g8MmE
+    y1DQ==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD/R51xABQjgPFtj5ophaE="
+X-RZG-CLASS-ID: mo00
+Received: from linux..
+    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
+    with ESMTPSA id z9cfbfy9PMOs2EA
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 26 Oct 2022 00:24:54 +0200 (CEST)
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org, daejun7.park@samsung.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/3] Changes for ufshcd.c
+Date:   Wed, 26 Oct 2022 00:24:27 +0200
+Message-Id: <20221025222430.277768-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221019152947.3857217-1-arnd@kernel.org> <20221019152947.3857217-15-arnd@kernel.org>
-In-Reply-To: <20221019152947.3857217-15-arnd@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 25 Oct 2022 23:22:37 +0100
-Message-ID: <CA+V-a8t7FupuGtN1YFLQJXu3aznQ_Liy71SQcKJDgLtZhm-z_g@mail.gmail.com>
-Subject: Re: [PATCH 14/14] media: davinci: remove vpbe support
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-arm-kernel@lists.infradead.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 4:41 PM Arnd Bergmann <arnd@kernel.org> wrote:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The davinci dm3xx/dm644x platforms are gone now, and the remaining
-> da8xx platforms do not use the vpbe driver, so the driver can be
-> removed as well.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+From: Bean Huo <beanhuo@micron.com>
 
-Acked-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+v4--v5:
+    1. Rebase the patch
+    2. Change commit message of patch 1/3
 
-Cheers,
-Prabhakar
+v3--v4:
+    1. Change patch 1/3 title
+    2. Fix one typo in patch 3/3
+    3. Fix coding type issue in  patch 2/3 based on Bart's comment
+
+v2--v3:
+    1. Add patch 3/3
+    2. Add remove unused parameter param_offset in patch 1/3 based on Daejun's comment
+    3. Further optimized patch 2/3 based on Bart's comment
+
+v1--v2:
+    1. change in ufshcd_lu_init() in  patch 2/2:
+        1) Remove duplicate parameter initialization
+        2) Move lun parameter initialization before kmalloc()
+
+Bean Huo (3):
+  scsi: ufs: core: Revert "WB is only available on LUN #0 to #7"
+  scsi: ufs: core: Cleanup ufshcd_slave_alloc()
+  scsi: ufs: core: Use is_visible to control UFS unit descriptor sysfs
+    nodes
+
+ drivers/ufs/core/ufs-sysfs.c   |  21 ++++-
+ drivers/ufs/core/ufshcd-priv.h |   6 +-
+ drivers/ufs/core/ufshcd.c      | 152 ++++++++++++---------------------
+ 3 files changed, 74 insertions(+), 105 deletions(-)
+
+-- 
+2.34.1
+
