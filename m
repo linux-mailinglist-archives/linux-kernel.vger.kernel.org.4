@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A970560D532
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D73C60D535
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 22:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232732AbiJYUFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 16:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S232724AbiJYUF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 16:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbiJYUFF (ORCPT
+        with ESMTP id S232685AbiJYUFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 16:05:05 -0400
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA501789E;
-        Tue, 25 Oct 2022 13:05:02 -0700 (PDT)
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1324e7a1284so17134601fac.10;
-        Tue, 25 Oct 2022 13:05:02 -0700 (PDT)
+        Tue, 25 Oct 2022 16:05:08 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7133F1E725;
+        Tue, 25 Oct 2022 13:05:06 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-13bef14ea06so3359743fac.3;
+        Tue, 25 Oct 2022 13:05:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vB32b7hqffV8RKafvwJiZ3CGSQiM2gKHX903Imkipag=;
-        b=7CWaIeyPm4So2PRofN762Ph8nOHdXOH5jdz3EIcrl8Ly1L1ClNGV387ksqUYcE3MJg
-         Qq9AzjctbGHPHYWB9Bs/HLjuQcY7ysAhRHler4qeExAhVrasy41vpdpUVZ2ISDNoKumj
-         LvQI1SkRvJmBU85nyaRfR8dAF9TS1PcnbWXE9Y3dYG22Rd7lWIe6lWHAByghTkHjFJrb
-         WUtoKb3UtV7CYJ8Q7zZanamP9r7yoR/zcNuV2xkzlgM4oeNpnYM9CoFA1mZvmTZTTB1g
-         /MOVQBa7D4zPiD1xWYKutbgYINrOIkmtDrEDXQ/K21oa5DkSw2znfafnk8mHr0CJy/Bv
-         7h2Q==
-X-Gm-Message-State: ACrzQf2dHDnJwD/a89e9DMxBFSr6rh3IHNmlqB7ONYyZ7wlocHpZT3UX
-        F2eB5mJ4+7VnYWTlugQjww==
-X-Google-Smtp-Source: AMsMyM7iCwd1pVTnVpkPrTHLBKLtE87bCuRGb8WUI6j5d80nFpJ5ZRoJ/yfU55Rkz4J4Cc2IC6FkKQ==
-X-Received: by 2002:a05:6870:c185:b0:137:5188:d2d7 with SMTP id h5-20020a056870c18500b001375188d2d7mr6381oad.296.1666728301917;
-        Tue, 25 Oct 2022 13:05:01 -0700 (PDT)
+        bh=eCcoXzqCOTLs/OXhRR73dWp6fEmoY2vqrJfVEZfm4bk=;
+        b=JPdyLs0Ez8tEhDJoEG3HnBWZQYfhLSmnk1iQMhutWdtTF/xyM12x1pAWiVHVQHrrM/
+         7DAohWN6Bx4i3TO0Z+Sisw5auKSa9erlgMoZO7Uf1qj9BD96GVbTV9fYRI8O/D2l13SE
+         FkM8M60R8NJV0NuEQHJA1rv6AJBsqQ6PRfqi9jv3xQoQiPBEVtPtU8Hslv+xIyfpQl/S
+         6ktNDIKy08+jxtkpiM9sfpgfSWf6RjDD1PeOr7U6H/gledzbcZ0xdL2/ogLUNS0U6w10
+         PrsNwKmVW4uDlpQPLAZxY07+xEmWC5YPWlbxKVY9DNc8OxD2Cj1G9gDbcWqOiTAKjmGK
+         ZvoQ==
+X-Gm-Message-State: ACrzQf1AwNMv74tK6BOdfj1Ymo0YydfwNqKi5QAeKiwZrRTrbfMWFY7r
+        Yo28D2dLDJueoZ1J6Mm1Mw==
+X-Google-Smtp-Source: AMsMyM6mcgNjxW6i/qnU+iYP+pBcCoyzMgXv5PdueWJlslCfweAIm0U9+f++poSxkgEwaRpzT1rZlQ==
+X-Received: by 2002:a05:6870:d107:b0:137:11e5:6a95 with SMTP id e7-20020a056870d10700b0013711e56a95mr15898oac.146.1666728305645;
+        Tue, 25 Oct 2022 13:05:05 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t6-20020a056871020600b0010d7242b623sm2049596oad.21.2022.10.25.13.05.00
+        by smtp.gmail.com with ESMTPSA id y16-20020a056871011000b0010e73e252b8sm2095073oab.6.2022.10.25.13.05.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 13:05:01 -0700 (PDT)
-Received: (nullmailer pid 3155077 invoked by uid 1000);
+        Tue, 25 Oct 2022 13:05:05 -0700 (PDT)
+Received: (nullmailer pid 3155080 invoked by uid 1000);
         Tue, 25 Oct 2022 20:05:02 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     =?utf-8?b?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        netdev@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
         Claudiu Manoil <claudiu.manoil@nxp.com>,
-        devicetree@vger.kernel.org, John Crispin <john@phrozen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        Sean Wang <sean.wang@mediatek.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        John Crispin <john@phrozen.org>,
+        DENG Qingfang <dqfext@gmail.com>,
+        linux-mediatek@lists.infradead.org,
         Rob Herring <robh+dt@kernel.org>,
+        =?utf-8?b?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-In-Reply-To: <20221025050355.3979380-4-colin.foster@in-advantage.com>
-References: <20221025050355.3979380-1-colin.foster@in-advantage.com> <20221025050355.3979380-4-colin.foster@in-advantage.com>
-Message-Id: <166672723142.3138516.12575129595346889697.robh@kernel.org>
-Subject: Re: [PATCH v1 net-next 3/7] dt-bindings: net: dsa: qca8k: utilize shared dsa.yaml
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20221025050355.3979380-8-colin.foster@in-advantage.com>
+References: <20221025050355.3979380-1-colin.foster@in-advantage.com> <20221025050355.3979380-8-colin.foster@in-advantage.com>
+Message-Id: <166672723302.3138577.18331816371776997839.robh@kernel.org>
+Subject: Re: [PATCH v1 net-next 7/7] dt-bindings: net: mscc,vsc7514-switch: utilize generic ethernet-switch.yaml
 Date:   Tue, 25 Oct 2022 15:05:02 -0500
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -77,17 +78,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 22:03:51 -0700, Colin Foster wrote:
-> The dsa.yaml binding contains duplicated bindings for address and size
-> cells, as well as the reference to dsa-port.yaml. Instead of duplicating
-> this information, remove the reference to dsa-port.yaml and include the
-> full reference to dsa.yaml.
+On Mon, 24 Oct 2022 22:03:55 -0700, Colin Foster wrote:
+> Several bindings for ethernet switches are available for non-dsa switches
+> by way of ethernet-switch.yaml. Remove these duplicate entries and utilize
+> the common bindings for the VSC7514.
 > 
 > Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 > Suggested-by: Vladimir Oltean <olteanv@gmail.com>
 > ---
->  .../devicetree/bindings/net/dsa/qca8k.yaml         | 14 +++-----------
->  1 file changed, 3 insertions(+), 11 deletions(-)
+>  .../bindings/net/mscc,vsc7514-switch.yaml     | 36 +------------------
+>  1 file changed, 1 insertion(+), 35 deletions(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -96,12 +96,8 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/dsa/qca8k.example.dtb: switch@10: Unevaluated properties are not allowed ('#address-cells', '#size-cells' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/dsa/qca8k.example.dtb: switch@10: ports:port@6: Unevaluated properties are not allowed ('qca,sgmii-rxclk-falling-edge' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/dsa/qca8k.example.dtb: switch@10: Unevaluated properties are not allowed ('#address-cells', '#size-cells' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+./Documentation/devicetree/bindings/net/mscc,vsc7514-switch.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/net/ethernet-switch.yaml
+Documentation/devicetree/bindings/net/mscc,vsc7514-switch.example.dtb:0:0: /example-0/switch@1010000: failed to match any schema with compatible: ['mscc,vsc7514-switch']
 
 doc reference errors (make refcheckdocs):
 
