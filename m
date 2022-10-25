@@ -2,167 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7378B60C1E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 04:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D24F60C1EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 04:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiJYCsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 22:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S229988AbiJYCvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 22:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbiJYCsg (ORCPT
+        with ESMTP id S229729AbiJYCvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 22:48:36 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40B082870;
-        Mon, 24 Oct 2022 19:48:35 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MxGbB425tzHvBM;
-        Tue, 25 Oct 2022 10:48:22 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 10:48:33 +0800
-Message-ID: <370a7ef1-885b-66b6-2282-fcc2a1dcfcec@huawei.com>
-Date:   Tue, 25 Oct 2022 10:48:33 +0800
+        Mon, 24 Oct 2022 22:51:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD03103242;
+        Mon, 24 Oct 2022 19:51:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5D83B80EE4;
+        Tue, 25 Oct 2022 02:51:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F816C43144;
+        Tue, 25 Oct 2022 02:51:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666666275;
+        bh=kLyDAivtXjl7b9FNwIOi8R/xoqspaY0DzbslbZXJA38=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=p9sGE0hTLj2N8smJAMWAwVEgvmwR5nu8X+LWJVHEDJ87MYMKGN6BZKuSePCCnZ2de
+         n8I3A3FOKw+iie0FiUolq4G1YFAyvMOj2pw55oFXx5McVpzNHFRDDkbSn3XWkXgoyc
+         7eYpEM3BnwobLACC+xAAm0Rf+9tCWjJU4WpqHU05yA9ApdXtZXebZwGfLSyyw3qujF
+         BH48uTSs15eFxhVsSROFM4SIpJARdCBhwxqtD70C7CY3zqxzYVNvRptd1phXgnyVDe
+         +Xb8QHk8FrYi1W34G4hFSMarnBIfKQ9/WyGLQgUXx0FdYFaqcgo4ulUznDjZ3y8zWl
+         V9+ZjZaOmvvQw==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-13ae8117023so14100062fac.9;
+        Mon, 24 Oct 2022 19:51:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2XflEQKNuY9iKF/jfsihs3BZ1y5aDRwF6Dhim1CAhHAhhUbcJq
+        kSgboJ1p6gYXKr2MfmHMH0IPsZKB/0jedAINmLk=
+X-Google-Smtp-Source: AMsMyM5EPDsIKsDhKpa2tacV+samW4UcYdf1FV41waP3RSXg7QVWFrQ47hBEkSt3VMDgDA6b2T4bsOr1hUPCpPWYyO4=
+X-Received: by 2002:a05:6870:5803:b0:12c:c3e0:99dc with SMTP id
+ r3-20020a056870580300b0012cc3e099dcmr37449251oap.19.1666666274587; Mon, 24
+ Oct 2022 19:51:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2 1/2] ext4: fix bug_on in __es_tree_search caused by
- wrong s_usr_quota_inum
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
-References: <20221021040731.4180649-1-libaokun1@huawei.com>
- <20221021040731.4180649-2-libaokun1@huawei.com>
- <20221024141053.n3ds3q37abdajrto@quack3>
- <20221024141630.r6egasefk744taxi@quack3>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20221024141630.r6egasefk744taxi@quack3>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221002012451.2351127-1-guoren@kernel.org> <20221002012451.2351127-5-guoren@kernel.org>
+ <YzrJ0wQxWfjWCxhQ@FVFF77S0Q05N> <CAJF2gTRBEGx3qncpk_C8rCsFN+kqxjgeAcPvZU5m7kDnpwytoA@mail.gmail.com>
+ <Y1ERsP0YYVNulWnw@FVFF77S0Q05N> <CAJF2gTTurEaFjbKvj1tUptq_TLpXeBAE1UstNYxriC-7r5MHpQ@mail.gmail.com>
+ <Y1Z9U7XN4nlGg8yb@FVFF77S0Q05N> <Y1Z/rLaaUp7e9xoy@hirez.programming.kicks-ass.net>
+ <Y1aBshGIWMEm+yTv@FVFF77S0Q05N>
+In-Reply-To: <Y1aBshGIWMEm+yTv@FVFF77S0Q05N>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 25 Oct 2022 10:51:02 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQvmSuOP_QQ8RGfq2soLrv9XD3g=8v9pE+U0y+pzqMY4A@mail.gmail.com>
+Message-ID: <CAJF2gTQvmSuOP_QQ8RGfq2soLrv9XD3g=8v9pE+U0y+pzqMY4A@mail.gmail.com>
+Subject: Re: [PATCH V6 04/11] compiler_types.h: Add __noinstr_section() for noinstr
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Lai Jiangshan <laijs@linux.alibaba.com>, arnd@arndb.de,
+        palmer@rivosinc.com, tglx@linutronix.de, luto@kernel.org,
+        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
+        lazyparser@gmail.com, falcon@tinylab.org, chenhuacai@kernel.org,
+        apatel@ventanamicro.com, atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, zouyipeng@huawei.com,
+        bigeasy@linutronix.de, David.Laight@aculab.com,
+        chenzhongjin@huawei.com, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Borislav Petkov <bp@alien8.de>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/24 22:16, Jan Kara wrote:
-> On Mon 24-10-22 16:10:53, Jan Kara wrote:
->> On Fri 21-10-22 12:07:30, Baokun Li wrote:
->>> We got a issue as fllows:
->>> ==================================================================
->>>   kernel BUG at fs/ext4/extents_status.c:202!
->>>   invalid opcode: 0000 [#1] PREEMPT SMP
->>>   CPU: 1 PID: 810 Comm: mount Not tainted 6.1.0-rc1-next-g9631525255e3 #352
->>>   RIP: 0010:__es_tree_search.isra.0+0xb8/0xe0
->>>   RSP: 0018:ffffc90001227900 EFLAGS: 00010202
->>>   RAX: 0000000000000000 RBX: 0000000077512a0f RCX: 0000000000000000
->>>   RDX: 0000000000000002 RSI: 0000000000002a10 RDI: ffff8881004cd0c8
->>>   RBP: ffff888177512ac8 R08: 47ffffffffffffff R09: 0000000000000001
->>>   R10: 0000000000000001 R11: 00000000000679af R12: 0000000000002a10
->>>   R13: ffff888177512d88 R14: 0000000077512a10 R15: 0000000000000000
->>>   FS: 00007f4bd76dbc40(0000)GS:ffff88842fd00000(0000)knlGS:0000000000000000
->>>   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>   CR2: 00005653bf993cf8 CR3: 000000017bfdf000 CR4: 00000000000006e0
->>>   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>>   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>   Call Trace:
->>>    <TASK>
->>>    ext4_es_cache_extent+0xe2/0x210
->>>    ext4_cache_extents+0xd2/0x110
->>>    ext4_find_extent+0x5d5/0x8c0
->>>    ext4_ext_map_blocks+0x9c/0x1d30
->>>    ext4_map_blocks+0x431/0xa50
->>>    ext4_getblk+0x82/0x340
->>>    ext4_bread+0x14/0x110
->>>    ext4_quota_read+0xf0/0x180
->>>    v2_read_header+0x24/0x90
->>>    v2_check_quota_file+0x2f/0xa0
->>>    dquot_load_quota_sb+0x26c/0x760
->>>    dquot_load_quota_inode+0xa5/0x190
->>>    ext4_enable_quotas+0x14c/0x300
->>>    __ext4_fill_super+0x31cc/0x32c0
->>>    ext4_fill_super+0x115/0x2d0
->>>    get_tree_bdev+0x1d2/0x360
->>>    ext4_get_tree+0x19/0x30
->>>    vfs_get_tree+0x26/0xe0
->>>    path_mount+0x81d/0xfc0
->>>    do_mount+0x8d/0xc0
->>>    __x64_sys_mount+0xc0/0x160
->>>    do_syscall_64+0x35/0x80
->>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>    </TASK>
->>> ==================================================================
->>>
->>> Above issue may happen as follows:
->>> -------------------------------------
->>> ext4_fill_super
->>>   ext4_orphan_cleanup
->>>    ext4_enable_quotas
->>>     ext4_quota_enable
->>>      ext4_iget --> get error inode <5>
->>>       ext4_ext_check_inode --> Wrong imode makes it escape inspection
->>>       make_bad_inode(inode) --> EXT4_BOOT_LOADER_INO set imode
->>>      dquot_load_quota_inode
->>>       vfs_setup_quota_inode --> check pass
->>>       dquot_load_quota_sb
->>>        v2_check_quota_file
->>>         v2_read_header
->>>          ext4_quota_read
->>>           ext4_bread
->>>            ext4_getblk
->>>             ext4_map_blocks
->>>              ext4_ext_map_blocks
->>>               ext4_find_extent
->>>                ext4_cache_extents
->>>                 ext4_es_cache_extent
->>>                  __es_tree_search.isra.0
->>>                   ext4_es_end --> Wrong extents trigger BUG_ON
->>>
->>> In the above issue, s_usr_quota_inum is set to 5, but inode<5> contains
->>> incorrect imode and disordered extents. Because 5 is EXT4_BOOT_LOADER_INO,
->>> the ext4_ext_check_inode check in the ext4_iget function can be bypassed,
->>> finally, the extents that are not checked trigger the BUG_ON in the
->>> __es_tree_search function. To solve this issue, check whether qf_inode
->>> obtained by ext4_iget is bad_inode.
->>>
->>> Signed-off-by: Baokun Li <libaokun1@huawei.com>
->> Looks good to me. Feel free to add:
->>
->> Reviewed-by: Jan Kara <jack@suse.cz>
-> Hum, on a second thought: Would not it be better if vfs_setup_quota_inode()
-> actually checked for bad inode and refused it with EUCLEAN? That would
-> sound like a more generic approach (covers all filesystems) to this
-> problem.
+On Mon, Oct 24, 2022 at 8:14 PM Mark Rutland <mark.rutland@arm.com> wrote:
 >
-> 								Honza
+> On Mon, Oct 24, 2022 at 02:06:04PM +0200, Peter Zijlstra wrote:
+> > On Mon, Oct 24, 2022 at 12:56:03PM +0100, Mark Rutland wrote:
+> >
+> > > How about we split this like:
+> > >
+> > > | /*
+> > > |  * Prevent the compiler from instrumenting this code in any way
+> > > |  * This does not prevent instrumentation via KPROBES, which must be
+> > > |  * prevented through other means if necessary.
+> >
+> > Perhaps point to NOINSTR_TEXT in vmlinux.lds.h
+>
+> Makes sense, will do.
+Do I need to update the comment with NOINSTR_TEXT? eg:
 
-Hello Honza,
+ * Prevent the compiler from instrumenting this code in any way
+ * This does not prevent instrumentation via KPROBES, which must be
+ * prevented through other means if necessary. See NOINSTR_TEXT
+ * in vmlinux.lds.h.
 
-Totally agree with you! We initially added the check to 
-vfs_setup_quota_inode(),
-because the check for imode is here. However, in ext4_quota_enable, if 
-qf_inode
-is abnormal, "Bad quota inode..." is printed. Therefore, we feel that 
-adding a check
-here can help us quickly find out where the problem occurs.
-Perhaps we should still add the check to vfs_setup_quota_inode() and 
-also add the
-print ino when ext4_enable_quotas fails.
+>
+> >
+> > > |  */
+> > > | #define __no_compiler_instrument                          \
+> > > |   noinline notrace noinline notrace __no_kcsan            \
+> > > |   __no_sanitize_address __no_sanitize_coverage
+> > > |
+> > > | /*
+> > > |  * Section for code which can't be instrumented at all.
+> > > |  * Any code in this section cannot be instrumented with KPROBES.
+> > > |  */
+> > > | #define noinstr __no_compiler_instrument section(".noinstr.text")
+> > >
+> > > ... then we don't need __noinstr_section(), and IMO the split is
+> > > clearer.
+> >
+> > Yeah, perhaps, no strong feelings. Note I have this in the sched-idle
+> > series as well (which I still need to rebase and repost :/).
+>
+> Ah; I'll sit on this for now then, and once that's all in I can send a
+> cleanup/rework patch. Sorry for the noise!
+We still keep __noinstr_section(), right?
 
-
-Thank you for your review!
--- 
-With Best Regards,
-Baokun Li
-
+>
+> Thanks,
+> Mark.
+--
+Best Regards
+ Guo Ren
