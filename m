@@ -2,124 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F9F60D4CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0948E60D4D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbiJYTjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
+        id S232204AbiJYTkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232124AbiJYTjo (ORCPT
+        with ESMTP id S231511AbiJYTka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:39:44 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2069.outbound.protection.outlook.com [40.107.244.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54452BE39
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:39:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MaIg+soDo8T5eqXRIObqW6HWG0f9VZCbgbcmA6PPn2v/XKOWfeYrUZC0bWtp9GEXiv/0uiLKEsX28Ho2pb6laOT7H5VuSMSzRNZ19ib7KrKoqHwOSXdHh1DouJOPIoEAJyALA2NUCLMNSuaxBMuH904aud8n7Hse2+O1Z672/JebmBUbXtm/TAbfmQAhLB1SUeWuywkhlr/s/BdB5gS3mXbXJQLZ6nZ5DsK9lOYsVgtWqTmZmwpG4THTwDzNNm2h6JLUJ9T2ipnIUQUSD3EemGSb9VIhBHJTrz9nDdty6SvDW/0Wy51rMrURasraNw6/UcmCpuzgv7rEkAVdakSOXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yRV5HvcJZRyQGQvM+lhAaxHGbLXkP0NOOm1IIX7S0sQ=;
- b=WuaafR2MvEloBAjjD8Iq3RPAYqXtlj2FGNrVzabZF8Js1DJ8QTplXUsr0QR9sUo8ZWqbJlCZPcoqB6Fl695wYA4sHGc5kwMeOSduR/I1ATc7dQ40q6GqlDtz18fZXBZqc39Fjow2mO2SLq/N0Aw8KtazlatfYSyrc0oNVlLyYpF5urAhQyXZ4qY+YXOlxxLc5RZE7cIyzZgzkaXOWCUYAvLtguup5V6XYKV3uR/9zWEB5K8XsqEK1XJ0ZuYQvIiOPiJV3IUKb/UOK8N9dRoz917d5PxsLO7R1sM7L+RQMqERDiWCsBGTxHfy3WpIPFh7diJN3Kwos7wUFI/nTZ24ZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yRV5HvcJZRyQGQvM+lhAaxHGbLXkP0NOOm1IIX7S0sQ=;
- b=CBg/eROxE8AmDviuINdUOHxKpE1+npngIEcBOWe6XzJY0vKPcJLomWNXD5Ued9umksHZ7nizLCO31tRIGKw90J3HpCt/fPYptHTlH01sPo//u1DEUeLnReT7heOL/nSSGcmPt7qKeIdRUYNj/SYpyFeh7Mkb9/0jMikiGTBIf3I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by DM4PR12MB6326.namprd12.prod.outlook.com (2603:10b6:8:a3::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Tue, 25 Oct
- 2022 19:39:40 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::7e91:f457:9ec5:33be]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::7e91:f457:9ec5:33be%6]) with mapi id 15.20.5746.026; Tue, 25 Oct 2022
- 19:39:40 +0000
-Message-ID: <9c58cacc-27a5-035e-0c17-2a0e8b30cf54@amd.com>
-Date:   Tue, 25 Oct 2022 15:39:38 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH -next] drm/amdkfd: Fix NULL pointer dereference in
- svm_migrate_to_ram()
-Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20221025072822.129940-1-yang.lee@linux.alibaba.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-In-Reply-To: <20221025072822.129940-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YT1PR01CA0039.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2e::8) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        Tue, 25 Oct 2022 15:40:30 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A40360CA7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:40:29 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id g16so7464312pfr.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KHrI51VyLmEbdkMQPFyPFqHTbu3szjBEsqryLz11l/Q=;
+        b=KI6W4uH4hjHvEV9PtWI7rfTLnLrATRV5KtpQAaVnspwMWnoOLD/v7F3kjtsxHAqer4
+         hcg7E9X24iKmosbb1AxXvtVNpCn/x9djDQOSgSwSuKvNIPLcU+XqH7yRqwb+spJX4LEl
+         h8fmqi8uIZLeugiji3Dkf3Mmg/u91DdfKHKhPSMcvPqxrGbDlqGu/8hWiit8oAIg5V7G
+         QhptPcoqeT1Yk49vIiJiT2FoWoQ3mI4TC6QE2hh6A1MSLpOAtarxYbwWaARenBtVCB7A
+         Q2a2v83ABsAMuMCWmFQBjmGPi6tE73V0xJFTqAJCC59QSBJjA3Gal0nFSLI8csDK3qGg
+         779g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KHrI51VyLmEbdkMQPFyPFqHTbu3szjBEsqryLz11l/Q=;
+        b=LrVCHYwLaztVRDPRBnJkTFfbkt4B58Jg40mWJ/7cMnvrCYC5DZ6Di2we4/+BtZJKI3
+         QGWITFakrDEyxCLhK36swQGZu1DHtQ1gHb4oVAfLz944HB+9VFZYfcrY9KscM77xN21R
+         lKSA7W48XMIHzc1zyHj0++L4dfsKCVgkN7SxaRD+ZVrvq0u8s+h/WfwciyfZc/36NjaG
+         r+HcQDqiuZJ284NrhSDJLm8o5E2utq12grLuIeSFk2+/WrIp/6j+qFuev2JHDEwmlbDx
+         vajQremTDLANIdJ3BcdXvkOk8mN0k6CoHj2UjqXI+ckKjjFDnP5f95WgCX0jNXkU2O23
+         kYqw==
+X-Gm-Message-State: ACrzQf0N7ZKlGvFoy+lFXOsz+YU1uLJ5sVHyaZ+yNni0ZnH8166CGYxa
+        DNw1BkwGE97nciUtifVhdpTUmyJt3SO6tCHbD5c9m8kU
+X-Google-Smtp-Source: AMsMyM4W6iPBtifLFZppSjzLfqp4yMDTHrdLV1eKapE0x2M1LEv7DbpdxN0ssd9LBoOOW2mnisGdkIKvVPfO4i55u/E=
+X-Received: by 2002:a63:8a42:0:b0:460:58ec:cc66 with SMTP id
+ y63-20020a638a42000000b0046058eccc66mr34066355pgd.195.1666726828776; Tue, 25
+ Oct 2022 12:40:28 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5115:EE_|DM4PR12MB6326:EE_
-X-MS-Office365-Filtering-Correlation-Id: ed49cb40-abeb-49e7-f0ec-08dab6c0a889
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iFPe0MCXwSjy0FHfYePwkpKdP0O0hgK+elO195EYB2nzD4WGX0p98RORfDeSSKIrYG3oRjE2EZfJl6NFgFFfNa6PNCIk67NMdBReTVHgDAuNVoFGKAsHHQdALR70ydPlHZRXYTLyOGrsPnp7pyQct+o7cQJIqwPgORBxkVAXNzBKkcXNpArIAkQC7jCiv5c7GOa6kH7T1NeGEt/pCtGtnExL+sFhDQdpgjLD242VvBEILuWTT9n0e+JiLHwOUQJSk38eXUOrYDFeDrz4kr/P1X2hFAVB1CNpM1t58IMD/+Ld2G+A+Dw5WuxtrplZfAlR9QaJVxef+88JrrhVoVYk+vA3/ddLfH+1pXYUEmecIBsBFcowyGNsjBQEHNRvrhh7GyeC48ix0Go8cUy8E176PkSQFIXIZd8+E1ebHxflES+vAhO+wSjc+GQbVIbVt61f72mXm/Hk5dPErmbKScF5rij44LLEk+rGM5r06EDzBGuT9ixE3Kz8kmPl1za1Tn2i6sBRuNohLS4y7C2Xcm1cMbvnjJdbtDwf2biUd5DPMOkOEYPQelC7HE1pZRWOnOD5Ra4MLRyHL4YgkxCnmO+OxNcj5fN2yGM8kZOImpS8fvpdxgpG/SEKA+f9T6k3lgtyyqnep5AUJAHNv80216TNaQ4pDNzhyp6IuxdKGSuNR/4elfFyFTHmKjOWKT81uFpGLnd6oedhm1IfJukvZ/SsU0akAqDI0VoXbVgNKZmxqLLC4VgLvCpI0gT5lXyJvuNY76aJOXUkm1PagRXu6AbIl2dI5ab4RD1+CYCmD3pcHIX2Kk0azHU7XwZJeVNhPk/0mi+tZn4lDnkQAcuIpsjQRQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(366004)(396003)(136003)(451199015)(31686004)(36756003)(66476007)(66556008)(66946007)(5660300002)(38100700002)(8936002)(83380400001)(86362001)(31696002)(6636002)(316002)(26005)(186003)(2616005)(6512007)(6486002)(478600001)(966005)(4001150100001)(2906002)(8676002)(44832011)(41300700001)(4326008)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1VCN0xNUTQya1NHdk5kSk8vZjUrZ3N2TzZQWDVpN2tEVkJMMjgwSGpiSXBL?=
- =?utf-8?B?OWE5Rm9uWlZsbEQ2bnpqNHhpdkJyU2dGc24xNUJhb3I4UGRxNXBwWXdzL3NJ?=
- =?utf-8?B?ZjJSazJET0swcjZDdGwySEl4YndiYnV5K3N1L0V0d3Q5Y2xCajNRM2Y1UWVq?=
- =?utf-8?B?dzViUElLNXJham5FZ2VnTm9wTW5jc3o4SmE0UmFNQzU2Wk5QbHYxUC9Xc1Bm?=
- =?utf-8?B?T1BpcS83VjArMHN5U1dxV0ZVME0vVVpISzlDdzJpZzBUUURxeGJuTmdoK3Az?=
- =?utf-8?B?K0hQQmhTanI5NnV1QjFYQm82Vk5zOVA2QXplVis0QkFyem1SSDVpOFNUSEEw?=
- =?utf-8?B?Mi9nTmY2MXJZdllRTCsxeHJRMFlETXhyanU5UUh0L1B3MW1uQ2RPZzRKN3Ba?=
- =?utf-8?B?eTNKaUpRL1pSS2lGbmFDdmV5UmlVRllZNjd2M0hnbm5vYVJmcVdXdGJQNTMv?=
- =?utf-8?B?U00zM3hMN216ZUMzS1R5aC9hSExRdDQvV29XMFBjc3dHelcvcWlFMkFTb25x?=
- =?utf-8?B?T3hsc0hmclBYK2c2L29Gdmp6T3NJUFoveDR0V1VxNkFlQ0JCQkp5SE1XQWtl?=
- =?utf-8?B?MnpyTDNOTWpHaisvdjRGbjhiNnVRUFhIUjdBRjlVaCs2eFJ6bGtIK0NQZTJK?=
- =?utf-8?B?Y0E0QVM0QTFtTm1TOHF0aW5tR21PRitVWXVmN1VDeFBGYVJuZm9hdGNHK3lh?=
- =?utf-8?B?aXpTNG1uS2Q0WmlXZkRKYnYwcW9ITGJ4SWZYUHUrb2k3SU5zYzl0TzhRdjU5?=
- =?utf-8?B?M2RXVDk4cGhXMDV3N1JDSXVkQjZ3UTBFM2JyV3NDWWsvM0t2TldhUUI4dWhF?=
- =?utf-8?B?Rm1kejBrdlY0bFpIR2VFajJ4cUo5T2tUOUhhV1Y4cmg3SlVJRit4YVFRSlJH?=
- =?utf-8?B?aDRBOGdNMmxSb0V1eVpaUUFPUWZiTEt0SDljNkUzRGd2bGZMajRjcEJjUmxC?=
- =?utf-8?B?M1BLM2txckU5aWxmVTJpQkVTMmc4NDZGL25qNkhnZm1LMnA3T0dDZVRmR1p2?=
- =?utf-8?B?YU5qWEp1YXQzQnJaK3JZdEx2c1VhSU1LelJPQndGQ0hvaWZHU3R5bVcyVlUx?=
- =?utf-8?B?Y1l4T09RdVViUTAwclBCdUxaNWZzNUUwZ2F1b0Q1dEZXSEhUazZ3ZWhVSGFm?=
- =?utf-8?B?SGgxQXNyaHBsVlJZVXI3bGIzU245MUQ2aHh5a21nb0Y0d1kwWVFpNVVNMlZW?=
- =?utf-8?B?dE03TE1uWUxuWnVrNjZGR3VIdWgxT04rQ3ZiYjNxSnlyTms0UnZmZE5RS2hU?=
- =?utf-8?B?TDYyaVRacU1VeHJjQ3BIYlh6M1Qrb0ptald5SndBN1gyaU5LeFRlVUdCV0FR?=
- =?utf-8?B?K3NZVVpPNjZPWCs3ZGZYekZFc2dvZ3RzQlZIV1AwekJ4bGtCczA0NUJlNHdX?=
- =?utf-8?B?Y0hkTHFKNTRNYm5SeWY3MkJMbkQvZlE1NGZSWXkzZlBPcVlrQ0xHS3J4Q3FQ?=
- =?utf-8?B?Z2UwZWpjK3d5Tk9JcEJPa1I0YUR6M3QvWjI1RmV2WjIvaDlkYXA3RTlCdXQ2?=
- =?utf-8?B?bHBFNWVGUVl3NVpZTGxPQU13Y25WeDU5eHdpQjUwYVBtdnptVnpGVmh2eUFM?=
- =?utf-8?B?WldTK0NYTXBxVWhRTFF2Yi9iVmR1dzRTeEdWS1p1RnNZcTg2U1Y1RWU3MnNs?=
- =?utf-8?B?OVEwNjJNYmV4bnhRS2prc0h6TDA5NlRMK0d2VWcwbzNhRXVGbTVraG5WczZJ?=
- =?utf-8?B?d0k4YzhQM3gyZjh3Z0lDTUlyWmFFYnBDNjB4aU5OYmZtenF0Si9yWHBIRWRM?=
- =?utf-8?B?QVVHaUNkS0k2SElPcjlvZ1k2emFVd2Z4enlCSUV1MDVqb2lkaWVsb0l5N2Mx?=
- =?utf-8?B?L01DcGpvVGl5Wm5kR0V3Vy9vRkViazZXd1IwV1RRYndXQmJ3WFFUTzVYb3N0?=
- =?utf-8?B?d1ZkUStvZFJRczZsd0NPalI1b29NQmFGZHcyWFkvVncwdW9PN1gzeDdQR1ZT?=
- =?utf-8?B?bk9OSXBFV01QejdkR0pkSFpIRWo1MXBwZDNKUkVFUnhQOE5yRWdCWGZWT3FE?=
- =?utf-8?B?M1dyYjU2ejdkWlJaUytKSCtJa1RhMWgrczgvcEVHYlIzNU1INnhOdjg1RXJO?=
- =?utf-8?B?UWxxVDYzNTdTRU1pQytNQWd4SFJYcHh3VzIvUFdTWFAxZ1ljWEhwNy8vZGtH?=
- =?utf-8?Q?RrpqdKqUw1/Hlcp88shsjJTjp?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed49cb40-abeb-49e7-f0ec-08dab6c0a889
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 19:39:40.5809
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Qk34KpTOuIwqEkUlLRMXG5pr5FBwplVS3XlNEeBop+umed1lWfWVKMrYewYTRUpBJYChvnDdchotK7a7dG3drQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6326
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+References: <20221025170519.314511-1-hannes@cmpxchg.org>
+In-Reply-To: <20221025170519.314511-1-hannes@cmpxchg.org>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 25 Oct 2022 12:40:15 -0700
+Message-ID: <CAHbLzkoXzbHRJxb9DkjGkKQ8TAO08ctvz7wvjyPA8Gy2Skm+2g@mail.gmail.com>
+Subject: Re: [PATCH] mm: vmscan: split khugepaged stats from direct reclaim stats
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Eric Bergen <ebergen@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,37 +67,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-10-25 um 03:28 schrieb Yang Li:
-> ./drivers/gpu/drm/amd/amdkfd/kfd_migrate.c:985:58-62: ERROR: p is NULL but dereferenced.
+On Tue, Oct 25, 2022 at 10:05 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
 >
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2549
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Direct reclaim stats are useful for identifying a potential source for
+> application latency, as well as spotting issues with kswapd. However,
+> khugepaged currently distorts the picture: as a kernel thread it
+> doesn't impose allocation latencies on userspace, and it explicitly
+> opts out of kswapd reclaim. Its activity showing up in the direct
+> reclaim stats is misleading. Counting it as kswapd reclaim could also
+> cause confusion when trying to understand actual kswapd behavior.
+>
+> Break out khugepaged from the direct reclaim counters into new
+> pgsteal_khugepaged, pgdemote_khugepaged, pgscan_khugepaged counters.
+>
+> Test with a huge executable (CONFIG_READ_ONLY_THP_FOR_FS):
+>
+> pgsteal_kswapd 1342185
+> pgsteal_direct 0
+> pgsteal_khugepaged 3623
+> pgscan_kswapd 1345025
+> pgscan_direct 0
+> pgscan_khugepaged 3623
+
+There are other kernel threads or works may allocate memory then
+trigger memory reclaim, there may be similar problems for them and
+someone may try to add a new stat. So how's about we make the stats
+more general, for example, call it "pg{steal|scan}_kthread"?
+
+>
+> Reported-by: Eric Bergen <ebergen@meta.com>
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 > ---
->   drivers/gpu/drm/amd/amdkfd/kfd_migrate.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+>  Documentation/admin-guide/cgroup-v2.rst |  6 +++++
+>  include/linux/khugepaged.h              |  6 +++++
+>  include/linux/vm_event_item.h           |  3 +++
+>  mm/khugepaged.c                         |  5 +++++
+>  mm/memcontrol.c                         |  8 +++++--
+>  mm/vmscan.c                             | 30 ++++++++++++++++++-------
+>  mm/vmstat.c                             |  3 +++
+>  7 files changed, 51 insertions(+), 10 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-> index cddf259875c0..405dd51521dc 100644
-> --- a/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_migrate.c
-> @@ -981,7 +981,8 @@ static vm_fault_t svm_migrate_to_ram(struct vm_fault *vmf)
->   out_mmput:
->   	mmput(mm);
->   
-> -	pr_debug("CPU fault svms 0x%p address 0x%lx done\n", &p->svms, addr);
-> +	if (p)
-> +		pr_debug("CPU fault svms 0x%p address 0x%lx done\n", &p->svms, addr);
-
-Thank you for catching and reporting this problem. I think the correct 
-solution would be to move the pr_debug up before the kfd_unref_process 
-call. That way you're sure that the pointer is initialized and that it 
-represents a valid reference to the kfd_process structure.
-
-Regards,
-   Felix
-
-
->   
->   	return r ? VM_FAULT_SIGBUS : 0;
->   }
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index dc254a3cb956..74cec76be9f2 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -1488,12 +1488,18 @@ PAGE_SIZE multiple when read back.
+>           pgscan_direct (npn)
+>                 Amount of scanned pages directly  (in an inactive LRU list)
+>
+> +         pgscan_khugepaged (npn)
+> +               Amount of scanned pages by khugepaged  (in an inactive LRU list)
+> +
+>           pgsteal_kswapd (npn)
+>                 Amount of reclaimed pages by kswapd
+>
+>           pgsteal_direct (npn)
+>                 Amount of reclaimed pages directly
+>
+> +         pgsteal_khugepaged (npn)
+> +               Amount of reclaimed pages by khugepaged
+> +
+>           pgfault (npn)
+>                 Total number of page faults incurred
+>
+> diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
+> index 70162d707caf..f68865e19b0b 100644
+> --- a/include/linux/khugepaged.h
+> +++ b/include/linux/khugepaged.h
+> @@ -15,6 +15,7 @@ extern void __khugepaged_exit(struct mm_struct *mm);
+>  extern void khugepaged_enter_vma(struct vm_area_struct *vma,
+>                                  unsigned long vm_flags);
+>  extern void khugepaged_min_free_kbytes_update(void);
+> +extern bool current_is_khugepaged(void);
+>  #ifdef CONFIG_SHMEM
+>  extern int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+>                                    bool install_pmd);
+> @@ -57,6 +58,11 @@ static inline int collapse_pte_mapped_thp(struct mm_struct *mm,
+>  static inline void khugepaged_min_free_kbytes_update(void)
+>  {
+>  }
+> +
+> +static inline bool current_is_khugepaged(void)
+> +{
+> +       return false;
+> +}
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>
+>  #endif /* _LINUX_KHUGEPAGED_H */
+> diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
+> index 3518dba1e02f..7f5d1caf5890 100644
+> --- a/include/linux/vm_event_item.h
+> +++ b/include/linux/vm_event_item.h
+> @@ -40,10 +40,13 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
+>                 PGREUSE,
+>                 PGSTEAL_KSWAPD,
+>                 PGSTEAL_DIRECT,
+> +               PGSTEAL_KHUGEPAGED,
+>                 PGDEMOTE_KSWAPD,
+>                 PGDEMOTE_DIRECT,
+> +               PGDEMOTE_KHUGEPAGED,
+>                 PGSCAN_KSWAPD,
+>                 PGSCAN_DIRECT,
+> +               PGSCAN_KHUGEPAGED,
+>                 PGSCAN_DIRECT_THROTTLE,
+>                 PGSCAN_ANON,
+>                 PGSCAN_FILE,
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 4734315f7940..36318ebbf50d 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -2528,6 +2528,11 @@ void khugepaged_min_free_kbytes_update(void)
+>         mutex_unlock(&khugepaged_mutex);
+>  }
+>
+> +bool current_is_khugepaged(void)
+> +{
+> +       return kthread_func(current) == khugepaged;
+> +}
+> +
+>  static int madvise_collapse_errno(enum scan_result r)
+>  {
+>         /*
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 2d8549ae1b30..a17a5cfa6a55 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -661,8 +661,10 @@ static const unsigned int memcg_vm_event_stat[] = {
+>         PGPGOUT,
+>         PGSCAN_KSWAPD,
+>         PGSCAN_DIRECT,
+> +       PGSCAN_KHUGEPAGED,
+>         PGSTEAL_KSWAPD,
+>         PGSTEAL_DIRECT,
+> +       PGSTEAL_KHUGEPAGED,
+>         PGFAULT,
+>         PGMAJFAULT,
+>         PGREFILL,
+> @@ -1574,10 +1576,12 @@ static void memory_stat_format(struct mem_cgroup *memcg, char *buf, int bufsize)
+>         /* Accumulated memory events */
+>         seq_buf_printf(&s, "pgscan %lu\n",
+>                        memcg_events(memcg, PGSCAN_KSWAPD) +
+> -                      memcg_events(memcg, PGSCAN_DIRECT));
+> +                      memcg_events(memcg, PGSCAN_DIRECT) +
+> +                      memcg_events(memcg, PGSCAN_KHUGEPAGED));
+>         seq_buf_printf(&s, "pgsteal %lu\n",
+>                        memcg_events(memcg, PGSTEAL_KSWAPD) +
+> -                      memcg_events(memcg, PGSTEAL_DIRECT));
+> +                      memcg_events(memcg, PGSTEAL_DIRECT) +
+> +                      memcg_events(memcg, PGSTEAL_KHUGEPAGED));
+>
+>         for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++) {
+>                 if (memcg_vm_event_stat[i] == PGPGIN ||
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 04d8b88e5216..8ceae125bbf7 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -54,6 +54,7 @@
+>  #include <linux/shmem_fs.h>
+>  #include <linux/ctype.h>
+>  #include <linux/debugfs.h>
+> +#include <linux/khugepaged.h>
+>
+>  #include <asm/tlbflush.h>
+>  #include <asm/div64.h>
+> @@ -1047,6 +1048,22 @@ void drop_slab(void)
+>                 drop_slab_node(nid);
+>  }
+>
+> +static int reclaimer_offset(void)
+> +{
+> +       BUILD_BUG_ON(PGSTEAL_DIRECT - PGSTEAL_KSWAPD != 1);
+> +       BUILD_BUG_ON(PGSTEAL_KHUGEPAGED - PGSTEAL_KSWAPD != 2);
+> +       BUILD_BUG_ON(PGDEMOTE_DIRECT - PGDEMOTE_KSWAPD != 1);
+> +       BUILD_BUG_ON(PGDEMOTE_KHUGEPAGED - PGDEMOTE_KSWAPD != 2);
+> +       BUILD_BUG_ON(PGSCAN_DIRECT - PGSCAN_KSWAPD != 1);
+> +       BUILD_BUG_ON(PGSCAN_KHUGEPAGED - PGSCAN_KSWAPD != 2);
+> +
+> +       if (current_is_kswapd())
+> +               return 0;
+> +       if (current_is_khugepaged())
+> +               return 2;
+> +       return 1;
+> +}
+> +
+>  static inline int is_page_cache_freeable(struct folio *folio)
+>  {
+>         /*
+> @@ -1599,10 +1616,7 @@ static unsigned int demote_folio_list(struct list_head *demote_folios,
+>                       (unsigned long)&mtc, MIGRATE_ASYNC, MR_DEMOTION,
+>                       &nr_succeeded);
+>
+> -       if (current_is_kswapd())
+> -               __count_vm_events(PGDEMOTE_KSWAPD, nr_succeeded);
+> -       else
+> -               __count_vm_events(PGDEMOTE_DIRECT, nr_succeeded);
+> +       __count_vm_events(PGDEMOTE_KSWAPD + reclaimer_offset(), nr_succeeded);
+>
+>         return nr_succeeded;
+>  }
+> @@ -2475,7 +2489,7 @@ static unsigned long shrink_inactive_list(unsigned long nr_to_scan,
+>                                      &nr_scanned, sc, lru);
+>
+>         __mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, nr_taken);
+> -       item = current_is_kswapd() ? PGSCAN_KSWAPD : PGSCAN_DIRECT;
+> +       item = PGSCAN_KSWAPD + reclaimer_offset();
+>         if (!cgroup_reclaim(sc))
+>                 __count_vm_events(item, nr_scanned);
+>         __count_memcg_events(lruvec_memcg(lruvec), item, nr_scanned);
+> @@ -2492,7 +2506,7 @@ static unsigned long shrink_inactive_list(unsigned long nr_to_scan,
+>         move_folios_to_lru(lruvec, &folio_list);
+>
+>         __mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, -nr_taken);
+> -       item = current_is_kswapd() ? PGSTEAL_KSWAPD : PGSTEAL_DIRECT;
+> +       item = PGSTEAL_KSWAPD + reclaimer_offset();
+>         if (!cgroup_reclaim(sc))
+>                 __count_vm_events(item, nr_reclaimed);
+>         __count_memcg_events(lruvec_memcg(lruvec), item, nr_reclaimed);
+> @@ -4857,7 +4871,7 @@ static int scan_folios(struct lruvec *lruvec, struct scan_control *sc,
+>                         break;
+>         }
+>
+> -       item = current_is_kswapd() ? PGSCAN_KSWAPD : PGSCAN_DIRECT;
+> +       item = PGSCAN_KSWAPD + reclaimer_offset();
+>         if (!cgroup_reclaim(sc)) {
+>                 __count_vm_events(item, isolated);
+>                 __count_vm_events(PGREFILL, sorted);
+> @@ -5015,7 +5029,7 @@ static int evict_folios(struct lruvec *lruvec, struct scan_control *sc, int swap
+>         if (walk && walk->batched)
+>                 reset_batch_size(lruvec, walk);
+>
+> -       item = current_is_kswapd() ? PGSTEAL_KSWAPD : PGSTEAL_DIRECT;
+> +       item = PGSTEAL_KSWAPD + reclaimer_offset();
+>         if (!cgroup_reclaim(sc))
+>                 __count_vm_events(item, reclaimed);
+>         __count_memcg_events(memcg, item, reclaimed);
+> diff --git a/mm/vmstat.c b/mm/vmstat.c
+> index b2371d745e00..1ea6a5ce1c41 100644
+> --- a/mm/vmstat.c
+> +++ b/mm/vmstat.c
+> @@ -1271,10 +1271,13 @@ const char * const vmstat_text[] = {
+>         "pgreuse",
+>         "pgsteal_kswapd",
+>         "pgsteal_direct",
+> +       "pgsteal_khugepaged",
+>         "pgdemote_kswapd",
+>         "pgdemote_direct",
+> +       "pgdemote_khugepaged",
+>         "pgscan_kswapd",
+>         "pgscan_direct",
+> +       "pgscan_khugepaged",
+>         "pgscan_direct_throttle",
+>         "pgscan_anon",
+>         "pgscan_file",
+> --
+> 2.38.1
+>
+>
