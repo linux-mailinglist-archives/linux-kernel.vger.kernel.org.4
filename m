@@ -2,52 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DE160C527
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46BAE60C52A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbiJYHah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:30:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
+        id S229497AbiJYHbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbiJYHae (ORCPT
+        with ESMTP id S231397AbiJYHbN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:30:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD161DA59;
-        Tue, 25 Oct 2022 00:30:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D807B81BAD;
-        Tue, 25 Oct 2022 07:30:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57A60C433C1;
-        Tue, 25 Oct 2022 07:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666683030;
-        bh=9PQO5EeSNbSv5VDIsFCn2UxUU606aDLQ0vkNteEU2j0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gdjwytLU9yA+Pi6WQOAdhZrkQQcDgTvtaupSFZ2aSBfsb01O1ZihfEhi/TNquJbOk
-         Qk4s5kz/rkR+Dr2QS2i8YktcnOm060YUtKP5lXz7AxHvV6B48y6N8VOp32c+82G/bk
-         R4GHGmUQilUS0ERNQHH5NZ3wTF7nHpcRD9jneP012afF2RuHZTwHBI81n+MuD3aQzL
-         G1j+2E+XiTmMoQixLNKafcJJ+Vs4xNSrJBVZHZK3eQv3pfRCh7yd6iyq7xjGo7wE0f
-         LRAadl1dNRQ2UYtUGZrm7mk0dMRnw8Trfln81pq2+MqgvANCiFhAaGDS6/q1vRNPtB
-         v0xVwow2K8njQ==
-Date:   Tue, 25 Oct 2022 10:30:27 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        jgg@ziepe.ca, wsa+renesas@sang-engineering.com, avihaih@nvidia.com,
-        raeds@nvidia.com, penguin-kernel@i-love.sakura.ne.jp,
-        dledford@redhat.com, matanb@mellanox.com
-Subject: Re: [PATCH] RDMA/core: Fix null-ptr-deref in ib_core_cleanup()
-Message-ID: <Y1eQkzttmSDcSIrU@unreal>
-References: <20221025024146.109137-1-chenzhongjin@huawei.com>
+        Tue, 25 Oct 2022 03:31:13 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F86127CEE;
+        Tue, 25 Oct 2022 00:31:11 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4MxNpg1W4bz6S2lC;
+        Tue, 25 Oct 2022 15:28:43 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgA3Ree7kFdjS_OoAA--.14841S3;
+        Tue, 25 Oct 2022 15:31:09 +0800 (CST)
+Subject: Re: [patch v11 0/6] support concurrent sync io for bfq on a specail
+ occasion
+To:     Paolo VALENTE <paolo.valente@unimore.it>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220916071942.214222-1-yukuai1@huaweicloud.com>
+ <29348B39-94AE-4D76-BD2E-B759056264B6@linaro.org>
+ <011d479f-644f-0013-40bf-664b62f93bec@huaweicloud.com>
+ <A9D22DB6-6481-46BA-9D4C-5A828D19CB61@linaro.org>
+ <bcd07062-5a3b-563e-fb2d-2fa8e4c8bba5@huaweicloud.com>
+ <82f1e969-742d-d3c3-63ca-961c755b5c35@huaweicloud.com>
+ <A1E2F76F-2D27-4DCE-9B97-C8011CBE2A9E@unimore.it>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <69485939-d874-0201-e7ed-b3f49dbbb9c9@huaweicloud.com>
+Date:   Tue, 25 Oct 2022 15:31:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025024146.109137-1-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <A1E2F76F-2D27-4DCE-9B97-C8011CBE2A9E@unimore.it>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgA3Ree7kFdjS_OoAA--.14841S3
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw1UGrWkAw17Cr1DCF17Jrb_yoWfCFg_Ka
+        48ta47Ka1UtFnFyFnYqr18JrWrGF42qrW8Zry5Xw4fJry7Gr1jgF43WrsrXwnFgr45G3WU
+        Xr1UXw4UAryaqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,89 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 10:41:46AM +0800, Chen Zhongjin wrote:
-> KASAN reported a null-ptr-deref error:
-> 
-> KASAN: null-ptr-deref in range [0x0000000000000118-0x000000000000011f]
-> CPU: 1 PID: 379
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-> RIP: 0010:destroy_workqueue+0x2f/0x740
-> RSP: 0018:ffff888016137df8 EFLAGS: 00000202
-> ...
-> Call Trace:
->  <TASK>
->  ib_core_cleanup+0xa/0xa1 [ib_core]
->  __do_sys_delete_module.constprop.0+0x34f/0x5b0
->  do_syscall_64+0x3a/0x90
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fa1a0d221b7
-> ...
->  </TASK>
-> 
-> It is because the fail of roce_gid_mgmt_init() is ignored:
-> 
-> ib_core_init()
->   roce_gid_mgmt_init()
->     gid_cache_wq = alloc_ordered_workqueue # fail
-> ...
-> ib_core_cleanup()
->   roce_gid_mgmt_cleanup()
->     destroy_workqueue(gid_cache_wq)
->     # destroy an unallocated wq
-> 
-> Fix this by catching the fail of roce_gid_mgmt_init() in ib_core_init().
-> 
-> Fixes: 03db3a2d81e6 ("IB/core: Add RoCE GID table management")
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
-> ---
->  drivers/infiniband/core/device.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-> index ae60c73babcc..b45431e6817b 100644
-> --- a/drivers/infiniband/core/device.c
-> +++ b/drivers/infiniband/core/device.c
-> @@ -2815,10 +2815,18 @@ static int __init ib_core_init(void)
->  
->  	nldev_init();
->  	rdma_nl_register(RDMA_NL_LS, ibnl_ls_cb_table);
-> -	roce_gid_mgmt_init();
-> +	ret = roce_gid_mgmt_init();
-> +	if (ret) {
-> +		pr_warn("Couldn't init RoCE GID management\n");
-> +		goto err_parent;
-> +	}
->  
->  	return 0;
->  
-> +err_parent:
-> +	nldev_exit();
-> +	rdma_nl_unregister(RDMA_NL_LS);
-> +	unregister_pernet_device(&rdma_dev_net_ops);
+在 2022/10/25 14:34, Paolo VALENTE 写道:
 
-I fixed release flow and applied to -rc.
-
-diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-index b45431e6817b..b69e2c4e4d2a 100644
---- a/drivers/infiniband/core/device.c
-+++ b/drivers/infiniband/core/device.c
-@@ -2824,8 +2824,8 @@ static int __init ib_core_init(void)
-        return 0;
-
- err_parent:
--       nldev_exit();
-        rdma_nl_unregister(RDMA_NL_LS);
-+       nldev_exit();
-        unregister_pernet_device(&rdma_dev_net_ops);
- err_compat:
-        unregister_blocking_lsm_notifier(&ibdev_lsm_nb);
-
-Thanks
-
-
->  err_compat:
->  	unregister_blocking_lsm_notifier(&ibdev_lsm_nb);
->  err_sa:
-> -- 
-> 2.17.1
+>>
+>> I rerun the manually test for 5 times, here is the average result:
+>>
+>> without this patchset / with this patchset:
+>>
+>> | --------------- | ------------- | ------------ | -------------- | ------------- | -------------- |
+>> | cg1 weight      | 10            | 20           | 30             | 40          | 50             |
+>> | cg2 weight      | 90            | 80           | 70             | 60          | 50             |
+>> | cg1 bw MiB/s    | 21.4 / 21.74  | 42.72 / 46.6 | 63.82 / 61.52  | 94.74 / 90.92 | 140 / 138.2    |
+>> | cg2 bw MiB/s    | 197.2 / 197.4 | 182 / 181.2  | 171.2 / 173.44 | 162 / 156.8   | 138.6 / 137.04 |
+>> | cg2 bw / cg1 bw | 9.22 / 9.08   | 4.26 / 3.89  | 2.68 / 2.82    | 1.71 / 1.72   | 0.99 / 0.99    |
 > 
+> Great!  Results are (statistically) the same, with and without your
+> patchset.  For me your patches are ok.  Thank you very much for this
+> contribution, and sorry again for my delay.
+> 
+> Acked-by: Paolo Valente <paolo.valente@linaro.org>
+
+Thanks for the review, it's nice to get this done finally!
+> 
+> Thanks,
+> Paolo
+
