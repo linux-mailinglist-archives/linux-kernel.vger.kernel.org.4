@@ -2,108 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A502560D44C
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BD060D44E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbiJYTAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42080 "EHLO
+        id S232539AbiJYTCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232330AbiJYTAj (ORCPT
+        with ESMTP id S231906AbiJYTCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:00:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AF342D70
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:00:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666724434;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JSbTyY7zGpX8KME5kgX7EAmxfdVlqZeBQMB1bp0O01s=;
-        b=h/5kTKUJRc9NlSVg15IjekgKS7oJ7MR0qhVHR9E1m0fcTcl+XxdM/NefT9CWPMuSXCeDoG
-        fWLbYcup23pkfD214TuCVMnEStrrcpbU61A6LKuYbe2dSTykv8zUNHRCtRTayMYN161OMn
-        NrBnCcuNSlMxDGlR3elmJTd1nfQIAFU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-154-OzXHSfwPMI22D5yr4mHpZQ-1; Tue, 25 Oct 2022 15:00:30 -0400
-X-MC-Unique: OzXHSfwPMI22D5yr4mHpZQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35214101E9B0;
-        Tue, 25 Oct 2022 19:00:30 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D6CE940C6EC6;
-        Tue, 25 Oct 2022 19:00:29 +0000 (UTC)
-Message-ID: <7dc61070-4696-4668-eaef-efae8d7fa271@redhat.com>
-Date:   Tue, 25 Oct 2022 15:00:29 -0400
+        Tue, 25 Oct 2022 15:02:16 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FE32A95B;
+        Tue, 25 Oct 2022 12:02:15 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id y14so15122930ejd.9;
+        Tue, 25 Oct 2022 12:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wdQpMJv+fAAdPj7JhNoObv56I8k+ulFEDb11lC7AivY=;
+        b=lJlZT5zbsgVFeKCsWmbaL5DSMTf48Ru56giPGXdY/pQohgHr9azEIF3ixhn+tAWh/x
+         pbaOZD2att0kTfKsdsTsl8C7ASExfvIysnxfEkWE1FEyNlSS/fOGJ8oBj4u4jptLgfaO
+         q7rt7ptzzqwkXI+hgKYF1n/wNwKUYygRtFU+CjBdM19VG6l6OWopGfIGo9gDxokz6Oqw
+         BUrWJ6U5FbwDcvIVNRqvvMTjxCiNqF4O/R2GlAoQdy11Zdyl1JlDOEy8a2PKTpxPIgdw
+         fPw6db9HfDJgI6jLVrnWTwMMI+SftXJFg3N2zsQZVPtnbdaQy+RhWAWT4htQIZMRYQbc
+         tLQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wdQpMJv+fAAdPj7JhNoObv56I8k+ulFEDb11lC7AivY=;
+        b=Tja2TpcNVg0wBVrVuxbBIq3ijwsvAI+KZ8nwZMreymljgir2zZObZ42bwZoyeonpV2
+         5hp7iDp91X1k9cUKD90ovHoisKXNqM+GWqq0/AEAmX5qV0IlrrgWvgmBObB1rJ42JUSB
+         ek1Czjr/YsiTwNIiTtmncoUCMZXzu55toL4CmozfYji/2/S5w1FJjDQVKzVqccUSyrfs
+         Xl+YGNv5djANx7RBTClD26L4Z7+horMecd9oCwgs96tFxRHjX6NEfvIwCichfn8pD61y
+         feQb+lc0O4uVkWPjITqIV3scKuvw0d9QdpYWZux5r6FCGECCP7TSeuJs3Q4kVl5oj9FI
+         UYrQ==
+X-Gm-Message-State: ACrzQf3SXyZE/Gcveas5J8N8bihRp71D6DrlZqtyC7cCr6Gmio0KaR/H
+        Vn73EKkMT+kwVLEozPYbsg==
+X-Google-Smtp-Source: AMsMyM7fNS7fCUE8nEqacvdkW1wr5/+kQrklLGOYoO4TKyWPl5HmOInIjZOsek2fd6tLXWvZGAASlQ==
+X-Received: by 2002:a17:906:5a6a:b0:7a6:bad5:8295 with SMTP id my42-20020a1709065a6a00b007a6bad58295mr11961592ejc.647.1666724534017;
+        Tue, 25 Oct 2022 12:02:14 -0700 (PDT)
+Received: from p183 ([46.53.248.70])
+        by smtp.gmail.com with ESMTPSA id s5-20020a056402036500b004623028c594sm1031397edw.49.2022.10.25.12.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 12:02:13 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 22:02:11 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Li Zetao <lizetao1@huawei.com>
+Cc:     viro@zeniv.linux.org.uk, ebiederm@xmission.com,
+        keescook@chromium.org, akpm@linux-foundation.org,
+        yi.zhang@huawei.com, chengzhihao1@huawei.com,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs/binfmt_elf: Fix memory leak in load_elf_binary()
+Message-ID: <Y1gys5Cvjh8cREWB@p183>
+References: <20221024154421.982230-1-lizetao1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 2/5] locking/rwsem: Limit # of null owner retries for
- handoff writer
-Content-Language: en-US
-To:     Hillf Danton <hdanton@sina.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
-References: <20221017211356.333862-1-longman@redhat.com>
- <20221017211356.333862-3-longman@redhat.com>
- <Y1aTpYba1Wwly48+@hirez.programming.kicks-ass.net>
- <980d882c-01b8-2ce1-663f-41a8a337f350@redhat.com>
- <Y1fG7nQxiLyKIhQ6@hirez.programming.kicks-ass.net>
- <20221025145843.2953-1-hdanton@sina.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20221025145843.2953-1-hdanton@sina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221024154421.982230-1-lizetao1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 10:58, Hillf Danton wrote:
->> @@ -1179,15 +1171,12 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
->>   		if (waiter.handoff_set) {
->>   			enum owner_state owner_state;
->>   
->> -			preempt_disable();
->>   			owner_state = rwsem_spin_on_owner(sem);
->> -			preempt_enable();
->> -
->>   			if (owner_state == OWNER_NULL)
->>   				goto trylock_again;
->>   		}
-> 	__up_write()
-> 	{
-> 	rwsem_clear_owner(sem);
-> 	/*
-> 	 If lockup can happen when a bound kworker gets preempted here by
-> 	 a FIFO acquirer for write, this is a case of preemption deeper
-> 	 than thought IMO
-> 	*/
-> 	tmp = atomic_long_fetch_add_release(-RWSEM_WRITER_LOCKED, &sem->count);
-> 	if (unlikely(tmp & RWSEM_FLAG_WAITERS))
-> 		rwsem_wake(sem);
->
-A preempt_disable()/preempt_enable() pair has been added by commit 
-48dfb5d2560 ("locking/rwsem: Disable preemption while trying for rwsem 
-lock") to __up_write(). So that should not be a problem. However, that 
-does make this change, if implemented, has dependency on the coexistence 
-of the previous mentioned commit to be functionally complete.
+On Mon, Oct 24, 2022 at 11:44:21PM +0800, Li Zetao wrote:
+> If "interp_elf_ex" fails to allocate memory in load_elf_binary(),
+> the program will take the "out_free_ph" error handing path,
+> resulting in "interpreter" file resource is not released.
 
-Cheers,
-Longman
+Yes :-(
 
+> --- a/fs/binfmt_elf.c
+> +++ b/fs/binfmt_elf.c
+> @@ -911,7 +911,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
+>  		interp_elf_ex = kmalloc(sizeof(*interp_elf_ex), GFP_KERNEL);
+>  		if (!interp_elf_ex) {
+>  			retval = -ENOMEM;
+> -			goto out_free_ph;
+> +			goto out_free_file;
+
+Reviewed-by: Alexey Dobriyan <adobriyan@gmail.com>
