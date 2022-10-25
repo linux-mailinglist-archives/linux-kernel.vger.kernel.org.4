@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62BC60D008
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46DD60D00E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJYPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S232987AbiJYPMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232529AbiJYPLi (ORCPT
+        with ESMTP id S232936AbiJYPL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:11:38 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213391A9916;
-        Tue, 25 Oct 2022 08:11:36 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id o12so22575494lfq.9;
-        Tue, 25 Oct 2022 08:11:36 -0700 (PDT)
+        Tue, 25 Oct 2022 11:11:59 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E702663
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:11:57 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id a5so8249230qkl.6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:11:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MWul1tU4IjkmONdULsGbXx3VTw+2F7vYwrYbT4qfDWk=;
-        b=Z+al1FwzheJmJi29u7rREJFZgLX1IOoO3LjLp9XVN7j70XdxwCew3JkHhWQi+mzeSN
-         RLshy1L3ieOmjUfJBUUR5XA/AJzyYtCI7gO5HCv7qP87Ruzkm+Rp/aSuAhgNtaMiuXvQ
-         47xvgR1meAZ7av5MtGB8OlyzoHKZnaCjrBPL1ejjMphg3ef8WammYiTm9uLPcbraJwTI
-         tR9+IHCNyezLUfwsMuj+dAmdJz6fgqbRRtFLQyZhRSKQDGNkwRbXBv3IEZkJRtWhekCp
-         74CcTwSUCDTHyBM5nO6oT28pwIziOyNfuDrZ+4Pq4h+28vd+DsdSqBeME/xZfu6d+VQZ
-         7nWw==
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M79Zo45I4bE9WQNkOFTdWrsHTrfrgiJTHtIWiYegoZg=;
+        b=FX9N/s9/SutgcW/9gcbePP3lroDMrQICKB6xcxQVBj4qtH8fmRaBUvZHexK1tfGk1v
+         uKyM+qQHZbOOY1CWZPaShmnA2n/NLOn7R+ImH/Mmv8B2BwoohpGZ3Z1TTVD52vYZsrgD
+         G/OgMCKF1T6Zq1ULEGFTjvYWuPWBuO5TabbyDsPyC82NHSV4b/MWyKxUeFU6mIgr5TWA
+         Siju8v07GQvikO4Q81JV2VfCoAX6lJIoHPFdvTBWGxHnBbHT8MAuA8GBNsbHWZhHHpAp
+         32eGFEih6wnI57wCKepW1niVlOP6YSn1l3lloG8co96YKbVIG12l4rONXoH4iDctBmzk
+         Wq2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MWul1tU4IjkmONdULsGbXx3VTw+2F7vYwrYbT4qfDWk=;
-        b=lgZaFMmZRKZS0D7Ikbzh7QC+A5PNizJLpZwnVwQuNBTQC68hiJcWFbKDXuIX1bp4yl
-         ejedH991rsKMKEP7N8OpHgmherh7NuK7YY+SFQqJa5mQkIOhDZL3zvld1YL8ne8ba+tR
-         tBuXLtI5byd0ut7hi7kzDzuaP/7+jbQyGfjZMQbX7flDZhabgBzZ8UHVtrVMS9jAr4oL
-         uJASqVW2uKRj8AwKn1BD39ohccnKfRu2jf9XfbiREzfnFZ2KHx515hDqvEeOhcMV1QJP
-         zyYvLgCd2xOfbofMei6yLlW9blO38FXKuNezTA/Xj+Ta0QESOj1DXvldnoWlFXNLrgdS
-         3vRg==
-X-Gm-Message-State: ACrzQf2Ho3nFyg6y5iZnUbNpq97YkY8IdFl8ZcZQsMMLn9m9D3NYpcvo
-        0sS2zY9EiVnuZbaGgxsfyhY=
-X-Google-Smtp-Source: AMsMyM52GZYPhz8VhljMtqnPuDj5cPIm5wR/Vd3dmECrYTZ7fu2asTreYMNi4h8a3wyrs9SRb9zjqg==
-X-Received: by 2002:a05:6512:75:b0:4a4:6c3e:a75d with SMTP id i21-20020a056512007500b004a46c3ea75dmr13354062lfo.408.1666710694300;
-        Tue, 25 Oct 2022 08:11:34 -0700 (PDT)
-Received: from fedora (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id n11-20020ac2490b000000b004979df1c1fasm453946lfi.61.2022.10.25.08.11.30
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M79Zo45I4bE9WQNkOFTdWrsHTrfrgiJTHtIWiYegoZg=;
+        b=Bmx+bJQx2ODTa4MxlBnLC6fW7Ux3UrkMM3fc94Ea75s+58arI3yn9Sa+rtHueXa4PH
+         S4WZAnbpWO/mc1t2TTEjYbsMFPMNbol1i0FBhHPMfLw+317bINj/rhGjU1iOZrrEeioY
+         lNekiVuI1SSF/9xb5ZG5NQQjSO5N/QsiG4i3lkCk/mtd40XaWz3J9fuwyI4cZB1DtfWm
+         4hXUj3A4MmcjjGgpKLMxGqBIhJ3iCtZlhl6pPXSa71MFsJip6xp3I8XPW5M77gd6NfLa
+         JEobpXX/UlbY9E/qGvAHTx6hGHpdyNL6W7Re9FzaZmYmU9regv1ryYL54pvxZrBwfgG8
+         SAJw==
+X-Gm-Message-State: ACrzQf2ezhq+L0Uf0iaVSnM4gHBEYA3q8nU2sDnccttsmL2qMzg2WP7p
+        W6Ht1/pCRIlJkX2+97QrrW4hlw==
+X-Google-Smtp-Source: AMsMyM4uLvCMD1LrvZe04wjR7BhAlI/BQUBp5sxVyjBzG/zAe7JuqyUG2sW/PMNqosjXoH9UhK1MEA==
+X-Received: by 2002:a37:c203:0:b0:6ee:a214:a560 with SMTP id i3-20020a37c203000000b006eea214a560mr20946826qkm.528.1666710716191;
+        Tue, 25 Oct 2022 08:11:56 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id fp9-20020a05622a508900b0039a08c0a594sm1694087qtb.82.2022.10.25.08.11.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 08:11:33 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 18:11:26 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
-Subject: [PATCH v2 0/2] fix fwnode_irq_get_byname() returnvalue
-Message-ID: <cover.1666710197.git.mazziesaccount@gmail.com>
+        Tue, 25 Oct 2022 08:11:55 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 08:11:44 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Mel Gorman <mgorman@techsingularity.net>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Seth Jennings <sjenning@redhat.com>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Subject: Re: [PATCH 6.0 19/20] mm/huge_memory: do not clobber swp_entry_t
+ during THP split
+In-Reply-To: <20221024112935.173960536@linuxfoundation.org>
+Message-ID: <f6d7b68a-a5ae-2f85-49b7-f4666eb3a8c9@google.com>
+References: <20221024112934.415391158@linuxfoundation.org> <20221024112935.173960536@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="t1R8QCdkJ9VqjNyC"
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,100 +82,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 24 Oct 2022, Greg Kroah-Hartman wrote:
+> From: Mel Gorman <mgorman@techsingularity.net>
+> 
+> commit 71e2d666ef85d51834d658830f823560c402b8b6 upstream.
+> 
+> The following has been observed when running stressng mmap since commit
+> b653db77350c ("mm: Clear page->private when splitting or migrating a page")
+> 
+>    watchdog: BUG: soft lockup - CPU#75 stuck for 26s! [stress-ng:9546]
+>    CPU: 75 PID: 9546 Comm: stress-ng Tainted: G            E      6.0.0-revert-b653db77-fix+ #29 0357d79b60fb09775f678e4f3f64ef0579ad1374
+>    Hardware name: SGI.COM C2112-4GP3/X10DRT-P-Series, BIOS 2.0a 05/09/2016
+>    RIP: 0010:xas_descend+0x28/0x80
+>    Code: cc cc 0f b6 0e 48 8b 57 08 48 d3 ea 83 e2 3f 89 d0 48 83 c0 04 48 8b 44 c6 08 48 89 77 18 48 89 c1 83 e1 03 48 83 f9 02 75 08 <48> 3d fd 00 00 00 76 08 88 57 12 c3 cc cc cc cc 48 c1 e8 02 89 c2
+>    RSP: 0018:ffffbbf02a2236a8 EFLAGS: 00000246
+>    RAX: ffff9cab7d6a0002 RBX: ffffe04b0af88040 RCX: 0000000000000002
+>    RDX: 0000000000000030 RSI: ffff9cab60509b60 RDI: ffffbbf02a2236c0
+>    RBP: 0000000000000000 R08: ffff9cab60509b60 R09: ffffbbf02a2236c0
+>    R10: 0000000000000001 R11: ffffbbf02a223698 R12: 0000000000000000
+>    R13: ffff9cab4e28da80 R14: 0000000000039c01 R15: ffff9cab4e28da88
+>    FS:  00007fab89b85e40(0000) GS:ffff9cea3fcc0000(0000) knlGS:0000000000000000
+>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>    CR2: 00007fab84e00000 CR3: 00000040b73a4003 CR4: 00000000003706e0
+>    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>    Call Trace:
+>     <TASK>
+>     xas_load+0x3a/0x50
+>     __filemap_get_folio+0x80/0x370
+>     ? put_swap_page+0x163/0x360
+>     pagecache_get_page+0x13/0x90
+>     __try_to_reclaim_swap+0x50/0x190
+>     scan_swap_map_slots+0x31e/0x670
+>     get_swap_pages+0x226/0x3c0
+>     folio_alloc_swap+0x1cc/0x240
+>     add_to_swap+0x14/0x70
+>     shrink_page_list+0x968/0xbc0
+>     reclaim_page_list+0x70/0xf0
+>     reclaim_pages+0xdd/0x120
+>     madvise_cold_or_pageout_pte_range+0x814/0xf30
+>     walk_pgd_range+0x637/0xa30
+>     __walk_page_range+0x142/0x170
+>     walk_page_range+0x146/0x170
+>     madvise_pageout+0xb7/0x280
+>     ? asm_common_interrupt+0x22/0x40
+>     madvise_vma_behavior+0x3b7/0xac0
+>     ? find_vma+0x4a/0x70
+>     ? find_vma+0x64/0x70
+>     ? madvise_vma_anon_name+0x40/0x40
+>     madvise_walk_vmas+0xa6/0x130
+>     do_madvise+0x2f4/0x360
+>     __x64_sys_madvise+0x26/0x30
+>     do_syscall_64+0x5b/0x80
+>     ? do_syscall_64+0x67/0x80
+>     ? syscall_exit_to_user_mode+0x17/0x40
+>     ? do_syscall_64+0x67/0x80
+>     ? syscall_exit_to_user_mode+0x17/0x40
+>     ? do_syscall_64+0x67/0x80
+>     ? do_syscall_64+0x67/0x80
+>     ? common_interrupt+0x8b/0xa0
+>     entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> The problem can be reproduced with the mmtests config
+> config-workload-stressng-mmap.  It does not always happen and when it
+> triggers is variable but it has happened on multiple machines.
+> 
+> The intent of commit b653db77350c patch was to avoid the case where
+> PG_private is clear but folio->private is not-NULL.  However, THP tail
+> pages uses page->private for "swp_entry_t if folio_test_swapcache()" as
+> stated in the documentation for struct folio.  This patch only clobbers
+> page->private for tail pages if the head page was not in swapcache and
+> warns once if page->private had an unexpected value.
+> 
+> Link: https://lkml.kernel.org/r/20221019134156.zjyyn5aownakvztf@techsingularity.net
+> Fixes: b653db77350c ("mm: Clear page->private when splitting or migrating a page")
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Cc: Mel Gorman <mgorman@techsingularity.net>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Brian Foster <bfoster@redhat.com>
+> Cc: Dan Streetman <ddstreet@ieee.org>
+> Cc: Miaohe Lin <linmiaohe@huawei.com>
+> Cc: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Cc: Seth Jennings <sjenning@redhat.com>
+> Cc: Vitaly Wool <vitaly.wool@konsulko.com>
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
---t1R8QCdkJ9VqjNyC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Greg, this patch from Mel is important,
+but introduces a warning which is giving Tvrtko trouble - see linux-mm
+https://lore.kernel.org/linux-mm/1596edbb-02ad-6bdf-51b8-15c2d2e08b76@linux.intel.com/
 
-The fix fwnode_irq_get_byname() may have returned zero if mapping the
-IRQ fails. This contradicts the documentation. Furthermore, returning
-zero or errno on error is unepected and can easily lead to problems
-like:
+We already have the fix for the warning, it's making its way through the
+system, and is marked for stable, but it has not reached Linus's tree yet.
 
-int probe(foo)
-{
-=2E..
-	ret =3D fwnode_irq_get_byname(...);
-	if (ret < 0)
-		return ret;
-=2E..
-}
+Please drop this 19/20 from 6.0.4, then I'll reply to this to let you know
+when the fix does reach Linus's tree - hopefully the two can go together
+in the next 6.0-stable.
 
-or
+I apologize for not writing yesterday: gmail had gathered together
+different threads with the same subject, I thought you and stable
+were Cc'ed on the linux-mm mail and you would immediately drop it
+yourself, but in fact you were not on that thread at all.
 
-int probe(foo)
-{
-=2E..
-	ret =3D fwnode_irq_get_byname(...);
-	if (ret <=3D 0)
-		return ret;
-=2E..
-}
-
-which are both likely to be wrong. First treats zero as successful call and
-misses the IRQ mapping failure. Second returns zero from probe even though
-it detects the IRQ mapping failure correvtly.
-
-Here we change the fwnode_irq_get_byname() to always return a negative
-errno upon failure. I have also audited following callers:
-
-drivers/i2c/i2c-smbus.c
-drivers/iio/accel/adxl355_core.c
-drivers/iio/gyro/fxas21002c_core.c
-drivers/iio/imu/adis16480.c
-drivers/iio/imu/bmi160/bmi160_core.c
-drivers/iio/imu/bmi160/bmi160_core.c
-
-and it seems to me these calls will be Ok after the change. The
-i2c-smbus.c will gain a functional change (bugfix?) as after this patch
-the probe will return -EINVAL should the IRQ mapping fail. The series
-will also adjust the return value check for zero to be omitted.
-
-Changelog v1 =3D> v2:
- - minor styling
-
----
-
-Matti Vaittinen (2):
-  drivers: fwnode: fix fwnode_irq_get_byname()
-  i2c: i2c-smbus: fwnode_irq_get_byname() return value fix
-
- drivers/base/property.c | 9 +++++++--
- drivers/i2c/i2c-smbus.c | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
-
-
-base-commit: 247f34f7b80357943234f93f247a1ae6b6c3a740
---=20
-2.37.3
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---t1R8QCdkJ9VqjNyC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNX/J4ACgkQeFA3/03a
-ocXOkQgAq0+GJzHMzhUv+D5OZ0idZ4ZX0qKwMCcdTxS11fetfx2xqhNGDXhPMdOH
-M8SJSo7HgvR5QNqGJ7se8c61BzXtigWjo6Jj0FJ/AQHjhFq3mgYMUnR74DfBw4yr
-XZafFAhLk95WbMgOt/G3yXaFQPMK47yS4qW1yd1hd0sSnFFj7z3nNHZqvNah6YGF
-pIGf3AThYnHGMJIwkaDnktHCpuo2+nDz2QptEVgxmUrOBSXCc+RnoayTU1wkEkj1
-FrDQq1NnNIcB2N7SVqqRyfbpGPGo7ekpQRflJw1JA8x/67JFKh4645HtvYSEGaxx
-uSteZw4Qe8L0d4gFs6OgvWcE/HuaRw==
-=LzQ4
------END PGP SIGNATURE-----
-
---t1R8QCdkJ9VqjNyC--
+Thanks,
+Hugh
