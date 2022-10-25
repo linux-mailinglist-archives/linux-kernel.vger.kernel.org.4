@@ -2,69 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A9060C271
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 06:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0FA60C275
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 06:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiJYEA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 00:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S229889AbiJYEFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 00:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiJYEAX (ORCPT
+        with ESMTP id S229528AbiJYEFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 00:00:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00384504D;
-        Mon, 24 Oct 2022 21:00:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AAD2061725;
-        Tue, 25 Oct 2022 04:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81CFBC433D7;
-        Tue, 25 Oct 2022 04:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666670421;
-        bh=3TINTyanXuh5N7qudvfxQz6WRFTsujLwEF2pzywIiiE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P+KnXybmZVUF8gekFdWhYtiDldRQa2c58xCgS3Ba/n5uiZdtsuWFZ+YgTBOfCxIHh
-         2JmNbKMTzQwkP8wWeXWN2Os2mG4mnBgJ/9yKp58256KL8zWaqwPMtdEdg+ArHDKycg
-         02kzSCX5iq2Y4S4E3QzNG7VeZ3438EHSHLKAVtGBxw4wmKzSVRuj17oS7aN+z19Y1z
-         +ImrrVUaFfuvbjHy2V8HvOYinRuzKFsSkySjPDDzVwHxyFMXzwzVfdn0W2UwUYgWRG
-         dTP7g6yEgrQosSJxkBhpHnNRj89zSHufDIwjY3zdGheve31DXS+GteBnYkIAMaW8zX
-         kUU5UgHNUKAbw==
-Date:   Mon, 24 Oct 2022 21:00:19 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Junxiao Chang <junxiao.chang@intel.com>
-Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, mcoquelin.stm32@gmail.com,
-        Joao.Pinto@synopsys.com, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/2] net: stmmac: fix unsafe MTL DMA macro
-Message-ID: <20221024210019.551e64ae@kernel.org>
-In-Reply-To: <20221021114711.1610797-1-junxiao.chang@intel.com>
-References: <20221021114711.1610797-1-junxiao.chang@intel.com>
+        Tue, 25 Oct 2022 00:05:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753BC1108
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 21:05:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666670706;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KGQAN5QfmAdIFxH4zxQ7DPOdP0CTozat81OxKPl1IMM=;
+        b=SMyS4fuuL4lEN0CPibSS8It5eRCEWO9w4FmiG+eBFbg3hExfWNZUz0wA+eD2WgyxdDs2g+
+        sdP6CP+WoDsLI4NIU1BKQ1yHNoxzh2u/bbhDcrfgglTDNdvNNt+4yaeP1A3UC+Dld432Xm
+        gEpBSnwmSsWbXygG7OAyBNUlT1yWvuU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-616-iCJ_zHsqNRKBQflQJRGvTw-1; Tue, 25 Oct 2022 00:05:04 -0400
+X-MC-Unique: iCJ_zHsqNRKBQflQJRGvTw-1
+Received: by mail-wr1-f69.google.com with SMTP id s11-20020adfbc0b000000b0023659af24a8so3345277wrg.14
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 21:05:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KGQAN5QfmAdIFxH4zxQ7DPOdP0CTozat81OxKPl1IMM=;
+        b=FmulY+esKbQO/VFAXwg/wNKXwxuangomVdSFUsho+I2w6721/3gKhjjpiReOYn729S
+         zR0X5P+xB9oAQdZ2UPdlnNcUyJZSr3BM3rmKRYkbS5lv9XJS8//YAytjTwjexSiVP/AR
+         D66n5VkaVFFgwPjZGFNm7ACwm7CLF59ECUVie90bzF99Enqssv/eHPeeqdwywaUgJd3q
+         G/kuplOzHIz6YoRkI2wraM/Hel187qxYa/AiRxlmawszjrjEdgG2qVtyTktGG9J6bL/K
+         LfidZVq5U9k+jHrpLN7e/X/S2REQCaHvtvM3YqEGuAKGT7ixd+6MC54CubarEZOuZszA
+         QUBA==
+X-Gm-Message-State: ACrzQf1PAe0D+JGxWSsPIMxRsQPJ2ORGlKjLU0oghlXJ39ZQZ3pRiGG8
+        xM9X8NL3tRQkvlwTZI7sdW8B72fc1KvLmYf5v99MWkkUe+/vxKf2ZHmtEj8dNjpi+sYYPfSyrLz
+        htBffOZ6+PEjhlUTlVBNDe3sr
+X-Received: by 2002:a05:600c:1822:b0:3c7:103:f9be with SMTP id n34-20020a05600c182200b003c70103f9bemr22816970wmp.195.1666670702988;
+        Mon, 24 Oct 2022 21:05:02 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6GrspV0Rv4ooc27M/ZkGRCgHDhw7hvK7fug9mQV9MrYrQcfzp+yqeg/SM+IxYTvSy/l/z7tw==
+X-Received: by 2002:a05:600c:1822:b0:3c7:103:f9be with SMTP id n34-20020a05600c182200b003c70103f9bemr22816959wmp.195.1666670702802;
+        Mon, 24 Oct 2022 21:05:02 -0700 (PDT)
+Received: from redhat.com ([2.52.24.36])
+        by smtp.gmail.com with ESMTPSA id r7-20020a1c2b07000000b003c6f3e5ba42sm9660282wmr.46.2022.10.24.21.05.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 21:05:02 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 00:04:58 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Igor Skalkin <Igor.Skalkin@opensynergy.com>
+Cc:     virtualization@lists.linux-foundation.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, johan.hedberg@gmail.com, jasowang@redhat.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/1] virtio_bt: Fix alignment in configuration struct
+Message-ID: <20221025000433-mutt-send-email-mst@kernel.org>
+References: <20221018191911.589564-1-Igor.Skalkin@opensynergy.com>
+ <20221024134033.30142-1-Igor.Skalkin@opensynergy.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024134033.30142-1-Igor.Skalkin@opensynergy.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022 19:47:10 +0800 Junxiao Chang wrote:
-> Macro like "#define abc(x) (x, x)" is unsafe which might introduce
-> side effects. Each MTL RxQ DMA channel mask is 4 bits, so using
-> (0xf << chan) instead of GENMASK(x + 3, x) to avoid unsafe macro.
+On Mon, Oct 24, 2022 at 03:40:32PM +0200, Igor Skalkin wrote:
+> According to specification [1], "For the device-specific configuration
+> space, the driver MUST use 8 bit wide accesses for 8 bit wide fields,
+> 16 bit wide and aligned accesses for 16 bit wide fields and 32 bit wide
+> and aligned accesses for 32 and 64 bit wide fields.".
 > 
-> Fixes: d43042f4da3e ("net: stmmac: mapping mtl rx to dma channel")
+> Current version of the configuration structure has non-aligned 16bit
+> fields.
+> 
+> This patch adds a second, aligned  version of the configuration structure
+> and a new feature bit indicating that this version is being used.
 
-You need to point out an existing usage where this is causing problems,
-otherwise this is not a fix.
 
-And squash the two patches together, it's going to be easier to review.
+subject should be v4 but besides that, ok.
+Will a spec patch be forthcoming?
+
+> [1] https://docs.oasis-open.org/virtio/virtio/v1.1/virtio-v1.1.pdf
+> 
+> Changes in v4:
+>   v3 was corrupted by our smtp server.
+> Changes in v3:
+>   v2 had been sent from the wrong address, fixed.
+> Changes in v2:
+>   The first version of this patch just changed the configuration
+>   structure in uapi/linux/virtio_bt.h
+>   This can not be done, because it will break the userspace, so the
+>   second version offers a less radical approach - it introduces a new
+>   feature bit and a new configuration structure that both the device
+>   and the driver will use if this bit is negotiated.
+> 
+> Igor Skalkin (1):
+>   virtio_bt: Fix alignment in configuration struct
+> 
+>  drivers/bluetooth/virtio_bt.c  | 16 +++++++++++++---
+>  include/uapi/linux/virtio_bt.h |  8 ++++++++
+>  2 files changed, 21 insertions(+), 3 deletions(-)
+> 
+> -- 
+> 2.37.2
+
