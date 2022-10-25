@@ -2,178 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D044360CC60
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D937160CC0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbiJYMsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S231986AbiJYMlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbiJYMrn (ORCPT
+        with ESMTP id S231378AbiJYMlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:47:43 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 052E71958FE
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:45:26 -0700 (PDT)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MxWkW4tPXzVj6j;
-        Tue, 25 Oct 2022 20:40:35 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 20:45:21 +0800
-Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
- 2022 20:45:21 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <gregkh@linuxfoundation.org>,
-        <linux-accelerators@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <zhangfei.gao@linaro.org>, <wangzhou1@hisilicon.com>,
-        <yekai13@huawei.com>
-Subject: [PATCH v9 3/3] crypto: hisilicon/qm - add the device isolation feature for acc
-Date:   Tue, 25 Oct 2022 12:39:31 +0000
-Message-ID: <20221025123931.42161-4-yekai13@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221025123931.42161-1-yekai13@huawei.com>
-References: <20221025123931.42161-1-yekai13@huawei.com>
+        Tue, 25 Oct 2022 08:41:00 -0400
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E82D185425;
+        Tue, 25 Oct 2022 05:40:59 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id 8so7909888qka.1;
+        Tue, 25 Oct 2022 05:40:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Lao/ypUUNI0LjIKEvGEpGGZT7cntnLS2PFomcQrERvE=;
+        b=isKE4M3Ed15PP3W2RI9Xgl09g+mee7lta8lrAXvRWga5CRrE+vESEEnLhZi+omNHaQ
+         DPRj/DoXeqnLeHe85RnlmgVFl1W1yhkOVGvTG6FZ5aPwZ41GhDlJ4I69GP8VrmaCkcLB
+         O8a++ioqdZ/xcx1qks59yo8rnf7HadckRpnuoTD0PMqjYo5LCCepgyU6xClkPuzUNvIz
+         IYAzd3IzK+lScBLuCsoGc5WquYuxA+DMKWQxxw8k+9ojH/wg/g3gPajstPFliCJHM9Bd
+         cuHqYSbzBgNVW0YQ006s4fMrbikHvgimxNBkEYUiBQqA/3X28OC5yH+0OgwpkU6Srga9
+         XP0w==
+X-Gm-Message-State: ACrzQf26KjDuz4b/u5uA7YwjnpCuVx3UNLJm+yPl6HY5+t35jrj7xHxW
+        BHBUKDcDm28gOP8vVPC6LNePYpIJFiK5Nw==
+X-Google-Smtp-Source: AMsMyM7MsvRpNJJYaxWIj/JGMMdI8VbctEcpSCeueXrEDTD2qjlQ7VI6zTZEqU1ktt+xkO7jIGg4mQ==
+X-Received: by 2002:a37:b802:0:b0:6ee:9495:9a79 with SMTP id i2-20020a37b802000000b006ee94959a79mr25672278qkf.136.1666701657782;
+        Tue, 25 Oct 2022 05:40:57 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id d19-20020a05620a241300b006cfc01b4461sm1975292qkn.118.2022.10.25.05.40.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 05:40:57 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id o70so14386009yba.7;
+        Tue, 25 Oct 2022 05:40:57 -0700 (PDT)
+X-Received: by 2002:a25:4fc2:0:b0:6be:afb4:d392 with SMTP id
+ d185-20020a254fc2000000b006beafb4d392mr31753639ybb.604.1666701657095; Tue, 25
+ Oct 2022 05:40:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220929172356.301342-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220929172356.301342-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 25 Oct 2022 14:40:45 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVfExBuXNiRBaPRqaX9AvDprTHec7+1K-7Un6gDf6VWJA@mail.gmail.com>
+Message-ID: <CAMuHMdVfExBuXNiRBaPRqaX9AvDprTHec7+1K-7Un6gDf6VWJA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] RZ/G2UL separate out SoC specific parts
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        DT <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Record every AER error by uacce api. And isolate the device directly
-when the controller reset fail. The VF device use the PF device
-isolation strategy. Once the PF device is isolated, its VF device will
-also be isolated.
+Hi Prabhakar,
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
----
- drivers/crypto/hisilicon/qm.c | 66 ++++++++++++++++++++++++++++++-----
- 1 file changed, 57 insertions(+), 9 deletions(-)
+On Thu, Sep 29, 2022 at 7:24 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> This patch series aims to split up the RZ/G2UL SoC DTSI into common parts
+> so that this can be shared with the RZ/Five SoC.
+>
+> Implementation is based on the discussion [0] where I have used option#2.
+>
+> The Renesas RZ/G2UL (ARM64) and RZ/Five (RISC-V) have almost the same
+> identical blocks to avoid duplication a base SoC dtsi (r9a07g043.dtsi) is
+> created which will be used by the RZ/G2UL (r9a07g043u.dtsi) and RZ/Five
+> (r9a07g043F.dtsi)
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index 363a02810a16..aa953ce86f70 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -3397,6 +3397,29 @@ static void qm_set_sqctype(struct uacce_queue *q, u16 type)
- 	up_write(&qm->qps_lock);
- }
- 
-+static int qm_uacce_isolate_init(struct hisi_qm *qm)
-+{
-+	struct pci_dev *pdev = qm->pdev;
-+	struct uacce_device *pf_uacce, *uacce;
-+	struct device *pf_dev = &(pci_physfn(pdev)->dev);
-+
-+	uacce = qm->uacce;
-+	if (uacce->is_vf) {
-+		/* VF uses PF's isoalte data */
-+		pf_uacce = dev_to_uacce(pf_dev);
-+		if (!pf_uacce) {
-+			pci_err(pdev, "fail to PF device!\n");
-+			return -ENODEV;
-+		}
-+
-+		uacce->isolate_ctx = &pf_uacce->isolate_data;
-+	} else {
-+		uacce->isolate_ctx = &uacce->isolate_data;
-+	}
-+
-+	return 0;
-+}
-+
- static long hisi_qm_uacce_ioctl(struct uacce_queue *q, unsigned int cmd,
- 				unsigned long arg)
- {
-@@ -3450,6 +3473,14 @@ static const struct uacce_ops uacce_qm_ops = {
- 	.is_q_updated = hisi_qm_is_q_updated,
- };
- 
-+static void qm_remove_uacce(struct hisi_qm *qm)
-+{
-+	if (qm->use_sva) {
-+		uacce_remove(qm->uacce);
-+		qm->uacce = NULL;
-+	}
-+}
-+
- static int qm_alloc_uacce(struct hisi_qm *qm)
- {
- 	struct pci_dev *pdev = qm->pdev;
-@@ -3511,7 +3542,14 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
- 
- 	qm->uacce = uacce;
- 
-+	ret = qm_uacce_isolate_init(qm);
-+	if (ret)
-+		goto err_rm_uacce;
-+
- 	return 0;
-+err_rm_uacce:
-+	qm_remove_uacce(qm);
-+	return ret;
- }
- 
- /**
-@@ -5133,6 +5171,12 @@ static int qm_controller_reset_prepare(struct hisi_qm *qm)
- 		return ret;
- 	}
- 
-+	if (qm->use_sva) {
-+		ret = uacce_hw_err_isolate(qm->uacce);
-+		if (ret)
-+			pci_err(pdev, "failed to isolate hw err!\n");
-+	}
-+
- 	ret = qm_wait_vf_prepare_finish(qm);
- 	if (ret)
- 		pci_err(pdev, "failed to stop by vfs in soft reset!\n");
-@@ -5458,21 +5502,25 @@ static int qm_controller_reset(struct hisi_qm *qm)
- 		qm->err_ini->show_last_dfx_regs(qm);
- 
- 	ret = qm_soft_reset(qm);
--	if (ret) {
--		pci_err(pdev, "Controller reset failed (%d)\n", ret);
--		qm_reset_bit_clear(qm);
--		return ret;
--	}
-+	if (ret)
-+		goto err_reset;
- 
- 	ret = qm_controller_reset_done(qm);
--	if (ret) {
--		qm_reset_bit_clear(qm);
--		return ret;
--	}
-+	if (ret)
-+		goto err_reset;
- 
- 	pci_info(pdev, "Controller reset complete\n");
- 
- 	return 0;
-+err_reset:
-+	pci_info(pdev, "Controller reset failed (%d)\n", ret);
-+	qm_reset_bit_clear(qm);
-+
-+	/* if resetting fails, isolate the device */
-+	if (qm->use_sva && !qm->uacce->is_vf)
-+		qm->uacce->isolate_ctx->is_isolate = true;
-+
-+	return ret;
- }
- 
- /**
--- 
-2.17.1
+Thanks for your series!
 
+> r9a07g043f.dtsi will look something like below:
+>
+> #include <dt-bindings/interrupt-controller/irq.h>
+>
+> #define SOC_PERIPHERAL_IRQ_NUMBER(nr)   (nr + 32)
+> #define SOC_PERIPHERAL_IRQ(nr, na)      SOC_PERIPHERAL_IRQ_NUMBER(nr) na
+
+Originally, when I assumed incorrectly that dtc does not support
+arithmetic, I used "nr" and "na" in the macro I proposed to mean RISC-V
+("r") resp. ARM ("a") interrupt number.  Apparently the names stuck,
+although the second parameter now has a completely different meaning ;-)
+
+However, as the NCEPLIC does support interrupt flags, unlike the SiFive
+PLIC, there is no need to have the flags parameter in the macro.
+
+Moreover,  it looks like the SOC_PERIPHERAL_IRQ_NUMBER()
+intermediate is not needed, so you can just write:
+
+    #define SOC_PERIPHERAL_IRQ(nr)  (nr + 32)
+
+> #include <arm64/renesas/r9a07g043.dtsi>
+>
+> / {
+>    ...
+>    ...
+> };
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
