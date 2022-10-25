@@ -2,187 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573AE60C671
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2774D60C6FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbiJYIbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
+        id S231172AbiJYIyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbiJYIbC (ORCPT
+        with ESMTP id S229867AbiJYIyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:31:02 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8EE5246A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:30:59 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MxQ6Y2WT5zpVtM;
-        Tue, 25 Oct 2022 16:27:33 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 16:30:57 +0800
-Received: from huawei.com (10.175.127.227) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
- 2022 16:30:57 +0800
-From:   ZhaoLong Wang <wangzhaolong1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>, <vigneshr@ti.com>,
-        <patchwork@huawei.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <wangzhaolong1@huawei.com>,
-        <yi.zhang@huawei.com>, <miaoxie@huawei.com>,
-        <guohanjun@huawei.com>, <huawei.libin@huawei.com>,
-        <yuehaibing@huawei.com>, <johnny.chenyi@huawei.com>,
-        <weiyongjun1@huawei.com>
-Subject: [PATCH -next] ubi: fastmap: Add fastmap control support for module parameter
-Date:   Tue, 25 Oct 2022 16:52:49 +0800
-Message-ID: <20221025085249.256285-1-wangzhaolong1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 25 Oct 2022 04:54:12 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF985139C21
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:54:10 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id a13so35275386edj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezeNa0KTk2LzeMG5JhgWIVDQRQDMmtK5jUjmS8DSveY=;
+        b=aSnigHEoQW6zMZsvzBlSGlaGf/YJDJY/viTwyD/cryQ1AAM2cMo/yR/u2Xvd5aB8/l
+         nKMIxOHRqxMp24TxH0yY75kjQVLu6r0ggRki31sGz9OWSsMEw3y1KThHkFxxmYJDQzQR
+         7MzDSzXmGdWt54DU/MMi6A7hA+gmLqCamfnHUffOlsaNs7oQ2VzAOOdkDz0IUCkOGGXJ
+         YQIHst7yoGMGu1VkeUEthj5tB6M2MyTbLypRMNB5mVFbovKv2+uRrzPZywpUAwzWwELb
+         sYVtS1PzLeZ23ZPr9TAaNqHJhAaSqPwgSwG3235pZt3m0dtEnLohZrEqRH2jLBsTvvQG
+         +tmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ezeNa0KTk2LzeMG5JhgWIVDQRQDMmtK5jUjmS8DSveY=;
+        b=Z/SHKBrjSZ3lfz2btDCgHEdN/b8Gg+UG8Bfh/qTjqWPWKjK+QKCtI53FiQrBKJGMFT
+         oHsQ6nZIMaMPGt7uV7p/StsaZZEckYbjG0+5lO3r5WH8h0Rj796W0DjGChddpo/aai9d
+         a7d1VzBygpurcEbjY31dKBC/ynfvRc1TE+ZTuaBJHyi6ddHdAosdDqgNlI6bZu0ORpqR
+         Wkefq9dLOsYQufz+SdFPyFb6TywNtqbWaz2xMWadTguybtPQ5fUcFDZdiCOKFymu1sVC
+         fUSr1wp84UydXdbUtaoTzmBOuGM/Ky4iyl7lcinND71/iujserzdViL/FsgY4Q5SOXSW
+         Xysw==
+X-Gm-Message-State: ACrzQf31GlE9dFJG95GH0fkEBksKDnPWhbhRxYkUYZryh2tuk3+9iU9V
+        tmMBcgrMg8+000Jcz3Xxxexi2G7sCd0=
+X-Google-Smtp-Source: AMsMyM5m9ddl+EduppwZSQwDXO95/iY9B1gwgu7wF1ojRZR2sd6ZZhlB2brLCCKUEO4umWgM8mSEww==
+X-Received: by 2002:a05:6402:1d86:b0:457:e84:f0e with SMTP id dk6-20020a0564021d8600b004570e840f0emr34418751edb.241.1666688049383;
+        Tue, 25 Oct 2022 01:54:09 -0700 (PDT)
+Received: from nam-dell (ip-217-105-46-178.ip.prioritytelecom.net. [217.105.46.178])
+        by smtp.gmail.com with ESMTPSA id er5-20020a056402448500b0045cf4f72b04sm1200945edb.94.2022.10.25.01.54.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 01:54:09 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 10:54:00 +0200
+From:   Nam Cao <namcaov@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] staging: rtl8712: check for alloc fail in
+ _r8712_init_recv_priv()
+Message-ID: <20221025085400.GA246874@nam-dell>
+References: <cover.1666645510.git.namcaov@gmail.com>
+ <ce12408f17f90b3b368d077a7321a2a252f52b72.1666645510.git.namcaov@gmail.com>
+ <Y1eI4kTRSwEG+G6g@kadam>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1eI4kTRSwEG+G6g@kadam>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The UBI driver can use the IOCTL to disable the fastmap after the
-mainline 669d204469c4 ("ubi: fastmap: Add fastmap control support
-for 'UBI_IOCATT' ioctl"). To destroy the fastmap on a old image,
-we need to reattach the device in user space.
+On Tue, Oct 25, 2022 at 09:57:38AM +0300, Dan Carpenter wrote:
+> On Mon, Oct 24, 2022 at 11:24:07PM +0200, Nam Cao wrote:
+> > The function _r8712_init_recv_priv() and also r8712_init_recv_priv()
+> > just returns silently if they fail to allocate memory. Change their
+> > return type to int and add necessary checks and handling if they return
+> > -ENOMEM
+> > 
+> > Signed-off-by: Nam Cao <namcaov@gmail.com>
+> > ---
+> >  drivers/staging/rtl8712/os_intfs.c     |  3 ++-
+> >  drivers/staging/rtl8712/recv_osdep.h   |  8 ++++----
+> >  drivers/staging/rtl8712/rtl8712_recv.c |  7 ++++---
+> >  drivers/staging/rtl8712/rtl871x_recv.c | 13 +++++++++----
+> >  4 files changed, 19 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
+> > index 003e97205124..47d7d998fa86 100644
+> > --- a/drivers/staging/rtl8712/os_intfs.c
+> > +++ b/drivers/staging/rtl8712/os_intfs.c
+> > @@ -309,7 +309,8 @@ int r8712_init_drv_sw(struct _adapter *padapter)
+> >  	if (ret)
+> >  		return ret;
+> >  	_r8712_init_xmit_priv(&padapter->xmitpriv, padapter);
+> > -	_r8712_init_recv_priv(&padapter->recvpriv, padapter);
+> > +	ret = _r8712_init_recv_priv(&padapter->recvpriv, padapter);
+> > +		return ret;
+> 
+> If statement missing.
 
-However, if the UBI driver build in kernel and the UBI volume is
-the root partition, the UBI device cannot be reattached in user
-space. To disable fastmap in this case, the UBI must provide the
-kernel cmdline parameters to disable fastmap during attach.
+Probably a rebase mistake, the if statement is there in the last patch.
+Will send a v2 nonetheless, thank you for noticing this.
 
-This patch add 'enable_fm' as 5th module init parameter of mtd=xx to
-control fastmap enable or not. When the value is 0, fastmap will not
-create and existed fastmap will destroyed for the given ubi device.
-Default value is 0.
-
-To enable or disable fastmap during module loading, fm_autoconvert
-must be set to non-zero.
-
-+-----------------+---------------+---------------------------+
-|        \        |  enable_fm=0  |  enable_fm=1              |
-+-----------------+---------------+---------------------------+
-|fm_autoconvert=Y |  disable fm   |  enable fm                |
-+---------------------------------+---------------------------+
-|fm_autoconvert=N |  disable fm   | Enable fastmap if fastmap |
-|                 |               | exists on the old image   |
-+-------------------------------------------------------------+
-
-Example:
-  # - Attach mtd1 to ubi1, disable fastmap, mtd2 to ubi2, enable
-      fastmap.
-  # modprobe ubi mtd=1,0,0,1,0 mtd=2,0,0,2,1 fm_autoconvert=1
-
-  # - If 5th parameter is not specified, the value is 0, fastmap is
-      disable
-  # modprobe ubi mtd=1 fm_autoconvert=1
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216623
-Signed-off-by: ZhaoLong Wang <wangzhaolong1@huawei.com>
----
- drivers/mtd/ubi/build.c | 24 ++++++++++++++++++++----
- 1 file changed, 20 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
-index a901f8edfa41..0393cb794a9a 100644
---- a/drivers/mtd/ubi/build.c
-+++ b/drivers/mtd/ubi/build.c
-@@ -35,7 +35,7 @@
- #define MTD_PARAM_LEN_MAX 64
- 
- /* Maximum number of comma-separated items in the 'mtd=' parameter */
--#define MTD_PARAM_MAX_COUNT 4
-+#define MTD_PARAM_MAX_COUNT 5
- 
- /* Maximum value for the number of bad PEBs per 1024 PEBs */
- #define MAX_MTD_UBI_BEB_LIMIT 768
-@@ -53,12 +53,14 @@
-  * @ubi_num: UBI number
-  * @vid_hdr_offs: VID header offset
-  * @max_beb_per1024: maximum expected number of bad PEBs per 1024 PEBs
-+ * @enable_fm: enable fastmap when value is non-zero
-  */
- struct mtd_dev_param {
- 	char name[MTD_PARAM_LEN_MAX];
- 	int ubi_num;
- 	int vid_hdr_offs;
- 	int max_beb_per1024;
-+	int enable_fm;
- };
- 
- /* Numbers of elements set in the @mtd_dev_param array */
-@@ -1248,7 +1250,7 @@ static int __init ubi_init(void)
- 		mutex_lock(&ubi_devices_mutex);
- 		err = ubi_attach_mtd_dev(mtd, p->ubi_num,
- 					 p->vid_hdr_offs, p->max_beb_per1024,
--					 false);
-+					 p->enable_fm == 0 ? true : false);
- 		mutex_unlock(&ubi_devices_mutex);
- 		if (err < 0) {
- 			pr_err("UBI error: cannot attach mtd%d\n",
-@@ -1427,7 +1429,7 @@ static int ubi_mtd_param_parse(const char *val, const struct kernel_param *kp)
- 		int err = kstrtoint(token, 10, &p->max_beb_per1024);
- 
- 		if (err) {
--			pr_err("UBI error: bad value for max_beb_per1024 parameter: %s",
-+			pr_err("UBI error: bad value for max_beb_per1024 parameter: %s\n",
- 			       token);
- 			return -EINVAL;
- 		}
-@@ -1438,13 +1440,25 @@ static int ubi_mtd_param_parse(const char *val, const struct kernel_param *kp)
- 		int err = kstrtoint(token, 10, &p->ubi_num);
- 
- 		if (err) {
--			pr_err("UBI error: bad value for ubi_num parameter: %s",
-+			pr_err("UBI error: bad value for ubi_num parameter: %s\n",
- 			       token);
- 			return -EINVAL;
- 		}
- 	} else
- 		p->ubi_num = UBI_DEV_NUM_AUTO;
- 
-+	token = tokens[4];
-+	if (token) {
-+		int err = kstrtoint(token, 10, &p->enable_fm);
-+
-+		if (err) {
-+			pr_err("UBI error: bad value for enable_fm parameter: %s\n",
-+				token);
-+			return -EINVAL;
-+		}
-+	} else
-+		p->enable_fm = 0;
-+
- 	mtd_devs += 1;
- 	return 0;
- }
-@@ -1457,11 +1471,13 @@ MODULE_PARM_DESC(mtd, "MTD devices to attach. Parameter format: mtd=<name|num|pa
- 		      "Optional \"max_beb_per1024\" parameter specifies the maximum expected bad eraseblock per 1024 eraseblocks. (default value ("
- 		      __stringify(CONFIG_MTD_UBI_BEB_LIMIT) ") if 0)\n"
- 		      "Optional \"ubi_num\" parameter specifies UBI device number which have to be assigned to the newly created UBI device (assigned automatically by default)\n"
-+		      "Optional \"enable_fm\" parameter determines whether to enable fastmap during attach. If the value is non-zero, fastmap is enabled. Default value is 0.\n"
- 		      "\n"
- 		      "Example 1: mtd=/dev/mtd0 - attach MTD device /dev/mtd0.\n"
- 		      "Example 2: mtd=content,1984 mtd=4 - attach MTD device with name \"content\" using VID header offset 1984, and MTD device number 4 with default VID header offset.\n"
- 		      "Example 3: mtd=/dev/mtd1,0,25 - attach MTD device /dev/mtd1 using default VID header offset and reserve 25*nand_size_in_blocks/1024 erase blocks for bad block handling.\n"
- 		      "Example 4: mtd=/dev/mtd1,0,0,5 - attach MTD device /dev/mtd1 to UBI 5 and using default values for the other fields.\n"
-+		      "example 5: mtd=1,0,0,5 mtd=2,0,0,6,1 - attach MTD device /dev/mtd1 to UBI 5 and disable fastmap; attach MTD device /dev/mtd2 to UBI 6 and enable fastmap.(only works when fastmap is enabled and fm_autoconvert=Y).\n"
- 		      "\t(e.g. if the NAND *chipset* has 4096 PEB, 100 will be reserved for this UBI device).");
- #ifdef CONFIG_MTD_UBI_FASTMAP
- module_param(fm_autoconvert, bool, 0644);
--- 
-2.31.1
-
+Best regards,
+Nam
