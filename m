@@ -2,101 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F1C60D61E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 23:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2EF60D626
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 23:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbiJYV0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 17:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S230522AbiJYVac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 17:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiJYV0E (ORCPT
+        with ESMTP id S230075AbiJYVaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 17:26:04 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A511CBC63E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 14:26:01 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id jo13so8510721plb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 14:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BGWr04V+lF6aWhbJp/Uoy9sOYrALVnSBN3Y8pRXJ1k4=;
-        b=LdQSRDMo4JJXiBFQObJX4/tZ9izfN24AJBstnxjRMdZ1izJI+2DHzkRncteED1OM8i
-         I3iX2jMpKfK3rAh2fD9WhhLy+dP2bpWtb6oCAyHm4cGNCy8Bm7R1HlOnz/VBvFWNDevp
-         K4ar1SFCfoHZCN0CjYu8+ZEikR0PC5KTwqlj7X2K9z5xjtcSlRSj1ONmX2o2htyf4sT9
-         xGU028Xqas2JAG+66gwK7xIASDWE+W8zZrYkS/PjX1G9RPxDL6GkZtGY6hLV5xnkSNwt
-         tJ4vR1jfLNOc/QI+yCBkVWPYR9JmxkpZmV2FntTuEEgbTsdZqa9UOyYfxhUiOT/ZItGj
-         FOgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BGWr04V+lF6aWhbJp/Uoy9sOYrALVnSBN3Y8pRXJ1k4=;
-        b=FaInrzS3Glo0esZCbj4I+Y/+q5rKQ4JXzlIL+JUfBqZvSY6ho3pjm+wFdqIqQUq5dd
-         LUnGZHNbspv0znd88GEaXrYU+rVVflY9OiOvJu1pJlNlIPPfRg93veASaqi+kChKvyLe
-         HMH50jI1U4a9hZy0GZlL897lriIm0V0U6ZAo2rlqnIdNlIFvnaHyB2ZV1cr0QZWIR/Lo
-         0U4ScvmHSZn26I5MvwFRNQ4sjGutksWAghaaIDJr1WQazFw1G7wL1Ljn3ZBfL8GOpdWA
-         7sQzYvvIC40VlNG3hv5rGLBzADXJeBHc095LkBUWdBrUeRCQfvbiDaekYSgoviVzPqwl
-         V9Tg==
-X-Gm-Message-State: ACrzQf35Z0ehze0eSbkboHO8wLexZXcKT2o2nk15rkbpv5QNpfFPz0ji
-        MA+x8i2ZdcdxcHRBfr6B5nNeqw==
-X-Google-Smtp-Source: AMsMyM4HtsuFLh5sOl5mxr3A6eeej2Rj7MHrQqomMmaqpDfXKwW6UZp8/eXMGqO9t73FTQZHw9vN9w==
-X-Received: by 2002:a17:90b:38c5:b0:20d:2938:8123 with SMTP id nn5-20020a17090b38c500b0020d29388123mr303632pjb.59.1666733161290;
-        Tue, 25 Oct 2022 14:26:01 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id mr21-20020a17090b239500b0020669c8bd87sm29866pjb.36.2022.10.25.14.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 14:26:00 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 21:25:57 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        jmattson@google.com
-Subject: Re: [PATCH] KVM: x86: Do not expose the host value of CPUID.8000001EH
-Message-ID: <Y1hUZYs7kz7JXmr7@google.com>
-References: <20221022082643.1725875-1-pbonzini@redhat.com>
- <Y1gS6Z/kc+WfUsa3@google.com>
- <e906030e-a77d-468f-2c68-d6c643a768c4@redhat.com>
+        Tue, 25 Oct 2022 17:30:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3752A5246E;
+        Tue, 25 Oct 2022 14:30:20 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0EE9C1F8B3;
+        Tue, 25 Oct 2022 21:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666733419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GsChx+MZJNG5dXDKs99vdVY/KWr9zZZnfSpLrLhebqA=;
+        b=1Q1d+7Rr51d6MYXDNZD5NSRsd+RrBP3t89UkSIFI4OXho3Mx53DsfYJDC2Mx5tP8+eHEVw
+        XxVyDYvsWem9SkJU2bpIfyQXhkpTCPI4HnyM3guNyQeKF4AjtXMxRRCN2H+mVEqUIoot7P
+        zykaHxIu+d+8/0b2ksEoHLgKf3ObLpk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666733419;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GsChx+MZJNG5dXDKs99vdVY/KWr9zZZnfSpLrLhebqA=;
+        b=nwqV8LR6vkXw2FIVIHBJT++eqLS73KWJjC5AoPKaZaV7rXbMGb3MU4ils8pyvbQaQQ5q8D
+        fS6HQAyGJbuC8JBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A3ADB13A64;
+        Tue, 25 Oct 2022 21:30:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kgFFFmhVWGOXIQAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 25 Oct 2022 21:30:16 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e906030e-a77d-468f-2c68-d6c643a768c4@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Li zeming" <zeming@nfschina.com>
+Cc:     willy@infradead.org, jlayton@kernel.org, song@kernel.org,
+        bvanassche@acm.org, reiserfs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "Li zeming" <zeming@nfschina.com>
+Subject: Re: [PATCH] reiserfs: journal: Increase jl pointer check
+In-reply-to: <20221025084704.3922-1-zeming@nfschina.com>
+References: <20221025084704.3922-1-zeming@nfschina.com>
+Date:   Wed, 26 Oct 2022 08:30:13 +1100
+Message-id: <166673341340.7585.173987927705263434@noble.neil.brown.name>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022, Paolo Bonzini wrote:
-> On 10/25/22 18:46, Sean Christopherson wrote:
-> > On Sat, Oct 22, 2022, Paolo Bonzini wrote:
-> > > Several fields of CPUID.8000001EH (ExtendedApicId in EAX[31:0],
-> > > CoreId in EBX[7:0], NodeId in ECX[7:0]) vary on each processor,
-> > > and it is simply impossible to fit the right values in the
-> > > KVM_GET_SUPPORTED_CPUID API, in such a way that they can be
-> > > passed to KVM_SET_CPUID2.
-> > 
-> > The same is true for 0xb and 0x1f, why delete 0x8000001e but keep those? I agree
-> > that KVM_GET_SUPPORTED_CPUID can't get this right, but KVM can at least be
-> > consistent with itself.
-> 
-> 0xb and 0x1f are already special cased because EDX is set to the X2APIC id.
-> KVM knows how to do that unlike the NodeId and CoreId.
+On Tue, 25 Oct 2022, Li zeming wrote:
+> If kzalloc fails to allocate the jl pointer, NULL is returned directly.
+>=20
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+> ---
+>  fs/reiserfs/journal.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
+> index 94addfcefede..d64e9de126c1 100644
+> --- a/fs/reiserfs/journal.c
+> +++ b/fs/reiserfs/journal.c
+> @@ -2569,6 +2569,9 @@ static struct reiserfs_journal_list *alloc_journal_li=
+st(struct super_block *s)
+>  	struct reiserfs_journal_list *jl;
+>  	jl =3D kzalloc(sizeof(struct reiserfs_journal_list),
+>  		     GFP_NOFS | __GFP_NOFAIL);
+> +	if (!jl)
+> +		return NULL;
+> +
 
-But KVM doesn't properly support 0xB/0x1F.  E.g. if usersepace regurgitates
-KVM_GET_SUPPORTED_CPUID back into KVM_SET_CPUID2, all vCPUs will observe the same
-x2APIC ID in EDX, and it will be a host x2APIC ID to boot.
+What do you think the __GFP_NOFAIL flag might mean?
 
-KVM only handles the where userspace provides 0xB.1 (or 0x1F.1), the guest performs
-CPUID with ECX>1, _and_ userspace doesn't provide the exact CPUID entry. 
+NeilBrown
 
-I suppose one could argue that KVM needs to communicate to userspace that KVM
-emulates the edge case behavior of CPUID 0xB and 0x1F, but I would argue that KVM
-communicates that by announcing a max basic leaf >= 0xB/0x1F.
+
+
+>  	INIT_LIST_HEAD(&jl->j_list);
+>  	INIT_LIST_HEAD(&jl->j_working_list);
+>  	INIT_LIST_HEAD(&jl->j_tail_bh_list);
+> --=20
+> 2.18.2
+>=20
+>=20
