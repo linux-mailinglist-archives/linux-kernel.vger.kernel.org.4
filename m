@@ -2,64 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D969560D052
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7411E60D01A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233271AbiJYPVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S232974AbiJYPQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233174AbiJYPUn (ORCPT
+        with ESMTP id S231368AbiJYPQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:20:43 -0400
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECFCA2BE6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:19:34 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Tue, 25 Oct
- 2022 23:15:01 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.15.254]
-Date:   Tue, 25 Oct 2022 23:15:01 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   wangkailong@jari.cn
-To:     Jason@zx2c4.com, djwong@kernel.org, hca@linux.ibm.com,
-        gregkh@linuxfoundation.org, kuba@kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] rslib: replace ternary operator with min()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 25 Oct 2022 11:16:23 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26299AC33;
+        Tue, 25 Oct 2022 08:16:21 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id z14so8124287wrn.7;
+        Tue, 25 Oct 2022 08:16:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r6+tPR/kzu6yF7DNjbTLOGctUOsV7x2e9sXfAZuE0k4=;
+        b=K/0n8sGD13R9NapDToBhBYXraQ2lv2zWdofXSCF4F7BjIa6/wKU3fG1eRxjlEYsiXD
+         c0YVX3StPEiX4/sDk8pF3BaoYxnxE5Vg9oaC/nl/oBwgbsZ9G/MHJVhgjkli8c9Lhp4n
+         6x0BxFVlSjNYR76+vjd8I13nj/0cnPKK2k/kheJm9JmQhW0XsHpUsVv59PlUHo9WeZtt
+         1puXpbkugYO9+ew8skdfhTD830InDexc/trs5T3qjef/5mdty2ideJ22l4a3lJwPTSqy
+         HXSPlN7zpHx8QjtdKG8rXkzIhq3paMF8+XYbZQzMg3Jpv1D0phBioMJx6tAE3oMEfCRV
+         BI5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r6+tPR/kzu6yF7DNjbTLOGctUOsV7x2e9sXfAZuE0k4=;
+        b=vsiVYYBEGKojDt6nL+tN1lJCc6IuOV+y+iK6StxLy4Bnbh9wm32X10hGiNdhE3idfZ
+         UG3R+fVFDNbmf5N5IFnJQbTzsXhlFoNV7HmfDm7J66OhLwLYlQpLrh9mLsuGWF+WISSg
+         /GGvVNiaQatRWOK7NcbIur24CymnS7XRP5Q9hlhBC+Z9tZfZxRW7Lk5jzl9oogHyntbR
+         /l9ysMbomliX8Fp5BdW9cXibjTr7Wt9XizHq9i38e6AxGJePmZEGp1CFTJXqgAB/kk2l
+         A/lkFFlUrwsY7CkU8z7yA7hTuSMbpHh5mA9G1K+p3EHAlMQ62Urh5jcA2PuIizSiiTmp
+         1mIg==
+X-Gm-Message-State: ACrzQf1rV9YGkEBbGHwywBa3uguwkma6kEBCv7GB7n5fHeYC5QhB5FBT
+        EEQ9urIvgx293nTmtMpvlZf0THWj1HWosQ==
+X-Google-Smtp-Source: AMsMyM6L8Y9mJA8bh1cRNm85m47Dxo8RyLw6mQrzRo0S0OGLSTb5Y6EY/LQsZhz+jpc7NS+0GIN/Ww==
+X-Received: by 2002:a05:6000:1862:b0:230:fc9a:813b with SMTP id d2-20020a056000186200b00230fc9a813bmr25408691wri.552.1666710928334;
+        Tue, 25 Oct 2022 08:15:28 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id j37-20020a05600c1c2500b003b4c979e6bcsm12181227wms.10.2022.10.25.08.15.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 08:15:27 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     mripard@kernel.org, mchehab@kernel.org, gregkh@linuxfoundation.org,
+        wens@csie.org, samuel@sholland.org, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/11] media: cedrus: prefer untiled capture format
+Date:   Tue, 25 Oct 2022 17:15:26 +0200
+Message-ID: <4749341.GXAFRqVoOG@jernej-laptop>
+In-Reply-To: <Y1f7LCVwRgT9FHDe@aptenodytes>
+References: <20221024201515.34129-1-jernej.skrabec@gmail.com> <20221024201515.34129-9-jernej.skrabec@gmail.com> <Y1f7LCVwRgT9FHDe@aptenodytes>
 MIME-Version: 1.0
-Message-ID: <4b3795b5.6.1840fb613ac.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwB3jOJ1_VdjvwQAAA--.4W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAKB2FEYx0AVwAEsE
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VW7Jw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKbGliL3JlZWRfc29sb21vbi90
-ZXN0X3JzbGliLmM6NDIyOiBXQVJOSU5HIG9wcG9ydHVuaXR5IGZvciBtaW4oKQoKU2lnbmVkLW9m
-Zi1ieTogS2FpTG9uZyBXYW5nIDx3YW5na2FpbG9uZ0BqYXJpLmNuPgotLS0KIGxpYi9yZWVkX3Nv
-bG9tb24vdGVzdF9yc2xpYi5jIHwgMiArLQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
-LCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvbGliL3JlZWRfc29sb21vbi90ZXN0X3JzbGli
-LmMgYi9saWIvcmVlZF9zb2xvbW9uL3Rlc3RfcnNsaWIuYwppbmRleCA4NDhlN2ViNWRhOTIuLmY0
-YTAzYWU0M2I4NiAxMDA2NDQKLS0tIGEvbGliL3JlZWRfc29sb21vbi90ZXN0X3JzbGliLmMKKysr
-IGIvbGliL3JlZWRfc29sb21vbi90ZXN0X3JzbGliLmMKQEAgLTQxOSw3ICs0MTksNyBAQCBzdGF0
-aWMgaW50IGV4ZXJjaXNlX3JzX2JjKHN0cnVjdCByc19jb250cm9sICpycywgc3RydWN0IHdzcGFj
-ZSAqd3MsCiAJCWlmIChlcmFzIDwgMCkKIAkJCWVyYXMgPSAwOwogCi0JCWN1dG9mZiA9IG5yb290
-cyA8PSBsZW4gLSBlcnJzID8gbnJvb3RzIDogbGVuIC0gZXJyczsKKwkJY3V0b2ZmID0gbWluKG5y
-b290cywgbGVuIC0gZXJycyk7CiAJCWZvciAoOyBlcmFzIDw9IGN1dG9mZjsgZXJhcysrKQogCQkJ
-dGVzdF9iYyhycywgbGVuLCBlcnJzLCBlcmFzLCB0cmlhbHMsICZzdGF0LCB3cyk7CiAJfQotLSAK
-Mi4yNS4xCg==
+Dne torek, 25. oktober 2022 ob 17:05:16 CEST je Paul Kocialkowski napisal(a):
+> Hi Jernej,
+> 
+> On Mon 24 Oct 22, 22:15, Jernej Skrabec wrote:
+> > While all generations of display engine on Allwinner SoCs support
+> > untiled format, only first generation supports tiled format.  Let's
+> > move untiled format up, so it can be picked before tiled one. If
+> > Cedrus variant doesn't support untiled format, tiled will still be
+> > picked as default format.
+> 
+> Makes sense to me. Of course the order shouldn't matter to smart-enough
+> userspace but it doesn't hurt to serve the most generic case first.
+
+Per Documentation/userspace-api/media/v4l/dev-stateless-decoder.rst driver 
+should select most appropriate format for current platform by default. Setting 
+capture format is optional by aforementioned document.
+
+Best regards,
+Jernej
+
+> 
+> Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> 
+> Cheers,
+> 
+> Paul
+> 
+> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+> > ---
+> > 
+> >  drivers/staging/media/sunxi/cedrus/cedrus_video.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> > b/drivers/staging/media/sunxi/cedrus/cedrus_video.c index
+> > 3591bf9d7d9c..f9f723ea3f79 100644
+> > --- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
+> > @@ -56,13 +56,13 @@ static struct cedrus_format cedrus_formats[] = {
+> > 
+> >  		.capabilities	= CEDRUS_CAPABILITY_VP8_DEC,
+> >  	
+> >  	},
+> >  	{
+> > 
+> > -		.pixelformat	= V4L2_PIX_FMT_NV12_32L32,
+> > +		.pixelformat	= V4L2_PIX_FMT_NV12,
+> > 
+> >  		.directions	= CEDRUS_DECODE_DST,
+> > 
+> > +		.capabilities	= CEDRUS_CAPABILITY_UNTILED,
+> > 
+> >  	},
+> >  	{
+> > 
+> > -		.pixelformat	= V4L2_PIX_FMT_NV12,
+> > +		.pixelformat	= V4L2_PIX_FMT_NV12_32L32,
+> > 
+> >  		.directions	= CEDRUS_DECODE_DST,
+> > 
+> > -		.capabilities	= CEDRUS_CAPABILITY_UNTILED,
+> > 
+> >  	},
+> >  
+> >  };
+
+
+
+
