@@ -2,152 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3950F60CECE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDF460CED2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbiJYOVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:21:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44476 "EHLO
+        id S232524AbiJYOVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232968AbiJYOVH (ORCPT
+        with ESMTP id S232846AbiJYOVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:21:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD486746A;
-        Tue, 25 Oct 2022 07:21:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4155AB81D14;
-        Tue, 25 Oct 2022 14:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AF32C433C1;
-        Tue, 25 Oct 2022 14:20:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666707660;
-        bh=npqwxasURQRjt6ABDS11DHTpEYlQm3/w7oHiAuuaNNQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zqyiqDiIFYYZ5JichYUevRVtzSCBeTiGoqVbpYFwVp8SpXUMu99ghXGdK4GO1AlJa
-         zmv71rQfOke0AtlwfLOa54yMMdbLsfgsBfy88vrTBwkuuMsDuKKHdoqBpT1DJirl1P
-         MrqkNvVWfWHhtgdI+IhMrzl6owd8GeD/QBGsMj3k=
-Date:   Tue, 25 Oct 2022 16:20:57 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>
-Subject: Re: [PATCH 5.10 384/390] Revert "drm/amdgpu: move nbio
- sdma_doorbell_range() into sdma code for vega"
-Message-ID: <Y1fwyYcHsMPhUE2o@kroah.com>
-References: <20221024113022.510008560@linuxfoundation.org>
- <20221024113039.334437223@linuxfoundation.org>
- <Y1emKRzhii9qK+cN@eldamar.lan>
+        Tue, 25 Oct 2022 10:21:42 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A88380EB5;
+        Tue, 25 Oct 2022 07:21:40 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id x6-20020a4ac586000000b0047f8cc6dbe4so1849323oop.3;
+        Tue, 25 Oct 2022 07:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yko5glIn0tdH0ycCuGOetmeeVh4jbYQFoyxurLJH+28=;
+        b=XMKh31YujBGTgFvh/3bL/FJZ9lbvUpwDIv8xizLBI3z3Y3cEyBj3Vg+O3dn4cWst1o
+         Idcb+RCS3CRObMpknf+nYdmslkuNrsaVhgu7u4XXCxnKGlaHPJknbKTJG82mOPEwiAK/
+         U6RH+TxJ4L4dZUFRbl68MesEhLvyf4iYpNT5IAoFy20seD2+eVGLdgUAcW7Cu6e+mz2b
+         vCGWR0JSLSOUL44ocBUVdFHL9AY8iqrXp8EsLgxsRjToJ+K+mLku/7itzfJnuOwz3/uf
+         kqyZVQeLl3aUH90BMNryZJmBXKU05Nf097iIFbZKz6dw8lchOahxunWA2Mp/hrNk1hf6
+         A06g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yko5glIn0tdH0ycCuGOetmeeVh4jbYQFoyxurLJH+28=;
+        b=WCE36eZTXobY9MlcGMKc6ZrdgLofI6ykJ+P0f0ktX7xyVzT9fE5q95Zn3nnXvoDrDS
+         5TLWaUux6rClJvFCKu9tgCWU9uJ4Lw6wOdW9HmpKhtcazYQObvsjlTUegc92wWwWKgry
+         k6r6cowaCTjVASZx71IYcj3gkd0AS1OGHaNbgHqzU4B/pDfzLxi3uuM0wygoVOUw6JUE
+         1TQJ0pru7mQYtPo/gDYA/5nRhDrLZgLXpbLxnxQtTa1eDKAqbxBiqTh4yr2d3k9zk0yg
+         4DnODlf2PQ1ogBqFPxX0NXrRaWeAXTBeqPlZnNNu43ja8qqt8Sa5AESYiw50izVyX/fq
+         s1BQ==
+X-Gm-Message-State: ACrzQf3KosCPLx08vw3Lj0ZQzitITQzwCFLyvKlnXf85cfc+RQ6PEtQe
+        6O+QDOHRuCYIXOnl+0HBVI8=
+X-Google-Smtp-Source: AMsMyM4hC9gdelH7FK9R/Gan9m4AcPKmHPKl3Amx7nPKpEUnC5Z0GnU1uvauhxxxuVj1KRRxg9Aq5g==
+X-Received: by 2002:a4a:ab0c:0:b0:47f:653f:693e with SMTP id i12-20020a4aab0c000000b0047f653f693emr17114124oon.86.1666707699384;
+        Tue, 25 Oct 2022 07:21:39 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u16-20020a056871059000b0012d939eb0bfsm1598376oan.34.2022.10.25.07.21.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 07:21:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <bea41e17-0269-d88e-fd22-ad5c5a4b8dac@roeck-us.net>
+Date:   Tue, 25 Oct 2022 07:21:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1emKRzhii9qK+cN@eldamar.lan>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Content-Language: en-US
+To:     Andrej Picej <andrej.picej@norik.com>,
+        linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221025072533.2980154-1-andrej.picej@norik.com>
+ <20221025072533.2980154-2-andrej.picej@norik.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
+In-Reply-To: <20221025072533.2980154-2-andrej.picej@norik.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:02:33AM +0200, Salvatore Bonaccorso wrote:
-> Hi Greg,
+On 10/25/22 00:25, Andrej Picej wrote:
+> Putting device into the "Suspend-To-Idle" mode causes watchdog to
+> trigger and reset the board after set watchdog timeout period elapses.
 > 
-> On Mon, Oct 24, 2022 at 01:33:01PM +0200, Greg Kroah-Hartman wrote:
-> > From: Shuah Khan <skhan@linuxfoundation.org>
-> > 
-> > This reverts commit 9f55f36f749a7608eeef57d7d72991a9bd557341 which is
-> > commit e3163bc8ffdfdb405e10530b140135b2ee487f89 upstream.
-> > 
-> > This commit causes repeated WARN_ONs from
-> > 
-> > drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amd
-> > gpu_dm.c:7391 amdgpu_dm_atomic_commit_tail+0x23b9/0x2430 [amdgpu]
-> > 
-> > dmesg fills up with the following messages and drm initialization takes
-> > a very long time.
-> > 
-> > Cc: <stable@vger.kernel.org>    # 5.10
-> > Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c |    5 -----
-> >  drivers/gpu/drm/amd/amdgpu/soc15.c     |   25 +++++++++++++++++++++++++
-> >  2 files changed, 25 insertions(+), 5 deletions(-)
-> > 
-> > --- a/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-> > @@ -1475,11 +1475,6 @@ static int sdma_v4_0_start(struct amdgpu
-> >  		WREG32_SDMA(i, mmSDMA0_CNTL, temp);
-> >  
-> >  		if (!amdgpu_sriov_vf(adev)) {
-> > -			ring = &adev->sdma.instance[i].ring;
-> > -			adev->nbio.funcs->sdma_doorbell_range(adev, i,
-> > -				ring->use_doorbell, ring->doorbell_index,
-> > -				adev->doorbell_index.sdma_doorbell_range);
-> > -
-> >  			/* unhalt engine */
-> >  			temp = RREG32_SDMA(i, mmSDMA0_F32_CNTL);
-> >  			temp = REG_SET_FIELD(temp, SDMA0_F32_CNTL, HALT, 0);
-> > --- a/drivers/gpu/drm/amd/amdgpu/soc15.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/soc15.c
-> > @@ -1332,6 +1332,25 @@ static int soc15_common_sw_fini(void *ha
-> >  	return 0;
-> >  }
-> >  
-> > +static void soc15_doorbell_range_init(struct amdgpu_device *adev)
-> > +{
-> > +	int i;
-> > +	struct amdgpu_ring *ring;
-> > +
-> > +	/* sdma/ih doorbell range are programed by hypervisor */
-> > +	if (!amdgpu_sriov_vf(adev)) {
-> > +		for (i = 0; i < adev->sdma.num_instances; i++) {
-> > +			ring = &adev->sdma.instance[i].ring;
-> > +			adev->nbio.funcs->sdma_doorbell_range(adev, i,
-> > +				ring->use_doorbell, ring->doorbell_index,
-> > +				adev->doorbell_index.sdma_doorbell_range);
-> > +		}
-> > +
-> > +		adev->nbio.funcs->ih_doorbell_range(adev, adev->irq.ih.use_doorbell,
-> > +						adev->irq.ih.doorbell_index);
-> > +	}
-> > +}
-> > +
-> >  static int soc15_common_hw_init(void *handle)
-> >  {
-> >  	struct amdgpu_device *adev = (struct amdgpu_device *)handle;
-> > @@ -1351,6 +1370,12 @@ static int soc15_common_hw_init(void *ha
-> >  
-> >  	/* enable the doorbell aperture */
-> >  	soc15_enable_doorbell_aperture(adev, true);
-> > +	/* HW doorbell routing policy: doorbell writing not
-> > +	 * in SDMA/IH/MM/ACV range will be routed to CP. So
-> > +	 * we need to init SDMA/IH/MM/ACV doorbell range prior
-> > +	 * to CP ip block init and ring test.
-> > +	 */
-> > +	soc15_doorbell_range_init(adev);
-> >  
-> >  	return 0;
-> >  }
-> 
-> Can you please as well revert 7b0db849ea030a70b8fb9c9afec67c81f955482e
-> on top?
-> 
-> See https://lore.kernel.org/stable/BL1PR12MB5144F3CC640A18DF0C36E414F72E9@BL1PR12MB5144.namprd12.prod.outlook.com/
-> 
-> Both of these reverts need to be applied to fix regressions which were
-> reported in https://gitlab.freedesktop.org/drm/amd/-/issues/2216 and
-> downstream in Debian (https://bugs.debian.org/1022025).
-> 
-> If it is now not anymore possible for 5.10.150 can you pick the revert
-> for 5.10.151?
 
-Now queued up.
+s/reset/resets/
 
-greg k-h
+> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
+> watchdog in WAIT mode. This is done by setting WDW bit in WCR
+> (Watchdog Control Register) Watchdog operation is restored after exiting
+
+'.' after ')' missing ?
+
+> WAIT mode as expected. WAIT mode coresponds with Linux's
+
+s/coresponds/corresponds/
+
+> "Suspend-To-Idle".
+> 
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Changes in v2:
+>   - validate the property with compatible string, as this functionality
+>     is not supported by all devices.
+> ---
+>   drivers/watchdog/imx2_wdt.c | 37 +++++++++++++++++++++++++++++++++++++
+>   1 file changed, 37 insertions(+)
+> 
+> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> index d0c5d47ddede..dd9866c6f1e5 100644
+> --- a/drivers/watchdog/imx2_wdt.c
+> +++ b/drivers/watchdog/imx2_wdt.c
+> @@ -35,6 +35,7 @@
+>   
+>   #define IMX2_WDT_WCR		0x00		/* Control Register */
+>   #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* -> Watchdog Timeout Field */
+> +#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable for WAIT */
+>   #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset WDOG_B */
+>   #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset Signal */
+>   #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable */
+> @@ -67,6 +68,27 @@ struct imx2_wdt_device {
+>   	bool ext_reset;
+>   	bool clk_is_on;
+>   	bool no_ping;
+> +	bool sleep_wait;
+> +};
+> +
+> +static const char * const wdw_boards[] __initconst = {
+> +	"fsl,imx25-wdt",
+> +	"fsl,imx35-wdt",
+> +	"fsl,imx50-wdt",
+> +	"fsl,imx51-wdt",
+> +	"fsl,imx53-wdt",
+> +	"fsl,imx6q-wdt",
+> +	"fsl,imx6sl-wdt",
+> +	"fsl,imx6sll-wdt",
+> +	"fsl,imx6sx-wdt",
+> +	"fsl,imx6ul-wdt",
+> +	"fsl,imx7d-wdt",
+> +	"fsl,imx8mm-wdt",
+> +	"fsl,imx8mn-wdt",
+> +	"fsl,imx8mp-wdt",
+> +	"fsl,imx8mq-wdt",
+> +	"fsl,vf610-wdt",
+> +	NULL
+>   };
+>   
+>   static bool nowayout = WATCHDOG_NOWAYOUT;
+> @@ -129,6 +151,9 @@ static inline void imx2_wdt_setup(struct watchdog_device *wdog)
+>   
+>   	/* Suspend timer in low power mode, write once-only */
+>   	val |= IMX2_WDT_WCR_WDZST;
+> +	/* Suspend timer in low power WAIT mode, write once-only */
+> +	if (wdev->sleep_wait)
+> +		val |= IMX2_WDT_WCR_WDW;
+>   	/* Strip the old watchdog Time-Out value */
+>   	val &= ~IMX2_WDT_WCR_WT;
+>   	/* Generate internal chip-level reset if WDOG times out */
+> @@ -313,6 +338,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+>   
+>   	wdev->ext_reset = of_property_read_bool(dev->of_node,
+>   						"fsl,ext-reset-output");
+> +
+> +	if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait"))
+> +		if (of_device_compatible_match(dev->of_node, wdw_boards))
+> +			wdev->sleep_wait = 1;
+
+Since sleep_wait is bool:
+			wdev->sleep_wait = true;
+
+> +		else {
+> +			dev_warn(dev, "Warning: Suspending watchdog during " \
+> +				"WAIT mode is not supported for this device.\n");
+
+Do not split strings. "Warning:" is redundant. Please handle the error first.
+
+> +			wdev->sleep_wait = 0;
+
+Unnecessary; false by default. Also, this should fail and return -EINVAL.
+Devicetree files should be correct, and warning messages tend to be ignored.
+
+> +		}
+
+All branches of if/else need to wither use {} or no {}.
+
+> +	else
+> +		wdev->sleep_wait = 0;
+> +
+Unnecessary.
+
+I would suggest to replace the above code with something like
+
+	if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait")) {
+		if (!of_device_compatible_match(dev->of_node, wdw_boards)) {
+			dev_err(dev, "Suspending watchdog in WAIT mode is not supported for this device\n");
+			return -EINVAL;
+		}
+		wdev->sleep_wait = true;
+	}
+
+>   	/*
+>   	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
+>   	 * during suspend.
+
+I still wonder how that interacts with fsl,suspend-in-wait, but since we have a
+property for that we can leave that for someone else to find out. Maybe add a
+comment explaining that interaction with "fsl,suspend-in-wait" is unknown.
+
+Thanks,
+Guenter
+
