@@ -2,54 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACFB60C4B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:06:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C991D60C4B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJYHGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S231539AbiJYHHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiJYHGU (ORCPT
+        with ESMTP id S229851AbiJYHG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:06:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E9C7CE1E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:06:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF55AB81A99
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:06:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449DAC433D7;
-        Tue, 25 Oct 2022 07:06:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666681573;
-        bh=FK2hLWqW8o/+ohg5F3oci1iOm+qnjC9Ne0BOHtIr+dQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ezhCLrJW1TXHHe7innJlISBXAUSWMF8Q076pZF7PjLvEg7DQWWJZXIXxyZ6NMwxXa
-         WLqbMIcmqgH3AAT8BHU1J0fI0s4HJPBGh9G0/ELTdaeTTGJ86Iyt/edmWFEPZMWWFW
-         DWEC7QHe2/KDJvkPYCo88lbG0ZbyR5U87PVWCiapSoTGGKJvR2E47Z9Nw2IkD8xqsp
-         6JAjpZPajs/ZSDu4oJRl6G7ylfyvIIwKmBhHuJuFRSlIapX642cvBObqZZFk9+wlq+
-         VSakJm1hdq32hyaUYYzWFwuvz1j72k99bO+UMvd70CCYj/WBpKMPORCcYSMkTmNV0J
-         EdvlblEuaC8CQ==
-Message-ID: <63ebd06c-9b1c-a390-4a7a-b24b1ed647c5@kernel.org>
-Date:   Tue, 25 Oct 2022 15:06:07 +0800
+        Tue, 25 Oct 2022 03:06:59 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F930625F1;
+        Tue, 25 Oct 2022 00:06:58 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id b2so20397285lfp.6;
+        Tue, 25 Oct 2022 00:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8043rJedakz3yZ0z90+IfFCIJlgzttal/kEkX/MKtrA=;
+        b=qdKFnm3S7SOUrkHeDgmV5z/rDLyPWOnjojVEZuRyEfA9KEvVpoUwb43AQxJSehGvoq
+         KPFMee2e/TKTZcT7OfM4WZoYTMK1vuAnAgCfAa3lr0qVrXqcdfLve0WU3oritH6w3hKm
+         2eKz/qf2YCW1AWpeiwFjzFVHxpkdXK2CXPBShgXipEKsyd9MjF5A/YID2OfDrAscSPYz
+         atfoA98C6IjFxDg1MGdNSCjvdRIg1PTT4YyJ6js1+tUrezlpWlKJrYpOGlvvVD3p9goX
+         BdjvFQcRZM+t0wOa+IopHlspWX0ZFemeKls4TwQoaMsHCZRnwlIE79RRlJgAWcucswRH
+         gC4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8043rJedakz3yZ0z90+IfFCIJlgzttal/kEkX/MKtrA=;
+        b=6Xd1aviWKU9tj99MMPQIgH7vwTFFr5xfXcldQoAHj3MDA/vOufXYPGJiefW3oBt3wB
+         hy2msJJWo0elcMiBbEjXCUPlX8QBR/Js1rSd/zuqOaWxckIRR2WiKX4lx1ueDO17Mluq
+         PxmtEILns41hLGo6TcuNgU6+SWd9poODs+X+35qVhSbcxjoHs1+HCLl/yysvbemV74b0
+         lJn8l/L3UO81XBB3GLVf8McfnHQe5JTHilaZOpft//QWZCvnLSJXtH8tGni7/gvym5ui
+         SRWEOQD91/R1uxNWPr3b/b49IeCGi6TPQBOVvJq3s4pPBBHzJ2ZZJ9QQvUpeUTP3INv3
+         PNog==
+X-Gm-Message-State: ACrzQf1pOF0lCouRgcG2TRVeKC6uRxbfa60PtqhAfMbO91vzwp2V9MQO
+        TM7nirNPpm4QIy4s8LA21TWkDzB3ZqY=
+X-Google-Smtp-Source: AMsMyM5iUHz31uhE/ItaKL0wiFjLAMYPJvIHN3fW28Tkw87cfMzGfsb+NObmNtIJBLV01dwyEsSmkQ==
+X-Received: by 2002:a05:6512:a93:b0:4a2:a5b3:fbb4 with SMTP id m19-20020a0565120a9300b004a2a5b3fbb4mr12518720lfu.346.1666681616012;
+        Tue, 25 Oct 2022 00:06:56 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::2? (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
+        by smtp.gmail.com with ESMTPSA id i11-20020ac25b4b000000b004a91d1b3070sm275794lfp.308.2022.10.25.00.06.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 00:06:55 -0700 (PDT)
+Message-ID: <cd6eb645-4663-40a6-c238-7c82123db1a4@gmail.com>
+Date:   Tue, 25 Oct 2022 10:06:51 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] f2fs: introduce max_order_discard sysfs node
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221021102806.25459-1-frank.li@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20221021102806.25459-1-frank.li@vivo.com>
+References: <Y1dzCCMCDswQFVvO@dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi>
+ <Y1eGwtqbOhXCGoaM@paasikivi.fi.intel.com>
+Content-Language: en-US
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH] drivers: fwnode: fix fwnode_irq_get_byname() kerneldoc
+In-Reply-To: <Y1eGwtqbOhXCGoaM@paasikivi.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,120 +83,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/21 18:28, Yangtao Li wrote:
-> The current max_order_discard is a fixed value,
+Hi Sakari,
 
-max_ordered_discard?
-
-> change it to be configurable through the sys node.
+On 10/25/22 09:48, Sakari Ailus wrote:
+> Moi,
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->   Documentation/ABI/testing/sysfs-fs-f2fs |  6 ++++++
->   fs/f2fs/f2fs.h                          |  3 +++
->   fs/f2fs/segment.c                       |  3 ++-
->   fs/f2fs/sysfs.c                         | 11 +++++++++++
->   4 files changed, 22 insertions(+), 1 deletion(-)
+> On Tue, Oct 25, 2022 at 08:24:24AM +0300, Matti Vaittinen wrote:
+>> The fwnode_irq_get_byname() may return zero on device-tree mapping
+>> error. Fix documentation to reflect this as current documentation
+>> suggests check:
+>>
+>> if (ret < 0)
+>> is enough to detect the errors. This is not the case.
+>>
+>> Add zero as a return value indicating error.
+>>
+>> Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
+>> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>> ---
+>>   drivers/base/property.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/base/property.c b/drivers/base/property.c
+>> index 4d6278a84868..df437d10aa08 100644
+>> --- a/drivers/base/property.c
+>> +++ b/drivers/base/property.c
+>> @@ -960,7 +960,7 @@ EXPORT_SYMBOL(fwnode_irq_get);
+>>    * string.
+>>    *
+>>    * Return:
+>> - * Linux IRQ number on success, or negative errno otherwise.
+>> + * Linux IRQ number on success, zero or negative errno otherwise.
 > 
-> diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
-> index 11ce4a8bdacd..8faef2078a7a 100644
-> --- a/Documentation/ABI/testing/sysfs-fs-f2fs
-> +++ b/Documentation/ABI/testing/sysfs-fs-f2fs
-> @@ -99,6 +99,12 @@ Description:	Controls the issue rate of discard commands that consist of small
->   		checkpoint is triggered, and issued during the checkpoint.
->   		By default, it is disabled with 0.
->   
-> +What:		/sys/fs/f2fs/<disk>/max_order_discard
-> +Date:		October 2022
-> +Contact:	"Yangtao Li" <frank.li@vivo.com>
-> +Description:	Controls the maximum ordered discard, the unit size is one block(4KB).
-> +		By default, it is disabled with 16.
+> I wonder if it would be possible instead to always return a negative error
+> code on error. Returning zero on error is really unconventional and can be
+> expected to be a source of bugs.
 
-By default, it is disabled with 16
+Agree, and I did also consider just adding:
 
-Set it to 16 by default?
+if (!ret)
+	return -EINVAL; (or another feasible errno)
 
-Thanks,
+return ret;
 
-> +
->   What:		/sys/fs/f2fs/<disk>/max_discard_request
->   Date:		December 2021
->   Contact:	"Konstantin Vyshetsky" <vkon@google.com>
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index c444f3f86608..070dee37b915 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -330,6 +330,8 @@ struct discard_entry {
->   
->   /* default discard granularity of inner discard thread, unit: block count */
->   #define DEFAULT_DISCARD_GRANULARITY		16
-> +/* default maximum discard granularity of ordered discard, unit: block count */
-> +#define DEFAULT_MAX_ORDER_DISCARD_GRANULARITY	16
->   
->   /* max discard pend list number */
->   #define MAX_PLIST_NUM		512
-> @@ -409,6 +411,7 @@ struct discard_cmd_control {
->   	unsigned int mid_discard_issue_time;	/* mid. interval between discard issue */
->   	unsigned int max_discard_issue_time;	/* max. interval between discard issue */
->   	unsigned int discard_granularity;	/* discard granularity */
-> +	unsigned int max_order_discard; /* maximum discard granularity issued by lba order */
->   	unsigned int undiscard_blks;		/* # of undiscard blocks */
->   	unsigned int next_pos;			/* next discard position */
->   	atomic_t issued_discard;		/* # of issued discard */
-> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> index acf3d3fa4363..921ec17a40ce 100644
-> --- a/fs/f2fs/segment.c
-> +++ b/fs/f2fs/segment.c
-> @@ -1448,7 +1448,7 @@ static int __issue_discard_cmd(struct f2fs_sb_info *sbi,
->   		if (i + 1 < dpolicy->granularity)
->   			break;
->   
-> -		if (i < DEFAULT_DISCARD_GRANULARITY && dpolicy->ordered)
-> +		if (i < dcc->max_order_discard && dpolicy->ordered)
->   			return __issue_discard_cmd_orderly(sbi, dpolicy);
->   
->   		pend_list = &dcc->pend_list[i];
-> @@ -2046,6 +2046,7 @@ static int create_discard_cmd_control(struct f2fs_sb_info *sbi)
->   		return -ENOMEM;
->   
->   	dcc->discard_granularity = DEFAULT_DISCARD_GRANULARITY;
-> +	dcc->max_order_discard = DEFAULT_MAX_ORDER_DISCARD_GRANULARITY;
->   	if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SEGMENT)
->   		dcc->discard_granularity = sbi->blocks_per_seg;
->   	else if (F2FS_OPTION(sbi).discard_unit == DISCARD_UNIT_SECTION)
-> diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
-> index 555849d4c744..81f628aed2e5 100644
-> --- a/fs/f2fs/sysfs.c
-> +++ b/fs/f2fs/sysfs.c
-> @@ -487,6 +487,15 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
->   		return count;
->   	}
->   
-> +	if (!strcmp(a->attr.name, "max_order_discard")) {
-> +		if (t == 0 || t > MAX_PLIST_NUM)
-> +			return -EINVAL;
-> +		if (!f2fs_block_unit_discard(sbi))
-> +			return -EINVAL;
-> +		*ui = t;
-> +		return count;
-> +	}
-> +
->   	if (!strcmp(a->attr.name, "migration_granularity")) {
->   		if (t == 0 || t > sbi->segs_per_sec)
->   			return -EINVAL;
-> @@ -801,6 +810,7 @@ F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, min_discard_issue_time, min_discard_
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, mid_discard_issue_time, mid_discard_issue_time);
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_discard_issue_time, max_discard_issue_time);
->   F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, discard_granularity, discard_granularity);
-> +F2FS_RW_ATTR(DCC_INFO, discard_cmd_control, max_order_discard, max_order_discard);
->   F2FS_RW_ATTR(RESERVED_BLOCKS, f2fs_sb_info, reserved_blocks, reserved_blocks);
->   F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, batched_trim_sections, trim_sections);
->   F2FS_RW_ATTR(SM_INFO, f2fs_sm_info, ipu_policy, ipu_policy);
-> @@ -931,6 +941,7 @@ static struct attribute *f2fs_attrs[] = {
->   	ATTR_LIST(mid_discard_issue_time),
->   	ATTR_LIST(max_discard_issue_time),
->   	ATTR_LIST(discard_granularity),
-> +	ATTR_LIST(max_order_discard),
->   	ATTR_LIST(pending_discard),
->   	ATTR_LIST(batched_trim_sections),
->   	ATTR_LIST(ipu_policy),
+at the end of the fwnode_irq_get_byname().
+
+However, such a functional change would require auditing the existing 
+callers which I have no time right now.
+if (someone is up to the task)
+	be my guest :)
+else
+	please fix the doc ;)
+
+Yours
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
