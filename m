@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC3860D705
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:26:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB4C60D708
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbiJYW0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
+        id S231640AbiJYW00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbiJYWZW (ORCPT
+        with ESMTP id S232841AbiJYWZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:25:22 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04C57D1E2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:25:20 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id ez6so12245137pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:25:19 -0700 (PDT)
+        Tue, 25 Oct 2022 18:25:59 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B12C8233
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:25:31 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id b5so12941516pgb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:25:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fVyOXaIPwUu5vIxKTkFwgvGCOhZvoDwYK5zKXQji1rw=;
-        b=FXN94XTHI8WO7GeSzT3nSCHe9nGZqe2ZmzGLnUOqPa93icziFIl7n+9AfXwT3f2+y0
-         8QSjBta7eXcMJndiixYUZaYrIr/ALR4UMqjUyF0XwH2DvIQU9E69PpcWNPC0sAnOd+X6
-         fVZP3RQlmJQyVICheUyWF2dKDm4CAztuMUGoM=
+        bh=bfUwPkkWvWRH7D0jic4UzLRvzXiFnNnqQdHiOc474w4=;
+        b=X81xPrHAJB8kKGIX9N34GO+pUJhjd0vTSsPqLbXZPbnwjhw78RSFkKX/ieyem911R5
+         vn0YP9brTjXp2CKcqAxTTuhsFkGMkkbJSeJal6bAZHaMdMnU4oL5F7ZaV6+sbUjQOBsF
+         e8mfAG7nfu7SJUEleArdeEKViZFX4gjE+8yY0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fVyOXaIPwUu5vIxKTkFwgvGCOhZvoDwYK5zKXQji1rw=;
-        b=yZbRFXylTomh4VcRTRXTWt7iKQBGgfm2Q7ztIRnPwPbrTMCSBT9lXgABRF6crQplaD
-         fKXvpOiX7aySY6UZU4834dda2ZuJwMmE6HYTeRa3NUXM8FNJO+HfoW3+q5bT8WtPxXvl
-         FBJGUgXtiEAmwpKOesaNRKTVyvWA5yO4NbEXblHr4iowgp8SU9T6t5H+zrkCtH138taM
-         eMbwkzG5zobH/sNf9WuHy7uU16qNGD32CRiMD9HVLqkc55WddcCNBOBjr2hJaK8XkmSw
-         UtxcpGItua3FpcM+8ESX3rMfNzGNJ0nLBbTt0lLBIpsm+ZNFNsFOStkyGUBqwj9IC6ib
-         wMEA==
-X-Gm-Message-State: ACrzQf00A4AIXNvRuXmsSpS3b2G73M3JT325Y6p44RAZZcvtSnM53QkV
-        IoC/WMfWiWNBuc8dPKxG1sf453/0DdHe2g==
-X-Google-Smtp-Source: AMsMyM4ED1R3VmA5cIJauau3fO0RwdvVSUL/RQb5KUEJx9boipxAayQvCEMLL5iMFYJ0zskyLrXX7g==
-X-Received: by 2002:a17:90b:4c52:b0:20d:489b:5607 with SMTP id np18-20020a17090b4c5200b0020d489b5607mr597178pjb.40.1666736719535;
-        Tue, 25 Oct 2022 15:25:19 -0700 (PDT)
+        bh=bfUwPkkWvWRH7D0jic4UzLRvzXiFnNnqQdHiOc474w4=;
+        b=cHKAqxGKoNhpoOgnmVTRSZISFL0YH+sOPrMBA63xG3Z28/xL0Wz1LtLGkqQKpnXaKL
+         iVokF+b7mPnwexpsUAff0IWJIqRiGs4OkuZo5/vOR3mh36eUsOz6n495cJJ5RPhR4CFe
+         TQs3TW7woU4J+njQdi+AE+YxW0brmb5qPEJsmm5hTRnO1VYcYOXRfKjNUlHETibQ0GL6
+         CtV0Ez+5MrjV782m8ziQt2gKfy827N0CoRtHH7wjEyu9S9w2HkhJQu6IhwqtSkkW8HPy
+         CMYo2orKbvfP6GSCvXoWJwMG+6we+in9vWbqDa1s6J+wyJe7c8FnGxMMyeqzzPrUtYZM
+         AoTA==
+X-Gm-Message-State: ACrzQf24PaOAsjo7vJE/cxzEbj6qvfWnEh8Q8hgBQieJnuvEM2uPYZLN
+        0A2P2Dm64iDxmNISwVTQhBnXaQ==
+X-Google-Smtp-Source: AMsMyM6BfIf8gI4+orMuLMLulOzofOtWVpprVt+MKJeR7Vf9gJoXQ8G6kX4U/nRDcdT0HEkPtm8YpQ==
+X-Received: by 2002:a63:2c4c:0:b0:434:e001:89fd with SMTP id s73-20020a632c4c000000b00434e00189fdmr34519522pgs.444.1666736730605;
+        Tue, 25 Oct 2022 15:25:30 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b78-20020a621b51000000b0056b4c5dde61sm1898977pfb.98.2022.10.25.15.25.18
+        by smtp.gmail.com with ESMTPSA id q15-20020a170902dacf00b0018685257c0dsm1671942plx.58.2022.10.25.15.25.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 15:25:18 -0700 (PDT)
+        Tue, 25 Oct 2022 15:25:29 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>, ebiederm@xmission.com,
-        eb@emlix.com
-Cc:     Kees Cook <keescook@chromium.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] fs/exec.c: simplify initial stack size expansion
-Date:   Tue, 25 Oct 2022 15:24:39 -0700
-Message-Id: <166673667324.2128117.14471012472344174206.b4-ty@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, adobriyan@gmail.com,
+        ebiederm@xmission.com, lizetao1@huawei.com
+Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
+        chengzhihao1@huawei.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, yi.zhang@huawei.com
+Subject: Re: [PATCH] fs/binfmt_elf: Fix memory leak in load_elf_binary()
+Date:   Tue, 25 Oct 2022 15:24:41 -0700
+Message-Id: <166673667327.2128117.4844279671091670952.b4-ty@chromium.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2017429.gqNitNVd0C@mobilepool36.emlix.com>
-References: <2017429.gqNitNVd0C@mobilepool36.emlix.com>
+In-Reply-To: <20221024154421.982230-1-lizetao1@huawei.com>
+References: <20221024154421.982230-1-lizetao1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,20 +73,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 19 Oct 2022 09:32:35 +0200, Rolf Eike Beer wrote:
-> I had a hard time trying to understand completely why it is using vm_end in
-> one side of the expression and vm_start in the other one, and using
-> something in the "if" clause that is not an exact copy of what is used
-> below. The whole point is that the stack_size variable that was used in the
-> "if" clause is the difference between vm_start and vm_end, which is not far
-> away but makes this thing harder to read than it must be.
+On Mon, 24 Oct 2022 23:44:21 +0800, Li Zetao wrote:
+> There is a memory leak reported by kmemleak:
+> 
+>   unreferenced object 0xffff88817104ef80 (size 224):
+>     comm "xfs_admin", pid 47165, jiffies 4298708825 (age 1333.476s)
+>     hex dump (first 32 bytes):
+>       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>       60 a8 b3 00 81 88 ff ff a8 10 5a 00 81 88 ff ff  `.........Z.....
+>     backtrace:
+>       [<ffffffff819171e1>] __alloc_file+0x21/0x250
+>       [<ffffffff81918061>] alloc_empty_file+0x41/0xf0
+>       [<ffffffff81948cda>] path_openat+0xea/0x3d30
+>       [<ffffffff8194ec89>] do_filp_open+0x1b9/0x290
+>       [<ffffffff8192660e>] do_open_execat+0xce/0x5b0
+>       [<ffffffff81926b17>] open_exec+0x27/0x50
+>       [<ffffffff81a69250>] load_elf_binary+0x510/0x3ed0
+>       [<ffffffff81927759>] bprm_execve+0x599/0x1240
+>       [<ffffffff8192a997>] do_execveat_common.isra.0+0x4c7/0x680
+>       [<ffffffff8192b078>] __x64_sys_execve+0x88/0xb0
+>       [<ffffffff83bbf0a5>] do_syscall_64+0x35/0x80
 > 
 > [...]
 
 Applied to for-next/execve, thanks!
 
-[1/1] fs/exec.c: simplify initial stack size expansion
-      https://git.kernel.org/kees/c/bfb4a2b95875
+[1/1] fs/binfmt_elf: Fix memory leak in load_elf_binary()
+      https://git.kernel.org/kees/c/594d2a14f216
 
 -- 
 Kees Cook
