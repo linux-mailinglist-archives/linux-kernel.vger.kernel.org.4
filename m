@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C47560C9B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6554E60C9B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbiJYKO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
+        id S232252AbiJYKPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbiJYKOW (ORCPT
+        with ESMTP id S232171AbiJYKOf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:14:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BE918A528;
-        Tue, 25 Oct 2022 03:07:02 -0700 (PDT)
+        Tue, 25 Oct 2022 06:14:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B107D18D462;
+        Tue, 25 Oct 2022 03:07:28 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D1C586600363;
-        Tue, 25 Oct 2022 11:07:00 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED9D86600363;
+        Tue, 25 Oct 2022 11:07:26 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666692421;
-        bh=UtlfTotMD2ki+X2wC6TKcrkIjBB6Q4W+mMUDKD795dM=;
+        s=mail; t=1666692447;
+        bh=JW1CdqgCRsqnGgTQGAjrlKyW6HoCOVr4phtjoxwxRlQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b9KTrGEQpLIHDjuvIOvXFZJbHa0JO9S7ZX+EkKE7rbk3JBhjAg/65WD65Oat73Zip
-         3yXfm7TZRmyQVDlCK0o8iQHjAepjQV/jok+m3F89uxQK4hsKBKWuF3ANcc/pf+COMu
-         /yT2xQ2cHezIyeA56dwvvb1JJHkYYedEQGMOZtHMheUd62uv5kRAosSeewDJghC/1H
-         SsVxZEDJdRh1UVINt+wndS/Z4bm5XmbAn6B9EfN0v1dnMvcGo7W2DEWP3jlpupGZG8
-         D7fZ5NhzBqnxT8LRdNvY+2rKIke6f0QbEzla0vYUTBPS7lNUlgu4iqn80ark+UhUj7
-         zB/cYc9jq43XQ==
-Message-ID: <b1863393-0b73-ca44-12ae-567982b07f68@collabora.com>
-Date:   Tue, 25 Oct 2022 12:06:58 +0200
+        b=ERqyKwDaRLFxX9qvOO+vPHZcIkg52NCWfGHjj6KySZ4sy9wXn4Y/AkBShGgMZH1IT
+         bjP30wT3Q5v01vuveUF0h/hizJa2Q7Z3zqEEu8wEfn0eyp84cMYB/6iuiPnCVZY0cK
+         mZbqmGjWCTDXI5Otw5mknwGk5N6WHnoP4nC4db/Kbj1mEiwwj/u9HVTGqdWWGNLIMg
+         kL3i0zA1ppJeIq8EFmHv8RJ+FIGl3yieTFQA7IIEKJvXuf/Niz0v9xXGu22/u5dV1/
+         fSi+Pl79edHsCx332vWYRzv3ijGKvmGtrbvHp1wGxnt/bDUTEXr7xpyzLEearhBJ+x
+         yFYMyUAlvflHw==
+Message-ID: <48cb7032-14c7-5b2b-120f-570368f0b097@collabora.com>
+Date:   Tue, 25 Oct 2022 12:07:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.3
-Subject: Re: [PATCH v2 1/4] ASoC: dt-bindings: realtek,rt5682s: Add
- #sound-dai-cells
+Subject: Re: [PATCH v2 3/4] ASoC: dt-bindings: rt5682: Set sound-dai-cells to
+ 1
 Content-Language: en-US
 To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
         <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com, Derek Fang <derek.fang@realtek.com>,
+Cc:     kernel@collabora.com,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20221024220015.1759428-1-nfraprado@collabora.com>
- <20221024220015.1759428-2-nfraprado@collabora.com>
+ <20221024220015.1759428-4-nfraprado@collabora.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221024220015.1759428-2-nfraprado@collabora.com>
+In-Reply-To: <20221024220015.1759428-4-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -64,11 +64,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 25/10/22 00:00, Nícolas F. R. A. Prado ha scritto:
-> The rt5682s codec is a DAI provider with two interfaces - AIF1 and AIF2
-> - and therefore should have a #sound-dai-cells property that is equal to
-> 1. Add it.
+> Commit 0adccaf1eac9 ("ASoC: dt-bindings: rt5682: Add #sound-dai-cells")
+> defined the sound-dai-cells property as 0. However, rt5682 has two DAIs,
+> AIF1 and AIF2, and therefore should have sound-dai-cells set to 1. Fix
+> it.
 > 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Fixes: 0adccaf1eac9 ("ASoC: dt-bindings: rt5682: Add #sound-dai-cells")
 > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > 
 
