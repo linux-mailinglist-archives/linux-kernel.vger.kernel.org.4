@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C46DD60D00E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8222660D00B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232987AbiJYPMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S232925AbiJYPMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbiJYPL7 (ORCPT
+        with ESMTP id S232633AbiJYPL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:11:59 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E702663
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:11:57 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id a5so8249230qkl.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:11:57 -0700 (PDT)
+        Tue, 25 Oct 2022 11:11:58 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E051F2C2;
+        Tue, 25 Oct 2022 08:11:56 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id z24so7343412ljn.4;
+        Tue, 25 Oct 2022 08:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M79Zo45I4bE9WQNkOFTdWrsHTrfrgiJTHtIWiYegoZg=;
-        b=FX9N/s9/SutgcW/9gcbePP3lroDMrQICKB6xcxQVBj4qtH8fmRaBUvZHexK1tfGk1v
-         uKyM+qQHZbOOY1CWZPaShmnA2n/NLOn7R+ImH/Mmv8B2BwoohpGZ3Z1TTVD52vYZsrgD
-         G/OgMCKF1T6Zq1ULEGFTjvYWuPWBuO5TabbyDsPyC82NHSV4b/MWyKxUeFU6mIgr5TWA
-         Siju8v07GQvikO4Q81JV2VfCoAX6lJIoHPFdvTBWGxHnBbHT8MAuA8GBNsbHWZhHHpAp
-         32eGFEih6wnI57wCKepW1niVlOP6YSn1l3lloG8co96YKbVIG12l4rONXoH4iDctBmzk
-         Wq2Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJ2+YP+cPm60d2/5NOUBXuBeSPhDydv5METYzP/z0a4=;
+        b=AoD0+jUlhKuShGAvHefomjU16pIUI47QirDqHeF6R9B/SKWtuWB+XEeXrH/2tq6Myx
+         6J90gflCVR+PUzUYY8WXi38WQ4P4vSseIBqz6UL3LKdbHtnaI5Sn4ECWDpp+SgBYd3Cw
+         HL4xWKl3CC+KX2lTfwpL3OwnJgamLbFIF5zxasQFa/AJLcawT2MffG2+1MOIwhJUXO5B
+         1TAIcN8YJTrFEmWliIeSsNorOv9OvOo8zTycao/B9KOxF47lC2tv5s6lpqdG0IIECG+x
+         XH6P+0XpejVLFiJ7AKJYf3S8SkJv+c/q5bZ9YPYHdpidp5bf+J4y2Ry1a2Oidtzr+31/
+         9olg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M79Zo45I4bE9WQNkOFTdWrsHTrfrgiJTHtIWiYegoZg=;
-        b=Bmx+bJQx2ODTa4MxlBnLC6fW7Ux3UrkMM3fc94Ea75s+58arI3yn9Sa+rtHueXa4PH
-         S4WZAnbpWO/mc1t2TTEjYbsMFPMNbol1i0FBhHPMfLw+317bINj/rhGjU1iOZrrEeioY
-         lNekiVuI1SSF/9xb5ZG5NQQjSO5N/QsiG4i3lkCk/mtd40XaWz3J9fuwyI4cZB1DtfWm
-         4hXUj3A4MmcjjGgpKLMxGqBIhJ3iCtZlhl6pPXSa71MFsJip6xp3I8XPW5M77gd6NfLa
-         JEobpXX/UlbY9E/qGvAHTx6hGHpdyNL6W7Re9FzaZmYmU9regv1ryYL54pvxZrBwfgG8
-         SAJw==
-X-Gm-Message-State: ACrzQf2ezhq+L0Uf0iaVSnM4gHBEYA3q8nU2sDnccttsmL2qMzg2WP7p
-        W6Ht1/pCRIlJkX2+97QrrW4hlw==
-X-Google-Smtp-Source: AMsMyM4uLvCMD1LrvZe04wjR7BhAlI/BQUBp5sxVyjBzG/zAe7JuqyUG2sW/PMNqosjXoH9UhK1MEA==
-X-Received: by 2002:a37:c203:0:b0:6ee:a214:a560 with SMTP id i3-20020a37c203000000b006eea214a560mr20946826qkm.528.1666710716191;
-        Tue, 25 Oct 2022 08:11:56 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id fp9-20020a05622a508900b0039a08c0a594sm1694087qtb.82.2022.10.25.08.11.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OJ2+YP+cPm60d2/5NOUBXuBeSPhDydv5METYzP/z0a4=;
+        b=hUgWAHN9m0QooupihleE9tTHAWO5L66beu9V+QOtNyQMHX6uVLcKJ5poqE0kYqHhCL
+         /zYEVYnfouxGS76kzVKBquDgC/Z/1SfY0tzymvZa5I+OJRNyhHBeLmi7zHYBrFeDiE+F
+         VdjSTSysK+//8yyT+tqZpiL5Kk27oh8p3MJ2g8YoTDhEaXiEqDW4YUktMzLrW6jKEQFu
+         lWJrJhYiznPN6XAlpsovMNDzbjB7BtHIOwNjDBD7dFMnkR1gOIiUs+8/JtiEIi0bwDRn
+         Pq605RTspktS61huij1TBwKB22m1jSr2YUpl0DzMquxyP8R1XCJZC5Ly84ArnGZmJZLg
+         eE+w==
+X-Gm-Message-State: ACrzQf1Ic5U2WpoSv8LngjK7Ni9LykTennuSmD81vhAj7SnP6sat/wFi
+        y9bIm7SPZzuyB2E8zhzG9gs=
+X-Google-Smtp-Source: AMsMyM4RpDJZQC14HbxKi/x9pYMmm2HRPKLbHmzUIaGRcuIwg5PACYftISFclsh6Z1EYORgJJYz6BA==
+X-Received: by 2002:a05:651c:1111:b0:26f:eb56:5844 with SMTP id e17-20020a05651c111100b0026feb565844mr15107789ljo.4.1666710715209;
         Tue, 25 Oct 2022 08:11:55 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 08:11:44 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Seth Jennings <sjenning@redhat.com>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Subject: Re: [PATCH 6.0 19/20] mm/huge_memory: do not clobber swp_entry_t
- during THP split
-In-Reply-To: <20221024112935.173960536@linuxfoundation.org>
-Message-ID: <f6d7b68a-a5ae-2f85-49b7-f4666eb3a8c9@google.com>
-References: <20221024112934.415391158@linuxfoundation.org> <20221024112935.173960536@linuxfoundation.org>
+Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
+        by smtp.gmail.com with ESMTPSA id c7-20020a056512074700b004a46f92a15bsm455046lfs.41.2022.10.25.08.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 08:11:54 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 18:11:49 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org
+Subject: [PATCH v2 1/2] drivers: fwnode: fix fwnode_irq_get_byname()
+Message-ID: <a3bf7094a9f9ebf114736dc7944553dcc701fe73.1666710197.git.mazziesaccount@gmail.com>
+References: <cover.1666710197.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="A023IJH4n4xEpZ4V"
+Content-Disposition: inline
+In-Reply-To: <cover.1666710197.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,109 +80,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022, Greg Kroah-Hartman wrote:
-> From: Mel Gorman <mgorman@techsingularity.net>
-> 
-> commit 71e2d666ef85d51834d658830f823560c402b8b6 upstream.
-> 
-> The following has been observed when running stressng mmap since commit
-> b653db77350c ("mm: Clear page->private when splitting or migrating a page")
-> 
->    watchdog: BUG: soft lockup - CPU#75 stuck for 26s! [stress-ng:9546]
->    CPU: 75 PID: 9546 Comm: stress-ng Tainted: G            E      6.0.0-revert-b653db77-fix+ #29 0357d79b60fb09775f678e4f3f64ef0579ad1374
->    Hardware name: SGI.COM C2112-4GP3/X10DRT-P-Series, BIOS 2.0a 05/09/2016
->    RIP: 0010:xas_descend+0x28/0x80
->    Code: cc cc 0f b6 0e 48 8b 57 08 48 d3 ea 83 e2 3f 89 d0 48 83 c0 04 48 8b 44 c6 08 48 89 77 18 48 89 c1 83 e1 03 48 83 f9 02 75 08 <48> 3d fd 00 00 00 76 08 88 57 12 c3 cc cc cc cc 48 c1 e8 02 89 c2
->    RSP: 0018:ffffbbf02a2236a8 EFLAGS: 00000246
->    RAX: ffff9cab7d6a0002 RBX: ffffe04b0af88040 RCX: 0000000000000002
->    RDX: 0000000000000030 RSI: ffff9cab60509b60 RDI: ffffbbf02a2236c0
->    RBP: 0000000000000000 R08: ffff9cab60509b60 R09: ffffbbf02a2236c0
->    R10: 0000000000000001 R11: ffffbbf02a223698 R12: 0000000000000000
->    R13: ffff9cab4e28da80 R14: 0000000000039c01 R15: ffff9cab4e28da88
->    FS:  00007fab89b85e40(0000) GS:ffff9cea3fcc0000(0000) knlGS:0000000000000000
->    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->    CR2: 00007fab84e00000 CR3: 00000040b73a4003 CR4: 00000000003706e0
->    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->    Call Trace:
->     <TASK>
->     xas_load+0x3a/0x50
->     __filemap_get_folio+0x80/0x370
->     ? put_swap_page+0x163/0x360
->     pagecache_get_page+0x13/0x90
->     __try_to_reclaim_swap+0x50/0x190
->     scan_swap_map_slots+0x31e/0x670
->     get_swap_pages+0x226/0x3c0
->     folio_alloc_swap+0x1cc/0x240
->     add_to_swap+0x14/0x70
->     shrink_page_list+0x968/0xbc0
->     reclaim_page_list+0x70/0xf0
->     reclaim_pages+0xdd/0x120
->     madvise_cold_or_pageout_pte_range+0x814/0xf30
->     walk_pgd_range+0x637/0xa30
->     __walk_page_range+0x142/0x170
->     walk_page_range+0x146/0x170
->     madvise_pageout+0xb7/0x280
->     ? asm_common_interrupt+0x22/0x40
->     madvise_vma_behavior+0x3b7/0xac0
->     ? find_vma+0x4a/0x70
->     ? find_vma+0x64/0x70
->     ? madvise_vma_anon_name+0x40/0x40
->     madvise_walk_vmas+0xa6/0x130
->     do_madvise+0x2f4/0x360
->     __x64_sys_madvise+0x26/0x30
->     do_syscall_64+0x5b/0x80
->     ? do_syscall_64+0x67/0x80
->     ? syscall_exit_to_user_mode+0x17/0x40
->     ? do_syscall_64+0x67/0x80
->     ? syscall_exit_to_user_mode+0x17/0x40
->     ? do_syscall_64+0x67/0x80
->     ? do_syscall_64+0x67/0x80
->     ? common_interrupt+0x8b/0xa0
->     entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> The problem can be reproduced with the mmtests config
-> config-workload-stressng-mmap.  It does not always happen and when it
-> triggers is variable but it has happened on multiple machines.
-> 
-> The intent of commit b653db77350c patch was to avoid the case where
-> PG_private is clear but folio->private is not-NULL.  However, THP tail
-> pages uses page->private for "swp_entry_t if folio_test_swapcache()" as
-> stated in the documentation for struct folio.  This patch only clobbers
-> page->private for tail pages if the head page was not in swapcache and
-> warns once if page->private had an unexpected value.
-> 
-> Link: https://lkml.kernel.org/r/20221019134156.zjyyn5aownakvztf@techsingularity.net
-> Fixes: b653db77350c ("mm: Clear page->private when splitting or migrating a page")
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Mel Gorman <mgorman@techsingularity.net>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Brian Foster <bfoster@redhat.com>
-> Cc: Dan Streetman <ddstreet@ieee.org>
-> Cc: Miaohe Lin <linmiaohe@huawei.com>
-> Cc: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Cc: Seth Jennings <sjenning@redhat.com>
-> Cc: Vitaly Wool <vitaly.wool@konsulko.com>
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Greg, this patch from Mel is important,
-but introduces a warning which is giving Tvrtko trouble - see linux-mm
-https://lore.kernel.org/linux-mm/1596edbb-02ad-6bdf-51b8-15c2d2e08b76@linux.intel.com/
+--A023IJH4n4xEpZ4V
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We already have the fix for the warning, it's making its way through the
-system, and is marked for stable, but it has not reached Linus's tree yet.
+The fwnode_irq_get_byname() does return 0 upon device-tree IRQ mapping
+failure. This is contradicting the function documentation and can
+potentially be a source of errors like:
 
-Please drop this 19/20 from 6.0.4, then I'll reply to this to let you know
-when the fix does reach Linus's tree - hopefully the two can go together
-in the next 6.0-stable.
+int probe(...) {
+	...
 
-I apologize for not writing yesterday: gmail had gathered together
-different threads with the same subject, I thought you and stable
-were Cc'ed on the linux-mm mail and you would immediately drop it
-yourself, but in fact you were not on that thread at all.
+	irq =3D fwnode_irq_get_byname();
+	if (irq <=3D 0)
+		return irq;
 
-Thanks,
-Hugh
+	...
+}
+
+Here we do correctly check the return value from fwnode_irq_get_byname()
+but the driver probe will now return success. (There was already one
+such user in-tree).
+
+Change the fwnode_irq_get_byname() to work as documented and according to
+the common convention and abd always return a negative errno upon failure.
+
+Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
+Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+---
+v1 =3D> v2:
+- change check if (!ret) =3D> if (ret =3D=3D 0), add comment.
+- fix drop redundant empty line.
+
+I did a quick audit for the callers at v6.1-rc2:
+drivers/i2c/i2c-smbus.c
+drivers/iio/accel/adxl355_core.c
+drivers/iio/gyro/fxas21002c_core.c
+drivers/iio/imu/adis16480.c
+drivers/iio/imu/bmi160/bmi160_core.c
+drivers/iio/imu/bmi160/bmi160_core.c
+
+I did not spot any errors to be caused by this change. There will be a
+functional change in i2c-smbus.c as the probe will now return -EINVAL
+should the IRQ dt-mapping fail. It'd be nice if this was checked to be
+Ok by the peeps knowing the i2c-smbus :)
+---
+ drivers/base/property.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index 4d6278a84868..b4ccc64f7bd2 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -964,7 +964,7 @@ EXPORT_SYMBOL(fwnode_irq_get);
+  */
+ int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *=
+name)
+ {
+-	int index;
++	int index, ret;
+=20
+ 	if (!name)
+ 		return -EINVAL;
+@@ -973,7 +973,12 @@ int fwnode_irq_get_byname(const struct fwnode_handle *=
+fwnode, const char *name)
+ 	if (index < 0)
+ 		return index;
+=20
+-	return fwnode_irq_get(fwnode, index);
++	ret =3D fwnode_irq_get(fwnode, index);
++	/* We treat mapping errors as invalid case */
++	if (ret =3D=3D 0)
++		return -EINVAL;
++
++	return ret;
+ }
+ EXPORT_SYMBOL(fwnode_irq_get_byname);
+=20
+--=20
+2.37.3
+
+
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--A023IJH4n4xEpZ4V
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNX/LUACgkQeFA3/03a
+ocXoQwf/U38IGZg2gZXDJsSsSwQB6GvJ0ne1TVbUxPp7/RBAQFVKg8yFZnsKtmPS
+Hw91FqYW+/MTBEIqXMf/bCyVre76cUDb56VMZ+mk2rED3h41mJ3Lew0NSmwXA9/b
+kjYxjhrAlQWXYIGZcooXmkWpt7WvrRx1Fu7BUy3K19wwXYGQUnrEoIoARWM1GjOo
+3/3gLpOt1aoSM+6rVw28cOcoKqKnD0b7+WxeChaXXRgoQOgGkABpgC6weQlzrno9
+HUq7BIKf0Ox9KuRtit5MCFP4UZCrMvXzCs4Y9XtaX3Qbz3UhqeE5YqR75tw+EWPw
+5/NvEve7tW6L7S184ef7uOq+djXWZw==
+=V8kr
+-----END PGP SIGNATURE-----
+
+--A023IJH4n4xEpZ4V--
