@@ -2,106 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B94B60C3B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDD360C3BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiJYGTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S230460AbiJYGUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiJYGTD (ORCPT
+        with ESMTP id S231234AbiJYGUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:19:03 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7BCE09C1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:19:00 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso8686866pjc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=12QBAJ7DmLqyQWnHrdks60L8hd98m3eMBCj+hNYftI0=;
-        b=InODbJj4Fj/eiKetwOgrodIX0PxWjCUlX16/H+OhnS89EDFUjGlPs3yDws2Ax4LbYo
-         svkJpAR/ZX/jWAra79lJBxfYLaem0Gg+Hq/hA80MiFvfwiOe9U5wtzcfOfCCj1ANX9Z3
-         sh0sVLZY8qSADqafobTn+a6dGnsPvR04iCnTr+HBy/491Y2DB6z4ySJovE/Pjge1cMCJ
-         N7RtJdXexVoxTIQJY/la4v7RKPLiOa+upOi6j2xhTwwBJdtT20ed9EAkAvJa4GlZhlPU
-         LaeAjvEytdwfV8C8+FAUWfU1YjSVd51s2Bl5+ijeXSQtaVNJlklC+bcazDNN+ciN36Y9
-         COvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=12QBAJ7DmLqyQWnHrdks60L8hd98m3eMBCj+hNYftI0=;
-        b=xM71TMUfq3J9RHfR2ux5Ppguh9ZDiZzaHT2SXadyiYen4FcmgGKtrxswiuGKfWGNDR
-         i+uZiY1TfSpZk8N1EdKAQIvWCXuWqfrfvFghcGrwwXvnzhozx0vY4gl0Cll60z+ZrzmP
-         pUHq3Z1l06xt4TVNlapRWJKvNNSTgeNGxzTmvFtzNHnFLixKYzbuThsWaL6eS8I2g7ae
-         c0Z2Q21tZa0zlFpBIbKjjOhSc4gHfP+SuwuNjpTg4jnrRnKD+BxdzFWsHj0rrmnPmwX3
-         Nm9bklAgOfWjMQcRnl/rigGOq7a7YIasbgbKrTx+78Z4yKpeDVwnqc8WKE0RU7vS4Eoh
-         2sLQ==
-X-Gm-Message-State: ACrzQf1iYE3pC2sDHcbJ8dqxyaHNZz7mtJTPaxLaMySExl4hXJoVg7fZ
-        CzsmPHV1jJog03OqWmTshv/vPvQuYjYgTYmk
-X-Google-Smtp-Source: AMsMyM5p5tpQvnFbyquz5tYj/STP6Kb+hIKXV83kT0DLWXB4Z1ZgRcWqs/UnY7b7yl/qYSSewOG02Q==
-X-Received: by 2002:a17:902:f34b:b0:186:abd0:93ff with SMTP id q11-20020a170902f34b00b00186abd093ffmr8063636ple.56.1666678740372;
-        Mon, 24 Oct 2022 23:19:00 -0700 (PDT)
-Received: from b-7000.. ([103.7.29.103])
-        by smtp.gmail.com with ESMTPSA id me2-20020a17090b17c200b0020d9df9610bsm4830047pjb.19.2022.10.24.23.18.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 23:19:00 -0700 (PDT)
-From:   brolerliew <brolerliew@gmail.com>
-Cc:     brolerliew@gmail.com,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/scheduler: set current_entity to next when remove from rq
-Date:   Tue, 25 Oct 2022 14:18:46 +0800
-Message-Id: <20221025061846.447975-1-brolerliew@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 25 Oct 2022 02:20:47 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD4826575;
+        Mon, 24 Oct 2022 23:20:43 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1F6A15C0195;
+        Tue, 25 Oct 2022 02:20:43 -0400 (EDT)
+Received: from imap42 ([10.202.2.92])
+  by compute2.internal (MEProxy); Tue, 25 Oct 2022 02:20:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1666678843; x=1666765243; bh=7W3UXDHBfkNojsHZuhGRHr85qNsS45ct53e
+        sNjSB9hc=; b=iRthNzQHgq4jCwNYZJiQBECSxEopKaQr0iOdgDqWIRAqgoGt340
+        JrjJ9pIfLrUyf1CxrHXdTdxuV9ApWrG/lJQDV8KnKXYIEQB5OxzKupG0psRS0uZr
+        EZywIZWSNtAjUxOk3TBMF7n4jZazT2r5kXj6s4LeFQ3ANppVZ9+nBh40UIHcr71V
+        nTs77XJT5kSW0oCiq/zzTV7rVGP7tuvtQ5cWrJxdezJ8XupHEcHSMeb0jtqB54oz
+        V3id8otJG73Y/BDcCbp6TGM9npdowdd5rrF7OmOcPPaWQ4pNmcdya/CvotwPsMXz
+        7LrK60TPYwR9O0HgsDoqOZZ5QD2XITvM9iQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666678843; x=
+        1666765243; bh=7W3UXDHBfkNojsHZuhGRHr85qNsS45ct53esNjSB9hc=; b=p
+        pkyH9JYKEmuUSAapa/HXGo9qwV4s9XRC5IobH32xugrmQ0qyctmm7u+r3b+QXOGj
+        0zIUPT8srWlA4gsGDrJWz8zF1jLkyD0BfCr2ICV2X0YoPAW0z3CP2PtN1BB52OjE
+        GquVkMyWHSyR/df1VxRL5Cw9Amvhut6G4WLiqCuQlC+HQQJ7jZbf2ojP6VFQfHAe
+        O4e5WjhrsPGVUiSaOKAnvicyWc0uMs855hU0Z44gjWykHEhFaw1awk3oCpHfVfMs
+        IJNCNmtV8dnYFGcrX+kMz8nVYy5/n+TP6X/YsuDzXG3VwGWVTyqaiv8sVr4jaVLj
+        NUVxD9wx3Z/jSwidadFzw==
+X-ME-Sender: <xms:OoBXYyU0qxB8gEVxTphuY_TnQ2miRubdQP7FAERM3gmwcnYhDLvR8w>
+    <xme:OoBXY-mN0Fk5QpuiWKq36wqLq4x9EYk2w76CJIzPNY1Wuqa7cZ8ZIrl_117kp_Ox6
+    _gX6tlFDyFG9tklhw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedthedguddutdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculddvfedmnecujfgurhepofgfggfkfffhvfevufgtsehttdertder
+    redtnecuhfhrohhmpedfffgrnhhivghlucgiuhdfuceougiguhesugiguhhuuhdrgiihii
+    eqnecuggftrfgrthhtvghrnhepkeffhffhfedvueejhfekkeeitdetkedvjeetkeektedt
+    gfeuleeiudfgteelheetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuh
+    gsrdgtohhmpdhnvghtfhhilhhtvghrrdhorhhgnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:OoBXY2YaeHVHIBuHbZSN3tdLhXZ1VbMsq5pPxGMBhml3U8W_FIQ4yA>
+    <xmx:OoBXY5VNxvp_NDN1SA3m16aXUF1lEk5lNFImu6Dnz67JHj5QXVaHjg>
+    <xmx:OoBXY8mqwudL1R-Yj9-lXM-ccqyR08eHFXnYD9f0E_lHDtwZsOOowg>
+    <xmx:O4BXY7taLan8SFYRH95dKXG4m2U8FvrMZ47dqP0DaB8jqo9kHlKxWQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 4E785BC0078; Tue, 25 Oct 2022 02:20:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <9a91603a-7b8f-4c6d-9012-497335e4373b@app.fastmail.com>
+Date:   Tue, 25 Oct 2022 00:19:55 -0600
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     "Pablo Neira Ayuso" <pablo@netfilter.org>,
+        "Jozsef Kadlecsik" <kadlec@netfilter.org>,
+        "Florian Westphal" <fw@strlen.de>, netfilter-devel@vger.kernel.org
+Cc:     coreteam@netfilter.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ppenkov@aviatrix.com
+Subject: ip_set_hash_netiface
+Content-Type: text/plain
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When entity move from one rq to another, current_entity will be set to NULL
-if it is the moving entity. This make entities close to rq head got
-selected more frequently, especially when doing load balance between
-multiple drm_gpu_scheduler.
+Hi Pablo,
 
-Make current_entity to next when removing from rq.
+I'm following up with our hallway chat yesterday about how ipset
+hash:net,iface can easily OOM.
 
-Signed-off-by: brolerliew <brolerliew@gmail.com>
----
- drivers/gpu/drm/scheduler/sched_main.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Here's a quick reproducer (stolen from
+https://bugzilla.kernel.org/show_bug.cgi?id=199107):
 
-diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
-index 2fab218d7082..00b22cc50f08 100644
---- a/drivers/gpu/drm/scheduler/sched_main.c
-+++ b/drivers/gpu/drm/scheduler/sched_main.c
-@@ -168,10 +168,11 @@ void drm_sched_rq_remove_entity(struct drm_sched_rq *rq,
- 	spin_lock(&rq->lock);
- 
- 	atomic_dec(rq->sched->score);
--	list_del_init(&entity->list);
- 
- 	if (rq->current_entity == entity)
--		rq->current_entity = NULL;
-+		rq->current_entity = list_next_entry(entity, list);
-+
-+	list_del_init(&entity->list);
- 
- 	if (drm_sched_policy == DRM_SCHED_POLICY_FIFO)
- 		drm_sched_rq_remove_fifo_locked(entity);
--- 
-2.34.1
+        $ ipset create ACL.IN.ALL_PERMIT hash:net,iface hashsize 1048576 timeout 0
+        $ for i in $(seq 0 100); do /sbin/ipset add ACL.IN.ALL_PERMIT 0.0.0.0/0,kaf_$i timeout 0 -exist; done
 
+This used to cause a NULL ptr deref panic before
+https://github.com/torvalds/linux/commit/2b33d6ffa9e38f344418976b06 .
+
+Now it'll either allocate a huge amount of memory or fail a
+vmalloc():
+
+        [Tue Oct 25 00:13:08 2022] ipset: vmalloc error: size 1073741848, exceeds total pages
+        <...>
+        [Tue Oct 25 00:13:08 2022] Call Trace:
+        [Tue Oct 25 00:13:08 2022]  <TASK>
+        [Tue Oct 25 00:13:08 2022]  dump_stack_lvl+0x48/0x60
+        [Tue Oct 25 00:13:08 2022]  warn_alloc+0x155/0x180
+        [Tue Oct 25 00:13:08 2022]  __vmalloc_node_range+0x72a/0x760
+        [Tue Oct 25 00:13:08 2022]  ? hash_netiface4_add+0x7c0/0xb20
+        [Tue Oct 25 00:13:08 2022]  ? __kmalloc_large_node+0x4a/0x90
+        [Tue Oct 25 00:13:08 2022]  kvmalloc_node+0xa6/0xd0
+        [Tue Oct 25 00:13:08 2022]  ? hash_netiface4_resize+0x99/0x710
+        <...>
+
+Note that this behavior is somewhat documented
+(https://ipset.netfilter.org/ipset.man.html):
+
+>  The internal restriction of the hash:net,iface set type is that the same
+>  network prefix cannot be stored with more than 64 different interfaces
+>  in a single set.
+
+I'm not sure how hard it would be to enforce a limit, but I think it would
+be a bit better to error than allocate many GBs of memory.
+
+Thanks,
+Daniel
