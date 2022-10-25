@@ -2,220 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B517960D053
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D768760D074
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbiJYPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:21:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S233121AbiJYPYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233241AbiJYPUn (ORCPT
+        with ESMTP id S233233AbiJYPXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:20:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745F515FE0
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:19:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9237BB81D4F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:19:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2246C433D6;
-        Tue, 25 Oct 2022 15:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666711175;
-        bh=DE1F4TvoVP7AJhOmyQie2kpTOti803NS0bsN9b4in2U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AIyB/EAe5O/Dk4cq3GUmvEWOXbUwmgrJxjxBYYKp71ibK3jXCDAZLNgE4pxf38XwN
-         ofsmwtImq4Y0ltv9kclyOJ3MH/kFUolxgCZy9VEZSkslzKVLkA8pKUANoK8i1lx0PG
-         15NmipZQpyFlRjt6wN226pz1IUYf2vII7c81xvj5Og8fN/3RN9xS61joLfOh5qh7R6
-         JFd8SM3wZgLVSj9Lnird+QKU7OZz5VnC7uOr5fHjVb59t0ZqZvgvL87nfSpANXRmlr
-         HXAyV5/xIpq1d9pCDXC8bN1v7vk84ZpKRH0ohpxdw+hyBESNuVJ3HV2vd0zUfrnQZn
-         KqRdQBcF3+J4w==
-From:   Conor Dooley <conor@kernel.org>
-To:     aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com
-Cc:     l3b2w1@gmail.com, anil.s.keshavamurthy@intel.com, conor@kernel.org,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        mhiramat@kernel.org, naveen.n.rao@linux.ibm.com,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH RESEND v9] riscv: add riscv rethook implementation
-Date:   Tue, 25 Oct 2022 16:18:32 +0100
-Message-Id: <20221025151831.1097417-1-conor@kernel.org>
-X-Mailer: git-send-email 2.38.0
+        Tue, 25 Oct 2022 11:23:35 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1221998A5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:21:42 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id n7so11255998plp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uPoTu9GpF3r7JCGLoYLEXJRrWXzP036fJar0pcMsbUs=;
+        b=OJ+JNHV3wkyvUa+VFpIWGkJAgUsruutAWy8nA4OikHySUZMhON/lKAQV2jEevO+N73
+         BlsXjVUyTOBI4Wip/QpCWcFBhkM5KW9oe+lcoeMDxVa1G+dvDvDAMcgB7m+KJuIgKU1u
+         knldjhoyXh+EyT0VyiuWGEj3bECUotQIEioSeUpun+7dbiYTZXxxsJKNFd6P/J9ZIwGX
+         UJpVGtku3dcpUMQwE44auMweCygVFAWssDmpKWMLUFVB3jW3LoIhJQc5jY9Nzk3+jOPb
+         HXZWt3DDReClW5oeIDFnhDHClDKu6c54mzJsJJsjfOBL/p6i3GiNEg+8Ul/zr/pgZCw2
+         0Akg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uPoTu9GpF3r7JCGLoYLEXJRrWXzP036fJar0pcMsbUs=;
+        b=Fspej20ncrdBWWWPAjNDAGjlsNU/GK8vpPo7QDgFMuDvwYtJ3bbJuLMJC5qMokJMVg
+         VScbu4hkWeT8KsFWVVZT94Imwj5LG8tfspzr1r27wFOW9dBIN9O3S7/PJUau0BGySdt0
+         V+7wfHvsBxVKlHhHNeFcpE+/Dem+uIHt13GORk8YeaKi6eMDIaQfIQtFRgoLfJQVr+yb
+         PHDhan4+hu1AqNZyo8deLXV7C8OU+Y8FixBjaoBZyoiQ0UCfEa40iNzQL8QKw4lSeh23
+         Kgnb6KLPII+BZlpFLVYWC8wV0cj76VYESeAM5j8uOHLtaYR+qbd3nQQpV+Xp/droZdQR
+         R3vg==
+X-Gm-Message-State: ACrzQf2YRVWxkKA4Sa7om5M0Isr24U+NOseNi6RIJWKCc0juBuiUwRRi
+        S053wkcram762lS55ztsHaA=
+X-Google-Smtp-Source: AMsMyM5KqM34tFEIZCaV2VzjvgyKT25/4pgbQ8lef3I/zzQE5Bg+nu+8iJZKiWDTEqUpSxw/vvqRMw==
+X-Received: by 2002:a17:903:41ce:b0:182:a32f:4dde with SMTP id u14-20020a17090341ce00b00182a32f4ddemr38435859ple.47.1666711301774;
+        Tue, 25 Oct 2022 08:21:41 -0700 (PDT)
+Received: from localhost.localdomain (124244014158.ctinets.com. [124.244.14.158])
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090311ce00b001754fa42065sm1356022plh.143.2022.10.25.08.21.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 08:21:41 -0700 (PDT)
+From:   Hoi Pok Wu <wuhoipok@gmail.com>
+To:     shaggy@kernel.org
+Cc:     Hoi Pok Wu <wuhoipok@gmail.com>,
+        jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        syzbot+f0e0fcf3cd1047ae60ad@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com
+Subject: [PATCH V2] fs: jfs: fix shift-out-of-bounds in dbDiscardAG
+Date:   Tue, 25 Oct 2022 23:20:45 +0800
+Message-Id: <20221025152045.343650-1-wuhoipok@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Binglei Wang <l3b2w1@gmail.com>
+This should be applied to most URSAN bugs found recently by syzbot,
+by guarding the dbMount. As syzbot feeding rubbish into the bmap
+descriptor.
 
-Implement the kretprobes on riscv arch by using rethook machenism
-which abstracts general kretprobe info into a struct rethook_node
-to be embedded in the struct kretprobe_instance.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Binglei Wang <l3b2w1@gmail.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Hoi Pok Wu <wuhoipok@gmail.com>
 ---
-Binglei's patches do not seem to make it to the linux-riscv list, so
-blindly resending on their behalf, with Masami's ack from v8 added.
+V1->2: guarding the corrupted data structure from dbMount instead
+ fs/jfs/jfs_dmap.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- arch/riscv/Kconfig                            |  1 +
- arch/riscv/include/asm/kprobes.h              |  2 --
- arch/riscv/kernel/probes/Makefile             |  2 +-
- arch/riscv/kernel/probes/kprobes.c            | 13 ---------
- arch/riscv/kernel/probes/rethook.c            | 27 +++++++++++++++++++
- arch/riscv/kernel/probes/rethook.h            |  8 ++++++
- ...obes_trampoline.S => rethook_trampoline.S} |  6 ++---
- 7 files changed, 40 insertions(+), 19 deletions(-)
- create mode 100644 arch/riscv/kernel/probes/rethook.c
- create mode 100644 arch/riscv/kernel/probes/rethook.h
- rename arch/riscv/kernel/probes/{kprobes_trampoline.S => rethook_trampoline.S} (94%)
-
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 6b48a3ae9843..413aeca71ca0 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -99,6 +99,7 @@ config RISCV
- 	select HAVE_KPROBES if !XIP_KERNEL
- 	select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
- 	select HAVE_KRETPROBES if !XIP_KERNEL
-+	select HAVE_RETHOOK if !XIP_KERNEL
- 	select HAVE_MOVE_PMD
- 	select HAVE_MOVE_PUD
- 	select HAVE_PCI
-diff --git a/arch/riscv/include/asm/kprobes.h b/arch/riscv/include/asm/kprobes.h
-index 217ef89f22b9..e7882ccb0fd4 100644
---- a/arch/riscv/include/asm/kprobes.h
-+++ b/arch/riscv/include/asm/kprobes.h
-@@ -40,8 +40,6 @@ void arch_remove_kprobe(struct kprobe *p);
- int kprobe_fault_handler(struct pt_regs *regs, unsigned int trapnr);
- bool kprobe_breakpoint_handler(struct pt_regs *regs);
- bool kprobe_single_step_handler(struct pt_regs *regs);
--void __kretprobe_trampoline(void);
--void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index e1cbfbb60303..765838578a72 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -198,6 +198,11 @@ int dbMount(struct inode *ipbmap)
+ 		goto err_release_metapage;
+ 	}
  
- #endif /* CONFIG_KPROBES */
- #endif /* _ASM_RISCV_KPROBES_H */
-diff --git a/arch/riscv/kernel/probes/Makefile b/arch/riscv/kernel/probes/Makefile
-index 7f0840dcc31b..c40139e9ca47 100644
---- a/arch/riscv/kernel/probes/Makefile
-+++ b/arch/riscv/kernel/probes/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_KPROBES)		+= kprobes.o decode-insn.o simulate-insn.o
--obj-$(CONFIG_KPROBES)		+= kprobes_trampoline.o
-+obj-$(CONFIG_RETHOOK)		+= rethook.o rethook_trampoline.o
- obj-$(CONFIG_KPROBES_ON_FTRACE)	+= ftrace.o
- obj-$(CONFIG_UPROBES)		+= uprobes.o decode-insn.o simulate-insn.o
- CFLAGS_REMOVE_simulate-insn.o = $(CC_FLAGS_FTRACE)
-diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-index e6e950b7cf32..f21592d20306 100644
---- a/arch/riscv/kernel/probes/kprobes.c
-+++ b/arch/riscv/kernel/probes/kprobes.c
-@@ -345,19 +345,6 @@ int __init arch_populate_kprobe_blacklist(void)
- 	return ret;
- }
- 
--void __kprobes __used *trampoline_probe_handler(struct pt_regs *regs)
--{
--	return (void *)kretprobe_trampoline_handler(regs, NULL);
--}
--
--void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
--				      struct pt_regs *regs)
--{
--	ri->ret_addr = (kprobe_opcode_t *)regs->ra;
--	ri->fp = NULL;
--	regs->ra = (unsigned long) &__kretprobe_trampoline;
--}
--
- int __kprobes arch_trampoline_kprobe(struct kprobe *p)
- {
- 	return 0;
-diff --git a/arch/riscv/kernel/probes/rethook.c b/arch/riscv/kernel/probes/rethook.c
-new file mode 100644
-index 000000000000..5c27c1f50989
---- /dev/null
-+++ b/arch/riscv/kernel/probes/rethook.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Generic return hook for riscv.
-+ */
++	if (((bmp->db_mapsize - 1) >> bmp->db_agl2size) > MAXAG) {
++		err = -EINVAL;
++		goto err_release_metapage;
++	}
 +
-+#include <linux/kprobes.h>
-+#include <linux/rethook.h>
-+#include "rethook.h"
-+
-+/* This is called from arch_rethook_trampoline() */
-+unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
-+{
-+	return rethook_trampoline_handler(regs, regs->s0);
-+}
-+
-+NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
-+
-+void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount)
-+{
-+	rhn->ret_addr = regs->ra;
-+	rhn->frame = regs->s0;
-+
-+	/* replace return addr with trampoline */
-+	regs->ra = (unsigned long)arch_rethook_trampoline;
-+}
-+
-+NOKPROBE_SYMBOL(arch_rethook_prepare);
-diff --git a/arch/riscv/kernel/probes/rethook.h b/arch/riscv/kernel/probes/rethook.h
-new file mode 100644
-index 000000000000..4758f7e3ce88
---- /dev/null
-+++ b/arch/riscv/kernel/probes/rethook.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __RISCV_RETHOOK_H
-+#define __RISCV_RETHOOK_H
-+
-+unsigned long arch_rethook_trampoline_callback(struct pt_regs *regs);
-+void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount);
-+
-+#endif
-diff --git a/arch/riscv/kernel/probes/kprobes_trampoline.S b/arch/riscv/kernel/probes/rethook_trampoline.S
-similarity index 94%
-rename from arch/riscv/kernel/probes/kprobes_trampoline.S
-rename to arch/riscv/kernel/probes/rethook_trampoline.S
-index 7bdb09ded39b..21bac92a170a 100644
---- a/arch/riscv/kernel/probes/kprobes_trampoline.S
-+++ b/arch/riscv/kernel/probes/rethook_trampoline.S
-@@ -75,13 +75,13 @@
- 	REG_L x31, PT_T6(sp)
- 	.endm
- 
--ENTRY(__kretprobe_trampoline)
-+ENTRY(arch_rethook_trampoline)
- 	addi sp, sp, -(PT_SIZE_ON_STACK)
- 	save_all_base_regs
- 
- 	move a0, sp /* pt_regs */
- 
--	call trampoline_probe_handler
-+	call arch_rethook_trampoline_callback
- 
- 	/* use the result as the return-address */
- 	move ra, a0
-@@ -90,4 +90,4 @@ ENTRY(__kretprobe_trampoline)
- 	addi sp, sp, PT_SIZE_ON_STACK
- 
- 	ret
--ENDPROC(__kretprobe_trampoline)
-+ENDPROC(arch_rethook_trampoline)
+ 	for (i = 0; i < MAXAG; i++)
+ 		bmp->db_agfree[i] = le64_to_cpu(dbmp_le->dn_agfree[i]);
+ 	bmp->db_agsize = le64_to_cpu(dbmp_le->dn_agsize);
 -- 
-2.38.0
+2.38.1
 
