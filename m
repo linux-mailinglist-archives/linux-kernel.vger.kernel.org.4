@@ -2,202 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7973360CF85
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B288060CF88
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbiJYOtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
+        id S232756AbiJYOtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbiJYOs5 (ORCPT
+        with ESMTP id S232036AbiJYOte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:48:57 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F84519C220
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:48:57 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-12c8312131fso15843026fac.4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:48:57 -0700 (PDT)
+        Tue, 25 Oct 2022 10:49:34 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A10388F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:49:31 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id z30so8157849qkz.13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:49:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QbIETgbP3QGPBzS/+H8xqY4TN9qqk1LnkbQ9lqFB7wg=;
-        b=TlKOycCUniWQ6MqZCFCYLS4iFNYGPWsVgp8o4amBVB+rgEX1GYohW4Mn9NTnICmiW0
-         bm1FKq6+enezio8D6j6vvjaI7e4E9iznXpt0Iw3hDuJtSOXVuJNg5rx6Sf4OG8xKr+xU
-         gkFMzlksALOT0CcBqX/Ta3GlFzOhrBS5Ov+dcs+1VEKlPyr0ENpMCt0/yATw90ILP37V
-         siHDyH+A/ZxVrdOpqIAaAuqw9gcbJKR6YwwPMME8WMFwArU8zjfDatapNm/w0qikj0Fk
-         YdAMG5SEW3z+og8fIjD8BY4Q0ikIHDR+PP4mkvivWRg3TF/sbO/s1FquF3jpGL/EH+48
-         3cKQ==
+        bh=8YP5wWUEEBMY2PTNKrTu3Hh2pQmEm7huU1HOYVz0Rwk=;
+        b=jwEJWV/zFdZ896Mkmss4/ajlWv6Os+0/UtK8gEBYdYtX5hvHY0/rI58TAvELkvqVsE
+         YJargWbH5W1QyduIbf7U2FNwQcQvsAmEyafhApayU/O8VFZIDia/USrcnbhY0bouVtok
+         2HwauXBFcJTpxlvgaY70ySmMsiDBUGAge285taKQC9lM07fL4/70Xr+lHmbgTxNOQybU
+         q2hM+fHtSfR71pvx5/bB54JFwT/1RwiqtQ2mnzlAWHCDfRE2stpV6SvhOWjj35LMof4W
+         NP1SxoAnNIAI/e+72XdoNM9mVuBXlyQYehDWrG0jwSTWdImJl5cP1bNpiQFnpplwjPKc
+         Hb/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QbIETgbP3QGPBzS/+H8xqY4TN9qqk1LnkbQ9lqFB7wg=;
-        b=A1WexKiPKigoxBduTBZ10CJkN/yw1A6vPv8j8ggRDsh7D9Ea+W/hqdh6jDtxqMjvYx
-         zyQZyGnwVg6+biLHfezwtM3imPE4QZJc6yNXes9haTotvZupa7u3RoH3lOQL3yrDA383
-         GDfOEiQyfNuhmeAsEoRJAAUH3hBoQIxqWkYq9KyaVtk26RwvC077zVS0iqub3cyRz2lA
-         LaKB10pucs2T3kvb4T0nV3iu18WQiuPPneZ5lkNlyh5MSRnrjyDb2AkAQuvYFnrXCKLX
-         /QvAgHORhlHg3Eds4+7gJ5PjPjo5Aue948KDQlvJEsDqbI/xqxEXpfWlMDNrSbl05dWy
-         7/Fg==
-X-Gm-Message-State: ACrzQf3kBMSIM8laXQra1R50Ys0kP/0NmL1NVP9YDRAjC9yIKKtySRov
-        lMDtpagpeNetWP8p4gO+hRU=
-X-Google-Smtp-Source: AMsMyM6nttbj38H3M5+7ezAMaRWQckl6AYETSqTIr+B5ECxLqwUQl56kLg/vqJhqzKtKhj4Frerz0A==
-X-Received: by 2002:a05:6871:687:b0:132:fd73:4551 with SMTP id l7-20020a056871068700b00132fd734551mr40990547oao.195.1666709336414;
-        Tue, 25 Oct 2022 07:48:56 -0700 (PDT)
-Received: from quaco.ghostprotocols.net ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id ep2-20020a056870a98200b0013ae5246449sm1630989oab.22.2022.10.25.07.48.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 07:48:56 -0700 (PDT)
-From:   arnaldo.melo@gmail.com
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 82D00404BE; Tue, 25 Oct 2022 11:48:53 -0300 (-03)
-Date:   Tue, 25 Oct 2022 11:48:53 -0300
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>
-Subject: [PATCH FYI 1/1] tools headers: Update the copy of x86's memcpy_64.S
- used in 'perf bench'
-Message-ID: <Y1f3VRIec9EBgX6F@kernel.org>
+        bh=8YP5wWUEEBMY2PTNKrTu3Hh2pQmEm7huU1HOYVz0Rwk=;
+        b=yqeTwRp8JrDWDxbuaVmvx8+Fk2z1OnkRYK8Y3aAwfUZjm4LSOta1y49c7llScer7hR
+         pJKoeUygi8DGsTttjzZLp8HF7AAXQ7o0ZvZ5aPy9ypuAzCADisFUeWbCbEvDvLZys/pC
+         VYsgiOXOQpBu37QTvStctTPS0qVhmQZ1afSu7QCIOmZicy4HQgdQs56KWcuLZb6S8vkD
+         KBQCKiS76Qu4EgYXZnQ/o5RbsyohVoC++j3yQ48CJevl8XZHa7KrDIPuHIvXKjd4uNps
+         LNJCLeFgsNIEYI9UEKHOg9NGoKnBsumWzTIFrUbaO6GWk/FWdxI4a3lSgDgYvPpv6fa4
+         NYsA==
+X-Gm-Message-State: ACrzQf0ZAOmVGThqOIER82Pq2F1fDK8VKfuuVw2vi2coMPJub07pYzuh
+        B0k6vx7ZWAtLCOSHWeWl9PaD/Q==
+X-Google-Smtp-Source: AMsMyM6CxSbFXx8tIMJFyF8KEBlAnnnHYsyGOMTSwcPVWCGa6Me8gw8xFad19rxKtM7zhMtCSDY/FQ==
+X-Received: by 2002:a05:620a:484c:b0:6ee:9acb:dfdc with SMTP id ec12-20020a05620a484c00b006ee9acbdfdcmr26735181qkb.594.1666709370859;
+        Tue, 25 Oct 2022 07:49:30 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id m17-20020ae9e711000000b006ed61f18651sm2155611qka.16.2022.10.25.07.49.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 07:49:30 -0700 (PDT)
+Message-ID: <d181924f-d87b-cad3-400a-dec22d3b29a6@linaro.org>
+Date:   Tue, 25 Oct 2022 10:49:28 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 2/2] dt-bindings: hpet: add loongson2 hpet
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev
+References: <20221021010925.21604-1-zhuyinbo@loongson.cn>
+ <20221021010925.21604-2-zhuyinbo@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221021010925.21604-2-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+On 20/10/2022 21:09, Yinbo Zhu wrote:
+> Add the loongson2 High Precision Event Timer (HPET) binding
+> with DT schema format using json-schema.
+> 
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v3:
+> 		1. Update dts that base on common clock framework.
+> 
+>  .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+> new file mode 100644
+> index 000000000000..01656048858a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+> @@ -0,0 +1,50 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/timer/loongson,ls2k-hpet.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson2 High Precision Event Timer (HPET)
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    const: loongson,ls2k-hpet
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: SoC apb clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: apb_clk
 
-- Arnaldo
+Just: apb
 
-Full explanation:
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/loongson,ls2k-clk.h>
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+Your patchset is now untestable/unapplicable because you have a
+dependency. You need to explain the dependencies in the cover letter or
+in the patch changelog (---).
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
-
-E.g.:
-
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-We also need to add SYM_TYPED_FUNC_START() to util/include/linux/linkage.h
-and update tools/perf/check_headers.sh to ignore the include cfi_types.h
-line when checking if the kernel original files drifted from the copies
-we carry.
-
-This is to get the changes from:
-
-  ccace936eec7b805 ("x86: Add types to indirectly called assembly functions")
-
-Addressing these tools/perf build warnings:
-
-  Warning: Kernel ABI header at 'tools/arch/x86/lib/memcpy_64.S' differs from latest version at 'arch/x86/lib/memcpy_64.S'
-  diff -u tools/arch/x86/lib/memcpy_64.S arch/x86/lib/memcpy_64.S
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Sami Tolvanen <samitolvanen@google.com>
-Link: https://lkml.kernel.org/r/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/lib/memcpy_64.S          |  2 +-
- tools/perf/check-headers.sh             |  2 +-
- tools/perf/util/include/linux/linkage.h | 13 +++++++++++++
- 3 files changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/tools/arch/x86/lib/memcpy_64.S b/tools/arch/x86/lib/memcpy_64.S
-index d0d7b9bc6cad394c..5418e2f99834e5de 100644
---- a/tools/arch/x86/lib/memcpy_64.S
-+++ b/tools/arch/x86/lib/memcpy_64.S
-@@ -27,7 +27,7 @@
-  * Output:
-  * rax original destination
-  */
--SYM_FUNC_START(__memcpy)
-+SYM_TYPED_FUNC_START(__memcpy)
- 	ALTERNATIVE_2 "jmp memcpy_orig", "", X86_FEATURE_REP_GOOD, \
- 		      "jmp memcpy_erms", X86_FEATURE_ERMS
- 
-diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-index 6ee44b18c6b57cf1..eacca9a874e2f334 100755
---- a/tools/perf/check-headers.sh
-+++ b/tools/perf/check-headers.sh
-@@ -143,7 +143,7 @@ for i in $SYNC_CHECK_FILES; do
- done
- 
- # diff with extra ignore lines
--check arch/x86/lib/memcpy_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memcpy_\(erms\|orig\))"'
-+check arch/x86/lib/memcpy_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memcpy_\(erms\|orig\))" -I"^#include <linux/cfi_types.h>"'
- check arch/x86/lib/memset_64.S        '-I "^EXPORT_SYMBOL" -I "^#include <asm/export.h>" -I"^SYM_FUNC_START\(_LOCAL\)*(memset_\(erms\|orig\))"'
- check arch/x86/include/asm/amd-ibs.h  '-I "^#include [<\"]\(asm/\)*msr-index.h"'
- check arch/arm64/include/asm/cputype.h '-I "^#include [<\"]\(asm/\)*sysreg.h"'
-diff --git a/tools/perf/util/include/linux/linkage.h b/tools/perf/util/include/linux/linkage.h
-index aa0c5179836d1bbb..75e2248416f55f67 100644
---- a/tools/perf/util/include/linux/linkage.h
-+++ b/tools/perf/util/include/linux/linkage.h
-@@ -115,4 +115,17 @@
- 	SYM_ALIAS(alias, name, SYM_T_FUNC, SYM_L_WEAK)
- #endif
- 
-+// In the kernel sources (include/linux/cfi_types.h), this has a different
-+// definition when CONFIG_CFI_CLANG is used, for tools/ just use the !clang
-+// definition:
-+#ifndef SYM_TYPED_START
-+#define SYM_TYPED_START(name, linkage, align...)        \
-+        SYM_START(name, linkage, align)
-+#endif
-+
-+#ifndef SYM_TYPED_FUNC_START
-+#define SYM_TYPED_FUNC_START(name)                      \
-+        SYM_TYPED_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
-+#endif
-+
- #endif	/* PERF_LINUX_LINKAGE_H_ */
--- 
-2.37.3
+Best regards,
+Krzysztof
 
