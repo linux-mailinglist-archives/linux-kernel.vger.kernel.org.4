@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB82560C0FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A9460C16C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiJYB1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
+        id S231603AbiJYBvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbiJYB1B (ORCPT
+        with ESMTP id S230295AbiJYBv0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:27:01 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0394F6D577
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 18:02:51 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id u7so7616341qvn.13
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 18:02:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6x4NyeHIOb8xnnvnRIlkAggzAkRP4Y6+NCcjWrSgBrw=;
-        b=IQ2h5W/VdXcKcCHqZdhxMIgDZ36eLpFiMnCu+wiKIn/Tp7DodYCzwFOutjpjlySJZR
-         vpE2tn82bO7UEbAXqNq6PQPZyK500l+Je3siM1BUgKglFvjBTx/thHbAYntOfut4L/lf
-         HmkKJ00EAIxPj9lNiSx5HYNgBpcftcBuKvnjc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6x4NyeHIOb8xnnvnRIlkAggzAkRP4Y6+NCcjWrSgBrw=;
-        b=sz96sRyYrr2oE0ckU1c9i9A691eWCIHxQWlD66PHIVAGUoPl7a/MRDkTAV4yrvrNsz
-         CFKxazjUx7Hntsqqs9wNwpFvpW/f8WtVoYiDA1dRvEUW0OEMmpbdb5C4/33TuuoVMA1F
-         OzmtZ/w81ckwMIzg5LcTaZsL+UazN6jebRbFR0gq86mwKgbl+C98vfH80/9bUOt8HlAX
-         YQ3p70r9nf2+Z2PpsX32yXg2X9o61NeOCgnuTg6pHh0ubG1c0NR454M0qUbDQNkHJ8Jn
-         Pj7SH8git7c1maWRQYWUL0CRnw1IJ3ouCjhrFDTovPpg8DU7hljJQUbSbCy2kdA9hfv2
-         9Itg==
-X-Gm-Message-State: ACrzQf3vxqhR/mbr4w+lyCClnZnnbzfEvmPviQjcWynvdI+FpvC7akeK
-        s/iiazfA3WIZa64TBh2Qhe0iAerGLmeV2w==
-X-Google-Smtp-Source: AMsMyM75in+xw6F0+oeo6FTxEQNzYijkmORM19CqIsKPXPlnSIstomIEZ74cZuAchwDX+TFLIoQwmA==
-X-Received: by 2002:a0c:f005:0:b0:4bb:847a:5ace with SMTP id z5-20020a0cf005000000b004bb847a5acemr3335298qvk.104.1666659769966;
-        Mon, 24 Oct 2022 18:02:49 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id d13-20020a05620a240d00b006bc192d277csm1079262qkn.10.2022.10.24.18.02.48
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 18:02:48 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id i127so12854313ybc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 18:02:48 -0700 (PDT)
-X-Received: by 2002:a05:6902:124f:b0:66e:e3da:487e with SMTP id
- t15-20020a056902124f00b0066ee3da487emr33367907ybu.310.1666659768246; Mon, 24
- Oct 2022 18:02:48 -0700 (PDT)
+        Mon, 24 Oct 2022 21:51:26 -0400
+X-Greylist: delayed 2794 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Oct 2022 18:50:21 PDT
+Received: from gateway36.websitewelcome.com (gateway36.websitewelcome.com [192.185.188.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951BC3BB
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 18:50:20 -0700 (PDT)
+Received: from atl1wswcm03.websitewelcome.com (unknown [50.6.129.164])
+        by atl3wswob06.websitewelcome.com (Postfix) with ESMTP id 3894A97FA7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:03:45 +0000 (UTC)
+Received: from br984.hostgator.com.br ([162.241.203.37])
+        by cmsmtp with ESMTP
+        id n8M4oU53VPUI8n8M4odBhp; Tue, 25 Oct 2022 01:03:45 +0000
+X-Authority-Reason: nr=8
+Received: from [177.194.67.221] (port=43054 helo=arch-avell.meuintelbras.local)
+        by br984.hostgator.com.br with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <pedro.guilherme@espectro.eng.br>)
+        id 1on8M4-001BYl-76;
+        Mon, 24 Oct 2022 22:03:44 -0300
+From:   Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pedro Guilherme Siqueira Moreira 
+        <pedro.guilherme@espectro.eng.br>
+Subject: [PATCH 1/3] media: uvc_driver: fix missing newline after declarations
+Date:   Mon, 24 Oct 2022 22:03:01 -0300
+Message-Id: <20221025010303.570815-1-pedro.guilherme@espectro.eng.br>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221024190311.65b89ecb@gandalf.local.home> <CAHk-=wji4q7rGUWDLonnEnxq0ykNCcYGpMrNnZg89rAwOgyRKg@mail.gmail.com>
- <20221024202133.38e0913e@gandalf.local.home>
-In-Reply-To: <20221024202133.38e0913e@gandalf.local.home>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 24 Oct 2022 18:02:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj_jxetFqMB8VWcJdtOt+CU0r_isyGV4AhEYFxA7YsU7Q@mail.gmail.com>
-Message-ID: <CAHk-=wj_jxetFqMB8VWcJdtOt+CU0r_isyGV4AhEYFxA7YsU7Q@mail.gmail.com>
-Subject: Re: [RFC PATCH] text_poke/ftrace/x86: Allow text_poke() to be called
- in early boot
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - br984.hostgator.com.br
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - espectro.eng.br
+X-BWhitelist: no
+X-Source-IP: 177.194.67.221
+X-Source-L: No
+X-Exim-ID: 1on8M4-001BYl-76
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (arch-avell.meuintelbras.local) [177.194.67.221]:43054
+X-Source-Auth: pedro.guilherme@espectro.eng.br
+X-Email-Count: 1
+X-Source-Cap: ZXNwZWN0ODU7ZXNwZWN0ODU7YnI5ODQuaG9zdGdhdG9yLmNvbS5icg==
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfC3NzepG6MiC+UzNpUGi4VMBqIjE4JCZ7pXHkIz7xwbSSEtfH6gNpCQOkweuiVielZjgU4zXI3AORxiDpJwxIM8rKXHiny8UJ5NhiGul+ydiIlQNa3Wz
+ de+q4TgDnQEJDs/e5c3do3sdQi5qiX1JcFToeW1GQDp/8joFxp+KcX3VIhY8/aKP3aJ0j6qH2iQw4Ai8ehmRSZjoFo5csA2ngCM4tiiVmP8v9D5rydyoUSBQ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 5:21 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> It's all about updating read only pages that are executable with a shadow mm.
+Signed-off-by: Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
+---
+ drivers/media/usb/uvc/uvc_driver.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Right. And it doesn't actually need the mm at all, all it wants is the
-kernel page tables. Which is why all the "dup_mmap()" stuff seems so
-wrong.
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 215fb483efb0..b591ad823c66 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -732,6 +732,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
+ 	/* Parse the alternate settings to find the maximum bandwidth. */
+ 	for (i = 0; i < intf->num_altsetting; ++i) {
+ 		struct usb_host_endpoint *ep;
++
+ 		alts = &intf->altsetting[i];
+ 		ep = uvc_find_endpoint(alts,
+ 				streaming->header.bEndpointAddress);
+@@ -1859,12 +1860,14 @@ static void uvc_delete(struct kref *kref)
+ 
+ 	list_for_each_safe(p, n, &dev->chains) {
+ 		struct uvc_video_chain *chain;
++
+ 		chain = list_entry(p, struct uvc_video_chain, list);
+ 		kfree(chain);
+ 	}
+ 
+ 	list_for_each_safe(p, n, &dev->entities) {
+ 		struct uvc_entity *entity;
++
+ 		entity = list_entry(p, struct uvc_entity, list);
+ #ifdef CONFIG_MEDIA_CONTROLLER
+ 		uvc_mc_cleanup_entity(entity);
+@@ -1874,6 +1877,7 @@ static void uvc_delete(struct kref *kref)
+ 
+ 	list_for_each_safe(p, n, &dev->streams) {
+ 		struct uvc_streaming *streaming;
++
+ 		streaming = list_entry(p, struct uvc_streaming, list);
+ 		usb_driver_release_interface(&uvc_driver.driver,
+ 			streaming->intf);
+-- 
+2.38.1
 
-I suspect mm_alloc() does everything that VM actually needs.
-
-IOW, it shouldn't have used the fork() helper, it should have used the
-execve() helper that actually starts out from a clean slate. Because a
-clean slate is exactly what that code wants.
-
-No?
-
-           Linus
