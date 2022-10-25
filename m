@@ -2,97 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120C060CBCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3591960CBD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbiJYM1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
+        id S231664AbiJYM1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiJYM1O (ORCPT
+        with ESMTP id S231544AbiJYM1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:27:14 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E3B12743D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:27:13 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id w29so245489qtv.9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:27:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L5QTt0IUvs/O5s0wdnL64lhb29nJZhbQLf7PtjZhkdM=;
-        b=hi17ogfjTyDmQQemC2NEiM/0Y5oEFMUzrDSpPyE3oUHpsd7z0wddB0aFBADAeaVHT/
-         g2ryoZY7bG3MqXtTNM2SnxxlKg4kaCB4vvPvT8wrggmoiW7sHsfMxWsjZ4r8zoDqqqNM
-         UbjvkrQZW9bkKhIGazMwuNqZHBiPu7sZRxnBxpphJu+wLdAvLJIccrTKtdgJgOG/Zp48
-         fSggj6RA4ALSRXZZkTSFgSbdRlsH4TKvZBmA1WYm0DJd179eNjzqo06CY8w+rY6B6hfu
-         Lz5bh6lS+az+tWK9wfk4jpxBRz4rpNGudd9wmpyg97Wxlag7tDeGy8DqOJvQAXmM4GTD
-         NYVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L5QTt0IUvs/O5s0wdnL64lhb29nJZhbQLf7PtjZhkdM=;
-        b=TLOgqZWayV0eMD5ywin6xubF30lmdwWeivGINLwdgXLyNNsrD0rI7h2XZCeNGcAGiH
-         3YpkkRYjVzPhntdKgBRHhBLPmHGSFrYOnS6+c2lctlzDwFHQfeem470RiVkwW/XLovVf
-         ZQcQXzAMYIYaqtBqumqEn7Uz4V7/8iNy0GOlZGY3TZ2bIsyizt9lVWz4WGPTQsE49I8s
-         Olq/AAh2eXpBpCAWhIlrPXVJTC+7zR0OjC+SkPFsMNPsxsydGTT5xgt6yrUFrKlcGDGI
-         YfHKgSpf2v6Wo6TuRQidUXKKq3tjAkJ2v0F+EMne/1lhYsGKDfaJhnBSRkBTXoGr02DG
-         15EA==
-X-Gm-Message-State: ACrzQf3e52swf0AOjiwGNktmA5SQWvf4zmVsRKqwyPq22GQUVKjI1J1S
-        LLTHOy0STYlTNYGj6XJ8Gz2Fzw==
-X-Google-Smtp-Source: AMsMyM6T/VN6zHWKHEw+/slQIe1ZYAI7TRy/Le7tokVuUTKpCZw1pVA9eMrX5RBUON04vFir1lPw6A==
-X-Received: by 2002:ac8:5809:0:b0:39d:db1:895 with SMTP id g9-20020ac85809000000b0039d0db10895mr22223169qtg.440.1666700832806;
-        Tue, 25 Oct 2022 05:27:12 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05620a255000b006cbe3be300esm1996577qko.12.2022.10.25.05.27.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 05:27:11 -0700 (PDT)
-Message-ID: <d72b4a52-0dce-203d-4a42-bdba2e564674@linaro.org>
-Date:   Tue, 25 Oct 2022 08:27:10 -0400
+        Tue, 25 Oct 2022 08:27:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D52182C55
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:27:37 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1onJ1h-0000nv-H5; Tue, 25 Oct 2022 14:27:25 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1onJ1f-0004Nz-U4; Tue, 25 Oct 2022 14:27:23 +0200
+Date:   Tue, 25 Oct 2022 14:27:23 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        kernel@pengutronix.de, Anson.Huang@nxp.com, festevam@gmail.com,
+        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, linux-imx@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, wim@linux-watchdog.org,
+        shawnguo@kernel.org, linux@roeck-us.net
+Subject: Re: [PATCH v2 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
+Message-ID: <20221025122723.yl5vax7y33ueo2p5@pengutronix.de>
+References: <20221025072533.2980154-1-andrej.picej@norik.com>
+ <20221025072533.2980154-2-andrej.picej@norik.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 4/4] ASoC: dt-bindings: rt5682: Add AVDD, MICVDD and
- VBAT supplies
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221024220015.1759428-1-nfraprado@collabora.com>
- <20221024220015.1759428-5-nfraprado@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024220015.1759428-5-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025072533.2980154-2-andrej.picej@norik.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 18:00, Nícolas F. R. A. Prado wrote:
-> The rt5682 codec can have three supplies: AVDD, MICVDD and VBAT. They
-> are already used by sc7180-trogdor.dtsi, so document them in the
-> binding.
+On 22-10-25, Andrej Picej wrote:
+> Putting device into the "Suspend-To-Idle" mode causes watchdog to
+> trigger and reset the board after set watchdog timeout period elapses.
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
+> watchdog in WAIT mode. This is done by setting WDW bit in WCR
+> (Watchdog Control Register) Watchdog operation is restored after exiting
+> WAIT mode as expected. WAIT mode coresponds with Linux's
+> "Suspend-To-Idle".
 > 
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Changes in v2:
+>  - validate the property with compatible string, as this functionality
+>    is not supported by all devices.
+> ---
+>  drivers/watchdog/imx2_wdt.c | 37 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 37 insertions(+)
+> 
+> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+> index d0c5d47ddede..dd9866c6f1e5 100644
+> --- a/drivers/watchdog/imx2_wdt.c
+> +++ b/drivers/watchdog/imx2_wdt.c
+> @@ -35,6 +35,7 @@
+>  
+>  #define IMX2_WDT_WCR		0x00		/* Control Register */
+>  #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* -> Watchdog Timeout Field */
+> +#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable for WAIT */
+>  #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset WDOG_B */
+>  #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset Signal */
+>  #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable */
+> @@ -67,6 +68,27 @@ struct imx2_wdt_device {
+>  	bool ext_reset;
+>  	bool clk_is_on;
+>  	bool no_ping;
+> +	bool sleep_wait;
+> +};
+> +
+> +static const char * const wdw_boards[] __initconst = {
+> +	"fsl,imx25-wdt",
+> +	"fsl,imx35-wdt",
+> +	"fsl,imx50-wdt",
+> +	"fsl,imx51-wdt",
+> +	"fsl,imx53-wdt",
+> +	"fsl,imx6q-wdt",
+> +	"fsl,imx6sl-wdt",
+> +	"fsl,imx6sll-wdt",
+> +	"fsl,imx6sx-wdt",
+> +	"fsl,imx6ul-wdt",
+> +	"fsl,imx7d-wdt",
+> +	"fsl,imx8mm-wdt",
+> +	"fsl,imx8mn-wdt",
+> +	"fsl,imx8mp-wdt",
+> +	"fsl,imx8mq-wdt",
+> +	"fsl,vf610-wdt",
+> +	NULL
+>  };
+
+For such things we have the data pointer within the struct of_device_id.
+
+>  
+>  static bool nowayout = WATCHDOG_NOWAYOUT;
+> @@ -129,6 +151,9 @@ static inline void imx2_wdt_setup(struct watchdog_device *wdog)
+>  
+>  	/* Suspend timer in low power mode, write once-only */
+>  	val |= IMX2_WDT_WCR_WDZST;
+> +	/* Suspend timer in low power WAIT mode, write once-only */
+> +	if (wdev->sleep_wait)
+> +		val |= IMX2_WDT_WCR_WDW;
+>  	/* Strip the old watchdog Time-Out value */
+>  	val &= ~IMX2_WDT_WCR_WT;
+>  	/* Generate internal chip-level reset if WDOG times out */
+> @@ -313,6 +338,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+>  
+>  	wdev->ext_reset = of_property_read_bool(dev->of_node,
+>  						"fsl,ext-reset-output");
+> +
+> +	if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait"))
+
+Why do we need this special property? If the device has problems when
+"freeze" is used as suspend mode and this is fixed by this special bit
+then we should enable it if the device supports it.
+
+Regards,
+  Marco
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+> +		if (of_device_compatible_match(dev->of_node, wdw_boards))
+> +			wdev->sleep_wait = 1;
+> +		else {
+> +			dev_warn(dev, "Warning: Suspending watchdog during " \
+> +				"WAIT mode is not supported for this device.\n");
+> +			wdev->sleep_wait = 0;
+> +		}
+> +	else
+> +		wdev->sleep_wait = 0;
+> +
+>  	/*
+>  	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
+>  	 * during suspend.
+> -- 
+> 2.25.1
+> 
+> 
+> 
