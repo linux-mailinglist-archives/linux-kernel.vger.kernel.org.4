@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9D560D6E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357E760D6EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiJYWSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S232572AbiJYWSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiJYWSB (ORCPT
+        with ESMTP id S232518AbiJYWSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:18:01 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F21FC58;
-        Tue, 25 Oct 2022 15:18:00 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id o8so9907523qvw.5;
-        Tue, 25 Oct 2022 15:18:00 -0700 (PDT)
+        Tue, 25 Oct 2022 18:18:02 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CE5C58
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:18:01 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id qk31-20020a1709077f9f00b00791a3e02c80so3522391ejc.21
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sBctOic5Jlqwv7dQ/OcbsCcYwMhW7gNKqj7DG4uh3kk=;
-        b=a+L0eQQmLecyw0nknTLcGw/I7RrVyowZfcF3d2y+BIMofaBOYJ4McrsCEwcTEFSYZn
-         NfY/oYnV48cHs+3vHUz4V4HRO6IkWdET4AqUgU5X5zETq4MsZGMdWmxaf5kaAWAIebgA
-         bG1eqDVPEq34MjLvdkr/Z/33gCuG+t+yd/lGVsNphjS8Muzez6O+5RG4geeg8GXQ91Wv
-         981Ug1LrzbF+aPqzZAHo4+z+csuOF90G6c9/HcojFmO/XCq1MkC8MziiJgdWIWsM3Bc+
-         iMJkp+HJgDHG2WbkPg5NMRv2Fy3+HrfMJJNx2T9GuczkWqDRCHtnbHZyY9wdw8K++6by
-         664g==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZQGssT3M/U7b4XMGY/asVcg61n5AcupNDo7Gu+AvRuY=;
+        b=GZzG9I3EC4BdTG42DnBMyd1ivXSjjTelzZgMfx5pqBuLbH+hAXxGKOtyb79pJSdisX
+         /cpLkpV914ei9LOOwDEcu7sTj/B25/nINBuG35/Tk8G54bHHoc+ny2ycz1Wam8uSNmGd
+         tY/cb0kPSQi17ZqKRk4v3fjjk3EuSGaByehhMseFU4VSIV3fseJw2rBBP+T7eVNHsmf0
+         tVDy8K7dQhxLyCes+qB6UaAS/ALtPRdJJfJCqOT8iExcL/IzM25Ullu5r3UeNdoSZqBy
+         KYA/w+Zg554ckMQspY6Vt30Ly/d4YYC5g2WsdbKbuwghxsCBeOYps6smx3sA2/cHwrxs
+         r7qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sBctOic5Jlqwv7dQ/OcbsCcYwMhW7gNKqj7DG4uh3kk=;
-        b=nBe1graJ7PBVTmTb/tunKZsz+OiKlQehhGFuIvbGzY3tf3tbj8c+yLSKgI7pn/VaBC
-         6gqn7BBNb38yE+SrpwFS7Pr/gz4WPvnYMaYZr50CFeE37WDyWeE8pLv7GryXHA9n1M2J
-         5OEEEVX03/eIcHFmgMygFhwhKE8bp6eeavd9BrUyUgo7CkHGQmpja0RINwbvqxcStGZA
-         5K8B8+ZM1dAUZ/IDEFp9KMM8pf0RXIqnx8bMvfIg43dFdoqbbUOwATnph/jh7gAr0ktl
-         GmotcNHvpS9pB0M+mJNjEZpPPpp81smPdqW9jxcn5W4p4PxrzH5dwYMlmwZiESCbJdP8
-         QyQA==
-X-Gm-Message-State: ACrzQf1ShPVrfx7LhLsiYL4n1pzlL5FeXi06S/uVlQfisz9xyM5h0HEu
-        NthJowMFiVtDZ6/nbF8HeWZchHgLsFUPuKrI6bE=
-X-Google-Smtp-Source: AMsMyM7bwRfU/9iNaQbyljheW233pohShNkzDsvX5eCeD0iJDN+6nYrObBDYS85GAmjuVNxoNOwdcyLqfGLtXD+JT/0=
-X-Received: by 2002:a05:6214:e86:b0:4bb:7e1a:9dee with SMTP id
- hf6-20020a0562140e8600b004bb7e1a9deemr8414735qvb.96.1666736279438; Tue, 25
- Oct 2022 15:17:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221025203852.681822-1-helgaas@kernel.org>
-In-Reply-To: <20221025203852.681822-1-helgaas@kernel.org>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Wed, 26 Oct 2022 08:17:47 +1000
-Message-ID: <CAPM=9twkfjHh4SR2aQdB9WTRYEhTdWZG4A-f0n8oB8yw=dZgyw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] agp: Convert to generic power management
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     David Airlie <airlied@redhat.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZQGssT3M/U7b4XMGY/asVcg61n5AcupNDo7Gu+AvRuY=;
+        b=BN+l2Zz8BhMwTjL4epUgCAn25AWTWFwo1xkRkgaIbITCHSQOziXlqHrzR3nUkGxD0S
+         bdbuKj9hLRJu+zS/TopaF7pM5N5alQr7MV41RyBJhUQF2Urfg09NJYlGJet2S592S6ag
+         /otSS4MIx24j7TxMwJSEJt9lLrmXuarp0ZQjZ7ulAHQ3/EKwU3Km6zchxo/Hl9v7tRZj
+         QoM5tIjLdx2LExjMl52vb23wH5RPU9EFVat2/nkvv1fKwKNPPsyqwdR+r8JR+SavavQU
+         rNzBNQHjt53sEGWyVDOyXpwbC9Ya6cvzlDPWEA+tKDxWnOn6m745pvWHev/ApBf64wcb
+         q+Wg==
+X-Gm-Message-State: ACrzQf2V6GrH1p1IVkzBO5s14c4z6fslM0INL8VSj5GQ5qsgogMgXHeE
+        ZoeiUj9JERMrEE9kGmnSGsHEn3yfwps=
+X-Google-Smtp-Source: AMsMyM6wWRQeoGnTklgT6+h+msVouxh/KVCK+QWxO1G7zXpVRcKJfnF95EwBt0uYbBEf2yxO5HMusq31MdQ=
+X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:2e8:4dec:7a62:7bda])
+ (user=glider job=sendgmr) by 2002:a05:6402:b2f:b0:461:701e:877a with SMTP id
+ bo15-20020a0564020b2f00b00461701e877amr18471401edb.82.1666736280249; Tue, 25
+ Oct 2022 15:18:00 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 00:17:55 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Message-ID: <20221025221755.3810809-1-glider@google.com>
+Subject: [PATCH] x86/uaccess: instrument copy_from_user_nmi()
+From:   Alexander Potapenko <glider@google.com>
+To:     glider@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,48 +68,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 at 06:39, Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> Vaibhav converted several AGP drivers from legacy PCI power management to
-> generic power management [1].  This series converts the rest of them.
+Make sure usercopy hooks from linux/instrumented.h are invoked for
+copy_from_user_nmi().
+This fixes KMSAN false positives reported when dumping opcodes for a
+stack trace.
 
-Do you want to merge through the PCI tree?
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: x86@kernel.org
+Signed-off-by: Alexander Potapenko <glider@google.com>
+---
+ arch/x86/lib/usercopy.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Acked-by: Dave Airlie <airlied@redhat.com>
+diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
+index f1bb186171562..24b48af274173 100644
+--- a/arch/x86/lib/usercopy.c
++++ b/arch/x86/lib/usercopy.c
+@@ -6,6 +6,7 @@
+ 
+ #include <linux/uaccess.h>
+ #include <linux/export.h>
++#include <linux/instrumented.h>
+ 
+ #include <asm/tlbflush.h>
+ 
+@@ -44,7 +45,9 @@ copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
+ 	 * called from other contexts.
+ 	 */
+ 	pagefault_disable();
++	instrument_copy_from_user_before(to, from, n);
+ 	ret = raw_copy_from_user(to, from, n);
++	instrument_copy_from_user_after(to, from, n, ret);
+ 	pagefault_enable();
+ 
+ 	return ret;
+-- 
+2.38.0.135.g90850a2211-goog
 
-Dave.
->
-> v1 posted at [2].
->
-> Changes from v1 to v2:
->   - Convert from SIMPLE_DEV_PM_OPS() (which is deprecated) to
->     DEFINE_SIMPLE_DEV_PM_OPS() and remove __maybe_unused annotations.
->
-> [1] https://lore.kernel.org/all/20210112080924.1038907-1-vaibhavgupta40@gmail.com/#t
-> [2] https://lore.kernel.org/all/20220607034340.307318-1-helgaas@kernel.org/
->
-> Bjorn Helgaas (8):
->   agp/efficeon: Convert to generic power management
->   agp/intel: Convert to generic power management
->   agp/amd-k7: Convert to generic power management
->   agp/ati: Convert to generic power management
->   agp/nvidia: Convert to generic power management
->   agp/amd64: Update to DEFINE_SIMPLE_DEV_PM_OPS()
->   agp/sis: Update to DEFINE_SIMPLE_DEV_PM_OPS()
->   agp/via: Update to DEFINE_SIMPLE_DEV_PM_OPS()
->
->  drivers/char/agp/amd-k7-agp.c   | 24 ++++--------------------
->  drivers/char/agp/amd64-agp.c    |  6 ++----
->  drivers/char/agp/ati-agp.c      | 22 ++++------------------
->  drivers/char/agp/efficeon-agp.c | 16 ++++------------
->  drivers/char/agp/intel-agp.c    | 11 +++++------
->  drivers/char/agp/nvidia-agp.c   | 24 ++++--------------------
->  drivers/char/agp/sis-agp.c      |  7 ++-----
->  drivers/char/agp/via-agp.c      |  6 ++----
->  8 files changed, 27 insertions(+), 89 deletions(-)
->
-> --
-> 2.25.1
->
