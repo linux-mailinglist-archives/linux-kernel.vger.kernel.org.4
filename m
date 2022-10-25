@@ -2,95 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3EA60D3E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389A360D41A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 20:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232976AbiJYSrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 14:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S231375AbiJYSvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 14:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbiJYSq4 (ORCPT
+        with ESMTP id S233062AbiJYSvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 14:46:56 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C648F26F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 11:46:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DX8GeZD+7wIauIxcml5zJGVF3YPfTLq0mBVS5tuc9VM=; b=Q+69t2hWlib0hjKDIuhez4Wu8Z
-        wy5GuV/BhVxQxDtgWAa65Yaw6pYGVY8U7VAQ/7Kt9UeKOHfNq4aF4rNMAiskyOWck7ep3c7Tz55rl
-        bc4lnjTy46vDyO95b7xVtCFWWzm43B+JHKftxk0N0jtv5JV368bzZ+dor6bUCiqIH8WQmD0gN/s9/
-        dFkxou5+TxQhorrLIDlkouc7VJGboKDoA5z2TQkBzpdWT2wQUV078uG9oindo4bxJX3dhcF2Xg0Cl
-        CVLEiWJ9EHEvwXh7+UTJhCEc54D/7aN9VBoMtJE5MZMGPAksDQ+J/svMogrInNVS7h77UR0Vczkic
-        uWINwXwA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onOwX-006NMi-0T; Tue, 25 Oct 2022 18:46:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DD63F30020C;
-        Tue, 25 Oct 2022 20:46:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id C77342C450017; Tue, 25 Oct 2022 20:46:27 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 20:46:27 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH] x86/mm: Do not verify W^X at boot up
-Message-ID: <Y1gvA9gHUIiQFogw@hirez.programming.kicks-ass.net>
-References: <20221024114536.44686c83@gandalf.local.home>
- <CAHk-=wj9xBsbeoiFCBLrr3y_CdMOzNh=fD3rr_kcxYwL6vV0Jw@mail.gmail.com>
- <20221024145250.08cfc147@gandalf.local.home>
- <CAHk-=wjRpCS3oAJHVfByDoaj0-tAhV5a5YKV7QssUdMOAm8bAg@mail.gmail.com>
- <Y1eu2wFVp1zcLg5b@hirez.programming.kicks-ass.net>
- <Y1e3i3RJRxOHTcJS@hirez.programming.kicks-ass.net>
- <CAHk-=wjwjWAhPD=C7sW7804eOTSQRnpSrrQh44PFYpVjn8SjKg@mail.gmail.com>
- <Y1ghRheOJeAfJvdY@hirez.programming.kicks-ass.net>
- <CAHk-=wgvuanYPtndJR2iDpn60ry4FMueEg2DCRdQresvkdRgHQ@mail.gmail.com>
+        Tue, 25 Oct 2022 14:51:33 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58301D0CD0;
+        Tue, 25 Oct 2022 11:51:28 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-12-207-nat.elisa-mobile.fi [85.76.12.207])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 83DFC8A9;
+        Tue, 25 Oct 2022 20:51:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1666723886;
+        bh=xbteTmAtF3iK2woihZ9oPPAxvwZYurRCEmY72C9dzKs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IwAHqfLltubDJZxI6+qenB85QpezLC85Xb88eZ1UiUw44zu+ucZ/yZvr1D9jtM0EV
+         fBBkLmUaI+kWPHk9drseL8oVNZMHVrqYPG/OFC8SIQAtvYznTuB4ryRVLlrSvrAk79
+         NnKIrPUS7yhry2ZJ5+kI45FvYyOQ+DHGJtJNl6kw=
+Date:   Tue, 25 Oct 2022 21:50:57 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] media: uvc_driver: fix missing newline after
+ declarations
+Message-ID: <Y1gwETdTkfAMTB8E@pendragon.ideasonboard.com>
+References: <20221025050450.1743072-1-pedro.guilherme@espectro.eng.br>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgvuanYPtndJR2iDpn60ry4FMueEg2DCRdQresvkdRgHQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221025050450.1743072-1-pedro.guilherme@espectro.eng.br>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:14:07AM -0700, Linus Torvalds wrote:
-> On Tue, Oct 25, 2022 at 10:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > mm_alloc() uses allocate_mm() which requires a kmem_cache to be set-up.
-> 
-> Well, that seems to be just a strange effect of mm_cachep being set up
-> by the oddly named "proc_caches_init" (I say oddly named because these
-> days I associate "proc" with proc-fs, but I think it actually comes
-> from "process").
-> 
-> That would actually probably make more sense if it was part of
-> mm_init(), much earlier (where we do "kmem_cache_init()")
-> 
-> So this is another oddity in how we do "mm_init()", but we haven't
-> actually initialized _that_ part of the mm setup.
-> 
-> Extra bonus points for another strange thing: we have "fork_init()",
-> but that too doesn't actually initialize the mm_cachep that fork()
-> actually uses. It does initialize the process one
-> (task_struct_cachep). So that kind of makes sense, but yeah, the
-> mm_alloc() cachep should have been set up by mm_init.
-> 
-> I think this is all "we just ended up randomly initializing things due
-> to hysterical raisins"
+Hi Pedro,
 
-OK, I'll go make all that happen.
+Thank you for the patch.
+
+On Tue, Oct 25, 2022 at 02:04:48AM -0300, Pedro Guilherme Siqueira Moreira wrote:
+> Fixes 'Missing a blank line after declarations' warning issued by
+> scripts/checkpatch.pl on drivers/media/usb/uvc/uvc_driver.c
+> 
+> Signed-off-by: Pedro Guilherme Siqueira Moreira <pedro.guilherme@espectro.eng.br>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+> index 215fb483efb0..b591ad823c66 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -732,6 +732,7 @@ static int uvc_parse_streaming(struct uvc_device *dev,
+>  	/* Parse the alternate settings to find the maximum bandwidth. */
+>  	for (i = 0; i < intf->num_altsetting; ++i) {
+>  		struct usb_host_endpoint *ep;
+> +
+>  		alts = &intf->altsetting[i];
+>  		ep = uvc_find_endpoint(alts,
+>  				streaming->header.bEndpointAddress);
+> @@ -1859,12 +1860,14 @@ static void uvc_delete(struct kref *kref)
+>  
+>  	list_for_each_safe(p, n, &dev->chains) {
+>  		struct uvc_video_chain *chain;
+> +
+>  		chain = list_entry(p, struct uvc_video_chain, list);
+>  		kfree(chain);
+>  	}
+>  
+>  	list_for_each_safe(p, n, &dev->entities) {
+>  		struct uvc_entity *entity;
+> +
+>  		entity = list_entry(p, struct uvc_entity, list);
+>  #ifdef CONFIG_MEDIA_CONTROLLER
+>  		uvc_mc_cleanup_entity(entity);
+> @@ -1874,6 +1877,7 @@ static void uvc_delete(struct kref *kref)
+>  
+>  	list_for_each_safe(p, n, &dev->streams) {
+>  		struct uvc_streaming *streaming;
+> +
+>  		streaming = list_entry(p, struct uvc_streaming, list);
+>  		usb_driver_release_interface(&uvc_driver.driver,
+>  			streaming->intf);
+
+-- 
+Regards,
+
+Laurent Pinchart
