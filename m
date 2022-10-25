@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2EF60D626
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 23:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFD060D624
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 23:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiJYVac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 17:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
+        id S230415AbiJYVaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 17:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiJYVaX (ORCPT
+        with ESMTP id S232024AbiJYVaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 17:30:23 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3752A5246E;
-        Tue, 25 Oct 2022 14:30:20 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 25 Oct 2022 17:30:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A773E4F64C;
+        Tue, 25 Oct 2022 14:30:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0EE9C1F8B3;
-        Tue, 25 Oct 2022 21:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666733419; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GsChx+MZJNG5dXDKs99vdVY/KWr9zZZnfSpLrLhebqA=;
-        b=1Q1d+7Rr51d6MYXDNZD5NSRsd+RrBP3t89UkSIFI4OXho3Mx53DsfYJDC2Mx5tP8+eHEVw
-        XxVyDYvsWem9SkJU2bpIfyQXhkpTCPI4HnyM3guNyQeKF4AjtXMxRRCN2H+mVEqUIoot7P
-        zykaHxIu+d+8/0b2ksEoHLgKf3ObLpk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666733419;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GsChx+MZJNG5dXDKs99vdVY/KWr9zZZnfSpLrLhebqA=;
-        b=nwqV8LR6vkXw2FIVIHBJT++eqLS73KWJjC5AoPKaZaV7rXbMGb3MU4ils8pyvbQaQQ5q8D
-        fS6HQAyGJbuC8JBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A3ADB13A64;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43FB161BAC;
+        Tue, 25 Oct 2022 21:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93F39C433D7;
         Tue, 25 Oct 2022 21:30:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kgFFFmhVWGOXIQAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 25 Oct 2022 21:30:16 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666733416;
+        bh=sOpXMCe9LC1xfyUXh2lmcg/3x2PBBpExWr6Hng1hpAQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=i8wngfqK8cXmbc2Bn0/GH0lD40yiiXTzQzGaoftBx6FOZOqMNz1oG92AUzTKJtfTl
+         +PDpYSNe3XbSTSKU8l5LBbV46pmxJhyThuIvEotpWbYqdJaCds48JMHC+sfG3evXVx
+         sDvef30alWKmmKuwUyMRYX0bm1VJHPjv72iwDCQGohaUX9Ouiza3CjwjVyGYbUJtON
+         0LKC38A65N1T53TjX4bmNcFe30fxMADlvL9DkhY9gy0mnEU6HQs3KkcCTpsaAxDT8d
+         8jSMlseccyi94HZJWQFWw+TwqGruQqSC5IwqzOGEBizBsfK67q3jGZe/vIXzBpMz6g
+         EGWSB2dlmasbA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73CCEE45192;
+        Tue, 25 Oct 2022 21:30:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Li zeming" <zeming@nfschina.com>
-Cc:     willy@infradead.org, jlayton@kernel.org, song@kernel.org,
-        bvanassche@acm.org, reiserfs-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Li zeming" <zeming@nfschina.com>
-Subject: Re: [PATCH] reiserfs: journal: Increase jl pointer check
-In-reply-to: <20221025084704.3922-1-zeming@nfschina.com>
-References: <20221025084704.3922-1-zeming@nfschina.com>
-Date:   Wed, 26 Oct 2022 08:30:13 +1100
-Message-id: <166673341340.7585.173987927705263434@noble.neil.brown.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][next] net: dev: Convert sa_data to flexible array in struct
+ sockaddr
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166673341646.9987.5803101009027995896.git-patchwork-notify@kernel.org>
+Date:   Tue, 25 Oct 2022 21:30:16 +0000
+References: <20221018095503.never.671-kees@kernel.org>
+In-Reply-To: <20221018095503.never.671-kees@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+        pabeni@redhat.com, axboe@kernel.dk, asml.silence@gmail.com,
+        dsahern@kernel.org, dylany@fb.com, yajun.deng@linux.dev,
+        petrm@nvidia.com, liuhangbin@gmail.com, leon@kernel.org,
+        syzkaller@googlegroups.com, willemb@google.com,
+        pablo@netfilter.org, netdev@vger.kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com,
+        alibuda@linux.alibaba.com, jk@codeconstruct.com.au,
+        bigeasy@linutronix.de, imagedong@tencent.com, kuniyu@amazon.com,
+        liu3101@purdue.edu, wsa+renesas@sang-engineering.com,
+        william.xuanziyang@huawei.com, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022, Li zeming wrote:
-> If kzalloc fails to allocate the jl pointer, NULL is returned directly.
->=20
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-> ---
->  fs/reiserfs/journal.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-> index 94addfcefede..d64e9de126c1 100644
-> --- a/fs/reiserfs/journal.c
-> +++ b/fs/reiserfs/journal.c
-> @@ -2569,6 +2569,9 @@ static struct reiserfs_journal_list *alloc_journal_li=
-st(struct super_block *s)
->  	struct reiserfs_journal_list *jl;
->  	jl =3D kzalloc(sizeof(struct reiserfs_journal_list),
->  		     GFP_NOFS | __GFP_NOFAIL);
-> +	if (!jl)
-> +		return NULL;
-> +
+Hello:
 
-What do you think the __GFP_NOFAIL flag might mean?
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-NeilBrown
+On Tue, 18 Oct 2022 02:56:03 -0700 you wrote:
+> One of the worst offenders of "fake flexible arrays" is struct sockaddr,
+> as it is the classic example of why GCC and Clang have been traditionally
+> forced to treat all trailing arrays as fake flexible arrays: in the
+> distant misty past, sa_data became too small, and code started just
+> treating it as a flexible array, even though it was fixed-size. The
+> special case by the compiler is specifically that sizeof(sa->sa_data)
+> and FORTIFY_SOURCE (which uses __builtin_object_size(sa->sa_data, 1))
+> do not agree (14 and -1 respectively), which makes FORTIFY_SOURCE treat
+> it as a flexible array.
+> 
+> [...]
+
+Here is the summary with links:
+  - [next] net: dev: Convert sa_data to flexible array in struct sockaddr
+    https://git.kernel.org/netdev/net-next/c/b5f0de6df6dc
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-
->  	INIT_LIST_HEAD(&jl->j_list);
->  	INIT_LIST_HEAD(&jl->j_working_list);
->  	INIT_LIST_HEAD(&jl->j_tail_bh_list);
-> --=20
-> 2.18.2
->=20
->=20
