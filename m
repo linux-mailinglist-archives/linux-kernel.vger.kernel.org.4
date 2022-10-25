@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CCC60CA9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B394D60CAA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbiJYLId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
+        id S231276AbiJYLIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiJYLI3 (ORCPT
+        with ESMTP id S231244AbiJYLIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:08:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E281F12B378
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666696106;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GbFZfMwxDx0onwzCpoqUiakpnSjMLfSg7C2QrxxsGK4=;
-        b=JDuLsFEtKae2mZgnUEZySjiEf9jeqrwoJ/6rqqePcqyz431lBi5w0/pV11GEEtgHb9NN62
-        qlSdbw/3sOyO+4qbf0YTdrte5dIk+zknceHOQB7qO4KxGEYjbkdwsT3nHp6pSMsY+B8V9H
-        74YDiWaRD2jAFkPUBUKk21J2K6rWr2M=
-Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
- [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-561-rrPjH48mMOeVyj57HfAHWw-1; Tue, 25 Oct 2022 07:08:25 -0400
-X-MC-Unique: rrPjH48mMOeVyj57HfAHWw-1
-Received: by mail-vk1-f199.google.com with SMTP id f129-20020a1f9c87000000b003b6d7b00d48so943247vke.15
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:08:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GbFZfMwxDx0onwzCpoqUiakpnSjMLfSg7C2QrxxsGK4=;
-        b=uS6afOGgHLpMejGIEVTsEjieJrJKyyfXefIQxCPQgoRPhHKb7wZf+bXXTRUiaO7b9M
-         sQUoJfqUXEEO7dukfetEQ0jQWYs+hZCmZZE3kbiRXOu0tr5lTwFBbumiRb3w/Ge+IVsV
-         N5lEJ5AqDRtchvSlPtoeaeAiDgoRYDngqo8EaaaN50Xa4dAD+JTjY9U4pGjyRAQEiSqF
-         B7pwMYlOFy3WrCSSYyIWaIwzxe+8g+1FmgrO8Qwog122gE2+ooM1e8IvAgevL/4OVCKZ
-         sQQYuDBMo6TiU6UHNeeaNf2w41OGhkJouGYjxl3hSZGtKBCKkkf4GKh1IFyNf90EyFFa
-         Hdlg==
-X-Gm-Message-State: ACrzQf2XUD7DzWG7E2i/EmkptBkWXbpryu62XnljQ3Z3oPoKj72NiZ6N
-        +jYwzsKbPF9NGEOozjTi3LsRD0kTE3hhAlPLVlMQHq+POJ9AqnTpeUj4mh3cJoMOyoPRZoE879W
-        altNPoMYdF4ziF9JyQuVkg6ywyJqWCq5oD3nZ/aFZ
-X-Received: by 2002:ac5:c1d9:0:b0:3b4:7394:7b7 with SMTP id g25-20020ac5c1d9000000b003b4739407b7mr9578614vkk.11.1666696104726;
-        Tue, 25 Oct 2022 04:08:24 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7EUbGLB/rDds585tq55Wl4/tVVwITzQQEXtZm8AfW9Fma4NxTd9oCv9EU3wnDj+904F0d4RfiTnVasrXoigOQ=
-X-Received: by 2002:ac5:c1d9:0:b0:3b4:7394:7b7 with SMTP id
- g25-20020ac5c1d9000000b003b4739407b7mr9578607vkk.11.1666696104483; Tue, 25
- Oct 2022 04:08:24 -0700 (PDT)
+        Tue, 25 Oct 2022 07:08:44 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C645E189520;
+        Tue, 25 Oct 2022 04:08:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666696123; x=1698232123;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pMfcDWmEvv6uwFR85xXT/GMoLUi2ugbCSFtAe8+1dKs=;
+  b=jGcmf+9BfxH58yN4P28htn587XvvFQwUvUryrT9xUd+uuSVvbEsDMxNo
+   27RBw4j8eFdgjgrxP/1Wzll0ZNDx+dPDoWdPbRmQdXUQfIvanrtZCOr5R
+   /0MIwgRzn2jiD/LF32vcciRHFvzdooEjnA1p9hbFMI7cXwutdeC/pBcsV
+   WToBJpNMdItR2582XZyWxhAstTKIwv8pxO2rRRGN71QzXV81l2WqU1jeI
+   Q0TDjn7tAE6pejtUa/puD4YAWfSO3geK72qMmzDqiaw3RNN3PMFj+XrUa
+   BpgjHSGDnV0ddk62O+PReCwbGkhbc4WtL5p1GJq+XNxeFLUxVkP1gH8zF
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="308740065"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="308740065"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 04:08:43 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="664871795"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="664871795"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.45.236])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 04:08:40 -0700
+Message-ID: <8a1549d5-7407-7e47-5fbe-bcb9ca953cda@intel.com>
+Date:   Tue, 25 Oct 2022 14:08:36 +0300
 MIME-Version: 1.0
-References: <20221025101828.1626490-1-ecurtin@redhat.com> <20221025104833.io3spnxw7724vlhb@begin>
-In-Reply-To: <20221025104833.io3spnxw7724vlhb@begin>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Tue, 25 Oct 2022 12:08:08 +0100
-Message-ID: <CAOgh=FwFHrLc3kmjVD49cVoRcfhtPFAqKrO5U_RE6FYVV2zXTw@mail.gmail.com>
-Subject: Re: [PATCH] speakup: include types.h so u_char is a known type
-To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Eric Curtin <ecurtin@redhat.com>, gregkh@linuxfoundation.org,
-        William Hubbs <w.d.hubbs@gmail.com>,
-        Chris Brannon <chris@the-brannons.com>,
-        Kirk Reiser <kirk@reisers.ca>,
-        "open list:SPEAKUP CONSOLE SPEECH DRIVER" <speakup@linux-speakup.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.0
+Subject: Re: [PATCH] mmc: sdhci-brcmstb: Allow building with COMPILE_TEST
+Content-Language: en-US
+To:     Brian Norris <briannorris@chromium.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>, linux-mmc@vger.kernel.org
+References: <20221024181759.2355583-1-briannorris@chromium.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20221024181759.2355583-1-briannorris@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 at 11:54, Samuel Thibault
-<samuel.thibault@ens-lyon.org> wrote:
->
-> Hello,
->
-> Eric Curtin, le mar. 25 oct. 2022 11:18:24 +0100, a ecrit:
-> > Fixes build of utils.h header file, occurred when building kernel on
-> > postmarketOS on Lenovo Duet Chromebook.
-> >
-> >   drivers/accessibility/speakup/utils.h:57:9: error: unknown type name 'u_char'; did you mean 'char'?
-> >      57 |         u_char *pn = (u_char *)name;
-> >         |         ^~~~~~
-> >         |         char
-> >
->
-> There is already a patch pending commit that just replaces it with
-> unsigned char.
+On 24/10/22 21:17, Brian Norris wrote:
+> This driver is pretty simple, and it can be useful to build it (for
+> validation purposes) without BMIPS or ARCH_BRCMSTB.
+> 
+> It technically depends on CONFIG_OF to do anything useful at runtime,
+> but it still works out OK for compile-testing using the !OF stubs.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-Sorry I missed that. that works for me :)
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
->
-> (see
-> Subject: [PATCH] speakup: replace utils' u_char with unsigned char
-> )
->
-> Samuel
->
+> ---
+> 
+>  drivers/mmc/host/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/Kconfig b/drivers/mmc/host/Kconfig
+> index f324daadaf70..453fba8d2d9d 100644
+> --- a/drivers/mmc/host/Kconfig
+> +++ b/drivers/mmc/host/Kconfig
+> @@ -1040,10 +1040,10 @@ config MMC_SDHCI_MICROCHIP_PIC32
+>  
+>  config MMC_SDHCI_BRCMSTB
+>  	tristate "Broadcom SDIO/SD/MMC support"
+> -	depends on ARCH_BRCMSTB || BMIPS_GENERIC
+> +	depends on ARCH_BRCMSTB || BMIPS_GENERIC || COMPILE_TEST
+>  	depends on MMC_SDHCI_PLTFM
+>  	select MMC_CQHCI
+> -	default y
+> +	default ARCH_BRCMSTB || BMIPS_GENERIC
+>  	help
+>  	  This selects support for the SDIO/SD/MMC Host Controller on
+>  	  Broadcom STB SoCs.
 
