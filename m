@@ -2,99 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D00A60D50A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D72C60D507
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232608AbiJYTzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
+        id S229544AbiJYTzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiJYTzU (ORCPT
+        with ESMTP id S231482AbiJYTzS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:55:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA522BB3D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666727714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2rsahskIW82j7Opr6zcxmIFVVHL4k7W5ic86oG0lZpM=;
-        b=hjSnoaMI5iaeOSDpw1XJ5pxoqMRVLzOnx5AAEVLrzR4xkNYVdOboZF7ZowcJPKudWuTxAK
-        EmnLMwZpzzfiyJa2/CJxs9CjqsG5O/QEy+GZT4N6GBfmKeUMtQ5qNBigBfFZTI0AmUfDjB
-        lOaD4pxJNhEnvxT4ba0Cp6ApTf7hNYk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-UG7250pGNUCosQds8y14Hw-1; Tue, 25 Oct 2022 15:55:11 -0400
-X-MC-Unique: UG7250pGNUCosQds8y14Hw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 25 Oct 2022 15:55:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36F328E17
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:55:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50B5188606B;
-        Tue, 25 Oct 2022 19:55:10 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BCD874B3FC6;
-        Tue, 25 Oct 2022 19:55:09 +0000 (UTC)
-Message-ID: <d67740dc-d608-4b1a-0889-b9861153fdf3@redhat.com>
-Date:   Tue, 25 Oct 2022 15:55:09 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5725D61B0B
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 19:55:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CB72C433D6;
+        Tue, 25 Oct 2022 19:55:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666727713;
+        bh=LHxPXgJSeStUU4r7az4EysTl2+3HCQRlrc0uwfLrm7s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=h2jcai28jCPYvodz6FvftC4x1Ej2dEKohaXmlQpAOQTotBXUUAfV+JAfUgFsM8yhD
+         twu598BfJz1kcx160tgE/k7laqbZ4mn6GLQRofN+FAkBAR1KcMBHRDsdYFabIvEB+J
+         lzr+VntGnoL5Yd+kRRs33eYKJbaOvU8+2QxKW+t1epOK6w0OC0d4uvyDBt/sULcCCm
+         VCvep91dFIQNKYhBzQutVbAmK6N+KxhehyiDTjFKiQvadX6ljjDo4QZwyL4Sd9lEzc
+         Of7Ux4MLNjJwqYPuu4qPAWh3Bf/hXYLW1SLgAe2Op/LYxYK/qXpxz+b4THpFA1hgmo
+         eHt/maMNS791g==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2F584404BE; Tue, 25 Oct 2022 16:55:11 -0300 (-03)
+Date:   Tue, 25 Oct 2022 16:55:11 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ravi Bangoria <ravi.bangoria@linux.vnet.ibm.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: perf amd: PERF_MEM_LVLNUM_CXL -> PERF_MEM_LVLNUM_EXTN_MEM
+Message-ID: <Y1g/H2/ljZ1rGmM9@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH v3 2/5] locking/rwsem: Limit # of null owner retries for
- handoff writer
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        Hillf Danton <hdanton@sina.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
-References: <20221017211356.333862-1-longman@redhat.com>
- <20221017211356.333862-3-longman@redhat.com>
- <Y1aTpYba1Wwly48+@hirez.programming.kicks-ass.net>
- <980d882c-01b8-2ce1-663f-41a8a337f350@redhat.com>
- <Y1fG7nQxiLyKIhQ6@hirez.programming.kicks-ass.net>
- <Y1fNJZ9SALWlmoon@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Y1fNJZ9SALWlmoon@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 07:48, Peter Zijlstra wrote:
-> On Tue, Oct 25, 2022 at 01:22:22PM +0200, Peter Zijlstra wrote:
->
->> Funny, I find the former approach much saner. Disabling preemption
->> around the whole thing fixes the fundamental problem while spin-limiting
->> is a band-aid.
->>
->> Note how rwsem_write_trylock() already does preempt_disable(), having
->> the read-side do something similar only makes sense.
-> Something like the completely untested below perhaps...
+Ravi,
 
-That is quite a number of changes spread over many different functions. 
-That is the kind of changes that may make it harder to backport to 
-stable releases.
+	I'm updating the tools header copies and noticed that a previous
+sync brought PERF_MEM_LVLNUM_CXL but now this got renamed to
+PERF_MEM_LVLNUM_EXTN_MEM, so I had to add this change to the sync of
+tools/uapi/linux/perf_event.h, please ack.
 
-This patch is just a stop-gap measure for stable releases which I 
-essentially revert in a later patch. I have no objection to disable 
-preemption in within the rwsem code exception to be backported to a 
-stable release. So I can add another patch on top of the series to 
-essentially do that.
+Thanks,
 
-Cheers,
-Longman
+- Arnaldo
 
+⬢[acme@toolbox perf-urgent]$ git diff tools/perf/util/mem-events.c
+diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
+index b3a91093069a5715..c80fce18025051ae 100644
+--- a/tools/perf/util/mem-events.c
++++ b/tools/perf/util/mem-events.c
+@@ -295,7 +295,7 @@ static const char * const mem_lvl[] = {
+ };
+
+ static const char * const mem_lvlnum[] = {
+-       [PERF_MEM_LVLNUM_CXL] = "CXL",
++       [PERF_MEM_LVLNUM_EXTN_MEM] = "Extension mem",
+        [PERF_MEM_LVLNUM_IO] = "I/O",
+        [PERF_MEM_LVLNUM_ANY_CACHE] = "Any cache",
+        [PERF_MEM_LVLNUM_LFB] = "LFB/MAB",
+⬢[acme@toolbox perf-urgent]$
+
+-- 
+
+- Arnaldo
