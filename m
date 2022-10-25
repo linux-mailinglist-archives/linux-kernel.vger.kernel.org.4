@@ -2,163 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157BA60C7C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D3760C7C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiJYJSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
+        id S231341AbiJYJTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232384AbiJYJRz (ORCPT
+        with ESMTP id S229629AbiJYJSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:17:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB451CB1C
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:10:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666689018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D7V3TCPoYLGECIiPNR0pPoNV1DhkNdk1bP7qY02/4Jc=;
-        b=SiI5Up5wtRC2+7UgCMyryBxDrq9Pa44KwCa0AInN3KgnhxbEz8xxiJT6FKiDdHFX/munC4
-        LVNuJSsaPKmzTiLlPv4sybkuH53hOSGoVco3gyXIEsOGKjB7V/5D3Xrmb3XIwAkn1lFTPZ
-        PxKh9u43Kz7mGm/c3xP1QYoGTOXjTwA=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-50-haoR1TPOMBCPJHK-mZjbVg-1; Tue, 25 Oct 2022 05:10:17 -0400
-X-MC-Unique: haoR1TPOMBCPJHK-mZjbVg-1
-Received: by mail-pj1-f72.google.com with SMTP id q93-20020a17090a1b6600b0021311ab9082so2484142pjq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:10:15 -0700 (PDT)
+        Tue, 25 Oct 2022 05:18:50 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B062A8A1E2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:12:09 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 78so10888279pgb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xGVOD/2VPjGiBRav22AYMwWy4zxh7fmfTMDotebo6hU=;
+        b=IiF+9H7HDBvMko4kvyz08iL4jk0sxX0hNcDqSZOVzhEfkq3VldocjhlbifIuF33l4v
+         TISqYvzkqU5+iaXJnFpxZI4myVYsfqHxtJc5DN769q9+w+cEk6i5l5/pNf+17dpYTHoy
+         Yrq74N1XEG8LbDs9OVJwxcKUf6Z/5TXYk+U6zy/EVoUmmtvzE0+hF34oU2D7Kd6x8SFl
+         j3AnRhGmOnfYmPums2ywjIk/q8Tq4Kyv0conadgtJ19IHKu6wFvaALV0LfDXbzLnvKkg
+         33+95aMWuJqWos8QpVVPgHLK42bBz7gvdVSLkCVxSvwH2GIyrqa7qz6XV6qfGPl/FKTq
+         nF8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D7V3TCPoYLGECIiPNR0pPoNV1DhkNdk1bP7qY02/4Jc=;
-        b=Ytp6p2dIuF3C2fG1/u4YteRRJBDYECHzDApReKe3YuFe44fmJxUI+4vGeroGkmmEm2
-         gf1ozUAWZuTwU4HuxH4C/tyd2oPBpNPX0mAXAWmFvMn8GqfTeIROU+9rKkPhU2TegPw6
-         CfWjm2XdXBZl61mzsZjsoIC4Y1D3DntuTMGJrtsSp2SGDa8mkaUX/fdBVmOQTLmUnbtp
-         305VWwf0OVid/XY8o2PSIpA2UE7fw8fcH3n1mzGrk61yTMF8wyDsv73a/dbdzEhmHKOX
-         sE0PWgaWy7uKDN7mQn8kjmBK3/KXIRqEEYIrcIaKHFtzgHp0QPLecuVHU03Xw6JNfRHh
-         jP6g==
-X-Gm-Message-State: ACrzQf2IY3lMaBOxu30GkDBaqN0H5wHVwtZlhPkP5tOt6CqVbG47wLhM
-        JbDJz1UqUXVzQsZeYuE8jjMnTRclGxTwZh2C1xs2aZIlem+ruXJFGvvOxrsnQqwuJwLW+ezkSuH
-        hhy42Fy/QAQ3V4/Bw6bG/M+u4VSIS+wWsaI8ZaUCz7pwJbZ/Dw+X393adt3tLuyZEragJOyHing
-        ==
-X-Received: by 2002:a17:902:b70c:b0:186:8bb2:de36 with SMTP id d12-20020a170902b70c00b001868bb2de36mr16394373pls.106.1666689014793;
-        Tue, 25 Oct 2022 02:10:14 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7Uf0Aklz9O3y8UewgVP1XxC7F2FNzzxj/Xw1kWqSytxMwF6q8lWgpfjsbq4XK1+qBjE0puww==
-X-Received: by 2002:a17:902:b70c:b0:186:8bb2:de36 with SMTP id d12-20020a170902b70c00b001868bb2de36mr16394337pls.106.1666689014334;
-        Tue, 25 Oct 2022 02:10:14 -0700 (PDT)
-Received: from [10.72.12.79] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id gd2-20020a17090b0fc200b002009db534d1sm1031910pjb.24.2022.10.25.02.10.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 02:10:13 -0700 (PDT)
-Subject: Re: [PATCH] fs/ceph/super: add mount options "snapdir{mode,uid,gid}"
-To:     Max Kellermann <max.kellermann@ionos.com>
-Cc:     Jeff Layton <jlayton@kernel.org>, idryomov@gmail.com,
-        ceph-devel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220927120857.639461-1-max.kellermann@ionos.com>
- <88f8941f-82bf-5152-b49a-56cb2e465abb@redhat.com>
- <CAKPOu+88FT1SeFDhvnD_NC7aEJBxd=-T99w67mA-s4SXQXjQNw@mail.gmail.com>
- <75e7f676-8c85-af0a-97b2-43664f60c811@redhat.com>
- <CAKPOu+-rKOVsZ1T=1X-T-Y5Fe1MW2Fs9ixQh8rgq3S9shi8Thw@mail.gmail.com>
- <baf42d14-9bc8-93e1-3d75-7248f93afbd2@redhat.com>
- <cd5ed50a3c760f746a43f8d68fdbc69b01b89b39.camel@kernel.org>
- <7e28f7d1-cfd5-642a-dd4e-ab521885187c@redhat.com>
- <8ef79208adc82b546cc4c2ba20b5c6ddbc3a2732.camel@kernel.org>
- <7d40fada-f5f8-4357-c559-18421266f5b4@redhat.com>
- <CAKPOu+_Jk0EHRDjqiNuFv8wL0kLXLLRZpx7AgWDPOWHzJn22xg@mail.gmail.com>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <db650fa8-8b64-5275-7390-f6b48bfd3a37@redhat.com>
-Date:   Tue, 25 Oct 2022 17:10:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        bh=xGVOD/2VPjGiBRav22AYMwWy4zxh7fmfTMDotebo6hU=;
+        b=EP1xjtARrwOWrlgnGE0sAf5YMwsVSk4xw4snIYZo/2r0rkZmQDA1U2bXqrP3+YDaNg
+         PE6weD5GBza+QkZ1vMxgiw5gpstVcVRC2ggAUNgYMWkwNNYsN9MiBciPsZtJmm4LbK8v
+         V0j62v/DGeCV980/yC+4/3ALFEV/rXa5i+DjYOgtzGPm6Xr5ZXbJdSvKbBemEE1q2Pfy
+         H1oRwRXxhYVrbcH63RjAxrHp2J4KCVoT8jp98L2J/CO/pz7NGqnrNWAlrcmv9u/ShUi7
+         ZD6YAYmW8yMVPXBLyAQ8pKvOS6x4xf82Ny3B0jz5brI2ZpIC8bVrSCcfpuZLnHnTt1GT
+         A1xQ==
+X-Gm-Message-State: ACrzQf23/vYGpZYQrxqQx6xTkO6+HKiw9+op95gN0oo0BJxdnTctDnsm
+        t2QZe3cLknEfzU+PbmsFgfJ1y56ycG/B8/iv
+X-Google-Smtp-Source: AMsMyM7nReHG+DxExO3yNsZWg9FWsmN+c9TS6v6XjbAsRncGxUpOUqx69/NCOLmMtNa5fJw12Icl3g==
+X-Received: by 2002:aa7:838a:0:b0:536:101a:9ccf with SMTP id u10-20020aa7838a000000b00536101a9ccfmr37281309pfm.18.1666689129044;
+        Tue, 25 Oct 2022 02:12:09 -0700 (PDT)
+Received: from mail.google.com (122-58-209-93-fibre.sparkbb.co.nz. [122.58.209.93])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b00186a8085382sm896604plk.43.2022.10.25.02.12.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 02:12:08 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 22:12:00 +1300
+From:   Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+To:     Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org,
+        paulo.miguel.almeida.rodenas@gmail.com
+Subject: [PATCH] [next] amdkfd: remove unused kfd_pm4_headers_diq header file
+Message-ID: <Y1eoYDDZWdyLNlBc@mail.google.com>
 MIME-Version: 1.0
-In-Reply-To: <CAKPOu+_Jk0EHRDjqiNuFv8wL0kLXLLRZpx7AgWDPOWHzJn22xg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+kfd_pm4_headers_diq.h header is a leftover from the old H/W debugger
+module support added on commit <fbeb661bfa895dc>. That implementation
+was removed after a while and the last file that included that header
+was removed on commit <5bdd3eb253544b1>.
 
-On 25/10/2022 15:22, Max Kellermann wrote:
-> On Tue, Oct 25, 2022 at 3:36 AM Xiubo Li <xiubli@redhat.com> wrote:
->> Currently cephx permission has already supported the 's' permission,
->> which means you can do the snapshot create/remove. And for a privileged
->> or specific mounts you can give them the 's' permission and then only
->> they can do the snapshot create/remove. And all the others won't.
-> But that's a client permission, not a user permission.
->
-> I repeat: the problem is that snapshots should only be
-> accessible/discoverable/creatable by certain users (UIDs/GIDs) on the
-> client machine, independent of their permission on the parent
-> directory.
+This patch removes the unused header file kfd_pm4_headers_diq.h
 
-Hi Max,
+Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+---
+ .../gpu/drm/amd/amdkfd/kfd_pm4_headers_diq.h  | 291 ------------------
+ 1 file changed, 291 deletions(-)
+ delete mode 100644 drivers/gpu/drm/amd/amdkfd/kfd_pm4_headers_diq.h
 
-Yeah, the cephx permission could cover this totally and there is no need 
-to worry about the user id mapping issue.
-
-You can allow the mount with specific client ids, "client.privileged" 
-for example, could create/remove the snapshots:
-
-[client.privileged]
-     key = AQA19uZUqIwkHxAAFuUwvq0eJD4S173oFRxe0g==
-     caps mds = "allow rws /"
-     caps mon = "allow *"
-     caps osd = "allow *"
-
-[client.global]
-     key = xE21RuZTqIuiHxFFAuEwv4TjJD3R176BFOi4Fj==
-     caps mds = "allow rw /"
-     caps mon = "allow *"
-     caps osd = "allow *"
-
-Then specify the client ids when mounting:
-
-$ sudo ./bin/mount.ceph privileged@.a=/ /mnt/privileged/mountpoint
-
-$ sudo ./bin/mount.ceph global@.a=/ /mnt/global/mountpoint
-
-Just to make sure only certain users, who have permission to 
-create/remove snapshots, could access to the "/mnt/privileged/" directory.
-
-I didn't read the openshift code, but when I was debugging the bugs and 
-from the logs I saw it acting similarly to this.
-
-> My patch decouples parent directory permissions from snapdir
-> permissions, and it's a simple and elegant solution to my problem.
-
-Yeah, I'm aware of the differences between these two approaches exactly. 
-This should be a common feature not only in kernel client. We also need 
-to implement this in cephfs user space client. If the above cephx 
-permission approach could work very well everywhere, I am afraid this 
-couldn't go to ceph in user space.
-
->> And then use the container or something else to make the specific users
->> could access to them.
-> Sorry, I don't get it at all. What is "the container or something" and
-> how does it enable me to prevent specific users from accessing
-> snapdirs in their home directories?
->
-Please see my above example. If that still won't work well, please send 
-one mail in ceph-user to discuss this further, probably we can get more 
-feedbacks from there.
-
-Thanks!
-
-- Xiubo
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_pm4_headers_diq.h b/drivers/gpu/drm/amd/amdkfd/kfd_pm4_headers_diq.h
+deleted file mode 100644
+index f9cd28690151..000000000000
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_pm4_headers_diq.h
++++ /dev/null
+@@ -1,291 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 OR MIT */
+-/*
+- * Copyright 2014-2022 Advanced Micro Devices, Inc.
+- *
+- * Permission is hereby granted, free of charge, to any person obtaining a
+- * copy of this software and associated documentation files (the "Software"),
+- * to deal in the Software without restriction, including without limitation
+- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+- * and/or sell copies of the Software, and to permit persons to whom the
+- * Software is furnished to do so, subject to the following conditions:
+- *
+- * The above copyright notice and this permission notice shall be included in
+- * all copies or substantial portions of the Software.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+- * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
+- * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+- * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+- * OTHER DEALINGS IN THE SOFTWARE.
+- *
+- */
+-
+-#ifndef KFD_PM4_HEADERS_DIQ_H_
+-#define KFD_PM4_HEADERS_DIQ_H_
+-
+-/*--------------------_INDIRECT_BUFFER-------------------- */
+-
+-#ifndef _PM4__INDIRECT_BUFFER_DEFINED
+-#define _PM4__INDIRECT_BUFFER_DEFINED
+-enum _INDIRECT_BUFFER_cache_policy_enum {
+-	cache_policy___indirect_buffer__lru = 0,
+-	cache_policy___indirect_buffer__stream = 1,
+-	cache_policy___indirect_buffer__bypass = 2
+-};
+-
+-enum {
+-	IT_INDIRECT_BUFFER_PASID = 0x5C
+-};
+-
+-struct pm4__indirect_buffer_pasid {
+-	union {
+-		union PM4_MES_TYPE_3_HEADER header;	/* header */
+-		unsigned int ordinal1;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int reserved1:2;
+-			unsigned int ib_base_lo:30;
+-		} bitfields2;
+-		unsigned int ordinal2;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int ib_base_hi:16;
+-			unsigned int reserved2:16;
+-		} bitfields3;
+-		unsigned int ordinal3;
+-	};
+-
+-	union {
+-		unsigned int control;
+-		unsigned int ordinal4;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int pasid:10;
+-			unsigned int reserved4:22;
+-		} bitfields5;
+-		unsigned int ordinal5;
+-	};
+-
+-};
+-
+-#endif
+-
+-/*--------------------_RELEASE_MEM-------------------- */
+-
+-#ifndef _PM4__RELEASE_MEM_DEFINED
+-#define _PM4__RELEASE_MEM_DEFINED
+-enum _RELEASE_MEM_event_index_enum {
+-	event_index___release_mem__end_of_pipe = 5,
+-	event_index___release_mem__shader_done = 6
+-};
+-
+-enum _RELEASE_MEM_cache_policy_enum {
+-	cache_policy___release_mem__lru = 0,
+-	cache_policy___release_mem__stream = 1,
+-	cache_policy___release_mem__bypass = 2
+-};
+-
+-enum _RELEASE_MEM_dst_sel_enum {
+-	dst_sel___release_mem__memory_controller = 0,
+-	dst_sel___release_mem__tc_l2 = 1,
+-	dst_sel___release_mem__queue_write_pointer_register = 2,
+-	dst_sel___release_mem__queue_write_pointer_poll_mask_bit = 3
+-};
+-
+-enum _RELEASE_MEM_int_sel_enum {
+-	int_sel___release_mem__none = 0,
+-	int_sel___release_mem__send_interrupt_only = 1,
+-	int_sel___release_mem__send_interrupt_after_write_confirm = 2,
+-	int_sel___release_mem__send_data_after_write_confirm = 3
+-};
+-
+-enum _RELEASE_MEM_data_sel_enum {
+-	data_sel___release_mem__none = 0,
+-	data_sel___release_mem__send_32_bit_low = 1,
+-	data_sel___release_mem__send_64_bit_data = 2,
+-	data_sel___release_mem__send_gpu_clock_counter = 3,
+-	data_sel___release_mem__send_cp_perfcounter_hi_lo = 4,
+-	data_sel___release_mem__store_gds_data_to_memory = 5
+-};
+-
+-struct pm4__release_mem {
+-	union {
+-		union PM4_MES_TYPE_3_HEADER header;	/*header */
+-		unsigned int ordinal1;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int event_type:6;
+-			unsigned int reserved1:2;
+-			enum _RELEASE_MEM_event_index_enum event_index:4;
+-			unsigned int tcl1_vol_action_ena:1;
+-			unsigned int tc_vol_action_ena:1;
+-			unsigned int reserved2:1;
+-			unsigned int tc_wb_action_ena:1;
+-			unsigned int tcl1_action_ena:1;
+-			unsigned int tc_action_ena:1;
+-			unsigned int reserved3:6;
+-			unsigned int atc:1;
+-			enum _RELEASE_MEM_cache_policy_enum cache_policy:2;
+-			unsigned int reserved4:5;
+-		} bitfields2;
+-		unsigned int ordinal2;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int reserved5:16;
+-			enum _RELEASE_MEM_dst_sel_enum dst_sel:2;
+-			unsigned int reserved6:6;
+-			enum _RELEASE_MEM_int_sel_enum int_sel:3;
+-			unsigned int reserved7:2;
+-			enum _RELEASE_MEM_data_sel_enum data_sel:3;
+-		} bitfields3;
+-		unsigned int ordinal3;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int reserved8:2;
+-			unsigned int address_lo_32b:30;
+-		} bitfields4;
+-		struct {
+-			unsigned int reserved9:3;
+-			unsigned int address_lo_64b:29;
+-		} bitfields5;
+-		unsigned int ordinal4;
+-	};
+-
+-	unsigned int address_hi;
+-
+-	unsigned int data_lo;
+-
+-	unsigned int data_hi;
+-
+-};
+-#endif
+-
+-
+-/*--------------------_SET_CONFIG_REG-------------------- */
+-
+-#ifndef _PM4__SET_CONFIG_REG_DEFINED
+-#define _PM4__SET_CONFIG_REG_DEFINED
+-
+-struct pm4__set_config_reg {
+-	union {
+-		union PM4_MES_TYPE_3_HEADER header;	/*header */
+-		unsigned int ordinal1;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int reg_offset:16;
+-			unsigned int reserved1:7;
+-			unsigned int vmid_shift:5;
+-			unsigned int insert_vmid:1;
+-			unsigned int reserved2:3;
+-		} bitfields2;
+-		unsigned int ordinal2;
+-	};
+-
+-	unsigned int reg_data[1];	/*1..N of these fields */
+-
+-};
+-#endif
+-
+-/*--------------------_WAIT_REG_MEM-------------------- */
+-
+-#ifndef _PM4__WAIT_REG_MEM_DEFINED
+-#define _PM4__WAIT_REG_MEM_DEFINED
+-enum _WAIT_REG_MEM_function_enum {
+-	function___wait_reg_mem__always_pass = 0,
+-	function___wait_reg_mem__less_than_ref_value = 1,
+-	function___wait_reg_mem__less_than_equal_to_the_ref_value = 2,
+-	function___wait_reg_mem__equal_to_the_reference_value = 3,
+-	function___wait_reg_mem__not_equal_reference_value = 4,
+-	function___wait_reg_mem__greater_than_or_equal_reference_value = 5,
+-	function___wait_reg_mem__greater_than_reference_value = 6,
+-	function___wait_reg_mem__reserved = 7
+-};
+-
+-enum _WAIT_REG_MEM_mem_space_enum {
+-	mem_space___wait_reg_mem__register_space = 0,
+-	mem_space___wait_reg_mem__memory_space = 1
+-};
+-
+-enum _WAIT_REG_MEM_operation_enum {
+-	operation___wait_reg_mem__wait_reg_mem = 0,
+-	operation___wait_reg_mem__wr_wait_wr_reg = 1
+-};
+-
+-struct pm4__wait_reg_mem {
+-	union {
+-		union PM4_MES_TYPE_3_HEADER header;	/*header */
+-		unsigned int ordinal1;
+-	};
+-
+-	union {
+-		struct {
+-			enum _WAIT_REG_MEM_function_enum function:3;
+-			unsigned int reserved1:1;
+-			enum _WAIT_REG_MEM_mem_space_enum mem_space:2;
+-			enum _WAIT_REG_MEM_operation_enum operation:2;
+-			unsigned int reserved2:24;
+-		} bitfields2;
+-		unsigned int ordinal2;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int reserved3:2;
+-			unsigned int memory_poll_addr_lo:30;
+-		} bitfields3;
+-		struct {
+-			unsigned int register_poll_addr:16;
+-			unsigned int reserved4:16;
+-		} bitfields4;
+-		struct {
+-			unsigned int register_write_addr:16;
+-			unsigned int reserved5:16;
+-		} bitfields5;
+-		unsigned int ordinal3;
+-	};
+-
+-	union {
+-		struct {
+-			unsigned int poll_address_hi:16;
+-			unsigned int reserved6:16;
+-		} bitfields6;
+-		struct {
+-			unsigned int register_write_addr:16;
+-			unsigned int reserved7:16;
+-		} bitfields7;
+-		unsigned int ordinal4;
+-	};
+-
+-	unsigned int reference;
+-
+-	unsigned int mask;
+-
+-	union {
+-		struct {
+-			unsigned int poll_interval:16;
+-			unsigned int reserved8:16;
+-		} bitfields8;
+-		unsigned int ordinal7;
+-	};
+-
+-};
+-#endif
+-
+-
+-#endif /* KFD_PM4_HEADERS_DIQ_H_ */
+-- 
+2.37.3
 
