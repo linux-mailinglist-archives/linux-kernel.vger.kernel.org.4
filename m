@@ -2,202 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE17260CB8D
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A0FA60CB90
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiJYMMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S231455AbiJYMMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJYMMf (ORCPT
+        with ESMTP id S231324AbiJYMMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:12:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8D0E4B0FA;
-        Tue, 25 Oct 2022 05:12:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CFF96D6E;
-        Tue, 25 Oct 2022 05:12:40 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DAD53F7B4;
-        Tue, 25 Oct 2022 05:12:32 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 13:12:30 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Amit Pundir <amit.pundir@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arm64: dts: qcom: qrb5165-rb5: Disable cpuidle states
-Message-ID: <20221025121230.xmdkfn55wmw3cg7s@bogus>
-References: <20221018145348.4051809-1-amit.pundir@linaro.org>
- <CAPDyKFoBMB9OMUrcoPCV0of1fj2dimEwPyHGW=ydjJ2M0ubM8Q@mail.gmail.com>
- <20221020093057.zrrvxlgghn27bpes@bogus>
- <CAMi1Hd05PkEJcHqHpQX-X6B2oR4250_pHPjkd2-54JWgKsYx0Q@mail.gmail.com>
- <CAPDyKFo=w-ET62c-B6=qSpkZm-V9LmBuVRy38GzX_UAjQhX6oA@mail.gmail.com>
- <20221020161628.nyimwuni4zboasjo@bogus>
- <CAPDyKFonwjh58jPoGc==BEjj6kY-=C97Ws=43hbdAqJMpEAa=g@mail.gmail.com>
- <CAMi1Hd0B7T=Tkw=P_rBDV9SQSGCXAeYLYPADtVkh=95xf54D8A@mail.gmail.com>
+        Tue, 25 Oct 2022 08:12:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F1510B7AC;
+        Tue, 25 Oct 2022 05:12:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68087618F8;
+        Tue, 25 Oct 2022 12:12:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46757C433C1;
+        Tue, 25 Oct 2022 12:12:48 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="osx4zi68"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1666699966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z8qjzZkK8c3Es/HwytaaCio3kn0QdSSBQEAuIzcBPNc=;
+        b=osx4zi68YC6Zf24Vq+JIB/bxSDK2ECgUM2SOmfWHBbcpuSXwDXaC4QH7biAzF2JzHha5iz
+        hyxtd04490dnfuTNxHEukgNMfrABpX2OLzXO6uJqEM/E+L9dHGuGIus24lZkBEJkbw416V
+        7JxVbj6DxUinba/HBGM2dhJA1KNLJK4=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d7021f8b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 25 Oct 2022 12:12:46 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 14:12:42 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Kalle Valo <kvalo@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+Subject: Re: [PATCH] wifi: cisco: do not assign -1 to unsigned char
+Message-ID: <Y1fSuq4I9BBQ4o+J@zx2c4.com>
+References: <20221024162843.535921-1-Jason@zx2c4.com>
+ <6a1652ab408d4c5d8ba754f35680e792@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAMi1Hd0B7T=Tkw=P_rBDV9SQSGCXAeYLYPADtVkh=95xf54D8A@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6a1652ab408d4c5d8ba754f35680e792@AcuMS.aculab.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 04:53:51PM +0530, Amit Pundir wrote:
-> On Fri, 21 Oct 2022 at 18:33, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > On Thu, 20 Oct 2022 at 18:16, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Thu, Oct 20, 2022 at 04:40:15PM +0200, Ulf Hansson wrote:
-> > > > On Thu, 20 Oct 2022 at 16:09, Amit Pundir <amit.pundir@linaro.org> wrote:
-> > > > >
-> > > > > On Thu, 20 Oct 2022 at 15:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > > > >
-> > > > > > On Wed, Oct 19, 2022 at 01:57:34PM +0200, Ulf Hansson wrote:
-> > > > > > > On Tue, 18 Oct 2022 at 16:53, Amit Pundir <amit.pundir@linaro.org> wrote:
-> > > > > > > >
-> > > > > > > > Disable cpuidle states for RB5. These cpuidle states
-> > > > > > > > made the device highly unstable and it runs into the
-> > > > > > > > following crash frequently:
-> > > > > > > >
-> > > > > > > > [    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
-> > > > > > > > [    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
-> > > > > > > > [    T1] qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
-> > > > > > > >
-> > > > > > > > Fixes: 32bc936d7321 ("arm64: dts: qcom: sm8250: Add cpuidle states")
-> > > > > > > > Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
-> > > > > > > > ---
-> > > > > > > >  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 8 ++++++++
-> > > > > > > >  1 file changed, 8 insertions(+)
-> > > > > > > >
-> > > > > > > > diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > > > > > > index cc003535a3c5..f936c41bfbea 100644
-> > > > > > > > --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > > > > > > +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> > > > > > > > @@ -251,6 +251,14 @@ qca639x: qca639x {
-> > > > > > > >
-> > > > > > > >  };
-> > > > > > > >
-> > > > > > > > +&LITTLE_CPU_SLEEP_0 {
-> > > > > > > > +       status = "disabled";
-> > > > > > > > +};
-> > > > > > > > +
-> > > > > > > > +&BIG_CPU_SLEEP_0 {
-> > > > > > > > +       status = "disabled";
-> > > > > > > > +};
-> > > > > > > > +
-> > > > > > > >  &adsp {
-> > > > > > > >         status = "okay";
-> > > > > > > >         firmware-name = "qcom/sm8250/adsp.mbn";
-> > > > > > > > --
-> > > > > > > > 2.25.1
-> > > > > > >
-> > > > > > > Disabling the CPU idlestates, will revert us back to using only the WFI state.
-> > > > > > >
-> > > > > > > An option that probably works too is to just drop the idlestate for
-> > > > > > > the CPU cluster. Would you mind trying the below and see if that works
-> > > > > > > too?
-> > > > > > >
-> > > > > >
-> > > > > > Indeed this is was I suggested to check initially. But I was surprised to
-> > > > > > see IIUC, Amit just disabled CPU states with above change and got it working.
-> > > > > > So it is not cluster state alone causing the issue, is it somehow presence
-> > > > > > of both cpu and cluster states ? Am I missing something here.
-> > > > > >
-> > > > > > > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > > > > > > b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > > > > > > index c32227ea40f9..c707a49e8001 100644
-> > > > > > > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > > > > > > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-> > > > > > > @@ -700,7 +700,6 @@ CPU_PD7: cpu7 {
-> > > > > > >
-> > > > > > >                 CLUSTER_PD: cpu-cluster0 {
-> > > > > > >                         #power-domain-cells = <0>;
-> > > > > > > -                       domain-idle-states = <&CLUSTER_SLEEP_0>;
-> > > > > >
-> > > > > > How about just marking CLUSTER_SLEEP_0 state disabled ? That looks cleaner
-> > > > > > than deleting this domain-idle-states property here. Also not sure if DTS
-> > > > > > warnings will appear if you delete this ?
-> > > > >
-> > > > > Hi, I did try disabling CLUSTER_SLEEP_0: cluster-sleep-0 {} in
-> > > > > domain-idle-states {} but that didn't help. That's why I end up
-> > > > > disabling individual cpu states in idle-states {}.
-> > > >
-> > > > Yep, this boils down to the fact that genpd doesn't check whether the
-> > > > domain-idle-state is disabled by using of_device_is_available(). See
-> > > > genpd_iterate_idle_states().
-> > > >
-> > >
-> > > Yes I found that but can't that be fixed with a simple patch like below ?
-> >
-> > Sure, yes it can.
-> >
-> > Although, it does complicate things a bit, as we would need two
-> > patches instead of one, to get things working.
-> >
-> > >
-> > > > That said, I suggest we go with the above one-line change. It may not
-> > > > be as clean as it could be, but certainly easy to revert when the
-> > > > support for it has been added in a newer kernel.
-> > > >
-> > >
-> > > I don't like removing the state. It means it doesn't have the state rather
-> > > than i"it has state but is not working and hence disabled".
-> > >
-> > > Will handling the availability of the state cause any issues ?
-> >
-> > No, this works fine. It's already been proven by Amit's test.
-> >
-> > >
-> > > Regards,
-> > > Sudeep
-> > >
-> > > -->8
-> > >
-> > > diff --git i/drivers/base/power/domain.c w/drivers/base/power/domain.c
-> > > index ead135c7044c..6471b559230e 100644
-> > > --- i/drivers/base/power/domain.c
-> > > +++ w/drivers/base/power/domain.c
-> > > @@ -2952,6 +2952,10 @@ static int genpd_iterate_idle_states(struct device_node *dn,
-> > >                 np = it.node;
-> > >                 if (!of_match_node(idle_state_match, np))
-> > >                         continue;
-> > > +
-> > > +               if (!of_device_is_available(np))
-> > > +                       continue;
-> > > +
-> > >                 if (states) {
-> > >                         ret = genpd_parse_state(&states[i], np);
-> > >                         if (ret) {
-> > >
-> >
-> > The above code looks correct to me. Anyone that wants to submit the
-> > patches? Otherwise I can try to manage it...
+On Tue, Oct 25, 2022 at 10:11:44AM +0000, David Laight wrote:
+> From: Jason A. Donenfeld
+> > Sent: 24 October 2022 17:29
+> > 
+> > With char becoming unsigned by default, and with `char` alone being
+> > ambiguous and based on architecture, we get a warning when assigning the
+> > unchecked output of hex_to_bin() to that unsigned char. Mark `key` as a
+> > `u8`, which matches the struct's type, and then check each call to
+> > hex_to_bin() before casting.
+> > 
+> > Cc: Kalle Valo <kvalo@kernel.org>
+> > Cc: linux-wireless@vger.kernel.org
+> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> >  drivers/net/wireless/cisco/airo.c | 18 ++++++++++++++----
+> >  1 file changed, 14 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/net/wireless/cisco/airo.c b/drivers/net/wireless/cisco/airo.c
+> > index 10daef81c355..fb2c35bd73bb 100644
+> > --- a/drivers/net/wireless/cisco/airo.c
+> > +++ b/drivers/net/wireless/cisco/airo.c
+> > @@ -5232,7 +5232,7 @@ static int get_wep_tx_idx(struct airo_info *ai)
+> >  	return -1;
+> >  }
+> > 
+> > -static int set_wep_key(struct airo_info *ai, u16 index, const char *key,
+> > +static int set_wep_key(struct airo_info *ai, u16 index, const u8 *key,
+> >  		       u16 keylen, int perm, int lock)
+> >  {
+> >  	static const unsigned char macaddr[ETH_ALEN] = { 0x01, 0, 0, 0, 0, 0 };
+> > @@ -5283,7 +5283,7 @@ static void proc_wepkey_on_close(struct inode *inode, struct file *file)
+> >  	struct net_device *dev = pde_data(inode);
+> >  	struct airo_info *ai = dev->ml_priv;
+> >  	int i, rc;
+> > -	char key[16];
+> > +	u8 key[16];
+> >  	u16 index = 0;
+> >  	int j = 0;
+> > 
+> > @@ -5311,12 +5311,22 @@ static void proc_wepkey_on_close(struct inode *inode, struct file *file)
+> >  	}
+> > 
+> >  	for (i = 0; i < 16*3 && data->wbuffer[i+j]; i++) {
+> > +		int val;
+> > +
+> > +		if (i % 3 == 2)
+> > +			continue;
+> > +
+> > +		val = hex_to_bin(data->wbuffer[i+j]);
+> > +		if (val < 0) {
+> > +			airo_print_err(ai->dev->name, "WebKey passed invalid key hex");
+> > +			return;
+> > +		}
+> >  		switch(i%3) {
+> >  		case 0:
+> > -			key[i/3] = hex_to_bin(data->wbuffer[i+j])<<4;
+> > +			key[i/3] = (u8)val << 4;
+> >  			break;
+> >  		case 1:
+> > -			key[i/3] |= hex_to_bin(data->wbuffer[i+j]);
+> > +			key[i/3] |= (u8)val;
+> >  			break;
+> >  		}
+> >  	}
 > 
-> Just out of curiosity, I gave this patch a test run and, as Ulf also
-> mentioned above, this patch alone is not enough to fix the boot
-> regression I see on RB5.
->
+> That is about the crappiest loop I've seen.
+> I was just going to point out that the (u8) casts aren't needed.
+> Something like:
+> 	for (i = 0, buf = data->wbuffer + j; i < 16; i++, buf += 3) {
+> 		int val;
+> 		if (!buf[0] || !buf[1])
+> 			break;
+> 		val = hex_to_bin(buf[0]) | hex_to_bin(buf[1]) << 8;
+> 		if (val < 0) {
+> 			airo_print_err(ai->dev->name, "WebKey passed invalid key hex");
+> 			return;
+> 		}
+> 		key[i] = val;
+> 		if (!buf[2])
+> 			break;
+> 	}
+> 
+> Although there should be a check for buf[2] being valid.
+> Any I worry about exactly what happens if there aren't 16 full bytes.
 
-Indeed, Ulf has posted the other changes needed and I have reviewed it
-just now. I can post this one. I agree it is multiple change but I think
-it is right set as we need to fix all these anyways, why not at once.
-Though they are multiple changes, the delta is not too much in my opinion.
+buf[2] isn't checked. Presumably it's a space or something. Your <<8
+also isn't right; this is a hex char. Anyway, I think I'd rather
+minimize this delta and leave this patch as-is.
 
--- 
-Regards,
-Sudeep
+Jason
