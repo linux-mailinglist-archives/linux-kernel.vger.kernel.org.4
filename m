@@ -2,235 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B258660D503
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D00A60D50A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiJYTwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S232608AbiJYTzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbiJYTwF (ORCPT
+        with ESMTP id S231629AbiJYTzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:52:05 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540B3106E06
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:51:59 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id y80so11430199iof.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kzxGUpzbXxImm84chnls9JcE5FMkEnfBOo4eTdKEFsk=;
-        b=d7vJizjehnoLsN4v+Aizmx7Y1q2iL54jeFUJWrbcm4/2ynOw1RDegLc409znFarKsw
-         HE9OKWnp9eW4nJnTnie9nMmTs+2rO4s2vMBmcmG7yaFlbqIBxdK8pUOh6ygb+d4M6qxy
-         ljle91MMhrF1omsAOxXQJJvBcA7JTAvRMQUrJA0Zpehe7rSrEKQOMGB+6k/TTmxdB5Ox
-         8rmLW0Q89Ta5FD10PT/GpJOcbdsgBq3IsiTVnIBHyyxDwd7+ulg9orZkRoUh0vhRs4Ke
-         O9B4Xi4a7aBDBFAMagF2rgxg8zYoLO2aPJzKJnxg/RW9/kERYCV+qxKY7wsJrDr5AqE2
-         kAzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kzxGUpzbXxImm84chnls9JcE5FMkEnfBOo4eTdKEFsk=;
-        b=WV8WJyuMdOx1oVngnR+90Rh4+PQTTr7+K75KRDbnwaPJnRzWbMAqZWlaX9nk4v9oj+
-         Z/kR3wAAHVuxmiw21TgCDUZPSTczgpXkmjiCdGaVXYuRn9oxo7Fo9cbdUZk3trHCEVDn
-         bmznz6LTii1+V9ZWInTry6ewvXv5d2gCgX2DZbC8/tLTtColV4PRKeggOglOTX9hDhE6
-         +cXFB4I5EJ4xadiYdP214nh0J+CNtWONRSehWuYxH6IrYKwi053pi/T5EDhNpKwvUnvS
-         uc3hIx03DKO92sVkiRrZJXW3jBRGVGhyu/Dvj4wh4eqfR5rv0S42gkqH7QQtZGBdIsWH
-         3f0A==
-X-Gm-Message-State: ACrzQf3nRv8iD/owE8uJIDO6vXJbxC48fh9sH2rSpykg85Kbr8m+EXUO
-        m83OazrUT1Lu6o1ll1Ij6P/gUQ==
-X-Google-Smtp-Source: AMsMyM5ljODGAxjMX1WHPCX8qeMMu35WtxFHsuESq6U44Gy7kpGxTVEzLOVKi7fg8V97Z2L5irPFQw==
-X-Received: by 2002:a05:6638:1687:b0:374:fbbd:6617 with SMTP id f7-20020a056638168700b00374fbbd6617mr4754988jat.201.1666727518613;
-        Tue, 25 Oct 2022 12:51:58 -0700 (PDT)
-Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id y10-20020a056638014a00b00349d2d52f6asm1211719jao.37.2022.10.25.12.51.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 12:51:57 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 4/4] net: ipa: determine filter table size from memory region
-Date:   Tue, 25 Oct 2022 14:51:43 -0500
-Message-Id: <20221025195143.255934-5-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221025195143.255934-1-elder@linaro.org>
-References: <20221025195143.255934-1-elder@linaro.org>
+        Tue, 25 Oct 2022 15:55:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA522BB3D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:55:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666727714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2rsahskIW82j7Opr6zcxmIFVVHL4k7W5ic86oG0lZpM=;
+        b=hjSnoaMI5iaeOSDpw1XJ5pxoqMRVLzOnx5AAEVLrzR4xkNYVdOboZF7ZowcJPKudWuTxAK
+        EmnLMwZpzzfiyJa2/CJxs9CjqsG5O/QEy+GZT4N6GBfmKeUMtQ5qNBigBfFZTI0AmUfDjB
+        lOaD4pxJNhEnvxT4ba0Cp6ApTf7hNYk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-335-UG7250pGNUCosQds8y14Hw-1; Tue, 25 Oct 2022 15:55:11 -0400
+X-MC-Unique: UG7250pGNUCosQds8y14Hw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50B5188606B;
+        Tue, 25 Oct 2022 19:55:10 +0000 (UTC)
+Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BCD874B3FC6;
+        Tue, 25 Oct 2022 19:55:09 +0000 (UTC)
+Message-ID: <d67740dc-d608-4b1a-0889-b9861153fdf3@redhat.com>
+Date:   Tue, 25 Oct 2022 15:55:09 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v3 2/5] locking/rwsem: Limit # of null owner retries for
+ handoff writer
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
+        Hillf Danton <hdanton@sina.com>,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        =?UTF-8?B?VGluZzExIFdhbmcg546L5am3?= <wangting11@xiaomi.com>
+References: <20221017211356.333862-1-longman@redhat.com>
+ <20221017211356.333862-3-longman@redhat.com>
+ <Y1aTpYba1Wwly48+@hirez.programming.kicks-ass.net>
+ <980d882c-01b8-2ce1-663f-41a8a337f350@redhat.com>
+ <Y1fG7nQxiLyKIhQ6@hirez.programming.kicks-ass.net>
+ <Y1fNJZ9SALWlmoon@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Y1fNJZ9SALWlmoon@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently we assume that any filter table contains a fixed number
-of entries.  Like routing tables, the number of entries in a filter
-table is limited only by the size of the IPA-local memory region
-used to hold the table.
+On 10/25/22 07:48, Peter Zijlstra wrote:
+> On Tue, Oct 25, 2022 at 01:22:22PM +0200, Peter Zijlstra wrote:
+>
+>> Funny, I find the former approach much saner. Disabling preemption
+>> around the whole thing fixes the fundamental problem while spin-limiting
+>> is a band-aid.
+>>
+>> Note how rwsem_write_trylock() already does preempt_disable(), having
+>> the read-side do something similar only makes sense.
+> Something like the completely untested below perhaps...
 
-Stop assuming that a filter table has exactly 14 entries.  Instead,
-determine the number of entries in a routing table by dividing its
-memory region size by the size of an entry.  (Note that the first
-"entry" in a filter table contains an endpoint bitmap.)
+That is quite a number of changes spread over many different functions. 
+That is the kind of changes that may make it harder to backport to 
+stable releases.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/ipa.h       |  2 ++
- drivers/net/ipa/ipa_cmd.c   |  8 ++------
- drivers/net/ipa/ipa_table.c | 20 +++++++++++---------
- drivers/net/ipa/ipa_table.h |  3 ---
- 4 files changed, 15 insertions(+), 18 deletions(-)
+This patch is just a stop-gap measure for stable releases which I 
+essentially revert in a later patch. I have no objection to disable 
+preemption in within the rwsem code exception to be backported to a 
+stable release. So I can add another patch on top of the series to 
+essentially do that.
 
-diff --git a/drivers/net/ipa/ipa.h b/drivers/net/ipa/ipa.h
-index 5c95acc70bb33..82225316a2e25 100644
---- a/drivers/net/ipa/ipa.h
-+++ b/drivers/net/ipa/ipa.h
-@@ -41,6 +41,7 @@ struct ipa_interrupt;
-  * @table_virt:		Virtual address of filter/route table content
-  * @route_count:	Total number of entries in a routing table
-  * @modem_route_count:	Number of modem entries in a routing table
-+ * @filter_count:	Maximum number of entries in a filter table
-  * @interrupt:		IPA Interrupt information
-  * @uc_powered:		true if power is active by proxy for microcontroller
-  * @uc_loaded:		true after microcontroller has reported it's ready
-@@ -88,6 +89,7 @@ struct ipa {
- 	__le64 *table_virt;
- 	u32 route_count;
- 	u32 modem_route_count;
-+	u32 filter_count;
- 
- 	struct ipa_interrupt *interrupt;
- 	bool uc_powered;
-diff --git a/drivers/net/ipa/ipa_cmd.c b/drivers/net/ipa/ipa_cmd.c
-index 08e3f395a9453..bb3dfa9a2bc81 100644
---- a/drivers/net/ipa/ipa_cmd.c
-+++ b/drivers/net/ipa/ipa_cmd.c
-@@ -151,11 +151,6 @@ static void ipa_cmd_validate_build(void)
- 	 * maximum size.  IPv4 and IPv6 filter tables have the same number
- 	 * of entries.
- 	 */
--#define TABLE_SIZE	(IPA_FILTER_COUNT_MAX * sizeof(__le64))
--	BUILD_BUG_ON(TABLE_SIZE > field_max(IP_FLTRT_FLAGS_HASH_SIZE_FMASK));
--	BUILD_BUG_ON(TABLE_SIZE > field_max(IP_FLTRT_FLAGS_NHASH_SIZE_FMASK));
--#undef TABLE_SIZE
--
- 	/* Hashed and non-hashed fields are assumed to be the same size */
- 	BUILD_BUG_ON(field_max(IP_FLTRT_FLAGS_HASH_SIZE_FMASK) !=
- 		     field_max(IP_FLTRT_FLAGS_NHASH_SIZE_FMASK));
-@@ -177,7 +172,8 @@ bool ipa_cmd_table_init_valid(struct ipa *ipa, const struct ipa_mem *mem,
- 	struct device *dev = &ipa->pdev->dev;
- 	u32 size;
- 
--	size = route ? ipa->route_count * sizeof(__le64) : mem->size;
-+	size = route ? ipa->route_count : ipa->filter_count + 1;
-+	size *= sizeof(__le64);
- 
- 	/* Size must fit in the immediate command field that holds it */
- 	if (size > size_max) {
-diff --git a/drivers/net/ipa/ipa_table.c b/drivers/net/ipa/ipa_table.c
-index c9ab6a3fabbc3..db1992eaafaa9 100644
---- a/drivers/net/ipa/ipa_table.c
-+++ b/drivers/net/ipa/ipa_table.c
-@@ -160,9 +160,9 @@ bool ipa_filter_map_valid(struct ipa *ipa, u32 filter_map)
- 	}
- 
- 	count = hweight32(filter_map);
--	if (count > IPA_FILTER_COUNT_MAX) {
-+	if (count > ipa->filter_count) {
- 		dev_err(dev, "too many filtering endpoints (%u, max %u)\n",
--			count, IPA_FILTER_COUNT_MAX);
-+			count, ipa->filter_count);
- 
- 		return false;
- 	}
-@@ -178,7 +178,7 @@ static dma_addr_t ipa_table_addr(struct ipa *ipa, bool filter_mask, u16 count)
- 	if (!count)
- 		return 0;
- 
--	WARN_ON(count > max_t(u32, IPA_FILTER_COUNT_MAX, ipa->route_count));
-+	WARN_ON(count > max_t(u32, ipa->filter_count, ipa->route_count));
- 
- 	/* Skip over the zero rule and possibly the filter mask */
- 	skip = filter_mask ? 1 : 2;
-@@ -586,11 +586,13 @@ bool ipa_table_mem_valid(struct ipa *ipa, bool filter)
- 	if (mem_ipv4->size != mem_ipv6->size)
- 		return false;
- 
--	/* Compute the number of entries, and for routing tables, record it */
-+	/* Compute and record the number of entries for each table type */
- 	count = mem_ipv4->size / sizeof(__le64);
- 	if (count < 2)
- 		return false;
--	if (!filter)
-+	if (filter)
-+		ipa->filter_count = count - 1;	/* Filter map in first entry */
-+	else
- 		ipa->route_count = count;
- 
- 	/* Table offset and size must fit in TABLE_INIT command fields */
-@@ -645,7 +647,7 @@ bool ipa_table_mem_valid(struct ipa *ipa, bool filter)
-  *
-  * The first entry in a filter table contains a bitmap indicating which
-  * endpoints contain entries in the table.  In addition to that first entry,
-- * there are at most IPA_FILTER_COUNT_MAX entries that follow.  Filter table
-+ * there is a fixed maximum number of entries that follow.  Filter table
-  * entries are 64 bits wide, and (other than the bitmap) contain the DMA
-  * address of a filter rule.  A "zero rule" indicates no filtering, and
-  * consists of 64 bits of zeroes.  When a filter table is initialized (or
-@@ -669,7 +671,7 @@ bool ipa_table_mem_valid(struct ipa *ipa, bool filter)
-  *	|\   |-------------------|
-  *	| ---- zero rule address | \
-  *	|\   |-------------------|  |
-- *	| ---- zero rule address |  |	IPA_FILTER_COUNT_MAX
-+ *	| ---- zero rule address |  |	Max IPA filter count
-  *	|    |-------------------|   >	or IPA route count,
-  *	|	      ...	    |	whichever is greater
-  *	 \   |-------------------|  |
-@@ -687,7 +689,7 @@ int ipa_table_init(struct ipa *ipa)
- 
- 	ipa_table_validate_build();
- 
--	count = max_t(u32, IPA_FILTER_COUNT_MAX, ipa->route_count);
-+	count = max_t(u32, ipa->filter_count, ipa->route_count);
- 
- 	/* The IPA hardware requires route and filter table rules to be
- 	 * aligned on a 128-byte boundary.  We put the "zero rule" at the
-@@ -723,7 +725,7 @@ int ipa_table_init(struct ipa *ipa)
- 
- void ipa_table_exit(struct ipa *ipa)
- {
--	u32 count = max_t(u32, 1 + IPA_FILTER_COUNT_MAX, ipa->route_count);
-+	u32 count = max_t(u32, 1 + ipa->filter_count, ipa->route_count);
- 	struct device *dev = &ipa->pdev->dev;
- 	size_t size;
- 
-diff --git a/drivers/net/ipa/ipa_table.h b/drivers/net/ipa/ipa_table.h
-index 79583b16f363f..8a4dcd7df4c0f 100644
---- a/drivers/net/ipa/ipa_table.h
-+++ b/drivers/net/ipa/ipa_table.h
-@@ -10,9 +10,6 @@
- 
- struct ipa;
- 
--/* The maximum number of filter table entries (IPv4, IPv6; hashed or not) */
--#define IPA_FILTER_COUNT_MAX	14
--
- /**
-  * ipa_filter_map_valid() - Validate a filter table endpoint bitmap
-  * @ipa:	IPA pointer
--- 
-2.34.1
+Cheers,
+Longman
 
