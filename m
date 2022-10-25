@@ -2,91 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CFC60CF6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D54660CF78
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232721AbiJYOoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S232729AbiJYOqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232727AbiJYOnw (ORCPT
+        with ESMTP id S232697AbiJYOqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:43:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EB0196343
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666709030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pxb6hLNBaPYX709qS8Dsh8K7Uk4NY/7ppFr76EjMPTQ=;
-        b=SoUpCAqjvIGdBvmp6otMCdCXcO1tZ77BWNu2d39ZqBxb+AuDY7PHLG/3QtXZ4W0ClWRAkd
-        Fw7DimUbzbO9J4Xtpskejvo/OVKznC/Ig/lUx+/UaGQxviNkyFgF86r4K4vXc1gFsTsK2n
-        mjRwdtkdHRa8qt4feQAm+e5gAru254o=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-547-NAQFJlrnOPiR1vbaU1jInQ-1; Tue, 25 Oct 2022 10:43:49 -0400
-X-MC-Unique: NAQFJlrnOPiR1vbaU1jInQ-1
-Received: by mail-qv1-f69.google.com with SMTP id c2-20020a05621401c200b004bb71b13dfcso2907465qvt.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:43:48 -0700 (PDT)
+        Tue, 25 Oct 2022 10:46:20 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98FF188126;
+        Tue, 25 Oct 2022 07:46:18 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id y14so13075922ejd.9;
+        Tue, 25 Oct 2022 07:46:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bv2yciqWXVf1nawsif5m+jnHjZDrY4BaG8l2aHPj3u0=;
+        b=T3VrzCl2VUwTA1hQpT3Lg3Yn/FYN0GtoetEJy3NhGdEUFJAX9EAsZFI7wtsXHEgVqb
+         2g5ujVKzErcjJBtPS/juOCBapHRuJPmElWNaH5oM0oOoH6keDIXVSsinX5ul4L0kKQWp
+         2YVfMQKEhY5L5OETUDnXlTefSVOzRwCTcT/ll4cqNSg2PZUJjHsU3NmaCqScVtsdnwmJ
+         SaN1M4c6pOnpwHMv5YBYbm76yq/rc1VcjXoUMY2gzfxI7yfd44ToqqjNrgPfwHYRG1v5
+         iBNzBziYcLVuSeUOAp8x6dJGL+7D0sZGhgzyvva07pIy3eJJGwUqsydmn1ZBZljU1i2K
+         igNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pxb6hLNBaPYX709qS8Dsh8K7Uk4NY/7ppFr76EjMPTQ=;
-        b=f92r1LMku1SQ6HHN3Ce/s1B06yACE2DzBqJyzRWDoL+ALUb3ASHs4imKreec8fyIa9
-         BXMvM+MdcKCXc50t/QHxSnLIzqybrZCz8ilrogMItxB8cokGcInyI4AE74pc6y++bXAR
-         oCuNIE3tdaoOQBFRxSSL7vci/iN7iE1MpH/65A8BNySehl0jczP9JruMdlG/qpZLaEg0
-         lBmEnYiE+kbk+iMoeqcA9NpXxLB1GWbalVc9VYS7NkwN3OuiBa3xoY9YICXMsO46DmUG
-         yQuf1S26zRxzIC0x3lTrO5K/qUVpf/DmtGM8G4PsSdM2zb4I2KJJBMhvxZbAX9YJ6wex
-         T0Rw==
-X-Gm-Message-State: ACrzQf3QfDxQ3zKUlwjp1M2ZRwUmhTLExXol8H/BzhZCn+g5RU9ZWz5C
-        Xf/b3S4/qHtGoBJyCYPX9QEyCXNX+lCrGq+dODRGUATxnUETuamg72Q9T3iVzHCnp2ziQQ09MN8
-        /YztR98+NfjL3Vli/HkyIvBP/
-X-Received: by 2002:ac8:5fc5:0:b0:39c:bb48:e42f with SMTP id k5-20020ac85fc5000000b0039cbb48e42fmr31816265qta.586.1666709028240;
-        Tue, 25 Oct 2022 07:43:48 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7GfOvBIe3eVSO7BOHXT4+eelhHEZ0ULsG5cnoD9Qz3T3NoGoqp3jXdbO0dGqNFN3eQPDey7A==
-X-Received: by 2002:ac8:5fc5:0:b0:39c:bb48:e42f with SMTP id k5-20020ac85fc5000000b0039cbb48e42fmr31816250qta.586.1666709027994;
-        Tue, 25 Oct 2022 07:43:47 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05620a400a00b006f8665f483fsm396408qko.85.2022.10.25.07.43.46
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bv2yciqWXVf1nawsif5m+jnHjZDrY4BaG8l2aHPj3u0=;
+        b=OkH/wI8CpUwOim05fgeU5OISXgEMb8ClVDcyw6WoIkh0WRyLk2QZYQuSK2KsHsZ9VK
+         xe91y0r8VjxlphfkWrI4HmHlf7RDSWJPsAAx3YI/27YNdCk3RKooTfdnWfmZVbWDP65s
+         IelyMU/niKgXbOeJXFCf5qxZ70q5AM4L2venSavAyqIj0VDX7nQC3X3cGrnNC7aRF7X7
+         m1+vuz97+UPkJ6PAfmDAcK48SbSfV+koN647ACy2s4mNmUn4mcLbHNmZj/Otqzc+wxjr
+         TzBbNMK9XpQtbFVmqYUaZQOI2apUU6hCGJct0PRYwX1Q59YdtDk7x/nuu+et3rdFenc6
+         Jt6g==
+X-Gm-Message-State: ACrzQf1U8q3hxBAHicpRyXUGqoinyYwR7s+nNhqNcZBv3cJ9GCOAQNjF
+        ptXjDHn/ICdZs0WYShY7TX8juyn3n9U=
+X-Google-Smtp-Source: AMsMyM4I9d5rImEGae4mCaZYkgtxaTJAsRanxYoDI91cG4h3UrV/Zj0KrVKp3w+t2q47uH4lDyZXlQ==
+X-Received: by 2002:a17:906:7315:b0:7ab:8542:559c with SMTP id di21-20020a170906731500b007ab8542559cmr4973622ejc.639.1666709177096;
+        Tue, 25 Oct 2022 07:46:17 -0700 (PDT)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id z2-20020a1709067e4200b007a8de84ce36sm1474505ejr.206.2022.10.25.07.46.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 07:43:47 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 10:43:45 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Anatoly Pugachev <matorola@gmail.com>
-Cc:     David Miller <davem@davemloft.net>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Alistair Popple <apopple@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, sparclinux@vger.kernel.org
-Subject: Re: dpkg fails on sparc64 (was: [PATCH v4 4/7] mm/thp: Carry over
- dirty bit when thp splits on pmd)
-Message-ID: <Y1f2IR+h4i2+/swj@x1n>
-References: <20220811161331.37055-1-peterx@redhat.com>
- <20220811161331.37055-5-peterx@redhat.com>
- <20221021160603.GA23307@u164.east.ru>
- <Y1Wbi4yyVvDtg4zN@x1n>
- <CADxRZqy+cMHN4FjtDr7-LOyVf0y+G8MPiBoGiTEsSj48jBfVnw@mail.gmail.com>
+        Tue, 25 Oct 2022 07:46:16 -0700 (PDT)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH 1/1] rcu: Refactor kvfree_call_rcu() and high-level helpers
+Date:   Tue, 25 Oct 2022 16:46:12 +0200
+Message-Id: <20221025144612.506951-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADxRZqy+cMHN4FjtDr7-LOyVf0y+G8MPiBoGiTEsSj48jBfVnw@mail.gmail.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,66 +73,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 01:22:45PM +0300, Anatoly Pugachev wrote:
-> On Sun, Oct 23, 2022 at 10:53 PM Peter Xu <peterx@redhat.com> wrote:
-> > On Fri, Oct 21, 2022 at 07:06:03PM +0300, Anatoly Pugachev wrote:
-> > >
-> > >     Link: https://lkml.kernel.org/r/20220811161331.37055-5-peterx@redhat.com
-> > >
-> > > So, v6.0-rc3-176-g0d206b5d2e0d) does not segfault dpkg,
-> > > v6.0-rc3-177-g0ccf7f168e17 segfaults it on package install.
-> > >
-> > > dpkg test was (apt) install/remove some packages, segfaults only on install
-> > > (not remove).
-> > >
-> > > Reverted 0ccf7f168e17bb7eb5a322397ba5a841f4fbaccb from top of v6.1-rc1 and
-> > > tried to compile kernel, but got error
-> > >
-> > > mm/huge_memory.c: In function ‘__split_huge_pmd_locked’:
-> > > mm/huge_memory.c:2129:17: error: ‘dirty’ undeclared (first use in this function)
-> > >  2129 |                 dirty = is_migration_entry_dirty(entry);
-> > >       |                 ^~~~~
-> > > mm/huge_memory.c:2129:17: note: each undeclared identifier is reported only once for each function it appears in
-> > > make[2]: *** [scripts/Makefile.build:250: mm/huge_memory.o] Error 1
-> > >
-> > > So can't test v6.1-rc1 with patch reverted...
-> >
-> > Sorry to know this, and thanks for the report and debugging.  The revert
-> > won't work because dirty variable is used in later patch for the swap path
-> > too.  I've attached a partial (and minimum) revert, feel free to try.
-> 
-> Peter,
-> 
-> tested again with 6.1.0-rc2 already, non patched kernel segfaulting
-> dpkg, using your patch makes dpkg
-> (or kernel) to behave properly.
-> Thanks!
+Currently a kvfree_call_rcu() takes an offset within a
+structure as a second parameter, so a helper such as a
+kvfree_rcu_arg_2() has to convert rcu_head and a freed
+ptr to an offset in order to pass it. That leads to an
+extra conversion on macro entry.
 
-Thanks for the quick feedback.
+Instead of converting, refactor the code in way that a
+pointer that has to be freed is passed directly to the
+kvfree_call_rcu().
 
-> 
-> > I had a feeling that it's somehow related to the special impl of sparc64
-> > pte_mkdirty() where a kernel patching mechanism is used to share code
-> > between sun4[uv].  I'd assume your machine is sun4v?  As that's the one
-> > that needs the patching, iiuc.
-> 
-> kernel boot log reports
-> ARCH: SUN4V
+This patch does not make any functional change and is
+transparent to all kvfree_rcu() users.
 
-Then it's expected but unfortunate too, as QEMU doesn't seem to have
-support on sun4v so I cannot even try that out with a VM.
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ include/linux/rcupdate.h |  5 ++---
+ include/linux/rcutiny.h  | 12 ++++++------
+ include/linux/rcutree.h  |  2 +-
+ kernel/rcu/tiny.c        |  9 +++------
+ kernel/rcu/tree.c        | 29 ++++++++++++-----------------
+ 5 files changed, 24 insertions(+), 33 deletions(-)
 
-https://wiki.qemu.org/Documentation/Platforms/SPARC
-
-I'd also expect there's nothing useful in either dmesg or relevant logs
-because it's segv, but please share if you find anything that may be
-helpful.
-
-Maybe we need to have the minimum revert for v6.1 before we have more
-clues.
-
-Thanks,
-
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index 08605ce7379d..cbd34058fff1 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -985,8 +985,7 @@ do {									\
+ 									\
+ 	if (___p) {									\
+ 		BUILD_BUG_ON(!__is_kvfree_rcu_offset(offsetof(typeof(*(ptr)), rhf)));	\
+-		kvfree_call_rcu(&((___p)->rhf), (rcu_callback_t)(unsigned long)		\
+-			(offsetof(typeof(*(ptr)), rhf)));				\
++		kvfree_call_rcu(&((___p)->rhf), (void *) (___p));			\
+ 	}										\
+ } while (0)
+ 
+@@ -995,7 +994,7 @@ do {								\
+ 	typeof(ptr) ___p = (ptr);				\
+ 								\
+ 	if (___p)						\
+-		kvfree_call_rcu(NULL, (rcu_callback_t) (___p));	\
++		kvfree_call_rcu(NULL, (void *) (___p));		\
+ } while (0)
+ 
+ /*
+diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
+index 768196a5f39d..9623c039964c 100644
+--- a/include/linux/rcutiny.h
++++ b/include/linux/rcutiny.h
+@@ -98,25 +98,25 @@ static inline void synchronize_rcu_expedited(void)
+  */
+ extern void kvfree(const void *addr);
+ 
+-static inline void __kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
++static inline void __kvfree_call_rcu(struct rcu_head *head, void *ptr)
+ {
+ 	if (head) {
+-		call_rcu(head, func);
++		call_rcu(head, (rcu_callback_t) ((void *) head - ptr));
+ 		return;
+ 	}
+ 
+ 	// kvfree_rcu(one_arg) call.
+ 	might_sleep();
+ 	synchronize_rcu();
+-	kvfree((void *) func);
++	kvfree(ptr);
+ }
+ 
+ #ifdef CONFIG_KASAN_GENERIC
+-void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func);
++void kvfree_call_rcu(struct rcu_head *head, void *ptr);
+ #else
+-static inline void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
++static inline void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+ {
+-	__kvfree_call_rcu(head, func);
++	__kvfree_call_rcu(head, ptr);
+ }
+ #endif
+ 
+diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
+index 5efb51486e8a..e37a0747a8b2 100644
+--- a/include/linux/rcutree.h
++++ b/include/linux/rcutree.h
+@@ -33,7 +33,7 @@ static inline void rcu_virt_note_context_switch(int cpu)
+ }
+ 
+ void synchronize_rcu_expedited(void);
+-void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func);
++void kvfree_call_rcu(struct rcu_head *head, void *ptr);
+ 
+ void rcu_barrier(void);
+ bool rcu_eqs_special_set(int cpu);
+diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+index a33a8d4942c3..6c9496d08669 100644
+--- a/kernel/rcu/tiny.c
++++ b/kernel/rcu/tiny.c
+@@ -246,15 +246,12 @@ bool poll_state_synchronize_rcu(unsigned long oldstate)
+ EXPORT_SYMBOL_GPL(poll_state_synchronize_rcu);
+ 
+ #ifdef CONFIG_KASAN_GENERIC
+-void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
++void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+ {
+-	if (head) {
+-		void *ptr = (void *) head - (unsigned long) func;
+-
++	if (head)
+ 		kasan_record_aux_stack_noalloc(ptr);
+-	}
+ 
+-	__kvfree_call_rcu(head, func);
++	__kvfree_call_rcu(head, ptr);
+ }
+ EXPORT_SYMBOL_GPL(kvfree_call_rcu);
+ #endif
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 0ca21ac0f064..9fea2aff87a1 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3068,8 +3068,8 @@ static void kfree_rcu_work(struct work_struct *work)
+ 	 * This list is named "Channel 3".
+ 	 */
+ 	for (; head; head = next) {
+-		unsigned long offset = (unsigned long)head->func;
+-		void *ptr = (void *)head - offset;
++		void *ptr = (void *) head->func;
++		unsigned long offset = (void *) head - ptr;
+ 
+ 		next = head->next;
+ 		debug_rcu_head_unqueue((struct rcu_head *)ptr);
+@@ -3307,26 +3307,21 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
+  * be free'd in workqueue context. This allows us to: batch requests together to
+  * reduce the number of grace periods during heavy kfree_rcu()/kvfree_rcu() load.
+  */
+-void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
++void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+ {
+ 	unsigned long flags;
+ 	struct kfree_rcu_cpu *krcp;
+ 	bool success;
+-	void *ptr;
+ 
+-	if (head) {
+-		ptr = (void *) head - (unsigned long) func;
+-	} else {
+-		/*
+-		 * Please note there is a limitation for the head-less
+-		 * variant, that is why there is a clear rule for such
+-		 * objects: it can be used from might_sleep() context
+-		 * only. For other places please embed an rcu_head to
+-		 * your data.
+-		 */
++	/*
++	 * Please note there is a limitation for the head-less
++	 * variant, that is why there is a clear rule for such
++	 * objects: it can be used from might_sleep() context
++	 * only. For other places please embed an rcu_head to
++	 * your data.
++	 */
++	if (!head)
+ 		might_sleep();
+-		ptr = (unsigned long *) func;
+-	}
+ 
+ 	// Queue the object but don't yet schedule the batch.
+ 	if (debug_rcu_head_queue(ptr)) {
+@@ -3347,7 +3342,7 @@ void kvfree_call_rcu(struct rcu_head *head, rcu_callback_t func)
+ 			// Inline if kvfree_rcu(one_arg) call.
+ 			goto unlock_return;
+ 
+-		head->func = func;
++		head->func = ptr;
+ 		head->next = krcp->head;
+ 		krcp->head = head;
+ 		success = true;
 -- 
-Peter Xu
+2.30.2
 
