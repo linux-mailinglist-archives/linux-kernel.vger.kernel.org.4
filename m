@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E883D60C079
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A218E60C07C
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbiJYBHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40560 "EHLO
+        id S230226AbiJYBHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiJYBGa (ORCPT
+        with ESMTP id S230108AbiJYBHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:06:30 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AEC5D0ED
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:13:58 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id s9so2066811ilu.1
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:13:58 -0700 (PDT)
+        Mon, 24 Oct 2022 21:07:36 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B0A171CF3
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:15:29 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id j21so7123530qkk.9
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fKgDKCeDKNO9FBWEIojN7Xd6mduLIJo/sewHx/RV/2c=;
-        b=bYRR2rD2Dh0ImULhoW76ziyExf5TzJeeqph8DmiYaR+mfOsi2t6bq3drAueJqCUtuJ
-         PaJW0xjUFYUngKtcZ3RWtkTnLt+JOEV/jhfCaKZkbYx24aw2D6vY3pQ8m6hCh2NmeIih
-         oTBzEpUWr9WabxG61nABChfVgf3/8n2ncNjxAFJ8UHTgwzuVCyIwE+Eij6+Xmi8O7V6Z
-         RZYXjAPew3UcvoidMGa3YWeVLrLHERiVrE8S3+x8/tAt6VsKieHVV2jr+elJntwycWlM
-         tsL8sQjo2ikuhbC2Idg3Nl5cLP3hihEtbh+TTmgCSdIKD1h+ZtGSqcBePNv0xhX1cDfe
-         /wuQ==
+        bh=fMyBAadE9jT7keW2Iz84U2Ui+EeQMGMSZPVnQH8Mg94=;
+        b=E89tmkbuGxzrnlxxXB5ytpm2tNdd7d2sUi6NwZwhxSgOrcmwyqqB6BPArnDWGNM7NM
+         hfphQVLeRbeFieuiqvY+h3lJjIBtb9Wh0vMrbYMXblhoiezJvfph8z4+rMUIbGzobJos
+         yY5dTGKtkpsVRh0u+J/ZLH7cx2RK0SBbpO6HmVKooLqt7HVfbDUN1Rxdlh4gmwNlySvG
+         PJ3Fqjt4cgDy6ELwSZFYOXQd9tcFkX8pf2BSTJfs9WhYplac8nx3qvl1ZDR+LDo86nbm
+         kp+80xTK4F1Qp+oQGq85legG4rAODphXrvRFPejvbgmRlwBf18IIA3vQN9JGIkUYQKs2
+         V46A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fKgDKCeDKNO9FBWEIojN7Xd6mduLIJo/sewHx/RV/2c=;
-        b=CgetNlwrlWXjafwwEyyjaRxhkWs97Ixj80cfypRZufbNRtU8lE/SbYqNpWfUezNQ4f
-         beWHI8oMKAHBpmt3/NyoFKaX0dBikwYehydRM8HuuuK2sAx2+PzGBkfNgCCJd0vYcyDT
-         iIX95J8JrTafj2EH8qVdvCvULjTQMJBd8iTwpabAP1u7wLsb992+HXVuIFsTbM6t0e18
-         xLW2jFbViRQsGvLmXnU0bjmXNEZ1zBRdw0prfHq+hyNDUd29g29xMeNxOSYGIJ1j+1WC
-         +WLlz/Mlsj4GOjxWCnMzBHapeuyFmyMNDlMGhkFaXYHLICExIZQ8HtqFRTsVnEkMqVBA
-         Z4LQ==
-X-Gm-Message-State: ACrzQf02/dXH1+gTlhu4EX3N73uXo//0ALczx3YAfP7xt8bsDdbEQQ95
-        ekXkeW7NzKMg50b2pOPN0iPhPw==
-X-Google-Smtp-Source: AMsMyM4Y1mAy+4pcdwgPu6VC6SRU/tWLtHHq+K7Q6COzkdbHJrHyRDCIW2jJMik5Wsrh7SrIcPgZiQ==
-X-Received: by 2002:a05:6e02:1bc7:b0:2fa:876e:95a7 with SMTP id x7-20020a056e021bc700b002fa876e95a7mr23318130ilv.240.1666656837582;
-        Mon, 24 Oct 2022 17:13:57 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id o16-20020a056e02115000b002fff117027dsm499772ill.13.2022.10.24.17.13.54
+        bh=fMyBAadE9jT7keW2Iz84U2Ui+EeQMGMSZPVnQH8Mg94=;
+        b=rQv9nBrF2pjRlePuap/Z8Ipk6a2X7yM2c91OcilcPBcI4Kf4N/O07EbbMqDF0tHNLa
+         4mhHojmd8OtQ7BcMZjpYfavHDQYHhIsO0ZRerLFVpL+XIJpUX+c4EjwGs13ZIUkuF4ac
+         KfogktK+6cSqf5jO7b2RIm2y6pm+omd/8U8YCuezutHBGOX8/NyGIAud/6jXt8mkC1Mu
+         qMhghtOKsYqhwW/MAqn6LaK2x749teq+WJZ3zvM/ZFM0t0JbzuBuEep/r/zeDBuJkTxj
+         H5D8HdhcJfmlz6SRTlWKC0l6lwGJJEdiVDxd2RHEy3t05adNAssT6P7o7WlfVYFY+ZdV
+         8UIQ==
+X-Gm-Message-State: ACrzQf3PVnMkHHhctjlJyFnrusopmf6bW8k2WRe8i57bqyB1W74Sr8bM
+        3//TnA2Lsgh8tT2aPg7kyBW5hw==
+X-Google-Smtp-Source: AMsMyM46bqy32oNqEmSHpF73Fpm3i1V9sJnJPRx+HXZIVt5rGs2TVIlCc1ICUNKJBsFCfMYBbt0VEQ==
+X-Received: by 2002:a05:620a:6009:b0:6ec:ed49:b93c with SMTP id dw9-20020a05620a600900b006eced49b93cmr25597569qkb.180.1666656928817;
+        Mon, 24 Oct 2022 17:15:28 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id dm12-20020a05620a1d4c00b006b5e296452csm1017225qkb.54.2022.10.24.17.15.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 17:13:55 -0700 (PDT)
-Message-ID: <5156132d-f55b-8d1a-1783-f82733400753@linaro.org>
-Date:   Mon, 24 Oct 2022 19:13:53 -0500
+        Mon, 24 Oct 2022 17:15:28 -0700 (PDT)
+Message-ID: <d51b7f8d-3681-e19d-3ebb-7e021fc50403@linaro.org>
+Date:   Mon, 24 Oct 2022 20:15:25 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] net: ipa: don't configure IDLE_INDICATION on v3.1
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 2/5] dt-bindings: soc: hpe: Add hpe,gxp-plreg
 Content-Language: en-US
-To:     Caleb Connolly <caleb.connolly@linaro.org>,
-        Alex Elder <elder@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jami Kettunen <jami.kettunen@somainline.org>
-Cc:     Alex Elder <elder@kernel.org>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20221024234850.4049778-1-caleb.connolly@linaro.org>
-From:   Alex Elder <elder@linaro.org>
-In-Reply-To: <20221024234850.4049778-1-caleb.connolly@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Hawkins, Nick" <nick.hawkins@hpe.com>
+Cc:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20221011185525.94210-1-nick.hawkins@hpe.com>
+ <20221011185525.94210-3-nick.hawkins@hpe.com>
+ <CAL_Jsq+xb2Ltfne4mQMXQAde-eHS7TsO73YZ-vhE7nK1Z_M0gw@mail.gmail.com>
+ <DM4PR84MB192795B45639710259E9B19D88229@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+ <820095a2-3722-5c3a-77fb-5a6b6b44e1c3@linaro.org>
+ <DM4PR84MB19275A47D7006BD5664E1AF488319@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DM4PR84MB19275A47D7006BD5664E1AF488319@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -81,57 +87,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 6:48 PM, Caleb Connolly wrote:
-> IPA v3.1 doesn't support the IDLE_INDICATION_CFG register, this was
-> causing a harmless splat in ipa_idle_indication_cfg(), add a version
-> check to prevent trying to fetch this register on v3.1
+On 24/10/2022 20:03, Hawkins, Nick wrote:
+>> I don't think DT place is to describe register or memory layout, with some exceptions like MTD partitions or nvmem cells. Basically you are representing here a device register map inside DT, just because it is a CPLD.
 > 
-> Fixes: 6a244b75cfab ("net: ipa: introduce ipa_reg()")
-
-Actually, the bug first appeared long ago.  This commit:
-   1bb1a117878b9 ("net: ipa: add IPA v3.1 configuration data")
-marked IPA v3.1 supported.  But it did not update the code
-to avoid accessing the IDLE_INDICATION register for IPA v3.1
-(in ipa_reg_idle_indication_cfg_offset()).  That being said,
-we have no evidence that it caused harm, and until we do I'd
-rather not try to fix the problem that far back.
-
-The commit you point out is the one where we actually
-start checking (and WARNing), and I think it's reasonable
-to say that's what this fixes.
-
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-> ---
-> This will need to wait for Jami's Tested-by as I don't have any v3.1 hardware.
-
-I would very much like to get a Tested-by tag.
-
-But from my perspective, this patch looks good.  Previously
-offset 0x220 was used, even though it was not well-defined
-for IPA v3.1.
-
-This is a bug fix destined for the net/master branch.
-
-Reviewed-by: Alex Elder <elder@linaro.org>
-
-Thank you.
-
-> ---
->   drivers/net/ipa/ipa_main.c | 3 +++
->   1 file changed, 3 insertions(+)
+>> Every regular multi-functional device handles its register map in the driver itself and uses Linux framework to expose the internals. CPLD should not be different, except that is programmable.
+> Hi Krzysztof,
 > 
-> diff --git a/drivers/net/ipa/ipa_main.c b/drivers/net/ipa/ipa_main.c
-> index 3461ad3029ab..49537fccf6ad 100644
-> --- a/drivers/net/ipa/ipa_main.c
-> +++ b/drivers/net/ipa/ipa_main.c
-> @@ -434,6 +434,9 @@ static void ipa_idle_indication_cfg(struct ipa *ipa,
->   	const struct ipa_reg *reg;
->   	u32 val;
->   
-> +	if (ipa->version < IPA_VERSION_3_5_1)
-> +		return;
-> +
->   	reg = ipa_reg(ipa, IDLE_INDICATION_CFG);
->   	val = ipa_reg_encode(reg, ENTER_IDLE_DEBOUNCE_THRESH,
->   			     enter_idle_debounce_thresh);
+> Thank you for your time and feedback. We are looking for a place to describe differences within our CPLD implementation due to our memory mapping not being consistent. The idea we are pursuing is to use the device tree to serve as an input to Linux to prevent driver code fragmentation from multiple platforms needing their own specific offsets. 
+
+I understand what you want to achieve, but Devicetree does not seem a
+tool for that. DT describes the hardware characteristics, but not is
+exact memory map.
+
+Although your goal differs than for example goal of some developer of
+I2C or MMIO device drivers, but essentially devices are similar. We do
+not describe memory map of MMIO or register map of I2C devices in DT.
+
+
+> If this is not acceptable to do through the device tree, should we rely on having an include file for each platform instead?
+
+I would say use rather standard Linux subsystems and problem is gone.
+You have fan? Sure, we have subsystem for fans. You have power supply or
+battery - we have stuff for this as well.
+
+Best regards,
+Krzysztof
 
