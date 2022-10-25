@@ -2,51 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9E460D2C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:51:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC7460D2CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbiJYRvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 13:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54598 "EHLO
+        id S232024AbiJYRxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 13:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbiJYRvT (ORCPT
+        with ESMTP id S231889AbiJYRxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 13:51:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D1F1900A;
-        Tue, 25 Oct 2022 10:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=5N1wutp/qlXBYy2QP7C/3+5yhBOHXBrYT/91aOtTBAU=; b=QuXa0ioU3lLXiJ3+Vjs8Dn2cxi
-        8tMU2Rfj6xaIQAk0vicqGHCxB5kNEn4wZN0kmgGoy2jnGvcLu9WqNKkGBf9u53m97Fe4/t0elf2o4
-        ZYG3sHFienIpVx4jnraCmtXmDLvLcr6Oqs8UNEbCRbNtziOeHqCF40ixz3aEppokHXbpoNE2hPWWy
-        itEUCJbnFHWTnPBY3YkeREHpder8a1/Bbv1yFaddphXYLmapwe3G4FnbgHTF7G8kCobLQcB9z25cF
-        FBH+G6hsvd6KuhwXZMm/GYXeq4uPfCvef4eyw+mX9VvczqJ+2IJEJ35NTYIjKo+Vzpl/RBCHflrPw
-        CKf/H6DQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onO54-006YCt-FJ; Tue, 25 Oct 2022 17:51:14 +0000
-Date:   Tue, 25 Oct 2022 10:51:14 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Pavlu <petr.pavlu@suse.com>,
-        Prarit Bhargava <prarit@redhat.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     pmladek@suse.com, david@redhat.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] selftests: kmod: Add tests for merging same-name
- module load requests
-Message-ID: <Y1giEusr0/sGNrGC@bombadil.infradead.org>
-References: <20221016123031.3963-1-petr.pavlu@suse.com>
- <20221016123031.3963-5-petr.pavlu@suse.com>
+        Tue, 25 Oct 2022 13:53:15 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E9889CF7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:53:14 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id g7so23547197lfv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/DWO3XKLTp/RYRFQfFYnsNn2htt+v/ieqDvCyvnXiVM=;
+        b=TqH2uoUkCVrhd9uLjpamZt/nVfT65rs02gzJAxp+t13bbBmtERJGOuGl8r8fNNCspv
+         vJgVufxhc2tTRx8xJZQp0ua3toPexWB9IpoqOSMWXyXUdNJgFw6CKbxENzfGaFxE/09W
+         4EK1bQUoWd/DiRGPyZ5uXcYlb6IlKHU+xHax9OvsmGlyRIaDSe/gs66ynnxFDwUiMKDB
+         bH/3SbVo235sim6CVIeZOgGD3uPL54dAxBKch2KLRuYFQm2LUBOGj4Im5L+gM6Vjsy3P
+         gRS7ZEGTk4pgt7uKnQz7LV0Z0XmT4+fHDaAEnjw5D/OyouTKA9JBQdf+YGMqUBgVUz2+
+         fhmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/DWO3XKLTp/RYRFQfFYnsNn2htt+v/ieqDvCyvnXiVM=;
+        b=A3iNcqKW8AA9Gl6a3yXGHEbwJZtZgTpl5POBQExRLcOxo3kv944geXrm1R3JPi8fs9
+         tNxbU0sKJCh5eb2Z1XXYZVRPcEIobFPDK2yKUbr0mh/7xuWXy7vyqfEHE93N24z+TUje
+         mfBAo635UnJFrVvab/zAJOYV8qgHhvlHkFu4WOanwE/HLg9Xj/ryKRoVHJR30hiYTdba
+         nSLycV/Xomvw60qk9RXsgYbXr5kAaB8V2HTajsERuNNI04LMBZlhZYiqxPKDZIfPwitQ
+         gB90Ya/yIRw8bRTXbOMtc0fZMN3oXk+fRNUf3n0kUnQmPcRVb42AH+GeZ4mBj7R2XaVX
+         Uf6w==
+X-Gm-Message-State: ACrzQf3sYfTlxC6dtndo/LdHG0jrkoE9UHYAPnACARqYeX3a0wHB+9YK
+        rHDcvh4R9Ez5/8eMAEorbK1EZVQzugphlWRTxCV/xQ==
+X-Google-Smtp-Source: AMsMyM4VvdU86oQkaUGC9uoWzsnwbya9LrfRLDNv+7Yhr3KVP+2bVahni0JjeA8Bqw9zA2D/Xq5Ht8t/mqjlM4Ns+Co=
+X-Received: by 2002:ac2:5195:0:b0:4a2:bd54:90cf with SMTP id
+ u21-20020ac25195000000b004a2bd5490cfmr14836939lfi.486.1666720392960; Tue, 25
+ Oct 2022 10:53:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221016123031.3963-5-petr.pavlu@suse.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+References: <20221025055844.1231592-1-davidgow@google.com>
+In-Reply-To: <20221025055844.1231592-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Tue, 25 Oct 2022 10:53:01 -0700
+Message-ID: <CAGS_qxpwfpa-d9FAsVFORDH5eu3_ezu7s6Xen3WdeVnC3_wTBw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: Remove redundant 'tips.rst' page
+To:     David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,29 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 16, 2022 at 02:30:31PM +0200, Petr Pavlu wrote:
-> diff --git a/tools/testing/selftests/kmod/init_module.c b/tools/testing/selftests/kmod/init_module.c
-> @@ -525,6 +662,8 @@ list_tests()
->  	echo "0011 x $(get_test_count 0011) - test completely disabling module autoloading"
->  	echo "0012 x $(get_test_count 0012) - test /proc/modules address visibility under CAP_SYSLOG"
->  	echo "0013 x $(get_test_count 0013) - test /sys/module/*/sections/* visibility under CAP_SYSLOG"
-> +	echo "0014 x $(get_test_count 0014) - test handling of parallel loads, success case"
-> +	echo "0015 x $(get_test_count 0015) - test handling of parallel loads, init returning error"
+On Mon, Oct 24, 2022 at 10:58 PM David Gow <davidgow@google.com> wrote:
+>
+> The contents of 'tips.rst' was included in 'usage.rst' way back in
+> commit 953574390634 ("Documentation: KUnit: Rework writing page to focus on writing tests"),
+> but the tips page remained behind as well.
+>
+> Therefore, delete 'tips.rst'
+>
+> While I regret breaking any links to 'tips' which might exist
+> externally, it's confusing to have two subtly different versions of the
+> same content around.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Good stuff!
+I liked tips.rst, but I agree we should probably remove it for the
+sake of deduping.
 
-So test 0015 mimics the error reported by Prarit Bhargava through
-commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for modules
-that have finished loading")? If so it would be good to document that
-here.
+The only blocker in my mind is we're missing an equivalent of:
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/tips.html#customizing-error-messages
 
-Also, this patch should go first, with the ALL_TESTS variable set to
-disable the tests which are known to fail, so to demonstrate the *new*
-issues as they are failing and then your fix first and then you enable
-that test afterwards.
+Non-blocker: we have a duplicate section on assertion vs expectations:
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/usage.html#assertions
+https://www.kernel.org/doc/html/latest/dev-tools/kunit/usage.html#exiting-early-on-failed-expectations
 
-If 6e6de3dee51a introduced another regression which is not covered
-by the tests we'd add it, and fix on top of it as a stepping stone
-to prove / send to stable.
-
-  Luis
+Daniel
