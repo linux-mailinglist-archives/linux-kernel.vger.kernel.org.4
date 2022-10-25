@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E73D60CFA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A457960CF9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiJYOxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
+        id S231909AbiJYOw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiJYOxm (ORCPT
+        with ESMTP id S233011AbiJYOwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:53:42 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA2E19E91E;
-        Tue, 25 Oct 2022 07:53:41 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5so506376wmo.1;
-        Tue, 25 Oct 2022 07:53:41 -0700 (PDT)
+        Tue, 25 Oct 2022 10:52:08 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B394719E01F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:52:06 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id c9-20020a05640227c900b0045d4a88c750so11958092ede.12
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A+O8rQxYMCKxiugB25CpOR5TRiPSVHAXloU6ZW0+2ew=;
-        b=pw2goslS3d3YvdLr34VC/tMBSPVNUxcfMFEACL/u5/FDOrUTKYELsEqTZ1Qhq0erDw
-         lVNIxCUOtDALppjPpKhIfGd4z1rbvTz6uLvxvA6a+rYhWUThM5FWQ9mwQrOlVkOMHGGo
-         jgzeAxkVSMPb+bNWd3lmlcWotCVStpokXeema2bhYB35NS9YAslYye/3PX3sZ2tvt0TO
-         79A8JHvawHz2EWIn0b3oAWnVHWCkIRnKw6tTLMyOzVF9bKQ9g+de8NlO3qaPEMJTsCBh
-         5Ibch6MjWdBOdr7mIZbusCjtZ2Oug6S46d3aXf/0HFxFoD5/geW4PaJ9a6vx7Yweggk/
-         bkrQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iW7y1fLgpkJui3hvQxzLoNSX4KE+fgXa0IU1VCGorq8=;
+        b=qJakZ6WY7j9J9m8Y0t0mKscdKtWoQFQZx/SlIwtmdVidxM8A5xf050QT9Ki74jQrL1
+         I1jtlS5bPffVifc9+0ncXh2wwwFOzVaq6063eYqf/v/Pl2+CjzJRqU13Oz7kC4XO9shq
+         rk7e1jP74dU+C6IgUOoa4PVz3g4RhXXyTqm6wsiEhNC7ZVMmHNQhgmULb6ksYf93T5Pq
+         Hz1ccacdzLT7No3GpTOIBgRj9eUiZYuKalDOV91XpIhsNHChn2V7IF28NwUwvxVpR7ps
+         7iqals/Wlf90wOzqbZc+9XGB9AKrzHp5iU5dKE+mCdqT+LlsVAHopgFQJUCQmhrKOdkS
+         ENcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A+O8rQxYMCKxiugB25CpOR5TRiPSVHAXloU6ZW0+2ew=;
-        b=aDgtnsdAkaxadI7lYU4Hl1mSzQl5DXzI7bJ2gEPTdQ7YhdT5b/GNi8HskSVNa9ZnjP
-         sNM65hiBLw+Q9hW8I+8RVacFE+kiiJxWkOXTvKJYgejwlc5nf4LzH5TyNvQAbCdnx3xd
-         rVHlriqwDmfS/nvmMCWAxzAvM7S+Aj/1LZ/zMWLCeyy11sorsE+SDtQXckQmwmy7eof8
-         umDpzmS9DGbvZpodJgxINhptkwpjhyZShqGpE7fZz4T5MrmuxS4yEIBsfJ+lX9MEW4G+
-         DdBrlNlEDzPwNoq1pUPxvIwlGnjk12XvRPbbdToqPYaqb7epNJv62B5S6Y2AK/rCOFvH
-         lSFQ==
-X-Gm-Message-State: ACrzQf0lIS1yrkuFGMtFKqLHfrhObVomXNCYTGufSlSA8ptBhtCfceG+
-        T2Z+fXMWZ0lVNZkVBcRpHh3Cj+ps6mdVWA==
-X-Google-Smtp-Source: AMsMyM5KkaSWVGkgxvT1Hnc2uk6gGbPrMvIJsthGvrjpaVipp3s1NodJ4PrH3fMGk4iOew3wAt+RfQ==
-X-Received: by 2002:a05:600c:4588:b0:3c6:f645:dad0 with SMTP id r8-20020a05600c458800b003c6f645dad0mr27572232wmo.114.1666709620462;
-        Tue, 25 Oct 2022 07:53:40 -0700 (PDT)
-Received: from [10.1.2.99] (wifi-guest-gw.tecnico.ulisboa.pt. [193.136.152.65])
-        by smtp.gmail.com with ESMTPSA id e17-20020a5d5011000000b002305cfb9f3dsm2724433wrt.89.2022.10.25.07.53.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 07:53:40 -0700 (PDT)
-Message-ID: <25567965-4eb5-7557-db49-e17776cec3d4@gmail.com>
-Date:   Tue, 25 Oct 2022 15:51:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH for-next v3 0/3] implement pcpu bio caching for IRQ I/O
-Content-Language: en-US
-To:     Kanchan Joshi <joshi.k@samsung.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-References: <CGME20221021103627epcas5p34eaaf3c8161bbee33160cce8b58efd5f@epcas5p3.samsung.com>
- <cover.1666347703.git.asml.silence@gmail.com>
- <20221025132502.GA31530@test-zns>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20221025132502.GA31530@test-zns>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iW7y1fLgpkJui3hvQxzLoNSX4KE+fgXa0IU1VCGorq8=;
+        b=TyxYtKzsodw0KpfWXV6VTULRHGKlxTO7M2hc9j2ucSkJbJ/ibPlFyRI/+4313B0TIU
+         cAT8tne7kSZt8C4XelxQMNr4Uke9I+O45kK8rWpvOj9fOawjLj1Dx/Lknwz2itHvtbMD
+         oUA86V7bgmSGiSXl9RFNwLzKnjb5vHEKBL+oe8TQU7x7LoghGMoG/du0fI/xC76h4j9n
+         g1UDsSSbzwr7EpUUcro0t/Jrv+4Npd3+WJN1XgZt+6QTMDywoFxgeWLRaUf4R2HkBpjY
+         TbS2F2pG81s+8/y7m3hUPXKQSJ9rQ5gBU822WW/lMN+xYoqmAYkn1g84nn5jMIqPLTju
+         sBUA==
+X-Gm-Message-State: ACrzQf2VrxRkiyZ3q9ZtX7xVV0hjmV6dUqRe9ECu/pSr0TYi6UtkRgMk
+        3wweJvvjqZtsaL83gNcM/gy3YczytpXY
+X-Google-Smtp-Source: AMsMyM4BGDxK+RsryB8gWtAc8z+lfBDtIE7P/25DUQWrqxjJtocSP2UPxVASx3qt+ngO9qDF5OIYpYiVN++A
+X-Received: from big-boi.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:129])
+ (user=qperret job=sendgmr) by 2002:a05:6402:d06:b0:45a:3ac6:ad26 with SMTP id
+ eb6-20020a0564020d0600b0045a3ac6ad26mr36497510edb.195.1666709525134; Tue, 25
+ Oct 2022 07:52:05 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 14:51:56 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
+Message-ID: <20221025145156.855308-1-qperret@google.com>
+Subject: [PATCH] KVM: arm64: Use correct accessor to parse stage-1 PTEs
+From:   Quentin Perret <qperret@google.com>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Quentin Perret <qperret@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,40 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/25/22 14:25, Kanchan Joshi wrote:
-> On Fri, Oct 21, 2022 at 11:34:04AM +0100, Pavel Begunkov wrote:
->> Add bio pcpu caching for normal / IRQ-driven I/O extending REQ_ALLOC_CACHE,
->> which was limited to iopoll. 
-> 
-> So below comment (stating process context as MUST) can also be removed as
-> part of this series now?
+hyp_get_page_state() is used with pKVM to retrieve metadata about a page
+by parsing a hypervisor stage-1 PTE. However, it incorrectly uses a
+helper which parses *stage-2* mappings. Ouch.
 
-Right, good point
+Luckily, pkvm_getstate() only looks at the software bits, which happen
+to be in the same place for stage-1 and stage-2 PTEs, and this all ends
+up working correctly by accident. But clearly, we should do better.
 
+Fix hyp_get_page_state() to use the correct helper.
 
-> 495  * If REQ_ALLOC_CACHE is set, the final put of the bio MUST be done from process
-> 496  * context, not hard/soft IRQ.
-> 497  *
-> 498  * Returns: Pointer to new bio on success, NULL on failure.
-> 499  */
-> 500 struct bio *bio_alloc_bioset(struct block_device *bdev, unsigned short nr_vecs,
-> 501                              blk_opf_t opf, gfp_t gfp_mask,
-> 502                              struct bio_set *bs)
-> 503 {
-[...]
->> The next step will be turning it on for other users, hopefully by default.
->> The only restriction we currently have is that the allocations can't be
->> done from non-irq context and so needs auditing.
-> 
-> Isn't allocation (of bio) happening in non-irq context already?
+Fixes: e82edcc75c4e ("KVM: arm64: Implement do_share() helper for sharing memory")
+Signed-off-by: Quentin Perret <qperret@google.com>
+---
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That's my assumption, true for most of them, but I need to actually
-check that. Will be following up after this series is merged.
-
-
-> Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
-
-thanks
-
+diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+index 1e78acf9662e..07f9dc9848ef 100644
+--- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
++++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
+@@ -516,7 +516,7 @@ static enum pkvm_page_state hyp_get_page_state(kvm_pte_t pte)
+ 	if (!kvm_pte_valid(pte))
+ 		return PKVM_NOPAGE;
+ 
+-	return pkvm_getstate(kvm_pgtable_stage2_pte_prot(pte));
++	return pkvm_getstate(kvm_pgtable_hyp_pte_prot(pte));
+ }
+ 
+ static int __hyp_check_page_state_range(u64 addr, u64 size,
 -- 
-Pavel Begunkov
+2.38.0.135.g90850a2211-goog
+
