@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AA360C3FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F1F60C401
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiJYGsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
+        id S230305AbiJYGsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbiJYGsa (ORCPT
+        with ESMTP id S230327AbiJYGsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:48:30 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381C014BB72
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:48:29 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-36847dfc5ccso105878477b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:48:29 -0700 (PDT)
+        Tue, 25 Oct 2022 02:48:46 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4EC148FE1
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:48:44 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id m125so304633ybb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JPRRYLjIyOi+l0vP5hB11FlLPptXndDWR57UKLvqVFs=;
-        b=k2ppGJjX3Z9j6TEBU4XW5Pue1wIrSncGBXuSj+0p+HIhlsvg2E2i7Aavf8GtZPDOJO
-         XWL5Y/6yO+zRbbeMgDCfw1RRc5kTmn4jIdf48odLbcF9WfFYHcx4GHyrdOwMkmvtn3eM
-         GurjSDbHq8pWgVpdb1Po3ibPBL8l758BgMfWObmyH84FCyidPk7b1HpM1fvXGq/xEPuU
-         m9I0seJTlQM5nPgdAJwAEi0OtRkiCTxyUUp9IRJUnOAv4GCvbVCTw75V3A0WcKhCAgi6
-         /OaR0+ChRHCeSu9wdIX7vSj8Q+kf/t5n+MWPZuTIwVMMBR8mJiCxycYlXFokJ0t7CgHO
-         Sh3w==
+        bh=52Ackc+HIaGbbEoFOOYpWlvR8CA50d8AxFJw/tKl/6o=;
+        b=NaYQSyho5xlX02NRoH9tbD+t+kKtnlqtqMXq5Ed43u5oNQu94haBkDyUViIk6HGKYh
+         XMV2Q36m3/TVoduSMKWQ3xdPW/hGah60R1EdncGCUnUeuTn4WNyl3H/cM/8INSifyHRs
+         CXEVqiaozScxXpXRyq/HNKNYVX0PCLSEP9W62KfSqYfuJHuwzrYjziaCk0Wz5b+y+dAv
+         W7nQQ23hG2BVLPIYV8szZ8kah2yr+d24dF7ZLwxrOpo6F+Q/n+QXkVhWVH/xc2kumZsd
+         UO3IRB3HRtmddGJgFzy5cQ4cCwIZv+yloKpSGIrGozuGth3FwuI++loODE/glk9X0mny
+         ayyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=JPRRYLjIyOi+l0vP5hB11FlLPptXndDWR57UKLvqVFs=;
-        b=u7Io8trZ6NqcJSvRTdiK4eAPeUAyJFTuHSk3mok9b5Ficy1YUjjf4JWVoVPRLqEMcx
-         cdh9l6Bn/RgeZOMV0vw7GFBEWxqm6/OJ4BntZCZrE7YQgkkGnsYk5h7FLizEUMq/kuki
-         gIa+xpOGLNaHCSXk7gqi0oCu45pE8xUuaknKMl8312OLJrPuPMTmX2w4PllzX90y8gUt
-         c7qeIwR6c8ZzxvHbtNIJyDZMU4R+86cVsjfuahQYo6SmuNnLJlxyClqPFZRDp2v4XC38
-         dGQs6KO7sikMqsCzIEas1PB7/Hk+Gwt4SXB4Basp4Y28Hi9Ub1yorH5dkX1o8Ex+CsaJ
-         3q0Q==
-X-Gm-Message-State: ACrzQf2urpclUYeGSJbpfRzuOHqbAC4iNUtNK/QM5xhAAsjMyWiCSCaJ
-        99RdUZc1z6EdGBakbY/uXaGhbnE5Yv9ZuikNtdtGbg==
-X-Google-Smtp-Source: AMsMyM4UxUNUoo9ZHmaxATl7Pl8lKSNiL5vivNDiUqywTNqfL9iXItW/z/XSLcjnJOjq1SXEOg65vMWakQK4L4iTzCc=
-X-Received: by 2002:a81:7804:0:b0:369:1074:e2b with SMTP id
- t4-20020a817804000000b0036910740e2bmr22567329ywc.127.1666680508337; Mon, 24
- Oct 2022 23:48:28 -0700 (PDT)
+        bh=52Ackc+HIaGbbEoFOOYpWlvR8CA50d8AxFJw/tKl/6o=;
+        b=N23KiHm+P1xwtK2Z2t3BDL1BNHphuOZyBUygSnZIUcbjRJ+NGRU6wZp8bLPafsY0Ww
+         rVskHw7JpwepePqgbbL59Iu+pFPZAObKwxwb8mWiRWAPEFFwZvjwlWSOazbQweASeE6l
+         D5OfSnk1O3sq5B7/bMlxZRcfWq02GrhO5NB8FYvyU6DBtGYOqvAQO6S8VI7RGTTGOSTF
+         1EYkf49sCvIOot65ZocAO/QhYVbca4SMnwa7J5y9RoOJnK3Aj3tiGDoBu9hVj7nxO8Fm
+         WZFqg4NxtFW8ZoIaMx67fRMucHPAaVS+6q0diFbpeLr8XHzgdoaSKzAjP/ZvkSA55sde
+         4kdg==
+X-Gm-Message-State: ACrzQf2T2rAxjEqJfchZn9F9nB043wvF7Z+RrKDOGUuIi1ffcaRsAi0k
+        m7tpshpV42ZerjTY+KeKPd7ZkQjdiGw/SCYM7jY=
+X-Google-Smtp-Source: AMsMyM6N2d3bGnAQ60fHXYouIPFSZAw7PsPqTB7GyUKOQbzpn0oo0j9C4p3mNh1T1x9QLKuHr2hTmayyPBJrjLRaUpQ=
+X-Received: by 2002:a25:81d2:0:b0:6ca:1fc9:de7c with SMTP id
+ n18-20020a2581d2000000b006ca1fc9de7cmr23655368ybm.13.1666680524020; Mon, 24
+ Oct 2022 23:48:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221025050608.2635173-1-quic_fenglinw@quicinc.com> <20221025050608.2635173-2-quic_fenglinw@quicinc.com>
-In-Reply-To: <20221025050608.2635173-2-quic_fenglinw@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 25 Oct 2022 09:48:17 +0300
-Message-ID: <CAA8EJpqQaGwsBKMqqHSqd-jcKsacuamqsd0adxCWTvQcDz9b3Q@mail.gmail.com>
-Subject: Re: [RESEND PATCH v1 1/2] spmi: pmic-arb: add support to map SPMI
- addresses to physical addr
-To:     Fenglin Wu <quic_fenglinw@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        David Collins <collinsd@codeaurora.org>
+References: <20221020153540.8226-1-ubizjak@gmail.com> <220dabe6-dac1-8ca7-0134-e6e89c923d81@nvidia.com>
+In-Reply-To: <220dabe6-dac1-8ca7-0134-e6e89c923d81@nvidia.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Tue, 25 Oct 2022 08:48:32 +0200
+Message-ID: <CAFULd4besRPEWJ1C2otAs3CaPnNJqVkcKD0sn4vQ9gD1a-RvtQ@mail.gmail.com>
+Subject: Re: [PATCH] nvmet: use try_cmpxchg in nvmet_update_sq_head
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,289 +69,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 at 08:08, Fenglin Wu <quic_fenglinw@quicinc.com> wrote:
+On Tue, Oct 25, 2022 at 2:47 AM Chaitanya Kulkarni
+<chaitanyak@nvidia.com> wrote:
 >
-> From: David Collins <collinsd@codeaurora.org>
+> On 10/20/22 08:35, Uros Bizjak wrote:
+> > Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+> > nvmet_update_sq_head.  x86 CMPXCHG instruction returns success in ZF flag, so
+> > this change saves a compare after cmpxchg (and related move instruction in
+> > front of cmpxchg).
+> >
 >
-> Add an exported function which can map an SPMI address to the
-> physical address range of the registers used to write to that
-> SPMI address.
->
-> The feature can be used by consumer drivers that need to lock
-> down access to certain PMIC peripherals temporarily for certain
-> secure use cases.
+> Is it worth a share delts of assembly instructions of the changes above?
+> as developers on block mailing list are sharing the delta between before
+> and after patch including the assembly.
 
-No-no-no-no. First, typically the API is only accepted together with
-the actual API user. It is bad to have an API call that has no users.
+The difference in the assembly of nvmet_update_sq_head function is:
 
-Next, the API you are trying to add doesn't match what you have
-described so far. Instead of locking the device from the ARB driver,
-you are providing the child devices with the wormhole, meaning that
-the child device will have know how to program the ARB. This is not
-correct. The ARB programming should happen from the ARB driver, not
-from the PMIC/etc drivers.
+before:
 
-Last, but not least. The API you have tried to add is added as the one
-specific to the spmi_pmic_arb. This is usually a very bad practice.
-Please rework this as an API that doesn't depend on the backing SPMI
-arbiter.
+0000000000001d30 <nvmet_update_sq_head>:
+    1d30:    48 8b 4f 10              mov    0x10(%rdi),%rcx
+    1d34:    49 89 f8                 mov    %rdi,%r8
+    1d37:    0f b7 71 1a              movzwl 0x1a(%rcx),%esi
+    1d3b:    66 85 f6                 test   %si,%si
+    1d3e:    75 14                    jne    1d54 <nvmet_update_sq_head+0x24>
+    1d40:    49 8b 40 08              mov    0x8(%r8),%rax
+    1d44:    8b 51 1c                 mov    0x1c(%rcx),%edx
+    1d47:    66 89 50 08              mov    %dx,0x8(%rax)
+    1d4b:    e9 00 00 00 00           jmpq   1d50 <nvmet_update_sq_head+0x20>
+            1d4c: R_X86_64_PLT32    __x86_return_thunk-0x4
+    1d50:    0f b7 71 1a              movzwl 0x1a(%rcx),%esi
+    1d54:    8b 79 1c                 mov    0x1c(%rcx),%edi
+    1d57:    31 d2                    xor    %edx,%edx
+    1d59:    8d 47 01                 lea    0x1(%rdi),%eax
+    1d5c:    f7 f6                    div    %esi
+    1d5e:    89 f8                    mov    %edi,%eax
+    1d60:    f0 0f b1 51 1c           lock cmpxchg %edx,0x1c(%rcx)
+    1d65:    49 8b 48 10              mov    0x10(%r8),%rcx
+    1d69:    39 c7                    cmp    %eax,%edi
+    1d6b:    75 e3                    jne    1d50 <nvmet_update_sq_head+0x20>
+    1d6d:    49 8b 40 08              mov    0x8(%r8),%rax
+    1d71:    8b 51 1c                 mov    0x1c(%rcx),%edx
+    1d74:    66 89 50 08              mov    %dx,0x8(%rax)
+    1d78:    e9 00 00 00 00           jmpq   1d7d <nvmet_update_sq_head+0x4d>
+            1d79: R_X86_64_PLT32    __x86_return_thunk-0x4
+    1d7d:
 
->
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
-> ---
->  drivers/spmi/spmi-pmic-arb.c           | 104 +++++++++++++++++++++++++
->  include/linux/soc/qcom/spmi-pmic-arb.h |  23 ++++++
->  2 files changed, 127 insertions(+)
->  create mode 100644 include/linux/soc/qcom/spmi-pmic-arb.h
->
-> diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
-> index 2cf3203b2397..1e7f5a9ff4bc 100644
-> --- a/drivers/spmi/spmi-pmic-arb.c
-> +++ b/drivers/spmi/spmi-pmic-arb.c
-> @@ -16,6 +16,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  #include <linux/spmi.h>
-> +#include <linux/soc/qcom/spmi-pmic-arb.h>
->
->  /* PMIC Arbiter configuration registers */
->  #define PMIC_ARB_VERSION               0x0000
-> @@ -124,6 +125,8 @@ struct apid_data {
->   *
->   * @rd_base:           on v1 "core", on v2 "observer" register base off DT.
->   * @wr_base:           on v1 "core", on v2 "chnls"    register base off DT.
-> + * @wr_base_phys:      base physical address of the register range used for
-> + *                     SPMI write commands.
->   * @intr:              address of the SPMI interrupt control registers.
->   * @cnfg:              address of the PMIC Arbiter configuration registers.
->   * @lock:              lock to synchronize accesses.
-> @@ -141,6 +144,7 @@ struct apid_data {
->  struct spmi_pmic_arb {
->         void __iomem            *rd_base;
->         void __iomem            *wr_base;
-> +       phys_addr_t             wr_base_phys;
->         void __iomem            *intr;
->         void __iomem            *cnfg;
->         void __iomem            *core;
-> @@ -180,6 +184,9 @@ struct spmi_pmic_arb {
->   * @irq_clear:         on v1 address of PMIC_ARB_SPMI_PIC_IRQ_CLEARn
->   *                     on v2 address of SPMI_PIC_IRQ_CLEARn.
->   * @apid_map_offset:   offset of PMIC_ARB_REG_CHNLn
-> + * @wr_addr_map:       maps from an SPMI address to the physical address
-> + *                     range of the registers used to perform an SPMI write
-> + *                     command to the SPMI address.
->   */
->  struct pmic_arb_ver_ops {
->         const char *ver_str;
-> @@ -196,6 +203,8 @@ struct pmic_arb_ver_ops {
->         void __iomem *(*irq_status)(struct spmi_pmic_arb *pmic_arb, u16 n);
->         void __iomem *(*irq_clear)(struct spmi_pmic_arb *pmic_arb, u16 n);
->         u32 (*apid_map_offset)(u16 n);
-> +       int (*wr_addr_map)(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
-> +                          struct resource *res_out);
->  };
->
->  static inline void pmic_arb_base_write(struct spmi_pmic_arb *pmic_arb,
-> @@ -972,6 +981,21 @@ static int pmic_arb_offset_v1(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
->         return 0x800 + 0x80 * pmic_arb->channel;
->  }
->
-> +static int pmic_arb_wr_addr_map_v1(struct spmi_pmic_arb *pmic_arb, u8 sid,
-> +                                  u16 addr, struct resource *res_out)
-> +{
-> +       int rc;
-> +
-> +       rc = pmic_arb_offset_v1(pmic_arb, sid, addr, PMIC_ARB_CHANNEL_RW);
-> +       if (rc < 0)
-> +               return rc;
-> +
-> +       res_out->start = pmic_arb->wr_base_phys + rc;
-> +       res_out->end = res_out->start + 0x80 - 1;
-> +
-> +       return 0;
-> +}
-> +
->  static u16 pmic_arb_find_apid(struct spmi_pmic_arb *pmic_arb, u16 ppid)
->  {
->         struct apid_data *apidd = &pmic_arb->apid_data[pmic_arb->last_apid];
-> @@ -1111,6 +1135,21 @@ static int pmic_arb_offset_v2(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
->         return 0x1000 * pmic_arb->ee + 0x8000 * apid;
->  }
->
-> +static int pmic_arb_wr_addr_map_v2(struct spmi_pmic_arb *pmic_arb, u8 sid,
-> +                                  u16 addr, struct resource *res_out)
-> +{
-> +       int rc;
-> +
-> +       rc = pmic_arb_offset_v2(pmic_arb, sid, addr, PMIC_ARB_CHANNEL_RW);
-> +       if (rc < 0)
-> +               return rc;
-> +
-> +       res_out->start = pmic_arb->wr_base_phys + rc;
-> +       res_out->end = res_out->start + 0x1000 - 1;
-> +
-> +       return 0;
-> +}
-> +
->  /*
->   * v5 offset per ee and per apid for observer channels and per apid for
->   * read/write channels.
-> @@ -1145,6 +1184,21 @@ static int pmic_arb_offset_v5(struct spmi_pmic_arb *pmic_arb, u8 sid, u16 addr,
->         return offset;
->  }
->
-> +static int pmic_arb_wr_addr_map_v5(struct spmi_pmic_arb *pmic_arb, u8 sid,
-> +                                  u16 addr, struct resource *res_out)
-> +{
-> +       int rc;
-> +
-> +       rc = pmic_arb_offset_v5(pmic_arb, sid, addr, PMIC_ARB_CHANNEL_RW);
-> +       if (rc < 0)
-> +               return rc;
-> +
-> +       res_out->start = pmic_arb->wr_base_phys + rc;
-> +       res_out->end = res_out->start + 0x10000 - 1;
-> +
-> +       return 0;
-> +}
-> +
->  static u32 pmic_arb_fmt_cmd_v1(u8 opc, u8 sid, u16 addr, u8 bc)
->  {
->         return (opc << 27) | ((sid & 0xf) << 20) | (addr << 4) | (bc & 0x7);
-> @@ -1254,6 +1308,7 @@ static const struct pmic_arb_ver_ops pmic_arb_v1 = {
->         .irq_status             = pmic_arb_irq_status_v1,
->         .irq_clear              = pmic_arb_irq_clear_v1,
->         .apid_map_offset        = pmic_arb_apid_map_offset_v2,
-> +       .wr_addr_map            = pmic_arb_wr_addr_map_v1,
->  };
->
->  static const struct pmic_arb_ver_ops pmic_arb_v2 = {
-> @@ -1267,6 +1322,7 @@ static const struct pmic_arb_ver_ops pmic_arb_v2 = {
->         .irq_status             = pmic_arb_irq_status_v2,
->         .irq_clear              = pmic_arb_irq_clear_v2,
->         .apid_map_offset        = pmic_arb_apid_map_offset_v2,
-> +       .wr_addr_map            = pmic_arb_wr_addr_map_v2,
->  };
->
->  static const struct pmic_arb_ver_ops pmic_arb_v3 = {
-> @@ -1280,6 +1336,7 @@ static const struct pmic_arb_ver_ops pmic_arb_v3 = {
->         .irq_status             = pmic_arb_irq_status_v2,
->         .irq_clear              = pmic_arb_irq_clear_v2,
->         .apid_map_offset        = pmic_arb_apid_map_offset_v2,
-> +       .wr_addr_map            = pmic_arb_wr_addr_map_v2,
->  };
->
->  static const struct pmic_arb_ver_ops pmic_arb_v5 = {
-> @@ -1293,6 +1350,7 @@ static const struct pmic_arb_ver_ops pmic_arb_v5 = {
->         .irq_status             = pmic_arb_irq_status_v5,
->         .irq_clear              = pmic_arb_irq_clear_v5,
->         .apid_map_offset        = pmic_arb_apid_map_offset_v5,
-> +       .wr_addr_map            = pmic_arb_wr_addr_map_v5,
->  };
->
->  static const struct irq_domain_ops pmic_arb_irq_domain_ops = {
-> @@ -1302,6 +1360,50 @@ static const struct irq_domain_ops pmic_arb_irq_domain_ops = {
->         .translate = qpnpint_irq_domain_translate,
->  };
->
-> +static int _spmi_pmic_arb_map_address(struct spmi_pmic_arb *pmic_arb,
-> +                               u32 spmi_address, struct resource *res_out)
-> +{
-> +       u32 sid, addr;
-> +
-> +       sid = (spmi_address >> 16) & 0xF;
-> +       addr = spmi_address & 0xFFFF;
-> +
-> +       return pmic_arb->ver_ops->wr_addr_map(pmic_arb, sid, addr, res_out);
-> +}
-> +
-> +/**
-> + * spmi_pmic_arb_map_address() - returns physical addresses of registers used to
-> + *             write to the PMIC peripheral at spmi_address
-> + * @ctrl:              SPMI controller device pointer
-> + * @spmi_address:      20-bit SPMI address of the form: 0xSPPPP
-> + *                     where S = global PMIC SID and
-> + *                     PPPP = SPMI address within the slave
-> + * @res_out:           Resource struct (allocated by the caller) in which
-> + *                     physical addresses for the range are passed via start
-> + *                     and end elements
-> + *
-> + * Returns: 0 on success or an errno on failure.
-> + */
-> +int spmi_pmic_arb_map_address(struct spmi_controller *ctrl, u32 spmi_address,
-> +                             struct resource *res_out)
-> +{
-> +       struct spmi_pmic_arb *pmic_arb;
-> +
-> +       if (!ctrl || !res_out) {
-> +               pr_err("%s: Invalid pointer\n", __func__);
-> +               return -EINVAL;
-> +       }
-> +
-> +       pmic_arb = spmi_controller_get_drvdata(ctrl);
-> +       if (!pmic_arb) {
-> +               pr_err("Missing PMIC arbiter device\n");
-> +               return -ENODEV;
-> +       }
-> +
-> +       return _spmi_pmic_arb_map_address(pmic_arb, spmi_address, res_out);
-> +}
-> +EXPORT_SYMBOL(spmi_pmic_arb_map_address);
-> +
->  static int spmi_pmic_arb_probe(struct platform_device *pdev)
->  {
->         struct spmi_pmic_arb *pmic_arb;
-> @@ -1341,6 +1443,7 @@ static int spmi_pmic_arb_probe(struct platform_device *pdev)
->         if (hw_ver < PMIC_ARB_VERSION_V2_MIN) {
->                 pmic_arb->ver_ops = &pmic_arb_v1;
->                 pmic_arb->wr_base = core;
-> +               pmic_arb->wr_base_phys = res->start;
->                 pmic_arb->rd_base = core;
->         } else {
->                 pmic_arb->core = core;
-> @@ -1367,6 +1470,7 @@ static int spmi_pmic_arb_probe(struct platform_device *pdev)
->                         err = PTR_ERR(pmic_arb->wr_base);
->                         goto err_put_ctrl;
->                 }
-> +               pmic_arb->wr_base_phys = res->start;
->         }
->
->         dev_info(&ctrl->dev, "PMIC arbiter version %s (0x%x)\n",
-> diff --git a/include/linux/soc/qcom/spmi-pmic-arb.h b/include/linux/soc/qcom/spmi-pmic-arb.h
-> new file mode 100644
-> index 000000000000..adb999d6e246
-> --- /dev/null
-> +++ b/include/linux/soc/qcom/spmi-pmic-arb.h
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/* Copyright (c) 2020, The Linux Foundation. All rights reserved. */
-> +
-> +#ifndef _SPMI_PMIC_ARB_H
-> +#define _SPMI_PMIC_ARB_H
-> +
-> +#include <linux/spmi.h>
-> +#include <linux/ioport.h>
-> +#include <linux/types.h>
-> +
-> +
-> +#if IS_ENABLED(CONFIG_SPMI_MSM_PMIC_ARB)
-> +int spmi_pmic_arb_map_address(struct spmi_controller *ctrl, u32 spmi_address,
-> +                             struct resource *res_out);
-> +#else
-> +static inline int spmi_pmic_arb_map_address(struct spmi_controller *ctrl,
-> +                               u32 spmi_address, struct resource *res_out)
-> +{
-> +       return -ENODEV;
-> +}
-> +#endif
-> +
-> +#endif
-> --
-> 2.25.1
->
+after:
 
+0000000000001d30 <nvmet_update_sq_head>:
+    1d30:    48 8b 4f 10              mov    0x10(%rdi),%rcx
+    1d34:    0f b7 51 1a              movzwl 0x1a(%rcx),%edx
+    1d38:    66 85 d2                 test   %dx,%dx
+    1d3b:    74 1e                    je     1d5b <nvmet_update_sq_head+0x2b>
+    1d3d:    8b 71 1c                 mov    0x1c(%rcx),%esi
+    1d40:    44 0f b7 c2              movzwl %dx,%r8d
+    1d44:    8d 46 01                 lea    0x1(%rsi),%eax
+    1d47:    31 d2                    xor    %edx,%edx
+    1d49:    41 f7 f0                 div    %r8d
+    1d4c:    89 f0                    mov    %esi,%eax
+    1d4e:    f0 0f b1 51 1c           lock cmpxchg %edx,0x1c(%rcx)
+    1d53:    48 8b 4f 10              mov    0x10(%rdi),%rcx
+    1d57:    89 c6                    mov    %eax,%esi
+    1d59:    75 10                    jne    1d6b <nvmet_update_sq_head+0x3b>
+    1d5b:    48 8b 47 08              mov    0x8(%rdi),%rax
+    1d5f:    8b 51 1c                 mov    0x1c(%rcx),%edx
+    1d62:    66 89 50 08              mov    %dx,0x8(%rax)
+    1d66:    e9 00 00 00 00           jmpq   1d6b <nvmet_update_sq_head+0x3b>
+            1d67: R_X86_64_PLT32    __x86_return_thunk-0x4
+    1d6b:    0f b7 51 1a              movzwl 0x1a(%rcx),%edx
+    1d6f:    eb cf                    jmp    1d40 <nvmet_update_sq_head+0x10>
+    1d71:
 
--- 
-With best wishes
-Dmitry
+You can see that in addition to the smaller size of the function, the
+load of req->sq->size at 1d6b got moved to a cold path. As the main
+benefit, the load at 1d3d is now out of the loop, and the value in
+%esi is now provided by cmpxchg insn itself at 1d4e (plus move at
+1d57). Unfortunately, the division clobbers %eax, so some reg-reg
+moves are necessary. Note also that the compare at 1d69 is now gone.
+
+> I also hope that you have tested this change with blktests nvme.
+
+No, I didn't test the patch that thoroughly, but the change is the
+same as some similar recent changes in the generic code, so I
+confirmed the patch by inspecting asm code. OTOH, the kernel booted
+from a NVME SSD.
+
+> Either way:-
+>
+> Reviewed-by: ChaItanya Kulkarni <kch@nvidia.com>
+
+Thanks!
+
+Uros.
