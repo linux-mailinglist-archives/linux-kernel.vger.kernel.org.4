@@ -2,98 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3274660CFBB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E73D60CFA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbiJYO62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
+        id S230388AbiJYOxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbiJYO60 (ORCPT
+        with ESMTP id S230158AbiJYOxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:58:26 -0400
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 518161A9913
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:58:18 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Tue, 25 Oct
- 2022 22:51:35 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.15.254]
-Date:   Tue, 25 Oct 2022 22:51:35 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   wangkailong@jari.cn
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, linkinjeon@kernel.org,
-        sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com
-Cc:     roman.gushchin@linux.dev, akpm@linux-foundation.org,
-        willy@infradead.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-cifs@vger.kernel.org
-Subject:  [PATCH] ext4: replace ternary operator with min()
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Tue, 25 Oct 2022 10:53:42 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA2E19E91E;
+        Tue, 25 Oct 2022 07:53:41 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5so506376wmo.1;
+        Tue, 25 Oct 2022 07:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A+O8rQxYMCKxiugB25CpOR5TRiPSVHAXloU6ZW0+2ew=;
+        b=pw2goslS3d3YvdLr34VC/tMBSPVNUxcfMFEACL/u5/FDOrUTKYELsEqTZ1Qhq0erDw
+         lVNIxCUOtDALppjPpKhIfGd4z1rbvTz6uLvxvA6a+rYhWUThM5FWQ9mwQrOlVkOMHGGo
+         jgzeAxkVSMPb+bNWd3lmlcWotCVStpokXeema2bhYB35NS9YAslYye/3PX3sZ2tvt0TO
+         79A8JHvawHz2EWIn0b3oAWnVHWCkIRnKw6tTLMyOzVF9bKQ9g+de8NlO3qaPEMJTsCBh
+         5Ibch6MjWdBOdr7mIZbusCjtZ2Oug6S46d3aXf/0HFxFoD5/geW4PaJ9a6vx7Yweggk/
+         bkrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A+O8rQxYMCKxiugB25CpOR5TRiPSVHAXloU6ZW0+2ew=;
+        b=aDgtnsdAkaxadI7lYU4Hl1mSzQl5DXzI7bJ2gEPTdQ7YhdT5b/GNi8HskSVNa9ZnjP
+         sNM65hiBLw+Q9hW8I+8RVacFE+kiiJxWkOXTvKJYgejwlc5nf4LzH5TyNvQAbCdnx3xd
+         rVHlriqwDmfS/nvmMCWAxzAvM7S+Aj/1LZ/zMWLCeyy11sorsE+SDtQXckQmwmy7eof8
+         umDpzmS9DGbvZpodJgxINhptkwpjhyZShqGpE7fZz4T5MrmuxS4yEIBsfJ+lX9MEW4G+
+         DdBrlNlEDzPwNoq1pUPxvIwlGnjk12XvRPbbdToqPYaqb7epNJv62B5S6Y2AK/rCOFvH
+         lSFQ==
+X-Gm-Message-State: ACrzQf0lIS1yrkuFGMtFKqLHfrhObVomXNCYTGufSlSA8ptBhtCfceG+
+        T2Z+fXMWZ0lVNZkVBcRpHh3Cj+ps6mdVWA==
+X-Google-Smtp-Source: AMsMyM5KkaSWVGkgxvT1Hnc2uk6gGbPrMvIJsthGvrjpaVipp3s1NodJ4PrH3fMGk4iOew3wAt+RfQ==
+X-Received: by 2002:a05:600c:4588:b0:3c6:f645:dad0 with SMTP id r8-20020a05600c458800b003c6f645dad0mr27572232wmo.114.1666709620462;
+        Tue, 25 Oct 2022 07:53:40 -0700 (PDT)
+Received: from [10.1.2.99] (wifi-guest-gw.tecnico.ulisboa.pt. [193.136.152.65])
+        by smtp.gmail.com with ESMTPSA id e17-20020a5d5011000000b002305cfb9f3dsm2724433wrt.89.2022.10.25.07.53.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 07:53:40 -0700 (PDT)
+Message-ID: <25567965-4eb5-7557-db49-e17776cec3d4@gmail.com>
+Date:   Tue, 25 Oct 2022 15:51:52 +0100
 MIME-Version: 1.0
-Message-ID: <5036013e.4.1840fa09d42.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwCnu+H491djhgQAAA--.1W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAQB2FEYxtGOgADs0
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=2.2 required=5.0 tests=BAYES_00,RCVD_IN_PBL,RDNS_NONE,
-        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH for-next v3 0/3] implement pcpu bio caching for IRQ I/O
+Content-Language: en-US
+To:     Kanchan Joshi <joshi.k@samsung.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+References: <CGME20221021103627epcas5p34eaaf3c8161bbee33160cce8b58efd5f@epcas5p3.samsung.com>
+ <cover.1666347703.git.asml.silence@gmail.com>
+ <20221025132502.GA31530@test-zns>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20221025132502.GA31530@test-zns>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKZnMvZXh0NC9pbmxpbmUuYzox
-ODM6IFdBUk5JTkcgb3Bwb3J0dW5pdHkgZm9yIG1pbigpCmZzL2lzb2ZzL2lub2RlLmM6MTE1Mzog
-V0FSTklORyBvcHBvcnR1bml0eSBmb3IgbWluKCkKZnMva3NtYmQvb3Bsb2NrLmM6ODgyOiBXQVJO
-SU5HIG9wcG9ydHVuaXR5IGZvciBtaW4oKQpmcy9rc21iZC9vcGxvY2suYzo5MTY6IFdBUk5JTkcg
-b3Bwb3J0dW5pdHkgZm9yIG1pbigpCmZzL2hwZnMvbmFtZS5jOjc5OiBXQVJOSU5HIG9wcG9ydHVu
-aXR5IGZvciBtaW4oKQoKU2lnbmVkLW9mZi1ieTogS2FpTG9uZyBXYW5nIDx3YW5na2FpbG9uZ0Bq
-YXJpLmNuPgotLS0KIGZzL2V4dDQvaW5saW5lLmMgIHwgMyArLS0KIGZzL2hwZnMvbmFtZS5jICAg
-IHwgMiArLQogZnMvaXNvZnMvaW5vZGUuYyAgfCAyICstCiBmcy9rc21iZC9vcGxvY2suYyB8IDQg
-KystLQogNCBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCgpk
-aWZmIC0tZ2l0IGEvZnMvZXh0NC9pbmxpbmUuYyBiL2ZzL2V4dDQvaW5saW5lLmMKaW5kZXggYTRm
-YmU4MjU2OTRiLi4xOTQ4MWYzMmRkZmMgMTAwNjQ0Ci0tLSBhL2ZzL2V4dDQvaW5saW5lLmMKKysr
-IGIvZnMvZXh0NC9pbmxpbmUuYwpAQCAtMTgwLDggKzE4MCw3IEBAIHN0YXRpYyBpbnQgZXh0NF9y
-ZWFkX2lubGluZV9kYXRhKHN0cnVjdCBpbm9kZSAqaW5vZGUsIHZvaWQgKmJ1ZmZlciwKIAogCUJV
-R19PTihsZW4gPiBFWFQ0X0koaW5vZGUpLT5pX2lubGluZV9zaXplKTsKIAotCWNwX2xlbiA9IGxl
-biA8IEVYVDRfTUlOX0lOTElORV9EQVRBX1NJWkUgPwotCQkJbGVuIDogRVhUNF9NSU5fSU5MSU5F
-X0RBVEFfU0laRTsKKwljcF9sZW4gPSBtaW4obGVuLCBFWFQ0X01JTl9JTkxJTkVfREFUQV9TSVpF
-KTsKIAogCXJhd19pbm9kZSA9IGV4dDRfcmF3X2lub2RlKGlsb2MpOwogCW1lbWNweShidWZmZXIs
-ICh2b2lkICopKHJhd19pbm9kZS0+aV9ibG9jayksIGNwX2xlbik7CmRpZmYgLS1naXQgYS9mcy9o
-cGZzL25hbWUuYyBiL2ZzL2hwZnMvbmFtZS5jCmluZGV4IGVmN2JhNzdmMzZiOC4uY2E2MTYwYTZk
-NmY5IDEwMDY0NAotLS0gYS9mcy9ocGZzL25hbWUuYworKysgYi9mcy9ocGZzL25hbWUuYwpAQCAt
-NzYsNyArNzYsNyBAQCBpbnQgaHBmc19jb21wYXJlX25hbWVzKHN0cnVjdCBzdXBlcl9ibG9jayAq
-cywKIAkJICAgICAgIGNvbnN0IHVuc2lnbmVkIGNoYXIgKm4xLCB1bnNpZ25lZCBsMSwKIAkJICAg
-ICAgIGNvbnN0IHVuc2lnbmVkIGNoYXIgKm4yLCB1bnNpZ25lZCBsMiwgaW50IGxhc3QpCiB7Ci0J
-dW5zaWduZWQgbCA9IGwxIDwgbDIgPyBsMSA6IGwyOworCXVuc2lnbmVkIGwgPSBtaW4obDEsIGwy
-KTsKIAl1bnNpZ25lZCBpOwogCWlmIChsYXN0KSByZXR1cm4gLTE7CiAJZm9yIChpID0gMDsgaSA8
-IGw7IGkrKykgewpkaWZmIC0tZ2l0IGEvZnMvaXNvZnMvaW5vZGUuYyBiL2ZzL2lzb2ZzL2lub2Rl
-LmMKaW5kZXggZGY5ZDcwNTg4YjYwLi5lOGMxY2FkMDRiZDIgMTAwNjQ0Ci0tLSBhL2ZzL2lzb2Zz
-L2lub2RlLmMKKysrIGIvZnMvaXNvZnMvaW5vZGUuYwpAQCAtMTE1MCw3ICsxMTUwLDcgQEAgc3Rh
-dGljIGludCBpc29mc19nZXRfYmxvY2soc3RydWN0IGlub2RlICppbm9kZSwgc2VjdG9yX3QgaWJs
-b2NrLAogCX0KIAogCXJldCA9IGlzb2ZzX2dldF9ibG9ja3MoaW5vZGUsIGlibG9jaywgJmJoX3Jl
-c3VsdCwgMSk7Ci0JcmV0dXJuIHJldCA8IDAgPyByZXQgOiAwOworCXJldHVybiBtaW4ocmV0LCAw
-KTsKIH0KIAogc3RhdGljIGludCBpc29mc19ibWFwKHN0cnVjdCBpbm9kZSAqaW5vZGUsIHNlY3Rv
-cl90IGJsb2NrKQpkaWZmIC0tZ2l0IGEvZnMva3NtYmQvb3Bsb2NrLmMgYi9mcy9rc21iZC9vcGxv
-Y2suYwppbmRleCBkN2Q0N2I4MjQ1MWQuLjk0ZWM4ZDAyZDg3NyAxMDA2NDQKLS0tIGEvZnMva3Nt
-YmQvb3Bsb2NrLmMKKysrIGIvZnMva3NtYmQvb3Bsb2NrLmMKQEAgLTg3OSw3ICs4NzksNyBAQCBz
-dGF0aWMgaW50IG9wbG9ja19icmVhayhzdHJ1Y3Qgb3Bsb2NrX2luZm8gKmJya19vcGluZm8sIGlu
-dCByZXFfb3BfbGV2ZWwpCiAKIAkJZXJyID0gb3Bsb2NrX2JyZWFrX3BlbmRpbmcoYnJrX29waW5m
-bywgcmVxX29wX2xldmVsKTsKIAkJaWYgKGVycikKLQkJCXJldHVybiBlcnIgPCAwID8gZXJyIDog
-MDsKKwkJCXJldHVybiBtaW4oZXJyLCAwKTsKIAogCQlpZiAoYnJrX29waW5mby0+b3Blbl90cnVu
-YykgewogCQkJLyoKQEAgLTkxMyw3ICs5MTMsNyBAQCBzdGF0aWMgaW50IG9wbG9ja19icmVhayhz
-dHJ1Y3Qgb3Bsb2NrX2luZm8gKmJya19vcGluZm8sIGludCByZXFfb3BfbGV2ZWwpCiAJfSBlbHNl
-IHsKIAkJZXJyID0gb3Bsb2NrX2JyZWFrX3BlbmRpbmcoYnJrX29waW5mbywgcmVxX29wX2xldmVs
-KTsKIAkJaWYgKGVycikKLQkJCXJldHVybiBlcnIgPCAwID8gZXJyIDogMDsKKwkJCXJldHVybiBt
-aW4oZXJyLCAwKTsKIAogCQlpZiAoYnJrX29waW5mby0+bGV2ZWwgPT0gU01CMl9PUExPQ0tfTEVW
-RUxfQkFUQ0ggfHwKIAkJICAgIGJya19vcGluZm8tPmxldmVsID09IFNNQjJfT1BMT0NLX0xFVkVM
-X0VYQ0xVU0lWRSkKLS0gCjIuMjUuMQo=
+On 10/25/22 14:25, Kanchan Joshi wrote:
+> On Fri, Oct 21, 2022 at 11:34:04AM +0100, Pavel Begunkov wrote:
+>> Add bio pcpu caching for normal / IRQ-driven I/O extending REQ_ALLOC_CACHE,
+>> which was limited to iopoll. 
+> 
+> So below comment (stating process context as MUST) can also be removed as
+> part of this series now?
+
+Right, good point
+
+
+> 495  * If REQ_ALLOC_CACHE is set, the final put of the bio MUST be done from process
+> 496  * context, not hard/soft IRQ.
+> 497  *
+> 498  * Returns: Pointer to new bio on success, NULL on failure.
+> 499  */
+> 500 struct bio *bio_alloc_bioset(struct block_device *bdev, unsigned short nr_vecs,
+> 501                              blk_opf_t opf, gfp_t gfp_mask,
+> 502                              struct bio_set *bs)
+> 503 {
+[...]
+>> The next step will be turning it on for other users, hopefully by default.
+>> The only restriction we currently have is that the allocations can't be
+>> done from non-irq context and so needs auditing.
+> 
+> Isn't allocation (of bio) happening in non-irq context already?
+
+That's my assumption, true for most of them, but I need to actually
+check that. Will be following up after this series is merged.
+
+
+> Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
+
+thanks
+
+-- 
+Pavel Begunkov
