@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB68660CCE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B434560CCE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbiJYND2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
+        id S231752AbiJYNDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232670AbiJYNCg (ORCPT
+        with ESMTP id S232600AbiJYNCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:02:36 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50698CC82E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:00:59 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1onJY9-0005ei-Ga; Tue, 25 Oct 2022 15:00:57 +0200
-Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1onJY9-000JYF-OD; Tue, 25 Oct 2022 15:00:56 +0200
-Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <lgo@pengutronix.de>)
-        id 1onJY7-00Dg1R-Re; Tue, 25 Oct 2022 15:00:55 +0200
-From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel@pengutronix.de
-Subject: [PATCH v2 0/2] iio: adc: add ADC driver for the TI LMP92064
-Date:   Tue, 25 Oct 2022 15:00:22 +0200
-Message-Id: <20221025130023.3259128-1-l.goehrs@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Tue, 25 Oct 2022 09:02:23 -0400
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 757FBA8356;
+        Tue, 25 Oct 2022 06:00:45 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 15:00:40 +0200
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Michael Lilja <michael.lilja@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: Re: [PATCH] Periodically flow expire from flow offload tables
+Message-ID: <Y1fd+DEPZ8xM2x5B@salvia>
+References: <20221023171658.69761-1-michael.lilja@gmail.com>
+ <Y1fC5K0EalIYuB7Y@salvia>
+ <381FF5B6-4FEF-45E9-92D6-6FE927A5CC2D@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: multipart/mixed; boundary="1rcC1yEX000eNPzk"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: lgo@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <381FF5B6-4FEF-45E9-92D6-6FE927A5CC2D@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -50,34 +46,112 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Changes from v1 -> v2:
+--1rcC1yEX000eNPzk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
- - Rebase from 6.0 to 6.1-rc2 to get access to devm_regulator_get_enable.
- - Use regmap instead of raw SPI commands. This fixes multiple issues:
-   - Remove need to assemble register address using bit shifts.
-   - Remove non DMA-safe stack-allocated buffers.
-   - Regmap has internal lock handling, removing the need for locking in the
-     driver read code using mlock.
- - Use be16_to_cpu() instead of manually assembling values using bit shifts.
- - Use generic device_property_read_u32() instead of devicetree specific
-   of_property_read_u32().
- - Rename the "shunt-resistor" devicetree property to
-   "shunt-resistor-micro-ohms".
- - Add supply regulator support for the two voltage domains of the chip
-   (vdd and vdig).
- - Only perform soft reset if no GPIO line for hard resets is available.
- - Change the error returned if the device does not respond after a reset
-   from "EBUSY" to "ENXIO" to indicate that this is likely a persistent
-   error (like a broken connection).
- - Don't set the SPI mode manually.
- - Provide a spi_device_id table.
- - Declare local variables in reverse christmas tree order.
- - Fix formatting of multi-line comments and some whitespace issues.
- - Fix typos and missing "allOf:$ref to spi-peripheral-props.yaml"
-   in devicetree bindings.
+Hi,
 
-See https://lore.kernel.org/lkml/20221004134238.3144326-1-l.goehrs@pengutronix.de/
-for the v1.
- 
-Thanks to Marcus, Jonathan and Krzysztof for the reviews.
+On Tue, Oct 25, 2022 at 02:36:35PM +0200, Michael Lilja wrote:
+> Hi,
+> 
+> No problem. Here is a snippet of the rulesets in play. I simplified it because there are a lot of devices and a lot of schedules per device. The ‘mark’ is set by userspace so not all flow types are offloaded, that is controlled by userspace:
+> 
+> - - - - snip start - - - - 
+> table inet fw4 {
+> 	flowtable ft {
+> 	hook ingress priority filter
+> 	devices = { lan1, lan2, wan }
+> 	flags offload
+> }
+> 
+>  chain mangle_forward {
+> 	type filter hook forward priority mangle; policy
+> 	meta mark set ct mark
+> 	meta mark 0x00000000/16 queue flags bypass to 0
+>  }
+> 
+> 
+> chain my_devices_rules {
+> 	ether saddr 96:68:97:a7:e8:a7 jump fw_p0_dev0 comment “Device match”
+> }
+> 
+> chain fw_p0_dev0 {
+> 	meta time >= "2022-10-09 18:46:50" meta time < "2022-10-09 19:16:50" counter packets 0 bytes 0 drop comment "!Schedule OFFLINE override"
+> 	meta day “Tuesday" meta hour >= "06:00" meta hour < "07:00" drop
+> }
+> 
+> chain forward {
+> 	 type filter hook forward priority filter; policy accept;
+> 	jump my_devices_rules
+> }
+> 
+> chain my_forward_offload {
+> 	type filter hook forward priority filter + 1; policy accept;
+> 	meta mark != 0x00000000/16 meta l4proto { tcp, udp } flow add @ft
+> }
+> 
+> chain mangle_postrouting {
+> 	type filter hook postrouting priority mangle; policy accept;
+> 	ct mark set meta mark
+> }
+> - - - - snip end - - - -
+> 
+> The use case is that I have schedules per device to control when
+> they are allowed access to the internet and if the flows are
+> offloaded they will not get dropped once the schedule kicks in.
 
+Thanks for explaining.
+
+I suggest to move your 'forward' chain to netdev/ingress using priority
+
+      filter - 1
+
+so the time schedule evaluation is always done before the flowtable
+lookup, that is, schedules rules will be always evaluated.
+
+In your example, you are using a linear ruleset, which might defeat
+the purpose of the flowtable. So I'm attaching a new ruleset
+transformed to use maps and the ingress chain as suggested.
+
+--1rcC1yEX000eNPzk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment; filename="schedules.nft"
+
+table netdev filter {
+	map ether_to_chain {
+		typeof ether saddr : verdict
+		elements = { 96:68:97:a7:e8:a7 comment "Device match" : jump fw_p0_dev0 }
+	}
+
+	map schedule_time {
+		typeof meta time : verdict
+		flags interval
+		counter
+		elements = { "2022-10-09 18:46:50" - "2022-10-09 19:16:50" comment "!Schedule OFFLINE override" : drop }
+	}
+
+	map schedule_day {
+		typeof meta day . meta hour : verdict
+		flags interval
+		counter
+		elements = { "Tuesday" . "06:00" - "07:00" : drop }
+	}
+
+	chain fw_p0_dev0 {
+		meta time vmap @schedule_time
+		meta day . meta hour vmap @schedule_day
+	}
+
+	chain my_devices_rules {
+		ether saddr vmap @ether_to_chain
+	}
+
+	chain ingress {
+		type filter hook ingress device eth0 priority filter; policy accept;
+		jump my_devices_rules
+	}
+}
+
+--1rcC1yEX000eNPzk--
