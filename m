@@ -2,138 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E43060CCD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA00660CCDC
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbiJYNB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:01:59 -0400
+        id S231837AbiJYNCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:02:18 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbiJYNB2 (ORCPT
+        with ESMTP id S232506AbiJYNB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:01:28 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C8F40018
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:00:07 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id g12so11267781lfh.3
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:00:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z1vsiNiiwIzZazksMN4ViTwO/hUhf//I8PrPGoa++Tk=;
-        b=GwA9tKkg3KqV61c5lfKLPKdG1DX5e/JvV06NDdkBtaVJKrU2f3E4dty4qvjdeOWzLn
-         heO/scJkO15GIwW/G3uCUq+eS96D57e2vSdj8IxMrLLHYfVGS41NbgLG7iZNZELYgG6G
-         V5ue9W7UI8aW1NSSeHUMMqYS9tB+wKCLumfd0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z1vsiNiiwIzZazksMN4ViTwO/hUhf//I8PrPGoa++Tk=;
-        b=LrO4VpN8I8HLQcgCJJIrUfLYMZ21xwQHAx07gU3wHccQ35N7j/Li7x8A5NT6kbMVN5
-         GlGEkyecmLBSR7uisxnBQrhpDjON0xiVwr0EgAwzTfLkXRKvdYojMIMZ1vEPXajWK2yb
-         mtLUygU5yLs3uREB0f6SKxPLWceq48lQsB9u3Wnlb+6m7Yc7Cl3TvEGtWuybTPugWWr4
-         d/xFvy7lb5rK+vCoGDptzN5idzn1YA6+rIfe/FJyhU/ZfuUAnxhb7pJWubDSpv59bERz
-         AK3jX5xHpSL7Z+kwZcrP3dhIDmp/gJU8D32tkkvnu9ZDNiHu/euMB4Nsela9pRoSx9KF
-         qQXA==
-X-Gm-Message-State: ACrzQf3ARF18x4pWcXfQzcvfpqgJDcycuVL7tkstnUUQFkOYUOXVQ0au
-        QI/c8vmd/JUpYhOnxdh/MbKlwQ==
-X-Google-Smtp-Source: AMsMyM7Q2fXlsUL7oaT2JfPvfQdxLOGBb13Zb2izx5WUCdkga5xn+aQuIdqj2tDC7PQ/Yk9OWkJhuA==
-X-Received: by 2002:a05:6512:b0e:b0:4ae:9d2:544e with SMTP id w14-20020a0565120b0e00b004ae09d2544emr993095lfu.461.1666702806226;
-        Tue, 25 Oct 2022 06:00:06 -0700 (PDT)
-Received: from localhost.localdomain ([87.54.42.112])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05651205c600b00497aae401edsm406722lfo.109.2022.10.25.06.00.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 06:00:05 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Miroslav Benes <mbenes@suse.cz>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kernel/params.c: defer most of param_sysfs_init() to late_initcall time
-Date:   Tue, 25 Oct 2022 15:00:02 +0200
-Message-Id: <20221025130003.1116366-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Tue, 25 Oct 2022 09:01:56 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47696DAFB;
+        Tue, 25 Oct 2022 06:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1666702811;
+        bh=wsDhwFYF2ypw9VCnpe60sIBdnr/nisSCe9ukcSaSRJc=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=HeBGreJuEr0HxgZjQSTleJuyFSwNYqu58sCfGzb0FtLR/c6HqBEXAqs9qHeNp4ur/
+         lftOHiS0chQj7YchcW10fjb6r5f5Zk1pzZriv/gV2GY6Zhv4mcXaNDy00v21c1qoJF
+         mHAP0MEO3dO8w/2F25tUY1tBkJWJGVUWV5xMGXhM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.173.118]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M3lc9-1omUSO0PND-000wT2; Tue, 25
+ Oct 2022 15:00:11 +0200
+Message-ID: <d8ece597-33a1-fa9e-919c-e366baf429a8@gmx.de>
+Date:   Tue, 25 Oct 2022 15:00:10 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] video: fbdev: sis: use explicitly signed char
+Content-Language: en-US
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Thomas Winischhofer <thomas@winischhofer.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20221024162901.535972-1-Jason@zx2c4.com>
+ <ec8edb92-a21b-6291-4275-d7cba97d7ad7@gmx.de>
+ <CAHmME9r=E=sUEU0_thtrj6agd_8YbTVUm2fEsErGKM-ff6y03w@mail.gmail.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <CAHmME9r=E=sUEU0_thtrj6agd_8YbTVUm2fEsErGKM-ff6y03w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:3jd4/zuW7A1CY/7wnyvEZTEZ75iH/CycOOhyBADdI+VYatFG8BU
+ r8yAOfCMJXTYpe8IB05uMf0a5Pg/TfTvUipZsO1vqgDPGvkmVVIJrJT89JdX3H8NDL7u/Ol
+ OFDiAy0ITEF1G+3zCOAUCK3rRcG9kuCi4h0Gl/yW6IdavWS9LJhHVgsOlUUz0BtpkqStzeF
+ SZVVS2Vp1qxaKVl4DX8eQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:p9RwJudlmmI=:P8aM+/cDAX+TuByCTv6svH
+ rGu5tv79wQt9hOXjkhmD7vBtcHcWwPR+InAILrrdho5rXzIqdk80MBXWSJUJ8etARgqHPIWHG
+ 3AbvJsXolUzL2qUb9NqrlXM5AdIsr4ggGtABPN2nwA7ZZ7hbcKDtlV+rZGhl4QB11/+5cMl4C
+ i3YUnEnVcNYag23c/lozSIiQPyKVIBwv6IoF0H49JGtN6jDgs2wwgyhl8Y2r15PLvo3tQUJiQ
+ 9Pt1zgIpfQlcjjfgt4aycCpe66uYMCXQeos8LJSZYGTYaA8IW4bM7fRLp3BUuqV3finMlLV75
+ xVgsCs7uwq/Ev5Z/ECDkJFpU1gCwwYSk1g+Md7Kzz2Ow0Q9i+aBLnN5WEP2vqPJ+YkRr041pe
+ DQTCLKwNkkUG4sgStm583HtxhCB2hk3RTeDUBPlXCAKXHjrz9JPzGQ6snn1Ck3MpK6VaHJ2VP
+ lOMHlpHtL3ZHANwmTHa4GcBNySu5UAhGGKmqZP2/rTXL3QoQveXaoayEotjaO4uv5TtB9BZmH
+ cdXOceDmwXggpM8UR6RbfhhVHfg7p3XtERF1oj5SJnxy9xaQBLK+n+GoldiIt34RA5SH42/Gq
+ eN/UxC0dXMuFOkVa05Bk1XFfxWG40LVJI8TcqXSsH25yF3jfBZTIOWwrkfzzO4nOGdLlsDg3B
+ JdfaxEyv8bX+mHTSZJp3qKI8NLGQdN9hUbirr0+eNbx735C6w58smWNoCZ8DcGpkiZmDQ2XJ9
+ lqewWxcnwGYKJ2NK1r86oGr1l7rKr5eeNhrM6FZltFKKCkAwRd941SVGjLqcuNG2oZinqM1jv
+ HU2EJjyz/tkRqiWLQWZ5kHQ7mWD5e0uvVCZhgfqid6eYp0jo49lAJgD3/GEoXroRD44ZfGJ0k
+ 558ZJnCPNpLPi3IEZsLEGWJaYs8vsSXGQr5zMnlqQ5rjw9P5bpxgVyZhhnWiGYLlQgwxaiSYQ
+ o6ewWdullqeQN4FrYSannHJqek/cMU6cUjA28ragWGpyWvc+Eua0PnN2MkSg0hO+Tbv5UemJT
+ Jbc/6DY++byRPGnoRhxIHCsKCnilI9kpcCD7n1EkqP1DfXOsm2zwZqBir+/z9kXo24abFjfm0
+ v758+kY2PE0m8Ot0S7aSsrQSENaCKoLTsO+83cyzDZZROCqdiuUezkphn3sc/VWSX+4J2Smpm
+ M7rJbnhPyfXz+uZslPfQ2pLwljUoCS02T8AHn8RaIHMFD0zc5GEJbBf9hh0svO4z9TFUqGwbn
+ H9sn6sTeHAMjAlRvye9WBFjpEERlmltbvkFGAJ2r5KIEEsZ56+4zXjpdIxB1ABkJPh3ulBcnQ
+ RiDdVgeKDItVxDvhaBQSlbZ69ZHvpXEqcHnZ4h+cQEXdm3kSzGK8HBA6dKneskrEQFw7NzSLi
+ 9ySJ8pbcn+ZNLxwNOmC6KhM884NAzFTituKMbXaEhCHdGy8u3/iX2vF9Cz9I9l8cuuhrfylIz
+ CeJESdJgEA5qkhLI4O4Kk/Kh6lxyw6cWynkuBhXYRF55FbCTaTbsqpB95RqZMrWc8lSg71jSe
+ 44/Ta6HzDDmep0aznGk+xnkihgK+f4wdDYl3yf3uIsHG6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-param_sysfs_init(), and in particular param_sysfs_builtin() is rather
-time-consuming; for my board, it currently takes about 30ms.
+On 10/25/22 14:55, Jason A. Donenfeld wrote:
+> On Mon, Oct 24, 2022 at 8:29 PM Helge Deller <deller@gmx.de> wrote:
+>>
+>> On 10/24/22 18:29, Jason A. Donenfeld wrote:
+>>> With char becoming unsigned by default, and with `char` alone being
+>>> ambiguous and based on architecture, signed chars need to be marked
+>>> explicitly as such. This fixes warnings like:
+>>>
+>>> drivers/video/fbdev/sis/init301.c:3549 SiS_GetCRT2Data301() warn: 'SiS=
+_Pr->SiS_EModeIDTable[ModeIdIndex]->ROMMODEIDX661' is unsigned
+>>>
+>>> Cc: Thomas Winischhofer <thomas@winischhofer.net>
+>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>> Cc: Helge Deller <deller@gmx.de>
+>>> Cc: linux-usb@vger.kernel.org
+>>> Cc: linux-fbdev@vger.kernel.org
+>>> Cc: dri-devel@lists.freedesktop.org
+>>> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+>>
+>> Applied to linux-fbdev git tree.
+>
+> For 6.1 as a fix, right? Since this is already broken on, e.g., ARM.
 
-That amounts to about 3% of the time budget I have from U-Boot hands
-over control to linux and linux must assume responsibility for keeping
-the external watchdog happy.
+Yes.
 
-We must still continue to initialize module_kset at subsys_initcall
-time, since otherwise any request_module() would fail in
-mod_sysfs_init(). However, the bulk of the work in
-param_sysfs_builtin(), namely populating /sys/module/*/version and/or
-/sys/module/*/parameters/ for builtin modules, can be deferred to
-late_initcall time - there's no userspace yet anyway to observe
-contents of /sys or the lack thereof.
-
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
-
-This is on top of
-https://lore.kernel.org/lkml/20220929121039.702873-1-linux@rasmusvillemoes.dk/
-which I think has been applied somewhere, but I can't yet find it in
-linux-next.
-
- kernel/params.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/params.c b/kernel/params.c
-index 8d4e9a3f0df2..db524cf51231 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -953,7 +953,7 @@ struct kobj_type module_ktype = {
- };
- 
- /*
-- * param_sysfs_init - wrapper for built-in params support
-+ * param_sysfs_init - create "module" kset
-  */
- static int __init param_sysfs_init(void)
- {
-@@ -964,11 +964,24 @@ static int __init param_sysfs_init(void)
- 		return -ENOMEM;
- 	}
- 
-+	return 0;
-+}
-+subsys_initcall(param_sysfs_init);
-+
-+/*
-+ * param_sysfs_builtin_init - add sysfs version and parameter
-+ * attributes for built-in modules
-+ */
-+static int __init param_sysfs_builtin_init(void)
-+{
-+	if (!module_kset)
-+		return -ENOMEM;
-+
- 	version_sysfs_builtin();
- 	param_sysfs_builtin();
- 
- 	return 0;
- }
--subsys_initcall(param_sysfs_init);
-+late_initcall(param_sysfs_builtin_init);
- 
- #endif /* CONFIG_SYSFS */
--- 
-2.37.2
+Helge
 
