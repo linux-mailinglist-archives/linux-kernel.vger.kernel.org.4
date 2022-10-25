@@ -2,129 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4981960C565
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C8260C572
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiJYHgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
+        id S231709AbiJYHhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiJYHgJ (ORCPT
+        with ESMTP id S231715AbiJYHhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:36:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5175437E2;
-        Tue, 25 Oct 2022 00:36:05 -0700 (PDT)
+        Tue, 25 Oct 2022 03:37:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D209EC2C87;
+        Tue, 25 Oct 2022 00:37:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F957617B5;
-        Tue, 25 Oct 2022 07:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1850DC433D6;
-        Tue, 25 Oct 2022 07:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666683364;
-        bh=csTN+if518gFOuGYlWzyn01/ZqMgQMJaa5htwhFMhvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1P49JiLnbXMLkKWKAQwcLZSo8ZsuUxg5HcnhKUedNDsS3qKT+ioTwHCavQnQKDUPm
-         6sVKW3qpzs37cHjAbypmHHF7m55VNF9UbtUMtdSBlLZmHONqN/YM5+QUuIdBoppNe6
-         zreakjbjrhh+S+9VCh+jN2DZ5RubOBlCBwspCH8w=
-Date:   Tue, 25 Oct 2022 09:36:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Cc:     scott.d.constable@intel.com, daniel.sneddon@linux.intel.com,
-        Jakub Kicinski <kuba@kernel.org>, dave.hansen@intel.com,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        antonio.gomez.iglesias@linux.intel.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, netdev@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] minstrel_ht: Mitigate BTI gadget
- minstrel_ht_get_expected_throughput()
-Message-ID: <Y1eSGK5vylNmBbVp@kroah.com>
-References: <cover.1666651511.git.pawan.kumar.gupta@linux.intel.com>
- <ceb2bcdc79f1494151e85734fa7bdc639df275bb.1666651511.git.pawan.kumar.gupta@linux.intel.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 92684B81BB6;
+        Tue, 25 Oct 2022 07:37:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A15C433C1;
+        Tue, 25 Oct 2022 07:37:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666683465;
+        bh=1yX3XLwCIhZx3uwra6UtSiNAmlaJnOcsv2QPETxZ664=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=K1rSMc7GcLUQDeO+5XxekX7xVKwvnjKfu9tgSuK5olqF9l8nkCZ9H1WtdD68cd056
+         LDImUXXHHNXee0P6/mkk59g+8lozGFObp4EiioJN8Ctm5hJjskhKyE2UsaK+fzrBOS
+         M766NzPdjJ15Zq4sXNik7gkYMEgUIr91M7lNHXxrJCerElfYPnjohbYmARV2zIBRKN
+         foCIlet/wryE4Mp7LyZi5IkS4a0STzGRRgh0XF1suIfetpIAjHtheudgt7tCKmvJif
+         98FgSODnbFdrG5Kq9bNpPeLM6ZlXNGmXHGeYhTaGkja8uxqdHUVAehaqJyGjaSRbYV
+         QlC7rAx/dNVEA==
+From:   Leon Romanovsky <leon@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-rdma@vger.kernel.org
+Cc:     wsa+renesas@sang-engineering.com, dledford@redhat.com,
+        matanb@mellanox.com, avihaih@nvidia.com,
+        penguin-kernel@I-love.SAKURA.ne.jp, jgg@ziepe.ca, raeds@nvidia.com
+In-Reply-To: <20221025024146.109137-1-chenzhongjin@huawei.com>
+References: <20221025024146.109137-1-chenzhongjin@huawei.com>
+Subject: Re: [PATCH] RDMA/core: Fix null-ptr-deref in ib_core_cleanup()
+Message-Id: <166668346207.75287.12802762328335692637.b4-ty@kernel.org>
+Date:   Tue, 25 Oct 2022 10:37:42 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ceb2bcdc79f1494151e85734fa7bdc639df275bb.1666651511.git.pawan.kumar.gupta@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-87e0e
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 03:57:47PM -0700, Pawan Gupta wrote:
-> Static analysis indicate that indirect target
-> minstrel_ht_get_expected_throughput() could be used as a disclosure
-> gadget for Intra-mode Branch Target Injection (IMBTI) and Branch History
-> Injection (BHI).
-
-You define these new TLAs here, but the code comment below does not,
-making this code now impossible to understand :(
-
-> ASM generated by compilers indicate a construct of a typical disclosure
-> gadget, where an adversary-controlled register contents can be used to
-> transiently access an arbitrary memory location.
-
-If you have an "adveraray-controlled register contents", why would you
-waste that on a mere speculation attack and not do something better,
-like get root instead?
-
-> Although there are no known ways to exploit this, but to be on safer
-> side mitigate it by adding a speculation barrier.
+On Tue, 25 Oct 2022 10:41:46 +0800, Chen Zhongjin wrote:
+> KASAN reported a null-ptr-deref error:
 > 
-> Reported-by: Scott D. Constable <scott.d.constable@intel.com>
-> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> ---
->  net/mac80211/rc80211_minstrel_ht.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> KASAN: null-ptr-deref in range [0x0000000000000118-0x000000000000011f]
+> CPU: 1 PID: 379
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+> RIP: 0010:destroy_workqueue+0x2f/0x740
+> RSP: 0018:ffff888016137df8 EFLAGS: 00000202
+> ...
+> Call Trace:
+>  <TASK>
+>  ib_core_cleanup+0xa/0xa1 [ib_core]
+>  __do_sys_delete_module.constprop.0+0x34f/0x5b0
+>  do_syscall_64+0x3a/0x90
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7fa1a0d221b7
+> ...
+>  </TASK>
 > 
-> diff --git a/net/mac80211/rc80211_minstrel_ht.c b/net/mac80211/rc80211_minstrel_ht.c
-> index 3d91b98db099..7cf90666a865 100644
-> --- a/net/mac80211/rc80211_minstrel_ht.c
-> +++ b/net/mac80211/rc80211_minstrel_ht.c
-> @@ -11,6 +11,7 @@
->  #include <linux/moduleparam.h>
->  #include <linux/ieee80211.h>
->  #include <linux/minmax.h>
-> +#include <linux/nospec.h>
->  #include <net/mac80211.h>
->  #include "rate.h"
->  #include "sta_info.h"
-> @@ -1999,6 +2000,14 @@ static u32 minstrel_ht_get_expected_throughput(void *priv_sta)
->  	struct minstrel_ht_sta *mi = priv_sta;
->  	int i, j, prob, tp_avg;
->  
-> +	/*
-> +	 * Protect against IMBTI/BHI.
+> [...]
 
-This makes no sense here, right?
+Applied, thanks!
 
-And you are NOT following the proper networking comment style, didn't
-checkpatch complain about this?
+[1/1] RDMA/core: Fix null-ptr-deref in ib_core_cleanup()
+      https://git.kernel.org/rdma/rdma/c/ad9394a3da3399
 
-> +	 *
-> +	 * Transiently executing this function with an adversary controlled
-> +	 * argument may disclose secrets. Speculation barrier prevents that.
-> +	 */
-> +	barrier_nospec();
-
-So how much did you just slow down the normal use of the system?
-
-> +
->  	i = MI_RATE_GROUP(mi->max_tp_rate[0]);
->  	j = MI_RATE_IDX(mi->max_tp_rate[0]);
-
-These are all internal structures, can't you just bounds-prevent the
-speculation instead of the hard barrier?
-
-thanks,
-
-greg k-h
+Best regards,
+-- 
+Leon Romanovsky <leon@kernel.org>
