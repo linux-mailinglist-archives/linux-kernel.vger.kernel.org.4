@@ -2,175 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541C660C9E4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67FD60C9E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbiJYKWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S232270AbiJYKWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232435AbiJYKVd (ORCPT
+        with ESMTP id S232184AbiJYKVm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:21:33 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2558713669F;
-        Tue, 25 Oct 2022 03:18:47 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Tue, 25 Oct 2022 06:21:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D244825F6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666693155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2HG73spb/6yEKDnuiniZI5mjP3/NK2ZeRipm0BSN9WA=;
+        b=Yyt4GX+ntHqXVqPO4awSVnI/SKpQholYK8gbDbUXAQqu1IBWFTYgHFTBfAPzwTaLq2V1pH
+        2t0Pfdld3fFLidw6yO+O9L7iJs+xPYvpii5W91NW4aKJGc+h6JKqPGaOZuTtb1LQoT0OPB
+        fo0B48xdmF0ZgRSOmrpXhtLs5rm5nIA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-522-Szj1dSiuM0KnjlSVicR6zQ-1; Tue, 25 Oct 2022 06:19:13 -0400
+X-MC-Unique: Szj1dSiuM0KnjlSVicR6zQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 38415660239C;
-        Tue, 25 Oct 2022 11:18:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666693125;
-        bh=oPF1o7oWPbryY18wvQiyqLyaSGkoOyYT6E+3DLkyLxs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aNxRpUtzvLMgc0F9bQ4w3Pla8RcdaRHv8Cryqkg+evUgzf2jE9kuUy6pcnO1hkucl
-         Jxs+diruWGkYOA5oU2Ydei2qtQTk2zOPW8nOwQ9P6wgrPpb1tnG0ghdJUGwuzOoFA4
-         +OuqXMVALz5ew3SouzOGDkE75nmFAkIzvs5/N7157pve+pFQ72TchQWZvqYE0G2ywj
-         XP9Ek3H4XfIEHoEw6kSfPSsCX0Im0z7EL2shxzG0l9lTgD2le5qep7g43dQBdxqEse
-         4kvlwIAGfvJBU13l1Y3aXlo/y8+BThw2hlbrBHzTRyfMALtthobTNh9w44it19NZhX
-         bYp2HlOWhlALQ==
-Message-ID: <473d67ed-198f-82c6-9f32-5827c1f8c852@collabora.com>
-Date:   Tue, 25 Oct 2022 12:18:43 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E86C7833A38;
+        Tue, 25 Oct 2022 10:19:06 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (ovpn-194-221.brq.redhat.com [10.40.194.221])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 558BAC15BAB;
+        Tue, 25 Oct 2022 10:19:02 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue, 25 Oct 2022 12:19:06 +0200 (CEST)
+Date:   Tue, 25 Oct 2022 12:19:00 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     chen zhang <chenzhang@kylinos.cn>
+Cc:     chenzhang_0901@163.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ptrace: disable single step in __ptrace_unlink for
+ protecting init task
+Message-ID: <20221025101858.GB17158@redhat.com>
+References: <20221025051032.280352-1-chenzhang@kylinos.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 03/12] ASoC: mediatek: mt8188: support audsys clock
-Content-Language: en-US
-To:     =?UTF-8?B?VHJldm9yIFd1ICjlkLPmlofoia8p?= <Trevor.Wu@mediatek.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "tiwai@suse.com" <tiwai@suse.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-References: <20221021082719.18325-1-trevor.wu@mediatek.com>
- <20221021082719.18325-4-trevor.wu@mediatek.com>
- <de66f0e3-7694-7315-c896-9211259a1a17@collabora.com>
- <776557c0fda5a538549ee0d4f4b7f482b0d69934.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <776557c0fda5a538549ee0d4f4b7f482b0d69934.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025051032.280352-1-chenzhang@kylinos.cn>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/10/22 11:58, Trevor Wu (吳文良) ha scritto:
-> On Fri, 2022-10-21 at 10:41 +0200, AngeloGioacchino Del Regno wrote:
->> Il 21/10/22 10:27, Trevor Wu ha scritto:
->>> Add mt8188 audio cg clock control. Audio clock gates are registered
->>> to CCF
->>> for reference count and clock parent management.
->>>
->>> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
->>> ---
->>>    sound/soc/mediatek/mt8188/mt8188-audsys-clk.c | 206
->>> ++++++++++++++++++
->>>    sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |  15 ++
->>>    .../soc/mediatek/mt8188/mt8188-audsys-clkid.h |  83 +++++++
->>>    3 files changed, 304 insertions(+)
->>>    create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>>    create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-clk.h
->>>    create mode 100644 sound/soc/mediatek/mt8188/mt8188-audsys-
->>> clkid.h
->>>
->>> diff --git a/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>> b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>> new file mode 100644
->>> index 000000000000..1f294231d4c2
->>> --- /dev/null
->>> +++ b/sound/soc/mediatek/mt8188/mt8188-audsys-clk.c
->>> @@ -0,0 +1,206 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * mt8188-audsys-clk.c  --  MediaTek 8188 audsys clock control
->>> + *
->>> + * Copyright (c) 2022 MediaTek Inc.
->>> + * Author: Chun-Chia Chiu <chun-chia.chiu@mediatek.com>
->>> + */
->>> +
->>> +#include <linux/clk.h>
->>> +#include <linux/clk-provider.h>
->>> +#include <linux/clkdev.h>
->>> +#include "mt8188-afe-common.h"
->>> +#include "mt8188-audsys-clk.h"
->>> +#include "mt8188-audsys-clkid.h"
->>> +#include "mt8188-reg.h"
->>> +
->>> +struct afe_gate {
->>> +	int id;
->>> +	const char *name;
->>> +	const char *parent_name;
->>> +	int reg;
->>> +	u8 bit;
->>> +	const struct clk_ops *ops;
->>> +	unsigned long flags;
->>> +	u8 cg_flags;
->>> +};
->>> +
->>> +#define GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit, _flags,
->>> _cgflags) {\
->>> +		.id = _id,					\
->>> +		.name = _name,					\
->>> +		.parent_name = _parent,				\
->>> +		.reg = _reg,					\
->>> +		.bit = _bit,					\
->>> +		.flags = _flags,				\
->>> +		.cg_flags = _cgflags,				\
->>> +	}
->>> +
->>> +#define GATE_AFE(_id, _name, _parent, _reg, _bit)		\
->>> +	GATE_AFE_FLAGS(_id, _name, _parent, _reg, _bit,		\
->>> +		       CLK_SET_RATE_PARENT | CLK_IGNORE_UNUSED,
->>> CLK_GATE_SET_TO_DISABLE)
->>
->> Can you please explain what's the reason for CLK_IGNORE_UNUSED here?
->> Maybe we can solve some issue that you're facing in a cleaner way.
->>
->> Regards,
->> Angelo
-> 
-> Hi Angelo,
-> 
-> Because clk_disable_unused() calls clk_core_is_enabled(), register
-> access happens in is_enabled() ops.
-> At the moment, the power for register access is not enabled, so the
-> register read results in CPU hang.
-> 
-> That's why I added CLK_IGNORE_UNUSED here, but it can't resolve all
-> issues. Actually, we met same problem when "cat
-> /sys/kernel/debug/clk/clk_summary" is used. We are still suffering the
-> problem.
-> 
-> I'm not sure if I can implement clk ops by myself, and exclude the
-> registration of is_enabled() ops.
-> 
+On 10/25, chen zhang wrote:
+>
+> Thanks for your reply. I think kernel should not panic when the
+> application has a bug, or a fault operation such as ctrl+c,
 
-Is the power for register access enabled with a power domain?
+	a) init is special. If it exits, the kernel panics. This is
+	   by design.
 
-Check drivers/clk/clk.c, grep for core->rpm_enabled.
+	b) debugger can always crash the tracee. In particular if it
+	   exits without ptrace(PTRACE_DETACH) which implies
+	   user_disable_single_step().
 
-If you enable runtime PM before registering the clocks, and you register them
-with the right struct device, the clock API will enable power for you before
-trying to read the clock enable status.
+> This patch can really prevent kernel panic on
+> my x86 machine.
 
-Regards,
-Angelo
+Really? You ignored this part of my previous email,
+
+	Not to mention I don't understand how your patch can actually help. If nothing
+	else,
+
+		- debugger does ptrace(PTRACE_SINGLESTEP), this wakes the tracee up
+
+		- the tracee enters force_sig_info_to_task(SIGTRAP) after single step
+
+		- debugger exits, __ptrace_unlink() clears ptrace/TIF_SINGLESTEP
+
+		- force_sig_info_to_task() clears SIGNAL_UNKILLABLE, the traced init
+		  will be killed.
+
+Am I wrong?
+
+Finally,
+
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -130,6 +130,8 @@ void __ptrace_unlink(struct task_struct *child)
+>  	put_cred(old_cred);
+>
+>  	spin_lock(&child->sighand->siglock);
+> +	if (unlikely(child->signal->flags & SIGNAL_UNKILLABLE))
+> +		user_disable_single_step(child);
+>  	child->ptrace = 0;
+>  	/*
+
+I don't understnd why do you call user_disable_single_step() with ->siglock
+held, but this is minor.
+
+user_disable_single_step(child) assumes that child is stopped and frozen,
+see ptrace_freeze_traced(). This is not necessarily true if __ptrace_unlink()
+is called by the exiting tracer, so the patch is wrong in any case.
+
+Nack, sorry.
+
+Oleg.
 
