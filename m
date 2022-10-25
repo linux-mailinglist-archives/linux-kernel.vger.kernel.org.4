@@ -2,169 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B6460C4C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09DB60C4C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 09:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiJYHKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 03:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        id S231221AbiJYHKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 03:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiJYHKT (ORCPT
+        with ESMTP id S231571AbiJYHK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 03:10:19 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F90BD6BB7
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:10:17 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666681815;
+        Tue, 25 Oct 2022 03:10:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C76DEF0E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:10:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666681825;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=L4lUHvQEMKR3V8SAeCBrP3BHLGEPzUD0h8eSeuTa0g0=;
-        b=LKrUuJiSreMoY+tKEMbwSI72RM12OFTZdm7IK6q3O7G5z3rPQdSMTGautGCkdWY2TepW9+
-        +mIWwfiClSQEivjImn8gq/nXc38pTqRp+xZrmM+BDk91g8L1AOUvFfvCkN/C4WNNVc+zhC
-        1JCn47nCwuWbirLRgB/L9dCA3vpaCOs=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     rppt@kernel.org, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH v2] memblock: don't run loop in memblock_add_range() twice
-Date:   Tue, 25 Oct 2022 15:09:43 +0800
-Message-Id: <20221025070943.363578-1-yajun.deng@linux.dev>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6uE3DhoyppSorLvc/Envz8CzaNz1EF7/KSd+9Rw6KO4=;
+        b=F2olL4dCR8tov21M9ponpWw3UsLZE7zSKCYDiX+ZxiQqbUf5eEs2PSxlDdxK9B8JjSkprI
+        +2zYiG7UeNfnjtayiCvLjIpDIWVFozDOPpuML9LMikr2zbz4TONb8EUE3aAdPVV/XoXIgo
+        Ax7Jz73EsemlCObqgcvwUC7yCFL12BU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-398-pcN-xP41NcWW9q62SHzAdw-1; Tue, 25 Oct 2022 03:10:22 -0400
+X-MC-Unique: pcN-xP41NcWW9q62SHzAdw-1
+Received: by mail-wm1-f70.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso260029wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:10:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6uE3DhoyppSorLvc/Envz8CzaNz1EF7/KSd+9Rw6KO4=;
+        b=lcXdk2rTDHBzpOfHbERRT/Hnsu1uxN/D1xpE0/lL8wVCO1H6srr8bNTw15yAMEmc7M
+         fP8MO70betCnePwOtUZmiBRAhgKd94RxVgOQ3SY4P3+D/wRR7G/wtKKnXjNBmYCB26Kl
+         kXE9zqeHAqE2G44Nu0YzqqUP2naYdBeea6E13gnRHaIoWZtmYUwiTnC1C6vkU/DGPUc4
+         /cBqhVKSVRdlUBTruvdNyd+WeSpAw6OyogvzhUnhTMIRv2QAz6GVfE3MI77Y0QE2ZZDl
+         tq9WeThgnqBxjA0ps3MQCGurZQBkW5ZaiPq3JwGEuXGAKOt7niSQkCyviP9Rh4wVwxkY
+         SDsQ==
+X-Gm-Message-State: ACrzQf3qIHOzqCmvtWGnQ1ER1n9i0w178KBjiPdi70UgKAX9PwYNl2qg
+        mOD2d/QDuSeWfhUddbZXgJGqYj4ojyjDLWKcaIrCHXEl21SK7jx39+5qt2le+KAJeGKb0kFOiBN
+        XoGeWGu3T7+pGv4mhIn9e86p1/RgEci4UR/eCK+3elznt9b7qasivZxaBXgO77wI/kydzEXZn
+X-Received: by 2002:a05:600c:a47:b0:3a6:5848:4bde with SMTP id c7-20020a05600c0a4700b003a658484bdemr44919425wmq.189.1666681820705;
+        Tue, 25 Oct 2022 00:10:20 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7YT/j1Vmojh5DBuD0Dlc3qbWbBxDj/qp//DibR7eJ6WajhCcajb+s3exb/pzzTjfOALnrs0Q==
+X-Received: by 2002:a05:600c:a47:b0:3a6:5848:4bde with SMTP id c7-20020a05600c0a4700b003a658484bdemr44919379wmq.189.1666681820211;
+        Tue, 25 Oct 2022 00:10:20 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:4e00:3efc:1c60:bc60:f557? (p200300cbc70b4e003efc1c60bc60f557.dip0.t-ipconnect.de. [2003:cb:c70b:4e00:3efc:1c60:bc60:f557])
+        by smtp.gmail.com with ESMTPSA id p5-20020a1c5445000000b003c71358a42dsm12027984wmi.18.2022.10.25.00.10.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 00:10:19 -0700 (PDT)
+Message-ID: <445fe1ae-9e22-0d1d-4d09-272231d2f84a@redhat.com>
+Date:   Tue, 25 Oct 2022 09:10:18 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v1 5/7] selftests/vm: anon_cow: add liburing test cases
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mike Rapoport <rppt@kernel.org>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>
+References: <20220927110120.106906-1-david@redhat.com>
+ <20220927110120.106906-6-david@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220927110120.106906-6-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need round twice in memblock_add_range().
+On 27.09.22 13:01, David Hildenbrand wrote:
+> io_uring provides a simple mechanism to test long-term, R/W GUP pins
+> -- via fixed buffers -- and can be used to verify that GUP pins stay
+> in sync with the pages in the page table even if a page would
+> temporarily get mapped R/O or concurrent fork() could accidentially
+> end up sharing pinned pages with the child.
+> 
+> Note that this essentially re-introduces local_config support that was
+> removed recently in commit 6f83d6c74ea5 ("Kselftests: remove support of
+> libhugetlbfs from kselftests").
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
 
-We can call memblock_double_array() to extend the size if type->cnt
-greater or equal to type->max before memblock_insert_region(); otherwise,
-we can insert the new region directly.
+The following fixup on top:
 
-v2:
- - Add a comment when the allocation is required.
+diff --git a/tools/testing/selftests/vm/anon_cow.c b/tools/testing/selftests/vm/anon_cow.c
+index c1450a5d6f53..01417a604eda 100644
+--- a/tools/testing/selftests/vm/anon_cow.c
++++ b/tools/testing/selftests/vm/anon_cow.c
+@@ -346,7 +346,7 @@ static void do_test_iouring(char *mem, size_t size, bool use_fork)
+         struct io_uring_cqe *cqe;
+         struct io_uring_sqe *sqe;
+         struct io_uring ring;
+-       size_t cur, total;
++       ssize_t cur, total;
+         struct iovec iov;
+         char *buf, *tmp;
+         int ret, fd;
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
----
- mm/memblock.c | 69 ++++++++++++++++++---------------------------------
- 1 file changed, 24 insertions(+), 45 deletions(-)
 
-diff --git a/mm/memblock.c b/mm/memblock.c
-index 511d4783dcf1..602fa8ee9b71 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -578,10 +578,10 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
- 				phys_addr_t base, phys_addr_t size,
- 				int nid, enum memblock_flags flags)
- {
--	bool insert = false;
- 	phys_addr_t obase = base;
- 	phys_addr_t end = base + memblock_cap_size(base, &size);
--	int idx, nr_new;
-+	unsigned long ocnt = type->cnt;
-+	int idx;
- 	struct memblock_region *rgn;
- 
- 	if (!size)
-@@ -598,25 +598,6 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
- 		return 0;
- 	}
- 
--	/*
--	 * The worst case is when new range overlaps all existing regions,
--	 * then we'll need type->cnt + 1 empty regions in @type. So if
--	 * type->cnt * 2 + 1 is less than type->max, we know
--	 * that there is enough empty regions in @type, and we can insert
--	 * regions directly.
--	 */
--	if (type->cnt * 2 + 1 < type->max)
--		insert = true;
--
--repeat:
--	/*
--	 * The following is executed twice.  Once with %false @insert and
--	 * then with %true.  The first counts the number of regions needed
--	 * to accommodate the new area.  The second actually inserts them.
--	 */
--	base = obase;
--	nr_new = 0;
--
- 	for_each_memblock_type(idx, type, rgn) {
- 		phys_addr_t rbase = rgn->base;
- 		phys_addr_t rend = rbase + rgn->size;
-@@ -634,11 +615,18 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
- 			WARN_ON(nid != memblock_get_region_node(rgn));
- #endif
- 			WARN_ON(flags != rgn->flags);
--			nr_new++;
--			if (insert)
--				memblock_insert_region(type, idx++, base,
--						       rbase - base, nid,
--						       flags);
-+
-+			/*
-+			 * if type->cnt greater or equal to type->max,
-+			 * resize array; otherwise, insert directly.
-+			 */
-+			if ((type->cnt >= type->max) &&
-+			    memblock_double_array(type, obase, size))
-+				return -ENOMEM;
-+
-+			memblock_insert_region(type, idx++, base,
-+					       rbase - base, nid,
-+					       flags);
- 		}
- 		/* area below @rend is dealt with, forget about it */
- 		base = min(rend, end);
-@@ -646,29 +634,20 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
- 
- 	/* insert the remaining portion */
- 	if (base < end) {
--		nr_new++;
--		if (insert)
--			memblock_insert_region(type, idx, base, end - base,
--					       nid, flags);
-+		if ((type->cnt >= type->max) &&
-+		    memblock_double_array(type, obase, size))
-+			return -ENOMEM;
-+
-+		memblock_insert_region(type, idx, base, end - base,
-+				       nid, flags);
- 	}
- 
--	if (!nr_new)
-+	if (ocnt == type->cnt)
- 		return 0;
- 
--	/*
--	 * If this was the first round, resize array and repeat for actual
--	 * insertions; otherwise, merge and return.
--	 */
--	if (!insert) {
--		while (type->cnt + nr_new > type->max)
--			if (memblock_double_array(type, obase, size) < 0)
--				return -ENOMEM;
--		insert = true;
--		goto repeat;
--	} else {
--		memblock_merge_regions(type);
--		return 0;
--	}
-+	memblock_merge_regions(type);
-+
-+	return 0;
- }
- 
- /**
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
