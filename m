@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258AE60CB83
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DB360CB87
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiJYMIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        id S230301AbiJYMLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiJYMIj (ORCPT
+        with ESMTP id S230025AbiJYMLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:08:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7CCEC531
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:08:39 -0700 (PDT)
+        Tue, 25 Oct 2022 08:11:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2999B10043F
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:10:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0CF4618F5
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:08:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58B3AC433C1;
-        Tue, 25 Oct 2022 12:08:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A671B81C4E
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2ED3C433C1;
+        Tue, 25 Oct 2022 12:10:56 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CrVd9HRe"
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dDRZaYoL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666699714;
+        t=1666699854;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lDTzz8RCtiO8TmkrYzfZqplpH5tp9ZvYdKoLxqYoZgw=;
-        b=CrVd9HReLy5CSqBBbmToAhk3P2sFOIwgsfi2fIs9mP4dYkJ+WufkgyZDKGUwD12i4tZOqI
-        9O2TnmESRupj37Z7svdhOU26hAbpHpVOJkK+SvbYTYbi6d+nsG7bl2NnekwTTS6kHAtCSS
-        7LKKuLADDA5VyJ+JapFl8+33A33n+ag=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 74f0cab3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 25 Oct 2022 12:08:33 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 14:08:29 +0200
+        bh=xJD2D6blGTMHiZM2q3gLESOKFIffvbwoaPVYCZFEep4=;
+        b=dDRZaYoLNxj6zBh368fRie4kJanP5lvRqPTeJz0aM/cyCjsWQrva/wLd5dOcuFE0+7sWoC
+        YqIhF2GaCsUAhnGIarb47q3zqYQbsIc5g9r9521q/0IZGFMawK4kh/zBd8vbUFRvkJr3aH
+        QCJE4gLo5781JJskR5CPoTKmOaL6ilU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d47b2917 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 25 Oct 2022 12:10:53 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 14:10:50 +0200
 From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2] ALSA: rme9652: use explicitly signed char
-Message-ID: <Y1fRvWfcU4NT1HTU@zx2c4.com>
-References: <202210250456.vKv5zoLb-lkp@intel.com>
- <20221025000313.546261-1-Jason@zx2c4.com>
- <87bkq0s9rw.wl-tiwai@suse.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v2] misc: sgi-gru: use explicitly signed char
+Message-ID: <Y1fSSt17uXy/YP1D@zx2c4.com>
+References: <202210251026.dfeqb1M2-lkp@intel.com>
+ <20221025025223.573543-1-Jason@zx2c4.com>
+ <Y1eShe+T8YTiokN5@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <87bkq0s9rw.wl-tiwai@suse.de>
+In-Reply-To: <Y1eShe+T8YTiokN5@kroah.com>
 X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
@@ -59,25 +60,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 08:21:55AM +0200, Takashi Iwai wrote:
-> On Tue, 25 Oct 2022 02:03:13 +0200,
-> Jason A. Donenfeld wrote:
-> > 
+On Tue, Oct 25, 2022 at 09:38:45AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 25, 2022 at 04:52:23AM +0200, Jason A. Donenfeld wrote:
 > > With char becoming unsigned by default, and with `char` alone being
 > > ambiguous and based on architecture, signed chars need to be marked
 > > explicitly as such. This fixes warnings like:
 > > 
-> > sound/pci/rme9652/hdsp.c:3953 hdsp_channel_buffer_location() warn: 'hdsp->channel_map[channel]' is unsigned
-> > sound/pci/rme9652/hdsp.c:4153 snd_hdsp_channel_info() warn: impossible condition '(hdsp->channel_map[channel] < 0) => (0-255 < 0)'
-> > sound/pci/rme9652/rme9652.c:1833 rme9652_channel_buffer_location() warn: 'rme9652->channel_map[channel]' is unsigned
+> > drivers/misc/sgi-gru/grumain.c:711 gru_check_chiplet_assignment() warn: 'gts->ts_user_chiplet_id' is unsigned
 > > 
-> > Cc: Jaroslav Kysela <perex@perex.cz>
-> > Cc: Takashi Iwai <tiwai@suse.com>
-> > Cc: alsa-devel@alsa-project.org
+> > Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> > ---
+> >  drivers/misc/sgi-gru/grumain.c   |  6 +++---
+> >  drivers/misc/sgi-gru/grutables.h | 14 +++++++-------
+> >  2 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> Applied now.  Thanks!
+> Hi,
+> 
+> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> a patch that has triggered this response.  He used to manually respond
+> to these common problems, but in order to save his sanity (he kept
+> writing the same thing over and over, yet to different people), I was
+> created.  Hopefully you will not take offence and will fix the problem
+> in your patch and resubmit it so that it can be accepted into the Linux
+> kernel tree.
+> 
+> You are receiving this message because of the following common error(s)
+> as indicated below:
+> 
+> - This looks like a new version of a previously submitted patch, but you
+>   did not list below the --- line any changes from the previous version.
+>   Please read the section entitled "The canonical patch format" in the
+>   kernel file, Documentation/SubmittingPatches for what needs to be done
+>   here to properly describe this.
 
-Thanks. For this and the other patch, applied for 6.1 or 6.2?
+I fixed the kbuild errors that v2 was a reply to. Specifically, I fixed
+up the function prototypes in grutables.h.
 
 Jason
