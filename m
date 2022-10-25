@@ -2,191 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EC360CDB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5759160CDB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 15:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbiJYNhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 09:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
+        id S232155AbiJYNjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 09:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbiJYNhi (ORCPT
+        with ESMTP id S231544AbiJYNjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 09:37:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7849194208
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666705054;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 25 Oct 2022 09:39:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC4736BE9;
+        Tue, 25 Oct 2022 06:39:44 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 928FB1F74A;
+        Tue, 25 Oct 2022 13:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666705183; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=exi/m0Abh7Peoy1eaDEpT6oKngaAyQ3kIL361TzbR/Y=;
-        b=K7BNfizSYaoHOmuOBLfWXJJGAIfj2Ysgx7SUSVV/l9U1wYcqbpl6o86ToMcrdiD5OvJmEq
-        M898Affw+p5zbex504aZTL3Aqr7moGdmRfynQ2MDF+2aNv763/jsJzQjC6nXANQIXSiaVe
-        esYWlaykLACqNyYWfAKqZ0wa1ojNE6w=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-275-KEUMeMosM0-9sRylU7FYMw-1; Tue, 25 Oct 2022 09:37:33 -0400
-X-MC-Unique: KEUMeMosM0-9sRylU7FYMw-1
-Received: by mail-qk1-f198.google.com with SMTP id h9-20020a05620a244900b006ee944ec451so11521393qkn.13
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:37:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=exi/m0Abh7Peoy1eaDEpT6oKngaAyQ3kIL361TzbR/Y=;
-        b=Vd/+0xnmSlHPx8MqyMmZCdPH3dc6pHHvsazJBkC4SAB47PWUERrtMU9J7MMQpA/yXR
-         B65rmzlwn2GH03FsrgW7w5MbB7zuNNilSruM3jY3nUUTF1HXX6OUSBFpBMjuXjqmetcp
-         ncwJKof7cVz6INOlQMr40OTBdoCe+JFZY33XQnRRAjzEdJ2jNItlc3M2M3hojHOTFJ3+
-         D2ijl+SrSSjLRN5xY+/XG8vf9eNch093+gnVoFAWewViTUqe8LrgZjH5EHI8fz4oy7wA
-         v4ftkyn/o5RJ7qPqcFze0hpfasNXiRxu85wzTS7FjHEnpgTUkTh2HJcaSCBm75msVC7v
-         q5mg==
-X-Gm-Message-State: ACrzQf2fR1bCPJXp7+/txMA1Fzg7b7FTahWlFxijug8GQWfAavtQnWXe
-        x4HQaZ3qOasldsZ0z+3EmTuucNugIZgDuGYhmBnGI4BTUSoomcw1fSz1Gs+qxHsYA1y/WwaXyMf
-        khbNygKM+90I9PPqlHMspTXx2
-X-Received: by 2002:a05:620a:4414:b0:6ee:76e4:1b6d with SMTP id v20-20020a05620a441400b006ee76e41b6dmr25236859qkp.360.1666705052593;
-        Tue, 25 Oct 2022 06:37:32 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM68HpWeY+CJiGKYkIVSR65r7FtSbw6IzHBXldUSNhKCTbouniAxrMfvQVq6EzqpiZi7la0B2w==
-X-Received: by 2002:a05:620a:4414:b0:6ee:76e4:1b6d with SMTP id v20-20020a05620a441400b006ee76e41b6dmr25236849qkp.360.1666705052322;
-        Tue, 25 Oct 2022 06:37:32 -0700 (PDT)
-Received: from [10.35.4.238] (bzq-82-81-161-50.red.bezeqint.net. [82.81.161.50])
-        by smtp.gmail.com with ESMTPSA id w3-20020ac857c3000000b0039442ee69c5sm1612489qta.91.2022.10.25.06.37.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 06:37:31 -0700 (PDT)
-Message-ID: <cc6f6e29ca844cccbefd9f2a3c0a25159ce3fecd.camel@redhat.com>
-Subject: Re: [PATCH 4/4] KVM: x86: forcibly leave nested mode on vCPU reset
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, stable@vger.kernel.org
-Date:   Tue, 25 Oct 2022 16:37:27 +0300
-In-Reply-To: <Y1FqXiBB7Bqzj8eh@google.com>
-References: <20221020093055.224317-1-mlevitsk@redhat.com>
-         <20221020093055.224317-5-mlevitsk@redhat.com> <Y1FqXiBB7Bqzj8eh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-5.fc34) 
+        bh=jV+/V964f5a6YsdV9cIZOOLPnxJd1yg28bVzYXvdSNE=;
+        b=XfWRH0X5l35RDq60Md4xj6mjphfPfdcDgAokBsoxJCwBD/D13j9+KFxlyb4FKt5iSZItym
+        WXjU+SIf+EzrhXI/XgAOV3iJLTMLmTJ6FyEP7t+XkQMZVG9vPQfuK76P7B6rA86a9c2chI
+        maR6uSFaDrSC1lZJQUYwHiA3mygb6rs=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 729402C141;
+        Tue, 25 Oct 2022 13:39:43 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 15:39:40 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>, Tom Rix <trix@redhat.com>,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH printk v2 24/38] xen: fbfront: use srcu console list
+ iterator
+Message-ID: <Y1fnHH2J4bIS59ER@alley>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-25-john.ogness@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019145600.1282823-25-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-10-20 at 15:33 +0000, Sean Christopherson wrote:
-> On Thu, Oct 20, 2022, Maxim Levitsky wrote:
-> > While not obivous, kvm_vcpu_reset leaves the nested mode by
+On Wed 2022-10-19 17:01:46, John Ogness wrote:
+> Since the console_lock is not being used for anything other than
+> safe console list traversal, use srcu console list iteration instead.
 > 
-> Please add () when referencing function, and wrap closer to ~75 chars.
-> 
-> > clearing 'vcpu->arch.hflags' but it does so without all the
-> > required housekeeping.
-> > 
-> > This makes SVM and VMX continue to use vmcs02/vmcb02 while
-> 
-> This bug should be impossible to hit on VMX as INIT and TRIPLE_FAULT unconditionally
-> cause VM-Exit, i.e. will always be forwarded to L1.
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-True I guess as I found out as well, in VMX the physical CPU can't be reset while
-in guest mode. I'll update the changelog.
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
+> ---
+>  drivers/video/fbdev/xen-fbfront.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> > the cpu is not in nested mode.
-> 
-> Can you add a blurb to call out exactly how this bug can be triggered?  Doesn't
-> take much effort to suss out the "how", but it'd be nice to capture that info in
-> the changelog.
+> diff --git a/drivers/video/fbdev/xen-fbfront.c b/drivers/video/fbdev/xen-fbfront.c
+> index 4d2694d904aa..2552c853c6c2 100644
+> --- a/drivers/video/fbdev/xen-fbfront.c
+> +++ b/drivers/video/fbdev/xen-fbfront.c
+> @@ -500,16 +500,18 @@ static int xenfb_probe(struct xenbus_device *dev,
+>  static void xenfb_make_preferred_console(void)
 
-I will add (in another patch) a selftest for this.
+Just for record. This function is a dirty hack how to associate "ttyX"
+console with /dev/console.
 
-> 
-> > In particular, in SVM code, it makes the 'svm_free_nested'
-> > free the vmcb02, while still in use, which later triggers
-> > use after free and a kernel crash.
-> > 
-> > This issue is assigned CVE-2022-3344
-> > 
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
-> > ---
-> >  arch/x86/kvm/x86.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index d86a8aae1471d3..313c4a6dc65e45 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -11931,6 +11931,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
-> >         WARN_ON_ONCE(!init_event &&
-> >                      (old_cr0 || kvm_read_cr3(vcpu) || kvm_read_cr4(vcpu)));
-> >  
-> > +       kvm_leave_nested(vcpu);
-> 
-> Not a big deal, especially if/when nested_ops are turned into static_calls, but
-> at the same time it's quite easy to do:
-> 
->         if (is_guest_mode(vcpu))
->                 kvm_leave_nested(vcpu);
-> 
-> I think it's worth adding a comment explaining how this can happen, and to also
-> call out that EFER is cleared on INIT, i.e. that virtualization is disabled due
-> to EFER.SVME=0.  Unsurprisingly, I don't see anything in the APM that explicitly
-> states what happens if INIT occurs in guest mode, i.e. it's not immediately obvious
-> that forcing the vCPU back to L1 is architecturally correct.
-> 
-> 
-> >         kvm_lapic_reset(vcpu, init_event);
-> >  
-> >         vcpu->arch.hflags = 0;
-> 
-> Maybe add a WARN above this to try and detect other potential issues?  Kinda silly,
-> but it'd at least help draw attention to the importance of hflags.
-> 
-> E.g. this?
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 4bd5f8a751de..c50fa0751a0b 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11915,6 +11915,15 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->         unsigned long old_cr0 = kvm_read_cr0(vcpu);
->         unsigned long new_cr0;
->  
-> +       /*
-> +        * SVM doesn't unconditionally VM-Exit on INIT and SHUTDOWN, thus it's
-> +        * possible to INIT the vCPU while L2 is active.  Force the vCPU back
-> +        * into L1 as EFER.SVME is cleared on INIT (along with all other EFER
-> +        * bits), i.e. virtualization is disabled.
-> +        */
+A clean solution would be to just reshuffle console_drivers list. I
+have a patch for this in my bottom drawer. It is part of a bigger
+clean up that it not ready for upstreaming yet.
 
+Best Regards,
+Petr
 
-> +       if (is_guest_mode(vcpu))
-> +               kvm_leave_nested(vcpu);
+>  {
+>  	struct console *c;
+> +	int cookie;
+>  
+>  	if (console_set_on_cmdline)
+>  		return;
+>  
+> -	console_lock();
+> -	for_each_console(c) {
+> +	cookie = console_srcu_read_lock();
+> +	for_each_console_srcu(c) {
+>  		if (!strcmp(c->name, "tty") && c->index == 0)
+>  			break;
+>  	}
+> -	console_unlock();
+> +	console_srcu_read_unlock(cookie);
 > +
->         /*
->          * Several of the "set" flows, e.g. ->set_cr0(), read other registers
->          * to handle side effects.  RESET emulation hits those flows and relies
-> @@ -11927,6 +11936,7 @@ void kvm_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->  
->         kvm_lapic_reset(vcpu, init_event);
->  
-> +       WARN_ON_ONCE(is_guest_mode(vcpu) || is_smm(vcpu));
->         vcpu->arch.hflags = 0;
->  
->         vcpu->arch.smi_pending = 0;
-> 
-
-Best regards,
-	Maxim Levitsky
-
+>  	if (c) {
+>  		unregister_console(c);
+>  		c->flags |= CON_CONSDEV;
+> -- 
+> 2.30.2
