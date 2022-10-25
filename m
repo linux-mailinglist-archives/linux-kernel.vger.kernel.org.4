@@ -2,133 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5E160D0B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4441060D0B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbiJYPfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S232183AbiJYPfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiJYPfA (ORCPT
+        with ESMTP id S233356AbiJYPfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:35:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540B157E11
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666712097;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 25 Oct 2022 11:35:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6B197ED6
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:35:10 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6AB3B1F9BF;
+        Tue, 25 Oct 2022 15:35:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666712109; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=q1GvBOBCP6KETy6rTK6QCl92NvC/MctQ2jjFIvDTUSU=;
-        b=NLEHoELw3FW3lGAgKhXLKvhRXSXYC03mFHzo1Lky6pvEkID2pMR6rKBYICtB3nSoMf1lN+
-        hZOvwTWRTtYyRiTbg2ps3opYv8AjsB4gXa1uUXfJSilHQ1M5tAt4+9YaufcCwWCq9rmZKw
-        fe94xfgCJ+R3aad6fFES1l0NAansthI=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-83-yz9NXCMbPqCyCYmgQXzsZQ-1; Tue, 25 Oct 2022 11:34:55 -0400
-X-MC-Unique: yz9NXCMbPqCyCYmgQXzsZQ-1
-Received: by mail-wr1-f71.google.com with SMTP id i14-20020adfa50e000000b0023652707418so4815136wrb.20
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:34:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q1GvBOBCP6KETy6rTK6QCl92NvC/MctQ2jjFIvDTUSU=;
-        b=cThrVIh6r25qum3svuo0t99uWIN7hrV5i2zC/CU7DUs2uTSNdZfCY1rKVHq6VTFtP5
-         ot0a02PGDl+4Ur3CfK2QOfITRA4PNIuhQ8LHirpJSM/cffJT1QqPfuo/9M9y0qhPxkqy
-         sjfy1at2MIcPen1ZfhiehXC/eNDUk7GIGiq5iXtj9Pr8rk2HFzeaDHk99pc0pdMfNYrk
-         o1cIkS7395hgxtijbK79wyZ6OX916AVk4RavVaLWOyiQiU3eucZr1iaoB8+aZ639VP+n
-         yWzgdvUKeNFAmvcr514dHT3oT3OoUu4RC/l3kh+zHb+lUhBn0vXraVIV2iRQdpF5/YPn
-         oupQ==
-X-Gm-Message-State: ACrzQf1Nu2VTFWpvkOFlRO6IM+uKyM61KZZn5e6yQtornZ5BV6UVGTtC
-        euorzYZOTVyIglres6k586SXwSa+zyP3zfzBfhlkkZBgF0OiH+TznK/t6lJm0F6PSeYwY9XJW1j
-        KxW97OHNWor2JaD5ND8UHe+/R
-X-Received: by 2002:a05:6000:18ad:b0:230:6d12:fc7d with SMTP id b13-20020a05600018ad00b002306d12fc7dmr25096957wri.409.1666712094506;
-        Tue, 25 Oct 2022 08:34:54 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5MF3ZzlWB5p5BMwQBW0Xp49UZmIOa+s5CbB/a5oA0uLsaa08jpku5+sqs+rXA4yS/NADMYVw==
-X-Received: by 2002:a05:6000:18ad:b0:230:6d12:fc7d with SMTP id b13-20020a05600018ad00b002306d12fc7dmr25096938wri.409.1666712094252;
-        Tue, 25 Oct 2022 08:34:54 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c719:d00:eae9:3af6:9999:7b63? (p200300cbc7190d00eae93af699997b63.dip0.t-ipconnect.de. [2003:cb:c719:d00:eae9:3af6:9999:7b63])
-        by smtp.gmail.com with ESMTPSA id c1-20020adfe741000000b00236883f2f5csm506813wrn.94.2022.10.25.08.34.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 08:34:53 -0700 (PDT)
-Message-ID: <e5eff1ef-760c-5e6f-9f32-e8a7a624993b@redhat.com>
-Date:   Tue, 25 Oct 2022 17:34:52 +0200
+        bh=qqhEb2ihSVOs7s1JGMME0ep/AP7oc92gwbxiPCWRjTY=;
+        b=U7zcq2sPhU5K0Yox+0kOows7P2/C/KUj5Dc5alM6awf6lt4GIO8GgijtBDKSZTCdxjCse6
+        /VEQ7UFc6Uo9etMeTXX600NSB6BKVE2iLugKFs/dTy9/c3xqXMfxONkjKnJLumTylhkeS/
+        Cd3iJuaOvQQRt29p5eiFbAiggkiqays=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3AB4C2C141;
+        Tue, 25 Oct 2022 15:35:09 +0000 (UTC)
+Date:   Tue, 25 Oct 2022 17:35:08 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v2 30/38] printk: console_device: use srcu console
+ list iterator
+Message-ID: <Y1gCLDQP+6rYYRP5@alley>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-31-john.ogness@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] selftests: vm: use 1 MB hugepage size for s390
-Content-Language: en-US
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>
-References: <20221025152610.3439102-1-gerald.schaefer@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221025152610.3439102-1-gerald.schaefer@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221019145600.1282823-31-john.ogness@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25.10.22 17:26, Gerald Schaefer wrote:
-> hugepage-vmemmap test fails for s390 because it assumes a hugepagesize
-> of 2 MB, while we have 1 MB on s390. This results in iterating over two
-> hugepages. If they are consecutive in memory, check_page_flags() will
-> stumble over the additional head page. Otherwise, it will stumble over
-> non-huge pageflags, after crossing the first 1 MB hugepage.
+On Wed 2022-10-19 17:01:52, John Ogness wrote:
+> Use srcu console list iteration for console list traversal.
 > 
-> Fix this by using 1 MB MAP_LENGTH for s390.
+> Document why the console_lock is still necessary.
 > 
-> Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 > ---
->   tools/testing/selftests/vm/hugepage-vmemmap.c | 7 +++++++
->   1 file changed, 7 insertions(+)
+>  kernel/printk/printk.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/vm/hugepage-vmemmap.c b/tools/testing/selftests/vm/hugepage-vmemmap.c
-> index 557bdbd4f87e..a4695f138cec 100644
-> --- a/tools/testing/selftests/vm/hugepage-vmemmap.c
-> +++ b/tools/testing/selftests/vm/hugepage-vmemmap.c
-> @@ -11,7 +11,14 @@
->   #include <sys/mman.h>
->   #include <fcntl.h>
->   
-> +/*
-> + * 1 MB hugepage size for s390
-> + */
-> +#if defined(__s390x__)
-> +#define MAP_LENGTH		(1UL * 1024 * 1024)
-> +#else
->   #define MAP_LENGTH		(2UL * 1024 * 1024)
-> +#endif
+> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
+> index e478cb92e7ba..410ad9d5649c 100644
+> --- a/kernel/printk/printk.c
+> +++ b/kernel/printk/printk.c
+> @@ -3025,15 +3025,24 @@ struct tty_driver *console_device(int *index)
+>  {
+>  	struct console *c;
+>  	struct tty_driver *driver = NULL;
+> +	int cookie;
+>  
+> +	/*
+> +	 * Stop console printing because the device() callback may
+> +	 * assume the console is not within its write() callback.
 
-Why not detect it at runtime, so this works on any architecture (e.g., 
-ppc64 with 16 MiB IIRC and arm64 with weird sizes)?
+Again, I would like to know more details about the possible races
+with the write() callback. It is not that obvious.
 
-A patch that adds such detection code is currently on its way upstream:
+> +	 */
+>  	console_lock();
+> -	for_each_console(c) {
+> +
+> +	cookie = console_srcu_read_lock();
+> +	for_each_console_srcu(c) {
+>  		if (!c->device)
+>  			continue;
+>  		driver = c->device(c, index);
+>  		if (driver)
+>  			break;
+>  	}
+> +	console_srcu_read_unlock(cookie);
+> +
+>  	console_unlock();
+>  	return driver;
 
-https://lore.kernel.org/all/20220927110120.106906-5-david@redhat.com/T/#u
+Otherwise, the change looks good.
 
-We could factor that out into vm_utils.c
-
--- 
-Thanks,
-
-David / dhildenb
-
+Best Regards,
+Petr
