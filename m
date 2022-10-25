@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DB360CB87
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D355360CB8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 14:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiJYMLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 08:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S231368AbiJYMMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 08:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbiJYMLB (ORCPT
+        with ESMTP id S230305AbiJYMMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 08:11:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2999B10043F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 05:10:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A671B81C4E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2ED3C433C1;
-        Tue, 25 Oct 2022 12:10:56 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dDRZaYoL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666699854;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xJD2D6blGTMHiZM2q3gLESOKFIffvbwoaPVYCZFEep4=;
-        b=dDRZaYoLNxj6zBh368fRie4kJanP5lvRqPTeJz0aM/cyCjsWQrva/wLd5dOcuFE0+7sWoC
-        YqIhF2GaCsUAhnGIarb47q3zqYQbsIc5g9r9521q/0IZGFMawK4kh/zBd8vbUFRvkJr3aH
-        QCJE4gLo5781JJskR5CPoTKmOaL6ilU=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d47b2917 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 25 Oct 2022 12:10:53 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 14:10:50 +0200
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v2] misc: sgi-gru: use explicitly signed char
-Message-ID: <Y1fSSt17uXy/YP1D@zx2c4.com>
-References: <202210251026.dfeqb1M2-lkp@intel.com>
- <20221025025223.573543-1-Jason@zx2c4.com>
- <Y1eShe+T8YTiokN5@kroah.com>
+        Tue, 25 Oct 2022 08:12:36 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDCE2FC2C;
+        Tue, 25 Oct 2022 05:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=1GLLDI99fTLFVk7UHyLsLRMZqShPEgCumFtxPIsX+Wc=; b=O+DlVwkKqDxVFj9SutyvUOq/vH
+        RwP08FVS4SER5XjmDApbsgbkufJNZrT8qqpbm9cW4Mf8yyi5wCnC56IViXb6e+3mVR9hiQvWc0XNR
+        FsBbea57NNHwF+IeGrxEjbL+RgMxK18Vft6iQCSEWWLfA1ixt+FxxOO+cm09foJ+mSWn2+kAbutzG
+        wsk5LXvRagU8cDBOYCphomgBn8O0Jp2PZqbZAZergWemCaHHB/tVV3QiT+tNmSP+bG0PIY9AbAPpU
+        FrwxaMq9vE6BkP20I3syeqytDAexB22Z21ClAjFTK32iHA4zGxQhvdZnTgTg6S9qTOqRuU2uiJDiH
+        YYhPGxvg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34946)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1onIn5-0004Sr-7S; Tue, 25 Oct 2022 13:12:19 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1onImw-00086k-St; Tue, 25 Oct 2022 13:12:10 +0100
+Date:   Tue, 25 Oct 2022 13:12:10 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 04/11] ARM: sa1100: make cpufreq driver build standalone
+Message-ID: <Y1fSmg5ljuPH37Xy@shell.armlinux.org.uk>
+References: <20221021155000.4108406-1-arnd@kernel.org>
+ <20221021155000.4108406-5-arnd@kernel.org>
+ <Y1eeEQr/E59uIE3j@shell.armlinux.org.uk>
+ <e21edff1-1f01-40d1-96a4-5b77a16dccb4@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1eShe+T8YTiokN5@kroah.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e21edff1-1f01-40d1-96a4-5b77a16dccb4@app.fastmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 09:38:45AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Oct 25, 2022 at 04:52:23AM +0200, Jason A. Donenfeld wrote:
-> > With char becoming unsigned by default, and with `char` alone being
-> > ambiguous and based on architecture, signed chars need to be marked
-> > explicitly as such. This fixes warnings like:
-> > 
-> > drivers/misc/sgi-gru/grumain.c:711 gru_check_chiplet_assignment() warn: 'gts->ts_user_chiplet_id' is unsigned
-> > 
-> > Cc: Dimitri Sivanich <dimitri.sivanich@hpe.com>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > ---
-> >  drivers/misc/sgi-gru/grumain.c   |  6 +++---
-> >  drivers/misc/sgi-gru/grutables.h | 14 +++++++-------
-> >  2 files changed, 10 insertions(+), 10 deletions(-)
+On Tue, Oct 25, 2022 at 12:14:19PM +0200, Arnd Bergmann wrote:
+> On Tue, Oct 25, 2022, at 10:28, Russell King (Oracle) wrote:
+> > On Fri, Oct 21, 2022 at 05:49:34PM +0200, Arnd Bergmann wrote:
+> >> From: Arnd Bergmann <arnd@arndb.de>
+> >> 
+> >> Commit 59a2e613d07f ("cpufreq: sa11x0: move cpufreq driver
+> >> to drivers/cpufreq") added an unnecessary reference to
+> >> mach/generic.h. Just remove it again after moving the code
+> >> into the corresponding driver.
+> >
+> > So how does arch/arm/mach-sa1100/clock.c get the MPLL rate with this
+> > change?
 > 
-> Hi,
-> 
-> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-> a patch that has triggered this response.  He used to manually respond
-> to these common problems, but in order to save his sanity (he kept
-> writing the same thing over and over, yet to different people), I was
-> created.  Hopefully you will not take offence and will fix the problem
-> in your patch and resubmit it so that it can be accepted into the Linux
-> kernel tree.
-> 
-> You are receiving this message because of the following common error(s)
-> as indicated below:
-> 
-> - This looks like a new version of a previously submitted patch, but you
->   did not list below the --- line any changes from the previous version.
->   Please read the section entitled "The canonical patch format" in the
->   kernel file, Documentation/SubmittingPatches for what needs to be done
->   here to properly describe this.
+> You are right, that's broken. It works for the defconfigs that
+> enable the cpufreq driver,
 
-I fixed the kbuild errors that v2 was a reply to. Specifically, I fixed
-up the function prototypes in grutables.h.
+Umm. How? I think your testing must be seriously flawed!
 
-Jason
+You add sa11x0_getspeed() to the sa1110 cpufreq driver as a static
+function, which means it won't be visible to clock.c - and clock.c
+is always built, and always references sa11x0_getspeed()... so you
+should be getting an unconditional build failure at link time and
+a compiler warning that sa11x0_getspeed() is not declared.
+
+Are you not seeing that?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
