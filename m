@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33FA60C088
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 552B460C08D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiJYBJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
+        id S231177AbiJYBJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiJYBIb (ORCPT
+        with ESMTP id S230228AbiJYBIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 24 Oct 2022 21:08:31 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9351E704
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:17:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C138BDD3B8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:17:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666657064; x=1698193064;
+  t=1666657063; x=1698193063;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=kLvyVSLWSQb+POxDNMInSWdsGrXEv5cSfT1ANJOQpLA=;
-  b=djrvlDSYU1YcjeuPIjnkiYr5uwqoOFMkojpp+/U9ttcsNJYzTSkTxyvZ
-   3JrF6l8S8zBBsXxvRjxKJDNFCP5JpKu3+oRxky/jtTWKUp4RoS5hI3kX0
-   wTUxmsXbIgxKPhkVkHA8gI+lOsJkul/87Mt0/Ekp4sal5Yi/+2VD8CrwM
-   jxpUvAqpmol6nwZ4Tb5L1TpCAo8Q2U247xUvq8Qyr4nguqMB81ekc2mb5
-   PwiH84zX04mcIdo3FFAueduU4D7r1f5lbrqJEXUvQjncdNQTyjApWZUdb
-   dZtKeaD0qDcXJuHvxn95/ZdTuwAJEuZ70s8M1w9Gpy2nK1IVxOpeF3dpQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="308644667"
+  bh=1RmDlHjank+08AvRxU4Dq3nTeuAWGKaZTDb08aAe7to=;
+  b=BS5Pbn5LlaL9MFTP8k13ezjzGVlSW/G8orEt/1rTbpn92lCJYUo0oJw6
+   uKOKxOTk+alz66ukitn5dPau9J5Ud149EoVV9qn1Nw00jcTc68Lw2QFBX
+   6kQxVkPa4Q8xbD680WsuO92d+E9GllI7FEWf43FcCV5OC4yguKF9SJ7bj
+   tw02sJMC93CO53bHKX2hfg1nh7qIZiOKA/bVpCVWrI2y/JCxgL6J/d2fj
+   mTMEapG0ZcKiUBDhRVXcShnn2xMar35eMJTIS04yYWcVWv7nE9BJW6ftn
+   QArTSeRfDCDR62iLIDXBUE59/8qe4lefosLgJ3fmJinvXz3pvTM6PNEEs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="308644666"
 X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="308644667"
+   d="scan'208";a="308644666"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 17:17:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="582587481"
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="582587479"
 X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="582587481"
+   d="scan'208";a="582587479"
 Received: from ghoyler-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.39.118])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 17:17:35 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id DB0371095BB; Tue, 25 Oct 2022 03:17:25 +0300 (+03)
+        id E5D271095BC; Tue, 25 Oct 2022 03:17:25 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -57,11 +57,10 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Jacob Pan <jacob.jun.pan@linux.intel.com>,
         Ashok Raj <ashok.raj@intel.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCHv11 06/16] KVM: Serialize tagged address check against tagging enabling
-Date:   Tue, 25 Oct 2022 03:17:12 +0300
-Message-Id: <20221025001722.17466-7-kirill.shutemov@linux.intel.com>
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv11 07/16] x86/mm: Provide arch_prctl() interface for LAM
+Date:   Tue, 25 Oct 2022 03:17:13 +0300
+Message-Id: <20221025001722.17466-8-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20221025001722.17466-1-kirill.shutemov@linux.intel.com>
 References: <20221025001722.17466-1-kirill.shutemov@linux.intel.com>
@@ -77,54 +76,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KVM forbids usage of tagged userspace addresses for memslots. It is done
-by checking if the address stays the same after untagging.
+Add a couple of arch_prctl() handles:
 
-It is works fine for ARM TBI, but it the check gets racy for LAM. TBI
-enabling happens per-thread, so nobody can enable tagging for the thread
-while the memslot gets added.
+ - ARCH_ENABLE_TAGGED_ADDR enabled LAM. The argument is required number
+   of tag bits. It is rounded up to the nearest LAM mode that can
+   provide it. For now only LAM_U57 is supported, with 6 tag bits.
 
-LAM gets enabled per-process. If it gets enabled after the
-untagged_addr() check, but before access_ok() check the kernel can
-wrongly allow tagged userspace_addr.
+ - ARCH_GET_UNTAG_MASK returns untag mask. It can indicates where tag
+   bits located in the address.
 
-Use mmap lock to protect against parallel LAM enabling.
+ - ARCH_GET_MAX_TAG_BITS returns the maximum tag bits user can request.
+   Zero if LAM is not supported.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Reported-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Marc Zyngier <maz@kernel.org>
+Tested-by: Alexander Potapenko <glider@google.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- virt/kvm/kvm_main.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ arch/x86/include/uapi/asm/prctl.h |  4 ++
+ arch/x86/kernel/process_64.c      | 65 ++++++++++++++++++++++++++++++-
+ 2 files changed, 68 insertions(+), 1 deletion(-)
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 8c86b06b35da..833742c21c91 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -1943,12 +1943,22 @@ int __kvm_set_memory_region(struct kvm *kvm,
- 		return -EINVAL;
- 	if (mem->guest_phys_addr & (PAGE_SIZE - 1))
- 		return -EINVAL;
+diff --git a/arch/x86/include/uapi/asm/prctl.h b/arch/x86/include/uapi/asm/prctl.h
+index 500b96e71f18..a31e27b95b19 100644
+--- a/arch/x86/include/uapi/asm/prctl.h
++++ b/arch/x86/include/uapi/asm/prctl.h
+@@ -20,4 +20,8 @@
+ #define ARCH_MAP_VDSO_32		0x2002
+ #define ARCH_MAP_VDSO_64		0x2003
+ 
++#define ARCH_GET_UNTAG_MASK		0x4001
++#define ARCH_ENABLE_TAGGED_ADDR		0x4002
++#define ARCH_GET_MAX_TAG_BITS		0x4003
 +
-+	/* Serialize against tagging enabling */
-+	if (mmap_read_lock_killable(kvm->mm))
+ #endif /* _ASM_X86_PRCTL_H */
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 6b3418bff326..a98536101447 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -743,6 +743,60 @@ static long prctl_map_vdso(const struct vdso_image *image, unsigned long addr)
+ }
+ #endif
+ 
++static void enable_lam_func(void *mm)
++{
++	struct mm_struct *loaded_mm = this_cpu_read(cpu_tlbstate.loaded_mm);
++	unsigned long lam_mask;
++	unsigned long cr3;
++
++	if (loaded_mm != mm)
++		return;
++
++	lam_mask = READ_ONCE(loaded_mm->context.lam_cr3_mask);
++
++	/* Update CR3 to get LAM active on the CPU */
++	cr3 = __read_cr3();
++	cr3 &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
++	cr3 |= lam_mask;
++	write_cr3(cr3);
++	set_tlbstate_cr3_lam_mask(lam_mask);
++}
++
++#define LAM_U57_BITS 6
++
++static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
++{
++	int ret = 0;
++
++	if (!cpu_feature_enabled(X86_FEATURE_LAM))
++		return -ENODEV;
++
++	if (mmap_write_lock_killable(mm))
 +		return -EINTR;
 +
- 	/* We can read the guest memory with __xxx_user() later on. */
- 	if ((mem->userspace_addr & (PAGE_SIZE - 1)) ||
- 	    (mem->userspace_addr != untagged_addr(kvm->mm, mem->userspace_addr)) ||
- 	     !access_ok((void __user *)(unsigned long)mem->userspace_addr,
--			mem->memory_size))
-+			mem->memory_size)) {
-+		mmap_read_unlock(kvm->mm);
- 		return -EINVAL;
++	/* Already enabled? */
++	if (mm->context.lam_cr3_mask) {
++		ret = -EBUSY;
++		goto out;
 +	}
 +
-+	mmap_read_unlock(kvm->mm);
++	if (!nr_bits) {
++		ret = -EINVAL;
++		goto out;
++	} else if (nr_bits <= LAM_U57_BITS) {
++		mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
++		mm->context.untag_mask =  ~GENMASK(62, 57);
++	} else {
++		ret = -EINVAL;
++		goto out;
++	}
 +
- 	if (as_id >= KVM_ADDRESS_SPACE_NUM || id >= KVM_MEM_SLOTS_NUM)
- 		return -EINVAL;
- 	if (mem->guest_phys_addr + mem->memory_size < mem->guest_phys_addr)
++	on_each_cpu_mask(mm_cpumask(mm), enable_lam_func, mm, true);
++out:
++	mmap_write_unlock(mm);
++	return ret;
++}
++
+ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ {
+ 	int ret = 0;
+@@ -830,7 +884,16 @@ long do_arch_prctl_64(struct task_struct *task, int option, unsigned long arg2)
+ 	case ARCH_MAP_VDSO_64:
+ 		return prctl_map_vdso(&vdso_image_64, arg2);
+ #endif
+-
++	case ARCH_GET_UNTAG_MASK:
++		return put_user(task->mm->context.untag_mask,
++				(unsigned long __user *)arg2);
++	case ARCH_ENABLE_TAGGED_ADDR:
++		return prctl_enable_tagged_addr(task->mm, arg2);
++	case ARCH_GET_MAX_TAG_BITS:
++		if (!cpu_feature_enabled(X86_FEATURE_LAM))
++			return put_user(0, (unsigned long __user *)arg2);
++		else
++			return put_user(LAM_U57_BITS, (unsigned long __user *)arg2);
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
 -- 
 2.38.0
 
