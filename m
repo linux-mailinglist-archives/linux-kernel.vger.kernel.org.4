@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA96A60D746
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345C460D750
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232671AbiJYWkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S232274AbiJYWnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbiJYWkU (ORCPT
+        with ESMTP id S229515AbiJYWni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:40:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C68558DEE;
-        Tue, 25 Oct 2022 15:40:19 -0700 (PDT)
+        Tue, 25 Oct 2022 18:43:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A3AD7E0D;
+        Tue, 25 Oct 2022 15:43:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFC5DB81F5E;
-        Tue, 25 Oct 2022 22:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 80D19C433D7;
-        Tue, 25 Oct 2022 22:40:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4027461B89;
+        Tue, 25 Oct 2022 22:43:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A9CC433D6;
+        Tue, 25 Oct 2022 22:43:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666737616;
-        bh=v/gO7B5DNK3drVPpsCaD6Y1Q264IFu3D5vXNNxHMIWE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SX9tHiUaCAR43XAXShzfk3LwHh6/LYHK352WPmS33nhN2JsoS3qPm1p6bKC8mALC7
-         3HNEB6zC6AS1Bg/rNeopUqxrAYnJUbQH553s4pP3TC7dwH8t+KY3+EN+vVMgMKrrIT
-         gP7QTHQd5tkFG0dE11WxhWhwqZfoWC8WgZaUNkYXL5LEFuGjMGCDkyBsyhCtJm0IQV
-         AWoAR6TtC0Epqc1wnw+7PPdP4/b7+Qf9V6mI7R3zGPK/i0zxqKTF0Gwteen5Uzwih7
-         EvHbmwXEJmgVSnysSJG5CddnUcrbRPBxij1OtuMkUwT1gnkZG1glMngGe3CrWrvONz
-         s/SYElMCrt+bw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5F8EFE29F32;
-        Tue, 25 Oct 2022 22:40:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1666737816;
+        bh=VzotCHER+4tJmGewDcfbWpt7XoYpGbd1YkpPo+U5NQo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=EpHcLnsL+gZtYIDpAyeoyqfxBTPc2AwdkPujIrcind2CrETjd399N1hfJHz5yw2D9
+         JjL27F5gKSmyC24qG1JX5qnOJY8OIdrrvd1GjfKDq8PGH5BXxPr6tDybKzGDUJUhu/
+         Ew3B2VZcE/NxmscjdbWp15Pv7Mgu+2yWr17g5R9z9AwyH9ccrmW+UlWW86PwTjWrJ1
+         uxHWihZp8tJI1D6Y5VF4lwmFHVm/B64n05inTiZeaFBDNtnR8Etrbx8x4D5sDfY12N
+         THe/9naax49Z1z8OVpAwvrzxOKY85gEnfFT4U1FayeyZ597/CP2AoTatEfRw4GCpae
+         DVfUHgbKwmxhA==
+Date:   Tue, 25 Oct 2022 17:43:34 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        David Airlie <airlied@redhat.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 0/8] agp: Convert to generic power management
+Message-ID: <20221025224334.GA694255@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 1/1] virtio_bt: Fix alignment in configuration struct
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <166673761638.12942.12923887540538153791.git-patchwork-notify@kernel.org>
-Date:   Tue, 25 Oct 2022 22:40:16 +0000
-References: <20221024134033.30142-2-Igor.Skalkin@opensynergy.com>
-In-Reply-To: <20221024134033.30142-2-Igor.Skalkin@opensynergy.com>
-To:     Igor Skalkin <igor.skalkin@opensynergy.com>
-Cc:     virtualization@lists.linux-foundation.org, luiz.dentz@gmail.com,
-        mst@redhat.com, marcel@holtmann.org, johan.hedberg@gmail.com,
-        jasowang@redhat.com, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Igor.Skalkin@opensynergy.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPM=9twkfjHh4SR2aQdB9WTRYEhTdWZG4A-f0n8oB8yw=dZgyw@mail.gmail.com>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,28 +57,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
-
-On Mon, 24 Oct 2022 15:40:33 +0200 you wrote:
-> The current version of the configuration structure has unaligned
-> 16-bit fields, but according to the specification [1], access to
-> the configuration space must be aligned.
+On Wed, Oct 26, 2022 at 08:17:47AM +1000, Dave Airlie wrote:
+> On Wed, 26 Oct 2022 at 06:39, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >
+> > From: Bjorn Helgaas <bhelgaas@google.com>
+> >
+> > Vaibhav converted several AGP drivers from legacy PCI power management to
+> > generic power management [1].  This series converts the rest of them.
 > 
-> Add a second, aligned  version of the configuration structure
-> and a new feature bit indicating that this version is being used.
+> Do you want to merge through the PCI tree?
 > 
-> [...]
+> Acked-by: Dave Airlie <airlied@redhat.com>
 
-Here is the summary with links:
-  - [v4,1/1] virtio_bt: Fix alignment in configuration struct
-    https://git.kernel.org/bluetooth/bluetooth-next/c/57dc0d471d27
+Sure, will be happy to.  Thanks!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> > v1 posted at [2].
+> >
+> > Changes from v1 to v2:
+> >   - Convert from SIMPLE_DEV_PM_OPS() (which is deprecated) to
+> >     DEFINE_SIMPLE_DEV_PM_OPS() and remove __maybe_unused annotations.
+> >
+> > [1] https://lore.kernel.org/all/20210112080924.1038907-1-vaibhavgupta40@gmail.com/#t
+> > [2] https://lore.kernel.org/all/20220607034340.307318-1-helgaas@kernel.org/
+> >
+> > Bjorn Helgaas (8):
+> >   agp/efficeon: Convert to generic power management
+> >   agp/intel: Convert to generic power management
+> >   agp/amd-k7: Convert to generic power management
+> >   agp/ati: Convert to generic power management
+> >   agp/nvidia: Convert to generic power management
+> >   agp/amd64: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+> >   agp/sis: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+> >   agp/via: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+> >
+> >  drivers/char/agp/amd-k7-agp.c   | 24 ++++--------------------
+> >  drivers/char/agp/amd64-agp.c    |  6 ++----
+> >  drivers/char/agp/ati-agp.c      | 22 ++++------------------
+> >  drivers/char/agp/efficeon-agp.c | 16 ++++------------
+> >  drivers/char/agp/intel-agp.c    | 11 +++++------
+> >  drivers/char/agp/nvidia-agp.c   | 24 ++++--------------------
+> >  drivers/char/agp/sis-agp.c      |  7 ++-----
+> >  drivers/char/agp/via-agp.c      |  6 ++----
+> >  8 files changed, 27 insertions(+), 89 deletions(-)
+> >
+> > --
+> > 2.25.1
+> >
