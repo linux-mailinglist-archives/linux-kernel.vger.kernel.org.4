@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7280760D260
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A7260D262
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 19:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbiJYRW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 13:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S232348AbiJYRWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 13:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbiJYRWW (ORCPT
+        with ESMTP id S232438AbiJYRWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 13:22:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C15E09B9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:22:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FA3D61A5F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 17:22:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BC39C433C1;
-        Tue, 25 Oct 2022 17:22:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666718539;
-        bh=b2jLgOkbVkgTFTZHzgyPA7Qmaai4R+6ZbvML08sPZ8Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XGcaCVTWH69C0Hr/M2My2JludMZyyrkr7NYNOM8i6rIGudr+GcROIX1eqmUgJvi1m
-         rOQp1BVl++YOu+PK1vY/AVI7g5pDGh1eUqVRNkG8tUVDXudml2D4uZDGTJQUt4AaWA
-         zTdg0yObDCvWmchtRx6I5H264wxT7WZiBolLodaM=
-Date:   Tue, 25 Oct 2022 19:22:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Kang Minchul <tegongkang@gmail.com>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] staging: r8188eu: cleaning up unused variables
-Message-ID: <Y1gbOfBBkqt1m5rS@kroah.com>
-References: <20221024084925.262289-1-tegongkang@gmail.com>
- <CA+uqrQDuJQ3yBY8_re===u0f97pyr_hn_VNu6LqLJAZnDeqhVQ@mail.gmail.com>
+        Tue, 25 Oct 2022 13:22:42 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8150ED9955
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:22:41 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id p127so15094575oih.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UnycRWzQFhXW+E+yHAOypiR1qOTxMMwn/mhojHoxaPo=;
+        b=aQXTsL9NfQ6zm9GGiC7urT7nYN3RJAfmUONUTx6FytLwp5zSbDRgfbpz0SkKcQutcy
+         4IiyJ3bK+iCKC8ie7Y84bwUlEgaL6ANTpS+4zD0TzLANJacQoTs3TZPB6Wm9k+YJEydU
+         Ke6M/V6X9jp3zk2h2TmweOM1irSxFs7/d5EqHPwZmxxqLIqLGm6bUl1n1/cq66ojxVoz
+         r7bcn30Ga46Fqa5dIdpMNE1MQLX6HB1EZMpyWGIwJdkqAuXcYX26I3VWs6G6NchoaeG7
+         /49Vx7VY34jlFs8ZP8oj5TyWvP0u0CjBOmubNWu2ozkoGngbbvQzSnY2njDzn7dQCvlx
+         sRAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UnycRWzQFhXW+E+yHAOypiR1qOTxMMwn/mhojHoxaPo=;
+        b=ZR89iqS/TgzCsS51c0HpVVYdgOCnDYTxbW0eoVpdAkjSdaq0kMG1xSGGZPi642WjZr
+         RFRi3YymfMPb3l7BmmRxGqFcos0DT5nN20o2aJs7PCKZA6bKDVdhur/EDjLrn+D3ebnb
+         jgZB4SNf0z21LQCiL/Yez89eQU3z92qAhyZGAWUWZ9wLRJ6Y/C5vUIbF4cotXDBWxSF4
+         FvsFRHni7hiPwfFoGXAyuGbhFBQ6LZwz+yu/MkoE1zWJapr5tly9/cWHIRyE84+Pb8zm
+         txukNUZNxgCu5lopG8eJh+0aEl3SYfh7UnNq7xQa/6gx3ClbNBAFTrXox27d0wzn+W0d
+         U43g==
+X-Gm-Message-State: ACrzQf0s0FF1o3xEekxkxNP9hqXzXkSlKy7QIx+EVnYEHd8FJh9yk78L
+        IYh7QtkRHGku9gAwa3YrWd6N8GFI7q4=
+X-Google-Smtp-Source: AMsMyM4Y1I0byczm5I1F5DvGJA5GWyFL+U1kQRDyENq0n5dTlj7k3Hyfz7okkqqHKolh48TLkZ4kXg==
+X-Received: by 2002:a05:6808:130e:b0:359:5695:bb9a with SMTP id y14-20020a056808130e00b003595695bb9amr1590412oiv.131.1666718560890;
+        Tue, 25 Oct 2022 10:22:40 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 11-20020aca0d0b000000b0035476861b1dsm1120347oin.49.2022.10.25.10.22.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 10:22:40 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 25 Oct 2022 10:22:39 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: Linux 6.1-rc2
+Message-ID: <20221025172239.GC968059@roeck-us.net>
+References: <CAHk-=wgLV1tNP0EYz7qWK-xeKzO6bh5Kogbpn2wxKLPPpOit3w@mail.gmail.com>
+ <20221025162441.GA1128834@roeck-us.net>
+ <CAHk-=wivKoK4VgfKB8ykQUHKhNSUYA2=m4X7k8QKaizSMvzgZg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+uqrQDuJQ3yBY8_re===u0f97pyr_hn_VNu6LqLJAZnDeqhVQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHk-=wivKoK4VgfKB8ykQUHKhNSUYA2=m4X7k8QKaizSMvzgZg@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 08:23:08PM +0900, Kang Minchul wrote:
-> 2022년 10월 24일 (월) 오후 5:49, Kang Minchul <tegongkang@gmail.com>님이 작성:
+On Tue, Oct 25, 2022 at 09:41:50AM -0700, Linus Torvalds wrote:
+> On Tue, Oct 25, 2022 at 9:24 AM Guenter Roeck <linux@roeck-us.net> wrote:
 > >
-> > This patch series cleans up unused variables in r8188eu
-> > causing coccicheck warnings.
-> >
-> > Difference between v1 and this patch is that this patch series
-> > include making function amsdu_to_msdu in /r8188eu/core/rtw_recv.c
-> > into void function.
-> >
-> > Kang Minchul (4):
-> >   staging: r8188eu: remove unnecessary variable in ioctl_linux
-> >   staging: r8188eu: make amsdu_to_msdu void function
-> >   staging: r8188eu: remove unnecessary variable in rtl8188eu_xmit
-> >   staging: r8188eu: remove unnecessary variable in rtw_ap
-> >
-> >  drivers/staging/r8188eu/core/rtw_ap.c        | 5 ++---
-> >  drivers/staging/r8188eu/core/rtw_recv.c      | 5 +----
-> >  drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
-> >  drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
-> >  4 files changed, 5 insertions(+), 12 deletions(-)
-> >
-> > --
-> > 2.34.1
-> >
-> Oh, I guess patch 4/4 can be fixed as well.
-> I think the function rtw_sta_flush can be void as well.
+> > Build results:
+> >         total: 152 pass: 152 fail: 0
+> > Qemu test results:
+> >         total: 499 pass: 499 fail: 0
 > 
-> I'll resend the patch later.
+> Woo-hoo!
+> 
+> That was quick, for once.
+> 
 
-You broke the build in this series, please fix up and send a v3.
+Yes, it was. I now have an even better one, with a new personal
+milestone reached (500 qemu boot tests):
 
-thanks,
+Build results:
+	total: 152 pass: 152 fail: 0
+Qemu test results:
+	total: 500 pass: 500 fail: 0
+	       ^^^
 
-greg k-h
+... after getting yet another qemu machine to boot.
+
+> > Runtime warnings
+> 
+> Oh.
+> 
+> Well, close enough, and those fixes are presumably pending too.
+> 
+
+Let's hope so. I think I forgot to copy the ppc maintainers last week,
+so we'll see if we get some feedback on the status of those problems.
+
+Thanks,
+Guenter
