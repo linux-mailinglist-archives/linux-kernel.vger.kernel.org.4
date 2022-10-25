@@ -2,104 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D4360C3E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C6260C3ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiJYGjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S230016AbiJYGnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbiJYGjL (ORCPT
+        with ESMTP id S229678AbiJYGnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:39:11 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22709147D17;
-        Mon, 24 Oct 2022 23:39:09 -0700 (PDT)
-X-UUID: 3cdc034a11d34d0193bbaedc53a61c63-20221025
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=tQobf7xDtt3s0PCmRp7MPfET49Bi1DCJ8ajNsUuFyIs=;
-        b=kj3Mq+CiCePf6Xqb1xJG+BIJ7YMsxNAYxlpyQslxZEcpLMeZUz71bRTWqwyw6kw5GOCalTMGcpM95t0aJbaHS1e79AKLMkNsEm/Wif60JMo3MQfnBOBu/pv6HaeGe/GoUMWcc0P/xqcFLmZLO7NO0tqsXVIu+Iw3o387GrMun7o=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:9a903fc1-5aa1-429f-98fd-044b19337204,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:1117026d-89d3-4bfa-baad-dc632a24bca3,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 3cdc034a11d34d0193bbaedc53a61c63-20221025
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1452619724; Tue, 25 Oct 2022 14:39:02 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 25 Oct 2022 14:39:01 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Tue, 25 Oct 2022 14:39:00 +0800
-Message-ID: <514697c381172b4baa011cc68ae8093c7517e0b2.camel@mediatek.com>
-Subject: Re: [PATCH v5 0/3] iommu/mediatek: Add mt8365 iommu support
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Alexandre Mergnat <amergnat@baylibre.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        <devicetree@vger.kernel.org>, Fabien Parent <fparent@baylibre.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Markus Schneider-Pargmann" <msp@baylibre.com>,
-        <linux-mediatek@lists.infradead.org>, <iommu@lists.linux.dev>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <mingyuan.ma@mediatek.com>, <yf.wang@mediatek.com>,
-        <libo.kang@mediatek.com>, <anan.sun@mediatek.com>
-Date:   Tue, 25 Oct 2022 14:39:00 +0800
-In-Reply-To: <20221001-iommu-support-v5-0-92cdbb83bbb8@baylibre.com>
-References: <20221001-iommu-support-v5-0-92cdbb83bbb8@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
+        Tue, 25 Oct 2022 02:43:42 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6DEA13ECFE
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:43:38 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20221025064333epoutp01beb4027b11c971d68b71cc5839b76f3d~hPNLTIvNx1068010680epoutp01L
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 06:43:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20221025064333epoutp01beb4027b11c971d68b71cc5839b76f3d~hPNLTIvNx1068010680epoutp01L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1666680213;
+        bh=QvdlCHmxLDwLk/YfcGnvZ9WuodpOPFQncDCNAfh4N+c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Yx4wvo2VctJlZxRjLjWb+8tSDZpC47bUez02H9LAKCcqb6uXsvQyBwIHCTrL7rsTG
+         BkB5fF6fmWYshPDV0d9QIEqLt7sG9vw53ezYHM4TxxksQSGMzMXwd+wIOcxcQAASFL
+         3X7bDhPubfqmn/MEIXcyaDrFiolWuLQgrORwj0SQ=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20221025064332epcas1p3c7eddf0bb91c73ef5b344db936132fa6~hPNKuYDkk1286312863epcas1p3b;
+        Tue, 25 Oct 2022 06:43:32 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.38.235]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4MxMpW55xkz4x9Q2; Tue, 25 Oct
+        2022 06:43:31 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A7.CF.51827.39587536; Tue, 25 Oct 2022 15:43:31 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20221025064331epcas1p4a323241a653ad0dc9a582ad348a3b831~hPNJYAQ753176631766epcas1p4D;
+        Tue, 25 Oct 2022 06:43:31 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221025064331epsmtrp1f39e99f7e37cb7961714e661130eb576~hPNJW1S1G2748727487epsmtrp1L;
+        Tue, 25 Oct 2022 06:43:31 +0000 (GMT)
+X-AuditID: b6c32a36-17bfa7000000ca73-3a-63578593f457
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        66.55.18644.29587536; Tue, 25 Oct 2022 15:43:31 +0900 (KST)
+Received: from jiho-chu04.tn.corp.samsungelectronics.net (unknown
+        [10.113.112.236]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20221025064330epsmtip16d6321c17f0df26a274de6d1447cc401~hPNI9HtaU1891818918epsmtip1Z;
+        Tue, 25 Oct 2022 06:43:30 +0000 (GMT)
+Date:   Tue, 25 Oct 2022 15:43:30 +0900
+From:   Jiho Chu <jiho.chu@samsung.com>
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+Subject: Re: [RFC PATCH 3/3] drm: add dedicated minor for accelerator
+ devices
+Message-Id: <20221025154330.a3a839357363da6d5de96c89@samsung.com>
+In-Reply-To: <20221022214622.18042-4-ogabbay@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHd3t7bwsTclcQzuoWa5kxsBQotHiYYOb7LsOMzSVmJq5r2jtg
+        LW1pi9tkMVXkIa3S8lCsSgCRMYYgUMobDVUK6liQbjIjkCg+mLw3dPKQtV6c++/7+53P753D
+        RjlZLC47SaWntCqpko97M+2OYIEgP2OvLLzm9HrYc7uMAU/ebcPgUl43Cy7bLSh0ZZzCoGtu
+        Cofp52txeMPsRgr6ljD4d70Zh64X7Qise1DGglPGNhQ+z7Ix4EDrWRyWzjQy4eH0QRRmHqvA
+        YKdpBoE3S/9BofPFQWgbt7hzPor/MJC8ODOCkRm3lnByYT4PIacGM1hkx9MSJvl4zo6SLdYh
+        FtlQGULWVx3DyeLeT8nL56pZ5IjRySCPp0/ipKX9EHnCVoWQDTfS4jn7FDGJlFROaXmUSqaW
+        J6kSYvkf75Fsk4ijwoUCYTTcyOeppMlULH97XLxgZ5LSvQg+74BUmep2xUt1On7Y5hitOlVP
+        8RLVOn0sn9LIlRqxJlQnTdalqhJCVZT+A2F4eITYDX6lSByu52qurPnO0LjagBQG5CBebECI
+        QO6Ty6wcxJvNIZoRUH67GqONWQSYH/zMoI2/EGCtvYS9CvnxWRvDozlEKwImWzbSUDYD9P1x
+        HPE8MIn1wJBZ/RLC3fp0UbW7BpvtT7wH+i+IPDxKTONgvK4Q8/j9iE9Aa4fII32ILWDsqtIT
+        6UVAMFt2n0GXhWDIVInRyFtgqdnP40aJtaBp4izqyQiIWi9wzWFaaXM7yKvIX4n1A386bSxa
+        c8FYbuaKVoCC7DImrTWg71Ej6skPiEjQXyn3SJQIBrWtYTSxDrQsnEPosr5gcs6E0bQPyM7k
+        0AgflC86VpIDUFj0dKUBEozcrGHSe2pBwKhxETcjPOvrYaz/G8b6unAJglYhAZRGl5xA6YSa
+        iP9OK1Mn1yMvf0RIVDOSNzEd2oUw2EgXAtgo39+HObpHxvGRS78/SGnVEm2qktJ1IWL3XSwo
+        d7VM7f5SKr1EKIoOF0VFRIqgMErID/QxFIXIOESCVE8pKEpDaV/FMdheXANDs204pfcoVaB9
+        Y7j7+oXlz6Zqmu70nkyaLu0yBY7bC4MOm7OCLG9/ETe4m7vJ3i8xCCpiFi0bLn5dXDFu+qj8
+        1ximJveXN2vaxxq8jQNPglts8/YdJ2KqXY7d3x4aSCtZjPUft1WGGc6cMs9uwq935vx+74ij
+        Ithx1OWV9bync795wbxOkTGzdsO+CcVPvd9kK4PXIInHd+0NutSzNa78t5SE0TO+tYJQXsnO
+        0YdfsuMDO33fXyWNfUcn2LpZkrb/vu5e9OPzD30jndeGBCnzW+bftX/+THy1gTF012j9gX1L
+        HHBnVZ3rAHYlZHLHdFN+SRqU63PKO484i5drqrBuo3Oko4HP1CVKhSGoVif9F7FaiaCaBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02RfUzMcRzH+/6eOzv7dUXfaiM3TztEynxt5Zn90pDZMG108nPM3ZU7hWzn
+        7FxUHioqtSKFWuuU61HlqU4PelinkIeK0aRJD+QUh84x/nvt/X59PvtsHwYXvSDcmX3Kg7xK
+        KZWLKQFRWiOeMu+8fmvogrh6gOqfZmEo+WUliayJtTT6WZqAo3Z9ConaRwYopMsuoFBj/Lhy
+        ocVKos/GeAq1/6gC6GZPFo0G4ipxNHqyGENtFekUujJUQqDjug4cRcdcJ9Gd00MANV35iqO6
+        H1Go+EPC+M53QctdOcNQN8npH1kp7ttYIuAGOvQ0d/tLJsH1jpTi3K20TporypVwxrwYirvU
+        sIm7m5FPc91xdRh3RveR4hKqNNzZ4jzAFTUeDRJtF/jt5uX7InnV/KUhgr1dRvfwex6HtSWT
+        tCBpcixwZCDrC3MslVgsEDAithzAM33XCHsBobErB48FzDg7w5oatd2JxmDCswHK5hDsDKiN
+        zsdsTI1z6sV82ua7sNOh+ZqvzcfZQQreKUslbbkzuxFW3Pa1oZBdAd+b5LZJRxbB4aw3f064
+        BeDbuO+U/QQEO0/nknbfCVrLnW0xzkrg67HnhJ2nwrL+dDweOKX9s9L+s9L+szIBngfc+HC1
+        QqZQe4cvVPKHvNRShTpCKfMKDVMYwe//SyTloCpv0KsaYAyoBpDBxS5C4u3mUJFwt/RIFK8K
+        26mKkPPqauDBEGJXYWtsw04RK5Me5PfzfDiv+ttijKO7FmusozUXgWxXubT2zYwmU9GsT7Jt
+        WO+qxs7LLREhVIzzI3/rseLZVwsDUi6hbsPdwlUm8zKPE8K2dZFti/2erJQZzk91MljqDK6m
+        piVB95s9vWfWvNrjv27WOU1LX8EaV/8w31O1N7ZEaWsL5xA5nrkF9OqAJ98De82CHTcpxwVL
+        zKXZ2cEZbcuHH943+ORoe7qa15iDByum+CtOTvhGZCp0x1tPeT7NgG5+WwJcLFrPBrRIX9Uf
+        emKrxaoZakmkj5XRqXvcnpNzlMlGnnkQQh6Y+KxS7pA7N7n+cNLjQf3XDV1l1IGU9fdGyA4H
+        H8vwDVOv1NtLp1k26hC4dtpaHz8xod4r9ZbgKrX0F0/PgZ5uAwAA
+X-CMS-MailID: 20221025064331epcas1p4a323241a653ad0dc9a582ad348a3b831
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221022214657epcas1p18a2625c84cd6470b5404cb71f9836cc8
+References: <20221022214622.18042-1-ogabbay@kernel.org>
+        <CGME20221022214657epcas1p18a2625c84cd6470b5404cb71f9836cc8@epcas1p1.samsung.com>
+        <20221022214622.18042-4-ogabbay@kernel.org>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-10-21 at 15:42 +0200, Alexandre Mergnat wrote:
-> Hi,
-> 
-> This series contains patches related to the support of mt8365 iommu.
-> Thanks for your feedback so far.
-> 
-> Regards,
-> Alex
-> 
-> Changes in
-> v5:                                                                  
-> - Fix name file in
-> mediatek,iommu.yaml                                          
-> - Rename defines to be more
-> consistent                                          
-> - Rework INT_ID_PORT_WIDTH_6
-> check                                              
-> - Link to v4: 
-> https://lore.kernel.org/r/20221001-iommu-support-v4-0-f1e13438dfd2@baylibre.com
+
+On Sun, 23 Oct 2022 00:46:22 +0300
+Oded Gabbay <ogabbay@kernel.org> wrote:
+
+> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+> index b58ffb1433d6..c13701a8d4be 100644
+> --- a/drivers/gpu/drm/drm_drv.c
+> +++ b/drivers/gpu/drm/drm_drv.c
+> @@ -56,6 +56,9 @@ MODULE_LICENSE("GPL and additional rights");
+>  static DEFINE_SPINLOCK(drm_minor_lock);
+>  static struct idr drm_minors_idr;
+>  
+> +static DEFINE_SPINLOCK(accel_minor_lock);
+> +static struct idr accel_minors_idr;
+> +
+>  /*
+>   * If the drm core fails to init for whatever reason,
+>   * we should prevent any drivers from registering with it.
+> @@ -94,6 +97,8 @@ static struct drm_minor **drm_minor_get_slot(struct drm_device *dev,
+>  		return &dev->primary;
+>  	case DRM_MINOR_RENDER:
+>  		return &dev->render;
+> +	case DRM_MINOR_ACCEL:
+> +		return &dev->accel;
+>  	default:
+>  		BUG();
+>  	}
+> @@ -108,9 +113,15 @@ static void drm_minor_alloc_release(struct drm_device *dev, void *data)
+>  
+>  	put_device(minor->kdev);
+>  
+> -	spin_lock_irqsave(&drm_minor_lock, flags);
+> -	idr_remove(&drm_minors_idr, minor->index);
+> -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +	if (minor->type == DRM_MINOR_ACCEL) {
+> +		spin_lock_irqsave(&accel_minor_lock, flags);
+> +		idr_remove(&accel_minors_idr, minor->index);
+> +		spin_unlock_irqrestore(&accel_minor_lock, flags);
+> +	} else {
+> +		spin_lock_irqsave(&drm_minor_lock, flags);
+> +		idr_remove(&drm_minors_idr, minor->index);
+> +		spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +	}
+>  }
+>  
+>  static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+> @@ -127,13 +138,23 @@ static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+>  	minor->dev = dev;
+>  
+>  	idr_preload(GFP_KERNEL);
+> -	spin_lock_irqsave(&drm_minor_lock, flags);
+> -	r = idr_alloc(&drm_minors_idr,
+> -		      NULL,
+> -		      64 * type,
+> -		      64 * (type + 1),
+> -		      GFP_NOWAIT);
+> -	spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +	if (type == DRM_MINOR_ACCEL) {
+> +		spin_lock_irqsave(&accel_minor_lock, flags);
+> +		r = idr_alloc(&accel_minors_idr,
+> +			NULL,
+> +			64 * (type - DRM_MINOR_ACCEL),
+> +			64 * (type - DRM_MINOR_ACCEL + 1),
+> +			GFP_NOWAIT);
+> +		spin_unlock_irqrestore(&accel_minor_lock, flags);
+> +	} else {
+> +		spin_lock_irqsave(&drm_minor_lock, flags);
+> +		r = idr_alloc(&drm_minors_idr,
+> +			NULL,
+> +			64 * type,
+> +			64 * (type + 1),
+> +			GFP_NOWAIT);
+> +		spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +	}
+
+Hi,
+There are many functions which checks drm type and decides its behaviors. It's good to
+re-use exiting codes, but accel devices use totally different major/minor, and so it needs to be moved to 
+/drvier/accel/ (maybe later..). How about seperating functions for alloc/release minor (accel_minor_alloc..)? 
+also, for others which have drm type related codes.
 
 
-For this series,
-
-Reviewed-by: Yong Wu <yong.wu@mediatek.com>
 
 
+> @@ -607,6 +652,14 @@ static int drm_dev_init(struct drm_device *dev,
+>  	/* no per-device feature limits by default */
+>  	dev->driver_features = ~0u;
+>  
+> +	if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
+> +				(drm_core_check_feature(dev, DRIVER_RENDER) ||
+> +				drm_core_check_feature(dev, DRIVER_MODESET))) {
+> +
+> +		DRM_ERROR("DRM driver can't be both a compute acceleration and graphics driver\n");
+> +		return -EINVAL;
+> +	}
+> +
+
+It's fine for the device only for acceleration, but can't graphic devices have acceleration feature?
+
+
+Thanks,
+Jiho Chu
