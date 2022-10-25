@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4787C60D111
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F01D60D110
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbiJYP4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
+        id S231260AbiJYP4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiJYP4C (ORCPT
+        with ESMTP id S232280AbiJYPz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:56:02 -0400
+        Tue, 25 Oct 2022 11:55:57 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F288172B62
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:56:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8B8517650D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:55:55 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 40CC4ED1;
-        Tue, 25 Oct 2022 08:56:06 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B363FD6E;
+        Tue, 25 Oct 2022 08:56:01 -0700 (PDT)
 Received: from [10.1.197.78] (unknown [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 646853F71A;
-        Tue, 25 Oct 2022 08:55:58 -0700 (PDT)
-Message-ID: <a4def722-aa98-6bf9-6e77-65a9fd9bd8ca@arm.com>
-Date:   Tue, 25 Oct 2022 16:55:46 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 542F13F71A;
+        Tue, 25 Oct 2022 08:55:54 -0700 (PDT)
+Message-ID: <715e4123-fdb3-a71e-4069-91d16a56a308@arm.com>
+Date:   Tue, 25 Oct 2022 16:55:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
 Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
 Content-Language: en-GB
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Newman <peternewman@google.com>
-Cc:     Tony Luck <tony.luck@intel.com>,
+To:     Peter Newman <peternewman@google.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
         "Yu, Fenghua" <fenghua.yu@intel.com>,
         "Eranian, Stephane" <eranian@google.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -43,13 +43,13 @@ References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
  <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com>
  <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
  <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
- <7b09fb62-e61a-65b9-a71e-ab725f527ded@intel.com>
- <CALPaoCg4zrODVoXF2y2b+LRYq_+jnV8yv5qB+T_3Z264cV82GQ@mail.gmail.com>
- <b931062a-1a70-2331-03cc-6bfa69a51bee@intel.com>
- <CALPaoCj8ps2YRH5T1eCRY-8MLwGi25cfbd0KNtjYXTq5baAXOQ@mail.gmail.com>
- <da89ea90-8453-f848-38d1-a14195faa95e@intel.com>
+ <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com>
+ <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
+ <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com>
+ <CALPaoCgiwtvxZMJ6f-BOTNMPXDbMB8QM42HyCAvYRi4grPiphQ@mail.gmail.com>
+ <CALPaoCg2-9ARbK+MEgdvdcjJtSy_2H6YeRkLrT97zgy8Aro3Vg@mail.gmail.com>
 From:   James Morse <james.morse@arm.com>
-In-Reply-To: <da89ea90-8453-f848-38d1-a14195faa95e@intel.com>
+In-Reply-To: <CALPaoCg2-9ARbK+MEgdvdcjJtSy_2H6YeRkLrT97zgy8Aro3Vg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -61,86 +61,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette, Peter,
+Hi Peter,
 
-On 20/10/2022 20:08, Reinette Chatre wrote:
-> On 10/20/2022 1:48 AM, Peter Newman wrote:
->> On Thu, Oct 20, 2022 at 1:54 AM Reinette Chatre
->> <reinette.chatre@intel.com> wrote:
->>> It is still not clear to me how palatable this will be on Arm systems.
->>> This solution also involves changing the CLOSID/PARTID like your original
->>> proposal and James highlighted that it would "mess up the bandwidth counters"
->>> because of the way PARTID.PMG is used for monitoring. Perhaps even a new
->>> PMG would need to be assigned during such a monitor group move. One requirement
->>> for this RFD was to keep usage counts intact and from what I understand
->>> this will not be possible on Arm systems.  There could be software mechanisms
->>> to help reduce the noise during the transition. For example, some new limbo
->>> mechanism that avoids re-assigning the old PARTID.PMG, while perhaps still
->>> using the old PARTID.PMG to read usage counts for a while? Or would the
->>> guidance just be that the counters will have some noise after the move?
+On 21/10/2022 13:42, Peter Newman wrote:
+> On Thu, Oct 20, 2022 at 12:39 PM Peter Newman <peternewman@google.com> wrote:
 >>
->> I'm going to have to follow up on the details of this in James's thread.
->> It sounded like we probably won't be able to create enough mon_groups
->> under a single control group for the rename feature to even be useful.
->> Rather, we expect the PARTID counts to be so much larger than the PMG
->> counts that creating more mon_groups to reduce the number of control
->> groups wouldn't make sense.
+>> On Wed, Oct 19, 2022 at 3:58 PM James Morse <james.morse@arm.com> wrote:
+>>> The devil is in the detail, I'm not sure how it serialises with a fork()ing process, I'd
+>>> hope to do better than relying on the kernel walking the list of processes a lot quicker
+>>> than user-space can.
 >>
->> At least in our use case, we're literally creating "classes of service"
->> to prioritize memory traffic, so we want a small number of control
->> groups to represent the small number of priority levels, but enough
->> RMIDs to count every job's traffic independently. For MPAM to support
->> this MBM/MBA use case in exactly this fashion, we'd have to develop the
->> monitors-not-matching-on-PARTID use case better in the MPAM
->> architecture. But before putting much effort into that, I'd want to know
->> if there's any payoff beyond being able to use resctrl the same way on
->> both implementations.
+>> I wasn't planning to do it any more optimally than the rmdir
+>> implementation today when looking for all tasks impacted by a
+>> CLOSID/RMID deletion.
+> 
+> This is probably a separate topic, but I noticed this when looking at how rmdir
+> moves tasks to a new closid/rmid...
+> 
+> In rdt_move_group_tasks(), how do we know that a task switching in on another
+> CPU will observe the updated closid and rmid values soon enough?
+> 
+> Even on x86, without an smp_mb(), the stores to t->closid and t->rmid could be
+> reordered with the task_curr(t) and task_cpu(t) reads which follow. The original
+> description of this scenario seemed to assume that accesses below would happen
+> in program order:
+> 
+>     WRITE_ONCE(t->closid, to->closid);
+>     WRITE_ONCE(t->rmid, to->mon.rmid);
+> 
+>     /*
+>      * If the task is on a CPU, set the CPU in the mask.
+>      * The detection is inaccurate as tasks might move or
+>      * schedule before the smp function call takes place.
+>      * In such a case the function call is pointless, but
+>      * there is no other side effect.
+>      */
+>     if (IS_ENABLED(CONFIG_SMP) && mask && task_curr(t))
+>          cpumask_set_cpu(task_cpu(t), mask);
+> 
+> If the task concurrently switches in on another CPU, the code above may not
+> observed that it's running, and the CPU running the task may not have observed
+> the updated rmid and closid yet, so it could continue with the old rmid/closid
+> and not get interrupted.
 
-> If the expectation is that PARTID counts are very high then how about
-> a solution where multiple PARTIDs are associated with the same CTRL_MON group?
-> A CTRL_MON group presents a resource allocation to user space, CLOSIDs/PARTIDs
-> are not exposed. So using multiple PARTIDs for a resource group (all with the
-> same allocation) seems conceptually ok to me. (Please note, I did not do an
-> audit to see if there are any hidden assumption or look into lifting required
-> to support his.)
-
-This would work when systems are built to look like RDT, but MPAM has other control types
-where this would have interesting behaviours.
-
-'CPOR' is equivalent to CBM as they are both a bitmap of portions. MPAM also has 'CMAX'
-where a fraction of the cache is specified. If you create two control groups with
-different PARTIDs but the same configuration, their two 50%s of the cache could become
-100%. CPOR can be used like this, CMAX can't.
-
-
-> So, if a user moves a MON group to a new CTRL_MON group, if there are no
-> PARTID.PMG available in the destination CTRL_MON group to support the move
-> then one of the free PARTID can be used, automatically assigned with the
-> allocation of the destination CTRL_MON, and a new monitor group created using
-> the new PMG range brought with the new PARTID.
-
-This would be transparent on some hardware, but not on others. It depends what controls
-are supported.
-
-Even when the controls behave in the same way, a different PARTID with the same control
-values could be regulated differently, resulting in weirdness.
-
-
-> There may also be a way to guide resctrl to do something like this (use
-> available PARTID) when a user creates a new MON group. This may be a way
-> to address the earlier concern of how applications can decide to create
-> lots of MON groups vs CTRL_MON groups.
-
-I think we should keep this intelligence in user-space.
-
-Exposing a way to indicate how many groups can be created 'at this level', allows
-user-space to determine if its on an RMID-rich machine or a PARTID-rich machine.
-If there is a way of moving a group of tasks between control groups, then we'd also need
-to expose some indication as to whether the monitors at the old location keep counting
-after the move. (which I think is the best way of explaining the difference to user-space)
-
-With these, user-space can change the structure it creates to better fit the resources of
-the machine.
+Makes sense to me - do you want to send a patch to fix it?
 
 
 Thanks,
