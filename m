@@ -2,104 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345C460D750
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504B660D754
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232274AbiJYWnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35974 "EHLO
+        id S232569AbiJYWoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiJYWni (ORCPT
+        with ESMTP id S231628AbiJYWn6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:43:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A3AD7E0D;
-        Tue, 25 Oct 2022 15:43:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4027461B89;
-        Tue, 25 Oct 2022 22:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A9CC433D6;
-        Tue, 25 Oct 2022 22:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666737816;
-        bh=VzotCHER+4tJmGewDcfbWpt7XoYpGbd1YkpPo+U5NQo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=EpHcLnsL+gZtYIDpAyeoyqfxBTPc2AwdkPujIrcind2CrETjd399N1hfJHz5yw2D9
-         JjL27F5gKSmyC24qG1JX5qnOJY8OIdrrvd1GjfKDq8PGH5BXxPr6tDybKzGDUJUhu/
-         Ew3B2VZcE/NxmscjdbWp15Pv7Mgu+2yWr17g5R9z9AwyH9ccrmW+UlWW86PwTjWrJ1
-         uxHWihZp8tJI1D6Y5VF4lwmFHVm/B64n05inTiZeaFBDNtnR8Etrbx8x4D5sDfY12N
-         THe/9naax49Z1z8OVpAwvrzxOKY85gEnfFT4U1FayeyZ597/CP2AoTatEfRw4GCpae
-         DVfUHgbKwmxhA==
-Date:   Tue, 25 Oct 2022 17:43:34 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        David Airlie <airlied@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 0/8] agp: Convert to generic power management
-Message-ID: <20221025224334.GA694255@bhelgaas>
+        Tue, 25 Oct 2022 18:43:58 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B2CEA695
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:43:57 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id s206so2947463oie.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YgIZ1MCTZBEibSbMHUkytkQD0P8jtnB55ZvjcWs03Y0=;
+        b=Ug2NqqojYFHitvHk6uAKAT3Ndk5ffagye/IgLQk/qMn7aOmF02GbeVMzrEmnfwt9mL
+         RSS/WyhRNA0YojgdYLu95cGeMvGbHr+L5QFHLtF2y97nCcpaOdV4SRbnXIb+EqUenzNu
+         YeOt1t8eQOK4OM6mSdMkjrV5G9VSSJwXHGfjU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YgIZ1MCTZBEibSbMHUkytkQD0P8jtnB55ZvjcWs03Y0=;
+        b=Egxq/mTfL0Z2y556B/97ws5fD2sv96UuapMew5GwpcCtK1JenOqbiRlsH6e44+/XTy
+         X/KG/IEQXp8TI57zX7+5I+Wx9FQjM/FjI1I+kVwFGlDMYSsq4mkcLAyxvPsNzMsy5HcF
+         IS3CW5bavwW90IOnbfaUXJEZNSn30BCU6CXIW57T81jQLJ4Be3GU9zwpf2YC7hpTb0VQ
+         +vcnhEbXkwQweqROVo07xlcNdACn6zobeXKRd+Vqvd6H8bG070MLyQr2XDKWgkEAFocm
+         23OFvurfr+cSeOvb4ck4k4DU156AWIm9NXlCapLZYP8sh8/YXbrOqMgAkQ78yEt/PPFb
+         ijYw==
+X-Gm-Message-State: ACrzQf2bbDHs8EEf8qyCuVYAvE5mNBeYyyAL6K7rbZUsVa80gZouwFjK
+        XSMAwc7xzWllje3y/GhCo/sNPg==
+X-Google-Smtp-Source: AMsMyM6l58SiPiliWPOD6a7CUxrcFG8qNCwVjdjo/6C8iTfaMhKNjpAYehQKVuhQCoLgmhGvmq9gLQ==
+X-Received: by 2002:aca:aa94:0:b0:359:aa62:295f with SMTP id t142-20020acaaa94000000b00359aa62295fmr330198oie.230.1666737836498;
+        Tue, 25 Oct 2022 15:43:56 -0700 (PDT)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id r40-20020a05683044a800b0066194e0e1casm1523460otv.75.2022.10.25.15.43.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 15:43:56 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Tue, 25 Oct 2022 17:43:54 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 6.0 00/20] 6.0.4-rc1 review
+Message-ID: <Y1hmqspgeYLPy5Fv@fedora64.linuxtx.org>
+References: <20221024112934.415391158@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPM=9twkfjHh4SR2aQdB9WTRYEhTdWZG4A-f0n8oB8yw=dZgyw@mail.gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221024112934.415391158@linuxfoundation.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 08:17:47AM +1000, Dave Airlie wrote:
-> On Wed, 26 Oct 2022 at 06:39, Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > Vaibhav converted several AGP drivers from legacy PCI power management to
-> > generic power management [1].  This series converts the rest of them.
+On Mon, Oct 24, 2022 at 01:31:02PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.4 release.
+> There are 20 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Do you want to merge through the PCI tree?
+> Responses should be made by Wed, 26 Oct 2022 11:29:24 +0000.
+> Anything received after that time might be too late.
 > 
-> Acked-by: Dave Airlie <airlied@redhat.com>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Sure, will be happy to.  Thanks!
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-> > v1 posted at [2].
-> >
-> > Changes from v1 to v2:
-> >   - Convert from SIMPLE_DEV_PM_OPS() (which is deprecated) to
-> >     DEFINE_SIMPLE_DEV_PM_OPS() and remove __maybe_unused annotations.
-> >
-> > [1] https://lore.kernel.org/all/20210112080924.1038907-1-vaibhavgupta40@gmail.com/#t
-> > [2] https://lore.kernel.org/all/20220607034340.307318-1-helgaas@kernel.org/
-> >
-> > Bjorn Helgaas (8):
-> >   agp/efficeon: Convert to generic power management
-> >   agp/intel: Convert to generic power management
-> >   agp/amd-k7: Convert to generic power management
-> >   agp/ati: Convert to generic power management
-> >   agp/nvidia: Convert to generic power management
-> >   agp/amd64: Update to DEFINE_SIMPLE_DEV_PM_OPS()
-> >   agp/sis: Update to DEFINE_SIMPLE_DEV_PM_OPS()
-> >   agp/via: Update to DEFINE_SIMPLE_DEV_PM_OPS()
-> >
-> >  drivers/char/agp/amd-k7-agp.c   | 24 ++++--------------------
-> >  drivers/char/agp/amd64-agp.c    |  6 ++----
-> >  drivers/char/agp/ati-agp.c      | 22 ++++------------------
-> >  drivers/char/agp/efficeon-agp.c | 16 ++++------------
-> >  drivers/char/agp/intel-agp.c    | 11 +++++------
-> >  drivers/char/agp/nvidia-agp.c   | 24 ++++--------------------
-> >  drivers/char/agp/sis-agp.c      |  7 ++-----
-> >  drivers/char/agp/via-agp.c      |  6 ++----
-> >  8 files changed, 27 insertions(+), 89 deletions(-)
-> >
-> > --
-> > 2.25.1
-> >
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
