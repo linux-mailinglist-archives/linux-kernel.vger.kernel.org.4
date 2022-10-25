@@ -2,59 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A9460C613
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAA360C614
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbiJYIIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
+        id S230419AbiJYIIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:08:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiJYIIH (ORCPT
+        with ESMTP id S229864AbiJYIIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:08:07 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0BD22733D2;
-        Tue, 25 Oct 2022 01:08:05 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id A1DA180B0;
-        Tue, 25 Oct 2022 07:58:48 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 11:08:03 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 00/10] ARM: omap2: assorted cleanups
-Message-ID: <Y1eZY/WRA+WYeDhH@atomide.com>
-References: <20221024153814.254652-1-arnd@kernel.org>
+        Tue, 25 Oct 2022 04:08:17 -0400
+Received: from mail.wantstofly.org (hmm.wantstofly.org [213.239.204.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2B27C1D7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:08:16 -0700 (PDT)
+Received: by mail.wantstofly.org (Postfix, from userid 1000)
+        id A83C97F527; Tue, 25 Oct 2022 11:08:13 +0300 (EEST)
+Date:   Tue, 25 Oct 2022 11:08:13 +0300
+From:   Lennert Buytenhek <buytenh@wantstofly.org>
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH,RFC] iommu/vt-d: Convert dmar_fault IRQ to a threaded IRQ
+Message-ID: <Y1eZbXKdJDoS8loC@wantstofly.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221024153814.254652-1-arnd@kernel.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Under a high enough I/O page fault load, the dmar_fault hardirq handler
+can end up starving other tasks that wanted to run on the CPU that the
+IRQ is being routed to.  On an i7-6700 CPU this seems to happen at
+around 2.5 million I/O page faults per second, and at a fraction of
+that rate on some of the lower-end CPUs that we use.
 
-* Arnd Bergmann <arnd@kernel.org> [221024 15:29]:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> While going through the removal of board files on some other
-> platforms, I noticed a bit of outdated code on omap2+ that
-> was left behind after the platform became DT only.
-> 
-> I can put this into the same cleanup tree as the omap1 patches,
-> or you can merge these into your omap2 tree if there are likely
-> conflicts with other patches.
+An I/O page fault rate of 2.5 million per second may seem like a very
+high number, but when we get an I/O page fault for every cache line
+touched by a DMA operation, this I/O page fault rate can be the result
+of a confused PCIe device DMAing to RAM at 2.5 * 64 = 160 MB/sec, which
+is not an unlikely rate to be DMAing things to RAM at.  And, in fact,
+when we do see PCIe devices getting confused like this, this sort of
+I/O page fault rate is not uncommon.
 
-Nice, looks good to me. A lot off stuff has moved to drivers
-over the years.
+A peripheral device continuously DMAing to RAM at 160 MB/s is
+inarguably a bug, either in the kernel driver for the device or in the
+firmware for the device, and should be fixed there, but it's the sort
+of bug that iommu/vt-d could be handling better than it currently does,
+and there is a fairly simple way to achieve that.
 
-As long as you have some immutable branch I can base patches on
-as needed please just go head and apply them to your branch:
+This patch changes the dmar_fault IRQ handler to be a threaded IRQ
+handler.  This is a pretty minimal code change, and comes with the
+advantage that Intel IOMMU I/O page fault handling work is now subject
+to RT throttling, which allows it to be kept under control using the
+sched_rt_period_us / sched_rt_runtime_us parameters.
 
-Acked-by: Tony Lindgren <tony@atomide.com>
+iommu/amd already uses a threaded IRQ handler for its I/O page fault
+reporting, and so it already has this advantage.
+
+When IRQ remapping is enabled, iommu/vt-d will try to set up its
+dmar_fault IRQ handler from start_kernel() -> x86_late_time_init()
+-> apic_intr_mode_init() -> apic_bsp_setup() ->
+irq_remap_enable_fault_handling() -> enable_drhd_fault_handling(),
+which happens before kthreadd is started, and trying to set up a
+threaded IRQ handler this early on will oops.  However, there
+doesn't seem to be a reason why iommu/vt-d needs to set up its fault
+reporting IRQ handler this early, and if we remove the IRQ setup code
+from enable_drhd_fault_handling(), the IRQ will be registered instead
+from pci_iommu_init() -> intel_iommu_init() -> init_dmars(), which
+seems to work just fine.
+
+Suggested-by: Scarlett Gourley <scarlett@arista.com>
+Suggested-by: James Sewart <jamessewart@arista.com>
+Suggested-by: Jack O'Sullivan <jack@arista.com>
+Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
+---
+ drivers/iommu/intel/dmar.c | 27 ++-------------------------
+ 1 file changed, 2 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+index 5a8f780e7ffd..d0871fe9d04d 100644
+--- a/drivers/iommu/intel/dmar.c
++++ b/drivers/iommu/intel/dmar.c
+@@ -2043,7 +2043,8 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
+ 		return -EINVAL;
+ 	}
+ 
+-	ret = request_irq(irq, dmar_fault, IRQF_NO_THREAD, iommu->name, iommu);
++	ret = request_threaded_irq(irq, NULL, dmar_fault, IRQF_ONESHOT,
++				   iommu->name, iommu);
+ 	if (ret)
+ 		pr_err("Can't request irq\n");
+ 	return ret;
+@@ -2051,30 +2052,6 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
+ 
+ int __init enable_drhd_fault_handling(void)
+ {
+-	struct dmar_drhd_unit *drhd;
+-	struct intel_iommu *iommu;
+-
+-	/*
+-	 * Enable fault control interrupt.
+-	 */
+-	for_each_iommu(iommu, drhd) {
+-		u32 fault_status;
+-		int ret = dmar_set_interrupt(iommu);
+-
+-		if (ret) {
+-			pr_err("DRHD %Lx: failed to enable fault, interrupt, ret %d\n",
+-			       (unsigned long long)drhd->reg_base_addr, ret);
+-			return -1;
+-		}
+-
+-		/*
+-		 * Clear any previous faults.
+-		 */
+-		dmar_fault(iommu->irq, iommu);
+-		fault_status = readl(iommu->reg + DMAR_FSTS_REG);
+-		writel(fault_status, iommu->reg + DMAR_FSTS_REG);
+-	}
+-
+ 	return 0;
+ }
+ 
+-- 
+2.37.3
