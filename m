@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20CA860CE3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC57D60CE39
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbiJYOBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
+        id S232503AbiJYOBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:01:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiJYN7h (ORCPT
+        with ESMTP id S232169AbiJYN7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 25 Oct 2022 09:59:37 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB56E0BC;
-        Tue, 25 Oct 2022 06:59:30 -0700 (PDT)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C446FAC9;
+        Tue, 25 Oct 2022 06:59:31 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1666706369;
+        s=2020; t=1666706370;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3r8eFvXX7ewTWx91C3hEXLRF8LG7h66hSM9FnLvuvbY=;
-        b=wClEbjJseJEAEj1agp1ZPP+vXzt++cAMTswcwsjpza8uM4kPm3Ndw5nGzdByxBJyy6XnYj
-        pKpCZFQpmh2c26XnKRSz2WgpFCQotX3eW5Fl6LqxEJvEqyWf2vTcRrbps7Xob1oLfyJapq
-        BYP/EkZHcZDe/4v3t2ExSLJf3vjmRMo1lIDEUgc+IR/LPlMVrezjVaXZSa9Gi+CXTtA1m6
-        dvvT+VSBkd3B3dw8amtXgd6Ga1aTUIuzJakP/Gn61aQatEke0E7eh16pqQDfCzazq4HTgk
-        PC5z4UiGNzZHgekKKOa0fRBfJo6IESMAXwb9L5XqijA7qUoY8WOa5h8ycpTftQ==
+        bh=t38ZOSk7RADUS9yQPx+jhxDPVyx+Ww7vTN6ZsN90lKg=;
+        b=bEwlhGzpXpX8hMG8IqtPZmhlQRTQikKxqNs+gbQgfv3WFD96OO3tUpQT4EGa3g/BzQnubQ
+        YJSxR22rP/7t7RYGTs+tiAigsONu+jLzODJiGTM/3aFyR1hciqB+lBSGwaCnd2Th7JbGQq
+        uwSOnET8vkJWh2fJdQx7Pue1BuPsppC5/Vnq2Kf4G1QWNwkR7MP7bc6yZ3yGh4vYfD9AGW
+        NcMkYkdYIzu/1fLOmu4BzSl8JZJExpqx06XXG7SZsxGs6MycZ4DWUgN6eLrtxp1JzRVe61
+        FhrUh86UP3a4VJCA0facxuPBjkZB5p26oaplpC/jxnH/cB37pSiJfUs6KLYmgQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1666706369;
+        s=2020e; t=1666706370;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3r8eFvXX7ewTWx91C3hEXLRF8LG7h66hSM9FnLvuvbY=;
-        b=JleMxpC5zVweo7sN4lVtElzmCTyxCBVd3omw897K6J4kqYM9TFA2vNfwz1/gzczHD76eER
-        EnsNeZmfc+s3mnAw==
+        bh=t38ZOSk7RADUS9yQPx+jhxDPVyx+Ww7vTN6ZsN90lKg=;
+        b=WydopO46wwu45sP+yRfKw5ZwrGNEVisF1hJAUAO3vVDu9Yj/PohrKCIGU8fAEgVTpFn5D9
+        G2QbL4hSwWjxuBDg==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <john.stultz@linaro.org>,
@@ -48,9 +48,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Frederic Weisbecker <fweisbec@gmail.com>,
         Rik van Riel <riel@redhat.com>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>
-Subject: [PATCH v3 15/17] timer_migration: Add tracepoints
-Date:   Tue, 25 Oct 2022 15:58:48 +0200
-Message-Id: <20221025135850.51044-16-anna-maria@linutronix.de>
+Subject: [PATCH v3 16/17] add_timer_on(): Make sure callers have TIMER_PINNED flag
+Date:   Tue, 25 Oct 2022 15:58:49 +0200
+Message-Id: <20221025135850.51044-17-anna-maria@linutronix.de>
 In-Reply-To: <20221025135850.51044-1-anna-maria@linutronix.de>
 References: <20221025135850.51044-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -64,425 +64,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The timer pull logic needs proper debugging aids. Add tracepoints so the
-hierarchical idle machinery can be diagnosed.
+The hierachical timer pull model at expiry time is now in place. Timers
+which should expire on a dedicated CPU needs the TIMER_PINNED
+flag. Otherwise they will be queued on the dedicated CPU but in global
+timer base and those timers could also expire on other CPUs. Only timers
+with TIMER_PINNED flag will end up in local timer base
+
+Therefore add the missing TIMER_PINNED flag for those who use
+add_timer_on() without the flag.
 
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 ---
- include/trace/events/timer_migration.h | 277 +++++++++++++++++++++++++
- kernel/time/timer_migration.c          |  24 +++
- 2 files changed, 301 insertions(+)
- create mode 100644 include/trace/events/timer_migration.h
+ arch/x86/kernel/tsc_sync.c | 3 ++-
+ kernel/time/clocksource.c  | 2 +-
+ kernel/workqueue.c         | 7 +++++--
+ 3 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/include/trace/events/timer_migration.h b/include/trace/events/timer_migration.h
-new file mode 100644
-index 000000000000..0c4824056930
---- /dev/null
-+++ b/include/trace/events/timer_migration.h
-@@ -0,0 +1,277 @@
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM timer_migration
-+
-+#if !defined(_TRACE_TIMER_MIGRATION_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_TIMER_MIGRATION_H
-+
-+#include <linux/tracepoint.h>
-+
-+/* Group events */
-+TRACE_EVENT(tmigr_group_set,
-+
-+	TP_PROTO(struct tmigr_group *group),
-+
-+	TP_ARGS(group),
-+
-+	TP_STRUCT__entry(
-+		__field( void *,	group		)
-+		__field( unsigned int,	lvl		)
-+		__field( unsigned int,	numa_node	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->group		= group;
-+		__entry->lvl		= group->level;
-+		__entry->numa_node	= group->numa_node;
-+	),
-+
-+	TP_printk("group=%p lvl=%d numa=%d",
-+		  __entry->group, __entry->lvl, __entry->numa_node)
-+);
-+
-+TRACE_EVENT(tmigr_connect_child_parent,
-+
-+	TP_PROTO(struct tmigr_group *child),
-+
-+	TP_ARGS(child),
-+
-+	TP_STRUCT__entry(
-+		__field( void *,	child		)
-+		__field( void *,	parent		)
-+		__field( unsigned int,	lvl		)
-+		__field( unsigned int,	numa_node	)
-+		__field( unsigned int,	num_childs	)
-+		__field( u32,		childmask	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->child		= child;
-+		__entry->parent		= child->parent;
-+		__entry->lvl		= child->parent->level;
-+		__entry->numa_node	= child->parent->numa_node;
-+		__entry->numa_node	= child->parent->num_childs;
-+		__entry->childmask	= child->childmask;
-+	),
-+
-+	TP_printk("group=%p childmask=%0x parent=%p lvl=%d numa=%d num_childs=%d",
-+		  __entry->child,  __entry->childmask, __entry->parent,
-+		  __entry->lvl, __entry->numa_node, __entry->num_childs)
-+);
-+
-+TRACE_EVENT(tmigr_connect_cpu_parent,
-+
-+	TP_PROTO(struct tmigr_cpu *tmc),
-+
-+	TP_ARGS(tmc),
-+
-+	TP_STRUCT__entry(
-+		__field( void *,	parent		)
-+		__field( unsigned int,	cpu		)
-+		__field( unsigned int,	lvl		)
-+		__field( unsigned int,	numa_node	)
-+		__field( unsigned int,	num_childs	)
-+		__field( u32,		childmask	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->parent		= tmc->tmgroup;
-+		__entry->cpu		= tmc->cpuevt.cpu;
-+		__entry->lvl		= tmc->tmgroup->level;
-+		__entry->numa_node	= tmc->tmgroup->numa_node;
-+		__entry->numa_node	= tmc->tmgroup->num_childs;
-+		__entry->childmask	= tmc->childmask;
-+	),
-+
-+	TP_printk("cpu=%d childmask=%0x parent=%p lvl=%d numa=%d num_childs=%d",
-+		  __entry->cpu,	 __entry->childmask, __entry->parent,
-+		  __entry->lvl, __entry->numa_node, __entry->num_childs)
-+);
-+
-+DECLARE_EVENT_CLASS(tmigr_group_and_cpu,
-+
-+	TP_PROTO(struct tmigr_group *group, union tmigr_state state, u32 childmask),
-+
-+	TP_ARGS(group, state, childmask),
-+
-+	TP_STRUCT__entry(
-+		__field( void *,	group		)
-+		__field( void *,	parent		)
-+		__field( unsigned int,	lvl		)
-+		__field( unsigned int,	numa_node	)
-+		__field( u8,		active		)
-+		__field( u8,		migrator	)
-+		__field( u32,		childmask	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->group		= group;
-+		__entry->parent		= group->parent;
-+		__entry->lvl		= group->level;
-+		__entry->numa_node	= group->numa_node;
-+		__entry->active		= state.active;
-+		__entry->migrator	= state.migrator;
-+		__entry->childmask	= childmask;
-+	),
-+
-+	TP_printk("group=%p lvl=%d numa=%d active=%0x migrator=%0x "
-+		  "parent=%p childmask=%0x",
-+		  __entry->group, __entry->lvl, __entry->numa_node,
-+		  __entry->active, __entry->migrator,
-+		  __entry->parent, __entry->childmask)
-+);
-+
-+DEFINE_EVENT(tmigr_group_and_cpu, tmigr_group_set_cpu_inactive,
-+
-+	TP_PROTO(struct tmigr_group *group, union tmigr_state state, u32 childmask),
-+
-+	TP_ARGS(group, state, childmask)
-+);
-+
-+DEFINE_EVENT(tmigr_group_and_cpu, tmigr_group_set_cpu_active,
-+
-+	TP_PROTO(struct tmigr_group *group, union tmigr_state state, u32 childmask),
-+
-+	TP_ARGS(group, state, childmask)
-+);
-+
-+/* CPU events*/
-+DECLARE_EVENT_CLASS(tmigr_cpugroup,
-+
-+	TP_PROTO(struct tmigr_cpu *tmc),
-+
-+	TP_ARGS(tmc),
-+
-+	TP_STRUCT__entry(
-+		__field( void *,	parent)
-+		__field( unsigned int,	cpu)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->cpu		= tmc->cpuevt.cpu;
-+		__entry->parent		= tmc->tmgroup;
-+	),
-+
-+	TP_printk("cpu=%d parent=%p", __entry->cpu, __entry->parent)
-+);
-+
-+DEFINE_EVENT(tmigr_cpugroup, tmigr_cpu_new_timer,
-+
-+	TP_PROTO(struct tmigr_cpu *tmc),
-+
-+	TP_ARGS(tmc)
-+);
-+
-+DEFINE_EVENT(tmigr_cpugroup, tmigr_cpu_active,
-+
-+	TP_PROTO(struct tmigr_cpu *tmc),
-+
-+	TP_ARGS(tmc)
-+);
-+
-+DEFINE_EVENT(tmigr_cpugroup, tmigr_cpu_online,
-+
-+	TP_PROTO(struct tmigr_cpu *tmc),
-+
-+	TP_ARGS(tmc)
-+);
-+
-+DEFINE_EVENT(tmigr_cpugroup, tmigr_cpu_offline,
-+
-+	TP_PROTO(struct tmigr_cpu *tmc),
-+
-+	TP_ARGS(tmc)
-+);
-+
-+DEFINE_EVENT(tmigr_cpugroup, tmigr_handle_remote_cpu,
-+
-+	TP_PROTO(struct tmigr_cpu *tmc),
-+
-+	TP_ARGS(tmc)
-+);
-+
-+TRACE_EVENT(tmigr_cpu_idle,
-+
-+	TP_PROTO(struct tmigr_cpu *tmc, u64 nextevt),
-+
-+	TP_ARGS(tmc, nextevt),
-+
-+	TP_STRUCT__entry(
-+		__field( void *,	parent)
-+		__field( unsigned int,	cpu)
-+		__field( u64,		nextevt)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->cpu		= tmc->cpuevt.cpu;
-+		__entry->parent		= tmc->tmgroup;
-+		__entry->nextevt	= nextevt;
-+	),
-+
-+	TP_printk("cpu=%d parent=%p nextevt=%llu",
-+		  __entry->cpu, __entry->parent, __entry->nextevt)
-+);
-+
-+TRACE_EVENT(tmigr_update_events,
-+
-+	TP_PROTO(struct tmigr_group *child, struct tmigr_group *group,
-+		 union tmigr_state childstate,	union tmigr_state groupstate,
-+		 u64 nextevt),
-+
-+	TP_ARGS(child, group, childstate, groupstate, nextevt),
-+
-+	TP_STRUCT__entry(
-+		__field( void *,	child			)
-+		__field( void *,	group			)
-+		__field( u64,		nextevt			)
-+		__field( u64,		group_next_expiry	)
-+		__field( unsigned int,	group_lvl		)
-+		__field( u8,		child_active		)
-+		__field( u8,		group_active		)
-+		__field( unsigned int,	child_evtcpu		)
-+		__field( u64,		child_evt_expiry	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->child			= child;
-+		__entry->group			= group;
-+		__entry->nextevt		= nextevt;
-+		__entry->group_next_expiry	= group->next_expiry;
-+		__entry->group_lvl		= group->level;
-+		__entry->child_active		= childstate.active;
-+		__entry->group_active		= groupstate.active;
-+		__entry->child_evtcpu		= child ? child->groupevt.cpu : 0;
-+		__entry->child_evt_expiry	= child ? child->groupevt.nextevt.expires : 0;
-+	),
-+
-+	TP_printk("child=%p group=%p group_lvl=%d child_active=%0x group_active=%0x "
-+		  "nextevt=%llu next_expiry=%llu child_evt_expiry=%llu child_evtcpu=%d",
-+		  __entry->child, __entry->group, __entry->group_lvl, __entry->child_active,
-+		  __entry->group_active,
-+		  __entry->nextevt, __entry->group_next_expiry, __entry->child_evt_expiry,
-+		  __entry->child_evtcpu)
-+);
-+
-+TRACE_EVENT(tmigr_handle_remote,
-+
-+	TP_PROTO(struct tmigr_group *group),
-+
-+	TP_ARGS(group),
-+
-+	TP_STRUCT__entry(
-+		__field( void * ,	group	)
-+		__field( unsigned int ,	lvl	)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->group		= group;
-+		__entry->lvl		= group->level;
-+	),
-+
-+	TP_printk("group=%p lvl=%d",
-+		   __entry->group, __entry->lvl)
-+);
-+
-+#endif /*  _TRACE_TIMER_MIGRATION_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
-diff --git a/kernel/time/timer_migration.c b/kernel/time/timer_migration.c
-index d68b8fd06a97..6b954e034959 100644
---- a/kernel/time/timer_migration.c
-+++ b/kernel/time/timer_migration.c
-@@ -13,6 +13,9 @@
- #include "timer_migration.h"
- #include "tick-internal.h"
+diff --git a/arch/x86/kernel/tsc_sync.c b/arch/x86/kernel/tsc_sync.c
+index 9452dc9664b5..eab827288e0f 100644
+--- a/arch/x86/kernel/tsc_sync.c
++++ b/arch/x86/kernel/tsc_sync.c
+@@ -110,7 +110,8 @@ static int __init start_sync_check_timer(void)
+ 	if (!cpu_feature_enabled(X86_FEATURE_TSC_ADJUST) || tsc_clocksource_reliable)
+ 		return 0;
  
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/timer_migration.h>
-+
- /*
-  * The timer migration mechanism is built on a hierarchy of groups. The
-  * lowest level group contains CPUs, the next level groups of CPU groups
-@@ -317,6 +320,8 @@ static bool tmigr_active_up(struct tmigr_group *group,
- 	 */
- 	set_bit(0, &group->groupevt.ignore);
+-	timer_setup(&tsc_sync_check_timer, tsc_sync_check_timer_fn, 0);
++	timer_setup(&tsc_sync_check_timer, tsc_sync_check_timer_fn,
++		    TIMER_PINNED);
+ 	tsc_sync_check_timer.expires = jiffies + SYNC_CHECK_INTERVAL;
+ 	add_timer(&tsc_sync_check_timer);
  
-+	trace_tmigr_group_set_cpu_active(group, newstate, childmask);
-+
- 	return walk_done;
+diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+index 8058bec87ace..f8c310e62758 100644
+--- a/kernel/time/clocksource.c
++++ b/kernel/time/clocksource.c
+@@ -523,7 +523,7 @@ static inline void clocksource_start_watchdog(void)
+ {
+ 	if (watchdog_running || !watchdog || list_empty(&watchdog_list))
+ 		return;
+-	timer_setup(&watchdog_timer, clocksource_watchdog, 0);
++	timer_setup(&watchdog_timer, clocksource_watchdog, TIMER_PINNED);
+ 	watchdog_timer.expires = jiffies + WATCHDOG_INTERVAL;
+ 	add_timer_on(&watchdog_timer, cpumask_first(cpu_online_mask));
+ 	watchdog_running = 1;
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 7cd5f5e7e0a1..a0f7bf7be6f2 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -1670,10 +1670,13 @@ static void __queue_delayed_work(int cpu, struct workqueue_struct *wq,
+ 	dwork->cpu = cpu;
+ 	timer->expires = jiffies + delay;
+ 
+-	if (unlikely(cpu != WORK_CPU_UNBOUND))
++	if (unlikely(cpu != WORK_CPU_UNBOUND)) {
++		timer->flags |= TIMER_PINNED;
+ 		add_timer_on(timer, cpu);
+-	else
++	} else {
++		timer->flags &= ~TIMER_PINNED;
+ 		add_timer(timer);
++	}
  }
  
-@@ -341,6 +346,7 @@ void tmigr_cpu_activate(void)
- 	raw_spin_lock(&tmc->lock);
- 	tmc->idle = 0;
- 	tmc->wakeup = KTIME_MAX;
-+	trace_tmigr_cpu_active(tmc);
- 	__tmigr_cpu_activate(tmc);
- 	raw_spin_unlock(&tmc->lock);
- }
-@@ -435,6 +441,9 @@ static bool tmigr_update_events(struct tmigr_group *group,
- 		data->nextexp = tmigr_next_groupevt_expires(group);
- 	}
- 
-+	trace_tmigr_update_events(child, group, data->childstate,
-+				  data->groupstate, nextexp);
-+
- unlock:
- 	raw_spin_unlock(&group->lock);
- 
-@@ -478,6 +487,8 @@ static u64 tmigr_new_timer(struct tmigr_cpu *tmc, u64 nextexp)
- 	if (tmc->remote)
- 		return KTIME_MAX;
- 
-+	trace_tmigr_cpu_new_timer(tmc);
-+
- 	clear_bit(0, &tmc->cpuevt.ignore);
- 
- 	data.groupstate.state = atomic_read(tmc->tmgroup->migr_state);
-@@ -576,6 +587,8 @@ static bool tmigr_inactive_up(struct tmigr_group *group,
- 		}
- 	}
- 
-+	trace_tmigr_group_set_cpu_inactive(group, data->childstate, childmask);
-+
- 	return walk_done;
- }
- 
-@@ -652,6 +665,7 @@ u64 tmigr_cpu_deactivate(u64 nextexp)
- 	tmc->idle = 1;
- 
- unlock:
-+	trace_tmigr_cpu_idle(tmc, ret);
- 	raw_spin_unlock(&tmc->lock);
- 	return ret;
- }
-@@ -678,6 +692,8 @@ static u64 tmigr_handle_remote_cpu(unsigned int cpu, u64 now,
- 		return next;
- 	}
- 
-+	trace_tmigr_handle_remote_cpu(tmc);
-+
- 	tmc->remote = 1;
- 
- 	/* Drop the lock to allow the remote CPU to exit idle */
-@@ -728,6 +744,7 @@ static bool tmigr_handle_remote_up(struct tmigr_group *group,
- 
- 	childmask = data->childmask;
- 
-+	trace_tmigr_handle_remote(group);
- again:
- 	/*
- 	 * Handle the group only if @childmask is the migrator or if the
-@@ -963,6 +980,7 @@ static struct tmigr_group *tmigr_get_group(unsigned int cpu, unsigned int node,
- 	tmigr_init_group(group, lvl, node, migr_state);
- 	/* Setup successful. Add it to the hierarchy */
- 	list_add(&group->list, &tmigr_level_list[lvl]);
-+	trace_tmigr_group_set(group);
- 	return group;
- }
- 
-@@ -981,6 +999,8 @@ static void tmigr_connect_child_parent(struct tmigr_group *child,
- 	raw_spin_unlock(&parent->lock);
- 	raw_spin_unlock_irqrestore(&child->lock, flags);
- 
-+	trace_tmigr_connect_child_parent(child);
-+
- 	/*
- 	 * To prevent inconsistent states, active childs needs to be active
- 	 * in new parent as well. Inactive childs are already marked
-@@ -1067,6 +1087,8 @@ static int tmigr_setup_groups(unsigned int cpu, unsigned int node)
- 
- 			raw_spin_unlock_irqrestore(&group->lock, flags);
- 
-+			trace_tmigr_connect_cpu_parent(tmc);
-+
- 			/* There are no childs that needs to be connected */
- 			continue;
- 		} else {
-@@ -1135,6 +1157,7 @@ static int tmigr_cpu_online(unsigned int cpu)
- 		tmc->wakeup = KTIME_MAX;
- 	}
- 	raw_spin_lock_irqsave(&tmc->lock, flags);
-+	trace_tmigr_cpu_online(tmc);
- 	__tmigr_cpu_activate(tmc);
- 	tmc->online = 1;
- 	raw_spin_unlock_irqrestore(&tmc->lock, flags);
-@@ -1148,6 +1171,7 @@ static int tmigr_cpu_offline(unsigned int cpu)
- 	raw_spin_lock_irq(&tmc->lock);
- 	tmc->online = 0;
- 	__tmigr_cpu_deactivate(tmc, KTIME_MAX);
-+	trace_tmigr_cpu_offline(tmc);
- 	raw_spin_unlock_irq(&tmc->lock);
- 
- 	return 0;
+ /**
 -- 
 2.30.2
 
