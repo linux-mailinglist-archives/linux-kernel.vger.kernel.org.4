@@ -2,152 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B4C60C605
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473BE60C60D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 10:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiJYIDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 04:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S231828AbiJYIFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 04:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbiJYID2 (ORCPT
+        with ESMTP id S231752AbiJYIFj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 04:03:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E946D10DE71;
-        Tue, 25 Oct 2022 01:03:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79519617B9;
-        Tue, 25 Oct 2022 08:03:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72758C433C1;
-        Tue, 25 Oct 2022 08:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666685006;
-        bh=p8P0GS3FIpwPpYKwBDEQTqKude0DJCIEmUZ9yV9u+t8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JOZmhhCaFcnVG0iHvZ91XDZY6ypIvUKqk7uiGWNCdmRNP4seoPWpI2HegtTcV3o7D
-         TgJxFm6O13/jp0sCsSy6+2FmA1TwoouNLbycU3VUWM8iMB8nQyFrMbCSmQ9hw1R0/s
-         98WKKqs6hWYjwmt5P7/pCiiJO9B3sCOdwqR+OtdE=
-Date:   Tue, 25 Oct 2022 10:04:19 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jeff Vanhoof <jdv1029@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Paul Elder <paul.elder@ideasonboard.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: uvc gadget performance issues with skip interrupt impl
-Message-ID: <Y1eYg1ESBtLJFQ20@kroah.com>
-References: <20221025063359.GA19049@qjv001-XeonWs>
+        Tue, 25 Oct 2022 04:05:39 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2122.outbound.protection.outlook.com [40.107.255.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB815FAE5
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 01:05:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fnlB77EC8slHXFmQWbSNZ9uLSdwxfJNxskxNdM2nV6/Qad2MtL8RCh8aAoWqEvoKmMsuFHu8imQYJDT+fFnCSA0HQKM44TvGJ2wuj6sDd4CgOhR7G+dT4ciZwfYP20L9uyDAX9noGydvbM/EwKrYsXBaQFcxMeiLXnTnLQ5VklIlGDkyEVjHDlX0cqW2l7t/r3MlynkHc/wakbh3nbTu4aVyLSStqDhZy8//lB3IyOioEGgZ32uYgkL/9vsznTvPFhYPn+3XgNdNfHgtUNPjzRrvtwy/GsGtmjIUPztWlPtyRGsMgNUuNHjh7ta0+f+3cI1RVdGsK10KJJYgC9WJ3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q6mhdRo0rJ0G+OYhur+vjiwq9R07TyurOMjhIaGh4Zw=;
+ b=apzOLIC4oerAOB5MGj6j/IThMVHqf8WgzWsH0FT1vkkkMcaP5NHR8w5R1/nkymqid+dZsJuwGkeVFf/lRue/DMBselX5cThIIM/UTnctvFPv3ESQTemrMbjx/9X/hpnj8FiR/QwxKbFPVwJdgjYdSJbt8aXAItwehlc7OPbV3aiaciUiVnSYj0die6uD8cPE2SekGDgiAjj6t61BUg83q7oNdZqvjPwQTwudA7MIp1Q/rr+NzjSmDOdxXvilJ8X+PMCoqBGshtFRkzH1O9ISTJ5l7NkDxss8inBXfY5Dw0YlKAfxbbKuqBiOmaAmyBe90W9oYprqkUYUajZ3/fYlMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q6mhdRo0rJ0G+OYhur+vjiwq9R07TyurOMjhIaGh4Zw=;
+ b=ZYuYi+FnZwB9eiDfcbGTqpA9SRYjrVJPrRS9YVcGWZGmEncKeOU0u+TPTo0d6p/9BibCvKiNVG4b5zi3GvpJ2G4mWAg0hyFuomgz8v7NuRURmhXFz6E0UrMm+crZPo6sT12SEKofsnhyP9/o+Qcat6M1psmJ42173VI4BsLqUpPNaU5kqqjUUp4Iw9IP6FkELu0hV+8aj636DEeAWiT5uXid8ohFKju/FQBp6xLd/YetKNokErehPqdlCJMHhwX5JKbZn654O5cibUH1fnO3/0XkfbbdKuJxvS2ZoAAccBmJGEXqgUdNRYZGE3fzMIkGczzZ29k9ke1bpe/ORpwFXA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by KL1PR0601MB5550.apcprd06.prod.outlook.com (2603:1096:820:c1::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Tue, 25 Oct
+ 2022 08:05:35 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::c84b:5a6c:d66f:c0fd]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::c84b:5a6c:d66f:c0fd%3]) with mapi id 15.20.5746.023; Tue, 25 Oct 2022
+ 08:05:35 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH v3] f2fs: cleanup in f2fs_create_flush_cmd_control()
+Date:   Tue, 25 Oct 2022 16:05:26 +0800
+Message-Id: <20221025080526.9331-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0010.apcprd02.prod.outlook.com
+ (2603:1096:3:17::22) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025063359.GA19049@qjv001-XeonWs>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB5550:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec435f05-32b2-4dc0-1598-08dab65fb247
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HthUCvfyYySU40wTUl55b6cfhYXZ2Ea2pnKovp0va2oyb95mAl0J9IE9kj9i/eO3ZdycqeNiJ5k8hOu0g+bkB6zc4twBqq91NxYMd3eiDOhfwhO4okXGGC2gOnFCX/WPNFzUo/DAVp3wuYDe94YOpiUSXTkOuMaB+umtR00cmSZYrEftKAoXnThgropveHkbMUUHxdfB5Lx5FKNqCKRzH+4RKggA/anjZCL7n281qCWMu8A+eJ7FTmDDIuTsJxRYll4EmNSlrY+Hhqvam0kb8rkHlbXBx4c09YoxXJaO7rqGQ9hYxqIsQWE1OY7/t7klRXcM7k4kWC3BI3jV4dCq4G7jbnhVy4BGdJYW8JXE0anml3mpXIG5HQzy0cfY9++Ha+/iYpLw23BzmaceZWlrly2X3hvgCyWD2DUjPpfI6FcpLKoSC7doMCQ17MFi9XLkd4uVp4x7ZyuItz3MRjQlc0i8j1l6rhyHn/jWmARVkZiy1oLSYPLn11RgOgdv2raEkjHgyFxjcOhDuNalR2ssWx2+re0CgIC0T+JGHLladbp4uCBsdeq0cKoz85yokd4c41S1Pwos4nbOhkphZAUy3mofR1P43YUsFEwMZhMF24e/+fYTt+Z0LQrdUBPDqARr0/C6hfn/+LDQQgB+buMQF7uW0Z7Cl/53LmFnW6Z8irrLA2QKrSftIiZl8wxTliAiPX+07NnoseLPhJHG/Bo116JKf7SryRudbXm9P9h5cHscSKdJn8rl/sx0iuYGoVlxoiCqK1Nx7TFMEXU88N1HjA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(366004)(346002)(39860400002)(451199015)(2616005)(1076003)(186003)(86362001)(38100700002)(38350700002)(41300700001)(83380400001)(316002)(2906002)(8936002)(5660300002)(478600001)(6512007)(26005)(6486002)(107886003)(6666004)(6506007)(4326008)(52116002)(66946007)(8676002)(66476007)(66556008)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?99ccrjmAuTZ3lfwRQqbSkOxQdjgeQxLS1cB1hiM9rOdprUG+gTvL+whjSBVJ?=
+ =?us-ascii?Q?aMS9Mb1vNspzCfZOolqvIXFInKb1SURLcS5ElpCbUgLD3zbkmMVlW5Safdfw?=
+ =?us-ascii?Q?xecjv2Q9nwPLljnNtI/ClRcZv/Ccdy58LsdOfoL4n+5fiO2eynlDcEDtu0a2?=
+ =?us-ascii?Q?KI2JLomA/3GOvVwpljiccKUmZr4VIqydoxHJQA/CGX1orHTUgMrnQCX4F1GO?=
+ =?us-ascii?Q?vpLekLYrQT3v8Bxl4WXklDiX114ZAnSy9qvJesEDa5brartF2HvAcl6FIuQr?=
+ =?us-ascii?Q?U41LfvI2+6aVLG3ve69AGXITipo5nbLrwq9lrilz68J/HX0VnC1GBfgllZXz?=
+ =?us-ascii?Q?QA9aYTggr5cQgNROMWE+2hAT4Ujruf6JeqQQfK/OQ/OE/8pSeO3Ng8yQqaEe?=
+ =?us-ascii?Q?sxfn3zEzuWeA9BFymGoCsg4TiTq61ATl4WE7uXw+qwdAB9HqBHAqpuUn0C7v?=
+ =?us-ascii?Q?aALtja6daiXoeUWeV1A1NfP0IyRZEYWCDJ/GA7xDx3KcgsgsL6/gHejtsX6p?=
+ =?us-ascii?Q?3mOsIhAlgSsGXYEOgFWI95nk1xdNZBT5jvdwpRRyzjn2jU9n/NEBIt2VvZXh?=
+ =?us-ascii?Q?8tcO1EryoMVZ3IWW2/UgYDZK/S8jwpV3simkTDubK0C63m6qhw30PvNhNFgQ?=
+ =?us-ascii?Q?9zJNzgSV4iEhpTSVuZ25tvm15m9/N+egZ4T1zRdcVW4M8yBmR8vvWZ0a8wjJ?=
+ =?us-ascii?Q?FJHRNA3IhYuNPULvbW7THD48pPPKXvNbapztwLwHAJQXcGeTRf215s+U/xie?=
+ =?us-ascii?Q?DmP8tnOT6SZGBSwaIs2GkUZpgjkPff0d+9CZiJZLuhyZgI/YEtVCf2CT4qQm?=
+ =?us-ascii?Q?HcwPUvEooBknfy84yjsvyomkUuHvQ1jZA+/FlTpSDBq9eZrHMRu9xuGxutGh?=
+ =?us-ascii?Q?lWpaJIb1VGeXoRK2RWfon+v5HBhX+mGTcsN+qLTJMWwvLXmIudlih9Yoloyk?=
+ =?us-ascii?Q?vNMNzdpufKjqA7kyrI7edolYm5Pqt3vjyBzoA+u1Egpp/H9U/xW3PYoRFzKy?=
+ =?us-ascii?Q?ZjhW9MVqpYjOBCBsJt/lEsV6TvBsfgMGsox9ec7U/M4FIs0Xiy5ny5xzfD2p?=
+ =?us-ascii?Q?6I+f/BXCdziC9udrI5A8FLgv2j0UlLQ83m3nvAiUrSu5Qygcq1J8X5GcmOKs?=
+ =?us-ascii?Q?UQs7uXo+u+spp10LxLwpyvTvF4HMf56mrRTJRAr4RiAhyw+Fy+YktCXVkPL+?=
+ =?us-ascii?Q?bThR7b/BADVghNP4oko+YFMiY5qHyIWoImFJdWyhzFet6ZfVbWKG98439bKa?=
+ =?us-ascii?Q?Nar7GFNFR7HtRZbHUIzAEgG5pxU9cbadYwVjTCW9PzXbUM/vrBJtg5+uFej+?=
+ =?us-ascii?Q?/wg7WBU5acaSqxjbeDWsGJ66u54HUbdxmNWcNcHeShLX/9CwDJbLOkmJgq1m?=
+ =?us-ascii?Q?yndRXGQk5Avyy5TwY35g6i8TE861ZjaPpNUf13olz96WnC7VGbPavBMg/AUI?=
+ =?us-ascii?Q?favKwWw8pZbUaU2HZvwWdmNkqF0mPBC19CmuAqFfKdErdhEdqrVhZ3YCVAFz?=
+ =?us-ascii?Q?0FO5/faXmubRkq2GyeI2/zEvc89a83YndNRq7ZSm1tRUPrEUaMoFbSDxNZDU?=
+ =?us-ascii?Q?1RMbX3Be6EOdAKRrXqH80mxvqYRdZ4Docc8zcmvb?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec435f05-32b2-4dc0-1598-08dab65fb247
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 08:05:35.7527
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LbrvOXE5PoGtJsojsxZ92H3gaAU2SghaOrWEBf/AKtRKlr43EBLFQLOyppl2a38jQzto3k7t0EeXJOWamohIEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5550
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 01:34:01AM -0500, Jeff Vanhoof wrote:
-> Hi,
-> 
-> During the queuing up of requests from the UVC Gadget Driver to DWC3 for one
-> frame, if a missed isoc event occurs then it is possible for the next
-> consecutive frame(s) to also see missed isoc related errors as a result,
-> presenting to the user as a large video stall.
-> 
-> This issue appears to have come in with the skip interrupt implementation in
-> the UVC Gadget Driver:
-> 
-> usb: gadget: uvc: decrease the interrupt load to a quarter
-> https://lore.kernel.org/r/20210628155311.16762-6-m.grzeschik@pengutronix.de
-> 
-> Below is an example flow of how the issue can occur (and why).
-> 
-> For example (ISOC use case):
-> 1) DWC3 driver has 4 requests queued up from the UVC Gadget Driver.
-> 
-> 2) First request has IOC bit set due to no_interrupt=0 also being set, and IMI
-> bit is set to detect missed ISOC.
-> 
-> 3) Requests 2,3,4 do not have IOC bit set due to no_interrupt=1 being set for
-> them. (Note: Whether or not the IMI bit is set for these requests does not
-> matter, issue can still crop up as there is no guarantee that request 2,3,4
-> will see a missed isoc event)
-> 
-> 4) First request gets a missed isoc event and DWC3 returns the req and error to
-> UVC Gadget Driver.
-> 
-> 5) UVC Gadget Driver, in uvc_video_complete, proceeds to cancel the queue by
-> calling uvcg_queue_cancel.
-> 
-> 6) UVC Gadget Driver stops sending additional requests for the current frame.
-> 
-> 7) DWC3 will still have requests 2,3,4 queued up and sitting in its
-> started_list as these requests are not given back to the UVC gadget driver
-> because they each have no_interrupt=1 set, and the DWC3 driver will not have
-> any additional interrupts triggered for them as a result.
-> 
-> 8) Approximately 30-100ms later a new frame enters the UVC Gadget Driver (from
-> V4L2), and it proceeds to send additional requests to the DWC3 driver.
-> 
-> 9) Because requests 2,3,4 are still sitting in the started_list of the dwc3
-> driver, the driver does not stop and restart the transmission that normally
-> helps it recover from the missed isoc situation (this usually happens in
-> between frames).
-> 
-> 10) Some of the requests from the new frame will have no_interrupt=0 set, but
-> these requests will be considered missed/late by the DWC3 controller.
-> 
-> 11) Because these new requests have the IOC bit set (and possibly IMI),
-> interrupts will be triggered causing the DWC3 Driver to return the req and
-> error to the UVC Gadget Driver.
-> 
-> 12) And if the last set of requests sent by the UVC Gadget Driver have
-> "no_interrupt=1" set, then DWC3 may not interrupt further until new requests
-> come in, and the cycle of frame drops/errors will continue.
-> 
-> I have briefly mentioned this issue in another conversation with Thinh. At the
-> time he mentioned that 3 things could possibly be done to help resolve this
-> issue:
-> 
-> 1) The UVC Gadget Driver should ensure that the last requests queued to DWC3
-> must always have "no_interrupt=0" set.
-> 
-> 2) DWC3 can detect stale requests, stop the transmission and give back the
-> requests to the UVC Gadget Driver, and restart the transmission for the new set
-> of requests.
-> 
-> 3) Set "no_interrupt=0" for each request.
->  
-> I have tested out various implementations for all 3 possibilities and they each
-> seem to work ok. Note that these test implementations are not ready for prime
-> time, but served as a way to prove that potential changes in these areas could
-> help to resolve this issue.
-> 
-> I believe that a change for the UVC Gadget Driver should be made, but it also
-> makes sense for the DWC3 driver to also attempt to recover from this situation
-> if possible.
-> 
-> Does anyone have an opinion on the best way to proceed?
+Just cleanup for readable, no functional changes.
 
-Please see this set of patches and the discussion around them:
-	https://lore.kernel.org/r/20221018215044.765044-1-w36195@motorola.com
+Suggested-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+v3:
+-avoid UAF
+ fs/f2fs/segment.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Some of them are already queued up in my tree and in linux-next, can you
-try that?  There are others for the dwc3 driver on the mailing list as
-well, testing those would be wonderful if you could do that.
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index acf3d3fa4363..84a17607dfee 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -620,12 +620,12 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
+ {
+ 	dev_t dev = sbi->sb->s_bdev->bd_dev;
+ 	struct flush_cmd_control *fcc;
+-	int err = 0;
++	int err;
+ 
+ 	if (SM_I(sbi)->fcc_info) {
+ 		fcc = SM_I(sbi)->fcc_info;
+ 		if (fcc->f2fs_issue_flush)
+-			return err;
++			return 0;
+ 		goto init_thread;
+ 	}
+ 
+@@ -638,7 +638,7 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
+ 	init_llist_head(&fcc->issue_list);
+ 	SM_I(sbi)->fcc_info = fcc;
+ 	if (!test_opt(sbi, FLUSH_MERGE))
+-		return err;
++		return 0;
+ 
+ init_thread:
+ 	fcc->f2fs_issue_flush = kthread_run(issue_flush_thread, sbi,
+@@ -650,7 +650,7 @@ int f2fs_create_flush_cmd_control(struct f2fs_sb_info *sbi)
+ 		return err;
+ 	}
+ 
+-	return err;
++	return 0;
+ }
+ 
+ void f2fs_destroy_flush_cmd_control(struct f2fs_sb_info *sbi, bool free)
+-- 
+2.25.1
 
-thanks,
-
-greg k-h
