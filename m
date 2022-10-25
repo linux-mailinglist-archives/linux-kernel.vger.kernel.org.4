@@ -2,113 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F69A60C959
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19BC60C95F
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231921AbiJYKE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S231688AbiJYKGE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 25 Oct 2022 06:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiJYKE2 (ORCPT
+        with ESMTP id S231484AbiJYKFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:04:28 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2601515CB3A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:59:12 -0700 (PDT)
-Received: from fsav112.sakura.ne.jp (fsav112.sakura.ne.jp [27.133.134.239])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 29P9xAOB031963;
-        Tue, 25 Oct 2022 18:59:10 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav112.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp);
- Tue, 25 Oct 2022 18:59:10 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav112.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 29P9xAnV031959
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 25 Oct 2022 18:59:10 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <86b65dc6-466c-abbd-0601-d07923bc3d10@I-love.SAKURA.ne.jp>
-Date:   Tue, 25 Oct 2022 18:59:06 +0900
+        Tue, 25 Oct 2022 06:05:35 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4334517FD48
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:59:56 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-221-ubkgpKyWN-GZuVIw3Ovb-w-1; Tue, 25 Oct 2022 10:59:44 +0100
+X-MC-Unique: ubkgpKyWN-GZuVIw3Ovb-w-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 25 Oct
+ 2022 10:59:16 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Tue, 25 Oct 2022 10:59:16 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Thomas Winischhofer <thomas@winischhofer.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Subject: RE: [PATCH] video: fbdev: sis: use explicitly signed char
+Thread-Topic: [PATCH] video: fbdev: sis: use explicitly signed char
+Thread-Index: AQHY59GfTKHiiX1cE0qqKUXinyrVOK4e4PPg
+Date:   Tue, 25 Oct 2022 09:59:16 +0000
+Message-ID: <37a4d200e0b74c72854c018c02e18b50@AcuMS.aculab.com>
+References: <20221024162901.535972-1-Jason@zx2c4.com>
+In-Reply-To: <20221024162901.535972-1-Jason@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v38 04/39] LSM: Maintain a table of LSM attribute data
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     linux-audit@redhat.com, jmorris@namei.org, selinux@vger.kernel.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
-References: <20220927195421.14713-1-casey@schaufler-ca.com>
- <20220927195421.14713-5-casey@schaufler-ca.com>
- <9907d724-4668-cd50-7454-1a8ca86542b0@I-love.SAKURA.ne.jp>
- <f6b8ac05-6900-f57d-0daf-02d5ae53bc47@schaufler-ca.com>
- <a130dc1f-a187-2957-25c1-974fb9c2569f@I-love.SAKURA.ne.jp>
- <753dfbe8-c68c-5e16-c4d0-1e14cd831c2e@schaufler-ca.com>
- <55f27f99-3a2b-3482-6dc2-12203948dd35@I-love.SAKURA.ne.jp>
- <7263e155-9024-0508-370c-72692901b326@schaufler-ca.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <7263e155-9024-0508-370c-72692901b326@schaufler-ca.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Oops. I chose a wrong mail. Replying to intended mail.)
-
-On 2022/10/25 1:37, Casey Schaufler wrote:
->>  What I'm insisting is that "warrant the freedom to load
->> loadable LSM modules without recompiling the whole kernel".
+From: Jason A. Donenfeld
+> Sent: 24 October 2022 17:29
+> To: linux-kernel@vger.kernel.org
 > 
-> Since security modules are optional and the LSM infrastructure
-> itself is optional you can't ensure that any given kernel would
-> support a loadable security module.
-
-Like I propose adding EXPORT_SYMBOL_GPL(security_hook_heads),
-I'm not taking about distributors who choose CONFIG_SECURITY=n.
-
->> Adding EXPORT_SYMBOL_GPL(security_hook_heads) is the only way that can "allow
->> LSM modules which distributors cannot support to be legally loaded".
+> With char becoming unsigned by default, and with `char` alone being
+> ambiguous and based on architecture, signed chars need to be marked
+> explicitly as such. This fixes warnings like:
 > 
-> I believe that I've identified an alternative. It isn't easy or cheap.
+...
+> ---
+>  drivers/usb/misc/sisusbvga/sisusb_struct.h | 2 +-
+>  drivers/video/fbdev/sis/vstruct.h          | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/sisusbvga/sisusb_struct.h b/drivers/usb/misc/sisusbvga/sisusb_struct.h
+> index 3df64d2a9d43..a86032a26d36 100644
+> --- a/drivers/usb/misc/sisusbvga/sisusb_struct.h
+> +++ b/drivers/usb/misc/sisusbvga/sisusb_struct.h
+> @@ -91,7 +91,7 @@ struct SiS_Ext {
+>  	unsigned char VB_ExtTVYFilterIndex;
+>  	unsigned char VB_ExtTVYFilterIndexROM661;
+>  	unsigned char REFindex;
+> -	char ROMMODEIDX661;
+> +	signed char ROMMODEIDX661;
 
-No. You are just handwaving/postponing the problem using something unknown
-that is not yet shown as a workable code. Anything that can be disabled via
-kernel config option cannot be an alternative.
+Isn't the correct fix to use u8 and s8 ?
 
-  Quoting from https://lkml.kernel.org/r/2225aec6-f0f3-d38e-ee3c-6139a7c25a37@I-love.SAKURA.ne.jp
-  > Like Paul Moore said
-  > 
-  >   However, I will caution that it is becoming increasingly difficult for people
-  >   to find time to review potential new LSMs so it may a while to attract sufficient
-  >   comments and feedback.
-  > 
-  > , being unable to legally use loadable LSMs deprives of chances to develop/try
-  > new LSMs, and makes LSM interface more and more unattractive. The consequence
-  > would be "The LSM interface is dead. We will give up implementing as LSMs."
+	David
 
-The biggest problem is that quite few developers show interest in loadable LSM modules.
-How many developers responded to this topic? Once the ability to allow loadable LSM
-modules is technically lost, nobody shall be able to revive it. You will be happy with
-ignoring poor people.
-
-You are already and completely trapped into "only in-tree and supported by distributors
-is correct" crap.
-
-> Of course the upstream kernel isn't going to have LSM IDs for out-of-tree
-> security modules. That's one of many reasons loadable modules are going to
-> have to be treated differently from built-in modules, if they're allowed
-> at all.
-
-Then, I have to hate your idea of having fixed sized array.
-
-Nacked-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
