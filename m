@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6894660D08E
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B0660D090
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233231AbiJYP21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S233249AbiJYP2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233228AbiJYP2X (ORCPT
+        with ESMTP id S233234AbiJYP20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:28:23 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D153410F884
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:28:20 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 7E2171F8A8;
-        Tue, 25 Oct 2022 15:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666711699; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/o9zDdOplWoFe1gHONmvf+OT1OCX1C3rPWeCJRA+vow=;
-        b=m/UDYWeRmAsgd5J6xxh9UQbdgDthjZcFr035rIKrnUTvna/6Li0J/KF/Vi6xmxd74eVBg7
-        yxfKiAZ7JC3UAkGpER+u1Y+moRfUNHIPJt7uVTnBRMVBY4HLLoRF5lnRijtIOlwhEntHI4
-        g+xHtiwsctK9jYjJ8862iUUqinJ3YfM=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5E3DC2C141;
-        Tue, 25 Oct 2022 15:28:19 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 17:28:18 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Tue, 25 Oct 2022 11:28:26 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996EA43328;
+        Tue, 25 Oct 2022 08:28:25 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id g12so8917530wrs.10;
+        Tue, 25 Oct 2022 08:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7r/lxb9syFi5fszVxey13EVYUFPTHODfMEEaPAN/V+Y=;
+        b=V381NSJCc2t+KGfhMm8mz4zvLvUd1ECWt2Vg5y1ifx5E4L3IBAiDSRqQGj3Af6/log
+         dvzcHCrt8eR0BcP3QJLig4KAwW+Qx9duhgXdGEClye3/s8l6nOkhL95NQo3hNzmlo1CF
+         ggdhZTBfabsD4bUcZdOCI2yIp3nVwMdndztOLdI4fAxy0yO2c3Ww4zMT/QDpPLd7Q33R
+         5HG3fP2syiJpc1A/ikzob+C3y9qDmtsngf4hSh3k/BB9kwBXCRX4GarXRgAGpGXHkRAY
+         7Yhd6Haq2Mcr8Eshwk+u8bTf+FqR3mfsSokRK4pbZuZtGluGnEtq0ACluHE7de+QB13k
+         Tk6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7r/lxb9syFi5fszVxey13EVYUFPTHODfMEEaPAN/V+Y=;
+        b=Z5dJOwWZyGTogTb+CjemGdoPwv6tQXpJshtpLtLt/XAzOCZljhWTTf4lAax5q5MJ85
+         qShQdWuU8Fc1Xnf3eIyL6jNMDrpO79me5wzbI7OH8R7goGJB1IcDY0uCDvg2a05h0QKk
+         NqUNEkhlKAvxfpAN93Q4X89n3SCqQNsZCu9qn4O1Ls2npQSDG0F+MVvx16/aahhqWH+H
+         c6rZaYgh1d9PbSa17Fn9p/d2SSrqQbfSyODSLmDQd5KbNtDXjjbr9KSvmkgONQq1YBye
+         vSQtg6pq4CYstmE6s4abwHjNydSg+2SZfpMOVdr4WfbqwhlqkrndAcb5fbDqmvbHSQfE
+         lKNA==
+X-Gm-Message-State: ACrzQf1zTm+fCUnjvzxBf66EmcDnAIZtYObpnsrX00R0iRl2qHQoarl4
+        8+TDrM7/OAC5vbtjI43C+A4=
+X-Google-Smtp-Source: AMsMyM5K0ZKfrU9AcZgM/WGkAuYCPoBp+s8EysvSeUPepfjiMjsmTSvUp3+EbonMe8RJZrf0AZOixg==
+X-Received: by 2002:a5d:52d0:0:b0:21e:4923:fa09 with SMTP id r16-20020a5d52d0000000b0021e4923fa09mr26317288wrv.244.1666711704051;
+        Tue, 25 Oct 2022 08:28:24 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id a2-20020a056000050200b0023662245d3csm2848766wrf.95.2022.10.25.08.28.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 08:28:23 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>, mripard@kernel.org,
+        mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v2 28/38] printk: console_unblank: use srcu
- console list iterator
-Message-ID: <Y1gAkjvSS3XXUJly@alley>
-References: <20221019145600.1282823-1-john.ogness@linutronix.de>
- <20221019145600.1282823-29-john.ogness@linutronix.de>
+Subject: Re: [PATCH 04/11] media: cedrus: Add helper for checking capabilities
+Date:   Tue, 25 Oct 2022 17:28:22 +0200
+Message-ID: <8131177.T7Z3S40VBb@jernej-laptop>
+In-Reply-To: <Y1f/U8NxyJo/pMAH@aptenodytes>
+References: <20221024201515.34129-1-jernej.skrabec@gmail.com> <13124586.uLZWGnKmhe@jernej-laptop> <Y1f/U8NxyJo/pMAH@aptenodytes>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019145600.1282823-29-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2022-10-19 17:01:50, John Ogness wrote:
-> Use srcu console list iteration for console list traversal.
-> 
-> Document why the console_lock is still necessary.
-> 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Dne torek, 25. oktober 2022 ob 17:22:59 CEST je Paul Kocialkowski napisal(a=
+):
+> Hi Jernej,
+>=20
+> On Tue 25 Oct 22, 17:17, Jernej =C5=A0krabec wrote:
+> > Dne torek, 25. oktober 2022 ob 08:30:28 CEST je Dan Carpenter napisal(a=
+):
+> > > On Mon, Oct 24, 2022 at 10:15:08PM +0200, Jernej Skrabec wrote:
+> > > > There is several different Cedrus cores with varying capabilities, =
+so
+> > > > some operations like listing formats depends on checks if feature is
+> > > > supported or not.
+> > > >=20
+> > > > Currently check for capabilities is only in format enumeration help=
+er,
+> > > > but it will be used also elsewhere later. Let's convert this check =
+to
+> > > > helper and while at it, also simplify it. There is no need to check=
+ if
+> > > > capability mask is zero, condition will still work properly.
+> > >=20
+> > > Sure.  That's true.  Out of curiousity, can
+> > > cedrus_formats[i].capabilities
+> > > be zero?  Because it feels like that's what should be checked.
+> >=20
+> > Yes, it can be. It's the case for V4L2_PIX_FMT_NV12_32L32. All variants
+> > supports it, so there is no special capability needed in order to be
+> > listed. What would you check in such case? Condition still works for th=
+is
+> > case.
+> I think the problem is that (bits & 0) =3D=3D 0 is always true.
+> So if the input caps are 0, we need to make sure to return false.
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
+No. If format (or any other) capabilities are 0, means they are supported b=
+y=20
+all variants and it's expected from cedrus_is_capable() to return true.
 
-See a note below.
+Regards,
+Jernej
 
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2948,10 +2948,14 @@ EXPORT_SYMBOL(console_conditional_schedule);
->  void console_unblank(void)
->  {
->  	struct console *c;
-> +	int cookie;
->  
->  	/*
-> -	 * console_unblank can no longer be called in interrupt context unless
-> -	 * oops_in_progress is set to 1..
-> +	 * Stop console printing because the unblank() callback may
-> +	 * assume the console is not within its write() callback.
 
-From some reason, I believe this even without more details. I expect
-that unbank() would need to refresh the screen and use similar
-code as the write() callback.
-
-It is different than the device() callback where the dependency is
-less obvious.
-
-Best Regards,
-Petr
-
-> +	 *
-> +	 * If @oops_in_progress is set, this may be an atomic context.
-> +	 * In that case, attempt a trylock as best-effort.
->  	 */
->  	if (oops_in_progress) {
->  		if (down_trylock_console_sem() != 0)
-> @@ -2961,9 +2965,14 @@ void console_unblank(void)
->  
->  	console_locked = 1;
->  	console_may_schedule = 0;
-> -	for_each_console(c)
-> +
-> +	cookie = console_srcu_read_lock();
-> +	for_each_console_srcu(c) {
->  		if (console_is_enabled(c) && c->unblank)
->  			c->unblank();
-> +	}
-> +	console_srcu_read_unlock(cookie);
-> +
->  	console_unlock();
->  
->  	if (!oops_in_progress)
