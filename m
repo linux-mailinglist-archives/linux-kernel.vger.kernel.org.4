@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2456260C812
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796E160C81A
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiJYJ3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S231241AbiJYJao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiJYJ3Z (ORCPT
+        with ESMTP id S230307AbiJYJaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:29:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E31DF5B;
-        Tue, 25 Oct 2022 02:27:00 -0700 (PDT)
+        Tue, 25 Oct 2022 05:30:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B3CBAF;
+        Tue, 25 Oct 2022 02:29:03 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 622CC220A6;
-        Tue, 25 Oct 2022 09:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666690019; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EBC5D1FDB3;
+        Tue, 25 Oct 2022 09:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666690141; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=U+HGnLY306jy4fvUdCHxKjpjZejfwZcQIT35V1hFjoA=;
-        b=OUtfMkz3OJvDfqAMtwqWf7k1Pi7qIxAS5MB102cPv5WME1jsfKJfQ77lN+/tz24xTKGPnb
-        wj3EEDG4GRCBPpMFzEZ3V5vmDURJndwsAzlxBrcdrMtfnLdyR4k+tjxYxxYC7QmvzfOzO2
-        AAPXhTky1UlF5hepfpXpIHnVfaai1b8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666690019;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U+HGnLY306jy4fvUdCHxKjpjZejfwZcQIT35V1hFjoA=;
-        b=EhnJldASVXrNxBiqA2m24UtHP/rG2wFxWhvo9Q4JG4X+pTLPBGuTdZhub1Sb+A14G/ff58
-        Pfpi1gJXhDWHhrDQ==
+        bh=X3hqIV0wZfEGGNbJBT4Kj1SM5tbGwTop51vS5maKUNI=;
+        b=iklZYoBsKNhjMJ4wTorCWN5TtI7lP6OEUK/v0hqVKvfqWo7u6oBG82yYh0ynNx17tCj8y9
+        SaedHE8rtfBX2dY7EB7oOrS2Sv5tmbVdbgfSlzj5qd2hoiq+fKUQpJ+y2YxxDG0w+rBFo1
+        ykTU/b6lYYAqPmZdEg5GF6uREsmTvRk=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 509B7134CA;
-        Tue, 25 Oct 2022 09:26:59 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 955FF134CA;
+        Tue, 25 Oct 2022 09:29:01 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id WXOrE+OrV2MBQAAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 25 Oct 2022 09:26:59 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id DDD13A06F5; Tue, 25 Oct 2022 11:26:58 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 11:26:58 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jan Kara <jack@suse.cz>, Arnd Bergmann <arnd@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, Thomas Schmitt <scdbackup@gmx.net>,
-        stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Jeff Layton <jlayton@kernel.org>,
-        Deepa Dinamani <deepa.kernel@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] isofs: prevent file time rollover after year 2038
-Message-ID: <20221025092658.qshqotkncsbp5nr5@quack3>
-References: <20221020160037.4002270-1-arnd@kernel.org>
- <20221024122614.bkcehqr7gi3f23ca@quack3>
- <20221024145121.2dj6sdeqvxndbhpt@quack3>
- <20221024135517.7d40b96a206020eca03e3802@linux-foundation.org>
+        id YombIV2sV2PiQAAAMHmgww
+        (envelope-from <nborisov@suse.com>); Tue, 25 Oct 2022 09:29:01 +0000
+Message-ID: <1d9d4d78-073d-fc49-1918-f7c8ab6fe15e@suse.com>
+Date:   Tue, 25 Oct 2022 12:29:00 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024135517.7d40b96a206020eca03e3802@linux-foundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] btrfs: volumes: Increase bioc pointer check
+Content-Language: en-US
+To:     Li zeming <zeming@nfschina.com>, clm@fb.com, josef@toxicpanda.com,
+        dsterba@suse.com
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221025082835.3751-1-zeming@nfschina.com>
+From:   Nikolay Borisov <nborisov@suse.com>
+In-Reply-To: <20221025082835.3751-1-zeming@nfschina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 24-10-22 13:55:17, Andrew Morton wrote:
-> On Mon, 24 Oct 2022 16:51:21 +0200 Jan Kara <jack@suse.cz> wrote:
+
+
+On 25.10.22 г. 11:28 ч., Li zeming wrote:
+> If kzalloc fails to allocate the bioc pointer, NULL is returned
+> directly.
 > 
-> > > Thanks! I've added the patch to my tree and will push it to Linus.
-> > 
-> > Oh, I have noticed Andrew has merged the patch already into his tree. So
-> > dropped from mine.
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+
+This patch clearly shows you haven't really understood the code. As is 
+evident there is __GFP_NOFAIL flag so as per the guarantees for this 
+flag we either loop infinitely trying to allocate a bioc or simply 
+allocated it. So this check can never be triggered.
+
+NAK
+> ---
+>   fs/btrfs/volumes.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> You could have just added it and I'd drop my copy when Stephen tells
-> us of the duplicate.  But whatever.
-
-Yeah, I know. But since I've just pulled the patch in I figured it's less
-work if I just take it out as well ;)
-
-> Maybe you owe us an ISOFS MAINTAINERS entry ;)
-
-Yeah, I can see isofs currently has no entry in MAINTAINERS. OK, I'll add
-some ;)
-
-								Honza
-
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+> index 064ab2a79c80..f9cb815fe23d 100644
+> --- a/fs/btrfs/volumes.c
+> +++ b/fs/btrfs/volumes.c
+> @@ -5892,6 +5892,8 @@ static struct btrfs_io_context *alloc_btrfs_io_context(struct btrfs_fs_info *fs_
+>   		 */
+>   		sizeof(u64) * (total_stripes),
+>   		GFP_NOFS|__GFP_NOFAIL);
+> +	if (!bioc)
+> +		return NULL;
+>   
+>   	atomic_set(&bioc->error, 0);
+>   	refcount_set(&bioc->refs, 1);
