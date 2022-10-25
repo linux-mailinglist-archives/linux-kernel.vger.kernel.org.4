@@ -2,232 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6866460C3B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECB560C3AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiJYGRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S231180AbiJYGRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiJYGRK (ORCPT
+        with ESMTP id S229689AbiJYGRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:17:10 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582BBDF8;
-        Mon, 24 Oct 2022 23:17:08 -0700 (PDT)
-Received: from dggpeml500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MxM6R0ZWRz15M3l;
-        Tue, 25 Oct 2022 14:12:15 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by dggpeml500022.china.huawei.com
- (7.185.36.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
- 2022 14:17:06 +0800
-From:   Zhang Zekun <zhangzekun11@huawei.com>
-To:     <lenb@kernel.org>, <rafael@kernel.org>
-CC:     <patchwork@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH RFC] ACPI: container: Add power domain control methods
-Date:   Tue, 25 Oct 2022 06:14:37 +0000
-Message-ID: <20221025061437.17571-1-zhangzekun11@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 25 Oct 2022 02:17:07 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46C2DF8
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:17:04 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MxM8n2hyrzJnFP;
+        Tue, 25 Oct 2022 14:14:17 +0800 (CST)
+Received: from [10.174.151.185] (10.174.151.185) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 25 Oct 2022 14:17:02 +0800
+Subject: Re: [PATCH v8 1/4] mm,hwpoison,hugetlb,memory_hotplug: hotremove
+ memory section with hwpoisoned hugepage
+To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
+CC:     <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Jane Chu <jane.chu@oracle.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20221024062012.1520887-1-naoya.horiguchi@linux.dev>
+ <20221024062012.1520887-2-naoya.horiguchi@linux.dev>
+ <2484c6be-5075-2203-4f16-9cfdc4876e11@huawei.com>
+ <20221025053559.GA2104800@ik1-406-35019.vs.sakura.ne.jp>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <6decf924-1743-d67e-8222-0f02f83b05c1@huawei.com>
+Date:   Tue, 25 Oct 2022 14:17:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500022.china.huawei.com (7.185.36.66)
+In-Reply-To: <20221025053559.GA2104800@ik1-406-35019.vs.sakura.ne.jp>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.151.185]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Platform devices which supports power control are often required to be
-power off/on together with the devices in the same power domain. However,
-there isn't a generic driver that support the power control logic of
-these devices.
+On 2022/10/25 13:35, Naoya Horiguchi wrote:
+> On Tue, Oct 25, 2022 at 10:38:11AM +0800, Miaohe Lin wrote:
+>> On 2022/10/24 14:20, Naoya Horiguchi wrote:
+>>> From: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>>
+>>> HWPoisoned page is not supposed to be accessed once marked, but currently
+>>> such accesses can happen during memory hotremove because do_migrate_range()
+>>> can be called before dissolve_free_huge_pages() is called.
+>>>
+>>> Clear HPageMigratable for hwpoisoned hugepages to prevent them from being
+>>> migrated.  This should be done in hugetlb_lock to avoid race against
+>>> isolate_hugetlb().
+>>>
+>>> get_hwpoison_huge_page() needs to have a flag to show it's called from
+>>> unpoison to take refcount of hwpoisoned hugepages, so add it.
+>>>
+>>> Reported-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+>>> Reviewed-by: Oscar Salvador <osalvador@suse.de>
+>>> Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> ---
+>>> ChangeLog v3 -> v7:
+>>> - introduce TESTCLEARHPAGEFLAG() to determine the value of migratable_cleared
+>>
+>> Many thanks for update, Naoya. I'm sorry but TestClearHPageMigratable() might be somewhat
+>> overkill. As we discussed in previous thread:
+>>
+>> """
+>> I think I might be nitpicking... But it seems ClearHPageMigratable is not enough here.
+>>   1. In MF_COUNT_INCREASED case, we don't know whether HPageMigratable is set.
+>>   2. Even if HPageMigratable is set, there might be a race window before we clear HPageMigratable?
+>> So "*migratable_cleared = TestClearHPageMigratable" might be better? But I might be wrong.
+>> """
+>>
+>> The case 2 should be a dumb problem(sorry about it). HPageMigratable() is always cleared while holding
+>> the hugetlb_lock which is already held by get_huge_page_for_hwpoison(). So the only case we should care
+>> about is case 1 and that can be handled by below more efficient pattern:
+>> 	if (HPageMigratable)
+>> 		ClearHPageMigratable()
+>>
+>> So the overhead of test and clear atomic ops can be avoided. But this is trival.
+>>
+>> Anyway, this patch still looks good to me. And my Reviewed-by tag still applies. Many thanks.
+> 
+> OK, so I replace this 1/4 with the following one, thank you.
 
-ACPI container seems to be a good place to hold these control logic. Add
-platform devices in the same power domain in a ACPI container, we can
-easily get the locality information about these devices and can moniter
-the power of these devices in the same power domain together.
+Many thanks for your update, Naoya. ;) This version looks good to me too.
 
-This patch provide three userspace control interface to control the power
-of devices together in the container:
-- on: power up the devices in the container and then online these devices
-  which will be triggered by BIOS.
-- off: offline and eject the child devices in the container which are
-  ejectable.
-- pxms: show the pxms of devices which are present in the container.
-
-In our scenario, we need to control the power of HBM memory devices which
-can be power consuming and will only be used in some specialized scenarios,
-such as HPC. HBM memory devices in a socket are in the same power domain,
-and should be power off/on together. We have come up with an idea that put
-these power control logic in a specialized driver, but ACPI container seems
-to be a more generic place to hold these control logic.
-
-Signed-off-by: Zhang Zekun <zhangzekun11@huawei.com>
----
- drivers/acpi/Kconfig     |  12 +++++
- drivers/acpi/container.c | 112 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 124 insertions(+)
-
-diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
-index 473241b5193f..ebb26d56dba0 100644
---- a/drivers/acpi/Kconfig
-+++ b/drivers/acpi/Kconfig
-@@ -584,6 +584,18 @@ config ACPI_PRMT
- 	  substantially increase computational overhead related to the
- 	  initialization of some server systems.
- 
-+config ACPI_POWER_DOMAIN_CTL
-+	bool "acpi container power domain control support"
-+	depends on ACPI_CONTAINER
-+	default n
-+	help
-+	  Add userspace power control interfaces in container which can be used
-+	  for manipulating the power of child devices in the same power domain.
-+
-+	  To use this feature you need to put devices in the same power domain
-+	  in a container. Enable this feature if you want to control the power
-+	  of these devices together.
-+
- endif	# ACPI
- 
- config X86_PM_TIMER
-diff --git a/drivers/acpi/container.c b/drivers/acpi/container.c
-index 5b7e3b9ae370..9ed2eb5a3dcc 100644
---- a/drivers/acpi/container.c
-+++ b/drivers/acpi/container.c
-@@ -42,6 +42,115 @@ static void acpi_container_release(struct device *dev)
- 	kfree(to_container_dev(dev));
- }
- 
-+#ifdef CONFIG_ACPI_POWER_DOMAIN_CTL
-+
-+static int get_pxm(struct acpi_device *acpi_device, void *arg)
-+{
-+	int nid;
-+	unsigned long long sta;
-+	acpi_handle handle;
-+	nodemask_t *mask;
-+	acpi_status status;
-+
-+	mask = arg;
-+	handle = acpi_device->handle;
-+
-+	status = acpi_evaluate_integer(handle, "_STA", NULL, &sta);
-+	if (ACPI_SUCCESS(status) && (sta & ACPI_STA_DEVICE_ENABLED)) {
-+		nid = acpi_get_node(handle);
-+		if (nid >= 0)
-+			node_set(nid, *mask);
-+	}
-+
-+	return 0;
-+}
-+
-+static ssize_t pxms_show(struct device *dev,
-+			 struct device_attribute *attr,
-+			 char *buf)
-+{
-+	nodemask_t mask;
-+	acpi_status status;
-+	struct acpi_device *adev;
-+
-+	adev = to_acpi_device(dev);
-+	nodes_clear(mask);
-+
-+	status = acpi_dev_for_each_child(adev, get_pxm, &mask);
-+
-+	return sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&mask));
-+}
-+DEVICE_ATTR_RO(pxms);
-+
-+static ssize_t on_store(struct device *d, struct device_attribute *attr,
-+		const char *buf, size_t count)
-+{
-+	acpi_status status;
-+	acpi_handle handle;
-+	struct acpi_device *adev;
-+
-+	if (!count || buf[0] != '1')
-+		return -EINVAL;
-+
-+	adev = to_acpi_device(d);
-+	handle = adev->handle;
-+	status = acpi_evaluate_object(handle, "_ON", NULL, NULL);
-+	if (status == AE_NOT_FOUND)
-+		acpi_handle_warn(handle, "No power on support for the container\n");
-+	else if (ACPI_FAILURE(status))
-+		acpi_handle_warn(handle, "Power on the device failed (0x%x)\n", status);
-+
-+	return count;
-+}
-+DEVICE_ATTR_WO(on);
-+
-+static int eject_device(struct acpi_device *acpi_device, void *not_used)
-+{
-+	acpi_object_type unused;
-+	acpi_status status;
-+
-+	status = acpi_get_type(acpi_device->handle, &unused);
-+	if (ACPI_FAILURE(status) || !acpi_device->flags.ejectable)
-+		return -ENODEV;
-+
-+	acpi_dev_get(acpi_device);
-+	status = acpi_hotplug_schedule(acpi_device, ACPI_OST_EC_OSPM_EJECT);
-+	if (ACPI_SUCCESS(status))
-+		return status;
-+
-+	acpi_dev_put(acpi_device);
-+	acpi_evaluate_ost(acpi_device->handle, ACPI_OST_EC_OSPM_EJECT,
-+			  ACPI_OST_SC_NON_SPECIFIC_FAILURE, NULL);
-+
-+	return status == AE_NO_MEMORY ? -ENOMEM : -EAGAIN;
-+}
-+
-+static ssize_t off_store(struct device *d, struct device_attribute *attr,
-+		const char *buf, size_t count)
-+{
-+	struct acpi_device *adev;
-+	acpi_status status;
-+
-+	if (!count || buf[0] != '1')
-+		return -EINVAL;
-+
-+	adev = to_acpi_device(d);
-+	status = acpi_dev_for_each_child(adev, eject_device, NULL);
-+	if (ACPI_SUCCESS(status))
-+		return count;
-+
-+	return status;
-+}
-+DEVICE_ATTR_WO(off);
-+
-+static void create_sysfs(struct device *dev)
-+{
-+	device_create_file(dev, &dev_attr_on);
-+	device_create_file(dev, &dev_attr_off);
-+	device_create_file(dev, &dev_attr_pxms);
-+}
-+#endif
-+
- static int container_device_attach(struct acpi_device *adev,
- 				   const struct acpi_device_id *not_used)
- {
-@@ -68,6 +177,9 @@ static int container_device_attach(struct acpi_device *adev,
- 		return ret;
- 	}
- 	adev->driver_data = dev;
-+#ifdef CONFIG_ACPI_POWER_DOMAIN_CTL
-+	create_sysfs(&adev->dev);
-+#endif
- 	return 1;
- }
- 
--- 
-2.30.0
+Thanks,
+Miaohe Lin
 
