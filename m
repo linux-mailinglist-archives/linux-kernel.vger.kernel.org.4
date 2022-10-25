@@ -2,159 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4F7B60C915
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A526F60C91E
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 11:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231845AbiJYJ6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 05:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S231240AbiJYJ7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 05:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbiJYJ6O (ORCPT
+        with ESMTP id S231469AbiJYJ6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 05:58:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34B217A955
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:53:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666691585;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=EtrW71D5/2sPWM7kdpNEu7omKbDnLBRaRCZse75RN24=;
-        b=QQ7GqgiROqwNihh5xpWeymUpLIh0ZBEcTt7mqRP16dDDKdZGe3+iGWGMORSc0P6zF+eXvj
-        2gd5wqRl5eLL1dDe/hInjx97l8Ado2xyoC0OrHCb+pkCb9ld2GnTjIKmJx5YVd+0RE86Pp
-        Hv5/9vHdDALa8+MXPk4HfukKgYC28Gk=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-493-OZZ3BLGDNeClv3Pbq6V9DQ-1; Tue, 25 Oct 2022 05:53:03 -0400
-X-MC-Unique: OZZ3BLGDNeClv3Pbq6V9DQ-1
-Received: by mail-ed1-f71.google.com with SMTP id dz9-20020a0564021d4900b0045d9a3aded4so11650707edb.22
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 02:53:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EtrW71D5/2sPWM7kdpNEu7omKbDnLBRaRCZse75RN24=;
-        b=7cOHdX2B2pUgRSH7mr/qutqOqrOOcQdApRjRnwjf4ZRxmf/CVLYSTAYOMfiPRnDYJ+
-         YKDH74NZraDcsLwcgfLsDtkVVTR03co3/TyWVQAHX6xPCg/ag6LaNJ/Xboz11PuNr4v+
-         mE5yd/APiEg9hKf+O635c8gz14yVKZSVmOd7Y9eS0ptJ3yw0aAzr1NEJ/N2GaZ208gO8
-         CcGg77ABXGZ13krOH8Mt/TU4vyTK814iKyQG5aoBc59C9Qb8b3h4ER52MMmbww2HICE1
-         M1si8hm9zm7aIYXXaJR+jCAxjXznTD1CO466MmTMf114v5x8RguqWyu6fvTSRLA/7KBw
-         tnqg==
-X-Gm-Message-State: ACrzQf0vw+Vwffj6JA9140TLKgkMhqUuzVI7dPUVxTFbUAcIo2ETz+Pi
-        gt0P18nmbA2aAEKDpwJYVwrxhEAbJy5gHjz6uR9iM+oHhysGvp0a/rqArwsbeReXWRTl4Ou0WrB
-        iayYlrYOUHiORMRN0mUiHRADA
-X-Received: by 2002:a17:907:da7:b0:791:8f57:6860 with SMTP id go39-20020a1709070da700b007918f576860mr32509234ejc.509.1666691581773;
-        Tue, 25 Oct 2022 02:53:01 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5UdWVp2QHWe3GuycJ8wnLjKKaJcsY9oYSs676/vqh3nm58pjFII9O6z3LyFVUZl1FBqX3rgg==
-X-Received: by 2002:aa7:c14f:0:b0:460:e1cc:2c29 with SMTP id r15-20020aa7c14f000000b00460e1cc2c29mr24718596edp.423.1666691571384;
-        Tue, 25 Oct 2022 02:52:51 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id o6-20020a17090611c600b007919ba4295esm1072639eja.216.2022.10.25.02.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 02:52:50 -0700 (PDT)
-Message-ID: <9256cedf-151d-724b-1e39-fe016fce8a44@redhat.com>
-Date:   Tue, 25 Oct 2022 11:52:49 +0200
+        Tue, 25 Oct 2022 05:58:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5233F16D893;
+        Tue, 25 Oct 2022 02:53:25 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EC30E660237B;
+        Tue, 25 Oct 2022 10:53:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666691603;
+        bh=AfoC+u7QOoMXL0swZVl0spuIt4jUU/HeJkWsU7RAiyY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=e3IHYNgCWZFHB87MlOvMPIe8lEbMrg8kIJx4WoAX8/jwbREZ7I3fZaTIyr0w3J10j
+         pZBOISwXMzpJCcYc7/SQvDd+Ma5oayPsd8+Ka6I5VNGbVveaGhOL8VeRMqvGMgKBpL
+         exWc+XE1mILerfwugzCj1mWwZ1a9Va2UaSUVjtsUeKpM5q/neXObmgIHRnRKlTyLAR
+         MbtO1yqpogjhUhFaJsm+l+jIcu4xvzEVqJmUZMkiMNsA/4y4wXTxuu4aApxS8uY5iz
+         abIvvWX4zMGKOFa+VW0O6sL/fttYa5qLsw5kuw9CT+Ca78H8kubHmx9Jb8aRahwQXJ
+         oHQ5piozLYcYA==
+Message-ID: <03f10476-f36f-3b74-6523-7bfbbbf1a5e7@collabora.com>
+Date:   Tue, 25 Oct 2022 11:53:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 6.1-2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-Content-Language: en-US, nl
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 3/3] soc: mediatek: pwrap: add mt8365 SoC support
+Content-Language: en-US
+To:     Fadwa CHIBY <fchiby@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        "Zhiyong . Tao" <zhiyong.tao@mediatek.com>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        Sen Chu <sen.chu@mediatek.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221024131544.31219-1-fchiby@baylibre.com>
+ <20221024131544.31219-4-fchiby@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221024131544.31219-4-fchiby@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Il 24/10/22 15:15, Fadwa CHIBY ha scritto:
+> From: Fabien Parent <fparent@baylibre.com>
+> 
+> Add PMIC Wrap support for MT8365 SoC.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Fadwa CHIBY <fchiby@baylibre.com>
 
-Here is the first round of fixes for platform-drivers-x86 for 6.1.
-
-The only thing which stands out is a fix for a backlight regression
-on Chromebooks (under drivers/acpi, with ack from Rafael).
-
-Other then that nothing special to report just various small fixes
-and hardware-id additions.
-
-Regards,
-
-Hans
-
-
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.1-2
-
-for you to fetch changes up to e9cf4d9b9a6fdb1df6401a59f5ac5d24006bfeae:
-
-  ACPI: video: Fix missing native backlight on Chromebooks (2022-10-24 17:02:13 +0200)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v6.1-2
-
-A small set of assorted fixes and hardware-id additions for 6.1.
-
-The following is an automated git shortlog grouped by driver:
-
-ACPI:
- -  video: Fix missing native backlight on Chromebooks
-
-asus-wmi:
- -  Add support for ROG X16 tablet mode
-
-leds:
- -  simatic-ipc-leds-gpio: fix incorrect LED to GPIO mapping
-
-platform/x86/amd:
- -  pmc: Read SMU version during suspend on Cezanne systems
-
-platform/x86/intel:
- -  pmc/core: Add Raptor Lake support to pmc core driver
-
-thinkpad_acpi:
- -  Fix reporting a non present second fan on some models
-
-----------------------------------------------------------------
-Dmitry Osipenko (1):
-      ACPI: video: Fix missing native backlight on Chromebooks
-
-Gayatri Kammela (1):
-      platform/x86/intel: pmc/core: Add Raptor Lake support to pmc core driver
-
-Henning Schild (1):
-      leds: simatic-ipc-leds-gpio: fix incorrect LED to GPIO mapping
-
-Jelle van der Waa (1):
-      platform/x86: thinkpad_acpi: Fix reporting a non present second fan on some models
-
-Luke D. Jones (1):
-      platform/x86: asus-wmi: Add support for ROG X16 tablet mode
-
-Mario Limonciello (1):
-      platform/x86/amd: pmc: Read SMU version during suspend on Cezanne systems
-
- drivers/acpi/video_detect.c                 | 12 ++++++++++++
- drivers/leds/simple/simatic-ipc-leds-gpio.c | 12 ++++++------
- drivers/platform/x86/amd/pmc.c              |  7 +++++++
- drivers/platform/x86/asus-nb-wmi.c          |  9 +++++++++
- drivers/platform/x86/intel/pmc/core.c       |  2 ++
- drivers/platform/x86/thinkpad_acpi.c        |  4 +++-
- 6 files changed, 39 insertions(+), 7 deletions(-)
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
