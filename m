@@ -2,119 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BF960D089
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C965060D084
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbiJYP1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S233185AbiJYP0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232447AbiJYP1T (ORCPT
+        with ESMTP id S233002AbiJYP0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:27:19 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45EF2B262;
-        Tue, 25 Oct 2022 08:27:18 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29PEr5a8021511;
-        Tue, 25 Oct 2022 15:27:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=GGFbsnWykh4fbfGryO7D4Cga+is61229sObN4S+/oX0=;
- b=bcCjSX83agkBJcPPBpR37y7efTEqxZZh53yevmVNe6AMdYnJ9HPT3wME5cduJrx3BRzE
- TBWAXw3vsvbDrxKuLzz0I5f/CytfQlW88MC1vdyFPmsquLVR/LyyRHA/1vRDCzGx2KDG
- lGG15qyaA7sCjthcwmkyL+8/88jcHIqnTroBPLlbn3YWGh+L/FLgC6hex18lY4ldd36r
- UsGX9NGI9rd4y3jnn8/3C7cl/9hFEfGgocVxJyHVVoP2ysstRhcaBYHZsOtoDwG6lMKc
- u6XTUfRtoYqYA9n82UGy2yhRxvNbOfpiWT/bUK8rrwKPv6D5pj7V8ZgZwiYEcGT0IrbB dA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kee362q41-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 15:27:11 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29PFPPso002042;
-        Tue, 25 Oct 2022 15:27:09 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma06ams.nl.ibm.com with ESMTP id 3kc7sj5utx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Oct 2022 15:27:09 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29PFR7c445482344
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Oct 2022 15:27:07 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CE9D42045;
-        Tue, 25 Oct 2022 15:27:07 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B266642041;
-        Tue, 25 Oct 2022 15:27:06 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Oct 2022 15:27:06 +0000 (GMT)
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>
-Subject: [PATCH] selftests: vm: use 1 MB hugepage size for s390
-Date:   Tue, 25 Oct 2022 17:26:10 +0200
-Message-Id: <20221025152610.3439102-1-gerald.schaefer@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 25 Oct 2022 11:26:33 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C495C3C8DC
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:26:30 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f9so7392404pgj.2
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=f0Fk+0/Amw7nskzxgUFtOOx5Md+yUa8AJYsojRyR41E=;
+        b=at2Vihq0ZysdnRIAuOMyqUBdq1/FFvX63hDc58gBWKAYTaAmkdYraFO/pRcQUDSDYE
+         0fkDw3uZaS0h9nyoTmESSO/FjPD1QqpECPNASv+D/6l+zaxAf+VJn/1HbEpmn5RksRqM
+         Kzp2cehpcT91+FjF962CIIiyPLseroHnn8m58E8xAwNn8/VzQz0SjVNwnMGfPlyntwWG
+         1v+JEBR3ZSQGmfEMYXT1afvMpcQP3UQ/MndzyKc736Oi9OUW1NIyDDMvB7aFBM+fsgL1
+         HkgjZvE5tmNi+7E1mPJH+qwH0v1PNDsMYQONw16TaTIl5SmDaOKIjaZzxn0BT619gx8g
+         +GOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f0Fk+0/Amw7nskzxgUFtOOx5Md+yUa8AJYsojRyR41E=;
+        b=WD8qMDRWver1NdPy11WjCP0oMN7Cv8l62gvUMAsKNE1qSJpecxMTJTHIn1mGoUgppS
+         I4kZMlsUzmVZbl/1i5xvff5A78I2D6ARmIMEwXaOVX/s4//xFaf7pjNC99RYnES0Wb/C
+         5NTYUgrkatpSeQ57tqjFUuBDedpNZVEvoSgnQhS7lsyboM5gV4VB+IJSSH7nJBhKq1QB
+         fS6Df98L4tmImK6L1/0WI6atILybglo8+7qXVtWpjxZG9Jg3SuFsQJwNz2y2zWkCH4WY
+         kBj6+MkvQfJmR0SHfyaGMWIdYJHuzJwNGGZyhqEmjCl1DlXNDksCF9miWUyYHH+l7aJO
+         9tsw==
+X-Gm-Message-State: ACrzQf1aovF3CiHF53eeFrb7gDZcJDArGQ/Y0tBu9i1APyOsoRtsoYRI
+        BEpychmXvnwAclePGmeV+Jd1okWBSc/FJH/ZOTQ4jw==
+X-Google-Smtp-Source: AMsMyM7S5IISqnVExEMx/Y/NdDoxoi+mPZLZks2JQtwFF+Q9Vn8DzGWDrBRBdHkSKruNqn9cxFFTv641nHc01V+gClk=
+X-Received: by 2002:a63:1d5a:0:b0:46e:d157:39ef with SMTP id
+ d26-20020a631d5a000000b0046ed15739efmr17120402pgm.231.1666711590299; Tue, 25
+ Oct 2022 08:26:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tCPza0spCnqBsDU9_hqvLwgFi3o8ihpQ
-X-Proofpoint-GUID: tCPza0spCnqBsDU9_hqvLwgFi3o8ihpQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-25_08,2022-10-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=664
- suspectscore=0 adultscore=0 mlxscore=0 malwarescore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 clxscore=1011 phishscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2209130000 definitions=main-2210250086
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com> <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+In-Reply-To: <20221025151344.3784230-4-chao.p.peng@linux.intel.com>
+From:   Peter Maydell <peter.maydell@linaro.org>
+Date:   Tue, 25 Oct 2022 16:26:18 +0100
+Message-ID: <CAFEAcA-=Sc9Sc4oLq13HAFW49ZBw8u6DtN7bf_vjVYX_AAaKSg@mail.gmail.com>
+Subject: Re: [PATCH v9 3/8] KVM: Add KVM_EXIT_MEMORY_FAULT exit
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hugepage-vmemmap test fails for s390 because it assumes a hugepagesize
-of 2 MB, while we have 1 MB on s390. This results in iterating over two
-hugepages. If they are consecutive in memory, check_page_flags() will
-stumble over the additional head page. Otherwise, it will stumble over
-non-huge pageflags, after crossing the first 1 MB hugepage.
+On Tue, 25 Oct 2022 at 16:21, Chao Peng <chao.p.peng@linux.intel.com> wrote:
+>
+> This new KVM exit allows userspace to handle memory-related errors. It
+> indicates an error happens in KVM at guest memory range [gpa, gpa+size).
+> The flags includes additional information for userspace to handle the
+> error. Currently bit 0 is defined as 'private memory' where '1'
+> indicates error happens due to private memory access and '0' indicates
+> error happens due to shared memory access.
+>
+> When private memory is enabled, this new exit will be used for KVM to
+> exit to userspace for shared <-> private memory conversion in memory
+> encryption usage. In such usage, typically there are two kind of memory
+> conversions:
+>   - explicit conversion: happens when guest explicitly calls into KVM
+>     to map a range (as private or shared), KVM then exits to userspace
+>     to perform the map/unmap operations.
+>   - implicit conversion: happens in KVM page fault handler where KVM
+>     exits to userspace for an implicit conversion when the page is in a
+>     different state than requested (private or shared).
+>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Co-developed-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  Documentation/virt/kvm/api.rst | 23 +++++++++++++++++++++++
+>  include/uapi/linux/kvm.h       |  9 +++++++++
+>  2 files changed, 32 insertions(+)
+>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index f3fa75649a78..975688912b8c 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6537,6 +6537,29 @@ array field represents return values. The userspace should update the return
+>  values of SBI call before resuming the VCPU. For more details on RISC-V SBI
+>  spec refer, https://github.com/riscv/riscv-sbi-doc.
+>
+> +::
+> +
+> +               /* KVM_EXIT_MEMORY_FAULT */
+> +               struct {
+> +  #define KVM_MEMORY_EXIT_FLAG_PRIVATE (1 << 0)
+> +                       __u32 flags;
+> +                       __u32 padding;
+> +                       __u64 gpa;
+> +                       __u64 size;
+> +               } memory;
+> +
+> +If exit reason is KVM_EXIT_MEMORY_FAULT then it indicates that the VCPU has
+> +encountered a memory error which is not handled by KVM kernel module and
+> +userspace may choose to handle it. The 'flags' field indicates the memory
+> +properties of the exit.
+> +
+> + - KVM_MEMORY_EXIT_FLAG_PRIVATE - indicates the memory error is caused by
+> +   private memory access when the bit is set. Otherwise the memory error is
+> +   caused by shared memory access when the bit is clear.
+> +
+> +'gpa' and 'size' indicate the memory range the error occurs at. The userspace
+> +may handle the error and return to KVM to retry the previous memory access.
+> +
 
-Fix this by using 1 MB MAP_LENGTH for s390.
+What's the difference between this and a plain old MMIO exit ?
+Just that we can specify a wider size and some flags ?
 
-Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
----
- tools/testing/selftests/vm/hugepage-vmemmap.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/tools/testing/selftests/vm/hugepage-vmemmap.c b/tools/testing/selftests/vm/hugepage-vmemmap.c
-index 557bdbd4f87e..a4695f138cec 100644
---- a/tools/testing/selftests/vm/hugepage-vmemmap.c
-+++ b/tools/testing/selftests/vm/hugepage-vmemmap.c
-@@ -11,7 +11,14 @@
- #include <sys/mman.h>
- #include <fcntl.h>
- 
-+/*
-+ * 1 MB hugepage size for s390
-+ */
-+#if defined(__s390x__)
-+#define MAP_LENGTH		(1UL * 1024 * 1024)
-+#else
- #define MAP_LENGTH		(2UL * 1024 * 1024)
-+#endif
- 
- #ifndef MAP_HUGETLB
- #define MAP_HUGETLB		0x40000	/* arch specific */
--- 
-2.34.1
-
+-- PMM
