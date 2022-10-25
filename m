@@ -2,300 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2918060C061
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B46A60C062
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 03:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiJYBE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 21:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S230048AbiJYBEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 21:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiJYBDo (ORCPT
+        with ESMTP id S230167AbiJYBD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 21:03:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAFB5F62
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 17:03:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 24 Oct 2022 21:03:58 -0400
+Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257D096A08;
+        Mon, 24 Oct 2022 17:04:13 -0700 (PDT)
+Received: from pps.filterd (m0148664.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29P02HbB018420;
+        Tue, 25 Oct 2022 00:03:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pps0720;
+ bh=ihKAJ3kl53xpbHrbQgggZBze5PlfYXA3QQ0gdDPoNOI=;
+ b=K8lZKlFg5SCN8T9/7MxNWvcJwyQmnu6U9JC8faDfXtTZiTeB5cjTHazioU1aHQnTPTcS
+ QVUW01uPU/Id4Vz+RUvslejjk4xL8G2E4bgJb4Wv+HnbTzg30GHs1yNfOBJXQlGFmJdF
+ yHiHtpyzFzbh439mIHrP98SGf+AatP84/+hh9K2MNCgiqlq2TwGSg24NwvdE8lGJ9Opn
+ mn7YZRNZ2s68c/Migc3d8HrPGHsh8SepkLrQqSHsLfEvowE/XAzhKglIpwBqcyOMDhYf
+ Wxat6ymh4M+o1vpSdSNBdMxQS2lwNOA8pa29f+BzaK6k7xhG9VAaUj2awQoaBWvW8usW pA== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3ke30u8spd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Oct 2022 00:03:55 +0000
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F19861632
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 00:03:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5C2C433D7;
-        Tue, 25 Oct 2022 00:03:32 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WD+MrOqf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666656209;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mM/8UIZQ6LYQtk+8TLtw6u3mXtNCLZf8tJ3WoqaQvII=;
-        b=WD+MrOqf7XKVcr3T+DQ1LWtnfaYDnq4liAnsPnLb/StyoFw+C2DjcpJ+lRslpib/E/4s80
-        QwEkUwshOR8odApb8B77H2aLMouBdQ9fvx56v6ZdqwmdcKAxblryaNQeYMSJQ7vQDjRC+x
-        4v0YY7f+YRZ90ul7oM1dDbx6GJy+qoo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7d2b3757 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 25 Oct 2022 00:03:29 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
-Subject: [PATCH v2] ALSA: rme9652: use explicitly signed char
-Date:   Tue, 25 Oct 2022 02:03:13 +0200
-Message-Id: <20221025000313.546261-1-Jason@zx2c4.com>
-In-Reply-To: <202210250456.vKv5zoLb-lkp@intel.com>
-References: <202210250456.vKv5zoLb-lkp@intel.com>
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 559CF8040D3;
+        Tue, 25 Oct 2022 00:03:54 +0000 (UTC)
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 24 Oct 2022 12:03:43 -1200
+Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.15
+ via Frontend Transport; Mon, 24 Oct 2022 12:03:43 -1200
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (192.58.206.38)
+ by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.15; Mon, 24 Oct 2022 12:03:42 -1200
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WOS5D91gUsdvwAnIveU4NYQr/mmXDscNVK6P8zY2i3B2Er7RwkFMMA0lekgu9hyxKhmcbln+UUX1kY8WMVMHE/46LKtyL1tQVW1F+FmJeimgPCDfo3G52qR4rd3WYcbKA1O9gGHzg2Gy6nxf19z9tw7fknzKz25aQ7zM0ZIKtJ3kIG7NG6lFOCcLdpyY7lpplt5sKmXHViZstvnuRRG1mToEnkPCn3n7tSYdX66m1p/4kUjh0DF50KB68sahD7i2528FGsNJGnDgb+v6zBBUpgbchE8Fu2ANPpG3iX/Le2Y8YNadYqT5/1zNOp5FASq2elmC2IoqLTTQ0Wy6tmf5Jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ihKAJ3kl53xpbHrbQgggZBze5PlfYXA3QQ0gdDPoNOI=;
+ b=Ywq2X0S9CLEBVlZQucWf2kwkYel03UyP2sxOs1/ZGlHrtWdB+uLfJgmPJcO6QGjYqIbeL1hUdNsVv21JZFrU7OxKR41Ytb3tvpxUaZsq3wKRoegBUdZXVIAlVtUCqmlCpcTz9CNUjZkNFudCm7+XxgXJ3ZsM+WuR8oPZ9gkaaVl4dx9LCjQEM5+VMlXLnb5aiqE06DMRanFbYsqswR3lq7URizh7yXaLnuSVqZMd91/y+a+zVwsTY+WPXNnPVfqTh5RtSVdm/EFSfMGGE/QD74GTeOmK3EkeBy49rl3LqLqTlZmm/t97SrOzgGSLqK2MIYLihUp+1xjSt+jw/qZoug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
+ header.d=hpe.com; arc=none
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
+ DM4PR84MB1709.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:48::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5746.26; Tue, 25 Oct 2022 00:03:36 +0000
+Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::f4f4:4c43:9c7c:333c]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::f4f4:4c43:9c7c:333c%8]) with mapi id 15.20.5723.033; Tue, 25 Oct 2022
+ 00:03:36 +0000
+From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: RE: [PATCH v1 2/5] dt-bindings: soc: hpe: Add hpe,gxp-plreg
+Thread-Topic: [PATCH v1 2/5] dt-bindings: soc: hpe: Add hpe,gxp-plreg
+Thread-Index: AQHY3aMniIVqm01b3kyrrbcxm5Jgf64JpGIAgAGGr3CAD3YZAIADo6MQ
+Date:   Tue, 25 Oct 2022 00:03:36 +0000
+Message-ID: <DM4PR84MB19275A47D7006BD5664E1AF488319@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20221011185525.94210-1-nick.hawkins@hpe.com>
+ <20221011185525.94210-3-nick.hawkins@hpe.com>
+ <CAL_Jsq+xb2Ltfne4mQMXQAde-eHS7TsO73YZ-vhE7nK1Z_M0gw@mail.gmail.com>
+ <DM4PR84MB192795B45639710259E9B19D88229@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
+ <820095a2-3722-5c3a-77fb-5a6b6b44e1c3@linaro.org>
+In-Reply-To: <820095a2-3722-5c3a-77fb-5a6b6b44e1c3@linaro.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|DM4PR84MB1709:EE_
+x-ms-office365-filtering-correlation-id: fdab7052-042d-43fc-def6-08dab61c5d14
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6/1NbnbJMyTafwqG4kgJUJ4oHtbk0RLL/0o8ifcgk1G4wDK8F/WSHVZZFsdpUgpROaaznR/GO03t6YyTguMPBQtzipdTsy1jw1R9lgjS+gTaQIE71TQnoGV5yATmHrd1o2SI5pJ/wfWx3ebp0hc7j018SjJSHZfNP2voY7VwuOxPRPJy9i0loIClcpkMtkFM2eVSuVlk1822O1q1X5EoiHCP59VrrtF5TmQ78lUYSKQ1VX6EKBnvUoLiTBiunCVI7KYOnb8Is9xBJlicSjd+JHodCGl27Vr2aUzhCwlF+kDajZs80U/YGdjBk6Qzq/PqvPWsVDJnIHpgfTWaTal5FdUkRYRZ+Y4p4VNtUifSgvyJU7GVTkBY/RxDs8C91T8jYLuXKqb1TaTxMbCjigVKxyJiRdvjuEzsUp4anv16maoR8G1ugQmUkFo7HloVNuoOYIzN0OtbSkHgz0OLZqDZQmKhdiBN1tQ6g1M6o73DGbRkFap+ZTuM1hfxBCYz5wKABMgOFzyE9RrVlcKfW4S5jp7KGL5MyYp6gjOx73gNx0qybuiVkaRRF9eQMRtXuuqwhk3D21fD6TQBZ7wpMOakafetxHf8C+hLY+g32cYvzdaAPuv9op0ITR3YwnpsEwIr+xNlGGZRUSWZ4vtOrbFaCM29uY1KOqC2vcaeO7Cx3XbkLtlEN9HIOnrtL1zNXRFVd1A7Qlvrp9nabBxi+98E8dNZiZc6g7lB5hMmVZVOY7LcuDoLinykWO12Z6g0iHr6ZLgX26O11fipfz0CZVORJg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(39860400002)(346002)(366004)(396003)(451199015)(122000001)(2906002)(4744005)(8936002)(38100700002)(5660300002)(186003)(38070700005)(86362001)(82960400001)(33656002)(316002)(26005)(55236004)(9686003)(478600001)(54906003)(76116006)(55016003)(4326008)(6916009)(66446008)(71200400001)(66476007)(64756008)(66946007)(8676002)(41300700001)(66556008)(52536014)(6506007)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TCtXclJNYUhweHo4UmphaytSaW5LSG5GODVBazh5dS8weXo0OGplbUI3eVZP?=
+ =?utf-8?B?bG1heFQ3bTF2ZEFVNmF4bDVQckYyRE01TDMwZSsyNkJ6WlBUc3hCWUlmcjZI?=
+ =?utf-8?B?OTRJZ1lyVHFsVHA1Y1J6T25EODBaOTJhMUJsNzkyV0N4YVh1L214QjlSaGNo?=
+ =?utf-8?B?VFJXNVJwdnp3eG5TQnBNcWFVeDFUQkJqRzY4VDF3cnp3Qk9BNXRRZXpLdXpY?=
+ =?utf-8?B?ZnVTY1NIRDdpdGx4ZjVRSlRZNkVEdFpabzV6ZnB4aXNQcy9DaEVlZDQ1dHoz?=
+ =?utf-8?B?UUpPQ29SY1FQMlduOVVGUy9ZUVIwTkZLLytWampCQmVyM2g0SHpGM0grRmly?=
+ =?utf-8?B?MEZNVE9zckxEQUhUMG9lL2xqOG5lZkl6RXF4VDdlTVNEd0RtY09EVXlYWnBQ?=
+ =?utf-8?B?L1hKNXErb2E2a0dRNmZSdHUxZUs5aGF0SE9JY0RLVFpGS3B0aFBZL05aaHpY?=
+ =?utf-8?B?N1pkaXNHSHRWYmM5U2xlMkM4WnA1V3YxWlczSnpnNzIzTVh4eGZnRHJyUVR6?=
+ =?utf-8?B?MjdacG1RSEV6K1ova2d4eDdPa1J4dVBQUVp1SWhHeG1CclVkRmQramhSRDd2?=
+ =?utf-8?B?Z3VMVXJBWXlkN0xxN2R1ZUVRWmYvZWE5bS9wWkZQSVJCeTQyQjhnZEJZZm9i?=
+ =?utf-8?B?K2VMemhsQ2JMcm9jV2h1WWRCQllIWmh1a2FaZlJ4eXdJWDNCZmpzaDUzMlhL?=
+ =?utf-8?B?Ry9pWDIveEx3aENzcC82S05HdzFCazJLdGs0Mjh5WWlMNkgwMWc1eGJOd0ZO?=
+ =?utf-8?B?NEhqLzFrVmViVjRNVTBGTW9NTUVHS0JJY21BU2tmbXFQdFQxd051cUhRTEZq?=
+ =?utf-8?B?OUZISFRxZ0NWd1NGcjQrWW9heGhBZjdpbWdiOUgzNEdwMG1QSHVkQVdJS2hn?=
+ =?utf-8?B?ZkFjeHE3UnFBODlCcHpvYmdFcFVuaEp5QXkzTzA0Smd6a0lwSlJvMzZ4UXNO?=
+ =?utf-8?B?Tkl4cUdtWFdXUnJuOHVOT3pKOTFlNkJGbGVMSGt6NGNOTHVzbGZxSmZUK0FB?=
+ =?utf-8?B?cGM0LzBYOFBCUGxRd3Nvb0VmdWhqOFdsOFpLYWliZzU0UUpPemdEQWxOWEkw?=
+ =?utf-8?B?RGFFUFFrN1JVaTkxQllTb2VtWllHanZxeXkxV21ER3czL3piNEkycDJidkxu?=
+ =?utf-8?B?R21VcDJzY3cyNjlXWGxzWFFOanY5TGNDL2dGOVA1VVpRVmF3SWJ1MUxxeHV0?=
+ =?utf-8?B?cmVLOE12TlUwN2h5M0pWREx1UnJQcTlxRDVRZG9CanlHaG96RDlYK1luVW1j?=
+ =?utf-8?B?KzBUcHBSSDY2N2YvRThmT0xaRUpITnpsRWxwRU1vNlB3cER2ZVRLTTJwS2RW?=
+ =?utf-8?B?b2hYOXpkOWZwNmhTeXBtS3hqV2NWQngrNkU1MVVqdzlOb1c4WTZDblg2MFRU?=
+ =?utf-8?B?ZGltZUVpWjhvQUxVYi9JYWlQYS85T2ZQdXpNRHBpeFVuSmRpTU8yUnNXdUlD?=
+ =?utf-8?B?d005N2ZJdThqNWxBNEtPVjFFTGxrV21MTkdqRW1NcmN5ekp5N09VNE8zQWJm?=
+ =?utf-8?B?QnFOZmJSMDFJRmJHWFRFRTh5KzVCYjJENm1SMmU4NmR5NHB0RjFuSDFGSXEw?=
+ =?utf-8?B?TWplMHBQdXVpT01yTU50YUJ4T1FuS3VtM3RaOTZCQ0hkb2dOV1R3cFB1dHNh?=
+ =?utf-8?B?S2NYSmF0cG12Z05yalFQUFZrZjUyby9GUExaWVIrSit5WHQxQjFraWZmdnU0?=
+ =?utf-8?B?ZkFmZ1c2ZlVsL1hFRnVUMnBXOUsycHRlRERKZnBja1l3aFRwQ1VZMUZVUmJh?=
+ =?utf-8?B?Nk5hKzNJQm9henVOaG9Ka205eEJTQStQSDFqbC9XWW5BM29zOER1alEyenNz?=
+ =?utf-8?B?bXRHWVRhV21XMmRKVzE3Tk1sNGVVcnJMS0cyNVBLVnlkZVUrbFpSclRoVEZL?=
+ =?utf-8?B?Z2t2UDc2cHNjcmhXS1FaaUt1M0hqRUlYZkR2NnQzeWhYSlp2TFBpTzcwcyta?=
+ =?utf-8?B?b3dnUGd6bXFOQ2padzJUamVtYVZhdW5vZEFheXdEMTExSVhlK2JPZlZGdVIr?=
+ =?utf-8?B?enJUbVVTTklrTmVpWk5GWml3dExiVW5kMSs5T0N6M2swVG1GR2FhT1pFL0Fl?=
+ =?utf-8?B?eHNGbGZlTzZSbjVnU29kT1RvbDY5S3RyQW9qQ09WdVgwS25TS1FiUFgyQWpj?=
+ =?utf-8?Q?HIst4G8W4iBIeH+28q6s+UHbC?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdab7052-042d-43fc-def6-08dab61c5d14
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2022 00:03:36.2866
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: o5krY23Jdo6ri94W6hUtxVMzHrnRTITtubPcCcklVIZeuG7AgaN76l3d8wv8T5gZzji6WAKBqKNq3tkHK6lgdw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR84MB1709
+X-OriginatorOrg: hpe.com
+X-Proofpoint-ORIG-GUID: tnrmlRzHhfXMtA4lmtNZ_IZv_YKDyVc-
+X-Proofpoint-GUID: tnrmlRzHhfXMtA4lmtNZ_IZv_YKDyVc-
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-24_08,2022-10-21_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ impostorscore=0 mlxlogscore=662 clxscore=1011 priorityscore=1501
+ spamscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210240144
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With char becoming unsigned by default, and with `char` alone being
-ambiguous and based on architecture, signed chars need to be marked
-explicitly as such. This fixes warnings like:
-
-sound/pci/rme9652/hdsp.c:3953 hdsp_channel_buffer_location() warn: 'hdsp->channel_map[channel]' is unsigned
-sound/pci/rme9652/hdsp.c:4153 snd_hdsp_channel_info() warn: impossible condition '(hdsp->channel_map[channel] < 0) => (0-255 < 0)'
-sound/pci/rme9652/rme9652.c:1833 rme9652_channel_buffer_location() warn: 'rme9652->channel_map[channel]' is unsigned
-
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Cc: alsa-devel@alsa-project.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- sound/pci/rme9652/hdsp.c    | 26 +++++++++++++-------------
- sound/pci/rme9652/rme9652.c | 22 +++++++++++-----------
- 2 files changed, 24 insertions(+), 24 deletions(-)
-
-diff --git a/sound/pci/rme9652/hdsp.c b/sound/pci/rme9652/hdsp.c
-index dcc43a81ae0e..65add92c88aa 100644
---- a/sound/pci/rme9652/hdsp.c
-+++ b/sound/pci/rme9652/hdsp.c
-@@ -433,7 +433,7 @@ struct hdsp_midi {
-     struct snd_rawmidi           *rmidi;
-     struct snd_rawmidi_substream *input;
-     struct snd_rawmidi_substream *output;
--    char                     istimer; /* timer in use */
-+    signed char		     istimer; /* timer in use */
-     struct timer_list	     timer;
-     spinlock_t               lock;
-     int			     pending;
-@@ -480,7 +480,7 @@ struct hdsp {
- 	pid_t                 playback_pid;
- 	int                   running;
- 	int                   system_sample_rate;
--	const char           *channel_map;
-+	const signed char    *channel_map;
- 	int                   dev;
- 	int                   irq;
- 	unsigned long         port;
-@@ -502,7 +502,7 @@ struct hdsp {
-    where the data for that channel can be read/written from/to.
- */
- 
--static const char channel_map_df_ss[HDSP_MAX_CHANNELS] = {
-+static const signed char channel_map_df_ss[HDSP_MAX_CHANNELS] = {
- 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
- 	18, 19, 20, 21, 22, 23, 24, 25
- };
-@@ -517,7 +517,7 @@ static const char channel_map_mf_ss[HDSP_MAX_CHANNELS] = { /* Multiface */
- 	-1, -1, -1, -1, -1, -1, -1, -1
- };
- 
--static const char channel_map_ds[HDSP_MAX_CHANNELS] = {
-+static const signed char channel_map_ds[HDSP_MAX_CHANNELS] = {
- 	/* ADAT channels are remapped */
- 	1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23,
- 	/* channels 12 and 13 are S/PDIF */
-@@ -526,7 +526,7 @@ static const char channel_map_ds[HDSP_MAX_CHANNELS] = {
- 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
- };
- 
--static const char channel_map_H9632_ss[HDSP_MAX_CHANNELS] = {
-+static const signed char channel_map_H9632_ss[HDSP_MAX_CHANNELS] = {
- 	/* ADAT channels */
- 	0, 1, 2, 3, 4, 5, 6, 7,
- 	/* SPDIF */
-@@ -540,7 +540,7 @@ static const char channel_map_H9632_ss[HDSP_MAX_CHANNELS] = {
- 	-1, -1
- };
- 
--static const char channel_map_H9632_ds[HDSP_MAX_CHANNELS] = {
-+static const signed char channel_map_H9632_ds[HDSP_MAX_CHANNELS] = {
- 	/* ADAT */
- 	1, 3, 5, 7,
- 	/* SPDIF */
-@@ -554,7 +554,7 @@ static const char channel_map_H9632_ds[HDSP_MAX_CHANNELS] = {
- 	-1, -1, -1, -1, -1, -1
- };
- 
--static const char channel_map_H9632_qs[HDSP_MAX_CHANNELS] = {
-+static const signed char channel_map_H9632_qs[HDSP_MAX_CHANNELS] = {
- 	/* ADAT is disabled in this mode */
- 	/* SPDIF */
- 	8, 9,
-@@ -3939,7 +3939,7 @@ static snd_pcm_uframes_t snd_hdsp_hw_pointer(struct snd_pcm_substream *substream
- 	return hdsp_hw_pointer(hdsp);
- }
- 
--static char *hdsp_channel_buffer_location(struct hdsp *hdsp,
-+static signed char *hdsp_channel_buffer_location(struct hdsp *hdsp,
- 					     int stream,
- 					     int channel)
- 
-@@ -3964,7 +3964,7 @@ static int snd_hdsp_playback_copy(struct snd_pcm_substream *substream,
- 				  void __user *src, unsigned long count)
- {
- 	struct hdsp *hdsp = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	if (snd_BUG_ON(pos + count > HDSP_CHANNEL_BUFFER_BYTES))
- 		return -EINVAL;
-@@ -3982,7 +3982,7 @@ static int snd_hdsp_playback_copy_kernel(struct snd_pcm_substream *substream,
- 					 void *src, unsigned long count)
- {
- 	struct hdsp *hdsp = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	channel_buf = hdsp_channel_buffer_location(hdsp, substream->pstr->stream, channel);
- 	if (snd_BUG_ON(!channel_buf))
-@@ -3996,7 +3996,7 @@ static int snd_hdsp_capture_copy(struct snd_pcm_substream *substream,
- 				 void __user *dst, unsigned long count)
- {
- 	struct hdsp *hdsp = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	if (snd_BUG_ON(pos + count > HDSP_CHANNEL_BUFFER_BYTES))
- 		return -EINVAL;
-@@ -4014,7 +4014,7 @@ static int snd_hdsp_capture_copy_kernel(struct snd_pcm_substream *substream,
- 					void *dst, unsigned long count)
- {
- 	struct hdsp *hdsp = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	channel_buf = hdsp_channel_buffer_location(hdsp, substream->pstr->stream, channel);
- 	if (snd_BUG_ON(!channel_buf))
-@@ -4028,7 +4028,7 @@ static int snd_hdsp_hw_silence(struct snd_pcm_substream *substream,
- 			       unsigned long count)
- {
- 	struct hdsp *hdsp = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	channel_buf = hdsp_channel_buffer_location (hdsp, substream->pstr->stream, channel);
- 	if (snd_BUG_ON(!channel_buf))
-diff --git a/sound/pci/rme9652/rme9652.c b/sound/pci/rme9652/rme9652.c
-index 1d614fe89a6a..e7c320afefe8 100644
---- a/sound/pci/rme9652/rme9652.c
-+++ b/sound/pci/rme9652/rme9652.c
-@@ -230,7 +230,7 @@ struct snd_rme9652 {
- 	int last_spdif_sample_rate;	/* so that we can catch externally ... */
- 	int last_adat_sample_rate;	/* ... induced rate changes            */
- 
--	const char *channel_map;
-+	const signed char *channel_map;
- 
- 	struct snd_card *card;
- 	struct snd_pcm *pcm;
-@@ -247,12 +247,12 @@ struct snd_rme9652 {
-    where the data for that channel can be read/written from/to.
- */
- 
--static const char channel_map_9652_ss[26] = {
-+static const signed char channel_map_9652_ss[26] = {
- 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
- 	18, 19, 20, 21, 22, 23, 24, 25
- };
- 
--static const char channel_map_9636_ss[26] = {
-+static const signed char channel_map_9636_ss[26] = {
- 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 
- 	/* channels 16 and 17 are S/PDIF */
- 	24, 25,
-@@ -260,7 +260,7 @@ static const char channel_map_9636_ss[26] = {
- 	-1, -1, -1, -1, -1, -1, -1, -1
- };
- 
--static const char channel_map_9652_ds[26] = {
-+static const signed char channel_map_9652_ds[26] = {
- 	/* ADAT channels are remapped */
- 	1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23,
- 	/* channels 12 and 13 are S/PDIF */
-@@ -269,7 +269,7 @@ static const char channel_map_9652_ds[26] = {
- 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
- };
- 
--static const char channel_map_9636_ds[26] = {
-+static const signed char channel_map_9636_ds[26] = {
- 	/* ADAT channels are remapped */
- 	1, 3, 5, 7, 9, 11, 13, 15,
- 	/* channels 8 and 9 are S/PDIF */
-@@ -1819,7 +1819,7 @@ static snd_pcm_uframes_t snd_rme9652_hw_pointer(struct snd_pcm_substream *substr
- 	return rme9652_hw_pointer(rme9652);
- }
- 
--static char *rme9652_channel_buffer_location(struct snd_rme9652 *rme9652,
-+static signed char *rme9652_channel_buffer_location(struct snd_rme9652 *rme9652,
- 					     int stream,
- 					     int channel)
- 
-@@ -1847,7 +1847,7 @@ static int snd_rme9652_playback_copy(struct snd_pcm_substream *substream,
- 				     void __user *src, unsigned long count)
- {
- 	struct snd_rme9652 *rme9652 = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	if (snd_BUG_ON(pos + count > RME9652_CHANNEL_BUFFER_BYTES))
- 		return -EINVAL;
-@@ -1867,7 +1867,7 @@ static int snd_rme9652_playback_copy_kernel(struct snd_pcm_substream *substream,
- 					    void *src, unsigned long count)
- {
- 	struct snd_rme9652 *rme9652 = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	channel_buf = rme9652_channel_buffer_location(rme9652,
- 						      substream->pstr->stream,
-@@ -1883,7 +1883,7 @@ static int snd_rme9652_capture_copy(struct snd_pcm_substream *substream,
- 				    void __user *dst, unsigned long count)
- {
- 	struct snd_rme9652 *rme9652 = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	if (snd_BUG_ON(pos + count > RME9652_CHANNEL_BUFFER_BYTES))
- 		return -EINVAL;
-@@ -1903,7 +1903,7 @@ static int snd_rme9652_capture_copy_kernel(struct snd_pcm_substream *substream,
- 					   void *dst, unsigned long count)
- {
- 	struct snd_rme9652 *rme9652 = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	channel_buf = rme9652_channel_buffer_location(rme9652,
- 						      substream->pstr->stream,
-@@ -1919,7 +1919,7 @@ static int snd_rme9652_hw_silence(struct snd_pcm_substream *substream,
- 				  unsigned long count)
- {
- 	struct snd_rme9652 *rme9652 = snd_pcm_substream_chip(substream);
--	char *channel_buf;
-+	signed char *channel_buf;
- 
- 	channel_buf = rme9652_channel_buffer_location (rme9652,
- 						       substream->pstr->stream,
--- 
-2.38.1
-
+PiBJIGRvbid0IHRoaW5rIERUIHBsYWNlIGlzIHRvIGRlc2NyaWJlIHJlZ2lzdGVyIG9yIG1lbW9y
+eSBsYXlvdXQsIHdpdGggc29tZSBleGNlcHRpb25zIGxpa2UgTVREIHBhcnRpdGlvbnMgb3IgbnZt
+ZW0gY2VsbHMuIEJhc2ljYWxseSB5b3UgYXJlIHJlcHJlc2VudGluZyBoZXJlIGEgZGV2aWNlIHJl
+Z2lzdGVyIG1hcCBpbnNpZGUgRFQsIGp1c3QgYmVjYXVzZSBpdCBpcyBhIENQTEQuDQoNCj4gRXZl
+cnkgcmVndWxhciBtdWx0aS1mdW5jdGlvbmFsIGRldmljZSBoYW5kbGVzIGl0cyByZWdpc3RlciBt
+YXAgaW4gdGhlIGRyaXZlciBpdHNlbGYgYW5kIHVzZXMgTGludXggZnJhbWV3b3JrIHRvIGV4cG9z
+ZSB0aGUgaW50ZXJuYWxzLiBDUExEIHNob3VsZCBub3QgYmUgZGlmZmVyZW50LCBleGNlcHQgdGhh
+dCBpcyBwcm9ncmFtbWFibGUuDQpIaSBLcnp5c3p0b2YsDQoNClRoYW5rIHlvdSBmb3IgeW91ciB0
+aW1lIGFuZCBmZWVkYmFjay4gV2UgYXJlIGxvb2tpbmcgZm9yIGEgcGxhY2UgdG8gZGVzY3JpYmUg
+ZGlmZmVyZW5jZXMgd2l0aGluIG91ciBDUExEIGltcGxlbWVudGF0aW9uIGR1ZSB0byBvdXIgbWVt
+b3J5IG1hcHBpbmcgbm90IGJlaW5nIGNvbnNpc3RlbnQuIFRoZSBpZGVhIHdlIGFyZSBwdXJzdWlu
+ZyBpcyB0byB1c2UgdGhlIGRldmljZSB0cmVlIHRvIHNlcnZlIGFzIGFuIGlucHV0IHRvIExpbnV4
+IHRvIHByZXZlbnQgZHJpdmVyIGNvZGUgZnJhZ21lbnRhdGlvbiBmcm9tIG11bHRpcGxlIHBsYXRm
+b3JtcyBuZWVkaW5nIHRoZWlyIG93biBzcGVjaWZpYyBvZmZzZXRzLiBJZiB0aGlzIGlzIG5vdCBh
+Y2NlcHRhYmxlIHRvIGRvIHRocm91Z2ggdGhlIGRldmljZSB0cmVlLCBzaG91bGQgd2UgcmVseSBv
+biBoYXZpbmcgYW4gaW5jbHVkZSBmaWxlIGZvciBlYWNoIHBsYXRmb3JtIGluc3RlYWQ/IA0KDQpU
+aGFua3MsDQoNCi1OaWNrIEhhd2tpbnMNCg==
