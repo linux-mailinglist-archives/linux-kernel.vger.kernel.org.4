@@ -2,58 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2BF60C9DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AC460C9E5
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:22:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbiJYKVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60400 "EHLO
+        id S231374AbiJYKWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbiJYKVA (ORCPT
+        with ESMTP id S231772AbiJYKVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:21:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9C0188A9D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:17:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF67661876
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:17:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AC4FC433C1;
-        Tue, 25 Oct 2022 10:17:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666693067;
-        bh=loBjWPuoKTGF/gO56VzkKo6krQdgRby7JIrG/EzZOSQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=d6ZDNCAcK4F26u54xQf8kDBp/8b3DW5BfO6g1lzeUvpUqST0Kw+Ohe0820AGWKYi+
-         /7Iqw8NZ0p6eQ/pqwMi1Gu67j2R14VHUyxddgBClTRfmn7+eiBCfjsq3GSF79nNNGz
-         0X7g+J7DfNAmhkRl2i3xi1iShD/jLXV9iOD0Aj/KAyEV5IbzhVMFLMbIuW+YD0HX3T
-         B8i2fs2s6CKT9WlZ6lTFZXa/hnB4DlVRnIIZi1IMECfFVAoF+8Q0qD/kHO/VT7rrxh
-         ahRkwDT3WUrOsLHpVfVQd0i2lzMAzWlJ4qQ4wL0BQod1CCuVzaQiHLp5VsXHdnMHQK
-         2bogCqmt8gCvw==
-Message-ID: <f36153fe-214c-2904-e155-ab9cee8a2a2c@kernel.org>
-Date:   Tue, 25 Oct 2022 12:17:43 +0200
+        Tue, 25 Oct 2022 06:21:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A221290AC
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666693131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SXA47cu2kRp4Fi4dLuQ4em2pKNdxxQ8Fg0d1TX3Qq34=;
+        b=N4T2RBJTlEZV5ZRcxVlLEidUeDMHSGjgQNL0m9LHfKuuYUGS1c3t7jvbD/oEnqo/P8mO6L
+        5Gs494d50zqX16sWt4+dWgsDl9Mek7UxTFMLZ29wx6i8s5knzJ9q9L9zpY8LYLjx8avpV+
+        asChgPBDUdroqhqh6pNjX5BRWX6N9Tk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-438-D5fbiyQzPcKxNoCBN36U-w-1; Tue, 25 Oct 2022 06:18:50 -0400
+X-MC-Unique: D5fbiyQzPcKxNoCBN36U-w-1
+Received: by mail-wm1-f72.google.com with SMTP id bg25-20020a05600c3c9900b003cf3ed7e27bso437372wmb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:18:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SXA47cu2kRp4Fi4dLuQ4em2pKNdxxQ8Fg0d1TX3Qq34=;
+        b=aX42Zr/RTptHiy1Uo7XtNi1wp1KHj2aIDJZYoJZNubEnCUcuHUekxE9PVHL/fMbRt2
+         3jru85ciA7Dtcm7wfH8ZGjCsp8Q6x5X7elxgZ2+l5tXQMrkcgowTDpLXciu3YbUzU31k
+         DjtfQWzG8ddmpJD5GRe1vx3mvxcYdxQRPzjPhgw2vLhbNMiMbzc2BbunSHdyB/5+YEuP
+         Pcsgei8cbcGeoXz7H5VaGvSO10tEMMDYVYQ6KARuo32MsXZ5q7MvlE1Wg2p3pDNjHHPC
+         cVT+FAaKpMQ3dxlNNv2VTKQelIbOWoUx3yaCYrSXsbsfH4P2/SXQQftF2XFAGj0hm6yq
+         mMPQ==
+X-Gm-Message-State: ACrzQf2LMiVxGvG7v+7eIb53gVaBS7qalAy89RDqyKSKQ/7Gi1874qnX
+        yvlcXwjf3tqK8PoJJhmaFCkwhQsoQ1GQwPuwnaPeqj7aBkAes1QGuqYYkWj/UAfOiM5uHKyMC3c
+        0/6l+6HcZhWS0D5nPL2datzQI
+X-Received: by 2002:a05:600c:468a:b0:3c6:f1ae:3e95 with SMTP id p10-20020a05600c468a00b003c6f1ae3e95mr25551266wmo.152.1666693129119;
+        Tue, 25 Oct 2022 03:18:49 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6puwz/55DZ3rXyf9X2tFB3ea5/Zm1rwqyhGbqCvzGWOzYvH36S16hJRbfVGi0WMwv6B0ixsg==
+X-Received: by 2002:a05:600c:468a:b0:3c6:f1ae:3e95 with SMTP id p10-20020a05600c468a00b003c6f1ae3e95mr25551249wmo.152.1666693128920;
+        Tue, 25 Oct 2022 03:18:48 -0700 (PDT)
+Received: from p1.Home ([2001:8a0:672b:1200:af07:c9d2:aa37:4cdd])
+        by smtp.gmail.com with ESMTPSA id bo9-20020a056000068900b00228a6ce17b4sm2222525wrb.37.2022.10.25.03.18.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 03:18:48 -0700 (PDT)
+From:   Eric Curtin <ecurtin@redhat.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Eric Curtin <ecurtin@redhat.com>,
+        William Hubbs <w.d.hubbs@gmail.com>,
+        Chris Brannon <chris@the-brannons.com>,
+        Kirk Reiser <kirk@reisers.ca>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        speakup@linux-speakup.org (open list:SPEAKUP CONSOLE SPEECH DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] speakup: include types.h so u_char is a known type
+Date:   Tue, 25 Oct 2022 11:18:24 +0100
+Message-Id: <20221025101828.1626490-1-ecurtin@redhat.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 0/8] Fix several device private page reference counting
- issues
-Content-Language: en-US
-To:     Alistair Popple <apopple@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Lyude Paul <lyude@redhat.com>
-References: <cover.60659b549d8509ddecafad4f498ee7f03bb23c69.1664366292.git-series.apopple@nvidia.com>
-From:   "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-In-Reply-To: <cover.60659b549d8509ddecafad4f498ee7f03bb23c69.1664366292.git-series.apopple@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,72 +80,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/28/22 14:01, Alistair Popple wrote:
-> This series aims to fix a number of page reference counting issues in
-> drivers dealing with device private ZONE_DEVICE pages. These result in
-> use-after-free type bugs, either from accessing a struct page which no
-> longer exists because it has been removed or accessing fields within the
-> struct page which are no longer valid because the page has been freed.
-> 
-> During normal usage it is unlikely these will cause any problems. However
-> without these fixes it is possible to crash the kernel from userspace.
-> These crashes can be triggered either by unloading the kernel module or
-> unbinding the device from the driver prior to a userspace task exiting. In
-> modules such as Nouveau it is also possible to trigger some of these issues
-> by explicitly closing the device file-descriptor prior to the task exiting
-> and then accessing device private memory.
+Fixes build of utils.h header file, occurred when building kernel on
+postmarketOS on Lenovo Duet Chromebook.
 
-Hi, as this series was noticed to create a CVE [1], do you think a stable
-backport is warranted? I think the "It is possible to launch the attack
-remotely." in [1] is incorrect though, right?
+  drivers/accessibility/speakup/utils.h:57:9: error: unknown type name 'u_char'; did you mean 'char'?
+     57 |         u_char *pn = (u_char *)name;
+        |         ^~~~~~
+        |         char
 
-It looks to me that patch 1 would be needed since the CONFIG_DEVICE_PRIVATE
-introduction, while the following few only to kernels with 27674ef6c73f
-(probably not so critical as that includes no LTS)?
+Fixes: 6a5c94d92699 ("speakup: Generate speakupmap.h automatically")
+Signed-off-by: Eric Curtin <ecurtin@redhat.com>
+---
+ drivers/accessibility/speakup/utils.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Vlastimil
-
-[1] https://nvd.nist.gov/vuln/detail/CVE-2022-3523
-
-> This involves some minor changes to both PowerPC and AMD GPU code.
-> Unfortunately I lack hardware to test either of those so any help there
-> would be appreciated. The changes mimic what is done in for both Nouveau
-> and hmm-tests though so I doubt they will cause problems.
-> 
-> To: Andrew Morton <akpm@linux-foundation.org>
-> To: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: nouveau@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> 
-> Alistair Popple (8):
->   mm/memory.c: Fix race when faulting a device private page
->   mm: Free device private pages have zero refcount
->   mm/memremap.c: Take a pgmap reference on page allocation
->   mm/migrate_device.c: Refactor migrate_vma and migrate_deivce_coherent_page()
->   mm/migrate_device.c: Add migrate_device_range()
->   nouveau/dmem: Refactor nouveau_dmem_fault_copy_one()
->   nouveau/dmem: Evict device private memory during release
->   hmm-tests: Add test for migrate_device_range()
-> 
->  arch/powerpc/kvm/book3s_hv_uvmem.c       |  17 +-
->  drivers/gpu/drm/amd/amdkfd/kfd_migrate.c |  19 +-
->  drivers/gpu/drm/amd/amdkfd/kfd_migrate.h |   2 +-
->  drivers/gpu/drm/amd/amdkfd/kfd_svm.c     |  11 +-
->  drivers/gpu/drm/nouveau/nouveau_dmem.c   | 108 +++++++----
->  include/linux/memremap.h                 |   1 +-
->  include/linux/migrate.h                  |  15 ++-
->  lib/test_hmm.c                           | 129 ++++++++++---
->  lib/test_hmm_uapi.h                      |   1 +-
->  mm/memory.c                              |  16 +-
->  mm/memremap.c                            |  30 ++-
->  mm/migrate.c                             |  34 +--
->  mm/migrate_device.c                      | 239 +++++++++++++++++-------
->  mm/page_alloc.c                          |   8 +-
->  tools/testing/selftests/vm/hmm-tests.c   |  49 +++++-
->  15 files changed, 516 insertions(+), 163 deletions(-)
-> 
-> base-commit: 088b8aa537c2c767765f1c19b555f21ffe555786
+diff --git a/drivers/accessibility/speakup/utils.h b/drivers/accessibility/speakup/utils.h
+index 4bf2ee8ac246..f6fe477ecb28 100644
+--- a/drivers/accessibility/speakup/utils.h
++++ b/drivers/accessibility/speakup/utils.h
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <stdio.h>
++#include <sys/types.h>
+ 
+ #define MAXKEYS 512
+ #define MAXKEYVAL 160
+-- 
+2.37.3
 
