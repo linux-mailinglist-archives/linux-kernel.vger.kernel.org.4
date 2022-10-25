@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11DFF60D113
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB5E60D115
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbiJYP4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
+        id S232125AbiJYP4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbiJYP4X (ORCPT
+        with ESMTP id S232920AbiJYP4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:56:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB62217A94A
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:56:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81F6DD6E;
-        Tue, 25 Oct 2022 08:56:27 -0700 (PDT)
-Received: from [10.1.197.78] (unknown [10.1.197.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5C0F3F71A;
-        Tue, 25 Oct 2022 08:56:19 -0700 (PDT)
-Message-ID: <c1ed6c5d-c3fa-fa76-686a-033fe803a74d@arm.com>
-Date:   Tue, 25 Oct 2022 16:56:13 +0100
+        Tue, 25 Oct 2022 11:56:34 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A8217EF2A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rCB4w7a7izDHuCRG0GKLpQ0oTnbpcNv0boNPZHCst/M=; b=dHR1J6tKlacNZjErtr5USYxBhW
+        oNsx2Xex4IuDJHHttfj92eiAv2tOFoSiFBS8wKiJmq3QN0PltWuYH/MCAQQuOYdM4TR9k+PMrG+DT
+        K+kUVsz7L/Zhaofl7LM3jfSHVSWJsIJMxNRDX5qZdRgV+oscznTJJFgIOORSSL7kN9h795xH2UNdV
+        NL5gUKg+K8EudHUQB9Utfoy2SW35103RKs7NJ15wzafFoUu0eJCkpC6SceXVkTi5xZ0fyriciJ5iR
+        s4vidGiejNKBhgXMzwhHf2uv16D0Ykk2lddn56vGUYMXhkpuSoyjplozCdt4KMrgXZqDmIpjyVqRZ
+        DX/4LwHA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1onMHz-006CKM-Hc; Tue, 25 Oct 2022 15:56:27 +0000
+Date:   Tue, 25 Oct 2022 08:56:27 -0700
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Miroslav Benes <mbenes@suse.cz>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kernel/params.c: defer most of param_sysfs_init() to
+ late_initcall time
+Message-ID: <Y1gHKwPnw+vQ/irX@bombadil.infradead.org>
+References: <20221025130003.1116366-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
-Content-Language: en-GB
-To:     Peter Newman <peternewman@google.com>,
-        Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Gaurang Upasani <gupasani@google.com>
-References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
- <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com>
- <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
- <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com>
- <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
- <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
- <7b09fb62-e61a-65b9-a71e-ab725f527ded@intel.com>
- <CALPaoCg4zrODVoXF2y2b+LRYq_+jnV8yv5qB+T_3Z264cV82GQ@mail.gmail.com>
- <b931062a-1a70-2331-03cc-6bfa69a51bee@intel.com>
- <CALPaoCj8ps2YRH5T1eCRY-8MLwGi25cfbd0KNtjYXTq5baAXOQ@mail.gmail.com>
- <da89ea90-8453-f848-38d1-a14195faa95e@intel.com>
- <CALPaoChgi9Z8J7sca_YRHveBW9NzB=PPC1Yp01S=TGiJLBxkQw@mail.gmail.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <CALPaoChgi9Z8J7sca_YRHveBW9NzB=PPC1Yp01S=TGiJLBxkQw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025130003.1116366-1-linux@rasmusvillemoes.dk>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,49 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
-
-On 21/10/2022 11:09, Peter Newman wrote:
-> On Thu, Oct 20, 2022 at 9:08 PM Reinette Chatre
-> <reinette.chatre@intel.com> wrote:
->>
->> If the expectation is that PARTID counts are very high then how about
->> a solution where multiple PARTIDs are associated with the same CTRL_MON group?
->> A CTRL_MON group presents a resource allocation to user space, CLOSIDs/PARTIDs
->> are not exposed. So using multiple PARTIDs for a resource group (all with the
->> same allocation) seems conceptually ok to me. (Please note, I did not do an
->> audit to see if there are any hidden assumption or look into lifting required
->> to support his.)
-
-> I did propose using PARTIDs to back additional mon_groups a few days ago
-> on the other sub-thread with James. My understanding was that it would
-> be less trouble if the user opted to do this on their own rather than
-> the kernel somehow doing this automatically.
+On Tue, Oct 25, 2022 at 03:00:02PM +0200, Rasmus Villemoes wrote:
+> param_sysfs_init(), and in particular param_sysfs_builtin() is rather
+> time-consuming; for my board, it currently takes about 30ms.
 > 
-> https://lore.kernel.org/all/835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com/
-
-> So perhaps we can just arrive at some way to inform the user of the
-> difference in resources. We may not even need to be able to precisely
-> calculate the number of groups we can create, as the logic for us could
-> be a simple as:
+> That amounts to about 3% of the time budget I have from U-Boot hands
+> over control to linux and linux must assume responsibility for keeping
+> the external watchdog happy.
 > 
-> 1) If num_closids >= desired job count, just use CTRL_MON groups
+> We must still continue to initialize module_kset at subsys_initcall
+> time, since otherwise any request_module() would fail in
+> mod_sysfs_init().
 
-> 2) Otherwise, fall back to the proposed mon_group-move approach if
-> num_rmids is large enough for the desired job count
+It would be good to document this through a comment.
 
-> To address the glitchy behavior of moving a PMG to a new PARTID, I found
-> that the MPAM spec says explicitly that a PMG is subordinate to a
-> PARTID, so I would be fine with James finding a way for the MPAM driver
-> to block the rename operation, because it's unable to mix and match
-> RMIDs and CLOSIDs the way that RDT can.
+> However, the bulk of the work in
+> param_sysfs_builtin(), namely populating /sys/module/*/version and/or
+> /sys/module/*/parameters/ for builtin modules, can be deferred to
+> late_initcall time - there's no userspace yet anyway to observe
+> contents of /sys or the lack thereof.
+> 
 
-I'd like to support moving groups of tasks in a sensible way on MPAM too.
+Other than that, this looks good and looks cautious enough.
 
-I don't think we should conflate it with 'old counters keep counting' - that should be
-exposed as a separate property that influences how user-space sets this stuff up.
+Acked-by: Luis Chamberlain <mcgrof@kernel.org>
 
+Happy to take this in through moduels and give this a spin on linux-next
+to see what blows up early. Can you send a v2 with a small code comment for
+the above?
 
-Thanks,
-
-James
+  Luis
