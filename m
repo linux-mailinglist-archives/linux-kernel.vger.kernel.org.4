@@ -2,127 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C9E60CACE
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3A560CAD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 13:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiJYLWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 07:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S231867AbiJYLYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 07:24:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiJYLWk (ORCPT
+        with ESMTP id S231282AbiJYLYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 07:22:40 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAF01382DC
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=6rHGxDSRKH7/ejAcJLi7ugcZ3Zusj0FQwU8RBAcUUHI=; b=enT5uEATH1DZv3r6WIDSAciIT6
-        LgDxvfQlBqbdNOVarMJbvRKYHCMAOzrjijCrSA4nN+r46SWqPQUq4XZSmnJp8GcWN6kgu7tBZU8pd
-        AHxs0WcwTXrM4Tc4cRrLvUjlgKvx1Tn2ydlD4kBIMguPD/ML4Upr/KZeCJbxRddNeqeTVmqzROufu
-        3Ss32+xYQzCNdu1QCQFteaWeOkd5zvl0GIKFSwX8Fax9h8bUM1umRB/EKycT8OR8OvZKTRXqbJhxZ
-        F2vR4MXvyKZPOMwnF2TS+JYPW4GB3PW/l4H9l2Fgz7AEoXv1UbdVxRJFO1qoBATvyYinbQLJjGnS0
-        3Jyir26g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onI0l-006IbT-Py; Tue, 25 Oct 2022 11:22:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E848330035C;
-        Tue, 25 Oct 2022 13:22:22 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D218C2C431FA9; Tue, 25 Oct 2022 13:22:22 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 13:22:22 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        Hillf Danton <hdanton@sina.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Ting11 Wang =?utf-8?B?546L5am3?= <wangting11@xiaomi.com>
-Subject: Re: [PATCH v3 2/5] locking/rwsem: Limit # of null owner retries for
- handoff writer
-Message-ID: <Y1fG7nQxiLyKIhQ6@hirez.programming.kicks-ass.net>
-References: <20221017211356.333862-1-longman@redhat.com>
- <20221017211356.333862-3-longman@redhat.com>
- <Y1aTpYba1Wwly48+@hirez.programming.kicks-ass.net>
- <980d882c-01b8-2ce1-663f-41a8a337f350@redhat.com>
+        Tue, 25 Oct 2022 07:24:30 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F25C21E17
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:24:29 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13bd2aea61bso4330590fac.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 04:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ogvOahPNmhpggqBTZ5QbvTn84Q49yePxZeXFmnUqiLs=;
+        b=jutuwQxLvlEtjl08GBEDEUQLUX0ZptKv2K4eZi72W8GM7Qc2yUpxRsr+hXwVtu+diN
+         ot8DN8Gnd4YFEI/dymIexaiz9CTLFPWzIzIBSFialYercjlsjhqfVBsin1yzJS/QfPXY
+         DsqtLyLFDuIE8pg4D5N1ubpMaMp7Jee8dXMncrAAhnYYtVWppvc6lKdxvghxhjb2VrzR
+         bE791M9x6DSiICRPPnF8+zvQqI2uSNjPbC3gbnJlMRQnIdgHYdtMteK1hlQI1c4IVmt5
+         U2eRg34zVbfoRXm4XnPRpLuMrnnxA8AGxmkhyBhHeNApBLp2GVt8H8duYlxMnS8IBilf
+         eSLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ogvOahPNmhpggqBTZ5QbvTn84Q49yePxZeXFmnUqiLs=;
+        b=xzy4qEIE3Ndi7MY4dDIy7+1XPkmG6vW+lnNL6+zWSjxQ43YySXxeWJ+6zYgEX1Bflh
+         Cme1wmtvOYHniY29Z2BeFl0bbMJaniJyWvHGy0amYrNlPpwsLv0/wP1tfkNyM5fc7KA4
+         Sdqc+imL/F7XXlPU8fxRiREK2+XdcdegH4mbZLYlHGsaMMkfQf6VH6glh0K21OKht26X
+         jdpYh1VEuANkkpbPUzls7kZTxli05s9+58fWcIbDy0nzc6YjZX1haPe6BrmQg0HLR2Bz
+         2xkV/e0KoZeRZRHv8TOIx10nT/xz8UiWp3ipjk1LD1/yrH+ObriU79JYhExpPb1lXqcV
+         67Wg==
+X-Gm-Message-State: ACrzQf2xseR2IRc+U1YBGLTL29xnwER61wxnfD0l75JO9EJkXgvaRXqA
+        AbJWPM3TIiTh3Tj+mUV5cUOgfjv8hYDpxUugbR5q6g==
+X-Google-Smtp-Source: AMsMyM76taCJV+dCGKywuvCZcEk2Xs4M2Rw6lpxM+f0zfnwF1BufrNo2tesNJ4zzfv12nDqHKLnIKsJPPbZDyD77A34=
+X-Received: by 2002:a05:6871:7a1:b0:131:946a:7b30 with SMTP id
+ o33-20020a05687107a100b00131946a7b30mr40030282oap.67.1666697068405; Tue, 25
+ Oct 2022 04:24:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <980d882c-01b8-2ce1-663f-41a8a337f350@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018145348.4051809-1-amit.pundir@linaro.org>
+ <CAPDyKFoBMB9OMUrcoPCV0of1fj2dimEwPyHGW=ydjJ2M0ubM8Q@mail.gmail.com>
+ <20221020093057.zrrvxlgghn27bpes@bogus> <CAMi1Hd05PkEJcHqHpQX-X6B2oR4250_pHPjkd2-54JWgKsYx0Q@mail.gmail.com>
+ <CAPDyKFo=w-ET62c-B6=qSpkZm-V9LmBuVRy38GzX_UAjQhX6oA@mail.gmail.com>
+ <20221020161628.nyimwuni4zboasjo@bogus> <CAPDyKFonwjh58jPoGc==BEjj6kY-=C97Ws=43hbdAqJMpEAa=g@mail.gmail.com>
+In-Reply-To: <CAPDyKFonwjh58jPoGc==BEjj6kY-=C97Ws=43hbdAqJMpEAa=g@mail.gmail.com>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Tue, 25 Oct 2022 16:53:51 +0530
+Message-ID: <CAMi1Hd0B7T=Tkw=P_rBDV9SQSGCXAeYLYPADtVkh=95xf54D8A@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: qrb5165-rb5: Disable cpuidle states
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 11:55:53AM -0400, Waiman Long wrote:
+On Fri, 21 Oct 2022 at 18:33, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Thu, 20 Oct 2022 at 18:16, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Thu, Oct 20, 2022 at 04:40:15PM +0200, Ulf Hansson wrote:
+> > > On Thu, 20 Oct 2022 at 16:09, Amit Pundir <amit.pundir@linaro.org> wrote:
+> > > >
+> > > > On Thu, 20 Oct 2022 at 15:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > > >
+> > > > > On Wed, Oct 19, 2022 at 01:57:34PM +0200, Ulf Hansson wrote:
+> > > > > > On Tue, 18 Oct 2022 at 16:53, Amit Pundir <amit.pundir@linaro.org> wrote:
+> > > > > > >
+> > > > > > > Disable cpuidle states for RB5. These cpuidle states
+> > > > > > > made the device highly unstable and it runs into the
+> > > > > > > following crash frequently:
+> > > > > > >
+> > > > > > > [    T1] vreg_l11c_3p3: failed to enable: -ETIMEDOUT
+> > > > > > > [    T1] qcom-rpmh-regulator 18200000.rsc:pm8150l-rpmh-regulators: ldo11: devm_regulator_register() failed, ret=-110
+> > > > > > > [    T1] qcom-rpmh-regulator: probe of 18200000.rsc:pm8150l-rpmh-regulators failed with error -110
+> > > > > > >
+> > > > > > > Fixes: 32bc936d7321 ("arm64: dts: qcom: sm8250: Add cpuidle states")
+> > > > > > > Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
+> > > > > > > ---
+> > > > > > >  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 8 ++++++++
+> > > > > > >  1 file changed, 8 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> > > > > > > index cc003535a3c5..f936c41bfbea 100644
+> > > > > > > --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> > > > > > > +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+> > > > > > > @@ -251,6 +251,14 @@ qca639x: qca639x {
+> > > > > > >
+> > > > > > >  };
+> > > > > > >
+> > > > > > > +&LITTLE_CPU_SLEEP_0 {
+> > > > > > > +       status = "disabled";
+> > > > > > > +};
+> > > > > > > +
+> > > > > > > +&BIG_CPU_SLEEP_0 {
+> > > > > > > +       status = "disabled";
+> > > > > > > +};
+> > > > > > > +
+> > > > > > >  &adsp {
+> > > > > > >         status = "okay";
+> > > > > > >         firmware-name = "qcom/sm8250/adsp.mbn";
+> > > > > > > --
+> > > > > > > 2.25.1
+> > > > > >
+> > > > > > Disabling the CPU idlestates, will revert us back to using only the WFI state.
+> > > > > >
+> > > > > > An option that probably works too is to just drop the idlestate for
+> > > > > > the CPU cluster. Would you mind trying the below and see if that works
+> > > > > > too?
+> > > > > >
+> > > > >
+> > > > > Indeed this is was I suggested to check initially. But I was surprised to
+> > > > > see IIUC, Amit just disabled CPU states with above change and got it working.
+> > > > > So it is not cluster state alone causing the issue, is it somehow presence
+> > > > > of both cpu and cluster states ? Am I missing something here.
+> > > > >
+> > > > > > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > > > > > b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > > > > > index c32227ea40f9..c707a49e8001 100644
+> > > > > > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > > > > > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > > > > > @@ -700,7 +700,6 @@ CPU_PD7: cpu7 {
+> > > > > >
+> > > > > >                 CLUSTER_PD: cpu-cluster0 {
+> > > > > >                         #power-domain-cells = <0>;
+> > > > > > -                       domain-idle-states = <&CLUSTER_SLEEP_0>;
+> > > > >
+> > > > > How about just marking CLUSTER_SLEEP_0 state disabled ? That looks cleaner
+> > > > > than deleting this domain-idle-states property here. Also not sure if DTS
+> > > > > warnings will appear if you delete this ?
+> > > >
+> > > > Hi, I did try disabling CLUSTER_SLEEP_0: cluster-sleep-0 {} in
+> > > > domain-idle-states {} but that didn't help. That's why I end up
+> > > > disabling individual cpu states in idle-states {}.
+> > >
+> > > Yep, this boils down to the fact that genpd doesn't check whether the
+> > > domain-idle-state is disabled by using of_device_is_available(). See
+> > > genpd_iterate_idle_states().
+> > >
+> >
+> > Yes I found that but can't that be fixed with a simple patch like below ?
+>
+> Sure, yes it can.
+>
+> Although, it does complicate things a bit, as we would need two
+> patches instead of one, to get things working.
+>
+> >
+> > > That said, I suggest we go with the above one-line change. It may not
+> > > be as clean as it could be, but certainly easy to revert when the
+> > > support for it has been added in a newer kernel.
+> > >
+> >
+> > I don't like removing the state. It means it doesn't have the state rather
+> > than i"it has state but is not working and hence disabled".
+> >
+> > Will handling the availability of the state cause any issues ?
+>
+> No, this works fine. It's already been proven by Amit's test.
+>
+> >
+> > Regards,
+> > Sudeep
+> >
+> > -->8
+> >
+> > diff --git i/drivers/base/power/domain.c w/drivers/base/power/domain.c
+> > index ead135c7044c..6471b559230e 100644
+> > --- i/drivers/base/power/domain.c
+> > +++ w/drivers/base/power/domain.c
+> > @@ -2952,6 +2952,10 @@ static int genpd_iterate_idle_states(struct device_node *dn,
+> >                 np = it.node;
+> >                 if (!of_match_node(idle_state_match, np))
+> >                         continue;
+> > +
+> > +               if (!of_device_is_available(np))
+> > +                       continue;
+> > +
+> >                 if (states) {
+> >                         ret = genpd_parse_state(&states[i], np);
+> >                         if (ret) {
+> >
+>
+> The above code looks correct to me. Anyone that wants to submit the
+> patches? Otherwise I can try to manage it...
 
-> Looks like, There is still a window for a race.
-> 
-> There is a chance when a reader who came first added it's BIAS and goes to
-> slowpath and before it gets added to wait list it got preempted by RT task
-> which  goes to slowpath as well and being the first waiter gets its hand-off
-> bit set and not able to get the lock due to following condition in
-> rwsem_try_write_lock()
-> 
->  630                 if (count & RWSEM_LOCK_MASK) {  ==> reader has sets its
-> bias
-> ..
-> ...
-> 
->  634
->  635                         new |= RWSEM_FLAG_HANDOFF;
->  636                 } else {
->  637                         new |= RWSEM_WRITER_LOCKED;
-> 
-> 
-> ---------------------->----------------------->-------------------------
-> 
-> First reader (1)          writer(2) RT task             Lock holder(3)
-> 
-> It sets
-> RWSEM_READER_BIAS.
-> while it is going to
-> slowpath(as the lock
-> was held by (3)) and
-> before it got added
-> to the waiters list
-> it got preempted
-> by (2).
->                         RT task also takes
->                         the slowpath and add              release the
->                         itself into waiting list          rwsem lock
->             and since it is the first         clear the
->                         it is the next one to get         owner.
->                         the lock but it can not
->                         get the lock as (count &
->                         RWSEM_LOCK_MASK) is set
->                         as (1) has added it but
->                         not able to remove its
->             adjustment.
-> 
-> ----------------------
-> 
-> To fix that we either has to disable preemption in down_read() and reenable
-> it in rwsem_down_read_slowpath after decrementing the RWSEM_READER_BIAS or
-> to limit the number of trylock-spinning attempt like this patch. The latter
-> approach seems a bit less messy and I am going to take it back out anyway in
-> patch 4. I will put a summary of that special case in the patch description.
+Just out of curiosity, I gave this patch a test run and, as Ulf also
+mentioned above, this patch alone is not enough to fix the boot
+regression I see on RB5.
 
-Funny, I find the former approach much saner. Disabling preemption
-around the whole thing fixes the fundamental problem while spin-limiting
-is a band-aid.
+Regards,
+Amit Pundir
 
-Note how rwsem_write_trylock() already does preempt_disable(), having
-the read-side do something similar only makes sense.
+>
+> Kind regards
+> Uffe
