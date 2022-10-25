@@ -2,196 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574A260D4AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A685E60D4B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 21:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiJYT2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 15:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59266 "EHLO
+        id S231649AbiJYTdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 15:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiJYT2l (ORCPT
+        with ESMTP id S230366AbiJYTdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 15:28:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DEDD018F;
-        Tue, 25 Oct 2022 12:28:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 350B9B81E85;
-        Tue, 25 Oct 2022 19:28:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E95C433D6;
-        Tue, 25 Oct 2022 19:28:35 +0000 (UTC)
-Date:   Tue, 25 Oct 2022 15:28:47 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Smita.KoralahalliChannabasappa@amd.com" 
-        <Smita.KoralahalliChannabasappa@amd.com>
-Subject: Re: [PATCH 1/3] x86/MCE, EDAC/mce_amd: Add support for new
- MCA_SYND{1,2} registers
-Message-ID: <20221025152847.32788cd4@gandalf.local.home>
-In-Reply-To: <Y1glfOlFE90SqjV/@zn.tnic>
-References: <YtVlNrW58cFmksln@zn.tnic>
-        <YukW/IltcCRwvSM4@yaz-fattaah>
-        <Y1a4prRIYNw8GIkm@zn.tnic>
-        <Y1a/lCVnlTMk8p75@agluck-desk3.sc.intel.com>
-        <Y1b15vnE/Pd1U4r8@zn.tnic>
-        <SJ1PR11MB608390D539CD4B405A195344FC2E9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-        <Y1cCU9UqGG7nl8cy@zn.tnic>
-        <SJ1PR11MB6083DBDAA90E1E03EC7A9EEAFC2E9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-        <SJ1PR11MB6083A794C876D6F44E530CAFFC2E9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-        <Y1gQQ8gh1CJf0Tuy@yaz-fattaah>
-        <Y1glfOlFE90SqjV/@zn.tnic>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 25 Oct 2022 15:33:02 -0400
+Received: from smtp.smtpout.orange.fr (smtp-11.smtpout.orange.fr [80.12.242.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8EB3DCAE3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 12:32:52 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id nPfLoHUnu42kJnPfLovwLq; Tue, 25 Oct 2022 21:32:50 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 25 Oct 2022 21:32:50 +0200
+X-ME-IP: 86.243.100.34
+Message-ID: <bad224c0-98a3-37db-99c3-b44687cc396e@wanadoo.fr>
+Date:   Tue, 25 Oct 2022 21:32:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: RE: [PATCH] lib/string.c: Improve strcasecmp speed by not
+ lowering if chars match
+Content-Language: fr, en-US
+To:     Nathan Moinvaziri <nathan@nathanm.com>,
+        Andy Shevchenko <andy@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <BYAPR06MB557347406F22FBA1E400A5BFD8319@BYAPR06MB5573.namprd06.prod.outlook.com>
+ <CAHp75Vd4Vk0v-T3kfxApGHb-H26KTHgH59DGP3Wm4qBgunDt6A@mail.gmail.com>
+ <Y1embP5sEp/NPxK0@smile.fi.intel.com>
+ <BYAPR06MB557390C5F741300BDE2BAA8BD8319@BYAPR06MB5573.namprd06.prod.outlook.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <BYAPR06MB557390C5F741300BDE2BAA8BD8319@BYAPR06MB5573.namprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 20:05:48 +0200
-Borislav Petkov <bp@alien8.de> wrote:
-
-> On Tue, Oct 25, 2022 at 04:35:15PM +0000, Yazen Ghannam wrote:
-> > I think the "right way" to use tracepoints is to parse the data according to
-> > the format provided by the tracepoint itself. You can see an example of
-> > rasdaemon doing that here:
-> > https://github.com/mchehab/rasdaemon/blob/c2255178a49f62c53009a456bc37dd5e37332f09/ras-mce-handler.c#L386  
+Le 25/10/2022 à 19:53, Nathan Moinvaziri a écrit :
+> Hi Andy,
 > 
-> Lemme add Rostedt.
+> I appreciate your quick feedback!
 > 
-> So now we have libtraceevent and here's an example how to do it:
+> I have done as you suggested and published my results this time using Google benchmark:
+> https://github.com/nmoinvaz/strcasecmp
 
-Yes, I'm really grateful to Mauro for adapting an earlier version of
-libtraceevent, although it was just cut and pasted into rasdaemon. But it
-is time to use the official library, which had a bit of changes to the
-interface.
+Hi,
+the algorithm on github is not the same as the one posted here.
 
-> 
-> https://patchwork.kernel.org/project/linux-trace-devel/patch/20221021182345.092cdb50@gandalf.local.home/
-> https://www.trace-cmd.org/Documentation/libtracefs/libtracefs-kprobes.html
-> 
-> Reportedly, rasdaemon is still using the old libtraceevent method. So it
-> probably should be updated to use the new library version.
+IIUC, the one on github is wrong. If you compare 2 strings that are the 
+same, they will have the same length, and "if (c1 == c2) continue;" will 
+go one past the end of the strings. And the result will be <0 or 0 or >0 
+depending the the char *after* the trailing \0.
 
-Definitely.
+On the other side, the results of the benchmark on github are likely not 
+accurate with the algorithm posted here, because there is one more test 
+in each loop ("while (c1 != 0)") as long as the 2 strings are the same.
+On github this test is skipped because you will go through the "continue"
+
+CJ
 
 > 
-> > A tracepoint user should not assume a fixed struct layout, so adding
-> > and rearranging fields shouldn't be a problem. I'm not sure about
-> > removing a field. It seems to me that this should be okay in the
-> > interface, and it's up to the application how it wants to handle a
-> > field that isn't found.  
+> After you review it, and if you still think the patch is worthwhile then I can fix the other problems you mentioned for the original patch. If you think it is not worth it, then I understand.
 > 
-> >From looking at the examples, I think the new libtraceevent should be  
-> able to handle all that just fine.
-
-As long as the code can handle a field removed or renamed. It allows the
-application to check if it is there or not.
-
+> Thanks again,
+> Nathan
 > 
-> > Another option could be to define a new tracepoint.  
+> -----Original Message-----
+> From: Andy Shevchenko <andy@kernel.org>
+> Sent: Tuesday, October 25, 2022 2:04 AM
+> To: Nathan Moinvaziri <nathan@nathanm.com>
+> Cc: linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH] lib/string.c: Improve strcasecmp speed by not lowering if chars match
 > 
-> Yeah, no. Let's get this one to work pls.
+> On Tue, Oct 25, 2022 at 11:00:36AM +0300, Andy Shevchenko wrote:
+>> On Tue, Oct 25, 2022 at 4:46 AM Nathan Moinvaziri <nathan@nathanm.com> wrote:
+> 
+> ...
+> 
+>>> When running tests using Quick Benchmark with two matching 256
+>>> character strings these changes result in anywhere between ~6-9x speed improvement.
+>>>
+>>> * We use unsigned char instead of int similar to strncasecmp.
+>>> * We only subtract c1 - c2 when they are not equal.
+> 
+> ...
+> 
+>> You tell us that this is more preformant, but have not provided the
+>> numbers. Can we see those, please?
+> 
+> So, I have read carefully and see the reference to some QuickBenchmark I have no idea about. What I meant here is to have numbers provided by an (open
+> source) tool (maybe even in-kernel test case) that anybody can test on their machines. You also missed details about how you run, what the data set has been used, etc.
+> 
+>> Note, that you basically trash CPU cache lines when characters are not
+>> equal, and before doing that you have a branching. I'm unsure that
+>> your way is more performant than the original one.
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
+> 
 
-You can always add a trace event on top of an existing trace event with a
-"custom" trace event.
-
-See https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/trace_events/trace_custom_sched.h
-
-Also, take a look at some of the code that is coming with libtracefs:
-
-  https://patchwork.kernel.org/project/linux-trace-devel/list/?series=688772
-
- (Note, it's not there just yet)
-
-Basically you can just do:
-
-	instance = tracefs_instance_create(TOOL_NAME);
-
-	for (i = 0; i < nr_cpus; i++) {
-		tcpus[i] = tracefs_cpu_open(instance, i, false);
-
-And then you can read from the raw trace buffers;
-
-	/* Read all "ras" events */
-	tep = tracefs_local_events_system(NULL, "ras");
-
-	/* Note pevent was renamed to tep */
-
-	/* I need to write up kbuffer man pages :-/ */
-	kbuf = kbuffer_alloc(sizeof(long) == 8, !tep_is_bigendian());
-
-	/* I guess you want to retrieve any data */
-	tracefs_instance_file_write(instance, "buffer_percent", "0");
-
-	buf = malloc(tracefs_cpu_read_size(tcpu));
-
-	/* false means block until there's data */
-	tracefs_cpu_read(tcpus[i], buf, false);
-
-	struct tep_record *record;
-	unsigned long long ts;
-
-	/* Load the read raw data into the kbuffer parser */
-	kbuffer_load_subbuffer(kbuf, buf);
-
-	for (;;) {
-		record.data = kbuffer_read_event(kbuf, &ts);
-		if (!record.data)
-			break;
-		record.ts = ts;
-
-		process(tep, record);
-
-		kbuffer_next_event(kbuf, NULL);
-
-		/* There's tracefs iterators that do this too, but I'm
-		 * working on adding more features to them. */
-	}
-
-
-static void process(struct tep_handle *tep, struct tep_record *record)
-{
-	static struct tep_event *mc_event;
-	static struct tep_event *aer_event;
-	[..]
-	static struct trace_seq s;
-	struct tep_event *event;
-	unsigned long long val;
-
-	/* Initialize the static events to use them for data */
-	if (!mc_event) {
-		trace_seq_init(&s);
-		mc_event = tep_find_event_by_name(tep, "ras", "mc_event");
-		/* Do error checking? */
-		aer_event = tep_find_event_by_name(tep, "ras", "aer_event");
-		[..]
-	}
-
-	/* Remove any previous strings in s. */
-	trace_seq_reset(&s);
-
-	event = tep_find_event_by_record(tep, record);
-	if (event->id == mc_event->id) {
-		tep_get_field_val(&s, event, "address", record, &val, 0);
-		[..]
-	}
-}
-
-
-With libtracefs and libtraceevent, process trace events is so much easier
-than it use to be!
-
--- Steve
