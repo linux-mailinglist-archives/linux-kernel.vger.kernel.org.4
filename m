@@ -2,214 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC8F60D075
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4606060D078
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 17:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbiJYPYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 11:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S232921AbiJYPYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 11:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbiJYPYA (ORCPT
+        with ESMTP id S233339AbiJYPYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 11:24:00 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A95F8981E
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:22:05 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-13b103a3e5dso15995533fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 08:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ctYQV4GxDN3REGC5Ngr89qvWAy02hVp5badprvw3WCQ=;
-        b=mSQF/N9y2bXCI2cFsPTQ2tvdTQgio88yRqSzfeG3jVdts8YZHTKnCnhNB8c+i1XsBH
-         VIu6Jl7VeNlSaITQKqwCw6W3UK31VubatllDFBlCLM8Az3kR4QyQ7KGjeR6AYo/hYVJx
-         XhNNv/xk/4qaGFyHCvAcAySpvpyn5GcX4IvSu4b00QMXZY4u1776kU/sg9//Q0DZl1RN
-         LSsqudIXjLRQYcpidAOqKJZjE8uUzOtE25umOFEsx76r8qmT712XW2ttpSmF+SFmxnjp
-         RFN/SJ6eOGNUST+bnxvPVb2nJ+aFervp2wNoCF7W85kWDM996IyPA7DkmNtlIVAlnBpt
-         MeGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ctYQV4GxDN3REGC5Ngr89qvWAy02hVp5badprvw3WCQ=;
-        b=U3+5dGFfaxjDfgaueict5iqlGvkPVfv8IF9OVoKqFCjNwCgOFyyrii9eViwOeSx1j/
-         YnNwb3vQuoQ6DIF7mpfJbyXzFZtSHFo4zoVKDW0qWkomhm/TZAYuSyCl4pt61moveI9S
-         IEDUCVtr3opCFR51II8HzIpoUQvs/kRiozKj36FSkJhNAx7SgLEJS6l9VDkIggdZgNMi
-         NmzBKfch4rJs0YXlcg9nXV0VDH6ma+fpk2kW0cgLid5jjKSbFTQprqRIJaOgDycFRLYI
-         yEFRQSwzm/DitJncYDEno298jPV/ccKQKLAJ9L9kq1LsdkoJD2XPFKCAOMcvDdvunF9E
-         ECug==
-X-Gm-Message-State: ACrzQf0/YMSNLM8nERCFGD9hYHAv+1KOqN6JgVgVFFkhLlnAGGIUhzTt
-        hQoj2UBfLLiX8QWwP0mULgY=
-X-Google-Smtp-Source: AMsMyM4aKW0CDfLbQiqBQV3T348HiQLRQFJKr8AlwvkNDFfbN+VpzSEwElVmbQsrHaP37VHukNj9Qg==
-X-Received: by 2002:a05:6870:438d:b0:13b:aeb6:d119 with SMTP id r13-20020a056870438d00b0013baeb6d119mr6214274oah.142.1666711324558;
-        Tue, 25 Oct 2022 08:22:04 -0700 (PDT)
-Received: from quaco.ghostprotocols.net ([179.97.37.151])
-        by smtp.gmail.com with ESMTPSA id g4-20020a4ab044000000b0044b0465bd07sm1207767oon.20.2022.10.25.08.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 08:22:04 -0700 (PDT)
-From:   arnaldo.melo@gmail.com
-X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 98CC3404BE; Tue, 25 Oct 2022 12:22:01 -0300 (-03)
-Date:   Tue, 25 Oct 2022 12:22:01 -0300
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Subject: [PATCH FYI 1/1] tools headers uapi: Update linux/in.h copy
-Message-ID: <Y1f/Ge6vjQrGjYiK@kernel.org>
+        Tue, 25 Oct 2022 11:24:30 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6D32BB1A;
+        Tue, 25 Oct 2022 08:23:05 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4ECFF240003;
+        Tue, 25 Oct 2022 15:23:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1666711384;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qDzusZ9A8zw1jVXS4iAKbgJV8r3mCHdkLf1MyFvx4gk=;
+        b=WyQWk65ertDntaKhrGj2iEo9HpiA+d4viIf1ns4+LTjL95FFJj5RygO21qTem71T734nMU
+        XuFdPvOe3SmnjD1hJ+Z/cEwn0j4R4PsZlGPJ8Fldbt43ScGRbt0KWzH2gPCBXrdb7pMqCt
+        tmpzhW6N+nEO+LS8MnOFxA5edif7JHq89c1iXH4YiwaCcDLCNgJsNYWgM782c1EHXKwSN/
+        vu/Q6w3dgJv/6gDN43FtD61zcadhTxBb8NZ0ZAqiQo5xICYa89ushQMdyJzT3U3yg16Dtb
+        cP1yW44UuAwQD2fUa761qEcPQnDGHLAXciStnBRnV+Rv6AG2+zVCFLqtdyyYug==
+Date:   Tue, 25 Oct 2022 17:22:59 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>, mripard@kernel.org,
+        mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/11] media: cedrus: Add helper for checking capabilities
+Message-ID: <Y1f/U8NxyJo/pMAH@aptenodytes>
+References: <20221024201515.34129-1-jernej.skrabec@gmail.com>
+ <20221024201515.34129-5-jernej.skrabec@gmail.com>
+ <Y1eChJS/0aEchtpH@kadam>
+ <13124586.uLZWGnKmhe@jernej-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="W34rlajBUncxrU/f"
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <13124586.uLZWGnKmhe@jernej-laptop>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-- Arnaldo
+--W34rlajBUncxrU/f
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Full explanation:
+Hi Jernej,
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+On Tue 25 Oct 22, 17:17, Jernej =C5=A0krabec wrote:
+> Dne torek, 25. oktober 2022 ob 08:30:28 CEST je Dan Carpenter napisal(a):
+> > On Mon, Oct 24, 2022 at 10:15:08PM +0200, Jernej Skrabec wrote:
+> > > There is several different Cedrus cores with varying capabilities, so
+> > > some operations like listing formats depends on checks if feature is
+> > > supported or not.
+> > >=20
+> > > Currently check for capabilities is only in format enumeration helper,
+> > > but it will be used also elsewhere later. Let's convert this check to
+> > > helper and while at it, also simplify it. There is no need to check if
+> > > capability mask is zero, condition will still work properly.
+> >=20
+> > Sure.  That's true.  Out of curiousity, can cedrus_formats[i].capabilit=
+ies
+> > be zero?  Because it feels like that's what should be checked.
+>=20
+> Yes, it can be. It's the case for V4L2_PIX_FMT_NV12_32L32. All variants=
+=20
+> supports it, so there is no special capability needed in order to be list=
+ed.=20
+> What would you check in such case? Condition still works for this case.
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+I think the problem is that (bits & 0) =3D=3D 0 is always true.
+So if the input caps are 0, we need to make sure to return false.
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
+Cheers,
 
-E.g.:
+Paul
 
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
+--W34rlajBUncxrU/f
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
+-----BEGIN PGP SIGNATURE-----
 
----
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmNX/1MACgkQ3cLmz3+f
+v9Hflwf/W2MqmRYak1O1TUFjnU5lVd99pw1YkGwToYlc9u+6GUXrUy0MBg0vXhOB
+o0P+HJNDhO1cRPqpTWcL3B3dJ13j0RhTHOGQNFVtkedHoWsRKM3OGCYHlGgMwGQm
+FBYMx7GgV6HkB3uox/fY60RAqYG42RWkm6h+lVwdb/771kNvEBDYX1U/rrQaLSCY
+uh/6uKNqO6EtUaLYI/ox+7C35G2DZepkHz+9miOY7KDdgXBloFKA+9t8OdjYx899
+KROzq5yjNk04Jbe3xFX9B2saxt8Y6OlxcElLKyZFBJ1NhjaGss14BToEH9etGQ/8
+6gSrdpjlnmrKeVQvEFKhIhKxx56bpw==
+=0zvP
+-----END PGP SIGNATURE-----
 
-To get the changes in:
-
-  65b32f801bfbc54d ("uapi: move IPPROTO_L2TP to in.h")
-  5854a09b49574da5 ("net/ipv4: Use __DECLARE_FLEX_ARRAY() helper")
-
-That ends up automatically adding the new IPPROTO_L2TP to the socket
-args beautifiers:
-
-  $ tools/perf/trace/beauty/socket.sh > before
-  $ cp include/uapi/linux/in.h tools/include/uapi/linux/in.h
-  $ tools/perf/trace/beauty/socket.sh > after
-  $ diff -u before after
-  --- before	2022-10-25 12:17:02.577892416 -0300
-  +++ after	2022-10-25 12:17:10.806113033 -0300
-  @@ -20,6 +20,7 @@
-   	[98] = "ENCAP",
-   	[103] = "PIM",
-   	[108] = "COMP",
-  +	[115] = "L2TP",
-   	[132] = "SCTP",
-   	[136] = "UDPLITE",
-   	[137] = "MPLS",
-  $
-
-Now 'perf trace' will decode that 115 into "L2TP" and it will also be
-possible to use it in tracepoint filter expressions.
-
-Addresses this tools/perf build warning:
-
-  Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
-  diff -u tools/include/uapi/linux/in.h include/uapi/linux/in.h
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Wojciech Drewek <wojciech.drewek@intel.com>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/include/uapi/linux/in.h | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
-
-diff --git a/tools/include/uapi/linux/in.h b/tools/include/uapi/linux/in.h
-index 14168225cecdc74c..f243ce665f74f82d 100644
---- a/tools/include/uapi/linux/in.h
-+++ b/tools/include/uapi/linux/in.h
-@@ -68,6 +68,8 @@ enum {
- #define IPPROTO_PIM		IPPROTO_PIM
-   IPPROTO_COMP = 108,		/* Compression Header Protocol		*/
- #define IPPROTO_COMP		IPPROTO_COMP
-+  IPPROTO_L2TP = 115,		/* Layer 2 Tunnelling Protocol		*/
-+#define IPPROTO_L2TP		IPPROTO_L2TP
-   IPPROTO_SCTP = 132,		/* Stream Control Transport Protocol	*/
- #define IPPROTO_SCTP		IPPROTO_SCTP
-   IPPROTO_UDPLITE = 136,	/* UDP-Lite (RFC 3828)			*/
-@@ -188,21 +190,13 @@ struct ip_mreq_source {
- };
- 
- struct ip_msfilter {
-+	__be32		imsf_multiaddr;
-+	__be32		imsf_interface;
-+	__u32		imsf_fmode;
-+	__u32		imsf_numsrc;
- 	union {
--		struct {
--			__be32		imsf_multiaddr_aux;
--			__be32		imsf_interface_aux;
--			__u32		imsf_fmode_aux;
--			__u32		imsf_numsrc_aux;
--			__be32		imsf_slist[1];
--		};
--		struct {
--			__be32		imsf_multiaddr;
--			__be32		imsf_interface;
--			__u32		imsf_fmode;
--			__u32		imsf_numsrc;
--			__be32		imsf_slist_flex[];
--		};
-+		__be32		imsf_slist[1];
-+		__DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
- 	};
- };
- 
--- 
-2.37.3
-
+--W34rlajBUncxrU/f--
