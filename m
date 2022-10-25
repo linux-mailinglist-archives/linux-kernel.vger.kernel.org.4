@@ -2,52 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48EC60C9A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DAC60CA29
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbiJYKMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
+        id S231903AbiJYKdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232171AbiJYKKt (ORCPT
+        with ESMTP id S229800AbiJYKdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:10:49 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8806013669F;
-        Tue, 25 Oct 2022 03:03:42 -0700 (PDT)
-Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MxS9Q390vz67brF;
-        Tue, 25 Oct 2022 18:00:10 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.31; Tue, 25 Oct 2022 12:03:40 +0200
-Received: from localhost.localdomain (10.69.192.58) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 25 Oct 2022 11:03:37 +0100
-From:   John Garry <john.garry@huawei.com>
-To:     <damien.lemoal@opensource.wdc.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hare@suse.de>, <bvanassche@acm.org>,
-        <hch@lst.de>, <ming.lei@redhat.com>, <niklas.cassel@wdc.com>
-CC:     <axboe@kernel.dk>, <jinpu.wang@cloud.ionos.com>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linuxarm@huawei.com>, John Garry <john.garry@huawei.com>
-Subject: [PATCH RFC v3 7/7] scsi: hisi_sas: Remove internal tag handling for reserved commands
-Date:   Tue, 25 Oct 2022 18:32:56 +0800
-Message-ID: <1666693976-181094-8-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
-References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+        Tue, 25 Oct 2022 06:33:04 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524CE16CA42
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:33:02 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bs21so4147486wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=66cLoBSJDG8wtROQKHHj/HCiSoIoqGjskOnA1JjrMs4=;
+        b=EsinVv7lY4mFWF9zAXFWNSq/PlLiuThvfBA6FIs32bxAt9cSRCW6CoNQM46JXHHV00
+         vbLofaGo4uftSErfd0CaUJAloTKfyuSgpenM4aWYIWlmNidUQ1qRPc+UU+EGYbAqgAz6
+         PqQmeRQYPLBp0Rse3uGTazS/bUI+GX6LajygaB7oIht8nxsCdzHZR2AFknUZRi7BxWbE
+         /jCzdM3/l1sDgX9znlR7Jldhb1QOCPr6Jz0gL/EldC4VJUMQW4BIf4jy6cO43QbvRCzJ
+         yPWc1jqcSsGtC8ugXBy+FcUm4iFjlibG2YPEOu572xmbZBPefBi8vI9oODVY3GCrThvQ
+         5wrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=66cLoBSJDG8wtROQKHHj/HCiSoIoqGjskOnA1JjrMs4=;
+        b=SY2IhV7tl54vtT2C5B/5n+KWJNGc3RjiPwG20DunVpeEjxRcyeROdel65pBhSPJ2UX
+         WxgNI0hIpAdKcHZcmpKlNYHHGln97Bzj7I+rJSwElSUxYqcFt/dzaRhEOsX4HGJqoZ3c
+         fOnEtq0OMMK6JkQZttTn3nkvY61yxpiASMS+PznpVIbqknKTyLRnRzTxiXQ01Np4z6mo
+         /q+Q7RB3FWWPNhcp0LJIbxdEJZTtfbk7UpGU4CKq7lMtB9+XM97eyZOpiBheeyjoOc8y
+         iBNJLY6w2o7Zm/jlY/1nkMbGMUIkZZmuOosfndIkMBFffLcJK4+EO6aiZZPIoYspIL7G
+         +aHg==
+X-Gm-Message-State: ACrzQf3u/LDCelcyQk7JnVhSku55bypBaBeC6PMHtymEScFl0ZepX98H
+        Tr8qJ0K6DNnRf0dRYLE7/2V2pOVg+Dop+8ZtE7M=
+X-Google-Smtp-Source: AMsMyM6M6qlAQjBljmmzOXjq4u3AucmyE7qU1ZqU4aZWRcPhut5obO/D02H6dN7TRWeW0zBEY3oB6w==
+X-Received: by 2002:adf:dbc5:0:b0:22c:c605:3b81 with SMTP id e5-20020adfdbc5000000b0022cc6053b81mr24510392wrj.218.1666693980884;
+        Tue, 25 Oct 2022 03:33:00 -0700 (PDT)
+Received: from [192.168.1.115] ([185.126.107.38])
+        by smtp.gmail.com with ESMTPSA id g42-20020a05600c4caa00b003a84375d0d1sm10021817wmp.44.2022.10.25.03.32.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 03:33:00 -0700 (PDT)
+Message-ID: <714a3bba-611a-fc78-cb62-f12be9a7e356@linaro.org>
+Date:   Tue, 25 Oct 2022 12:32:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.3.2
+Subject: Re: [PATCH 4/5] pwm: jz4740: Depend on MACH_INGENIC instead of MIPS
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     od@opendingux.net, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+References: <20221024205213.327001-1-paul@crapouillou.net>
+ <20221024205213.327001-5-paul@crapouillou.net>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221024205213.327001-5-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,183 +78,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that any sas_task which we're sent has a request associated, we can
-use the request tag for slot IPTT.
+On 24/10/22 22:52, Paul Cercueil wrote:
+> The MACH_INGENIC Kconfig option will be selected when building a kernel
+> targeting Ingenic SoCs, but also when compiling a generic MIPS kernel
+> that happens to support Ingenic SoCs.
+> 
+> Therefore, if MACH_INGENIC is not set, we know that we're not even
+> trying to build a generic kernel that supports these SoCs, and we can
+> hide the options to compile the SoC-specific drivers.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+>   drivers/pwm/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-However, since v2 HW has its own slot IPTT allocation scheme due to badly
-broken HW, continue to use it.
-
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas.h       |  3 -
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 82 +++++---------------------
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  9 +--
- 3 files changed, 17 insertions(+), 77 deletions(-)
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index 6f8a52a1b808..8cd238f75066 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -39,9 +39,6 @@
- #define HISI_SAS_PM_BIT		2
- #define HISI_SAS_HW_FAULT_BIT	3
- #define HISI_SAS_MAX_COMMANDS (HISI_SAS_QUEUE_SLOTS)
--#define HISI_SAS_RESERVED_IPTT  96
--#define HISI_SAS_UNRESERVED_IPTT \
--	(HISI_SAS_MAX_COMMANDS - HISI_SAS_RESERVED_IPTT)
- 
- #define HISI_SAS_IOST_ITCT_CACHE_NUM 64
- #define HISI_SAS_IOST_ITCT_CACHE_DW_SZ 10
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 65475775c844..7f784cdacf9f 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -161,49 +161,13 @@ static void hisi_sas_slot_index_clear(struct hisi_hba *hisi_hba, int slot_idx)
- 
- static void hisi_sas_slot_index_free(struct hisi_hba *hisi_hba, int slot_idx)
- {
--	if (hisi_hba->hw->slot_index_alloc ||
--	    slot_idx >= HISI_SAS_UNRESERVED_IPTT) {
-+	if (hisi_hba->hw->slot_index_alloc) {
- 		spin_lock(&hisi_hba->lock);
- 		hisi_sas_slot_index_clear(hisi_hba, slot_idx);
- 		spin_unlock(&hisi_hba->lock);
- 	}
- }
- 
--static void hisi_sas_slot_index_set(struct hisi_hba *hisi_hba, int slot_idx)
--{
--	void *bitmap = hisi_hba->slot_index_tags;
--
--	__set_bit(slot_idx, bitmap);
--}
--
--static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
--				     struct request *rq)
--{
--	int index;
--	void *bitmap = hisi_hba->slot_index_tags;
--
--	if (rq)
--		return rq->tag + HISI_SAS_RESERVED_IPTT;
--
--	spin_lock(&hisi_hba->lock);
--	index = find_next_zero_bit(bitmap, HISI_SAS_RESERVED_IPTT,
--				   hisi_hba->last_slot_index + 1);
--	if (index >= HISI_SAS_RESERVED_IPTT) {
--		index = find_next_zero_bit(bitmap,
--				HISI_SAS_RESERVED_IPTT,
--				0);
--		if (index >= HISI_SAS_RESERVED_IPTT) {
--			spin_unlock(&hisi_hba->lock);
--			return -SAS_QUEUE_FULL;
--		}
--	}
--	hisi_sas_slot_index_set(hisi_hba, index);
--	hisi_hba->last_slot_index = index;
--	spin_unlock(&hisi_hba->lock);
--
--	return index;
--}
--
- void hisi_sas_slot_task_free(struct hisi_hba *hisi_hba, struct sas_task *task,
- 			     struct hisi_sas_slot *slot)
- {
-@@ -465,8 +429,10 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
- 	struct hisi_sas_port *port;
- 	struct hisi_hba *hisi_hba;
- 	struct hisi_sas_slot *slot;
-+	unsigned int dq_index;
- 	struct request *rq;
- 	struct device *dev;
-+	u32 blk_tag;
- 	int rc;
- 
- 	if (!sas_port) {
-@@ -486,20 +452,9 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
- 	hisi_hba = dev_to_hisi_hba(device);
- 	dev = hisi_hba->dev;
- 	rq = sas_task_find_rq(task);
--	if (rq) {
--		unsigned int dq_index;
--		u32 blk_tag;
--
--		blk_tag = blk_mq_unique_tag(rq);
--		dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
--		dq = &hisi_hba->dq[dq_index];
--	} else {
--		struct Scsi_Host *shost = hisi_hba->shost;
--		struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
--		int queue = qmap->mq_map[raw_smp_processor_id()];
--
--		dq = &hisi_hba->dq[queue];
--	}
-+	blk_tag = blk_mq_unique_tag(rq);
-+	dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
-+	dq = &hisi_hba->dq[dq_index];
- 
- 	switch (task->task_proto) {
- 	case SAS_PROTOCOL_SSP:
-@@ -563,13 +518,13 @@ static int hisi_sas_queue_command(struct sas_task *task, gfp_t gfp_flags)
- 			goto err_out_dma_unmap;
- 	}
- 
--	if (!internal_abort && hisi_hba->hw->slot_index_alloc)
-+	if (hisi_hba->hw->slot_index_alloc) {
- 		rc = hisi_hba->hw->slot_index_alloc(hisi_hba, device);
--	else
--		rc = hisi_sas_slot_index_alloc(hisi_hba, rq);
--
--	if (rc < 0)
--		goto err_out_dif_dma_unmap;
-+		if (rc < 0)
-+			goto err_out_dif_dma_unmap;
-+	} else {
-+		rc = rq->tag;
-+	}
- 
- 	slot = &hisi_hba->slot_info[rc];
- 	slot->n_elem = n_elem;
-@@ -2434,17 +2389,8 @@ int hisi_sas_probe(struct platform_device *pdev,
- 	shost->max_lun = ~0;
- 	shost->max_channel = 1;
- 	shost->max_cmd_len = 16;
--	if (hisi_hba->hw->slot_index_alloc) {
--		shost->can_queue = HISI_SAS_MAX_COMMANDS;
--		shost->cmd_per_lun = HISI_SAS_MAX_COMMANDS;
--	} else {
--		/*
--		 * Intentionally use HISI_SAS_UNRESERVED_IPTT for .can_queue until
--		 * every sas_task we're sent has a request associated.
--		 */
--		shost->can_queue = HISI_SAS_UNRESERVED_IPTT;
--		shost->cmd_per_lun = HISI_SAS_UNRESERVED_IPTT;
--	}
-+	shost->can_queue = HISI_SAS_MAX_COMMANDS;
-+	shost->cmd_per_lun = HISI_SAS_MAX_COMMANDS;
- 
- 	sha->sas_ha_name = DRV_NAME;
- 	sha->dev = hisi_hba->dev;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 4caf07306b24..c7963ae8ad50 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -4862,12 +4862,9 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	shost->max_lun = ~0;
- 	shost->max_channel = 1;
- 	shost->max_cmd_len = 16;
--	/*
--	 * Intentionally use HISI_SAS_UNRESERVED_IPTT for .can_queue until
--	 * every sas_task we're sent has a request associated.
--	 */
--	shost->can_queue = HISI_SAS_UNRESERVED_IPTT;
--	shost->cmd_per_lun = HISI_SAS_UNRESERVED_IPTT;
-+
-+	shost->can_queue = HISI_SAS_MAX_COMMANDS;
-+	shost->cmd_per_lun = HISI_SAS_MAX_COMMANDS;
- 
- 	sha->sas_ha_name = DRV_NAME;
- 	sha->dev = dev;
--- 
-2.35.3
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
