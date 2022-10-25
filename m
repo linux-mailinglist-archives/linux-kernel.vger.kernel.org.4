@@ -2,92 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B5360C9FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC2460CA04
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiJYK0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        id S231447AbiJYK1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbiJYKZt (ORCPT
+        with ESMTP id S231787AbiJYK0t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:25:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBC733E05;
-        Tue, 25 Oct 2022 03:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666693455; x=1698229455;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Wg6aEGHEdId7S6JpiQW4fRhbxjFPUgrJCGjNAjCIf5Q=;
-  b=Wm1WAn020M62bhrFyduBWHFrH1IZ8Ei9M/wKYOBppFWaBPz9pP079PBJ
-   ACD8Sl7uVxhu1lCSgz1gWZl8niP0Rx5Mq+DFQpe2uyw+FOKKbPgwXXq04
-   3HSp8s9JD2KQTIcJZUMZL1YMjCf2DlMlilYqOxX1yEMm7EVi2dYPMMUb1
-   3uoIweVgwS06I+UKb+oURVWnycqs9vCZA/huDy6eGKez0qRgat8Tzklrt
-   vxdM+MbECeLxHoDaq4WjVGlGyX1T5w0Hg1KdSMs53atrX6v9T8ZQF4CzQ
-   5lXmvHXyd/jpRgN22FavU3+wzhctuT/S0XvkDQU/fYV0Ib+U40rNKZVG7
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287359574"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="287359574"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 03:24:15 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="631584636"
-X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
-   d="scan'208";a="631584636"
-Received: from pweidel-mobl.ger.corp.intel.com ([10.252.44.62])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 03:24:13 -0700
-Date:   Tue, 25 Oct 2022 13:24:11 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "D. Starke" <daniel.starke@siemens.com>
-cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] tty: n_gsm: add parameters used with parameter
- negotiation
-In-Reply-To: <20221024130114.2070-2-daniel.starke@siemens.com>
-Message-ID: <4dded9d2-a67b-94b4-752f-3bbdf9e1c3@linux.intel.com>
-References: <20221024130114.2070-1-daniel.starke@siemens.com> <20221024130114.2070-2-daniel.starke@siemens.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-410768071-1666693456=:1638"
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 25 Oct 2022 06:26:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4082E792ED
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:25:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 97359CE1D0D
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 10:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A5B4C433D7;
+        Tue, 25 Oct 2022 10:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666693498;
+        bh=jHJWyyC2edptUkM6YkvKXRmAmMlLoZnY8lejow3fMZA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AIHWVWjMBL9qOY2xwBoU3gPtx2slDg23ZbzaZ6ZvKlA67mSYI7ulc8wFwMF14XM3S
+         0CKZZ4P9a2EmxIm6YCL4vmRri1Gdhgf/PTTp+cJ5s9fCLyvqzKcVyzQbG3Gvgjvm2g
+         SW0N/UpThov4bjpkDuz86SUPpN6NedEBsBnJyyA1HrjeNYXN2rc1aAKKwoWgkzkHkq
+         668ZyY4n8ls2xNcIFH4sz5ANPES+a2K2h+g556BJnPqDAZOp0ttf+Ff5BXvOdQSJNo
+         v+oJSBYu5otdcYWoMB97E95Lc37WpsussDcdYhVmCxIzpH/YzcedKX68ODNGpOJRPx
+         FpvgBAFPorGWA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1onH79-001V2Q-Rl;
+        Tue, 25 Oct 2022 11:24:55 +0100
+Date:   Tue, 25 Oct 2022 11:24:55 +0100
+Message-ID: <86pmegdwug.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Tyler Hicks <code@tyhicks.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vijay Balakrishna <vijayb@linux.microsoft.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] clocksource/drivers/arm_arch_timer: Fix event stream param in Kconfig
+In-Reply-To: <20221024195118.871907-1-code@tyhicks.com>
+References: <20221024195118.871907-1-code@tyhicks.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: code@tyhicks.com, mark.rutland@arm.com, daniel.lezcano@linaro.org, tglx@linutronix.de, vijayb@linux.microsoft.com, will@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Tyler,
 
---8323329-410768071-1666693456=:1638
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+On Mon, 24 Oct 2022 20:51:18 +0100,
+Tyler Hicks <code@tyhicks.com> wrote:
+> 
+> From: "Tyler Hicks (Microsoft)" <code@tyhicks.com>
+> 
+> Fix the event stream timer command line parameter name that's documented
+> in the Kconfig description for CONFIG_ARM_ARCH_TIMER_EVTSTREAM. It
+> didn't match the command line parameter name that's actually honored in
+> the source code.
+> 
+> Reported-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+> Fixes: 46fd5c6b3059 ("clocksource/drivers/arm_arch_timer: Control the evtstrm via the cmdline")
+> Cc: stable@vger.kernel.org
 
-On Mon, 24 Oct 2022, D. Starke wrote:
+No, this really doesn't deserve a Cc: stable. This bit may be wrong,
+but we have the correct information in the kernel-parameters.txt file,
+which is authoritative AFAIC.
 
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-> the newer 27.010 here. Chapter 5.4.6.3.1 describes the encoding of the
-> parameter negotiation messages.
-> 
-> Add the parameters used there to 'gsm_mux' and 'gsm_dlci' and initialize both
-> according to the value ranges and recommended defaults defined in chapter 5.7.
-> 
-> Replace the use of the DLC default values from the 'gsm_mux' fields with the DLC
-> specific values from the 'gsm_dlci' fields where applicable.
-> 
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> Signed-off-by: Tyler Hicks (Microsoft) <code@tyhicks.com>
 > ---
+>  drivers/clocksource/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+> index 4469e7f555e9..dcc274460973 100644
+> --- a/drivers/clocksource/Kconfig
+> +++ b/drivers/clocksource/Kconfig
+> @@ -315,7 +315,7 @@ config ARM_ARCH_TIMER_EVTSTREAM
+>  	  executing the wfe instruction at a frequency represented as a
+>  	  power-of-2 divisor of the clock rate. The behaviour can also be
+>  	  overridden on the command line using the
+> -	  clocksource.arm_arch_timer.evtstream parameter.
+> +	  clocksource.arm_arch_timer.evtstrm parameter.
+>  	  The main use of the event stream is wfe-based timeouts of userspace
+>  	  locking implementations. It might also be useful for imposing timeout
+>  	  on wfe to safeguard against any programming errors in case an expected
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+With this tag dropped,
+
+Acked-by: Marc Zyngier <maz@kernel.org>
+
+	M.
 
 -- 
- i.
---8323329-410768071-1666693456=:1638--
+Without deviation from the norm, progress is not possible.
