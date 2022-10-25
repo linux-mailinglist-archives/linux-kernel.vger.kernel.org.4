@@ -2,120 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A71A60CA2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B257F60CA2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbiJYKem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S229800AbiJYKgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiJYKek (ORCPT
+        with ESMTP id S231808AbiJYKgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:34:40 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B80432045
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=w7jyh7t+HSd8ls+5K8wYXg67ORftlivpSuWpTIAA1Ec=; b=pwDgHKGNYy+q7+1Zq4ibtxTn9f
-        4mH06Pa213DTyXq8WBhCs81sD2PBLHuokf5excD05nlRoKPtWjttOFmCAaMhiaXHbmSDTtc/ZoMh2
-        cXNJVIBtMFOZcxD7pzX0Iw87EWqdbxowVdSGxtUdkZfR3tfpRGlAC35X7mmUDzUgX3PrRBt8cZ+Yh
-        BcNA4f04gCGPS4pPR6UR3MckTlYIwiUcCZXozXJzdCZyedGCKRw6V9OxIgeqC10xj6RatgblM8Iuy
-        I1drWuXnnZOOoIoYiJ8vQIaND5k3Y+Zg/h/4biEtQsK8CqzwKK8fSDQ3cOT8VRi/7H+2so3BG/Fww
-        658t26TQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onHFr-006I9L-Aw; Tue, 25 Oct 2022 10:33:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BF151300169;
-        Tue, 25 Oct 2022 12:33:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A028B2C431FAA; Tue, 25 Oct 2022 12:33:54 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 12:33:54 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     kernel test robot <yujie.liu@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Seth Jenkins <sethjenkins@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com, "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [tip:x86/mm] [x86/mm] 1248fb6a82:
- Kernel_panic-not_syncing:kasan_populate_pmd:Failed_to_allocate_page
-Message-ID: <Y1e7kgKweck6S954@hirez.programming.kicks-ass.net>
-References: <202210241508.2e203c3d-yujie.liu@intel.com>
+        Tue, 25 Oct 2022 06:36:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB48E11A1D;
+        Tue, 25 Oct 2022 03:36:08 -0700 (PDT)
+Received: from [192.168.2.138] (109-252-112-196.nat.spd-mgts.ru [109.252.112.196])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 944CD660239C;
+        Tue, 25 Oct 2022 11:36:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666694167;
+        bh=asjeGT77iVFKNvBoOyaKFQC3C+LKDkA03+0QH0yhYDw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=A8oFHe5QT2rpBTeO3g1xKqFH3MqBiHEtVQD5XLYnX48k1/Sr3bW68/RwvUWNzDNoh
+         yYlaTiq7uOg8ZYqcMeccNE3cd83c9xPHY6hKH3KMe/UmPLemJK4MWAdEUe6lcEHCiu
+         6YBPdxMWAc7ocs5/fwGX5WPTHlDjKsmRY9jo9DcmKS95HkrJPa0S0LK5hTwtm+r196
+         RsVqTCzH7GJ/EitJN+T5xzYw7P1udtStBztJYhLwiDKXIayVDsGs3fYDWr0S41sgKw
+         QXwFxzoZ78wYuFf0LWj/WX1Lx/VnF43H14BTfmcgLv+JBkGjbrZVHuGYzGAPtfnYFZ
+         FcYujIB725WIQ==
+Message-ID: <fcf78a88-ab27-3a6a-db06-66504fc18e10@collabora.com>
+Date:   Tue, 25 Oct 2022 13:36:03 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202210241508.2e203c3d-yujie.liu@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v1] media: cedrus: Propagate error code from
+ cedrus_h265_skip_bits()
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Cc:     linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20220914150105.209484-1-dmitry.osipenko@collabora.com>
+ <d75c0597-2323-27f2-a7e2-b319667bdcf6@xs4all.nl>
+ <12078224.O9o76ZdvQC@jernej-laptop>
+ <3a26e105-9c50-8cdd-b4be-ba97b3306261@collabora.com>
+ <1103d833-6c29-6ccb-05dd-a2883eaa2281@xs4all.nl>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <1103d833-6c29-6ccb-05dd-a2883eaa2281@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 12:54:40PM +0800, kernel test robot wrote:
-> Hi Peter,
+On 10/25/22 13:23, Hans Verkuil wrote:
+> On 10/25/22 11:34, Dmitry Osipenko wrote:
+>> On 10/25/22 07:59, Jernej Škrabec wrote:
+>>> Dne ponedeljek, 24. oktober 2022 ob 13:38:36 CEST je Hans Verkuil napisal(a):
+>>>> Hi Dmitry,
+>>>>
+>>>> This patch has a conflict with this patch from Jernej:
+>>>>
+>>>> https://patchwork.linuxtv.org/project/linux-media/patch/20221017194413.11983
+>>>> 01-1-jernej.skrabec@gmail.com/
+>>>>
+>>>> I decided to take Jernej's patch first. Can you make a v2 that sits on top
+>>>> of that patch?
+>>> I believe you already merged first version of the patch for 6.1. No need for 
+>>> this version though, first version already solves main issue.
+>>
+>> That was a followup to the first version.
+>>
 > 
-> We noticed that below commit changed the value of
-> CPU_ENTRY_AREA_MAP_SIZE. Seems KASAN uses this value to allocate memory,
-> and failed during initialization after this change, so we send this
-> mail and Cc KASAN folks. Please kindly check below report for more
-> details. Thanks.
+> I have no idea what you are both talking about :-)
 > 
-> 
-> Greeting,
-> 
-> FYI, we noticed Kernel_panic-not_syncing:kasan_populate_pmd:Failed_to_allocate_page due to commit (built with gcc-11):
-> 
-> commit: 1248fb6a8201ddac1c86a202f05a0a1765efbfce ("x86/mm: Randomize per-cpu entry area")
-> https://git.kernel.org/cgit/linux/kernel/git/tip/tip.git x86/mm
-> 
-> in testcase: boot
-> 
-> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> [    7.114808][    T0] Kernel panic - not syncing: kasan_populate_pmd+0x142/0x1d2: Failed to allocate page, nid=0 from=1000000
-> [    7.119742][    T0] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc1-00001-g1248fb6a8201 #1
-> [    7.122122][    T0] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-4 04/01/2014
-> [    7.124976][    T0] Call Trace:
-> [    7.125849][    T0]  <TASK>
-> [    7.126642][    T0]  ? dump_stack_lvl+0x45/0x5d
-> [    7.127908][    T0]  ? panic+0x21e/0x46a
-> [    7.129009][    T0]  ? panic_print_sys_info+0x77/0x77
-> [    7.130618][    T0]  ? memblock_alloc_try_nid_raw+0x106/0x106
-> [    7.132224][    T0]  ? memblock_alloc_try_nid+0xd9/0x118
-> [    7.133717][    T0]  ? memblock_alloc_try_nid_raw+0x106/0x106
-> [    7.135252][    T0]  ? kasan_populate_pmd+0x142/0x1d2
-> [    7.136655][    T0]  ? early_alloc+0x95/0x9d
-> [    7.137738][    T0]  ? kasan_populate_pmd+0x142/0x1d2
-> [    7.138936][    T0]  ? kasan_populate_pud+0x182/0x19f
-> [    7.140335][    T0]  ? kasan_populate_shadow+0x1e0/0x233
-> [    7.141759][    T0]  ? kasan_init+0x3be/0x57f
-> [    7.142942][    T0]  ? setup_arch+0x101d/0x11f0
-> [    7.144229][    T0]  ? start_kernel+0x6f/0x3d0
-> [    7.145449][    T0]  ? secondary_startup_64_no_verify+0xe0/0xeb
-> [    7.147051][    T0]  </TASK>
-> [    7.147868][    T0] ---[ end Kernel panic - not syncing: kasan_populate_pmd+0x142/0x1d2: Failed to allocate page, nid=0 from=1000000 ]---
+> "I believe you already merged first version of the patch for 6.1" Which patch
+> are you referring to?
 
-Ufff, no idea about what KASAN wants here; Andrey, you have clue?
+This is about [1] that was already merged. This patch implements the
+error propagation that Jernej asked [2] when he reviewed [1].
 
-Are you trying to allocate backing space for .5T of vspace and failing
-that because the kvm thing doesn't have enough memory?
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=91db7a3fc7fe670cf1770a398a43bb4a1f776bf1
+
+[2] https://lore.kernel.org/lkml/1733932.VLH7GnMWUR@kista/
+
+I'll prepare the v2 if this change is still desired by Jernej.
+
+-- 
+Best regards,
+Dmitry
 
