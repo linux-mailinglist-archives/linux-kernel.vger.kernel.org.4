@@ -2,105 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB4C60D708
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C4160D70C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 00:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiJYW00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 18:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37152 "EHLO
+        id S232433AbiJYW1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 18:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbiJYWZ7 (ORCPT
+        with ESMTP id S232821AbiJYW0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 18:25:59 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B12C8233
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:25:31 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id b5so12941516pgb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:25:31 -0700 (PDT)
+        Tue, 25 Oct 2022 18:26:55 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8842EFB706
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:26:14 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id jo13so8639502plb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 15:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bfUwPkkWvWRH7D0jic4UzLRvzXiFnNnqQdHiOc474w4=;
-        b=X81xPrHAJB8kKGIX9N34GO+pUJhjd0vTSsPqLbXZPbnwjhw78RSFkKX/ieyem911R5
-         vn0YP9brTjXp2CKcqAxTTuhsFkGMkkbJSeJal6bAZHaMdMnU4oL5F7ZaV6+sbUjQOBsF
-         e8mfAG7nfu7SJUEleArdeEKViZFX4gjE+8yY0=
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kVEPqaLVudNuaFpxbKtyRoGGYaYZMen60jyTQDmJ0k0=;
+        b=K+FHUN+DhmHFK1V/WuSfv6mwiiQHXJjg1sZf/h/3SDbpDj6pyeIVX+ifv9e5rbB4nn
+         7xwJgy2i0vtw4aKv/75RDvV95Tm2r1nRElNfDSCBSRJz82TaTUVW5e8ZwdKDcbon4eQ0
+         SDWFUUlX1tMUlzGfAU+nySGlIs39X+hE7DUCw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bfUwPkkWvWRH7D0jic4UzLRvzXiFnNnqQdHiOc474w4=;
-        b=cHKAqxGKoNhpoOgnmVTRSZISFL0YH+sOPrMBA63xG3Z28/xL0Wz1LtLGkqQKpnXaKL
-         iVokF+b7mPnwexpsUAff0IWJIqRiGs4OkuZo5/vOR3mh36eUsOz6n495cJJ5RPhR4CFe
-         TQs3TW7woU4J+njQdi+AE+YxW0brmb5qPEJsmm5hTRnO1VYcYOXRfKjNUlHETibQ0GL6
-         CtV0Ez+5MrjV782m8ziQt2gKfy827N0CoRtHH7wjEyu9S9w2HkhJQu6IhwqtSkkW8HPy
-         CMYo2orKbvfP6GSCvXoWJwMG+6we+in9vWbqDa1s6J+wyJe7c8FnGxMMyeqzzPrUtYZM
-         AoTA==
-X-Gm-Message-State: ACrzQf24PaOAsjo7vJE/cxzEbj6qvfWnEh8Q8hgBQieJnuvEM2uPYZLN
-        0A2P2Dm64iDxmNISwVTQhBnXaQ==
-X-Google-Smtp-Source: AMsMyM6BfIf8gI4+orMuLMLulOzofOtWVpprVt+MKJeR7Vf9gJoXQ8G6kX4U/nRDcdT0HEkPtm8YpQ==
-X-Received: by 2002:a63:2c4c:0:b0:434:e001:89fd with SMTP id s73-20020a632c4c000000b00434e00189fdmr34519522pgs.444.1666736730605;
-        Tue, 25 Oct 2022 15:25:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q15-20020a170902dacf00b0018685257c0dsm1671942plx.58.2022.10.25.15.25.29
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kVEPqaLVudNuaFpxbKtyRoGGYaYZMen60jyTQDmJ0k0=;
+        b=5Eji5p4M0L0dwgH42Co8LSYUi3oPXgZ8Z0bQYYJYtZx9APler4GJwRvXvtGHGbbN6a
+         ZaHhA8B9AXeuTkNMWExZXf/ux1+/Vrtt7+tsx+pYyYzaXRAqpBxPwmE0xdvgLiS9sxME
+         SA9ynB85Aia3rlPjDwKpkRR4+okumxV/OS+H5KBlFfPjZSFFYo6QvKMMhUiHzUM1U6w5
+         2iHHxrTgVB6rC8Ho08MCmg6OzHLtUUPuIoYV9P4E1wAX9AVA603w8gbdOvGF4ssXM1M3
+         8DrnJndOUxA8QE4MLxkxtNZ2VoYB1L+/moqzVaY0PY/EXAHuR44dERgAMBsmon9geVa0
+         LUxg==
+X-Gm-Message-State: ACrzQf01TmJ4alpnl1Q4le6llwgDM6UYMS6tThC8J2hMwnpmuzuUGnnu
+        AZOjWneM/TvF+NI0wD8SqY5fXA==
+X-Google-Smtp-Source: AMsMyM6gD0CPcY0vG7fGXAk8rMs0hZe+/EtLUVVDC9aYXK3R4Doan2SbfHHxcEtilRi8tbarYUldfA==
+X-Received: by 2002:a17:90a:9a8f:b0:212:ea8d:dc34 with SMTP id e15-20020a17090a9a8f00b00212ea8ddc34mr624038pjp.30.1666736774027;
+        Tue, 25 Oct 2022 15:26:14 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:efef:6660:5e20:5f6b])
+        by smtp.gmail.com with ESMTPSA id g9-20020a1709026b4900b001752216ca51sm1653302plt.39.2022.10.25.15.26.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 15:25:29 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, adobriyan@gmail.com,
-        ebiederm@xmission.com, lizetao1@huawei.com
-Cc:     Kees Cook <keescook@chromium.org>, linux-fsdevel@vger.kernel.org,
-        chengzhihao1@huawei.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, yi.zhang@huawei.com
-Subject: Re: [PATCH] fs/binfmt_elf: Fix memory leak in load_elf_binary()
-Date:   Tue, 25 Oct 2022 15:24:41 -0700
-Message-Id: <166673667327.2128117.4844279671091670952.b4-ty@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221024154421.982230-1-lizetao1@huawei.com>
-References: <20221024154421.982230-1-lizetao1@huawei.com>
+        Tue, 25 Oct 2022 15:26:13 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 15:26:10 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-mmc@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Faiz Abbas <faiz_abbas@ti.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH v3 6/7] mmc: sdhci_am654: Fix SDHCI_RESET_ALL for CQHCI
+Message-ID: <Y1higmSUMLsxvXyq@google.com>
+References: <20221024175501.2265400-1-briannorris@chromium.org>
+ <20221024105229.v3.6.I35ca9d6220ba48304438b992a76647ca8e5b126f@changeid>
+ <5b91c0eb-52aa-8431-c286-81b7feae84ce@intel.com>
+ <Y1hY57vkkOhybwE1@google.com>
+ <6268199c-78ca-8f55-0377-c14bb0299443@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6268199c-78ca-8f55-0377-c14bb0299443@gmail.com>
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 23:44:21 +0800, Li Zetao wrote:
-> There is a memory leak reported by kmemleak:
+On Tue, Oct 25, 2022 at 02:53:46PM -0700, Florian Fainelli wrote:
+> On 10/25/22 14:45, Brian Norris wrote:
+> > On Tue, Oct 25, 2022 at 04:10:44PM +0300, Adrian Hunter wrote:
+> > > On 24/10/22 20:55, Brian Norris wrote:
+> > > > diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+> > > > index 8f1023480e12..6a282c7a221e 100644
+> > > > --- a/drivers/mmc/host/sdhci_am654.c
+> > > > +++ b/drivers/mmc/host/sdhci_am654.c
+> > 
+> > > > @@ -378,7 +379,7 @@ static void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
+> > > >   	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> > > >   	struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
+> > > > -	sdhci_reset(host, mask);
+> > > > +	sdhci_and_cqhci_reset(host, mask);
+> > > >   	if (sdhci_am654->quirks & SDHCI_AM654_QUIRK_FORCE_CDTEST) {
+> > > >   		ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
+> > > 
+> > > What about sdhci_reset in sdhci_am654_ops ?
+> > 
+> > Oops, I think you caught a big fallacy in some of my patches: I assumed
+> > there was a single reset() implementation in a given driver (an unwise
+> > assumption, I realize). I see at least sdhci-brcmstb.c also has several
+> > variant ops that call sdhci_reset(), and I should probably convert them
+> > too.
 > 
->   unreferenced object 0xffff88817104ef80 (size 224):
->     comm "xfs_admin", pid 47165, jiffies 4298708825 (age 1333.476s)
->     hex dump (first 32 bytes):
->       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->       60 a8 b3 00 81 88 ff ff a8 10 5a 00 81 88 ff ff  `.........Z.....
->     backtrace:
->       [<ffffffff819171e1>] __alloc_file+0x21/0x250
->       [<ffffffff81918061>] alloc_empty_file+0x41/0xf0
->       [<ffffffff81948cda>] path_openat+0xea/0x3d30
->       [<ffffffff8194ec89>] do_filp_open+0x1b9/0x290
->       [<ffffffff8192660e>] do_open_execat+0xce/0x5b0
->       [<ffffffff81926b17>] open_exec+0x27/0x50
->       [<ffffffff81a69250>] load_elf_binary+0x510/0x3ed0
->       [<ffffffff81927759>] bprm_execve+0x599/0x1240
->       [<ffffffff8192a997>] do_execveat_common.isra.0+0x4c7/0x680
->       [<ffffffff8192b078>] __x64_sys_execve+0x88/0xb0
->       [<ffffffff83bbf0a5>] do_syscall_64+0x35/0x80
-> 
-> [...]
+> You got it right for sdhci-brcmstb.c because "supports-cqe" which gates the
+> enabling of CQE can only be found with the "brcm,bcm7216-sdhci" compatible
+> which implies using brcmstb_reset().
 
-Applied to for-next/execve, thanks!
+I don't see any in-tree device trees for these chips (which is OK), and
+that's not what the Documentation/ says, and AFAICT nothing in the
+driver is limiting other variants from specifying the "supports-cqe"
+flag in their (out-of-tree) device tree. The closest thing I see is that
+an *example* in brcm,sdhci-brcmstb.yaml shows "supports-cqe" only on
+brcm,bcm7216-sdhci -- but an example is not a binding agreement. Am I
+missing something?
 
-[1/1] fs/binfmt_elf: Fix memory leak in load_elf_binary()
-      https://git.kernel.org/kees/c/594d2a14f216
+Now of course, you probably know behind the scenes that there are no
+other sdhci-brcmstb-relevant controllers that "support cqe", but AFAICT
+I have no way of knowing that a priori. The driver and bindings give
+(too much?) flexibility.
 
--- 
-Kees Cook
+Poking around, I think the only other one I might have missed would be
+gl9763e in sdhci-pci-gli.c. That also calls cqhci_init() but is
+otherwise relying on the default sdhci_pci_ops. So I'd either have to
+change the common sdhci_pci_ops, or else start a new copy/paste/modify
+'struct sdhci_ops' for it... This really does start to get messy when
+poking around on drivers I can't test. As in, it shouldn't be harmful
+to change most sdhci_reset() to sdhci_and_cqhci_reset() (as long as they
+aren't using some other CQE implementation), but the more invasive it
+gets (say, rewriting a bunch of other ops), the easier it is to get
+something wrong.
 
+Thoughts welcome.
+
+Brian
