@@ -2,122 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A7D60C9AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D434260C9AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbiJYKNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        id S232064AbiJYKOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbiJYKNV (ORCPT
+        with ESMTP id S232401AbiJYKOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:13:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4C714FD0F
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666692314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WkMY2q7k/FRScATXzFjfEIt8wnjgYfKsZeIIXZ3g4lg=;
-        b=Hb0BkHQ9GI+AMUEa2uZeqFKA6oGI4JX9MJ62mNiJsc6zkSJ9l8+NtF2apaZaOdAQ/713OV
-        0bOYBahz0z6YWYGYo9ZPVXZxWLJfrK/6v8sNkbAZcdbfFc+v0NAB0M+/Il1OShCJRNbCoX
-        beJl9z+5w65N2vwYQMmCDI0brlGWQlE=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-663-tCvdeM3wMFC7ORiw4fbwvA-1; Tue, 25 Oct 2022 06:05:05 -0400
-X-MC-Unique: tCvdeM3wMFC7ORiw4fbwvA-1
-Received: by mail-qk1-f200.google.com with SMTP id u6-20020a05620a430600b006e47fa02576so11156694qko.22
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:05:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WkMY2q7k/FRScATXzFjfEIt8wnjgYfKsZeIIXZ3g4lg=;
-        b=nYwcum8x5LNd2mtPDbiDnEQatmN/7sX6gUXrT7EdHWIY9Uw6ftt7/uL5a833PO28Pj
-         mo29t9baMRnggYLPnPgb+hzdU6PNo29aB1UCKajP+wVSEspaqJO0FId9lz0qRAr9R1bz
-         G/gp8ZrgFUh0loMMkJ5MXFDq+XpTDozFm3tfPlw2qVRWWbgEt2bsrvKjTHLOfWi/FqU7
-         uYRGLtmtnRjAp6BEcHzi2UhlLhbNjpbtp847EzFROZSb7R6Ug4H6SLjrSm9KsWLqoMdW
-         knGNniRYUpp0qWZ4++zvizCTeA28Ax+RVXbjJBGjrbvBCjzHKe7XblL9l1iSSVc/n20t
-         DfvA==
-X-Gm-Message-State: ACrzQf25z2GPUR2J9xdHJUAj5bMPk92lMH32l61sQrbdLepytJxTFQzb
-        im/hlpy150XUZ/kVNzFXs2Mw6EMKVzuxMf3vZ6E3xUj5Hfz4hF0aiP9/1n8Ytya9GrzOoi65bAM
-        Dqfqiyk2NrioTCQn3S7ew6LJi
-X-Received: by 2002:a05:6214:21e5:b0:4b3:f3e0:5432 with SMTP id p5-20020a05621421e500b004b3f3e05432mr30997935qvj.19.1666692305295;
-        Tue, 25 Oct 2022 03:05:05 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM693U09GZt8c3TCu0FJo9qI1g4ScuhxN9DXfAJplWl/vGo09zLnXBtWBBG2qZwZQgoHuj3OGw==
-X-Received: by 2002:a05:6214:21e5:b0:4b3:f3e0:5432 with SMTP id p5-20020a05621421e500b004b3f3e05432mr30997911qvj.19.1666692305082;
-        Tue, 25 Oct 2022 03:05:05 -0700 (PDT)
-Received: from [10.201.49.36] (nat-pool-mxp-u.redhat.com. [149.6.153.187])
-        by smtp.googlemail.com with ESMTPSA id d13-20020a05620a240d00b006bc192d277csm1807519qkn.10.2022.10.25.03.05.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 03:05:04 -0700 (PDT)
-Message-ID: <6812bb87-f355-eddb-c484-b3bb089dd630@redhat.com>
-Date:   Tue, 25 Oct 2022 12:05:01 +0200
+        Tue, 25 Oct 2022 06:14:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25008183E23;
+        Tue, 25 Oct 2022 03:06:28 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 576B66600363;
+        Tue, 25 Oct 2022 11:06:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666692386;
+        bh=VUGneu/GkKsEmT+PsR4f+B8IGy/eQwLdVzDz2FlK9lc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iOlw4dlTjzXRVQ1CT2YdYh77UHzv1fjxXQd5xg4emPrpVJc/2t++4xZYC8XA3BDPU
+         UBTj7AMjXsbclKU3CP8qhVXAuFdoJxcW5qgbK+IAiTwmz+55/LdbwFTwx9wCInlBoa
+         FxfMnPUv/fSYvpiXfnd05I+kLzzvugqV3AduZyvdbjqGlZhqnmGZTpMpAiuZY8sG9g
+         JZ3dtrHD0kIdGjaBwvQU2gEIQaV9oMioeJXnk8WsYV+eyP+LFUzXBcxxBGL14+l2PH
+         6DPxutnTohLkzhbfocvwg1bb9Qas69D66ofJOsDKb/rymnR86W6/ga8dnLR2wei41r
+         IRzWN9T22iBfg==
+Message-ID: <dcf284c6-dee5-d726-7f8f-c4ff1be99ddb@collabora.com>
+Date:   Tue, 25 Oct 2022 12:06:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH 4/4] KVM: use signals to abort enter_guest/blocking and
- retry
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 2/4] ASoC: dt-bindings: realtek,rt5682s: Add AVDD and
+ MICVDD supplies
 Content-Language: en-US
-To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221022154819.1823133-1-eesposit@redhat.com>
- <20221022154819.1823133-5-eesposit@redhat.com>
- <5ee4eeb8-4d61-06fc-f80d-06efeeffe902@redhat.com>
- <4ef882c2-1535-d7df-d474-e5fab2975f53@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <4ef882c2-1535-d7df-d474-e5fab2975f53@redhat.com>
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
+Cc:     kernel@collabora.com, Derek Fang <derek.fang@realtek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221024220015.1759428-1-nfraprado@collabora.com>
+ <20221024220015.1759428-3-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221024220015.1759428-3-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/24/22 09:43, Emanuele Giuseppe Esposito wrote:
->> Since the userspace should anyway avoid going into this effectively-busy
->> wait, what about clearing the request after the first exit?  The
->> cancellation ioctl can be kept for vCPUs that are never entered after
->> KVM_KICK_ALL_RUNNING_VCPUS.  Alternatively, kvm_clear_all_cpus_request
->> could be done right before up_write().
->
-> Clearing makes sense, but should we "trust" the userspace not to go into
-> busy wait?
+Il 25/10/22 00:00, Nícolas F. R. A. Prado ha scritto:
+> The rt5682s codec can have two supplies: AVDD and MICVDD. They are
+> already used by sc7180-trogdor-kingoftown.dtsi, so document them in the
+> binding.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
 
-I think so, there are many other ways for userspace to screw up.
+I also don't like these uppercase supply names... I wonder if it's worth changing
+the driver to get "avdd" *or* "AVDD" (so, if "avdd" fails -> backwards compat)...
 
-> What's the typical "contract" between KVM and the userspace? Meaning,
-> should we cover the basic usage mistakes like forgetting to busy wait on
-> KVM_RUN?
+...this way, we can change the devicetree to use the lowercase names without
+breaking abi.
 
-Being able to remove the second ioctl if you do (sort-of pseudocode 
-based on this v1)
+Of course, this commit would need to be changed to document only the lowercase
+supply names.
 
-	kvm_make_all_cpus_request(kvm, KVM_REQ_USERSPACE_KICK);
-	down_write(&kvm->memory_transaction);
-	up_write(&kvm->memory_transaction);
-	kvm_clear_all_cpus_request(kvm, KVM_REQ_USERSPACE_KICK);
+Driver-wise, we have a rt5682s_supply_names array... we could do something like:
 
-would be worth it, I think.
+static const char *rt5682s_supply_names_legacy[RT5682S_NUM_SUPPLIES] = {
+	[RT5682S_SUPPLY_AVDD] = "AVDD",
+	[RT5682S_SUPPLY_MICVDD] = "MICVDD",
+};
 
-Paolo
+static const char *rt5682s_supply_names[RT5682S_NUM_SUPPLIES] = {
+	[RT5682S_SUPPLY_AVDD] = "avdd",
+	[RT5682S_SUPPLY_MICVDD] = "micvdd",
+};
 
+for (...) assign_supply_names;
+ret = devm_regulator_bulk_get(...);
+
+if (ret) {
+	for (...) assign_legacy_supply_names;
+	ret = devm_regulator_bulk_get(...)
+	if (ret)
+		return ret;
+}
+
+What do you think?
+
+Cheers,
+Angelo
