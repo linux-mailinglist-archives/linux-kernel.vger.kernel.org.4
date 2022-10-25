@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A740160C3C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6440060C3C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 08:22:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiJYGVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 02:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S231254AbiJYGWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 02:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbiJYGVh (ORCPT
+        with ESMTP id S230419AbiJYGWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 02:21:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CFF32AB7
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:21:36 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onDJb-0007AK-Jt; Tue, 25 Oct 2022 08:21:31 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onDJb-000G3y-C5; Tue, 25 Oct 2022 08:21:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1onDJZ-00ASFg-Hl; Tue, 25 Oct 2022 08:21:29 +0200
-Date:   Tue, 25 Oct 2022 08:21:29 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Thierry Reding <thierry.reding@gmail.com>, od@opendingux.net,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/5] pwm: jz4740: Fix pin level of disabled TCU2
- channels, part 1
-Message-ID: <20221025062129.drzltbavg6hrhv7r@pengutronix.de>
-References: <20221024205213.327001-1-paul@crapouillou.net>
- <20221024205213.327001-2-paul@crapouillou.net>
+        Tue, 25 Oct 2022 02:22:00 -0400
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EC5444B0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:21:59 -0700 (PDT)
+Received: by mail-ua1-x929.google.com with SMTP id p4so5605779uao.0
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 23:21:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vjhCMJ8a1lWEwc5lKcva0autIJNGaKra1VBDgEdvOnQ=;
+        b=lSsesLZY7EGX2+FB5+i8PxJGpxMQdr229dAC80JjAywq6H0xB3iI5yxDQK+DSjlR7f
+         4xkrwpiEhYGqQgj7quG6T2Os/AxOyoSOBB78h/qYv5QBYK89tWPX/+mbYX9aqnCwLLzv
+         a9cBqX7i2I+fNIxeBU0cz6kgFFVQWGcO4egEQtDCRGuc/A1IhVRN0wOdXQqny0OFDbHK
+         ZGtxxKwO9eGedFppAzt7EBf5p8E0kNJQ8+hsN/GBE8m89YMxnRb509T+L2rsuzDbZ7If
+         9BQxEPlNikhZlO3xcVr3u6KINGB9I+ZwwJh0mApSyXxCEEUfphy4L2WKo8HMSbXU/hvP
+         efDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vjhCMJ8a1lWEwc5lKcva0autIJNGaKra1VBDgEdvOnQ=;
+        b=0sb3Q/vVg8pIp/SWPGqjAfDZTtdz5jTugvzvvtWzP4wbEbETxzm0zj4OGmwGtWJKG/
+         H2amiL7DrYayNWmHOKCD/szDjaZFRxJ2QIW+6+k9UbikK0jQSNTski+no/8qNmboZ1SI
+         CjDcdS7kTp3OHd1ph/pxmVE9Wxh/C2gCedhtgZ6j7cTnwMxwAXX8MIq0FcguIvGxxv/t
+         VRHt+kgDIMHVy/beSFxMzAWx41ilXKGG8b9/2Uch3ZtrK6tT0zrBfPgY8yU4qR/dfXqI
+         QYL8r5DLwTXo+9LkyXCf+yGRgrLuIq1OYL+OaSB5Z5MTPAwLVF6bOK0Dxm+E/VuKhsXM
+         GbYQ==
+X-Gm-Message-State: ACrzQf1z0MHR0/uzG+pXbyAV3ECDXpB0J4TtNJDWL4E/LYLGDTYm1Ipw
+        hTULxR5xrzv+dwxP+pyuoEL+NjasGcSMjQCKkdiMjQ==
+X-Google-Smtp-Source: AMsMyM7F/K1+h/RnqQyC078CIIpFW0/yryvvVcmnalMDY0PtvtDu7Bz8bRM10fCu1SgA61eB9OpehUz/+P0C619F1zM=
+X-Received: by 2002:ab0:6451:0:b0:3b8:7f95:f20e with SMTP id
+ j17-20020ab06451000000b003b87f95f20emr21630282uap.31.1666678918419; Mon, 24
+ Oct 2022 23:21:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5xgfedwwwq7lvzdq"
-Content-Disposition: inline
-In-Reply-To: <20221024205213.327001-2-paul@crapouillou.net>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <20221024094853.2877441-1-yulei.sh@bytedance.com> <661b43881b7f8764919847f29c0daf1866441090.camel@kernel.crashing.org>
+In-Reply-To: <661b43881b7f8764919847f29c0daf1866441090.camel@kernel.crashing.org>
+From:   Lei Yu <yulei.sh@bytedance.com>
+Date:   Tue, 25 Oct 2022 14:21:47 +0800
+Message-ID: <CAGm54UE1oS1N_hn4RKuF8a+OWgfvJ-OCc0-uju4mXbtz-jw8VA@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: aspeed: fix buffer overflow
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Henry Tian <tianxiaofeng@bytedance.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        linux-usb@vger.kernel.org,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/ASPEED MACHINE SUPPORT" 
+        <linux-aspeed@lists.ozlabs.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,91 +76,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 25, 2022 at 6:00 AM Benjamin Herrenschmidt
+<benh@kernel.crashing.org> wrote:
+>
+> On Mon, 2022-10-24 at 09:48 +0000, Lei YU wrote:
+> > From: Henry Tian <tianxiaofeng@bytedance.com>
+>
+> I wrote that driver, please CC me on further patches to it (thanks Joel
+> for the heads up).
+>
+> > In ast_vhub_epn_handle_ack() when the received data length exceeds the
+> > buffer, it does not check the case and just copies to req.buf and cause
+> > a buffer overflow, kernel oops on this case.
+>
+>  .../...
+>
+> Thanks ! Seems like a legit bug, however:
+>
+> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/epn.c b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+> > index b5252880b389..56e55472daa1 100644
+> > --- a/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
+> > @@ -84,6 +84,7 @@ static void ast_vhub_epn_handle_ack(struct ast_vhub_ep *ep)
+> >  {
+> >         struct ast_vhub_req *req;
+> >         unsigned int len;
+> > +       int status = 0;
+> >         u32 stat;
+> >
+> >         /* Read EP status */
+> > @@ -119,9 +120,15 @@ static void ast_vhub_epn_handle_ack(struct ast_vhub_ep *ep)
+> >         len = VHUB_EP_DMA_TX_SIZE(stat);
+> >
+> >         /* If not using DMA, copy data out if needed */
+> > -       if (!req->req.dma && !ep->epn.is_in && len)
+> > -               memcpy(req->req.buf + req->req.actual, ep->buf, len);
+> > -
+> > +       if (!req->req.dma && !ep->epn.is_in && len) {
+> > +               if (req->req.actual + len > req->req.length) {
+> > +                       req->last_desc = 1;
+> > +                       status = -EOVERFLOW;
+> > +                       goto done;
+>
+> Should we stall as well ? Should we continue receiving and just dropping the data until we have
+> a small packet ? Otherwise the EP could get out of sync for subsequent ones...
+>
 
---5xgfedwwwq7lvzdq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This case is treated as an error and we do not care about the following data.
+Similarly, if we change the MTU in BMC and let BMC ping the OS, the OS
+kernel does not crash and it gets RX errors, and the ping fails.
 
-Hello,
+ # ifconfig usb0
+ usb0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+         ...
+         RX packets 85  bytes 15380 (15.0 KiB)
+         RX errors 51  dropped 0  overruns 0  frame 51
 
-On Mon, Oct 24, 2022 at 09:52:09PM +0100, Paul Cercueil wrote:
-> The "duty > cycle" trick to force the pin level of a disabled TCU2
-> channel would only work when the channel had been enabled previously.
->=20
-> Address this issue by enabling the PWM mode in jz4740_pwm_disable
-> (I know, right) so that the "duty > cycle" trick works before disabling
-> the PWM channel right after.
->=20
-> This issue went unnoticed, as the PWM pins on the majority of the boards
-> tested would default to the inactive level once the corresponding TCU
-> clock was enabled, so the first call to jz4740_pwm_disable() would not
-> actually change the pin levels.
->=20
-> On the GCW Zero however, the PWM pin for the backlight (PWM1, which is
-> a TCU2 channel) goes active as soon as the timer1 clock is enabled.
-> Since the jz4740_pwm_disable() function did not work on channels not
-> previously enabled, the backlight would shine at full brightness from
-> the moment the backlight driver would probe, until the backlight driver
-> tried to *enable* the PWM output.
->=20
-> With this fix, the PWM pins will be forced inactive as soon as
-> jz4740_pwm_apply() is called (and might be reconfigured to active if
-> dictated by the pwm_state). This means that there is still a tiny time
-> frame between the .request() and .apply() callbacks where the PWM pin
-> might be active. Sadly, there is no way to fix this issue: it is
-> impossible to write a PWM channel's registers if the corresponding clock
-> is not enabled, and enabling the clock is what causes the PWM pin to go
-> active.
->=20
-> There is a workaround, though, which complements this fix: simply
-> starting the backlight driver (or any PWM client driver) with a "init"
-> pinctrl state that sets the pin as an inactive GPIO. Once the driver is
-> probed and the pinctrl state switches to "default", the regular PWM pin
-> configuration can be used as it will be properly driven.
->=20
-> Fixes: c2693514a0a1 ("pwm: jz4740: Obtain regmap from parent node")
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Cc: stable@vger.kernel.org
+With this patch, we get the similar behavior on BMC that the RX errors
+are increasing.
 
-OK, understood the issue. I think there is another similar issue: The
-clk is get and enabled only in the .request() callback. The result is (I
-think---depends on a few further conditions) that if you have the
-backlight driver as a module and the bootloader enables the backlight to
-show a splash screen, the backlight goes off because of the
-clk_disable_unused initcall.
+> Additionally, I'm curious, why in this specific case is the device sending more data than
+> the buffer can hold ? The MTU change should have resulted in buffers being re-allocated no ?
 
-So the right thing to do is to get the clock in .probe(), and ensure it
-is kept on if the PWM is running already. Then you can also enable the
-counter in .probe() and don't care for it in the enable and disable
-functions.
+The issue is found in a rare case during BIOS boot, we assume that
+BIOS is sending unexpected data to BMC for unknown reasons.
 
-The init pinctrl then has to be on the PWM then, but that's IMHO ok.
+> Or did you change the MTU on the remote and not on the local device ?
+>
 
-Best regards
-Uwe
+Yes, the MTU is changed to 2000 in OS and kept 1500 on BMC, then the
+issue is reproduced. (see detailed steps in the above email).
 
-PS: While looking into the driver I noticed that .request() uses
-dev_err_probe(). That's wrong, this function is only supposed to be used
-in .probe().
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---5xgfedwwwq7lvzdq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmNXgGYACgkQwfwUeK3K
-7AnfjggAnEOBtXlPzcBwx8UedR+Wp2Bwl4cWaX4hA3RCsLJJRov0yjJ0x9r5HGBf
-kE+ut8y6I42VSGXLwaPZAwqjNhiAP7NPvXyTOckvrgUk4UZXXmRYVHqrkP7UQRWI
-mVyJWG0LPMd45Swx66Rkf6IDnDwgUTpP8ClZqFaZo/luiPz2kI8IJ1OYLNFTRxis
-k/OPQWYLeFtM4QAZXjH1PJq1W4RGKR8jZZTvyDOZkEuT1f5vQyeMeCIXdv9CxvOE
-1VU/x/FpAsppfw7LwbTSzjJ+31OdWCWBpqZ7uH5J4G115q4dtc7FD1cLVNOx3E+/
-YsVQS9JuYF0B/YlX9qv8v5KAhWagkw==
-=sVSE
------END PGP SIGNATURE-----
-
---5xgfedwwwq7lvzdq--
+The reason we made the above test is because we are trying to
+reproduce the behavior as BIOS, and from the logs it looks like it's
+sending a packet larger than MTU. Then we tried to adjust the MTU on
+the OS side and reproduced the issue.
