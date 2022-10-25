@@ -2,147 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F72560C23A
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 05:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6392A60C23B
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 05:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbiJYDX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 24 Oct 2022 23:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        id S230499AbiJYDZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 24 Oct 2022 23:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbiJYDXv (ORCPT
+        with ESMTP id S230218AbiJYDZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 24 Oct 2022 23:23:51 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC5B4C2E6
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 20:23:49 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id io19so5173588plb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 20:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f9FEmbC5xpjHJg/2O8DNlMMB4H4G84Faq1RNdC5/70Y=;
-        b=J6AoKAQCxSkBd/sowbwPCi6ub1mPxV0qlHWX0WF7X3NIlYQn4YHES82Srn6p4epgIr
-         I/r34Cbt1RAn8twGDRZkfGNfzOPw/CE/lQ3d8KKm/xk0O0byOMZgfEBxXin8xMsH6Ae4
-         OYdMDc09gEwKmklQ38eKDQ1EP/Ifp9975kI3vOWpMT2+B7APWMDg1HWdHh6RDm2IhmZp
-         nFlQWBQ5LXCjatGUOm0Nssz0irDhTOK5bRfoLWDBGVjr3x7Zn+3TjCCDg34vvNahoMXf
-         /GTBMcEoPm5pkxKRsBe/cZklokeE7OuhvhWmNxe9o2BV3Dg9u2aHkD+tP04uQVNOH6VR
-         XDtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f9FEmbC5xpjHJg/2O8DNlMMB4H4G84Faq1RNdC5/70Y=;
-        b=VIICYBxkDL9xsOpDHIYm30SwNqKRUndvTHHyqdSftWQ2EV+2DHL73H2KtvIlIyS/pK
-         0exfwkQUAuXfBc4M0uy3Ytvt6BIITb2jCoa0iSjOA2/vKYRvs8SL8uBqKycKm37Mv89c
-         O3boAzf0qWpbRPcHWecLccILFonzqXlpsRB7InGem9lszgysu5gAI+5iDtpVatW16zM8
-         EZhtQH2uq3e6sQVeseWFg0emhn5vp9PHaAEIBfo5JTUhkIWjyO/v6K7kVA9L38Vs+8u3
-         iKKdOPtcr/wKgDIFZFxNnv+ZecT5L1go+pjLSz6LCOF7IIPfUyC/MQVsDJHABe3HMgc+
-         LnmA==
-X-Gm-Message-State: ACrzQf3A3peCDLEBaGpsZ1SQT/P0HZfOGQtio/UgQoJLEYjvPx9VixYN
-        /3QMGW8d+TWZ8AXTWZJ+Idf5xw==
-X-Google-Smtp-Source: AMsMyM6T9pbgn5kWI4AmOtmghV7rd1u8oseHmlwr+2DnuT3VwNTxi88zyEHreGyjv+o07wkD42j/iQ==
-X-Received: by 2002:a17:90b:4a47:b0:212:f7ef:1bd6 with SMTP id lb7-20020a17090b4a4700b00212f7ef1bd6mr13717346pjb.79.1666668229127;
-        Mon, 24 Oct 2022 20:23:49 -0700 (PDT)
-Received: from ?IPV6:2400:4050:c360:8200:8ae8:3c4:c0da:7419? ([2400:4050:c360:8200:8ae8:3c4:c0da:7419])
-        by smtp.gmail.com with ESMTPSA id n16-20020a170903111000b001868d4600b8sm397270plh.158.2022.10.24.20.23.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Oct 2022 20:23:48 -0700 (PDT)
-Message-ID: <8ed65e3e-e0b9-05ae-b113-db9d649a1e5a@daynix.com>
-Date:   Tue, 25 Oct 2022 12:23:39 +0900
+        Mon, 24 Oct 2022 23:25:04 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEFF60528
+        for <linux-kernel@vger.kernel.org>; Mon, 24 Oct 2022 20:25:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 00/22] Fallback to native backlight
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        "Lee, Chun-Yi" <jlee@suse.com>, Mark Gross <markgross@kernel.org>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Cezary Jackiewicz <cezary.jackiewicz@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Jonathan Woithe <jwoithe@just42.net>,
-        Ike Panhc <ike.pan@canonical.com>,
-        Daniel Dadap <ddadap@nvidia.com>,
-        Kenneth Chan <kenneth.t.chan@gmail.com>,
-        Mattia Dongili <malattia@linux.it>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Azael Avalos <coproscefalo@gmail.com>,
-        Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Robert Moore <robert.moore@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org,
-        acpi4asus-user@lists.sourceforge.net,
-        ibm-acpi-devel@lists.sourceforge.net, linux-fbdev@vger.kernel.org,
-        devel@acpica.org
-References: <20221024113513.5205-1-akihiko.odaki@daynix.com>
- <746e5cc6-516f-8f69-9d4b-8fe237de8fd6@redhat.com>
- <edec5950-cec8-b647-ccb1-ba48f9b3bbb0@daynix.com>
- <60672af8-05d2-113c-12b9-d635608be0dd@redhat.com>
- <ea69242c-0bc8-c7bb-9602-c7489bb69684@daynix.com>
- <7373e258-f7cc-4416-9b1c-c8c9dab59ada@daynix.com>
- <ae3497ed-b68d-c36a-6b6f-f7b9771d9238@redhat.com>
- <78ad5d7b-4078-0b8e-f4aa-6c8113631359@daynix.com> <87o7u1drcz.fsf@intel.com>
-Content-Language: en-US
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <87o7u1drcz.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666668298;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LH5DBZPs+080KlLpiMFfu+g7+DecHB8krFfWZbsth0k=;
+        b=OV0xsd6mmXvElXII3FAVv1fF1vUV0GrdhSTLNqYeSCGjmvt8TcFLYae1KaI4YFER61CkEf
+        Q0C/BcIn935yIfVg121J3MmNllT31UVZlfFu2nHBSNuVCEpC1S/hzW5BijQrF2N5onxVKH
+        mJiUdkC+kCQJZxqHBiM2mgIIXWsjn8I=
+Date:   Tue, 25 Oct 2022 03:24:58 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <6cccd4cba4f8407d52815c68f60446fb@linux.dev>
+Subject: Re: [PATCH] memblock: remove repeat round
+To:     "Mike Rapoport" <rppt@kernel.org>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <Y1a6BoawCoDDCo/K@kernel.org>
+References: <Y1a6BoawCoDDCo/K@kernel.org>
+ <20221019120337.2098298-1-yajun.deng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/25 3:11, Jani Nikula wrote:
-> On Tue, 25 Oct 2022, Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->> That aside, the first patch in this series can be applied without the
->> later patches so you may have a look at it. It's fine if you don't merge
->> it though since it does not fix really a pragmatic bug as its message says.
-> 
-> I think it's problematic because it needlessly ties i915 backlight
-> operation to existence of backlight devices that may not be related to
-> Intel GPU at all. The direction should be multiple supported backlight
-> devices, across GPUs and connectors, but only one per display.
-> 
-> BR,
-> Jani.
-> 
-> 
-
-Unfortunately it is the current situation (even without this patch), and 
-this patch is not meant to fix the particular issue.
-
-This patch replaces the following expression:
-acpi_video_get_backlight_type() == acpi_backlight_native
-
-As you can see, acpi_video_get_backlight_type() doesn't take a parameter 
-which represents the backlight currently being operated. The problem is 
-known and documented in "Brightness handling on devices with multiple 
-internal panels" section of Documentation/gpu/todo.rst.
-
-The exiting solution is based on the assumption that no device with i915 
-and multiple internal backlights.
-
-Regards,
-Akihiko Odaki
+October 25, 2022 12:15 AM, "Mike Rapoport" <rppt@kernel.org> wrote:=0A=0A=
+> Hi,=0A> =0A> On Wed, Oct 19, 2022 at 08:03:37PM +0800, Yajun Deng wrote=
+:=0A> =0A>> Subject: memblock: remove repeat round=0A> =0A> Please make t=
+he patch subject more detailed. Say=0A> =0A> membloc: don't run loop in m=
+emblock_add_range() twice=0A> =0A=0AOkay!=0A>> There is no need round twi=
+ce in memblock_add_range().=0A>> =0A>> We can call memblock_double_array(=
+) to extand the size if type->cnt no=0A> =0A> ^ extend=0A> =0A>> less tha=
+n type->max before memblock_insert_region(), otherwise we can=0A> =0A> s/=
+no less than/greater or equal to/=0A> =0A=0AGot it.=0A>> insert the new r=
+egion directly.=0A>> =0A>> Signed-off-by: Yajun Deng <yajun.deng@linux.de=
+v>=0A>> ---=0A>> mm/memblock.c | 54 +++++++++++++++----------------------=
+--------------=0A>> 1 file changed, 16 insertions(+), 38 deletions(-)=0A>=
+> =0A>> diff --git a/mm/memblock.c b/mm/memblock.c=0A>> index 511d4783dcf=
+1..1679244b4a1a 100644=0A>> --- a/mm/memblock.c=0A>> +++ b/mm/memblock.c=
+=0A>> @@ -578,7 +578,6 @@ static int __init_memblock memblock_add_range(s=
+truct memblock_type *type,=0A>> phys_addr_t base, phys_addr_t size,=0A>> =
+int nid, enum memblock_flags flags)=0A>> {=0A>> - bool insert =3D false;=
+=0A>> phys_addr_t obase =3D base;=0A>> phys_addr_t end =3D base + membloc=
+k_cap_size(base, &size);=0A>> int idx, nr_new;=0A>> @@ -598,22 +597,6 @@ =
+static int __init_memblock memblock_add_range(struct memblock_type *type,=
+=0A>> return 0;=0A>> }=0A>> =0A>> - /*=0A>> - * The worst case is when ne=
+w range overlaps all existing regions,=0A>> - * then we'll need type->cnt=
+ + 1 empty regions in @type. So if=0A>> - * type->cnt * 2 + 1 is less tha=
+n type->max, we know=0A>> - * that there is enough empty regions in @type=
+, and we can insert=0A>> - * regions directly.=0A>> - */=0A>> - if (type-=
+>cnt * 2 + 1 < type->max)=0A>> - insert =3D true;=0A>> -=0A>> -repeat:=0A=
+>> - /*=0A>> - * The following is executed twice. Once with %false @inser=
+t and=0A>> - * then with %true. The first counts the number of regions ne=
+eded=0A>> - * to accommodate the new area. The second actually inserts th=
+em.=0A>> - */=0A>> base =3D obase;=0A>> nr_new =3D 0;=0A> =0A> I believe =
+nr_new variable is no longer needed, is it?=0A> =0ANo, nr_new is needed b=
+efore memblock_merge_regions() for return.=0A=0A>> @@ -635,10 +618,14 @@ =
+static int __init_memblock memblock_add_range(struct memblock_type *type,=
+=0A>> #endif=0A>> WARN_ON(flags !=3D rgn->flags);=0A>> nr_new++;=0A>> - i=
+f (insert)=0A>> - memblock_insert_region(type, idx++, base,=0A>> - rbase =
+- base, nid,=0A>> - flags);=0A>> +=0A>> + if ((type->cnt >=3D type->max) =
+&&=0A>> + (memblock_double_array(type, obase, size) < 0))=0A> =0A> if ((t=
+ype->cnt >=3D type->max) &&=0A> memblock_double_array(type, obase, size))=
+=0A> =0A> would be just fine.=0A> =0A> I'd appreciate a comment above the=
+ if statement explaining when the=0A> allocation is required.=0A> =0AGot =
+it.=0A=0A>> + return -ENOMEM;=0A>> +=0A>> + memblock_insert_region(type, =
+idx++, base,=0A>> + rbase - base, nid,=0A>> + flags);=0A>> }=0A>> /* area=
+ below @rend is dealt with, forget about it */=0A>> base =3D min(rend, en=
+d);=0A>> @@ -647,28 +634,19 @@ static int __init_memblock memblock_add_ra=
+nge(struct memblock_type *type,=0A>> /* insert the remaining portion */=
+=0A>> if (base < end) {=0A>> nr_new++;=0A>> - if (insert)=0A>> - memblock=
+_insert_region(type, idx, base, end - base,=0A>> - nid, flags);=0A>> + if=
+ ((type->cnt >=3D type->max) &&=0A>> + (memblock_double_array(type, obase=
+, size) < 0))=0A>> + return -ENOMEM;=0A>> +=0A>> + memblock_insert_region=
+(type, idx, base, end - base,=0A>> + nid, flags);=0A>> }=0A>> =0A>> if (!=
+nr_new)=0A>> return 0;=0A>> =0A>> - /*=0A>> - * If this was the first rou=
+nd, resize array and repeat for actual=0A>> - * insertions; otherwise, me=
+rge and return.=0A>> - */=0A>> - if (!insert) {=0A>> - while (type->cnt +=
+ nr_new > type->max)=0A>> - if (memblock_double_array(type, obase, size) =
+< 0)=0A>> - return -ENOMEM;=0A>> - insert =3D true;=0A>> - goto repeat;=
+=0A>> - } else {=0A>> - memblock_merge_regions(type);=0A>> - return 0;=0A=
+>> - }=0A>> + memblock_merge_regions(type);=0A> =0A> A blank line here wo=
+uld be nice.=0A> =0AGot it.=0A=0A>> + return 0;=0A>> }=0A>> =0A>> /**=0A>=
+> --=0A>> 2.25.1=0A> =0A> --=0A> Sincerely yours,=0A> Mike.
