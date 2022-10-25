@@ -2,134 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8153160CEC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7C360CEC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 16:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbiJYOSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 10:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34560 "EHLO
+        id S233130AbiJYOTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 10:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233148AbiJYOSB (ORCPT
+        with ESMTP id S233032AbiJYOS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 10:18:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE70B46DBE;
-        Tue, 25 Oct 2022 07:17:47 -0700 (PDT)
-Received: from mercury (dyndsl-095-033-154-085.ewe-ip-backbone.de [95.33.154.85])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9692D66017D3;
-        Tue, 25 Oct 2022 15:17:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666707454;
-        bh=n69auhz0Ir0VGRIA5Bye37d1x6LLrH8ICp6KQcQA+8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oCtHezU1Ok3oYWhsSRhZCr0wT9aISnoiWLqTGmnJpa2pQ01K2feGoMToVu5H0/F35
-         9MQr6opKRN/dmBayoL9AmB36wqq8lf/PAlqi9h3qOieUjArSlnhg8g1Lf36WCtdiHf
-         eqaSTH7MOf7w0urxr1OG1Ym3mwDePBjq9resKtIXrL7Pbzp8UEf/fAFI6TLq1RQ/Rp
-         YEFRUPGN4VGfj9i6ZiPXLWE2PUdyRo85LhWYK4hzV6HE/CJ9KDto6DRCpDM6hxtwml
-         BLtI52iHB6To+JPqn3S87Ryzx2YAaI4qePG6GXG1j0ibi5irOrS+0PbAFmL6yB6Ndu
-         mSrICxIt9FUJA==
-Received: by mercury (Postfix, from userid 1000)
-        id 43E5C10607D6; Tue, 25 Oct 2022 16:17:32 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 16:17:32 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH 1/1] dt-bindings: net: snps,dwmac: Document queue config
- subnodes
-Message-ID: <20221025141732.z65kswaptgeuz2cl@mercury.elektranox.org>
-References: <20221021171055.85888-1-sebastian.reichel@collabora.com>
- <761d6ae2-e779-2a4b-a735-960c716c3024@linaro.org>
- <20221024222850.5zq426cnn75twmvn@mercury.elektranox.org>
- <aa146042-2130-9fc3-adcd-c6d701084b4a@linaro.org>
+        Tue, 25 Oct 2022 10:18:58 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AE313CF9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:18:57 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id q75so638871iod.7
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 07:18:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tYduAKOaNAny9MQJ4fO8rjwMRKFCq+OYJTarNsbUmcc=;
+        b=b9nMU8xuokJYf96EjprqccecIqVi4LtY3NFELQACDNkjVNyYV5P7dus7/1w2YDJwgK
+         ffsiW3uQSUh69VSxmzuUBqiEKAqZ922NLo4YDQsIN5UVsgRKFvNffrkjhK1Y0lYXP84H
+         jg9uBRwVgmb6fpFxQV7l1maCPUEy+bliJmEeRE7BJgrXGF9+sJwNsL8BKrafOFyXptA2
+         65j6ZKttleyPBv02B1gf7tuDyQQcBJsBqNWzQTr/WU2tEv2wHNTODsMQaujRGUhbb6DD
+         X6spe92iE48FoTkqnAvohe4EBX7WyUeIl9CiG/5wmbV22hNWSJEK3Ddx7Bxhf5YiWGTC
+         QRcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tYduAKOaNAny9MQJ4fO8rjwMRKFCq+OYJTarNsbUmcc=;
+        b=gEahyl9TT9e+Ft5QQ6/wBIlkxwIYNJbJzsU5CIgE4NszkmGp244sz2ugMUt3i6N//U
+         70Onb4oqPG8PV+9A6hzxOhVKqnWQGa/EMXdJkrITEUz8aZbz6I+QYoCTPHXPsPkp4fzz
+         djxyzO8rGhK5zfhMKXAMhdD+ZuaPR0pJTLH/7ssmq/FQiIek+258D1RsQmMqYtCuiThs
+         wxZY1jwWrzayDgn6QH6I0VCEck6/cj7ntj4NCpFLIb2upfu0CJXxKQ16MdIbIHngSR4R
+         G3fIW4PFv1mq6V549s24GMHXQzyqSX5KCAY3Kyurcr2jjLQ3baJuasL78SB/973+KC7S
+         ke8Q==
+X-Gm-Message-State: ACrzQf002Dhc2cilQpka/V4fwl3UE4MrV4TDU/rjT1GSDHfBRVsK1tbS
+        SegEf7WybzsO/0bOx2oTA2DA1kQsQxAnFsfzgWjouw==
+X-Google-Smtp-Source: AMsMyM7kgc8WOeDtEkSpzZEDfe3c6j9gRL+T2Jhn7Z9EiLOLURzVvAcjowE4b4X9Dv6gjSpOsHeaOGc+YH0eodTP438=
+X-Received: by 2002:a6b:690b:0:b0:6bc:4d2a:e60a with SMTP id
+ e11-20020a6b690b000000b006bc4d2ae60amr22450717ioc.56.1666707536652; Tue, 25
+ Oct 2022 07:18:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mydihmwcuy62wu5n"
-Content-Disposition: inline
-In-Reply-To: <aa146042-2130-9fc3-adcd-c6d701084b4a@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221022111403.531902164@infradead.org> <20221022114424.515572025@infradead.org>
+ <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com> <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net>
+ <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com> <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net>
+In-Reply-To: <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 25 Oct 2022 16:18:20 +0200
+Message-ID: <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
+Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     John Hubbard <jhubbard@nvidia.com>, x86@kernel.org,
+        willy@infradead.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, aarcange@redhat.com,
+        kirill.shutemov@linux.intel.com, jroedel@suse.de, ubizjak@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---mydihmwcuy62wu5n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-Hi,
-
-On Mon, Oct 24, 2022 at 07:28:29PM -0400, Krzysztof Kozlowski wrote:
-> Old binding did not document "tx-queues-config". Old binding had
-> "snps,mtl-tx-config" which was a phandle, so this is an ABI break of
-> bindings.
+On Tue, Oct 25, 2022 at 4:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> On Mon, Oct 24, 2022 at 09:58:07PM +0200, Jann Horn wrote:
 >
-> You are changing the binding - adding new properties.
+> > Unless I'm completely misunderstanding what's going on here, the whole
+> > "remove_table" thing only happens when you "remove a table", meaning
+> > you free an entire *pagetable*. Just zapping PTEs doesn't trigger that
+> > logic.
+>
+> Aah; yes true. OTOH even it that were not so, I think it would still be
+> broken because the current code relies on the TLB flush to have
+> completed, whereas the RCU scheme is effectively async and can be
+> considered pending until the callback runs.
+>
+> Hurmph... easiest fix is probably to dis-allow kvm_flush_tlb_multi()
+> for i386-pae builds.
+>
+> Something like so... nobody in his right mind should care about i386-pae
+> virt performance much.
 
-The new binding still has the phandle. The only thing I changed is
-explicitly allowing the referenced node to be a subnode of the dwmac
-node. This is 100% compatible, since the binding does not specify
-where the referenced node should be. Only the example suggested it
-could be next to the ethernet node. But changing any properties in
-the config node means a ABI break requiring code changes.
+I think Xen and HyperV have similar codepaths.
+hyperv_flush_tlb_multi() looks like it uses remote flush hypercalls,
+xen_flush_tlb_multi() too.
 
-Note, that right now 4/7 devicetrees with snps,mtl-tx-config already
-follow the scheme I documented. The other 3 have the queue config
-below the root node like the current example:
+On top of that, I think that theoretically, Linux doesn't even ensure
+that you have a TLB flush in between tearing down one PTE and
+installing another PTE (see
+https://lore.kernel.org/all/CAG48ez1Oz4tT-N2Y=Zs6jumu=zOp7SQRZ=V2c+b5bT9P4retJA@mail.gmail.com/),
+but I haven't tested that, and if it is true, I'm also not entirely
+sure if it's correct (in the sense that it only creates incoherent-TLB
+states when userspace is doing something stupid like racing
+MADV_DONTNEED and page faults on the same region).
 
-has the queues config in /:
- * arch/arm/boot/dts/artpec6.dtsi
- * arch/arm64/boot/dts/mediatek/mt2712e.dtsi
- * arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-
-has the queues config in the ethernet node:
- * arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
- * arch/arm64/boot/dts/freescale/imx8mp-evk.dts
- * arch/arm64/boot/dts/rockchip/rk3568.dtsi
- * arch/arm64/boot/dts/rockchip/rk356x.dtsi
-
-After my change both are considered valid. Anyways I'm doing this
-for rk3588 and planned to follow the subnode style. But if I have
-to fully fix this mess I will just put the queue config to the
-root node instead and let somebody else figure this out.
-
--- Sebastian
-
---mydihmwcuy62wu5n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNX7/EACgkQ2O7X88g7
-+pqxixAAixJg4jKnLIysudmOG3bwFNtz/E0sXxWmxFPMDK8dm0zwNVq1b1kP3prG
-xyEy7uqMRw1l5JzcmaQTkFbDjBVA0BLHGwY31/FEU5MR4ElFKqWdkFzkt3oV6N5b
-+RUOd1SYAPngXZlbwcegdDirl+fMBOvS4KyJxEmlaxka0HQ5eLU5jdK7QWc6dhnL
-eKdfch2qVThP3K00Oz47hQEpqWaGZUv8KmxMPTgHZTElx/lkOjKyMj9ATIS/2Wlc
-2gH608dBl8OqOmC9dyMCMxFHECK1qIkizebKkSQNRn1FudDlbgTFSNdJpjSCUBRo
-V9fwJc8ZeJKNf/fmh+eHoXG751pOVKT8ica2Akiba4M4TbwJ5Hej0q+DI8li43zE
-F+XKzg8jxXguKus74HF2rewG/+LqSz2XhfgZC1OqEB8uyBZu9SeAzNwONQ9L49Mt
-OsYtOobXRiFQ+a5AJQtIsR3UBqD6L1lgRvb8MWk04EJ75jk4grxDbMAF8cRXY6pn
-f3y9YxevlGmzh+xUThA/PLx55N15PRWfAYUOELcvsyKlzToS8N/lDrvUUTp+MTbr
-yTvBSzC7poEN1lLm3VWBuIIJpmO3ZgERVrMRO3EXtrR801+fjBH8fm/33sLyFNdE
-yMNecsOaBb8E8ixFzLcZtaQXc2gjAZJ4OTnpQbI6F+ACuFkYcAI=
-=9qXU
------END PGP SIGNATURE-----
-
---mydihmwcuy62wu5n--
+I think the more clearly correct fix would be to get rid of the split
+loads and use CMPXCHG16B instead (probably destroying the performance
+of GUP-fast completely), but that's complicated because some of the
+architectures that use the split loads path don't have cmpxchg_double
+(or at least don't have it wired up).
