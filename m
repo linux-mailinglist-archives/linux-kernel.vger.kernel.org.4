@@ -2,98 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC0E60C9FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B5360C9FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 25 Oct 2022 12:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiJYK0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 06:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S232155AbiJYK0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 06:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232390AbiJYKZT (ORCPT
+        with ESMTP id S232261AbiJYKZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 06:25:19 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E712A1D306
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:23:07 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id f37so21058079lfv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 03:23:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u/rueLkErXcyJyPk78wEDhbANCqJ+K9rCJeT2P0Ue/U=;
-        b=P9QtxjbP8BFwnXyVhC1nZOpLkGohvfxMoxUcx+V/gFCCpd0hQ8tmqS2XyAqd2JmI7U
-         Bk6ZTrpwAKjBEGgqbBTKNk7+V/mgWAWmKDWcsI+tZqwH7d35nbajBYcHqQWIwePGBmbq
-         p61WuoWF63rHOfppgToZyeER/ZPP2xKAv+fijEcHgeXTcwN5rdpZbOWSqejnJuQL9Zwf
-         IBkpOBl7CoUo73EZNvtTdFO+aQ5CZAwjEBKi0VL6VesW+xu7VxW9/dl7YFvIfRi/VkMN
-         OhcfsrIs1kHdDXU7UBhuBJUvKpM1SO+a6eFOxxKuEVS/vKnVjBCuJYAwU7XeoxcmKEYO
-         Q6XQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u/rueLkErXcyJyPk78wEDhbANCqJ+K9rCJeT2P0Ue/U=;
-        b=vDrlNWmC1eAxqpskLlow+xilBiJW9QL73Q7NaaHj1cTh+CJ5h/cb/hHosJsCX2QfoY
-         VQcAK7amdUsURsgHDU5WECFETrRTEVHK4SdCy1XtO+lpo8NBRZKwTN8O231q0bjIJbr3
-         p9o5kb4+RMItmqLWyxEqvnET5I7WN3CFNQpUhZLH9bpsBBtlfIJlwQfWDqHDj/HNm/bC
-         LqtFoBZ28e9y1H5cDxoybEBdlNLIorAp6X6/2XZ3JO0LN2onP/jfHlh3hNlv6imETv82
-         aPVLpK9b3BwreP/pvJTYhRHvFEjEtnRn/mLqaU39m/hYFTsD9uzqwxhPR+oXdF5jZrAR
-         5yhw==
-X-Gm-Message-State: ACrzQf3GtPEpa0FFJ9oJJKQJbcD62gBptO+riTNwEUCOCR18W0IWNAmT
-        6O6ln4rHrWUyHbhV0tB9bZvQdg==
-X-Google-Smtp-Source: AMsMyM5idpO1iNIZWroj7oq6xtgot4wdscnkHql4eiEWNBLInMpsyhaJYtPOx8iIUnNqcSl1mPx/lQ==
-X-Received: by 2002:ac2:509a:0:b0:4a2:2bfc:3487 with SMTP id f26-20020ac2509a000000b004a22bfc3487mr14039269lfm.458.1666693386339;
-        Tue, 25 Oct 2022 03:23:06 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id g5-20020a056512118500b00494978b0caesm348359lfr.276.2022.10.25.03.23.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 03:23:06 -0700 (PDT)
-Message-ID: <98ed35ac-8dd4-e81f-713e-2e5213731976@linaro.org>
-Date:   Tue, 25 Oct 2022 13:23:05 +0300
+        Tue, 25 Oct 2022 06:25:49 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBC733E05;
+        Tue, 25 Oct 2022 03:24:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666693455; x=1698229455;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Wg6aEGHEdId7S6JpiQW4fRhbxjFPUgrJCGjNAjCIf5Q=;
+  b=Wm1WAn020M62bhrFyduBWHFrH1IZ8Ei9M/wKYOBppFWaBPz9pP079PBJ
+   ACD8Sl7uVxhu1lCSgz1gWZl8niP0Rx5Mq+DFQpe2uyw+FOKKbPgwXXq04
+   3HSp8s9JD2KQTIcJZUMZL1YMjCf2DlMlilYqOxX1yEMm7EVi2dYPMMUb1
+   3uoIweVgwS06I+UKb+oURVWnycqs9vCZA/huDy6eGKez0qRgat8Tzklrt
+   vxdM+MbECeLxHoDaq4WjVGlGyX1T5w0Hg1KdSMs53atrX6v9T8ZQF4CzQ
+   5lXmvHXyd/jpRgN22FavU3+wzhctuT/S0XvkDQU/fYV0Ib+U40rNKZVG7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="287359574"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="287359574"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 03:24:15 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="631584636"
+X-IronPort-AV: E=Sophos;i="5.95,211,1661842800"; 
+   d="scan'208";a="631584636"
+Received: from pweidel-mobl.ger.corp.intel.com ([10.252.44.62])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 03:24:13 -0700
+Date:   Tue, 25 Oct 2022 13:24:11 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "D. Starke" <daniel.starke@siemens.com>
+cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] tty: n_gsm: add parameters used with parameter
+ negotiation
+In-Reply-To: <20221024130114.2070-2-daniel.starke@siemens.com>
+Message-ID: <4dded9d2-a67b-94b4-752f-3bbdf9e1c3@linux.intel.com>
+References: <20221024130114.2070-1-daniel.starke@siemens.com> <20221024130114.2070-2-daniel.starke@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] cpuidle: psci: Extend information in log about OSI/PC
- mode
-Content-Language: en-GB
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221020115513.93809-1-ulf.hansson@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221020115513.93809-1-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-410768071-1666693456=:1638"
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/10/2022 14:55, Ulf Hansson wrote:
-> It's useful to understand whether we are using OS-initiated (OSI) mode or
-> Platform Coordinated (PC) mode, when initializing the CPU PM domains.
-> Therefore, let's extend the print in the log after a successful probe with
-> this information.
-> 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->   drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+--8323329-410768071-1666693456=:1638
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+
+On Mon, 24 Oct 2022, D. Starke wrote:
+
+> From: Daniel Starke <daniel.starke@siemens.com>
+> 
+> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+> the newer 27.010 here. Chapter 5.4.6.3.1 describes the encoding of the
+> parameter negotiation messages.
+> 
+> Add the parameters used there to 'gsm_mux' and 'gsm_dlci' and initialize both
+> according to the value ranges and recommended defaults defined in chapter 5.7.
+> 
+> Replace the use of the DLC default values from the 'gsm_mux' fields with the DLC
+> specific values from the 'gsm_dlci' fields where applicable.
+> 
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
 -- 
-With best wishes
-Dmitry
-
+ i.
+--8323329-410768071-1666693456=:1638--
