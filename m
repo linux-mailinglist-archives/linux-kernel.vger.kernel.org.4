@@ -2,93 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB3860D968
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DA560D96D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232641AbiJZCqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 22:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
+        id S231549AbiJZCuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 22:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiJZCqb (ORCPT
+        with ESMTP id S232509AbiJZCuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 22:46:31 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3190857BFD
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 19:46:30 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id y12so19063988edc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 19:46:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=otMyQVNwUCr9/v61glePdAqeCORbvdU0f4529W/48AQ=;
-        b=Dj5la0z0+e0s/6NUxF2ZggIrlKZvsle3DarCv/Ko9HieUAMeysJ3fKNNgKQ3ii3FiG
-         13VWx8B+sO9r3LRCwuh/mC/h5Kn2UKJVMd/FjSHgOiR5IMHTVIjTn5GKV5sYkTqsrY2d
-         9Ttz4DyhjRshNjJ8vy1w0q/wN+Mt3j9NWerWZMFBvKET0hI88C1jD0Ts153Gtdb+VQWD
-         ZPtGa2mvTczh2LIAwxL3V9PuUW6XpTNL1Xe8zy48AAuz3WLVwWpPsWyeXO4aS2mFP4CV
-         vt+0uUDcdvJ8odINcvHf9WYH5kMjNw1bKOoWXdD3c2lbrNFMnUoomxIUqLFyQbzL9Wzi
-         5alA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=otMyQVNwUCr9/v61glePdAqeCORbvdU0f4529W/48AQ=;
-        b=d6cffPy00j6AgHrvsdUxAo2kz8zTWs+dF6ErXbrPiQ9W9+a3SqvtoaD/Z1yyjeMnVH
-         o/szt2SCxujLdU1Rzv3zN+/kpRF6QLZKur2IxL6AExfvR5rbbwUX0AZn9WlPpgeRSGL0
-         Y1ynqcHFHCyytDGJSxQFt6mhb7jTqOWVsIqU21o3LAW2XvBJLvFpOtyg+/BKbuDb9VKS
-         csSzRIumMUwSwkTiKnCSDWA7kDB/Je/tEGgVSm/jpocyDnbJtgXD0e1785s9bdeYIcIj
-         UKDt1FNjbQdI+Ek067aSxuFkHeXZEWkWteBQLJ+BTxUzma8Vf4d7z/dT2TdeN/vNzYgo
-         gKSw==
-X-Gm-Message-State: ACrzQf3b+WO6m7/t8tiIGoSB/mHbY6R2sTtnzAvgxa9Chwur0rTonFSw
-        MHaZOzFhSl5bNUZbPqR1bkA=
-X-Google-Smtp-Source: AMsMyM7eC/+I2EXIQZWpl79J0alK4TL4Cf0xyvZdhVfunBLyQM7C/HSlxuWDjMVZQyYcsgS7YD9KdA==
-X-Received: by 2002:aa7:cb09:0:b0:461:e6b6:4bad with SMTP id s9-20020aa7cb09000000b00461e6b64badmr10126319edt.27.1666752388625;
-        Tue, 25 Oct 2022 19:46:28 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f2a:b844:c952:3daa:e0a:40ba? (p200300c78f2ab844c9523daa0e0a40ba.dip0.t-ipconnect.de. [2003:c7:8f2a:b844:c952:3daa:e0a:40ba])
-        by smtp.gmail.com with ESMTPSA id h20-20020a1709070b1400b0078d85934cf8sm2221536ejl.111.2022.10.25.19.46.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 19:46:28 -0700 (PDT)
-Message-ID: <6b13762a-704e-b97c-2eeb-d4533ac9e998@gmail.com>
-Date:   Wed, 26 Oct 2022 04:46:27 +0200
+        Tue, 25 Oct 2022 22:50:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9A33E769;
+        Tue, 25 Oct 2022 19:50:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 609AAB81FEE;
+        Wed, 26 Oct 2022 02:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E8E41C43470;
+        Wed, 26 Oct 2022 02:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666752615;
+        bh=n9sJ4KLB0FhlXT692AcX2PeP8h09PGHq9UBiYs6qD8o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=q+DiQMyPGAx9dpdzPmRZXUMBArxNKqHI689FtnEK4Hpvu+F1zKGOiezCN61CNffHY
+         jQvfNMp+un8KcVdCqg4iIs+ykyxqfRMM4+wtm1XJi/yUaw0NqLF2WAhUDVZZkx0Qe/
+         OPJZNBBX/Xgcsv1Esef5yFCNAfj5WutfQVOIRfW9Lwu8QIi9qhrfQK6eYnq1oA1pXh
+         dWn1c8H9/3aJXdGqd0OsTFANR90FTpGWlS6eM3S7a4lwlfdMTcPT6Eioa3zOz//f9A
+         nC+JvM3o98GbOheBHLQ6eSMBVBL15zGnQ87mQerl0mHd+ffpwI2lE2YI8TN8ZxSi9w
+         eKeztujVSPsmg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CEC1FE29F32;
+        Wed, 26 Oct 2022 02:50:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 01/17] staging: vt6655: changed variable names: wFB_Opt0
-Content-Language: en-US
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-References: <cover.1666740522.git.tanjubrunostar0@gmail.com>
- <62f69eddc9641ac9eb045edf8a9453bf36a02b36.1666740522.git.tanjubrunostar0@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <62f69eddc9641ac9eb045edf8a9453bf36a02b36.1666740522.git.tanjubrunostar0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4] net: hinic: Set max_mtu/min_mtu directly to simplify the
+ code.
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166675261484.3838.2180607229263110846.git-patchwork-notify@kernel.org>
+Date:   Wed, 26 Oct 2022 02:50:14 +0000
+References: <20221024103349.4494-1-cai.huoqing@linux.dev>
+In-Reply-To: <20221024103349.4494-1-cai.huoqing@linux.dev>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     pabeni@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, mqaio@linux.alibaba.com, shaozhengchao@huawei.com,
+        christophe.jaillet@wanadoo.fr, gustavoars@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/22 01:36, Tanjuate Brunostar wrote:
-> -static const unsigned short wFB_Opt0[2][5] = {
-> +static const unsigned short w_fb_opt_0[2][5] = {
->   	{RATE_12M, RATE_18M, RATE_24M, RATE_36M, RATE_48M}, /* fallback_rate0 */
->   	{RATE_12M, RATE_12M, RATE_18M, RATE_24M, RATE_36M}, /* fallback_rate1 */
->   };
+Hello:
 
-In this driver the variables often start with a "w" for "word", "p" for 
-"pointer", "b" for "bool", "by" for "byte" and even "pv" for "pointer 
-void"...
-If possible I would omit those prefixes for the type as they sometimes 
-make the variable names even longer and you need to consider how to 
-break lines.
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Bye Philipp
+On Mon, 24 Oct 2022 18:33:35 +0800 you wrote:
+> From: caihuoqing <cai.huoqing@linux.dev>
+> 
+> Set max_mtu/min_mtu directly to avoid making the validity judgment
+> when set mtu, because the judgment is made in net/core: dev_validate_mtu,
+> so to simplify the code.
+> 
+> Signed-off-by: caihuoqing <cai.huoqing@linux.dev>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v4] net: hinic: Set max_mtu/min_mtu directly to simplify the code.
+    https://git.kernel.org/netdev/net-next/c/022f19cf361b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
