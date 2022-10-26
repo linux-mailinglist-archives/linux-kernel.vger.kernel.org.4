@@ -2,106 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1625860E396
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1486160E395
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbiJZOmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S231476AbiJZOmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233767AbiJZOmg (ORCPT
+        with ESMTP id S233681AbiJZOme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:42:36 -0400
-Received: from out199-18.us.a.mail.aliyun.com (out199-18.us.a.mail.aliyun.com [47.90.199.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3716EE1979;
-        Wed, 26 Oct 2022 07:42:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VT7dcpZ_1666795345;
-Received: from localhost.localdomain(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VT7dcpZ_1666795345)
-          by smtp.aliyun-inc.com;
-          Wed, 26 Oct 2022 22:42:26 +0800
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        bagasdotme@gmail.com
-Cc:     kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
-        k-hagio-ab@nec.com, hschauhan@nulltrace.org, yixun.lan@gmail.com,
-        Xianting Tian <xianting.tian@linux.alibaba.com>
-Subject: [PATCH V5 2/2] Documentation: kdump: describe VMCOREINFO export for RISCV64
-Date:   Wed, 26 Oct 2022 22:42:08 +0800
-Message-Id: <20221026144208.373504-3-xianting.tian@linux.alibaba.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221026144208.373504-1-xianting.tian@linux.alibaba.com>
-References: <20221026144208.373504-1-xianting.tian@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 26 Oct 2022 10:42:34 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25BDDED27;
+        Wed, 26 Oct 2022 07:42:32 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id y16so16257435wrt.12;
+        Wed, 26 Oct 2022 07:42:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :references:from:to:cc:subject:date:message-id:reply-to;
+        bh=OOQ+kDA4G+wlVL+Ry3C2hNPCcp5na+qrAnLo83Besj4=;
+        b=NsT4aKIWNh8VI1pqGxDuMdij95PeSRomq9fcVnLuUdufvUhkiJenOSIq4zjBZcpguL
+         YHwYgOdkenfpk64mO5RIPHJOucrjh2Ak0Q0NrslVONPd/XfgVznuQTvYmiVTkWmEDUx3
+         CSW1gg23t7h/JH4EkTVhztriJju1ZSQBqvvYQ9blkWaDu/W7fGmOY60IQL50ffUV5eG3
+         AuxSAJwmjXCDkZLf63CIkr4yYedZ5gSKGYTpoEixWgeZ0Y9lMNRlxliPiPDQI3UkfdEh
+         idW0PZT2K5Z6pirybjnWPe2e7aZ5Ei2QAzt4bioCuWu4jfToiAZc2HCuj27wU9SBzOty
+         euNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :references:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OOQ+kDA4G+wlVL+Ry3C2hNPCcp5na+qrAnLo83Besj4=;
+        b=TY3feQJ8De2jqkKSKUzDX6XsK6sXaHKQl+foPr57/gUoMEvua0P8P3Z1QIUnsKprPE
+         QI1RMdekSGNaCMsCAFokfHMq9Kx+4aW+DGmOTZq3wQ7Zj+Ap2S5ZLE8KT3fjmWE1yT54
+         Y4xC0B5caZavizzdZOp8rnnMwL+rFK4FQjkL6ol5OyLM2Dhrg7UFRGxYemx0pn+B0pA8
+         R56C8zGDsCW+aA1up0mSrAzA6rSBD96o590i2CftXUhBwK82gPsCacWGNu+w84VXPBaz
+         sEXFvq2jEDRZ6r+2OIZBQofhPRG7J4N0dlMTxl7LuJeGRNh4KBSQjBtD70K9t1dkHmIR
+         TUHA==
+X-Gm-Message-State: ACrzQf3/EeMEXwpWls2ss2RAfMLr300DSX+pO/wwhvT8UPIkiEzS9Nen
+        QMETuT5DDQo2nXLmp97bnFZIrx2xPtDKLA==
+X-Google-Smtp-Source: AMsMyM6+iea+6w9Q40omuHqI7vrbCP13G0UnlyON5YvJ3pwG56gCmnZU/yp0hMeTDVBPdrJbQC1f/A==
+X-Received: by 2002:a05:6000:18c7:b0:22e:5503:9c46 with SMTP id w7-20020a05600018c700b0022e55039c46mr27782051wrq.668.1666795351099;
+        Wed, 26 Oct 2022 07:42:31 -0700 (PDT)
+Received: from localhost (94.197.44.200.threembb.co.uk. [94.197.44.200])
+        by smtp.gmail.com with ESMTPSA id y17-20020a05600c365100b003cf4eac8e80sm690283wmq.23.2022.10.26.07.42.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 07:42:30 -0700 (PDT)
+References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
+ <Y1Z74/vKHbnaCLrX@sirena.org.uk>
+ <XaoRSEMyUlabAR8wEJITmm2lGCjwfPZg@localhost>
+ <Y1fCfej+/WH8TI39@sirena.org.uk>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        kuninori.morimoto.gx@renesas.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] ASoC: simple-card: Support custom DAI system
+ clock IDs
+In-reply-to: <Y1fCfej+/WH8TI39@sirena.org.uk>
+Date:   Wed, 26 Oct 2022 15:42:31 +0100
+Message-ID: <FgO8Xz5MtaEBdBidpT8So4X5posjL95Y@localhost>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following interrelated definitions and ranges are needed by the kdump
-crash tool, which are exported by "arch/riscv/kernel/crash_core.c":
-    VA_BITS,
-    PAGE_OFFSET,
-    phys_ram_base,
-    KERNEL_LINK_ADDR,
-    MODULES_VADDR ~ MODULES_END,
-    VMALLOC_START ~ VMALLOC_END,
-    VMEMMAP_START ~ VMEMMAP_END,
 
-Document these RISCV64 exports above.
+Mark Brown <broonie@kernel.org> writes:
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
----
- .../admin-guide/kdump/vmcoreinfo.rst          | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
+> On Tue, Oct 25, 2022 at 12:17:25AM +0100, Aidan MacDonald wrote:
+>> Mark Brown <broonie@kernel.org> writes:
+>
+>> > We already have clock bindings, if we need to configure clocks we should
+>> > be using those to configure there.
+>
+>> The existing clock bindings are only useful for setting rates, and
+>> .set_sysclk() does more than that. See my reply to Krzysztof if you
+>> want an explanation, check nau8821 or tas2552 codecs for an example
+>> of the kind of thing I'm talking about.
+>
+> I thought there was stuff for muxes, but in any case if you are adding a
+> new binding here you could just as well add one to the clock bindings.
+>
+>> I picked those codecs at random, but they are fairly representative:
+>> often a codec will allow the system clock to be derived from another
+>> I2S clock (eg. BCLK), or provided directly, or maybe generated from an
+>> internal PLL. In cases like that you need to configure the codec with
+>> .set_sysclk() to select the right input. Many card drivers need to do
+>> this, it's just as important as .set_fmt() or .hw_params().
+>
+> There is a strong case for saying that all the clocking in CODECs might
+> fit into the clock API, especially given the whole DT thing.
 
-diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-index 6726f439958c..86fd88492870 100644
---- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
-+++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-@@ -595,3 +595,32 @@ X2TLB
- -----
- 
- Indicates whether the crashed kernel enabled SH extended mode.
-+
-+RISCV64
-+=======
-+
-+VA_BITS
-+-------
-+
-+The maximum number of bits for virtual addresses. Used to compute the
-+virtual memory ranges.
-+
-+PAGE_OFFSET
-+-----------
-+
-+Indicates the virtual kernel start address of the direct-mapped RAM region.
-+
-+phys_ram_base
-+-------------
-+
-+Indicates the start physical RAM address.
-+
-+MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END|KERNEL_LINK_ADDR
-+----------------------------------------------------------------------------------------------
-+
-+Used to get the correct ranges:
-+
-+  * MODULES_VADDR ~ MODULES_END : Kernel module space.
-+  * VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
-+  * VMEMMAP_START ~ VMEMMAP_END : vmemmap space, used for struct page array.
-+  * KERNEL_LINK_ADDR : start address of Kernel link and BPF
--- 
-2.17.1
+The ASoC APIs don't speak "struct clk", which seems (to me) like a
+prerequisite before we can think about doing anything with clocks.
 
+Even if ASoC began to use the clock API for codec clocking, it's not
+clear how you maintain backward compatibility with the existing
+simple-card bindings. You'd have to go over all DAIs and mimic the
+effects of "snd_soc_dai_set_sysclk(dai, 0, freq, dir)" because there
+could be a device tree relying on it somewhere.
+
+So... given you're already stuck maintaining .set_sysclk() behavior
+forever, is there much harm in exposing the sysclock ID to the DT?
