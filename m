@@ -2,122 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF41860DB6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B860860DB72
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbiJZGiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 02:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S233094AbiJZGjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 02:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiJZGiC (ORCPT
+        with ESMTP id S229995AbiJZGi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 02:38:02 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B9778BE1;
-        Tue, 25 Oct 2022 23:38:01 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id t25so13164108ejb.8;
-        Tue, 25 Oct 2022 23:38:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mx8fYuOqE4Fz7MoTG2qyzZeL72DVY10BTmV8q9Mc57w=;
-        b=qHrL7FKIzMARVP4gCZGtCYP08mU2Xgs4Znav05N95RRQvkbRXbQF61MJZY96Q7WP/F
-         PWoN3+fpTvoAPWT65Uyqim26UaP8B6LfsZtTfWdCU7iLytxgLzcnb4igksIT7QZ63oZJ
-         Vlrlyxo1RC4LpvygdZyzmKnEkymjdjkwbcBMqF7MX8OOLslunSPukQWeBsGRHL+6QRaP
-         Gl9hoVbkGXIolT8N8QoHjwTe7TKPha9HyqpFdaIaHQ9pqMxaoSxBf3OZxHGXjYO+QKBk
-         8QCxxjRWCmzjerQAe0aH8NBo19nPtyIFLm8/1uhQpLw2ng6P8F0nRHz8I2flGllpOQYf
-         BcVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mx8fYuOqE4Fz7MoTG2qyzZeL72DVY10BTmV8q9Mc57w=;
-        b=hXlJ7XzjruRa94wvdR8J9cBkfmRbAKKs+jGTEqpAHPAYFlKKGKWoYjCb2stoUdf8I6
-         t0dRF80n9NVi6pnrXGWiJZgpgjWiFwoJh7eeRX9k24L24istYrmmgkiSsGbDlfSDDL8V
-         6fKDr5MSUtUhjVEeVuNo9XBVHh+YBImVoKK1Ntek+zvXQ8cUwmLvut+IuL0wvs4AH0GC
-         get9FtZQEio2y5NUTWkgiFT5EphSAPARwHn/INTi93lJ5Ls5ElUepael6XDz6Pmbfz/F
-         FhlIl78cvq6JcDVPQTJYVj8VuXSm2akvh3komNtK/Ob9EfZx2HuKcGUSfKSUq+rzT4bP
-         sG1g==
-X-Gm-Message-State: ACrzQf2C3apmnbEgnKOLsRE3m5xLJ8A2BV9vSWvNUUK5/qs2e4XMkXRL
-        8W61TKzexHw+ftPhJt1MtR3F/RM5PiWrpJXbE9Q=
-X-Google-Smtp-Source: AMsMyM4Wnn4932Ytv91Nrg1zHGI8MgLVZC+Ngl65IwrEw5f7VTg8YZr0RLz02wh9lfIB4mbydGN7lFZ10h6BzWe7zMM=
-X-Received: by 2002:a17:906:fe45:b0:788:15a5:7495 with SMTP id
- wz5-20020a170906fe4500b0078815a57495mr36566308ejb.633.1666766233858; Tue, 25
- Oct 2022 23:37:13 -0700 (PDT)
+        Wed, 26 Oct 2022 02:38:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C5F8709A
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:38:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CFCEB8210F
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:38:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49E61C43141
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:38:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666766333;
+        bh=61Hb6HxumLKiyn9KEa/suPToYAXki8IY7g9gAEJU+m0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ix/J1CBu0zNHI4/yZvUVCuCYLOIm6BMTQfW4E0VeVobQ+Nl7GXZtwdaCMN4A1VMsT
+         zZzztMXs9JbonquBj6U+ssowTM8C3pWK7ZK3PbPS4pI82mfQRA5djbbQbSZ7Pn9eqw
+         6aB48A3dTvH3zs5m0KLjClohaDe3UnVaO8oWHT1piY4+t0yZ9dCnsnRWuovDK1JoCz
+         t2oiCXW5no2LvtjrZccYqm9LiH1Vb4qPHXCY+j0IzxNoX97RVW54a+pA3e2LPcqd+n
+         QTuGoM0w6OvcTJiDeYlZjatA0JmF661nJ/kdMx0l0gRyk6XxnqaxLdi5Dx8Po6ujWO
+         uWKcOzkTAp/3A==
+Received: by mail-ed1-f46.google.com with SMTP id a5so26804060edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:38:53 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3XryvkfjVuam1ATVUSmL5OdmyYP0NIT7qYX6wcZRyZh0ltVrLG
+        8VW0Uk7k3gqhYRnwzDhwW64V0DSRXVEDtKzYZK4=
+X-Google-Smtp-Source: AMsMyM66J0TK1LkxGYBKU8UrlEn6zd7Urf//t7Wuf68mxaxnpS0HD2lFafWDcfkGTMvGGHsNtc7opgHrSn5gjZQVKWM=
+X-Received: by 2002:a05:6402:270b:b0:45d:61cd:73cc with SMTP id
+ y11-20020a056402270b00b0045d61cd73ccmr39530200edd.136.1666766320964; Tue, 25
+ Oct 2022 23:38:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
- <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
- <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
- <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
- <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
- <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com> <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com>
-In-Reply-To: <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 25 Oct 2022 23:37:02 -0700
-Message-ID: <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
-Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from bpf_lsm_inode_init_security()
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>
+References: <20221022214622.18042-1-ogabbay@kernel.org> <CGME20221022214657epcas1p18a2625c84cd6470b5404cb71f9836cc8@epcas1p1.samsung.com>
+ <20221022214622.18042-4-ogabbay@kernel.org> <20221025154330.a3a839357363da6d5de96c89@samsung.com>
+In-Reply-To: <20221025154330.a3a839357363da6d5de96c89@samsung.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Wed, 26 Oct 2022 09:38:13 +0300
+X-Gmail-Original-Message-ID: <CAFCwf11kg-ZvYjEKf=VrvgvM03QZp7GejFhJ=gbCp4up++4h2w@mail.gmail.com>
+Message-ID: <CAFCwf11kg-ZvYjEKf=VrvgvM03QZp7GejFhJ=gbCp4up++4h2w@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] drm: add dedicated minor for accelerator devices
+To:     Jiho Chu <jiho.chu@samsung.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+On Tue, Oct 25, 2022 at 9:43 AM Jiho Chu <jiho.chu@samsung.com> wrote:
 >
-> On 10/25/2022 12:43 AM, Roberto Sassu wrote:
-> > On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov wrote:
-> >> I'm looking at security_inode_init_security() and it is indeed messy.
-> >> Per file system initxattrs callback that processes kmalloc-ed
-> >> strings.
-> >> Yikes.
-> >>
-> >> In the short term we should denylist inode_init_security hook to
-> >> disallow attaching bpf-lsm there. set/getxattr should be done
-> >> through kfuncs instead of such kmalloc-a-string hack.
-> > Inode_init_security is an example. It could be that the other hooks are
-> > affected too. What happens if they get arbitrary positive values too?
 >
-> TL;DR - Things will go cattywampus.
+> On Sun, 23 Oct 2022 00:46:22 +0300
+> Oded Gabbay <ogabbay@kernel.org> wrote:
 >
-> The LSM infrastructure is an interface that has "grown organically",
-> and isn't necessarily consistent in what it requires of the security
-> module implementations. There are cases where it assumes that the
-> security module hooks are well behaved, as you've discovered. I have
-> no small amount of fear that someone is going to provide an eBPF
-> program for security_secid_to_secctx(). There has been an assumption,
-> oft stated, that all security modules are going to be reviewed as
-> part of the upstream process. The review process ought to catch hooks
-> that return unacceptable values. Alas, we've lost that with BPF.
+> > diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+> > index b58ffb1433d6..c13701a8d4be 100644
+> > --- a/drivers/gpu/drm/drm_drv.c
+> > +++ b/drivers/gpu/drm/drm_drv.c
+> > @@ -56,6 +56,9 @@ MODULE_LICENSE("GPL and additional rights");
+> >  static DEFINE_SPINLOCK(drm_minor_lock);
+> >  static struct idr drm_minors_idr;
+> >
+> > +static DEFINE_SPINLOCK(accel_minor_lock);
+> > +static struct idr accel_minors_idr;
+> > +
+> >  /*
+> >   * If the drm core fails to init for whatever reason,
+> >   * we should prevent any drivers from registering with it.
+> > @@ -94,6 +97,8 @@ static struct drm_minor **drm_minor_get_slot(struct drm_device *dev,
+> >               return &dev->primary;
+> >       case DRM_MINOR_RENDER:
+> >               return &dev->render;
+> > +     case DRM_MINOR_ACCEL:
+> > +             return &dev->accel;
+> >       default:
+> >               BUG();
+> >       }
+> > @@ -108,9 +113,15 @@ static void drm_minor_alloc_release(struct drm_device *dev, void *data)
+> >
+> >       put_device(minor->kdev);
+> >
+> > -     spin_lock_irqsave(&drm_minor_lock, flags);
+> > -     idr_remove(&drm_minors_idr, minor->index);
+> > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +     if (minor->type == DRM_MINOR_ACCEL) {
+> > +             spin_lock_irqsave(&accel_minor_lock, flags);
+> > +             idr_remove(&accel_minors_idr, minor->index);
+> > +             spin_unlock_irqrestore(&accel_minor_lock, flags);
+> > +     } else {
+> > +             spin_lock_irqsave(&drm_minor_lock, flags);
+> > +             idr_remove(&drm_minors_idr, minor->index);
+> > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +     }
+> >  }
+> >
+> >  static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+> > @@ -127,13 +138,23 @@ static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+> >       minor->dev = dev;
+> >
+> >       idr_preload(GFP_KERNEL);
+> > -     spin_lock_irqsave(&drm_minor_lock, flags);
+> > -     r = idr_alloc(&drm_minors_idr,
+> > -                   NULL,
+> > -                   64 * type,
+> > -                   64 * (type + 1),
+> > -                   GFP_NOWAIT);
+> > -     spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +     if (type == DRM_MINOR_ACCEL) {
+> > +             spin_lock_irqsave(&accel_minor_lock, flags);
+> > +             r = idr_alloc(&accel_minors_idr,
+> > +                     NULL,
+> > +                     64 * (type - DRM_MINOR_ACCEL),
+> > +                     64 * (type - DRM_MINOR_ACCEL + 1),
+> > +                     GFP_NOWAIT);
+> > +             spin_unlock_irqrestore(&accel_minor_lock, flags);
+> > +     } else {
+> > +             spin_lock_irqsave(&drm_minor_lock, flags);
+> > +             r = idr_alloc(&drm_minors_idr,
+> > +                     NULL,
+> > +                     64 * type,
+> > +                     64 * (type + 1),
+> > +                     GFP_NOWAIT);
+> > +             spin_unlock_irqrestore(&drm_minor_lock, flags);
+> > +     }
 >
-> It would take a(nother) major overhaul of the LSM infrastructure to
-> make it safe against hooks that are not well behaved. From what I have
-> seen so far it wouldn't be easy/convenient/performant to do it in the
-> BPF security module either. I personally think that BPF needs to
-> ensure that the eBPF implementations don't return inappropriate values,
-> but I understand why that is problematic.
+> Hi,
+> There are many functions which checks drm type and decides its behaviors. It's good to
+> re-use exiting codes, but accel devices use totally different major/minor, and so it needs to be moved to
+> /drvier/accel/ (maybe later..). How about seperating functions for alloc/release minor (accel_minor_alloc..)?
+> also, for others which have drm type related codes.
+My feeling was moving the minor code handling to a different file (in
+addition to moving the major code handling) will cause too much
+duplication.
+My main theme is that an accel minor is another minor in drm, even if
+a bit different. i.e. It uses the same drm_minor structure.
+The driver declares he wants to use this minor using a drm driver feature flag.
+imo, all of that indicates the code should be inside drm.
+>
+>
+>
+>
+> > @@ -607,6 +652,14 @@ static int drm_dev_init(struct drm_device *dev,
+> >       /* no per-device feature limits by default */
+> >       dev->driver_features = ~0u;
+> >
+> > +     if (drm_core_check_feature(dev, DRIVER_COMPUTE_ACCEL) &&
+> > +                             (drm_core_check_feature(dev, DRIVER_RENDER) ||
+> > +                             drm_core_check_feature(dev, DRIVER_MODESET))) {
+> > +
+> > +             DRM_ERROR("DRM driver can't be both a compute acceleration and graphics driver\n");
+> > +             return -EINVAL;
+> > +     }
+> > +
+>
+> It's fine for the device only for acceleration, but can't graphic devices have acceleration feature?
+Of course they can :) In that case, and if they want to expose an
+accel device char, they should write an accel driver and connect it to
+their main graphics driver via auxiliary bus.
 
-That's an accurate statement. Thank you.
+I could have added two flags - compute_accel, and compute_accel_only
+(similar to a patch that was sent to add render only flag), but imo it
+would make the code more convoluted. I prefer the clean separation and
+using standard auxiliary bus.
 
-Going back to the original question...
-We fix bugs when we discover them.
-Regardless of the subsystem they belong to.
-No finger pointing.
+Thanks,
+Oded
+
+>
+>
+> Thanks,
+> Jiho Chu
