@@ -2,106 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5261860E589
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6162960E58A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233563AbiJZQgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S233160AbiJZQjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233460AbiJZQgw (ORCPT
+        with ESMTP id S232773AbiJZQjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:36:52 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE74AC2A1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:36:50 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id hh9so10291318qtb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+O6n1+4Noo4lqABNPcNmHpEdPhT1c2lxt97PdSfadgg=;
-        b=lGZQfp2ouRZjOccXJJKrtcDtmvCxmhC4VwWrnGQrDqBqrTinjAK6oSLGGSKU6q8NI/
-         D7AkuJQCXxocXdMVUUSeCISSv0e3oMPgAZL3KbzSK3meS7rHCEBrqX0PmzNkRbv8v89v
-         p2vZwwfodQZ2d/Ts5lq/OXwA0sYsYzTHtHZGPWZ8JnhsLjaBOJpx7B+V4bfQFaeBKRSx
-         Hie6MX+Yvs4Fh9OaK2crkRH8Gs6ikBmlJF2vimFXoAvllkLUe6EIjzbI+1FOH+Pbzu9a
-         vb92LPjLoOnXkV122OYrqkjywxDS1AR/kcs0hysf7a0qogvWKgBwPNSSYV6YIwLCxcFY
-         8LEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+O6n1+4Noo4lqABNPcNmHpEdPhT1c2lxt97PdSfadgg=;
-        b=SyOvC7zucQydTeZEw3zAKnnsoAPlARAvgUEkX6oV8zwMFC2FMUbzQV8W7Kf7i04v5I
-         fm8iP7O5JuyO93IMXLxEYxQx9JJ2oVmBgnM1xmxEg9ZjyNyZgQee6OxIIErQish40MTl
-         7qXuK9TfX6p0+B0hf83RcZ4m8PsLD2hzybBe5KGTv+M26nRgGS/mPJOkWOpaN2Evxvhd
-         ZITg6WsZdrA3ZJsEc2XIA06qjpDN9tUtQO4/8+nXIm+2iBihTmlGxzKK6LWxfxnP/3Bj
-         nsWrQlaBmjQxV/6nCy44edGDaVvp/kZV2vihvg6SE4pca7isA4enFwBJTMUVlNy+qfKL
-         bfVQ==
-X-Gm-Message-State: ACrzQf0CH6fgsWWdgCfo31Am+N9N6E4MuPIawgVkZwTvp8mbf/7DVLat
-        wLuOS8XSBmk8/XKcGXLg+DCSDw==
-X-Google-Smtp-Source: AMsMyM4nmCswutT+FfSqr7WQOhGm2VmuDShqaCLJO01GoLr+2YAVnpGdHlAlEdTjGAKXzOyAH3aelw==
-X-Received: by 2002:a05:622a:5cb:b0:39c:fb06:5f6c with SMTP id d11-20020a05622a05cb00b0039cfb065f6cmr34629412qtb.474.1666802209719;
-        Wed, 26 Oct 2022 09:36:49 -0700 (PDT)
-Received: from krzk-bin.. ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id w8-20020a05620a424800b006b949afa980sm4161223qko.56.2022.10.26.09.36.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 09:36:48 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RESEND PATCH] arm64: dts: qcom: sm6125: fix SDHCI CQE reg names
-Date:   Wed, 26 Oct 2022 12:36:46 -0400
-Message-Id: <20221026163646.37433-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 26 Oct 2022 12:39:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88273120ED4
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:39:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DCB561F8A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:39:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07329C433C1;
+        Wed, 26 Oct 2022 16:39:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666802343;
+        bh=4gG/8lY0Eu0LFKD8NmUND/jh6Wol8H9kVyNLR1/Xkd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lZ9s40w0PWSuBrI9jbQXsQpTGCfO0yEOQit3cPIl0dyiUVx+hOpGQ2xViPxxNpZro
+         /Pe5sv2hxDtnY4ffLDegs8JA76zR/zxB2J+OE4SRQLDz/A3PwpL4+6+Ur1nFK9GEd/
+         DAsgRnG6ZcP/wMoaTb5D/iXrw74lXvP+wj1lh+VVA4zJlIYF/+2O4XPaOPIhDmr4Kq
+         Z4HbaBVr7tC3ZcYs6tgJy9X0Gvd2tiRbOClzgJt90ZUwNBgddah5SFdP8Ss/AqqlYY
+         pzv1n0WZa7SoSlIQLb1LXpUqZz4in0SuPq/3IXRYJ3/oihNK8qYzHjLoENSZ9di7SI
+         1axQsOAMs6bCQ==
+Date:   Wed, 26 Oct 2022 09:39:01 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        patches@lists.linux.dev, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] mm/khugepaged: Initialize index and nr in collapse_file()
+Message-ID: <Y1lipZXfRStgms/7@dev-arch.thelio-3990X>
+References: <20221025173407.3423241-1-nathan@kernel.org>
+ <20221025184802.7d4611caff603fecf98330b6@linux-foundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025184802.7d4611caff603fecf98330b6@linux-foundation.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM6125 comes with SDCC (SDHCI controller) v5, so the second range of
-registers is cqhci, not core.
+On Tue, Oct 25, 2022 at 06:48:02PM -0700, Andrew Morton wrote:
+> On Tue, 25 Oct 2022 10:34:07 -0700 Nathan Chancellor <nathan@kernel.org> wrote:
+> 
+> > Clang warns (trimmed for brevity):
+> > 
+> >   mm/khugepaged.c:1729:7: warning: variable 'index' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+> >   mm/khugepaged.c:1716:6: warning: variable 'index' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+> >   mm/khugepaged.c:1729:7: warning: variable 'nr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+> >   mm/khugepaged.c:1716:6: warning: variable 'nr' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+> > 
+> > There are two goto statements that will use index and nr before they
+> > have been properly initialized. Zero initialize them so that they can be
+> > safely used by the tracepoint at the end of the function.
+> 
+> Thanks.  I've actually dropped the offending patch - I'd like a resend
+> which includes a fix such as this and a good reason for making the
+> change.
 
-Fixes: cff4bbaf2a2d ("arm64: dts: qcom: Add support for SM6125")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+That certainly seems like a reasonable request. Thanks for letting me
+know!
 
----
-
-Not tested on hardware, but no practical impact is expected, because
-supports-cqe is not defined.
----
- arch/arm64/boot/dts/qcom/sm6125.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-index af49a748e511..24ee7c0c1195 100644
---- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-@@ -458,7 +458,7 @@ rpm_msg_ram: sram@45f0000 {
- 		sdhc_1: mmc@4744000 {
- 			compatible = "qcom,sm6125-sdhci", "qcom,sdhci-msm-v5";
- 			reg = <0x04744000 0x1000>, <0x04745000 0x1000>;
--			reg-names = "hc", "core";
-+			reg-names = "hc", "cqhci";
- 
- 			interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 352 IRQ_TYPE_LEVEL_HIGH>;
--- 
-2.34.1
-
+Cheers,
+Nathan
