@@ -2,135 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B17B60E35B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48C460E35C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234315AbiJZObL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
+        id S234334AbiJZObe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbiJZObJ (ORCPT
+        with ESMTP id S233520AbiJZOb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:31:09 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7868FE52DF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:31:08 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-369426664f9so149083847b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qJ5F1pjW8SMEXXHoQZ6QOHXEeoztHvn/vAaV/N7Q4oI=;
-        b=Gsr8KaLxasXc4l5zrmV5WhlFPdgEtfHHjDx4RW3kHJyo5NwG1SZa55oM5xn0EP3Vpq
-         nJOCb14YXZnPsDCk3AajqOrxBo3etW5seZVStyr49l/OwavxhNEdKnKz3s+D6r5ioMJP
-         1Z2LpwQir5PHPNGJXLWBAsTJl4Prs6dDLKjRqGm5IM3w0/0Jf3gDES2Lh0gGeoj5ucs6
-         M1qU5gsM4ETE398ftu/uRgMv39Ey8rRdEjgY5yNkppgvWiEa1YYOljF927CEYhq2DOn1
-         lgji5dzlzUw3J63HXgIb5GbwUaaN6ckX7ZdSjsZChJi2zktUGPAFxYyWOhZ3M5iGb3VP
-         wBFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qJ5F1pjW8SMEXXHoQZ6QOHXEeoztHvn/vAaV/N7Q4oI=;
-        b=frnvNtn/JoT4G79oaEVLXwzcSzo0SzZ/Ef3OnysyNiiNfK9qcXuG8yrbg5meTG+gb/
-         vXuYuzEtAQc6TCOS7s94EK2LP6NJhSzB6tqd0V7hazRY7tYZhq231to8A42kJaWnewHW
-         AJBuLDy04G+Pdbw9J+94xJJRO5ZuBmQYEPelw0iD4ggyzIwasAX/1iuzGU4Iw1oiPlT5
-         aQvDDn+LTXZHr9tJgCdp5/+j2roQlfW9HrSYTM+B5SRH4y4QmLUuFZCbiUfF14bB5kLI
-         Rvyw+UI1ccVaVMhEf0u8larq8LBmTV5cnue5edjhVOCkdv8/OpJs57XWQy2Pc0QD1J0r
-         ogFQ==
-X-Gm-Message-State: ACrzQf13JHXmy0eVtV7yQZ0vj8rcut3YjtZpg21YybhYXX8WAxKaZmYP
-        FG8udVIR5RGjQMhpQst0jBMAiSEtupKjIp8+TthxvA==
-X-Google-Smtp-Source: AMsMyM7UZ69oVZczuSIXICeiTOFlXJbU5fAgP0OPxJsKQTmACTH9ACkVKBlggaJTW/1YUvn8+bROtDUgJEnfSACmOw0=
-X-Received: by 2002:a81:1b09:0:b0:35d:cf91:aadc with SMTP id
- b9-20020a811b09000000b0035dcf91aadcmr39507860ywb.47.1666794667345; Wed, 26
- Oct 2022 07:31:07 -0700 (PDT)
+        Wed, 26 Oct 2022 10:31:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B36AFFFAE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:31:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666794688; x=1698330688;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=j/+TzUZKjPg6AiDdPdUrU7skNxekli5IAwJzr55tM8E=;
+  b=U/YbAfcTJ3V+LVDgemolQd/YN52D7omGXqEOySFrN8uiKWcdN7nPpMxH
+   qUHM1M1Us55Su4I5xyWVfpgBOHqpadwSkNKEjcloDSCHbr5EGWx5Xq8Zy
+   aP4KX2q7c+Oy/de/gx9nqvJ7lpnh1TKaRLqcSlDF/lXXZBN4mPMRR0RyF
+   uOypXIhXerMgNLI4NInqRcw2OlrhPBBxFuDcnovF1OHiozclASlSpzYWx
+   HYrjWD9yrPQALtTpoz61AiTJ9hmQcOroHoloKQk7J/guoWC2tBzVHj0qG
+   ax7Hvrnmze5Y7jlcv/qtCrhcb/2xXQLSeZmDE0xRUMxwnCN4kysl/lt2N
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="307952647"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="307952647"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 07:31:27 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="609972132"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="609972132"
+Received: from chaosong-mobl.ccr.corp.intel.com (HELO [10.255.29.191]) ([10.255.29.191])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 07:31:24 -0700
+Message-ID: <69fa20ca-da52-b85f-ffcc-66a533471568@linux.intel.com>
+Date:   Wed, 26 Oct 2022 22:31:05 +0800
 MIME-Version: 1.0
-References: <20221026151558.4165020-1-luwei32@huawei.com>
-In-Reply-To: <20221026151558.4165020-1-luwei32@huawei.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 26 Oct 2022 07:30:56 -0700
-Message-ID: <CANn89iJQn5ET3U9cYeiT0ijTkab2tRDBB1YP3Y6oELVq0dj6Zw@mail.gmail.com>
-Subject: Re: [PATCH net] tcp: reset tp->sacked_out when sack is enabled
-To:     Lu Wei <luwei32@huawei.com>, Pavel Emelyanov <xemul@openvz.org>
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, xemul@parallels.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2] ASoC: sun50i-dmic: avoid unused variable warning for
+ sun50i_dmic_of_match
+Content-Language: en-US
+To:     Ban Tao <fengzheng923@gmail.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org
+Cc:     alsa-devel@alsa-project.org, linux-sunxi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1666511085-2748-1-git-send-email-fengzheng923@gmail.com>
+From:   Chao Song <chao.song@linux.intel.com>
+In-Reply-To: <1666511085-2748-1-git-send-email-fengzheng923@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 7:12 AM Lu Wei <luwei32@huawei.com> wrote:
+
+On 10/23/2022 3:44 PM, Ban Tao wrote:
+> In configurations with CONFIG_OF=n, we get a harmless build warning:
 >
-> The meaning of tp->sacked_out depends on whether sack is enabled
-> or not. If setsockopt is called to enable sack_ok via
-> tcp_repair_options_est(), tp->sacked_out should be cleared, or it
-> will trigger warning in tcp_verify_left_out as follows:
+> sound/soc/sunxi/sun50i-dmic.c:268:34: warning: unused variable
+> 'sun50i_dmic_of_match' [-Wunused-const-variable]
 >
-> ============================================
-> WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
-> tcp_timeout_mark_lost+0x154/0x160
-> tcp_enter_loss+0x2b/0x290
-> tcp_retransmit_timer+0x50b/0x640
-> tcp_write_timer_handler+0x1c8/0x340
-> tcp_write_timer+0xe5/0x140
-> call_timer_fn+0x3a/0x1b0
-> __run_timers.part.0+0x1bf/0x2d0
-> run_timer_softirq+0x43/0xb0
-> __do_softirq+0xfd/0x373
-> __irq_exit_rcu+0xf6/0x140
->
-> This warning occurs in several steps:
-> Step1. If sack is not enabled, when server receives dup-ack,
->        it calls tcp_add_reno_sack() to increase tp->sacked_out.
->
-> Step2. Setsockopt() is called to enable sack
->
-> Step3. The retransmit timer expires, it calls tcp_timeout_mark_lost()
->        to increase tp->lost_out but not clear tp->sacked_out because
->        sack is enabled and tcp_is_reno() is false.
->
-> So tp->left_out is increased repeatly in Step1 and Step3 and it is
-> greater than tp->packets_out and trigger the warning. In function
-> tcp_timeout_mark_lost(), tp->sacked_out will be cleared if Step2 not
-> happen and the warning will not be triggered. So this patch clears
-> tp->sacked_out in tcp_repair_options_est().
->
-> Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
-> Signed-off-by: Lu Wei <luwei32@huawei.com>
+> Signed-off-by: Ban Tao <fengzheng923@gmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 > ---
->  net/ipv4/tcp.c | 3 +++
->  1 file changed, 3 insertions(+)
+> v1->v2:Add "Acked-by" tag.
+> ---
+>   sound/soc/sunxi/sun50i-dmic.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index ef14efa1fb70..188d5c0e440f 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -3282,6 +3282,9 @@ static int tcp_repair_options_est(struct sock *sk, sockptr_t optbuf,
->                         if (opt.opt_val != 0)
->                                 return -EINVAL;
->
-> +                       if (tcp_is_reno(tp))
-> +                               tp->sacked_out = 0;
-> +
->                         tp->rx_opt.sack_ok |= TCP_SACK_SEEN;
->                         break;
->                 case TCPOPT_TIMESTAMP:
-> --
-> 2.31.1
->
+> diff --git a/sound/soc/sunxi/sun50i-dmic.c b/sound/soc/sunxi/sun50i-dmic.c
+> index 86cff5a..62509cb 100644
+> --- a/sound/soc/sunxi/sun50i-dmic.c
+> +++ b/sound/soc/sunxi/sun50i-dmic.c
+> @@ -391,7 +391,7 @@ static const struct dev_pm_ops sun50i_dmic_pm = {
+>   static struct platform_driver sun50i_dmic_driver = {
+>   	.driver         = {
+>   		.name   = "sun50i-dmic",
+> -		.of_match_table = of_match_ptr(sun50i_dmic_of_match),
+> +		.of_match_table = sun50i_dmic_of_match,
+I don't think this is the right direction (remove the of_match_ptr) to 
+fix the issue.
 
-Hmm, I am not sure this is the right fix.
+of_match_ptr(of_table) returns of_table if CONFIG_OF=y, and returns NULL 
+if CONFIG_OF=n.
 
-Probably TCP_REPAIR_OPTIONS should not be allowed if data has already been sent.
+So guard  the definition of sun50i_dmic_of_match with `#ifdef CONFIG_OF` 
+should be better.
 
-Pavel, what do you think ?
+Many other drivers do it this way.
+
+>   		.pm     = &sun50i_dmic_pm,
+>   	},
+>   	.probe          = sun50i_dmic_probe,
