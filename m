@@ -2,787 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C9160DE49
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F2360DE50
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbiJZJhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S233468AbiJZJiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiJZJhI (ORCPT
+        with ESMTP id S233454AbiJZJiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:37:08 -0400
-Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD89BBE02;
-        Wed, 26 Oct 2022 02:37:06 -0700 (PDT)
-Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
-        by mxout3.routing.net (Postfix) with ESMTP id D8F9A62687;
-        Wed, 26 Oct 2022 09:37:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1666777024;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fZN7K6SjPfR0ei21Pvo3/zh0TEeqCP9RYAtUrDagsLM=;
-        b=JTL+TKGMMyjTll+3cCU+Xi663tGhfQM0f5B1IkZiaU8qmlKZD4sMsvkVDyZu3lUDCnniZO
-        TCtP7uik6nqjcx7845VycuSdWltUp7omTxmXlHd8tmbH9ZRgpDFoC6AV/cpflKpyQKnvQh
-        qVD9yF7gAFGWcIq++1E95FhczZHtVyg=
-Received: from frank-G5.. (fttx-pool-80.245.72.174.bambit.de [80.245.72.174])
-        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 30A6380ADC;
-        Wed, 26 Oct 2022 09:37:04 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC v2 7/7] arm64: dts: mt7986: add Bananapi R3
-Date:   Wed, 26 Oct 2022 11:36:50 +0200
-Message-Id: <20221026093650.110290-8-linux@fw-web.de>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221026093650.110290-1-linux@fw-web.de>
-References: <20221026093650.110290-1-linux@fw-web.de>
+        Wed, 26 Oct 2022 05:38:02 -0400
+Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F91BEAF4;
+        Wed, 26 Oct 2022 02:37:31 -0700 (PDT)
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29Q0SG1Q002302;
+        Wed, 26 Oct 2022 02:37:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=proofpoint;
+ bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
+ b=ooO1vib10S2RKCRjVpTKOU4Owrc4x6lz0X/BwU0FVn+1tRXLw9fGPHOmpStDVcCSeZtK
+ b4aX9YI6BiqhbfyFaiIzxzX9+F7x6fQXArsIxKx5s0IyWfyf1osnZmO7Brwdq8gys1PN
+ nWNF6fxqYvGbh1G+DYAjW93naiAnTGpSyT3OrhnIg9EUte5Mwy1t0ttgCoXvEVGAKBtE
+ P3TSoQ8bnXy0jye+DgVhmWWx5FyUX9YxhKZNvsH9CA52VGXu3i5cdp9rBxhvU3X17aWO
+ ZTzaVO6QYsic16TdIZKHHmqsLBy0+jFLiUpSIO7NVyhU0v9DAeIP8SVj/HSz8XaDMfi9 mw== 
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam07lp2043.outbound.protection.outlook.com [104.47.51.43])
+        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3kcc42js07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 02:37:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XoC7tH3ClLNXfSrWG98iJ0c9t4Qw/Fg923QJOoIYJnqxtmkWUKr38DLcakeTelRnYHs28ms4IGbEp68vdSNiXMucj1WRsguUfEoElYAqCWXKVukQsW8Z+YynP4rqiQqpzpW6sPx8InsQ1vmsF2bKuPrKArWTKfyewznmtqjxm2BP9+dPETJ5wAfpA3ayJYCegQpoebGwPdyDPLjqgjoeCQTH+15oJkS0K68Z28rjmrJHKRdz/pdFnD9zW9kmxead6hAAMCwshZjiP/UYNvnBX5uD1DilmBC8zMPiNtkWWhBbSA9bRsT+Pm3VbMpMD2/RG3mz9ds/ME/hZJlvhMQlxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
+ b=MZwySUER4/82cg8H1vmNqu56RdOUmj76Wt0I/Zx488rssPralXxUJWkb4S0FtGQ9n6FbkNmm1oZbhJ0J9YXrkN0zcQocfI/OpxTGADm95ASHRK0BBidTEa9XuhR0Hebw/078opIfmyUIPgB5Hs+8BmDcUO4wlj9DmS444T0Cu1U8GuJeUB5GAsaTa0If9IPEzCZVG8AmbjoXvqaHxZWnPA6LJxzdtR45rm67L4D8lJpaJBsX45CdNB98IQana0MW3cpd7QRj6YVIKHPWK00WuueLc0oTECCS2ghbUjsZ7CuFCNOKRquxLKrEKXL6dGSa4PFJW4z58Rvc4gASMnLrKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 158.140.1.148) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G1cBCdwClRAfQNHEw6stJyXzDuc9Rv4hqoZ8Gl306AM=;
+ b=MWiy0HAxE0hARL2u3MQXq39x4lkQ++SmNc/sKtYsFgIPDW3bplZOrHpLRN3id0FsZtkJ4xT8yilXAv/eX2gt7zHJfqm43w98vgGibg+0Bm/PdtLfwA/925rv8iXrPAU38bWwvdYplXWjX1V/DbGimxCI5vpG4BjS8nm78OUjNzc=
+Received: from DM6PR21CA0008.namprd21.prod.outlook.com (2603:10b6:5:174::18)
+ by MN2PR07MB5822.namprd07.prod.outlook.com (2603:10b6:208:106::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Wed, 26 Oct
+ 2022 09:37:18 +0000
+Received: from DM6NAM12FT073.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:5:174:cafe::46) by DM6PR21CA0008.outlook.office365.com
+ (2603:10b6:5:174::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.8 via Frontend
+ Transport; Wed, 26 Oct 2022 09:37:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
+ smtp.mailfrom=cadence.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
+ client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com; pr=C
+Received: from sjmaillnx2.cadence.com (158.140.1.148) by
+ DM6NAM12FT073.mail.protection.outlook.com (10.13.179.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5769.12 via Frontend Transport; Wed, 26 Oct 2022 09:37:18 +0000
+Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
+        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 29Q9bGkY013561
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 02:37:17 -0700
+Received: from maileu5.global.cadence.com (10.160.110.202) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 26 Oct 2022 11:37:15 +0200
+Received: from eu-cn01.cadence.com (10.160.89.184) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24 via Frontend Transport; Wed, 26 Oct 2022 11:37:15 +0200
+Received: from eu-cn01.cadence.com (localhost.localdomain [127.0.0.1])
+        by eu-cn01.cadence.com (8.14.7/8.14.7) with ESMTP id 29Q9bFPk449928;
+        Wed, 26 Oct 2022 05:37:15 -0400
+Received: (from pawell@localhost)
+        by eu-cn01.cadence.com (8.14.7/8.14.7/Submit) id 29Q9bF9E449925;
+        Wed, 26 Oct 2022 05:37:15 -0400
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <peter.chen@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: cdnsp: Fix issue with Clear Feature Halt Endpoint
+Date:   Wed, 26 Oct 2022 05:37:10 -0400
+Message-ID: <20221026093710.449809-1-pawell@cadence.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 15207e11-d9b6-4e3e-a0cb-0242da82a19d
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
+X-OrganizationHeadersPreserved: maileu5.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM12FT073:EE_|MN2PR07MB5822:EE_
+X-MS-Office365-Filtering-Correlation-Id: 20cf906c-d901-418f-ed4b-08dab735ac99
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SEcT2/gPVZ0cbuI7oaMdDksWWcPDQ4wwj6Lz63oWELRLP8eqXnmnQJE9fAVjvYKSqXhkLBN0R+4NPiC3TVsu6beVnHfJwFVt7JtLrRgrm0/1tsnPi/d+N2voDpKwGUUVvPna5qqSmCtnu2YV8fJXY0t4AJMoakcDTNf8GwJe2noQRMZGMkPmWCr5E2QWcEeWOXJXfzCQIM88T7lbIELyxifLmbwbfhkF5M+L8AGaoePwBASXY1v+7C7d4TTec4lftdhCioQk9PbBLS9cOPtg3JpWn/Qjzzt7AGJDUBkn64lDIOoV5Pola/I5uXuJe1xDzPhCSyb6K14I12o8WAGg9NrcwFEqNMLz7UtYhPPJd0RGJ7ts/EOxDU8MbbKdeigCrBBZO2ACh0VxJX9Pdwa/aqNdk68OF1P21DBJUGE8Ztgh676e+it3kCkGQFkl9VcpqlbSP5fLki4jPeNZigQILV8D1TsBZXJwy+VSD5mix5sYLLwJN2LVugQT6P+YDbrh1DX6CJEUnvw+l/YDDWiL1cw1F9csVf81kvjU/nqpjSp5x3vUrgVkAWRBu+eaS9aN0OZC7oDo6aywkP71i3PuCIwE7Biy/hoV2Dg0AroPzrFC+BS2s7u0xZHGKmZOcNoLtTntlQ6LNMJJ5cI3jqwYs1ybzhT9lAeB2tNtdD3mhcJSxF0jodrbE2qBMe7H+DDsN9GXK79ZioeNz3btQw7X4GaQLnG0JYtQ2b8xHtF45zLK+1k9P4gjB6S1K5n3HcUf9wPAQoWLatjVshh4DugIkw==
+X-Forefront-Antispam-Report: CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(39860400002)(346002)(36092001)(451199015)(40470700004)(46966006)(36840700001)(82740400003)(40460700003)(86362001)(7636003)(356005)(36756003)(316002)(54906003)(6916009)(42186006)(4326008)(70586007)(8676002)(70206006)(41300700001)(83380400001)(426003)(8936002)(5660300002)(478600001)(47076005)(2906002)(40480700001)(36860700001)(1076003)(186003)(6666004)(2616005)(336012)(26005)(82310400005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 09:37:18.2171
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20cf906c-d901-418f-ed4b-08dab735ac99
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM12FT073.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR07MB5822
+X-Proofpoint-ORIG-GUID: Z0ZBkRAp_AJOEs8BQfXHC4IUz5JnLv3s
+X-Proofpoint-GUID: Z0ZBkRAp_AJOEs8BQfXHC4IUz5JnLv3s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_05,2022-10-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 clxscore=1015
+ adultscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ mlxlogscore=470 mlxscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2209130000 definitions=main-2210260053
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+During handling Clear Halt Endpoint Feature request driver invokes
+Reset Endpoint command. Because this command has some issue with
+transition endpoint from Running to Idle state the driver must
+stop the endpoint by using Stop Endpoint command.
 
-Add support for Bananapi R3 SBC.
-
-- SD/eMMC support (switching first 4 bits of data-bus with sw6/D)
-- all rj45 ports and both SFP working (eth1/lan4)
-- all USB-Ports + SIM-Slot tested
-- i2c and all uarts tested
-- wifi tested
-
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+cc: <stable@vger.kernel.org>
+Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 ---
-SPI-NAND/NOR switched (CS by sw5/C) not yet included
-  this is done with DT-Overlays in my tree, but i have no idea yet,
-  how to upstream
+ drivers/usb/cdns3/cdnsp-gadget.c | 12 ++++--------
+ drivers/usb/cdns3/cdnsp-ring.c   |  3 ++-
+ 2 files changed, 6 insertions(+), 9 deletions(-)
 
-break some lines in wifi-eeprom-data because of checkpatch warnings.
-originally there were 8 x int32 per line
-
-changes:
-
-v2:
-- remove pcie to be added later (discussion about clocks)
-- some fixes based on suggestions on ML
-  - add key suffix like it's done in mt7622-bpi-r64 devicetree
-  - add dash in sfp node names
-  - use reg as unit for switch-node
-  - drop "-3-4" suffix from i2c-pins node name
-  - fix order in Makefile
----
- arch/arm64/boot/dts/mediatek/Makefile         |   2 +
- .../mediatek/mt7986a-bananapi-bpi-r3-emmc.dts |  34 +
- .../mediatek/mt7986a-bananapi-bpi-r3-sd.dts   |  29 +
- .../dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi | 593 ++++++++++++++++++
- 4 files changed, 658 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-
-diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index 0ec90cb3ef28..e8902f2cc58f 100644
---- a/arch/arm64/boot/dts/mediatek/Makefile
-+++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -7,6 +7,8 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-evb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt6797-x20-dev.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-rfb1.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt7622-bananapi-bpi-r64.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-emmc.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-bananapi-bpi-r3-sd.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986a-rfb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt7986b-rfb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8167-pumpkin.dtb
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
-new file mode 100644
-index 000000000000..859b4180ca11
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (C) 2021 MediaTek Inc.
-+ * Author: Sam.Shih <sam.shih@mediatek.com>
-+ */
-+
-+/dts-v1/;
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+#include "mt7986a-bananapi-bpi-r3.dtsi"
-+
-+/ {
-+	model = "Bananapi BPI-R3 (emmc)";
-+};
-+
-+&mmc0 {
-+	pinctrl-names = "default", "state_uhs";
-+	pinctrl-0 = <&mmc0_pins_default>;
-+	pinctrl-1 = <&mmc0_pins_uhs>;
-+	bus-width = <8>;
-+	max-frequency = <200000000>;
-+	cap-mmc-highspeed;
-+	mmc-hs200-1_8v;
-+	mmc-hs400-1_8v;
-+	hs400-ds-delay = <0x14014>;
-+	vmmc-supply = <&reg_3p3v>;
-+	vqmmc-supply = <&reg_1p8v>;
-+	non-removable;
-+	no-sd;
-+	no-sdio;
-+	status = "okay";
-+};
-+
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
-new file mode 100644
-index 000000000000..57200407ab86
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (C) 2021 MediaTek Inc.
-+ * Author: Sam.Shih <sam.shih@mediatek.com>
-+ */
-+
-+/dts-v1/;
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+#include "mt7986a-bananapi-bpi-r3.dtsi"
-+
-+/ {
-+	model = "Bananapi BPI-R3 (sdmmc)";
-+};
-+
-+&mmc0 {
-+	//sdcard
-+	pinctrl-names = "default", "state_uhs";
-+	pinctrl-0 = <&mmc0_pins_default>;
-+	pinctrl-1 = <&mmc0_pins_uhs>;
-+	bus-width = <4>;
-+	max-frequency = <52000000>;
-+	cap-sd-highspeed;
-+	vmmc-supply = <&reg_3p3v>;
-+	vqmmc-supply = <&reg_1p8v>;
-+	status = "okay";
-+};
-+
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-new file mode 100644
-index 000000000000..fc100c3a6415
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-@@ -0,0 +1,593 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (C) 2021 MediaTek Inc.
-+ * Authors: Sam.Shih <sam.shih@mediatek.com>
-+ *          Frank Wunderlich <frank-w@public-files.de>
-+ *          Daniel Golle <daniel@makrotopia.org>
-+ */
-+
-+/dts-v1/;
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+
-+#include "mt7986a.dtsi"
-+
-+/ {
-+	model = "Bananapi BPI-R3";
-+	compatible = "bananapi,bpi-r3", "mediatek,mt7986a";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		ethernet0 = &gmac0;
-+		ethernet1 = &gmac1;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		factory-key {
-+			label = "reset";
-+			linux,code = <KEY_RESTART>;
-+			gpios = <&pio 9 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		wps-key {
-+			label = "wps";
-+			linux,code = <KEY_WPS_BUTTON>;
-+			gpios = <&pio 10 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	/* i2c of the left SFP cage (wan) */
-+	i2c_sfp1: i2c-gpio-0 {
-+		compatible = "i2c-gpio";
-+		sda-gpios = <&pio 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+		scl-gpios = <&pio 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+		i2c-gpio,delay-us = <2>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+
-+	/* i2c of the right SFP cage (lan) */
-+	i2c_sfp2: i2c-gpio-1 {
-+		compatible = "i2c-gpio";
-+		sda-gpios = <&pio 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+		scl-gpios = <&pio 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-+		i2c-gpio,delay-us = <2>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		green_led: led-0 {
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_POWER;
-+			gpios = <&pio 69 GPIO_ACTIVE_HIGH>;
-+			default-state = "on";
-+		};
-+
-+		blue_led: led-1 {
-+			color = <LED_COLOR_ID_BLUE>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&pio 86 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0 0x40000000 0 0x40000000>;
-+	};
-+
-+	reg_1p8v: regulator-1p8v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "fixed-1.8V";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	reg_3p3v: regulator-3p3v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "fixed-3.3V";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	reg_5v: regulator-5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "fixed-5V";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	/* left SFP cage (wan) */
-+	sfp1: sfp-1 {
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp1>;
-+		los-gpio = <&pio 46 GPIO_ACTIVE_HIGH>;
-+		moddef0-gpio = <&pio 49 GPIO_ACTIVE_LOW>;
-+		tx-disable-gpio = <&pio 20 GPIO_ACTIVE_HIGH>;
-+		tx-fault-gpio = <&pio 7 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	/* right SFP cage (lan) */
-+	sfp2: sfp-2 {
-+		compatible = "sff,sfp";
-+		i2c-bus = <&i2c_sfp2>;
-+		los-gpios = <&pio 31 GPIO_ACTIVE_HIGH>;
-+		mod-def0-gpios = <&pio 47 GPIO_ACTIVE_LOW>;
-+		tx-disable-gpios = <&pio 15 GPIO_ACTIVE_HIGH>;
-+		tx-fault-gpios = <&pio 48 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&crypto {
-+	status = "okay";
-+};
-+
-+&eth {
-+	status = "okay";
-+
-+	gmac0: mac@0 {
-+		compatible = "mediatek,eth-mac";
-+		reg = <0>;
-+		phy-mode = "2500base-x";
-+
-+		fixed-link {
-+			speed = <2500>;
-+			full-duplex;
-+			pause;
-+		};
-+	};
-+
-+	gmac1: mac@1 {
-+		compatible = "mediatek,eth-mac";
-+		reg = <1>;
-+		phy-mode = "2500base-x";
-+		sfp = <&sfp1>;
-+		managed = "in-band-status";
-+	};
-+
-+	mdio: mdio-bus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+	};
-+};
-+
-+&mdio {
-+	switch: switch@31 {
-+		compatible = "mediatek,mt7531";
-+		reg = <31>;
-+		reset-gpios = <&pio 5 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&i2c0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c_pins>;
-+	status = "okay";
-+};
-+
-+&pio {
-+	i2c_pins: i2c-pins {
-+		mux {
-+			function = "i2c";
-+			groups = "i2c";
-+		};
-+	};
-+
-+	mmc0_pins_default: mmc0-pins {
-+		mux {
-+			function = "emmc";
-+			groups = "emmc_51";
-+		};
-+		conf-cmd-dat {
-+			pins = "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
-+			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
-+			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
-+			input-enable;
-+			drive-strength = <4>;
-+			mediatek,pull-up-adv = <1>;	/* pull-up 10K */
-+		};
-+		conf-clk {
-+			pins = "EMMC_CK";
-+			drive-strength = <6>;
-+			mediatek,pull-down-adv = <2>;	/* pull-down 50K */
-+		};
-+		conf-ds {
-+			pins = "EMMC_DSL";
-+			mediatek,pull-down-adv = <2>;	/* pull-down 50K */
-+		};
-+		conf-rst {
-+			pins = "EMMC_RSTB";
-+			drive-strength = <4>;
-+			mediatek,pull-up-adv = <1>;	/* pull-up 10K */
-+		};
-+	};
-+
-+	mmc0_pins_uhs: mmc0-uhs-pins {
-+		mux {
-+			function = "emmc";
-+			groups = "emmc_51";
-+		};
-+		conf-cmd-dat {
-+			pins = "EMMC_DATA_0", "EMMC_DATA_1", "EMMC_DATA_2",
-+			       "EMMC_DATA_3", "EMMC_DATA_4", "EMMC_DATA_5",
-+			       "EMMC_DATA_6", "EMMC_DATA_7", "EMMC_CMD";
-+			input-enable;
-+			drive-strength = <4>;
-+			mediatek,pull-up-adv = <1>;	/* pull-up 10K */
-+		};
-+		conf-clk {
-+			pins = "EMMC_CK";
-+			drive-strength = <6>;
-+			mediatek,pull-down-adv = <2>;	/* pull-down 50K */
-+		};
-+		conf-ds {
-+			pins = "EMMC_DSL";
-+			mediatek,pull-down-adv = <2>;	/* pull-down 50K */
-+		};
-+		conf-rst {
-+			pins = "EMMC_RSTB";
-+			drive-strength = <4>;
-+			mediatek,pull-up-adv = <1>;	/* pull-up 10K */
-+		};
-+	};
-+
-+	spi_flash_pins: spi-flash-pins {
-+		mux {
-+			function = "spi";
-+			groups = "spi0", "spi0_wp_hold";
-+		};
-+	};
-+
-+	spic_pins: spic-pins {
-+		mux {
-+			function = "spi";
-+			groups = "spi1_0";
-+		};
-+	};
-+
-+	uart1_pins: uart1-pins {
-+		mux {
-+			function = "uart";
-+			groups = "uart1_rx_tx";
-+		};
-+	};
-+
-+	uart2_pins: uart2-pins {
-+		mux {
-+			function = "uart";
-+			groups = "uart2_0_rx_tx";
-+		};
-+	};
-+
-+	wf_2g_5g_pins: wf-2g-5g-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_2g", "wf_5g";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
-+
-+	wf_dbdc_pins: wf-dbdc-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_dbdc";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
-+
-+	wf_led_pins: wf-led-pins {
-+		mux {
-+			function = "led";
-+			groups = "wifi_led";
-+		};
-+	};
-+};
-+
-+&spi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi_flash_pins>;
-+	cs-gpios = <0>, <0>;
-+	status = "okay";
-+};
-+
-+&spi1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spic_pins>;
-+	cs-gpios = <0>, <0>;
-+	status = "okay";
-+};
-+
-+&ssusb {
-+	vusb33-supply = <&reg_3p3v>;
-+	vbus-supply = <&reg_5v>;
-+	status = "okay";
-+};
-+
-+&switch {
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+			label = "wan";
-+		};
-+
-+		port@1 {
-+			reg = <1>;
-+			label = "lan0";
-+		};
-+
-+		port@2 {
-+			reg = <2>;
-+			label = "lan1";
-+		};
-+
-+		port@3 {
-+			reg = <3>;
-+			label = "lan2";
-+		};
-+
-+		port@4 {
-+			reg = <4>;
-+			label = "lan3";
-+		};
-+
-+		port5: port@5 {
-+			reg = <5>;
-+			label = "lan4";
-+			phy-mode = "2500base-x";
-+			sfp = <&sfp2>;
-+			managed = "in-band-status";
-+		};
-+
-+		port@6 {
-+			reg = <6>;
-+			label = "cpu";
-+			ethernet = <&gmac0>;
-+			phy-mode = "2500base-x";
-+
-+			fixed-link {
-+				speed = <2500>;
-+				full-duplex;
-+				pause;
-+			};
-+		};
-+	};
-+};
-+
-+&trng {
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart1_pins>;
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart2_pins>;
-+	status = "okay";
-+};
-+
-+&usb_phy {
-+	status = "okay";
-+};
-+
-+&watchdog {
-+	status = "okay";
-+};
-+
-+&wifi {
-+	status = "okay";
-+	pinctrl-names = "default", "dbdc";
-+	pinctrl-0 = <&wf_2g_5g_pins>, <&wf_led_pins>;
-+	pinctrl-1 = <&wf_dbdc_pins>, <&wf_led_pins>;
-+
-+	mediatek,eeprom-data = <0x86790900 0xc4326 0x60000000 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x1000000
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x800 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x24649090 0x280000 0x5100000 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x21e00 0x21e0002 0x1e00021e 0x22800 0x2280002 0x28000228 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x8080 0x8080fdf7
-+				0x903150d 0x80808080 0x80808080 0x5050d0d 0x1313c6c6 0xc3c3c200
-+				0xc200c2 0x8182
-+				0x8585c2c2 0x82828282 0x858500c2 0xc2000081 0x82858587 0x87c2c200
-+				0x81818285 0x858787c2
-+				0xc2000081 0x82858587 0x87c2c200 0x818285 0x858787c2 0xc2000081
-+				0x82858587 0x87c4c4c2
-+				0xc100c300 0xc3c3c100 0x818383c3 0xc3c3c100 0x81838300 0xc2c2c2c0
-+				0x81828484 0xc3
-+				0xc3c3c100 0x81838386 0x86c3c3c3 0xc1008183 0x838686c2 0xc2c2c081
-+				0x82848486 0x86c3c3c3
-+				0xc1008183 0x838686c3 0xc3c3c100 0x81838386 0x86c3c3c3 0xc1008183
-+				0x83868622 0x28002228
-+				0x222800 0x22280000 0xdddddddd 0xdddddddd 0xddbbbbbb 0xccccccdd
-+				0xdddddddd 0xdddddddd
-+				0xeeeeeecc 0xccccdddd 0xdddddddd 0x4a5662 0x4a 0x56620000 0x4a5662
-+				0x4a
-+				0x56620000 0x88888888 0x33333326 0x26262626 0x26262600 0x33333326
-+				0x26262626 0x26262600
-+				0x33333326 0x26262626 0x26262600 0x33333326 0x26262626 0x26262600
-+				0x00 0xf0f0cc00
-+				0x00 0xaaaa 0xaabbbbbb 0xcccccccc 0xccccbbbb 0xbbbbbbbb 0xbbbbbbaa
-+				0xaaaabbbb
-+				0xbbaaaaaa 0x999999aa 0xaaaabbbb 0xbbcccccc 0x00 0xaaaa 0xaa000000
-+				0xbbbbbbbb
-+				0xbbbbaaaa 0xaa999999 0xaaaaaaaa 0xaaaaaaaa 0xaaaaaaaa 0xaaaaaaaa
-+				0xaaaabbbb 0xbbbbbbbb
-+				0x00 0x00 0x00 0x99999999 0x9999aaaa 0xaaaaaaaa 0x999999aa
-+				0xaaaaaaaa
-+				0xaaaaaaaa 0xaaaaaaaa 0xaaaabbbb 0xbbbbbbbb 0x00 0xeeee 0xeeffffff
-+				0xcccccccc
-+				0xccccdddd 0xddbbbbbb 0xccccccbb 0xbbbbbbbb 0xbbbbbbbb 0xbbbbbbbb
-+				0xbbbbcccc 0xccdddddd
-+				0x516200 0x686e0051 0x6200686e 0x516200 0x686e0051 0x6200686e
-+				0x516200 0x686e0051
-+				0x6200686e 0x516200 0x686e0051 0x6200686e 0x516200 0x686e0051
-+				0x6200686e 0x516200
-+				0x686e0051 0x6200686e 0x516200 0x686e0051 0x6200686e 0x516200
-+				0x686e0051 0x6200686e
-+				0x516200 0x686e0051 0x6200686e 0x516200 0x686e0051 0x6200686e
-+				0x516200 0x686e0051
-+				0x6200686e 0x516200 0x686e0051 0x6200686e 0x516200 0x686e0051
-+				0x6200686e 0x516200
-+				0x686e0051 0x6200686e 0x516200 0x686e0051 0x6200686e 0x516200
-+				0x686e0051 0x6200686e
-+				0x88888888 0x88888888 0x88888888 0x88888888 0x88888888 0x88888888
-+				0x88888888 0x88888888
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x01 0x6000100 0x1050002 0xff0300
-+				0xf900fe03 0x00 0x00 0x9b 0x6e370000 0x00 0xfc0009 0xa00fe00
-+				0x60700fe 0x70800 0x5000b0a 0x00 0x00 0xe2 0x96460000 0x00
-+				0x400f7 0xf8000300 0xfcfe0003 0xfbfc00 0xee00e3f2 0x00 0x00 0x11
-+				0xbb550000 0x00 0x600f6 0xfc000300 0xfbfe0004 0xfafe00 0xf600ecf2
-+				0x00
-+				0x00 0x1f 0xbf580000 0x00 0x600f5 0xf6000400 0xf8f90004 0xf7f800
-+				0xf700f0f4 0x00 0x00 0x24 0xbe570000 0x00 0x800f8 0xfe000600
-+				0xf8fd0007 0xf9fe00 0xf500f0f4 0x00 0x00 0x2d 0xd6610000 0x00
-+				0x400f7 0xfc000500 0xf7fc0005 0xf7fc00 0xf900f5f8 0x00 0x00 0x26
-+				0xd96e0000 0x00 0x400f7 0xf9000600 0xf5f70005 0xf5f800 0xf900f4f7
-+				0x00
-+				0x00 0x1b 0xce690000 0x00 0x300f8 0xf8000600 0xf6f60004 0xf6f700
-+				0xf900f4f7 0x00 0x00 0x18 0xd8720000 0x00 0x00 0x2404002
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0xc1c2c1c2 0x41c341c3 0x3fc13fc1 0x40c13fc2 0x3fc240c1 0x41c040c0
-+				0x3fc23fc2 0x40c13fc2
-+				0x3fc140c0 0x41c040c0 0x3fc33fc3 0x40c23fc2 0x3fc240c1 0x41c040c0
-+				0x3fc23fc2 0x40c23fc2
-+				0x3fc140c1 0x41c040c0 0x00 0x00 0x41c741c7 0xc1c7c1c7 0x00 0x00
-+				0x3fc03fc0 0x3fc03fc0 0x3fc03fc0 0x3fc03fc0 0x3fc03fc0 0x3fc03fc0
-+				0x3fc03fc0 0x3fc03fc0
-+				0x3fc03fc0 0x3fc03fc0 0x3fc03fc0 0x3fc03fc0 0x3fc03fc0 0x3fc03fc0
-+				0x3fc03fc0 0x3fc03fc0
-+				0xa0ce00 0x00 0xb6840000 0x00 0x00 0x00 0x18181818 0x18181818
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x4b5763 0x4b 0x57630000 0x4b5763 0x4b 0x57630000 0x88888888
-+				0x8474759
-+				0x69780849 0x49596d7a 0x849495a 0x6d790848 0x48596c78 0x8484858
-+				0x6a780848 0x48586a78
-+				0x8484858 0x6c78084a 0x4a5b6d79 0x8474759 0x697a0848 0x48596b79
-+				0x8484859 0x6c7a0848
-+				0x48586c79 0x8484857 0x68770848 0x48576877 0x8484857 0x6a77084a
-+				0x4a5a6a77 0x8464659
-+				0x69790848 0x48586b79 0x8484858 0x6c7a0848 0x48596c79 0x8484857
-+				0x68770848 0x48576877
-+				0x8494958 0x6d7a084b 0x4b5c6c77 0x847475a 0x6a7b0849 0x495a6e7c
-+				0x849495a 0x6e7c0849
-+				0x495b6e7c 0x8494959 0x6a7a0849 0x49596a7a 0x84a4a5a 0x6f7d084b
-+				0x4b5c6e7b 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x85848484
-+				0xc3c4c4c5 0xc4c3c33f 0xc3c3c2c2 0xc2c2c03f 0xc3c3c3c4 0xc4c4c33f
-+				0xc2c2c2c2 0xc1c3c1c1
-+				0xc0c08282 0x83848686 0x88880000 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x1111 0x00
-+				0x8080f703 0x10808080 0x80050d13 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0xa4 0xce000000 0xb684 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
-+				0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00>;
-+};
-+
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+index e2e7d16f43f4..0576f9b0e4aa 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.c
++++ b/drivers/usb/cdns3/cdnsp-gadget.c
+@@ -600,11 +600,11 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+ 
+ 	trace_cdnsp_ep_halt(value ? "Set" : "Clear");
+ 
+-	if (value) {
+-		ret = cdnsp_cmd_stop_ep(pdev, pep);
+-		if (ret)
+-			return ret;
++	ret = cdnsp_cmd_stop_ep(pdev, pep);
++	if (ret)
++		return ret;
+ 
++	if (value) {
+ 		if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_STOPPED) {
+ 			cdnsp_queue_halt_endpoint(pdev, pep->idx);
+ 			cdnsp_ring_cmd_db(pdev);
+@@ -613,10 +613,6 @@ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+ 
+ 		pep->ep_state |= EP_HALTED;
+ 	} else {
+-		/*
+-		 * In device mode driver can call reset endpoint command
+-		 * from any endpoint state.
+-		 */
+ 		cdnsp_queue_reset_ep(pdev, pep->idx);
+ 		cdnsp_ring_cmd_db(pdev);
+ 		ret = cdnsp_wait_for_cmd_compl(pdev);
+diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+index 25e5e51cf5a2..aa79bce89d8a 100644
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -2081,7 +2081,8 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+ 	u32 ep_state = GET_EP_CTX_STATE(pep->out_ctx);
+ 	int ret = 0;
+ 
+-	if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED) {
++	if (ep_state == EP_STATE_STOPPED || ep_state == EP_STATE_DISABLED ||
++	    ep_state == EP_STATE_HALTED) {
+ 		trace_cdnsp_ep_stopped_or_disabled(pep->out_ctx);
+ 		goto ep_stopped;
+ 	}
 -- 
-2.34.1
+2.25.1
 
