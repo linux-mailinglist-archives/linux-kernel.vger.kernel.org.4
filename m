@@ -2,58 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACBD60E341
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7EC60E346
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234324AbiJZOYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
+        id S234307AbiJZOZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234241AbiJZOYO (ORCPT
+        with ESMTP id S234279AbiJZOZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:24:14 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F615E09F6;
-        Wed, 26 Oct 2022 07:24:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R301e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=25;SR=0;TI=SMTPD_---0VT7eb5C_1666794245;
-Received: from 30.39.214.125(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VT7eb5C_1666794245)
-          by smtp.aliyun-inc.com;
-          Wed, 26 Oct 2022 22:24:07 +0800
-Message-ID: <e2567835-b14d-3bb4-bb1c-a4964554a8de@linux.alibaba.com>
-Date:   Wed, 26 Oct 2022 22:24:05 +0800
+        Wed, 26 Oct 2022 10:25:33 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0C440BC9;
+        Wed, 26 Oct 2022 07:25:30 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QECEjR009813;
+        Wed, 26 Oct 2022 14:25:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=v4IElr1XVSmtDQp4qrq9wsnanqdMbHLRHjqiWbwPzWk=;
+ b=EgtqblsdArmNsj8gBLf4oUjasF28gj1phLSJpPVytSGW23oq1Gf9o1XeONRR9lpRDZSX
+ QO3Q+psehGysBMZ8k4x0t8er97Nfo5u3aZHLOQQVbc8oK25uuy2Ac1y28oJtcWDTLVdZ
+ V08BzTVA4pWdExVMNt3Lb09Y6vPLyFJqvU3bU8vhneH8Jituz9PW/Kruysv+60s7IN/p
+ Cm4gA82jaV2hnwYE7vmO3ZYVW7RMtlgsj4vdTH1Lg6pUkTo0OGIt/dA9Tr6GfJn98L4c
+ LtuRD4vBNxP6xOuwUXVxJfA7qY17/JpGm3R6ENNl5rXoKYHLtoLqlI/tGi1rUp7vgFls TQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kc7a36w8e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 14:25:25 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29QD1KIp020785;
+        Wed, 26 Oct 2022 14:25:24 GMT
+Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2049.outbound.protection.outlook.com [104.47.74.49])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kc6y5t3qm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 14:25:24 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XzX5euYFCVm/ouIhmq861fEwDR4hqCKzuQlbhxj5TZ18gjN9La5Aqe1gs+br1R6bCu/ox0zy6HYSmjv8sMp3XydiSs3+mzjAIEQ1cpnmq21Lo5ct1DMlI9UMosPMObqrZAt3INDODG72HELHCDfpsVuQoE15ub3ro0HkN42ZCHwZPBD/w8kwohgVfRlTpulKDGYoa0iw5zgO2s4rS4p5BLQr2o3SrsObOPlpsvFbMzfiffKvgmaENTSJexwZPyrgNrv3XhCBfmbPZPEzoNplf4HZf5jfGVQHWFsbA1oCJad7M7gM+39QV7TlYwaQJOtQKZfU2ftvWb4GlePxYbrZEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v4IElr1XVSmtDQp4qrq9wsnanqdMbHLRHjqiWbwPzWk=;
+ b=gQVSX9c1bauALa5ZKiBRa+7ZII1Cwn7GqPg3AvmT8dBv2JEKeyr1HeEtGpPwDq02wnW5YtbAebzeTFFi9JyJtlmkJg/m2D3cAUmyWeFAdfY2/ga67h+NKi8omNRNhJnD37hoYQM5GGTAawuJly9/CHGYSJsOwBnFj8jAIxhugmh0Txg1iGWu0lhWFgKdW+MxtKVfFbO9NRrKt01oKIyitmJSaxxvpQs2J0n5VeAC6mySBRBCg8voeAoj+i/9INHommvrC+L5m2EHj1lasicyn/5I23Pn+NLHQ7RVUktDGOeXcCJduitc9Ri3xVn2cdmz0XbijwIle9TMDdin+C2lfg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v4IElr1XVSmtDQp4qrq9wsnanqdMbHLRHjqiWbwPzWk=;
+ b=RyFgnWbl2VT2tPNcrfKMu5Vp+AO3DEKYKXVqVTXbYiZ/k7vP3kFEU0UOWatL+qlQqmgc4boIu9Kafws82sGv89MrF3puxLeGhBpAyixv0pb/mAKX2Pp1g7DDZREc1z25S3svfeQkQKOotxC1lY7Ks0t5gIIVF8wQCMbIjMkCC9U=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by DS7PR10MB5054.namprd10.prod.outlook.com (2603:10b6:5:38e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Wed, 26 Oct
+ 2022 14:25:22 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::f378:f1d0:796a:55a1]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::f378:f1d0:796a:55a1%3]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
+ 14:25:22 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+CC:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] lib: maple_tree: remove unneeded initialization in
+ mtree_range_walk()
+Thread-Topic: [PATCH 1/1] lib: maple_tree: remove unneeded initialization in
+ mtree_range_walk()
+Thread-Index: AQHY6TKlbfwgc8LED0+rTJD3nSzgSK4guyEA
+Date:   Wed, 26 Oct 2022 14:25:21 +0000
+Message-ID: <20221026142514.ipe6rm6ekyh2rre6@revolver>
+References: <20221026120029.12555-1-lukas.bulwahn@gmail.com>
+ <20221026120029.12555-2-lukas.bulwahn@gmail.com>
+In-Reply-To: <20221026120029.12555-2-lukas.bulwahn@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN6PR10MB3022:EE_|DS7PR10MB5054:EE_
+x-ms-office365-filtering-correlation-id: d35abe2c-6293-4a9c-c8ec-08dab75dea77
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: z1Z5Gfdf6Ay/OKlUlKoPYC/fChDVUzhFvz46b1iQA8t1Jf/MG16RqBNSsXgnQzk2uZ0RATiGkvitqwAXl+jV02HqvxihA1dkHGnW8B0wdtw24sz5uzOL0ehWi53XDSCDmf8iw1oc1jW+cTkNVgRr+CrwcIb+b/8CuaPRt1z4fSPiEFcec101MeqPtt1Xz63aP+cKoE5rTXAbAmHZ1pQda5F11rANFcMcg1ELv2X9KkSdixhFOqFZeI8jy5OF593CGw/XYLdMzS5wmpsBg+vzMxOyRyi2oD4fo/lWxml6l7Y7Z5WnC/C+cCdzUVw6nU0ZzEnLW+ssFhDj26p4QHbW0Nu4PGZ7K9HraWUBCqlCwgUWFGtM5YqwbH+PYUs/p8dbPOgl5ys9JGmHiUJD5e6IT820b704jq1s3ITaGSSWDnUcvljX/LAz8fHQEe7O5ZtYbZgW6STD39QgQpabZnUvI5I8OJ+C9BjaYRd1NhoPjvtRUEU5cSR47NzPNR3655ag+4lNDvPljlQBANpyEHbTQf+mcDYnnLJQaT6Zh4xhrgRm8ilA8S8PA4xcoITjvP369jCz8gGMiZrmh6FuYC0VWqWuaWyypzXhfP5IuRKI7g2WC6QYM8AITly3R813sIriLHFgN5bVJx0ENeunp8233U4hh/X1evxuVGBpOLeqAtmZ9qCxTWqkMfKLUkVfaJouu8VQH7WmryVpEcG+c+g1wgfh7D0alZ5uZ6dvrEmqg6Ns9ZGL7umgSkl0J99YDW8BrkiNr0K9bG5eDzuvRFZuhg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(136003)(376002)(346002)(366004)(39860400002)(451199015)(8936002)(33716001)(44832011)(5660300002)(71200400001)(38070700005)(6486002)(122000001)(478600001)(91956017)(4326008)(8676002)(2906002)(316002)(86362001)(38100700002)(6506007)(186003)(1076003)(26005)(6512007)(9686003)(64756008)(54906003)(6916009)(66556008)(66476007)(66446008)(41300700001)(76116006)(66946007)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NFDz2jY9XySTQjR4nOIW1uzp1Sc+rmfZ58PZXPu5P7Co5HvT8aXv6TBn3HbP?=
+ =?us-ascii?Q?gf2YmjABj7tO4eQVKhFNHkdPcqkIZFxc9hTaT4EugIv/fLiEo9Ex17J16Hnx?=
+ =?us-ascii?Q?+Y0Gvj4f1YHAq8WWKPCVNWNojGbnLY5Xwxw9myDvYQhi7+tUl013YOdnHdmj?=
+ =?us-ascii?Q?TgDXlP41PRLUWBfpZR92BW5rMHJWcyfZKzWYuhundP/0jnNIiJXFRR6PS68J?=
+ =?us-ascii?Q?cqzlRdjNKqtY5ulSZnLMj09w7m9YnjmmDWxh3GakgVgkzn00vKlQ9x9YCg9A?=
+ =?us-ascii?Q?RN7iVWFbZjI7BG0QkJ7Za+/rFhz4XAEJ+EpN2G/FD6259QeAJFpRNvD7BAMR?=
+ =?us-ascii?Q?4ZQQgw1Xa6Itche75Qyr5m+cvAAp/nwfWAUJewljxiaPzXX9VS/Pcc6hQvPE?=
+ =?us-ascii?Q?yIVrllLT4c/9XbNPegMH/ZRc+m8XIIDn/i8AH5yjGtIdLnr2qaPvD24Lsj/g?=
+ =?us-ascii?Q?RqkaHCgkGvGdoxL0qMLOPRnW19hCkTfPnmDBLF6Ehv88C1O3rJZIXbUzxteN?=
+ =?us-ascii?Q?jup+p1Kq8oDOp0WMSuQZdYaHBXrhYSzUojPnEjtdJfRkmvN/lEeHP9kPPa88?=
+ =?us-ascii?Q?K1WT74UGL1ETZhHmEEs/4xc0Q8CDaV6vgvL+DqbdTP03DtayOY1IV4ubn5PT?=
+ =?us-ascii?Q?Bkohk9ePK8Jzx4FLJkD6W6en8aH1jb6NciZdZUwxuZBgvYC3pUS4pjOyuJP8?=
+ =?us-ascii?Q?prrRCOZNUFR8VFdSH48THsPaFacAQ4Qjw3yuakJQ7iPG0mYKDXNez5FRqdRM?=
+ =?us-ascii?Q?1rS9VDJMxj4MnSrZ+6T07XKdgqI3z5ZLdebEqVV2E8b3+P4pSGIZLapkI0kz?=
+ =?us-ascii?Q?rrgeJK8TFUB2ae19JNL6olq5ZDYiinvRzwywTwk3sGThUrzotQw0JIhKtPaG?=
+ =?us-ascii?Q?T8CradMZGrFomdFPRM9kygBWLPwgpHJ1o0iOIDh7qk0e128gEb1nhnSk4Ufd?=
+ =?us-ascii?Q?gZEc7I5CWXrKmJgLeVvdX1zktffJT51G8ts0rCtVCR1UseUNACHCUcufBkLk?=
+ =?us-ascii?Q?dSlWd4xVMC+90EV9te7dn+hJW82X8MKBWL/lhZ19CoAQ98I63A8f8Km+MgAD?=
+ =?us-ascii?Q?indAk961FvESxBGj3uoSFb8j8tsacewycJIqSOST9xHBv9vGax7yKDa6xXLg?=
+ =?us-ascii?Q?aTamMcoARIzY0279lM+RzGIkdArB5eThh3jXLs8et9ZzXACLftWT1bC0WlTg?=
+ =?us-ascii?Q?0Coo8z5rEk96nArO6m5KT7nFnLiB3vzaPE2dyJC4Jwhn0f/00vimw7Up7gEG?=
+ =?us-ascii?Q?1IR698TLUKfIHYI19SCrqTrBTxfxaXLyF2mnLIMFXK7o4ukejLN29kCBYt7b?=
+ =?us-ascii?Q?ko5abjQ8DMRCd3Z0BIxvH9SOwX89bNgiw99Hzm7mseh2lUh+p4nEsRZGsWxm?=
+ =?us-ascii?Q?vHIfG9wn+sUtt1RdT7HX+XIxB0oUZ6F/IaquyJ4sGMub/WfUxIfrUxiYlwWV?=
+ =?us-ascii?Q?xwm+s01KnQb2zW//I7k7R83XPdpDpYiPQyra2wTjG9t6aCnG2VyV1Ys2ukks?=
+ =?us-ascii?Q?I1lPDb7dqZmUinPyO/NtKdLamCAyYVcn/A5ZuSRndbeJhG1g5qD8MJ2YUYAv?=
+ =?us-ascii?Q?thCXWka+qQqVaI+NHgatRECIampcT+HM4lgJ+tNsAuZEP0NwBLkj91+fYbo1?=
+ =?us-ascii?Q?Wg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D3D1F52706904043A61686E1E121055E@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH V4 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
-To:     Conor Dooley <conor@kernel.org>, Baoquan He <bhe@redhat.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, bagasdotme@gmail.com,
-        k-hagio-ab@nec.com, lijiang@redhat.com, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
-        heinrich.schuchardt@canonical.com, hschauhan@nulltrace.org,
-        yixun.lan@gmail.com
-References: <20221019103623.7008-1-xianting.tian@linux.alibaba.com>
- <20221019103623.7008-2-xianting.tian@linux.alibaba.com>
- <Y1CtreAKT/SEh4vN@MiWiFi-R3L-srv>
- <30621b3b-47ba-d612-cfb0-583d779691a3@linux.alibaba.com>
- <Y1C681H2mlxX+zqf@MiWiFi-R3L-srv>
- <6af05838-fa58-8197-f3ce-ca95457077a7@linux.alibaba.com>
- <5df30e57-88ae-0a3b-2c1a-b962363d8670@linux.alibaba.com>
- <Y1j9AAhJXpoCx48N@wendy>
- <3c8beab1-3ca7-c3d7-6f31-c28a0ae008a3@linux.alibaba.com>
- <Y1kilaWGEHChimZw@MiWiFi-R3L-srv> <Y1k6i1mNYNroWckn@spud>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-In-Reply-To: <Y1k6i1mNYNroWckn@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d35abe2c-6293-4a9c-c8ec-08dab75dea77
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2022 14:25:21.9438
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7qTt1tWpMzh8OFZPmCr6cm2uU8ZCzCyJFTIhJz2YShlVKPam13O1oZYe29t4AG/mztZk4jjYPT3ehUmAPBkvPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5054
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_06,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 malwarescore=0 phishscore=0 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210260081
+X-Proofpoint-GUID: -Ubqoq1VW7KkckeXP7wtsuc9den59WmW
+X-Proofpoint-ORIG-GUID: -Ubqoq1VW7KkckeXP7wtsuc9den59WmW
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,193 +155,51 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2022/10/26 下午9:47, Conor Dooley 写道:
-> On Wed, Oct 26, 2022 at 08:05:41PM +0800, Baoquan He wrote:
->> Hi Xianting,
->>
->> On 10/26/22 at 05:44pm, Xianting Tian wrote:
->>> 在 2022/10/26 下午5:25, Conor Dooley 写道:
->>>> On Wed, Oct 26, 2022 at 05:08:11PM +0800, Xianting Tian wrote:
->>>>> Hi Palmer, Conor
->>>>>
->>>>> Is this version OK for you?
->>>> The weird ifdef/IS_ENABLED thing was the only comment I had. It's a bit
->>>> odd & I notice Baoquan brought it up too. I didn't (and won't) give you
->>>> a reviewed by on these patches because I don't understand the area well
->>>> enough. The general nitpickery seems to be sorted though.
->>> I checked the KERNEL_LINK_ADDR definition of riscv,  it is valid for
->>> CONFIG_64BIT and !CONFIG_64BIT.
->> This series looks good to me. My only minor concern is if we can make
->> the arch_crash_save_vmcoreinfo() as below. I don't understand why we
->> have to have the CONFIG_64BIT ifdeffery and the IS_ENABLED(CONFIG_64BIT)
->> between two adjacent code blocks. Not sure if we are saying the same
->> thing.
-> I think we can just go and drop the IS_ENABLED(). From looking at it
-> last time, one bit is compileable (but not usable) for !64BIT and the
-> other isn't hence the IS_ENABLED(). I think it would make sense to drop
-> the IS_ENABLED() - I don't think we're too likely to hit some compile
-> testing edge cases that IS_ENABLED() would help with & only having one
-> makes the code look a lot less odd and a lot more intentional.
-thanks, I will send V5 patch for review.
->
->> +void arch_crash_save_vmcoreinfo(void)
->> +{
->> +       VMCOREINFO_NUMBER(VA_BITS);
->> +       VMCOREINFO_NUMBER(phys_ram_base);
->> +
->> +       vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n", PAGE_OFFSET);
->> +       vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n", VMALLOC_START);
->> +       vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n", VMALLOC_END);
->> +       vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n", VMEMMAP_START);
->> +       vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n", VMEMMAP_END);
->> +#ifdef CONFIG_64BIT
->> +	vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n", MODULES_VADDR);
->> +       vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n", MODULES_END);
->> +       vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n", KERNEL_LINK_ADDR);
->> +#endif
->> +}
->>
->>> Maybe we can remove IS_ENABLED(CONFIG_64BIT)
->>>
->>> arch/riscv/include/asm/pgtable.h
->>> #define ADDRESS_SPACE_END       (UL(-1))
->>> #ifdef CONFIG_64BIT
->>> /* Leave 2GB for kernel and BPF at the end of the address space */
->>> #define KERNEL_LINK_ADDR        (ADDRESS_SPACE_END - SZ_2G + 1)
->>> #else
->>> #define KERNEL_LINK_ADDR        PAGE_OFFSET
->>> #endif
->>>
->>> arch/riscv/include/asm/page.h
->>> #ifdef CONFIG_64BIT
->>> #ifdef CONFIG_MMU
->>> #define PAGE_OFFSET             kernel_map.page_offset
->>> #else
->>> #define PAGE_OFFSET             _AC(CONFIG_PAGE_OFFSET, UL)
->>> #endif
->>> /*
->>>   * By default, CONFIG_PAGE_OFFSET value corresponds to SV48 address space so
->>>   * define the PAGE_OFFSET value for SV39.
->>>   */
->>> #define PAGE_OFFSET_L4          _AC(0xffffaf8000000000, UL)
->>> #define PAGE_OFFSET_L3          _AC(0xffffffd800000000, UL)
->>> #else
->>> #define PAGE_OFFSET             _AC(CONFIG_PAGE_OFFSET, UL)
->>> #endif /* CONFIG_64BIT */
->>>
->>>> Thanks,
->>>> Conor.
->>>>
->>>>> 在 2022/10/20 下午12:40, Xianting Tian 写道:
->>>>>> 在 2022/10/20 上午11:05, Baoquan He 写道:
->>>>>>> On 10/20/22 at 10:17am, Xianting Tian wrote:
->>>>>>>> 在 2022/10/20 上午10:08, Baoquan He 写道:
->>>>>>>>> On 10/19/22 at 06:36pm, Xianting Tian wrote:
->>>>>>>>>> Add arch_crash_save_vmcoreinfo(), which exports VM
->>>>>>>>>> layout(MODULES, VMALLOC,
->>>>>>>>>> VMEMMAP ranges and KERNEL_LINK_ADDR), va bits and ram
->>>>>>>>>> base for vmcore.
->>>>>>>>>>
->>>>>>>>>> Default pagetable levels and PAGE_OFFSET aren't same for
->>>>>>>>>> different kernel
->>>>>>>>>> version as below. For pagetable levels, it sets sv57 by
->>>>>>>>>> default and falls
->>>>>>>>>> back to setting sv48 at boot time if sv57 is not
->>>>>>>>>> supported by the hardware.
->>>>>>>>>>
->>>>>>>>>> For ram base, the default value is 0x80200000 for qemu
->>>>>>>>>> riscv64 env and,
->>>>>>>>>> for example, is 0x200000 on the XuanTie 910 CPU.
->>>>>>>>>>
->>>>>>>>>>      * Linux Kernel 5.18 ~
->>>>>>>>>>      *      PGTABLE_LEVELS = 5
->>>>>>>>>>      *      PAGE_OFFSET = 0xff60000000000000
->>>>>>>>>>      * Linux Kernel 5.17 ~
->>>>>>>>>>      *      PGTABLE_LEVELS = 4
->>>>>>>>>>      *      PAGE_OFFSET = 0xffffaf8000000000
->>>>>>>>>>      * Linux Kernel 4.19 ~
->>>>>>>>>>      *      PGTABLE_LEVELS = 3
->>>>>>>>>>      *      PAGE_OFFSET = 0xffffffe000000000
->>>>>>>>>>
->>>>>>>>>> Since these configurations change from time to time and
->>>>>>>>>> version to version,
->>>>>>>>>> it is preferable to export them via vmcoreinfo than to
->>>>>>>>>> change the crash's
->>>>>>>>>> code frequently, it can simplify the development of crash tool.
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
->>>>>>>>>> ---
->>>>>>>>>>      arch/riscv/kernel/Makefile     |  1 +
->>>>>>>>>>      arch/riscv/kernel/crash_core.c | 23 +++++++++++++++++++++++
->>>>>>>>>>      2 files changed, 24 insertions(+)
->>>>>>>>>>      create mode 100644 arch/riscv/kernel/crash_core.c
->>>>>>>>>>
->>>>>>>>>> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
->>>>>>>>>> index db6e4b1294ba..4cf303a779ab 100644
->>>>>>>>>> --- a/arch/riscv/kernel/Makefile
->>>>>>>>>> +++ b/arch/riscv/kernel/Makefile
->>>>>>>>>> @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)        += kgdb.o
->>>>>>>>>>      obj-$(CONFIG_KEXEC_CORE)    += kexec_relocate.o
->>>>>>>>>> crash_save_regs.o machine_kexec.o
->>>>>>>>>>      obj-$(CONFIG_KEXEC_FILE)    += elf_kexec.o machine_kexec_file.o
->>>>>>>>>>      obj-$(CONFIG_CRASH_DUMP)    += crash_dump.o
->>>>>>>>>> +obj-$(CONFIG_CRASH_CORE)    += crash_core.o
->>>>>>>>>>      obj-$(CONFIG_JUMP_LABEL)    += jump_label.o
->>>>>>>>>> diff --git a/arch/riscv/kernel/crash_core.c
->>>>>>>>>> b/arch/riscv/kernel/crash_core.c
->>>>>>>>>> new file mode 100644
->>>>>>>>>> index 000000000000..3e889d0ed7bd
->>>>>>>>>> --- /dev/null
->>>>>>>>>> +++ b/arch/riscv/kernel/crash_core.c
->>>>>>>>>> @@ -0,0 +1,23 @@
->>>>>>>>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>>>>>>>> +
->>>>>>>>>> +#include <linux/crash_core.h>
->>>>>>>>>> +#include <linux/pagemap.h>
->>>>>>>>>> +
->>>>>>>>>> +void arch_crash_save_vmcoreinfo(void)
->>>>>>>>>> +{
->>>>>>>>>> +    VMCOREINFO_NUMBER(VA_BITS);
->>>>>>>>>> +    VMCOREINFO_NUMBER(phys_ram_base);
->>>>>>>>>> +
->>>>>>>>>> +
->>>>>>>>>> vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n",
->>>>>>>>>> PAGE_OFFSET);
->>>>>>>>>> + vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n",
->>>>>>>>>> VMALLOC_START);
->>>>>>>>>> +
->>>>>>>>>> vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n",
->>>>>>>>>> VMALLOC_END);
->>>>>>>>>> + vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n",
->>>>>>>>>> VMEMMAP_START);
->>>>>>>>>> +
->>>>>>>>>> vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n",
->>>>>>>>>> VMEMMAP_END);
->>>>>>>>>> +#ifdef CONFIG_64BIT
->>>>>>>>>> + vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n",
->>>>>>>>>> MODULES_VADDR);
->>>>>>>>>> +
->>>>>>>>>> vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n",
->>>>>>>>>> MODULES_END);
->>>>>>>>>> +#endif
->>>>>>>>>> +
->>>>>>>>>> +    if (IS_ENABLED(CONFIG_64BIT))
->>>>>>>>>> +
->>>>>>>>>> vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n",
->>>>>>>>>> KERNEL_LINK_ADDR);
->>>>>>>>> Wondering why you don't put KERNEL_LINK_ADDR exporting into the above
->>>>>>>>> ifdeffery scope, with that you can save one line of
->>>>>>>>> "IS_ENABLED(CONFIG_64BIT)".
->>>>>>>> I followed the rule in print_vm_layout() of
->>>>>>>> arch/riscv/mm/init.c, which used
->>>>>>>> IS_ENABLED when print the value of KERNEL_LINK_ADDR.
->>>>>>>>
->>>>>>> I see. There's PAGE_OFFSET in the middle. Thanks.
->>>>>>>
->>>>>>>            print_ml("lowmem", (unsigned long)PAGE_OFFSET,
->>>>>>>                    (unsigned long)high_memory)
->>>>>>>
->>>>>>> So now, do you think if it's necessary to have another
->>>>>>> IS_ENABLED(CONFIG_64BIT) in the current arch_crash_save_vmcoreinfo()?
->>>>>> For which MACRO?  I think current code for PAGE_OFFSET is OK.
->>>>>>
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+
+* Lukas Bulwahn <lukas.bulwahn@gmail.com> [221026 08:01]:
+> Before the do-while loop in mtree_range_walk(), the variables next, min,
+> max need to be initialized. The variables last, prev_min and prev_max are
+> set within the loop body before they are eventually used after exiting th=
+e
+> loop body.
+>=20
+> As it is a do-while loop, the loop body is executed at least once, so the
+> variables last, prev_min and prev_max do not need to be initialized befor=
+e
+> the loop body.
+>=20
+> Remove unneeded initialization of last and prev_min.
+>=20
+> The needless initialization was reported by clang-analyzer as Dead Stores=
+.
+>=20
+> As the compiler already identifies these assignments as unneeded, it
+> optimizes the assignments away. Hence:
+>=20
+> No functional change. No change in object code.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  lib/maple_tree.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> index e1743803c851..fbde494444b8 100644
+> --- a/lib/maple_tree.c
+> +++ b/lib/maple_tree.c
+> @@ -2903,8 +2903,8 @@ static inline void *mtree_range_walk(struct ma_stat=
+e *mas)
+>  	unsigned long max, min;
+>  	unsigned long prev_max, prev_min;
+> =20
+> -	last =3D next =3D mas->node;
+> -	prev_min =3D min =3D mas->min;
+> +	next =3D mas->node;
+> +	min =3D mas->min;
+>  	max =3D mas->max;
+>  	do {
+>  		offset =3D 0;
+> --=20
+> 2.17.1
+> =
