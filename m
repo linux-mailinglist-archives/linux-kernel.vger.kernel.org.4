@@ -2,84 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E7E60DEEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F72160DEF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232844AbiJZKiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 06:38:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
+        id S233431AbiJZKnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 06:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231877AbiJZKiA (ORCPT
+        with ESMTP id S233389AbiJZKnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 06:38:00 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CC736DD7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 03:37:59 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 225111EC032C;
-        Wed, 26 Oct 2022 12:37:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666780678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ZX9dpgsglCG9/xfyhtzG1Jg1smDACPCZdOVzq6ZSD7A=;
-        b=UVRzJi407zgiEMvg1MFExN6jybGK2KCFer+1pIO0GpYRp00V9RjhDuS/yGK9dcymEvQdd7
-        YAyadENKE6MHNcoNmVpCHwx9OVNxmK/J52kuoqo1Gv53YCzql2FzxDfP0RyR+1iYmhk7Cj
-        VTMNcQsLD1ltMHUsD9Kw5LRxgsjx60M=
-Date:   Wed, 26 Oct 2022 12:37:53 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v4 07/16] x86/mtrr: split generic_set_all()
-Message-ID: <Y1kOAUDYW7HpRvfl@zn.tnic>
-References: <20221004081023.32402-1-jgross@suse.com>
- <20221004081023.32402-8-jgross@suse.com>
+        Wed, 26 Oct 2022 06:43:18 -0400
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EC4BECC7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 03:43:14 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1666780837tnocriqo
+Received: from localhost.localdomain ( [101.6.93.82])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 26 Oct 2022 18:40:20 +0800 (CST)
+X-QQ-SSF: 0140000000000060B000000A0000000
+X-QQ-FEAT: /dh/S7faoAIKBd2C5GJ0Of9RdLfgrEtMrQ6BkXeX3UpsjiE9o+0zZjJErafrq
+        EQHZDShdY6rYXbwDzIeMAxgarEhYQpkR7gHDTnH34j3AgEd8k5kMMwm+OZ0rFveFbDGLrar
+        9CiYRl5rQlpEAXIYCvf7Q2cgC1rjBBzjh3TwgQqjcJgQt5IR5AysKG6xT0MHA6XiUMw9crD
+        liPjbpXBcn1uxknkvCRM6RI9mVoMT5B3A7SRFtxx2JIFSh684r0u+FZ/rWDSz+viC5AzsAw
+        XSUWgxypCX2kPhnzBRPDEpnMWOsq97lb1EQeuskD+ppNGk/0yoclTO5ujzqWJ0ydQEo18FI
+        HUwDcKxqzcdOkuzjVuz40a60qD6hNn/HjaGHGVN70Qr8KvZXMnwaWpQD0cgVWEBWeGBpGRH
+X-QQ-GoodBg: 1
+From:   Wen Yao <haiwenyao@uniontech.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Wen Yao <haiwenyao@uniontech.com>
+Subject: [PATCH 0/2] riscv: Rewrite percpu operations and support cmpxchg-local feature
+Date:   Wed, 26 Oct 2022 18:40:13 +0800
+Message-Id: <20221026104015.565468-1-haiwenyao@uniontech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221004081023.32402-8-jgross@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 04, 2022 at 10:10:14AM +0200, Juergen Gross wrote:
-> Split generic_set_all() into multiple parts, while moving the main
-> function body into cacheinfo.c.
-> 
-> Prepare the support of PAT without needing MTRR support by
-> moving the main function body of generic_set_all() into cacheinfo.c
-> while renaming it to cache_cpu_init(). The MTRR specific parts are
-> moved into a dedicated small function called by cache_cpu_init() in
-> order to make cache_cpu_init() as MTRR agnostic as possible.
-> 
-> The setting of smp_changes_mask is merged into the (new) function
-> mtrr_generic_set_state() used to call set_mtrr_state(). It was
-> probably split in ancient times, as atomic operations while running
-> uncached might be quite expensive, but OTOH only systems with a
-> broken BIOS should ever require to set any bit in smp_changes_mask,
-> so just hurting those devices with a penalty of a few microseconds
-> during boot shouldn't be a real issue.
+The series try to use riscv amo instructions to optimise some percpu
+operations and select HAVE_CMPXCHG_LOCAL to support cmpxchg-local feature.
 
-This still needs addressing
+Wen Yao (2):
+  riscv: percpu:Add riscv percpu operations
+  riscv:kconfig:select HAVE_CMPXCHG_LOCAL
 
-"So the commit message should not say what you're doing - that should
-be visible from the diff itself. It should talk more about the *why*
-you're doing it."
+ arch/riscv/Kconfig              |   1 +
+ arch/riscv/include/asm/percpu.h | 101 ++++++++++++++++++++++++++++++++
+ 2 files changed, 102 insertions(+)
+ create mode 100644 arch/riscv/include/asm/percpu.h
 
 -- 
-Regards/Gruss,
-    Boris.
+2.25.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
