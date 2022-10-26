@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E9E60EBEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7E460EBEB
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbiJZW75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 18:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S233965AbiJZXAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 19:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiJZW7y (ORCPT
+        with ESMTP id S233946AbiJZW76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 18:59:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE62813E39
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:59:51 -0700 (PDT)
+        Wed, 26 Oct 2022 18:59:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AEA26558
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:59:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9957AB82456
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:59:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF248C433D7;
-        Wed, 26 Oct 2022 22:59:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39CA8B82473
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:59:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A973C433B5;
+        Wed, 26 Oct 2022 22:59:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666825189;
-        bh=A1xog9/JoTImuQjfC8/0jRefs+jLn853oqIp5j+8x/c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=QuZyRMU3886vYVE9gsZJ/b9p/OupKMJkvflDE3O8Tpf3rT5z/+aX0QHbWjjP63vHI
-         LZZkgA1vu7Blc2LCxWr051ayX6l1dQzGNlUL11HVCOqYob35Z4MQdCHEbmTsLu/OyB
-         oEFhko1EMhCPAhvgco50a17N4c2GLd3zLbQX5aUF3Tw9tdHQIThpqd1lEOfqWs6BrF
-         fFmwJYzqRWJSM/T/Sygfc8AFO+/lFSWw6Yd5HXvNxx3XnO1gghW1eOgrY2tyxGsHP2
-         vHdKZ9Xa2YTSV6GkqtaUY+96KMC++26CXgZM1YYvQddsPVWBm4PNdV/jcfkCzbT+oC
-         STlJEMnhT2gNA==
+        bh=PcpzlnNHZWtuE8/7HVnA2SeaMVIQ6XHWVj8vUJ1ZrF4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=lRniJU/9ikWpyMRR5kfjgU/6Iqe32PXn0o8jXqKhZolqSUOL6HEenaGW3obcwZEyZ
+         ufRoarBtPKYdazvBBO4J4gqrFYNmg1QOcFolHNHL1vfvd5J/VnXK97cZPvcjJuH9tq
+         2VQBajLilWdf5g8PTKhxX7S8lRiOGISlVxGh1mrqP/5i/kJEHSfr633CYOYblvKrgu
+         VVFj2q/MDA8hq8R7Ka2PJelPuGw/AwgYXp5YUZ7w5vthBWlPuouiB9i9qYzIrXBGmE
+         NrB2LowcimyC2ELjFifkgsNJbkQgkismBiW85BYvRgRbFWX8ZXxy4om7MQw9nrtNL6
+         kjwOlB50TEX1Q==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, damon@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 00/12] mm/damon: cleanup and refactoring code
-Date:   Wed, 26 Oct 2022 22:59:31 +0000
-Message-Id: <20221026225943.100429-1-sj@kernel.org>
+Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
+Subject: [PATCH v2 01/12] mm/damon/core: split out DAMOS-charged region skip logic into a new function
+Date:   Wed, 26 Oct 2022 22:59:32 +0000
+Message-Id: <20221026225943.100429-2-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221026225943.100429-1-sj@kernel.org>
+References: <20221026225943.100429-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -51,63 +53,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes from v1
-(https://lore.kernel.org/damon/20221024204919.18524-1-sj@kernel.org/):
-- Add 10th patch, which splits schemes sysfs directory implementation
+The DAMOS action applying function, 'damon_do_apply_schemes()', is quite
+long and not so simple.  Split out the already quota-charged region skip
+code, which is not a small amount of simple code, into a new function with
+some comments for better readability.
 
-This patchset cleans up and refactors a range of DAMON code including
-the core, DAMON sysfs interface, and DAMON modules, for better
-readability and convenient future feature implementations.
+Signed-off-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+ mm/damon/core.c | 96 +++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 65 insertions(+), 31 deletions(-)
 
-In detail, this patchset splits unnecessarily long and complex functions
-in core into smaller functions (patches 1-4).  Then, it cleans up the
-DAMON sysfs interface by using more type-safe code (patch 5) and
-removing unnecessary function parameters (patch 6).  Further, it
-refactor the code by distributing the code into multiple files (patches
-7-10).  Last two patches (patches 11 and 12) deduplicates and remove
-unnecessary header inclusion in DAMON modules (reclaim and lru_sort).
-
-Note that this initially posted as a part of a feature implementation
-RFC patchset[1], but separated into this patchset as the amount of the
-change is not small compared to the feature implementation change
-itself.
-
-[1] https://lore.kernel.org/damon/20221019001317.104270-1-sj@kernel.org/
-
-SeongJae Park (12):
-  mm/damon/core: split out DAMOS-charged region skip logic into a new
-    function
-  mm/damon/core: split damos application logic into a new function
-  mm/damon/core: split out scheme stat update logic into a new function
-  mm/damon/core: split out scheme quota adjustment logic into a new
-    function
-  mm/damon/sysfs: use damon_addr_range for regions' start and end values
-  mm/damon/sysfs: remove parameters of damon_sysfs_region_alloc()
-  mm/damon/sysfs: move sysfs_lock to common module
-  mm/damon/sysfs: move unsigned long range directory to common module
-  mm/damon/sysfs: split out kdamond-independent schemes stats update
-    logic into a new function
-  mm/damon/sysfs: split out schemes directory implementation to separate
-    file
-  mm/damon/modules: deduplicate init steps for DAMON context setup
-  mm/damon/{reclaim,lru_sort}: remove unnecessarily included headers
-
- mm/damon/Makefile         |    6 +-
- mm/damon/core.c           |  262 +++++----
- mm/damon/lru_sort.c       |   19 +-
- mm/damon/modules-common.c |   42 ++
- mm/damon/modules-common.h |    3 +
- mm/damon/reclaim.c        |   19 +-
- mm/damon/sysfs-common.c   |  107 ++++
- mm/damon/sysfs-common.h   |   46 ++
- mm/damon/sysfs-schemes.c  | 1022 ++++++++++++++++++++++++++++++++
- mm/damon/sysfs.c          | 1152 +------------------------------------
- 10 files changed, 1399 insertions(+), 1279 deletions(-)
- create mode 100644 mm/damon/modules-common.c
- create mode 100644 mm/damon/sysfs-common.c
- create mode 100644 mm/damon/sysfs-common.h
- create mode 100644 mm/damon/sysfs-schemes.c
-
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 36d098d06c55..06b50ede9cc6 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -694,6 +694,67 @@ static bool damos_valid_target(struct damon_ctx *c, struct damon_target *t,
+ 	return c->ops.get_scheme_score(c, t, r, s) >= s->quota.min_score;
+ }
+ 
++/*
++ * damos_skip_charged_region() - Check if the given region or starting part of
++ * it is already charged for the DAMOS quota.
++ * @t:	The target of the region.
++ * @rp:	The pointer to the region.
++ * @s:	The scheme to be applied.
++ *
++ * If a quota of a scheme has exceeded in a quota charge window, the scheme's
++ * action would applied to only a part of the target access pattern fulfilling
++ * regions.  To avoid applying the scheme action to only already applied
++ * regions, DAMON skips applying the scheme action to the regions that charged
++ * in the previous charge window.
++ *
++ * This function checks if a given region should be skipped or not for the
++ * reason.  If only the starting part of the region has previously charged,
++ * this function splits the region into two so that the second one covers the
++ * area that not charged in the previous charge widnow and saves the second
++ * region in *rp and returns false, so that the caller can apply DAMON action
++ * to the second one.
++ *
++ * Return: true if the region should be entirely skipped, false otherwise.
++ */
++static bool damos_skip_charged_region(struct damon_target *t,
++		struct damon_region **rp, struct damos *s)
++{
++	struct damon_region *r = *rp;
++	struct damos_quota *quota = &s->quota;
++	unsigned long sz_to_skip;
++
++	/* Skip previously charged regions */
++	if (quota->charge_target_from) {
++		if (t != quota->charge_target_from)
++			return true;
++		if (r == damon_last_region(t)) {
++			quota->charge_target_from = NULL;
++			quota->charge_addr_from = 0;
++			return true;
++		}
++		if (quota->charge_addr_from &&
++				r->ar.end <= quota->charge_addr_from)
++			return true;
++
++		if (quota->charge_addr_from && r->ar.start <
++				quota->charge_addr_from) {
++			sz_to_skip = ALIGN_DOWN(quota->charge_addr_from -
++					r->ar.start, DAMON_MIN_REGION);
++			if (!sz_to_skip) {
++				if (damon_sz_region(r) <= DAMON_MIN_REGION)
++					return true;
++				sz_to_skip = DAMON_MIN_REGION;
++			}
++			damon_split_region_at(t, r, sz_to_skip);
++			r = damon_next_region(r);
++			*rp = r;
++		}
++		quota->charge_target_from = NULL;
++		quota->charge_addr_from = 0;
++	}
++	return false;
++}
++
+ static void damon_do_apply_schemes(struct damon_ctx *c,
+ 				   struct damon_target *t,
+ 				   struct damon_region *r)
+@@ -702,7 +763,7 @@ static void damon_do_apply_schemes(struct damon_ctx *c,
+ 
+ 	damon_for_each_scheme(s, c) {
+ 		struct damos_quota *quota = &s->quota;
+-		unsigned long sz = damon_sz_region(r);
++		unsigned long sz;
+ 		struct timespec64 begin, end;
+ 		unsigned long sz_applied = 0;
+ 
+@@ -713,41 +774,14 @@ static void damon_do_apply_schemes(struct damon_ctx *c,
+ 		if (quota->esz && quota->charged_sz >= quota->esz)
+ 			continue;
+ 
+-		/* Skip previously charged regions */
+-		if (quota->charge_target_from) {
+-			if (t != quota->charge_target_from)
+-				continue;
+-			if (r == damon_last_region(t)) {
+-				quota->charge_target_from = NULL;
+-				quota->charge_addr_from = 0;
+-				continue;
+-			}
+-			if (quota->charge_addr_from &&
+-					r->ar.end <= quota->charge_addr_from)
+-				continue;
+-
+-			if (quota->charge_addr_from && r->ar.start <
+-					quota->charge_addr_from) {
+-				sz = ALIGN_DOWN(quota->charge_addr_from -
+-						r->ar.start, DAMON_MIN_REGION);
+-				if (!sz) {
+-					if (damon_sz_region(r) <=
+-					    DAMON_MIN_REGION)
+-						continue;
+-					sz = DAMON_MIN_REGION;
+-				}
+-				damon_split_region_at(t, r, sz);
+-				r = damon_next_region(r);
+-				sz = damon_sz_region(r);
+-			}
+-			quota->charge_target_from = NULL;
+-			quota->charge_addr_from = 0;
+-		}
++		if (damos_skip_charged_region(t, &r, s))
++			continue;
+ 
+ 		if (!damos_valid_target(c, t, r, s))
+ 			continue;
+ 
+ 		/* Apply the scheme */
++		sz = damon_sz_region(r);
+ 		if (c->ops.apply_scheme) {
+ 			if (quota->esz &&
+ 					quota->charged_sz + sz > quota->esz) {
 -- 
 2.25.1
 
