@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CA260EA6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7126C60EA60
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234508AbiJZUme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 16:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
+        id S234247AbiJZUlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 16:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234367AbiJZUmG (ORCPT
+        with ESMTP id S233536AbiJZUlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 16:42:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25FAA23C3;
-        Wed, 26 Oct 2022 13:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666816925; x=1698352925;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1gaLxx2/iHz7YZIBgFqkbZxBg68PkAwpn99ti8lfuqs=;
-  b=Z7+ovRIlwsZGcLhQ+9mTLcKsIfryYqFNHZoVuI9/KcXdxpd7vMs7G9Ls
-   k/CzB63y6z3ihVIPw2LL+Zfp3wxdOrYZFC+4WdBlOkNvSzKPmNoWzt0dA
-   KzAEMlOU3EBYk2MsNQ7mIOBThlzIgtdJixB6KgxSDsJd4m25btUsEFfDL
-   pI/vvgZ6s/FroF2gYT1UEtB1a67hJmKmhAVJuPMXYZyWxcaXer5Yiih/R
-   1zLUR1bTLSel/Ikr1WiSR8m3O7j+rRYcocxv6ryC6rvg567RusuIMJbqx
-   1G1K5HH0QSk/rpCio45rHLdhT6T5uNRO0tWCOr8E+i3bx9pQOGQ5qg4iy
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="288450861"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="288450861"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 13:42:05 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="610103338"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="610103338"
-Received: from bcoan-mobl2.amr.corp.intel.com (HELO [10.209.189.197]) ([10.209.189.197])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 13:42:05 -0700
-Message-ID: <3f207f82-e177-c833-b2b0-ca9e64a6e9a7@linux.intel.com>
-Date:   Wed, 26 Oct 2022 15:41:09 -0500
+        Wed, 26 Oct 2022 16:41:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970539E0FD;
+        Wed, 26 Oct 2022 13:41:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4BED3B82406;
+        Wed, 26 Oct 2022 20:41:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EB5C433D6;
+        Wed, 26 Oct 2022 20:41:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666816899;
+        bh=OiDy0J7N0gG89OlO1sTJTMLRoyLa6wUK63NLTwswiYo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=e2kiXrsKyVJ5VAY16xGSFHU3ojplVtxkLebWApev69ep5EIkci5ZtMxB4LkSNWOJu
+         07hDBr4TNy4z24dEjYLJbWewgl/eyoGkdugUTeqjB6hsdDEMEnxntitMU+4XGQsiEd
+         hjIzX6wOfYZvEZawOKLEIQ/fXkkW1j4TNCGMg0Zjxwk3CvfWDOS+gC1F022hZbE7jL
+         fyKkLj3wHzDjZ1iDZX09Ze15t/MCIxF0elo68WCFnaT3Pp4BGgT6FhX9FHle3vjAIW
+         uxdTlLJ35GYavwhjmIIkp3BSDUk+k64Lk7Jk5cXsXNbkM8inHxpZvW4aoyIQTH2A7F
+         1qk+/xzP2d98Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9BC6B5C05F8; Wed, 26 Oct 2022 13:41:38 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 13:41:38 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: always rebuild the sysroot when
+ running a test
+Message-ID: <20221026204138.GQ5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221026054508.19634-1-w@1wt.eu>
+ <20221026164825.GN5600@paulmck-ThinkPad-P17-Gen-1>
+ <20221026195902.GB24197@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [Regression] Bug 216613 - Sound stopped working with v6.0.3 on
- Lenovo T14 Gen2i: ASoC: error at snd_soc_component_probe #forregzbot
-Content-Language: en-US
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     alsa-devel@alsa-project.org,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <2c028797-b313-be93-7b1e-8d838e694948@leemhuis.info>
- <f34cafd4-f224-ad10-6962-e8f6c709cb39@leemhuis.info>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <f34cafd4-f224-ad10-6962-e8f6c709cb39@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026195902.GB24197@1wt.eu>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/26/22 07:08, Thorsten Leemhuis wrote:
-> [Note: this mail is primarily send for documentation purposes and/or for
-> regzbot, my Linux kernel regression tracking bot. That's why I removed
-> most or all folks from the list of recipients, but left any that looked
-> like a mailing lists. These mails usually contain '#forregzbot' in the
-> subject, to make them easy to spot and filter out.]
+On Wed, Oct 26, 2022 at 09:59:02PM +0200, Willy Tarreau wrote:
+> On Wed, Oct 26, 2022 at 09:48:25AM -0700, Paul E. McKenney wrote:
+> > On Wed, Oct 26, 2022 at 07:45:08AM +0200, Willy Tarreau wrote:
+> > Works like a champ with reverting and unreverting c9388e0c1c6c
+> > ("tools/nolibc/string: Fix memcmp() implementation"), thank you!!!
 > 
-> On 22.10.22 08:35, Thorsten Leemhuis wrote:
->> Hi, this is your Linux kernel regression tracker speaking.
->>
->> I noticed a regression report in bugzilla.kernel.org. As many (most?)
->> kernel developer don't keep an eye on it, I decided to forward it by
->> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216613 :
->>
->>>  Grzegorz Alibożek 2022-10-21 19:26:43 UTC
->>>
->>> After upgrade kernel from 6.0.2 to 6.0.3 on Lenovo T14 Gen2i, sound stopped working.
->>> dmesg:
->>>
->>> paź 21 21:11:45 kernel: snd_hda_codec_hdmi ehdaudio0D2: failed to create hda codec -12
->>> paź 21 21:11:45 kernel: snd_hda_codec_hdmi ehdaudio0D2: ASoC: error at snd_soc_component_probe on ehdaudio0D2: -12
->>> paź 21 21:11:45 kernel: skl_hda_dsp_generic skl_hda_dsp_generic: ASoC: failed to instantiate card -12
->>>
->>> [reply] [−] Comment 1 Grzegorz Alibożek 2022-10-21 19:56:43 UTC
->>>
->>> Created attachment 303070 [details]
->>> trace
+> Thanks for the feedback, and glad it suits your needs as well. I
+> hope that it will progressively encourage a few of us to enhance
+> it with more tests.
+
+Here is hoping!  ;-)
+
+> > I have queued this.  I expect to push this into the next merge window,
+> > thus avoiding the need to document the need for "make clean" in my
+> > pull request.  ;-)
 > 
-> #regzbot introduced: 7494e2e6c55ed19
-> #regzbot fixed-by: 02356311982b
+> Stupid question, is it really worth postponing it, considering that
+> we've just introduced this series right now ? I mean, if the current
+> usage is confusing, it's probably better to propose the fix before
+> 6.1-final ? It's not a new feature here but rather a fix for a recently
+> introduced one, thus I think it could be part of the next fix series.
+> Rest assured I don't want to put a mess into your patch workflow, just
+> asking :-)
 
-Revert on its way:
+You lost me here.
 
-https://lore.kernel.org/r/20221024143931.15722-1-tiwai@suse.de
+My intent is to push these nolicb patches into the upcoming v6.2
+merge window:
+
+2318a710bffbd tools/nolibc: Fix missing strlen() definition and infinite loop with gcc-12
+6937b8de8f1c3 tools/nolibc/string: Fix memcmp() implementation
+e1bbfe393c900 selftests/nolibc: Add 7 tests for memcmp()
+3f2c1c45a3a9a selftests/nolibc: Always rebuild the sysroot when running a test
+
+I didn't see the problem until I queued the third patch (e1bbfe393c900),
+and it is still in -rcu, not in v6.1.
+
+What am I missing here?
+
+							Thanx, Paul
