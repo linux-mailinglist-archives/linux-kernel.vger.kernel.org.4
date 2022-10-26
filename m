@@ -2,116 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E0B60DBD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA1360DBD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233228AbiJZHGL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 26 Oct 2022 03:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42656 "EHLO
+        id S233230AbiJZHGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233182AbiJZHGJ (ORCPT
+        with ESMTP id S229904AbiJZHGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:06:09 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE59674BAC;
-        Wed, 26 Oct 2022 00:06:06 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id l28so9310530qtv.4;
-        Wed, 26 Oct 2022 00:06:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9EmVPQE/ovI/dPmhhr1wEw1SPWZw+nWSc8rrtFBbd34=;
-        b=YMHPnSoVVge+rxOzqBa4Myguwk+u6mduuV3p7Gz9ljGgdc0RdNuc6/aQhSz5QR6CRe
-         RI6vZ6bxYU9aDGVsGCC9GVYJGzevOIsm5JncZn0dpBPnlasz/T6lcKsRwVHKi35TXlai
-         RK2LNLaU5gQIhUWc06vMcLh9gJDoIdVqpTjIJ2lg3Z0oF/3ibnDT4RP8CjG9wJ6LY9H0
-         ttwHxiNSQw4UHOroYfLODdm03rR1OVi3fbXxGNjo2Rt2CUZfOvowiTVVCrDFAPYY9q49
-         6t47LTAbLFLDe1KcjqPJmWlKQBKisC9LNdmNpCCeslqoD3xRbXterlZI3ui2lz330xgI
-         tUYA==
-X-Gm-Message-State: ACrzQf0T3ouR+b0MGI8Sv4mmi5hYjKq6i4tHf2cUoNOKlG6IsxiXaDDo
-        dr9YC0glIHSc0ycsnECqUlpS0pFglQkH+w==
-X-Google-Smtp-Source: AMsMyM5P+foiYncIasrJ6IajVDiZX/dm91ucePDtQONgyhN1+Zf+xjlc00XIstDKG3Umd8ySHeOUHg==
-X-Received: by 2002:a05:622a:387:b0:394:7a0a:9584 with SMTP id j7-20020a05622a038700b003947a0a9584mr35549849qtx.60.1666767955116;
-        Wed, 26 Oct 2022 00:05:55 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id w5-20020a05620a444500b006e2d087fd63sm3468738qkp.63.2022.10.26.00.05.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 00:05:54 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id n130so17708952yba.10;
-        Wed, 26 Oct 2022 00:05:54 -0700 (PDT)
-X-Received: by 2002:a5b:52:0:b0:6cb:7584:1b20 with SMTP id e18-20020a5b0052000000b006cb75841b20mr5924096ybp.380.1666767954181;
- Wed, 26 Oct 2022 00:05:54 -0700 (PDT)
+        Wed, 26 Oct 2022 03:06:38 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2047.outbound.protection.outlook.com [40.107.93.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EC074BAC;
+        Wed, 26 Oct 2022 00:06:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TYZ3ApH6L/+BJvImPVbQbmujLCdBa+apGwZZ4/MfCRLNT1qQyOj2MgzvRq+K6jz5PwHDLeuRupYmU09xrSq7c4MbxsZ2JzK5QRoXyX2HChNrGUCpFU/VMyvYIjircqgbeF/KiLB+xSLdg2E9rmYbyqej2ocxvAqJG06n+duwXkW9UGhDkcSpDRnjEO1AmT3gyB5JEag8D8PvvcLYicqZwITVaJQzovPq8lgVJXanpQDPUWG+ZdE0RePRavdbFUfR6gsWkEWZDGnihudPtoqTmOA/parLcqtBjAxeLrXcmaaOsfl10RDmnnJhb4eCXyte0YWweMTiMiXtSbrsmDg/BQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QoeFATyX+h5wykISW8rRPdJcJK8iYkyvfCTwyBC422k=;
+ b=QKpbdwiY6qkcb+NuWBsJdeY0TpoleQz6BBj0deZN87opFr9AMUWTKEi9IHCPct9DQTxiU8v2KKNY2nVasaXyn50cgHpqDk4FiriuRqoVcgh9pxhUb7akQNd76Pgoj/0gPr9xwPFyAXV/mM1UIXlgzoB6+JO3a2cAqmf+0nIJzXWSbrtUY+PMPr0NLG18OTJ/vrA0PbPZr1iXS1OIqkGFdb6jGRMQb59KoelwxQ5uOVKQRBAV3fujUCvinu8meaORQET361+rS0qvj7M2JFoocrKRLYCGY+cq3xxSw8MKIDiPIwQnkID1FMsTPmEgKn36IIKMQMvjs8oPwReW6GDfFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QoeFATyX+h5wykISW8rRPdJcJK8iYkyvfCTwyBC422k=;
+ b=tbvf0epf4YrDJacIkIOLfyEywYjJmhhAFIYCNWADhyZthw1I6vgausfU5ZxSgDZMYtg1k5JwkUh5mbQjz7S+tl+vXXHGXgnBsjQikt4WOJu00r4WZAeFmGz9sKA9M5EIAaN00qzSAmjXsWQFrUx648s7mXaEuhvWkHlBOg5A0NlKHESDuxdiz5/0xgiuMeNj3ZKoZYspppAeNgt3Ugkx+fT+Al+7j3kbNljVQ2URZJKxmtBP/5x20qCCyWUPVItjWwIPpnEkWAuprwIO3fXOBDJBpG0aJRYrElF5nv6XJ+UAIZEdL6u7N2UeSKP3qhwY0aOGLhkmhcGWHwk5uJBCDQ==
+Received: from DM6PR03CA0052.namprd03.prod.outlook.com (2603:10b6:5:100::29)
+ by CH0PR12MB5041.namprd12.prod.outlook.com (2603:10b6:610:e0::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Wed, 26 Oct
+ 2022 07:06:35 +0000
+Received: from DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:100:cafe::2e) by DM6PR03CA0052.outlook.office365.com
+ (2603:10b6:5:100::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28 via Frontend
+ Transport; Wed, 26 Oct 2022 07:06:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM6NAM11FT066.mail.protection.outlook.com (10.13.173.179) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5746.16 via Frontend Transport; Wed, 26 Oct 2022 07:06:35 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 26 Oct
+ 2022 00:06:24 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 26 Oct
+ 2022 00:06:23 -0700
+Received: from pshete-ubuntu.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Wed, 26 Oct 2022 00:06:20 -0700
+From:   Prathamesh Shete <pshete@nvidia.com>
+To:     <thierry.reding@gmail.com>, <linus.walleij@linaro.org>,
+        <bgolaszewski@baylibre.com>, <jonathanh@nvidia.com>,
+        <linux-gpio@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <smangipudi@nvidia.com>, <pshete@nvidia.com>,
+        <kyarlagadda@nvidia.com>, Manish Bhardwaj <mbhardwaj@nvidia.com>
+Subject: [PATCH v2] gpio: tegra186: Check PMC driver status before any request
+Date:   Wed, 26 Oct 2022 12:36:14 +0530
+Message-ID: <20221026070614.24446-1-pshete@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <Y1aa3/oJA2ElSGp0@orome>
+References: <Y1aa3/oJA2ElSGp0@orome>
 MIME-Version: 1.0
-References: <12f2142991690d2b1d6890821f6e7779a4d4bdc0.1666706435.git.geert+renesas@glider.be>
- <20221026001713.kuu5mj6kogosvqnk@pengutronix.de>
-In-Reply-To: <20221026001713.kuu5mj6kogosvqnk@pengutronix.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 26 Oct 2022 09:05:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW=h922855yyiiR2Bo+P2Dg7S7r1pVBF56S+Z0ytng3fA@mail.gmail.com>
-Message-ID: <CAMuHMdW=h922855yyiiR2Bo+P2Dg7S7r1pVBF56S+Z0ytng3fA@mail.gmail.com>
-Subject: Re: [PATCH] pwm: Add missing dummy for devm_pwmchip_add()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT066:EE_|CH0PR12MB5041:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1fafa4df-d1c0-42aa-0ec3-08dab7209ed0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dcRKXASe9blxy2SsGpgdhEEOu0ZD5T7sg0KvpuVkOXSyeR+XikN8Z3wi9JrK2NPh+MLLHURn8GX9yqinqsRmzyScbcSa/eZG9vnijtE7etr7PrVZq1QSPKfyOXkEyzzA077ZT/sRtbaiqJy2Zm8LUqsMoPMZ+pmVl1voGrchMJEW+Il5wiitNH6r1XgKFjfyA9A811I3Uy47gRBf8HCKpjoGIO6R27gx/shz9rYueJ2hPk/GOnhKG8aEwoGdbpAUV8muMCy5qiaiTKrkIxUiL9irEZ4FPXwSkzP02ikY/dG+MaeeWLc5jY1n9XkxyyZT77ogD+3u9pfbkBIqKN5EKlqgDxy4ywTdZ61jgrOUQN3aPfmond4D648goVHwdzUyCFRf+lb/BUpcU6B0awgmI4S5Qliul1CDQk51BTkvCkox8kkUpqIu+s/BF8+TRQJgDabK1G+fVDKepnQlx1om56wY6UBVIK7Y+9dRTyidgtOSserV6Whu538kdVd9fg5ia/ws64kbsbwQmiaaoKbmlG8EZ29wJJ86jYps1xHgH9aMUzijBK+58ZDtxt1FV0/nTmYQRetDwqzeG9zf082P3B+DhrghJ0qnAW9JP1kbMaMm82z88eITOVaW8Xx+mQ74IgOm0CvqSb02gLBPQhZlAcSx3Iy8knrIpgk/0iODgcAOrftEXnRbT/Qbub47uoGpDquooMVoBPWVSHTqDdJyvJjkN60vXfRFXSiJZUlg26KsibsbX6oc13lOfEPsZocXbPMb44TQKzdptBHZFHpuMA==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(136003)(376002)(451199015)(36840700001)(46966006)(40470700004)(6666004)(41300700001)(107886003)(7696005)(110136005)(82740400003)(36756003)(5660300002)(40460700003)(54906003)(8676002)(478600001)(356005)(40480700001)(7636003)(4326008)(8936002)(316002)(70586007)(70206006)(86362001)(83380400001)(2616005)(82310400005)(2906002)(26005)(47076005)(426003)(186003)(1076003)(336012)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 07:06:35.6055
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fafa4df-d1c0-42aa-0ec3-08dab7209ed0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT066.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5041
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Uwe,
+This patch fixes the issue where even if PMC driver status is
+disabled still we are trying to look up for the IRQ domain
+that PMC driver would've registered if it had been enabled.
 
-On Wed, Oct 26, 2022 at 2:17 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
-> On Tue, Oct 25, 2022 at 04:03:42PM +0200, Geert Uytterhoeven wrote:
-> > The PWM subsystem supports compile-testing if CONFIG_PWM is disabled.
-> > However, no dummy is provided for devm_pwmchip_add(), which may lead to
-> > build failures.
-> >
-> > Fixes: bcda91bf86c1ff76 ("pwm: Add a device-managed function to add PWM chips")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Is this a problem that today yields a failure to compile? As of v6.1-rc1
-> and also in next all callers are below drivers/pwm/ which isn't included
-> in the build without PWM=y.
+Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
+Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+---
+ drivers/gpio/gpio-tegra186.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-So none of these support compile-testing with CONFIG_PWM=n...
+diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
+index 54d9fa7da9c1..b99756037ed4 100644
+--- a/drivers/gpio/gpio-tegra186.c
++++ b/drivers/gpio/gpio-tegra186.c
+@@ -896,11 +896,15 @@ static int tegra186_gpio_probe(struct platform_device *pdev)
+ 
+ 	np = of_find_matching_node(NULL, tegra186_pmc_of_match);
+ 	if (np) {
+-		irq->parent_domain = irq_find_host(np);
+-		of_node_put(np);
+-
+-		if (!irq->parent_domain)
+-			return -EPROBE_DEFER;
++		if (of_device_is_available(np)) {
++			irq->parent_domain = irq_find_host(np);
++			of_node_put(np);
++
++			if (!irq->parent_domain)
++				return -EPROBE_DEFER;
++		} else {
++			of_node_put(np);
++		}
+ 	}
+ 
+ 	irq->map = devm_kcalloc(&pdev->dev, gpio->gpio.ngpio,
+-- 
+2.17.1
 
-> Am I missing something or is this just preparing that one of the drivers
-> that doesn't live in drivers/pwm might call devm_pwmchip_add in the
-> future?
-
-I saw it with the RZ/G2L MTU3 PWM driver[1], which is not yet applied.
-After noticing its sibling counter driver lacked a dependency on
-CONFIG_COUNTER, I tried disabling CONFIG_PWM...
-
-> In that case I wouldn't add that Fixes: line (and also oppose to
-> backporting that commit to stable).
-
-I tend to disagree: more drivers may be converted to devm_pwmchip_add()
-in the future, possibly as part of a fix, causing troubles for the
-stable team when backporting such fixes.
-
-Thanks!
-
-[1] https://lore.kernel.org/all/CAMuHMdWE+H=aXkt61hZK6mbQairwdk1F522mZRemC0T5LxQtMg@mail.gmail.com
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
