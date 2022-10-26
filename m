@@ -2,134 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE9160E19D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B7460E1A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbiJZNIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
+        id S233779AbiJZNLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbiJZNH6 (ORCPT
+        with ESMTP id S233487AbiJZNLG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:07:58 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED10BFB735;
-        Wed, 26 Oct 2022 06:07:28 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id az22-20020a05600c601600b003c6b72797fdso1506926wmb.5;
-        Wed, 26 Oct 2022 06:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L0jiMTSBmquugDzo1rVzLGgWnpe8YQDdbS4JQdF2oe0=;
-        b=MAVaFUOx/nc/Tlqs7/GJJy2togIYrAqyxRla3MZEdmldp/7TOH4Md8XmrKIeB/407T
-         9CWwhffHjgDpoUKCpncsUNQrdagWzmOe66eZ0cyF7snK/oWaSZiVjF5lJe9syxJUPrUz
-         974mpN3MP9cVl1wZbtP4LgrW1s+S42bj39pf9dcGd7sGdbg5Rzt4+D64OyspzVMNGJ5w
-         ZSHQ3EHZrdeenCXSWz+g3VLb4y68jzy+HWOHsPs6PkCejoG2uEBXVVrLdTKev8ColhpT
-         KBmMh1+F/EWcipKHI5UauJUQecTdeaBNP2z+a/aoTmWdtFqH8gxsqDh7ffHUQQlXtUv1
-         Ue7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L0jiMTSBmquugDzo1rVzLGgWnpe8YQDdbS4JQdF2oe0=;
-        b=GfoGfzAzpBIuAo5NpYbxzSxysit41sWPELslvtGPgt4QZaWRYgSAfx6nDGYs4vKmmO
-         R1jG5OAZ+kdvbV3Fmt7xkAfJduP4TVmMi3/s+SmSDI8ePJtus5qf42U2fpsTPpnogPTU
-         d29pobY8jq9jlMPT6nin2XebRYUkk/5cKw6iVFdwvy+cnENnai16q4K9QzAfTnEX7V8Y
-         mV1U3gx4kxB6R2OFTAACCI0IF7Fi17HfwLpP7ca8XfHSXMaa0VH00ZdnX7ajUFcj26Au
-         hMZSnjSjkj5TJaf2O6PnNSFBUncxOWMvPqy/oYIGm2X59zU9qlMapjikjHAoSmyAYI1U
-         eacA==
-X-Gm-Message-State: ACrzQf1pNZ42PUn14YCNByof2YPCwJ+AWRYmGyHd1DILVcsJZ2cn/IgT
-        0xd2OyN4yMYZMYISW8GWyyQ=
-X-Google-Smtp-Source: AMsMyM4Er4WKAbIRWgF2gLUapvRVsqBjj5aTQoG1761EBBrIC+UZB72u0L0sSE79mM2YekoYDezymg==
-X-Received: by 2002:a05:600c:16c7:b0:3cf:4dbf:f360 with SMTP id l7-20020a05600c16c700b003cf4dbff360mr1218450wmn.74.1666789647537;
-        Wed, 26 Oct 2022 06:07:27 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2501:c701:cc:c67c:46e:319e])
-        by smtp.gmail.com with ESMTPSA id l3-20020adfa383000000b002366eb01e07sm5245433wrb.114.2022.10.26.06.07.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 06:07:26 -0700 (PDT)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Shawn Tu <shawnx.tu@intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v3 9/9] media: i2c: ov5645: Call ov5645_entity_init_cfg() before registering the subdev
-Date:   Wed, 26 Oct 2022 14:06:58 +0100
-Message-Id: <20221026130658.45601-10-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Wed, 26 Oct 2022 09:11:06 -0400
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9167BFA02A;
+        Wed, 26 Oct 2022 06:11:02 -0700 (PDT)
+Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
+        by mail.kmu-office.ch (Postfix) with ESMTPSA id 255C85C3ABB;
+        Wed, 26 Oct 2022 15:11:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
+        t=1666789860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QLFgExITwIN4lybw/UjaBeJn22b4fh+Q9W7AXp52SJY=;
+        b=NXnk3GNi1ceLZUXZtK/jPKqypVy8x6mNmwOgzfH+iUj3QQb6Z3ENK2E4RlUnXtjfKJVtqm
+        Wn5M1kNEE8cyHkU7FE42iFAuIiIAi43yeknhNOjcOrQglCHzKixmbrlc3Vq7Lz40BlGukP
+        g+eGl7/bauZiRChnA3yzqFLh/UxjCoo=
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Wed, 26 Oct 2022 15:11:00 +0200
+From:   Stefan Agner <stefan@agner.ch>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        stable <stable@kernel.org>, regressions@lists.linux.dev,
+        m.szyprowski@samsung.com, krzk@kernel.org
+Subject: Re: [PATCH stable-5.15 3/3] usb: dwc3: disable USB core PHY
+ management
+In-Reply-To: <Y1JCIKT80P9IysKD@hovoldconsulting.com>
+References: <20220906120702.19219-1-johan@kernel.org>
+ <20220906120702.19219-4-johan@kernel.org>
+ <808bdba846bb60456adf10a3016911ee@agner.ch>
+ <Y0+8dKESygFunXOu@hovoldconsulting.com>
+ <86c0f1ee8ffc94f9a53690dda6a83fbb@agner.ch>
+ <Y1JCIKT80P9IysKD@hovoldconsulting.com>
+Message-ID: <b2a1e70bda64cb741efe81c5b7e56707@agner.ch>
+X-Sender: stefan@agner.ch
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 2022-10-21 08:54, Johan Hovold wrote:
+> On Fri, Oct 21, 2022 at 12:06:12AM +0200, Stefan Agner wrote:
+>> On 2022-10-19 10:59, Johan Hovold wrote:
+>> > On Tue, Oct 18, 2022 at 05:27:24PM +0200, Stefan Agner wrote:
+>> >> On 2022-09-06 14:07, Johan Hovold wrote:
+>> >> > From: Johan Hovold <johan+linaro@kernel.org>
+>> >> >
+>> >> > commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
+>> >> >
+>> >> > The dwc3 driver manages its PHYs itself so the USB core PHY management
+>> >> > needs to be disabled.
+>> >> >
+>> >> > Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
+>> >> > host: xhci-plat: add platform data support") and f768e718911e ("usb:
+>> >> > host: xhci-plat: add priv quirk for skip PHY initialization") to
+>> >> > propagate the setting for now.
+> 
+>> >> For some reason, this commit seems to break detection of the USB to
+>> >> S-ATA controller on ODROID-HC1 devices (Exynos 5422).
+> 
+>> > I think this may be related to the calibration calls added to dwc3 and
+>> > later removed again by commits:
+>> >
+>> > 	d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
+>> > 	a0a465569b45 ("usb: dwc3: remove generic PHY calibrate() calls")
+>> >
+>> > The removal explicitly mentions that the expectation is that USB core
+>> > will do the PHY calibration.
+>> >
+>> > There could be other changes in the sequencing of events that this
+>> > platform has been implicitly relying on, but as a start, could try
+>> > adding the missing calibration calls (patch below) and see if that makes a
+>> > difference?
+>> 
+>> The patch below did not apply to 5.15.74 directly, but I think I was
+>> able to get the corrected patch applied (see below)
+> 
+> Looks good to me.
+> 
+>> That said, I do not have direct access to that hardware, but I created a
+>> build and asked the user test it.
+> 
+> Thanks, let me know how it goes.
 
-Make sure we call ov5645_entity_init_cfg() before registering the subdev
-to make sure default formats are set up.
+The user reports the S-ATA disk is *not* recognized with that patch
+applied.
 
-Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
----
-v2->v3
-* Included RB tag from Laurent.
-
-v1->v2
-* New patch
----
- drivers/media/i2c/ov5645.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index 5702a55607fc..73cf6716f3ed 100644
---- a/drivers/media/i2c/ov5645.c
-+++ b/drivers/media/i2c/ov5645.c
-@@ -1223,6 +1223,8 @@ static int ov5645_probe(struct i2c_client *client)
- 		goto err_pm_runtime;
- 	}
- 
-+	ov5645_entity_init_cfg(&ov5645->sd, NULL);
-+
- 	ret = v4l2_async_register_subdev(&ov5645->sd);
- 	if (ret < 0) {
- 		dev_err(dev, "could not register v4l2 device\n");
-@@ -1234,8 +1236,6 @@ static int ov5645_probe(struct i2c_client *client)
- 	pm_runtime_mark_last_busy(dev);
- 	pm_runtime_put_autosuspend(dev);
- 
--	ov5645_entity_init_cfg(&ov5645->sd, NULL);
--
- 	return 0;
- 
- err_pm_runtime:
--- 
-2.25.1
+--
+Stefan
 
