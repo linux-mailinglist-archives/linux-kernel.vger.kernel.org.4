@@ -2,122 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6E860E221
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B61A960E277
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233711AbiJZN0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S233985AbiJZNrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233852AbiJZN0B (ORCPT
+        with ESMTP id S233440AbiJZNqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:26:01 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC494F3B9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:25:41 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id f37so28500282lfv.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3F0J21CmvJ5WHYm54tJvUEMwUkDmIvZoPvGXEV0b6J0=;
-        b=lsUq/Qjsz9IpqJKpiyJDngqGR9UY+5zS4PjiUAV10f+pvIUBRlfvIUDW2JUWfd0M9Z
-         M5qO0x36vlguUJg4KU/YD2wvlqQWuAyTq1kuCzE5zZI6urZ6j4I4Bg7dCHOE4rkr35Jc
-         C99l6rZ07Jo+aAIACx46GhvOUVf3KHC5PyJSaMPDeYJx7OpjeaUv+Aw7g1dGYN/R8SBx
-         AFtP0pwheE5KQg6mks7OXc479o/5XdKUdZVceFS4BmIrfOUHE3JW8jxVTa+25y2mF42T
-         9ONF1ksL8yte8/HDFf9uiEBxogxHstNx/7B50HcPDR+rKQKwa0/pZWSC5GpGkrygbzDa
-         XZvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3F0J21CmvJ5WHYm54tJvUEMwUkDmIvZoPvGXEV0b6J0=;
-        b=gyxe8ux4OH6ygnwFD5SNdK4zmXl6b9cDgHPb+BuL1PsbCqdngRUQ6t7mkQndOxP/0v
-         IPq6lyO5TDcNhNuyXECCk/YLL4IziT8+UM8olM26phufshWC8xf+PUAEy7XxVF2eCPVP
-         XC1NtQq3aCTUPJgkqhlub0R8q/yOGOiJ3m4/jwzkhPmVxGpblpH4RZiMLug4hXmlv4em
-         wnWkZT5/OVi7h9oUGtbjBJHG7mldxlaJTvloMnrEZrO3Tglf1PsQmInaXdEsATrItFIb
-         urHzfym/D+DAocQubI28RKf/WerONtuI9mgP+uQwoN2kyZ2pyivjV85TqChJSBRGcXvv
-         XFMQ==
-X-Gm-Message-State: ACrzQf2etiSAOCUYShANxFHCvv0vZKW96swdWCMzAuKDpyR1WnGpao9u
-        WP4NNpMiaNnREW/B00wc6X+RNps8n8GqI2Ofvn9DHw==
-X-Google-Smtp-Source: AMsMyM6Ix7WVURNf29MW/sR9dZMcJHjp4pAbYMfHGaQV0OuYybYDVQVX3iQaU4p5VxB4eE+WtkUAaTqy96ma42EGVZ4=
-X-Received: by 2002:a05:6512:3a83:b0:4ad:23ac:94ec with SMTP id
- q3-20020a0565123a8300b004ad23ac94ecmr4470741lfu.540.1666790739137; Wed, 26
- Oct 2022 06:25:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000aa2b2805ebea9137@google.com> <9a450a11-531d-8e1a-4c77-70102aa7f424@redhat.com>
-In-Reply-To: <9a450a11-531d-8e1a-4c77-70102aa7f424@redhat.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 26 Oct 2022 06:25:27 -0700
-Message-ID: <CACT4Y+YTjYMWQKixhkNMuty4LXTsgBmpiYAN5ChGVXZBCyp0uA@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in __split_huge_page_tail
-To:     David Hildenbrand <david@redhat.com>
-Cc:     syzbot <syzbot+273b547b15eb58ea35e8@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 26 Oct 2022 09:46:35 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC32167073;
+        Wed, 26 Oct 2022 06:46:33 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3020B1A81C5;
+        Wed, 26 Oct 2022 15:46:32 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BA5371A81C2;
+        Wed, 26 Oct 2022 15:46:31 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id DC7CC183486A;
+        Wed, 26 Oct 2022 21:46:29 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     shengjiu.wang@gmail.com, abelvesa@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, marex@denx.de
+Subject: [PATCH] clk: imx8mp: Add audio shared gate
+Date:   Wed, 26 Oct 2022 21:26:01 +0800
+Message-Id: <1666790761-4685-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 at 02:54, David Hildenbrand <david@redhat.com> wrote:
->
-> On 26.10.22 08:59, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    4da34b7d175d Merge tag 'thermal-6.1-rc2' of git://git.kern..
-> > git tree:       upstream
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=113bd8bc880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=4789759e8a6d5f57
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=273b547b15eb58ea35e8
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161e1f62880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16dd4fe6880000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/a61ddb36c296/disk-4da34b7d.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/ceee41246252/vmlinux-4da34b7d.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+273b547b15eb58ea35e8@syzkaller.appspotmail.com
-> >
-> >   tlb_finish_mmu+0xcb/0x200 mm/mmu_gather.c:363
-> >   exit_mmap+0x2b1/0x670 mm/mmap.c:3098
-> >   __mmput+0x114/0x3b0 kernel/fork.c:1185
-> >   exit_mm+0x217/0x2f0 kernel/exit.c:516
-> >   do_exit+0x5e7/0x2070 kernel/exit.c:807
-> >   do_group_exit+0x1fd/0x2b0 kernel/exit.c:950
-> >   __do_sys_exit_group kernel/exit.c:961 [inline]
-> >   __se_sys_exit_group kernel/exit.c:959 [inline]
-> >   __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:959
-> >   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> >   do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
-> >   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 0 PID: 3908 at mm/huge_memory.c:2465 __split_huge_page_tail+0x81c/0x1080 mm/huge_memory.c:2465
->
-> Is this the
->
-> VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
->
-> assertion?
+From: Abel Vesa <abel.vesa@nxp.com>
 
-Hi David,
+According to the RM, the CCGR101 is shared for the following root clocks:
+- AUDIO_AHB_CLK_ROOT
+- AUDIO_AXI_CLK_ROOT
+- SAI1_CLK_ROOT
+- SAI2_CLK_ROOT
+- SAI3_CLK_ROOT
+- SAI5_CLK_ROOT
+- SAI6_CLK_ROOT
+- SAI7_CLK_ROOT
+- PDM_CLK_ROOT
 
-You can check the sources for that revision, but on the dashboard
-there are clickable links for all source references:
-https://syzkaller.appspot.com/bug?extid=273b547b15eb58ea35e8
+And correct clock MX8MP_CLK_AUDIO_ROOT to be IMX8MP_CLK_AUDIO_AHB_ROOT.
 
-In this case it points to:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/huge_memory.c?id=4da34b7d175dc99b8befebd69e96546c960d526c#n2465
+Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ drivers/clk/imx/clk-imx8mp.c             | 11 ++++++++++-
+ include/dt-bindings/clock/imx8mp-clock.h | 11 ++++++++++-
+ 2 files changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
+index 652ae58c2735..0ae3bc7bf8a1 100644
+--- a/drivers/clk/imx/clk-imx8mp.c
++++ b/drivers/clk/imx/clk-imx8mp.c
+@@ -17,6 +17,7 @@
+ 
+ static u32 share_count_nand;
+ static u32 share_count_media;
++static u32 share_count_audio;
+ 
+ static const char * const pll_ref_sels[] = { "osc_24m", "dummy", "dummy", "dummy", };
+ static const char * const audio_pll1_bypass_sels[] = {"audio_pll1", "audio_pll1_ref_sel", };
+@@ -699,7 +700,15 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
+ 	hws[IMX8MP_CLK_HDMI_ROOT] = imx_clk_hw_gate4("hdmi_root_clk", "hdmi_axi", ccm_base + 0x45f0, 0);
+ 	hws[IMX8MP_CLK_TSENSOR_ROOT] = imx_clk_hw_gate4("tsensor_root_clk", "ipg_root", ccm_base + 0x4620, 0);
+ 	hws[IMX8MP_CLK_VPU_ROOT] = imx_clk_hw_gate4("vpu_root_clk", "vpu_bus", ccm_base + 0x4630, 0);
+-	hws[IMX8MP_CLK_AUDIO_ROOT] = imx_clk_hw_gate4("audio_root_clk", "audio_ahb", ccm_base + 0x4650, 0);
++	hws[IMX8MP_CLK_AUDIO_AHB_ROOT] = imx_clk_hw_gate2_shared2("audio_ahb_root", "audio_ahb", ccm_base + 0x4650, 0, &share_count_audio);
++	hws[IMX8MP_CLK_AUDIO_AXI_ROOT] = imx_clk_hw_gate2_shared2("audio_axi_root", "audio_axi", ccm_base + 0x4650, 0, &share_count_audio);
++	hws[IMX8MP_CLK_SAI1_ROOT] = imx_clk_hw_gate2_shared2("sai1_root", "sai1", ccm_base + 0x4650, 0, &share_count_audio);
++	hws[IMX8MP_CLK_SAI2_ROOT] = imx_clk_hw_gate2_shared2("sai2_root", "sai2", ccm_base + 0x4650, 0, &share_count_audio);
++	hws[IMX8MP_CLK_SAI3_ROOT] = imx_clk_hw_gate2_shared2("sai3_root", "sai3", ccm_base + 0x4650, 0, &share_count_audio);
++	hws[IMX8MP_CLK_SAI5_ROOT] = imx_clk_hw_gate2_shared2("sai5_root", "sai5", ccm_base + 0x4650, 0, &share_count_audio);
++	hws[IMX8MP_CLK_SAI6_ROOT] = imx_clk_hw_gate2_shared2("sai6_root", "sai6", ccm_base + 0x4650, 0, &share_count_audio);
++	hws[IMX8MP_CLK_SAI7_ROOT] = imx_clk_hw_gate2_shared2("sai7_root", "sai7", ccm_base + 0x4650, 0, &share_count_audio);
++	hws[IMX8MP_CLK_PDM_ROOT] = imx_clk_hw_gate2_shared2("pdm_root", "pdm", ccm_base + 0x4650, 0, &share_count_audio);
+ 
+ 	hws[IMX8MP_CLK_ARM] = imx_clk_hw_cpu("arm", "arm_a53_core",
+ 					     hws[IMX8MP_CLK_A53_CORE]->clk,
+diff --git a/include/dt-bindings/clock/imx8mp-clock.h b/include/dt-bindings/clock/imx8mp-clock.h
+index 9d5cc2ddde89..2f6fec299662 100644
+--- a/include/dt-bindings/clock/imx8mp-clock.h
++++ b/include/dt-bindings/clock/imx8mp-clock.h
+@@ -324,8 +324,17 @@
+ #define IMX8MP_CLK_CLKOUT2_SEL			317
+ #define IMX8MP_CLK_CLKOUT2_DIV			318
+ #define IMX8MP_CLK_CLKOUT2			319
++#define IMX8MP_CLK_AUDIO_AHB_ROOT		320
++#define IMX8MP_CLK_AUDIO_AXI_ROOT		321
++#define IMX8MP_CLK_SAI1_ROOT			322
++#define IMX8MP_CLK_SAI2_ROOT			323
++#define IMX8MP_CLK_SAI3_ROOT			324
++#define IMX8MP_CLK_SAI5_ROOT			325
++#define IMX8MP_CLK_SAI6_ROOT			326
++#define IMX8MP_CLK_SAI7_ROOT			327
++#define IMX8MP_CLK_PDM_ROOT			328
+ 
+-#define IMX8MP_CLK_END				320
++#define IMX8MP_CLK_END				329
+ 
+ #define IMX8MP_CLK_AUDIOMIX_SAI1_IPG		0
+ #define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK1		1
+-- 
+2.34.1
+
