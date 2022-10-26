@@ -2,157 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA23F60EA00
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE1960EA02
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234938AbiJZULY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 16:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
+        id S235086AbiJZUL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 16:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235118AbiJZULO (ORCPT
+        with ESMTP id S234987AbiJZULW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 16:11:14 -0400
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302AB143A74;
-        Wed, 26 Oct 2022 13:11:12 -0700 (PDT)
-Received: by mail-ot1-f46.google.com with SMTP id d18-20020a05683025d200b00661c6f1b6a4so10703713otu.1;
-        Wed, 26 Oct 2022 13:11:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bxh7/bAaex3YOoW5fejtI6wP7XMx1Bm3idoLs8QD3D4=;
-        b=xSPXhAZZw4fUWNguCX+FMaMAp33yOfzqNRkm3lIOOkaLIsZyhLQXVbXc9jGMVTT9ry
-         HVAu0oQy6uCrJ6EMgRdBdd+KF/ejtQ1eOnRs7rpaq2I7nexcSvzhyUkOm5zJt8KxWwdY
-         yUMMu6depuegT/pOqCQH0JqqnEhUOLeHXamT+N72grd6fsAVPv4lSBRyqAtWapmWzvkn
-         wH6IkZir/FVVI7mEO11X8aHKJISO9vFqP9X5Ln9jqwtd53zKSqbkv6X4xcHNZFCpkY3/
-         chv764CEsOBBdK7fwTMs57umNfUczJhvC/lV3B7MlGIcrUAY5ztvOVNk8S+8P1CwQqFj
-         q5Qg==
-X-Gm-Message-State: ACrzQf0zlVm5EjwYfNejihbWxRwbaXk6AYP6Bza2xu7Z/fYLwJ/pm5wc
-        syOfwYkSU87uGf+sQ5Wm+A==
-X-Google-Smtp-Source: AMsMyM4eINBgPpQ+uYOM1SjWMaqslOU61o8eyuDNV/lbKUULILrGgf1JXyrSpYeSTmLixyx9jsYo6g==
-X-Received: by 2002:a05:6830:3102:b0:661:e1f9:ff75 with SMTP id b2-20020a056830310200b00661e1f9ff75mr22442086ots.207.1666815072153;
-        Wed, 26 Oct 2022 13:11:12 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q10-20020a05683033ca00b00661a33883b8sm2525809ott.71.2022.10.26.13.11.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 13:11:11 -0700 (PDT)
-Received: (nullmailer pid 1123772 invoked by uid 1000);
-        Wed, 26 Oct 2022 20:11:12 -0000
-Date:   Wed, 26 Oct 2022 15:11:12 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Weilong Chen <chenweilong@huawei.com>
-Cc:     f.fangjian@huawei.com, linus.walleij@linaro.org,
-        yangyicong@hisilicon.com, xuwei5@huawei.com,
-        krzysztof.kozlowski+dt@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH next 2/2] dt-bindings: gpio: add entry for
- hisilicon,gpio-ascend910
-Message-ID: <20221026201112.GA1104486-robh@kernel.org>
-References: <20221026034219.172880-1-chenweilong@huawei.com>
- <20221026034219.172880-2-chenweilong@huawei.com>
+        Wed, 26 Oct 2022 16:11:22 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E63118769;
+        Wed, 26 Oct 2022 13:11:19 -0700 (PDT)
+Received: from [192.168.31.208] (unknown [194.29.137.22])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id EE9643F73D;
+        Wed, 26 Oct 2022 22:11:16 +0200 (CEST)
+Message-ID: <cd4bea2e-3832-1684-ff8e-2236ccdbe558@somainline.org>
+Date:   Wed, 26 Oct 2022 22:11:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026034219.172880-2-chenweilong@huawei.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH 1/4] arm64: dts: qcom: sm8450: move SDHCI pin
+ configuration to DTSI
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20221026200357.391635-1-krzysztof.kozlowski@linaro.org>
+ <20221026200357.391635-2-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20221026200357.391635-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 11:42:19AM +0800, Weilong Chen wrote:
-> Add the new compatible for HiSilicon gpio controller driver.
-> 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+
+On 26/10/2022 22:03, Krzysztof Kozlowski wrote:
+> The SDHCI pin configuration/mux nodes are actually common to all
+> upstreamed boards, so define them in SoC DTSI to reduce code
+> duplication.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
 > ---
->  .../gpio/hisilicon,gpio-ascend910.yaml        | 54 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 55 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/hisilicon,gpio-ascend910.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/hisilicon,gpio-ascend910.yaml b/Documentation/devicetree/bindings/gpio/hisilicon,gpio-ascend910.yaml
-> new file mode 100644
-> index 000000000000..912e4b808cae
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/hisilicon,gpio-ascend910.yaml
-> @@ -0,0 +1,54 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/hisilicon,gpio-ascend910.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: HiSilicon common GPIO controller Device Tree Bindings
-> +
-> +maintainers:
-> +  - Jay Fang <f.fangjian@huawei.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,gpio-ascend910
 
-The normal convention is: vendor,soc-ipblock
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-> +    description:
-> +      The HiSilicon common GPIO controller can be used for many different
-> +      types of SoC such as Huawei Ascend AI series chips.
+
+Konrad
+
+>
+> In theory drive strength belongs to the board DTS, not SoC DTSI, but I
+> am following the advice here:
+> https://lore.kernel.org/lkml/CAD=FV=VUL4GmjaibAMhKNdpEso_Hg_R=XeMaqah1LSj_9-Ce4Q@mail.gmail.com/
+> ---
+>   .../qcom/sm8450-sony-xperia-nagara-pdx223.dts | 20 -------------------
+>   arch/arm64/boot/dts/qcom/sm8450.dtsi          | 20 +++++++++++++++++++
+>   2 files changed, 20 insertions(+), 20 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
+> index 82918c2d956f..718c690af8ad 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
+> @@ -572,26 +572,6 @@ &spi10 {
+>   &tlmm {
+>   	gpio-reserved-ranges = <28 4>;
+>   
+> -	sdc2_default_state: sdc2-default-state {
+> -		clk-pins {
+> -			pins = "sdc2_clk";
+> -			drive-strength = <16>;
+> -			bias-disable;
+> -		};
+> -
+> -		cmd-pins {
+> -			pins = "sdc2_cmd";
+> -			drive-strength = <16>;
+> -			bias-pull-up;
+> -		};
+> -
+> -		data-pins {
+> -			pins = "sdc2_data";
+> -			drive-strength = <16>;
+> -			bias-pull-up;
+> -		};
+> -	};
+> -
+>   	ts_int_default: ts-int-default-state {
+>   		pins = "gpio23";
+>   		function = "gpio";
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> index 1d1775334575..1df5c964c6f7 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -2515,6 +2515,26 @@ tlmm: pinctrl@f100000 {
+>   			gpio-ranges = <&tlmm 0 0 211>;
+>   			wakeup-parent = <&pdc>;
+>   
+> +			sdc2_default_state: sdc2-default-state {
+> +				clk-pins {
+> +					pins = "sdc2_clk";
+> +					drive-strength = <16>;
+> +					bias-disable;
+> +				};
 > +
-> +  reg:
-> +    description:
-> +      Address and length of the register set for the device.
-> +    maxItems: 1
+> +				cmd-pins {
+> +					pins = "sdc2_cmd";
+> +					drive-strength = <16>;
+> +					bias-pull-up;
+> +				};
 > +
-> +  interrupts:
-> +    maxItems: 1
+> +				data-pins {
+> +					pins = "sdc2_data";
+> +					drive-strength = <16>;
+> +					bias-pull-up;
+> +				};
+> +			};
 > +
-> +  gpio-controller: true
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +  ngpios:
-> +    minimum: 1
-> +    maximum: 32
-> +
-> +required:
-> +  - compatible
-> +  - gpio-controller
-> +  - reg
-> +  - interrupts
-> +  - ngpios
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    gpio@840d0000 {
-> +      compatible = "hisilicon,gpio-ascend910";
-> +      reg = <0x840d0000 0x1000>;
-> +      ngpios = <0x20>;
-> +      gpio-controller;
-> +      #gpio-cells = <2>;
-> +      interrupts = <0x0 33 0x4>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 746becb5fe92..0ec86558cdce 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9212,6 +9212,7 @@ HISILICON GPIO DRIVER
->  M:	Jay Fang <f.fangjian@huawei.com>
->  L:	linux-gpio@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/gpio/hisilicon,gpio-ascend910.yaml
->  F:	drivers/gpio/gpio-hisi.c
->  
->  HISILICON HIGH PERFORMANCE RSA ENGINE DRIVER (HPRE)
-> -- 
-> 2.31.GIT
-> 
-> 
+>   			sdc2_sleep_state: sdc2-sleep-state {
+>   				clk-pins {
+>   					pins = "sdc2_clk";
