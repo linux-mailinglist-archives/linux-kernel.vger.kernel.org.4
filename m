@@ -2,115 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0990160E0B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8396960E0D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbiJZMdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S233703AbiJZMgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:36:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233150AbiJZMdm (ORCPT
+        with ESMTP id S233655AbiJZMgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:33:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9514073936;
-        Wed, 26 Oct 2022 05:33:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56B00B8212F;
-        Wed, 26 Oct 2022 12:33:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D92C433C1;
-        Wed, 26 Oct 2022 12:33:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666787619;
-        bh=1oQIC/cEy+BOnB6qVZCAUuyMhZUjMaoO2CL7d79n42k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MkhUuZ4R24oHo5gcthD/4oPGb+VW8T8sm1LSjL0hHEzT9Bb/3OGFs7KrTYXf/o44O
-         WQnOxrRYa9CK5XmryT2epofDD3UX1XH5KcB8wyoWNN7HmP2wtvbjoPXrAE7K8dHAVp
-         IXEqBid+aksXgIJfJ7rUnq6QUw5JhIpuKj446uAPtnL1mktK9UognPJDBe9T7rkJ/A
-         ysQaowqW9Xh5YaqXgYdF3p7Dtm2AByLJaOhH5CtpmOyVeDW/mSoX0nmoPyE3isAGSp
-         dzEBGKMNiS0nNhIyLCw1uSSn36DodrC06ESR0XHRbydkqNFRsXLRRX6xqQFDUo4DwP
-         JcQolSq6ACWOQ==
-Date:   Wed, 26 Oct 2022 14:33:31 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Vidya Sagar <vidyas@nvidia.com>, jingoohan1@gmail.com,
-        gustavo.pimentel@synopsys.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, treding@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
- logging
-Message-ID: <Y1kpG0l05uMueM9Y@lpieralisi>
-References: <20221018164329.GA3808783@bhelgaas>
- <8670e757-7275-57eb-3f5c-0a21ba354e37@nvidia.com>
+        Wed, 26 Oct 2022 08:36:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB2C8E442;
+        Wed, 26 Oct 2022 05:36:23 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QCZoXE004892;
+        Wed, 26 Oct 2022 12:36:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=LoNYjlvw7n7AAaxNgSQnxhM7o1qFq0VL7RM3za1O2Yo=;
+ b=hm+19J7JgVA0+Lihb+CZfSSiRdzSrxBX9XCM/+hbFMxA7MMCdht3dhn4KzJE3wIGDO+n
+ HEbdsQTOfUePta5ZFDtwOpoEJ2+e9jQtxp9fvtklFLU9hR93NfZBB8vuc8KvtDnhoAhO
+ XJagtI0c93lj6KerCHSXf4hVrefPyZ17BhisD0WHLEOST//rMRdTQGTGeRzMB/Yi0v9O
+ YabPvIU5SblaT+dTvY3/UGq4J/MNSMXB30AeGqoEerg97zYujoKYmfo0iy0YKw1H9TKX
+ Yd0zSEDvhs3N6NnZ4ZJRhyF5cTHmSjvxgD82aRG8FP9obnmE08/suvzz8qwPjzF2v9uf UQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kf3n5tue3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 12:36:14 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29QCa8Up007547;
+        Wed, 26 Oct 2022 12:36:13 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kf3n5ttup-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 12:36:13 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29QCYul0005032;
+        Wed, 26 Oct 2022 12:35:53 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kc7sj7eh3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 12:35:53 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29QCZpuZ2163298
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 12:35:51 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6C03EAE053;
+        Wed, 26 Oct 2022 12:35:51 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D438AE045;
+        Wed, 26 Oct 2022 12:35:48 +0000 (GMT)
+Received: from [9.43.91.80] (unknown [9.43.91.80])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Oct 2022 12:35:47 +0000 (GMT)
+Message-ID: <22590f74-ec91-e673-32df-8a04b4ab3931@linux.ibm.com>
+Date:   Wed, 26 Oct 2022 18:05:46 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8670e757-7275-57eb-3f5c-0a21ba354e37@nvidia.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+References: <20221026074343.6517-1-feng.tang@intel.com>
+ <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
+ <Y1jpDfwBQId3GkJC@feng-clx> <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
+ <d17698d2-c1b5-9aa3-6271-838830d36cc5@linux.ibm.com>
+ <Y1kTz1qjfsY1UBPf@dhcp22.suse.cz>
+ <44e485d4-acf5-865d-17fe-13be1c1b430b@linux.ibm.com>
+ <Y1kmOaXvzwRv/tza@dhcp22.suse.cz>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <Y1kmOaXvzwRv/tza@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1Q9pvveorLwz4xerIDi54tOgfrFYTHPz
+X-Proofpoint-ORIG-GUID: y98Ye8vStkw9KLE5ZWvS4COwtqur_lej
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_06,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ priorityscore=1501 adultscore=0 lowpriorityscore=0 malwarescore=0
+ phishscore=0 impostorscore=0 mlxlogscore=995 mlxscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210260070
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 12:39:13PM +0100, Jon Hunter wrote:
-> Hi Lorenzo,
+On 10/26/22 5:51 PM, Michal Hocko wrote:
+> On Wed 26-10-22 17:38:06, Aneesh Kumar K V wrote:
+>> On 10/26/22 4:32 PM, Michal Hocko wrote:
+>>> On Wed 26-10-22 16:12:25, Aneesh Kumar K V wrote:
+>>>> On 10/26/22 2:49 PM, Michal Hocko wrote:
+>>>>> On Wed 26-10-22 16:00:13, Feng Tang wrote:
+>>>>>> On Wed, Oct 26, 2022 at 03:49:48PM +0800, Aneesh Kumar K V wrote:
+>>>>>>> On 10/26/22 1:13 PM, Feng Tang wrote:
+>>>>>>>> In page reclaim path, memory could be demoted from faster memory tier
+>>>>>>>> to slower memory tier. Currently, there is no check about cpuset's
+>>>>>>>> memory policy, that even if the target demotion node is not allowd
+>>>>>>>> by cpuset, the demotion will still happen, which breaks the cpuset
+>>>>>>>> semantics.
+>>>>>>>>
+>>>>>>>> So add cpuset policy check in the demotion path and skip demotion
+>>>>>>>> if the demotion targets are not allowed by cpuset.
+>>>>>>>>
+>>>>>>>
+>>>>>>> What about the vma policy or the task memory policy? Shouldn't we respect
+>>>>>>> those memory policy restrictions while demoting the page? 
+>>>>>>  
+>>>>>> Good question! We have some basic patches to consider memory policy
+>>>>>> in demotion path too, which are still under test, and will be posted
+>>>>>> soon. And the basic idea is similar to this patch.
+>>>>>
+>>>>> For that you need to consult each vma and it's owning task(s) and that
+>>>>> to me sounds like something to be done in folio_check_references.
+>>>>> Relying on memcg to get a cpuset cgroup is really ugly and not really
+>>>>> 100% correct. Memory controller might be disabled and then you do not
+>>>>> have your association anymore.
+>>>>>
+>>>>
+>>>> I was looking at this recently and I am wondering whether we should worry about VM_SHARE
+>>>> vmas. 
+>>>>
+>>>> ie, page_to_policy() can just reverse lookup just one VMA and fetch the policy right?
+>>>
+>>> How would that help for private mappings shared between parent/child?
+>>
+>>
+>> this is MAP_PRIVATE | MAP_SHARED?
 > 
-> On 18/10/2022 17:43, Bjorn Helgaas wrote:
-> > On Tue, Oct 18, 2022 at 07:21:54AM +0100, Jon Hunter wrote:
-> > > Hi Bjorn,
-> > > 
-> > > On 13/09/2022 11:12, Vidya Sagar wrote:
-> > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
-> > > > not having an endpoint connected to the slot is not an error.
-> > > > So, changing the macro from dev_err to dev_info to log the event.
-> > > > 
-> > > > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> > > > ---
-> > > >    drivers/pci/controller/dwc/pcie-designware.c | 2 +-
-> > > >    1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > > > index 650a7f22f9d0..25154555aa7a 100644
-> > > > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > > > @@ -456,7 +456,7 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
-> > > >    	}
-> > > >    	if (retries >= LINK_WAIT_MAX_RETRIES) {
-> > > > -		dev_err(pci->dev, "Phy link never came up\n");
-> > > > +		dev_info(pci->dev, "Phy link never came up\n");
-> > > >    		return -ETIMEDOUT;
-> > > >    	}
-> > > 
-> > > 
-> > > Are you OK to take this change?
-> > 
-> > When this came up, Lorenzo was in the middle of a big move and I was
-> > covering for him while he was unavailable.  But he's back, and I'm
-> > sure he will resolve this soon.
-> > 
-> > Personally I'm OK either way.
-> > 
-> > Bjorn
-> 
-> 
-> Can we come to a conclusion on this?
-> 
-> We have tests that fail when errors/warning messages are reported. We can
-> choose to ignore these errors, but given that this is not an error in this
-> case, we were thinking it is better to make it informational.
 
-I understood.
+Sorry, I meant MAP_ANONYMOUS | MAP_SHARED. 
 
-We are at v6.1-rc2, this patch is not a fix, we will handle it for the
-v6.2 merge window.
+> This is not a valid combination IIRC. What I meant is a simple
+> MAP_PRIVATE|MAP_ANON that is CoW shared between parent and child.
+> 
+> [...]
 
-Thanks,
-Lorenzo
+
+-aneesh
