@@ -2,109 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C626760E024
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B94960E028
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:03:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbiJZMCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
+        id S233465AbiJZMDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiJZMCl (ORCPT
+        with ESMTP id S233485AbiJZMDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:02:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE9346DB4;
-        Wed, 26 Oct 2022 05:02:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 5150A2207D;
-        Wed, 26 Oct 2022 12:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1666785758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7e4B9MbvTUT94KALkUjhjJvQIZdQ+NZ1YEAmT1iPCak=;
-        b=jBTiR2056OB5RGxD9Ep8aMTeGXS5/19j7BYWZI0qf+LmCe0xtKt55xiRpgEE2go33r73uC
-        5eh7cB3vp1wG4kENaaylmSyX7DN1ZbZO8B3OEYEYi7EFk/0qGkY5ur7GwwdeWhPt3oBFJI
-        gN00fCK1RtvMjhrBBXrL04kYq18Dd5A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1666785758;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7e4B9MbvTUT94KALkUjhjJvQIZdQ+NZ1YEAmT1iPCak=;
-        b=LCdWfDzVU66lhmR0RvgigsvxFNdO+VFt/FJY3rX/qAXyNZ6xS++brVDVFsdbKswA+qYVq9
-        FwdjFLb226jabWCg==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 279362C141;
-        Wed, 26 Oct 2022 12:02:34 +0000 (UTC)
-Date:   Wed, 26 Oct 2022 13:02:32 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Doug Berger <opendmb@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Rapoport <rppt@kernel.org>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v3 0/9] mm: introduce Designated Movable Blocks
-Message-ID: <20221026120232.bbhfwjm32qq4mh57@suse.de>
-References: <20221020215318.4193269-1-opendmb@gmail.com>
- <20221026105500.n6ddzqqf5ozjswsp@suse.de>
- <b8a4cd98-8236-d6e4-ee36-550ae1c107ff@redhat.com>
+        Wed, 26 Oct 2022 08:03:36 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FB14B4BC;
+        Wed, 26 Oct 2022 05:03:34 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id p3so12878277pld.10;
+        Wed, 26 Oct 2022 05:03:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eeyWPYOfNLO5HnpCrV5iKgVUweZC5smkX35UuDur0+M=;
+        b=M3jMZCz2f9I//6dZFQixFueDv6DvYYSZAPHVtKl+MyKAgJt6T38Gb6GzCvJeBqFFWe
+         0IPEe0eefPjToxWp/R7HaW03L9zOfBHUukgzhX6wH2VLoqOP1LiSPhUW8qdlzKVa1fyn
+         ynUjy1O7nL0X2uG4J6xqfMZCAWMRa/K8N2Ttl14QZGYaym4CzdqkSkNDznT6XxNUhg1A
+         DGnknrKGEEZOpISRKsAuZ9K3FbMmReDddGUuhOTenZ7QTT1bXck7JGO0cAeMWvlZO7SK
+         peq006gMhlFVtmMBqC0WmcoxoqEhL/vgut4uQHRWurhrmUrceuEwqtg6fro2VEvfGI8h
+         c81Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eeyWPYOfNLO5HnpCrV5iKgVUweZC5smkX35UuDur0+M=;
+        b=JZY6CnB6aNqfH6j9QSrDkbMmHYnWx7kWhRGfC0x8hNEacGQWmLQsIVeQNxQ7XLY3NZ
+         sWXg013DPPIa2QrFQhmu36sptr6g3B1Sawzp1B/b4ih0GqCf3eob37s1xaREco+LnC43
+         6dQE509Anqu3w1gFFw5ycA0vQ5Vqp7QyX63H5QzCX9QFh2qEjS3dZfbNmsmzVaaEkwWF
+         lcTlSJSXhjdUPkz/nk81oB22O19eKz2JQhfsK2soQrhXF/A4rRmEPErHfJRNEkjhfaYf
+         yEA3ADFV9QRcNAgRt5m1GOPEbGW0YDHs19dP0qNeeAdIpo1x9tA0/3YJPZB2PUXoAE38
+         zjoA==
+X-Gm-Message-State: ACrzQf1K+QKNAN6JOPHQVovOSHa+Ye3snKZ3XiscatQpwwVW5DVTHc3X
+        MqVyuaf3vv8Rk/CfrpySFRj/Z/QqeGk=
+X-Google-Smtp-Source: AMsMyM7ZsD9zd75rfP1t09/N84nyoB0b00ATY643mX5PB2nD6sq/UXCjBUsi7BIkPjosWUKH0WyEkg==
+X-Received: by 2002:a17:902:ed82:b0:178:5653:ecfb with SMTP id e2-20020a170902ed8200b001785653ecfbmr43634366plj.58.1666785814222;
+        Wed, 26 Oct 2022 05:03:34 -0700 (PDT)
+Received: from localhost.localdomain ([43.224.245.180])
+        by smtp.gmail.com with ESMTPSA id f27-20020aa7969b000000b0053e4296e1d3sm2863289pfk.198.2022.10.26.05.03.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 05:03:33 -0700 (PDT)
+From:   Qibo Huang <huangqibo.tech@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huangqibo <huangqibo@xiaomi.com>
+Subject: [PATCH] thermal/core: cooling device duplicate creation check
+Date:   Wed, 26 Oct 2022 20:03:21 +0800
+Message-Id: <20221026120321.735-1-huangqibo.tech@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <b8a4cd98-8236-d6e4-ee36-550ae1c107ff@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 01:11:40PM +0200, David Hildenbrand wrote:
-> > In the appliance case, it doesn't matter if the intent is that "all
-> > application data should use high bandwidth memory where possible and
-> > the application phase behaviour is predictable" and that may very well
-> > work fine for the users of the Broadcom platforms with multiple memory
-> > controllers. It does not work at all for the general where access must
-> > be restricted to a subset of tasks in a general system that can only be
-> > controlled with memory policies.
-> > 
-> > The high bandwidth memory should be representated as a NUMA node, optionally
-> > to create that node as ZONE_MOVABLE and relying on the zonelists to select
-> > the movable zone as the first preference.
-> 
-> ... that boils down to my remark to tiered memory and eventually using
-> devdax to expose this memory to the system and letting the admin decide to
-> online it to ZONE_MOVABLE. Of course, that's just one way of doing it.
-> 
+From: huangqibo <huangqibo@xiaomi.com>
 
-I don't see this approach being inherently bad as such, particularly in
-the appliance space where it is known in advance what exactly is running
-and what the requirements are. It's not automagical but it's not worse
-than specifying something like movablecore=100M@2G,100M@3G,1G@1024G. In
-either case, knowledge of the address ranges needing special treatment is
-required with the difference being that access to the special memory can
-be restricted by policies in the general case.
+Because creating a cooling device may have duplicate names.
+When creating, first check thermal_cdev_list whether
+there is a device with the same name. If it has the same name,
+it returns a reference to the cooling device.
 
+Signed-off-by: huangqibo <huangqibo@xiaomi.com>
+---
+ drivers/thermal/thermal_core.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 117eeaf7dd24..092c7732a294 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -873,6 +873,12 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	    !ops->set_cur_state)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (type)
++		cdev = thermal_cdev_get_zone_by_name(type);
++
++	if (!IS_ERR_OR_NULL(cdev))
++		return cdev;
++
+ 	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+ 		return ERR_PTR(-ENOMEM);
+@@ -1435,6 +1441,34 @@ struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name)
+ }
+ EXPORT_SYMBOL_GPL(thermal_zone_get_zone_by_name);
+ 
++struct thermal_cooling_device *thermal_cdev_get_zone_by_name(const char *name)
++{
++	struct thermal_cooling_device *pos = NULL, *ref = ERR_PTR(-EINVAL);
++	unsigned int found = 0;
++
++	if (!name)
++		goto exit;
++
++	mutex_lock(&thermal_list_lock);
++	list_for_each_entry(pos, &thermal_cdev_list, node)
++		if (!strncasecmp(name, pos->type, THERMAL_NAME_LENGTH)) {
++			found++;
++			ref = pos;
++		}
++	mutex_unlock(&thermal_list_lock);
++
++	/* nothing has been found, thus an error code for it */
++	if (found == 0)
++		ref = ERR_PTR(-ENODEV);
++	else if (found > 1)
++	/* Success only when an unique zone is found */
++		ref = ERR_PTR(-EEXIST);
++
++exit:
++	return ref;
++}
++EXPORT_SYMBOL_GPL(thermal_cdev_get_zone_by_name);
++
+ static int thermal_pm_notify(struct notifier_block *nb,
+ 			     unsigned long mode, void *_unused)
+ {
 -- 
-Mel Gorman
-SUSE Labs
+2.36.1
+
