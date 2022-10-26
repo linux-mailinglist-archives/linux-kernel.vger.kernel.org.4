@@ -2,143 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3888960DF35
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C7360DF38
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiJZLCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 07:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39422 "EHLO
+        id S233453AbiJZLDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 07:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbiJZLCd (ORCPT
+        with ESMTP id S233326AbiJZLCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 07:02:33 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CC4B7EDB
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 04:02:31 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id bk15so25671531wrb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 04:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wv+lK711vFeOkaa3Qp58DAbyPphjfDZDE3jaNs67Gvk=;
-        b=nCFoVQj1TzEu56BZ7+4z29jNcy1DdPyggeQccdQjjd4B46gWsDCDhN9iz/QOxic6lA
-         k/nygJ4hASyHt5AZCV6JOveUNr3H2UNBSyveXcadxsD8gINgBi4FWkX1teanfP1nibIW
-         SFQ4Vi+fbvTBB1Ge5AjaV9bQXRHqssoGl8Fyfov+2EIoRzOkdH/7jqCUuNRwddNgBtRT
-         UUBM0Bx9ZsTkhhC/s36tCYQa3gIV0mADpFbUqQnPLVHOOfJ5FyreoLeiJT4YVriyLN0C
-         LESJ1P062nzfBJzNRlOvZrh/cXTBDxzd0mKTaH3Ve9FmOsgcFLJNUDQhul+CIZEfV41U
-         T38w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wv+lK711vFeOkaa3Qp58DAbyPphjfDZDE3jaNs67Gvk=;
-        b=vJheMe0LsA0ZavE+VxnTrRYL0xhiKZ0qgnn3Tums+a/rWE82OjmipjwJZrcJvHnpr/
-         M5L21/utWUMNIj1InKIaqGHxNu0VAFnh5SvFIg/V1WO9gzZrmtc5a04C59YrS5zdq1vc
-         kYZEPAUrlLYjUxKRPYcE4eeM+K/HL7iWqUgcFwkG8ipp/odRcT/HwHPuidIRsML7LDUR
-         zsy1b7LG8lBjZva3IdFmganfiLIKTYBEczXwc+SkeI7rR9FRBsCrAvXy66xjA3GkuGbb
-         iJB5IIFdMSu+D8w9YOwLONOdfG3dfIsx+IvYlp0mwcYVgb4GGPYlwlrW0rBIsvqB5bfB
-         Qo5w==
-X-Gm-Message-State: ACrzQf3SIL4ewd+V1AnWYp3E3REbnivbmpTlLYW7LNVjhs4oN8nyLB6J
-        Un7IxtRxXr3eSO4lFOSMT4/8R0x9uPu3Yw==
-X-Google-Smtp-Source: AMsMyM5/IK0Y55jZRn1DGhW6Oe8RtJZuWJ+ACBij9XW/Sp94JeJDtzyZVdNkfNfHekrL8fZcLBSS2Q==
-X-Received: by 2002:a05:6000:1687:b0:231:95e6:e9ec with SMTP id y7-20020a056000168700b0023195e6e9ecmr30383929wrd.275.1666782149546;
-        Wed, 26 Oct 2022 04:02:29 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id z7-20020a5d44c7000000b0023672104c24sm5237415wrr.74.2022.10.26.04.02.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 04:02:28 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     vkoul@kernel.org, yung-chuan.liao@linux.intel.com
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: [PATCH 6/6] soundwire: qcom: add support for v1.7 Soundwire Controller
-Date:   Wed, 26 Oct 2022 12:02:10 +0100
-Message-Id: <20221026110210.6575-7-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20221026110210.6575-1-srinivas.kandagatla@linaro.org>
-References: <20221026110210.6575-1-srinivas.kandagatla@linaro.org>
+        Wed, 26 Oct 2022 07:02:49 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3671FBCB88;
+        Wed, 26 Oct 2022 04:02:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D7CEC1FDA4;
+        Wed, 26 Oct 2022 11:02:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1666782159; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=adHMhRn3WIk1ySFAhVm2bNqHsYDSJM4TbkvH222iQq4=;
+        b=RaDDXpbRe46YrwPfY4vYlvwAcgHjXPs2Y+UdGX6GUc0CDWdk02QHBrZVauVp8kX8vTnIWZ
+        mCEN2MdReWMTroJHGH8F1G9k3mMyibN00+5cd/JK6WhUEL2Iz2512PKXtK01fu3fHW12rF
+        ZFrPtuN06dsSVjDmkmMRAfqn2E11A+s=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BA98E13A6E;
+        Wed, 26 Oct 2022 11:02:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id d/RWKs8TWWMhFAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 26 Oct 2022 11:02:39 +0000
+Date:   Wed, 26 Oct 2022 13:02:39 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     Feng Tang <feng.tang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+Message-ID: <Y1kTz1qjfsY1UBPf@dhcp22.suse.cz>
+References: <20221026074343.6517-1-feng.tang@intel.com>
+ <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
+ <Y1jpDfwBQId3GkJC@feng-clx>
+ <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
+ <d17698d2-c1b5-9aa3-6271-838830d36cc5@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d17698d2-c1b5-9aa3-6271-838830d36cc5@linux.ibm.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch add support for v1.7 SoundWire Controller which has
-support for Multi-EE (Execution Environment), resulting in a
-new register and extending field in BUS_CTRL register.
+On Wed 26-10-22 16:12:25, Aneesh Kumar K V wrote:
+> On 10/26/22 2:49 PM, Michal Hocko wrote:
+> > On Wed 26-10-22 16:00:13, Feng Tang wrote:
+> >> On Wed, Oct 26, 2022 at 03:49:48PM +0800, Aneesh Kumar K V wrote:
+> >>> On 10/26/22 1:13 PM, Feng Tang wrote:
+> >>>> In page reclaim path, memory could be demoted from faster memory tier
+> >>>> to slower memory tier. Currently, there is no check about cpuset's
+> >>>> memory policy, that even if the target demotion node is not allowd
+> >>>> by cpuset, the demotion will still happen, which breaks the cpuset
+> >>>> semantics.
+> >>>>
+> >>>> So add cpuset policy check in the demotion path and skip demotion
+> >>>> if the demotion targets are not allowed by cpuset.
+> >>>>
+> >>>
+> >>> What about the vma policy or the task memory policy? Shouldn't we respect
+> >>> those memory policy restrictions while demoting the page? 
+> >>  
+> >> Good question! We have some basic patches to consider memory policy
+> >> in demotion path too, which are still under test, and will be posted
+> >> soon. And the basic idea is similar to this patch.
+> > 
+> > For that you need to consult each vma and it's owning task(s) and that
+> > to me sounds like something to be done in folio_check_references.
+> > Relying on memcg to get a cpuset cgroup is really ugly and not really
+> > 100% correct. Memory controller might be disabled and then you do not
+> > have your association anymore.
+> > 
+> 
+> I was looking at this recently and I am wondering whether we should worry about VM_SHARE
+> vmas. 
+> 
+> ie, page_to_policy() can just reverse lookup just one VMA and fetch the policy right?
 
-With these updates v1.7.0 is fully supported.
+How would that help for private mappings shared between parent/child?
+Also reducing this to a single VMA is not really necessary as
+folio_check_references already does most of that work. What is really
+missing is to check for other memory policies (i.e. cpusets and per-task
+mempolicy). The later is what can get quite expensive.
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- drivers/soundwire/qcom.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+> if it VM_SHARE it will be a shared policy we can find using vma->vm_file? 
+> 
+> For non anonymous and anon vma not having any policy set  it is owning task vma->vm_mm->owner task policy ? 
 
-diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
-index 54d370f4b291..335424870290 100644
---- a/drivers/soundwire/qcom.c
-+++ b/drivers/soundwire/qcom.c
-@@ -25,6 +25,8 @@
- 
- #define SWRM_COMP_SW_RESET					0x008
- #define SWRM_COMP_STATUS					0x014
-+#define SWRM_LINK_MANAGER_EE					0x018
-+#define SWRM_EE_CPU						1
- #define SWRM_FRM_GEN_ENABLED					BIT(0)
- #define SWRM_COMP_HW_VERSION					0x00
- #define SWRM_COMP_CFG_ADDR					0x04
-@@ -693,7 +695,14 @@ static int qcom_swrm_init(struct qcom_swrm_ctrl *ctrl)
- 	u32p_replace_bits(&val, SWRM_DEF_CMD_NO_PINGS, SWRM_MCP_CFG_MAX_NUM_OF_CMD_NO_PINGS_BMSK);
- 	ctrl->reg_write(ctrl, SWRM_MCP_CFG_ADDR, val);
- 
--	ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL, SWRM_MCP_BUS_CLK_START);
-+	if (ctrl->version >= 0x01070000) {
-+		ctrl->reg_write(ctrl, SWRM_LINK_MANAGER_EE, SWRM_EE_CPU);
-+		ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL,
-+				SWRM_MCP_BUS_CLK_START << SWRM_EE_CPU);
-+	} else {
-+		ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL, SWRM_MCP_BUS_CLK_START);
-+	}
-+
- 	/* Configure number of retries of a read/write cmd */
- 	if (ctrl->version > 0x01050001) {
- 		/* Only for versions >= 1.5.1 */
-@@ -1518,7 +1527,13 @@ static int __maybe_unused swrm_runtime_resume(struct device *dev)
- 	} else {
- 		reset_control_reset(ctrl->audio_cgcr);
- 
--		ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL, SWRM_MCP_BUS_CLK_START);
-+		if (ctrl->version >= 0x01070000) {
-+			ctrl->reg_write(ctrl, SWRM_LINK_MANAGER_EE, SWRM_EE_CPU);
-+			ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL,
-+					SWRM_MCP_BUS_CLK_START << SWRM_EE_CPU);
-+		} else {
-+			ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL, SWRM_MCP_BUS_CLK_START);
-+		}
- 		ctrl->reg_write(ctrl, SWRM_INTERRUPT_CLEAR,
- 			SWRM_INTERRUPT_STATUS_MASTER_CLASH_DET);
- 
-@@ -1582,6 +1597,7 @@ static const struct of_device_id qcom_swrm_of_match[] = {
- 	{ .compatible = "qcom,soundwire-v1.3.0", .data = &swrm_v1_3_data },
- 	{ .compatible = "qcom,soundwire-v1.5.1", .data = &swrm_v1_5_data },
- 	{ .compatible = "qcom,soundwire-v1.6.0", .data = &swrm_v1_6_data },
-+	{ .compatible = "qcom,soundwire-v1.7.0", .data = &swrm_v1_5_data },
- 	{/* sentinel */},
- };
- 
+Please note that mm can be shared even outside of the traditional thread
+group so you would need to go into something like mm_update_next_owner
+
+> We don't worry about multiple tasks that can be possibly sharing that page right? 
+
+Why not?
+
+> > This all can get quite expensive so the primary question is, does the
+> > existing behavior generates any real issues or is this more of an
+> > correctness exercise? I mean it certainly is not great to demote to an
+> > incompatible numa node but are there any reasonable configurations when
+> > the demotion target node is explicitly excluded from memory
+> > policy/cpuset?
+> 
+> I guess vma policy is important. Applications want to make sure that they don't
+> have variable performance and they go to lengths to avoid that by using MEM_BIND.
+> So if they access the memory they always know access is satisfied from a specific
+> set of NUMA nodes. Swapin can cause performance impact but then all continued
+> access will be from a specific NUMA nodes. With slow memory demotion that is
+> not going to be the case. Large in-memory database applications are observed to
+> be sensitive to these access latencies. 
+
+Yes, I do understand that from the correctness POV this is a problem. My
+question is whether this is a _practical_ problem worth really being
+fixed as it is not really a cheap fix. If there are strong node locality
+assumptions by the userspace then I would expect demotion to be disabled
+in the first place.
 -- 
-2.21.0
-
+Michal Hocko
+SUSE Labs
