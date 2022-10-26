@@ -2,96 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB4260E7A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B438F60E7B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiJZSsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S233514AbiJZSyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 14:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbiJZSsN (ORCPT
+        with ESMTP id S233473AbiJZSyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:48:13 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E7FD2CDD
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:48:13 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-333a4a5d495so157513977b3.10
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hRxOFS7Sx6dO2GW/75w/W4oHmcqu5DxQl23Fxpg/q7I=;
-        b=fWzNFxQWoucrvGjeZscdqU5IC0s2gnxGTWwFejGE42H9pZdUXKlziM6VzhqtbMXJBA
-         whJZMrjXQN0he53DZi5LQe/xXx/iA5t49rt3rkhVYKYWjJ5I9Di2Wq2HF+WtRUCQcETs
-         GNalEnPV8c5gm6DB0cdcVd5P7gRIzcbKC7x7/Wuz5H/aNS2hQjZPwNAyJRSkqdYw3cxO
-         ODGZKYX3m8uZtXQAglIXFjzQeOm7l6529dNKNEJ5dedaDeDqgGG6QTDJWX+qf8dD9Mou
-         yfPEA1+DxM4k43IvD9xkb5HE/0vaFE3KFGucqQdyq7BDqmdXfg3XMV/jHriOy4kMzl97
-         ycJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hRxOFS7Sx6dO2GW/75w/W4oHmcqu5DxQl23Fxpg/q7I=;
-        b=cQ2V7DDQVHEuJPYSvkk6HDlEzjLT4UlHq/bDV/Cy27tynVCykCQOj5dHzddKDJMczb
-         LLJQKTBXOkl6KrnUnhMzd2+ut0ZsCij7pA9495rKZUlIXCa2kQgH0zRm6jygd93l3RMV
-         IO+HCaX3M9TDcNhsU1wjtjMQ9xtYo3nmBwAf5haaES/Lpqgfx2Ef/x52Snem4ZrPOEbK
-         L6T468XUzKsqjxippapS76V4JtmI7zHBzemcvmDv+Be9nB0+K6tU98Rr0t+j3cr2n9AZ
-         1ndNqEuonTan5Z6fkBLfY7HN/GxkElnTcFLSN/0XdobhB4LYdS2JPgx1vxAMjopAADsC
-         Azsg==
-X-Gm-Message-State: ACrzQf3y1bGFtYR3EtgA0exrdlAy/3mnqk+1aXQ0EISFEhLIZ0fG437B
-        F39foZONqWh6oIrzuJ8O7M8wBaQ5Kh2v3h7NTFIF+Q==
-X-Google-Smtp-Source: AMsMyM7Ed2SK/ZMNN4r3tWJCyA/X3+ZX2V0tKtk9C+U0X8euFL9UhAofye9uM4qX7ENX9bgL9i6Sfqb1c+6fnK7OIzo=
-X-Received: by 2002:a0d:ff01:0:b0:353:380e:ca03 with SMTP id
- p1-20020a0dff01000000b00353380eca03mr40924242ywf.466.1666810092171; Wed, 26
- Oct 2022 11:48:12 -0700 (PDT)
+        Wed, 26 Oct 2022 14:54:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56E11D0C1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:54:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C0816202E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 18:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B21A6C433C1;
+        Wed, 26 Oct 2022 18:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666810474;
+        bh=Ieo52/jNSdW27hzsdTn6oYBvOHTHSgTAdPGfBUcNP4k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GC4V3OvnH3tWXaHfzU4RZ+AC9GASpBSuAr3BBHRLfa4KKK58wnV0gYNSxG2b7DL0g
+         SUSkIwR9P/3Niskkm33goFHVefozJRt7rQDzkkKl5NDwCwON9dCIabexG4CgzMdeF9
+         1Y4lryEp2aDDdHlrIh4oDlQAZj81b18xoNthNokRyS4ftCkhWM+SrpPtjK8sb74nY5
+         0n8ZE/ZBP+kAecFdM92q6ErE8xFY5rkCMC+DfZCxz3GUHiBXaUUUAzW3RhHKxrcgQ7
+         2STV5dEq5JBMzsnU+3qhAVyoD6WoNXUj3CxjlQ+gwyWJMryi9Iw3mJ/hrLs3lSLOak
+         WfxIP9HcOrE3g==
+Date:   Wed, 26 Oct 2022 19:54:29 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Wen Yao <haiwenyao@uniontech.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 1/2] riscv: percpu:Add riscv percpu operations
+Message-ID: <Y1mCZT8ejRpvCfw6@spud>
+References: <20221026104015.565468-1-haiwenyao@uniontech.com>
+ <20221026104015.565468-2-haiwenyao@uniontech.com>
 MIME-Version: 1.0
-References: <20220823080117.738248512@linuxfoundation.org> <20221026160051.5340-1-mdecandia@gmail.com>
- <Y1ljluiq8Ojp4vdL@kroah.com> <CAAPDZK9Oz2Hs9wofW9820gM=SeWgycCEWN=Xsjmy-YY_iFBcfQ@mail.gmail.com>
-In-Reply-To: <CAAPDZK9Oz2Hs9wofW9820gM=SeWgycCEWN=Xsjmy-YY_iFBcfQ@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 26 Oct 2022 11:48:01 -0700
-Message-ID: <CALvZod5My-JaXBSm1iuVSFMiarB2YuE=O0AxD=6ZG0BfmJZ1AQ@mail.gmail.com>
-Subject: Re: [PATCH 5.4 051/389] epoll: autoremove wakers even more aggressively
-To:     Michele Jr De Candia <mdecandia@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, akpm@linux-foundation.org,
-        bsegall@google.com, edumazet@google.com, jbaron@akamai.com,
-        khazhy@google.com, linux-kernel@vger.kernel.org, r@hev.cc,
-        rpenyaev@suse.de, stable@kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026104015.565468-2-haiwenyao@uniontech.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 11:44 AM Michele Jr De Candia
-<mdecandia@gmail.com> wrote:
->
-> Hi Greg,
-> sorry for the confusion.
->
-> I'm running a container-based app on top of Ubuntu Linux 20.04 and linux kernel 5.4 always updated with latest patches.
->
-> Updating from 5.4.210 to 5.4.211 we faced the hang up issue and searching for the cause we have tested that
-> hangup occurs only with this patch
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=linux-5.4.y&id=cf2db24ec4b8e9d399005ececd6f6336916ab6fc
->
-> While understanding root cause, wt the moment we reverted it and hang up does not occurs (actually we are running 5.4.219 without that patch).
->
-> Michele
->
+Hey Wen Yao,
+Couple comments for you.
 
-Hi Michele, can you try the latest upstream kernel and see if the
-issue repro ther? Also is it possible to provide a simplified repro of
-the issue?
+On Wed, Oct 26, 2022 at 06:40:14PM +0800, Wen Yao wrote:
+> riscv: percpu:Add riscv percpu operations
 
-Shakeel
+Can you please consistently use ": " between parts of the commit
+messages? For both this and patch 2/2.
+
+> This patch use riscv AMO(Atomic Memory Operation) instructions to
+
+nit: s/This patch/Use (or better:
+"Optimise some ... using RISC-V AMO (Atomic..."
+
+> optimise some this_cpu_and this_cpu_or this_cpu_add operations.
+> It reuse cmpxchg_local() to impletment this_cpu_cmpxchg macros.
+
+s/It Reuse/Reuse, and "impletment" is a typo.
+
+> It reuse xchg_relaxed() to impletment this_cpu_xchg macros.
+> 
+> Signed-off-by: Wen Yao <haiwenyao@uniontech.com>
+> ---
+>  arch/riscv/include/asm/percpu.h | 101 ++++++++++++++++++++++++++++++++
+>  1 file changed, 101 insertions(+)
+>  create mode 100644 arch/riscv/include/asm/percpu.h
+> 
+> diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/percpu.h
+> new file mode 100644
+> index 000000000000..ae796e328442
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/percpu.h
+> @@ -0,0 +1,101 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (C) 2020-2022 Union Tech Software Technology Corporation Limited
+> + */
+> +#ifndef __ASM_PERCPU_H
+> +#define __ASM_PERCPU_H
+> +
+> +#include <asm/cmpxchg.h>
+> +
+> +#define PERCPU_OP(op, asm_op, c_op)                                            \
+> +	static inline unsigned long __percpu_##op(void *ptr,                   \
+
+Can you please make sure that these \s are actually aligned & swap the
+spaces you've used for tabs? The other files that I checked in this
+directory all use tabs for \ alignment in macros.
+
+Thanks,
+Conor.
+
+> +						  unsigned long val, int size) \
+> +	{                                                                      \
+> +		unsigned long ret;                                             \
+> +		switch (size) {                                                \
+> +		case 4:                                                        \
+> +			__asm__ __volatile__(                                  \
+> +				"amo" #asm_op ".w"                             \
+> +				" %[ret], %[val], %[ptr]\n"                   \
+> +				: [ret] "=&r"(ret), [ptr] "+A"(*(u32 *)ptr)    \
+> +				: [val] "r"(val));                             \
+> +			break;                                                 \
+> +		case 8:                                                        \
+> +			__asm__ __volatile__(                                  \
+> +				"amo" #asm_op ".d"                             \
+> +				" %[ret], %[val], %[ptr]\n"                   \
+> +				: [ret] "=&r"(ret), [ptr] "+A"(*(u64 *)ptr)    \
+> +				: [val] "r"(val));                             \
+> +			break;                                                 \
+> +		default:                                                       \
+> +			ret = 0;                                               \
+> +			BUILD_BUG();                                           \
+> +		}                                                              \
+> +										\
+> +		return ret c_op val;                                           \
+> +	}
+> +
+> +PERCPU_OP(add, add, +)
+> +PERCPU_OP(and, and, &)
+> +PERCPU_OP(or, or, |)
+> +#undef PERCPU_OP
+> +
+> +/* this_cpu_xchg */
+> +#define _protect_xchg_local(pcp, val)                           \
+> +	({                                                      \
+> +		typeof(*raw_cpu_ptr(&(pcp))) __ret;             \
+> +		preempt_disable_notrace();                      \
+> +		__ret = xchg_relaxed(raw_cpu_ptr(&(pcp)), val); \
+> +		preempt_enable_notrace();                       \
+> +		__ret;                                          \
+> +	})
+> +
+> +/* this_cpu_cmpxchg */
+> +#define _protect_cmpxchg_local(pcp, o, n)                         \
+> +	({                                                        \
+> +		typeof(*raw_cpu_ptr(&(pcp))) __ret;               \
+> +		preempt_disable_notrace();                        \
+> +		__ret = cmpxchg_local(raw_cpu_ptr(&(pcp)), o, n); \
+> +		preempt_enable_notrace();                         \
+> +		__ret;                                            \
+> +	})
+> +
+> +#define _pcp_protect(operation, pcp, val)                                     \
+> +	({                                                                    \
+> +		typeof(pcp) __retval;                                         \
+> +		preempt_disable_notrace();                                    \
+> +		__retval = (typeof(pcp))operation(raw_cpu_ptr(&(pcp)), (val), \
+> +						  sizeof(pcp));               \
+> +		preempt_enable_notrace();                                     \
+> +		__retval;                                                     \
+> +	})
+> +
+> +#define _percpu_add(pcp, val) _pcp_protect(__percpu_add, pcp, val)
+> +
+> +#define _percpu_add_return(pcp, val) _percpu_add(pcp, val)
+> +
+> +#define _percpu_and(pcp, val) _pcp_protect(__percpu_and, pcp, val)
+> +
+> +#define _percpu_or(pcp, val) _pcp_protect(__percpu_or, pcp, val)
+> +
+> +#define this_cpu_add_4(pcp, val) _percpu_add(pcp, val)
+> +#define this_cpu_add_8(pcp, val) _percpu_add(pcp, val)
+> +
+> +#define this_cpu_add_return_4(pcp, val) _percpu_add_return(pcp, val)
+> +#define this_cpu_add_return_8(pcp, val) _percpu_add_return(pcp, val)
+> +
+> +#define this_cpu_and_4(pcp, val) _percpu_and(pcp, val)
+> +#define this_cpu_and_8(pcp, val) _percpu_and(pcp, val)
+> +
+> +#define this_cpu_or_4(pcp, val) _percpu_or(pcp, val)
+> +#define this_cpu_or_8(pcp, val) _percpu_or(pcp, val)
+> +
+> +#define this_cpu_xchg_4(pcp, val) _protect_xchg_local(pcp, val)
+> +#define this_cpu_xchg_8(pcp, val) _protect_xchg_local(pcp, val)
+> +
+> +#define this_cpu_cmpxchg_4(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
+> +#define this_cpu_cmpxchg_8(ptr, o, n) _protect_cmpxchg_local(ptr, o, n)
+> +
+> +#include <asm-generic/percpu.h>
+> +
+> +#endif /* __ASM_PERCPU_H */
+> -- 
+> 2.25.1
+> 
