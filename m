@@ -2,124 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A642D60E071
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 329DE60E072
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbiJZMM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36382 "EHLO
+        id S233878AbiJZMNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbiJZMMd (ORCPT
+        with ESMTP id S233748AbiJZMMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:12:33 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E922C2D747
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:12:31 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id g10so18166466oif.10
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:12:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vZ5aSZWWIhIFIjTByURiHqOWXy1GxsKS3NVs264EAr8=;
-        b=oXfPzt0JJzEiYPmp6/UVl3QESY5eYmPMyk1PUXcPsx5TkKA1luR3mwvzMiHsFdGkuw
-         lFH6H1yHTH3ixTKPoCmMNQ4zmAp75XjW8TEArvQQcC9hfXaPtgUUlj1DryJcJiA3nJ+W
-         cgnd9b+7zJ5sW07GpsYxTQ9nhqXaUOiY7d1M26nHfsv7Cr8ofV5LDZayI7aSrq/ruofN
-         D9sxcxBlcJsoCSj/b9SDSbyoFg2D1P3keAyRtLQMECLOm6SnKgknqsy0ty6kzKJ1ys76
-         UuRzGDlMsZauVIIEb8m9Do0erpzGPXdpUdcsyaPfqdbcpnUagMxNHH8ihhphMM3USBN5
-         c7Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vZ5aSZWWIhIFIjTByURiHqOWXy1GxsKS3NVs264EAr8=;
-        b=ExlsU40ItqdvP/Ntxf0UZFyhWvY9NRPPngN/2yGPqMXPUCFrxjF3lt4xBEjNY76Mhc
-         UaUtM52GTZLEfKZi/n4nC7zNOBxdCQ5xHjTIH/dpp/U+5wWhHA5W4VsvnpbUHEnw2eIE
-         04qrIcIj1+rI3nMcWuujGqF6Z0AtPn+dSYTh9n6R3c7kMp19rPcTTvw4aKH1seXX6UEl
-         MHNbycEDLgh+3ejkzupHxCuMX+khzHOk8eKhO4eOiw5q1xmuW6/jRMS7tfGEBHQM1azr
-         WCG6oam/GFGd6j/PEMKg0Rk8sSpOLREA4qpm/O/PLsqf6e+dYHbehiPrcdAMc6wxzmEK
-         Ix1g==
-X-Gm-Message-State: ACrzQf3eAajIWfaYaoNHUxtDcSdQWpgGJyaYVbrD1uaBWHbAoDzmyeq5
-        aoVz8R8GbXA5jIwFSgMHHr/6+QrZ6q1ZJpvCmcLJzL+/dE0=
-X-Google-Smtp-Source: AMsMyM6M69yoWy/DsnOkqIuIhedU2TaFkjjGn29Zgv+lzU9ZTLfGzsVjJyPfg+CacBfyK3QLJhVTKAWS0qGoNA4silI=
-X-Received: by 2002:a05:6808:f93:b0:355:29b1:c2a1 with SMTP id
- o19-20020a0568080f9300b0035529b1c2a1mr1666878oiw.297.1666786351235; Wed, 26
- Oct 2022 05:12:31 -0700 (PDT)
+        Wed, 26 Oct 2022 08:12:35 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C2A4D252
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:12:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666786345; bh=+Q65ej4JbwX8/itgBgDtPbMGphOFzFFUFnr24Fd4cLk=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=VfFSJOBoE07AoDGnkVZnFqc6YJ2iOvd/++LbyxLfn//mgLqgzAkzCQOgNjADGUMH7
+         1s6TU1S0Wmj5dy+kIJBX8wm1L8W8EEgsHqY9xmX01BjCRh2HjsOygo9/ChZShaonSt
+         WbsnK+iz9gOcqeKFKvoKcYRDp0laiz2xNemVycl8=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via [213.182.55.206]
+        Wed, 26 Oct 2022 14:12:25 +0200 (CEST)
+X-EA-Auth: Gb9BbW2DushtZY9y0WTWPXm2IyyjglMHKF1ws0Yj96dIpgjoe9MDRDAQW9WmguCQT0dJxWQeOcNI7IVVUZ+jGc5awbtui1df
+Date:   Wed, 26 Oct 2022 17:42:23 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] staging: rtl8192u: remove unnecessary function
+ implementation
+Message-ID: <Y1kkJ7VNCuBfikGI@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1666754500.git.drv@mailo.com>
+ <a15fe9f6167e76e4422d303ceafbd4d9b432dd13.1666754500.git.drv@mailo.com>
+ <Y1kPlLyo7sb8OfFx@kroah.com>
 MIME-Version: 1.0
-References: <20221017171118.1588820-1-sammler@google.com> <CAM9Jb+ggq5L9XZZHhfA98XDO+P=8y-mT+ct0JFAtXRbsCuORsA@mail.gmail.com>
- <CAFPP518-gU1M1XcHMHgpx=ZPPkSyjPmfOK6D+wM6t6vM6Ve6XQ@mail.gmail.com>
-In-Reply-To: <CAFPP518-gU1M1XcHMHgpx=ZPPkSyjPmfOK6D+wM6t6vM6Ve6XQ@mail.gmail.com>
-From:   Pankaj Gupta <pankaj.gupta.linux@gmail.com>
-Date:   Wed, 26 Oct 2022 14:12:20 +0200
-Message-ID: <CAM9Jb+hk0ZRtXnF+WVj0LiRiO7uH-jDydJrnUQ_57yTEcs--Dw@mail.gmail.com>
-Subject: Re: [PATCH v1] virtio_pmem: populate numa information
-To:     Michael Sammler <sammler@google.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        nvdimm@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1kPlLyo7sb8OfFx@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > Compute the numa information for a virtio_pmem device from the memory
-> > > range of the device. Previously, the target_node was always 0 since
-> > > the ndr_desc.target_node field was never explicitly set. The code for
-> > > computing the numa node is taken from cxl_pmem_region_probe in
-> > > drivers/cxl/pmem.c.
-> > >
-> > > Signed-off-by: Michael Sammler <sammler@google.com>
-> > > ---
-> > >  drivers/nvdimm/virtio_pmem.c | 11 +++++++++--
-> > >  1 file changed, 9 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
-> > > index 20da455d2ef6..a92eb172f0e7 100644
-> > > --- a/drivers/nvdimm/virtio_pmem.c
-> > > +++ b/drivers/nvdimm/virtio_pmem.c
-> > > @@ -32,7 +32,6 @@ static int init_vq(struct virtio_pmem *vpmem)
-> > >  static int virtio_pmem_probe(struct virtio_device *vdev)
-> > >  {
-> > >         struct nd_region_desc ndr_desc = {};
-> > > -       int nid = dev_to_node(&vdev->dev);
-> > >         struct nd_region *nd_region;
-> > >         struct virtio_pmem *vpmem;
-> > >         struct resource res;
-> > > @@ -79,7 +78,15 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
-> > >         dev_set_drvdata(&vdev->dev, vpmem->nvdimm_bus);
-> > >
-> > >         ndr_desc.res = &res;
-> > > -       ndr_desc.numa_node = nid;
-> > > +
-> > > +       ndr_desc.numa_node = memory_add_physaddr_to_nid(res.start);
-> > > +       ndr_desc.target_node = phys_to_target_node(res.start);
-> > > +       if (ndr_desc.target_node == NUMA_NO_NODE) {
-> > > +               ndr_desc.target_node = ndr_desc.numa_node;
-> > > +               dev_dbg(&vdev->dev, "changing target node from %d to %d",
-> > > +                       NUMA_NO_NODE, ndr_desc.target_node);
-> > > +       }
+On Wed, Oct 26, 2022 at 12:44:36PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Oct 26, 2022 at 08:57:48AM +0530, Deepak R Varma wrote:
+> > Current implementation of function ieee80211_tkip_null simply returns
+> > back to the caller without any useful instruction executions. This makes
+> > the function call and its implementation unnecessary and should be
+> > removed.
 > >
-> > As this memory later gets hotplugged using "devm_memremap_pages". I don't
-> > see if 'target_node' is used for fsdax case?
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> >  drivers/staging/rtl8192u/ieee80211/ieee80211.h            | 3 ---
+> >  drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c | 6 ------
+> >  drivers/staging/rtl8192u/ieee80211/ieee80211_module.c     | 3 ---
+> >  3 files changed, 12 deletions(-)
 > >
-> > It seems to me "target_node" is used mainly for volatile range above
-> > persistent memory ( e.g kmem driver?).
+> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > index 9cd4b1896745..00c07455cbb3 100644
+> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > @@ -232,8 +232,6 @@ struct cb_desc {
 > >
-> I am not sure if 'target_node' is used in the fsdax case, but it is
-> indeed used by the devdax/kmem driver when hotplugging the memory (see
-> 'dev_dax_kmem_probe' and '__dax_pmem_probe').
+> >  #define ieee80211_ccmp_null		ieee80211_ccmp_null_rsl
+> >
+> > -#define ieee80211_tkip_null		ieee80211_tkip_null_rsl
+> > -
+> >  #define free_ieee80211			free_ieee80211_rsl
+> >  #define alloc_ieee80211			alloc_ieee80211_rsl
+> >
+> > @@ -2256,7 +2254,6 @@ void ieee80211_ps_tx_ack(struct ieee80211_device *ieee, short success);
+> >  void softmac_mgmt_xmit(struct sk_buff *skb, struct ieee80211_device *ieee);
+> >
+> >  /* ieee80211_crypt_ccmp&tkip&wep.c */
+> > -void ieee80211_tkip_null(void);
+> >
+> >  int ieee80211_crypto_init(void);
+> >  void ieee80211_crypto_deinit(void);
+> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
+> > index 7b120b8cb982..9bfd24ad46b6 100644
+> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
+> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
+> > @@ -716,9 +716,3 @@ void ieee80211_crypto_tkip_exit(void)
+> >  {
+> >  	ieee80211_unregister_crypto_ops(&ieee80211_crypt_tkip);
+> >  }
+> > -
+> > -void ieee80211_tkip_null(void)
+> > -{
+> > -//    printk("============>%s()\n", __func__);
+> > -	return;
+> > -}
+> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_module.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_module.c
+> > index b94fe9b449b6..3f93939bc4ee 100644
+> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_module.c
+> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_module.c
+> > @@ -159,9 +159,6 @@ struct net_device *alloc_ieee80211(int sizeof_priv)
+> >  		ieee->last_packet_time[i] = 0;
+> >  	}
+> >
+> > -/* These function were added to load crypte module autoly */
+> > -	ieee80211_tkip_null();
+> > -
+>
+> Ah, but this was created on purpose, did you now break the module
+> autoloading here?  Is this built as a separate module or is it all one
+> big module?
 
-Yes, but not currently for FS_DAX iiuc.
+Looks like a one big module on the kernel I built post this change. I looked
+into the modules.dep file for dependencies. I was able to load the driver
+r8192u_usb using modprobe without any issues.
 
-Thanks,
-Pankaj
+Let me know if I should be looking at something else to validate your concern.
+
+>
+> You need to explain why this does not change functionality in your
+> changelog text.
+
+Okay. I will work on it and send in a revision.
+
+>
+> thanks,
+>
+> greg k-h
+>
+
+
