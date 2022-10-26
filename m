@@ -2,179 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E735560E6CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435E960E6D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234223AbiJZRwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S233913AbiJZRx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234235AbiJZRwY (ORCPT
+        with ESMTP id S233563AbiJZRxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:52:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C245108DCC
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666806735;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=geniLJHmWq3kpgcGVKm4jCdheUxhYshUAvvdO1yrzTQ=;
-        b=ZpTEV4cgsSVP+VR8YE55RSluSXq6vh4I+E1yE1h4L9pY9cE+TseMiinFgIK12NqSABPq0G
-        XVU1D3LjR5JvXI/frmS2ULsFyR0eLMWPSkSW4I64aguFROyPbnrO1v2KcLK6SV6ONX/07X
-        vJtzpJGPTY8ygmugu91VBoJDRSWXiJA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-163-Rf7KdyzOM_W2LQOX2UPDnA-1; Wed, 26 Oct 2022 13:52:13 -0400
-X-MC-Unique: Rf7KdyzOM_W2LQOX2UPDnA-1
-Received: by mail-wm1-f72.google.com with SMTP id iw9-20020a05600c54c900b003cf4eea332cso419256wmb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:52:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=geniLJHmWq3kpgcGVKm4jCdheUxhYshUAvvdO1yrzTQ=;
-        b=HY31WGhDwNUPuCdLLu4mcHUe0Gll8DaeEbkEkt5F0HIeHhHnqxN8Wf5LnOoN3TB8cL
-         VAK3Oqrkda9PzL8qKseLjrJav3oh/GovdgVuffesdKn337l+GivpZmiKDq3uxbqtD9IC
-         BfnhEmU+OiKk3oXe6o6dX6q3lkL7EAahl510SEUapIwKDoeMeTZo3jp1O3bBdobjuKyj
-         UC+ihwnZY93IKDpDwfCTTOPurv9qnQP+exMdG2KO+8S5coUr+2wdZeYSluF+lV14Soce
-         qs8BKTv3EKyRsuk0FMa8VMHvoVHdt8FaZaLaBJfLZpB4vciNnbVW+rWxOPCKDBRKmIbi
-         PsUA==
-X-Gm-Message-State: ACrzQf073vAIMQDO5lJ9Wzza6NqZV8EuQdNDbVDK+Gr92ImcbinNZ2Qq
-        Zi6LCP2I3Zhg5KJzOoRPJV00Y6oxl53UHBc/zLMSyrO6AuApYw+QgSCS3is6YY2NR2+haU2Nzy8
-        BlbLVbZJpx0DJKjSpGVEutIx5
-X-Received: by 2002:a05:6000:1ac7:b0:232:b68c:9e0 with SMTP id i7-20020a0560001ac700b00232b68c09e0mr30940564wry.54.1666806732600;
-        Wed, 26 Oct 2022 10:52:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5H8nSmRGc8ubFmwlY72dw0Lzn/Wbclbz9oiRnT7h3ncFdTKq7AZYYBKQFrVTm3HA3Rxq8Ucw==
-X-Received: by 2002:a05:6000:1ac7:b0:232:b68c:9e0 with SMTP id i7-20020a0560001ac700b00232b68c09e0mr30940544wry.54.1666806732335;
-        Wed, 26 Oct 2022 10:52:12 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id g12-20020a05600c310c00b003b4cba4ef71sm2448055wmo.41.2022.10.26.10.52.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 10:52:11 -0700 (PDT)
-Message-ID: <d3e2dd2b-9520-32ef-6785-94164a834adf@redhat.com>
-Date:   Wed, 26 Oct 2022 19:52:10 +0200
+        Wed, 26 Oct 2022 13:53:53 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75F9FF220;
+        Wed, 26 Oct 2022 10:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=cqxi+n3MmD7NBGgLs1eKTWF/KKLqUV5WI593klf6b/o=; b=voACzILOGDgQCDl04V355uNyQH
+        0Et67ksxu5E206x3I3uNqsAjFWF7LyAUHsotkbQz3M8LL9gQx+HA9gETynR+UQvMMzbQ5JIsPaRha
+        lSEawjnn8MGZVhgiGbOaq85FedWhlbrnVAVGsvsRP7NiBWH5yb7gQ5WKVSBDBveJ4YPj6eewuWtz/
+        USNUB27FVNZfK8qCI+LNW5N0n02+J6PAdBnxkqOomsnHJ84FeZDRNXqHMAQgELdbi3qu5m2CgZhvH
+        CZ84onrW/JB2uKCcgdczMfeMAoJLyKXdWZ90zy06XBhtgC+5Yy5OR4n/7YcrDtWN5rpjPPt3miK2l
+        4GiXZSFw==;
+Received: from p200300ccff073f001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff07:3f00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1onkb4-0001AD-2t; Wed, 26 Oct 2022 19:53:46 +0200
+Date:   Wed, 26 Oct 2022 19:53:44 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Marco Felsch <m.felsch@pengutronix.de>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>
+Subject: Re: [PATCH] arm: dts: imx: e60k02: Add touchscreen
+Message-ID: <20221026195344.7fda0b44@aktux>
+In-Reply-To: <20221026174300.6f5l6lsg5msrz6op@pengutronix.de>
+References: <20221026173015.1172816-1-andreas@kemnade.info>
+        <20221026174300.6f5l6lsg5msrz6op@pengutronix.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Hyper-V VTLs, permission bitmaps and userspace exits (was Re: [PATCH
- 0/4] KVM: API to block and resume all running vcpus in a vm)
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        kvm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221022154819.1823133-1-eesposit@redhat.com>
- <a2e16531-5522-a334-40a1-2b0e17663800@linux.ibm.com>
- <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
- <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
- <Y1cVfECAAfmp5XqA@google.com>
- <5a26c107-9ab5-60ee-0e9c-a9955dfe313d@redhat.com>
- <Y1gG/W/q/VIydpMu@google.com>
- <02c910bb-3ea0-fa84-7a1c-92fb9e8b03de@redhat.com>
- <Y1hsHjPuZfrREulV@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Y1hsHjPuZfrREulV@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/22 01:07, Sean Christopherson wrote:
-> I don't think it's realistic to make accesses outside of KVM_RUN go away, e.g.
-> see the ARM ITS discussion in the dirty ring thread.  kvm_xen_set_evtchn() also
-> explicitly depends on writing guest memory without going through KVM_RUN (and
-> apparently can be invoked from a kernel thread?!?).
+Hi Marco,
 
-Yeah, those are the pages that must be considered dirty when using the 
-dirty ring.
+On Wed, 26 Oct 2022 19:43:00 +0200
+Marco Felsch <m.felsch@pengutronix.de> wrote:
 
-> In theory, I do actually like the idea of restricting memory access to KVM_RUN,
-> but in reality I just think that forcing everything into KVM_RUN creates far more
-> problems than it solves.  E.g. my complaint with KVM_REQ_GET_NESTED_STATE_PAGES
-> is that instead of syncrhonously telling userspace it has a problem, KVM chugs
-> along as if everything is fine and only fails at later point in time.  I doubt
-> userspace would actually do anything differently, i.e. the VM is likely hosed no
-> matter what, but deferring work adds complexity in KVM and makes it more difficult
-> to debug problems when they occur.
->
->>>     - to stop anything else in the system that consumes KVM memslots, e.g. KVM GT
->>
->> Is this true if you only look at the KVM_GET_DIRTY_LOG case and consider it
->> a guest bug to access the memory (i.e. ignore the strange read-only changes
->> which only happen at boot, and which I agree are QEMU-specific)?
+> Hi Andreas,
 > 
-> Yes?  I don't know exactly what "the KVM_GET_DIRTY_LOG case" is.
-
-It is not possible to atomically read the dirty bitmap and delete a 
-memslot.  When you delete a memslot, the bitmap is gone.  In this case 
-however memory accesses to the deleted memslot are a guest bug, so 
-stopping KVM-GT would not be necessary.
-
-So while I'm being slowly convinced that QEMU should find a way to pause 
-its vCPUs around memslot changes, I'm not sure that pausing everything 
-is needed in general.
-
->>> And because of the nature of KVM, to support this API on all architectures, KVM
->>> needs to make change on all architectures, whereas userspace should be able to
->>> implement a generic solution.
->>
->> Yes, I agree that this is essentially just a more efficient kill().
->> Emanuele, perhaps you can put together a patch to x86/vmexit.c in
->> kvm-unit-tests, where CPU0 keeps changing memslots and the other CPUs are in
->> a for(;;) busy wait, to measure the various ways to do it?
+> On 22-10-26, Andreas Kemnade wrote:
+> > Add the touchscreen now, since the driver is available.  
 > 
-> I'm a bit confused.  Is the goal of this to simplify QEMU, dedup VMM code, provide
-> a more performant solution, something else entirely?
+> I pulled input/next and grep'ed for the compatible but found nothing.
+> Where should the driver be available?
+> 
 
-Well, a bit of all of them and perhaps that's the problem.  And while 
-the issues at hand *are* self-inflicted wounds on part of QEMU, it seems 
-to me that the underlying issues are general.
+Copying the link again.
+I have the guts feeling that it is near being accepted:
 
-For example, Alex Graf and I looked back at your proposal of a userspace 
-exit for "bad" accesses to memory, wondering if it could help with 
-Hyper-V VTLs too.  To recap, the "higher privileged" code at VTL1 can 
-set up VM-wide restrictions on access to some pages through a hypercall 
-(HvModifyVtlProtectionMask).  After the hypercall, VTL0 would not be 
-able to access those pages.  The hypercall would be handled in userspace 
-and would invoke a KVM_SET_MEMORY_REGION_PERM ioctl to restrict the RWX 
-permissions, and this ioctl would set up a VM-wide permission bitmap 
-that would be used when building page tables.
+https://lore.kernel.org/linux-devicetree/20221026114908.191472-1-alistair@alistair23.me/T/#t
 
-Using such a bitmap instead of memslots makes it possible to cause 
-userspace vmexits on VTL mapping violations with efficient data 
-structures.  And it would also be possible to use this mechanism around 
-KVM_GET_DIRTY_LOG, to read the KVM dirty bitmap just before removing a 
-memslot.
+Regards,
+Andreas
 
-However, external accesses to the regions (ITS, Xen, KVM-GT, non KVM_RUN 
-ioctls) would not be blocked, due to the lack of a way to report the 
-exit.  The intersection of these features with VTLs should be very small 
-(sometimes zero since VTLs are x86 only), but the ioctls would be a 
-problem so I'm wondering what your thoughts are on this.
-
-Also, while the exit API could be the same, it is not clear to me that 
-the permission bitmap would be a good match for entirely "void" memslots 
-used to work around non-atomic memslot changes.  So for now let's leave 
-this aside and only consider the KVM_GET_DIRTY_LOG case.
-
-Paolo
+> Regards,
+>   Marco
+> 
+> > Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> > ---
+> > runtime/dtbs_check depends
+> > https://lore.kernel.org/linux-devicetree/20221026114908.191472-1-alistair@alistair23.me/T/#t
+> >  arch/arm/boot/dts/e60k02.dtsi              | 12 +++++++++++-
+> >  arch/arm/boot/dts/imx6sl-tolino-shine3.dts | 14 ++++++++++++++
+> >  arch/arm/boot/dts/imx6sll-kobo-clarahd.dts | 14 ++++++++++++++
+> >  3 files changed, 39 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm/boot/dts/e60k02.dtsi b/arch/arm/boot/dts/e60k02.dtsi
+> > index 935e2359f8df..4f36cc181a52 100644
+> > --- a/arch/arm/boot/dts/e60k02.dtsi
+> > +++ b/arch/arm/boot/dts/e60k02.dtsi
+> > @@ -104,7 +104,17 @@ &i2c2 {
+> >  	clock-frequency = <100000>;
+> >  	status = "okay";
+> >  
+> > -	/* TODO: CYTTSP5 touch controller at 0x24 */
+> > +	touchscreen@24 {
+> > +		compatible = "cypress,tt21000";
+> > +		reg = <0x24>;
+> > +		pinctrl-names = "default","sleep";  
+> 
+> Does the driver handle the different states?
+> 
+> > +		pinctrl-0 = <&pinctrl_cyttsp5_gpio>;
+> > +		pinctrl-1 = <&pinctrl_cyttsp5_gpio_sleep>;
+> > +		interrupt-parent = <&gpio5>;
+> > +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
+> > +		reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
+> > +		vdd-supply = <&ldo5_reg>;
+> > +	};
+> >  
+> >  	/* TODO: TPS65185 PMIC for E Ink at 0x68 */
+> >  
+> > diff --git a/arch/arm/boot/dts/imx6sl-tolino-shine3.dts b/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
+> > index e3f1e8d79528..82d9ed91df92 100644
+> > --- a/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
+> > +++ b/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
+> > @@ -52,6 +52,20 @@ &iomuxc {
+> >  	pinctrl-names = "default";
+> >  	pinctrl-0 = <&pinctrl_hog>;
+> >  
+> > +	pinctrl_cyttsp5_gpio: cyttsp5_gpio_grp {  
+> 
+> According the below code it should be:
+>    	pinctrl_cyttsp5_gpio: cyttsp5-gpiogrp {
+> 
+> and..
+> 
+> > +		fsl,pins = <
+> > +			MX6SL_PAD_SD1_DAT3__GPIO5_IO06                0x17059 /* TP_INT */
+> > +			MX6SL_PAD_SD1_DAT2__GPIO5_IO13                0x10059 /* TP_RST */
+> > +		>;
+> > +	};
+> > +
+> > +	pinctrl_cyttsp5_gpio_sleep: cyttsp5_gpio_grp_sleep {  
+> 
+> 
+>    	pinctrl_cyttsp5_gpio_sleep: cyttsp5-gpio-sleepgrp {
+> 
+> 
+> Regards,
+>   Marco
+> 
+> > +		fsl,pins = <
+> > +			MX6SL_PAD_SD1_DAT3__GPIO5_IO06                0x10059 /* TP_INT */
+> > +			MX6SL_PAD_SD1_DAT2__GPIO5_IO13                0x10059 /* TP_RST */
+> > +		>;
+> > +	};
+> > +
+> >  	pinctrl_gpio_keys: gpio-keysgrp {
+> >  		fsl,pins = <
+> >  			MX6SL_PAD_SD1_DAT1__GPIO5_IO08	0x17059	/* PWR_SW */
+> > diff --git a/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts b/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
+> > index 90b32f5eb529..d743bf4fd8e6 100644
+> > --- a/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
+> > +++ b/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
+> > @@ -62,6 +62,20 @@ &iomuxc {
+> >  	pinctrl-names = "default";
+> >  	pinctrl-0 = <&pinctrl_hog>;
+> >  
+> > +	pinctrl_cyttsp5_gpio: cyttsp5-gpiogrp {
+> > +		fsl,pins = <
+> > +			MX6SLL_PAD_SD1_DATA3__GPIO5_IO06                0x17059 /* TP_INT */
+> > +			MX6SLL_PAD_SD1_DATA2__GPIO5_IO13                0x10059 /* TP_RST */
+> > +		>;
+> > +	};
+> > +
+> > +	pinctrl_cyttsp5_gpio_sleep: cyttsp5-gpiogrp-sleep {
+> > +		fsl,pins = <
+> > +			MX6SLL_PAD_SD1_DATA3__GPIO5_IO06                0x10059 /* TP_INT */
+> > +			MX6SLL_PAD_SD1_DATA2__GPIO5_IO13                0x10059 /* TP_RST */
+> > +		>;
+> > +	};
+> > +
+> >  	pinctrl_gpio_keys: gpio-keysgrp {
+> >  		fsl,pins = <
+> >  			MX6SLL_PAD_SD1_DATA1__GPIO5_IO08	0x17059	/* PWR_SW */
+> > -- 
+> > 2.30.2
+> > 
+> > 
+> >   
+> 
 
