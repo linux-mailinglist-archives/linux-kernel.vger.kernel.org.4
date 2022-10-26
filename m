@@ -2,99 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E59660E52D
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ABC60E52F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbiJZQB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S234593AbiJZQCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234629AbiJZQB0 (ORCPT
+        with ESMTP id S234595AbiJZQCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:01:26 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E2110FFC;
-        Wed, 26 Oct 2022 09:01:01 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 21so8300738edv.3;
-        Wed, 26 Oct 2022 09:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eh+SEU+HnlEQUbzfnGbfU7kWNyEwnXy9QRYac8VJ2Q4=;
-        b=NpxL6YqAXQlu73AZJIkFuQX1ymYP/ct6mf0wbAK5OulIJMkr2/uBv7rqvE8RaazO86
-         FqB0tJYiiMaS1mlmkvuRE4tduf33y9xTYa7GOtdf6Y9L7O6iW1DDKcLiGPVfCzoHF4oM
-         vfZhchwk3lS7saoKnBYPcAZ2P1senLC8gdVGeETVCkiErXPEpfxnYegKcXRLoKD0HjSG
-         zzk0jEfAENn3ajktr3YQK3ASMLyebtbJVpy+5IqUBHMQ9vO4HeC+ZSUsIImTjwEis8P+
-         +OTw+6hiOF/M+ROAlVhZoXIAWf8llK6Lh+GbRiVGcWnIvhEM9FHbGHynCPnsgNjSUPM2
-         2o7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eh+SEU+HnlEQUbzfnGbfU7kWNyEwnXy9QRYac8VJ2Q4=;
-        b=tMPQw49zOgzU40K2hnoDMgyGa3JDb/IPFRHinZlKoPsMUhZv84fvK/8Q3GYe7Lf28N
-         u1+Eu16RnuOmw+JIvAkKOoHX6s7PAmJR6MsIS5znmTqo5vvSwVZKigUDngO+z+4FrGzm
-         E519i50J188zr6OEqZByitzqv8AoMo2PqJu8pG6Cz8kjMJNO6roVg3mUjdT2iHNvRAJh
-         igXsDcBrTN4ECqklll6NTZgfCFVKVCEY2z2jfGepNNw5T7Qi3BopbGMRoutdhXp61fDj
-         K8hfkLLvoEakrmD8UtcUbKSpgqiApAk2JsPO1cv6gG1lG9VStHOggeI4REq0QiVkDls2
-         4EVQ==
-X-Gm-Message-State: ACrzQf0ps2lu7JKtPzWmObiq+7skjp00SSy2rNLcgNkBV1u6gE3acjIR
-        bZSMYerTlIfoiFOZ+D0+B8o=
-X-Google-Smtp-Source: AMsMyM6QXU8xfCeZGqtR6fz4hE0zcKx1lhuevTCZW36Q97qDQJUfxPXiBCuH/bsGX9HrCq73gGDFWA==
-X-Received: by 2002:a05:6402:358e:b0:461:ea80:fb61 with SMTP id y14-20020a056402358e00b00461ea80fb61mr12685675edc.356.1666800060420;
-        Wed, 26 Oct 2022 09:01:00 -0700 (PDT)
-Received: from michele-ThinkPad-T14-Gen-1.wind3.hub ([31.190.164.33])
-        by smtp.gmail.com with ESMTPSA id j6-20020a170906278600b00780b1979adesm3133449ejc.218.2022.10.26.09.00.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 09:00:58 -0700 (PDT)
-From:   mdecandia@gmail.com
-To:     gregkh@linuxfoundation.org
-Cc:     akpm@linux-foundation.org, bsegall@google.com, edumazet@google.com,
-        jbaron@akamai.com, khazhy@google.com, linux-kernel@vger.kernel.org,
-        r@hev.cc, rpenyaev@suse.de, shakeelb@google.com, stable@kernel.org,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        viro@zeniv.linux.org.uk
-Subject: [PATCH 5.4 051/389] epoll: autoremove wakers even more aggressively
-Date:   Wed, 26 Oct 2022 18:00:51 +0200
-Message-Id: <20221026160051.5340-1-mdecandia@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220823080117.738248512@linuxfoundation.org>
-References: <20220823080117.738248512@linuxfoundation.org>
+        Wed, 26 Oct 2022 12:02:24 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7B14314D;
+        Wed, 26 Oct 2022 09:02:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=9y9m9otalywWzoGvSHtu1e01bQrx9OTbpDapeszo2KA=; b=O51igS0MsMbF+jUOJyTYhhLyyd
+        b/n2CUMLRbNwrkTK6ozOw9vQ6b2Vvart7diDjRHm9uveLB58B7WRvNFVD9x6UsS2FXbtLsSTwis0O
+        IHMhl141MwIRHqy9v/zZLa2UgnRFUGnQNkM4KcvfMSO9YVRGfEuCbjNyaolgUqcRIeO2KpMso9grJ
+        P0bblg/8SBQJVDvloxiAZ3SKFVdvwO5/z71f7SlV9zT0e2SFm52+nhrFn9wRkn/MVZp5R5mvGvfRT
+        C6sT/Tij1yyoBwcMQD3ev7E0r36cjjtnpM053pJB+Yay7YNhjAbomBXqXk8kulfdW+V/gl9fEAPAK
+        y4e1cQCA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oniqr-00H7Uj-Hv; Wed, 26 Oct 2022 16:01:57 +0000
+Date:   Wed, 26 Oct 2022 17:01:57 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com, baocong.liu@unisoc.com,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
+Message-ID: <Y1lZ9Rm87GpFRM/Q@casper.infradead.org>
+References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <Y0lSChlclGPkwTeA@casper.infradead.org>
+ <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
+ <Y017BeC64GDb3Kg7@casper.infradead.org>
+ <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
+ <Y04Y3RNq6D2T9rVw@casper.infradead.org>
+ <20221018223042.GJ2703033@dread.disaster.area>
+ <Y1AWXiJdyjdLmO1E@casper.infradead.org>
+ <20221019220424.GO2703033@dread.disaster.area>
+ <Y1HDDu3UV0L3cDwE@casper.infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1HDDu3UV0L3cDwE@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=0D
-Subject: [PATCH 5.4 051/389] epoll: autoremove wakers even more aggressivel=
-y=0D
-=0D
-Hi all,=0D
-I'm facing an hangup of runc command during startup of containers on Ubuntu=
- 20.04,=0D
-just adding this patch to my updated linux kernel 5.4.210.=0D
-=0D
-The runc process exits if I run an strace on it with the strace_runc_hangup=
-.login you can find here=0D
-=0D
-https://github.com/opencontainers/runc/issues/3641=0D
-=0D
-with more details.=0D
-=0D
-Testing it with previous docker-ce/containerio releases, just hangup the ru=
-nc process and it will remain locked even analyzing it with strace.=0D
-=0D
-Any idea or further test I can do on it?=0D
-=0D
-Thanks,=0D
-Michele=
+On Thu, Oct 20, 2022 at 10:52:14PM +0100, Matthew Wilcox wrote:
+> But I think the tests you've done refute that theory.  I'm all out of
+> ideas at the moment.
+
+I have a new idea.  In page_cache_delete_batch(), we don't set the
+order of the entry before calling xas_store().  That means we can end
+up in a situation where we have an order-2 folio in the page cache,
+delete it and end up with a NULL pointer at (say) index 20 and sibling
+entries at indices 21-23.  We can come along (potentially much later)
+and put an order-0 folio back at index 20.  Now all of indices 20-23
+point to the index-20, order-0 folio.  Worse, the xarray node can be
+freed with the sibling entries still intact and then be reallocated by
+an entirely different xarray.
+
+I don't know if this is going to fix the problem you're seeing.  I can't
+quite draw a line from this situation to your symptoms.  I came across
+it while auditing all the places which set folio->mapping to NULL.
+I did notice a mis-ordering; all the other places first remove the folio
+from the xarray before setting folio to NULL, but I have a hard time
+connecting that to your symptoms either.
+
+diff --git a/include/linux/xarray.h b/include/linux/xarray.h
+index 44dd6d6e01bc..cc1fd1f849a7 100644
+--- a/include/linux/xarray.h
++++ b/include/linux/xarray.h
+@@ -1617,6 +1617,12 @@ static inline void xas_advance(struct xa_state *xas, unsigned long index)
+ 	xas->xa_offset = (index >> shift) & XA_CHUNK_MASK;
+ }
+ 
++static inline void xas_adjust_order(struct xa_state *xas, unsigned int order)
++{
++	xas->xa_shift = order - (order % XA_CHUNK_SHIFT);
++	xas->xa_sibs = (1 << (order % XA_CHUNK_SHIFT)) - 1;
++}
++
+ /**
+  * xas_set_order() - Set up XArray operation state for a multislot entry.
+  * @xas: XArray operation state.
+@@ -1628,8 +1634,7 @@ static inline void xas_set_order(struct xa_state *xas, unsigned long index,
+ {
+ #ifdef CONFIG_XARRAY_MULTI
+ 	xas->xa_index = order < BITS_PER_LONG ? (index >> order) << order : 0;
+-	xas->xa_shift = order - (order % XA_CHUNK_SHIFT);
+-	xas->xa_sibs = (1 << (order % XA_CHUNK_SHIFT)) - 1;
++	xas_adjust_order(xas, order);
+ 	xas->xa_node = XAS_RESTART;
+ #else
+ 	BUG_ON(order > 0);
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 08341616ae7a..6e3f486131e4 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -305,11 +305,13 @@ static void page_cache_delete_batch(struct address_space *mapping,
+ 
+ 		WARN_ON_ONCE(!folio_test_locked(folio));
+ 
++		if (!folio_test_hugetlb(folio))
++			xas_adjust_order(&xas, folio_order(folio));
++		xas_store(&xas, NULL);
+ 		folio->mapping = NULL;
+ 		/* Leave folio->index set: truncation lookup relies on it */
+ 
+ 		i++;
+-		xas_store(&xas, NULL);
+ 		total_pages += folio_nr_pages(folio);
+ 	}
+ 	mapping->nrpages -= total_pages;
