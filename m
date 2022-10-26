@@ -2,74 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD1C60DE57
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40A260DE5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbiJZJkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S233425AbiJZJly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233374AbiJZJkc (ORCPT
+        with ESMTP id S233158AbiJZJlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:40:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7FF3E757;
-        Wed, 26 Oct 2022 02:40:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 26 Oct 2022 05:41:50 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328BF5071F;
+        Wed, 26 Oct 2022 02:41:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3DE761D96;
-        Wed, 26 Oct 2022 09:40:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D658FC433D6;
-        Wed, 26 Oct 2022 09:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666777230;
-        bh=htdOOYurCJIZsVSaVVuVoWXOfQvlH6d2OhO+9vBnWRo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hV3ukEHTFXCXwTzFHNIzZ3Bn02cNz6RC/gV/2KRvldzQQ40yyXKFd5zn5Ajyj0Aeb
-         5vys5+neAd5iINvz1mr1zBd04UTTWHpfgK1AaXrRGzayYDiR/a/toWNQVJgeS7LMp/
-         TV/AzznGO8upG423Ti6y0iHiO6cumZUZwFGTzsTSp9hwM45FttWIu12t6NcoNv5jmV
-         Oekq0yIfu+R4JjtY7oZmk/TqJuaea173ur6PthPZwJu1Di9DsscTgmh5FDRuU0RI49
-         KX3E74AFeyIV/vL/H3iJWXCk5nlVPKh6Lw0zVJHUKZAs3VAAN32Zhe0i+Ahx3Zvd2+
-         CTnEZfj2ntcFA==
-Date:   Wed, 26 Oct 2022 11:40:27 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Arjan van de Ven <arjan@infradead.org>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@redhat.com>
-Subject: Re: [PATCH v3 04/17] timer: Split next timer interrupt logic
-Message-ID: <20221026094027.GB1327339@lothringen>
-References: <20221025135850.51044-1-anna-maria@linutronix.de>
- <20221025135850.51044-5-anna-maria@linutronix.de>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E61EC1F74A;
+        Wed, 26 Oct 2022 09:41:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666777307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HvGGmhT+mb54m/Ckk59OpGjeeAhbrk4I5c2+MnDwZWg=;
+        b=XmA0pkXIS8rsBBbbiB2tx6W2pECUxZE4PFxaPFUCdHuTjR3rYaqmfQXc7OYc4e4nXSY5lK
+        v9nrZ/YukMF/AULVImpWPfE3L3Z+k0jD7w+0R08DjS4dwf0/eOxRVvyxFBOdScN2CnUoN5
+        da8Lw7UXv2gwE6gLH8qLpb5LF4fj3UQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666777307;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HvGGmhT+mb54m/Ckk59OpGjeeAhbrk4I5c2+MnDwZWg=;
+        b=VnGgJPbC8H2jSSi0oAZZ2Map/uj44FZMY8jbIQfJMI7supcLEFxu7XoGVhhE/11oNVv7AW
+        bsSTjprbi6GI38Cg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3F0E13A6E;
+        Wed, 26 Oct 2022 09:41:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 7Wj0M9sAWWMhaAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 26 Oct 2022 09:41:47 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 574A8A06F9; Wed, 26 Oct 2022 11:41:47 +0200 (CEST)
+Date:   Wed, 26 Oct 2022 11:41:47 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH v3 3/4] ext4: add EXT4_IGET_BAD flag to prevent
+ unexpected bad inode
+Message-ID: <20221026094147.n3hv6bk6meafc73y@quack3>
+References: <20221026042310.3839669-1-libaokun1@huawei.com>
+ <20221026042310.3839669-4-libaokun1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025135850.51044-5-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221026042310.3839669-4-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 03:58:37PM +0200, Anna-Maria Behnsen wrote:
-> Logic for getting next timer interrupt (no matter of recalculated or
-> already stored in base->next_expiry) is split into a separate function
-> "next_timer_interrupt()" to make it available for new call sites.
+On Wed 26-10-22 12:23:09, Baokun Li wrote:
+> There are many places that will get unhappy (and crash) when ext4_iget()
+> returns a bad inode. However, if iget the boot loader inode, allows a bad
+> inode to be returned, because the inode may not be initialized. This
+> mechanism can be used to bypass some checks and cause panic. To solve this
+> problem, we add a special iget flag EXT4_IGET_BAD. Only with this flag
+> we'd be returning bad inode from ext4_iget(), otherwise we always return
+> the error code if the inode is bad inode.(suggested by Jan Kara)
 > 
-> No functional change.
-> 
-> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Looks good to me. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/ext4/ext4.h  | 3 ++-
+>  fs/ext4/inode.c | 8 +++++++-
+>  fs/ext4/ioctl.c | 3 ++-
+>  3 files changed, 11 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> index 8d5453852f98..2b574b143bde 100644
+> --- a/fs/ext4/ext4.h
+> +++ b/fs/ext4/ext4.h
+> @@ -2964,7 +2964,8 @@ int do_journal_get_write_access(handle_t *handle, struct inode *inode,
+>  typedef enum {
+>  	EXT4_IGET_NORMAL =	0,
+>  	EXT4_IGET_SPECIAL =	0x0001, /* OK to iget a system inode */
+> -	EXT4_IGET_HANDLE = 	0x0002	/* Inode # is from a handle */
+> +	EXT4_IGET_HANDLE = 	0x0002,	/* Inode # is from a handle */
+> +	EXT4_IGET_BAD =		0x0004  /* Allow to iget a bad inode */
+>  } ext4_iget_flags;
+>  
+>  extern struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index ae3a836dd9d7..f767340229fd 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -5043,8 +5043,14 @@ struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
+>  	if (IS_CASEFOLDED(inode) && !ext4_has_feature_casefold(inode->i_sb))
+>  		ext4_error_inode(inode, function, line, 0,
+>  				 "casefold flag without casefold feature");
+> -	brelse(iloc.bh);
+> +	if (is_bad_inode(inode) && !(flags & EXT4_IGET_BAD)) {
+> +		ext4_error_inode(inode, function, line, 0,
+> +				 "bad inode without EXT4_IGET_BAD flag");
+> +		ret = -EUCLEAN;
+> +		goto bad_inode;
+> +	}
+>  
+> +	brelse(iloc.bh);
+>  	unlock_new_inode(inode);
+>  	return inode;
+>  
+> diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
+> index ded535535b27..e0be8026c996 100644
+> --- a/fs/ext4/ioctl.c
+> +++ b/fs/ext4/ioctl.c
+> @@ -375,7 +375,8 @@ static long swap_inode_boot_loader(struct super_block *sb,
+>  	blkcnt_t blocks;
+>  	unsigned short bytes;
+>  
+> -	inode_bl = ext4_iget(sb, EXT4_BOOT_LOADER_INO, EXT4_IGET_SPECIAL);
+> +	inode_bl = ext4_iget(sb, EXT4_BOOT_LOADER_INO,
+> +			EXT4_IGET_SPECIAL | EXT4_IGET_BAD);
+>  	if (IS_ERR(inode_bl))
+>  		return PTR_ERR(inode_bl);
+>  	ei_bl = EXT4_I(inode_bl);
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
