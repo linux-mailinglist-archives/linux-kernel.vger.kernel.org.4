@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35EF60EBF9
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5559760EBFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234178AbiJZXBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 19:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S233683AbiJZXB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 19:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234113AbiJZXAe (ORCPT
+        with ESMTP id S234068AbiJZXB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 19:00:34 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50980317F3;
-        Wed, 26 Oct 2022 16:00:08 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id a13so44192741edj.0;
-        Wed, 26 Oct 2022 16:00:08 -0700 (PDT)
+        Wed, 26 Oct 2022 19:01:29 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8B069BF7;
+        Wed, 26 Oct 2022 16:00:40 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id k2so25703679ejr.2;
+        Wed, 26 Oct 2022 16:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Ww8Jx6MwPKHu8PJmJYn80kwAUAuLzjtG0hvl+VPoT7M=;
-        b=I3fm9YJEZN8vn/vYlXN9fSY8k4i77jAX52zOoYBBuPldBV1oZUwXuOvRRKrprh6aIs
-         9XgPQSBYSf5MkYEjF4m3St8lRpQkqlYZ5W5rXDzeor135zCDa3EtyZ1eiPqaRIcZDgXy
-         9KHMK3AStov4UfcuX3L4cYqw/Z/Pa1Ty6r5uzfdl5/t9SLr7Hji9DJBcxeoisTUdybZl
-         hBhqiq7ODzjdmpTwfVcA32aXit4rdv+Ws2XO9kH8lFn2XanPs7ZXfPKlLxhOn22yYYvE
-         M92dIhVxNN7oaWijPD8O3xtcn5HwZXm1y6SmUwjFUp6dRyYlyazwRqVg/gFQ5kl5UK91
-         bkvg==
+        bh=QDnwRNSvILxD4k9pcL4E1+s2WIr1eI7KS5V5B2hV+gw=;
+        b=OZri08sC3H4NhbuF2t777h2w0nJU42EHf88jSJxwBiXid44X+DoiRTD2iuTX84q8Ne
+         5u5OZBnJF4wbYBYSCT0DosCyZnfODHZ21wjDv4YxESxguroiXZ6gSNjND/fNxT1NisTc
+         OkGgbuV0ExZw5EOG1PCWrAEifdEDEOuwv4zfMvuADsGQeaLFFkskS8DV/tvJytN3L1Tu
+         6TROGFhgqadljW9oKaNcrnzmpR3s3pdfWzgsXiAFSURTce6J4F0HAk5q4tbkWjj/AC2p
+         yFPc5UrbEtCxBuqQIelOnUtVkiOXrEqwSS+ag9tTB7zQZ1XOqPeqb+4kDC2BmuIdhvcL
+         Sy+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ww8Jx6MwPKHu8PJmJYn80kwAUAuLzjtG0hvl+VPoT7M=;
-        b=TLqQUn8UNW/PaQamoSqhKcG5fqHpHAFnMB4/SOlxVxBxOlzL/F3X6DdV/jhzAisHTE
-         8guRcqmwA3KcGo19NwRTSJujWIL/IQAm2I//x1YZ8WYOcFypDa4Ymw6aDVDjK1Hc/3Bf
-         KlndGD27R/3gsk8mPdFrOJmbLYBvEXCkxE4j8ESqWQXNSmdHr8rKf0/lfawwZ1HJSb9R
-         SjOgTVVZSawR4TG+j13fvVDeXBvbKnBSwD3zVXl28w0YsR+QdBy1Ql46t3Z3DMV4B2B1
-         pbUzpl3c3XgkM3Ic7P1oHxeh3SLxHJaMS43rTG99rKgDnq0VH91H2VWLf2LPuF0jtrnd
-         gwLw==
-X-Gm-Message-State: ACrzQf0pBpUkzsq4zPkCHCJt4xv1V2RVAr98SSGh6byKa1nXMC1RT7RK
-        GmLgWUyuXeu8FjKBdBehruU=
-X-Google-Smtp-Source: AMsMyM7LfwC6hr00YFuS7OlQuq6QKPSmS3Rztqf9jg+nzCnwAq4lXLwpFOcej6U/S60SWkn3lWsQEA==
-X-Received: by 2002:a05:6402:3213:b0:461:dec8:336d with SMTP id g19-20020a056402321300b00461dec8336dmr15397238eda.221.1666825206604;
-        Wed, 26 Oct 2022 16:00:06 -0700 (PDT)
+        bh=QDnwRNSvILxD4k9pcL4E1+s2WIr1eI7KS5V5B2hV+gw=;
+        b=0ZY/H2KnJC1dU52yvd3CQN2t0JrbN5kMMsFK6tkd+zKgKV17yutr+DM+MrkgqqtRxj
+         faat1mdCYHWwIGd/L79EUxyZRngkXb03zVmbaqJpDorc2ZFjHK9JjEbMqmd1zxEB48Em
+         +g3+SCZLu2utDamqOSyL+9h+iym4uH/CPMP7aqF/0ow/lQ/d5PVy6QqtpCkBCryrHtPR
+         Kgs0dTInvfCmXLxNHS0Q6Pm+OqTQrZ2L/FdY7QGYjXNFGe6j1GtdSEYsjrJnw0P42Uva
+         fJpT04isyCgegtPhKacdFD7m/Co4ZuCA5JcXGI3Ms5x6ARqls70w+lleHVe23lcNVrBE
+         D5zg==
+X-Gm-Message-State: ACrzQf3lays5GCIslK5JTUiNLCALgE5kxtVGyMIFqyyEGQ+PUChfF8uM
+        T8uqZKGFPn77eCC9g90ZGTo=
+X-Google-Smtp-Source: AMsMyM6WkfKw92SRZVxTuuDFP0qLNx9+SU/w1+k6OaO/N5MWqBFb40Iwy8t6K0T2FMIlRjvdFepiIg==
+X-Received: by 2002:a17:907:2e01:b0:78d:f24b:7330 with SMTP id ig1-20020a1709072e0100b0078df24b7330mr39087661ejc.604.1666825239392;
+        Wed, 26 Oct 2022 16:00:39 -0700 (PDT)
 Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id qh24-20020a170906ecb800b00782fbb7f5f7sm3563185ejb.113.2022.10.26.16.00.05
+        by smtp.gmail.com with ESMTPSA id 13-20020a170906318d00b007317f017e64sm3546886ejy.134.2022.10.26.16.00.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 16:00:06 -0700 (PDT)
-Message-ID: <84f14b40-0804-9734-963a-31e200687a8d@gmail.com>
-Date:   Thu, 27 Oct 2022 01:00:05 +0200
+        Wed, 26 Oct 2022 16:00:39 -0700 (PDT)
+Message-ID: <8facb161-44cd-4cd1-93ec-468fa3164ed4@gmail.com>
+Date:   Thu, 27 Oct 2022 01:00:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.0
 From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v1 2/3] ARM: dts: rockchip: rename "haoyu,hym8563" rtc nodes
+Subject: [PATCH v1 3/3] arm64: dts: rockchip: rename "haoyu,hym8563" rtc nodes
 To:     heiko@sntech.de
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         a.zummo@towertech.it, alexandre.belloni@bootlin.com,
@@ -83,45 +83,42 @@ so change them.
 
 Signed-off-by: Johan Jonker <jbx6244@gmail.com>
 ---
- arch/arm/boot/dts/rk3036-evb.dts            | 2 +-
- arch/arm/boot/dts/rk3288-evb-act8846.dts    | 2 +-
- arch/arm/boot/dts/rk3288-firefly-reload.dts | 2 +-
- arch/arm/boot/dts/rk3288-firefly.dtsi       | 2 +-
- arch/arm/boot/dts/rk3288-miqi.dts           | 2 +-
- arch/arm/boot/dts/rk3288-rock2-square.dts   | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3368-r88.dts            | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/rk3036-evb.dts b/arch/arm/boot/dts/rk3036-evb.dts
-index 9fd4d9db9..89b0927ce 100644
---- a/arch/arm/boot/dts/rk3036-evb.dts
-+++ b/arch/arm/boot/dts/rk3036-evb.dts
-@@ -35,7 +35,7 @@
- &i2c1 {
- 	status = "okay";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts b/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
+index 7f5bba0c6..0e88e9592 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-orion-r68-meta.dts
+@@ -208,7 +208,7 @@
+ 		vin-supply = <&vcc_sys>;
+ 	};
 
 -	hym8563: hym8563@51 {
 +	hym8563: rtc@51 {
  		compatible = "haoyu,hym8563";
  		reg = <0x51>;
  		#clock-cells = <0>;
-diff --git a/arch/arm/boot/dts/rk3288-evb-act8846.dts b/arch/arm/boot/dts/rk3288-evb-act8846.dts
-index be695b8c1..8a635c243 100644
---- a/arch/arm/boot/dts/rk3288-evb-act8846.dts
-+++ b/arch/arm/boot/dts/rk3288-evb-act8846.dts
-@@ -54,7 +54,7 @@
+diff --git a/arch/arm64/boot/dts/rockchip/rk3368-r88.dts b/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
+index 38d757c00..e147d6f8b 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3368-r88.dts
+@@ -192,7 +192,7 @@
  		vin-supply = <&vcc_sys>;
  	};
 
--	hym8563@51 {
-+	rtc@51 {
+-	hym8563: hym8563@51 {
++	hym8563: rtc@51 {
  		compatible = "haoyu,hym8563";
  		reg = <0x51>;
-
-diff --git a/arch/arm/boot/dts/rk3288-firefly-reload.dts b/arch/arm/boot/dts/rk3288-firefly-reload.dts
-index a5a082634..2b462bbca 100644
---- a/arch/arm/boot/dts/rk3288-firefly-reload.dts
-+++ b/arch/arm/boot/dts/rk3288-firefly-reload.dts
-@@ -197,7 +197,7 @@
+ 		#clock-cells = <0>;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts
+index 5a2661ae0..18b5050c6 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-roc-pc-plus.dts
+@@ -98,7 +98,7 @@
  };
 
  &i2c0 {
@@ -129,46 +126,7 @@ index a5a082634..2b462bbca 100644
 +	hym8563: rtc@51 {
  		compatible = "haoyu,hym8563";
  		reg = <0x51>;
- 		#clock-cells = <0>;
-diff --git a/arch/arm/boot/dts/rk3288-firefly.dtsi b/arch/arm/boot/dts/rk3288-firefly.dtsi
-index 052afe554..9267857be 100644
---- a/arch/arm/boot/dts/rk3288-firefly.dtsi
-+++ b/arch/arm/boot/dts/rk3288-firefly.dtsi
-@@ -233,7 +233,7 @@
- 		vin-supply = <&vcc_sys>;
- 	};
-
--	hym8563: hym8563@51 {
-+	hym8563: rtc@51 {
- 		compatible = "haoyu,hym8563";
- 		reg = <0x51>;
- 		#clock-cells = <0>;
-diff --git a/arch/arm/boot/dts/rk3288-miqi.dts b/arch/arm/boot/dts/rk3288-miqi.dts
-index 713f55e14..e3d5644f2 100644
---- a/arch/arm/boot/dts/rk3288-miqi.dts
-+++ b/arch/arm/boot/dts/rk3288-miqi.dts
-@@ -162,7 +162,7 @@
- 		vin-supply = <&vcc_sys>;
- 	};
-
--	hym8563: hym8563@51 {
-+	hym8563: rtc@51 {
- 		compatible = "haoyu,hym8563";
- 		reg = <0x51>;
- 		#clock-cells = <0>;
-diff --git a/arch/arm/boot/dts/rk3288-rock2-square.dts b/arch/arm/boot/dts/rk3288-rock2-square.dts
-index 80e0f07c8..07a3a5275 100644
---- a/arch/arm/boot/dts/rk3288-rock2-square.dts
-+++ b/arch/arm/boot/dts/rk3288-rock2-square.dts
-@@ -165,7 +165,7 @@
- };
-
- &i2c0 {
--	hym8563: hym8563@51 {
-+	hym8563: rtc@51 {
- 		compatible = "haoyu,hym8563";
- 		reg = <0x51>;
- 		#clock-cells = <0>;
+ 		interrupt-parent = <&gpio0>;
 --
 2.20.1
 
