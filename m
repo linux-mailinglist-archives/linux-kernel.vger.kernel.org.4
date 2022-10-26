@@ -2,119 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1B660DD8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C896260DD91
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbiJZIw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38424 "EHLO
+        id S233289AbiJZIx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:53:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232685AbiJZIwy (ORCPT
+        with ESMTP id S233156AbiJZIxw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:52:54 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390299A9CF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:52:52 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-35befab86a4so140460697b3.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=c2GJjxQXlRACGVSyWh1rRfrje5tRQvUdNnSASNewsQM=;
-        b=C1gF9FC6lAH6D91dNfaXKJ43bJpdVXiKwPfIxVVBTBE8vcGb8oj7XUCkqvddeHiwxv
-         GDrb87Yu+aPRZmRwySZm7QQGJy21Ijkj1+YsH7cif/U/xCrqJdy2Tl6gWmAI0c+9aF6k
-         WqpNCV30aInH9Rl1RoRrs+ly6UhxN2ZWeW32Dpwl2onPY/RQMBS0rzYVLOHwDQGa3t6H
-         bjKXbVdniz/uozAzGXCx1ETM5P6nCtSlhmqUYjGTz6OrOSl1KOT/0kNaYQ0hM5vxkF6Y
-         jylJKyZEnLjRl+5zr4J2iS0exicXqLF6y9H8DY8aYHWJn8bm/vq4S3RTk3SUtXLwH4/q
-         XWZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=c2GJjxQXlRACGVSyWh1rRfrje5tRQvUdNnSASNewsQM=;
-        b=Im8y3ATDzyyv6+mV9eyTFiGcBgd1xqipTz7L0AiH26L3sHf/chRcBV04EoqzTZtXAy
-         /doAus3rF+QWp7O6KqqZa9v8jiuHq1u6WIBG+gly02UYWuSD75HwMAZhDDqGiJDvG/ao
-         QcpBjLf/jGPDzbJlUyonGNIPSlXBzC/S17VxI89OFxMw+pehh+JJ2LEShkaJy2s8oYc3
-         LPgzuCjqQb2G14fBsEg/Z54rq6j5Ug2KAq8lEVxIrWlWKC9woX5ofbXAIiBITJTZLYv8
-         CFBciDw5eXmZ/oMU2gcr6KdVvIBemlgmHUxH1wb6kaK5S/w4+ICoYACg2/tL/7KjeGD+
-         C10Q==
-X-Gm-Message-State: ACrzQf1xTJc/t+I15Xhg1iWp+kmRKaItuTPFGToOO4ayDY6UgaX5XDQ+
-        dDEvKWWLS2+WOoJn3rJRSGnXiuD40+e3NvXZQf+qBA==
-X-Google-Smtp-Source: AMsMyM4Wq7M/7T0OiXJsqluBz8s1LQV3vheQ3AHuyHU0ig7icR9INAafHlf+XXvpRuGFfR31LlGJIjzGltFBQmRNQl8=
-X-Received: by 2002:a0d:eacc:0:b0:36b:506f:20cc with SMTP id
- t195-20020a0deacc000000b0036b506f20ccmr18647348ywe.313.1666774371390; Wed, 26
- Oct 2022 01:52:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <CALPaoCj-zav4x6H3ffXo_O+RFan8Qb-uLy-DdtkaQTfuxY4a0w@mail.gmail.com>
- <b2e020b1-f6b2-e236-a042-4eb2fd27d8b0@intel.com> <IA1PR11MB6097236CFF891041DBA42ECB9B5F9@IA1PR11MB6097.namprd11.prod.outlook.com>
- <Y0BhzKkksSjSeE3W@agluck-desk3.sc.intel.com> <81a7b4f6-fbb5-380e-532d-f2c1fc49b515@intel.com>
- <CALPaoCjdeRjyX5L6BBX688ZM21eMwetuL9QLF1+GEDUskGcU2w@mail.gmail.com>
- <76bb4dc9-ab7c-4cb6-d1bf-26436c88c6e2@arm.com> <CALPaoCiKUQC+LxDwKQ0gE5AQniJi_nbzrXi_HA9ZBRtiXdw_dg@mail.gmail.com>
- <835d769b-3662-7be5-dcdd-804cb1f3999a@arm.com> <CALPaoCgiwtvxZMJ6f-BOTNMPXDbMB8QM42HyCAvYRi4grPiphQ@mail.gmail.com>
- <CALPaoCg2-9ARbK+MEgdvdcjJtSy_2H6YeRkLrT97zgy8Aro3Vg@mail.gmail.com> <715e4123-fdb3-a71e-4069-91d16a56a308@arm.com>
-In-Reply-To: <715e4123-fdb3-a71e-4069-91d16a56a308@arm.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Wed, 26 Oct 2022 10:52:40 +0200
-Message-ID: <CALPaoCjUk31HvhaqWKfkLNLyZJzbDLJOnEqTsqn882CToLCGcw@mail.gmail.com>
-Subject: Re: [RFD] resctrl: reassigning a running container's CTRL_MON group
-To:     James Morse <james.morse@arm.com>
-Cc:     Reinette Chatre <reinette.chatre@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Babu Moger <Babu.Moger@amd.com>,
-        Gaurang Upasani <gupasani@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 26 Oct 2022 04:53:52 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72859AC0A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:53:50 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1666774429;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RXR/lAFz86mG9q2ZJofRnpXszeaU/ER/Y/nKQPHzKgU=;
+        b=PU+hs6TreoiqzMMQOr/t4miTssPjIWp6M9N6LFYYkFXeFWIWsrWAFDeY4PWtwjl5FNH5pw
+        IQLPcYoGYcCPHB6OqWLe4pJ0kyvRVrtgUt64quQfC69Al84Nya8BOPDUGzMxrdh4djgRLH
+        x4UHdnSr4MxQDSWb+soL4BFTbsfoxLE=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: Re: [PATCH -next 1/1] mm: hugetlb_vmemmap: Fix WARN_ON in
+ vmemmap_remap_pte
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com>
+Date:   Wed, 26 Oct 2022 16:53:33 +0800
+Cc:     Wupeng Ma <mawupeng1@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>, catalin.marinas@arm.com,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <46A852E1-B19E-4ABE-B96C-992DC7C67414@linux.dev>
+References: <20221025014215.3466904-1-mawupeng1@huawei.com>
+ <614E3E83-1EAB-4C39-AF9C-83C0CCF26218@linux.dev>
+ <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
+ <3D6FDA43-A812-4907-B9C8-C2B25567DBBC@linux.dev>
+ <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 5:55 PM James Morse <james.morse@arm.com> wrote:
-> On 21/10/2022 13:42, Peter Newman wrote:
-> > Even on x86, without an smp_mb(), the stores to t->closid and t->rmid could be
-> > reordered with the task_curr(t) and task_cpu(t) reads which follow. The original
-> > description of this scenario seemed to assume that accesses below would happen
-> > in program order:
-> >
-> >     WRITE_ONCE(t->closid, to->closid);
-> >     WRITE_ONCE(t->rmid, to->mon.rmid);
-> >
-> >     /*
-> >      * If the task is on a CPU, set the CPU in the mask.
-> >      * The detection is inaccurate as tasks might move or
-> >      * schedule before the smp function call takes place.
-> >      * In such a case the function call is pointless, but
-> >      * there is no other side effect.
-> >      */
-> >     if (IS_ENABLED(CONFIG_SMP) && mask && task_curr(t))
-> >          cpumask_set_cpu(task_cpu(t), mask);
-> >
-> > If the task concurrently switches in on another CPU, the code above may not
-> > observed that it's running, and the CPU running the task may not have observed
-> > the updated rmid and closid yet, so it could continue with the old rmid/closid
-> > and not get interrupted.
->
-> Makes sense to me - do you want to send a patch to fix it?
 
-Sure, when I think of a solution. For an smp_mb() to be effective above,
-we would need to execute another smp_mb() unconditionally before reading
-the closid/rmid fields when switching a task in.
 
-The only quick fix I know will work without badly hurting context switch
-time would be to go back to pinging all CPUs following a mass
-task-movement operation.
+> On Oct 26, 2022, at 16:36, Anshuman Khandual =
+<anshuman.khandual@arm.com> wrote:
+>=20
+>=20
+>=20
+> On 10/26/22 12:31, Muchun Song wrote:
+>>=20
+>>=20
+>>> On Oct 26, 2022, at 13:06, Anshuman Khandual =
+<anshuman.khandual@arm.com> wrote:
+>>>=20
+>>>=20
+>>>=20
+>>> On 10/25/22 12:06, Muchun Song wrote:
+>>>>=20
+>>>>=20
+>>>>> On Oct 25, 2022, at 09:42, Wupeng Ma <mawupeng1@huawei.com> wrote:
+>>>>>=20
+>>>>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>>>>=20
+>>>>> Commit f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages =
+associated with
+>>>>> each HugeTLB page") add vmemmap_remap_pte to remap the tail pages =
+as
+>>>>> read-only to catch illegal write operation to the tail page.
+>>>>>=20
+>>>>> However this will lead to WARN_ON in arm64 in =
+__check_racy_pte_update()
+>>>>=20
+>>>> Thanks for your finding this issue.
+>>>>=20
+>>>>> since this may lead to dirty state cleaned. This check is =
+introduced by
+>>>>> commit 2f4b829c625e ("arm64: Add support for hardware updates of =
+the
+>>>>> access and dirty pte bits") and the initial check is as follow:
+>>>>>=20
+>>>>> BUG_ON(pte_write(*ptep) && !pte_dirty(pte));
+>>>>>=20
+>>>>> Since we do need to mark this pte as read-only to catch illegal =
+write
+>>>>> operation to the tail pages, use set_pte  to replace set_pte_at to =
+bypass
+>>>>> this check.
+>>>>=20
+>>>> In theory, the waring does not affect anything since the tail =
+vmemmap
+>>>> pages are supposed to be read-only. So, skipping this check for =
+vmemmap
+>>>=20
+>>> Tails vmemmap pages are supposed to be read-only, in practice but =
+their
+>>> backing pages do have pte_write() enabled. Otherwise the =
+VM_WARN_ONCE()
+>>> warning would not have triggered.
+>>=20
+>> Right.
+>>=20
+>>>=20
+>>>       VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
+>>>                    "%s: racy dirty state clearing: 0x%016llx -> =
+0x%016llx",
+>>>                    __func__, pte_val(old_pte), pte_val(pte));
+>>>=20
+>>> Also, is not it true that the pte being remapped into a different =
+page
+>>> as read only, than what it had originally (which will be freed up) =
+i.e=20
+>>> the PFN in 'old_pte' and 'pte' will be different. Hence is there =
+still
+>>=20
+>> Right.
+>>=20
+>>> a possibility for a race condition even when the PFN changes ?
+>>=20
+>> Sorry, I didn't get this question. Did you mean the PTE is changed =
+from
+>> new (pte) to the old one (old_pte) by the hardware because of the =
+update
+>> of dirty bit when a concurrent write operation to the tail vmemmap =
+page?
+>=20
+> No, but is not vmemmap_remap_pte() reuses walk->reuse_page for all =
+remaining
+> tails pages ? Is not there a PFN change, along with access permission =
+change
+> involved in this remapping process ?
 
-I'll see if I can come up with anything better, though.
+Alright, yes, both the PFN and the access permission are changed.
 
--Peter
+
