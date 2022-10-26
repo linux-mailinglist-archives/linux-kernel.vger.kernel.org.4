@@ -2,115 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2209760E0CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0174F60E0D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233585AbiJZMgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S233479AbiJZMhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233565AbiJZMgH (ORCPT
+        with ESMTP id S232903AbiJZMhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:36:07 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E378D86F96;
-        Wed, 26 Oct 2022 05:36:04 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id r83so663067oih.2;
-        Wed, 26 Oct 2022 05:36:04 -0700 (PDT)
+        Wed, 26 Oct 2022 08:37:40 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C8258D221
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:37:40 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id h8-20020a056e021b8800b002f9c2e31750so13216333ili.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:37:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rm41MowY05sJRqfXfoxzAmqqrLaTLbUM9gClxYnyOow=;
-        b=PpHtfvsYLHborqDA20hRoLhVN13YglXgOCBq9jYcsmMd1ViDvKdb40EwORO2uctoGt
-         Rx3XDWxGPgHaZ9h0aGOL8XZRAP/ucesZNNlgM3ZRTAwsSs/RTTdXKZctsGLsaAbbPbwP
-         ETfoBH6VW7lGtCDDvB9YnPKe1uJiFyApzCswm2UpWIATmL3o7CeEkkBR0UnzwX4rVMPP
-         aWU2QWLfQORm1can2+mrfy/06NqDWelnxE6f2+ErsT6tmb1qg6dRJ9+eVnFfPVgD9uhh
-         bXq5UdFrQecj6TYcKNVFVuEN1MGzr08FwjNsJrIWCpADX/vrcojes9sUpWB8uFBOE80F
-         roRA==
-X-Gm-Message-State: ACrzQf2EfLDMZ8YQzgPzG7jqLrHlncD87oUXpFrECAJZUS8bQAzKv50t
-        aPq0XUdnPSL81RDOBmUZgxhnpUT/Yw==
-X-Google-Smtp-Source: AMsMyM6duJO0gmR8nZl6HIMYUcghPQyMdR8djOWJsGUC4WlydXSFxuJPtsjlClzbZvqef+U12QY7jA==
-X-Received: by 2002:a05:6808:1404:b0:355:4cd4:b10b with SMTP id w4-20020a056808140400b003554cd4b10bmr1667530oiv.207.1666787764113;
-        Wed, 26 Oct 2022 05:36:04 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r26-20020a4ae51a000000b0047f8ceca22bsm2129712oot.15.2022.10.26.05.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 05:36:03 -0700 (PDT)
-Received: (nullmailer pid 277723 invoked by uid 1000);
-        Wed, 26 Oct 2022 12:36:02 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>, devicetree@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        loongarch@lists.linux.dev
-In-Reply-To: <20221026035752.32681-2-zhuyinbo@loongson.cn>
-References: <20221026035752.32681-1-zhuyinbo@loongson.cn> <20221026035752.32681-2-zhuyinbo@loongson.cn>
-Message-Id: <166678762827.274703.1754327957580321197.robh@kernel.org>
-Subject: Re: [PATCH v4 2/2] dt-bindings: hpet: add loongson2 hpet
-Date:   Wed, 26 Oct 2022 07:36:02 -0500
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=giEKpFCOAGFhFBssx0rXv7faluMBkRAJIt7vP3gQfcg=;
+        b=LqQ0wncKKxaP16AzfvdKTIr+3svJOsl93RD/NGx/f/g+/Cj6UA+Ic0p5BH5K8IFu/7
+         cHdK3JWUpVrLGE0Rtk+Dha4mjz9ihq9vA59kD2IYoxY3Pyhk2WVXNi0sI7yg+Vtn7zWW
+         stpBBNOWhkBEfLNY35oMXFxWWPS+7wPkAXqwVbilehv9uDXf48evKYFFtrPfOfFYbyG6
+         Xi0taSJCB0O4n6BSoYl20Lk6+6gZh5ZrpjAzCPrZQE9xd7maegyHY7dhRGjGuwzl42UG
+         i3MeEO95CsONbDCB/llxIEVHA5cudqAUSA9xlwJAXITD4P1yz3Y0k/AaUJB3SIYx/pys
+         cDLg==
+X-Gm-Message-State: ACrzQf3hJNPFBWGHr0ooLgQ17dZBzRcGrppbxaRXqNAlerbynLDxFRnD
+        X1AG4gFU4IwYJd31PKbFAmNVwPYrg+y+o/Dq9j21s7fbbFOV
+X-Google-Smtp-Source: AMsMyM5r7dsZdVt160YC5BPbjclJeotonvfTb9M6Y/9MqlbnqBdLkqd+gbWuZkwuxllvLriR5DttATdFDSwT+4VCwqbBOV/tsBmF
+MIME-Version: 1.0
+X-Received: by 2002:a05:6e02:170d:b0:2fc:3e76:b262 with SMTP id
+ u13-20020a056e02170d00b002fc3e76b262mr26506480ill.152.1666787859573; Wed, 26
+ Oct 2022 05:37:39 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 05:37:39 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000049382505ebef4a0c@google.com>
+Subject: [syzbot] riscv/fixes build error
+From:   syzbot <syzbot+9d8dc6c2d48bbc419bb4@syzkaller.appspotmail.com>
+To:     anup@brainfault.org, aou@eecs.berkeley.edu, atishp@atishpatra.org,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 11:57:52 +0800, Yinbo Zhu wrote:
-> Add the loongson2 High Precision Event Timer (HPET) binding
-> with DT schema format using json-schema.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v4:
->                 1. Fixup the clock-names that replace apb-clk with apb.
->                 2. This patch need rely on clock patch, which patchwork
->                    link was "https://patchwork.kernel.org/project/linux-clk/list/?series=688892".
-> 
->  .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-> 
+Hello,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+syzbot found the following issue on:
 
-yamllint warnings/errors:
+HEAD commit:    9abf2313adc1 Linux 6.1-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git fixes
+console output: https://syzkaller.appspot.com/x/log.txt?x=152b6b6a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9631ed0b9757aaab
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d8dc6c2d48bbc419bb4
+compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: riscv64
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.example.dts:21:18: fatal error: dt-bindings/clock/loongson,ls2k-clk.h: No such file or directory
-   21 |         #include <dt-bindings/clock/loongson,ls2k-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1492: dt_binding_check] Error 2
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9d8dc6c2d48bbc419bb4@syzkaller.appspotmail.com
 
-doc reference errors (make refcheckdocs):
+arch/riscv/kvm/vcpu.c:269: undefined reference to `riscv_cbom_block_size'
+riscv64-linux-gnu-ld: arch/riscv/kvm/vcpu.c:269: undefined reference to `riscv_cbom_block_size'
 
-See https://patchwork.ozlabs.org/patch/
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
