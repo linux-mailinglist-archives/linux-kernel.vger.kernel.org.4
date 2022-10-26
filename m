@@ -2,148 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A4C60DB91
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A2660DBA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbiJZGsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 02:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35750 "EHLO
+        id S232954AbiJZG7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 02:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiJZGsp (ORCPT
+        with ESMTP id S230134AbiJZG7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 02:48:45 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70081.outbound.protection.outlook.com [40.107.7.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2665BB06D
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:48:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iPsXuvat5FJTa00wK9wCAR5dxTSJmcrCz4zKXoGJ04wkPCbDwqw36pai2Ck/SGFrDcli4zJqwPljIkJE4iBxCbaDiqd8W6bGdvRG8g+RQtBPD7mt7tkcl5s8CdFTsA52mIZ4HVXQfHMOP/D7DPw264MxGe2kNEA8Q+6HSlJOsgcqibDi3Ta2rTlwC7eAQnYE0T3MH7hvFaT9+DcgD5a1rWBt8BQ483PywtOMXEDqe7MIkqeDQ1mGMzVxEqmxOc0KJ8V9lj+axLnwcjnptV5CEpeXX1tjJWW72y3SiQkT4crjGDP/Y+inB/xRxPn5ekwC5uAMcWygzXGetk8lOf8SOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F5dzZN/bRWj6d1nMzh1I45jpzIItFnKy47d2Ne59uY4=;
- b=OWk1xgrda+RpoaPFG3/nMIVrbWfnAqSQEsCYew41v2crai92l6Wvq5TCxz/YauugWLsqgd8yYN5xFmYxFH9aXZ0m2pI0GTuioqYhOGQX3gPMKG0tQn7oNkgHFHxQxvOnY9nEnBenZ+eqBNin4C6WXlpPeFii8lz1i7QEu+juWP8ce3JEwymHzgUt1qY+gYg9QVr61IUz1KSxLZeEjG9GmRcilcXxrRY99jRIlSm1XCEkkwYKQ5+MijhBwMSqnwSyJNQap/O3ddGbCbRw/BCSl9KhdCGd0XSuiyPh44CbvwYnNgR2ejEdA8dGA42wa7MElPqX6PbtEpa0il/RKvkEqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F5dzZN/bRWj6d1nMzh1I45jpzIItFnKy47d2Ne59uY4=;
- b=jYp4J/Z+Las4JE+PD5gjQIt0cgDsu0k1QyVsbSzxD883wqpnYtD5HAsxkSMZBpg457GYiWn+mssNpeseY0q26KNKsPJBYMT2FMfVB/OB3b0iYMJ4Pc4yO+OiY7YZknBitv5Gc03HSChw0QElpeqC4qd1Bxu23bI4JNdkj+G0Nq4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AS8PR04MB8434.eurprd04.prod.outlook.com (2603:10a6:20b:406::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Wed, 26 Oct
- 2022 06:48:41 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::dcca:b62f:206b:dcf8]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::dcca:b62f:206b:dcf8%3]) with mapi id 15.20.5746.021; Wed, 26 Oct 2022
- 06:48:41 +0000
-Message-ID: <ccc935bedb154883911750e511be85f4cfe70999.camel@nxp.com>
-Subject: Re: [PATCH] drm/imx: Kconfig: Remove duplicated 'select
- DRM_KMS_HELPER' line
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, tzimmermann@suse.de
-Date:   Wed, 26 Oct 2022 14:48:00 +0800
-In-Reply-To: <20221009023527.3669647-1-victor.liu@nxp.com>
-References: <20221009023527.3669647-1-victor.liu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR01CA0041.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::15) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Wed, 26 Oct 2022 02:59:19 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF4672FD8;
+        Tue, 25 Oct 2022 23:59:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=dFkSfUaqcKDadnSdg6pAVIh7mRl2EJ6mB3zhqhRUTc0=; b=L9znhq3yWHiSTT5cSBNrHsQJWu
+        s1SmVYFHFJ68pwuSQAb3FzZin6TELDoVt1sNv2ri95AXxo9EDm0f/m20+K2itl+VvgJgOLoi8qw4z
+        gBrlnhdW1JR+ulCEjx15qy9a8i7IzdyQkPa4CD0a432PjuYRgwjeGWgoc0mBnhwOb2JIqp89Qkgcs
+        UINtNuZu34vfg+IUTgNgg/x2iU6eU9xmKBSq9WUFYKXx1aMZKhIZbxEdJ3Ns3tOmU5Fy1GhEyMLfG
+        XN6AGC1LoIAaZscte5tkujUWaV1+c9DFa2QPmyQG9D6wmR3tXupdDdK9xUcAwtEIVGMcujgCRAweq
+        mv25GlNA==;
+Received: from [89.212.21.243] (port=59376 helo=[192.168.69.85])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1onaNT-00CD8z-VC;
+        Wed, 26 Oct 2022 08:59:13 +0200
+Message-ID: <1badfe10-7f5f-9197-6d10-e34a586046df@norik.com>
+Date:   Wed, 26 Oct 2022 08:59:15 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AS8PR04MB8434:EE_
-X-MS-Office365-Filtering-Correlation-Id: 126e7433-21f1-43e3-703f-08dab71e1e30
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n9D132OXWY+KWgWwigEMaUGvQuH20JGWR8sL87fwVZZ7Tc1Mwg69rFqo87FcaBnCGELWgGjo3ZvJkK3iMJ0ZOOYk6HbArzYjkFO6K/JbNNj1qTB+tVc5ZVeUeoaBK2OPEuUjGfregwMULMWR5/o7LMBlqK7cR6/vYpSMxJY9RJYaL1LgGHjSvGqS6aPjh8Jhe+tgl8IEUmAQaItc66732xa9rzBNSCYX7YEXe15+op0HlZS4xh7M0F7zRPTKq0IM3ev0/w3bjoT1uY8TVn3vDj/+IcJSNSuYddSv3XX4ibn2CeOCF4hgrfu8On1RwcrmZCFz9Ft1ZTnKtNMZrHdkX5GrQauVIEfmIt+nkELxFb7X/MuECR6WWAYz8c4gb927ISRQqkCt/PRYqqRQAA6rljNm/5lZ2cofH01imlfLp29FxPSOSaceOFWupZufUeCBh6us7Qin6AMH8dKRu+85WIfnlMfaR1U1WbT69ZamoRGJWXgoc6Ba9xxONScv2o5kPE1r7Gx/LAYxee5fTKCS/aCktjW6e6RdyWeiLfhcMBKnRqTUOIkFAhKM4JOw7i8bfjP7zhpBVMkZx5MC60zpuKBjasXa358ZixvZRgA34VdJHJ3w5uayARjKlw7dS0KWOME0EgmDrenGjOJ5wUoW1MZy+B5zQu9cX9D4y3e+4IJNi6/93yPhdBQy5DdQ9kQSAJIcmzt+az6bQpUjmugUIuox87FZ8pqH0UoDbMZHVhPiw96ul4VnGfvPhRw4sjlNYDkyM2w6hYcwpCdPDv33QenUqlxVjWc/TD73b8bzZos=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(346002)(136003)(39860400002)(376002)(451199015)(478600001)(7416002)(41300700001)(8936002)(86362001)(316002)(6666004)(2906002)(8676002)(66556008)(66946007)(5660300002)(66476007)(4326008)(38350700002)(6486002)(36756003)(38100700002)(2616005)(4744005)(52116002)(186003)(26005)(83380400001)(6512007)(6506007)(99106002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZUQvRDZEaytJKzErZmV3M1k5STV1NU5NYk0vOVlWK0VWaWEyQVd2anhXU3U5?=
- =?utf-8?B?T1VEYkJEMTR5ZEViUGJmbDBjaVdaTmpHNy9URUN1YlZka1dvaG1UeHgzSEZO?=
- =?utf-8?B?Q0F1c0d3ZS9EQ1FMbDdkYXBIOFlPc0ZieWp1U05nSlpmaHoxNFRRdHNiQjJm?=
- =?utf-8?B?cERyMk1GZG5laVVMYVpOM3FJM3JacGpTTDZBSUdLMTFOOVFmZ1ZzUTQvZXp0?=
- =?utf-8?B?bThWbHhOWnBmZHNFOWhTcVY1U0g2TjZidUFrNzF1U01DaHl3K0FqMWVEenZV?=
- =?utf-8?B?MUNQSjBzZWpFU0JmQ2p0VTNYYkErcFZBa0hGUVNPSDBCZWY5MWVhbHdENDBV?=
- =?utf-8?B?UThmbDhDK0UzdUh3azZ5NFJLWDVWMjJvNnFkdXMzVGhiSFlVRjVkVHZNZ2ph?=
- =?utf-8?B?di9GV0dKaFg4S2g0ZTM2Nlh6NlNDcHpPNmZLbVQwVXBXRENiOFR5SnVkR014?=
- =?utf-8?B?YWVhT1FzNUxyT0NlcW5wb3RxbUtiaUJzU1N3RDhKc0k1MXBKZXZZN3hlRThz?=
- =?utf-8?B?VTA3VTBUMUtVVFZpOU8rMkhoelRGd01HUEZ4eXB5YmpKN3JUeElRTmxLVzBO?=
- =?utf-8?B?bFdGdjF4VnFzUmhWZUNha1FlNDRjWEZPbHNON0UvVzNIUmUrNEwxQkE4MVBq?=
- =?utf-8?B?RVdyMmM4VmUvQXV4NWZmeVhrQmlRMUV1VTZDVzdyeUhBeGwxUkJ1eVZiWitJ?=
- =?utf-8?B?M0x0M3VKZTlkMFRjZHVnYzZCUGhyS3d2cFZ4cEtzcGRNNStSNlhneElRb3pJ?=
- =?utf-8?B?aE95aHZkRk9ua0E1SVpIcUF4WHNsM0NWSVBFWVNFaXhieUlQRDJJOXpZa0hU?=
- =?utf-8?B?NWVNYk4vQ1lzK2pqc24yS0RNNmRiaUxVRE93b0lTeE5RRWZNTlhxMFRCMnYy?=
- =?utf-8?B?UWU5RUdkeWdUYkgzcVU1RmRnd3doSmZxMlkybi9LZEE4TFBEUXlnRURlZ2Nk?=
- =?utf-8?B?L2owbU82MC9IRDhRaU9jdmllVFVMNGVoNE5mUDJDWFJkSWRITHFSWXJBTXZK?=
- =?utf-8?B?MDR1akl3ZGthckx2bHdMaUtibC9abmlqUFYvbnNlQnViSEtZSFJLVWl3TmQw?=
- =?utf-8?B?aGhvWE9IQnp3Y0JZUjEya2VvTU5vcTNlZklncGpVMnJSb0ljR29WUzhBWkhS?=
- =?utf-8?B?MVJ4VzZLSW15Vlo3LzBhc3pFdEJqcklQenh2eVd2ZEtQZFVnS0k2Y2NmNi9l?=
- =?utf-8?B?MEdWbkNrQ2E2eG0vTVJadWZWeWQwdExmcmdSYjNpOVV5aTJwVXdzK1VnNlpq?=
- =?utf-8?B?dEx2OGNzZnVQRkxwTlJxLzBJOW13Z2ozOUM3TTNacXhLR0dUbGVKaWxCR0Fp?=
- =?utf-8?B?OFlOOG00eWZOSkdYMzJMUGNORWdWUVIrRjNBa1ZiRURVTTNxVzFtREZPaCt3?=
- =?utf-8?B?SWt1WWpySlFNUlhqV2dUclVHVUs0U2h2K25hdy9rQ1BEaWdqSGEzTlBESkJU?=
- =?utf-8?B?eDhhY0ZqQmJ3YURKRWZWd2lIOUI5dTZjUU4vMnF6ZVhtckJOcUdKaFlnTEow?=
- =?utf-8?B?ZWI2SUw0MUgzdWl2Sm9LN2NOSDdvS044b2dtaHhOUldGV0JvYWNXU1c0UEo4?=
- =?utf-8?B?MTBYcnhJbEhOZzV6OGNhSkdiWjFpRHVUN1Q5cUkvOHZacGVxTEY4TWdIQmti?=
- =?utf-8?B?R09YODJTcnNBWkR6bUtjcGltRXIwakJ1V1ZueWJMOUlnSkhuM3E0ZUp4TmhK?=
- =?utf-8?B?MWRRM1NyeVpOV1hzTHY2Wng0NCtDbkRQMHNtb0tpajBoeEVDWnZpdE1CMTdo?=
- =?utf-8?B?dnpxMEVHMGw2Q0x6eG5JekhVMjBTVXBJN0RrTjhMTDRPQVJvWmk1UGxHQjlS?=
- =?utf-8?B?SXFoS202eXp2ZnNBbE1INE1UWHc4VTVRYzUzM1hyMWttZ0hVTnc1Wndac29H?=
- =?utf-8?B?L1JpSjVZc2V5OVVFaExaZFFNZ1hYbDNCWkMySWpnWXFaWGZ2ZnBFdW1sTFk5?=
- =?utf-8?B?dHlXUU0vRDRWSkx2dWlsMHVneUxzcEpEUDM1RlBxQXlXeWZMWkpyYXB6Y215?=
- =?utf-8?B?YnBIdUVTalN4S3VGb0x2UitVb0VGN1pNcEY0L01NY3ByUUE2M2ZaYUk3UEJT?=
- =?utf-8?B?SXhQUmFXSDJDMkxLYk1zWEFqVFJrMnFRQTVOUEVMcnUyWkM0dmxKYWt2TEx3?=
- =?utf-8?Q?9quyxqEubscZ+mQp1I6Qk9S3E?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 126e7433-21f1-43e3-703f-08dab71e1e30
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 06:48:41.2238
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yvE1yZVSjXl9dqgdmjIs6GeOCAwS2MaHa7l7OJQ8t9H/kmHOifFE0FOSmtc6tvNJPOQaY2btri3EXcooyoj+5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8434
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
+Content-Language: en-GB
+To:     Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221025072533.2980154-1-andrej.picej@norik.com>
+ <20221025072533.2980154-2-andrej.picej@norik.com>
+ <bea41e17-0269-d88e-fd22-ad5c5a4b8dac@roeck-us.net>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <bea41e17-0269-d88e-fd22-ad5c5a4b8dac@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Philipp,
 
-On Sun, 2022-10-09 at 10:35 +0800, Liu Ying wrote:
-> A duplicated line 'select DRM_KMS_HELPER' was introduced in Kconfig
-> file
-> by commit 09717af7d13d ("drm: Remove CONFIG_DRM_KMS_CMA_HELPER
-> option"),
-> so remove it.
+
+On 25. 10. 22 16:21, Guenter Roeck wrote:
+> On 10/25/22 00:25, Andrej Picej wrote:
+>> Putting device into the "Suspend-To-Idle" mode causes watchdog to
+>> trigger and reset the board after set watchdog timeout period elapses.
+>>
 > 
-> Fixes: 09717af7d13d ("drm: Remove CONFIG_DRM_KMS_CMA_HELPER option")
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
->  drivers/gpu/drm/imx/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+> s/reset/resets/
+> 
+>> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
+>> watchdog in WAIT mode. This is done by setting WDW bit in WCR
+>> (Watchdog Control Register) Watchdog operation is restored after exiting
+> 
+> '.' after ')' missing ?
+> 
+>> WAIT mode as expected. WAIT mode coresponds with Linux's
+> 
+> s/coresponds/corresponds/
+> 
+Will fix this in v3, thank you.
 
-If no objections, can you please pick this small fix up through
-imx-drm/fixes? Or through drm-misc-fixes?
+>> "Suspend-To-Idle".
+>>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>> ---
+>> Changes in v2:
+>>   - validate the property with compatible string, as this functionality
+>>     is not supported by all devices.
+>> ---
+>>   drivers/watchdog/imx2_wdt.c | 37 +++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 37 insertions(+)
+>>
+>> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+>> index d0c5d47ddede..dd9866c6f1e5 100644
+>> --- a/drivers/watchdog/imx2_wdt.c
+>> +++ b/drivers/watchdog/imx2_wdt.c
+>> @@ -35,6 +35,7 @@
+>>   #define IMX2_WDT_WCR        0x00        /* Control Register */
+>>   #define IMX2_WDT_WCR_WT        (0xFF << 8)    /* -> Watchdog Timeout 
+>> Field */
+>> +#define IMX2_WDT_WCR_WDW    BIT(7)        /* -> Watchdog disable for 
+>> WAIT */
+>>   #define IMX2_WDT_WCR_WDA    BIT(5)        /* -> External Reset 
+>> WDOG_B */
+>>   #define IMX2_WDT_WCR_SRS    BIT(4)        /* -> Software Reset 
+>> Signal */
+>>   #define IMX2_WDT_WCR_WRE    BIT(3)        /* -> WDOG Reset Enable */
+>> @@ -67,6 +68,27 @@ struct imx2_wdt_device {
+>>       bool ext_reset;
+>>       bool clk_is_on;
+>>       bool no_ping;
+>> +    bool sleep_wait;
+>> +};
+>> +
+>> +static const char * const wdw_boards[] __initconst = {
+>> +    "fsl,imx25-wdt",
+>> +    "fsl,imx35-wdt",
+>> +    "fsl,imx50-wdt",
+>> +    "fsl,imx51-wdt",
+>> +    "fsl,imx53-wdt",
+>> +    "fsl,imx6q-wdt",
+>> +    "fsl,imx6sl-wdt",
+>> +    "fsl,imx6sll-wdt",
+>> +    "fsl,imx6sx-wdt",
+>> +    "fsl,imx6ul-wdt",
+>> +    "fsl,imx7d-wdt",
+>> +    "fsl,imx8mm-wdt",
+>> +    "fsl,imx8mn-wdt",
+>> +    "fsl,imx8mp-wdt",
+>> +    "fsl,imx8mq-wdt",
+>> +    "fsl,vf610-wdt",
+>> +    NULL
+>>   };
+>>   static bool nowayout = WATCHDOG_NOWAYOUT;
+>> @@ -129,6 +151,9 @@ static inline void imx2_wdt_setup(struct 
+>> watchdog_device *wdog)
+>>       /* Suspend timer in low power mode, write once-only */
+>>       val |= IMX2_WDT_WCR_WDZST;
+>> +    /* Suspend timer in low power WAIT mode, write once-only */
+>> +    if (wdev->sleep_wait)
+>> +        val |= IMX2_WDT_WCR_WDW;
+>>       /* Strip the old watchdog Time-Out value */
+>>       val &= ~IMX2_WDT_WCR_WT;
+>>       /* Generate internal chip-level reset if WDOG times out */
+>> @@ -313,6 +338,18 @@ static int __init imx2_wdt_probe(struct 
+>> platform_device *pdev)
+>>       wdev->ext_reset = of_property_read_bool(dev->of_node,
+>>                           "fsl,ext-reset-output");
+>> +
+>> +    if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait"))
+>> +        if (of_device_compatible_match(dev->of_node, wdw_boards))
+>> +            wdev->sleep_wait = 1;
+> 
+> Since sleep_wait is bool:
+>              wdev->sleep_wait = true;
+> 
+>> +        else {
+>> +            dev_warn(dev, "Warning: Suspending watchdog during " \
+>> +                "WAIT mode is not supported for this device.\n");
+> 
+> Do not split strings. "Warning:" is redundant. Please handle the error 
+> first.
+> 
+>> +            wdev->sleep_wait = 0;
+> 
+> Unnecessary; false by default. Also, this should fail and return -EINVAL.
+> Devicetree files should be correct, and warning messages tend to be 
+> ignored.
+> 
+>> +        }
+> 
+> All branches of if/else need to wither use {} or no {}.
+> 
+>> +    else
+>> +        wdev->sleep_wait = 0;
+>> +
+> Unnecessary.
+> 
+> I would suggest to replace the above code with something like
+> 
+>      if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait")) {
+>          if (!of_device_compatible_match(dev->of_node, wdw_boards)) {
+>              dev_err(dev, "Suspending watchdog in WAIT mode is not 
+> supported for this device\n");
+>              return -EINVAL;
+>          }
+>          wdev->sleep_wait = true;
+>      }
 
-Regards,
-Liu Ying
+OK, this look cleaner, will use this, thanks.
 
+> 
+>>       /*
+>>        * The i.MX7D doesn't support low power mode, so we need to ping 
+>> the watchdog
+>>        * during suspend.
+> 
+> I still wonder how that interacts with fsl,suspend-in-wait, but since we 
+> have a
+> property for that we can leave that for someone else to find out. Maybe 
+> add a
+> comment explaining that interaction with "fsl,suspend-in-wait" is unknown.
+I'm assuming that i.MX7D doesn't enter any of low-power modes including 
+WAIT mode. If this is the case the watchdog wouldn't get disabled.
 
+Anyway, I will add a short comment regarding the unknown behaviour of 
+this property with i.MX7D device.
+
+Best regards,
+Andrej
