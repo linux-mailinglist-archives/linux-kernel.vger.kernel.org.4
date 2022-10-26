@@ -2,232 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D5B60E3A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36FAB60E3A4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233630AbiJZOqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
+        id S233775AbiJZOqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbiJZOqR (ORCPT
+        with ESMTP id S233974AbiJZOqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:46:17 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F08F954;
-        Wed, 26 Oct 2022 07:46:16 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id s206so5409384oie.3;
-        Wed, 26 Oct 2022 07:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=640dLyMUCMjIlKunzEVy4WNaqFwkLIguCYAfhGHE+AE=;
-        b=AVHqEVKxSyBPceT01vuHPGkTjNXI68esBbeZ1bY6be+5xvhCzivCbkclZETbQde/Hh
-         yYvc8D8bBS/ktZMAFeCcOOnqBWFjTQB5ml8Q7DsVIeL1NCDTNndstQZ4LrZ1PjgmvCuP
-         pAh7QBgKMYDbBkUK4+IJsh5EYKhL3ylTllqIISkEPbPmcaSGnYcJ56c89M+kGiMcdbNj
-         LuZ0avqUiEj5rdcLRKGyh7XS0NGmVCmE4Nws1OBHNexi3hFHYK7cEsqQBhqCoBFpfAuR
-         +gfjrDn9jYlfGp30Kzg7WhRrlUWpBU3PHFEr3YiGjCHdtTwWEHtOwQfNNolGrlb8X8AN
-         89fg==
+        Wed, 26 Oct 2022 10:46:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB78100BF5
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666795585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M9+Xbb5RQBhXFVF0gto838Senf/9nz2P5jsm5fcrSvM=;
+        b=Fbq0BBYtGlYoM2a3ARjc1SLJXIe9TdFX0PxjNb1VSY7dWobBQ3tz0c71W1dT51rx9Duo38
+        MEKnjb8s4UwGtfszFZEh8sZFnLvYWaqoBpcHS8QtscqaTdDS3ose6Ie+rvLuRo153sDBBT
+        wSqM+19Qi51VDduNGKFavQOgRttgDEo=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-344-cvnu4LigMc2WqoHc2nAi9A-1; Wed, 26 Oct 2022 10:46:24 -0400
+X-MC-Unique: cvnu4LigMc2WqoHc2nAi9A-1
+Received: by mail-wm1-f69.google.com with SMTP id r66-20020a1c4445000000b003cf4c205936so566035wma.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:46:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=640dLyMUCMjIlKunzEVy4WNaqFwkLIguCYAfhGHE+AE=;
-        b=AAX2sTe3Z8ikubhd8VGauN6YncxiDk8hZzfYiwACohNrQ/VInk0sz6HrXY1mJwbdtf
-         h2BSijSp8v2udKD3tVy1ESFASoWypIrKtAogg0Hr87lJdLPgWtL3rYHXEQBp/pFptpnu
-         kIzsgGzrq+FDuiUj4GsZs9ci2M5hRmiGF7WjogzIxras7EwrW0uB05cJk9LVuHf2MPVa
-         edojHyhsG+s/LZR4xbaJ5pvHJsVHhShn0V/GltdktxC4R6UINetoI/LoJnMRWmwwamDa
-         j6ydvtdTQC36jGsXg9rLQONGnJqRZVSTt5uAqCP4anTtug91GlMRFACi6FW77D1WH890
-         oGCA==
-X-Gm-Message-State: ACrzQf3pz59gHe3bnxadnFjLkbgGrzIdXuwc1nEo76skZ1yc6fyrLC2Q
-        K47Q3fM9Hg0r4RWwWI2nzeQ=
-X-Google-Smtp-Source: AMsMyM7QS/EkPZbY3lAXH44G43Ssys1duk6sOh+Z4FTn4VnqRdYgZgK6FbZALfETkVwAzzakyigrpQ==
-X-Received: by 2002:a05:6808:6c3:b0:351:45ae:7b with SMTP id m3-20020a05680806c300b0035145ae007bmr2113093oih.28.1666795575311;
-        Wed, 26 Oct 2022 07:46:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v6-20020a4a5a06000000b00480dccc0c2asm2262697ooa.14.2022.10.26.07.46.13
+        bh=M9+Xbb5RQBhXFVF0gto838Senf/9nz2P5jsm5fcrSvM=;
+        b=Q6vleBdrs5AcajmJxh5Dz9ldoSR4M1kUCfxjCwkXxE36bSOy7zQnGLHdYSMk7EQxEj
+         1UeDwUiYg4dfjINiRduJoIM3FBMcacIRCxkN9/umY/LH5KnS4KTEn6zTKP0eugogCQst
+         Or8Y5yhNq6XpqJ7oh/VrQJoPCcaQ1ewIC/eLGA0M9AMJVKIDIeAGlVWxedHqRxbqhVTg
+         e8DWM0t4aKoi44wF7HX98kxxy6WYfs9i8CJZDe3KiHah0UxaKMn8Btu10p0IIj/V+zg7
+         DqoxNfncqpvlo7ggqsZXo2PYdPnmK3a9RNEeSPBrpcfn7Ukg9LszX/pgPeBk19/1wY2Y
+         M+TA==
+X-Gm-Message-State: ACrzQf1gJ2SF4r+dTP6DXh1n6fwILIYKVuqWeXH/Qsrkp4cN51HDwHj0
+        qfBMKDyewAkvEL07gqSRiFsyCRnKXRzs6NiANo7rzarmwiUBnl88RC64/nW4rdPHPLw1kv0/LE0
+        ARVnYBnkkgsWL3Q78ij6Pi+8m
+X-Received: by 2002:adf:fb43:0:b0:22b:64:8414 with SMTP id c3-20020adffb43000000b0022b00648414mr29850895wrs.70.1666795581731;
+        Wed, 26 Oct 2022 07:46:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6qzzVrO9wpr3qnIOHUcJaAfmjQ5F5tBnpRNBBzgF413+NO9Ot/9ckpUBdSy/jA4ZFu8I3Ujw==
+X-Received: by 2002:adf:fb43:0:b0:22b:64:8414 with SMTP id c3-20020adffb43000000b0022b00648414mr29850881wrs.70.1666795581450;
+        Wed, 26 Oct 2022 07:46:21 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:5b00:c9f4:7535:9360:70d7? (p200300cbc7065b00c9f47535936070d7.dip0.t-ipconnect.de. [2003:cb:c706:5b00:c9f4:7535:9360:70d7])
+        by smtp.gmail.com with ESMTPSA id m17-20020a056000009100b0022eafed36ebsm5567280wrx.73.2022.10.26.07.46.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:46:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4f1a17fa-596e-eaf5-2dad-790b1ab95dc1@roeck-us.net>
-Date:   Wed, 26 Oct 2022 07:46:13 -0700
+        Wed, 26 Oct 2022 07:46:20 -0700 (PDT)
+Message-ID: <c17502a0-2e43-bf34-239b-1e9b0bde46db@redhat.com>
+Date:   Wed, 26 Oct 2022 16:46:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 9/9] rtc: isl12022: add support for temperature sensor
+ Thunderbird/102.3.1
+Subject: Re: [syzbot] WARNING in __split_huge_page_tail
 Content-Language: en-US
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jean Delvare <jdelvare@suse.com>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-References: <20220921114624.3250848-10-linux@rasmusvillemoes.dk>
- <20221026133847.1193422-1-linux@rasmusvillemoes.dk>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20221026133847.1193422-1-linux@rasmusvillemoes.dk>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+273b547b15eb58ea35e8@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Hugh Dickins <hughd@google.com>
+References: <000000000000aa2b2805ebea9137@google.com>
+ <9a450a11-531d-8e1a-4c77-70102aa7f424@redhat.com>
+ <CACT4Y+YTjYMWQKixhkNMuty4LXTsgBmpiYAN5ChGVXZBCyp0uA@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CACT4Y+YTjYMWQKixhkNMuty4LXTsgBmpiYAN5ChGVXZBCyp0uA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/22 06:38, Rasmus Villemoes wrote:
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-
-There should be some description above. Other than that,
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
- > ---
-> v3: drop 0444 update_interval property.
+On 26.10.22 15:25, Dmitry Vyukov wrote:
+> On Wed, 26 Oct 2022 at 02:54, David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 26.10.22 08:59, syzbot wrote:
+>>> Hello,
+>>>
+>>> syzbot found the following issue on:
+>>>
+>>> HEAD commit:    4da34b7d175d Merge tag 'thermal-6.1-rc2' of git://git.kern..
+>>> git tree:       upstream
+>>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=113bd8bc880000
+>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=4789759e8a6d5f57
+>>> dashboard link: https://syzkaller.appspot.com/bug?extid=273b547b15eb58ea35e8
+>>> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+>>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161e1f62880000
+>>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16dd4fe6880000
+>>>
+>>> Downloadable assets:
+>>> disk image: https://storage.googleapis.com/syzbot-assets/a61ddb36c296/disk-4da34b7d.raw.xz
+>>> vmlinux: https://storage.googleapis.com/syzbot-assets/ceee41246252/vmlinux-4da34b7d.xz
+>>>
+>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>>> Reported-by: syzbot+273b547b15eb58ea35e8@syzkaller.appspotmail.com
+>>>
+>>>    tlb_finish_mmu+0xcb/0x200 mm/mmu_gather.c:363
+>>>    exit_mmap+0x2b1/0x670 mm/mmap.c:3098
+>>>    __mmput+0x114/0x3b0 kernel/fork.c:1185
+>>>    exit_mm+0x217/0x2f0 kernel/exit.c:516
+>>>    do_exit+0x5e7/0x2070 kernel/exit.c:807
+>>>    do_group_exit+0x1fd/0x2b0 kernel/exit.c:950
+>>>    __do_sys_exit_group kernel/exit.c:961 [inline]
+>>>    __se_sys_exit_group kernel/exit.c:959 [inline]
+>>>    __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:959
+>>>    do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>>    do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+>>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>> ------------[ cut here ]------------
+>>> WARNING: CPU: 0 PID: 3908 at mm/huge_memory.c:2465 __split_huge_page_tail+0x81c/0x1080 mm/huge_memory.c:2465
+>>
+>> Is this the
+>>
+>> VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
+>>
+>> assertion?
 > 
-> v2 of patches 1-8 are already upstream (b1a1baa657c7 and parents).
+> Hi David,
 > 
->   drivers/rtc/rtc-isl12022.c | 94 ++++++++++++++++++++++++++++++++++++++
->   1 file changed, 94 insertions(+)
+> You can check the sources for that revision, but on the dashboard
+> there are clickable links for all source references:
+> https://syzkaller.appspot.com/bug?extid=273b547b15eb58ea35e8
 > 
-> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-> index ca677c4265e6..a3b0de3393f5 100644
-> --- a/drivers/rtc/rtc-isl12022.c
-> +++ b/drivers/rtc/rtc-isl12022.c
-> @@ -17,6 +17,7 @@
->   #include <linux/of.h>
->   #include <linux/of_device.h>
->   #include <linux/regmap.h>
-> +#include <linux/hwmon.h>
->   
->   /* ISL register offsets */
->   #define ISL12022_REG_SC		0x00
-> @@ -30,6 +31,9 @@
->   #define ISL12022_REG_SR		0x07
->   #define ISL12022_REG_INT	0x08
->   
-> +#define ISL12022_REG_BETA	0x0d
-> +#define ISL12022_REG_TEMP_L	0x28
-> +
->   /* ISL register bits */
->   #define ISL12022_HR_MIL		(1 << 7)	/* military or 24 hour time */
->   
-> @@ -38,6 +42,7 @@
->   
->   #define ISL12022_INT_WRTC	(1 << 6)
->   
-> +#define ISL12022_BETA_TSE	(1 << 7)
->   
->   static struct i2c_driver isl12022_driver;
->   
-> @@ -46,6 +51,93 @@ struct isl12022 {
->   	struct regmap *regmap;
->   };
->   
-> +static umode_t isl12022_hwmon_is_visible(const void *data,
-> +					 enum hwmon_sensor_types type,
-> +					 u32 attr, int channel)
-> +{
-> +	if (type == hwmon_temp && attr == hwmon_temp_input)
-> +		return 0444;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * A user-initiated temperature conversion is not started by this function,
-> + * so the temperature is updated once every ~60 seconds.
-> + */
-> +static int isl12022_hwmon_read_temp(struct device *dev, long *mC)
-> +{
-> +	struct isl12022 *isl12022 = dev_get_drvdata(dev);
-> +	struct regmap *regmap = isl12022->regmap;
-> +	u8 temp_buf[2];
-> +	int temp, ret;
-> +
-> +	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L,
-> +			       temp_buf, sizeof(temp_buf));
-> +	if (ret)
-> +		return ret;
-> +	/*
-> +	 * Temperature is represented as a 10-bit number, unit half-Kelvins.
-> +	 */
-> +	temp = (temp_buf[1] << 8) | temp_buf[0];
-> +	temp *= 500;
-> +	temp -= 273000;
-> +
-> +	*mC = temp;
-> +
-> +	return 0;
-> +}
-> +
-> +static int isl12022_hwmon_read(struct device *dev,
-> +			       enum hwmon_sensor_types type,
-> +			       u32 attr, int channel, long *val)
-> +{
-> +	if (type == hwmon_temp && attr == hwmon_temp_input)
-> +		return isl12022_hwmon_read_temp(dev, val);
-> +
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static const struct hwmon_channel_info *isl12022_hwmon_info[] = {
-> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
-> +	NULL
-> +};
-> +
-> +static const struct hwmon_ops isl12022_hwmon_ops = {
-> +	.is_visible = isl12022_hwmon_is_visible,
-> +	.read = isl12022_hwmon_read,
-> +};
-> +
-> +static const struct hwmon_chip_info isl12022_hwmon_chip_info = {
-> +	.ops = &isl12022_hwmon_ops,
-> +	.info = isl12022_hwmon_info,
-> +};
-> +
-> +static void isl12022_hwmon_register(struct device *dev)
-> +{
-> +	struct isl12022 *isl12022;
-> +	struct device *hwmon;
-> +	int ret;
-> +
-> +	if (!IS_REACHABLE(CONFIG_HWMON))
-> +		return;
-> +
-> +	isl12022 = dev_get_drvdata(dev);
-> +
-> +	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
-> +				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
-> +	if (ret) {
-> +		dev_warn(dev, "unable to enable temperature sensor\n");
-> +		return;
-> +	}
-> +
-> +	hwmon = devm_hwmon_device_register_with_info(dev, "isl12022", isl12022,
-> +						     &isl12022_hwmon_chip_info,
-> +						     NULL);
-> +	if (IS_ERR(hwmon))
-> +		dev_warn(dev, "unable to register hwmon device: %pe\n", hwmon);
-> +}
-> +
->   /*
->    * In the routines that deal directly with the isl12022 hardware, we use
->    * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
-> @@ -160,6 +252,8 @@ static int isl12022_probe(struct i2c_client *client)
->   		return PTR_ERR(isl12022->regmap);
->   	}
->   
-> +	isl12022_hwmon_register(&client->dev);
-> +
->   	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
->   	if (IS_ERR(isl12022->rtc))
->   		return PTR_ERR(isl12022->rtc);
+> In this case it points to:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/huge_memory.c?id=4da34b7d175dc99b8befebd69e96546c960d526c#n2465
+> 
+
+Ah, thanks!
+
+... so
+
+	if (!folio_test_swapcache(page_folio(head))) {
+		VM_WARN_ON_ONCE_PAGE(page_tail->private != 0, head);
+		page_tail->private = 0;
+	}
+
+I recall that there was a patch either from Hugh or Mel floating around 
+that might be related.
+
+-- 
+Thanks,
+
+David / dhildenb
 
