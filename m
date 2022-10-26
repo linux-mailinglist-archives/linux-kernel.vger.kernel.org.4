@@ -2,69 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7168D60DDE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844EE60DDE9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbiJZJT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
+        id S233282AbiJZJVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233145AbiJZJTy (ORCPT
+        with ESMTP id S232903AbiJZJVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:19:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196DE1DDD6;
-        Wed, 26 Oct 2022 02:19:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 26 Oct 2022 05:21:18 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820E550053
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:21:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1666776074; bh=VUxXyqeqC9xJjU4/DUbIIcNzYJ6jIKRvBSz+ajHq9TM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Vc2yQ/lR3CL1OdYJDVQzTwx5zRyjkJbojVYujWgQAF2jxlGSbz7/+Ce9XeeIb0deu
+         38HdpCujrA9ljRgnbUvkNtOhHDwBxYeFhynaynJb9Cq8nga9Z7BJh974gcbh/VFq5q
+         4aqUXK4FuOmupXtLcGCPAQiyHSHx686gLsXZrVgo=
+Received: from [100.100.57.122] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id CA11F1F37C;
-        Wed, 26 Oct 2022 09:19:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666775991; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UJSIrhvBIpYg0Q5icEbLoO9eTA3cWeRbn/PlJQxhuBo=;
-        b=VFpME5g2pfkFFViLcZNoofvXS+Tmw4rncRgBETSsWP7403402Z8wRLHmXCaj1s3XAjN4eP
-        dLG+/q7e9UNVbysPDEFoYrwrgmkQOEKHhdUNSXH2h9KO3UeQp5rgTm5Q4o5MfKtD8IfYl0
-        Bz9yn1QM+zxRckwTPgzjYfLmFfa58rg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A6C7C13A6E;
-        Wed, 26 Oct 2022 09:19:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZmT+Jbf7WGNcXAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 26 Oct 2022 09:19:51 +0000
-Date:   Wed, 26 Oct 2022 11:19:50 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-Message-ID: <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
-References: <20221026074343.6517-1-feng.tang@intel.com>
- <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
- <Y1jpDfwBQId3GkJC@feng-clx>
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 769AC6008C;
+        Wed, 26 Oct 2022 17:21:14 +0800 (CST)
+Message-ID: <edb4002c-3325-53b2-de79-ad4033b363f7@xen0n.name>
+Date:   Wed, 26 Oct 2022 17:21:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1jpDfwBQId3GkJC@feng-clx>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:108.0)
+ Gecko/20100101 Thunderbird/108.0a1
+Subject: Re: [PATCH] LoongArch: Fix memsection size
+Content-Language: en-US
+To:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+References: <20221026075638.9396-1-lvjianmin@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20221026075638.9396-1-lvjianmin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,38 +51,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26-10-22 16:00:13, Feng Tang wrote:
-> On Wed, Oct 26, 2022 at 03:49:48PM +0800, Aneesh Kumar K V wrote:
-> > On 10/26/22 1:13 PM, Feng Tang wrote:
-> > > In page reclaim path, memory could be demoted from faster memory tier
-> > > to slower memory tier. Currently, there is no check about cpuset's
-> > > memory policy, that even if the target demotion node is not allowd
-> > > by cpuset, the demotion will still happen, which breaks the cpuset
-> > > semantics.
-> > > 
-> > > So add cpuset policy check in the demotion path and skip demotion
-> > > if the demotion targets are not allowed by cpuset.
-> > > 
-> > 
-> > What about the vma policy or the task memory policy? Shouldn't we respect
-> > those memory policy restrictions while demoting the page? 
->  
-> Good question! We have some basic patches to consider memory policy
-> in demotion path too, which are still under test, and will be posted
-> soon. And the basic idea is similar to this patch.
+On 2022/10/26 15:56, Jianmin Lv wrote:
+> On LoongArch, the physical address space ranging from 0 to 0xfffffff is
+> always memory, which is in the low half of the memsection range from 0 to
+> 0x1fffffff with 512M memsection size, and the high half will be a hole with
+> invalid memory pages.
 
-For that you need to consult each vma and it's owning task(s) and that
-to me sounds like something to be done in folio_check_references.
-Relying on memcg to get a cpuset cgroup is really ugly and not really
-100% correct. Memory controller might be disabled and then you do not
-have your association anymore.
+The description is incorrect. For systems with less than 512MiB of 
+memory for example, I believe not every address from 0x0 to 0x0fff_ffff 
+is valid; and regarding the latter part of the sentence, what you mean 
+by "invalid memory pages"...
 
-This all can get quite expensive so the primary question is, does the
-existing behavior generates any real issues or is this more of an
-correctness exercise? I mean it certainly is not great to demote to an
-incompatible numa node but are there any reasonable configurations when
-the demotion target node is explicitly excluded from memory
-policy/cpuset?
+> 
+> This situation may cause some issues. For example, the range of 0x10000000
+> to 0x1fffffff is io registers, which will be considered as valid memory range
+> since which is in the memsection of range of 0 to 0x1fffffff. During S3
+
+... turns out to be totally valid, only of the I/O kind. (This might be 
+a case of Chinglish that is actually conveying the incorrect meaning to 
+unaware readers.)
+
+> sleep and resume, these io registers will be saved and restored as valid memory
+> page (pfn_valid() of common version considers that all pages in a memsection
+> are valid), which will cause exception, especially when restoring during resume.
+> 
+> We can use 256M size for memsection of LoongArch, or use the way as ARM64 to
+> walk through all memory memblock to check if a mem pfn is valid which maybe
+> lower performance. For simplicity, this patch just use the former way.
+
+And the rest of the commit message is, unfortunately, a bit too verbose 
+and hard to understand in general. I have to look at the actual change 
+(luckily, a one-liner in this case) to confirm my understanding.
+
+I think your intent is just to *avoid stepping into IO memory region 
+during suspend/resume by reducing the section size order by one*. Try 
+reducing the verbosity of the commit message in v2? I can't proofread 
+and edit every commit due to limited time, so you have to practice and 
+improve your writing skills after all. I'll review that piece of text 
+afterwards. :)
+
+> 
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> 
+> diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
+> index 3d18cdf1b069..05903b40a625 100644
+> --- a/arch/loongarch/include/asm/sparsemem.h
+> +++ b/arch/loongarch/include/asm/sparsemem.h
+> @@ -8,7 +8,7 @@
+>    * SECTION_SIZE_BITS		2^N: how big each section will be
+>    * MAX_PHYSMEM_BITS		2^N: how much memory we can have in that space
+>    */
+> -#define SECTION_SIZE_BITS	29 /* 2^29 = Largest Huge Page Size */
+> +#define SECTION_SIZE_BITS	28
+>   #define MAX_PHYSMEM_BITS	48
+>   
+>   #endif /* CONFIG_SPARSEMEM */
+
+The change is trivial indeed but I'm not immediately giving the R-b.
+
 -- 
-Michal Hocko
-SUSE Labs
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
