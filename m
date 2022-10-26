@@ -2,273 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AD660DBEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BFC60DBFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiJZHPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S232807AbiJZHSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:18:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231341AbiJZHPq (ORCPT
+        with ESMTP id S231751AbiJZHSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:15:46 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C7598CB8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=FFZ6l2955No38OkpSABmKnKKUnPQ62XcPPzsCT8f1/s=; b=ncHiHr8KM3pkzhqiU2WdLC5ssV
-        gKW5E1VGnhkR1M6M0s1KCCvj1Rlsd0XaehJfluxtulR91VDweXAfV3xr9J9LNovvLx8fcoQKtLj27
-        Aa3NSxqnADLlKYLlVUDjcxoohHYZ4+2JY7+11qlEXtO0ozzOnvw/Oqkh6M271eK8vLbmwZSeyZD+T
-        EmOYXPq5RnoT39zpkm0vEilKjzIasBu8cFN/qlcOg70/dGGQOCMv3fvy10mT41h1yCX/Ag/TGQvSQ
-        Whc/SjbWKhVmY0yEvsLwfXVC1EfgfLzlhbrrxtvX16mLovTD9MbOJejoL0gEsDA2rUfAkI/7uFhFc
-        Yz+MGYng==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onadQ-006WOq-Jn; Wed, 26 Oct 2022 07:15:32 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2D10E3000DD;
-        Wed, 26 Oct 2022 09:15:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 14CDC2C259E9D; Wed, 26 Oct 2022 09:15:32 +0200 (CEST)
-Date:   Wed, 26 Oct 2022 09:15:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     rostedt@goodmis.org, dave.hansen@intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        keescook@chromium.org, seanjc@google.com
-Subject: Re: [PATCH 0/5] x86/ftrace: Cure boot time W+X mapping
-Message-ID: <Y1jek64pXOsougmz@hirez.programming.kicks-ass.net>
-References: <20221025200656.951281799@infradead.org>
- <CAHk-=wjBn=jThQ4drqgorDQFR3i2QUi9PeOG1tH2uWVkN8+6mQ@mail.gmail.com>
+        Wed, 26 Oct 2022 03:18:17 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A8DBD059;
+        Wed, 26 Oct 2022 00:18:16 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id n12so13512420eja.11;
+        Wed, 26 Oct 2022 00:18:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jgrCSgoyKQAcf7Cn8RHYWJzwfMDTCeEL4acz0yVvwcc=;
+        b=kWEfo76nU65gaK4Vio7Gf89NJSOvl6f683/pOlM6otWjqfMyEa/3uhWau9vZDZE37U
+         C9Mjm7AeAE5UPt7kfSfNUswN2SS1xrCvWBHJJ6mInVmfsE+PaeG0kFTG3aSgDhoWlimX
+         VLOAs8pQkINxhGiCB7uibfbCjFlg9MV0zR+Uy+NkSc7DnBHhBeo9ijpr679n9YqsaRAi
+         CYrAaIzjsmJhzxvjjjFtWtDaJp9vjy2wignN3YqwsIW86TvTzeASAVaadjd8pMB1/MlD
+         SckYwLZ40A3A/m4EvYm3fjSdkhaUOiK1t21pfv4QQIikKWDPSDwuPnzr0Aiq167AyRvU
+         Z4aA==
+X-Gm-Message-State: ACrzQf0KEo9K/eaaWZw84iW3BO8xgi8FTz9uP6XUAUdQB2Rwl7mmzx7W
+        F+x8LVCHINPKf4K1nF/WQwpf0GPGIYTHIg==
+X-Google-Smtp-Source: AMsMyM47akiGq5DuCuDFHk2dVM5tb9IybhfihjyBOoI/UghMYjV/ct5kTcFCxew+mCnBf5iYuisMyg==
+X-Received: by 2002:a17:907:1dec:b0:7aa:6262:f23f with SMTP id og44-20020a1709071dec00b007aa6262f23fmr10680718ejc.38.1666768695290;
+        Wed, 26 Oct 2022 00:18:15 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170906d18100b0072af4af2f46sm2528312ejz.74.2022.10.26.00.18.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 00:18:14 -0700 (PDT)
+Message-ID: <bc107c62-25ab-f959-c5bc-d5bacc511f20@kernel.org>
+Date:   Wed, 26 Oct 2022 09:18:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjBn=jThQ4drqgorDQFR3i2QUi9PeOG1tH2uWVkN8+6mQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] block: fix Werror=format with GCC 13
+Content-Language: en-US
+To:     =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-block@vger.kernel.org, axboe@kernel.dk
+References: <f70c7a11-e81e-f6b9-a403-315117f4aa3a@suse.cz>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <f70c7a11-e81e-f6b9-a403-315117f4aa3a@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 04:07:25PM -0700, Linus Torvalds wrote:
+On 24. 10. 22, 21:01, Martin Liška wrote:
+> Starting with GCC 13, since
+> [g3b3083a598ca3f4b] c: C2x enums wider than int [PR36113]
+> 
+> GCC promotes enum values with larger than integer types to a wider type.
+> In case of the anonymous enum type in blk-iocost.c it is:
+> 
+> enum {
+> 	MILLION			= 1000000,
+> ...
+> 
+> 	WEIGHT_ONE		= 1 << 16,
+> ...
+> 	VTIME_PER_SEC_SHIFT	= 37,
+> 	VTIME_PER_SEC		= 1LLU << VTIME_PER_SEC_SHIFT,
+> ...
+> 
+> as seen VTIME_PER_SEC cannot fit into 32-bits (int type), thus one needs
+> to use 'long unsigned int' in the format string.
+> 
+> It fixes then the following 2 warnings:
+> 
+> block/blk-iocost.c: In function ‘ioc_weight_prfill’:
+> block/blk-iocost.c:3035:37: error: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Werror=format=]
+>   3035 |                 seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
+>        |                                    ~^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>        |                                     |                             |
+>        |                                     unsigned int                  long unsigned int
+>        |                                    %lu
+> block/blk-iocost.c: In function ‘ioc_weight_show’:
+> block/blk-iocost.c:3045:34: error: format ‘%u’ expects argument of type ‘unsigned int’, but argument 3 has type ‘long unsigned int’ [-Werror=format=]
+>   3045 |         seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
+>        |                                 ~^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>        |                                  |                      |
+>        |                                  unsigned int           long unsigned int
+>        |                                 %lu
 
-> It does strike me that it's stupid to make those be two calls that do
-> exactly the same thing, and we should have a combined "set it
-> read-only and executable" function, but that's a separate issue.
+But introduces two with gcc-12 ;):
+ > block/blk-iocost.c: In function ‘ioc_weight_prfill’:
+ > block/blk-iocost.c:3037:38: error: format ‘%lu’ expects argument of 
+type ‘long unsigned int’, but argument 4 has type ‘u32’ {aka ‘unsigned 
+int’} [-Werror=format=]
+ >  3037 |                 seq_printf(sf, "%s %lu\n", dname, 
+iocg->cfg_weight / WEIGHT_ONE);
+ >       |                                    ~~^ 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ >       |                                      | 
+      |
+ >       |                                      long unsigned int 
+      u32 {aka unsigned int}
+ >       |                                    %u
 
-Right, and we have it all over the place. Something like the below
-perhaps? I'll feed it to the robots, see if something breaks.
 
-> The slowness is probably not the trampilines, but just the regular
-> "text_poke of kernel text" that we probably want to keep special just
-> because otherwise it's _so_ slow to do for every alternative etc.
+Note that:
+1) the specs says enum behaves as int, or uint in some cases
+2) iocc->dfl_weight is u32, i.e. uint
+    WEIGHT_ONE is 1 << 16, i.e. int
+    so the promotion should be to s32/int. Or not?
 
-I tried with and without the patches, it's dead slow either way and I
-couldn't spot a noticable difference between the two -- so I'm assuming
-it's simply the trace overhead, not the trace-enable time.
+I think gcc-13 is wrong -- incosistent with gcc-12 at least.
 
+> Signed-off-by: Martin Liska <mliska@suse.cz>
+> ---
+>   block/blk-iocost.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
+> index 495396425bad..f165bac9bffb 100644
+> --- a/block/blk-iocost.c
+> +++ b/block/blk-iocost.c
+> @@ -3032,7 +3032,7 @@ static u64 ioc_weight_prfill(struct seq_file *sf, struct blkg_policy_data *pd,
+>   	struct ioc_gq *iocg = pd_to_iocg(pd);
+>   
+>   	if (dname && iocg->cfg_weight)
+> -		seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
+> +		seq_printf(sf, "%s %lu\n", dname, iocg->cfg_weight / WEIGHT_ONE);
+>   	return 0;
+>   }
+>   
+> @@ -3042,7 +3042,7 @@ static int ioc_weight_show(struct seq_file *sf, void *v)
+>   	struct blkcg *blkcg = css_to_blkcg(seq_css(sf));
+>   	struct ioc_cgrp *iocc = blkcg_to_iocc(blkcg);
+>   
+> -	seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
+> +	seq_printf(sf, "default %lu\n", iocc->dfl_weight / WEIGHT_ONE);
+>   	blkcg_print_blkgs(sf, blkcg, ioc_weight_prfill,
+>   			  &blkcg_policy_iocost, seq_cft(sf)->private, false);
+>   	return 0;
 
----
---- a/arch/arm/mach-omap1/sram-init.c
-+++ b/arch/arm/mach-omap1/sram-init.c
-@@ -74,8 +74,7 @@ void *omap_sram_push(void *funcp, unsign
- 
- 	dst = fncpy(sram, funcp, size);
- 
--	set_memory_ro(base, pages);
--	set_memory_x(base, pages);
-+	set_memory_rox(base, pages);
- 
- 	return dst;
- }
-@@ -126,8 +125,7 @@ static void __init omap_detect_and_map_s
- 	base = (unsigned long)omap_sram_base;
- 	pages = PAGE_ALIGN(omap_sram_size) / PAGE_SIZE;
- 
--	set_memory_ro(base, pages);
--	set_memory_x(base, pages);
-+	set_memory_rox(base, pages);
- }
- 
- static void (*_omap_sram_reprogram_clock)(u32 dpllctl, u32 ckctl);
---- a/arch/arm/mach-omap2/sram.c
-+++ b/arch/arm/mach-omap2/sram.c
-@@ -96,8 +96,7 @@ void *omap_sram_push(void *funcp, unsign
- 
- 	dst = fncpy(sram, funcp, size);
- 
--	set_memory_ro(base, pages);
--	set_memory_x(base, pages);
-+	set_memory_rox(base, pages);
- 
- 	return dst;
- }
-@@ -217,8 +216,7 @@ static void __init omap2_map_sram(void)
- 	base = (unsigned long)omap_sram_base;
- 	pages = PAGE_ALIGN(omap_sram_size) / PAGE_SIZE;
- 
--	set_memory_ro(base, pages);
--	set_memory_x(base, pages);
-+	set_memory_rox(base, pages);
- }
- 
- static void (*_omap2_sram_ddr_init)(u32 *slow_dll_ctrl, u32 fast_dll_ctrl,
---- a/arch/powerpc/kernel/kprobes.c
-+++ b/arch/powerpc/kernel/kprobes.c
-@@ -134,10 +134,9 @@ void *alloc_insn_page(void)
- 	if (!page)
- 		return NULL;
- 
--	if (strict_module_rwx_enabled()) {
--		set_memory_ro((unsigned long)page, 1);
--		set_memory_x((unsigned long)page, 1);
--	}
-+	if (strict_module_rwx_enabled())
-+		set_memory_rox((unsigned long)page, 1);
-+
- 	return page;
- }
- 
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -415,8 +415,7 @@ create_trampoline(struct ftrace_ops *ops
- 
- 	set_vm_flush_reset_perms(trampoline);
- 
--	set_memory_ro((unsigned long)trampoline, npages);
--	set_memory_x((unsigned long)trampoline, npages);
-+	set_memory_rox((unsigned long)trampoline, npages);
- 	return (unsigned long)trampoline;
- fail:
- 	tramp_free(trampoline);
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -415,17 +415,12 @@ void *alloc_insn_page(void)
- 		return NULL;
- 
- 	set_vm_flush_reset_perms(page);
--	/*
--	 * First make the page read-only, and only then make it executable to
--	 * prevent it from being W+X in between.
--	 */
--	set_memory_ro((unsigned long)page, 1);
- 
- 	/*
- 	 * TODO: Once additional kernel code protection mechanisms are set, ensure
- 	 * that the page was not maliciously altered and it is still zeroed.
- 	 */
--	set_memory_x((unsigned long)page, 1);
-+	set_memory_rox((unsigned long)page, 1);
- 
- 	return page;
- }
---- a/drivers/misc/sram-exec.c
-+++ b/drivers/misc/sram-exec.c
-@@ -106,10 +106,7 @@ void *sram_exec_copy(struct gen_pool *po
- 
- 	dst_cpy = fncpy(dst, src, size);
- 
--	ret = set_memory_ro((unsigned long)base, pages);
--	if (ret)
--		goto error_out;
--	ret = set_memory_x((unsigned long)base, pages);
-+	ret = set_memory_rox((unsigned long)base, pages);
- 	if (ret)
- 		goto error_out;
- 
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -860,8 +860,7 @@ static inline void bpf_prog_lock_ro(stru
- static inline void bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
- {
- 	set_vm_flush_reset_perms(hdr);
--	set_memory_ro((unsigned long)hdr, hdr->size >> PAGE_SHIFT);
--	set_memory_x((unsigned long)hdr, hdr->size >> PAGE_SHIFT);
-+	set_memory_rox((unsigned long)hdr, hdr->size >> PAGE_SHIFT);
- }
- 
- int sk_filter_trim_cap(struct sock *sk, struct sk_buff *skb, unsigned int cap);
---- a/include/linux/set_memory.h
-+++ b/include/linux/set_memory.h
-@@ -14,6 +14,14 @@ static inline int set_memory_x(unsigned
- static inline int set_memory_nx(unsigned long addr, int numpages) { return 0; }
- #endif
- 
-+static inline int set_memory_rox(unsigned long addr, int numpages)
-+{
-+	int ret = set_memory_ro(addr, numpages);
-+	if (ret)
-+		return ret;
-+	return set_memory_x(addr, numpages);
-+}
-+
- #ifndef CONFIG_ARCH_HAS_SET_DIRECT_MAP
- static inline int set_direct_map_invalid_noflush(struct page *page)
- {
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -494,8 +494,7 @@ static int bpf_struct_ops_map_update_ele
- 	refcount_set(&kvalue->refcnt, 1);
- 	bpf_map_inc(map);
- 
--	set_memory_ro((long)st_map->image, 1);
--	set_memory_x((long)st_map->image, 1);
-+	set_memory_rox((long)st_map->image, 1);
- 	err = st_ops->reg(kdata);
- 	if (likely(!err)) {
- 		/* Pair with smp_load_acquire() during lookup_elem().
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -864,8 +864,7 @@ static struct bpf_prog_pack *alloc_new_p
- 	list_add_tail(&pack->list, &pack_list);
- 
- 	set_vm_flush_reset_perms(pack->ptr);
--	set_memory_ro((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
--	set_memory_x((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
-+	set_memory_rox((unsigned long)pack->ptr, BPF_PROG_PACK_SIZE / PAGE_SIZE);
- 	return pack;
- }
- 
-@@ -883,8 +882,7 @@ void *bpf_prog_pack_alloc(u32 size, bpf_
- 		if (ptr) {
- 			bpf_fill_ill_insns(ptr, size);
- 			set_vm_flush_reset_perms(ptr);
--			set_memory_ro((unsigned long)ptr, size / PAGE_SIZE);
--			set_memory_x((unsigned long)ptr, size / PAGE_SIZE);
-+			set_memory_rox((unsigned long)ptr, size / PAGE_SIZE);
- 		}
- 		goto out;
- 	}
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -468,8 +468,7 @@ static int bpf_trampoline_update(struct
- 	if (err < 0)
- 		goto out;
- 
--	set_memory_ro((long)im->image, 1);
--	set_memory_x((long)im->image, 1);
-+	set_memory_rox((long)im->image, 1);
- 
- 	WARN_ON(tr->cur_image && tr->selector == 0);
- 	WARN_ON(!tr->cur_image && tr->selector);
---- a/net/bpf/bpf_dummy_struct_ops.c
-+++ b/net/bpf/bpf_dummy_struct_ops.c
-@@ -124,8 +124,7 @@ int bpf_struct_ops_test_run(struct bpf_p
- 	if (err < 0)
- 		goto out;
- 
--	set_memory_ro((long)image, 1);
--	set_memory_x((long)image, 1);
-+	set_memory_rox((long)image, 1);
- 	prog_ret = dummy_ops_call_op(image, args);
- 
- 	err = dummy_ops_copy_args(args);
+thanks,
+-- 
+js
+suse labs
+
