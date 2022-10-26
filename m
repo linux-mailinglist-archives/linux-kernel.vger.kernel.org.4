@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9EA60E5F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9695860E5F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234189AbiJZQ6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S234006AbiJZQ7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234024AbiJZQ6A (ORCPT
+        with ESMTP id S234097AbiJZQ6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:58:00 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DABB03C5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:57:59 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id z17so8375334qkj.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aDHp0LO4ebRzQFErfPNEMqx5O4CaTBDIkwZQBMq/Dg4=;
-        b=ArijeelUJ4PnCB2tHC2NEtSYiuXym+iw0HWEI1W1dBOm7EXblIcG21uFbiGLvzrDL1
-         rfJVmY+nvaFoZPQhr7Zs12QdvtEOelzAlDr277gLSNfTv9S4djxu+842lquiHvrwb4ht
-         IH5PJvqvphEJ9nJPke9o2WCPponWeEuyzo9qWj9HfTG52pbGFTGYkVhIkIptjcxUS79Z
-         a53cb1j2OE0FpAxO4hf0p4flfGoIhfoa2mERzDv1V0130kmsOETXwW0M1RVwYBgDcouq
-         S5Zebg4VM0ErgLbTzhvMJSbH7sv5bfZCloMq2NaxKwbSnpy0WwjPaL9bV1myFew4LVZr
-         iTLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aDHp0LO4ebRzQFErfPNEMqx5O4CaTBDIkwZQBMq/Dg4=;
-        b=xGfcU0n9SPHPrFq++9jlyfXmGLZ91wV11TDItcVgWeWSN7UCbPoxR1VUfrxfrlHmcB
-         o9PrDRAN1ar0g47ZplyTWKge795yCcncQfAHP3ZYPz2rk/N8WmLdeXoNWsVMgQ5OVrPH
-         T1ZafUFnJvFSVWARHwE6dSKJ3v162mTW8Hf8Unk4pa4VF51DJ2ZAkAmNYcQJIMtHzhVA
-         /xe4JoojKPb5bRoMoZQA+uspEzhUbebJeiqmN47U6V3qhrX9Czkaywc4GpHYYLlU48J+
-         Xu9GIMzayJsHOx23T5N6aF2fwcezyHEoeGVnOZdEBdPhR0FsAMI0PJ1z51qGFKoAQblq
-         Rghw==
-X-Gm-Message-State: ACrzQf2sZi3Vy33NpBd/YGPdVsu5MmCgSO7NC0/JYwdie1faIALyGH3e
-        sZPQMRlULm/vxGF2QWR94NYQPw==
-X-Google-Smtp-Source: AMsMyM4L31N5v5Z/OJ+Ql1auenm0qxCUxsxrMOlHlUbzzY3cECrNBwFfxUJnIRShJRMOcirE+fzN4w==
-X-Received: by 2002:a05:620a:2189:b0:6e9:856f:944a with SMTP id g9-20020a05620a218900b006e9856f944amr31425798qka.322.1666803478643;
-        Wed, 26 Oct 2022 09:57:58 -0700 (PDT)
-Received: from krzk-bin.. ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id g21-20020a05620a40d500b006ee8874f5fasm4360759qko.53.2022.10.26.09.57.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 09:57:57 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH] dt-bindings: pinctrl: qcom,pmic-mpp: make compatible fallbacks specific
-Date:   Wed, 26 Oct 2022 12:57:46 -0400
-Message-Id: <166680346261.49767.16285909952987662463.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220908080703.28643-1-krzysztof.kozlowski@linaro.org>
-References: <20220908080703.28643-1-krzysztof.kozlowski@linaro.org>
+        Wed, 26 Oct 2022 12:58:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9580AF1A8;
+        Wed, 26 Oct 2022 09:58:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4618761FC9;
+        Wed, 26 Oct 2022 16:58:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A1AFC433C1;
+        Wed, 26 Oct 2022 16:58:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666803528;
+        bh=MxMNVBq6qCtDiZuSSRHMS4DNSCx1BT6mrpskQwkZdF4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tdX3s73UqQuJyp0qg2D8dDRFehu3TsIJuSq+SigPvbKYviY1zlgjgEw3YE6CFNkmO
+         AU9iJZ1xSEWJ6pjy4aPEq07F17ijONUWMmCgLN4SqpHFdhvXNA75N7BuRcMTfiLj+n
+         Wx6jbvQZiYBiiRkorWf3vQO4wVjbPAPp81he0ozg=
+Date:   Wed, 26 Oct 2022 18:58:46 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
+Cc:     linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        jason@zx2c4.com, saeed.mirzamohammadi@oracle.com
+Subject: Re: [PATCH stable 0/5] Fix missing patches in stable
+Message-ID: <Y1lnRm9NZDhIFhwU@kroah.com>
+References: <20221017192006.36398-1-saeed.mirzamohammadi@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221017192006.36398-1-saeed.mirzamohammadi@oracle.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Sep 2022 10:07:03 +0200, Krzysztof Kozlowski wrote:
-> Instead of allowing compatibles followed by any fallback (for SPMI or
-> SSBI PMICs), make the list specific.
+On Mon, Oct 17, 2022 at 12:20:01PM -0700, Saeed Mirzamohammadi wrote:
+> The following patches has been applied to 6.0 but only patch#2 below
+> has been applied to stable. This caused regression with nfs tests in
+> all stable releases.
 > 
+> This patchset backports patches 1 and 3-6 to stable.
 > 
+> 1. 868941b14441 fs: remove no_llseek
+> 2. 97ef77c52b78 fs: check FMODE_LSEEK to control internal pipe splicing
+> 3. 54ef7a47f67d vfio: do not set FMODE_LSEEK flag
+> 4. c9eb2d427c1c dma-buf: remove useless FMODE_LSEEK flag
+> 5. 4e3299eaddff fs: do not compare against ->llseek
+> 6. e7478158e137 fs: clear or set FMODE_LSEEK based on llseek function
+> 
+> For 5.10.y and 5.4.y only, a revert of patch#2 is already included.
+> Please apply patch#2, for 5.4.y and 5.10.y as well.
 
-Applied, thanks!
+I am sorry, I really do not understand here.
 
-[1/1] dt-bindings: pinctrl: qcom,pmic-mpp: make compatible fallbacks specific
-      https://git.kernel.org/krzk/linux-dt/c/7ec006642590033e2b07eeccf57134751acea03e
+You list these commits in a specific order, yet the patches you send are
+in a different order.
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+And they don't apply to 5.10 or older.
+
+Can you resend proper patch series, for each stable branch that you want
+these applied to, so that I can correctly queue them up?
+
+thanks,
+
+greg k-h
