@@ -2,55 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F1A360E2F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CF660E305
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbiJZOPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58524 "EHLO
+        id S233626AbiJZOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbiJZOPK (ORCPT
+        with ESMTP id S232906AbiJZOQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:15:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC93A98CA;
-        Wed, 26 Oct 2022 07:15:08 -0700 (PDT)
+        Wed, 26 Oct 2022 10:16:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FC8F682C;
+        Wed, 26 Oct 2022 07:16:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E371B822B5;
-        Wed, 26 Oct 2022 14:15:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EC99C433D6;
-        Wed, 26 Oct 2022 14:15:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5E6561F08;
+        Wed, 26 Oct 2022 14:16:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F146C433D6;
+        Wed, 26 Oct 2022 14:16:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666793705;
-        bh=bPQpw1YW/RYUx9xDPaehp0siCZJYUrJDtAPLbnqzJH4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UM1u4sHYdC8RQ3vbFlDUC4dawHYQ80NJ+/V7tWEpOMUebBWE3EowzgqMIbp3PFDeM
-         biB32xiew3R0v5rgoxZxe3n+K+EyTQE5BUvXCWeM+t42vXKsQL7o1QJR2dY1xpwraF
-         pLJ5wsvWxozMVui+pdVPrcKO8OqsH3JPLP1aQPRj6FL4MALpFA2snMbfaKkUi/8jBN
-         M4ElAKdItOeA8r5f8ac2mycNbhmwcf+A1FCHT+/fWOcZwD6blSA7hWYYfJFMikWR/0
-         YquwGO/WiViCXdA0umI602mqRxyE7lyxIXDUjKG/48MRU7kDtkBvGgoRuE0zYuFk96
-         AzcPEdcrL6pUg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6FCD6404BE; Wed, 26 Oct 2022 11:15:03 -0300 (-03)
-Date:   Wed, 26 Oct 2022 11:15:03 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCHSET 0/8] perf test: Improve perf record tests (v2)
-Message-ID: <Y1lA57moAxMCiJzG@kernel.org>
-References: <20221020172643.3458767-1-namhyung@kernel.org>
+        s=k20201202; t=1666793802;
+        bh=4sbYQ1JjOf2cO851WHCHY1Zq78kCtJj8OQbcl0ns6Wc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=tRcZLhtkJvU8yKeyyubVEGg+DXBbc1HY/0UNCdAgOpzQyoUF1OazH9+UOZf1nehfR
+         qWqlGu07+4CP+8J3jordoCgUepnM4owBzenmDpn5/nAVkfLmHbHtLE9Hedht+dTRkv
+         RLxilEJYU2bjy3FqWtntfgVvR8DOrglOeWkW0f60TQSKYJicGaXnkzP7aQkI/8wq6P
+         XNExJVm9vn0+pV75FFAdwnXj83n+Jzx0TsIfvE+4RRUnl7mZ1bW5aabFEqAqrT7Wtl
+         plM4OJfyOxQzAQH3s+ef3X6wWee/s9WMopIa+naIPDoOxx8yiqiDnL6jocMzTw4Ecd
+         tTtOhw9yzIy/Q==
+From:   Dinh Nguyen <dinguyen@kernel.org>
+To:     jh80.chung@samsung.com
+Cc:     dinguyen@kernel.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: [PATCHv6 1/6] dt-bindings: mmc: synopsys-dw-mshc: document "altr,sysmgr-syscon"
+Date:   Wed, 26 Oct 2022 09:16:26 -0500
+Message-Id: <20221026141631.696863-1-dinguyen@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221020172643.3458767-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -61,74 +55,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Oct 20, 2022 at 10:26:35AM -0700, Namhyung Kim escreveu:
-> Hello,
-> 
-> This patchset improves the perf record tests to check more cases so that it
-> can find problems early.  The motivation was a failure per-thread mmap with
-> multi-threaded targets which Adrian is working on the fix.
-> 
-> Changes in v2)
->  * fix shellcheck issues
->  * drop unsupported --per-thread and --threads combination
->  * do not use initial delay (-D option); instead it runs the target
->    and wait for it separately using the recent waiting.sh library
->  * add Adrian's Reviewed-by tags
-> 
-> I added a custom test program and more combinations like system-wide and
-> command line workload (in per-process mode) testing with multi-threaded
-> recording mode.
+Document the optional "altr,sysmgr-syscon" binding that is used to
+access the System Manager register that controls the SDMMC clock
+phase.
 
-Thanks, applied to perf/core.
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+---
+v6: make "altr,sysmgr-syscon" optional
+v5: document reg shift
+v4: add else statement
+v3: document that the "altr,sysmgr-syscon" binding is only applicable to
+    "altr,socfpga-dw-mshc"
+v2: document "altr,sysmgr-syscon" in the MMC section
+---
+ .../bindings/mmc/synopsys-dw-mshc.yaml        | 23 ++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-- Arnaldo
-
+diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
+index ae6d6fca79e2..0e2024eb9018 100644
+--- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
++++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
+@@ -6,9 +6,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
-> Currently it succeeds every tests when running as root!
-> 
->   $ sudo ./perf test -v 91
->    91: perf record tests                                               :
->   --- start ---
->   test child forked, pid 108975
->   Build a test program
->   Basic --per-thread mode test
->   Basic --per-thread mode test [Success]
->   Register capture test
->   Register capture test [Success]
->   Basic --system-wide mode test
->   Basic --system-wide mode test [Success]
->   Basic target workload test
->   Basic target workload test [Success]
->   test child finished with 0
->   ---- end ----
->   perf record tests: Ok
-> 
-> You can find it in 'perf/record-test-v2' branch in
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> Namhyung Kim (8):
->   perf test: Do not use instructions:u explicitly
->   perf test: Fix shellcheck issues in the record test
->   perf test: Use a test program in perf record tests
->   perf test: Wait for a new thread when testing --per-thread record
->   perf test: Add system-wide mode in perf record tests
->   perf test: Add target workload test in perf record tests
->   perf test: Test record with --threads option
->   perf test: Do not set TEST_SKIP for record subtests
-> 
->  tools/perf/tests/shell/record.sh | 180 +++++++++++++++++++++++++++----
->  1 file changed, 158 insertions(+), 22 deletions(-)
-> 
-> 
-> base-commit: a3a365655a28f12f07eddf4f3fd596987b175e1d
-> -- 
-> 2.38.0.135.g90850a2211-goog
-
+ title: Synopsys Designware Mobile Storage Host Controller Binding
+ 
+-allOf:
+-  - $ref: "synopsys-dw-mshc-common.yaml#"
+-
+ maintainers:
+   - Ulf Hansson <ulf.hansson@linaro.org>
+ 
+@@ -38,6 +35,26 @@ properties:
+       - const: biu
+       - const: ciu
+ 
++allOf:
++  - $ref: synopsys-dw-mshc-common.yaml#
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: altr,socfpga-dw-mshc
++    then:
++      properties:
++        altr,sysmgr-syscon:
++          $ref: /schemas/types.yaml#/definitions/phandle-array
++          items:
++            - description: phandle to the sysmgr node
++            - description: register offset that controls the SDMMC clock phase
++            - description: register shift for the smplsel(drive in) setting
++    else:
++      properties:
++        altr,sysmgr-syscon: false
++
+ required:
+   - compatible
+   - reg
 -- 
+2.25.1
 
-- Arnaldo
