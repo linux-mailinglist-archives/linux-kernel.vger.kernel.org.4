@@ -2,255 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F9660DC63
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BBA60DC65
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbiJZHoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S233119AbiJZHpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiJZHoR (ORCPT
+        with ESMTP id S231628AbiJZHpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:44:17 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD00A6C37
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:44:15 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id jb18so6202858wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QxYf73s3xgQHPjgaJYLNKSY52juiOV4Io/j3A3VHpOo=;
-        b=3zBDOL8ngYX81xMqmYHR2Y8U5YqvhX91VmGX/0Cc7C4k78kwO8H5DsPkwQ2cvlpPnR
-         VF3Be2kaJUfyOy+2S8jZUc0MiHFhRWvs2VPz35OKXL85wp6MNNuEdrWh/jBzBr8YBn9P
-         /wBY9fTlZoR3l3/yUbtIWdqB2HIHKB8pGbnqGedKTE6/wfVuaKF3a+DlUoHsY4b6L4rP
-         QnbmCGyEUxPg7gx9SV5Y7WX21OvP+SD8p9Du/HvZzfVS8bEcMn1OqLDUZsm/KSgD0dTk
-         h1HPn23et+PuYwbhnAbPIUdcABVpO/pPBd/PqXbBuwIN6pIJ/1z60urN9SNOBIA/nE9d
-         Q27A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QxYf73s3xgQHPjgaJYLNKSY52juiOV4Io/j3A3VHpOo=;
-        b=DStxbEdHS7OO3ZJk08Sv+eT8NSronm7HaxO5H0YGixS7p8unXxItCQlN8lxJTn52C0
-         ijqNe3/021bxXY7XBtfkgviG6imuRmvUdC1y/WfKGHzZdumyuTyMZ+zPfSX8GZMSxGz1
-         AAPni8OJuuSuwMyAQeo7tY4iXotfJyayrSFEHC18GrygJLrxw1W3s9zvIvP5kkZ1sr6s
-         iShliC0KKT4oYoEn3630G+TT27RQDYYSXevvpxxah9fKfI2ptqHnafmqtMyXFfeilInz
-         qBqUE3YxNClOh5oSCrt7Y2t7Q+Gub1de98BEkw/CILvAQwCJ+I9sncVa8h+RXdoIKECO
-         /vSw==
-X-Gm-Message-State: ACrzQf0PQb1ujPicO0d5n/ud2zLsMXgFMl8EPFTUmlmDnG4RWJyGqtg/
-        jXaNBaeOyO87etrww8020tRqHA==
-X-Google-Smtp-Source: AMsMyM7enZgJ7JHsGNavIYiIobSpf4ullddfFCTFv9Fn5InagRsjwMG3s6O2gxEA2IUmelma2CHAYQ==
-X-Received: by 2002:a05:600c:a47:b0:3a6:5848:4bde with SMTP id c7-20020a05600c0a4700b003a658484bdemr1397660wmq.189.1666770254441;
-        Wed, 26 Oct 2022 00:44:14 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:4a02:2aff:fe07:1efc])
-        by smtp.googlemail.com with ESMTPSA id i7-20020a5d4387000000b002366e8eee11sm4500955wrq.101.2022.10.26.00.44.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 00:44:14 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 09:44:12 +0200
-From:   Corentin LABBE <clabbe@baylibre.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 1/2] usb: serial: add support for CH348
-Message-ID: <Y1jlTP7HuH1FQbpk@Red>
-References: <20221021133758.1881904-1-clabbe@baylibre.com>
- <20221021133758.1881904-2-clabbe@baylibre.com>
- <135c51e3-56b6-cdf0-3499-cd354f43601d@suse.com>
+        Wed, 26 Oct 2022 03:45:49 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74E413CF8;
+        Wed, 26 Oct 2022 00:45:47 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29Q7jb16095916;
+        Wed, 26 Oct 2022 02:45:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666770338;
+        bh=72Wp6K6btvwssLObTvZnh3Xf9VESzUOX8m3VxikOzuo=;
+        h=From:To:CC:Subject:Date;
+        b=iSxYsvX3kB9ZR28KwJ8Qvs1v94DxEjT4sZNR4EBJBMz6t48U3n69AB7h1eI+n1tVm
+         izg1iDbjys8YVwhqGwGJIidL5nwc9PIBf75CZCxl1f5kLF+QtpV6CBLpHlDnMRkxT1
+         ibl2FSlQze/CsH33eiH218oztQ5WFj/l5nM4V5IM=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29Q7jbRG083990
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Oct 2022 02:45:37 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 26
+ Oct 2022 02:45:37 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 26 Oct 2022 02:45:37 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29Q7jXFj005631;
+        Wed, 26 Oct 2022 02:45:34 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <robh+dt@kernel.org>, <lee@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <kishon@kernel.org>,
+        <vkoul@kernel.org>, <dan.carpenter@oracle.com>, <rogerq@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
+Subject: [PATCH v3 0/3] Add support to PHY GMII SEL for J721e CPSW9G QSGMII
+Date:   Wed, 26 Oct 2022 13:15:29 +0530
+Message-ID: <20221026074532.109220-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <135c51e3-56b6-cdf0-3499-cd354f43601d@suse.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, Oct 24, 2022 at 11:40:16AM +0200, Oliver Neukum a écrit :
-> 
-> 
-> On 21.10.22 15:37, Corentin Labbe wrote:
-> > The CH348 is an USB octo port serial adapter.
-> > This patch adds support for it.
-> > 
-> 
-> Hi,
-> 
-> comments inline.
-> 
-> > +struct ch348_rxbuf {
-> > +	u8 port;
-> > +	u8 length;
-> > +	u8 data[];
-> > +} __packed;
-> > +
-> > +#define CH348_RX_PORT_CHUNK_LENGTH	32
-> > +#define CH348_RX_PORT_MAX_LENGTH	30
-> > +
-> > +struct ch348_txbuf {
-> > +	u8 port;
-> > +	__le16 length;
-> > +	u8 data[];
-> > +} __packed;
-> > +
-> 
-> You know how long data will be. Why leave it unspecified?
-> 
-> > +static void ch348_process_read_urb(struct urb *urb)
-> > +{
-> > +	struct usb_serial_port *port = urb->context;
-> > +	struct ch348 *ch348 = usb_get_serial_data(port->serial);
-> > +	u8 *buffer = urb->transfer_buffer, *end;
-> > +	unsigned int portnum, usblen;
-> > +	struct ch348_rxbuf *rxb;
-> > +
-> > +	if (!urb->actual_length) {
-> 
-> That check needs to be for < 2 or you can process garbage.
-> 
-> > +		dev_warn(&port->dev, "%s:%d empty rx buffer\n", __func__, __LINE__);
-> > +		return;
-> > +	}
-> > +
-> > +	end = buffer + urb->actual_length;
-> > +
-> > +	for (; buffer < end; buffer += CH348_RX_PORT_CHUNK_LENGTH) {
-> > +		rxb = (struct ch348_rxbuf *)buffer;
-> > +		portnum = rxb->port;
-> > +		if (portnum >= CH348_MAXPORT) {
-> > +			dev_warn(&port->dev, "%s:%d invalid port %d\n",
-> > +				 __func__, __LINE__, portnum);
-> > +			break;
-> > +		}
-> > +
-> > +		usblen = rxb->length;
-> > +		if (usblen > 30) {
-> 
-> You have defined a nummerical constant for that. Use it.
-> 
-> > +			dev_warn(&port->dev, "%s:%d invalid length %d for port %d\n",
-> > +				 __func__, __LINE__, usblen, portnum);
-> > +			break;
-> > +		}
-> > +
-> > +		port = ch348->ttyport[portnum].port;
-> > +		tty_insert_flip_string(&port->port, rxb->data, usblen);
-> > +		tty_flip_buffer_push(&port->port);
-> > +		port->icount.rx += usblen;
-> > +		usb_serial_debug_data(&port->dev, __func__, usblen, rxb->data);
-> > +	}
-> > +}
-> > +
-> > +static int ch348_prepare_write_buffer(struct usb_serial_port *port, void *dest, size_t size)
-> > +{
-> > +	struct ch348_txbuf *rxt = dest;
-> > +	const size_t txhdrsize = offsetof(struct ch348_txbuf, data);
-> 
-> What is that? This is a constant.
-> 
-> > +	int count;
-> > +
-> > +	count = kfifo_out_locked(&port->write_fifo, rxt->data,
-> > +				 size - txhdrsize, &port->lock);
-> > +
-> > +	rxt->port = port->port_number;
-> > +	rxt->length = cpu_to_le16(count);
-> > +
-> > +	return count + txhdrsize;
-> > +}
-> 
-> > +static void ch348_set_termios(struct tty_struct *tty, struct usb_serial_port *port,
-> > +			      const struct ktermios *termios_old)
-> > +{
-> > +	struct ch348 *ch348 = usb_get_serial_data(port->serial);
-> > +	int portnum = port->port_number;
-> > +	struct ktermios *termios = &tty->termios;
-> > +	int ret, sent;
-> > +	__le32	dwDTERate;
-> 
-> OK it is LE.
-> 
-> > +	u8	bCharFormat;
-> > +	struct ch348_initbuf *buffer;
-> > +
-> > +	if (termios_old && !tty_termios_hw_change(&tty->termios, termios_old))
-> > +		return;
-> > +
-> > +	buffer = kzalloc(sizeof(*buffer), GFP_KERNEL);
-> > +	if (!buffer) {
-> > +		if (termios_old)
-> > +			tty->termios = *termios_old;
-> > +		return;
-> > +	}
-> > +
-> > +	dwDTERate = tty_get_baud_rate(tty);
-> 
-> This is speed_t, in other words unsigned int without specified endianness.
-> 
-> > +	/* test show no success on low baud and datasheet said it is not supported */
-> > +	if (dwDTERate < 1200)
-> > +		dwDTERate = DEFAULT_BAUD_RATE;
-> > +	/* datasheet said it is not supported */
-> > +	if (dwDTERate > 6000000)
-> > +		dwDTERate = 6000000;
-> 
-> You are comparing to constants in native endianness.
-> 
-> > +
-> > +	bCharFormat = termios->c_cflag & CSTOPB ? 2 : 1;
-> > +
-> > +	buffer->bParityType = termios->c_cflag & PARENB ?
-> > +			     (termios->c_cflag & PARODD ? 1 : 2) +
-> > +			     (termios->c_cflag & CMSPAR ? 2 : 0) : 0;
-> > +
-> > +	switch (termios->c_cflag & CSIZE) {
-> > +	case CS5:
-> > +		buffer->bDataBits = 5;
-> > +		break;
-> > +	case CS6:
-> > +		buffer->bDataBits = 6;
-> > +		break;
-> > +	case CS7:
-> > +		buffer->bDataBits = 7;
-> > +		break;
-> > +	case CS8:
-> > +	default:
-> > +		buffer->bDataBits = 8;
-> > +		break;
-> > +	}
-> > +	buffer->cmd = CMD_WB_E | (portnum & 0x0F);
-> > +	buffer->reg = R_INIT;
-> > +	buffer->port = portnum;
-> > +	buffer->dwDTERate = cpu_to_be32(le32_to_cpu(dwDTERate));
-> 
-> So it is native, not LE?
-> 
+Add compatible for J721e CPSW9G, which contains 8 external ports and 1
+internal host port.
 
-Hello
+Update existing approach of using compatible to differentiate between
+devices that support QSGMII mode and those that don't. The new
+approach involves storing the number of qsgmii main ports for the device
+in the num_qsgmii_main_ports member of the "struct phy_gmii_sel_soc_data".
+This approach makes it scalable for newer devices.
 
-Thanks for your review, I will fix them all.
+=========
+Changelog
+=========
+v2 -> v3:
+1. Run 'make DT_CHECKER_FLAGS=-m dt_binding_check' and fix errors and
+   warnings corresponding to the patch for:
+   Documentation/devicetree/bindings/phy/ti,phy-gmii-sel
+   with the latest dt-schema and yamllint.
 
-> [..]
-> 
-> > +
-> > +static int ch348_fixup_port_bulk_in(struct ch348 *ch348, struct usb_serial_port *port)
-> > +{
-> > +	int i;
-> > +
-> > +	/* Already Initialized */
-> > +	if (port->bulk_in_size) {
-> 
-> BTW, shouldn't these be unsigned int?
+v1 -> v2:
+1. Drop all patches corresponding to SGMII mode. This is done since I do
+   not have a method to test SGMII in the standard mode which uses an
+   SGMII PHY. The previous series used SGMII in a fixed-link mode,
+   bypassing the SGMII PHY. I will post the SGMII patches in a future
+   series after testing them.
+2. Update description for the property "ti,qsgmii-main-ports", to describe
+   it in a unified way across the compatibles.
+3. Add minItems, maxItems, and items at the top, where the property
+   "ti,qsgmii-main-ports" is first defined. Modify them later
+   appropriately, based on the compatible.
+4. Update the method to fetch the property "ti,qsgmii-main-ports" from the
+   device-tree, to make it scalable.
+5. Use dev_err() when the value(s) provided in the device-tree for the
+   property "ti,qsgmii-main-ports" is/are invalid.
 
-I dont understand what you mean here.
+v2:
+https://lore.kernel.org/r/20221018084333.149790-1-s-vadapalli@ti.com/
+v1:
+https://lore.kernel.org/r/20220914093911.187764-1-s-vadapalli@ti.com/
 
-Regards
+Siddharth Vadapalli (3):
+  dt-bindings: phy: ti: phy-gmii-sel: Add bindings for J721e
+  phy: ti: gmii-sel: Update methods for fetching and using qsgmii main
+    port
+  phy: ti: gmii-sel: Add support for CPSW9G GMII SEL in J721e
+
+ .../bindings/phy/ti,phy-gmii-sel.yaml         | 48 ++++++++++++++++---
+ drivers/phy/ti/phy-gmii-sel.c                 | 42 +++++++++++++---
+ 2 files changed, 77 insertions(+), 13 deletions(-)
+
+-- 
+2.25.1
+
