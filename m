@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD90760E3FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AAAC60E402
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbiJZPBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S229949AbiJZPCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJZPBP (ORCPT
+        with ESMTP id S234115AbiJZPCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:01:15 -0400
-Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2047F101CF;
-        Wed, 26 Oct 2022 08:01:12 -0700 (PDT)
-Received: from mg.ssi.bg (localhost [127.0.0.1])
-        by mg.ssi.bg (Proxmox) with ESMTP id C601A11DDB;
-        Wed, 26 Oct 2022 18:01:11 +0300 (EEST)
-Received: from ink.ssi.bg (unknown [193.238.174.40])
-        by mg.ssi.bg (Proxmox) with ESMTP id 9092211DDA;
-        Wed, 26 Oct 2022 18:01:10 +0300 (EEST)
-Received: from ja.ssi.bg (unknown [178.16.129.10])
-        by ink.ssi.bg (Postfix) with ESMTPS id 654093C07E1;
-        Wed, 26 Oct 2022 18:01:10 +0300 (EEST)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29QF19DQ097559;
-        Wed, 26 Oct 2022 18:01:09 +0300
-Date:   Wed, 26 Oct 2022 18:01:09 +0300 (EEST)
-From:   Julian Anastasov <ja@ssi.bg>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Simon Horman <horms@verge.net.au>, stable@vger.kernel.org
-Subject: Re: [PATCH] ipvs: use explicitly signed chars
-In-Reply-To: <Y1lEebYfRwrtliDL@zx2c4.com>
-Message-ID: <bb93406f-6935-deee-22e4-c4b4be55bc60@ssi.bg>
-References: <20221026123216.1575440-1-Jason@zx2c4.com> <4cc36ff5-46fd-c2b3-3292-d6369337fec1@ssi.bg> <Y1lEebYfRwrtliDL@zx2c4.com>
+        Wed, 26 Oct 2022 11:02:20 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AED12A50DA
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:02:18 -0700 (PDT)
+Received: (qmail 1489809 invoked by uid 1000); 26 Oct 2022 11:02:17 -0400
+Date:   Wed, 26 Oct 2022 11:02:17 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Eli Billauer <eli.billauer@gmail.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        imv4bel@gmail.com
+Subject: Re: [PATCH] char: xillybus: Prevent use-after-free due to race
+ condition
+Message-ID: <Y1lL+dVsJo2zu3Gy@rowland.harvard.edu>
+References: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e5cbdfe-f6cd-d24f-9785-55176af6c975@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-	Hello,
-
-On Wed, 26 Oct 2022, Jason A. Donenfeld wrote:
-
-> On Wed, Oct 26, 2022 at 05:20:03PM +0300, Julian Anastasov wrote:
-> > 
-> > 	Hello,
-> > 
-> > On Wed, 26 Oct 2022, Jason A. Donenfeld wrote:
-> > 
-> > > The `char` type with no explicit sign is sometimes signed and sometimes
-> > > unsigned. This code will break on platforms such as arm, where char is
-> > > unsigned. So mark it here as explicitly signed, so that the
-> > > todrop_counter decrement and subsequent comparison is correct.
-> > > 
-> > > Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> > > Cc: Julian Anastasov <ja@ssi.bg>
-> > > Cc: Simon Horman <horms@verge.net.au>
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > 
-> > 	Looks good to me for -next, thanks!
+On Wed, Oct 26, 2022 at 11:52:40AM +0300, Eli Billauer wrote:
+> xillybus_find_inode() is called by xillybus_open() and xillyusb_open()
+> to translate the inode's major and minor into a pointer to a relevant
+> data structure and an index.
 > 
-> This is actually net.git material, not net-next.git material,
-> considering it fixes a bug on arm and many other archs, and is marked
-> with a stable@ tag.
+> But with xillyusb_open(), the data structure can be freed by
+> xillyusb_disconnect() during an unintentional time gap between the
+> release of the mutex that is taken by xillybus_find_inode() and the
+> mutex that is subsequently taken by xillyusb_open().
+> 
+> To fix this, xillybus_find_inode() supplies the pointer to the mutex that
+> it has locked (when returning success), so xillyusb_open() releases this
+> mutex only after obtaining the mutex that is specific to a device file.
+> This ensures that xillyusb_disconnect() won't release anything that is in
+> use.
 
-	OK. As algorithm is not SMP safe, the problem is
-not just for the first 256 packets on these platforms.
+The standard way of handling this problem is different from this.  The 
+driver defines a private mutex, and it ensures that any routine calling 
+*_find_inode() holds the mutex.  It also ensures that the mutex is held 
+while a new device is being registered and while a device is being 
+removed.
 
-Regards
+Even that won't fix all the synchronization problems.  A process can 
+open a device, and then after the device has been removed the process 
+can still try to access the device.  The driver needs to ensure that 
+such accesses are not allowed.
 
---
-Julian Anastasov <ja@ssi.bg>
-
+Alan Stern
