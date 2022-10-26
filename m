@@ -2,301 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEAD60E531
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B570F60E538
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234378AbiJZQD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S234609AbiJZQGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234430AbiJZQDQ (ORCPT
+        with ESMTP id S234527AbiJZQGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:03:16 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384603ED49;
-        Wed, 26 Oct 2022 09:03:14 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id i21so21212038edj.10;
-        Wed, 26 Oct 2022 09:03:14 -0700 (PDT)
+        Wed, 26 Oct 2022 12:06:00 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4CB647FA
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:05:56 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id d26so22520904eje.10
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=raspberrypi.com; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yYLspxKBLe6VOgufkSWikbMUpY/L7ohCSbY/unPCwSU=;
-        b=U39hpm+etoqyCUadd+PboIdqMPjpz1pCz1s5CR5l1KR0eRpssb1QbAoo4Pnc6xtU30
-         CU0D35x+5ojQ80FW4MZu1QqkJPKvBeocaMo5u6d7Q3vZQYXhQ5+K6fHsLoEFX+//uXGg
-         EB4I0SkUg+2G1EcNvnijCHwD0mhhdCRVQPs2gimO6czUcidqFy0hujocpn1subnbF9S8
-         90PklyR94o2cylYKbV0/11J3yEdKukafDaKpg2EzADUkXPYQlxL8K4y2NArnD7aay8jn
-         DqpZONm+8GlZKIPZ2aJQjyRG+VJqso+fv6l4rdKYzV0sJrPuvldDq8slvgAZshwcxXDF
-         SmVg==
+        bh=gy9lnatI+idv0wfVA4PCjrB1av5GQo89IHVX6FEEu3g=;
+        b=TScHVi0L08eESt+XzunmlEydMGWiiMffiZYRqzJjFu+kN8+8XjYjRIxn/LBxbTC0eX
+         8ljZb0epE91p9D/NMVRgIzhhE5eM4NYUBt3gy2FVQbRlq1P32HOhDDqcmGpcWF5TIDt/
+         Ne5FZrmZMo9WReu8jF9Z4Ws/5veueBgI1EOJAsOOhULMhAPWXWIlxG6S8ZbGgbamrcuW
+         NjvKsXVPgthGXadfrv/QXWAkU9Hei4dJjtkUrIBIU7VPiwg2FjolEgunmNlgsPJiVA9v
+         PnsdWzejMbpWMvMpcMn/cFsMF/CnHh35whzQn54nhye9UoLOp8Z7UShP4t/VTI+Dt4L/
+         pLOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yYLspxKBLe6VOgufkSWikbMUpY/L7ohCSbY/unPCwSU=;
-        b=P9xITNCIhoo+Q36H3ALZxZzRSI+UGEYPJpdWhL0PZfo0z9EkyKsD6gFSHXpe3777gx
-         2gGy5rVgffaqby+m/Dua0Pa3cP6Qe98yUHfUd+MusEHkrQO+3thV+aKqkUjtaKQxgLIB
-         mzJzW22wGN6aiddiqWNbc3OppjTy5YYDhzSb07q5T/iicyiTjtah6MYFwJHt2eAg+wo0
-         qesMVUd7V4tQw8/oHHUv6yJk45jPkytqqUCDrbE7RTljmgqjEFUfzoOIL9wsnz0f5jqx
-         QIOvNhEyLpWTcVI1fmpy3oxeHveXph6nfAa8MiTpN+eu/1fYwgvwF7H7O6iD9YsgH18Q
-         lnNw==
-X-Gm-Message-State: ACrzQf0AdkgRb6bguwybKXrN65QAud9IOofABlLox6uLyn1VFl0IpLff
-        hIZMlAG+Qy6Kk2Dz/lv06Z1F5YXyCBH3jze/PCQ=
-X-Google-Smtp-Source: AMsMyM6IyjfRRhU335+2dHq3/bo4scng930I2w0IbnNfgmeQ25McW+aDtO5PPBeun56aU3c2Fepx8Rs3KU2pQ9ZGm08=
-X-Received: by 2002:a05:6402:4029:b0:45b:d50c:b9b0 with SMTP id
- d41-20020a056402402900b0045bd50cb9b0mr41419087eda.126.1666800193309; Wed, 26
- Oct 2022 09:03:13 -0700 (PDT)
+        bh=gy9lnatI+idv0wfVA4PCjrB1av5GQo89IHVX6FEEu3g=;
+        b=hBSmA4XyygI9LOOEmGMQ0I43r24F6hCc+pdtvtDad/EGo46PaWm9GRyRN8qgRI19Ml
+         HttZW6ZAB9huliqpZs3Ip8y5yUoaK6QHe3KjxTHoVA+xKC/yY/1ivEnQREO9VDq9Nzhz
+         tcJedUPl3NgEvLZAk0v6NVrQ/Cx4C/+VNgkRzS9ms3H6uj2yQhSUqbLlVzqMwZPmeOUu
+         DM8kxsKeN5EI0yfSFXdX2KBqCYfbbjfnDQz+SkrwczXCWu2YCJZPQWehOLDiTjn+eFKm
+         fs5rDp87lBV72wpALKiPxtEHNaGlXOrV6oIaBOpb8ZfiOHtDrKDdT1D/azqatqHxyUb9
+         6W+g==
+X-Gm-Message-State: ACrzQf27btLAeyHQWHCpPQNVva5kmjWQu3gqAf4Gak8YDNA4nkT8v9Vi
+        tge+G6kS5IWdzxWaULpPfOt/C0/1PxXdSJFdbjQU0g==
+X-Google-Smtp-Source: AMsMyM6+EBdhOBXGhtCJrpxytVHNJz1d0SNEMwgO8O2dtf4tYw36MwISR1CucJMvfIdcCf79+5ytILIeyuWNJ2/Afho=
+X-Received: by 2002:a17:907:2cf1:b0:78d:cafc:caba with SMTP id
+ hz17-20020a1709072cf100b0078dcafccabamr38531914ejc.154.1666800354786; Wed, 26
+ Oct 2022 09:05:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221022084737.1028-1-linux.amoon@gmail.com> <CAFBinCBu_-0m9JeAr5kd-v7Z5LTi7w0WmmUYybW_kL4KJXXpOQ@mail.gmail.com>
- <CANAwSgRzdD0FWg+z6hTFs7KvpsD64bChX-k0dPXJfACXZH2zbQ@mail.gmail.com>
- <CAFBinCCNJiL-ZKRYesQAwys6bBMpYHJbUDK-Zi_VhGDVSvF7uQ@mail.gmail.com>
- <CANAwSgTLTCA9=WvWXcR-40baauN3kAk2qx9k4FQOPCa1+_O0Yw@mail.gmail.com> <5d2ffeca-b41c-20b4-454b-703c39bbb29e@linaro.org>
-In-Reply-To: <5d2ffeca-b41c-20b4-454b-703c39bbb29e@linaro.org>
-From:   Anand Moon <linux.amoon@gmail.com>
-Date:   Wed, 26 Oct 2022 21:32:56 +0530
-Message-ID: <CANAwSgR1CN=Gho6NGMoM1bH92KyeGqoAphmT6NqtnL=+3Zg_jQ@mail.gmail.com>
-Subject: Re: [PATCHv3] arm64: dts: meson: Enable active coling using gpio-fan
- on Odroid N2/N2+
-To:     neil.armstrong@linaro.org
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Dan Johansen <strit@manjaro.org>, devicetree@vger.kernel.org,
+References: <20220815-rpi-fix-4k-60-v4-0-a1b40526df3e@cerno.tech>
+ <20220815-rpi-fix-4k-60-v4-5-a1b40526df3e@cerno.tech> <CAPY8ntBUJRKOkw4VxWL97zj13+DLtMG6rBgGCrvA+HHaAZ7Zvg@mail.gmail.com>
+In-Reply-To: <CAPY8ntBUJRKOkw4VxWL97zj13+DLtMG6rBgGCrvA+HHaAZ7Zvg@mail.gmail.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Wed, 26 Oct 2022 17:05:39 +0100
+Message-ID: <CAPY8ntCgfLvUuSh=zHxxNPok4ygp1P0Nz--SV-hXKd_jQOL8Uw@mail.gmail.com>
+Subject: Re: [PATCH v4 5/7] drm/vc4: hdmi: Rework hdmi_enable_4kp60 detection code
+To:     maxime@cerno.tech
+Cc:     Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Dom Cobley <popcornmix@gmail.com>, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+        linux-rpi-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,URI_HEX
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Neil,
+I knew there was something else
 
-On Wed, 26 Oct 2022 at 13:32, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+On Wed, 26 Oct 2022 at 17:00, Dave Stevenson
+<dave.stevenson@raspberrypi.com> wrote:
 >
-> Hi,
+> Hi Maxime
 >
-> On 25/10/2022 20:06, Anand Moon wrote:
-> > Hi Martin,
+> On Thu, 20 Oct 2022 at 10:14, <maxime@cerno.tech> wrote:
 > >
-> > On Sat, 22 Oct 2022 at 17:22, Martin Blumenstingl
-> > <martin.blumenstingl@googlemail.com> wrote:
-> >>
-> >> Hi Anand,
-> >>
-> >> On Sat, Oct 22, 2022 at 1:27 PM Anand Moon <linux.amoon@gmail.com> wrote:
-> >> [...]
-> >>>>> @@ -1982,7 +1982,6 @@ pwm_ao_d_10_pins: pwm-ao-d-10 {
-> >>>>>                                                  mux {
-> >>>>>                                                          groups = "pwm_ao_d_10";
-> >>>>>                                                          function = "pwm_ao_d";
-> >>>>> -                                                       bias-disable;
-> >>>> &pwm_ao_d_10_pins is not referenced anywhere so it seems that this
-> >>>> change has no impact on controlling the fan on Odroid-N2(+).
-> >>>> How did you test this change?
-> >>>>
-> >>> Ok I felt these changes affect the behavior of the pinctrl
-> >>>
-> >>>    * @PIN_CONFIG_BIAS_DISABLE: disable any pin bias on the pin, a
-> >>>   *  transition from say pull-up to pull-down implies that you disable
-> >>>   *  pull-up in the process, this setting disables all biasing.
-> >>>
-> >>> I mapped this is linked in pinctrl driver, pwm_ao_d_10_pins GPIOAO_10 see below
-> >> Yes, I understand this part.
-> >> My concern is: &pwm_ao_d_10_pins settings only become active when this
-> >> node is actively referenced. You can even see it in your output
-> >> below...
-> >>
-> >> [...]
-> >>> pin 10 (GPIOAO_10): (MUX UNCLAIMED) aobus-banks:1958
-> >> This shows that it's used as a GPIO. If the &pwm_ao_d_10_pins setting
-> >> was used then it would show "function pwm_ao_d group pwm_ao_d_10"
-> >> (similar to what GPIOE_1 shows in your output)
-> >>
-> >> If you want to know if a pull-up/down is enabled you can look at the output of:
-> >> $ cat /sys/kernel/debug/pinctrl/ff800000.sys-ctrl\:pinctrl@14-pinctrl-meson/pinconf-pins
-> >> (I'm sure this can also be retrieved from some userspace tools, but I
-> >> don't know how)
-> >>
+> > In order to support higher HDMI frequencies, users have to set the
+> > hdmi_enable_4kp60 parameter in their config.txt file.
 > >
-> > I now switch using pwm-fan with the local changes I am able to link
-> > pwm_ao_d_10_pins
-> > but now the issue is fan keeps on spinning on boot-up and stays on.
+> > This will have the side-effect of raising the maximum of the core clock,
+> > tied to the HVS, and managed by the HVS driver.
 > >
-> > I can manually turn on off by using
-> > $ sudo gpioset gpiochip1 10=1   // fan on
-> > $ sudo gpioset gpiochip1 10=0   // fan off
+> > However, we are querying this in the HDMI driver by poking into the HVS
+> > structure to get our struct clk handle.
+> >
+> > Let's make this part of the HVS bind implementation to have all the core
+> > clock related setup in the same place.
+> >
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> > ---
+> >  drivers/gpu/drm/vc4/vc4_drv.h  | 10 ++++++++++
+> >  drivers/gpu/drm/vc4/vc4_hdmi.c | 15 ++++-----------
+> >  drivers/gpu/drm/vc4/vc4_hdmi.h |  8 --------
+> >  drivers/gpu/drm/vc4/vc4_hvs.c  | 23 +++++++++++++++++++++++
+> >  4 files changed, 37 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/vc4/vc4_drv.h b/drivers/gpu/drm/vc4/vc4_drv.h
+> > index 418a8242691f..8b2b1af565f9 100644
+> > --- a/drivers/gpu/drm/vc4/vc4_drv.h
+> > +++ b/drivers/gpu/drm/vc4/vc4_drv.h
+> > @@ -326,6 +326,8 @@ struct vc4_hvs {
+> >
+> >         struct clk *core_clk;
+> >
+> > +       unsigned long max_core_rate;
+> > +
+> >         /* Memory manager for CRTCs to allocate space in the display
+> >          * list.  Units are dwords.
+> >          */
+> > @@ -337,6 +339,14 @@ struct vc4_hvs {
+> >         struct drm_mm_node mitchell_netravali_filter;
+> >
+> >         struct debugfs_regset32 regset;
+> > +
+> > +       /*
+> > +        * Even if HDMI0 on the RPi4 can output modes requiring a pixel
+> > +        * rate higher than 297MHz, it needs some adjustments in the
+> > +        * config.txt file to be able to do so and thus won't always be
+> > +        * available.
+> > +        */
+> > +       bool vc5_hdmi_enable_scrambling;
+
+Name only. This flag isn't to do with scrambling, it's whether we can
+achieve pixel rates greater than those defined by HDMI 1.4.
+
+We do have code related to enabling scrambling, which is part of HDMI
+2.0, so this currently could cause confusion.
+
+  Dave
+
+> >  };
+> >
+> >  struct vc4_plane {
+> > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > index 87961d4de5aa..afe3daa2173e 100644
+> > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > @@ -46,7 +46,6 @@
+> >  #include <linux/pm_runtime.h>
+> >  #include <linux/rational.h>
+> >  #include <linux/reset.h>
+> > -#include <soc/bcm2835/raspberrypi-clocks.h>
+> >  #include <sound/dmaengine_pcm.h>
+> >  #include <sound/hdmi-codec.h>
+> >  #include <sound/pcm_drm_eld.h>
+> > @@ -460,6 +459,7 @@ static int vc4_hdmi_connector_detect_ctx(struct drm_connector *connector,
+> >  static int vc4_hdmi_connector_get_modes(struct drm_connector *connector)
+> >  {
+> >         struct vc4_hdmi *vc4_hdmi = connector_to_vc4_hdmi(connector);
+> > +       struct vc4_dev *vc4 = to_vc4_dev(connector->dev);
+> >         int ret = 0;
+> >         struct edid *edid;
+> >
+> > @@ -483,7 +483,7 @@ static int vc4_hdmi_connector_get_modes(struct drm_connector *connector)
+> >         ret = drm_add_edid_modes(connector, edid);
+> >         kfree(edid);
+> >
+> > -       if (vc4_hdmi->disable_4kp60) {
+> > +       if (!vc4->hvs->vc5_hdmi_enable_scrambling) {
+> >                 struct drm_device *drm = connector->dev;
+> >                 const struct drm_display_mode *mode;
+> >
+> > @@ -1757,11 +1757,12 @@ vc4_hdmi_encoder_clock_valid(const struct vc4_hdmi *vc4_hdmi,
+> >  {
+> >         const struct drm_connector *connector = &vc4_hdmi->connector;
+> >         const struct drm_display_info *info = &connector->display_info;
+> > +       struct vc4_dev *vc4 = to_vc4_dev(connector->dev);
+> >
+> >         if (clock > vc4_hdmi->variant->max_pixel_clock)
+> >                 return MODE_CLOCK_HIGH;
+> >
+> > -       if (vc4_hdmi->disable_4kp60 && clock > HDMI_14_MAX_TMDS_CLK)
+> > +       if (!vc4->hvs->vc5_hdmi_enable_scrambling && clock > HDMI_14_MAX_TMDS_CLK)
+> >                 return MODE_CLOCK_HIGH;
+> >
+> >         if (info->max_tmds_clock && clock > (info->max_tmds_clock * 1000))
+> > @@ -3428,14 +3429,6 @@ static int vc4_hdmi_bind(struct device *dev, struct device *master, void *data)
+> >         vc4_hdmi->disable_wifi_frequencies =
+> >                 of_property_read_bool(dev->of_node, "wifi-2.4ghz-coexistence");
+> >
+> > -       if (variant->max_pixel_clock == 600000000) {
+> > -               struct vc4_dev *vc4 = to_vc4_dev(drm);
+> > -               unsigned long max_rate = rpi_firmware_clk_get_max_rate(vc4->hvs->core_clk);
+> > -
+> > -               if (max_rate < 550000000)
+> > -                       vc4_hdmi->disable_4kp60 = true;
+> > -       }
+> > -
+> >         ret = devm_pm_runtime_enable(dev);
+> >         if (ret)
+> >                 return ret;
+> > diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.h b/drivers/gpu/drm/vc4/vc4_hdmi.h
+> > index db823efb2563..e3619836ca17 100644
+> > --- a/drivers/gpu/drm/vc4/vc4_hdmi.h
+> > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.h
+> > @@ -156,14 +156,6 @@ struct vc4_hdmi {
+> >          */
+> >         bool disable_wifi_frequencies;
+> >
+> > -       /*
+> > -        * Even if HDMI0 on the RPi4 can output modes requiring a pixel
+> > -        * rate higher than 297MHz, it needs some adjustments in the
+> > -        * config.txt file to be able to do so and thus won't always be
+> > -        * available.
+> > -        */
+> > -       bool disable_4kp60;
+> > -
+> >         struct cec_adapter *cec_adap;
+> >         struct cec_msg cec_rx_msg;
+> >         bool cec_tx_ok;
+> > diff --git a/drivers/gpu/drm/vc4/vc4_hvs.c b/drivers/gpu/drm/vc4/vc4_hvs.c
+> > index 4ac9f5a2d5f9..300ac0b57571 100644
+> > --- a/drivers/gpu/drm/vc4/vc4_hvs.c
+> > +++ b/drivers/gpu/drm/vc4/vc4_hvs.c
+> > @@ -28,6 +28,8 @@
+> >  #include <drm/drm_drv.h>
+> >  #include <drm/drm_vblank.h>
+> >
+> > +#include <soc/bcm2835/raspberrypi-firmware.h>
+> > +
+> >  #include "vc4_drv.h"
+> >  #include "vc4_regs.h"
+> >
+> > @@ -791,12 +793,33 @@ static int vc4_hvs_bind(struct device *dev, struct device *master, void *data)
+> >         hvs->regset.nregs = ARRAY_SIZE(hvs_regs);
+> >
+> >         if (vc4->is_vc5) {
+> > +               struct rpi_firmware *firmware;
+> > +               struct device_node *node;
+> > +               unsigned long max_rate;
 >
-> By doing that actually override the PWM function of the pin and set it as a GPIO.
-
-Yes, I just want to test if this pin is working.
+> As commented on patch 4, the value returned by
+> rpi_firmware_clk_get_max_rate is only an unsigned int.
+> I guess in this case it is passed into the clock frame work which
+> wants unsigned long, but do we need to keep it as an unsigned long?
 >
+> > +
+> > +               node = rpi_firmware_find_node();
+> > +               if (!node)
+> > +                       return -EINVAL;
+> > +
+> > +               firmware = rpi_firmware_get(node);
+> > +               of_node_put(node);
+> > +               if (!firmware)
+> > +                       return -EPROBE_DEFER;
+> > +
+> >                 hvs->core_clk = devm_clk_get(&pdev->dev, NULL);
+> >                 if (IS_ERR(hvs->core_clk)) {
+> >                         dev_err(&pdev->dev, "Couldn't get core clock\n");
+> >                         return PTR_ERR(hvs->core_clk);
+> >                 }
 > >
-> > It is not controlled by the thermal tip as expected.
-> > I feel some configuration is missing in pwm-meson driver.
-> > Any input for me?
-> >
-> > $ sudo cat /sys/kernel/debug/pinctrl/ff800000.sys-ctrl\:pinctrl@14-pinctrl-meson/pinmux-pins
-> > [sudo] password for alarm:
-> > Pinmux settings per pin
-> > Format: pin (name): mux_owner gpio_owner hog?
-> > pin 0 (GPIOAO_0): ff803000.serial (GPIO UNCLAIMED) function uart_ao_a
-> > group uart_ao_a_tx
-> > pin 1 (GPIOAO_1): ff803000.serial (GPIO UNCLAIMED) function uart_ao_a
-> > group uart_ao_a_rx
-> > pin 2 (GPIOAO_2): (MUX UNCLAIMED) aobus-banks:1950
-> > pin 3 (GPIOAO_3): (MUX UNCLAIMED) (GPIO UNCLAIMED)
-> > pin 4 (GPIOAO_4): (MUX UNCLAIMED) (GPIO UNCLAIMED)
-> > pin 5 (GPIOAO_5): ff808000.ir (GPIO UNCLAIMED) function
-> > remote_ao_input group remote_ao_input
-> > pin 6 (GPIOAO_6): (MUX UNCLAIMED) (GPIO UNCLAIMED)
-> > pin 7 (GPIOAO_7): (MUX UNCLAIMED) (GPIO UNCLAIMED)
-> > pin 8 (GPIOAO_8): (MUX UNCLAIMED) aobus-banks:1956
-> > pin 9 (GPIOAO_9): (MUX UNCLAIMED) aobus-banks:1957
-> > pin 10 (GPIOAO_10): ff807000.pwm (GPIO UNCLAIMED) function pwm_ao_d
-> > group pwm_ao_d_10
-> > pin 11 (GPIOAO_11): (MUX UNCLAIMED) aobus-banks:1959
-> > pin 12 (GPIOE_0): (MUX UNCLAIMED) (GPIO UNCLAIMED)
-> > pin 13 (GPIOE_1): ff802000.pwm (GPIO UNCLAIMED) function pwm_ao_d
-> > group pwm_ao_d_e
-> > pin 14 (GPIOE_2): ffd1b000.pwm (GPIO UNCLAIMED) function pwm_a_e group pwm_a_e
-> >
-> > $ sudo cat /sys/kernel/debug/pwm
-> > platform/ffd1b000.pwm, 2 PWM devices
-> >   pwm-0   (regulator-vddcpu-a  ): requested enabled period: 1250 ns
-> > duty: 838 ns polarity: normal
-> >   pwm-1   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
-> >
-> > platform/ff807000.pwm, 2 PWM devices
-> >   pwm-0   (pwm-fan             ): requested period: 1250 ns duty: 0 ns
-> > polarity: normal
-> >   pwm-1   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
+> > +               max_rate = rpi_firmware_clk_get_max_rate(firmware,
+> > +                                                        RPI_FIRMWARE_CORE_CLK_ID);
+> > +               rpi_firmware_put(firmware);
+> > +               if (max_rate >= 550000000)
+> > +                       hvs->vc5_hdmi_enable_scrambling = true;
+> > +
+> > +               hvs->max_core_rate = max_rate;
 >
-> This should be on the pwm-1, hence the "pwm_AO_cd" name, "c" and "d" and the
-> names of the outputs.
+> I was going to query the reason for storing this value, but it's used
+> when we get to patch 7/7.
+> I won't quibble about having it as an unused value for 2 patches.
 >
-> So you need to use 1 as first PWM phandle argument instead of 0.
+> If you're happy in both cases, then I'll send an R-b.
 >
+>   Dave
+>
+> >                 ret = clk_prepare_enable(hvs->core_clk);
+> >                 if (ret) {
+> >                         dev_err(&pdev->dev, "Couldn't enable the core clock\n");
 > >
-> > platform/ff802000.pwm, 2 PWM devices
-> >   pwm-0   ((null)              ): period: 0 ns duty: 0 ns polarity: normal
-> >   pwm-1   (regulator-vddcpu-b  ): requested enabled period: 1250 ns
-> > duty: 1213 ns polarity: normal
-> >
-> > I could observe a change in duty when we have stress testing the CPU.
->
-> Can you share the complete change you did here ?
->
-
-When I try to use pwm_AO_cd,,
-Either one of the PWM binds will fail to get the following error.
-
- &pwm_AO_cd {
--       pinctrl-0 = <&pwm_ao_d_e_pins>;
-+       pinctrl-0 = <&pwm_ao_d_e_pins>, <&pwm_ao_d_10_pins>;
-        pinctrl-names = "default";
-        clocks = <&xtal>;
-        clock-names = "clkin1";
-
-[    3.941700] pwm-regulator regulator-vddcpu-b: error -EBUSY: Failed to get PWM
-[    3.943198] pwm-regulator: probe of regulator-vddcpu-b failed with error -16
-
-[    3.956356] pwm-fan pwm-fan: error -EBUSY: Could not get PWM
-[    3.956396] pwm-fan: probe of pwm-fan failed with error -16
-
-Below are my changes with  pwm_AO_ab
----------------------------------------------------------------------------------------------
-alarm@odroid-n2:~/linux-amlogic-5.y-devel$ git diff
-arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-index fd3fa82e4c33..d038ba1e2453 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-n2.dtsi
-@@ -39,6 +39,14 @@ emmc_pwrseq: emmc-pwrseq {
-                reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-        };
-
-+       fan: pwm-fan {
-+               compatible = "pwm-fan";
-+               pwms = <&pwm_AO_ab 1 1250 0>;
-+               fan-supply = <&vcc_5v>;
-+               #cooling-cells = <2>;
-+               cooling-levels = <0 100 170 230>;
-+       };
-+
-        leds {
-                compatible = "gpio-leds";
-
-@@ -410,6 +418,40 @@ &cpu103 {
-        clock-latency = <50000>;
- };
-
-+&cpu_thermal {
-+       trips {
-+               cpu_active: cpu-active {
-+                       temperature = <55000>; /* millicelsius */
-+                       hysteresis = <2000>; /* millicelsius */
-+                       type = "active";
-+               };
-+       };
-+
-+       cooling-maps {
-+               map {
-+                       trip = <&cpu_active>;
-+                       cooling-device = <&fan THERMAL_NO_LIMIT
-THERMAL_NO_LIMIT>;
-+               };
-+       };
-+};
-+
-+&ddr_thermal {
-+       trips {
-+               ddr_active: ddr-active {
-+                       temperature = <55000>; /* millicelsius */
-+                       hysteresis = <2000>; /* millicelsius */
-+                       type = "active";
-+               };
-+       };
-+
-+       cooling-maps {
-+               map {
-+                       trip = <&ddr_active>;
-+                       cooling-device = <&fan THERMAL_NO_LIMIT
-THERMAL_NO_LIMIT>;
-+               };
-+       };
-+};
-+
- &ext_mdio {
-        external_phy: ethernet-phy@0 {
-                /* Realtek RTL8211F (0x001cc916) */
-@@ -547,6 +589,14 @@ &pwm_ab {
-        status = "okay";
- };
-
-+&pwm_AO_ab {
-+       pinctrl-0 = <&pwm_ao_d_10_pins>;
-+       pinctrl-names = "default";
-+       clocks = <&xtal>;
-+       clock-names = "clkin1";
-+       status = "okay";
-+};
-+
- &pwm_AO_cd {
-        pinctrl-0 = <&pwm_ao_d_e_pins>;
-        pinctrl-names = "default";
--------------------------------------------------------------------------------------------
-> >
-> > Thanks
-> >
-> > -Anand
->
-> Neil
+> > --
+> > b4 0.10.1
