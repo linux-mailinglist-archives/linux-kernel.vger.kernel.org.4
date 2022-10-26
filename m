@@ -2,152 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40A260DE5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B50960DE60
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiJZJly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S233442AbiJZJpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbiJZJlu (ORCPT
+        with ESMTP id S233427AbiJZJpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:41:50 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328BF5071F;
-        Wed, 26 Oct 2022 02:41:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E61EC1F74A;
-        Wed, 26 Oct 2022 09:41:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666777307; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HvGGmhT+mb54m/Ckk59OpGjeeAhbrk4I5c2+MnDwZWg=;
-        b=XmA0pkXIS8rsBBbbiB2tx6W2pECUxZE4PFxaPFUCdHuTjR3rYaqmfQXc7OYc4e4nXSY5lK
-        v9nrZ/YukMF/AULVImpWPfE3L3Z+k0jD7w+0R08DjS4dwf0/eOxRVvyxFBOdScN2CnUoN5
-        da8Lw7UXv2gwE6gLH8qLpb5LF4fj3UQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666777307;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HvGGmhT+mb54m/Ckk59OpGjeeAhbrk4I5c2+MnDwZWg=;
-        b=VnGgJPbC8H2jSSi0oAZZ2Map/uj44FZMY8jbIQfJMI7supcLEFxu7XoGVhhE/11oNVv7AW
-        bsSTjprbi6GI38Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3F0E13A6E;
-        Wed, 26 Oct 2022 09:41:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7Wj0M9sAWWMhaAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 26 Oct 2022 09:41:47 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 574A8A06F9; Wed, 26 Oct 2022 11:41:47 +0200 (CEST)
-Date:   Wed, 26 Oct 2022 11:41:47 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v3 3/4] ext4: add EXT4_IGET_BAD flag to prevent
- unexpected bad inode
-Message-ID: <20221026094147.n3hv6bk6meafc73y@quack3>
-References: <20221026042310.3839669-1-libaokun1@huawei.com>
- <20221026042310.3839669-4-libaokun1@huawei.com>
+        Wed, 26 Oct 2022 05:45:07 -0400
+Received: from out199-12.us.a.mail.aliyun.com (out199-12.us.a.mail.aliyun.com [47.90.199.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00E210553;
+        Wed, 26 Oct 2022 02:45:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VT6jFsX_1666777492;
+Received: from 30.221.97.58(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VT6jFsX_1666777492)
+          by smtp.aliyun-inc.com;
+          Wed, 26 Oct 2022 17:44:55 +0800
+Message-ID: <3c8beab1-3ca7-c3d7-6f31-c28a0ae008a3@linux.alibaba.com>
+Date:   Wed, 26 Oct 2022 17:44:52 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026042310.3839669-4-libaokun1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH V4 1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Baoquan He <bhe@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        anup@brainfault.org, heiko@sntech.de, guoren@kernel.org,
+        mick@ics.forth.gr, alexandre.ghiti@canonical.com,
+        vgoyal@redhat.com, dyoung@redhat.com, corbet@lwn.net,
+        bagasdotme@gmail.com, k-hagio-ab@nec.com, lijiang@redhat.com,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        crash-utility@redhat.com, heinrich.schuchardt@canonical.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+References: <20221019103623.7008-1-xianting.tian@linux.alibaba.com>
+ <20221019103623.7008-2-xianting.tian@linux.alibaba.com>
+ <Y1CtreAKT/SEh4vN@MiWiFi-R3L-srv>
+ <30621b3b-47ba-d612-cfb0-583d779691a3@linux.alibaba.com>
+ <Y1C681H2mlxX+zqf@MiWiFi-R3L-srv>
+ <6af05838-fa58-8197-f3ce-ca95457077a7@linux.alibaba.com>
+ <5df30e57-88ae-0a3b-2c1a-b962363d8670@linux.alibaba.com>
+ <Y1j9AAhJXpoCx48N@wendy>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+In-Reply-To: <Y1j9AAhJXpoCx48N@wendy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26-10-22 12:23:09, Baokun Li wrote:
-> There are many places that will get unhappy (and crash) when ext4_iget()
-> returns a bad inode. However, if iget the boot loader inode, allows a bad
-> inode to be returned, because the inode may not be initialized. This
-> mechanism can be used to bypass some checks and cause panic. To solve this
-> problem, we add a special iget flag EXT4_IGET_BAD. Only with this flag
-> we'd be returning bad inode from ext4_iget(), otherwise we always return
-> the error code if the inode is bad inode.(suggested by Jan Kara)
-> 
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Looks good to me. Feel free to add:
+在 2022/10/26 下午5:25, Conor Dooley 写道:
+> On Wed, Oct 26, 2022 at 05:08:11PM +0800, Xianting Tian wrote:
+>> Hi Palmer, Conor
+>>
+>> Is this version OK for you?
+> The weird ifdef/IS_ENABLED thing was the only comment I had. It's a bit
+> odd & I notice Baoquan brought it up too. I didn't (and won't) give you
+> a reviewed by on these patches because I don't understand the area well
+> enough. The general nitpickery seems to be sorted though.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+I checked the KERNEL_LINK_ADDR definition of riscv,  it is valid for 
+CONFIG_64BIT and !CONFIG_64BIT.
 
-								Honza
+Maybe we can remove IS_ENABLED(CONFIG_64BIT)
 
-> ---
->  fs/ext4/ext4.h  | 3 ++-
->  fs/ext4/inode.c | 8 +++++++-
->  fs/ext4/ioctl.c | 3 ++-
->  3 files changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-> index 8d5453852f98..2b574b143bde 100644
-> --- a/fs/ext4/ext4.h
-> +++ b/fs/ext4/ext4.h
-> @@ -2964,7 +2964,8 @@ int do_journal_get_write_access(handle_t *handle, struct inode *inode,
->  typedef enum {
->  	EXT4_IGET_NORMAL =	0,
->  	EXT4_IGET_SPECIAL =	0x0001, /* OK to iget a system inode */
-> -	EXT4_IGET_HANDLE = 	0x0002	/* Inode # is from a handle */
-> +	EXT4_IGET_HANDLE = 	0x0002,	/* Inode # is from a handle */
-> +	EXT4_IGET_BAD =		0x0004  /* Allow to iget a bad inode */
->  } ext4_iget_flags;
->  
->  extern struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index ae3a836dd9d7..f767340229fd 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -5043,8 +5043,14 @@ struct inode *__ext4_iget(struct super_block *sb, unsigned long ino,
->  	if (IS_CASEFOLDED(inode) && !ext4_has_feature_casefold(inode->i_sb))
->  		ext4_error_inode(inode, function, line, 0,
->  				 "casefold flag without casefold feature");
-> -	brelse(iloc.bh);
-> +	if (is_bad_inode(inode) && !(flags & EXT4_IGET_BAD)) {
-> +		ext4_error_inode(inode, function, line, 0,
-> +				 "bad inode without EXT4_IGET_BAD flag");
-> +		ret = -EUCLEAN;
-> +		goto bad_inode;
-> +	}
->  
-> +	brelse(iloc.bh);
->  	unlock_new_inode(inode);
->  	return inode;
->  
-> diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-> index ded535535b27..e0be8026c996 100644
-> --- a/fs/ext4/ioctl.c
-> +++ b/fs/ext4/ioctl.c
-> @@ -375,7 +375,8 @@ static long swap_inode_boot_loader(struct super_block *sb,
->  	blkcnt_t blocks;
->  	unsigned short bytes;
->  
-> -	inode_bl = ext4_iget(sb, EXT4_BOOT_LOADER_INO, EXT4_IGET_SPECIAL);
-> +	inode_bl = ext4_iget(sb, EXT4_BOOT_LOADER_INO,
-> +			EXT4_IGET_SPECIAL | EXT4_IGET_BAD);
->  	if (IS_ERR(inode_bl))
->  		return PTR_ERR(inode_bl);
->  	ei_bl = EXT4_I(inode_bl);
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+arch/riscv/include/asm/pgtable.h
+#define ADDRESS_SPACE_END       (UL(-1))
+#ifdef CONFIG_64BIT
+/* Leave 2GB for kernel and BPF at the end of the address space */
+#define KERNEL_LINK_ADDR        (ADDRESS_SPACE_END - SZ_2G + 1)
+#else
+#define KERNEL_LINK_ADDR        PAGE_OFFSET
+#endif
+
+arch/riscv/include/asm/page.h
+#ifdef CONFIG_64BIT
+#ifdef CONFIG_MMU
+#define PAGE_OFFSET             kernel_map.page_offset
+#else
+#define PAGE_OFFSET             _AC(CONFIG_PAGE_OFFSET, UL)
+#endif
+/*
+  * By default, CONFIG_PAGE_OFFSET value corresponds to SV48 address 
+space so
+  * define the PAGE_OFFSET value for SV39.
+  */
+#define PAGE_OFFSET_L4          _AC(0xffffaf8000000000, UL)
+#define PAGE_OFFSET_L3          _AC(0xffffffd800000000, UL)
+#else
+#define PAGE_OFFSET             _AC(CONFIG_PAGE_OFFSET, UL)
+#endif /* CONFIG_64BIT */
+
+>
+> Thanks,
+> Conor.
+>
+>> 在 2022/10/20 下午12:40, Xianting Tian 写道:
+>>> 在 2022/10/20 上午11:05, Baoquan He 写道:
+>>>> On 10/20/22 at 10:17am, Xianting Tian wrote:
+>>>>> 在 2022/10/20 上午10:08, Baoquan He 写道:
+>>>>>> On 10/19/22 at 06:36pm, Xianting Tian wrote:
+>>>>>>> Add arch_crash_save_vmcoreinfo(), which exports VM
+>>>>>>> layout(MODULES, VMALLOC,
+>>>>>>> VMEMMAP ranges and KERNEL_LINK_ADDR), va bits and ram
+>>>>>>> base for vmcore.
+>>>>>>>
+>>>>>>> Default pagetable levels and PAGE_OFFSET aren't same for
+>>>>>>> different kernel
+>>>>>>> version as below. For pagetable levels, it sets sv57 by
+>>>>>>> default and falls
+>>>>>>> back to setting sv48 at boot time if sv57 is not
+>>>>>>> supported by the hardware.
+>>>>>>>
+>>>>>>> For ram base, the default value is 0x80200000 for qemu
+>>>>>>> riscv64 env and,
+>>>>>>> for example, is 0x200000 on the XuanTie 910 CPU.
+>>>>>>>
+>>>>>>>     * Linux Kernel 5.18 ~
+>>>>>>>     *      PGTABLE_LEVELS = 5
+>>>>>>>     *      PAGE_OFFSET = 0xff60000000000000
+>>>>>>>     * Linux Kernel 5.17 ~
+>>>>>>>     *      PGTABLE_LEVELS = 4
+>>>>>>>     *      PAGE_OFFSET = 0xffffaf8000000000
+>>>>>>>     * Linux Kernel 4.19 ~
+>>>>>>>     *      PGTABLE_LEVELS = 3
+>>>>>>>     *      PAGE_OFFSET = 0xffffffe000000000
+>>>>>>>
+>>>>>>> Since these configurations change from time to time and
+>>>>>>> version to version,
+>>>>>>> it is preferable to export them via vmcoreinfo than to
+>>>>>>> change the crash's
+>>>>>>> code frequently, it can simplify the development of crash tool.
+>>>>>>>
+>>>>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>>>>>>> ---
+>>>>>>>     arch/riscv/kernel/Makefile     |  1 +
+>>>>>>>     arch/riscv/kernel/crash_core.c | 23 +++++++++++++++++++++++
+>>>>>>>     2 files changed, 24 insertions(+)
+>>>>>>>     create mode 100644 arch/riscv/kernel/crash_core.c
+>>>>>>>
+>>>>>>> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+>>>>>>> index db6e4b1294ba..4cf303a779ab 100644
+>>>>>>> --- a/arch/riscv/kernel/Makefile
+>>>>>>> +++ b/arch/riscv/kernel/Makefile
+>>>>>>> @@ -81,6 +81,7 @@ obj-$(CONFIG_KGDB)        += kgdb.o
+>>>>>>>     obj-$(CONFIG_KEXEC_CORE)    += kexec_relocate.o
+>>>>>>> crash_save_regs.o machine_kexec.o
+>>>>>>>     obj-$(CONFIG_KEXEC_FILE)    += elf_kexec.o machine_kexec_file.o
+>>>>>>>     obj-$(CONFIG_CRASH_DUMP)    += crash_dump.o
+>>>>>>> +obj-$(CONFIG_CRASH_CORE)    += crash_core.o
+>>>>>>>     obj-$(CONFIG_JUMP_LABEL)    += jump_label.o
+>>>>>>> diff --git a/arch/riscv/kernel/crash_core.c
+>>>>>>> b/arch/riscv/kernel/crash_core.c
+>>>>>>> new file mode 100644
+>>>>>>> index 000000000000..3e889d0ed7bd
+>>>>>>> --- /dev/null
+>>>>>>> +++ b/arch/riscv/kernel/crash_core.c
+>>>>>>> @@ -0,0 +1,23 @@
+>>>>>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>>>>>> +
+>>>>>>> +#include <linux/crash_core.h>
+>>>>>>> +#include <linux/pagemap.h>
+>>>>>>> +
+>>>>>>> +void arch_crash_save_vmcoreinfo(void)
+>>>>>>> +{
+>>>>>>> +    VMCOREINFO_NUMBER(VA_BITS);
+>>>>>>> +    VMCOREINFO_NUMBER(phys_ram_base);
+>>>>>>> +
+>>>>>>> +
+>>>>>>> vmcoreinfo_append_str("NUMBER(PAGE_OFFSET)=0x%lx\n",
+>>>>>>> PAGE_OFFSET);
+>>>>>>> + vmcoreinfo_append_str("NUMBER(VMALLOC_START)=0x%lx\n",
+>>>>>>> VMALLOC_START);
+>>>>>>> +
+>>>>>>> vmcoreinfo_append_str("NUMBER(VMALLOC_END)=0x%lx\n",
+>>>>>>> VMALLOC_END);
+>>>>>>> + vmcoreinfo_append_str("NUMBER(VMEMMAP_START)=0x%lx\n",
+>>>>>>> VMEMMAP_START);
+>>>>>>> +
+>>>>>>> vmcoreinfo_append_str("NUMBER(VMEMMAP_END)=0x%lx\n",
+>>>>>>> VMEMMAP_END);
+>>>>>>> +#ifdef CONFIG_64BIT
+>>>>>>> + vmcoreinfo_append_str("NUMBER(MODULES_VADDR)=0x%lx\n",
+>>>>>>> MODULES_VADDR);
+>>>>>>> +
+>>>>>>> vmcoreinfo_append_str("NUMBER(MODULES_END)=0x%lx\n",
+>>>>>>> MODULES_END);
+>>>>>>> +#endif
+>>>>>>> +
+>>>>>>> +    if (IS_ENABLED(CONFIG_64BIT))
+>>>>>>> +
+>>>>>>> vmcoreinfo_append_str("NUMBER(KERNEL_LINK_ADDR)=0x%lx\n",
+>>>>>>> KERNEL_LINK_ADDR);
+>>>>>> Wondering why you don't put KERNEL_LINK_ADDR exporting into the above
+>>>>>> ifdeffery scope, with that you can save one line of
+>>>>>> "IS_ENABLED(CONFIG_64BIT)".
+>>>>> I followed the rule in print_vm_layout() of
+>>>>> arch/riscv/mm/init.c, which used
+>>>>> IS_ENABLED when print the value of KERNEL_LINK_ADDR.
+>>>>>
+>>>> I see. There's PAGE_OFFSET in the middle. Thanks.
+>>>>
+>>>>           print_ml("lowmem", (unsigned long)PAGE_OFFSET,
+>>>>                   (unsigned long)high_memory)
+>>>>
+>>>> So now, do you think if it's necessary to have another
+>>>> IS_ENABLED(CONFIG_64BIT) in the current arch_crash_save_vmcoreinfo()?
+>>> For which MACRO?  I think current code for PAGE_OFFSET is OK.
+>>>
