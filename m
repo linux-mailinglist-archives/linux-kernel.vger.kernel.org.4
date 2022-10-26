@@ -2,85 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F4360E3D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D59F360E3E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbiJZOz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S234210AbiJZO6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbiJZOzm (ORCPT
+        with ESMTP id S233790AbiJZO6I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:55:42 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FECD4DF31
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:55:40 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id cr19so10088694qtb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e3lqNi3RbqgpuL1HhrQjDmFY0qPGdGmAhxHwivSb/T8=;
-        b=Gcb8FjMs4ySz6J+pR+J1Mo/EPLeUu24ZaxXMLXfj+jAWgYMTPDfUxiUow8fZpQ+i8I
-         9h34U92YQK5UR2zLTk97+OU7cXC0yJaTq8Y6OTGdTaSLKD2KKVd26WHoL5IVUPH3J+QO
-         7XrFg5T6yXwvOrbfOi4B8fZL1i1mh9My6ry+pAxcIgfz4Kmc49O8OFQiBPCPtRT5FdYV
-         Ju34rxsPx5/4VRT7Mqt81L7wwaB03Y2rpFkyX0cLpzgH3QQVx6TatZYdm+J0ipP0BD8h
-         pif4Orsgp4D/e3eyQypKmhjvH+Ss1Gu/8G2QEVmIZx0R3CvTT/JHI/95xR9DQe1nFnsO
-         vlhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e3lqNi3RbqgpuL1HhrQjDmFY0qPGdGmAhxHwivSb/T8=;
-        b=U0vo5+sPRef00KEOJedDt8p2xiRC7nQys42kvENZTPxTemBerbZHEJe6JZuT4GjLEF
-         o35PtkNnRuizPmVODwDoLDsBVJ8OeSMS5IvV5cOi0Ucvh/wBPjXm2Bu7zo/kO8nrrfPr
-         PWPY6/1NT4MOBSFfetWp9U/gdtXYietz4Mq+kW7jKV0D4OQYMFQ6GlHhmWc8flSjKZ5d
-         krSkuSVKV5+uN43RqlVv5Jim+hcY5DaZR0OpyOoTnVIWq/pfLMc46cbFXI4sRDiBQR5O
-         Fp+dDlD7oipv05giw4UTkObvY7q+uQAVokpa6Slp61PxuPPCCP9wB2CWZ/8m5l+DOGHp
-         cRvg==
-X-Gm-Message-State: ACrzQf2SLfuF+Dt5rtEQMezx50ZpFUn0BhHzDGyFQWdSgaAYag2WXgYq
-        G3VMvcf580Ela01/rcFTMPknNA==
-X-Google-Smtp-Source: AMsMyM7j/ZVDc5l9UFuHrdwBCBzkxBteTzFIJOBIUZKFvQpGoW8iRFKuzC3SUR7OGcb+XCilbIai4A==
-X-Received: by 2002:ac8:7f41:0:b0:39c:f34f:feca with SMTP id g1-20020ac87f41000000b0039cf34ffecamr36575709qtk.644.1666796139618;
-        Wed, 26 Oct 2022 07:55:39 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id w27-20020a05620a0e9b00b006f16148fa96sm4007204qkm.91.2022.10.26.07.55.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:55:38 -0700 (PDT)
-Message-ID: <853acb94-ee52-e776-2e0e-08ef837bf02d@linaro.org>
-Date:   Wed, 26 Oct 2022 10:55:36 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 06/11] dt-bindings: thermal: k3-j72xx: conditionally
- require efuse reg range
+        Wed, 26 Oct 2022 10:58:08 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11021018.outbound.protection.outlook.com [52.101.52.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993A81213D8;
+        Wed, 26 Oct 2022 07:58:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lO0rMXzqth99pdO+CNcGAPxixjQZs/0Yt7jDXx835Sh7ReWxpS/EfKkDBA1Ln25HKMIdoZchfZDQcds7NKwI9WDZw3abulGID8mzqVea5stdPGXVjTeEhn6jmR6xFtobpjaOAl1Oc3jJRKyzP8JyLYxJFxICjtghpyj9yet9pw0qs4IuGOBA8zIBoT40fDCCw+5SZHweWnZmyPJrGXHjXEiW21j1sgsIRoUFnNLfH7yxXRqFGyrxl8iBaeMOtjwlF5BN3+IXlaClr/+EuDrzhx/CHV2+j7aQDIXihA4wbZ+bDDOxZjdNRvFB3oU2nCI+NnzsheeRFZ2Hc1Pk1mAnnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5SAxyFnDrMP9zDR++7dI2iZ3B6ZWI/+AlEdRfa9sktY=;
+ b=WUnXE75pHqUDk2kciF2k8jQM2pELEV3zcxTUTTrnlBYXKt+TUTeVoq+z2j514sEn3RFz++aPlundx9Hgb+6W4aOul9toV0nbfmOfXY3AnKntFh+mhqJ/92SRrvSQuBJanDnZ/yc+u3QuhYXrSnih555OQNlE/AE/Skaw4LY0RZOw+Sb9u3fb/b5HFgoTs89Y3PVT1WA9W5WuApEygUoAjk1x7mC6F6H3Oui9haHIa0PU1VDPVAaFpbC/m5BwZJxD0HUrIb8JojidtKlBsqazJjWn+5ABPqR1U7HazUiZyyhG8sCJQpVfFRlF2gIMjtKcTBl+rz4vnrY/SRKFtuXyxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5SAxyFnDrMP9zDR++7dI2iZ3B6ZWI/+AlEdRfa9sktY=;
+ b=aLWXY7Tjv1Mg4kxaNUL648eRmfZSmG+dLZ/37O8ZosgmRK0qqJIoAPV+tLKxUvS2GhNNYtB3/lVVUqG8UUc8GPC9xkgRcP+TY2lQO/7a5OYeqfICdzSukYOfMQlEn8+T09YoTnb0LnThy+sEFdOThsuJdWtytp7nOy1kx+2UnZs=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by SJ0PR21MB1870.namprd21.prod.outlook.com (2603:10b6:a03:291::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.17; Wed, 26 Oct
+ 2022 14:57:58 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b%8]) with mapi id 15.20.5791.008; Wed, 26 Oct 2022
+ 14:57:58 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+CC:     "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
+        "mail@anirudhrb.com" <mail@anirudhrb.com>
+Subject: RE: [PATCH 0/2] Fix MSR access errors during kexec in root partition
+Thread-Topic: [PATCH 0/2] Fix MSR access errors during kexec in root partition
+Thread-Index: AQHY6UGlSxecIa3tCUqtnwUn6w6xFa4gwWeA
+Date:   Wed, 26 Oct 2022 14:57:58 +0000
+Message-ID: <BYAPR21MB1688DBC9CA80E03BDC7643E2D7309@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20221026134715.1438789-1-anrayabh@linux.microsoft.com>
+In-Reply-To: <20221026134715.1438789-1-anrayabh@linux.microsoft.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Bryan Brattlof <bb@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-Cc:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
-        Device Trees <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LKML ARM <linux-arm-kernel@lists.infradead.org>
-References: <20221025191515.9151-1-bb@ti.com>
- <20221025191515.9151-7-bb@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221025191515.9151-7-bb@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=edc789b0-4bdb-4268-bcf6-837b60eb2193;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-10-26T14:48:06Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SJ0PR21MB1870:EE_
+x-ms-office365-filtering-correlation-id: c2b7b51c-f28a-44cb-6ee3-08dab762789f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: LiO+8KgY8kA9gmq+5QlVsEieRGvsAZRvtGlQMEFE65djiPrp+ZT/kCz8BwUIkFmRUWc2Svs7tbjxg1zJE2zleuY1OVt99Z0Y+kqYVkr7s6MFK4eYRJEqRI7KupEyTsdb51DaYqJfGtPwXsJTwawDclQdAIPGw0iOjuXCcXz2a/vnwqwgfBe33AvwlhkGn7vReHrOYmkqFsSC7ZEFUvdPY9O+QVLmm5z5dVuQxeeFYumhMUna4BTj6QYE5Q53TW3iVG7TELLmxlQCkZRTFEYHV+5EpACbYGslnrZ9Yg1RAKAvHWG0/8+/BlcRUa/t5/YZF1GKyT38oKq0ZsWhWQw3X4yYQ/Wa345hFD6/xAphj4a9H3ufhrMiMBtHmy3kPsa9uX/mOwyubm8aPgaXYV56B3E1kJ04oFxBOWD/q7/A5UTQ5+HTO05jHsdw6WPLSOwNZfOB8uGt0JPMXsDRfqPeEuktNFPyM/sGyy6dIttV0vTQE6/gu2aTlmHi60gUS8MCCpI7xyaH2HgD9y9s2+0eLEl8dX8tolXi4JiZNdTz94+k2RMZuM+AqhFJedPybSTYbDO6Pr8SfmRhUvHWhp2YbAk99Zm2isPkS+sQTjAy0oCIFG2+mdf7f84P3K0uG9LtTwInhLOsUa3pmAFmkETh7KNPAODUlIxWURZa9cg40/6+FKFCi3rOD97qduBJvR9EqaWHjssCJUMhL6INU4Jhi/x2zZLsD9IM+AXZiZEwIbzjgIKyTT0f0eLqRp0X4A5Q9FUFzLb9HM2HcmOL+4JmSKfwmxoVnw0a+SYWJzDxGv1UpxHaHubbyTw56grOYppdQWbuLw1ewAHIFbBndF5IvA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(39860400002)(376002)(396003)(346002)(451199015)(2906002)(6506007)(38070700005)(186003)(66476007)(66446008)(5660300002)(38100700002)(41300700001)(52536014)(66556008)(921005)(7416002)(122000001)(4326008)(33656002)(86362001)(8676002)(26005)(7696005)(110136005)(8936002)(64756008)(66946007)(8990500004)(82950400001)(82960400001)(55016003)(54906003)(478600001)(71200400001)(76116006)(10290500003)(316002)(9686003)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hcDXCjmxA8NSnyf1af2LW2gORTq6g30BiEia6VVwhzzDG+YUqgAFH3y8rq32?=
+ =?us-ascii?Q?FT/kuKbzL3UUrG+ko7z0hpvHKYz9ZvkOQcNG4IAKyUdxqdREsXTOmoY24R8V?=
+ =?us-ascii?Q?HZSLD30HvB1+67UuLm/dOy4dG6nKW+p6YCQu1S9S0CPvTfqWNCzG6jlEENJB?=
+ =?us-ascii?Q?mlwKxQ5FqaEtYHY+Rf5Lzvoh6MjjocFAF+h/d8uAwe4TUQ2V3n+ou+7959tJ?=
+ =?us-ascii?Q?4d/FG7RzRw8oaW68nsfTeNm5hVNiH9od1E476E6MiRzaShROmRWIXSAOE8tJ?=
+ =?us-ascii?Q?CDdvMX7czEB8ss5I0Fv3SdKbKAJ6+fBrzUlAqiuYP4bvB8KEEVlVLkVQkGuI?=
+ =?us-ascii?Q?9NubeQkPauS2T6RG9ccJunXXk80/HWb30+5uHfnP/9L4Kmi/OR8/H3J3ICPb?=
+ =?us-ascii?Q?jfAbhYaqWlLLPQby9VLRyn6O8fPZnrj3w5kPnE/4Fbg4OpZdrTyGV3JJBQhu?=
+ =?us-ascii?Q?UhQnvvE5s6xX/AbXbb+xk4IAx7+3UkZjh6ng64darMvOnrzqDlUsubPiAOuw?=
+ =?us-ascii?Q?ZKkO2y8kWe3n9T+l1bvrraloTR8fCICgKTfmGmNVw8AWC484651Phpoo7LJ5?=
+ =?us-ascii?Q?kEly8eyVmnYu2XG30tPawAHfdu29KoIhElGehdyYc5AVQT+bfMyj4JlIDFg9?=
+ =?us-ascii?Q?h+AIfvGf03ZOUe/TeH7yCrlUuyci9Qw99q4Ohwy+7WrpYlYvl7lw8vxUqmgd?=
+ =?us-ascii?Q?yS8eFx78WU2NkC3ZzNdTsdJHmXm0NY5mnDDUGB0Zu6X79cA/xHK50w4/B139?=
+ =?us-ascii?Q?QYy8AdR9ntR59arc6bH6J1jdh0cCFqwbOUoXQQ939y4UZ7OIwT1mc5bMKT0X?=
+ =?us-ascii?Q?fvluIVgrQCPpbJhTz0SbZfMr6l6jHjsCe4ttauI0+8CP6pN8SVNHS4MJ7cna?=
+ =?us-ascii?Q?0g/t+dURVK0hf2boMvwdyiSISdewpH0oxnO20lfWTPr5cGf1rCJDt2ivpz+V?=
+ =?us-ascii?Q?jfEZGcmPvxdsz0g4K0Q5rbrJaxKjao+LyqO3WFoiZowRXdLJaBpBBfCVij+c?=
+ =?us-ascii?Q?gkdRBIHEiL5HPa5nmxY0VzA8fmHnGWfsI3LGp8pcmQYOTgGhYYSvDtUfSH38?=
+ =?us-ascii?Q?tIPo59OPfePjLkTR5TZ0i8HUYzOzVA6Q3e/Lfg3wrM3p1TanF+GtRWzQjGp8?=
+ =?us-ascii?Q?gAafcGQT0v5W3fWc7Y8W2am/MwDqf2m7QpB0FdhSqh5MKtc7E4SjvkSwtIgy?=
+ =?us-ascii?Q?aWqA4Ljv/JB8vgarIdnVnRRVpw1tsz0gfAMZqNtkj5PQIH9SzcqiRcb85Sir?=
+ =?us-ascii?Q?tyo7wfa3/BqRIIkCRz1+y2yUa7AEWKIM3Nfh+cIbGizmDmmDNKDugiYwZJns?=
+ =?us-ascii?Q?pBWuYQydZtiADO/YqZyoVxEzPa4RW5aaOuonoURCg7MSRgsjQMmWCPxKyTii?=
+ =?us-ascii?Q?YJMQXIUDQHEcUAn6V6lksRc4dFbc3WrLmM7kEUvl0qbR9Tupj5PA+N25OAOH?=
+ =?us-ascii?Q?dNg/cWl2I40W4dQmo1m4aDOo5jTX32rNDrQfHZKG3x2suQKb4I/3ShPo5nf0?=
+ =?us-ascii?Q?WaWm/LW7ZUzg8d08OmUuk50RoXRawmBRkFcnu6Q7Mn6Yj+KrWhwN9hoUpU5o?=
+ =?us-ascii?Q?2RV+REs6OFeMtEHLDwV1mONo4qlBFESVRFs8RiJTLO8dz12zAMoUtW9/7suF?=
+ =?us-ascii?Q?Tg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2b7b51c-f28a-44cb-6ee3-08dab762789f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2022 14:57:58.4270
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TmAGfCHSUU/L4lx1QhMr8euiQI6Gbt7NQehrokIkTrE8UpQzqNhcREM5MCcU329XARGqypxxjoMYo9RvPmsjK5jd8d8psgk6fMiTgFlovV0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR21MB1870
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,18 +133,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/10/2022 15:15, Bryan Brattlof wrote:
-> Only some of TI's J721E SoCs will need a eFuse register range mapped to
-> determine if they're affected by TI's i2128 erratum. All other SoC will
-> not need this eFuse range to function properly
-> 
-> Update the bindings for the k3_j72xx_bandgap thermal driver so other
-> devices will only need two register ranges
-> 
+From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Wednesday, Oc=
+tober 26, 2022 6:47 AM
+>=20
+> Fixes a couple of MSR access errors seen during kexec in root partition
+> and opportunistically introduces a data structure for the reference TSC
+> MSR in order to simplify the code that updates that MSR.
+>=20
+> Anirudh Rayabharam (2):
+>   x86/hyperv: fix invalid writes to MSRs during root partition kexec
+>   clocksource/drivers/hyperv: add data structure for reference TSC MSR
 
+Could these two patches be sequenced in the opposite order, to avoid the
+need to change the TSC code in hyperv_cleanup() twice?  The new
+data structure for the Reference TSC MSR and clocksource driver changes
+would be in the first patch.  Then the second patch would update
+hyperv_cleanup() and could use the new data structure.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Michael
 
-Best regards,
-Krzysztof
+>=20
+>  arch/x86/hyperv/hv_init.c          | 11 +++++++----
+>  drivers/clocksource/hyperv_timer.c | 28 ++++++++++++++--------------
+>  include/asm-generic/hyperv-tlfs.h  |  9 +++++++++
+>  3 files changed, 30 insertions(+), 18 deletions(-)
+>=20
+> --
+> 2.34.1
 
