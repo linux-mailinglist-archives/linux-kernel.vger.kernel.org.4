@@ -2,117 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B626160E975
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962C660E97F
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235164AbiJZTp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S235178AbiJZTrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235089AbiJZTpb (ORCPT
+        with ESMTP id S235161AbiJZTrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:45:31 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2070.outbound.protection.outlook.com [40.107.223.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F9A65B5;
-        Wed, 26 Oct 2022 12:44:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d/xChWoRUiN4Bjckowf0vy+S80rfC6lH21sOSdxyaIz43nbiLr7ux09omdEv8IL2R/ihjbNzXjO6O/Zu2eVi+SIAgyWzLPbA0SQm+X3TYlmaf/9kXpRS2cd3Kw791aQqITcd31F/kmsveL5JGTrVv4wcEJkY0hliY5E7U1g0vwftf9s36BzryYJnGSJmvGhrC28iGMOU5tYiq4e7dNsYgAtP2w5wH1cSXon4SAnB3xFiQLCgqPdR4jXChFBaex5qgCRuRJKtoI3IsFEi8SyMxwoC7ibBvRYklL2J1bsn0YHaiskTzjlzoRwvXAagfrONX+ST5nreEcY2hmO9wrHabg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CQ2xtJ7pTn8MLYMUFaB1zRBgo/E29ZS6wMRNpsGva0A=;
- b=X9cfhZ3QxPncZCaNC9yV7h52gXR303dOFeQzmzkAQMFQdolVm9pRxg5cq7WyJq4ZrgFNwVGgiDerbf9YljyqbJstD9qD9UEd91wwU/c2TMBQOJwuM0AD8WLp5oRp18B9FrHuL+OMJYTJeRE/6FvmHRrnEns8vyQz0sD9G3KO8JwH0b5IFaVhJnV91YanH2sazNf1RE3xdJICFLPkVsxBzAv0iDVzOGCJjnk6YgJRTPcIx1gEpEPenlFW1GiKLigM9IMxk1PnaC54FukpE0GEnH6qVytnjXiIvwPvxQgKTwpCgxtU/heZW939ucsBXRiCI+4WFaisOB84v8FlvnnQ3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CQ2xtJ7pTn8MLYMUFaB1zRBgo/E29ZS6wMRNpsGva0A=;
- b=tb2U9Vk+FptiT1Y3jrBHFM3qnES7rd8RLDN0RbaheDHnqm4sKKH/JKlXxxeizwvaFDOrBaA3a3rXXB01oc7SCpDqVkOnsGDxJ+wcry6Vrivn/J2a06B4SH76txHmE46TZ5HdujlTqs9uqMHqBKK2fcTa5zfAwr+xNxKTpe0fdDQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by DM4PR12MB6325.namprd12.prod.outlook.com (2603:10b6:8:a4::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Wed, 26 Oct
- 2022 19:44:24 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ee94:4f22:751d:278a]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ee94:4f22:751d:278a%7]) with mapi id 15.20.5746.021; Wed, 26 Oct 2022
- 19:44:24 +0000
-Date:   Wed, 26 Oct 2022 19:44:17 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, mpatocka@redhat.com
-Subject: Re: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when
- removing threshold blocks
-Message-ID: <Y1mOEfEM6MdnV8CX@yaz-fattaah>
-References: <20220614174346.3648305-1-yazen.ghannam@amd.com>
- <Yql9TqFtebd2h9Z9@kroah.com>
- <Yqnj88FPkZ6kBU7k@yaz-fattaah>
- <Y1kJCHBtatohj/JK@zn.tnic>
- <Y1kiNBh3/XBNe6uv@kroah.com>
- <Y1lUo08UzaqIaI7r@yaz-fattaah>
- <Y1l8nx1KnTFP1xKj@zn.tnic>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1l8nx1KnTFP1xKj@zn.tnic>
-X-ClientProxiedBy: CH0PR03CA0254.namprd03.prod.outlook.com
- (2603:10b6:610:e5::19) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        Wed, 26 Oct 2022 15:47:07 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C42411CB57
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:46:21 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id r14so30987681lfm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WFjZUwg9kkHrdeWfJ5ahCLFcRDkAGeHiMWgq9vVh9Ps=;
+        b=PkYZcfy5WMquWospUQFh7cJpJo4V6wkPaXLJ+W6HivXj3w49ZeLEO8i24izYjxeJzG
+         zRJ/RCfo8mUZzDqGtvoSKR9JZ9RKUY7AEh/cic+6wn7MtLZ7PzFTsJTz4KFzOI+rnz8B
+         BjE8MjFSCSjl+Arttw6PQIqvVmdd0X2q+bNb7LjStezGyMy5ya9RCS1rJm5e5f1vt4hH
+         l3hPWeD3i/dkNIaGPGCsVKuYAQWepXoaYL8QnKpGpEgWpwMoOmNdaq5XQGq4UjIv/zOR
+         /ubN28kFhv9jFCj/bYUHXt4GiyEOS8sE7BVj8K/E5hohb+ch+uNU1PNfAMw4RRQ7mO+F
+         A0lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WFjZUwg9kkHrdeWfJ5ahCLFcRDkAGeHiMWgq9vVh9Ps=;
+        b=uh6lsSPRYg2gGlo/XUZJ8pGZERJoWc29Ayz0ekQrM9eJvPbt1x2auamLHlpD8cLFXS
+         PQ6JHF5fjKxusECo5dopd2HD4fompAh/jgTxQ7twCpt1mkNXEVzcdgtmGN9YLcKGHCmX
+         ymcbcFHMvqbJr4jMKUrKFjlcHniVUG46unucV61LmSHZ+0HPtLWygGT0J3j1uVg0Q/G8
+         VA9nnpPLZZGFeZgLrPBvvSj+e6b2kTgGI6hY5i3k+9LB4NnWwYHzme5mhwB4sfRrJB1x
+         Y4VpirAcg9chLKU1KzGnZt25Oz1o5n7T6Wu+bX2bA7dXhyt3F79fbs/9MkxkSkCxB1T1
+         sM1A==
+X-Gm-Message-State: ACrzQf2+6JzYnt4S0X4rEcNKyVeAkeQlYqyGWYhAKrxAD73Ph5PcNCbQ
+        +1RQsVTJr2Fcvh/gt9X+pYoeQg==
+X-Google-Smtp-Source: AMsMyM7Sc9bm+ICPknqGgF6givhaCtNofBIUTNotmKABmE9Zv5ip/cKuOpnhFd8xARGFACdSOJBk1Q==
+X-Received: by 2002:a05:6512:3f8c:b0:4a1:8d5:d75b with SMTP id x12-20020a0565123f8c00b004a108d5d75bmr18369184lfa.670.1666813579744;
+        Wed, 26 Oct 2022 12:46:19 -0700 (PDT)
+Received: from [10.27.10.248] ([195.165.23.90])
+        by smtp.gmail.com with ESMTPSA id s5-20020a05651c048500b002770e531535sm1051653ljc.55.2022.10.26.12.46.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 12:46:19 -0700 (PDT)
+Message-ID: <56a47a6c-29b9-b8f3-e39b-a5841ddf7394@linaro.org>
+Date:   Wed, 26 Oct 2022 22:46:17 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|DM4PR12MB6325:EE_
-X-MS-Office365-Filtering-Correlation-Id: 33c9b02f-3ef2-433f-ca43-08dab78a7c4e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BF5IwsF6R1+uoVDSDVz9n0V+MYlGkw39UEzdziZ07pMhnCuxcMLTyFdwFZfB51NQWOGq31avwpdrifX5zCf9KJk4w5S8a4m1xQQTeg5C1G6ZPNz7XV89vCxpiD98fIgyA1toYY13Vd96GNY26x8LDfXvNx0k/MAyB6XOKbXpEKJ+0T9bqqKeYnjTrwnnap7AQ3y39YEN9ap19n2EqaVsG0BIXQrrtySLTUa7+/xhTQZysO7HVLrBAbOCYjSDJtEumPd1z5jX/7ZdJU9Ms7csLkCSOc/IdV9Nqa04SqaPwHlMQoAWCKssZQwREKJ0Pe7F3rpTjUcvkcn4B11QsXiBl1XXft/xh2mC2DagD8uZLmLT03X3NGG4tGdVhjPeHC87gkzB4ROEDlx/ZNTA6dbxesHSxgXr1nG9KkTNPgtyGQb8zLUJMyqOi+zXw4OWGwW1gqqiSUF0eO0jT85wmwAaMqqvTX3meD/GQjY3usYPhcxkTLrIbnzX3VYmCVKaJqVK8e26lmbagnN5FjdEZdM53YoMxoyzjJiv0/TmYtBiBYKxJEm8Zsp9C4L5gkhCGdFnInknFRiA53oQTdTGPaGrGLy6YoYIKZrer3zqxnZPY1x8orj/09jLXlnJ95Pqaddvet72+P85HmTAomL3zNd5uZslcJ727GS7t8OyflKySKRCMG9OCP5ED1gFX8z5OQwu5LvTS61LmSCOGkrEGCzBVA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(7916004)(396003)(136003)(346002)(39860400002)(366004)(376002)(451199015)(44832011)(6486002)(38100700002)(6666004)(66946007)(41300700001)(66476007)(66556008)(4326008)(5660300002)(478600001)(8936002)(6916009)(8676002)(2906002)(83380400001)(33716001)(6506007)(86362001)(26005)(6512007)(9686003)(186003)(316002)(66899015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RID6/BpR2RG49twhcCv1MP5dBM7E6C1zCQMDwIPA6R3jkUhKFqjeG7vq2gds?=
- =?us-ascii?Q?k+zdFi/qTgJXCdBBic4CcC61Dt2JUUBZ/jibRmyzxXq9zNCdp4tT1MMIRdBp?=
- =?us-ascii?Q?NxzorvXZ5VOUc9Xud6g7cDtfgJfisAkIDCsHCICVcOPiNwq5JeCgGfck5aYS?=
- =?us-ascii?Q?8Ha+UEaLMy3oSdnTJqSLmSCgyPc+0wlekO9xjTgdoVp+Fi3hUnuIMmjBrZ+z?=
- =?us-ascii?Q?xoFRvpuCn/Li1Efrcbrhnm6G+m2ZtSXQlbmgqOCkEL0EVzatXRR+IWcx7/vU?=
- =?us-ascii?Q?rvf7OiAViK7MchohZzZ/IH8jC7TTF+t+U3pMlca7Xy9wUqS9Y0/RWDz9nnpE?=
- =?us-ascii?Q?dv33GmEeY+5rrK4WziWMtocdOVOEpr1cjWoP3C1q4KIggxZ/kAZ1G/aEusSu?=
- =?us-ascii?Q?vmtZSIIQ/pqYWBHUprOPfhnYssRZITJRRf/rOX9CpuRVu+sxR/C0bktbSDrf?=
- =?us-ascii?Q?hBuJ4+E6OXnRYm+RNsFcnWb/zZI+pDOrWvJK1VvwWmMl1NSyKq6PwNoBU7Da?=
- =?us-ascii?Q?raiSz1kJ+O5A1oPJID0DzBf0RbJkzCMAG3YFPUr+BosHZg765URu4/sCXHUF?=
- =?us-ascii?Q?mprqB/6KAyJgwR4jHF4o8giIxRHtfKhPRdgc72trTNCIyc20igdJyPSTLvOP?=
- =?us-ascii?Q?5uJChOdKVKZrV8rBQSYtDMeD7q4YdaizkUcaIGOuZlQX7XtoOnKEuYmsalOz?=
- =?us-ascii?Q?m9DzlS0QFaT1ON0EwyuP7Zd4KsXIWpFCqW+0DbdMl/pEtr8YK/9TcncCFWs5?=
- =?us-ascii?Q?xkPETKKFO+jz33/IhkVjkzx61xYxeHMM7/eszZDP7JJ/AZUoWw5BnNSUWiaq?=
- =?us-ascii?Q?Lsu3tH9IjL+BHerGvCVY8+F/BEBdMnuWAc+MCuWfiwv07vGy3ySPnIWB+FSV?=
- =?us-ascii?Q?KT9EIEtbXNNPyRxOhVuaiP92x7lOMORQOIbSdwqtNQof0Y588yNbZyNE/bz8?=
- =?us-ascii?Q?JRZItuIQpiqg+OHd50ybjfiNzqAMlY9CAuqkcXgPpgMvmAB+BXipeG9BCcYh?=
- =?us-ascii?Q?J8Iw7KI2ZZcA2zui5J1t1bYJifnZAXSRr4yoGzy3ZcjYEVpiiH4IHUM2T0uH?=
- =?us-ascii?Q?wyHH87wmkdlArUn40ct/+b1a0HiD2OzFAjAWFJQv8ynbDgP2z71AhxGd+pRC?=
- =?us-ascii?Q?zH8jXUClXHVWdrp7Zp7gkn+BgqKxnQh89bq63dhKlQydVCYpcuxxy9ho7Bpk?=
- =?us-ascii?Q?weMVdyyihi3qZorom1tRq+kPaWE9YF6oI53Z4Dck49DOJFg/sP9Xh1yrNZ5h?=
- =?us-ascii?Q?vYFuzyNaNBvwKJ58ofxmdyB1cisntnNO9wk5HoLTik5/SV7fON5GkiH9D57C?=
- =?us-ascii?Q?uyUny6Q9wNz/OcnJe/L5mhJDVvKkXgjYqkQhMOeULOSpkfx75TOgcXdSkAmL?=
- =?us-ascii?Q?nDVhAvE+y7yeden9KGh0awe6wsfUQ9AWdycC0e19MJaw/DKYRMKcQ86KpyL5?=
- =?us-ascii?Q?RKz2XF5OsmAn/GEO4Jg58BPHpeg8nqDXTPISPoJ/3X9ca8mTRZLq7DxIX2e5?=
- =?us-ascii?Q?oyDGegNwYnPjTghrEkcdaLScWaldxHq79uqL3rYE2Y8egVtMuPHrLa1e/pb9?=
- =?us-ascii?Q?M0HgkZy+9r6lzRfxd4Ewxriq6A1jBix8FGEO8IaE?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33c9b02f-3ef2-433f-ca43-08dab78a7c4e
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 19:44:24.7285
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2EnXTbzXkM0olI9R050U5126VoffEkNXxqoQNM71hYValXhU9jeJXf03cSNt38sT5GDHiG1oWCtgQkrA4n6r3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6325
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v6 04/21] arm64: smccc: Include alternative-macros.h
+Content-Language: en-GB
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
+ <20221026185846.3983888-5-quic_eberman@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221026185846.3983888-5-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -120,64 +99,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 08:29:51PM +0200, Borislav Petkov wrote:
-> On Wed, Oct 26, 2022 at 03:39:15PM +0000, Yazen Ghannam wrote:
-> > What's the issue with my original patch?
-> 
-> Do you see it?
-> 
-> > @@ -1258,10 +1258,10 @@ static void __threshold_remove_blocks(struct threshold_bank *b)
-> >         struct threshold_block *pos = NULL;
-> >         struct threshold_block *tmp = NULL;
-> >  
-> > -       kobject_del(b->kobj);
-> > +       kobject_put(b->kobj);
-> >  
-> >         list_for_each_entry_safe(pos, tmp, &b->blocks->miscj, miscj)
-> > -               kobject_del(&pos->kobj);
-> > +               kobject_put(b->kobj);
-> 
-> You're basically putting the parent as many times as there are elements
-> on the ->miscj list.
-> 
-> Basically what Greg doesn't like.
-> 
-> Him and I need to talk it over first whether my gross hack of grafting
-> the bank4 kobject hierarchy from CPU0 onto the other CPUs on the node is
-> even viable so stay tuned...
-> 
-> > I think this is the simplest way to fix the current implementation.
-> > But we should probably get rid of this kobject sharing idea in light
-> > of Greg's comments.
-> 
-> You said it. :)
-> 
-> Or maybe do a better one.
+On 26/10/2022 21:58, Elliot Berman wrote:
+> Fix build error when CONFIG_ARM64_SVE is selected and
+> asm/alternative-macros.h wasn't implicitly included by another header.
 
-Right, so can we do the following two things?
+Please include the build error into the commit message to help anybody 
+looking for the solution for the same issue.
 
-1) Apply the patch I submitted as a simple fix/workaround for the presented
-symptom. I tried to keep it small and well described to be a stable backport.
-Obviously I wrote it without knowing the shared kobject behavior isn't ideal.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>   include/linux/arm-smccc.h | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
+> index 220c8c60e021..6a627cdbbdec 100644
+> --- a/include/linux/arm-smccc.h
+> +++ b/include/linux/arm-smccc.h
+> @@ -383,6 +383,7 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
+>   
+>   /* nVHE hypervisor doesn't have a current thread so needs separate checks */
+>   #if defined(CONFIG_ARM64_SVE) && !defined(__KVM_NVHE_HYPERVISOR__)
+> +#include <asm/alternative-macros.h>
+>   
+>   #define SMCCC_SVE_CHECK ALTERNATIVE("nop \n",  "bl __arm_smccc_sve_check \n", \
+>   				    ARM64_SVE)
 
-2) Address the shared kobject thing.
-   Here are some options:
-   a. Only set up the thresholding kobject on a single CPU per "AMD Node".
-   Technically MCA Bank 4 is "shared" on legacy systems. But AFAICT from
-   looking at old BKDG docs, in practice only the "Node Base Core" can access
-   the registers. This behavior is controlled by a bit in NB which BIOS is
-   supposed to set. Maybe some BIOSes don't do this, but I think that's a
-   "broken BIOS on legacy system" issue if so.
-   b. Disable the MCA Thresholding interface for Families before 0x17. This is
-   an undocumented interface, and I don't know if anyone is using it on older
-   systems. The issue we're discussing here started because of a splat during
-   suspend/resume/CPU hotplug. In disable_err_thresholding(), we disable MCA
-   Thresholding for bank 4 on Family 15h, so there's some precedent.
-   c. Do nothing at the moment. I *really* want to clean up the MCA
-   Thresholding interface, and the shared kobject thing may get resolved in
-   that.
+-- 
+With best wishes
+Dmitry
 
-What do you think?
-
-Thanks,
-Yazen
