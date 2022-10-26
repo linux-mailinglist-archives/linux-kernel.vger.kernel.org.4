@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B7460E1A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35EB60E1AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbiJZNLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S234006AbiJZNMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233487AbiJZNLG (ORCPT
+        with ESMTP id S233487AbiJZNMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:11:06 -0400
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9167BFA02A;
-        Wed, 26 Oct 2022 06:11:02 -0700 (PDT)
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
-        by mail.kmu-office.ch (Postfix) with ESMTPSA id 255C85C3ABB;
-        Wed, 26 Oct 2022 15:11:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
-        t=1666789860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QLFgExITwIN4lybw/UjaBeJn22b4fh+Q9W7AXp52SJY=;
-        b=NXnk3GNi1ceLZUXZtK/jPKqypVy8x6mNmwOgzfH+iUj3QQb6Z3ENK2E4RlUnXtjfKJVtqm
-        Wn5M1kNEE8cyHkU7FE42iFAuIiIAi43yeknhNOjcOrQglCHzKixmbrlc3Vq7Lz40BlGukP
-        g+eGl7/bauZiRChnA3yzqFLh/UxjCoo=
+        Wed, 26 Oct 2022 09:12:34 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE17AFB72A;
+        Wed, 26 Oct 2022 06:12:33 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QAews5025621;
+        Wed, 26 Oct 2022 09:11:56 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kcac8vfbv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 09:11:56 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 29QDBthk021374
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Oct 2022 09:11:55 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 26 Oct
+ 2022 09:11:54 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 26 Oct 2022 09:11:54 -0400
+Received: from IST-LT-39247.ad.analog.com (IST-LT-39247.ad.analog.com [10.25.16.24])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 29QDBY6l014246;
+        Wed, 26 Oct 2022 09:11:37 -0400
+From:   Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        <linux-rtc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 0/2] drivers: rtc: add max313xx series rtc driver
+Date:   Wed, 26 Oct 2022 16:11:22 +0300
+Message-ID: <20221026131124.289-1-Ibrahim.Tilki@analog.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Date:   Wed, 26 Oct 2022 15:11:00 +0200
-From:   Stefan Agner <stefan@agner.ch>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        stable <stable@kernel.org>, regressions@lists.linux.dev,
-        m.szyprowski@samsung.com, krzk@kernel.org
-Subject: Re: [PATCH stable-5.15 3/3] usb: dwc3: disable USB core PHY
- management
-In-Reply-To: <Y1JCIKT80P9IysKD@hovoldconsulting.com>
-References: <20220906120702.19219-1-johan@kernel.org>
- <20220906120702.19219-4-johan@kernel.org>
- <808bdba846bb60456adf10a3016911ee@agner.ch>
- <Y0+8dKESygFunXOu@hovoldconsulting.com>
- <86c0f1ee8ffc94f9a53690dda6a83fbb@agner.ch>
- <Y1JCIKT80P9IysKD@hovoldconsulting.com>
-Message-ID: <b2a1e70bda64cb741efe81c5b7e56707@agner.ch>
-X-Sender: stefan@agner.ch
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: VTRmnLnWg0e49etj_AovKISeG9rWA790
+X-Proofpoint-GUID: VTRmnLnWg0e49etj_AovKISeG9rWA790
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_06,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=575 phishscore=0 malwarescore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 adultscore=0 mlxscore=0 bulkscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210260074
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-21 08:54, Johan Hovold wrote:
-> On Fri, Oct 21, 2022 at 12:06:12AM +0200, Stefan Agner wrote:
->> On 2022-10-19 10:59, Johan Hovold wrote:
->> > On Tue, Oct 18, 2022 at 05:27:24PM +0200, Stefan Agner wrote:
->> >> On 2022-09-06 14:07, Johan Hovold wrote:
->> >> > From: Johan Hovold <johan+linaro@kernel.org>
->> >> >
->> >> > commit 6000b8d900cd5f52fbcd0776d0cc396e88c8c2ea upstream.
->> >> >
->> >> > The dwc3 driver manages its PHYs itself so the USB core PHY management
->> >> > needs to be disabled.
->> >> >
->> >> > Use the struct xhci_plat_priv hack added by commits 46034a999c07 ("usb:
->> >> > host: xhci-plat: add platform data support") and f768e718911e ("usb:
->> >> > host: xhci-plat: add priv quirk for skip PHY initialization") to
->> >> > propagate the setting for now.
-> 
->> >> For some reason, this commit seems to break detection of the USB to
->> >> S-ATA controller on ODROID-HC1 devices (Exynos 5422).
-> 
->> > I think this may be related to the calibration calls added to dwc3 and
->> > later removed again by commits:
->> >
->> > 	d8c80bb3b55b ("phy: exynos5-usbdrd: Calibrate LOS levels for exynos5420/5800")
->> > 	a0a465569b45 ("usb: dwc3: remove generic PHY calibrate() calls")
->> >
->> > The removal explicitly mentions that the expectation is that USB core
->> > will do the PHY calibration.
->> >
->> > There could be other changes in the sequencing of events that this
->> > platform has been implicitly relying on, but as a start, could try
->> > adding the missing calibration calls (patch below) and see if that makes a
->> > difference?
->> 
->> The patch below did not apply to 5.15.74 directly, but I think I was
->> able to get the corrected patch applied (see below)
-> 
-> Looks good to me.
-> 
->> That said, I do not have direct access to that hardware, but I created a
->> build and asked the user test it.
-> 
-> Thanks, let me know how it goes.
 
-The user reports the S-ATA disk is *not* recognized with that patch
-applied.
+changelog:
+since v2:
+  - dtbinding: update title and description
+  - dtbinding: remove last example
+  - drop watchdog support
+  - support reading 12Hr format instead of forcing 24hr at probe time
+  - use "tm_year % 100" instead of range check
+  - refactor max313xx_init for readability
 
---
-Stefan
+
+Ibrahim Tilki (2):
+  drivers: rtc: add max313xx series rtc driver
+  dt-bindings: rtc: add bindings for max313xx RTCs
+
+ .../devicetree/bindings/rtc/adi,max313xx.yaml |  151 +++
+ drivers/rtc/Kconfig                           |   11 +
+ drivers/rtc/Makefile                          |    1 +
+ drivers/rtc/rtc-max313xx.c                    | 1069 +++++++++++++++++
+ 4 files changed, 1232 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+ create mode 100644 drivers/rtc/rtc-max313xx.c
+
+-- 
+2.25.1
 
