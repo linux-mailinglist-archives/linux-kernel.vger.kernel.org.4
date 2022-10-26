@@ -2,115 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54E260E294
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C9060E2A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233909AbiJZNvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
+        id S232528AbiJZNxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233972AbiJZNvX (ORCPT
+        with ESMTP id S234069AbiJZNwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:51:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E599C2EF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:50:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56AC461EAF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:50:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47BA1C433D6;
-        Wed, 26 Oct 2022 13:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666792251;
-        bh=2TCF+GRWI0MqrB/KOyIKP2v35SPhwI1B51gp2H/KcyM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B40wPC7JsKMoTby01XbXH84xWTv6qpmXSSjfJCDxoWNV8zC4IK1GmX2I1deZQ/pbo
-         IAuDzYvNd4LKHclCiHQvPBSR/0NkS+tUgH5LP60WvstnaovVxV5JAWCfPoU4yBBtRx
-         dLbn3RQOXM620KnE721i6QHmUyup0AO8Es8ZkCB4=
-Date:   Wed, 26 Oct 2022 15:51:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH 05/17] staging: vt6655: changed variable name: pvRTS
-Message-ID: <Y1k7cDP4Dpdr5EOe@kroah.com>
-References: <cover.1666740522.git.tanjubrunostar0@gmail.com>
- <47da976cd02d262cebe520b21a0bf2451de6731b.1666740522.git.tanjubrunostar0@gmail.com>
+        Wed, 26 Oct 2022 09:52:11 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7174110693B
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:52:08 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1646987wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r6vbNsa2eLap4ns5f+FVzjJUNvmUKrnMf3TrYs7N5b8=;
+        b=WO+G3icBGCRcaMhVI1/GdlooZ49H5FQYwsViSL3DAvFOS8vB5/wOWnZOqR7OhDo9zT
+         PkdFY8vmyNGEqZInbZ9vPVhUIaWZkdY6WQFqyMRRtCzhPU95KGvuo8OGMsm6+1ty4BEs
+         awbYncV8BOAmY0O772wKpZqBv6DdgHGU4IiunWLaGNUwFit6BT9uqTSGo+LWPjJ6Lgqf
+         I4OtBkme9Mys08eQGD/w3JM6pjU87qyVEzRis1V1Wngjxk4KtO94dG63mxF+GjkDlZoT
+         JT2VQsVrf8qhh7ABalixMLMG2Hjg+M1TuselYfEW7H8ELH6I+4VVowZmaPeHpmzWLgw+
+         YQuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r6vbNsa2eLap4ns5f+FVzjJUNvmUKrnMf3TrYs7N5b8=;
+        b=WjP7PDvYogCA3dMTKLiws6OFVjNdtLrlewsSZRwlucetYgP64A4OjNnJfMVm7KcMSX
+         h3Isg+jDAnx3dVwnXoS0R8rjohH+8+HNrI+rUS+tL4ifrcoDKEJGcbODhQAKs0V2a0Az
+         HOaW88GNqVTeBCy+TScB7oRWMv1rH9/exnIyaAJG/2AEk+pmNPexhLYotx+iGQxzPayN
+         qMsc6zNYXlymIpMioDRrueeuU9Q6OSU+HbfZhbqgL3XJJhN8cRNcgjuhdOnOVpw2mHUp
+         4Jw/6Z9Qon5Hr1wfOwCrdEPtwHXsf2kOuagJpHLAg/YaylQJ8jEPSKIf0VNbVqe7Gkpj
+         7oEQ==
+X-Gm-Message-State: ACrzQf2aKJTU8C0I7RKL061ToH9Xya7iw075HBVzduXxkxwT98HHWyEb
+        nXMXvAXXYE30+4e+8yQ/3RGIW6EbZPUPqA==
+X-Google-Smtp-Source: AMsMyM5PI8dFGSbXQd/vYi9TfqFNTgrunruofUiIdTvGhqcuOOErFVL6bRBaf8Ox/Ovh+zKR3UYfIQ==
+X-Received: by 2002:a05:600c:46ce:b0:3c6:f243:8d74 with SMTP id q14-20020a05600c46ce00b003c6f2438d74mr2600379wmo.166.1666792326702;
+        Wed, 26 Oct 2022 06:52:06 -0700 (PDT)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b4d7:0:e68:932d:8865:32dc])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05600c2ca500b003b435c41103sm2663346wmc.0.2022.10.26.06.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 06:52:06 -0700 (PDT)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org, longman@redhat.com,
+        yanfei.xu@windriver.com
+Cc:     fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH] kernel/locking: Fix spelling mistake "task_strcut" -> "task_struct"
+Date:   Wed, 26 Oct 2022 14:51:50 +0100
+Message-Id: <20221026135150.2210119-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47da976cd02d262cebe520b21a0bf2451de6731b.1666740522.git.tanjubrunostar0@gmail.com>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 11:37:01PM +0000, Tanjuate Brunostar wrote:
+These are in mutex and rwsem code.
 
-Philipp has pointed out most of this already, but I'll just be specific
-and say what isn't ok in all of these patches:
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+---
+ kernel/locking/mutex.c | 4 ++--
+ kernel/locking/rwsem.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> 	change variable names pvRTS to meet the
+diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+index d973fe6041bf..fe7335fb63d4 100644
+--- a/kernel/locking/mutex.c
++++ b/kernel/locking/mutex.c
+@@ -362,7 +362,7 @@ bool mutex_spin_on_owner(struct mutex *lock, struct task_struct *owner,
+ 		 * checking lock->owner still matches owner. And we already
+ 		 * disabled preemption which is equal to the RCU read-side
+ 		 * crital section in optimistic spinning code. Thus the
+-		 * task_strcut structure won't go away during the spinning
++		 * task_struct structure won't go away during the spinning
+ 		 * period
+ 		 */
+ 		barrier();
+@@ -401,7 +401,7 @@ static inline int mutex_can_spin_on_owner(struct mutex *lock)
+ 
+ 	/*
+ 	 * We already disabled preemption which is equal to the RCU read-side
+-	 * crital section in optimistic spinning code. Thus the task_strcut
++	 * crital section in optimistic spinning code. Thus the task_struct
+ 	 * structure won't go away during the spinning period.
+ 	 */
+ 	owner = __mutex_owner(lock);
+diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
+index 44873594de03..bb87d28c011c 100644
+--- a/kernel/locking/rwsem.c
++++ b/kernel/locking/rwsem.c
+@@ -720,7 +720,7 @@ static inline bool rwsem_can_spin_on_owner(struct rw_semaphore *sem)
+ 	preempt_disable();
+ 	/*
+ 	 * Disable preemption is equal to the RCU read-side crital section,
+-	 * thus the task_strcut structure won't go away.
++	 * thus the task_struct structure won't go away.
+ 	 */
+ 	owner = rwsem_owner_flags(sem, &flags);
+ 	/*
+-- 
+2.25.1
 
-"name" not "name"
-
->         linux coding standard, as it says to avoid using camelCase naming
-
-"Linux" not "linux"
-
->         style. Cought by checkpatch
-
-Why is this all indented?
-
-Please do not do that, look at existing accepted changes in the git log
-and match up what they look like.
-
-But worst of all, you didn't really fix the variable name at all.  You
-just appeased a tool that was trying to say "don't use camelCase, use
-sane names".
-
-> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> ---
->  drivers/staging/vt6655/rxtx.c | 56 +++++++++++++++++------------------
->  1 file changed, 28 insertions(+), 28 deletions(-)
-> 
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> index 2cac8f3882df..e97cba014adf 100644
-> --- a/drivers/staging/vt6655/rxtx.c
-> +++ b/drivers/staging/vt6655/rxtx.c
-> @@ -87,7 +87,7 @@ static const unsigned short w_fb_opt_1[2][5] = {
->  /*---------------------  Static Functions  --------------------------*/
->  static void s_v_fill_rts_head(struct vnt_private *p_device,
->  			      unsigned char by_pkt_type,
-> -			      void *pvRTS,
-> +			      void *pv_rts,
-
-"pvRTS" is using Hungarian Notation.  Look it up on Wikipedia for what
-it means, and why people used to use it.
-
-For us, we don't need that at all as the type of the variable is obvious
-in the code and the compiler checks it.
-
-So "pvRTS" is trying to say "this is a pointer to void called "RTS".
-
-We don't care about the "describe the variable type in the name" thing,
-so it should just be called "RTS", or better yet, "rts", right?
-
-But then, step back.  Why is this a void pointer at all?  This is really
-a structure of type struct vnt_rts_g_fb.  So why isn't that being passed
-here instead?
-
-So try to work on both, fixing up the names to be sane, and then,
-getting rid of the void * stuff, to better reflect how data is flowing
-around and what type that data is in.
-
-thanks,
-
-greg k-h
