@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844EE60DDE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1851560DDEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbiJZJVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S229904AbiJZJVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiJZJVS (ORCPT
+        with ESMTP id S229551AbiJZJVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:21:18 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820E550053
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1666776074; bh=VUxXyqeqC9xJjU4/DUbIIcNzYJ6jIKRvBSz+ajHq9TM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Vc2yQ/lR3CL1OdYJDVQzTwx5zRyjkJbojVYujWgQAF2jxlGSbz7/+Ce9XeeIb0deu
-         38HdpCujrA9ljRgnbUvkNtOhHDwBxYeFhynaynJb9Cq8nga9Z7BJh974gcbh/VFq5q
-         4aqUXK4FuOmupXtLcGCPAQiyHSHx686gLsXZrVgo=
-Received: from [100.100.57.122] (unknown [220.248.53.61])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 769AC6008C;
-        Wed, 26 Oct 2022 17:21:14 +0800 (CST)
-Message-ID: <edb4002c-3325-53b2-de79-ad4033b363f7@xen0n.name>
-Date:   Wed, 26 Oct 2022 17:21:14 +0800
+        Wed, 26 Oct 2022 05:21:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1105FA23FD
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GcWjCPz0aiQ3UDfRDASwxNkIdrXAItdYhv9int3ZI/U=; b=gj8w7MhoQY57qyVo4vwzYUUb/v
+        aMDMjfENlY8Nbf2RXHRRNZzAayFtjwp02KNoehoojXkS9qD6tn624JJsoYGkHAJvNq0BE0yLgqSe7
+        WPE1caovNzjAxQQm1hHErHtvr1FEaYBPL+TJNRvtiMXRViWmBxQFtz63qjFcHNgRnUoQ5oHW77k2F
+        2bYWhMVRSxgBziZoOGuUkOJvgWAC//Hs2GrsBXlWLeqTr7kW2zBrp5OLWF98/UZLUWy+vai3ulDXC
+        qgxZR24huXU2inSzfGM2KVAtt5EJasGtCmQq8WIiX6TfDDNcvmbJv0WLvyalULvWxqz9FP/kePS9u
+        D1i31mtA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oncbT-006Y6C-JX; Wed, 26 Oct 2022 09:21:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 373853000DD;
+        Wed, 26 Oct 2022 11:21:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 17A9C2C268BC5; Wed, 26 Oct 2022 11:21:39 +0200 (CEST)
+Date:   Wed, 26 Oct 2022 11:21:39 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [peterz-queue:sched/core 16/18] kernel/sched/psi.c:983:35:
+ error: too few arguments to function call, expected 3, have 2
+Message-ID: <Y1j8I2qf78jHfLWs@hirez.programming.kicks-ass.net>
+References: <202210260945.cCKjgJe3-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:108.0)
- Gecko/20100101 Thunderbird/108.0a1
-Subject: Re: [PATCH] LoongArch: Fix memsection size
-Content-Language: en-US
-To:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <20221026075638.9396-1-lvjianmin@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20221026075638.9396-1-lvjianmin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202210260945.cCKjgJe3-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/26 15:56, Jianmin Lv wrote:
-> On LoongArch, the physical address space ranging from 0 to 0xfffffff is
-> always memory, which is in the low half of the memsection range from 0 to
-> 0x1fffffff with 512M memsection size, and the high half will be a hole with
-> invalid memory pages.
-
-The description is incorrect. For systems with less than 512MiB of 
-memory for example, I believe not every address from 0x0 to 0x0fff_ffff 
-is valid; and regarding the latter part of the sentence, what you mean 
-by "invalid memory pages"...
-
+On Wed, Oct 26, 2022 at 09:58:58AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/core
+> head:   7005e3c43be6b6297440e85cb7d8c12a94540b49
+> commit: 95a70934458341dc43db09be8e7b88c98fba9b89 [16/18] psi: stop relying on timer_pending for poll_work rescheduling
+> config: i386-randconfig-a004-20221024 (attached as .config)
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/?id=95a70934458341dc43db09be8e7b88c98fba9b89
+>         git remote add peterz-queue https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git
+>         git fetch --no-tags peterz-queue sched/core
+>         git checkout 95a70934458341dc43db09be8e7b88c98fba9b89
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 > 
-> This situation may cause some issues. For example, the range of 0x10000000
-> to 0x1fffffff is io registers, which will be considered as valid memory range
-> since which is in the memsection of range of 0 to 0x1fffffff. During S3
-
-... turns out to be totally valid, only of the I/O kind. (This might be 
-a case of Chinglish that is actually conveying the incorrect meaning to 
-unaware readers.)
-
-> sleep and resume, these io registers will be saved and restored as valid memory
-> page (pfn_valid() of common version considers that all pages in a memsection
-> are valid), which will cause exception, especially when restoring during resume.
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
 > 
-> We can use 256M size for memsection of LoongArch, or use the way as ARM64 to
-> walk through all memory memblock to check if a mem pfn is valid which maybe
-> lower performance. For simplicity, this patch just use the former way.
-
-And the rest of the commit message is, unfortunately, a bit too verbose 
-and hard to understand in general. I have to look at the actual change 
-(luckily, a one-liner in this case) to confirm my understanding.
-
-I think your intent is just to *avoid stepping into IO memory region 
-during suspend/resume by reducing the section size order by one*. Try 
-reducing the verbosity of the commit message in v2? I can't proofread 
-and edit every commit due to limited time, so you have to practice and 
-improve your writing skills after all. I'll review that piece of text 
-afterwards. :)
-
+> All errors (new ones prefixed by >>):
 > 
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+>    In file included from kernel/sched/build_utility.c:97:
+> >> kernel/sched/psi.c:983:35: error: too few arguments to function call, expected 3, have 2
+>                            psi_schedule_poll_work(group, 1);
+>                            ~~~~~~~~~~~~~~~~~~~~~~         ^
+>    kernel/sched/psi.c:568:13: note: 'psi_schedule_poll_work' declared here
+>    static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay,
+>                ^
+>    1 error generated.
 > 
-> diff --git a/arch/loongarch/include/asm/sparsemem.h b/arch/loongarch/include/asm/sparsemem.h
-> index 3d18cdf1b069..05903b40a625 100644
-> --- a/arch/loongarch/include/asm/sparsemem.h
-> +++ b/arch/loongarch/include/asm/sparsemem.h
-> @@ -8,7 +8,7 @@
->    * SECTION_SIZE_BITS		2^N: how big each section will be
->    * MAX_PHYSMEM_BITS		2^N: how much memory we can have in that space
->    */
-> -#define SECTION_SIZE_BITS	29 /* 2^29 = Largest Huge Page Size */
-> +#define SECTION_SIZE_BITS	28
->   #define MAX_PHYSMEM_BITS	48
->   
->   #endif /* CONFIG_SPARSEMEM */
+> 
 
-The change is trivial indeed but I'm not immediately giving the R-b.
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+Droping for now; Suren could you fix up and repost please?
