@@ -2,170 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4613660E46E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F8760E471
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234490AbiJZP0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
+        id S234534AbiJZP1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbiJZP00 (ORCPT
+        with ESMTP id S234562AbiJZP0y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:26:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47571EE8AD;
-        Wed, 26 Oct 2022 08:26:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D612861F86;
-        Wed, 26 Oct 2022 15:26:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD787C433C1;
-        Wed, 26 Oct 2022 15:26:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666797984;
-        bh=Pzek3yhRyqg9onveV/DhbH5znQ1mcRmwDYSkzMK+98w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ifwIVNut1KU3sPF6rN9bNiDsLLnDSmcNPtKJLrLZvWrRpGjxiadRNZBdyFHaTBSRl
-         noZbPvz1hdQitmFg3eFsp9o6AuOuAIqr1VRwVs75iowjYn3Jj0R6ANIiqKI/0iBci+
-         Mf0mhiT54j9Ixm+7wSA5efQaz2caWpGM6dx2OsPJS8sI+nF11h6JJKhOrM+GEG1haH
-         EBVqD5yjop3RFtrpNL60f5ooEMkFTNpjCeIzlH4CBWVn2vDX7SGek0ycWEfKUldNtL
-         sIVv6LdPzHKsGQwnv8u+X2uomMRVyiPsn6+3N8B/a0rKMTi6TuPFSjSc1uewjFAVCW
-         dwVft+cnQxMxA==
-Date:   Wed, 26 Oct 2022 17:26:21 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Arjan van de Ven <arjan@infradead.org>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>
-Subject: Re: [PATCH v3 06/17] timer: Keep the pinned timers separate from the
- others
-Message-ID: <20221026152621.GA1330257@lothringen>
-References: <20221025135850.51044-1-anna-maria@linutronix.de>
- <20221025135850.51044-7-anna-maria@linutronix.de>
+        Wed, 26 Oct 2022 11:26:54 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE6FAA45;
+        Wed, 26 Oct 2022 08:26:48 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id d26-20020a05683018fa00b0066ab705617aso691285otf.13;
+        Wed, 26 Oct 2022 08:26:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rETPEk1QmQkLedue9Aq10b8Dr7LRzg0Ndi5czbR2hBM=;
+        b=B54fnVfPIbpKgzqs0UjFdW9Dwxh0Wp9I9IRyxLfsKmP0Mp73HqbzpGVooDNWoZgeoT
+         6cIfWt2pIJfaj0DDk5q306TAGKrPs9Fxa+L/PJNvzuFZq9NAXocoYQ7GgX2lxwFV1xxo
+         8n/J+XcXsQUuwuYp0vpQWNvjN2396K0QfnRIkW5Zf7n8HQ3jOhGThDRCt8BXFvIMwbtX
+         gn9I6hft/vhUM5XaUwAFKLs76MNsXFntXHzM/w2ZprifyvGHMqp9MW5KmoyulztQ/0pX
+         4OVxLlOilLlj7Kgy1S9rTWhLppX5qxiKxoBQvcA4bg4xqxsTmfSglXMAEgYGUbuEJWhI
+         j6KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rETPEk1QmQkLedue9Aq10b8Dr7LRzg0Ndi5czbR2hBM=;
+        b=Sd0XTe6I5JJcmQqqJG6/dMJchRoE1ycXNZCwCEH1hEEaZzgCqJ609gttAPeAvAHLx4
+         WAJuYbO3xKZ+Yvfp/9zmU8dEOEeUt6kZNeCa0Sk/WGjoGvMAV+dZS/5INTEX5EK82gVK
+         HWvnLc7l2NQM6DIO99i0Nys675VDVfWt2p8bEnYV7U6qRYEIL/4QqIob3YRTn7idtj2X
+         WkdsLYjvpVKijUqTr+mTlXP0P4RLTc8v24XhUArufGMGzusj7QUF060nUcGB7t6uMj7J
+         DG0dqlORyCAIn2mAAoglgMVtoLS3onh4plnBf7fwlCj5g8Id/Q2T1W9BH2eMkUg1RuxF
+         NMeg==
+X-Gm-Message-State: ACrzQf3eRf7OPWVGw+6YUv4Uaoo9h95Njwldi/qWZ50a0tS7rbdHhCmu
+        mWzuYhCvmZefXVRZrn6zw+k=
+X-Google-Smtp-Source: AMsMyM48086VLKArZW0qg/GJXwajJeYDYn0Mw0euDn179MpRlshE5OrXRRv/dWeDXWc6cWBR3Sbhyg==
+X-Received: by 2002:a05:6830:603:b0:661:b07c:bf24 with SMTP id w3-20020a056830060300b00661b07cbf24mr22137103oti.208.1666798007507;
+        Wed, 26 Oct 2022 08:26:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id fo27-20020a0568709a1b00b0013b0b19100fsm3218662oab.32.2022.10.26.08.26.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 08:26:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 26 Oct 2022 08:26:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Runyang Chen <Runyang.Chen@mediatek.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        nfraprado@collabora.com, angelogioacchino.delregno@collabora.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [RESEND v3 1/3] dt-bindings: watchdog: Add compatible for
+ MediaTek MT8188
+Message-ID: <20221026152645.GA2946818@roeck-us.net>
+References: <20221026063327.20037-1-Runyang.Chen@mediatek.com>
+ <20221026063327.20037-2-Runyang.Chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025135850.51044-7-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221026063327.20037-2-Runyang.Chen@mediatek.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 03:58:39PM +0200, Anna-Maria Behnsen wrote:
-> @@ -1711,38 +1724,69 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
->  	if (cpu_is_offline(smp_processor_id()))
->  		return expires;
->  
-> -	raw_spin_lock(&base->lock);
-> +	base_local = this_cpu_ptr(&timer_bases[BASE_LOCAL]);
-> +	base_global = this_cpu_ptr(&timer_bases[BASE_GLOBAL]);
->  
-> -	nextevt = next_timer_interrupt(base);
-> +	raw_spin_lock(&base_local->lock);
-> +	raw_spin_lock_nested(&base_global->lock, SINGLE_DEPTH_NESTING);
-> +
-> +	nextevt_local = next_timer_interrupt(base_local);
-> +	nextevt_global = next_timer_interrupt(base_global);
->  
->  	/*
->  	 * We have a fresh next event. Check whether we can forward the
->  	 * base. We can only do that when @basej is past base->clk
->  	 * otherwise we might rewind base->clk.
->  	 */
-> -	if (time_after(basej, base->clk)) {
-> -		if (time_after(nextevt, basej))
-> -			base->clk = basej;
-> -		else if (time_after(nextevt, base->clk))
-> -			base->clk = nextevt;
-> +	if (time_after(basej, base_local->clk)) {
-> +		if (time_after(nextevt_local, basej))
-> +			base_local->clk = basej;
-> +		else if (time_after(nextevt_local, base_local->clk))
-> +			base_local->clk = nextevt_local;
-> +	}
-> +
-> +	if (time_after(basej, base_global->clk)) {
-> +		if (time_after(nextevt_global, basej))
-> +			base_global->clk = basej;
-> +		else if (time_after(nextevt_global, base_global->clk))
-> +			base_global->clk = nextevt_global;
-
-Perhaps make a helper for the two above?
-
->  	}
->  
-> @@ -1763,6 +1807,9 @@ void timer_clear_idle(void)
->  	 * the lock in the exit from idle path.
->  	 */
->  	base->is_idle = false;
-> +
-> +	base = this_cpu_ptr(&timer_bases[BASE_GLOBAL]);
-> +	base->is_idle = false;
-
-May be just:
-
-    __this_cpu_write(timer_bases[BASE_LOCAL].is_idle, false)
-    __this_cpu_write(timer_bases[BASE_GLOBAL].is_idle, false)
-
->  }
->  #endif
->  
-> @@ -1820,17 +1869,21 @@ static __latent_entropy void run_timer_softirq(struct softirq_action *h)
->   */
->  static void run_local_timers(void)
->  {
-> -	struct timer_base *base = this_cpu_ptr(&timer_bases[BASE_STD]);
-> +	struct timer_base *base = this_cpu_ptr(&timer_bases[BASE_LOCAL]);
->  
->  	hrtimer_run_queues();
->  	/* Raise the softirq only if required. */
->  	if (time_before(jiffies, base->next_expiry)) {
->  		if (!IS_ENABLED(CONFIG_NO_HZ_COMMON))
->  			return;
-> -		/* CPU is awake, so check the deferrable base. */
-> +		/* CPU is awake, so check for the global base. */
->  		base++;
-> -		if (time_before(jiffies, base->next_expiry))
-> -			return;
-> +		if (time_before(jiffies, base->next_expiry)) {
-> +			/* CPU is awake, so check the deferrable base. */
-> +			base++;
-> +			if (time_before(jiffies, base->next_expiry))
-> +				return;
-> +		}
-
-Could be:
-
-for (i = 0; i < NR_BASES; i++) {
-    struct timer_base *base = this_cpu_ptr(&timer_bases[i]);
-    if (time_after_eq(jiffies, base->next_expiry)) {
-       raise_softirq(TIMER_SOFTIRQ);
-       return;
-    }
-}
-       
-
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-
-Thanks!
-
-
->  	}
->  	raise_softirq(TIMER_SOFTIRQ);
->  }
-> -- 
-> 2.30.2
+On Wed, Oct 26, 2022 at 02:33:25PM +0800, Runyang Chen wrote:
+> From: Runyang Chen <runyang.chen@mediatek.com>
 > 
+> Add dt-binding documentation of watchdog for MediaTek MT8188 Soc
+> 
+> Signed-off-by: Runyang Chen <runyang.chen@mediatek.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+This conflicts with the ongoing yaml conversion of this file
+which is still not accepted.
+
+https://patchwork.kernel.org/project/linux-watchdog/patch/20221005113517.70628-4-angelogioacchino.delregno@collabora.com/
+
+Nevertheless, I'll apply this series to my watchdog-next branch
+and assume that it will be included in the next version of the
+yaml conversion patch.
+
+For my and Wim's reference:
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
+Thanks,
+Guenter
+
+> ---
+>  Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> index 762c62e428ef..b900c85d4560 100644
+> --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> @@ -17,6 +17,7 @@ Required properties:
+>  	"mediatek,mt7986-wdt", "mediatek,mt6589-wdt": for MT7986
+>  	"mediatek,mt8183-wdt": for MT8183
+>  	"mediatek,mt8186-wdt", "mediatek,mt6589-wdt": for MT8186
+> +	"mediatek,mt8188-wdt", "mediatek,mt6589-wdt": for MT8188
+>  	"mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for MT8516
+>  	"mediatek,mt8192-wdt": for MT8192
+>  	"mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for MT8195
