@@ -2,52 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFE660D954
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F3860D964
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbiJZCeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 22:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S232614AbiJZCoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 22:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiJZCeI (ORCPT
+        with ESMTP id S229753AbiJZCoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 22:34:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02120C8215;
-        Tue, 25 Oct 2022 19:34:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 90EAA61C5A;
-        Wed, 26 Oct 2022 02:34:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92DF8C433D6;
-        Wed, 26 Oct 2022 02:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666751646;
-        bh=FDVpsBRsUXGYnqYQqEWHdd0PZaotpM7jFC1LM+4IOLw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OAyyyXn5NukoB3j8toWNaJABBy/S/5TntYG/CvvG+RTJandosqs6BmGEumXVTe1Lx
-         ptLZGC8qB92wzZ1EUNFIKbkcGsFIbnX5/KczRb0eQl5Dv6Vd0JYRJDMX62QXQRd+O2
-         Gq7HEILgUrK1di4fi9R7fLqfHYa/TJzE92dTnpZ9N2vRkYuQl4g0BVREKPFCwV0QCJ
-         GghWRkDVVC3+/Qll9HISgFCZiIwKxIScuBoq2mI8cOnS8Epa9hxUxxnEKRMSsnmaP4
-         iEuYDeF/3s2lnlsY7ppvPrBejDcVn6oMsgdjjz6S6ZOMmxDISMkfk7+Z+f9hI38vTF
-         0Rh3uPv0wcfTQ==
-Date:   Tue, 25 Oct 2022 19:34:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net 3/3] net: lan966x: Fix FDMA when MTU is changed
-Message-ID: <20221025193405.1c8f6e74@kernel.org>
-In-Reply-To: <20221023184838.4128061-4-horatiu.vultur@microchip.com>
-References: <20221023184838.4128061-1-horatiu.vultur@microchip.com>
-        <20221023184838.4128061-4-horatiu.vultur@microchip.com>
+        Tue, 25 Oct 2022 22:44:10 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5573260CA7;
+        Tue, 25 Oct 2022 19:44:09 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 29Q2JJ9L047261;
+        Wed, 26 Oct 2022 10:19:19 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Oct
+ 2022 10:42:08 +0800
+Message-ID: <22c85f42-a4d7-c6cc-5f1e-346c88c29dc5@aspeedtech.com>
+Date:   Wed, 26 Oct 2022 10:42:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v10 3/5] media: Documentation: aspeed-video: Add user
+ documentation for the aspeed-video driver
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
+        <andrew@aj.id.au>, <hverkuil-cisco@xs4all.nl>,
+        <laurent.pinchart@ideasonboard.com>, <xavier.roumegue@oss.nxp.com>,
+        <ezequiel@vanguardiasur.com.ar>, <stanimir.varbanov@linaro.org>,
+        <sakari.ailus@linux.intel.com>, <ming.qian@nxp.com>,
+        <andrzej.p@collabora.com>, <linux-media@vger.kernel.org>,
+        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+References: <20221025090203.5623-1-jammy_huang@aspeedtech.com>
+ <20221025090203.5623-4-jammy_huang@aspeedtech.com>
+ <8a8f7c818688bda7c75d2f4fb5f8f0d6f89cb965.camel@collabora.com>
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+In-Reply-To: <8a8f7c818688bda7c75d2f4fb5f8f0d6f89cb965.camel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 29Q2JJ9L047261
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,28 +59,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 23 Oct 2022 20:48:38 +0200 Horatiu Vultur wrote:
-> +		mtu = lan_rd(lan966x, DEV_MAC_MAXLEN_CFG(port->chip_port));
+Hi Nicolas,
 
-I'm slightly confused about the vlan situation, does this return the
-vlan hdr length when enabled? or vlans are always communicated
-out-of-band so don't need to count here?
+Thanks for your comments.
 
-Unrelated potential issue I spotted:
+On 2022/10/25 下午 09:18, Nicolas Dufresne wrote:
+> Hi Jammy,
+>
+> thanks for the addition.
+>
+> Le mardi 25 octobre 2022 à 17:02 +0800, Jammy Huang a écrit :
+>> Add user documentation for the aspeed-video driver.
+>>
+>> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+>> ---
+>> v10:
+>>    - new
+>> ---
+>>   .../media/drivers/aspeed-video.rst            | 61 +++++++++++++++++++
+>>   .../userspace-api/media/drivers/index.rst     |  1 +
+>>   2 files changed, 62 insertions(+)
+>>   create mode 100644 Documentation/userspace-api/media/drivers/aspeed-video.rst
+>>
+>> diff --git a/Documentation/userspace-api/media/drivers/aspeed-video.rst b/Documentation/userspace-api/media/drivers/aspeed-video.rst
+>> new file mode 100644
+>> index 000000000000..798a2588b175
+>> --- /dev/null
+>> +++ b/Documentation/userspace-api/media/drivers/aspeed-video.rst
+>> @@ -0,0 +1,61 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +.. include:: <isonum.txt>
+>> +
+>> +ASPEED video driver
+>> +===================
+>> +
+>> +ASPEED Video Engine found on AST2400/2500/2600 SoC supports high performance
+>> +video compressions with a wide range of video quality and compression ratio
+>> +options. The adopted compressing algorithm is a modified JPEG algorithm.
+>> +
+>> +There are 2 types of compressions in this IP.
+>> +
+>> +* JPEG JFIF standard mode: for single frame and management compression
+>> +* ASPEED proprietary mode: for multi-frame and differential compression.
+>> +  Support 2-pass (high quality) video compression scheme (Patent pending by
+>> +  ASPEED). Provide visually lossless video compression quality or to reduce
+>> +  the network average loading under intranet KVM applications.
+> I think some of the information disclosed in the following quote could be
+> summarized. Notably the part about the extra buffers.
+>
+>     Aspeed JPEG Format requires an additional buffer, called bcd, to store
+>     the information about which macro block in the new frame is different
+>     from the previous one.
+>     
+>     To have bcd correctly working, we need to swap the buffers for src0/1 to
+>     make src1 refer to previous frame and src0 to the coming new frame.
+>     
+> But before I push you this route, have you considered using a dedicated pixel
+> format instead ? Here's my thinking, the output of the JPEG encoder is no longer
+> "compatible" (or at least won't yield the expected images) if used with a normal
+> JPEG decoder. By differentiating these two as dedicated formats, you will only need
+> 1 vendor control, and you avoid the potential risk of software bugs mixing them up.
+> Also note that there is other JPEG based vendor formats that exist in V4L2.
+>
+> Let me know what do you think ?
 
-        skb = build_skb(page_address(page), PAGE_SIZE << rx->page_order);       
-        if (unlikely(!skb))                                                     
-                goto unmap_page;                                                
-                                                                                
-        dma_unmap_single(lan966x->dev, (dma_addr_t)db->dataptr,                 
-                         FDMA_DCB_STATUS_BLOCKL(db->status),                    
-                         DMA_FROM_DEVICE);  
+Yes, I also add a dedicated formats, V4L2_PIX_FMT_AJPG, in this series. 
+In [PATCH v10 1/5]
 
-Are you sure it's legal to unmap with a different length than you
-mapped? Seems questionable - you can unmap & ask the unmap to skip
-the sync, then sync manually only the part that you care about - if you
-want to avoid full sync.
+media: v4l: Add definition for the Aspeed JPEG format, I add the 
+description in pixfmt-reserved.rst.
 
-What made me pause here is that you build_skb() and then unmap which is
-also odd because normally (if unmap was passed full len) unmap could
-wipe what build_skb() initialized.
+After this series applied, the users can choose either of these two 
+formats by VIDIOC_S_FMT as
+
+per their preference.
+
+>
+> Nicolas
+>
+>> +
+>> +More details on the ASPEED video hardware operations can be found in
+>> +*chapter 6.2.16 KVM Video Driver* of SDK_User_Guide which available on
+>> +AspeedTech-BMC/openbmc/releases.
+>> +
+>> +The ASPEED video driver implements the following driver-specific control:
+>> +
+>> +``V4L2_CID_ASPEED_HQ_MODE``
+>> +-------------------------------
+>> +    Enable/Disable ASPEED's High quality mode. This is a private control
+>> +    that can be used to enable high quality for aspeed proprietary mode.
+>> +
+>> +.. flat-table::
+>> +    :header-rows:  0
+>> +    :stub-columns: 0
+>> +    :widths:       1 4
+>> +
+>> +    * - ``(0)``
+>> +      - ASPEED HQ mode is disabled.
+>> +    * - ``(1)``
+>> +      - ASPEED HQ mode is enabled.
+>> +
+>> +``V4L2_CID_ASPEED_HQ_JPEG_QUALITY``
+>> +-------------------------------
+>> +    Define the quality of ASPEED's High quality mode. This is a private control
+>> +    that can be used to decide compression quality if High quality mode enabled
+>> +    . Higher the value, better the quality and bigger the size.
+>> +
+>> +.. flat-table::
+>> +    :header-rows:  0
+>> +    :stub-columns: 0
+>> +    :widths:       1 4
+>> +
+>> +    * - ``(1)``
+>> +      - minimum
+>> +    * - ``(12)``
+>> +      - maximum
+>> +    * - ``(1)``
+>> +      - step
+>> +    * - ``(1)``
+>> +      - default
+>> +
+>> +**Copyright** |copy| 2022 ASPEED Technology Inc.
+>> diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
+>> index 32f82aed47d9..46a494e00b72 100644
+>> --- a/Documentation/userspace-api/media/drivers/index.rst
+>> +++ b/Documentation/userspace-api/media/drivers/index.rst
+>> @@ -31,6 +31,7 @@ For more details see the file COPYING in the source distribution of Linux.
+>>   	:maxdepth: 5
+>>   	:numbered:
+>>   
+>> +	aspeed-video
+>>   	ccs
+>>   	cx2341x-uapi
+>>   	dw100
+
+-- 
+Best Regards
+Jammy
+
