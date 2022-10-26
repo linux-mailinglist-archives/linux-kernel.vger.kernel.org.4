@@ -2,208 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BFA60DBC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E5A160DBD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232752AbiJZHDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S233132AbiJZHFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiJZHDg (ORCPT
+        with ESMTP id S233239AbiJZHFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:03:36 -0400
-Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB673AB2C;
-        Wed, 26 Oct 2022 00:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5LUCRkBZUWBFN2HFD44qVvvQikXvluZ3OpUfsL7n6IQ=; b=cloFE2Q6TxIA/a0cmR0w5KqKDC
-        w1bJKZ+NN2hBea1pYKCL2lm1YrdF6LoJzyNmQy2iNn+UvgjvhTZzCynT5kPD5j/d1Z8do6DHFnrfM
-        1qTskMSOWGcTwVdDf+6e9FyMhA5n/GU4R5YNteLHIskpVx/NiqgonVJPJve692QWx+hD2++2npdrm
-        5HKhmLqLx7MznKJXw4EUNh9xLXAzB0FMTvPsLypnsf0pnN17pWZzluhXTmai+CnfJPnznJijrS843
-        UNQL/tiF3yrd4aP67OfJ44iCaul0xQkQVke8xKuddUHAREx6jkt9rrXDT94YXloHmtEBPT4Cz/9ll
-        gcpkB79A==;
-Received: from [89.212.21.243] (port=44686 helo=[192.168.69.85])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1onaRc-00CDzK-Qa;
-        Wed, 26 Oct 2022 09:03:29 +0200
-Message-ID: <a5eb7912-4d61-7a9e-07ef-34a3320ca468@norik.com>
-Date:   Wed, 26 Oct 2022 09:03:30 +0200
+        Wed, 26 Oct 2022 03:05:15 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6865BCAE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:05:11 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id n14so5326642wmq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zQUyYnkfD/QphPAhvZx7MKv0769amG9itPpYbqF4pAg=;
+        b=qWl7iB7LmbYBsmiX/9/8KvoCoJKf1FBBDgoMyja/yFA/2kloeRbdOx+lTsehp+1xE/
+         JjW4RdhwYefgJ30e7ZNhJYflZDRgkBtMFEqItkbKfvWOPSkCnaZhS0ZjJ6glzS/to6M6
+         3TfsfLPB53AJrNDOm2gBL04x1qu2IHJJT/AIVP4pGx7Y3xULtbwHFE3B3d1pwgdtDsS3
+         ILAB8k2YLQoILmJPqrDeNZNk0O1op4H1u7NsZ7QZy0tIGk5tnxLJWAL+m551aLxu1PWc
+         /Ky4ak4ThxXs5SyOGK57yu94EgeYfIpbsQ3JeVzG57ZLorCPk2lXUw9BwxisJJPYfCLS
+         XzGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zQUyYnkfD/QphPAhvZx7MKv0769amG9itPpYbqF4pAg=;
+        b=1c0um7AKXTOdCQj6d2y+PjO2WABu7QRbG3BZqhGVwNXrHNEgpjdT6trGXiyc60Yj9r
+         z0aR8mqBWebp3mHRGW/4fludMO8R8YavwHLewLcFt5Ugj8HqqV2oFd0xF6ft59SP/mU1
+         LVKSuvHFTfoHzzz99I3T8X24Ye09e8cUmZKDQfepmR4LWR8fG9TaGFxkKVoZ1lWav9oW
+         dBH/KXFTyMh4zUFyg6l8pOUXMtPSj0CpYeVnTeYGTkDfjuhWdygvPV+Bp6J32k0tWHGw
+         CjncWVM/gqUFaqsWPcCr785a2B5oCwuDBbTzNrLj6v3SzI0+7UT/VGODJLIZvPdI2mGr
+         RgmQ==
+X-Gm-Message-State: ACrzQf1zIl+mIrbmkg7DcNhF6DYD2/IJPeIZ34r9TdCSQDqnERh6OAIO
+        mjIWpMU2NFt7J8R53Dsev8jF91No8vsd6EYDmJf0M22xB+MEHg==
+X-Google-Smtp-Source: AMsMyM5C9NLr2Kz1+vKkOOJ10yx17T4xwIKTzoLig0Zw9Z44q8yI20nka6ZVPN9VHFsB21O4aWfFUz+j7o/G73EyP7U=
+X-Received: by 2002:a05:600c:1990:b0:3c9:a5e8:addb with SMTP id
+ t16-20020a05600c199000b003c9a5e8addbmr1273615wmq.140.1666767909354; Wed, 26
+ Oct 2022 00:05:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
-Content-Language: en-GB
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221025072533.2980154-1-andrej.picej@norik.com>
- <13126397.uLZWGnKmhe@steina-w>
- <56af1cc3-c10e-5694-d25f-252304732568@norik.com>
- <2201746.iZASKD2KPV@steina-w>
-From:   Andrej Picej <andrej.picej@norik.com>
-In-Reply-To: <2201746.iZASKD2KPV@steina-w>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <1666318661-11777-1-git-send-email-u0084500@gmail.com>
+ <CAHp75VeMvWycVsNPHb1cvMbtVSCiX3m9wUsZk7HkPU+e=VTb3A@mail.gmail.com>
+ <CADiBU3_m1gDgZxyo53UNvDP8P5LpFgpV+mBbw9+_epYuXimqWA@mail.gmail.com>
+ <CAHp75VeWMSeZiq6vUo25hRdueMbeEEQuzPqR=-ROsOufK+27LQ@mail.gmail.com>
+ <CADiBU39UF3Ez-80Xauy8qaO0iSyh-n-ZxScH+aZt3m=s3qkOjA@mail.gmail.com> <CAHp75VevGHnZKJvsdJ6QpWbHdhWP0VW0G71QLqRDvgk8MFeNUg@mail.gmail.com>
+In-Reply-To: <CAHp75VevGHnZKJvsdJ6QpWbHdhWP0VW0G71QLqRDvgk8MFeNUg@mail.gmail.com>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Wed, 26 Oct 2022 15:04:57 +0800
+Message-ID: <CADiBU39pRnrTuCM4OEFpLwEP9c86aJz2L6+G7yFm22i+7Gt8pw@mail.gmail.com>
+Subject: Re: [PATCH v2] mfd: mt6370: Add the out-of-bound check to prevent the
+ null pointer
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     lee@kernel.org, matthias.bgg@gmail.com, chiaen_wu@richtek.com,
+        cy_huang@richtek.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B410=E6=9C=
+=8821=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=886:35=E5=AF=AB=E9=81=93=
+=EF=BC=9A
+>
+> On Fri, Oct 21, 2022 at 12:58 PM ChiYuan Huang <u0084500@gmail.com> wrote=
+:
+> > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B410=
+=E6=9C=8821=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:14=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+> > > On Fri, Oct 21, 2022 at 12:02 PM ChiYuan Huang <u0084500@gmail.com> w=
+rote:
+> > > > Andy Shevchenko <andy.shevchenko@gmail.com> =E6=96=BC 2022=E5=B9=B4=
+10=E6=9C=8821=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:34=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+> > > > > On Fri, Oct 21, 2022 at 5:17 AM cy_huang <u0084500@gmail.com> wro=
+te:
+>
+> ...
+>
+> > > > > https://www.kernel.org/doc/html/latest/process/submitting-patches=
+.html#backtraces-in-commit-messages
+> > >
+> > > Have you had a chance to read this section of the document?
+> > >
+> > OK, get it.
+> > Is the below text enough to express this problem?
+>
+> It is you who decides, because I don't know what exact problem this
+> will represent.
+>
+> > Ex. Testing as below (mt6370 register range from 0 to 0x1ff)
+> >    rg_bound_show()
+> >         regmap_raw_read(regmap, 0x200, &val, sizeof(val));
+>
+> > pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
+>
+> For example, why is this line here?
+>
+> > pc : i2c_smbus_xfer+0x58/0x120
+> > lr : i2c_smbus_read_i2c_block_data+0x74/0xc0
+> > Call trace:
+> >  i2c_smbus_xfer+0x58/0x120
+> >  i2c_smbus_read_i2c_block_data+0x74/0xc0
+> >  mt6370_regmap_read+0x40/0x60
+> >  _regmap_raw_read+0xe4/0x278
+> >  regmap_raw_read+0xec/0x240
+> >  rg_bound_show+0xb0/0x120
+>
+> The rule of thumb is that it's okay to shrink to ~4-5 lines (in most case=
+s).
+>
 
+At first, I start this thread due to  the original thread seems stopped
+Since it already restarted, please forget this one.
+Just follow the restaed thread for the discussion.
+https://lore.kernel.org/all/Y1aCiReTZDbPp%2FrS@kadam/
 
-On 26. 10. 22 08:01, Alexander Stein wrote:
-> Hello Andrej,
-> 
-> Am Dienstag, 25. Oktober 2022, 13:21:18 CEST schrieb Andrej Picej:
->> Hi Alexander,
->>
->> On 25. 10. 22 11:38, Alexander Stein wrote:
->>> Am Dienstag, 25. Oktober 2022, 09:25:31 CEST schrieb Andrej Picej:
->>>> Putting device into the "Suspend-To-Idle" mode causes watchdog to
->>>> trigger and reset the board after set watchdog timeout period elapses.
->>>>
->>>> Introduce new device-tree property "fsl,suspend-in-wait" which suspends
->>>> watchdog in WAIT mode. This is done by setting WDW bit in WCR
->>>> (Watchdog Control Register) Watchdog operation is restored after exiting
->>>> WAIT mode as expected. WAIT mode coresponds with Linux's
->>>> "Suspend-To-Idle".
->>>>
->>>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
->>>> Reviewed-by: Fabio Estevam <festevam@gmail.com>
->>>> ---
->>>>
->>>> Changes in v2:
->>>>    - validate the property with compatible string, as this functionality
->>>>    
->>>>      is not supported by all devices.
->>>>
->>>> ---
->>>>
->>>>    drivers/watchdog/imx2_wdt.c | 37 +++++++++++++++++++++++++++++++++++++
->>>>    1 file changed, 37 insertions(+)
->>>>
->>>> diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
->>>> index d0c5d47ddede..dd9866c6f1e5 100644
->>>> --- a/drivers/watchdog/imx2_wdt.c
->>>> +++ b/drivers/watchdog/imx2_wdt.c
->>>> @@ -35,6 +35,7 @@
->>>>
->>>>    #define IMX2_WDT_WCR		0x00		/* Control
->>>
->>> Register */
->>>
->>>>    #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* ->
->>>
->>> Watchdog Timeout Field */
->>>
->>>> +#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable
->>>
->>> for WAIT */
->>>
->>>>    #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset
->>>
->>> WDOG_B */
->>>
->>>>    #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset
->>>
->>> Signal */
->>>
->>>>    #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable
->>>
->>> */
->>>
->>>> @@ -67,6 +68,27 @@ struct imx2_wdt_device {
->>>>
->>>>    	bool ext_reset;
->>>>    	bool clk_is_on;
->>>>    	bool no_ping;
->>>>
->>>> +	bool sleep_wait;
->>>> +};
->>>> +
->>>> +static const char * const wdw_boards[] __initconst = {
->>>> +	"fsl,imx25-wdt",
->>>> +	"fsl,imx35-wdt",
->>>> +	"fsl,imx50-wdt",
->>>> +	"fsl,imx51-wdt",
->>>> +	"fsl,imx53-wdt",
->>>> +	"fsl,imx6q-wdt",
->>>> +	"fsl,imx6sl-wdt",
->>>> +	"fsl,imx6sll-wdt",
->>>> +	"fsl,imx6sx-wdt",
->>>> +	"fsl,imx6ul-wdt",
->>>> +	"fsl,imx7d-wdt",
->>>> +	"fsl,imx8mm-wdt",
->>>> +	"fsl,imx8mn-wdt",
->>>> +	"fsl,imx8mp-wdt",
->>>> +	"fsl,imx8mq-wdt",
->>>> +	"fsl,vf610-wdt",
->>>> +	NULL
->>>>
->>>>    };
->>>
->>> So the models listed in
->>> Documentation/devicetree/bindings/watchdog/fsl-imx-
->>> wdt.yaml not supporting this feature are
->>> * fsl,imx21-wdt
->>> * fsl,imx27-wdt
->>> * fsl,imx31-wdt
->>> * fsl,ls1012a-wdt
->>> * fsl,ls1043a-wdt
->>> ?
->>
->> yes, you are correct.
->>
->>> But all models are listed as compatible to fsl,imx21-wdt. So there is
->>> something wrong here. IMHO this sounds like the compatible list has to be
->>> split and updated. Depending on that this feature can be detected.
->>> Maintaining another list seems error prone to me.
->>
->> So basically the compatible lists would be split into two groups, one
->> for the devices which support this WDW bit and the rest which don't
->> support this?
-> 
-> This was my idea, so only one set has to be maintained.
-> 
->> You got a point here, but...this means that every processors
->> device-tree, which has two compatible strings (with "fsl,imx21-wdt")
->> should be updated, right? That sounds like quite a lot of changes, which
->> I'd like to avoid if possible.
-> 
-> Well, the compatible list right now doesn't reflect the hardware features/
-> compatibility correctly, so IMHO it should be fixed.
-> But apparently Krzysztof is okay having the special property only applicable
-> for a specific set of devices. But in this case you will have to maintain two
-> sets of device models (bindings + driver) to which WDW applies/does not apply
-> to.
-> 
-Ok, lets see what @Krzysztof has to say about this.
-
-Best regards,
-Andrej
+> --
+> With Best Regards,
+> Andy Shevchenko
