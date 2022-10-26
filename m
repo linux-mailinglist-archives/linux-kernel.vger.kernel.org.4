@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597D760DEF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485FE60DEF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbiJZKox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 06:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S229995AbiJZKpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 06:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiJZKos (ORCPT
+        with ESMTP id S233439AbiJZKo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 06:44:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662E137408
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 03:44:44 -0700 (PDT)
+        Wed, 26 Oct 2022 06:44:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525424AD71;
+        Wed, 26 Oct 2022 03:44:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D9015CE21B2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:44:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 028F2C433D7;
-        Wed, 26 Oct 2022 10:44:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1666781079;
-        bh=mv+nT/fYds+81lQzwzMKAsyolciIF3Ndr3XzU773gZc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yJGawvpN+O+Hb8WEAFiiNKOwz0dKk8onsE+jbC9O4hgEmAOfyMagD/N2TJj4LNsMN
-         AwBdYJuWj3g4nQ/23nC6TXtQKjl5oH2N+cjhs5589RpvL1Hm6d4+zQcTknVIesFadr
-         L44u3HzLjJ3GcgkE0ietNDGedvb9VsV98rAttjxM=
-Date:   Wed, 26 Oct 2022 12:44:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        by ams.source.kernel.org (Postfix) with ESMTPS id C340DB82189;
+        Wed, 26 Oct 2022 10:44:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F7E2C433C1;
+        Wed, 26 Oct 2022 10:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666781093;
+        bh=U82//oUDhaVje5b0sUsZV8SSFolQg4Jy8YYSsA3q5Ew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uFq7Oc1SDyKqkgr6vxDa6I06tknv7JNntEqWuqHzhBEJlNkgPf0B9CDnhjJOmcVN5
+         6+3WI2CAym9pFj+teebjNYIDcmHTw4LtaxcHh0f+wXI3++Wmt4IKWpBjOhqKqxORlN
+         7b1RvOB0qWQhFnGXyq3Al/vM9r8BK/eJi483T178M9y0WVzoCGB8b49b9cLMzrQyAy
+         3h6wSd9cv1BxhSaChn7HHVKE4yBYBDEuML4KEHdEFheT+i2KhrwNBFQx28ukOp3g3+
+         8xZZuN6Afa7rCar+SthYyGxv3mFB26F9Q/tw4zHODc9hBEQ8gMIGbwq6yOdYxTiOVB
+         Oa2xf1IR9XYVQ==
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        linux-trace-devel@vger.kernel.org
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] staging: rtl8192u: remove unnecessary function
- implementation
-Message-ID: <Y1kPlLyo7sb8OfFx@kroah.com>
-References: <cover.1666754500.git.drv@mailo.com>
- <a15fe9f6167e76e4422d303ceafbd4d9b432dd13.1666754500.git.drv@mailo.com>
+Subject: [PATCH 0/3] verification/rv: Add rv tool
+Date:   Wed, 26 Oct 2022 12:44:38 +0200
+Message-Id: <cover.1666776642.git.bristot@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a15fe9f6167e76e4422d303ceafbd4d9b432dd13.1666754500.git.drv@mailo.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 08:57:48AM +0530, Deepak R Varma wrote:
-> Current implementation of function ieee80211_tkip_null simply returns
-> back to the caller without any useful instruction executions. This makes
-> the function call and its implementation unnecessary and should be
-> removed.
-> 
-> Signed-off-by: Deepak R Varma <drv@mailo.com>
-> ---
->  drivers/staging/rtl8192u/ieee80211/ieee80211.h            | 3 ---
->  drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c | 6 ------
->  drivers/staging/rtl8192u/ieee80211/ieee80211_module.c     | 3 ---
->  3 files changed, 12 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-> index 9cd4b1896745..00c07455cbb3 100644
-> --- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-> +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-> @@ -232,8 +232,6 @@ struct cb_desc {
-> 
->  #define ieee80211_ccmp_null		ieee80211_ccmp_null_rsl
-> 
-> -#define ieee80211_tkip_null		ieee80211_tkip_null_rsl
-> -
->  #define free_ieee80211			free_ieee80211_rsl
->  #define alloc_ieee80211			alloc_ieee80211_rsl
-> 
-> @@ -2256,7 +2254,6 @@ void ieee80211_ps_tx_ack(struct ieee80211_device *ieee, short success);
->  void softmac_mgmt_xmit(struct sk_buff *skb, struct ieee80211_device *ieee);
-> 
->  /* ieee80211_crypt_ccmp&tkip&wep.c */
-> -void ieee80211_tkip_null(void);
-> 
->  int ieee80211_crypto_init(void);
->  void ieee80211_crypto_deinit(void);
-> diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-> index 7b120b8cb982..9bfd24ad46b6 100644
-> --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-> +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_crypt_tkip.c
-> @@ -716,9 +716,3 @@ void ieee80211_crypto_tkip_exit(void)
->  {
->  	ieee80211_unregister_crypto_ops(&ieee80211_crypt_tkip);
->  }
-> -
-> -void ieee80211_tkip_null(void)
-> -{
-> -//    printk("============>%s()\n", __func__);
-> -	return;
-> -}
-> diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_module.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_module.c
-> index b94fe9b449b6..3f93939bc4ee 100644
-> --- a/drivers/staging/rtl8192u/ieee80211/ieee80211_module.c
-> +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_module.c
-> @@ -159,9 +159,6 @@ struct net_device *alloc_ieee80211(int sizeof_priv)
->  		ieee->last_packet_time[i] = 0;
->  	}
-> 
-> -/* These function were added to load crypte module autoly */
-> -	ieee80211_tkip_null();
-> -
+This is the (user-space) runtime verification tool named rv.
 
-Ah, but this was created on purpose, did you now break the module
-autoloading here?  Is this built as a separate module or is it all one
-big module?
+This tool aims to be the interface for in-kernel rv monitors, as
+well as the home for user-space controlled monitors.
 
-You need to explain why this does not change functionality in your
-changelog text.
+The tool receives a command as the first argument, the current
+commands are:
 
-thanks,
+  list	- list all available monitors
+  mon	- run a given monitor
 
-greg k-h
+Each monitor is an independent piece of software inside the
+tool and can have their own arguments.
+
+Daniel Bristot de Oliveira (3):
+  rv: Add rv tool
+  tools/rv: Add in-kernel monitor interface
+  Documentation/rv: Add verification/rv man pages
+
+ Documentation/tools/index.rst              |   1 +
+ Documentation/tools/rv/Makefile            |  52 ++
+ Documentation/tools/rv/common_appendix.rst |  13 +
+ Documentation/tools/rv/common_ikm.rst      |  21 +
+ Documentation/tools/rv/index.rst           |  24 +
+ Documentation/tools/rv/rv-list.rst         |  39 ++
+ Documentation/tools/rv/rv-mon-wip.rst      |  40 ++
+ Documentation/tools/rv/rv-mon-wwnr.rst     |  39 ++
+ Documentation/tools/rv/rv-mon.rst          |  51 ++
+ Documentation/tools/rv/rv.rst              |  57 ++
+ tools/verification/rv/Makefile             | 141 +++++
+ tools/verification/rv/README.txt           |  38 ++
+ tools/verification/rv/include/in_kernel.h  |   3 +
+ tools/verification/rv/include/rv.h         |  12 +
+ tools/verification/rv/include/trace.h      |  16 +
+ tools/verification/rv/include/utils.h      |   8 +
+ tools/verification/rv/src/in_kernel.c      | 698 +++++++++++++++++++++
+ tools/verification/rv/src/rv.c             | 177 ++++++
+ tools/verification/rv/src/trace.c          | 128 ++++
+ tools/verification/rv/src/utils.c          |  46 ++
+ 20 files changed, 1604 insertions(+)
+ create mode 100644 Documentation/tools/rv/Makefile
+ create mode 100644 Documentation/tools/rv/common_appendix.rst
+ create mode 100644 Documentation/tools/rv/common_ikm.rst
+ create mode 100644 Documentation/tools/rv/index.rst
+ create mode 100644 Documentation/tools/rv/rv-list.rst
+ create mode 100644 Documentation/tools/rv/rv-mon-wip.rst
+ create mode 100644 Documentation/tools/rv/rv-mon-wwnr.rst
+ create mode 100644 Documentation/tools/rv/rv-mon.rst
+ create mode 100644 Documentation/tools/rv/rv.rst
+ create mode 100644 tools/verification/rv/Makefile
+ create mode 100644 tools/verification/rv/README.txt
+ create mode 100644 tools/verification/rv/include/in_kernel.h
+ create mode 100644 tools/verification/rv/include/rv.h
+ create mode 100644 tools/verification/rv/include/trace.h
+ create mode 100644 tools/verification/rv/include/utils.h
+ create mode 100644 tools/verification/rv/src/in_kernel.c
+ create mode 100644 tools/verification/rv/src/rv.c
+ create mode 100644 tools/verification/rv/src/trace.c
+ create mode 100644 tools/verification/rv/src/utils.c
+
+-- 
+2.37.3
+
