@@ -2,151 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BD260DBA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 08:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBFC60DBA9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiJZG7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 02:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        id S233056AbiJZHBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233083AbiJZG7o (ORCPT
+        with ESMTP id S229497AbiJZHB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 02:59:44 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B76A1C108
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:59:43 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id w6-20020a6bd606000000b006bcd951c261so9708957ioa.2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 23:59:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rgA8wVXtaAqvqN1Bpn2B16FsEHYpcRrh8pBk9jEsgBM=;
-        b=KTG5+vCTAuumEJQ4v33DHbck17cHFkDHJvyOGCdOofLBrlxH7D38Ty2DTCQh7yJZya
-         DBLKxMJvwpvfhq9WoPdeYX29OcC3T18xkTXZKC/VgWxeFPFxgT11StiI7XNQbLIexn8R
-         Mk/IJO7ZsNWW4/+i2e28qe9Ic46EE/hOuBgaf3rYvazHImp8EVsQHWcSCLPs7PsFusfw
-         SH3fxWT8IfirSOzjVJdYjJj3E20uBy96AzIlqgudRjejsjtcrVacGLDhqfaR//jsHdy3
-         FbWU+/yfaJ19Y3bw6nmdN4mVjmlwZvefR/eVTlRSJwfO7CnDW3pXRM5RMhhSyVKTpqVT
-         /tqQ==
-X-Gm-Message-State: ACrzQf0ZrG9V6q3WFtX/LB4ucXu2aVsKIXDsht17e95xlh9eyaJm4LNK
-        u6yb3oUWSn84fq4MI94J6OUb+xr6pD04jQI0nBHgJNFWMTQ2
-X-Google-Smtp-Source: AMsMyM5dbmcqAPxlAnr9t449nYUmo/KShV4jDUGOxT8aCHAwnQt4YD3/RrH7rgudQ65SsPAP3nnNxkLWFSoM2V5Hmm5h+mBCA5ey
+        Wed, 26 Oct 2022 03:01:26 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A2232B9C
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:01:25 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29Q69KsS017875;
+        Wed, 26 Oct 2022 07:00:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=i74J7YxKNCGZnJ4ntBW29KJiOsTw3NkvkI4MTBMck88=;
+ b=jnLt7cRKjf7YhEcP0y2j1WGV8fjq7obXmW8Kwo/W7irerY3KCiEE780PX0oywARh1spD
+ UPv7ZfwL/aWH4KOvKdyOfr0LqZ7Df7HVPc6WKDXEd1h8mSlX1hi4Cfv4TIfi0vppJ9pW
+ XwfHiNtp/rcZBvo0ot+WEDCba3pn1cjFcQZuN3sx/jEO2YoJ9Wij04Y5eR/GiAvpawLK
+ RacCt1V8CowjyK0BJQHlQSGJasWe6f0q6NVQI9fvMUCloC2CNZHl3JVLuNu++51xfC+j
+ XntdczZs2hFniZwWEV5bysrDjpqPWtAxjBuSJOo3/sIyeiAmgwNlcR7ijXQSCDHk1rjY 9A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kedmq2jbc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 07:00:15 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29Q6uuDr018320;
+        Wed, 26 Oct 2022 07:00:15 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kedmq2j9a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 07:00:15 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29Q6p3CW023281;
+        Wed, 26 Oct 2022 07:00:12 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3kc7sj512w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 07:00:12 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29Q70iCt51970370
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 07:00:44 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A2C834C04E;
+        Wed, 26 Oct 2022 07:00:09 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 30B654C046;
+        Wed, 26 Oct 2022 07:00:03 +0000 (GMT)
+Received: from [9.43.71.140] (unknown [9.43.71.140])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Oct 2022 07:00:02 +0000 (GMT)
+Message-ID: <04b0ebb7-2131-97f0-a49f-af16c5378831@linux.ibm.com>
+Date:   Wed, 26 Oct 2022 12:30:02 +0530
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1545:b0:2ff:6ab3:dab1 with SMTP id
- j5-20020a056e02154500b002ff6ab3dab1mr15880137ilu.285.1666767582274; Tue, 25
- Oct 2022 23:59:42 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 23:59:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000aa2b2805ebea9137@google.com>
-Subject: [syzbot] WARNING in __split_huge_page_tail
-From:   syzbot <syzbot+273b547b15eb58ea35e8@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Subject: Re: [PATCH v12 3/7] crash: add generic infrastructure for crash
+ hotplug support
+To:     Baoquan He <bhe@redhat.com>,
+        Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220909210509.6286-1-eric.devolder@oracle.com>
+ <20220909210509.6286-4-eric.devolder@oracle.com>
+ <8cc31b22-a061-d07c-77dc-c555b8b35af3@linux.ibm.com>
+ <97f2daae-f34a-86bb-6d28-8aa8314321bc@oracle.com>
+ <Y1ZWaSeGk53QqZHX@MiWiFi-R3L-srv>
+Content-Language: en-US
+From:   Sourabh Jain <sourabhjain@linux.ibm.com>
+In-Reply-To: <Y1ZWaSeGk53QqZHX@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: y_DdF7yAzuDyQRTIg2efVFrexyXEX96L
+X-Proofpoint-ORIG-GUID: ffAIrTWg8AXqgaDGIz-os4EWOLZ0W6s4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_02,2022-10-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
+ impostorscore=0 mlxlogscore=999 suspectscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210260036
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hello Baoquan,
 
-syzbot found the following issue on:
+On 24/10/22 14:40, Baoquan He wrote:
+> Hi Eric, Sourabh,
+>
+> On 10/07/22 at 02:14pm, Eric DeVolder wrote:
+>>
+>> On 10/3/22 12:51, Sourabh Jain wrote:
+>>> Hello Eric,
+>>>
+>>> On 10/09/22 02:35, Eric DeVolder wrote:
+> ......
+>>>> +static void handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+>>>> +{
+>>>> +    /* Obtain lock while changing crash information */
+>>>> +    mutex_lock(&kexec_mutex);
+>>>> +
+>>>> +    /* Check kdump is loaded */
+>>>> +    if (kexec_crash_image) {
+>>>> +        struct kimage *image = kexec_crash_image;
+>>>> +
+>>>> +        if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
+>>>> +            hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+>>>> +            pr_debug("crash hp: hp_action %u, cpu %u\n", hp_action, cpu);
+>>>> +        else
+>>>> +            pr_debug("crash hp: hp_action %u\n", hp_action);
+>>>> +
+>>>> +        /*
+>>>> +         * When the struct kimage is allocated, it is wiped to zero, so
+>>>> +         * the elfcorehdr_index_valid defaults to false. Find the
+>>>> +         * segment containing the elfcorehdr, if not already found.
+>>>> +         * This works for both the kexec_load and kexec_file_load paths.
+>>>> +         */
+>>>> +        if (!image->elfcorehdr_index_valid) {
+>>>> +            unsigned char *ptr;
+>>>> +            unsigned long mem, memsz;
+>>>> +            unsigned int n;
+>>>> +
+>>>> +            for (n = 0; n < image->nr_segments; n++) {
+>>>> +                mem = image->segment[n].mem;
+>>>> +                memsz = image->segment[n].memsz;
+>>>> +                ptr = arch_map_crash_pages(mem, memsz);
+>>>> +                if (ptr) {
+>>>> +                    /* The segment containing elfcorehdr */
+>>>> +                    if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
+>>>> +                        image->elfcorehdr_index = (int)n;
+>>>> +                        image->elfcorehdr_index_valid = true;
+>>>> +                    }
+>>>> +                }
+>>>> +                arch_unmap_crash_pages((void **)&ptr);
+>>>> +            }
+>>>> +        }
+>>>> +
+>>>> +        if (!image->elfcorehdr_index_valid) {
+>>>> +            pr_err("crash hp: unable to locate elfcorehdr segment");
+>>>> +            goto out;
+>>>> +        }
+>>>> +
+>>>> +        /* Needed in order for the segments to be updated */
+>>>> +        arch_kexec_unprotect_crashkres();
+>>>> +
+>>>> +        /* Flag to differentiate between normal load and hotplug */
+>>>> +        image->hotplug_event = true;
+>>>> +
+>>>> +        /* Now invoke arch-specific update handler */
+>>>> +        arch_crash_handle_hotplug_event(image, hp_action);
+>>>> +
+>>>> +        /* No longer handling a hotplug event */
+>>>> +        image->hotplug_event = false;
+>>>> +
+>>>> +        /* Change back to read-only */
+>>>> +        arch_kexec_protect_crashkres();
+>>>> +    }
+>>>> +
+>>>> +out:
+>>>> +    /* Release lock now that update complete */
+>>>> +    mutex_unlock(&kexec_mutex);
+>>>> +}
+>>>> +
+>>>> +static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
+>>>> +{
+>>>> +    switch (val) {
+>>>> +    case MEM_ONLINE:
+>>>> +        handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY, 0);
+>>>> +        break;
+>>>> +
+>>>> +    case MEM_OFFLINE:
+>>>> +        handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY, 0);
+>>>> +        break;
+>>>> +    }
+>>>> +    return NOTIFY_OK;
+>>> Can we pass v (memory_notify) argument to arch_crash_handle_hotplug_event function
+>>> via handle_hotplug_event?
+>>>
+>>> Because the way memory hotplug is handled on PowerPC, it is hard to update the elfcorehdr
+>>> without memory_notify args.
+>>>
+>>> On PowePC memblock data structure is used to prepare elfcorehdr for kdump. Since the notifier
+>>> used for memory hotplug crash handler get initiated before the memblock data structure update
+>>> happens (as depicted below), the newly prepared elfcorehdr still holds the old memory regions.
+>>> So if the system crash with obsolete elfcorehdr, makedumpfile failed to collect vmcore.
+>>>
+>>> Sequence of actions done on PowerPC to server the memory hotplug:
+>>>
+>>>    Initiate memory hot remove
+>>>             |
+>>>             v
+>>>    offline pages
+>>>             |
+>>>             v
+>>>    initiate memory notify call chain
+>>>    for MEM_OFFLINE event.
+>>>    (same is used for crash update)
+>>>             |
+>>>             v
+>>>    prepare new elfcorehdr for kdump using
+>>>    memblock data structure
+>>>             |
+>>>             v
+>>>    update memblock data structure
+>>>
+>>> How passing memory_notify to arch crash hotplug handler will help?
+>>>
+>>> memory_notify holds the start PFN and page count, with that we can get
+>>> the base address and size of hot unplugged memory and can use the same
+>>> to avoid hot unplugged memeory region to get added in the elfcorehdr..
+>>>
+>>> Thanks,
+>>> Sourabh Jain
+>>>
+>> Sourabh, let's see what Baoquan thinks.
+>>
+>> Baoquan, are you OK with this request? I once had these parameters to the
+>> crash hotplug handler and since they were unused at the time, you asked
+>> that I remove them, which I did.
+> Sorry to miss this mail. I thought both of you were talking about
+> somthing, and didn't notice this question to me.
+>
+> I think there are two ways to solve the issue Sourabh raised:
+> 1) make handle_hotplug_event() get and pass down the memory_notify as
+> Sourabh said, or the hp_action, mem_start|size as Eric suggested. I
+> have to admit I haven't carefully checked which one is better.
+>
+> 2) let the current code as is since it's aiming at x86 only. Later
+> Sourabh can modify code according to his need on ppc. This can give
+> satisfying why on code change each time.
+>
+> I personally like the 2nd way, while also like seeing 1st one if the
+> code change and log is convincing to any reviewer.
 
-HEAD commit:    4da34b7d175d Merge tag 'thermal-6.1-rc2' of git://git.kern..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=113bd8bc880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4789759e8a6d5f57
-dashboard link: https://syzkaller.appspot.com/bug?extid=273b547b15eb58ea35e8
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161e1f62880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16dd4fe6880000
+Ok let's go with second approach. I will introduce a patch in PowerPC 
+series to update the
+handle_hotplug_event function signature and justify the change.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a61ddb36c296/disk-4da34b7d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ceee41246252/vmlinux-4da34b7d.xz
+Thanks,
+Sourabh Jain
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+273b547b15eb58ea35e8@syzkaller.appspotmail.com
-
- tlb_finish_mmu+0xcb/0x200 mm/mmu_gather.c:363
- exit_mmap+0x2b1/0x670 mm/mmap.c:3098
- __mmput+0x114/0x3b0 kernel/fork.c:1185
- exit_mm+0x217/0x2f0 kernel/exit.c:516
- do_exit+0x5e7/0x2070 kernel/exit.c:807
- do_group_exit+0x1fd/0x2b0 kernel/exit.c:950
- __do_sys_exit_group kernel/exit.c:961 [inline]
- __se_sys_exit_group kernel/exit.c:959 [inline]
- __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:959
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3908 at mm/huge_memory.c:2465 __split_huge_page_tail+0x81c/0x1080 mm/huge_memory.c:2465
-Modules linked in:
-CPU: 0 PID: 3908 Comm: syz-executor315 Not tainted 6.1.0-rc1-syzkaller-00249-g4da34b7d175d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:__split_huge_page_tail+0x81c/0x1080 mm/huge_memory.c:2465
-Code: ff ff e8 57 a7 a6 ff 48 ff cb e9 1a fd ff ff e8 4a a7 a6 ff 4c 89 ef 48 c7 c6 80 5d bb 8a e8 6b f0 e3 ff c6 05 2f 20 30 0c 01 <0f> 0b e9 cb fb ff ff 89 e9 80 e1 07 80 c1 03 38 c1 0f 8c 29 f8 ff
-RSP: 0018:ffffc900044b6ba8 EFLAGS: 00010046
-RAX: beb4e3f6a4108300 RBX: 1ffffd400031ed85 RCX: ffffffff8169255b
-RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffff8e277d28
-RBP: ffffea00018f0008 R08: dffffc0000000000 R09: fffffbfff1c4efa6
-R10: fffffbfff1c4efa6 R11: 1ffffffff1c4efa5 R12: ffffea00018f6c00
-R13: ffffea00018f0000 R14: 1ffffd400031e001 R15: ffffea00018f6c28
-FS:  00005555567b0300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020001304 CR3: 000000001d5c1000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __split_huge_page+0x403/0x1df0 mm/huge_memory.c:2527
- split_huge_page_to_list+0x101d/0x1c90 mm/huge_memory.c:2756
- split_huge_page include/linux/huge_mm.h:188 [inline]
- deferred_split_scan+0x683/0x8b0 mm/huge_memory.c:2882
- do_shrink_slab+0x4e1/0xa00 mm/vmscan.c:842
- shrink_slab_memcg+0x2ec/0x630 mm/vmscan.c:911
- shrink_slab+0xbe/0x340 mm/vmscan.c:990
- shrink_node_memcgs+0x3c3/0x770 mm/vmscan.c:6076
- shrink_node+0x299/0x1050 mm/vmscan.c:6105
- shrink_zones+0x4fb/0xc40 mm/vmscan.c:6343
- do_try_to_free_pages+0x215/0xcd0 mm/vmscan.c:6405
- try_to_free_mem_cgroup_pages+0x3cb/0x6d0 mm/vmscan.c:6720
- try_charge_memcg+0x6a1/0x11f0 mm/memcontrol.c:2681
- try_charge mm/memcontrol.c:2823 [inline]
- mem_cgroup_charge_skmem+0xa7/0x370 mm/memcontrol.c:7209
- sock_reserve_memory+0x105/0x640 net/core/sock.c:1018
- sk_setsockopt+0x16bf/0x32c0 net/core/sock.c:1518
- __sys_setsockopt+0x6ba/0xa00 net/socket.c:2248
- __do_sys_setsockopt net/socket.c:2263 [inline]
- __se_sys_setsockopt net/socket.c:2260 [inline]
- __x64_sys_setsockopt+0xb1/0xc0 net/socket.c:2260
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff3a2ea8ee9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd09efcd08 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007ff3a2ea8ee9
-RDX: 0000000000000049 RSI: 0000000000000001 RDI: 0000000000000004
-RBP: 0000000000000000 R08: 0000000000000010 R09: 00007ffd09efcd30
-R10: 0000000020000040 R11: 0000000000000246 R12: 00007ffd09efcd2c
-R13: 00007ffd09efcd40 R14: 00007ffd09efcd80 R15: 0000000000000130
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
