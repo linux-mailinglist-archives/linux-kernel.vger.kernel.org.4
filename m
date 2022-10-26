@@ -2,142 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E1560E121
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D6960E125
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbiJZMqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47988 "EHLO
+        id S233290AbiJZMsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbiJZMqA (ORCPT
+        with ESMTP id S230090AbiJZMsD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:46:00 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2972199381;
-        Wed, 26 Oct 2022 05:45:58 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id d6so28261443lfs.10;
-        Wed, 26 Oct 2022 05:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wCYS2MrhiyiJRqchJbvsfNWsp2c+i8O2FNVXcaDM2G4=;
-        b=OCrv7IpWNVUMh2AO7e6i1IyrvD4QBaDHl9M/25FYN8pyuGhpeRH6kYbzWzzSnceI0c
-         N4a2t56ENioRfRnjumaWnYNQen0MC47bXE3ZZVDFEuu2XWhWJdvJyU8AUDd3KsRcqlh+
-         kHjrSSIHAlKCafM4UYmdwMxf0qeDdf8EMmOFFQqRobtLhiKPcItmnudZvpSiS6cTc23k
-         +q/eRIT/IFKikBZBogYbxKkbGcesrxwg3SnVVJk/98giXNrMCdFm2qQg2Zp3/QOmmcbR
-         jwHE9uR86dqDDhXLmwMBh+pSNamlPxqpPtwqHFBSovR9xvrylqtUOIrC3yJ7jMFIdFM/
-         PnTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wCYS2MrhiyiJRqchJbvsfNWsp2c+i8O2FNVXcaDM2G4=;
-        b=vMB9O1UKSuDOW4MbDRRhStiQTt5OjAB0e1oSjg28cEVgf5gttx0Jmkn/O950a2c/ZD
-         zr4Ix5ZTjogiqkLIuURKTMSfx1WFWETorGPSXHLWHFCrolf0aPDdmaNuF21Y10vOUi76
-         bt4L3s+Q01g+IpEGv3LHs0pOmAg+MKKy7LbJRd0JcWPnckDfSweQDwN4VzIvepNrgYoH
-         qOtvwqPZLu8u1u/v9EGHGPBQ7n+4QZjuWcNalE4GoKyO25dS9R5y5j2nI0gEahL9X/dR
-         FN2bXL5i5VPInrDazHVDxXzybt3MxJhvV+tXPws8W9gL38c2alGVU++3eWtpyxHXIbGT
-         p8YQ==
-X-Gm-Message-State: ACrzQf1GnRyPox6S4QaSDJOl3YFLuYxCSiZofVE3W/GkRk0cKZqZy4tW
-        nbQ+luVqJrb9tDBCS95mb0q8HDPr3Ted0Q==
-X-Google-Smtp-Source: AMsMyM7PmmfexehbTSLlEBJ85BUrVcVkxpZ12MjCwV8C0zdOptDhQ86sr76L1I0wSxNc5kzBjQ0OtA==
-X-Received: by 2002:ac2:4f03:0:b0:495:ec98:bcac with SMTP id k3-20020ac24f03000000b00495ec98bcacmr15638176lfr.339.1666788356422;
-        Wed, 26 Oct 2022 05:45:56 -0700 (PDT)
-Received: from localhost (95-31-187-187.broadband.corbina.ru. [95.31.187.187])
-        by smtp.gmail.com with ESMTPSA id k21-20020a2ea275000000b0026c35c4720esm932661ljm.24.2022.10.26.05.45.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 05:45:55 -0700 (PDT)
-From:   Mikhail Rudenko <mike.rudenko@gmail.com>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mikhail Rudenko <mike.rudenko@gmail.com>
-Subject: [PATCH] media: i2c: ov4689: code cleanup
-Date:   Wed, 26 Oct 2022 15:45:51 +0300
-Message-Id: <20221026124552.163172-1-mike.rudenko@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <Y1gl1FMAjhXCfCmk@paasikivi.fi.intel.com>
-References: <Y1gl1FMAjhXCfCmk@paasikivi.fi.intel.com>
+        Wed, 26 Oct 2022 08:48:03 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCB9E8C42;
+        Wed, 26 Oct 2022 05:48:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8KIIctAa0VqNOSQ/2ZbNb/5Sjk32KtswvNRHKfRZHe8=; b=k4U0wbAzgdk0ibRqzdOrNyT5ks
+        GY0QL65LsETSsuMMjMZ1mA45Y/vRqzSUSz77zT+WpXS8KmwT8mddef2EuvCro6OnzjxekiAlEro3M
+        evU1A61xB5wh1d4nJuQWrTNwCaou0XAmMM8C3nwZyvmoE/8ZsUVZh9XmOCqmktF6A1XljPGBErHtz
+        McVaF+xWBq25wpNctc4HENh72+4LsBtod98Ppb1lv1RApYH3seMvj6XqSbJjaHmbDkTP5/E6Lp+0a
+        sq411EGaG5VIFNMBWJXlBpQM400dstEgepBOrlgLoeSzEPGiDCrBNAow4O0MiBVn8net0ZjukS3yC
+        UtezbUgQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34960)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1onfp5-0005bZ-5S; Wed, 26 Oct 2022 13:47:55 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1onfp2-0000cY-Jm; Wed, 26 Oct 2022 13:47:52 +0100
+Date:   Wed, 26 Oct 2022 13:47:52 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Sean Anderson <seanga2@gmail.com>, davem@davemloft.net,
+        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/5] net: pcs: add new PCS driver for altera
+ TSE PCS
+Message-ID: <Y1kseONzzimgWQP3@shell.armlinux.org.uk>
+References: <20220901143543.416977-1-maxime.chevallier@bootlin.com>
+ <20220901143543.416977-4-maxime.chevallier@bootlin.com>
+ <68b3dfbf-9bab-2554-254e-bffd280ba97e@gmail.com>
+ <20221026113711.2b740c7a@pc-8.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026113711.2b740c7a@pc-8.home>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix minor nits from the last review round: extra {}, temporary
-variables for ARRAYS_SIZE(), redundant check in ov4689_check_hwcfg.
-No functional change intended.
+On Wed, Oct 26, 2022 at 11:37:11AM +0200, Maxime Chevallier wrote:
+> Hello Sean,
+> 
+> On Sun, 9 Oct 2022 01:38:15 -0400
+> Sean Anderson <seanga2@gmail.com> wrote:
+> 
+> 
+> > > +#define   SGMII_PCS_LINK_TIMER_REG(x)		(0x12 + (x))  
+> > 
+> > Not used.
+> 
+> Right, I'll remove that in a followup patch
+> 
+> > > +#define SGMII_PCS_LINK_TIMER_1	0x13
+> > > +#define SGMII_PCS_IF_MODE	0x14
+> > > +#define   PCS_IF_MODE_SGMII_ENA		BIT(0)
+> > > +#define   PCS_IF_MODE_USE_SGMII_AN	BIT(1)
+> > > +#define   PCS_IF_MODE_SGMI_SPEED_MASK	GENMASK(3, 2)
+> > > +#define   PCS_IF_MODE_SGMI_SPEED_10	(0 << 2)
+> > > +#define   PCS_IF_MODE_SGMI_SPEED_100	(1 << 2)
+> > > +#define   PCS_IF_MODE_SGMI_SPEED_1000	(2 << 2)  
+> > 
+> > You can use FIELD_PREP if you're so inclined. I assume SGMI is from
+> > the datasheet.
+> 
+> Will do ! thanks :)
+> 
+> > > +#define   PCS_IF_MODE_SGMI_HALF_DUPLEX	BIT(4)
+> > > +#define   PCS_IF_MODE_SGMI_PHY_ANi	BIT(5)
 
-Signed-off-by: Mikhail Rudenko <mike.rudenko@gmail.com>
----
- drivers/media/i2c/ov4689.c | 18 +++++-------------
- 1 file changed, 5 insertions(+), 13 deletions(-)
+The definitions up to here look very similar to pcs-lynx.c when it comes
+to 1000base-X and SGMII. I wonder whether regmap can help here to
+abstract the register access differences and then maybe code can be
+shared.
 
-diff --git a/drivers/media/i2c/ov4689.c b/drivers/media/i2c/ov4689.c
-index 419ff7371ba8..c602e507d42b 100644
---- a/drivers/media/i2c/ov4689.c
-+++ b/drivers/media/i2c/ov4689.c
-@@ -623,9 +623,8 @@ static int ov4689_map_gain(struct ov4689 *ov4689, int logical_gain, int *result)
- 
- 	for (n = 0; n < ARRAY_SIZE(ov4689_gain_ranges); n++) {
- 		if (logical_gain >= ov4689_gain_ranges[n].logical_min &&
--		    logical_gain <= ov4689_gain_ranges[n].logical_max) {
-+		    logical_gain <= ov4689_gain_ranges[n].logical_max)
- 			break;
--		}
- 	}
- 
- 	if (n == ARRAY_SIZE(ov4689_gain_ranges)) {
-@@ -815,23 +814,22 @@ static int ov4689_check_sensor_id(struct ov4689 *ov4689,
- 
- static int ov4689_configure_regulators(struct ov4689 *ov4689)
- {
--	unsigned int supplies_count = ARRAY_SIZE(ov4689_supply_names);
- 	unsigned int i;
- 
--	for (i = 0; i < supplies_count; i++)
-+	for (i = 0; i < ARRAY_SIZE(ov4689_supply_names); i++)
- 		ov4689->supplies[i].supply = ov4689_supply_names[i];
- 
--	return devm_regulator_bulk_get(&ov4689->client->dev, supplies_count,
-+	return devm_regulator_bulk_get(&ov4689->client->dev,
-+				       ARRAY_SIZE(ov4689_supply_names),
- 				       ov4689->supplies);
- }
- 
- static u64 ov4689_check_link_frequency(struct v4l2_fwnode_endpoint *ep)
- {
--	unsigned int freqs_count = ARRAY_SIZE(link_freq_menu_items);
- 	const u64 *freqs = link_freq_menu_items;
- 	unsigned int i, j;
- 
--	for (i = 0; i < freqs_count; i++) {
-+	for (i = 0; i < ARRAY_SIZE(link_freq_menu_items); i++) {
- 		for (j = 0; j < ep->nr_of_link_frequencies; j++)
- 			if (freqs[i] == ep->link_frequencies[j])
- 				return freqs[i];
-@@ -864,12 +862,6 @@ static int ov4689_check_hwcfg(struct device *dev)
- 		goto out_free_bus_cfg;
- 	}
- 
--	if (!bus_cfg.nr_of_link_frequencies) {
--		dev_err(dev, "No link frequencies defined\n");
--		ret = -EINVAL;
--		goto out_free_bus_cfg;
--	}
--
- 	if (!ov4689_check_link_frequency(&bus_cfg)) {
- 		dev_err(dev, "No supported link frequency found\n");
- 		ret = -EINVAL;
+What value is in registers 2 and 3 (the ID registers) for this PCS?
+
+On the link timer value setting, I have a patch to add a phylink helper
+which returns the link timer in nanoseconds. May be a good idea if we
+get that queued up so drivers can make use of it rather than hard-coding
+a register value everywhere.
+
 -- 
-2.38.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
