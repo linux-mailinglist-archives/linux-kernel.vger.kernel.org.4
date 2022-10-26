@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0158360D98E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCCA60D990
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbiJZDEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 23:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S233073AbiJZDG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 23:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiJZDDu (ORCPT
+        with ESMTP id S232963AbiJZDFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 23:03:50 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2561FCD2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 20:03:49 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bj12so17740718ejb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 20:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y9ynIFAF3DcHSRiFihWBoNbJID3cgAU90Hgr+Zp14k8=;
-        b=YgAvV3fEXsz4gVdfGATDJcLEcI82bGyUBjf+c8tUEmHcN34J0NqyVcG0PbvSdLHn6p
-         8PcisaQh2U0G1AmHb116VM9ejHomfY6UPZk7LeRAD0lY3IBIkRmjj3xSb7mxPaAT8WRk
-         gWosfqjJdszBq2MLs4BVrQXVAMKVvZNFDCuMUD8I8+3V1F5A7OeBc9J914gOBfHAu4od
-         LRzZqVSZmg09WK85zRqjHPnKDbK0RGYlSRflXT5H33Y4zUH3X6RsixPKTBdw+nRC75VD
-         tUHd57CN0wlPZNmZVhBAilHDBFyjQ9+KJ9SIqVB6Z3oBn9OoDYiQ9sKX0qnQn8F52/xJ
-         +h3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y9ynIFAF3DcHSRiFihWBoNbJID3cgAU90Hgr+Zp14k8=;
-        b=zgnEdRghOoH+NVV9RhwS8+8ZIck4D1+z/0YKTuB0TpCz0FxfnViS9KnoYC6qIDyE7L
-         bxnozVOE8L4Xz9SiWN9iL5KxR46DyGyCh4853hcDWLnIFXJ+KlckM7siXBGkNahGzqq5
-         oXVWHNev5uwLSiNE6DP/Uw6lZ6nSC/gX7y/04JB85CC1ioVHHupfXOr1sp96Y/bu6fqa
-         WsUKZkP0Gkiv+fh7zL5OL/DiMAChs80tyMVfJba13QmKvtpaFR2JshYUDt7p6ZH8FwiU
-         FtLrNwEjd/UEo4hSUQQV0Ipfkf3lT3RaU4po/SZM+yRUawjlWYcCIBNbPpLIbOx6wuBs
-         3Bhw==
-X-Gm-Message-State: ACrzQf3+Nm0NAfG81YaxgQHep8uyEm3ILSQ+YTR6d2+h+n+PmhUEpAwV
-        wUY++cvNsPzRaEXEX53AwjIxQqb7hqE=
-X-Google-Smtp-Source: AMsMyM5BjNzJUZ8X+tJjbIq6WESS15PXp1ShFWF6a2WYtEdZoabupSiwikX42EGIj8ToVEzs03XjNw==
-X-Received: by 2002:a17:907:1c8a:b0:782:1a0d:3373 with SMTP id nb10-20020a1709071c8a00b007821a0d3373mr34125357ejc.135.1666753427946;
-        Tue, 25 Oct 2022 20:03:47 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f2a:b844:c952:3daa:e0a:40ba? (p200300c78f2ab844c9523daa0e0a40ba.dip0.t-ipconnect.de. [2003:c7:8f2a:b844:c952:3daa:e0a:40ba])
-        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b0073dd7e586f9sm2245751ejg.193.2022.10.25.20.03.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 20:03:47 -0700 (PDT)
-Message-ID: <3c9bf2b6-1801-83eb-d4ce-418d34a31e07@gmail.com>
-Date:   Wed, 26 Oct 2022 05:03:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 03/17] staging: vt6655: changed variable name: pDevice
-Content-Language: en-US
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-References: <cover.1666740522.git.tanjubrunostar0@gmail.com>
- <1f09760c8f6972b0e2b272060424b60a11166a0d.1666740522.git.tanjubrunostar0@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <1f09760c8f6972b0e2b272060424b60a11166a0d.1666740522.git.tanjubrunostar0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Tue, 25 Oct 2022 23:05:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03262F663;
+        Tue, 25 Oct 2022 20:05:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 770FE1FA15;
+        Wed, 26 Oct 2022 03:05:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1666753516; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wXuHRTM+3pPVGvFWj9th29d+zpf7pxkYh7JjYDkSJOo=;
+        b=Jzaq5cEqGZ/pzne9N0Jeby4iWc1mLyw7ZtRwMtgFzmmhOVwrypMqgivbfFv4NPkIShkAcE
+        922TPoIGUlfpUEO66NAmpKG/8dDIRu1CqOUc7vYjvXGdIGNuGYI0jpB1IIt+FNd21jX6yO
+        PLn2Qc6+gmeFJpjw4sNcTxfwHGzDyXM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1666753516;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wXuHRTM+3pPVGvFWj9th29d+zpf7pxkYh7JjYDkSJOo=;
+        b=8LdFFTmNZJVb9vXkdp10tkFKqJ7oupnEVbDmjHdXyCq0UPf1QZZD1G+0Ll+lvoMTE1KZga
+        7h+5OlUvLGpCQ7Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2A59C13A3B;
+        Wed, 26 Oct 2022 03:05:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GSgPNemjWGM4LgAAMHmgww
+        (envelope-from <neilb@suse.de>); Wed, 26 Oct 2022 03:05:13 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Li zeming" <zeming@nfschina.com>
+Cc:     bvanassche@acm.org, jlayton@kernel.org,
+        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        song@kernel.org, willy@infradead.org
+Subject: Re: [PATCH] reiserfs: journal: Increase jl pointer check
+In-reply-to: <20221026014727.3020-1-zeming@nfschina.com>
+References: <166673341340.7585.173987927705263434@noble.neil.brown.name>,
+ <20221026014727.3020-1-zeming@nfschina.com>
+Date:   Wed, 26 Oct 2022 14:05:11 +1100
+Message-id: <166675351102.12462.1842756348742191725@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/22 01:36, Tanjuate Brunostar wrote:
->      change variable names pDevice to meet the
->      linux coding standard, as it says to avoid using camelCase naming
->      style. Cought by checkpatch
+On Wed, 26 Oct 2022, Li zeming wrote:
+> I'm sorry, I think __GFP_NOFAIL should be like this:
 > 
-> Signed-off-by: Tanjuate Brunostar<tanjubrunostar0@gmail.com>
-> ---
->   drivers/staging/vt6655/rxtx.c | 354 +++++++++++++++++-----------------
->   1 file changed, 177 insertions(+), 177 deletions(-)
+> The __GFP_NOFAIL flag will cause memory to be allocated an infinite
+>  number of times until the allocation is successful, but it is best to
+>  use it only for very necessary code, and try not to use it.
+
+I agree with that.  But you didn't try not to use it - you left it there
+in the code.
+Had you removed the flag as well, then your patch would have made a bit
+more sense.  However you would then need to explain why it is safe to
+return NULL from alloc_journal_list().  Are you sure callers don't try
+to dereference the pointer?
+
 > 
-> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> index 8bb06b142748..3565f5608790 100644
-> --- a/drivers/staging/vt6655/rxtx.c
-> +++ b/drivers/staging/vt6655/rxtx.c
-> @@ -85,7 +85,7 @@ static const unsigned short w_fb_opt_1[2][5] = {
->   #define DATADUR_A_F1    13
+> I'm not sure alloc_journal_list function is a very important function
+>  here. If it is, this patch ignores it and does not consider it anymore
+>  __GFP_NOFAIL allocatiIon problem.
+> 
+> 
 
+You are correct that the function isn't very important, but that is
+because reiserfs itself isn't very important.
+You might not have noticed, but in the reiserfs Kconfig file it says:
 
-WARNING: line length of 104 exceeds 100 columns
-#376: FILE: drivers/staging/vt6655/rxtx.c:496:
-+									    p_device->byTopCCKBasicRate,
+	  Reiserfs is deprecated and scheduled to be removed from the kernel
+	  in 2025. If you are still using it, please migrate to another
+	  filesystem or tell us your usecase for reiserfs.
+
+So it will still be around for a few years, but there isn't much point
+with small clean-ups like this as hardly anyone uses the code, and in a
+few years it won't be in mainline Linux at all.
+
+Thanks,
+NeilBrown
