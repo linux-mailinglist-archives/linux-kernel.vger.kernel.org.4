@@ -2,140 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE8B60EACF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CE860EAD3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233408AbiJZVZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 17:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
+        id S233264AbiJZV33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 17:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbiJZVZZ (ORCPT
+        with ESMTP id S229592AbiJZV31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 17:25:25 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9DF22B29
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:25:25 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id b2so31502500lfp.6
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:25:25 -0700 (PDT)
+        Wed, 26 Oct 2022 17:29:27 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301F0138B8E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:29:24 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id a67so43775157edf.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:29:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xwQzSxEYATvXw39X4hIfByL5axaSJ+hp0GX3dcFg9xE=;
-        b=RpM/5T09Rkd7whH1lYSUsRaIYsLxkJ0RHNwjJCSxMK6DXCHNXTKvm/1fd6/rqZteFR
-         Rx0Dd96ySW4Ipv/w5BooL5M2xPSrcjrb8u6NBcWH5FYSfZQAuMc7l+4tKtdhQ+GupunV
-         QxDrwD5p/mLnrG+XlPTaY3Bs1cduAAinJEmPjaKEHtI6PU/jlh7sqgyaCKUUx4NHkvwe
-         gQ7yfcspKa3yD8qwC59MMnhKCEbG5hH4oqDos1yN52iQjO8nTh3HigOQyXj7O5Dbi9ZV
-         h8NZhnbLYWMt7sRrzSiuElVjYuCoOb7cJR9nec0Geq3YRRQA9H69XcMHraBJpty9UP+5
-         LQ0A==
+        d=soleen.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Idd0Hb78ztmsONfbOU5aIzBiJwVe7VkMWxVXkQJGGR0=;
+        b=DinbMQBIydVstQWlIMsTMkASzRhi6Bgsazw851vqWYHRId1tuK0lsLzNSArjgEqwvY
+         CfJwqxIK6JyqkH6Tcus2Gils+S+vzbqCkdOaeM6bJERtjQNsAuWQImrR8L4VpBYuMGoE
+         CIgSmKIqLEhmop7RoF+9wNri5oDiQAl5VFZkkOU9zrJnvz3UiXXaOWaVOu6FycxEcFPk
+         ePm0XIT6cCOufWh5GTYrZkjSuRf34KFfVAswUwrtsj/V/4ZIa6R7ES72DEcwE300g0Ox
+         VGR6WVxQuexAlcYhyr8Wa2DiK31AJ2S22HIcIV1D/dTE8ufsd2qQ0PLJDtjneK5tD1dy
+         MIjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwQzSxEYATvXw39X4hIfByL5axaSJ+hp0GX3dcFg9xE=;
-        b=hMo4QQq4pyQigw5fxrHKPoyYWVlgpYk4g72wRiebz8QYdUb3ifVKshdxt4XnQxR+Dk
-         jzpQZY7w7AchyUhpPGDZwbLsbK4exi0o3iXgPB7nipKVED7Yr0N+D4rks1Gkz+bOzW2Y
-         Y/ZMBgT5uSo8oqsKHNs9Er0OqhfjW7tFkcLvkNLPauJyslDqfnA9MvwN5mBDDMBwxvpt
-         iO7l6ZXZ3MlLoB1wvYX1gC8jJ+6d2KaQBC5Kj+pa/xjzYylnSyeNmE2OR6mbKdehO/LO
-         VCOipRNoC6l8B5jDAQ95wcyA1klqCLvgN2aex5dCuPFgFS9/PLWfhIkHAqTuPAOH624g
-         kgWw==
-X-Gm-Message-State: ACrzQf0JREMpVqNSwpMl9HyPDyTSl1rfPUsCLpVQLcfH43AZH63J6F4l
-        MoeLTaiDV1G+wSMKm2/jddo=
-X-Google-Smtp-Source: AMsMyM6ensEOd7HbTbNfYIT/f7EQdTyWIhqe5A2BIVTj3+ujPQdHszK3t50zI7jkiMDMZGau3DPaxg==
-X-Received: by 2002:ac2:5b50:0:b0:4af:d01:63d0 with SMTP id i16-20020ac25b50000000b004af0d0163d0mr2786228lfp.596.1666819523402;
-        Wed, 26 Oct 2022 14:25:23 -0700 (PDT)
-Received: from ?IPV6:2a02:a31a:a240:1700:c898:de98:30b3:a07? ([2a02:a31a:a240:1700:c898:de98:30b3:a07])
-        by smtp.googlemail.com with ESMTPSA id p8-20020a2eba08000000b00277041268absm1070023lja.78.2022.10.26.14.25.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 14:25:22 -0700 (PDT)
-From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
-X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Message-ID: <1adf0b0b-3743-4b5a-9416-823b8bf903fa@gmail.com>
-Date:   Wed, 26 Oct 2022 23:25:20 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Idd0Hb78ztmsONfbOU5aIzBiJwVe7VkMWxVXkQJGGR0=;
+        b=oKdfUQnzzehrdc0SseEKzgRnoGXAJE/cvIAptk4Q77MrhnlAjk5Oqn0JXgBU9urF4N
+         qmSc8krJq3KjStakphVIlKApORx6MWORncUIqRShYbAvDs/+CXf4X7RqitxIDUq6f/XE
+         ySWgiO4L+Vg878SZCJnVX+naYDwC7srlcpDDtWdhN5MMbLH6zNv/1X1rMvqFjKuEuQsk
+         OSpQMzzp9Wxt2QHmJJdr0qNiZg295DhRu0M7MwUSaEUv6xZgz6OFNaWd6V9FxRv5Hv6r
+         ZrK+G85jbZCyghZOZKRMUR0cgGziE51RoKZmxyOD6OFjtwbi9TX5gUMjKhTlmZ63bP4e
+         7SLQ==
+X-Gm-Message-State: ACrzQf2adlrKx4eKJlYwqq2V3Dfz6fln9xemZH+Tm+07Favj+izg4sfR
+        iqwIw7Vpj1ymsL8px/AlRs5J9w8MERVKjxIS7PDyoA==
+X-Google-Smtp-Source: AMsMyM6kRwjV9/szTrjs7h3XAUyi7r15t/ukN7NiqEbr92FgP1GxYSk5dYdN8UduhH7sy0nqw6V6GUgs1GIW3wehPw4=
+X-Received: by 2002:a05:6402:26ca:b0:462:7f27:a0dd with SMTP id
+ x10-20020a05640226ca00b004627f27a0ddmr2075991edd.132.1666819762711; Wed, 26
+ Oct 2022 14:29:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH v6 14/23] drm/modes: Properly generate a drm_display_mode
- from a named mode
-To:     maxime@cerno.tech, Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Maxime Ripard <mripard@kernel.org>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>
-Cc:     linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org,
-        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
-        Dom Cobley <dom@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
- <20220728-rpi-analog-tv-properties-v6-14-e7792734108f@cerno.tech>
-Content-Language: pl
-In-Reply-To: <20220728-rpi-analog-tv-properties-v6-14-e7792734108f@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20221017171118.1588820-1-sammler@google.com>
+In-Reply-To: <20221017171118.1588820-1-sammler@google.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Wed, 26 Oct 2022 17:28:45 -0400
+Message-ID: <CA+CK2bCNYe6V9TJDKD5s5cseQ8vzBP9BTykpQfRUtwcaecBkFQ@mail.gmail.com>
+Subject: Re: [PATCH v1] virtio_pmem: populate numa information
+To:     Michael Sammler <sammler@google.com>
+Cc:     Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+On Mon, Oct 17, 2022 at 1:11 PM Michael Sammler <sammler@google.com> wrote:
+>
+> Compute the numa information for a virtio_pmem device from the memory
+> range of the device. Previously, the target_node was always 0 since
+> the ndr_desc.target_node field was never explicitly set. The code for
+> computing the numa node is taken from cxl_pmem_region_probe in
+> drivers/cxl/pmem.c.
+>
+> Signed-off-by: Michael Sammler <sammler@google.com>
 
-> +static struct drm_display_mode *drm_named_mode(struct drm_device *dev,
-> +					       struct drm_cmdline_mode *cmd)
-> +{
-> +	struct drm_display_mode *mode;
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(drm_named_modes); i++) {
-> +		const struct drm_named_mode *named_mode = &drm_named_modes[i];
-> +
-> +		if (strcmp(cmd->name, named_mode->name))
-> +			continue;
-> +
-> +		if (!named_mode->tv_mode)
-> +			continue;
-> +
-> +		mode = drm_analog_tv_mode(dev,
-> +					  named_mode->tv_mode,
-> +					  named_mode->pixel_clock_khz * 1000,
-> +					  named_mode->xres,
-> +					  named_mode->yres,
-> +					  named_mode->flags & DRM_MODE_FLAG_INTERLACE);
-> +		if (!mode)
-> +			return NULL;
-> +
-> +		return mode;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
+Enables the hot-plugging of virtio-pmem memory into correct memory
+nodes. Does not look like it effect the FS_DAX.
 
-You didn't add tv_mode_specified to struct drm_named_mode, and left the
-if (!named_mode->tv_mode) condition here. This will break on NTSC.
+Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 
-Best regards,
-Mateusz Kwiatkowski
+Thanks,
+Pasha
 
+> ---
+>  drivers/nvdimm/virtio_pmem.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/nvdimm/virtio_pmem.c b/drivers/nvdimm/virtio_pmem.c
+> index 20da455d2ef6..a92eb172f0e7 100644
+> --- a/drivers/nvdimm/virtio_pmem.c
+> +++ b/drivers/nvdimm/virtio_pmem.c
+> @@ -32,7 +32,6 @@ static int init_vq(struct virtio_pmem *vpmem)
+>  static int virtio_pmem_probe(struct virtio_device *vdev)
+>  {
+>         struct nd_region_desc ndr_desc = {};
+> -       int nid = dev_to_node(&vdev->dev);
+>         struct nd_region *nd_region;
+>         struct virtio_pmem *vpmem;
+>         struct resource res;
+> @@ -79,7 +78,15 @@ static int virtio_pmem_probe(struct virtio_device *vdev)
+>         dev_set_drvdata(&vdev->dev, vpmem->nvdimm_bus);
+>
+>         ndr_desc.res = &res;
+> -       ndr_desc.numa_node = nid;
+> +
+> +       ndr_desc.numa_node = memory_add_physaddr_to_nid(res.start);
+> +       ndr_desc.target_node = phys_to_target_node(res.start);
+> +       if (ndr_desc.target_node == NUMA_NO_NODE) {
+> +               ndr_desc.target_node = ndr_desc.numa_node;
+> +               dev_dbg(&vdev->dev, "changing target node from %d to %d",
+> +                       NUMA_NO_NODE, ndr_desc.target_node);
+> +       }
+> +
+>         ndr_desc.flush = async_pmem_flush;
+>         ndr_desc.provider_data = vdev;
+>         set_bit(ND_REGION_PAGEMAP, &ndr_desc.flags);
+> --
+> 2.38.0.413.g74048e4d9e-goog
