@@ -2,94 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A7860D960
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0A260D982
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232563AbiJZCmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 22:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
+        id S232895AbiJZDAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 23:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbiJZCmS (ORCPT
+        with ESMTP id S232783AbiJZDAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 22:42:18 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA64760CA7;
-        Tue, 25 Oct 2022 19:42:15 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MxtMB4ndFzl7yt;
-        Wed, 26 Oct 2022 10:40:06 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-        by APP3 (Coremail) with SMTP id _Ch0CgDn+lyDnlhj1o8qAw--.33518S2;
-        Wed, 26 Oct 2022 10:42:12 +0800 (CST)
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>
-Subject: [PATCH bpf-next] bpf: Fix a typo in comment for DFS algorithm
-Date:   Tue, 25 Oct 2022 22:59:41 -0400
-Message-Id: <20221026025941.2621795-1-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 25 Oct 2022 23:00:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCF23740F;
+        Tue, 25 Oct 2022 20:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5851B82014;
+        Wed, 26 Oct 2022 03:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 64D12C433D7;
+        Wed, 26 Oct 2022 03:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666753216;
+        bh=8nabVticuCpcAcueCMQ1mmCBEDT7rRPUWr+aIr8zL3c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=khhfOhDAoNx6GuhbDgwlQKDStMxcAlhyLgV0RhhG/HyBG11DsdxTytOo13oD/M3/0
+         rsX7pxI/rOb9W0JN6Z9nMkE7kp4n2Bx7jAgVcsd8lf6yB11sVJEUqNCtdibRxB/IkI
+         0+qQt/HTSiEI72hgqz3i+KRK2x86UvhpaBtctaT+hnPpPPvguJFr7cLPvkN/MrMdsI
+         G7jd7mwvXjo6PmlyasVNrqBO4217JZQWov1+z4x0z2gVuuETJMxPwXoCXubBlosH2k
+         bZZtx/crFLbqWu2lzTODk4NHVkwhs3GvO71t+axt9cvtnpv/Hhc3PDpLEEeCKVShVV
+         Tgvw6DMWxUSkA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 455EDE45192;
+        Wed, 26 Oct 2022 03:00:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDn+lyDnlhj1o8qAw--.33518S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruFyftr1UJF1DXFyfXFykGrg_yoW3KrgEkr
-        s5Z3ZagrsIq3WfCws3Ca47Xw1jkr15tF18WrnxG39rArWYqw18Wrs5GFn0qa4DZFWUtrZr
-        tF93GrZFqw1Y9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
-        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/2] net: ipa: fix v3.5.1 resource limit max values
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166675321627.7735.13125128064237036684.git-patchwork-notify@kernel.org>
+Date:   Wed, 26 Oct 2022 03:00:16 +0000
+References: <20221024210336.4014983-1-caleb.connolly@linaro.org>
+In-Reply-To: <20221024210336.4014983-1-caleb.connolly@linaro.org>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     elder@linaro.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, jami.kettunen@somainline.org,
+        elder@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xu Kuohai <xukuohai@huawei.com>
+Hello:
 
-There is a typo in comment for DFS algorithm in bpf/verifier.c. The top
-element should not be popped until all its neighbors have been checked.
-Fix it.
+This series was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Fixes: 475fb78fbf48 ("bpf: verifier (add branch/goto checks)")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 24 Oct 2022 22:03:31 +0100 you wrote:
+> Some resource limits on IPA v3.5.1 have their max values set to
+> 255, this causes a few splats in ipa_reg_encode and prevents the
+> IPA from booting properly. The limits are all 6 bits wide so
+> adjust the max values to 63.
+> 
+> Fixes: 1c418c4a929c ("net: ipa: define resource group/type IPA register fields")
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> 
+> [...]
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b83a8d420520..96ba5ea6d1a6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10662,7 +10662,7 @@ static int check_return_code(struct bpf_verifier_env *env)
-  * 3      let S be a stack
-  * 4      S.push(v)
-  * 5      while S is not empty
-- * 6            t <- S.pop()
-+ * 6            t <- S.top()
-  * 7            if t is what we're looking for:
-  * 8                return t
-  * 9            for all edges e in G.adjacentEdges(t) do
+Here is the summary with links:
+  - [v2,1/2] net: ipa: fix v3.5.1 resource limit max values
+    https://git.kernel.org/netdev/net/c/f23a566bbfc0
+  - [v2,2/2] net: ipa: fix v3.1 resource limit masks
+    https://git.kernel.org/netdev/net/c/05a31b94af32
+
+You are awesome, thank you!
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
