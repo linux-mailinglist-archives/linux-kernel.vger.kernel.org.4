@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5FD60E42B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B27960E437
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbiJZPJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
+        id S234464AbiJZPLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234484AbiJZPJ1 (ORCPT
+        with ESMTP id S234328AbiJZPLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:09:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6B2200
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666796964; x=1698332964;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=xRbBHi5E+N2qU/Z+c5NfZHEpwCKk1QOB5B18pjThjKE=;
-  b=QmeLlV4MhkNOzGy6Uj26VA187RwSJHPE0qEAZHjWlwpkDFgeFTph0DCJ
-   JV9YB6QEyKzLdNY814xoavjc4li/j+TlnhuVk5WJboG46PmU64dpWCXHo
-   c9g8SHKrUCIUiCza6ueBpraA9KqNjcpOhRY0idhtjNCZTu4CAQXPKyLqX
-   zbS52c9EaOGojFW5u8uvpkkd9HxLBM/kOsfjaFOW0L6EeHsuL7ri6D7uo
-   6A200kvsSIGkSvivYsraqEA5NkJx9UmHwljxVD2RNyvrWxd5GNpbj+DWE
-   YSQcXqwrsayMLVSiKRnwDgnjH29bRLJOt6RinO9Zga+ouBlXQPkT7d4Ql
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="372178709"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="372178709"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 08:09:03 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="961252466"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="961252466"
-Received: from briansim-mobl.ger.corp.intel.com (HELO sboeuf-mobl.home) ([10.252.29.107])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 08:09:01 -0700
-From:   sebastien.boeuf@intel.com
-To:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Cc:     mst@redhat.com, jasowang@redhat.com, eperezma@redhat.com,
-        sebastien.boeuf@intel.com
-Subject: [PATCH v5 4/4] vdpa_sim: Implement resume vdpa op
-Date:   Wed, 26 Oct 2022 17:08:38 +0200
-Message-Id: <d8c405c150c6eb25acab58718c38e0ef4c3c0293.1666796792.git.sebastien.boeuf@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1666796792.git.sebastien.boeuf@intel.com>
-References: <cover.1666796792.git.sebastien.boeuf@intel.com>
+        Wed, 26 Oct 2022 11:11:14 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA83915C3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:11:09 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id x13so10202504qvn.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eT2uz8tUG/sofl6nuodiNAwatRFoHDNx9Z1BojLryfg=;
+        b=lHC8D0Zhnqe3uE9yu0bdgopEQXVZ+h7wdNuabF2dxkye0OmeQoY4GBzpd7XzCJpljY
+         PSEsmSxTsMUU6v+CBOF4LJVm1jSdZfqutAlgrBP7iWpevfzn9tMe223LkVOD22I0KRjG
+         1Rq2GomVkEu3b2DM0EeYz1mYLHdItTSUtsQan6PXvNVA9GxhRr+Upt+JvHSewPzvOKy0
+         iG9OIgrQmNKhl1o1CqtWLPW8rXrqtbZ6wmABElscWaR3VT/ukr3lx7v5LXyMkXdinVz/
+         fsmLrSqzmQAD86yNTcUEIJ1PVpiFnLOyfJHjfbUTieXBeK6FONXGCPEBb3PhOJTgf+uS
+         /eKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eT2uz8tUG/sofl6nuodiNAwatRFoHDNx9Z1BojLryfg=;
+        b=s+S3i0zLWUDC45LiL/wKtTZS0NcK82MX7gfCN9QN4j8nnx+rgsLgyARpO+0iBl3Hi2
+         xHStyyLaLXPaZWxFWlDMpWgu/Cmi1xMFfBd1jlO4e94IaLpZ5DPawPEikndHQ+Q3Ue7w
+         IneCHxPkobqITH8Sdyz0YnrOm9hPP3HzA3cs1rHcQczMuB61HaCl1rUlJNRjWQ8jiyrT
+         jg7RMk6F5KQY1x+tPzemYk8SKRng1kRO20jAAnGPZrd94DkqBDk5d/UxS9ySk/X8P6bm
+         tcbPNXkMJJSSXFTuRe11tawgsi3g7rmDZvc4jhaB/LIb2iOOl3ETcRxMPLYmFWqkPUct
+         wPrA==
+X-Gm-Message-State: ACrzQf1CwhscTktOZVARiZWT74rWk8W/784v2NUpq6J8us/hrQpbLPnG
+        a+r1jBfbCkCHOcpFTKQthl3I/JgQaMAvtA==
+X-Google-Smtp-Source: AMsMyM6Yn+1KOEK89O0iT2HyiWTicc/woCgenW2nBrNU7zFODjOEF8s+kOgrUppy9Wku0TzcXnhcnw==
+X-Received: by 2002:a17:902:cf08:b0:17d:46b6:25f9 with SMTP id i8-20020a170902cf0800b0017d46b625f9mr44701685plg.67.1666797057642;
+        Wed, 26 Oct 2022 08:10:57 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 66-20020a630545000000b0043a0de69c94sm2910520pgf.14.2022.10.26.08.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 08:10:57 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 15:10:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     Vipin Sharma <vipinsh@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 3/5] KVM: selftests: Add atoi_paranoid() to catch
+ errors missed by atoi()
+Message-ID: <Y1lN/YRc2B3KoR+n@google.com>
+References: <20221021211816.1525201-1-vipinsh@google.com>
+ <20221021211816.1525201-4-vipinsh@google.com>
+ <DS0PR11MB63733C7CA0B1497215B40F8DDC309@DS0PR11MB6373.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DS0PR11MB63733C7CA0B1497215B40F8DDC309@DS0PR11MB6373.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,102 +79,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastien Boeuf <sebastien.boeuf@intel.com>
+On Wed, Oct 26, 2022, Wang, Wei W wrote:
+> On Saturday, October 22, 2022 5:18 AM, Vipin Sharma wrote:
+> > +int atoi_paranoid(const char *num_str)
+> > +{
+> > +	char *end_ptr;
+> > +	long num;
+> > +
+> > +	errno = 0;
+> > +	num = strtol(num_str, &end_ptr, 10);
+> 
+> Why not use strtoull here?
 
-Implement resume operation for vdpa_sim devices, so vhost-vdpa will
-offer that backend feature and userspace can effectively resume the
-device.
+This intended to be a drop in replacement for atoi(), which allows negative
+numbers.
 
-Signed-off-by: Sebastien Boeuf <sebastien.boeuf@intel.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c | 28 ++++++++++++++++++++++++++++
- drivers/vdpa/vdpa_sim/vdpa_sim.h |  1 +
- 2 files changed, 29 insertions(+)
+> Negative numbers will result in a huge "unsigned long long" number,
+> and this will be captured by your TEST_ASSERT(num >= INT_MIN) below.
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index b071f0d842fb..84fee8bb2929 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -357,6 +357,11 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa, u16 idx)
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
- 	struct vdpasim_virtqueue *vq = &vdpasim->vqs[idx];
- 
-+	if (!vdpasim->running) {
-+		vdpasim->pending_kick = true;
-+		return;
-+	}
-+
- 	if (vq->ready)
- 		schedule_work(&vdpasim->work);
- }
-@@ -527,6 +532,27 @@ static int vdpasim_suspend(struct vdpa_device *vdpa)
- 	return 0;
- }
- 
-+static int vdpasim_resume(struct vdpa_device *vdpa)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+	int i;
-+
-+	spin_lock(&vdpasim->lock);
-+	vdpasim->running = true;
-+
-+	if (vdpasim->pending_kick) {
-+		/* Process pending descriptors */
-+		for (i = 0; i < vdpasim->dev_attr.nvqs; ++i)
-+			vdpasim_kick_vq(vdpa, i);
-+
-+		vdpasim->pending_kick = false;
-+	}
-+
-+	spin_unlock(&vdpasim->lock);
-+
-+	return 0;
-+}
-+
- static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-@@ -717,6 +743,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
- 	.suspend		= vdpasim_suspend,
-+	.resume			= vdpasim_resume,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-@@ -750,6 +777,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
- 	.suspend		= vdpasim_suspend,
-+	.resume			= vdpasim_resume,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 0e78737dcc16..a745605589e2 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -67,6 +67,7 @@ struct vdpasim {
- 	u64 features;
- 	u32 groups;
- 	bool running;
-+	bool pending_kick;
- 	/* spinlock to synchronize iommu table */
- 	spinlock_t iommu_lock;
- };
--- 
-2.34.1
+As above, we want to allow negative numbers, e.g. memslot_perf_test.c uses '-1'
+to indicate "as many slots as possible".
 
----------------------------------------------------------------------
-Intel Corporation SAS (French simplified joint stock company)
-Registered headquarters: "Les Montalets"- 2, rue de Paris, 
-92196 Meudon Cedex, France
-Registration Number:  302 456 199 R.C.S. NANTERRE
-Capital: 5 208 026.16 Euros
+It's unlikely a test will As unlikely as 
 
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
+> Then we don't need patch 4, I think.
 
+Even if this low level helper disallowed negative numbers, patch 4 still has value
+in that the wrappers make the code self-documenting, i.e. makes it very obvious
+what input values are allowed.
