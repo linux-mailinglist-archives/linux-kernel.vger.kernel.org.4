@@ -2,321 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C7860E6EA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B740A60E6F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbiJZSBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
+        id S233775AbiJZSG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 14:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbiJZSBh (ORCPT
+        with ESMTP id S231164AbiJZSG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:01:37 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05359A0333
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:01:35 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id bb5so10511707qtb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:01:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=klV8RzaV/QSYOpMVWproVjBI7E4u+D4eP4WiGrNP5MI=;
-        b=a+3V2M2GT9OhnUH5fcX//TLSqzcIWrTfhAjqGnSnLGAhiZxpP03UUVy8DHw60QRVsA
-         aYg6ggXSSoP7nFwzKmNBD5reGVj8GvmKwvL1N96vBuUapQ+j7NNXcqaIfooxUrc8KJQg
-         GRD5WjESJBhCc7qCbkJTYWHgE1NgoPzd1datHPvLUFU3sduEpGuDDTQjPNC0C+KpAx/g
-         9LRiTbp4rZkO90C/wTqBcEMTa64qLQGCxZNHn7o3VBF3E1uGIJTKZ+C/md/hJ0U8u0fD
-         ih8s5dcwgrWsu0PHQGASPWaGm+xt9sHBGJM3t/LDoTLM/NL953U6qxWB3qcWp8uvNnGn
-         bMzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=klV8RzaV/QSYOpMVWproVjBI7E4u+D4eP4WiGrNP5MI=;
-        b=Cn29FBo23MByEitgcBvZxkdpOAZUHPyuuEYbiT4+I6fdsniYJhcySrTWJR+wZ5js5q
-         35dadF/QsGsJ6a/GHkB0jOTF7cXmrPm0iAZpJkRieXvu8TJHYqv5wj/b7RqN3q1E9/To
-         RTMv6QrMc6BUD8rg97hDSRc+Z63XGdscDs4X+BBJBGgsxBWkyEYutwvp9vJ8tv5AE7mJ
-         t/8CIEW2LmdbgripFny47Tfa7Ww8FCBzCKAyszVADonyLTyEsLQ0H1iUgfwRZzBa9Y85
-         dAJe51jqQdGdcjwYFWlUF5hnUy2HkY58HHnSlcqtebL286utgQS9HgDzCWOFlfU3q/ZS
-         opCQ==
-X-Gm-Message-State: ACrzQf0GaUOP9HIcWoCTSq35SuhdFu2vYYUMmeIT/pGke0UjE9va7NYA
-        AYzFrjvSiXJIOah7Cpin9qEobzM7dz8sKw==
-X-Google-Smtp-Source: AMsMyM7bAtNmx1jsUmP6nbHmg+jOd/twPQEEnuSbvM6tfX1QoSCCSyFdU1hNDwhPMsuudfb6GyoO/Q==
-X-Received: by 2002:a05:622a:64e:b0:39c:f167:a5f6 with SMTP id a14-20020a05622a064e00b0039cf167a5f6mr37366597qtb.430.1666807293601;
-        Wed, 26 Oct 2022 11:01:33 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::25f1])
-        by smtp.gmail.com with ESMTPSA id cn13-20020a05622a248d00b003a4cda52c95sm2169952qtb.63.2022.10.26.11.01.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 11:01:33 -0700 (PDT)
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Yang Shi <shy828301@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Eric Bergen <ebergen@meta.com>
-Subject: [PATCH v2] mm: vmscan: split khugepaged stats from direct reclaim stats
-Date:   Wed, 26 Oct 2022 14:01:33 -0400
-Message-Id: <20221026180133.377671-1-hannes@cmpxchg.org>
-X-Mailer: git-send-email 2.38.1
+        Wed, 26 Oct 2022 14:06:27 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2072.outbound.protection.outlook.com [40.107.100.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6DA7646A;
+        Wed, 26 Oct 2022 11:06:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YYEzSysDvUSJc28avj0pn6tGxEabBajSWgcCZT0ovST/hcngoPrEe1++Shd4XeqkAonM4sHAp7ggo23obarb5oVy6wcEfqXLg5x7r5p1RpGMOOOyiM0zkYxbp1l0/vkqll7qtnzPbG6dYOrXbaiI/QElDjUZY3J5dClreNsycPbhehfJGZ+gI74ucajp7YZjL8CR1jnZ1yRzEAxVo6WvKaHKQH/wSYOaY50fIUhrlWou1Gdg8+Jsaf31j8SWY7E9DG+y+e/kKPpiqrzWHFIR+9vJXd9JPwPgnbx+nAcdBv30I7weJn7aSOw0JLx1psjMM8c43xONumZaoM51ZvcGQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CxBG3gumM3e5bV+iIRMpa9gbxFbIkRx1fswD0NT6iOg=;
+ b=nyeNbjt82XwTCPEukdwLZ2ZEp1Pat5WriwT4AUz0WKBS7newOvGaiQKalAwfECuZ2bvCXFDwvkZZGVMQ6YAP0coz0IEm219JWrDbZKJKa8LURO3ZRXc108Dv/VhF1jYLu2XbdudRGbga0JIWfIqAORfw7JgmfXuElxdrsOvtoJBfhJqjSX8eymTRpiGs1PufkDOKGyBpMtcCQLa9txLvA4ULGereZbep2E0MH9QUdBjM5P1VoydFJPESUwnQLJgGCQoPlj+ITorehfbStrdrKUl6+5jdkhu9h9VOk0D8nTDvbh+bucdMttTNf4dgrZEaHaCWzlEv6h8+RHsTApS6QQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CxBG3gumM3e5bV+iIRMpa9gbxFbIkRx1fswD0NT6iOg=;
+ b=g4+BrTYQxe6sw+uc6j/zazf6GRA0H3H9PzkjUSKy9ZqAu0Dp6Hw9VMgbKVSyVuMtH9fKnHjZoaTdQzOe07WfkCG0Q73QsseQfB+0lKcwPwp8OYr0VeVsaZklKUvZyADZBP9UufzHRASDGUP8rm1QOX1vSmujmbW8PvVLWueqqRnXBDct1CsD8dk+Q5jRRDZkAIv5gSf2L2rRYVG9W5saaJofOiKu+YuzCRl0GmbO3Zlr9d2yeTVDU89GzCriIuGUnEl80YfEqOkhC6wMKYXP+AXOohpqwYOQkSdNaD9NDOoM5d4Y4omFcWxpVnCtVPGC99TRkVcpSV6Incm4MTisWg==
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com (2603:10b6:302:12::28)
+ by SA1PR12MB6896.namprd12.prod.outlook.com (2603:10b6:806:24f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Wed, 26 Oct
+ 2022 18:06:24 +0000
+Received: from MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::1402:a17a:71c1:25a3]) by MW2PR12MB4667.namprd12.prod.outlook.com
+ ([fe80::1402:a17a:71c1:25a3%7]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
+ 18:06:24 +0000
+From:   Chaitanya Kulkarni <chaitanyak@nvidia.com>
+To:     Keith Busch <kbusch@meta.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hch@lst.de" <hch@lst.de>, "djwong@kernel.org" <djwong@kernel.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH] iomap: directly use logical block size
+Thread-Topic: [PATCH] iomap: directly use logical block size
+Thread-Index: AQHY6VtMhGyUgFy+mUmBUk3rMgjjWK4g+JmA
+Date:   Wed, 26 Oct 2022 18:06:24 +0000
+Message-ID: <526c5c01-3c3f-3ef0-35f7-924a6e3db134@nvidia.com>
+References: <20221026165133.2563946-1-kbusch@meta.com>
+In-Reply-To: <20221026165133.2563946-1-kbusch@meta.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW2PR12MB4667:EE_|SA1PR12MB6896:EE_
+x-ms-office365-filtering-correlation-id: 3188c1bb-f734-4bc2-8caf-08dab77ccb74
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: SlGt3DlQ5IeBYCLVsS3rQPr/fd+dSPyrglDOppVSfdDtHqcAvoyvowy7IVpJgRacuKg49qXYydCG/0xVDq9vI1T199qytMu/oC01gCtdJ7iu3OxCqgIKQB+ziIy6/qIC7J1ocgYh+zBcF0IrCQ8vVk+rUgRN/eaEK05dxeDzD/JGQahYPx5wSfoKWjKzRZLH3XqrF+HbGbgi+fhf206/KjX5QuNS3rYgk5LZ5qlUPnN/a2YLeuL/zRUm86HWA33+dsBsT76kpc/J9ME5w0dIXEQ7eevdaB8r7Bx48aGfTXKwrJLZvsUMiifvzg54m3suXKYMt2TxQXleo7a26RTC7LQVBdb4HscoeN0AJCZuBoninOyDNxP3s/e/ZLOawr7RPSjJ6sqoQ4UD72PfKY6o/dyGB8boU1pdwusceZ3NrFfXvxe0wgdhBgbsrdvTsxKJ3NNc8pPwiQOt/l8fXJftcwluD3TcZb41Ck4Bel6CSjEd7FZK6yRjVrIdJDJRqYFmVvKlAuBdlVFtmBtgyS6UVtnbThbBLE4a6hgKOZog9ok5aLk2rngm3GVhxa+FS2jb0iLnMc8k/dO71JN03MmOt6MDq24mnN6Tt1J6iaF4XnlFXMwYPB07g07hjq7BiloSz7s1VTyHEFS9LtAd5dyXaeg0RT0/r/xDnml9EVXS/Vmxj4G5tljUNr5qWZjnfK1eF20UDW1mfjBLllovI8y52leTVPtheh2+WlH3ofTL7n8BdA81bYS4aTVrwK+4lhenUKLHCQRn4Cr5OqLlgh9m6aXJfKLT1qs4Gx2yigPGMsHSuFhiJGUOT2zosTNtS2jLqGxYb9zmyMRqSUPUMhFDYA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB4667.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(451199015)(5660300002)(2616005)(26005)(2906002)(38070700005)(83380400001)(186003)(38100700002)(31696002)(54906003)(122000001)(4744005)(8936002)(86362001)(478600001)(8676002)(91956017)(6506007)(76116006)(64756008)(53546011)(66556008)(66946007)(4326008)(66446008)(71200400001)(6512007)(41300700001)(110136005)(316002)(36756003)(31686004)(66476007)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZmRzaG5YcytkZ3hvZ3I1WVcyRzRzLzNrZzV6WG9MUmtsMGVFRXY5bVNmSXFM?=
+ =?utf-8?B?N2txREdaSFlCVWoyYVArbmU2aitsSS9yV0dVQnFqZGdRbkNTZW9KbldkRXZ5?=
+ =?utf-8?B?eDFRYTh1RkRlM1ZoKzhQU0lDNHd6dC9QMURpZHpkajFFanZMdnMrM0VRRDhR?=
+ =?utf-8?B?UXMrbFlNelhkK3puVEVraUpVeG9HU3ZldHBDVDBpVjQzN1FKbEk1VXcyeHdW?=
+ =?utf-8?B?bFhocjJYMFVRM2xDZi9QbkM1NmhXcHFVK0JocFczdmxLdVdyS05yNE81TnRZ?=
+ =?utf-8?B?SWh3cTVnR0pnRk5VcHJxdkkxclB3ODRkS25NUVRta3F2N2M2TFZFVDVEc0Rh?=
+ =?utf-8?B?YWl5MGdoRHAwV1lDejJXTkpqdTBZa0Via0wwOWpWbHd4T2pkc0pzSHBka2NB?=
+ =?utf-8?B?NnJjK202aUZmWWd6clRtcXV1SU9yME5rdWNYb1pUaDZaNENCZ0JJeWNJSS8r?=
+ =?utf-8?B?ZElDODk2VUFzZHBCditqb2NURDdHR1JMYzdoaG9rdkN0L3B4WHhpNUJ0NnAy?=
+ =?utf-8?B?TFB3aDltK3krTGpYOGRyUHdYVVpvd0kxV21yMmdGdUg0WXhQaERiMWFRWEpE?=
+ =?utf-8?B?NUs0U0FKS3lKTkJCUkJpR285RHkxSllqaExrZm1aOXNpRE8zdFFYRXlsZk5Q?=
+ =?utf-8?B?UFZubVZXMU1hRWRqMXluSUsvSXAzdmRXRkFSZ2xpTWFXdVBwZlYxZFJKR0hR?=
+ =?utf-8?B?Qk92a3lqSGVYRnpzU1BCcWRONmZqWVU3bVFRWmU5by9BZDY1NWJwUzdlMVV3?=
+ =?utf-8?B?OCtwS2Z4QXpaOVVwbTZZWmVBQnFXUWI2T1RDUHYvK3JrQ2hSam8yd2t1Ukxj?=
+ =?utf-8?B?MDFNcU1Ua1p3YzdIbHIrdXAvTm5EVW9XWUcxamZDOElFcGtBT0lWbFY4TDdE?=
+ =?utf-8?B?UExoRTNVTm9tSWRQNGhhSkVEYzgzME5ycFd6UXNmb0xrT1lNc1RYT0pVc3JU?=
+ =?utf-8?B?RlRpdjZ6WHMwb3d0QndKWDdzRG4vNVUwVUJLMDBkT2k5U2tiWWdFaG1XZmd4?=
+ =?utf-8?B?aG1RUDhHZElzaytNMEZuQkRibk5PT0JNRnU2d2dnOUxOcHFFZjdjeWRwS25w?=
+ =?utf-8?B?SWdEOHZvWmt2bFc4ZWRlY2JxYllDeEFSRGVBb0JjYnJjTGtFQ1VVc3AvL2tQ?=
+ =?utf-8?B?RUVkbERsUmcrZ0hlQkhhNGx0Si9mU0wvblM0N2NqSCtpOVVUSHpkYTBBbWpW?=
+ =?utf-8?B?d0p4cHh5YUtycVBrMHdsZG4wQTFMYmFOVVdqSkZWQStsTVI4MkVSMHdCajhR?=
+ =?utf-8?B?Nm9ZYTVtTmhKZ0xyWlltZ0hSbi9Eb3NYYjh5R3UrOHFwTnpnWklzUXNtWElG?=
+ =?utf-8?B?cHpRWTdLSEMvOVZRWkdtMGlZcmlCVjkwckg2ZGF4MkEzSGR1SlRJbXk4YWdo?=
+ =?utf-8?B?QzhWZWxhLy9Sd0haNHk1THJFcE0wRjFQN08wVUpIeWlWVFp2eDIwai9sOEFp?=
+ =?utf-8?B?cnR6ekVBRFhmVEN1NFhhbzVhd3BLWGF4Sm9ORHUxeWNEVXg0ZHZRUWk4eUJi?=
+ =?utf-8?B?SzluZlc3dXJ2N0lEeXFVbFl1cFNxekJFcmNzSW5kcjZ2M2UwaEhsUFZYT0c1?=
+ =?utf-8?B?WTcwUmxsMXVnR1JncHdqQXlvWWYvN0JtcDBRYXV6ZXRkYnZlem82OUxkQmxD?=
+ =?utf-8?B?RCtEM0ovbUQ4NDR2d3RjbUdybmpTYWQwajVuS1dxNVZzd3RNSmgrTGVvcVkx?=
+ =?utf-8?B?Um04Qk9sa1cvRDFuWDJCUlFuVHpSNS9Ha1VXNCswNDZzOHYwM2pvelJ3TURU?=
+ =?utf-8?B?SVMrU0FIMXVTWmR5VlJRd2RET1BadHhIbzBUbUluT1EyTDlieDRMV2lodjho?=
+ =?utf-8?B?R3MxNktUTVVTaWxIRFJjSEs0cWYrY2hRWkdhMDY2SXVFTkFGQ01VSi83YnpH?=
+ =?utf-8?B?elVIeHBHK0FUZ2UxRlJKcGpMazhSWE04ajVqT1c4cTV4bExJVkxnWW00Y1l5?=
+ =?utf-8?B?R0tDU252WUVKMTc2QWJldEgxWjNlR1lBb3pmQlBRdXhoTUplZEZyVlZSTzRB?=
+ =?utf-8?B?aW53Tm1YV3VNWS9CK0FIMDBXd2hJZTFZUFMxUlFHYzdkS1NUV1ZoOU56bExa?=
+ =?utf-8?B?ZXhuNlI2NnhYeklXVmlaUXVpeklXMUtnNzRwUXhWMWRuL0ovbWRtL2JlZVBi?=
+ =?utf-8?Q?8rNO66YhGC7KDpVWm9gAa5pET?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <40A93DC729E017438D232374C62CB030@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB4667.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3188c1bb-f734-4bc2-8caf-08dab77ccb74
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2022 18:06:24.2962
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Q2/QEglSUeESBQ8goTyj6TpGn5xZBQwWi0cUF8Cv1UGoOGgJaWtsCB6Yq+t/nHM+0seWZ4DxTVLuzvfJEfiGsw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6896
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Direct reclaim stats are useful for identifying a potential source for
-application latency, as well as spotting issues with kswapd. However,
-khugepaged currently distorts the picture: as a kernel thread it
-doesn't impose allocation latencies on userspace, and it explicitly
-opts out of kswapd reclaim. Its activity showing up in the direct
-reclaim stats is misleading. Counting it as kswapd reclaim could also
-cause confusion when trying to understand actual kswapd behavior.
-
-Break out khugepaged from the direct reclaim counters into new
-pgsteal_khugepaged, pgdemote_khugepaged, pgscan_khugepaged counters.
-
-Test with a huge executable (CONFIG_READ_ONLY_THP_FOR_FS):
-
-pgsteal_kswapd 1342185
-pgsteal_direct 0
-pgsteal_khugepaged 3623
-pgscan_kswapd 1345025
-pgscan_direct 0
-pgscan_khugepaged 3623
-
-Reported-by: Eric Bergen <ebergen@meta.com>
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
----
- Documentation/admin-guide/cgroup-v2.rst |  6 +++++
- include/linux/khugepaged.h              |  6 +++++
- include/linux/vm_event_item.h           |  3 +++
- mm/khugepaged.c                         |  5 ++++
- mm/memcontrol.c                         |  8 +++++--
- mm/vmscan.c                             | 32 ++++++++++++++++++-------
- mm/vmstat.c                             |  3 +++
- 7 files changed, 53 insertions(+), 10 deletions(-)
-
-v2: reclaimer_offset(): magic -> muggle (Willy)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index dc254a3cb956..74cec76be9f2 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -1488,12 +1488,18 @@ PAGE_SIZE multiple when read back.
- 	  pgscan_direct (npn)
- 		Amount of scanned pages directly  (in an inactive LRU list)
- 
-+	  pgscan_khugepaged (npn)
-+		Amount of scanned pages by khugepaged  (in an inactive LRU list)
-+
- 	  pgsteal_kswapd (npn)
- 		Amount of reclaimed pages by kswapd
- 
- 	  pgsteal_direct (npn)
- 		Amount of reclaimed pages directly
- 
-+	  pgsteal_khugepaged (npn)
-+		Amount of reclaimed pages by khugepaged
-+
- 	  pgfault (npn)
- 		Total number of page faults incurred
- 
-diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
-index 70162d707caf..f68865e19b0b 100644
---- a/include/linux/khugepaged.h
-+++ b/include/linux/khugepaged.h
-@@ -15,6 +15,7 @@ extern void __khugepaged_exit(struct mm_struct *mm);
- extern void khugepaged_enter_vma(struct vm_area_struct *vma,
- 				 unsigned long vm_flags);
- extern void khugepaged_min_free_kbytes_update(void);
-+extern bool current_is_khugepaged(void);
- #ifdef CONFIG_SHMEM
- extern int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
- 				   bool install_pmd);
-@@ -57,6 +58,11 @@ static inline int collapse_pte_mapped_thp(struct mm_struct *mm,
- static inline void khugepaged_min_free_kbytes_update(void)
- {
- }
-+
-+static inline bool current_is_khugepaged(void)
-+{
-+	return false;
-+}
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
- 
- #endif /* _LINUX_KHUGEPAGED_H */
-diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.h
-index 3518dba1e02f..7f5d1caf5890 100644
---- a/include/linux/vm_event_item.h
-+++ b/include/linux/vm_event_item.h
-@@ -40,10 +40,13 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT,
- 		PGREUSE,
- 		PGSTEAL_KSWAPD,
- 		PGSTEAL_DIRECT,
-+		PGSTEAL_KHUGEPAGED,
- 		PGDEMOTE_KSWAPD,
- 		PGDEMOTE_DIRECT,
-+		PGDEMOTE_KHUGEPAGED,
- 		PGSCAN_KSWAPD,
- 		PGSCAN_DIRECT,
-+		PGSCAN_KHUGEPAGED,
- 		PGSCAN_DIRECT_THROTTLE,
- 		PGSCAN_ANON,
- 		PGSCAN_FILE,
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 4734315f7940..36318ebbf50d 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -2528,6 +2528,11 @@ void khugepaged_min_free_kbytes_update(void)
- 	mutex_unlock(&khugepaged_mutex);
- }
- 
-+bool current_is_khugepaged(void)
-+{
-+	return kthread_func(current) == khugepaged;
-+}
-+
- static int madvise_collapse_errno(enum scan_result r)
- {
- 	/*
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 2d8549ae1b30..a17a5cfa6a55 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -661,8 +661,10 @@ static const unsigned int memcg_vm_event_stat[] = {
- 	PGPGOUT,
- 	PGSCAN_KSWAPD,
- 	PGSCAN_DIRECT,
-+	PGSCAN_KHUGEPAGED,
- 	PGSTEAL_KSWAPD,
- 	PGSTEAL_DIRECT,
-+	PGSTEAL_KHUGEPAGED,
- 	PGFAULT,
- 	PGMAJFAULT,
- 	PGREFILL,
-@@ -1574,10 +1576,12 @@ static void memory_stat_format(struct mem_cgroup *memcg, char *buf, int bufsize)
- 	/* Accumulated memory events */
- 	seq_buf_printf(&s, "pgscan %lu\n",
- 		       memcg_events(memcg, PGSCAN_KSWAPD) +
--		       memcg_events(memcg, PGSCAN_DIRECT));
-+		       memcg_events(memcg, PGSCAN_DIRECT) +
-+		       memcg_events(memcg, PGSCAN_KHUGEPAGED));
- 	seq_buf_printf(&s, "pgsteal %lu\n",
- 		       memcg_events(memcg, PGSTEAL_KSWAPD) +
--		       memcg_events(memcg, PGSTEAL_DIRECT));
-+		       memcg_events(memcg, PGSTEAL_DIRECT) +
-+		       memcg_events(memcg, PGSTEAL_KHUGEPAGED));
- 
- 	for (i = 0; i < ARRAY_SIZE(memcg_vm_event_stat); i++) {
- 		if (memcg_vm_event_stat[i] == PGPGIN ||
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 04d8b88e5216..a54d567c5e66 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -54,6 +54,7 @@
- #include <linux/shmem_fs.h>
- #include <linux/ctype.h>
- #include <linux/debugfs.h>
-+#include <linux/khugepaged.h>
- 
- #include <asm/tlbflush.h>
- #include <asm/div64.h>
-@@ -1047,6 +1048,24 @@ void drop_slab(void)
- 		drop_slab_node(nid);
- }
- 
-+static int reclaimer_offset(void)
-+{
-+	BUILD_BUG_ON(PGSTEAL_DIRECT - PGSTEAL_KSWAPD !=
-+			PGDEMOTE_DIRECT - PGDEMOTE_KSWAPD);
-+	BUILD_BUG_ON(PGSTEAL_DIRECT - PGSTEAL_KSWAPD !=
-+			PGSCAN_DIRECT - PGSCAN_KSWAPD);
-+	BUILD_BUG_ON(PGSTEAL_KHUGEPAGED - PGSTEAL_KSWAPD !=
-+			PGDEMOTE_KHUGEPAGED - PGDEMOTE_KSWAPD);
-+	BUILD_BUG_ON(PGSTEAL_KHUGEPAGED - PGSTEAL_KSWAPD !=
-+			PGSCAN_KHUGEPAGED - PGSCAN_KSWAPD);
-+
-+	if (current_is_kswapd())
-+		return 0;
-+	if (current_is_khugepaged())
-+		return PGSTEAL_KHUGEPAGED - PGSTEAL_KSWAPD;
-+	return PGSTEAL_DIRECT - PGSTEAL_KSWAPD;
-+}
-+
- static inline int is_page_cache_freeable(struct folio *folio)
- {
- 	/*
-@@ -1599,10 +1618,7 @@ static unsigned int demote_folio_list(struct list_head *demote_folios,
- 		      (unsigned long)&mtc, MIGRATE_ASYNC, MR_DEMOTION,
- 		      &nr_succeeded);
- 
--	if (current_is_kswapd())
--		__count_vm_events(PGDEMOTE_KSWAPD, nr_succeeded);
--	else
--		__count_vm_events(PGDEMOTE_DIRECT, nr_succeeded);
-+	__count_vm_events(PGDEMOTE_KSWAPD + reclaimer_offset(), nr_succeeded);
- 
- 	return nr_succeeded;
- }
-@@ -2475,7 +2491,7 @@ static unsigned long shrink_inactive_list(unsigned long nr_to_scan,
- 				     &nr_scanned, sc, lru);
- 
- 	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, nr_taken);
--	item = current_is_kswapd() ? PGSCAN_KSWAPD : PGSCAN_DIRECT;
-+	item = PGSCAN_KSWAPD + reclaimer_offset();
- 	if (!cgroup_reclaim(sc))
- 		__count_vm_events(item, nr_scanned);
- 	__count_memcg_events(lruvec_memcg(lruvec), item, nr_scanned);
-@@ -2492,7 +2508,7 @@ static unsigned long shrink_inactive_list(unsigned long nr_to_scan,
- 	move_folios_to_lru(lruvec, &folio_list);
- 
- 	__mod_node_page_state(pgdat, NR_ISOLATED_ANON + file, -nr_taken);
--	item = current_is_kswapd() ? PGSTEAL_KSWAPD : PGSTEAL_DIRECT;
-+	item = PGSTEAL_KSWAPD + reclaimer_offset();
- 	if (!cgroup_reclaim(sc))
- 		__count_vm_events(item, nr_reclaimed);
- 	__count_memcg_events(lruvec_memcg(lruvec), item, nr_reclaimed);
-@@ -4857,7 +4873,7 @@ static int scan_folios(struct lruvec *lruvec, struct scan_control *sc,
- 			break;
- 	}
- 
--	item = current_is_kswapd() ? PGSCAN_KSWAPD : PGSCAN_DIRECT;
-+	item = PGSCAN_KSWAPD + reclaimer_offset();
- 	if (!cgroup_reclaim(sc)) {
- 		__count_vm_events(item, isolated);
- 		__count_vm_events(PGREFILL, sorted);
-@@ -5015,7 +5031,7 @@ static int evict_folios(struct lruvec *lruvec, struct scan_control *sc, int swap
- 	if (walk && walk->batched)
- 		reset_batch_size(lruvec, walk);
- 
--	item = current_is_kswapd() ? PGSTEAL_KSWAPD : PGSTEAL_DIRECT;
-+	item = PGSTEAL_KSWAPD + reclaimer_offset();
- 	if (!cgroup_reclaim(sc))
- 		__count_vm_events(item, reclaimed);
- 	__count_memcg_events(memcg, item, reclaimed);
-diff --git a/mm/vmstat.c b/mm/vmstat.c
-index b2371d745e00..1ea6a5ce1c41 100644
---- a/mm/vmstat.c
-+++ b/mm/vmstat.c
-@@ -1271,10 +1271,13 @@ const char * const vmstat_text[] = {
- 	"pgreuse",
- 	"pgsteal_kswapd",
- 	"pgsteal_direct",
-+	"pgsteal_khugepaged",
- 	"pgdemote_kswapd",
- 	"pgdemote_direct",
-+	"pgdemote_khugepaged",
- 	"pgscan_kswapd",
- 	"pgscan_direct",
-+	"pgscan_khugepaged",
- 	"pgscan_direct_throttle",
- 	"pgscan_anon",
- 	"pgscan_file",
--- 
-2.38.1
-
+T24gMTAvMjYvMjAyMiA5OjUxIEFNLCBLZWl0aCBCdXNjaCB3cm90ZToNCj4gRnJvbTogS2VpdGgg
+QnVzY2ggPGtidXNjaEBrZXJuZWwub3JnPg0KPiANCj4gRG9uJ3QgdHJhbnNmb3JtIHRoZSBsb2dp
+Y2FsIGJsb2NrIHNpemUgdG8gYSBiaXQgc2hpZnQgb25seSB0byBzaGlmdCBpdA0KPiBiYWNrIHRv
+IHRoZSBvcmlnaW5hbCBibG9jayBzaXplLiBKdXN0IHVzZSB0aGUgc2l6ZS4NCj4gDQo+IFNpZ25l
+ZC1vZmYtYnk6IEtlaXRoIEJ1c2NoIDxrYnVzY2hAa2VybmVsLm9yZz4NCj4gLS0tDQoNCndlIHNo
+b3VsZCBhbHNvIGNoYW5nZSBhbnkgb3RoZXIgY2FsbGVycyBsaWtlIHRoaXMuDQoNClJldmlld2Vk
+LWJ5OiBDaGFpdGFueWEgS3Vsa2FybmkgPGtjaEBudmlkaWEuY29tPg0KDQotY2sNCg0K
