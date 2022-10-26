@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA7660DE3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DDDB60DE45
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233387AbiJZJhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
+        id S233406AbiJZJhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233372AbiJZJhE (ORCPT
+        with ESMTP id S233376AbiJZJhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:37:04 -0400
-Received: from mxout3.routing.net (mxout3.routing.net [IPv6:2a03:2900:1:a::8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8A8BC617;
-        Wed, 26 Oct 2022 02:37:01 -0700 (PDT)
+        Wed, 26 Oct 2022 05:37:05 -0400
+Received: from mxout1.routing.net (mxout1.routing.net [IPv6:2a03:2900:1:a::a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E62BC613;
+        Wed, 26 Oct 2022 02:37:02 -0700 (PDT)
 Received: from mxbox4.masterlogin.de (unknown [192.168.10.79])
-        by mxout3.routing.net (Postfix) with ESMTP id C653F626A8;
-        Wed, 26 Oct 2022 09:36:59 +0000 (UTC)
+        by mxout1.routing.net (Postfix) with ESMTP id 8740C41C24;
+        Wed, 26 Oct 2022 09:37:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1666777019;
+        s=20200217; t=1666777020;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Bc6cQwclXRXDwOqWgeEjn61RmTobdHqJkYLEj/iLtpo=;
-        b=ia30a0U6EGjaqLmgGc7lXw/Gd0gDOGVekvdvCEexd7p50Xxw1gkKl8FPPjF5DxtpEE1Keh
-        hxtGBbp3tHlkACKE6+6TyfgrYBjn2rJb18jWF/7iUmS2FWDFgLwadjRdWKXPs13Xfn8qKU
-        dcqQ8sc7kAvaFiqfCe9i1r+N+D8Jg0w=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7x37NMKwdPVEFEYwYdUiHOP5otf/Yj4Go4IwQ6BGTXI=;
+        b=ROTAeF4mTI/Zhcn/OJAtdzc+isJeGK3KHvx34fgV9ykFhy+Ezf891Axot6o4tw+HSVYZ08
+        ZFPsbppncoAf7lnsM3Z8bYLuzi4+m35a9hyH3Hjqm2d3LbAScQ/oPViQTGR+H56LViMe5I
+        UCHWMwKWq1TPhNi7lXMWr/6LSMyQ3tQ=
 Received: from frank-G5.. (fttx-pool-80.245.72.174.bambit.de [80.245.72.174])
-        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id 062D68026C;
-        Wed, 26 Oct 2022 09:36:58 +0000 (UTC)
+        by mxbox4.masterlogin.de (Postfix) with ESMTPSA id C4739802C9;
+        Wed, 26 Oct 2022 09:36:59 +0000 (UTC)
 From:   Frank Wunderlich <linux@fw-web.de>
 To:     linux-mediatek@lists.infradead.org
 Cc:     Frank Wunderlich <frank-w@public-files.de>,
@@ -37,14 +38,16 @@ Cc:     Frank Wunderlich <frank-w@public-files.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC v2 0/7] Add BananaPi R3
-Date:   Wed, 26 Oct 2022 11:36:43 +0200
-Message-Id: <20221026093650.110290-1-linux@fw-web.de>
+        linux-kernel@vger.kernel.org, Sam Shih <sam.shih@mediatek.com>
+Subject: [RFC v2 1/7] arm64: dts: mt7986: harmonize device node order
+Date:   Wed, 26 Oct 2022 11:36:44 +0200
+Message-Id: <20221026093650.110290-2-linux@fw-web.de>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221026093650.110290-1-linux@fw-web.de>
+References: <20221026093650.110290-1-linux@fw-web.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: 34114509-b48f-4b6e-a4e7-fd466745400a
+X-Mail-ID: ed22976e-4fcd-48d6-bda8-56339d81192e
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
@@ -54,62 +57,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+From: Sam Shih <sam.shih@mediatek.com>
 
-This Series adds some Nodes to mt7986 devicetree and the BananaPi R3
+This arrange device tree nodes in alphabetical order.
 
-i included sams series for mt7986 DTS with small changes
-https://patchwork.kernel.org/project/linux-mediatek/cover/20220427124741.18245-1-sam.shih@mediatek.com/
+Signed-off-by: Sam Shih <sam.shih@mediatek.com>
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+i modified sams patch
 
-this series need these Patches:
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220427124741.18245-2-sam.shih@mediatek.com/
 
-i2c-support:
-https://patchwork.kernel.org/project/linux-mediatek/cover/20221009101631.82380-1-linux@fw-web.de/
+by moving pio-node up instead of moving uarts down to ensure alphabetical
+order for switch-/wifi-node.
 
-mmc bindings:
-https://patchwork.kernel.org/project/linux-mediatek/list/?series=688675
+And moved uart0 and wifi in mt7986b-rfb too.
+---
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 94 ++++++++++----------
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 22 ++---
+ 2 files changed, 58 insertions(+), 58 deletions(-)
 
-update pinctrl-bindings:
-https://patchwork.kernel.org/project/linux-mediatek/patch/20221024074349.7777-1-linux@fw-web.de/
-https://patchwork.kernel.org/project/linux-mediatek/patch/20221025070255.14407-1-linux@fw-web.de/
-
-hwrng and pinctrl (uart splitting) are already applied to next
-
-v2 do not include PCIe as there is still a discussion on bindings.
-
-i had run full dtbs-check but i end up with some strange warnings in
-ethernet-node that should not come up as phy-handle and sfp/managed
-properties are already defined.
-
-phy-handle made optional
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/mediatek,net.yaml#n265
-
-property sfp/managed (which is included for mac subnode in yaml above):
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/ethernet-controller.yaml#n137
-
-Frank Wunderlich (2):
-  arm64: dts: mt7986: add i2c node
-  arm64: dts: mt7986: add Bananapi R3
-
-Sam Shih (5):
-  arm64: dts: mt7986: harmonize device node order
-  arm64: dts: mt7986: add spi related device nodes
-  arm64: dts: mt7986: add usb related device nodes
-  arm64: dts: mt7986: add crypto related device nodes
-  arm64: dts: mt7986: add mmc related device nodes
-
- arch/arm64/boot/dts/mediatek/Makefile         |   2 +
- .../mediatek/mt7986a-bananapi-bpi-r3-emmc.dts |  34 +
- .../mediatek/mt7986a-bananapi-bpi-r3-sd.dts   |  29 +
- .../dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi | 593 ++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts  | 246 ++++++--
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi     | 127 ++++
- arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts  |  83 ++-
- 7 files changed, 1059 insertions(+), 55 deletions(-)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dtsi
-
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+index afe37b702eef..6189436fe31d 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+@@ -54,6 +54,53 @@ switch: switch@0 {
+ 	};
+ };
+ 
++&pio {
++	uart1_pins: uart1-pins {
++		mux {
++			function = "uart";
++			groups = "uart1";
++		};
++	};
++
++	uart2_pins: uart2-pins {
++		mux {
++			function = "uart";
++			groups = "uart2";
++		};
++	};
++
++	wf_2g_5g_pins: wf-2g-5g-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_2g", "wf_5g";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++
++	wf_dbdc_pins: wf-dbdc-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_dbdc";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++};
++
+ &switch {
+ 	ports {
+ 		#address-cells = <1>;
+@@ -121,50 +168,3 @@ &wifi {
+ 	pinctrl-0 = <&wf_2g_5g_pins>;
+ 	pinctrl-1 = <&wf_dbdc_pins>;
+ };
+-
+-&pio {
+-	uart1_pins: uart1-pins {
+-		mux {
+-			function = "uart";
+-			groups = "uart1";
+-		};
+-	};
+-
+-	uart2_pins: uart2-pins {
+-		mux {
+-			function = "uart";
+-			groups = "uart2";
+-		};
+-	};
+-
+-	wf_2g_5g_pins: wf-2g-5g-pins {
+-		mux {
+-			function = "wifi";
+-			groups = "wf_2g", "wf_5g";
+-		};
+-		conf {
+-			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
+-			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
+-			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
+-			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
+-			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
+-			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
+-			       "WF1_TOP_CLK", "WF1_TOP_DATA";
+-			drive-strength = <4>;
+-		};
+-	};
+-
+-	wf_dbdc_pins: wf-dbdc-pins {
+-		mux {
+-			function = "wifi";
+-			groups = "wf_dbdc";
+-		};
+-		conf {
+-			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
+-			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
+-			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
+-			       "WF0_TOP_CLK", "WF0_TOP_DATA";
+-			drive-strength = <4>;
+-		};
+-	};
+-};
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+index 3443013b5971..7459ddb6b6f0 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+@@ -25,10 +25,6 @@ memory@40000000 {
+ 	};
+ };
+ 
+-&uart0 {
+-	status = "okay";
+-};
+-
+ &eth {
+ 	status = "okay";
+ 
+@@ -99,13 +95,6 @@ fixed-link {
+ 	};
+ };
+ 
+-&wifi {
+-	status = "okay";
+-	pinctrl-names = "default", "dbdc";
+-	pinctrl-0 = <&wf_2g_5g_pins>;
+-	pinctrl-1 = <&wf_dbdc_pins>;
+-};
+-
+ &pio {
+ 	wf_2g_5g_pins: wf-2g-5g-pins {
+ 		mux {
+@@ -138,3 +127,14 @@ conf {
+ 		};
+ 	};
+ };
++
++&uart0 {
++	status = "okay";
++};
++
++&wifi {
++	status = "okay";
++	pinctrl-names = "default", "dbdc";
++	pinctrl-0 = <&wf_2g_5g_pins>;
++	pinctrl-1 = <&wf_dbdc_pins>;
++};
 -- 
 2.34.1
 
