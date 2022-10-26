@@ -2,139 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C48A60E3D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4F760E3C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233645AbiJZOzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
+        id S234125AbiJZOwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234398AbiJZOzP (ORCPT
+        with ESMTP id S234094AbiJZOwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:55:15 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F1113D5C;
-        Wed, 26 Oct 2022 07:55:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IfNG5Bwkn4T10aMEtSm6DflTBJYVLWKcwoFGQwU6sey6oqb2PnTMfR+auTZmf45sya1r/VuKi/5V6d4dGh29X+AmzS4nPQSb2ycJTIRLfw7pK3TKwhngGa+P+oW1zlJCbwv14ew/MKTnhnUG1GpYFZ/7VxDe0ZL2kpoZfdncFDfJIdruLLt/Ho5fNT2+RXdavvyfacAAkqJlz5AWhml1lvI0/+Wvg+Ox7Kj8r7OG3U1tyBcsx872L7raK8q1BYlSFqka2wwP4U22sY5mo2nZQfOeuZMAaiYlpav5YNMRNmYaDabSLFdzp6EapcbsBQ733uzrsWds25QTiKnXEtfhQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=78+eN9scEcWw/knemipW33ExY/3ws/gPJbJWRMlFDQA=;
- b=R/DiuOiHr8pbuUrjQovSC0H84/bslMHaAGkkvH+iHspC7sKheZFKSCPDdeZIiAeuo6NeOa08yo+PJxeTFxCme6coGCVfwQRBN43XJC66vS5H8C7BKxuhyR7geLWpUSg3OwDZtITqMk0ejf/aP1ogtAtxbogJEH15+vTNFf4tqvFEuTYoX2/z1wYhGIuPgyNiUw38F2t/Oj5Aigdg+z0VqoT0kQWZmpsVkJwYfH9cZSqMV/i8RLNLnh9sxuNsJsU433XZ56hZeVmjNTP8gCcL15mGRrczmIBHdOEaIIupKH8Ws/ee0HFb6mIVhXL/oFvAHPG2KOgkiJ9oxml0khLy1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=lists.infradead.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=78+eN9scEcWw/knemipW33ExY/3ws/gPJbJWRMlFDQA=;
- b=dK8Sg6H26up/uMmowl8O0rH16DhjRmF0bphbYRW1io/GsTUTHTUXzPz02OYgxP1QvILnL814+w1CnMNSTgRBb/CQ2lBc1/vuHxLYeYoaoBb+CJYjKcF0fTGQvuRhBw5jtAHQmUePJ/FLe6ADb2P2KQLG3CIfem2htarLav5v2LL7Im8JTIEsv1D+26R41NSqxZ1OMncIhrz9wlXJ9AIk+LrBgmWbbAVGieqGu9tWjbHQZ8LRK/HtjqMjqMiCFgpacFq0qim57fmQF/1jEeACZhWoYC+8H9n6i5Wo4zce4FT6tFgjr9v/2+X995YJQBNsUt6iACv3b2mkfsaiBU1hFg==
-Received: from DM6PR06CA0041.namprd06.prod.outlook.com (2603:10b6:5:54::18) by
- DM4PR12MB6301.namprd12.prod.outlook.com (2603:10b6:8:a5::21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5723.33; Wed, 26 Oct 2022 14:55:12 +0000
-Received: from DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:54:cafe::75) by DM6PR06CA0041.outlook.office365.com
- (2603:10b6:5:54::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28 via Frontend
- Transport; Wed, 26 Oct 2022 14:55:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT011.mail.protection.outlook.com (10.13.172.108) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.16 via Frontend Transport; Wed, 26 Oct 2022 14:55:12 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 26 Oct
- 2022 07:54:59 -0700
-Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 26 Oct
- 2022 07:54:55 -0700
-References: <20221024091333.1048061-1-daniel.machon@microchip.com>
- <20221024091333.1048061-2-daniel.machon@microchip.com>
- <874jvq28l3.fsf@nvidia.com> <Y1kaErnPh5h4otWe@DEN-LT-70577>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     <Daniel.Machon@microchip.com>
-CC:     <petrm@nvidia.com>, <netdev@vger.kernel.org>,
-        <davem@davemloft.net>, <maxime.chevallier@bootlin.com>,
-        <thomas.petazzoni@bootlin.com>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <Lars.Povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
-        <linux@armlinux.org.uk>, <Horatiu.Vultur@microchip.com>,
-        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [net-next v3 1/6] net: dcb: add new pcp selector to app object
-Date:   Wed, 26 Oct 2022 16:51:32 +0200
-In-Reply-To: <Y1kaErnPh5h4otWe@DEN-LT-70577>
-Message-ID: <87k04mzlc3.fsf@nvidia.com>
+        Wed, 26 Oct 2022 10:52:08 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA08B4888
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:52:06 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id f8so10693253qkg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 07:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BRAVl/jwTcV9oATKPy/gFpDCwVtUOLelijvTTaSWnGg=;
+        b=AjSJc8sbeB9AS4fvGTqF5hOSH88uRNxiEUF5cwc8f9rtlcA+g5xOJ96dOFLewJ8sg8
+         zUIKdFb7J90tDQ+DtAV5ExRVljW7NOqNlKX0FFoy031GHB5Psunydm1h6jpp60PvuyNm
+         /8I7o1Ql7yZHIPSp/KaWj65QQO6FB5WTgS2ZMng0KSNHlltE5wkrAbp76Y1p4GP9hPsH
+         FklH1IiwWTSdfWTYPrs2XxLPnt/KMENpJ63JsNLayK2m27hW5iCwQcMdsnTsRzRa/swM
+         an/gCOX2pr04x8U4hSLxWwQwzNOfT0yu+DM8WFb+ddYZT3N4D3coduusPPA5dmgzgrWC
+         N5Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BRAVl/jwTcV9oATKPy/gFpDCwVtUOLelijvTTaSWnGg=;
+        b=ZGlUFpARSxEHE7Cg/aXiNzqeO5AtCCgsInKg0IQRRhfYl8yUkShTKyolUQXBm/WHlJ
+         JTEyJmjnNjIJJkI/ZnyIw4xWzZTF/3YkOkvu6QxJCt96HvwzNlS/+nP49ev7u0CLzvJ4
+         MCytQCHRT5PqXyT3wttUeQmvWhFdqOPvnQlOExxF+xBp8EAcB5dO30+WaRqc62aZGHpa
+         xbQfDJOMJ2Lo2SDEQzSZBxGfRB36XTHIKymdGSK+JqQu4E9TKQDVpJnOSKeR//xLsPDV
+         Mnr4okDheWr2rQcuwPCpx2uHvvg6+Ltd8Lwot4SrlZIcO0NzFjA0mwJaqQAYG/K086GC
+         GTKQ==
+X-Gm-Message-State: ACrzQf2YmK+9NIDksnvLHSWz0AsQO0Rz4MyTXei8PDuq2OxBtRKwF/3C
+        eQGQrJC8knMIlW8euYfOo0pFVw==
+X-Google-Smtp-Source: AMsMyM5iwidwgAruSNa03zv/AGhLCmH/0fY2+r/Jj+TasH9LX4SwHYqK8c3EVcZjjuFFc5SdGMeeaw==
+X-Received: by 2002:a05:620a:4385:b0:6ee:7b48:202e with SMTP id a5-20020a05620a438500b006ee7b48202emr31725350qkp.306.1666795926065;
+        Wed, 26 Oct 2022 07:52:06 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id u6-20020a37ab06000000b006bb2cd2f6d1sm3885523qke.127.2022.10.26.07.52.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 07:52:05 -0700 (PDT)
+Message-ID: <895ab493-dcf2-c9e9-7850-3a6aea9a97ee@linaro.org>
+Date:   Wed, 26 Oct 2022 10:52:03 -0400
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.231.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT011:EE_|DM4PR12MB6301:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4b28ed0c-02b9-46dc-a791-08dab76215a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OTf3nNtc/LktkBSLxo/Da7KJE2LfOc+ZVA85CIvom7BAYh7bVrNINpkahH5QeAL6hBRzwkf+2Wd6zGHEfI2+9wZ0DYM1eupHrSNayUpHXThZQcxVH8/6h5LbXMR4QnSC0uZq3cyZ4JVSRnfkW7BQ8bF8+8+ppZyHkCqP5ic7IzrBD9Wbbpmh4VByQYT827XavWtqMBXEnSzwJALtzgtOLirFf61Hy4tkvPhpvVlCqe3HtGBAdkyFh/A+2/CNttaYvSrTdCXQFkr03J+NqZjTcTuZ1Y9ZLmigkQPtrsfGUdjsTj3vLqaKGlBTPVEHD1dmZlMdvHkTMTW8GpLEVBX7s084csQJ6GBlpxah4Wjhaaz8bO+bdzPSSVp38Yt/Yk2Uie+4vgfV94GYM2ghhxY2eHspPaNicKGOEHEmMQrj8oNfKHAloCO9u2KIL9k77Wsriip0REOGnTBpLQGJCS5j1S7FKf9odNKw9YElQmjfDgcNSuWKoOuni4iKdmcCaS4rgGlS9d8v7jDBKqUNVapKiWbWF+sb57udnEhrUutycgFITFa3OyHWDfjq1RWqbUF5/nDXfr6VzGS0t/v7j4wU2F1sVDImfCb8NWh5xvitOoKffObCEzcLufywQqfdPISRrz696sG/Uf+JlLNOOvcnH8oPUKXuiznbgcSxPAJKOMETxGgVh15jeLO3HSkNWw0PKdoNYYjD1z1c4vfc2m4PhfuL4PE/K7GOtStT2AocPc6gBtA+LdYUj+JBY2CIyQ4uht/pGXUvg4wctXJIRK+jrQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(39860400002)(136003)(451199015)(40470700004)(46966006)(36840700001)(6666004)(186003)(41300700001)(478600001)(7636003)(36860700001)(36756003)(8936002)(8676002)(54906003)(4326008)(40460700003)(356005)(2616005)(6916009)(86362001)(426003)(16526019)(82740400003)(40480700001)(336012)(26005)(316002)(82310400005)(70206006)(83380400001)(47076005)(2906002)(70586007)(5660300002)(7416002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 14:55:12.2902
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b28ed0c-02b9-46dc-a791-08dab76215a9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6301
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 1/4] ASoC: dt-bindings: rockchip: i2s-tdm: Make grf
+ property optional
+Content-Language: en-US
+To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-rockchip@lists.infradead.org, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221025124132.399729-1-frattaroli.nicolas@gmail.com>
+ <20221025124132.399729-2-frattaroli.nicolas@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221025124132.399729-2-frattaroli.nicolas@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 25/10/2022 08:41, Nicolas Frattaroli wrote:
+> Turns out most things don't require the GRF, so making the property
+> optional is the obvious move.
+> 
+> Signed-off-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+> ---
 
-<Daniel.Machon@microchip.com> writes:
 
->> I'm missing a validation that DCB_APP_SEL_PCP is always sent in
->> DCB_ATTR_DCB_APP encapsulation. Wouldn't the current code permit
->> sending it in the IEEE encap? This should be forbidden.
->
-> Right. Current impl. does not check that the non-std selectors received, are
-> sent with a DCB_ATTR_DCB_APP type.  We could introduce a new check
-> dcbnl_app_attr_selector_validate() that checks combination of type and 
-> selector, after the type and nla_len(attr) has been checked, so that:
->
->  validate type -> validate nla_len(attr) -> validate selector
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This needs to be validated, otherwise there's no point in having a
-dedicated attribute for the non-standard stuff.
+Best regards,
+Krzysztof
 
->> And vice versa: I'm not sure we want to permit sending the standard
->> attributes in the DCB encap.
->
-> dcbnl_app_attr_type_get() in dcbnl_ieee_fill() takes care of this. IEEE are
-> always sent in DCB_ATTR_IEEE and non-std are sent in DCB_ATTR_DCB.
-
-By "sending" I meant userspace sending this to the kernel. So bounce
-extended opcodes that are wrapped in IEEE and bounce IEEE opcodes
-wrapped in DCB as well.
