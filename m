@@ -2,123 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B32C60E2C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A213760E2C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbiJZN6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:58:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S233913AbiJZN7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234113AbiJZN5q (ORCPT
+        with ESMTP id S234241AbiJZN7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:57:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936566C941;
-        Wed, 26 Oct 2022 06:57:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DA3A61EB1;
-        Wed, 26 Oct 2022 13:57:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 915D1C433C1;
-        Wed, 26 Oct 2022 13:57:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666792653;
-        bh=iYKHMvchQIp87mwU83wThwb0OZA3KotzKOlVoc0s0MA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=hmqX9Q0xyTNhZXq7aaKH37rZEwY9NhtQD6VbHx63tcNWXmuU+JEJFI3UNu+CpmicW
-         PDQ3gtolLiSjlORamI0zl4bvLqBSKcnwQIeC+LyeMfMCi9Fx2g+UBREJow0vJa2AnR
-         wyk05vh+Sv/AoH4K1pTdUHlbj+PxEy6KFiOzslto5DIVb9vUKMUFpPGWAY8lsYKnXK
-         qztDGjizLA2otYmNXwa3yTQ8QotCPywMeb9jARof+A0TxLX4csh8S7vFGfUdk/d0NZ
-         VcL5ycbT1xQyWvfY4ITUpqVlZIFBIITFT623w0PO1tKt4Xc5qK4fsyphP1kv/NMDAX
-         ENPFqdiKQihTQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3DBA65C069B; Wed, 26 Oct 2022 06:57:33 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 06:57:33 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
-Message-ID: <20221026135733.GK5600@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221021060340.7515-1-w@1wt.eu>
- <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021170134.GB8420@1wt.eu>
- <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021172026.GC8420@1wt.eu>
- <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221022112228.GB30596@1wt.eu>
- <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026053922.GA19206@1wt.eu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026053922.GA19206@1wt.eu>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 26 Oct 2022 09:59:22 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38041BE84
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:59:20 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13c2cfd1126so1239713fac.10
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KfyR/Tx2YrJr2+0GB3rE6Edzxc43nhhgdPrci6LuUC8=;
+        b=OeK5wNwoI4T5cOsTsmcmKGTzgcZlDwB2Rix/EhxBM6a8aXl0LDKzBpQUABkroSWrLs
+         4KPkmc254SQjjvrC2eDjozz8YRA4l1mTUsLEJOZJWderh7CRxXUYCW8drlIyVsYiFLmP
+         s0SydLN163TzJ7HLUMfCP2K2zTOrZWvsIpHryDmJZtUk6tpPyD4PdKk8qw5UwWna9gne
+         YJig/uUnXCHuSORavizX03+xqBhcXWYIRTiuW/w6QdtIjzS1Cb8KCCez5StuQknPT93Y
+         JbOAjqtLLFAZzHnlJQHjECNBsRXkh0BHUdBaG7OkGnvaNRBfLw+aGwjVBFQWcvGzZjun
+         3oJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KfyR/Tx2YrJr2+0GB3rE6Edzxc43nhhgdPrci6LuUC8=;
+        b=QcXSEGtfv0VdeFa0h2VKkd9f5whei9Z/gkreuqSAI2mKe64RstWpCeJMxSIIc5055w
+         Rq4PgsZIPRjqxleyhQ5ZXIvU1yRwFV7gEUZ2BJHzTgKpzh4Hzq2Ii84FuekLpuBdkpDA
+         umuC+XyWeZOBpGWwqW+Q7eU8aliJ+jnUdL1Jfab25derzQOjNJF0c0+9nab+bouS81hI
+         oqbOIR1OXAfT0EnHSOOlt2kYoCTsLSv8DBg3wZnN4dMUyhwUFPLuzwyGHkE4th2br3Zz
+         DPy7KoQQ+ZXqeTHd6Gg1XEilLvkBiQ7i5pDjIjw1quX0LxOn0vKMOjcqpUD9mFOz9paF
+         FsZg==
+X-Gm-Message-State: ACrzQf1jybI6hh3KNTfKhSn1VbAsAwqeIu46nR1HPICBKn1XewK6DXtZ
+        FkgW62wtuYQ5KkAL9b1M1mgvlH6Gj0HQzg==
+X-Google-Smtp-Source: AMsMyM6Rntwur5E6cD3lENn4JxTAtCUFkswVbmCP+HOzy4XWlAgzvLZK0nze43VSxgq7FOsd71DbAw==
+X-Received: by 2002:a17:90a:c78a:b0:212:e56b:2b17 with SMTP id gn10-20020a17090ac78a00b00212e56b2b17mr4399137pjb.51.1666792749850;
+        Wed, 26 Oct 2022 06:59:09 -0700 (PDT)
+Received: from localhost ([135.180.227.132])
+        by smtp.gmail.com with ESMTPSA id om2-20020a17090b3a8200b0020d3662cc77sm1148299pjb.48.2022.10.26.06.59.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 06:59:09 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 06:59:09 -0700 (PDT)
+X-Google-Original-Date: Wed, 26 Oct 2022 06:59:05 PDT (-0700)
+Subject:     Re: [PATCH] riscv: Fix build with CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+In-Reply-To: <Yz56K2W/6ttN1SLT@xhacker>
+CC:     samuel@sholland.org, linux-riscv@lists.infradead.org,
+        aou@eecs.berkeley.edu, anup@brainfault.org,
+        Atish Patra <atishp@rivosinc.com>, daolu@rivosinc.com,
+        guoren@kernel.org, heiko@sntech.de,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     jszhang@kernel.org
+Message-ID: <mhng-9854c795-768e-4db5-a167-0cc80561cd7e@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 07:39:22AM +0200, Willy Tarreau wrote:
-> Hi Paul,
-> 
-> On Mon, Oct 24, 2022 at 08:53:57AM -0700, Paul E. McKenney wrote:
-> > > Will keep thinking about it and hopefully propose a patch to make the
-> > > tests easier to use before we're too far in the 6.1 release.
-> > 
-> > Another possibility is to have a separate developers' and maintainers'
-> > option.  Linus and I do "make whatever" for some value of "whatever"
-> > that builds from scratch, doing whatever cleaning that might be required.
-> > Developers use targets that are faster but have the possibility of false
-> > positives and false negatives.
-> > 
-> > But maybe you have something better in mind.
-> > 
-> > > Thanks for keeping the conversation flowing, that helps me!
-> > 
-> > Looking forward to seeing what you come up with!
-> 
-> I could finally figure what was taking time in the installation process.
-> Interestingly, it's "make headers", which is not redone without a "make
-> clean" at the kernel level. The "make headers_install" only takes a few
-> hundred milliseconds, so issuing a systematic "make clean" in the nolibc
-> test dir only takes ~800ms here to perform a full rebuild, which is totally
-> acceptable to me.
-> 
-> Thus what I've done is to mark the sysroot target as .phony and start it
-> with a removal of the current include dir so that we systematically rebuild
-> it. Now there's no such risk of running a test against an earlier version
-> anymore, and there are no "make clean" to worry about anymore either.
-> That looks much better to me!
-> 
-> And I could confirm that just issuing:
-> 
->   $ time make -j8 -C tools/testing/selftests/nolibc run
-> 
-> after reverting Rasmus' fix led me to this pretty quickly:
-> 
->   ...
->   Kernel: arch/x86/boot/bzImage is ready  (#3)
->   make[1]: Leaving directory '/k'
->   15 memcmp_20_e0 = 64                    [FAIL]
->   16 memcmp_e0_20 = -64                   [FAIL]
->   See all results in /k/tools/testing/selftests/nolibc/run.out
->   make: Leaving directory '/k/tools/testing/selftests/nolibc'
-> 
->   real    0m14.538s
->   user    0m27.828s
->   sys     0m4.576s
-> 
-> No more false positives nor false negatives anymore. I'm sending you
-> the patch separately.
-> 
-> Thanks for the discussion, the solution is way better now!
+On Wed, 05 Oct 2022 23:48:11 PDT (-0700), jszhang@kernel.org wrote:
+> On Thu, Sep 22, 2022 at 01:09:58AM -0500, Samuel Holland wrote:
+>> commit 8eb060e10185 ("arch/riscv: add Zihintpause support") broke
+>> building with CONFIG_CC_OPTIMIZE_FOR_SIZE enabled (gcc 11.1.0):
+>>
+>>   CC      arch/riscv/kernel/vdso/vgettimeofday.o
+>> In file included from <command-line>:
+>> ./arch/riscv/include/asm/jump_label.h: In function 'cpu_relax':
+>> ././include/linux/compiler_types.h:285:33: warning: 'asm' operand 0 probably does not match constraints
+>>   285 | #define asm_volatile_goto(x...) asm goto(x)
+>>       |                                 ^~~
+>> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro 'asm_volatile_goto'
+>>    41 |         asm_volatile_goto(
+>>       |         ^~~~~~~~~~~~~~~~~
+>> ././include/linux/compiler_types.h:285:33: error: impossible constraint in 'asm'
+>>   285 | #define asm_volatile_goto(x...) asm goto(x)
+>>       |                                 ^~~
+>> ./arch/riscv/include/asm/jump_label.h:41:9: note: in expansion of macro 'asm_volatile_goto'
+>>    41 |         asm_volatile_goto(
+>>       |         ^~~~~~~~~~~~~~~~~
+>> make[1]: *** [scripts/Makefile.build:249: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
+>> make: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
+>>
+>> Having a static branch in cpu_relax() is problematic because that
+>> function is widely inlined, including in some quite complex functions
+>> like in the VDSO. A quick measurement shows this static branch is
+>> responsible by itself for around 40% of the jump table.
+>>
+>> Drop the static branch, which ends up being the same number of
+>> instructions anyway. If Zihintpause is supported, we trade the nop from
+>> the static branch for a div. If Zihintpause is unsupported, we trade the
+>> jump from the static branch for (what gets interpreted as) a nop.
+>
+> Hi Samuel,
+>
+> I'm not sure whether it's correct to remove static branch usage from
+> cpu_relax, but your report inspired my patch of constifying arguments
+> of arch_static_branch() and arch_static_branch_jump() [1]. Could you
+> please also test it?
+>
+> Thanks very much
+>
+> [1]https://lore.kernel.org/linux-riscv/20221006064028.548-1-jszhang@kernel.org/T/#u
 
-Nice, looking forward to the patch!
+Thanks.  IMO that's the better short-term fix, as that sorts out the 
+build errors without dropping the div routine and we need the div 
+routine to avoid regression on the old SiFive cores (like the one in the 
+PolarFire SOC).  We can make a few improvements, though:
 
-							Thanx, Paul
+* If folks are worried about the performance of the static branch then 
+  we can convert this over to an alternative.  It should be safe to 
+  default to pause as it aliases a fence, it's just not as good at 
+  slowing down the core.
+* We can just drop the Zihintpause detection entirely and go with 
+  .4byte/.insn to encode the pause.  That's essentially what we've dove 
+  with the T-Head Zicbom stuff, but not sure it's worth it here because 
+  Zihintpause is new.
+
+>
+>>
+>> Fixes: 8eb060e10185 ("arch/riscv: add Zihintpause support")
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
+>> ---
+>>
+>>  arch/riscv/include/asm/hwcap.h          |  3 ---
+>>  arch/riscv/include/asm/vdso/processor.h | 25 ++++++++++---------------
+>>  2 files changed, 10 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+>> index 6f59ec64175e..b21d46e68386 100644
+>> --- a/arch/riscv/include/asm/hwcap.h
+>> +++ b/arch/riscv/include/asm/hwcap.h
+>> @@ -68,7 +68,6 @@ enum riscv_isa_ext_id {
+>>   */
+>>  enum riscv_isa_ext_key {
+>>  	RISCV_ISA_EXT_KEY_FPU,		/* For 'F' and 'D' */
+>> -	RISCV_ISA_EXT_KEY_ZIHINTPAUSE,
+>>  	RISCV_ISA_EXT_KEY_MAX,
+>>  };
+>>
+>> @@ -88,8 +87,6 @@ static __always_inline int riscv_isa_ext2key(int num)
+>>  		return RISCV_ISA_EXT_KEY_FPU;
+>>  	case RISCV_ISA_EXT_d:
+>>  		return RISCV_ISA_EXT_KEY_FPU;
+>> -	case RISCV_ISA_EXT_ZIHINTPAUSE:
+>> -		return RISCV_ISA_EXT_KEY_ZIHINTPAUSE;
+>>  	default:
+>>  		return -EINVAL;
+>>  	}
+>> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
+>> index 1e4f8b4aef79..789bdb8211a2 100644
+>> --- a/arch/riscv/include/asm/vdso/processor.h
+>> +++ b/arch/riscv/include/asm/vdso/processor.h
+>> @@ -4,30 +4,25 @@
+>>
+>>  #ifndef __ASSEMBLY__
+>>
+>> -#include <linux/jump_label.h>
+>>  #include <asm/barrier.h>
+>> -#include <asm/hwcap.h>
+>>
+>>  static inline void cpu_relax(void)
+>>  {
+>> -	if (!static_branch_likely(&riscv_isa_ext_keys[RISCV_ISA_EXT_KEY_ZIHINTPAUSE])) {
+>>  #ifdef __riscv_muldiv
+>> -		int dummy;
+>> -		/* In lieu of a halt instruction, induce a long-latency stall. */
+>> -		__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+>> +	int dummy;
+>> +	/* In lieu of a halt instruction, induce a long-latency stall. */
+>> +	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+>>  #endif
+>> -	} else {
+>> -		/*
+>> -		 * Reduce instruction retirement.
+>> -		 * This assumes the PC changes.
+>> -		 */
+>> +	/*
+>> +	 * Reduce instruction retirement.
+>> +	 * This assumes the PC changes.
+>> +	 */
+>>  #ifdef __riscv_zihintpause
+>> -		__asm__ __volatile__ ("pause");
+>> +	__asm__ __volatile__ ("pause");
+>>  #else
+>> -		/* Encoding of the pause instruction */
+>> -		__asm__ __volatile__ (".4byte 0x100000F");
+>> +	/* Encoding of the pause instruction */
+>> +	__asm__ __volatile__ (".4byte 0x100000F");
+>>  #endif
+>> -	}
+>>  	barrier();
+>>  }
+>>
+>> --
+>> 2.35.1
+>>
