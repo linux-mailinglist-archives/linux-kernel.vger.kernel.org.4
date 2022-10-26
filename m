@@ -2,199 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F3860D964
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB3860D968
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbiJZCoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 22:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S232641AbiJZCqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 22:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiJZCoK (ORCPT
+        with ESMTP id S229753AbiJZCqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 22:44:10 -0400
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5573260CA7;
-        Tue, 25 Oct 2022 19:44:09 -0700 (PDT)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 29Q2JJ9L047261;
-        Wed, 26 Oct 2022 10:19:19 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from [192.168.2.115] (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Oct
- 2022 10:42:08 +0800
-Message-ID: <22c85f42-a4d7-c6cc-5f1e-346c88c29dc5@aspeedtech.com>
-Date:   Wed, 26 Oct 2022 10:42:09 +0800
+        Tue, 25 Oct 2022 22:46:31 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3190857BFD
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 19:46:30 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y12so19063988edc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 19:46:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=otMyQVNwUCr9/v61glePdAqeCORbvdU0f4529W/48AQ=;
+        b=Dj5la0z0+e0s/6NUxF2ZggIrlKZvsle3DarCv/Ko9HieUAMeysJ3fKNNgKQ3ii3FiG
+         13VWx8B+sO9r3LRCwuh/mC/h5Kn2UKJVMd/FjSHgOiR5IMHTVIjTn5GKV5sYkTqsrY2d
+         9Ttz4DyhjRshNjJ8vy1w0q/wN+Mt3j9NWerWZMFBvKET0hI88C1jD0Ts153Gtdb+VQWD
+         ZPtGa2mvTczh2LIAwxL3V9PuUW6XpTNL1Xe8zy48AAuz3WLVwWpPsWyeXO4aS2mFP4CV
+         vt+0uUDcdvJ8odINcvHf9WYH5kMjNw1bKOoWXdD3c2lbrNFMnUoomxIUqLFyQbzL9Wzi
+         5alA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=otMyQVNwUCr9/v61glePdAqeCORbvdU0f4529W/48AQ=;
+        b=d6cffPy00j6AgHrvsdUxAo2kz8zTWs+dF6ErXbrPiQ9W9+a3SqvtoaD/Z1yyjeMnVH
+         o/szt2SCxujLdU1Rzv3zN+/kpRF6QLZKur2IxL6AExfvR5rbbwUX0AZn9WlPpgeRSGL0
+         Y1ynqcHFHCyytDGJSxQFt6mhb7jTqOWVsIqU21o3LAW2XvBJLvFpOtyg+/BKbuDb9VKS
+         csSzRIumMUwSwkTiKnCSDWA7kDB/Je/tEGgVSm/jpocyDnbJtgXD0e1785s9bdeYIcIj
+         UKDt1FNjbQdI+Ek067aSxuFkHeXZEWkWteBQLJ+BTxUzma8Vf4d7z/dT2TdeN/vNzYgo
+         gKSw==
+X-Gm-Message-State: ACrzQf3b+WO6m7/t8tiIGoSB/mHbY6R2sTtnzAvgxa9Chwur0rTonFSw
+        MHaZOzFhSl5bNUZbPqR1bkA=
+X-Google-Smtp-Source: AMsMyM7eC/+I2EXIQZWpl79J0alK4TL4Cf0xyvZdhVfunBLyQM7C/HSlxuWDjMVZQyYcsgS7YD9KdA==
+X-Received: by 2002:aa7:cb09:0:b0:461:e6b6:4bad with SMTP id s9-20020aa7cb09000000b00461e6b64badmr10126319edt.27.1666752388625;
+        Tue, 25 Oct 2022 19:46:28 -0700 (PDT)
+Received: from ?IPV6:2003:c7:8f2a:b844:c952:3daa:e0a:40ba? (p200300c78f2ab844c9523daa0e0a40ba.dip0.t-ipconnect.de. [2003:c7:8f2a:b844:c952:3daa:e0a:40ba])
+        by smtp.gmail.com with ESMTPSA id h20-20020a1709070b1400b0078d85934cf8sm2221536ejl.111.2022.10.25.19.46.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 19:46:28 -0700 (PDT)
+Message-ID: <6b13762a-704e-b97c-2eeb-d4533ac9e998@gmail.com>
+Date:   Wed, 26 Oct 2022 04:46:27 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v10 3/5] media: Documentation: aspeed-video: Add user
- documentation for the aspeed-video driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 01/17] staging: vt6655: changed variable names: wFB_Opt0
 Content-Language: en-US
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        <eajames@linux.ibm.com>, <mchehab@kernel.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>, <hverkuil-cisco@xs4all.nl>,
-        <laurent.pinchart@ideasonboard.com>, <xavier.roumegue@oss.nxp.com>,
-        <ezequiel@vanguardiasur.com.ar>, <stanimir.varbanov@linaro.org>,
-        <sakari.ailus@linux.intel.com>, <ming.qian@nxp.com>,
-        <andrzej.p@collabora.com>, <linux-media@vger.kernel.org>,
-        <openbmc@lists.ozlabs.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
-References: <20221025090203.5623-1-jammy_huang@aspeedtech.com>
- <20221025090203.5623-4-jammy_huang@aspeedtech.com>
- <8a8f7c818688bda7c75d2f4fb5f8f0d6f89cb965.camel@collabora.com>
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-In-Reply-To: <8a8f7c818688bda7c75d2f4fb5f8f0d6f89cb965.camel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 29Q2JJ9L047261
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+References: <cover.1666740522.git.tanjubrunostar0@gmail.com>
+ <62f69eddc9641ac9eb045edf8a9453bf36a02b36.1666740522.git.tanjubrunostar0@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <62f69eddc9641ac9eb045edf8a9453bf36a02b36.1666740522.git.tanjubrunostar0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+On 10/26/22 01:36, Tanjuate Brunostar wrote:
+> -static const unsigned short wFB_Opt0[2][5] = {
+> +static const unsigned short w_fb_opt_0[2][5] = {
+>   	{RATE_12M, RATE_18M, RATE_24M, RATE_36M, RATE_48M}, /* fallback_rate0 */
+>   	{RATE_12M, RATE_12M, RATE_18M, RATE_24M, RATE_36M}, /* fallback_rate1 */
+>   };
 
-Thanks for your comments.
+In this driver the variables often start with a "w" for "word", "p" for 
+"pointer", "b" for "bool", "by" for "byte" and even "pv" for "pointer 
+void"...
+If possible I would omit those prefixes for the type as they sometimes 
+make the variable names even longer and you need to consider how to 
+break lines.
 
-On 2022/10/25 下午 09:18, Nicolas Dufresne wrote:
-> Hi Jammy,
->
-> thanks for the addition.
->
-> Le mardi 25 octobre 2022 à 17:02 +0800, Jammy Huang a écrit :
->> Add user documentation for the aspeed-video driver.
->>
->> Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
->> ---
->> v10:
->>    - new
->> ---
->>   .../media/drivers/aspeed-video.rst            | 61 +++++++++++++++++++
->>   .../userspace-api/media/drivers/index.rst     |  1 +
->>   2 files changed, 62 insertions(+)
->>   create mode 100644 Documentation/userspace-api/media/drivers/aspeed-video.rst
->>
->> diff --git a/Documentation/userspace-api/media/drivers/aspeed-video.rst b/Documentation/userspace-api/media/drivers/aspeed-video.rst
->> new file mode 100644
->> index 000000000000..798a2588b175
->> --- /dev/null
->> +++ b/Documentation/userspace-api/media/drivers/aspeed-video.rst
->> @@ -0,0 +1,61 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +.. include:: <isonum.txt>
->> +
->> +ASPEED video driver
->> +===================
->> +
->> +ASPEED Video Engine found on AST2400/2500/2600 SoC supports high performance
->> +video compressions with a wide range of video quality and compression ratio
->> +options. The adopted compressing algorithm is a modified JPEG algorithm.
->> +
->> +There are 2 types of compressions in this IP.
->> +
->> +* JPEG JFIF standard mode: for single frame and management compression
->> +* ASPEED proprietary mode: for multi-frame and differential compression.
->> +  Support 2-pass (high quality) video compression scheme (Patent pending by
->> +  ASPEED). Provide visually lossless video compression quality or to reduce
->> +  the network average loading under intranet KVM applications.
-> I think some of the information disclosed in the following quote could be
-> summarized. Notably the part about the extra buffers.
->
->     Aspeed JPEG Format requires an additional buffer, called bcd, to store
->     the information about which macro block in the new frame is different
->     from the previous one.
->     
->     To have bcd correctly working, we need to swap the buffers for src0/1 to
->     make src1 refer to previous frame and src0 to the coming new frame.
->     
-> But before I push you this route, have you considered using a dedicated pixel
-> format instead ? Here's my thinking, the output of the JPEG encoder is no longer
-> "compatible" (or at least won't yield the expected images) if used with a normal
-> JPEG decoder. By differentiating these two as dedicated formats, you will only need
-> 1 vendor control, and you avoid the potential risk of software bugs mixing them up.
-> Also note that there is other JPEG based vendor formats that exist in V4L2.
->
-> Let me know what do you think ?
-
-Yes, I also add a dedicated formats, V4L2_PIX_FMT_AJPG, in this series. 
-In [PATCH v10 1/5]
-
-media: v4l: Add definition for the Aspeed JPEG format, I add the 
-description in pixfmt-reserved.rst.
-
-After this series applied, the users can choose either of these two 
-formats by VIDIOC_S_FMT as
-
-per their preference.
-
->
-> Nicolas
->
->> +
->> +More details on the ASPEED video hardware operations can be found in
->> +*chapter 6.2.16 KVM Video Driver* of SDK_User_Guide which available on
->> +AspeedTech-BMC/openbmc/releases.
->> +
->> +The ASPEED video driver implements the following driver-specific control:
->> +
->> +``V4L2_CID_ASPEED_HQ_MODE``
->> +-------------------------------
->> +    Enable/Disable ASPEED's High quality mode. This is a private control
->> +    that can be used to enable high quality for aspeed proprietary mode.
->> +
->> +.. flat-table::
->> +    :header-rows:  0
->> +    :stub-columns: 0
->> +    :widths:       1 4
->> +
->> +    * - ``(0)``
->> +      - ASPEED HQ mode is disabled.
->> +    * - ``(1)``
->> +      - ASPEED HQ mode is enabled.
->> +
->> +``V4L2_CID_ASPEED_HQ_JPEG_QUALITY``
->> +-------------------------------
->> +    Define the quality of ASPEED's High quality mode. This is a private control
->> +    that can be used to decide compression quality if High quality mode enabled
->> +    . Higher the value, better the quality and bigger the size.
->> +
->> +.. flat-table::
->> +    :header-rows:  0
->> +    :stub-columns: 0
->> +    :widths:       1 4
->> +
->> +    * - ``(1)``
->> +      - minimum
->> +    * - ``(12)``
->> +      - maximum
->> +    * - ``(1)``
->> +      - step
->> +    * - ``(1)``
->> +      - default
->> +
->> +**Copyright** |copy| 2022 ASPEED Technology Inc.
->> diff --git a/Documentation/userspace-api/media/drivers/index.rst b/Documentation/userspace-api/media/drivers/index.rst
->> index 32f82aed47d9..46a494e00b72 100644
->> --- a/Documentation/userspace-api/media/drivers/index.rst
->> +++ b/Documentation/userspace-api/media/drivers/index.rst
->> @@ -31,6 +31,7 @@ For more details see the file COPYING in the source distribution of Linux.
->>   	:maxdepth: 5
->>   	:numbered:
->>   
->> +	aspeed-video
->>   	ccs
->>   	cx2341x-uapi
->>   	dw100
-
--- 
-Best Regards
-Jammy
-
+Bye Philipp
