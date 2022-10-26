@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B9F60E4A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7863160E4A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233976AbiJZPfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51580 "EHLO
+        id S233395AbiJZPfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234604AbiJZPez (ORCPT
+        with ESMTP id S234609AbiJZPe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:34:55 -0400
+        Wed, 26 Oct 2022 11:34:58 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE5B6362
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:34:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1DF5FCB
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:34:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666798491;
+        s=mimecast20190719; t=1666798495;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3W/r9ElK7sh/SFf0M/t1SVrs5dFd+1CxEY7lkRSmLhk=;
-        b=Z05caYannmq9/rH3/6PuYTSk6eJLrFWp31M2FhEFz0qz72N8/a0ZMF+ElBxtKWDrBNyZhX
-        NZ0ZNv0C/n6rWlt1PPdRq4pd2QGwAxlaCjQ5qQ6Js/NILzCNji8H5LwgMixuTK2SOo6rDz
-        HeTe3S0z/Mptn+0zC5P3QGqfUFmCE9w=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ejOPhJEJNpELka6gD2XD7ypHfsFu2fomcMBYmFfmxuI=;
+        b=Gtumf4iXtC4PIGmYTt/hbBvZVllSpKZZx+AQdjTqdO7ySNz2GtFkqbnQAvfoOwYv9D5xWn
+        ytYTQB66M+PKJ/lEqQ0vKDRdUxe2WDUy2nVJ6RohUc5pZqDvucKnhYHFUF7Oplrh4nyVZd
+        CXt96jbV2Z5nf7gl7PSsrDCotWpUaZw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-515-9cYeD-raMfe-RLU8VtjsCg-1; Wed, 26 Oct 2022 11:34:50 -0400
-X-MC-Unique: 9cYeD-raMfe-RLU8VtjsCg-1
-Received: by mail-ej1-f69.google.com with SMTP id sa6-20020a1709076d0600b0078d84ed54b9so4715991ejc.18
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:34:50 -0700 (PDT)
+ us-mta-561-s_vnf-pPNICNtQpcXHpzYg-1; Wed, 26 Oct 2022 11:34:53 -0400
+X-MC-Unique: s_vnf-pPNICNtQpcXHpzYg-1
+Received: by mail-ed1-f72.google.com with SMTP id v18-20020a056402349200b004622e273bbbso3091253edc.14
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:34:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3W/r9ElK7sh/SFf0M/t1SVrs5dFd+1CxEY7lkRSmLhk=;
-        b=u3xvuum/BWaxi2rI0LZnpMyaTBBWNj4s0nkYl1rS9K1spoyEOS+1l2zeXMPzp3dPD4
-         yFGEI8vu/KfBo0+kAKvRsjjV+isxEOvIwZk5nBYjy6z1oTux0UYEt5THgrefepbnmJFt
-         6iry9oLGRiRXFC88Yv5CAQ2gM8/2rwAsN2JeYFb3fIEq1uVgiE83HmMNE9Pbf8McdwDk
-         vIxItJORhfbUsEs3T0UHW3HvcxPP70ICW8ERnhs0nrSyIJMEVge2SelDZoqRVvrLQqYx
-         7yMgZfb/h2raJvN1JHlEMuskN1abF2b4R5g06MZETeGWBEBqDixEcfxredoW8ElqL/0Z
-         c9Hg==
-X-Gm-Message-State: ACrzQf0iv4HkSK5S/HB3Lu7IG+cCkA+PRit5DlzQDvoWRHyHgdL4qK+w
-        +TJz2zscYQMJhZSWZYZakHmS27RN22VJqG21eD/3Rc7LhO8rEpjBzXmTqI9yGaKsYqxq8v3KVQq
-        a61eUtr8hSwv27ZdDWNUi7m5A
-X-Received: by 2002:a17:906:8a65:b0:7ad:88f8:7ecc with SMTP id hy5-20020a1709068a6500b007ad88f87eccmr205488ejc.535.1666798489134;
-        Wed, 26 Oct 2022 08:34:49 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7hZV+nzwBhtCJNCfdWd9aTbL+g+XhULTYvMLCYKRB9T7riygaPgFJlt+DyvtV2u2xPOacYiQ==
-X-Received: by 2002:a17:906:8a65:b0:7ad:88f8:7ecc with SMTP id hy5-20020a1709068a6500b007ad88f87eccmr205472ejc.535.1666798489007;
-        Wed, 26 Oct 2022 08:34:49 -0700 (PDT)
+        bh=ejOPhJEJNpELka6gD2XD7ypHfsFu2fomcMBYmFfmxuI=;
+        b=TyvaWycLQ5CmCR9td99sfm/bAOHfecYiMHZV/KZnG1XT6xkcLsJ4AzxaUGP01zBdy7
+         E42+/TLORrlEAuRgVQDHxklWGh2wxLqz9hIrCqTsjaLrXOaZgiGbJrc/B0bEwZLnYRGi
+         w+ZDr8zD+LkIEDNaD9GnyON8NvWpm/9j+7jI1SIVCzxg+GmK0/Ldj41lP5Rte0NASA5U
+         SeuHsv2oopMj6W+kEc6XksnrBOFciWKskQgNvfxz6+cKh50i5tmcbLPk4FnS5fl+AAP4
+         r9fHofcqzFN0mepfbTFoGbdPA3nQsbBrB63ONe3AVX1+bKBIzYZnBuqP3KH1sq4ZAxai
+         8AYw==
+X-Gm-Message-State: ACrzQf3OGN7CGvphnr04aQw1Jlahf3Rkdksa3aMR6k9Hbwoeaq6KEgFp
+        LiGTa2K4oHyYWxjJHn/oSLXAwSV7u0OpUgTiUw7lh4TB/INqrYOj8pkC4F60opM2adn/BqQE5gF
+        3dI4+bZIw3j+ho+CfYFprD+L1
+X-Received: by 2002:a17:906:2f87:b0:78a:c0d5:d019 with SMTP id w7-20020a1709062f8700b0078ac0d5d019mr37917828eji.158.1666798492571;
+        Wed, 26 Oct 2022 08:34:52 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5EBkDZr7mSHI/IJXrOR7VYqX6OqCiEF3KuvriT6LLy2miYkg3LlwMcfHJamXcTxJp1LQpWvw==
+X-Received: by 2002:a17:906:2f87:b0:78a:c0d5:d019 with SMTP id w7-20020a1709062f8700b0078ac0d5d019mr37917812eji.158.1666798492434;
+        Wed, 26 Oct 2022 08:34:52 -0700 (PDT)
 Received: from pollux.. ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id m24-20020a056402051800b00459e3a3f3ddsm3684370edv.79.2022.10.26.08.34.48
+        by smtp.gmail.com with ESMTPSA id b12-20020a1709063f8c00b0078d4e39d87esm3114855ejj.225.2022.10.26.08.34.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 08:34:48 -0700 (PDT)
+        Wed, 26 Oct 2022 08:34:52 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
         mripard@kernel.org, liviu.dudau@arm.com, brian.starkey@arm.com
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v4 3/4] drm/arm/hdlcd: plane: use drm managed resources
-Date:   Wed, 26 Oct 2022 17:34:30 +0200
-Message-Id: <20221026153431.72033-4-dakr@redhat.com>
+Subject: [PATCH drm-misc-next v4 4/4] drm/arm/hdlcd: remove calls to drm_mode_config_cleanup()
+Date:   Wed, 26 Oct 2022 17:34:31 +0200
+Message-Id: <20221026153431.72033-5-dakr@redhat.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221026153431.72033-1-dakr@redhat.com>
 References: <20221026153431.72033-1-dakr@redhat.com>
@@ -79,54 +79,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use drm managed resource allocation (drmm_universal_plane_alloc()) in
-order to get rid of the explicit destroy hook in struct drm_plane_funcs.
+drm_mode_config_init() simply calls drmm_mode_config_init(), hence
+cleanup is automatically handled through registering
+drm_mode_config_cleanup() with drmm_add_action_or_reset().
+
+While at it, get rid of the deprecated drm_mode_config_init() and
+replace it with drmm_mode_config_init() directly.
 
 Signed-off-by: Danilo Krummrich <dakr@redhat.com>
 ---
- drivers/gpu/drm/arm/hdlcd_crtc.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+ drivers/gpu/drm/arm/hdlcd_drv.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/arm/hdlcd_crtc.c b/drivers/gpu/drm/arm/hdlcd_crtc.c
-index 2055b1abcec3..1de0f7b23766 100644
---- a/drivers/gpu/drm/arm/hdlcd_crtc.c
-+++ b/drivers/gpu/drm/arm/hdlcd_crtc.c
-@@ -290,7 +290,6 @@ static const struct drm_plane_helper_funcs hdlcd_plane_helper_funcs = {
- static const struct drm_plane_funcs hdlcd_plane_funcs = {
- 	.update_plane		= drm_atomic_helper_update_plane,
- 	.disable_plane		= drm_atomic_helper_disable_plane,
--	.destroy		= drm_plane_cleanup,
- 	.reset			= drm_atomic_helper_plane_reset,
- 	.atomic_duplicate_state = drm_atomic_helper_plane_duplicate_state,
- 	.atomic_destroy_state	= drm_atomic_helper_plane_destroy_state,
-@@ -301,21 +300,16 @@ static struct drm_plane *hdlcd_plane_init(struct drm_device *drm)
- 	struct hdlcd_drm_private *hdlcd = drm_to_hdlcd_priv(drm);
- 	struct drm_plane *plane = NULL;
- 	u32 formats[ARRAY_SIZE(supported_formats)], i;
--	int ret;
+diff --git a/drivers/gpu/drm/arm/hdlcd_drv.c b/drivers/gpu/drm/arm/hdlcd_drv.c
+index 120c87934a91..49c977cdae40 100644
+--- a/drivers/gpu/drm/arm/hdlcd_drv.c
++++ b/drivers/gpu/drm/arm/hdlcd_drv.c
+@@ -175,14 +175,21 @@ static const struct drm_mode_config_funcs hdlcd_mode_config_funcs = {
+ 	.atomic_commit = drm_atomic_helper_commit,
+ };
+ 
+-static void hdlcd_setup_mode_config(struct drm_device *drm)
++static int hdlcd_setup_mode_config(struct drm_device *drm)
+ {
+-	drm_mode_config_init(drm);
++	int ret;
++
++	ret = drmm_mode_config_init(drm);
++	if (ret)
++		return ret;
++
+ 	drm->mode_config.min_width = 0;
+ 	drm->mode_config.min_height = 0;
+ 	drm->mode_config.max_width = HDLCD_MAX_XRES;
+ 	drm->mode_config.max_height = HDLCD_MAX_YRES;
+ 	drm->mode_config.funcs = &hdlcd_mode_config_funcs;
++
++	return 0;
+ }
+ 
+ #ifdef CONFIG_DEBUG_FS
+@@ -255,7 +262,10 @@ static int hdlcd_drm_bind(struct device *dev)
+ 
+ 	dev_set_drvdata(dev, drm);
+ 
+-	hdlcd_setup_mode_config(drm);
++	ret = hdlcd_setup_mode_config(drm);
++	if (ret)
++		goto err_free;
++
+ 	ret = hdlcd_load(drm, 0);
+ 	if (ret)
+ 		goto err_free;
+@@ -314,9 +324,7 @@ static int hdlcd_drm_bind(struct device *dev)
+ 	hdlcd_irq_uninstall(hdlcd);
+ 	of_reserved_mem_device_release(drm->dev);
+ err_free:
+-	drm_mode_config_cleanup(drm);
+ 	dev_set_drvdata(dev, NULL);
 -
--	plane = devm_kzalloc(drm->dev, sizeof(*plane), GFP_KERNEL);
--	if (!plane)
--		return ERR_PTR(-ENOMEM);
+ 	return ret;
+ }
  
- 	for (i = 0; i < ARRAY_SIZE(supported_formats); i++)
- 		formats[i] = supported_formats[i].fourcc;
+@@ -337,7 +345,6 @@ static void hdlcd_drm_unbind(struct device *dev)
+ 	if (pm_runtime_enabled(dev))
+ 		pm_runtime_disable(dev);
+ 	of_reserved_mem_device_release(dev);
+-	drm_mode_config_cleanup(drm);
+ 	dev_set_drvdata(dev, NULL);
+ }
  
--	ret = drm_universal_plane_init(drm, plane, 0xff, &hdlcd_plane_funcs,
--				       formats, ARRAY_SIZE(formats),
--				       NULL,
--				       DRM_PLANE_TYPE_PRIMARY, NULL);
--	if (ret)
--		return ERR_PTR(ret);
-+	plane = drmm_universal_plane_alloc(drm, struct drm_plane, dev, 0xff,
-+					   &hdlcd_plane_funcs,
-+					   formats, ARRAY_SIZE(formats),
-+					   NULL, DRM_PLANE_TYPE_PRIMARY, NULL);
-+	if (IS_ERR(plane))
-+		return plane;
- 
- 	drm_plane_helper_add(plane, &hdlcd_plane_helper_funcs);
- 	hdlcd->plane = plane;
 -- 
 2.37.3
 
