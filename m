@@ -2,130 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17D960D9FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BC060D9F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbiJZDks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 23:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
+        id S232539AbiJZDev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 23:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiJZDkn (ORCPT
+        with ESMTP id S230134AbiJZDeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 23:40:43 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F525757F;
-        Tue, 25 Oct 2022 20:40:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666755640; x=1698291640;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=m1J819reqM48jm228hcMX4Esd+oOKdedmDl84tOWAEI=;
-  b=fX3HwDKbfNdmpWiEV3tBvezPG+cWaEfkzk5EFxmzprpeDBtScO50leSB
-   mCOI4n8rRo+3L0+wcZBUxsYerOKkpIYbUUnbbr1VjFhfBd+wJ5L+vPUJs
-   TtnXqitRNHdeyL75e4mpdMr5AzXGn8yAVz7lJM6pdNciDh8FhV7xinXN3
-   urX4YuYXg/pPh2VJk/gL12K1IRZ5v99qwtKlyhmMK35+keueBwzSbiNW1
-   JTfECMfRG1KPpm03TJ7AsC3C2xQLKAwQ395XerTPLmfK+2a7cPvaay9tD
-   kTAv0lzmSGgRdGRJwuAMidHRj2GGS4RX7R5JILeGe2KqHJk8BWNWKm9mF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="305466337"
-X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="305466337"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 20:40:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="626655402"
-X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="626655402"
-Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.238.2.23]) ([10.238.2.23])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 20:40:33 -0700
-Message-ID: <cce514da-32b4-3b84-cfad-67a05705bc9f@linux.intel.com>
-Date:   Wed, 26 Oct 2022 11:40:31 +0800
+        Tue, 25 Oct 2022 23:34:46 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC392A432;
+        Tue, 25 Oct 2022 20:34:40 -0700 (PDT)
+Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MxvYs3wtlzHvFM;
+        Wed, 26 Oct 2022 11:34:25 +0800 (CST)
+Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
+ (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 26 Oct
+ 2022 11:34:38 +0800
+From:   Weilong Chen <chenweilong@huawei.com>
+To:     <chenweilong@huawei.com>, <f.fangjian@huawei.com>,
+        <linus.walleij@linaro.org>, <yangyicong@hisilicon.com>,
+        <xuwei5@huawei.com>, <robh+dt@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: [PATCH next 1/2] gpio: hisi: Add initial device tree support
+Date:   Wed, 26 Oct 2022 11:42:18 +0800
+Message-ID: <20221026034219.172880-1-chenweilong@huawei.com>
+X-Mailer: git-send-email 2.31.GIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 1/6] x86: KVM: Enable CMPccXADD CPUID and expose it to
- guest
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, jane.malalane@citrix.com, nathan@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-References: <20221019084734.3590760-1-jiaxi.chen@linux.intel.com>
- <20221019084734.3590760-2-jiaxi.chen@linux.intel.com>
- <Y1AUhlwWjIkKfZHA@google.com>
-From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
-In-Reply-To: <Y1AUhlwWjIkKfZHA@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500004.china.huawei.com (7.192.104.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for HiSilicon GPIO controller in embedded platform, which
+boot from devicetree.
 
+Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+---
+ drivers/gpio/Kconfig     |  2 +-
+ drivers/gpio/gpio-hisi.c | 15 ++++++++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
-On 10/19/2022 11:15 PM, Sean Christopherson wrote:
-> For all the shortlogs, "expose it to guest" is technically wrong.  Adding
-> recognition in kvm/cpuid.c advertises KVM support to host userspace.  Whether or
-> not a feature is exposed to the guest is up to the userspace VMM.
-> 
-> On Wed, Oct 19, 2022, Jiaxi Chen wrote:
->> CMPccXADD is a new set of instructions in the latest Intel platform Sierra
->> Forest. It includes a semaphore operation that can compare and add the
-> 
-> In general, avoid pronouns in changelogs, it's not clear what "it" refers to here.
-> 
-> And for all of these changelogs, please explicitly state that there are no VMX
-> controls for these instructions, assuming that's actually true.  From a KVM
-> perspective, that's far more interesting than the details of the instruction(s).
-> 
->> operands if condition is met, which can improve database performance.
->>
->> The bit definition:
->> CPUID.(EAX=7,ECX=1):EAX[bit 7]
->>
->> This patch enables this CPUID in the kernel feature bits and expose it to
->> guest OS.
-> 
-> Same thing here, KVM doesn't decide whether or not to expose the feature to the
-> guest.
-> 
->> Signed-off-by: Jiaxi Chen <jiaxi.chen@linux.intel.com>
->> ---
->>  arch/x86/include/asm/cpufeatures.h | 1 +
->>  arch/x86/kvm/cpuid.c               | 2 +-
->>  2 files changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
->> index ef4775c6db01..445626cb5779 100644
->> --- a/arch/x86/include/asm/cpufeatures.h
->> +++ b/arch/x86/include/asm/cpufeatures.h
->> @@ -308,6 +308,7 @@
->>  /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
->>  #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
->>  #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
->> +#define X86_FEATURE_CMPCCXADD           (12*32+ 7) /* CMPccXADD instructions */
-> 
-> Boris,
-> 
-> What do you think about moving CPUID_7_1_EAX to be a KVM-only leaf too?  AFAICT,
-> KVM passthrough is the only reason the existing features are defined.
-Boris,
-
-Since CPUID_7_1_EAX has only 5 features now, it is a big waste, should we move it to 
-KVM-only leaf as Sean suggested. What's your opinion about this? 
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index e034f752e7ce..71a7880af59d 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -310,7 +310,7 @@ config GPIO_GRGPIO
+ 
+ config GPIO_HISI
+ 	tristate "HiSilicon GPIO controller driver"
+-	depends on (ARM64 && ACPI) || COMPILE_TEST
++	depends on ARM64 || COMPILE_TEST
+ 	select GPIO_GENERIC
+ 	select GPIOLIB_IRQCHIP
+ 	help
+diff --git a/drivers/gpio/gpio-hisi.c b/drivers/gpio/gpio-hisi.c
+index 3caabef5c7a2..813c0c1d4e49 100644
+--- a/drivers/gpio/gpio-hisi.c
++++ b/drivers/gpio/gpio-hisi.c
+@@ -1,8 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright (c) 2020 HiSilicon Limited. */
++#include <linux/acpi.h>
+ #include <linux/gpio/driver.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/property.h>
+ 
+@@ -215,11 +217,21 @@ static void hisi_gpio_init_irq(struct hisi_gpio *hisi_gpio)
+ 	hisi_gpio_write_reg(chip, HISI_GPIO_INTCOMB_MASK_WX, 1);
+ }
+ 
++#ifdef CONFIG_ACPI
+ static const struct acpi_device_id hisi_gpio_acpi_match[] = {
+ 	{"HISI0184", 0},
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(acpi, hisi_gpio_acpi_match);
++#endif
++
++#ifdef CONFIG_OF
++static const struct of_device_id hisi_gpio_dts_match[] = {
++	{ .compatible = "hisilicon,gpio-ascend910", },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, hisi_gpio_dts_match);
++#endif
+ 
+ static void hisi_gpio_get_pdata(struct device *dev,
+ 				struct hisi_gpio *hisi_gpio)
+@@ -310,7 +322,8 @@ static int hisi_gpio_probe(struct platform_device *pdev)
+ static struct platform_driver hisi_gpio_driver = {
+ 	.driver		= {
+ 		.name	= HISI_GPIO_DRIVER_NAME,
+-		.acpi_match_table = hisi_gpio_acpi_match,
++		.acpi_match_table = ACPI_PTR(hisi_gpio_acpi_match),
++		.of_match_table = of_match_ptr(hisi_gpio_dts_match),
+ 	},
+ 	.probe		= hisi_gpio_probe,
+ };
 -- 
-Regards,
-Jiaxi
+2.31.GIT
+
