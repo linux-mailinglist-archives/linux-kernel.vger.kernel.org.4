@@ -2,119 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771C360D911
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5769760D913
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiJZCIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 22:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        id S231351AbiJZCIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 22:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiJZCIB (ORCPT
+        with ESMTP id S230327AbiJZCIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 22:08:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40498B14EB;
-        Tue, 25 Oct 2022 19:08:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAE7361BE6;
-        Wed, 26 Oct 2022 02:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38AC8C433C1;
-        Wed, 26 Oct 2022 02:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666750080;
-        bh=0C3A6REuaewLmHH5E6YwXG5jrIKOyFuUNR9RkKLw9IU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=m9iKShnnwhLbiPWx2w7g9PXODebLnovzuRsSnzNbL/zeRqf+w7wnuHt2WyvYtn1Ny
-         jsk2o2p09U/rdliEzdXGsAYf7egrCekTiul4MpC1J0mDdofpADju2pq33wVF8OPazh
-         QLIJqfJ0XAOWukihNpEXbN4NrVIsR1c30WnOn5bxep8Iva0PqmaicHnvZgLKZd5URZ
-         xhCrYh+vXDr9m/bde6lsmSLldE5ydZ5+5eBKTHAJGSf9oc6hyk2a97OYCcM21exWQ0
-         +ZeUKJT3wfIPOC0cGtMxtIgF6HstIcSllG+cOZylmLOuW1IBirSiQEIp+irIoNzwGy
-         e164CJ/ynBOPw==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 25 Oct 2022 22:08:40 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FA1B5FF8
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 19:08:39 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id i8-20020a056e0212c800b002f9a4c75658so12421865ilm.3
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 19:08:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yecWmzsy3zyxUrCWTGcZzapzJraUSLhYg8sRvC4iTp0=;
+        b=aSFJNDd3q/UtVSazFlmjvJ3NKwzy5TTL2mv2ktDZXjO13V+muLcGK+Flx+dTsWdpRc
+         UZYVjOHhN63qGV5gcCZ8DT2Ds7eQlmEY14y9Z9YcQ3I028QOMxhSlY5u6feOlo9h8CKu
+         a2TlK5zxFH9P8VmXW23CZ2G9+kNvgfx392BZkSj/dv5wa/GGe43qdIWQLRGNd1/QfMRn
+         fW3BwxrJWLWLjbbxfBhn1xdjHLnq33IEfAb4u3YjiV78Ev0AhvwRIcB1Zn68Mj+SJ5k/
+         Osa9J4LXxi62yKIb/9g/FTbUc4WupMqELbICsK6I/uejvcOgQpg9ZJybXtarNb8ELwpw
+         ev5A==
+X-Gm-Message-State: ACrzQf1osEmspS/8nv8kNTh6f6bhTUTTpfkV9wgVzzczh20qFRXz5IYz
+        egbRb/AUdEAog2R6QCtamoEX5/5PL0zZnYQ3S4K2yEcGg20q
+X-Google-Smtp-Source: AMsMyM6b1rJQ9/14JoVBq2a3JVjUsU7m4IXuyQrYFfRVkM4/A/P6Ia0GksEmZ9xgghkvkvd5+qRCNH5cozbO0RYD1qdErXaYt+m2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221018-clk-range-checks-fixes-v1-4-f3ef80518140@cerno.tech>
-References: <20221018-clk-range-checks-fixes-v1-0-f3ef80518140@cerno.tech> <20221018-clk-range-checks-fixes-v1-4-f3ef80518140@cerno.tech>
-Subject: Re: [PATCH 4/4] clk: Warn if we register a mux without determine_rate
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Michael Turquette <mturquette@baylibre.com>
-Date:   Tue, 25 Oct 2022 19:07:58 -0700
-User-Agent: alot/0.10
-Message-Id: <20221026020800.38AC8C433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:c8cb:0:b0:36e:3514:bdfe with SMTP id
+ q11-20020a02c8cb000000b0036e3514bdfemr11271147jao.172.1666750118802; Tue, 25
+ Oct 2022 19:08:38 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 19:08:38 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c2ba5205ebe680bc@google.com>
+Subject: [syzbot] WARNING in vcpu_enter_guest (2)
+From:   syzbot <syzbot+dbef12497aa912c8e7ba@syzkaller.appspotmail.com>
+To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        jarkko@kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, seanjc@google.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Maxime Ripard (2022-10-18 06:52:59)
-> The determine_rate hook allows to select the proper parent and its rate
-> for a given clock configuration. On another hand, set_parent is there to
-> change the parent of a mux.
->=20
-> Some clocks provide a set_parent hook but don't implement
-> determine_rate. In such a case, set_parent is pretty much useless since
-> the clock framework will always assume the current parent is to be used,
-> and we will thus never change it.
->=20
-> This situation can be solved in two ways:
->   - either we don't need to change the parent, and we thus shouldn't
->     implement set_parent;
->   - or we don't want to change the parent, in this case we should set
->     CLK_SET_RATE_NO_REPARENT;
->   - or we're missing a determine_rate implementation.
->=20
-> The latter is probably just an oversight from the driver's author, and
-> we should thus raise their awareness about the fact that the current
-> state of the driver is confusing.
+Hello,
 
-There is another case which is a leaf clk that is a mux where you only
-expect clk_set_parent() to be used, and not clk_set_rate(). This use
-case is odd though, so I'm not sure how much we care.
+syzbot found the following issue on:
 
->=20
-> It's not clear at this point how many drivers are affected though, so
-> let's make it a warning instead of an error for now.
->=20
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> ---
->  drivers/clk/clk.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-> index 57b83665e5c3..11c41d987ff4 100644
-> --- a/drivers/clk/clk.c
-> +++ b/drivers/clk/clk.c
-> @@ -3700,6 +3700,11 @@ static int __clk_core_init(struct clk_core *core)
->                 goto out;
->         }
-> =20
-> +       /* TODO: Promote to an error */
+HEAD commit:    4dc12f37a8e9 Merge tag 'platform-drivers-x86-v6.1-2' of gi..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=113363d2880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=dbef12497aa912c8e7ba
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=132e84fc880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10a872f2880000
 
-The documentation should be updated in this patch (see the table of
-hardware characteristics in Documentation/driver-api/clk.rst).
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7858e54948b9/disk-4dc12f37.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f37bd48d06dc/vmlinux-4dc12f37.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/98114f50afb3/bzImage-4dc12f37.xz
 
-> +       if (core->ops->set_parent && !core->ops->determine_rate)
-> +               pr_warn("%s: %s must implement .set_parent & .determine_r=
-ate\n",
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dbef12497aa912c8e7ba@syzkaller.appspotmail.com
 
-You can grep for it:
+kvm: KVM_SET_TSS_ADDR need to be called before entering vcpu
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3603 at arch/x86/kvm/x86.c:10047 kvm_check_and_inject_events arch/x86/kvm/x86.c:10047 [inline]
+WARNING: CPU: 0 PID: 3603 at arch/x86/kvm/x86.c:10047 vcpu_enter_guest+0x92c/0x5a10 arch/x86/kvm/x86.c:10649
+Modules linked in:
+CPU: 0 PID: 3603 Comm: syz-executor122 Not tainted 6.1.0-rc2-syzkaller-00070-g4dc12f37a8e9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:kvm_check_and_inject_events arch/x86/kvm/x86.c:10047 [inline]
+RIP: 0010:vcpu_enter_guest+0x92c/0x5a10 arch/x86/kvm/x86.c:10649
+Code: c0 74 06 0f 8e d2 4f 00 00 45 0f b6 b4 24 e8 08 00 00 31 ff 44 89 f6 e8 72 db 6a 00 45 84 f6 0f 84 d4 41 00 00 e8 d4 de 6a 00 <0f> 0b e9 1e 11 00 00 e8 c8 de 6a 00 be 08 00 00 00 4c 89 ff e8 4b
+RSP: 0018:ffffc90003d3fb60 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888023d8ba80 RSI: ffffffff8111bdac RDI: 0000000000000001
+RBP: ffffc90003d3fc80 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 000000000008c07e R12: ffff88801c784000
+R13: 0000000000000000 R14: 0000000000000001 R15: ffff88801c784038
+FS:  0000555556d6e300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fffcf8d4d68 CR3: 000000007b6d6000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vcpu_run arch/x86/kvm/x86.c:10951 [inline]
+ kvm_arch_vcpu_ioctl_run+0xa5e/0x2b30 arch/x86/kvm/x86.c:11172
+ kvm_vcpu_ioctl+0x570/0xfc0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4065
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6a646982b9
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffcf8d6828 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f6a646982b9
+RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
+RBP: 00007f6a6465bd10 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6a6465bda0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
 
- $ git grep -W 'struct clk_ops .*=3D'
 
-but I'm fairly certain a coccinelle script can detect most of these
-because clk_ops are usually statically defined (although not always).
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Either way I already see that 'owl_comp_div_ops' will trigger this
-warning. And 'at91sam9x5_smd_ops' looks even more likely. Given that I'm
-not super keen on applying this patch.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
