@@ -2,105 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93ADC60EA06
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492DF60EA0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234908AbiJZUMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 16:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
+        id S235135AbiJZUM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 16:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233783AbiJZUMM (ORCPT
+        with ESMTP id S235115AbiJZUMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 16:12:12 -0400
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED0D13A7FC
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:12:11 -0700 (PDT)
-Received: from [192.168.31.208] (unknown [194.29.137.22])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Wed, 26 Oct 2022 16:12:22 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B419A143A79;
+        Wed, 26 Oct 2022 13:12:21 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B67973F73D;
-        Wed, 26 Oct 2022 22:12:09 +0200 (CEST)
-Message-ID: <1ce38a7a-7c4d-32b0-dd53-90fd3b708d64@somainline.org>
-Date:   Wed, 26 Oct 2022 22:12:08 +0200
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1537A1EC06BD;
+        Wed, 26 Oct 2022 22:12:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1666815140;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=JRPU/VosrpVRR+iXu5ifunnhEheX6vmVtTupYdvcy3w=;
+        b=Z9BTwCQlOjSc0gmsajldgC8unz0qOWgec9dWC8Sr2ro4ysB7DQOehw7MfQRfTGFSW/I+BX
+        esaqgLhAxa0lAy4UTawwwUKyUB5FLyTXFbYueSfGBBb11icL8QVV4cLH2rNvEQXQWZzM4K
+        DB8C6oDKfMGXfaIaKfVZJJR6ZbpHFYM=
+Date:   Wed, 26 Oct 2022 22:12:15 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com, mpatocka@redhat.com
+Subject: Re: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when
+ removing threshold blocks
+Message-ID: <Y1mUn/xvx1RYPqAQ@zn.tnic>
+References: <20220614174346.3648305-1-yazen.ghannam@amd.com>
+ <Yql9TqFtebd2h9Z9@kroah.com>
+ <Yqnj88FPkZ6kBU7k@yaz-fattaah>
+ <Y1kJCHBtatohj/JK@zn.tnic>
+ <Y1kiNBh3/XBNe6uv@kroah.com>
+ <Y1lUo08UzaqIaI7r@yaz-fattaah>
+ <Y1l8nx1KnTFP1xKj@zn.tnic>
+ <Y1mOEfEM6MdnV8CX@yaz-fattaah>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH 2/4] arm64: dts: qcom: sm8450: disable SDHCI SDR104/SDR50
- on all boards
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20221026200357.391635-1-krzysztof.kozlowski@linaro.org>
- <20221026200357.391635-3-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221026200357.391635-3-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y1mOEfEM6MdnV8CX@yaz-fattaah>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 26, 2022 at 07:44:17PM +0000, Yazen Ghannam wrote:
+> 1) Apply the patch I submitted as a simple fix/workaround for the presented
+> symptom. I tried to keep it small and well described to be a stable backport.
+> Obviously I wrote it without knowing the shared kobject behavior isn't ideal.
 
-On 26/10/2022 22:03, Krzysztof Kozlowski wrote:
-> SDHCI on SM8450 HDK also has problems with SDR104/SDR50:
->
->    mmc0: card never left busy state
->    mmc0: error -110 whilst initialising SD card
->
-> so I think it is safe to assume this issue affects all SM8450 boards.
-> Move the quirk disallowing these modes to the SoC DTSI, to spare people
-> working on other boards the misery of debugging this issue.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+We'll see.
 
-While I have no way to tell whether this is a common issue, it may as 
-well be..
+> 2) Address the shared kobject thing.
+>    Here are some options:
+>    a. Only set up the thresholding kobject on a single CPU per "AMD Node".
+>    Technically MCA Bank 4 is "shared" on legacy systems. But AFAICT from
+>    looking at old BKDG docs, in practice only the "Node Base Core" can access
+>    the registers. This behavior is controlled by a bit in NB which BIOS is
+>    supposed to set. Maybe some BIOSes don't do this, but I think that's a
+>    "broken BIOS on legacy system" issue if so.
+
+I guess we can do that. And I even think we have some code which finds
+out which the NBC is...
+
+/me greps a bit:
+
+ah, there it is: get_nbc_for_node() in arch/x86/kernel/cpu/mce/inject.c.
 
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+>    b. Disable the MCA Thresholding interface for Families before 0x17.
 
+Can't. It is user-visible and you don't know for sure whether someone is
+using it or not.
 
-Konrad
+Believe me, I have been wanting to disable this thing forever. I've
+never heard of anyone using it and all the energy we put in it was for
+nothing. :-\
 
->   arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts | 2 --
->   arch/arm64/boot/dts/qcom/sm8450.dtsi                          | 3 +++
->   2 files changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-> index 718c690af8ad..ae8ba297b0b6 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-> @@ -556,8 +556,6 @@ &sdhc_2 {
->   	pinctrl-1 = <&sdc2_sleep_state &sdc2_card_det_n>;
->   	vmmc-supply = <&pm8350c_l9>;
->   	vqmmc-supply = <&pm8350c_l6>;
-> -	/* Forbid SDR104/SDR50 - broken hw! */
-> -	sdhci-caps-mask = <0x3 0x0>;
->   	no-sdio;
->   	no-mmc;
->   	status = "okay";
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 1df5c964c6f7..6800e05a549d 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -3412,6 +3412,9 @@ sdhc_2: sdhci@8804000 {
->   			bus-width = <4>;
->   			dma-coherent;
->   
-> +			/* Forbid SDR104/SDR50 - broken hw! */
-> +			sdhci-caps-mask = <0x3 0x0>;
-> +
->   			status = "disabled";
->   
->   			sdhc2_opp_table: opp-table {
+We could try to deprecate it, though, make it default=n in Kconfig and
+see who complains. And after a couple of releases, kill it.
+
+>    This is an undocumented interface, 
+
+Of course it is documented - it is in the old BKDGs.
+
+> and I don't know if anyone is using it on older systems.
+
+Yap.
+
+> The issue we're discussing here started because of a splat during
+> suspend/resume/CPU hotplug. In disable_err_thresholding(), we disable
+> MCA Thresholding for bank 4 on Family 15h, so there's some precedent.
+> c. Do nothing at the moment. I *really* want to clean up the MCA
+> Thresholding interface, and the shared kobject thing may get resolved
+> in that.
+
+Clean it up how exactly?
+
+Put it behind a Kconfig item, disable it and remove it after a while?
+
+:-)
+
+If so, I wouldn't mind. No one's using this. At least I haven't heard of
+a single bug report or of a use case. Only when CPU hotplug explodes and
+that thing is involved, only then.
+
+Might as well remove it. And then remove it in the hardware too. RAS
+folks would love to get rid of some of that crap which takes up verif
+resources for no good reason.
+
+:-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
