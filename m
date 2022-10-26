@@ -2,158 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA8B460DA0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F0060DA0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbiJZDzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 23:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S232404AbiJZD4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 23:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbiJZDzV (ORCPT
+        with ESMTP id S232280AbiJZD4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 23:55:21 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D0A717E16
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 20:55:17 -0700 (PDT)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8Dxndqkr1hjbYcCAA--.9980S3;
-        Wed, 26 Oct 2022 11:55:16 +0800 (CST)
-Received: from localhost.localdomain (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+Cir1hj2yMFAA--.19823S2;
-        Wed, 26 Oct 2022 11:55:15 +0800 (CST)
-From:   Jinyang He <hejinyang@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Oleg Nesterov <oleg@redhat.com>
-Cc:     Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 RESEND] LoongArch: Remove unused kernel stack padding
-Date:   Wed, 26 Oct 2022 11:55:01 +0800
-Message-Id: <20221026035501.11986-1-hejinyang@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Tue, 25 Oct 2022 23:56:08 -0400
+Received: from mail.nfschina.com (mail.nfschina.com [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D389A43E63;
+        Tue, 25 Oct 2022 20:56:01 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 6E5CC1E80C80;
+        Wed, 26 Oct 2022 11:54:35 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jC5nzn9Ck9y4; Wed, 26 Oct 2022 11:54:33 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id F273B1E80C40;
+        Wed, 26 Oct 2022 11:54:32 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     neilb@suse.de
+Cc:     bvanassche@acm.org, jlayton@kernel.org,
+        linux-kernel@vger.kernel.org, reiserfs-devel@vger.kernel.org,
+        song@kernel.org, willy@infradead.org
+Subject: Re: [PATCH] reiserfs: journal: Increase jl pointer check
+Date:   Wed, 26 Oct 2022 11:55:50 +0800
+Message-Id: <20221026035551.3437-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+In-Reply-To: <166675351102.12462.1842756348742191725@noble.neil.brown.name>
+References: <166675351102.12462.1842756348742191725@noble.neil.brown.name>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Axf+Cir1hj2yMFAA--.19823S2
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxZF4DKw4DuF4Uur4UKF1ftFb_yoWrXrWrpF
-        9rAwnrGr4jkF1vyryDtrs8uryDJwn7Kw1aga17ta4rCrnFqF1rXry8AryDXFyaqa95K3y0
-        gFyfKwsxtay5J3JanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
-        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
-        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel stack padding looks like obey MIPS o32 Calling Convention, as
-LoongArch is inspired by MIPS and keep it. Remove it avoid not clear
-code.
 
-Link: https://lore.kernel.org/loongarch/1662130897-13156-1-git-send-email-hejinyang@loongson.cn/
-
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
----
-v2: Remove TOP_OF_KERNEL_STACK_PADDING
-    Remove 'init stack pointer' in head.S
-
- arch/loongarch/include/asm/processor.h | 2 +-
- arch/loongarch/include/asm/ptrace.h    | 2 +-
- arch/loongarch/kernel/head.S           | 3 +--
- arch/loongarch/kernel/process.c        | 4 ++--
- arch/loongarch/kernel/switch.S         | 2 +-
- 5 files changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/arch/loongarch/include/asm/processor.h b/arch/loongarch/include/asm/processor.h
-index 6954dc5d24e9..7184f1dc61f2 100644
---- a/arch/loongarch/include/asm/processor.h
-+++ b/arch/loongarch/include/asm/processor.h
-@@ -191,7 +191,7 @@ static inline void flush_thread(void)
- unsigned long __get_wchan(struct task_struct *p);
- 
- #define __KSTK_TOS(tsk) ((unsigned long)task_stack_page(tsk) + \
--			 THREAD_SIZE - 32 - sizeof(struct pt_regs))
-+			 THREAD_SIZE - sizeof(struct pt_regs))
- #define task_pt_regs(tsk) ((struct pt_regs *)__KSTK_TOS(tsk))
- #define KSTK_EIP(tsk) (task_pt_regs(tsk)->csr_era)
- #define KSTK_ESP(tsk) (task_pt_regs(tsk)->regs[3])
-diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/include/asm/ptrace.h
-index 7437b9366c3b..59c4608de91d 100644
---- a/arch/loongarch/include/asm/ptrace.h
-+++ b/arch/loongarch/include/asm/ptrace.h
-@@ -133,7 +133,7 @@ static inline void die_if_kernel(const char *str, struct pt_regs *regs)
- #define current_pt_regs()						\
- ({									\
- 	unsigned long sp = (unsigned long)__builtin_frame_address(0);	\
--	(struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1 - 32) - 1;	\
-+	(struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1) - 1;		\
- })
- 
- /* Helpers for working with the user stack pointer */
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index 97425779ce9f..84970e266658 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -84,10 +84,9 @@ SYM_CODE_START(kernel_entry)			# kernel entry point
- 
- 	la.pcrel	tp, init_thread_union
- 	/* Set the SP after an empty pt_regs.  */
--	PTR_LI		sp, (_THREAD_SIZE - 32 - PT_SIZE)
-+	PTR_LI		sp, (_THREAD_SIZE - PT_SIZE)
- 	PTR_ADD		sp, sp, tp
- 	set_saved_sp	sp, t0, t1
--	PTR_ADDI	sp, sp, -4 * SZREG	# init stack pointer
- 
- 	bl		start_kernel
- 	ASM_BUG()
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index 1256e3582475..2526b68f1c0f 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -129,7 +129,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	unsigned long clone_flags = args->flags;
- 	struct pt_regs *childregs, *regs = current_pt_regs();
- 
--	childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE - 32;
-+	childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE;
- 
- 	/* set up new TSS. */
- 	childregs = (struct pt_regs *) childksp - 1;
-@@ -236,7 +236,7 @@ bool in_task_stack(unsigned long stack, struct task_struct *task,
- 			struct stack_info *info)
- {
- 	unsigned long begin = (unsigned long)task_stack_page(task);
--	unsigned long end = begin + THREAD_SIZE - 32;
-+	unsigned long end = begin + THREAD_SIZE;
- 
- 	if (stack < begin || stack >= end)
- 		return false;
-diff --git a/arch/loongarch/kernel/switch.S b/arch/loongarch/kernel/switch.S
-index 43ebbc3990f7..202a163cb32f 100644
---- a/arch/loongarch/kernel/switch.S
-+++ b/arch/loongarch/kernel/switch.S
-@@ -26,7 +26,7 @@ SYM_FUNC_START(__switch_to)
- 	move	tp, a2
- 	cpu_restore_nonscratch a1
- 
--	li.w		t0, _THREAD_SIZE - 32
-+	li.w		t0, _THREAD_SIZE
- 	PTR_ADD		t0, t0, tp
- 	set_saved_sp	t0, t1, t2
- 
--- 
-2.34.3
+many thanks for your reply. I think I should do something more meaningful
+.
 
