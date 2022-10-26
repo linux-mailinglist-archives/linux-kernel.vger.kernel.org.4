@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1486160E395
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D5B60E3A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiJZOmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41674 "EHLO
+        id S233630AbiJZOqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233681AbiJZOme (ORCPT
+        with ESMTP id S233067AbiJZOqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:42:34 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25BDDED27;
-        Wed, 26 Oct 2022 07:42:32 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id y16so16257435wrt.12;
-        Wed, 26 Oct 2022 07:42:32 -0700 (PDT)
+        Wed, 26 Oct 2022 10:46:17 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098F08F954;
+        Wed, 26 Oct 2022 07:46:16 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id s206so5409384oie.3;
+        Wed, 26 Oct 2022 07:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :references:from:to:cc:subject:date:message-id:reply-to;
-        bh=OOQ+kDA4G+wlVL+Ry3C2hNPCcp5na+qrAnLo83Besj4=;
-        b=NsT4aKIWNh8VI1pqGxDuMdij95PeSRomq9fcVnLuUdufvUhkiJenOSIq4zjBZcpguL
-         YHwYgOdkenfpk64mO5RIPHJOucrjh2Ak0Q0NrslVONPd/XfgVznuQTvYmiVTkWmEDUx3
-         CSW1gg23t7h/JH4EkTVhztriJju1ZSQBqvvYQ9blkWaDu/W7fGmOY60IQL50ffUV5eG3
-         AuxSAJwmjXCDkZLf63CIkr4yYedZ5gSKGYTpoEixWgeZ0Y9lMNRlxliPiPDQI3UkfdEh
-         idW0PZT2K5Z6pirybjnWPe2e7aZ5Ei2QAzt4bioCuWu4jfToiAZc2HCuj27wU9SBzOty
-         euNg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=640dLyMUCMjIlKunzEVy4WNaqFwkLIguCYAfhGHE+AE=;
+        b=AVHqEVKxSyBPceT01vuHPGkTjNXI68esBbeZ1bY6be+5xvhCzivCbkclZETbQde/Hh
+         yYvc8D8bBS/ktZMAFeCcOOnqBWFjTQB5ml8Q7DsVIeL1NCDTNndstQZ4LrZ1PjgmvCuP
+         pAh7QBgKMYDbBkUK4+IJsh5EYKhL3ylTllqIISkEPbPmcaSGnYcJ56c89M+kGiMcdbNj
+         LuZ0avqUiEj5rdcLRKGyh7XS0NGmVCmE4Nws1OBHNexi3hFHYK7cEsqQBhqCoBFpfAuR
+         +gfjrDn9jYlfGp30Kzg7WhRrlUWpBU3PHFEr3YiGjCHdtTwWEHtOwQfNNolGrlb8X8AN
+         89fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :references:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OOQ+kDA4G+wlVL+Ry3C2hNPCcp5na+qrAnLo83Besj4=;
-        b=TY3feQJ8De2jqkKSKUzDX6XsK6sXaHKQl+foPr57/gUoMEvua0P8P3Z1QIUnsKprPE
-         QI1RMdekSGNaCMsCAFokfHMq9Kx+4aW+DGmOTZq3wQ7Zj+Ap2S5ZLE8KT3fjmWE1yT54
-         Y4xC0B5caZavizzdZOp8rnnMwL+rFK4FQjkL6ol5OyLM2Dhrg7UFRGxYemx0pn+B0pA8
-         R56C8zGDsCW+aA1up0mSrAzA6rSBD96o590i2CftXUhBwK82gPsCacWGNu+w84VXPBaz
-         sEXFvq2jEDRZ6r+2OIZBQofhPRG7J4N0dlMTxl7LuJeGRNh4KBSQjBtD70K9t1dkHmIR
-         TUHA==
-X-Gm-Message-State: ACrzQf3/EeMEXwpWls2ss2RAfMLr300DSX+pO/wwhvT8UPIkiEzS9Nen
-        QMETuT5DDQo2nXLmp97bnFZIrx2xPtDKLA==
-X-Google-Smtp-Source: AMsMyM6+iea+6w9Q40omuHqI7vrbCP13G0UnlyON5YvJ3pwG56gCmnZU/yp0hMeTDVBPdrJbQC1f/A==
-X-Received: by 2002:a05:6000:18c7:b0:22e:5503:9c46 with SMTP id w7-20020a05600018c700b0022e55039c46mr27782051wrq.668.1666795351099;
-        Wed, 26 Oct 2022 07:42:31 -0700 (PDT)
-Received: from localhost (94.197.44.200.threembb.co.uk. [94.197.44.200])
-        by smtp.gmail.com with ESMTPSA id y17-20020a05600c365100b003cf4eac8e80sm690283wmq.23.2022.10.26.07.42.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 07:42:30 -0700 (PDT)
-References: <20221022162742.21671-1-aidanmacdonald.0x0@gmail.com>
- <Y1Z74/vKHbnaCLrX@sirena.org.uk>
- <XaoRSEMyUlabAR8wEJITmm2lGCjwfPZg@localhost>
- <Y1fCfej+/WH8TI39@sirena.org.uk>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        kuninori.morimoto.gx@renesas.com, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] ASoC: simple-card: Support custom DAI system
- clock IDs
-In-reply-to: <Y1fCfej+/WH8TI39@sirena.org.uk>
-Date:   Wed, 26 Oct 2022 15:42:31 +0100
-Message-ID: <FgO8Xz5MtaEBdBidpT8So4X5posjL95Y@localhost>
+        bh=640dLyMUCMjIlKunzEVy4WNaqFwkLIguCYAfhGHE+AE=;
+        b=AAX2sTe3Z8ikubhd8VGauN6YncxiDk8hZzfYiwACohNrQ/VInk0sz6HrXY1mJwbdtf
+         h2BSijSp8v2udKD3tVy1ESFASoWypIrKtAogg0Hr87lJdLPgWtL3rYHXEQBp/pFptpnu
+         kIzsgGzrq+FDuiUj4GsZs9ci2M5hRmiGF7WjogzIxras7EwrW0uB05cJk9LVuHf2MPVa
+         edojHyhsG+s/LZR4xbaJ5pvHJsVHhShn0V/GltdktxC4R6UINetoI/LoJnMRWmwwamDa
+         j6ydvtdTQC36jGsXg9rLQONGnJqRZVSTt5uAqCP4anTtug91GlMRFACi6FW77D1WH890
+         oGCA==
+X-Gm-Message-State: ACrzQf3pz59gHe3bnxadnFjLkbgGrzIdXuwc1nEo76skZ1yc6fyrLC2Q
+        K47Q3fM9Hg0r4RWwWI2nzeQ=
+X-Google-Smtp-Source: AMsMyM7QS/EkPZbY3lAXH44G43Ssys1duk6sOh+Z4FTn4VnqRdYgZgK6FbZALfETkVwAzzakyigrpQ==
+X-Received: by 2002:a05:6808:6c3:b0:351:45ae:7b with SMTP id m3-20020a05680806c300b0035145ae007bmr2113093oih.28.1666795575311;
+        Wed, 26 Oct 2022 07:46:15 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v6-20020a4a5a06000000b00480dccc0c2asm2262697ooa.14.2022.10.26.07.46.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 07:46:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4f1a17fa-596e-eaf5-2dad-790b1ab95dc1@roeck-us.net>
+Date:   Wed, 26 Oct 2022 07:46:13 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 9/9] rtc: isl12022: add support for temperature sensor
+Content-Language: en-US
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
+References: <20220921114624.3250848-10-linux@rasmusvillemoes.dk>
+ <20221026133847.1193422-1-linux@rasmusvillemoes.dk>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20221026133847.1193422-1-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,41 +82,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/26/22 06:38, Rasmus Villemoes wrote:
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
 
-Mark Brown <broonie@kernel.org> writes:
+There should be some description above. Other than that,
 
-> On Tue, Oct 25, 2022 at 12:17:25AM +0100, Aidan MacDonald wrote:
->> Mark Brown <broonie@kernel.org> writes:
->
->> > We already have clock bindings, if we need to configure clocks we should
->> > be using those to configure there.
->
->> The existing clock bindings are only useful for setting rates, and
->> .set_sysclk() does more than that. See my reply to Krzysztof if you
->> want an explanation, check nau8821 or tas2552 codecs for an example
->> of the kind of thing I'm talking about.
->
-> I thought there was stuff for muxes, but in any case if you are adding a
-> new binding here you could just as well add one to the clock bindings.
->
->> I picked those codecs at random, but they are fairly representative:
->> often a codec will allow the system clock to be derived from another
->> I2S clock (eg. BCLK), or provided directly, or maybe generated from an
->> internal PLL. In cases like that you need to configure the codec with
->> .set_sysclk() to select the right input. Many card drivers need to do
->> this, it's just as important as .set_fmt() or .hw_params().
->
-> There is a strong case for saying that all the clocking in CODECs might
-> fit into the clock API, especially given the whole DT thing.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-The ASoC APIs don't speak "struct clk", which seems (to me) like a
-prerequisite before we can think about doing anything with clocks.
+ > ---
+> v3: drop 0444 update_interval property.
+> 
+> v2 of patches 1-8 are already upstream (b1a1baa657c7 and parents).
+> 
+>   drivers/rtc/rtc-isl12022.c | 94 ++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 94 insertions(+)
+> 
+> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
+> index ca677c4265e6..a3b0de3393f5 100644
+> --- a/drivers/rtc/rtc-isl12022.c
+> +++ b/drivers/rtc/rtc-isl12022.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/of.h>
+>   #include <linux/of_device.h>
+>   #include <linux/regmap.h>
+> +#include <linux/hwmon.h>
+>   
+>   /* ISL register offsets */
+>   #define ISL12022_REG_SC		0x00
+> @@ -30,6 +31,9 @@
+>   #define ISL12022_REG_SR		0x07
+>   #define ISL12022_REG_INT	0x08
+>   
+> +#define ISL12022_REG_BETA	0x0d
+> +#define ISL12022_REG_TEMP_L	0x28
+> +
+>   /* ISL register bits */
+>   #define ISL12022_HR_MIL		(1 << 7)	/* military or 24 hour time */
+>   
+> @@ -38,6 +42,7 @@
+>   
+>   #define ISL12022_INT_WRTC	(1 << 6)
+>   
+> +#define ISL12022_BETA_TSE	(1 << 7)
+>   
+>   static struct i2c_driver isl12022_driver;
+>   
+> @@ -46,6 +51,93 @@ struct isl12022 {
+>   	struct regmap *regmap;
+>   };
+>   
+> +static umode_t isl12022_hwmon_is_visible(const void *data,
+> +					 enum hwmon_sensor_types type,
+> +					 u32 attr, int channel)
+> +{
+> +	if (type == hwmon_temp && attr == hwmon_temp_input)
+> +		return 0444;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * A user-initiated temperature conversion is not started by this function,
+> + * so the temperature is updated once every ~60 seconds.
+> + */
+> +static int isl12022_hwmon_read_temp(struct device *dev, long *mC)
+> +{
+> +	struct isl12022 *isl12022 = dev_get_drvdata(dev);
+> +	struct regmap *regmap = isl12022->regmap;
+> +	u8 temp_buf[2];
+> +	int temp, ret;
+> +
+> +	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L,
+> +			       temp_buf, sizeof(temp_buf));
+> +	if (ret)
+> +		return ret;
+> +	/*
+> +	 * Temperature is represented as a 10-bit number, unit half-Kelvins.
+> +	 */
+> +	temp = (temp_buf[1] << 8) | temp_buf[0];
+> +	temp *= 500;
+> +	temp -= 273000;
+> +
+> +	*mC = temp;
+> +
+> +	return 0;
+> +}
+> +
+> +static int isl12022_hwmon_read(struct device *dev,
+> +			       enum hwmon_sensor_types type,
+> +			       u32 attr, int channel, long *val)
+> +{
+> +	if (type == hwmon_temp && attr == hwmon_temp_input)
+> +		return isl12022_hwmon_read_temp(dev, val);
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static const struct hwmon_channel_info *isl12022_hwmon_info[] = {
+> +	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_ops isl12022_hwmon_ops = {
+> +	.is_visible = isl12022_hwmon_is_visible,
+> +	.read = isl12022_hwmon_read,
+> +};
+> +
+> +static const struct hwmon_chip_info isl12022_hwmon_chip_info = {
+> +	.ops = &isl12022_hwmon_ops,
+> +	.info = isl12022_hwmon_info,
+> +};
+> +
+> +static void isl12022_hwmon_register(struct device *dev)
+> +{
+> +	struct isl12022 *isl12022;
+> +	struct device *hwmon;
+> +	int ret;
+> +
+> +	if (!IS_REACHABLE(CONFIG_HWMON))
+> +		return;
+> +
+> +	isl12022 = dev_get_drvdata(dev);
+> +
+> +	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
+> +				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
+> +	if (ret) {
+> +		dev_warn(dev, "unable to enable temperature sensor\n");
+> +		return;
+> +	}
+> +
+> +	hwmon = devm_hwmon_device_register_with_info(dev, "isl12022", isl12022,
+> +						     &isl12022_hwmon_chip_info,
+> +						     NULL);
+> +	if (IS_ERR(hwmon))
+> +		dev_warn(dev, "unable to register hwmon device: %pe\n", hwmon);
+> +}
+> +
+>   /*
+>    * In the routines that deal directly with the isl12022 hardware, we use
+>    * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
+> @@ -160,6 +252,8 @@ static int isl12022_probe(struct i2c_client *client)
+>   		return PTR_ERR(isl12022->regmap);
+>   	}
+>   
+> +	isl12022_hwmon_register(&client->dev);
+> +
+>   	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
+>   	if (IS_ERR(isl12022->rtc))
+>   		return PTR_ERR(isl12022->rtc);
 
-Even if ASoC began to use the clock API for codec clocking, it's not
-clear how you maintain backward compatibility with the existing
-simple-card bindings. You'd have to go over all DAIs and mimic the
-effects of "snd_soc_dai_set_sysclk(dai, 0, freq, dir)" because there
-could be a device tree relying on it somewhere.
-
-So... given you're already stuck maintaining .set_sysclk() behavior
-forever, is there much harm in exposing the sysclock ID to the DT?
