@@ -2,96 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB1C60E775
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C36C60E779
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:32:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234563AbiJZSbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
+        id S234400AbiJZSco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 14:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234502AbiJZSbJ (ORCPT
+        with ESMTP id S233699AbiJZScO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:31:09 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C0289906;
-        Wed, 26 Oct 2022 11:30:09 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C6C571EC06A7;
-        Wed, 26 Oct 2022 20:29:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666808995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=c14ywI1xdXZdWoFtZUGaNlQ7OSW7CsbDv0TnLHcpulI=;
-        b=GP3Uy3esNFrgCaYo+T1RfJ2EKCwPdigLmou+msv7WmmkDBsbwtQSQ7a5koSzq2kn4shbcV
-        OtlR1SrKs+9Fwr6HSDaZ1ABzy/oMdf8Em8tK43Ci4Xbsc2pppNRIoGHZe3JQT206xp/1e2
-        k5pLcNt0SNIC7naWtPQ3tWkZbTVpUXo=
-Date:   Wed, 26 Oct 2022 20:29:51 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, mpatocka@redhat.com
-Subject: Re: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when
- removing threshold blocks
-Message-ID: <Y1l8nx1KnTFP1xKj@zn.tnic>
-References: <20220614174346.3648305-1-yazen.ghannam@amd.com>
- <Yql9TqFtebd2h9Z9@kroah.com>
- <Yqnj88FPkZ6kBU7k@yaz-fattaah>
- <Y1kJCHBtatohj/JK@zn.tnic>
- <Y1kiNBh3/XBNe6uv@kroah.com>
- <Y1lUo08UzaqIaI7r@yaz-fattaah>
+        Wed, 26 Oct 2022 14:32:14 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA2B10CF85
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:31:24 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id bx35so17428953ljb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KGZ+b7AE38d+5UwfXCy0/gevM/R3+Wu+DeyQvG3oHGU=;
+        b=DA6R5PRs05EXklso+W+hmkRSKmzNFrdlPHrumf+P6eNAP70ubDQfmKrY+otZcTcLXd
+         CvPxCWq7muIGmO6qHrzr8TZAArg4hJQvXvNa/XR/Txdac+G9sXF2XEI+0ipXHNZXopJb
+         cCFh/U5GCO8Y6ZAPEq/Ub3W6ZW70eV4cp/opqeWC5W5/VRQ703eMPH2f56teUZFC1qCQ
+         3rNMcTofJP+b4HhxsvqYQa4aB6TAiD0oquv8SDMwsUIOkwcyo5GWRlSf6WLHWQm13GoX
+         Go1qpse67K0WNXpt7GKFHSSGKl+KOjkVrzcwoCzl5EmtT8wjEa8OjOr5cOmLGL8U7txE
+         qbBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KGZ+b7AE38d+5UwfXCy0/gevM/R3+Wu+DeyQvG3oHGU=;
+        b=IQNM8gz30nbjKYNImA8O5FQVnqZIXtWEV2pXLRhlD3aE8QZ1Mj2sqVoyazGXLCj930
+         X0+EebUAEreNvVzBgMVP98t0lwT1DYzlU/RkJj37Xo42X8zMnIVuCqtmGJb1QuUvS9b0
+         wP/T1eVvWP8V2T3T8HpOMTASZtr7KhpSyRN7Fa8g8MWls4KBN6DMGAEzNd5DxGoIrFWO
+         MbYpMwY3vA4Y9F4eQtt2t7NtEHQrj6vmfBiMF9lT7dIJC40Sf4NAOXzB8cMKPiILuZiP
+         mYOtunb9IdFXEGok6ZfNSnam2MNQ7pP/ulA/AXzoqnwRb8aZLNuUzcMSJqXQGNkvZGmq
+         DrCw==
+X-Gm-Message-State: ACrzQf1ouKt9HrIHOMrPUnEdlAUhnDxBxE73SB39KugWNetdQx/Q2Aqe
+        rbVWKmHHKDkLHtNwzhvHlFTTAS5wPh3rN5KtaIISWw==
+X-Google-Smtp-Source: AMsMyM60aH64MsXumBnoFULKI736s7tM2Ujc/LnIfGhSG75YqtviPQqK5e+Gvb+A4hRb8CzOSg9Ik6Fmdlgjaccraik=
+X-Received: by 2002:a2e:7303:0:b0:277:c7c:9c61 with SMTP id
+ o3-20020a2e7303000000b002770c7c9c61mr6631853ljc.274.1666809082407; Wed, 26
+ Oct 2022 11:31:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y1lUo08UzaqIaI7r@yaz-fattaah>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221026141040.1609203-1-davidgow@google.com>
+In-Reply-To: <20221026141040.1609203-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Wed, 26 Oct 2022 11:31:10 -0700
+Message-ID: <CAGS_qxrd7kPzXexF_WvFX6YyVqdE_gf_7E7-XJhY2F0QAHPQ=w@mail.gmail.com>
+Subject: Re: [PATCH] perf/hw_breakpoint: test: Skip the test if dependencies unmet
+To:     David Gow <davidgow@google.com>
+Cc:     Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 03:39:15PM +0000, Yazen Ghannam wrote:
-> What's the issue with my original patch?
+On Wed, Oct 26, 2022 at 7:10 AM David Gow <davidgow@google.com> wrote:
+>
+> Running the test currently fails on non-SMP systems, despite being
+> enabled by default. This means that running the test with:
+>
+>  ./tools/testing/kunit/kunit.py run --arch x86_64 hw_breakpoint
+>
+> results in every hw_breakpoint test failing with:
+>
+>  # test_one_cpu: failed to initialize: -22
+>  not ok 1 - test_one_cpu
+>
+> Instead, use kunit_skip(), which will mark the test as skipped, and give
+> a more comprehensible message:
+>
+>  ok 1 - test_one_cpu # SKIP not enough cpus
+>
+> This makes it more obvious that the test is not suited to the test
+> environment, and so wasn't run, rather than having run and failed.
+>
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Do you see it?
+Reviewed-by: Daniel Latypov <dlatypov@google.com>
 
-> @@ -1258,10 +1258,10 @@ static void __threshold_remove_blocks(struct threshold_bank *b)
->         struct threshold_block *pos = NULL;
->         struct threshold_block *tmp = NULL;
->  
-> -       kobject_del(b->kobj);
-> +       kobject_put(b->kobj);
->  
->         list_for_each_entry_safe(pos, tmp, &b->blocks->miscj, miscj)
-> -               kobject_del(&pos->kobj);
-> +               kobject_put(b->kobj);
+This patch makes this command pass for me.
+$ ./tools/testing/kunit/kunit.py run --arch x86_64
+Since this test gets picked up by default, having it pass for common
+uses of kunit.py is a priority, IMO.
 
-You're basically putting the parent as many times as there are elements
-on the ->miscj list.
+(Note: if I add --alltests as well, these were the only failures)
 
-Basically what Greg doesn't like.
+I agree with Marco that TAP/KTAP saying "ok" for skipped tests can be
+confusing at first.
+But a SKIP status feels more appropriate than FAIL, so I'd strongly
+like for this change to go in.
 
-Him and I need to talk it over first whether my gross hack of grafting
-the bank4 kobject hierarchy from CPU0 onto the other CPUs on the node is
-even viable so stay tuned...
+> ---
+>  kernel/events/hw_breakpoint_test.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/events/hw_breakpoint_test.c b/kernel/events/hw_breakpoint_test.c
+> index 5ced822df788..c57610f52bb4 100644
+> --- a/kernel/events/hw_breakpoint_test.c
+> +++ b/kernel/events/hw_breakpoint_test.c
+> @@ -295,11 +295,11 @@ static int test_init(struct kunit *test)
+>  {
+>         /* Most test cases want 2 distinct CPUs. */
+>         if (num_online_cpus() < 2)
+> -               return -EINVAL;
+> +               kunit_skip(test, "not enough cpus");
 
-> I think this is the simplest way to fix the current implementation.
-> But we should probably get rid of this kobject sharing idea in light
-> of Greg's comments.
+The only minor nit I have is that I'd personally prefer something like
+  kunit_skip(test, "need >=2 cpus");
+since that makes it clearer
+a) that we must only have 1 CPU by default
+b) roughly how one might address this.
 
-You said it. :)
+Note: b) is a bit more complicated than I would like. The final
+command is something like
+$ ./tools/testing/kunit/kunit.py run --arch x86_64 --qemu_args='-smp
+2' --kconfig_add='CONFIG_SMP=y'
 
-Or maybe do a better one.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+But that's orthogonal to this patch.
