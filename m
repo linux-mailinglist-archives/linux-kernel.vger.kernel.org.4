@@ -2,138 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B94960E028
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E048360E02B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbiJZMDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
+        id S233394AbiJZMES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbiJZMDg (ORCPT
+        with ESMTP id S231926AbiJZMEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:03:36 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FB14B4BC;
-        Wed, 26 Oct 2022 05:03:34 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id p3so12878277pld.10;
-        Wed, 26 Oct 2022 05:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eeyWPYOfNLO5HnpCrV5iKgVUweZC5smkX35UuDur0+M=;
-        b=M3jMZCz2f9I//6dZFQixFueDv6DvYYSZAPHVtKl+MyKAgJt6T38Gb6GzCvJeBqFFWe
-         0IPEe0eefPjToxWp/R7HaW03L9zOfBHUukgzhX6wH2VLoqOP1LiSPhUW8qdlzKVa1fyn
-         ynUjy1O7nL0X2uG4J6xqfMZCAWMRa/K8N2Ttl14QZGYaym4CzdqkSkNDznT6XxNUhg1A
-         DGnknrKGEEZOpISRKsAuZ9K3FbMmReDddGUuhOTenZ7QTT1bXck7JGO0cAeMWvlZO7SK
-         peq006gMhlFVtmMBqC0WmcoxoqEhL/vgut4uQHRWurhrmUrceuEwqtg6fro2VEvfGI8h
-         c81Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eeyWPYOfNLO5HnpCrV5iKgVUweZC5smkX35UuDur0+M=;
-        b=JZY6CnB6aNqfH6j9QSrDkbMmHYnWx7kWhRGfC0x8hNEacGQWmLQsIVeQNxQ7XLY3NZ
-         sWXg013DPPIa2QrFQhmu36sptr6g3B1Sawzp1B/b4ih0GqCf3eob37s1xaREco+LnC43
-         6dQE509Anqu3w1gFFw5ycA0vQ5Vqp7QyX63H5QzCX9QFh2qEjS3dZfbNmsmzVaaEkwWF
-         lcTlSJSXhjdUPkz/nk81oB22O19eKz2JQhfsK2soQrhXF/A4rRmEPErHfJRNEkjhfaYf
-         yEA3ADFV9QRcNAgRt5m1GOPEbGW0YDHs19dP0qNeeAdIpo1x9tA0/3YJPZB2PUXoAE38
-         zjoA==
-X-Gm-Message-State: ACrzQf1K+QKNAN6JOPHQVovOSHa+Ye3snKZ3XiscatQpwwVW5DVTHc3X
-        MqVyuaf3vv8Rk/CfrpySFRj/Z/QqeGk=
-X-Google-Smtp-Source: AMsMyM7ZsD9zd75rfP1t09/N84nyoB0b00ATY643mX5PB2nD6sq/UXCjBUsi7BIkPjosWUKH0WyEkg==
-X-Received: by 2002:a17:902:ed82:b0:178:5653:ecfb with SMTP id e2-20020a170902ed8200b001785653ecfbmr43634366plj.58.1666785814222;
-        Wed, 26 Oct 2022 05:03:34 -0700 (PDT)
-Received: from localhost.localdomain ([43.224.245.180])
-        by smtp.gmail.com with ESMTPSA id f27-20020aa7969b000000b0053e4296e1d3sm2863289pfk.198.2022.10.26.05.03.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 05:03:33 -0700 (PDT)
-From:   Qibo Huang <huangqibo.tech@gmail.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huangqibo <huangqibo@xiaomi.com>
-Subject: [PATCH] thermal/core: cooling device duplicate creation check
-Date:   Wed, 26 Oct 2022 20:03:21 +0800
-Message-Id: <20221026120321.735-1-huangqibo.tech@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 26 Oct 2022 08:04:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0121EAC7;
+        Wed, 26 Oct 2022 05:04:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61453B82033;
+        Wed, 26 Oct 2022 12:04:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3B7C43141;
+        Wed, 26 Oct 2022 12:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666785853;
+        bh=6LTuX/xQ6IMZD8m/CLE4a7GdIxVNvlWbr19szbGf1QI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dBIkrKlpZIrs7WEu4uvfJbkp+tGD7CpMplVUIJpjTbuvUtn8swhzoEVpt590lywyl
+         ijkRYpN6ie87eUZb9mwiSiz34UPOZj274H13DduEmgkXs/A4ztPYruEeY+O5hO8Bph
+         iA2xfKOEGpahAwkyo/5bhGSia5tL89QSNGd1N0Sj9wIznTfC0qmozFAvD6Hh1HFEVd
+         i2Q4Uhi18cnImrXDWC0VOgEKcYemUOvLoZBqvqmMY/DqIflQBKzKGTxejJl9mlmTd4
+         oOldE//5xKH0fcTB74SVTZr6YLn6ypI+XFkTXC591HMD+X1hB2kqCtdOrFoGmHTbx3
+         Yf20MAvPc7JUw==
+Received: by mail-ej1-f45.google.com with SMTP id t25so15048763ejb.8;
+        Wed, 26 Oct 2022 05:04:12 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1l96CWUjzEBkKjHv4oZsJK0+PU8IGHpKLCIzeWxLRvoFpiToNy
+        hO88y9cpWLspZv+6jdvWUVM/ieawpWZTGH+E0+I=
+X-Google-Smtp-Source: AMsMyM6b4UIXWLoTsQpMjRB4UKQywbOMmW91BTJZlw7mq+lzs5nHy5Q4XTZdyDvnaIupM/uAgrsH5IkA6cfbPB+q4JI=
+X-Received: by 2002:a17:907:2cf7:b0:78d:c7fc:29ff with SMTP id
+ hz23-20020a1709072cf700b0078dc7fc29ffmr38046370ejc.748.1666785851109; Wed, 26
+ Oct 2022 05:04:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221026030256.30512-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20221026030256.30512-1-zhuyinbo@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 26 Oct 2022 20:03:22 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7jSMei+EDJ_vhoBh-kX-MVxs-vtwQwjsDnrx_zCSFAAw@mail.gmail.com>
+Message-ID: <CAAhV-H7jSMei+EDJ_vhoBh-kX-MVxs-vtwQwjsDnrx_zCSFAAw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] dt-bindings: clock: add loongson2 clock include file
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huangqibo <huangqibo@xiaomi.com>
+Hi, Yinbo,
 
-Because creating a cooling device may have duplicate names.
-When creating, first check thermal_cdev_list whether
-there is a device with the same name. If it has the same name,
-it returns a reference to the cooling device.
+On Wed, Oct 26, 2022 at 11:03 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
+>
+> This file defines all loongson2 soc clock indexes, it should be
+I suggest to use regular names, i.e., don't use loongson2, Loongson2
+or LOONGSON2, use Loongson-2 instead. (except in C code). And soc may
+be SoC?
 
-Signed-off-by: huangqibo <huangqibo@xiaomi.com>
----
- drivers/thermal/thermal_core.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Huacai
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 117eeaf7dd24..092c7732a294 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -873,6 +873,12 @@ __thermal_cooling_device_register(struct device_node *np,
- 	    !ops->set_cur_state)
- 		return ERR_PTR(-EINVAL);
- 
-+	if (type)
-+		cdev = thermal_cdev_get_zone_by_name(type);
-+
-+	if (!IS_ERR_OR_NULL(cdev))
-+		return cdev;
-+
- 	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
- 	if (!cdev)
- 		return ERR_PTR(-ENOMEM);
-@@ -1435,6 +1441,34 @@ struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name)
- }
- EXPORT_SYMBOL_GPL(thermal_zone_get_zone_by_name);
- 
-+struct thermal_cooling_device *thermal_cdev_get_zone_by_name(const char *name)
-+{
-+	struct thermal_cooling_device *pos = NULL, *ref = ERR_PTR(-EINVAL);
-+	unsigned int found = 0;
-+
-+	if (!name)
-+		goto exit;
-+
-+	mutex_lock(&thermal_list_lock);
-+	list_for_each_entry(pos, &thermal_cdev_list, node)
-+		if (!strncasecmp(name, pos->type, THERMAL_NAME_LENGTH)) {
-+			found++;
-+			ref = pos;
-+		}
-+	mutex_unlock(&thermal_list_lock);
-+
-+	/* nothing has been found, thus an error code for it */
-+	if (found == 0)
-+		ref = ERR_PTR(-ENODEV);
-+	else if (found > 1)
-+	/* Success only when an unique zone is found */
-+		ref = ERR_PTR(-EEXIST);
-+
-+exit:
-+	return ref;
-+}
-+EXPORT_SYMBOL_GPL(thermal_cdev_get_zone_by_name);
-+
- static int thermal_pm_notify(struct notifier_block *nb,
- 			     unsigned long mode, void *_unused)
- {
--- 
-2.36.1
-
+> included in the device tree in which there's device using the
+> clocks.
+>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  MAINTAINERS                                   |  6 ++++
+>  include/dt-bindings/clock/loongson,ls2k-clk.h | 29 +++++++++++++++++++
+>  2 files changed, 35 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/loongson,ls2k-clk.h
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0be0f520c032..b6aae412de9c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -11907,6 +11907,12 @@ S:     Maintained
+>  F:     Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+>  F:     drivers/thermal/loongson2_thermal.c
+>
+> +LOONGSON2 SOC SERIES CLOCK DRIVER
+> +M:     Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:     linux-clk@vger.kernel.org
+> +S:     Maintained
+> +F:     include/dt-bindings/clock/loongson,ls2k-clk.h
+> +
+>  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+>  M:     Sathya Prakash <sathya.prakash@broadcom.com>
+>  M:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> diff --git a/include/dt-bindings/clock/loongson,ls2k-clk.h b/include/dt-bindings/clock/loongson,ls2k-clk.h
+> new file mode 100644
+> index 000000000000..db1e27e792ff
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/loongson,ls2k-clk.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#ifndef __DT_BINDINGS_CLOCK_LOONGSON2_H
+> +#define __DT_BINDINGS_CLOCK_LOONGSON2_H
+> +
+> +#define LOONGSON2_REF_100M                             0
+> +#define LOONGSON2_NODE_PLL                             1
+> +#define LOONGSON2_DDR_PLL                              2
+> +#define LOONGSON2_DC_PLL                               3
+> +#define LOONGSON2_PIX0_PLL                             4
+> +#define LOONGSON2_PIX1_PLL                             5
+> +#define LOONGSON2_NODE_CLK                             6
+> +#define LOONGSON2_HDA_CLK                              7
+> +#define LOONGSON2_GPU_CLK                              8
+> +#define LOONGSON2_DDR_CLK                              9
+> +#define LOONGSON2_GMAC_CLK                             10
+> +#define LOONGSON2_DC_CLK                               11
+> +#define LOONGSON2_APB_CLK                              12
+> +#define LOONGSON2_USB_CLK                              13
+> +#define LOONGSON2_SATA_CLK                             14
+> +#define LOONGSON2_PIX0_CLK                             15
+> +#define LOONGSON2_PIX1_CLK                             16
+> +#define LOONGSON2_CLK_END                              17
+> +
+> +#endif
+> --
+> 2.31.1
+>
+>
