@@ -2,141 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCD760E5DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF9B60E5DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbiJZQ46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46444 "EHLO
+        id S233856AbiJZQ4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233893AbiJZQ4x (ORCPT
+        with ESMTP id S233126AbiJZQ4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:56:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1869AC11;
-        Wed, 26 Oct 2022 09:56:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5B2CB82389;
-        Wed, 26 Oct 2022 16:56:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81CAAC43147;
-        Wed, 26 Oct 2022 16:56:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666803409;
-        bh=Vi8sx4aHNpojzRYzXmqjTrqY6mW5GyQ8eA3RJ1HlulQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=anP5j2gqPlA0CJUatDTr2DdhObFHUzWHqJfMkJ2XwAhpxjrmo9+g3+huQbX1jq544
-         dNvq+Lj+aO/+ADOWr3wMz3fPM3StPYP/BfgTuiuQtLGzqen1ftnp7HbBCH7mIJ3YjD
-         LnkRpUl4PufDhzyKpxewCF7hyXIuLHL+s9037D29o1S/gtMMd+BQhzQeHEjgvKnNXL
-         XC3CiCVHG8umwyfVnrYHjNUl+hfoeFRHSvUpYOAqUjajznc5qyqe+Ky8taqLCzy2Mf
-         C2t7zJBY/wlYUluEPXIfKLsZcWgUnTeZMCwe8V6Biv91Yv6X/JzJBoaZ3Eu2KI7QGg
-         BNbjBnSBRx0Og==
-Received: by mail-lf1-f46.google.com with SMTP id j4so30022202lfk.0;
-        Wed, 26 Oct 2022 09:56:49 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2EELtfqnjpRayPEpG6FYES/RVUNYGAwI8WIm5TYRk9X7y6R1OH
-        LaUkqKnpk1NSyvtzIrN8Iwn6zGfpsqA+kEWz7g==
-X-Google-Smtp-Source: AMsMyM6LrfSRjX/HUKVBgz4AtfsuMXbX9k+asKJtcIXDWCakd6ADGIkff/pXR6/xCmQI+exsymHAHErxpqcm1TMu7Gw=
-X-Received: by 2002:a05:6512:3f0e:b0:4a0:45b7:a8dc with SMTP id
- y14-20020a0565123f0e00b004a045b7a8dcmr16030816lfa.368.1666803407497; Wed, 26
- Oct 2022 09:56:47 -0700 (PDT)
+        Wed, 26 Oct 2022 12:56:45 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494768E9A0
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:56:44 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id DC9B51D17;
+        Wed, 26 Oct 2022 16:54:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1666803244;
+        bh=bUaFzx51Y3McLSXkoVjYqSdbgP//EcB99FWcLekE2kI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=e8jkaWH/O9ByNEKPkrf+Kvw/NxgehNdUaaB06GQ7qIq7z0sYfGKSpHFr+QP9XsFn0
+         Y82eMxDV5AVR0AZwKv1e5bP6fYwaNai5V8vKOU7zyjMv8xrVQgGLFtig0l7PMAxhXY
+         xdrcnFjgme1dR9NO7+SnsW2Qfk21J/c17ViRl3NI=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 26 Oct 2022 19:56:41 +0300
+Message-ID: <f5c18c15-6fdf-d7fe-627b-080dd7af93cc@paragon-software.com>
+Date:   Wed, 26 Oct 2022 19:56:41 +0300
 MIME-Version: 1.0
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221014183459.181567-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAL_JsqKC_BJDJLLFck_0CbQ-0rZ0oVWMAdiwwGep23nh2pP19g@mail.gmail.com>
- <CA+V-a8vMLuzJ8h5UDNXUiZRXPV1vJ9gguUMywe_+sPcU8tK+tA@mail.gmail.com>
- <20221014214029.GA2937999-robh@kernel.org> <Y0pLDFMsFmHhC/R8@pendragon.ideasonboard.com>
-In-Reply-To: <Y0pLDFMsFmHhC/R8@pendragon.ideasonboard.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 26 Oct 2022 11:56:38 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+K72HEEqA2inRRgk4wHjLsueJhvrLPTXFpfhnGK3HJiQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+K72HEEqA2inRRgk4wHjLsueJhvrLPTXFpfhnGK3HJiQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] media: dt-bindings: ov5645: Convert OV5645 binding
- to a schema
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next v2 1/2] fs/ntfs3: Don't use uni1 uninitialized in
+ ntfs_d_compare()
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>
+CC:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <ntfs3@lists.linux.dev>,
+        <llvm@lists.linux.dev>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>
+References: <20221004232359.285685-1-nathan@kernel.org>
+ <Y1LSn+O44lCRR3qE@dev-arch.thelio-3990X>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <Y1LSn+O44lCRR3qE@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 15, 2022 at 12:54 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Rob,
->
-> On Fri, Oct 14, 2022 at 04:40:29PM -0500, Rob Herring wrote:
-> > On Fri, Oct 14, 2022 at 10:27:53PM +0100, Lad, Prabhakar wrote:
-> > > On Fri, Oct 14, 2022 at 10:05 PM Rob Herring <robh+dt@kernel.org> wrote:
-> > > > On Fri, Oct 14, 2022 at 1:35 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > > > >
-> > > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > >
-> > > > > Convert the simple OV5645 Device Tree binding to json-schema.
-> > > > >
-> > > > > The previous binding marked the below properties as required which was a
-> > > > > driver requirement and not the device requirement so just drop them from
-> > > > > the required list during the conversion.
-> > > > > - clock-frequency
-> > > > > - enable-gpios
-> > > > > - reset-gpios
-> > > > >
-> > > > > Also drop the "clock-names" property as we have a single clock source for
-> > > > > the sensor and the driver has been updated to drop the clk referencing by
-> > > > > name.
-> > > >
-> > > > Driver requirements are the ABI!
-> > > >
-> > > > This breaks a kernel without the driver change and a DTB that has
-> > > > dropped the properties.
-> > > >
-> > > I already have a patch for the driver [0] which I missed to include
-> > > along with the series.
-> >
-> > You completely miss the point. Read the first sentence again. Changing
-> > driver requirements changes the ABI.
-> >
-> > This breaks the ABI. The driver patch does not help that.
->
-> I'm not following you here. If the DT binding makes a mandatory property
-> optional, it doesn't break any existing platform. The only thing that
-> would not work is a new DT that doesn't contain the now optional
-> property combined with an older driver that makes it required. That's
-> not a regression, as it would be a *new* DT.
->
-> > > > Also, with 'clock-names' dropped, you've just introduced a bunch of
-> > > > warnings on other people's platforms. Are you going to 'fix' all of
-> > > > them?
-> > > >
-> > > Yes I will fix them, once the patch driver patch [0] is merged in.
-> >
-> > Why? You are just making extra work. We have enough warnings as-is to
-> > fix.
->
-> I agree that a DT binding change should patch all in-tree DTS to avoid
-> introducing new warnings.
 
-That is not what I was saying. Why not just keep 'clock-names' and go
-spend the DTS fixing time fixing some other warnings that we already
-have. Also, there is no requirement that converting bindings also fix
-DTS files. The only wish is that any warnings we do see are ones
-deemed needing to be fixed in the DTS file.
 
-Anyways, there's patches now for the new warnings, so nevermind on this one.
+On 10/21/22 20:10, Nathan Chancellor wrote:
+> Ping? This is still breaking our builds in -next...
+> 
 
-Rob
+Thanks for patch, applied!
+
+> On Tue, Oct 04, 2022 at 04:23:58PM -0700, Nathan Chancellor wrote:
+>> Clang warns:
+>>
+>>    fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>>                    if (toupper(c1) != toupper(c2)) {
+>>                        ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    ./include/linux/ctype.h:64:20: note: expanded from macro 'toupper'
+>>    #define toupper(c) __toupper(c)
+>>                      ^
+>>    fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+>>            __putname(uni1);
+>>                      ^~~~
+>>    ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
+>>    #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+>>                                                                          ^~~~
+>>    fs/ntfs3/namei.c:445:3: note: remove the 'if' if its condition is always false
+>>                    if (toupper(c1) != toupper(c2)) {
+>>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>    fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
+>>                    if (!lm--) {
+>>                        ^~~~~
+>>    fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
+>>            __putname(uni1);
+>>                      ^~~~
+>>    ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
+>>    #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
+>>                                                                          ^~~~
+>>    fs/ntfs3/namei.c:434:3: note: remove the 'if' if its condition is always false
+>>                    if (!lm--) {
+>>                    ^~~~~~~~~~~~
+>>    fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silence this warning
+>>            struct cpu_str *uni1, *uni2;
+>>                                ^
+>>                                = NULL
+>>    2 errors generated.
+>>
+>> There is no point in calling __putname() in these particular error
+>> paths, as there has been no corresponding __getname() call yet. Just
+>> return directly in these blocks to clear up the warning.
+>>
+>> Fixes: a3a956c78efa ("fs/ntfs3: Add option "nocase"")
+>> Link: https://github.com/ClangBuiltLinux/linux/issues/1729
+>> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+>> ---
+>>
+>> v2:
+>>      * Pick up Nick's reviewed-by tag.
+>> v1: https://lore.kernel.org/20221004144145.1345772-1-nathan@kernel.org/
+>>
+>>   fs/ntfs3/namei.c | 12 ++++--------
+>>   1 file changed, 4 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+>> index 315763eb05ff..5d3a6ce3f05f 100644
+>> --- a/fs/ntfs3/namei.c
+>> +++ b/fs/ntfs3/namei.c
+>> @@ -431,10 +431,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+>>   
+>>   	/* First try fast implementation. */
+>>   	for (;;) {
+>> -		if (!lm--) {
+>> -			ret = len1 == len2 ? 0 : 1;
+>> -			goto out;
+>> -		}
+>> +		if (!lm--)
+>> +			return len1 == len2 ? 0 : 1;
+>>   
+>>   		if ((c1 = *n1++) == (c2 = *n2++))
+>>   			continue;
+>> @@ -442,10 +440,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+>>   		if (c1 >= 0x80 || c2 >= 0x80)
+>>   			break;
+>>   
+>> -		if (toupper(c1) != toupper(c2)) {
+>> -			ret = 1;
+>> -			goto out;
+>> -		}
+>> +		if (toupper(c1) != toupper(c2))
+>> +			return 1;
+>>   	}
+>>   
+>>   	/*
+>>
+>> base-commit: d45da67caedacd500879de5e649360cc70777af7
+>> -- 
+>> 2.37.3
+>>
+>>
