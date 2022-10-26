@@ -2,130 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867B160DE70
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C5360DE82
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbiJZJy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S232679AbiJZKAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 06:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiJZJyT (ORCPT
+        with ESMTP id S232528AbiJZKAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:54:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80674C7877
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:54:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666778057;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x/uJi88rLYn+Jby6NBl7m6FkQ3GGLfjzxETi8/CrQyY=;
-        b=iSKlby99UplZQjmmAAM5/UjZqu/nEK9KUiwbfB9PUX0jBz5Q/SqxqAOIfO8xbgZ1mKF7Xl
-        1Lh4cbRjVavoVSd6ba8Moszsxt2CZVwhLU/cbIa7bHbzprUgcIHmntOFJodakRDjnPDtA4
-        IiXQiHyHkLwBCOriUrSxjWrZk4Ux10c=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-380-9wjYEAY1MOOUptQmaIgIjw-1; Wed, 26 Oct 2022 05:54:15 -0400
-X-MC-Unique: 9wjYEAY1MOOUptQmaIgIjw-1
-Received: by mail-wr1-f69.google.com with SMTP id g4-20020adfbc84000000b0022fc417f87cso5857397wrh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:54:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x/uJi88rLYn+Jby6NBl7m6FkQ3GGLfjzxETi8/CrQyY=;
-        b=kBTrGe9IGnpKEGrL7zoRhASHVx/bbHu38Q8OR+Imh07pKD1md43OuNGtnM3CEqsrE6
-         qD/MOZolrFXTG2BFgsCXGFYn46M3vF5+EsbzcI7qSntivGHCOaNELPMEK8wMOaHTPxUN
-         meGDsBlOgCJo5oMDRaZCJAmu5GKwXUBjMNOQfqIhBjsfWyFPaalnr6GbYtIwsp/cZA5I
-         Ap1BBY5qx6DTZRTc4PoTegPLIwub/sDoIsXaoDKwXQ8Nx6Di1+p6+UGzxJeOhTi4i6Eh
-         du+czQD8jghPJ3yZI1YhF+zZU4Ipi1NgAayv0j8XlSCpAePFZlXoiBJ5wBOTetytKw6e
-         21bA==
-X-Gm-Message-State: ACrzQf0sHw6v/ZA86cUg+3phENr1/vrmxrkZsgNMZAjWp65rgELbm/R2
-        j3qXRa8IOqDDVDW/+DHHK0njKW8nUpyEJ1DOzc9cFmXG+pkgsrOYZ9a3pUYzc7Pzzr+ROVQ2Ibq
-        quk0BbdFgAO4oNzyoSNIL4THK
-X-Received: by 2002:a1c:19c4:0:b0:3b4:a1da:76c3 with SMTP id 187-20020a1c19c4000000b003b4a1da76c3mr1802571wmz.106.1666778054387;
-        Wed, 26 Oct 2022 02:54:14 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5gnhIJI5fMpEcs4UaESIX7W2jHroFsl4g/+KuAGD6//954emnet0+lEIUinuRjtWcePbZqZA==
-X-Received: by 2002:a1c:19c4:0:b0:3b4:a1da:76c3 with SMTP id 187-20020a1c19c4000000b003b4a1da76c3mr1802543wmz.106.1666778054094;
-        Wed, 26 Oct 2022 02:54:14 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:5b00:c9f4:7535:9360:70d7? (p200300cbc7065b00c9f47535936070d7.dip0.t-ipconnect.de. [2003:cb:c706:5b00:c9f4:7535:9360:70d7])
-        by smtp.gmail.com with ESMTPSA id bx6-20020a5d5b06000000b00228d52b935asm5095909wrb.71.2022.10.26.02.54.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 02:54:13 -0700 (PDT)
-Message-ID: <9a450a11-531d-8e1a-4c77-70102aa7f424@redhat.com>
-Date:   Wed, 26 Oct 2022 11:54:12 +0200
+        Wed, 26 Oct 2022 06:00:30 -0400
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D797F1DA52;
+        Wed, 26 Oct 2022 03:00:27 -0700 (PDT)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1ondCv-0005BQ-Sg; Wed, 26 Oct 2022 12:00:22 +0200
+Date:   Wed, 26 Oct 2022 11:00:18 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Sam Shih <sam.shih@mediatek.com>
+Cc:     linux-pwm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH 1/2] pwm: mediatek: Add support for MT7986
+Message-ID: <Y1kFMmkavtBc4BnV@makrotopia.org>
+References: <Y1K5ym1EL8kwzQEt@makrotopia.org>
+ <b5ab84b4d595713588f1d8a68a1585ca3ae5521e.camel@mediatek.com>
+ <Y1fPLzwUz/E9C3I1@makrotopia.org>
+ <df08d62655e57d00ab5596bc90a4c40c332cee6b.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [syzbot] WARNING in __split_huge_page_tail
-Content-Language: en-US
-To:     syzbot <syzbot+273b547b15eb58ea35e8@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
-References: <000000000000aa2b2805ebea9137@google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <000000000000aa2b2805ebea9137@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <df08d62655e57d00ab5596bc90a4c40c332cee6b.camel@mediatek.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.10.22 08:59, syzbot wrote:
-> Hello,
+On Wed, Oct 26, 2022 at 02:17:06PM +0800, Sam Shih wrote:
+> On Tue, 2022-10-25 at 12:57 +0100, Daniel Golle wrote:
+> > On Tue, Oct 25, 2022 at 02:35:43PM +0800, Sam Shih wrote:
+> > > Hi Daniel:
+> > > 
+> > > On Fri, 2022-10-21 at 16:24 +0100, Daniel Golle wrote:
+> > > > Add support for PWM on MT7986 which has 2 PWM channels, one of
+> > > > them
+> > > > is
+> > > > typically used for a temperature controlled fan.
+> > > > 
+> > > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > > > ---
+> > > >  drivers/pwm/pwm-mediatek.c | 7 +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/pwm/pwm-mediatek.c b/drivers/pwm/pwm-
+> > > > mediatek.c
+> > > > index 6901a44dc428de..2219cba033e348 100644
+> > > > --- a/drivers/pwm/pwm-mediatek.c
+> > > > +++ b/drivers/pwm/pwm-mediatek.c
+> > > > @@ -329,6 +329,12 @@ static const struct pwm_mediatek_of_data
+> > > > mt8365_pwm_data = {
+> > > >  	.has_ck_26m_sel = true,
+> > > >  };
+> > > >  
+> > > > +static const struct pwm_mediatek_of_data mt7986_pwm_data = {
+> > > > +	.num_pwms = 2,
+> > > > +	.pwm45_fixup = false,
+> > > > +	.has_ck_26m_sel = true,
+> > > 
+> > > For MT7986 SoC, I think the value of "has_ck_26m_sel" should be
+> > > 'false'
+> > 
+> > That's a bit surprising, please explain why.
+> > 
 > 
-> syzbot found the following issue on:
+> The clock tree of MT7981/MT7986 PWM BCLK is as bellow:
+> PLL --> topckgen fix-factors --> TOP_PWM_SEL (topckgen clock mux) -->
+> --
+> > CLK_INFRA_PWM_BSEL (infra clock mux) --> PWM BCLK (gate)
 > 
-> HEAD commit:    4da34b7d175d Merge tag 'thermal-6.1-rc2' of git://git.kern..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=113bd8bc880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4789759e8a6d5f57
-> dashboard link: https://syzkaller.appspot.com/bug?extid=273b547b15eb58ea35e8
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=161e1f62880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16dd4fe6880000
+> We do have the clock multiplexer to select the source clock for PWM_BCLK
+> https://github.com/torvalds/linux/blob/master/drivers/clk/mediatek/clk-mt7986-infracfg.c#L63
 > 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/a61ddb36c296/disk-4da34b7d.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/ceee41246252/vmlinux-4da34b7d.xz
+> In my knowledge, the pwm hardware of MT7981/MT7986 SoC should ignore
+> this register directtly, but we still keep the register for backword
+> compatibility.
 > 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+273b547b15eb58ea35e8@syzkaller.appspotmail.com
+> In fact, the MT7986 SoC is also working whether 'has_ck_26m_sel' is
+> 'true' or 'false'.
 > 
->   tlb_finish_mmu+0xcb/0x200 mm/mmu_gather.c:363
->   exit_mmap+0x2b1/0x670 mm/mmap.c:3098
->   __mmput+0x114/0x3b0 kernel/fork.c:1185
->   exit_mm+0x217/0x2f0 kernel/exit.c:516
->   do_exit+0x5e7/0x2070 kernel/exit.c:807
->   do_group_exit+0x1fd/0x2b0 kernel/exit.c:950
->   __do_sys_exit_group kernel/exit.c:961 [inline]
->   __se_sys_exit_group kernel/exit.c:959 [inline]
->   __x64_sys_exit_group+0x3b/0x40 kernel/exit.c:959
->   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->   do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 3908 at mm/huge_memory.c:2465 __split_huge_page_tail+0x81c/0x1080 mm/huge_memory.c:2465
+> Going back to the definition of 'has_ck_26m_sel', if it means
+> "PWM_CK_26M_SEL" register exists or not, we should use 'true', but if
+> it means clock from 26M clock or BUS clock, we should use 'false'
 
-Is this the
+It means 'write 0 to PWM_CK_26M_SEL to make sure PWM BCLK is selected'.
+If the register isn't used at all on MT7986 (despite being mentioned in
+the datasheet) or the value written there never has any effect then
+there is no need to do this and has_ck_26m_sel can be false.
 
-VM_BUG_ON_PAGE(atomic_read(&page_tail->_mapcount) != -1, page_tail);
+> 
+> > Reading the commit adding .has_ck_26m_sel field:
+> > > commit 0c0ead76235db0bcfaab83f04db546995449d002
+> > > Author: Fabien Parent <fparent@baylibre.com>
+> > > Date:   Mon Oct 19 16:07:02 2020 +0200
+> > > 
+> > > pwm: mediatek: Always use bus clock
+> > > 
+> > > The MediaTek PWM IP can sometimes use the 26 MHz source clock to
+> > > generate the PWM signal, but the driver currently assumes that we
+> > > always
+> > > use the PWM bus clock to generate the PWM signal.
+> > > 
+> > > This commit modifies the PWM driver in order to force the PWM IP to
+> > > always use the bus clock as source clock.
+> > > 
+> > > I do not have the datasheet of all the MediaTek SoC, so I don't
+> > > know if
+> > > the register to choose the source clock is present in all the SoCs
+> > > or
+> > > only in subset. As a consequence I made this change optional by
+> > > using a
+> > > platform data paremeter to says whether this register is supported
+> > > or
+> > > not. On all the SoCs I don't have the datasheet (MT2712, MT7622,
+> > > MT7623,
+> > > MT7628, MT7629) I kept the behavior to be the same as before this
+> > > change.
+> > > 
+> > > Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> > > Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> > > Signed-off-by: Thierry Reding <thierry.reding@gmail.com>
+> > 
+> > From MT7986 datasheet:
+> > > 0x10048210 PWM_CK_26M_SEL PWM BCLK Selection
+> > > Reset value 0x00000001
+> > > Description
+> > > 0: Select bus CLK as BCLK
+> > > 1: Select 26M fix CLK as BCLK
+> > So after reset, the 26M clock is selected by default.
+> > 
+> > In pwm-mediatek.c I read:
+> > > #define PWM_CK_26M_SEL          0x210
+> > > ...
+> > >         /* Make sure we use the bus clock and not the 26MHz clock
+> > > */
+> > >         if (pc->soc->has_ck_26m_sel)
+> > >                 writel(0, pc->regs + PWM_CK_26M_SEL);
+> > 
+> > So this PWM_CK_26M_SEL register does exist on MT7986 and has the
+> > same address as expected by the driver ($PWM_BASE + 0x210).
+> > The default value selected after reset (0x00000001) matches the
+> > problem and solution described in the commit description
+> > "pwm: mediatek: Always use bus clock".
+> > 
+> > Sidenode: I've tried with both, .has_ck_26m_sel = true as well as
+> > .has_ck_26m_sel = false. Both do work, but the behavior is slightly
+> > different, again matching the commit description above.
+> 
+> What is the difference between the two?
+> 
+> I tried to config the pwm ch0 period=1000000 and duty=500000,
+> Modify PWM_CK_26M_SEL, and measure the output waveform, the waveform
+> keep the same.
 
-assertion?
-
--- 
-Thanks,
-
-David / dhildenb
-
+Maybe something else already sets the PWM_CK_26M_SEL register to 0
+before Linux starts (e.g. U-Boot)?
