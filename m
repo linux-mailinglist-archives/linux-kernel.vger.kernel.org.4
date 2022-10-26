@@ -2,106 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A07960DE19
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AF360DE1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbiJZJbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S233035AbiJZJdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233325AbiJZJbJ (ORCPT
+        with ESMTP id S231164AbiJZJdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:31:09 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EA5A599B
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=k561CKc6O1U1Gi5CEAUuXAJYDxt0c2P7n4SCwQkBNOs=; b=S/lY5GPtb/jr+6VJQyAIQ2h820
-        4XBR71Ag9+QwvT+jk6JOTIRv20JgHIOXMCP4an1T4u9KVfjDmagwPkq8kUrbtX0PtTHJ/MElvIgOi
-        wfZVORiSCl2bVor74hEhrq9CN9smf+wf4tXOWhUIuPA0mQCKvcwRpq/17TADRGOJbdeAxIp3Wom9D
-        XDOWKJJQPzjGZzp2E3/Qa3q3yNK7YHhXo2w+44q16hCBHzjod7XII9JymLqlfftc3a7j7XDF9Ngmd
-        HNdV7elp3xAfWDfnAqAKXCH092yGJEkIlmH6H+xE+i/pAwuegvoMLPF6KLTtuY+HkGOZmpXsCx4xc
-        LUOmlJfQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onckR-006YDk-57; Wed, 26 Oct 2022 09:30:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4D4383000DD;
-        Wed, 26 Oct 2022 11:30:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 34E352C268BC3; Wed, 26 Oct 2022 11:30:54 +0200 (CEST)
-Date:   Wed, 26 Oct 2022 11:30:54 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Kees Cook <keescook@chromium.org>, x86@kernel.org
-Subject: Re: [PATCH] x86/uaccess: instrument copy_from_user_nmi()
-Message-ID: <Y1j+Tt9mnMDU0zO+@hirez.programming.kicks-ass.net>
-References: <20221025221755.3810809-1-glider@google.com>
+        Wed, 26 Oct 2022 05:33:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B0BB2773;
+        Wed, 26 Oct 2022 02:33:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3DD2B8212F;
+        Wed, 26 Oct 2022 09:33:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22DC0C433C1;
+        Wed, 26 Oct 2022 09:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666776787;
+        bh=BofbRtfIxoJoenlFoJc1d0N551Sv7Cz7H1y1Amq+Qo0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OCCBUq/Df0dDEVCTbMgVIdLVL865mdtl9QRgpR4rlTZFRIaHQOucswtXZaGFckhTZ
+         Qu0SI6rb2kmQcRhOlDmCyoFSgPvdgxVdThEBpvBe412LTeVjEtPJJvuEv+qDyrRGfZ
+         jdroKRhc9D8yHZCm1fx/T2wy2jX182MdYWx5k5TKl5wYDbFugnWiEZfQKptprlA5Ok
+         mzPg9Frd2Eh+IxXGwkVJzbP35M1HM4IL9C9qHCHXJYUfHuhJyd6KDHS+ySzhrsGNIR
+         e4XJUExG0QSoS0gaYOOQBL9q+S2ZhCdqjGZOf4B21cH2eOTg2XdP+85ihdpHl5uwis
+         JtOWS76re+WsQ==
+Date:   Wed, 26 Oct 2022 11:33:04 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Arjan van de Ven <arjan@infradead.org>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@redhat.com>
+Subject: Re: [PATCH v3 03/17] timer: Move store of next event into
+ __next_timer_interrupt()
+Message-ID: <20221026093304.GA1327339@lothringen>
+References: <20221025135850.51044-1-anna-maria@linutronix.de>
+ <20221025135850.51044-4-anna-maria@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025221755.3810809-1-glider@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221025135850.51044-4-anna-maria@linutronix.de>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 12:17:55AM +0200, Alexander Potapenko wrote:
-> Make sure usercopy hooks from linux/instrumented.h are invoked for
-> copy_from_user_nmi().
-> This fixes KMSAN false positives reported when dumping opcodes for a
-> stack trace.
+On Tue, Oct 25, 2022 at 03:58:36PM +0200, Anna-Maria Behnsen wrote:
+> Both call sides of __next_timer_interrupt() store the return value directly
+> in base->next_expiry. Move the store into __next_timer_interrupt().
 > 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: x86@kernel.org
-> Signed-off-by: Alexander Potapenko <glider@google.com>
+> No functional change.
+> 
+> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  arch/x86/lib/usercopy.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  kernel/time/timer.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 > 
-> diff --git a/arch/x86/lib/usercopy.c b/arch/x86/lib/usercopy.c
-> index f1bb186171562..24b48af274173 100644
-> --- a/arch/x86/lib/usercopy.c
-> +++ b/arch/x86/lib/usercopy.c
-> @@ -6,6 +6,7 @@
+> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+> index 717fcb9fb14a..7695c733dfa5 100644
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -1571,8 +1571,10 @@ static int next_pending_bucket(struct timer_base *base, unsigned offset,
+>  /*
+>   * Search the first expiring timer in the various clock levels. Caller must
+>   * hold base->lock.
+> + *
+> + * Store next expiry time in base->next_expiry.
+>   */
+> -static unsigned long __next_timer_interrupt(struct timer_base *base)
+> +static void __next_timer_interrupt(struct timer_base *base)
+>  {
+>  	unsigned long clk, next, adj;
+>  	unsigned lvl, offset = 0;
+> @@ -1638,10 +1640,11 @@ static unsigned long __next_timer_interrupt(struct timer_base *base)
+>  		clk += adj;
+>  	}
 >  
->  #include <linux/uaccess.h>
->  #include <linux/export.h>
-> +#include <linux/instrumented.h>
+> +	base->next_expiry = next;
+>  	base->next_expiry_recalc = false;
+
+In that case, maybe rename that function as next_expiry_recalc() to make its
+purpose clearer?
+
+Thanks!
+
+>  	base->timers_pending = !(next == base->clk + NEXT_TIMER_MAX_DELTA);
 >  
->  #include <asm/tlbflush.h>
+> -	return next;
+> +	return;
+>  }
 >  
-> @@ -44,7 +45,9 @@ copy_from_user_nmi(void *to, const void __user *from, unsigned long n)
->  	 * called from other contexts.
->  	 */
->  	pagefault_disable();
-> +	instrument_copy_from_user_before(to, from, n);
->  	ret = raw_copy_from_user(to, from, n);
-> +	instrument_copy_from_user_after(to, from, n, ret);
->  	pagefault_enable();
+>  #ifdef CONFIG_NO_HZ_COMMON
+> @@ -1701,7 +1704,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
 >  
->  	return ret;
-
-Is all that instrumentation NMI safe? ISTR having seen locks in some of
-that *SAN stuff.
-
-Also did this want:
-
-Fixes: 59298997df89 ("x86/uaccess: avoid check_object_size() in copy_from_user_nmi()")
-
-?
+>  	raw_spin_lock(&base->lock);
+>  	if (base->next_expiry_recalc)
+> -		base->next_expiry = __next_timer_interrupt(base);
+> +		__next_timer_interrupt(base);
+>  	nextevt = base->next_expiry;
+>  
+>  	/*
+> @@ -1784,7 +1787,7 @@ static inline void __run_timers(struct timer_base *base)
+>  		WARN_ON_ONCE(!levels && !base->next_expiry_recalc
+>  			     && base->timers_pending);
+>  		base->clk++;
+> -		base->next_expiry = __next_timer_interrupt(base);
+> +		__next_timer_interrupt(base);
+>  
+>  		while (levels--)
+>  			expire_timers(base, heads + levels);
+> -- 
+> 2.30.2
+> 
