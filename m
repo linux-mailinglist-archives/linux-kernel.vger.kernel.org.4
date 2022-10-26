@@ -2,158 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BFC60DBFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:18:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA00360DC05
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiJZHSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S232888AbiJZHWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiJZHSR (ORCPT
+        with ESMTP id S230134AbiJZHWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:18:17 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A8DBD059;
-        Wed, 26 Oct 2022 00:18:16 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id n12so13512420eja.11;
-        Wed, 26 Oct 2022 00:18:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jgrCSgoyKQAcf7Cn8RHYWJzwfMDTCeEL4acz0yVvwcc=;
-        b=kWEfo76nU65gaK4Vio7Gf89NJSOvl6f683/pOlM6otWjqfMyEa/3uhWau9vZDZE37U
-         C9Mjm7AeAE5UPt7kfSfNUswN2SS1xrCvWBHJJ6mInVmfsE+PaeG0kFTG3aSgDhoWlimX
-         VLOAs8pQkINxhGiCB7uibfbCjFlg9MV0zR+Uy+NkSc7DnBHhBeo9ijpr679n9YqsaRAi
-         CYrAaIzjsmJhzxvjjjFtWtDaJp9vjy2wignN3YqwsIW86TvTzeASAVaadjd8pMB1/MlD
-         SckYwLZ40A3A/m4EvYm3fjSdkhaUOiK1t21pfv4QQIikKWDPSDwuPnzr0Aiq167AyRvU
-         Z4aA==
-X-Gm-Message-State: ACrzQf0KEo9K/eaaWZw84iW3BO8xgi8FTz9uP6XUAUdQB2Rwl7mmzx7W
-        F+x8LVCHINPKf4K1nF/WQwpf0GPGIYTHIg==
-X-Google-Smtp-Source: AMsMyM47akiGq5DuCuDFHk2dVM5tb9IybhfihjyBOoI/UghMYjV/ct5kTcFCxew+mCnBf5iYuisMyg==
-X-Received: by 2002:a17:907:1dec:b0:7aa:6262:f23f with SMTP id og44-20020a1709071dec00b007aa6262f23fmr10680718ejc.38.1666768695290;
-        Wed, 26 Oct 2022 00:18:15 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170906d18100b0072af4af2f46sm2528312ejz.74.2022.10.26.00.18.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 00:18:14 -0700 (PDT)
-Message-ID: <bc107c62-25ab-f959-c5bc-d5bacc511f20@kernel.org>
-Date:   Wed, 26 Oct 2022 09:18:13 +0200
+        Wed, 26 Oct 2022 03:22:18 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEE0E57BD1;
+        Wed, 26 Oct 2022 00:22:14 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8AxDdkl4FhjTo0CAA--.9934S3;
+        Wed, 26 Oct 2022 15:22:13 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeAh4FhjNzEFAA--.19404S2;
+        Wed, 26 Oct 2022 15:22:09 +0800 (CST)
+Subject: Re: [PATCH v2 2/2] dt-bindings: soc: add loongson2 guts
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        zhuyinbo@loongson.cn, Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221025035128.21068-1-zhuyinbo@loongson.cn>
+ <20221025035128.21068-2-zhuyinbo@loongson.cn>
+ <7c67c721-685a-fa0e-ab4b-41b7de3ea0a0@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <52de60bd-8aa5-a461-9bca-ce8e6f82ead8@loongson.cn>
+Date:   Wed, 26 Oct 2022 15:22:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] block: fix Werror=format with GCC 13
+In-Reply-To: <7c67c721-685a-fa0e-ab4b-41b7de3ea0a0@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-block@vger.kernel.org, axboe@kernel.dk
-References: <f70c7a11-e81e-f6b9-a403-315117f4aa3a@suse.cz>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <f70c7a11-e81e-f6b9-a403-315117f4aa3a@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8DxLeAh4FhjNzEFAA--.19404S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWFy7ZF43WF4UuFyUJF1rCrg_yoW5Kr13p3
+        WxCFW5KFWvqF129wsIq3WxAF13urZ7C3WDWr9rJ3429FyDCasaqwsxKas8Za1xJr97WFW2
+        9FW0g3yF9F4DAFJanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bq8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUciL0UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24. 10. 22, 21:01, Martin Liška wrote:
-> Starting with GCC 13, since
-> [g3b3083a598ca3f4b] c: C2x enums wider than int [PR36113]
-> 
-> GCC promotes enum values with larger than integer types to a wider type.
-> In case of the anonymous enum type in blk-iocost.c it is:
-> 
-> enum {
-> 	MILLION			= 1000000,
-> ...
-> 
-> 	WEIGHT_ONE		= 1 << 16,
-> ...
-> 	VTIME_PER_SEC_SHIFT	= 37,
-> 	VTIME_PER_SEC		= 1LLU << VTIME_PER_SEC_SHIFT,
-> ...
-> 
-> as seen VTIME_PER_SEC cannot fit into 32-bits (int type), thus one needs
-> to use 'long unsigned int' in the format string.
-> 
-> It fixes then the following 2 warnings:
-> 
-> block/blk-iocost.c: In function ‘ioc_weight_prfill’:
-> block/blk-iocost.c:3035:37: error: format ‘%u’ expects argument of type ‘unsigned int’, but argument 4 has type ‘long unsigned int’ [-Werror=format=]
->   3035 |                 seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
->        |                                    ~^            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->        |                                     |                             |
->        |                                     unsigned int                  long unsigned int
->        |                                    %lu
-> block/blk-iocost.c: In function ‘ioc_weight_show’:
-> block/blk-iocost.c:3045:34: error: format ‘%u’ expects argument of type ‘unsigned int’, but argument 3 has type ‘long unsigned int’ [-Werror=format=]
->   3045 |         seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
->        |                                 ~^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->        |                                  |                      |
->        |                                  unsigned int           long unsigned int
->        |                                 %lu
-
-But introduces two with gcc-12 ;):
- > block/blk-iocost.c: In function ‘ioc_weight_prfill’:
- > block/blk-iocost.c:3037:38: error: format ‘%lu’ expects argument of 
-type ‘long unsigned int’, but argument 4 has type ‘u32’ {aka ‘unsigned 
-int’} [-Werror=format=]
- >  3037 |                 seq_printf(sf, "%s %lu\n", dname, 
-iocg->cfg_weight / WEIGHT_ONE);
- >       |                                    ~~^ 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- >       |                                      | 
-      |
- >       |                                      long unsigned int 
-      u32 {aka unsigned int}
- >       |                                    %u
 
 
-Note that:
-1) the specs says enum behaves as int, or uint in some cases
-2) iocc->dfl_weight is u32, i.e. uint
-    WEIGHT_ONE is 1 << 16, i.e. int
-    so the promotion should be to s32/int. Or not?
-
-I think gcc-13 is wrong -- incosistent with gcc-12 at least.
-
-> Signed-off-by: Martin Liska <mliska@suse.cz>
-> ---
->   block/blk-iocost.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+在 2022/10/26 上午3:40, Krzysztof Kozlowski 写道:
+> On 24/10/2022 23:51, Yinbo Zhu wrote:
+>> Add the loongson2 soc guts driver binding with DT schema format
+>> using json-schema.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>>   .../soc/loongson/loongson,ls2k-guts.yaml      | 37 +++++++++++++++++++
 > 
-> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-> index 495396425bad..f165bac9bffb 100644
-> --- a/block/blk-iocost.c
-> +++ b/block/blk-iocost.c
-> @@ -3032,7 +3032,7 @@ static u64 ioc_weight_prfill(struct seq_file *sf, struct blkg_policy_data *pd,
->   	struct ioc_gq *iocg = pd_to_iocg(pd);
->   
->   	if (dname && iocg->cfg_weight)
-> -		seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
-> +		seq_printf(sf, "%s %lu\n", dname, iocg->cfg_weight / WEIGHT_ONE);
->   	return 0;
->   }
->   
-> @@ -3042,7 +3042,7 @@ static int ioc_weight_show(struct seq_file *sf, void *v)
->   	struct blkcg *blkcg = css_to_blkcg(seq_css(sf));
->   	struct ioc_cgrp *iocc = blkcg_to_iocc(blkcg);
->   
-> -	seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
-> +	seq_printf(sf, "default %lu\n", iocc->dfl_weight / WEIGHT_ONE);
->   	blkcg_print_blkgs(sf, blkcg, ioc_weight_prfill,
->   			  &blkcg_policy_iocost, seq_cft(sf)->private, false);
->   	return 0;
+> Looks like wrong location, although difficult to judge because you did
+> not describe the hardware at all. If this is chipinfo-like device, then
+> Documentation/devicetree/bindings/hwinfo/.
+My guts driver is refer fsl platform. It was was to manage and access
+global utilities register block for SoC and it was only used in SoC
+platform. when driver need use Soc ops to do some function the this 
+driver was needed.  the dcfg (device config) was a function in guts 
+(global utilities) block.
+For these type of driver, other platforms were initially placed on
+Documentation/devicetree/bindings/arm/   if it is arm/arm64
+architecture. Later, move it to the soc directory.
 
-thanks,
--- 
-js
-suse labs
+Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
+
+So, do you still think it is inappropriate to place it in the soc dir?
+> 
+> 
+>>   MAINTAINERS                                   |  1 +
+>>   2 files changed, 38 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>> new file mode 100644
+>> index 000000000000..2502f8aeb74d
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
+>> @@ -0,0 +1,37 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-guts.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson2 GUTS driver.
+> 
+> Drop "driver." unless you refer to some hardware (like motor driver?).
+this need refer hardware soc datasheet to gain soc register (global 
+utilities register block ).
+so keep "driver" string that whether was more appropriate?
+> 
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +description: |
+>> +  GUTS driver was to manage and access global utilities block. Initially
+> 
+> Drop "driver" and describe instead what is GUTS, including its acronym,
+> 
+>> +  only reading SVR and registering soc device are supported.
+> 
+> Entire sentence describe Linux driver - drop it. Instead describe the
+> device, the hardware.
+> 
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: loongson,ls2k-guts
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  little-endian: true
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    guts: guts@1fe00000 {
+> 
+> Node names should be generic.
+dcfg/scfg (device cfg/ soc cfg)was the key function of guts (global 
+utilities) block. and guts name I was refer fsl soc driver. 
+"drivers/soc/fsl/guts.c"
+this binding file was follows of fsl guts.
+Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
+Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
+
+or, I was use scfg as node name, Do you think it's appropriate?
+
+
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
 
