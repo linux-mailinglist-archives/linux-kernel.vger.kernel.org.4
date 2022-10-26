@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E6960E9E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1DD60E9E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234446AbiJZUHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 16:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S234650AbiJZUIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 16:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235119AbiJZUGX (ORCPT
+        with ESMTP id S234828AbiJZUHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 16:06:23 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F82A220E
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:06:21 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id m6so16594946pfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:06:21 -0700 (PDT)
+        Wed, 26 Oct 2022 16:07:40 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E371613332A;
+        Wed, 26 Oct 2022 13:07:34 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b12so43511123edd.6;
+        Wed, 26 Oct 2022 13:07:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7OqjbX0ITf4k24OuoKwYdR+7colwCLHKEor3QZ1c38U=;
-        b=B8/Zw4l4FSDq4hTG54dSyA1WeuK0Dz1r5JD85LjlCAjLNCsu+MH0bnTd8jjEnsSulV
-         s/CLh+005SrNFDNzbqQrDnnoyMd5btQIsGqmYFFvJZIEP77Px713mxhnG60gec1LVfQC
-         UfCzlpF8ILFekFuXunWwwlFeMahnDOiL0xypcbekLCThO56VkxqMbFSsgf7WfBl1hjrm
-         oGUTYDJOstz3KhAVJ04QqOEkGCovf3rWK9WO4/xoDCtwHFQ2Tn98YCQbYwx5GM2rbNt3
-         t5yM59yjjbw8dwfk8XY0jNDoWln3+eSnlD+pYGCde2RSC+iu8Ou/tUYxaQqH0Fgrt4EW
-         QiZA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SMe4ztje59yCgYCGVuiDIj/z3i7JsmR1qOmIgpndbO0=;
+        b=P8SRkqp6J2kS9c6yqxbdaEGejFc1UkHRd5VKkpWFuxTonKGK/AWQSH5tjDtlBvZUbv
+         49dn3GZYrRB9iuoJhzQLcrKrVUXsj/k8DmZAvJaDQm4JkLrX0kXt98OM8SI8Kxcl6RQe
+         TyFculnQAaC7xKxSpkj5wos+xsi1eBM0GwYxfdeiPnSvuDq4aazqVaAw9peM6GgGaTye
+         xTNQ/hzCZHVMi5NS4if74U8kqUdjsPMQqF38zzz+JOF19q9W2myoHgRDm/5sRzWrZxgU
+         QV1dBlfHwKrqlHCLXYNGCQHPCZ02RsAveb6/oXGvv/E7UhIy8oL/cZR+V3b8iEqaPfSZ
+         mzqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7OqjbX0ITf4k24OuoKwYdR+7colwCLHKEor3QZ1c38U=;
-        b=VdGIj51On1T4LReOVLCTu1HhcjFfcLwAdmakv5oGnAJahCKiGFew+g3Ta4iYfA60Zh
-         DWVnmgZuIvQMpN+6k9xtTM2ucpwGwYLVvHlHzzIwJ1R/Lt0xYdWYVuj9/CJ1yXbdxP0j
-         icYOZTu15ycKNrQd9av3zPs3Bsrd0B26MKeQ0yCqkalCvbRrmXuQMz6/iq0/MnjMs+G5
-         o8OYmScRWpglpzluG4BXz37RsagLSyKJgrulAqhifuh7WNpKzEryVEY4tyvjypajG85A
-         78INqcfM0PlBvw1ZjITYchHdGJOz9ancCX9lc9ajBpW6kGWB73f/kAvsmwxupEp9AeW5
-         QaCQ==
-X-Gm-Message-State: ACrzQf2MPBICY9CjQqPvvd62azeDOSdwtFDQn7bmDNcu6Gb5smb0oigh
-        97jQEkOjugicjpssG/rGQAA=
-X-Google-Smtp-Source: AMsMyM5o3eP60Zv0hO1mVs3qgeH/LP3UM8DuGGCr+5DJWpv+Yu2EDQE4y69NFgmo6zXatp4eFr11QA==
-X-Received: by 2002:a05:6a00:10cf:b0:563:34ce:4138 with SMTP id d15-20020a056a0010cf00b0056334ce4138mr46545932pfu.6.1666814780588;
-        Wed, 26 Oct 2022 13:06:20 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-001.fbsv.net. [2a03:2880:ff:1::face:b00c])
-        by smtp.gmail.com with ESMTPSA id g31-20020a63111f000000b0043a18cef977sm3156403pgl.13.2022.10.26.13.06.19
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SMe4ztje59yCgYCGVuiDIj/z3i7JsmR1qOmIgpndbO0=;
+        b=wwhSnNfSuYdOVvFLcIBnAaJf8Ul5sgLzEYdpznvJQSLLjtm17hT47+02ElDSa8ubwo
+         UHEfWJtkVLs5vDJ/QUV1qr71qHSpzokeyvOcD+BPdgIFwXWxHG6L2Q2FfTFRYNmeozAG
+         YBg8lNskrcjJWt7G38aYcPmaa/CJRzLLneyrqjqZumR/B2YlEyqGmQxi3RMpokNGXxVk
+         srz01L4PXeDbyU9Y77Y0dD0o89ihbwEMkGNhikdh/6CqUzoxrRsimUh3FBOBNmqK2EUK
+         kDm/sKbOecc37z52M5Am06pom0AqkLeTQBti08qkHZMluk2p86F31MeHOm3kIbjywc4h
+         YNFw==
+X-Gm-Message-State: ACrzQf1q+r/T0xzP0SkAWwlTbjOw0Xrd291qwAUMh8O62lOy3k4ZbIK4
+        +ekUwro293WIqxbjZpNFfEs=
+X-Google-Smtp-Source: AMsMyM4OXkYCOQgAPOhMmMMEOl9fW/cznVnimULGHVkhPK0Bj2s2CUq64sqHEGr1YOe6DJAhzxjSDQ==
+X-Received: by 2002:aa7:cd92:0:b0:456:cbb5:2027 with SMTP id x18-20020aa7cd92000000b00456cbb52027mr42171665edv.384.1666814853248;
+        Wed, 26 Oct 2022 13:07:33 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id n26-20020aa7c69a000000b0045bef7cf489sm4008353edq.89.2022.10.26.13.07.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 13:06:20 -0700 (PDT)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: [PATCH 5/5] zsmalloc: Implement writeback mechanism for zsmalloc
-Date:   Wed, 26 Oct 2022 13:06:13 -0700
-Message-Id: <20221026200613.1031261-6-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221026200613.1031261-1-nphamcs@gmail.com>
-References: <20221026200613.1031261-1-nphamcs@gmail.com>
+        Wed, 26 Oct 2022 13:07:32 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 23:07:30 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Arun.Ramadoss@microchip.com
+Cc:     ceggers@arri.de, andrew@lunn.ch, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
+        linux@armlinux.org.uk, Tristram.Ha@microchip.com,
+        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, Woojung.Huh@microchip.com,
+        davem@davemloft.net, b.hutchman@gmail.com
+Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support
+ for LAN937x switch
+Message-ID: <20221026200730.ggyd4jhhbwpezmhs@skbuf>
+References: <20221014152857.32645-1-arun.ramadoss@microchip.com>
+ <20221018102924.g2houe3fz6wxlril@skbuf>
+ <d8459511785de2f6d503341ce5f87c6e6064d7b5.camel@microchip.com>
+ <1843632.tdWV9SEqCh@n95hx1g2>
+ <42c713fb7ad6aebe8ad2d3e0740f1e4678b10902.camel@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42c713fb7ad6aebe8ad2d3e0740f1e4678b10902.camel@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,325 +81,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds the writeback mechanism for zsmalloc, analogous to the
-zbud allocator. Zsmalloc will attempt to determine the coldest zspage
-(i.e least recently used) in the pool, and attempt to write back all the
-stored compressed objects via the pool's evict handler.
+Hi Arun,
 
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
----
- mm/zsmalloc.c | 192 ++++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 177 insertions(+), 15 deletions(-)
+On Tue, Oct 25, 2022 at 03:41:26AM +0000, Arun.Ramadoss@microchip.com wrote:
+> > CONFIG_PTP_1588_CLOCK=m
+> > CONFIG_NET_DSA=m
+> > CONFIG_NET_DSA_MICROCHIP_KSZ_COMMON=m [ksz_switch.ko]
+> > CONFIG_NET_DSA_MICROCHIP_KSZ9477_I2C=m
+> > CONFIG_NET_DSA_MICROCHIP_KSZ_PTP=y [builtin]
+> > 
+> > With this configuration, kbuild doesn't even try to compile
+> > ksz_ptp.c:
+> > 
+> > ERROR: modpost: "ksz_hwtstamp_get"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_hwtstamp_set"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_port_txtstamp"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_ptp_clock_register"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_port_deferred_xmit"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_ptp_clock_unregister"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_ptp_irq_free"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_tstamp_reconstruct"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_get_ts_info"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > ERROR: modpost: "ksz_ptp_irq_setup"
+> > [drivers/net/dsa/microchip/ksz_switch.ko] undefined!
+> > 
+> > After setting all of the above to 'y', the build process works (but
+> > I would prefer being able to build as modules). 
+> 
+> May be this is due to kconfig of config_ksz_ptp  defined bool instead
+> of tristate. Do I need to change the config_ksz_ptp to tristate in
+> order to compile as modules?
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 76ff2ed839d0..c79cbd3f46f3 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -279,10 +279,13 @@ struct zspage {
- 	/* links the zspage to the lru list in the pool */
- 	struct list_head lru;
- 
-+	bool under_reclaim;
-+
-+	/* list of unfreed handles whose objects have been reclaimed */
-+	unsigned long *deferred_handles;
-+
- 	struct zs_pool *pool;
--#ifdef CONFIG_COMPACTION
- 	rwlock_t lock;
--#endif
- };
- 
- struct mapping_area {
-@@ -303,10 +306,11 @@ static bool ZsHugePage(struct zspage *zspage)
- 	return zspage->huge;
- }
- 
--#ifdef CONFIG_COMPACTION
- static void migrate_lock_init(struct zspage *zspage);
- static void migrate_read_lock(struct zspage *zspage);
- static void migrate_read_unlock(struct zspage *zspage);
-+
-+#ifdef CONFIG_COMPACTION
- static void migrate_write_lock(struct zspage *zspage);
- static void migrate_write_lock_nested(struct zspage *zspage);
- static void migrate_write_unlock(struct zspage *zspage);
-@@ -314,9 +318,6 @@ static void kick_deferred_free(struct zs_pool *pool);
- static void init_deferred_free(struct zs_pool *pool);
- static void SetZsPageMovable(struct zs_pool *pool, struct zspage *zspage);
- #else
--static void migrate_lock_init(struct zspage *zspage) {}
--static void migrate_read_lock(struct zspage *zspage) {}
--static void migrate_read_unlock(struct zspage *zspage) {}
- static void migrate_write_lock(struct zspage *zspage) {}
- static void migrate_write_lock_nested(struct zspage *zspage) {}
- static void migrate_write_unlock(struct zspage *zspage) {}
-@@ -444,6 +445,27 @@ static void zs_zpool_free(void *pool, unsigned long handle)
- 	zs_free(pool, handle);
- }
- 
-+static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries);
-+
-+static int zs_zpool_shrink(void *pool, unsigned int pages,
-+			unsigned int *reclaimed)
-+{
-+	unsigned int total = 0;
-+	int ret = -EINVAL;
-+
-+	while (total < pages) {
-+		ret = zs_reclaim_page(pool, 8);
-+		if (ret < 0)
-+			break;
-+		total++;
-+	}
-+
-+	if (reclaimed)
-+		*reclaimed = total;
-+
-+	return ret;
-+}
-+
- static void *zs_zpool_map(void *pool, unsigned long handle,
- 			enum zpool_mapmode mm)
- {
-@@ -482,6 +504,7 @@ static struct zpool_driver zs_zpool_driver = {
- 	.malloc_support_movable = true,
- 	.malloc =		  zs_zpool_malloc,
- 	.free =			  zs_zpool_free,
-+	.shrink =     zs_zpool_shrink,
- 	.map =			  zs_zpool_map,
- 	.unmap =		  zs_zpool_unmap,
- 	.total_size =		  zs_zpool_total_size,
-@@ -955,6 +978,21 @@ static int trylock_zspage(struct zspage *zspage)
- 	return 0;
- }
- 
-+/*
-+ * Free all the deferred handles whose objects are freed in zs_free.
-+ */
-+static void free_handles(struct zs_pool *pool, struct zspage *zspage)
-+{
-+	unsigned long handle = (unsigned long) zspage->deferred_handles;
-+
-+	while (handle) {
-+		unsigned long nxt_handle = handle_to_obj(handle);
-+
-+		cache_free_handle(pool, handle);
-+		handle = nxt_handle;
-+	}
-+}
-+
- static void __free_zspage(struct zs_pool *pool, struct size_class *class,
- 				struct zspage *zspage)
- {
-@@ -969,6 +1007,9 @@ static void __free_zspage(struct zs_pool *pool, struct size_class *class,
- 	VM_BUG_ON(get_zspage_inuse(zspage));
- 	VM_BUG_ON(fg != ZS_EMPTY);
- 
-+	/* Free all deferred handles from zs_free */
-+	free_handles(pool, zspage);
-+
- 	next = page = get_first_page(zspage);
- 	do {
- 		VM_BUG_ON_PAGE(!PageLocked(page), page);
-@@ -1051,6 +1092,8 @@ static void init_zspage(struct size_class *class, struct zspage *zspage)
- 	}
- 
- 	INIT_LIST_HEAD(&zspage->lru);
-+	zspage->under_reclaim = false;
-+	zspage->deferred_handles = NULL;
- 
- 	set_freeobj(zspage, 0);
- }
-@@ -1472,11 +1515,8 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
- 		fix_fullness_group(class, zspage);
- 		record_obj(handle, obj);
- 		class_stat_inc(class, OBJ_USED, 1);
--		/* Move the zspage to front of pool's LRU */
--		move_to_front(pool, zspage);
--		spin_unlock(&pool->lock);
- 
--		return handle;
-+		goto out;
- 	}
- 
- 	spin_unlock(&pool->lock);
-@@ -1500,6 +1540,8 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t gfp)
- 
- 	/* We completely set up zspage so mark them as movable */
- 	SetZsPageMovable(pool, zspage);
-+
-+out:
- 	/* Move the zspage to front of pool's LRU */
- 	move_to_front(pool, zspage);
- 	spin_unlock(&pool->lock);
-@@ -1557,12 +1599,24 @@ void zs_free(struct zs_pool *pool, unsigned long handle)
- 
- 	obj_free(class->size, obj);
- 	class_stat_dec(class, OBJ_USED, 1);
-+
-+	if (zspage->under_reclaim) {
-+		/*
-+		 * Reclaim needs the handles during writeback. It'll free
-+		 * them along with the zspage when it's done with them.
-+		 *
-+		 * Record current deferred handle at the memory location
-+		 * whose address is given by handle.
-+		 */
-+		record_obj(handle, (unsigned long) zspage->deferred_handles);
-+		zspage->deferred_handles = (unsigned long *) handle;
-+		spin_unlock(&pool->lock);
-+		return;
-+	}
- 	fullness = fix_fullness_group(class, zspage);
--	if (fullness != ZS_EMPTY)
--		goto out;
-+	if (fullness == ZS_EMPTY)
-+		free_zspage(pool, class, zspage);
- 
--	free_zspage(pool, class, zspage);
--out:
- 	spin_unlock(&pool->lock);
- 	cache_free_handle(pool, handle);
- }
-@@ -1762,7 +1816,6 @@ static enum fullness_group putback_zspage(struct size_class *class,
- 	return fullness;
- }
- 
--#ifdef CONFIG_COMPACTION
- /*
-  * To prevent zspage destroy during migration, zspage freeing should
-  * hold locks of all pages in the zspage.
-@@ -1805,6 +1858,21 @@ static void lock_zspage(struct zspage *zspage)
- 	migrate_read_unlock(zspage);
- }
- 
-+/*
-+ * Unlocks all the pages of the zspage.
-+ *
-+ * pool->lock must be held before this function is called
-+ * to prevent the underlying pages from migrating.
-+ */
-+static void unlock_zspage(struct zspage *zspage)
-+{
-+	struct page *page = get_first_page(zspage);
-+
-+	do {
-+		unlock_page(page);
-+	} while ((page = get_next_page(page)) != NULL);
-+}
-+
- static void migrate_lock_init(struct zspage *zspage)
- {
- 	rwlock_init(&zspage->lock);
-@@ -1820,6 +1888,7 @@ static void migrate_read_unlock(struct zspage *zspage) __releases(&zspage->lock)
- 	read_unlock(&zspage->lock);
- }
- 
-+#ifdef CONFIG_COMPACTION
- static void migrate_write_lock(struct zspage *zspage)
- {
- 	write_lock(&zspage->lock);
-@@ -2380,6 +2449,99 @@ void zs_destroy_pool(struct zs_pool *pool)
- }
- EXPORT_SYMBOL_GPL(zs_destroy_pool);
- 
-+static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
-+{
-+	int i, obj_idx, ret = 0;
-+	unsigned long handle;
-+	struct zspage *zspage;
-+	struct page *page;
-+	enum fullness_group fullness;
-+
-+	/* Lock LRU and fullness list */
-+	spin_lock(&pool->lock);
-+	if (!pool->ops || !pool->ops->evict || list_empty(&pool->lru) ||
-+			retries == 0) {
-+		spin_unlock(&pool->lock);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < retries; i++) {
-+		struct size_class *class;
-+
-+		zspage = list_last_entry(&pool->lru, struct zspage, lru);
-+		list_del(&zspage->lru);
-+
-+		/* zs_free may free objects, but not the zspage and handles */
-+		zspage->under_reclaim = true;
-+
-+		/* Lock backing pages into place */
-+		lock_zspage(zspage);
-+
-+		class = zspage_class(pool, zspage);
-+		fullness = get_fullness_group(class, zspage);
-+
-+		/* Lock out object allocations and object compaction */
-+		remove_zspage(class, zspage, fullness);
-+
-+		spin_unlock(&pool->lock);
-+
-+		obj_idx = 0;
-+		page = zspage->first_page;
-+		while (1) {
-+			handle = find_alloced_obj(class, page, &obj_idx);
-+			if (!handle) {
-+				page = get_next_page(page);
-+				if (!page)
-+					break;
-+				obj_idx = 0;
-+				continue;
-+			}
-+
-+			/*
-+			 * This will write the object and call
-+			 * zs_free.
-+			 *
-+			 * zs_free will free the object, but the
-+			 * under_reclaim flag prevents it from freeing
-+			 * the zspage altogether. This is necessary so
-+			 * that we can continue working with the
-+			 * zspage potentially after the last object
-+			 * has been freed.
-+			 */
-+			ret = pool->ops->evict(pool, handle);
-+			if (ret)
-+				goto next;
-+
-+			obj_idx++;
-+		}
-+
-+next:
-+		/* For freeing the zspage, or putting it back in the pool and LRU list. */
-+		spin_lock(&pool->lock);
-+		zspage->under_reclaim = false;
-+
-+		if (!get_zspage_inuse(zspage)) {
-+			/*
-+			 * Fullness went stale as zs_free() won't touch it
-+			 * while the page is removed from the pool. Fix it
-+			 * up for the check in __free_zspage().
-+			 */
-+			zspage->fullness = ZS_EMPTY;
-+
-+			__free_zspage(pool, class, zspage);
-+			spin_unlock(&pool->lock);
-+			return 0;
-+		}
-+
-+		putback_zspage(class, zspage);
-+		list_add(&zspage->lru, &pool->lru);
-+		unlock_zspage(zspage);
-+	}
-+
-+	spin_unlock(&pool->lock);
-+	return -EAGAIN;
-+}
-+
- static int __init zs_init(void)
- {
- 	int ret;
--- 
-2.30.2
+You don't want a separate kernel module for PTP support, so no, you
+don't want to make CONFIG_NET_DSA_MICROCHIP_KSZ_PTP tristate.
 
+But what you want is for the ksz_ptp.o object file to be included into
+ksz_switch-objs when CONFIG_NET_DSA_MICROCHIP_KSZ_PTP is enabled.
+
+See how sja1105 does it:
+
+ifdef CONFIG_NET_DSA_SJA1105_PTP
+sja1105-objs += sja1105_ptp.o
+endif
+
+You'll also want to make NET_DSA_MICROCHIP_KSZ9477_I2C and
+NET_DSA_MICROCHIP_KSZ_SPI to depend on PTP_1588_CLOCK_OPTIONAL, because
+CONFIG_PTP_1588_CLOCK can be compiled as module (as Christian shows),
+and in that case, you'll want the KSZ drivers to also be built as
+modules (otherwise they're built-in, and built-in code cannot depend on
+symbols exported from modules, because the modules may never be inserted).
+
+It's best to actually experiment with this, you cannot get it right if
+you don't experiment.
