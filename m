@@ -2,154 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C896260DD91
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0871360DD94
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233289AbiJZIx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S233126AbiJZIzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbiJZIxw (ORCPT
+        with ESMTP id S232208AbiJZIzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:53:52 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72859AC0A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:53:50 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1666774429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RXR/lAFz86mG9q2ZJofRnpXszeaU/ER/Y/nKQPHzKgU=;
-        b=PU+hs6TreoiqzMMQOr/t4miTssPjIWp6M9N6LFYYkFXeFWIWsrWAFDeY4PWtwjl5FNH5pw
-        IQLPcYoGYcCPHB6OqWLe4pJ0kyvRVrtgUt64quQfC69Al84Nya8BOPDUGzMxrdh4djgRLH
-        x4UHdnSr4MxQDSWb+soL4BFTbsfoxLE=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH -next 1/1] mm: hugetlb_vmemmap: Fix WARN_ON in
- vmemmap_remap_pte
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com>
-Date:   Wed, 26 Oct 2022 16:53:33 +0800
-Cc:     Wupeng Ma <mawupeng1@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Oscar Salvador <osalvador@suse.de>, catalin.marinas@arm.com,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <46A852E1-B19E-4ABE-B96C-992DC7C67414@linux.dev>
-References: <20221025014215.3466904-1-mawupeng1@huawei.com>
- <614E3E83-1EAB-4C39-AF9C-83C0CCF26218@linux.dev>
- <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
- <3D6FDA43-A812-4907-B9C8-C2B25567DBBC@linux.dev>
- <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 26 Oct 2022 04:55:39 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCF55A8C7
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:55:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cLkJYxIr1IyVWUTJ6UiahEJA+eYgKa/tpB2kz92PDOg=; b=ghVfqn4YFMQ62y4ShXWVm/Kmaq
+        Ux01lD8W4HqUNGlQFPxLXCt8XOW7ayKAlSAljS55pLqBABYaMcftozY6TJl2qw4UVBHUaYqb2Gtz5
+        fuiHj7k8lZ+NI+kAuGGTnlP9L0ixIiLn1pzbsrOw3wv9vm/PMEp4P+2Z8NLBo4T7Vk7BKJGFlXhUW
+        peKfCP20QzbHMpvm65gZpwZ1fr8KxkcEG3DoHaXmK1rNnHQgT/HQFRBj+azZzvOUrTiYMCVeiW0AE
+        JQQIaSzGpN6Ek09oW8T2I7u16gOxlR639eMLiB7VIgMyEcByySu6hymZ2JsEOzE/fp/OadaTdyYa8
+        snOeG00g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oncBs-006Xox-FB; Wed, 26 Oct 2022 08:55:12 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7CA2330020C;
+        Wed, 26 Oct 2022 10:55:11 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 598BA2C259E91; Wed, 26 Oct 2022 10:55:11 +0200 (CEST)
+Date:   Wed, 26 Oct 2022 10:55:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [RFC PATCH 08/23] sched/fair: Compute task-class performance
+ scores for load balancing
+Message-ID: <Y1j170UQc5DJPYgR@hirez.programming.kicks-ass.net>
+References: <20220909231205.14009-1-ricardo.neri-calderon@linux.intel.com>
+ <20220909231205.14009-9-ricardo.neri-calderon@linux.intel.com>
+ <YzK/QisKmix6hrKG@hirez.programming.kicks-ass.net>
+ <20221026035724.GA21523@ranerica-svr.sc.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026035724.GA21523@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Oct 25, 2022 at 08:57:24PM -0700, Ricardo Neri wrote:
+
+> Do you want me to add your Signed-off-by and Co-developed-by tags?
+
+Nah; who cares ;-)
 
 
-> On Oct 26, 2022, at 16:36, Anshuman Khandual =
-<anshuman.khandual@arm.com> wrote:
->=20
->=20
->=20
-> On 10/26/22 12:31, Muchun Song wrote:
->>=20
->>=20
->>> On Oct 26, 2022, at 13:06, Anshuman Khandual =
-<anshuman.khandual@arm.com> wrote:
->>>=20
->>>=20
->>>=20
->>> On 10/25/22 12:06, Muchun Song wrote:
->>>>=20
->>>>=20
->>>>> On Oct 25, 2022, at 09:42, Wupeng Ma <mawupeng1@huawei.com> wrote:
->>>>>=20
->>>>> From: Ma Wupeng <mawupeng1@huawei.com>
->>>>>=20
->>>>> Commit f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages =
-associated with
->>>>> each HugeTLB page") add vmemmap_remap_pte to remap the tail pages =
-as
->>>>> read-only to catch illegal write operation to the tail page.
->>>>>=20
->>>>> However this will lead to WARN_ON in arm64 in =
-__check_racy_pte_update()
->>>>=20
->>>> Thanks for your finding this issue.
->>>>=20
->>>>> since this may lead to dirty state cleaned. This check is =
-introduced by
->>>>> commit 2f4b829c625e ("arm64: Add support for hardware updates of =
-the
->>>>> access and dirty pte bits") and the initial check is as follow:
->>>>>=20
->>>>> BUG_ON(pte_write(*ptep) && !pte_dirty(pte));
->>>>>=20
->>>>> Since we do need to mark this pte as read-only to catch illegal =
-write
->>>>> operation to the tail pages, use set_pte  to replace set_pte_at to =
-bypass
->>>>> this check.
->>>>=20
->>>> In theory, the waring does not affect anything since the tail =
-vmemmap
->>>> pages are supposed to be read-only. So, skipping this check for =
-vmemmap
->>>=20
->>> Tails vmemmap pages are supposed to be read-only, in practice but =
-their
->>> backing pages do have pte_write() enabled. Otherwise the =
-VM_WARN_ONCE()
->>> warning would not have triggered.
->>=20
->> Right.
->>=20
->>>=20
->>>       VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
->>>                    "%s: racy dirty state clearing: 0x%016llx -> =
-0x%016llx",
->>>                    __func__, pte_val(old_pte), pte_val(pte));
->>>=20
->>> Also, is not it true that the pte being remapped into a different =
-page
->>> as read only, than what it had originally (which will be freed up) =
-i.e=20
->>> the PFN in 'old_pte' and 'pte' will be different. Hence is there =
-still
->>=20
->> Right.
->>=20
->>> a possibility for a race condition even when the PFN changes ?
->>=20
->> Sorry, I didn't get this question. Did you mean the PTE is changed =
-from
->> new (pte) to the old one (old_pte) by the hardware because of the =
-update
->> of dirty bit when a concurrent write operation to the tail vmemmap =
-page?
->=20
-> No, but is not vmemmap_remap_pte() reuses walk->reuse_page for all =
-remaining
-> tails pages ? Is not there a PFN change, along with access permission =
-change
-> involved in this remapping process ?
+> > @@ -8749,32 +8747,18 @@ static void compute_ilb_sg_task_class_sc
+> >  	if (!busy_cpus)
+> >  		return;
+> >  
+> > -	score_on_dst_cpu = arch_get_task_class_score(class_sgs->p_min_score->class,
+> > -						     dst_cpu);
+> > +	score_on_dst_cpu = arch_get_task_class_score(sgcs->min_class, dst_cpu);
+> >  
+> > -	/*
+> > -	 * The simpest case. The single busy CPU in the current group will
+> > -	 * become idle after pulling its current task. The destination CPU is
+> > -	 * idle.
+> > -	 */
+> > -	if (busy_cpus == 1) {
+> > -		sgs->task_class_score_before = class_sgs->sum_score;
+> > -		sgs->task_class_score_after = score_on_dst_cpu;
+> > -		return;
+> > -	}
+> > +	before = sgcs->sum_score
+> > +	after  = before - sgcs->min_score + score_on_dst_cpu;
+> 
+> This works when the sched group being evaluated has only one busy CPU
+> because it will become idle if the destination CPU (which was idle) pulls
+> the current task.
+> 
+> >  
+> > -	/*
+> > -	 * Now compute the group score with and without the task with the
+> > -	 * lowest score. We assume that the tasks that remain in the group share
+> > -	 * the CPU resources equally.
+> > -	 */
+> > -	group_score = class_sgs->sum_score / busy_cpus;
+> > -
+> > -	group_score_without =  (class_sgs->sum_score - class_sgs->min_score) /
+> > -			       (busy_cpus - 1);
+> > +	if (busy_cpus > 1) {
+> > +		before /= busy_cpus;
+> > +		after  /= busy_cpus;
+> 
+> 
+> However, I don't think this works when the sched group has more than one
+> busy CPU. 'before' and 'after' reflect the total throughput score of both
+> the sched group *and* the destination CPU.
+> 
+> One of the CPUs in the sched group will become idle after the balance.
+> 
+> Also, at this point we have already added score_on_dst_cpu. We are incorrectly
+> scaling it by the number of busy CPUs in the sched group.
+> 
+> We instead must scale 'after' by busy_cpus - 1 and then add score_on_dst_cpu.
 
-Alright, yes, both the PFN and the access permission are changed.
+So none of that makes sense.
 
+'x/n + y' != '(x+y)/(n+1)'
+
+IOW:
+
+> > +	}
+> >  
+> > -	sgs->task_class_score_after = group_score_without + score_on_dst_cpu;
+> > -	sgs->task_class_score_before = group_score;
+> > +	sgs->task_class_score_before = before;
+> > +	sgs->task_class_score_after  = after;
+
+your task_class_score_after is a sum value for 2 cpus worth, not a value
+for a single cpu, while your task_class_score_before is a single cpu
+average. You can't compare these numbers and have a sensible outcome.
+
+If you have a number of values: x_1....x_n, their average is
+Sum(x_1...x_n) / n, which is a single value again.
+
+If you want to update one of the x's, say x_i->x'_i, then the average
+changes like:
+
+	Sum(x_1...x_n-x_i+x'_i) / n
+
+If you want to remove one of the x's, then you get:
+
+	Sum(x_1...x_n-x_i) / (n-1) ; 0<i<n
+
+if you want to add an x:
+
+	Sum(x_1...x_n+i_i) / (n+1) ; i>n
+
+Nowhere would you ever get:
+
+	Sum(x_1...x_n) / n + x_i
+
+That's just straight up nonsense.
+
+So I might buy an argument for:
+
+	if (busy_cpus > 1) {
+		before /= (busy_cpus-1);
+		after  /= (busy_cpus+1);
+	}
+
+Or something along those lines (where you remove an entry from before
+and add it to after), but not this.
 
