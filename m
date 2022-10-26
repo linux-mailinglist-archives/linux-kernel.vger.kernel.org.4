@@ -2,348 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D9F60E90E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF01960E912
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbiJZTga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
+        id S234908AbiJZTgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234170AbiJZTg1 (ORCPT
+        with ESMTP id S234763AbiJZTgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:36:27 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2087.outbound.protection.outlook.com [40.107.101.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF9678BF0;
-        Wed, 26 Oct 2022 12:36:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KroJjuioC+YCpbYNY41cid3uDFD8/8jchze2UeFf3zOJaLd1nagxdrwyrYZigCDi38yfka5YcQfiF4lLWV1jFoMGDBbcWnP8fk0sn3PZ71kbzbwJ+HWDhq5mhqyY5I8c4K0k2Q49tLQpbCivH5Qb0Cwn4xN8/UpgBwluv2Xoz2YTxQKoKS1W+37TcEK2uGgufvoety3Wfj/vNnO+3arYh6nR5DShF6Zvqf9S2fVxX+k1v3OMS2qQN9B+rAUPceEd5ujKsT8KbY0TwF7VexQB3orHcllgYsmROLwXv9g3w7geUlU2lwz8enRcaR2joP6ij+AzdzyJLvn2nr6qbyjKeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W2wr31c3ejz3qiAt1nKKJU4Il/w7/UqjFk8ScF1Tsmg=;
- b=bif9isBv9J+1W+8JTEH6i3BOlzDXBHV9/f1hiYBC9vndF25O1fZGLoxF97++3O2s3UIakYDamvAMispLrk93Eb4yE6MpPMMdQFoANczY8/DPRj3vWGVz4i7/UySfxywIZyoI11aYDDiDX7oqnWsJ0TEMtBN2nKuY5q+B7sqenrhemT2837fWyoRnwDmMvi8kq/O9WropZkfRmXlXHZLpSRUy8WUDK7JeU3V0lPmQfjWGMOpJjIuDYansdv1cIbxEa1imueKoS9VH5+PHIBOqataOXUYOhFwr4s498Eh/M6pdrHhA54iCKzd2yVH81/fSfMWH5vCIfFSrGZke666ctA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W2wr31c3ejz3qiAt1nKKJU4Il/w7/UqjFk8ScF1Tsmg=;
- b=HQunJx/WahdXJAaDrVzUA/GRZeLlIwae2s5NpQbPVJhlpcTnRbEmUhmyx3wbNdfjplqoWATOs9WYk+nkt6TBEwnY5DkjXly5jjsIfyTWuej2s6MbYkt/HyNPlMBjfeRu5S/zvZHkRtRsRUKcRFXPKiAQh5iApvSkQ9+gL6vuXb0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by SJ0PR12MB7067.namprd12.prod.outlook.com (2603:10b6:a03:4ae::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Wed, 26 Oct
- 2022 19:36:21 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::2d5:77ac:6d39:e57b]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::2d5:77ac:6d39:e57b%9]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
- 19:36:21 +0000
-Message-ID: <a6349e6d-6733-66be-87d0-a10fc1480305@amd.com>
-Date:   Wed, 26 Oct 2022 14:36:16 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH v7 07/12] x86/resctrl: Add sysfs interface to read
- mbm_total_bytes event configuration
+        Wed, 26 Oct 2022 15:36:45 -0400
+Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F77A814DA
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:36:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666813001; bh=fgyo2ISY3OAsGAQIUHFMsA2y9yvPMn9uSWbL47QxgxA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=uTw2h70iE/0PCD7KKMkxLHTtgAoTGrE5zsq+ZBQoedItywpfJrL6SYgLxfpBnLMw6Thl7JKq/8LntfQ/knJv4LUxgmH5qH/GmusYgjflF0lJzLndr9BvY6oGucrYSbKEUongwy7WDWjcK6kbYn7H+MXyQ6NBSt6+r/+m1wRf8i+h0XI9qHg/VRQCSKqLcDlhWiP3h1jgZZDe9dqDTm35r5COaPClVY5PgL5f6yoYNGe3/u4PhcaVSfd5HP5lfODx3aaxZC2ykOI8jWWaC+zl6enoYKUArFdWbgwxBex/tRotca/Jd+/vdsWfFuFxEDjO+Up0SiwtEbhvxE+DmlZ40g==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1666813001; bh=XORoNFgByCE8mTnxUG6iFHtoEpoZrKyHEA68/kkIPxD=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=t+zIjAP5vbgQdmLR2xrDnQkEJUj0Kwf0b+TRGgingAkT4bIT3hIlObTYOxHD9XbBAudtOoj8HocP+d8IOIS7wTTMC+sSeUNP47a5fln6hIP4mUDUUKPxLwKoDZQAfjjeyip8amyQsY41fEioz/h/Orrmr6KxPF7JZUsBTYqdrhHhDbdyXvWYmMNvYam0yLZl4bHYMLJxImjtcQqvmRKH+5iyJjeu03GjQ9JxJcfeHi9LW1S7p7ta1vDvgrGz4UKHCxN6L0UjFtAKdUhGP1lxD+iUC2r+f4iAGln0TyX0miEpGNMPaCwbsmD1NvYuIsoKtyWBoJoVcOs/JOigSm4ENw==
+X-YMail-OSG: AcF0dHUVM1lbkt5gX5hDUE0dbPop16EuKUO5obC9.AaQT86FBILl_UN.TYJlbMs
+ Kg4LKXY6YVinaHUb6rNs5uCL5NOgnWTqB5NdbQVNx.dAq0wWQAoavhotUfkGuu4PvI5oys6x2odX
+ jBgBBeq96ApUNFgN.J1radWcIcVhlafkzHOCZ5vypQRUQR9IXxjPLhXiTKoB98uIukk4pwBPM11L
+ wM4FP.G8tTDjB2O3bzlyc4gU.Dy0M0f5rvrRPELdbKDC6H3WAEuxuIiOad3RErKIlcwiqHnl5yPY
+ ze_C5bcx8xvub34zLiNmPfMLIfEdqI1qqjDH0VF9rN4YGeaywh6zczKjF3Q45CsAGHtDZFVWWvK9
+ gZvCMV76q7e4poDnE_32_jmRiuas1SbzmsszNZEBcV_OmV.jWHchwpLWoFuQ8oMhHqL7Ijrt9qeq
+ NtnMo5SoSAi2luDso5Q4GOEft4VWJZPlRDLSqSHz9dHPKXF_iU_9wj.c41lofn5c.S7IpPUs85MF
+ dH52bxflrFcJckAgAqcyi0EPXsqE6Ef6yZh69bvnsfGFvuSlp8Qip731OdZLZTOogZ5xKc0Botbs
+ g622dUa1R1imzIPWc3m5IAysMqqIS5_dis1mD9rcdQEcOECa4T03Sks06Jj367.68_Qv_jREySIZ
+ VvBOxlYQyVwwUiTF2CrShAebQs4MU8XVhlZESCwqi57kgsyD7JUU7cbOmv0.QPyMDmizLlTE1Eq7
+ n4C36xKuNMYcvIQqmGHLB_PIJwQzLrO61DbmdhODARGSomz5DrpZzL7qUzww.ErhwGb64kavx1qh
+ JL4d5kkiWpuL4RRPaumNitlU5Altz9dAUgyD.FRV0A2s5wYZe0wcLfpvJWhyN3hJFXe2sRPUaZDm
+ 1pfAFFtF9jlyj91VJk3V6CwltC4QuKoY5odMPenTIpY3yS4U9ps_8Cw9QeouY11AugCq6BRI1Or1
+ F0jI8zPe63.PC5PQSW_cLPyaGHGCv3O0Ssu3J1FslFFWD5gP.Y82eLV_hoEHVAxIrIomf9iudzWy
+ OGh969pMXfzWubO3m_KCM30PZ.pc64U7GZTu8I8Prht8SSH557zuimExq8n_KR0ScMHy70qKlrqW
+ AbeT9_tvzmraVmwYhKWgvr8oABCNe7blBUaamLigtl1fC2Ke.AoIBWA7H.StNuwDApwQPXoPqYoY
+ 2xTwohVP6ZK9l65GyMboLkt_si2hYk7FvQzZY9ouYhd0B3zASgV6QGsQN6AtSRpnivgZQuyJ.a_R
+ jh79r9znqnoUeURIi2TafsZNraM7AFqNCXFq6OOOn6ROHYaCI09KM.zwz_qmSqQxHeOk4BXf54VK
+ hnNMX0UuaK5UfgKuEusXi6rA_K7muRmgHqBVhdYWkL6QfQZNE6.EKBPOgfjLLkCd7JVS2T9moDQC
+ HPsgbnzwtBatLd2MdvatoUVeY58j0cNTHzCv2llF9KbKHRh1qwOwrJti8sKDqqbqjanbNVxsgvMS
+ .a4jGzBiqEbzifzmtJsmKDvFK14QlEDBaMOLd4VXSm06cxrQIH19OmjAyg7VuzUA3X1AajSIanbv
+ G5MCIOT_ElyD3Q19lW0Z9eontYl4KrbPydKxQ_QRt8jPGdDg3u9.BjJDcV_k_ySDlGtQV1heEezX
+ mlcv1vc0bHQjMtvVtcHANhu_N5XqOCZYuN8jn.NtwD8dzaSEDaHLFAD.VGVJQJ6lgNWYV0W_OC10
+ 4txovE9J7jYYE2QOfeEoO6q9WhwSuqAUNbPt90ljYQg6UAPQ3dsuobuU2Xxu0lIif6BE27sCp3Gz
+ dXQz8FKu.k2kugWEZhQ6NU3J5NpKzeHAlZHdT.qmlF6T25M0elvCZPmOK26MhzJZST.fj2NfSTkF
+ OcDrmYtoR_8P8H8RTGHIQWeLK6rVp3aJFKGlofbnsoGaUhswkhR8M4IWflm43H1oy_mIiwQPi31t
+ sVRB6CUDJXdzQk2nDWZOOeM9OR3zDla_eSPuNIsTk8VCbOt423SlrMpSj5M3hBdYKYjruuFIuDBl
+ tnTBNyHsQuJr5Cz4uz277KY.KQ0M5lczjEGWnmMmfu8gF8CmZjPE9UPfPP2CJX2.UG5glrSsQBvl
+ zSrCqCbzaLiYq.8pjEUb0la6LdTKDDT4_8kWtngRJUmite4xbPh_YRQjitGKgZ0hnKcx.GNgWvCZ
+ TCJ0teB7SLKXxIVv9wc7y8.g9D.L0k9A90F4HIMunjd9_fLAiGk31Gndk_mNPmccmPFxkGtBdUWe
+ gKvlQ2qdRBY_5KRZsW.N0O4n5i23_yNbPkSzsx9cd
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Wed, 26 Oct 2022 19:36:41 +0000
+Received: by hermes--production-bf1-64dccd5d47-k9w9h (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0c5d151e36f47c5c39f843a98a5bcf91;
+          Wed, 26 Oct 2022 19:36:36 +0000 (UTC)
+Message-ID: <5396ab1e-9b93-df33-ca49-58dc59459a76@schaufler-ca.com>
+Date:   Wed, 26 Oct 2022 12:36:34 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v1 2/8] LSM: Add an LSM identifier for external use
 Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>, corbet@lwn.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
-Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bagasdotme@gmail.com, eranian@google.com
-References: <166604543832.5345.9696970469830919982.stgit@bmoger-ubuntu>
- <166604561380.5345.17668177010598977321.stgit@bmoger-ubuntu>
- <0065fe9d-80d4-2e8a-afbb-d150df2ee78b@intel.com>
-From:   "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <0065fe9d-80d4-2e8a-afbb-d150df2ee78b@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     casey.schaufler@intel.com, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        keescook@chromium.org, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        mic@digikod.net, casey@schaufler-ca.com
+References: <20221025184519.13231-1-casey@schaufler-ca.com>
+ <20221025184519.13231-3-casey@schaufler-ca.com> <Y1jMeWl0oV4/2zyE@kroah.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <Y1jMeWl0oV4/2zyE@kroah.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0060.namprd03.prod.outlook.com
- (2603:10b6:610:b3::35) To MW3PR12MB4553.namprd12.prod.outlook.com
- (2603:10b6:303:2c::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|SJ0PR12MB7067:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12a8db5e-4576-47d3-13fd-08dab7895bfe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /D6o+rEV5aug3FGW4h5HN+XRI43jVKirtzGsiLPsm9BhpaeD7hQdbMQUq6eptdN3ZXlgKCAh37lOJpysdyUBjunvI788bsOjmdpcl3iQ7sOmCD33CVMtTxA2l3Vz9H+y8rFIxg0oIe43muojg71yGprB/obBhQyggyWJCkkLHK3ce7bMVadTcRkXJPDPpyBNC9xmAoLE2YgCh9MZZDMjEIuAou6dJbg1yUIHIpVeP1BJQiPdoGvNSRXpYusGg4iLIacX64gjC0Ka/tyNv/HDKtipPUjhoPXT0GX5hmQOiGViNEeMIN6xz/6GE1OANVQXI0hpyhsRiQwAfcAR6vCbT49f/k1wd2calN/fz/dE0zwScN/tEOgLaSCAzvYDVCqxJ9MBrJVFaPg+9bnI7e3EepIZ4S7f1un15FyD3xc6TVObpkFZNacesFrv7Hx9ZjLXZaH94+E1Z2y6xsrjgz4KPotFbp48YfkZNudqjhMt1CmzQFF6xnIm89Jh+Y3f1362U2QUtKRFtnntHSPtB94o7BgCNavReRYvk6gYOlxjqu3LmfoAl6dI/NJpzCm//nI+EdIs/dqLSorxsfmONTzlxN961Cl/Ptf9IWgH4L3TRpv4vO11k7C1Ws7VRoIcF3J8P11LebnN/KVDeCI+3Q0Bb8op5ZmbsZMuzzudTQ1Y6jYEi2birf9N7F+DxB7HgHZJEY5d3Kkql9BDCKTyVoYjbj/cwQUBVAhGy/qD6XtKyfYtfXg1RuNNfxh3/Zp1oZ1uvaadsgOR49vb7Z0dapWz8C1hNLsQlJ0JRQJSh4rxvas=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(346002)(366004)(396003)(451199015)(66946007)(5660300002)(4326008)(6666004)(36756003)(8676002)(7416002)(8936002)(2906002)(41300700001)(3450700001)(316002)(6506007)(478600001)(66556008)(2616005)(31686004)(26005)(6486002)(6512007)(31696002)(53546011)(66476007)(38100700002)(83380400001)(186003)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VWY4WENvZHBGU2lTclVyN2d4QlM3OUtMSzVpejhFUWJTeXJqa1dScEpkMmgz?=
- =?utf-8?B?cVg0RkpqSklpM2pTMklqMzhURHpQRlRBL3NDWHBab08xK05sVHZuMUNXZkhl?=
- =?utf-8?B?eHJkK3FjcElobnZkV250TWIrR3R0VlRvWEY4Rmdtd3ZkeGdScXZ4MjBkSDRH?=
- =?utf-8?B?UFBQOVVEU21hZFQvRHluakpuTE5Bd2t0VHU3cGFOZEFvT2ZERDcyV1BUbHU2?=
- =?utf-8?B?dzJCMW5FcWVLUTN0aFM0a0lnT0J4aHFpMzhiYXJCdzNYVmp3eUxiUEFISThM?=
- =?utf-8?B?cjAyUWhwbldSVElXTnF6R1RIYktJb1JwNVNLcWV1Z0p1NDN1SFRra1pMaW51?=
- =?utf-8?B?bk1xdDhSckgwYUdUbUJZWlMwTmN4S1BIVlVlYldPWUpKclZvNm1HRyszOFBQ?=
- =?utf-8?B?YjB1SHYyQVh2d01GMHY2MjBoeDQ1Mk9wZ2tyNHhlY0ZzQWpEL2dFdUhLd3Rw?=
- =?utf-8?B?UVZLbHdwRjBqaW9NSzNBbVVQeFVLZEVheTNleW5nSjc3QlhxbHM5alZrWWl3?=
- =?utf-8?B?b1dRbXB0MUkybXA5cmxPVEZVbVhoK2RhakVDVlJJYi8rY0Q2TkJHa1J5VXNF?=
- =?utf-8?B?UktyNTgweUt1ZHV1bjFNYmcvZmpSRkZhWndLQTFMT05JVkdaK1Z3cUtwRnp2?=
- =?utf-8?B?NnZOWHg4YndKNC8wZ2FNeW9VSDRaVkZXQy9TcFhxdlYvcGxEcFhYQ0NWalZr?=
- =?utf-8?B?MDVFTXE3RTVYaU9iMnRMdWFyQUQ4WXhWT21UNzR0ZjBsWUdTWkZwTkN6aTdN?=
- =?utf-8?B?ci8zQzBBblFxMU52K0FDM21QdGo4UUlWUmNYL1MvVnRTTWt4TWE5UTNnUjZh?=
- =?utf-8?B?UXgzK2ViYlAyK09PQ2cyN2NaSWRDcHJCVXBtSTUwZzk5bzVHeTVQTW95NndG?=
- =?utf-8?B?Q3VFL2loc2xXdXdzRGdoUGhLcVYxcjhiTTg2cnpXMlI0NkwxSm9BcHNkZmxH?=
- =?utf-8?B?bWdudzZ0NVlMU1VPRkhZaWI1cWZ1SUxsOE9vSEtBdTdzcEZRN2poYWpKQkVv?=
- =?utf-8?B?N3dJdnM2cWxCVW8raEc1WWE3cm1NVjRqejFkdEpwZWpMTUkwbm53SnR3WGxo?=
- =?utf-8?B?Wk9YRjVzRXRKZzhJdFZJaS9hcEpLMEEzVGV6WU1QcVBOcHBCYmxpbTh0alVy?=
- =?utf-8?B?NzFPZUczR2dJb0VwTTE0cWJNbU82S29vWEZXN1Y2dUpoR3B4UkxBMmZHU1lM?=
- =?utf-8?B?bzMyNkFJcC90bGp6RGlKM2hqQXd6NHQrZzd0YkszYXJpSmNkb1MzZWJjTkxZ?=
- =?utf-8?B?amp0NzRrUng1V3NkOWpiZTM5aTdBY2RzZ3JVU2hYbE0rU2ZGbHNBQzRybmtp?=
- =?utf-8?B?YWQxN05sQ2V4Z2ZlcnZkMHJvMm1DS0R1ZHR6Z1MrajFpdE5lY2FmVHNvek15?=
- =?utf-8?B?VlRkcEpOekpJVGZsR1QzYzN3OUQ4bVVnbGc1YkxtSzBTNm8zM01aWGhtaHkv?=
- =?utf-8?B?Q3RwQVpNRFVkNTBQZzh1MVBQWWNvcDllU01kYkV5RzJ6eUJSTFJRaHVJVUdX?=
- =?utf-8?B?OWR3Z0pVS29ZWWlxUlJieTd1ajZjcmg3YnlGMEZLRUlicTkvSWtML2lZYVJJ?=
- =?utf-8?B?WnNjL2F2S285MWtaTHJhRnBlbmNlMmwwK2pCcEI2ZlVhNzZhSnZYd3VxQmtO?=
- =?utf-8?B?VGVXeVcyVkQ5eGtTTWc0MzlKRVpnMUN6YVBSVGJFbXZMYUlEcFRLaWprN0lz?=
- =?utf-8?B?QVdEZjQwenpNS25RclVYZE83ZHNBbWFOTGRYbUtqMitmWHBQODFRcFRvRXdG?=
- =?utf-8?B?S1k0aTBlc3MyMlk4eG1RWFhJNDdqbHY3YlBUNEIrdWpJQk83SStEeEs0NElm?=
- =?utf-8?B?dFF1eWsyemh3ZW93c0syOTBlQmI4cE1mbkFmcHRpK0tpVGg0d2ZiZWdGUjN6?=
- =?utf-8?B?Qk9JN0N1eHZ3emJaL2JmNUhJUHFtUk1uUmxuV294d05abUFrR0Jac1dWYitR?=
- =?utf-8?B?elNaaHZDZXZCdUg5d3ByeTJmdDhieXl1M0tPSjlPTFNDdnJOT2UwMmZpT1li?=
- =?utf-8?B?SUhiaitLQjkxYXk3d1RqbGZRbDM3UEo1ZU5telE4YUdFb3pJRmNTS2JpR1Q5?=
- =?utf-8?B?c3V2bHU1dXhEWi8vM1lpSXp1ZVJlZG0zSXZqRFNSZ1dVUjgzQW9mRGFZL0ZI?=
- =?utf-8?Q?PAOvhCJ0udNn9DsuuFqBy5n8C?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12a8db5e-4576-47d3-13fd-08dab7895bfe
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 19:36:21.1251
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: muxL0R50gTt8hjgKiRuCohlMQD/9j85CqQv44f3ojJCfoUVrZbZ+sTiNdLsV7XM+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7067
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mailer: WebService/1.1.20783 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
-
-On 10/25/22 18:47, Reinette Chatre wrote:
-> Hi Babu,
->
-> On 10/17/2022 3:26 PM, Babu Moger wrote:
->> The current event configuration can be viewed by the user by reading
->> the configuration file /sys/fs/resctrl/info/L3_MON/mbm_total_config.
->> The event configuration settings are domain specific and will affect all
->> the CPUs in the domain.
+On 10/25/2022 10:58 PM, Greg KH wrote:
+> On Tue, Oct 25, 2022 at 11:45:13AM -0700, Casey Schaufler wrote:
+>> Add an integer member "id" to the struct lsm_id. This value is
+>> a unique identifier associated with each security module. The
+>> values are defined in a new UAPI header file. Each existing LSM
+>> has been updated to include it's LSMID in the lsm_id.
 >>
->> Following are the types of events supported:
->> ====  ===========================================================
->> Bits   Description
->> ====  ===========================================================
->> 6      Dirty Victims from the QOS domain to all types of memory
->> 5      Reads to slow memory in the non-local NUMA domain
->> 4      Reads to slow memory in the local NUMA domain
->> 3      Non-temporal writes to non-local NUMA domain
->> 2      Non-temporal writes to local NUMA domain
->> 1      Reads to memory in the non-local NUMA domain
->> 0      Reads to memory in the local NUMA domain
->> ====  ===========================================================
+>> The LSM ID values are sequential, with the oldest module
+>> LSM_ID_CAPABILITY being the lowest value and the existing
+>> modules numbered in the order they were included in the
+>> main line kernel. The first 32 values (0 - 31) are reserved
+>> for some as yet unknown but important use.
 >>
->> By default, the mbm_total_bytes configuration is set to 0x7f to count
->> all the event types.
->>
->> For example:
->>     $cat /sys/fs/resctrl/info/L3_MON/mbm_total_config
->>     0=0x7f;1=0x7f;2=0x7f;3=0x7f
->>
->>     In this case, the event mbm_total_bytes is currently configured
->>     with 0x7f on domains 0 to 3.
->>
->> Signed-off-by: Babu Moger <babu.moger@amd.com>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
 >> ---
->>  arch/x86/kernel/cpu/resctrl/core.c     |    3 +
->>  arch/x86/kernel/cpu/resctrl/internal.h |    2 +
->>  arch/x86/kernel/cpu/resctrl/rdtgroup.c |   76 ++++++++++++++++++++++++++++++++
->>  3 files changed, 81 insertions(+)
+>>  include/linux/lsm_hooks.h    |  1 +
+>>  include/uapi/linux/lsm.h     | 32 ++++++++++++++++++++++++++++++++
+>>  security/apparmor/lsm.c      |  2 ++
+>>  security/bpf/hooks.c         |  2 ++
+>>  security/commoncap.c         |  2 ++
+>>  security/landlock/setup.c    |  2 ++
+>>  security/loadpin/loadpin.c   |  2 ++
+>>  security/lockdown/lockdown.c |  2 ++
+>>  security/safesetid/lsm.c     |  2 ++
+>>  security/selinux/hooks.c     |  2 ++
+>>  security/smack/smack_lsm.c   |  2 ++
+>>  security/tomoyo/tomoyo.c     |  2 ++
+>>  security/yama/yama_lsm.c     |  2 ++
+>>  13 files changed, 55 insertions(+)
+>>  create mode 100644 include/uapi/linux/lsm.h
 >>
->> diff --git a/arch/x86/kernel/cpu/resctrl/core.c b/arch/x86/kernel/cpu/resctrl/core.c
->> index 46813b1c50c2..758c5d7553a4 100644
->> --- a/arch/x86/kernel/cpu/resctrl/core.c
->> +++ b/arch/x86/kernel/cpu/resctrl/core.c
->> @@ -826,6 +826,9 @@ static __init bool get_rdt_mon_resources(void)
->>  	if (!rdt_mon_features)
->>  		return false;
->>  
->> +	if (mon_configurable)
->> +		mbm_config_rftype_init();
->> +
-> Please move this to be within rdt_get_mon_l3_config().
-Sure.
+>> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+>> index e383e468f742..dd4b4d95a172 100644
+>> --- a/include/linux/lsm_hooks.h
+>> +++ b/include/linux/lsm_hooks.h
+>> @@ -1607,6 +1607,7 @@ struct security_hook_heads {
+>>   */
+>>  struct lsm_id {
+>>  	const char	*lsm;		/* Name of the LSM */
+>> +	int		id;		/* LSM ID */
+> Again, kerneldoc.
 >
->>  	return !rdt_get_mon_l3_config(r, mon_configurable);
->>  }
->>  
->> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
->> index b458f768f30c..326a1b582f38 100644
->> --- a/arch/x86/kernel/cpu/resctrl/internal.h
->> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
->> @@ -15,6 +15,7 @@
->>  #define MSR_IA32_MBA_THRTL_BASE		0xd50
->>  #define MSR_IA32_MBA_BW_BASE		0xc0000200
->>  #define MSR_IA32_SMBA_BW_BASE		0xc0000280
->> +#define MSR_IA32_EVT_CFG_BASE		0xc0000400
->>  
->>  #define MSR_IA32_QM_CTR			0x0c8e
->>  #define MSR_IA32_QM_EVTSEL		0x0c8d
->> @@ -541,5 +542,6 @@ bool has_busy_rmid(struct rdt_resource *r, struct rdt_domain *d);
->>  void __check_limbo(struct rdt_domain *d, bool force_free);
->>  void rdt_domain_reconfigure_cdp(struct rdt_resource *r);
->>  void __init thread_throttle_mode_init(void);
->> +void __init mbm_config_rftype_init(void);
->>  
->>  #endif /* _ASM_X86_RESCTRL_INTERNAL_H */
->> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> index 5f0ef1bf4c78..0982845594d0 100644
->> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> @@ -1423,6 +1423,67 @@ static int rdtgroup_size_show(struct kernfs_open_file *of,
->>  	return ret;
->>  }
->>  
->> +struct mon_config_info {
->> +	u32 evtid;
->> +	u32 mon_config;
->> +};
->> +
->> +static void mon_event_config_read(void *info)
->> +{
->> +	struct mon_config_info *mon_info = info;
->> +	u32 h, msr_index;
->> +
->> +	switch (mon_info->evtid) {
->> +	case QOS_L3_MBM_TOTAL_EVENT_ID:
->> +		msr_index = 0;
->> +		break;
->> +	case QOS_L3_MBM_LOCAL_EVENT_ID:
->> +		msr_index = 1;
->> +		break;
->> +	default:
->> +		/* Not expected to come here */
->> +		return;
->> +	}
->> +
->> +	rdmsr(MSR_IA32_EVT_CFG_BASE + msr_index, mon_info->mon_config, h);
->> +}
->> +
->> +static void mondata_config_read(struct rdt_domain *d, struct mon_config_info *mon_info)
->> +{
->> +	smp_call_function_any(&d->cpu_mask, mon_event_config_read, mon_info, 1);
->> +}
->> +
->> +static int mbm_config_show(struct seq_file *s, struct rdt_resource *r, u32 evtid)
->> +{
->> +	struct mon_config_info mon_info = {0};
->> +	struct rdt_domain *dom;
->> +	bool sep = false;
->> +
->> +	list_for_each_entry(dom, &r->domains, list) {
-> This is done with no protection ... I do not see anything preventing last CPU of
-> a domain going offline around this time taking this domain with it while this code
-> still tries to access its members.
->
-> I think all of this needs protection with rdtgroup_mutex.
-Yes. I agree. Will change it.
->
->> +		if (sep)
->> +			seq_puts(s, ";");
->> +
->> +		mon_info.evtid = evtid;
->> +		mondata_config_read(dom, &mon_info);
->> +
->> +		seq_printf(s, "%d=0x%02x", dom->id, mon_info.mon_config);
-> It does not seem robust to me to use printf field width to manage the data
-> returned from hardware. At this time bits 0 - 6 are supported by hardware ...
-> what happens if hardware starts using bit 7 for something? 
-> It seems to me that the mask introduced later needs to be pulled here to
-> ensure that only the valid bits are handled.
-Ok. Sure.
->
->> +		sep = true;
->> +	}
->> +	seq_puts(s, "\n");
->> +
->> +	return 0;
->> +}
->> +
->> +static int mbm_total_config_show(struct kernfs_open_file *of,
->> +				 struct seq_file *seq, void *v)
->> +{
->> +	struct rdt_resource *r = of->kn->parent->priv;
->> +
->> +	mbm_config_show(seq, r, QOS_L3_MBM_TOTAL_EVENT_ID);
->> +
->> +	return 0;
->> +}
->> +
->>  /* rdtgroup information files for one cache resource. */
->>  static struct rftype res_common_files[] = {
->>  	{
->> @@ -1521,6 +1582,12 @@ static struct rftype res_common_files[] = {
->>  		.seq_show	= max_threshold_occ_show,
->>  		.fflags		= RF_MON_INFO | RFTYPE_RES_CACHE,
->>  	},
->> +	{
->> +		.name		= "mbm_total_config",
->> +		.mode		= 0644,
->> +		.kf_ops		= &rdtgroup_kf_single_ops,
->> +		.seq_show	= mbm_total_config_show,
->> +	},
-> Please only make mode writable when there is support for it.
+> And if this crosses the user/kernel boundry, please make it __u64.  Or
+> __s32?  Something explicit please.
 
-Ok.
+Will do.
 
-Thanks
 
-Babu
+>>  };
+>>  
+>>  /*
+>> diff --git a/include/uapi/linux/lsm.h b/include/uapi/linux/lsm.h
+>> new file mode 100644
+>> index 000000000000..d5bcbb9375df
+>> --- /dev/null
+>> +++ b/include/uapi/linux/lsm.h
+>> @@ -0,0 +1,32 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>> +/*
+>> + * Linus Security Modules (LSM) - User space API
+> s/Linus/Linux/.
+
+Whoops.
 
 >
->>  	{
->>  		.name		= "cpus",
->>  		.mode		= 0644,
->> @@ -1627,6 +1694,15 @@ void __init thread_throttle_mode_init(void)
->>  	rft->fflags = RF_CTRL_INFO | RFTYPE_RES_MB;
->>  }
->>  
->> +void __init mbm_config_rftype_init(void)
->> +{
->> +	struct rftype *rft;
->> +
->> +	rft = rdtgroup_get_rftype_by_name("mbm_total_config");
->> +	if (rft)
->> +		rft->fflags = RF_MON_INFO | RFTYPE_RES_CACHE;
->> +}
->> +
->>  /**
->>   * rdtgroup_kn_mode_restrict - Restrict user access to named resctrl file
->>   * @r: The resource group with which the file is associated.
->>
->>
 >
-> Reinette
+>> + *
+>> + * Copyright (C) 2022 Casey Schaufler <casey@schaufler-ca.com>
+>> + * Copyright (C) Intel Corporation
+> No date for Intel?
 
--- 
-Thanks
-Babu Moger
+The latest guidance I have received is that Intel does not want a date.
 
+>> + */
+>> +
+>> +#ifndef _UAPI_LINUX_LSM_H
+>> +#define _UAPI_LINUX_LSM_H
+>> +
+>> +/*
+>> + * ID values to identify security modules.
+>> + * A system may use more than one security module.
+>> + *
+>> + * LSM_ID_XXX values 0 - 31 are reserved for future use
+> Reserved for what?  Why?
+
+You're not the first person to ask. I'll remove the reserved values
+for the next version. The invalid value has to change as the id field
+is going to be unsigned.
+
+>
+> thanks,
+>
+> greg k-h
