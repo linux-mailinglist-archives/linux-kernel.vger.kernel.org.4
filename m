@@ -2,47 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4874B60D90F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 771C360D911
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 04:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiJZCGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 22:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
+        id S231640AbiJZCIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 22:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiJZCGr (ORCPT
+        with ESMTP id S230327AbiJZCIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 22:06:47 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C777AC4BD;
-        Tue, 25 Oct 2022 19:06:45 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MxscR07cpzHv3L;
-        Wed, 26 Oct 2022 10:06:31 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 26 Oct 2022 10:06:43 +0800
-Received: from ubuntu1804.huawei.com (10.67.175.36) by
- dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 26 Oct 2022 10:06:43 +0800
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <chenzhongjin@huawei.com>
-Subject: [PATCH] net: dsa: Fix possible memory leaks in dsa_loop_init()
-Date:   Wed, 26 Oct 2022 10:03:21 +0800
-Message-ID: <20221026020321.58615-1-chenzhongjin@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 25 Oct 2022 22:08:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40498B14EB;
+        Tue, 25 Oct 2022 19:08:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAE7361BE6;
+        Wed, 26 Oct 2022 02:08:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38AC8C433C1;
+        Wed, 26 Oct 2022 02:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666750080;
+        bh=0C3A6REuaewLmHH5E6YwXG5jrIKOyFuUNR9RkKLw9IU=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=m9iKShnnwhLbiPWx2w7g9PXODebLnovzuRsSnzNbL/zeRqf+w7wnuHt2WyvYtn1Ny
+         jsk2o2p09U/rdliEzdXGsAYf7egrCekTiul4MpC1J0mDdofpADju2pq33wVF8OPazh
+         QLIJqfJ0XAOWukihNpEXbN4NrVIsR1c30WnOn5bxep8Iva0PqmaicHnvZgLKZd5URZ
+         xhCrYh+vXDr9m/bde6lsmSLldE5ydZ5+5eBKTHAJGSf9oc6hyk2a97OYCcM21exWQ0
+         +ZeUKJT3wfIPOC0cGtMxtIgF6HstIcSllG+cOZylmLOuW1IBirSiQEIp+irIoNzwGy
+         e164CJ/ynBOPw==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.36]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20221018-clk-range-checks-fixes-v1-4-f3ef80518140@cerno.tech>
+References: <20221018-clk-range-checks-fixes-v1-0-f3ef80518140@cerno.tech> <20221018-clk-range-checks-fixes-v1-4-f3ef80518140@cerno.tech>
+Subject: Re: [PATCH 4/4] clk: Warn if we register a mux without determine_rate
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Maxime Ripard <maxime@cerno.tech>, linux-clk@vger.kernel.org
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Tue, 25 Oct 2022 19:07:58 -0700
+User-Agent: alot/0.10
+Message-Id: <20221026020800.38AC8C433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,100 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmemleak reported memory leaks in dsa_loop_init():
+Quoting Maxime Ripard (2022-10-18 06:52:59)
+> The determine_rate hook allows to select the proper parent and its rate
+> for a given clock configuration. On another hand, set_parent is there to
+> change the parent of a mux.
+>=20
+> Some clocks provide a set_parent hook but don't implement
+> determine_rate. In such a case, set_parent is pretty much useless since
+> the clock framework will always assume the current parent is to be used,
+> and we will thus never change it.
+>=20
+> This situation can be solved in two ways:
+>   - either we don't need to change the parent, and we thus shouldn't
+>     implement set_parent;
+>   - or we don't want to change the parent, in this case we should set
+>     CLK_SET_RATE_NO_REPARENT;
+>   - or we're missing a determine_rate implementation.
+>=20
+> The latter is probably just an oversight from the driver's author, and
+> we should thus raise their awareness about the fact that the current
+> state of the driver is confusing.
 
-kmemleak: 12 new suspected memory leaks
+There is another case which is a leaf clk that is a mux where you only
+expect clk_set_parent() to be used, and not clk_set_rate(). This use
+case is odd though, so I'm not sure how much we care.
 
-unreferenced object 0xffff8880138ce000 (size 2048):
-  comm "modprobe", pid 390, jiffies 4295040478 (age 238.976s)
-  backtrace:
-    [<000000006a94f1d5>] kmalloc_trace+0x26/0x60
-    [<00000000a9c44622>] phy_device_create+0x5d/0x970
-    [<00000000d0ee2afc>] get_phy_device+0xf3/0x2b0
-    [<00000000dca0c71f>] __fixed_phy_register.part.0+0x92/0x4e0
-    [<000000008a834798>] fixed_phy_register+0x84/0xb0
-    [<0000000055223fcb>] dsa_loop_init+0xa9/0x116 [dsa_loop]
-    ...
+>=20
+> It's not clear at this point how many drivers are affected though, so
+> let's make it a warning instead of an error for now.
+>=20
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> ---
+>  drivers/clk/clk.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> index 57b83665e5c3..11c41d987ff4 100644
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -3700,6 +3700,11 @@ static int __clk_core_init(struct clk_core *core)
+>                 goto out;
+>         }
+> =20
+> +       /* TODO: Promote to an error */
 
-There are two reasons for memleak in dsa_loop_init().
+The documentation should be updated in this patch (see the table of
+hardware characteristics in Documentation/driver-api/clk.rst).
 
-First, fixed_phy_register() create and register phy_device:
+> +       if (core->ops->set_parent && !core->ops->determine_rate)
+> +               pr_warn("%s: %s must implement .set_parent & .determine_r=
+ate\n",
 
-fixed_phy_register()
-  get_phy_device()
-    phy_device_create() # freed by phy_device_free()
-  phy_device_register() # freed by phy_device_remove()
+You can grep for it:
 
-But fixed_phy_unregister() only calls phy_device_remove().
-So the memory allocated in phy_device_create() is leaked.
+ $ git grep -W 'struct clk_ops .*=3D'
 
-Second, when mdio_driver_register() fail in dsa_loop_init(),
-it just returns and there is no cleanup for phydevs.
+but I'm fairly certain a coccinelle script can detect most of these
+because clk_ops are usually statically defined (although not always).
 
-Fix the problems by catching the error of mdio_driver_register()
-in dsa_loop_init(), then calling both fixed_phy_unregister() and
-phy_device_free() to release phydevs.
-Also add a function for phydevs cleanup to avoid duplacate.
-
-Fixes: 98cd1552ea27 ("net: dsa: Mock-up driver")
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
----
- drivers/net/dsa/dsa_loop.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/dsa/dsa_loop.c b/drivers/net/dsa/dsa_loop.c
-index b9107fe40023..5b139f2206b6 100644
---- a/drivers/net/dsa/dsa_loop.c
-+++ b/drivers/net/dsa/dsa_loop.c
-@@ -376,6 +376,17 @@ static struct mdio_driver dsa_loop_drv = {
- 
- #define NUM_FIXED_PHYS	(DSA_LOOP_NUM_PORTS - 2)
- 
-+static void dsa_loop_phydevs_unregister(void)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < NUM_FIXED_PHYS; i++)
-+		if (!IS_ERR(phydevs[i])) {
-+			fixed_phy_unregister(phydevs[i]);
-+			phy_device_free(phydevs[i]);
-+		}
-+}
-+
- static int __init dsa_loop_init(void)
- {
- 	struct fixed_phy_status status = {
-@@ -383,23 +394,23 @@ static int __init dsa_loop_init(void)
- 		.speed = SPEED_100,
- 		.duplex = DUPLEX_FULL,
- 	};
--	unsigned int i;
-+	unsigned int i, ret;
- 
- 	for (i = 0; i < NUM_FIXED_PHYS; i++)
- 		phydevs[i] = fixed_phy_register(PHY_POLL, &status, NULL);
- 
--	return mdio_driver_register(&dsa_loop_drv);
-+	ret = mdio_driver_register(&dsa_loop_drv);
-+	if (ret)
-+		dsa_loop_phydevs_unregister();
-+
-+	return ret;
- }
- module_init(dsa_loop_init);
- 
- static void __exit dsa_loop_exit(void)
- {
--	unsigned int i;
--
- 	mdio_driver_unregister(&dsa_loop_drv);
--	for (i = 0; i < NUM_FIXED_PHYS; i++)
--		if (!IS_ERR(phydevs[i]))
--			fixed_phy_unregister(phydevs[i]);
-+	dsa_loop_phydevs_unregister();
- }
- module_exit(dsa_loop_exit);
- 
--- 
-2.17.1
-
+Either way I already see that 'owl_comp_div_ops' will trigger this
+warning. And 'at91sam9x5_smd_ops' looks even more likely. Given that I'm
+not super keen on applying this patch.
