@@ -2,74 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B560660DEED
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F8E60DE89
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233382AbiJZKjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 06:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49938 "EHLO
+        id S233158AbiJZKC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 06:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJZKjp (ORCPT
+        with ESMTP id S229995AbiJZKC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 06:39:45 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06C34D4C9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 03:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1666780641; bh=2o2vObTUWUB0Kdk6K5kLMVJ/u7FvQKx9DpX0JHVrhzY=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=n9MF0KHexYUfDnyDE20lf405Xu6eQgg5AD5PItaKVVcUlo/0pSqv2Uo8X9GKspeLF
-         kIQHC/9qfA8NkdVphP9gpGmrjfwXyXJgkE0cfHw0ToeWMZHAGe1rSE8zlb0NOCrEd3
-         8Py/EIBBA+0A8igYR+rev85Ac5ZXBOYREYl3lbPs=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via [213.182.55.206]
-        Wed, 26 Oct 2022 12:37:21 +0200 (CEST)
-X-EA-Auth: H2CtVnUc+erUdiJhAzCjTta69U9/k8Kq8sa4I6xa+4zRi0CNntGfIIw5oc42fnlqqx4kU74pVOSz5wALBQUyjFZB9nU7T7yB
-Date:   Wed, 26 Oct 2022 08:58:44 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] staging: rtl8192u: remove unused macro definition
-Message-ID: <b7053d8737c048d6a878609f0ec24d66b18c5abd.1666754500.git.drv@mailo.com>
-References: <cover.1666754500.git.drv@mailo.com>
+        Wed, 26 Oct 2022 06:02:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AB59187B;
+        Wed, 26 Oct 2022 03:02:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3ABF91F8B3;
+        Wed, 26 Oct 2022 10:02:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1666778574; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vR6f3Clxj5CrL08Ju/vI52Uneo3/xjRAjpwZPragrGg=;
+        b=bz4318npD5LKv6OgOsEgmjuAojToyggPbdIHJs+iX/3aAH9iloZt/lD4hEnPq2JA4M9/HV
+        vfPa7c11Rx6zwnA5+IwCiNsiojNpcQRnIs/pnktGoXBljMw7Lx9Cjm25l90IkoGBfBgb5O
+        0y4PbMiSoOsh31BaS0/kWFuTCsfhwGA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1666778574;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vR6f3Clxj5CrL08Ju/vI52Uneo3/xjRAjpwZPragrGg=;
+        b=Y45GjEJ0tLrfb/Pq4dg6Qwyowx3FC6E9SSohCtxbtu8IXqD7Hex+wvaUeRyo4Lg/n28+SS
+        /+6dFeKiTCxAFOCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 12EC913A77;
+        Wed, 26 Oct 2022 10:02:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IYvhA84FWWOEcwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 26 Oct 2022 10:02:54 +0000
+Message-ID: <a2e15c0d-dd0f-dcf1-ca53-c37333bdfe99@suse.cz>
+Date:   Wed, 26 Oct 2022 12:02:53 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1666754500.git.drv@mailo.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3] mempool: Do not use ksize() for poisoning
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        Marco Elver <elver@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20221025233421.you.825-kees@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221025233421.you.825-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pre-processor macros that are defined but are never used should be
-cleaned up to avoid unexpected usage.
+On 10/26/22 01:36, Kees Cook wrote:
+> Nothing appears to be using ksize() within the kmalloc-backed mempools
+> except the mempool poisoning logic. Use the actual pool size instead
+> of the ksize() to avoid needing any special handling of the memory as
+> needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE.
+> 
+> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+> Link: https://lore.kernel.org/lkml/f4fc52c4-7c18-1d76-0c7a-4058ea2486b9@suse.cz/
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/staging/rtl8192u/ieee80211/ieee80211.h | 2 --
- 1 file changed, 2 deletions(-)
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-index 00c07455cbb3..0b3dda59d7c0 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-@@ -230,8 +230,6 @@ struct cb_desc {
- #define ieee80211_unregister_crypto_ops ieee80211_unregister_crypto_ops_rsl
- #define ieee80211_get_crypto_ops	ieee80211_get_crypto_ops_rsl
-
--#define ieee80211_ccmp_null		ieee80211_ccmp_null_rsl
--
- #define free_ieee80211			free_ieee80211_rsl
- #define alloc_ieee80211			alloc_ieee80211_rsl
-
---
-2.30.2
-
-
+> ---
+> v3: remove ksize() calls instead of adding kmalloc_roundup_size() calls (vbabka)
+> v2: https://lore.kernel.org/lkml/20221018090323.never.897-kees@kernel.org/
+> v1: https://lore.kernel.org/lkml/20220923202822.2667581-14-keescook@chromium.org/
+> ---
+>  mm/mempool.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/mempool.c b/mm/mempool.c
+> index 96488b13a1ef..54204065037d 100644
+> --- a/mm/mempool.c
+> +++ b/mm/mempool.c
+> @@ -58,7 +58,7 @@ static void check_element(mempool_t *pool, void *element)
+>  {
+>  	/* Mempools backed by slab allocator */
+>  	if (pool->free == mempool_free_slab || pool->free == mempool_kfree) {
+> -		__check_element(pool, element, ksize(element));
+> +		__check_element(pool, element, (size_t)pool->pool_data);
+>  	} else if (pool->free == mempool_free_pages) {
+>  		/* Mempools backed by page allocator */
+>  		int order = (int)(long)pool->pool_data;
+> @@ -81,7 +81,7 @@ static void poison_element(mempool_t *pool, void *element)
+>  {
+>  	/* Mempools backed by slab allocator */
+>  	if (pool->alloc == mempool_alloc_slab || pool->alloc == mempool_kmalloc) {
+> -		__poison_element(element, ksize(element));
+> +		__poison_element(element, (size_t)pool->pool_data);
+>  	} else if (pool->alloc == mempool_alloc_pages) {
+>  		/* Mempools backed by page allocator */
+>  		int order = (int)(long)pool->pool_data;
+> @@ -112,7 +112,7 @@ static __always_inline void kasan_poison_element(mempool_t *pool, void *element)
+>  static void kasan_unpoison_element(mempool_t *pool, void *element)
+>  {
+>  	if (pool->alloc == mempool_alloc_slab || pool->alloc == mempool_kmalloc)
+> -		kasan_unpoison_range(element, __ksize(element));
+> +		kasan_unpoison_range(element, (size_t)pool->pool_data);
+>  	else if (pool->alloc == mempool_alloc_pages)
+>  		kasan_unpoison_pages(element, (unsigned long)pool->pool_data,
+>  				     false);
 
