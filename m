@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D10660E9C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2F160E9C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234930AbiJZUEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 16:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S234812AbiJZUEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 16:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234821AbiJZUER (ORCPT
+        with ESMTP id S234729AbiJZUEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 16:04:17 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1610B110B10
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:04:15 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id s17so11503710qkj.12
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:04:15 -0700 (PDT)
+        Wed, 26 Oct 2022 16:04:08 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F525EE08A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:04:07 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id j6so8123942qvn.12
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Pco6XP3zzlzKkHJ/8k4uES/pSob9fk0mMY+1kXvS6TY=;
-        b=JwHHwywsMb9iQbsPockEFVNMIDxExD2U8RnZfFgB5sQQbVmOePQhpU9USsB3t6B4/G
-         zkJ3CUAaXNGbx7oJwoAUfWQV7Un5b1XTA3KE6NIZKMy31msSxtkbl/Oz2hbvWn6DSPhg
-         OKS8lKgs2mmDQydn+5wXf+POR5Xxmt7cRj9uhLrvE5RZ8BDRn/eB4VnauOM1i+XixRWS
-         flCvJGUQAQTvC6QWgTxiQ4gBzNzqKTyN74UeL+tpHpOUb5NRuhTPg/vPh/8rpPEGY0Ha
-         TKnai6UGH+K8DOJE2r7vPETcoOjka7kmBg6S5PlWlOAlC5/x8JoaDg3VTYS5mDtywi2I
-         AVuA==
+        bh=6I69Zy+eBkLEpLnPbCVtCr+lW3hmKUksCslyxamftAo=;
+        b=g1+d1Kw0pvIFhB+RjVtdnJXxuNZVtmjd4lpFq0YQkzmXp9NSoHt6sgqNHf8KFBAc4I
+         /+sDTgDP40Uyr76x6FgGrFQSQ6ebbaEvKhivMaqLvVyPpOvLA0HvUa51b595dE3YRLqa
+         UGuQz2L5AYWzIQXIy0KgfiERC0C2b5RuV2/4lsce2QkWS/qflExs3KTiWFqBIh4Yg8Kp
+         54ra0AwK51pYRWHg/kSpKbUSlm/w5wRICMfSZoA3gyaRrHKHHhzrYjL3IXdqGR2vvGLB
+         /4IYLFxDqBbkSwv7AHwsvL4e3l0piWrCjJFgg0KGf+E3QC5OspsSZlWCGIpvLkueyzd8
+         j5Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Pco6XP3zzlzKkHJ/8k4uES/pSob9fk0mMY+1kXvS6TY=;
-        b=dFbxmsCQo7IdBGsr+PQy+7aNWumg2mDoeLBXtNZy0+IAWiPvbkEc9DHT6vapCWbD8S
-         6l/ajQ8OwCGELMLbnRYZ/F+vA2wQ6bjfVXLP9AjkBE1pnj5W5m1+QgTT+Fh7m8SjIVVG
-         oqP/ZmVGJUJfSlB63hvW0tZyiOI4xWTsRQUmEKXvLBtYVpi2jrXO0tD9ufGsL19FBTx0
-         nlMs3TlhLm/MUfQz0d/dKxWk3WFFmYZnn3Pr+EOpZEnEcUWMfgEugWW88yigkLS0wAEN
-         VIivqBC0ahi7oJmoR4Q7uxXXMgc32EhX1fSsMadB/+oo2QfxBQqDlJH3nNFry9avsfbk
-         9IAQ==
-X-Gm-Message-State: ACrzQf2ifB9KDkD8q3XrIMM4N3m0Nt0MZE2rzW+5cmgfn050QbQMOJ86
-        fswNnXukfMg+neiUrvJlhcAj4WYU7c6CNg==
-X-Google-Smtp-Source: AMsMyM6IbRSXEB6Fmc2djOZ0B0rJEV/aVUdSza0WpoDlkxwlChcr7aww0a6H3dSgeptN56TRdQMPyg==
-X-Received: by 2002:a05:620a:13b6:b0:6ee:cf79:bfa1 with SMTP id m22-20020a05620a13b600b006eecf79bfa1mr32285840qki.15.1666814645256;
-        Wed, 26 Oct 2022 13:04:05 -0700 (PDT)
+        bh=6I69Zy+eBkLEpLnPbCVtCr+lW3hmKUksCslyxamftAo=;
+        b=2ABfMihKTyd5ycqhu3cdBMNpNXnnFf+SDsrmpPzv/WkyCgn10pn7av0Tn1Qj9zzCyp
+         XmNd7RkkriAl2D0O3psJgyk+PVEaIo4rDf02QfhW1vSgGpOhBzqgT/9JFr8r5vhXqPjP
+         s/u/eJY08EvNSEjQPHNBw9CFXEROh5NhBLuWveTHOHhkaIMFVFw4eiXa4EvFRI6T800x
+         cVtTR7ebmhPwoe9/u/roxHJUAeJHKvPPQMW+weq675h8FzdFNWWS8puOVWnljoJEJi1e
+         CPsxrhFvAic3YAtiFlz+YE6qn6+GMK2FgBB/AsEWPN5osodorUFYIo+y3Bhdzde0F37a
+         YNtw==
+X-Gm-Message-State: ACrzQf2LqRw8uSY8TJ/tRODelzc3Rxyz1uCZLaSXDePZyjEv4zMFgLGe
+        vF49Qq4Z58hUiTU9GN935DAByg==
+X-Google-Smtp-Source: AMsMyM73a1oynvfy1v4YrEeqUwACBe7tyz2zuBTsaDQy1tHN6OiYSIj+H50fKDKBHlBVaGY8Xl8o9w==
+X-Received: by 2002:a05:6214:2346:b0:496:ba45:bdb0 with SMTP id hu6-20020a056214234600b00496ba45bdb0mr39010792qvb.47.1666814646760;
+        Wed, 26 Oct 2022 13:04:06 -0700 (PDT)
 Received: from krzk-bin.. ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id de30-20020a05620a371e00b006e99290e83fsm2942089qkb.107.2022.10.26.13.04.03
+        by smtp.gmail.com with ESMTPSA id de30-20020a05620a371e00b006e99290e83fsm2942089qkb.107.2022.10.26.13.04.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 13:04:04 -0700 (PDT)
+        Wed, 26 Oct 2022 13:04:06 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH 2/4] arm64: dts: qcom: sm8450: disable SDHCI SDR104/SDR50 on all boards
-Date:   Wed, 26 Oct 2022 16:03:55 -0400
-Message-Id: <20221026200357.391635-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/4] arm64: dts: qcom: sm8450-hdk: add SDHCI for microSD
+Date:   Wed, 26 Oct 2022 16:03:56 -0400
+Message-Id: <20221026200357.391635-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221026200357.391635-1-krzysztof.kozlowski@linaro.org>
 References: <20221026200357.391635-1-krzysztof.kozlowski@linaro.org>
@@ -78,48 +78,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SDHCI on SM8450 HDK also has problems with SDR104/SDR50:
-
-  mmc0: card never left busy state
-  mmc0: error -110 whilst initialising SD card
-
-so I think it is safe to assume this issue affects all SM8450 boards.
-Move the quirk disallowing these modes to the SoC DTSI, to spare people
-working on other boards the misery of debugging this issue.
+The HDK8450 has microSD card slot.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts | 2 --
- arch/arm64/boot/dts/qcom/sm8450.dtsi                          | 3 +++
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-index 718c690af8ad..ae8ba297b0b6 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dts
-@@ -556,8 +556,6 @@ &sdhc_2 {
- 	pinctrl-1 = <&sdc2_sleep_state &sdc2_card_det_n>;
- 	vmmc-supply = <&pm8350c_l9>;
- 	vqmmc-supply = <&pm8350c_l6>;
--	/* Forbid SDR104/SDR50 - broken hw! */
--	sdhci-caps-mask = <0x3 0x0>;
- 	no-sdio;
- 	no-mmc;
- 	status = "okay";
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 1df5c964c6f7..6800e05a549d 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -3412,6 +3412,9 @@ sdhc_2: sdhci@8804000 {
- 			bus-width = <4>;
- 			dma-coherent;
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+index 3ccbdd2ed734..f4a5f1a8e573 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
++++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
+@@ -426,6 +426,18 @@ &remoteproc_slpi {
+ 	firmware-name = "qcom/sm8450/slpi.mbn";
+ };
  
-+			/* Forbid SDR104/SDR50 - broken hw! */
-+			sdhci-caps-mask = <0x3 0x0>;
++&sdhc_2 {
++	cd-gpios = <&tlmm 92 GPIO_ACTIVE_HIGH>;
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&sdc2_default_state &sdc2_card_det_n>;
++	pinctrl-1 = <&sdc2_sleep_state &sdc2_card_det_n>;
++	vmmc-supply = <&vreg_l9c_2p96>;
++	vqmmc-supply = <&vreg_l6c_1p8>;
++	no-sdio;
++	no-mmc;
++	status = "okay";
++};
 +
- 			status = "disabled";
+ &tlmm {
+ 	gpio-reserved-ranges = <28 4>, <36 4>;
  
- 			sdhc2_opp_table: opp-table {
+@@ -461,6 +473,13 @@ pinconf {
+ 			bias-pull-down;
+ 		};
+ 	};
++
++	sdc2_card_det_n: sd-card-det-n-state {
++		pins = "gpio92";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-pull-up;
++	};
+ };
+ 
+ &uart7 {
 -- 
 2.34.1
 
