@@ -2,140 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F50660E445
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0E660E447
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbiJZPPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43732 "EHLO
+        id S234480AbiJZPPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234479AbiJZPPD (ORCPT
+        with ESMTP id S234321AbiJZPPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:15:03 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2076.outbound.protection.outlook.com [40.92.98.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328F133374;
-        Wed, 26 Oct 2022 08:15:01 -0700 (PDT)
+        Wed, 26 Oct 2022 11:15:48 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2045.outbound.protection.outlook.com [40.107.92.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942FD7FF84;
+        Wed, 26 Oct 2022 08:15:44 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mvXNKLt+szKOjJjGwp496Q9wFvv/7WEFIeN0jfoitve/6yWwZ9mx1plfZHMgZ2vhlqiEuAW5LUzDo8PKkXb3mbOBiEmitKpcZKqvZyLe+7zFUXYjP6fLa0NmspysVov3UenTvE6G5F0zKmqMuGa2/f28VEXc2BcjDNdoE4L6Z4ZurnSyD2dcXjGXExZs2Y507qxW8+D20XIA+Oi/57dvrixpsFVMAS3JAdoUlkB/tJz91NvnnOSvyDT9ceOpj94pQ5bTxAZL8o25YOXC57bpeGrYhrQTp/TM1gbp/Z/BfwXkSn90qbkymMafi6G9wPUT8RKC0rmo4glFIGi+B2fwlw==
+ b=XRQl61kOzm8m2XOOfFZbpbAo6UpZ8R9m2zASxbgbEh27B1bSXbMwnkcpDj8BFxo1pgJ+UjelX+NicsVwb3ecY2pT9WVhG0QvUjoECNmj6uZmZ5culAGyNzM8zD09B/pgqN1cYgU5l7Ry7bH2/gW0eD36f64m+XFpNRdG4VaTTABAGI7JQB3wpmuGf3F+bovmiF9WCiitBTM4FmTWSIFKknPIvAS0a0KX77lbSUZ99yJUnA1rg8IGdKSwGmNUEWAszHH/42c6ivr5Ezy7OgKcBgADilUU3u/uBF8njw9G4RHdki9PTSxt7kQBo2kdxdWFqtSItuNwxj4oMx20AybPMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ulOj1YnM6PAGnJqoucXx6hZyUUZwGh3j9S5ZMoReXfw=;
- b=PnDE+jjQG/8PaJ+2C3W3R7YiZ7boT3AXYI175GQnxD8cqgBGYPMVeapXmO4DlJGDXsWPi7ahlGnTzVQW+mNJSFzbuEmp7t1CvU8iYk3kwBUCt5O8RdTYYgIik26cbmSDwfl8GU3kuCXxt5DIh+3XIxd5hQzoyXI/9MBXXWRZ/JOATuAYJ+JxQUZ1m6fNwq3H9ymbBvchKjG9y+T4ZqfzNCN/BA5aeYwzCYrZIf4BIMOa+QiKC91+r6L70Cjhxtx80zSyOhXF5k3mlWjeYGStXI3JRmut4q6N/i58CrAwek4PypnwZvc78FqSS1D6NsYKo8vlLRT2auohWcElteIV5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=OBoywryoQlg9SixBF+WF9QRtiOzpkB6a9mEh0+x21c4=;
+ b=SfSI0HIHQwkrD0qSaBeW0BHpbWNK9wxCp4/3X44VIzRgWoc3scNocBLoumNiKxJamBrfk9u3LUBAicnXwm6sVILlT3e69qyaRdGCtZdRMHfUdGde69w/VicGHGq+vY8ud1MG4b9H5BRV3Fh1yZXhakGnqdz/oYHJ8hMiKEAD1wRT2tLIsGo6xTrpuoDAWXQEiJV+JzKmv8lwUbx6cw5HVviABXvJaNhnBqgTCYGciyLQvRKUhCTJg1KyXblOXDaRp3sKIvtkTo5bh24q6SRDiRPk0SkUpBwex+LuOy7U4jNZR24kkvpiL9E+dyVeDDCuOfLdF+FxWBKOcUgPd7y3nQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=amd.com smtp.mailfrom=xilinx.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ulOj1YnM6PAGnJqoucXx6hZyUUZwGh3j9S5ZMoReXfw=;
- b=TwBnxMtovIlt6ABTTZMnaCswrB8WMU40GgSzMa7xn6n9Z9K7QwauqIGxVy38q05St8rXgab+qa1hYHNM9vMsqhMMJNf4bJ8E88t2OZ95K3h4LnaEKCCX23UnKtsMSClFMUqBkMslJkVSifz6ZjRYon4SakFpJvuAJoB6I/TC37+RjVLW3k22YMeiO5NdfTF6MBNjUKoBbuPAnCtaJAclSp33eh8LVNUlDUgz4CAdt8IbAWGEIiFmJhw5H1z/sWRZXm0nUq5iUw8TpQJb7My+W19VMyWLv1ButVcLXx+UZ15XC7fWQBkSKMOECkVkGZTKnHvKJoSEXzdfigsNIC4gCw==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by TYCP286MB1756.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:11d::8) with
+ bh=OBoywryoQlg9SixBF+WF9QRtiOzpkB6a9mEh0+x21c4=;
+ b=j2Nm4rmwAuDip9XtTT0Jsp8wBaTfnOXn8vH/4baBlwNsC5QiyS6wEz6AbplcbLxqspydCbU9x5HiXjp+TN+bP8algw01Fi+Vv2CHDgLCA3dOk1WSxwGdO6NpA/bKROeGFLr2CyPJgQ9tc7IhtSnD2TXVj6U9HOB2pN0dx38Y6DU=
+Received: from DM6PR08CA0050.namprd08.prod.outlook.com (2603:10b6:5:1e0::24)
+ by SJ0PR02MB7661.namprd02.prod.outlook.com (2603:10b6:a03:328::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Wed, 26 Oct
- 2022 15:14:59 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::4722:62da:4861:9d73]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::4722:62da:4861:9d73%3]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
- 15:14:59 +0000
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     axboe@kernel.dk
-Cc:     hch@lst.de, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
-Subject: [PATCH] block: simplify blksize_bits() implementation
-Date:   Wed, 26 Oct 2022 23:14:46 +0800
-Message-ID: <TYCP286MB2323169D81A806A7C1F7FDF1CA309@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [TIpoowrWW5cdtGWtQp56rVRRu8UThlMfSrye1qb/IJU=]
-X-ClientProxiedBy: SG2PR03CA0107.apcprd03.prod.outlook.com
- (2603:1096:4:7c::35) To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20221026151446.700736-1-set_pte_at@outlook.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Wed, 26 Oct
+ 2022 15:15:42 +0000
+Received: from DM3NAM02FT004.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:1e0:cafe::e7) by DM6PR08CA0050.outlook.office365.com
+ (2603:10b6:5:1e0::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28 via Frontend
+ Transport; Wed, 26 Oct 2022 15:15:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ DM3NAM02FT004.mail.protection.outlook.com (10.13.5.122) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5746.16 via Frontend Transport; Wed, 26 Oct 2022 15:15:42 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 26 Oct 2022 08:15:40 -0700
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2507.9 via Frontend Transport; Wed, 26 Oct 2022 08:15:40 -0700
+Envelope-to: git@amd.com,
+ radhey.shyam.pandey@amd.com,
+ davem@davemloft.net,
+ edumazet@google.com,
+ kuba@kernel.org,
+ pabeni@redhat.com,
+ linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org
+Received: from [172.23.64.3] (port=40015 helo=xhdvnc103.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <radhey.shyam.pandey@xilinx.com>)
+        id 1oni84-000D2d-KA; Wed, 26 Oct 2022 08:15:40 -0700
+Received: by xhdvnc103.xilinx.com (Postfix, from userid 13245)
+        id 7A38710550D; Wed, 26 Oct 2022 20:45:39 +0530 (IST)
+From:   Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <michal.simek@xilinx.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <git@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Subject: [PATCH] net: emaclite: update reset_lock member documentation
+Date:   Wed, 26 Oct 2022 20:45:24 +0530
+Message-ID: <1666797324-1780-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|TYCP286MB1756:EE_
-X-MS-Office365-Filtering-Correlation-Id: a9d8ff43-52c5-402c-06d0-08dab764d8ba
-X-MS-Exchange-SLBlob-MailProps: AZnQBsB9XmqoBV1gSYdwKgf2JzaEM+p/V60CjNbcLTV/TAw8Tf6FSPBhhwm4/p3B5IjFKcJ9W0mELPqs/jnbge56L2EEygSKummp+RH4GTfruf7W718+vIyAIezOasLuFpB83nNaU9MwPPDqC7yLM51IbHn4WhOGu0djBGfKNooIV708IAB6jP840Y68KOJVFj7x+ND3koty+cpie33ZIFroifB7fkRrzf3hYRBJy4JGVR/uGkzXxp67/mx2X0Y2aafRzJD/z5+PKm4aC4PsFS17k6+f7Lh44/F1nPzBG3Umnk5nkvsCtxblLuzh3uKWg06Nv3KclhsMZyzJ4xNo4I8owpsF4tPSIKQGA+uITAxvdfyRruFK8U2QzHarEJrQtHF5iMhr5UOA4T39gmIIatdYNaPA4zSNFWRegmEne9+lLUqm/7XMRJb30g0XOEToGVWRbtvV4wm1xDKjaTn9o74pMqJsN1ku3h9My0j2fI5vLRX/n37+YMK+gv0ZTUqZxVpYXm/xPpsAPV2q08fR/AkthcIBto2bbaUwU7tjnT8fc3gjurxlqP1csOqHQQ+cTqiX1Mezbe3iJS0XaOogB7gjSmVprIRBE9L26YfG7zGJ/2F2OqQTS5jUh3JM9rYPeUHk7Nif1H1tVLyL5r76n6rdl3WhEp5igc8GXihlZVxB5XtDh+CtjyQq9/D1N6G9kShQCTQMbLSVFdWTMjesfWOeMUEcmX3oA2/ssBiRX7T/UuTjhDa6w05B5IytqGtkSdgKogROWD8=
+X-MS-TrafficTypeDiagnostic: DM3NAM02FT004:EE_|SJ0PR02MB7661:EE_
+X-MS-Office365-Filtering-Correlation-Id: b1b063ff-51d6-499a-de6d-08dab764f2ef
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vr9mLKRL83ATj+AemunHQvK9zf8oX4VF/yW9XjRd3sMjJLdul6HrL/RYOrZRykKbwp3Srj4FsH8PuB2Ydby1aXLZ1j8EAAEgMdhlqR1AxxVHAk5eNaAH1Wyc/hyZf9BeCYGHxvG13l3IqgoK7eVEoUwrAQN/fJsiNScoS1Jks3I8QHzzn1Cf5/9tfx1b/4FSIP+19eNNmy+tzPxuqhl9RpNB4fSYTZdrDFbYrB7FJS4f0s8uVaPkIO/r+tvw4zRcWNNoCLp/31YfS+9vu58uceMXuORfRPpbv8A9PAl0pptID8Wa2iwgadiga29HE8PBaa/mbDtdg1dzYnvqDfLFtBHzr+iEHeh/AwCSL7Os4nDi0GEPe6RrVJp9DIhf2uCeMoZHqtzTbvq2IHV1cvu7eE0I8hcoXuGmobtUhvBur+SCvbGK2nA7E7Ga4gIpVrjbzMT79Vm4fqCuy6YgTC2jFDFlNUnZsEguSGBj87kYAycJCubVQ4Ey8uzmaFnV5D65AdiRBDBKk1ug/83SkqKg6zl5kTeE72UY1okMAjox38YMIBX442vKk/zUpRxow0Cwfg2oMSYJqG4h0SheF4km/rOzatSLnsCUknOYGKtBPnS8FWfshcynAPTAfVquSdbTewLa7gnTM6R5JN+NFW1meFt9fN1oEcWJDAw0+SAqeSf6xEYk19jrfTxdl81MlxZi
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QdIllXjjEoTOcnojBIKwsUObILlroVNcHltYKKM/PZqfFCeKrWYO9rNIN4bO?=
- =?us-ascii?Q?+OIgzqBWZeLKdc4i6T6SWEPlaEWQPaxHPT9rSARsdPYmnYPw3wXjyfah7R8J?=
- =?us-ascii?Q?W75pxLO6pK0gvDVkD25s650AEGeVUuFx/3pJFGywf6gqh62u+2NzxD48zN1a?=
- =?us-ascii?Q?BO4VU4dAoUFJ/tud2kU60BRtrDOzV+mD0JlBadw6P6f+YC/QzOfFsvZxsEbc?=
- =?us-ascii?Q?LqZ+F5gN3TRZZTL1krpQh9/Lk3eIIMQ4Qbt5+MZNyOQr2qbakJC48WTVR74r?=
- =?us-ascii?Q?fBDEnF7AGLQMjvK+fsNawrArcoI6iMYCNRvyT7d/mSzn4ocr/b0mKJR4NXaK?=
- =?us-ascii?Q?Qf1Pzy+jVditUV9uvhEMZzDUHJdsFsw4iNPfO08qXTeicurYV34Q+R6gLe6j?=
- =?us-ascii?Q?rnt2uVd9hmpN6xRPT1lBeAY6dsebf4kpufLgRnbCM/+H9T/NSeHlXGeLyHoX?=
- =?us-ascii?Q?gZQ1CdxUfBH3pCA9PCaJoji8Oq8nExrwtqeWVhTph7gcTKkkxaHXaYoDbimN?=
- =?us-ascii?Q?cUWes5apGP/WOYC3Z7f1Py1YKXa2OhZP/MWlM16Y6XSy/t1G+PvDO/gA+g2T?=
- =?us-ascii?Q?THUx8CXEEQWM9ysqIfDpCzeEw7JasCqr1lwDoCCUz+34yDd3SRBvXQumu1C9?=
- =?us-ascii?Q?a2jCNo6xhfIg3cKHlh0YBy52I/htHIITmjYpLhfpfrbi0EzYGl5YLUe4ArQl?=
- =?us-ascii?Q?6iiZD0dSTBlP/z4eacDyCS8iRRH8ko7YBSMHSs67t01QKCyNxOnXkyULqbSG?=
- =?us-ascii?Q?xyOrxGe+xtiRiDAUPXosIcrgWwFoplt4eErwoBKyAYT9HyNutOMpCyF68jv7?=
- =?us-ascii?Q?6+ELKOqP61bJ2I/urZuCbTepNVeQeKuChQ05LeDIg9T+86ZXS2SWmY3Yulte?=
- =?us-ascii?Q?emjolZTUM0CPP6BfrXhaAMpdNKabWv92m2cQ+TxiipqTkxsyhxOfHVtzAGfu?=
- =?us-ascii?Q?n9sPVLY29nTCQKoectJK4eTbWa5E+SHBH0+caDiTo3cgw+WX8u+nBKH4taZ0?=
- =?us-ascii?Q?/o5Tg/j6j23z1a36zoo/rrP6BhB1DJjlilkPvUcCPYNTd0GL9oWCcHtRn22n?=
- =?us-ascii?Q?dqN33umRcZT+/WPkMsCPMlhC9rJVoTATvEtuwtRazOqHQhx4//fg6lGSA7aD?=
- =?us-ascii?Q?YAn8p3hzqUyBWqxBGW19xcFyaBwLNnaVgym32114FxbDV9UtTwd/LPZouY0T?=
- =?us-ascii?Q?cPK+pVXArqHRPFsUH2zrKdpOjYwLnofv71ds1tAm/eeWrzfZdCUMxT07myjR?=
- =?us-ascii?Q?YWYLEdwGGecO0YA/KijYbnbs9jxp/Uh908HIbvIHNw=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9d8ff43-52c5-402c-06d0-08dab764d8ba
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 15:14:59.0153
+X-Microsoft-Antispam-Message-Info: 79X2fvJtbepAvSlguQylfHiKHZBg5QJRaX+Qq/1y52JO9aWSh4CKWu0Gvjw6vXH++9K2pGTPz/deFplGDj1qdjpm01VSBrg1dEVx4gTPBoZ+Sjwo1ZLjLNdJEAgLgmebILdt8ET0nn6NF68U/vehqFTGBfF3n0QcQi5sxl7ngyfqk8ltEEWJZDpaFPINdVAive/fB0KccUBPDP25RFWr0jnGgoSMcKWll9oLgnzKBKC07RMEFkdyL5e6ldZwshxPL2Psuq2X60B8bp6BUU0BFFtLS2TYwaqAv9jiKjw8Xdr9alzOvWecvJJ1N4+swPq+P9Vi+m8Td1QVCZh0BHO0XVsjz2XHKkCuQ1jEV4Xbbm+Akl0ZbY48zQbB7Z8oyoQ8PnAjinS/SeaLfxv/0fuTfKuVvlXF4kbahRGww9hpinDlbBFQK97QEB1o89Qao5tK2UnESrdqGBG3H5TJHORAnV2+m3Lm5AlVQSsBsk5nxCocaJDQNUpMjA22/l6yWMOVEN4A6A29/Raw4RRQZ8BeiKswfN0D0I/J0naSR3mp8huFEERRTB1b4W3OZlmGyKtSy03Uy57t+2SSsrACJUpwCnjdgx5N/qnh2fA8HLiwQ1f9qkuy/iQ2nTxnPo2olj+fCJ899uvE3fhUB01sdgqgwIHFwDOQ75qK3165POImSa1NfgBwk/eG1UXHWHkzIcarMGfwdBT+G41VEr/lRO4qNJAkDx07wm/1eKNJj+ydMeLMhfOywJwiO4U4CAOVTqM4DIvH54DmuVNeRn2+Q4wOiG0dUpR0yJ0/30Z/8kTLbxw=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199015)(40470700004)(46966006)(36840700001)(36756003)(82740400003)(7636003)(110136005)(83170400001)(8936002)(70586007)(5660300002)(4744005)(70206006)(47076005)(83380400001)(42882007)(36860700001)(356005)(54906003)(2616005)(26005)(478600001)(6266002)(40460700003)(41300700001)(2906002)(42186006)(316002)(82310400005)(6666004)(8676002)(4326008)(40480700001)(336012)(186003)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 15:15:42.5203
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB1756
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1b063ff-51d6-499a-de6d-08dab764f2ef
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT004.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7661
+X-Spam-Status: No, score=0.6 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert current looping-based implementation into bit operation,
-which can bring improvement for:
+Instead of generic description, mention what reset_lock actually
+protects i.e. lock to serialize xmit and tx_timeout execution.
 
-1) bitops is more efficient for its arch-level optimization.
-
-2) Given that blksize_bits() is inline, _if_ @size is compile-time
-constant, it's possible that order_base_2() _may_ make output
-compile-time evaluated, depending on code context and compiler behavior.
-
-Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 ---
- include/linux/blkdev.h | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_emaclite.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 50e358a19d98..117061c8b9a1 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1349,12 +1349,7 @@ static inline int blk_rq_aligned(struct request_queue *q, unsigned long addr,
- /* assumes size > 256 */
- static inline unsigned int blksize_bits(unsigned int size)
- {
--	unsigned int bits = 8;
--	do {
--		bits++;
--		size >>= 1;
--	} while (size > 256);
--	return bits;
-+	return size > 512 ? order_base_2(size) : 9;
- }
- 
- static inline unsigned int block_size(struct block_device *bdev)
+diff --git a/drivers/net/ethernet/xilinx/xilinx_emaclite.c b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
+index 05848ff15fb5..a3967f8de417 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_emaclite.c
++++ b/drivers/net/ethernet/xilinx/xilinx_emaclite.c
+@@ -108,7 +108,7 @@
+  * @next_tx_buf_to_use:	next Tx buffer to write to
+  * @next_rx_buf_to_use:	next Rx buffer to read from
+  * @base_addr:		base address of the Emaclite device
+- * @reset_lock:		lock used for synchronization
++ * @reset_lock:		lock to serialize xmit and tx_timeout execution
+  * @deferred_skb:	holds an skb (for transmission at a later time) when the
+  *			Tx buffer is not free
+  * @phy_dev:		pointer to the PHY device
 -- 
 2.25.1
 
