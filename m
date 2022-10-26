@@ -2,142 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CC960E1D1
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49EC60E1DC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbiJZNRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S233987AbiJZNSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233773AbiJZNQj (ORCPT
+        with ESMTP id S233983AbiJZNSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:16:39 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD51F87085;
-        Wed, 26 Oct 2022 06:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1666790198; x=1698326198;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AQ8LdJdDckBueGG5Er3mqgTunJL51UlKkWeBI9xQaPo=;
-  b=HbIMkZp2KQJcQVlQ0Pn8Rb57+XdijlvGGZBVFdyJIqaUR2jA7CI7w5Zi
-   PPoF44RIe1qYK5IVNT/jF3HfLXVNpPFjQF2x7cvTtjCuqiux25O0IpQDQ
-   sHkBkoNxGsJhpTJUADbNTf4Mh5f5v/jOnHgIT4WVT/2BsQT8ahwyuOeSc
-   7Q1xLCyg/1vnDuD6AvFfn8J+sk/7WOzP4i0wvhEGGaMlQcd/OrVmMerXG
-   aTASRtuOQwUMSIzQnAK0AfWHBNBjO863jgxs8wObYFdKD7yPfqbHjByQJ
-   M/J3aohSCQVaSRf46pJl/FSE5xqt5JFlifct/1D8KSlXm/2YMxnMsSuCv
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,214,1661810400"; 
-   d="scan'208";a="26988477"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 26 Oct 2022 15:16:32 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Wed, 26 Oct 2022 15:16:32 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Wed, 26 Oct 2022 15:16:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1666790193; x=1698326193;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AQ8LdJdDckBueGG5Er3mqgTunJL51UlKkWeBI9xQaPo=;
-  b=IZJ5D2z0IFL2KfFH0KlWWd6DscaAybMlc+Xfp/WLHFG06VCHJWaGD0f9
-   N/E+eXFVu8JdwIVL+e10Zgc1DqIO4gyJG058StZpr+KPW+wy+R7/K7C3y
-   3IxHQVJo9eDn6IoWveWT1XpGtqVtzmKBSL8S3a4iXYD/nC9fkCh7QZPDP
-   gqsBFKtgfFC++Jdw4Ga0fBan0UxpDmtMKJKywfsbdQlF+LLLW0oQh8yrH
-   ah4Ot4sq9viLDrpE+UkF1Xs8eX/ZXIPsf+1TCe9THdlZ/3Rd5HWYJdSlh
-   WNYtKOPNgz7DNXOORhThSPVsJDM8Ys4s/IwQrnAF0TxHbxOPHgaRu8P4X
+        Wed, 26 Oct 2022 09:18:09 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D2A103DB2;
+        Wed, 26 Oct 2022 06:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666790236; x=1698326236;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hIbMjk472qjMcR6jrGfkylFFiMP/jDat0gI5PwpO4rw=;
+  b=MIjeZ4ZyFKsTzLBq4Pq6STvwJaE4Yr/xWOZYOiHgBMUNsVxbXDIhpnhs
+   G2s3ENh+t8qmJtWwpcBTJ1owPgc2a6SpoqWgIk+dYNBilpVLFciHCd5jm
+   tXrJi8z6lRiqde6VAs8oGOI4TBR7LiqdNH0QUIKdp/q2dDK0QrTAW0Alj
+   x/lVJ/xdLJ0uwcqjkZ4ioBjABTgIxTJQr6naXR1YU2CrJSWh0/yEa0LsD
+   Pt4qlEibg7AfOp1kqqkCdbM/uBv9X1ZP2g4+qjYN1NvE5s1frKRZymnXh
+   1wmYEVTwr8B7s5CYGRw6zCJ8Yn8lAM94FW1DrQzdrgjSEGDtHWbuPOoNt
    Q==;
-X-IronPort-AV: E=Sophos;i="5.95,214,1661810400"; 
-   d="scan'208";a="26988476"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 26 Oct 2022 15:16:32 +0200
-Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 78F70280072;
-        Wed, 26 Oct 2022 15:16:31 +0200 (CEST)
-From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux@ew.tq-group.com,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Subject: [RFC 5/5] bluetooth: hci_mrvl: allow waiting for firmware load using notify-device
-Date:   Wed, 26 Oct 2022 15:15:34 +0200
-Message-Id: <fa9cdbe5906fdcfcb37dbe682f3f46ce4b2e1b73.1666786471.git.matthias.schiffer@ew.tq-group.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1666786471.git.matthias.schiffer@ew.tq-group.com>
-References: <cover.1666786471.git.matthias.schiffer@ew.tq-group.com>
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="307935495"
+X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
+   d="scan'208";a="307935495"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 06:17:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="632000787"
+X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
+   d="scan'208";a="632000787"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 26 Oct 2022 06:17:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ongHJ-002f4J-0g;
+        Wed, 26 Oct 2022 16:17:05 +0300
+Date:   Wed, 26 Oct 2022 16:17:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Kees Cook <keescook@chromium.org>, cocci@inria.fr,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, masahiroy@kernel.org,
+        gregkh@linuxfoundation.org, Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH -mm] -funsigned-char, x86: make struct
+ p4_event_bind::cntr signed array
+Message-ID: <Y1kzUMzFdMiHpEnF@smile.fi.intel.com>
+References: <20221020000356.177CDC433C1@smtp.kernel.org>
+ <Y1EZuQcO8UoN91cX@localhost.localdomain>
+ <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com>
+ <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
+ <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com>
+ <CAHk-=wjZDC9o8iwF+bU91Hx40HjGOpMui+VoFCDJkaGCu=rG4A@mail.gmail.com>
+ <202210201151.ECC19BC97A@keescook>
+ <Y1iSYddi3BpP8gvf@zx2c4.com>
+ <Y1ku+jfRAyezq6Nz@zx2c4.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1ku+jfRAyezq6Nz@zx2c4.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
----
- drivers/bluetooth/hci_mrvl.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
++Cc: Rasmus as he has done a lot regarding library stuff and optimizations and
+     he knows Coccinelle (to some extent as far as I can tell).
 
-diff --git a/drivers/bluetooth/hci_mrvl.c b/drivers/bluetooth/hci_mrvl.c
-index b7d764e6010f..dc55053574a9 100644
---- a/drivers/bluetooth/hci_mrvl.c
-+++ b/drivers/bluetooth/hci_mrvl.c
-@@ -12,6 +12,7 @@
- #include <linux/skbuff.h>
- #include <linux/firmware.h>
- #include <linux/module.h>
-+#include <linux/notify-device.h>
- #include <linux/tty.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-@@ -433,9 +434,25 @@ static int mrvl_serdev_probe(struct serdev_device *serdev)
- 		return -ENOMEM;
- 
- 	if (IS_ENABLED(CONFIG_OF)) {
-+		struct device_node *firmware_ready_node;
-+		struct device *firmware_ready;
-+
- 		mrvldev->info = of_device_get_match_data(&serdev->dev);
- 		if (!mrvldev->info)
- 			return -ENODEV;
-+
-+		firmware_ready_node = of_parse_phandle(serdev->dev.of_node,
-+						       "firmware-ready", 0);
-+		if (firmware_ready_node) {
-+			firmware_ready =
-+				notify_device_find_by_of_node(firmware_ready_node);
-+			if (!firmware_ready)
-+				return -EPROBE_DEFER;
-+			if (IS_ERR(firmware_ready))
-+				return PTR_ERR(firmware_ready);
-+			put_device(firmware_ready);
-+		}
-+
- 	}
- 
- 	mrvldev->hu.serdev = serdev;
+On Wed, Oct 26, 2022 at 02:58:34PM +0200, Jason A. Donenfeld wrote:
+> On Wed, Oct 26, 2022 at 03:50:25AM +0200, Jason A. Donenfeld wrote:
+> > The traditional objdump comparison does work, though. It produces a good
+> 
+> Another thing that appears to work well is just using Coccinelle
+> scripts. I've had some success just scrolling through the results of:
+> 
+>     @@
+>     char c;
+>     expression E;
+>     @@
+>     (
+>     * E > c
+>     |
+>     * E >= c
+>     |
+>     * E < c
+>     |
+>     * E <= c
+>     )
+> 
+> That also triggers on explicitly signed chars, and examining those
+> reveals that quite a bit of code in the tree already does do the right
+> thing, which is good.
+> 
+> From looking at this and objdump output, it looks like most naked-char
+> usage that isn't for strings is actually already assuming it's unsigned,
+> using it as a byte. I'll continue to churn, and I'm sure I'll miss a few
+> things here and there, but all and all, I don't think this is looking as
+> terrible as I initially feared.
+> 
+> I'm CC'ing the Coccinelle people to see if they have any nice ideas on
+> improvements. Specifically, the thing we're trying to identify is:
+> 
+>   - Usage of vanilla `char`, without a `signed` or `unsigned` qualifier,
+>     where:
+>   - It's not being used for characters; and
+>   - It's doing something that assumes it is signed, such as various
+>     types of comparisons or decrements.
+> 
+> LWN wrote a summary of the general problem, in case that helps describe
+> what would be useful: https://lwn.net/SubscriberLink/911914/f90c2ed1af23cbc4/
+> 
+> Any nice Cocci tricks for this?
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
