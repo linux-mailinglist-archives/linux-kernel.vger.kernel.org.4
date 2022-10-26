@@ -2,148 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB7F60D9F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CC560D9EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 05:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbiJZDfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 23:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
+        id S232207AbiJZDe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 23:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232981AbiJZDe6 (ORCPT
+        with ESMTP id S232951AbiJZDeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 23:34:58 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F8A33E0A;
-        Tue, 25 Oct 2022 20:34:51 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MxvVN1ckzzpVrr;
-        Wed, 26 Oct 2022 11:31:24 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (7.185.36.200) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 26 Oct 2022 11:34:49 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500003.china.huawei.com
- (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 26 Oct
- 2022 11:34:49 +0800
-From:   Yu Liao <liaoyu15@huawei.com>
-To:     <alexandre.belloni@bootlin.com>, <a.zummo@towertech.it>
-CC:     <liaoyu15@huawei.com>, <liwei391@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <linux-rtc@vger.kernel.org>
-Subject: [RFC PATCH 2/2] rtc: fix race condition in rtc_set_time()
-Date:   Wed, 26 Oct 2022 11:33:48 +0800
-Message-ID: <20221026033348.1660732-3-liaoyu15@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221026033348.1660732-1-liaoyu15@huawei.com>
-References: <20221026033348.1660732-1-liaoyu15@huawei.com>
+        Tue, 25 Oct 2022 23:34:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0A980EA5;
+        Tue, 25 Oct 2022 20:34:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666755245; x=1698291245;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CiHzwKChNtskDci/iK98LzhjMC+nlcLra68ozPBmmZA=;
+  b=VAHyhMJYsjtd1+zrGGuGX9a/Pjp6b6URhRxGljHw5L5dN+9fQo1h2/1+
+   icuEiQ/uF9HHv85UVehHEGG7648RAXa0tr+e4+oCzatplpxFQ4gnYrMmT
+   rbGnvg/Brh6itUuvjPVPjseGDMcz1AaxSU2Btkjv8+yqCO2QH2mzsn/O3
+   GIG0BYNNp7InooTt25dKFYI4Pw8ZU0tBShDMhQZyt8vipBRu7M+iAzO5B
+   aFtUwWpqd3e6cKQQ3oEOQMkGhN4OejonaewAdNiulr296ONGQpBqlfEsj
+   K2JMHD/sZBZzpJ07tUmS3XW22HKMEM86OieQ+k7i3ggn5WEVz0X9aE3cw
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="306580940"
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="scan'208";a="306580940"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 20:34:04 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="806901572"
+X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
+   d="scan'208";a="806901572"
+Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.238.2.23]) ([10.238.2.23])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 20:33:58 -0700
+Message-ID: <46a493d4-9a2b-ae52-27bf-8e306a85c570@linux.intel.com>
+Date:   Wed, 26 Oct 2022 11:33:56 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500003.china.huawei.com (7.185.36.200)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 4/6] x86: KVM: Enable AVX-VNNI-INT8 CPUID and expose it to
+ guest
+To:     Sean Christopherson <seanjc@google.com>,
+        Borislav Petkov <bp@alien8.de>
+Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        pbonzini@redhat.com, ndesaulniers@google.com,
+        alexandre.belloni@bootlin.com, peterz@infradead.org,
+        jpoimboe@kernel.org, chang.seok.bae@intel.com,
+        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
+        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
+        keescook@chromium.org, jane.malalane@citrix.com, nathan@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221019084734.3590760-1-jiaxi.chen@linux.intel.com>
+ <20221019084734.3590760-5-jiaxi.chen@linux.intel.com>
+ <Y0+6tJ7MiZWbYK5l@zn.tnic> <Y1AQX3RfM+awULlE@google.com>
+ <Y1ATKF2xjERFbspn@google.com>
+From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
+In-Reply-To: <Y1ATKF2xjERFbspn@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7e7c005b4b1f ("rtc: disable uie before setting time and enable
-after") was introduced to solve problem that rtc_timer_do_work will loop
-for a while, when setting the time in the future with the uie timer
-enabled. But reading uie timer state and setting rtc time are not in
-a critical section, a race condition may occur in rtc_set_time which
-has two issues:
 
-1) In the above scenario, rtc_timer_do_work may still loop for a while.
-   For example consider the following sequence:
 
-   CPU0					CPU1
-   ----					----
-   ioctl(RTC_SET_TIME)			ioctl(RTC_UIE_ON)
-   uie = rtc->uie_rtctimer.enabled;
-   [ assume uie is 0 ]
-   if (uie)
-   	rtc_update_irq_enable(rtc, 0);
+On 10/19/2022 11:09 PM, Sean Christopherson wrote:
+> On Wed, Oct 19, 2022, Sean Christopherson wrote:
+>> On Wed, Oct 19, 2022, Borislav Petkov wrote:
+>>> On Wed, Oct 19, 2022 at 04:47:32PM +0800, Jiaxi Chen wrote:
+>>>> AVX-VNNI-INT8 is a new set of instructions in the latest Intel platform
+>>>> Sierra Forest. It multiplies the individual bytes of two unsigned or
+>>>> unsigned source operands, then add and accumulate the results into the
+>>>> destination dword element size operand. This instruction allows for the
+>>>> platform to have superior AI capabilities.
+>>>>
+>>>> The bit definition:
+>>>> CPUID.(EAX=7,ECX=1):EDX[bit 4]
+>>>
+>>> For this particular one, use scattered.c instead of adding a new leaf.
+>>
+>> Unless the kernel wants to use X86_FEATURE_AVX_VNNI_INT8, which seems unlikely,
+>> there's no need to create a scattered entry.  This can be handled in KVM by adding
+>> a KVM-only leaf entry (which will be needed no matter what), plus a #define for
+>> X86_FEATURE_AVX_VNNI_INT8 to direct it to the KVM entry.
+>>
+>> E.g. 
+>>
+>> diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
+>> index a19d473d0184..25e7bfc61607 100644
+>> --- a/arch/x86/kvm/reverse_cpuid.h
+>> +++ b/arch/x86/kvm/reverse_cpuid.h
+>> @@ -13,6 +13,7 @@
+>>   */
+>>  enum kvm_only_cpuid_leafs {
+>>         CPUID_12_EAX     = NCAPINTS,
+>> +       CPUID_7_1_EDX,
+>>         NR_KVM_CPU_CAPS,
+>>  
+>>         NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
+>> @@ -24,6 +25,16 @@ enum kvm_only_cpuid_leafs {
+>>  #define KVM_X86_FEATURE_SGX1           KVM_X86_FEATURE(CPUID_12_EAX, 0)
+>>  #define KVM_X86_FEATURE_SGX2           KVM_X86_FEATURE(CPUID_12_EAX, 1)
+>>  
+>> +#define KVM_X86_FEATURE_AVX_VNNI_INT8  KVM_X86_FEATURE(CPUID_7_1_EDX, 4)
+>> +
+>> +/*
+>> + * Alias X86_FEATURE_* to the KVM variant for features in KVM-only leafs that
+>> + * aren't scattered by cpufeatures.h so that X86_FEATURE_* can be used in KVM,
+>> + * e.g. to query guest CPUID.  As a bonus, no translation is needed for these
+>> + * features in __feature_translate().
+>> + */
+>> +#define X86_FEATURE_AVX_VNNI_INT8      KVM_X86_FEATURE_AVX_VNNI_INT8
+> 
+> Actually, there's no need for KVM_X86_FEATURE_AVX_VNNI_INT8 in this case, just
+> #define X86_FEATURE_AVX_VNNI_INT8 directly.  The KVM_ prefixed macro exists purely
+> to redirect the non-KVM_ version, but that's unnecessary in this case.
+> 
+> diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
+> index a19d473d0184..38adafb03490 100644
+> --- a/arch/x86/kvm/reverse_cpuid.h
+> +++ b/arch/x86/kvm/reverse_cpuid.h
+> @@ -13,6 +13,7 @@
+>   */
+>  enum kvm_only_cpuid_leafs {
+>         CPUID_12_EAX     = NCAPINTS,
+> +       CPUID_7_1_EDX,
+>         NR_KVM_CPU_CAPS,
+>  
+>         NKVMCAPINTS = NR_KVM_CPU_CAPS - NCAPINTS,
+> @@ -24,6 +25,13 @@ enum kvm_only_cpuid_leafs {
+>  #define KVM_X86_FEATURE_SGX1           KVM_X86_FEATURE(CPUID_12_EAX, 0)
+>  #define KVM_X86_FEATURE_SGX2           KVM_X86_FEATURE(CPUID_12_EAX, 1)
+>  
+> +/*
+> + * Omit the KVM_ prefix for features in KVM-only leafs that aren't scattered by
+> + * cpufeatures.h so that X86_FEATURE_* can be used in KVM,* e.g. to query guest
+> + * CPUID.  As a bonus, no handling in __feature_translate() is needed.
+> + */
+> +#define X86_FEATURE_AVX_VNNI_INT8      KVM_X86_FEATURE(CPUID_7_1_EDX, 4)
+> +
+>  struct cpuid_reg {
+>         u32 function;
+>         u32 index;
+> @@ -48,6 +56,7 @@ static const struct cpuid_reg reverse_cpuid[] = {
+>         [CPUID_7_1_EAX]       = {         7, 1, CPUID_EAX},
+>         [CPUID_12_EAX]        = {0x00000012, 0, CPUID_EAX},
+>         [CPUID_8000_001F_EAX] = {0x8000001f, 0, CPUID_EAX},
+> +       [CPUID_7_1_EDX]       = {         7, 1, CPUID_EDX},
+>  };
 
-   					rtc_update_irq_enable(rtc, 1);
-   					[ uie is enabled ]
-   rtc->ops->set_time();
-   [ set rtc time in the future ]
-
-2) A thread try to turn off uie, however rtc_settime called by another
-   thread turns on uie when they run in parallel. Consider the following
-   sequence:
-
-   CPU0					CPU1
-   ----					----
-   ioctl(RTC_SET_TIME)			ioctl(RTC_UIE_OFF)
-   rtc->ops->set_time();
-   					rtc_update_irq_enable(rtc, 0);
-   rtc_update_irq_enable(rtc, 1);
-
-Fix it by guaranteeing that reading uie timer state, setting rtc time
-and enabling uie timer within a critical section.
-
-Fixes: 7e7c005b4b1f ("rtc: disable uie before setting time and enable after")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
----
- drivers/rtc/interface.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/rtc/interface.c b/drivers/rtc/interface.c
-index bc55dd31bece..00a6173d8895 100644
---- a/drivers/rtc/interface.c
-+++ b/drivers/rtc/interface.c
-@@ -139,21 +139,21 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
- 
- 	rtc_subtract_offset(rtc, tm);
- 
-+	err = mutex_lock_interruptible(&rtc->ops_lock);
-+	if (err)
-+		return err;
-+
- #ifdef CONFIG_RTC_INTF_DEV_UIE_EMUL
- 	uie = rtc->uie_rtctimer.enabled || rtc->uie_irq_active;
- #else
- 	uie = rtc->uie_rtctimer.enabled;
- #endif
- 	if (uie) {
--		err = rtc_update_irq_enable(rtc, 0);
-+		err = __rtc_update_irq_enable(rtc, 0);
- 		if (err)
- 			return err;
- 	}
- 
--	err = mutex_lock_interruptible(&rtc->ops_lock);
--	if (err)
--		return err;
--
- 	if (!rtc->ops)
- 		err = -ENODEV;
- 	else if (rtc->ops->set_time)
-@@ -162,15 +162,15 @@ int rtc_set_time(struct rtc_device *rtc, struct rtc_time *tm)
- 		err = -EINVAL;
- 
- 	pm_stay_awake(rtc->dev.parent);
--	mutex_unlock(&rtc->ops_lock);
- 	/* A timer might have just expired */
- 	schedule_work(&rtc->irqwork);
- 
- 	if (uie) {
--		err = rtc_update_irq_enable(rtc, 1);
-+		err = __rtc_update_irq_enable(rtc, 1);
- 		if (err)
- 			return err;
- 	}
-+	mutex_unlock(&rtc->ops_lock);
- 
- 	trace_rtc_set_time(rtc_tm_to_time64(tm), err);
- 	return err;
+Use KVM-only leafs is better for edx in this case. Will follow this suggestion in v2. 
+Thanks Sean very much.
 -- 
-2.25.1
-
+Regards,
+Jiaxi
