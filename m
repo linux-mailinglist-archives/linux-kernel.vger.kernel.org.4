@@ -2,140 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A920060E68C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793DE60E697
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233466AbiJZRc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S233951AbiJZRfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiJZRcW (ORCPT
+        with ESMTP id S233859AbiJZRfv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:32:22 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B07E09A2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:32:21 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id w10so5845911qvr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RjKfksPlBhlwYLzBgcKzpziSVwI69KcAuIfLwh+ulWo=;
-        b=QxzeJ/8gAFock46G6AynUz67ur9KujA23UFuhm9X8nKa5ZTKZpdCTPiZaGIjZh6/iQ
-         CUgWzthusrsB7Ny/aynnKAhUgWn3XoloiLODTi/PLWQSwuq3B/LlpXIJuhfHqcE/1H4H
-         Nm8L2FtRBj1/ZFFRVE+4dxftrnSsmcMKGAKbNst3KexHj2hKHpBTQRXD7agBjLXMVTZv
-         DLg8sS3HSUYvMc8Q2pPGmAgWgs0gEZ8++VBmd5KWG5qi9VLDrNmAuHvyH6QIj3EtMG0L
-         oDdCVpJO0Mj0NhqOQ6wZc2lzO/7O5F3t4yu26Lfyi8b30AriWwjXVAcHNv/frQs8Q3rG
-         n5dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RjKfksPlBhlwYLzBgcKzpziSVwI69KcAuIfLwh+ulWo=;
-        b=LHyLEbGQxzsEi4/PQb41GQmeNXj+AsjY1wMU/J4YB9ZqZGNpF3lbQCZXV3btoWI9BX
-         vpKJyzYVb8c3jGHWkw9FPHJF9N4r2eqmgooOOyJ/ZF+gjHF4anAQ6J3Og6m4Gbu0RWhh
-         GA74ibmaMA88iu7kOffcj253kluwtaVZZmQ4up5FWwqkY4j82jY1gelJaVnvVn2A1O8P
-         i+ifKg4uZ3ZzvzL5SrTX3nl6cpRYWDfrnyICyeK/E0OYrMIfpvqBtlWwNeIo3geG5Ehn
-         wxEq7B7EavueBotVuO9Qz9n+lh4gxzk/Vof153uplQ0TiaK3ukZcdASzDlEwfULE1JVw
-         WxMg==
-X-Gm-Message-State: ACrzQf2NsQLHRl1Gsh3Bc8HlpBSmsTUtiF9wK5qtXj4hk2AmLPO7klVP
-        BJY5GUj372SHg6rO1QTciNFPsA==
-X-Google-Smtp-Source: AMsMyM4zC2bor82A6TRyJteIhhSCalmnmm5YkOvC3A7NuQKtQ6+exeNR7sYQ5Pr1gVPPygNaGtNTqg==
-X-Received: by 2002:a05:6214:ac7:b0:4bb:61e7:18eb with SMTP id g7-20020a0562140ac700b004bb61e718ebmr3576201qvi.55.1666805540383;
-        Wed, 26 Oct 2022 10:32:20 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::25f1])
-        by smtp.gmail.com with ESMTPSA id x11-20020a05620a258b00b006ceb933a9fesm4351579qko.81.2022.10.26.10.32.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 10:32:20 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 13:32:20 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Eric Bergen <ebergen@meta.com>
-Subject: Re: [PATCH] mm: vmscan: split khugepaged stats from direct reclaim
- stats
-Message-ID: <Y1lvJBnVx1Fv5WHz@cmpxchg.org>
-References: <20221025170519.314511-1-hannes@cmpxchg.org>
- <CAHbLzkoXzbHRJxb9DkjGkKQ8TAO08ctvz7wvjyPA8Gy2Skm+2g@mail.gmail.com>
- <Y1hM6sMRpBGUPRyo@cmpxchg.org>
- <CAHbLzkpaoN37camSLYVDU7p9AXzQjYcvHnWm3K87iwae-YyZiQ@mail.gmail.com>
+        Wed, 26 Oct 2022 13:35:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0067A2ABC
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:35:49 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1onkJG-0005YF-1O; Wed, 26 Oct 2022 19:35:22 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1onkJD-00060f-7f; Wed, 26 Oct 2022 19:35:19 +0200
+Date:   Wed, 26 Oct 2022 19:35:19 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Shawn Tu <shawnx.tu@intel.com>, devicetree@vger.kernel.org,
+        Jacopo Mondi <jacopo@jmondi.org>, linux-kernel@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 8/9] media: i2c: ov5645: Don't return early on
+ failures for s_stream(0)
+Message-ID: <20221026173519.bm22im7uov6b4nnp@pengutronix.de>
+References: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221026130658.45601-9-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20221026171721.4nfvhamguwnrw6zf@pengutronix.de>
+ <CA+V-a8urKEjEKP0n9mki8xx1B9JLOMTYM4F1aXC3h_5Ne0+tCw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHbLzkpaoN37camSLYVDU7p9AXzQjYcvHnWm3K87iwae-YyZiQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CA+V-a8urKEjEKP0n9mki8xx1B9JLOMTYM4F1aXC3h_5Ne0+tCw@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 02:53:01PM -0700, Yang Shi wrote:
-> On Tue, Oct 25, 2022 at 1:54 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> >
-> > On Tue, Oct 25, 2022 at 12:40:15PM -0700, Yang Shi wrote:
-> > > On Tue, Oct 25, 2022 at 10:05 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
-> > > >
-> > > > Direct reclaim stats are useful for identifying a potential source for
-> > > > application latency, as well as spotting issues with kswapd. However,
-> > > > khugepaged currently distorts the picture: as a kernel thread it
-> > > > doesn't impose allocation latencies on userspace, and it explicitly
-> > > > opts out of kswapd reclaim. Its activity showing up in the direct
-> > > > reclaim stats is misleading. Counting it as kswapd reclaim could also
-> > > > cause confusion when trying to understand actual kswapd behavior.
-> > > >
-> > > > Break out khugepaged from the direct reclaim counters into new
-> > > > pgsteal_khugepaged, pgdemote_khugepaged, pgscan_khugepaged counters.
-> > > >
-> > > > Test with a huge executable (CONFIG_READ_ONLY_THP_FOR_FS):
-> > > >
-> > > > pgsteal_kswapd 1342185
-> > > > pgsteal_direct 0
-> > > > pgsteal_khugepaged 3623
-> > > > pgscan_kswapd 1345025
-> > > > pgscan_direct 0
-> > > > pgscan_khugepaged 3623
-> > >
-> > > There are other kernel threads or works may allocate memory then
-> > > trigger memory reclaim, there may be similar problems for them and
-> > > someone may try to add a new stat. So how's about we make the stats
-> > > more general, for example, call it "pg{steal|scan}_kthread"?
-> >
-> > I'm not convinved that's a good idea.
-> >
-> > Can you generally say that userspace isn't indirectly waiting for one
-> > of those allocating threads? With khugepaged, we know.
+On 22-10-26, Lad, Prabhakar wrote:
+> Hi Marco,
 > 
-> AFAIK, ksm may do slab allocation with __GFP_DIRECT_RECLAIM.
+> Thank you for the review.
+> 
+> On Wed, Oct 26, 2022 at 6:17 PM Marco Felsch <m.felsch@pengutronix.de> wrote:
+> >
+> > Hi Prabhakar,
+> >
+> > thanks for the patch, please see below my comments.
+> >
+> > On 22-10-26, Prabhakar wrote:
+> > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Make sure we dont stop the code flow in case of errors while stopping
+> > > the stream and return the error code of the first error case if any.
+> > >
+> > > v4l2-core takes care of warning the user so no need to add a warning
+> > > message in the driver.
+> > >
+> > > Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > ---
+> > > v2->v3
+> > > * Now propagating the first error code in case of failure.
+> > >
+> > > v1->v2
+> > > * New patch
+> > > ---
+> > >  drivers/media/i2c/ov5645.c | 11 ++++++++---
+> > >  1 file changed, 8 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
+> > > index eea3067ddc8b..5702a55607fc 100644
+> > > --- a/drivers/media/i2c/ov5645.c
+> > > +++ b/drivers/media/i2c/ov5645.c
+> > > @@ -996,17 +996,22 @@ static int ov5645_s_stream(struct v4l2_subdev *subdev, int enable)
+> > >               if (ret < 0)
+> > >                       goto err_rpm_put;
+> > >       } else {
+> > > +             int stream_off_ret = 0;
+> > > +
+> > >               ret = ov5645_write_reg(ov5645, OV5645_IO_MIPI_CTRL00, 0x40);
+> >
+> > If this write failed..
+> >
+> > >               if (ret < 0)
+> > > -                     return ret;
+> > > +                     stream_off_ret = ret;
+> > >
+> > >               ret = ov5645_write_reg(ov5645, OV5645_SYSTEM_CTRL0,
+> > >                                      OV5645_SYSTEM_CTRL0_STOP);
+> >
+> > why should this write be successful?
+> >
+> Indeed that will fail unless I have a lucky day ;-)
+> 
+> But it seemed to be an overkill for adding an additional check to see
+> if the previous write succeeded. Do you think this will create an
+> issue?
 
-Right, but ksm also uses __GFP_KSWAPD_RECLAIM. So while userspace
-isn't directly waiting for ksm, when ksm enters direct reclaim it's
-because kswapd failed. This is of interest to kernel developers.
-Userspace will likely see direct reclaim in that scenario as well, so
-the ksm direct reclaim counts aren't liable to confuse users.
+Why not just say?
 
-Khugepaged on the other hand will *always* reclaim directly, even if
-there is no memory pressure or kswapd failure. The direct reclaim
-counts there are misleading to both developers and users.
+	ret = ov5645_write_reg();
+	if (ret < 0)
+		goto out;
 
-What it really should be is pgscan_nokswapd_nouserprocesswaiting, but
-that just seems kind of long ;-)
+	...
 
-I'm also not sure anybody but khugepaged is doing direct reclaim
-without kswapd reclaim. It seems unlikely we'll get more of those.
+	out:
 
-> Some device mapper drivers may do heavy lift in the work queue, for
-> example, dm-crypt, particularly for writing.
+	dev_pm_xxx();
 
-Userspace will wait for those through dirty throttling. We'd want to
-know about kswapd failures in that case - again, without them being
-muddied by khugepaged.
+	return ret;
 
-> > And those other allocations are usually ___GFP_KSWAPD_RECLAIM, so if
-> > they do direct reclaim, we'd probably want to know that kswapd is
-> > failing to keep up (doubly so if userspace is waiting). In a shared
-> > kthread counter, khugepaged would again muddy the waters.
+Regards,
+  Marco
