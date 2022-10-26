@@ -2,149 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E048360E02B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A03460E026
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233394AbiJZMES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
+        id S233510AbiJZMDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiJZMEQ (ORCPT
+        with ESMTP id S233485AbiJZMDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:04:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0121EAC7;
-        Wed, 26 Oct 2022 05:04:15 -0700 (PDT)
+        Wed, 26 Oct 2022 08:03:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331AE1EAC7;
+        Wed, 26 Oct 2022 05:03:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61453B82033;
-        Wed, 26 Oct 2022 12:04:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3B7C43141;
-        Wed, 26 Oct 2022 12:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666785853;
-        bh=6LTuX/xQ6IMZD8m/CLE4a7GdIxVNvlWbr19szbGf1QI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dBIkrKlpZIrs7WEu4uvfJbkp+tGD7CpMplVUIJpjTbuvUtn8swhzoEVpt590lywyl
-         ijkRYpN6ie87eUZb9mwiSiz34UPOZj274H13DduEmgkXs/A4ztPYruEeY+O5hO8Bph
-         iA2xfKOEGpahAwkyo/5bhGSia5tL89QSNGd1N0Sj9wIznTfC0qmozFAvD6Hh1HFEVd
-         i2Q4Uhi18cnImrXDWC0VOgEKcYemUOvLoZBqvqmMY/DqIflQBKzKGTxejJl9mlmTd4
-         oOldE//5xKH0fcTB74SVTZr6YLn6ypI+XFkTXC591HMD+X1hB2kqCtdOrFoGmHTbx3
-         Yf20MAvPc7JUw==
-Received: by mail-ej1-f45.google.com with SMTP id t25so15048763ejb.8;
-        Wed, 26 Oct 2022 05:04:12 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1l96CWUjzEBkKjHv4oZsJK0+PU8IGHpKLCIzeWxLRvoFpiToNy
-        hO88y9cpWLspZv+6jdvWUVM/ieawpWZTGH+E0+I=
-X-Google-Smtp-Source: AMsMyM6b4UIXWLoTsQpMjRB4UKQywbOMmW91BTJZlw7mq+lzs5nHy5Q4XTZdyDvnaIupM/uAgrsH5IkA6cfbPB+q4JI=
-X-Received: by 2002:a17:907:2cf7:b0:78d:c7fc:29ff with SMTP id
- hz23-20020a1709072cf700b0078dc7fc29ffmr38046370ejc.748.1666785851109; Wed, 26
- Oct 2022 05:04:11 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B672D61E66;
+        Wed, 26 Oct 2022 12:03:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA89BC433D6;
+        Wed, 26 Oct 2022 12:03:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1666785791;
+        bh=6nSdeLY7Vee3zTn134Svm4OVr3YBNP5jgNn+QKXMSVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GLVvkhyQ2pa5HCN+eKkJGW96HlNJqNbUAlfedOV5KjSFWq2yjrck4LiZm4ksRKplm
+         T/+mBH4se+pxATjhaKPnXelfg8u51eSSjkoVgxqiPuxOu11SZDfKjDoqzAO/b2OSKL
+         5bvI+TLWzFu+ssFg99xbvpxYOpp2LUM/gkI4WLhY=
+Date:   Wed, 26 Oct 2022 14:04:04 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
+        Smita.KoralahalliChannabasappa@amd.com, mpatocka@redhat.com
+Subject: Re: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when
+ removing threshold blocks
+Message-ID: <Y1kiNBh3/XBNe6uv@kroah.com>
+References: <20220614174346.3648305-1-yazen.ghannam@amd.com>
+ <Yql9TqFtebd2h9Z9@kroah.com>
+ <Yqnj88FPkZ6kBU7k@yaz-fattaah>
+ <Y1kJCHBtatohj/JK@zn.tnic>
 MIME-Version: 1.0
-References: <20221026030256.30512-1-zhuyinbo@loongson.cn>
-In-Reply-To: <20221026030256.30512-1-zhuyinbo@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 26 Oct 2022 20:03:22 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7jSMei+EDJ_vhoBh-kX-MVxs-vtwQwjsDnrx_zCSFAAw@mail.gmail.com>
-Message-ID: <CAAhV-H7jSMei+EDJ_vhoBh-kX-MVxs-vtwQwjsDnrx_zCSFAAw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: clock: add loongson2 clock include file
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y1kJCHBtatohj/JK@zn.tnic>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yinbo,
-
-On Wed, Oct 26, 2022 at 11:03 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->
-> This file defines all loongson2 soc clock indexes, it should be
-I suggest to use regular names, i.e., don't use loongson2, Loongson2
-or LOONGSON2, use Loongson-2 instead. (except in C code). And soc may
-be SoC?
-
-Huacai
-
-> included in the device tree in which there's device using the
-> clocks.
->
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, Oct 26, 2022 at 12:16:40PM +0200, Borislav Petkov wrote:
+> On Wed, Jun 15, 2022 at 01:51:47PM +0000, Yazen Ghannam wrote:
+> > Yes, I believe that's true based on code inspection. But I'm not aware of any
+> > reported issues in this area before the commit listed above. So I decided to
+> > switch the Fixes tag from what I had before (shown below). I can switch it
+> > back if you think that's best.
+> > 
+> > Fixes: 019f34fccfd5 ("x86, MCE, AMD: Move shared bank to node descriptor")
+> 
+> Yeah, that is probably the culprit. I finally got to this and am able to
+> repro on my F10h box.
+> 
+> Here's what I think the fix should be, Greg, please check this
+> for no-nos, especially for doing a kobject_put() on the parent in
+> remove_shared_bank_kobjects(). But that is basically the reverse
+> operation of the kobject_add() I'm doing when sharing the bank, more to
+> that below.
+> 
+> I wonder why we see this now - maybe the kobject reference counting got
+> changed since then...
+> 
+> Anyway, thoughts?
+> 
 > ---
->  MAINTAINERS                                   |  6 ++++
->  include/dt-bindings/clock/loongson,ls2k-clk.h | 29 +++++++++++++++++++
->  2 files changed, 35 insertions(+)
->  create mode 100644 include/dt-bindings/clock/loongson,ls2k-clk.h
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0be0f520c032..b6aae412de9c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11907,6 +11907,12 @@ S:     Maintained
->  F:     Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->  F:     drivers/thermal/loongson2_thermal.c
->
-> +LOONGSON2 SOC SERIES CLOCK DRIVER
-> +M:     Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:     linux-clk@vger.kernel.org
-> +S:     Maintained
-> +F:     include/dt-bindings/clock/loongson,ls2k-clk.h
-> +
->  LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->  M:     Sathya Prakash <sathya.prakash@broadcom.com>
->  M:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> diff --git a/include/dt-bindings/clock/loongson,ls2k-clk.h b/include/dt-bindings/clock/loongson,ls2k-clk.h
-> new file mode 100644
-> index 000000000000..db1e27e792ff
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/loongson,ls2k-clk.h
-> @@ -0,0 +1,29 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> From: Borislav Petkov <bp@suse.de>
+> 
+> x86/MCE/AMD: Correctly drop shared bank references
+> 
+> Old AMD machines have a shared MCA bank 4 which reports northbridge
+> error types. That bank has a bunch of controls which are exposed this
+> way in sysfs on CPU0:
+> 
+>   /sys/devices/system/machinecheck/machinecheck0/northbridge/
+>   ├── dram
+>   │   ├── error_count
+>   │   ├── interrupt_enable
+>   │   └── threshold_limit
+>   ├── ht_links
+>   │   ├── error_count
+>   │   ├── interrupt_enable
+>   │   └── threshold_limit
+>   └── l3_cache
+>       ├── error_count
+>       ├── interrupt_enable
+>       └── threshold_limit
+> 
+> In order to expose the exact same controls - the bank is shared
+> between all CPUs - threshold_create_bank() reuses the bank pointer and
+> kobject_add()s it to the parent of the other CPUs:
+> 
+>   mce: threshold_create_bank: CPU1, yes, use it, kref: 4, parent_kref: 3, name: northbridge
+>   mce: threshold_create_bank: CPU1, inc cpus: 2, bank ref: 4
+>   mce: __threshold_add_blocks: entry, kobj: 0xffff888100adb218, parent: 0xffff888100c10c00 ref: 1, parent_kref: 4, name: dram
+>   mce: __threshold_add_blocks: misc,  kobj: 0xffff888100adb418, parent: 0xffff888100c10c00,  kref: 1, parent_kref: 6, name: l3_cache
+>   mce: __threshold_add_blocks: misc,  kobj: 0xffff888100adb318, parent: 0xffff888100c10c00,  kref: 1, parent_kref: 7, name: ht_links
+>   ...
+> 
+> kobject_add() does a kobject_get() on the parent for each sysfs file it
+> adds.
+> 
+> Therefore, in order to unwind the same setup work when the CPU goes
+> offline and the bank *references* only are being removed - the other
+> CPUs still share it - do a kobject_put() on the parent.
+
+Eeek, no!
+
+You can't decrement the reference on the parent, that could cause you to
+get dropped.
+
+And you can not reuse kobjects, is that the issue here?  When you are
+done with one, you have to delete it.  Then create a new one.
+
+No need to move anything around, just destory it all and then add new
+ones.
+
+> Rename things more properly while at it and add comments.
+> 
+> Signed-off-by: Borislav Petkov <bp@suse.de>
+> 
+> ---
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+> index 1c87501e0fa3..b2bdee9e0bae 100644
+> --- a/arch/x86/kernel/cpu/mce/amd.c
+> +++ b/arch/x86/kernel/cpu/mce/amd.c
+> @@ -1241,31 +1241,40 @@ static void threshold_block_release(struct kobject *kobj)
+>  	kfree(to_block(kobj));
+>  }
+>  
 > +/*
-> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
-> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + * Drop refcounts and delete list heads in order to free the memory.
 > + */
-> +
-> +#ifndef __DT_BINDINGS_CLOCK_LOONGSON2_H
-> +#define __DT_BINDINGS_CLOCK_LOONGSON2_H
-> +
-> +#define LOONGSON2_REF_100M                             0
-> +#define LOONGSON2_NODE_PLL                             1
-> +#define LOONGSON2_DDR_PLL                              2
-> +#define LOONGSON2_DC_PLL                               3
-> +#define LOONGSON2_PIX0_PLL                             4
-> +#define LOONGSON2_PIX1_PLL                             5
-> +#define LOONGSON2_NODE_CLK                             6
-> +#define LOONGSON2_HDA_CLK                              7
-> +#define LOONGSON2_GPU_CLK                              8
-> +#define LOONGSON2_DDR_CLK                              9
-> +#define LOONGSON2_GMAC_CLK                             10
-> +#define LOONGSON2_DC_CLK                               11
-> +#define LOONGSON2_APB_CLK                              12
-> +#define LOONGSON2_USB_CLK                              13
-> +#define LOONGSON2_SATA_CLK                             14
-> +#define LOONGSON2_PIX0_CLK                             15
-> +#define LOONGSON2_PIX1_CLK                             16
-> +#define LOONGSON2_CLK_END                              17
-> +
-> +#endif
-> --
-> 2.31.1
->
->
+>  static void deallocate_threshold_blocks(struct threshold_bank *bank)
+>  {
+> +	struct list_head *head = &bank->blocks->miscj;
+>  	struct threshold_block *pos, *tmp;
+>  
+> -	list_for_each_entry_safe(pos, tmp, &bank->blocks->miscj, miscj) {
+> -		list_del(&pos->miscj);
+> +	list_for_each_entry_safe(pos, tmp, head, miscj) {
+>  		kobject_put(&pos->kobj);
+> +		list_del(&pos->miscj);
+>  	}
+>  
+>  	kobject_put(&bank->blocks->kobj);
+>  }
+>  
+> -static void __threshold_remove_blocks(struct threshold_bank *b)
+> +/*
+> + * Only put the parent kobject of each block. The inverse of  kobject_add()
+> + * above in threshold_create_bank().
+> + */
+> +static void remove_shared_bank_kobjects(struct threshold_bank *bank)
+>  {
+> -	struct threshold_block *pos = NULL;
+> -	struct threshold_block *tmp = NULL;
+> +	struct list_head *head = &bank->blocks->miscj;
+> +	struct threshold_block *pos, *tmp;
+>  
+> -	kobject_del(b->kobj);
+> +	list_for_each_entry_safe(pos, tmp, head, miscj)
+> +		kobject_put(pos->kobj.parent);
+
+No, please don't do that.
+
+>  
+> -	list_for_each_entry_safe(pos, tmp, &b->blocks->miscj, miscj)
+> -		kobject_del(&pos->kobj);
+> +	kobject_put(bank->kobj);
+
+What changed to cause problems?  the kobject reference logic hasn't
+changed, was it some topology stuff?
+
+thanks,
+
+greg k-h
