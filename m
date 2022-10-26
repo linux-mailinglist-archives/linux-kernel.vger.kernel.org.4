@@ -2,145 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474BD60E11B
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D916960E1A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233811AbiJZMo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S233598AbiJZNKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233835AbiJZMoS (ORCPT
+        with ESMTP id S231476AbiJZNKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:44:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B81D10075;
-        Wed, 26 Oct 2022 05:44:18 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QCbnpK017383;
-        Wed, 26 Oct 2022 12:44:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=vahBHWcjmX25fVfVppqO25R8GRT50gCuNofrt1TcoK4=;
- b=pBs6LbiNS3CUyqAiiOPizWkElYkgt5B10jYMfFaCrnEI6ICsORTtLyl17N0adkl9w9lR
- YgLj84hxehhCbxTeIY6wgF3XOpqtqf/Q4SjdxsLEooiMbDyU9Ckr0M9EGyGYgbCGavHd
- SBodUGORSUhPywMBxOpfVnOKqcWax2Mbi6dnvBm0Xvr0mlt31NvWgk/xSP8t0vtkFugS
- Av6VJ3nlkpXa2u3Udso9GJD7n1HebJD/wLyWX6Z4eHLNWl+hQ8buNpxL1sll8OZMrZe9
- UXOCDb2XZo+z5u4MymC+t5jAOdqNeDuO1RPcvZSf4XHO0VaoZMSNflY8CJGlsefGosza 4A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kf3n5ua0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 12:44:12 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 29QCcNow022863;
-        Wed, 26 Oct 2022 12:44:11 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kf3n5u9y8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 12:44:11 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 29QCaYtB015665;
-        Wed, 26 Oct 2022 12:44:09 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3kc859ndav-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 26 Oct 2022 12:44:09 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 29QCcqSc49414598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Oct 2022 12:38:52 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5795CA4040;
-        Wed, 26 Oct 2022 12:44:07 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DEA43A4051;
-        Wed, 26 Oct 2022 12:44:06 +0000 (GMT)
-Received: from thinkpad (unknown [9.171.3.66])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Wed, 26 Oct 2022 12:44:06 +0000 (GMT)
-Date:   Wed, 26 Oct 2022 14:44:04 +0200
-From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        linux-mm <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>
-Subject: Re: [PATCH] selftests: vm: use 1 MB hugepage size for s390
-Message-ID: <20221026144404.2d67681a@thinkpad>
-In-Reply-To: <e5eff1ef-760c-5e6f-9f32-e8a7a624993b@redhat.com>
-References: <20221025152610.3439102-1-gerald.schaefer@linux.ibm.com>
-        <e5eff1ef-760c-5e6f-9f32-e8a7a624993b@redhat.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3Yn-AhucFM2Iy7NU2wdj19KAUIBuFP63
-X-Proofpoint-ORIG-GUID: mwDdvCMyECj3v-6kQ4FEuQuocyYSjqm2
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 26 Oct 2022 09:10:37 -0400
+X-Greylist: delayed 1527 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Oct 2022 06:10:35 PDT
+Received: from hz.preining.info (hz.preining.info [IPv6:2a01:4f9:2a:1a08::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594CF2FFFF;
+        Wed, 26 Oct 2022 06:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=preining.info; s=201909; h=Content-Type:MIME-Version:Message-ID:Subject:To:
+        From:Date:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0La9xePEka4s3dK4EFGiM4QoypNG8UN+HmXZKdb7kCA=; b=iD+0Q10MfbKIiKO0rg1t2AynId
+        bJM/S+Lmse1dcjOxPPMJHCfeWDgIyqq5todb/szevvYniRfZ9CnrWoBK0MvHV9Vi1cEEuGZqbu/9W
+        qEoOpOj1HPlvfFjWifOdf2MnQNw1W2Rg7ilVrDJ56FY80PnM/NjBDvv9kdUZGBac+XZEkZFkvVoJk
+        ipaQc0oZC9LZEscYBPMxDoavzT8vd6So7C4AeyAl6qroApzrSiKpt8um1g/mCJt1Hf0PYYaVmKwLM
+        agzjQVWVhD83Cpvo7xtNNJvSlKcLxXpEvzyi10T10j2UtF/FKWmq23GOACszkU0KCvO1fkboyqKEp
+        aAq2UzNA==;
+Received: from tvk215040.tvk.ne.jp ([180.94.215.40] helo=bulldog.preining.info)
+        by hz.preining.info with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <norbert@preining.info>)
+        id 1onfmL-004sbp-LG; Wed, 26 Oct 2022 12:45:05 +0000
+Received: by bulldog.preining.info (Postfix, from userid 1000)
+        id 46942DE9448; Wed, 26 Oct 2022 21:45:01 +0900 (JST)
+Date:   Wed, 26 Oct 2022 21:45:01 +0900
+From:   Norbert Preining <norbert@preining.info>
+To:     Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Lenovo X1 - kernel 6.0.N - complete freeze btrfs or i915 related
+Message-ID: <Y1krzbq3zdYOSQYG@bulldog>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-26_06,2022-10-26_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- priorityscore=1501 adultscore=0 lowpriorityscore=0 malwarescore=0
- phishscore=0 impostorscore=0 mlxlogscore=868 mlxscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2210260070
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022 17:34:52 +0200
-David Hildenbrand <david@redhat.com> wrote:
+Hi all,
 
-> On 25.10.22 17:26, Gerald Schaefer wrote:
-> > hugepage-vmemmap test fails for s390 because it assumes a hugepagesize
-> > of 2 MB, while we have 1 MB on s390. This results in iterating over two
-> > hugepages. If they are consecutive in memory, check_page_flags() will
-> > stumble over the additional head page. Otherwise, it will stumble over
-> > non-huge pageflags, after crossing the first 1 MB hugepage.
-> > 
-> > Fix this by using 1 MB MAP_LENGTH for s390.
-> > 
-> > Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> > ---
-> >   tools/testing/selftests/vm/hugepage-vmemmap.c | 7 +++++++
-> >   1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/vm/hugepage-vmemmap.c b/tools/testing/selftests/vm/hugepage-vmemmap.c
-> > index 557bdbd4f87e..a4695f138cec 100644
-> > --- a/tools/testing/selftests/vm/hugepage-vmemmap.c
-> > +++ b/tools/testing/selftests/vm/hugepage-vmemmap.c
-> > @@ -11,7 +11,14 @@
-> >   #include <sys/mman.h>
-> >   #include <fcntl.h>
-> >   
-> > +/*
-> > + * 1 MB hugepage size for s390
-> > + */
-> > +#if defined(__s390x__)
-> > +#define MAP_LENGTH		(1UL * 1024 * 1024)
-> > +#else
-> >   #define MAP_LENGTH		(2UL * 1024 * 1024)
-> > +#endif
-> 
-> Why not detect it at runtime, so this works on any architecture (e.g., 
-> ppc64 with 16 MiB IIRC and arm64 with weird sizes)?
-> 
-> A patch that adds such detection code is currently on its way upstream:
-> 
-> https://lore.kernel.org/all/20220927110120.106906-5-david@redhat.com/T/#u
-> 
-> We could factor that out into vm_utils.c
-> 
+(please Cc)
 
-Hello David, nice, I guess that would be much better than adding new #ifdefs,
-and also allow to check all available hugepage sizes per arch.
+I got a new laptop Lenovo X1 Gen 10 Alder Lake, and installed Arch on
+it. In contrast to my desktop that runs the same kernel and software,
+
+kernel 6.0.N (latest stable), with or without -zen changes
+Arch linux uptodate
+Hardware name: LENOVO 21CBCTO1WW/21CBCTO1WW, BIOS N3AET67W (1.32 ) 09/27/2022
+
+The laptop is freezing like hell. At the moment it hangs reproducible
+on every boot after a few seconds (around 20?).
+
+I captured a call trace on photo:
+
+btrfs_release_delayed_item.part
+btrfs_delete_delayed_dir_index
+...
+
+(more on request, I can type it in)
+
+
+Intel i915 also has loads of warnings. I tried with 
+	i915.enable_psr=0
+otherwise screen flickering and tearing is bad, and bad pixels show up.
+Adding the enable_psr=0 did fix that.
+
+Other things are that the GUI (Plasma via X11 - not wayland) is often
+freezing completely. But I guess that is a consequence of the btrfs
+error above, since starting new shell does not work, anything that wants
+to read from disk is hanging.
+
+I captured a recent boot log:
+	https://www.preining.info/boot.log
+which shows in detail hardware etc.
+
+I am more than happy to:
+- compile kernel with patches
+- provide detailed information as far as I can gather them
+
+Thanks for any comment/help
+
+(Please Cc)
+
+Best regards
+
+Norbert
+
+--
+PREINING Norbert                              https://www.preining.info
+Mercari Inc.     +     IFMGA Guide     +     TU Wien     +     TeX Live
+GPG: 0x860CDC13   fp: F7D8 A928 26E3 16A1 9FA0 ACF0 6CAC A448 860C DC13
