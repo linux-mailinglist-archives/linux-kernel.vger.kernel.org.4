@@ -2,179 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E5B60DDCC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53F8A60DDCA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbiJZJKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S233328AbiJZJKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbiJZJKk (ORCPT
+        with ESMTP id S233166AbiJZJKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:10:40 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1150A41D3F;
-        Wed, 26 Oct 2022 02:10:34 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29Q9AIn2005932;
-        Wed, 26 Oct 2022 04:10:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666775418;
-        bh=L6LdHRO5MG5avprXD4ic8aHDCe3/bQHvKFboizyJl8o=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=P+avpxK79BdUpwN/jnbJsV5R9JeHDoLYvsZeCLzoSkkch18OYmfSbYwn7O3trlKzk
-         EBR6nn+fbDNABvB8DPVPfzxvD8u2xcNhBu+KMOEEKxDXySMIj8ZU8QQx7GM8ES7iXn
-         JUBG8jp2YvoONd9qRrbrBM9BvT002uA952WwTx5Q=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29Q9AIkC125170
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 Oct 2022 04:10:18 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 26
- Oct 2022 04:10:17 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 26 Oct 2022 04:10:17 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29Q99wxs005870;
-        Wed, 26 Oct 2022 04:10:13 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
-        <vladimir.oltean@nxp.com>, <vigneshr@ti.com>, <nsekhar@ti.com>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
-Subject: [PATCH v3 3/3] net: ethernet: ti: am65-cpsw: Add support for SERDES configuration
-Date:   Wed, 26 Oct 2022 14:39:57 +0530
-Message-ID: <20221026090957.180592-4-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221026090957.180592-1-s-vadapalli@ti.com>
-References: <20221026090957.180592-1-s-vadapalli@ti.com>
+        Wed, 26 Oct 2022 05:10:39 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7C640BD3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uh3BCm/3F38LepawwgOLWixsQrToIu+qFMWiZqKufG8=; b=T3HhDtIpYO7ka3qVlLncPuMToO
+        /qhSEkFlmYHwwIZ7mkIVnwdfEQh6ClMXDkLYxfKzo8Qi+//6/pFf+atm2z9WXpe0FvZoJvuaOYUPf
+        U/jRq1hz7wjEo24C8IcEk5XiIlVopfUoj+8de8maXOIwiQGaXC6vkMSGdwRW/Maj/lTcQcJY1/lzG
+        1jqSLnBW/EHGDPGO1/IhzMzHSvAM4yZo63D4inLo6iluOUsR3l4ScRH5cOX8xbvbJd3sSwejjE3yB
+        3BYL9wwJcYWi2zVgnd5b2C5sy9lqWO6owE6OL4fFRHtI96A2JSzz7kdpW/cmVBigu5TVPds6se56z
+        l9ZBTe3g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oncQN-006XzU-O9; Wed, 26 Oct 2022 09:10:12 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1923730010B;
+        Wed, 26 Oct 2022 11:10:11 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 013D32C268BC3; Wed, 26 Oct 2022 11:10:10 +0200 (CEST)
+Date:   Wed, 26 Oct 2022 11:10:10 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vishal Chourasia <vishalc@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        vincent.guittot@linaro.org, vschneid@redhat.com,
+        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
+        linuxppc-dev@lists.ozlabs.org, ritesh.list@gmail.com,
+        aneesh.kumar@linux.ibm.com
+Subject: Re: sched/debug: CPU hotplug operation suffers in a large cpu systems
+Message-ID: <Y1j5cqbyZCDlyaTn@hirez.programming.kicks-ass.net>
+References: <Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y01kc4g9CVmoyOxj@hirez.programming.kicks-ass.net>
+ <Y01sk3l8yCMvhvYm@kroah.com>
+ <Y06B0pr8hpwzxEzI@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y06ISBWhJflnV+NI@kroah.com>
+ <Y1jVjX9FUuUilcjA@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+ <Y1jbhCYfktL51zNB@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1jbhCYfktL51zNB@kroah.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use PHY framework APIs to initialize the SERDES PHY connected to CPSW MAC.
+On Wed, Oct 26, 2022 at 09:02:28AM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Oct 26, 2022 at 12:07:01PM +0530, Vishal Chourasia wrote:
+> > On Tue, Oct 18, 2022 at 01:04:40PM +0200, Greg Kroah-Hartman wrote:
+> > 
+> > > Why do you need to?  What tools require these debugfs files to be
+> > > present?
+> > 
+> > We are not entirely sure what applications (if any) might be using this interface.
+> 
+> Then just disable it and see what happens :)
 
-Define the functions am65_cpsw_disable_phy(), am65_cpsw_enable_phy(),
-am65_cpsw_disable_serdes_phy() and am65_cpsw_enable_serdes_phy().
+It's mostly a debug interface for developers. A lot of people complained
+when I moved things to debugfs, and I told them their program was broken
+for a SCHED_DEBUG=n build anyway, but nobody complained about
+this particular thing IIRC.
 
-Power on and initialize the SerDes PHY in am65_cpsw_nuss_init_slave_ports()
-by invoking am65_cpsw_enable_serdes_phy().
+It's mostly affected by things like hotplug and cpusets, you can
+discover the resulting topology by looking at these files.
 
-Power off the SerDes PHY in am65_cpsw_nuss_remove() by invoking
-am65_cpsw_disable_serdes_phy().
+Also; while we generally try and keep SCHED_DEBUG impact low, it is
+still measurable; there are a number of people that run SCHED_DEBUG=n
+kernels for the extra little gain.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 65 ++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+> > > And if you only have 7-8 files per CPU, that does not seem like a lot of
+> > > files overall (14000-16000)?  If you only offline 1 cpu, how is removing
+> > > 7 or 8 files a bottleneck?  Do you really offline 1999 cpus for a 2k
+> > > system?
+> > 
+> > It's 7-8 files per domain per cpu, so, in a system with approx 2k cpus and five
+> > domains, the total file count goes above 70k-80k files. And, when we offline 1
+> > CPU, the entire directory is rebuilt, resulting in creation of all the files
+> > again.
+> 
+> Perhaps change the logic to not rebuild the whole thing and instead just
+> remove the required files?
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 91e294afc3ad..519ebd371dd8 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -1403,6 +1403,65 @@ static const struct net_device_ops am65_cpsw_nuss_netdev_ops = {
- 	.ndo_get_devlink_port   = am65_cpsw_ndo_get_devlink_port,
- };
- 
-+static void am65_cpsw_disable_phy(struct phy *phy)
-+{
-+	phy_power_off(phy);
-+	phy_exit(phy);
-+}
-+
-+static int am65_cpsw_enable_phy(struct phy *phy)
-+{
-+	int ret;
-+
-+	ret = phy_init(phy);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = phy_power_on(phy);
-+	if (ret < 0) {
-+		phy_exit(phy);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void am65_cpsw_disable_serdes_phy(struct am65_cpsw_common *common)
-+{
-+	struct device_node *node, *port_np;
-+	struct device *dev = common->dev;
-+	const char *name = "serdes-phy";
-+	struct phy *phy;
-+
-+	node = of_get_child_by_name(dev->of_node, "ethernet-ports");
-+
-+	for_each_child_of_node(node, port_np) {
-+		phy = devm_of_phy_get(dev, port_np, name);
-+		am65_cpsw_disable_phy(phy);
-+	}
-+}
-+
-+static int am65_cpsw_init_serdes_phy(struct device *dev, struct device_node *port_np)
-+{
-+	const char *name = "serdes-phy";
-+	struct phy *phy;
-+	int ret;
-+
-+	phy = devm_of_phy_get(dev, port_np, name);
-+	if (PTR_ERR(phy) == -ENODEV)
-+		return 0;
-+
-+	ret =  am65_cpsw_enable_phy(phy);
-+	if (ret < 0)
-+		goto err_phy;
-+
-+	return 0;
-+
-+err_phy:
-+	devm_phy_put(dev, phy);
-+	return ret;
-+}
-+
- static void am65_cpsw_nuss_mac_config(struct phylink_config *config, unsigned int mode,
- 				      const struct phylink_link_state *state)
- {
-@@ -1880,6 +1939,11 @@ static int am65_cpsw_nuss_init_slave_ports(struct am65_cpsw_common *common)
- 			goto of_node_put;
- 		}
- 
-+		/* Initialize the phy for the port */
-+		ret = am65_cpsw_init_serdes_phy(dev, port_np);
-+		if (ret)
-+			return ret;
-+
- 		port->slave.mac_only =
- 				of_property_read_bool(port_np, "ti,mac-only");
- 
-@@ -2833,6 +2897,7 @@ static int am65_cpsw_nuss_remove(struct platform_device *pdev)
- 
- 	am65_cpsw_nuss_phylink_cleanup(common);
- 	am65_cpsw_unregister_devlink(common);
-+	am65_cpsw_disable_serdes_phy(common);
- 	am65_cpsw_unregister_notifiers(common);
- 
- 	/* must unregister ndevs here because DD release_driver routine calls
--- 
-2.25.1
+Unplugging a single cpu can change the topology and the other cpus might
+need to be updated too.
 
+Simplest example would be the SMT case, if you reduce from SMT>1 to SMT1
+the SMT domain goes away (because a single CPU domain is as pointless as
+it sounds) and that affects the CPU that remains.
+
+Tracking all that is a pain. Simply rebuilding the whole thing is by
+*far* the simplest option. And given this all is debug code, simple is
+good.
+
+> Or as I mentioned before, you can move debugfs to use kernfs, which
+> should resolve most of these issues automatically.  Why not take the
+> time to do that which will solve the problem no matter what gets added
+> in the future in other subsystems?
+
+This sounds like a good approach.
