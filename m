@@ -2,288 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA9C60E6CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E735560E6CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234002AbiJZRwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
+        id S234223AbiJZRwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234258AbiJZRwW (ORCPT
+        with ESMTP id S234235AbiJZRwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:52:22 -0400
-Received: from domac.alu.hr (domac.alu.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B6A107CEF
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:52:11 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 9B471604F2;
-        Wed, 26 Oct 2022 19:52:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1666806729; bh=/cPVVwLxCJykskvapN3iSQ/QyEuP7ZZdJZTFQ1rvd7Q=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=Z9j0OUug2d5DDQnn1RDApCpjODAgGITl91HkDPew7HfH/sq7vOjLWks2FKb8hApbf
-         L+JcmMoE2+YsL+Vc1nVOuvT/5XPncLMHnykEbWOC0KaoSFsZK98J5xa12iPzSXLVey
-         qQTSD1lRGTslRpiX1bXOghzgicAlP2Dj5q4yoGzfbkh37m2sKZ5vy2Vx0+C74+FJHW
-         PeQN/O6MHPZRZ9diPWB69JkKTiP2K5cqtOx3CpwKcdzsag5zRxahi2Y/8Z0WYHTogM
-         iwqPkD0+3IkdKVTsLy5c9lReLq0Z1MsdMVzeGm/tL6GjIqwqStAANhq0WSgrwvVOFp
-         95iWeu4O2sNqQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id P8dag7I5IpKy; Wed, 26 Oct 2022 19:52:05 +0200 (CEST)
-Received: from [192.168.0.12] (unknown [188.252.199.26])
-        by domac.alu.hr (Postfix) with ESMTPSA id 9FD68604EC;
-        Wed, 26 Oct 2022 19:52:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1666806725; bh=/cPVVwLxCJykskvapN3iSQ/QyEuP7ZZdJZTFQ1rvd7Q=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=Tk+EIwimkS8MebCtMJwJMUn2W7sF43actOEDbEqJ9Ydp2etWDyKY5tjLiF4WZFg7L
-         yZBIxA2q35TrxiSYmEv0EcbpUHrNR7H7HQv0pRpiNVM5v2vU7ZQF2corOFEzlscYZW
-         W3Q42sU2ddJhN1+z6kvyNwmPMkfF4JvxVJLNLTJ8ijPuifPyFZoXUxYMSwC+Xm2+VV
-         k1ehqYQkTXLhQnKb/9imvz1HbjFTeP3JEj8fPzZKjOXifpp1a9WoQMA17e0v2Nznnr
-         bAvuQmKi1a0UT66rfUytK+a/IaKVMBdOPJEsvklS06gwM8ZfmWTAUSfNEeCjVoqbYk
-         XOmmWc5UviYoA==
-Content-Type: multipart/mixed; boundary="------------Ll0EviEI1ovXA5j6SuTndsfK"
-Message-ID: <6c2f47c8-d6b5-074a-4c8f-e9cd04f62ef4@alu.unizg.hr>
-Date:   Wed, 26 Oct 2022 19:52:03 +0200
+        Wed, 26 Oct 2022 13:52:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C245108DCC
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666806735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=geniLJHmWq3kpgcGVKm4jCdheUxhYshUAvvdO1yrzTQ=;
+        b=ZpTEV4cgsSVP+VR8YE55RSluSXq6vh4I+E1yE1h4L9pY9cE+TseMiinFgIK12NqSABPq0G
+        XVU1D3LjR5JvXI/frmS2ULsFyR0eLMWPSkSW4I64aguFROyPbnrO1v2KcLK6SV6ONX/07X
+        vJtzpJGPTY8ygmugu91VBoJDRSWXiJA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-163-Rf7KdyzOM_W2LQOX2UPDnA-1; Wed, 26 Oct 2022 13:52:13 -0400
+X-MC-Unique: Rf7KdyzOM_W2LQOX2UPDnA-1
+Received: by mail-wm1-f72.google.com with SMTP id iw9-20020a05600c54c900b003cf4eea332cso419256wmb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:52:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=geniLJHmWq3kpgcGVKm4jCdheUxhYshUAvvdO1yrzTQ=;
+        b=HY31WGhDwNUPuCdLLu4mcHUe0Gll8DaeEbkEkt5F0HIeHhHnqxN8Wf5LnOoN3TB8cL
+         VAK3Oqrkda9PzL8qKseLjrJav3oh/GovdgVuffesdKn337l+GivpZmiKDq3uxbqtD9IC
+         BfnhEmU+OiKk3oXe6o6dX6q3lkL7EAahl510SEUapIwKDoeMeTZo3jp1O3bBdobjuKyj
+         UC+ihwnZY93IKDpDwfCTTOPurv9qnQP+exMdG2KO+8S5coUr+2wdZeYSluF+lV14Soce
+         qs8BKTv3EKyRsuk0FMa8VMHvoVHdt8FaZaLaBJfLZpB4vciNnbVW+rWxOPCKDBRKmIbi
+         PsUA==
+X-Gm-Message-State: ACrzQf073vAIMQDO5lJ9Wzza6NqZV8EuQdNDbVDK+Gr92ImcbinNZ2Qq
+        Zi6LCP2I3Zhg5KJzOoRPJV00Y6oxl53UHBc/zLMSyrO6AuApYw+QgSCS3is6YY2NR2+haU2Nzy8
+        BlbLVbZJpx0DJKjSpGVEutIx5
+X-Received: by 2002:a05:6000:1ac7:b0:232:b68c:9e0 with SMTP id i7-20020a0560001ac700b00232b68c09e0mr30940564wry.54.1666806732600;
+        Wed, 26 Oct 2022 10:52:12 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5H8nSmRGc8ubFmwlY72dw0Lzn/Wbclbz9oiRnT7h3ncFdTKq7AZYYBKQFrVTm3HA3Rxq8Ucw==
+X-Received: by 2002:a05:6000:1ac7:b0:232:b68c:9e0 with SMTP id i7-20020a0560001ac700b00232b68c09e0mr30940544wry.54.1666806732335;
+        Wed, 26 Oct 2022 10:52:12 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id g12-20020a05600c310c00b003b4cba4ef71sm2448055wmo.41.2022.10.26.10.52.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 10:52:11 -0700 (PDT)
+Message-ID: <d3e2dd2b-9520-32ef-6785-94164a834adf@redhat.com>
+Date:   Wed, 26 Oct 2022 19:52:10 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: BUG: bisected: thermald regression (MEMLEAK) in commit
- c7ff29763989bd09c433f73fae3c1e1c15d9cda4
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, rjw@rjwysocki.net
-Cc:     regressions@lists.linux.dev, regressions@leemhuis.info,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Robert Moore <robert.moore@intel.com>, devel@acpica.org
-References: <e0f06714-5a49-a4e6-24e6-c4103c820819@alu.unizg.hr>
- <9ef3674afd370050b86a68e44c97e4f0257f1adf.camel@linux.intel.com>
- <bd1f0d2a-d456-92cc-ecca-23e480aea4b1@alu.unizg.hr>
- <e5d3d561bb3a9c68bc903cfc35c27629a4a9225c.camel@linux.intel.com>
- <d034dbbc-613c-1a5e-df64-d0251453c8eb@alu.unizg.hr>
+ Thunderbird/102.2.1
+Subject: Hyper-V VTLs, permission bitmaps and userspace exits (was Re: [PATCH
+ 0/4] KVM: API to block and resume all running vcpus in a vm)
 Content-Language: en-US
-In-Reply-To: <d034dbbc-613c-1a5e-df64-d0251453c8eb@alu.unizg.hr>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        kvm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221022154819.1823133-1-eesposit@redhat.com>
+ <a2e16531-5522-a334-40a1-2b0e17663800@linux.ibm.com>
+ <2701ce67-bfff-8c0c-4450-7c4a281419de@redhat.com>
+ <384b2622-8d7f-ce02-1452-84a86e3a5697@linux.ibm.com>
+ <Y1cVfECAAfmp5XqA@google.com>
+ <5a26c107-9ab5-60ee-0e9c-a9955dfe313d@redhat.com>
+ <Y1gG/W/q/VIydpMu@google.com>
+ <02c910bb-3ea0-fa84-7a1c-92fb9e8b03de@redhat.com>
+ <Y1hsHjPuZfrREulV@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <Y1hsHjPuZfrREulV@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------Ll0EviEI1ovXA5j6SuTndsfK
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+On 10/26/22 01:07, Sean Christopherson wrote:
+> I don't think it's realistic to make accesses outside of KVM_RUN go away, e.g.
+> see the ARM ITS discussion in the dirty ring thread.  kvm_xen_set_evtchn() also
+> explicitly depends on writing guest memory without going through KVM_RUN (and
+> apparently can be invoked from a kernel thread?!?).
 
-Dear all,
+Yeah, those are the pages that must be considered dirty when using the 
+dirty ring.
 
-On 24. 10. 2022. 20:56, Mirsad Goran Todorovac wrote:
-> On 24. 10. 2022. 20:39, srinivas pandruvada wrote:
+> In theory, I do actually like the idea of restricting memory access to KVM_RUN,
+> but in reality I just think that forcing everything into KVM_RUN creates far more
+> problems than it solves.  E.g. my complaint with KVM_REQ_GET_NESTED_STATE_PAGES
+> is that instead of syncrhonously telling userspace it has a problem, KVM chugs
+> along as if everything is fine and only fails at later point in time.  I doubt
+> userspace would actually do anything differently, i.e. the VM is likely hosed no
+> matter what, but deferring work adds complexity in KVM and makes it more difficult
+> to debug problems when they occur.
 >
->>> Thank you for the patch. Unfortunately, when applied to v6.0.3 it
->>> didn't
->>> fix the issue.
->> Thanks for the test. I copied to acpi and acpica mailing list. Someone
->> can tell us what is this call doing wrong here. 
+>>>     - to stop anything else in the system that consumes KVM memslots, e.g. KVM GT
+>>
+>> Is this true if you only look at the KVM_GET_DIRTY_LOG case and consider it
+>> a guest bug to access the memory (i.e. ignore the strange read-only changes
+>> which only happen at boot, and which I agree are QEMU-specific)?
+> 
+> Yes?  I don't know exactly what "the KVM_GET_DIRTY_LOG case" is.
 
-I have worse news: after every
+It is not possible to atomically read the dirty bitmap and delete a 
+memslot.  When you delete a memslot, the bitmap is gone.  In this case 
+however memory accesses to the deleted memslot are a guest bug, so 
+stopping KVM-GT would not be necessary.
 
-# systemctl stop thermald
-# systemctl start thermald
+So while I'm being slowly convinced that QEMU should find a way to pause 
+its vCPUs around memslot changes, I'm not sure that pausing everything 
+is needed in general.
 
-the number of leaks increases by one allocated block (apparently 80 
-bytes). The effect appears to be
-cummulative.
+>>> And because of the nature of KVM, to support this API on all architectures, KVM
+>>> needs to make change on all architectures, whereas userspace should be able to
+>>> implement a generic solution.
+>>
+>> Yes, I agree that this is essentially just a more efficient kill().
+>> Emanuele, perhaps you can put together a patch to x86/vmexit.c in
+>> kvm-unit-tests, where CPU0 keeps changing memslots and the other CPUs are in
+>> a for(;;) busy wait, to measure the various ways to do it?
+> 
+> I'm a bit confused.  Is the goal of this to simplify QEMU, dedup VMM code, provide
+> a more performant solution, something else entirely?
 
-Please find the results of the MEMLEAK scan in the attachment.
+Well, a bit of all of them and perhaps that's the problem.  And while 
+the issues at hand *are* self-inflicted wounds on part of QEMU, it seems 
+to me that the underlying issues are general.
 
-In theory, motivated adversary could theoretically exhaust  i.e. 8 GiB 
-in a loop of 10 million thermald stops/starts,
-on my laptop and 2 sec for stop+start, it would be approx. 230 days.
+For example, Alex Graf and I looked back at your proposal of a userspace 
+exit for "bad" accesses to memory, wondering if it could help with 
+Hyper-V VTLs too.  To recap, the "higher privileged" code at VTL1 can 
+set up VM-wide restrictions on access to some pages through a hypercall 
+(HvModifyVtlProtectionMask).  After the hypercall, VTL0 would not be 
+able to access those pages.  The hypercall would be handled in userspace 
+and would invoke a KVM_SET_MEMORY_REGION_PERM ioctl to restrict the RWX 
+permissions, and this ioctl would set up a VM-wide permission bitmap 
+that would be used when building page tables.
 
-Hope this helps.
+Using such a bitmap instead of memslots makes it possible to cause 
+userspace vmexits on VTL mapping violations with efficient data 
+structures.  And it would also be possible to use this mechanism around 
+KVM_GET_DIRTY_LOG, to read the KVM dirty bitmap just before removing a 
+memslot.
 
-Mirsad
+However, external accesses to the regions (ITS, Xen, KVM-GT, non KVM_RUN 
+ioctls) would not be blocked, due to the lack of a way to report the 
+exit.  The intersection of these features with VTLs should be very small 
+(sometimes zero since VTLs are x86 only), but the ioctls would be a 
+problem so I'm wondering what your thoughts are on this.
 
--- 
+Also, while the exit API could be the same, it is not clear to me that 
+the permission bitmap would be a good match for entirely "void" memslots 
+used to work around non-atomic memslot changes.  So for now let's leave 
+this aside and only consider the KVM_GET_DIRTY_LOG case.
 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
--- 
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
-The European Union
+Paolo
 
---------------Ll0EviEI1ovXA5j6SuTndsfK
-Content-Type: text/plain; charset=UTF-8; name="memleak-cummulative.txt"
-Content-Disposition: attachment; filename="memleak-cummulative.txt"
-Content-Transfer-Encoding: base64
-
-dW5yZWZlcmVuY2VkIG9iamVjdCAweGZmZmY5NWU2ODZkZjdjODAgKHNpemUgODApOgogIGNv
-bW0gInRoZXJtYWxkIiwgcGlkIDg1MywgamlmZmllcyA0Mjk0ODk0MzA4IChhZ2UgMTMyNy43
-ODRzKQogIGhleCBkdW1wIChmaXJzdCAzMiBieXRlcyk6CiAgICAwMCAwMCAwMCAwMCAwMCAw
-MCAwMCAwMCAwZCAwMSAyZCAwMCAwMCAwMCAwMCAwMCAgLi4uLi4uLi4uLi0uLi4uLgogICAg
-YWYgMDcgMDEgNDAgZmUgYTIgZmYgZmYgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgIC4uLkAu
-Li4uLi4uLi4uLi4KICBiYWNrdHJhY2U6CiAgICBbPDAwMDAwMDAwZGEzYzY2N2M+XSBzbGFi
-X3Bvc3RfYWxsb2NfaG9vaysweDgwLzB4MmUwCiAgICBbPDAwMDAwMDAwNzgyMGY3NjM+XSBr
-bWVtX2NhY2hlX2FsbG9jKzB4MTcxLzB4MzAwCiAgICBbPDAwMDAwMDAwYzhkMDBiY2M+XSBh
-Y3BpX29zX2FjcXVpcmVfb2JqZWN0KzB4MmMvMHgzMgogICAgWzwwMDAwMDAwMDNhZWM0NTFh
-Pl0gYWNwaV9wc19hbGxvY19vcCsweDRhLzB4OTkKICAgIFs8MDAwMDAwMDA4YTdmNmM4MT5d
-IGFjcGlfcHNfZ2V0X25leHRfYXJnKzB4NjExLzB4NzYxCiAgICBbPDAwMDAwMDAwZjdmY2Mw
-M2Q+XSBhY3BpX3BzX3BhcnNlX2xvb3ArMHg0OTQvMHg4ZDcKICAgIFs8MDAwMDAwMDA3OGJh
-NjM5Nz5dIGFjcGlfcHNfcGFyc2VfYW1sKzB4MWJiLzB4NTYxCiAgICBbPDAwMDAwMDAwZTE4
-OWFjMzA+XSBhY3BpX3BzX2V4ZWN1dGVfbWV0aG9kKzB4MjBmLzB4MmQ1CiAgICBbPDAwMDAw
-MDAwNzg1MzJiYjk+XSBhY3BpX25zX2V2YWx1YXRlKzB4MzRkLzB4NGYzCiAgICBbPDAwMDAw
-MDAwNzE1Mzg5NDM+XSBhY3BpX2V2YWx1YXRlX29iamVjdCsweDE4MC8weDNhZQogICAgWzww
-MDAwMDAwMGZkY2VjOTM4Pl0gYWNwaV9ydW5fb3NjKzB4MTI4LzB4MjUwCiAgICBbPDAwMDAw
-MDAwZTA1NDRlNTc+XSBpbnQzNDAwX3RoZXJtYWxfcnVuX29zYysweDZmLzB4YzAgW2ludDM0
-MDBfdGhlcm1hbF0KICAgIFs8MDAwMDAwMDA3YTQ0MzQ2Mj5dIGN1cnJlbnRfdXVpZF9zdG9y
-ZSsweGUzLzB4MTIwIFtpbnQzNDAwX3RoZXJtYWxdCiAgICBbPDAwMDAwMDAwNTA2M2FlNTU+
-XSBkZXZfYXR0cl9zdG9yZSsweDE0LzB4MzAKICAgIFs8MDAwMDAwMDAxY2NjMGIwND5dIHN5
-c2ZzX2tmX3dyaXRlKzB4MzgvMHg1MAogICAgWzwwMDAwMDAwMGYyNGRjZmZjPl0ga2VybmZz
-X2ZvcF93cml0ZV9pdGVyKzB4MTQ2LzB4MWQwCnVucmVmZXJlbmNlZCBvYmplY3QgMHhmZmZm
-OTVlNjgzNzY4ODIwIChzaXplIDgwKToKICBjb21tICJ0aGVybWFsZCIsIHBpZCA4NTMsIGpp
-ZmZpZXMgNDI5NDk1MDAyMSAoYWdlIDExMDUuMDY0cykKICBoZXggZHVtcCAoZmlyc3QgMzIg
-Ynl0ZXMpOgogICAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMDAgMGQgMDEgMmQgMDAgMDAgMDAg
-MDAgMDAgIC4uLi4uLi4uLi4tLi4uLi4KICAgIDNhIDA4IDAxIDQwIGZlIGEyIGZmIGZmIDAw
-IDAwIDAwIDAwIDAwIDAwIDAwIDAwICA6Li5ALi4uLi4uLi4uLi4uCiAgYmFja3RyYWNlOgog
-ICAgWzwwMDAwMDAwMGRhM2M2NjdjPl0gc2xhYl9wb3N0X2FsbG9jX2hvb2srMHg4MC8weDJl
-MAogICAgWzwwMDAwMDAwMDc4MjBmNzYzPl0ga21lbV9jYWNoZV9hbGxvYysweDE3MS8weDMw
-MAogICAgWzwwMDAwMDAwMGM4ZDAwYmNjPl0gYWNwaV9vc19hY3F1aXJlX29iamVjdCsweDJj
-LzB4MzIKICAgIFs8MDAwMDAwMDAzYWVjNDUxYT5dIGFjcGlfcHNfYWxsb2Nfb3ArMHg0YS8w
-eDk5CiAgICBbPDAwMDAwMDAwOGE3ZjZjODE+XSBhY3BpX3BzX2dldF9uZXh0X2FyZysweDYx
-MS8weDc2MQogICAgWzwwMDAwMDAwMGY3ZmNjMDNkPl0gYWNwaV9wc19wYXJzZV9sb29wKzB4
-NDk0LzB4OGQ3CiAgICBbPDAwMDAwMDAwNzhiYTYzOTc+XSBhY3BpX3BzX3BhcnNlX2FtbCsw
-eDFiYi8weDU2MQogICAgWzwwMDAwMDAwMGUxODlhYzMwPl0gYWNwaV9wc19leGVjdXRlX21l
-dGhvZCsweDIwZi8weDJkNQogICAgWzwwMDAwMDAwMDc4NTMyYmI5Pl0gYWNwaV9uc19ldmFs
-dWF0ZSsweDM0ZC8weDRmMwogICAgWzwwMDAwMDAwMDcxNTM4OTQzPl0gYWNwaV9ldmFsdWF0
-ZV9vYmplY3QrMHgxODAvMHgzYWUKICAgIFs8MDAwMDAwMDBmZGNlYzkzOD5dIGFjcGlfcnVu
-X29zYysweDEyOC8weDI1MAogICAgWzwwMDAwMDAwMGUwNTQ0ZTU3Pl0gaW50MzQwMF90aGVy
-bWFsX3J1bl9vc2MrMHg2Zi8weGMwIFtpbnQzNDAwX3RoZXJtYWxdCiAgICBbPDAwMDAwMDAw
-MTRiOTZmN2Q+XSBpbnQzNDAwX3RoZXJtYWxfY2hhbmdlX21vZGUrMHhkMy8weDExMCBbaW50
-MzQwMF90aGVybWFsXQogICAgWzwwMDAwMDAwMDZmZmM4ODI2Pl0gdGhlcm1hbF96b25lX2Rl
-dmljZV9zZXRfbW9kZSsweDQ2LzB4YzAKICAgIFs8MDAwMDAwMDAzNmExZjIyMT5dIHRoZXJt
-YWxfem9uZV9kZXZpY2VfZGlzYWJsZSsweDEwLzB4MjAKICAgIFs8MDAwMDAwMDA1MDJlNGU3
-ND5dIG1vZGVfc3RvcmUrMHg1Yy8weDgwCnVucmVmZXJlbmNlZCBvYmplY3QgMHhmZmZmOTVl
-NjhhNjE4MWUwIChzaXplIDgwKToKICBjb21tICJ0aGVybWFsZCIsIHBpZCA1MjA2LCBqaWZm
-aWVzIDQyOTQ5NTE5NjMgKGFnZSAxMDk3LjMwMHMpCiAgaGV4IGR1bXAgKGZpcnN0IDMyIGJ5
-dGVzKToKICAgIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDBkIDAxIDJkIDAwIDAwIDAwIDAw
-IDAwICAuLi4uLi4uLi4uLS4uLi4uCiAgICBhZiAwNyAwMSA0MCBmZSBhMiBmZiBmZiAwMCAw
-MCAwMCAwMCAwMCAwMCAwMCAwMCAgLi4uQC4uLi4uLi4uLi4uLgogIGJhY2t0cmFjZToKICAg
-IFs8MDAwMDAwMDBkYTNjNjY3Yz5dIHNsYWJfcG9zdF9hbGxvY19ob29rKzB4ODAvMHgyZTAK
-ICAgIFs8MDAwMDAwMDA3ODIwZjc2Mz5dIGttZW1fY2FjaGVfYWxsb2MrMHgxNzEvMHgzMDAK
-ICAgIFs8MDAwMDAwMDBjOGQwMGJjYz5dIGFjcGlfb3NfYWNxdWlyZV9vYmplY3QrMHgyYy8w
-eDMyCiAgICBbPDAwMDAwMDAwM2FlYzQ1MWE+XSBhY3BpX3BzX2FsbG9jX29wKzB4NGEvMHg5
-OQogICAgWzwwMDAwMDAwMDhhN2Y2YzgxPl0gYWNwaV9wc19nZXRfbmV4dF9hcmcrMHg2MTEv
-MHg3NjEKICAgIFs8MDAwMDAwMDBmN2ZjYzAzZD5dIGFjcGlfcHNfcGFyc2VfbG9vcCsweDQ5
-NC8weDhkNwogICAgWzwwMDAwMDAwMDc4YmE2Mzk3Pl0gYWNwaV9wc19wYXJzZV9hbWwrMHgx
-YmIvMHg1NjEKICAgIFs8MDAwMDAwMDBlMTg5YWMzMD5dIGFjcGlfcHNfZXhlY3V0ZV9tZXRo
-b2QrMHgyMGYvMHgyZDUKICAgIFs8MDAwMDAwMDA3ODUzMmJiOT5dIGFjcGlfbnNfZXZhbHVh
-dGUrMHgzNGQvMHg0ZjMKICAgIFs8MDAwMDAwMDA3MTUzODk0Mz5dIGFjcGlfZXZhbHVhdGVf
-b2JqZWN0KzB4MTgwLzB4M2FlCiAgICBbPDAwMDAwMDAwZmRjZWM5Mzg+XSBhY3BpX3J1bl9v
-c2MrMHgxMjgvMHgyNTAKICAgIFs8MDAwMDAwMDBlMDU0NGU1Nz5dIGludDM0MDBfdGhlcm1h
-bF9ydW5fb3NjKzB4NmYvMHhjMCBbaW50MzQwMF90aGVybWFsXQogICAgWzwwMDAwMDAwMDdh
-NDQzNDYyPl0gY3VycmVudF91dWlkX3N0b3JlKzB4ZTMvMHgxMjAgW2ludDM0MDBfdGhlcm1h
-bF0KICAgIFs8MDAwMDAwMDA1MDYzYWU1NT5dIGRldl9hdHRyX3N0b3JlKzB4MTQvMHgzMAog
-ICAgWzwwMDAwMDAwMDFjY2MwYjA0Pl0gc3lzZnNfa2Zfd3JpdGUrMHgzOC8weDUwCiAgICBb
-PDAwMDAwMDAwZjI0ZGNmZmM+XSBrZXJuZnNfZm9wX3dyaXRlX2l0ZXIrMHgxNDYvMHgxZDAK
-dW5yZWZlcmVuY2VkIG9iamVjdCAweGZmZmY5NWU2ODdkYmU1MDAgKHNpemUgODApOgogIGNv
-bW0gInRoZXJtYWxkIiwgcGlkIDUyMDYsIGppZmZpZXMgNDI5NDk1Mjg4OSAoYWdlIDEwOTMu
-NzI0cykKICBoZXggZHVtcCAoZmlyc3QgMzIgYnl0ZXMpOgogICAgMDAgMDAgMDAgMDAgMDAg
-MDAgMDAgMDAgMGQgMDEgMmQgMDAgMDAgMDAgMDAgMDAgIC4uLi4uLi4uLi4tLi4uLi4KICAg
-IDNhIDA4IDAxIDQwIGZlIGEyIGZmIGZmIDAwIDAwIDAwIDAwIDAwIDAwIDAwIDAwICA6Li5A
-Li4uLi4uLi4uLi4uCiAgYmFja3RyYWNlOgogICAgWzwwMDAwMDAwMGRhM2M2NjdjPl0gc2xh
-Yl9wb3N0X2FsbG9jX2hvb2srMHg4MC8weDJlMAogICAgWzwwMDAwMDAwMDc4MjBmNzYzPl0g
-a21lbV9jYWNoZV9hbGxvYysweDE3MS8weDMwMAogICAgWzwwMDAwMDAwMGM4ZDAwYmNjPl0g
-YWNwaV9vc19hY3F1aXJlX29iamVjdCsweDJjLzB4MzIKICAgIFs8MDAwMDAwMDAzYWVjNDUx
-YT5dIGFjcGlfcHNfYWxsb2Nfb3ArMHg0YS8weDk5CiAgICBbPDAwMDAwMDAwOGE3ZjZjODE+
-XSBhY3BpX3BzX2dldF9uZXh0X2FyZysweDYxMS8weDc2MQogICAgWzwwMDAwMDAwMGY3ZmNj
-MDNkPl0gYWNwaV9wc19wYXJzZV9sb29wKzB4NDk0LzB4OGQ3CiAgICBbPDAwMDAwMDAwNzhi
-YTYzOTc+XSBhY3BpX3BzX3BhcnNlX2FtbCsweDFiYi8weDU2MQogICAgWzwwMDAwMDAwMGUx
-ODlhYzMwPl0gYWNwaV9wc19leGVjdXRlX21ldGhvZCsweDIwZi8weDJkNQogICAgWzwwMDAw
-MDAwMDc4NTMyYmI5Pl0gYWNwaV9uc19ldmFsdWF0ZSsweDM0ZC8weDRmMwogICAgWzwwMDAw
-MDAwMDcxNTM4OTQzPl0gYWNwaV9ldmFsdWF0ZV9vYmplY3QrMHgxODAvMHgzYWUKICAgIFs8
-MDAwMDAwMDBmZGNlYzkzOD5dIGFjcGlfcnVuX29zYysweDEyOC8weDI1MAogICAgWzwwMDAw
-MDAwMGUwNTQ0ZTU3Pl0gaW50MzQwMF90aGVybWFsX3J1bl9vc2MrMHg2Zi8weGMwIFtpbnQz
-NDAwX3RoZXJtYWxdCiAgICBbPDAwMDAwMDAwMTRiOTZmN2Q+XSBpbnQzNDAwX3RoZXJtYWxf
-Y2hhbmdlX21vZGUrMHhkMy8weDExMCBbaW50MzQwMF90aGVybWFsXQogICAgWzwwMDAwMDAw
-MDZmZmM4ODI2Pl0gdGhlcm1hbF96b25lX2RldmljZV9zZXRfbW9kZSsweDQ2LzB4YzAKICAg
-IFs8MDAwMDAwMDAzNmExZjIyMT5dIHRoZXJtYWxfem9uZV9kZXZpY2VfZGlzYWJsZSsweDEw
-LzB4MjAKICAgIFs8MDAwMDAwMDA1MDJlNGU3ND5dIG1vZGVfc3RvcmUrMHg1Yy8weDgwCnVu
-cmVmZXJlbmNlZCBvYmplY3QgMHhmZmZmOTVlNjg3YTM0Y2QwIChzaXplIDgwKToKICBjb21t
-ICJ0aGVybWFsZCIsIHBpZCA1MjE0LCBqaWZmaWVzIDQyOTQ5NTM2MjggKGFnZSAxMDkwLjc2
-OHMpCiAgaGV4IGR1bXAgKGZpcnN0IDMyIGJ5dGVzKToKICAgIDAwIDAwIDAwIDAwIDAwIDAw
-IDAwIDAwIDBkIDAxIDJkIDAwIDAwIDAwIDAwIDAwICAuLi4uLi4uLi4uLS4uLi4uCiAgICBh
-ZiAwNyAwMSA0MCBmZSBhMiBmZiBmZiAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAgLi4uQC4u
-Li4uLi4uLi4uLgogIGJhY2t0cmFjZToKICAgIFs8MDAwMDAwMDBkYTNjNjY3Yz5dIHNsYWJf
-cG9zdF9hbGxvY19ob29rKzB4ODAvMHgyZTAKICAgIFs8MDAwMDAwMDA3ODIwZjc2Mz5dIGtt
-ZW1fY2FjaGVfYWxsb2MrMHgxNzEvMHgzMDAKICAgIFs8MDAwMDAwMDBjOGQwMGJjYz5dIGFj
-cGlfb3NfYWNxdWlyZV9vYmplY3QrMHgyYy8weDMyCiAgICBbPDAwMDAwMDAwM2FlYzQ1MWE+
-XSBhY3BpX3BzX2FsbG9jX29wKzB4NGEvMHg5OQogICAgWzwwMDAwMDAwMDhhN2Y2YzgxPl0g
-YWNwaV9wc19nZXRfbmV4dF9hcmcrMHg2MTEvMHg3NjEKICAgIFs8MDAwMDAwMDBmN2ZjYzAz
-ZD5dIGFjcGlfcHNfcGFyc2VfbG9vcCsweDQ5NC8weDhkNwogICAgWzwwMDAwMDAwMDc4YmE2
-Mzk3Pl0gYWNwaV9wc19wYXJzZV9hbWwrMHgxYmIvMHg1NjEKICAgIFs8MDAwMDAwMDBlMTg5
-YWMzMD5dIGFjcGlfcHNfZXhlY3V0ZV9tZXRob2QrMHgyMGYvMHgyZDUKICAgIFs8MDAwMDAw
-MDA3ODUzMmJiOT5dIGFjcGlfbnNfZXZhbHVhdGUrMHgzNGQvMHg0ZjMKICAgIFs8MDAwMDAw
-MDA3MTUzODk0Mz5dIGFjcGlfZXZhbHVhdGVfb2JqZWN0KzB4MTgwLzB4M2FlCiAgICBbPDAw
-MDAwMDAwZmRjZWM5Mzg+XSBhY3BpX3J1bl9vc2MrMHgxMjgvMHgyNTAKICAgIFs8MDAwMDAw
-MDBlMDU0NGU1Nz5dIGludDM0MDBfdGhlcm1hbF9ydW5fb3NjKzB4NmYvMHhjMCBbaW50MzQw
-MF90aGVybWFsXQogICAgWzwwMDAwMDAwMDdhNDQzNDYyPl0gY3VycmVudF91dWlkX3N0b3Jl
-KzB4ZTMvMHgxMjAgW2ludDM0MDBfdGhlcm1hbF0KICAgIFs8MDAwMDAwMDA1MDYzYWU1NT5d
-IGRldl9hdHRyX3N0b3JlKzB4MTQvMHgzMAogICAgWzwwMDAwMDAwMDFjY2MwYjA0Pl0gc3lz
-ZnNfa2Zfd3JpdGUrMHgzOC8weDUwCiAgICBbPDAwMDAwMDAwZjI0ZGNmZmM+XSBrZXJuZnNf
-Zm9wX3dyaXRlX2l0ZXIrMHgxNDYvMHgxZDAKdW5yZWZlcmVuY2VkIG9iamVjdCAweGZmZmY5
-NWU2ODdhMzQ4MjAgKHNpemUgODApOgogIGNvbW0gInRoZXJtYWxkIiwgcGlkIDUyMTQsIGpp
-ZmZpZXMgNDI5NTE5NDE4MiAoYWdlIDEyOC41NjhzKQogIGhleCBkdW1wIChmaXJzdCAzMiBi
-eXRlcyk6CiAgICAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwZCAwMSAyZCAwMCAwMCAwMCAw
-MCAwMCAgLi4uLi4uLi4uLi0uLi4uLgogICAgM2EgMDggMDEgNDAgZmUgYTIgZmYgZmYgMDAg
-MDAgMDAgMDAgMDAgMDAgMDAgMDAgIDouLkAuLi4uLi4uLi4uLi4KICBiYWNrdHJhY2U6CiAg
-ICBbPDAwMDAwMDAwZGEzYzY2N2M+XSBzbGFiX3Bvc3RfYWxsb2NfaG9vaysweDgwLzB4MmUw
-CiAgICBbPDAwMDAwMDAwNzgyMGY3NjM+XSBrbWVtX2NhY2hlX2FsbG9jKzB4MTcxLzB4MzAw
-CiAgICBbPDAwMDAwMDAwYzhkMDBiY2M+XSBhY3BpX29zX2FjcXVpcmVfb2JqZWN0KzB4MmMv
-MHgzMgogICAgWzwwMDAwMDAwMDNhZWM0NTFhPl0gYWNwaV9wc19hbGxvY19vcCsweDRhLzB4
-OTkKICAgIFs8MDAwMDAwMDA4YTdmNmM4MT5dIGFjcGlfcHNfZ2V0X25leHRfYXJnKzB4NjEx
-LzB4NzYxCiAgICBbPDAwMDAwMDAwZjdmY2MwM2Q+XSBhY3BpX3BzX3BhcnNlX2xvb3ArMHg0
-OTQvMHg4ZDcKICAgIFs8MDAwMDAwMDA3OGJhNjM5Nz5dIGFjcGlfcHNfcGFyc2VfYW1sKzB4
-MWJiLzB4NTYxCiAgICBbPDAwMDAwMDAwZTE4OWFjMzA+XSBhY3BpX3BzX2V4ZWN1dGVfbWV0
-aG9kKzB4MjBmLzB4MmQ1CiAgICBbPDAwMDAwMDAwNzg1MzJiYjk+XSBhY3BpX25zX2V2YWx1
-YXRlKzB4MzRkLzB4NGYzCiAgICBbPDAwMDAwMDAwNzE1Mzg5NDM+XSBhY3BpX2V2YWx1YXRl
-X29iamVjdCsweDE4MC8weDNhZQogICAgWzwwMDAwMDAwMGZkY2VjOTM4Pl0gYWNwaV9ydW5f
-b3NjKzB4MTI4LzB4MjUwCiAgICBbPDAwMDAwMDAwZTA1NDRlNTc+XSBpbnQzNDAwX3RoZXJt
-YWxfcnVuX29zYysweDZmLzB4YzAgW2ludDM0MDBfdGhlcm1hbF0KICAgIFs8MDAwMDAwMDAx
-NGI5NmY3ZD5dIGludDM0MDBfdGhlcm1hbF9jaGFuZ2VfbW9kZSsweGQzLzB4MTEwIFtpbnQz
-NDAwX3RoZXJtYWxdCiAgICBbPDAwMDAwMDAwNmZmYzg4MjY+XSB0aGVybWFsX3pvbmVfZGV2
-aWNlX3NldF9tb2RlKzB4NDYvMHhjMAogICAgWzwwMDAwMDAwMDM2YTFmMjIxPl0gdGhlcm1h
-bF96b25lX2RldmljZV9kaXNhYmxlKzB4MTAvMHgyMAogICAgWzwwMDAwMDAwMDUwMmU0ZTc0
-Pl0gbW9kZV9zdG9yZSsweDVjLzB4ODAKdW5yZWZlcmVuY2VkIG9iamVjdCAweGZmZmY5NWU2
-ODdkYmU0YjAgKHNpemUgODApOgogIGNvbW0gInRoZXJtYWxkIiwgcGlkIDU3NjMsIGppZmZp
-ZXMgNDI5NTE5NzgxNCAoYWdlIDExNC4xODhzKQogIGhleCBkdW1wIChmaXJzdCAzMiBieXRl
-cyk6CiAgICAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwMCAwZCAwMSAyZCAwMCAwMCAwMCAwMCAw
-MCAgLi4uLi4uLi4uLi0uLi4uLgogICAgYWYgMDcgMDEgNDAgZmUgYTIgZmYgZmYgMDAgMDAg
-MDAgMDAgMDAgMDAgMDAgMDAgIC4uLkAuLi4uLi4uLi4uLi4KICBiYWNrdHJhY2U6CiAgICBb
-PDAwMDAwMDAwZGEzYzY2N2M+XSBzbGFiX3Bvc3RfYWxsb2NfaG9vaysweDgwLzB4MmUwCiAg
-ICBbPDAwMDAwMDAwNzgyMGY3NjM+XSBrbWVtX2NhY2hlX2FsbG9jKzB4MTcxLzB4MzAwCiAg
-ICBbPDAwMDAwMDAwYzhkMDBiY2M+XSBhY3BpX29zX2FjcXVpcmVfb2JqZWN0KzB4MmMvMHgz
-MgogICAgWzwwMDAwMDAwMDNhZWM0NTFhPl0gYWNwaV9wc19hbGxvY19vcCsweDRhLzB4OTkK
-ICAgIFs8MDAwMDAwMDA4YTdmNmM4MT5dIGFjcGlfcHNfZ2V0X25leHRfYXJnKzB4NjExLzB4
-NzYxCiAgICBbPDAwMDAwMDAwZjdmY2MwM2Q+XSBhY3BpX3BzX3BhcnNlX2xvb3ArMHg0OTQv
-MHg4ZDcKICAgIFs8MDAwMDAwMDA3OGJhNjM5Nz5dIGFjcGlfcHNfcGFyc2VfYW1sKzB4MWJi
-LzB4NTYxCiAgICBbPDAwMDAwMDAwZTE4OWFjMzA+XSBhY3BpX3BzX2V4ZWN1dGVfbWV0aG9k
-KzB4MjBmLzB4MmQ1CiAgICBbPDAwMDAwMDAwNzg1MzJiYjk+XSBhY3BpX25zX2V2YWx1YXRl
-KzB4MzRkLzB4NGYzCiAgICBbPDAwMDAwMDAwNzE1Mzg5NDM+XSBhY3BpX2V2YWx1YXRlX29i
-amVjdCsweDE4MC8weDNhZQogICAgWzwwMDAwMDAwMGZkY2VjOTM4Pl0gYWNwaV9ydW5fb3Nj
-KzB4MTI4LzB4MjUwCiAgICBbPDAwMDAwMDAwZTA1NDRlNTc+XSBpbnQzNDAwX3RoZXJtYWxf
-cnVuX29zYysweDZmLzB4YzAgW2ludDM0MDBfdGhlcm1hbF0KICAgIFs8MDAwMDAwMDA3YTQ0
-MzQ2Mj5dIGN1cnJlbnRfdXVpZF9zdG9yZSsweGUzLzB4MTIwIFtpbnQzNDAwX3RoZXJtYWxd
-CiAgICBbPDAwMDAwMDAwNTA2M2FlNTU+XSBkZXZfYXR0cl9zdG9yZSsweDE0LzB4MzAKICAg
-IFs8MDAwMDAwMDAxY2NjMGIwND5dIHN5c2ZzX2tmX3dyaXRlKzB4MzgvMHg1MAogICAgWzww
-MDAwMDAwMGYyNGRjZmZjPl0ga2VybmZzX2ZvcF93cml0ZV9pdGVyKzB4MTQ2LzB4MWQwCg==
-
-
---------------Ll0EviEI1ovXA5j6SuTndsfK--
