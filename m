@@ -2,137 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2DF60EA94
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961BD60EA95
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 22:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234667AbiJZUuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 16:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56960 "EHLO
+        id S234598AbiJZUvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 16:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234615AbiJZUuY (ORCPT
+        with ESMTP id S234638AbiJZUvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 16:50:24 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74A0631F9;
-        Wed, 26 Oct 2022 13:50:21 -0700 (PDT)
-Received: by mail-oi1-f173.google.com with SMTP id g10so20306870oif.10;
-        Wed, 26 Oct 2022 13:50:21 -0700 (PDT)
+        Wed, 26 Oct 2022 16:51:44 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D1D7286A
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:51:43 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id m2so11247840pjr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 13:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YeygMNC1bvvP4dcp+sNmGP0csnZPsocgrlb2fYDiWOY=;
+        b=mT0Gj/1hgbfHpr4tBRM0sIv8kGBgibduh6mGLVFoszyYauSXlp7FNBO4ryODJHkNi0
+         tYGUuYF+EMS0BzEXPKp9l3Fs/9jRiab58j3H835hiKh9MUdsZOsifalrpQyREpY9Gx/T
+         Wdkj5JipzbWXHC9NfXrckH7J0sYhgXKE+hv+iKh7i1eEMS0pzxT88WK7vLhp9uaUM2Ux
+         XlhpEk4EcjhdFDnb2y7HU/8SEfux2krNwImfa7XQxVT6kGThwswMniIPrPAm2RUxahmP
+         7Lcv5e8AGDmG+ZMsYUk7zn5U7eLy2wfB1e55QQKxCYzfkCwklPXpS24pfhxcE0TKElBx
+         Iv/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HykrIfDGj0Emwb0ltWiGLZGl2PcTl3HkdAqnWg1OeHs=;
-        b=gyJn1LwtZnto6T6KX5woSq3gTSjAP8sei/VgtHJkcCAoA6dcXE33Gu9quK/nmCyhJj
-         WqWRNLBppkVn22akepRle2YdQIU9adqSvpTPApbpT/cjitrjtNJUo67D9rjQ/zKRziFH
-         /BOVYYtzK3Gvl0bHP1WTWnOBsfHfZSxoD1rkQBGBeC8hzs3WvXoQmdrZGL2NgF9Z6dn/
-         kiP/Adatjt0gjfzN3C9Cf5phsYqUJpKGtP1BuzrwjozBOoAGpioy8uisSaMJJBrS4nyQ
-         sahlNsDBD2zPAwXhjIlv8/ibuAdzfNno4ekCTE0GjnletwO5sBEHxAz7HzTi1Gu6VA99
-         N26Q==
-X-Gm-Message-State: ACrzQf2V3B4R4WvIOAPrmSa1DG7AEZ+qMQz2l27qXkDcZ4gbriE0B2ZQ
-        6zHhEpsmDcQ+Ms4029L5Rg==
-X-Google-Smtp-Source: AMsMyM6KS8E4GJgpsN95NTujJva07W8KKKeA3reyNOFR2b1fz7WjG1LUzrKyh0h31G0KPSeL8vLmTg==
-X-Received: by 2002:aca:c155:0:b0:355:1aa6:d7ad with SMTP id r82-20020acac155000000b003551aa6d7admr3004216oif.0.1666817421025;
-        Wed, 26 Oct 2022 13:50:21 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z3-20020a4ad583000000b00480816a5b8csm1268377oos.18.2022.10.26.13.50.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 13:50:20 -0700 (PDT)
-Received: (nullmailer pid 1294279 invoked by uid 1000);
-        Wed, 26 Oct 2022 20:50:22 -0000
-Date:   Wed, 26 Oct 2022 15:50:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jh80.chung@samsung.com, ulf.hansson@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCHv6 1/6] dt-bindings: mmc: synopsys-dw-mshc: document
- "altr,sysmgr-syscon"
-Message-ID: <20221026205022.GA1291041-robh@kernel.org>
-References: <20221026141631.696863-1-dinguyen@kernel.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YeygMNC1bvvP4dcp+sNmGP0csnZPsocgrlb2fYDiWOY=;
+        b=XoZXrIEP9EDohJ5lyoBMfJ4IeGq7EpGmqB/h+Vc1u2Otpo3ChhOb5vZX9s/IESJcas
+         os2HiCW8gk5wtKGPkzq7AM8rY9tgAGkcd9nkATRh2ZwPBUu4vvu/fUy3e1vnBa17nASG
+         odwOKpMUxotr7bsTiKYts1cejSQLCHXxNNjVcSAO+dFdJ9L+roBBWIyRC4H3Omxilaat
+         yPBX/TFa/anguJdZn4IC83X763d8KPVLCDBH92/TkSceDSVUPCUWCdx11n5CAnCbpFTE
+         XYBTwGXcr+h4JWmnit5Pk1kwxxdlLG1Zn/NhLe9KVXmw7lGIHW5R5wq8jUkn3LNKY7XR
+         2i+Q==
+X-Gm-Message-State: ACrzQf3HAdI3BtnBMJQ7Byl1yLIO27xH/YYvKjwx5iutpTMO4/Du3Z8Y
+        AMdVME4llSP25juDsS6H5L2veRduUljs6om753Q=
+X-Google-Smtp-Source: AMsMyM4i0/+LPtnjst3vkT/fbWzXVFqE9ysDPhBIrR5lM0MKIcPUs4V6vo+39FROICRRSsLKk5L03kciNgz3lD91nkM=
+X-Received: by 2002:a17:90b:4a09:b0:20d:5b67:1496 with SMTP id
+ kk9-20020a17090b4a0900b0020d5b671496mr6175529pjb.67.1666817503002; Wed, 26
+ Oct 2022 13:51:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026141631.696863-1-dinguyen@kernel.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20221025170519.314511-1-hannes@cmpxchg.org> <CAHbLzkoXzbHRJxb9DkjGkKQ8TAO08ctvz7wvjyPA8Gy2Skm+2g@mail.gmail.com>
+ <Y1hM6sMRpBGUPRyo@cmpxchg.org> <CAHbLzkpaoN37camSLYVDU7p9AXzQjYcvHnWm3K87iwae-YyZiQ@mail.gmail.com>
+ <Y1lvJBnVx1Fv5WHz@cmpxchg.org>
+In-Reply-To: <Y1lvJBnVx1Fv5WHz@cmpxchg.org>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 26 Oct 2022 13:51:22 -0700
+Message-ID: <CAHbLzkqQ=6U3uerEkypsCHnmsXerEZi5erMSYK-kp8-vJNk89Q@mail.gmail.com>
+Subject: Re: [PATCH] mm: vmscan: split khugepaged stats from direct reclaim stats
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Eric Bergen <ebergen@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 09:16:26AM -0500, Dinh Nguyen wrote:
-> Document the optional "altr,sysmgr-syscon" binding that is used to
-> access the System Manager register that controls the SDMMC clock
-> phase.
-> 
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
-> v6: make "altr,sysmgr-syscon" optional
-> v5: document reg shift
-> v4: add else statement
-> v3: document that the "altr,sysmgr-syscon" binding is only applicable to
->     "altr,socfpga-dw-mshc"
-> v2: document "altr,sysmgr-syscon" in the MMC section
-> ---
->  .../bindings/mmc/synopsys-dw-mshc.yaml        | 23 ++++++++++++++++---
->  1 file changed, 20 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> index ae6d6fca79e2..0e2024eb9018 100644
-> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml
-> @@ -6,9 +6,6 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
->  title: Synopsys Designware Mobile Storage Host Controller Binding
->  
-> -allOf:
-> -  - $ref: "synopsys-dw-mshc-common.yaml#"
-> -
->  maintainers:
->    - Ulf Hansson <ulf.hansson@linaro.org>
->  
-> @@ -38,6 +35,26 @@ properties:
->        - const: biu
->        - const: ciu
->  
-> +allOf:
-> +  - $ref: synopsys-dw-mshc-common.yaml#
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: altr,socfpga-dw-mshc
-> +    then:
-> +      properties:
-> +        altr,sysmgr-syscon:
-> +          $ref: /schemas/types.yaml#/definitions/phandle-array
-> +          items:
-> +            - description: phandle to the sysmgr node
-> +            - description: register offset that controls the SDMMC clock phase
-> +            - description: register shift for the smplsel(drive in) setting
+On Wed, Oct 26, 2022 at 10:32 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Tue, Oct 25, 2022 at 02:53:01PM -0700, Yang Shi wrote:
+> > On Tue, Oct 25, 2022 at 1:54 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > >
+> > > On Tue, Oct 25, 2022 at 12:40:15PM -0700, Yang Shi wrote:
+> > > > On Tue, Oct 25, 2022 at 10:05 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > > > >
+> > > > > Direct reclaim stats are useful for identifying a potential source for
+> > > > > application latency, as well as spotting issues with kswapd. However,
+> > > > > khugepaged currently distorts the picture: as a kernel thread it
+> > > > > doesn't impose allocation latencies on userspace, and it explicitly
+> > > > > opts out of kswapd reclaim. Its activity showing up in the direct
+> > > > > reclaim stats is misleading. Counting it as kswapd reclaim could also
+> > > > > cause confusion when trying to understand actual kswapd behavior.
+> > > > >
+> > > > > Break out khugepaged from the direct reclaim counters into new
+> > > > > pgsteal_khugepaged, pgdemote_khugepaged, pgscan_khugepaged counters.
+> > > > >
+> > > > > Test with a huge executable (CONFIG_READ_ONLY_THP_FOR_FS):
+> > > > >
+> > > > > pgsteal_kswapd 1342185
+> > > > > pgsteal_direct 0
+> > > > > pgsteal_khugepaged 3623
+> > > > > pgscan_kswapd 1345025
+> > > > > pgscan_direct 0
+> > > > > pgscan_khugepaged 3623
+> > > >
+> > > > There are other kernel threads or works may allocate memory then
+> > > > trigger memory reclaim, there may be similar problems for them and
+> > > > someone may try to add a new stat. So how's about we make the stats
+> > > > more general, for example, call it "pg{steal|scan}_kthread"?
+> > >
+> > > I'm not convinved that's a good idea.
+> > >
+> > > Can you generally say that userspace isn't indirectly waiting for one
+> > > of those allocating threads? With khugepaged, we know.
+> >
+> > AFAIK, ksm may do slab allocation with __GFP_DIRECT_RECLAIM.
+>
+> Right, but ksm also uses __GFP_KSWAPD_RECLAIM. So while userspace
+> isn't directly waiting for ksm, when ksm enters direct reclaim it's
+> because kswapd failed. This is of interest to kernel developers.
+> Userspace will likely see direct reclaim in that scenario as well, so
+> the ksm direct reclaim counts aren't liable to confuse users.
+>
+> Khugepaged on the other hand will *always* reclaim directly, even if
+> there is no memory pressure or kswapd failure. The direct reclaim
+> counts there are misleading to both developers and users.
+>
+> What it really should be is pgscan_nokswapd_nouserprocesswaiting, but
+> that just seems kind of long ;-)
+>
+> I'm also not sure anybody but khugepaged is doing direct reclaim
+> without kswapd reclaim. It seems unlikely we'll get more of those.
 
-This goes in the top-level. Use if/then schema to add constraints, not 
-define properties.
+IIUC you actually don't care about how many direct reclaim are
+triggered by khugepaged, but you would like to separate the direct
+reclaim stats between that are triggered directly by userspace
+actions, which may stall userspace, and that aren't, which don't stall
+userspace. If so it doesn't sound that important to distinguish
+whether the direct reclaim are triggered by khugepaged or other kernel
+threads even though other kthreads are not liable to confuse users
+IMHO.
 
-> +    else:
+>
+> > Some device mapper drivers may do heavy lift in the work queue, for
+> > example, dm-crypt, particularly for writing.
+>
+> Userspace will wait for those through dirty throttling. We'd want to
 
-Then you'll need to negate the if:  if: { not: { properties: ... }}
+Not guaranteed.
 
-> +      properties:
-> +        altr,sysmgr-syscon: false
-> +
->  required:
->    - compatible
->    - reg
-> -- 
-> 2.25.1
-> 
-> 
+Anyway I just thought pgscan_khugepaged might be more confusing for
+the users even the developers who are not familiar with
+THP/khugepaged.
+
+> know about kswapd failures in that case - again, without them being
+> muddied by khugepaged.
+>
+> > > And those other allocations are usually ___GFP_KSWAPD_RECLAIM, so if
+> > > they do direct reclaim, we'd probably want to know that kswapd is
+> > > failing to keep up (doubly so if userspace is waiting). In a shared
+> > > kthread counter, khugepaged would again muddy the waters.
