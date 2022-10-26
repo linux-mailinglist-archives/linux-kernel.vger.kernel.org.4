@@ -2,81 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1D560E6A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7545A60E691
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbiJZRgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S233878AbiJZRdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233672AbiJZRgi (ORCPT
+        with ESMTP id S229995AbiJZRdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:36:38 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DB36567;
-        Wed, 26 Oct 2022 10:36:37 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id o12so30192016lfq.9;
-        Wed, 26 Oct 2022 10:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GOBxO2vTj4pQ4aIbyzSDDJOcDDeM1TEViOD8cCWt4BY=;
-        b=YJ/QJUMubvUEs1kkmB6WihInHwiD6FV3O6Ifh2QzAVOjzezDSzxfJaTKgNMNDwLMys
-         Kz2vIYoYk8dgxtvyDC4LG08oOCwqHN3+gMG03ZUh/0YNSXHkO/2CAEkE0mlkUoDiQUaq
-         goBalu2lRkjO5rGdTuyGLGWkViMOJvy40eVncP5EroDYj/D82rZhIrX/0qCvX6TyDYGM
-         6kONH+kWwAgIIGvK/gHX5BS/68BAMEaR8zLf/KE6AnS2R/ROydwimiNKLrQWUz7+YLSl
-         YYeQoZyooY+uclKbVkxI21Da5qQw6TlRSzQPv+cZIeDTPKQf3KEf1npycUj9yUgdkTHY
-         mIkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GOBxO2vTj4pQ4aIbyzSDDJOcDDeM1TEViOD8cCWt4BY=;
-        b=1ih6LN/A0v3K4BISmeb2GP+06Ltf5Fb8KAZ7vifXLj4WwkNxJnBy1ObY6wl23lTOyO
-         v9yFONbQyuaMOLCDKboLBtxGjknQlgzOGucjLl4POWjkRgYBYOeWuEMUYv+2NME/qetn
-         jaoxsj3GS5/6ou2FE4svUgIe6s8qyIbNUONDXvpGygW+IllZZtG6TE4QIPbJvmEFXxNH
-         28huO5TOUcfIR2YUNEvdRorIt2Nibhot3Z25t86DtMMv/YQ2ErpAWR089SJIyrEeQ2kc
-         IdY9pSzvAtIzmblNUlTpXORfQei3N/0ip4/cCqcFhLnTe4CEt3vVBgwu8724znC0cUet
-         CT2A==
-X-Gm-Message-State: ACrzQf08dv2H8E6HXv1YzgpcGnguG5Gm0fkU4shoLMBfjazrGlGWxIBu
-        GFHI5dZGes4V0gAecvmK9oI=
-X-Google-Smtp-Source: AMsMyM7graN5LI/64DZqEGICp6VHlD/7djtr6oZe2CFM3fq1Ao1iFbuJbwrbvjpRuB0qFhw2Z3Emng==
-X-Received: by 2002:ac2:4c82:0:b0:4a0:5825:a0ac with SMTP id d2-20020ac24c82000000b004a05825a0acmr15859970lfl.660.1666805795020;
-        Wed, 26 Oct 2022 10:36:35 -0700 (PDT)
-Received: from smtpclient.apple (188-177-109-202-dynamic.dk.customer.tdc.net. [188.177.109.202])
-        by smtp.gmail.com with ESMTPSA id a11-20020a19e30b000000b0048a757d1303sm911652lfh.217.2022.10.26.10.36.33
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Oct 2022 10:36:34 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH] Periodically flow expire from flow offload tables
-From:   Michael Lilja <michael.lilja@gmail.com>
-In-Reply-To: <Y1kQ9FhrwxCKIdoe@salvia>
-Date:   Wed, 26 Oct 2022 19:36:22 +0200
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <25246B91-B5BE-43CA-9D98-67950F17F0A1@gmail.com>
-References: <20221023171658.69761-1-michael.lilja@gmail.com>
- <Y1fC5K0EalIYuB7Y@salvia> <381FF5B6-4FEF-45E9-92D6-6FE927A5CC2D@gmail.com>
- <Y1fd+DEPZ8xM2x5B@salvia> <F754AC3A-D89A-4CF7-97AE-CA59B18A758E@gmail.com>
- <Y1kQ9FhrwxCKIdoe@salvia>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>
-X-Mailer: Apple Mail (2.3731.200.110.1.12)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 26 Oct 2022 13:33:36 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3071057F9;
+        Wed, 26 Oct 2022 10:33:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666805614; x=1698341614;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O261lLQiLqPVrCWlpXCG39uNCbVIJ7+DxA1Gv8LAvJg=;
+  b=zP0ZKPtSX0axz/gs1TpNHwKXL+ewqJgV/YW/iQZKRcAO1KXqYZvFDoSr
+   YXQcUf9uswzadXVEpNyTs2oBP4DPv7oFPlI4k//NHjw+OQR3bvf74cfhC
+   HWpGq4jZKAlre1cspxU61LFKcIpGK98J4Opw5t4ZK1HESKi9gyWMl93ZN
+   QGuu6VbltsVTTwXAfD7PXGk4vG7OPCdxJt0LNU5dcVvUfpEzbYmyiV/nZ
+   PFacxC3yJP4Kp1gVbCRYan8QBw/awzh2VI2Vt9CC7xngU3ZmIrZctt/Uz
+   0UU0+lkmh94/bLGJD997rP45dFwcht1jjXqSdqychpeiwmSn55r6xKljF
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="186409655"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Oct 2022 10:33:33 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 26 Oct 2022 10:33:32 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Wed, 26 Oct 2022 10:33:32 -0700
+Date:   Wed, 26 Oct 2022 19:38:13 +0200
+From:   Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
+To:     Claudiu Beznea - M18063 <Claudiu.Beznea@microchip.com>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
+        UNGLinuxDriver <UNGLinuxDriver@microchip.com>
+Subject: Re: [PATCH] ARM: dts: lan966x: Enable sgpio on pcb8291
+Message-ID: <20221026173813.wdpueueziirxdgq5@soft-dev3-1>
+References: <20221019075154.2555054-1-horatiu.vultur@microchip.com>
+ <fb12f594-5d71-dc35-c37e-b357e51b6b3c@microchip.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <fb12f594-5d71-dc35-c37e-b357e51b6b3c@microchip.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +67,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The 10/26/2022 07:47, Claudiu Beznea - M18063 wrote:
+> Hi, Horatiu,
 
-I will look to use the flowable netlink interface. I have not yet, but =
-does this possible give the option of doing something like this:
+Hi Claudiu,
 
-flowtable ft {
-	hook ingress priority filter
-	devices =3D { lan1, lan2, wan }
-	flags offload, timeout
-}
+> 
+> On 19.10.2022 10:51, Horatiu Vultur wrote:
+> > Enable sgpio node on pcb8291 as this is needed to be able to control
+> > the LEDs on this board. Otherwise the LEDs support on the board will
+> > not be available.
+> 
+> Do we need a fixes tag for this?
 
+I was not 100% sure that I need to add the tag, but I will send
+another version where I will add the tag.
 
-I would say the above it the most flexible, I just didn=E2=80=99t =
-explore that, it would kinda be like with =E2=80=99sets=E2=80=99 where =
-you can specify a timeout on when the entries should expire?
+> 
+> > On the other board pcb8309 the sgpio is already enabled because it
+> > needed to access the SFP ports.
+> > 
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> > ---
+> >  arch/arm/boot/dts/lan966x-pcb8291.dts | 20 ++++++++++++++++++++
+> >  1 file changed, 20 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
+> > index f4f054cdf2a87..3a3d76af86122 100644
+> > --- a/arch/arm/boot/dts/lan966x-pcb8291.dts
+> > +++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
+> > @@ -69,6 +69,12 @@ can0_b_pins:  can0-b-pins {
+> >  		pins = "GPIO_35", "GPIO_36";
+> >  		function = "can0_b";
+> >  	};
+> > +
+> > +	sgpio_a_pins: sgpio-a-pins {
+> > +		/* SCK, D0, D1, LD */
+> > +		pins = "GPIO_32", "GPIO_33", "GPIO_34", "GPIO_35";
+> > +		function = "sgpio_a";
+> > +	};
+> >  };
+> >  
+> >  &can0 {
+> > @@ -118,6 +124,20 @@ &serdes {
+> >  	status = "okay";
+> >  };
+> >  
+> > +&sgpio {
+> > +	pinctrl-0 = <&sgpio_a_pins>;
+> > +	pinctrl-names = "default";
+> > +	microchip,sgpio-port-ranges = <0 3>, <8 11>;
+> > +	status = "okay";
+> > +
+> > +	gpio@0 {
+> > +		ngpios = <64>;
+> > +	};
+> > +	gpio@1 {
+> > +		ngpios = <64>;
+> > +	};
+> > +};
+> > +
+> >  &switch {
+> >  	status = "okay";
+> >  };
+> 
 
-
-With regards to the IPS_OPPLOAD clear in flow_offload_del() then I added =
-that because I saw some weird timeout side effects due to =
-flow_offload_fixup_ct(), but I can re-investigate, it could be that it =
-was early in my investigations and some of the other changes I made has =
-made it obsolete.
-
-Thanks
-Michael
-
+-- 
+/Horatiu
