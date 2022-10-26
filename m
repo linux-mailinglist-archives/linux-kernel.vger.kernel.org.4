@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5A160EBED
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD75360EBEC
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:00:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbiJZXAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 19:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
+        id S234006AbiJZXAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 19:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233491AbiJZW77 (ORCPT
+        with ESMTP id S233956AbiJZW76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 18:59:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C5C26569
+        Wed, 26 Oct 2022 18:59:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A2826495
         for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:59:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC4E2620DC
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCCD462079
         for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 22:59:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B58E6C43142;
-        Wed, 26 Oct 2022 22:59:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C6D9C433C1;
+        Wed, 26 Oct 2022 22:59:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1666825191;
-        bh=JpR/JpSFcvX/01k1C+QGg0rBNnZER7RU6+E6N5NVTO8=;
+        bh=ijAibGNK7BkbPJuFkIhnu5wZ2+BYvBnNeRFcJtsugII=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r6Eyv8ffq85heYOnigGBCrI+z0CZ4/IyyIB+YPDQDNJr+24gdpnLwQ302W4TFpqyE
-         5PQSq5YVSY+94t/kcpD7m9+o9jvI/FY4BYFd0+W9bHrzsmGY6GI8uVrq3mV9rcjRmN
-         hvtwew5+HkJ8S2WsXBTfP9t2ch6LmFZtXk+MMmVxUGPLhHE2XSGGUP1y+Wl/1C0mhA
-         CD1fMCaw9yw3bWwDBGNYTqGQ6za5fGkEaUIrJrrazMtESzldt4aujvwPTKMP2i7JEw
-         3hx82Iuk66RtdFldolTjr0JN5VVAl0a+BGfrNSkmoMLSrijYWfDanoNknERIUi3044
-         JlEfEkO6oAyjg==
+        b=DjzuvnukrhrEXV0TQ6k4DIipy66pmX1qwr2/IQjeWOaeQa6+czARR6Ptlcl/Dt2If
+         zxTdpJLrTS3qmyK70kX5Pu1y0K4TWkQQnZIdhopotH+HN0z/aebztqY+OyRGAyASsz
+         24Ui1EecU/z0NJTt4nPQDJaiujlCHqBTKV2MukbdDG279a9OIRNuqh4T3ITZvC7OFG
+         jikPYJtcnv9+Bdfbx0W3WYCe8c0A5XPrL68AMdS/l/feFJi9Q7eWJyoPNBzONWi43L
+         WVFGdNZlifefEWOrka/adY/lsb/6ySEt70LVVxjpJKNg2XSzP5LOEcahDcXSFz9RQr
+         XdLN8zi1Pqf3A==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH v2 03/12] mm/damon/core: split out scheme stat update logic into a new function
-Date:   Wed, 26 Oct 2022 22:59:34 +0000
-Message-Id: <20221026225943.100429-4-sj@kernel.org>
+Subject: [PATCH v2 04/12] mm/damon/core: split out scheme quota adjustment logic into a new function
+Date:   Wed, 26 Oct 2022 22:59:35 +0000
+Message-Id: <20221026225943.100429-5-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221026225943.100429-1-sj@kernel.org>
 References: <20221026225943.100429-1-sj@kernel.org>
@@ -53,50 +53,128 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function for applying a given DAMON scheme action to a given DAMON
-region, 'damos_apply_scheme()' is not quite short.  Make it better to read
-by splitting out the stat update logic into a new function.
+DAMOS quota adjustment logic in 'kdamond_apply_schemes()', has some amount
+of code, and the logic is not so straightforward.  Split it out to a new
+function for better readability.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- mm/damon/core.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ mm/damon/core.c | 91 ++++++++++++++++++++++++++-----------------------
+ 1 file changed, 48 insertions(+), 43 deletions(-)
 
 diff --git a/mm/damon/core.c b/mm/damon/core.c
-index c1a912bc46ae..3a810c6e26bc 100644
+index 3a810c6e26bc..80d5937fe337 100644
 --- a/mm/damon/core.c
 +++ b/mm/damon/core.c
-@@ -755,6 +755,16 @@ static bool damos_skip_charged_region(struct damon_target *t,
- 	return false;
+@@ -848,59 +848,64 @@ static void damos_set_effective_quota(struct damos_quota *quota)
+ 	quota->esz = esz;
  }
  
-+static void damos_update_stat(struct damos *s,
-+		unsigned long sz_tried, unsigned long sz_applied)
-+{
-+	s->stat.nr_tried++;
-+	s->stat.sz_tried += sz_tried;
-+	if (sz_applied)
-+		s->stat.nr_applied++;
-+	s->stat.sz_applied += sz_applied;
-+}
-+
- static void damos_apply_scheme(struct damon_ctx *c, struct damon_target *t,
- 		struct damon_region *r, struct damos *s)
+-static void kdamond_apply_schemes(struct damon_ctx *c)
++static void damos_adjust_quota(struct damon_ctx *c, struct damos *s)
  {
-@@ -786,11 +796,7 @@ static void damos_apply_scheme(struct damon_ctx *c, struct damon_target *t,
- 		r->age = 0;
++	struct damos_quota *quota = &s->quota;
+ 	struct damon_target *t;
+-	struct damon_region *r, *next_r;
+-	struct damos *s;
++	struct damon_region *r;
++	unsigned long cumulated_sz;
++	unsigned int score, max_score = 0;
  
- update_stat:
--	s->stat.nr_tried++;
--	s->stat.sz_tried += sz;
--	if (sz_applied)
--		s->stat.nr_applied++;
--	s->stat.sz_applied += sz_applied;
-+	damos_update_stat(s, sz, sz_applied);
- }
+-	damon_for_each_scheme(s, c) {
+-		struct damos_quota *quota = &s->quota;
+-		unsigned long cumulated_sz;
+-		unsigned int score, max_score = 0;
++	if (!quota->ms && !quota->sz)
++		return;
  
- static void damon_do_apply_schemes(struct damon_ctx *c,
+-		if (!s->wmarks.activated)
+-			continue;
++	/* New charge window starts */
++	if (time_after_eq(jiffies, quota->charged_from +
++				msecs_to_jiffies(quota->reset_interval))) {
++		if (quota->esz && quota->charged_sz >= quota->esz)
++			s->stat.qt_exceeds++;
++		quota->total_charged_sz += quota->charged_sz;
++		quota->charged_from = jiffies;
++		quota->charged_sz = 0;
++		damos_set_effective_quota(quota);
++	}
+ 
+-		if (!quota->ms && !quota->sz)
+-			continue;
++	if (!c->ops.get_scheme_score)
++		return;
+ 
+-		/* New charge window starts */
+-		if (time_after_eq(jiffies, quota->charged_from +
+-					msecs_to_jiffies(
+-						quota->reset_interval))) {
+-			if (quota->esz && quota->charged_sz >= quota->esz)
+-				s->stat.qt_exceeds++;
+-			quota->total_charged_sz += quota->charged_sz;
+-			quota->charged_from = jiffies;
+-			quota->charged_sz = 0;
+-			damos_set_effective_quota(quota);
++	/* Fill up the score histogram */
++	memset(quota->histogram, 0, sizeof(quota->histogram));
++	damon_for_each_target(t, c) {
++		damon_for_each_region(r, t) {
++			if (!__damos_valid_target(r, s))
++				continue;
++			score = c->ops.get_scheme_score(c, t, r, s);
++			quota->histogram[score] += damon_sz_region(r);
++			if (score > max_score)
++				max_score = score;
+ 		}
++	}
+ 
+-		if (!c->ops.get_scheme_score)
+-			continue;
++	/* Set the min score limit */
++	for (cumulated_sz = 0, score = max_score; ; score--) {
++		cumulated_sz += quota->histogram[score];
++		if (cumulated_sz >= quota->esz || !score)
++			break;
++	}
++	quota->min_score = score;
++}
+ 
+-		/* Fill up the score histogram */
+-		memset(quota->histogram, 0, sizeof(quota->histogram));
+-		damon_for_each_target(t, c) {
+-			damon_for_each_region(r, t) {
+-				if (!__damos_valid_target(r, s))
+-					continue;
+-				score = c->ops.get_scheme_score(
+-						c, t, r, s);
+-				quota->histogram[score] += damon_sz_region(r);
+-				if (score > max_score)
+-					max_score = score;
+-			}
+-		}
++static void kdamond_apply_schemes(struct damon_ctx *c)
++{
++	struct damon_target *t;
++	struct damon_region *r, *next_r;
++	struct damos *s;
+ 
+-		/* Set the min score limit */
+-		for (cumulated_sz = 0, score = max_score; ; score--) {
+-			cumulated_sz += quota->histogram[score];
+-			if (cumulated_sz >= quota->esz || !score)
+-				break;
+-		}
+-		quota->min_score = score;
++	damon_for_each_scheme(s, c) {
++		if (!s->wmarks.activated)
++			continue;
++
++		damos_adjust_quota(c, s);
+ 	}
+ 
+ 	damon_for_each_target(t, c) {
 -- 
 2.25.1
 
