@@ -2,122 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E0D60E0BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0990160E0B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233534AbiJZMeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S233221AbiJZMdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232625AbiJZMeG (ORCPT
+        with ESMTP id S233150AbiJZMdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:34:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1A8AF1AA;
-        Wed, 26 Oct 2022 05:34:05 -0700 (PDT)
+        Wed, 26 Oct 2022 08:33:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9514073936;
+        Wed, 26 Oct 2022 05:33:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 434DAB821D9;
-        Wed, 26 Oct 2022 12:34:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20DAFC433D6;
-        Wed, 26 Oct 2022 12:34:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Xx5KKuxr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1666787640;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZeAi1MGyrPwsr84DGCNB/7Ek0xszjHGR2vlAtEQhd1A=;
-        b=Xx5KKuxrtpwoY9Wy+CYd1WDXBT9sCoNC9fjwsGkstHhNbN1WpvKcBizZeRpT/FCzCiS4RQ
-        tcs+Bt7NF3eTh8IExPNnbvvnyDYVtjOIBQ7zCHExZIsoRAGhDA8m5Mp/+dUQ/2ed4jN+pX
-        1b2G92MsVRvv78DJhUgz7++3kx0ah/c=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8a7530bf (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 26 Oct 2022 12:33:59 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Julian Anastasov <ja@ssi.bg>,
-        Simon Horman <horms@verge.net.au>, stable@vger.kernel.org
-Subject: [PATCH] ipvs: use explicitly signed chars
-Date:   Wed, 26 Oct 2022 14:32:16 +0200
-Message-Id: <20221026123216.1575440-1-Jason@zx2c4.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56B00B8212F;
+        Wed, 26 Oct 2022 12:33:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D92C433C1;
+        Wed, 26 Oct 2022 12:33:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666787619;
+        bh=1oQIC/cEy+BOnB6qVZCAUuyMhZUjMaoO2CL7d79n42k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MkhUuZ4R24oHo5gcthD/4oPGb+VW8T8sm1LSjL0hHEzT9Bb/3OGFs7KrTYXf/o44O
+         WQnOxrRYa9CK5XmryT2epofDD3UX1XH5KcB8wyoWNN7HmP2wtvbjoPXrAE7K8dHAVp
+         IXEqBid+aksXgIJfJ7rUnq6QUw5JhIpuKj446uAPtnL1mktK9UognPJDBe9T7rkJ/A
+         ysQaowqW9Xh5YaqXgYdF3p7Dtm2AByLJaOhH5CtpmOyVeDW/mSoX0nmoPyE3isAGSp
+         dzEBGKMNiS0nNhIyLCw1uSSn36DodrC06ESR0XHRbydkqNFRsXLRRX6xqQFDUo4DwP
+         JcQolSq6ACWOQ==
+Date:   Wed, 26 Oct 2022 14:33:31 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Vidya Sagar <vidyas@nvidia.com>, jingoohan1@gmail.com,
+        gustavo.pimentel@synopsys.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, treding@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH V1] PCI: dwc: Use dev_info for PCIe link down event
+ logging
+Message-ID: <Y1kpG0l05uMueM9Y@lpieralisi>
+References: <20221018164329.GA3808783@bhelgaas>
+ <8670e757-7275-57eb-3f5c-0a21ba354e37@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8670e757-7275-57eb-3f5c-0a21ba354e37@nvidia.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The `char` type with no explicit sign is sometimes signed and sometimes
-unsigned. This code will break on platforms such as arm, where char is
-unsigned. So mark it here as explicitly signed, so that the
-todrop_counter decrement and subsequent comparison is correct.
+On Wed, Oct 26, 2022 at 12:39:13PM +0100, Jon Hunter wrote:
+> Hi Lorenzo,
+> 
+> On 18/10/2022 17:43, Bjorn Helgaas wrote:
+> > On Tue, Oct 18, 2022 at 07:21:54AM +0100, Jon Hunter wrote:
+> > > Hi Bjorn,
+> > > 
+> > > On 13/09/2022 11:12, Vidya Sagar wrote:
+> > > > Some of the platforms (like Tegra194 and Tegra234) have open slots and
+> > > > not having an endpoint connected to the slot is not an error.
+> > > > So, changing the macro from dev_err to dev_info to log the event.
+> > > > 
+> > > > Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> > > > ---
+> > > >    drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+> > > >    1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> > > > index 650a7f22f9d0..25154555aa7a 100644
+> > > > --- a/drivers/pci/controller/dwc/pcie-designware.c
+> > > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> > > > @@ -456,7 +456,7 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
+> > > >    	}
+> > > >    	if (retries >= LINK_WAIT_MAX_RETRIES) {
+> > > > -		dev_err(pci->dev, "Phy link never came up\n");
+> > > > +		dev_info(pci->dev, "Phy link never came up\n");
+> > > >    		return -ETIMEDOUT;
+> > > >    	}
+> > > 
+> > > 
+> > > Are you OK to take this change?
+> > 
+> > When this came up, Lorenzo was in the middle of a big move and I was
+> > covering for him while he was unavailable.  But he's back, and I'm
+> > sure he will resolve this soon.
+> > 
+> > Personally I'm OK either way.
+> > 
+> > Bjorn
+> 
+> 
+> Can we come to a conclusion on this?
+> 
+> We have tests that fail when errors/warning messages are reported. We can
+> choose to ignore these errors, but given that this is not an error in this
+> case, we were thinking it is better to make it informational.
 
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Julian Anastasov <ja@ssi.bg>
-Cc: Simon Horman <horms@verge.net.au>
-Cc: stable@vger.kernel.org
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- net/netfilter/ipvs/ip_vs_conn.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I understood.
 
-diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
-index 8c04bb57dd6f..7c4866c04343 100644
---- a/net/netfilter/ipvs/ip_vs_conn.c
-+++ b/net/netfilter/ipvs/ip_vs_conn.c
-@@ -1249,40 +1249,40 @@ static const struct seq_operations ip_vs_conn_sync_seq_ops = {
- 	.next  = ip_vs_conn_seq_next,
- 	.stop  = ip_vs_conn_seq_stop,
- 	.show  = ip_vs_conn_sync_seq_show,
- };
- #endif
- 
- 
- /* Randomly drop connection entries before running out of memory
-  * Can be used for DATA and CTL conns. For TPL conns there are exceptions:
-  * - traffic for services in OPS mode increases ct->in_pkts, so it is supported
-  * - traffic for services not in OPS mode does not increase ct->in_pkts in
-  * all cases, so it is not supported
-  */
- static inline int todrop_entry(struct ip_vs_conn *cp)
- {
- 	/*
- 	 * The drop rate array needs tuning for real environments.
- 	 * Called from timer bh only => no locking
- 	 */
--	static const char todrop_rate[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
--	static char todrop_counter[9] = {0};
-+	static const signed char todrop_rate[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
-+	static signed char todrop_counter[9] = {0};
- 	int i;
- 
- 	/* if the conn entry hasn't lasted for 60 seconds, don't drop it.
- 	   This will leave enough time for normal connection to get
- 	   through. */
- 	if (time_before(cp->timeout + jiffies, cp->timer.expires + 60*HZ))
- 		return 0;
- 
- 	/* Don't drop the entry if its number of incoming packets is not
- 	   located in [0, 8] */
- 	i = atomic_read(&cp->in_pkts);
- 	if (i > 8 || i < 0) return 0;
- 
- 	if (!todrop_rate[i]) return 0;
- 	if (--todrop_counter[i] > 0) return 0;
- 
- 	todrop_counter[i] = todrop_rate[i];
- 	return 1;
- }
--- 
-2.38.1
+We are at v6.1-rc2, this patch is not a fix, we will handle it for the
+v6.2 merge window.
 
+Thanks,
+Lorenzo
