@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DAD960DDBC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8788B60DDC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 11:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232960AbiJZJJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 05:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
+        id S233256AbiJZJKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 05:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbiJZJIw (ORCPT
+        with ESMTP id S233158AbiJZJKi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 05:08:52 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59709E6A5
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:08:44 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id be13so27295586lfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 02:08:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kxvYJthqzz9Ch/FqWQ8XhBVmiJuFjTiWQBM9GNthY1Q=;
-        b=dLq1lvr7ijuQYVhxr6ksYWfPSV5MW7jkOz7HomVM7JcsvhE7pEA3RhV6nb/khhtVRf
-         xuSIzjunoHk9DH7ihAoreksPSOu4eRXykeH5HfgbkW552dDnfWToCOKg0ltwZyo+PMvt
-         3AEHCAH3JOJoE114X7S+cXXfy4jvpZPEWOIC4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kxvYJthqzz9Ch/FqWQ8XhBVmiJuFjTiWQBM9GNthY1Q=;
-        b=N3v6fw6ztCvlemxoZ2aqE3a97BlD9kmEfMKkWalL6/VNJxwCYZ22T0ZbTgtfo2UzLp
-         Je5UNk6xEjn9oYLZfPyP8W362vUGky8lmzwXj5BXc1ETuXbpQdS5+2VLYFEYz5vE75N/
-         bgVq4UTr4Q35RPz6gKPkL8KvNDhebb+XWiOVqdDG2nRYVy8LIU2RQIgz8aE6aRnLnHEl
-         KF1eHwPJhjSyhwwS0yxtJf7N1UubJ33b00/jqwbsP+3+po4dMonal3QrLjnZ2QM5HW5h
-         r/bfQVerXh7OnP8jCN/7M9Dy6fNyA4mxcc5XYSNpkc2K6y+nBIVRNl97V6KAdH2e+smV
-         0ugg==
-X-Gm-Message-State: ACrzQf03bVl+TDTQHQ1tRcbc7WORlZuLz+s/CYn9kpdy9ZRUm5NEer2k
-        NzPpOLQ4gVB+VDviKFoRMnBDjw==
-X-Google-Smtp-Source: AMsMyM6xUY+dz5Tae0JqZ/Gt/+e/3j4bX9GN6Q/duxsMwusZHTZGtpBDWt+XZUOl2BllGHQisMALcQ==
-X-Received: by 2002:ac2:4c03:0:b0:4a2:2273:89c6 with SMTP id t3-20020ac24c03000000b004a2227389c6mr14264301lfq.245.1666775322987;
-        Wed, 26 Oct 2022 02:08:42 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id v24-20020ac258f8000000b00499f9aaa9desm767405lfo.179.2022.10.26.02.08.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 02:08:42 -0700 (PDT)
-Message-ID: <a5233381-4081-afce-07b5-72d653eeeefb@rasmusvillemoes.dk>
-Date:   Wed, 26 Oct 2022 11:08:41 +0200
+        Wed, 26 Oct 2022 05:10:38 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD823FF18;
+        Wed, 26 Oct 2022 02:10:31 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29Q9A3VM024236;
+        Wed, 26 Oct 2022 04:10:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1666775403;
+        bh=PFseUz2FLH0+SJbEiSZOFucKInC/j7Az10LCI3tDJFo=;
+        h=From:To:CC:Subject:Date;
+        b=UDUKE/pvFMfTyFEqi23gX5PfuMwvAVan2z60pkqQaBeCYWwFqgZI9r+IkiX8a0zcv
+         JRWke3fPR2iImYwjXm/ffKSbityaG9m3yY9Meej/cOkbvYZCHmSpBnGyKOk3qzjv9a
+         6bcx3CxcUpXFW8XoUeclZnj08xnCT98sKlc9fku4=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29Q9A3jZ017215
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Oct 2022 04:10:03 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 26
+ Oct 2022 04:10:03 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 26 Oct 2022 04:10:03 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29Q99wxp005870;
+        Wed, 26 Oct 2022 04:09:58 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <linux@armlinux.org.uk>,
+        <vladimir.oltean@nxp.com>, <vigneshr@ti.com>, <nsekhar@ti.com>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <s-vadapalli@ti.com>
+Subject: [PATCH v3 0/3] Add support for QSGMII mode for J721e CPSW9G to am65-cpsw driver
+Date:   Wed, 26 Oct 2022 14:39:54 +0530
+Message-ID: <20221026090957.180592-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] selftests/nolibc: add 7 tests for memcmp()
-Content-Language: en-US
-To:     Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221021060340.7515-1-w@1wt.eu>
- <20221021155645.GK5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021170134.GB8420@1wt.eu>
- <20221021170738.GM5600@paulmck-ThinkPad-P17-Gen-1>
- <20221021172026.GC8420@1wt.eu>
- <20221021180040.GN5600@paulmck-ThinkPad-P17-Gen-1>
- <20221022112228.GB30596@1wt.eu>
- <20221024155357.GZ5600@paulmck-ThinkPad-P17-Gen-1>
- <20221026053922.GA19206@1wt.eu>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20221026053922.GA19206@1wt.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,10 +67,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/2022 07.39, Willy Tarreau wrote:
-> 
-> No more false positives nor false negatives anymore. I'm sending you
-> the patch separately.
+Add compatible to am65-cpsw driver for J721e CPSW9G, which contains 8
+external ports and 1 internal host port.
 
-While you're at it, may I suggest also adding a few test cases where the
-buffers differ by 128, e.g. 0x0 v 0x80 and 0x40 v 0xc0.
+Add support to power on and power off the SERDES PHY which is used by the
+CPSW MAC.
+
+=========
+Changelog
+=========
+v2 -> v3:
+1. Run 'make DT_CHECKER_FLAGS=-m dt_binding_check' and fix errors and
+   warnings corresponding to the patch for:
+   Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
+   with the latest dt-schema and yamllint.
+
+v1 -> v2:
+1. Drop all patches corresponding to SGMII mode. This is done since I do
+   not have a method to test SGMII in the standard mode which uses an
+   SGMII PHY. The previous series used SGMII in a fixed-link mode,
+   bypassing the SGMII PHY. I will post the SGMII patches in a future
+   series after testing them.
+2. Drop all patches corresponding to fixed-link in the am65-cpsw driver.
+   This is done since PHYLINK takes care of fixed-link automatically and
+   there is no need to deal with fixed-link in a custom fashion.
+3. Fix indentation errors in k3-am65-cpsw-nuss.yaml.
+4. Remove the stale code which tries to power on and power off the CPSW
+   MAC's phy, since the CPSW MAC's phy driver does not support it.
+5. Rename the function "am65_cpsw_init_phy()" to
+   "am65_cpsw_init_serdes_phy()", to indicate that the phy corresponds to
+   the SERDES.
+6. Invoke "am65_cpsw_disable_serdes_phy()" as a part of the cleanup that
+   is associated with the "am65_cpsw_nuss_remove()" function.
+
+v2:
+https://lore.kernel.org/r/20221018085810.151327-1-s-vadapalli@ti.com/
+v1:
+https://lore.kernel.org/r/20220914095053.189851-1-s-vadapalli@ti.com/
+
+Siddharth Vadapalli (3):
+  dt-bindings: net: ti: k3-am654-cpsw-nuss: Update bindings for J721e
+    CPSW9G
+  net: ethernet: ti: am65-cpsw: Enable QSGMII mode for J721e CPSW9G
+  net: ethernet: ti: am65-cpsw: Add support for SERDES configuration
+
+ .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 33 ++++++++-
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c      | 73 +++++++++++++++++++
+ 2 files changed, 102 insertions(+), 4 deletions(-)
+
+-- 
+2.25.1
+
