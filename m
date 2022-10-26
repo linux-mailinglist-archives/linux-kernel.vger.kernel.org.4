@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB4360EBB8
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435FA60EBBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbiJZWn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 18:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
+        id S233403AbiJZWoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 18:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiJZWnf (ORCPT
+        with ESMTP id S233668AbiJZWni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 18:43:35 -0400
+        Wed, 26 Oct 2022 18:43:38 -0400
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70E9C139C07;
-        Wed, 26 Oct 2022 15:43:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F47511700C;
+        Wed, 26 Oct 2022 15:43:17 -0700 (PDT)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 9CEBD4830;
-        Thu, 27 Oct 2022 00:43:12 +0200 (CEST)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 222C24832;
+        Thu, 27 Oct 2022 00:43:17 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1666824192;
-        bh=6pkTsC/X3DXZE/1Nfcqo6aUpf8jpMUrgSqAARhHXbY4=;
+        s=202205; t=1666824197;
+        bh=pYNAXn7meYx+O/2Uw04Ex9qd0o7Lea6vZv0pqijKfL0=;
         h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=t0N1sIXCHYG7BMvFda7Y9i2bcXE6p67yVFVd6WfdMLY9915Tv6VpSKFYkKF/H+Rs+
-         OWR03FlGilVT3HXqNkE0B5l//9jLy7diLyZPOObJNUxr460n4EgKxqHhVAggZPLOTY
-         LdwHziOYdEi0OkGHlOvvJiu8J2P9o0MuBrJwf22Z6jwv/3q4U6TWHO6SzAz6kAk53g
-         KZgH43sk5odPvW08Dp9Mq/82cQBOVu2SodgMOaZ/h0DukqCQ3CcuvvLZi+K7Men3tM
-         Qbw51HcMUEOrRILuaTPM9MtF3JBBQOxGWZyIHkPQEN134EEgbe5vhV4i4K+wIGrqDL
-         3z3sSrL74sUt4I1xRYLKcQtsud40Vv+DjkIWiJfnBNXmWIqf2iU0F+6N92r8VEN8Lc
-         eP+qjW59Q8R3lwCXE6jVdXGOW+BzVZlcPZWvxGjYUW+lxc1KQpSI2VwI7YjBpY+nC/
-         gO1ypdzK/VHzFMNTf0Rx6hRJJQlTCehKImwiqtyhYILNof7laAMdziTY0KUVGoAI8O
-         8V9rSQXCRSN6dSv/dY2DBPTCxYoia5c965CSOQUwCw7cRLxaTFhbHR5qpBiOiPCd6U
-         Ol72bU+1saOpAQWUWyW5hQUpy+W0ptzFh8qQchjE4nBQo9QMxAuKn1bUBPswJaWkCc
-         Y4IAQRR+gQHbtP2KG4w7U6uE=
-Date:   Thu, 27 Oct 2022 00:43:11 +0200
+        b=EPwaNgB2n2n0Td7OkYlPzf/50q8c0WbVu+UD9unSG1qXZkzK5aB5Ff/eMQgCTQi8x
+         Z4dx4FNXQNVV/v2aCB/84alz4rTWdc4x3EaqWQftZdf31bWT1vIEhOdAiOHbALJUvq
+         pE+j955+xklyf94i5QAWUctm0Zv787sZrBP78neVqg6rDSZbD7BWjJcjFAfycbyqN3
+         3/6cHVcQ+5G3MqDFgH38stNlcveoskT5NwXXGYbnAP8yr/zSjblZzdIcrKQujGR9We
+         OvMh9hBBwfowvWIc6Jpf2UmX9Whran88EsqN/ryNGKLiEcI6z5qaPbilN8tbMyKCWV
+         5PaBhS5D4Ow8rsL7QrdcXr7PGDm4FxmZF2UVxP16cpvzXADhMZ+p39uJAy22je4nea
+         aR0Z51DHzKPNfldYCSvjz5A2vhYtqH75nlp1dQDnjPHyyS0pQVvQ0B9Hm8yoF0oUAt
+         8Nm7pBym5feZ9yAMIHkik23f7oqgJ1jW1tOf1gCslBcuCUp8oW55SM3Joi+Rq2OBF0
+         SOraSzFQcY1UO7SocT0xTQ4iIfb+ro4lxJctr1ImrmhoPJ3kuSvVLgCWjQSgr9HLMj
+         eP9jYtobTb7Z6SK49r7D4ImnG7uJfDri+bWx+EGU2qFCLqg0ig7E12gTjZxWBbdKFJ
+         V5lWU+NbU/K44IzwC9XYxQx0=
+Date:   Thu, 27 Oct 2022 00:43:16 +0200
 From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
 Cc:     Jonathan Corbet <corbet@lwn.net>,
         Federico Vaga <federico.vaga@vaga.pv.it>,
         Alex Shi <alexs@kernel.org>,
         Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Hu Haowen <src.res@email.cn>, Jiri Kosina <jikos@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net,
-        linux-mips@vger.kernel.org
-Subject: [PATCH 08/15] MIPS: IP27: remove KV_MAGIC
-Message-ID: <ebf854f94d7a33c744202efb31cbb61087a33e44.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+        Jiri Slaby <jirislaby@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc-tw-discuss@lists.sourceforge.net
+Subject: [PATCH 09/15] x86/APM: remove APM_BIOS_MAGIC
+Message-ID: <ff5e936ea657d9197a9c13404b9fd880dffc9fbb.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sniqqlarsgxgmoca"
+        protocol="application/pgp-signature"; boundary="25xdnldcorum34ww"
 Content-Disposition: inline
 In-Reply-To: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 User-Agent: NeoMutt/20220429
@@ -69,169 +74,189 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---sniqqlarsgxgmoca
+--25xdnldcorum34ww
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-It appeared in the original import of SGI code in 2.4.0-test3pre8
-and has never been used anywhere
+We have largely moved away from this approach,
+and we have better debugging instrumentation nowadays: kill it
 
+Ref: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
 Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
- Documentation/process/magic-number.rst                    | 1 -
- Documentation/translations/it_IT/process/magic-number.rst | 1 -
- Documentation/translations/zh_CN/process/magic-number.rst | 1 -
- Documentation/translations/zh_TW/process/magic-number.rst | 1 -
- arch/mips/include/asm/sn/klkernvars.h                     | 8 ++------
- arch/mips/sgi-ip27/ip27-klnuma.c                          | 1 -
- 6 files changed, 2 insertions(+), 11 deletions(-)
+ Documentation/process/magic-number.rst                   | 1 -
+ .../translations/it_IT/process/magic-number.rst          | 1 -
+ .../translations/zh_CN/process/magic-number.rst          | 1 -
+ .../translations/zh_TW/process/magic-number.rst          | 1 -
+ arch/x86/kernel/apm_32.c                                 | 9 +--------
+ 5 files changed, 1 insertion(+), 12 deletions(-)
 
 diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
 /magic-number.rst
-index 7dada7abc733..d8ffbc21872e 100644
+index d8ffbc21872e..77a96a79c7e8 100644
 --- a/Documentation/process/magic-number.rst
 +++ b/Documentation/process/magic-number.rst
-@@ -72,7 +72,6 @@ APM_BIOS_MAGIC        0x4101           apm_user          =
-       ``arch/x86/kerne
+@@ -68,7 +68,6 @@ Changelog::
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+ Magic Name            Number           Structure                File
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+-APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
+/kernel/apm_32.c``
  FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
 linux/fs.h``
  SLIP_MAGIC            0x5302           slip                     ``drivers/=
 net/slip.h``
  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
 linux/hdlcdrv.h``
--KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
 diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
 cumentation/translations/it_IT/process/magic-number.rst
-index f9634a04d349..0e59704aa617 100644
+index 0e59704aa617..ef509265a3df 100644
 --- a/Documentation/translations/it_IT/process/magic-number.rst
 +++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -78,7 +78,6 @@ APM_BIOS_MAGIC        0x4101           apm_user          =
-       ``arch/x86/kerne
+@@ -74,7 +74,6 @@ Registro dei cambiamenti::
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+ Nome magico           Numero           Struttura                File
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+-APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
+/kernel/apm_32.c``
  FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
 linux/fs.h``
  SLIP_MAGIC            0x5302           slip                     ``drivers/=
 net/slip.h``
  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
 linux/hdlcdrv.h``
--KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
 diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
 cumentation/translations/zh_CN/process/magic-number.rst
-index 966b9e6b1a46..17a73661ef17 100644
+index 17a73661ef17..6437c408dd67 100644
 --- a/Documentation/translations/zh_CN/process/magic-number.rst
 +++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -61,7 +61,6 @@ APM_BIOS_MAGIC        0x4101           apm_user          =
-       ``arch/x86/kerne
+@@ -57,7 +57,6 @@ Linux =E9=AD=94=E6=9C=AF=E6=95=B0
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+ =E9=AD=94=E6=9C=AF=E6=95=B0=E5=90=8D              =E6=95=B0=E5=AD=97      =
+       =E7=BB=93=E6=9E=84                     =E6=96=87=E4=BB=B6
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+-APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
+/kernel/apm_32.c``
  FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
 linux/fs.h``
  SLIP_MAGIC            0x5302           slip                     ``drivers/=
 net/slip.h``
  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
 linux/hdlcdrv.h``
--KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
 diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
 cumentation/translations/zh_TW/process/magic-number.rst
-index f3e87a6b3a01..9d44d49b93bf 100644
+index 9d44d49b93bf..453cc205e6c3 100644
 --- a/Documentation/translations/zh_TW/process/magic-number.rst
 +++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -64,7 +64,6 @@ APM_BIOS_MAGIC        0x4101           apm_user          =
-       ``arch/x86/kerne
+@@ -60,7 +60,6 @@ Linux =E9=AD=94=E8=A1=93=E6=95=B8
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+ =E9=AD=94=E8=A1=93=E6=95=B8=E5=90=8D              =E6=95=B8=E5=AD=97      =
+       =E7=B5=90=E6=A7=8B                     =E6=96=87=E4=BB=B6
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+-APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
+/kernel/apm_32.c``
  FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
 linux/fs.h``
  SLIP_MAGIC            0x5302           slip                     ``drivers/=
 net/slip.h``
  HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
 linux/hdlcdrv.h``
--KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CCB_MAGIC             0xf2691ad2       ccb                      ``drivers/=
-scsi/ncr53c8xx.c``
- QUEUE_MAGIC_FREE      0xf7e1c9a3       queue_entry              ``drivers/=
-scsi/arm/queue.c``
- QUEUE_MAGIC_USED      0xf7e1cc33       queue_entry              ``drivers/=
-scsi/arm/queue.c``
-diff --git a/arch/mips/include/asm/sn/klkernvars.h b/arch/mips/include/asm/=
-sn/klkernvars.h
-index ea6b21795163..93d5eb873255 100644
---- a/arch/mips/include/asm/sn/klkernvars.h
-+++ b/arch/mips/include/asm/sn/klkernvars.h
-@@ -6,18 +6,14 @@
- #ifndef __ASM_SN_KLKERNVARS_H
- #define __ASM_SN_KLKERNVARS_H
+diff --git a/arch/x86/kernel/apm_32.c b/arch/x86/kernel/apm_32.c
+index 60e330cdbd17..f3dd21dc56b7 100644
+--- a/arch/x86/kernel/apm_32.c
++++ b/arch/x86/kernel/apm_32.c
+@@ -330,7 +330,6 @@ extern int (*console_blank_hook)(int);
+  * The per-file APM data
+  */
+ struct apm_user {
+-	int		magic;
+ 	struct apm_user *next;
+ 	unsigned int	suser: 1;
+ 	unsigned int	writer: 1;
+@@ -346,11 +345,6 @@ struct apm_user {
+ 	apm_event_t	events[APM_MAX_EVENTS];
+ };
 =20
--#define KV_MAGIC_OFFSET		0x0
--#define KV_RO_NASID_OFFSET	0x4
--#define KV_RW_NASID_OFFSET	0x6
+-/*
+- * The magic number in apm_user
+- */
+-#define APM_BIOS_MAGIC		0x4101
 -
--#define KV_MAGIC		0x5f4b565f
-+#define KV_RO_NASID_OFFSET	0x0
-+#define KV_RW_NASID_OFFSET	0x2
+ /*
+  * idle percentage above which bios idle calls are done
+  */
+@@ -1459,7 +1453,7 @@ static void apm_mainloop(void)
 =20
- #ifndef __ASSEMBLY__
+ static int check_apm_user(struct apm_user *as, const char *func)
+ {
+-	if (as =3D=3D NULL || as->magic !=3D APM_BIOS_MAGIC) {
++	if (as =3D=3D NULL) {
+ 		pr_err("%s passed bad filp\n", func);
+ 		return 1;
+ 	}
+@@ -1616,7 +1610,6 @@ static int do_open(struct inode *inode, struct file *=
+filp)
+ 	if (as =3D=3D NULL)
+ 		return -ENOMEM;
 =20
- #include <asm/sn/types.h>
-=20
- typedef struct kern_vars_s {
--	int		kv_magic;
- 	nasid_t		kv_ro_nasid;
- 	nasid_t		kv_rw_nasid;
- 	unsigned long	kv_ro_baseaddr;
-diff --git a/arch/mips/sgi-ip27/ip27-klnuma.c b/arch/mips/sgi-ip27/ip27-kln=
-uma.c
-index abd7a84df7dd..82bb7ac20ef8 100644
---- a/arch/mips/sgi-ip27/ip27-klnuma.c
-+++ b/arch/mips/sgi-ip27/ip27-klnuma.c
-@@ -61,7 +61,6 @@ static __init void set_ktext_source(nasid_t client_nasid,=
- nasid_t server_nasid)
-=20
- 	KERN_VARS_ADDR(client_nasid) =3D (unsigned long)kvp;
-=20
--	kvp->kv_magic =3D KV_MAGIC;
- 	kvp->kv_ro_nasid =3D server_nasid;
- 	kvp->kv_rw_nasid =3D master_nasid;
- 	kvp->kv_ro_baseaddr =3D NODE_CAC_BASE(server_nasid);
+-	as->magic =3D APM_BIOS_MAGIC;
+ 	as->event_tail =3D as->event_head =3D 0;
+ 	as->suspends_pending =3D as->standbys_pending =3D 0;
+ 	as->suspends_read =3D as->standbys_read =3D 0;
 --=20
 2.30.2
 
---sniqqlarsgxgmoca
+--25xdnldcorum34ww
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNZt/8ACgkQvP0LAY0m
-WPG5kBAApZjQIEPUhGRvbEU3UKObOB6nSNfts+IU7eRWcYCb2Lr4Rmjf9DV7JKqk
-xPXD7AofKmfoqF6qKlKshzIHEtv0Uhw8k42jcq+ooAaZgsHExkUAGEtfGr5R9D3i
-VAW04tKX8RgQPDaOduhdmUNDWbB/kUGce9p0E5xpX/JBGOYikPR+BtSd2tUb25xl
-X+TFD7zsPtrhbzewFfkkwogNVMp4stgwM82spHWmd9lK+3Kh+k1/K4hW/kL7Hj4L
-KzXGMDl7uGLFledvCfYAjM7H7k/zvADG6bKjT2wjY9bXUGY3rSY9mbbhHr5g9psA
-4rvVsGlkqLe2EAQ7zE2Riyf+DP36or3+uNWKuXlcuNoN1hzABXg4hJ0BV/A64Wxq
-IfWiuZsEUaPSVxiRYXdhpzsbHPTPijVxB3+TcR3tS0RxaNjTqU3aIQY6k0fKzaqH
-XPFH4Us9PGfLRSQ32ZrOzo4t3fPDRLUSiAvFgjMIBlXdo7n+KF5jXymRPXe9xvsl
-eqXkKbH/greIy3oE6jNP1E2gNcDcjo90vwPnkUwFn+XW5b/HhMyLji627NP0GnS1
-qtMdFPlHxB3wBOlXCeD3i2S9yjHN4qBfRmHlgdm2K8mRYHcNeNb9yx3vYXIKqvm9
-GkoHiyeDHqNon/MC87ZQossiF8jVuhLWTjcbkG9gYAKNmIALNK8=
-=9nt2
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNZuAMACgkQvP0LAY0m
+WPGPXA/+OXXLOZ+tHwUL1HpBXUcqqAANTMsPcIteBX/t++xvVqqEU3u/sLh5BDKj
+67FLa2axj9LsfCBLf4GU1v86ck2X3BZ2qo/5w9S/oAPysZfWxh0r7go6Ii21oR7a
+fBGiO0J6b6laSKC3OUeFsOC2iNNS/H0T4S9117pbIwf+JK468FQ/COLAiAOI8357
+Jj2YTN0Kfr8R7QtukTHFQUAzgq39VbO7VXFq3tGtca2JSBCt4Wq0MsxAEkisuVtB
+UkfHF5W8a664S8VoWO0HUzIDCtX1DDBv9fgXlqnc0rv69+w7aMjoqaLVnooQ35tF
+T7cPZZeFJte3wrBQmT7THus6NdIBN/JFNR0CGe6BwXEFUvZfVNbTSQJspduqKiBK
+WuG4giAZBMLJ3h+UZNpx8+qRRtKWTVlFB4FHveAFYvq77QHB812QJOaYKkqj8WHi
+A4GdLhPKRw3S7TrTL/K1+zw/CBJotTpSVU4xfZbOo8uh1sWwidWu+4LAxmaFKdXS
++iYGD1He+AtFRGKQM3ZMMLEipAQQGU0sCferlgGJ+HDuItLSTVivFg2k6ui/xypn
+SAnCndxa/xh7ExucntkxIiMhX5Pbu1dDGVx7MoYK4pFLrPdKP8fdO3Puphuo+kmH
+m2CuDJfCZaCQXUz7kgDbzB6wEdkICaEdkEDupWswX4g20wQTTWI=
+=2BJn
 -----END PGP SIGNATURE-----
 
---sniqqlarsgxgmoca--
+--25xdnldcorum34ww--
