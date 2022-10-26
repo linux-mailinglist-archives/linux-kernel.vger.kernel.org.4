@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E8160DC60
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2F060DC5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiJZHmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S231696AbiJZHmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233313AbiJZHmr (ORCPT
+        with ESMTP id S233331AbiJZHly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:42:47 -0400
+        Wed, 26 Oct 2022 03:41:54 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A76C0982
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:42:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4A1A4B90;
+        Wed, 26 Oct 2022 00:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666770165; x=1698306165;
-  h=date:from:to:cc:subject:message-id:mime-version:
+  t=1666770112; x=1698306112;
+  h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=tg0J1SHWrj2/aeL7dMpFKDW5ofVhbgswqgrHtxhYxxI=;
-  b=Fnmi25yk+qPvmkS+CVBSNIE3I43Dlsb5lp7F/OidZcqBfvBAbqtdvca0
-   yOI1sOU1scuwfyeuV9jXc9RxPpxyoccPx8sXiAkp9Z3KxT1uo5q+I7F3O
-   ED2OEWm5plCuPLhZZwVUIKKQysGYk8kEQqZG+5M+YerpkBGuFFvBZuHK/
-   IuCGA7SurJF7Fh3KK/z7h9U/S4c+qxsTjIgB2dH9fpzxQPqYEwMN6T8qc
-   MD2mN0ye9PovxxL+1R7kbnM0gsKqoQwFZiXlbacK66TrIqO40AQjgtxqA
-   av1xxXrf+AYQR6/DeZPIn9/GaWyie29l0rjZVUG8P/wPSKx6Pukume18l
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="308977170"
+  bh=jl6oLzXT4bn5lvPhVCs6xFhXegqNnCjjfs7rohSWfqY=;
+  b=Q6/wOhD3VeZyicRsjyaiaNpVpiV7OFEWbjva551Coa4XeJMovLYasHJU
+   jFTnhRu02Elu8or06/h8I0upGHXfqTDIfr5RIIDHw8+/ErEqp7ZJql8Bm
+   Ovkb6bM+YVr387KeYWL/hWwVjS4NQuGxGU+2nliweWiB0NErjoKnsUGEl
+   wMPvpMgS19RtxRMqdat2Cqj5m11q0omGJ0t0x0Y11tnHrIV01tBe/Yb4m
+   udTMuxn1mq0N72uMXGKE4eu54PlS2xDzqj/6KreKMdoMKDU53IPoIshkr
+   oR5lt+Fayp53drKMjfMhwHiAJ4NNda4LQE0DkLrWMfbw4BGAymJ4Na7BV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="308977052"
 X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="308977170"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 00:42:45 -0700
+   d="scan'208";a="308977052"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 00:41:51 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="665198174"
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="700832747"
 X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="665198174"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 26 Oct 2022 00:42:43 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1onb3j-00079c-0Z;
-        Wed, 26 Oct 2022 07:42:43 +0000
-Date:   Wed, 26 Oct 2022 15:42:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/core] BUILD SUCCESS
- ae25e00ba84073450c07d8ffd2d74f914a027230
-Message-ID: <6358e4ed.IN2+On/X/kp2Km6c%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="700832747"
+Received: from shbuild999.sh.intel.com ([10.239.146.101])
+  by fmsmga004.fm.intel.com with ESMTP; 26 Oct 2022 00:41:47 -0700
+From:   Feng Tang <feng.tang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>, ying.huang@intel.com,
+        aneesh.kumar@linux.ibm.com, linux-mm@kvack.org,
+        cgroups@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, dave.hansen@intel.com,
+        tim.c.chen@intel.com, fengwei.yin@intel.com,
+        Feng Tang <feng.tang@intel.com>
+Subject: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+Date:   Wed, 26 Oct 2022 15:43:43 +0800
+Message-Id: <20221026074343.6517-1-feng.tang@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -64,95 +66,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/core
-branch HEAD: ae25e00ba84073450c07d8ffd2d74f914a027230  x86/retpoline: Fix crash printing warning
+In page reclaim path, memory could be demoted from faster memory tier
+to slower memory tier. Currently, there is no check about cpuset's
+memory policy, that even if the target demotion node is not allowd
+by cpuset, the demotion will still happen, which breaks the cpuset
+semantics.
 
-elapsed time: 720m
+So add cpuset policy check in the demotion path and skip demotion
+if the demotion targets are not allowed by cpuset.
 
-configs tested: 74
-configs skipped: 79
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+---
+Hi reviewers,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+For easy bisectable, I combined the cpuset change and mm change
+in one patch, if you prefer to separate them, I can turn it into
+2 patches.
 
-gcc tested configs:
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a014
-x86_64                        randconfig-a006
-i386                          randconfig-a012
-i386                          randconfig-a016
-i386                                defconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-i386                             allyesconfig
-x86_64                        randconfig-a015
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-ia64                             allmodconfig
-i386                 randconfig-a011-20221024
-i386                 randconfig-a014-20221024
-i386                 randconfig-a015-20221024
-i386                 randconfig-a016-20221024
-i386                 randconfig-a012-20221024
-i386                 randconfig-a013-20221024
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-arc                  randconfig-r043-20221026
-s390                 randconfig-r044-20221026
-riscv                randconfig-r042-20221026
-i386                             alldefconfig
-arm                      integrator_defconfig
-openrisc                 simple_smp_defconfig
-mips                          rb532_defconfig
-sh                        edosk7705_defconfig
-i386                          randconfig-c001
+Thanks,
+Feng
 
-clang tested configs:
-i386                 randconfig-a002-20221024
-x86_64                        randconfig-a001
-i386                          randconfig-a013
-i386                 randconfig-a003-20221024
-x86_64                        randconfig-a003
-i386                 randconfig-a001-20221024
-i386                          randconfig-a011
-x86_64                        randconfig-a005
-i386                          randconfig-a015
-i386                 randconfig-a005-20221024
-i386                 randconfig-a004-20221024
-i386                 randconfig-a006-20221024
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64               randconfig-a001-20221024
-x86_64               randconfig-a003-20221024
-x86_64               randconfig-a002-20221024
-x86_64               randconfig-a004-20221024
-x86_64               randconfig-a005-20221024
-x86_64               randconfig-a006-20221024
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
+ include/linux/cpuset.h |  6 ++++++
+ kernel/cgroup/cpuset.c | 29 +++++++++++++++++++++++++++++
+ mm/vmscan.c            | 35 ++++++++++++++++++++++++++++++++---
+ 3 files changed, 67 insertions(+), 3 deletions(-)
 
+diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+index d58e0476ee8e..6fcce2bd2631 100644
+--- a/include/linux/cpuset.h
++++ b/include/linux/cpuset.h
+@@ -178,6 +178,8 @@ static inline void set_mems_allowed(nodemask_t nodemask)
+ 	task_unlock(current);
+ }
+ 
++extern void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup,
++						nodemask_t *nmask);
+ #else /* !CONFIG_CPUSETS */
+ 
+ static inline bool cpusets_enabled(void) { return false; }
+@@ -299,6 +301,10 @@ static inline bool read_mems_allowed_retry(unsigned int seq)
+ 	return false;
+ }
+ 
++static inline void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup,
++						nodemask_t *nmask)
++{
++}
+ #endif /* !CONFIG_CPUSETS */
+ 
+ #endif /* _LINUX_CPUSET_H */
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 3ea2e836e93e..cbb118c0502f 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -3750,6 +3750,35 @@ nodemask_t cpuset_mems_allowed(struct task_struct *tsk)
+ 	return mask;
+ }
+ 
++/*
++ * Retrieve the allowed memory nodemask for a cgroup.
++ *
++ * Set *nmask to cpuset's effective allowed nodemask for cgroup v2,
++ * and NODE_MASK_ALL (means no constraint) for cgroup v1 where there
++ * is no guaranteed association from a cgroup to a cpuset.
++ */
++void cpuset_get_allowed_mem_nodes(struct cgroup *cgroup, nodemask_t *nmask)
++{
++	struct cgroup_subsys_state *css;
++	struct cpuset *cs;
++
++	if (!is_in_v2_mode()) {
++		*nmask = NODE_MASK_ALL;
++		return;
++	}
++
++	rcu_read_lock();
++	css = cgroup_e_css(cgroup, &cpuset_cgrp_subsys);
++	if (css) {
++		css_get(css);
++		cs = css_cs(css);
++		*nmask = cs->effective_mems;
++		css_put(css);
++	}
++
++	rcu_read_unlock();
++}
++
+ /**
+  * cpuset_nodemask_valid_mems_allowed - check nodemask vs. current mems_allowed
+  * @nodemask: the nodemask to be checked
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 18f6497994ec..c205d98283bc 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1537,9 +1537,21 @@ static struct page *alloc_demote_page(struct page *page, unsigned long private)
+ {
+ 	struct page *target_page;
+ 	nodemask_t *allowed_mask;
+-	struct migration_target_control *mtc;
++	struct migration_target_control *mtc = (void *)private;
+ 
+-	mtc = (struct migration_target_control *)private;
++#if IS_ENABLED(CONFIG_MEMCG) && IS_ENABLED(CONFIG_CPUSETS)
++	struct mem_cgroup *memcg;
++	nodemask_t cpuset_nmask;
++
++	memcg = page_memcg(page);
++	cpuset_get_allowed_mem_nodes(memcg->css.cgroup, &cpuset_nmask);
++
++	if (!node_isset(mtc->nid, cpuset_nmask)) {
++		if (mtc->nmask)
++			nodes_and(*mtc->nmask, *mtc->nmask, cpuset_nmask);
++		return alloc_migration_target(page, (unsigned long)mtc);
++	}
++#endif
+ 
+ 	allowed_mask = mtc->nmask;
+ 	/*
+@@ -1649,6 +1661,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+ 		enum folio_references references = FOLIOREF_RECLAIM;
+ 		bool dirty, writeback;
+ 		unsigned int nr_pages;
++		bool skip_this_demotion = false;
+ 
+ 		cond_resched();
+ 
+@@ -1658,6 +1671,22 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+ 		if (!folio_trylock(folio))
+ 			goto keep;
+ 
++#if IS_ENABLED(CONFIG_MEMCG) && IS_ENABLED(CONFIG_CPUSETS)
++		if (do_demote_pass) {
++			struct mem_cgroup *memcg;
++			nodemask_t nmask, nmask1;
++
++			node_get_allowed_targets(pgdat, &nmask);
++			memcg = folio_memcg(folio);
++			if (memcg)
++				cpuset_get_allowed_mem_nodes(memcg->css.cgroup,
++								&nmask1);
++
++			if (!nodes_intersects(nmask, nmask1))
++				skip_this_demotion = true;
++		}
++#endif
++
+ 		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
+ 
+ 		nr_pages = folio_nr_pages(folio);
+@@ -1799,7 +1828,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+ 		 * Before reclaiming the folio, try to relocate
+ 		 * its contents to another node.
+ 		 */
+-		if (do_demote_pass &&
++		if (do_demote_pass && !skip_this_demotion &&
+ 		    (thp_migration_supported() || !folio_test_large(folio))) {
+ 			list_add(&folio->lru, &demote_folios);
+ 			folio_unlock(folio);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+
