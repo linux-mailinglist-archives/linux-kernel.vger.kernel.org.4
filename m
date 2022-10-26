@@ -2,140 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A0460E485
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D9460E487
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234570AbiJZPds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
+        id S233818AbiJZPdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234434AbiJZPdq (ORCPT
+        with ESMTP id S233445AbiJZPdw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:33:46 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1504F9737
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:33:45 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 21so8155273edv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:33:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mBX4bT2qc6/G5xqtzpd0iJ6M1TPlZmSU/EpcMpqcNzM=;
-        b=U51/v2w0f9bh4CquGhgtUghzC0aS52L9CRVebJ48950nhz00QgYxl2FErs8/XE6tG2
-         OBjdfDhfhgAkSHEAyO1ezFmEzBbkUizjIm6roRJhDFr0OA8wAHd5rTI7kJab2X70ansT
-         Bsq1CJ9EzVqc/g0itDGIwsR57YVOY6EcurqyQ=
+        Wed, 26 Oct 2022 11:33:52 -0400
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C820130D5C;
+        Wed, 26 Oct 2022 08:33:51 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so1904256wmb.0;
+        Wed, 26 Oct 2022 08:33:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mBX4bT2qc6/G5xqtzpd0iJ6M1TPlZmSU/EpcMpqcNzM=;
-        b=AyGsDm6XoXTGA/bpq1nIS/cG0B+B4kBtFyG+gcYID0NfK3n875TkvLuJd77SakhWyo
-         W2wJ5QjdD9OVoNy/Q6tSOuvXuK/aNyjw8Exl3LnSgaf3QDLAS7WvcttOlZnjBve1ZY8X
-         Rr7l8kvEi+VvpWf4ZV4XwcYXKmwSW+lPMkhACnTLnD/ezic7GYpUdUB2FKsyirVXDLly
-         2dGNx5PqWlrbmZB6L8NQHnpfjCnq0Yq/0DwRQEqbxCJnIC3uz0PGQXfQ8jIyUYY4epqo
-         Oc6TRgThGGnIvJ75YU/QVzka+X1YRZj3TTK2NDf76AHAcpCt100Ug3AFNZRjlx76ygbS
-         4psQ==
-X-Gm-Message-State: ACrzQf3D6NMsHSuUmXZAc4Ivtxf0axPPPg8UisgH1Lj+aoYUQbDfUUOz
-        Uqavp+lJI4GA3dXjBqQb+N2WbpzcYu4lURfx
-X-Google-Smtp-Source: AMsMyM6Q4gexF0GJk8ZpTsuqgw+HxnwfMSnjQxrRwvMkFTX1VvqSPaoJS5MONMATvjlEgnz9L1YRVg==
-X-Received: by 2002:a05:6402:11c7:b0:462:549d:fbbe with SMTP id j7-20020a05640211c700b00462549dfbbemr4799956edw.199.1666798423949;
-        Wed, 26 Oct 2022 08:33:43 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id 27-20020a508e1b000000b00456c6b4b777sm3663920edw.69.2022.10.26.08.33.40
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 08:33:41 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id z14so13480450wrn.7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:33:40 -0700 (PDT)
-X-Received: by 2002:a05:6000:3c1:b0:236:5779:546d with SMTP id
- b1-20020a05600003c100b002365779546dmr18412470wrg.405.1666798420614; Wed, 26
- Oct 2022 08:33:40 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rpy3zNSL/y/tD/d9yfVMzCJsLEWWsJUHpcwvg6PJ/JA=;
+        b=aLs6Xv1d4O0vutxfGVpdp2GkXhKAFFCBpTTKIpaLKaNBFgTvayaUqXk1XDgk0AdQ9e
+         Xuu4QXMqxHIrENeO80HTDblD4zei/5+DjjttaNqP+i3ewtkSkNe/RF/H0gsKvV7hJo9l
+         /AQlbwqrIOQXH4b9+43nZNfjK2fHYNI2UmSvSv9sEEg9FQgQcAea44x9hyAgo1dSElqy
+         tXCv4Hy0TBEq6YsihpmPP75qZZYaqr1aExQpNPuGAUE4vENVTS1YWvXP0VC+04/LYzSK
+         KPvpisvDLwh7pqdyXRVWA+tJ0TmujjZBsuDXcJb0eHPSogknCxh8wzv6YeOBi8MPHT7l
+         jddw==
+X-Gm-Message-State: ACrzQf3Ohtoex0hxosdCxFUGGCZZh+Is49sGGuD/SbGWQ2RDbvgzzOZe
+        R/Lta/X91/GgTJX4EbhXZp3ujRBQQD4=
+X-Google-Smtp-Source: AMsMyM4Axp+Fa7CgEJvzWt4sr8Nyu2jUTvpMABm/oeliK2HiYmE8ODrqHBmjg8gr00pbnp2x8ceRlg==
+X-Received: by 2002:a05:600c:310a:b0:3c6:f9a6:5a7d with SMTP id g10-20020a05600c310a00b003c6f9a65a7dmr2924497wmo.29.1666798429687;
+        Wed, 26 Oct 2022 08:33:49 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id f18-20020a5d58f2000000b0022b315b4649sm5736607wrd.26.2022.10.26.08.33.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 08:33:48 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 15:33:47 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [PATCH v2 1/2] mm/page_reporting: Add checks for
+ page_reporting_order param
+Message-ID: <Y1lTWxMnk3lnS+3V@liuwe-devbox-debian-v2>
+References: <1664447081-14744-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <1664517699-1085-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <1664517699-1085-2-git-send-email-shradhagupta@linux.microsoft.com>
 MIME-Version: 1.0
-References: <20221020225135.31750-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221020225135.31750-1-krzysztof.kozlowski@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 26 Oct 2022 08:33:28 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VRgEF=bADEKttmtGqrQ6mDqipGZFRh7JKa5mf4ovF2iA@mail.gmail.com>
-Message-ID: <CAD=FV=VRgEF=bADEKttmtGqrQ6mDqipGZFRh7JKa5mf4ovF2iA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] arm64/pinctrl: dt-bindings: qcom: sc7180: convert
- to dtschema
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1664517699-1085-2-git-send-email-shradhagupta@linux.microsoft.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bjorn,
+On Thu, Sep 29, 2022 at 11:01:38PM -0700, Shradha Gupta wrote:
+> Current code allows the page_reporting_order parameter to be changed
+> via sysfs to any integer value.  The new value is used immediately
+> in page reporting code with no validation, which could cause incorrect
+> behavior.  Fix this by adding validation of the new value.
+> Export this parameter for use in the driver that is calling the
+> page_reporting_register().
+> This is needed by drivers like hv_balloon to know the order of the
+> pages reported. Traditionally the values provided in the kernel boot
+> line or subsequently changed via sysfs take priority therefore, if
+> page_reporting_order parameter's value is set, it takes precedence
+> over the value passed while registering with the driver.
+> 
+> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
 
-On Thu, Oct 20, 2022 at 3:51 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> Hi,
->
-> Changes since v3
-> ================
-> 1. Drop bindings patch: applied.
-> 2. Rebase.
-> 3. Add tags.
->
-> Changes since v2
-> ================
-> 1. New patch: revert of glitch SPI CS workaround
-> 2. dt-bindings: Drop entire drive-strength (not needed, brought by common TLMM
->    schema).
-> 3. Add tags.
-> v2: https://lore.kernel.org/all/20221013184700.87260-1-krzysztof.kozlowski@linaro.org/
->
-> Best regards,
-> Krzysztof
->
-> Krzysztof Kozlowski (3):
->   arm64: dts: qcom: sc7180-trogdor-homestar: fully configure secondary
->     I2S pins
->   arm64: dts: qcom: sc7180: revert "arm64: dts: qcom: sc7180: Avoid
->     glitching SPI CS at bootup on trogdor"
->   arm64: dts: qcom: sc7180: align TLMM pin configuration with DT schema
->
->  arch/arm64/boot/dts/qcom/sc7180-idp.dts       | 236 +++----
->  .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  36 +-
->  .../dts/qcom/sc7180-trogdor-homestar.dtsi     |  41 +-
->  .../dts/qcom/sc7180-trogdor-kingoftown-r0.dts |  16 +-
->  .../dts/qcom/sc7180-trogdor-kingoftown.dtsi   |   8 +-
->  .../boot/dts/qcom/sc7180-trogdor-lazor.dtsi   |  16 +-
->  .../dts/qcom/sc7180-trogdor-mrbland-rev0.dtsi |  25 +-
->  .../boot/dts/qcom/sc7180-trogdor-mrbland.dtsi |  72 +-
->  .../qcom/sc7180-trogdor-parade-ps8640.dtsi    |  32 +-
->  .../boot/dts/qcom/sc7180-trogdor-pazquel.dtsi |   8 +-
->  .../boot/dts/qcom/sc7180-trogdor-pompom.dtsi  |  14 +-
->  .../qcom/sc7180-trogdor-quackingstick.dtsi    |  56 +-
->  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |   8 +-
->  .../dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi |  16 +-
->  .../qcom/sc7180-trogdor-wormdingler-rev0.dtsi |  25 +-
->  .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  |  72 +-
->  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 650 +++++++-----------
->  arch/arm64/boot/dts/qcom/sc7180.dtsi          | 597 ++++++++--------
->  18 files changed, 776 insertions(+), 1152 deletions(-)
+Andrew and other MM reviewers, can I get an ack / nack for this patch?
 
-I'd love to see this series land sooner rather than later. It'll cause
-conflicts with pretty much any other patch to a sc7180 device tree
-file, so it'd be nice to get it in the tree. ;-)
-
-
--Doug
+> ---
+>  mm/page_reporting.c | 50 ++++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 45 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/page_reporting.c b/mm/page_reporting.c
+> index 382958eef8a9..29d67c824fd2 100644
+> --- a/mm/page_reporting.c
+> +++ b/mm/page_reporting.c
+> @@ -11,10 +11,42 @@
+>  #include "page_reporting.h"
+>  #include "internal.h"
+>  
+> -unsigned int page_reporting_order = MAX_ORDER;
+> -module_param(page_reporting_order, uint, 0644);
+> +/* Initialize to an unsupported value */
+> +unsigned int page_reporting_order = -1;
+> +
+> +int page_order_update_notify(const char *val, const struct kernel_param *kp)
+> +{
+> +	/*
+> +	 * If param is set beyond this limit, order is set to default
+> +	 * pageblock_order value
+> +	 */
+> +	return  param_set_uint_minmax(val, kp, 0, MAX_ORDER-1);
+> +}
+> +
+> +const struct kernel_param_ops page_reporting_param_ops = {
+> +	.set = &page_order_update_notify,
+> +	/*
+> +	 * For the get op, use param_get_int instead of param_get_uint.
+> +	 * This is to make sure that when unset the initialized value of
+> +	 * -1 is shown correctly
+> +	 */
+> +	.get = &param_get_int,
+> +};
+> +
+> +module_param_cb(page_reporting_order, &page_reporting_param_ops,
+> +			&page_reporting_order, 0644);
+>  MODULE_PARM_DESC(page_reporting_order, "Set page reporting order");
+>  
+> +/*
+> + * This symbol is also a kernel parameter. Export the page_reporting_order
+> + * symbol so that other drivers can access it to control order values without
+> + * having to introduce another configurable parameter. Only one driver can
+> + * register with the page_reporting driver for the service, so we have just
+> + * one control parameter for the use case(which can be accessed in both
+> + * drivers)
+> + */
+> +EXPORT_SYMBOL_GPL(page_reporting_order);
+> +
+>  #define PAGE_REPORTING_DELAY	(2 * HZ)
+>  static struct page_reporting_dev_info __rcu *pr_dev_info __read_mostly;
+>  
+> @@ -330,10 +362,18 @@ int page_reporting_register(struct page_reporting_dev_info *prdev)
+>  	}
+>  
+>  	/*
+> -	 * Update the page reporting order if it's specified by driver.
+> -	 * Otherwise, it falls back to @pageblock_order.
+> +	 * If the page_reporting_order value is not set, we check if
+> +	 * an order is provided from the driver that is performing the
+> +	 * registration. If that is not provided either, we default to
+> +	 * pageblock_order.
+>  	 */
+> -	page_reporting_order = prdev->order ? : pageblock_order;
+> +
+> +	if (page_reporting_order == -1) {
+> +		if (prdev->order > 0 && prdev->order <= MAX_ORDER)
+> +			page_reporting_order = prdev->order;
+> +		else
+> +			page_reporting_order = pageblock_order;
+> +	}
+>  
+>  	/* initialize state and work structures */
+>  	atomic_set(&prdev->state, PAGE_REPORTING_IDLE);
+> -- 
+> 2.37.2
+> 
