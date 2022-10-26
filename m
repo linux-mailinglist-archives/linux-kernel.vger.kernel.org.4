@@ -2,190 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D104260E500
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D28860E50D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbiJZPsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S234061AbiJZP6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233663AbiJZPsn (ORCPT
+        with ESMTP id S234027AbiJZP6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:48:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40713B488F;
-        Wed, 26 Oct 2022 08:48:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E72B9B82344;
-        Wed, 26 Oct 2022 15:48:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F189C43470;
-        Wed, 26 Oct 2022 15:48:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666799319;
-        bh=sX2VmN8QIAfNUi3ehGzCa1UcNn8eoXtW++VSPOl7vVk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QbkHDSCwnYyR/TgpFq+jGc2Y6i3FFrkj4mMkK5eytAslQwuAXdJVjh2cAc6LaVrCs
-         yVbewnkkEflINbWrv1btIkUqOnFJ5cUymjuOqfC7BHdhZxyvWgYI9QPv3Fgm+0ATdO
-         0ekjuIAe99BVxfkfziBzawSLqPeZYREaEVxFnMxbPGSrEg/8RJoOBHt77w1So14Tna
-         2YPNYb0l7MIReOi2oOc4u7iUtn8LFqa++0vZK3aOUfQXVl17Xh+jGkPyvmc6pyZIsl
-         5jucngEwhSgHOKRcMGArtObJvOT7R/qUKv7uhuTKTLe+Pigxymf3VsMf5qB8mLNmiY
-         STZqgKjeMNHWA==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Primiano Tucci <primiano@google.com>
-Subject: [PATCH v2 2/2] tracing/probes: Reject symbol/symstr type for uprobe
-Date:   Thu, 27 Oct 2022 00:48:36 +0900
-Message-Id: <166679931679.1528100.15540755370726009882.stgit@devnote3>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-In-Reply-To: <166679929981.1528100.11309260111368557859.stgit@devnote3>
-References: <166679929981.1528100.11309260111368557859.stgit@devnote3>
-User-Agent: StGit/0.19
+        Wed, 26 Oct 2022 11:58:18 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08F19F35E
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:58:17 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so2976270pjc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VT0rMKlhjPrh+Ua8dUfAbjg38XkjnzDUvVzRJBD2CfU=;
+        b=TJcrG/pQPN9uJ7MAv/jvNq7Elf57q+NL3j7bA5CtMLd7fck4Ze8kXe25VLsMwws9fX
+         dJcXxphL5cMs0GTyN9XDMB5+NtiFAitZuyU1p8+XIKWxuXfx7n9DKrXcPou/aq0Ce4d6
+         gW/n2hLzbYPb2vrNvLl8/971CtOsE1HKoZsKw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VT0rMKlhjPrh+Ua8dUfAbjg38XkjnzDUvVzRJBD2CfU=;
+        b=LOtBeLaed9fAYvcUSSBloxTxUwNr4F/TRp3MOaJbtnkaxv57FHWzq0H+CVbWr+29JM
+         LZwhq17rYNcCg03Zvykc2VDe00I9MMplCEqijd2n/kckJdIzJpy0EZFQRb/r2d7DGCEi
+         pNJ87wufuGANTFGBpk8d6+r5wrMInZjT9KNjdMzm4J/sNiAJNscz8DxAA/AJ+FsHc0Io
+         EThhstAwnICv3qvAGqsrBm/ECFX+hYoV0JkjLn/RMmjwwM+p8CQTyma3UmTwSPFxWbax
+         EilgblNV2kDwdN4lUb0eSUX35fTyjGggypX1luNngzljkk3tTH+Th35IoZqPBpdER/J8
+         nQDg==
+X-Gm-Message-State: ACrzQf2fnL7v8L+LuPPKT25VufXh6um89OkPjj3zRHDqMy2LsCks8ZdA
+        Rk8iJD6otvs+fdkeOlT8uyqHtgGW3g3MRqMkhAt9iw==
+X-Google-Smtp-Source: AMsMyM4ARSsIPDLGSpr/5lW0y7QoVlqRAQOUvVHbrqggGiWktFVND8/Vo72wma+CTnACerihB2PeR/HLo34D4dMuBQo=
+X-Received: by 2002:a17:902:bd02:b0:178:1a1c:889 with SMTP id
+ p2-20020a170902bd0200b001781a1c0889mr44369292pls.107.1666799897328; Wed, 26
+ Oct 2022 08:58:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220724231458.93830-1-ajit.khaparde@broadcom.com>
+ <20221025173110.33192-1-ajit.khaparde@broadcom.com> <20221025173110.33192-3-ajit.khaparde@broadcom.com>
+ <Y1j8wv9nn6MmdlcB@unreal>
+In-Reply-To: <Y1j8wv9nn6MmdlcB@unreal>
+From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
+Date:   Wed, 26 Oct 2022 08:58:00 -0700
+Message-ID: <CACZ4nhtmE9Dh9z_O9-A934+q0_8yHEyj+V-DcEsuEWFbPH6BGg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] RDMA/bnxt_re: Use auxiliary driver interface
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, jgg@ziepe.ca, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        michael.chan@broadcom.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, selvin.xavier@broadcom.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000cfda6905ebf21705"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--000000000000cfda6905ebf21705
+Content-Type: text/plain; charset="UTF-8"
 
-Since uprobe's argument must contain the user-space data, that
-should not be converted to kernel symbols. Reject if user
-specifies these types on uprobe events. e.g.
+On Wed, Oct 26, 2022 at 2:24 AM Leon Romanovsky <leon@kernel.org> wrote:
+>
+> On Tue, Oct 25, 2022 at 10:31:06AM -0700, Ajit Khaparde wrote:
+> > Use auxiliary driver interface for driver load, unload ROCE driver.
+> > The driver does not need to register the interface using the netdev
+> > notifier anymore. Removed the bnxt_re_dev_list which is not needed.
+> > Currently probe, remove and shutdown ops have been implemented for
+> > the auxiliary device.
+> >
+> > Signed-off-by: Ajit Khaparde <ajit.khaparde@broadcom.com>
+> > Reviewed-by: Andy Gospodarek <andrew.gospodarek@broadcom.com>
+> > ---
+> >  drivers/infiniband/hw/bnxt_re/bnxt_re.h       |   9 +-
+> >  drivers/infiniband/hw/bnxt_re/main.c          | 387 +++++++-----------
+> >  drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  64 ---
+> >  drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c |  67 ++-
+> >  drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h |   3 +
+> >  5 files changed, 214 insertions(+), 316 deletions(-)
+>
+> <...>
+>
+> > -static struct bnxt_en_dev *bnxt_re_dev_probe(struct net_device *netdev)
+> > +static struct bnxt_en_dev *bnxt_re_dev_probe(struct auxiliary_device *adev)
+> >  {
+> > -     struct bnxt_en_dev *en_dev;
+> > +     struct bnxt_aux_dev *aux_dev =
+> > +             container_of(adev, struct bnxt_aux_dev, aux_dev);
+> > +     struct bnxt_en_dev *en_dev = NULL;
+> >       struct pci_dev *pdev;
+> >
+> > -     en_dev = ((struct bnxt*)netdev_priv(netdev))->edev;
+> > -     if (IS_ERR(en_dev))
+> > -             return en_dev;
+> > +     if (aux_dev)
+> > +             en_dev = aux_dev->edev;
+> > +
+> > +     if (!en_dev)
+> > +             return NULL;
+>
+> Thank you for working to convert this driver to auxiliary bus. I'm
+> confident that it will be ready soon.
+Thanks
 
- /sys/kernel/debug/tracing # echo 'p /bin/sh:10 %ax:symbol' >> uprobe_events
- sh: write error: Invalid argument
- /sys/kernel/debug/tracing # echo 'p /bin/sh:10 %ax:symstr' >> uprobe_events
- sh: write error: Invalid argument
- /sys/kernel/debug/tracing # cat error_log
- [ 1783.134883] trace_uprobe: error: Unknown type is specified
-   Command: p /bin/sh:10 %ax:symbol
-                             ^
- [ 1792.201120] trace_uprobe: error: Unknown type is specified
-   Command: p /bin/sh:10 %ax:symstr
-                             ^
+>
+> In order to effectively review this series, you need to structure
+> patches in such way that you don't remove in patch X+1 code that you
+> added in patch X.
+Sure. Moving from v1 to v2, I surely ran into the situation and cleaned them.
+I will clean up the rest in case I missed something.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v2:
-  - Fixes indentation.
----
- kernel/trace/trace_probe.c                         |   21 ++++++++++++--------
- kernel/trace/trace_probe.h                         |    3 ++-
- kernel/trace/trace_uprobe.c                        |    3 ++-
- .../ftrace/test.d/kprobe/uprobe_syntax_errors.tc   |    5 +++++
- 4 files changed, 22 insertions(+), 10 deletions(-)
+>
+> Also you should remove maze of redundant functions that do nothing, but
+> just call to another function with useless checks.
+ACK
 
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index dfec4af857b4..960bb7693a84 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -100,10 +100,15 @@ static const struct fetch_type probe_fetch_types[] = {
- 	ASSIGN_FETCH_TYPE_END
- };
- 
--static const struct fetch_type *find_fetch_type(const char *type)
-+static const struct fetch_type *find_fetch_type(const char *type, unsigned long flags)
- {
- 	int i;
- 
-+	/* Reject the symbol/symstr for uprobes */
-+	if (type && (flags & TPARG_FL_USER) &&
-+	    (!strcmp(type, "symbol") || !strcmp(type, "symstr")))
-+		return NULL;
-+
- 	if (!type)
- 		type = DEFAULT_FETCH_TYPE_STR;
- 
-@@ -121,13 +126,13 @@ static const struct fetch_type *find_fetch_type(const char *type)
- 
- 		switch (bs) {
- 		case 8:
--			return find_fetch_type("u8");
-+			return find_fetch_type("u8", flags);
- 		case 16:
--			return find_fetch_type("u16");
-+			return find_fetch_type("u16", flags);
- 		case 32:
--			return find_fetch_type("u32");
-+			return find_fetch_type("u32", flags);
- 		case 64:
--			return find_fetch_type("u64");
-+			return find_fetch_type("u64", flags);
- 		default:
- 			goto fail;
- 		}
-@@ -480,7 +485,7 @@ parse_probe_arg(char *arg, const struct fetch_type *type,
- 					    DEREF_OPEN_BRACE);
- 			return -EINVAL;
- 		} else {
--			const struct fetch_type *t2 = find_fetch_type(NULL);
-+			const struct fetch_type *t2 = find_fetch_type(NULL, flags);
- 
- 			*tmp = '\0';
- 			ret = parse_probe_arg(arg, t2, &code, end, flags, offs);
-@@ -632,9 +637,9 @@ static int traceprobe_parse_probe_arg_body(const char *argv, ssize_t *size,
- 		/* The type of $comm must be "string", and not an array. */
- 		if (parg->count || (t && strcmp(t, "string")))
- 			goto out;
--		parg->type = find_fetch_type("string");
-+		parg->type = find_fetch_type("string", flags);
- 	} else
--		parg->type = find_fetch_type(t);
-+		parg->type = find_fetch_type(t, flags);
- 	if (!parg->type) {
- 		trace_probe_log_err(offset + (t ? (t - arg) : 0), BAD_TYPE);
- 		goto out;
-diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-index 0838b74f403b..23acfd1c3812 100644
---- a/kernel/trace/trace_probe.h
-+++ b/kernel/trace/trace_probe.h
-@@ -358,7 +358,8 @@ int trace_probe_create(const char *raw_command, int (*createfn)(int, const char
- #define TPARG_FL_KERNEL BIT(1)
- #define TPARG_FL_FENTRY BIT(2)
- #define TPARG_FL_TPOINT BIT(3)
--#define TPARG_FL_MASK	GENMASK(3, 0)
-+#define TPARG_FL_USER   BIT(4)
-+#define TPARG_FL_MASK	GENMASK(4, 0)
- 
- extern int traceprobe_parse_probe_arg(struct trace_probe *tp, int i,
- 				const char *argv, unsigned int flags);
-diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-index fb58e86dd117..8d64b6553aed 100644
---- a/kernel/trace/trace_uprobe.c
-+++ b/kernel/trace/trace_uprobe.c
-@@ -691,7 +691,8 @@ static int __trace_uprobe_create(int argc, const char **argv)
- 	for (i = 0; i < argc && i < MAX_TRACE_ARGS; i++) {
- 		trace_probe_log_set_index(i + 2);
- 		ret = traceprobe_parse_probe_arg(&tu->tp, i, argv[i],
--					is_return ? TPARG_FL_RETURN : 0);
-+					(is_return ? TPARG_FL_RETURN : 0) |
-+					TPARG_FL_USER);
- 		if (ret)
- 			goto error;
- 	}
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-index f5e3f9e4a01f..c817158b99db 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/uprobe_syntax_errors.tc
-@@ -23,4 +23,9 @@ check_error 'p /bin/sh:10^%hoge'	# BAD_ADDR_SUFFIX
- check_error 'p /bin/sh:10(10)^%return'	# BAD_REFCNT_SUFFIX
- fi
- 
-+# symstr is not supported by uprobe
-+if grep -q ".*symstr.*" README; then
-+check_error 'p /bin/sh:10 $stack0:^symstr'	# BAD_TYPE
-+fi
-+
- exit 0
+>
+> Auxiliary devices shouldn't be created if en_dev == NULL.
+ACK
 
+& Thanks
+
+>
+> Thanks
+
+--000000000000cfda6905ebf21705
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
+K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
+xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
+OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
+aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
+KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
+aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
+u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
+4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIA1Mtr9BZB0+ZZHwWDnW
+ckwHghYZc0Js11sX0XufBwtTMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMTAyNjE1NTgxN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCJMEBoGYSkUaxQ2jOD+WqEpzDddRqsyEfeA616
+sd2YAFXrKEuMD6tKg1ihP6w/HJGGAPXfgFlkbmv1BD5FjeEXZ0nczkJ4/3WixvowmxriIyOIusML
+1PgY+9s2yibZwrSUwlAsYReHkGaEOv131hF317DFfe0imIJKcxpAcTqsbb3vkb2ilkIGdwUbV110
+Ck+aYdR1AFgqM3DaDT9cQ85F8/YAX1aDe97BUdOU9i6yy2S/vV9dYGmNVk6ejNGMkOYik7t4oDwS
+AJ0Rl/BevvEkCLUmZotb0zxkDDtDnFaax+cW3P+SmJzosWxfrDkdS6Yz0+PPfl9xPGDNRKONEJtd
+--000000000000cfda6905ebf21705--
