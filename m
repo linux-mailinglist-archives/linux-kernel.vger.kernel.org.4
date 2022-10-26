@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B22E60E423
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F383960E425
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 17:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiJZPIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 11:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S234336AbiJZPI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 11:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbiJZPIu (ORCPT
+        with ESMTP id S234355AbiJZPIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:08:50 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80058.outbound.protection.outlook.com [40.107.8.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1819B12500A
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:08:49 -0700 (PDT)
+        Wed, 26 Oct 2022 11:08:52 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2043.outbound.protection.outlook.com [40.107.20.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD0E122BE1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:08:51 -0700 (PDT)
 ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
- b=XazKFHdAN9mHDEr2tQb92OrHN+WI66zRVN+cQDIch8Ik4eu1RbasRupCC/t8OdfchQyQR5hv+gsac6OpvePQGqUGV1IqVrgEenIogiYgR2g37wgQyfQfrBkGxy7RLOKTSasqL+iPIFTStm+dZld0qIA2RnVR7TPFREVkzdbNOWhF5KV/gRpiUihEugLR11kZUAjZoUpkFo03aS8Vt7vmWYoy6IIgXmSb8BElIj6VFUIRD9FwI0Aj+CtGw1K0dtKL2KZtI2QSgMpzBnpsdBHKPK/bFS+1vWRrDTTvcsk19T38hZB9R0rXQbKD2kCbq80bKJygaEAuk/4o/OJS5hJT3Q==
+ b=Ycp3xYjdTUt036PVyj3/YDREHGXVSGXrz7Fodnc9X+pJ1nMkeXjObrEAVgT1VisJLQy2OjjAJkvgeZXyifPcdujpZeQZJkcCkAgkshF0Ac/A7mmCCl8UMUrK8ZTkA3JSlyc5nDMymn31Xov1TWTdt02P2KQq4EJSpaAvVA4Bc29zcZKfvWR4Lay4naoq2sWAgQR1tyTAV6e6h1IwokjiVdpIaMEqX6uOWeBoIeRkIuYAEpQwFzR6sy5f1vY1bjYEMPeTGN4+9QOZSaF1mQwHPRPmf/CmJOK/Rh1IcfX3i76+5r/8WG0JmRD9w0LGkfDlRoVKRx5JHXUgZ9kO+L5bcQ==
 ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HYfPwbM8XKUTWEb22ZoeQws90ygepA223xQAlZWfh0I=;
- b=B87RkYaZnp8WuL08pCNUkAh/NISMhBsz2IV8EkrD8Hp4UIWX/FZNKHdKkdYzb2JSY0pK9yJD6ubOLfBVhM9BzJNmo/3tcUO5Rth1nrU7hzimw7PV9FGgyud9cXfy9cbYOMKxBcN2f9TiVmoU8oytNW6lowihsG1/1/uyOS5mG2bU961+w54YjqO9G404FDdlNApSsSDc5Osw30W7egj6BszabeiR5Ch6is56wE8buYfwKsFMsbmSV6bUeNfxLYQrI7JwN0oHm1ywcwYX9EGcXCufFneq7YIDYZSQssB1kVzZqRsdGHEPTQWZ4oIMFL7lmX2fSd00x7KolriP+Mv1sg==
+ bh=Md2eIw/qYyLb6WObHWIWKkMCdMsgVJSwb+YL6Upe9Nw=;
+ b=FMzGEPMb+Q825QfwshVnhk3l+e7Ao6C6IJASG3vrpmtGd4464JYj1ymnNMY5eE50YkuWqE9PEZ40HxeT2NXJkRBgAEU9RUH8KNlD4gonG6c20ZVuRz0w21DwtUIu8fiSy+6xi8orAki5ywSPtv9Mbe1ReNzWmQtXq50EXsENNpk577c5HwAURk3F20ReX6MMshMRX8ox0hmxOmYm2Ltj54pHedLgMuHa1NZqVmyB2JhAzLixGi/OEBXN24wINbhiF6nGtBJKbjCw+J8fZ8Pgc4po7ydnz5Vg+DAbstb/G+kqvMRJGwycoqa4cUSXXh/X5GKCI57Rz2CLe/0yq/qKDQ==
 ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
  63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
@@ -30,18 +30,18 @@ ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
  s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HYfPwbM8XKUTWEb22ZoeQws90ygepA223xQAlZWfh0I=;
- b=8vo6DjhPrEOP8p9q+0Ex6MPJ8zr6mwpU2U787IEXFRtLqahPjgbyMomEbXbNdz8qPTxmOQasKbb9l/hmPs8Y1q6o3o+IIn4qpMeJpA6w9DGoUD+J3/nkIJUgFG6fgK48PgYlurKHOLHIDP4coKVWTYGT9//74CO8fbbTY7IxEcY=
-Received: from FR3P281CA0100.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:a1::18)
- by AS2PR08MB10155.eurprd08.prod.outlook.com (2603:10a6:20b:62d::9) with
+ bh=Md2eIw/qYyLb6WObHWIWKkMCdMsgVJSwb+YL6Upe9Nw=;
+ b=gmO25wVav1/taN5Db1F/nBf1QL4tpJUiaOaPxD/0idMSd0YDbd3bB8pptW63IRr9TmThEjPOg+7+F/WuLZPbw5NyJWzWON/GVMinv8kM7dmnqApCzSkfwNnzWWZZ4hIRYGsSOgpMzvFsly4hXOofPvmBF3moV9zTAEAa8/moU9g=
+Received: from DB6P193CA0003.EURP193.PROD.OUTLOOK.COM (2603:10a6:6:29::13) by
+ DU2PR08MB10303.eurprd08.prod.outlook.com (2603:10a6:10:491::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23; Wed, 26 Oct
- 2022 15:08:40 +0000
-Received: from VI1EUR03FT005.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:d10:a1:cafe::1) by FR3P281CA0100.outlook.office365.com
- (2603:10a6:d10:a1::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.13 via Frontend
- Transport; Wed, 26 Oct 2022 15:08:40 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.21; Wed, 26 Oct
+ 2022 15:08:34 +0000
+Received: from DBAEUR03FT028.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:6:29:cafe::be) by DB6P193CA0003.outlook.office365.com
+ (2603:10a6:6:29::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28 via Frontend
+ Transport; Wed, 26 Oct 2022 15:08:34 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
  smtp.mailfrom=arm.com; dkim=pass (signature was verified)
  header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
@@ -50,27 +50,27 @@ Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
  client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
  pr=C
 Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VI1EUR03FT005.mail.protection.outlook.com (100.127.144.102) with Microsoft
+ DBAEUR03FT028.mail.protection.outlook.com (100.127.142.236) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5746.19 via Frontend Transport; Wed, 26 Oct 2022 15:08:40 +0000
-Received: ("Tessian outbound 58faf9791229:v130"); Wed, 26 Oct 2022 15:08:39 +0000
+ 15.20.5723.20 via Frontend Transport; Wed, 26 Oct 2022 15:08:34 +0000
+Received: ("Tessian outbound 2ff13c8f2c05:v130"); Wed, 26 Oct 2022 15:08:34 +0000
 X-CheckRecipientChecked: true
-X-CR-MTA-CID: 3c1f7f1f4a1c5bad
+X-CR-MTA-CID: b53391cd8ab55964
 X-CR-MTA-TID: 64aa7808
-Received: from 503de7c18d26.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id DD19D9F3-A868-4ACE-8C01-F4F83DCAD6FD.1;
-        Wed, 26 Oct 2022 15:05:28 +0000
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 503de7c18d26.1
+Received: from cbae66d2aa36.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id B8046C14-437F-41FF-8087-0946A0586D4C.1;
+        Wed, 26 Oct 2022 15:05:22 +0000
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id cbae66d2aa36.1
     (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Wed, 26 Oct 2022 15:05:27 +0000
+    Wed, 26 Oct 2022 15:05:22 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iuvYlbolZrzter9locKaKlk5HWuddnzWAreNvF3uFVQvpNCp6oDwdBmjkFYcmoUk0f77cgz3Lp23AG45Uvw0evRK5HkSkBpOzFFfXOpgLj6wb1s3JDhrRo9gZNt0AakozRKujoKHuQlQBkub13dDdjOe7BQSA7Gy2rPNCQPzTvr9fZBTzqPyVFr45V4L9cqTriq0hw80B5oJZW22i7tlAlMajHUGlBSzCGCnmxZsa5K4hyk2FdSRRO0Qf9tFw3tUVAoMge20Jmk+fkojTHv81Oc8KJL5jirWtg4jybUS44/Iy8TooV0hijpQfdZIJMk6c3hi0qSqwwixxTc5DyOJ1A==
+ b=ZkX9V87TVMr6BEvHgsJ7bMISzqAtEQBdCxCP1BRKLY5FRfL/fLcdbUzACSwaMV8X4rn9FRJu/zfAgskCHs7JcUa6gaBcMa0OdCpFVmWpRx5zusMCy0HG+DhcTZDIg6aIX/LZ/5CZindckNuxaZFTfXIFk6DwFsay2axLp0hU+8oDPeajMWSTkOVCfe7kc9OvbkeexIw3v8aiALwlcQVkiw5aZvGHVqfEBbTygDfr+7NMizHvBbFoAjeaa0TozWY0znqzTaVOjgHoGGOss4CsXwogqDrxN4OeQdjcMpbkghUPU6RS6F7X+5Yo4/F+fBmwNqpjJvTOHPj1lJjEi8acuA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HYfPwbM8XKUTWEb22ZoeQws90ygepA223xQAlZWfh0I=;
- b=XvayGapnsyXJV+qahfdyV0cLAPnP4q67AxvY3QGK+2sN5w1w7FEAZ435DQV2iWuaqVvQx/NTqd9s2YH+/iwBSuj2KMwP9YLjiUZusuTbXRpatoNnz+HhjuSTAcRy5iaOkbSb82U52mBO9zU+vJsjlwM5acSUW/0Dv+zOKssp0PRysp0q327pm0+rcU7u22XkVyqiERhUf50rRHwlOqKHNFPVdOmrlrV2uwOBo4egK3ELUNrNwxs3MhxJVNF/0LQiiThI69XCB5AQJjpz16d0FBt9bqUKBut8UkXvuFwF4/BkQ/iPPKzlcA7jHjs9f7EK2yc4xyK8PSqj6VU3MZQzJQ==
+ bh=Md2eIw/qYyLb6WObHWIWKkMCdMsgVJSwb+YL6Upe9Nw=;
+ b=fmw5/kMPoZb9v+vG9Ed+S5AYvRzQsE6Dsmm1EogIwR8r2WDEymazlwsoY4apwd8MPixWW1TJrh1Oorh3Jpn3ZQ9JTl1Nwx8MLiZh3ttd98a00N5psJMi77BnbQdzEb/ZooORcq1+YTFWc59MDOLyh3oCuk11KRtEqwFjQu7B2yLf0QRypIHg/NneRXEO3FdDCFJe3njkmF+psQfXjwSefVtVV2Zp5LtZKB7W3xf9PikCdyVZWjNJTqTa1JrnMJuXDdSorXbhJzpMyqnAhRPgdHqJDOkN7XIrXOxmykA75bjD5rFdEL/AdjcgQVR6WzDiulQnX8CgQeh8Vg9qnZSbsg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  40.67.248.234) smtp.rcpttodomain=linux-foundation.org smtp.mailfrom=arm.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
@@ -78,18 +78,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
  s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HYfPwbM8XKUTWEb22ZoeQws90ygepA223xQAlZWfh0I=;
- b=8vo6DjhPrEOP8p9q+0Ex6MPJ8zr6mwpU2U787IEXFRtLqahPjgbyMomEbXbNdz8qPTxmOQasKbb9l/hmPs8Y1q6o3o+IIn4qpMeJpA6w9DGoUD+J3/nkIJUgFG6fgK48PgYlurKHOLHIDP4coKVWTYGT9//74CO8fbbTY7IxEcY=
-Received: from DB6PR0601CA0020.eurprd06.prod.outlook.com (2603:10a6:4:7b::30)
- by AM9PR08MB6692.eurprd08.prod.outlook.com (2603:10a6:20b:30c::22) with
+ bh=Md2eIw/qYyLb6WObHWIWKkMCdMsgVJSwb+YL6Upe9Nw=;
+ b=gmO25wVav1/taN5Db1F/nBf1QL4tpJUiaOaPxD/0idMSd0YDbd3bB8pptW63IRr9TmThEjPOg+7+F/WuLZPbw5NyJWzWON/GVMinv8kM7dmnqApCzSkfwNnzWWZZ4hIRYGsSOgpMzvFsly4hXOofPvmBF3moV9zTAEAa8/moU9g=
+Received: from DB6PR0601CA0002.eurprd06.prod.outlook.com (2603:10a6:4:7b::12)
+ by AS8PR08MB6552.eurprd08.prod.outlook.com (2603:10a6:20b:31c::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Wed, 26 Oct
  2022 15:05:19 +0000
 Received: from DBAEUR03FT057.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:4:7b:cafe::57) by DB6PR0601CA0020.outlook.office365.com
- (2603:10a6:4:7b::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.27 via Frontend
- Transport; Wed, 26 Oct 2022 15:05:17 +0000
+ (2603:10a6:4:7b:cafe::91) by DB6PR0601CA0002.outlook.office365.com
+ (2603:10a6:4:7b::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.23 via Frontend
+ Transport; Wed, 26 Oct 2022 15:05:19 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 40.67.248.234)
  smtp.mailfrom=arm.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=arm.com;
@@ -99,11 +99,15 @@ Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
 Received: from nebula.arm.com (40.67.248.234) by
  DBAEUR03FT057.mail.protection.outlook.com (100.127.142.182) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5709.10 via Frontend Transport; Wed, 26 Oct 2022 15:05:17 +0000
-Received: from AZ-NEU-EX03.Arm.com (10.251.24.31) by AZ-NEU-EX03.Arm.com
+ 15.20.5709.10 via Frontend Transport; Wed, 26 Oct 2022 15:05:19 +0000
+Received: from AZ-NEU-EX02.Emea.Arm.com (10.251.26.5) by AZ-NEU-EX03.Arm.com
  (10.251.24.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Wed, 26 Oct
- 2022 15:05:15 +0000
+ 2022 15:05:16 +0000
+Received: from AZ-NEU-EX03.Arm.com (10.251.24.31) by AZ-NEU-EX02.Emea.Arm.com
+ (10.251.26.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Wed, 26 Oct
+ 2022 15:05:16 +0000
 Received: from e124191.cambridge.arm.com (10.1.197.45) by mail.arm.com
  (10.251.24.31) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
  Transport; Wed, 26 Oct 2022 15:05:15 +0000
@@ -122,41 +126,41 @@ CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
         <linux-kernel@vger.kernel.org>,
         <linux-abi-devel@lists.sourceforge.net>, <nd@arm.com>,
         <joey.gouly@arm.com>, <shuah@kernel.org>
-Subject: [PATCH v1 1/2] mm: Implement memory-deny-write-execute as a prctl
-Date:   Wed, 26 Oct 2022 16:04:56 +0100
-Message-ID: <20221026150457.36957-2-joey.gouly@arm.com>
+Subject: [PATCH v1 2/2] kselftest: vm: add tests for memory-deny-write-execute
+Date:   Wed, 26 Oct 2022 16:04:57 +0100
+Message-ID: <20221026150457.36957-3-joey.gouly@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221026150457.36957-1-joey.gouly@arm.com>
 References: <20221026150457.36957-1-joey.gouly@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 1
-X-MS-TrafficTypeDiagnostic: DBAEUR03FT057:EE_|AM9PR08MB6692:EE_|VI1EUR03FT005:EE_|AS2PR08MB10155:EE_
-X-MS-Office365-Filtering-Correlation-Id: a76c9443-07e5-4d0f-6251-08dab763f722
+X-MS-TrafficTypeDiagnostic: DBAEUR03FT057:EE_|AS8PR08MB6552:EE_|DBAEUR03FT028:EE_|DU2PR08MB10303:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e3c2767-3218-400f-35da-08dab763f3d1
 x-checkrecipientrouted: true
 NoDisclaimer: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: btyGyqO+L1lYyZ63EFHnfmsUpYkQFORqj+fnatsRahQfYHpNsVStiU2NmU6yuQdmwPqyQhKzemnNZtyMuvEiYA4UdL3KF0eq3286wUOnDoPJvPznBMFJ8Y7B5r3euggfzbSqo4hOds46tkU2UQSC9ZCNcLFUecjNmflV5Gi30VR6Tsc2byCXFOzrMwrNlsoAMl6dQSUOyMXPj9VfEy69+JpjupOBF5TDESjH4U9XmotDSDCQn/aOkyrGcDK8WK36dfPjLQRV9d/CBvbGR3g8xCvly+52qkLyr2+90bFM1fiOd7NYN02kkw2UKIVX7pNPUHVMmBg48YJvYoCgtygFThXBs9Is5JDFKmYORfoeMjYkUzfiF5UK4VDwfhqjreiKt+aLVO7gELrfJlY9vkd0Sx1lO7uy10kPilprG4j1YlKVkbBVlvhh+LnWnsAdh4NfEhOBtyl/qSm4cnvUaZ/bZJj6NCGhzVbBq4Vd+Acj4n82xNw91V4/p3Xug0MgBDiGayrR0CH3U+5yJdk8hLGgNLVuAcJgaozP9hsap00etNXmkBkG04o8WJOuMKCvidcW5rhUlTKYOhUUpIaQZqmcCnCNT2P78l2lGgIa00xtfNcEnS0TTHIYECVGTVqdqwRDofczncd8mDNd3uCBnTMHbxRnbO1DfcSPwsY443WOKjaLr7TeFA7EnoXstTce7qrO/Oqovg2B6+/Z8b/4KaUc9KI2KuO/spGMpU2ciqgFYNjMvkkXVuVSF5maS+FDa0/C6qcqiprSa/FVRQrMWuTnH7n+TIesgmeKqq6mV1TlgFiAjkyV8mVPsHtpclIWdwZQUanpIMEp2dzg6LHrSUfjtw==
-X-Forefront-Antispam-Report-Untrusted: CIP:40.67.248.234;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(36756003)(86362001)(356005)(81166007)(82740400003)(44832011)(40460700003)(40480700001)(2906002)(2616005)(6666004)(36860700001)(83380400001)(7696005)(1076003)(26005)(336012)(478600001)(47076005)(186003)(110136005)(54906003)(426003)(82310400005)(41300700001)(316002)(70206006)(4326008)(8676002)(7416002)(5660300002)(8936002)(70586007)(17423001)(36900700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR08MB6692
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR03FT005.eop-EUR03.prod.protection.outlook.com
+X-Microsoft-Antispam-Message-Info-Original: QwUsFmYxus8FCwgw7iqHDmsu585q6R/EEuS7Le6LjGD7MNIY0l77EukW35nVVetZuhWc8+MgFHZFBkAzAAJTx+LVTxPU8dmbv1UCtNjmQvF9NUZTbR6w9YpjHMB8qUS/xhTeyWns1Piq5cIx91spkFwo8wOI9uPc5NnWHQ+Qt24CzoX1qtD3RvOLSHkdyyFOTnp6VIggOsvA39VgsLFdpP8XCH6S+VZr0IGjz8Hi1rQ84z/jVN6mUpPVzD0jlleX0+rXvsSd+zkJgPQuvyM5tWKpmaPhovioliQaxSAh6HJAl4jNDCm6A9Qy2qhuXfCtF51WSSNIU4TR7JRpf1OcXkYgqc3ShTcR0ZDX+QlhL6PY/CpO51k7hKXkcCHsRvCk0/5IJCY0AHoTjNJJKZCk8LfNFE/KJyxeg+qiIMLxCx0QSGP9kuLPpqrV1Q33Mliz7A/YqpWeRejvWSW/X7MQUqZLF8KLbxkKei/zL1asOi2pznH0q+ozOWU11iJzhWaS4Owfv29YtTQXYQBg3iR+xaJkIQ5vOTcD0r0KsuclpDCnbd/inz7xPgEMm2Jc7eGnB8lQQSg7SQyQLTZUM9ZUdUcyWsdS5NRV6tSDUsY6qpGiINP0dg4LYvygQ9WgMmVKqSWHC82NM3hqZDQhliso4sR71ylNfjpc4fW04g7eBDj51aFZP9Afdc/2Wzj0YVIO7vNCEqPecuogXf0y6WAujPDVZugBTci019ySZHa7zh2FuZZDQo7/OUfIIVP3ZYUqHKIuiudTrckDbnoMOEpRydS5WgmFXq4aA3fCduH7o+V9MyxLvRR+JE9io3g+NZcT
+X-Forefront-Antispam-Report-Untrusted: CIP:40.67.248.234;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199015)(36840700001)(46966006)(40470700004)(82740400003)(36860700001)(86362001)(81166007)(356005)(110136005)(54906003)(316002)(40480700001)(83380400001)(47076005)(70586007)(2906002)(70206006)(5660300002)(478600001)(8936002)(8676002)(44832011)(426003)(41300700001)(4326008)(7416002)(186003)(6666004)(336012)(1076003)(7696005)(40460700003)(2616005)(26005)(82310400005)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6552
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT028.eop-EUR03.prod.protection.outlook.com
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 84b34e25-0825-4a8f-ca1c-08dab7637e26
+X-MS-Office365-Filtering-Correlation-Id-Prvs: bb267f41-e2a6-415a-b2af-08dab7637f9a
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 51KCiw6n1Mzxet6b4wyyahNFovWAztKMcwodk9FKBVvgOQGdLNAIeEtP1fGqvB7u89Xqc2lOM/FKu5csw6hCXTFzijb0sDVX6twPKdV5j3czeuikE4E/0cIqYPBskvtpOsDUxvSKIlhsii4auXtVgK134twO+Sn01PDZrhpRic28vkzogysZWfNfCqt604tKpSeaWEb+pmmohYx8r0UesK+BkGbUM/kB1liC83iak6TzXuX9S4xkegt/+yZ78w7xIL8MmrUm/+yT5Y4ByTx/ezhviAoY0MRLGmfZfjZdZl80sYE3B+ReuJLYLSdne0RaXOApTUFsukYUyUxo8JM67oVNtV/zmR6eT3B6wgqa6OIXc+swHV/jXZSwweJfJqgKSWz9aHwVx6AIRWbMDqYA8m+rXJ/9UXAFq3y9fEiq0uATDYxMFygRfafv/5XXV2BQWL4moQksV8oaYSy043YNVa6DMjkG9vkhh3Wu7cN/kVy7srTIqFfNhQWp1lN+4GFb4RgZ8tS5iRneU6lDF+kK2azGr3WpeFQtinqzOCrWM5ihYj41vTyYhBzWI4caUS5gkyPK0dbK3b8vRNZbk5CNzFX1ltDOqGyTi2pC58vlWW9Qdi7eA8vp+fMYOSSi+yzkILTWnNwglDuL8/Z7Pc+523KvKSJG/xlg3GCBQf+4oXGi67bw3XDdo8o8h3/wMiFgWhrSpGL6zfh3v+faSy16UPt7rdKu2fJnjaaLo8QSGOay0DgvUoD7e3OJO330rO/uRVSfwqK+lCngktwzWhnPKcDW2RTskFvYqP0lk/9xoyA=
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(396003)(451199015)(40470700004)(36840700001)(46966006)(2906002)(316002)(36756003)(40480700001)(8936002)(41300700001)(44832011)(47076005)(81166007)(5660300002)(70586007)(82740400003)(8676002)(70206006)(40460700003)(110136005)(54906003)(86362001)(4326008)(83380400001)(336012)(1076003)(426003)(478600001)(186003)(2616005)(82310400005)(36860700001)(26005)(7696005)(6666004)(17423001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: htz8CXt+O2fm2bwC6EB3mkho0ZgMyWeTEGbXvfX3/uPmwdk48jJ1e5C17FaiPJq7ARTALk75lnfVBvCReNkD/OIEn+PJHMCgSR7y54MFgmh4BKL/kSaUp3Kfg62BWFltzbuqQw0QCA/updi8XUGNjp+BqRKbYmBbQLpVTI3VyJdqXJG7pwmLhlGCy0SnxKRvsw7rOH0L4/JeWhr4jjbvLJf2iHmYk2/UBr7FfLBwCwCq04euTVDrubS+yCFjDWUBk9wjvGE6Y7Ap2bNySeVibHGv3kqTpDgJrJSxqSGWzuMb4Zp7ivIAOPZ1OFZYgNVw5cSv4YPlhWMG1Tn+w3WkrT0M5Ulq+M8j4aOzhUwpfo6btlFejJPEAqMiCDp13lf0AmVAlAN1BD10GJEqKrqVIcXEaBRs9tCe48IfkEFonGo2C/ahZ9KavT5hf6UTEDQrBsU5G8Iq0Dflj0vLK7swlG9chWecDD3AdNxjGzi8kvEJsXYm+v2NX82y2fI+FNVNjzDERCja2eAKrGEmi2TEUthmeU1LdAny1rHyBmtQXDc4sncmv2hDQF5RwyFe9QXFAcWiOHtAsyUpcghx8pniFEn2468aGwNIPEuVG2hThxWMc8vFj0PD64O8hillCqKdSj7+EpYhaLKTTaWUzgXDBf6ImIjFCEe9K6UPauQqa9WiZGaLpGrf2+IpKxDm9b1VaoTDLC9PnOsGyLgfZ3BVLiCzUc2kS8Gbgm/SnXC2SJTUYa0JyFVxrN6rruLXn3D9ZEwmEHHseiehhkdlNU3Jrg==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(136003)(396003)(451199015)(40470700004)(36840700001)(46966006)(70206006)(54906003)(5660300002)(36756003)(110136005)(44832011)(4326008)(86362001)(8676002)(41300700001)(26005)(70586007)(316002)(8936002)(2906002)(40460700003)(47076005)(36860700001)(83380400001)(426003)(81166007)(186003)(40480700001)(2616005)(336012)(1076003)(6666004)(82310400005)(478600001)(82740400003)(7696005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 15:08:40.1123
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 15:08:34.6566
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a76c9443-07e5-4d0f-6251-08dab763f722
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e3c2767-3218-400f-35da-08dab763f3d1
 X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR03FT005.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT028.eop-EUR03.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB10155
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR08MB10303
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
@@ -167,166 +171,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The aim of such policy is to prevent a user task from creating an
-executable mapping that is also writeable.
-
-An example of mmap() returning -EACCESS if the policy is enabled:
-
-	mmap(0, size, PROT_READ | PROT_WRITE | PROT_EXEC, flags, 0, 0);
-
-Similarly, mprotect() would return -EACCESS below:
-
-	addr = mmap(0, size, PROT_READ | PROT_EXEC, flags, 0, 0);
-	mprotect(addr, size, PROT_READ | PROT_WRITE | PROT_EXEC);
-
-The BPF filter that systemd MDWE uses is stateless, and disallows
-mprotect() with PROT_EXEC completely. This new prctl allows PROT_EXEC to
-be enabled if it was already PROT_EXEC, which allows the following case:
-
-	addr = mmap(0, size, PROT_READ | PROT_EXEC, flags, 0, 0);
-	mprotect(addr, size, PROT_READ | PROT_EXEC | PROT_BTI);
-
-where PROT_BTI enables branch tracking identification on arm64.
+Add some tests to cover the new PR_SET_MDWE prctl.
 
 Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Shuah Khan <shuah@kernel.org>
 ---
- include/linux/mman.h           | 15 +++++++++++++++
- include/linux/sched/coredump.h |  6 +++++-
- include/uapi/linux/prctl.h     |  6 ++++++
- kernel/sys.c                   | 18 ++++++++++++++++++
- mm/mmap.c                      |  3 +++
- mm/mprotect.c                  |  5 +++++
- 6 files changed, 52 insertions(+), 1 deletion(-)
+ tools/testing/selftests/vm/mdwe_test.c | 194 +++++++++++++++++++++++++
+ 1 file changed, 194 insertions(+)
+ create mode 100644 tools/testing/selftests/vm/mdwe_test.c
 
-diff --git a/include/linux/mman.h b/include/linux/mman.h
-index 58b3abd457a3..d84fdeab6b5e 100644
---- a/include/linux/mman.h
-+++ b/include/linux/mman.h
-@@ -156,4 +156,19 @@ calc_vm_flag_bits(unsigned long flags)
- }
- 
- unsigned long vm_commit_limit(void);
+diff --git a/tools/testing/selftests/vm/mdwe_test.c b/tools/testing/selftests/vm/mdwe_test.c
+new file mode 100644
+index 000000000000..67f3fc06d069
+--- /dev/null
++++ b/tools/testing/selftests/vm/mdwe_test.c
+@@ -0,0 +1,194 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+static inline bool map_deny_write_exec(struct vm_area_struct *vma,  unsigned long vm_flags)
++#include <asm/hwcap.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/auxv.h>
++#include <sys/mman.h>
++#include <sys/prctl.h>
++#include <sys/wait.h>
++#include <unistd.h>
++
++#include <linux/prctl.h>
++
++#include "../kselftest.h"
++
++#define PR_SET_MDWE                     65
++# define PR_MDWE_FLAG_MMAP              1
++
++#define PR_GET_MDWE                     66
++
++#ifdef __aarch64__
++#define PROT_BTI      0x10            /* BTI guarded page */
++#endif
++
++#define TEST1 "mmap(PROT_WRITE | PROT_EXEC)\n"
++#define TEST2 "mmap(PROT_WRITE); mprotect(PROT_EXEC)\n"
++#define TEST3 "mmap(PROT_EXEC); mprotect(PROT_EXEC | PROT_READ)\n"
++#define TEST4 "mmap(PROT_EXEC); mprotect(PROT_EXEC | PROT_BTI)\n"
++
++int fork_test(int (*func)(int))
 +{
-+	if (!test_bit(MMF_HAS_MDWE, &current->mm->flags))
-+		return false;
++	pid_t pid;
++	int status;
 +
-+	if ((vm_flags & VM_EXEC) && (vm_flags & VM_WRITE))
-+		return true;
++	pid = fork();
++	if (pid < 0) {
++		printf("fork failed\n");
++		return KSFT_FAIL;
++	}
 +
-+	if (vma && !(vma->vm_flags & VM_EXEC) && (vm_flags & VM_EXEC))
-+		return true;
++	if (pid == 0)
++		exit(func(1));
 +
-+	return false;
-+}
++	waitpid(pid, &status, 0);
 +
- #endif /* _LINUX_MMAN_H */
-diff --git a/include/linux/sched/coredump.h b/include/linux/sched/coredump.h
-index 8270ad7ae14c..0e17ae7fbfd3 100644
---- a/include/linux/sched/coredump.h
-+++ b/include/linux/sched/coredump.h
-@@ -81,9 +81,13 @@ static inline int get_dumpable(struct mm_struct *mm)
-  * lifecycle of this mm, just for simplicity.
-  */
- #define MMF_HAS_PINNED		27	/* FOLL_PIN has run, never cleared */
-+
-+#define MMF_HAS_MDWE		28
-+#define MMF_HAS_MDWE_MASK	(1 << MMF_HAS_MDWE)
-+
- #define MMF_DISABLE_THP_MASK	(1 << MMF_DISABLE_THP)
- 
- #define MMF_INIT_MASK		(MMF_DUMPABLE_MASK | MMF_DUMP_FILTER_MASK |\
--				 MMF_DISABLE_THP_MASK)
-+				 MMF_DISABLE_THP_MASK | MMF_HAS_MDWE_MASK)
- 
- #endif /* _LINUX_SCHED_COREDUMP_H */
-diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-index a5e06dcbba13..ab9db1e86230 100644
---- a/include/uapi/linux/prctl.h
-+++ b/include/uapi/linux/prctl.h
-@@ -281,6 +281,12 @@ struct prctl_mm_map {
- # define PR_SME_VL_LEN_MASK		0xffff
- # define PR_SME_VL_INHERIT		(1 << 17) /* inherit across exec */
- 
-+/* Memory deny write / execute */
-+#define PR_SET_MDWE			65
-+# define PR_MDWE_FLAG_MMAP		1
-+
-+#define PR_GET_MDWE			66
-+
- #define PR_SET_VMA		0x53564d41
- # define PR_SET_VMA_ANON_NAME		0
- 
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 5fd54bf0e886..08e1dd6d2533 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -2348,6 +2348,18 @@ static int prctl_set_vma(unsigned long opt, unsigned long start,
- }
- #endif /* CONFIG_ANON_VMA_NAME */
- 
-+static inline int prctl_set_mdwe(void)
-+{
-+	set_bit(MMF_HAS_MDWE, &current->mm->flags);
++	if (WIFEXITED(status))
++		return WEXITSTATUS(status);
 +
 +	return 0;
 +}
 +
-+static inline int prctl_get_mdwe(void)
++static inline void test_result(int err, const char *msg)
 +{
-+	return test_bit(MMF_HAS_MDWE, &current->mm->flags);
++	switch (err) {
++	case KSFT_PASS:
++		ksft_test_result_pass(msg);
++		break;
++	case KSFT_FAIL:
++		ksft_test_result_fail(msg);
++		break;
++	case KSFT_SKIP:
++		ksft_test_result_skip(msg);
++		break;
++	default:
++		ksft_test_result_error("Unknown return code %d from %s",
++				       err, msg);
++		break;
++	}
 +}
 +
- SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 		unsigned long, arg4, unsigned long, arg5)
- {
-@@ -2623,6 +2635,12 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 		error = sched_core_share_pid(arg2, arg3, arg4, arg5);
- 		break;
- #endif
-+	case PR_SET_MDWE:
-+		error = prctl_set_mdwe();
-+		break;
-+	case PR_GET_MDWE:
-+		error = prctl_get_mdwe();
-+		break;
- 	case PR_SET_VMA:
- 		error = prctl_set_vma(arg2, arg3, arg4, arg5);
- 		break;
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 099468aee4d8..42eaf6683216 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1409,6 +1409,9 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
- 			vm_flags |= VM_NORESERVE;
- 	}
- 
-+	if (map_deny_write_exec(NULL, vm_flags))
-+		return -EACCES;
++int test1(int mdwe_enabled)
++{
++	void *p;
 +
- 	addr = mmap_region(file, addr, len, vm_flags, pgoff, uf);
- 	if (!IS_ERR_VALUE(addr) &&
- 	    ((vm_flags & VM_LOCKED) ||
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 8d770855b591..af71ef0788fd 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -766,6 +766,11 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
- 			break;
- 		}
- 
-+		if (map_deny_write_exec(vma, newflags)) {
-+			error = -EACCES;
-+			goto out;
-+		}
++	int size = getpagesize();
++	int mmap_flags = MAP_SHARED | MAP_ANONYMOUS;
 +
- 		/* Allow architectures to sanity-check the new flags */
- 		if (!arch_validate_flags(newflags)) {
- 			error = -EINVAL;
++	p = mmap(0, size, PROT_WRITE | PROT_EXEC, mmap_flags, 0, 0);
++
++	if (mdwe_enabled)
++		return p == MAP_FAILED ? KSFT_PASS : KSFT_FAIL;
++	else
++		return p != MAP_FAILED ? KSFT_PASS : KSFT_FAIL;
++}
++
++int test2(int mdwe_enabled)
++{
++	void *p;
++	int ret;
++
++	int size = getpagesize();
++	int mmap_flags = MAP_SHARED | MAP_ANONYMOUS;
++
++	p = mmap(0, size, PROT_WRITE, mmap_flags, 0, 0);
++	if (p == MAP_FAILED)
++		return 0;
++	ret = mprotect(p, size, PROT_EXEC);
++
++	if (mdwe_enabled)
++		return ret < 0 ? KSFT_PASS : KSFT_FAIL;
++	else
++		return ret == 0 ? KSFT_PASS : KSFT_FAIL;
++}
++
++int test3(int mdwe_enabled)
++{
++	void *p;
++	int ret;
++
++	int size = getpagesize();
++	int mmap_flags = MAP_SHARED | MAP_ANONYMOUS;
++
++	p = mmap(0, size, PROT_EXEC, mmap_flags, 0, 0);
++	if (p == MAP_FAILED)
++		return 0;
++
++	ret = mprotect(p, size, PROT_EXEC | PROT_READ);
++
++	return ret == 0 ? KSFT_PASS : KSFT_FAIL;
++}
++
++#ifdef __aarch64__
++int test4(int mdwe_enabled)
++{
++	void *p;
++	int ret;
++
++	int size = getpagesize();
++	int mmap_flags = MAP_SHARED | MAP_ANONYMOUS;
++
++	if (!(getauxval(AT_HWCAP2) & HWCAP2_BTI))
++		return KSFT_SKIP;
++
++	p = mmap(0, size, PROT_EXEC, mmap_flags, 0, 0);
++	if (p == MAP_FAILED)
++		return KSFT_FAIL;
++
++	ret = mprotect(p, size, PROT_EXEC | PROT_BTI);
++
++	return ret == 0 ? KSFT_PASS : KSFT_FAIL;
++}
++#endif
++
++int main(void)
++{
++	int ret;
++
++	ksft_print_header();
++#ifdef __aarch64__
++	ksft_set_plan(12);
++#else
++	ksft_set_plan(9);
++#endif
++
++	// First run the tests without MDWE
++	test_result(test1(0), TEST1);
++	test_result(test2(0), TEST2);
++	test_result(test3(0), TEST3);
++#ifdef __aarch64__
++	test_result(test4(0), TEST4);
++#endif
++
++	// Enable MDWE and then run the tests again.
++	ret = prctl(PR_SET_MDWE, PR_MDWE_FLAG_MMAP, 0, 0, 0);
++	if (ret < 0) {
++		ksft_print_msg("PR_SET_MDWE failed or unsupported!\n");
++		goto exit;
++	}
++
++	ret = prctl(PR_GET_MDWE, PR_MDWE_FLAG_MMAP, 0, 0, 0);
++	if (ret == 0)
++		ksft_exit_fail_msg("PR_GET_MDWE failed!");
++
++	test_result(test1(1), "MDWE: " TEST1);
++	test_result(test2(1), "MDWE: " TEST2);
++	test_result(test3(1), "MDWE: " TEST3);
++#ifdef __aarch64__
++	test_result(test4(1), "MDWE: " TEST4);
++#endif
++
++	// Verify the MDWE setting is transferred when fork()ing
++	test_result(fork_test(test1), "MDWE+fork: " TEST1);
++	test_result(fork_test(test2), "MDWE+fork: " TEST2);
++	test_result(fork_test(test3), "MDWE+fork: " TEST3);
++#ifdef __aarch64__
++	test_result(fork_test(test4), "MDWE+fork: " TEST4);
++#endif
++
++exit:
++	ksft_finished();
++
++	return 0;
++}
++
 -- 
 2.17.1
 
