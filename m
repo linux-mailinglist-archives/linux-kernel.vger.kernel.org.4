@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADAB60E311
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509F860E319
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234244AbiJZOQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
+        id S234277AbiJZORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234221AbiJZOQu (ORCPT
+        with ESMTP id S234225AbiJZOQw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:16:50 -0400
+        Wed, 26 Oct 2022 10:16:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A85610F881;
-        Wed, 26 Oct 2022 07:16:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F256510F8A6;
+        Wed, 26 Oct 2022 07:16:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2BA78B822B3;
-        Wed, 26 Oct 2022 14:16:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B68C43143;
-        Wed, 26 Oct 2022 14:16:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A41F3B8224D;
+        Wed, 26 Oct 2022 14:16:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F3FC433D6;
+        Wed, 26 Oct 2022 14:16:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666793806;
-        bh=20zEspJzMm9fflHXzbJ8RnT9WirOG5GHjev3+HrUS8I=;
+        s=k20201202; t=1666793808;
+        bh=F/UkwECDYYfjVBSUKXbQqh8KWSiKfMvFy1f9yNwcZu0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iniyl5UY1LvOsCYnn2hXyaYBmj0zNdLE7/xJmDtUT12Gsa+C9ki81nB0bewpGT5zv
-         n1jFBUj+LYHhoTgX04OZ/g1qvWqlY9T1ZIXsl377gAnTvd5Ul6iO8fUHWdQdhkjHTK
-         pdpyKLk2219g+G3/Z40KUTeBTZWJLxDMX29Muo0vY3NnsYei+cbj/y9OaUG8lpenBY
-         euZnNK+bXJK9hd/NuFQGkmfez6b8b74gGBKgblZvjc++FnD5bb/8EPXXCs+bjaJnSX
-         UlfHtTgOoTY7atAQMmIF5xc6iRxAP4x0UDlAqCEuyPhHer4z8MsXGSLqjtQIYh+K4e
-         6lDj8qrrLuwwQ==
+        b=k89YhgqzFPugPebWzK3/JC8WlnveKq+SQq/RI+srPT1QPBBrvhWpBh0vmpMPsr8Zj
+         rgJPVec7FSbj3XXd5x2+c62Kjr5ajVoEZs17gbb5ELDPwCD2y+JgrjKYKD82S+b2eM
+         yL+p4C4z7x/QgwL/vS5+EUKtbfn7zNOR0+cldMxfkamxC/krIQEGL19L3mu8LYutnZ
+         x7zymVfneyl+wT1RBRqTd0U1XNhRFvlBixs3a6W2qd78opgi50cYsyMZHpVK+D1lXJ
+         jrO1uOJKUeCQn2KSJVj0DeIAtlT6HLRoKVn/Raqh1ofJ5IYcbwNylwLyyufv0SS7Sy
+         fXgKbuz/7iHNA==
 From:   Dinh Nguyen <dinguyen@kernel.org>
 To:     jh80.chung@samsung.com
 Cc:     dinguyen@kernel.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
@@ -39,9 +39,9 @@ Cc:     dinguyen@kernel.org, ulf.hansson@linaro.org, robh+dt@kernel.org,
         sboyd@kernel.org, linux-mmc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org
-Subject: [PATCHv6 4/6] mmc: dw_mmc-pltfm: socfpga: add method to configure clk-phase
-Date:   Wed, 26 Oct 2022 09:16:29 -0500
-Message-Id: <20221026141631.696863-4-dinguyen@kernel.org>
+Subject: [PATCHv6 5/6] clk: socfpga: remove the setting of clk-phase for sdmmc_clk
+Date:   Wed, 26 Oct 2022 09:16:30 -0500
+Message-Id: <20221026141631.696863-5-dinguyen@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221026141631.696863-1-dinguyen@kernel.org>
 References: <20221026141631.696863-1-dinguyen@kernel.org>
@@ -49,98 +49,220 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The clock-phase settings for the SDMMC controller in the SoCFPGA
-platforms reside in a register in the System Manager. Add a method
-to access that register through the syscon interface.
+Now that the SDMMC driver supports setting the clk-phase, we can remove
+the need to do it in the clock driver.
 
 Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
 ---
-v6: not getting the clk-phase-sd-hs is not a hard failure
-v5: change error handling from of_property_read_variable_u32_array()
-    support arm32 by reading the reg_shift
-v4: no change
-v3: add space before &socfpga_drv_data
-v2: simplify clk-phase calculations
-
-make property optional in driver
+v6: remove unused clk_phase in clk-gate.c
+v5: new
 ---
- drivers/mmc/host/dw_mmc-pltfm.c | 43 ++++++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+ drivers/clk/socfpga/clk-gate-a10.c | 68 ------------------------------
+ drivers/clk/socfpga/clk-gate.c     | 61 ---------------------------
+ drivers/clk/socfpga/clk.h          |  1 -
+ 3 files changed, 130 deletions(-)
 
-diff --git a/drivers/mmc/host/dw_mmc-pltfm.c b/drivers/mmc/host/dw_mmc-pltfm.c
-index 9901208be797..fff6222d58e4 100644
---- a/drivers/mmc/host/dw_mmc-pltfm.c
-+++ b/drivers/mmc/host/dw_mmc-pltfm.c
-@@ -17,10 +17,16 @@
- #include <linux/mmc/host.h>
- #include <linux/mmc/mmc.h>
- #include <linux/of.h>
-+#include <linux/mfd/altera-sysmgr.h>
-+#include <linux/regmap.h>
+diff --git a/drivers/clk/socfpga/clk-gate-a10.c b/drivers/clk/socfpga/clk-gate-a10.c
+index 738c53391e39..7cdf2f07c79b 100644
+--- a/drivers/clk/socfpga/clk-gate-a10.c
++++ b/drivers/clk/socfpga/clk-gate-a10.c
+@@ -35,59 +35,7 @@ static unsigned long socfpga_gate_clk_recalc_rate(struct clk_hw *hwclk,
+ 	return parent_rate / div;
+ }
  
- #include "dw_mmc.h"
- #include "dw_mmc-pltfm.h"
+-static int socfpga_clk_prepare(struct clk_hw *hwclk)
+-{
+-	struct socfpga_gate_clk *socfpgaclk = to_socfpga_gate_clk(hwclk);
+-	int i;
+-	u32 hs_timing;
+-	u32 clk_phase[2];
+-
+-	if (socfpgaclk->clk_phase[0] || socfpgaclk->clk_phase[1]) {
+-		for (i = 0; i < ARRAY_SIZE(clk_phase); i++) {
+-			switch (socfpgaclk->clk_phase[i]) {
+-			case 0:
+-				clk_phase[i] = 0;
+-				break;
+-			case 45:
+-				clk_phase[i] = 1;
+-				break;
+-			case 90:
+-				clk_phase[i] = 2;
+-				break;
+-			case 135:
+-				clk_phase[i] = 3;
+-				break;
+-			case 180:
+-				clk_phase[i] = 4;
+-				break;
+-			case 225:
+-				clk_phase[i] = 5;
+-				break;
+-			case 270:
+-				clk_phase[i] = 6;
+-				break;
+-			case 315:
+-				clk_phase[i] = 7;
+-				break;
+-			default:
+-				clk_phase[i] = 0;
+-				break;
+-			}
+-		}
+-
+-		hs_timing = SYSMGR_SDMMC_CTRL_SET_AS10(clk_phase[0], clk_phase[1]);
+-		if (!IS_ERR(socfpgaclk->sys_mgr_base_addr))
+-			regmap_write(socfpgaclk->sys_mgr_base_addr,
+-				     SYSMGR_SDMMCGRP_CTRL_OFFSET, hs_timing);
+-		else
+-			pr_err("%s: cannot set clk_phase because sys_mgr_base_addr is not available!\n",
+-					__func__);
+-	}
+-	return 0;
+-}
+-
+ static struct clk_ops gateclk_ops = {
+-	.prepare = socfpga_clk_prepare,
+ 	.recalc_rate = socfpga_gate_clk_recalc_rate,
+ };
  
-+#define SOCFPGA_DW_MMC_CLK_PHASE_STEP	45
-+#define SYSMGR_SDMMC_CTRL_SET(smplsel, drvsel, reg_shift) \
-+	((((smplsel) & 0x7) << reg_shift) | (((drvsel) & 0x7) << 0))
-+
- int dw_mci_pltfm_register(struct platform_device *pdev,
- 			  const struct dw_mci_drv_data *drv_data)
+@@ -96,7 +44,6 @@ static void __init __socfpga_gate_init(struct device_node *node,
  {
-@@ -62,9 +68,44 @@ const struct dev_pm_ops dw_mci_pltfm_pmops = {
- };
- EXPORT_SYMBOL_GPL(dw_mci_pltfm_pmops);
+ 	u32 clk_gate[2];
+ 	u32 div_reg[3];
+-	u32 clk_phase[2];
+ 	u32 fixed_div;
+ 	struct clk_hw *hw_clk;
+ 	struct socfpga_gate_clk *socfpga_clk;
+@@ -136,21 +83,6 @@ static void __init __socfpga_gate_init(struct device_node *node,
+ 		socfpga_clk->div_reg = NULL;
+ 	}
  
-+static int dw_mci_socfpga_priv_init(struct dw_mci *host)
-+{
-+	struct device_node *np = host->dev->of_node;
-+	struct regmap *sys_mgr_base_addr;
-+	u32 clk_phase[2] = {0}, reg_offset, reg_shift;
-+	int i, rc, hs_timing;
-+
-+	rc = of_property_read_variable_u32_array(np, "clk-phase-sd-hs", &clk_phase[0], 2, 0);
-+	if (rc < 0) {
-+		dev_info(host->dev, "Optional: clk-phase-sd-hs not found!\n");
-+		return 0;
-+	}
-+
-+	sys_mgr_base_addr = altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
-+	if (IS_ERR(sys_mgr_base_addr)) {
-+		dev_info(host->dev, "Optional: failed to find altr,sys-mgr regmap!\n");
-+		return 0;
-+	}
-+
-+	of_property_read_u32_index(np, "altr,sysmgr-syscon", 1, &reg_offset);
-+	of_property_read_u32_index(np, "altr,sysmgr-syscon", 2, &reg_shift);
-+
-+	for (i = 0; i < ARRAY_SIZE(clk_phase); i++)
-+		clk_phase[i] /= SOCFPGA_DW_MMC_CLK_PHASE_STEP;
-+
-+	hs_timing = SYSMGR_SDMMC_CTRL_SET(clk_phase[0], clk_phase[1], reg_shift);
-+	regmap_write(sys_mgr_base_addr, reg_offset, hs_timing);
-+
-+	return 0;
-+}
-+
-+static const struct dw_mci_drv_data socfpga_drv_data = {
-+	.init		= dw_mci_socfpga_priv_init,
-+};
-+
- static const struct of_device_id dw_mci_pltfm_match[] = {
- 	{ .compatible = "snps,dw-mshc", },
--	{ .compatible = "altr,socfpga-dw-mshc", },
-+	{ .compatible = "altr,socfpga-dw-mshc", .data = &socfpga_drv_data, },
- 	{ .compatible = "img,pistachio-dw-mshc", },
- 	{},
+-	rc = of_property_read_u32_array(node, "clk-phase", clk_phase, 2);
+-	if (!rc) {
+-		socfpga_clk->clk_phase[0] = clk_phase[0];
+-		socfpga_clk->clk_phase[1] = clk_phase[1];
+-
+-		socfpga_clk->sys_mgr_base_addr =
+-			syscon_regmap_lookup_by_compatible("altr,sys-mgr");
+-		if (IS_ERR(socfpga_clk->sys_mgr_base_addr)) {
+-			pr_err("%s: failed to find altr,sys-mgr regmap!\n",
+-					__func__);
+-			kfree(socfpga_clk);
+-			return;
+-		}
+-	}
+-
+ 	of_property_read_string(node, "clock-output-names", &clk_name);
+ 
+ 	init.name = clk_name;
+diff --git a/drivers/clk/socfpga/clk-gate.c b/drivers/clk/socfpga/clk-gate.c
+index 53d6e3ec4309..3e347b9e9eff 100644
+--- a/drivers/clk/socfpga/clk-gate.c
++++ b/drivers/clk/socfpga/clk-gate.c
+@@ -108,61 +108,7 @@ static unsigned long socfpga_clk_recalc_rate(struct clk_hw *hwclk,
+ 	return parent_rate / div;
+ }
+ 
+-static int socfpga_clk_prepare(struct clk_hw *hwclk)
+-{
+-	struct socfpga_gate_clk *socfpgaclk = to_socfpga_gate_clk(hwclk);
+-	struct regmap *sys_mgr_base_addr;
+-	int i;
+-	u32 hs_timing;
+-	u32 clk_phase[2];
+-
+-	if (socfpgaclk->clk_phase[0] || socfpgaclk->clk_phase[1]) {
+-		sys_mgr_base_addr = syscon_regmap_lookup_by_compatible("altr,sys-mgr");
+-		if (IS_ERR(sys_mgr_base_addr)) {
+-			pr_err("%s: failed to find altr,sys-mgr regmap!\n", __func__);
+-			return -EINVAL;
+-		}
+-
+-		for (i = 0; i < 2; i++) {
+-			switch (socfpgaclk->clk_phase[i]) {
+-			case 0:
+-				clk_phase[i] = 0;
+-				break;
+-			case 45:
+-				clk_phase[i] = 1;
+-				break;
+-			case 90:
+-				clk_phase[i] = 2;
+-				break;
+-			case 135:
+-				clk_phase[i] = 3;
+-				break;
+-			case 180:
+-				clk_phase[i] = 4;
+-				break;
+-			case 225:
+-				clk_phase[i] = 5;
+-				break;
+-			case 270:
+-				clk_phase[i] = 6;
+-				break;
+-			case 315:
+-				clk_phase[i] = 7;
+-				break;
+-			default:
+-				clk_phase[i] = 0;
+-				break;
+-			}
+-		}
+-		hs_timing = SYSMGR_SDMMC_CTRL_SET(clk_phase[0], clk_phase[1]);
+-		regmap_write(sys_mgr_base_addr, SYSMGR_SDMMCGRP_CTRL_OFFSET,
+-			hs_timing);
+-	}
+-	return 0;
+-}
+-
+ static struct clk_ops gateclk_ops = {
+-	.prepare = socfpga_clk_prepare,
+ 	.recalc_rate = socfpga_clk_recalc_rate,
+ 	.get_parent = socfpga_clk_get_parent,
+ 	.set_parent = socfpga_clk_set_parent,
+@@ -172,7 +118,6 @@ void __init socfpga_gate_init(struct device_node *node)
+ {
+ 	u32 clk_gate[2];
+ 	u32 div_reg[3];
+-	u32 clk_phase[2];
+ 	u32 fixed_div;
+ 	struct clk_hw *hw_clk;
+ 	struct socfpga_gate_clk *socfpga_clk;
+@@ -218,12 +163,6 @@ void __init socfpga_gate_init(struct device_node *node)
+ 		socfpga_clk->div_reg = NULL;
+ 	}
+ 
+-	rc = of_property_read_u32_array(node, "clk-phase", clk_phase, 2);
+-	if (!rc) {
+-		socfpga_clk->clk_phase[0] = clk_phase[0];
+-		socfpga_clk->clk_phase[1] = clk_phase[1];
+-	}
+-
+ 	of_property_read_string(node, "clock-output-names", &clk_name);
+ 
+ 	init.name = clk_name;
+diff --git a/drivers/clk/socfpga/clk.h b/drivers/clk/socfpga/clk.h
+index d80115fbdd6a..9a2fb2dde5b8 100644
+--- a/drivers/clk/socfpga/clk.h
++++ b/drivers/clk/socfpga/clk.h
+@@ -50,7 +50,6 @@ struct socfpga_gate_clk {
+ 	u32 width;	/* only valid if div_reg != 0 */
+ 	u32 shift;	/* only valid if div_reg != 0 */
+ 	u32 bypass_shift;      /* only valid if bypass_reg != 0 */
+-	u32 clk_phase[2];
  };
+ 
+ struct socfpga_periph_clk {
 -- 
 2.25.1
 
