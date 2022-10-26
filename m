@@ -2,307 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DBE60ECBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCAB60ECC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 01:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233983AbiJZXu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 19:50:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
+        id S233884AbiJZXwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 19:52:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiJZXuY (ORCPT
+        with ESMTP id S233532AbiJZXwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 19:50:24 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A59A3B73F
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:50:22 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id o70so21144780yba.7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 16:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CAlVcangjllWE4d/TKwBzq5t2wvRwgrX82tWmkgivY8=;
-        b=LP32NRkC6Hss/3NIEHMZ+M93o8oVa93//jhRrkZ8NJcHBVGrGpbDBS9Ejq/W8mHhdR
-         wqctEN6vFfZ/GbE2u1s6IzS9VWuxMsT0EaCdSP6RTwd9/eBfJ3lAKCwh7UhGugqF7l+q
-         6mUjjr9Q7cj0HssPcvA6kqS/n0CaMz8TDkXEQFzHH8VSoaCURhFWrbubbI9RUa/vbCXX
-         gK6pDBeNkxD5IXl4TIkDbklprADGB8mR8qfywdbRkvELXyKrOh5Qi+0+8tb/b79XNrzZ
-         lT7/T5i9CccO94gI4VMdV6TrbrvXwtrHZA+/cAGI8HPc5JB0qfcZXX8iSw4YLagAuwSO
-         8wAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CAlVcangjllWE4d/TKwBzq5t2wvRwgrX82tWmkgivY8=;
-        b=CCgwvpQxz1YjW0Qbmu2Xbw9BJSilJyFsl9x7e94/tJ0pwI+1V+d00y/0X57sesAjK3
-         kwnjCyIxqhn+UIiprnhGps0R/vBITC79ARewzLk2Z5EtVvWoOBaqXAEyH9a59a7viLEn
-         NKYFl7ATmcSgz8BAiD1Mms1BgATiatoHIa2o4Z8h3OEuMs83sHXOAFCiRdwd+IJDB1ph
-         Rfny6Z/1RXuJWgrn12vJU3sOQ4PSq/mhYWxGUHvJ6B+eMdgvg3H1qTS3smeUw9Eh4DBY
-         BbPIFkQvG4WURY6IVYRkriGrcGgJ+AMmlX+qIi7/2+OHwCz4Q1JOjxcIcgTSudoluezF
-         drBg==
-X-Gm-Message-State: ACrzQf2rNTbWdGsJBwjkU2q21zXBFjv0jrT0E6s7W6i7ZxdrZ1hXeESQ
-        vUL5cr2LMG7cHTjDQ1I/aOJpPStbXeZLFlM6yTRMiQ==
-X-Google-Smtp-Source: AMsMyM4czU6uYwVoNp6dsLDT0v7+1AaaSrOFTSC8XL2axVl5nfOHLcJW7UhxUB5s/qGWg8vf3exHj0FkEqsakZ39W8k=
-X-Received: by 2002:a25:3812:0:b0:6cb:446b:69fd with SMTP id
- f18-20020a253812000000b006cb446b69fdmr13916888yba.59.1666828221080; Wed, 26
- Oct 2022 16:50:21 -0700 (PDT)
+        Wed, 26 Oct 2022 19:52:00 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB95EE0AF;
+        Wed, 26 Oct 2022 16:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666828319; x=1698364319;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=XNxI0SMMAAsjT7qvLlAMklet1zLiCmn9/n7KLQtItxk=;
+  b=HbQ+GYf41Ql0leJo+wmU3FRbo7ipE+oGRoFsPwAt1q0bVA5snTI6DZGx
+   27tYp5zYXdPwGQrHeclHSWw1YlHdaefwrs0h71xMM9h6FCboDpui8WJ2Y
+   Ge7sB+eHjses9jIWsxMG6mC9U3jPr0LQOOLvKWDs0MeCdYlXBVlgKQ3nw
+   oBpS1GJXGEtZut5GYdVrY5FhUiO7OOhuNvUcNbjlR5AaOYncYJ3lYbOcR
+   w8k/GsFOHM9e5qEiIIprMvskExPumqMJTVvfNZ5XdDYGbbLgmhPWH0Fzd
+   RvQeiODOJzeY3tRZc8EmvIKZRpM0yFVCnoGs8M6Fb+50/A0LuFQ/bCh1A
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="288485200"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="288485200"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 16:51:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="807248091"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="807248091"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 26 Oct 2022 16:51:58 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 16:51:57 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 26 Oct 2022 16:51:57 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 26 Oct 2022 16:51:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Muaus0aipe4WROs86XtW9DmkQ7PR+6Gm5T5HQXul2e3Oshc27e9Sy9zU8W18SOj9OhLdInWj/Da4mhwzwt2kz79R2P52zCqlnrIOizszUog8BSshZNeYxehZqQetH2Y5hZYpZob+gA578IT9X/iHAgIG2+gU1ADAatzoNvdC80eof0PEVWPgzTlIuKUUv/wAN4Y5V8qwW0UOkOGCoDXulN9v1JH+n/CW7cBh5kmR9IBStMd9AP0SY5ReVqiER2g/VmqQ3B+Ntm1RlrqhnY5Lmi3TzvyH+bt81ROJ7x3z+QQY2SkrAQwoS69myP2ZDJUFcxYnUaWV/YBcK8PV0lOdzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XNxI0SMMAAsjT7qvLlAMklet1zLiCmn9/n7KLQtItxk=;
+ b=GuckifNDQfLKWev7uYgunKRJMGFlF80zUHgYV8Sqctl1yrt1fIEsSn5KHGpUcaaw5DSpaYpIlrIkF1f9sfVnrbrbnki/546ms9WXs5bnDgk6DPyQYbnF5+AkEmqyXHAAlBmYeUS5uPqJ7UkNlrpr2SUNrMA/K1B68cco8HfECvnyU6j+4Q20H2ByBesNSxEJHj1ziKT6oT7Y5lSF1QRBriC00YtwSkDCIorSSx5pJKgoNZYEL50HdN8CKEhoISbpDR1gTZHJuPOECOQL0OZUtLLITc530OCHxJ2EQvHiys69+XsepLnIkmiUDIJaPxXdXd4OpltlvBP4KtdVF+RRZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by SN7PR11MB7138.namprd11.prod.outlook.com (2603:10b6:806:2a1::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.34; Wed, 26 Oct
+ 2022 23:51:53 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::6eb:99bf:5c45:a94b]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::6eb:99bf:5c45:a94b%3]) with mapi id 15.20.5746.021; Wed, 26 Oct 2022
+ 23:51:53 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v6 00/21] TDX host kernel support
+Thread-Topic: [PATCH v6 00/21] TDX host kernel support
+Thread-Index: AQHY6Y2bTREFjnLhrkmd1Pu5PGAu7q4hUYkAgAAHMwA=
+Date:   Wed, 26 Oct 2022 23:51:53 +0000
+Message-ID: <81713166f9a6163feea8323c1cccf0b3602f3732.camel@intel.com>
+References: <cover.1666824663.git.kai.huang@intel.com>
+         <fb2d1c23-df8b-4f7f-ce3f-25ba9076e5fb@intel.com>
+In-Reply-To: <fb2d1c23-df8b-4f7f-ce3f-25ba9076e5fb@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SN7PR11MB7138:EE_
+x-ms-office365-filtering-correlation-id: 8496c195-ec9c-492e-d55e-08dab7ad0f0b
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KY0jzs71QRJWnfP6mz3a1dQQEicS+FeBW4lRNWqAqzWP/W2Hipr4np/m4+ftsoZUIsvoJrrwr/YZZTAi/xGDug8gYPdbdXZfYOVrOUtcQB+OgaFvbqhrIMFVHgyYCmuseAcqSk3jEPaTQCFCTvyG9npmQpDGKFL1TrjfxMwfHi0SyH0RZgDYCN/v5du5v8BvwVUJpqXp3sx7jhDchRtkpcphFZjDIUSmU/zz8e/L0ocDLx8Rc0P0+jcJZYhNZb5V0jbrFkqEe8Z62U+ZaWdqJHFwh1prasUVsUPpKOykt4OOAUbLJMQHMDWJ3UYJKdfjc+K+sjD7LARL030ybY68uZiu+C+x5aQqz/3WQRh4GFNiDIZMI3iPyVv6JTRPVRDUFP0mC5J9rRjbnto1ztTmoc9Rm5ER61RTdQh2mT/LEhPmB76GaFCLlAot5qKm0WtixEwnJn8ASYjwSsmeltdAC8GeQWNzIxeScVYRX2RmoI9bhUvigHEHVBW9fwbkllpu+GT2PI7o2WJyy0Vel+B5M0qHDoRc1q3HGxjUUIKIy7DBbwI25AwX7le4+Bxbg5bPKYB6azlyLcGBq7+Wf06zWrYAykjxe+UilKAAI8hyR5fWtDL1t/zzD+mSI5RTKXB1m4XbDC7ZzEkx+KyX2H1vXOHr2H1eFNm0dlvV52o7mKBknI2MxXsqJ7dmxErQO/PBvesGwYuUAt/XAtC7TEVXpI0/abWnf0jwdpsjVHS62XG9Gm22r+vJ5gF2LAkGEQrVKyYyzQCw3J/SeDvqI81fmA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(39860400002)(396003)(346002)(376002)(451199015)(71200400001)(478600001)(316002)(86362001)(36756003)(6486002)(5660300002)(6512007)(6506007)(66946007)(8936002)(2616005)(53546011)(76116006)(110136005)(54906003)(26005)(122000001)(38100700002)(8676002)(4326008)(41300700001)(2906002)(66446008)(64756008)(91956017)(66556008)(82960400001)(4001150100001)(38070700005)(66476007)(186003)(7416002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bUZVMHNlWVFESXBnRXkvTkFWZ01LNXEzNk0rZytTOXAwVVJPbDJNM09TZ0Vk?=
+ =?utf-8?B?WEdaM1B5eU9OMUg1TENBNjNRNVgxWGV6YnU0Vng5cTduZWx5ZUJIa1hxODE4?=
+ =?utf-8?B?R3VKajVyc2FLeTJDcUZ4ZkpTck15T2lGekY3OCtHenQ0Mzg5aWdhMDVCTC94?=
+ =?utf-8?B?Z3J6OGZRSHhrMDBIN1p6d0d0TzBpc3B2Wng2SDAwWkFycnV6TE0zNUx6WXVx?=
+ =?utf-8?B?ek5tcmM1M3JXblp0SnI0RkI4VEpzZGdibmk3TXhDMFNycnhUTTJCOFhYRWRh?=
+ =?utf-8?B?RzA0MW5vdGt2a3RkZ1RuTnFjTlJNbTlhVEY5Z1JKekYwaVhxN2ZzR0JZMWhH?=
+ =?utf-8?B?Y3h1Ni96TVRSeVdVQlFHVHFsYS81cHYxZDhDbjFCWlVwcUpsbitpazk5YWhR?=
+ =?utf-8?B?WTRTYkJpVHBQK2JhQ1FJS3J2U0VIMkREVjlWVjY2RkdZRTNRTitlZHVFdXBH?=
+ =?utf-8?B?YndjeDFvSTFsRGVobkJMZkxlZUJzZ2ZSKzg3Yzg1L2FmM0hnVXVxWlNTR3hY?=
+ =?utf-8?B?UUI0K1p5MUxxY3FoUDN6dm9KMFYvU1cvdGdVa3YzSU5uSmg5QTJQdE51WVM0?=
+ =?utf-8?B?S1E2L0JnaEkzZUp4Wmc4Wmp0OGxOWDkzTkZyaEtPeHdWUHVQbERwU1J1WE5t?=
+ =?utf-8?B?V25xOWZZSlRpSnZaOUwvT240NnZtWjFnQVhabUVUNWNaLzA0Q3BsTG9zQ3p0?=
+ =?utf-8?B?RUtxcGUvNjFzemxXemZ4QkpHbEZsam1la2luTTJiTm1EN1R3bzN4VWtacGNk?=
+ =?utf-8?B?Nm13Y09rV2toODNsVUo3V0djRFBPUFJiN2htcVhxN3MxZ2xTT0RYQStQNXlO?=
+ =?utf-8?B?MlZuRGRrUHVNY05VTnZ1S1U3QzJRenorclJMV1dKNDVhTXBTNWoySTNHbW9N?=
+ =?utf-8?B?cEJ2UXkwVFcrSy9ndTFIL2E4ZTBCL0hBRWFBdGtEZVMxbnJvdUdNZk9HUGRl?=
+ =?utf-8?B?eGRrU21pS0VIcWh2NThNdzlzRnFDVk42Z2hDek1QWVNFOGdNbFJRbUhJdkJB?=
+ =?utf-8?B?Q2RUU2h2MUd0SUp6RzRNZFMvdW9qWjhxNEJIT0ZRSWdCYkRkTDBQbkhzVGVR?=
+ =?utf-8?B?dmxiQkNrbk1PelhxOGpPeG9FRTZJc1ZNdzJJNG1xWGxoYzNPbThUSTVRWDkv?=
+ =?utf-8?B?V1o3OVVFbUNoMERlMGlVTzBCMUdreHlHalNTL3NrVTFqZXlhdHpMcGdPa3F6?=
+ =?utf-8?B?aUdkV0c1S2hWd3UzRU9OeHlON3BNb1RUZHpIZytrZFVLVWI4elFLc0Y1OVRD?=
+ =?utf-8?B?NElmekx6N2xoeUhDVjE2aGlBREdsdk9UVE90dkVmZ3lFNXJaZUxMSHgzUDlD?=
+ =?utf-8?B?NlBLWlJXM1E3YndOK3JuUDNZVW9EN0hZUXF6UFNIWUxtK243U2ZmT08yc2ZD?=
+ =?utf-8?B?ODMwMjZzQWdtTEswNitnN0cvVGR3S2F1S0xRY002QXdOUUIyOUxNcHFBZUR4?=
+ =?utf-8?B?Y2lxRWJObmNFdUFza0xTektZWi9vRGZLUW9mL3I1cDBqUHEwQUpwaDBRRjI5?=
+ =?utf-8?B?NVdUQjc1dXNFYlV1M3Y0b1RiWk9qL0ZLM3BXOHk4MUJaWW4xaHRUZzZWdDk1?=
+ =?utf-8?B?VHljNk9tZkltdGRIL0hPUGhqU0ZKalNpRHc1a1YvNmZ2Z3F4Y1pDYVN3Smt0?=
+ =?utf-8?B?T096bjFDOVRFMUdwQ0tNZmpYUzR3OG94OHE2RVU4cWF2VlhSN3VGRW5zU2ty?=
+ =?utf-8?B?dktNY2xiUW9qWnROMjJHM0lQT0F5cytMTHVMVk84OTA2YWVlT1Y5OGQvdmZQ?=
+ =?utf-8?B?TkN4b3RHNFdlR0FwdmY4UExhRFJNK1VlU0ZSVWFNa096cno5d0crTzhTdGNh?=
+ =?utf-8?B?MWxVZktnUGxoaVVOTFBHenZGUGw1TUM3T2xZbjdPMXljSFF4VExoZVd2RG1z?=
+ =?utf-8?B?Y1piRElWUExKR1hKZlNGVzRKOGg2UzhuZVVZMzBoYkxJU3Q5ZU1MNlB5ekpq?=
+ =?utf-8?B?SjRsVW5mTjVHQkNHN3o3c3ZmTU9rcVpWVXBhYzFLalJYRkUxa3NqV2JVTnRR?=
+ =?utf-8?B?WCt6R3NlejZROGVWZFNiUEFKNTNWSFJPcHhJd2dzR0JRSUJianRISUpCdW1t?=
+ =?utf-8?B?MjNjOTVRWHgwcE14T2xHc2M1M1FObWpCMklSL0ZoOWxsVUxXVjlWS0N1SGVY?=
+ =?utf-8?B?eEhNUTduelkvaDkrL0wyaHhSWE5vSDEySkVIMk42M3VnemdTZnhLMUtqUTFm?=
+ =?utf-8?B?U2c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <7351702E07B80A4F9D3B396EB1DAD108@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221026233839.1934419-1-surenb@google.com>
-In-Reply-To: <20221026233839.1934419-1-surenb@google.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 26 Oct 2022 16:50:10 -0700
-Message-ID: <CAJuCfpHqEuGSOZptb1-F1kx72Zu+3Rpnqp0qvW0b4SCdyBqeLw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] psi: stop relying on timer_pending for poll_work rescheduling
-To:     peterz@infradead.org
-Cc:     hannes@cmpxchg.org, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, matthias.bgg@gmail.com, minchan@google.com,
-        yt.chang@mediatek.com, wenju.xu@mediatek.com,
-        jonathan.jmchen@mediatek.com, show-hong.chen@mediatek.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8496c195-ec9c-492e-d55e-08dab7ad0f0b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2022 23:51:53.5536
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MOszS501/cz6XTux0Wfat7mguI0IYbS5QstiOlXdep7EHw+697kbNmNvsVw4t/J/bNs9IDl5DBupS8goXBpxGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7138
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 4:38 PM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> Psi polling mechanism is trying to minimize the number of wakeups to
-> run psi_poll_work and is currently relying on timer_pending() to detect
-> when this work is already scheduled. This provides a window of opportunity
-> for psi_group_change to schedule an immediate psi_poll_work after
-> poll_timer_fn got called but before psi_poll_work could reschedule itself.
-> Below is the depiction of this entire window:
->
-> poll_timer_fn
->   wake_up_interruptible(&group->poll_wait);
->
-> psi_poll_worker
->   wait_event_interruptible(group->poll_wait, ...)
->   psi_poll_work
->     psi_schedule_poll_work
->       if (timer_pending(&group->poll_timer)) return;
->       ...
->       mod_timer(&group->poll_timer, jiffies + delay);
->
-> Prior to 461daba06bdc we used to rely on poll_scheduled atomic which was
-> reset and set back inside psi_poll_work and therefore this race window
-> was much smaller.
-> The larger window causes increased number of wakeups and our partners
-> report visible power regression of ~10mA after applying 461daba06bdc.
-> Bring back the poll_scheduled atomic and make this race window even
-> narrower by resetting poll_scheduled only when we reach polling expiration
-> time. This does not completely eliminate the possibility of extra wakeups
-> caused by a race with psi_group_change however it will limit it to the
-> worst case scenario of one extra wakeup per every tracking window (0.5s
-> in the worst case).
-> This patch also ensures correct ordering between clearing poll_scheduled
-> flag and obtaining changed_states using memory barrier. Correct ordering
-> between updating changed_states and setting poll_scheduled is ensured by
-> atomic_xchg operation.
-> By tracing the number of immediate rescheduling attempts performed by
-> psi_group_change and the number of these attempts being blocked due to
-> psi monitor being already active, we can assess the effects of this change:
->
-> Before the patch:
->                                            Run#1    Run#2      Run#3
-> Immediate reschedules attempted:           684365   1385156    1261240
-> Immediate reschedules blocked:             682846   1381654    1258682
-> Immediate reschedules (delta):             1519     3502       2558
-> Immediate reschedules (% of attempted):    0.22%    0.25%      0.20%
->
-> After the patch:
->                                            Run#1    Run#2      Run#3
-> Immediate reschedules attempted:           882244   770298    426218
-> Immediate reschedules blocked:             881996   769796    426074
-> Immediate reschedules (delta):             248      502       144
-> Immediate reschedules (% of attempted):    0.03%    0.07%     0.03%
->
-> The number of non-blocked immediate reschedules dropped from 0.22-0.25%
-> to 0.03-0.07%. The drop is attributed to the decrease in the race window
-> size and the fact that we allow this race only when psi monitors reach
-> polling window expiration time.
->
-> Fixes: 461daba06bdc ("psi: eliminate kthread_worker from psi trigger scheduling mechanism")
-> Reported-by: Kathleen Chang <yt.chang@mediatek.com>
-> Reported-by: Wenju Xu <wenju.xu@mediatek.com>
-> Reported-by: Jonathan Chen <jonathan.jmchen@mediatek.com>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Tested-by: SH Chen <show-hong.chen@mediatek.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> ---
-> Changes since v4 posted at
-> https://lore.kernel.org/all/20221010225744.101629-1-surenb@google.com/
-> - Added missing parameter in psi_schedule_poll_work() call used only when
-> CONFIG_IRQ_TIME_ACCOUNTING is enabled, reported by kernel test robot.
->
->  include/linux/psi_types.h |  1 +
->  kernel/sched/psi.c        | 62 ++++++++++++++++++++++++++++++++-------
->  2 files changed, 53 insertions(+), 10 deletions(-)
->
-> diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
-> index 6e4372735068..14a1ebb74e11 100644
-> --- a/include/linux/psi_types.h
-> +++ b/include/linux/psi_types.h
-> @@ -177,6 +177,7 @@ struct psi_group {
->         struct timer_list poll_timer;
->         wait_queue_head_t poll_wait;
->         atomic_t poll_wakeup;
-> +       atomic_t poll_scheduled;
->
->         /* Protects data used by the monitor */
->         struct mutex trigger_lock;
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index dbaeac915895..19d05b5c8a55 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -189,6 +189,7 @@ static void group_init(struct psi_group *group)
->         INIT_DELAYED_WORK(&group->avgs_work, psi_avgs_work);
->         mutex_init(&group->avgs_lock);
->         /* Init trigger-related members */
-> +       atomic_set(&group->poll_scheduled, 0);
->         mutex_init(&group->trigger_lock);
->         INIT_LIST_HEAD(&group->triggers);
->         group->poll_min_period = U32_MAX;
-> @@ -580,18 +581,17 @@ static u64 update_triggers(struct psi_group *group, u64 now)
->         return now + group->poll_min_period;
->  }
->
-> -/* Schedule polling if it's not already scheduled. */
-> -static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay)
-> +/* Schedule polling if it's not already scheduled or forced. */
-> +static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay,
-> +                                  bool force)
->  {
->         struct task_struct *task;
->
->         /*
-> -        * Do not reschedule if already scheduled.
-> -        * Possible race with a timer scheduled after this check but before
-> -        * mod_timer below can be tolerated because group->polling_next_update
-> -        * will keep updates on schedule.
-> +        * atomic_xchg should be called even when !force to provide a
-> +        * full memory barrier (see the comment inside psi_poll_work).
->          */
-> -       if (timer_pending(&group->poll_timer))
-> +       if (atomic_xchg(&group->poll_scheduled, 1) && !force)
->                 return;
->
->         rcu_read_lock();
-> @@ -603,12 +603,15 @@ static void psi_schedule_poll_work(struct psi_group *group, unsigned long delay)
->          */
->         if (likely(task))
->                 mod_timer(&group->poll_timer, jiffies + delay);
-> +       else
-> +               atomic_set(&group->poll_scheduled, 0);
->
->         rcu_read_unlock();
->  }
->
->  static void psi_poll_work(struct psi_group *group)
->  {
-> +       bool force_reschedule = false;
->         u32 changed_states;
->         u64 now;
->
-> @@ -616,6 +619,43 @@ static void psi_poll_work(struct psi_group *group)
->
->         now = sched_clock();
->
-> +       if (now > group->polling_until) {
-> +               /*
-> +                * We are either about to start or might stop polling if no
-> +                * state change was recorded. Resetting poll_scheduled leaves
-> +                * a small window for psi_group_change to sneak in and schedule
-> +                * an immegiate poll_work before we get to rescheduling. One
-> +                * potential extra wakeup at the end of the polling window
-> +                * should be negligible and polling_next_update still keeps
-> +                * updates correctly on schedule.
-> +                */
-> +               atomic_set(&group->poll_scheduled, 0);
-> +               /*
-> +                * A task change can race with the poll worker that is supposed to
-> +                * report on it. To avoid missing events, ensure ordering between
-> +                * poll_scheduled and the task state accesses, such that if the poll
-> +                * worker misses the state update, the task change is guaranteed to
-> +                * reschedule the poll worker:
-> +                *
-> +                * poll worker:
-> +                *   atomic_set(poll_scheduled, 0)
-> +                *   smp_mb()
-> +                *   LOAD states
-> +                *
-> +                * task change:
-> +                *   STORE states
-> +                *   if atomic_xchg(poll_scheduled, 1) == 0:
-> +                *     schedule poll worker
-> +                *
-> +                * The atomic_xchg() implies a full barrier.
-> +                */
-> +               smp_mb();
-> +       } else {
-> +               /* Polling window is not over, keep rescheduling */
-> +               force_reschedule = true;
-> +       }
-> +
-> +
->         collect_percpu_times(group, PSI_POLL, &changed_states);
->
->         if (changed_states & group->poll_states) {
-> @@ -641,7 +681,8 @@ static void psi_poll_work(struct psi_group *group)
->                 group->polling_next_update = update_triggers(group, now);
->
->         psi_schedule_poll_work(group,
-> -               nsecs_to_jiffies(group->polling_next_update - now) + 1);
-> +               nsecs_to_jiffies(group->polling_next_update - now) + 1,
-> +               force_reschedule);
->
->  out:
->         mutex_unlock(&group->trigger_lock);
-> @@ -802,7 +843,7 @@ static void psi_group_change(struct psi_group *group, int cpu,
->         write_seqcount_end(&groupc->seq);
->
->         if (state_mask & group->poll_states)
-> -               psi_schedule_poll_work(group, 1);
-> +               psi_schedule_poll_work(group, 1, false);
->
->         if (wake_clock && !delayed_work_pending(&group->avgs_work))
->                 schedule_delayed_work(&group->avgs_work, PSI_FREQ);
-> @@ -956,7 +997,7 @@ void psi_account_irqtime(struct task_struct *task, u32 delta)
->                 write_seqcount_end(&groupc->seq);
->
->                 if (group->poll_states & (1 << PSI_IRQ_FULL))
-> -                       psi_schedule_poll_work(group, 1);
-> +                       psi_schedule_poll_work(group, 1, false);
-
-Previous patch was missing the above one-line change. I missed that
-because I didn't test CONFIG_IRQ_TIME_ACCOUNTING=y configuration. The
-older version of this patch didn't have it because this function
-invocation code is relatively new (added on 08/25/22 by 52b1364ba0b1
-"sched/psi: Add PSI_IRQ to track IRQ/SOFTIRQ pressure").
-Peter, please try picking up this one. Hopefully I didn't miss
-anything else this time...
-
->         } while ((group = group->parent));
->  }
->  #endif
-> @@ -1342,6 +1383,7 @@ void psi_trigger_destroy(struct psi_trigger *t)
->                  * can no longer be found through group->poll_task.
->                  */
->                 kthread_stop(task_to_destroy);
-> +               atomic_set(&group->poll_scheduled, 0);
->         }
->         kfree(t);
->  }
-> --
-> 2.38.1.273.g43a17bfeac-goog
->
+T24gV2VkLCAyMDIyLTEwLTI2IGF0IDE2OjI2IC0wNzAwLCBEYXZlIEhhbnNlbiB3cm90ZToNCj4g
+T24gMTAvMjYvMjIgMTY6MTUsIEthaSBIdWFuZyB3cm90ZToNCj4gPiBUbyBrZWVwIHRoaW5ncyBz
+aW1wbGUsIHRoaXMgc2VyaWVzIGRvZXNuJ3QgaGFuZGxlIG1lbW9yeSBob3RwbHVnIGF0IGFsbCwN
+Cj4gPiBidXQgZGVwZW5kcyBvbiB0aGUgbWFjaGluZSBvd25lciB0byBub3QgZG8gYW55IG1lbW9y
+eSBob3RwbHVnIG9wZXJhdGlvbi4NCj4gPiBGb3IgZXhtYXBsZSwgdGhlIG1hY2hpbmUgb3duZXIg
+c2hvdWxkIG5vdCBwbHVnIGFueSBOVkRJTU0gYW5kIENYTCBtZW1vcnkNCj4gPiBpbnRvIHRoZSBt
+YWNoaW5lLCBvciB1c2Uga21lbSBkcml2ZXIgdG8gcGx1ZyBOVkRJTU0gb3IgQ1hMIG1lbW9yeSB0
+byB0aGUNCj4gPiBjb3JlLW1tLg0KPiA+IA0KPiA+IFRoaXMgd2lsbCBiZSBlbmhhbmNlZCBpbiB0
+aGUgZnV0dXJlIGFmdGVyIGZpcnN0IHN1Ym1pc3Npb24uICBXZSBhcmUgYWxzbw0KPiA+IGxvb2tp
+bmcgaW50byBvcHRpb25zIG9uIGhvdyB0byBoYW5kbGU6DQo+IA0KPiBUaGlzIGlzIGFsc28ga25v
+d24gYXMgdGhlICJob3BlcyBhbmQgcHJheWVycyIgYXBwcm9hY2ggdG8gc29mdHdhcmUNCj4gZW5h
+YmxpbmcuICAiTGV0J3MganVzdCBob3BlIGFuZCBwcmF5IHRoYXQgbm9ib2R5IGRvZXMgdGhlc2Ug
+dGhpbmdzIHdoaWNoDQo+IHdlIGtub3cgYXJlIGJyb2tlbi4iDQo+IA0KPiBJbiB0aGUgc3Bpcml0
+IG9mIG1vdmluZyB0aGlzIHN1Ym1pc3Npb24gZm9yd2FyZCwgSSdtIHdpbGxpbmcgdG8gY29udGlu
+dWUNCj4gdG8gX3Jldmlld18gdGhpcyBzZXJpZXMuIMKgDQo+IA0KDQpUaGFuayB5b3UgRGF2ZSEN
+Cg0KPiBCdXQsIEkgZG9uJ3QgdGhpbmsgaXQgY2FuIGdvIHVwc3RyZWFtIHVudGlsIGl0DQo+IGNv
+bnRhaW5zIGF0IGxlYXN0IF9zb21lXyB3YXkgdG8gaGFuZGxlIG1lbW9yeSBob3RwbHVnLg0KPiAN
+Cj4gDQoNClllcyBJIGFncmVlLg0KDQpPbmUgaW50ZW50aW9uIG9mIHNlbmRpbmcgb3V0IHRoaXMg
+c2VyaWVzIGlzIGFjdHVhbGx5IHRvIGhlYXIgZmVlZGJhY2tzIG9uIGhvdyB0bw0KaGFuZGxlLiAg
+QXMgbWVudGlvbmVkIGluIHRoZSBjb3ZlciBsZXR0ZXIsIEFGQUlDVCB3ZSBoYXZlIHR3byBvcHRp
+b25zOg0KDQoxKSB0byBlbmZvcmNlIHRoZSBrZXJuZWwgdG8gYWx3YXlzIGd1YXJhbnRlZSBhbGwg
+cGFnZXMgaW4gdGhlIHBhZ2UgYWxsb2NhdG9yIGFyZQ0KVERYIG1lbW9yeSAoaS5lLiB2aWEgcmVq
+ZWN0aW5nIG5vbi1URFggbWVtb3J5IGluIG1lbW9yeSBob3RwbHVnKS4gIE5vbi1URFgNCm1lbW9y
+eSBjYW4gYmUgdXNlZCB2aWEgZGV2ZGF4Lg0KMinCoHRvIG1hbmFnZSBURFggYW5kIG5vbi1URFgg
+bWVtb3J5IGluIGRpZmZlcmVudCBOVU1BIG5vZGVzLCBhbmQgdXNlIHBlci1ub2RlDQpURFggbWVt
+b3J5IGNhcGFiaWxpdHkgZmxhZyB0byBzaG93IHdoaWNoIG5vZGVzIGFyZSBURFgtY2FwYWJsZS4g
+IFVzZXJzcGFjZSBuZWVkcw0KdG8gZXhwbGljaXRseSBiaW5kIFREWCBndWVzdHMgdG8gdGhvc2Ug
+VERYLWNhcGFibGUgTlVNQSBub2Rlcy4NCg0KSSB0aGluayB0aGUgaW1wb3J0YW50IHRoaW5nIGlz
+IHdlIG5lZWQgdG8gZ2V0IGNvbnNlbnN1cyBvbiB3aGljaCBkaXJlY3Rpb24gdG8gZ28NCmFzIHRo
+aXMgaXMga2luZGEgcmVsYXRlZCB0byB1c2Vyc3BhY2UgQUJJIEFGQUlDVC4NCg0KS2lyaWxsIGhh
+cyBzb21lIHRob3VnaHRzIG9uIHRoZSBzZWNvbmQgb3B0aW9uLCBzdWNoIGFzIHdlIG1heSBuZWVk
+IHNvbWUNCmFkZGl0aW9uYWwgd29yayB0byBzcGxpdCBOVU1BIG5vZGUgd2hpY2ggY29udGFpbnMg
+Ym90aCBURFggYW5kIG5vbi1URFggbWVtb3J5Lg0KDQpJIGFtIG5vdCBlbnRpcmVseSBjbGVhciBo
+b3cgaGFyZCB0aGlzIHdvcmsgd2lsbCBiZSwgYnV0IG15IHRoaW5raW5nIGlzLCB0aGUNCmFib3Zl
+IHR3byBhcmUgbm90IG5lY2Vzc2FyaWx5IGNvbmZsaWN0aW5nLiAgRm9yIGV4YW1wbGUsIGZyb20g
+dXNlcnNwYWNlIEFCSSdzDQpwZXJzcGVjdGl2ZSB3ZSBjYW4gZ28gb3B0aW9uIDIsIGJ1dCBhdCB0
+aGUgbWVhbnRpbWUsIHdlIHN0aWxsIHJlamVjdCBob3RwbHVnIG9mDQpub24tVERYIG1lbW9yeS4g
+IFRoaXMgZWZmZWN0aXZlbHkgZXF1YWxzIHRvIHJlcG9ydGluZyBhbGwgbm9kZXMgYXMgVERYLWNh
+cGFibGUuDQoNClNwbGl0dGluZyBOVU1BIG5vZGVzIHdoaWNoIGNvbnRhaW5zIGJvdGggVERYIGFu
+ZCBub24tVERYIG1lbW9yeSBjYW4gYmUgZW5oYW5jZWQNCmluIHRoZSBmdXR1cmUgYXMgaXQgZG9l
+c24ndCBicmVhayB1c2Vyc3BhY2UgQUJJIC0tICB1c2Vyc3BhY2UgbmVlZHMgdG8NCmV4cGxpY2l0
+bHkgYmluZCBURFggZ3Vlc3RzIHRvIFREWC1jYXBhYmxlIG5vZGVzIGFueXdheS4NCg==
