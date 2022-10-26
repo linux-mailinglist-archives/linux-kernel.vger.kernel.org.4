@@ -2,57 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E6E60EBAC
+	by mail.lfdr.de (Postfix) with ESMTP id 7E49260EBAD
 	for <lists+linux-kernel@lfdr.de>; Thu, 27 Oct 2022 00:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233692AbiJZWm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 18:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S233721AbiJZWnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 18:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233542AbiJZWmv (ORCPT
+        with ESMTP id S233669AbiJZWm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 18:42:51 -0400
+        Wed, 26 Oct 2022 18:42:56 -0400
 Received: from tarta.nabijaczleweli.xyz (unknown [139.28.40.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 062DE1F9D5;
-        Wed, 26 Oct 2022 15:42:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9824E356DA
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 15:42:54 -0700 (PDT)
 Received: from tarta.nabijaczleweli.xyz (unknown [192.168.1.250])
-        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id 4B735489C;
-        Thu, 27 Oct 2022 00:42:49 +0200 (CEST)
+        by tarta.nabijaczleweli.xyz (Postfix) with ESMTPSA id E4C3C489E;
+        Thu, 27 Oct 2022 00:42:53 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nabijaczleweli.xyz;
-        s=202205; t=1666824169;
-        bh=z+Ch54k+gmevbiInJZ+ZMJKFOWNNhIeKTNXpceivE7M=;
+        s=202205; t=1666824173;
+        bh=POnUIzf1npzUTJWLJxHdqxp++JUxZ5v0ALeMnMs/AHI=;
         h=Date:From:Cc:Subject:References:In-Reply-To:From;
-        b=eInDpVGunEUvT6dYehv5m3C8ThSDrmXAle8/b0GhcaOXgnk8vOBUNu9XLZb8+pek+
-         kfdbYHXD6YjL29PPocHeAJlf72Q93tsvXtk++Mm0aOJh3VLtbSYPxD5vAkRjVvEISA
-         W6dwoMyhg/uj4PVn43oBdbDNZJ4zH39CJLjQiF/hVij0Mq9wrQs3JSyVF0dYU4lIqQ
-         9uP4CdzWQGvhkpvj0qBg2/LE0tKDEjkcIx1mYp3aY6t4Bo90fNr/TFzF0RkImh7jbg
-         zzW2hD6nRo4DezdHay25upYcBvroLH5ob4rGsWuXijYxriKyo88uCyGbBvMzBqq7/p
-         5e5lNipu/ItOeddN2EdDKYUvdwHyTOdkB9rtn+roh7K0ivwPftz9BeLaszEygqGwzK
-         E0Y7wEvdr1Kw2X8soctrl8sQHoSrsK4/qADBC7r1sKWudwn0CqQ+BiDVGiOATekxyy
-         /jt362ZP/qYm58AmF/4X9bmnLFspedhKOSvOtcVbgycFY6q/bIWoYAEGppF5AzJ6kl
-         8jE7Krr/5WnxpvtTAHRA5wYE/Qv4+oxU3VLD9JBV0W3Ku7jW4xHNGE/fxv7isAf7h3
-         hp/LETvRJpptE3Agk+qeft2GSVtkoxZgCDD8xT8yWqDLDjnykmJEtrJGkPs1nFN0LP
-         /0mpI/ZPHJZmMuBoXpOZNvhQ=
-Date:   Thu, 27 Oct 2022 00:42:48 +0200
+        b=Iehr94EQZ22V2ug75Lmq0a6rPBjGWUmgXEOkpMQcrM6/PNtWezt0LVCjwWns1EwOC
+         fVT0HDU8gnFg+GzFujXo350Z2FhzcotX6EyiYkdVgx4n9p/M9Gre9g/0pi7XHZzBVD
+         ltEcGBzlL4TSjDOenqTgH3Vi/nIsYVguoWS/F4m4LsrBxnPGJuKe0cLc/5cBMVldms
+         +4ixaWsYrTBIn2z2VCPsYJJyI3zPo7YrCMxB5wphuImJMGU+zBCZ9Kl0LLS7+MvI2z
+         XrCZ2KbhPARbRmn0j61XQarO2I76Sslq+rmrlTBRyzP+5XVtFO1sVq7RbHNVU4ciRw
+         u+/jaERqmiSIJAZclPShz1MZw0Qa7PZlHGzFcG8YxeQ52QsiOg50OdBL7IFeTj2K+8
+         WREzDFPaNXBmYmuiPCRD4JIR+H4SUth176ifJ8xPUufrryV4HK4ogdiawsrhh53+Un
+         Tr6RE2K5g+K8d7JOmbxSUQUf1avqplF/PayqKAAGwNc3k0A8sUn2697I8HwJ78tZGx
+         +14iGTmriDxP0hSljfoNm2d0WI8YohGPvJEPWdrJqKyNEzfa4v3tMZjP2StxwzQFHC
+         HeS4vOfkbbYffc44fg/hIHoRAzEm6hn6LImAdGQYnjCKBpvwgmEXjoAg779DyspJiP
+         vL7ES4f2G/7Pbhz5NccQNob0=
+Date:   Thu, 27 Oct 2022 00:42:52 +0200
 From:   =?utf-8?B?0L3QsNCx?= <nabijaczleweli@nabijaczleweli.xyz>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>, Arnd Bergmann <arnd@arndb.de>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
         Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Haowen Bai <baihaowen@meizu.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-doc-tw-discuss@lists.sourceforge.net
-Subject: [PATCH 03/15] pcmcia: synclink_cs: remove MGSLPC_MAGIC
-Message-ID: <c909c36218b0d4b5888b41f9af18e763a5b36dcf.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Haowen Bai <baihaowen@meizu.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 04/15] pcmcia: synclink_cs: remove dead paranoia_check, warn
+ for missing line
+Message-ID: <051083d29e5812608deb034dfa86ae0c583fee44.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 References: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="giavft5aq6szb66s"
+        protocol="application/pgp-signature"; boundary="ainb25crrpdnzvbz"
 Content-Disposition: inline
 In-Reply-To: <9a453437b5c3b4b1887c1bd84455b0cc3d1c40b2.1666822928.git.nabijaczleweli@nabijaczleweli.xyz>
 User-Agent: NeoMutt/20220429
@@ -70,185 +65,257 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---giavft5aq6szb66s
+--ainb25crrpdnzvbz
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 MGSLPC_PARANOIA_CHECK has never been defined automatically,
-and in the context of magic numbers as defined in magic-number.rst,
-"the tty layer should not need this"
+and devices with null driver_info can't happen, since we reject the open
+in that case
 
-This is 100% dead cruft, and we have better debugging tooling nowadays:
-kill it
+Move the log statement from dead code to the check,
+and log the state inconsistency like we do above for the line count
+("invalid line #%d.")
 
-Ref: https://lore.kernel.org/linux-doc/YyMlovoskUcHLEb7@kroah.com/
 Signed-off-by: Ahelenia Ziemia=C5=84ska <nabijaczleweli@nabijaczleweli.xyz>
 ---
- Documentation/process/magic-number.rst                 |  1 -
- .../translations/it_IT/process/magic-number.rst        |  1 -
- .../translations/zh_CN/process/magic-number.rst        |  1 -
- .../translations/zh_TW/process/magic-number.rst        |  1 -
- drivers/char/pcmcia/synclink_cs.c                      | 10 ----------
- 5 files changed, 14 deletions(-)
+ drivers/char/pcmcia/synclink_cs.c | 71 +++----------------------------
+ 1 file changed, 6 insertions(+), 65 deletions(-)
 
-diff --git a/Documentation/process/magic-number.rst b/Documentation/process=
-/magic-number.rst
-index a4414b7e15aa..18f8b1e3a993 100644
---- a/Documentation/process/magic-number.rst
-+++ b/Documentation/process/magic-number.rst
-@@ -72,7 +72,6 @@ PG_MAGIC              'P'              pg_{read,write}_hd=
-r      ``include/linux/
- APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
-/kernel/apm_32.c``
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- SLIP_MAGIC            0x5302           slip                     ``drivers/=
-net/slip.h``
--MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
-char/pcmcia/synclink_cs.c``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
- KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
-coda_fs_i.h``
-diff --git a/Documentation/translations/it_IT/process/magic-number.rst b/Do=
-cumentation/translations/it_IT/process/magic-number.rst
-index f51c5ef9d93f..827167b18f15 100644
---- a/Documentation/translations/it_IT/process/magic-number.rst
-+++ b/Documentation/translations/it_IT/process/magic-number.rst
-@@ -78,7 +78,6 @@ PG_MAGIC              'P'              pg_{read,write}_hd=
-r      ``include/linux/
- APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
-/kernel/apm_32.c``
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- SLIP_MAGIC            0x5302           slip                     ``drivers/=
-net/slip.h``
--MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
-char/pcmcia/synclink_cs.c``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
- KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
-coda_fs_i.h``
-diff --git a/Documentation/translations/zh_CN/process/magic-number.rst b/Do=
-cumentation/translations/zh_CN/process/magic-number.rst
-index 3b53bd67e41b..9553475e9867 100644
---- a/Documentation/translations/zh_CN/process/magic-number.rst
-+++ b/Documentation/translations/zh_CN/process/magic-number.rst
-@@ -61,7 +61,6 @@ PG_MAGIC              'P'              pg_{read,write}_hd=
-r      ``include/linux/
- APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
-/kernel/apm_32.c``
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- SLIP_MAGIC            0x5302           slip                     ``drivers/=
-net/slip.h``
--MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
-char/pcmcia/synclink_cs.c``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
- KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
-coda_fs_i.h``
-diff --git a/Documentation/translations/zh_TW/process/magic-number.rst b/Do=
-cumentation/translations/zh_TW/process/magic-number.rst
-index 7d176a87ec3c..8a64f56ae267 100644
---- a/Documentation/translations/zh_TW/process/magic-number.rst
-+++ b/Documentation/translations/zh_TW/process/magic-number.rst
-@@ -64,7 +64,6 @@ PG_MAGIC              'P'              pg_{read,write}_hd=
-r      ``include/linux/
- APM_BIOS_MAGIC        0x4101           apm_user                 ``arch/x86=
-/kernel/apm_32.c``
- FASYNC_MAGIC          0x4601           fasync_struct            ``include/=
-linux/fs.h``
- SLIP_MAGIC            0x5302           slip                     ``drivers/=
-net/slip.h``
--MGSLPC_MAGIC          0x5402           mgslpc_info              ``drivers/=
-char/pcmcia/synclink_cs.c``
- HDLCDRV_MAGIC         0x5ac6e778       hdlcdrv_state            ``include/=
-linux/hdlcdrv.h``
- KV_MAGIC              0x5f4b565f       kernel_vars_s            ``arch/mip=
-s/include/asm/sn/klkernvars.h``
- CODA_MAGIC            0xC0DAC0DA       coda_file_info           ``fs/coda/=
-coda_fs_i.h``
 diff --git a/drivers/char/pcmcia/synclink_cs.c b/drivers/char/pcmcia/syncli=
 nk_cs.c
-index b2735be81ab2..262f087bfc01 100644
+index 262f087bfc01..19b6118639b4 100644
 --- a/drivers/char/pcmcia/synclink_cs.c
 +++ b/drivers/char/pcmcia/synclink_cs.c
-@@ -137,7 +137,6 @@ struct _input_signal_events {
- typedef struct _mgslpc_info {
- 	struct tty_port		port;
- 	void *if_ptr;	/* General purpose pointer (used by SPPP) */
--	int			magic;
- 	int			line;
+@@ -644,25 +644,6 @@ static int mgslpc_resume(struct pcmcia_device *link)
+ }
 =20
- 	struct mgsl_icount	icount;
-@@ -228,8 +227,6 @@ typedef struct _mgslpc_info {
 =20
- } MGSLPC_INFO;
-=20
--#define MGSLPC_MAGIC 0x5402
+-static inline bool mgslpc_paranoia_check(MGSLPC_INFO *info,
+-					char *name, const char *routine)
+-{
+-#ifdef MGSLPC_PARANOIA_CHECK
+-	static const char *badinfo =3D
+-		"Warning: null mgslpc_info for (%s) in %s\n";
 -
- /*
-  * The size of the serial xmit buffer is 1 page, or 4096 bytes
-  */
-@@ -525,7 +522,6 @@ static int mgslpc_probe(struct pcmcia_device *link)
- 		return -ENOMEM;
- 	}
-=20
--	info->magic =3D MGSLPC_MAGIC;
- 	tty_port_init(&info->port);
- 	info->port.ops =3D &mgslpc_port_ops;
- 	INIT_WORK(&info->task, bh_handler);
-@@ -652,8 +648,6 @@ static inline bool mgslpc_paranoia_check(MGSLPC_INFO *i=
-nfo,
- 					char *name, const char *routine)
- {
- #ifdef MGSLPC_PARANOIA_CHECK
--	static const char *badmagic =3D
--		"Warning: bad magic number for mgsl struct (%s) in %s\n";
- 	static const char *badinfo =3D
- 		"Warning: null mgslpc_info for (%s) in %s\n";
-=20
-@@ -661,10 +655,6 @@ static inline bool mgslpc_paranoia_check(MGSLPC_INFO *=
-info,
- 		printk(badinfo, name, routine);
- 		return true;
- 	}
--	if (info->magic !=3D MGSLPC_MAGIC) {
--		printk(badmagic, name, routine);
+-	if (!info) {
+-		printk(badinfo, name, routine);
 -		return true;
 -	}
- #else
- 	if (!info)
- 		return true;
+-#else
+-	if (!info)
+-		return true;
+-#endif
+-	return false;
+-}
+-
+-
+ #define CMD_RXFIFO      BIT7	// release current rx FIFO
+ #define CMD_RXRESET     BIT6	// receiver reset
+ #define CMD_RXFIFO_READ BIT5
+@@ -694,8 +675,6 @@ static void tx_pause(struct tty_struct *tty)
+ 	MGSLPC_INFO *info =3D (MGSLPC_INFO *)tty->driver_data;
+ 	unsigned long flags;
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "tx_pause"))
+-		return;
+ 	if (debug_level >=3D DEBUG_LEVEL_INFO)
+ 		printk("tx_pause(%s)\n", info->device_name);
+=20
+@@ -710,8 +689,6 @@ static void tx_release(struct tty_struct *tty)
+ 	MGSLPC_INFO *info =3D (MGSLPC_INFO *)tty->driver_data;
+ 	unsigned long flags;
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "tx_release"))
+-		return;
+ 	if (debug_level >=3D DEBUG_LEVEL_INFO)
+ 		printk("tx_release(%s)\n", info->device_name);
+=20
+@@ -1476,9 +1453,6 @@ static int mgslpc_put_char(struct tty_struct *tty, un=
+signed char ch)
+ 			__FILE__, __LINE__, ch, info->device_name);
+ 	}
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_put_char"))
+-		return 0;
+-
+ 	if (!info->tx_buf)
+ 		return 0;
+=20
+@@ -1508,9 +1482,6 @@ static void mgslpc_flush_chars(struct tty_struct *tty)
+ 		printk("%s(%d):mgslpc_flush_chars() entry on %s tx_count=3D%d\n",
+ 			__FILE__, __LINE__, info->device_name, info->tx_count);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_flush_chars"))
+-		return;
+-
+ 	if (info->tx_count <=3D 0 || tty->flow.stopped ||
+ 	    tty->hw_stopped || !info->tx_buf)
+ 		return;
+@@ -1546,8 +1517,7 @@ static int mgslpc_write(struct tty_struct * tty,
+ 		printk("%s(%d):mgslpc_write(%s) count=3D%d\n",
+ 			__FILE__, __LINE__, info->device_name, count);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_write") ||
+-		!info->tx_buf)
++	if (!info->tx_buf)
+ 		goto cleanup;
+=20
+ 	if (info->params.mode =3D=3D MGSL_MODE_HDLC) {
+@@ -1600,9 +1570,6 @@ static unsigned int mgslpc_write_room(struct tty_stru=
+ct *tty)
+ 	MGSLPC_INFO *info =3D (MGSLPC_INFO *)tty->driver_data;
+ 	int ret;
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_write_room"))
+-		return 0;
+-
+ 	if (info->params.mode =3D=3D MGSL_MODE_HDLC) {
+ 		/* HDLC (frame oriented) mode */
+ 		if (info->tx_active)
+@@ -1632,9 +1599,6 @@ static unsigned int mgslpc_chars_in_buffer(struct tty=
+_struct *tty)
+ 		printk("%s(%d):mgslpc_chars_in_buffer(%s)\n",
+ 			 __FILE__, __LINE__, info->device_name);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_chars_in_buffer"))
+-		return 0;
+-
+ 	if (info->params.mode =3D=3D MGSL_MODE_HDLC)
+ 		rc =3D info->tx_active ? info->max_frame_size : 0;
+ 	else
+@@ -1658,9 +1622,6 @@ static void mgslpc_flush_buffer(struct tty_struct *tt=
+y)
+ 		printk("%s(%d):mgslpc_flush_buffer(%s) entry\n",
+ 			 __FILE__, __LINE__, info->device_name);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_flush_buffer"))
+-		return;
+-
+ 	spin_lock_irqsave(&info->lock, flags);
+ 	info->tx_count =3D info->tx_put =3D info->tx_get =3D 0;
+ 	del_timer(&info->tx_timer);
+@@ -1681,9 +1642,6 @@ static void mgslpc_send_xchar(struct tty_struct *tty,=
+ char ch)
+ 		printk("%s(%d):mgslpc_send_xchar(%s,%d)\n",
+ 			 __FILE__, __LINE__, info->device_name, ch);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_send_xchar"))
+-		return;
+-
+ 	info->x_char =3D ch;
+ 	if (ch) {
+ 		spin_lock_irqsave(&info->lock, flags);
+@@ -1704,9 +1662,6 @@ static void mgslpc_throttle(struct tty_struct * tty)
+ 		printk("%s(%d):mgslpc_throttle(%s) entry\n",
+ 			 __FILE__, __LINE__, info->device_name);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_throttle"))
+-		return;
+-
+ 	if (I_IXOFF(tty))
+ 		mgslpc_send_xchar(tty, STOP_CHAR(tty));
+=20
+@@ -1729,9 +1684,6 @@ static void mgslpc_unthrottle(struct tty_struct * tty)
+ 		printk("%s(%d):mgslpc_unthrottle(%s) entry\n",
+ 			 __FILE__, __LINE__, info->device_name);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_unthrottle"))
+-		return;
+-
+ 	if (I_IXOFF(tty)) {
+ 		if (info->x_char)
+ 			info->x_char =3D 0;
+@@ -2160,9 +2112,6 @@ static int mgslpc_break(struct tty_struct *tty, int b=
+reak_state)
+ 		printk("%s(%d):mgslpc_break(%s,%d)\n",
+ 			 __FILE__, __LINE__, info->device_name, break_state);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_break"))
+-		return -EINVAL;
+-
+ 	spin_lock_irqsave(&info->lock, flags);
+ 	if (break_state =3D=3D -1)
+ 		set_reg_bits(info, CHA+DAFO, BIT6);
+@@ -2218,9 +2167,6 @@ static int mgslpc_ioctl(struct tty_struct *tty,
+ 		printk("%s(%d):mgslpc_ioctl %s cmd=3D%08X\n", __FILE__, __LINE__,
+ 			info->device_name, cmd);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_ioctl"))
+-		return -ENODEV;
+-
+ 	if (cmd !=3D TIOCMIWAIT) {
+ 		if (tty_io_error(tty))
+ 		    return -EIO;
+@@ -2312,9 +2258,6 @@ static void mgslpc_close(struct tty_struct *tty, stru=
+ct file * filp)
+ 	MGSLPC_INFO * info =3D (MGSLPC_INFO *)tty->driver_data;
+ 	struct tty_port *port =3D &info->port;
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_close"))
+-		return;
+-
+ 	if (debug_level >=3D DEBUG_LEVEL_INFO)
+ 		printk("%s(%d):mgslpc_close(%s) entry, count=3D%d\n",
+ 			 __FILE__, __LINE__, info->device_name, port->count);
+@@ -2352,9 +2295,6 @@ static void mgslpc_wait_until_sent(struct tty_struct =
+*tty, int timeout)
+ 		printk("%s(%d):mgslpc_wait_until_sent(%s) entry\n",
+ 			 __FILE__, __LINE__, info->device_name);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_wait_until_sent"))
+-		return;
+-
+ 	if (!tty_port_initialized(&info->port))
+ 		goto exit;
+=20
+@@ -2412,9 +2352,6 @@ static void mgslpc_hangup(struct tty_struct *tty)
+ 		printk("%s(%d):mgslpc_hangup(%s)\n",
+ 			 __FILE__, __LINE__, info->device_name);
+=20
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_hangup"))
+-		return;
+-
+ 	mgslpc_flush_buffer(tty);
+ 	shutdown(info, tty);
+ 	tty_port_hangup(&info->port);
+@@ -2468,8 +2405,12 @@ static int mgslpc_open(struct tty_struct *tty, struc=
+t file * filp)
+ 	info =3D mgslpc_device_list;
+ 	while(info && info->line !=3D line)
+ 		info =3D info->next_device;
+-	if (mgslpc_paranoia_check(info, tty->name, "mgslpc_open"))
++	if (!info) {
++		printk(KERN_WARNING "%s(%d):mgslpc_open: "
++			"no device for line #%d.\n",
++			__FILE__, __LINE__, line);
+ 		return -ENODEV;
++	}
+=20
+ 	port =3D &info->port;
+ 	tty->driver_data =3D info;
 --=20
 2.30.2
 
---giavft5aq6szb66s
+--ainb25crrpdnzvbz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNZt+cACgkQvP0LAY0m
-WPGU2g//ealvvVdNSk/+j901xtE1Cn9QAl98lXslGQsYfilZkbInrouwago5FJ12
-w0A4HDWLv06lawk1BcZof2bpTkVK3oyLs/zy94ZwTi8WOC1HkKArulk0w4YHe0AE
-jt/tA+FMQAYzcMBdtkKfsQZ+YYNjyUCVWW4xHwak6/tndMEtEnnPuHQbWcRvi6Kw
-iyt3C28j3hnRq8ZkRmSnbNc1IHmuo/ULgROhn83SuX5OUnHIIRn8EoMvSg44CpUP
-3c1nJNjv3GW32/8EDumTFGKpGVFr6kqHqX8x8AZd+EpuVBaLuQ+LyxJs52ByE3lL
-q3CFT0VmsCVf8JMqXyqMbJl1oSo4EeF2RI494nsiR4vduDtWbr2lg6qqPfvzXl7C
-iECR1OfZ9svLjyQ3INqG1GL0Tw46P5HGkqtl+ScoAdDoxgsXKFyA+VhEoVlyII3n
-FBKaBDsv6J89fU5w+tdwnvl/dybLgUICigUCGQupyGpXFgf2ruCOGiBPPf3uXH4F
-V82MdEiTDXaihwbRN3K5kxoO4B4krANkjRmUlGlHtvtki6q/fMNs3/cby9+/WFjb
-mYpBBrPS0sG0+Abtf5s4qOhxvidFMv0gz1zHoqwQB9uR6awbNop5tIuiCorE/tsY
-VRVUBF3LeYei5ykJydNDratNNzzab4KgMNQX7FqCobk3VBCmOpg=
-=Eazf
+iQIzBAABCgAdFiEEfWlHToQCjFzAxEFjvP0LAY0mWPEFAmNZt+wACgkQvP0LAY0m
+WPEx/Q//bVkUvkkalzcQenJBzVetYREcKr6YHGXrRdWbsWtgFk6DWIoRG61dX0iW
+ifXRbFEkO9CD6iA0DdrHsq5i/jkBsco2SG9zscr1OUL/Y6C2y21vjR5psR8qnGvr
+8ae9l7vH1CurTEEbGf1hIaK3uifjot/EvY+jEfOXnnikTsc8CvfAK0Mmvp/Bw4Ya
+QuDnuCiIB3qNlqtho+75vS2WZtHrUVWjpBoUH+7LocWMuXoRud4vPInBWOxQoDfE
+AUuBE2Oet2V2SI6shjvj4/J4w+2+x4P2xAebI7WvybekoiJwl6hqgtkFweY72Gxj
+xqEUpcRM5WHjJg3XYNDhzO+VpYvTK1WhQelMSiEWGLlfp7GagrLZtvleFToqbV0c
+Uylthu1frK6ADJEhKVfNREgL9eNJyRQ3sk228ArcqfhOt+hMteApVM6V6YTqNBpZ
+7JbEAeS4QkDRGdlwmJ25AdOV98EXG7TJF6tWyffL8dz+VM+1NLHCFX9VOYV/70wu
+A0PDBcodKukhKu/FlQkO6MkHTJ19QJYr847/dvNFRxqULWV0uT3CeS6g85cqWy7u
+a8haLJWU3+zFi4rYHQCYn6CMC923VNz8vf3mCUFhftgYqljtfUKy+h6dUGkXQEZ9
+um0G/TnE7EWCBCR1jnvLJlSHgGjHUfDAMyKX3HE5Wq+NpY4F5Q0=
+=11Qt
 -----END PGP SIGNATURE-----
 
---giavft5aq6szb66s--
+--ainb25crrpdnzvbz--
