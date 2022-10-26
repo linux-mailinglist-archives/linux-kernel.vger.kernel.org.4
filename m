@@ -2,67 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE18960E2EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D7260E2ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234182AbiJZOLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
+        id S234185AbiJZOLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbiJZOLe (ORCPT
+        with ESMTP id S234189AbiJZOLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:11:34 -0400
+        Wed, 26 Oct 2022 10:11:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B22A3AAD;
-        Wed, 26 Oct 2022 07:11:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEFBDFC17;
+        Wed, 26 Oct 2022 07:11:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF95761EC1;
-        Wed, 26 Oct 2022 14:11:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35B4DC43142;
-        Wed, 26 Oct 2022 14:11:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC6F461F1D;
+        Wed, 26 Oct 2022 14:11:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 103B7C43470;
+        Wed, 26 Oct 2022 14:11:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666793493;
-        bh=YMIF5UCWISG2ob0vvfFQtpNcUPd+lX4YhYyWt0PFYPw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dCCnkTS6zQYXpli9FHZ3e7+Dogw8PaXYNgjsWYWZcuPL0kREvUpGKJtP4qBggBodN
-         2AMODGNDYnn4B7/vXd8sq4gdpeRhscDJp4UaGXRNI6dLkAm0M1nQoSnemavqR6+4QG
-         c73C/TQ3Hn86w+Boor+bUecKVVhFzNbQ/EgtI85Skrhrt5/7ee69/w98i9SqgdGl3e
-         ZTYZ88KE3ZHmD8BwhFwr5fDAJnjNVr9haOpBqvrko0bS1YFjFiepe+nz31iSFkSA3+
-         jgMnKrdWPQzTBG1pUCicthhiwteujQHpqXOIhjUGVfrfJKwr+nOKQKcF7MlZ/KFOuL
-         7hfJ51haA9kKw==
-Received: by mail-lj1-f169.google.com with SMTP id o4so17267156ljp.8;
-        Wed, 26 Oct 2022 07:11:33 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3pDNHafGb3fNm4dnGpXq6wki8FvI5gB5lOW6UBLTEphwHB4x0g
-        7PzvvbvIDAvGVJNodLXBPCpcGbT5PF8UK9sD3g==
-X-Google-Smtp-Source: AMsMyM6i/jjuNFCIcusJ8ZdpQuFHkRapKnNvN0juosoob6Nyxuo+jLAbTwN/yM4+V2v4zQPVryPgNoBO+QR4ZVRpbGk=
-X-Received: by 2002:a05:651c:114a:b0:25d:5ae6:42a4 with SMTP id
- h10-20020a05651c114a00b0025d5ae642a4mr16242008ljo.255.1666793491191; Wed, 26
- Oct 2022 07:11:31 -0700 (PDT)
+        s=k20201202; t=1666793501;
+        bh=A4HWxpOUTvcYoLIu6PA/gJqS6JUpPF+81q8U5rfVUjg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hgUlTSc4eoFdgnMKyupiYVziW+G8pwFArYWAfJ1NiOgm2l2slLNlu0k6JYdNw9VHZ
+         1K1JwwfPFaVLTbOUNgdmPpiuc6zD3OW1WjtyBZJ4+IQGMtBuyakmYiDshjoSzCcswx
+         1Mos7gKI/vXSZvLr1VLbAkHipisTkhiLliYoA6jKbl6y88yFCrd+TZRUiCEnk0bbY+
+         glzjn/YbtSfJT7wgM+q4C3zXFMPu3abL9VzSJ6NMzYdS+yH5bfiUOzV7IgeRbOoMwQ
+         hDyN5Wwywt3t1l1WvtU09VD+FfWqxAFnTDpqjdmOv7Ci/d6L/c/tiIVrFPgaqrgGsd
+         ny+6/KaZ2Jc0Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id EF4EA404BE; Wed, 26 Oct 2022 11:11:32 -0300 (-03)
+Date:   Wed, 26 Oct 2022 11:11:32 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 5/8] perf test: Add system-wide mode in perf record tests
+Message-ID: <Y1lAFJV3IO+P+3u2@kernel.org>
+References: <20221020172643.3458767-1-namhyung@kernel.org>
+ <20221020172643.3458767-6-namhyung@kernel.org>
+ <CAP-5=fVDi8Cj2XenWDB_rENJPYj_Nafo7BE2c7XiOGYUh1QqLw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221024173434.32518-1-afd@ti.com>
-In-Reply-To: <20221024173434.32518-1-afd@ti.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 26 Oct 2022 09:11:21 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
-Message-ID: <CAL_JsqJxgVwsjKnkCEkZeoSsDgaRD+DVPkHRBc2SrcSq69PBNw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] Rename DTB overlay source files
-To:     Andrew Davis <afd@ti.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fVDi8Cj2XenWDB_rENJPYj_Nafo7BE2c7XiOGYUh1QqLw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -73,50 +63,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 12:34 PM Andrew Davis <afd@ti.com> wrote:
->
-> Hello all,
->
-> This is a series based on my patch here[0]. As suggested by Rob
-> I've resurrected Frank's patch and appended it to mine as a series.
->
-> First patch here is my original patch, 3rd is Frank's patch but with
-> the unittest changes pulled out into the 2nd patch. That was re-worked
-> moving the source building macro into scripts/Makefile.lib.
->
-> Patches 4, 5, and 6 are an attempt at renaming all the existing DTB
-> overlays. Split out by platform so they could be taken by platform
-> maintainers or if easier ACK'd here and taken all together.
->
-> This should cover all the DTB overlays so we can remove the old .dts
-> rule for overlays and make .dtso the only supported way, let me know
-> if we want that this cycle and I can post that too.
->
+Em Thu, Oct 20, 2022 at 05:00:39PM -0700, Ian Rogers escreveu:
+> On Thu, Oct 20, 2022 at 10:26 AM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > Add system wide recording test with the same pattern.  It'd skip the
+> > test when it failes to run perf record.  For system-wide mode, it needs
+> 
+> nit: s/failes/fails/
+> 
+> > to avoid build-id collection and synthesis because the test only cares
+> > about the test program and kernel would generates necessary events as
+> 
+> nit: s/generates/generate the/
+
+fixed
+ 
+> > the process starts.
+> >
+> > Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> 
+> Acked-by: Ian Rogers <irogers@google.com>
+> 
 > Thanks,
-> Andrew
->
-> Changes from v1[1]:
->  - Added patch to rename pi433 overlay.
->  - Cleaned wording on patch 4-6.
->  - Collected some ACKs
->
-> [0] https://www.spinics.net/lists/kernel/msg4548509.html
-> [1] https://www.spinics.net/lists/arm-kernel/msg1020165.html
->
-> Andrew Davis (6):
->   kbuild: Allow DTB overlays to built from .dtso named source files
->   kbuild: Allow DTB overlays to built into .dtso.S files
->   arm64: dts: freescale: Rename DTB overlay source files from .dts to
->     .dtso
->   arm64: dts: renesas: Rename DTB overlay source files from .dts to
->     .dtso
->   arm64: dts: xilinx: Rename DTB overlay source files from .dts to .dtso
->   staging: pi433: overlay: Rename overlay source file from .dts to .dtso
->
-> Frank Rowand (1):
->   of: overlay: rename overlay source files from .dts to .dtso
+> Ian
+> 
+> > ---
+> >  tools/perf/tests/shell/record.sh | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> >
+> > diff --git a/tools/perf/tests/shell/record.sh b/tools/perf/tests/shell/record.sh
+> > index d1640d1daf2e..345764afb745 100755
+> > --- a/tools/perf/tests/shell/record.sh
+> > +++ b/tools/perf/tests/shell/record.sh
+> > @@ -154,10 +154,31 @@ test_register_capture() {
+> >    echo "Register capture test [Success]"
+> >  }
+> >
+> > +test_system_wide() {
+> > +  echo "Basic --system-wide mode test"
+> > +  if ! perf record -aB --synth=no -o "${perfdata}" ${testprog} 2> /dev/null
+> > +  then
+> > +    echo "System-wide record [Skipped not supported]"
+> > +    if [ $err -ne 1 ]
+> > +    then
+> > +      err=2
+> > +    fi
+> > +    return
+> > +  fi
+> > +  if ! perf report -i "${perfdata}" -q | grep -q "${testsym}"
+> > +  then
+> > +    echo "System-wide record [Failed missing output]"
+> > +    err=1
+> > +    return
+> > +  fi
+> > +  echo "Basic --system-wide mode test [Success]"
+> > +}
+> > +
+> >  build_test_program
+> >
+> >  test_per_thread
+> >  test_register_capture
+> > +test_system_wide
+> >
+> >  cleanup
+> >  exit $err
+> > --
+> > 2.38.0.135.g90850a2211-goog
+> >
 
-I've applied patches 1-3 and 7. I'll send a PR for the branch to the
-platform maintainers after a few days in linux-next.
+-- 
 
-Rob
+- Arnaldo
