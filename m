@@ -2,73 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA5360DCAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A5360DCB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbiJZH6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S233135AbiJZIAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232954AbiJZH6f (ORCPT
+        with ESMTP id S231649AbiJZIAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:58:35 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B3AA98E9
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:58:34 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so902063wms.0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+jyjrbZo+ELkTQHp1UO8qB1tgFnSatDzGs6yA5dAalk=;
-        b=D+lIzuFmmhNmptsvaY8BGQUNGKXCtzv9MHCJaBqvK9nBESL8oazEgpAqhXJVAJywpB
-         i0qxXytK2Dwz3lYx3b2byIBa7MjTi4+3R/V3Jt+8aDopFCPUPRQVDBddysrWAA0Phax+
-         GsYYY4ORqfBeJ0gh58fwYn4mOe9jZKXpaONekw+G4azlTm6jgFc3k+AqCucxptEumHuc
-         liQt7PiNML/sEXGIyXfUbanAFC9/tbEOA3DkJTRlKddeRB5fVya50nxVvbfV6LinPlC1
-         h3/iWju6Wi1Po0962nuxTwR6MKDELIciU2qzNQA7vRW34v/ASomx6+uoD/vRzRiOITSX
-         RO0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+jyjrbZo+ELkTQHp1UO8qB1tgFnSatDzGs6yA5dAalk=;
-        b=EdW9aJc98ezTizbLa1cXWkQZsnKfxqi/dsZ/XQmpcJF6qBgBQ36pSmJy/XOgNS3MUn
-         AQsXb4Bg4cVTIUcD6uCahvyI3w8gqTH/0nTDaYWZaiOE2PnUa9xaSGr4VxYNgA0o2XT8
-         gWqVul8Mo0NutVIzPA+ZdqOuD2YfJEdt5n1m+HlACE4xoO+xtgpY9KOo8ct1xBEYAWal
-         FOz2XXgx33RQ4ajjfZZlOyF+0ES5iCQGWYMgG1pBrLdJGzKXb03YBYBCLbKvoh56sTn0
-         kphQB6yQtjb8cRvRLY8Vy1j6Y+qENSqiXBk8L9cQhG+Yl7PV17o5qUfcPHtxKdfI67bp
-         SAzA==
-X-Gm-Message-State: ACrzQf39NT8EmaO62dna9qrgCCM19LWP/zP+lCyYdV5JXe0God8DGRKU
-        MBwXrYx3Bn5d7f/sf2Ji81sg5w==
-X-Google-Smtp-Source: AMsMyM6biL997EUrBv+5AmVPUHlDggoRWcpPcDDG67spwOF+g8th63MEzdahrujErNWbC8OUcQgQOw==
-X-Received: by 2002:a05:600c:1e28:b0:3c6:e046:9da7 with SMTP id ay40-20020a05600c1e2800b003c6e0469da7mr1497424wmb.43.1666771113122;
-        Wed, 26 Oct 2022 00:58:33 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id k1-20020a5d6e81000000b0022cc3e67fc5sm4562593wrz.65.2022.10.26.00.58.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 00:58:32 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 26 Oct 2022 09:58:28 +0200
-Subject: [PATCH] spi: meson-spicc: move wait completion in driver to take
- bursts delay in account
+        Wed, 26 Oct 2022 04:00:31 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB2543176;
+        Wed, 26 Oct 2022 01:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666771230; x=1698307230;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=ekxMYdeASdyQHgs8vqRYA2eL9dBearRTLTiGUWM3A6g=;
+  b=TxV3QIOnhkk07JW6hn6qadSaweG0TSpZr93y3R00ftxj6Y2NLEn6ljQM
+   vuJmccrAUFjQcdm8R32OSI310HPjW5pVV/diacpnDiB1Pk+U2FIzItlU/
+   PITy55u37e46rFrP+CfRBY2vTyMz9ld9VXU3duIK3vxDYIk71FKmYh9zP
+   KJAqNQAmc6kGR8xGT9rMYzYNWQ12BrO1L8u/Kged5TNgHZ2nxwbMIJMyz
+   WWxmkVR8PY20fSrQ3rZpECzYwRW3HPOtoct6u9vn9Dg62hA1IDSHQ8MyD
+   Y1XceRbpumaDY1ZXIErXHd0Q+fC3kYj7QXVLp8HJU9TyubS4nojKM/ukh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="305501040"
+X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
+   d="scan'208";a="305501040"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 01:00:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="877102274"
+X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
+   d="scan'208";a="877102274"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Oct 2022 01:00:29 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 01:00:29 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 01:00:28 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 26 Oct 2022 01:00:28 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.175)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 26 Oct 2022 01:00:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HseajafTN0uzUys5q8lcfYggjlOpPDHuT54fNd6XU0PR1bvBa9od2viMo3M9RgtAn4+2p/71L3BKyAA157BCHPtblrXD6BQtncX2ixVpZXk3gZ4MXMcQpIvHasMcEAbARH4zCYbNbtEpgtIuH7XkxN+KVtCOBtpJgzoxceNxJS5ulYMnc8Y6XmFULF7jYKBpdZ22kQBhHm69hrJhayaJJDYuF63U9FOngWscLU5mo6q93amX8XVgr8SYgJvBdOUgl9lXd3VLpq0wbp1uhBZNOnrGdAZEfb9Fkt/mXMufGwf6Cd+1aMhXu2EnpjYPHc+d4GC+/9gapAiVSinSuAHmYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MXXMXwNvD9RcMR3AM0PYx7f6a+nGW6eKhPrISp0DXmQ=;
+ b=PCzaiv42cE14AXZQzxcWNAcnSXRj7ns8LHToPjE7FbMnrKLFaVNYSfNDXmKMP4lqTe2v02aC5sYvuLsQIUud1dT3XupYO96+Ed8MapUroZUc+C1eR/peuKq3NiPM1BcDMscm0cqxI+b/Pp+XuZeVLTduT1j9S740lGWz99QX1+6qaVDQsR5vzjkegpcjgRgF1gawx1pqIb8AT5VsprWi4wSfLR5zxl52wZwVDO6Rr9nbFSRqggaAmrl0C7D8KMRCtkeMbtysOTslAo8Jqq0J7rnhT9vHlgLqcey1AtTsErk2zpOKg2RzzKWQugGthOTLe71i7jBniaO/+ghn14xB5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ by PH0PR11MB7562.namprd11.prod.outlook.com (2603:10b6:510:287::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Wed, 26 Oct
+ 2022 08:00:24 +0000
+Received: from MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::3f8d:1406:50e2:7bcc]) by MN0PR11MB6304.namprd11.prod.outlook.com
+ ([fe80::3f8d:1406:50e2:7bcc%3]) with mapi id 15.20.5723.033; Wed, 26 Oct 2022
+ 08:00:24 +0000
+Date:   Wed, 26 Oct 2022 16:00:13 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Hocko, Michal" <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Waiman Long <longman@redhat.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Chen, Tim C" <tim.c.chen@intel.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>
+Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
+Message-ID: <Y1jpDfwBQId3GkJC@feng-clx>
+References: <20221026074343.6517-1-feng.tang@intel.com>
+ <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
+X-ClientProxiedBy: SG2PR06CA0206.apcprd06.prod.outlook.com
+ (2603:1096:4:68::14) To MN0PR11MB6304.namprd11.prod.outlook.com
+ (2603:10b6:208:3c0::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221026-spicc-burst-delay-v1-0-1be5ffb7051a@linaro.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     linux-arm-kernel@lists.infradead.org, Da Xue <da@libre.computer>,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-spi@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|PH0PR11MB7562:EE_
+X-MS-Office365-Filtering-Correlation-Id: 918417b0-e5af-4ab0-ae87-08dab7282340
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zxw8pwsVasH2lFeQaHCxV5AdfahVd+4QMW7tQyqKpCzpdR4KPvNdLWeMFbxXTImA3XHDre4DlHsjG/SkWhQYOeJqjLbMjPV8C8OCQiiv5pYB80nV/uWq4tOAP8LgQdN2d0fHSIlEm0s5xBJISSZ+2DhljRdmcNeGns0ndf4VC6WjVw+XwAgHxSmSkKlN7NJcjRrAckAaMFp25aB7qgHMO898F2n40/KbIEti/+0M+9ec54/F7MO1q8FNU+7pyCr4bnWRpdrTrQxkVsG4cUyirM6c8BS2szwup/kk0PHhADvCqhVre/6Njba1praDCvTP722VeEh5pqlmj0VKOSFxYPZHK+CqvNjvCKcpH5EOePS+joXucsgK9sNOJtz5YlQ0C9S/Ja+1hpUMvYs/YrBcT6ASVfxtWISCdYiGOjhNEkfCZMDz3qiTJTXSMasXq+QQLRwNdhSn9Oa6EmuXje4Zd9Ygd7H2tIZR799uxSa0W+jrpByPQN5B5DdbN7P4+Z2MwmGF4GxQR4cwPTqnAwHOgiFM55Imrjr9epgAptfiy2qDwARGkDBLrZgbQSlVXxKQrr407Klb3EclUzuG43+egw1uc2WuXBFBkZBTqYSOQPHSTlThER8RPCxW40Hj7ut8Lkrr4VTg5XCPi9KTjELeFLr2ZlfIVETqi4Fgww1PNnUCnYD9rvjsADP3eUW51sk4HKBrn6hN4gWVFx2T9G3xYw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(366004)(346002)(136003)(39860400002)(376002)(451199015)(6512007)(53546011)(9686003)(26005)(6666004)(107886003)(478600001)(186003)(44832011)(6506007)(2906002)(54906003)(33716001)(4744005)(316002)(66476007)(66946007)(7416002)(8936002)(5660300002)(8676002)(66556008)(6916009)(4326008)(41300700001)(6486002)(86362001)(38100700002)(82960400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DdaApELdfEJ/5r1JPtJ0uJK3Aru8ObMVQhnkM4G8Sy9qGN2rrZBwCZytiwc6?=
+ =?us-ascii?Q?6YwkSExUAqZkYo3AMzIJGKCm4pzfPPe0k7eG9g9ZQWxyxpHzzhKXOeMD20lR?=
+ =?us-ascii?Q?Ercw2HtWJG/cZTkmSRzIRkuz5YbWUhXT2QJ72WDVi0wRS9EguuBuJ1bGiof2?=
+ =?us-ascii?Q?4I/J5OVeo2+Oi4Tf4YUuqYACCfpgWMMPJv34MY4vUFyRgr+TB9NJAb4UAQxG?=
+ =?us-ascii?Q?zHpmdtm3JG4/ZgRAeabxc2nccpP7bTJFO1pCa1Kb7UyDfMwr76w0WdcAMYzm?=
+ =?us-ascii?Q?ky4aq/0Y0dEchAAxNr3H7T4U1F12d8lZKypO3RJUWO8aBwYJQpgoRBD0O1sT?=
+ =?us-ascii?Q?RrlUU4P7heV2h5u85+CxKfomlZm0+ukd/2kKcvVMqSNToWq9cySEzUKURZEW?=
+ =?us-ascii?Q?s1b7K5EQcF5I0Du5U6T8L9wSjMuspgphba1mzbkTuZll9OTUw1DpVcPdshGr?=
+ =?us-ascii?Q?QmSDRasbY9kxre6HgchHlDLTnOaITU5dpar0Jc/gRTifTEQuF7wV38l832Oz?=
+ =?us-ascii?Q?jI10cpi1b2Gb/fUyUVA3SdqDPQB6S6W5ZBpNrAmXCfUwRzPZD6ZSNvpmrjsc?=
+ =?us-ascii?Q?T0DORkyCKFgUx+5u1JyebmCeYMFFRksfXdGc/zgYV+xItZtLI+SiwtGbxsSv?=
+ =?us-ascii?Q?dPDj0Bo3FkqTtq9R6BdRCQ3OayEAUItG5Q2/qCS5gR16UTEskrk/hZfyhs/v?=
+ =?us-ascii?Q?ElvjJ+BZr65SZmnOrgQaHYaya36rXeTgACQDb5HNhaKKJkn/QA/cFbJNnvZT?=
+ =?us-ascii?Q?splOQzWHmnhj3ZiL0o/oFZNBjGAKeS5DvvydOjh3ISh/+WJmPGmkqQ7kq3it?=
+ =?us-ascii?Q?LpudKNjoPzPpilKG/6j3Y/MdcgLPY7m++YRvA8nXQ1/fFh9HJQGwwiwN7XOX?=
+ =?us-ascii?Q?0k03Ebzpia+QwyPvO3aehLkwaE8WjPFFZDeDz73VHL2aiPSktngY2T4cVfQe?=
+ =?us-ascii?Q?gzedyGSOBIUpSM3pqDtyd9jFc95MhFqDWz5TCWcKjn054qswv5xkqQMK6tCQ?=
+ =?us-ascii?Q?b+AcFzEzxcF3n7rcdNKcQeJlZ65ZNia+pviVL8LJDc18D4y5BhH7ZFu2jPaE?=
+ =?us-ascii?Q?9OsTvpTD9LGXV7hG8SZYUNyNuANR+2FII/NDYhipOmwKJCR8RLeC9IcIqcEn?=
+ =?us-ascii?Q?JmxrSyZTIzhjC722DjHl/0AirOdRTNHZB0BAkjr1iB+yPITvIyTjNgEETHlw?=
+ =?us-ascii?Q?ZB3UXkl1mirRP67b8+f6g0gUFz2+lucTSc5qHKdnWoGFMhIc3PSTl1tan1LZ?=
+ =?us-ascii?Q?daKLwu2EuDZzBOKKIeKUVk0pTghKKNRRamrWtF5fo7lqgEtBpIbBfA5BH/TX?=
+ =?us-ascii?Q?SOcNU1zzgvdb7ILb9pWcK2e9mGNPv+9fWR85TrgfKN2t29rwREio8G2RLesC?=
+ =?us-ascii?Q?7KaucQtzJ6vfulcCKSJ+LEM6bqieqdGifsafgoBlImnqQH9vqL1bULbP03z5?=
+ =?us-ascii?Q?FLbP9EY3wGILikLHA8tfUwAV1VU6BcClFIf7VbsDHenWDF3vZautVCuhNfff?=
+ =?us-ascii?Q?QtKgrbPUe3CWcSBNc8OmEfUW+nobHqjG20ElDN+7u0hXQvZtKQ7oXgOUBazo?=
+ =?us-ascii?Q?cJW7eW8499V89anrLS9s6VYpRKMRjDrTxzBqMoJV?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 918417b0-e5af-4ab0-ae87-08dab7282340
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 08:00:24.5455
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LzV3lum1mKtlB5ef3Jib6iIPNlS+HtQO1FA6dGeyzWDRik3MYl+kZz2dlyvDXGs6NvYQvDE2yBKwV0HZ1G/4Kw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7562
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,101 +160,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some delay occurs between each bursts, thus the default delay is wrong
-and a timeout will occur with big enough transfers.
+On Wed, Oct 26, 2022 at 03:49:48PM +0800, Aneesh Kumar K V wrote:
+> On 10/26/22 1:13 PM, Feng Tang wrote:
+> > In page reclaim path, memory could be demoted from faster memory tier
+> > to slower memory tier. Currently, there is no check about cpuset's
+> > memory policy, that even if the target demotion node is not allowd
+> > by cpuset, the demotion will still happen, which breaks the cpuset
+> > semantics.
+> > 
+> > So add cpuset policy check in the demotion path and skip demotion
+> > if the demotion targets are not allowed by cpuset.
+> > 
+> 
+> What about the vma policy or the task memory policy? Shouldn't we respect
+> those memory policy restrictions while demoting the page? 
+ 
+Good question! We have some basic patches to consider memory policy
+in demotion path too, which are still under test, and will be posted
+soon. And the basic idea is similar to this patch.
 
-The solution is to handle the timeout management in the driver and
-add some delay for each bursts in the timeout calculation.
+Thanks,
+Feng
 
-Reported-by: Da Xue <da@libre.computer>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
-To: Mark Brown <broonie@kernel.org>
-To: Kevin Hilman <khilman@baylibre.com>
-To: Jerome Brunet <jbrunet@baylibre.com>
-To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc: linux-spi@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-amlogic@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/spi/spi-meson-spicc.c | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/spi/spi-meson-spicc.c b/drivers/spi/spi-meson-spicc.c
-index bad201510a99..52bffab18329 100644
---- a/drivers/spi/spi-meson-spicc.c
-+++ b/drivers/spi/spi-meson-spicc.c
-@@ -160,6 +160,7 @@ struct meson_spicc_device {
- 	struct clk			*clk;
- 	struct spi_message		*message;
- 	struct spi_transfer		*xfer;
-+	struct completion		done;
- 	const struct meson_spicc_data	*data;
- 	u8				*tx_buf;
- 	u8				*rx_buf;
-@@ -282,7 +283,7 @@ static irqreturn_t meson_spicc_irq(int irq, void *data)
- 		/* Disable all IRQs */
- 		writel(0, spicc->base + SPICC_INTREG);
- 
--		spi_finalize_current_transfer(spicc->master);
-+		complete(&spicc->done);
- 
- 		return IRQ_HANDLED;
- 	}
-@@ -386,6 +387,7 @@ static int meson_spicc_transfer_one(struct spi_master *master,
- 				    struct spi_transfer *xfer)
- {
- 	struct meson_spicc_device *spicc = spi_master_get_devdata(master);
-+	unsigned long timeout;
- 
- 	/* Store current transfer */
- 	spicc->xfer = xfer;
-@@ -410,13 +412,29 @@ static int meson_spicc_transfer_one(struct spi_master *master,
- 	/* Setup burst */
- 	meson_spicc_setup_burst(spicc);
- 
-+	/* Setup wait for completion */
-+	reinit_completion(&spicc->done);
-+
-+	/* For each byte we wait for 8 cycles of the SPI clock */
-+	timeout = 8LL * MSEC_PER_SEC * xfer->len;
-+	do_div(timeout, xfer->speed_hz);
-+
-+	/* Add 10us delay between each fifo bursts */
-+	timeout += ((xfer->len >> 4) * 10) / MSEC_PER_SEC;
-+
-+	/* Increase it twice and add 200 ms tolerance */
-+	timeout += timeout + 200;
-+
- 	/* Start burst */
- 	writel_bits_relaxed(SPICC_XCH, SPICC_XCH, spicc->base + SPICC_CONREG);
- 
- 	/* Enable interrupts */
- 	writel_relaxed(SPICC_TC_EN, spicc->base + SPICC_INTREG);
- 
--	return 1;
-+	if (!wait_for_completion_timeout(&spicc->done, msecs_to_jiffies(timeout)))
-+		return -ETIMEDOUT;
-+
-+	return 0;
- }
- 
- static int meson_spicc_prepare_message(struct spi_master *master,
-@@ -743,6 +761,8 @@ static int meson_spicc_probe(struct platform_device *pdev)
- 	spicc->pdev = pdev;
- 	platform_set_drvdata(pdev, spicc);
- 
-+	init_completion(&spicc->done);
-+
- 	spicc->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(spicc->base)) {
- 		dev_err(&pdev->dev, "io resource mapping failed\n");
-
----
-base-commit: 247f34f7b80357943234f93f247a1ae6b6c3a740
-change-id: 20221026-spicc-burst-delay-ea0526602760
-
-Best regards,
--- 
-Neil Armstrong <neil.armstrong@linaro.org>
+> -aneesh
