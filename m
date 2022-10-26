@@ -2,173 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4942860DEAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF47960DEBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 12:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbiJZKMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 06:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S233121AbiJZKPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 06:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233111AbiJZKMO (ORCPT
+        with ESMTP id S233111AbiJZKPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 06:12:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092BDCE2D;
-        Wed, 26 Oct 2022 03:12:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B88001FD59;
-        Wed, 26 Oct 2022 10:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666779132; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j/Y48pcNkqn3S/xTguuWcH01a65LRpiTF8wppHlOxB8=;
-        b=SZKcYXDOP4ubEKgKj1btbrAef5iNo+hxa02YCl2qpvLOFH9txOYnxt6Ht5JPOCQCD1yz1D
-        1s26gFCSbY/1UlJVCbOe/mO31iQNeVdG0xwYcAs/njtKONGHGoejlA0uWDYMkNzWuHp2NX
-        OPivxQHZ5746mK9VZ/981EaFty4T6hs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666779132;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j/Y48pcNkqn3S/xTguuWcH01a65LRpiTF8wppHlOxB8=;
-        b=qyHz9U4XYPZpk5WUzLX1rGSQGkjpfLeHpTS6Ue00WskBVLYHICly6QrniHDhZhe1oql2r4
-        liViSjGp9ymPLADQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A8CF413A77;
-        Wed, 26 Oct 2022 10:12:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id OPo+KfwHWWMJeAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 26 Oct 2022 10:12:12 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 3F26AA06F9; Wed, 26 Oct 2022 12:12:12 +0200 (CEST)
-Date:   Wed, 26 Oct 2022 12:12:12 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
-        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v3 4/4] ext4: fix bug_on in __es_tree_search caused by
- bad boot loader inode
-Message-ID: <20221026101212.q7bhteu3c6g4af25@quack3>
-References: <20221026042310.3839669-1-libaokun1@huawei.com>
- <20221026042310.3839669-5-libaokun1@huawei.com>
+        Wed, 26 Oct 2022 06:15:39 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9291C40E31;
+        Wed, 26 Oct 2022 03:15:33 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 7750B1102D;
+        Wed, 26 Oct 2022 13:15:31 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 56210111A8;
+        Wed, 26 Oct 2022 13:15:29 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id 3440E3C07D9;
+        Wed, 26 Oct 2022 13:15:29 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29QAFR91036797;
+        Wed, 26 Oct 2022 13:15:28 +0300
+Date:   Wed, 26 Oct 2022 13:15:27 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>
+cc:     netdev@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] ipv4: fix source address and gateway mismatch under
+ multiple default gateways
+In-Reply-To: <20221026032017.3675060-1-william.xuanziyang@huawei.com>
+Message-ID: <5e0249d-b6e1-44fa-147b-e2af65e56f64@ssi.bg>
+References: <20221026032017.3675060-1-william.xuanziyang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026042310.3839669-5-libaokun1@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26-10-22 12:23:10, Baokun Li wrote:
-> We got a issue as fllows:
-> ==================================================================
->  kernel BUG at fs/ext4/extents_status.c:203!
->  invalid opcode: 0000 [#1] PREEMPT SMP
->  CPU: 1 PID: 945 Comm: cat Not tainted 6.0.0-next-20221007-dirty #349
->  RIP: 0010:ext4_es_end.isra.0+0x34/0x42
->  RSP: 0018:ffffc9000143b768 EFLAGS: 00010203
->  RAX: 0000000000000000 RBX: ffff8881769cd0b8 RCX: 0000000000000000
->  RDX: 0000000000000000 RSI: ffffffff8fc27cf7 RDI: 00000000ffffffff
->  RBP: ffff8881769cd0bc R08: 0000000000000000 R09: ffffc9000143b5f8
->  R10: 0000000000000001 R11: 0000000000000001 R12: ffff8881769cd0a0
->  R13: ffff8881768e5668 R14: 00000000768e52f0 R15: 0000000000000000
->  FS: 00007f359f7f05c0(0000)GS:ffff88842fd00000(0000)knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 00007f359f5a2000 CR3: 000000017130c000 CR4: 00000000000006e0
->  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->  Call Trace:
->   <TASK>
->   __es_tree_search.isra.0+0x6d/0xf5
->   ext4_es_cache_extent+0xfa/0x230
->   ext4_cache_extents+0xd2/0x110
->   ext4_find_extent+0x5d5/0x8c0
->   ext4_ext_map_blocks+0x9c/0x1d30
->   ext4_map_blocks+0x431/0xa50
->   ext4_mpage_readpages+0x48e/0xe40
->   ext4_readahead+0x47/0x50
->   read_pages+0x82/0x530
->   page_cache_ra_unbounded+0x199/0x2a0
->   do_page_cache_ra+0x47/0x70
->   page_cache_ra_order+0x242/0x400
->   ondemand_readahead+0x1e8/0x4b0
->   page_cache_sync_ra+0xf4/0x110
->   filemap_get_pages+0x131/0xb20
->   filemap_read+0xda/0x4b0
->   generic_file_read_iter+0x13a/0x250
->   ext4_file_read_iter+0x59/0x1d0
->   vfs_read+0x28f/0x460
->   ksys_read+0x73/0x160
->   __x64_sys_read+0x1e/0x30
->   do_syscall_64+0x35/0x80
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
->   </TASK>
-> ==================================================================
-> 
-> In the above issue, ioctl invokes the swap_inode_boot_loader function to
-> swap inode<5> and inode<12>. However, inode<5> contain incorrect imode and
-> disordered extents, and i_nlink is set to 1. The extents check for inode in
-> the ext4_iget function can be bypassed bacause 5 is EXT4_BOOT_LOADER_INO.
-> While links_count is set to 1, the extents are not initialized in
-> swap_inode_boot_loader. After the ioctl command is executed successfully,
-> the extents are swapped to inode<12>, in this case, run the `cat` command
-> to view inode<12>. And Bug_ON is triggered due to the incorrect extents.
-> 
-> When the boot loader inode is not initialized, its imode can be one of the
-> following:
-> 1) the imode is a bad type, which is marked as bad_inode in ext4_iget and
->    set to S_IFREG.
-> 2) the imode is good type but not S_IFREG.
-> 3) the imode is S_IFREG.
-> 
-> The BUG_ON may be triggered by bypassing the check in cases 1 and 2.
-> Therefore, when the boot loader inode is bad_inode or its imode is not
-> S_IFREG, initialize the inode to avoid triggering the BUG.
-> 
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Looks good to me. Feel free to add:
+	Hello,
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+On Wed, 26 Oct 2022, Ziyang Xuan wrote:
 
-								Honza
+> We found a problem that source address doesn't match with selected gateway
+> under multiple default gateways. The reproducer is as following:
+> 
+> Setup in client as following:
+> 
+> $ ip link add link eth2 dev eth2.71 type vlan id 71
+> $ ip link add link eth2 dev eth2.72 type vlan id 72
+> $ ip addr add 192.168.71.41/24 dev eth2.71
+> $ ip addr add 192.168.72.41/24 dev eth2.72
+> $ ip link set eth2.71 up
+> $ ip link set eth2.72 up
+> $ route add -net default gw 192.168.71.1 dev eth2.71
+> $ route add -net default gw 192.168.72.1 dev eth2.72
 
+	Second route goes to first position due to the
+prepend operation for the route add command. That is
+why 192.168.72.41 is selected.
+
+> Add a nameserver configuration in the following file:
+> $ cat /etc/resolv.conf
+> nameserver 8.8.8.8
+> 
+> Setup in peer server as following:
+> 
+> $ ip link add link eth2 dev eth2.71 type vlan id 71
+> $ ip link add link eth2 dev eth2.72 type vlan id 72
+> $ ip addr add 192.168.71.1/24 dev eth2.71
+> $ ip addr add 192.168.72.1/24 dev eth2.72
+> $ ip link set eth2.71 up
+> $ ip link set eth2.72 up
+> 
+> Use the following command trigger DNS packet in client:
+> $ ping www.baidu.com
+> 
+> Capture packets with tcpdump in client when ping:
+> $ tcpdump -i eth2 -vne
+> ...
+> 20:30:22.996044 52:54:00:20:23:a9 > 52:54:00:d2:4f:e3, ethertype 802.1Q (0x8100), length 77: vlan 71, p 0, ethertype IPv4, (tos 0x0, ttl 64, id 25407, offset 0, flags [DF], proto UDP (17), length 59)
+>     192.168.72.41.42666 > 8.8.8.8.domain: 58562+ A? www.baidu.com. (31)
+> ...
+> 
+> We get the problem that IPv4 saddr "192.168.72.41" do not match with
+> selected VLAN device "eth2.71".
+
+	The problem could be that source address is selected
+once and later used as source address in following routing lookups.
+
+	And your routing rules do not express the restriction that
+both addresses can not be used for specific route. If you have
+such restriction which is common, you should use source-specific routes:
+
+1. ip rule to consider table main only for link routes,
+no default routes here
+
+ip rule add prio 10 table main
+
+2. source-specific routes:
+
+ip rule add prio 20 from 192.168.71.0/24 table 20
+ip route append default via 192.168.71.1 dev eth2.71 src 192.168.71.41 table 20
+ip rule add prio 30 from 192.168.72.0/24 table 30
+ip route append default via 192.168.72.1 dev eth2.72 src 192.168.72.41 table 30
+
+3. Store default alternative routes not in table main:
+ip rule add prio 200 table 200
+ip route append default via 192.168.71.1 dev eth2.71 src 192.168.71.41 table 200
+ip route append default via 192.168.72.1 dev eth2.72 src 192.168.72.41 table 200
+
+	Above routes should work even without specifying prefsrc.
+
+	As result, table 200 is used only for routing lookups
+without specific source address, usually for first packet in
+connection, next packets should hit tables 20/30.
+
+	You can check https://ja.ssi.bg/dgd-usage.txt for such
+examples, see under 2. Alternative routes and dead gateway detection
+
+> In above scenario, the process does __ip_route_output_key() twice in
+> ip_route_connect(), the two processes have chosen different default gateway,
+> and the last choice is not the best.
+> 
+> Add flowi4->saddr and fib_nh_common->nhc_gw.ipv4 matching consideration in
+> fib_select_default() to fix that.
+
+	Other setups may not have such restriction, they can
+prefer any gateway in reachable state no matter the saddr.
+
+> Fixes: 19baf839ff4a ("[IPV4]: Add LC-Trie FIB lookup algorithm.")
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
 > ---
->  fs/ext4/ioctl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  net/ipv4/fib_semantics.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-> index e0be8026c996..8c7a4ae85e99 100644
-> --- a/fs/ext4/ioctl.c
-> +++ b/fs/ext4/ioctl.c
-> @@ -426,7 +426,7 @@ static long swap_inode_boot_loader(struct super_block *sb,
->  	/* Protect extent tree against block allocations via delalloc */
->  	ext4_double_down_write_data_sem(inode, inode_bl);
+> diff --git a/net/ipv4/fib_semantics.c b/net/ipv4/fib_semantics.c
+> index e9a7f70a54df..8bd94875a009 100644
+> --- a/net/ipv4/fib_semantics.c
+> +++ b/net/ipv4/fib_semantics.c
+> @@ -2046,6 +2046,7 @@ static void fib_select_default(const struct flowi4 *flp, struct fib_result *res)
+>  	int order = -1, last_idx = -1;
+>  	struct fib_alias *fa, *fa1 = NULL;
+>  	u32 last_prio = res->fi->fib_priority;
+> +	u8 prefix, max_prefix = 0;
+>  	dscp_t last_dscp = 0;
 >  
-> -	if (inode_bl->i_nlink == 0) {
-> +	if (is_bad_inode(inode_bl) || !S_ISREG(inode_bl->i_mode)) {
->  		/* this inode has never been used as a BOOT_LOADER */
->  		set_nlink(inode_bl, 1);
->  		i_uid_write(inode_bl, 0);
+>  	hlist_for_each_entry_rcu(fa, fa_head, fa_list) {
+> @@ -2078,6 +2079,11 @@ static void fib_select_default(const struct flowi4 *flp, struct fib_result *res)
+>  		if (!nhc->nhc_gw_family || nhc->nhc_scope != RT_SCOPE_LINK)
+>  			continue;
+>  
+> +		prefix = __ffs(flp->saddr ^ nhc->nhc_gw.ipv4);
+> +		if (prefix < max_prefix)
+> +			continue;
+> +		max_prefix = max_t(u8, prefix, max_prefix);
+> +
+>  		fib_alias_accessed(fa);
+>  
+>  		if (!fi) {
 > -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> 2.25.1
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
+
