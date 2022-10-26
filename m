@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A721660E0EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E83860E0EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:39:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbiJZMjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
+        id S233764AbiJZMj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233816AbiJZMj3 (ORCPT
+        with ESMTP id S233823AbiJZMj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 26 Oct 2022 08:39:29 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B093EC1EA;
-        Wed, 26 Oct 2022 05:39:21 -0700 (PDT)
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C36BEC1F5;
+        Wed, 26 Oct 2022 05:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1666787962; x=1698323962;
+  t=1666787961; x=1698323961;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=2wFwP5DO/Q0M+PToFWR6iInwUsotX6p9IkR/irjoawA=;
-  b=LuXoipBD/7Qrz7TLGl76RgbE+INWKTlemQOVdsHkqCDZebM/bNfY5FTA
-   M7J3kjRetHlKz3vfkwNvePNxA+CuFc1+u0pJpXLytwbORU/SkZ1WioqMC
-   0uSK7ueIpt64ItKeT8vYpFmJa/Ey8juQvIyBLQOH/lMSrXLtQW/GsjxVB
-   USHlOAG6brpp2ZAi3MiCVWKESt0/2i8O+qBFWi0Td96vDWC2jWlUk2gly
-   02s5sSgz6d8hbdjRWpMmdvcyItmTsbq40GG4YyxWDuH7qFTJytNCaalu4
-   Y5leLVFn7HqZeMNKbLeoOc5gCjOU3IKK4HFme1fK6UdeMNwqPiC+yBmFQ
-   Q==;
+  bh=iVoxQBlwpKU5kYBJRx5jbkUjy572KppbIP2UDBEugq8=;
+  b=ZQBYrjZOvLmEaG72k/w4C2Mg3g1GXjFmWxiSWXPCfP969wDBSu/FZaMf
+   7IsEmY8eDHbFkaA9wy8IIzwvUYFXsV/rir2Fr2h3zjzRDLsZwx5QqZhCD
+   cDmOl4G0yYI6L37ox7BykMzcWjAr4Ia0LivOia++H4SB5XOzQlz3Np+ON
+   AGWiIA1TQYoHtcaGZ2BY8ZN8Bk9KG2PkV12kCwipAZJgJiq+NRdvB1WzC
+   oNtr5kqwgFEYr6JsWNVq9XJGed2csSvi65trH63Jiqa14LoFW7wBRmq5v
+   xvCqLtWQzbfMmVTi5z1dg93sVwmNbG0jy6yzeAqi5Nx31yVdLQtj+cNE7
+   w==;
 X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="180590465"
+   d="scan'208";a="197101717"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Oct 2022 05:39:21 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Oct 2022 05:39:21 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 26 Oct 2022 05:39:18 -0700
+ 15.1.2507.12; Wed, 26 Oct 2022 05:39:21 -0700
 Received: from localhost.localdomain (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 26 Oct 2022 05:39:16 -0700
+ 15.1.2507.12 via Frontend Transport; Wed, 26 Oct 2022 05:39:18 -0700
 From:   Claudiu Beznea <claudiu.beznea@microchip.com>
 To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
@@ -46,9 +46,9 @@ To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH 06/11] ARM: dts: at91: sama7g5: add thermal zones node
-Date:   Wed, 26 Oct 2022 15:41:09 +0300
-Message-ID: <20221026124114.985876-7-claudiu.beznea@microchip.com>
+Subject: [PATCH 07/11] ARM: configs: at91: sama7: use make savedefconfig
+Date:   Wed, 26 Oct 2022 15:41:10 +0300
+Message-ID: <20221026124114.985876-8-claudiu.beznea@microchip.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20221026124114.985876-1-claudiu.beznea@microchip.com>
 References: <20221026124114.985876-1-claudiu.beznea@microchip.com>
@@ -57,92 +57,41 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add thermal zones node with its associated trips and cooling-maps.
-It uses CPUFreq as cooling device for temperatures in the interval
-[90, 100) degrees Celsius and describe the temperature of 100 degrees
-Celsius as critical temperature. System will be is shutting down when
-reaching critical temperature.
+Use make savedefconfig on sama7_defconfig.
 
 Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 ---
- arch/arm/boot/dts/sama7g5.dtsi | 42 ++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ arch/arm/configs/sama7_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/sama7g5.dtsi b/arch/arm/boot/dts/sama7g5.dtsi
-index 52829be04427..fb517f9aff30 100644
---- a/arch/arm/boot/dts/sama7g5.dtsi
-+++ b/arch/arm/boot/dts/sama7g5.dtsi
-@@ -17,6 +17,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/mfd/at91-usart.h>
- #include <dt-bindings/nvmem/microchip,sama7g5-otpc.h>
-+#include <dt-bindings/thermal/thermal.h>
- 
- / {
- 	model = "Microchip SAMA7G5 family SoC";
-@@ -36,6 +37,7 @@ cpu0: cpu@0 {
- 			clocks = <&pmc PMC_TYPE_CORE PMC_CPUPLL>;
- 			clock-names = "cpu";
- 			operating-points-v2 = <&cpu_opp_table>;
-+			#cooling-cells = <2>; /* min followed by max */
- 		};
- 	};
- 
-@@ -74,6 +76,46 @@ opp-1000000002 {
- 		};
- 	};
- 
-+	thermal-zones {
-+		cpu_thermal: cpu-thermal {
-+			polling-delay-passive = <1000>;
-+			polling-delay = <5000>;
-+			thermal-sensors = <&thermal_sensor>;
-+
-+			trips {
-+				cpu_normal: cpu-alert0 {
-+					temperature = <90000>;
-+					hysteresis = <0>;
-+					type = "passive";
-+				};
-+
-+				cpu_hot: cpu-alert1 {
-+					temperature = <95000>;
-+					hysteresis = <0>;
-+					type = "passive";
-+				};
-+
-+				cpu_critical: cpu-critical {
-+					temperature = <100000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu_normal>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+
-+				map1 {
-+					trip = <&cpu_hot>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+	};
-+
- 	clocks {
- 		slow_xtal: slow_xtal {
- 			compatible = "fixed-clock";
+diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defconfig
+index 8f28c9d443f0..dcd2705b7c97 100644
+--- a/arch/arm/configs/sama7_defconfig
++++ b/arch/arm/configs/sama7_defconfig
+@@ -211,13 +211,13 @@ CONFIG_NLS_ISO8859_1=y
+ CONFIG_NLS_UTF8=y
+ CONFIG_LSM="N"
+ CONFIG_CRYPTO_AUTHENC=y
+-CONFIG_CRYPTO_GCM=y
++CONFIG_CRYPTO_DES=y
+ CONFIG_CRYPTO_CBC=y
+ CONFIG_CRYPTO_CFB=y
+ CONFIG_CRYPTO_OFB=y
+ CONFIG_CRYPTO_XTS=y
++CONFIG_CRYPTO_GCM=y
+ CONFIG_CRYPTO_SHA1=y
+-CONFIG_CRYPTO_DES=y
+ CONFIG_CRYPTO_USER_API_HASH=m
+ CONFIG_CRYPTO_USER_API_SKCIPHER=m
+ CONFIG_CRYPTO_DEV_ATMEL_AES=y
 -- 
 2.34.1
 
