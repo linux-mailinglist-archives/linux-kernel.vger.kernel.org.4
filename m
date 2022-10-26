@@ -2,126 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EED060DD2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA3460DD4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiJZIkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
+        id S231877AbiJZIlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbiJZIkG (ORCPT
+        with ESMTP id S233381AbiJZIki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:40:06 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D22E1C92F
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:40:03 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id ud5so15782944ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 01:40:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pB+C6SdYHI1MJjuO7kRlLZxMto9minOW953/oIWwSMc=;
-        b=JoFBDXVY5isva+nxYxgaq3YVgdfHiUZhYlC0Sjiep3ioAnHAGPsoxDQ65NM95RlThs
-         X5xJVbdcg1RcxL/mzhYAny1E0NIbx5sLIHRniJ7T6f2DNIus1tAnnbqpP3qxbwFC8VWj
-         yV/SUIYv4a33e5AZY5AP4aB8HADC9onKuX9qLlIPFv0pCgKOFjiwBZzIWiyx0bW2gXJ5
-         AoPDqyJCdmRNVSbD1HFcPIy3gqLbDKXOT3pfiIrgfMbLifphg+4ZG81lKg9OtM7JkJ9e
-         agMRYckuS3J3+/0OeRHsRqIEiSsifi3A4+tFTSC2SNPpL6gwZb+EjMA5CIRv0aC98isI
-         Zsrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pB+C6SdYHI1MJjuO7kRlLZxMto9minOW953/oIWwSMc=;
-        b=xIZqnHJXZqIAsLn+/yfcoSM7rlluDzGkhq5D01ULE8vr9MI/YsjTS+/HOe9Ln2gW4G
-         JsE1RpASX927jpVPErWPOZGQLRsJlWlxTW7TX6PzHzZIeC6n8Odehsb6Dz1sIFm1SJRZ
-         YsKezDysFFkmkOdXFs5m37pNL2zJWDVmyBGOkzQDJW/qXStBq8JeEg9MsdtmBU2NcRbR
-         MFNVAnXeAuzKr6LmXuHa8N9xvrH020SXfBGMfz7z1Fq/rKLNHHPzMDu6MM+Nbdh9Ubh+
-         gazZfi5yrm9ClpZY2STbl6TY3dRJq6ibcd6jWb+i5GjxfFuj+pjYEG4aWlndPJzlzMZh
-         2Z+A==
-X-Gm-Message-State: ACrzQf3GRBH4IIaRHFoHNM+PGQsJqgM3+JZx05Vw6UnjjUxxx5aT1+tS
-        Zeu5rscPxsIXu3gN/lNroEc=
-X-Google-Smtp-Source: AMsMyM7UKMXUWTe8FYSuDI2bfhbwqS/rw2TfsjdvdhlWOZRFfg7UlDYfKYtExpOJzibuYs77q65BLg==
-X-Received: by 2002:a17:907:d03:b0:7a2:d213:de18 with SMTP id gn3-20020a1709070d0300b007a2d213de18mr17639680ejc.124.1666773601908;
-        Wed, 26 Oct 2022 01:40:01 -0700 (PDT)
-Received: from centennial.enunes.eu (ip-78-45-66-209.bb.vodafone.cz. [78.45.66.209])
-        by smtp.gmail.com with ESMTPSA id su24-20020a17090703d800b0073cf6ec3276sm2600232ejb.207.2022.10.26.01.40.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 01:40:01 -0700 (PDT)
-From:   Erico Nunes <nunes.erico@gmail.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Qiang Yu <yuq825@gmail.com>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Erico Nunes <nunes.erico@gmail.com>
-Subject: [PATCH] drm/lima: Fix dev_pm_opp_set_config in case of missing regulator
-Date:   Wed, 26 Oct 2022 10:39:50 +0200
-Message-Id: <20221026083950.3712598-1-nunes.erico@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Wed, 26 Oct 2022 04:40:38 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81561386BC;
+        Wed, 26 Oct 2022 01:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666773620; x=1698309620;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=X2DMP8+EBgWpNYmY5Z4GpJwzp3M8y47xTwhwXFf8M3c=;
+  b=mnVZIr7OmE3kefb7neH7bVM5osrOeJuj6CbzmXYizblm16qeFtEz8JFp
+   fbwNNmD2MHxPY0CRModWFSH7D3SOtEs1RRA7RkIvFt4PUDIraWPOK+RbG
+   XTMEpefRT5n3RUQ32zeihLAgfke0GrvsQgWq25Hxok/z7+TPNH93jydsO
+   H8phQUpkkiNDlayWNW5YlqY155VnCp/qLGhpJcIM61JjFX1KX6H9Nx+DF
+   OXGSFC8ZRm8kKVftgKQS7SM8GHrfHP4iTWwsUG62Qp8B+dsuKiX1ilrUd
+   0Wzug0WImmObbtQdPxgdHJLwA5HzWZ5S2rdV1R5C6qkewZy9yhUqKSNA3
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="334509523"
+X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
+   d="scan'208";a="334509523"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 01:40:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="877112584"
+X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
+   d="scan'208";a="877112584"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 26 Oct 2022 01:40:16 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id C7350291; Wed, 26 Oct 2022 11:40:38 +0300 (EEST)
+Date:   Wed, 26 Oct 2022 11:40:38 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] PCI/ACPI: PCI/ACPI: Validate devices with power
+ resources support D3
+Message-ID: <Y1jyhsKG4/T7RRO9@black.fi.intel.com>
+References: <20221025221054.12377-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221025221054.12377-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d8c32d3971e4 ("drm/lima: Migrate to dev_pm_opp_set_config()")
-introduced a regression as it may undo the clk_names setting in case
-the optional regulator is missing. This resulted in test and performance
-regressions with lima.
+On Tue, Oct 25, 2022 at 05:10:54PM -0500, Mario Limonciello wrote:
+> Firmware typically advertises that PCIe devices can support D3
+> by a combination of the value returned by _S0W as well as the
+> HotPlugSupportInD3 _DSD.
+> 
+> `acpi_pci_bridge_d3` looks for this combination but also contains
+> an assumption that if a device contains power resources it can support
+> D3.  This was introduced from commit c6e331312ebf ("PCI/ACPI: Whitelist
+> hotplug ports for D3 if power managed by ACPI").
+> 
+> On some firmware configurations for "AMD Pink Sardine" D3 is not
+> supported for wake in _S0W for the PCIe root port for tunneling.
+> However the device will still be opted into runtime PM since
+> `acpi_pci_bridge_d3` returns since the ACPI device contains power
+> resources.
+> 
+> When the thunderbolt driver is loaded a device link between the USB4
+> router and the PCIe root port for tunneling is created where the PCIe
+> root port for tunneling is the consumer and the USB4 router is the
+> supplier.  Here is a demonstration of this topology that occurs:
+> 
+> ├─ 0000:00:03.1
+> |       | ACPI Path: \_SB_.PCI0.GP11 (Supports "0" in _S0W)
+> |       | Device Links: supplier:pci:0000:c4:00.5
+> |       └─ D0 (Runtime PM enabled)
+> ├─ 0000:00:04.1
+> |       | ACPI Path: \_SB_.PCI0.GP12 (Supports "0" in _S0W)
+> |       | Device Links: supplier:pci:0000:c4:00.6
+> |       └─ D0 (Runtime PM enabled)
+> ├─ 0000:00:08.3
+> |       | ACPI Path: \_SB_.PCI0.GP19
+> |       ├─ D0 (Runtime PM disabled)
+> |       ├─ 0000:c4:00.3
+> |       |       | ACPI Path: \_SB_.PCI0.GP19.XHC3
+> |       |       | Device Links: supplier:pci:0000:c4:00.5
+> |       |       └─ D3cold (Runtime PM enabled)
+> |       ├─ 0000:c4:00.4
+> |       |       | ACPI Path: \_SB_.PCI0.GP19.XHC4
+> |       |       | Device Links: supplier:pci:0000:c4:00.6
+> |       |       └─ D3cold (Runtime PM enabled)
+> |       ├─ 0000:c4:00.5
+> |       |       | ACPI Path: \_SB_.PCI0.GP19.NHI0 (Supports "4" in _S0W)
+> |       |       | Device Links: consumer:pci:0000:00:03.1 consumer:pci:0000:c4:00.3
+> |       |       └─ D3cold (Runtime PM enabled)
+> |       └─ 0000:c4:00.6
+> |               | ACPI Path: \_SB_.PCI0.GP19.NHI1 (Supports "4" in _S0W)
+> |               | Device Links: consumer:pci:0000:c4:00.4 consumer:pci:0000:00:04.1
+> |               └─ D3cold (Runtime PM enabled)
+> 
+> Allowing the PCIe root port for tunneling to go into runtime PM (even if
+> it doesn't support D3) allows the USB4 router to also go into runtime PM.
+> The PCIe root port for tunneling stays in D0 but is in runtime PM. Due to
+> the device link the USB4 router transitions to D3cold when this happens.
+> 
+> The expectation is the USB4 router should have also remained in D0 since
+> the PCIe root port for tunneling remained in D0.
+> 
+> Instead of making this assertion from the power resources check
+> immediately, move the check to later on, which will have validated
+> that the device supports wake from D3hot or D3cold.
+> 
+> This fix prevents the USB4 router going into D3 when the firmware says that
+> the PCIe root port for tunneling can't handle it while still allowing
+> system that don't have the HotplugSupportInD3 _DSD to also enter D3 if they
+> have power resources that can wake from D3.
+> 
+> Fixes: dff6139015dc6 ("PCI/ACPI: Allow D3 only if Root Port can signal and wake from D3")
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Restore the old behavior where clk_names is set separately so it is not
-undone in case of a missing optional regulator.
-
-Fixes: d8c32d3971e4 ("drm/lima: Migrate to dev_pm_opp_set_config()")
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
----
- drivers/gpu/drm/lima/lima_devfreq.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
-index 011be7ff51e1..9c8654934fea 100644
---- a/drivers/gpu/drm/lima/lima_devfreq.c
-+++ b/drivers/gpu/drm/lima/lima_devfreq.c
-@@ -113,10 +113,12 @@ int lima_devfreq_init(struct lima_device *ldev)
- 	int ret;
- 	const char *regulator_names[] = { "mali", NULL };
- 	const char *clk_names[] = { "core", NULL };
--	struct dev_pm_opp_config config = {
--		.regulator_names = regulator_names,
-+	struct dev_pm_opp_config config_clk_names = {
- 		.clk_names = clk_names,
- 	};
-+	struct dev_pm_opp_config config_regulator_names = {
-+		.regulator_names = regulator_names,
-+	};
- 
- 	if (!device_property_present(dev, "operating-points-v2"))
- 		/* Optional, continue without devfreq */
-@@ -124,7 +126,15 @@ int lima_devfreq_init(struct lima_device *ldev)
- 
- 	spin_lock_init(&ldevfreq->lock);
- 
--	ret = devm_pm_opp_set_config(dev, &config);
-+	/*
-+	 * Set clk_names separately so it is not undone in case of
-+	 * a missing optional regulator.
-+	 */
-+	ret = devm_pm_opp_set_config(dev, &config_clk_names);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_pm_opp_set_config(dev, &config_regulator_names);
- 	if (ret) {
- 		/* Continue if the optional regulator is missing */
- 		if (ret != -ENODEV)
--- 
-2.37.3
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
