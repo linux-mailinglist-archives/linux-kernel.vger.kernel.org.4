@@ -2,529 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA06760E92E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3FD60E935
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234369AbiJZTmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
+        id S235087AbiJZTms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234432AbiJZTlt (ORCPT
+        with ESMTP id S235063AbiJZTmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:41:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE4EBC608;
-        Wed, 26 Oct 2022 12:41:47 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DDCA722029;
-        Wed, 26 Oct 2022 19:41:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666813305; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1Lk0jla7Dh3kqdUHZpu2RNb/LcgsWJikmOAgMB8CUfw=;
-        b=TAfAc8VM1Vaf0+ZB5lC3dMQLSXTFUfue1NPEssJ+0NN/pyv8Di3AST3eqQ8Hc5h4anZVyY
-        tU4HQLR1AHVZ1FAI+fz0XsWV1UIhc+C8IOUSyDInyo2vS7QdAYHNUT7VoM9ilfZMNbRawa
-        B//bg2AVCQDEe8AdXK/5rFVNEzdUSdY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B9D813A77;
-        Wed, 26 Oct 2022 19:41:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IEzmNHaNWWNlFwAAMHmgww
-        (envelope-from <mpdesouza@suse.com>); Wed, 26 Oct 2022 19:41:42 +0000
-From:   Marcos Paulo de Souza <mpdesouza@suse.com>
-To:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org
-Cc:     jpoimboe@redhat.com, joe.lawrence@redhat.com, pmladek@suse.com,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: [PATCH v2 4/4] livepatch/shadow: Add garbage collection of shadow variables
-Date:   Wed, 26 Oct 2022 16:41:22 -0300
-Message-Id: <20221026194122.11761-5-mpdesouza@suse.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221026194122.11761-1-mpdesouza@suse.com>
-References: <20221026194122.11761-1-mpdesouza@suse.com>
+        Wed, 26 Oct 2022 15:42:23 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B12DD03B5;
+        Wed, 26 Oct 2022 12:42:13 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QIobHB020594;
+        Wed, 26 Oct 2022 19:41:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=lBIDfYERkNAr4lL9jFCw7JLd+2Oz04DuNQGPV8zUJzY=;
+ b=WVZ8//flnAvBme21Y1FnpXixMqCzvFWrUTtI8kBzmxUyFkI4DJbIfkLERfFy8WIoycpy
+ PoyuWlow4DdFjtCwoG4w5RlM/vJ1BVErwGGE/gCAa7I8J323UhY+6woAxgxEalFJcD4T
+ ukBNMJa3aW6WhluCgIhn2hLz7AP9uulufk0lgvM++OsnxxhCG1UkdWCrtasRVaokjjxF
+ +USCsoGNhFnq47cWEEv7PaVDSaIqu0HgcYCxikha+d68+eVM52+hpjNHzjyc/JtzSTtj
+ OjpxxMsTg/GUJBZMjTW9JPv/GamAWT7E4NHUJFnDtZnEkt/4P3NvPyVXvDji0s11M6PN 5w== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kfahe84er-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 19:41:45 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29QInFbZ011678;
+        Wed, 26 Oct 2022 19:41:43 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kfagq9atd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Oct 2022 19:41:43 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IoEWs5wupnVSq1Ul4cYut/KY3V67fMBp2VIIHa6hHFyzLtG9u9N3pVWOzQYzWx6viSyzDS0kPsZaZx4lJy45NYKWnDyjgLG02qXb2LT9o3uj67E/592cdQwrKMdxPxUB9fkuEczJ1ku5NKrw8jGOapRNAcibxoomrVUADQ/RrBTmEdel/MEW661tFJBTElhCsaE9D4gslXq56sVTFdXmS/iOJUNWPCwoSNfId2uhi2rvFYyri3kdcbqjR+LocUXBo1Ak2RgQvKcyct6nXlIu2aRBm4ME7jwciS1AF6mtUm2UkqpixZ/X3o5/6XFk0P8wWxBxDdnGJDA2fmuuGC2JDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lBIDfYERkNAr4lL9jFCw7JLd+2Oz04DuNQGPV8zUJzY=;
+ b=mU41k3F1j0Wr/9KAf55eGuLL+Nzc3QSC87eoZxs/swnfuYDh6L8/rrWBkKDxn5oIashXJlSp1jIz95XLYE5JbM2lNsDuTKgtCEl+7GWyvFzLfdeyEw2VO99E7D0v7lSzXsfVEp3f307j26c96X+WLT1PW9cJM2odyAvnct3hePD/MRzq5eWSDXzP6N+H8SxwWRsupflGwKtUQymMfvLGH6QU3TDynRBN5ewwhCeENAeMk+YipTWKxVRFf1g2ZTziYERaMPvXyFAq6hhM+SyK5IqMXHJusy1xYFMgjpbT+1kxmq/Tu6W14nEsppRJ/LGNtdqfQ/IJHBDrxyz4pwmdjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lBIDfYERkNAr4lL9jFCw7JLd+2Oz04DuNQGPV8zUJzY=;
+ b=tmAMzSY09zedK0UZ7RYnyCyJcTjI3k/8dXFU0SQJzCYjoXRAYbXX+KT9B1/M/zRPPzdAMZPcYfDBcWcWkisodImejhWI/9v0fUl9Vv3W1/fMqWK+qZ6G//FxKiPFtefKAKKtqQQw0yeSqejKdiy5sP7Zli/NrABcB8aC0W+hlSo=
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com (2603:10b6:303:9e::12)
+ by PH7PR10MB5830.namprd10.prod.outlook.com (2603:10b6:510:127::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Wed, 26 Oct
+ 2022 19:41:41 +0000
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::4cb8:f380:67:fe9e]) by CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::4cb8:f380:67:fe9e%4]) with mapi id 15.20.5723.033; Wed, 26 Oct 2022
+ 19:41:41 +0000
+Message-ID: <46618e3c-def1-8502-47b4-9cd132f95c53@oracle.com>
+Date:   Wed, 26 Oct 2022 14:41:34 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH v3 0/2] arm64: kdump: Function supplement and performance
+ optimization
+Content-Language: en-US
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Baoquan He <bhe@redhat.com>
+Cc:     Will Deacon <will@kernel.org>,
+        "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        Dave Young <dyoung@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, kexec@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        "samasth.norway.ananda" <samasth.norway.ananda@oracle.com>,
+        John Donnelly <john.p.donnelly@oracle.com>
+References: <20220711090319.1604-1-thunder.leizhen@huawei.com>
+ <YueMyUqannVg7l9v@MiWiFi-R3L-srv>
+ <a80c2b7e-a510-8e45-1f3c-7e2ddf79bc37@huawei.com>
+ <1d89e2cb-de26-0f85-7a2a-f68599a1b143@oracle.com>
+ <Y0fsi4+T6k/OO0hx@MiWiFi-R3L-srv> <Y0mOaLL6wO2Mp7dy@arm.com>
+From:   john.p.donnelly@oracle.com
+In-Reply-To: <Y0mOaLL6wO2Mp7dy@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR18CA0028.namprd18.prod.outlook.com
+ (2603:10b6:5:15b::41) To CO1PR10MB4722.namprd10.prod.outlook.com
+ (2603:10b6:303:9e::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4722:EE_|PH7PR10MB5830:EE_
+X-MS-Office365-Filtering-Correlation-Id: 01bdd319-11d0-445b-0e12-08dab78a1ab7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dgQYqNjrSlb6eo0aLFI/TXuqJXC4hA4JRqQ+uyHwMMtfwtCfcQ58Ak9WR9ATd73h56sG8LMVIRf2wJEePiyb7JhB4+T5RdofKFA3FdmXACpr+S2IHTdYYakBz8YuDBuQcAU6BORnngj4Pe2hKJMwD7u7JOviagVIhHAXl2yY6QbsQfz4bBth32wJnabG/NKBFl8ySTs6x8wHKhUF0aGAARfHOAtFO1jeNCpMh10fEZhwEzccEJtKT9/20tMpds0UgZZ9DPG2ZGalalsKbdZ3lnMt0omHxAc04eymoNnhjG8OvsW5aRmb8S25hmNKTLIFiOUWiU/g7X28gq8atyy39TctDPHqu+FVC0vrd3UOfHFJCXVhSiCefFobXU0RgsR2xx3XcKOTreLInJuIu8FXSWOtFJZFE1TB7L1+ryR8Pdbu3uQxVHYjeU4U86AQ0jIoEXLdGdHT5SQcHSwE28GmIh6u6d7C1nKnB625qRsZLmFkSRZXZd9JdGN7TpElqSQj26MlZ1/6R5iOS+zUWmmBNhxu6a3k0BiCavGzUeNhNlq1WDSmAhzG1Jo8nt/tIxOVVWEFG5uKeLNUdn5bZA4fcOyGVX4F2sX78kcKfVPU+48m1WZ3ZQvisbJqqJeLyz5sBI6ol2olTlQTv5nYBWHsjR7gUwDifjQZ3kwjMCb70iTZcoUEXpLB9sY6SZ2Ypjno0HITFIj2qQEHOgyVbSyHxtDgccQ6Lp5j6Wpk20xViQnLn6Im4GRmY4wIP+GRvqsKmDsCrT4TBnW9op8iQoHJeA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4722.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199015)(66946007)(54906003)(8676002)(38100700002)(478600001)(6486002)(2616005)(186003)(110136005)(41300700001)(7416002)(53546011)(316002)(6506007)(66476007)(86362001)(5660300002)(26005)(6666004)(66556008)(31686004)(107886003)(36756003)(2906002)(4326008)(31696002)(9686003)(83380400001)(8936002)(6512007)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M2lZQnljZUNYYzNOWVVGUUhEVkVnRnlhR25CZUNmMW1qN1d5NGI2NTVFOUxx?=
+ =?utf-8?B?ZTBKU1lYTUVEU2poaVd6Z25BMHR5cTVhelZxWjNLdjAwNnE2clNockVCTG1Q?=
+ =?utf-8?B?NGtyRWhQN2xLUTlKN1VIaXhRUDUwaVhoM0dTVHZkZk9UODJoTGFhMlVPZHcy?=
+ =?utf-8?B?QkVmendHSDBxZms4OE5iV04zMG5UaVc1blVCN1IyVVVOV3RGKy9LV2gvdFpx?=
+ =?utf-8?B?TzlPaUMrMjNqOExvbGF0NGl6SWRRZnFUUDF3Tk5iaitibzJTTktIeUZKU3Vi?=
+ =?utf-8?B?Mkhic29LZGNTamVQMFhyMU5pZ3JQU2hhK3duRjJnZml5M3JENU53UGF6WG1O?=
+ =?utf-8?B?b0lKYnl5SGtjTVAzaTAzR1VPS2w2bFY2eGlZVmY3Y3A2MXhIUXhnSUxCRGNR?=
+ =?utf-8?B?SVNFcDZWUDFiZUlxMStFV0hSVk1hV1g1RGpXdXY2cnNLSFRwWUUrMXhSWUlo?=
+ =?utf-8?B?MEhpTk0yamY5N2pHM01zMkVra3lTZVRjcG5CQUk1OGVoSEtxT2t1dm9adkFq?=
+ =?utf-8?B?SnI1RFB3anpaOHpIbklJbEhYYWNETXRmeUhYY1dSck5nQW12TUNMell4NEJo?=
+ =?utf-8?B?VEhwaDlKZjl3bWJLa0ZyWDlQWlh0SHNtSTJKNCtpSDZWc3RKeE5iL2YvTExY?=
+ =?utf-8?B?cVo0MXoxQjhvTHpJVk1HRUpMQnJsUERBTlhiZXh6c0d1VG1UdHFTMVhKV0hF?=
+ =?utf-8?B?OGdiYkVFS0FVVVIrbWNJY3pjOXhabG9vbURWenlJbmtxS2JqWWZibTA2dmZP?=
+ =?utf-8?B?WFRhNndMM205Z2dvNUlEdzlCdjVIY3hNSk1jRTM1U04rQXBKbjBNL1VXL1A1?=
+ =?utf-8?B?cWNjK2tUYTUyTWh2dU9uSUxJMjRTUE9pWndGUHlvaWZzTlhWZDllWnk0akNw?=
+ =?utf-8?B?Q0x2ZXJsYndmUWkrQzRtOGFMbldnQk9RdEd5cVdoTzd0OFNxd1Q4WmdQTkpU?=
+ =?utf-8?B?SXpaVDFhdm1tajdxOGN0K2g4M0xXaExVNmM3cGdRNmtEeXlvT2tFTzFXSzds?=
+ =?utf-8?B?ditnOHRHYW9zNU5CK2d6VjV2WUxJS01VV1lheTRJMXo0WFJMTmc4bGk2ZVNS?=
+ =?utf-8?B?cHhObVNQSmpDSDI1cVhkMU10M0l1UTVvek9renIvSXZMZTUzalJndnZIOG9P?=
+ =?utf-8?B?ak5aMzVRMlhzR3FMeHhvUkZjL2FXYXphUU5WYmhHNUZWSitUV1I2N1I4Yk9G?=
+ =?utf-8?B?dEV5OURYYkNTdUlZQzZtN29oMkZHellCMmF4Vlk5V3F6TWgwQ1RmTDh4WEgr?=
+ =?utf-8?B?Q0lWMGw2MTErOHVUZmt6R3RjY25rbXZSVTRPeWFXRWlsYklvaVVGZTQ1Sisy?=
+ =?utf-8?B?Y3BXNFZ4Y1VPdnBDSDhDZ0FaM3JzUjZ1TzBEdUxJcTZKb3p2Q2tVZVo4SDJR?=
+ =?utf-8?B?cE1lUWFXaDI4Z2xIQzlzVEhFaWFmZnQwOUE0cVpSOFVmanJhSmt5dkhZV1Jq?=
+ =?utf-8?B?OS9QTW5FeHJHUUNRUUlFb0owYmhaZVgyS0ZMemRMWGkwN1pvWXBhbWordjY0?=
+ =?utf-8?B?ZTZQRkdxaG5hN1owcEF2MzFTc0U4eTZwMkVLUGdrVHRhS29lRTJVaXQxdWJ0?=
+ =?utf-8?B?VVByUDQvMmVUTmlPa29Bczgvcmd2SDZ5cUMvRVE3NTVxdENUa1VNdVJZNXRW?=
+ =?utf-8?B?S3pEOTd3b2IwcUtsUVNMa3ZXa0RUOE5wMWduVlc3VDVWcVkvMGpaTmE5VWhW?=
+ =?utf-8?B?ejBhcmkxVmlLT0piQVpiTFZtNmxSdEtxLzh0T2Q2VVRRNzBpSXNGZmp4dXI5?=
+ =?utf-8?B?YUdkOFZkeFNaY2Z0djgyU2dHdlNqbW55WHJXRjhNVlBhd2tmdDhmZXBNWUJ4?=
+ =?utf-8?B?YmlQSlZiV1doNzJCT0czOEtTNW44dUhQTW9wZlVBRkdYMDdrNUNuTTlWWWFX?=
+ =?utf-8?B?cXJsbUVXelJhMlVYL1BXSGgyQU9oTloxd1lWeG1lVXVrTjlwY0wxR3VBNDFa?=
+ =?utf-8?B?SkdVK2xvaXpNRkxjZkNzaTE5TmVmWUw2UTIyL2g0VWg2ZkdTeDdsMTY3clFm?=
+ =?utf-8?B?cW5DWm1zVDdnQTRxQW1mUXU2eXJEb1JrTmgxOFNxWkYzZkwraHp1NS9Fckc2?=
+ =?utf-8?B?VDR5d2lNcU1BTEF5c0lBZU5ocE55a2Evb3hPQUs4QTlOUGtmQnA2NkQ0MEY5?=
+ =?utf-8?B?L25wRXB2dm5ZUUZnbjgzU2FtZ2JQV2QrRFY1aUVLbVVCem9wSFQwaTgrUTR0?=
+ =?utf-8?B?RFE9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01bdd319-11d0-445b-0e12-08dab78a1ab7
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4722.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 19:41:40.9639
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DfHC0ey1A6pfRjskTVQm/Ho9W1KUxcl8yZmxjcbWlQuL1CYxtF6FZeu8Ot/N+jFq/nxRVQkKJZ9LWU5L+3Hujl0oH4MFD2/qOfJ/LDZ8X3I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5830
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_08,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ adultscore=0 malwarescore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210260109
+X-Proofpoint-GUID: ueBG7zw6j8rwTBwsFkC-nJFBPHmVJtJ5
+X-Proofpoint-ORIG-GUID: ueBG7zw6j8rwTBwsFkC-nJFBPHmVJtJ5
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The life of shadow variables is not completely trivial to maintain.
-They might be used by more livepatches and more livepatched objects.
-They should stay as long as there is any user.
+On 10/14/22 11:29 AM, Catalin Marinas wrote:
+> On Thu, Oct 13, 2022 at 06:46:35PM +0800, Baoquan He wrote:
+>> On 10/06/22 at 09:55am, john.p.donnelly@oracle.com wrote:
+>>> What is the progress of this series ?
+>>>
+>>> Without this patch set we are seeing  larger crashkernel=896M failures on
+>>> Arm  with Linux-6.0.rc7.  This larger value is needed for
+>>> iSCSI booted systems with certain network adapters.
+>>
+>> This change is located in arch/arm64 folder, I have pinged arm64
+>> maintainer to consider merging this patchset. Not sure if they are
+>> still thinking, or ignore this.
+>>
+>> Hi Catalin, Will,
+>>
+>> Ping again!
+>>
+>> Do you have plan to accept this patchset? It's very important for
+>> crashkernel setting on arm64 with a simple and default syntax.
+> 
+> I'll look at it once the merging window closes. I saw discussions on
+> this thread and I ignored it until you all agreed ;).
+> 
 
-In practice, it requires to implement reference counting in callbacks
-of all users. They should register all the user and remove the shadow
-variables only when there is no user left.
 
-This patch hides the reference counting into the klp_shadow API.
-The counter is connected with the shadow variable @id. It requires
-an API to take and release the reference. The release function also
-calls the related dtor() when defined.
+Hi,
 
-An easy solution would be to add some get_ref()/put_ref() API.
-But it would need to get called from pre()/post_un() callbacks.
-It might be easy to forget a callback and make it wrong.
+Do you have a timeline for this ?  This crashkernel > 4G for Arm item 
+has been lingering for 3 years. I think it is time for it to be 
+incorporated.
 
-A more safe approach is to associate the klp_shadow_type with
-klp_objects that use the shadow variables. The livepatch core
-code might then handle the reference counters on background.
 
-The shadow variable type might then be added into a new @shadow_types
-member of struct klp_object. They will get then automatically registered
-and unregistered when the object is being livepatched. The registration
-increments the reference count. Unregistration decreases the reference
-count. All shadow variables of the given type are freed when the reference
-count reaches zero.
+Thanks,
 
-All klp_shadow_alloc/get/free functions also checks whether the requested
-type is registered. It will help to catch missing registration and might
-also help to catch eventual races.
+John.
 
-Signed-off-by: Petr Mladek <pmladek@suse.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
----
- Changes from v1:
- * Reordered my SoB (Josh)
- * Changed code comments (Petr)
 
- include/linux/livepatch.h                 |  21 ++++
- kernel/livepatch/core.c                   |  39 +++++++
- kernel/livepatch/core.h                   |   1 +
- kernel/livepatch/shadow.c                 | 124 ++++++++++++++++++++++
- kernel/livepatch/transition.c             |   4 +-
- lib/livepatch/test_klp_shadow_vars.c      |  18 +++-
- samples/livepatch/livepatch-shadow-fix1.c |   8 +-
- samples/livepatch/livepatch-shadow-fix2.c |   9 +-
- 8 files changed, 214 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/livepatch.h b/include/linux/livepatch.h
-index 79e7bf3b35f6..fdd82fde86e6 100644
---- a/include/linux/livepatch.h
-+++ b/include/linux/livepatch.h
-@@ -100,11 +100,14 @@ struct klp_callbacks {
- 	bool post_unpatch_enabled;
- };
- 
-+struct klp_shadow_type;
-+
- /**
-  * struct klp_object - kernel object structure for live patching
-  * @name:	module name (or NULL for vmlinux)
-  * @funcs:	function entries for functions to be patched in the object
-  * @callbacks:	functions to be executed pre/post (un)patching
-+ * @shadow_types: shadow variable types used by the livepatch for the klp_object
-  * @kobj:	kobject for sysfs resources
-  * @func_list:	dynamic list of the function entries
-  * @node:	list node for klp_patch obj_list
-@@ -118,6 +121,7 @@ struct klp_object {
- 	const char *name;
- 	struct klp_func *funcs;
- 	struct klp_callbacks callbacks;
-+	struct klp_shadow_type **shadow_types;
- 
- 	/* internal */
- 	struct kobject kobj;
-@@ -222,13 +226,30 @@ typedef void (*klp_shadow_dtor_t)(void *obj, void *shadow_data);
-  * @ctor:	custom constructor to initialize the shadow data (optional)
-  * @dtor:	custom callback that can be used to unregister the variable
-  *		and/or free data that the shadow variable points to (optional)
-+ * @registered: flag indicating if the variable was successfully registered
-+ *
-+ * All shadow variables used by the livepatch for the related klp_object
-+ * must be listed here so that they are registered when the livepatch
-+ * and the module is loaded. Otherwise, it will not be possible to
-+ * allocate them.
-  */
- struct klp_shadow_type {
- 	unsigned long id;
- 	klp_shadow_ctor_t ctor;
- 	klp_shadow_dtor_t dtor;
-+
-+	/* internal */
-+	bool registered;
- };
- 
-+#define klp_for_each_shadow_type(obj, shadow_type, i)			\
-+	for (shadow_type = obj->shadow_types ? obj->shadow_types[0] : NULL, i = 1; \
-+	     shadow_type; \
-+	     shadow_type = obj->shadow_types[i++])
-+
-+int klp_shadow_register(struct klp_shadow_type *shadow_type);
-+void klp_shadow_unregister(struct klp_shadow_type *shadow_type);
-+
- void *klp_shadow_get(void *obj, struct klp_shadow_type *shadow_type);
- void *klp_shadow_alloc(void *obj, struct klp_shadow_type *shadow_type,
- 		       size_t size, gfp_t gfp_flags, void *ctor_data);
-diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
-index 9ada0bc5247b..44c9e5ea0d2c 100644
---- a/kernel/livepatch/core.c
-+++ b/kernel/livepatch/core.c
-@@ -928,6 +928,30 @@ static int klp_init_patch(struct klp_patch *patch)
- 	return 0;
- }
- 
-+void klp_unregister_shadow_types(struct klp_object *obj)
-+{
-+	struct klp_shadow_type *shadow_type;
-+	int i;
-+
-+	klp_for_each_shadow_type(obj, shadow_type, i) {
-+		klp_shadow_unregister(shadow_type);
-+	}
-+}
-+
-+static int klp_register_shadow_types(struct klp_object *obj)
-+{
-+	struct klp_shadow_type *shadow_type;
-+	int i, ret;
-+
-+	klp_for_each_shadow_type(obj, shadow_type, i) {
-+		ret = klp_shadow_register(shadow_type);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int __klp_disable_patch(struct klp_patch *patch)
- {
- 	struct klp_object *obj;
-@@ -988,6 +1012,13 @@ static int __klp_enable_patch(struct klp_patch *patch)
- 		if (!klp_is_object_loaded(obj))
- 			continue;
- 
-+		ret = klp_register_shadow_types(obj);
-+		if (ret) {
-+			pr_warn("failed to register shadow types for object '%s'\n",
-+				klp_is_module(obj) ? obj->name : "vmlinux");
-+			goto err;
-+		}
-+
- 		ret = klp_pre_patch_callback(obj);
- 		if (ret) {
- 			pr_warn("pre-patch callback failed for object '%s'\n",
-@@ -1172,6 +1203,7 @@ static void klp_cleanup_module_patches_limited(struct module *mod,
- 			klp_unpatch_object(obj);
- 
- 			klp_post_unpatch_callback(obj);
-+			klp_unregister_shadow_types(obj);
- 
- 			klp_free_object_loaded(obj);
- 			break;
-@@ -1218,6 +1250,13 @@ int klp_module_coming(struct module *mod)
- 			pr_notice("applying patch '%s' to loading module '%s'\n",
- 				  patch->mod->name, obj->mod->name);
- 
-+			ret = klp_register_shadow_types(obj);
-+			if (ret) {
-+				pr_warn("failed to register shadow types for object '%s'\n",
-+					obj->name);
-+				goto err;
-+			}
-+
- 			ret = klp_pre_patch_callback(obj);
- 			if (ret) {
- 				pr_warn("pre-patch callback failed for object '%s'\n",
-diff --git a/kernel/livepatch/core.h b/kernel/livepatch/core.h
-index 38209c7361b6..0b68f2407a82 100644
---- a/kernel/livepatch/core.h
-+++ b/kernel/livepatch/core.h
-@@ -13,6 +13,7 @@ extern struct list_head klp_patches;
- #define klp_for_each_patch(patch)	\
- 	list_for_each_entry(patch, &klp_patches, list)
- 
-+void klp_unregister_shadow_types(struct klp_object *obj);
- void klp_free_patch_async(struct klp_patch *patch);
- void klp_free_replaced_patches_async(struct klp_patch *new_patch);
- void klp_unpatch_replaced_patches(struct klp_patch *new_patch);
-diff --git a/kernel/livepatch/shadow.c b/kernel/livepatch/shadow.c
-index 64e83853891d..9437dc1be7b2 100644
---- a/kernel/livepatch/shadow.c
-+++ b/kernel/livepatch/shadow.c
-@@ -34,6 +34,7 @@
- #include <linux/hashtable.h>
- #include <linux/slab.h>
- #include <linux/livepatch.h>
-+#include "core.h"
- 
- static DEFINE_HASHTABLE(klp_shadow_hash, 12);
- 
-@@ -59,6 +60,22 @@ struct klp_shadow {
- 	char data[];
- };
- 
-+/**
-+ * struct klp_shadow_type_reg - information about a registered shadow
-+ *	variable type
-+ * @id:		shadow variable type indentifier
-+ * @count:	reference counter
-+ * @list:	list node for list of registered shadow variable types
-+ */
-+struct klp_shadow_type_reg {
-+	unsigned long id;
-+	int ref_cnt;
-+	struct list_head list;
-+};
-+
-+/* List of registered shadow variable types */
-+static LIST_HEAD(klp_shadow_types);
-+
- /**
-  * klp_shadow_match() - verify a shadow variable matches given <obj, id>
-  * @shadow:	shadow variable to match
-@@ -84,6 +101,13 @@ void *klp_shadow_get(void *obj, struct klp_shadow_type *shadow_type)
- {
- 	struct klp_shadow *shadow;
- 
-+	/* Just the best effort. Can't take @klp_shadow_lock here. */
-+	if (!shadow_type->registered) {
-+		pr_err("Trying to get shadow variable of non-registered type: %lu\n",
-+		       shadow_type->id);
-+		return NULL;
-+	}
-+
- 	rcu_read_lock();
- 
- 	hash_for_each_possible_rcu(klp_shadow_hash, shadow, node,
-@@ -310,3 +334,103 @@ void klp_shadow_free_all(struct klp_shadow_type *shadow_type)
- 	spin_unlock_irqrestore(&klp_shadow_lock, flags);
- }
- EXPORT_SYMBOL_GPL(klp_shadow_free_all);
-+
-+static struct klp_shadow_type_reg *
-+klp_shadow_type_get_reg(struct klp_shadow_type *shadow_type)
-+{
-+	struct klp_shadow_type_reg *shadow_type_reg;
-+	lockdep_assert_held(&klp_shadow_lock);
-+
-+	list_for_each_entry(shadow_type_reg, &klp_shadow_types, list) {
-+		if (shadow_type_reg->id == shadow_type->id)
-+			return shadow_type_reg;
-+	}
-+
-+	return NULL;
-+}
-+
-+/**
-+ * klp_shadow_register() - register the given shadow variable type
-+ * @shadow_type:	shadow type to be registered
-+ *
-+ * Tell the system that the given shadow type is going to used by the caller
-+ * (livepatch module). It allows to check and maintain lifetime of shadow
-+ * variables.
-+ *
-+ * Return: 0 on suceess, -ENOMEM when there is not enough memory.
-+ */
-+int klp_shadow_register(struct klp_shadow_type *shadow_type)
-+{
-+	struct klp_shadow_type_reg *shadow_type_reg;
-+	struct klp_shadow_type_reg *new_shadow_type_reg;
-+
-+	new_shadow_type_reg =
-+		kzalloc(sizeof(struct klp_shadow_type_reg), GFP_KERNEL);
-+	if (!new_shadow_type_reg)
-+		return -ENOMEM;
-+
-+	spin_lock_irq(&klp_shadow_lock);
-+
-+	if (shadow_type->registered) {
-+		pr_err("Trying to register shadow variable type that is already registered: %lu",
-+		       shadow_type->id);
-+		kfree(new_shadow_type_reg);
-+		goto out;
-+	}
-+
-+	shadow_type_reg = klp_shadow_type_get_reg(shadow_type);
-+	if (!shadow_type_reg) {
-+		shadow_type_reg = new_shadow_type_reg;
-+		shadow_type_reg->id = shadow_type->id;
-+		list_add(&shadow_type_reg->list, &klp_shadow_types);
-+	} else {
-+		kfree(new_shadow_type_reg);
-+	}
-+
-+	shadow_type_reg->ref_cnt++;
-+	shadow_type->registered = true;
-+out:
-+	spin_unlock_irq(&klp_shadow_lock);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(klp_shadow_register);
-+
-+/**
-+ * klp_shadow_unregister() - unregister the give shadow variable type
-+ * @shadow_type:	shadow type to be unregistered
-+ *
-+ * Tell the system that a given shadow variable ID is not longer be used by
-+ * the caller (livepatch module). All existing shadow variables are freed
-+ * when it was the last registered user.
-+ */
-+void klp_shadow_unregister(struct klp_shadow_type *shadow_type)
-+{
-+	struct klp_shadow_type_reg *shadow_type_reg;
-+
-+	spin_lock_irq(&klp_shadow_lock);
-+
-+	if (!shadow_type->registered) {
-+		pr_err("Trying to unregister shadow variable type that is not registered: %lu",
-+		       shadow_type->id);
-+		goto out;
-+	}
-+
-+	shadow_type_reg = klp_shadow_type_get_reg(shadow_type);
-+	if (!shadow_type_reg) {
-+		pr_err("Can't find shadow variable type registration: %lu", shadow_type->id);
-+		goto out;
-+	}
-+
-+	shadow_type->registered = false;
-+	shadow_type_reg->ref_cnt--;
-+
-+	if (!shadow_type_reg->ref_cnt) {
-+		__klp_shadow_free_all(shadow_type);
-+		list_del(&shadow_type_reg->list);
-+		kfree(shadow_type_reg);
-+	}
-+out:
-+	spin_unlock_irq(&klp_shadow_lock);
-+}
-+EXPORT_SYMBOL_GPL(klp_shadow_unregister);
-diff --git a/kernel/livepatch/transition.c b/kernel/livepatch/transition.c
-index 30187b1d8275..9c57941974a7 100644
---- a/kernel/livepatch/transition.c
-+++ b/kernel/livepatch/transition.c
-@@ -123,8 +123,10 @@ static void klp_complete_transition(void)
- 			continue;
- 		if (klp_target_state == KLP_PATCHED)
- 			klp_post_patch_callback(obj);
--		else if (klp_target_state == KLP_UNPATCHED)
-+		else if (klp_target_state == KLP_UNPATCHED) {
- 			klp_post_unpatch_callback(obj);
-+			klp_unregister_shadow_types(obj);
-+		}
- 	}
- 
- 	pr_notice("'%s': %s complete\n", klp_transition_patch->mod->name,
-diff --git a/lib/livepatch/test_klp_shadow_vars.c b/lib/livepatch/test_klp_shadow_vars.c
-index ee47c1fae8e2..6de1f6d11bcf 100644
---- a/lib/livepatch/test_klp_shadow_vars.c
-+++ b/lib/livepatch/test_klp_shadow_vars.c
-@@ -188,6 +188,17 @@ static int test_klp_shadow_vars_init(void)
- 	int ret;
- 	int i;
- 
-+	/* Registered manually since we don't have a klp_object instance. */
-+	ret = klp_shadow_register(&shadow_type_1);
-+	if (ret)
-+		return ret;
-+
-+	ret = klp_shadow_register(&shadow_type_2);
-+	if (ret) {
-+		klp_shadow_unregister(&shadow_type_1);
-+		return ret;
-+	}
-+
- 	ptr_id(NULL);
- 
- 	/*
-@@ -296,12 +307,9 @@ static int test_klp_shadow_vars_init(void)
- 			pr_info("  got expected NULL result\n");
- 	}
- 
--	free_ptr_list();
--
--	return 0;
- out:
--	shadow_free_all(&shadow_type_1); /* 'char' pairs */
--	shadow_free_all(&shadow_type_2); /* 'int' pairs */
-+	klp_shadow_unregister(&shadow_type_1); /* 'char' pairs */
-+	klp_shadow_unregister(&shadow_type_2); /* 'int' pairs */
- 	free_ptr_list();
- 
- 	return ret;
-diff --git a/samples/livepatch/livepatch-shadow-fix1.c b/samples/livepatch/livepatch-shadow-fix1.c
-index 0cc7d1e4b4bc..6718df9ec14b 100644
---- a/samples/livepatch/livepatch-shadow-fix1.c
-+++ b/samples/livepatch/livepatch-shadow-fix1.c
-@@ -141,6 +141,11 @@ static struct klp_shadow_type shadow_leak_type = {
- 	.dtor = livepatch_fix1_dummy_leak_dtor,
- };
- 
-+struct klp_shadow_type *shadow_types[] = {
-+	&shadow_leak_type,
-+	NULL
-+};
-+
- static struct klp_func funcs[] = {
- 	{
- 		.old_name = "dummy_alloc",
-@@ -156,6 +161,7 @@ static struct klp_object objs[] = {
- 	{
- 		.name = "livepatch_shadow_mod",
- 		.funcs = funcs,
-+		.shadow_types = shadow_types,
- 	}, { }
- };
- 
-@@ -171,8 +177,6 @@ static int livepatch_shadow_fix1_init(void)
- 
- static void livepatch_shadow_fix1_exit(void)
- {
--	/* Cleanup any existing SV_LEAK shadow variables */
--	klp_shadow_free_all(&shadow_leak_type);
- }
- 
- module_init(livepatch_shadow_fix1_init);
-diff --git a/samples/livepatch/livepatch-shadow-fix2.c b/samples/livepatch/livepatch-shadow-fix2.c
-index 840100555152..290c7e3f96b0 100644
---- a/samples/livepatch/livepatch-shadow-fix2.c
-+++ b/samples/livepatch/livepatch-shadow-fix2.c
-@@ -103,6 +103,12 @@ static struct klp_shadow_type shadow_counter_type = {
- 	.id = SV_COUNTER,
- };
- 
-+struct klp_shadow_type *shadow_types[] = {
-+	&shadow_leak_type,
-+	&shadow_counter_type,
-+	NULL
-+};
-+
- static struct klp_func funcs[] = {
- 	{
- 		.old_name = "dummy_check",
-@@ -118,6 +124,7 @@ static struct klp_object objs[] = {
- 	{
- 		.name = "livepatch_shadow_mod",
- 		.funcs = funcs,
-+		.shadow_types = shadow_types,
- 	}, { }
- };
- 
-@@ -133,8 +140,6 @@ static int livepatch_shadow_fix2_init(void)
- 
- static void livepatch_shadow_fix2_exit(void)
- {
--	/* Cleanup any existing SV_COUNTER shadow variables */
--	klp_shadow_free_all(&shadow_leak_type);
- }
- 
- module_init(livepatch_shadow_fix2_init);
--- 
-2.37.3
 
