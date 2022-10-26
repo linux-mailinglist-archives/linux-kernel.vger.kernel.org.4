@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC61F60DCD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:14:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F53B60DCE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233274AbiJZIOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S233018AbiJZIQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbiJZIOo (ORCPT
+        with ESMTP id S232161AbiJZIQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:14:44 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACF118399;
-        Wed, 26 Oct 2022 01:14:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5FDB722029;
-        Wed, 26 Oct 2022 08:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1666772081;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SD3QMwyS+ZUTaFP2Tk/T8hZPNAT2QJ5hUJJf1eQUrwk=;
-        b=VyxfC/qwjmoVh8np5Xb8Oz+4eaUp2SYzuUGT9tt2ZNLZ2CaeXsx9Dc4bQcGpDdeLzvwiHt
-        t4D8f6UELZChjDvITZnqppa8d/MEDDS7ieH9Pz/FQMLQMwMnw9iJWsbddViyN/5iHPT84R
-        IGVihk7YMEiSqL6Cmtnw+0A0gBrf3l0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1666772081;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SD3QMwyS+ZUTaFP2Tk/T8hZPNAT2QJ5hUJJf1eQUrwk=;
-        b=msOw3yfYoDm/GRmwl7t6vUgfiFdGxrVETGJmQiQQ6b5v4GbxYNTBlCwNcm+PQf5NCRAkhr
-        ugVQ45cUThwY7PAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2373E13A77;
-        Wed, 26 Oct 2022 08:14:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id omXKB3HsWGM2OAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 26 Oct 2022 08:14:41 +0000
-Date:   Wed, 26 Oct 2022 10:14:26 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-Cc:     syzbot <syzbot+858534c396b0cdd291d2@syzkaller.appspotmail.com>,
-        "clm@fb.com" <clm@fb.com>, "dsterba@suse.com" <dsterba@suse.com>,
-        "josef@toxicpanda.com" <josef@toxicpanda.com>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "osandov@fb.com" <osandov@fb.com>,
-        "sweettea-kernel@dorminy.me" <sweettea-kernel@dorminy.me>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] WARNING in cow_file_range_inline
-Message-ID: <20221026081426.GP5824@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <00000000000080bb5c05ebe34a4d@google.com>
- <b9fb66a0-5516-d1d4-34d6-da91c60c56cf@wdc.com>
+        Wed, 26 Oct 2022 04:16:49 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08EF8D22E;
+        Wed, 26 Oct 2022 01:16:48 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id az22-20020a05600c601600b003c6b72797fdso970070wmb.5;
+        Wed, 26 Oct 2022 01:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XQrSTyfhMtQPpxxhJU/ar1JrJV7XCzKtcCQvIyVOIy8=;
+        b=jl2HFmdzLYBiS+vt9fhpdR7erCRUSVpVoy903eybZ712HPcEgrUVhxUdjNy8vjtq+a
+         mGsvt2MbaRAyEioeSN10YIGQjmYqOVLgVn3wWjX1oTI/q70ZUCwWNdo8k+QgGNFmOSoF
+         UZaChFiLIlkNUuSFDRZclzqsWhuhd6gvx6wokU8joqeWiFoZHYXv5s4xB25D6bQlvNps
+         PPWZ8pwzj0elHveJdi/vtKctM3Ew9vilspuPOZ/58gXRWxJhA412dIhpJJuxxI5erDmc
+         +TSXJVMfW5Hh3vF41JK8hLWS0wnPXKnGzYuJQlaZwTivWaOaL/3S+V2f9yHtIqYo2n00
+         IovA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XQrSTyfhMtQPpxxhJU/ar1JrJV7XCzKtcCQvIyVOIy8=;
+        b=Jm7aXTQiaqPXizcmohqD4OuFSCDlY3Kwb11Imd4GxDOFMxddhCGb+OvrpYK5V5klP6
+         xHz/I7JZKO/7We8SlweZwn5INm0IfnkG8PpZfsrUqK2WKs8AKbZ2hUnZMdcu2myD1TH2
+         bu+2Hu7NYYa3EC2OqVwYLNJ4hvUGqMUUfi8YFKRs1jpLnBEOF8tdlhvgGifThW/feh3N
+         fljiJ/L+dtktazNYboTpEjGo5ZUN3B9Atn1fdhHEB+oeJUoGPqNMY6/wrs8uUePAf2G9
+         oHX218fW7hptsAP6tydDnxwoI+vo59uck+hXtHM8d7Dx0GpYlHeVSe6x8AQt+dkm9uY0
+         n5Vg==
+X-Gm-Message-State: ACrzQf0+4LxDa6tDlt1Pbq68c74mIY1aDV5SrpLzzmsyRXn2+t4QyLby
+        413/nBjnl5rR+gInMRUQFF4=
+X-Google-Smtp-Source: AMsMyM7XmA1X4tNZpHNjEWs8mQT3Wq9+040EXB3IJxVuT7nU9CCPl8Q7M8NbOb/FBrVnwxXk2aORxg==
+X-Received: by 2002:a05:600c:1f08:b0:3c6:75b3:f444 with SMTP id bd8-20020a05600c1f0800b003c675b3f444mr1541407wmb.74.1666772207290;
+        Wed, 26 Oct 2022 01:16:47 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05600c4e8c00b003b95ed78275sm1236938wmq.20.2022.10.26.01.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 01:16:46 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] bpftool: Fix spelling mistake "disasembler" -> "disassembler"
+Date:   Wed, 26 Oct 2022 09:16:45 +0100
+Message-Id: <20221026081645.3186878-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b9fb66a0-5516-d1d4-34d6-da91c60c56cf@wdc.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 07:30:02AM +0000, Johannes Thumshirn wrote:
-> On 26.10.22 00:19, syzbot wrote:
+There is a spelling mistake in an error message. Fix it.
 
-> Not sure how applicable this is. The reproducer configures failslab to
-> fail every 16th call and then complains about -ENOMEM ¯\_(ツ)_/¯
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/bpf/bpftool/jit_disasm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This still has some value I think, though we can't do much when an
-ENOMEM is hit, at least from this report I see the way it's reported
-back to user can be improved.
+diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
+index 58a5017034a2..7b8d9ec89ebd 100644
+--- a/tools/bpf/bpftool/jit_disasm.c
++++ b/tools/bpf/bpftool/jit_disasm.c
+@@ -223,7 +223,7 @@ static int init_context(disasm_ctx_t *ctx, const char *arch,
+ 
+ 	memset(tpath, 0, sizeof(tpath));
+ 	if (get_exec_path(tpath, sizeof(tpath))) {
+-		p_err("failed to create disasembler (get_exec_path)");
++		p_err("failed to create disassembler (get_exec_path)");
+ 		return -1;
+ 	}
+ 
+-- 
+2.37.3
 
-For EIO and EUCLEAN we don't dump the full stack trace because such
-errors can happen during testing a lot, we may add ENOMEM as well. The
-stack is supposed to be noisy for errors we want to know about, eg.
-ENOSPC during transaction commit that would point to a bug in the
-reservations.
