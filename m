@@ -2,70 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEC660EAC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE8B60EACF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiJZVW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 17:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S233408AbiJZVZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 17:25:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233282AbiJZVW4 (ORCPT
+        with ESMTP id S233395AbiJZVZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 17:22:56 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C73912B354
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:22:52 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id e4so12836217pfl.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:22:52 -0700 (PDT)
+        Wed, 26 Oct 2022 17:25:25 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9DF22B29
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:25:25 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id b2so31502500lfp.6
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6OTWbttkJY9+UiZ3IJ1wp/zYpMm58Srtsymi020albs=;
-        b=OTQ73ymmP9Nu02c4m+zswp13fUzdyubfqcegfFxDng7b9BvPZAUO5xZ34EAsUZ11q+
-         su10Ar+fQeM+pfq4wbagonj9Cl8gjfHfm6rEiqtyBhZWLLFvUtsVxUC/GgMSeTYO6dUu
-         FIaMTcthbk/hJ/6f20gn/SkBb4DVnoiGvDIKnL2sq/+R0ODT/MrxlZgylXwkUceSbRX4
-         nhKZquxx91ViHYSJYYoWV0OKf5kkDaUnM6G9EQALfuFf/kxKHGyT06NNBxiEMAEDCOsJ
-         PB+VQ+0GPNACv4LnPnm5QYGPk8pBvSIPf6MJapdzVCpA2ZKOzCpF7wwBiY+0rFA3ndDd
-         eWdg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xwQzSxEYATvXw39X4hIfByL5axaSJ+hp0GX3dcFg9xE=;
+        b=RpM/5T09Rkd7whH1lYSUsRaIYsLxkJ0RHNwjJCSxMK6DXCHNXTKvm/1fd6/rqZteFR
+         Rx0Dd96ySW4Ipv/w5BooL5M2xPSrcjrb8u6NBcWH5FYSfZQAuMc7l+4tKtdhQ+GupunV
+         QxDrwD5p/mLnrG+XlPTaY3Bs1cduAAinJEmPjaKEHtI6PU/jlh7sqgyaCKUUx4NHkvwe
+         gQ7yfcspKa3yD8qwC59MMnhKCEbG5hH4oqDos1yN52iQjO8nTh3HigOQyXj7O5Dbi9ZV
+         h8NZhnbLYWMt7sRrzSiuElVjYuCoOb7cJR9nec0Geq3YRRQA9H69XcMHraBJpty9UP+5
+         LQ0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6OTWbttkJY9+UiZ3IJ1wp/zYpMm58Srtsymi020albs=;
-        b=LWscNMhBPSE2huXskfJDp+r75X/YsiWzfs+SU5CUQQlo+VqEmAg17FZuXHllnAju6R
-         QpTRL/1NKqCUz9vBUL7S+z3KpPc7B49NBv34b3X1AQAYpI3YqnKPhuEeqnRIbfG6iqny
-         Q+3x+1H2w2SDBrkvZ0XiW2Nuk44lXJwQzhO2Hg3e3+Wmiy54WK52dD8lt1OU8xmjTQwH
-         8gKB7qcP+GG6QvD3gK9PUydH4PDpA0Ht4HCfk5k5pfeUuJbqodEqSlyg+aPSuaqpjc5R
-         Fihk2lK0vakEadk9UXJl5NxMxZYifd1XjJdYICPGSsHk2/TM6KBA9dN3lWoeYfSaEUuO
-         XMEw==
-X-Gm-Message-State: ACrzQf3JuYzItQJ3d/Xfd5MKOCGmjRpJWX601mGTbvkFhBeLx1AOSFFo
-        Nf/vfQAtyJ2vtuXITqsQjiADDA==
-X-Google-Smtp-Source: AMsMyM6lZW58ikrKYE7rGbhgOpi1TcfuL9KXipcclHosAShP5Xqm8tKM3JzhFHvVQBs9v8IsMw9CuA==
-X-Received: by 2002:a65:6e47:0:b0:438:c2f0:c0eb with SMTP id be7-20020a656e47000000b00438c2f0c0ebmr39121933pgb.236.1666819371325;
-        Wed, 26 Oct 2022 14:22:51 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id s23-20020aa78bd7000000b0056bc95ef1ffsm3417064pfd.75.2022.10.26.14.22.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 14:22:50 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 14:22:46 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Wei Wang <wei.w.wang@intel.com>
-Cc:     seanjc@google.com, pbonzini@redhat.com, vipinsh@google.com,
-        ajones@ventanamicro.com, eric.auger@redhat.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 00/18] KVM selftests code consolidation and cleanup
-Message-ID: <Y1mlJqKdFtlgG3jR@google.com>
-References: <20221024113445.1022147-1-wei.w.wang@intel.com>
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xwQzSxEYATvXw39X4hIfByL5axaSJ+hp0GX3dcFg9xE=;
+        b=hMo4QQq4pyQigw5fxrHKPoyYWVlgpYk4g72wRiebz8QYdUb3ifVKshdxt4XnQxR+Dk
+         jzpQZY7w7AchyUhpPGDZwbLsbK4exi0o3iXgPB7nipKVED7Yr0N+D4rks1Gkz+bOzW2Y
+         Y/ZMBgT5uSo8oqsKHNs9Er0OqhfjW7tFkcLvkNLPauJyslDqfnA9MvwN5mBDDMBwxvpt
+         iO7l6ZXZ3MlLoB1wvYX1gC8jJ+6d2KaQBC5Kj+pa/xjzYylnSyeNmE2OR6mbKdehO/LO
+         VCOipRNoC6l8B5jDAQ95wcyA1klqCLvgN2aex5dCuPFgFS9/PLWfhIkHAqTuPAOH624g
+         kgWw==
+X-Gm-Message-State: ACrzQf0JREMpVqNSwpMl9HyPDyTSl1rfPUsCLpVQLcfH43AZH63J6F4l
+        MoeLTaiDV1G+wSMKm2/jddo=
+X-Google-Smtp-Source: AMsMyM6ensEOd7HbTbNfYIT/f7EQdTyWIhqe5A2BIVTj3+ujPQdHszK3t50zI7jkiMDMZGau3DPaxg==
+X-Received: by 2002:ac2:5b50:0:b0:4af:d01:63d0 with SMTP id i16-20020ac25b50000000b004af0d0163d0mr2786228lfp.596.1666819523402;
+        Wed, 26 Oct 2022 14:25:23 -0700 (PDT)
+Received: from ?IPV6:2a02:a31a:a240:1700:c898:de98:30b3:a07? ([2a02:a31a:a240:1700:c898:de98:30b3:a07])
+        by smtp.googlemail.com with ESMTPSA id p8-20020a2eba08000000b00277041268absm1070023lja.78.2022.10.26.14.25.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 14:25:22 -0700 (PDT)
+From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
+X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Message-ID: <1adf0b0b-3743-4b5a-9416-823b8bf903fa@gmail.com>
+Date:   Wed, 26 Oct 2022 23:25:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024113445.1022147-1-wei.w.wang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.0
+Subject: Re: [PATCH v6 14/23] drm/modes: Properly generate a drm_display_mode
+ from a named mode
+To:     maxime@cerno.tech, Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Ben Skeggs <bskeggs@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>
+Cc:     linux-sunxi@lists.linux.dev, intel-gfx@lists.freedesktop.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        linux-arm-kernel@lists.infradead.org,
+        nouveau@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
+        Dom Cobley <dom@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220728-rpi-analog-tv-properties-v6-0-e7792734108f@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v6-14-e7792734108f@cerno.tech>
+Content-Language: pl
+In-Reply-To: <20220728-rpi-analog-tv-properties-v6-14-e7792734108f@cerno.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,112 +100,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 07:34:27PM +0800, Wei Wang wrote:
-> This patch series intends to improve kvm selftests with better code
-> consolidation using the helper functions to perform vcpu and thread
-> related operations.
-> 
-> In general, several aspects are improved:
-> 1) The current users allocate an array of vcpu pointers to the vcpus that
->    are added to a vm, and an array of vcpu threads. This isn't necessary
->    as kvm_vm already maintains a list of added vcpus. This series changes
->    the list of vcpus in the kvm_vm struct to a vcpu array for users to
->    work with and removes each user's own allocation of such vcpu arrays.
->    Aslo add the vcpu thread to the kvm_vcpu struct, so that users don't
->    need to explicitly allocate a thread array to manage vcpu threads on
->    their own.
-> 2) Change the users to use the helper functions provided by this series
->    with the following enhancements:
->    - Many users working with pthread_create/join forgot to check if
->      error on returning. The helper functions have handled thoses inside,
->      so users don't need to handle them by themselves;
->    - The vcpu threads created via the helper functions are named in
->      "vcpu-##id" format. Naming the threads facilitates debugging,
->      performance tuning, runtime pining etc;
->    - helper functions named with "vm_vcpu_threads_" iterates over all the
->      vcpus that have been added to the vm. Users don't need a explicit
->      loop to go through the added cpus by themselves.
-> 3) kvm_vcpu is used as the interface parameter to the vcpu thread's
->    start routine, and the user specific data is made to be the private
->    data in kvm_vcpu. This can simplify the user specific data structures,
->    as kvm_vcpu has already included the required info for the thread, for
->    example, in patch 13, the cpu_idx field from "struct vcpu_thread"
->    is a duplicate of vcpu->id.
+Hi Maxime,
 
-I haven't dug too much into the actual code yet, but I have some high
-level feedback based on a quick look through the series:
+> +static struct drm_display_mode *drm_named_mode(struct drm_device *dev,
+> +					       struct drm_cmdline_mode *cmd)
+> +{
+> +	struct drm_display_mode *mode;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(drm_named_modes); i++) {
+> +		const struct drm_named_mode *named_mode = &drm_named_modes[i];
+> +
+> +		if (strcmp(cmd->name, named_mode->name))
+> +			continue;
+> +
+> +		if (!named_mode->tv_mode)
+> +			continue;
+> +
+> +		mode = drm_analog_tv_mode(dev,
+> +					  named_mode->tv_mode,
+> +					  named_mode->pixel_clock_khz * 1000,
+> +					  named_mode->xres,
+> +					  named_mode->yres,
+> +					  named_mode->flags & DRM_MODE_FLAG_INTERLACE);
+> +		if (!mode)
+> +			return NULL;
+> +
+> +		return mode;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
 
- - Use the format "KVM: selftests: <Decsription>" for the shortlog.
+You didn't add tv_mode_specified to struct drm_named_mode, and left the
+if (!named_mode->tv_mode) condition here. This will break on NTSC.
 
- - Make the shortlog more specific. "vcpu related code consolidation" is
-   vague.
+Best regards,
+Mateusz Kwiatkowski
 
- - Do not introduce bugs and then fix them in subsequent commits.  This
-   breaks bisection. For example, kvm_page_table_test is broken at "KVM:
-   selftests/kvm_util: use vm->vcpus[] when create vm with vcpus" and
-   then fixed by "KVM: selftests/kvm_page_table_test: vcpu related code
-   consolidation".
-
- - Try to limit each patch to one logical change. This is somewhat more
-   art than science, but the basic idea is to avoid changing too much at
-   once so that the code is easier to review and bisect. For example,
-   "KVM: selftests/perf_test_util: vcpu related code consolidation" has
-   a list of 6 different changes being made in the commit description.
-   This is a sure sign this commit should be broken up. The same applies
-   to many of the other patches. This will also make it easier to come
-   up with more specific shortlogs.
-
-> 
-> The changes have been tested on an SPR server. Patch 15 and 16 haven't
-> been tested due to the lack of an ARM environment currently.
-> 
-> Wei Wang (18):
->   KVM: selftests/kvm_util: use array of pointers to maintain vcpus in
->     kvm_vm
->   KVM: selftests/kvm_util: use vm->vcpus[] when create vm with vcpus
->   KVM: selftests/kvm_util: helper functions for vcpus and threads
->   KVM: selftests/kvm_page_table_test: vcpu related code consolidation
->   KVM: selftests/hardware_disable_test: code consolidation and cleanup
->   KVM: selftests/dirty_log_test: vcpu related code consolidation
->   KVM: selftests/max_guest_memory_test: vcpu related code consolidation
->   KVM: selftests/set_memory_region_test: vcpu related code consolidation
->   KVM: selftests/steal_time: vcpu related code consolidation and cleanup
->   KVM: selftests/tsc_scaling_sync: vcpu related code consolidation
->   KVM: selftest/xapic_ipi_test: vcpu related code consolidation
->   KVM: selftests/rseq_test: name the migration thread and some cleanup
->   KVM: selftests/perf_test_util: vcpu related code consolidation
->   KVM: selftest/memslot_perf_test: vcpu related code consolidation
->   KVM: selftests/vgic_init: vcpu related code consolidation
->   KVM: selftest/arch_timer: vcpu related code consolidation
->   KVM: selftests: remove the *vcpu[] input from __vm_create_with_vcpus
->   KVM: selftests/kvm_create_max_vcpus: check KVM_MAX_VCPUS
-> 
->  .../selftests/kvm/aarch64/arch_timer.c        |  42 ++--
->  .../testing/selftests/kvm/aarch64/vgic_init.c |  35 ++-
->  .../selftests/kvm/access_tracking_perf_test.c |  18 +-
->  .../selftests/kvm/demand_paging_test.c        |   9 +-
->  .../selftests/kvm/dirty_log_perf_test.c       |  11 +-
->  tools/testing/selftests/kvm/dirty_log_test.c  |  16 +-
->  .../selftests/kvm/hardware_disable_test.c     |  56 ++---
->  .../testing/selftests/kvm/include/kvm_util.h  |  24 ++
->  .../selftests/kvm/include/kvm_util_base.h     |  12 +-
->  .../selftests/kvm/include/perf_test_util.h    |   9 +-
->  .../selftests/kvm/kvm_create_max_vcpus.c      |   7 +
->  .../selftests/kvm/kvm_page_table_test.c       |  16 +-
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 217 +++++++++++++++---
->  .../selftests/kvm/lib/perf_test_util.c        |  68 ++----
->  .../selftests/kvm/lib/x86_64/perf_test_util.c |  11 +-
->  tools/testing/selftests/kvm/lib/x86_64/vmx.c  |   2 +-
->  .../selftests/kvm/max_guest_memory_test.c     |  53 ++---
->  .../kvm/memslot_modification_stress_test.c    |   9 +-
->  .../testing/selftests/kvm/memslot_perf_test.c | 137 +++++------
->  tools/testing/selftests/kvm/rseq_test.c       |  10 +-
->  .../selftests/kvm/set_memory_region_test.c    |  16 +-
->  tools/testing/selftests/kvm/steal_time.c      |  15 +-
->  .../selftests/kvm/x86_64/tsc_scaling_sync.c   |  25 +-
->  .../selftests/kvm/x86_64/xapic_ipi_test.c     |  54 ++---
->  24 files changed, 476 insertions(+), 396 deletions(-)
-> 
-> -- 
-> 2.27.0
-> 
