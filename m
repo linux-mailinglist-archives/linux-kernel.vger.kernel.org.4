@@ -2,126 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18CC60E5CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAADB60E5CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233885AbiJZQvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
+        id S233908AbiJZQvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiJZQvZ (ORCPT
+        with ESMTP id S233915AbiJZQvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:51:25 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6EAA2A9D;
-        Wed, 26 Oct 2022 09:51:23 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id l6so11001247pjj.0;
-        Wed, 26 Oct 2022 09:51:23 -0700 (PDT)
+        Wed, 26 Oct 2022 12:51:40 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7F8A98FA
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:51:34 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id i12so12026304qvs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:51:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=otIxxDfSMe9NIzeveqx6jnjued64xx34K/45O0pl07U=;
-        b=jJKA3ulHxiWK+gd+Gn9nSqwVxiPE3ZCz1dWPoyI7yyKR86Tm8IRtkuRgGjO3Osub64
-         wWkZrx+1QL7U5jq4BNzLSa3qabbc7taFjcjOt+Z5ZnF6OgCmx7COgYhcQNjiywHRtN0n
-         cIAwDWyvK4O9u11HP7MeHmj+9VJnPpzgakF7HyOQnmJ9x6fP9WzIFrYYAi00pJz5shj2
-         x1oX3xtoFN3XgqamPJiB/9DHgqgLGzmMc1wyMXDPORQ7YO/QCQ2SrQFilgnXiHq89t1Z
-         /NK5r5oV/2BSbrwJUCft9B3yZrdYAdyureMMesp2c9QPk8Elxyn0Rl/o11akDbD3a60b
-         I9uw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VmS+uedq9rzycs24wj1ycZpaKGAK2vI/UBOPK1atnrA=;
+        b=QtKakQTVufItu5vl/8R42Qnn9Wzs/hChZ09yA7FjmJ9mpKgNVXRrg2X1M5yl/PP9OZ
+         HMq1+RaeaaRsj+hRYQ3TsmQv4nytH4Ahp08Z47qG/6AA+DgeXWAk1DSJ7TBODGiXf5xr
+         VEGAFdIgRFtBRj6UrUa1yf0RJEKNYpwKCDmJO1rCrowfmgnqrBLA8HZA1Xjw9HpNwm80
+         GjvTIrqN7n/378lvmq0khEiatP3JO9PKwD+NRK6RduFf0Pzeihrr1AVzWqFpW+XpGvGV
+         zbjCSp2IzLfDLjCY/r9wXv9kaRqOQUXKXvZrn1P106jOC7BFyH1ev/Q4WGLQrPGV4xWR
+         FfOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=otIxxDfSMe9NIzeveqx6jnjued64xx34K/45O0pl07U=;
-        b=K/TqdCwQ1HhU9AUL/iEkl5RilCNzeT3phh9uVEeZGzlFgZHbs7D21a8I+zK0NRw1yj
-         Hg8Fi24v4myUZFq1krHB8xB8mnAIJeqDd0KxG19uR9ziYCRHsw4cz6LxO9jIQQuLCh/I
-         JPTfv8ni0cHTZ/6NfE/iF+USPbYjkF8pGPSZ6bdIZ0t2y5sfSCrwi9K6CKO3bPxzNCtY
-         Czr0/B2XQ17fQTpyrTvdWe6SoNrYEzDNraPafs8RBDuLjCI3HQgzmyoVyBUjljIy9C9q
-         7U/+Ru6KV/U4uQCjzxapUpF0m3dZ4ZCQNlwsfQAT8G+jUL2j2zWN1TOcw7uMm7X7tU48
-         Zezw==
-X-Gm-Message-State: ACrzQf00vP01ZpfAA5j2P6FPmi7SmWmcNA2d7NgCgj2JEOSM2WuMjtiX
-        /PTxM4CpKiZNcqKINYDZn+CFOPD8W3g=
-X-Google-Smtp-Source: AMsMyM51RcQoRYQcB4q2ADLlloKLf5sfxlm5+/zLXCjtlGv62pW80DfsbwFcNmdWhppzrZbojSwWDA==
-X-Received: by 2002:a17:902:6542:b0:172:95d8:a777 with SMTP id d2-20020a170902654200b0017295d8a777mr44965751pln.61.1666803083093;
-        Wed, 26 Oct 2022 09:51:23 -0700 (PDT)
-Received: from ?IPV6:2600:8802:b00:4a48:1c5e:eaed:5c17:c765? ([2600:8802:b00:4a48:1c5e:eaed:5c17:c765])
-        by smtp.gmail.com with ESMTPSA id g12-20020a17090a4b0c00b0020dd9382124sm1297892pjh.57.2022.10.26.09.51.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 09:51:22 -0700 (PDT)
-Message-ID: <4f0ae178-f075-1f24-43b7-7ba8e494db76@gmail.com>
-Date:   Wed, 26 Oct 2022 09:51:20 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VmS+uedq9rzycs24wj1ycZpaKGAK2vI/UBOPK1atnrA=;
+        b=TeOSMtb77a5+ljF2LrqodddxiNjU+lMBnOi/E6RITGTBwUTAx5gB0pojvQkH0ZGLna
+         iwGewbpIQZviuwdQI5sMaDwr2IsKRKGL9ic+D6ZV2SqkqqDlIoI4gV+ueqO0LMJUhR41
+         v8DLZIqnvN7glaoazT1oaA+91WSD9dE6woeBCciJl/yCofv/83aUu4/+IHME6wU5ZKMU
+         rNVSTDCY8Ceslxd3nFnebrdIyvbsOZJkiREzuLrxH4yL1kfQ6SWvDaVMqXnnmyGgFtov
+         C3p9lWy3V9dy+DeCIiOp1kGqElHAzqC1zeikYdrggYbojhMJnKHtx5KmNaTkl/j2C9Em
+         wleQ==
+X-Gm-Message-State: ACrzQf1mOL/yfDOqHnoL3VCbbLBvnGIhrWwSHEEY33rq6dbeIggYlE5o
+        AKinST8jtJCX0CN+PPrAkxc9Hg==
+X-Google-Smtp-Source: AMsMyM5NHLEVxZiJLk0E6mFpOZw493Bl8ApQVclF6CiyclewbLeaFtb/1NUY4DjOq2pM8MRNEg/I0g==
+X-Received: by 2002:a05:6214:5710:b0:4bb:8e33:560c with SMTP id lt16-20020a056214571000b004bb8e33560cmr6878068qvb.122.1666803093278;
+        Wed, 26 Oct 2022 09:51:33 -0700 (PDT)
+Received: from krzk-bin.. ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id h2-20020ac81382000000b0038b684a1642sm3440438qtj.32.2022.10.26.09.51.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 09:51:32 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [RESEND PATCH] dt-bindings: pci: qcom,pcie-ep: correct qcom,perst-regs
+Date:   Wed, 26 Oct 2022 12:51:29 -0400
+Message-Id: <20221026165129.48405-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH stable 4.19] arm64: errata: Remove AES hwcap for COMPAT
- tasks
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, James Morse <james.morse@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Shreyas K K <quic_shrekk@quicinc.com>,
-        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-References: <20221020230110.1255660-1-f.fainelli@gmail.com>
- <20221020230110.1255660-3-f.fainelli@gmail.com> <Y1llLTazLS6LyOWB@kroah.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <Y1llLTazLS6LyOWB@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+qcom,perst-regs is an phandle array of one item with a phandle and its
+arguments.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-On 10/26/2022 9:49 AM, Greg Kroah-Hartman wrote:
-> On Thu, Oct 20, 2022 at 04:01:07PM -0700, Florian Fainelli wrote:
->> From: James Morse <james.morse@arm.com>
->>
->> commit 44b3834b2eed595af07021b1c64e6f9bc396398b upstream
->>
->> Cortex-A57 and Cortex-A72 have an erratum where an interrupt that
->> occurs between a pair of AES instructions in aarch32 mode may corrupt
->> the ELR. The task will subsequently produce the wrong AES result.
->>
->> The AES instructions are part of the cryptographic extensions, which are
->> optional. User-space software will detect the support for these
->> instructions from the hwcaps. If the platform doesn't support these
->> instructions a software implementation should be used.
->>
->> Remove the hwcap bits on affected parts to indicate user-space should
->> not use the AES instructions.
->>
->> Acked-by: Ard Biesheuvel <ardb@kernel.org>
->> Signed-off-by: James Morse <james.morse@arm.com>
->> Link: https://lore.kernel.org/r/20220714161523.279570-3-james.morse@arm.com
->> Signed-off-by: Will Deacon <will@kernel.org>
->> [florian: resolved conflicts in arch/arm64/tools/cpucaps and cpu_errata.c]
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> Change-Id: I651a0db2e9d2f304d210ae979ae586e7dcc9744d
-> 
-> No need for Change-Id: in upstream patches :)
-
-Meh, the perils of working with Gerrit in the same tree.. do you need me 
-to resubmit or can you strip those when you apply the patches?
+diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+index 977c976ea799..5aa590957ee4 100644
+--- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
++++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+@@ -47,8 +47,10 @@ properties:
+                  enable registers
+     $ref: "/schemas/types.yaml#/definitions/phandle-array"
+     items:
+-      minItems: 3
+-      maxItems: 3
++      - items:
++          - description: Syscon to TCSR system registers
++          - description: Perst enable offset
++          - description: Perst separateion enable offset
+ 
+   interrupts:
+     items:
 -- 
-Florian
+2.34.1
+
