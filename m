@@ -2,123 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61A960E277
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:47:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA7A60E223
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233985AbiJZNrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        id S231706AbiJZN1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbiJZNqf (ORCPT
+        with ESMTP id S233757AbiJZN1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:46:35 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC32167073;
-        Wed, 26 Oct 2022 06:46:33 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3020B1A81C5;
-        Wed, 26 Oct 2022 15:46:32 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BA5371A81C2;
-        Wed, 26 Oct 2022 15:46:31 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id DC7CC183486A;
-        Wed, 26 Oct 2022 21:46:29 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     shengjiu.wang@gmail.com, abelvesa@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, marex@denx.de
-Subject: [PATCH] clk: imx8mp: Add audio shared gate
-Date:   Wed, 26 Oct 2022 21:26:01 +0800
-Message-Id: <1666790761-4685-1-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 26 Oct 2022 09:27:25 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0956B7F57
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:27:23 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id l14so19083800wrw.2
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=03VqyrssAnWYRCP0pdmk/17TCQCe4Tb4Cliyq7Ue4DU=;
+        b=AcakbBd+Jw19mBAgmbFUuo2PwWTbN74rRB77CJHHK6nv3QvkbUMYH5WA3WSl5z2WL5
+         jG61S5UEbfQx8InrBj1VMcIBJX5xgQqTwJ3KnzYk7MxMs2ydYw13p4yRTle+UZwKP6eu
+         CZE6XpR2Q6HJxskOtIGThUkxGrg7MZVE06QY+dmbagj40X050RZgZXMPuKqOqbZl1Bmm
+         AZq/lDszqeBMxbBEVlid55sHWjg1gCtopX8FThiAKlUNw8brYsWnUEcAZr7FRIsVyKhK
+         Z5/tkG7J3LyJOz9h43i/XPycPK98n9bUtDU3m0a5vWWm64jwKPkLt5/crhpkmAtGRlKZ
+         /6wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=03VqyrssAnWYRCP0pdmk/17TCQCe4Tb4Cliyq7Ue4DU=;
+        b=IdYB5YV8tiwqKB5ov2zFK+p9PUCNaWRKWpxGKwz7Hd1GRE6TJHHcdbpAvkd1AgoXJ0
+         KZrF5MnaIDyhmtgr5KZh7qBm5SOtOmPHHkFZVHzhy+2Rh/IXT1XBZ/4NdHSStt8dTVVE
+         vj6Gp6v/nFWfuA4UPyg2kf/tlRJC6k3zWafCLR23aBy5sVBNqwUJ2ZDydcduFfh4sRrI
+         37S36c0FNGamzzvVFiaH9Wk8oiqHjWa17fvvfGLj24jt9w2Rzt6evIib+jGASIlUGwF5
+         rA0n9KARzb9plwAwukSJMfW78Du36T1vT63Jho81yewE598xFjzRsYPXjsrDByjh61ET
+         UgGQ==
+X-Gm-Message-State: ACrzQf1Kz8LckNwgSj1216PirLFLqNLgPRGzcH3WtU1D0RT6QJC3bqep
+        H7K+Xbq4Gyd/vJxa18FB8j6homFxffieqA==
+X-Google-Smtp-Source: AMsMyM5vSNcTib7F7qbfY2NVz3RPcmwOSyoKqTc8u6PeVVOblws3MYd8aToQQECLP1HZWj/nRWGC5A==
+X-Received: by 2002:a05:6000:228:b0:236:773e:a6c0 with SMTP id l8-20020a056000022800b00236773ea6c0mr9042682wrz.102.1666790842116;
+        Wed, 26 Oct 2022 06:27:22 -0700 (PDT)
+Received: from localhost.localdomain ([111.88.96.240])
+        by smtp.gmail.com with ESMTPSA id i11-20020a5d438b000000b0022cbf4cda62sm6565483wrq.27.2022.10.26.06.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 06:27:21 -0700 (PDT)
+From:   Osama Muhammad <osmtendev@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Osama Muhammad <osmtendev@gmail.com>,
+        Samuel Thibault <samuel.thibault@ens-lyon.org>
+Subject: [PATCH] Accessiblity: speakup_decext: specifying the default driver parameters among the module params
+Date:   Wed, 26 Oct 2022 18:27:11 +0500
+Message-Id: <20221026132711.10071-1-osmtendev@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Abel Vesa <abel.vesa@nxp.com>
+This is an enhancement which allows to specify the default driver
+parameters among the module parameters.
 
-According to the RM, the CCGR101 is shared for the following root clocks:
-- AUDIO_AHB_CLK_ROOT
-- AUDIO_AXI_CLK_ROOT
-- SAI1_CLK_ROOT
-- SAI2_CLK_ROOT
-- SAI3_CLK_ROOT
-- SAI5_CLK_ROOT
-- SAI6_CLK_ROOT
-- SAI7_CLK_ROOT
-- PDM_CLK_ROOT
+Adding default variables to the speakup_decext module
+allows to easily set that at boot, rather than
+setting the sys variables after boot.
+More details can be found here:
+https://github.com/linux-speakup/speakup/issues/7
 
-And correct clock MX8MP_CLK_AUDIO_ROOT to be IMX8MP_CLK_AUDIO_AHB_ROOT.
+Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Reviewed-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+
 ---
- drivers/clk/imx/clk-imx8mp.c             | 11 ++++++++++-
- include/dt-bindings/clock/imx8mp-clock.h | 11 ++++++++++-
- 2 files changed, 20 insertions(+), 2 deletions(-)
+ .../accessibility/speakup/speakup_decext.c    | 44 ++++++++++++++-----
+ 1 file changed, 34 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/clk/imx/clk-imx8mp.c b/drivers/clk/imx/clk-imx8mp.c
-index 652ae58c2735..0ae3bc7bf8a1 100644
---- a/drivers/clk/imx/clk-imx8mp.c
-+++ b/drivers/clk/imx/clk-imx8mp.c
-@@ -17,6 +17,7 @@
+diff --git a/drivers/accessibility/speakup/speakup_decext.c b/drivers/accessibility/speakup/speakup_decext.c
+index eaebf62300a4..271bcf279bf9 100644
+--- a/drivers/accessibility/speakup/speakup_decext.c
++++ b/drivers/accessibility/speakup/speakup_decext.c
+@@ -38,16 +38,25 @@ static void synth_flush(struct spk_synth *synth);
  
- static u32 share_count_nand;
- static u32 share_count_media;
-+static u32 share_count_audio;
+ static int in_escape;
  
- static const char * const pll_ref_sels[] = { "osc_24m", "dummy", "dummy", "dummy", };
- static const char * const audio_pll1_bypass_sels[] = {"audio_pll1", "audio_pll1_ref_sel", };
-@@ -699,7 +700,15 @@ static int imx8mp_clocks_probe(struct platform_device *pdev)
- 	hws[IMX8MP_CLK_HDMI_ROOT] = imx_clk_hw_gate4("hdmi_root_clk", "hdmi_axi", ccm_base + 0x45f0, 0);
- 	hws[IMX8MP_CLK_TSENSOR_ROOT] = imx_clk_hw_gate4("tsensor_root_clk", "ipg_root", ccm_base + 0x4620, 0);
- 	hws[IMX8MP_CLK_VPU_ROOT] = imx_clk_hw_gate4("vpu_root_clk", "vpu_bus", ccm_base + 0x4630, 0);
--	hws[IMX8MP_CLK_AUDIO_ROOT] = imx_clk_hw_gate4("audio_root_clk", "audio_ahb", ccm_base + 0x4650, 0);
-+	hws[IMX8MP_CLK_AUDIO_AHB_ROOT] = imx_clk_hw_gate2_shared2("audio_ahb_root", "audio_ahb", ccm_base + 0x4650, 0, &share_count_audio);
-+	hws[IMX8MP_CLK_AUDIO_AXI_ROOT] = imx_clk_hw_gate2_shared2("audio_axi_root", "audio_axi", ccm_base + 0x4650, 0, &share_count_audio);
-+	hws[IMX8MP_CLK_SAI1_ROOT] = imx_clk_hw_gate2_shared2("sai1_root", "sai1", ccm_base + 0x4650, 0, &share_count_audio);
-+	hws[IMX8MP_CLK_SAI2_ROOT] = imx_clk_hw_gate2_shared2("sai2_root", "sai2", ccm_base + 0x4650, 0, &share_count_audio);
-+	hws[IMX8MP_CLK_SAI3_ROOT] = imx_clk_hw_gate2_shared2("sai3_root", "sai3", ccm_base + 0x4650, 0, &share_count_audio);
-+	hws[IMX8MP_CLK_SAI5_ROOT] = imx_clk_hw_gate2_shared2("sai5_root", "sai5", ccm_base + 0x4650, 0, &share_count_audio);
-+	hws[IMX8MP_CLK_SAI6_ROOT] = imx_clk_hw_gate2_shared2("sai6_root", "sai6", ccm_base + 0x4650, 0, &share_count_audio);
-+	hws[IMX8MP_CLK_SAI7_ROOT] = imx_clk_hw_gate2_shared2("sai7_root", "sai7", ccm_base + 0x4650, 0, &share_count_audio);
-+	hws[IMX8MP_CLK_PDM_ROOT] = imx_clk_hw_gate2_shared2("pdm_root", "pdm", ccm_base + 0x4650, 0, &share_count_audio);
+-static struct var_t vars[] = {
+-	{ CAPS_START, .u.s = {"[:dv ap 222]" } },
+-	{ CAPS_STOP, .u.s = {"[:dv ap 100]" } },
+-	{ RATE, .u.n = {"[:ra %d]", 7, 0, 9, 150, 25, NULL } },
+-	{ PITCH, .u.n = {"[:dv ap %d]", 100, 0, 100, 0, 0, NULL } },
+-	{ INFLECTION, .u.n = {"[:dv pr %d] ", 100, 0, 10000, 0, 0, NULL } },
+-	{ VOL, .u.n = {"[:dv gv %d]", 13, 0, 16, 0, 5, NULL } },
+-	{ PUNCT, .u.n = {"[:pu %c]", 0, 0, 2, 0, 0, "nsa" } },
+-	{ VOICE, .u.n = {"[:n%c]", 0, 0, 9, 0, 0, "phfdburwkv" } },
+-	{ DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
++
++enum default_vars_id {
++	CAPS_START_ID = 0, CAPS_STOP_ID,
++	RATE_ID, PITCH_ID, INFLECTION_ID,
++	VOL_ID, PUNCT_ID, VOICE_ID,
++	DIRECT_ID, V_LAST_ID,
++	NB_ID,
++};
++
++static struct var_t vars[NB_ID] = {
++	[CAPS_START_ID] = { CAPS_START, .u.s = {"[:dv ap 222]" } },
++	[CAPS_STOP_ID] = { CAPS_STOP, .u.s = {"[:dv ap 100]" } },
++	[RATE_ID] = { RATE, .u.n = {"[:ra %d]", 7, 0, 9, 150, 25, NULL } },
++	[PITCH_ID] = { PITCH, .u.n = {"[:dv ap %d]", 100, 0, 100, 0, 0, NULL } },
++	[INFLECTION_ID] = { INFLECTION, .u.n = {"[:dv pr %d] ", 100, 0, 10000, 0, 0, NULL } },
++	[VOL_ID] = { VOL, .u.n = {"[:dv gv %d]", 13, 0, 16, 0, 5, NULL } },
++	[PUNCT_ID] = { PUNCT, .u.n = {"[:pu %c]", 0, 0, 2, 0, 0, "nsa" } },
++	[VOICE_ID] = { VOICE, .u.n = {"[:n%c]", 0, 0, 9, 0, 0, "phfdburwkv" } },
++	[DIRECT_ID] = { DIRECT, .u.n = {NULL, 0, 0, 1, 0, 0, NULL } },
+ 	V_LAST_VAR
+ };
  
- 	hws[IMX8MP_CLK_ARM] = imx_clk_hw_cpu("arm", "arm_a53_core",
- 					     hws[IMX8MP_CLK_A53_CORE]->clk,
-diff --git a/include/dt-bindings/clock/imx8mp-clock.h b/include/dt-bindings/clock/imx8mp-clock.h
-index 9d5cc2ddde89..2f6fec299662 100644
---- a/include/dt-bindings/clock/imx8mp-clock.h
-+++ b/include/dt-bindings/clock/imx8mp-clock.h
-@@ -324,8 +324,17 @@
- #define IMX8MP_CLK_CLKOUT2_SEL			317
- #define IMX8MP_CLK_CLKOUT2_DIV			318
- #define IMX8MP_CLK_CLKOUT2			319
-+#define IMX8MP_CLK_AUDIO_AHB_ROOT		320
-+#define IMX8MP_CLK_AUDIO_AXI_ROOT		321
-+#define IMX8MP_CLK_SAI1_ROOT			322
-+#define IMX8MP_CLK_SAI2_ROOT			323
-+#define IMX8MP_CLK_SAI3_ROOT			324
-+#define IMX8MP_CLK_SAI5_ROOT			325
-+#define IMX8MP_CLK_SAI6_ROOT			326
-+#define IMX8MP_CLK_SAI7_ROOT			327
-+#define IMX8MP_CLK_PDM_ROOT			328
+@@ -225,10 +234,25 @@ static void synth_flush(struct spk_synth *synth)
+ module_param_named(ser, synth_decext.ser, int, 0444);
+ module_param_named(dev, synth_decext.dev_name, charp, 0444);
+ module_param_named(start, synth_decext.startup, short, 0444);
++module_param_named(rate, vars[RATE_ID].u.n.default_val, int, 0444);
++module_param_named(pitch, vars[PITCH_ID].u.n.default_val, int, 0444);
++module_param_named(inflection, vars[INFLECTION_ID].u.n.default_val, int, 0444);
++module_param_named(vol, vars[VOL_ID].u.n.default_val, int, 0444);
++module_param_named(punct, vars[PUNCT_ID].u.n.default_val, int, 0444);
++module_param_named(voice, vars[VOICE_ID].u.n.default_val, int, 0444);
++module_param_named(direct, vars[DIRECT_ID].u.n.default_val, int, 0444);
++
  
--#define IMX8MP_CLK_END				320
-+#define IMX8MP_CLK_END				329
+ MODULE_PARM_DESC(ser, "Set the serial port for the synthesizer (0-based).");
+ MODULE_PARM_DESC(dev, "Set the device e.g. ttyUSB0, for the synthesizer.");
+ MODULE_PARM_DESC(start, "Start the synthesizer once it is loaded.");
++MODULE_PARM_DESC(rate, "Set the rate variable on load.");
++MODULE_PARM_DESC(pitch, "Set the pitch variable on load.");
++MODULE_PARM_DESC(inflection, "Set the inflection variable on load.");
++MODULE_PARM_DESC(vol, "Set the vol variable on load.");
++MODULE_PARM_DESC(punct, "Set the punct variable on load.");
++MODULE_PARM_DESC(voice, "Set the voice variable on load.");
++MODULE_PARM_DESC(direct, "Set the direct variable on load.");
  
- #define IMX8MP_CLK_AUDIOMIX_SAI1_IPG		0
- #define IMX8MP_CLK_AUDIOMIX_SAI1_MCLK1		1
+ module_spk_synth(synth_decext);
+ 
 -- 
-2.34.1
+2.25.1
 
