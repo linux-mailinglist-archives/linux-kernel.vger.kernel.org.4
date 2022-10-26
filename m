@@ -2,90 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A3360EB10
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EC560EAFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233542AbiJZV7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 17:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
+        id S233598AbiJZVxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 17:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiJZV7P (ORCPT
+        with ESMTP id S229602AbiJZVxs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 17:59:15 -0400
-X-Greylist: delayed 345 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 26 Oct 2022 14:59:13 PDT
-Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54C6A7CABD;
-        Wed, 26 Oct 2022 14:59:13 -0700 (PDT)
-Received: by cae.in-ulm.de (Postfix, from userid 1000)
-        id 8C92A140306; Wed, 26 Oct 2022 23:53:26 +0200 (CEST)
-From:   "Christian A. Ehrhardt" <lk@c--e.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Christian A. Ehrhardt" <lk@c--e.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Kees Cook <keescook@chromium.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] x86/kvm: Fix state restore in em_rsm
-Date:   Wed, 26 Oct 2022 23:52:54 +0200
-Message-Id: <20221026215255.1063662-1-lk@c--e.de>
-X-Mailer: git-send-email 2.30.2
+        Wed, 26 Oct 2022 17:53:48 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445BE95AD4;
+        Wed, 26 Oct 2022 14:53:46 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MyMyJ2PX1z4x1G;
+        Thu, 27 Oct 2022 08:53:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1666821224;
+        bh=uv97AMPsc6IV7qTqkmaF+rTZKz0591gTDPT7qnof5Z0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Kt9Et3iev+6kzlFewJvzmbutbKadYpAiUPPltWNqsGOyni3vhUanKS8U2YTPYaxEO
+         fcuOEU8jSK4AYxhEvrQGD0XBMlJ91zIW7p69wnzi81075zmMQcQrnVYF4TtbNr6KkY
+         IAMSL0cpB41XBHxRSL1CHnLiVvy0ghF57IndBUZZOI6ymP8BLDGUlJP6YA04bjkUN1
+         Y46G5f0khn2lB1xVLDEyiAVW1+YFckkG9e/TMwxESYqdUA4wTtxGgcpKHKGrkSEWOh
+         j3l/OILk0U5jLIQUlFCbdG1HCX5+g/dLQi4EHiCLisFF9nwigy/Hx3V9BDqzJdp3IS
+         gpxvHxPGOck8Q==
+Date:   Thu, 27 Oct 2022 08:53:32 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     Zhao Liu <zhao1.liu@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the hyperv-fixes tree
+Message-ID: <20221027085220.32076be7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/eES6Rp7.geZxe_+S96qRldh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reports a stack-out-of-bounds access when
-emulating RSM (return from system management mode).
+--Sig_/eES6Rp7.geZxe_+S96qRldh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Assume that a 64-bit capable host (i.e. CONFIG_X86_64 is true)
-emulates a guest cpu that does not support 64-bit mode. In this case
-RSM must use the 32-bit version of the SMM state map which only
-contains space for 8 general purpose registers.
-However, NR_EMULATOR_GPRS is defined to 16 due to CONFIG_X86_64.
+Hi all,
 
-As a result rsm_load_state_32 will try to restore 16
-registers from the state save area which only contains 8
-registers. Manual offset calculation easily shows that
-memory beyond the end of the smstate buffer is accessed in
-this case.
+After merging the hyperv-fixes tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Revert the relevant parts of b443183a25ab and use explicit constants
-for the number of general purpose registers, again. This
-also ensures that the code in rsm_load_state_{32,64} matches
-what is done in enter_smm_save_state_{32,64}.
+arch/x86/hyperv/hv_init.c: In function 'hyperv_init':
+arch/x86/hyperv/hv_init.c:447:29: error: unused variable 'dst' [-Werror=3Du=
+nused-variable]
+  447 |                 void *src, *dst;
+      |                             ^~~
+cc1: all warnings being treated as errors
 
-Fixes: b443183a25ab ("KVM: x86: Reduce the number of emulator GPRs to '8' for 32-bit KVM")
-Signed-off-by: Christian A. Ehrhardt <lk@c--e.de>
----
- arch/x86/kvm/emulate.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Caused by commit
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 3b27622d4642..05355ebaf4f3 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -2432,7 +2432,7 @@ static int rsm_load_state_32(struct x86_emulate_ctxt *ctxt,
- 	ctxt->eflags =             GET_SMSTATE(u32, smstate, 0x7ff4) | X86_EFLAGS_FIXED;
- 	ctxt->_eip =               GET_SMSTATE(u32, smstate, 0x7ff0);
- 
--	for (i = 0; i < NR_EMULATOR_GPRS; i++)
-+	for (i = 0; i < 8; i++)
- 		*reg_write(ctxt, i) = GET_SMSTATE(u32, smstate, 0x7fd0 + i * 4);
- 
- 	val = GET_SMSTATE(u32, smstate, 0x7fcc);
-@@ -2489,7 +2489,7 @@ static int rsm_load_state_64(struct x86_emulate_ctxt *ctxt,
- 	u16 selector;
- 	int i, r;
- 
--	for (i = 0; i < NR_EMULATOR_GPRS; i++)
-+	for (i = 0; i < 16; i++)
- 		*reg_write(ctxt, i) = GET_SMSTATE(u64, smstate, 0x7ff8 - i * 8);
- 
- 	ctxt->_eip   = GET_SMSTATE(u64, smstate, 0x7f78);
--- 
-2.34.1
+  f8162cff19f1 ("x86/hyperv: Remove BUG_ON() for kmap_local_page()")
 
+I have used the hyperv-fixes tree from next-20221026 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/eES6Rp7.geZxe_+S96qRldh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNZrFwACgkQAVBC80lX
+0GwDBAf+KxgqXhRpbt6y5r760MiU3j7NSwAbMGC+qNV6sf/XaFZ9UqCGbA9C5Aqm
+AN9bQJ4NaTzWQzEVwBs1Ctt7WroDq0BoTei6VBmHECclV8QEFTKxpZNAVFGirStD
+PIl08w7UICbvAe4QyskpSSAvBMVjc96LmNNzO/i8gumY+q1lcUvtOKgzS5d3yAx+
+G2n7KLNVMhzJke5f/dWnJ+ob9XYN3hJRmHi8cU0DOE0+JxcoPKIE9yLtrSVvEZME
+71eCturbIL81U5Uf3btIXiPWxcxY04SEG73++5YIeYf/j6+bAfY9W/JlQ4IVGfP7
+SIjWrPnp4EPPJDsVDmmh4crQxftXrA==
+=Biax
+-----END PGP SIGNATURE-----
+
+--Sig_/eES6Rp7.geZxe_+S96qRldh--
