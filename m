@@ -2,92 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D34F660D8BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 03:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 592F660D8C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 03:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiJZBJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 21:09:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
+        id S231847AbiJZBNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 21:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbiJZBJq (ORCPT
+        with ESMTP id S230327AbiJZBNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 21:09:46 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5304E1B796;
-        Tue, 25 Oct 2022 18:09:45 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id i7so3433907oif.4;
-        Tue, 25 Oct 2022 18:09:45 -0700 (PDT)
+        Tue, 25 Oct 2022 21:13:48 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678CEE4C28
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 18:13:47 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso2638442pjn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 18:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gggPBAdhwzHx2K1mydrKo8NbjmVha3/Mzmm/f3GMSRU=;
+        b=TrJkrw/wSHS5X3vvLUaKxFJtrzPtH5iTzVd7Vcjqm9q+T40od8a4eYZJ/tdXYPXti3
+         X2CD6GMeTxCHU9skHFuPbjb0De5yMEaMtfbMzKuQ4oAG7grxMIsgF+oWxoHhQFu3e5it
+         +/haYeMQxrDLQmdWmELgZoaKC5+zqg3EzlDNg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HG4VVkS24N9P28wqi2fW2XTbUe425KORd603IoTp6S0=;
-        b=dIdwHT/FVqJhsyGNVUSbfd25nmnmOCNARATqU8YczBM7DQAtbARGCKrQc+6IYIT2nR
-         cjGPuERbPS2SkhNk1gShUSIyRL1FsP8ACycnW47nVdAn47068cIRPkbiJq5ffCucgMr5
-         0tXc74oDTZxDVYPJoLO9+9JAly3vTwj65uYRw5qGxJendXViFpBZoFdXIO88NPp0Be3q
-         EkLxeoSPlpIwXhofNtam3xrdkx77oe+Y3/17EjHfTnB8riF1cx1fjEx781NjxLCQicKh
-         RV5BZ5BkzXH7YVff2NLPgLp1xYbjXwKRTSzV6kMZASEM8SL8SSzdBoTHWw65rY+v7rm3
-         LSyQ==
-X-Gm-Message-State: ACrzQf1WLmUNigYIdN+FasYA8Iqk9uFBIEPsSegjOGDk5TXKHo9r3wUx
-        LOmEEZCJ8stfFJNUFH93fw==
-X-Google-Smtp-Source: AMsMyM6ZtYFMnBkpqKM2x3pzwsH/yh/j7SGFOypJpp0NROCfS3lVPoCuxyWMxk5quff+xl9pBCy9rw==
-X-Received: by 2002:a05:6808:1893:b0:354:b5bc:cd0d with SMTP id bi19-20020a056808189300b00354b5bccd0dmr598596oib.244.1666746584580;
-        Tue, 25 Oct 2022 18:09:44 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i25-20020a9d6259000000b006619533d1ddsm1603477otk.76.2022.10.25.18.09.43
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gggPBAdhwzHx2K1mydrKo8NbjmVha3/Mzmm/f3GMSRU=;
+        b=QTibjof18yWUjqSq7zTkSiPoCAdSmTTq3iWjHxHK5MMlRr/0CwJIONAfegMOBV7Zzd
+         Rgz86Gz7m6WY4EMQg0IJKeWzkr5LL0JCe5TCIu7wwRlEaJT1zYA9MDDlrgOffBIRXAam
+         XI0HuMvVrg4NZ6ucFBmaQYQ2mtcWHooyYZom+91k3pcd1gcGzLIjBUHPK9IEA2BNFvZE
+         8qazwLl/3j7K8tNHFuxshEz7WAbiTiJ4erzJ+N3/YHpNXRpWf+Lsjha9A6qnQvUrQWBM
+         lnM+lfxvmVcZZY960BMvSnfLGo0R6pMLIxxoatUjMWusXcF9ad/7g5VitBPgdtEGuSfZ
+         syvQ==
+X-Gm-Message-State: ACrzQf3M5dBPrpIJZlLUB69mC9MlexGqVqsOx2K0Od/OC4KfKp6NxOC0
+        QoPkc2hp6Hj0m23jEZtnfMc66Q==
+X-Google-Smtp-Source: AMsMyM5JEmI8MymPbUu6llAYi+U3etJHqlQZAkTVnxE/sJy0QUl7WqIthyrxmdjrIhdstLQHrYVdMQ==
+X-Received: by 2002:a17:902:6bc8:b0:178:81db:c6d9 with SMTP id m8-20020a1709026bc800b0017881dbc6d9mr41814359plt.56.1666746826901;
+        Tue, 25 Oct 2022 18:13:46 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:faf6:e503:6cac:3b53])
+        by smtp.gmail.com with ESMTPSA id m15-20020a17090a158f00b00212d4c50647sm189268pja.36.2022.10.25.18.13.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 18:09:44 -0700 (PDT)
-Received: (nullmailer pid 3525382 invoked by uid 1000);
-        Wed, 26 Oct 2022 01:09:45 -0000
-Date:   Tue, 25 Oct 2022 20:09:45 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        kernel@collabora.com, Rob Herring <robh+dt@kernel.org>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Shane Chien <shane.chien@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] ASoC: dt-bindings: mt8192-mt6359: Set maxItems, not
- type, for sound-dai
-Message-ID: <166674658480.3525343.6807644531936287296.robh@kernel.org>
-References: <20221024230658.1772907-1-nfraprado@collabora.com>
+        Tue, 25 Oct 2022 18:13:46 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 10:13:42 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the mm tree
+Message-ID: <Y1iJxiAky+k7Tgaf@google.com>
+References: <20221026115748.24b57082@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221024230658.1772907-1-nfraprado@collabora.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221026115748.24b57082@canb.auug.org.au>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 19:06:57 -0400, Nícolas F. R. A. Prado wrote:
-> sound-dai is a standard property whose type is already set to
-> phandle-array by sound-dai.yaml, so there's no need to set it (and
-> wrongly so for headset-codec) in this binding. What should be set
-> however is the maximum number of items, which for headset-codec should
-> be 1.
+On (22/10/26 11:57), Stephen Rothwell wrote:
+> Hi all,
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> After merging the mm tree, today's linux-next build (htmldocs) produced
+> this warning:
 > 
-> ---
+> Documentation/admin-guide/blockdev/zram.rst:304: WARNING: Title underline too short.
 > 
->  .../devicetree/bindings/sound/mt8192-mt6359-rt1015-rt5682.yaml | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> 10) Deactivate
+> =============
 > 
+> Introduced by commit
+> 
+>   410119cc7a63 ("Documentation: document zram pool_page_order attribute")
 
-Acked-by: Rob Herring <robh@kernel.org>
+Will fix. Thanks!
