@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FAD60E17F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6877260E193
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbiJZNHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
+        id S233937AbiJZNHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbiJZNHV (ORCPT
+        with ESMTP id S233044AbiJZNHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:07:21 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3718FAE21C;
-        Wed, 26 Oct 2022 06:07:18 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bp11so25675177wrb.9;
-        Wed, 26 Oct 2022 06:07:18 -0700 (PDT)
+        Wed, 26 Oct 2022 09:07:25 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA71FB701;
+        Wed, 26 Oct 2022 06:07:19 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id c7-20020a05600c0ac700b003c6cad86f38so1451159wmr.2;
+        Wed, 26 Oct 2022 06:07:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nyVNISqKQi9jXd38wQpw8MDXfXd5f1BICV0pIG254pc=;
-        b=U/tL7gRoPuAUkGJ6rjM8DuHdAsQkYwzQ6cXMYcI1bN3yzkj4m7DrrkVuRNujMOWmP6
-         cky4BTcDrY4w8N7ExDcfz4pdyc+/ir9rcUZUPfkW3atK5e2/NxqksC4tuVG5ylJ5DNSm
-         Vg+W7KPYaPLk3oYsp8/+T34ReQ/w4itM5E9PQ+lVLArhrF58+g2QsMSsGwIKFTpzJe7W
-         CR1kMgtPLTLanukzhavxHsRAexhFCOPruKYxK8f351dO0Boqjm9MUCZuVsUAeXQ71N6k
-         G8+4gwGSKDlEM+m4Nonjj647CRiJzGW+x3wWq6FYln4NSQtZ8c6lKZVlMGXdAb2dE1sS
-         Yd1g==
+        bh=tf2UiB+zU3vDS2ZGfH6hKqDtwI6lpc4PY4He6vWYvz4=;
+        b=aIxFQBtFoxypKmy5lP8Nk86z3bdDwR6XHd2uN35GLGvO4nMZmd2FErn67JwqbYpBWt
+         +w/SOEytlOjUuruWyuUDKeVuPM/jN8PTP/9ZEg2L4iQGNe5RFifhUuM/B0PVNdYTa3aB
+         RCuaRApl4YUM/Wh3oKFZ1ISx8D3j28ak+R9j1oXvWD/t3r7q4bg1r33D4LRyAXhS2f7O
+         +Uu7eiwFTfBGK4z9rWApu8K8EQRNonxcVptAougeAOE+8JnGOnQVING/umzElmbhFOe3
+         xd2LrVB6wGxKCQ+OsP2QZ0gWCmePRIiaVFD181HMrWF9GloQ/YnJh/rzXHGkuJJ9FOJp
+         PCsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nyVNISqKQi9jXd38wQpw8MDXfXd5f1BICV0pIG254pc=;
-        b=aUnSyTpD60+yMB7xEDFVmEcSPhCOcIJzz+kZxgPRHPg6hL1/BFdmyCK3VVSU7MwgDv
-         AI7HnBpvZza0Ie0Kw2zZbIyN369yJbZ3Ng1L1hEL0wNlwiTCO0NfNiWu8it7g13YpDmK
-         yeziIgAxgBbHduWo8rBW0c7m3OT8IxISSyQfgVK6IPaQgh4X/qySfqDxRSSKWbpmEqJ+
-         uNnQwZ/h5qQtxCv27seUyXcFK3ZYtYgrJb+gz6Q00v7K0jxHY82cXUr7AzU65geAZimE
-         nA6fdIHpLGgb3hxHhg6161eDBA5bisyVR0PUxcTobOZ8mYPSObZ9iLjdjrO/MJDTfG+P
-         mZrQ==
-X-Gm-Message-State: ACrzQf06N/5k2S0VBb83wMAFtxAAxF/BUPcmkiO3cPjDivAiSlQpJ8DP
-        UI0ehJjrHK3kvsDdC+sfoGs=
-X-Google-Smtp-Source: AMsMyM6dkyokXKAuIfga7S2q7xmvYNtJBmrXeJK+/bn7qRQKvEt6c1fmeUaVN2JXqblEZTrTjUdFlQ==
-X-Received: by 2002:adf:e785:0:b0:236:5998:67a0 with SMTP id n5-20020adfe785000000b00236599867a0mr17412045wrm.414.1666789636745;
-        Wed, 26 Oct 2022 06:07:16 -0700 (PDT)
+        bh=tf2UiB+zU3vDS2ZGfH6hKqDtwI6lpc4PY4He6vWYvz4=;
+        b=CoFFmPevnDSATjV0oR3Vv4JjZe5POZfaLZBKI4gOLtG8xKpkSkb1B1FSiChBFpAfop
+         jh4Bgg0/gNr9uUTu6fdEuKmbYXNG6AUcQBqG6YCZqaJ5aImxCwU3jWBu6AYgV2msxEbZ
+         gI+YtT6UIAl6gERFNpKZ6EkSD4fDJRwJx9esRxctzVKxayedu9mJidRBUfC/1EpvD/W6
+         8jMIrH4S/ytXnEZMoj+x3K9/lujOs7f6Qf26wAwnCe0+VaITfqH+gSDvSQxJkqxHuFiB
+         MR+ia8G22K9stsEmzohB9fc7Atq05yotPAksgc69uJWxNrZbX1+WWXjhZgEIvpvmAhtg
+         I+KA==
+X-Gm-Message-State: ACrzQf3Gjw+OqIv7qilpeZl6nM7STxJo2TcsFARaLUV+rAeh9VGN6jbK
+        I053RTO9UgO2qvXObNxOaO0=
+X-Google-Smtp-Source: AMsMyM6nJq7LNPFc/VDVJBW42THSzVzYdGTV/smjB+OZhSvemg+8pvORx1sIduEukfTnMxeR5SiCpw==
+X-Received: by 2002:a05:600c:3548:b0:3c6:f7cb:1567 with SMTP id i8-20020a05600c354800b003c6f7cb1567mr2370839wmq.161.1666789638051;
+        Wed, 26 Oct 2022 06:07:18 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:cc:c67c:46e:319e])
-        by smtp.gmail.com with ESMTPSA id l3-20020adfa383000000b002366eb01e07sm5245433wrb.114.2022.10.26.06.07.15
+        by smtp.gmail.com with ESMTPSA id l3-20020adfa383000000b002366eb01e07sm5245433wrb.114.2022.10.26.06.07.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 06:07:16 -0700 (PDT)
+        Wed, 26 Oct 2022 06:07:17 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -71,11 +71,10 @@ Cc:     Shawn Tu <shawnx.tu@intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
         linux-renesas-soc@vger.kernel.org,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Subject: [PATCH v3 1/9] media: i2c: ov5645: Drop fetching the clk reference by name
-Date:   Wed, 26 Oct 2022 14:06:50 +0100
-Message-Id: <20221026130658.45601-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v3 2/9] ARM: dts: imx6qdl-pico: Drop clock-names property
+Date:   Wed, 26 Oct 2022 14:06:51 +0100
+Message-Id: <20221026130658.45601-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20221026130658.45601-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -93,38 +92,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-The OV5645 sensor has a single clock source, so just drop fetching the
-clk reference by name.
+Now that the driver has been updated to drop fetching the clk reference by
+name we no longer need the clock-names property in the ov5645 sensor node.
 
-This is in preparation to drop the "clock-names" property from the DT
-binding.
+This is in preparation for removal for clock-names property from the
+DT binding.
 
-Suggested-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 ---
-v1->v3
-* No change
-
-v1:
-https://patchwork.kernel.org/project/linux-media/patch/20220919143350.176746-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
+v3
+* New patch
 ---
- drivers/media/i2c/ov5645.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/imx6qdl-pico.dtsi | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov5645.c b/drivers/media/i2c/ov5645.c
-index 81e4e87e1821..47451238ca05 100644
---- a/drivers/media/i2c/ov5645.c
-+++ b/drivers/media/i2c/ov5645.c
-@@ -1090,7 +1090,7 @@ static int ov5645_probe(struct i2c_client *client)
- 	}
- 
- 	/* get system clock (xclk) */
--	ov5645->xclk = devm_clk_get(dev, "xclk");
-+	ov5645->xclk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(ov5645->xclk)) {
- 		dev_err(dev, "could not get xclk");
- 		return PTR_ERR(ov5645->xclk);
+diff --git a/arch/arm/boot/dts/imx6qdl-pico.dtsi b/arch/arm/boot/dts/imx6qdl-pico.dtsi
+index f7a56d6b160c..c39a9ebdaba1 100644
+--- a/arch/arm/boot/dts/imx6qdl-pico.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-pico.dtsi
+@@ -233,7 +233,6 @@ camera@3c {
+ 		pinctrl-0 = <&pinctrl_ov5645>;
+ 		reg = <0x3c>;
+ 		clocks = <&clks IMX6QDL_CLK_CKO2>;
+-		clock-names = "xclk";
+ 		clock-frequency = <24000000>;
+ 		vdddo-supply = <&reg_1p8v>;
+ 		vdda-supply = <&reg_2p8v>;
 -- 
 2.25.1
 
