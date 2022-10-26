@@ -2,167 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7629160E6B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A272F60E6A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233772AbiJZRnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
+        id S234093AbiJZRiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbiJZRnK (ORCPT
+        with ESMTP id S233672AbiJZRis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:43:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019A036097
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:43:09 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1onkQf-0006QE-Pm; Wed, 26 Oct 2022 19:43:01 +0200
-Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1onkQe-0006Do-6o; Wed, 26 Oct 2022 19:43:00 +0200
-Date:   Wed, 26 Oct 2022 19:43:00 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alistair Francis <alistair@alistair23.me>
-Subject: Re: [PATCH] arm: dts: imx: e60k02: Add touchscreen
-Message-ID: <20221026174300.6f5l6lsg5msrz6op@pengutronix.de>
-References: <20221026173015.1172816-1-andreas@kemnade.info>
+        Wed, 26 Oct 2022 13:38:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CA7B1DC2;
+        Wed, 26 Oct 2022 10:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1666805927; x=1698341927;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=D73vSYeGPyXAlI5Xim/Iszf2mfGpknfip7fOka+JNww=;
+  b=gIowBRvDWiMUMyUesajhf1G0QC81I+D6xE7Z5ACX5t/rXLCjx6ea3/jU
+   bk4/CLVXYU1UpXxK5zjGvaEZerFYKY4UyrDDb/ujIptKdlYWmyeaU9AUK
+   QRA1npEclnrpsu9gedvsyvU6UcS0N7+DZlhPJqvVilPJKeQkkxfmj1sEc
+   Z4YilzFuCyBUju7njIwNr8BDhhxDvu+l7gBIv+St8SCY50QQZXWoJ5LJ3
+   /9QaCfnE068uOSEgVz4daTTRUbNP/NU8ZMJWguEOViYalfhrhzN3gFGul
+   8a8WVpMXMnZO+T5hFSWDFwL0pL8tgQKqiKexHVaeM40tfDf8lYX4+Qb7X
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="120490281"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Oct 2022 10:38:46 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 26 Oct 2022 10:38:45 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 26 Oct 2022 10:38:44 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <claudiu.beznea@microchip.com>, <nicolas.ferre@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH v2] ARM: dts: lan966x: Enable sgpio on pcb8291
+Date:   Wed, 26 Oct 2022 19:43:03 +0200
+Message-ID: <20221026174303.702919-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026173015.1172816-1-andreas@kemnade.info>
-User-Agent: NeoMutt/20180716
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andreas,
+Enable sgpio node on pcb8291 as this is needed to be able to control
+the LEDs on this board. Otherwise the LEDs support on the board will
+not be available.
+On the other board pcb8309 the sgpio is already enabled because it
+needed to access the SFP ports.
 
-On 22-10-26, Andreas Kemnade wrote:
-> Add the touchscreen now, since the driver is available.
+Fixes: 0b7baa1a307f ("ARM: dts: lan966x: add led configuration")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-I pulled input/next and grep'ed for the compatible but found nothing.
-Where should the driver be available?
+---
+v1->v2:
+- add fixes tag
+---
+ arch/arm/boot/dts/lan966x-pcb8291.dts | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-Regards,
-  Marco
+diff --git a/arch/arm/boot/dts/lan966x-pcb8291.dts b/arch/arm/boot/dts/lan966x-pcb8291.dts
+index f4f054cdf2a87..3a3d76af86122 100644
+--- a/arch/arm/boot/dts/lan966x-pcb8291.dts
++++ b/arch/arm/boot/dts/lan966x-pcb8291.dts
+@@ -69,6 +69,12 @@ can0_b_pins:  can0-b-pins {
+ 		pins = "GPIO_35", "GPIO_36";
+ 		function = "can0_b";
+ 	};
++
++	sgpio_a_pins: sgpio-a-pins {
++		/* SCK, D0, D1, LD */
++		pins = "GPIO_32", "GPIO_33", "GPIO_34", "GPIO_35";
++		function = "sgpio_a";
++	};
+ };
+ 
+ &can0 {
+@@ -118,6 +124,20 @@ &serdes {
+ 	status = "okay";
+ };
+ 
++&sgpio {
++	pinctrl-0 = <&sgpio_a_pins>;
++	pinctrl-names = "default";
++	microchip,sgpio-port-ranges = <0 3>, <8 11>;
++	status = "okay";
++
++	gpio@0 {
++		ngpios = <64>;
++	};
++	gpio@1 {
++		ngpios = <64>;
++	};
++};
++
+ &switch {
+ 	status = "okay";
+ };
+-- 
+2.38.0
 
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
-> ---
-> runtime/dtbs_check depends
-> https://lore.kernel.org/linux-devicetree/20221026114908.191472-1-alistair@alistair23.me/T/#t
->  arch/arm/boot/dts/e60k02.dtsi              | 12 +++++++++++-
->  arch/arm/boot/dts/imx6sl-tolino-shine3.dts | 14 ++++++++++++++
->  arch/arm/boot/dts/imx6sll-kobo-clarahd.dts | 14 ++++++++++++++
->  3 files changed, 39 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/e60k02.dtsi b/arch/arm/boot/dts/e60k02.dtsi
-> index 935e2359f8df..4f36cc181a52 100644
-> --- a/arch/arm/boot/dts/e60k02.dtsi
-> +++ b/arch/arm/boot/dts/e60k02.dtsi
-> @@ -104,7 +104,17 @@ &i2c2 {
->  	clock-frequency = <100000>;
->  	status = "okay";
->  
-> -	/* TODO: CYTTSP5 touch controller at 0x24 */
-> +	touchscreen@24 {
-> +		compatible = "cypress,tt21000";
-> +		reg = <0x24>;
-> +		pinctrl-names = "default","sleep";
-
-Does the driver handle the different states?
-
-> +		pinctrl-0 = <&pinctrl_cyttsp5_gpio>;
-> +		pinctrl-1 = <&pinctrl_cyttsp5_gpio_sleep>;
-> +		interrupt-parent = <&gpio5>;
-> +		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
-> +		reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-> +		vdd-supply = <&ldo5_reg>;
-> +	};
->  
->  	/* TODO: TPS65185 PMIC for E Ink at 0x68 */
->  
-> diff --git a/arch/arm/boot/dts/imx6sl-tolino-shine3.dts b/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
-> index e3f1e8d79528..82d9ed91df92 100644
-> --- a/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
-> +++ b/arch/arm/boot/dts/imx6sl-tolino-shine3.dts
-> @@ -52,6 +52,20 @@ &iomuxc {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_hog>;
->  
-> +	pinctrl_cyttsp5_gpio: cyttsp5_gpio_grp {
-
-According the below code it should be:
-   	pinctrl_cyttsp5_gpio: cyttsp5-gpiogrp {
-
-and..
-
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT3__GPIO5_IO06                0x17059 /* TP_INT */
-> +			MX6SL_PAD_SD1_DAT2__GPIO5_IO13                0x10059 /* TP_RST */
-> +		>;
-> +	};
-> +
-> +	pinctrl_cyttsp5_gpio_sleep: cyttsp5_gpio_grp_sleep {
-
-
-   	pinctrl_cyttsp5_gpio_sleep: cyttsp5-gpio-sleepgrp {
-
-
-Regards,
-  Marco
-
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT3__GPIO5_IO06                0x10059 /* TP_INT */
-> +			MX6SL_PAD_SD1_DAT2__GPIO5_IO13                0x10059 /* TP_RST */
-> +		>;
-> +	};
-> +
->  	pinctrl_gpio_keys: gpio-keysgrp {
->  		fsl,pins = <
->  			MX6SL_PAD_SD1_DAT1__GPIO5_IO08	0x17059	/* PWR_SW */
-> diff --git a/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts b/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
-> index 90b32f5eb529..d743bf4fd8e6 100644
-> --- a/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
-> +++ b/arch/arm/boot/dts/imx6sll-kobo-clarahd.dts
-> @@ -62,6 +62,20 @@ &iomuxc {
->  	pinctrl-names = "default";
->  	pinctrl-0 = <&pinctrl_hog>;
->  
-> +	pinctrl_cyttsp5_gpio: cyttsp5-gpiogrp {
-> +		fsl,pins = <
-> +			MX6SLL_PAD_SD1_DATA3__GPIO5_IO06                0x17059 /* TP_INT */
-> +			MX6SLL_PAD_SD1_DATA2__GPIO5_IO13                0x10059 /* TP_RST */
-> +		>;
-> +	};
-> +
-> +	pinctrl_cyttsp5_gpio_sleep: cyttsp5-gpiogrp-sleep {
-> +		fsl,pins = <
-> +			MX6SLL_PAD_SD1_DATA3__GPIO5_IO06                0x10059 /* TP_INT */
-> +			MX6SLL_PAD_SD1_DATA2__GPIO5_IO13                0x10059 /* TP_RST */
-> +		>;
-> +	};
-> +
->  	pinctrl_gpio_keys: gpio-keysgrp {
->  		fsl,pins = <
->  			MX6SLL_PAD_SD1_DATA1__GPIO5_IO08	0x17059	/* PWR_SW */
-> -- 
-> 2.30.2
-> 
-> 
-> 
