@@ -2,130 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962C660E97F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1EF60E97C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 21:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235178AbiJZTrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 15:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        id S235262AbiJZTrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 15:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235161AbiJZTrH (ORCPT
+        with ESMTP id S234623AbiJZTrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 15:47:07 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C42411CB57
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:46:21 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id r14so30987681lfm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 12:46:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WFjZUwg9kkHrdeWfJ5ahCLFcRDkAGeHiMWgq9vVh9Ps=;
-        b=PkYZcfy5WMquWospUQFh7cJpJo4V6wkPaXLJ+W6HivXj3w49ZeLEO8i24izYjxeJzG
-         zRJ/RCfo8mUZzDqGtvoSKR9JZ9RKUY7AEh/cic+6wn7MtLZ7PzFTsJTz4KFzOI+rnz8B
-         BjE8MjFSCSjl+Arttw6PQIqvVmdd0X2q+bNb7LjStezGyMy5ya9RCS1rJm5e5f1vt4hH
-         l3hPWeD3i/dkNIaGPGCsVKuYAQWepXoaYL8QnKpGpEgWpwMoOmNdaq5XQGq4UjIv/zOR
-         /ubN28kFhv9jFCj/bYUHXt4GiyEOS8sE7BVj8K/E5hohb+ch+uNU1PNfAMw4RRQ7mO+F
-         A0lw==
+        Wed, 26 Oct 2022 15:47:05 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8B52A43F;
+        Wed, 26 Oct 2022 12:46:18 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id t10so3226336oib.5;
+        Wed, 26 Oct 2022 12:46:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WFjZUwg9kkHrdeWfJ5ahCLFcRDkAGeHiMWgq9vVh9Ps=;
-        b=uh6lsSPRYg2gGlo/XUZJ8pGZERJoWc29Ayz0ekQrM9eJvPbt1x2auamLHlpD8cLFXS
-         PQ6JHF5fjKxusECo5dopd2HD4fompAh/jgTxQ7twCpt1mkNXEVzcdgtmGN9YLcKGHCmX
-         ymcbcFHMvqbJr4jMKUrKFjlcHniVUG46unucV61LmSHZ+0HPtLWygGT0J3j1uVg0Q/G8
-         VA9nnpPLZZGFeZgLrPBvvSj+e6b2kTgGI6hY5i3k+9LB4NnWwYHzme5mhwB4sfRrJB1x
-         Y4VpirAcg9chLKU1KzGnZt25Oz1o5n7T6Wu+bX2bA7dXhyt3F79fbs/9MkxkSkCxB1T1
-         sM1A==
-X-Gm-Message-State: ACrzQf2+6JzYnt4S0X4rEcNKyVeAkeQlYqyGWYhAKrxAD73Ph5PcNCbQ
-        +1RQsVTJr2Fcvh/gt9X+pYoeQg==
-X-Google-Smtp-Source: AMsMyM7Sc9bm+ICPknqGgF6givhaCtNofBIUTNotmKABmE9Zv5ip/cKuOpnhFd8xARGFACdSOJBk1Q==
-X-Received: by 2002:a05:6512:3f8c:b0:4a1:8d5:d75b with SMTP id x12-20020a0565123f8c00b004a108d5d75bmr18369184lfa.670.1666813579744;
-        Wed, 26 Oct 2022 12:46:19 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id s5-20020a05651c048500b002770e531535sm1051653ljc.55.2022.10.26.12.46.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 12:46:19 -0700 (PDT)
-Message-ID: <56a47a6c-29b9-b8f3-e39b-a5841ddf7394@linaro.org>
-Date:   Wed, 26 Oct 2022 22:46:17 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v6 04/21] arm64: smccc: Include alternative-macros.h
-Content-Language: en-GB
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FS6rm9BDQlab5fLy0WIjAlMKCNgvwb6RMvMQ+w+1YTY=;
+        b=sszRyWPj7RqKdsCoopMwTeYYpH34otrd/zwRyBbRZoAaTmUB2SMxhY3QzRpLkUjzn1
+         sAbDFe8lXmmQcVDFM0huTKpwy1rfWZ5aFtx7bML1J/zzv+eEcN2DeZZfdN2SXXXAsSgE
+         wVBek3sSJZux25ApsCvbsly6HsQOYDyvUTiz4oM6CkNMEPFFodlg0qjsasDaaq6V8638
+         H44Zoeemel0RQ35IV8Lhsd7eQE+IzTrpX/OaNA3KsfkrIX9k1qlXo9oJUDw449SBZvWK
+         ZBKk/SZPe2wdVapKBBK5tfvkeqsefAuJJXeYB6QFwppErga9S0ueF0SHNxMezZn8UVLQ
+         SFGA==
+X-Gm-Message-State: ACrzQf1cbKmygXKwlLK2jLxm5xxvBFOifFYQOZcbZOPuVLJlJShkOBZZ
+        Hi5DwOk6ekXCtzoHE2RzCUFEMwe7VA==
+X-Google-Smtp-Source: AMsMyM6UXJyWxevgK90NbceQb/Qr6Yzp1ZycrnNhNY0KdyxUpeRsVRHipmEBOMF8TifjGLHUVMsPmQ==
+X-Received: by 2002:a05:6808:1384:b0:355:535f:118c with SMTP id c4-20020a056808138400b00355535f118cmr2677393oiw.35.1666813577379;
+        Wed, 26 Oct 2022 12:46:17 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x11-20020a056808144b00b00350743ac8eesm2407990oiv.41.2022.10.26.12.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 12:46:16 -0700 (PDT)
+Received: (nullmailer pid 1052629 invoked by uid 1000);
+        Wed, 26 Oct 2022 19:46:18 -0000
+Date:   Wed, 26 Oct 2022 14:46:18 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-5-quic_eberman@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221026185846.3983888-5-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        devicetree@vger.kernel.org, Ryder Lee <ryder.lee@mediatek.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: PCI: mediatek-gen3: add support for
+ mt7986
+Message-ID: <20221026194618.GA1049502-robh@kernel.org>
+References: <20221025072837.16591-1-linux@fw-web.de>
+ <20221025072837.16591-3-linux@fw-web.de>
+ <22728b06-f460-6dda-21fa-1d7a7ae3b903@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <22728b06-f460-6dda-21fa-1d7a7ae3b903@collabora.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/2022 21:58, Elliot Berman wrote:
-> Fix build error when CONFIG_ARM64_SVE is selected and
-> asm/alternative-macros.h wasn't implicitly included by another header.
-
-Please include the build error into the commit message to help anybody 
-looking for the solution for the same issue.
-
+On Tue, Oct 25, 2022 at 01:10:56PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 25/10/22 09:28, Frank Wunderlich ha scritto:
+> > From: Frank Wunderlich <frank-w@public-files.de>
+> > 
+> > Add compatible string and clock-definition for mt7986. It needs 4 clocks
+> > for PCIe, define them in binding.
+> > 
+> > Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> > ---
+> > v2:
+> > - squashed patch 2+3 (compatible and clock definition)
+> > ---
+> >   .../bindings/pci/mediatek-pcie-gen3.yaml        | 17 +++++++++++++++++
+> >   1 file changed, 17 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> > index 98d3f0f1cd76..57d0e84253e9 100644
+> > --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> > +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
+> > @@ -48,6 +48,7 @@ properties:
+> >       oneOf:
+> >         - items:
+> >             - enum:
+> > +              - mediatek,mt7986-pcie
+> >                 - mediatek,mt8188-pcie
+> >                 - mediatek,mt8195-pcie
+> >             - const: mediatek,mt8192-pcie
+> > @@ -78,9 +79,11 @@ properties:
+> >         - const: mac
+> >     clocks:
+> > +    minItems: 4
+> >       maxItems: 6
 > 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->   include/linux/arm-smccc.h | 1 +
->   1 file changed, 1 insertion(+)
+> I'm not sure that this is really correct.
+> If you have a list of items (const or description, doesn't matter), you don't have
+> to specify maxItems, as it is implicitly equal to the number of items.
+> Also, specifying minItems means that you're "setting" one or more items as
+> optional.
 > 
-> diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
-> index 220c8c60e021..6a627cdbbdec 100644
-> --- a/include/linux/arm-smccc.h
-> +++ b/include/linux/arm-smccc.h
-> @@ -383,6 +383,7 @@ asmlinkage void __arm_smccc_hvc(unsigned long a0, unsigned long a1,
->   
->   /* nVHE hypervisor doesn't have a current thread so needs separate checks */
->   #if defined(CONFIG_ARM64_SVE) && !defined(__KVM_NVHE_HYPERVISOR__)
-> +#include <asm/alternative-macros.h>
->   
->   #define SMCCC_SVE_CHECK ALTERNATIVE("nop \n",  "bl __arm_smccc_sve_check \n", \
->   				    ARM64_SVE)
+> It looks like you're specifying a specific and definite list of items for both
+> clocks and clock-names... and for all of the supported SoCs, so, I don't think
+> that having {min,max}Items globally specified on clocks, clock-names make any
+> kind of sense.
+> 
+> .....but I'd like for someone else to give an opinion on this as well.
 
--- 
-With best wishes
-Dmitry
+It does make sense. Globally, we have the full range of possible clocks 
+and then the if/then schemas further restrict it.
 
+Rob
