@@ -2,236 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178DC60DA90
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 07:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC9660DA97
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 07:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232679AbiJZF2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 01:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
+        id S232832AbiJZFbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 01:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbiJZF2g (ORCPT
+        with ESMTP id S232201AbiJZFbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 01:28:36 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DB2900E2
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 22:28:34 -0700 (PDT)
-X-UUID: 2034bdfd7994467aaf227391b5c6acbf-20221026
-X-CPASD-INFO: b00788a87c794b9d99398594316d9a35@q4BqV2Vqj2hjg3mFg6WEnllqY2loYVm
-        DdWtWlGeRX1WVhH5xTV5uYFV9fWtVYV9dYVR6eGxQYmBgZFJ4i3-XblBgXoZgUZB3sXJqV2hmkQ==
-X-CLOUD-ID: b00788a87c794b9d99398594316d9a35
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:185.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:281.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:13,DUF:6815,ACD:122,DCD:122,SL:0,EISP:0,AG:0,CFC:0.351,CFSR:0.146,UAT:0
-        ,RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:
-        0,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 2034bdfd7994467aaf227391b5c6acbf-20221026
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 2034bdfd7994467aaf227391b5c6acbf-20221026
-X-User: chenzhang@kylinos.cn
-Received: from localhost.localdomain [(111.48.58.12)] by mailgw
-        (envelope-from <chenzhang@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1920383655; Wed, 26 Oct 2022 13:28:29 +0800
-From:   chen zhang <chenzhang@kylinos.cn>
-To:     oleg@redhat.com
-Cc:     chenzhang_0901@163.com, linux-kernel@vger.kernel.org,
-        chen zhang <chenzhang@kylinos.cn>
-Subject: [PATCH v3] ptrace: disable single step in __ptrace_unlink for protecting init task
-Date:   Wed, 26 Oct 2022 13:29:23 +0800
-Message-Id: <20221026052923.11902-1-chenzhang@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 26 Oct 2022 01:31:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BF87E814;
+        Tue, 25 Oct 2022 22:31:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A34ACB81CF1;
+        Wed, 26 Oct 2022 05:31:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649DEC433D7;
+        Wed, 26 Oct 2022 05:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666762260;
+        bh=RdsVKGr0DKlgl6WpaDh170LCu3U34tEkshFDVWtm758=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rgNTr7masNG4Olgab5jNl69ohTUd82wAW378pvkSSfOHf16i5MTG6xu4qyCQRYREb
+         Xm6CPVo3XY4jqvQJtUTf96I9td8dzIWvwot0iKm4GjRYUvq2lpswW5LFqtMADG5LMH
+         UM+AEkxmhnIFio230Z4XTsp/dfEQ23EdIA/TZvYT3ZNVZH3WK/wcVJ+VPhRuqhclBs
+         wYLI/eluFiGFCZOeK0MW3heFQ1stHGrJko/7TFM1jKM8REAydjMDNiBJpDABcvAm9a
+         fxv4fCEmAM9IM3ituuMexB1pWO8rrLLMow53SYM+Vob93p6+y/XnOOpeTTOf/0DW0u
+         nlXLjXzu8tibw==
+Date:   Wed, 26 Oct 2022 11:00:46 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, Sergey.Semin@baikalelectronics.ru,
+        dmitry.baryshkov@linaro.org, linmq006@gmail.com,
+        ffclaire1224@gmail.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kthota@nvidia.com, mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V5 2/3] PCI: qcom-ep: Refactor EP initialization
+ completion
+Message-ID: <20221026053046.GB5179@thinkpad>
+References: <20221013175712.7539-1-vidyas@nvidia.com>
+ <20221013175712.7539-3-vidyas@nvidia.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221013175712.7539-3-vidyas@nvidia.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I got below panic when doing fuzz test:
+On Thu, Oct 13, 2022 at 11:27:11PM +0530, Vidya Sagar wrote:
+> Move the post initialization code to .ep_init_late() call back and call
+> only dw_pcie_ep_init_notify() which internally takes care of calling
+> dw_pcie_ep_init_complete().
+> 
+> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
+> ---
+> V5:
+> * None
+> 
+> V4:
+> * New patch in this series
+> 
+>  drivers/pci/controller/dwc/pcie-qcom-ep.c | 27 ++++++++++++++---------
+>  1 file changed, 16 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> index e33eb3871309..c418b20042aa 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> @@ -361,22 +361,12 @@ static int qcom_pcie_perst_deassert(struct dw_pcie *pci)
+>  	      PARF_INT_ALL_LINK_UP;
+>  	writel_relaxed(val, pcie_ep->parf + PARF_INT_ALL_MASK);
+>  
+> -	ret = dw_pcie_ep_init_complete(&pcie_ep->pci.ep);
+> +	ret = dw_pcie_ep_init_notify(&pcie_ep->pci.ep);
+>  	if (ret) {
+>  		dev_err(dev, "Failed to complete initialization: %d\n", ret);
+>  		goto err_disable_resources;
+>  	}
+>  
+> -	/*
+> -	 * The physical address of the MMIO region which is exposed as the BAR
+> -	 * should be written to MHI BASE registers.
+> -	 */
+> -	writel_relaxed(pcie_ep->mmio_res->start,
+> -		       pcie_ep->parf + PARF_MHI_BASE_ADDR_LOWER);
+> -	writel_relaxed(0, pcie_ep->parf + PARF_MHI_BASE_ADDR_UPPER);
 
-Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000005
-CPU: 2 PID: 1 Comm: systemd Kdump: loaded Not tainted 6.1.0-rc1 #1
-Hardware name: LENOVO 20L5A07XCD/20L5A07XCD, BIOS N24ET56W (1.31 ) 02/19/2020
-Call Trace:
-[  157.210356]  dump_stack_lvl+0x49/0x63
-[  157.210364]  dump_stack+0x10/0x16
-[  157.210368]  panic+0x10c/0x299
-[  157.210375]  do_exit.cold+0x15/0x15
-[  157.210381]  do_group_exit+0x35/0x90
-[  157.210386]  get_signal+0x910/0x960
-[  157.210390]  ? signal_wake_up_state+0x2e/0x40
-[  157.210396]  ? complete_signal+0xd0/0x2c0
-[  157.210402]  arch_do_signal_or_restart+0x37/0x7c0
-[  157.210408]  ? send_signal_locked+0xf5/0x140
-[  157.210416]  exit_to_user_mode_prepare+0x133/0x180
-[  157.210423]  irqentry_exit_to_user_mode+0x9/0x20
-[  157.210428]  noist_exc_debug+0xea/0x150
-[  157.210433]  asm_exc_debug+0x34/0x40
-[  157.210438] RIP: 0033:0x7fcf2a8e51c9
-[  157.210442] Code: ff ff 73 01 c3 48 8b 0d c5 7c 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 ba 00 00 00 <0f> 05 c3 0f 1f 40 00 f3 0f 1e fa b8 ea 00 00 00 0f 05 48 3d 01 f0
-[  157.210446] RSP: 002b:00007ffd7dc44678 EFLAGS: 00000302
-[  157.210451] RAX: 00000000000000ba RBX: 000055f7c0363170 RCX: 000055f7c04d2820
-[  157.210454] RDX: 00000000ffffffff RSI: ffffffffffffffff RDI: 000055f7c0363170
-[  157.210457] RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000001dd0
-[  157.210460] R10: 00007ffd7ddc9090 R11: 000000000000d7da R12: 0000000000000001
-[  157.210463] R13: ffffffffffffffff R14: 000055f7bf3557c1 R15: 0000000000000000
+Writes to the MHI base addresses are required before starting LTSSM and not
+necessarily before core_init notifier. So you could just leave this code here
+and get rid of .ep_init_late() callback.
 
-If a task attaches init task and is single stepping it, when this task
-exits, ptrace value will be cleaned. It causes SIGNAL_UNKILLABLE flag
-cleaned, and init task will lose the protection. Init task maybe be killed
-by SIGTRAP signal because of stepping enabled. So syscall tracing and
-stepping should be turned off for protecting init task before ptrace value
-is cleaned.
+And you should also rebase the series on top of v6.1-rcX as I've added few more
+code in this function.
 
-Signed-off-by: chen zhang <chenzhang@kylinos.cn>
----
-change for v2: remove _TIF_SINGLESTEP because of some architecture has not defined _TIF_SINGLESTEP such as mips.
- 
-change for v3: 
-Thanks for your reply and your patience. Let us discuss if the patch is useful to avoid kernel panic. In my x86 machine, 
-I tested v5.4.18 kernel version, v5.15.67 kernel version and v6.1.0-rc1 kernel version.
-My test C codes include:
-  r[3] = 1;
-  syscall(__NR_ptrace, 0x4206, r[3], 0, 0);
-  syscall(__NR_ptrace, 0x4207, r[3]);
-  syscall(__NR_ptrace, 9, r[3], 0, 0);
-I tested while(1) loop and ctrl-c operation, fork and call ptrace syscall, loop 100 times syscalls and so on. The kernel will be in panic.
-For example in 5.4 kernel, trap signal is sent by two pathes:
-the one is:
-	force_sig_info_to_task.cold+0x71/0x76
-	force_sig_fault+0x63/0x80
-	send_sigtrap+0x45/0x50
-	do_debug+0x170/0x210
-	debug+0x3f/0x60
-	debug+0x53/0x60
-the other one is:
-	force_sig_info_to_task.cold+0x84/0x8e
-	force_sig_fault+0x63/0x80
-	user_single_step_report+0x49/0x50
-	syscall_slow_exit_work+0x75/0x150
-	do_syscall_64+0x156/0x190
-	entry_SYSCALL_64_after_hwframe+0x44/0xa9
-I debugged the sigtrap sending and get_signal function. When the debugger exits, the first sigtrap 
-is prevent by SIGNAL_UNKILLABLE flag in get_signal function. Without my patch, the second sigtrap will be sent, 
-and kernel will be in panic. 
-I added my patch into the kernel:
-+	if (unlikely(child->signal->flags & SIGNAL_UNKILLABLE) &&
-+	    unlikely(task_thread_info(child)->flags & _TIF_SINGLESTEP))
-+		user_disable_single_step(child);
-I test the kernel with my patch, the kernel will not be in panic when I run my test program or ctrl-c the test program.
-So I think my patch is efficient to avoid kernel panic. You said:
-- debugger does ptrace(PTRACE_SINGLESTEP), this wakes the tracee up
-- the tracee enters force_sig_info_to_task(SIGTRAP) after single step
-- debugger exits, __ptrace_unlink() clears ptrace/TIF_SINGLESTEP
-- force_sig_info_to_task() clears SIGNAL_UNKILLABLE, the traced init will be killed.
+Thanks,
+Mani
 
-But run kernel with my patch, I can not find SIGTRAP signal without SIGNAL_UNKILLABLE flag for init task in get_signal function,
-so the kernel can not be in panic. Please let me verify my patch, I write a simple test, test.c includes
-  r[3] = 1;
-  syscall(__NR_ptrace, 0x4206, r[3], 0, 0);  /* ptrace(PTRACE_SEIZE, 1, NULL, 0) */
-  syscall(__NR_ptrace, 0x4207, r[3]);		/* ptrace(PTRACE_INTERRUPT, 1) */	
-  syscall(__NR_ptrace, 9, r[3], 0, 0);		/* ptrace(PTRACE_SINGLESTEP, 1, NULL, 0) */
-  syscall(__NR_ptrace, 9, r[3], 0, 0);		/* ptrace(PTRACE_SINGLESTEP, 1, NULL, 0) */
-  sleep(10000);
-When test is sleeping, I will ctrl-c to stop the test. Do you think the traced init will be killed by SIGTRAP and my patch is unuseful?
-For verify my patch, I add three debug in the kernel of 6.1.0-rc1:
-1. kernel/ptrace.c
-printk("user_disable_single_step will be called in __ptrace_unlink, child is %s, parent is %s, cpu is %d\n",
-child->comm, child->parent->comm, smp_processor_id());
-2. kernel/signal.c
-bool get_signal(struct ksignal *ksig) {
-	...
-	/* Trace actually delivered signals. */
-	trace_signal_deliver(signr, &ksig->info, ka);
-	/* chen zhang add */
-	if (current->pid == 1 && signr == 5) {
-		printk("current->siganl->flags is 0x%x,current->parent is %s, ptrace is %d, cpu is %d in get_signal\n",
-			current->signal->flags, current->parent->comm, current->ptrace, smp_processor_id());
-		if (unlikely(signal->flags & SIGNAL_UNKILLABLE) &&
-				!sig_kernel_only(signr))
-			printk("flages is SIGNAL_UNKILLABLE in get_signal\n");
-		else
-			printk("SIGNAL_UNKILLABLE is clear in get_signal\n");
-		
-		
-	}
-	/* chen zhang add end */
-	if (!signr)
-		break; /* will return 0 */
-	...
-	
-}
-3. kernel/signal.c
-static int
-force_sig_info_to_task(struct kernel_siginfo *info, struct task_struct *t,
-	enum sig_handler handler) {
-	...
-	/* chen zhang add */
-	if (t->pid == 1 && sig == 5) {
-		printk("init will send sigtrap in force_sig_info_to_task, ptrace is %d, parent is %s,"
-			"regs eflags is 0x%lx, thread info flags is 0x%lx, cpu is %d\n",
-			t->ptrace,t->parent->comm,task_pt_regs(t)->flags,
-			task_thread_info(t)->flags,smp_processor_id());
-	}
-	/* chen zhang add end */	
-	if (action->sa.sa_handler == SIG_DFL &&
-	    (!t->ptrace || (handler == HANDLER_EXIT))) {
-	    	/* chen zhang add */
-	    	printk("SIGNAL_UNKILLABLE will be clear in force_sig_info_to_task, pid is %d, sig is %d\n", t->pid, sig);
-	    	/* chen zhang add end */
-		t->signal->flags &= ~SIGNAL_UNKILLABLE;
-	}
-	ret = send_signal_locked(sig, info, t, PIDTYPE_PID);
-	...
-}
-I installed the debug kernel with my patch and run strace ./test, dmesg:
-[  768.416269] init will send sigtrap in force_sig_info_to_task, ptrace is 65537, parent is test,regs eflags is 0x306, thread info flags is 0x1000010, cpu is 1
-[  768.416288] init will send sigtrap in force_sig_info_to_task, ptrace is 65537, parent is test,regs eflags is 0x306, thread info flags is 0x1000010, cpu is 1
-After ctrl-c
-[  780.963530] user_disable_single_step will be called in __ptrace_unlink, child is systemd, parent is swapper/0, cpu is 5
-[  780.963580] current->siganl->flags is 0x40,current->parent is swapper/0, ptrace is 0, cpu is 6 in get_signal
-[  780.963583] flages is SIGNAL_UNKILLABLE in get_signal
+> -
+> -	dw_pcie_ep_init_notify(&pcie_ep->pci.ep);
+> -
+>  	/* Enable LTSSM */
+>  	val = readl_relaxed(pcie_ep->parf + PARF_LTSSM);
+>  	val |= BIT(8);
+> @@ -643,8 +633,23 @@ static void qcom_pcie_ep_init(struct dw_pcie_ep *ep)
+>  		dw_pcie_ep_reset_bar(pci, bar);
+>  }
+>  
+> +static void qcom_pcie_ep_init_late(struct dw_pcie_ep *ep)
+> +{
+> +	struct dw_pcie *pci = to_dw_pcie_from_ep(ep);
+> +	struct qcom_pcie_ep *pcie_ep = to_pcie_ep(pci);
+> +
+> +	/*
+> +	 * The physical address of the MMIO region which is exposed as the BAR
+> +	 * should be written to MHI BASE registers.
+> +	 */
+> +	writel_relaxed(pcie_ep->mmio_res->start,
+> +		       pcie_ep->parf + PARF_MHI_BASE_ADDR_LOWER);
+> +	writel_relaxed(0, pcie_ep->parf + PARF_MHI_BASE_ADDR_UPPER);
+> +}
+> +
+>  static const struct dw_pcie_ep_ops pci_ep_ops = {
+>  	.ep_init = qcom_pcie_ep_init,
+> +	.ep_init_late = qcom_pcie_ep_init_late,
+>  	.raise_irq = qcom_pcie_ep_raise_irq,
+>  	.get_features = qcom_pcie_epc_get_features,
+>  };
+> -- 
+> 2.17.1
+> 
 
-Kernel is not in panic. I also use orignal test program, it autogenerated by syzkaller. And it use fork and while(1) loop. 
-When it run, the orignal kernel of v6.1.0-rc1 without my patch must be appear panic immediately.
-Now test my kernel, ./err_orig, run two minutes, then ctrl+c stop it, tail of dmesg:
-[ 1993.688471] user_disable_single_step will be called in __ptrace_unlink, child is systemd, parent is swapper/0, cpu is 0
-[ 1993.688514] current->siganl->flags is 0x40,current->parent is swapper/0, ptrace is 0, cpu is 7 in get_signal
-[ 1993.688516] flages is SIGNAL_UNKILLABLE in get_signal
-[ 1993.724130] init will send sigtrap in force_sig_info_to_task, ptrace is 65537, parent is err_orig,regs eflags is 0x306, thread info flags is 0x1000010, cpu is 1
-[ 1993.724299] user_disable_single_step will be called in __ptrace_unlink, child is systemd, parent is swapper/0, cpu is 5
-[ 1993.724367] current->siganl->flags is 0x40,current->parent is swapper/0, ptrace is 0, cpu is 2 in get_signal
-[ 1993.724372] flages is SIGNAL_UNKILLABLE in get_signal
- 
-It seemed running well and no kernel panic happened, SIGNAL_UNKILLABLE flag always protected the init task. My patch disabled
-hardware debug on time and avoid many SIGTRIP signals to be created and sent. So my patch is useful and it can avoid kernel 
-panic. At last I expect and welcome you review and verify my patch on your x86 machine. You can also give me a test case that 
-can cause kernel panic, I will test it on my kernel. Thanks again!
-
----
- kernel/ptrace.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 54482193e1ed..e7c41154b31e 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -130,6 +130,9 @@ void __ptrace_unlink(struct task_struct *child)
- 	put_cred(old_cred);
- 
- 	spin_lock(&child->sighand->siglock);
-+	if (unlikely(child->signal->flags & SIGNAL_UNKILLABLE) &&
-+	    unlikely(task_thread_info(child)->flags & _TIF_SINGLESTEP))
-+		user_disable_single_step(child);
- 	child->ptrace = 0;
- 	/*
- 	 * Clear all pending traps and TRAPPING.  TRAPPING should be
 -- 
-2.25.1
-
+மணிவண்ணன் சதாசிவம்
