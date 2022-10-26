@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F75B60DF94
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B9260DF95
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233533AbiJZLbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 07:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S233467AbiJZLbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 07:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbiJZLae (ORCPT
+        with ESMTP id S233365AbiJZLah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 07:30:34 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787363AE5D
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 04:30:28 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id t10-20020a17090a4e4a00b0020af4bcae10so1820456pjl.3
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 04:30:28 -0700 (PDT)
+        Wed, 26 Oct 2022 07:30:37 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1991F3D592
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 04:30:31 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so3257245pjh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 04:30:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aT/Z4fhTkuAT6uqwfGOJvQ0sBMgcsQNCZVCxP8pxlBo=;
-        b=PEXB9400YJgrNIKIbuMPW5DJZ23hEezyDssKRTAzHdBfEGRoNYv61tFk5sPh9u9LZB
-         UmuRibWhoyaZqjdPjwLjUsgUxDr1AZy3km0Wmbuz/mkPvzP+Egd8E9h2e6AK5sPjA6pM
-         KOme3SNEaFZ4JFG5Zj/kIuo/mNuJPW0c/jWQU=
+        bh=FfJZOEZUcigJa5MAkTFt0GQw8t62BAN+ikSaaiyKqzg=;
+        b=Hk7CS3au15tpcnLWnpgWC0Rnc801I8tY9u+HaqWxqlYNuxpQN/yv0Fy4xMMEg4wiFp
+         P1cmYme01LnaBIZiGnBSDg11RxQ6kx8NOUMHePDUSScdBnB4S+SETARYJdvD2HbhOKXH
+         71mfQKa3CRGhmyw1+LSbb4hFSYGLyJycxikyA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aT/Z4fhTkuAT6uqwfGOJvQ0sBMgcsQNCZVCxP8pxlBo=;
-        b=hMox/6rzqfHeWVe6+cua+ZGLXeYl9dPi37b1C24xX9HWFQXaEQfPMwFyGg5/mEXyOM
-         agavfsWxwugvrdvFnJojDIyGXFhB5QwEPoiuc3Up8aLOLW/jrljH36XOqwhUsLXTEJQj
-         qJXjLQznY4KNWluuNC6goDZpc375PNTKFpooUwldquywxQrZwUDqnewYEA1bypVAUk45
-         wnlQfWdC4JTdk/58pHnz8tCOIiM/Rc1veS9eWkaCG6nOkld994o8Pk0L62WVjv34y0Rl
-         CyGxawsn24YlgIIsNhV9AA+84P4WAJOGgc53r5PByodngnR/X8IYEogUTYN+mg8R9/DD
-         8ECw==
-X-Gm-Message-State: ACrzQf2H1hmE/e7v3v9/1koS0iWzbYB9A3CWK/qR7ueeTdFuMN/Ytx+o
-        477VH5jlH8YeFjozcKBoluiw6Q==
-X-Google-Smtp-Source: AMsMyM65lQWcdY1GRCZiFV+e7hmD7bxw4SxJccZ6E0WPQ0NgzAs46f1Zgdpb2wZ/sRCii0KuaBJ8hg==
-X-Received: by 2002:a17:90b:1d08:b0:212:de5d:e9e5 with SMTP id on8-20020a17090b1d0800b00212de5de9e5mr3704791pjb.239.1666783827887;
-        Wed, 26 Oct 2022 04:30:27 -0700 (PDT)
+        bh=FfJZOEZUcigJa5MAkTFt0GQw8t62BAN+ikSaaiyKqzg=;
+        b=fj0mhjKRwTdJBwB5rmRuetmoxx+K+HpsGo/Da2sf/aN4PaaibtEI2Cu/iOYkyT+EZQ
+         fQ8NzbNncJ7k0RKoR+N6FbJWVXnvdqAR1tkeE/O8hz3Qj3i5kzH2FHSSVbasN1hGHdyE
+         xLezCQrfJLsfmlpeqn6ov8Fpnk7naARh/TUopD9ViW7ZeRAbmdf41D3tmtUxaeGQFE7+
+         tqQSzqmpk8KLRAsa73VKyKqtJM/W0fARlkvvi9EX8kScZ0dEd0/YSBunaaY65y1X481D
+         CAVhwXSPJDLkJ+vgqFrVz1lMRiMookNiovtUfuEgCdVMilynenHI1ajEuUtFQL2KEyWU
+         /8Iw==
+X-Gm-Message-State: ACrzQf1fuL8nk3JkwW+Tb2j90OwIRqiYcEwhn1fW/WwF1kwFjH+GEsx2
+        L2Qfp9gAf2gJ4h84qWMhhExjBQ==
+X-Google-Smtp-Source: AMsMyM6pFzr/Nn/uvAjan7oO4hayW5IPIevd8ht+/9uN4dYdxV1aG5KBcN/L1bDFkLxcnNYJrtvF0A==
+X-Received: by 2002:a17:90b:380b:b0:20b:8dd:4f5f with SMTP id mq11-20020a17090b380b00b0020b08dd4f5fmr3788594pjb.158.1666783830341;
+        Wed, 26 Oct 2022 04:30:30 -0700 (PDT)
 Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:749c:f7f5:1a8e:d0be])
-        by smtp.gmail.com with ESMTPSA id x127-20020a626385000000b005627868e27esm2814919pfb.127.2022.10.26.04.30.26
+        by smtp.gmail.com with ESMTPSA id x127-20020a626385000000b005627868e27esm2814919pfb.127.2022.10.26.04.30.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 04:30:27 -0700 (PDT)
+        Wed, 26 Oct 2022 04:30:30 -0700 (PDT)
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Minchan Kim <minchan@kernel.org>
 Cc:     Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [PATCHv2 7/9] zram: add pages_per_pool_page device attribute
-Date:   Wed, 26 Oct 2022 20:29:31 +0900
-Message-Id: <20221026112933.4122957-8-senozhatsky@chromium.org>
+Subject: [PATCHv2 8/9] Documentation: document zram pages_per_pool_page attribute
+Date:   Wed, 26 Oct 2022 20:29:32 +0900
+Message-Id: <20221026112933.4122957-9-senozhatsky@chromium.org>
 X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
 In-Reply-To: <20221026112933.4122957-1-senozhatsky@chromium.org>
 References: <20221026112933.4122957-1-senozhatsky@chromium.org>
@@ -70,112 +70,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new sysfs knob that allows user-space to set
-zsmalloc pages per-zspage limit value on per-device
-basis.
+Provide a simple documentation for pages_per_pool_page ZRAM
+device attribute.
 
 Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
 ---
- drivers/block/zram/zram_drv.c | 44 ++++++++++++++++++++++++++++++++++-
- drivers/block/zram/zram_drv.h |  2 ++
- 2 files changed, 45 insertions(+), 1 deletion(-)
+ Documentation/admin-guide/blockdev/zram.rst | 38 ++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index bec02f636bce..cf9d3474b80c 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1180,6 +1180,45 @@ static ssize_t mm_stat_show(struct device *dev,
- 	return ret;
- }
+diff --git a/Documentation/admin-guide/blockdev/zram.rst b/Documentation/admin-guide/blockdev/zram.rst
+index 010fb05a5999..4cb287520d45 100644
+--- a/Documentation/admin-guide/blockdev/zram.rst
++++ b/Documentation/admin-guide/blockdev/zram.rst
+@@ -112,7 +112,29 @@ to list all of them using, for instance, /proc/crypto or any other
+ method. This, however, has an advantage of permitting the usage of
+ custom crypto compression modules (implementing S/W or H/W compression).
  
-+static ssize_t pages_per_pool_page_show(struct device *dev,
-+					struct device_attribute *attr,
-+					char *buf)
-+{
-+	u32 val;
-+	struct zram *zram = dev_to_zram(dev);
+-4) Set Disksize
++4) Set pages per-pool page limit: Optional
++==========================================
 +
-+	down_read(&zram->init_lock);
-+	val = zram->pages_per_pool_page;
-+	up_read(&zram->init_lock);
++zsmalloc pages can consist of up to ZS_DEFAULT_PAGES_PER_ZSPAGE (single)
++physical pages. The exact number is calculated for each zsmalloc size
++class during zsmalloc pool creation. ZRAM provides pages_per_pool_page
++device attribute that lets one adjust that limit (maximum possible value
++is ZS_MAX_PAGES_PER_ZSPAGE). The default limit is considered to be good
++enough, so tweak this value only when the changes in zsmalloc size classes
++characteristics are beneficial for your data patterns. The limit on the
++pages per zspages (currently) should be in [1,16] range; default value
++is 4.
 +
-+	return scnprintf(buf, PAGE_SIZE, "%d\n", val);
-+}
++Examples::
 +
-+static ssize_t pages_per_pool_page_store(struct device *dev,
-+					 struct device_attribute *attr,
-+					 const char *buf, size_t len)
-+{
-+	struct zram *zram = dev_to_zram(dev);
-+	u32 val;
++	#show current zsmalloc pages per-pool page limit
++	cat /sys/block/zramX/pages_per_pool_page
++	4
 +
-+	if (kstrtou32(buf, 10, &val))
-+		return -EINVAL;
++	#set zsmalloc pages per-pool page limit
++	echo 8 > /sys/block/zramX/pages_per_pool_page
 +
-+	if (val < ZS_MIN_PAGES_PER_ZSPAGE || val > ZS_MAX_PAGES_PER_ZSPAGE)
-+		return -EINVAL;
-+
-+	down_read(&zram->init_lock);
-+	if (init_done(zram)) {
-+		up_read(&zram->init_lock);
-+		return -EINVAL;
-+	}
-+
-+	zram->pages_per_pool_page = val;
-+	up_read(&zram->init_lock);
-+
-+	return len;
-+}
-+
- #ifdef CONFIG_ZRAM_WRITEBACK
- #define FOUR_K(x) ((x) * (1 << (PAGE_SHIFT - 12)))
- static ssize_t bd_stat_show(struct device *dev,
-@@ -1248,7 +1287,7 @@ static bool zram_meta_alloc(struct zram *zram, u64 disksize)
- 		return false;
++5) Set Disksize
+ ===============
  
- 	zram->mem_pool = zs_create_pool(zram->disk->disk_name,
--					ZS_DEFAULT_PAGES_PER_ZSPAGE);
-+					zram->pages_per_pool_page);
- 	if (!zram->mem_pool) {
- 		vfree(zram->table);
- 		return false;
-@@ -2174,6 +2213,7 @@ static DEVICE_ATTR_RW(writeback_limit_enable);
- static DEVICE_ATTR_RW(recomp_algorithm);
- static DEVICE_ATTR_WO(recompress);
- #endif
-+static DEVICE_ATTR_RW(pages_per_pool_page);
+ Set disk size by writing the value to sysfs node 'disksize'.
+@@ -132,7 +154,7 @@ There is little point creating a zram of greater than twice the size of memory
+ since we expect a 2:1 compression ratio. Note that zram uses about 0.1% of the
+ size of the disk when not in use so a huge zram is wasteful.
  
- static struct attribute *zram_disk_attrs[] = {
- 	&dev_attr_disksize.attr,
-@@ -2201,6 +2241,7 @@ static struct attribute *zram_disk_attrs[] = {
- 	&dev_attr_recomp_algorithm.attr,
- 	&dev_attr_recompress.attr,
- #endif
-+	&dev_attr_pages_per_pool_page.attr,
- 	NULL,
- };
+-5) Set memory limit: Optional
++6) Set memory limit: Optional
+ =============================
  
-@@ -2238,6 +2279,7 @@ static int zram_add(void)
- 		goto out_free_idr;
- 	}
+ Set memory limit by writing the value to sysfs node 'mem_limit'.
+@@ -151,7 +173,7 @@ Examples::
+ 	# To disable memory limit
+ 	echo 0 > /sys/block/zram0/mem_limit
  
-+	zram->pages_per_pool_page = ZS_DEFAULT_PAGES_PER_ZSPAGE;
- 	zram->disk->major = zram_major;
- 	zram->disk->first_minor = device_id;
- 	zram->disk->minors = 1;
-diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
-index 9d6fcfdf7aa7..bdfc9bf0bdd5 100644
---- a/drivers/block/zram/zram_drv.h
-+++ b/drivers/block/zram/zram_drv.h
-@@ -120,6 +120,8 @@ struct zram {
- 	 */
- 	u64 disksize;	/* bytes */
- 	const char *comp_algs[ZRAM_MAX_ZCOMPS];
-+
-+	u32 pages_per_pool_page;
- 	/*
- 	 * Pages that compress to sizes equal or greater than this are stored
- 	 * uncompressed in memory.
+-6) Activate
++7) Activate
+ ===========
+ 
+ ::
+@@ -162,7 +184,7 @@ Examples::
+ 	mkfs.ext4 /dev/zram1
+ 	mount /dev/zram1 /tmp
+ 
+-7) Add/remove zram devices
++8) Add/remove zram devices
+ ==========================
+ 
+ zram provides a control interface, which enables dynamic (on-demand) device
+@@ -182,7 +204,7 @@ execute::
+ 
+ 	echo X > /sys/class/zram-control/hot_remove
+ 
+-8) Stats
++9) Stats
+ ========
+ 
+ Per-device statistics are exported as various nodes under /sys/block/zram<id>/
+@@ -283,15 +305,15 @@ a single line of text and contains the following stats separated by whitespace:
+ 		Unit: 4K bytes
+  ============== =============================================================
+ 
+-9) Deactivate
+-=============
++10) Deactivate
++==============
+ 
+ ::
+ 
+ 	swapoff /dev/zram0
+ 	umount /dev/zram1
+ 
+-10) Reset
++11) Reset
+ =========
+ 
+ 	Write any positive value to 'reset' sysfs node::
 -- 
 2.38.0.135.g90850a2211-goog
 
