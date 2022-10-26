@@ -2,172 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8AF60DD78
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE2860DD7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbiJZIol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S233131AbiJZIrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233454AbiJZIoW (ORCPT
+        with ESMTP id S229904AbiJZIrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:44:22 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E16CD7E1D;
-        Wed, 26 Oct 2022 01:42:35 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4My2Fz396Gz9v7HC;
-        Wed, 26 Oct 2022 16:36:07 +0800 (CST)
-Received: from [10.206.134.65] (unknown [10.206.134.65])
-        by APP2 (Coremail) with SMTP id GxC2BwC37Pje8lhjkXoSAA--.11282S2;
-        Wed, 26 Oct 2022 09:42:15 +0100 (CET)
-Message-ID: <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com>
-Date:   Wed, 26 Oct 2022 10:42:03 +0200
+        Wed, 26 Oct 2022 04:47:12 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33107696D;
+        Wed, 26 Oct 2022 01:47:11 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id sc25so19303379ejc.12;
+        Wed, 26 Oct 2022 01:47:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dHciPpZ1UgXbXRvGPu7x5GbGmWOSivcZ/5MPRV1/Ons=;
+        b=HBPuNLiaf8LEoGHt9vdgvBgH+wID/hJDgyUmFN/i+CrvJANhSJKYN+sb7Izc/w4+sk
+         /WfcGVJFkOxLUC/ykQV/1YAV659IcfSeTt9JqJcL9CuPdClwVGWD/w1zR92g79O/vR2R
+         mcEShBP+h+mW5LSuEkWsMqlW8ud1IvPo86sm2UMEvwajuTlxza3iHb8rSUdyeDmTsr2P
+         c/mezJVXUzW9CHb/2jn+dmHa2gzqI0prXGlljJRzM+IbKl5CeHdF3V+UgFizqkMZkRBD
+         eteUctnBLmGvvur5uxHo+MiEVcrz3y9siQ4flTfn5WyjItSRXNalJmV6D2XSD8PQQOpO
+         Nxow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dHciPpZ1UgXbXRvGPu7x5GbGmWOSivcZ/5MPRV1/Ons=;
+        b=nPLlWY3R0PFp0z25B4bwcQT/MTOT1AyANSZuSAlaAjBHyGWfykuMJgGDMeE7ncFp3x
+         frikMlNe1mcyttER3SN9AiV1aggqcvjoUp2ZAdJ52v7nIXqj45bB4RaplA1CDsfNgn0s
+         yQ1wWBjFlQpsSTiuCYIZ257R9QaspXQh0MhQn8KPlZfHArxQQ8wHRCCMTv+4EOhtSK63
+         9r9B3F10h/ZCWcnf/+lp1rWTWM6vO80BD9Zo/upFCYgGNfaOC7h2uAilWy/Y+lWpdK9q
+         Ijw6taWMzEP3Bf6IIRG+qBuRzwAYyWRUuCaPDf1GJRFBljea09CWxHQpffBVl+5AtCGg
+         hsgg==
+X-Gm-Message-State: ACrzQf30nvQotWqyKAWdjsQuo8+shaMBjiTKqYmLeExEREcrBlN6sML0
+        xRteCSsV9gb2GJhDWQquRqlfHlSPwQzTK+WqIzg=
+X-Google-Smtp-Source: AMsMyM4xEIf06naDNkYmEl1zQz9IpL3fkrDGCsIddCLnKN0gZpHjaEDxcmdQKlbVGQLLjrPJ3Ykmdoo3ESPtHE0uPPQ=
+X-Received: by 2002:a17:906:c14f:b0:793:30e1:96be with SMTP id
+ dp15-20020a170906c14f00b0079330e196bemr31466869ejc.447.1666774030318; Wed, 26
+ Oct 2022 01:47:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from
- bpf_lsm_inode_init_security()
-Content-Language: en-US
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Cc:     KP Singh <kpsingh@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
-        linux-integrity <linux-integrity@vger.kernel.org>
-References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
- <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
- <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
- <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
- <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
- <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com>
- <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com>
- <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwC37Pje8lhjkXoSAA--.11282S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxury7WryrXr1kWry8CFy7GFg_yoW5WrW8pF
-        W5KF4UKFs8JF97u3s2qa1rWFWIy395Kr47Ja98JwnrZrn8Ar1ayr1fJFWY9ay7Cw4xCw1F
-        v3y2v3sxu3WDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
-        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBF1jj4SrugAAsw
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220915165256.352843-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220915165256.352843-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <CAMuHMdVJ4gp=kT2S+5bhjdZACSbEX=3pP7mmmi_GEbeAOxtHGw@mail.gmail.com>
+ <CA+V-a8sidwGQVSb7UV56opqE9ViS_y7nVPWx8Krx7t6P1BExCg@mail.gmail.com> <CAMuHMdWkg-k2efZoy=U+j-xji0Agp38qRy-8cjb7K7QiJrL-ZQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWkg-k2efZoy=U+j-xji0Agp38qRy-8cjb7K7QiJrL-ZQ@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 26 Oct 2022 09:46:43 +0100
+Message-ID: <CA+V-a8t3D0wFQhjm51hoduDqy2K93O5dUB=7aU0UjzhGYEowgg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: renesas: rzg2ul-smarc: Add
+ /omit-if-no-ref/ to pinmux
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/2022 8:37 AM, Alexei Starovoitov wrote:
-> On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
->>
->> On 10/25/2022 12:43 AM, Roberto Sassu wrote:
->>> On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov wrote:
->>>> I'm looking at security_inode_init_security() and it is indeed messy.
->>>> Per file system initxattrs callback that processes kmalloc-ed
->>>> strings.
->>>> Yikes.
->>>>
->>>> In the short term we should denylist inode_init_security hook to
->>>> disallow attaching bpf-lsm there. set/getxattr should be done
->>>> through kfuncs instead of such kmalloc-a-string hack.
->>> Inode_init_security is an example. It could be that the other hooks are
->>> affected too. What happens if they get arbitrary positive values too?
->>
->> TL;DR - Things will go cattywampus.
->>
->> The LSM infrastructure is an interface that has "grown organically",
->> and isn't necessarily consistent in what it requires of the security
->> module implementations. There are cases where it assumes that the
->> security module hooks are well behaved, as you've discovered. I have
->> no small amount of fear that someone is going to provide an eBPF
->> program for security_secid_to_secctx(). There has been an assumption,
->> oft stated, that all security modules are going to be reviewed as
->> part of the upstream process. The review process ought to catch hooks
->> that return unacceptable values. Alas, we've lost that with BPF.
->>
->> It would take a(nother) major overhaul of the LSM infrastructure to
->> make it safe against hooks that are not well behaved. From what I have
->> seen so far it wouldn't be easy/convenient/performant to do it in the
->> BPF security module either. I personally think that BPF needs to
->> ensure that the eBPF implementations don't return inappropriate values,
->> but I understand why that is problematic.
-> 
-> That's an accurate statement. Thank you.
-> 
-> Going back to the original question...
-> We fix bugs when we discover them.
-> Regardless of the subsystem they belong to.
-> No finger pointing.
+Hi Geert,
 
-I'm concerned about the following situation:
+On Wed, Oct 26, 2022 at 8:29 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> On Wed, Oct 26, 2022 at 12:39 AM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> > On Tue, Oct 25, 2022 at 9:13 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > > On Thu, Sep 15, 2022 at 6:53 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > > >
+> > > > In preparation to re-use the RZ/G2UL SMARC SoM and carrier DTS/I with the
+> > > > RZ/Five add /omit-if-no-ref/ keyword to pinmux entries as the support for
+> > > > RZ/Five SMARC EVK will be gradually added.
+> > > >
+> > > > Once we have full blown support for RZ/Five SMARC EVK we can get rid of
+> > > > the /omit-if-no-ref/ keyword.
+> > > >
+> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >
+> > > Thanks for your patch!
+> > >
+> > > I finally had a deeper look at this...
+> > >
+> > > Why do you want to disable these nodes? While they are indeed not
+> > > used yet on RZ/Five, they are valid hardware descriptions for the
+> > > RZ/Five SMARC EVK, and their presence doesn't harm anything.
+> > >
+> > > I do see a valid use case for marking pin control subnodes with
+> > > /omit-if-no-ref/: you can provide all possible configurations as a
+> > > convenience for the user, so the user no longer has to look up the
+> > > numeric parameters of the RZG2L_PORT_PINMUX() macros.
+> > > But IMHO those would belong in the SoC-specific .dtsi, not in a
+> > > board .dtsi.  See e.g. the massive use of /omit-if-no-ref/ in sunxi
+> > > and rockchip .dtsi files.
+> > >
+> > > Am I missing something?
+> > >
+> > My intention was to keep the DTB as minimal as possible so that it
+> > includes just the required pinmuxes which were enabled on the RZ/Five.
+> > For example [0], [1] we do delete the pinctrl for the nodes which are
+> > marked as disabled. Do you think we should drop it?
+>
+> You mean
+>
+>     /delete-property/ pinctrl-0;
+>     /delete-property/ pinctrl-names;
+>
+> ?
+> These do not delete pinctrl subnodes, but pinctrl properties in disabled
+> device nodes pointing to pinctrl subnodes.  The actual pinctrl subnodes
+> are still present.
+>
+Ahh right the pinctrl subnodes will still remain.
 
-struct <something> *function()
-{
-
-	ret = security_*();
-	if (ret)
-		return ERR_PTR(ret);
-
-}
-
-int caller()
-{
-	ptr = function()
-	if (IS_ERR(ptr)
-		goto out;
-
-	<use of invalid pointer>
-}
-
-I quickly found an occurrence of this:
-
-static int lookup_one_common()
-{
-
-[...]
-
-	return inode_permission();
-}
-
-struct dentry *try_lookup_one_len()
-{
-
-[...]
-
-         err = lookup_one_common(&init_user_ns, name, base, len, &this);
-         if (err)
-                 return ERR_PTR(err);
-
-
-Unfortunately, attaching to inode_permission causes the kernel
-to crash immediately (it does not happen with negative return
-values).
-
-So, I think the fix should be broader, and not limited to the
-inode_init_security hook. Will try to see how it can be fixed.
-
-Roberto
-
+Cheers,
+Prabhakar
