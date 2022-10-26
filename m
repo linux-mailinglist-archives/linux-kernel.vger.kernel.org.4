@@ -2,199 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86B7060E21F
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066C160E220
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233544AbiJZNYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S233706AbiJZNZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233711AbiJZNYU (ORCPT
+        with ESMTP id S233627AbiJZNZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:24:20 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB6931FB
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:24:13 -0700 (PDT)
-Received: from loongson.cn (unknown [171.223.96.17])
-        by gateway (Coremail) with SMTP id _____8Bx37f7NFljlqYCAA--.5455S3;
-        Wed, 26 Oct 2022 21:24:11 +0800 (CST)
-Received: from [127.0.0.1] (unknown [171.223.96.17])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPuD5NFljGVkFAA--.19908S3;
-        Wed, 26 Oct 2022 21:24:10 +0800 (CST)
-Message-ID: <26a42f0c-db3b-9330-de5c-68bf44976201@loongson.cn>
-Date:   Wed, 26 Oct 2022 21:24:10 +0800
+        Wed, 26 Oct 2022 09:25:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8AD2D2ED56
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:25:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CE3223A;
+        Wed, 26 Oct 2022 06:25:16 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.1.5])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 774603F71A;
+        Wed, 26 Oct 2022 06:25:08 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 14:24:58 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware/psci: demote suspend-mode warning to debug level
+Message-ID: <Y1k1Hp+0I1k1mioW@FVFF77S0Q05N>
+References: <20221024143417.11463-1-johan+linaro@kernel.org>
+ <20221025115355.26zrhmaudigumivn@bogus>
+ <Y1fc4FQ8WKnFb5my@hovoldconsulting.com>
+ <20221025132655.4kddpdod5czw3vts@bogus>
+ <Y1fzlItO+cwVybZm@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v2 RESEND] LoongArch: Remove unused kernel stack padding
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Oleg Nesterov <oleg@redhat.com>
-Cc:     Xi Ruoyao <xry111@xry111.site>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20221026035501.11986-1-hejinyang@loongson.cn>
- <43126fe8-9040-a574-a149-273844d3073f@xen0n.name>
-From:   Jinyang He <hejinyang@loongson.cn>
-In-Reply-To: <43126fe8-9040-a574-a149-273844d3073f@xen0n.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxPuD5NFljGVkFAA--.19908S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxuFW5KF1UZFW3Xr13ZF1UZFb_yoW7tF1rpF
-        1kAF1DJrWUCF1ktryUJr1UZFyUJr1kKw12gF13Ja45Jr4UZr1Ygr18Xr90gF1UJw4rKw40
-        qF1Yqw12va15Ja7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bxAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0V
-        AKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1l
-        Ox8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42
-        xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07URa0PUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1fzlItO+cwVybZm@hovoldconsulting.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xuerui,
+On Tue, Oct 25, 2022 at 04:32:52PM +0200, Johan Hovold wrote:
+> On Tue, Oct 25, 2022 at 02:26:55PM +0100, Sudeep Holla wrote:
+> > On Tue, Oct 25, 2022 at 02:56:00PM +0200, Johan Hovold wrote:
+> > > On Tue, Oct 25, 2022 at 12:53:55PM +0100, Sudeep Holla wrote:
+> > > > On Mon, Oct 24, 2022 at 04:34:17PM +0200, Johan Hovold wrote:
+> > > > > On some Qualcomm platform, like SC8280XP, the attempt to set PC mode
+> > > > > during boot fails with PSCI_RET_DENIED and since commit 998fcd001feb
+> > > > > ("firmware/psci: Print a warning if PSCI doesn't accept PC mode") this
+> > > > > is now logged at warning level:
+> > > > >
+> > > > > 	psci: failed to set PC mode: -3
+> > > > >
+> > > > > As there is nothing users can do about the firmware behaving this way,
+> > > > > demote the warning to debug level.
+> > > > >
+> > > >
+> > > > As mentioned in the other thread I prefer to keep this as error as we
+> > > > shouldn't mask this error and enable more/newer platforms to ignore it
+> > > > when they can go and fix it. So I don't agree with this.
+> > >
+> > > But now every owner of an X13s laptop will see this not very informative
+> > > error at every boot and wonder what it means. Has something gone broken?
+> > > Should they be worried? Can something be done about it?
+> > >
+> > 
+> > I understand that but I have expressed why I am concerned on generalising
+> > it. As long as we inform the concerned owners running Linux(which is quite
+> > small at the moment), keeping it will help to get these fixed on platforms
+> > that are running Linux today for validation and get it fixed if their
+> > platform firmware suffers from the same.
+> 
+> Trying to inform every user that a warning during boot is actually
+> benign and nothing to worry about generally seems backwards to me and is
+> not something that is likely to scale.
 
+It's not *entirely* beningn; we still have to bodge around this not being to
+spec, and there are things that won't work (e.g. if we kexec to a kernel that
+expects the FW to actually follow the spec it claims to).
 
-在 2022/10/26 15:27, WANG Xuerui 写道:
-> On 2022/10/26 11:55, Jinyang He wrote:
->> Kernel stack padding looks like obey MIPS o32 Calling Convention, as
->> LoongArch is inspired by MIPS and keep it. Remove it avoid not clear
->> code.
->
-> Just some improvement to the commit message so it's clearer:
->
-> "The current LoongArch kernel stack is padded as if obeying the MIPS 
-> o32 calling convention, signifying the port's MIPS lineage but no 
-> longer making sense. Remove the padding for clarity."
+I agree with Sudeep that we should log something here, but I do appreciate that
+argumetn that for 90% of users this is not interesting.
 
-Thanks, I'll improve it and send it later.
+I would suggest we make this:
 
+	pr_info(FW_BUG "failed to set PC mode: %d\n", ...);
 
->
->>
->> Link: 
->> https://lore.kernel.org/loongarch/1662130897-13156-1-git-send-email-hejinyang@loongson.cn/
->>
->
-> I think this blank line between the "Link" and S-o-b tags could be 
-> removed.
-
-Ok.
-
-
->
->> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
->> ---
->> v2: Remove TOP_OF_KERNEL_STACK_PADDING
->>      Remove 'init stack pointer' in head.S
->>
->>   arch/loongarch/include/asm/processor.h | 2 +-
->>   arch/loongarch/include/asm/ptrace.h    | 2 +-
->>   arch/loongarch/kernel/head.S           | 3 +--
->>   arch/loongarch/kernel/process.c        | 4 ++--
->>   arch/loongarch/kernel/switch.S         | 2 +-
->>   5 files changed, 6 insertions(+), 7 deletions(-)
->>
->> diff --git a/arch/loongarch/include/asm/processor.h 
->> b/arch/loongarch/include/asm/processor.h
->> index 6954dc5d24e9..7184f1dc61f2 100644
->> --- a/arch/loongarch/include/asm/processor.h
->> +++ b/arch/loongarch/include/asm/processor.h
->> @@ -191,7 +191,7 @@ static inline void flush_thread(void)
->>   unsigned long __get_wchan(struct task_struct *p);
->>     #define __KSTK_TOS(tsk) ((unsigned long)task_stack_page(tsk) + \
->> -             THREAD_SIZE - 32 - sizeof(struct pt_regs))
->> +             THREAD_SIZE - sizeof(struct pt_regs))
->>   #define task_pt_regs(tsk) ((struct pt_regs *)__KSTK_TOS(tsk))
->>   #define KSTK_EIP(tsk) (task_pt_regs(tsk)->csr_era)
->>   #define KSTK_ESP(tsk) (task_pt_regs(tsk)->regs[3])
->> diff --git a/arch/loongarch/include/asm/ptrace.h 
->> b/arch/loongarch/include/asm/ptrace.h
->> index 7437b9366c3b..59c4608de91d 100644
->> --- a/arch/loongarch/include/asm/ptrace.h
->> +++ b/arch/loongarch/include/asm/ptrace.h
->> @@ -133,7 +133,7 @@ static inline void die_if_kernel(const char *str, 
->> struct pt_regs *regs)
->>   #define current_pt_regs()                        \
->>   ({                                    \
->>       unsigned long sp = (unsigned long)__builtin_frame_address(0);    \
->> -    (struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1 - 32) - 1;    \
->> +    (struct pt_regs *)((sp | (THREAD_SIZE - 1)) + 1) - 1;        \
->>   })
->>     /* Helpers for working with the user stack pointer */
->> diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
->> index 97425779ce9f..84970e266658 100644
->> --- a/arch/loongarch/kernel/head.S
->> +++ b/arch/loongarch/kernel/head.S
->> @@ -84,10 +84,9 @@ SYM_CODE_START(kernel_entry)            # kernel 
->> entry point
->>         la.pcrel    tp, init_thread_union
->>       /* Set the SP after an empty pt_regs.  */
->> -    PTR_LI        sp, (_THREAD_SIZE - 32 - PT_SIZE)
->> +    PTR_LI        sp, (_THREAD_SIZE - PT_SIZE)
->>       PTR_ADD        sp, sp, tp
->>       set_saved_sp    sp, t0, t1
->> -    PTR_ADDI    sp, sp, -4 * SZREG    # init stack pointer
->>         bl        start_kernel
->>       ASM_BUG()
->> diff --git a/arch/loongarch/kernel/process.c 
->> b/arch/loongarch/kernel/process.c
->> index 1256e3582475..2526b68f1c0f 100644
->> --- a/arch/loongarch/kernel/process.c
->> +++ b/arch/loongarch/kernel/process.c
->> @@ -129,7 +129,7 @@ int copy_thread(struct task_struct *p, const 
->> struct kernel_clone_args *args)
->>       unsigned long clone_flags = args->flags;
->>       struct pt_regs *childregs, *regs = current_pt_regs();
->>   -    childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE - 32;
->> +    childksp = (unsigned long)task_stack_page(p) + THREAD_SIZE;
->>         /* set up new TSS. */
->>       childregs = (struct pt_regs *) childksp - 1;
->> @@ -236,7 +236,7 @@ bool in_task_stack(unsigned long stack, struct 
->> task_struct *task,
->>               struct stack_info *info)
->>   {
->>       unsigned long begin = (unsigned long)task_stack_page(task);
->> -    unsigned long end = begin + THREAD_SIZE - 32;
->> +    unsigned long end = begin + THREAD_SIZE;
->>         if (stack < begin || stack >= end)
->>           return false;
->> diff --git a/arch/loongarch/kernel/switch.S 
->> b/arch/loongarch/kernel/switch.S
->> index 43ebbc3990f7..202a163cb32f 100644
->> --- a/arch/loongarch/kernel/switch.S
->> +++ b/arch/loongarch/kernel/switch.S
->> @@ -26,7 +26,7 @@ SYM_FUNC_START(__switch_to)
->>       move    tp, a2
->>       cpu_restore_nonscratch a1
->>   -    li.w        t0, _THREAD_SIZE - 32
->> +    li.w        t0, _THREAD_SIZE
->>       PTR_ADD        t0, t0, tp
->>       set_saved_sp    t0, t1, t2
->
-> Otherwise LGTM, assuming you have tested it before sending (I don't 
-> currently have the capacity to immediately test this for you)...
->
-> Reviewed-by: WANG Xuerui <git@xen0n.name>
-
-
-Emm, to be honest, I didn't do tests like LTP. I ususally do development
-on CLFS-LoongArch while kernel has this patch. And it works normally.
-
+... so that it's always logged for those who care, but as it's INFO rather than
+WARNING, it'll easily be filtered out of logs (e.g. for users booting with
+"quiet"). Adding FW_BUG will also make this clear we're complaining about a FW
+bug rather than this being a kernel-internal error.
 
 Thanks,
-
-Jinyang
-
+Mark.
