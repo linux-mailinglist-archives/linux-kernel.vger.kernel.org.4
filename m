@@ -2,373 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8567460E715
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2674060E718
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 20:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233911AbiJZSS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 14:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
+        id S233913AbiJZSSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 14:18:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233362AbiJZSSV (ORCPT
+        with ESMTP id S234094AbiJZSSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 14:18:21 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8104ABECD8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:18:20 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id w14so3532873wru.8
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:18:20 -0700 (PDT)
+        Wed, 26 Oct 2022 14:18:43 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C53C45BA
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:18:41 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id v13-20020a17090a6b0d00b0021332e5388fso2919537pjj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 11:18:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ar1W8CHnQ3arlRC4SAVRQ6UfLOjT23QyPGPqxZrtkzM=;
-        b=NuGVOZ/BPhdEtnSmf+HL3WbY8vG+TAEg0JdPucXEZBhlVCVxm/wx2EHDHA6vrDCsrk
-         WQJL8GFYuzqqGGf5cic3JNppmqEPkpl5qS1TP6V9HRIcR3pl5kqv6qLWjYC6L/F9Fn+b
-         S1VLX8hqaPI9xaDT4AxHzuwya1XWRCMkdzgbkr8QHXakcCINxK1eGwRYFyuFzWkE/65/
-         v3gDq4os0fVzzjXoZWmQ8VeI8Dtx4lLGDbdyssVRpZ9LDnqFth6YbeXqCeDf0hLUzwMw
-         kh/HZBdrbl/MoqD65VY9g8XyNyMpGMpUp6qxED8ZApFFo8LUVh93FyqujD9etA2zNc9y
-         qWWQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YP8jpqbbIYZxZWSoeoFbOkeJPwCMijsPk6P/JiUcvP4=;
+        b=GdEZnBhNeLS3QFsCKyyIKFOJSw4RhzT4wX54Iz+TZXK6p5hKwk6YFm/wOebhWl/ger
+         Tx7QNrcB6aJx5HErg/rVYPyyRaPtZWnn6eeqLyv5aVOlfuvztFMYltiBrcvlnc/ztjAD
+         XOufFWlUHHnz+mNy0Q/K2qZXWkeQF4dMfvAq4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ar1W8CHnQ3arlRC4SAVRQ6UfLOjT23QyPGPqxZrtkzM=;
-        b=cLTP8ImnNhUpxrJATmVnJVCeirdyNvEVWqv+bXY0kUr6PQkpKeZJR+la3IH3ol70K+
-         IwKuITQ9QC4CjuiWMvfQi9+YkEvVUoYQFEBI528sa/SFP8VMQ5zcjgyyFbWnPMarlVjS
-         PMAc33/hbEvBQIFOtvWgOukPibn+1bY9tqNV0xg5z7X9r5Ps4RX50AAMV5ci2mxFq7Fp
-         V2a6BG6d7kVn5u5BKgY4Xz5ECcAKI6I85bj6eE/VUqittPze13/JmloM+zkvUk/N7nko
-         ThufpF71eB1PxEGMuqxt/ij/ZWS+cZTSPu1BzvZ94jEC+JE079SyzJ3fjaslKzzpLXZ7
-         WDQw==
-X-Gm-Message-State: ACrzQf1o2fuuvMoesB0BKft3dBBeaay4paKbpONx8hEvVsCNaPQ3klBJ
-        je4nkl4q0VATBeikBcGfVlr6IieQas/Iq0rfVE7R2g==
-X-Google-Smtp-Source: AMsMyM4h7yiYGsb3MlhiamXiqg8QB63N+vrHFHGaxkdN7diK1iBHk4RHzAblZ26qBPsTjdLMG+R44e47BHfRTh/tDuA=
-X-Received: by 2002:adf:f081:0:b0:236:5e7c:4ec2 with SMTP id
- n1-20020adff081000000b002365e7c4ec2mr15933656wro.641.1666808298850; Wed, 26
- Oct 2022 11:18:18 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YP8jpqbbIYZxZWSoeoFbOkeJPwCMijsPk6P/JiUcvP4=;
+        b=UjJdZaN1yggr6EZrtcSk+zQJaX8WVEF+8l9OKwyBOIwRIvJ2enzlI6GX70LRxzPvph
+         E/IPIC4e8OclrF9Jm+7tcZ5TgDLdRwAQxwF6qk2CgScQK8vNw4jmoP5Mlk1nUxNncWRu
+         wR2G8JHI+FCUPNmJHvYl5+joqs+mEqS3gxr8sBL3zftk4mhRQcUSmq5Or9xTEefjtVcI
+         liyci1IQAWnoG3rSpg9azNOE1LUTFGBRuR1jjnHXzx1CXd0USkC9pcQX+kvfF9a+bOVq
+         rLdxwoG1Xzzybcfho0Bnbi7IJvPKdCpaeZkYhXuFDPJgw0HGyORFuN6P7sY2c21W5WrD
+         RNgA==
+X-Gm-Message-State: ACrzQf1pDQa7FpmhwqDKpyq6Xz3LBmJKYJefsxYylFKLv5imoAYhOxP4
+        jMduTk7lNW1XZp4bAs56+7o/iQ==
+X-Google-Smtp-Source: AMsMyM6dLJd6E7h/F0+/aOt92HNYIp4+1kEGsJEox48TAdqkhmOa0QYlOyAryLYM348bQd5wCsctDg==
+X-Received: by 2002:a17:90b:3887:b0:213:566a:1417 with SMTP id mu7-20020a17090b388700b00213566a1417mr4549636pjb.225.1666808320852;
+        Wed, 26 Oct 2022 11:18:40 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:c9e3:74f3:6b2b:135])
+        by smtp.gmail.com with ESMTPSA id f15-20020a170902ce8f00b00186a2444a43sm3223958plg.27.2022.10.26.11.18.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 11:18:40 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 11:18:37 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-mmc@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH v3 6/7] mmc: sdhci_am654: Fix SDHCI_RESET_ALL for CQHCI
+Message-ID: <Y1l5/U3WnbDIIMOj@google.com>
+References: <20221024175501.2265400-1-briannorris@chromium.org>
+ <20221024105229.v3.6.I35ca9d6220ba48304438b992a76647ca8e5b126f@changeid>
+ <5b91c0eb-52aa-8431-c286-81b7feae84ce@intel.com>
+ <Y1hY57vkkOhybwE1@google.com>
+ <6268199c-78ca-8f55-0377-c14bb0299443@gmail.com>
+ <Y1higmSUMLsxvXyq@google.com>
+ <7db0a98e-36c8-afee-5b0d-16b836ac8de0@intel.com>
 MIME-Version: 1.0
-References: <20221021211816.1525201-1-vipinsh@google.com> <20221021211816.1525201-6-vipinsh@google.com>
- <DS0PR11MB637351B52E5F8752E7DA16A4DC309@DS0PR11MB6373.namprd11.prod.outlook.com>
- <Y1lV0l4uDjXdKpkL@google.com>
-In-Reply-To: <Y1lV0l4uDjXdKpkL@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Wed, 26 Oct 2022 11:17:42 -0700
-Message-ID: <CAHVum0d1Oaae0H4YO3GOJ5pCwV1vqNsE6n6mWV9wMGic6wN7_A@mail.gmail.com>
-Subject: Re: [PATCH v6 5/5] KVM: selftests: Allowing running
- dirty_log_perf_test on specific CPUs
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "andrew.jones@linux.dev" <andrew.jones@linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7db0a98e-36c8-afee-5b0d-16b836ac8de0@intel.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 8:44 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Wed, Oct 26, 2022, Wang, Wei W wrote:
-> > On Saturday, October 22, 2022 5:18 AM, Vipin Sharma wrote:
-> > > +static void pin_this_task_to_pcpu(uint32_t pcpu) {
-> > > +   cpu_set_t mask;
-> > > +   int r;
-> > > +
-> > > +   CPU_ZERO(&mask);
-> > > +   CPU_SET(pcpu, &mask);
-> > > +   r = sched_setaffinity(0, sizeof(mask), &mask);
-> > > +   TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
-> > > +}
-> > > +
-> > >  static void *vcpu_thread_main(void *data)  {
-> > > +   struct perf_test_vcpu_args *vcpu_args;
-> > >     struct vcpu_thread *vcpu = data;
-> > >
-> > > +   vcpu_args = &perf_test_args.vcpu_args[vcpu->vcpu_idx];
-> > > +
-> > > +   if (perf_test_args.pin_vcpus)
-> > > +           pin_this_task_to_pcpu(vcpu_args->pcpu);
-> > > +
-> >
-> > I think it would be better to do the thread pinning at the time when the
-> > thread is created by providing a pthread_attr_t attr, e.g. :
-> >
-> > pthread_attr_t attr;
-> >
-> > CPU_SET(vcpu->pcpu, &cpu_set);
-> > pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpu_set);
-> > pthread_create(thread, attr,...);
-> >
-> > Also, pinning a vCPU thread to a pCPU is a general operation
-> > which other users would need. I think we could make it more general and
-> > put it to kvm_util.
->
-> We could, but it taking advantage of the pinning functionality would require
-> plumbing a command line option for every test, or alternatively adding partial
-> command line parsing with a "hidden" global struct to kvm_selftest_init(), though
-> handling error checking for a truly generic case would be a mess.  Either way,
-> extending pinning to other tests would require non-trivial effort, and can be
-> done on top of this series.
->
-> That said, it's also trival to extract the pinning helpers to common code, and I
-> can't think of any reason not to do that straightaway.
->
-> Vipin, any objection to squashing the below diff with patch 5?
->
+Hi Adrian,
 
-Looks fine to me, I will send v7 with this change.
+On Wed, Oct 26, 2022 at 08:36:48AM +0300, Adrian Hunter wrote:
+> On 26/10/22 01:26, Brian Norris wrote:
+> > On Tue, Oct 25, 2022 at 02:53:46PM -0700, Florian Fainelli wrote:
+> >> On 10/25/22 14:45, Brian Norris wrote:
+> >>> On Tue, Oct 25, 2022 at 04:10:44PM +0300, Adrian Hunter wrote:
+> >>>> On 24/10/22 20:55, Brian Norris wrote:
+> >>>>> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+> >>>>> index 8f1023480e12..6a282c7a221e 100644
+> >>>>> --- a/drivers/mmc/host/sdhci_am654.c
+> >>>>> +++ b/drivers/mmc/host/sdhci_am654.c
+> >>>
+> >>>>> @@ -378,7 +379,7 @@ static void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
+> >>>>>   	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> >>>>>   	struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
+> >>>>> -	sdhci_reset(host, mask);
+> >>>>> +	sdhci_and_cqhci_reset(host, mask);
+> >>>>>   	if (sdhci_am654->quirks & SDHCI_AM654_QUIRK_FORCE_CDTEST) {
+> >>>>>   		ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
+> >>>>
+> >>>> What about sdhci_reset in sdhci_am654_ops ?
+> >>>
+> >>> Oops, I think you caught a big fallacy in some of my patches: I assumed
+> >>> there was a single reset() implementation in a given driver (an unwise
+> >>> assumption, I realize). I see at least sdhci-brcmstb.c also has several
+> >>> variant ops that call sdhci_reset(), and I should probably convert them
+> >>> too.
+> 
+> I checked and found only sdhci_am654_ops
 
-> >  e.g. adding it to the helper function that I'm trying to create
->
-> If we go this route in the future, we'd need to add a worker trampoline as the
-> pinning needs to happen in the worker task itself to guarantee that the pinning
-> takes effect before the worker does anything useful.  That should be very doable.
->
-> I do like the idea of extending __vcpu_thread_create(), but we can do that once
-> __vcpu_thread_create() lands to avoid further delaying this series.
->
-> ---
->  .../selftests/kvm/dirty_log_perf_test.c       |  7 ++-
->  .../selftests/kvm/include/kvm_util_base.h     |  4 ++
->  .../selftests/kvm/include/perf_test_util.h    |  8 +--
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 54 ++++++++++++++++++
->  .../selftests/kvm/lib/perf_test_util.c        | 57 +------------------
->  5 files changed, 68 insertions(+), 62 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> index 35504b36b126..a82fc51d57ca 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-> @@ -471,8 +471,11 @@ int main(int argc, char *argv[])
->                 }
->         }
->
-> -       if (pcpu_list)
-> -               perf_test_setup_pinning(pcpu_list, nr_vcpus);
-> +       if (pcpu_list) {
-> +               kvm_parse_vcpu_pinning(pcpu_list, perf_test_args.vcpu_to_pcpu,
-> +                                      nr_vcpus);
-> +               perf_test_args.pin_vcpus = true;
-> +       }
->
->         TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
->
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> index e42a09cd24a0..3bf2333ef95d 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-> @@ -688,6 +688,10 @@ static inline struct kvm_vm *vm_create_with_one_vcpu(struct kvm_vcpu **vcpu,
->
->  struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm);
->
-> +void kvm_pin_this_task_to_pcpu(uint32_t pcpu);
-> +void kvm_parse_vcpu_pinning(const char *pcpus_string, uint32_t vcpu_to_pcpu[],
-> +                           int nr_vcpus);
-> +
->  unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
->  unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size);
->  unsigned int vm_num_host_pages(enum vm_guest_mode mode, unsigned int num_guest_pages);
-> diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-> index ccfe3b9dc6bd..85320e0640fc 100644
-> --- a/tools/testing/selftests/kvm/include/perf_test_util.h
-> +++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-> @@ -27,8 +27,6 @@ struct perf_test_vcpu_args {
->         /* Only used by the host userspace part of the vCPU thread */
->         struct kvm_vcpu *vcpu;
->         int vcpu_idx;
-> -       /* The pCPU to which this vCPU is pinned. Only valid if pin_vcpus is true. */
-> -       uint32_t pcpu;
->  };
->
->  struct perf_test_args {
-> @@ -43,8 +41,12 @@ struct perf_test_args {
->         bool nested;
->         /* True if all vCPUs are pinned to pCPUs */
->         bool pin_vcpus;
-> +       /* The vCPU=>pCPU pinning map. Only valid if pin_vcpus is true. */
-> +       uint32_t vcpu_to_pcpu[KVM_MAX_VCPUS];
->
->         struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
-> +
-> +
->  };
->
->  extern struct perf_test_args perf_test_args;
-> @@ -64,6 +66,4 @@ void perf_test_guest_code(uint32_t vcpu_id);
->  uint64_t perf_test_nested_pages(int nr_vcpus);
->  void perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_vcpu *vcpus[]);
->
-> -void perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus);
-> -
->  #endif /* SELFTEST_KVM_PERF_TEST_UTIL_H */
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index f1cb1627161f..8292af9d7660 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -11,6 +11,7 @@
->  #include "processor.h"
->
->  #include <assert.h>
-> +#include <sched.h>
->  #include <sys/mman.h>
->  #include <sys/types.h>
->  #include <sys/stat.h>
-> @@ -443,6 +444,59 @@ struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm)
->         return vm_vcpu_recreate(vm, 0);
->  }
->
-> +void kvm_pin_this_task_to_pcpu(uint32_t pcpu)
-> +{
-> +       cpu_set_t mask;
-> +       int r;
-> +
-> +       CPU_ZERO(&mask);
-> +       CPU_SET(pcpu, &mask);
-> +       r = sched_setaffinity(0, sizeof(mask), &mask);
-> +       TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
-> +}
-> +
-> +static uint32_t parse_pcpu(const char *cpu_str, const cpu_set_t *allowed_mask)
-> +{
-> +       uint32_t pcpu = atoi_non_negative(cpu_str);
-> +
-> +       TEST_ASSERT(CPU_ISSET(pcpu, allowed_mask),
-> +                   "Not allowed to run on pCPU '%d', check cgroups?\n", pcpu);
-> +       return pcpu;
-> +}
-> +
-> +void kvm_parse_vcpu_pinning(const char *pcpus_string, uint32_t vcpu_to_pcpu[],
-> +                           int nr_vcpus)
-> +{
-> +       cpu_set_t allowed_mask;
-> +       char *cpu, *cpu_list;
-> +       char delim[2] = ",";
-> +       int i, r;
-> +
-> +       cpu_list = strdup(pcpus_string);
-> +       TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-> +
-> +       r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> +       TEST_ASSERT(!r, "sched_getaffinity() failed");
-> +
-> +       cpu = strtok(cpu_list, delim);
-> +
-> +       /* 1. Get all pcpus for vcpus. */
-> +       for (i = 0; i < nr_vcpus; i++) {
-> +               TEST_ASSERT(cpu, "pCPU not provided for vCPU '%d'\n", i);
-> +               vcpu_to_pcpu[i] = parse_pcpu(cpu, &allowed_mask);
-> +               cpu = strtok(NULL, delim);
-> +       }
-> +
-> +       /* 2. Check if the main worker needs to be pinned. */
-> +       if (cpu) {
-> +               kvm_pin_this_task_to_pcpu(parse_pcpu(cpu, &allowed_mask));
-> +               cpu = strtok(NULL, delim);
-> +       }
-> +
-> +       TEST_ASSERT(!cpu, "pCPU list contains trailing garbage characters '%s'", cpu);
-> +       free(cpu_list);
-> +}
-> +
->  /*
->   * Userspace Memory Region Find
->   *
-> diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> index 520d1f896d61..1d133007d7de 100644
-> --- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-> +++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-> @@ -5,7 +5,6 @@
->  #define _GNU_SOURCE
->
->  #include <inttypes.h>
-> -#include <sched.h>
->
->  #include "kvm_util.h"
->  #include "perf_test_util.h"
-> @@ -243,17 +242,6 @@ void __weak perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_v
->         exit(KSFT_SKIP);
->  }
->
-> -static void pin_this_task_to_pcpu(uint32_t pcpu)
-> -{
-> -       cpu_set_t mask;
-> -       int r;
-> -
-> -       CPU_ZERO(&mask);
-> -       CPU_SET(pcpu, &mask);
-> -       r = sched_setaffinity(0, sizeof(mask), &mask);
-> -       TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
-> -}
-> -
->  static void *vcpu_thread_main(void *data)
->  {
->         struct perf_test_vcpu_args *vcpu_args;
-> @@ -262,7 +250,7 @@ static void *vcpu_thread_main(void *data)
->         vcpu_args = &perf_test_args.vcpu_args[vcpu->vcpu_idx];
->
->         if (perf_test_args.pin_vcpus)
-> -               pin_this_task_to_pcpu(vcpu_args->pcpu);
-> +               kvm_pin_this_task_to_pcpu(perf_test_args.vcpu_to_pcpu[vcpu->vcpu_idx]);
->
->         WRITE_ONCE(vcpu->running, true);
->
-> @@ -312,46 +300,3 @@ void perf_test_join_vcpu_threads(int nr_vcpus)
->         for (i = 0; i < nr_vcpus; i++)
->                 pthread_join(vcpu_threads[i].thread, NULL);
->  }
-> -
-> -static uint32_t parse_pcpu(const char *cpu_str, const cpu_set_t *allowed_mask)
-> -{
-> -       uint32_t pcpu = atoi_non_negative(cpu_str);
-> -
-> -       TEST_ASSERT(CPU_ISSET(pcpu, allowed_mask),
-> -                   "Not allowed to run on pCPU '%d', check cgroups?\n", pcpu);
-> -       return pcpu;
-> -}
-> -
-> -void perf_test_setup_pinning(const char *pcpus_string, int nr_vcpus)
-> -{
-> -       cpu_set_t allowed_mask;
-> -       char *cpu, *cpu_list;
-> -       char delim[2] = ",";
-> -       int i, r;
-> -
-> -       cpu_list = strdup(pcpus_string);
-> -       TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-> -
-> -       r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
-> -       TEST_ASSERT(!r, "sched_getaffinity() failed");
-> -
-> -       cpu = strtok(cpu_list, delim);
-> -
-> -       /* 1. Get all pcpus for vcpus. */
-> -       for (i = 0; i < nr_vcpus; i++) {
-> -               TEST_ASSERT(cpu, "pCPU not provided for vCPU '%d'\n", i);
-> -               perf_test_args.vcpu_args[i].pcpu = parse_pcpu(cpu, &allowed_mask);
-> -               cpu = strtok(NULL, delim);
-> -       }
-> -
-> -       perf_test_args.pin_vcpus = true;
-> -
-> -       /* 2. Check if the main worker needs to be pinned. */
-> -       if (cpu) {
-> -               pin_this_task_to_pcpu(parse_pcpu(cpu, &allowed_mask));
-> -               cpu = strtok(NULL, delim);
-> -       }
-> -
-> -       TEST_ASSERT(!cpu, "pCPU list contains trailing garbage characters '%s'", cpu);
-> -       free(cpu_list);
-> -}
->
-> base-commit: 076ac4ca97225d6b8698a9b066153b556e97be7c
-> --
->
+And...how about sdhci_j721e_8bit_ops in that same driver?
+
+> >> You got it right for sdhci-brcmstb.c because "supports-cqe" which gates the
+> >> enabling of CQE can only be found with the "brcm,bcm7216-sdhci" compatible
+> >> which implies using brcmstb_reset().
+> > 
+> > I don't see any in-tree device trees for these chips (which is OK), and
+> > that's not what the Documentation/ says, and AFAICT nothing in the
+> > driver is limiting other variants from specifying the "supports-cqe"
+> > flag in their (out-of-tree) device tree. The closest thing I see is that
+> > an *example* in brcm,sdhci-brcmstb.yaml shows "supports-cqe" only on
+> > brcm,bcm7216-sdhci -- but an example is not a binding agreement. Am I
+> > missing something?
+> 
+> It was mentioned in the patch from the Fixes tag.
+
+OK, good note. If I don't patch the other seemingly-unaffected variants
+in brcmstb, I'll at least update the commit message, since the code
+doesn't tell me they're unaffected.
+
+> > Now of course, you probably know behind the scenes that there are no
+> > other sdhci-brcmstb-relevant controllers that "support cqe", but AFAICT
+> > I have no way of knowing that a priori. The driver and bindings give
+> > (too much?) flexibility.
+> > 
+> > Poking around, I think the only other one I might have missed would be
+> > gl9763e in sdhci-pci-gli.c. That also calls cqhci_init() but is
+> > otherwise relying on the default sdhci_pci_ops. So I'd either have to
+> 
+> It uses sdhci_gl9763e_ops not the default sdhci_pci_ops.  It looks OK
+> to me.
+
+Ugh, of course you're right. I think I'm mixing up past history and
+stuff I'm trying to patch now. I *am* patching gl9763e already in this
+series, but simply as a refactor, and not any additional bugfix.
+
+> > change the common sdhci_pci_ops, or else start a new copy/paste/modify
+> > 'struct sdhci_ops' for it... This really does start to get messy when
+> > poking around on drivers I can't test. As in, it shouldn't be harmful
+> > to change most sdhci_reset() to sdhci_and_cqhci_reset() (as long as they
+> > aren't using some other CQE implementation), but the more invasive it
+> > gets (say, rewriting a bunch of other ops), the easier it is to get
+> > something wrong.
+> 
+> AFAICS it was just sdhci_am654_ops
+
+Agreed it's less to change than I thought. But I think you (and I) also
+missed sdhci_j721e_8bit_ops.
+
+Assuming I'm not totally off-base yet again...v4 is coming sooner or
+later.
+
+Brian
