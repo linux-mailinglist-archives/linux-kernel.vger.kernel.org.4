@@ -2,108 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAADB60E5CF
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABB360E5D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbiJZQvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        id S233911AbiJZQwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233915AbiJZQvk (ORCPT
+        with ESMTP id S233536AbiJZQwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:51:40 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7F8A98FA
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:51:34 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id i12so12026304qvs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VmS+uedq9rzycs24wj1ycZpaKGAK2vI/UBOPK1atnrA=;
-        b=QtKakQTVufItu5vl/8R42Qnn9Wzs/hChZ09yA7FjmJ9mpKgNVXRrg2X1M5yl/PP9OZ
-         HMq1+RaeaaRsj+hRYQ3TsmQv4nytH4Ahp08Z47qG/6AA+DgeXWAk1DSJ7TBODGiXf5xr
-         VEGAFdIgRFtBRj6UrUa1yf0RJEKNYpwKCDmJO1rCrowfmgnqrBLA8HZA1Xjw9HpNwm80
-         GjvTIrqN7n/378lvmq0khEiatP3JO9PKwD+NRK6RduFf0Pzeihrr1AVzWqFpW+XpGvGV
-         zbjCSp2IzLfDLjCY/r9wXv9kaRqOQUXKXvZrn1P106jOC7BFyH1ev/Q4WGLQrPGV4xWR
-         FfOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VmS+uedq9rzycs24wj1ycZpaKGAK2vI/UBOPK1atnrA=;
-        b=TeOSMtb77a5+ljF2LrqodddxiNjU+lMBnOi/E6RITGTBwUTAx5gB0pojvQkH0ZGLna
-         iwGewbpIQZviuwdQI5sMaDwr2IsKRKGL9ic+D6ZV2SqkqqDlIoI4gV+ueqO0LMJUhR41
-         v8DLZIqnvN7glaoazT1oaA+91WSD9dE6woeBCciJl/yCofv/83aUu4/+IHME6wU5ZKMU
-         rNVSTDCY8Ceslxd3nFnebrdIyvbsOZJkiREzuLrxH4yL1kfQ6SWvDaVMqXnnmyGgFtov
-         C3p9lWy3V9dy+DeCIiOp1kGqElHAzqC1zeikYdrggYbojhMJnKHtx5KmNaTkl/j2C9Em
-         wleQ==
-X-Gm-Message-State: ACrzQf1mOL/yfDOqHnoL3VCbbLBvnGIhrWwSHEEY33rq6dbeIggYlE5o
-        AKinST8jtJCX0CN+PPrAkxc9Hg==
-X-Google-Smtp-Source: AMsMyM5NHLEVxZiJLk0E6mFpOZw493Bl8ApQVclF6CiyclewbLeaFtb/1NUY4DjOq2pM8MRNEg/I0g==
-X-Received: by 2002:a05:6214:5710:b0:4bb:8e33:560c with SMTP id lt16-20020a056214571000b004bb8e33560cmr6878068qvb.122.1666803093278;
-        Wed, 26 Oct 2022 09:51:33 -0700 (PDT)
-Received: from krzk-bin.. ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id h2-20020ac81382000000b0038b684a1642sm3440438qtj.32.2022.10.26.09.51.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 09:51:32 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [RESEND PATCH] dt-bindings: pci: qcom,pcie-ep: correct qcom,perst-regs
-Date:   Wed, 26 Oct 2022 12:51:29 -0400
-Message-Id: <20221026165129.48405-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 26 Oct 2022 12:52:04 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21ED5AA04
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:52:03 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QFxccJ031022
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:52:03 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=yweTIcEEup4K70R2eq07Kp6EbZy543M8HDS4MaHQouE=;
+ b=KeqUX9C6evJ19CNbkIyX//kFQ00xpDB38KH+ya2Mr46EC9xid+R9Iyq/WJq/bRXP7Wmv
+ nDNsjRYgZoBPj+EuhQjTWXQsKGUTf5DZ41wlCK9YNhyemfbzFNFRexRHod11QnxjHrIB
+ KP6itgP7A9mfGsff/hc8vbbNkuiRVMDeJjQp88b2iSRKSoadkEgrh3JfbKz/HV68M3Kg
+ UQMQe9Qy3FPqXgxRVxYGBliC8Sn85ZBfjaVvGln3mr1oHM/JfjPBnUXyK1wQ/H9SsD7a
+ cI1f30DSA2q95nwQN+rHl2R/QHhbvtM+HPXTBHhYiUKogJA2fFJ1UmGFLbDYChuMDgxN Ww== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ke5sncgsx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:52:03 -0700
+Received: from twshared13927.24.frc3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 09:52:02 -0700
+Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
+        id 5F861A4B1E3F; Wed, 26 Oct 2022 09:51:53 -0700 (PDT)
+From:   Keith Busch <kbusch@meta.com>
+To:     <linux-fsdevel@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <hch@lst.de>, <djwong@kernel.org>,
+        <bvanassche@acm.org>, Keith Busch <kbusch@kernel.org>
+Subject: [PATCH] iomap: directly use logical block size
+Date:   Wed, 26 Oct 2022 09:51:33 -0700
+Message-ID: <20221026165133.2563946-1-kbusch@meta.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 2wTcft4Q44mXu-rQ9bMYRVmULB6mduX7
+X-Proofpoint-GUID: 2wTcft4Q44mXu-rQ9bMYRVmULB6mduX7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_07,2022-10-26_01,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-qcom,perst-regs is an phandle array of one item with a phandle and its
-arguments.
+From: Keith Busch <kbusch@kernel.org>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Don't transform the logical block size to a bit shift only to shift it
+back to the original block size. Just use the size.
+
+Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ fs/iomap/direct-io.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-index 977c976ea799..5aa590957ee4 100644
---- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-+++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-@@ -47,8 +47,10 @@ properties:
-                  enable registers
-     $ref: "/schemas/types.yaml#/definitions/phandle-array"
-     items:
--      minItems: 3
--      maxItems: 3
-+      - items:
-+          - description: Syscon to TCSR system registers
-+          - description: Perst enable offset
-+          - description: Perst separateion enable offset
- 
-   interrupts:
-     items:
--- 
-2.34.1
+diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+index 4eb559a16c9e..503b97e5a115 100644
+--- a/fs/iomap/direct-io.c
++++ b/fs/iomap/direct-io.c
+@@ -240,7 +240,7 @@ static loff_t iomap_dio_bio_iter(const struct iomap_i=
+ter *iter,
+ {
+ 	const struct iomap *iomap =3D &iter->iomap;
+ 	struct inode *inode =3D iter->inode;
+-	unsigned int blkbits =3D blksize_bits(bdev_logical_block_size(iomap->bd=
+ev));
++	unsigned int blksz =3D bdev_logical_block_size(iomap->bdev);
+ 	unsigned int fs_block_size =3D i_blocksize(inode), pad;
+ 	loff_t length =3D iomap_length(iter);
+ 	loff_t pos =3D iter->pos;
+@@ -252,7 +252,7 @@ static loff_t iomap_dio_bio_iter(const struct iomap_i=
+ter *iter,
+ 	size_t copied =3D 0;
+ 	size_t orig_count;
+=20
+-	if ((pos | length) & ((1 << blkbits) - 1) ||
++	if ((pos | length) & (blksz - 1) ||
+ 	    !bdev_iter_is_aligned(iomap->bdev, dio->submit.iter))
+ 		return -EINVAL;
+=20
+--=20
+2.30.2
 
