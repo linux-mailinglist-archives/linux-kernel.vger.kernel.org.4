@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E5C60E325
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A7560E32B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 16:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbiJZOSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 10:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S234259AbiJZOUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 10:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234197AbiJZOSw (ORCPT
+        with ESMTP id S234033AbiJZOUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 10:18:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73AD810F891;
-        Wed, 26 Oct 2022 07:18:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E72623A;
-        Wed, 26 Oct 2022 07:18:57 -0700 (PDT)
-Received: from [10.57.68.77] (unknown [10.57.68.77])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A84B33F71A;
-        Wed, 26 Oct 2022 07:18:48 -0700 (PDT)
-Message-ID: <23503d33-2761-50b5-91dd-4138494e54d5@arm.com>
-Date:   Wed, 26 Oct 2022 15:18:47 +0100
+        Wed, 26 Oct 2022 10:20:11 -0400
+Received: from mg.ssi.bg (mg.ssi.bg [193.238.174.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B1E5A2B18D;
+        Wed, 26 Oct 2022 07:20:09 -0700 (PDT)
+Received: from mg.ssi.bg (localhost [127.0.0.1])
+        by mg.ssi.bg (Proxmox) with ESMTP id 096A011B4C;
+        Wed, 26 Oct 2022 17:20:09 +0300 (EEST)
+Received: from ink.ssi.bg (unknown [193.238.174.40])
+        by mg.ssi.bg (Proxmox) with ESMTP id 9A79C11C8B;
+        Wed, 26 Oct 2022 17:20:07 +0300 (EEST)
+Received: from ja.ssi.bg (unknown [178.16.129.10])
+        by ink.ssi.bg (Postfix) with ESMTPS id C2DE83C07E1;
+        Wed, 26 Oct 2022 17:20:06 +0300 (EEST)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.17.1/8.16.1) with ESMTP id 29QEK3RO087932;
+        Wed, 26 Oct 2022 17:20:05 +0300
+Date:   Wed, 26 Oct 2022 17:20:03 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+cc:     netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Simon Horman <horms@verge.net.au>, stable@vger.kernel.org
+Subject: Re: [PATCH] ipvs: use explicitly signed chars
+In-Reply-To: <20221026123216.1575440-1-Jason@zx2c4.com>
+Message-ID: <4cc36ff5-46fd-c2b3-3292-d6369337fec1@ssi.bg>
+References: <20221026123216.1575440-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.0
-Subject: Re: [PATCH 3/9] coresight-tpdm: Initialize DSB subunit configuration
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>
-Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, bjorn.andersson@linaro.org
-References: <1662626705-13097-1-git-send-email-quic_taozha@quicinc.com>
- <1662626705-13097-4-git-send-email-quic_taozha@quicinc.com>
- <aa2b93f2-9916-bcf1-4d5f-dc749fe2944e@arm.com>
- <72af1fa4-fa64-7f23-4000-db6d6a9f7f22@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <72af1fa4-fa64-7f23-4000-db6d6a9f7f22@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/2022 09:10, Tao Zhang wrote:
-> Hi Suzuki,
-> 
-> 在 10/24/2022 6:02 PM, Suzuki K Poulose 写道:
->> Hi
->>
->> On 08/09/2022 09:44, Tao Zhang wrote:
->>> DSB subunit need to be configured in enablement and disablement.
->>> A struct that specifics associated to dsb dataset is needed. It
->>> saves the configuration and parameters of the dsb datasets. This
->>> change is to add this struct and initialize the configuration of
->>> DSB subunit.
->>>
->>> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
->>> ---
->>>   drivers/hwtracing/coresight/coresight-tpdm.c | 44 
->>> ++++++++++++++++++++++++++--
->>>   drivers/hwtracing/coresight/coresight-tpdm.h | 17 +++++++++++
->>>   2 files changed, 58 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/hwtracing/coresight/coresight-tpdm.c 
->>> b/drivers/hwtracing/coresight/coresight-tpdm.c
->>> index 88df3e6..69ea453 100644
->>> --- a/drivers/hwtracing/coresight/coresight-tpdm.c
->>> +++ b/drivers/hwtracing/coresight/coresight-tpdm.c
->>> @@ -24,6 +24,22 @@ static void tpdm_enable_dsb(struct tpdm_drvdata 
->>> *drvdata)
->>>   {
->>>       u32 val;
->>>   +    val = readl_relaxed(drvdata->base + TPDM_DSB_TIER);
->>> +    /* Set trigger timestamp */
->>> +    if (drvdata->dsb->trig_ts)
->>
->> What happens if this instance doesn't have a DSB set ? Have
->> you tested this on a system without the DSB ?
->>
-> The function "tpdm_enable_dsb" will only be called when it is checked 
-> that the DSB dataset is present.
-> 
-> And only the TPDM that supports the DSB dataset will have the DSB TIER 
-> register.
-> 
-> If the TPDM doesn't support the DSB dataset, this instance should not be 
-> run. Otherwise, it will cause that the incorrect register is accessed.
 
-Thanks, this is what happens when you send something that is not queued
-anywhwere. Please provide a reference tree in the future, for ease of
-reviewing such things
+	Hello,
 
-Suzuki
+On Wed, 26 Oct 2022, Jason A. Donenfeld wrote:
 
+> The `char` type with no explicit sign is sometimes signed and sometimes
+> unsigned. This code will break on platforms such as arm, where char is
+> unsigned. So mark it here as explicitly signed, so that the
+> todrop_counter decrement and subsequent comparison is correct.
+> 
+> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+> Cc: Julian Anastasov <ja@ssi.bg>
+> Cc: Simon Horman <horms@verge.net.au>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+
+	Looks good to me for -next, thanks!
+
+Acked-by: Julian Anastasov <ja@ssi.bg>
+
+> ---
+>  net/netfilter/ipvs/ip_vs_conn.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/netfilter/ipvs/ip_vs_conn.c b/net/netfilter/ipvs/ip_vs_conn.c
+> index 8c04bb57dd6f..7c4866c04343 100644
+> --- a/net/netfilter/ipvs/ip_vs_conn.c
+> +++ b/net/netfilter/ipvs/ip_vs_conn.c
+> @@ -1249,40 +1249,40 @@ static const struct seq_operations ip_vs_conn_sync_seq_ops = {
+>  	.next  = ip_vs_conn_seq_next,
+>  	.stop  = ip_vs_conn_seq_stop,
+>  	.show  = ip_vs_conn_sync_seq_show,
+>  };
+>  #endif
+>  
+>  
+>  /* Randomly drop connection entries before running out of memory
+>   * Can be used for DATA and CTL conns. For TPL conns there are exceptions:
+>   * - traffic for services in OPS mode increases ct->in_pkts, so it is supported
+>   * - traffic for services not in OPS mode does not increase ct->in_pkts in
+>   * all cases, so it is not supported
+>   */
+>  static inline int todrop_entry(struct ip_vs_conn *cp)
+>  {
+>  	/*
+>  	 * The drop rate array needs tuning for real environments.
+>  	 * Called from timer bh only => no locking
+>  	 */
+> -	static const char todrop_rate[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+> -	static char todrop_counter[9] = {0};
+> +	static const signed char todrop_rate[9] = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+> +	static signed char todrop_counter[9] = {0};
+>  	int i;
+>  
+>  	/* if the conn entry hasn't lasted for 60 seconds, don't drop it.
+>  	   This will leave enough time for normal connection to get
+>  	   through. */
+>  	if (time_before(cp->timeout + jiffies, cp->timer.expires + 60*HZ))
+>  		return 0;
+>  
+>  	/* Don't drop the entry if its number of incoming packets is not
+>  	   located in [0, 8] */
+>  	i = atomic_read(&cp->in_pkts);
+>  	if (i > 8 || i < 0) return 0;
+>  
+>  	if (!todrop_rate[i]) return 0;
+>  	if (--todrop_counter[i] > 0) return 0;
+>  
+>  	todrop_counter[i] = todrop_rate[i];
+>  	return 1;
+>  }
+> -- 
+> 2.38.1
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
 
