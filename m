@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702C260EAEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629C260EAEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiJZVoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 17:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
+        id S233511AbiJZVpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 17:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJZVoe (ORCPT
+        with ESMTP id S229489AbiJZVpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 17:44:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BD7C0D
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:44:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666820666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FGEAcGAjAMPOazJHa2zAyqoTgNuI6YN3F8egocsHkTg=;
-        b=UesbWBVROI0Rg+wb+LnokhXtDvaEynLU/7tE6PgYTDoOeexpG5SxBO3R6Sl02O0IZdmI6J
-        PeAnc27ttEweXcns5P7IMEpVSCH9rmmVq2OGBPb95xsbST9/naQp+drnK8TFnGG+l1KGRU
-        I01EOfvBT7N+Y/X5XMC+tuN4szARt7M=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-196-YtY6g-kdP2-W4KkEwt0Ubg-1; Wed, 26 Oct 2022 17:44:25 -0400
-X-MC-Unique: YtY6g-kdP2-W4KkEwt0Ubg-1
-Received: by mail-qk1-f198.google.com with SMTP id u9-20020a05620a454900b006eeafac8ea4so15160263qkp.19
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:44:25 -0700 (PDT)
+        Wed, 26 Oct 2022 17:45:01 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2387C2FC3B;
+        Wed, 26 Oct 2022 14:45:00 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id d26so25108882eje.10;
+        Wed, 26 Oct 2022 14:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QyF0Qzmet3oFkaT2R25ZUSwb27jbh43Ykcga5rLid20=;
+        b=EDZBZvhhHNP+XexaiKMfO36fwKrZvK0b7e4U95i3fO0vJWfYAwWQTO3ssv7kyeWpAV
+         fAJOFn/YqaWWYlO2uD68MGlaxDl7xh6jivReg8IqTUAoCtVAiLJRVKThlwVtVRVudS4H
+         haSmoW3zycq6pPflj15C/Ahb6+kTt2Ng5BLgt16sILtBaJMCsLvIkaj4eDWxkdz7U3b/
+         BpCfqpBK+dxboFuAQQcv4WcogYMe/xHr7D1UoPRjcfdEGPHXkfyylCr0xyW8SD0Qmgil
+         wPjRFvVpKZNlINWvVGc68ptd3yCZ8lzorc7A2IDHYQ+ziR9EkZteli2YiOtZ79PL7Rpr
+         vPCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FGEAcGAjAMPOazJHa2zAyqoTgNuI6YN3F8egocsHkTg=;
-        b=RT1lJSpyvGHFhbQAHzvxPn6J4aCpOxW/RMyU3BYJsR2SjGPnBTCBdn0/X565DEj6zO
-         L1viz47BunET8JyseKT1m/05/8mMDizs0VenQGknwaO5ILCvH1Fh32WQXWCi88i9JNcN
-         4v+EPIF+RardkyZiB7tC7qlqsqwQesooCydtUzXNk/xcIH7nwSHFwbNjdLhITi44F0eH
-         s5wutD3UGHCNCfqFTl6jYs8eUk+YjpL3zoejyvKS33jXaWAt42udlc1Hsoy/3NVwzUNh
-         lt086/b2Zf/Dh/zM4gDYg70suHeeUxTFb4FDYfeSwcGDmzEBdsfX2RD/WfDnoo177cpM
-         isaw==
-X-Gm-Message-State: ACrzQf0nl0g5G7jxbYGQLaQSsgnOnolKChIZBhE9e1VCMP9nQoMk7xTa
-        V3zUvpQC55Jt91M7ltOJJzSYx3sA2EgNiX48s9Apvujo7APHlJaVddfEhbSxmbonm+z2ZCqJJVK
-        Un0SMa3J2OcZUB0tfW6JhRDc4
-X-Received: by 2002:a37:f61d:0:b0:6ec:cafa:4741 with SMTP id y29-20020a37f61d000000b006eccafa4741mr31814352qkj.761.1666820663336;
-        Wed, 26 Oct 2022 14:44:23 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7HHTcYSpvmiPVnb/2bsgS5xXso9GWJqdZfKpadyAATz9h1MRXRKgSf2YjE5S4eVRVaZ0aPOg==
-X-Received: by 2002:a37:f61d:0:b0:6ec:cafa:4741 with SMTP id y29-20020a37f61d000000b006eccafa4741mr31814329qkj.761.1666820663061;
-        Wed, 26 Oct 2022 14:44:23 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id bk30-20020a05620a1a1e00b006eeaf9160d6sm4644656qkb.24.2022.10.26.14.42.26
+        bh=QyF0Qzmet3oFkaT2R25ZUSwb27jbh43Ykcga5rLid20=;
+        b=BwzLTvVAJnWkBHSTCfE2DU4vsHhUkx+c+Lp8i8a4Hh7uclk8BzEBzAIfVBEB9R5ZYb
+         zLwhELe9NCS47Y3Y3MnZZd1u9UhBuzB6SUEhujO4tCeCbdpP/0UQ+heYB/JZnlvGMBbe
+         c7PK/mjPmfn41S42tM6atDc3f/fQMeb+Zsok9qbtkncrInyou4IXt+piFNVXxfMXrj8k
+         xFC0lZzCYVxOJZA0Ci3Ib523wi9M9K2fyI417tjmVxSnkvUYDjhVPhbDm9XKrtoSR3Hj
+         Ah55f1s1b4LD+9t/GTJ0OKvFoC3Uxo55jrjKYtV4o45VtNHic0KHZTyHtxr2BOzwgV//
+         ETgw==
+X-Gm-Message-State: ACrzQf2EMaJTAmYHAChby0aKWeM0KoTeLtikBmZXQCawivhe5Y28U+z7
+        1DqYpG2GzD1H/1ezsgiu4TA=
+X-Google-Smtp-Source: AMsMyM4dgwl0X6W2qOWAZ8qgTjUcf1JH6WO46X3VKI6KuHZfFY31U0YE0ZWKGL/JCYtewKgkGtXVBA==
+X-Received: by 2002:a17:906:c14f:b0:793:30e1:96be with SMTP id dp15-20020a170906c14f00b0079330e196bemr34407579ejc.447.1666820698414;
+        Wed, 26 Oct 2022 14:44:58 -0700 (PDT)
+Received: from skbuf ([188.27.184.197])
+        by smtp.gmail.com with ESMTPSA id sa3-20020a1709076d0300b0074134543f82sm3556174ejc.90.2022.10.26.14.44.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 14:42:52 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 17:42:24 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Chen <harperchen1110@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] hugetlb: don't delete vma_lock in hugetlb
- MADV_DONTNEED processing
-Message-ID: <Y1mpwKpwsiN6u6r7@x1n>
-References: <20221023025047.470646-1-mike.kravetz@oracle.com>
+        Wed, 26 Oct 2022 14:44:58 -0700 (PDT)
+Date:   Thu, 27 Oct 2022 00:44:55 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Eggers <ceggers@arri.de>
+Cc:     Arun.Ramadoss@microchip.com, andrew@lunn.ch,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        vivien.didelot@gmail.com, linux@armlinux.org.uk,
+        Tristram.Ha@microchip.com, f.fainelli@gmail.com, kuba@kernel.org,
+        edumazet@google.com, pabeni@redhat.com, richardcochran@gmail.com,
+        netdev@vger.kernel.org, Woojung.Huh@microchip.com,
+        davem@davemloft.net, b.hutchman@gmail.com
+Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support
+ for LAN937x switch
+Message-ID: <20221026214455.3n5f7eqp3duuie22@skbuf>
+References: <d8459511785de2f6d503341ce5f87c6e6064d7b5.camel@microchip.com>
+ <20221026164753.13866-1-ceggers@arri.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221023025047.470646-1-mike.kravetz@oracle.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20221026164753.13866-1-ceggers@arri.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,132 +78,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Mike,
+On Wed, Oct 26, 2022 at 06:47:53PM +0200, Christian Eggers wrote:
+> Hi Arun, hi Vladimir,
+> 
+> On Tuesday, 18 October 2022, 15:42:41 CEST, Arun.Ramadoss@microchip.com wrote:
+> > ...
+> > Thanks Vladimir. I will wait for Christian feedback.
+> >
+> > Hi Christian,
+> > To test this patch on KSZ9563, we need to increase the number of
+> > interrupts port_nirqs in KSZ9893 from 2 to 3. Since the chip id of
+> > KSZ9893 and KSZ9563 are same, I had reused the ksz_chip_data same for
+> > both chips. But this chip differ with number of port interrupts. So we
+> > need to update it. We are generating a new patch for adding the new
+> > element in the ksz_chip_data for KSZ9563.
+> > For now, you can update the code as below for testing the patch
+> 
+> today I hard first success with your patch series on KSZ9563! ptp4l reported
+> delay measurements between switch port 1 and the connected Meinberg clock:
+> 
+> > ptp4l[75.590]: port 2: new foreign master ec4670.fffe.0a9dcc-1
+> > ptp4l[79.590]: selected best master clock ec4670.fffe.0a9dcc
+> > ptp4l[79.590]: updating UTC offset to 37
+> > ptp4l[79.591]: port 2: LISTENING to UNCALIBRATED on RS_SLAVE
+> > ptp4l[81.114]: port 2: delay timeout
+> > ptp4l[81.117]: delay   filtered        338   raw        338
+> > ptp4l[81.118]: port 2: minimum delay request interval 2^1
+> > ptp4l[81.434]: port 1: announce timeout
+> > ptp4l[81.434]: config item lan0.udp_ttl is 1
+> > ptp4l[81.436]: config item (null).dscp_event is 0
+> > ptp4l[81.437]: config item (null).dscp_general is 0
+> > ptp4l[81.437]: selected best master clock ec4670.fffe.0a9dcc
+> > ptp4l[81.438]: updating UTC offset to 37
+> > ptp4l[81.843]: master offset         33 s0 freq   +6937 path delay       338
+> > ptp4l[82.844]: master offset         26 s2 freq   +6930 path delay       338
+> > ptp4l[82.844]: port 2: UNCALIBRATED to SLAVE on MASTER_CLOCK_SELECTED
+> > ptp4l[83.844]: master offset         32 s2 freq   +6962 path delay       338
+> > ptp4l[84.844]: master offset          3 s2 freq   +6943 path delay       338
+> > ptp4l[85.844]: master offset        -14 s2 freq   +6927 path delay       338
+> > ptp4l[86.042]: port 2: delay timeout
+> > ptp4l[86.045]: delay   filtered        336   raw        335
+> > ptp4l[86.211]: port 2: delay timeout
+> > ptp4l[86.213]: delay   filtered        335   raw        331
+> > ptp4l[86.844]: master offset          3 s2 freq   +6939 path delay       335
+> > ptp4l[87.847]: master offset         -7 s2 freq   +6930 path delay       335
+> 
+> As a next step I'll try to configure the external output for 1PPS. Is this
+> already implemented in your patches? The file /sys/class/ptp/ptp2/n_periodic_outputs
+> shows '0' on my system.
 
-On Sat, Oct 22, 2022 at 07:50:47PM -0700, Mike Kravetz wrote:
+Arun didn't share the PPS output patch publicly, so I don't know why
+we're discussing this here. Anyway, in it, Arun (incorrectly)
+implemented support for PTP_CLK_REQ_PPS rather than PTP_CLK_REQ_PEROUT,
+so there will not be any n_periodic_outputs visible in sysfs. For now,
+try via pps_available and pps_enable.
 
-[...]
+> 
+> BTW: Which is the preferred delay measurement which I shall test (E2E/P2P)?
 
-> -void __unmap_hugepage_range_final(struct mmu_gather *tlb,
-> +static void __unmap_hugepage_range_locking(struct mmu_gather *tlb,
->  			  struct vm_area_struct *vma, unsigned long start,
->  			  unsigned long end, struct page *ref_page,
-> -			  zap_flags_t zap_flags)
-> +			  zap_flags_t zap_flags, bool final)
->  {
->  	hugetlb_vma_lock_write(vma);
->  	i_mmap_lock_write(vma->vm_file->f_mapping);
->  
->  	__unmap_hugepage_range(tlb, vma, start, end, ref_page, zap_flags);
->  
-> -	/*
-> -	 * Unlock and free the vma lock before releasing i_mmap_rwsem.  When
-> -	 * the vma_lock is freed, this makes the vma ineligible for pmd
-> -	 * sharing.  And, i_mmap_rwsem is required to set up pmd sharing.
-> -	 * This is important as page tables for this unmapped range will
-> -	 * be asynchrously deleted.  If the page tables are shared, there
-> -	 * will be issues when accessed by someone else.
-> -	 */
-> -	__hugetlb_vma_unlock_write_free(vma);
-> +	if (final) {
-> +		/*
-> +		 * Unlock and free the vma lock before releasing i_mmap_rwsem.
-> +		 * When the vma_lock is freed, this makes the vma ineligible
-> +		 * for pmd sharing.  And, i_mmap_rwsem is required to set up
-> +		 * pmd sharing.  This is important as page tables for this
-> +		 * unmapped range will be asynchrously deleted.  If the page
-> +		 * tables are shared, there will be issues when accessed by
-> +		 * someone else.
-> +		 */
-> +		__hugetlb_vma_unlock_write_free(vma);
-> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
+As this time around there is somebody from Microchip finally on the
+line, I will not interfere in this part. I tried once, and failed to
+understand the KSZ PTP philosophy. I hope you get some answers from
+Arun. Just one question below.
 
-Pure question: can we rely on hugetlb_vm_op_close() to destroy the hugetlb
-vma lock?
+> I started with E2E is this was configured in the hardware and needs no 1-step
+> time stamping, but I had to add PTP_MSGTYPE_DELAY_REQ in ksz_port_txtstamp().
 
-I read the comment above, it seems we are trying to avoid racing with pmd
-sharing, but I don't see how that could ever happen, since iiuc there
-should only be two places that unmaps the vma (final==true):
+Hm? So if E2E "doesn't need" 1-step TX timestamping and KSZ9563 doesn't
+support 2-step TX timestamping, then what kind of TX timestamping is
+used here for Delay_Req messages?
 
-  (1) munmap: we're holding write lock, so no page fault possible
-  (2) exit_mmap: we've already reset current->mm so no page fault possible
+Perhaps you mean that E2E doesn't need moving the RX timestamp of the
+Pdelay_Req (t2) into the KSZ TX timestamp trailer of the Pdelay_Resp (t3)?
 
-> +	} else {
-> +		i_mmap_unlock_write(vma->vm_file->f_mapping);
-> +		hugetlb_vma_unlock_write(vma);
-> +	}
-> +}
->  
-> -	i_mmap_unlock_write(vma->vm_file->f_mapping);
-> +void __unmap_hugepage_range_final(struct mmu_gather *tlb,
-> +			  struct vm_area_struct *vma, unsigned long start,
-> +			  unsigned long end, struct page *ref_page,
-> +			  zap_flags_t zap_flags)
-> +{
-> +	__unmap_hugepage_range_locking(tlb, vma, start, end, ref_page,
-> +					zap_flags, true);
+> > May be this is due to kconfig of config_ksz_ptp  defined bool instead
+> > of tristate. Do I need to change the config_ksz_ptp to tristate in
+> > order to compile as modules?
+> 
+> I'm not an expert for kbuild and cannot tell whether it's allowed to use
+> bool options which depend on tristate options. At least ksz_ptp.c is compiled
+> by kbuild if tristate is used. But I needed to add additional EXPORT_SYMBOL()
+> statements for all non-static functions (see below) for successful linking.
+
+If ksz_ptp.o gets linked into ksz_ptp.ko, then yes. But this probably
+doesn't make sense, as you point out. So EXPORT_SYMBOL() should not be
+needed.
+
+> I'm unsure whether it makes sense to build ksz_ptp as a separate module.
+> Perhaps it should be (conditionally) added to ksz_switch.ko.
+> 
+> On Tuesday, 18 October 2022, 08:44:04 CEST, Arun.Ramadoss@microchip.com wrote:
+> > I had developed this patch set to add gPTP support for LAN937x based on
+> > the Christian eggers patch for KSZ9563.
+> 
+> Maybe this could be mentioned somewhere (e.g. extra line in file header of
+> ksz_ptp.c).  It took a lot of effort (for me) to get this initially running
+> (e.g. due to limited documentation / support by Microchip).  But I'm quite happy
+> that this is continued now as it is likely that I'll need PTP support for the
+> KSZ9563 soon.
+> 
+> For KSZ9563, we will need support for 1-step time stamping as two-step
+> is not possible.
+> 
+> I've stashed all my local changes into an additional patch (see below).
+> Please feel free to integrate this into your series.  As soon I get 1PPS
+> running, I'll continue testing.  Note that I'll be unavailable between Friday
+> and next Tuesday.
+> 
+> regards,
+> Christian
+>  static int ksz_set_hwtstamp_config(struct ksz_device *dev, int port,
+>  				   struct hwtstamp_config *config)
+> @@ -106,7 +108,7 @@ static int ksz_set_hwtstamp_config(struct ksz_device *dev, int port,
+>  	case HWTSTAMP_TX_OFF:
+>  		prt->hwts_tx_en = false;
+>  		break;
+> -	case HWTSTAMP_TX_ON:
+> +	case HWTSTAMP_TX_ONESTEP_P2P:
+
+One shouldn't replace the other; this implementation is simplistic, of course.
+
+Also, why did you choose HWTSTAMP_TX_ONESTEP_P2P and not HWTSTAMP_TX_ONESTEP_SYNC?
+
+>  		prt->hwts_tx_en = true;
+>  		break;
+>  	default:
+> @@ -162,6 +164,7 @@ int ksz_hwtstamp_set(struct dsa_switch *ds, int port, struct ifreq *ifr)
+>  	mutex_unlock(&ptp_data->lock);
+>  	return ret;
 >  }
->  
-> +#ifdef CONFIG_ADVISE_SYSCALLS
-> +/*
-> + * Similar setup as in zap_page_range().  madvise(MADV_DONTNEED) can not call
-> + * zap_page_range for hugetlb vmas as __unmap_hugepage_range_final will delete
-> + * the associated vma_lock.
-> + */
-> +void clear_hugetlb_page_range(struct vm_area_struct *vma, unsigned long start,
-> +				unsigned long end)
+> +EXPORT_SYMBOL(ksz_hwtstamp_set);
+> diff --git a/net/dsa/tag_ksz.c b/net/dsa/tag_ksz.c
+> index 582add3398d3..e7680718b478 100644
+> --- a/net/dsa/tag_ksz.c
+> +++ b/net/dsa/tag_ksz.c
+> @@ -251,17 +251,69 @@ MODULE_ALIAS_DSA_TAG_DRIVER(DSA_TAG_PROTO_KSZ9477);
+>  #define KSZ9893_TAIL_TAG_OVERRIDE	BIT(5)
+>  #define KSZ9893_TAIL_TAG_LOOKUP		BIT(6)
+> 
+> +/* Time stamp tag is only inserted if PTP is enabled in hardware. */
+> +static void ksz9893_xmit_timestamp(struct sk_buff *skb)
 > +{
-> +	struct mmu_notifier_range range;
-> +	struct mmu_gather tlb;
-> +
-> +	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, vma->vm_mm,
-> +				start, end);
-
-Is mmu_notifier_invalidate_range_start() missing here?
-
-> +	tlb_gather_mmu(&tlb, vma->vm_mm);
-> +	update_hiwater_rss(vma->vm_mm);
-> +
-> +	__unmap_hugepage_range_locking(&tlb, vma, start, end, NULL, 0, false);
-> +
-> +	mmu_notifier_invalidate_range_end(&range);
-> +	tlb_finish_mmu(&tlb);
+> +//	struct sk_buff *clone = KSZ9477_SKB_CB(skb)->clone;
+> +//	struct ptp_header *ptp_hdr;
+> +//	unsigned int ptp_type;
+> +	u32 tstamp_raw = 0;
+> +	put_unaligned_be32(tstamp_raw, skb_put(skb, KSZ9477_PTP_TAG_LEN));
 > +}
-> +#endif
+
+This is needed for one-step TX timestamping, ok.
+
 > +
->  void unmap_hugepage_range(struct vm_area_struct *vma, unsigned long start,
->  			  unsigned long end, struct page *ref_page,
->  			  zap_flags_t zap_flags)
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index 2baa93ca2310..90577a669635 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -790,7 +790,10 @@ static int madvise_free_single_vma(struct vm_area_struct *vma,
->  static long madvise_dontneed_single_vma(struct vm_area_struct *vma,
->  					unsigned long start, unsigned long end)
->  {
-> -	zap_page_range(vma, start, end - start);
-> +	if (!is_vm_hugetlb_page(vma))
-> +		zap_page_range(vma, start, end - start);
-> +	else
-> +		clear_hugetlb_page_range(vma, start, end);
->  	return 0;
->  }
+> +/* Defer transmit if waiting for egress time stamp is required.  */
+> +static struct sk_buff *ksz9893_defer_xmit(struct dsa_port *dp,
+> +					  struct sk_buff *skb)
 
-This does look a bit unfortunate - zap_page_range() contains yet another
-is_vm_hugetlb_page() check (further down in unmap_single_vma), it can be
-very confusing on which code path is really handling hugetlb.
+No need to duplicate, can rename lan937x_defer_xmit() and call that.
 
-The other mm_users check in v3 doesn't need this change, but was a bit
-hackish to me, because IIUC we're clear on the call paths to trigger this
-(unmap_vmas), so it seems clean to me to pass that info from the upper
-stack.
+Although I'm not exactly clear *which* packets will need deferred
+transmission on ksz9xxx. To my knowledge, such a procedure is only
+necessary for 2-step TX timestamping, when the TX timestamp must be
+propagated back to the socket error queue via skb_complete_tx_timestamp().
+For one-step, AFAIK*, this isn't needed.
 
-Maybe we can have a new zap_flags passed into unmap_single_vma() showing
-that it's destroying the vma?
+This is not used, right? Because the function call is shortcircuited by
+the "if (test_bit(KSZ_HWTS_EN, &priv->state))" test earlier.
 
-Thanks,
-
--- 
-Peter Xu
-
+*Or is this intended to be used for the "Software Two-Step Simulation
+Mode in hardware 1-Step Mode" that was suggested in the errata sheet,
+where one-step Sync messages still get their TX timestamp reported to
+user space as if they were two-step?
+http://ww1.microchip.com/downloads/en/DeviceDoc/KSZ9563R-Errata-80000786B.pdf
