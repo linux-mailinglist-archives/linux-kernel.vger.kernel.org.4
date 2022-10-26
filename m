@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6865D60D8CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 03:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAF160D8D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 03:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbiJZBSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 25 Oct 2022 21:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
+        id S229952AbiJZBVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 25 Oct 2022 21:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbiJZBR4 (ORCPT
+        with ESMTP id S229800AbiJZBVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 25 Oct 2022 21:17:56 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13D0C34CF
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 18:17:51 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h2so7217613pgp.4
-        for <linux-kernel@vger.kernel.org>; Tue, 25 Oct 2022 18:17:51 -0700 (PDT)
+        Tue, 25 Oct 2022 21:21:30 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FDEBEAC7;
+        Tue, 25 Oct 2022 18:21:28 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id bk15so23910357wrb.13;
+        Tue, 25 Oct 2022 18:21:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0R/zuogst9d/iMbwGJahqQyG29x6cKUoOmr+NFwHscw=;
-        b=CI1yQ/YQ/tnZzmgve848XpigUhg8RfAlohpGXwTPlL1rtvw+cEuQkOOqNoe4cJ5Nmn
-         wOKRSCOiCCIJxQdierMy2Bb+V59SGh4lVxTYrVx6LTmEqWGsLsTEPDReqGvaXHfBZ4sN
-         QjhppDIvzcNeXJ+GjtJhhSM5sKqXtbq8P7Iis=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Jz/vuqprTwlUswHT+3fQYYY63+kBW8BHUTRfhG1llY=;
+        b=OEHYEg101oDjbITmOmTAHCNj0HRcHTCchvZtotNvvAIhVbZcPmVW/KSnXx0nok+IA8
+         0x41O6RspdRnfAk9Jd9SzJ/8M0ynlVLiIuTvhFHYXMDqAbfxQ19IOP9tcIjnpDirGYr3
+         RxpAOISRff7tE7cONcw9LnOHTs6dDW4aLO4EWXSyezqt3IvHLwo8iCBK6hWcl1dpQbUK
+         ON80L9eSKMhst+TCRbONpecScmVzu8ypsYJNLpGOOP5+3x9ahfQzrkWR6siieXMdesMH
+         pWy4K1cJJDr9xM1Jl6DLS1eACGtNVgVwSzFm2Xb/56+O/1Y0I1hhpbLh/R9Bs279eC96
+         F6HQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0R/zuogst9d/iMbwGJahqQyG29x6cKUoOmr+NFwHscw=;
-        b=6MT97Ax1v6yGff65ha4O9Vr7qm/mT/KvWe1WDTKSBZxtfmKrkdx/bU1V9SkEEOddQZ
-         nAVnaxXEi4HwiTW4Y+tl9/VSL8DgZiawBaC1JRpKgbnO+KByjivP7SanpB+oR6vl/ADX
-         eJfbdIPhZgmzmNKDQ/yFtbDwGJdhQubjnXn4S5WS8rR14QCUvFgYKeaheQQOkn82WnsE
-         Z184N0BNVu9aCsLrMdu+zngnpjRJkuslomaadJfTOaWpehC2+Vnus/+YK5UlEI3tMWV0
-         oWlYsM/crN0+yZ0OCTvc6nw8f9Y02Yyk2a/RlytTLmyz6VLPtQs9F8hKzr5WZoq7NsPr
-         x+sA==
-X-Gm-Message-State: ACrzQf12Y0k1UbXNzm1Ua9ohp+kc6Cb11+fQMJZ6PiAzpOkImbXNZNnf
-        IA/E32qxNApZyCY2tJFkyzEMOQ==
-X-Google-Smtp-Source: AMsMyM7Xro5ZU7+jhnQa/JNPDsQcNW9Uc99cbnu1rLZvco3Ob13wL1U0NxHdZxNRbtzgHPEN4QT4qQ==
-X-Received: by 2002:a05:6a00:348b:b0:56c:35fb:8dab with SMTP id cp11-20020a056a00348b00b0056c35fb8dabmr4070124pfb.13.1666747071125;
-        Tue, 25 Oct 2022 18:17:51 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:faf6:e503:6cac:3b53])
-        by smtp.gmail.com with ESMTPSA id j18-20020a634a52000000b0042988a04bfdsm1840383pgl.9.2022.10.25.18.17.47
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0Jz/vuqprTwlUswHT+3fQYYY63+kBW8BHUTRfhG1llY=;
+        b=xXeynXrVkuiWzjTJZOWwRy7KsDDpA5qm2NYm+h9SpLq/NyupW1iUC9LCkh719pTEBl
+         bNj0YoTWKDEcMutugYJ7hVxuNXNvfqtzdSHZ+eDnBOBCxh68tVNUCKUfM5s0iDgLzmd2
+         fPW6zVrp/kwB9tzbEJW5i/OElnFiVmuKDWRQnPW9gsBKKJISVu5T/Kv5rSEstMe7V4l9
+         2waFS9gG1yV4UHF0MHMTFdopBikTTw/QXqrHrGPYyW17QZtD2ZJ0YGrFw0AsWwDW/gMs
+         i2G+N0ISX68iCGSbEaSp1ZZtDLtoKs8dOfsgGV6TfcQ6kzC4NsULblnqE7jOmkMiU5WD
+         YkpQ==
+X-Gm-Message-State: ACrzQf1rDwNISq/4giRyxPyFLFVgUyPjqQNSWqKfj6CZXcfLUfoJbI4y
+        Hs+6PZz1zV6UudMhmzl0/uY=
+X-Google-Smtp-Source: AMsMyM7TjQyEarJdQUz8kJ3bvQ8YOCO0mEm8pAH+q3zaxkAWblq2ftveFlDSnFSHssFKJ7+5Jqv7qw==
+X-Received: by 2002:a5d:6d0b:0:b0:232:bd2e:1bf2 with SMTP id e11-20020a5d6d0b000000b00232bd2e1bf2mr27339228wrq.534.1666747287415;
+        Tue, 25 Oct 2022 18:21:27 -0700 (PDT)
+Received: from prasmi.home ([2a00:23c8:2501:c701:1d2a:d2a2:361e:a475])
+        by smtp.gmail.com with ESMTPSA id t2-20020a1c7702000000b003c6bd12ac27sm394456wmi.37.2022.10.25.18.21.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 18:17:50 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 10:17:45 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     wangkailong@jari.cn
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, linkinjeon@kernel.org,
-        sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
-        roman.gushchin@linux.dev, akpm@linux-foundation.org,
-        willy@infradead.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-cifs@vger.kernel.org
-Subject: Re: [PATCH] ext4: replace ternary operator with min()
-Message-ID: <Y1iKuYLba/hingnG@google.com>
-References: <5036013e.4.1840fa09d42.Coremail.wangkailong@jari.cn>
+        Tue, 25 Oct 2022 18:21:26 -0700 (PDT)
+From:   Prabhakar <prabhakar.csengg@gmail.com>
+X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH] clk: renesas: rzg2l: Fix typo
+Date:   Wed, 26 Oct 2022 02:21:23 +0100
+Message-Id: <20221026012123.159790-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5036013e.4.1840fa09d42.Coremail.wangkailong@jari.cn>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,23 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/10/25 22:51), wangkailong@jari.cn wrote:
-[..]
-> @@ -879,7 +879,7 @@ static int oplock_break(struct oplock_info *brk_opinfo, int req_op_level)
->  
->  		err = oplock_break_pending(brk_opinfo, req_op_level);
->  		if (err)
-> -			return err < 0 ? err : 0;
-> +			return min(err, 0);
->  
->  		if (brk_opinfo->open_trunc) {
->  			/*
-> @@ -913,7 +913,7 @@ static int oplock_break(struct oplock_info *brk_opinfo, int req_op_level)
->  	} else {
->  		err = oplock_break_pending(brk_opinfo, req_op_level);
->  		if (err)
-> -			return err < 0 ? err : 0;
-> +			return min(err, 0);
+From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Honestly, I don't know. My personal preference would be to keep it as is.
-"return min(err, 0)" is a bit unusually looking code. Just my 2 cents.
+Fix typo pll5_mux_dsi_div_params -> mux_dsi_div_params
+
+Fixes the below warning (make W=1):
+
+drivers/clk/renesas/rzg2l-cpg.c:115: warning: Function parameter or member 'mux_dsi_div_params' not described in 'rzg2l_cpg_priv'
+
+Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ drivers/clk/renesas/rzg2l-cpg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clk/renesas/rzg2l-cpg.c b/drivers/clk/renesas/rzg2l-cpg.c
+index be4868fa3971..dfd676310ce9 100644
+--- a/drivers/clk/renesas/rzg2l-cpg.c
++++ b/drivers/clk/renesas/rzg2l-cpg.c
+@@ -95,7 +95,7 @@ struct rzg2l_pll5_mux_dsi_div_param {
+  * @num_resets: Number of Module Resets in info->resets[]
+  * @last_dt_core_clk: ID of the last Core Clock exported to DT
+  * @info: Pointer to platform data
+- * @pll5_mux_dsi_div_params: pll5 mux and dsi div parameters
++ * @mux_dsi_div_params: pll5 mux and dsi div parameters
+  */
+ struct rzg2l_cpg_priv {
+ 	struct reset_controller_dev rcdev;
+
+base-commit: 888a358164525a701121192f504433de6c7a281b
+-- 
+2.25.1
+
