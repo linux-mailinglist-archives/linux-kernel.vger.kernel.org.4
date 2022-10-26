@@ -2,140 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA3460DD4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8AF60DD78
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 10:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiJZIlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 04:41:12 -0400
+        id S233476AbiJZIol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 04:44:41 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiJZIki (ORCPT
+        with ESMTP id S233454AbiJZIoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 04:40:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81561386BC;
-        Wed, 26 Oct 2022 01:40:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666773620; x=1698309620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=X2DMP8+EBgWpNYmY5Z4GpJwzp3M8y47xTwhwXFf8M3c=;
-  b=mnVZIr7OmE3kefb7neH7bVM5osrOeJuj6CbzmXYizblm16qeFtEz8JFp
-   fbwNNmD2MHxPY0CRModWFSH7D3SOtEs1RRA7RkIvFt4PUDIraWPOK+RbG
-   XTMEpefRT5n3RUQ32zeihLAgfke0GrvsQgWq25Hxok/z7+TPNH93jydsO
-   H8phQUpkkiNDlayWNW5YlqY155VnCp/qLGhpJcIM61JjFX1KX6H9Nx+DF
-   OXGSFC8ZRm8kKVftgKQS7SM8GHrfHP4iTWwsUG62Qp8B+dsuKiX1ilrUd
-   0Wzug0WImmObbtQdPxgdHJLwA5HzWZ5S2rdV1R5C6qkewZy9yhUqKSNA3
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="334509523"
-X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="334509523"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 01:40:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="877112584"
-X-IronPort-AV: E=Sophos;i="5.95,214,1661842800"; 
-   d="scan'208";a="877112584"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga006.fm.intel.com with ESMTP; 26 Oct 2022 01:40:16 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id C7350291; Wed, 26 Oct 2022 11:40:38 +0300 (EEST)
-Date:   Wed, 26 Oct 2022 11:40:38 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PCI/ACPI: PCI/ACPI: Validate devices with power
- resources support D3
-Message-ID: <Y1jyhsKG4/T7RRO9@black.fi.intel.com>
-References: <20221025221054.12377-1-mario.limonciello@amd.com>
+        Wed, 26 Oct 2022 04:44:22 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E16CD7E1D;
+        Wed, 26 Oct 2022 01:42:35 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4My2Fz396Gz9v7HC;
+        Wed, 26 Oct 2022 16:36:07 +0800 (CST)
+Received: from [10.206.134.65] (unknown [10.206.134.65])
+        by APP2 (Coremail) with SMTP id GxC2BwC37Pje8lhjkXoSAA--.11282S2;
+        Wed, 26 Oct 2022 09:42:15 +0100 (CET)
+Message-ID: <34357c96-fe58-ffe5-e464-4bded8f119d5@huaweicloud.com>
+Date:   Wed, 26 Oct 2022 10:42:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221025221054.12377-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [RFC][PATCH] bpf: Check xattr name/value pair from
+ bpf_lsm_inode_init_security()
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Cc:     KP Singh <kpsingh@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        nicolas.bouchinet@clip-os.org, Mimi Zohar <zohar@linux.ibm.com>,
+        linux-integrity <linux-integrity@vger.kernel.org>
+References: <20221021164626.3729012-1-roberto.sassu@huaweicloud.com>
+ <CAADnVQJHDboosqTy5LTHJtJaWJCWn9rv09jmd_sMgeV_OVQjGg@mail.gmail.com>
+ <d7a17e482b7bbf945c92443b45de73f56afea08a.camel@huaweicloud.com>
+ <bb7a5986f3d25706269d0fec9906ea73c174b808.camel@huaweicloud.com>
+ <CAADnVQL1a2pPAJqzj6oUwupxxfaW38KQswzppAZeZPzmTFhjMg@mail.gmail.com>
+ <98353f6c82d3dabdb0d434d7ecf0bfc5295015ad.camel@huaweicloud.com>
+ <ffbdcfbe-0c63-2ced-62e3-a7248b7a24f0@schaufler-ca.com>
+ <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <CAADnVQLAXsZRNytPHG0KhYKar3K+=7bq2KPQG77VFOKbnTPHmg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwC37Pje8lhjkXoSAA--.11282S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxury7WryrXr1kWry8CFy7GFg_yoW5WrW8pF
+        W5KF4UKFs8JF97u3s2qa1rWFWIy395Kr47Ja98JwnrZrn8Ar1ayr1fJFWY9ay7Cw4xCw1F
+        v3y2v3sxu3WDZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBF1jj4SrugAAsw
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 05:10:54PM -0500, Mario Limonciello wrote:
-> Firmware typically advertises that PCIe devices can support D3
-> by a combination of the value returned by _S0W as well as the
-> HotPlugSupportInD3 _DSD.
+On 10/26/2022 8:37 AM, Alexei Starovoitov wrote:
+> On Tue, Oct 25, 2022 at 7:58 AM Casey Schaufler <casey@schaufler-ca.com> wrote:
+>>
+>> On 10/25/2022 12:43 AM, Roberto Sassu wrote:
+>>> On Mon, 2022-10-24 at 19:13 -0700, Alexei Starovoitov wrote:
+>>>> I'm looking at security_inode_init_security() and it is indeed messy.
+>>>> Per file system initxattrs callback that processes kmalloc-ed
+>>>> strings.
+>>>> Yikes.
+>>>>
+>>>> In the short term we should denylist inode_init_security hook to
+>>>> disallow attaching bpf-lsm there. set/getxattr should be done
+>>>> through kfuncs instead of such kmalloc-a-string hack.
+>>> Inode_init_security is an example. It could be that the other hooks are
+>>> affected too. What happens if they get arbitrary positive values too?
+>>
+>> TL;DR - Things will go cattywampus.
+>>
+>> The LSM infrastructure is an interface that has "grown organically",
+>> and isn't necessarily consistent in what it requires of the security
+>> module implementations. There are cases where it assumes that the
+>> security module hooks are well behaved, as you've discovered. I have
+>> no small amount of fear that someone is going to provide an eBPF
+>> program for security_secid_to_secctx(). There has been an assumption,
+>> oft stated, that all security modules are going to be reviewed as
+>> part of the upstream process. The review process ought to catch hooks
+>> that return unacceptable values. Alas, we've lost that with BPF.
+>>
+>> It would take a(nother) major overhaul of the LSM infrastructure to
+>> make it safe against hooks that are not well behaved. From what I have
+>> seen so far it wouldn't be easy/convenient/performant to do it in the
+>> BPF security module either. I personally think that BPF needs to
+>> ensure that the eBPF implementations don't return inappropriate values,
+>> but I understand why that is problematic.
 > 
-> `acpi_pci_bridge_d3` looks for this combination but also contains
-> an assumption that if a device contains power resources it can support
-> D3.  This was introduced from commit c6e331312ebf ("PCI/ACPI: Whitelist
-> hotplug ports for D3 if power managed by ACPI").
+> That's an accurate statement. Thank you.
 > 
-> On some firmware configurations for "AMD Pink Sardine" D3 is not
-> supported for wake in _S0W for the PCIe root port for tunneling.
-> However the device will still be opted into runtime PM since
-> `acpi_pci_bridge_d3` returns since the ACPI device contains power
-> resources.
-> 
-> When the thunderbolt driver is loaded a device link between the USB4
-> router and the PCIe root port for tunneling is created where the PCIe
-> root port for tunneling is the consumer and the USB4 router is the
-> supplier.  Here is a demonstration of this topology that occurs:
-> 
-> ├─ 0000:00:03.1
-> |       | ACPI Path: \_SB_.PCI0.GP11 (Supports "0" in _S0W)
-> |       | Device Links: supplier:pci:0000:c4:00.5
-> |       └─ D0 (Runtime PM enabled)
-> ├─ 0000:00:04.1
-> |       | ACPI Path: \_SB_.PCI0.GP12 (Supports "0" in _S0W)
-> |       | Device Links: supplier:pci:0000:c4:00.6
-> |       └─ D0 (Runtime PM enabled)
-> ├─ 0000:00:08.3
-> |       | ACPI Path: \_SB_.PCI0.GP19
-> |       ├─ D0 (Runtime PM disabled)
-> |       ├─ 0000:c4:00.3
-> |       |       | ACPI Path: \_SB_.PCI0.GP19.XHC3
-> |       |       | Device Links: supplier:pci:0000:c4:00.5
-> |       |       └─ D3cold (Runtime PM enabled)
-> |       ├─ 0000:c4:00.4
-> |       |       | ACPI Path: \_SB_.PCI0.GP19.XHC4
-> |       |       | Device Links: supplier:pci:0000:c4:00.6
-> |       |       └─ D3cold (Runtime PM enabled)
-> |       ├─ 0000:c4:00.5
-> |       |       | ACPI Path: \_SB_.PCI0.GP19.NHI0 (Supports "4" in _S0W)
-> |       |       | Device Links: consumer:pci:0000:00:03.1 consumer:pci:0000:c4:00.3
-> |       |       └─ D3cold (Runtime PM enabled)
-> |       └─ 0000:c4:00.6
-> |               | ACPI Path: \_SB_.PCI0.GP19.NHI1 (Supports "4" in _S0W)
-> |               | Device Links: consumer:pci:0000:c4:00.4 consumer:pci:0000:00:04.1
-> |               └─ D3cold (Runtime PM enabled)
-> 
-> Allowing the PCIe root port for tunneling to go into runtime PM (even if
-> it doesn't support D3) allows the USB4 router to also go into runtime PM.
-> The PCIe root port for tunneling stays in D0 but is in runtime PM. Due to
-> the device link the USB4 router transitions to D3cold when this happens.
-> 
-> The expectation is the USB4 router should have also remained in D0 since
-> the PCIe root port for tunneling remained in D0.
-> 
-> Instead of making this assertion from the power resources check
-> immediately, move the check to later on, which will have validated
-> that the device supports wake from D3hot or D3cold.
-> 
-> This fix prevents the USB4 router going into D3 when the firmware says that
-> the PCIe root port for tunneling can't handle it while still allowing
-> system that don't have the HotplugSupportInD3 _DSD to also enter D3 if they
-> have power resources that can wake from D3.
-> 
-> Fixes: dff6139015dc6 ("PCI/ACPI: Allow D3 only if Root Port can signal and wake from D3")
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Going back to the original question...
+> We fix bugs when we discover them.
+> Regardless of the subsystem they belong to.
+> No finger pointing.
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+I'm concerned about the following situation:
+
+struct <something> *function()
+{
+
+	ret = security_*();
+	if (ret)
+		return ERR_PTR(ret);
+
+}
+
+int caller()
+{
+	ptr = function()
+	if (IS_ERR(ptr)
+		goto out;
+
+	<use of invalid pointer>
+}
+
+I quickly found an occurrence of this:
+
+static int lookup_one_common()
+{
+
+[...]
+
+	return inode_permission();
+}
+
+struct dentry *try_lookup_one_len()
+{
+
+[...]
+
+         err = lookup_one_common(&init_user_ns, name, base, len, &this);
+         if (err)
+                 return ERR_PTR(err);
+
+
+Unfortunately, attaching to inode_permission causes the kernel
+to crash immediately (it does not happen with negative return
+values).
+
+So, I think the fix should be broader, and not limited to the
+inode_init_security hook. Will try to see how it can be fixed.
+
+Roberto
+
