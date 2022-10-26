@@ -2,73 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3E460E656
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D046C60E65B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 19:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233449AbiJZRVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 13:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
+        id S233785AbiJZRWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 13:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231926AbiJZRVM (ORCPT
+        with ESMTP id S233779AbiJZRWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 13:21:12 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A90789CFB;
-        Wed, 26 Oct 2022 10:21:08 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id u11so11098596ljk.6;
-        Wed, 26 Oct 2022 10:21:08 -0700 (PDT)
+        Wed, 26 Oct 2022 13:22:14 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD238D0DE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:22:11 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id z30so11068371qkz.13
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 10:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qov2Dgocew9BtpnUJ5VUmlVYXRxNX8vQVfGrG02GkcQ=;
-        b=X3dzyRxqhsdwAc893GNV5bM99VeFzQr/hfBD2ZXUmtDwa47o6KHKpCU9XL3ZOhpAuz
-         L7fkt6pqQ7lkvPQJZWoEhsHzCCFW/zCEh3neh75gsB+DXzy0l/01ZjPZXsF9rKi2KLEg
-         sgF68ZldYP8okSWAjX3Ap6hldXl8MmoUpkbkUNSytTbnZ8pyXV/fLJ5qsNStmt7mwqAI
-         7N8lB1grfvcrxxx7LCqwOSB7VrrFkW3Hh3vWcm9wiJ9Y+p+duIGI0PuESS8XNm02Gsf5
-         RpXHqKR789dRNT8mVDDXgbri3QBUIXEn9iyPnZkOMoUVKT+Iyip3N23joNQ6y2dQ6uSA
-         KePQ==
+        bh=oLlW1kscCZqIaTOlPcJH/jgt0YbKOWqVS01M6qgp7Uw=;
+        b=w/j7e/fNOCN2iVFnKD8fD8BvhEM2bJk4xOdewSXDEFnHOZGff4bZ5IRRwFooNK/vjC
+         RLiABqYXJAOzFl9nB1Ripgvl6j73RDhtXxtZxKy1HUQjPS3roj9630mO1NdwfExyW2+d
+         HXxquLZV361r+bxmEtPw3jUC5jkvTL0RwdZfeF/BIEMyFD2OGfDjeVP8ynKMTEyvvx+F
+         hHREYvY8RKqLJB1wC9fMSMlldzP0FJ6airbjaRnek0EUrBeMRv08K247pG/GijAS5za6
+         K8+QAhtZhWb5xN/OVXIvTs3nJOuGnDqodc1MNQjfwsDZeWnnHRUSNK5VNxWL/P4yUdAd
+         3sLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qov2Dgocew9BtpnUJ5VUmlVYXRxNX8vQVfGrG02GkcQ=;
-        b=catrZFTtUtMIQ/5dlu6ePVNbX2SopOVBRTZHAj2kef+tQ2HXnng/FWo3EIOTEn2bVe
-         eXODbuxTa1iYbqEbg1+A7WpB40sxkkNyv3PFvn0m77/onGhg6hKBGzOQ56Jfcru7+Sx/
-         aRm51rc/TpOuz80dg8vim5nEY1O3mglNTdgfYgTJGUGpKwQMGqpU1Q3EFJSUwUXVU4OV
-         KmTLBIoKdz6Ckf3TImAVQp7kLrnM6TNpjlidFm1arRZZKWI80BrulBH4MgzJCAtQDAdM
-         V+lmxDR3IqcZ0BvD0uu35HIKCYsPVn+rrwXP1dMUfTsJ62Wcalq7mKOHlbvAycZ8cQ10
-         SSNQ==
-X-Gm-Message-State: ACrzQf0smbL81r/sdXycV9iT6yFV9zPWObWGpPQ6myqsjmd7b0+iU24L
-        3sARR/gXL8QmzEEjXrqzviaNnXeZKbFgig==
-X-Google-Smtp-Source: AMsMyM7r5UycrzF6zRC7iMfR9iLY/mWsA/sgIm6t5TrSBaJ7e8698VUzdzKpu3A8ciL6PcBQTS0oOA==
-X-Received: by 2002:a05:651c:502:b0:26f:de48:7df3 with SMTP id o2-20020a05651c050200b0026fde487df3mr16115621ljp.93.1666804866634;
-        Wed, 26 Oct 2022 10:21:06 -0700 (PDT)
-Received: from [10.0.0.100] (host-185-69-38-8.kaisa-laajakaista.fi. [185.69.38.8])
-        by smtp.gmail.com with ESMTPSA id i5-20020a2ea365000000b0025e00e0116esm1008641ljn.128.2022.10.26.10.21.05
+        bh=oLlW1kscCZqIaTOlPcJH/jgt0YbKOWqVS01M6qgp7Uw=;
+        b=pV+L/pTVH7OwSTGdCjTKB+5diblwHUeux1WNemIHf2JEhZUK1ofQpj4GtOkzDbcvIV
+         2M3H97exhaYQzZBqCs4D+AMjN6eHvuhH6ODpIkPyp6MnGBYa0yviFupNke/dhjUTxD4j
+         Sn92x4bEunMeUwsBzgYAok6fzkeaLhxI2FGzp2jVX73lX07HY/onDA3KcG9ieRI5j5D/
+         4LWhaWd/SpJRdrM8+zt6L8n/I/UgnHyAgwzn9ewBPuQOJ7dYX3/IAfenIt93pmKHfhCL
+         u8wCaByN9i4vdMRSQX0LhuR362SqryVpaJ0xw8f7Az/cWF7BmkomBGyIUI0vu7bEmhwa
+         HhWw==
+X-Gm-Message-State: ACrzQf025KNuLb9+3wQK8wqcwh1//OM6jDpMpNQD29TJBsAyxnCC6bQP
+        9IPDHub6cTSWvpL7uCWKOAcaCw==
+X-Google-Smtp-Source: AMsMyM6Kf2jYy3iJqZeqVyXShFrqXF8kTcxCcGJu4mG93deokS9fXIamGA2nuPqOdQnS49zUo6CUpQ==
+X-Received: by 2002:ae9:dd04:0:b0:6e0:ae86:b4 with SMTP id r4-20020ae9dd04000000b006e0ae8600b4mr31724032qkf.146.1666804930281;
+        Wed, 26 Oct 2022 10:22:10 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id x22-20020a05620a0ed600b006b61b2cb1d2sm4130569qkm.46.2022.10.26.10.22.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 10:21:05 -0700 (PDT)
-Message-ID: <ad965dad-ced7-4f10-13fb-2d30e058f428@gmail.com>
-Date:   Wed, 26 Oct 2022 20:21:53 +0300
+        Wed, 26 Oct 2022 10:22:09 -0700 (PDT)
+Message-ID: <fe9b34f9-68f8-0d5d-4085-33a227b7c363@linaro.org>
+Date:   Wed, 26 Oct 2022 13:22:07 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH] dmaengine: ti: edma: Remove the unused function
- edma_and()
+Subject: Re: [RFC 5/5] bluetooth: hci_mrvl: allow waiting for firmware load
+ using notify-device
 Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20221018083820.25297-1-jiapeng.chong@linux.alibaba.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20221018083820.25297-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux@ew.tq-group.com
+References: <cover.1666786471.git.matthias.schiffer@ew.tq-group.com>
+ <fa9cdbe5906fdcfcb37dbe682f3f46ce4b2e1b73.1666786471.git.matthias.schiffer@ew.tq-group.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <fa9cdbe5906fdcfcb37dbe682f3f46ce4b2e1b73.1666786471.git.matthias.schiffer@ew.tq-group.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,46 +94,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/10/2022 11:38, Jiapeng Chong wrote:
-> The function edma_and() is defined in the edma.c file, but not called
-> elsewhere, so remove this unused function.
-> 
-> drivers/dma/ti/edma.c:321:20: warning: unused function 'edma_and'.
-
-0f4c5b29e333 dmaengine: ti: edma: Remove some unused functions
-dropped edma_param_and() but left the edma_and() behind...
-
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-
-> 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2430
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+On 26/10/2022 09:15, Matthias Schiffer wrote:
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 > ---
->   drivers/dma/ti/edma.c | 8 --------
->   1 file changed, 8 deletions(-)
+>  drivers/bluetooth/hci_mrvl.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-> index fa06d7e6d8e3..9ea91c640c32 100644
-> --- a/drivers/dma/ti/edma.c
-> +++ b/drivers/dma/ti/edma.c
-> @@ -318,14 +318,6 @@ static inline void edma_modify(struct edma_cc *ecc, int offset, unsigned and,
->   	edma_write(ecc, offset, val);
->   }
->   
-> -static inline void edma_and(struct edma_cc *ecc, int offset, unsigned and)
-> -{
-> -	unsigned val = edma_read(ecc, offset);
-> -
-> -	val &= and;
-> -	edma_write(ecc, offset, val);
-> -}
-> -
->   static inline void edma_or(struct edma_cc *ecc, int offset, unsigned or)
->   {
->   	unsigned val = edma_read(ecc, offset);
+> diff --git a/drivers/bluetooth/hci_mrvl.c b/drivers/bluetooth/hci_mrvl.c
+> index b7d764e6010f..dc55053574a9 100644
+> --- a/drivers/bluetooth/hci_mrvl.c
+> +++ b/drivers/bluetooth/hci_mrvl.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/skbuff.h>
+>  #include <linux/firmware.h>
+>  #include <linux/module.h>
+> +#include <linux/notify-device.h>
+>  #include <linux/tty.h>
+>  #include <linux/of.h>
+>  #include <linux/of_device.h>
+> @@ -433,9 +434,25 @@ static int mrvl_serdev_probe(struct serdev_device *serdev)
+>  		return -ENOMEM;
+>  
+>  	if (IS_ENABLED(CONFIG_OF)) {
+> +		struct device_node *firmware_ready_node;
+> +		struct device *firmware_ready;
+> +
+>  		mrvldev->info = of_device_get_match_data(&serdev->dev);
+>  		if (!mrvldev->info)
+>  			return -ENODEV;
+> +
+> +		firmware_ready_node = of_parse_phandle(serdev->dev.of_node,
+> +						       "firmware-ready", 0);
 
--- 
-Péter
+So you want us to go through five patches, find properties and OF-code,
+create in our minds bindings you think about and comment on that
+imaginary bindings.
+
+I think it should work otherwise - send bindings for all of your DT
+properties.
+
+Best regards,
+Krzysztof
+
