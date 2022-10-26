@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA5260E0DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3044660E0DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233555AbiJZMi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
+        id S233597AbiJZMi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233155AbiJZMiY (ORCPT
+        with ESMTP id S233577AbiJZMi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:38:24 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874C9E77BA;
-        Wed, 26 Oct 2022 05:38:23 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7b8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7b8:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2F30D1EC032C;
-        Wed, 26 Oct 2022 14:38:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1666787902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=BtYmqcK/SwOYOEYDhCGjtxRMVVKq17QV489dr1/AD1M=;
-        b=lEwKBM09qULzmxQO2ikbgRg6mJ3EW+0X+KTzylFl9gQtwqNOnN/yMGy78QI1TRyP00RAel
-        BMKbfOYAfuT86yO+qyTY3oDq+cuXF69gqIg2B04owPENSD6n1jPXTsd1lcQgIbrPLdhmPN
-        NX67SR7dha7rQ/vroVkuI1ADWpUcUfg=
-Date:   Wed, 26 Oct 2022 14:38:18 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     bjorn.andersson@linaro.org, mchehab@kernel.org,
-        james.morse@arm.com, rric@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com
-Subject: Re: [PATCH v2 3/3] MAINTAINERS: Add myself as the maintainer for
- qcom_edac driver
-Message-ID: <Y1kqOqhQeGkfoQnp@zn.tnic>
-References: <20220812060602.7672-1-manivannan.sadhasivam@linaro.org>
- <20220812060602.7672-4-manivannan.sadhasivam@linaro.org>
+        Wed, 26 Oct 2022 08:38:56 -0400
+Received: from sender4-pp-o95.zoho.com (sender4-pp-o95.zoho.com [136.143.188.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA8995E75
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 05:38:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1666787931; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=lB39/X0D3SRfQA0dvE2UkC0kCRljxxx5ltoURgLhrPKXbucOBvUjtAKDIhWaq0zkMx22lZCtZJaisdLtC34ag6GIqhmlOhTjk5llzzs/qkuN/k/TdmkxJ4hF3VYCjUnmjO1b7lZQ0r/uOhshypBfEjJNThoJqnD9EJWVZTyg26s=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1666787931; h=Content-Type:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=713x+7pv4blPKCD3gBMqVoWosY48e9YX4FfVf2Xs5ig=; 
+        b=Cctgoh7VxEw8bX8Q8zlOE6OHibwCqLCbGmcrqKzM7m67t9BoHnotFJRg58sQ8Yrv5bEjXTch6+lPNh2wSM+LpE05dgHl054Zr/B6gpvltAdN0c6JzdMosEdg9n+oLSKlaI9wUGJ1wU4GooCiRqg6w7RlIreDIuO7+/9lSSlIYgc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=zohomail.com;
+        spf=pass  smtp.mailfrom=t4rmin@zohomail.com;
+        dmarc=pass header.from=<t4rmin@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1666787931;
+        s=zm2022; d=zohomail.com; i=t4rmin@zohomail.com;
+        h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:MIME-Version:Content-Type:Message-Id:Reply-To;
+        bh=713x+7pv4blPKCD3gBMqVoWosY48e9YX4FfVf2Xs5ig=;
+        b=GlYN0jXm+JcbLFayK+X1pPBXkXav7aadZ8jN/qVy0M9t8hZGvuD58ii1CMdJlE+6
+        MMKHyZ44IbPl/zEj7m3m1vB/dlZla5KfruKYkACAQbyAWVsfftVZlf5LXaNqBufOmFx
+        pZANBTdGCHRCU7lTGTraw31HFqXiT6RPWk7Cg4F0=
+Received: from plymouth (103.47.132.63 [103.47.132.63]) by mx.zohomail.com
+        with SMTPS id 1666787930185303.88254902878305; Wed, 26 Oct 2022 05:38:50 -0700 (PDT)
+Date:   Wed, 26 Oct 2022 19:38:41 +0700
+From:   Aaron Lawrence <t4rmin@zohomail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] staging: rtl8192e: rtllib_crypt_tkip: code cleanup on
+ rtllib_crypt_tkip.c
+Message-ID: <cover.1666787061.git.t4rmin@zohomail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220812060602.7672-4-manivannan.sadhasivam@linaro.org>
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 11:36:02AM +0530, Manivannan Sadhasivam wrote:
-> The current maintainers have left Qualcomm and their email addresses were
-> bouncing. Since I couldn't get hold of them now, I'm volunteering myself
-> to maintain this driver.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  MAINTAINERS | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+Multiple patches regarding the cleanup of code in rtllib_crypt_tkip.c.
+Fixes were applied according to the reports generated by running the
+checkpatch script on said file with minor manual adjustments by personal
+judgement with handling the comments on the multiple assignments issue.
 
-Applied, thanks.
+Aaron Lawrence (6):
+  staging: rtl8192e: rtllib_crypt_tkip: multiple blank lines removal
+  staging: rtl8192e: rtllib_crypt_tkip: blank line before close brace
+    removal
+  staging: rtl8192e: rtllib_crypt_tkip: fixed alignment matching open
+    parentheses
+  staging: rtl8192e: rtllib_crypt_tkip: fixes on unbalanced braces
+  staging: rtl8192e: rtllib_crypt_tkip: split multiple assignments
+  staging: rtl8192e: rtllib_crypt_tkip: rewritten comparison to NULL
+
+ drivers/staging/rtl8192e/rtllib_crypt_tkip.c | 52 ++++++--------------
+ 1 file changed, 16 insertions(+), 36 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.38.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
