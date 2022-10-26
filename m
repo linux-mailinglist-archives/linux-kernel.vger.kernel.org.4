@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6688E60E266
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47A660E268
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233680AbiJZNou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S233658AbiJZNpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233552AbiJZNoe (ORCPT
+        with ESMTP id S233672AbiJZNpG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:44:34 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD693891;
-        Wed, 26 Oct 2022 06:44:31 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 29457723;
-        Wed, 26 Oct 2022 13:44:31 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 29457723
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1666791871; bh=FqnFi4P5DBvM5d8tmGPGlXGFwx5FCJWH+bst9DteRAc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=CeNjxMF/ta3zdJ4CUZbmazV5gjDlcKydZf1p91Mx0yq0i77JTdCiG4FDJG61WMszN
-         vYCJz7gBnXbFhtFMSHESN39VbIXQtnS5xe1Q68JidusN9kRryJHHk8YnkzG4E//cGq
-         0C8PlP0sbSDtVWg6vkj1cmm26Fz/Hk9GLUqfZWTBoLgH3pO1UogzBnR+Bz3DZakZhH
-         xlZ4NeoYpbLp3tOUEbLSEOjyaLPdy5d+P2dNirwvamrGIXFi6PU8JaJJ8ZBOVsENNp
-         q0Tjl4z3c7HF/HrRRfTIJDe+oQHezsR1RpwkPFT9QtgofZlBHkje4OubQcWhAz2+WZ
-         zDbIJXTYEghzQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH hid v11 14/14] Documentation: add HID-BPF docs
-In-Reply-To: <Y1k0QUxp38OhKg+1@debian.me>
-References: <20221025093458.457089-1-benjamin.tissoires@redhat.com>
- <20221025093458.457089-15-benjamin.tissoires@redhat.com>
- <Y1k0QUxp38OhKg+1@debian.me>
-Date:   Wed, 26 Oct 2022 07:44:30 -0600
-Message-ID: <87a65id7i9.fsf@meer.lwn.net>
+        Wed, 26 Oct 2022 09:45:06 -0400
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D281D0E8
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 06:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1666791886; bh=ysuEu2gcIIZ9Gls3WpW2bMj8egi1afgluP/NBc5EWnw=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=HmW0HhlZBEtQaXq4byFmXum8bkT8E96SObxAfid3j2s2cB79r4Yo29QJT5ip/cWxf
+         hPTcI+GQvnVGwAkFGPxQF7mS8PlZN04v9OQhGspAbZI5gaELFtlATFWXnKRuIzQEO9
+         XWCdXikR3FZwDtb6+MJzO0+Eby3yV/jBzzT0aDtY=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via [213.182.55.206]
+        Wed, 26 Oct 2022 15:44:46 +0200 (CEST)
+X-EA-Auth: N64AvuwQIp1I6Tw9cugKwmAqQwT+msEiS9FYfZa5FQBqVXeGcp75mkjIq995/MNmMfQMYPIEE1BZ3hgkWpENz5mYrJibjHPf
+Date:   Wed, 26 Oct 2022 19:14:43 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] staging: rtl8192u: remove unused macro definition
+Message-ID: <Y1k5y5PVT6t0+OIS@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1666754500.git.drv@mailo.com>
+ <b7053d8737c048d6a878609f0ec24d66b18c5abd.1666754500.git.drv@mailo.com>
+ <Y1kyr/hWqbKCzaaR@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1kyr/hWqbKCzaaR@kroah.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -57,58 +49,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+On Wed, Oct 26, 2022 at 03:14:23PM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Oct 26, 2022 at 08:58:44AM +0530, Deepak R Varma wrote:
+> > Pre-processor macros that are defined but are never used should be
+> > cleaned up to avoid unexpected usage.
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> >  drivers/staging/rtl8192u/ieee80211/ieee80211.h | 2 --
+> >  1 file changed, 2 deletions(-)
+> >
+> > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > index 00c07455cbb3..0b3dda59d7c0 100644
+> > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > @@ -230,8 +230,6 @@ struct cb_desc {
+> >  #define ieee80211_unregister_crypto_ops ieee80211_unregister_crypto_ops_rsl
+> >  #define ieee80211_get_crypto_ops	ieee80211_get_crypto_ops_rsl
+> >
+> > -#define ieee80211_ccmp_null		ieee80211_ccmp_null_rsl
+> > -
+> >  #define free_ieee80211			free_ieee80211_rsl
+> >  #define alloc_ieee80211			alloc_ieee80211_rsl
+>
+> These #defines are a mess, please look into unwinding them as they
+> should not be needed at all.
 
-> The wordings are somewhat confusing, so here's the alternative:
+Hello Greg,
+I would like to know what you mean by "unwind them". Is there a documentation or past
+commit that I can review to understand the expectations better?
 
-I've been kind of ignoring these editorial comments of yours, but this
-bit of bikeshedding kind of exceeded my threshold.
+Thank you,
+./drv
 
-> diff --git a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-bpf.rst
-> index ba35aa2e2ba836..c59bce4b9cf214 100644
-> --- a/Documentation/hid/hid-bpf.rst
-> +++ b/Documentation/hid/hid-bpf.rst
-> @@ -27,88 +27,89 @@ Assuming you have a joystick that is getting older, it is common to see it
->  wobbling around its neutral point. This is usually filtered at the application
->  level by adding a *dead zone* for this specific axis.
->  
-> -With HID-BPF, we can apply this filtering in the kernel directly so userspace
-> -does not get woken up when nothing else is happening on the input controller.
-> +With HID-BPF, the filter can be applied in the kernel directly so that
-> +userspace does not get woken up when nothing else is happening on the input
-> +controller.
+>
+> thanks,
+>
+> greg k-h
+>
 
-How does a shift to the passive voice help here?  What is the problem
-you are trying to solve?
 
-> -Of course, given that this dead zone is specific to an individual device, we
-> -can not create a generic fix for all of the same joysticks. Adding a custom
-> -kernel API for this (e.g. by adding a sysfs entry) does not guarantee this new
-> -kernel API will be broadly adopted and maintained.
-> +Of course, given that dead zone filter is device-specific, it is not possible
-
-                       ^
-Missing article -------+
-
-> +to create a generic fix for all of the same joysticks. Adding a custom
-> +kernel API for this (e.g. by adding a sysfs entry) does not guarantee that
-> +the API will be broadly adopted and maintained.
->  
-> -HID-BPF allows the userspace program to load the program itself, ensuring we
-> -only load the custom API when we have a user.
-> +HID-BPF allows the userspace program to load the program itself, ensuring that
-> +custom API is only needed for edge cases (like esoteric joysticks)
-
-That (beyond the missing article) changes the meaning of the sentence;
-it no longer really makes sense.
-
-I'll stop here.
-
-Bagas, I've asked this several times: *please* stop trying to tell other
-contributors what to do and, instead, focus on contributing something
-useful yourself.  You seem to have the energy and interest to do
-worthwhile stuff - please do that!
-
-Thanks,
-
-jon
