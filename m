@@ -2,213 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE25260DFF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:47:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F8E60DFF8
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 13:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbiJZLrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 07:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S233165AbiJZLtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 07:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233587AbiJZLqd (ORCPT
+        with ESMTP id S230090AbiJZLt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 07:46:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13374C613;
-        Wed, 26 Oct 2022 04:45:27 -0700 (PDT)
-X-UUID: 2ac84e4e357745dd93cb33e04406c6bc-20221026
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=9LC/FK6XWFOIUm1Lv8D9Fr/dapnZXyyTO4BlfBq5dRg=;
-        b=aYBrZgdhXMvYIp1bsCpYOyTraJHZTUgfD/5FzQtWgtpSXx6hAAk5i2V0v+2Q86OgglBK4Vcq23Rno35kLE/19aRN1XBDS0mNynvlg9hGGfxE7j2o7I9Y54PlRDV9RZnt2drs2MmlqCYIuDu/g3D6jw0VsNOO5ln0wi5sVv25/Sw=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:ba85b83b-2751-4653-8c34-78f8a5a7e86e,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:67b93527-9eb1-469f-b210-e32d06cfa36e,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 2ac84e4e357745dd93cb33e04406c6bc-20221026
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <haozhe.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 125040454; Wed, 26 Oct 2022 19:45:21 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 26 Oct 2022 19:45:19 +0800
-Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 26 Oct 2022 19:45:17 +0800
-Message-ID: <82a7acf3176c90d9bea773bb4ea365745c1a1971.camel@mediatek.com>
-Subject: Re: [PATCH] wwan: core: Support slicing in port TX flow of WWAN
- subsystem
-From:   haozhe chang <haozhe.chang@mediatek.com>
-To:     Loic Poulain <loic.poulain@linaro.org>,
-        "chandrashekar.devegowda@intel.com" 
-        <chandrashekar.devegowda@intel.com>,
-        "linuxwwan@intel.com" <linuxwwan@intel.com>,
-        "chiranjeevi.rapolu@linux.intel.com" 
-        <chiranjeevi.rapolu@linux.intel.com>,
-        Haijun Liu =?UTF-8?Q?=28=E5=88=98=E6=B5=B7=E5=86=9B=29?= 
-        <haijun.liu@mediatek.com>,
-        "m.chetan.kumar@linux.intel.com" <m.chetan.kumar@linux.intel.com>,
-        "ricardo.martinez@linux.intel.com" <ricardo.martinez@linux.intel.com>,
-        "ryazanov.s.a@gmail.com" <ryazanov.s.a@gmail.com>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Lambert Wang =?UTF-8?Q?=28=E7=8E=8B=E4=BC=9F=29?= 
-        <Lambert.Wang@mediatek.com>,
-        "Xiayu Zhang =?UTF-8?Q?=28=E5=BC=A0=E5=A4=8F=E5=AE=87=29?=" 
-        <Xiayu.Zhang@mediatek.com>, <srv_heupstream@mediatek.com>
-Date:   Wed, 26 Oct 2022 19:45:17 +0800
-In-Reply-To: <CAMZdPi_XSWeTf-eP+O2ZXGXtn5yviEp=p1Q0rs_fG76UGf2FsQ@mail.gmail.com>
-References: <20221026011540.8499-1-haozhe.chang@mediatek.com>
-         <CAMZdPi_XSWeTf-eP+O2ZXGXtn5yviEp=p1Q0rs_fG76UGf2FsQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.1-2 
+        Wed, 26 Oct 2022 07:49:29 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CA8764B;
+        Wed, 26 Oct 2022 04:49:27 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 8A17A32003CE;
+        Wed, 26 Oct 2022 07:49:25 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 26 Oct 2022 07:49:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1666784965; x=1666871365; bh=Fs
+        O0gPfX2wHmErfPj9SmHjSOURVfbrKHD0GjwO7ZwVk=; b=wguQpGpJB+dw8/sOY7
+        LLeySXpRG3RP0n5L14JU/FaYJiN3r0kUN6jw2eGYikDd93TOsJVIkoVXFEOtVE5Z
+        uDMU4CJoBph8oPHuYLXSGFaKgDEXMq5cHExDcvYEs7WEtqE/UT+RBLqvQ7VAZ+3v
+        CCYevACGdoWityOQsXB9PiuO31Dv7fbrBX521juoWjTrF4lQrjxbVxqcPadVthuR
+        eeosC508IAqq5g7ocvRmy9QFYcYpateK9DaXAuyYHT4GPSw89aa/a/hP8kRmwFq4
+        zgbkr9K3dS7JpaTePv+ne1o9CiLR5mlVqnQ1Iij1cTjcPKpz1JLjpUUyDVCA+D1F
+        u3Xg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1666784965; x=1666871365; bh=FsO0gPfX2wHmE
+        rfPj9SmHjSOURVfbrKHD0GjwO7ZwVk=; b=kKXNGot4HwX9HZLQpWN2eO25Rn4Aw
+        8KMBK7puUOgt9RAl95V/dAzpuw4x1bYOMogRuSZPrVO7+/NB1ShRblVme+Pow0Jr
+        b6JGyva8vSaIbqyT0gGDsj9+msQvV6+kFH5tF3CJ+vz7NVTDUkA7dkqxOLhVHY5Q
+        saQ4DnOlrEPijwKiWMZHgFov5Pg+vVCWpBtPc6ckZanUZXjUOesG5CsUVN6k30eA
+        6RXQNPbUO1QHC+JQHccazuZMKvHySq1fCZPwZHPigDkL1uj8WQutwb7oesHU+LlA
+        2nQ1UG9mCHLuHIqon1rtL8UWGGUXRZupYN3y6tdbQPatz/+HCzsBPt2/g==
+X-ME-Sender: <xms:xB5ZY10wOzL_asfqoRU2gGJOBBPgs8EYOF6ryjrc9XVoHIDUlWyUyw>
+    <xme:xB5ZY8FBWRTdKLxb9ETcrV0yQSa_ngy9Mgcv_ODLL0SceQDJ5TCZQDKuloeTHeT6U
+    FdD5Tp5TFvyby969l8>
+X-ME-Received: <xmr:xB5ZY169YM56KXh70yXZYRlN-7ZblnX5J3Y9IE4iHYejSSWOH35OGMwl7jU-PeOL840RM96HwZMj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdeggecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofggtgfgsehtkeertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepgedtvdfffeffje
+    ekgefggeetfffftdeuveekfedvjeevtedvueduvddvtdeigfelnecuffhomhgrihhnpehl
+    fihnrdhnvghtpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlihhsthgrihhrvdefrdhm
+    vg
+X-ME-Proxy: <xmx:xB5ZYy2B3iT3LecU9CWDtv7qA9DTdYxNTv22nszU-vFkxPSAkZZFUg>
+    <xmx:xB5ZY4Eyi_LlYQPqaCe19NYT3IP3O06vvaCnutA0fUOz0n6EsRXLCA>
+    <xmx:xB5ZYz8Dd0JRwW54laQDQwhE16rSzQ1VDpndUj_GMDXXRLdM_slpGQ>
+    <xmx:xR5ZY_eVhgJMCA9WIW0jcQhc_WZAlUnMU0gqpBUltsjnZiNCCagwXA>
+Feedback-ID: ifd214418:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 26 Oct 2022 07:49:15 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
+        robh+dt@kernel.org, dmitry.torokhov@gmail.com, shawnguo@kernel.org,
+        rydberg@bitmath.org, alistair23@gmail.com, s.hauer@pengutronix.de,
+        andreas@kemnade.info, Alistair Francis <alistair@alistair23.me>
+Subject: [PATCH v10 0/4] Add support for the Cypress cyttsp5
+Date:   Wed, 26 Oct 2022 21:49:04 +1000
+Message-Id: <20221026114908.191472-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SPF_TEMPERROR,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-10-26 at 15:28 +0800, Loic Poulain wrote:
-> Hi Haozhe,
-> 
-> On Wed, 26 Oct 2022 at 03:16, <haozhe.chang@mediatek.com> wrote:
-> > 
-> > From: haozhe chang <haozhe.chang@mediatek.com>
-> > 
-> > wwan_port_fops_write inputs the SKB parameter to the TX callback of
-> > the WWAN device driver. However, the WWAN device (e.g., t7xx) may
-> > have an MTU less than the size of SKB, causing the TX buffer to be
-> > sliced and copied once more in the WWAN device driver.
-> 
-> The benefit of putting data in an skb is that it is easy to
-> manipulate, so not sure why there is an additional copy in the first
-> place. Isn't possible for the t7xx driver to consume the skb
-> progressively (without intermediate copy), according to its own MTU
-> limitation?
-> 
-t7xx driver needs to add metadata to the SKB head for each fragment, so
-the driver has to allocate a new buffer to copy data(skb_put_data) and
-insert metadata. 
-Providing the option to slice in common layer benefits varieties of
-devices with different DMA capabilities. The patch is also compatible
-with existing WWAN devices.
-> > 
-> > This patch implements the slicing in the WWAN subsystem and gives
-> > the WWAN devices driver the option to slice(by chunk) or not. By
-> > doing so, the additional memory copy is reduced.
-> > 
-> > Meanwhile, this patch gives WWAN devices driver the option to
-> > reserve
-> > headroom in SKB for the device-specific metadata.
-> > 
-> > Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
-> > ---
-> >  drivers/net/wwan/t7xx/t7xx_port_wwan.c | 41 ++++++++++++--------
-> > ---
-> >  drivers/net/wwan/wwan_core.c           | 45 ++++++++++++++++++--
-> > ------
-> >  include/linux/wwan.h                   |  5 ++-
-> >  3 files changed, 56 insertions(+), 35 deletions(-)
-> > 
-> > diff --git a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
-> > b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
-> > index 33931bfd78fd..5e8589582121 100644
-> > --- a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
-> > +++ b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
-> > @@ -54,13 +54,12 @@ static void t7xx_port_ctrl_stop(struct
-> > wwan_port *port)
-> >  static int t7xx_port_ctrl_tx(struct wwan_port *port, struct
-> > sk_buff *skb)
-> >  {
-> >         struct t7xx_port *port_private =
-> > wwan_port_get_drvdata(port);
-> > -       size_t len, offset, chunk_len = 0, txq_mtu = CLDMA_MTU;
-> >         const struct t7xx_port_conf *port_conf;
-> >         struct t7xx_fsm_ctl *ctl;
-> >         enum md_state md_state;
-> > +       int ret;
-> > 
-> > -       len = skb->len;
-> > -       if (!len || !port_private->chan_enable)
-> > +       if (!port_private->chan_enable)
-> >                 return -EINVAL;
-> > 
-> >         port_conf = port_private->port_conf;
-> > @@ -72,33 +71,33 @@ static int t7xx_port_ctrl_tx(struct wwan_port
-> > *port, struct sk_buff *skb)
-> >                 return -ENODEV;
-> >         }
-> > 
-> > -       for (offset = 0; offset < len; offset += chunk_len) {
-> > -               struct sk_buff *skb_ccci;
-> > -               int ret;
-> > -
-> > -               chunk_len = min(len - offset, txq_mtu -
-> > sizeof(struct ccci_header));
-> > -               skb_ccci = t7xx_port_alloc_skb(chunk_len);
-> > -               if (!skb_ccci)
-> > -                       return -ENOMEM;
-> > -
-> > -               skb_put_data(skb_ccci, skb->data + offset,
-> > chunk_len);
-> > -               ret = t7xx_port_send_skb(port_private, skb_ccci, 0,
-> > 0);
-> > -               if (ret) {
-> > -                       dev_kfree_skb_any(skb_ccci);
-> > -                       dev_err(port_private->dev, "Write error on
-> > %s port, %d\n",
-> > -                               port_conf->name, ret);
-> > -                       return ret;
-> > -               }
-> > +       ret = t7xx_port_send_skb(port_private, skb, 0, 0);
-> > +       if (ret) {
-> > +               dev_err(port_private->dev, "Write error on %s port,
-> > %d\n",
-> > +                       port_conf->name, ret);
-> > +               return ret;
-> >         }
-> > -
-> >         dev_kfree_skb(skb);
-> > +
-> >         return 0;
-> >  }
-> > 
-> > +static size_t t7xx_port_get_tx_rsvd_headroom(struct wwan_port
-> > *port)
-> > +{
-> > +       return sizeof(struct ccci_header);
-> > +}
-> > +
-> > +static size_t t7xx_port_get_tx_chunk_len(struct wwan_port *port)
-> > +{
-> > +       return CLDMA_MTU - sizeof(struct ccci_header);
-> > +}
-> > +
-> >  static const struct wwan_port_ops wwan_ops = {
-> >         .start = t7xx_port_ctrl_start,
-> >         .stop = t7xx_port_ctrl_stop,
-> >         .tx = t7xx_port_ctrl_tx,
-> > +       .get_tx_rsvd_headroom = t7xx_port_get_tx_rsvd_headroom,
-> 
-> Can't we have a simple 'skb_headroom' or 'needed_headroom' member
-> here?
-> 
-OK, I will change it in patch v2.
-> > +       .get_tx_chunk_len = t7xx_port_get_tx_chunk_len,
-> >  };
-> > 
+This patch series builds on top of [1] and adds support for the cyttsp5
+touchscreen controller for the reMarkable 2.
+
+I first tried to add an I2C HID device. Although the cyttsp5 has some HID
+looking aspects it is not HID compatible. Just in trying to probe the device
+I found:
+ - The HID descriptor has extra padding
+ - The HID descriptor sets the high bytes of the descriptor length
+ - The HID descriptor has extra unrecognised tags
+ - The HID reset command doesn't appear to work
+
+I don't think there is a way to use the I2C HID framework with the cyttsp5.
+For anyone interested you can see the work here [2]. In that branch though I
+can only obtain a HID descriptor, nothing else works without more core
+changes.
+
+So instead I rebased the series from [1]. Converted to the new yaml DTS
+documentation, added regulator support and fixed a x/y miscalculation bug.
+
+1: https://lwn.net/ml/linux-kernel/20180703094309.18514-1-mylene.josserand@bootlin.com/
+2: https://github.com/alistair23/linux/commits/rM2-mainline-cyttsp5-hid
+
+v10:
+ - Fix device tree binding errors
+ - Add commit message about defcofig cahnges
+v9:
+ - Fixup kernel robot failures
+v8:
+ - Rebase and resend
+v7:
+ - Fix device tree warnings
+v6:
+ - Use reg for the button properties
+v5:
+ - Address review comments from v4
+
+Alistair Francis (4):
+  Input: Add driver for Cypress Generation 5 touchscreen
+  dt-bindings: input: Add Cypress TT21000 touchscreen controller
+  ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
+  ARM: dts: imx7d-remarkable2: Enable the cyttsp5
+
+ .../input/touchscreen/cypress,tt21000.yaml    | 106 ++
+ arch/arm/boot/dts/imx7d-remarkable2.dts       | 100 ++
+ arch/arm/configs/imx_v6_v7_defconfig          |   1 +
+ drivers/input/touchscreen/Kconfig             |  16 +
+ drivers/input/touchscreen/Makefile            |   1 +
+ drivers/input/touchscreen/cyttsp5.c           | 902 ++++++++++++++++++
+ 6 files changed, 1126 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
+ create mode 100644 drivers/input/touchscreen/cyttsp5.c
+
+-- 
+2.37.3
+
