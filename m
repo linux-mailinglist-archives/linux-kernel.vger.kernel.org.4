@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2282460EAE4
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D24560EAE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233119AbiJZVe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 17:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
+        id S233454AbiJZVjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 17:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiJZVex (ORCPT
+        with ESMTP id S233512AbiJZViz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 17:34:53 -0400
+        Wed, 26 Oct 2022 17:38:55 -0400
 Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA51E1D65D
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:34:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7969A13A5AE
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 14:38:54 -0700 (PDT)
 Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
          client-signature RSA-PSS (2048 bits) client-digest SHA256)
         (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MyMXT2zJSz9s87;
-        Wed, 26 Oct 2022 21:34:49 +0000 (UTC)
+        by mx0.riseup.net (Postfix) with ESMTPS id 4MyMd94dPbz9t1g;
+        Wed, 26 Oct 2022 21:38:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1666820089; bh=mK3QrnEPLUpU6dHFP51aqQ6A2Mwbwznsppi0dUK+dZg=;
+        t=1666820333; bh=DR9ZuA2jI503i7m2Ln1EFsfaplZ1ceRDedCOBNN4phs=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QZOI114NIArbQbJ0bZ7rwElb3r1YLigD342ZVithOM433yAP/6AIKoHy23erpeygV
-         ilbY8AkaLnGZ7AwImfvhJiiO4hVwCx/L49PqoqPDWG78C1uvB4AsvPaqdNSsmB/DbP
-         4l6LhpGkkur/kAStPKwB1o+LhK6xCXmlAgVSCzS8=
-X-Riseup-User-ID: A767155213843DF22C00E5927121719B7D7796EFC684842424197403131875F9
+        b=mG6LZmEm7jARDa5Pr8FCii4i4uWlGV1DIs+YdODaxRUFX4xL3Z9XCDHCMVsznQMkL
+         MHhtvlvFoEf/j8WIGYpbxkPcbcvKU42IVj1HAHpvnxkzbOz0LGqknN9sDWK7AkY4Ip
+         rPMwhJbUiILlNOBb3Oqi4DenwE3pwF6FDwIus7iI=
+X-Riseup-User-ID: 1BFB477598C653AF8E841CA8C8FF5E3C505961834BD473209E07EF89D7C9BD7B
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4MyMXN4lYFz5vNH;
-        Wed, 26 Oct 2022 21:34:44 +0000 (UTC)
-Message-ID: <6bd861cb-1eae-7f02-719b-8babfe7185dc@riseup.net>
-Date:   Wed, 26 Oct 2022 18:34:41 -0300
+         by fews1.riseup.net (Postfix) with ESMTPSA id 4MyMd610VJz5vVd;
+        Wed, 26 Oct 2022 21:38:49 +0000 (UTC)
+Message-ID: <c542030e-feed-2e3f-1bcc-65b04fc1c210@riseup.net>
+Date:   Wed, 26 Oct 2022 18:38:38 -0300
 MIME-Version: 1.0
 Subject: Re: [PATCH] drm/tests: Add back seed value information
 Content-Language: en-US
-To:     Arthur Grillo <arthurgrillo@riseup.net>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
+To:     Arthur Grillo <arthurgrillo@riseup.net>
+Cc:     dri-devel@lists.freedesktop.org,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
         =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>, linux-kernel@vger.kernel.org,
         David Gow <davidgow@google.com>,
-        Daniel Latypov <dlatypov@google.com>, andrealmeid@riseup.net,
-        melissa.srw@gmail.com,
+        Daniel Latypov <dlatypov@google.com>, melissa.srw@gmail.com,
         =?UTF-8?Q?Micha=c5=82_Winiarski?= <michal.winiarski@intel.com>
 References: <20221026211458.68432-1-arthurgrillo@riseup.net>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@riseup.net>
 In-Reply-To: <20221026211458.68432-1-arthurgrillo@riseup.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
@@ -62,97 +62,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arthur,
+Hi Grillo :)
 
 On 10/26/22 18:14, Arthur Grillo wrote:
 > As reported by Michał the drm_mm and drm_buddy unit tests lost the
 > printk with seed value after they being refactored into kunit. This
-
-Some grammar nits:
-- s/being/were
-- s/kunit/KUnit
-
 > patch adds back this important information to assure reproducibility
 > converting them to use the kunit api.
 > 
+
+You should write you commit message in imperative form, like "Add back 
+this important [...]"
+
 > Signed-off-by: Arthur Grillo <arthurgrillo@riseup.net>
 > Reported-by: Michał Winiarski <michal.winiarski@intel.com>
-
-I believe that Michał's should come before your tag, as the SoB chain
-should reflect the real route a patch took as it was propagated to the
-maintainers [1].
-
 > ---
->  drivers/gpu/drm/tests/drm_buddy_test.c | 3 +++
->  drivers/gpu/drm/tests/drm_mm_test.c    | 4 +++-
->  2 files changed, 6 insertions(+), 1 deletion(-)
+>   drivers/gpu/drm/tests/drm_buddy_test.c | 3 +++
+>   drivers/gpu/drm/tests/drm_mm_test.c    | 4 +++-
+>   2 files changed, 6 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
 > index 62f69589a72d..83c8863bc643 100644
 > --- a/drivers/gpu/drm/tests/drm_buddy_test.c
 > +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
 > @@ -731,6 +731,9 @@ static int drm_buddy_init_test(struct kunit *test)
->  	while (!random_seed)
->  		random_seed = get_random_u32();
->  
+>   	while (!random_seed)
+>   		random_seed = get_random_u32();
+>   
 > +	kunit_info("Testing DRM buddy manager (struct drm_buddy), with random_seed=0x%x\n",
+
+DRM buddy manager (struct drm_buddy)
+
+seems a bit redundant to me.
+
 > +		random_seed);
-
-I'm getting some compiling errors here:
-
-ERROR:root:../drivers/gpu/drm/tests/drm_buddy_test.c:735:3: error:
-expected ')'
-                random_seed);
-                ^
-../drivers/gpu/drm/tests/drm_buddy_test.c:734:2: note: to match this '('
-        kunit_info("Testing DRM buddy manager (struct drm_buddy), with
-random_seed=0x%x\n",
-        ^
-
-You can reproduce it by running:
-
-$ ./tools/testing/kunit/kunit.py --kunitconfig=drivers/gpu/drm/tests
-
-Moreover, could you address the checkpatch issues? There are some
-misaligned parenthesis and the line are too big.
-
 > +
->  	return 0;
->  }
->  
+>   	return 0;
+>   }
+>   
 > diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
 > index c4b66eeae203..492347069d58 100644
 > --- a/drivers/gpu/drm/tests/drm_mm_test.c
 > +++ b/drivers/gpu/drm/tests/drm_mm_test.c
 > @@ -2214,6 +2214,9 @@ static int drm_mm_init_test(struct kunit *test)
->  	while (!random_seed)
->  		random_seed = get_random_u32();
->  
+>   	while (!random_seed)
+>   		random_seed = get_random_u32();
+>   
 > +	kunit_info("Testing DRM range manager (struct drm_mm), with random_seed=0x%x max_iterations=%u max_prime=%u\n",
 > +	random_seed, max_iterations, max_prime);
 > +
-
-Same here.
-
->  	return 0;
->  }
->  
+>   	return 0;
+>   }
+>   
 > @@ -2251,6 +2254,5 @@ static struct kunit_suite drm_mm_test_suite = {
->  };
->  
->  kunit_test_suite(drm_mm_test_suite);
+>   };
+>   
+>   kunit_test_suite(drm_mm_test_suite);
 > -
-
-There is no need to change this line.
-
-Thanks for your patch!
-
-[1]
-https://docs.kernel.org/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
-
-Best Regards,
-- Maíra Canal
-
-
->  MODULE_AUTHOR("Intel Corporation");
->  MODULE_LICENSE("GPL");
+>   MODULE_AUTHOR("Intel Corporation");
+>   MODULE_LICENSE("GPL");
