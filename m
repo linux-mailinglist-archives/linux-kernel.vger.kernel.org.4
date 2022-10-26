@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9D160E517
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E8F60E51D
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234243AbiJZQAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
+        id S234562AbiJZQAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234295AbiJZP74 (ORCPT
+        with ESMTP id S234366AbiJZQAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 11:59:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F552A449
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:43 -0700 (PDT)
+        Wed, 26 Oct 2022 12:00:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8960BF025
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666799983;
+        s=mimecast20190719; t=1666799989;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qgreuePZp+4AtHTNoAATRGXVf37qFz6VqTZ1TsIsSCk=;
-        b=B67Ui64x5q3x7RSkOesjOozZiCVPINYHtPt2+l55G8pXRj5t5Dl7jrh1F/JbgqN+BrcKdN
-        N7k0DPSUo8Rnjc42UF0mNM9pQmmq78OB9u9hxY9+ydXyu90kEyRm5e9Rbuu1Z2g2KHanqc
-        afw44j12x0mFv2HaSuqvofOm7yf8ksg=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TF2idh4cfIfrFOF9EVS0R3ai/ZWpJhhFk/BXprIYCn4=;
+        b=QYUUfs88OFE9U/EbEOpE0bBY6UgdrL3JutiAmiFTEbfaorjBJN/YzYynPBYLhC6rn3tvIk
+        0dw9dkwRSJYoZ/GMH1EdFY7mS4tv10wUKMD3+0muI1hbilG6IoL39T7JE1ZhOv7eBzytR8
+        /0NYoTjc8qCnnsnAwNrp6oW1V+aJv5Q=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-311-KwnlF-61N3WSE1q9gOnApg-1; Wed, 26 Oct 2022 11:59:41 -0400
-X-MC-Unique: KwnlF-61N3WSE1q9gOnApg-1
-Received: by mail-ej1-f72.google.com with SMTP id hp41-20020a1709073e2900b0078e07dbf280so4753067ejc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:41 -0700 (PDT)
+ us-mta-52-KFPqdEdDOKS2NnKWye_PeQ-1; Wed, 26 Oct 2022 11:59:45 -0400
+X-MC-Unique: KFPqdEdDOKS2NnKWye_PeQ-1
+Received: by mail-ed1-f69.google.com with SMTP id m7-20020a056402430700b0045daff6ee5dso14245434edc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 08:59:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qgreuePZp+4AtHTNoAATRGXVf37qFz6VqTZ1TsIsSCk=;
-        b=it26AbCjKzjltTR+X1EfXZiHpckU8w/g6mEp7fDe8L61MpX8zsZl7eJP1j2sDHd344
-         l1IKn2UXozN4sF4GPhv6VOC93vbv0CiBkXUXcuh8sYTeqZt+Gk6HIFRpHgRJSQnmPvWk
-         UL6Y4vT9T3NuUBEgHWS4tmpYsgvTGBpC4CGjgp++Bx/Yu/HiIqxY5YNphxyjp6ppT6NN
-         rh6CR7f8rUJcq6jsyinuRI2Zfp77jqBCeKmlbInsoerdxjgz8swwmXlGKdpE+yN+RkBZ
-         Mv3ybp7jC58Lfiat1ReYkBLKdd4gKksXYpNDUTVokR6hy0roNIxvCD1In/XW8vRypf7Y
-         gA3A==
-X-Gm-Message-State: ACrzQf2PRsScbd5EvLhBW1+MNH5u0svqLuzpxmQNcQM9SST2FYfkoUT9
-        rb0Y+uKLzA2e8DfBrT5Ly1DGP7DlhqfE+VcqdeZmL+is3Aw0b6PaT+bV/sGtg4qOc4IvyewQTW8
-        fwYl4rSeCK5S5/+uMWWQXwEtd
-X-Received: by 2002:a17:907:6e18:b0:78d:b374:8989 with SMTP id sd24-20020a1709076e1800b0078db3748989mr37902973ejc.552.1666799980691;
-        Wed, 26 Oct 2022 08:59:40 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4nFY1b7F7PXIeIa9vbku1XcB89X6nlx28mnFIdln+HRp8pTaHGtsxr4DiRXOYLY2Ek4SMHlA==
-X-Received: by 2002:a17:907:6e18:b0:78d:b374:8989 with SMTP id sd24-20020a1709076e1800b0078db3748989mr37902957ejc.552.1666799980484;
-        Wed, 26 Oct 2022 08:59:40 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TF2idh4cfIfrFOF9EVS0R3ai/ZWpJhhFk/BXprIYCn4=;
+        b=QGhy6XT28ZLIgxXYM86LclKqyWuZtoHRxEAOQQZrufZAZ1c92zzWG1BJgBrScheziD
+         3kpIhR6mRp+YONRtewoVn19/vyUWi+aPF9UA0LJluUVey4FZM7ElIhIAP+xMY7DIM9FB
+         3hbwBLr6Z/QxmmaD4YVXz10WJoJ7wtVWDzkoDAoQZSu6T4fbP36hiPjjaA2dY7PVUora
+         B5WjzaZAqNQufypQhAXWVTGxDMZQ5usrD4+e1n19OthlKWQHsW9ZFFrxkCLDP9Ur6g/9
+         wdWjRtCXR5KJlu6S6+kh5O1rvARg4UJ3hE835Dp5xfVE8TV/nccj5+PiVLU4ojwswKKI
+         9SJQ==
+X-Gm-Message-State: ACrzQf0lB5c4o1GUtlJQyjNbFlepMhqM+uf3kFNLDrk5FPbxl7+tpWaU
+        7iZb+1YF8NpbxZpFHcaYZmGrYRhTTyoG1gMwBtLXLLq/4aGWN2el7g6fc9LYInYLkx13UXINQa2
+        Q96CbsTSlLmZ/2v9l7Bje4Qzv
+X-Received: by 2002:a17:907:96a0:b0:78d:dd45:a6d4 with SMTP id hd32-20020a17090796a000b0078ddd45a6d4mr38610050ejc.643.1666799984313;
+        Wed, 26 Oct 2022 08:59:44 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5ii8CCAKar6QQOlbxy2yn47jUIqPXJUP1rbe5ZDO3WgicXHPJpDAiPJobAr6N1Rie8IEkLUw==
+X-Received: by 2002:a17:907:96a0:b0:78d:dd45:a6d4 with SMTP id hd32-20020a17090796a000b0078ddd45a6d4mr38610038ejc.643.1666799984183;
+        Wed, 26 Oct 2022 08:59:44 -0700 (PDT)
 Received: from pollux.. ([2a02:810d:4b40:2ee8:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id m19-20020a1709066d1300b0078d4c72e2cesm3119035ejr.44.2022.10.26.08.59.39
+        by smtp.gmail.com with ESMTPSA id a29-20020a509b5d000000b00461c1804cdasm3876740edj.3.2022.10.26.08.59.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 08:59:39 -0700 (PDT)
+        Wed, 26 Oct 2022 08:59:43 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     daniel@ffwll.ch, airlied@linux.ie, tzimmermann@suse.de,
         mripard@kernel.org, liviu.dudau@arm.com, brian.starkey@arm.com
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-misc-next v3 0/5] drm/arm/malidp: use drm managed resources
-Date:   Wed, 26 Oct 2022 17:59:29 +0200
-Message-Id: <20221026155934.125294-1-dakr@redhat.com>
+Subject: [PATCH drm-misc-next v3 1/5] drm/arm/malidp: use drmm_* to allocate driver structures
+Date:   Wed, 26 Oct 2022 17:59:30 +0200
+Message-Id: <20221026155934.125294-2-dakr@redhat.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20221026155934.125294-1-dakr@redhat.com>
+References: <20221026155934.125294-1-dakr@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -76,43 +79,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Use drm managed resources to allocate driver structures and get rid of
+the deprecated drm_dev_alloc() call and replace it with
+devm_drm_dev_alloc().
 
-This patch series converts the driver to use drm managed resources to prevent
-potential use-after-free issues on driver unbind/rebind and to get rid of the
-usage of deprecated APIs.
+This also serves as preparation to get rid of drm_device->dev_private
+and to fix use-after-free issues on driver unload.
 
-Changes in v2:
-  - While protecting critical sections with drm_dev_{enter,exit} I forgot to
-    handle alternate return paths within the read-side critical sections, hence
-    fix them.
-  - Add a patch to remove explicit calls to drm_mode_config_cleanup() and switch
-    to drmm_mode_config_init() explicitly.
+Signed-off-by: Danilo Krummrich <dakr@redhat.com>
+---
+ drivers/gpu/drm/arm/malidp_drv.c | 20 +++++++-------------
+ drivers/gpu/drm/arm/malidp_drv.h |  1 +
+ 2 files changed, 8 insertions(+), 13 deletions(-)
 
-Changes in v3:
-  - Remove patches to protect platform device bound resources with
-    drm_dev_{enter,exit}, since this would leave the hardware enabled when
-    regularly unloading the driver e.g. via rmmod.
-    Instead do this in a later series, once we got drm_dev_unplug() in place
-    to deal with a regular driver shutdown.
-
-Danilo Krummrich (5):
-  drm/arm/malidp: use drmm_* to allocate driver structures
-  drm/arm/malidp: replace drm->dev_private with drm_to_malidp()
-  drm/arm/malidp: crtc: use drmm_crtc_init_with_planes()
-  drm/arm/malidp: plane: use drm managed resources
-  drm/arm/malidp: remove calls to drm_mode_config_cleanup()
-
- drivers/gpu/drm/arm/malidp_crtc.c   |  7 ++-
- drivers/gpu/drm/arm/malidp_drv.c    | 69 +++++++++++------------------
- drivers/gpu/drm/arm/malidp_drv.h    |  2 +
- drivers/gpu/drm/arm/malidp_hw.c     | 10 ++---
- drivers/gpu/drm/arm/malidp_mw.c     |  6 +--
- drivers/gpu/drm/arm/malidp_planes.c | 32 ++++---------
- 6 files changed, 48 insertions(+), 78 deletions(-)
-
-
-base-commit: e1e7bc481d49c3e3ada11029ce0d9b85a0a539d7
+diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
+index 1d0b0c54ccc7..41c80e905991 100644
+--- a/drivers/gpu/drm/arm/malidp_drv.c
++++ b/drivers/gpu/drm/arm/malidp_drv.c
+@@ -23,6 +23,7 @@
+ #include <drm/drm_fourcc.h>
+ #include <drm/drm_gem_dma_helper.h>
+ #include <drm/drm_gem_framebuffer_helper.h>
++#include <drm/drm_managed.h>
+ #include <drm/drm_modeset_helper.h>
+ #include <drm/drm_module.h>
+ #include <drm/drm_of.h>
+@@ -716,11 +717,13 @@ static int malidp_bind(struct device *dev)
+ 	int ret = 0, i;
+ 	u32 version, out_depth = 0;
+ 
+-	malidp = devm_kzalloc(dev, sizeof(*malidp), GFP_KERNEL);
+-	if (!malidp)
+-		return -ENOMEM;
++	malidp = devm_drm_dev_alloc(dev, &malidp_driver, typeof(*malidp), base);
++	if (IS_ERR(malidp))
++		return PTR_ERR(malidp);
++
++	drm = &malidp->base;
+ 
+-	hwdev = devm_kzalloc(dev, sizeof(*hwdev), GFP_KERNEL);
++	hwdev = drmm_kzalloc(drm, sizeof(*hwdev), GFP_KERNEL);
+ 	if (!hwdev)
+ 		return -ENOMEM;
+ 
+@@ -753,12 +756,6 @@ static int malidp_bind(struct device *dev)
+ 	if (ret && ret != -ENODEV)
+ 		return ret;
+ 
+-	drm = drm_dev_alloc(&malidp_driver, dev);
+-	if (IS_ERR(drm)) {
+-		ret = PTR_ERR(drm);
+-		goto alloc_fail;
+-	}
+-
+ 	drm->dev_private = malidp;
+ 	dev_set_drvdata(dev, drm);
+ 
+@@ -887,8 +884,6 @@ static int malidp_bind(struct device *dev)
+ 		malidp_runtime_pm_suspend(dev);
+ 	drm->dev_private = NULL;
+ 	dev_set_drvdata(dev, NULL);
+-	drm_dev_put(drm);
+-alloc_fail:
+ 	of_reserved_mem_device_release(dev);
+ 
+ 	return ret;
+@@ -917,7 +912,6 @@ static void malidp_unbind(struct device *dev)
+ 		malidp_runtime_pm_suspend(dev);
+ 	drm->dev_private = NULL;
+ 	dev_set_drvdata(dev, NULL);
+-	drm_dev_put(drm);
+ 	of_reserved_mem_device_release(dev);
+ }
+ 
+diff --git a/drivers/gpu/drm/arm/malidp_drv.h b/drivers/gpu/drm/arm/malidp_drv.h
+index cdfddfabf2d1..00be369b28f1 100644
+--- a/drivers/gpu/drm/arm/malidp_drv.h
++++ b/drivers/gpu/drm/arm/malidp_drv.h
+@@ -29,6 +29,7 @@ struct malidp_error_stats {
+ };
+ 
+ struct malidp_drm {
++	struct drm_device base;
+ 	struct malidp_hw_device *dev;
+ 	struct drm_crtc crtc;
+ 	struct drm_writeback_connector mw_connector;
 -- 
 2.37.3
 
