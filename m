@@ -2,123 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2493A60E274
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4543B60E27B
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 15:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbiJZNrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 09:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
+        id S233885AbiJZNsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 09:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233817AbiJZNq3 (ORCPT
+        with ESMTP id S233932AbiJZNsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 09:46:29 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0797FF9D;
-        Wed, 26 Oct 2022 06:46:17 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 3-20020a17090a0f8300b00212d5cd4e5eso2519930pjz.4;
-        Wed, 26 Oct 2022 06:46:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DS94dEp0e9NHK0r6We47z3gX45ynSmkIbkLaicVI9l8=;
-        b=GJUIllsYCyg7dI68FJOGWGtr4l/6Trz8Lgcs6kGbfQH+nB7VbuwI/iOdDzGkVFVOYL
-         B+lLtiJRg97boon6rTFBdW83CqYzJ+xCVcYXbREI6gVkCh+EbHAVgIGHhHYlmmLm0YpH
-         jfcMZqQLvuxM5NFomgpSGYBi9Ut2kb0ivhuo6IJYPhH1mswhSej7SV9ycA07TsO2ycbu
-         Bpzh0z/Hw4S6FNGdGFGQZtuE/wJY360jRt8iXpXHAk0XBTI4vfSYobBTjlscK2tKJHYK
-         GyS5e3+DvZXpM+EHqXT3Jo0Gvg12ENDTFalQd0yqNIlrvbWaC+in/SCi1BR9Sfo2Wt1u
-         hovA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DS94dEp0e9NHK0r6We47z3gX45ynSmkIbkLaicVI9l8=;
-        b=DiZlL0RjaqSdStKvjyH3dC8E8zAeCQvzTG/oHAIm5gZTRoFjB1lDW4f7ws5eqggk1x
-         Dg3iYyBi8tSohSYID0v2RYpan1f5aKhyZaskaXzq54qZe74FIGxr5vSGUJXsOvPZc55K
-         Zr1sutP1gp7Rzvz0BdGFjikl1E0rYe9W4i/wU+cRQK+IjUhVfQL/T8S4iRcF2eL4n64f
-         otee9K6/Jmq9R/d4Js8gWtyHtsgv4oJ2tJxVUxmhOnJ2rJq7h1jDmApFE91zeNqffPXG
-         vmUVjYD5MDOwPps2m0htYIwJjhzA5Ktvwi8SAD29suqTGNCNxdRdvTaWFRVR62Hp4ywM
-         ag7Q==
-X-Gm-Message-State: ACrzQf2uQE9mVbjYZwaQgDiV+1QefjL6ZrwDcly6wfwUwyyUAgy7Zjkd
-        zTRKg3FDmMppqQNQw++KfWw=
-X-Google-Smtp-Source: AMsMyM7s9x2+PNH3mrIKPeaHjt5Mzs/LCp1QFpv+GIrWqv5NSrC00ilnlFZ6ZnCZFFGbTQolmwXB2g==
-X-Received: by 2002:a17:90a:588a:b0:212:fa50:7dec with SMTP id j10-20020a17090a588a00b00212fa507decmr4404836pji.190.1666791976561;
-        Wed, 26 Oct 2022 06:46:16 -0700 (PDT)
-Received: from localhost ([36.152.119.226])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b001869f2120a4sm2945132plg.94.2022.10.26.06.46.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 06:46:16 -0700 (PDT)
-Date:   Wed, 26 Oct 2022 13:46:11 +0000
-From:   Wei Gong <gongwei833x@gmail.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v2] pci: fix device presence detection for VFs
-Message-ID: <20221026134611.GA361392@zander>
-References: <20221026060912.173250-1-mst@redhat.com>
+        Wed, 26 Oct 2022 09:48:00 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E672D105CCC;
+        Wed, 26 Oct 2022 06:47:30 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 679DE5C00D2;
+        Wed, 26 Oct 2022 09:47:29 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Wed, 26 Oct 2022 09:47:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1666792049; x=1666878449; bh=pnMK5XKDDG
+        c90XsqPqSH4CamFyR4mr2IljwezkbLwlE=; b=OjVqlYfYAfse9fEDEVNsG7dAAw
+        cfayJsp2QaqchCfykgEfBSRcSzBOfJc8dyyIryJKqBk0T1Mh80R6pWP8SPTfDU7L
+        rkddLPQwrr5KFSEDxXHEgsyigTTGexMfCtRA1Nep47CdUHmnP+F4y4wtlSLgmAu6
+        +CCg3cVMRoSeiTHbR4Xs6go8Uxg0JiVz1V9iyAA48raz9/Uqas7+KcjZYX0xTW58
+        0qBf0exCQBnGP3dxCPM2D2amVaoLDbEVILOQ9em2fAopwXivL1NWfdWMdlkQBDyE
+        eZ7scA3K8XO6GVrohkQ6ajaVSxmqRb6vgseQ5pNu9aX/azaNiULB15YU2gKA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1666792049; x=1666878449; bh=pnMK5XKDDGc90
+        XsqPqSH4CamFyR4mr2IljwezkbLwlE=; b=e0ojpbSFaPGgu05tGKEdWK/8umhX8
+        isfK08aqe28pqF0fwbTK+pC/yzDrNJUHCZesjSeOuqpN9JNHucB6vUFHa6Rjd/pQ
+        K8CBUdzv0OhG+Xek0bJqE0Oo7QYpczjD4YukH5yWXGWLHHGX/a0woJSZpKCBtEPp
+        bzYxbhDyCPJWokxpIBaz89Ot6zNo5ahyA5gCtGobvubekPHDnkOcCaZUoSxEVhQ8
+        uZGr0xNJLzQWWAKNIE1oRTm1hSsCY430fvvhvJcz9Vso4CWIRwuHup2ZRmMmHm3E
+        99xD5JwCV015ci/t+H7waDBIpjCyhEtL9jsPNJ0d5Y3STRQCdI/kR2Gvw==
+X-ME-Sender: <xms:cTpZYyRQKcpg-ouuho5GBk6tPzpqrNW_QOAGPm7XNDpRPdeyND6DhA>
+    <xme:cTpZY3yTvZLmynfSnxh_lYCnFyD_77ZF5dUZyku1UqD5MtJWO6u3AmXKnBDLF6xMg
+    UnJ04ioJnhPK5VHWps>
+X-ME-Received: <xmr:cTpZY_2L6UKPfe-PZVhQNXjYUpGkAR5yE0R5bZhuGZ71oiOtW_epaK_k2z5AY4X4UAzNxka1gqwJ6dgrnuB5RufWvoFl-bbTI__WrkEdULbdJA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtddvgdeilecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhufggtgfgfffkvfevofesthekredtredtjeenucfhrhhomhepmhgrgihimhgv
+    segtvghrnhhordhtvggthhenucggtffrrghtthgvrhhnpeeltdeifefgffetueehueefgf
+    dvtdfgjeegueetiedtteelieeftedtvefhlefgheenucffohhmrghinhepkhgvrhhnvghl
+    rdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:cTpZY-BUVQkLjmyPI9wetBjQ-G8gcB8KU824ZSQUQSz11a7OfzXe7A>
+    <xmx:cTpZY7gnWl7Xh_7izDGN3m3Y8v_cX5j4D7qDkUh-fuhraDvwRfF4nQ>
+    <xmx:cTpZY6rVmNrcSbmFuVuyc54ANH-LeVCGQprMdUwWOXiR-hdKNULs_A>
+    <xmx:cTpZY0bRilgFVh_H-YNqgNwskvJbEK1Za191LX1v-TfNKMAFeKhjwQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 26 Oct 2022 09:47:28 -0400 (EDT)
+From:   maxime@cerno.tech
+Subject: [PATCH v2 0/2] clk: Rate Request Tracing
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026060912.173250-1-mst@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAFE6WWMC/42NQQrCMBBFr1KydiRJo1ZX3kNcTNKxDZaUTtKClNzdwRO4+rwP//1dZeJIWd2aXT
+ FtMcc5CdhDo8KIaSCIvbCy2lqjTQdhegNjIWBaVsoFCmOIaYCLo057d2pdb5TMPWYCz5jCKIK0TpOU
+ Y8xl5s/vbjMSjz/MmwEN51eLqL32157ugTjNx0KiftZavzqfn0bGAAAA
+Date:   Wed, 26 Oct 2022 15:46:57 +0200
+Message-Id: <20221018-clk-rate-request-tracing-v2-0-5170b363c413@cerno.tech>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Cc:     Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1200; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=Ym/mQsI/sFoFqKKeo24pXbCH8MqSSbz1qd8rYqDzaQw=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMmRVsFtBg2Zv56piyZKzhbx9hA3WSewWd9wxZZsW8eAUzXs
+ fL87SlkYxLgYZMUUWWKEzZfEnZr1upONbx7MHFYmkCEMXJwCMJFzsxkZnpmUVPx/8iE+Yab9vJkrwp
+ p4nB3+fX72ct+U9TukRf8laDMyvJphu+wI91e9B6IBf/6aWckEz99Sl7TYJ+3i7QrnD/ozWAE=
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 02:11:21AM -0400, Michael S. Tsirkin wrote:
-> virtio uses the same driver for VFs and PFs.  Accordingly,
-> pci_device_is_present is used to detect device presence. This function
-> isn't currently working properly for VFs since it attempts reading
-> device and vendor ID. As VFs are present if and only if PF is present,
-> just return the value for that device.
-> 
-> Reported-by: Wei Gong <gongwei833x@gmail.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Hi,
 
-Tested-by: Wei Gong <gongwei833x@gmail.com>
+Here's a couple of patches to enable the tracing of clk_rate_requests as they
+are submitted to round/determine_rate.
 
-> ---
-> 
-> Wei Gong, thanks for your testing of the RFC!
-> As I made a small change, would appreciate re-testing.
+Let me know what you think,
+Maxime
 
-I updated your change and retested in my environment.
-It worked well and fixed my problem.
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: linux-clk@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-> 
-> Thanks!
-> 
-> changes from RFC:
-> 	use pci_physfn() wrapper to make the code build without PCI_IOV
-> 
-> 
->  drivers/pci/pci.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 2127aba3550b..899b3f52e84e 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -6445,8 +6445,13 @@ bool pci_devs_are_dma_aliases(struct pci_dev *dev1, struct pci_dev *dev2)
->  
->  bool pci_device_is_present(struct pci_dev *pdev)
->  {
-> +	struct pci_dev *physfn = pci_physfn(pdev);
->  	u32 v;
->  
-> +	/* Not a PF? Switch to the PF. */
-> +	if (physfn != pdev)
-> +		return pci_device_is_present(physfn);
-> +
->  	if (pci_dev_is_disconnected(pdev))
->  		return false;
->  	return pci_bus_read_dev_vendor_id(pdev->bus, pdev->devfn, &v, 0);
-> -- 
-> MST
-> 
+---
+Changes in v2:
+- Used a more optimal structure layout for the event
+- Added a commit log to the first patch
+- Link to v1: https://lore.kernel.org/r/20221018-clk-rate-request-tracing-v1-0-6f3aa0b0b9de@cerno.tech
+
+---
+Maxime Ripard (2):
+      clk: Store clk_core for clk_rate_request
+      clk: Add trace events for rate requests
+
+ drivers/clk/clk.c            | 32 ++++++++++++++++++++++++++++++++
+ include/linux/clk-provider.h |  2 ++
+ include/trace/events/clk.h   | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 77 insertions(+)
+---
+base-commit: 69a14e4a9d5a0e1ed73063e0d439c3cb33ce9829
+change-id: 20221018-clk-rate-request-tracing-74e80b4534d1
+
+Best regards,
+-- 
+Maxime Ripard <maxime@cerno.tech>
