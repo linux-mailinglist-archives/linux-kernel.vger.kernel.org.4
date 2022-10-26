@@ -2,125 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494C760E087
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87A5560E08C
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 14:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233753AbiJZMVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 08:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35264 "EHLO
+        id S233077AbiJZMXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 08:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbiJZMVS (ORCPT
+        with ESMTP id S232748AbiJZMXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 08:21:18 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E6B85597;
-        Wed, 26 Oct 2022 05:21:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 579231F8BE;
-        Wed, 26 Oct 2022 12:21:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1666786874; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=stwyNrefmhSrw8ppEzQNvMc29Kx0uiDfudCufTdmCGM=;
-        b=h4NGPvxQAvmYcOQAcqLhGHjHFLpeODtWyPXeWpOJ/M8Xb1AVRvurQrYS76hwRzaDG4wibb
-        rPherkc7CwQHQIMqW6AirPDBmhmF0N3JvYLy/JT1aQjl5blqf1AjnHUVZ0007JwCHx4XGx
-        oD0pqddYyE7kqh6rV9Xy+Yv4aejT4HA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 38F3413A77;
-        Wed, 26 Oct 2022 12:21:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id UMwBCzomWWOmPgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 26 Oct 2022 12:21:14 +0000
-Date:   Wed, 26 Oct 2022 14:21:13 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     Feng Tang <feng.tang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-Message-ID: <Y1kmOaXvzwRv/tza@dhcp22.suse.cz>
-References: <20221026074343.6517-1-feng.tang@intel.com>
- <dc453287-015d-fd1c-fe7f-6ee45772d6aa@linux.ibm.com>
- <Y1jpDfwBQId3GkJC@feng-clx>
- <Y1j7tsj5M0Md/+Er@dhcp22.suse.cz>
- <d17698d2-c1b5-9aa3-6271-838830d36cc5@linux.ibm.com>
- <Y1kTz1qjfsY1UBPf@dhcp22.suse.cz>
- <44e485d4-acf5-865d-17fe-13be1c1b430b@linux.ibm.com>
+        Wed, 26 Oct 2022 08:23:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F1908F240;
+        Wed, 26 Oct 2022 05:23:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F022623A;
+        Wed, 26 Oct 2022 05:23:13 -0700 (PDT)
+Received: from [10.57.2.24] (unknown [10.57.2.24])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B3563F71A;
+        Wed, 26 Oct 2022 05:23:05 -0700 (PDT)
+Message-ID: <62a7cafc-13d6-5341-0128-420db7d5da8c@arm.com>
+Date:   Wed, 26 Oct 2022 13:23:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <44e485d4-acf5-865d-17fe-13be1c1b430b@linux.ibm.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] sched/topology: Remove EM_MAX_COMPLEXITY limit
+Content-Language: en-US
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     Ionela.Voinescu@arm.com, Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220812101620.627838-1-pierre.gondois@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220812101620.627838-1-pierre.gondois@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 26-10-22 17:38:06, Aneesh Kumar K V wrote:
-> On 10/26/22 4:32 PM, Michal Hocko wrote:
-> > On Wed 26-10-22 16:12:25, Aneesh Kumar K V wrote:
-> >> On 10/26/22 2:49 PM, Michal Hocko wrote:
-> >>> On Wed 26-10-22 16:00:13, Feng Tang wrote:
-> >>>> On Wed, Oct 26, 2022 at 03:49:48PM +0800, Aneesh Kumar K V wrote:
-> >>>>> On 10/26/22 1:13 PM, Feng Tang wrote:
-> >>>>>> In page reclaim path, memory could be demoted from faster memory tier
-> >>>>>> to slower memory tier. Currently, there is no check about cpuset's
-> >>>>>> memory policy, that even if the target demotion node is not allowd
-> >>>>>> by cpuset, the demotion will still happen, which breaks the cpuset
-> >>>>>> semantics.
-> >>>>>>
-> >>>>>> So add cpuset policy check in the demotion path and skip demotion
-> >>>>>> if the demotion targets are not allowed by cpuset.
-> >>>>>>
-> >>>>>
-> >>>>> What about the vma policy or the task memory policy? Shouldn't we respect
-> >>>>> those memory policy restrictions while demoting the page? 
-> >>>>  
-> >>>> Good question! We have some basic patches to consider memory policy
-> >>>> in demotion path too, which are still under test, and will be posted
-> >>>> soon. And the basic idea is similar to this patch.
-> >>>
-> >>> For that you need to consult each vma and it's owning task(s) and that
-> >>> to me sounds like something to be done in folio_check_references.
-> >>> Relying on memcg to get a cpuset cgroup is really ugly and not really
-> >>> 100% correct. Memory controller might be disabled and then you do not
-> >>> have your association anymore.
-> >>>
-> >>
-> >> I was looking at this recently and I am wondering whether we should worry about VM_SHARE
-> >> vmas. 
-> >>
-> >> ie, page_to_policy() can just reverse lookup just one VMA and fetch the policy right?
-> > 
-> > How would that help for private mappings shared between parent/child?
-> 
-> 
-> this is MAP_PRIVATE | MAP_SHARED?
+Hi Pierre,
 
-This is not a valid combination IIRC. What I meant is a simple
-MAP_PRIVATE|MAP_ANON that is CoW shared between parent and child.
+On 8/12/22 11:16, Pierre Gondois wrote:
+> From: Pierre Gondois <Pierre.Gondois@arm.com>
+> 
+> The Energy Aware Scheduler (EAS) estimates the energy consumption
+> of placing a task on different CPUs. The goal is to minimize this
+> energy consumption. Estimating the energy of different task placements
+> is increasingly complex with the size of the platform. To avoid having
+> a slow wake-up path, EAS is only enabled if this complexity is low
+> enough.
+> 
+> The current complexity limit was set in:
+> commit b68a4c0dba3b1 ("sched/topology: Disable EAS on inappropriate
+> platforms").
+> base on the first implementation of EAS, which was re-computing
+> the power of the whole platform for each task placement scenario, cf:
+> commit 390031e4c309 ("sched/fair: Introduce an energy estimation helper
+> function").
+> but the complexity of EAS was reduced in:
+> commit eb92692b2544d ("sched/fair: Speed-up energy-aware wake-ups")
+> and find_energy_efficient_cpu() (feec) algorithm was updated in:
+> commit 3e8c6c9aac42 ("sched/fair: Remove task_util from effective
+> utilization in feec()")
+> 
+> find_energy_efficient_cpu() (feec) is now doing:
+> feec()
+> \_ for_each_pd(pd) [0]
+>    // get max_spare_cap_cpu and compute_prev_delta
+>    \_ for_each_cpu(pd) [1]
+> 
+>    \_ get_pd_busy_time(pd) [2]
+>      \_ for_each_cpu(pd)
+> 
+>    // evaluate pd energy without the task
+>    \_ get_pd_max_util(pd, -1) [3.0]
+>      \_ for_each_cpu(pd)
+>    \_ compute_energy(pd, -1)
+>      \_ for_each_ps(pd)
+> 
+>    // evaluate pd energy with the task on prev_cpu
+>    \_ get_pd_max_util(pd, prev_cpu) [3.1]
+>      \_ for_each_cpu(pd)
+>    \_ compute_energy(pd, prev_cpu)
+>      \_ for_each_ps(pd)
+> 
+>    // evaluate pd energy with the task on max_spare_cap_cpu
+>    \_ get_pd_max_util(pd, max_spare_cap_cpu) [3.2]
+>      \_ for_each_cpu(pd)
+>    \_ compute_energy(pd, max_spare_cap_cpu)
+>      \_ for_each_ps(pd)
+> 
+> [3.1] happens only once since prev_cpu is unique. To have an upper
+> bound of the complexity, [3.1] is taken into account for all pds.
+> So with the same definitions for nr_pd, nr_cpus and nr_ps,
+> the complexity is of:
+> nr_pd * (2 * [nr_cpus in pd] + 3 * ([nr_cpus in pd] + [nr_ps in pd]))
+>   [0]  * (     [1] + [2]      +       [3.0] + [3.1] + [3.2]          )
+> = 5 * nr_cpus + 3 * nr_ps
+> 
+> The complexity limit was set to 2048 in:
+> commit b68a4c0dba3b1 ("sched/topology: Disable EAS on inappropriate
+> platforms")
+> to make "EAS usable up to 16 CPUs with per-CPU DVFS and less than 8
+> performance states each". For the same platform, the complexity would
+> actually be of:
+> 5 * 16 + 3 * 7 = 101
+> 
+> Since the EAS complexity was greatly reduced, bigger platforms can
+> handle EAS. For instance, a platform with 256 CPUs with 256
+> performance states each would reach it. To reflect this improvement,
+> remove the EAS complexity check.
+> 
+> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+> ---
+>   Documentation/scheduler/sched-energy.rst | 37 ++--------------------
+>   kernel/sched/topology.c                  | 39 ++----------------------
+>   2 files changed, 6 insertions(+), 70 deletions(-)
+> 
 
-[...]
--- 
-Michal Hocko
-SUSE Labs
+The patch looks good for both: documentation bit and code removal.
+
+We have a new safety checks inside the Energy Model during the setup
+of EM for perf domian, even a more strict and precised (32bit arch or
+64bit arch) to no overflow in our calculations (when we estimate
+energy). This is documented in the Energy Model, so IMO you can easily
+drop this paragraph as the patch does. The same applies to the checks
+in the code.
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+
+
