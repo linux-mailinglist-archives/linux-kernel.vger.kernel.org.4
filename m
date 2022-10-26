@@ -2,180 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA00360DC05
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD1160DC0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 09:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbiJZHWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 03:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
+        id S233006AbiJZHXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 03:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiJZHWS (ORCPT
+        with ESMTP id S232924AbiJZHXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 03:22:18 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEE0E57BD1;
-        Wed, 26 Oct 2022 00:22:14 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8AxDdkl4FhjTo0CAA--.9934S3;
-        Wed, 26 Oct 2022 15:22:13 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxLeAh4FhjNzEFAA--.19404S2;
-        Wed, 26 Oct 2022 15:22:09 +0800 (CST)
-Subject: Re: [PATCH v2 2/2] dt-bindings: soc: add loongson2 guts
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        zhuyinbo@loongson.cn, Arnd Bergmann <arnd@arndb.de>,
-        Hector Martin <marcan@marcan.st>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Sven Peter <sven@svenpeter.dev>, loongarch@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221025035128.21068-1-zhuyinbo@loongson.cn>
- <20221025035128.21068-2-zhuyinbo@loongson.cn>
- <7c67c721-685a-fa0e-ab4b-41b7de3ea0a0@linaro.org>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <52de60bd-8aa5-a461-9bca-ce8e6f82ead8@loongson.cn>
-Date:   Wed, 26 Oct 2022 15:22:09 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 26 Oct 2022 03:23:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459EFAC393
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 00:23:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666769030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/57zO14tKIKGiNB71iEufewLL5Xzf0HGWHVNOYYvEjw=;
+        b=XCcoAZug2vieLz6h+70bbuFudRcm3uu9D32qV+Fhh30xxi6O/bXI0P27v/b6tX38CIgHEK
+        ydn82OoeAn+gDzclPPWkhhpjf0jtfD9NhTYRYGBOwtckoy+uPpDO1Uab0oZHJehBo+ee/O
+        5n7LAedVM3XXAWjap+psJzKq2hJqY4s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-500-ZNgQvMONPnewK8x-4MJpNg-1; Wed, 26 Oct 2022 03:23:44 -0400
+X-MC-Unique: ZNgQvMONPnewK8x-4MJpNg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43FDC185A7AF;
+        Wed, 26 Oct 2022 07:23:37 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E7BB9111F3B6;
+        Wed, 26 Oct 2022 07:23:32 +0000 (UTC)
+From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
+To:     kvm@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Bandan Das <bsd@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v3] KVM: nVMX: Advertise ENCLS_EXITING to L1 iff SGX is fully supported
+Date:   Wed, 26 Oct 2022 03:23:30 -0400
+Message-Id: <20221026072330.2248336-1-eesposit@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <7c67c721-685a-fa0e-ab4b-41b7de3ea0a0@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxLeAh4FhjNzEFAA--.19404S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWFy7ZF43WF4UuFyUJF1rCrg_yoW5Kr13p3
-        WxCFW5KFWvqF129wsIq3WxAF13urZ7C3WDWr9rJ3429FyDCasaqwsxKas8Za1xJr97WFW2
-        9FW0g3yF9F4DAFJanT9S1TB71UUUUbJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bq8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUciL0UUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Clear enable_sgx if ENCLS-exiting is not supported, i.e. if SGX cannot be
+virtualized.  This fixes a bug where KVM would advertise ENCLS-exiting to
+L1 and propagate the control from vmcs12 to vmcs02 even if ENCLS-exiting
+isn't supported in secondary execution controls, e.g. because SGX isn't
+fully enabled, and thus induce an unexpected VM-Fail in L1.
 
+Not updating enable_sgx is responsible for a second bug:
+vmx_set_cpu_caps() doesn't clear the SGX bits when hardware support is
+unavailable.  This is a much less problematic bug as it only pops up
+if SGX is soft-disabled (the case being handled by cpu_has_sgx()) or if
+SGX is supported for bare metal but not in the VMCS (will never happen
+when running on bare metal, but can theoertically happen when running in
+a VM).
 
-在 2022/10/26 上午3:40, Krzysztof Kozlowski 写道:
-> On 24/10/2022 23:51, Yinbo Zhu wrote:
->> Add the loongson2 soc guts driver binding with DT schema format
->> using json-schema.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   .../soc/loongson/loongson,ls2k-guts.yaml      | 37 +++++++++++++++++++
-> 
-> Looks like wrong location, although difficult to judge because you did
-> not describe the hardware at all. If this is chipinfo-like device, then
-> Documentation/devicetree/bindings/hwinfo/.
-My guts driver is refer fsl platform. It was was to manage and access
-global utilities register block for SoC and it was only used in SoC
-platform. when driver need use Soc ops to do some function the this 
-driver was needed.  the dcfg (device config) was a function in guts 
-(global utilities) block.
-For these type of driver, other platforms were initially placed on
-Documentation/devicetree/bindings/arm/   if it is arm/arm64
-architecture. Later, move it to the soc directory.
+Last but not least, KVM should ideally have module params reflect KVM's
+actual configuration.
 
-Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
+RHBZ: https://bugzilla.redhat.com/show_bug.cgi?id=2127128
 
-So, do you still think it is inappropriate to place it in the soc dir?
-> 
-> 
->>   MAINTAINERS                                   |  1 +
->>   2 files changed, 38 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
->> new file mode 100644
->> index 000000000000..2502f8aeb74d
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-guts.yaml
->> @@ -0,0 +1,37 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-guts.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson2 GUTS driver.
-> 
-> Drop "driver." unless you refer to some hardware (like motor driver?).
-this need refer hardware soc datasheet to gain soc register (global 
-utilities register block ).
-so keep "driver" string that whether was more appropriate?
-> 
->> +
->> +maintainers:
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +description: |
->> +  GUTS driver was to manage and access global utilities block. Initially
-> 
-> Drop "driver" and describe instead what is GUTS, including its acronym,
-> 
->> +  only reading SVR and registering soc device are supported.
-> 
-> Entire sentence describe Linux driver - drop it. Instead describe the
-> device, the hardware.
-> 
->> +
->> +properties:
->> +  compatible:
->> +    const: loongson,ls2k-guts
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  little-endian: true
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    guts: guts@1fe00000 {
-> 
-> Node names should be generic.
-dcfg/scfg (device cfg/ soc cfg)was the key function of guts (global 
-utilities) block. and guts name I was refer fsl soc driver. 
-"drivers/soc/fsl/guts.c"
-this binding file was follows of fsl guts.
-Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-dcfg.yaml
-Documentation/devicetree/bindings/soc/fsl/fsl,layerscape-scfg.yaml
+Fixes: 72add915fbd5 ("KVM: VMX: Enable SGX virtualization for SGX1, SGX2 and LC")
+Cc: stable@vger.kernel.org
 
-or, I was use scfg as node name, Do you think it's appropriate?
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Suggested-by: Bandan Das <bsd@redhat.com>
+Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ arch/x86/kvm/vmx/vmx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-
-> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 9dba04b6b019..ea0c65d3c08a 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -8263,6 +8263,11 @@ static __init int hardware_setup(void)
+ 	if (!cpu_has_virtual_nmis())
+ 		enable_vnmi = 0;
+ 
++	#ifdef CONFIG_X86_SGX_KVM
++		if (!cpu_has_vmx_encls_vmexit())
++			enable_sgx = false;
++	#endif
++
+ 	/*
+ 	 * set_apic_access_page_addr() is used to reload apic access
+ 	 * page upon invalidation.  No need to do anything if not
+-- 
+2.31.1
 
