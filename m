@@ -2,373 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD0E60EB0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4595960EB14
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 23:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233682AbiJZV55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 17:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
+        id S233681AbiJZV7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 17:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233772AbiJZV5k (ORCPT
+        with ESMTP id S233160AbiJZV7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 17:57:40 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2099.outbound.protection.outlook.com [40.107.247.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEF1B5FC7;
-        Wed, 26 Oct 2022 14:57:35 -0700 (PDT)
+        Wed, 26 Oct 2022 17:59:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B03270E;
+        Wed, 26 Oct 2022 14:59:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666821573; x=1698357573;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=tlG5sdvuZ5ZKe0jpbm36GuBCWoJXGHGl2a7+gow4d3E=;
+  b=QsjhdZ0b4UAVvAr8zubgza4n90I0xL+14lpGnk+L8XwoZcYcJAEyycyt
+   UEtTm/0alzACvFq540So4RJnjCEUH6vUv/fwLENd2cOHg521XaltofOIp
+   2tVpqejl1SGQhTSLB2x+VjPqPa4fXLUWoW7waDc4n6/e24DdeWHmnBJsu
+   jj44KdFC6QEFXZ/kdtCEvwZeBVX6jHOacYzwvCNzoine0vieROpOtmr8i
+   eAP/EStbUO8iuAVMaM0RxpObGSWirIor2q1agta8oda1NzIaK1TpDad0q
+   solL1zRsZ8k/vVDbWT/TdzLOxoZWJXVdAmS9V3gjyeY+cSNq9EF5xhtjQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="306800215"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="306800215"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 14:59:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="695547881"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="695547881"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga008.fm.intel.com with ESMTP; 26 Oct 2022 14:59:30 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 26 Oct 2022 14:59:30 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 26 Oct 2022 14:59:29 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 26 Oct 2022 14:59:29 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TMGVF1s+IvznZfzBx2xbSKg6bCg8vauNnCswFmkUj+VDDeOqCxnmwjY1bjPOmXeWsr470gl8jJha7wqjYVTdTuvrcVJ4RiXA80tdkTnn4sY/HYOtP0loJaJdpdUdNd9R3jXZOlMhw2Mr8sFW37FAjIDfKixm+ytiQt23Dktu9ESl0GaDJoQNY5ODf2L02bvWf30G4IL0z3t32gPxy/aNhnjHsmM0xM/nIgM5DqYf1q5Fi49akhWBNPW53iwDKmA1+BnqjF5/lTYJzjMBYjIt793aOY/2RIO4aGQ/y1sx1JyIxXf8YaA1sEjnRwgPtvXcuMlSA/vEBQg+q718AIKOxQ==
+ b=We/zM9OqwluaKh/Ez5rsoV71Pbk3td3gQg8sl//MF77UaoM10E64v/OajKE3fN9rT9LsUFL9vbKVB1/VpScvpaRRCc61g6YNEfcudxuK/mptEMfK8qqKRWxsxPrSn4ZM1wx9obDKlgZWETAugFJwoqx8eiteZCaPYuJ1J66tXA5niG6k0w8O35ozjyTq/RyglKvE+rPhwUd2iT23qVZXcWojLlCivlLc8DWwwwSTZIVEzZUMjgoGg3UxfuTTsoJQf2G7lJX+QWMuzngkosoHqP+7w2kZcGl/ySRqlZUBIwqb8DNfaGgRLxU3uO0+A0y9FwGRfvHV/gVUwb0cz1oCyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MVTpKpJ5aSQsXLfuLBcGt2L9XOl29rRIsDL0OJJST5k=;
- b=QMP4qV7u4OxYgxZ5JxOJksmiZ30bsravVkq8OIiXUPiYxGa3iz6vp8NYvvgItyUJeX2El75OYitISb6VheBWy52at9QJcM1e1Fzfx8kY1eQrVSWDbZi79miRggtSFbQQWhDQrHoKZGB+W6+thkGhaDfgDn3EeZ3uR/5OVXzVhkRRw5tYz7oEn8fveXsxF240i5FqXYw2xnEZWlEH0IqmM3iFxEOUJXiaJXlzWgSlc+5blySrAbjchB/0hQ8mE3QjbX8lUoOjlzNpxD9ZLGZfDXuPEiaXNJgrfbm4wwZZQDl7mcHG9Xi6mdWQi7dF98zGndVCti0kodhoTbItDIIgnw==
+ bh=tlG5sdvuZ5ZKe0jpbm36GuBCWoJXGHGl2a7+gow4d3E=;
+ b=UYGaKqWvP/tSgqGVh7BiaxVDQvJ8g9SdjWwgPawZe3nGAHTsD3BHylxpzC+3H2SOrW8Nfv+mvK7VXF1WEj79KlD9dQmOQFOBI1kq5Rm2hL//qzvKOcPZLoeScs8ZphpX1g6nSDzOkXFNpbk+ntU4TSzi8ZidPpcNmGE5RgQW8BGAz9GU7XrxQfGD9LdZzP39L5rOSl8WRRTYkTPeWSuWm2l1HsZwI0GFYb11R6ubifLD6rcRWdbytkSfL2/K+C4EPYcEglMAysuFp1coRVA5KwByUpOyWSUJgVnNXNGAa0Y3moqFZ6Cl6FTA+rrB+lcGDkZzikhL7evDLK8Ecl4nSw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MVTpKpJ5aSQsXLfuLBcGt2L9XOl29rRIsDL0OJJST5k=;
- b=dTaeQz5DUpivklaHZPp0iMMui6Y0hKq8WN/WyuXvmgsGRvnyIjXPYuMVQ7K5kqse2FDg9c+ZtYEIvOxfmx2wp34HHBVg18oKd/2rd0+ZKlG3eJiywVEwrswe6n3D1lSMQJf0CC5Led+4ZJkwJka5ITmWSPIH2engLYn/XHHBWCw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
- by DU0P190MB1828.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:34c::19) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
+ by MW4PR11MB6788.namprd11.prod.outlook.com (2603:10b6:303:208::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Wed, 26 Oct
- 2022 21:57:31 +0000
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::2b03:a6ec:3529:b969]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::2b03:a6ec:3529:b969%5]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
- 21:57:30 +0000
-Date:   Thu, 27 Oct 2022 00:57:28 +0300
-From:   Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: Re: [PATCH v5 1/2] dt-bindings: mtd: marvell-nand: Convert to YAML DT
- scheme
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Elad Nachman <enachman@marvell.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <33f04b06-dc00-b7ce-6a24-2282608b40dc@linaro.org>
-References: <20221026134545.7146-1-vadym.kochan@plvision.eu>
-        <20221026134545.7146-2-vadym.kochan@plvision.eu>
-        <33f04b06-dc00-b7ce-6a24-2282608b40dc@linaro.org>
-Content-Type: text/plain
-X-ClientProxiedBy: FR3P281CA0077.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1f::10) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:802:38::26)
-Message-ID: <VI1P190MB0317C739E2D39427CD2A771D95309@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+ 2022 21:59:27 +0000
+Received: from MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::99f8:3b5c:33c9:359a]) by MWHPR11MB1392.namprd11.prod.outlook.com
+ ([fe80::99f8:3b5c:33c9:359a%4]) with mapi id 15.20.5746.028; Wed, 26 Oct 2022
+ 21:59:27 +0000
+From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+To:     "fweimer@redhat.com" <fweimer@redhat.com>
+CC:     "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>
+Subject: Re: [PATCH v2 01/39] Documentation/x86: Add CET description
+Thread-Topic: [PATCH v2 01/39] Documentation/x86: Add CET description
+Thread-Index: AQHY1FL/9ZOrfh44YkS3ARV6MT/4g64HnGzRgABKE4CAAt11coACKNeAgBR2/AA=
+Date:   Wed, 26 Oct 2022 21:59:27 +0000
+Message-ID: <d780cf636f78688435fa943c2c1d9655c9c33365.camel@intel.com>
+References: <20220929222936.14584-1-rick.p.edgecombe@intel.com>
+         <20220929222936.14584-2-rick.p.edgecombe@intel.com>
+         <87ilkr27nv.fsf@oldenburg.str.redhat.com>
+         <62481017bc02b35587dd520ed446a011641aa390.camel@intel.com>
+         <87v8opz0me.fsf@oldenburg.str.redhat.com>
+         <cc1838888e9da64415331e6f7d83965b553daae7.camel@intel.com>
+In-Reply-To: <cc1838888e9da64415331e6f7d83965b553daae7.camel@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|MW4PR11MB6788:EE_
+x-ms-office365-filtering-correlation-id: 47a182df-8f8d-442f-9ea1-08dab79d5a10
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tTvfzivdSAMaV2LVXsCEaWXvsNZEX1BJnUpgQL3D++n0N7jgXpgXvF3dltGVpaZ2ebS7PIxY9Yv7V087nV+vEGmrmLgcC0RUequOJeOMjbBZ75QCOy1TVYDJavevX2ywGgv1t836UFrCIs5DqqXOjhQ3praxayZ/NvEBy9a7okZ+NkOPkAVpft+Suc9zw27M3nrnHO82tWoITUqoJ7ymw4LYPyo1UQvBTQx4GNtkvu4q1jTUDBeCa9t0B+TuRzEXAFjycs27y06odJuH7dBi8YUM8yUEC+UFZ9TYmh/VGUUpfInzS7jWPnPcK8npLgg2a0TnuImfiXpN0enuDWZci56RVln3UMVkSQDtEJLPer84ejSU4Ws+zmjUZNbHqh8DURjVZaR/t5dS10u1p0LleuwYg5dwBrqnt0rYD0i/8NOUxwMOYHbaS+Lv3jo21ThFc+g2T2wNKP+jOLBc1IXWT0mb/eH1WF7JNdHKGInPrIsBVTkTiM1VivrM8hNniQWr7dWsPxCNiLFse4Le+DRxcmlOSgobsVurA7iP6J5eY5RG8R39/6Ro++l6L/RH9WZTpjnzWmjaPNbt7qtqpfaJuga0eBK9xkNvsuqUPW1oQoQgGeJQVUkN8iT8I/Pst9g04kGPR6KGlG28Wq35IAzBiGYH4ESA//OHeBk1en2MbNDaGUW8YewLPePd3rpa5WMKX8oYeapimwjxaLwG8DpsTRF95ZnxUyipQNLQUmSp/TPLx3O4aZKFK+XSsDExquqIUWrRMkaMxrssOarC22R0OhmiVp7yOi+UQeZ3j9yIpls=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(39860400002)(396003)(346002)(136003)(451199015)(38070700005)(54906003)(71200400001)(6916009)(82960400001)(5660300002)(38100700002)(122000001)(316002)(76116006)(66946007)(91956017)(66476007)(6506007)(8676002)(8936002)(41300700001)(86362001)(66446008)(66556008)(4326008)(6512007)(26005)(478600001)(186003)(83380400001)(2616005)(64756008)(6486002)(4001150100001)(7416002)(7406005)(2906002)(4744005)(36756003)(99106002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MVBNTFNMd2ZtSHFtc1lLeDk2cFRKWEpXM2o2WTJBNFh5ODZBSjliUWRzRlFL?=
+ =?utf-8?B?OG9EUE9UM3Z4WWIwQWlldHpyWm05SHUyK2h0SDgwYmwxZ250UEZybzgzVzBQ?=
+ =?utf-8?B?VERyM3Z2KzJDMnVDTWJlYm9XOEU5MjZBNml0SndVeTdCUFQ1TnBmWnRUK2Rp?=
+ =?utf-8?B?bDZVS0o4TE1uNUxHZnZuVkVYUld2NGhsL1Ztb1dYNlRWVDVENUJTWW5ZMWNU?=
+ =?utf-8?B?SWJwbXlJQVU5OTJTemVVMEdtZDFQSHA4U1FsWGE2S3h5b2ViVFJSWE0ycitm?=
+ =?utf-8?B?SERyWDNRV2RObzVpekEyRjh0Ukt5REpWZXNISUxjclpmVVdoUklkdGFZeElj?=
+ =?utf-8?B?UXVnRWpNVXFHY3RKTjFHR0RGYWVzRlB5NmZBeFR2U3htLzFnRFNYZ01SbFhJ?=
+ =?utf-8?B?TWYwbkFTUlk3WEgvVkYvaDlpWEpuT0p3ZnJDbmExaXMrWUp2VUlBZ3RKZVdE?=
+ =?utf-8?B?bTYzNFBEVENyYTNZTjFFYTNvSzFkUTdJcFh4NWtHak5lQ3dpN3MwK25WNG9S?=
+ =?utf-8?B?bjNoMnlBVEdQSSsxMkZJc1R1WmNSWmNGSDFEdkVFQjRrZDRCak4rUEZ2VVNs?=
+ =?utf-8?B?Q25oSHROc1I5aG1acTVScUNjRmk4d003TE5XRzJUN2tPSjhHcWtrY0U3b3ZE?=
+ =?utf-8?B?QjdkcTRBalVYaEp0aXpNNXJMMWhOVHkrNXVkMi9wd1N5TkF1aUdkNmQ4MVA3?=
+ =?utf-8?B?STlTd05TYW0rMGhuOWlsbG9EL2MxNnNLZUkxbXgzZVZRRTBmN2ZZcEd1elp2?=
+ =?utf-8?B?c2Fkc1BXR2dIdzF5OFN6dXFIbzRyTUYxS1I0YWhzYzI2WGJjQmtEbWVkOGlu?=
+ =?utf-8?B?THMvVE8xdERlTmg4V0U3bXYwNDhlaG1xL2ZYRTJkTHFjVDVHdW9FVi9WbXNS?=
+ =?utf-8?B?c3pVVzZQbWxFeWFVMmJHay9tL2RZU2ZnVEtXYXFZaWRrWGRnWnlzZHptNUFu?=
+ =?utf-8?B?UEpjQjFScnFhT3FwSTl2WlJ0TlZSOENZYURxOUV1U2hvcmp5MkQvSEhINWZJ?=
+ =?utf-8?B?aUJLNlRMckhoYXc4YlhJSzlRSHlJVkRhM3RtSklsY1YyL1Qwcm1jRGNaMjI2?=
+ =?utf-8?B?WEtadHNudDVBNFdjL2EvNUJUQW9mWXh6SU5jOUZzdDM5YXRTcXhQZDMwV0ZF?=
+ =?utf-8?B?MDVXRml5SDlTa1pWZ3F4eGlYYnY5ZUtXVUxybGpGOU1wcUdIQmNFY1JNSWVS?=
+ =?utf-8?B?R0JYNi9admFtVGMxNmZ2TnRWU2RPS0FNMEF0NmJzTVNoV2JIV0xhdzhFSjRu?=
+ =?utf-8?B?RDR4VVROWGpLRHdHSEFpUjN6ZCtjcGFGRzBHeDQrcUkzNElXY1BXZ3Y3M2h2?=
+ =?utf-8?B?Sk5Ibld1citnWko2bExHYUt2M25uNnpBazJRRWd3V1hEQnV0dVpPUWNLY3JF?=
+ =?utf-8?B?NkR1ZWVGNmViL1ZCdkFMVWJSVzFaMlZmTXkyT2tPbEVoVGhKL0h4NXhvdmhn?=
+ =?utf-8?B?K095ZlpHWWxqTWhJd1VxN3pHM1Z4R3VEUHVnY3p5NVh5aXJVMjE1ZzRKQ1RU?=
+ =?utf-8?B?TFhPaDVjQ2cySVNhZmordnp6OEZRSmpDZUQzZitWemthZGJuUHY4K0xISTNO?=
+ =?utf-8?B?Q2RodFpSN3FFYldOSmJ4K2xuZEhmZGUzVndOR2FnQmcxa3RHOFpNT08yVFBY?=
+ =?utf-8?B?VkJUZDdGN1FsNzZ1ekpROHNndnU3QmV5K2I4L3VhZUM5ejdSaW5wSStlRkI1?=
+ =?utf-8?B?N293Ykl6d2h4SS9BSkZLQm9QZjR1anJuQ0hBa1dkVzVRYjBQZlNkQWhIdXJZ?=
+ =?utf-8?B?bmg3UHExS1BUdHBMUDB4WStDS0U3eEFIWm5pcHJEZUlPUW9EOFZSenNFYmx5?=
+ =?utf-8?B?dVorNzNFcWJrbTVpRWpkZTdhRXhKNXJWVDNsWXJ0Yytid3NLMTdrUG4xVjRZ?=
+ =?utf-8?B?Zmp4SkRMQTAyVFpFdXhWeXE3cmlaOHN5SjZGeDBBOXo2UzgyYmY0Qk56b3dT?=
+ =?utf-8?B?L0tMVitmL3NmUzRxUnpyZmxBL0d2Z0Z6em9iUVdyTEEvSHhNaHJwS1NoUmxl?=
+ =?utf-8?B?RUxWT3BxRlNRMHowZS9nL0I1UldybWRCYVFuS0h6d3AxVDhlRHVVb1E2MjQz?=
+ =?utf-8?B?UzFLbGZhWVhac0dsNjVveUhpMjdsZkJ2M0ZTWE1KMjJnUWdwYW91RXFselRr?=
+ =?utf-8?B?R1pNcERMcDlXb2ZmMzZPVWZwU0prTVBiZU9UdnE3ZGRGVmw3SUNNSzBndm9D?=
+ =?utf-8?Q?C+nTMSYDCUtOVSd4uSgy5Fw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <72DA8DB2B6A9A84FAA7DCBBA8D742202@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P190MB0317:EE_|DU0P190MB1828:EE_
-X-MS-Office365-Filtering-Correlation-Id: 272f621a-0678-4fa1-da36-08dab79d1452
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mATtxBbCeTOvjkuaw7eqaAAUHXm6n6uB9O5A1AOwRpQ0zaRfGwoyd2AK14/WNjUDzWZnbyvD7gSVFV5X2s7pET1ckYp44GhMRgfBNZ/VgcLakBwofseshfnl2zhCtqSRx0NCQQlzxe+pX8pLZZjO5KaS1zS3L1kV57MPEurQQCm4i7Vh5f3LtdtSj5FkqhrqzjigjVZyty3OozfqZFv+w1XGEkPY6q8kcMoK7O63lEgJ0kBXEJz6jIUex34uZnnbcfwhiCbOAMBbNqxKp2g9Ooq3nvFwbhvZP0ZZCrLy3H1pwWW1oXqTLH6fuVdWBYbWFD+6Y8O10BURbe7vtnsqcpGKdDYl+KPHehc3uZ9BFoOIwrT2rEZQYAIe05t+NQ1aTxwM8FdUX2+q+AlIpxalJSYS/iRLFqXBRyEaM5yWEu2WInuA8ZOuV52WpGkxjbu92FNUBJ7v8t3yv0hmUIbQK+9PHruKhlyeFGdDClrsvP5lnD01lVmLvubgUTAi2zfCX+AZiLZA421iUahuua4pl8blUcOIW0tbzPtiEIG5xW3sstdIT+FN5KpnFjRxKbXmvAIDdCjWUh3cGYbobF5qG7CegDKGAqs38ivB8dvfV/QIEtJdjPlJB1aF7ucgu1sbi7PqnyhI0OGViqFkqapq7QfFyXnquxm1wdd1GApBtNKOd4B4/BQNZL3ZAhKS6ngzDK9hmoLA2Y5+0lPh2Kag3cDqK4u8ZKwHLa4692zllIyPmwSxJQGjODbCwzl4biXCmwT282or6SUg0OzyXilI4ai5VJXN5twHUW61yFdzRbb210onPsxYOB+Nqp9wJBf/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(34036004)(376002)(39830400003)(366004)(346002)(396003)(451199015)(8936002)(5660300002)(186003)(41320700001)(7696005)(66946007)(4326008)(54906003)(66556008)(2906002)(86362001)(66476007)(316002)(52536014)(44832011)(33656002)(7416002)(110136005)(8676002)(41300700001)(966005)(508600001)(38350700002)(921005)(26005)(38100700002)(9686003)(53546011)(6506007)(83380400001)(55016003)(52116002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ho5QAJoomSQziz+8aYpU+fOrxBh/Lsc8xxW8/ev0Qsi8STnb5yQ9r1+TUtaa?=
- =?us-ascii?Q?ZvWJrxT3Mm0qK026G7NbL08VIapErWsQBzXgQsiU8N5J+T6CuyToeJodX31W?=
- =?us-ascii?Q?Rnyo1qi1kurw82CCA1Kpn2eNVpEiUWB0sP69uS3tg9O+bdNj48rc+eNpR77A?=
- =?us-ascii?Q?SVrWybL8vQuiAQuKPAeUAXNCTZVCp79N99k9654RThmiwQvVLB1iOO8tnWQ8?=
- =?us-ascii?Q?W1qJRkA7zKJJrDhTpqbTQoDP5kXRvnzjIsnMb7hF3IxONXaegYUTljNhwMap?=
- =?us-ascii?Q?sBplDpQJhivIyasnd09AuugculidpRMvUoGXbzHqr7F55Cp0Bdf9ztmsvACx?=
- =?us-ascii?Q?DFXOsehS7yJGWZw0ZEamSNVx8rP1cSwJxzGZSpkv876mCpOeXYn0wOE94y8V?=
- =?us-ascii?Q?7UC+Ijx3VTqU36/Za4iB4zaHRaP/VKT+gnf9TW0fiogU/YYbHUuHmsUr/+Yw?=
- =?us-ascii?Q?7JJDIgjIrpk37hIBjju8z4UZLtgzJP3iFp9123vT5C7dasMyfunaSTUFAwHt?=
- =?us-ascii?Q?8RMA3YfdPtLAgh4CBkSgHIulL+xv+gPIRUoR0r3+kkDeqS0tpBwp5Ebdx7xx?=
- =?us-ascii?Q?K9ypGn9/yAWzrS9b5CMHdZrn+EDw+lEffQOuSH9ct489jeXw64vxX/z9y25C?=
- =?us-ascii?Q?hRWYUtr4Tojyfvd1tAt1aD7ArlCFRWb/EEt0gfSSselXBhUFa3XDyooE+QOR?=
- =?us-ascii?Q?hb67RxulEInY+AroU3st8QOrm4XYBxhEccAmhpbA9XAesoqeS+uBCfz5tcyQ?=
- =?us-ascii?Q?T/8QfUP1bUGTFLWxoT1wjTLNeTomehB2O4pe07bD1wUZ/CkK9K8veTPXqAcF?=
- =?us-ascii?Q?pzT6nc1DcVw/KvVUN6EoNGO8aYGwNd1AflSdcHc6UmrJLADGXknM97eg8xcy?=
- =?us-ascii?Q?b6EVN3Y65IcVznZnnUDK48E6CuLKD1SDDG/7HATdUchbhaE/9QJk/jdqaEYH?=
- =?us-ascii?Q?ThTDMlY/kiOGD4kqRlAtN6XnQS81P/SjyMlIRJHKwEZUP3Q9RaSIgJPxJVj4?=
- =?us-ascii?Q?Tw/H8zWtelaeiOqQiMVN5B/aiZl1WnfRV9ScJGTc8Q5/YAm8IuQODiKf+DVy?=
- =?us-ascii?Q?IZ3y4mxMd5tmnxRNytcROWrobYxLMj82jHvmy6I9AJgwCAiisrfqEOG5GNQQ?=
- =?us-ascii?Q?eULp5XDdLQgQhTUMJYIZ+xp2GyMBdI8Zah9Bi8JstMmF8xxYvomqT0cvm0aw?=
- =?us-ascii?Q?D/6J1EQwpCXpRhC+yUETLz2lsF1+heoH+p9ntlZvpDnLHju7nQsYNtnlQnbM?=
- =?us-ascii?Q?DwUwJgll9Rf9+cEF7fCcu1axXecwvhXNmyq+ytv6239kiV2HFbjMkQtoap+m?=
- =?us-ascii?Q?gsE1qn/QfV+QmEs9TUphNRqV29PDmrrz3qZwBH9F0yvU9UJtNypuAYgEOUA2?=
- =?us-ascii?Q?G6UsKXxjwG1HLugwVtvJ6vT2eWCFba6bXPAitgDVJaEbAJiwzjjO1XzSzmA/?=
- =?us-ascii?Q?3Y1Lz+ysAua7wvqccBbUInGfpmvPz8rrvkXEeZteRkHJfgnfM8eppzwEqDH/?=
- =?us-ascii?Q?Zc/ibvAEl8i6ILFtzYB5Mm3UEdUSe48W7MchtSK4+M1cg4NEP3MtQldVv7U8?=
- =?us-ascii?Q?mLQEt7zyxyMMTfO/Zyf4lAjQtOWFRYILeI65VdDg/6mYxisfEDx9JmqVxvyu?=
- =?us-ascii?Q?Qg=3D=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 272f621a-0678-4fa1-da36-08dab79d1452
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2022 21:57:30.6787
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47a182df-8f8d-442f-9ea1-08dab79d5a10
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2022 21:59:27.4508
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tO5LhbK7HCSkaKGmVRY95BeZZERSzH7s3T4K2Cdt6/AhXx3RlBYqllFlZVGa4sySxmGrZtcCVM5up3uTiakhJ72vcDrkx48oj5SpDy2sT6g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P190MB1828
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: goRrcB6ypeoOBa5BjMUbux1AjSP5Kbf/Y8V5ndLnaVH8ZL8sa8usFjd8o0zFhaCpuBAmJ/5Ta6MFOT9vhRstTwNraRHg3e2Bc0iwDg1Y1x4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6788
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Wed, 26 Oct 2022 10:03:51 -0400, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> On 26/10/2022 09:45, Vadym Kochan wrote:
-> > Switch the DT binding to a YAML schema to enable the DT validation.
-> > 
-> > Dropped deprecated compatibles and properties described in txt file.
-> > 
-> > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> > ---
-> > 
-> > v5:
-> >    1) Get back "label" and "partitions" properties but without
-> >       ref to the "partition.yaml" which was wrongly used.
-> > 
-> >    2) Add "additionalProperties: false" for nand@ because all possible
-> >       properties are described.
-> > 
-> > v4:
-> >    1) Remove "label" and "partitions" properties
-> > 
-> >    2) Use 2 clocks for A7K/8K platform which is a requirement
-> > 
-> > v3:
-> >   1) Remove txt version from the MAINTAINERS list
-> > 
-> >   2) Use enum for some of compatible strings
-> > 
-> >   3) Drop:
-> >         #address-cells
-> >         #size-cells:
-> > 
-> >      as they are inherited from the nand-controller.yaml
-> > 
-> >   4) Add restriction to use 2 clocks for A8K SoC
-> > 
-> >   5) Dropped description for clock-names and extend it with 
-> >      minItems: 1
-> > 
-> >   6) Drop description for "dmas"
-> > 
-> >   7) Use "unevalautedProperties: false"
-> > 
-> >   8) Drop quites from yaml refs.
-> > 
-> >   9) Use 4-space indentation for the example section
-> > 
-> > v2:
-> >   1) Fixed warning by yamllint with incorrect indentation for compatible list
-> > 
-> >  .../bindings/mtd/marvell,nand-controller.yaml | 195 ++++++++++++++++++
-> >  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 -----------
-> >  MAINTAINERS                                   |   1 -
-> >  3 files changed, 195 insertions(+), 127 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
-> > 
-> > diff --git a/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> > new file mode 100644
-> > index 000000000000..544e98ed12bb
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
-> > @@ -0,0 +1,195 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mtd/marvell,nand-controller.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Marvell NAND Flash Controller (NFC)
-> > +
-> > +maintainers:
-> > +  - Miquel Raynal <miquel.raynal@bootlin.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - const: marvell,armada-8k-nand-controller
-> > +          - const: marvell,armada370-nand-controller
-> > +      - enum:
-> > +          - marvell,armada370-nand-controller
-> > +          - marvell,pxa3xx-nand-controller
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> 
-> What happened to maxItems here? This is wrong. You keep changing random
-> things, again. V3 was correct.
-> 
-
-It is not random, I tried to enforce to use 2 clocks for A7k/8K case.
-
-> 
-> > +    description:
-> > +      Shall reference the NAND controller clocks, the second one is
-> > +      is only needed for the Armada 7K/8K SoCs
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: core
-> > +      - const: reg
-> > +
-> > +  dmas:
-> > +    maxItems: 1
-> > +
-> > +  dma-names:
-> > +    items:
-> > +      - const: rxtx
-> > +
-> > +  marvell,system-controller:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description: Syscon node that handles NAND controller related registers
-> > +
-> > +patternProperties:
-> > +  "^nand@[0-3]$":
-> > +    type: object
-> > +    properties:
-> > +      reg:
-> > +        minimum: 0
-> > +        maximum: 3
-> > +
-> > +      nand-rb:
-> > +        minimum: 0
-> > +        maximum: 1
-> > +
-> > +      nand-ecc-strength:
-> > +        enum: [1, 4, 8]
-> > +
-> > +      nand-on-flash-bbt: true
-> > +
-> > +      nand-ecc-mode: true
-> > +
-> > +      nand-ecc-algo:
-> > +        description: |
-> > +          This property is essentially useful when not using hardware ECC.
-> > +          Howerver, it may be added when using hardware ECC for clarification
-> > +          but will be ignored by the driver because ECC mode is chosen depending
-> > +          on the page size and the strength required by the NAND chip.
-> > +          This value may be overwritten with nand-ecc-strength property.
-> > +
-> > +      nand-ecc-step-size:
-> > +        description: |
-> > +          Marvell's NAND flash controller does use fixed strength
-> > +          (1-bit for Hamming, 16-bit for BCH), so the actual step size
-> > +          will shrink or grow in order to fit the required strength.
-> > +          Step sizes are not completely random for all and follow certain
-> > +          patterns described in AN-379, "Marvell SoC NFC ECC".
-> > +
-> > +      label:
-> > +        $ref: /schemas/types.yaml#/definitions/string
-> > +
-> > +      partitions:
-> > +        type: object
-> 
-> That's not what I asked for. Like four times I asked you to add here
-> unevaluatedProperties: false and I never said that ref to partition.yaml
-> should be removed and you... instead remove that ref.
-> 
-> You need to define here children and specify their ref.
-> 
-> You must use unevaluatedProperties: false here. So this is fifth time I
-> am writing this feedback.
-> 
-> 
-
-It is a bit confusing that it is needed to define "partitions" and "label" rules particulary
-in this nand controller instead of some common place like nand-chip.yaml, these properties
-are common also for the other nand controllers.
-
-> 
-> > +
-> > +      marvell,nand-keep-config:
-> > +        description: |
-> > +          Orders the driver not to take the timings from the core and
-> > +          leaving them completely untouched. Bootloader timings will then
-> > +          be used.
-> > +        $ref: /schemas/types.yaml#/definitions/flag
-> > +
-> > +      marvell,nand-enable-arbiter:
-> > +        description: |
-> > +          To enable the arbiter, all boards blindly used it,
-> > +          this bit was set by the bootloader for many boards and even if
-> > +          it is marked reserved in several datasheets, it might be needed to set
-> > +          it (otherwise it is harmless) so whether or not this property is set,
-> > +          the bit is selected by the driver.
-> > +        $ref: /schemas/types.yaml#/definitions/flag
-> > +        deprecated: true
-> > +
-> > +    additionalProperties: false
-> > +
-> > +    required:
-> > +      - reg
-> > +      - nand-rb
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +
-> > +allOf:
-> > +  - $ref: nand-controller.yaml#
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: marvell,pxa3xx-nand-controller
-> > +    then:
-> > +      required:
-> > +        - dmas
-> > +        - dma-names
-> > +    else:
-> > +      properties:
-> > +        dmas: false
-> > +        dma-names: false
-> > +
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: marvell,armada-8k-nand-controller
-> > +    then:
-> > +      required:
-> > +        - marvell,system-controller
-> > +      properties:
-> > +        clocks:
-> > +          minItems: 2
-> > +          maxItems: 2
-> 
-> This does not make sense now...
-> 
-> Best regards,
-> Krzysztof
-> 
-
-Thank you,
-
+T24gVGh1LCAyMDIyLTEwLTEzIGF0IDE0OjI4IC0wNzAwLCBSaWNrIEVkZ2Vjb21iZSB3cm90ZToN
+Cj4gSW4gdGhlIG1lYW50aW1lIHdlIGNvdWxkIGhhdmUgYSBuZXcgYml0IHNoc3RrX3N0cmljdCwN
+Cj4gdGhhdCByZXF1ZXN0cyBiZWhhdmlvciBsaWtlIHRoZXNlIHBhdGNoZXMgaW1wbGVtZW50LCBh
+bmQga2lsbHMgdGhlDQo+IHByb2Nlc3Mgb24gdmlvbGF0aW9uLiBHbGliYy90b29scyBjb3VsZCBh
+ZGQgc3VwcG9ydCBmb3IgdGhpcyBzdHJpY3QNCj4gYml0DQo+IGFuZCBhbnlvbmUgdGhhdCB3YW50
+cyB0byBtb3JlIGNhcmVmdWxseSBjb21waWxlIHdpdGggaXQgY291bGQgZmluYWxseQ0KPiBnZXQg
+c2hhZG93IHN0YWNrIHRvZGF5LiBUaGVuIHRoZSBpbXBsZW1lbnRhdGlvbiBvZiB0aGUgd2FybiBh
+bmQNCj4gY29udGludWUgbW9kZSBjb3VsZCBmb2xsb3cgdGhhdCwgYW5kIGdsaWJjIGNvdWxkIG1h
+cCB0aGUgb3JpZ2luYWwNCj4gc2hzdGsNCj4gYml0IHRvIHRoYXQga2VybmVsIG1vZGUuIFNvIHRo
+ZSBvbGQgYmluYXJpZXMgd291bGQgZ2V0IHRoZXJlDQo+IGV2ZW50dWFsbHksIHdoaWNoIGlzIGJl
+dHRlciB0aGFuIHRoZSBjb250aW51aW5nIG5vdGhpbmcgdGhleSBoYXZlDQo+IHRvZGF5Lg0KDQpI
+aSwNCg0KQW55IHRob3VnaHRzIG9uIHRoaXMgcHJvcG9zYWw/DQoNClRoYW5rcywNCg0KUmljaw0K
