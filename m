@@ -2,158 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF9B60E5DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F2060E5E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 26 Oct 2022 18:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233856AbiJZQ4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 26 Oct 2022 12:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45856 "EHLO
+        id S233928AbiJZQ5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 26 Oct 2022 12:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233126AbiJZQ4p (ORCPT
+        with ESMTP id S232740AbiJZQ5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 26 Oct 2022 12:56:45 -0400
-Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494768E9A0
-        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:56:44 -0700 (PDT)
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id DC9B51D17;
-        Wed, 26 Oct 2022 16:54:04 +0000 (UTC)
+        Wed, 26 Oct 2022 12:57:51 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BDB9AC11
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:57:50 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id f22so10371948qto.3
+        for <linux-kernel@vger.kernel.org>; Wed, 26 Oct 2022 09:57:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1666803244;
-        bh=bUaFzx51Y3McLSXkoVjYqSdbgP//EcB99FWcLekE2kI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=e8jkaWH/O9ByNEKPkrf+Kvw/NxgehNdUaaB06GQ7qIq7z0sYfGKSpHFr+QP9XsFn0
-         Y82eMxDV5AVR0AZwKv1e5bP6fYwaNai5V8vKOU7zyjMv8xrVQgGLFtig0l7PMAxhXY
-         xdrcnFjgme1dR9NO7+SnsW2Qfk21J/c17ViRl3NI=
-Received: from [172.30.8.65] (172.30.8.65) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 26 Oct 2022 19:56:41 +0300
-Message-ID: <f5c18c15-6fdf-d7fe-627b-080dd7af93cc@paragon-software.com>
-Date:   Wed, 26 Oct 2022 19:56:41 +0300
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SMH8yy0K5bjEVyDE5fQG7VLZrpH6VjDBSTXM9KXwwlM=;
+        b=P81nZevgmYL2bPtSvUe4m5gPskkpK50V39SxUOLOClE4XtiMninGSwcah33MKucLTD
+         +xvtP0gw2lQxDx9tvWt+jiqT+W+CM8s60sszqToHUtwt1WdGfGabMTvVMQ9CkABVqQrV
+         aGXTkf+byIia/LBDKAU10K2IIJpy3RDBEEgttY/I5SCrkGpSootnZ6OY6l15Mn0j8PFW
+         1V1n66alusQoaQzWuIhYULr1Uipz84f+Xx3uGqMIs99wjVS7Xtna8QFLdtWU7dGbQB2T
+         0eXKPB2sZytkpbMZVbPDNaz+y9QtCER0trUT2au22M2Q50Wzx86qeGiH2tzeZBWSRv9O
+         zZEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SMH8yy0K5bjEVyDE5fQG7VLZrpH6VjDBSTXM9KXwwlM=;
+        b=AtYrxbBgBVFvY9tjhzdTsfNY+QNMihOR6Q1soPjXD6pU2nD4EqvUB/3iflNAaefU8B
+         eUWQAhbLSOwa8BJVmMufzHwJHsWmFl+5zjjqoo2Hwu5/YybjYpygaEipKrd/SfcZukxH
+         R/SuWOL4BKGqDqo8g2/9LcrpRTVPGaZg0jcVfFc/vFtFVhq4TDTpjYBebf+Is1CpVHPz
+         /+UoXHu2jeNIClVYy0/HvUVASVim4wvVUnZWv87fvoXpsdemhR6VPGwZDiAl8d71QhAv
+         Te5CRQkt8sUHUtQTuDivsZ8KKBHDIdPG6O3fgnU/Syr8WYB4IeveeFF58F/TanPHP04w
+         D3rw==
+X-Gm-Message-State: ACrzQf17RF0/ZzhQd4wrdYRqn/2E3WzBmv+58zVBRSqMGCkqXosB/uV0
+        jKsDG8yqQojB9x2WYZwb1KVFeQ==
+X-Google-Smtp-Source: AMsMyM52kSo4dwe98KsHb5B/S2GCroXLBYzzgP/n4SM7/4xO2UyexwU8NZBrIReXZn5PgBSiTxoyzg==
+X-Received: by 2002:a05:622a:2488:b0:3a4:ec00:2811 with SMTP id cn8-20020a05622a248800b003a4ec002811mr5170836qtb.487.1666803469255;
+        Wed, 26 Oct 2022 09:57:49 -0700 (PDT)
+Received: from krzk-bin.. ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id g21-20020a05620a40d500b006ee8874f5fasm4360759qko.53.2022.10.26.09.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 09:57:48 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: (subset) [PATCH 1/2] dt-bindings: pinctrl: qcom,msm8916: convert to dtschema
+Date:   Wed, 26 Oct 2022 12:57:40 -0400
+Message-Id: <166680346262.49767.13769629485836334119.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221024002356.28261-1-krzysztof.kozlowski@linaro.org>
+References: <20221024002356.28261-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH -next v2 1/2] fs/ntfs3: Don't use uni1 uninitialized in
- ntfs_d_compare()
-Content-Language: en-US
-To:     Nathan Chancellor <nathan@kernel.org>
-CC:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <ntfs3@lists.linux.dev>,
-        <llvm@lists.linux.dev>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-References: <20221004232359.285685-1-nathan@kernel.org>
- <Y1LSn+O44lCRR3qE@dev-arch.thelio-3990X>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-In-Reply-To: <Y1LSn+O44lCRR3qE@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.30.8.65]
-X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/21/22 20:10, Nathan Chancellor wrote:
-> Ping? This is still breaking our builds in -next...
+On Sun, 23 Oct 2022 20:23:55 -0400, Krzysztof Kozlowski wrote:
+> Convert Qualcomm MSM8916 pin controller bindings to DT schema.  Keep the
+> parsing of pin configuration subnodes consistent with other Qualcomm
+> schemas (children named with '-state' suffix, their children with
+> '-pins').
+> 
 > 
 
-Thanks for patch, applied!
+Applied, thanks!
 
-> On Tue, Oct 04, 2022 at 04:23:58PM -0700, Nathan Chancellor wrote:
->> Clang warns:
->>
->>    fs/ntfs3/namei.c:445:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->>                    if (toupper(c1) != toupper(c2)) {
->>                        ^~~~~~~~~~~~~~~~~~~~~~~~~~
->>    ./include/linux/ctype.h:64:20: note: expanded from macro 'toupper'
->>    #define toupper(c) __toupper(c)
->>                      ^
->>    fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
->>            __putname(uni1);
->>                      ^~~~
->>    ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
->>    #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
->>                                                                          ^~~~
->>    fs/ntfs3/namei.c:445:3: note: remove the 'if' if its condition is always false
->>                    if (toupper(c1) != toupper(c2)) {
->>                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>    fs/ntfs3/namei.c:434:7: error: variable 'uni1' is used uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uninitialized]
->>                    if (!lm--) {
->>                        ^~~~~
->>    fs/ntfs3/namei.c:487:12: note: uninitialized use occurs here
->>            __putname(uni1);
->>                      ^~~~
->>    ./include/linux/fs.h:2789:65: note: expanded from macro '__putname'
->>    #define __putname(name)         kmem_cache_free(names_cachep, (void *)(name))
->>                                                                          ^~~~
->>    fs/ntfs3/namei.c:434:3: note: remove the 'if' if its condition is always false
->>                    if (!lm--) {
->>                    ^~~~~~~~~~~~
->>    fs/ntfs3/namei.c:430:22: note: initialize the variable 'uni1' to silence this warning
->>            struct cpu_str *uni1, *uni2;
->>                                ^
->>                                = NULL
->>    2 errors generated.
->>
->> There is no point in calling __putname() in these particular error
->> paths, as there has been no corresponding __getname() call yet. Just
->> return directly in these blocks to clear up the warning.
->>
->> Fixes: a3a956c78efa ("fs/ntfs3: Add option "nocase"")
->> Link: https://github.com/ClangBuiltLinux/linux/issues/1729
->> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
->> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->> ---
->>
->> v2:
->>      * Pick up Nick's reviewed-by tag.
->> v1: https://lore.kernel.org/20221004144145.1345772-1-nathan@kernel.org/
->>
->>   fs/ntfs3/namei.c | 12 ++++--------
->>   1 file changed, 4 insertions(+), 8 deletions(-)
->>
->> diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
->> index 315763eb05ff..5d3a6ce3f05f 100644
->> --- a/fs/ntfs3/namei.c
->> +++ b/fs/ntfs3/namei.c
->> @@ -431,10 +431,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
->>   
->>   	/* First try fast implementation. */
->>   	for (;;) {
->> -		if (!lm--) {
->> -			ret = len1 == len2 ? 0 : 1;
->> -			goto out;
->> -		}
->> +		if (!lm--)
->> +			return len1 == len2 ? 0 : 1;
->>   
->>   		if ((c1 = *n1++) == (c2 = *n2++))
->>   			continue;
->> @@ -442,10 +440,8 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
->>   		if (c1 >= 0x80 || c2 >= 0x80)
->>   			break;
->>   
->> -		if (toupper(c1) != toupper(c2)) {
->> -			ret = 1;
->> -			goto out;
->> -		}
->> +		if (toupper(c1) != toupper(c2))
->> +			return 1;
->>   	}
->>   
->>   	/*
->>
->> base-commit: d45da67caedacd500879de5e649360cc70777af7
->> -- 
->> 2.37.3
->>
->>
+[1/2] dt-bindings: pinctrl: qcom,msm8916: convert to dtschema
+      https://git.kernel.org/krzk/linux-dt/c/70af922b7f23bc03b89b3f80b679d11d5e7c2045
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
